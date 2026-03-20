@@ -81,18 +81,18 @@ const App = () => {
     ];
 
     return (
-        <div style={{ position: 'relative', minHeight: '100vh', background: 'radial-gradient(circle at 50% 0%, #171131 0%, #070B14 100%)', backgroundAttachment: 'fixed', color: 'white', fontFamily: "'Inter', sans-serif" }}>
-            {/* Header */}
-            <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000, padding: '1rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(7, 11, 20, 0.8)', backdropFilter: 'blur(10px)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+        <div style={{ position: 'relative', minHeight: '100vh', background: '#FFFFFF', color: '#4A4A4A', fontFamily: "'Open Sans', sans-serif" }}>
+            {/* Header - White Glassmorphism */}
+            <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000, padding: '1rem 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(0,75,99,0.08)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{ width: 40, height: 40, background: 'linear-gradient(135deg, #4F46E5, #0EA5E9)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ width: 40, height: 40, background: 'linear-gradient(135deg, #004B63, #4DA8C4)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <i className="fa-solid fa-graduation-cap" style={{ color: 'white', fontSize: '1.2rem' }}></i>
                     </div>
-                    <span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 700, fontSize: '1.2rem', letterSpacing: '-0.02em' }}>EDUTECHLIFE</span>
+                    <span style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 700, fontSize: '1.1rem', letterSpacing: '-0.02em', color: '#004B63' }}>EDUTECHLIFE</span>
                 </div>
                 <nav style={{ display: 'flex', gap: '2rem' }}>
-                    <button onClick={() => handleNavigate('landing')} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.8)', cursor: 'pointer', fontSize: '0.9rem' }}>Inicio</button>
-                    <button onClick={() => handleNavigate('ialab')} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.8)', cursor: 'pointer', fontSize: '0.9rem' }}>IA Lab</button>
+                    <button onClick={() => handleNavigate('landing')} style={{ background: 'none', border: 'none', color: '#4A4A4A', cursor: 'pointer', fontSize: '0.9rem', fontWeight: 600, transition: 'color 0.3s' }}>Inicio</button>
+                    <button onClick={() => handleNavigate('ialab')} style={{ background: 'none', border: 'none', color: '#4DA8C4', cursor: 'pointer', fontSize: '0.9rem', fontWeight: 600, transition: 'color 0.3s' }}>IA Lab</button>
                 </nav>
             </header>
 
@@ -116,16 +116,15 @@ const App = () => {
                         <About />
 
                         {/* Pilares Section */}
-                        <section ref={pilaresRef} id="pilares" style={{ padding: '6rem 5%' }}>
-                            <h2 style={{ fontFamily: "'Poppins', sans-serif", fontSize: '2rem', fontWeight: 700, textAlign: 'center', marginBottom: '3rem' }}>
-                                Nuestros <span style={{ color: '#0EA5E9' }}>Pilares</span>
+                        <section ref={pilaresRef} id="pilares" style={{ padding: '6rem 5%', background: '#F8FAFC' }}>
+                            <h2 style={{ fontFamily: "'Montserrat', sans-serif", fontSize: '2rem', fontWeight: 700, textAlign: 'center', marginBottom: '3rem', color: '#004B63' }}>
+                                Nuestros <span style={{ color: '#4DA8C4' }}>Pilares</span>
                             </h2>
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '2rem' }}>
                                 {pilarData.map((pilar, idx) => (
-                                    <div key={pilar.id} className="relative overflow-hidden rounded-2xl bg-white border border-[#B2D8E5]/50 shadow-md transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl group flex flex-col">
-                                        
+                                    <div key={pilar.id} className="pilar-card">
                                         {/* Contenedor de la Imagen */}
-                                        <div className="w-full h-56 overflow-hidden bg-gray-100">
+                                        <div className="w-full h-56 overflow-hidden rounded-t-3xl">
                                             <img 
                                                 src={pilar.img} 
                                                 alt={pilar.title} 
@@ -133,22 +132,19 @@ const App = () => {
                                             />
                                         </div>
 
-                                        {/* Contenedor del Texto - BLANCO PURO Y SIN MORADO */}
-                                        <div className="p-8 bg-white flex-1 relative z-10">
-                                            <div className="flex items-center gap-4 mb-4">
-                                                <div className="w-12 h-12 rounded-xl bg-[#F0F8FA] flex items-center justify-center text-[#4DA8C4] group-hover:bg-[#4DA8C4] group-hover:text-white transition-colors duration-300">
-                                                    <i className={`fa-solid ${pilar.icon} text-xl`}></i>
-                                                </div>
-                                                <span className="text-3xl font-black text-[#F0F8FA] drop-shadow-sm group-hover:text-[#B2D8E5] transition-colors">{pilar.num}</span>
+                                        {/* Contenedor del Texto */}
+                                        <div className="p-8 flex-1 relative z-10">
+                                            <div className="pilar-icon-wrap mb-6">
+                                                <i className={`fa-solid ${pilar.icon}`}></i>
                                             </div>
                                             
-                                            <h3 className="text-[#004B63] font-bold text-xl mb-3 leading-tight">
+                                            <h3 className="pilar-title">
                                                 {pilar.title}
                                             </h3>
                                             
-                                            <div className="w-10 h-1 bg-[#66CCCC] rounded-full mb-4 transition-all duration-300 group-hover:w-20"></div>
+                                            <div className="w-10 h-1 bg-[#66CCCC] rounded-full mb-4 mx-auto transition-all duration-300 group-hover:w-20"></div>
                                             
-                                            <p className="text-[#4A4A4A] text-sm leading-relaxed">
+                                            <p className="pilar-text">
                                                 {pilar.desc}
                                             </p>
                                         </div>
@@ -172,7 +168,7 @@ const App = () => {
             <div style={{ position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 10000, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '1rem' }}>
                 {botOpen && (
                     <div style={{ background: '#0B0F19', border: '1px solid rgba(0,194,224,0.3)', borderRadius: '1rem', width: '350px', height: '450px', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-                        <div style={{ padding: '1rem', background: 'linear-gradient(135deg, #4F46E5, #0EA5E9)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ padding: '1rem', background: 'linear-gradient(135deg, #004B63, #4DA8C4)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                 <div style={{ width: 32, height: 32, background: 'rgba(255,255,255,0.2)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                     <i className="fa-solid fa-robot" style={{ color: 'white', fontSize: '0.9rem' }}></i>
@@ -188,17 +184,18 @@ const App = () => {
                                 <div key={i} style={{ 
                                     alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start', 
                                     maxWidth: '80%',
-                                    background: msg.role === 'user' ? '#4F46E5' : 'rgba(255,255,255,0.1)',
+                                    background: msg.role === 'user' ? '#4DA8C4' : 'rgba(255,255,255,0.1)',
                                     padding: '0.75rem 1rem',
                                     borderRadius: '1rem',
-                                    fontSize: '0.9rem'
+                                    fontSize: '0.9rem',
+                                    color: 'white'
                                 }}>
                                     {msg.text}
                                 </div>
                             ))}
                             {botLoading && (
                                 <div style={{ alignSelf: 'flex-start', background: 'rgba(255,255,255,0.1)', padding: '0.75rem 1rem', borderRadius: '1rem' }}>
-                                    <i className="fa-solid fa-ellipsis" style={{ animation: 'pulse 1s infinite' }}></i>
+                                    <i className="fa-solid fa-ellipsis" style={{ animation: 'pulse 1s infinite', color: 'white' }}></i>
                                 </div>
                             )}
                             <div ref={botMsgsEndRef} />
@@ -212,7 +209,7 @@ const App = () => {
                                 placeholder="Escribe un mensaje..."
                                 style={{ flex: 1, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '100px', padding: '0.75rem 1rem', color: 'white', outline: 'none' }}
                             />
-                            <button onClick={handleBotSend} style={{ background: '#4F46E5', border: 'none', borderRadius: '50%', width: 40, height: 40, color: 'white', cursor: 'pointer' }}>
+                            <button onClick={handleBotSend} style={{ background: '#4DA8C4', border: 'none', borderRadius: '50%', width: 40, height: 40, color: 'white', cursor: 'pointer' }}>
                                 <i className="fa-solid fa-paper-plane"></i>
                             </button>
                         </div>
@@ -224,12 +221,12 @@ const App = () => {
                         width: 56, 
                         height: 56, 
                         borderRadius: '50%', 
-                        background: 'linear-gradient(135deg, #4F46E5, #0EA5E9)', 
+                        background: 'linear-gradient(135deg, #4DA8C4, #66CCCC)', 
                         border: 'none', 
                         color: 'white', 
                         fontSize: '1.3rem', 
                         cursor: 'pointer',
-                        boxShadow: '0 4px 20px rgba(79,70,229,0.4)',
+                        boxShadow: '0 4px 20px rgba(77,168,196,0.4)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center'

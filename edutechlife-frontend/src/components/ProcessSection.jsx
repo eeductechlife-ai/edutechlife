@@ -51,7 +51,7 @@ export default function ProcessSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative py-20 lg:py-32 overflow-hidden" style={{ background: '#F8FAFC' }}>
+    <section ref={sectionRef} className="relative py-20 lg:py-32 overflow-hidden" style={{ background: '#FFFFFF' }}>
       <div className="max-w-7xl mx-auto px-5%">
         <div className={`text-center mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="inline-flex items-center gap-2 mb-6">
@@ -70,7 +70,7 @@ export default function ProcessSection() {
         </div>
 
         <div className="relative">
-          <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-[#B2D8E5] via-[#4DA8C4] to-[#004B63] transform -translate-y-1/2 hidden lg:block" />
+          <div className="absolute top-[4.5rem] left-[12.5%] right-[12.5%] h-0.5 bg-gradient-to-r from-transparent via-[#B2D8E5] to-transparent hidden lg:block" />
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {steps.map((step, i) => (
@@ -79,13 +79,13 @@ export default function ProcessSection() {
                 className={`relative transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
                 style={{ transitionDelay: `${i * 150}ms` }}
               >
-                <div className="relative bg-white rounded-2xl p-8 shadow-lg border border-[#B2D8E5]/30 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group h-full">
-                  <div className="absolute -top-4 left-8">
+                <div className="process-card relative bg-white rounded-2xl p-8 shadow-lg border border-[rgba(0,194,224,0.12)] hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group h-full" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}>
+                  <div className="absolute -top-5 left-1/2 -translate-x-1/2">
                     <div 
-                      className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg"
+                      className="w-14 h-14 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg border-2 border-white"
                       style={{ background: `linear-gradient(135deg, ${step.color}, ${step.color}dd)` }}
                     >
-                      {i + 1}
+                      <span className="font-mono text-sm font-bold">{String(i + 1).padStart(2, '0')}</span>
                     </div>
                   </div>
 

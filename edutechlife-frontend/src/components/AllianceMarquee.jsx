@@ -1,37 +1,36 @@
 import { useEffect, useRef } from 'react';
 
 const logos = [
-    { name: 'SENA', icon: 'fa-microchip' },
-    { name: 'IBM', icon: 'fa-server' },
-    { name: 'Coursera', icon: 'fa-graduation-cap' },
-    { name: 'UNESCO', icon: 'fa-globe' },
-    { name: 'MIT', icon: 'fa-atom' },
-    { name: 'Stanford', icon: 'fa-flask' },
-    { name: 'Google', icon: 'fa-search' },
-    { name: 'Microsoft', icon: 'fa-cloud' },
+    { icon: 'fa-graduation-cap', name: 'SenaTIC', sub: 'Ministerio TIC' },
+    { icon: 'fa-microchip', name: 'IBM', sub: 'Watson Education' },
+    { icon: 'fa-book-open', name: 'Coursera', sub: 'Global Learning' },
+    { icon: 'fa-landmark', name: 'MinTIC', sub: 'Colombia Digital' },
+    { icon: 'fa-award', name: 'SenaTIC', sub: 'Certificación Oficial' },
+    { icon: 'fa-brain', name: 'IBM', sub: 'AI for Education' },
+    { icon: 'fa-globe', name: 'Coursera', sub: '+200 Países' },
+    { icon: 'fa-flag', name: 'MinTIC', sub: 'Alianza Nacional' },
 ];
 
 const AllianceMarquee = () => {
-    const marqueeRef = useRef(null);
+    const trackRef = useRef(null);
 
     useEffect(() => {
-        const marquee = marqueeRef.current;
-        if (!marquee) return;
+        const track = trackRef.current;
+        if (!track) return;
 
         let animationId;
         let position = 0;
-        const speed = 0.4;
-        const itemWidth = 200;
+        const speed = 0.5;
 
         const animate = () => {
             position -= speed;
-            const totalWidth = itemWidth * logos.length;
+            const totalWidth = track.scrollWidth / 2;
 
             if (Math.abs(position) >= totalWidth) {
                 position = 0;
             }
 
-            marquee.style.transform = `translateX(${position}px)`;
+            track.style.transform = `translateX(${position}px)`;
             animationId = requestAnimationFrame(animate);
         };
 
@@ -43,47 +42,40 @@ const AllianceMarquee = () => {
     const allLogos = [...logos, ...logos];
 
     return (
-        <section className="relative py-16 overflow-hidden bg-gradient-to-b from-[#0A1628] to-[#070B14]">
-            <div className="text-center mb-10">
-                <span className="inline-flex items-center gap-3 px-5 py-2 text-[0.65rem] font-mono font-semibold tracking-[0.25em] uppercase text-[#B2D8E5] bg-white/5 border border-white/10 rounded-full backdrop-blur-xl">
-                    Alianzas Estratégicas
-                </span>
-            </div>
-
-            <div className="relative">
-                <div className="absolute left-0 top-0 bottom-0 w-32 z-10 bg-gradient-to-r from-[#0A1628] to-transparent pointer-events-none" />
-                <div className="absolute right-0 top-0 bottom-0 w-32 z-10 bg-gradient-to-l from-[#0A1628] to-transparent pointer-events-none" />
-
-                <div className="flex overflow-hidden">
-                    <div
-                        ref={marqueeRef}
-                        className="flex gap-4 whitespace-nowrap"
-                        style={{ willChange: 'transform' }}
-                    >
-                        {allLogos.map((logo, index) => (
-                            <div
-                                key={index}
-                                className="flex flex-col items-center justify-center gap-3 min-w-[180px] px-8 py-6 
-                                    bg-white/5 border border-white/10 rounded-2xl
-                                    transition-all duration-500 ease-out
-                                    grayscale opacity-60
-                                    hover:grayscale-0 hover:opacity-100
-                                    hover:bg-white/10 hover:border-[#4DA8C4]/40
-                                    hover:shadow-[0_0_30px_rgba(77,168,196,0.3)]
-                                    hover:-translate-y-1"
-                            >
-                                <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-gradient-to-br from-[#4DA8C4]/20 to-[#66CCCC]/10 border border-[#4DA8C4]/30 text-[#4DA8C4] text-xl transition-all duration-300 group-hover:bg-gradient-to-br group-hover:from-[#4DA8C4] group-hover:to-[#66CCCC] group-hover:text-white group-hover:scale-110">
-                                    <i className={`fa-solid ${logo.icon}`} />
-                                </div>
-                                <span className="font-montserrat font-bold text-sm tracking-wider text-white/70 transition-colors duration-300 group-hover:text-white">
-                                    {logo.name}
-                                </span>
-                            </div>
-                        ))}
-                    </div>
+        <div className="relative py-12 overflow-hidden" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #F1F5F9 100%)' }}>
+            {/* Header label */}
+            <div className="max-w-7xl mx-auto px-5% mb-8">
+                <div className="flex items-center justify-center gap-4">
+                    <div className="flex-1 h-px bg-gradient-to-r from-transparent to-[#B2D8E5]" />
+                    <span className="font-mono text-[11px] font-semibold text-[#64748B] uppercase tracking-[0.3em] whitespace-nowrap">
+                        Ecosistema de Nivel Mundial
+                    </span>
+                    <div className="flex-1 h-px bg-gradient-to-l from-transparent to-[#B2D8E5]" />
                 </div>
             </div>
-        </section>
+
+            {/* Marquee Container */}
+            <div className="marquee-wrap">
+                {/* Fade gradients */}
+                <div className="marquee-fade-left" />
+                <div className="marquee-fade-right" />
+
+                {/* Track */}
+                <div className="marquee-track" ref={trackRef}>
+                    {allLogos.map((logo, i) => (
+                        <div key={i} className="marquee-logo">
+                            <div className="marquee-icon-wrap">
+                                <i className={`fa-solid ${logo.icon}`} />
+                            </div>
+                            <div>
+                                <span className="brand-name">{logo.name}</span>
+                                <span className="brand-sub">{logo.sub}</span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
     );
 };
 
