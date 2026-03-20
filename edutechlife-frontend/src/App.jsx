@@ -2,6 +2,9 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import VAKTest from './components/VAKTest';
 import IALab from './components/IALab';
 import AIPanel from './components/AIPanel';
+import Hero from './components/Hero';
+import AllianceMarquee from './components/AllianceMarquee';
+import StatsBar from './components/StatsBar';
 import { callDeepseek } from './utils/api';
 
 const App = () => {
@@ -10,6 +13,7 @@ const App = () => {
     const [botMsgs, setBotMsgs] = useState([{ role: 'assistant', text: '¡Hola! Soy Nico, tu asistente virtual. ¿En qué te puedo ayudar hoy?' }]);
     const [botInput, setBotInput] = useState('');
     const [botLoading, setBotLoading] = useState(false);
+    const pilaresRef = useRef(null);
     const botMsgsEndRef = useRef(null);
 
     const scrollToBottom = () => {
@@ -40,6 +44,10 @@ const App = () => {
     const handleNavigate = useCallback(v => {
         setView(v);
         window.scrollTo(0, 0);
+    }, []);
+
+    const handleScrollToPilares = useCallback(() => {
+        pilaresRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, []);
 
     const pilarData = [
@@ -86,29 +94,23 @@ const App = () => {
             </header>
 
             {/* Main Content */}
-            <main style={{ paddingTop: '80px' }}>
+            <main style={{ paddingTop: '0' }}>
                 {view === 'landing' && (
-                    <div style={{ padding: '2rem', maxWidth: '1400px', margin: '0 auto' }}>
+                    <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
                         {/* Hero Section */}
-                        <section style={{ textAlign: 'center', padding: '4rem 0' }}>
-                            <h1 style={{ fontFamily: "'Poppins', sans-serif", fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.1, marginBottom: '1.5rem' }}>
-                                Liderando la Educación del<br /><span style={{ background: 'linear-gradient(135deg, #4F46E5, #0EA5E9)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Futuro con Pedagogía e IA</span>
-                            </h1>
-                            <p style={{ fontSize: '1.1rem', color: 'rgba(255,255,255,0.7)', maxWidth: '600px', margin: '0 auto 2rem', lineHeight: 1.7 }}>
-                                Transformamos la educación a través de la inteligencia artificial, creando experiencias de aprendizaje personalizadas para estudiantes de 8 a 16 años.
-                            </p>
-                            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-                                <button onClick={() => handleNavigate('ialab')} style={{ background: 'linear-gradient(135deg, #4F46E5, #0EA5E9)', border: 'none', borderRadius: '100px', padding: '1rem 2rem', color: 'white', fontWeight: 600, cursor: 'pointer' }}>
-                                    Comenzar Ahora
-                                </button>
-                                <button onClick={() => document.getElementById('pilares')?.scrollIntoView({ behavior: 'smooth' })} style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.3)', borderRadius: '100px', padding: '1rem 2rem', color: 'white', cursor: 'pointer' }}>
-                                    Conocer Más
-                                </button>
-                            </div>
-                        </section>
+                        <Hero 
+                            onNavigateToLab={() => handleNavigate('ialab')}
+                            onScrollToPilares={handleScrollToPilares}
+                        />
+
+                        {/* Alliance Marquee */}
+                        <AllianceMarquee />
+
+                        {/* Stats Bar */}
+                        <StatsBar />
 
                         {/* Pilares Section */}
-                        <section id="pilares" style={{ padding: '2rem 0' }}>
+                        <section ref={pilaresRef} id="pilares" style={{ padding: '6rem 5%' }}>
                             <h2 style={{ fontFamily: "'Poppins', sans-serif", fontSize: '2rem', fontWeight: 700, textAlign: 'center', marginBottom: '3rem' }}>
                                 Nuestros <span style={{ color: '#0EA5E9' }}>Pilares</span>
                             </h2>

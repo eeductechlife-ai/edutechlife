@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { PROMPT_VALERIO_DOCENTE } from '../constants/prompts';
 import { callDeepseek } from '../utils/api';
 import { speakTextConversational, iniciarReconocimiento } from '../utils/speech';
+import ValerioAvatar from './ValerioAvatar';
 
 const IALab = ({ onBack }) => {
     const [activeMod, setActiveMod] = useState(1);
@@ -22,10 +23,12 @@ const IALab = ({ onBack }) => {
     const [coachLoad, setCoachLoad] = useState(false);
     const [isListening, setIsListening] = useState(false);
     const [isHandsFree, setIsHandsFree] = useState(false);
+    const [avatarState, setAvatarState] = useState('idle');
     
     const recognitionRef = useRef(null);
     const fileInputRef = useRef(null);
     const loadingIntervalRef = useRef(null);
+    const speechSynthesisRef = useRef(null);
 
     const msgs = ['Analizando semántica...', 'Aplicando framework élite...', 'Optimizando parámetros...', 'Generando masterPrompt...'];
 
@@ -63,6 +66,7 @@ const IALab = ({ onBack }) => {
 
             recognitionRef.current.onend = () => {
                 setIsListening(false);
+                setAvatarState('thinking');
             };
         }
     }, []);
@@ -72,18 +76,31 @@ const IALab = ({ onBack }) => {
             if (loadingIntervalRef.current) {
                 clearInterval(loadingIntervalRef.current);
             }
+            if (speechSynthesisRef.current) {
+                speechSynthesisRef.current.cancel();
+            }
         };
     }, []);
 
     const askCoach = async () => {
         const q = coachQ.trim(); if (!q) return;
         setCoachLoad(true);
+        setAvatarState('thinking');
         const prompt = `Estudiante: ${q}`;
         const r = await callDeepseek(prompt, PROMPT_VALERIO_DOCENTE, false);
         setCoachMsg(r); 
         setCoachLoad(false); 
         setCoachQ('');
+        setAvatarState('speaking');
         doSpeak(r);
+        
+        setTimeout(() => {
+            if (speechSynthesisRef.current && speechSynthesisRef.current.speaking) {
+                speechSynthesisRef.current.onend = () => setAvatarState('idle');
+            } else {
+                setAvatarState('idle');
+            }
+        }, 500);
     };
 
     const toggleSpeech = () => {
@@ -91,9 +108,11 @@ const IALab = ({ onBack }) => {
         if (isListening) {
             recognitionRef.current.stop();
             setIsHandsFree(false);
+            setAvatarState('thinking');
         } else {
             setCoachQ('');
-            setIsListening(true); // Se agrega para actualizar el estado visual
+            setIsListening(true);
+            setAvatarState('listening');
             try {
                 recognitionRef.current.start();
             } catch (e) {
@@ -124,11 +143,13 @@ const IALab = ({ onBack }) => {
         reader.onload = async (evt) => {
             const content = evt.target.result;
             setCoachLoad(true);
+            setAvatarState('thinking');
             setCoachMsg('Leyendo el documento...');
             const prompt = `El estudiante acaba de subir un documento con el siguiente contenido:\n\n${content}\n\nPregúntale de forma empática y motivadora qué desea hacer con la información, o si tiene preguntas al respecto (eres un profesor colombiano). Responde de forma muy natural y concisa (1 o 2 líneas).`;
             const r = await callDeepseek(prompt, PROMPT_VALERIO_DOCENTE, false);
             setCoachMsg(r);
             setCoachLoad(false);
+            setAvatarState('speaking');
             doSpeak(r);
         };
         reader.readAsText(file);
@@ -137,7 +158,14 @@ const IALab = ({ onBack }) => {
 
     const doSpeak = (text) => {
         if (!text) return;
-        speakTextConversational(text);
+        setAvatarState('speaking');
+        const utterance = speakTextConversational(text);
+        if (utterance) {
+            speechSynthesisRef.current = utterance;
+            utterance.onend = () => setAvatarState('idle');
+        } else {
+            setTimeout(() => setAvatarState('idle'), 2000);
+        }
     };
 
     const handleOptimize = async () => {
@@ -341,9 +369,12 @@ const IALab = ({ onBack }) => {
                                 </div>
 
                                 <div className="glass-card" style={{ padding: '1.5rem', background: 'linear-gradient(165deg,rgba(0,194,224,.08),rgba(0,37,64,.15))' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '1rem' }}>
-                                        <i className="fa-solid fa-user-graduate" style={{ color: 'var(--primary)', fontSize: '1.2rem' }} />
-                                        <h3 style={{ fontFamily: 'Syne', fontWeight: 700, fontSize: '1.1rem', color: 'white' }}>Tu Coach Virtual: Valerio</h3>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: '1rem' }}>
+                                        <ValerioAvatar state={avatarState} size={56} />
+                                        <div>
+                                            <h3 style={{ fontFamily: 'Syne', fontWeight: 700, fontSize: '1.1rem', color: 'white' }}>Tu Coach Virtual: Valerio</h3>
+                                            <div className="coach-subtitle">Método Socrático · IA Nativa</div>
+                                        </div>
                                     </div>
                                     <div style={{ marginBottom: '1rem' }}>
                                         <textarea 
@@ -368,8 +399,17 @@ const IALab = ({ onBack }) => {
                                         </div>
                                     </div>
                                     {coachMsg && (
-                                        <div style={{ background: 'rgba(255,255,255,.05)', border: '1px solid rgba(0,194,224,.2)', borderRadius: '1rem', padding: '1rem', color: 'rgba(255,255,255,.9)', fontSize: '0.9rem', lineHeight: 1.6 }}>
-                                            {coachMsg}
+                                        <div className="mentor-bubble">
+                                            <div className="mentor-badge">
+                                                <i className="fa-solid fa-crown" />
+                                                <span>MENTOR JEFE</span>
+                                            </div>
+                                            <div className="mentor-content">
+                                                <ValerioAvatar state={avatarState} size={48} />
+                                                <div className="mentor-message">
+                                                    <p>{coachMsg}</p>
+                                                </div>
+                                            </div>
                                         </div>
                                     )}
                                 </div>

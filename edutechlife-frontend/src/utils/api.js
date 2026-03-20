@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://edutechlife-backend.onrender.com';
 
 async function fetchWithRetry(url, options, retries = 3) {
     for (let i = 0; i < retries; i++) {
@@ -107,35 +107,4 @@ export async function callDeepseekStream(p, systemPrompt, isJson = false, onChun
     });
 }
 
-export async function callDeepseekDirect(p, systemPrompt, isJson = false) {
-    const url = 'https://api.deepseek.com/chat/completions';
-    const apiKey = import.meta.env.VITE_DEEPSEEK_API_KEY;
-    
-    if (!apiKey) {
-        console.error('DeepSeek API key not configured');
-        return isJson ? { error: true, message: 'API key not configured' } : 'Error: API key no configurada';
-    }
 
-    const payload = { 
-        model: 'deepseek-chat', 
-        messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: p }], 
-        temperature: 0.75, 
-        max_tokens: 1200 
-    };
-    if (isJson) payload.response_format = { type: 'json_object' };
-
-    try {
-        const data = await fetchWithRetry(url, { 
-            method: 'POST', 
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` }, 
-            body: JSON.stringify(payload) 
-        });
-        
-        if (data.error) throw new Error(data.error.message);
-        const text = data.choices?.[0]?.message?.content;
-        if (!text) return isJson ? { error: true } : 'Sin respuesta.';
-        return isJson ? JSON.parse(text.replace(/```json|```/g, '').trim()) : text;
-    } catch (e) { 
-        return isJson ? { error: true, message: e.message } : `Error: ${e.message}`; 
-    }
-}
