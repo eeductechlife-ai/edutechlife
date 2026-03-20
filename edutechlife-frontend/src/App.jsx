@@ -9,7 +9,7 @@ import Footer from './components/Footer';
 import NeuroEntorno from './components/NeuroEntorno';
 import ProyectosNacional from './components/ProyectosNacional';
 import Consultoria from './components/Consultoria';
-import LoadingScreen from './components/LoadingScreen';
+import LoadingScreen, { MiniLoader } from './components/LoadingScreen';
 import { callDeepseek } from './utils/api';
 
 const App = () => {
@@ -211,8 +211,8 @@ const App = () => {
                                 </div>
                             ))}
                             {botLoading && (
-                                <div style={{ alignSelf: 'flex-start', background: 'rgba(255,255,255,0.1)', padding: '0.75rem 1rem', borderRadius: '1rem' }}>
-                                    <i className="fa-solid fa-ellipsis" style={{ animation: 'pulse 1s infinite', color: 'white' }}></i>
+                                <div style={{ alignSelf: 'flex-start', background: 'rgba(255,255,255,0.1)', padding: '0.75rem 1rem', borderRadius: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    <MiniLoader size="sm" color="white" />
                                 </div>
                             )}
                             <div ref={botMsgsEndRef} />
