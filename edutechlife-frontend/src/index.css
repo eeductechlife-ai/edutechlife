@@ -151,6 +151,13 @@
     background-clip: text;
   }
 
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
   .line-accent {
     position: relative;
     display: inline-block;
@@ -163,7 +170,7 @@
     bottom: -4px;
     width: 100%;
     height: 3px;
-    background: linear-gradient(90deg, #4DA8C4, #66CCCC);
+    background: linear-gradient(90deg, #004B63, #66CCCC);
     border-radius: 2px;
     transform: scaleX(0);
     transform-origin: left;
@@ -187,6 +194,7 @@
   --color-petroleum: #004B63;
   --color-corporate: #4DA8C4;
   --color-soft-blue: #B2D8E5;
+  --color-navy: #0A1628;
   --color-text-gray: #4A4A4A;
   --color-mint: #66CCCC;
   --color-white: #FFFFFF;
