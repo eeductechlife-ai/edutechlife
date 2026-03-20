@@ -86,17 +86,6 @@ const IALab = ({ onBack }) => {
         doSpeak(r);
     };
 
-    const askCoachVoice = async (textQ) => {
-        const q = textQ.trim(); if (!q) return;
-        setCoachLoad(true);
-        const prompt = `Estudiante: ${q}`;
-        const r = await callDeepseek(prompt, PROMPT_VALERIO_DOCENTE, false);
-        setCoachMsg(r); 
-        setCoachLoad(false); 
-        setCoachQ('');
-        doSpeak(r);
-    };
-
     const toggleSpeech = () => {
         if (!recognitionRef.current) return;
         if (isListening) {
@@ -104,7 +93,7 @@ const IALab = ({ onBack }) => {
             setIsHandsFree(false);
         } else {
             setCoachQ('');
-            setIsHandsFree(true);
+            setIsListening(true); // Se agrega para actualizar el estado visual
             try {
                 recognitionRef.current.start();
             } catch (e) {
@@ -276,7 +265,8 @@ const IALab = ({ onBack }) => {
                     ))}
                 </nav>
 
-                <button onClick={onBack} style={{ marginTop: '1.5rem', padding: '1rem 1.2rem', borderTop: '1px solid rgba(255,255,255,.06)', display: 'flex', alignItems: 'center', gap: 10, fontFamily: 'DM Mono', fontSize: '9px', color: 'rgba(255,255,255,.25)', textTransform: 'uppercase', letterSpacing: '.2em', background: 'transparent', border: 'none', borderTop: '1px solid rgba(255,255,255,.06)', cursor: 'pointer', transition: 'color .3s', width: '100%' }}
+                {/* CORRECCIÓN AQUÍ: Se eliminó borderTop duplicado y se unificó el estilo */}
+                <button onClick={onBack} style={{ marginTop: '1.5rem', padding: '1rem 1.2rem', display: 'flex', alignItems: 'center', gap: 10, fontFamily: 'DM Mono', fontSize: '9px', color: 'rgba(255,255,255,.25)', textTransform: 'uppercase', letterSpacing: '.2em', background: 'transparent', border: 'none', borderTop: '1px solid rgba(255,255,255,.06)', cursor: 'pointer', transition: 'color .3s', width: '100%' }}
                     onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,.7)'}
                     onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,.25)'}>
                     <i className="fa-solid fa-power-off text-xs" />VOLVER AL NÚCLEO
