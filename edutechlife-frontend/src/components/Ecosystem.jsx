@@ -82,7 +82,7 @@ const LineCard = ({ line, index, onExplore }) => {
             style={{
                 '--line-color': line.color,
                 '--line-glow': line.glowColor,
-                minHeight: '520px',
+                minHeight: 'auto',
             }}
         >
             {/* Background Image */}
@@ -104,7 +104,7 @@ const LineCard = ({ line, index, onExplore }) => {
             />
 
             {/* Content */}
-            <div className="relative z-10 p-8 h-full flex flex-col">
+            <div className="relative z-10 p-6 md:p-8 h-full flex flex-col">
                 {/* Header */}
                 <div className="flex items-start justify-between mb-6">
                     <div
@@ -268,7 +268,7 @@ const Ecosystem = ({ onExplore }) => {
     return (
         <section
             id="ecosystem"
-            className="relative py-24 px-5% overflow-hidden"
+            className="relative py-16 md:py-24 px-4 md:px-8 lg:px-5% overflow-hidden"
             style={{
                 background: 'linear-gradient(180deg, #0A1628 0%, #070B14 50%, #0A1628 100%)',
             }}
@@ -340,21 +340,22 @@ const Ecosystem = ({ onExplore }) => {
                 </div>
 
                 {/* Lines Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-2 md:px-0">
                     {lines.map((line, index) => (
-                        <LineCard
-                            key={line.id}
-                            line={line}
-                            index={index}
-                            onExplore={handleExplore}
-                        />
+                        <div key={line.id} className="mb-8 md:mb-0">
+                            <LineCard
+                                line={line}
+                                index={index}
+                                onExplore={handleExplore}
+                            />
+                        </div>
                     ))}
                 </div>
 
                 {/* Bottom CTA */}
-                <div className="text-center mt-16">
+                <div className="text-center mt-12 md:mt-16">
                     <div
-                        className={`inline-flex items-center gap-6 px-8 py-4 rounded-full border border-white/10 bg-white/[0.03] backdrop-blur-xl transition-all duration-700 delay-300 ${
+                        className={`inline-flex flex-col md:flex-row items-center gap-4 md:gap-6 px-6 md:px-8 py-4 rounded-2xl md:rounded-full border border-white/10 bg-white/[0.03] backdrop-blur-xl transition-all duration-700 delay-300 ${
                             isHeaderVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                         }`}
                     >
