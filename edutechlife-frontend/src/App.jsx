@@ -1,16 +1,19 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import VAKTest from './components/VAKTest';
 import IALab from './components/IALab';
-import AIPanel from './components/AIPanel';
 import Hero from './components/Hero';
 import AllianceMarquee from './components/AllianceMarquee';
 import StatsBar from './components/StatsBar';
 import About from './components/About';
 import ProcessSection from './components/ProcessSection';
 import Footer from './components/Footer';
+import NeuroEntorno from './components/NeuroEntorno';
+import ProyectosNacional from './components/ProyectosNacional';
+import Consultoria from './components/Consultoria';
+import LoadingScreen from './components/LoadingScreen';
 import { callDeepseek } from './utils/api';
 
 const App = () => {
+    const [isLoading, setIsLoading] = useState(true);
     const [view, setView] = useState('landing');
     const [botOpen, setBotOpen] = useState(false);
     const [botMsgs, setBotMsgs] = useState([{ role: 'assistant', text: '¡Hola! Soy Nico, tu asistente virtual. ¿En qué te puedo ayudar hoy?' }]);
@@ -53,35 +56,47 @@ const App = () => {
         pilaresRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, []);
 
+    const handleLoadingComplete = useCallback(() => {
+        setIsLoading(false);
+    }, []);
+
     const pilarData = [
         {
             id: 1,
             num: '01',
             title: 'NEURO-ENTORNO EDUCATIVO',
-            desc: 'Acompañamiento integral basado en metodologías VAK y STEAM. Docentes con maestría analizan procesos psicológicos y académicos para potenciar cada estilo de aprendizaje con herramientas de IA personalizadas.',
-            icon: 'fa-children',
-            img: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=800'
+            desc: 'IA que analiza procesos psicológicos y académicos en tiempo real para cada estudiante. Acompañamiento integral basado en metodologías VAK y STEAM.',
+            icon: 'fa-brain',
+            img: 'https://images.unsplash.com/photo-1559757175-5700dde675bc?q=80&w=800',
+            view: 'neuroentorno'
         },
         {
             id: 2,
             num: '02',
             title: 'PROYECTOS DE IMPACTO NACIONAL',
-            desc: 'Operadores oficiales SenaTIC. Certificamos a más de 6,000 estudiantes con respaldo internacional de IBM y Coursera. Maestros que forman maestros: más de 200 docentes colombianos transformados en líderes digitales.',
+            desc: 'Operadores oficiales SenaTIC. Certificamos a más de 6,000 estudiantes con respaldo internacional de IBM y Coursera.',
             icon: 'fa-award',
-            img: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?q=80&w=800'
+            img: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?q=80&w=800',
+            view: 'proyectos'
         },
         {
             id: 3,
             num: '03',
             title: 'CONSULTORÍA B2B Y AUTOMATIZACIÓN',
-            desc: 'Transformamos organizaciones educativas y empresas con metodología STEAM aplicada. Agentes de IA personalizados y capacitación de alto nivel que generan productividad real desde el primer mes de implementación.',
+            desc: 'Agentes de IA personalizados y capacitación de alto nivel que generan productividad real desde el primer mes de implementación.',
             icon: 'fa-building',
-            img: 'https://images.unsplash.com/photo-1664575600796-ffa828c5cb6e?q=80&w=800'
+            img: 'https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=800',
+            view: 'consultoria'
         },
     ];
 
     return (
         <div style={{ position: 'relative', minHeight: '100vh', background: '#FFFFFF', color: '#4A4A4A', fontFamily: "'Open Sans', sans-serif" }}>
+            {/* Loading Screen */}
+            {isLoading && (
+                <LoadingScreen onComplete={handleLoadingComplete} minDuration={3000} />
+            )}
+
             {/* Header - White Glassmorphism */}
             <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000, padding: '1rem 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(0,75,99,0.08)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -115,38 +130,37 @@ const App = () => {
                         {/* About Section */}
                         <About />
 
-                        {/* Pilares Section */}
-                        <section ref={pilaresRef} id="pilares" style={{ padding: '6rem 5%', background: '#F8FAFC' }}>
-                            <h2 style={{ fontFamily: "'Montserrat', sans-serif", fontSize: '2rem', fontWeight: 700, textAlign: 'center', marginBottom: '3rem', color: '#004B63' }}>
-                                Nuestros <span style={{ color: '#4DA8C4' }}>Pilares</span>
-                            </h2>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '2rem' }}>
-                                {pilarData.map((pilar, idx) => (
-                                    <div key={pilar.id} className="pilar-card">
-                                        {/* Contenedor de la Imagen */}
-                                        <div className="w-full h-56 overflow-hidden rounded-t-3xl">
-                                            <img 
-                                                src={pilar.img} 
-                                                alt={pilar.title} 
-                                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                            />
-                                        </div>
+                        {/* Pilares Section - v2286 Premium */}
+                        <section ref={pilaresRef} className="pilares-section">
+                            <div className="pilares-header">
+                                <div className="pilares-kicker">Líneas de Impacto · VAK + STEAM</div>
+                                <h2 className="pilares-title">Nuestro <span>Ecosistema</span></h2>
+                                <p className="pilares-subtitle">
+                                    Seis líneas de impacto diseñadas por Magísteres en Educación. Cada pilar aplica metodología VAK y STEAM con las herramientas de IA más avanzadas del mercado.
+                                </p>
+                            </div>
 
-                                        {/* Contenedor del Texto */}
-                                        <div className="p-8 flex-1 relative z-10">
-                                            <div className="pilar-icon-wrap mb-6">
+                            <div className="pilares-grid">
+                                {pilarData.map((pilar) => (
+                                    <div 
+                                        key={pilar.id} 
+                                        className="pilar-card-v2286"
+                                        onClick={() => handleNavigate(pilar.view)}
+                                    >
+                                        <span className="pilar-card-number">{pilar.num}</span>
+                                        <div className="pilar-card-image">
+                                            <img src={pilar.img} alt={pilar.title} />
+                                            <div className="pilar-card-overlay" />
+                                        </div>
+                                        <div className="pilar-card-content">
+                                            <div className="pilar-card-icon">
                                                 <i className={`fa-solid ${pilar.icon}`}></i>
                                             </div>
-                                            
-                                            <h3 className="pilar-title">
-                                                {pilar.title}
-                                            </h3>
-                                            
-                                            <div className="w-10 h-1 bg-[#66CCCC] rounded-full mb-4 mx-auto transition-all duration-300 group-hover:w-20"></div>
-                                            
-                                            <p className="pilar-text">
-                                                {pilar.desc}
-                                            </p>
+                                            <h3 className="pilar-card-title">{pilar.title}</h3>
+                                            <p className="pilar-card-desc">{pilar.desc}</p>
+                                            <span className="pilar-card-cta">
+                                                EXPLORAR <i className="fa-solid fa-arrow-right" />
+                                            </span>
                                         </div>
                                     </div>
                                 ))}
@@ -162,6 +176,9 @@ const App = () => {
                 )}
 
                 {view === 'ialab' && <IALab onBack={() => handleNavigate('landing')} />}
+                {view === 'neuroentorno' && <NeuroEntorno onBack={() => handleNavigate('landing')} />}
+                {view === 'proyectos' && <ProyectosNacional onBack={() => handleNavigate('landing')} />}
+                {view === 'consultoria' && <Consultoria onBack={() => handleNavigate('landing')} />}
             </main>
 
             {/* Floating Chatbot */}

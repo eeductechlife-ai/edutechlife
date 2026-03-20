@@ -1,14 +1,14 @@
 import { useEffect, useRef } from 'react';
 
 const logos = [
-    { icon: 'fa-graduation-cap', name: 'SenaTIC', sub: 'Ministerio TIC' },
+    { icon: 'fa-graduation-cap', name: 'SenaTIC', sub: 'Certificación Oficial' },
     { icon: 'fa-microchip', name: 'IBM', sub: 'Watson Education' },
     { icon: 'fa-book-open', name: 'Coursera', sub: 'Global Learning' },
     { icon: 'fa-landmark', name: 'MinTIC', sub: 'Colombia Digital' },
-    { icon: 'fa-award', name: 'SenaTIC', sub: 'Certificación Oficial' },
-    { icon: 'fa-brain', name: 'IBM', sub: 'AI for Education' },
-    { icon: 'fa-globe', name: 'Coursera', sub: '+200 Países' },
-    { icon: 'fa-flag', name: 'MinTIC', sub: 'Alianza Nacional' },
+    { icon: 'fa-award', name: 'ICFES', sub: 'Evaluación Nacional' },
+    { icon: 'fa-brain', name: 'Stanford', sub: 'AI Research' },
+    { icon: 'fa-globe', name: 'UNESCO', sub: 'Educación Global' },
+    { icon: 'fa-rocket', name: 'NASA', sub: 'STEM Programs' },
 ];
 
 const AllianceMarquee = () => {
@@ -20,7 +20,7 @@ const AllianceMarquee = () => {
 
         let animationId;
         let position = 0;
-        const speed = 0.5;
+        const speed = 0.4;
 
         const animate = () => {
             position -= speed;
@@ -42,40 +42,28 @@ const AllianceMarquee = () => {
     const allLogos = [...logos, ...logos];
 
     return (
-        <div className="relative py-12 overflow-hidden" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #F1F5F9 100%)' }}>
-            {/* Header label */}
-            <div className="max-w-7xl mx-auto px-5% mb-8">
-                <div className="flex items-center justify-center gap-4">
-                    <div className="flex-1 h-px bg-gradient-to-r from-transparent to-[#B2D8E5]" />
-                    <span className="font-mono text-[11px] font-semibold text-[#64748B] uppercase tracking-[0.3em] whitespace-nowrap">
-                        Ecosistema de Nivel Mundial
-                    </span>
-                    <div className="flex-1 h-px bg-gradient-to-l from-transparent to-[#B2D8E5]" />
-                </div>
+        <section className="alliance-section">
+            <div className="alliance-label">
+                <span>Ecosistema de Nivel Mundial</span>
             </div>
-
-            {/* Marquee Container */}
-            <div className="marquee-wrap">
-                {/* Fade gradients */}
+            
+            <div className="marquee-container">
                 <div className="marquee-fade-left" />
                 <div className="marquee-fade-right" />
-
-                {/* Track */}
+                
                 <div className="marquee-track" ref={trackRef}>
                     {allLogos.map((logo, i) => (
-                        <div key={i} className="marquee-logo">
-                            <div className="marquee-icon-wrap">
+                        <div key={i} className="marquee-item">
+                            <div className="marquee-logo">
                                 <i className={`fa-solid ${logo.icon}`} />
                             </div>
-                            <div>
-                                <span className="brand-name">{logo.name}</span>
-                                <span className="brand-sub">{logo.sub}</span>
-                            </div>
+                            <span className="marquee-name">{logo.name}</span>
+                            <span className="marquee-sub">{logo.sub}</span>
                         </div>
                     ))}
                 </div>
             </div>
-        </div>
+        </section>
     );
 };
 
