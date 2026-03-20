@@ -5,6 +5,9 @@ import AIPanel from './components/AIPanel';
 import Hero from './components/Hero';
 import AllianceMarquee from './components/AllianceMarquee';
 import StatsBar from './components/StatsBar';
+import About from './components/About';
+import ProcessSection from './components/ProcessSection';
+import Footer from './components/Footer';
 import { callDeepseek } from './utils/api';
 
 const App = () => {
@@ -109,6 +112,9 @@ const App = () => {
                         {/* Stats Bar */}
                         <StatsBar />
 
+                        {/* About Section */}
+                        <About />
+
                         {/* Pilares Section */}
                         <section ref={pilaresRef} id="pilares" style={{ padding: '6rem 5%' }}>
                             <h2 style={{ fontFamily: "'Poppins', sans-serif", fontSize: '2rem', fontWeight: 700, textAlign: 'center', marginBottom: '3rem' }}>
@@ -150,6 +156,12 @@ const App = () => {
                                 ))}
                             </div>
                         </section>
+
+                        {/* Process Section */}
+                        <ProcessSection />
+
+                        {/* Footer */}
+                        <Footer />
                     </div>
                 )}
 
