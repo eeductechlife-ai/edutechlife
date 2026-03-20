@@ -2,6 +2,10 @@ import { useState } from 'react';
 
 const ProyectosNacional = ({ onBack }) => {
     const [activeTab, setActiveTab] = useState('proyectos');
+    const [selectedCert, setSelectedCert] = useState(null);
+    const [enrollForm, setEnrollForm] = useState({ name: '', email: '', institution: '', program: '' });
+    const [enrollSubmitted, setEnrollSubmitted] = useState(false);
+    const [enrollLoading, setEnrollLoading] = useState(false);
 
     const proyectos = [
         {
@@ -10,7 +14,10 @@ const ProyectosNacional = ({ onBack }) => {
             desc: 'Programa de certificación oficial para operadores tecnológicos del SENA.',
             stats: { estudiantes: '6,000+', certificaciones: '12,000+', cobertura: '32 deptos' },
             icon: 'fa-graduation-cap',
-            color: '#4DA8C4'
+            color: '#4DA8C4',
+            duration: '6 meses',
+            modules: ['Fundamentos de TI', 'Metodologías Ágiles', 'Gestión de Proyectos', 'Evaluación de Competencias'],
+            certification: 'Técnico en Operación de Centros de Datos'
         },
         {
             id: 2,
@@ -18,7 +25,10 @@ const ProyectosNacional = ({ onBack }) => {
             desc: 'Alianza con IBM para formación en Watson y herramientas de IA educativa.',
             stats: { cursos: '45+', horas: '1,200+', partners: '8' },
             icon: 'fa-microchip',
-            color: '#004B63'
+            color: '#004B63',
+            duration: '4 meses',
+            modules: ['IBM Watson Fundamentals', 'AI for Education', 'Data Analytics', 'Cloud Computing Basics'],
+            certification: 'IBM AI Practitioner'
         },
         {
             id: 3,
@@ -26,7 +36,10 @@ const ProyectosNacional = ({ onBack }) => {
             desc: 'Acceso ilimitado a certificaciones internacionales de las mejores universidades.',
             stats: { carreras: '180+', universidades: '40+', paises: '200+' },
             icon: 'fa-globe',
-            color: '#66CCCC'
+            color: '#66CCCC',
+            duration: 'Variable',
+            modules: ['Profesionalización', 'Especialización', 'Diplomados', 'Maestrías'],
+            certification: 'Certificado Internacional'
         },
         {
             id: 4,
@@ -34,7 +47,10 @@ const ProyectosNacional = ({ onBack }) => {
             desc: 'Programa nacional de transformación digital educativa.',
             stats: { municipios: '1,100+', instituciones: '500+', beneficiarios: '50,000+' },
             icon: 'fa-landmark',
-            color: '#B2D8E5'
+            color: '#B2D8E5',
+            duration: '8 meses',
+            modules: ['Transformación Digital', 'Gobierno Digital', 'Competencias Digitales', 'Innovación Educativa'],
+            certification: 'Especialista en Gobierno Digital'
         },
     ];
 
@@ -46,10 +62,34 @@ const ProyectosNacional = ({ onBack }) => {
     ];
 
     const testimonios = [
-        { nombre: 'María Elena Gómez', rol: 'Docente I.E. San José', texto: 'Gracias a la metodología VAK pude transformar mis clases y alcanzar a estudiantes que antes no conectaban con el contenido.', img: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100' },
-        { nombre: 'Carlos Andrés Ríos', rol: 'Estudiante SenaTIC 2024', texto: 'La certificación de IBM fue un diferenciador enorme en mi hoja de vida. Hoy trabajo en una multinacional.', img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100' },
-        { nombre: 'Laura Patricia Vega', rol: 'Rectora I.E. Normal Superior', texto: 'La consultoría B2B transformó nuestra institución. Los resultados en pruebas Saber mejoraron un 35%.', img: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100' },
+        { nombre: 'María Elena Gómez', rol: 'Docente I.E. San José', texto: 'Gracias a la metodología VAK pude transformar mis clases y alcanzar a estudiantes que antes no conectaban con el contenido.', img: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100', programa: 'SenaTIC 2024' },
+        { nombre: 'Carlos Andrés Ríos', rol: 'Estudiante SenaTIC 2024', texto: 'La certificación de IBM fue un diferenciador enorme en mi hoja de vida. Hoy trabajo en una multinacional.', img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100', programa: 'IBM Academic' },
+        { nombre: 'Laura Patricia Vega', rol: 'Rectora I.E. Normal Superior', texto: 'La consultoría B2B transformó nuestra institución. Los resultados en pruebas Saber mejoraron un 35%.', img: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100', programa: 'Consultoría B2B' },
+        { nombre: 'Pedro Antonio Muñoz', rol: 'Coordinador TIC', texto: 'El programa MinTIC cambió completamente nuestra forma de enseñar. Ahora nuestros estudiantes están mejor preparados para el mundo digital.', img: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100', programa: 'MinTIC 2024' },
     ];
+
+    const successStories = [
+        { institution: 'I.E. San José - Bogotá', result: '+45% desempeño en pruebas Saber', year: '2024' },
+        { institution: 'I.E. Normal Superior - Medellín', result: '120 docentes certificados', year: '2024' },
+        { institution: 'Centro Tecnológico del Valle', result: '98% empleabilidad de egresados', year: '2023' },
+    ];
+
+    const handleEnroll = async (e) => {
+        e.preventDefault();
+        setEnrollLoading(true);
+        await new Promise(r => setTimeout(r, 1500));
+        setEnrollSubmitted(true);
+        setEnrollLoading(false);
+    };
+
+    const handleEnrollChange = (field, value) => {
+        setEnrollForm(prev => ({ ...prev, [field]: value }));
+    };
+
+    const resetEnroll = () => {
+        setEnrollSubmitted(false);
+        setEnrollForm({ name: '', email: '', institution: '', program: '' });
+    };
 
     return (
         <div className="pillar-page">
@@ -96,6 +136,10 @@ const ProyectosNacional = ({ onBack }) => {
                     <i className="fa-solid fa-comments" />
                     Testimonios
                 </button>
+                <button className={`tab-btn ${activeTab === 'inscripcion' ? 'active' : ''}`} onClick={() => setActiveTab('inscripcion')}>
+                    <i className="fa-solid fa-pen-to-square" />
+                    Inscribirme
+                </button>
             </div>
 
             <div className="pillar-content">
@@ -119,7 +163,11 @@ const ProyectosNacional = ({ onBack }) => {
                                         </div>
                                     ))}
                                 </div>
-                                <button className="explore-btn">
+                                <div className="program-meta">
+                                    <i className="fa-solid fa-clock" />
+                                    <span>{p.duration}</span>
+                                </div>
+                                <button className="explore-btn" onClick={() => setSelectedCert(p)}>
                                     <span>Explorar</span>
                                     <i className="fa-solid fa-arrow-right" />
                                 </button>
@@ -139,7 +187,7 @@ const ProyectosNacional = ({ onBack }) => {
                                 <div className="big-number">6,000+</div>
                                 <div className="big-label">Estudiantes certificados en 2024</div>
                                 <div className="stat-progress">
-                                    <div className="progress-bar" style={{ width: '85%' }} />
+                                    <div className="progress-bar" style={{ width: '75%' }} />
                                     <span>Meta 2025: 8,000+</span>
                                 </div>
                             </div>
@@ -166,6 +214,18 @@ const ProyectosNacional = ({ onBack }) => {
                                 </div>
                             </div>
                         </div>
+                        <div className="dashboard-section">
+                            <h3 className="dashboard-title">Historias de Éxito</h3>
+                            <div className="success-stories">
+                                {successStories.map((story, i) => (
+                                    <div key={i} className="success-story-card">
+                                        <div className="story-badge">{story.year}</div>
+                                        <h4>{story.institution}</h4>
+                                        <p>{story.result}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 )}
 
@@ -180,6 +240,10 @@ const ProyectosNacional = ({ onBack }) => {
                                         <span>{t.rol}</span>
                                     </div>
                                 </div>
+                                <div className="testimonio-programa">
+                                    <i className="fa-solid fa-certificate" />
+                                    <span>{t.programa}</span>
+                                </div>
                                 <p>"{t.texto}"</p>
                                 <div className="testimonio-rating">
                                     {[1,2,3,4,5].map(s => <i key={s} className="fa-solid fa-star" />)}
@@ -188,7 +252,147 @@ const ProyectosNacional = ({ onBack }) => {
                         ))}
                     </div>
                 )}
+
+                {activeTab === 'inscripcion' && (
+                    <div className="enroll-section">
+                        {!enrollSubmitted ? (
+                            <div className="enroll-card">
+                                <div className="enroll-header">
+                                    <i className="fa-solid fa-user-graduate" />
+                                    <h2>Formulario de Inscripción</h2>
+                                    <p>Completa tus datos para iniciar tu proceso de certificación</p>
+                                </div>
+                                <form onSubmit={handleEnroll} className="enroll-form">
+                                    <div className="form-group">
+                                        <label>Nombre Completo</label>
+                                        <input 
+                                            type="text" 
+                                            value={enrollForm.name}
+                                            onChange={(e) => handleEnrollChange('name', e.target.value)}
+                                            placeholder="Ej: María Elena Gómez"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Correo Electrónico</label>
+                                        <input 
+                                            type="email" 
+                                            value={enrollForm.email}
+                                            onChange={(e) => handleEnrollChange('email', e.target.value)}
+                                            placeholder="Ej: maria.gomez@email.com"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Institución / Empresa</label>
+                                        <input 
+                                            type="text" 
+                                            value={enrollForm.institution}
+                                            onChange={(e) => handleEnrollChange('institution', e.target.value)}
+                                            placeholder="Ej: I.E. San José"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Programa de Interés</label>
+                                        <select 
+                                            value={enrollForm.program}
+                                            onChange={(e) => handleEnrollChange('program', e.target.value)}
+                                            required
+                                        >
+                                            <option value="">Selecciona un programa</option>
+                                            <option value="senatic">SenaTIC Certification Program</option>
+                                            <option value="ibm">IBM Academic Initiative</option>
+                                            <option value="coursera">Coursera Campus</option>
+                                            <option value="mintic">MinTIC Colombia Digital</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" className="enroll-submit" disabled={enrollLoading}>
+                                        {enrollLoading ? (
+                                            <>
+                                                <span className="spinner" />
+                                                Procesando...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <i className="fa-solid fa-paper-plane" />
+                                                Enviar Solicitud
+                                            </>
+                                        )}
+                                    </button>
+                                </form>
+                            </div>
+                        ) : (
+                            <div className="enroll-success">
+                                <div className="success-icon">
+                                    <i className="fa-solid fa-check" />
+                                </div>
+                                <h2>¡Solicitud Enviada!</h2>
+                                <p>Te hemos enviado un correo de confirmación. Un asesor se pondrá en contacto contigo en las próximas 48 horas.</p>
+                                <button className="reset-btn" onClick={resetEnroll}>
+                                    <i className="fa-solid fa-plus" />
+                                    Realizar otra inscripción
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
+
+            {selectedCert && (
+                <div className="modal-overlay" onClick={() => setSelectedCert(null)}>
+                    <div className="modal-content cert-modal" onClick={(e) => e.stopPropagation()}>
+                        <button className="modal-close" onClick={() => setSelectedCert(null)}>
+                            <i className="fa-solid fa-xmark" />
+                        </button>
+                        <div className="modal-header" style={{ background: `linear-gradient(135deg, ${selectedCert.color}40, ${selectedCert.color}10)` }}>
+                            <div className="modal-icon" style={{ background: selectedCert.color }}>
+                                <i className={`fa-solid ${selectedCert.icon}`} />
+                            </div>
+                            <div>
+                                <span className="modal-badge">Certificación Oficial</span>
+                                <h2>{selectedCert.title}</h2>
+                            </div>
+                        </div>
+                        <div className="modal-body">
+                            <p className="modal-desc">{selectedCert.desc}</p>
+                            <div className="modal-meta">
+                                <div className="meta-item">
+                                    <i className="fa-solid fa-clock" />
+                                    <span>Duración: {selectedCert.duration}</span>
+                                </div>
+                                <div className="meta-item">
+                                    <i className="fa-solid fa-certificate" />
+                                    <span>Certificación: {selectedCert.certification}</span>
+                                </div>
+                            </div>
+                            <div className="modal-modules">
+                                <h3>Módulos del Programa</h3>
+                                <div className="modules-list">
+                                    {selectedCert.modules.map((mod, i) => (
+                                        <div key={i} className="module-item">
+                                            <span className="module-number">{String(i + 1).padStart(2, '0')}</span>
+                                            <span>{mod}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="modal-stats">
+                                {Object.entries(selectedCert.stats).map(([key, val]) => (
+                                    <div key={key} className="modal-stat">
+                                        <span className="modal-stat-value">{val}</span>
+                                        <span className="modal-stat-key">{key}</span>
+                                    </div>
+                                ))}
+                            </div>
+                            <button className="modal-cta" onClick={() => { setSelectedCert(null); setActiveTab('inscripcion'); }}>
+                                <i className="fa-solid fa-pen-to-square" />
+                                Inscribirme en este programa
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

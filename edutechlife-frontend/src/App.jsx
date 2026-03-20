@@ -4,26 +4,27 @@ import Hero from './components/Hero';
 import AllianceMarquee from './components/AllianceMarquee';
 import StatsBar from './components/StatsBar';
 import About from './components/About';
-import Testimonials from './components/Testimonials';
-import Pricing from './components/Pricing';
+import Ecosystem from './components/Ecosystem';
 import ProcessSection from './components/ProcessSection';
 import FinalCTA from './components/FinalCTA';
 import Footer from './components/Footer';
 import NeuroEntorno from './components/NeuroEntorno';
 import ProyectosNacional from './components/ProyectosNacional';
 import Consultoria from './components/Consultoria';
-import Ecosystem from './components/Ecosystem';
 import LoadingScreen, { MiniLoader } from './components/LoadingScreen';
 import { callDeepseek } from './utils/api';
 
 const App = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [view, setView] = useState('landing');
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [botOpen, setBotOpen] = useState(false);
-    const [botMsgs, setBotMsgs] = useState([{ role: 'assistant', text: '¡Hola! Soy Nico, tu asistente virtual de Edutechlife. ¿En qué te puedo ayudar hoy?' }]);
+    const [botMsgs, setBotMsgs] = useState([{ 
+        role: 'assistant', 
+        text: '¡Hola! Soy Nico, tu asistente virtual de Edutechlife. ¿En qué te puedo ayudar hoy?' 
+    }]);
     const [botInput, setBotInput] = useState('');
     const [botLoading, setBotLoading] = useState(false);
-    const pilaresRef = useRef(null);
     const botMsgsEndRef = useRef(null);
 
     const scrollToBottom = () => {
@@ -56,46 +57,21 @@ const App = () => {
 
     const handleNavigate = useCallback(v => {
         setView(v);
+        setMobileMenuOpen(false);
         window.scrollTo(0, 0);
-    }, []);
-
-    const handleScrollToPilares = useCallback(() => {
-        pilaresRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, []);
 
     const handleLoadingComplete = useCallback(() => {
         setIsLoading(false);
     }, []);
 
-    const pilarData = [
-        {
-            id: 1,
-            num: '01',
-            title: 'NEURO-ENTORNO EDUCATIVO',
-            desc: 'IA que analiza procesos psicológicos y académicos en tiempo real para cada estudiante. Acompañamiento integral basado en metodologías VAK y STEAM.',
-            icon: 'fa-brain',
-            img: 'https://images.unsplash.com/photo-1559757175-5700dde675bc?q=80&w=800',
-            view: 'neuroentorno'
-        },
-        {
-            id: 2,
-            num: '02',
-            title: 'PROYECTOS DE IMPACTO NACIONAL',
-            desc: 'Operadores oficiales SenaTIC. Certificamos a más de 6,000 estudiantes con respaldo internacional de IBM y Coursera.',
-            icon: 'fa-award',
-            img: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?q=80&w=800',
-            view: 'proyectos'
-        },
-        {
-            id: 3,
-            num: '03',
-            title: 'CONSULTORÍA B2B Y AUTOMATIZACIÓN',
-            desc: 'Agentes de IA personalizados y capacitación de alto nivel que generan productividad real desde el primer mes de implementación.',
-            icon: 'fa-building',
-            img: 'https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=800',
-            view: 'consultoria'
-        },
-    ];
+    const scrollToSection = (sectionId) => {
+        setMobileMenuOpen(false);
+        const element = document.getElementById(sectionId);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
 
     return (
         <div style={{ position: 'relative', minHeight: '100vh', background: '#FFFFFF', color: '#4A4A4A', fontFamily: "'Open Sans', sans-serif" }}>
@@ -122,17 +98,17 @@ const App = () => {
 
                     {/* Desktop Navigation */}
                     <nav className="hidden md:flex items-center gap-8">
-                        <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="font-medium text-[#4A4A4A] hover:text-[#004B63] transition-colors">
+                        <button onClick={() => handleNavigate('landing')} className="font-medium text-[#4A4A4A] hover:text-[#004B63] transition-colors">
                             Inicio
                         </button>
-                        <button onClick={() => pilaresRef.current?.scrollIntoView({ behavior: 'smooth' })} className="font-medium text-[#4A4A4A] hover:text-[#004B63] transition-colors">
-                            Pilares
+                        <button onClick={() => scrollToSection('ecosystem')} className="font-medium text-[#4A4A4A] hover:text-[#004B63] transition-colors">
+                            Líneas de Impacto
                         </button>
-                        <button onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })} className="font-medium text-[#4A4A4A] hover:text-[#004B63] transition-colors">
-                            Precios
+                        <button onClick={() => handleNavigate('neuroentorno')} className="font-medium text-[#4A4A4A] hover:text-[#004B63] transition-colors">
+                            Neuro-Entorno
                         </button>
-                        <button onClick={() => handleNavigate('ialab')} className="font-medium text-[#4A4A4A] hover:text-[#004B63] transition-colors">
-                            IA Lab
+                        <button onClick={() => handleNavigate('consultoria')} className="font-medium text-[#4DA8C4] hover:text-[#004B63] transition-colors">
+                            Consultoría
                         </button>
                     </nav>
 
@@ -149,8 +125,46 @@ const App = () => {
                             Comenzar
                             <i className="fa-solid fa-arrow-right text-xs" />
                         </button>
+
+                        {/* Mobile Menu Button */}
+                        <button 
+                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                            className="md:hidden p-2 text-[#004B63]"
+                        >
+                            <i className={`fa-solid ${mobileMenuOpen ? 'fa-times' : 'fa-bars'} text-xl`} />
+                        </button>
                     </div>
                 </div>
+
+                {/* Mobile Menu */}
+                {mobileMenuOpen && (
+                    <div className="md:hidden bg-white border-t border-[rgba(0,75,99,0.08)] px-5% py-4">
+                        <nav className="flex flex-col gap-4">
+                            <button onClick={() => handleNavigate('landing')} className="font-medium text-[#4A4A4A] hover:text-[#004B63] transition-colors text-left py-2">
+                                Inicio
+                            </button>
+                            <button onClick={() => scrollToSection('ecosystem')} className="font-medium text-[#4A4A4A] hover:text-[#004B63] transition-colors text-left py-2">
+                                Líneas de Impacto
+                            </button>
+                            <button onClick={() => handleNavigate('neuroentorno')} className="font-medium text-[#4A4A4A] hover:text-[#004B63] transition-colors text-left py-2">
+                                Neuro-Entorno
+                            </button>
+                            <button onClick={() => handleNavigate('consultoria')} className="font-medium text-[#4DA8C4] hover:text-[#004B63] transition-colors text-left py-2">
+                                Consultoría
+                            </button>
+                            <button 
+                                onClick={() => handleNavigate('neuroentorno')}
+                                className="flex items-center justify-center gap-2 px-6 py-3 rounded-full font-montserrat font-bold text-sm text-white mt-2"
+                                style={{ 
+                                    background: 'linear-gradient(135deg, #4DA8C4, #66CCCC)',
+                                }}
+                            >
+                                Comenzar Ahora
+                                <i className="fa-solid fa-arrow-right text-xs" />
+                            </button>
+                        </nav>
+                    </div>
+                )}
             </header>
 
             {/* Main Content */}
@@ -159,8 +173,8 @@ const App = () => {
                     <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
                         {/* Hero Section */}
                         <Hero 
-                            onNavigateToLab={() => handleNavigate('ialab')}
-                            onScrollToPilares={handleScrollToPilares}
+                            onNavigateToLab={() => handleNavigate('neuroentorno')}
+                            onScrollToPilares={() => scrollToSection('ecosystem')}
                         />
 
                         {/* Alliance Marquee */}
@@ -172,56 +186,11 @@ const App = () => {
                         {/* About Section */}
                         <About />
 
-                        {/* Ecosystem Section - Premium v2286 */}
-                        <Ecosystem />
-
-                        {/* Pilares Section - v2286 Premium */}
-                        <section ref={pilaresRef} className="pilares-section">
-                            <div className="pilares-header">
-                                <div className="pilares-kicker">Líneas de Impacto · VAK + STEAM</div>
-                                <h2 className="pilares-title">Nuestro <span>Ecosistema</span></h2>
-                                <p className="pilares-subtitle">
-                                    Seis líneas de impacto diseñadas por Magísteres en Educación. Cada pilar aplica metodología VAK y STEAM con las herramientas de IA más avanzadas del mercado.
-                                </p>
-                            </div>
-
-                            <div className="pilares-grid">
-                                {pilarData.map((pilar) => (
-                                    <div 
-                                        key={pilar.id} 
-                                        className="pilar-card-v2286"
-                                        onClick={() => handleNavigate(pilar.view)}
-                                    >
-                                        <span className="pilar-card-number">{pilar.num}</span>
-                                        <div className="pilar-card-image">
-                                            <img src={pilar.img} alt={pilar.title} />
-                                            <div className="pilar-card-overlay" />
-                                        </div>
-                                        <div className="pilar-card-content">
-                                            <div className="pilar-card-icon">
-                                                <i className={`fa-solid ${pilar.icon}`}></i>
-                                            </div>
-                                            <h3 className="pilar-card-title">{pilar.title}</h3>
-                                            <p className="pilar-card-desc">{pilar.desc}</p>
-                                            <span className="pilar-card-cta">
-                                                EXPLORAR <i className="fa-solid fa-arrow-right" />
-                                            </span>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </section>
-
-                        {/* Testimonials */}
-                        <Testimonials />
+                        {/* Ecosystem Section - LÍNEAS DE IMPACTO · VAK + STEAM */}
+                        <Ecosystem onExplore={handleNavigate} />
 
                         {/* Process Section */}
                         <ProcessSection />
-
-                        {/* Pricing Section */}
-                        <div id="pricing">
-                            <Pricing />
-                        </div>
 
                         {/* Final CTA */}
                         <FinalCTA onNavigate={handleNavigate} />
@@ -231,6 +200,7 @@ const App = () => {
                     </div>
                 )}
 
+                {/* Pillar Pages */}
                 {view === 'ialab' && <IALab onBack={() => handleNavigate('landing')} />}
                 {view === 'neuroentorno' && <NeuroEntorno onBack={() => handleNavigate('landing')} />}
                 {view === 'proyectos' && <ProyectosNacional onBack={() => handleNavigate('landing')} />}

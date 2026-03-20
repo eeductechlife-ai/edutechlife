@@ -76,7 +76,7 @@ const FinalCTA = ({ onNavigate }) => {
                 >
                     <div className="w-2 h-2 rounded-full bg-[#66CCCC] animate-pulse" />
                     <span className="font-mono text-xs font-semibold text-[#66CCCC] uppercase tracking-wider">
-                        Matrículas Abiertas - Ciclo 2024
+                        Acceso Abierto - Test VAK Gratuito
                     </span>
                 </div>
 
@@ -112,7 +112,7 @@ const FinalCTA = ({ onNavigate }) => {
                     }`}
                 >
                     <button
-                        onClick={() => onNavigate && onNavigate('ialab')}
+                        onClick={() => onNavigate && onNavigate('neuroentorno')}
                         className="group relative px-8 py-4 rounded-full font-montserrat font-bold text-white overflow-hidden transition-all duration-300 hover:-translate-y-1"
                         style={{
                             background: 'linear-gradient(135deg, #4DA8C4, #66CCCC)',
@@ -120,7 +120,7 @@ const FinalCTA = ({ onNavigate }) => {
                         }}
                     >
                         <span className="relative z-10 flex items-center justify-center gap-3">
-                            Comenzar Ahora
+                            Realizar Test VAK Gratis
                             <i className="fa-solid fa-arrow-right text-sm group-hover:translate-x-1 transition-transform" />
                         </span>
                         <div
@@ -132,12 +132,10 @@ const FinalCTA = ({ onNavigate }) => {
                     </button>
 
                     <button
-                        onClick={() => {
-                            document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
-                        }}
+                        onClick={() => onNavigate && onNavigate('consultoria')}
                         className="px-8 py-4 rounded-full font-montserrat font-bold text-white border-2 border-white/20 hover:border-white/40 transition-all duration-300 hover:-translate-y-1"
                     >
-                        Ver Planes y Precios
+                        Solicitar Consultoría
                     </button>
                 </div>
 

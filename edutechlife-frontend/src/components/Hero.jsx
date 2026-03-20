@@ -139,9 +139,12 @@ const Hero = memo(({ onNavigateToLab, onScrollToPilares }) => {
                         >
                             Conoce nuestro impacto <i className="fa-solid fa-arrow-right text-xs ml-2" />
                         </button>
-                        <button className="btn-ghost">
-                            <i className="fa-regular fa-circle-play mr-2" />
-                            Ver demo
+                        <button 
+                            className="btn-ghost"
+                            onClick={onScrollToPilares}
+                        >
+                            <i className="fa-solid fa-play mr-2" />
+                            Líneas de Impacto
                         </button>
                     </div>
 
