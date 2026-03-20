@@ -4,11 +4,15 @@ import Hero from './components/Hero';
 import AllianceMarquee from './components/AllianceMarquee';
 import StatsBar from './components/StatsBar';
 import About from './components/About';
+import Testimonials from './components/Testimonials';
+import Pricing from './components/Pricing';
 import ProcessSection from './components/ProcessSection';
+import FinalCTA from './components/FinalCTA';
 import Footer from './components/Footer';
 import NeuroEntorno from './components/NeuroEntorno';
 import ProyectosNacional from './components/ProyectosNacional';
 import Consultoria from './components/Consultoria';
+import Ecosystem from './components/Ecosystem';
 import LoadingScreen, { MiniLoader } from './components/LoadingScreen';
 import { callDeepseek } from './utils/api';
 
@@ -16,7 +20,7 @@ const App = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [view, setView] = useState('landing');
     const [botOpen, setBotOpen] = useState(false);
-    const [botMsgs, setBotMsgs] = useState([{ role: 'assistant', text: '¡Hola! Soy Nico, tu asistente virtual. ¿En qué te puedo ayudar hoy?' }]);
+    const [botMsgs, setBotMsgs] = useState([{ role: 'assistant', text: '¡Hola! Soy Nico, tu asistente virtual de Edutechlife. ¿En qué te puedo ayudar hoy?' }]);
     const [botInput, setBotInput] = useState('');
     const [botLoading, setBotLoading] = useState(false);
     const pilaresRef = useRef(null);
@@ -37,13 +41,16 @@ const App = () => {
         setBotMsgs(prev => [...prev, { role: 'user', text: userMsg }]);
         setBotLoading(true);
 
-        const systemPrompt = "Eres Nico, el asistente de soporte de Edutechlife. Eres amable, usas emojis y ayudas a los usuarios (posibles clientes o estudiantes) a entender la plataforma o resolver dudas breves. Tienes toda la experiencia y la sabiduría para guiar en temas de pedagogía con inteligencia artificial.";
+        const systemPrompt = "Eres Nico, el asistente de soporte de Edutechlife. Eres amable, profesional y ayudas a los usuarios (posibles clientes o estudiantes) a entender la plataforma o resolver dudas breves. Tienes toda la experiencia y la sabiduría para guiar en temas de pedagogía con inteligencia artificial, metodologías VAK y STEAM.";
         const contextMessages = botMsgs.map(m => `${m.role === 'assistant' ? 'Nico' : 'Usuario'}: ${m.text}`).join('\n');
         const prompt = `${contextMessages}\nUsuario: ${userMsg}\nNico:`;
 
-        const r = await callDeepseek(prompt, systemPrompt, false);
-
-        setBotMsgs(prev => [...prev, { role: 'assistant', text: r }]);
+        try {
+            const r = await callDeepseek(prompt, systemPrompt, false);
+            setBotMsgs(prev => [...prev, { role: 'assistant', text: r }]);
+        } catch (error) {
+            setBotMsgs(prev => [...prev, { role: 'assistant', text: 'Lo siento, estoy experimentando dificultades técnicas. Por favor intenta de nuevo en unos momentos.' }]);
+        }
         setBotLoading(false);
     };
 
@@ -97,18 +104,53 @@ const App = () => {
                 <LoadingScreen onComplete={handleLoadingComplete} minDuration={3000} />
             )}
 
-            {/* Header - White Glassmorphism */}
-            <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000, padding: '1rem 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(0,75,99,0.08)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{ width: 40, height: 40, background: 'linear-gradient(135deg, #004B63, #4DA8C4)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <i className="fa-solid fa-graduation-cap" style={{ color: 'white', fontSize: '1.2rem' }}></i>
+            {/* Header - Premium Navigation */}
+            <header className="fixed top-0 left-0 right-0 z-[1000] bg-white/95 backdrop-blur-xl border-b border-[rgba(0,75,99,0.08)]">
+                <div className="max-w-7xl mx-auto px-5% py-4 flex items-center justify-between">
+                    {/* Logo */}
+                    <button 
+                        onClick={() => handleNavigate('landing')}
+                        className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+                    >
+                        <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #004B63, #4DA8C4)' }}>
+                            <i className="fa-solid fa-graduation-cap text-white text-lg" />
+                        </div>
+                        <span className="font-montserrat font-bold text-lg text-[#004B63] tracking-tight">
+                            EDUTECHLIFE
+                        </span>
+                    </button>
+
+                    {/* Desktop Navigation */}
+                    <nav className="hidden md:flex items-center gap-8">
+                        <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="font-medium text-[#4A4A4A] hover:text-[#004B63] transition-colors">
+                            Inicio
+                        </button>
+                        <button onClick={() => pilaresRef.current?.scrollIntoView({ behavior: 'smooth' })} className="font-medium text-[#4A4A4A] hover:text-[#004B63] transition-colors">
+                            Pilares
+                        </button>
+                        <button onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })} className="font-medium text-[#4A4A4A] hover:text-[#004B63] transition-colors">
+                            Precios
+                        </button>
+                        <button onClick={() => handleNavigate('ialab')} className="font-medium text-[#4A4A4A] hover:text-[#004B63] transition-colors">
+                            IA Lab
+                        </button>
+                    </nav>
+
+                    {/* CTA Button */}
+                    <div className="flex items-center gap-4">
+                        <button 
+                            onClick={() => handleNavigate('ialab')}
+                            className="hidden sm:flex items-center gap-2 px-6 py-2.5 rounded-full font-montserrat font-bold text-sm text-white transition-all duration-300 hover:-translate-y-0.5"
+                            style={{ 
+                                background: 'linear-gradient(135deg, #4DA8C4, #66CCCC)',
+                                boxShadow: '0 4px 15px rgba(77, 168, 196, 0.3)'
+                            }}
+                        >
+                            Comenzar
+                            <i className="fa-solid fa-arrow-right text-xs" />
+                        </button>
                     </div>
-                    <span style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 700, fontSize: '1.1rem', letterSpacing: '-0.02em', color: '#004B63' }}>EDUTECHLIFE</span>
                 </div>
-                <nav style={{ display: 'flex', gap: '2rem' }}>
-                    <button onClick={() => handleNavigate('landing')} style={{ background: 'none', border: 'none', color: '#4A4A4A', cursor: 'pointer', fontSize: '0.9rem', fontWeight: 600, transition: 'color 0.3s' }}>Inicio</button>
-                    <button onClick={() => handleNavigate('ialab')} style={{ background: 'none', border: 'none', color: '#4DA8C4', cursor: 'pointer', fontSize: '0.9rem', fontWeight: 600, transition: 'color 0.3s' }}>IA Lab</button>
-                </nav>
             </header>
 
             {/* Main Content */}
@@ -129,6 +171,9 @@ const App = () => {
 
                         {/* About Section */}
                         <About />
+
+                        {/* Ecosystem Section - Premium v2286 */}
+                        <Ecosystem />
 
                         {/* Pilares Section - v2286 Premium */}
                         <section ref={pilaresRef} className="pilares-section">
@@ -167,8 +212,19 @@ const App = () => {
                             </div>
                         </section>
 
+                        {/* Testimonials */}
+                        <Testimonials />
+
                         {/* Process Section */}
                         <ProcessSection />
+
+                        {/* Pricing Section */}
+                        <div id="pricing">
+                            <Pricing />
+                        </div>
+
+                        {/* Final CTA */}
+                        <FinalCTA onNavigate={handleNavigate} />
 
                         {/* Footer */}
                         <Footer />
