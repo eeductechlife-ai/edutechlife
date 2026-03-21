@@ -51,7 +51,7 @@ export default function ProcessSection() {
   }, []);
 
     return (
-        <section ref={sectionRef} className="w-full relative py-24 overflow-hidden px-6 lg:px-8" style={{ background: '#FFFFFF' }}>
+        <section ref={sectionRef} className="w-full relative py-0 overflow-hidden px-6 lg:px-8" style={{ background: '#FFFFFF' }}>
       <div className="max-w-7xl mx-auto">
         <div className={`text-center mb-12 md:mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="inline-flex items-center gap-2 mb-6">
@@ -113,7 +113,7 @@ export default function ProcessSection() {
         </div>
 
         <div className={`text-center mt-12 transition-all duration-700 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <button className="btn-primary inline-flex items-center gap-2">
+           <button className="btn-primary glass-button inline-flex items-center gap-2">
             <span>Comenzar con Valerio</span>
             <i className="fa-solid fa-arrow-right"></i>
           </button>

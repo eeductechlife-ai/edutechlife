@@ -81,7 +81,7 @@ const App = () => {
             )}
 
             {/* Header - Premium Navigation */}
-            <header className="fixed top-0 left-0 right-0 z-[1000] bg-white/95 backdrop-blur-xl border-b border-[rgba(0,75,99,0.08)]">
+            <header className="sticky top-0 left-0 right-0 z-[1000] bg-white/95 backdrop-blur-xl border-b border-[rgba(0,75,99,0.08)]">
                     <div className="container flex items-center justify-between py-4">
                     {/* Logo */}
                     <button 

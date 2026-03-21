@@ -78,7 +78,7 @@ const Hero = memo(({ onNavigateToLab, onScrollToPilares }) => {
 
     return (
         <section 
-            className="w-full min-h-screen flex flex-col justify-center py-24 bg-white relative overflow-hidden"
+            className="w-full min-h-screen flex flex-col justify-center pt-24 pb-0 bg-white relative overflow-hidden"
         >
             {/* Grid 3D Animation */}
             <div className="grid-3d" />
@@ -134,12 +134,12 @@ const Hero = memo(({ onNavigateToLab, onScrollToPilares }) => {
                     <div className="flex flex-wrap justify-start items-center gap-4 mb-10">
                         <button 
                             onClick={onNavigateToLab}
-                            className="btn-primary"
+                            className="btn-primary glass-button"
                         >
                             Conoce nuestro impacto <i className="fa-solid fa-arrow-right text-xs ml-2" />
                         </button>
                         <button 
-                            className="btn-ghost"
+                            className="btn-ghost glass-button"
                             onClick={onScrollToPilares}
                         >
                             <i className="fa-solid fa-play mr-2" />

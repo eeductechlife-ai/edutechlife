@@ -42,7 +42,7 @@ const AllianceMarquee = () => {
     const allLogos = [...logos, ...logos];
 
      return (
-        <section className="w-full py-24 px-6 lg:px-8" style={{ background: 'linear-gradient(to bottom right, #0f172a 0%, #000 40%, #1f2937 100%)' }}>
+        <section className="w-full py-0 px-6 lg:px-8" style={{ background: 'linear-gradient(to bottom right, #0f172a 0%, #000 40%, #1f2937 100%)' }}>
             <div className="max-w-7xl mx-auto">
                 <div className="alliance-label">
                     <span>Ecosistema de Nivel Mundial</span>
