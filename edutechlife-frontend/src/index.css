@@ -54,14 +54,18 @@
   --font-body: 'Open Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
   
-  /* Espaciado Premium */
-  --space-xs: 0.25rem;
-  --space-sm: 0.5rem;
-  --space-md: 1rem;
-  --space-lg: 1.5rem;
-  --space-xl: 2rem;
-  --space-2xl: 3rem;
-  --space-3xl: 4rem;
+  /* Espaciado Premium - Sistema 8pt Grid */
+  --space-3xs: 0.125rem;  /* 2px */
+  --space-2xs: 0.25rem;   /* 4px */
+  --space-xs: 0.5rem;     /* 8px */
+  --space-sm: 0.75rem;    /* 12px */
+  --space-md: 1rem;       /* 16px */
+  --space-lg: 1.5rem;     /* 24px */
+  --space-xl: 2rem;       /* 32px */
+  --space-2xl: 3rem;      /* 48px */
+  --space-3xl: 4rem;      /* 64px */
+  --space-4xl: 6rem;      /* 96px */
+  --space-5xl: 8rem;      /* 128px */
   
   /* Border Radius Premium */
   --radius-sm: 0.5rem;
@@ -718,6 +722,190 @@
   
   .scrollbar-premium::-webkit-scrollbar-thumb:hover {
     background: var(--color-petroleum);
+  }
+  
+  /* ======================
+     SISTEMA DE ESPACIADO PREMIUM ENTRE SECCIONES
+     ====================== */
+  
+  /* Clases para espaciado vertical entre secciones */
+  .section-spacing {
+    padding-top: var(--space-3xl);
+    padding-bottom: var(--space-3xl);
+  }
+  
+  .section-spacing-lg {
+    padding-top: var(--space-4xl);
+    padding-bottom: var(--space-4xl);
+  }
+  
+  .section-spacing-md {
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-2xl);
+  }
+  
+  .section-spacing-sm {
+    padding-top: var(--space-xl);
+    padding-bottom: var(--space-xl);
+  }
+  
+  /* Espaciado específico para primera y última sección */
+  .section-first {
+    padding-top: var(--space-4xl);
+    padding-bottom: var(--space-3xl);
+  }
+  
+  .section-last {
+    padding-top: var(--space-3xl);
+    padding-bottom: var(--space-4xl);
+  }
+  
+  /* Espaciado interno de secciones */
+  .section-inner {
+    padding-left: var(--space-xl);
+    padding-right: var(--space-xl);
+  }
+  
+  @media (max-width: 768px) {
+    .section-spacing {
+      padding-top: var(--space-2xl);
+      padding-bottom: var(--space-2xl);
+    }
+    
+    .section-spacing-lg {
+      padding-top: var(--space-3xl);
+      padding-bottom: var(--space-3xl);
+    }
+    
+    .section-spacing-md {
+      padding-top: var(--space-xl);
+      padding-bottom: var(--space-xl);
+    }
+    
+    .section-spacing-sm {
+      padding-top: var(--space-lg);
+      padding-bottom: var(--space-lg);
+    }
+    
+    .section-first {
+      padding-top: var(--space-3xl);
+      padding-bottom: var(--space-2xl);
+    }
+    
+    .section-last {
+      padding-top: var(--space-2xl);
+      padding-bottom: var(--space-3xl);
+    }
+    
+    .section-inner {
+      padding-left: var(--space-lg);
+      padding-right: var(--space-lg);
+    }
+  }
+  
+  /* Separadores visuales entre secciones */
+  .section-divider {
+    position: relative;
+  }
+  
+  .section-divider::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 200px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-corporate), transparent);
+  }
+  
+  .section-divider-light::before {
+    background: linear-gradient(90deg, transparent, var(--color-gray-300), transparent);
+  }
+  
+  /* Contenedor de sección premium */
+  .section-container {
+    width: 100%;
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  /* Grid de sección premium */
+  .section-grid {
+    display: grid;
+    gap: var(--space-xl);
+  }
+  
+  @media (min-width: 768px) {
+    .section-grid {
+      gap: var(--space-2xl);
+    }
+  }
+  
+  /* Alineación de secciones */
+  .section-center {
+    text-align: center;
+  }
+  
+  .section-left {
+    text-align: left;
+  }
+  
+  .section-right {
+    text-align: right;
+  }
+  
+  /* Fondo de secciones alternadas */
+  .section-bg-white {
+    background-color: white;
+  }
+  
+  .section-bg-light {
+    background-color: var(--color-gray-50);
+  }
+  
+  .section-bg-gradient {
+    background: linear-gradient(135deg, var(--color-gray-50) 0%, white 100%);
+  }
+  
+  .section-bg-dark {
+    background-color: var(--color-navy);
+    color: white;
+  }
+  
+  .section-bg-dark * {
+    color: white;
+  }
+  
+  .section-bg-dark .text-gradient-primary {
+    background: linear-gradient(135deg, var(--color-corporate-light) 0%, var(--color-mint-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  /* Altura mínima de secciones */
+  .section-min-h-screen {
+    min-height: 100vh;
+  }
+  
+  .section-min-h-50 {
+    min-height: 50vh;
+  }
+  
+  .section-min-h-75 {
+    min-height: 75vh;
+  }
+  
+  /* Overflow control para secciones */
+  .section-overflow-hidden {
+    overflow: hidden;
+  }
+  
+  .section-overflow-visible {
+    overflow: visible;
   }
 
   /* Extended Glassmorphism Variants */

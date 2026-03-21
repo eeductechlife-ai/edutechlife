@@ -1,4 +1,5 @@
 import { useEffect, useRef, memo } from 'react';
+import SectionWrapper from './SectionWrapper';
 
 const Hero = memo(({ onNavigateToLab, onScrollToPilares }) => {
     const canvasRef = useRef(null);
@@ -77,9 +78,10 @@ const Hero = memo(({ onNavigateToLab, onScrollToPilares }) => {
     }, []);
 
     return (
-        <section 
-            className="w-full min-h-screen flex flex-col justify-center pt-24 pb-0 bg-gradient-to-b from-white via-[#F8FAFC] to-white relative overflow-hidden"
-        >
+        <SectionWrapper spacing="first">
+            <section 
+                className="w-full min-h-screen flex flex-col justify-center pt-24 pb-0 bg-gradient-to-b from-white via-[#F8FAFC] to-white relative overflow-hidden"
+            >
             {/* Fondo Premium con Gradientes Suaves */}
             <div className="absolute inset-0 overflow-hidden">
                 {/* Gradiente de fondo premium */}
@@ -272,7 +274,8 @@ const Hero = memo(({ onNavigateToLab, onScrollToPilares }) => {
                     <div className="w-1.5 h-1.5 bg-[#4DA8C4] rounded-full animate-bounce" />
                 </div>
             </div>
-        </section>
+            </section>
+        </SectionWrapper>
     );
 });
 

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import SectionWrapper from './SectionWrapper';
 
 const useCounter = (target, duration = 2000, start = false) => {
     const [count, setCount] = useState(0);
@@ -60,7 +61,8 @@ const StatsBar = () => {
     }, []);
 
      return (
-        <section className="w-full py-0 bg-white">
+        <SectionWrapper spacing="sm">
+            <section className="w-full py-0 bg-white">
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
                 <div 
                     ref={ref}
@@ -76,6 +78,7 @@ const StatsBar = () => {
                 </div>
             </div>
         </section>
+        </SectionWrapper>
     );
 };
 

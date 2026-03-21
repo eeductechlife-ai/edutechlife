@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import SectionWrapper from './SectionWrapper';
 
 const lines = [
     {
@@ -266,13 +267,14 @@ const Ecosystem = ({ onExplore }) => {
     };
 
     return (
-        <section
-            id="ecosystem"
-            className="w-full relative py-0 px-6 lg:px-8 overflow-hidden"
-            style={{
-                background: 'linear-gradient(180deg, #0A1628 0%, #070B14 50%, #0A1628 100%)',
-            }}
-        >
+        <SectionWrapper spacing="lg">
+            <section
+                id="ecosystem"
+                className="w-full relative py-0 px-6 lg:px-8 overflow-hidden"
+                style={{
+                    background: 'linear-gradient(180deg, #0A1628 0%, #070B14 50%, #0A1628 100%)',
+                }}
+            >
             {/* Background Grid */}
             <div className="grid-bg-3d" />
 
@@ -398,7 +400,8 @@ const Ecosystem = ({ onExplore }) => {
                     ))}
                 </div>
             </div>
-        </section>
+            </section>
+        </SectionWrapper>
     );
 };
 

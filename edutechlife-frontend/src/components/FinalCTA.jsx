@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import SectionWrapper from './SectionWrapper';
 
 const FinalCTA = ({ onNavigate }) => {
     const [isVisible, setIsVisible] = useState(false);
@@ -30,13 +31,14 @@ const FinalCTA = ({ onNavigate }) => {
     };
 
     return (
-        <section
-            ref={sectionRef}
-            className="w-full relative py-0 px-6 lg:px-8 overflow-hidden"
-            style={{
-                background: 'linear-gradient(135deg, #004B63 0%, #0B2A3A 50%, #0A1628 100%)',
-            }}
-        >
+        <SectionWrapper spacing="last">
+            <section
+                ref={sectionRef}
+                className="w-full relative py-0 px-6 lg:px-8 overflow-hidden"
+                style={{
+                    background: 'linear-gradient(135deg, #004B63 0%, #0B2A3A 50%, #0A1628 100%)',
+                }}
+            >
             {/* Background Elements */}
             <div className="absolute inset-0">
                 {/* Grid */}
@@ -197,6 +199,7 @@ const FinalCTA = ({ onNavigate }) => {
                 </div>
             </div>
         </section>
+        </SectionWrapper>
     );
 };
 

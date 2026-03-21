@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import SectionWrapper from './SectionWrapper';
 
 const steps = [
   {
@@ -51,7 +52,8 @@ export default function ProcessSection() {
   }, []);
 
     return (
-        <section ref={sectionRef} className="w-full relative py-0 overflow-hidden px-6 lg:px-8" style={{ background: '#FFFFFF' }}>
+        <SectionWrapper spacing="md">
+            <section ref={sectionRef} className="w-full relative py-0 overflow-hidden px-6 lg:px-8" style={{ background: '#FFFFFF' }}>
       <div className="max-w-7xl mx-auto">
         <div className={`text-center mb-12 md:mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="inline-flex items-center gap-2 mb-6">
@@ -123,5 +125,6 @@ export default function ProcessSection() {
       <div className="absolute top-1/2 left-0 w-72 h-72 rounded-full bg-[#66CCCC]/5 blur-3xl -translate-x-1/2 -translate-y-1/2" />
       <div className="absolute top-1/2 right-0 w-96 h-96 rounded-full bg-[#4DA8C4]/5 blur-3xl translate-x-1/2 -translate-y-1/2" />
     </section>
+  </SectionWrapper>
   );
 }
