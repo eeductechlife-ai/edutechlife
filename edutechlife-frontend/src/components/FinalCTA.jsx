@@ -32,7 +32,7 @@ const FinalCTA = ({ onNavigate }) => {
     return (
         <section
             ref={sectionRef}
-            className="relative py-24 px-5% overflow-hidden"
+            className="relative py-16 md:py-20 px-4 md:px-8 lg:px-5% overflow-hidden"
             style={{
                 background: 'linear-gradient(135deg, #004B63 0%, #0B2A3A 50%, #0A1628 100%)',
             }}

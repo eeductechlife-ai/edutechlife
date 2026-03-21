@@ -268,7 +268,7 @@ const Ecosystem = ({ onExplore }) => {
     return (
         <section
             id="ecosystem"
-            className="relative py-16 md:py-24 px-4 md:px-8 lg:px-5% overflow-hidden"
+            className="relative py-12 md:py-20 px-4 md:px-8 lg:px-5% overflow-hidden"
             style={{
                 background: 'linear-gradient(180deg, #0A1628 0%, #070B14 50%, #0A1628 100%)',
             }}

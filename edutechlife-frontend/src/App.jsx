@@ -82,7 +82,7 @@ const App = () => {
 
             {/* Header - Premium Navigation */}
             <header className="fixed top-0 left-0 right-0 z-[1000] bg-white/95 backdrop-blur-xl border-b border-[rgba(0,75,99,0.08)]">
-                <div className="max-w-7xl mx-auto px-5% py-4 flex items-center justify-between">
+                    <div className="container flex items-center justify-between py-4">
                     {/* Logo */}
                     <button 
                         onClick={() => handleNavigate('landing')}
@@ -90,7 +90,7 @@ const App = () => {
                     >
                         <img 
                             src="/images/logo-edutechlife.png" 
-                            alt="Edutechlife Logo" 
+                            alt="Edutechlife" 
                             className="h-10 w-auto"
                             style={{ maxHeight: '40px', width: 'auto' }}
                         />
@@ -172,31 +172,47 @@ const App = () => {
                 {view === 'landing' && (
                     <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
                         {/* Hero Section */}
-                        <Hero 
+                        <div className="section-container section-padding">
+                          <Hero 
                             onNavigateToLab={() => handleNavigate('neuroentorno')}
                             onScrollToPilares={() => scrollToSection('ecosystem')}
-                        />
+                          />
+                        </div>
 
                         {/* Alliance Marquee */}
-                        <AllianceMarquee />
+                        <div className="section-container section-padding">
+                          <AllianceMarquee />
+                        </div>
 
                         {/* Stats Bar */}
-                        <StatsBar />
+                        <div className="section-container section-padding">
+                          <StatsBar />
+                        </div>
 
                         {/* About Section */}
-                        <About />
+                        <div className="section-container section-padding">
+                          <About />
+                        </div>
 
                         {/* Ecosystem Section - LÍNEAS DE IMPACTO · VAK + STEAM */}
-                        <Ecosystem onExplore={handleNavigate} />
+                        <div className="section-container section-padding">
+                          <Ecosystem onExplore={handleNavigate} />
+                        </div>
 
                         {/* Process Section */}
-                        <ProcessSection />
+                        <div className="section-container section-padding">
+                          <ProcessSection />
+                        </div>
 
                         {/* Final CTA */}
-                        <FinalCTA onNavigate={handleNavigate} />
+                        <div className="section-container section-padding">
+                          <FinalCTA onNavigate={handleNavigate} />
+                        </div>
 
                         {/* Footer */}
-                        <Footer />
+                        <div className="section-container section-padding">
+                          <Footer />
+                        </div>
                     </div>
                 )}
 

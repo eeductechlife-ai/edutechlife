@@ -181,8 +181,8 @@ const About = () => {
     }, []);
 
     return (
-        <section ref={sectionRef} className="about-section">
-            <div className="max-w-7xl mx-auto about-grid">
+        <section ref={sectionRef} className="about-section section-padding">
+            <div className="section-container section-grid md:grid-cols-2">
                 {/* Columna Izquierda - Premium Carousel */}
                 <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}>
                     <AboutCarousel />
