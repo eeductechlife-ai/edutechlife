@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import AutomationArchitect from './AutomationArchitect';
 
 const Consultoria = ({ onBack }) => {
     const [activeTab, setActiveTab] = useState('servicios');
@@ -257,6 +258,10 @@ const Consultoria = ({ onBack }) => {
                 <button className={`tab-btn ${activeTab === 'roi' ? 'active' : ''}`} onClick={() => setActiveTab('roi')}>
                     <i className="fa-solid fa-calculator" />
                     Calculadora ROI
+                </button>
+                <button className={`tab-btn ${activeTab === 'arquitecto' ? 'active' : ''}`} onClick={() => setActiveTab('arquitecto')}>
+                    <i className="fa-solid fa-sitemap" />
+                    Arquitecto IA
                 </button>
             </div>
 
@@ -787,6 +792,12 @@ const Consultoria = ({ onBack }) => {
                                 </div>
                             </div>
                         </div>
+                    </div>
+                )}
+
+                {activeTab === 'arquitecto' && (
+                    <div className="automation-architect-container" style={{ marginTop: '2rem' }}>
+                        <AutomationArchitect onBack={() => setActiveTab('servicios')} embedded={true} />
                     </div>
                 )}
             </div>

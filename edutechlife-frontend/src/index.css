@@ -46,7 +46,7 @@
   /* Gradientes Premium */
   --gradient-primary: linear-gradient(135deg, #4DA8C4 0%, #66CCCC 100%);
   --gradient-dark: linear-gradient(135deg, #004B63 0%, #0A1628 100%);
-  --gradient-light: linear-gradient(135deg, #B2D8E5 0%, #FFFFFF 100%);
+   --gradient-light: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
   --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
   
   /* Tipografía Premium */
@@ -1187,11 +1187,11 @@
   --navy: #0B0F19;
   --primary: #4DA8C4;
   --accent: #66CCCC;
-  --bg-light: #FFFFFF;
-  --bg-dark: #F8FAFC;
-  --text-main: #4A4A4A;
-  --text-sub: #666666;
-  --glass-bg: rgba(255, 255, 255, 0.8);
+   --bg-light: #0f172a;
+  --bg-dark: #1e293b;
+  --text-main: #FFFFFF;
+  --text-sub: #94A3B8;
+  --glass-bg: rgba(15, 23, 42, 0.8);
   --glass-border: rgba(0, 75, 99, 0.1);
   
   /* Prototype Enhancement Variables */
@@ -1390,14 +1390,15 @@ h1, h2, h3, h4, h5 {
 }
 
 /* Stats bar */
-.stats-bar {
+ .stats-bar {
   display: flex;
-  background: white;
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(77, 168, 196, 0.2);
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 10px 40px rgba(0, 75, 99, 0.12);
-  margin-top: 2rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  margin-top: 0;
+  backdrop-filter: blur(10px);
 }
 
 @media (max-width: 768px) {
@@ -1481,11 +1482,11 @@ h1, h2, h3, h4, h5 {
   margin-bottom: 0.5rem;
 }
 
-.stat-label {
+ .stat-label {
   font-family: 'Open Sans', sans-serif;
   font-size: 0.85rem;
   font-weight: 400;
-  color: #64748B;
+  color: #94A3B8;
   letter-spacing: 0.02em;
 }
 
@@ -1639,7 +1640,7 @@ h1, h2, h3, h4, h5 {
 }
 
 .section-divider-light {
-  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
 }
 
 .divider-line {
@@ -1802,8 +1803,8 @@ h1, h2, h3, h4, h5 {
 }
 
 /* About section */
-.about-section {
-  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 50%, #ffffff 100%);
+ .about-section {
+  background: linear-gradient(180deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
   position: relative;
   overflow: hidden;
 }
@@ -3063,9 +3064,9 @@ h1, h2, h3, h4, h5 {
   letter-spacing: 0.1em;
 }
 
-.pillar-hero {
+ .pillar-hero {
   padding: 8rem 5% 4rem;
-  background: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%);
+  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4rem;

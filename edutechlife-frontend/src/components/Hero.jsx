@@ -80,17 +80,17 @@ const Hero = memo(({ onNavigateToLab, onScrollToPilares }) => {
     return (
         <SectionWrapper spacing="first">
             <section 
-                className="w-full min-h-screen flex flex-col justify-center pt-24 pb-0 bg-gradient-to-b from-white via-[#F8FAFC] to-white relative overflow-hidden"
+                className="w-full min-h-screen flex flex-col justify-center py-24 bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 relative overflow-hidden"
             >
             {/* Fondo Premium con Gradientes Suaves */}
             <div className="absolute inset-0 overflow-hidden">
                 {/* Gradiente de fondo premium */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#F8FAFC] via-white to-[#EFF6FF]" />
+                <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900" />
                 
                 {/* Patrón geométrico sutil */}
-                <div className="absolute inset-0 opacity-[0.02]"
+                <div className="absolute inset-0 opacity-[0.03]"
                      style={{
-                         backgroundImage: `radial-gradient(circle at 25% 25%, var(--color-corporate) 1px, transparent 1px)`,
+                         backgroundImage: `radial-gradient(circle at 25% 25%, #4DA8C4 1px, transparent 1px)`,
                          backgroundSize: '60px 60px'
                      }}
                 />
@@ -119,42 +119,42 @@ const Hero = memo(({ onNavigateToLab, onScrollToPilares }) => {
                 <div className="grid-cols-2-premium grid-premium items-center">
                     {/* Columna Izquierda - Texto Editorial Premium */}
                     <div className="space-y-8">
-                        {/* Kicker Premium */}
-                        <div className="inline-flex items-center gap-3 px-4 py-2 bg-white/80 backdrop-blur-sm border border-white/20 rounded-full shadow-sm">
+                         {/* Kicker Premium */}
+                        <div className="inline-flex items-center gap-3 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/10 rounded-full shadow-sm">
                             <div className="w-2 h-2 bg-[#4DA8C4] rounded-full animate-pulse-slow" />
-                            <span className="text-sm font-mono font-semibold text-[#004B63] tracking-wider">
+                            <span className="text-sm font-mono font-semibold text-white tracking-wider">
                                 Manizales · Colombia · Est. 2015
                             </span>
                             <div className="w-2 h-2 bg-[#66CCCC] rounded-full animate-pulse-slow" style={{ animationDelay: '0.5s' }} />
                         </div>
 
-                        {/* Título Premium */}
+                         {/* Título Premium */}
                         <div className="space-y-6">
                             <h1 className="display-1">
-                                <span className="block text-[#0A1628]">Pedagogía</span>
+                                <span className="block text-white">Pedagogía</span>
                                 <span className="block text-gradient-primary accent-line-solid">de Élite</span>
-                                <span className="block text-[#475569] text-3xl font-light mt-4">
-                                    con <span className="font-semibold text-[#004B63]">Inteligencia Artificial</span>
+                                <span className="block text-slate-300 text-3xl font-light mt-4">
+                                    con <span className="font-semibold text-[#4DA8C4]">Inteligencia Artificial</span>
                                 </span>
                             </h1>
 
-                            {/* Badge Premium */}
+                             {/* Badge Premium */}
                             <div className="inline-flex items-center gap-3 px-5 py-2.5 glass-accent rounded-full hover-lift">
                                 <div className="flex items-center gap-2">
                                     <div className="w-2 h-2 bg-[#66CCCC] rounded-full animate-pulse" />
                                     <div className="w-2 h-2 bg-[#4DA8C4] rounded-full animate-pulse" style={{ animationDelay: '0.3s' }} />
                                     <div className="w-2 h-2 bg-[#004B63] rounded-full animate-pulse" style={{ animationDelay: '0.6s' }} />
                                 </div>
-                                <span className="text-sm font-mono font-semibold text-[#004B63] tracking-wider">
+                                <span className="text-sm font-mono font-semibold text-white tracking-wider">
                                     IA · Educación · Impacto Nacional
                                 </span>
                             </div>
                         </div>
 
-                        {/* Descripción Premium */}
-                        <p className="body-lg text-[#334155] max-w-xl leading-relaxed">
-                            Magísteres en Educación que dominan la <strong className="text-[#004B63] font-semibold">IA más avanzada</strong>. 
-                            Más de <strong className="text-[#4DA8C4] font-semibold">6,000 estudiantes certificados</strong> con respaldo 
+                         {/* Descripción Premium */}
+                        <p className="body-lg text-slate-300 max-w-xl leading-relaxed">
+                            Magísteres en Educación que dominan la <strong className="text-[#4DA8C4] font-semibold">IA más avanzada</strong>. 
+                            Más de <strong className="text-[#66CCCC] font-semibold">6,000 estudiantes certificados</strong> con respaldo 
                             global de <span className="text-gradient-primary font-semibold">IBM y Coursera</span>.
                         </p>
 
@@ -180,9 +180,9 @@ const Hero = memo(({ onNavigateToLab, onScrollToPilares }) => {
                             </button>
                         </div>
 
-                        {/* Trust Strip Premium */}
+                         {/* Trust Strip Premium */}
                         <div className="pt-8">
-                            <div className="inline-flex items-center gap-3 text-sm text-[#64748B] mb-3">
+                            <div className="inline-flex items-center gap-3 text-sm text-slate-400 mb-3">
                                 <div className="w-4 h-px bg-gradient-to-r from-transparent via-[#4DA8C4] to-transparent" />
                                 <span className="font-mono text-xs uppercase tracking-widest">Operadores Certificados</span>
                                 <div className="w-4 h-px bg-gradient-to-r from-transparent via-[#66CCCC] to-transparent" />
@@ -193,7 +193,7 @@ const Hero = memo(({ onNavigateToLab, onScrollToPilares }) => {
                                         key={brand}
                                         className="group relative"
                                     >
-                                        <div className="text-lg font-display font-bold text-[#334155] opacity-70 group-hover:opacity-100 transition-opacity duration-300">
+                                        <div className="text-lg font-display font-bold text-slate-300 opacity-70 group-hover:opacity-100 transition-opacity duration-300">
                                             {brand}
                                         </div>
                                         <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] group-hover:w-full transition-all duration-300" />
@@ -211,7 +211,7 @@ const Hero = memo(({ onNavigateToLab, onScrollToPilares }) => {
                                 <div className="flex items-center justify-between mb-6">
                                     <div className="flex items-center gap-3">
                                         <div className="w-3 h-3 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] rounded-full animate-pulse" />
-                                        <h3 className="text-lg font-display font-bold text-[#0A1628]">Impacto Educativo</h3>
+                                         <h3 className="text-lg font-display font-bold text-white">Impacto Educativo</h3>
                                     </div>
                                     <div className="text-xs font-mono font-semibold text-[#66CCCC] bg-[#66CCCC]/10 px-3 py-1 rounded-full">
                                         LIVE
@@ -230,7 +230,7 @@ const Hero = memo(({ onNavigateToLab, onScrollToPilares }) => {
                                                 <div className="text-2xl font-display font-bold mb-1" style={{ color: stat.color }}>
                                                     {stat.value}
                                                 </div>
-                                                <div className="text-xs font-mono text-[#64748B] uppercase tracking-wider">
+                                                 <div className="text-xs font-mono text-slate-400 uppercase tracking-wider">
                                                     {stat.label}
                                                 </div>
                                             </div>
@@ -239,11 +239,11 @@ const Hero = memo(({ onNavigateToLab, onScrollToPilares }) => {
                                     
                                     {/* Barra de progreso sutil */}
                                     <div className="pt-4 border-t border-white/10">
-                                        <div className="flex items-center justify-between text-sm text-[#64748B] mb-2">
+                                         <div className="flex items-center justify-between text-sm text-slate-400 mb-2">
                                             <span>Progreso IA 2024</span>
-                                            <span className="font-semibold text-[#004B63]">84%</span>
+                                            <span className="font-semibold text-[#4DA8C4]">84%</span>
                                         </div>
-                                        <div className="h-2 bg-[#E2E8F0] rounded-full overflow-hidden">
+                                        <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
                                             <div 
                                                 className="h-full rounded-full bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] transition-all duration-1000"
                                                 style={{ width: '84%' }}
@@ -267,10 +267,10 @@ const Hero = memo(({ onNavigateToLab, onScrollToPilares }) => {
 
             {/* Scroll Indicator Premium */}
             <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer group animate-bounce">
-                <span className="text-xs font-mono uppercase tracking-widest text-[#64748B] group-hover:text-[#4DA8C4] transition-colors">
+                <span className="text-xs font-mono uppercase tracking-widest text-slate-400 group-hover:text-[#4DA8C4] transition-colors">
                     Scroll
                 </span>
-                <div className="w-6 h-10 border-2 border-[#CBD5E1] rounded-full flex items-start justify-center p-1 group-hover:border-[#4DA8C4] transition-colors">
+                <div className="w-6 h-10 border-2 border-slate-700 rounded-full flex items-start justify-center p-1 group-hover:border-[#4DA8C4] transition-colors">
                     <div className="w-1.5 h-1.5 bg-[#4DA8C4] rounded-full animate-bounce" />
                 </div>
             </div>

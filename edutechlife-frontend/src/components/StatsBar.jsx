@@ -62,7 +62,7 @@ const StatsBar = () => {
 
      return (
         <SectionWrapper spacing="sm">
-            <section className="w-full py-0 bg-white">
+             <section className="w-full py-20 bg-slate-900">
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
                 <div 
                     ref={ref}

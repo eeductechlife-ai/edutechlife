@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import ValerioAvatar from './ValerioAvatar';
+import SmartBoard from './SmartBoard';
 import { callDeepseek } from '../utils/api';
 
 const vakQuestions = [
@@ -233,6 +234,10 @@ Eres Valerio, mentor educativo experto en neuroeducación y metodologías VAK de
                     <i className="fa-solid fa-clipboard-check" />
                     Test VAK
                 </button>
+                <button className={`tab-btn ${activeTab === 'smartboard' ? 'active' : ''}`} onClick={() => setActiveTab('smartboard')}>
+                    <i className="fa-solid fa-chalkboard" />
+                    SmartBoard
+                </button>
                 <button className={`tab-btn ${activeTab === 'results' ? 'active' : ''}`} onClick={() => setActiveTab('results')} disabled={!testResult}>
                     <i className="fa-solid fa-chart-pie" />
                     Mi Perfil
@@ -346,6 +351,12 @@ Eres Valerio, mentor educativo experto en neuroeducación y metodologías VAK de
                                 </button>
                             </div>
                         )}
+                    </div>
+                )}
+
+                {activeTab === 'smartboard' && (
+                    <div className="smartboard-container">
+                        <SmartBoard embedded={true} />
                     </div>
                 )}
 
@@ -759,11 +770,20 @@ Eres Valerio, mentor educativo experto en neuroeducación y metodologías VAK de
                     cursor: pointer;
                     transition: all 0.3s ease;
                 }
-                .cta-testimonials:hover {
-                    transform: translateY(-3px);
-                    box-shadow: 0 10px 30px rgba(77, 168, 196, 0.4);
-                }
-            `}</style>
+                 .cta-testimonials:hover {
+                     transform: translateY(-3px);
+                     box-shadow: 0 10px 30px rgba(77, 168, 196, 0.4);
+                 }
+                 .smartboard-container {
+                     max-width: 1000px;
+                     margin: 0 auto;
+                 }
+                 .smartboard-container > div {
+                     border-radius: 1.5rem;
+                     overflow: hidden;
+                     box-shadow: 0 20px 60px rgba(0, 75, 99, 0.15);
+                 }
+             `}</style>
         </div>
     );
 };

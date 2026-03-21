@@ -75,7 +75,7 @@ const App = () => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col" style={{ background: '#FFFFFF', color: '#4A4A4A', fontFamily: "'Open Sans', sans-serif" }}>
+        <div className="min-h-screen flex flex-col bg-slate-950 text-white" style={{ fontFamily: "'Open Sans', sans-serif" }}>
             {/* Loading Screen */}
             {isLoading && (
                 <LoadingScreen onComplete={handleLoadingComplete} minDuration={3000} />
@@ -94,14 +94,11 @@ const App = () => {
                             <img 
                                 src="/images/logo-edutechlife.webp" 
                                 alt="Edutechlife" 
-                                className="h-9 w-auto relative z-10"
-                                style={{ maxHeight: '36px', width: 'auto' }}
+                                className="h-10 w-auto relative z-10 transition-all duration-300 group-hover:scale-105"
+                                style={{ maxHeight: '40px', width: 'auto' }}
                             />
                         </div>
-                        <div className="hidden md:block">
-                            <div className="text-sm font-display font-bold text-[#0A1628] tracking-tight">EDUTECHLIFE</div>
-                            <div className="text-xs font-mono text-[#4DA8C4] font-medium">v2286</div>
-                        </div>
+
                     </button>
 
                     {/* Desktop Navigation Premium */}

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { callDeepseek } from '../utils/api';
 
-const AutomationArchitect = ({ onBack }) => {
+const AutomationArchitect = ({ onBack, embedded = false }) => {
     const [activeStep, setActiveStep] = useState(1);
     const [formData, setFormData] = useState({
         empresa: '',
@@ -474,7 +474,7 @@ Formato: Título, descripción, y secciones claras.`;
                                     <i className="fa-solid fa-redo" />
                                     Crear Nuevo Plan
                                 </button>
-                                {onBack && (
+                                {onBack && !embedded && (
                                     <button 
                                         className="aa-btn-ghost"
                                         onClick={onBack}
