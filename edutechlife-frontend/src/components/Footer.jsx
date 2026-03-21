@@ -19,7 +19,7 @@ export default function Footer() {
           <div className="lg:col-span-1">
             <div className="mb-6">
               <img 
-                src="/images/logo-edutechlife.png" 
+                src="/images/logo-edutechlife.webp" 
                 alt="Edutechlife Logo" 
                 className="h-12 w-auto"
                 style={{ maxHeight: '48px', width: 'auto', filter: 'brightness(0) invert(1)' }}
@@ -123,9 +123,8 @@ export default function Footer() {
               </form>
             )}
           </div>
-        </div>
-
-        <div className="border-t border-white/10 pt-8">
+      </div>
+      <div className="border-t border-white/10 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-white/50 text-sm">
               © 2024 Edutechlife. Todos los derechos reservados.

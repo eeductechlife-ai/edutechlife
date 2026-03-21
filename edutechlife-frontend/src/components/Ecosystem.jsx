@@ -73,7 +73,7 @@ const LineCard = ({ line, index, onExplore }) => {
     return (
         <div
             ref={cardRef}
-            className={`ecosystem-card group relative bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden transition-all duration-500 cursor-pointer ${
+        className={`ecosystem-card glass-card backdrop-blur-md bg-white/5 border border-white/10 shadow-2xl hover:scale-105 transition-all duration-500 cursor-pointer hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] ${
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
             }`}
             onMouseEnter={() => setIsHovered(true)}

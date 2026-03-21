@@ -159,6 +159,10 @@
     background-clip: text;
   }
 
+  /* Typographic refinements */
+  .leading-relaxed { line-height: 1.75; }
+  .tracking-tight { letter-spacing: -0.02em; }
+
   /* Primary Color Utilities */
   .bg-glass { background-color: var(--glass-bg); }
   .border-glass { border-color: var(--glass-border); }
@@ -6110,7 +6114,7 @@ h1, h2, h3, h4, h5 {
 /* Alliance Marquee Section */
 .alliance-section {
   padding: 3rem 5%;
-  background: linear-gradient(180deg, rgba(10, 22, 40, 0.95) 0%, rgba(7, 11, 20, 0.98) 100%);
+  background: linear-gradient(to bottom right, #0f172a 0%, #000 40%, #1f2937 100%);
   position: relative;
   overflow: hidden;
 }

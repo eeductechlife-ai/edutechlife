@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 
 const carouselImages = [
-    { src: '/images/edutech-carrusel-1.png', alt: 'Estudiantes Edutechlife' },
-    { src: '/images/edutech-carrusel-2.png', alt: 'Aula Edutechlife' },
-    { src: '/images/edutech-carrusel-3.png', alt: 'Tecnología Educativa' },
-    { src: '/images/edutech-carrusel-4.png', alt: 'Aprendizaje Digital' },
-    { src: '/images/edutech-carrusel-5.png', alt: 'Innovación' },
-    { src: '/images/edutech-carrusel-6.png', alt: 'Comunidad' },
-    { src: '/images/edutech-carrusel-7.png', alt: 'Educación del Futuro' },
+    { src: '/images/edutech-carrusel-1.webp', alt: 'Estudiantes Edutechlife' },
+    { src: '/images/edutech-carrusel-2.webp', alt: 'Aula Edutechlife' },
+    { src: '/images/edutech-carrusel-3.webp', alt: 'Tecnología Educativa' },
+    { src: '/images/edutech-carrusel-4.webp', alt: 'Aprendizaje Digital' },
+    { src: '/images/edutech-carrusel-5.webp', alt: 'Innovación' },
+    { src: '/images/edutech-carrusel-6.webp', alt: 'Comunidad' },
+    { src: '/images/edutech-carrusel-7.webp', alt: 'Educación del Futuro' },
 ];
 
 const AboutCarousel = () => {
@@ -76,7 +76,7 @@ const AboutCarousel = () => {
                             <img
                                 src={img.src}
                                 alt={img.alt}
-                                className="carousel-image"
+                                className="w-full h-full object-cover saturate-110"
                             />
                         ) : (
                             <div className="carousel-placeholder">
@@ -86,6 +86,9 @@ const AboutCarousel = () => {
                         
                         {/* Overlay Gradient */}
                         <div className="carousel-overlay" />
+                        
+                        {/* Mask bottom gradient to merge with page */}
+                        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black via-black/60 to-transparent pointer-events-none" />
                         
                         {/* Neural Grid Effect */}
                         <div className="carousel-grid" />

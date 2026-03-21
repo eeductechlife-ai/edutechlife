@@ -74,7 +74,7 @@ const App = () => {
     };
 
     return (
-        <div style={{ position: 'relative', minHeight: '100vh', background: '#FFFFFF', color: '#4A4A4A', fontFamily: "'Open Sans', sans-serif" }}>
+        <div className="min-h-screen flex flex-col" style={{ background: '#FFFFFF', color: '#4A4A4A', fontFamily: "'Open Sans', sans-serif" }}>
             {/* Loading Screen */}
             {isLoading && (
                 <LoadingScreen onComplete={handleLoadingComplete} minDuration={3000} />
@@ -89,7 +89,7 @@ const App = () => {
                         className="flex items-center gap-3 hover:opacity-80 transition-opacity"
                     >
                         <img 
-                            src="/images/logo-edutechlife.png" 
+                            src="/images/logo-edutechlife.webp" 
                             alt="Edutechlife" 
                             className="h-10 w-auto"
                             style={{ maxHeight: '40px', width: 'auto' }}
@@ -168,7 +168,7 @@ const App = () => {
             </header>
 
             {/* Main Content */}
-            <main style={{ paddingTop: '0' }}>
+            <main className="flex-grow" style={{ paddingTop: '0' }}>
                 {view === 'landing' && (
                     <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
                         {/* Hero Section */}
@@ -209,10 +209,7 @@ const App = () => {
                           <FinalCTA onNavigate={handleNavigate} />
                         </div>
 
-                        {/* Footer */}
-                        <div className="section-container section-padding">
-                          <Footer />
-                        </div>
+                        {/* Footer (moved below main to fix sticky footer) - handled in layout outside main */}
                     </div>
                 )}
 
@@ -294,6 +291,8 @@ const App = () => {
                     <i className={`fa-solid ${botOpen ? 'fa-xmark' : 'fa-comment-dots'}`}></i>
                 </button>
             </div>
+            {/* Footer moved outside main to ensure sticky footer effect */}
+            <Footer />
         </div>
     );
 };
