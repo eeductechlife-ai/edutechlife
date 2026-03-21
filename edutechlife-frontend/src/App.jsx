@@ -168,49 +168,20 @@ const App = () => {
             </header>
 
             {/* Main Content */}
-            <main className="flex-grow" style={{ paddingTop: '0' }}>
+            <main className="flex-grow">
                 {view === 'landing' && (
-                    <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-                        {/* Hero Section */}
-                        <div className="section-container section-padding">
-                          <Hero 
-                            onNavigateToLab={() => handleNavigate('neuroentorno')}
-                            onScrollToPilares={() => scrollToSection('ecosystem')}
-                          />
-                        </div>
-
-                        {/* Alliance Marquee */}
-                        <div className="section-container section-padding">
-                          <AllianceMarquee />
-                        </div>
-
-                        {/* Stats Bar */}
-                        <div className="section-container section-padding">
-                          <StatsBar />
-                        </div>
-
-                        {/* About Section */}
-                        <div className="section-container section-padding">
-                          <About />
-                        </div>
-
-                        {/* Ecosystem Section - LÍNEAS DE IMPACTO · VAK + STEAM */}
-                        <div className="section-container section-padding">
-                          <Ecosystem onExplore={handleNavigate} />
-                        </div>
-
-                        {/* Process Section */}
-                        <div className="section-container section-padding">
-                          <ProcessSection />
-                        </div>
-
-                        {/* Final CTA */}
-                        <div className="section-container section-padding">
-                          <FinalCTA onNavigate={handleNavigate} />
-                        </div>
-
-                        {/* Footer (moved below main to fix sticky footer) - handled in layout outside main */}
-                    </div>
+                     <>
+                        <Hero 
+                          onNavigateToLab={() => handleNavigate('neuroentorno')}
+                          onScrollToPilares={() => scrollToSection('ecosystem')}
+                        />
+                        <AllianceMarquee />
+                        <StatsBar />
+                        <About />
+                        <Ecosystem onExplore={handleNavigate} />
+                        <ProcessSection />
+                        <FinalCTA onNavigate={handleNavigate} />
+                    </>
                 )}
 
                 {/* Pillar Pages */}

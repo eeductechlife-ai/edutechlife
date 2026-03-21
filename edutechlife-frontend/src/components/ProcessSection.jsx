@@ -50,8 +50,8 @@ export default function ProcessSection() {
     return () => observer.disconnect();
   }, []);
 
-  return (
-    <section ref={sectionRef} className="relative py-12 md:py-20 overflow-hidden px-4 md:px-8 lg:px-5%" style={{ background: '#FFFFFF' }}>
+    return (
+        <section ref={sectionRef} className="w-full relative py-24 overflow-hidden px-6 lg:px-8" style={{ background: '#FFFFFF' }}>
       <div className="max-w-7xl mx-auto">
         <div className={`text-center mb-12 md:mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="inline-flex items-center gap-2 mb-6">

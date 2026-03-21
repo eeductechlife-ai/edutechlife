@@ -13,8 +13,8 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative px-4 md:px-8 lg:px-5% section-padding" style={{ background: '#004B63' }}>
-      <div className="max-w-7xl mx-auto py-10 md:py-14">
+     <footer className="w-full relative px-6 lg:px-8 py-12" style={{ background: '#004B63' }}>
+       <div className="max-w-7xl mx-auto py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-10 md:mb-12">
           <div className="lg:col-span-1">
             <div className="mb-6">

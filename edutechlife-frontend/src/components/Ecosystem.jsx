@@ -268,7 +268,7 @@ const Ecosystem = ({ onExplore }) => {
     return (
         <section
             id="ecosystem"
-            className="relative py-12 md:py-20 px-4 md:px-8 lg:px-5% overflow-hidden"
+            className="w-full relative py-24 px-6 lg:px-8 overflow-hidden"
             style={{
                 background: 'linear-gradient(180deg, #0A1628 0%, #070B14 50%, #0A1628 100%)',
             }}
@@ -340,7 +340,7 @@ const Ecosystem = ({ onExplore }) => {
                 </div>
 
                 {/* Lines Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-2 md:px-0">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-0">
                     {lines.map((line, index) => (
                         <div key={line.id} className="mb-8 md:mb-0">
                             <LineCard

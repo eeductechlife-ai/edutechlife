@@ -41,26 +41,28 @@ const AllianceMarquee = () => {
 
     const allLogos = [...logos, ...logos];
 
-    return (
-        <section className="alliance-section">
-            <div className="alliance-label">
-                <span>Ecosistema de Nivel Mundial</span>
-            </div>
-            
-            <div className="marquee-container px-4 md:px-0">
-                <div className="marquee-fade-left" />
-                <div className="marquee-fade-right" />
+     return (
+        <section className="w-full py-24 px-6 lg:px-8" style={{ background: 'linear-gradient(to bottom right, #0f172a 0%, #000 40%, #1f2937 100%)' }}>
+            <div className="max-w-7xl mx-auto">
+                <div className="alliance-label">
+                    <span>Ecosistema de Nivel Mundial</span>
+                </div>
                 
-                <div className="marquee-track" ref={trackRef}>
-                    {allLogos.map((logo, i) => (
-                        <div key={i} className="marquee-item">
-                            <div className="marquee-logo">
-                                <i className={`fa-solid ${logo.icon}`} />
+                <div className="marquee-container px-4 md:px-0">
+                    <div className="marquee-fade-left" />
+                    <div className="marquee-fade-right" />
+                    
+                    <div className="marquee-track" ref={trackRef}>
+                        {allLogos.map((logo, i) => (
+                            <div key={i} className="marquee-item">
+                                <div className="marquee-logo">
+                                    <i className={`fa-solid ${logo.icon}`} />
+                                </div>
+                                <span className="marquee-name">{logo.name}</span>
+                                <span className="marquee-sub">{logo.sub}</span>
                             </div>
-                            <span className="marquee-name">{logo.name}</span>
-                            <span className="marquee-sub">{logo.sub}</span>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
             </div>
         </section>

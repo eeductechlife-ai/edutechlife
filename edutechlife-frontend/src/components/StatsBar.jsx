@@ -59,19 +59,23 @@ const StatsBar = () => {
         return () => obs.disconnect();
     }, []);
 
-    return (
-        <div 
-            ref={ref}
-            className="stats-bar mx-auto max-w-5xl reveal"
-        >
-            {stats.map((stat, i) => (
-                <StatItem 
-                    key={i} 
-                    {...stat} 
-                    start={isVisible}
-                />
-            ))}
-        </div>
+     return (
+        <section className="w-full py-24 bg-white">
+            <div className="max-w-7xl mx-auto px-6 lg:px-8">
+                <div 
+                    ref={ref}
+                    className="stats-bar mx-auto max-w-5xl reveal mt-0"
+                >
+                    {stats.map((stat, i) => (
+                        <StatItem 
+                            key={i} 
+                            {...stat} 
+                            start={isVisible}
+                        />
+                    ))}
+                </div>
+            </div>
+        </section>
     );
 };
 

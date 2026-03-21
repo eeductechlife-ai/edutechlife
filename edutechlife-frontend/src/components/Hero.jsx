@@ -78,8 +78,7 @@ const Hero = memo(({ onNavigateToLab, onScrollToPilares }) => {
 
     return (
         <section 
-            className="hero-wrap"
-            style={{ position: 'relative', overflow: 'hidden' }}
+            className="w-full min-h-screen flex flex-col justify-center py-24 bg-white relative overflow-hidden"
         >
             {/* Grid 3D Animation */}
             <div className="grid-3d" />
@@ -102,7 +101,7 @@ const Hero = memo(({ onNavigateToLab, onScrollToPilares }) => {
 
             {/* Main Content Grid */}
             <div 
-                className="max-w-7xl mx-auto w-full relative z-10 px-4 md:px-0"
+                className="max-w-7xl mx-auto w-full relative z-10 px-6 lg:px-8"
                 style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2rem', alignItems: 'center' }}
             >
                 {/* Columna Izquierda - Texto Editorial */}
