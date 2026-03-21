@@ -51,9 +51,9 @@ export default function ProcessSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative py-20 lg:py-32 overflow-hidden" style={{ background: '#FFFFFF' }}>
-      <div className="max-w-7xl mx-auto px-5%">
-        <div className={`text-center mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+    <section ref={sectionRef} className="relative py-16 md:py-24 lg:py-28 overflow-hidden px-4 md:px-8 lg:px-5%" style={{ background: '#FFFFFF' }}>
+      <div className="max-w-7xl mx-auto">
+        <div className={`text-center mb-12 md:mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="inline-flex items-center gap-2 mb-6">
             <span className="w-8 h-0.5 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] rounded" />
             <span className="font-mono text-xs font-semibold uppercase tracking-widest text-[#4DA8C4]">
@@ -61,10 +61,10 @@ export default function ProcessSection() {
             </span>
             <span className="w-8 h-0.5 bg-gradient-to-r from-[#66CCCC] to-[#4DA8C4] rounded" />
           </div>
-          <h2 className="font-display text-3xl lg:text-4xl xl:text-5xl font-black text-[#004B63] mb-4">
+          <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-black text-[#004B63] mb-4">
             Así Funciona
           </h2>
-          <p className="text-[#4A4A4A] text-lg max-w-2xl mx-auto">
+          <p className="text-[#4A4A4A] text-base md:text-lg max-w-2xl mx-auto px-4">
             Un proceso estructurado en 4 etapas para garantizar tu transformación educativa
           </p>
         </div>
@@ -72,14 +72,14 @@ export default function ProcessSection() {
         <div className="relative">
           <div className="absolute top-[4.5rem] left-[12.5%] right-[12.5%] h-0.5 bg-gradient-to-r from-transparent via-[#B2D8E5] to-transparent hidden lg:block" />
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             {steps.map((step, i) => (
               <div
                 key={step.num}
                 className={`relative transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
                 style={{ transitionDelay: `${i * 150}ms` }}
               >
-                <div className="process-card relative bg-white rounded-2xl p-8 shadow-lg border border-[rgba(0,194,224,0.12)] hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group h-full" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}>
+                <div className="process-card relative bg-white rounded-2xl p-6 md:p-8 shadow-lg border border-[rgba(0,194,224,0.12)] hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group h-full" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}>
                   <div className="absolute -top-5 left-1/2 -translate-x-1/2">
                     <div 
                       className="w-14 h-14 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg border-2 border-white"

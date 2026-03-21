@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const Consultoria = ({ onBack }) => {
     const [activeTab, setActiveTab] = useState('servicios');
@@ -18,9 +18,20 @@ const Consultoria = ({ onBack }) => {
     const [roiData, setRoiData] = useState({
         empleados: 50,
         horasAhorradas: 2,
-        costoHora: 50000
+        costoHora: 50000,
+        mesesProyecto: 12,
+        costoImplementacion: 15000000
     });
     const [roiResult, setRoiResult] = useState(null);
+    const [isCalculating, setIsCalculating] = useState(false);
+    const [animatedValues, setAnimatedValues] = useState(null);
+    const roiRef = useRef(null);
+
+    useEffect(() => {
+        if (activeTab === 'roi' && roiRef.current) {
+            roiRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [activeTab]);
 
     const servicios = [
         {
@@ -123,24 +134,61 @@ const Consultoria = ({ onBack }) => {
     };
 
     const calculateROI = () => {
-        const { empleados, horasAhorradas, costoHora } = roiData;
-        const ahorromensual = empleados * horasAhorradas * costoHora * 20;
-        const aohorroAnual = ahorromensual * 12;
-        const inversion = 15000000;
-        const roi = ((aohorroAnual - inversion) / inversion) * 100;
-        const payback = (inversion / ahorromensual).toFixed(1);
+        setIsCalculating(true);
+        setAnimatedValues(null);
         
-        setRoiResult({
-            ahorroMensual: ahorromensual,
-            ahorroAnual: aohorroAnual,
-            roi: roi.toFixed(0),
-            paybackMeses: payback
-        });
+        const { empleados, horasAhorradas, costoHora, mesesProyecto, costoImplementacion } = roiData;
+        const diasLaborales = 22;
+        const ahorromensual = empleados * horasAhorradas * costoHora * diasLaborales;
+        const ahorroTotal = ahorromensual * mesesProyecto;
+        const gananciaNeta = ahorroTotal - costoImplementacion;
+        const roi = ((gananciaNeta) / costoImplementacion) * 100;
+        const payback = (costoImplementacion / ahorromensual).toFixed(1);
+        const eficiencia = Math.min(100, ((ahorroTotal / costoImplementacion) * 100).toFixed(1));
+        
+        setTimeout(() => {
+            setRoiResult({
+                ahorroMensual: ahorromensual,
+                ahorroTotal: ahorroTotal,
+                gananciaNeta: gananciaNeta,
+                roi: Math.max(0, roi).toFixed(0),
+                paybackMeses: payback,
+                eficiencia: eficiencia,
+                inversion: costoImplementacion
+            });
+            setIsCalculating(false);
+            animateNumbers();
+        }, 1200);
+    };
+
+    const animateNumbers = () => {
+        const duration = 1500;
+        const startTime = Date.now();
+        const targetValues = { ...roiResult };
+        
+        const animate = () => {
+            const elapsed = Date.now() - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            
+            setAnimatedValues({
+                ahorroMensual: Math.round(targetValues.ahorroMensual * eased),
+                gananciaNeta: Math.round(targetValues.gananciaNeta * eased),
+                roi: (targetValues.roi * eased).toFixed(0)
+            });
+            
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            }
+        };
+        
+        requestAnimationFrame(animate);
     };
 
     const handleRoiChange = (field, value) => {
         setRoiData(prev => ({ ...prev, [field]: Number(value) }));
         setRoiResult(null);
+        setAnimatedValues(null);
     };
 
     return (
@@ -456,79 +504,288 @@ const Consultoria = ({ onBack }) => {
                 )}
 
                 {activeTab === 'roi' && (
-                    <div className="roi-section">
-                        <div className="roi-header">
-                            <i className="fa-solid fa-calculator" />
-                            <h2>Calculadora de ROI</h2>
-                            <p>Estima el retorno de inversión de implementar soluciones de IA en tu organización</p>
+                    <div className="roi-neural-section" ref={roiRef}>
+                        <div className="roi-neural-header">
+                            <div className="neural-badge">
+                                <div className="neural-pulse" />
+                                <i className="fa-solid fa-brain" />
+                                <span>ROI Neural Calculator</span>
+                            </div>
+                            <h2>Calculadora de Retorno de Inversión</h2>
+                            <p>Proyecta el impacto financiero de implementar IA en tu organización</p>
                         </div>
-                        <div className="roi-calculator">
-                            <div className="roi-inputs">
-                                <div className="roi-field">
-                                    <label>Número de empleados</label>
-                                    <input 
-                                        type="range" 
-                                        min="10" 
-                                        max="500" 
-                                        step="10"
-                                        value={roiData.empleados}
-                                        onChange={(e) => handleRoiChange('empleados', e.target.value)}
-                                    />
-                                    <span className="roi-value">{roiData.empleados}</span>
+
+                        <div className="roi-neural-grid">
+                            <div className="roi-neural-card inputs-card">
+                                <div className="card-header">
+                                    <i className="fa-solid fa-sliders" />
+                                    <h3>Parámetros</h3>
                                 </div>
-                                <div className="roi-field">
-                                    <label>Horas ahorradas por empleado/mes</label>
-                                    <input 
-                                        type="range" 
-                                        min="1" 
-                                        max="8" 
-                                        step="0.5"
-                                        value={roiData.horasAhorradas}
-                                        onChange={(e) => handleRoiChange('horasAhorradas', e.target.value)}
-                                    />
-                                    <span className="roi-value">{roiData.horasAhorradas}h</span>
+                                
+                                <div className="roi-inputs-neural">
+                                    <div className="roi-input-group">
+                                        <div className="input-header">
+                                            <label>
+                                                <i className="fa-solid fa-users" />
+                                                Empleados en tu organización
+                                            </label>
+                                            <span className="input-value">{roiData.empleados}</span>
+                                        </div>
+                                        <input 
+                                            type="range" 
+                                            min="5" 
+                                            max="1000" 
+                                            step="5"
+                                            value={roiData.empleados}
+                                            onChange={(e) => handleRoiChange('empleados', e.target.value)}
+                                            className="neural-range"
+                                        />
+                                        <div className="range-labels">
+                                            <span>5</span>
+                                            <span>1,000+</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="roi-input-group">
+                                        <div className="input-header">
+                                            <label>
+                                                <i className="fa-solid fa-clock" />
+                                                Horas ahorradas por empleado/mes
+                                            </label>
+                                            <span className="input-value">{roiData.horasAhorradas}h</span>
+                                        </div>
+                                        <input 
+                                            type="range" 
+                                            min="1" 
+                                            max="15" 
+                                            step="0.5"
+                                            value={roiData.horasAhorradas}
+                                            onChange={(e) => handleRoiChange('horasAhorradas', e.target.value)}
+                                            className="neural-range"
+                                        />
+                                        <div className="range-labels">
+                                            <span>1h</span>
+                                            <span>15h</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="roi-input-group">
+                                        <div className="input-header">
+                                            <label>
+                                                <i className="fa-solid fa-coins" />
+                                                Costo promedio hora (COP)
+                                            </label>
+                                            <span className="input-value">${roiData.costoHora.toLocaleString()}</span>
+                                        </div>
+                                        <input 
+                                            type="range" 
+                                            min="15000" 
+                                            max="300000" 
+                                            step="5000"
+                                            value={roiData.costoHora}
+                                            onChange={(e) => handleRoiChange('costoHora', e.target.value)}
+                                            className="neural-range"
+                                        />
+                                        <div className="range-labels">
+                                            <span>$15K</span>
+                                            <span>$300K</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="roi-input-group">
+                                        <div className="input-header">
+                                            <label>
+                                                <i className="fa-solid fa-calendar" />
+                                                Duración del proyecto
+                                            </label>
+                                            <span className="input-value">{roiData.mesesProyecto} meses</span>
+                                        </div>
+                                        <input 
+                                            type="range" 
+                                            min="3" 
+                                            max="36" 
+                                            step="1"
+                                            value={roiData.mesesProyecto}
+                                            onChange={(e) => handleRoiChange('mesesProyecto', e.target.value)}
+                                            className="neural-range"
+                                        />
+                                        <div className="range-labels">
+                                            <span>3 meses</span>
+                                            <span>36 meses</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="roi-input-group">
+                                        <div className="input-header">
+                                            <label>
+                                                <i className="fa-solid fa-rocket" />
+                                                Inversión en implementación (COP)
+                                            </label>
+                                            <span className="input-value">${roiData.costoImplementacion.toLocaleString()}</span>
+                                        </div>
+                                        <input 
+                                            type="range" 
+                                            min="5000000" 
+                                            max="100000000" 
+                                            step="1000000"
+                                            value={roiData.costoImplementacion}
+                                            onChange={(e) => handleRoiChange('costoImplementacion', e.target.value)}
+                                            className="neural-range"
+                                        />
+                                        <div className="range-labels">
+                                            <span>$5M</span>
+                                            <span>$100M</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="roi-field">
-                                    <label>Costo promedio por hora (COP)</label>
-                                    <input 
-                                        type="range" 
-                                        min="20000" 
-                                        max="200000" 
-                                        step="10000"
-                                        value={roiData.costoHora}
-                                        onChange={(e) => handleRoiChange('costoHora', e.target.value)}
-                                    />
-                                    <span className="roi-value">${roiData.costoHora.toLocaleString()}</span>
-                                </div>
-                                <button className="calculate-btn" onClick={calculateROI}>
-                                    <i className="fa-solid fa-calculator" />
-                                    Calcular ROI
+
+                                <button 
+                                    className={`calculate-btn-neural ${isCalculating ? 'calculating' : ''}`} 
+                                    onClick={calculateROI}
+                                    disabled={isCalculating}
+                                >
+                                    {isCalculating ? (
+                                        <>
+                                            <div className="calc-spinner" />
+                                            <span>Analizando...</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <i className="fa-solid fa-bolt" />
+                                            <span>Calcular ROI Neural</span>
+                                        </>
+                                    )}
                                 </button>
                             </div>
-                            {roiResult && (
-                                <div className="roi-results">
-                                    <div className="roi-result-card primary">
-                                        <span className="result-label">Ahorro Mensual</span>
-                                        <span className="result-value">${roiResult.ahorroMensual.toLocaleString()}</span>
-                                    </div>
-                                    <div className="roi-result-card">
-                                        <span className="result-label">Ahorro Anual</span>
-                                        <span className="result-value secondary">${roiResult.ahorroAnual.toLocaleString()}</span>
-                                    </div>
-                                    <div className="roi-result-card">
-                                        <span className="result-label">ROI Estimado</span>
-                                        <span className="result-value highlight">{roiResult.roi}%</span>
-                                    </div>
-                                    <div className="roi-result-card">
-                                        <span className="result-label">Payback</span>
-                                        <span className="result-value">{roiResult.paybackMeses} meses</span>
-                                    </div>
+
+                            <div className="roi-neural-card results-card">
+                                <div className="card-header">
+                                    <i className="fa-solid fa-chart-line" />
+                                    <h3>Proyección Neural</h3>
                                 </div>
-                            )}
-                        </div>
-                        <div className="roi-disclaimer">
-                            <i className="fa-solid fa-info-circle" />
-                            <span>Esta calculadora proporciona estimaciones basadas en promedios de la industria. Los resultados reales pueden variar según las características específicas de tu organización.</span>
+
+                                {!roiResult ? (
+                                    <div className="roi-placeholder">
+                                        <div className="placeholder-icon">
+                                            <i className="fa-solid fa-brain" />
+                                        </div>
+                                        <p>Configura los parámetros y presiona "Calcular" para ver tu proyección de ROI</p>
+                                        <div className="placeholder-glow" />
+                                    </div>
+                                ) : (
+                                    <div className="roi-results-neural">
+                                    <svg width="0" height="0">
+                                        <defs>
+                                            <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                <stop offset="0%" stopColor="#4DA8C4" />
+                                                <stop offset="100%" stopColor="#66CCCC" />
+                                            </linearGradient>
+                                        </defs>
+                                    </svg>
+                                        <div className="result-hero">
+                                            <div className="hero-glow" />
+                                            <div className="hero-content">
+                                                <span className="hero-label">Ganancia Neta Proyectada</span>
+                                                <span className="hero-value">
+                                                    ${(animatedValues?.gananciaNeta || roiResult.gananciaNeta).toLocaleString()}
+                                                </span>
+                                                <span className="hero-sub">en {roiData.mesesProyecto} meses</span>
+                                            </div>
+                                            <div className="roi-ring">
+                                                <svg viewBox="0 0 100 100">
+                                                    <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                        <stop offset="0%" stopColor="#4DA8C4" />
+                                                        <stop offset="100%" stopColor="#66CCCC" />
+                                                    </linearGradient>
+                                                    <circle cx="50" cy="50" r="45" className="ring-bg" />
+                                                    <circle 
+                                                        cx="50" 
+                                                        cy="50" 
+                                                        r="45" 
+                                                        className="ring-progress"
+                                                        strokeDasharray={`${Math.min(roiResult.eficiencia * 2.83, 283)} 283`}
+                                                    />
+                                                </svg>
+                                                <span className="ring-value">{roiResult.roi}%</span>
+                                            </div>
+                                        </div>
+
+                                        <div className="result-metrics">
+                                            <div className="metric-card">
+                                                <div className="metric-icon">
+                                                    <i className="fa-solid fa-arrow-trend-up" />
+                                                </div>
+                                                <div className="metric-info">
+                                                    <span className="metric-label">Ahorro Mensual</span>
+                                                    <span className="metric-value">${(animatedValues?.ahorroMensual || roiResult.ahorroMensual).toLocaleString()}</span>
+                                                </div>
+                                            </div>
+
+                                            <div className="metric-card">
+                                                <div className="metric-icon">
+                                                    <i className="fa-solid fa-piggy-bank" />
+                                                </div>
+                                                <div className="metric-info">
+                                                    <span className="metric-label">Ahorro Total</span>
+                                                    <span className="metric-value">${roiResult.ahorroTotal.toLocaleString()}</span>
+                                                </div>
+                                            </div>
+
+                                            <div className="metric-card">
+                                                <div className="metric-icon">
+                                                    <i className="fa-solid fa-clock" />
+                                                </div>
+                                                <div className="metric-info">
+                                                    <span className="metric-label">Payback</span>
+                                                    <span className="metric-value">{roiResult.paybackMeses} meses</span>
+                                                </div>
+                                            </div>
+
+                                            <div className="metric-card">
+                                                <div className="metric-icon">
+                                                    <i className="fa-solid fa-chart-pie" />
+                                                </div>
+                                                <div className="metric-info">
+                                                    <span className="metric-label">Eficiencia</span>
+                                                    <span className="metric-value">{roiResult.eficiencia}%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="result-comparison">
+                                            <div className="comparison-bar">
+                                                <div className="bar-label">
+                                                    <span>Inversión</span>
+                                                    <span>${roiResult.inversion.toLocaleString()}</span>
+                                                </div>
+                                                <div className="bar-track">
+                                                    <div 
+                                                        className="bar-fill investment"
+                                                        style={{ width: '40%' }}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="comparison-bar">
+                                                <div className="bar-label">
+                                                    <span>Ahorro Total</span>
+                                                    <span>${roiResult.ahorroTotal.toLocaleString()}</span>
+                                                </div>
+                                                <div className="bar-track">
+                                                    <div 
+                                                        className="bar-fill savings"
+                                                        style={{ width: `${Math.min((roiResult.ahorroTotal / roiResult.inversion) * 40, 100)}%` }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                <div className="roi-disclaimer-neural">
+                                    <i className="fa-solid fa-shield-halved" />
+                                    <span>Cálculos basados en promedios de la industria. Los resultados reales pueden variar. Consulta con nuestros especialistas para un análisis personalizado.</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 )}

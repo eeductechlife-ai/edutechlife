@@ -88,12 +88,12 @@ const App = () => {
                         onClick={() => handleNavigate('landing')}
                         className="flex items-center gap-3 hover:opacity-80 transition-opacity"
                     >
-                        <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #004B63, #4DA8C4)' }}>
-                            <i className="fa-solid fa-graduation-cap text-white text-lg" />
-                        </div>
-                        <span className="font-montserrat font-bold text-lg text-[#004B63] tracking-tight">
-                            EDUTECHLIFE
-                        </span>
+                        <img 
+                            src="/images/logo-edutechlife.png" 
+                            alt="Edutechlife Logo" 
+                            className="h-10 w-auto"
+                            style={{ maxHeight: '40px', width: 'auto' }}
+                        />
                     </button>
 
                     {/* Desktop Navigation */}

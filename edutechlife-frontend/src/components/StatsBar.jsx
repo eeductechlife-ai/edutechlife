@@ -63,7 +63,6 @@ const StatsBar = () => {
         <div 
             ref={ref}
             className="stats-bar mx-auto max-w-5xl reveal"
-            style={{ marginTop: '3.5rem' }}
         >
             {stats.map((stat, i) => (
                 <StatItem 

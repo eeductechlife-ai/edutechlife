@@ -13,17 +13,17 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative" style={{ background: '#004B63' }}>
-      <div className="max-w-7xl mx-auto px-5% py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+    <footer className="relative px-4 md:px-8 lg:px-5%" style={{ background: '#004B63' }}>
+      <div className="max-w-7xl mx-auto py-12 md:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-10 md:mb-12">
           <div className="lg:col-span-1">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
-                <i className="fa-solid fa-graduation-cap text-white text-xl"></i>
-              </div>
-              <span className="font-display font-bold text-xl text-white tracking-tight">
-                EDUTECHLIFE
-              </span>
+            <div className="mb-6">
+              <img 
+                src="/images/logo-edutechlife.png" 
+                alt="Edutechlife Logo" 
+                className="h-12 w-auto"
+                style={{ maxHeight: '48px', width: 'auto', filter: 'brightness(0) invert(1)' }}
+              />
             </div>
             <p className="text-white/70 text-sm leading-relaxed mb-6">
               Transformando la educación con inteligencia artificial y metodologías 

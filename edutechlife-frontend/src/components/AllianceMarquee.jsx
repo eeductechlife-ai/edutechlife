@@ -47,7 +47,7 @@ const AllianceMarquee = () => {
                 <span>Ecosistema de Nivel Mundial</span>
             </div>
             
-            <div className="marquee-container">
+            <div className="marquee-container px-4 md:px-0">
                 <div className="marquee-fade-left" />
                 <div className="marquee-fade-right" />
                 
