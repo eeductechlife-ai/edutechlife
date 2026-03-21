@@ -13,8 +13,8 @@ export default function Footer() {
   };
 
   return (
-     <footer className="w-full relative px-6 lg:px-8 py-12" style={{ background: '#004B63' }}>
-       <div className="max-w-7xl mx-auto py-8">
+      <footer className="w-full relative px-6 lg:px-8 py-12" style={{ background: '#0A3044' }}>
+        <div className="max-w-7xl mx-auto py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-10 md:mb-12">
           <div className="lg:col-span-1">
              <div className="mb-6">
@@ -40,7 +40,7 @@ export default function Footer() {
                   key={i}
                   href="#"
                   aria-label={social.label}
-                  className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:bg-white hover:text-[#004B63] transition-all duration-300"
+                  className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:bg-[#1B9EBA] hover:text-white transition-all duration-300"
                 >
                   <i className={`fa-solid ${social.icon} text-sm`}></i>
                 </a>
@@ -100,26 +100,26 @@ export default function Footer() {
               Recibe novidades educativas y actualizaciones de la plataforma.
             </p>
             {subscribed ? (
-              <div className="bg-white/10 rounded-xl p-4 text-center">
-                <i className="fa-solid fa-check-circle text-[#66CCCC] text-2xl mb-2"></i>
-                <p className="text-white text-sm">¡Gracias por suscribirte!</p>
-              </div>
+               <div className="bg-white/10 rounded-xl p-4 text-center">
+                 <i className="fa-solid fa-check-circle text-[#1B9EBA] text-2xl mb-2"></i>
+                 <p className="text-white text-sm">¡Gracias por suscribirte!</p>
+               </div>
             ) : (
               <form onSubmit={handleSubscribe} className="space-y-3">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="tu@email.com"
-                  className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm focus:outline-none focus:border-[#66CCCC] transition-colors"
-                  required
-                />
-                <button
-                  type="submit"
-                  className="w-full py-3 rounded-xl bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white font-semibold text-sm hover:opacity-90 transition-opacity"
-                >
-                  Suscribirme
-                </button>
+                 <input
+                   type="email"
+                   value={email}
+                   onChange={(e) => setEmail(e.target.value)}
+                   placeholder="tu@email.com"
+                   className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm focus:outline-none focus:border-[#1B9EBA] transition-colors"
+                   required
+                 />
+                 <button
+                   type="submit"
+                   className="w-full py-3 rounded-xl bg-[#1B9EBA] text-white font-semibold text-sm hover:opacity-90 transition-opacity"
+                 >
+                   Suscribirme
+                 </button>
               </form>
             )}
           </div>
@@ -144,7 +144,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full bg-[#66CCCC]/5 blur-3xl translate-x-1/2 translate-y-1/2 pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full bg-[#1B9EBA]/5 blur-3xl translate-x-1/2 translate-y-1/2 pointer-events-none" />
     </footer>
   );
 }

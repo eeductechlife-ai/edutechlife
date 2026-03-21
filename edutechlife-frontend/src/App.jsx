@@ -75,14 +75,14 @@ const App = () => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col bg-slate-950 text-white" style={{ fontFamily: "'Open Sans', sans-serif" }}>
+        <div className="min-h-screen flex flex-col bg-[#F8FAFC] text-[#334155]" style={{ fontFamily: "'Open Sans', sans-serif" }}>
             {/* Loading Screen */}
             {isLoading && (
                 <LoadingScreen onComplete={handleLoadingComplete} minDuration={3000} />
             )}
 
             {/* Header - Navigation Premium */}
-            <header className="sticky top-0 left-0 right-0 z-[1000] glass-light border-b border-white/20 shadow-sm">
+            <header className="sticky top-0 left-0 right-0 z-[1000] glass-light border-b border-white/10 shadow-sm">
                     <div className="container-premium flex items-center justify-between py-3">
                     {/* Logo Premium */}
                     <button 
@@ -90,114 +90,32 @@ const App = () => {
                         className="flex items-center gap-3 group"
                     >
                         <div className="relative">
-                            <div className="absolute -inset-3 bg-gradient-to-r from-[#4DA8C4]/20 to-[#66CCCC]/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                            <div className="absolute -inset-2 bg-gradient-to-r from-[#4DA8C4]/20 to-[#66CCCC]/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                             <img 
                                 src="/images/logo-edutechlife.webp" 
                                 alt="Edutechlife" 
-                                className="h-10 w-auto relative z-10 transition-all duration-300 group-hover:scale-105"
-                                style={{ maxHeight: '40px', width: 'auto' }}
+                                className="h-8 w-auto relative z-10 transition-all duration-300 group-hover:scale-105"
+                                style={{ maxHeight: '32px', width: 'auto' }}
                             />
                         </div>
-
                     </button>
 
-                    {/* Desktop Navigation Premium */}
-                    <nav className="hidden md:flex items-center gap-1">
-                        {[
-                            { label: 'Inicio', action: () => handleNavigate('landing'), icon: 'fa-home' },
-                            { label: 'Líneas de Impacto', action: () => scrollToSection('ecosystem'), icon: 'fa-chart-line' },
-                            { label: 'Neuro-Entorno', action: () => handleNavigate('neuroentorno'), icon: 'fa-brain' },
-                            { label: 'Consultoría', action: () => handleNavigate('consultoria'), icon: 'fa-handshake' },
-                            { label: 'Arquitecto IA', action: () => handleNavigate('automation'), icon: 'fa-robot' }
-                        ].map((item, index) => (
-                            <button 
-                                key={index}
-                                onClick={item.action}
-                                className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-[#475569] hover:text-[#004B63] transition-all duration-300 relative group/nav rounded-lg hover:bg-white/50"
-                            >
-                                <i className={`fa-solid ${item.icon} text-xs text-[#4DA8C4]`} />
-                                <span>{item.label}</span>
-                                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] group-hover/nav:w-3/4 transition-all duration-300 rounded-full" />
-                            </button>
-                        ))}
-                    </nav>
-
-                    {/* CTA & Utils Premium */}
-                    <div className="flex items-center gap-3">
-                        {/* AI Status Premium */}
-                        <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-[#4DA8C4]/10 to-[#66CCCC]/10 border border-[#4DA8C4]/20 rounded-full">
-                            <div className="relative">
-                                <div className="w-2 h-2 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] rounded-full" />
-                                <div className="absolute inset-0 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] rounded-full animate-ping opacity-30" />
-                            </div>
-                            <span className="text-xs font-mono font-semibold text-[#004B63]">IA: ONLINE</span>
-                        </div>
-
-                        {/* CTA Button Premium */}
-                        <button 
-                            onClick={() => handleNavigate('ialab')}
-                            className="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-full font-display font-bold text-sm text-white transition-all duration-300 hover-lift hover-glow"
-                            style={{ 
-                                background: 'linear-gradient(135deg, #4DA8C4, #66CCCC)',
-                                boxShadow: '0 6px 20px rgba(77, 168, 196, 0.3)'
-                            }}
-                        >
-                            <span className="flex items-center gap-2">
-                                <i className="fa-solid fa-rocket text-xs" />
-                                Comenzar
-                                <i className="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1" />
-                            </span>
-                        </button>
-
-                        {/* Mobile Menu Button Premium */}
-                        <button 
-                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                            className="md:hidden p-2 text-[#475569] hover:text-[#004B63] hover:bg-white/50 rounded-lg transition-colors"
-                        >
-                            <i className={`fa-solid ${mobileMenuOpen ? 'fa-times' : 'fa-bars'} text-lg`} />
-                        </button>
-                    </div>
+                    {/* CTA Button Premium */}
+                    <button 
+                        onClick={() => handleNavigate('ialab')}
+                        className="flex items-center gap-2 px-5 py-2 rounded-full font-display font-bold text-sm text-white transition-all duration-300 hover-lift hover-glow"
+                        style={{ 
+                            background: 'linear-gradient(135deg, #4DA8C4, #66CCCC)',
+                            boxShadow: '0 4px 15px rgba(77, 168, 196, 0.3)'
+                        }}
+                    >
+                        <span className="flex items-center gap-2">
+                            <i className="fa-solid fa-rocket text-xs" />
+                            Comenzar
+                            <i className="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1" />
+                        </span>
+                    </button>
                 </div>
-
-                {/* Mobile Menu Premium */}
-                {mobileMenuOpen && (
-                    <div className="md:hidden glass-light border-t border-white/20 px-6 py-4">
-                        <nav className="flex flex-col gap-1">
-                            {[
-                                { label: 'Inicio', action: () => handleNavigate('landing'), icon: 'fa-home' },
-                                { label: 'Líneas de Impacto', action: () => scrollToSection('ecosystem'), icon: 'fa-chart-line' },
-                                { label: 'Neuro-Entorno', action: () => handleNavigate('neuroentorno'), icon: 'fa-brain' },
-                                { label: 'Consultoría', action: () => handleNavigate('consultoria'), icon: 'fa-handshake' },
-                                { label: 'Arquitecto IA', action: () => handleNavigate('automation'), icon: 'fa-robot' }
-                            ].map((item, index) => (
-                                <button 
-                                    key={index}
-                                    onClick={item.action}
-                                    className="flex items-center gap-3 px-4 py-3 text-left text-[#475569] hover:text-[#004B63] hover:bg-white/50 rounded-lg transition-colors"
-                                >
-                                    <i className={`fa-solid ${item.icon} text-sm text-[#4DA8C4] w-5`} />
-                                    <span className="font-medium">{item.label}</span>
-                                </button>
-                            ))}
-                            <div className="pt-4 mt-2 border-t border-white/10">
-                                <button 
-                                    onClick={() => handleNavigate('ialab')}
-                                    className="w-full px-6 py-3 rounded-full font-display font-bold text-sm text-white transition-all duration-300 hover-lift"
-                                    style={{ 
-                                        background: 'linear-gradient(135deg, #4DA8C4, #66CCCC)',
-                                        boxShadow: '0 6px 20px rgba(77, 168, 196, 0.3)'
-                                    }}
-                                >
-                                    <span className="flex items-center justify-center gap-2">
-                                        <i className="fa-solid fa-rocket text-xs" />
-                                        Comenzar Ahora
-                                        <i className="fa-solid fa-arrow-right text-xs" />
-                                    </span>
-                                </button>
-                            </div>
-                        </nav>
-                    </div>
-                )}
             </header>
 
             {/* Main Content */}

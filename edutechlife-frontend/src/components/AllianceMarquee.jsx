@@ -44,7 +44,7 @@ const AllianceMarquee = () => {
 
      return (
         <SectionWrapper spacing="sm">
-             <section className="w-full py-20 px-6 lg:px-8" style={{ background: 'linear-gradient(to bottom right, #0f172a 0%, #000 40%, #1f2937 100%)' }}>
+             <section className="w-full py-20 px-6 lg:px-8 bg-white">
             <div className="max-w-7xl mx-auto">
                 <div className="alliance-label">
                     <span>Ecosistema de Nivel Mundial</span>

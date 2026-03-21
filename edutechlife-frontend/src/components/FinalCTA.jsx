@@ -34,9 +34,9 @@ const FinalCTA = ({ onNavigate }) => {
         <SectionWrapper spacing="last">
             <section
                 ref={sectionRef}
-                 className="w-full relative py-24 px-6 lg:px-8 overflow-hidden"
+                 className="w-full relative py-20 px-6 lg:px-8 overflow-hidden"
                 style={{
-                    background: 'linear-gradient(135deg, #004B63 0%, #0B2A3A 50%, #0A1628 100%)',
+                    background: 'linear-gradient(135deg, #ffffff 0%, #F8FAFC 50%, #ffffff 100%)',
                 }}
             >
             {/* Background Elements */}

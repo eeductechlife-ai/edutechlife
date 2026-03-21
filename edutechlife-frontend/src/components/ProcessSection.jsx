@@ -53,7 +53,7 @@ export default function ProcessSection() {
 
     return (
         <SectionWrapper spacing="md">
-             <section ref={sectionRef} className="w-full relative py-20 overflow-hidden px-6 lg:px-8 bg-slate-900">
+             <section ref={sectionRef} className="w-full relative py-20 overflow-hidden px-6 lg:px-8 bg-[#F8FAFC]">
       <div className="max-w-7xl mx-auto">
         <div className={`text-center mb-12 md:mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="inline-flex items-center gap-2 mb-6">
@@ -63,10 +63,10 @@ export default function ProcessSection() {
             </span>
             <span className="w-8 h-0.5 bg-gradient-to-r from-[#66CCCC] to-[#4DA8C4] rounded" />
           </div>
-           <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4">
+           <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-black text-[#0A3044] mb-4">
             Así Funciona
           </h2>
-          <p className="text-slate-300 text-base md:text-lg max-w-2xl mx-auto px-4">
+          <p className="text-[#334155] text-base md:text-lg max-w-2xl mx-auto px-4">
             Un proceso estructurado en 4 etapas para garantizar tu transformación educativa
           </p>
         </div>
@@ -81,7 +81,7 @@ export default function ProcessSection() {
                 className={`relative transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
                 style={{ transitionDelay: `${i * 150}ms` }}
               >
-                 <div className="process-card relative bg-slate-800/50 rounded-2xl p-6 md:p-8 shadow-lg border border-slate-700/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group h-full" style={{ backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}>
+                 <div className="process-card relative bg-white/90 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg border border-slate-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group h-full">
                   <div className="absolute -top-5 left-1/2 -translate-x-1/2">
                     <div 
                       className="w-14 h-14 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg border-2 border-white"
@@ -99,11 +99,11 @@ export default function ProcessSection() {
                     {step.subtitle}
                   </span>
                   
-                   <h3 className="font-display text-xl font-bold text-white mb-3">
+                   <h3 className="font-display text-xl font-bold text-[#0A3044] mb-3">
                     {step.title}
                   </h3>
                   
-                  <p className="text-slate-300 text-sm leading-relaxed">
+                  <p className="text-[#334155] text-sm leading-relaxed">
                     {step.desc}
                   </p>
 
