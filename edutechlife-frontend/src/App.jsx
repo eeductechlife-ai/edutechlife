@@ -11,6 +11,7 @@ import Footer from './components/Footer';
 import NeuroEntorno from './components/NeuroEntorno';
 import ProyectosNacional from './components/ProyectosNacional';
 import Consultoria from './components/Consultoria';
+import AutomationArchitect from './components/AutomationArchitect';
 import LoadingScreen, { MiniLoader } from './components/LoadingScreen';
 import { callDeepseek } from './utils/api';
 
@@ -80,112 +81,123 @@ const App = () => {
                 <LoadingScreen onComplete={handleLoadingComplete} minDuration={3000} />
             )}
 
-            {/* Header - Premium Navigation */}
-            <header className="sticky top-0 left-0 right-0 z-[1000] bg-[#0B0F19]/95 backdrop-blur-xl border-b border-white/10">
-                    <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between py-4">
-                    {/* Logo with Prototype Style */}
+            {/* Header - Navigation Premium */}
+            <header className="sticky top-0 left-0 right-0 z-[1000] glass-light border-b border-white/20 shadow-sm">
+                    <div className="container-premium flex items-center justify-between py-3">
+                    {/* Logo Premium */}
                     <button 
                         onClick={() => handleNavigate('landing')}
-                        className="flex items-center gap-3 hover:opacity-80 transition-opacity group"
+                        className="flex items-center gap-3 group"
                     >
                         <div className="relative">
+                            <div className="absolute -inset-3 bg-gradient-to-r from-[#4DA8C4]/20 to-[#66CCCC]/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                             <img 
                                 src="/images/logo-edutechlife.webp" 
                                 alt="Edutechlife" 
-                                className="h-10 w-auto filter brightness-125"
-                                style={{ maxHeight: '40px', width: 'auto' }}
+                                className="h-9 w-auto relative z-10"
+                                style={{ maxHeight: '36px', width: 'auto' }}
                             />
-                            <div className="absolute -inset-1 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] rounded-lg blur opacity-0 group-hover:opacity-30 transition-opacity duration-300" />
                         </div>
                         <div className="hidden md:block">
-                            <div className="text-sm font-mono text-white/60">EDUTECHLIFE</div>
-                            <div className="text-xs text-white/40">v2286</div>
+                            <div className="text-sm font-display font-bold text-[#0A1628] tracking-tight">EDUTECHLIFE</div>
+                            <div className="text-xs font-mono text-[#4DA8C4] font-medium">v2286</div>
                         </div>
                     </button>
 
-                    {/* Desktop Navigation - Prototype Style */}
+                    {/* Desktop Navigation Premium */}
                     <nav className="hidden md:flex items-center gap-1">
                         {[
-                            { label: 'Inicio', action: () => handleNavigate('landing') },
-                            { label: 'Líneas de Impacto', action: () => scrollToSection('ecosystem') },
-                            { label: 'Neuro-Entorno', action: () => handleNavigate('neuroentorno') },
-                            { label: 'Consultoría', action: () => handleNavigate('consultoria') }
+                            { label: 'Inicio', action: () => handleNavigate('landing'), icon: 'fa-home' },
+                            { label: 'Líneas de Impacto', action: () => scrollToSection('ecosystem'), icon: 'fa-chart-line' },
+                            { label: 'Neuro-Entorno', action: () => handleNavigate('neuroentorno'), icon: 'fa-brain' },
+                            { label: 'Consultoría', action: () => handleNavigate('consultoria'), icon: 'fa-handshake' },
+                            { label: 'Arquitecto IA', action: () => handleNavigate('automation'), icon: 'fa-robot' }
                         ].map((item, index) => (
                             <button 
                                 key={index}
                                 onClick={item.action}
-                                className="px-4 py-2 text-sm font-medium text-white/70 hover:text-white transition-colors relative group/nav"
+                                className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-[#475569] hover:text-[#004B63] transition-all duration-300 relative group/nav rounded-lg hover:bg-white/50"
                             >
-                                {item.label}
-                                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] group-hover/nav:w-3/4 transition-all duration-300" />
+                                <i className={`fa-solid ${item.icon} text-xs text-[#4DA8C4]`} />
+                                <span>{item.label}</span>
+                                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] group-hover/nav:w-3/4 transition-all duration-300 rounded-full" />
                             </button>
                         ))}
                     </nav>
 
-                    {/* CTA Button - Prototype Style */}
-                    <div className="flex items-center gap-4">
+                    {/* CTA & Utils Premium */}
+                    <div className="flex items-center gap-3">
+                        {/* AI Status Premium */}
+                        <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-[#4DA8C4]/10 to-[#66CCCC]/10 border border-[#4DA8C4]/20 rounded-full">
+                            <div className="relative">
+                                <div className="w-2 h-2 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] rounded-full" />
+                                <div className="absolute inset-0 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] rounded-full animate-ping opacity-30" />
+                            </div>
+                            <span className="text-xs font-mono font-semibold text-[#004B63]">IA: ONLINE</span>
+                        </div>
+
+                        {/* CTA Button Premium */}
                         <button 
                             onClick={() => handleNavigate('ialab')}
-                            className="hidden sm:flex items-center gap-2 px-6 py-2.5 rounded-full font-bold text-sm text-white transition-all duration-300 hover:-translate-y-0.5 interactive-glow"
+                            className="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-full font-display font-bold text-sm text-white transition-all duration-300 hover-lift hover-glow"
                             style={{ 
                                 background: 'linear-gradient(135deg, #4DA8C4, #66CCCC)',
-                                boxShadow: '0 4px 20px rgba(77, 168, 196, 0.4)'
+                                boxShadow: '0 6px 20px rgba(77, 168, 196, 0.3)'
                             }}
                         >
                             <span className="flex items-center gap-2">
                                 <i className="fa-solid fa-rocket text-xs" />
                                 Comenzar
-                                <i className="fa-solid fa-arrow-right text-xs" />
+                                <i className="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1" />
                             </span>
                         </button>
 
-                        {/* AI Status Indicator */}
-                        <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 rounded-full">
-                            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                            <span className="text-xs font-mono text-white/60">IA: ONLINE</span>
-                        </div>
-
-                        {/* Mobile Menu Button */}
+                        {/* Mobile Menu Button Premium */}
                         <button 
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                            className="md:hidden p-2 text-white/70 hover:text-white transition-colors"
+                            className="md:hidden p-2 text-[#475569] hover:text-[#004B63] hover:bg-white/50 rounded-lg transition-colors"
                         >
-                            <i className={`fa-solid ${mobileMenuOpen ? 'fa-times' : 'fa-bars'} text-xl`} />
+                            <i className={`fa-solid ${mobileMenuOpen ? 'fa-times' : 'fa-bars'} text-lg`} />
                         </button>
                     </div>
                 </div>
 
-                {/* Mobile Menu - Prototype Style */}
+                {/* Mobile Menu Premium */}
                 {mobileMenuOpen && (
-                    <div className="md:hidden bg-[#0B0F19] border-t border-white/10 px-6 py-4">
-                        <nav className="flex flex-col gap-2">
+                    <div className="md:hidden glass-light border-t border-white/20 px-6 py-4">
+                        <nav className="flex flex-col gap-1">
                             {[
-                                { label: 'Inicio', action: () => handleNavigate('landing') },
-                                { label: 'Líneas de Impacto', action: () => scrollToSection('ecosystem') },
-                                { label: 'Neuro-Entorno', action: () => handleNavigate('neuroentorno') },
-                                { label: 'Consultoría', action: () => handleNavigate('consultoria') }
+                                { label: 'Inicio', action: () => handleNavigate('landing'), icon: 'fa-home' },
+                                { label: 'Líneas de Impacto', action: () => scrollToSection('ecosystem'), icon: 'fa-chart-line' },
+                                { label: 'Neuro-Entorno', action: () => handleNavigate('neuroentorno'), icon: 'fa-brain' },
+                                { label: 'Consultoría', action: () => handleNavigate('consultoria'), icon: 'fa-handshake' },
+                                { label: 'Arquitecto IA', action: () => handleNavigate('automation'), icon: 'fa-robot' }
                             ].map((item, index) => (
                                 <button 
                                     key={index}
                                     onClick={item.action}
-                                    className="px-4 py-3 text-left text-white/70 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                                    className="flex items-center gap-3 px-4 py-3 text-left text-[#475569] hover:text-[#004B63] hover:bg-white/50 rounded-lg transition-colors"
                                 >
-                                    {item.label}
+                                    <i className={`fa-solid ${item.icon} text-sm text-[#4DA8C4] w-5`} />
+                                    <span className="font-medium">{item.label}</span>
                                 </button>
                             ))}
-                            <button 
-                                onClick={() => handleNavigate('ialab')}
-                                className="mt-4 px-6 py-3 rounded-full font-bold text-sm text-white transition-all duration-300 interactive-glow"
-                                style={{ 
-                                    background: 'linear-gradient(135deg, #4DA8C4, #66CCCC)',
-                                }}
-                            >
-                                <span className="flex items-center justify-center gap-2">
-                                    <i className="fa-solid fa-rocket text-xs" />
-                                    Comenzar Ahora
-                                    <i className="fa-solid fa-arrow-right text-xs" />
-                                </span>
-                            </button>
+                            <div className="pt-4 mt-2 border-t border-white/10">
+                                <button 
+                                    onClick={() => handleNavigate('ialab')}
+                                    className="w-full px-6 py-3 rounded-full font-display font-bold text-sm text-white transition-all duration-300 hover-lift"
+                                    style={{ 
+                                        background: 'linear-gradient(135deg, #4DA8C4, #66CCCC)',
+                                        boxShadow: '0 6px 20px rgba(77, 168, 196, 0.3)'
+                                    }}
+                                >
+                                    <span className="flex items-center justify-center gap-2">
+                                        <i className="fa-solid fa-rocket text-xs" />
+                                        Comenzar Ahora
+                                        <i className="fa-solid fa-arrow-right text-xs" />
+                                    </span>
+                                </button>
+                            </div>
                         </nav>
                     </div>
                 )}
@@ -213,6 +225,7 @@ const App = () => {
                 {view === 'neuroentorno' && <NeuroEntorno onBack={() => handleNavigate('landing')} />}
                 {view === 'proyectos' && <ProyectosNacional onBack={() => handleNavigate('landing')} />}
                 {view === 'consultoria' && <Consultoria onBack={() => handleNavigate('landing')} />}
+                {view === 'automation' && <AutomationArchitect onBack={() => handleNavigate('landing')} />}
             </main>
 
             {/* Floating Chatbot */}

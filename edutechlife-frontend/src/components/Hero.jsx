@@ -78,18 +78,32 @@ const Hero = memo(({ onNavigateToLab, onScrollToPilares }) => {
 
     return (
         <section 
-            className="w-full min-h-screen flex flex-col justify-center pt-24 pb-0 bg-gradient-to-b from-[#0B0F19] to-[#0A1628] relative overflow-hidden"
+            className="w-full min-h-screen flex flex-col justify-center pt-24 pb-0 bg-gradient-to-b from-white via-[#F8FAFC] to-white relative overflow-hidden"
         >
-            {/* Dashboard Grid Background */}
-            <div className="absolute inset-0">
-                <div className="grid-3d" />
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0B0F19]/20 to-[#0A1628]" />
+            {/* Fondo Premium con Gradientes Suaves */}
+            <div className="absolute inset-0 overflow-hidden">
+                {/* Gradiente de fondo premium */}
+                <div className="absolute inset-0 bg-gradient-to-br from-[#F8FAFC] via-white to-[#EFF6FF]" />
+                
+                {/* Patrón geométrico sutil */}
+                <div className="absolute inset-0 opacity-[0.02]"
+                     style={{
+                         backgroundImage: `radial-gradient(circle at 25% 25%, var(--color-corporate) 1px, transparent 1px)`,
+                         backgroundSize: '60px 60px'
+                     }}
+                />
+                
+                {/* Acentos de color suaves */}
+                <div className="absolute top-1/4 -left-20 w-96 h-96 bg-[#4DA8C4] opacity-[0.03] rounded-full blur-3xl" />
+                <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-[#66CCCC] opacity-[0.03] rounded-full blur-3xl" />
             </div>
 
-            {/* Dashboard Orbs */}
-            <div className="hero-orb-1" />
-            <div className="hero-orb-2" />
-            <div className="hero-orb-3" />
+            {/* Grid 3D Animation Mejorado */}
+            <div className="grid-3d" />
+
+            {/* Organic Blobs Premium */}
+            <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-gradient-to-br from-[#4DA8C4]/[0.03] to-[#66CCCC]/[0.02] rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
+            <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-gradient-to-tl from-[#004B63]/[0.03] to-[#0A1628]/[0.02] rounded-full blur-3xl translate-x-1/3 translate-y-1/3" />
 
             {/* Subtle Particles Canvas */}
             <canvas
@@ -98,52 +112,64 @@ const Hero = memo(({ onNavigateToLab, onScrollToPilares }) => {
                 style={{ zIndex: 1 }}
             />
 
-            {/* Main Dashboard Content */}
-            <div className="max-w-7xl mx-auto w-full relative z-10 px-6 lg:px-8">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                    {/* Dashboard Left Panel - Editorial */}
+            {/* Main Content Grid Premium */}
+            <div className="container-premium relative z-10">
+                <div className="grid-cols-2-premium grid-premium items-center">
+                    {/* Columna Izquierda - Texto Editorial Premium */}
                     <div className="space-y-8">
-                        {/* Dashboard Kicker */}
-                        <div className="hero-kicker">
-                            <div className="kicker-line" />
-                            <span className="kicker-text">Manizales · Colombia · Est. 2015</span>
-                            <div className="kicker-dot" />
+                        {/* Kicker Premium */}
+                        <div className="inline-flex items-center gap-3 px-4 py-2 bg-white/80 backdrop-blur-sm border border-white/20 rounded-full shadow-sm">
+                            <div className="w-2 h-2 bg-[#4DA8C4] rounded-full animate-pulse-slow" />
+                            <span className="text-sm font-mono font-semibold text-[#004B63] tracking-wider">
+                                Manizales · Colombia · Est. 2015
+                            </span>
+                            <div className="w-2 h-2 bg-[#66CCCC] rounded-full animate-pulse-slow" style={{ animationDelay: '0.5s' }} />
                         </div>
 
-                        {/* Dashboard Title */}
-                        <div className="space-y-4">
-                            <h1 className="hero-title">
-                                <span className="title-line">Pedagogía</span>
-                                <span className="title-line title-accent">de Élite</span>
-                                <span className="title-line">con <span className="title-ia">Inteligencia Artificial</span></span>
+                        {/* Título Premium */}
+                        <div className="space-y-6">
+                            <h1 className="display-1">
+                                <span className="block text-[#0A1628]">Pedagogía</span>
+                                <span className="block text-gradient-primary accent-line-solid">de Élite</span>
+                                <span className="block text-[#475569] text-3xl font-light mt-4">
+                                    con <span className="font-semibold text-[#004B63]">Inteligencia Artificial</span>
+                                </span>
                             </h1>
 
-                            {/* Dashboard Badge */}
-                            <div className="inline-flex items-center gap-3 px-4 py-2 bg-[#004B63]/10 border border-[#4DA8C4]/20 rounded-full backdrop-blur-sm">
-                                <div className="w-2 h-2 bg-[#66CCCC] rounded-full animate-pulse" />
-                                <span className="text-sm font-mono text-[#66CCCC] tracking-wider">IA · Educación · Impacto Nacional</span>
+                            {/* Badge Premium */}
+                            <div className="inline-flex items-center gap-3 px-5 py-2.5 glass-accent rounded-full hover-lift">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-2 h-2 bg-[#66CCCC] rounded-full animate-pulse" />
+                                    <div className="w-2 h-2 bg-[#4DA8C4] rounded-full animate-pulse" style={{ animationDelay: '0.3s' }} />
+                                    <div className="w-2 h-2 bg-[#004B63] rounded-full animate-pulse" style={{ animationDelay: '0.6s' }} />
+                                </div>
+                                <span className="text-sm font-mono font-semibold text-[#004B63] tracking-wider">
+                                    IA · Educación · Impacto Nacional
+                                </span>
                             </div>
                         </div>
 
-                        {/* Dashboard Description */}
-                        <p className="hero-subtitle">
-                            Magísteres en Educación que dominan la IA más avanzada. Más de <strong className="text-[#4DA8C4]">6,000 estudiantes certificados</strong> con respaldo global de IBM y Coursera.
+                        {/* Descripción Premium */}
+                        <p className="body-lg text-[#334155] max-w-xl leading-relaxed">
+                            Magísteres en Educación que dominan la <strong className="text-[#004B63] font-semibold">IA más avanzada</strong>. 
+                            Más de <strong className="text-[#4DA8C4] font-semibold">6,000 estudiantes certificados</strong> con respaldo 
+                            global de <span className="text-gradient-primary font-semibold">IBM y Coursera</span>.
                         </p>
 
-                        {/* Dashboard CTAs */}
-                        <div className="flex flex-wrap gap-4">
+                        {/* CTAs Premium */}
+                        <div className="flex flex-wrap gap-4 pt-4">
                             <button 
                                 onClick={onNavigateToLab}
-                                className="px-8 py-3 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white font-bold rounded-full hover:shadow-[0_0_30px_rgba(77,168,196,0.5)] transition-all duration-300 hover:-translate-y-1 interactive-glow"
+                                className="btn-primary hover-glow"
                             >
                                 <span className="flex items-center gap-2">
                                     Conoce nuestro impacto
-                                    <i className="fa-solid fa-arrow-right text-sm" />
+                                    <i className="fa-solid fa-arrow-right text-sm transition-transform group-hover:translate-x-1" />
                                 </span>
                             </button>
                             <button 
+                                className="btn-secondary"
                                 onClick={onScrollToPilares}
-                                className="px-6 py-3 bg-white/5 border border-white/10 text-white font-medium rounded-full hover:bg-white/10 transition-all duration-300 backdrop-blur-sm"
                             >
                                 <span className="flex items-center gap-2">
                                     <i className="fa-solid fa-chart-line" />
@@ -152,79 +178,99 @@ const Hero = memo(({ onNavigateToLab, onScrollToPilares }) => {
                             </button>
                         </div>
 
-                        {/* Dashboard Stats */}
-                        <div className="grid grid-cols-3 gap-4 pt-6">
-                            {[
-                                { label: 'Estudiantes', value: '6K+', icon: 'fa-users' },
-                                { label: 'Certificados', value: '98%', icon: 'fa-certificate' },
-                                { label: 'Impacto', value: 'A+', icon: 'fa-chart-line' }
-                            ].map((stat, index) => (
-                                <div key={index} className="dashboard-card p-4 text-center">
-                                    <div className="text-2xl font-bold text-[#4DA8C4] mb-1">{stat.value}</div>
-                                    <div className="text-xs text-white/60 uppercase tracking-wider">{stat.label}</div>
-                                </div>
-                            ))}
+                        {/* Trust Strip Premium */}
+                        <div className="pt-8">
+                            <div className="inline-flex items-center gap-3 text-sm text-[#64748B] mb-3">
+                                <div className="w-4 h-px bg-gradient-to-r from-transparent via-[#4DA8C4] to-transparent" />
+                                <span className="font-mono text-xs uppercase tracking-widest">Operadores Certificados</span>
+                                <div className="w-4 h-px bg-gradient-to-r from-transparent via-[#66CCCC] to-transparent" />
+                            </div>
+                            <div className="flex flex-wrap items-center gap-6">
+                                {['SenaTIC', 'IBM', 'Coursera', 'MinTIC'].map((brand, index) => (
+                                    <div 
+                                        key={brand}
+                                        className="group relative"
+                                    >
+                                        <div className="text-lg font-display font-bold text-[#334155] opacity-70 group-hover:opacity-100 transition-opacity duration-300">
+                                            {brand}
+                                        </div>
+                                        <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] group-hover:w-full transition-all duration-300" />
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
 
-                    {/* Dashboard Right Panel - Visualization */}
+                    {/* Columna Derecha - Elemento Visual Premium */}
                     <div className="relative">
-                        <div className="ai-panel p-8">
-                            <div className="flex items-center justify-between mb-6">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-3 h-3 bg-[#00C2E0] rounded-full animate-pulse" />
-                                    <h3 className="text-lg font-bold text-white">Panel de Impacto IA</h3>
+                        <div className="relative">
+                            {/* Tarjeta Glass Premium */}
+                            <div className="glass-card p-8">
+                                <div className="flex items-center justify-between mb-6">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-3 h-3 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] rounded-full animate-pulse" />
+                                        <h3 className="text-lg font-display font-bold text-[#0A1628]">Impacto Educativo</h3>
+                                    </div>
+                                    <div className="text-xs font-mono font-semibold text-[#66CCCC] bg-[#66CCCC]/10 px-3 py-1 rounded-full">
+                                        LIVE
+                                    </div>
                                 </div>
-                                <div className="text-xs text-white/40 font-mono">LIVE</div>
+                                
+                                {/* Visualización de Datos */}
+                                <div className="space-y-6">
+                                    <div className="flex items-center justify-between">
+                                        {[
+                                            { label: 'Estudiantes', value: '6K+', color: '#4DA8C4' },
+                                            { label: 'Certificados', value: '98%', color: '#66CCCC' },
+                                            { label: 'Satisfacción', value: '4.8/5', color: '#004B63' }
+                                        ].map((stat, index) => (
+                                            <div key={index} className="text-center">
+                                                <div className="text-2xl font-display font-bold mb-1" style={{ color: stat.color }}>
+                                                    {stat.value}
+                                                </div>
+                                                <div className="text-xs font-mono text-[#64748B] uppercase tracking-wider">
+                                                    {stat.label}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    
+                                    {/* Barra de progreso sutil */}
+                                    <div className="pt-4 border-t border-white/10">
+                                        <div className="flex items-center justify-between text-sm text-[#64748B] mb-2">
+                                            <span>Progreso IA 2024</span>
+                                            <span className="font-semibold text-[#004B63]">84%</span>
+                                        </div>
+                                        <div className="h-2 bg-[#E2E8F0] rounded-full overflow-hidden">
+                                            <div 
+                                                className="h-full rounded-full bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] transition-all duration-1000"
+                                                style={{ width: '84%' }}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             
-                            {/* Data Visualization */}
-                            <div className="data-visualization mb-6">
-                                <div className="flex items-end justify-between h-32">
-                                    {[65, 80, 90, 75, 85, 95].map((height, i) => (
-                                        <div key={i} className="flex flex-col items-center">
-                                            <div 
-                                                className="w-6 bg-gradient-to-t from-[#4DA8C4] to-[#66CCCC] rounded-t-lg transition-all duration-300 hover:opacity-80"
-                                                style={{ height: `${height}%` }}
-                                            />
-                                            <div className="text-xs text-white/40 mt-2">Q{i+1}</div>
-                                        </div>
-                                    ))}
-                                </div>
+                            {/* Elementos flotantes decorativos */}
+                            <div className="absolute -top-4 -right-4 w-16 h-16 glass-accent rounded-xl flex items-center justify-center animate-float">
+                                <i className="fa-solid fa-brain text-[#4DA8C4] text-xl" />
                             </div>
-
-                            {/* Metrics Grid */}
-                            <div className="grid grid-cols-2 gap-4">
-                                {[
-                                    { label: 'Eficiencia IA', value: '94%', trend: 'up' },
-                                    { label: 'Satisfacción', value: '96%', trend: 'up' },
-                                    { label: 'Retención', value: '89%', trend: 'stable' },
-                                    { label: 'Crecimiento', value: '42%', trend: 'up' }
-                                ].map((metric, i) => (
-                                    <div key={i} className="dashboard-card p-3">
-                                        <div className="flex items-center justify-between">
-                                            <div className="text-sm text-white/70">{metric.label}</div>
-                                            <div className={`text-xs px-2 py-1 rounded ${
-                                                metric.trend === 'up' ? 'bg-green-500/20 text-green-400' :
-                                                metric.trend === 'down' ? 'bg-red-500/20 text-red-400' :
-                                                'bg-yellow-500/20 text-yellow-400'
-                                            }`}>
-                                                {metric.trend === 'up' ? '↑' : metric.trend === 'down' ? '↓' : '→'}
-                                            </div>
-                                        </div>
-                                        <div className="text-xl font-bold text-white mt-2">{metric.value}</div>
-                                    </div>
-                                ))}
+                            <div className="absolute -bottom-4 -left-4 w-12 h-12 glass-accent rounded-xl flex items-center justify-center animate-float" style={{ animationDelay: '1.5s' }}>
+                                <i className="fa-solid fa-robot text-[#66CCCC] text-lg" />
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Scroll Indicator */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer animate-bounce">
-                <span className="text-xs uppercase tracking-widest text-white/40">Scroll</span>
-                <i className="fa-solid fa-chevron-down text-sm text-white/40" />
+            {/* Scroll Indicator Premium */}
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer group animate-bounce">
+                <span className="text-xs font-mono uppercase tracking-widest text-[#64748B] group-hover:text-[#4DA8C4] transition-colors">
+                    Scroll
+                </span>
+                <div className="w-6 h-10 border-2 border-[#CBD5E1] rounded-full flex items-start justify-center p-1 group-hover:border-[#4DA8C4] transition-colors">
+                    <div className="w-1.5 h-1.5 bg-[#4DA8C4] rounded-full animate-bounce" />
+                </div>
             </div>
         </section>
     );
