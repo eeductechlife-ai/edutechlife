@@ -91,6 +91,81 @@
     box-shadow: 0 8px 24px rgba(77, 168, 196, 0.2);
   }
 
+  /* Prototype Dashboard Styles */
+  .dashboard-card {
+    background: var(--dashboard-card);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--dashboard-border);
+    border-radius: 1.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .dashboard-card:hover {
+    border-color: var(--dashboard-accent);
+    box-shadow: 0 0 40px var(--dashboard-accent-glow);
+  }
+
+  .ai-panel {
+    background: var(--ai-panel-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 194, 224, 0.2);
+    border-radius: 1.5rem;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  }
+
+  .smartboard-panel {
+    background: var(--smartboard-bg);
+    border: 1px solid rgba(77, 168, 196, 0.2);
+    border-radius: 1.5rem;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Prototype Interactive Elements */
+  .interactive-glow {
+    position: relative;
+  }
+
+  .interactive-glow::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(45deg, #4DA8C4, #66CCCC, #00C2E0, #4DA8C4);
+    border-radius: inherit;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .interactive-glow:hover::before {
+    opacity: 0.6;
+    animation: glow-rotate 3s linear infinite;
+  }
+
+  @keyframes glow-rotate {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(360deg); }
+  }
+
+  /* Prototype Data Visualization */
+  .data-visualization {
+    background: linear-gradient(135deg, rgba(0, 75, 99, 0.1), rgba(77, 168, 196, 0.05));
+    border: 1px solid rgba(77, 168, 196, 0.15);
+    border-radius: 1rem;
+    padding: 1.5rem;
+  }
+
+  /* Prototype Section Spacing (No Gaps) */
+  .section-gapless {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .section-gapless + .section-gapless {
+    margin-top: -1px;
+  }
+
   /* Section Spacing Utilities */
   .section-padding {
     padding-top: 4rem;
@@ -244,6 +319,15 @@
   --text-sub: #666666;
   --glass-bg: rgba(255, 255, 255, 0.8);
   --glass-border: rgba(0, 75, 99, 0.1);
+  
+  /* Prototype Enhancement Variables */
+  --dashboard-bg: #0B0F19;
+  --dashboard-card: rgba(255, 255, 255, 0.03);
+  --dashboard-border: rgba(255, 255, 255, 0.08);
+  --dashboard-accent: #00C2E0;
+  --dashboard-accent-glow: rgba(0, 194, 224, 0.3);
+  --ai-panel-bg: rgba(10, 22, 40, 0.6);
+  --smartboard-bg: #0A1628;
 }
 
 * {
