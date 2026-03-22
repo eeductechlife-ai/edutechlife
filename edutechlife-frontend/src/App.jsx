@@ -147,7 +147,7 @@ const App = () => {
                 {view === 'proyectos' && <ProyectosNacional onBack={() => handleNavigate('landing')} />}
                 {view === 'consultoria' && <Consultoria onBack={() => handleNavigate('landing')} />}
                 {view === 'automation' && <AutomationArchitect onBack={() => handleNavigate('landing')} />}
-                {view === 'smartboard' && <SmartBoardDashboard onBack={() => handleNavigate('landing')} />}
+                {view === 'smartboard' && <SmartBoardDashboard onNavigate={handleNavigate} />}
             </main>
 
             {/* Floating Chatbot */}
@@ -197,8 +197,8 @@ const App = () => {
                     <i className={`fa-solid ${botOpen ? 'fa-xmark' : 'fa-comment-dots'}`}></i>
                 </button>
             </div>
-            {/* Footer moved outside main to ensure sticky footer effect */}
-            <Footer />
+            {/* Footer - Solo se muestra en páginas principales, no en SmartBoard */}
+            {view !== 'smartboard' && <Footer />}
         </div>
     );
 };

@@ -62,16 +62,16 @@ const SubjectGrid = ({ subjects = [], onSelectSubject }) => {
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-lg font-bold text-white font-montserrat tracking-tight">
+            <h3 className="text-lg font-bold text-[#004B63] font-montserrat tracking-tight">
               Materias Disponibles
             </h3>
-            <p className="text-sm text-[#B2D8E5]/70 font-open-sans">
+            <p className="text-sm text-[#64748B] font-open-sans">
               Explora y domina diferentes áreas del conocimiento
             </p>
           </div>
           
           <div className="flex items-center gap-2">
-            <span className="text-sm text-white/60 font-open-sans">
+            <span className="text-sm text-[#64748B] font-open-sans">
               {filteredSubjects.length} de {subjects.length} materias
             </span>
           </div>
@@ -89,13 +89,13 @@ const SubjectGrid = ({ subjects = [], onSelectSubject }) => {
                 className={`px-4 py-2.5 rounded-xl border transition-all duration-300 ${
                   isActive
                     ? `${colorConfig.bg} ${colorConfig.border} ${colorConfig.text} font-semibold`
-                    : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/10'
+                    : 'bg-[#F8FAFC] border-[#E2E8F0] text-[#64748B] hover:bg-[#F1F5F9]'
                 }`}
               >
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-open-sans">{category.label}</span>
                   <span className={`text-xs px-1.5 py-0.5 rounded-full ${
-                    isActive ? 'bg-white/20' : 'bg-white/10'
+                    isActive ? 'bg-white/20' : 'bg-[#E2E8F0]'
                   }`}>
                     {category.count}
                   </span>
@@ -117,26 +117,21 @@ const SubjectGrid = ({ subjects = [], onSelectSubject }) => {
           return (
             <div
               key={subject.id}
-              className={`relative glass-card rounded-2xl border overflow-hidden transition-all duration-500 ${
+              className={`relative rounded-2xl border overflow-hidden transition-all duration-500 ${
                 isCompleted
-                  ? 'border-[#66CCCC]/50 bg-gradient-to-br from-[#004B63]/20 to-[#66CCCC]/10'
-                  : 'border-white/10 hover:border-white/20 bg-gradient-to-br from-white/5 to-transparent'
-              } ${isHovered ? 'transform -translate-y-1 shadow-xl shadow-[#004B63]/20' : ''}`}
+                  ? 'border-[#66CCCC] bg-gradient-to-br from-[#66CCCC]/10 to-[#4DA8C4]/5'
+                  : 'border-[#E2E8F0] hover:border-[#4DA8C4]/30 bg-white'
+              } ${isHovered ? 'transform -translate-y-1 shadow-xl' : ''}`}
               onMouseEnter={() => setHoveredSubject(subject.id)}
               onMouseLeave={() => setHoveredSubject(null)}
               onClick={() => onSelectSubject(subject)}
             >
-              {/* Hover Effect */}
-              {isHovered && (
-                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent"></div>
-              )}
-
               {/* Subject Header */}
               <div className="p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-4">
                     <div className={`relative ${isCompleted ? 'scale-110' : ''} transition-transform duration-300`}>
-                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-lg ${
                         isCompleted
                           ? 'bg-gradient-to-br from-[#66CCCC] to-[#4DA8C4]'
                           : colorConfig.bg
@@ -145,19 +140,17 @@ const SubjectGrid = ({ subjects = [], onSelectSubject }) => {
                       </div>
                       
                       {subject.featured && (
-                        <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-gradient-to-br from-[#FFD166] to-[#FF6B9D] flex items-center justify-center">
+                        <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-gradient-to-br from-[#FFD166] to-[#FF6B9D] flex items-center justify-center shadow-lg">
                           <span className="text-xs text-white">⭐</span>
                         </div>
                       )}
                     </div>
 
                     <div>
-                      <h4 className={`text-lg font-bold font-montserrat tracking-tight ${
-                        isCompleted ? 'text-white' : 'text-white'
-                      }`}>
+                      <h4 className={`text-lg font-bold font-montserrat tracking-tight text-[#004B63]`}>
                         {subject.name}
                       </h4>
-                      <p className="text-sm text-[#B2D8E5]/80 font-open-sans">
+                      <p className="text-sm text-[#64748B] font-open-sans">
                         {subject.teacher}
                       </p>
                     </div>
@@ -170,14 +163,14 @@ const SubjectGrid = ({ subjects = [], onSelectSubject }) => {
                 </div>
 
                 {/* Description */}
-                <p className="text-sm text-[#B2D8E5]/80 font-open-sans mb-6 line-clamp-2">
+                <p className="text-sm text-[#64748B] font-open-sans mb-6 line-clamp-2">
                   {subject.description}
                 </p>
 
                 {/* Progress Bar */}
                 <div className="mb-6">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-white/80 font-open-sans">
+                    <span className="text-sm font-medium text-[#334155] font-open-sans">
                       Progreso
                     </span>
                     <span className="text-sm font-semibold text-[#66CCCC] font-open-sans">
@@ -185,7 +178,7 @@ const SubjectGrid = ({ subjects = [], onSelectSubject }) => {
                     </span>
                   </div>
                   
-                  <div className="relative h-2 rounded-full bg-white/10 overflow-hidden">
+                  <div className="relative h-2 rounded-full bg-[#E2E8F0] overflow-hidden">
                     <div 
                       className={`absolute inset-y-0 left-0 rounded-full transition-all duration-1000 ${
                         isCompleted
@@ -204,29 +197,29 @@ const SubjectGrid = ({ subjects = [], onSelectSubject }) => {
                 {/* Stats */}
                 <div className="grid grid-cols-3 gap-4">
                   <div className="text-center">
-                    <div className="text-xl font-bold text-white font-montserrat">
+                    <div className="text-xl font-bold text-[#004B63] font-montserrat">
                       {subject.lessons}
                     </div>
-                    <div className="text-xs text-white/60 font-open-sans mt-1">
+                    <div className="text-xs text-[#64748B] font-open-sans mt-1">
                       Lecciones
                     </div>
                   </div>
                   
                   <div className="text-center">
-                    <div className="text-xl font-bold text-white font-montserrat">
+                    <div className="text-xl font-bold text-[#004B63] font-montserrat">
                       {subject.quizzes}
                     </div>
-                    <div className="text-xs text-white/60 font-open-sans mt-1">
+                    <div className="text-xs text-[#64748B] font-open-sans mt-1">
                       Quizzes
                     </div>
                   </div>
                   
                   <div className="text-center">
-                    <div className="text-xl font-bold text-white font-montserrat flex items-center justify-center gap-1">
+                    <div className="text-xl font-bold text-[#004B63] font-montserrat flex items-center justify-center gap-1">
                       <Zap className="w-4 h-4 text-[#FFD166]" />
                       {subject.xp}
                     </div>
-                    <div className="text-xs text-white/60 font-open-sans mt-1">
+                    <div className="text-xs text-[#64748B] font-open-sans mt-1">
                       XP Total
                     </div>
                   </div>
@@ -235,14 +228,14 @@ const SubjectGrid = ({ subjects = [], onSelectSubject }) => {
 
               {/* Action Footer */}
               <div className={`px-6 py-4 border-t ${
-                isCompleted ? 'border-[#66CCCC]/30' : 'border-white/10'
+                isCompleted ? 'border-[#66CCCC]/30' : 'border-[#E2E8F0]'
               }`}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     {subject.prerequisites > 0 && !isCompleted && (
                       <div className="flex items-center gap-1">
-                        <Lock className="w-3 h-3 text-white/60" />
-                        <span className="text-xs text-white/60 font-open-sans">
+                        <Lock className="w-3 h-3 text-[#94A3B8]" />
+                        <span className="text-xs text-[#94A3B8] font-open-sans">
                           {subject.prerequisites} req.
                         </span>
                       </div>
@@ -263,11 +256,11 @@ const SubjectGrid = ({ subjects = [], onSelectSubject }) => {
                       e.stopPropagation();
                       onSelectSubject(subject);
                     }}
-                    className={`group relative overflow-hidden px-4 py-2 rounded-full transition-all duration-300 ${
+                    className={`group relative overflow-hidden px-4 py-2 rounded-full transition-all duration-300 shadow-lg ${
                       isCompleted
                         ? 'bg-[#66CCCC]/20 border border-[#66CCCC]/30 text-[#66CCCC]'
                         : subject.locked
-                        ? 'bg-white/10 border border-white/20 text-white/60 cursor-not-allowed'
+                        ? 'bg-[#F1F5F9] border border-[#E2E8F0] text-[#94A3B8] cursor-not-allowed'
                         : 'bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] hover:from-[#66CCCC] hover:to-[#4DA8C4] text-white'
                     }`}
                     disabled={subject.locked}
@@ -308,7 +301,7 @@ const SubjectGrid = ({ subjects = [], onSelectSubject }) => {
               {isCompleted && (
                 <div className="absolute top-4 right-4">
                   <div className="relative">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#66CCCC] to-[#4DA8C4] flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#66CCCC] to-[#4DA8C4] flex items-center justify-center shadow-lg">
                       <CheckCircle className="w-4 h-4 text-white" />
                     </div>
                     <div className="absolute -inset-2 bg-[#66CCCC] rounded-full opacity-20 blur-sm"></div>
@@ -322,19 +315,19 @@ const SubjectGrid = ({ subjects = [], onSelectSubject }) => {
 
       {/* Empty State */}
       {filteredSubjects.length === 0 && (
-        <div className="glass-card p-12 rounded-2xl border border-white/10 text-center">
-          <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-4">
-            <BookOpen className="w-8 h-8 text-white/40" />
+        <div className="bg-white p-12 rounded-2xl border border-[#E2E8F0] text-center shadow-sm">
+          <div className="w-16 h-16 rounded-full bg-[#F1F5F9] flex items-center justify-center mx-auto mb-4">
+            <BookOpen className="w-8 h-8 text-[#94A3B8]" />
           </div>
-          <h4 className="text-lg font-bold text-white/80 font-montserrat mb-2">
+          <h4 className="text-lg font-bold text-[#334155] font-montserrat mb-2">
             No hay materias en esta categoría
           </h4>
-          <p className="text-sm text-[#B2D8E5]/60 font-open-sans max-w-md mx-auto">
+          <p className="text-sm text-[#64748B] font-open-sans max-w-md mx-auto">
             Prueba seleccionando otra categoría o completa los prerrequisitos para desbloquear más materias.
           </p>
           <button
             onClick={() => setSelectedCategory('all')}
-            className="mt-6 px-5 py-2.5 rounded-full bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-sm font-semibold text-white font-open-sans hover:shadow-lg hover:shadow-[#4DA8C4]/30 transition-all duration-300"
+            className="mt-6 px-5 py-2.5 rounded-full bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-sm font-semibold text-white font-open-sans hover:shadow-lg transition-all duration-300 shadow-lg"
           >
             Ver Todas las Materias
           </button>
@@ -343,12 +336,5 @@ const SubjectGrid = ({ subjects = [], onSelectSubject }) => {
     </div>
   );
 };
-
-// Helper component for Zap icon
-const Zap = ({ className }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-  </svg>
-);
 
 export default SubjectGrid;

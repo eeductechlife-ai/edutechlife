@@ -5,8 +5,9 @@ import XPProgressBar from './XPProgressBar';
 import MissionCard from './MissionCard';
 import SubjectGrid from './SubjectGrid';
 import { useCustomCursor } from '../hooks/useCustomCursor';
+import { ArrowLeft, Home } from 'lucide-react';
 
-const SmartBoardDashboard = ({ onBack }) => {
+const SmartBoardDashboard = ({ onNavigate }) => {
     const [activeTab, setActiveTab] = useState('inicio');
     const [valeriaState, setValeriaState] = useState('idle');
     const [userXP, setUserXP] = useState(1250);
@@ -318,25 +319,25 @@ const SmartBoardDashboard = ({ onBack }) => {
                 return (
                     <div className="space-y-6">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            <div className="glass-card p-6 rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent">
-                                <h3 className="text-xl font-bold text-white font-montserrat mb-4">Bienvenido de vuelta</h3>
-                                <p className="text-[#B2D8E5]/80 font-open-sans mb-4">
+                            <div className="bg-white p-6 rounded-2xl border border-[#E2E8F0] shadow-sm hover:shadow-md transition-shadow">
+                                <h3 className="text-xl font-bold text-[#004B63] font-montserrat mb-4">¡Bienvenido de vuelta!</h3>
+                                <p className="text-[#64748B] font-open-sans mb-4">
                                     Hoy tienes <span className="font-bold text-[#4DA8C4]">{missions.filter(m => !m.completed && !m.locked).length} misiones</span> pendientes 
                                     y <span className="font-bold text-[#66CCCC]">{subjects.filter(s => s.progress > 0 && s.progress < 100).length} materias</span> para repasar.
                                 </p>
                                 <div className="flex items-center gap-2">
                                     <div className="w-2 h-2 rounded-full bg-[#66CCCC] animate-pulse" />
-                                    <span className="text-sm text-[#B2D8E5]/60 font-open-sans">Valeria está lista para ayudarte</span>
+                                    <span className="text-sm text-[#64748B] font-open-sans">Valeria está lista para ayudarte</span>
                                 </div>
                             </div>
-                            <div className="glass-card p-6 rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent">
+                            <div className="bg-white p-6 rounded-2xl border border-[#E2E8F0] shadow-sm">
                                 <XPProgressBar currentXP={userXP} level={userLevel} streak={streakDays} />
                             </div>
                         </div>
 
-                        <div className="glass-card p-6 rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent">
+                        <div className="bg-white p-6 rounded-2xl border border-[#E2E8F0] shadow-sm">
                             <div className="flex items-center justify-between mb-6">
-                                <h3 className="text-xl font-bold text-white font-montserrat">Misiones del Día</h3>
+                                <h3 className="text-xl font-bold text-[#004B63] font-montserrat">Misiones del Día</h3>
                                 <span className="text-sm font-mono text-[#4DA8C4] font-open-sans">
                                     {missions.filter(m => m.completed).length}/{missions.length} completadas
                                 </span>
@@ -357,8 +358,8 @@ const SmartBoardDashboard = ({ onBack }) => {
 
             case 'misiones':
                 return (
-                    <div className="glass-card p-6 rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent">
-                        <h3 className="text-xl font-bold text-white font-montserrat mb-6">Todas las Misiones</h3>
+                    <div className="bg-white p-6 rounded-2xl border border-[#E2E8F0] shadow-sm">
+                        <h3 className="text-xl font-bold text-[#004B63] font-montserrat mb-6">Todas las Misiones</h3>
                         <div className="space-y-4">
                             {missions.map(mission => (
                                 <MissionCard
@@ -374,8 +375,8 @@ const SmartBoardDashboard = ({ onBack }) => {
 
             case 'materias':
                 return (
-                    <div className="glass-card p-6 rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent">
-                        <h3 className="text-xl font-bold text-white font-montserrat mb-6">Tus Materias</h3>
+                    <div className="bg-white p-6 rounded-2xl border border-[#E2E8F0] shadow-sm">
+                        <h3 className="text-xl font-bold text-[#004B63] font-montserrat mb-6">Tus Materias</h3>
                         <SubjectGrid 
                             subjects={subjects}
                             onSelectSubject={handleSubjectClick}
@@ -385,26 +386,26 @@ const SmartBoardDashboard = ({ onBack }) => {
 
             case 'lab-ia':
                 return (
-                    <div className="glass-card p-6 rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent">
-                        <h3 className="text-xl font-bold text-white font-montserrat mb-6">Laboratorio de IA</h3>
-                        <p className="text-[#B2D8E5]/80 font-open-sans mb-6">
+                    <div className="bg-white p-6 rounded-2xl border border-[#E2E8F0] shadow-sm">
+                        <h3 className="text-xl font-bold text-[#004B63] font-montserrat mb-6">Laboratorio de IA</h3>
+                        <p className="text-[#64748B] font-open-sans mb-6">
                             Explora herramientas avanzadas de inteligencia artificial 
                             para potenciar tu aprendizaje.
                         </p>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <button className="glass-card p-6 rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent text-left hover:scale-[1.02] transition-all duration-300 hover:border-white/20">
-                                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#4DA8C4] to-[#004B63] flex items-center justify-center mb-4">
+                            <button className="bg-gradient-to-br from-[#4DA8C4]/10 to-[#004B63]/5 p-6 rounded-2xl border border-[#E2E8F0] text-left hover:scale-[1.02] transition-all duration-300 hover:shadow-lg hover:border-[#4DA8C4]/30">
+                                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#4DA8C4] to-[#004B63] flex items-center justify-center mb-4 shadow-lg">
                                     <span className="text-2xl">🤖</span>
                                 </div>
-                                <h4 className="font-bold text-white font-montserrat mb-2">Chat con Valeria</h4>
-                                <p className="text-sm text-[#B2D8E5]/60 font-open-sans">Conversa con tu tutor IA sobre cualquier tema</p>
+                                <h4 className="font-bold text-[#004B63] font-montserrat mb-2">Chat con Valeria</h4>
+                                <p className="text-sm text-[#64748B] font-open-sans">Conversa con tu tutor IA sobre cualquier tema</p>
                             </button>
-                            <button className="glass-card p-6 rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent text-left hover:scale-[1.02] transition-all duration-300 hover:border-white/20">
-                                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#66CCCC] to-[#4DA8C4] flex items-center justify-center mb-4">
+                            <button className="bg-gradient-to-br from-[#66CCCC]/10 to-[#4DA8C4]/5 p-6 rounded-2xl border border-[#E2E8F0] text-left hover:scale-[1.02] transition-all duration-300 hover:shadow-lg hover:border-[#66CCCC]/30">
+                                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#66CCCC] to-[#4DA8C4] flex items-center justify-center mb-4 shadow-lg">
                                     <span className="text-2xl">🧠</span>
                                 </div>
-                                <h4 className="font-bold text-white font-montserrat mb-2">VAK Test</h4>
-                                <p className="text-sm text-[#B2D8E5]/60 font-open-sans">Descubre tu estilo de aprendizaje preferido</p>
+                                <h4 className="font-bold text-[#004B63] font-montserrat mb-2">VAK Test</h4>
+                                <p className="text-sm text-[#64748B] font-open-sans">Descubre tu estilo de aprendizaje preferido</p>
                             </button>
                         </div>
                     </div>
@@ -413,36 +414,36 @@ const SmartBoardDashboard = ({ onBack }) => {
             case 'progreso':
                 return (
                     <div className="space-y-6">
-                        <div className="glass-card p-6 rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent">
+                        <div className="bg-white p-6 rounded-2xl border border-[#E2E8F0] shadow-sm">
                             <XPProgressBar currentXP={userXP} level={userLevel} streak={streakDays} />
                         </div>
                         
-                        <div className="glass-card p-6 rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent">
-                            <h3 className="text-xl font-bold text-white font-montserrat mb-6">Estadísticas de Aprendizaje</h3>
+                        <div className="bg-white p-6 rounded-2xl border border-[#E2E8F0] shadow-sm">
+                            <h3 className="text-xl font-bold text-[#004B63] font-montserrat mb-6">Estadísticas de Aprendizaje</h3>
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                                <div className="text-center p-6 rounded-xl bg-gradient-to-br from-[#004B63]/20 to-transparent border border-white/10">
-                                    <div className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] font-montserrat">
+                                <div className="text-center p-6 rounded-xl bg-gradient-to-br from-[#4DA8C4]/10 to-transparent border border-[#E2E8F0]">
+                                    <div className="text-3xl font-black text-[#4DA8C4] font-montserrat">
                                         24h
                                     </div>
-                                    <div className="text-sm text-[#B2D8E5]/60 font-open-sans mt-2">Tiempo total</div>
+                                    <div className="text-sm text-[#64748B] font-open-sans mt-2">Tiempo total</div>
                                 </div>
-                                <div className="text-center p-6 rounded-xl bg-gradient-to-br from-[#004B63]/20 to-transparent border border-white/10">
-                                    <div className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] font-montserrat">
+                                <div className="text-center p-6 rounded-xl bg-gradient-to-br from-[#66CCCC]/10 to-transparent border border-[#E2E8F0]">
+                                    <div className="text-3xl font-black text-[#66CCCC] font-montserrat">
                                         42
                                     </div>
-                                    <div className="text-sm text-[#B2D8E5]/60 font-open-sans mt-2">Misiones</div>
+                                    <div className="text-sm text-[#64748B] font-open-sans mt-2">Misiones</div>
                                 </div>
-                                <div className="text-center p-6 rounded-xl bg-gradient-to-br from-[#004B63]/20 to-transparent border border-white/10">
-                                    <div className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] font-montserrat">
+                                <div className="text-center p-6 rounded-xl bg-gradient-to-br from-[#FFD166]/10 to-transparent border border-[#E2E8F0]">
+                                    <div className="text-3xl font-black text-[#FFD166] font-montserrat">
                                         87%
                                     </div>
-                                    <div className="text-sm text-[#B2D8E5]/60 font-open-sans mt-2">Promedio</div>
+                                    <div className="text-sm text-[#64748B] font-open-sans mt-2">Promedio</div>
                                 </div>
-                                <div className="text-center p-6 rounded-xl bg-gradient-to-br from-[#004B63]/20 to-transparent border border-white/10">
-                                    <div className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] font-montserrat">
+                                <div className="text-center p-6 rounded-xl bg-gradient-to-br from-[#FF6B9D]/10 to-transparent border border-[#E2E8F0]">
+                                    <div className="text-3xl font-black text-[#FF6B9D] font-montserrat">
                                         14
                                     </div>
-                                    <div className="text-sm text-[#B2D8E5]/60 font-open-sans mt-2">Días racha</div>
+                                    <div className="text-sm text-[#64748B] font-open-sans mt-2">Días racha</div>
                                 </div>
                             </div>
                         </div>
@@ -457,9 +458,16 @@ const SmartBoardDashboard = ({ onBack }) => {
     return (
         <div 
             ref={dashboardRef}
-            className="relative min-h-screen bg-gradient-to-br from-[#0A1628] via-[#004B63] to-[#0A1628] overflow-hidden"
+            className="relative min-h-screen bg-gradient-to-br from-[#F8FAFC] via-[#FFFFFF] to-[#E2E8F0] overflow-hidden"
         >
-            {/* Custom cursor will be injected by useCustomCursor hook */}
+            {/* Botón flotante para volver al inicio */}
+            <button
+                onClick={() => onNavigate('landing')}
+                className="fixed top-6 right-6 z-50 flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
+            >
+                <Home className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                <span className="text-sm font-semibold font-open-sans">Volver al Inicio</span>
+            </button>
             
             {/* Dashboard Layout */}
             <div className="flex h-screen">
@@ -473,29 +481,6 @@ const SmartBoardDashboard = ({ onBack }) => {
 
                 {/* Main Content Area */}
                 <div className="flex-1 flex flex-col overflow-hidden">
-                    {/* Top Bar */}
-                    <div className="px-8 py-6 border-b border-white/10 bg-gradient-to-r from-[#0A1628]/90 to-[#004B63]/90 backdrop-blur-xl">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <h1 className="text-2xl font-black text-white font-montserrat tracking-tight">
-                                    SmartBoard <span className="text-[#4DA8C4]">Premium v2.286</span>
-                                </h1>
-                                <p className="text-sm text-[#B2D8E5]/70 font-open-sans mt-1">
-                                    Dashboard educativo inteligente para estudiantes 8-16 años
-                                </p>
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <div className="text-right">
-                                    <div className="text-sm font-bold text-white font-open-sans">Nivel {userLevel}</div>
-                                    <div className="text-xs text-[#B2D8E5]/60 font-mono">{userXP} XP</div>
-                                </div>
-                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#4DA8C4] to-[#004B63] flex items-center justify-center text-white">
-                                    <span className="text-lg">👤</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     {/* Content Area */}
                     <div className="flex-1 overflow-auto p-8">
                         <div className="max-w-7xl mx-auto">
@@ -511,11 +496,6 @@ const SmartBoardDashboard = ({ onBack }) => {
                         message="¡Hola! Estoy aquí para ayudarte en tu aprendizaje."
                     />
                 </div>
-            </div>
-
-            {/* Neuro-Ergonomics Overlay */}
-            <div className="fixed inset-0 pointer-events-none z-50">
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent" />
             </div>
         </div>
     );

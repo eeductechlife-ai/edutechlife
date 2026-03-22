@@ -46,40 +46,32 @@ const MissionCard = ({ mission, onStart, onComplete }) => {
 
   return (
     <div
-      className={`relative glass-card rounded-2xl border transition-all duration-500 overflow-hidden ${
+      className={`relative rounded-2xl border transition-all duration-500 overflow-hidden ${
         mission.completed
-          ? 'border-[#66CCCC]/50 bg-gradient-to-br from-[#004B63]/20 to-[#66CCCC]/10'
-          : 'border-white/10 hover:border-white/20 bg-gradient-to-br from-white/5 to-transparent'
-      } ${isHovered ? 'transform -translate-y-1 shadow-2xl shadow-[#004B63]/30' : ''}`}
+          ? 'border-[#66CCCC] bg-gradient-to-br from-[#66CCCC]/10 to-[#4DA8C4]/5'
+          : 'border-[#E2E8F0] hover:border-[#4DA8C4]/30 bg-white hover:shadow-lg'
+      } ${isHovered ? 'transform -translate-y-1 shadow-xl' : ''}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => setIsExpanded(!isExpanded)}
     >
-      {/* 3D Hover Effect Layers */}
-      {isHovered && !mission.completed && (
-        <>
-          <div className="absolute -inset-1 bg-gradient-to-r from-[#4DA8C4]/10 to-[#66CCCC]/10 blur-xl opacity-50"></div>
-          <div className="absolute inset-0 border border-white/20 rounded-2xl"></div>
-        </>
-      )}
-
       {/* Mission Header */}
       <div className="p-6">
         <div className="flex items-start justify-between">
           <div className="flex items-start gap-4">
             {/* Mission Icon */}
             <div className={`relative ${mission.completed ? 'scale-110' : ''} transition-transform duration-300`}>
-              <div className={`w-14 h-14 rounded-xl flex items-center justify-center text-2xl ${
+              <div className={`w-14 h-14 rounded-xl flex items-center justify-center text-2xl shadow-lg ${
                 mission.completed
                   ? 'bg-gradient-to-br from-[#66CCCC] to-[#4DA8C4]'
-                  : 'bg-gradient-to-br from-[#004B63] to-[#0A1628]'
+                  : 'bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC]'
               }`}>
                 {getMissionIcon(mission.type)}
               </div>
               
               {mission.featured && (
                 <div className="absolute -top-2 -right-2">
-                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#FFD166] to-[#FF6B9D] flex items-center justify-center">
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#FFD166] to-[#FF6B9D] flex items-center justify-center shadow-lg">
                     <Star className="w-3 h-3 text-white" />
                   </div>
                 </div>
@@ -89,9 +81,7 @@ const MissionCard = ({ mission, onStart, onComplete }) => {
             {/* Mission Info */}
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2">
-                <h3 className={`text-lg font-bold font-montserrat tracking-tight ${
-                  mission.completed ? 'text-white' : 'text-white'
-                }`}>
+                <h3 className={`text-lg font-bold font-montserrat tracking-tight text-[#004B63]`}>
                   {mission.title}
                 </h3>
                 
@@ -107,8 +97,8 @@ const MissionCard = ({ mission, onStart, onComplete }) => {
               {/* Stats */}
               <div className="flex items-center gap-6">
                 <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-[#B2D8E5]/60" />
-                  <span className="text-sm text-white/80 font-open-sans">
+                  <Clock className="w-4 h-4 text-[#64748B]" />
+                  <span className="text-sm text-[#64748B] font-open-sans">
                     {formatTime(mission.duration)}
                   </span>
                 </div>
@@ -142,9 +132,9 @@ const MissionCard = ({ mission, onStart, onComplete }) => {
                 </span>
               </div>
             ) : mission.locked ? (
-              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20">
-                <Lock className="w-4 h-4 text-white/60" />
-                <span className="text-sm font-semibold text-white/60 font-open-sans">
+              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#F1F5F9] border border-[#E2E8F0]">
+                <Lock className="w-4 h-4 text-[#94A3B8]" />
+                <span className="text-sm font-semibold text-[#94A3B8] font-open-sans">
                   Nivel {mission.requiredLevel}+
                 </span>
               </div>
@@ -154,7 +144,7 @@ const MissionCard = ({ mission, onStart, onComplete }) => {
                   e.stopPropagation();
                   onStart(mission);
                 }}
-                className="group relative overflow-hidden px-5 py-2.5 rounded-full bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] hover:from-[#66CCCC] hover:to-[#4DA8C4] transition-all duration-300"
+                className="group relative overflow-hidden px-5 py-2.5 rounded-full bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] hover:from-[#66CCCC] hover:to-[#4DA8C4] transition-all duration-300 shadow-lg"
               >
                 <div className="absolute inset-0 bg-white/20 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
                 <div className="relative flex items-center gap-2">
@@ -170,12 +160,12 @@ const MissionCard = ({ mission, onStart, onComplete }) => {
             {mission.progress > 0 && !mission.completed && (
               <div className="w-32">
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs text-white/60 font-open-sans">Progreso</span>
+                  <span className="text-xs text-[#64748B] font-open-sans">Progreso</span>
                   <span className="text-xs font-semibold text-[#66CCCC] font-open-sans">
                     {mission.progress}%
                   </span>
                 </div>
-                <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+                <div className="h-1.5 rounded-full bg-[#E2E8F0] overflow-hidden">
                   <div 
                     className="h-full rounded-full bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] transition-all duration-1000"
                     style={{ width: `${mission.progress}%` }}
@@ -189,18 +179,18 @@ const MissionCard = ({ mission, onStart, onComplete }) => {
 
       {/* Expanded Details */}
       {isExpanded && (
-        <div className="border-t border-white/10 px-6 py-4 animate-slide-down">
+        <div className="border-t border-[#E2E8F0] px-6 py-4 animate-slide-down">
           <div className="grid grid-cols-2 gap-6">
             {/* Skills Gained */}
             <div>
-              <h4 className="text-sm font-semibold text-white/80 mb-3 font-open-sans">
+              <h4 className="text-sm font-semibold text-[#334155] mb-3 font-open-sans">
                 Habilidades Desarrolladas
               </h4>
               <div className="flex flex-wrap gap-2">
                 {mission.skills.map((skill, index) => (
                   <span
                     key={index}
-                    className="px-3 py-1.5 rounded-full bg-[#004B63]/30 border border-[#4DA8C4]/20 text-sm text-[#B2D8E5] font-open-sans"
+                    className="px-3 py-1.5 rounded-full bg-[#4DA8C4]/10 border border-[#4DA8C4]/20 text-sm text-[#004B63] font-open-sans"
                   >
                     {skill}
                   </span>
@@ -210,14 +200,14 @@ const MissionCard = ({ mission, onStart, onComplete }) => {
 
             {/* Rewards */}
             <div>
-              <h4 className="text-sm font-semibold text-white/80 mb-3 font-open-sans">
+              <h4 className="text-sm font-semibold text-[#334155] mb-3 font-open-sans">
                 Recompensas
               </h4>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Zap className="w-4 h-4 text-[#FFD166]" />
-                    <span className="text-sm text-white/80 font-open-sans">Experiencia</span>
+                    <span className="text-sm text-[#64748B] font-open-sans">Experiencia</span>
                   </div>
                   <span className="text-sm font-semibold text-[#FFD166] font-open-sans">
                     +{mission.xpReward} XP
@@ -228,7 +218,7 @@ const MissionCard = ({ mission, onStart, onComplete }) => {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Award className="w-4 h-4 text-[#66CCCC]" />
-                      <span className="text-sm text-white/80 font-open-sans">Insignia</span>
+                      <span className="text-sm text-[#64748B] font-open-sans">Insignia</span>
                     </div>
                     <span className="text-sm font-semibold text-[#66CCCC] font-open-sans">
                       {mission.badgeReward}
@@ -240,7 +230,7 @@ const MissionCard = ({ mission, onStart, onComplete }) => {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <TrendingUp className="w-4 h-4 text-[#FF6B9D]" />
-                      <span className="text-sm text-white/80 font-open-sans">Bonus de Racha</span>
+                      <span className="text-sm text-[#64748B] font-open-sans">Bonus de Racha</span>
                     </div>
                     <span className="text-sm font-semibold text-[#FF6B9D] font-open-sans">
                       +{mission.streakBonus}%
@@ -253,18 +243,18 @@ const MissionCard = ({ mission, onStart, onComplete }) => {
 
           {/* Prerequisites */}
           {mission.prerequisites && mission.prerequisites.length > 0 && (
-            <div className="mt-4 pt-4 border-t border-white/10">
-              <h4 className="text-sm font-semibold text-white/80 mb-2 font-open-sans">
+            <div className="mt-4 pt-4 border-t border-[#E2E8F0]">
+              <h4 className="text-sm font-semibold text-[#334155] mb-2 font-open-sans">
                 Prerrequisitos
               </h4>
               <div className="flex items-center gap-2">
                 {mission.prerequisites.map((prereq, index) => (
                   <div
                     key={index}
-                    className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10"
+                    className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#F1F5F9] border border-[#E2E8F0]"
                   >
-                    <Target className="w-3 h-3 text-white/60" />
-                    <span className="text-sm text-white/60 font-open-sans">
+                    <Target className="w-3 h-3 text-[#64748B]" />
+                    <span className="text-sm text-[#64748B] font-open-sans">
                       {prereq}
                     </span>
                   </div>
@@ -282,7 +272,7 @@ const MissionCard = ({ mission, onStart, onComplete }) => {
                     e.stopPropagation();
                     setIsExpanded(false);
                   }}
-                  className="px-4 py-2 rounded-full border border-white/20 text-sm text-white/80 font-open-sans hover:bg-white/10 transition-colors"
+                  className="px-4 py-2 rounded-full border border-[#E2E8F0] text-sm text-[#64748B] font-open-sans hover:bg-[#F1F5F9] transition-colors"
                 >
                   Más tarde
                 </button>
@@ -292,7 +282,7 @@ const MissionCard = ({ mission, onStart, onComplete }) => {
                     e.stopPropagation();
                     onStart(mission);
                   }}
-                  className="px-5 py-2.5 rounded-full bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-sm font-semibold text-white font-open-sans hover:shadow-lg hover:shadow-[#4DA8C4]/30 transition-all duration-300"
+                  className="px-5 py-2.5 rounded-full bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-sm font-semibold text-white font-open-sans hover:shadow-lg transition-all duration-300"
                 >
                   Iniciar Ahora
                 </button>
@@ -305,7 +295,7 @@ const MissionCard = ({ mission, onStart, onComplete }) => {
                   e.stopPropagation();
                   onComplete(mission);
                 }}
-                className="px-5 py-2.5 rounded-full bg-gradient-to-r from-[#66CCCC] to-[#4DA8C4] text-sm font-semibold text-white font-open-sans"
+                className="px-5 py-2.5 rounded-full bg-gradient-to-r from-[#66CCCC] to-[#4DA8C4] text-sm font-semibold text-white font-open-sans shadow-lg"
               >
                 Ver Certificado
               </button>
@@ -318,7 +308,7 @@ const MissionCard = ({ mission, onStart, onComplete }) => {
       {mission.completed && (
         <div className="absolute top-4 right-4">
           <div className="relative">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#66CCCC] to-[#4DA8C4] flex items-center justify-center">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#66CCCC] to-[#4DA8C4] flex items-center justify-center shadow-lg">
               <CheckCircle className="w-4 h-4 text-white" />
             </div>
             <div className="absolute -inset-2 bg-[#66CCCC] rounded-full opacity-20 blur-sm"></div>

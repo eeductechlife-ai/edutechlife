@@ -59,18 +59,18 @@ const XPProgressBar = ({ currentXP = 1250, level = 8, streak = 14 }) => {
         <div className="absolute inset-0 flex items-center justify-center z-50">
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-r from-[#4DA8C4] via-[#66CCCC] to-[#9D4EDD] rounded-full blur-xl opacity-60 animate-ping"></div>
-            <div className="relative glass-card p-8 rounded-2xl border-2 border-[#66CCCC]/50 backdrop-blur-xl">
+            <div className="relative bg-white p-8 rounded-2xl border-2 border-[#66CCCC] shadow-2xl">
               <div className="text-center">
                 <Trophy className="w-16 h-16 text-[#FFD166] mx-auto mb-4 animate-bounce" />
-                <h3 className="text-2xl font-bold text-white font-montserrat mb-2">
+                <h3 className="text-2xl font-bold text-[#004B63] font-montserrat mb-2">
                   ¡Nivel {level} Alcanzado!
                 </h3>
-                <p className="text-[#B2D8E5] font-open-sans">
+                <p className="text-[#64748B] font-open-sans">
                   Ahora eres <span className="text-[#FFD166] font-bold">{getLevelTitle(level)}</span>
                 </p>
                 <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#66CCCC]/20">
                   <Zap className="w-4 h-4 text-[#FFD166]" />
-                  <span className="text-sm font-semibold text-white">
+                  <span className="text-sm font-semibold text-[#004B63]">
                     +{xpForNextLevel - xpInCurrentLevel} XP obtenidos
                   </span>
                 </div>
@@ -81,35 +81,35 @@ const XPProgressBar = ({ currentXP = 1250, level = 8, streak = 14 }) => {
       )}
 
       {/* Main Progress Container */}
-      <div className="glass-card p-6 rounded-2xl border border-white/10">
+      <div className="p-6">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h3 className="text-lg font-bold text-white font-montserrat tracking-tight">
+            <h3 className="text-lg font-bold text-[#004B63] font-montserrat tracking-tight">
               Progreso de Aprendizaje
             </h3>
-            <p className="text-sm text-[#B2D8E5]/70 font-open-sans">
+            <p className="text-sm text-[#64748B] font-open-sans">
               Sigue avanzando hacia la excelencia
             </p>
           </div>
           
           <div className="flex items-center gap-4">
             <div className="text-center">
-              <div className="text-3xl font-bold text-white font-montserrat">
+              <div className="text-3xl font-bold text-[#4DA8C4] font-montserrat">
                 {animatedLevel}
               </div>
-              <div className="text-xs text-[#B2D8E5]/60 font-open-sans mt-1">
+              <div className="text-xs text-[#64748B] font-open-sans mt-1">
                 Nivel
               </div>
             </div>
             
-            <div className="h-12 w-px bg-white/10"></div>
+            <div className="h-12 w-px bg-[#E2E8F0]"></div>
             
             <div className="text-center">
-              <div className="text-2xl font-bold text-white font-montserrat flex items-center gap-1">
+              <div className="text-2xl font-bold text-[#004B63] font-montserrat flex items-center gap-1">
                 <Zap className="w-5 h-5 text-[#FFD166]" />
                 {animatedXP.toLocaleString()}
               </div>
-              <div className="text-xs text-[#B2D8E5]/60 font-open-sans mt-1">
+              <div className="text-xs text-[#64748B] font-open-sans mt-1">
                 Puntos XP
               </div>
             </div>
@@ -119,7 +119,7 @@ const XPProgressBar = ({ currentXP = 1250, level = 8, streak = 14 }) => {
         {/* XP Progress Bar */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-white font-open-sans">
+            <span className="text-sm font-medium text-[#334155] font-open-sans">
               Nivel {level}: {getLevelTitle(level)}
             </span>
             <span className="text-sm font-semibold text-[#66CCCC] font-open-sans">
@@ -127,36 +127,22 @@ const XPProgressBar = ({ currentXP = 1250, level = 8, streak = 14 }) => {
             </span>
           </div>
           
-          <div className="relative h-4 rounded-full bg-white/10 overflow-hidden">
-            {/* Animated background */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#004B63]/30 via-[#4DA8C4]/30 to-[#66CCCC]/30 animate-gradient-x"></div>
-            
+          <div className="relative h-4 rounded-full bg-[#E2E8F0] overflow-hidden">
             {/* Progress fill */}
             <div 
               className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-[#4DA8C4] via-[#66CCCC] to-[#9D4EDD] transition-all duration-1000 ease-out"
               style={{ width: `${Math.min(progressPercentage, 100)}%` }}
             >
               {/* Shine effect */}
-              <div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shine"></div>
-            </div>
-            
-            {/* Level markers */}
-            <div className="absolute inset-0 flex">
-              {[0, 25, 50, 75, 100].map((percent) => (
-                <div
-                  key={percent}
-                  className="absolute top-1/2 w-px h-6 -translate-y-1/2 bg-white/20"
-                  style={{ left: `${percent}%` }}
-                />
-              ))}
+              <div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-shine"></div>
             </div>
           </div>
           
           <div className="flex justify-between mt-1">
-            <span className="text-xs text-white/60 font-open-sans">
+            <span className="text-xs text-[#64748B] font-open-sans">
               {currentLevelXP.toLocaleString()} XP
             </span>
-            <span className="text-xs text-white/60 font-open-sans">
+            <span className="text-xs text-[#64748B] font-open-sans">
               {nextLevelXP.toLocaleString()} XP
             </span>
           </div>
@@ -164,48 +150,48 @@ const XPProgressBar = ({ currentXP = 1250, level = 8, streak = 14 }) => {
 
         {/* Streak & Stats */}
         <div className="grid grid-cols-3 gap-4 mb-8">
-          <div className="glass-card p-4 rounded-xl">
+          <div className="bg-[#FF6B9D]/10 p-4 rounded-xl border border-[#FF6B9D]/20">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-[#FF6B9D]/20">
                 <Flame className="w-5 h-5 text-[#FF6B9D]" />
               </div>
               <div>
-                <div className="text-2xl font-bold text-white font-montserrat">
+                <div className="text-2xl font-bold text-[#004B63] font-montserrat">
                   {streak}
                 </div>
-                <div className="text-xs text-white/60 font-open-sans">
+                <div className="text-xs text-[#64748B] font-open-sans">
                   Días de racha
                 </div>
               </div>
             </div>
           </div>
           
-          <div className="glass-card p-4 rounded-xl">
+          <div className="bg-[#FFD166]/10 p-4 rounded-xl border border-[#FFD166]/20">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-[#FFD166]/20">
                 <Target className="w-5 h-5 text-[#FFD166]" />
               </div>
               <div>
-                <div className="text-2xl font-bold text-white font-montserrat">
+                <div className="text-2xl font-bold text-[#004B63] font-montserrat">
                   23
                 </div>
-                <div className="text-xs text-white/60 font-open-sans">
+                <div className="text-xs text-[#64748B] font-open-sans">
                   Misiones completadas
                 </div>
               </div>
             </div>
           </div>
           
-          <div className="glass-card p-4 rounded-xl">
+          <div className="bg-[#66CCCC]/10 p-4 rounded-xl border border-[#66CCCC]/20">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-[#66CCCC]/20">
                 <Award className="w-5 h-5 text-[#66CCCC]" />
               </div>
               <div>
-                <div className="text-2xl font-bold text-white font-montserrat">
+                <div className="text-2xl font-bold text-[#004B63] font-montserrat">
                   12
                 </div>
-                <div className="text-xs text-white/60 font-open-sans">
+                <div className="text-xs text-[#64748B] font-open-sans">
                   Logros desbloqueados
                 </div>
               </div>
@@ -215,7 +201,7 @@ const XPProgressBar = ({ currentXP = 1250, level = 8, streak = 14 }) => {
 
         {/* Achievements */}
         <div>
-          <h4 className="text-sm font-semibold text-white/80 mb-4 font-open-sans">
+          <h4 className="text-sm font-semibold text-[#334155] mb-4 font-open-sans">
             Logros Pendientes
           </h4>
           
@@ -228,41 +214,41 @@ const XPProgressBar = ({ currentXP = 1250, level = 8, streak = 14 }) => {
                   className={`p-3 rounded-xl border transition-all duration-300 ${
                     achievement.completed
                       ? 'bg-[#66CCCC]/10 border-[#66CCCC]/30'
-                      : 'bg-white/5 border-white/10 hover:border-white/20'
+                      : 'bg-[#F8FAFC] border-[#E2E8F0]'
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     <div className={`p-2 rounded-lg ${
                       achievement.completed
                         ? 'bg-[#66CCCC]/20'
-                        : 'bg-white/10'
+                        : 'bg-[#E2E8F0]'
                     }`}>
                       <Icon className={`w-4 h-4 ${
-                        achievement.completed ? 'text-[#66CCCC]' : 'text-white/60'
+                        achievement.completed ? 'text-[#66CCCC]' : 'text-[#64748B]'
                       }`} />
                     </div>
                     
                     <div className="flex-1">
                       <div className="flex items-center justify-between">
                         <span className={`text-sm font-medium ${
-                          achievement.completed ? 'text-white' : 'text-white/70'
+                          achievement.completed ? 'text-[#004B63]' : 'text-[#64748B]'
                         } font-open-sans`}>
                           {achievement.name}
                         </span>
                         <span className={`text-xs font-semibold ${
-                          achievement.completed ? 'text-[#FFD166]' : 'text-white/40'
+                          achievement.completed ? 'text-[#FFD166]' : 'text-[#94A3B8]'
                         }`}>
                           +{achievement.xp} XP
                         </span>
                       </div>
                       
                       <div className="mt-2 flex items-center gap-2">
-                        <div className="flex-1 h-1.5 rounded-full bg-white/10 overflow-hidden">
+                        <div className="flex-1 h-1.5 rounded-full bg-[#E2E8F0] overflow-hidden">
                           <div 
                             className={`h-full rounded-full ${
                               achievement.completed
                                 ? 'bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC]'
-                                : 'bg-gradient-to-r from-[#004B63] to-[#4DA8C4]'
+                                : 'bg-gradient-to-r from-[#94A3B8] to-[#64748B]'
                             }`}
                             style={{ width: achievement.completed ? '100%' : '0%' }}
                           ></div>
@@ -280,19 +266,19 @@ const XPProgressBar = ({ currentXP = 1250, level = 8, streak = 14 }) => {
         </div>
 
         {/* Next Level Preview */}
-        <div className="mt-6 pt-6 border-t border-white/10">
+        <div className="mt-6 pt-6 border-t border-[#E2E8F0]">
           <div className="flex items-center justify-between">
             <div>
-              <h4 className="text-sm font-semibold text-white font-open-sans">
+              <h4 className="text-sm font-semibold text-[#334155] font-open-sans">
                 Próximo Nivel: {getLevelTitle(level + 1)}
               </h4>
-              <p className="text-xs text-[#B2D8E5]/60 font-open-sans mt-1">
+              <p className="text-xs text-[#64748B] font-open-sans mt-1">
                 Necesitas {(nextLevelXP - currentXP).toLocaleString()} XP más
               </p>
             </div>
             
             <div className="flex items-center gap-2">
-              <div className="px-3 py-1.5 rounded-full bg-gradient-to-r from-[#004B63] to-[#4DA8C4]">
+              <div className="px-3 py-1.5 rounded-full bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC]">
                 <span className="text-xs font-semibold text-white">
                   {Math.ceil((nextLevelXP - currentXP) / 100)} días estimados
                 </span>
