@@ -151,13 +151,6 @@ const AboutCarousel = () => {
                 ))}
             </div>
 
-            {/* Slide Counter */}
-            <div className="carousel-counter">
-                <span className="counter-current">{String(active + 1).padStart(2, '0')}</span>
-                <span className="counter-separator">/</span>
-                <span className="counter-total">{String(carouselImages.length).padStart(2, '0')}</span>
-            </div>
-
             {/* Caption */}
             <div className="carousel-caption">
                 <div className="caption-badge">

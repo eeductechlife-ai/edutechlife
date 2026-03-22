@@ -21,24 +21,6 @@ const FinalCTA = memo(({ onNavigate }) => {
             {/* Content - Full Width */}
             <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 py-20 relative z-10">
                 <div className="max-w-4xl mx-auto text-center">
-                    {/* Badge */}
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full mb-8 backdrop-blur-sm border border-white/10">
-                        <span className="w-2 h-2 bg-[#4DA8C4] rounded-full animate-pulse" />
-                        <span className="text-white/80 text-sm font-medium">Únete a la revolución educativa</span>
-                    </div>
-
-                    {/* Title */}
-                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
-                        Transforma la Educación
-                        <span className="block text-[#4DA8C4]">con Inteligencia Artificial</span>
-                    </h2>
-
-                    {/* Description */}
-                    <p className="text-xl text-white/80 max-w-2xl mx-auto mb-8 leading-relaxed">
-                        Más de 6,000 estudiantes ya están aprendiendo con nuestras metodologías de vanguardia. 
-                        ¿Listo para ser parte del futuro de la educación?
-                    </p>
-
                     {/* Direct Access Cards */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto mb-12">
                         <button 

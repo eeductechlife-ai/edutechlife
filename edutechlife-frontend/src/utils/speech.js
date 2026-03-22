@@ -1,4 +1,4 @@
-export async function speakTextConversational(t, onFinishSpeaking) {
+export function speakTextConversational(text, onFinishSpeaking) {
     if (!('speechSynthesis' in window)) {
         console.warn('SpeechSynthesis not supported.');
         if (onFinishSpeaking) onFinishSpeaking();
@@ -7,76 +7,57 @@ export async function speakTextConversational(t, onFinishSpeaking) {
 
     window.speechSynthesis.cancel();
     
-    const cleanText = t.replace(/[#*`_~🎉🎯💡✨👏👍🎨🎧🎮🎬📚]/g, '').replace(/\n/g, ' ').trim();
+    const cleanText = text.replace(/[#*`_~🎉🎯💡✨👏👍🎨🎧🎮🎬📚©®™°•↑↓→←↔↕]/g, '').replace(/\n+/g, ' ').trim();
 
     if (!cleanText) {
         if (onFinishSpeaking) onFinishSpeaking();
         return;
     }
 
-    const speakNext = (text, callback) => {
-        const msg = new SpeechSynthesisUtterance(text);
-        msg.lang = 'es';
-        msg.rate = 0.95;
-        msg.pitch = 1.1;
-        msg.volume = 1.0;
+    const selectBestVoice = (voices) => {
+        const femaleLatinPriority = [
+            v => v.lang === 'es-CO' && v.name.includes('Google'),
+            v => v.lang === 'es-MX' && v.name.includes('Google'),
+            v => v.lang === 'es-AR' && v.name.includes('Google'),
+            v => v.lang === 'es-ES' && v.name.includes('Google') && !v.name.includes('Male'),
+            v => v.lang.includes('es') && v.name.includes('female') && v.name.includes('Google'),
+            v => v.lang.includes('es') && v.name.includes('Female'),
+            v => v.lang.includes('es') && (v.name.includes('Laura') || v.name.includes('Sofia') || v.name.includes('Carmen') || v.name.includes('Lucia')),
+            v => v.lang.includes('es') && v.name.includes('Microsoft') && v.name.includes('Sabina'),
+            v => v.lang === 'es-CO' && v.name.includes('Google'),
+            v => v.lang === 'es-MX' && v.name.includes('Google'),
+            v => v.lang === 'es-AR' && v.name.includes('Google'),
+            v => v.lang === 'es-ES' && v.name.includes('Google'),
+            v => v.lang.includes('es') && v.name.includes('Google'),
+        ];
         
-        const processVoices = (voices) => {
-            const femaleLatinVoices = [
-                v => v.lang.includes('es') && v.name.includes('female') && (v.name.includes('Google') || v.name.includes('Natural')),
-                v => v.lang.includes('es') && v.name.toLowerCase().includes('female') && v.name.includes('es'),
-                v => v.lang === 'es-ES' && v.name.includes('Google') && !v.name.includes('Male'),
-                v => v.lang === 'es-MX' && v.name.includes('Google'),
-                v => v.lang === 'es-CO' && v.name.includes('Google'),
-                v => v.lang === 'es-AR' && v.name.includes('Google'),
-                v => v.lang.includes('es') && v.name.includes('Google') && v.name.includes('Female'),
-                v => v.lang.includes('es') && (v.name.includes('Laura') || v.name.includes('Sofia') || v.name.includes('Carmen') || v.name.includes('Lucia')),
-                v => v.lang.includes('es') && v.name.includes('Microsoft') && (v.name.includes('Female') || v.name.includes('Sabina')),
-            ];
-            
-            const anyLatinVoices = [
-                v => v.lang.includes('es') && v.name.includes('Google'),
-                v => v.lang === 'es-ES' || v.lang === 'es-MX' || v.lang === 'es-CO' || v.lang === 'es-AR',
-                v => v.lang.includes('es-Latam'),
-                v => v.lang.includes('es') && !v.name.includes('US'),
-            ];
-            
-            for (const matcher of femaleLatinVoices) {
-                const found = voices.find(matcher);
-                if (found) {
-                    msg.voice = found;
-                    break;
-                }
-            }
-            
-            if (!msg.voice) {
-                for (const matcher of anyLatinVoices) {
-                    const found = voices.find(matcher);
-                    if (found) {
-                        msg.voice = found;
-                        break;
-                    }
-                }
-            }
-            
-            if (!msg.voice && voices.length > 0) {
-                const spanishVoices = voices.filter(v => v.lang.includes('es'));
-                if (spanishVoices.length > 0) {
-                    msg.voice = spanishVoices[0];
-                }
-            }
-        };
-        
-        const voices = window.speechSynthesis.getVoices();
-        if (voices.length > 0) {
-            processVoices(voices);
-        } else {
-            window.speechSynthesis.addEventListener('voiceschanged', () => {
-                const updatedVoices = window.speechSynthesis.getVoices();
-                processVoices(updatedVoices);
-            }, { once: true });
+        for (const matcher of femaleLatinPriority) {
+            const found = voices.find(matcher);
+            if (found) return found;
         }
         
+        const spanishVoices = voices.filter(v => v.lang.includes('es') && !v.lang.includes('US'));
+        if (spanishVoices.length > 0) {
+            return spanishVoices[0];
+        }
+        
+        return voices[0] || null;
+    };
+
+    const speakText = (textToSpeak, callback) => {
+        const msg = new SpeechSynthesisUtterance(textToSpeak);
+        
+        const voices = window.speechSynthesis.getVoices();
+        const selectedVoice = selectBestVoice(voices);
+        if (selectedVoice) {
+            msg.voice = selectedVoice;
+        }
+        
+        msg.lang = 'es';
+        msg.rate = 1.0;
+        msg.pitch = 1.05;
+        msg.volume = 1.0;
+
         msg.onend = () => {
             if (callback) callback();
         };
@@ -88,26 +69,25 @@ export async function speakTextConversational(t, onFinishSpeaking) {
         window.speechSynthesis.speak(msg);
     };
 
-    const segments = cleanText.split(/(?<=[.!?]) +/).filter(s => s.trim());
-    
+    const sentences = cleanText.match(/[^.!?]+[.!?]+/g) || [cleanText];
+    const filteredSentences = sentences.map(s => s.trim()).filter(s => s.length > 0);
+
+    if (filteredSentences.length === 0) {
+        filteredSentences.push(cleanText);
+    }
+
     let currentIndex = 0;
-    const speakNextSegment = () => {
-        if (currentIndex >= segments.length) {
+    const speakNext = () => {
+        if (currentIndex >= filteredSentences.length) {
             if (onFinishSpeaking) onFinishSpeaking();
             return;
         }
         
-        let text = segments[currentIndex].trim();
-        if (!text) {
+        const sentence = filteredSentences[currentIndex];
+        speakText(sentence, () => {
             currentIndex++;
-            speakNextSegment();
-            return;
-        }
-        
-        speakNext(text, () => {
-            currentIndex++;
-            if (currentIndex < segments.length) {
-                setTimeout(speakNextSegment, 120);
+            if (currentIndex < filteredSentences.length) {
+                setTimeout(speakNext, 80);
             } else {
                 if (onFinishSpeaking) onFinishSpeaking();
             }
@@ -115,9 +95,11 @@ export async function speakTextConversational(t, onFinishSpeaking) {
     };
 
     if (window.speechSynthesis.getVoices().length === 0) {
-        window.speechSynthesis.addEventListener('voiceschanged', () => speakNextSegment(), { once: true });
+        window.speechSynthesis.addEventListener('voiceschanged', () => {
+            setTimeout(speakNext, 50);
+        }, { once: true });
     } else {
-        setTimeout(speakNextSegment, 100);
+        setTimeout(speakNext, 50);
     }
 }
 
@@ -133,33 +115,38 @@ export function iniciarReconocimiento(setQ, onResult, setIsListening) {
     recognition.lang = 'es-CO';
     recognition.continuous = true;
     recognition.interimResults = true;
-    recognition.maxAlternatives = 3;
+    recognition.maxAlternatives = 1;
 
     let finalTranscript = '';
+    let lastResultIndex = 0;
 
     recognition.onstart = () => {
         finalTranscript = '';
+        lastResultIndex = 0;
         if (setIsListening) setIsListening(true);
     };
 
     recognition.onend = () => {
         if (setIsListening) setIsListening(false);
-        if (finalTranscript && onResult) {
-            onResult(finalTranscript);
+        if (finalTranscript.trim() && onResult) {
+            onResult(finalTranscript.trim());
         }
+        finalTranscript = '';
+        lastResultIndex = 0;
     };
 
     recognition.onresult = (event) => {
         let interimTranscript = '';
         
-        for (let i = event.resultIndex; i < event.results.length; i++) {
+        for (let i = lastResultIndex; i < event.results.length; i++) {
             const transcript = event.results[i][0].transcript;
             if (event.results[i].isFinal) {
-                finalTranscript += transcript;
+                finalTranscript += ' ' + transcript.trim();
             } else {
                 interimTranscript += transcript;
             }
         }
+        lastResultIndex = event.results.length;
 
         if (setQ) {
             setQ(finalTranscript || interimTranscript);
@@ -167,22 +154,22 @@ export function iniciarReconocimiento(setQ, onResult, setIsListening) {
     };
 
     recognition.onerror = (event) => {
-        console.error('SpeechRecognition error', event.error);
+        console.error('SpeechRecognition error:', event.error);
         if (setIsListening) setIsListening(false);
         
-        if (event.error === 'no-speech') {
+        if (event.error === 'no-speech' && finalTranscript.trim()) {
             setTimeout(() => {
-                if (onResult && finalTranscript) {
-                    onResult(finalTranscript);
+                if (onResult) {
+                    onResult(finalTranscript.trim());
                 }
-            }, 500);
+            }, 300);
         }
     };
 
     try {
         recognition.start();
     } catch(e) {
-        console.error("Recognition start error", e);
+        console.error('Recognition start error', e);
         if (setIsListening) setIsListening(false);
     }
 }

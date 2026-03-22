@@ -39,7 +39,7 @@ const AdminLoginModal = ({ isOpen, onClose, onLogin }) => {
 
     await new Promise(resolve => setTimeout(resolve, 800));
 
-    if (username === 'admin' && password === 'admin123') {
+    if (username === '123' && password === '123') {
       setIsLoading(false);
       onLogin();
     } else {
@@ -91,7 +91,7 @@ const AdminLoginModal = ({ isOpen, onClose, onLogin }) => {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   className="w-full pl-12 pr-4 py-4 rounded-xl bg-[#0B0F19] border border-[#004B63]/50 text-white placeholder-[#B2D8E5]/50 focus:outline-none focus:border-[#4DA8C4] focus:ring-2 focus:ring-[#4DA8C4]/20 transition-all"
-                  placeholder="admin"
+                  placeholder="123"
                   required
                 />
               </div>
@@ -106,7 +106,7 @@ const AdminLoginModal = ({ isOpen, onClose, onLogin }) => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full pl-12 pr-12 py-4 rounded-xl bg-[#0B0F19] border border-[#004B63]/50 text-white placeholder-[#B2D8E5]/50 focus:outline-none focus:border-[#4DA8C4] focus:ring-2 focus:ring-[#4DA8C4]/20 transition-all"
-                  placeholder="admin123"
+                  placeholder="123"
                   required
                 />
                 <button
