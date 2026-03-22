@@ -8,9 +8,24 @@ const Hero = memo(({ onNavigate }) => {
     }, []);
 
     const stats = [
-        { value: '6,000+', label: 'Estudiantes' },
-        { value: '98%', label: 'Certificación' },
-        { value: '10+', label: 'Años de Experiencia' }
+        { 
+            value: '6,000+', 
+            label: 'Estudiantes', 
+            icon: 'fa-users',
+            gradient: 'from-[#1B9EBA] to-[#0A3044]'
+        },
+        { 
+            value: '98%', 
+            label: 'Tasa de Éxito', 
+            icon: 'fa-trophy',
+            gradient: 'from-[#0A3044] to-[#1B9EBA]'
+        },
+        { 
+            value: '10+', 
+            label: 'Años de Experiencia', 
+            icon: 'fa-clock',
+            gradient: 'from-[#1B9EBA] to-[#0A3044]'
+        }
     ];
 
     return (
@@ -60,17 +75,28 @@ const Hero = memo(({ onNavigate }) => {
                             y el poder de la IA para formar profesionales del futuro.
                         </p>
 
-                        {/* Stats */}
-                        <div className="flex flex-wrap justify-center lg:justify-start gap-8 mb-10">
+                        {/* Stats Premium Cards */}
+                        <div className="flex flex-wrap justify-center lg:justify-start gap-4 mb-10">
                             {stats.map((stat, index) => (
                                 <div 
                                     key={index}
-                                    className={`text-center transition-all duration-700 delay-${(index + 1) * 200} ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}
+                                    className={`group relative bg-white/60 backdrop-blur-md border border-white/80 rounded-2xl px-6 py-5 min-w-[160px] transition-all duration-700 delay-${(index + 1) * 200} ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'} hover:bg-white/80 hover:shadow-xl hover:-translate-y-1 hover:border-[#1B9EBA]/30 cursor-default`}
                                 >
-                                    <div className="text-3xl md:text-4xl font-black text-[#0A3044]">
+                                    {/* Gradient Accent Line */}
+                                    <div className={`absolute top-0 left-4 right-4 h-1 rounded-b-full bg-gradient-to-r ${stat.gradient} opacity-80 group-hover:opacity-100 transition-opacity`} />
+                                    
+                                    {/* Icon */}
+                                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.gradient} flex items-center justify-center mb-3 shadow-lg`}>
+                                        <i className={`fa-solid ${stat.icon} text-xl text-white`} />
+                                    </div>
+                                    
+                                    {/* Value */}
+                                    <div className="text-3xl md:text-4xl font-black text-[#0A3044] leading-none mb-1">
                                         {stat.value}
                                     </div>
-                                    <div className="text-sm font-medium text-[#64748B] uppercase tracking-wider">
+                                    
+                                    {/* Label */}
+                                    <div className="text-sm font-medium text-[#64748B]">
                                         {stat.label}
                                     </div>
                                 </div>

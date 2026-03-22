@@ -2,6 +2,18 @@ import { memo, useState, useEffect } from 'react';
 
 const Esencia = memo(() => {
     const [currentSlide, setCurrentSlide] = useState(0);
+    const [isVisible, setIsVisible] = useState(false);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) setIsVisible(true);
+            },
+            { threshold: 0.2 }
+        );
+        observer.observe(document.getElementById('esencia-section'));
+        return () => observer.disconnect();
+    }, []);
 
     const slides = [
         {
@@ -44,164 +56,189 @@ const Esencia = memo(() => {
     useEffect(() => {
         const timer = setInterval(() => {
             setCurrentSlide((prev) => (prev + 1) % slides.length);
-        }, 4000);
+        }, 5000);
         return () => clearInterval(timer);
     }, [slides.length]);
 
-    const goToSlide = (index) => {
-        setCurrentSlide(index);
-    };
+    const values = [
+        { icon: 'fa-lightbulb', text: 'Innovación', desc: ' Siempre adelante' },
+        { icon: 'fa-heart', text: 'Pasión', desc: 'Por la educación' },
+        { icon: 'fa-handshake', text: 'Compromiso', desc: 'Con cada estudiante' },
+        { icon: 'fa-users', text: 'Comunidad', desc: 'Juntos crecemos' }
+    ];
 
     return (
-        <section className="w-full relative overflow-hidden bg-[#F8FAFC]">
-            {/* Background Decoration */}
-            <div className="absolute inset-0 opacity-[0.02]">
-                <div 
-                    className="absolute inset-0" 
-                    style={{
-                        backgroundImage: `radial-gradient(circle at 1px 1px, #0A3044 1px, transparent 0)`,
-                        backgroundSize: '50px 50px'
-                    }}
-                />
-            </div>
+        <section id="esencia-section" className="relative w-full overflow-hidden bg-white">
+            {/* Decorative Elements */}
+            <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-gradient-to-br from-[#1B9EBA]/5 to-transparent blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-gradient-to-tr from-[#0A3044]/5 to-transparent blur-3xl translate-y-1/2 -translate-x-1/3 pointer-events-none" />
 
             <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 py-20 relative z-10">
-                {/* Section Header */}
-                <div className="text-center mb-16">
-                    <span className="inline-block text-sm font-bold text-[#1B9EBA] uppercase tracking-widest mb-4">
-                        Quiénes Somos
-                    </span>
-                    <h2 className="text-4xl md:text-5xl font-black text-[#0A3044] mb-6">
-                        Nuestra Esencia
+                {/* Premium Header */}
+                <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                    <div className="inline-flex items-center gap-3 mb-6">
+                        <div className="w-12 h-[2px] bg-gradient-to-r from-transparent to-[#1B9EBA]" />
+                        <span className="text-sm font-bold text-[#1B9EBA] uppercase tracking-[0.2em]">
+                            Quiénes Somos
+                        </span>
+                        <div className="w-12 h-[2px] bg-gradient-to-l from-transparent to-[#1B9EBA]" />
+                    </div>
+                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#0A3044] mb-6">
+                        Nuestra{' '}
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1B9EBA] to-[#0A3044]">
+                            Esencia
+                        </span>
                     </h2>
-                    <p className="text-xl text-[#334155] max-w-3xl mx-auto">
-                        Somos un equipo de magísteres, pedagogos y desarrolladores apasionados por transformar la educación mediante la inteligencia artificial.
+                    <p className="text-lg md:text-xl text-[#64748B] max-w-3xl mx-auto leading-relaxed">
+                        Somos un equipo de magísteres, pedagogos y desarrolladores{' '}
+                        <span className="text-[#1B9EBA] font-semibold">apasionados</span> por transformar 
+                        la educación mediante la inteligencia artificial.
                     </p>
                 </div>
 
-                {/* Content Grid */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                    {/* Left - Info */}
-                    <div className="space-y-8">
-                        {/* Mission */}
-                        <div className="bg-white rounded-2xl p-8 shadow-lg border border-[#1B9EBA]/10">
-                            <div className="flex items-start gap-4">
-                                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#1B9EBA] to-[#0A3044] flex items-center justify-center flex-shrink-0">
-                                    <i className="fa-solid fa-bullseye text-2xl text-white" />
-                                </div>
-                                <div>
-                                    <h3 className="text-xl font-bold text-[#0A3044] mb-2">Misión</h3>
-                                    <p className="text-[#334155] leading-relaxed">
-                                        Democratizar la educación de calidad mediante herramientas de inteligencia artificial que se adapten al estilo de aprendizaje único de cada estudiante.
-                                    </p>
-                                </div>
-                            </div>
+                {/* Main Content - 3 Column Layout */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+                    {/* Mission Card */}
+                    <div className={`group relative bg-gradient-to-br from-[#0A3044] to-[#1B9EBA] rounded-3xl p-8 text-white overflow-hidden transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '100ms' }}>
+                        <div className="absolute inset-0 opacity-10">
+                            <div className="absolute inset-0" style={{
+                                backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
+                                backgroundSize: '30px 30px'
+                            }} />
                         </div>
-
-                        {/* Vision */}
-                        <div className="bg-white rounded-2xl p-8 shadow-lg border border-[#1B9EBA]/10">
-                            <div className="flex items-start gap-4">
-                                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0A3044] to-[#1B9EBA] flex items-center justify-center flex-shrink-0">
-                                    <i className="fa-solid fa-eye text-2xl text-white" />
-                                </div>
-                                <div>
-                                    <h3 className="text-xl font-bold text-[#0A3044] mb-2">Visión</h3>
-                                    <p className="text-[#334155] leading-relaxed">
-                                        Ser la plataforma líder en Latinoamérica en la integración de metodologías pedagógicas con inteligencia artificial para formar profesionales del futuro.
-                                    </p>
-                                </div>
+                        <div className="relative z-10">
+                            <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                                <i className="fa-solid fa-bullseye text-3xl" />
                             </div>
+                            <h3 className="text-2xl font-bold mb-4">Misión</h3>
+                            <p className="text-white/90 leading-relaxed">
+                                Democratizar la educación de calidad mediante herramientas de inteligencia artificial que se adapten al estilo de aprendizaje único de cada estudiante.
+                            </p>
                         </div>
+                        <div className="absolute -bottom-4 -right-4 w-32 h-32 rounded-full bg-white/10 blur-2xl" />
+                    </div>
 
-                        {/* Values */}
-                        <div className="bg-gradient-to-br from-[#0A3044] to-[#1B9EBA] rounded-2xl p-8 text-white">
-                            <h3 className="text-xl font-bold mb-4">Nuestros Valores</h3>
+                    {/* Vision Card */}
+                    <div className={`group relative bg-white rounded-3xl p-8 shadow-xl border border-[#E2E8F0] overflow-hidden transition-all duration-700 hover:shadow-2xl hover:-translate-y-2 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '200ms' }}>
+                        <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-[#1B9EBA]/10 to-transparent rounded-full -translate-y-1/2 translate-x-1/2" />
+                        <div className="relative z-10">
+                            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#1B9EBA] to-[#0A3044] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                                <i className="fa-solid fa-eye text-3xl text-white" />
+                            </div>
+                            <h3 className="text-2xl font-bold text-[#0A3044] mb-4">Visión</h3>
+                            <p className="text-[#64748B] leading-relaxed">
+                                Ser la plataforma líder en Latinoamérica en la integración de metodologías pedagógicas con inteligencia artificial para formar profesionales del futuro.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Values Card */}
+                    <div className={`group relative bg-[#F8FAFC] rounded-3xl p-8 border border-[#E2E8F0] overflow-hidden transition-all duration-700 hover:border-[#1B9EBA]/30 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '300ms' }}>
+                        <div className="relative z-10">
+                            <h3 className="text-2xl font-bold text-[#0A3044] mb-6">Nuestros Valores</h3>
                             <div className="grid grid-cols-2 gap-4">
-                                {[
-                                    { icon: 'fa-lightbulb', text: 'Innovación' },
-                                    { icon: 'fa-heart', text: 'Pasión' },
-                                    { icon: 'fa-handshake', text: 'Compromiso' },
-                                    { icon: 'fa-users', text: 'Comunidad' }
-                                ].map((value, index) => (
-                                    <div key={index} className="flex items-center gap-3">
-                                        <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
-                                            <i className={`fa-solid ${value.icon} text-white`} />
+                                {values.map((value, index) => (
+                                    <div 
+                                        key={index}
+                                        className="flex items-center gap-3 p-3 bg-white rounded-xl shadow-sm group-hover:shadow-md transition-shadow"
+                                    >
+                                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#1B9EBA]/20 to-[#0A3044]/20 flex items-center justify-center">
+                                            <i className={`fa-solid ${value.icon} text-[#1B9EBA]`} />
                                         </div>
-                                        <span className="text-base font-semibold text-white">{value.text}</span>
+                                        <div>
+                                            <span className="block text-sm font-bold text-[#0A3044]">{value.text}</span>
+                                            <span className="block text-xs text-[#94A3B8]">{value.desc}</span>
+                                        </div>
                                     </div>
                                 ))}
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    {/* Right - Carousel */}
-                    <div className="relative">
-                        <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-[#1B9EBA]/10">
-                            {/* Images */}
-                            <div className="relative h-[350px] md:h-[450px] overflow-hidden">
-                                {slides.map((slide, index) => (
-                                    <div
-                                        key={index}
-                                        className={`absolute inset-0 transition-opacity duration-700 ${
-                                            index === currentSlide ? 'opacity-100' : 'opacity-0'
-                                        }`}
-                                    >
-                                        <img 
-                                            src={slide.image} 
-                                            alt={slide.title}
-                                            className="w-full h-full object-cover"
-                                        />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-[#0A3044]/80 via-transparent to-transparent" />
-                                        <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
-                                            <h3 className="text-2xl font-bold mb-2">{slide.title}</h3>
-                                            <p className="text-white/80">{slide.description}</p>
+                {/* Gallery Section */}
+                <div className={`relative transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '400ms' }}>
+                    {/* Section Subtitle */}
+                    <div className="flex items-center justify-center gap-4 mb-8">
+                        <div className="flex-1 h-[1px] bg-gradient-to-r from-transparent via-[#E2E8F0] to-transparent" />
+                        <span className="text-sm font-semibold text-[#64748B] uppercase tracking-wider">
+                            Nuestra Galería
+                        </span>
+                        <div className="flex-1 h-[1px] bg-gradient-to-r from-transparent via-[#E2E8F0] to-transparent" />
+                    </div>
+
+                    {/* Premium Carousel */}
+                    <div className="relative bg-[#0A3044] rounded-3xl overflow-hidden shadow-2xl">
+                        {/* Carousel Images */}
+                        <div className="relative h-[400px] md:h-[500px] lg:h-[550px] overflow-hidden">
+                            {slides.map((slide, index) => (
+                                <div
+                                    key={index}
+                                    className={`absolute inset-0 transition-all duration-1000 ${
+                                        index === currentSlide 
+                                            ? 'opacity-100 scale-100' 
+                                            : 'opacity-0 scale-105'
+                                    }`}
+                                >
+                                    <img 
+                                        src={slide.image} 
+                                        alt={slide.title}
+                                        className="w-full h-full object-cover"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-[#0A3044] via-[#0A3044]/30 to-transparent" />
+                                </div>
+                            ))}
+
+                            {/* Slide Content */}
+                            <div className="absolute inset-0 flex items-end">
+                                <div className="p-8 md:p-12 text-white w-full">
+                                    <div className="max-w-2xl">
+                                        <span className="inline-block px-4 py-1 bg-[#1B9EBA] rounded-full text-sm font-semibold mb-4">
+                                            {currentSlide + 1} / {slides.length}
+                                        </span>
+                                        <h3 className="text-3xl md:text-4xl font-bold mb-3">
+                                            {slides[currentSlide].title}
+                                        </h3>
+                                        <p className="text-lg text-white/80 mb-6">
+                                            {slides[currentSlide].description}
+                                        </p>
+                                        <div className="flex gap-2">
+                                            {slides.map((_, index) => (
+                                                <span 
+                                                    key={index}
+                                                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                                                        index === currentSlide 
+                                                            ? 'bg-[#1B9EBA] w-8' 
+                                                            : 'bg-white/40 hover:bg-white/60'
+                                                    }`}
+                                                />
+                                            ))}
                                         </div>
                                     </div>
-                                ))}
-                            </div>
-
-                            {/* Indicators */}
-                            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                                {slides.map((_, index) => (
-                                    <button
-                                        key={index}
-                                        onClick={() => goToSlide(index)}
-                                        className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                                            index === currentSlide 
-                                                ? 'bg-[#1B9EBA] w-8' 
-                                                : 'bg-white/50 hover:bg-white/70'
-                                        }`}
-                                    />
-                                ))}
+                                </div>
                             </div>
 
                             {/* Navigation Arrows */}
                             <button 
                                 onClick={() => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)}
-                                className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 flex items-center justify-center text-[#0A3044] hover:bg-white transition-all shadow-lg"
+                                className="absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white/20 hover:scale-110 transition-all duration-300"
                             >
-                                <i className="fa-solid fa-chevron-left" />
+                                <i className="fa-solid fa-chevron-left text-lg" />
                             </button>
                             <button 
                                 onClick={() => setCurrentSlide((prev) => (prev + 1) % slides.length)}
-                                className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 flex items-center justify-center text-[#0A3044] hover:bg-white transition-all shadow-lg"
+                                className="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white/20 hover:scale-110 transition-all duration-300"
                             >
-                                <i className="fa-solid fa-chevron-right" />
+                                <i className="fa-solid fa-chevron-right text-lg" />
                             </button>
-                        </div>
 
-                        {/* Stats */}
-                        <div className="grid grid-cols-3 gap-3 mt-4">
-                            {[
-                                { value: '6,000+', label: 'Estudiantes' },
-                                { value: '10+', label: 'Años' },
-                                { value: '98%', label: 'Satisfacción' }
-                            ].map((stat, index) => (
-                                <div key={index} className="bg-white rounded-xl py-3 px-2 text-center shadow-md border border-[#1B9EBA]/10">
-                                    <div className="text-xl md:text-2xl font-black text-[#1B9EBA]">{stat.value}</div>
-                                    <div className="text-xs text-[#64748B] uppercase tracking-wider">{stat.label}</div>
-                                </div>
-                            ))}
+                            {/* Progress Bar */}
+                            <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20">
+                                <div 
+                                    className="h-full bg-gradient-to-r from-[#1B9EBA] to-[#0A3044] transition-all duration-300"
+                                    style={{ width: `${((currentSlide + 1) / slides.length) * 100}%` }}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
