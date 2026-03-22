@@ -24,7 +24,7 @@ const Aliados = memo(() => {
                     setIsVisible(true);
                 }
             },
-            { threshold: 0.3 }
+            { threshold: 0.2 }
         );
 
         if (sectionRef.current) {
@@ -36,81 +36,67 @@ const Aliados = memo(() => {
 
     return (
         <section ref={sectionRef} className="relative w-full py-20 overflow-hidden bg-gradient-to-b from-white to-[#F8FAFC]">
-            {/* Premium Header */}
-            <div className={`max-w-7xl mx-auto px-6 lg:px-8 mb-12 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-                <div className="text-center">
-                    <span className="inline-block text-sm font-bold text-[#1B9EBA] uppercase tracking-widest mb-4">
-                        Confían en nosotros
-                    </span>
-                    <h2 className="text-3xl md:text-4xl font-black text-[#0A3044] mb-4">
-                        Aliados Estratégicos
+            {/* Background Decoration */}
+            <div className="absolute inset-0 opacity-[0.02]" style={{
+                backgroundImage: `radial-gradient(circle at 1px 1px, #0A3044 1px, transparent 0)`,
+                backgroundSize: '40px 40px'
+            }} />
+
+            <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
+                {/* Premium Header */}
+                <div className={`text-center mb-12 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                    <div className="inline-flex items-center gap-3 mb-4">
+                        <div className="w-10 h-[2px] bg-gradient-to-r from-transparent to-[#1B9EBA]" />
+                        <span className="text-sm font-bold text-[#1B9EBA] uppercase tracking-widest">
+                            Confían en nosotros
+                        </span>
+                        <div className="w-10 h-[2px] bg-gradient-to-l from-transparent to-[#1B9EBA]" />
+                    </div>
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-[#0A3044] mb-4">
+                        Nuestros{' '}
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1B9EBA] to-[#0A3044]">
+                            Aliados Estratégicos
+                        </span>
                     </h2>
-                    <p className="text-[#64748B] max-w-2xl mx-auto">
-                        Las mejores instituciones y empresas tecnológicas del mundo trabajan con nosotros.
+                    <p className="text-[#64748B] max-w-2xl mx-auto text-lg">
+                        Las mejores instituciones y empresas tecnológicas del mundo trabajan con nosotros para garantizar una formación de excelencia.
                     </p>
                 </div>
-            </div>
 
-            {/* Carousel */}
-            <div className="relative overflow-hidden">
-                {/* Gradient Overlays */}
-                <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-20 pointer-events-none" />
-                <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent z-20 pointer-events-none" />
+                {/* Single Carousel */}
+                <div className="relative overflow-hidden mb-12">
+                    {/* Gradient Overlays */}
+                    <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-white to-transparent z-20 pointer-events-none" />
+                    <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-white to-transparent z-20 pointer-events-none" />
 
-                {/* Top Row - Moving Right */}
-                <div className="flex mb-4">
-                    <div className={`flex gap-8 animate-marquee-slow ${isVisible ? 'opacity-100' : 'opacity-0'} transition-opacity duration-1000`}>
-                        {[...aliados, ...aliados].map((aliado, index) => (
-                            <div 
-                                key={`top-${aliado.name}-${index}`}
-                                className="flex-shrink-0"
-                            >
-                                <div className="w-[160px] h-[100px] bg-white rounded-2xl shadow-lg border border-[#E2E8F0] flex flex-col items-center justify-center gap-2 hover:shadow-xl hover:border-[#1B9EBA]/30 hover:scale-105 transition-all duration-300 cursor-pointer">
-                                    <div 
-                                        className="w-12 h-12 rounded-xl flex items-center justify-center"
-                                        style={{ backgroundColor: `${aliado.color}20` }}
-                                    >
-                                        <i 
-                                            className={`fa-solid ${aliado.icon} text-2xl`}
-                                            style={{ color: aliado.color }}
-                                        />
+                    {/* Carousel Container */}
+                    <div className={`flex overflow-hidden transition-opacity duration-1000 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+                        <div className="flex gap-8 animate-marquee py-4">
+                            {[...aliados, ...aliados, ...aliados].map((aliado, index) => (
+                                <div 
+                                    key={`${aliado.name}-${index}`}
+                                    className="flex-shrink-0 group"
+                                >
+                                    <div className="w-[180px] h-[120px] bg-white rounded-2xl shadow-lg border border-[#E2E8F0] flex flex-col items-center justify-center gap-3 hover:shadow-xl hover:border-[#1B9EBA]/30 hover:scale-105 transition-all duration-300 cursor-pointer">
+                                        <div 
+                                            className="w-14 h-14 rounded-xl flex items-center justify-center"
+                                            style={{ backgroundColor: `${aliado.color}15` }}
+                                        >
+                                            <i 
+                                                className={`fa-solid ${aliado.icon} text-2xl`}
+                                                style={{ color: aliado.color }}
+                                            />
+                                        </div>
+                                        <span className="text-sm font-bold text-[#0A3044]">{aliado.name}</span>
                                     </div>
-                                    <span className="text-sm font-bold text-[#0A3044]">{aliado.name}</span>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
                 </div>
 
-                {/* Bottom Row - Moving Left */}
-                <div className="flex">
-                    <div className={`flex gap-8 animate-marquee-slow-reverse ${isVisible ? 'opacity-100' : 'opacity-0'} transition-opacity duration-1000`}>
-                        {[...aliados.reverse(), ...aliados.reverse()].map((aliado, index) => (
-                            <div 
-                                key={`bottom-${aliado.name}-${index}`}
-                                className="flex-shrink-0"
-                            >
-                                <div className="w-[160px] h-[100px] bg-white rounded-2xl shadow-lg border border-[#E2E8F0] flex flex-col items-center justify-center gap-2 hover:shadow-xl hover:border-[#1B9EBA]/30 hover:scale-105 transition-all duration-300 cursor-pointer">
-                                    <div 
-                                        className="w-12 h-12 rounded-xl flex items-center justify-center"
-                                        style={{ backgroundColor: `${aliado.color}20` }}
-                                    >
-                                        <i 
-                                            className={`fa-solid ${aliado.icon} text-2xl`}
-                                            style={{ color: aliado.color }}
-                                        />
-                                    </div>
-                                    <span className="text-sm font-bold text-[#0A3044]">{aliado.name}</span>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-
-            {/* Trust Indicators */}
-            <div className={`max-w-7xl mx-auto px-6 lg:px-8 mt-12 transition-all duration-700 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-                <div className="flex flex-wrap justify-center gap-4">
+                {/* Trust Badges */}
+                <div className={`flex flex-wrap justify-center gap-4 transition-all duration-700 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                     {[
                         { icon: 'fa-award', text: 'Certificaciones Internacionales' },
                         { icon: 'fa-shield-halved', text: 'Estándares de Calidad' },
@@ -118,10 +104,12 @@ const Aliados = memo(() => {
                     ].map((badge, index) => (
                         <div 
                             key={index}
-                            className="flex items-center gap-2 px-5 py-2 bg-white rounded-full shadow-sm border border-[#E2E8F0]"
+                            className="flex items-center gap-3 px-6 py-3 bg-white rounded-full shadow-md border border-[#E2E8F0] hover:shadow-lg hover:border-[#1B9EBA]/30 transition-all duration-300"
                         >
-                            <i className={`fa-solid ${badge.icon} text-[#1B9EBA]`} />
-                            <span className="text-sm font-medium text-[#334155]">{badge.text}</span>
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1B9EBA] to-[#0A3044] flex items-center justify-center">
+                                <i className={`fa-solid ${badge.icon} text-white`} />
+                            </div>
+                            <span className="text-sm font-semibold text-[#334155]">{badge.text}</span>
                         </div>
                     ))}
                 </div>
