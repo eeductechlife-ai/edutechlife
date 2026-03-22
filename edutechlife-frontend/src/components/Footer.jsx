@@ -27,7 +27,7 @@ export default function Footer() {
               Transformando la educación con inteligencia artificial y metodologías 
               pedagógicas de vanguardia para las nuevas generaciones.
             </p>
-            <div className="flex gap-3">
+            <div className="flex gap-3 justify-center md:justify-start">
               {[
                 { icon: 'fa-brands fa-facebook-f', label: 'Facebook' },
                 { icon: 'fa-brands fa-instagram', label: 'Instagram' },
@@ -48,21 +48,24 @@ export default function Footer() {
 
           <div>
             <h4 className="font-display font-bold text-white text-sm uppercase tracking-wider mb-4">
-              Plataforma
+              Herramientas
             </h4>
             <ul className="space-y-2">
               {[
-                'IA Lab con Valerio',
-                'Test VAK',
-                'Proyectos SenaTIC',
-                'Certificaciones',
-                'Recursos Educativos',
+                { label: 'IA Lab con Valerio', view: 'ialab' },
+                { label: 'SmartBoard', view: 'neuroentorno' },
+                { label: 'Test VAK', view: 'neuroentorno' },
+                { label: 'ROI Calculator', view: 'consultoria' },
+                { label: 'Automation Architect', view: 'automation' },
               ].map((item, i) => (
                 <li key={i}>
-                  <a href="#" className="text-white/60 hover:text-white transition-colors duration-200 text-sm flex items-center gap-2 group">
-                    <span className="w-1 h-1 rounded-full bg-white/30 group-hover:bg-white/60 transition-colors" />
-                    {item}
-                  </a>
+                  <button 
+                    onClick={() => window.dispatchEvent(new CustomEvent('navigate', { detail: item.view }))}
+                    className="text-white/60 hover:text-[#1B9EBA] transition-colors duration-200 text-sm flex items-center gap-2 group w-full text-left"
+                  >
+                    <span className="w-1 h-1 rounded-full bg-white/30 group-hover:bg-[#1B9EBA] transition-colors" />
+                    {item.label}
+                  </button>
                 </li>
               ))}
             </ul>
@@ -70,21 +73,24 @@ export default function Footer() {
 
           <div>
             <h4 className="font-display font-bold text-white text-sm uppercase tracking-wider mb-4">
-              Empresa
+              Recursos
             </h4>
             <ul className="space-y-2">
               {[
-                'Sobre Nosotros',
-                'Metodología VAK',
-                'Alianzas Estratégicas',
-                'Blog Educativo',
-                'Trabaja con Nosotros',
+                { label: 'Metodología VAK', href: '#vak' },
+                { label: 'Proyectos SenaTIC', view: 'proyectos' },
+                { label: 'Certificaciones', href: '#certificaciones' },
+                { label: 'Blog Educativo', href: '#blog' },
+                { label: 'Documentación', href: '#docs' },
               ].map((item, i) => (
                 <li key={i}>
-                  <a href="#" className="text-white/60 hover:text-white transition-colors duration-200 text-sm flex items-center gap-2 group">
-                    <span className="w-1 h-1 rounded-full bg-white/30 group-hover:bg-white/60 transition-colors" />
-                    {item}
-                  </a>
+                  <button 
+                    onClick={() => item.view && window.dispatchEvent(new CustomEvent('navigate', { detail: item.view }))}
+                    className="text-white/60 hover:text-[#1B9EBA] transition-colors duration-200 text-sm flex items-center gap-2 group w-full text-left"
+                  >
+                    <span className="w-1 h-1 rounded-full bg-white/30 group-hover:bg-[#1B9EBA] transition-colors" />
+                    {item.label}
+                  </button>
                 </li>
               ))}
             </ul>
@@ -95,7 +101,7 @@ export default function Footer() {
               Newsletter
             </h4>
             <p className="text-white/60 text-sm mb-3">
-              Recibe novidades educativas y actualizaciones de la plataforma.
+              Recibe novedades educativas y actualizaciones de la plataforma.
             </p>
             {subscribed ? (
                <div className="bg-white/10 rounded-xl p-4 text-center">
@@ -123,16 +129,16 @@ export default function Footer() {
            </div>
         </div>
       <div className="border-t border-white/10 mt-8 pt-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
             <p className="text-white/50 text-sm">
-              © 2024 Edutechlife. Todos los derechos reservados.
+              © 2026 Edutechlife. Todos los derechos reservados.
             </p>
-            <div className="flex gap-6">
+            <div className="flex flex-wrap justify-center gap-4 md:gap-6">
               {['Política de Privacidad', 'Términos de Uso', 'Contacto'].map((item, i) => (
                 <a
                   key={i}
                   href="#"
-                  className="text-white/50 hover:text-white text-sm transition-colors"
+                  className="text-white/50 hover:text-[#1B9EBA] text-sm transition-colors"
                 >
                   {item}
                 </a>

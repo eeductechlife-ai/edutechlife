@@ -1,206 +1,84 @@
-import { useState, useEffect, useRef } from 'react';
+import { memo } from 'react';
 import SectionWrapper from './SectionWrapper';
 
-const FinalCTA = ({ onNavigate }) => {
-    const [isVisible, setIsVisible] = useState(false);
-    const [email, setEmail] = useState('');
-    const [submitted, setSubmitted] = useState(false);
-    const sectionRef = useRef(null);
-
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) setIsVisible(true);
-            },
-            { threshold: 0.2 }
-        );
-
-        if (sectionRef.current) observer.observe(sectionRef.current);
-        return () => observer.disconnect();
-    }, []);
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (email.trim()) {
-            setSubmitted(true);
-            setTimeout(() => {
-                setEmail('');
-                setSubmitted(false);
-            }, 3000);
-        }
-    };
-
+const FinalCTA = memo(({ onNavigate }) => {
     return (
         <SectionWrapper spacing="last">
-            <section
-                ref={sectionRef}
-                 className="w-full relative px-6 lg:px-8 overflow-hidden"
-                style={{
-                    background: 'linear-gradient(135deg, #ffffff 0%, #F8FAFC 50%, #ffffff 100%)',
-                }}
-            >
-            {/* Background Elements */}
-            <div className="absolute inset-0">
-                {/* Grid */}
-                <div className="grid-bg-3d" />
-                
-                {/* Orbs */}
-                <div className="orb orb-primary" style={{ top: '10%', right: '20%', width: '500px', height: '500px' }} />
-                <div className="orb orb-secondary" style={{ bottom: '10%', left: '10%', width: '400px', height: '400px' }} />
-                
-                {/* Particles */}
-                <div className="particle-container">
-                    {Array.from({ length: 30 }).map((_, i) => (
-                        <div
-                            key={i}
-                            className="particle"
-                            style={{
-                                left: `${Math.random() * 100}%`,
-                                top: `${Math.random() * 100}%`,
-                                animationDelay: `${Math.random() * 6}s`,
-                                animationDuration: `${4 + Math.random() * 4}s`,
-                            }}
-                        />
-                    ))}
-                </div>
-            </div>
-
-            <div className="relative z-10 max-w-4xl mx-auto text-center">
-                {/* Badge */}
-                <div
-                    className={`inline-flex items-center gap-3 px-6 py-3 rounded-full mb-8 transition-all duration-1000 ${
-                        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                    }`}
-                    style={{
-                        background: 'rgba(77, 168, 196, 0.15)',
-                        border: '1px solid rgba(77, 168, 196, 0.3)',
-                    }}
-                >
-                    <div className="w-2 h-2 rounded-full bg-[#66CCCC] animate-pulse" />
-                    <span className="font-mono text-xs font-semibold text-[#66CCCC] uppercase tracking-wider">
-                        Acceso Abierto - Test VAK Gratuito
-                    </span>
-                </div>
-
-                {/* Title */}
-                <h2
-                    className={`font-montserrat text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 transition-all duration-1000 delay-150 ${
-                        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                    }`}
-                >
-                    Transforma Tu Futuro
-                    <span className="block mt-2" style={{
-                        background: 'linear-gradient(135deg, #4DA8C4 0%, #66CCCC 50%, #B2D8E5 100%)',
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
-                    }}>
-                        Con Educación de Élite
-                    </span>
-                </h2>
-
-                {/* Subtitle */}
-                <p
-                    className={`text-white/70 text-lg md:text-xl max-w-2xl mx-auto mb-10 transition-all duration-1000 delay-300 ${
-                        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                    }`}
-                >
-                    Únete a más de 6,000 estudiantes que ya están revolucionando su aprendizaje con metodologías VAK, STEAM y la inteligencia artificial más avanzada del mercado.
-                </p>
-
-                {/* CTA Buttons */}
-                <div
-                    className={`flex flex-col sm:flex-row gap-4 justify-center mb-12 transition-all duration-1000 delay-450 ${
-                        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                    }`}
-                >
-                    <button
-                        onClick={() => onNavigate && onNavigate('neuroentorno')}
-                        className="group relative px-8 py-4 rounded-full font-montserrat font-bold text-white overflow-hidden transition-all duration-300 hover:-translate-y-1"
+            <section className="w-full relative overflow-hidden bg-gradient-to-br from-[#0A3044] via-[#0A3044] to-[#1B9EBA]">
+                {/* Background Pattern */}
+                <div className="absolute inset-0 opacity-10">
+                    <div 
+                        className="absolute inset-0" 
                         style={{
-                            background: 'linear-gradient(135deg, #4DA8C4, #66CCCC)',
-                            boxShadow: '0 8px 30px rgba(77, 168, 196, 0.4)',
+                            backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
+                            backgroundSize: '50px 50px'
                         }}
-                    >
-                        <span className="relative z-10 flex items-center justify-center gap-3">
-                            Realizar Test VAK Gratis
-                            <i className="fa-solid fa-arrow-right text-sm group-hover:translate-x-1 transition-transform" />
-                        </span>
-                        <div
-                            className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"
-                            style={{
-                                background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
-                            }}
-                        />
-                    </button>
-
-                    <button
-                        onClick={() => onNavigate && onNavigate('consultoria')}
-                        className="px-8 py-4 rounded-full font-montserrat font-bold text-white border-2 border-white/20 hover:border-white/40 transition-all duration-300 hover:-translate-y-1"
-                    >
-                        Solicitar Consultoría
-                    </button>
+                    />
                 </div>
 
-                {/* Newsletter */}
-                <div
-                    className={`max-w-md mx-auto transition-all duration-1000 delay-600 ${
-                        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                    }`}
-                >
-                    <p className="text-white/50 text-sm mb-4">
-                        ¿Quieres estar al día con las últimas novedades?
-                    </p>
-                    <form onSubmit={handleSubmit} className="flex gap-3">
-                        <div className="relative flex-1">
-                            <input
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                placeholder="tu@correo.com"
-                                className="w-full px-6 py-4 rounded-full bg-white/10 border border-white/20 text-white placeholder-white/40 outline-none focus:border-[#4DA8C4] transition-colors"
-                            />
+                {/* Decorative Orbs */}
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-[#1B9EBA]/20 blur-3xl" />
+                <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-[#1B9EBA]/10 blur-3xl" />
+
+                <div className="container-premium relative z-10 mx-auto px-6 lg:px-8 py-20">
+                    <div className="max-w-4xl mx-auto text-center">
+                        {/* Badge */}
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full mb-8 backdrop-blur-sm border border-white/10">
+                            <span className="w-2 h-2 bg-[#1B9EBA] rounded-full animate-pulse" />
+                            <span className="text-white/80 text-sm font-medium">Únete a la revolución educativa</span>
                         </div>
-                        <button
-                            type="submit"
-                            className="px-6 py-4 rounded-full font-montserrat font-bold text-sm bg-white text-[#004B63] hover:bg-[#4DA8C4] hover:text-white transition-all duration-300"
-                        >
-                            {submitted ? (
-                                <i className="fa-solid fa-check" />
-                            ) : (
-                                'Suscribirse'
-                            )}
-                        </button>
-                    </form>
-                    <p className="text-white/30 text-xs mt-3">
-                        Respetamos tu privacidad. Sin spam, lo prometemos.
-                    </p>
-                </div>
 
-                {/* Trust Badges */}
-                <div
-                    className={`flex flex-wrap justify-center gap-6 mt-12 pt-12 border-t border-white/10 transition-all duration-1000 delay-750 ${
-                        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                    }`}
-                >
-                    {[
-                        { icon: 'fa-shield-halved', text: 'Pago Seguro' },
-                        { icon: 'fa-certificate', text: 'Certificados IBM' },
-                        { icon: 'fa-headset', text: 'Soporte 24/7' },
-                        { icon: 'fa-users', text: '6,000+ Alumnos' },
-                    ].map((badge, i) => (
-                        <div
-                            key={i}
-                            className="flex items-center gap-2 text-white/60"
-                        >
-                            <i className={`fa-solid ${badge.icon}`} />
-                            <span className="text-sm font-medium">{badge.text}</span>
+                        {/* Title */}
+                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
+                            Transforma la Educación
+                            <span className="block text-[#1B9EBA]">con Inteligencia Artificial</span>
+                        </h2>
+
+                        {/* Description */}
+                        <p className="text-xl text-white/80 max-w-2xl mx-auto mb-12 leading-relaxed">
+                            Más de 6,000 estudiantes ya están aprendiendo con nuestras metodologías de vanguardia. 
+                            ¿Listo para ser parte del futuro de la educación?
+                        </p>
+
+                        {/* CTAs */}
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+                            <button 
+                                onClick={() => onNavigate('consultoria')}
+                                className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#1B9EBA] text-white font-bold rounded-full transition-all duration-300 hover:bg-white hover:text-[#0A3044] hover:scale-105"
+                                style={{ boxShadow: '0 10px 40px rgba(27, 158, 186, 0.4)' }}
+                            >
+                                <i className="fa-solid fa-rocket text-lg" />
+                                <span className="text-lg">Solicitar Consultoría</span>
+                            </button>
+                            <button 
+                                onClick={() => onNavigate('ialab')}
+                                className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-white/10 text-white font-bold rounded-full border-2 border-white/30 transition-all duration-300 hover:bg-white hover:text-[#0A3044] backdrop-blur-sm"
+                            >
+                                <i className="fa-solid fa-play text-lg" />
+                                <span className="text-lg">Ver Demo Gratuita</span>
+                            </button>
                         </div>
-                    ))}
+
+                        {/* Trust Indicators */}
+                        <div className="flex flex-wrap justify-center gap-8 text-white/60">
+                            {[
+                                { icon: 'fa-shield-halved', text: 'Certificados Globally' },
+                                { icon: 'fa-clock', text: 'Soporte 24/7' },
+                                { icon: 'fa-users', text: '6,000+ Estudiantes' }
+                            ].map((item, index) => (
+                                <div key={index} className="flex items-center gap-2">
+                                    <i className={`fa-solid ${item.icon} text-[#1B9EBA]`} />
+                                    <span className="text-sm font-medium">{item.text}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
         </SectionWrapper>
     );
-};
+});
+
+FinalCTA.displayName = 'FinalCTA';
 
 export default FinalCTA;

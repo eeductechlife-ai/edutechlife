@@ -1,11 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import IALab from './components/IALab';
 import Hero from './components/Hero';
-import AllianceMarquee from './components/AllianceMarquee';
-import StatsBar from './components/StatsBar';
-import About from './components/About';
 import Ecosystem from './components/Ecosystem';
-import ProcessSection from './components/ProcessSection';
+import FinalCTA from './components/FinalCTA';
 import Footer from './components/Footer';
 import NeuroEntorno from './components/NeuroEntorno';
 import ProyectosNacional from './components/ProyectosNacional';
@@ -17,7 +14,6 @@ import { callDeepseek } from './utils/api';
 const App = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [view, setView] = useState('landing');
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [botOpen, setBotOpen] = useState(false);
     const [botMsgs, setBotMsgs] = useState([{ 
         role: 'assistant', 
@@ -34,6 +30,15 @@ const App = () => {
     useEffect(() => {
         if (botOpen) scrollToBottom();
     }, [botMsgs, botOpen]);
+
+    useEffect(() => {
+        const handleNavigate = (e) => {
+            setView(e.detail);
+            window.scrollTo(0, 0);
+        };
+        window.addEventListener('navigate', handleNavigate);
+        return () => window.removeEventListener('navigate', handleNavigate);
+    }, []);
 
     const handleBotSend = async () => {
         if (!botInput.trim()) return;
@@ -57,21 +62,12 @@ const App = () => {
 
     const handleNavigate = useCallback(v => {
         setView(v);
-        setMobileMenuOpen(false);
         window.scrollTo(0, 0);
     }, []);
 
     const handleLoadingComplete = useCallback(() => {
         setIsLoading(false);
     }, []);
-
-    const scrollToSection = (sectionId) => {
-        setMobileMenuOpen(false);
-        const element = document.getElementById(sectionId);
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
-        }
-    };
 
     return (
         <div className="min-h-screen flex flex-col bg-[#F8FAFC] text-[#334155]" style={{ fontFamily: "'Open Sans', sans-serif" }}>
@@ -81,7 +77,7 @@ const App = () => {
             )}
 
             {/* Header - Navigation Premium */}
-            <header className="sticky top-0 left-0 right-0 z-[1000] glass-light border-b border-white/10 shadow-sm">
+            <header className="sticky top-0 left-0 right-0 z-[1000] bg-white/95 backdrop-blur-md border-b border-[#E2E8F0] shadow-sm">
                     <div className="container-premium flex items-center justify-between py-3">
                     {/* Logo Premium */}
                     <button 
@@ -99,16 +95,15 @@ const App = () => {
                     {/* CTA Button Premium */}
                     <button 
                         onClick={() => handleNavigate('ialab')}
-                        className="flex items-center gap-2 px-5 py-2 rounded-full font-display font-bold text-sm text-white transition-all duration-300 hover-lift hover-glow"
+                        className="flex items-center gap-2 px-5 py-2 rounded-full font-display font-bold text-sm text-white transition-all duration-300 hover:opacity-90"
                         style={{ 
-                            background: 'linear-gradient(135deg, #4DA8C4, #66CCCC)',
-                            boxShadow: '0 4px 15px rgba(77, 168, 196, 0.3)'
+                            background: 'linear-gradient(135deg, #1B9EBA, #0A3044)',
+                            boxShadow: '0 4px 15px rgba(27, 158, 186, 0.3)'
                         }}
                     >
                         <span className="flex items-center gap-2">
                             <i className="fa-solid fa-rocket text-xs" />
                             Comenzar
-                            <i className="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1" />
                         </span>
                     </button>
                 </div>
@@ -118,12 +113,9 @@ const App = () => {
             <main className="flex-grow">
                 {view === 'landing' && (
                      <>
-                        <Hero />
-                        <AllianceMarquee />
-                        <StatsBar />
-                        <About />
+                        <Hero onNavigate={handleNavigate} />
                         <Ecosystem onExplore={handleNavigate} />
-                        <ProcessSection />
+                        <FinalCTA onNavigate={handleNavigate} />
                     </>
                 )}
 
@@ -136,72 +128,48 @@ const App = () => {
             </main>
 
             {/* Floating Chatbot */}
-            <div style={{ position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 10000, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '1rem' }}>
+            <div className="chatbot-container">
                 {botOpen && (
-                    <div style={{ background: '#0B0F19', border: '1px solid rgba(0,194,224,0.3)', borderRadius: '1rem', width: '350px', height: '450px', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-                        <div style={{ padding: '1rem', background: 'linear-gradient(135deg, #004B63, #4DA8C4)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                <div style={{ width: 32, height: 32, background: 'rgba(255,255,255,0.2)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                    <i className="fa-solid fa-robot" style={{ color: 'white', fontSize: '0.9rem' }}></i>
-                                </div>
-                                <span style={{ fontWeight: 600, color: 'white' }}>Nico</span>
+                    <div className="chatbot-window">
+                        <div className="chatbot-header">
+                            <div className="chatbot-avatar">
+                                <i className="fa-solid fa-robot"></i>
                             </div>
-                            <button onClick={() => setBotOpen(false)} style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer' }}>
+                            <span>Nico</span>
+                            <button onClick={() => setBotOpen(false)} className="chatbot-close">
                                 <i className="fa-solid fa-xmark"></i>
                             </button>
                         </div>
-                        <div style={{ flex: 1, overflowY: 'auto', padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                        <div className="chatbot-messages">
                             {botMsgs.map((msg, i) => (
-                                <div key={i} style={{ 
-                                    alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start', 
-                                    maxWidth: '80%',
-                                    background: msg.role === 'user' ? '#4DA8C4' : 'rgba(255,255,255,0.1)',
-                                    padding: '0.75rem 1rem',
-                                    borderRadius: '1rem',
-                                    fontSize: '0.9rem',
-                                    color: 'white'
-                                }}>
+                                <div key={i} className={`chatbot-msg ${msg.role}`}>
                                     {msg.text}
                                 </div>
                             ))}
                             {botLoading && (
-                                <div style={{ alignSelf: 'flex-start', background: 'rgba(255,255,255,0.1)', padding: '0.75rem 1rem', borderRadius: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                <div className="chatbot-loading">
                                     <MiniLoader size="sm" color="white" />
                                 </div>
                             )}
                             <div ref={botMsgsEndRef} />
                         </div>
-                        <div style={{ padding: '1rem', borderTop: '1px solid rgba(255,255,255,0.1)', display: 'flex', gap: '0.5rem' }}>
+                        <div className="chatbot-input">
                             <input 
                                 type="text" 
                                 value={botInput} 
                                 onChange={(e) => setBotInput(e.target.value)}
                                 onKeyDown={(e) => e.key === 'Enter' && handleBotSend()}
                                 placeholder="Escribe un mensaje..."
-                                style={{ flex: 1, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '100px', padding: '0.75rem 1rem', color: 'white', outline: 'none' }}
                             />
-                            <button onClick={handleBotSend} style={{ background: '#4DA8C4', border: 'none', borderRadius: '50%', width: 40, height: 40, color: 'white', cursor: 'pointer' }}>
+                            <button onClick={handleBotSend}>
                                 <i className="fa-solid fa-paper-plane"></i>
                             </button>
                         </div>
                     </div>
                 )}
                 <button 
+                    className="chatbot-toggle"
                     onClick={() => setBotOpen(!botOpen)} 
-                    style={{ 
-                        width: 56, 
-                        height: 56, 
-                        borderRadius: '50%', 
-                        background: 'linear-gradient(135deg, #4DA8C4, #66CCCC)', 
-                        border: 'none', 
-                        color: 'white', 
-                        fontSize: '1.3rem', 
-                        cursor: 'pointer',
-                        boxShadow: '0 4px 20px rgba(77,168,196,0.4)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }}
                 >
                     <i className={`fa-solid ${botOpen ? 'fa-xmark' : 'fa-comment-dots'}`}></i>
                 </button>
