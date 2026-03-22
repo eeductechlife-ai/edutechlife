@@ -156,7 +156,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   useEffect(() => {
     if (phase === 'calibration' && messages.length === 0) {
       setTimeout(() => {
-        addMessage('assistant', "¡Hola, qué tal! 😊 Soy el Dr. Valerio, tu asesor psicopedagógico virtual. Estoy muy contento de que estés aquí hoy. Vamos a hacer algo muy interesante: descubrir cómo aprendes tú de la mejor manera. Pero primero, cuéntame, ¿cómo te llamas?");
+        addMessage('assistant', "¡Hola, mi amor! 🥰 Qué alegría tenerte aquí conmigo el día de hoy. Soy Valeria, tu asesora neuropedagógica virtual. Estoy súper emocionada de conocerte y ayudarte a descubrir cómo aprendes tú de la mejor manera. Pero antes, cuéntame, ¿cómo te llamas?");
       }, 500);
     }
   }, [phase]);
@@ -255,13 +255,16 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     addMessage('user', option.text);
     
     const responsePhrases = [
-      "¡Muy buena esa! Veo que tienes las cosas claras. 👏",
-      "¡Excelente! Así me gusta, con decisión. 💪",
-      "¡Perfecto! Eso dice mucho de ti. 🎯",
-      "¡Qué interesante! Cada respuesta me ayuda a conocerte mejor. 💡",
-      "¡Genial! Continuamos con la siguiente. 😊",
-      "¡Claro que sí! Vamos bien. 🌟",
-      "¡Así se hace! Sigamos adelante. 🚀"
+      "¡Ay, qué buena esa! Me encanta cómo piensas. 👏",
+      "¡Perfecto, mi amor! Así se hace, con decisión. 💪",
+      "¡Qué padre! Eso me dice mucho de ti. 🎯",
+      "¡Ay, qué interesante! Cada respuesta me ayuda a conocerte más. 💡",
+      "¡Genial! Sigamos con la siguiente. 😊",
+      "¡Claro que sí! Vamos super bien. 🌟",
+      "¡Así se hace! Adelante nomás. 🚀",
+      "¡Uy, qué cool! Continuamos. ✨",
+      "¡Ay, sí! Eso está bien chido. 💫",
+      "¡Perfectito! Aquí va la siguiente. 🎈"
     ];
     
     const randomPhrase = responsePhrases[Math.floor(Math.random() * responsePhrases.length)];
@@ -269,13 +272,13 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     setTimeout(() => {
       if (currentQuestion < questions.length - 1) {
         setCurrentQuestion(prev => prev + 1);
-        addMessage('assistant', `${randomPhrase} Aquí va la siguiente pregunta: ${questions[currentQuestion + 1].text}`);
+        addMessage('assistant', `${randomPhrase} Aquí te va la siguiente: ${questions[currentQuestion + 1].text}`);
         
         if (voiceMode) {
           setTimeout(() => startListeningForUser(), 3000);
         }
       } else {
-        addMessage('assistant', `${randomPhrase} ¡Uf, ya terminamos todas las preguntas! Ahora déjame pensar un poquito y te doy tu diagnóstico personalizado. 🧠✨`);
+        addMessage('assistant', `${randomPhrase} ¡Ay, ya terminamos todas las preguntas! ¡Qué chido! Ahora déjame pensar un poquito y te preparo tu diagnóstico personalizado. 🧠✨`);
         
         setTimeout(() => {
           analyzeResults(newAnswers);
@@ -292,7 +295,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     
     setTimeout(() => {
       setIsTyping(false);
-      addMessage('assistant', `¡Qué gusto, ${studentName}! 🥰 Me encanta tu nombre. Bueno, ya somos conocidos. Ahora dime, ¿cómo te sientes el día de hoy? Piensa en cómo estás, ¿estás con buena energía, un poco nervioso, o quizás cansado?`);
+      addMessage('assistant', `¡Ay, qué bonito nombre, ${studentName}! 🥰 Me encanta. Ya somos conociditos entonces, ¿no? Bueno, cuéntame ahora, ¿cómo te sientes el día de hoy? Piensa bien... ¿estás con buena energía, quizás un poquito nervioso, o tal vez algo cansado/a?`);
     }, 1000);
   };
 
@@ -303,12 +306,14 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     setIsTyping(true);
     
     const moodResponses = {
-      'contento': '¡Qué wonderful! Me alegra mucho que estés con buena energía. 😊',
-      'feliz': '¡Eso es genial! La felicidad es el mejor combustible para aprender. 🎉',
-      'emocionado': '¡Qué emoción! La emoción es perfecta para descubrir cosas nuevas. 🚀',
-      'nervioso': 'Tranquilo, no te preocupes. Es totally normal sentirse así, y vamos a pasarla genial. 💪',
-      'cansado': 'Entiendo perfectamente. A veces uno llega cansado, pero no te preocupes, que esto es bem tranquilo. 😌',
-      'estresado': 'Bueno, respira hondo y relajémonos. Esto va a ser muy interesante y útil para ti. 🌟',
+      'contento': '¡Ay, qué padre! 😊 Me pone súper feliz saber que estás así. ¡Eso es perfect para aprender cosas nuevas!',
+      'feliz': '¡Eso es maravillo! 🎉 La felicidad es como el super combustible para el cerebro, ¿sabías?',
+      'emocionado': '¡Uy, qué emoción! 🚀 A mí también me emociona esto. Vamos a pasarla genial.',
+      'nervioso': '¡Uy, comprendo mi amor! 😌 Los nervios son normales, sobre todo cuando uno va a hacer algo nuevo. Tranqui, aquí estamos.',
+      'cansado': '¡Uy, sí! 😌 A veces el cansancio pega durísimo. No te preocupes, que vamos bien tranqui.',
+      'estresado': '¡Ay! Respira conmigo... inahal... exahal... así, así... 😌 Ya estás más calmado/a, ¿verdad? Vamos bien.',
+      'triste': '¡Ay, comprendo! 😢 A veces el corazón pesa y pues no使我们想 hacer nada. Pero aquí estoy yo para levantarte el ánimo.',
+      'motivado': '¡Eso es genial! 💪 La motivación es la clave de todo. ¡Vamos con toda!',
     };
     
     const lowerMood = mood.toLowerCase();
@@ -322,12 +327,12 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     }
     
     if (!moodResponse) {
-      moodResponse = `¡Perfecto! ${mood} es un estado totally válido. Vamos a comenzar ahora.`;
+      moodResponse = `¡Ya ya! 😊 Cualquier estado emocional es válido y normal. Lo importante es que estás aquí, ¿no?`;
     }
     
     setTimeout(() => {
       setIsTyping(false);
-      addMessage('assistant', `${moodResponse} Ahora voy a hacerte 10 preguntitas bem interesantes sobre situaciones de tu vida cotidiana. No hay respuestas correctas o incorrectas, solo quiero conocer cómo eres tú. ¿Listo/a? ¡Vamos! 🎯`);
+      addMessage('assistant', `${moodResponse} Bueno, ahora vamos a lo chido: te haré 10 preguntitas bem interesantes sobre situaciones de tu vida cotidiana. No hay respuestas malas ni buenas, solo quiero conocerte tal cual eres. ¿Listo/a? ¡Vamos a darle! 🎯`);
       
       setTimeout(() => {
         addMessage('assistant', questions[0].text);
@@ -362,7 +367,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
 
   const analyzeResults = async (finalAnswers) => {
     setIsTyping(true);
-    addMessage('assistant', "¡Eso fue amazing, amigo! Ya tengo toda la información que necesitaba. Déjame analizar todo muy bien para darte tu perfil personalizado... 🧠✨");
+    addMessage('assistant', "¡Ay, qué interesante todo! 🥰 Ya tengo toda tu información. Déjame analizar tus respuestas muy bien para darte tu perfil personalizado... 🧠✨");
 
     setTimeout(() => {
       const counts = { visual: 0, auditivo: 0, kinestesico: 0 };
@@ -430,9 +435,9 @@ const DiagnosticoVAK = ({ onNavigate }) => {
       setIsTyping(false);
       
       const congratMessages = [
-        `¡${studentName}, tenemos tu resultado! ¡Esto es genial! 🎉 Tu perfil de aprendizaje es muy interesante y ahora sabrás exactamente cómo estudiar mejor.`,
-        `¡${studentName}, ya está! ¡Me encanta tu perfil de aprendizaje! Ahora tenemos el mapa para que aproveches tu cerebro al máximo. 🚀`,
-        `¡${studentName}, qué padre! Ya terminé tu análisis. Tu forma de aprender es única y ahora te voy a dar las mejores herramientas para ti. 💪`
+        `¡${studentName}, aquí está tu resultado! 🎉 ¡Qué padre! Tu perfil de aprendizaje es súper interesante y ahora vas a saber exactamente cómo estudiar mejor para aprovechar tu cerebro al máximo.`,
+        `¡${studentName}, ya está mi amor! 🥰 ¡Me encanta tu perfil! Ahora tenemos el mapa perfecto para que saques todo tu potencial. ¡Vamos! 🚀`,
+        `¡Ay, ${studentName}! Aquí lo tienes. 💫 Tu forma de aprender es única y especial. Ahora te voy a dar las mejores herramientas para que estudies de la manera más efectiva. 💪`
       ];
       
       const randomCongrats = congratMessages[Math.floor(Math.random() * congratMessages.length)];
@@ -582,10 +587,10 @@ const DiagnosticoVAK = ({ onNavigate }) => {
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-white font-montserrat">
-                    Dr. Valerio - Asesor Psicopedagógico
+                    Valeria IA - Tu Asesora Neuropedagógica
                   </h2>
                   <p className="text-sm text-white/80 font-open-sans mt-1">
-                    {isListening ? '🎤 Escuchando...' : isSpeaking ? '🔊 Hablando...' : 'Especialista en PNL y estilos de aprendizaje'}
+                    {isListening ? '🎤 Escuchando...' : isSpeaking ? '🔊 Hablando...' : 'Especialista en estilos de aprendizaje'}
                   </p>
                 </div>
               </div>

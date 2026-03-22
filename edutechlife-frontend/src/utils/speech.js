@@ -7,7 +7,7 @@ export async function speakTextConversational(t, onFinishSpeaking) {
 
     window.speechSynthesis.cancel();
     
-    const cleanText = t.replace(/[#*`_~]/g, '').replace(/\n/g, ' ').trim();
+    const cleanText = t.replace(/[#*`_~🎉🎯💡✨👏👍🎨🎧🎮🎬📚]/g, '').replace(/\n/g, ' ').trim();
 
     if (!cleanText) {
         if (onFinishSpeaking) onFinishSpeaking();
@@ -16,21 +16,32 @@ export async function speakTextConversational(t, onFinishSpeaking) {
 
     const speakNext = (text, callback) => {
         const msg = new SpeechSynthesisUtterance(text);
-        msg.lang = 'es-ES';
-        msg.rate = 0.92;
-        msg.pitch = 1.05;
+        msg.lang = 'es';
+        msg.rate = 0.95;
+        msg.pitch = 1.1;
         msg.volume = 1.0;
         
         const processVoices = (voices) => {
-            const preferredVoices = [
-                v => v.lang.includes('es') && (v.name.includes('Google') || v.name.includes('Natural')) && !v.name.includes('US'),
-                v => v.lang === 'es-ES' || v.lang === 'es-MX' || v.lang === 'es-CO',
-                v => v.lang.includes('es') && v.name.includes('Spanish'),
-                v => v.lang.includes('es'),
-                v => v.name.includes('Microsoft') && v.lang.includes('Spanish'),
+            const femaleLatinVoices = [
+                v => v.lang.includes('es') && v.name.includes('female') && (v.name.includes('Google') || v.name.includes('Natural')),
+                v => v.lang.includes('es') && v.name.toLowerCase().includes('female') && v.name.includes('es'),
+                v => v.lang === 'es-ES' && v.name.includes('Google') && !v.name.includes('Male'),
+                v => v.lang === 'es-MX' && v.name.includes('Google'),
+                v => v.lang === 'es-CO' && v.name.includes('Google'),
+                v => v.lang === 'es-AR' && v.name.includes('Google'),
+                v => v.lang.includes('es') && v.name.includes('Google') && v.name.includes('Female'),
+                v => v.lang.includes('es') && (v.name.includes('Laura') || v.name.includes('Sofia') || v.name.includes('Carmen') || v.name.includes('Lucia')),
+                v => v.lang.includes('es') && v.name.includes('Microsoft') && (v.name.includes('Female') || v.name.includes('Sabina')),
             ];
             
-            for (const matcher of preferredVoices) {
+            const anyLatinVoices = [
+                v => v.lang.includes('es') && v.name.includes('Google'),
+                v => v.lang === 'es-ES' || v.lang === 'es-MX' || v.lang === 'es-CO' || v.lang === 'es-AR',
+                v => v.lang.includes('es-Latam'),
+                v => v.lang.includes('es') && !v.name.includes('US'),
+            ];
+            
+            for (const matcher of femaleLatinVoices) {
                 const found = voices.find(matcher);
                 if (found) {
                     msg.voice = found;
@@ -39,12 +50,19 @@ export async function speakTextConversational(t, onFinishSpeaking) {
             }
             
             if (!msg.voice) {
-                const latinVoices = voices.filter(v => 
-                    v.lang.includes('es') && 
-                    (v.lang.includes('ES') || v.lang.includes('MX') || v.lang.includes('CO') || v.lang.includes('AR'))
-                );
-                if (latinVoices.length > 0) {
-                    msg.voice = latinVoices[0];
+                for (const matcher of anyLatinVoices) {
+                    const found = voices.find(matcher);
+                    if (found) {
+                        msg.voice = found;
+                        break;
+                    }
+                }
+            }
+            
+            if (!msg.voice && voices.length > 0) {
+                const spanishVoices = voices.filter(v => v.lang.includes('es'));
+                if (spanishVoices.length > 0) {
+                    msg.voice = spanishVoices[0];
                 }
             }
         };
@@ -86,12 +104,10 @@ export async function speakTextConversational(t, onFinishSpeaking) {
             return;
         }
         
-        text = text.replace(/([.!?])$/, '$1');
-        
         speakNext(text, () => {
             currentIndex++;
             if (currentIndex < segments.length) {
-                setTimeout(speakNextSegment, 150);
+                setTimeout(speakNextSegment, 120);
             } else {
                 if (onFinishSpeaking) onFinishSpeaking();
             }
@@ -114,7 +130,7 @@ export function iniciarReconocimiento(setQ, onResult, setIsListening) {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
     
-    recognition.lang = 'es-ES';
+    recognition.lang = 'es-CO';
     recognition.continuous = true;
     recognition.interimResults = true;
     recognition.maxAlternatives = 3;

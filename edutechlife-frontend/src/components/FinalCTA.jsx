@@ -34,13 +34,60 @@ const FinalCTA = memo(({ onNavigate }) => {
                     </h2>
 
                     {/* Description */}
-                    <p className="text-xl text-white/80 max-w-2xl mx-auto mb-12 leading-relaxed">
+                    <p className="text-xl text-white/80 max-w-2xl mx-auto mb-8 leading-relaxed">
                         Más de 6,000 estudiantes ya están aprendiendo con nuestras metodologías de vanguardia. 
                         ¿Listo para ser parte del futuro de la educación?
                     </p>
 
-                    {/* CTAs */}
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+                    {/* Direct Access Cards */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto mb-12">
+                        <button 
+                            onClick={() => onNavigate('vak')}
+                            className="group p-6 bg-white/10 backdrop-blur-sm rounded-2xl border-2 border-white/20 text-left transition-all duration-300 hover:bg-white/20 hover:border-[#4DA8C4] hover:scale-105"
+                        >
+                            <div className="flex items-center gap-4 mb-3">
+                                <div className="w-14 h-14 bg-gradient-to-br from-[#66CCCC] to-[#4DA8C4] rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <i className="fa-solid fa-brain text-2xl text-white" />
+                                </div>
+                                <div>
+                                    <h3 className="text-xl font-bold text-white">Test VAK Gratis</h3>
+                                    <p className="text-white/70 text-sm">Diagnóstico en 5 minutos</p>
+                                </div>
+                            </div>
+                            <p className="text-white/80 text-sm">
+                                Descubre cómo aprendes mejor con nuestro test de estilos de aprendizaje. Sin registro, directo y gratuito.
+                            </p>
+                            <div className="mt-4 flex items-center gap-2 text-[#4DA8C4] font-semibold">
+                                <span>Haz el test ahora</span>
+                                <i className="fa-solid fa-arrow-right text-sm group-hover:translate-x-2 transition-transform" />
+                            </div>
+                        </button>
+
+                        <button 
+                            onClick={() => onNavigate('consultoria-b2b')}
+                            className="group p-6 bg-white/10 backdrop-blur-sm rounded-2xl border-2 border-white/20 text-left transition-all duration-300 hover:bg-white/20 hover:border-[#66CCCC] hover:scale-105"
+                        >
+                            <div className="flex items-center gap-4 mb-3">
+                                <div className="w-14 h-14 bg-gradient-to-br from-[#004B63] to-[#4DA8C4] rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <i className="fa-solid fa-chart-line text-2xl text-white" />
+                                </div>
+                                <div>
+                                    <h3 className="text-xl font-bold text-white">Herramientas IA</h3>
+                                    <p className="text-white/70 text-sm">ROI y Automatización</p>
+                                </div>
+                            </div>
+                            <p className="text-white/80 text-sm">
+                                Calcula el ROI de implementar IA en tu organización o diseña flujos de automatización personalizados.
+                            </p>
+                            <div className="mt-4 flex items-center gap-2 text-[#66CCCC] font-semibold">
+                                <span>Acceder gratis</span>
+                                <i className="fa-solid fa-arrow-right text-sm group-hover:translate-x-2 transition-transform" />
+                            </div>
+                        </button>
+                    </div>
+
+                    {/* Additional CTAs */}
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <button 
                             onClick={() => onNavigate('consultoria')}
                             className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#4DA8C4] text-white font-bold rounded-full transition-all duration-300 hover:bg-white hover:text-[#004B63] hover:scale-105"
@@ -59,7 +106,7 @@ const FinalCTA = memo(({ onNavigate }) => {
                     </div>
 
                     {/* Trust Indicators */}
-                    <div className="flex flex-wrap justify-center gap-8 text-white/60">
+                    <div className="flex flex-wrap justify-center gap-8 text-white/60 mt-12">
                         {[
                             { icon: 'fa-shield-halved', text: 'Certificados Globally' },
                             { icon: 'fa-clock', text: 'Soporte 24/7' },

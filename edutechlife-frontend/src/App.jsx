@@ -113,29 +113,42 @@ const App = () => {
                     {/* CTA Button Premium */}
                     <div className="flex items-center gap-3">
                         <button 
-                            onClick={() => handleNavigate('smartboard')}
-                            className="flex items-center gap-2 px-5 py-2 rounded-full font-display font-bold text-sm text-white transition-all duration-300 hover:opacity-90"
+                            onClick={() => handleNavigate('vak')}
+                            className="flex items-center gap-2 px-4 py-2 rounded-full font-display font-bold text-sm text-white transition-all duration-300 hover:opacity-90"
                             style={{ 
                                 background: 'linear-gradient(135deg, #66CCCC, #4DA8C4)',
                                 boxShadow: '0 4px 15px rgba(102, 204, 204, 0.3)'
                             }}
                         >
                             <span className="flex items-center gap-2">
-                                <i className="fa-solid fa-graduation-cap text-xs" />
-                                SmartBoard
+                                <i className="fa-solid fa-brain text-xs" />
+                                Test VAK
                             </span>
                         </button>
                         <button 
-                            onClick={() => handleNavigate('ialab')}
-                            className="flex items-center gap-2 px-5 py-2 rounded-full font-display font-bold text-sm text-white transition-all duration-300 hover:opacity-90"
+                            onClick={() => handleNavigate('consultoria-b2b')}
+                            className="flex items-center gap-2 px-4 py-2 rounded-full font-display font-bold text-sm text-white transition-all duration-300 hover:opacity-90"
                             style={{ 
                                 background: 'linear-gradient(135deg, #4DA8C4, #004B63)',
                                 boxShadow: '0 4px 15px rgba(77, 168, 196, 0.3)'
                             }}
                         >
                             <span className="flex items-center gap-2">
-                                <i className="fa-solid fa-rocket text-xs" />
-                                Comenzar
+                                <i className="fa-solid fa-chart-line text-xs" />
+                                Herramientas IA
+                            </span>
+                        </button>
+                        <button 
+                            onClick={() => handleNavigate('smartboard')}
+                            className="flex items-center gap-2 px-5 py-2 rounded-full font-display font-bold text-sm text-white transition-all duration-300 hover:opacity-90"
+                            style={{ 
+                                background: 'linear-gradient(135deg, #004B63, #0B2A3A)',
+                                boxShadow: '0 4px 15px rgba(0, 75, 99, 0.3)'
+                            }}
+                        >
+                            <span className="flex items-center gap-2">
+                                <i className="fa-solid fa-graduation-cap text-xs" />
+                                SmartBoard
                             </span>
                         </button>
                     </div>

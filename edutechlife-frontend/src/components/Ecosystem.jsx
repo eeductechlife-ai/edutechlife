@@ -379,6 +379,53 @@ const Ecosystem = memo(({ onNavigate }) => {
 
                 {/* Bottom CTA */}
                 <div className={`text-center mt-16 transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                    {/* Direct Access Cards */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-10">
+                        <button 
+                            onClick={() => onNavigate('vak')}
+                            className="group p-6 bg-gradient-to-r from-[#66CCCC]/10 to-[#4DA8C4]/10 rounded-2xl border-2 border-[#4DA8C4]/30 text-left transition-all duration-300 hover:shadow-xl hover:border-[#4DA8C4] hover:scale-105"
+                        >
+                            <div className="flex items-center gap-4 mb-3">
+                                <div className="w-12 h-12 bg-gradient-to-br from-[#66CCCC] to-[#4DA8C4] rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <i className="fa-solid fa-brain text-xl text-white" />
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-bold text-[#004B63]">Test VAK Gratis</h3>
+                                    <p className="text-[#64748B] text-sm">Sin registro</p>
+                                </div>
+                            </div>
+                            <p className="text-[#64748B] text-sm">
+                                Descubre tu estilo de aprendizaje en 5 minutos. Diagnóstico instantáneo y personalizado.
+                            </p>
+                            <div className="mt-3 flex items-center gap-2 text-[#4DA8C4] font-semibold text-sm">
+                                <span>Comenzar ahora</span>
+                                <i className="fa-solid fa-arrow-right text-xs group-hover:translate-x-2 transition-transform" />
+                            </div>
+                        </button>
+
+                        <button 
+                            onClick={() => onNavigate('consultoria-b2b')}
+                            className="group p-6 bg-gradient-to-r from-[#004B63]/10 to-[#4DA8C4]/10 rounded-2xl border-2 border-[#004B63]/30 text-left transition-all duration-300 hover:shadow-xl hover:border-[#004B63] hover:scale-105"
+                        >
+                            <div className="flex items-center gap-4 mb-3">
+                                <div className="w-12 h-12 bg-gradient-to-br from-[#004B63] to-[#4DA8C4] rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <i className="fa-solid fa-chart-line text-xl text-white" />
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-bold text-[#004B63]">Herramientas IA</h3>
+                                    <p className="text-[#64748B] text-sm">ROI y Automatización</p>
+                                </div>
+                            </div>
+                            <p className="text-[#64748B] text-sm">
+                                Calcula el ROI y diseña flujos de automatización con inteligencia artificial.
+                            </p>
+                            <div className="mt-3 flex items-center gap-2 text-[#004B63] font-semibold text-sm">
+                                <span>Acceder gratis</span>
+                                <i className="fa-solid fa-arrow-right text-xs group-hover:translate-x-2 transition-transform" />
+                            </div>
+                        </button>
+                    </div>
+
                     <button 
                         onClick={() => onNavigate('ialab')}
                         className="inline-flex items-center gap-3 px-8 py-4 bg-[#4DA8C4] text-white font-bold rounded-full transition-all duration-300 hover:bg-[#004B63] hover:shadow-xl hover:scale-105"

@@ -30,14 +30,17 @@ const SmartBoardLogin = ({ onLogin }) => {
       <div className="w-full max-w-md">
         {/* Logo y Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-[#4DA8C4] to-[#004B63] shadow-xl mb-6">
-            <GraduationCap className="w-10 h-10 text-white" />
-          </div>
+          <img 
+            src="/images/logo-edutechlife.webp" 
+            alt="Edutechlife" 
+            className="h-16 w-auto mx-auto mb-4"
+            style={{ maxHeight: '64px', width: 'auto' }}
+          />
           <h1 className="text-3xl font-bold text-[#004B63] font-montserrat tracking-tight mb-2">
             SmartBoard
           </h1>
           <p className="text-lg text-[#64748B] font-open-sans">
-            Plataforma Educativa Premium v2.286
+            Plataforma Educativa
           </p>
         </div>
 
@@ -123,15 +126,6 @@ const SmartBoardLogin = ({ onLogin }) => {
                 </>
               )}
             </button>
-
-            {/* Demo Credentials */}
-            <div className="p-4 bg-[#FFD166]/10 border border-[#FFD166]/20 rounded-xl">
-              <p className="text-sm text-[#004B63] font-open-sans text-center">
-                <span className="font-semibold">Credenciales de prueba:</span><br />
-                Usuario: <code className="bg-white/50 px-2 py-0.5 rounded">123</code> <br />
-                Contraseña: <code className="bg-white/50 px-2 py-0.5 rounded">123</code>
-              </p>
-            </div>
           </form>
         </div>
 

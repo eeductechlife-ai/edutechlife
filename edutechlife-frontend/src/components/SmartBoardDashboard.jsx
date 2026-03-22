@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import SidebarNavigation from './SidebarNavigation';
-import ValeriaHologram from './ValeriaHologram';
+import ValeriaChat from './ValeriaChat';
 import XPProgressBar from './XPProgressBar';
 import MissionCard from './MissionCard';
 import SubjectGrid from './SubjectGrid';
@@ -318,7 +318,7 @@ const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
             case 'inicio':
                 return (
                     <div className="space-y-6">
-                        {/* Header Section - Compact and Organized */}
+                        {/* Header Section - Compact */}
                         <div className="bg-gradient-to-r from-[#004B63] to-[#4DA8C4] p-4 rounded-2xl">
                             <div className="flex items-center justify-between">
                                 <div className="flex-1">
@@ -338,15 +338,6 @@ const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        {/* Progress Section */}
-                        <div className="bg-white p-4 rounded-2xl border border-[#E2E8F0] shadow-sm">
-                            <div className="flex items-center justify-between mb-3">
-                                <h3 className="text-base font-bold text-[#004B63] font-montserrat">Progreso de Aprendizaje</h3>
-                                <span className="text-xs text-[#64748B] font-open-sans">Sigue avanzando hacia la excelencia</span>
-                            </div>
-                            <XPProgressBar currentXP={userXP} level={userLevel} streak={streakDays} />
                         </div>
 
                         {/* Valeria Status */}
@@ -488,15 +479,18 @@ const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
                 <div className="flex items-center justify-between">
                     {/* Logo y Título */}
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#4DA8C4] to-[#004B63] flex items-center justify-center shadow-lg">
-                            <GraduationCap className="w-5 h-5 text-white" />
-                        </div>
-                        <div>
+                        <img 
+                            src="/images/logo-edutechlife.webp" 
+                            alt="Edutechlife" 
+                            className="h-8 w-auto"
+                            style={{ maxHeight: '32px', width: 'auto' }}
+                        />
+                        <div className="border-l border-[#E2E8F0] pl-3">
                             <h1 className="text-xl font-bold text-[#004B63] font-montserrat tracking-tight">
-                                SmartBoard Premium
+                                SmartBoard
                             </h1>
                             <p className="text-xs text-[#64748B] font-open-sans">
-                                v2.286
+                                Plataforma Educativa
                             </p>
                         </div>
                     </div>
@@ -535,11 +529,11 @@ const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
                     </div>
                 </div>
 
-                {/* Valeria Hologram Panel */}
+                {/* Valeria Chat Panel */}
                 <div className="w-96">
-                    <ValeriaHologram
-                        status={valeriaState}
-                        message="¡Hola! Estoy aquí para ayudarte en tu aprendizaje."
+                    <ValeriaChat
+                        studentName="Estudiante"
+                        onNavigate={onNavigate}
                     />
                 </div>
             </div>
