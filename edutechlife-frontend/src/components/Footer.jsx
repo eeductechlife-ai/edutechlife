@@ -18,14 +18,13 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
           <div className="lg:col-span-1">
                <img 
-                 src="/images/logo-edutechlife.webp" 
-                 alt="Edutechlife Logo" 
-                 className="h-10 w-auto mb-4"
-                 style={{ maxHeight: '40px', width: 'auto', filter: 'brightness(0) invert(1)' }}
-               />
-            <p className="text-white/70 text-sm leading-relaxed mb-4">
-              Transformando la educación con inteligencia artificial y metodologías 
-              pedagógicas de vanguardia para las nuevas generaciones.
+                  src="/images/logo-edutechlife.webp" 
+                  alt="Edutechlife" 
+                  className="h-8 w-auto mb-4"
+                  style={{ filter: 'brightness(0) invert(1)', opacity: 0.9 }}
+                />
+            <p className="text-white/60 text-sm leading-relaxed mb-6">
+              Transformando la educación con inteligencia artificial y metodologías pedagógicas de vanguardia.
             </p>
             <div className="flex gap-3 justify-center md:justify-start">
               {[

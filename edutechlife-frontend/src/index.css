@@ -6452,12 +6452,74 @@ h1, h2, h3, h4, h5 {
   justify-content: center;
   background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 50%, #F8FAFC 100%);
   transition: opacity 0.6s ease, transform 0.6s ease;
+  overflow: hidden;
 }
 
 .loading-screen.exiting {
   opacity: 0;
   transform: scale(1.05);
   pointer-events: none;
+}
+
+/* Falling Balls 3D Effect */
+.falling-balls-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.falling-ball {
+  position: absolute;
+  top: -50px;
+  border-radius: 50%;
+  animation: fall-bounce linear infinite;
+  transform-style: preserve-3d;
+  perspective: 100px;
+}
+
+.falling-ball::before {
+  content: '';
+  position: absolute;
+  top: 15%;
+  left: 20%;
+  width: 30%;
+  height: 30%;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  filter: blur(2px);
+}
+
+.falling-ball::after {
+  content: '';
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 10px;
+  background: rgba(27, 158, 186, 0.2);
+  border-radius: 50%;
+  filter: blur(4px);
+}
+
+@keyframes fall-bounce {
+  0% {
+    top: -50px;
+    transform: translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(20px) rotate(180deg);
+  }
+  100% {
+    top: 110vh;
+    transform: translateX(-20px) rotate(360deg);
+    opacity: 0.6;
+  }
 }
 
 .loading-content {
@@ -6467,7 +6529,7 @@ h1, h2, h3, h4, h5 {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  max-width: 400px;
+  max-width: 500px;
   padding: 2rem;
 }
 
@@ -6486,9 +6548,15 @@ h1, h2, h3, h4, h5 {
 }
 
 .brand-logo .logo-img {
-  width: 180px;
+  width: 280px;
   height: auto;
-  filter: drop-shadow(0 10px 30px rgba(27, 158, 186, 0.2));
+  filter: drop-shadow(0 15px 40px rgba(27, 158, 186, 0.3));
+}
+
+@media (max-width: 768px) {
+  .brand-logo .logo-img {
+    width: 200px;
+  }
 }
 
 @keyframes brand-float {

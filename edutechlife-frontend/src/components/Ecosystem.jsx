@@ -1,5 +1,4 @@
 import { memo } from 'react';
-import SectionWrapper from './SectionWrapper';
 
 const Ecosystem = memo(({ onExplore }) => {
     const tools = [
@@ -46,86 +45,85 @@ const Ecosystem = memo(({ onExplore }) => {
     ];
 
     return (
-        <SectionWrapper spacing="md">
-            <section className="w-full relative overflow-hidden bg-[#F8FAFC]">
-                {/* Background Decoration */}
-                <div className="absolute inset-0 opacity-[0.02]">
-                    <div 
-                        className="absolute inset-0" 
-                        style={{
-                            backgroundImage: `radial-gradient(circle at 1px 1px, #0A3044 1px, transparent 0)`,
-                            backgroundSize: '60px 60px'
-                        }}
-                    />
+        <section className="w-full relative overflow-hidden bg-[#F8FAFC]">
+            {/* Background Decoration */}
+            <div className="absolute inset-0 opacity-[0.02]">
+                <div 
+                    className="absolute inset-0" 
+                    style={{
+                        backgroundImage: `radial-gradient(circle at 1px 1px, #0A3044 1px, transparent 0)`,
+                        backgroundSize: '60px 60px'
+                    }}
+                />
+            </div>
+
+            {/* Content - Full Width */}
+            <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 py-20 relative z-10">
+                {/* Section Header */}
+                <div className="text-center mb-16">
+                    <span className="inline-block text-sm font-bold text-[#1B9EBA] uppercase tracking-widest mb-4">
+                        Herramientas de Alto Impacto
+                    </span>
+                    <h2 className="text-4xl md:text-5xl font-black text-[#0A3044] mb-6">
+                        Tu Ecosistema de Aprendizaje
+                    </h2>
+                    <p className="text-xl text-[#334155] max-w-2xl mx-auto">
+                        Accede a un conjunto completo de herramientas diseñadas para transformar la educación con inteligencia artificial.
+                    </p>
                 </div>
 
-                <div className="container-premium relative z-10 mx-auto px-6 lg:px-8 py-20">
-                    {/* Section Header */}
-                    <div className="text-center mb-16">
-                        <span className="inline-block text-sm font-bold text-[#1B9EBA] uppercase tracking-widest mb-4">
-                            Herramientas de Alto Impacto
-                        </span>
-                        <h2 className="text-4xl md:text-5xl font-black text-[#0A3044] mb-6">
-                            Tu Ecosistema de Aprendizaje
-                        </h2>
-                        <p className="text-xl text-[#334155] max-w-2xl mx-auto">
-                            Accede a un conjunto completo de herramientas diseñadas para transformar la educación con inteligencia artificial.
-                        </p>
-                    </div>
-
-                    {/* Tools Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-                        {tools.map((tool, index) => (
-                            <div 
-                                key={tool.id}
-                                className="group relative bg-white rounded-2xl p-8 border border-[#1B9EBA]/10 transition-all duration-300 hover:border-[#1B9EBA]/30 hover:shadow-xl hover:-translate-y-1"
-                                style={{ animationDelay: `${index * 100}ms` }}
-                            >
-                                {/* Icon */}
-                                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br ${tool.gradient} mb-6 shadow-lg`}>
-                                    <i className={`fa-solid ${tool.icon} text-2xl text-white`} />
-                                </div>
-
-                                {/* Content */}
-                                <div className="mb-6">
-                                    <span className="text-xs font-bold text-[#1B9EBA] uppercase tracking-wider mb-2 block">
-                                        {tool.subtitle}
-                                    </span>
-                                    <h3 className="text-2xl font-bold text-[#0A3044] mb-3">
-                                        {tool.title}
-                                    </h3>
-                                    <p className="text-[#334155] leading-relaxed">
-                                        {tool.description}
-                                    </p>
-                                </div>
-
-                                {/* Features */}
-                                <ul className="space-y-2 mb-6">
-                                    {tool.features.map((feature, fIndex) => (
-                                        <li key={fIndex} className="flex items-center gap-3 text-[#334155]">
-                                            <i className="fa-solid fa-check text-[#1B9EBA] text-sm" />
-                                            <span className="text-sm">{feature}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-
-                                {/* CTA */}
-                                <button 
-                                    onClick={() => onExplore(tool.id)}
-                                    className={`w-full py-3 rounded-xl bg-gradient-to-r ${tool.gradient} text-white font-semibold transition-all duration-300 group-hover:shadow-lg flex items-center justify-center gap-2`}
-                                >
-                                    <span>Explorar</span>
-                                    <i className="fa-solid fa-arrow-right text-sm transition-transform group-hover:translate-x-1" />
-                                </button>
-
-                                {/* Hover Accent */}
-                                <div className={`absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r ${tool.gradient} rounded-b-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
+                {/* Tools Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                    {tools.map((tool, index) => (
+                        <div 
+                            key={tool.id}
+                            className="group relative bg-white rounded-2xl p-8 border border-[#1B9EBA]/10 transition-all duration-300 hover:border-[#1B9EBA]/30 hover:shadow-xl hover:-translate-y-1"
+                            style={{ animationDelay: `${index * 100}ms` }}
+                        >
+                            {/* Icon */}
+                            <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br ${tool.gradient} mb-6 shadow-lg`}>
+                                <i className={`fa-solid ${tool.icon} text-2xl text-white`} />
                             </div>
-                        ))}
-                    </div>
+
+                            {/* Content */}
+                            <div className="mb-6">
+                                <span className="text-xs font-bold text-[#1B9EBA] uppercase tracking-wider mb-2 block">
+                                    {tool.subtitle}
+                                </span>
+                                <h3 className="text-2xl font-bold text-[#0A3044] mb-3">
+                                    {tool.title}
+                                </h3>
+                                <p className="text-[#334155] leading-relaxed">
+                                    {tool.description}
+                                </p>
+                            </div>
+
+                            {/* Features */}
+                            <ul className="space-y-2 mb-6">
+                                {tool.features.map((feature, fIndex) => (
+                                    <li key={fIndex} className="flex items-center gap-3 text-[#334155]">
+                                        <i className="fa-solid fa-check text-[#1B9EBA] text-sm" />
+                                        <span className="text-sm">{feature}</span>
+                                    </li>
+                                ))}
+                            </ul>
+
+                            {/* CTA */}
+                            <button 
+                                onClick={() => onExplore(tool.id)}
+                                className={`w-full py-3 rounded-xl bg-gradient-to-r ${tool.gradient} text-white font-semibold transition-all duration-300 group-hover:shadow-lg flex items-center justify-center gap-2`}
+                            >
+                                <span>Explorar</span>
+                                <i className="fa-solid fa-arrow-right text-sm transition-transform group-hover:translate-x-1" />
+                            </button>
+
+                            {/* Hover Accent */}
+                            <div className={`absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r ${tool.gradient} rounded-b-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
+                        </div>
+                    ))}
                 </div>
-            </section>
-        </SectionWrapper>
+            </div>
+        </section>
     );
 });
 

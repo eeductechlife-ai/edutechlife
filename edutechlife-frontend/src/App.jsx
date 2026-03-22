@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import IALab from './components/IALab';
 import Hero from './components/Hero';
+import Metodo from './components/Metodo';
 import Ecosystem from './components/Ecosystem';
 import FinalCTA from './components/FinalCTA';
 import Footer from './components/Footer';
@@ -114,6 +115,7 @@ const App = () => {
                 {view === 'landing' && (
                      <>
                         <Hero onNavigate={handleNavigate} />
+                        <Metodo />
                         <Ecosystem onExplore={handleNavigate} />
                         <FinalCTA onNavigate={handleNavigate} />
                     </>
