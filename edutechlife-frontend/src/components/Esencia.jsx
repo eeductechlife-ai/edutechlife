@@ -5,26 +5,46 @@ const Esencia = memo(() => {
 
     const slides = [
         {
-            image: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80',
+            image: '/images/edutech-carrusel-1.webp',
             title: 'Innovación Educativa',
             description: 'Transformamos la manera de enseñar con tecnología de vanguardia'
         },
         {
-            image: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&q=80',
+            image: '/images/edutech-carrusel-2.webp',
             title: 'Aprendizaje Personalizado',
             description: 'Cada estudiante tiene su propio camino hacia el éxito'
         },
         {
-            image: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?w=800&q=80',
+            image: '/images/edutech-carrusel-3.webp',
             title: 'Comunidad STEAM',
             description: 'Formamos la próxima generación de innovadores'
+        },
+        {
+            image: '/images/edutech-carrusel-4.webp',
+            title: 'Tecnología de Vanguardia',
+            description: 'Herramientas avanzadas para el aprendizaje del futuro'
+        },
+        {
+            image: '/images/edutech-carrusel-5.webp',
+            title: 'Metodología VAK',
+            description: 'Diagnóstico personalizado para cada estudiante'
+        },
+        {
+            image: '/images/edutech-carrusel-6.webp',
+            title: 'Proyectos Prácticos',
+            description: 'Aplicación real de conocimientos en entornos profesionales'
+        },
+        {
+            image: '/images/edutech-carrusel-7.webp',
+            title: 'Certificaciones Globales',
+            description: 'Credenciales respaldadas por líderes de la industria'
         }
     ];
 
     useEffect(() => {
         const timer = setInterval(() => {
             setCurrentSlide((prev) => (prev + 1) % slides.length);
-        }, 5000);
+        }, 4000);
         return () => clearInterval(timer);
     }, [slides.length]);
 
@@ -103,9 +123,11 @@ const Esencia = memo(() => {
                                     { icon: 'fa-handshake', text: 'Compromiso' },
                                     { icon: 'fa-users', text: 'Comunidad' }
                                 ].map((value, index) => (
-                                    <div key={index} className="flex items-center gap-2">
-                                        <i className={`fa-solid ${value.icon} text-[#1B9EBA]`} />
-                                        <span className="text-sm font-medium">{value.text}</span>
+                                    <div key={index} className="flex items-center gap-3">
+                                        <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+                                            <i className={`fa-solid ${value.icon} text-white`} />
+                                        </div>
+                                        <span className="text-base font-semibold text-white">{value.text}</span>
                                     </div>
                                 ))}
                             </div>
@@ -116,7 +138,7 @@ const Esencia = memo(() => {
                     <div className="relative">
                         <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-[#1B9EBA]/10">
                             {/* Images */}
-                            <div className="relative h-[400px] md:h-[500px] overflow-hidden">
+                            <div className="relative h-[350px] md:h-[450px] overflow-hidden">
                                 {slides.map((slide, index) => (
                                     <div
                                         key={index}
@@ -169,14 +191,14 @@ const Esencia = memo(() => {
                         </div>
 
                         {/* Stats */}
-                        <div className="grid grid-cols-3 gap-4 mt-6">
+                        <div className="grid grid-cols-3 gap-3 mt-4">
                             {[
                                 { value: '6,000+', label: 'Estudiantes' },
                                 { value: '10+', label: 'Años' },
                                 { value: '98%', label: 'Satisfacción' }
                             ].map((stat, index) => (
-                                <div key={index} className="bg-white rounded-xl p-4 text-center shadow-md border border-[#1B9EBA]/10">
-                                    <div className="text-2xl font-black text-[#1B9EBA]">{stat.value}</div>
+                                <div key={index} className="bg-white rounded-xl py-3 px-2 text-center shadow-md border border-[#1B9EBA]/10">
+                                    <div className="text-xl md:text-2xl font-black text-[#1B9EBA]">{stat.value}</div>
                                     <div className="text-xs text-[#64748B] uppercase tracking-wider">{stat.label}</div>
                                 </div>
                             ))}

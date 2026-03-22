@@ -4,6 +4,7 @@ import Hero from './components/Hero';
 import Metodo from './components/Metodo';
 import Esencia from './components/Esencia';
 import Ecosystem from './components/Ecosystem';
+import Aliados from './components/Aliados';
 import FinalCTA from './components/FinalCTA';
 import Footer from './components/Footer';
 import NeuroEntorno from './components/NeuroEntorno';
@@ -116,9 +117,10 @@ const App = () => {
                 {view === 'landing' && (
                      <>
                         <Hero onNavigate={handleNavigate} />
-                        <Metodo />
                         <Esencia />
+                        <Metodo />
                         <Ecosystem onExplore={handleNavigate} />
+                        <Aliados />
                         <FinalCTA onNavigate={handleNavigate} />
                     </>
                 )}

@@ -20,7 +20,7 @@ export default function Footer() {
                <img 
                   src="/images/logo-edutechlife.webp" 
                   alt="Edutechlife" 
-                  className="h-8 w-auto mb-4"
+                  className="h-6 w-auto mb-4"
                   style={{ filter: 'brightness(0) invert(1)', opacity: 0.9 }}
                 />
             <p className="text-white/60 text-sm leading-relaxed mb-6">
