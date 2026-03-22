@@ -5,66 +5,16 @@ const Aliados = memo(() => {
     const sectionRef = useRef(null);
 
     const aliados = [
-        { 
-            name: 'SENA', 
-            icon: 'fa-graduation-cap',
-            color: 'from-orange-500 to-orange-700',
-            desc: 'Formación Técnica'
-        },
-        { 
-            name: 'UNESCO', 
-            icon: 'fa-landmark',
-            color: 'from-blue-500 to-blue-700',
-            desc: 'Educación Global'
-        },
-        { 
-            name: 'Ministerio Educación', 
-            icon: 'fa-university',
-            color: 'from-red-500 to-red-700',
-            desc: 'Educación Nacional'
-        },
-        { 
-            name: 'Google', 
-            icon: 'fa-search',
-            color: 'from-blue-400 to-blue-600',
-            desc: 'Google for Education'
-        },
-        { 
-            name: 'Microsoft', 
-            icon: 'fa-microsoft',
-            color: 'from-blue-500 to-cyan-500',
-            desc: 'Microsoft Education'
-        },
-        { 
-            name: 'AWS', 
-            icon: 'fa-cloud',
-            color: 'from-orange-400 to-yellow-500',
-            desc: 'AWS Educate'
-        },
-        { 
-            name: 'ICETEX', 
-            icon: 'fa-hand-holding-dollar',
-            color: 'from-green-500 to-green-700',
-            desc: 'Financiación Educativa'
-        },
-        { 
-            name: 'Colciencias', 
-            icon: 'fa-flask',
-            color: 'from-purple-500 to-purple-700',
-            desc: 'Ciencia e Innovación'
-        },
-        { 
-            name: 'Apple', 
-            icon: 'fa-apple-whole',
-            color: 'from-gray-600 to-gray-800',
-            desc: 'Apple Education'
-        },
-        { 
-            name: 'STEAM', 
-            icon: 'fa-gears',
-            color: 'from-teal-500 to-cyan-500',
-            desc: 'Educación STEM'
-        }
+        { name: 'SENA', icon: 'fa-graduation-cap', color: '#F97316' },
+        { name: 'UNESCO', icon: 'fa-landmark', color: '#3B82F6' },
+        { name: 'Ministerio', icon: 'fa-university', color: '#EF4444' },
+        { name: 'Google', icon: 'fa-search', color: '#4285F4' },
+        { name: 'Microsoft', icon: 'fa-microsoft', color: '#00A4EF' },
+        { name: 'AWS', icon: 'fa-cloud', color: '#FF9900' },
+        { name: 'ICETEX', icon: 'fa-hand-holding-dollar', color: '#22C55E' },
+        { name: 'Colciencias', icon: 'fa-flask', color: '#8B5CF6' },
+        { name: 'Apple', icon: 'fa-apple-whole', color: '#64748B' },
+        { name: 'STEAM', icon: 'fa-gears', color: '#14B8A6' }
     ];
 
     useEffect(() => {
@@ -74,7 +24,7 @@ const Aliados = memo(() => {
                     setIsVisible(true);
                 }
             },
-            { threshold: 0.2 }
+            { threshold: 0.3 }
         );
 
         if (sectionRef.current) {
@@ -85,80 +35,93 @@ const Aliados = memo(() => {
     }, []);
 
     return (
-        <section ref={sectionRef} className="relative w-full py-20 overflow-hidden">
-            {/* Background */}
-            <div className="absolute inset-0 bg-gradient-to-b from-white via-[#F8FAFC] to-white" />
-            <div className="absolute inset-0 opacity-[0.02]" style={{
-                backgroundImage: `radial-gradient(circle at 1px 1px, #0A3044 1px, transparent 0)`,
-                backgroundSize: '40px 40px'
-            }} />
-
-            <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
-                {/* Premium Header */}
-                <div className={`text-center mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-                    <div className="inline-flex items-center gap-3 mb-6">
-                        <div className="w-12 h-[2px] bg-gradient-to-r from-transparent to-[#1B9EBA]" />
-                        <span className="text-sm font-bold text-[#1B9EBA] uppercase tracking-[0.2em]">
-                            Confían en nosotros
-                        </span>
-                        <div className="w-12 h-[2px] bg-gradient-to-l from-transparent to-[#1B9EBA]" />
-                    </div>
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-[#0A3044] mb-4">
-                        Nuestros{' '}
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1B9EBA] to-[#0A3044]">
-                            Aliados Estratégicos
-                        </span>
+        <section ref={sectionRef} className="relative w-full py-20 overflow-hidden bg-gradient-to-b from-white to-[#F8FAFC]">
+            {/* Premium Header */}
+            <div className={`max-w-7xl mx-auto px-6 lg:px-8 mb-12 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                <div className="text-center">
+                    <span className="inline-block text-sm font-bold text-[#1B9EBA] uppercase tracking-widest mb-4">
+                        Confían en nosotros
+                    </span>
+                    <h2 className="text-3xl md:text-4xl font-black text-[#0A3044] mb-4">
+                        Aliados Estratégicos
                     </h2>
-                    <p className="text-[#64748B] max-w-2xl mx-auto text-lg">
-                        Colaboramos con las mejores instituciones educativas y empresas tecnológicas del mundo para garantizar una formación de excelencia.
+                    <p className="text-[#64748B] max-w-2xl mx-auto">
+                        Las mejores instituciones y empresas tecnológicas del mundo trabajan con nosotros.
                     </p>
                 </div>
+            </div>
 
-                {/* Logos Grid - Premium */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-12">
-                    {aliados.map((aliado, index) => (
-                        <div 
-                            key={`${aliado.name}-${index}`}
-                            className={`group relative bg-white rounded-2xl p-6 shadow-md border border-[#E2E8F0] hover:shadow-xl hover:border-[#1B9EBA]/30 hover:-translate-y-1 transition-all duration-500 cursor-pointer ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-                            style={{ transitionDelay: `${index * 100}ms` }}
-                        >
-                            {/* Icon */}
-                            <div className={`w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br ${aliado.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                                <i className={`fa-solid ${aliado.icon} text-2xl text-white`} />
+            {/* Carousel */}
+            <div className="relative overflow-hidden">
+                {/* Gradient Overlays */}
+                <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-20 pointer-events-none" />
+                <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent z-20 pointer-events-none" />
+
+                {/* Top Row - Moving Right */}
+                <div className="flex mb-4">
+                    <div className={`flex gap-8 animate-marquee-slow ${isVisible ? 'opacity-100' : 'opacity-0'} transition-opacity duration-1000`}>
+                        {[...aliados, ...aliados].map((aliado, index) => (
+                            <div 
+                                key={`top-${aliado.name}-${index}`}
+                                className="flex-shrink-0"
+                            >
+                                <div className="w-[160px] h-[100px] bg-white rounded-2xl shadow-lg border border-[#E2E8F0] flex flex-col items-center justify-center gap-2 hover:shadow-xl hover:border-[#1B9EBA]/30 hover:scale-105 transition-all duration-300 cursor-pointer">
+                                    <div 
+                                        className="w-12 h-12 rounded-xl flex items-center justify-center"
+                                        style={{ backgroundColor: `${aliado.color}20` }}
+                                    >
+                                        <i 
+                                            className={`fa-solid ${aliado.icon} text-2xl`}
+                                            style={{ color: aliado.color }}
+                                        />
+                                    </div>
+                                    <span className="text-sm font-bold text-[#0A3044]">{aliado.name}</span>
+                                </div>
                             </div>
-
-                            {/* Name */}
-                            <h4 className="text-center font-bold text-[#0A3044] mb-1 group-hover:text-[#1B9EBA] transition-colors">
-                                {aliado.name}
-                            </h4>
-
-                            {/* Description */}
-                            <p className="text-center text-xs text-[#94A3B8]">
-                                {aliado.desc}
-                            </p>
-
-                            {/* Hover Accent */}
-                            <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-[#1B9EBA] to-[#0A3044] rounded-b-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
 
-                {/* Trust Badges - Premium */}
-                <div className={`flex flex-wrap justify-center gap-4 transition-all duration-700 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                {/* Bottom Row - Moving Left */}
+                <div className="flex">
+                    <div className={`flex gap-8 animate-marquee-slow-reverse ${isVisible ? 'opacity-100' : 'opacity-0'} transition-opacity duration-1000`}>
+                        {[...aliados.reverse(), ...aliados.reverse()].map((aliado, index) => (
+                            <div 
+                                key={`bottom-${aliado.name}-${index}`}
+                                className="flex-shrink-0"
+                            >
+                                <div className="w-[160px] h-[100px] bg-white rounded-2xl shadow-lg border border-[#E2E8F0] flex flex-col items-center justify-center gap-2 hover:shadow-xl hover:border-[#1B9EBA]/30 hover:scale-105 transition-all duration-300 cursor-pointer">
+                                    <div 
+                                        className="w-12 h-12 rounded-xl flex items-center justify-center"
+                                        style={{ backgroundColor: `${aliado.color}20` }}
+                                    >
+                                        <i 
+                                            className={`fa-solid ${aliado.icon} text-2xl`}
+                                            style={{ color: aliado.color }}
+                                        />
+                                    </div>
+                                    <span className="text-sm font-bold text-[#0A3044]">{aliado.name}</span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            {/* Trust Indicators */}
+            <div className={`max-w-7xl mx-auto px-6 lg:px-8 mt-12 transition-all duration-700 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                <div className="flex flex-wrap justify-center gap-4">
                     {[
-                        { icon: 'fa-award', text: 'Certificaciones Internacionales', color: '#1B9EBA' },
-                        { icon: 'fa-shield-halved', text: 'Estándares de Calidad', color: '#0A3044' },
-                        { icon: 'fa-globe', text: 'Alcance Global', color: '#1B9EBA' },
-                        { icon: 'fa-handshake', text: 'Alianzas Verificadas', color: '#0A3044' }
+                        { icon: 'fa-award', text: 'Certificaciones Internacionales' },
+                        { icon: 'fa-shield-halved', text: 'Estándares de Calidad' },
+                        { icon: 'fa-globe', text: 'Alcance Global' }
                     ].map((badge, index) => (
                         <div 
                             key={index}
-                            className="flex items-center gap-3 px-6 py-3 bg-white rounded-full shadow-md border border-[#E2E8F0] hover:shadow-lg hover:border-[#1B9EBA]/30 transition-all duration-300"
+                            className="flex items-center gap-2 px-5 py-2 bg-white rounded-full shadow-sm border border-[#E2E8F0]"
                         >
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1B9EBA] to-[#0A3044] flex items-center justify-center">
-                                <i className={`fa-solid ${badge.icon} text-white`} />
-                            </div>
-                            <span className="text-sm font-semibold text-[#334155]">{badge.text}</span>
+                            <i className={`fa-solid ${badge.icon} text-[#1B9EBA]`} />
+                            <span className="text-sm font-medium text-[#334155]">{badge.text}</span>
                         </div>
                     ))}
                 </div>
