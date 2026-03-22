@@ -46,15 +46,15 @@ const Esencia = memo(() => {
                 {/* Header */}
                 <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                     <div className="inline-flex items-center gap-3 mb-4">
-                        <div className="w-10 h-[2px] bg-gradient-to-r from-transparent to-[#1B9EBA]" />
-                        <span className="text-sm font-bold text-[#1B9EBA] uppercase tracking-[0.2em]">
+                        <div className="w-10 h-[2px] bg-gradient-to-r from-transparent to-[#4DA8C4]" />
+                        <span className="text-sm font-bold text-[#4DA8C4] uppercase tracking-[0.2em]">
                             Quiénes Somos
                         </span>
-                        <div className="w-10 h-[2px] bg-gradient-to-l from-transparent to-[#1B9EBA]" />
+                        <div className="w-10 h-[2px] bg-gradient-to-l from-transparent to-[#4DA8C4]" />
                     </div>
-                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#0A3044] mb-4">
+                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#004B63] mb-4">
                         Nuestra{' '}
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1B9EBA] to-[#0A3044]">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4DA8C4] to-[#004B63]">
                             Esencia
                         </span>
                     </h2>
@@ -68,13 +68,13 @@ const Esencia = memo(() => {
                     {/* Left Column - Mission & Vision */}
                     <div className="space-y-6">
                         {/* Mission */}
-                        <div className="group bg-gradient-to-br from-[#0A3044] to-[#1B9EBA] rounded-2xl p-8 text-white shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
+                        <div className="group bg-gradient-to-br from-[#004B63] to-[#4DA8C4] rounded-2xl p-8 text-white shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
                             <div className="flex items-center gap-4 mb-6">
                                 <div className="w-14 h-14 rounded-xl bg-white/20 flex items-center justify-center group-hover:scale-110 transition-transform">
                                     <i className="fa-solid fa-bullseye text-2xl" />
                                 </div>
                                 <div>
-                                    <span className="text-xs font-semibold text-[#1B9EBA] uppercase tracking-wider">Objetivo</span>
+                                    <span className="text-xs font-semibold text-[#4DA8C4] uppercase tracking-wider">Objetivo</span>
                                     <h3 className="text-xl font-bold">Misión</h3>
                                 </div>
                             </div>
@@ -82,7 +82,7 @@ const Esencia = memo(() => {
                                 Democratizar la educación de calidad mediante herramientas de inteligencia artificial que se adapten al estilo de aprendizaje único de cada estudiante.
                             </p>
                             <div className="mt-6 pt-4 border-t border-white/20">
-                                <div className="flex items-center gap-2 text-[#1B9EBA]">
+                                <div className="flex items-center gap-2 text-[#4DA8C4]">
                                     <i className="fa-solid fa-rocket" />
                                     <span className="font-semibold text-sm">Impulsando el futuro</span>
                                 </div>
@@ -90,23 +90,23 @@ const Esencia = memo(() => {
                         </div>
 
                         {/* Vision */}
-                        <div className="group bg-[#F8FAFC] rounded-2xl p-8 shadow-lg border border-[#E2E8F0] hover:shadow-xl hover:border-[#1B9EBA]/30 transition-all duration-500 hover:-translate-y-1">
+                        <div className="group bg-[#F8FAFC] rounded-2xl p-8 shadow-lg border border-[#E2E8F0] hover:shadow-xl hover:border-[#4DA8C4]/30 transition-all duration-500 hover:-translate-y-1">
                             <div className="flex items-center gap-4 mb-6">
-                                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#1B9EBA] to-[#0A3044] flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#4DA8C4] to-[#004B63] flex items-center justify-center group-hover:scale-110 transition-transform">
                                     <i className="fa-solid fa-eye text-2xl text-white" />
                                 </div>
                                 <div>
-                                    <span className="text-xs font-semibold text-[#1B9EBA] uppercase tracking-wider">Proyección</span>
-                                    <h3 className="text-xl font-bold text-[#0A3044]">Visión</h3>
+                                    <span className="text-xs font-semibold text-[#4DA8C4] uppercase tracking-wider">Proyección</span>
+                                    <h3 className="text-xl font-bold text-[#004B63]">Visión</h3>
                                 </div>
                             </div>
                             <p className="text-[#64748B] leading-relaxed">
                                 Ser la plataforma líder en Latinoamérica en la integración de metodologías pedagógicas con inteligencia artificial para formar profesionales del futuro.
                             </p>
                             <div className="mt-6 pt-4 border-t border-[#E2E8F0]">
-                                <div className="flex items-center gap-2 text-[#1B9EBA]">
+                                <div className="flex items-center gap-2 text-[#4DA8C4]">
                                     <i className="fa-solid fa-globe" />
-                                    <span className="font-semibold text-sm text-[#0A3044]">Liderazgo regional</span>
+                                    <span className="font-semibold text-sm text-[#004B63]">Liderazgo regional</span>
                                 </div>
                             </div>
                         </div>
@@ -114,7 +114,7 @@ const Esencia = memo(() => {
 
                     {/* Right Column - Carousel */}
                     <div className="lg:col-span-2">
-                        <div className="relative bg-[#0A3044] rounded-2xl overflow-hidden shadow-2xl h-full min-h-[400px] lg:min-h-[460px]">
+                        <div className="relative bg-[#004B63] rounded-2xl overflow-hidden shadow-2xl h-full min-h-[400px] lg:min-h-[460px]">
                             {/* Images */}
                             <div className="absolute inset-0">
                                 {slides.map((slide, index) => (
@@ -129,7 +129,7 @@ const Esencia = memo(() => {
                                             alt={slide.title}
                                             className="w-full h-full object-cover"
                                         />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-[#0A3044] via-[#0A3044]/30 to-transparent" />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-[#004B63] via-[#004B63]/30 to-transparent" />
                                     </div>
                                 ))}
                             </div>
@@ -137,7 +137,7 @@ const Esencia = memo(() => {
                             {/* Content */}
                             <div className="absolute inset-0 flex flex-col justify-end p-8">
                                 <div className="max-w-lg">
-                                    <span className="inline-block px-4 py-1 bg-[#1B9EBA] rounded-full text-sm font-semibold mb-4">
+                                    <span className="inline-block px-4 py-1 bg-[#4DA8C4] rounded-full text-sm font-semibold mb-4">
                                         {currentSlide + 1} / {slides.length}
                                     </span>
                                     <h3 className="text-2xl md:text-3xl font-bold text-white mb-3">
@@ -152,7 +152,7 @@ const Esencia = memo(() => {
                                             key={index}
                                             onClick={() => setCurrentSlide(index)}
                                             className={`h-1 rounded-full transition-all duration-500 ${
-                                                index === currentSlide ? 'w-8 bg-[#1B9EBA]' : 'w-4 bg-white/40 hover:bg-white/60'
+                                                index === currentSlide ? 'w-8 bg-[#4DA8C4]' : 'w-4 bg-white/40 hover:bg-white/60'
                                             }`}
                                         />
                                     ))}
@@ -180,10 +180,10 @@ const Esencia = memo(() => {
                 <div className={`transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                     {/* Section Header */}
                     <div className="text-center mb-12">
-                        <span className="inline-block text-sm font-bold text-[#1B9EBA] uppercase tracking-widest mb-4">
+                        <span className="inline-block text-sm font-bold text-[#4DA8C4] uppercase tracking-widest mb-4">
                             Lo que nos define
                         </span>
-                        <h3 className="text-3xl md:text-4xl font-black text-[#0A3044] mb-4">
+                        <h3 className="text-3xl md:text-4xl font-black text-[#004B63] mb-4">
                             Nuestros Valores
                         </h3>
                         <p className="text-[#64748B] max-w-xl mx-auto">
@@ -196,12 +196,12 @@ const Esencia = memo(() => {
                         {values.map((value, index) => (
                             <div 
                                 key={index}
-                                className="group bg-white rounded-2xl p-8 shadow-lg border border-[#E2E8F0] hover:shadow-xl hover:border-[#1B9EBA]/30 hover:-translate-y-2 transition-all duration-500"
+                                className="group bg-white rounded-2xl p-8 shadow-lg border border-[#E2E8F0] hover:shadow-xl hover:border-[#4DA8C4]/30 hover:-translate-y-2 transition-all duration-500"
                             >
-                                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#1B9EBA]/10 to-[#0A3044]/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                                    <i className={`fa-solid ${value.icon} text-3xl text-[#1B9EBA]`} />
+                                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#4DA8C4]/10 to-[#004B63]/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                                    <i className={`fa-solid ${value.icon} text-3xl text-[#4DA8C4]`} />
                                 </div>
-                                <h4 className="text-xl font-bold text-[#0A3044] mb-2">{value.text}</h4>
+                                <h4 className="text-xl font-bold text-[#004B63] mb-2">{value.text}</h4>
                                 <p className="text-[#64748B] text-sm">{value.desc}</p>
                             </div>
                         ))}

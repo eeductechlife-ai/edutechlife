@@ -2,7 +2,7 @@ import { memo } from 'react';
 
 const FinalCTA = memo(({ onNavigate }) => {
     return (
-        <section className="w-full relative overflow-hidden bg-gradient-to-br from-[#0A3044] via-[#0A3044] to-[#1B9EBA]">
+        <section className="w-full relative overflow-hidden bg-gradient-to-br from-[#004B63] via-[#004B63] to-[#4DA8C4]">
             {/* Background Pattern */}
             <div className="absolute inset-0 opacity-10">
                 <div 
@@ -15,22 +15,22 @@ const FinalCTA = memo(({ onNavigate }) => {
             </div>
 
             {/* Decorative Orbs */}
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-[#1B9EBA]/20 blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-[#1B9EBA]/10 blur-3xl" />
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-[#4DA8C4]/20 blur-3xl" />
+            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-[#4DA8C4]/10 blur-3xl" />
 
             {/* Content - Full Width */}
             <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 py-20 relative z-10">
                 <div className="max-w-4xl mx-auto text-center">
                     {/* Badge */}
                     <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full mb-8 backdrop-blur-sm border border-white/10">
-                        <span className="w-2 h-2 bg-[#1B9EBA] rounded-full animate-pulse" />
+                        <span className="w-2 h-2 bg-[#4DA8C4] rounded-full animate-pulse" />
                         <span className="text-white/80 text-sm font-medium">Únete a la revolución educativa</span>
                     </div>
 
                     {/* Title */}
                     <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
                         Transforma la Educación
-                        <span className="block text-[#1B9EBA]">con Inteligencia Artificial</span>
+                        <span className="block text-[#4DA8C4]">con Inteligencia Artificial</span>
                     </h2>
 
                     {/* Description */}
@@ -43,7 +43,7 @@ const FinalCTA = memo(({ onNavigate }) => {
                     <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
                         <button 
                             onClick={() => onNavigate('consultoria')}
-                            className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#1B9EBA] text-white font-bold rounded-full transition-all duration-300 hover:bg-white hover:text-[#0A3044] hover:scale-105"
+                            className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#4DA8C4] text-white font-bold rounded-full transition-all duration-300 hover:bg-white hover:text-[#004B63] hover:scale-105"
                             style={{ boxShadow: '0 10px 40px rgba(27, 158, 186, 0.4)' }}
                         >
                             <i className="fa-solid fa-rocket text-lg" />
@@ -51,7 +51,7 @@ const FinalCTA = memo(({ onNavigate }) => {
                         </button>
                         <button 
                             onClick={() => onNavigate('ialab')}
-                            className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-white/10 text-white font-bold rounded-full border-2 border-white/30 transition-all duration-300 hover:bg-white hover:text-[#0A3044] backdrop-blur-sm"
+                            className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-white/10 text-white font-bold rounded-full border-2 border-white/30 transition-all duration-300 hover:bg-white hover:text-[#004B63] backdrop-blur-sm"
                         >
                             <i className="fa-solid fa-play text-lg" />
                             <span className="text-lg">Ver Demo Gratuita</span>
@@ -66,7 +66,7 @@ const FinalCTA = memo(({ onNavigate }) => {
                             { icon: 'fa-users', text: '6,000+ Estudiantes' }
                         ].map((item, index) => (
                             <div key={index} className="flex items-center gap-2">
-                                <i className={`fa-solid ${item.icon} text-[#1B9EBA]`} />
+                                <i className={`fa-solid ${item.icon} text-[#4DA8C4]`} />
                                 <span className="text-sm font-medium">{item.text}</span>
                             </div>
                         ))}

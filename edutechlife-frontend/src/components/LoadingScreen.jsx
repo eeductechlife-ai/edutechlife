@@ -22,7 +22,7 @@ const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
             delay: Math.random() * 3,
             duration: 2 + Math.random() * 2,
             size: 8 + Math.random() * 16,
-            color: i % 3 === 0 ? '#1B9EBA' : i % 3 === 1 ? '#0A3044' : '#B8E6F0'
+            color: i % 3 === 0 ? '#4DA8C4' : i % 3 === 1 ? '#004B63' : '#B2D8E5'
         }));
     }, []);
 

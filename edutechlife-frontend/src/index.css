@@ -49,10 +49,13 @@
    --gradient-light: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
   --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
   
-  /* Tipografía Premium */
-  --font-display: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body: 'Open Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
+  /* Tipografía Premium - Sistema de 3 Familias */
+  /* Display: Montserrat 700, 900 - Autoridd editorial */
+  /* Body: Open Sans 300, 400 - Legibilidad maxima */
+  /* Mono: JetBrains Mono - Datos tecnologicos/IA */
+  --font-display: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-body: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, 'Fira Code', monospace;
   
   /* Espaciado Premium - Sistema 8pt Grid */
   --space-3xs: 0.125rem;  /* 2px */
@@ -84,45 +87,81 @@
   /* ======================
      SISTEMA TIPOGRÁFICO PREMIUM
      ====================== */
+   
+  /* --- DISPLAY: Montserrat 700, 900 --- */
+  /* Uso: Titulos H1-H3, headlines principales */
+  /* letter-spacing: -0.04em para look editorial y compacto */
   
-  /* Display Headings - Jerarquía clara */
   .display-1 {
     font-family: var(--font-display);
     font-size: clamp(3rem, 5vw, 4.5rem);
     font-weight: 900;
-    line-height: 1.1;
-    letter-spacing: -0.03em;
-    color: var(--color-navy);
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    color: var(--color-petroleum);
   }
   
   .display-2 {
     font-family: var(--font-display);
     font-size: clamp(2.5rem, 4vw, 3.5rem);
-    font-weight: 800;
+    font-weight: 700;
     line-height: 1.1;
-    letter-spacing: -0.02em;
-    color: var(--color-navy);
+    letter-spacing: -0.04em;
+    color: var(--color-petroleum);
   }
   
   .display-3 {
     font-family: var(--font-display);
     font-size: clamp(2rem, 3vw, 2.5rem);
     font-weight: 700;
-    line-height: 1.2;
-    letter-spacing: -0.01em;
-    color: var(--color-navy);
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    color: var(--color-petroleum);
   }
   
-  /* Body Text Premium */
+  /* Heading tradicional */
+  .heading-1 {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 2.5vw, 2.25rem);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+    color: var(--color-petroleum);
+  }
+  
+  .heading-2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 2vw, 1.875rem);
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    color: var(--color-petroleum);
+  }
+  
+  .heading-3 {
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 1.5vw, 1.5rem);
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    color: var(--color-petroleum);
+  }
+  
+  /* --- BODY: Open Sans 300, 400 --- */
+  /* Uso: Parrafos, descripciones, texto largo */
+  /* Light (300) para texto secundario, Regular (400) para lectura principal */
+  
   .body-lg {
     font-family: var(--font-body);
+    font-weight: 400;
     font-size: 1.125rem;
-    line-height: 1.7;
+    line-height: 1.75;
     color: var(--color-gray-700);
   }
   
   .body-md {
     font-family: var(--font-body);
+    font-weight: 400;
     font-size: 1rem;
     line-height: 1.7;
     color: var(--color-gray-600);
@@ -130,12 +169,66 @@
   
   .body-sm {
     font-family: var(--font-body);
+    font-weight: 300;
     font-size: 0.875rem;
     line-height: 1.6;
     color: var(--color-gray-500);
   }
   
-  /* Utility Classes Tipográficas */
+  .body-xs {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: var(--color-gray-400);
+  }
+  
+  /* --- MONO: JetBrains Mono --- */
+  /* Uso: Labels IA, contadores, badges, codigo, datos tecnicos */
+  /* Refuerza el caracter tecnologico de la plataforma */
+  
+  .text-mono {
+    font-family: var(--font-mono);
+    font-weight: 400;
+    font-size: 0.875rem;
+    letter-spacing: -0.01em;
+    color: var(--color-corporate);
+  }
+  
+  .text-mono-lg {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 1rem;
+    letter-spacing: 0;
+    color: var(--color-corporate);
+  }
+  
+  .text-mono-sm {
+    font-family: var(--font-mono);
+    font-weight: 400;
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    color: var(--color-corporate);
+  }
+  
+  .text-mono-badge {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-corporate);
+  }
+  
+  .text-mono-counter {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 1.25rem;
+    letter-spacing: -0.02em;
+    color: var(--color-mint);
+  }
+  
+  /* --- Utility Classes Tipográficas --- */
   .text-gradient-primary {
     background: var(--gradient-primary);
     -webkit-background-clip: text;
@@ -155,9 +248,12 @@
     letter-spacing: 0.1em;
   }
   
-  .text-mono {
-    font-family: var(--font-mono);
-    letter-spacing: -0.01em;
+  .text-display {
+    font-family: var(--font-display);
+  }
+  
+  .text-body {
+    font-family: var(--font-body);
   }
   
   /* ======================
@@ -1177,31 +1273,42 @@
   --font-mono: 'JetBrains Mono', monospace;
   
   --color-petroleum: #004B63;
+  /* =========================
+     PETROLEUM ELITE PALETTE
+     ========================= */
+  /* Petroleum #004B63 - Navegación, títulos H1, Footer - Autoridad y profundidad */
+  /* Corporate #4DA8C4 - Botones CTAs, iconos, acentos - Confianza tecnológica */
+  /* Soft Blue #B2D8E5 - Fondos de iconos, hover - Claridad y calma */
+  /* Mint #66CCCC - Badges IA, barras - Innovación y vitalidad */
+  /* Navy Deep #0B0F19 - Paneles IA, modales - Premium y contraste */
+
+  --color-petroleum: #004B63;
   --color-corporate: #4DA8C4;
   --color-soft-blue: #B2D8E5;
   --color-navy: #0A1628;
   --color-text-gray: #4A4A4A;
   --color-mint: #66CCCC;
+  --color-navy-deep: #0B0F19;
    --color-white: #FFFFFF;
   
-  --navy: #0A3044;
-  --primary: #1B9EBA;
-  --accent: #1B9EBA;
+  --navy: #004B63;
+  --primary: #4DA8C4;
+  --accent: #66CCCC;
    --bg-light: #F8FAFC;
   --bg-dark: #ffffff;
-  --text-main: #0A3044;
+  --text-main: #004B63;
   --text-sub: #334155;
   --glass-bg: rgba(255, 255, 255, 0.9);
-  --glass-border: rgba(27, 158, 186, 0.2);
+  --glass-border: rgba(77, 168, 196, 0.2);
   
   /* Prototype Enhancement Variables */
   --dashboard-bg: #0B0F19;
   --dashboard-card: rgba(255, 255, 255, 0.03);
   --dashboard-border: rgba(255, 255, 255, 0.08);
-  --dashboard-accent: #00C2E0;
-  --dashboard-accent-glow: rgba(0, 194, 224, 0.3);
-  --ai-panel-bg: rgba(10, 22, 40, 0.6);
-  --smartboard-bg: #0A1628;
+  --dashboard-accent: #66CCCC;
+  --dashboard-accent-glow: rgba(102, 204, 204, 0.3);
+  --ai-panel-bg: rgba(0, 75, 99, 0.6);
+  --smartboard-bg: #0B0F19;
 }
 
 /* Main content without extra space */
@@ -1380,7 +1487,7 @@ body {
 
  /* Button Styles */
 .btn-primary {
-  background: linear-gradient(135deg, #1B9EBA 0%, #0A3044 100%);
+    background: linear-gradient(135deg, #4DA8C4 0%, #004B63 100%);
   color: white;
   padding: 12px 28px;
   border-radius: 50px;
@@ -1389,12 +1496,12 @@ body {
   transition: all 0.3s ease;
   border: none;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(27, 158, 186, 0.35);
+  box-shadow: 0 4px 15px rgba(77, 168, 196, 0.35);
 }
 
 .btn-primary:hover {
   background: linear-gradient(135deg, #158694 0%, #072233 100%);
-  box-shadow: 0 8px 25px rgba(27, 158, 186, 0.45);
+  box-shadow: 0 8px 25px rgba(77, 168, 196, 0.45);
   transform: translateY(-2px);
 }
 
@@ -1448,25 +1555,34 @@ body {
 .heading-font {
   font-family: var(--font-display) !important;
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.04em;
   line-height: 1.1;
 }
 
-h1, h2, h3, h4, h5 {
-  font-family: var(--font-display) !important;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-  font-weight: 700;
+/* Base Heading Styles - Usan Montserrat Display */
+h1 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
   color: var(--color-petroleum);
 }
 
-/* Eyebrow pill */
+h2, h3, h4, h5 {
+  font-family: var(--font-display) !important;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: var(--color-petroleum);
+}
+
+/* Eyebrow pill - JetBrains Mono para labels tecnologicos */
 .eyebrow {
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  background: linear-gradient(135deg, rgba(0, 194, 224, .08), rgba(0, 224, 255, .04));
-  border: 1px solid rgba(0, 194, 224, .22);
+  background: linear-gradient(135deg, rgba(77, 168, 196, 0.1), rgba(102, 204, 204, 0.05));
+  border: 1px solid rgba(77, 168, 196, 0.25);
   border-radius: 100px;
   padding: 7px 18px;
   font-family: var(--font-mono);
@@ -1474,7 +1590,7 @@ h1, h2, h3, h4, h5 {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: #334155;
+  color: var(--color-corporate);
   box-shadow: 0 2px 12px rgba(0, 194, 224, .1);
   backdrop-filter: blur(8px);
 }
@@ -1509,11 +1625,11 @@ h1, h2, h3, h4, h5 {
 /* Stats bar */
  .stats-bar {
   display: flex;
-  background: #0A3044;
-  border: 2px solid rgba(27, 158, 186, 0.3);
+  background: #004B63;
+  border: 2px solid rgba(77, 168, 196, 0.3);
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 15px 50px rgba(10, 48, 68, 0.25);
+  box-shadow: 0 15px 50px rgba(0, 75, 99, 0.25);
   margin-top: 0;
 }
 
@@ -1527,7 +1643,7 @@ h1, h2, h3, h4, h5 {
 .stat-item {
   flex: 1;
   padding: 2rem 1.5rem;
-  border-right: 1px solid rgba(27, 158, 186, 0.3);
+  border-right: 1px solid rgba(77, 168, 196, 0.3);
   position: relative;
   transition: all 0.3s ease;
   cursor: default;
@@ -1537,7 +1653,7 @@ h1, h2, h3, h4, h5 {
 @media (max-width: 768px) {
   .stat-item {
     border-right: none;
-    border-bottom: 1px solid rgba(27, 158, 186, 0.3);
+    border-bottom: 1px solid rgba(77, 168, 196, 0.3);
     padding: 1.5rem 1rem;
   }
   
@@ -1551,7 +1667,7 @@ h1, h2, h3, h4, h5 {
 }
 
 .stat-item:hover {
-  background: linear-gradient(135deg, rgba(27, 158, 186, 0.15), rgba(10, 48, 68, 0.05));
+  background: linear-gradient(135deg, rgba(77, 168, 196, 0.15), rgba(0, 75, 99, 0.05));
   transform: translateY(-3px);
 }
 
@@ -1561,24 +1677,32 @@ h1, h2, h3, h4, h5 {
   justify-content: center;
   width: 56px;
   height: 56px;
-  background: linear-gradient(135deg, #1B9EBA, #0A3044);
+  background: linear-gradient(135deg, #4DA8C4, #004B63);
   border-radius: 14px;
   margin: 0 auto 1rem;
   color: white;
   font-size: 1.4rem;
-  box-shadow: 0 8px 25px rgba(27, 158, 186, 0.4);
+  box-shadow: 0 8px 25px rgba(77, 168, 196, 0.4);
 }
 
-.stat-live-dot {
+.stat-live-dot-container {
   position: absolute;
   top: 1rem;
   right: 1rem;
   width: 10px;
   height: 10px;
-  background: #1B9EBA;
+}
+
+.stat-live-dot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  background: #66CCCC;
   border-radius: 50%;
   animation: pulse-live 2s ease-in-out infinite;
-  box-shadow: 0 0 10px rgba(27, 158, 186, 0.6);
+  box-shadow: 0 0 10px rgba(102, 204, 204, 0.6);
 }
 
 @keyframes pulse-live {
@@ -1586,19 +1710,52 @@ h1, h2, h3, h4, h5 {
   50% { opacity: 0.6; transform: scale(0.9); }
 }
 
+/* Animated Counter Effects */
+@keyframes count-pop {
+  0% { transform: scale(0.8); opacity: 0; }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes counter-glow {
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(102, 204, 204, 0.4)); }
+  50% { filter: drop-shadow(0 0 16px rgba(102, 204, 204, 0.8)); }
+}
+
+.stat-num.animating {
+  animation: count-pop 0.4s ease-out forwards, counter-glow 2s ease-in-out infinite;
+}
+
+/* Live Pulse Ring Effect */
+@keyframes live-ring {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+.live-pulse-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid var(--color-mint);
+  animation: live-ring 2s ease-out infinite;
+  pointer-events: none;
+}
+
  .stat-num {
-  font-family: var(--font-display) !important;
+  font-family: var(--font-mono) !important;
   font-size: 2.8rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, #1B9EBA 0%, #ffffff 100%);
+  font-weight: 700;
+  background: linear-gradient(135deg, #66CCCC 0%, #4DA8C4 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   line-height: 1;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
   display: block;
   margin-bottom: 0.5rem;
-  text-shadow: 0 2px 10px rgba(27, 158, 186, 0.3);
+  text-shadow: 0 2px 10px rgba(77, 168, 196, 0.3);
 }
 
  .stat-label {
@@ -1822,9 +1979,9 @@ h1, h2, h3, h4, h5 {
   font-family: var(--font-display);
   font-size: clamp(2.2rem, 4.2vw, 3.8rem);
   font-weight: 900;
-  line-height: 1.0;
-  letter-spacing: -0.05em;
-  color: var(--navy);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  color: var(--color-petroleum);
 }
 
 .hero-kicker {
@@ -1833,7 +1990,7 @@ h1, h2, h3, h4, h5 {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.28em;
-  color: var(--primary);
+  color: var(--color-corporate);
   display: flex;
   align-items: center;
   gap: 0.6rem;
@@ -1844,7 +2001,7 @@ h1, h2, h3, h4, h5 {
   content: '';
   width: 24px;
   height: 2px;
-  background: linear-gradient(90deg, var(--primary), var(--accent));
+  background: linear-gradient(90deg, var(--color-corporate), var(--color-mint));
   border-radius: 2px;
 }
 
@@ -1936,7 +2093,7 @@ h1, h2, h3, h4, h5 {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(27, 158, 186, 0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(77, 168, 196, 0.2), transparent);
 }
 
 .about-section::after {
@@ -1946,7 +2103,7 @@ h1, h2, h3, h4, h5 {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(27, 158, 186, 0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(77, 168, 196, 0.2), transparent);
 }
 
 .about-section::before {
@@ -1956,7 +2113,7 @@ h1, h2, h3, h4, h5 {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(27, 158, 186, 0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(77, 168, 196, 0.2), transparent);
 }
 
 .about-section::after {
@@ -1966,7 +2123,7 @@ h1, h2, h3, h4, h5 {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(27, 158, 186, 0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(77, 168, 196, 0.2), transparent);
 }
 
 .about-grid {
@@ -2764,12 +2921,12 @@ h1, h2, h3, h4, h5 {
 
 /* Hero Title - Layered System */
 .hero-title {
-  font-family: 'Montserrat', sans-serif;
+  font-family: var(--font-display);
   font-weight: 900;
   font-size: clamp(2.2rem, 6vw, 4.5rem);
   line-height: 1.05;
   letter-spacing: -0.04em;
-  color: white;
+  color: var(--color-petroleum);
   margin-bottom: clamp(1.25rem, 3vh, 2rem);
   display: flex;
   flex-direction: column;

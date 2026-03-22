@@ -1,35 +1,66 @@
 import { useState, useEffect, useRef } from 'react';
 import SectionWrapper from './SectionWrapper';
 
-const useCounter = (target, duration = 2000, start = false) => {
+const useAnimatedCounter = (target, duration = 2500, start = false) => {
     const [count, setCount] = useState(0);
+    const [isAnimating, setIsAnimating] = useState(false);
+    const frameRef = useRef(null);
 
     useEffect(() => {
         if (!start) return;
-        let t0 = null;
-
-        const step = (ts) => {
-            if (!t0) t0 = ts;
-            const p = Math.min((ts - t0) / duration, 1);
-            setCount(Math.floor((1 - Math.pow(1 - p, 3)) * target));
-            if (p < 1) requestAnimationFrame(step);
+        
+        setIsAnimating(true);
+        const startTime = performance.now();
+        
+        const animate = (currentTime) => {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+            setCount(Math.floor(easeOutQuart * target));
+            
+            if (progress < 1) {
+                frameRef.current = requestAnimationFrame(animate);
+            } else {
+                setIsAnimating(false);
+            }
         };
-
-        requestAnimationFrame(step);
+        
+        frameRef.current = requestAnimationFrame(animate);
+        
+        return () => {
+            if (frameRef.current) {
+                cancelAnimationFrame(frameRef.current);
+            }
+        };
     }, [start, target, duration]);
 
-    return count;
+    return { count, isAnimating };
 };
 
-const StatItem = ({ n, suffix, label, icon, live, start }) => {
-    const count = useCounter(n, 2200, start);
+const StatItem = ({ n, suffix, label, icon, live, start, delay = 0 }) => {
+    const { count, isAnimating } = useAnimatedCounter(n, 2200, start);
+    const [showContent, setShowContent] = useState(false);
+    
+    useEffect(() => {
+        if (start) {
+            const timer = setTimeout(() => setShowContent(true), delay);
+            return () => clearTimeout(timer);
+        }
+        setShowContent(false);
+    }, [start, delay]);
+    
     return (
-        <div className="stat-item">
-            <div className="stat-icon">
+        <div className={`stat-item transition-all duration-500 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+            <div className={`stat-icon transition-transform duration-500 ${showContent ? 'scale-100' : 'scale-0'}`}>
                 <i className={`fa-solid ${icon}`} />
             </div>
-            {live && <span className="stat-live-dot" />}
-            <div className="stat-num">
+            {live && (
+                <div className="stat-live-dot-container">
+                    <span className="live-pulse-ring" />
+                    <span className="stat-live-dot" />
+                </div>
+            )}
+            <div className={`stat-num ${isAnimating ? 'animating' : ''}`}>
                 {n !== null ? count.toLocaleString() + suffix : 'Global'}
             </div>
             <div className="stat-label">{label}</div>
@@ -38,10 +69,10 @@ const StatItem = ({ n, suffix, label, icon, live, start }) => {
 };
 
 const stats = [
-    { n: 6000, suffix: '+', label: 'Estudiantes Certificados', icon: 'fa-graduation-cap', live: true },
-    { n: 10, suffix: ' Años', label: 'Experiencia', icon: 'fa-clock' },
-    { n: 200, suffix: '+', label: 'Docentes IA', icon: 'fa-chalkboard-user' },
-    { n: null, suffix: '', label: 'Alianzas Globales', icon: 'fa-globe-americas' },
+    { n: 6000, suffix: '+', label: 'Estudiantes Certificados', icon: 'fa-graduation-cap', live: true, delay: 0 },
+    { n: 10, suffix: '+', label: 'Años de Experiencia', icon: 'fa-clock', delay: 150 },
+    { n: 200, suffix: '+', label: 'Docentes IA', icon: 'fa-chalkboard-user', delay: 300 },
+    { n: 50, suffix: '+', label: 'Alianzas Globales', icon: 'fa-globe-americas', delay: 450 },
 ];
 
 const StatsBar = () => {
@@ -53,7 +84,7 @@ const StatsBar = () => {
             ([entry]) => {
                 if (entry.isIntersecting) setIsVisible(true);
             },
-            { threshold: 0.3 }
+            { threshold: 0.2 }
         );
 
         if (ref.current) obs.observe(ref.current);
@@ -77,7 +108,7 @@ const StatsBar = () => {
                     ))}
                 </div>
             </div>
-        </section>
+        </SectionWrapper>
         </SectionWrapper>
     );
 };

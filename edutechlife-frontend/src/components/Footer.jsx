@@ -12,8 +12,8 @@ export default function Footer() {
     }
   };
 
-  return (
-      <footer className="w-full px-6 lg:px-8 py-12 mt-auto" style={{ background: '#0A3044' }}>
+    return (
+      <footer className="w-full px-6 lg:px-8 py-12 mt-auto" style={{ background: '#004B63' }}>
         <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
           <div className="lg:col-span-1">
@@ -37,7 +37,7 @@ export default function Footer() {
                   key={i}
                   href="#"
                   aria-label={social.label}
-                  className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:bg-[#1B9EBA] hover:text-white transition-all duration-300"
+                  className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:bg-[#4DA8C4] hover:text-white transition-all duration-300"
                 >
                   <i className={`fa-solid ${social.icon} text-sm`}></i>
                 </a>
@@ -60,9 +60,9 @@ export default function Footer() {
                 <li key={i}>
                   <button 
                     onClick={() => window.dispatchEvent(new CustomEvent('navigate', { detail: item.view }))}
-                    className="text-white/60 hover:text-[#1B9EBA] transition-colors duration-200 text-sm flex items-center gap-2 group w-full text-left"
+                    className="text-white/60 hover:text-[#4DA8C4] transition-colors duration-200 text-sm flex items-center gap-2 group w-full text-left"
                   >
-                    <span className="w-1 h-1 rounded-full bg-white/30 group-hover:bg-[#1B9EBA] transition-colors" />
+                    <span className="w-1 h-1 rounded-full bg-white/30 group-hover:bg-[#4DA8C4] transition-colors" />
                     {item.label}
                   </button>
                 </li>
@@ -85,9 +85,9 @@ export default function Footer() {
                 <li key={i}>
                   <button 
                     onClick={() => item.view && window.dispatchEvent(new CustomEvent('navigate', { detail: item.view }))}
-                    className="text-white/60 hover:text-[#1B9EBA] transition-colors duration-200 text-sm flex items-center gap-2 group w-full text-left"
+                    className="text-white/60 hover:text-[#4DA8C4] transition-colors duration-200 text-sm flex items-center gap-2 group w-full text-left"
                   >
-                    <span className="w-1 h-1 rounded-full bg-white/30 group-hover:bg-[#1B9EBA] transition-colors" />
+                    <span className="w-1 h-1 rounded-full bg-white/30 group-hover:bg-[#4DA8C4] transition-colors" />
                     {item.label}
                   </button>
                 </li>
@@ -104,9 +104,9 @@ export default function Footer() {
             </p>
             {subscribed ? (
                <div className="bg-white/10 rounded-xl p-4 text-center">
-                 <i className="fa-solid fa-check-circle text-[#1B9EBA] text-2xl mb-2"></i>
+                 <i className="fa-solid fa-check-circle text-[#4DA8C4] text-2xl mb-2"></i>
                  <p className="text-white text-sm">¡Gracias por suscribirte!</p>
-               </div>
+                </div>
             ) : (
               <form onSubmit={handleSubscribe} className="space-y-3">
                  <input
@@ -114,12 +114,12 @@ export default function Footer() {
                    value={email}
                    onChange={(e) => setEmail(e.target.value)}
                    placeholder="tu@email.com"
-                   className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm focus:outline-none focus:border-[#1B9EBA] transition-colors"
+                   className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm focus:outline-none focus:border-[#4DA8C4] transition-colors"
                    required
                  />
                   <button
                     type="submit"
-                    className="w-full py-3 rounded-xl bg-[#1B9EBA] text-white font-semibold text-sm hover:opacity-90 transition-opacity"
+                    className="w-full py-3 rounded-xl bg-[#4DA8C4] text-white font-semibold text-sm hover:opacity-90 transition-opacity"
                   >
                     Suscribirme
                   </button>
@@ -147,7 +147,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="absolute bottom-0 right-0 w-64 h-64 rounded-full bg-[#1B9EBA]/5 blur-3xl translate-x-1/2 translate-y-1/2 pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-64 h-64 rounded-full bg-[#4DA8C4]/5 blur-3xl translate-x-1/2 translate-y-1/2 pointer-events-none" />
     </footer>
   );
 }

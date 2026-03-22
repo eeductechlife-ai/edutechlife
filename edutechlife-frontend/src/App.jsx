@@ -100,8 +100,8 @@ const App = () => {
                         onClick={() => handleNavigate('ialab')}
                         className="flex items-center gap-2 px-5 py-2 rounded-full font-display font-bold text-sm text-white transition-all duration-300 hover:opacity-90"
                         style={{ 
-                            background: 'linear-gradient(135deg, #1B9EBA, #0A3044)',
-                            boxShadow: '0 4px 15px rgba(27, 158, 186, 0.3)'
+                            background: 'linear-gradient(135deg, #4DA8C4, #004B63)',
+                            boxShadow: '0 4px 15px rgba(77, 168, 196, 0.3)'
                         }}
                     >
                         <span className="flex items-center gap-2">

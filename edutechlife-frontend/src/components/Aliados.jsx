@@ -38,7 +38,7 @@ const Aliados = memo(() => {
         <section ref={sectionRef} className="relative w-full py-20 overflow-hidden bg-gradient-to-b from-white to-[#F8FAFC]">
             {/* Background Decoration */}
             <div className="absolute inset-0 opacity-[0.02]" style={{
-                backgroundImage: `radial-gradient(circle at 1px 1px, #0A3044 1px, transparent 0)`,
+                backgroundImage: `radial-gradient(circle at 1px 1px, #004B63 1px, transparent 0)`,
                 backgroundSize: '40px 40px'
             }} />
 
@@ -46,15 +46,15 @@ const Aliados = memo(() => {
                 {/* Premium Header */}
                 <div className={`text-center mb-12 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                     <div className="inline-flex items-center gap-3 mb-4">
-                        <div className="w-10 h-[2px] bg-gradient-to-r from-transparent to-[#1B9EBA]" />
-                        <span className="text-sm font-bold text-[#1B9EBA] uppercase tracking-widest">
+                        <div className="w-10 h-[2px] bg-gradient-to-r from-transparent to-[#4DA8C4]" />
+                        <span className="text-sm font-bold text-[#4DA8C4] uppercase tracking-widest">
                             Confían en nosotros
                         </span>
-                        <div className="w-10 h-[2px] bg-gradient-to-l from-transparent to-[#1B9EBA]" />
+                        <div className="w-10 h-[2px] bg-gradient-to-l from-transparent to-[#4DA8C4]" />
                     </div>
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-[#0A3044] mb-4">
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-[#004B63] mb-4">
                         Nuestros{' '}
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1B9EBA] to-[#0A3044]">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4DA8C4] to-[#004B63]">
                             Aliados Estratégicos
                         </span>
                     </h2>
@@ -77,7 +77,7 @@ const Aliados = memo(() => {
                                     key={`${aliado.name}-${index}`}
                                     className="flex-shrink-0 group"
                                 >
-                                    <div className="w-[180px] h-[120px] bg-white rounded-2xl shadow-lg border border-[#E2E8F0] flex flex-col items-center justify-center gap-3 hover:shadow-xl hover:border-[#1B9EBA]/30 hover:scale-105 transition-all duration-300 cursor-pointer">
+                                    <div className="w-[180px] h-[120px] bg-white rounded-2xl shadow-lg border border-[#E2E8F0] flex flex-col items-center justify-center gap-3 hover:shadow-xl hover:border-[#4DA8C4]/30 hover:scale-105 transition-all duration-300 cursor-pointer">
                                         <div 
                                             className="w-14 h-14 rounded-xl flex items-center justify-center"
                                             style={{ backgroundColor: `${aliado.color}15` }}
@@ -87,7 +87,7 @@ const Aliados = memo(() => {
                                                 style={{ color: aliado.color }}
                                             />
                                         </div>
-                                        <span className="text-sm font-bold text-[#0A3044]">{aliado.name}</span>
+                                        <span className="text-sm font-bold text-[#004B63]">{aliado.name}</span>
                                     </div>
                                 </div>
                             ))}
@@ -104,9 +104,9 @@ const Aliados = memo(() => {
                     ].map((badge, index) => (
                         <div 
                             key={index}
-                            className="flex items-center gap-3 px-6 py-3 bg-white rounded-full shadow-md border border-[#E2E8F0] hover:shadow-lg hover:border-[#1B9EBA]/30 transition-all duration-300"
+                            className="flex items-center gap-3 px-6 py-3 bg-white rounded-full shadow-md border border-[#E2E8F0] hover:shadow-lg hover:border-[#4DA8C4]/30 transition-all duration-300"
                         >
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1B9EBA] to-[#0A3044] flex items-center justify-center">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#4DA8C4] to-[#004B63] flex items-center justify-center">
                                 <i className={`fa-solid ${badge.icon} text-white`} />
                             </div>
                             <span className="text-sm font-semibold text-[#334155]">{badge.text}</span>
