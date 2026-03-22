@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Brain, Send, Mic, MicOff, ChevronRight, User, Sparkles, Download, FileText, Volume2, CheckCircle, ArrowLeft, Loader2 } from 'lucide-react';
+import { Brain, Send, Mic, MicOff, ChevronRight, User, Sparkles, Download, FileText, Volume2, CheckCircle, ArrowLeft, Loader2, MessageCircle } from 'lucide-react';
 import html2pdf from 'html2pdf.js';
+import { speakTextConversational, iniciarReconocimiento } from '../utils/speech';
 
 const DiagnosticoVAK = ({ onNavigate }) => {
   const [phase, setPhase] = useState('calibration');
@@ -11,14 +12,18 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   const [answers, setAnswers] = useState({});
   const [isTyping, setIsTyping] = useState(false);
   const [isListening, setIsListening] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [voiceMode, setVoiceMode] = useState(false);
   const [diagnosis, setDiagnosis] = useState(null);
   const [progress, setProgress] = useState(0);
   const [pdfLoading, setPdfLoading] = useState(false);
   const [showPdfPreview, setShowPdfPreview] = useState(false);
+  const [inputText, setInputText] = useState('');
   
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
   const pdfTemplateRef = useRef(null);
+  const conversationModeRef = useRef(false);
 
   const questions = [
     {
@@ -151,13 +156,132 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   useEffect(() => {
     if (phase === 'calibration' && messages.length === 0) {
       setTimeout(() => {
-        addMessage('assistant', "¡Hola! Soy el Dr. Valerio, tu asesor psicopedagógico virtual. 🧠 Estoy aquí para ayudarte a descubrir cómo aprendes mejor. Antes de comenzar el diagnóstico VAK, me gustaría conocerte un poco. ¿Cómo te llamas?");
+        addMessage('assistant', "¡Hola, qué tal! 😊 Soy el Dr. Valerio, tu asesor psicopedagógico virtual. Estoy muy contento de que estés aquí hoy. Vamos a hacer algo muy interesante: descubrir cómo aprendes tú de la mejor manera. Pero primero, cuéntame, ¿cómo te llamas?");
       }, 500);
     }
   }, [phase]);
 
   const addMessage = (role, content) => {
     setMessages(prev => [...prev, { id: Date.now(), role, content, timestamp: new Date() }]);
+    
+    if (role === 'assistant' && voiceMode && !isSpeaking) {
+      speakMessage(content);
+    }
+  };
+
+  const speakMessage = (text) => {
+    setIsSpeaking(true);
+    speakTextConversational(text, () => {
+      setIsSpeaking(false);
+      if (voiceMode && conversationModeRef.current) {
+        setTimeout(() => startListeningForUser(), 500);
+      }
+    });
+  };
+
+  const stopSpeaking = () => {
+    window.speechSynthesis.cancel();
+    setIsSpeaking(false);
+  };
+
+  const startListeningForUser = () => {
+    if (!conversationModeRef.current) return;
+    
+    iniciarReconocimiento(
+      (transcript) => {
+        setInputText(transcript);
+      },
+      (transcript) => {
+        if (transcript && transcript.trim()) {
+          handleVoiceInput(transcript);
+        }
+      },
+      setIsListening
+    );
+  };
+
+  const handleVoiceInput = (text) => {
+    if (!text.trim()) return;
+    
+    if (phase === 'calibration' && messages.length <= 2) {
+      setStudentName(text);
+      addMessage('user', text);
+      setIsTyping(true);
+      
+      setTimeout(() => {
+        setIsTyping(false);
+        addMessage('assistant', `¡Encantado de conocerte, ${text}! 😊 Me alegra que estés aquí. Antes de empezar, cuéntame: ¿cómo te sientes hoy? (¿contento/a, nervioso/a, cansado/a, emocionado/a?)`);
+        
+        if (voiceMode) {
+          setTimeout(() => startListeningForUser(), 2000);
+        }
+      }, 1000);
+    } else if (phase === 'calibration' && messages.length > 2) {
+      setMood(text);
+      addMessage('user', text);
+      setIsTyping(true);
+      
+      setTimeout(() => {
+        setIsTyping(false);
+        addMessage('assistant', `¡Entiendo! Es completamente normal sentirse ${text}. Ahora, vamos a comenzar el Diagnóstico Cognitivo VAK. Te haré 10 preguntas sobre situaciones cotidianas para descubrir tu estilo de aprendizaje predominante. ¿Listo/a? 🚀`);
+        
+        setTimeout(() => {
+          addMessage('assistant', questions[0].text);
+          setPhase('test');
+          
+          if (voiceMode) {
+            setTimeout(() => startListeningForUser(), 2000);
+          }
+        }, 1500);
+      }, 1000);
+    }
+  };
+
+  const toggleVoiceMode = () => {
+    setVoiceMode(prev => !prev);
+    conversationModeRef.current = !voiceMode;
+    
+    if (voiceMode) {
+      stopSpeaking();
+    } else {
+      addMessage('assistant', "He activado el modo voz. Ahora puedes hablarme y te responderé en voz alta. 🎤 ¿Empezamos?");
+    }
+  };
+
+  const handleVoiceAnswer = (option) => {
+    const newAnswers = { ...answers, [currentQuestion]: option };
+    setAnswers(newAnswers);
+    
+    addMessage('user', option.text);
+    
+    const responsePhrases = [
+      "¡Muy buena esa! Veo que tienes las cosas claras. 👏",
+      "¡Excelente! Así me gusta, con decisión. 💪",
+      "¡Perfecto! Eso dice mucho de ti. 🎯",
+      "¡Qué interesante! Cada respuesta me ayuda a conocerte mejor. 💡",
+      "¡Genial! Continuamos con la siguiente. 😊",
+      "¡Claro que sí! Vamos bien. 🌟",
+      "¡Así se hace! Sigamos adelante. 🚀"
+    ];
+    
+    const randomPhrase = responsePhrases[Math.floor(Math.random() * responsePhrases.length)];
+    
+    setTimeout(() => {
+      if (currentQuestion < questions.length - 1) {
+        setCurrentQuestion(prev => prev + 1);
+        addMessage('assistant', `${randomPhrase} Aquí va la siguiente pregunta: ${questions[currentQuestion + 1].text}`);
+        
+        if (voiceMode) {
+          setTimeout(() => startListeningForUser(), 3000);
+        }
+      } else {
+        addMessage('assistant', `${randomPhrase} ¡Uf, ya terminamos todas las preguntas! Ahora déjame pensar un poquito y te doy tu diagnóstico personalizado. 🧠✨`);
+        
+        setTimeout(() => {
+          analyzeResults(newAnswers);
+        }, 2500);
+      }
+    }, 800);
   };
 
   const handleNameSubmit = () => {
@@ -168,7 +292,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     
     setTimeout(() => {
       setIsTyping(false);
-      addMessage('assistant', `¡Encantado de conocerte, ${studentName}! 😊 Me alegra que estés aquí. Antes de empezar, cuéntame: ¿cómo te sientes hoy? (¿contento/a, nervioso/a, cansado/a, emocionado/a?)`);
+      addMessage('assistant', `¡Qué gusto, ${studentName}! 🥰 Me encanta tu nombre. Bueno, ya somos conocidos. Ahora dime, ¿cómo te sientes el día de hoy? Piensa en cómo estás, ¿estás con buena energía, un poco nervioso, o quizás cansado?`);
     }, 1000);
   };
 
@@ -178,15 +302,38 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     addMessage('user', mood);
     setIsTyping(true);
     
+    const moodResponses = {
+      'contento': '¡Qué wonderful! Me alegra mucho que estés con buena energía. 😊',
+      'feliz': '¡Eso es genial! La felicidad es el mejor combustible para aprender. 🎉',
+      'emocionado': '¡Qué emoción! La emoción es perfecta para descubrir cosas nuevas. 🚀',
+      'nervioso': 'Tranquilo, no te preocupes. Es totally normal sentirse así, y vamos a pasarla genial. 💪',
+      'cansado': 'Entiendo perfectamente. A veces uno llega cansado, pero no te preocupes, que esto es bem tranquilo. 😌',
+      'estresado': 'Bueno, respira hondo y relajémonos. Esto va a ser muy interesante y útil para ti. 🌟',
+    };
+    
+    const lowerMood = mood.toLowerCase();
+    let moodResponse = '';
+    
+    for (const [key, value] of Object.entries(moodResponses)) {
+      if (lowerMood.includes(key)) {
+        moodResponse = value;
+        break;
+      }
+    }
+    
+    if (!moodResponse) {
+      moodResponse = `¡Perfecto! ${mood} es un estado totally válido. Vamos a comenzar ahora.`;
+    }
+    
     setTimeout(() => {
       setIsTyping(false);
-      addMessage('assistant', `¡Entiendo! Es completamente normal sentirse ${mood}. Ahora, vamos a comenzar el Diagnóstico Cognitivo VAK. Te haré 10 preguntas sobre situaciones cotidianas para descubrir tu estilo de aprendizaje predominante. ¿Listo/a? 🚀`);
+      addMessage('assistant', `${moodResponse} Ahora voy a hacerte 10 preguntitas bem interesantes sobre situaciones de tu vida cotidiana. No hay respuestas correctas o incorrectas, solo quiero conocer cómo eres tú. ¿Listo/a? ¡Vamos! 🎯`);
       
       setTimeout(() => {
         addMessage('assistant', questions[0].text);
         setPhase('test');
-      }, 1500);
-    }, 1000);
+      }, 2000);
+    }, 1200);
   };
 
   const handleAnswer = (option) => {
@@ -215,7 +362,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
 
   const analyzeResults = async (finalAnswers) => {
     setIsTyping(true);
-    addMessage('assistant', "Excelente, has completado todas las preguntas. Estoy analizando tus respuestas para generar tu diagnóstico personalizado... 🔍");
+    addMessage('assistant', "¡Eso fue amazing, amigo! Ya tengo toda la información que necesitaba. Déjame analizar todo muy bien para darte tu perfil personalizado... 🧠✨");
 
     setTimeout(() => {
       const counts = { visual: 0, auditivo: 0, kinestesico: 0 };
@@ -229,31 +376,37 @@ const DiagnosticoVAK = ({ onNavigate }) => {
         visual: {
           name: "APRENDIZ VISUAL",
           icon: "👁️",
-          description: "Aprendes mejor cuando puedes ver la información. Prefieres imágenes, gráficos, mapas mentales y materiales escritos.",
+          description: "¡Eres un aprendiz visual! La información te entra mejor cuando puedes verla. Te encantan los gráficos, los mapas mentales, los colores y todo lo que sea visual. Tus ojos son tu mejor herramienta para aprender. 🎨",
           hacks: [
-            "Usa colores y subrayados para destacar información importante",
-            "Crea mapas mentales y diagramas para organizar ideas",
-            "Visualiza los conceptos como imágenes en tu mente"
+            "Usa colores, marcadores y subrayados para destacar lo importante",
+            "Crea mapas mentales y diagramas con imágenes y símbolos",
+            "Piensa en imágenes cuando memorices cosas nuevas",
+            "Haz resúmenes escritos con esquemas y listas visuales",
+            "Usa videos educativos y tutoriales gráficos"
           ]
         },
         auditivo: {
           name: "APRENDIZ AUDITIVO",
           icon: "👂",
-          description: "Aprendes mejor cuando escuchas y hablas. Te beneficias de explicaciones orales, discusiones y audio.",
+          description: "¡Eres un aprendiz auditivo! Aprendes mejor escuchando y hablando. Las explicaciones orales, las conversaciones y los sonidos son tu fuerte. Tus oídos son gateway al conocimiento. 🎧",
           hacks: [
-            "Graba tus notas y escúchalas repetidamente",
-            "Explica los conceptos en voz alta como si enseñaras a alguien",
-            "Usa música de fondo suave mientras estudias"
+            "Graba tus notas y escuchalas mientras caminas o haces ejercicio",
+            "Explica los temas en voz alta, como si le enseñaras a alguien",
+            "Escucha podcasts y audiolibros sobre tus temas de estudio",
+            "Participa en discussions y debates sobre lo que aprendes",
+            "Usa música instrumental suave mientras estudias"
           ]
         },
         kinestesico: {
           name: "APRENDIZ KINESTÉSICO",
           icon: "🤲",
-          description: "Aprendes mejor cuando puedes tocar, moverte y experimentar. Necesitas práctica activa y experiencias.",
+          description: "¡Eres un aprendiz kinestésico! Necesitas tocar, moverte y experimentar para aprender de verdad. El movimiento y la práctica activa son tus mejores aliados. ¡Manos a la obra! ✋",
           hacks: [
-            "Usa tarjetas físicas que puedas manipular y mover",
-            "Toma notas a mano mientras estudias",
-            "Haz pausas activas: levántate, camina, haz ejercicio entre temas"
+            "Usa tarjetas o fichas físicas que puedas manipular",
+            "Toma notas a mano, no en laptop",
+            "Haz pausas activas: levántate, estírate, camina entre temas",
+            "Busca ejercicios prácticos y experimentos",
+            "Relaciona lo que aprendes con experiencias de tu vida"
           ]
         }
       };
@@ -276,8 +429,15 @@ const DiagnosticoVAK = ({ onNavigate }) => {
       setPhase('result');
       setIsTyping(false);
       
-      addMessage('assistant', `¡${studentName}, tu diagnóstico está listo! 🎉`);
-    }, 2000);
+      const congratMessages = [
+        `¡${studentName}, tenemos tu resultado! ¡Esto es genial! 🎉 Tu perfil de aprendizaje es muy interesante y ahora sabrás exactamente cómo estudiar mejor.`,
+        `¡${studentName}, ya está! ¡Me encanta tu perfil de aprendizaje! Ahora tenemos el mapa para que aproveches tu cerebro al máximo. 🚀`,
+        `¡${studentName}, qué padre! Ya terminé tu análisis. Tu forma de aprender es única y ahora te voy a dar las mejores herramientas para ti. 💪`
+      ];
+      
+      const randomCongrats = congratMessages[Math.floor(Math.random() * congratMessages.length)];
+      addMessage('assistant', randomCongrats);
+    }, 3000);
   };
 
   const handleExportPDF = async () => {
@@ -409,17 +569,48 @@ const DiagnosticoVAK = ({ onNavigate }) => {
         <div className="bg-white/95 backdrop-blur-xl rounded-2xl border border-[rgba(178,216,229,0.5)] shadow-xl overflow-hidden">
           {/* Header */}
           <div className="bg-gradient-to-r from-[#004B63] to-[#4DA8C4] p-6">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-full bg-white/20 flex items-center justify-center">
-                <Brain className="w-8 h-8 text-white" />
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-full bg-white/20 flex items-center justify-center relative">
+                  <Brain className="w-8 h-8 text-white" />
+                  {isListening && (
+                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full animate-pulse" />
+                  )}
+                  {isSpeaking && (
+                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full animate-ping" />
+                  )}
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-white font-montserrat">
+                    Dr. Valerio - Asesor Psicopedagógico
+                  </h2>
+                  <p className="text-sm text-white/80 font-open-sans mt-1">
+                    {isListening ? '🎤 Escuchando...' : isSpeaking ? '🔊 Hablando...' : 'Especialista en PNL y estilos de aprendizaje'}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h2 className="text-xl font-bold text-white font-montserrat">
-                  Dr. Valerio - Asesor Psicopedagógico
-                </h2>
-                <p className="text-sm text-white/80 font-open-sans mt-1">
-                  Especialista en PNL y estilos de aprendizaje
-                </p>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={toggleVoiceMode}
+                  className={`px-4 py-2 rounded-full flex items-center gap-2 font-semibold text-sm transition-all duration-300 ${
+                    voiceMode 
+                      ? 'bg-white/20 text-white border-2 border-white' 
+                      : 'bg-white/10 text-white/80 border-2 border-white/30 hover:bg-white/20'
+                  }`}
+                  title={voiceMode ? 'Desactivar modo voz' : 'Activar modo voz'}
+                >
+                  <MessageCircle className="w-5 h-5" />
+                  <span>{voiceMode ? 'Modo Voz ON' : 'Modo Voz'}</span>
+                </button>
+                {isSpeaking && (
+                  <button
+                    onClick={stopSpeaking}
+                    className="p-3 rounded-full bg-red-500/80 text-white hover:bg-red-500 transition-all"
+                    title="Detener audio"
+                  >
+                    <Volume2 className="w-5 h-5" />
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -484,14 +675,24 @@ const DiagnosticoVAK = ({ onNavigate }) => {
           {phase === 'calibration' && messages.length > 0 && !mood && (
             <div className="p-6 border-t border-[#E2E8F0] bg-[#F8FAFC]">
               <div className="flex gap-3">
-                <input
-                  type="text"
-                  value={studentName}
-                  onChange={(e) => setStudentName(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleNameSubmit()}
-                  placeholder="Escribe tu nombre..."
-                  className="flex-1 px-4 py-3 rounded-xl border border-[#E2E8F0] focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] font-open-sans"
-                />
+                <div className="flex-1 relative">
+                  <input
+                    type="text"
+                    value={studentName}
+                    onChange={(e) => setStudentName(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleNameSubmit()}
+                    placeholder="Escribe tu nombre o presiona el micrófono..."
+                    className="w-full px-4 py-3 pr-12 rounded-xl border border-[#E2E8F0] focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] font-open-sans"
+                  />
+                  <button
+                    onClick={() => iniciarReconocimiento(setStudentName, handleNameSubmit, setIsListening)}
+                    className={`absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full transition-all ${
+                      isListening ? 'bg-red-500 text-white animate-pulse' : 'bg-[#4DA8C4]/10 text-[#4DA8C4] hover:bg-[#4DA8C4]/20'
+                    }`}
+                  >
+                    <Mic className="w-5 h-5" />
+                  </button>
+                </div>
                 <button
                   onClick={handleNameSubmit}
                   className="px-6 py-3 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-xl font-semibold font-open-sans hover:shadow-lg transition-all duration-300 flex items-center gap-2"
@@ -507,14 +708,24 @@ const DiagnosticoVAK = ({ onNavigate }) => {
           {phase === 'calibration' && messages.length > 2 && mood === '' && (
             <div className="p-6 border-t border-[#E2E8F0] bg-[#F8FAFC]">
               <div className="flex gap-3">
-                <input
-                  type="text"
-                  value={mood}
-                  onChange={(e) => setMood(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleMoodSubmit()}
-                  placeholder="¿Cómo te sientes hoy? (ej: contento, nervioso, emocionado...)"
-                  className="flex-1 px-4 py-3 rounded-xl border border-[#E2E8F0] focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] font-open-sans"
-                />
+                <div className="flex-1 relative">
+                  <input
+                    type="text"
+                    value={mood}
+                    onChange={(e) => setMood(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleMoodSubmit()}
+                    placeholder="¿Cómo te sientes hoy? (ej: contento, nervioso, emocionado...)"
+                    className="w-full px-4 py-3 pr-12 rounded-xl border border-[#E2E8F0] focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] font-open-sans"
+                  />
+                  <button
+                    onClick={() => iniciarReconocimiento(setMood, handleMoodSubmit, setIsListening)}
+                    className={`absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full transition-all ${
+                      isListening ? 'bg-red-500 text-white animate-pulse' : 'bg-[#4DA8C4]/10 text-[#4DA8C4] hover:bg-[#4DA8C4]/20'
+                    }`}
+                  >
+                    <Mic className="w-5 h-5" />
+                  </button>
+                </div>
                 <button
                   onClick={handleMoodSubmit}
                   className="px-6 py-3 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-xl font-semibold font-open-sans hover:shadow-lg transition-all duration-300 flex items-center gap-2"
@@ -529,11 +740,19 @@ const DiagnosticoVAK = ({ onNavigate }) => {
           {/* Options - Test Phase */}
           {phase === 'test' && questions[currentQuestion] && (
             <div className="p-6 border-t border-[#E2E8F0] bg-[#F8FAFC]">
+              {voiceMode && (
+                <div className="mb-4 p-4 bg-gradient-to-r from-[#66CCCC]/20 to-[#4DA8C4]/20 rounded-xl flex items-center justify-center gap-3">
+                  <div className={`w-4 h-4 rounded-full ${isListening ? 'bg-red-500 animate-pulse' : 'bg-[#4DA8C4]'}`} />
+                  <span className="text-sm font-semibold text-[#004B63]">
+                    {isListening ? '🎤 Habla ahora...' : isSpeaking ? '🔊 Escuchando respuesta...' : 'Presiona una opción o habla'}
+                  </span>
+                </div>
+              )}
               <div className="space-y-3">
                 {questions[currentQuestion].options.map((option, index) => (
                   <button
                     key={index}
-                    onClick={() => handleAnswer(option)}
+                    onClick={() => voiceMode ? handleVoiceAnswer(option) : handleAnswer(option)}
                     className="w-full text-left px-5 py-4 bg-white border-2 border-[#E2E8F0] rounded-xl hover:border-[#4DA8C4] hover:shadow-md transition-all duration-300 group"
                   >
                     <div className="flex items-center justify-between">
@@ -545,6 +764,15 @@ const DiagnosticoVAK = ({ onNavigate }) => {
                   </button>
                 ))}
               </div>
+              {voiceMode && !isListening && !isSpeaking && (
+                <button
+                  onClick={startListeningForUser}
+                  className="mt-4 w-full py-3 bg-[#66CCCC]/10 border-2 border-dashed border-[#66CCCC] rounded-xl flex items-center justify-center gap-2 text-[#004B63] font-semibold hover:bg-[#66CCCC]/20 transition-all"
+                >
+                  <Mic className="w-5 h-5" />
+                  <span>También puedes hablar tu respuesta</span>
+                </button>
+              )}
             </div>
           )}
         </div>

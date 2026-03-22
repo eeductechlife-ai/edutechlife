@@ -88,6 +88,7 @@ const NeuroEntorno = ({ onBack, onNavigate }) => {
     const [coachLoad, setCoachLoad] = useState(false);
     const [avatarState, setAvatarState] = useState('idle');
     const [showDiagnostico, setShowDiagnostico] = useState(false);
+    const [fullDiagnostico, setFullDiagnostico] = useState(false);
 
     const askCoach = async () => {
         if (!coachQ.trim()) return;
@@ -170,6 +171,10 @@ Eres Valerio, mentor educativo experto en neuroeducación y metodologías VAK de
                     <i className="fa-solid fa-info-circle" />
                     Información
                 </button>
+                <button className={`tab-btn ${activeTab === 'diagnostico' ? 'active' : ''}`} onClick={() => { setActiveTab('diagnostico'); setFullDiagnostico(true); }}>
+                    <i className="fa-solid fa-brain" />
+                    Diagnóstico VAK
+                </button>
                 <button className={`tab-btn ${activeTab === 'test' ? 'active' : ''}`} onClick={() => { setActiveTab('test'); setShowDiagnostico(true); }}>
                     <i className="fa-solid fa-clipboard-check" />
                     Test VAK
@@ -185,6 +190,10 @@ Eres Valerio, mentor educativo experto en neuroeducación y metodologías VAK de
             </div>
 
             <div className="pillar-content">
+                {activeTab === 'diagnostico' && (
+                    <DiagnosticoVAK onNavigate={onNavigate} />
+                )}
+
                 {activeTab === 'info' && (
                     <div className="features-grid">
                         {features.map((f, i) => (
