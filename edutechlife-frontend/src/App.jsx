@@ -11,6 +11,7 @@ import NeuroEntorno from './components/NeuroEntorno';
 import ProyectosNacional from './components/ProyectosNacional';
 import Consultoria from './components/Consultoria';
 import AutomationArchitect from './components/AutomationArchitect';
+import SmartBoardDashboard from './components/SmartBoardDashboard';
 import LoadingScreen, { MiniLoader } from './components/LoadingScreen';
 import { callDeepseek } from './utils/api';
 
@@ -96,19 +97,34 @@ const App = () => {
                     </button>
 
                     {/* CTA Button Premium */}
-                    <button 
-                        onClick={() => handleNavigate('ialab')}
-                        className="flex items-center gap-2 px-5 py-2 rounded-full font-display font-bold text-sm text-white transition-all duration-300 hover:opacity-90"
-                        style={{ 
-                            background: 'linear-gradient(135deg, #4DA8C4, #004B63)',
-                            boxShadow: '0 4px 15px rgba(77, 168, 196, 0.3)'
-                        }}
-                    >
-                        <span className="flex items-center gap-2">
-                            <i className="fa-solid fa-rocket text-xs" />
-                            Comenzar
-                        </span>
-                    </button>
+                    <div className="flex items-center gap-3">
+                        <button 
+                            onClick={() => handleNavigate('smartboard')}
+                            className="flex items-center gap-2 px-5 py-2 rounded-full font-display font-bold text-sm text-white transition-all duration-300 hover:opacity-90"
+                            style={{ 
+                                background: 'linear-gradient(135deg, #66CCCC, #4DA8C4)',
+                                boxShadow: '0 4px 15px rgba(102, 204, 204, 0.3)'
+                            }}
+                        >
+                            <span className="flex items-center gap-2">
+                                <i className="fa-solid fa-graduation-cap text-xs" />
+                                SmartBoard
+                            </span>
+                        </button>
+                        <button 
+                            onClick={() => handleNavigate('ialab')}
+                            className="flex items-center gap-2 px-5 py-2 rounded-full font-display font-bold text-sm text-white transition-all duration-300 hover:opacity-90"
+                            style={{ 
+                                background: 'linear-gradient(135deg, #4DA8C4, #004B63)',
+                                boxShadow: '0 4px 15px rgba(77, 168, 196, 0.3)'
+                            }}
+                        >
+                            <span className="flex items-center gap-2">
+                                <i className="fa-solid fa-rocket text-xs" />
+                                Comenzar
+                            </span>
+                        </button>
+                    </div>
                 </div>
             </header>
 
@@ -131,6 +147,7 @@ const App = () => {
                 {view === 'proyectos' && <ProyectosNacional onBack={() => handleNavigate('landing')} />}
                 {view === 'consultoria' && <Consultoria onBack={() => handleNavigate('landing')} />}
                 {view === 'automation' && <AutomationArchitect onBack={() => handleNavigate('landing')} />}
+                {view === 'smartboard' && <SmartBoardDashboard onBack={() => handleNavigate('landing')} />}
             </main>
 
             {/* Floating Chatbot */}
