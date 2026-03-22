@@ -1,15 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import ValerioAvatar from './ValerioAvatar';
-import SmartBoard from './SmartBoard';
+import DiagnosticoVAK from './DiagnosticoVAK';
 import { callDeepseek } from '../utils/api';
-
-const vakQuestions = [
-    { q: "¿Cómo prefieres aprender algo nuevo?", visual: "Viendo gráficos, diagramas o demostraciones visuales", auditory: "Escuchando explicaciones, podcasts o discutiendo", kinesthetic: "Haciendo cosas prácticas, experimentos o movimientos" },
-    { q: "¿Qué recuerdas mejor después de unos días?", visual: "Imágenes, colores y lo que leíste", auditory: "Conversaciones y sonidos", kinesthetic: "Experiencias y actividades que hiciste" },
-    { q: "Cuando te concentras, ¿qué te distrae más?", visual: "El desorden visual o cosas en movimiento", auditory: "Ruido o conversaciones", kinesthetic: "Incomodidad física o necesidad de moverte" },
-    { q: "En tu tiempo libre prefieres:", visual: "Ver películas, fotos o leer", auditory: "Escuchar música o podcasts", kinesthetic: "Deportes, manualidades o cocinar" },
-    { q: "¿Cómo organizas tus ideas?", visual: "Esquemas, mapas mentales o colores", auditory: "Explicándotelo a alguien o en voz alta", kinesthetic: "Escribiendo en papel o moviéndote" },
-];
 
 const contentByStyle = {
     visual: {
@@ -88,66 +80,14 @@ const testimoniosVAK = [
     },
 ];
 
-const NeuroEntorno = ({ onBack }) => {
-    const [activeTab, setActiveTab] = useState('test');
-    const [testStep, setTestStep] = useState(0);
-    const [testAnswers, setTestAnswers] = useState([]);
+const NeuroEntorno = ({ onBack, onNavigate }) => {
+    const [activeTab, setActiveTab] = useState('info');
     const [testResult, setTestResult] = useState(null);
-    const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [coachQ, setCoachQ] = useState('');
     const [coachMsg, setCoachMsg] = useState('');
     const [coachLoad, setCoachLoad] = useState(false);
     const [avatarState, setAvatarState] = useState('idle');
-
-    const analyzeProfile = async () => {
-        setIsAnalyzing(true);
-        setAvatarState('thinking');
-        
-        const prompt = `Analiza las siguientes respuestas del test VAK y determina el perfil de aprendizaje dominante.
-
-Respuestas: ${testAnswers.map((a, i) => `Pregunta ${i + 1}: ${a}`).join('\n')}
-
-Determina:
-1. Perfil dominante (Visual, Auditivo, Kinestésico o Multimodal)
-2. Porcentaje de cada estilo
-3. 3 fortalezas basadas en el perfil
-4. 3 áreas de mejora
-5. 5 recomendaciones específicas de estudio
-
-Responde en JSON con esta estructura exacta:
-{
-  "perfil": "string",
-  "porcentajes": {"visual": number, "auditivo": number, "kinestesico": number},
-  "fortalezas": ["string", "string", "string"],
-  "areasMejora": ["string", "string", "string"],
-  "recomendaciones": ["string", "string", "string", "string", "string"]
-}`;
-
-        try {
-            const r = await callDeepseek(prompt, 'Eres un experto en metodologías VAK y análisis de estilos de aprendizaje.', true);
-            if (r && !r.error) {
-                const data = typeof r === 'string' ? JSON.parse(r) : r;
-                setTestResult(data);
-                setActiveTab('results');
-            }
-        } catch (e) {
-            console.error('Error analyzing profile:', e);
-        }
-        
-        setIsAnalyzing(false);
-        setAvatarState('idle');
-    };
-
-    const handleAnswer = (answer) => {
-        const newAnswers = [...testAnswers, answer];
-        setTestAnswers(newAnswers);
-        
-        if (testStep < vakQuestions.length - 1) {
-            setTestStep(testStep + 1);
-        } else {
-            analyzeProfile();
-        }
-    };
+    const [showDiagnostico, setShowDiagnostico] = useState(false);
 
     const askCoach = async () => {
         if (!coachQ.trim()) return;
@@ -230,13 +170,9 @@ Eres Valerio, mentor educativo experto en neuroeducación y metodologías VAK de
                     <i className="fa-solid fa-info-circle" />
                     Información
                 </button>
-                <button className={`tab-btn ${activeTab === 'test' ? 'active' : ''}`} onClick={() => setActiveTab('test')}>
+                <button className={`tab-btn ${activeTab === 'test' ? 'active' : ''}`} onClick={() => { setActiveTab('test'); setShowDiagnostico(true); }}>
                     <i className="fa-solid fa-clipboard-check" />
                     Test VAK
-                </button>
-                <button className={`tab-btn ${activeTab === 'smartboard' ? 'active' : ''}`} onClick={() => setActiveTab('smartboard')}>
-                    <i className="fa-solid fa-chalkboard" />
-                    SmartBoard
                 </button>
                 <button className={`tab-btn ${activeTab === 'results' ? 'active' : ''}`} onClick={() => setActiveTab('results')} disabled={!testResult}>
                     <i className="fa-solid fa-chart-pie" />
@@ -273,7 +209,7 @@ Eres Valerio, mentor educativo experto en neuroeducación y metodologías VAK de
                                 Conocer tu estilo te permite estudiar de forma más eficiente.
                             </p>
                             <button 
-                                onClick={() => setActiveTab('test')}
+                                onClick={() => { setActiveTab('test'); setShowDiagnostico(true); }}
                                 className="px-8 py-4 rounded-full font-montserrat font-bold text-white"
                                 style={{ background: 'linear-gradient(135deg, #4DA8C4, #66CCCC)' }}
                             >
@@ -286,59 +222,10 @@ Eres Valerio, mentor educativo experto en neuroeducación y metodologías VAK de
 
                 {activeTab === 'test' && (
                     <div className="vak-test-container">
-                        {!testResult ? (
-                            <div className="vak-test-card">
-                                <div className="vak-progress">
-                                    <div className="vak-progress-bar" style={{ width: `${((testStep + 1) / vakQuestions.length) * 100}%` }} />
-                                </div>
-                                <div className="vak-step-indicator">
-                                    Pregunta {testStep + 1} de {vakQuestions.length}
-                                </div>
-
-                                <h3 className="vak-question">{vakQuestions[testStep].q}</h3>
-
-                                <div className="vak-options">
-                                    <button 
-                                        className="vak-option"
-                                        onClick={() => handleAnswer('Visual')}
-                                        style={{ '--option-color': '#4DA8C4' }}
-                                    >
-                                        <div className="vak-option-icon" style={{ background: 'rgba(77, 168, 196, 0.15)', color: '#4DA8C4' }}>
-                                            <i className="fa-solid fa-eye" />
-                                        </div>
-                                        <span>{vakQuestions[testStep].visual}</span>
-                                    </button>
-                                    
-                                    <button 
-                                        className="vak-option"
-                                        onClick={() => handleAnswer('Auditivo')}
-                                        style={{ '--option-color': '#66CCCC' }}
-                                    >
-                                        <div className="vak-option-icon" style={{ background: 'rgba(102, 204, 204, 0.15)', color: '#66CCCC' }}>
-                                            <i className="fa-solid fa-ear-listen" />
-                                        </div>
-                                        <span>{vakQuestions[testStep].auditory}</span>
-                                    </button>
-                                    
-                                    <button 
-                                        className="vak-option"
-                                        onClick={() => handleAnswer('Kinestésico')}
-                                        style={{ '--option-color': '#004B63' }}
-                                    >
-                                        <div className="vak-option-icon" style={{ background: 'rgba(0, 75, 99, 0.15)', color: '#004B63' }}>
-                                            <i className="fa-solid fa-hand" />
-                                        </div>
-                                        <span>{vakQuestions[testStep].kinesthetic}</span>
-                                    </button>
-                                </div>
-
-                                {isAnalyzing && (
-                                    <div className="vak-analyzing">
-                                        <ValerioAvatar state="thinking" size={64} />
-                                        <p>Analizando tu perfil de aprendizaje...</p>
-                                    </div>
-                                )}
-                            </div>
+                        {showDiagnostico ? (
+                            <DiagnosticoVAK 
+                                onNavigate={onNavigate}
+                            />
                         ) : (
                             <div className="vak-results-ready">
                                 <p>Ya completaste el test. Ve a "Mi Perfil" para ver tus resultados.</p>
@@ -351,12 +238,6 @@ Eres Valerio, mentor educativo experto en neuroeducación y metodologías VAK de
                                 </button>
                             </div>
                         )}
-                    </div>
-                )}
-
-                {activeTab === 'smartboard' && (
-                    <div className="smartboard-container">
-                        <SmartBoard embedded={true} />
                     </div>
                 )}
 
@@ -448,7 +329,7 @@ Eres Valerio, mentor educativo experto en neuroeducación y metodologías VAK de
                         <div className="testimonios-cta">
                             <p>¿Listo para escribir tu propia historia de éxito?</p>
                             <button 
-                                onClick={() => setActiveTab('test')}
+                                onClick={() => { setActiveTab('test'); setShowDiagnostico(true); }}
                                 className="cta-testimonials"
                             >
                                 <i className="fa-solid fa-rocket" />

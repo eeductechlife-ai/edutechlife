@@ -5,9 +5,9 @@ import XPProgressBar from './XPProgressBar';
 import MissionCard from './MissionCard';
 import SubjectGrid from './SubjectGrid';
 import { useCustomCursor } from '../hooks/useCustomCursor';
-import { ArrowLeft, Home } from 'lucide-react';
+import { LogOut, GraduationCap } from 'lucide-react';
 
-const SmartBoardDashboard = ({ onNavigate }) => {
+const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
     const [activeTab, setActiveTab] = useState('inicio');
     const [valeriaState, setValeriaState] = useState('idle');
     const [userXP, setUserXP] = useState(1250);
@@ -460,22 +460,45 @@ const SmartBoardDashboard = ({ onNavigate }) => {
             ref={dashboardRef}
             className="relative min-h-screen bg-gradient-to-br from-[#F8FAFC] via-[#FFFFFF] to-[#E2E8F0] overflow-hidden"
         >
-            {/* Botón flotante para volver al inicio */}
-            <button
-                onClick={() => onNavigate('landing')}
-                className="fixed top-6 right-6 z-50 flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
-            >
-                <Home className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                <span className="text-sm font-semibold font-open-sans">Volver al Inicio</span>
-            </button>
+            {/* Top Bar con Logo y Logout */}
+            <div className="bg-white border-b border-[#E2E8F0] px-6 py-4 shadow-sm">
+                <div className="flex items-center justify-between">
+                    {/* Logo y Título */}
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#4DA8C4] to-[#004B63] flex items-center justify-center shadow-lg">
+                            <GraduationCap className="w-5 h-5 text-white" />
+                        </div>
+                        <div>
+                            <h1 className="text-xl font-bold text-[#004B63] font-montserrat tracking-tight">
+                                SmartBoard Premium
+                            </h1>
+                            <p className="text-xs text-[#64748B] font-open-sans">
+                                v2.286
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Botón de Logout */}
+                    <button
+                        onClick={onLogout}
+                        className="flex items-center gap-2 px-4 py-2.5 bg-[#F1F5F9] border border-[#E2E8F0] rounded-xl hover:bg-[#FF6B9D]/10 hover:border-[#FF6B9D]/20 transition-all duration-300 group"
+                    >
+                        <LogOut className="w-4 h-4 text-[#64748B] group-hover:text-[#FF6B9D] transition-colors" />
+                        <span className="text-sm font-semibold text-[#64748B] group-hover:text-[#FF6B9D] font-open-sans transition-colors">
+                            Cerrar Sesión
+                        </span>
+                    </button>
+                </div>
+            </div>
             
             {/* Dashboard Layout */}
-            <div className="flex h-screen">
+            <div className="flex h-[calc(100vh-73px)]">
                 {/* Sidebar Navigation */}
                 <div className="w-80">
                     <SidebarNavigation 
                         activeTab={activeTab}
                         onTabChange={setActiveTab}
+                        onNavigate={onNavigate}
                     />
                 </div>
 

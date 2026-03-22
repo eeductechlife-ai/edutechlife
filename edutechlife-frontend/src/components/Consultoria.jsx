@@ -259,9 +259,9 @@ const Consultoria = ({ onBack }) => {
                     <i className="fa-solid fa-calculator" />
                     Calculadora ROI
                 </button>
-                <button className={`tab-btn ${activeTab === 'arquitecto' ? 'active' : ''}`} onClick={() => setActiveTab('arquitecto')}>
-                    <i className="fa-solid fa-sitemap" />
-                    Arquitecto IA
+                <button className={`tab-btn ${activeTab === 'ai-tools' ? 'active' : ''}`} onClick={() => setActiveTab('ai-tools')}>
+                    <i className="fa-solid fa-brain" />
+                    Herramientas IA
                 </button>
             </div>
 
@@ -791,6 +791,69 @@ const Consultoria = ({ onBack }) => {
                                     <span>Cálculos basados en promedios de la industria. Los resultados reales pueden variar. Consulta con nuestros especialistas para un análisis personalizado.</span>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === 'ai-tools' && (
+                    <div className="ai-tools-section">
+                        <div className="ai-tools-header">
+                            <div className="neural-badge">
+                                <i className="fa-solid fa-brain" />
+                                <span>Herramientas de Análisis IA</span>
+                            </div>
+                            <h2>Potencia tu Consultoría con Inteligencia Artificial</h2>
+                            <p>Accede a herramientas especializadas para análisis financiero y diseño de flujos de automatización</p>
+                        </div>
+
+                        <div className="ai-tools-grid">
+                            <div className="ai-tool-card" onClick={() => onNavigate('consultoria-b2b')}>
+                                <div className="ai-tool-icon">
+                                    <i className="fa-solid fa-chart-line" />
+                                </div>
+                                <h3>Calculadora ROI Neural</h3>
+                                <p>Calcula el retorno de inversión de implementaciones de IA con análisis financiero detallado</p>
+                                <div className="ai-tool-features">
+                                    <span><i className="fa-solid fa-check" /> ROI Proyectado</span>
+                                    <span><i className="fa-solid fa-check" /> Ahorro Estimado</span>
+                                    <span><i className="fa-solid fa-check" /> Análisis Porcentual</span>
+                                </div>
+                                <div className="ai-tool-action">
+                                    <span>Acceder</span>
+                                    <i className="fa-solid fa-arrow-right" />
+                                </div>
+                            </div>
+
+                            <div className="ai-tool-card" onClick={() => onNavigate('consultoria-b2b')}>
+                                <div className="ai-tool-icon">
+                                    <i className="fa-solid fa-sitemap" />
+                                </div>
+                                <h3>Arquitecto de Automatización</h3>
+                                <p>Diseña workflows técnicos y sistemas de automatización paso a paso</p>
+                                <div className="ai-tool-features">
+                                    <span><i className="fa-solid fa-check" /> Workflows Detallados</span>
+                                    <span><i className="fa-solid fa-check" /> Especificaciones Técnicas</span>
+                                    <span><i className="fa-solid fa-check" /> Roadmap de Implementación</span>
+                                </div>
+                                <div className="ai-tool-action">
+                                    <span>Acceder</span>
+                                    <i className="fa-solid fa-arrow-right" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="ai-tools-cta">
+                            <div className="cta-content">
+                                <i className="fa-solid fa-rocket" />
+                                <div>
+                                    <h3>¿Necesitas un análisis personalizado?</h3>
+                                    <p>Agenda una sesión con nuestros consultores B2B para un diagnóstico específico</p>
+                                </div>
+                            </div>
+                            <button className="cta-btn" onClick={() => setActiveTab('contacto')}>
+                                <i className="fa-solid fa-calendar" />
+                                Agendar Consultoría
+                            </button>
                         </div>
                     </div>
                 )}

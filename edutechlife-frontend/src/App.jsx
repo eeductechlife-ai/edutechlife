@@ -10,14 +10,18 @@ import Footer from './components/Footer';
 import NeuroEntorno from './components/NeuroEntorno';
 import ProyectosNacional from './components/ProyectosNacional';
 import Consultoria from './components/Consultoria';
+import ConsultoriaB2B from './components/ConsultoriaB2B';
 import AutomationArchitect from './components/AutomationArchitect';
 import SmartBoardDashboard from './components/SmartBoardDashboard';
+import SmartBoardLogin from './components/SmartBoardLogin';
+import DiagnosticoVAK from './components/DiagnosticoVAK';
 import LoadingScreen, { MiniLoader } from './components/LoadingScreen';
 import { callDeepseek } from './utils/api';
 
 const App = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [view, setView] = useState('landing');
+    const [smartboardAuthenticated, setSmartboardAuthenticated] = useState(false);
     const [botOpen, setBotOpen] = useState(false);
     const [botMsgs, setBotMsgs] = useState([{ 
         role: 'assistant', 
@@ -67,6 +71,16 @@ const App = () => {
     const handleNavigate = useCallback(v => {
         setView(v);
         window.scrollTo(0, 0);
+    }, []);
+
+    const handleSmartboardLogin = useCallback((user) => {
+        setSmartboardAuthenticated(true);
+        setView('smartboard');
+    }, []);
+
+    const handleSmartboardLogout = useCallback(() => {
+        setSmartboardAuthenticated(false);
+        setView('landing');
     }, []);
 
     const handleLoadingComplete = useCallback(() => {
@@ -146,59 +160,72 @@ const App = () => {
                 {view === 'neuroentorno' && <NeuroEntorno onBack={() => handleNavigate('landing')} />}
                 {view === 'proyectos' && <ProyectosNacional onBack={() => handleNavigate('landing')} />}
                 {view === 'consultoria' && <Consultoria onBack={() => handleNavigate('landing')} />}
+                {view === 'consultoria-b2b' && <ConsultoriaB2B onBack={() => handleNavigate('landing')} />}
                 {view === 'automation' && <AutomationArchitect onBack={() => handleNavigate('landing')} />}
-                {view === 'smartboard' && <SmartBoardDashboard onNavigate={handleNavigate} />}
+                
+                {/* SmartBoard - Con Login */}
+                {view === 'smartboard' && !smartboardAuthenticated && (
+                    <SmartBoardLogin onLogin={handleSmartboardLogin} />
+                )}
+                {view === 'smartboard' && smartboardAuthenticated && (
+                    <SmartBoardDashboard onNavigate={handleNavigate} onLogout={handleSmartboardLogout} />
+                )}
+                
+                {/* VAK Test - Fuera del SmartBoard */}
+                {view === 'vak' && <DiagnosticoVAK onNavigate={handleNavigate} />}
             </main>
 
-            {/* Floating Chatbot */}
-            <div className="chatbot-container">
-                {botOpen && (
-                    <div className="chatbot-window">
-                        <div className="chatbot-header">
-                            <div className="chatbot-avatar">
-                                <i className="fa-solid fa-robot"></i>
+            {/* Floating Chatbot - Solo en páginas principales */}
+            {view !== 'smartboard' && view !== 'vak' && (
+                <div className="chatbot-container">
+                    {botOpen && (
+                        <div className="chatbot-window">
+                            <div className="chatbot-header">
+                                <div className="chatbot-avatar">
+                                    <i className="fa-solid fa-robot"></i>
+                                </div>
+                                <span>Nico</span>
+                                <button onClick={() => setBotOpen(false)} className="chatbot-close">
+                                    <i className="fa-solid fa-xmark"></i>
+                                </button>
                             </div>
-                            <span>Nico</span>
-                            <button onClick={() => setBotOpen(false)} className="chatbot-close">
-                                <i className="fa-solid fa-xmark"></i>
-                            </button>
+                            <div className="chatbot-messages">
+                                {botMsgs.map((msg, i) => (
+                                    <div key={i} className={`chatbot-msg ${msg.role}`}>
+                                        {msg.text}
+                                    </div>
+                                ))}
+                                {botLoading && (
+                                    <div className="chatbot-loading">
+                                        <MiniLoader size="sm" color="white" />
+                                    </div>
+                                )}
+                                <div ref={botMsgsEndRef} />
+                            </div>
+                            <div className="chatbot-input">
+                                <input 
+                                    type="text" 
+                                    value={botInput} 
+                                    onChange={(e) => setBotInput(e.target.value)}
+                                    onKeyDown={(e) => e.key === 'Enter' && handleBotSend()}
+                                    placeholder="Escribe un mensaje..."
+                                />
+                                <button onClick={handleBotSend}>
+                                    <i className="fa-solid fa-paper-plane"></i>
+                                </button>
+                            </div>
                         </div>
-                        <div className="chatbot-messages">
-                            {botMsgs.map((msg, i) => (
-                                <div key={i} className={`chatbot-msg ${msg.role}`}>
-                                    {msg.text}
-                                </div>
-                            ))}
-                            {botLoading && (
-                                <div className="chatbot-loading">
-                                    <MiniLoader size="sm" color="white" />
-                                </div>
-                            )}
-                            <div ref={botMsgsEndRef} />
-                        </div>
-                        <div className="chatbot-input">
-                            <input 
-                                type="text" 
-                                value={botInput} 
-                                onChange={(e) => setBotInput(e.target.value)}
-                                onKeyDown={(e) => e.key === 'Enter' && handleBotSend()}
-                                placeholder="Escribe un mensaje..."
-                            />
-                            <button onClick={handleBotSend}>
-                                <i className="fa-solid fa-paper-plane"></i>
-                            </button>
-                        </div>
-                    </div>
-                )}
-                <button 
-                    className="chatbot-toggle"
-                    onClick={() => setBotOpen(!botOpen)} 
-                >
-                    <i className={`fa-solid ${botOpen ? 'fa-xmark' : 'fa-comment-dots'}`}></i>
-                </button>
-            </div>
-            {/* Footer - Solo se muestra en páginas principales, no en SmartBoard */}
-            {view !== 'smartboard' && <Footer />}
+                    )}
+                    <button 
+                        className="chatbot-toggle"
+                        onClick={() => setBotOpen(!botOpen)} 
+                    >
+                        <i className={`fa-solid ${botOpen ? 'fa-xmark' : 'fa-comment-dots'}`}></i>
+                    </button>
+                </div>
+            )}
+            {/* Footer - Solo se muestra en páginas principales, no en SmartBoard ni VAK */}
+            {view !== 'smartboard' && view !== 'vak' && <Footer />}
         </div>
     );
 };

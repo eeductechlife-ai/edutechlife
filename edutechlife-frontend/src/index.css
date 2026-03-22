@@ -9277,3 +9277,33 @@ h2, h3, h4, h5 {
 .animate-slide-down {
   animation: slide-down 0.3s ease-out;
 }
+
+/* AI Tools Section - Consultoria B2B */
+.ai-tools-section { padding: 2rem 0; }
+.ai-tools-header { text-align: center; margin-bottom: 3rem; }
+.ai-tools-header .neural-badge { display: inline-flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1.5rem; background: linear-gradient(135deg, rgba(77, 168, 196, 0.15), rgba(102, 204, 204, 0.1)); border: 1px solid rgba(77, 168, 196, 0.3); border-radius: 100px; color: #4DA8C4; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.5rem; }
+.ai-tools-header h2 { font-family: 'Montserrat', sans-serif; font-size: 2rem; font-weight: 800; color: #004B63; margin-bottom: 0.75rem; }
+.ai-tools-header p { color: #64748B; max-width: 600px; margin: 0 auto; }
+.ai-tools-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; max-width: 1000px; margin: 0 auto 3rem; }
+.ai-tool-card { background: white; border: 1px solid rgba(0, 75, 99, 0.08); border-radius: 1.5rem; padding: 2rem; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; }
+.ai-tool-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #4DA8C4, #66CCCC); transform: scaleX(0); transition: transform 0.3s ease; }
+.ai-tool-card:hover { transform: translateY(-8px); box-shadow: 0 25px 50px rgba(0, 75, 99, 0.15); border-color: rgba(77, 168, 196, 0.3); }
+.ai-tool-card:hover::before { transform: scaleX(1); }
+.ai-tool-icon { width: 64px; height: 64px; background: linear-gradient(135deg, #004B63, #4DA8C4); border-radius: 1rem; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; }
+.ai-tool-icon i { font-size: 1.75rem; color: white; }
+.ai-tool-card h3 { font-family: 'Montserrat', sans-serif; font-size: 1.25rem; font-weight: 700; color: #004B63; margin-bottom: 0.75rem; }
+.ai-tool-card p { font-size: 0.9rem; color: #64748B; line-height: 1.6; margin-bottom: 1.5rem; }
+.ai-tool-features { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
+.ai-tool-features span { font-size: 0.75rem; padding: 0.4rem 0.75rem; background: rgba(77, 168, 196, 0.1); color: #4DA8C4; border-radius: 100px; display: flex; align-items: center; gap: 0.4rem; }
+.ai-tool-action { display: flex; align-items: center; justify-content: space-between; padding-top: 1rem; border-top: 1px solid rgba(0, 75, 99, 0.08); }
+.ai-tool-action span { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #004B63; }
+.ai-tool-action i { color: #4DA8C4; transition: transform 0.3s ease; }
+.ai-tool-card:hover .ai-tool-action i { transform: translateX(4px); }
+.ai-tools-cta { display: flex; align-items: center; justify-content: space-between; gap: 2rem; max-width: 1000px; margin: 0 auto; padding: 2rem; background: linear-gradient(135deg, #004B63, #0B2A3A); border-radius: 1.5rem; }
+.cta-content { display: flex; align-items: center; gap: 1.5rem; }
+.cta-content i { width: 56px; height: 56px; background: rgba(77, 168, 196, 0.2); border-radius: 1rem; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #4DA8C4; }
+.cta-content h3 { font-family: 'Montserrat', sans-serif; font-size: 1.25rem; font-weight: 700; color: white; margin-bottom: 0.25rem; }
+.cta-content p { font-size: 0.9rem; color: rgba(255, 255, 255, 0.7); }
+.cta-btn { display: flex; align-items: center; gap: 0.75rem; padding: 1rem 2rem; background: linear-gradient(135deg, #4DA8C4, #66CCCC); border: none; border-radius: 100px; color: white; font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s ease; white-space: nowrap; }
+.cta-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(77, 168, 196, 0.4); }
+@media (max-width: 768px) { .ai-tools-grid { grid-template-columns: 1fr; } .ai-tools-cta { flex-direction: column; text-align: center; } .cta-content { flex-direction: column; } }

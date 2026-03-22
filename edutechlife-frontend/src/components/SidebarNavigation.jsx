@@ -10,7 +10,7 @@ import {
   Clock
 } from 'lucide-react';
 
-const SidebarNavigation = ({ activeTab, onTabChange }) => {
+const SidebarNavigation = ({ activeTab, onTabChange, onNavigate }) => {
   const [hoveredTab, setHoveredTab] = useState(null);
 
   const tabs = [
@@ -31,7 +31,7 @@ const SidebarNavigation = ({ activeTab, onTabChange }) => {
   return (
     <div className="h-full flex flex-col bg-white border-r border-[#E2E8F0] shadow-lg">
       {/* Navigation Tabs */}
-      <div className="flex-1 p-4 pt-8">
+      <div className="flex-1 p-4 pt-6">
         <nav className="space-y-2">
           {tabs.map((tab) => {
             const Icon = tab.icon;
