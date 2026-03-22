@@ -15,6 +15,8 @@ import AutomationArchitect from './components/AutomationArchitect';
 import SmartBoardDashboard from './components/SmartBoardDashboard';
 import SmartBoardLogin from './components/SmartBoardLogin';
 import DiagnosticoVAK from './components/DiagnosticoVAK';
+import AdminDashboard from './components/AdminDashboard';
+import AdminLoginModal from './components/AdminLoginModal';
 import LoadingScreen, { MiniLoader } from './components/LoadingScreen';
 import { callDeepseek } from './utils/api';
 
@@ -22,6 +24,8 @@ const App = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [view, setView] = useState('landing');
     const [smartboardAuthenticated, setSmartboardAuthenticated] = useState(false);
+    const [adminAuthenticated, setAdminAuthenticated] = useState(false);
+    const [adminLoginModalOpen, setAdminLoginModalOpen] = useState(false);
     const [botOpen, setBotOpen] = useState(false);
     const [botMsgs, setBotMsgs] = useState([{ 
         role: 'assistant', 
@@ -80,6 +84,17 @@ const App = () => {
 
     const handleSmartboardLogout = useCallback(() => {
         setSmartboardAuthenticated(false);
+        setView('landing');
+    }, []);
+
+    const handleAdminLogin = useCallback(() => {
+        setAdminAuthenticated(true);
+        setAdminLoginModalOpen(false);
+        setView('admin');
+    }, []);
+
+    const handleAdminLogout = useCallback(() => {
+        setAdminAuthenticated(false);
         setView('landing');
     }, []);
 
@@ -151,6 +166,20 @@ const App = () => {
                                 SmartBoard
                             </span>
                         </button>
+                        <button 
+                            onClick={() => adminAuthenticated ? handleNavigate('admin') : setAdminLoginModalOpen(true)}
+                            className="flex items-center gap-2 px-4 py-2 rounded-full font-display font-bold text-sm text-white transition-all duration-300 hover:opacity-90"
+                            style={{ 
+                                background: 'linear-gradient(135deg, #0B0F19, #004B63)',
+                                border: '1px solid #4DA8C4/30',
+                                boxShadow: '0 4px 15px rgba(0, 75, 99, 0.3)'
+                            }}
+                        >
+                            <span className="flex items-center gap-2">
+                                <i className="fa-solid fa-shield-halved text-xs" />
+                                Admin
+                            </span>
+                        </button>
                     </div>
                 </div>
             </header>
@@ -186,10 +215,15 @@ const App = () => {
                 
                 {/* VAK Test - Fuera del SmartBoard */}
                 {view === 'vak' && <DiagnosticoVAK onNavigate={handleNavigate} />}
+                
+                {/* Admin Dashboard - Protected */}
+                {view === 'admin' && adminAuthenticated && (
+                    <AdminDashboard onLogout={handleAdminLogout} onBack={() => handleNavigate('landing')} />
+                )}
             </main>
 
-            {/* Floating Chatbot - Solo en páginas principales */}
-            {view !== 'smartboard' && view !== 'vak' && (
+            {/* Floating Chatbot - Solo en páginas principales, no en Admin */}
+            {view !== 'smartboard' && view !== 'vak' && view !== 'admin' && (
                 <div className="chatbot-container">
                     {botOpen && (
                         <div className="chatbot-window">
@@ -237,8 +271,15 @@ const App = () => {
                     </button>
                 </div>
             )}
-            {/* Footer - Solo se muestra en páginas principales, no en SmartBoard ni VAK */}
-            {view !== 'smartboard' && view !== 'vak' && <Footer />}
+            {/* Footer - Solo se muestra en páginas principales, no en SmartBoard, VAK ni Admin */}
+            {view !== 'smartboard' && view !== 'vak' && view !== 'admin' && <Footer />}
+
+            {/* Admin Login Modal */}
+            <AdminLoginModal 
+                isOpen={adminLoginModalOpen}
+                onClose={() => setAdminLoginModalOpen(false)}
+                onLogin={handleAdminLogin}
+            />
         </div>
     );
 };

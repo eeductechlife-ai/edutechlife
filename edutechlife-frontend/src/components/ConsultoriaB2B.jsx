@@ -5,7 +5,6 @@ import html2pdf from 'html2pdf.js';
 const ConsultoriaB2B = ({ onBack }) => {
     const [activeTool, setActiveTool] = useState('roi');
     const [roiResult, setRoiResult] = useState(null);
-    const [automationResult, setAutomationResult] = useState(null);
     
     const roiSystemPrompt = `Eres un CONSULTOR FINANCIERO EXPERTO en optimización de procesos empresariales con IA. Tienes 15+ años de experiencia en análisis financiero, ROI, reducción de costos operativos y transformación digital. Tu especialidad es calcular y proyectar el retorno de inversión (ROI) de implementaciones de IA en organizaciones educativas y empresariales.
 
@@ -231,31 +230,31 @@ Sé muy técnico y detallado. Tu respuesta debe poder ser entregada a un equipo 
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-[#0a1628] via-[#0f172a] to-[#1a2744]">
+        <div className="min-h-screen bg-gradient-to-br from-[#F8FAFC] via-[#FFFFFF] to-[#E2E8F0]">
             {/* Header */}
-            <div className="border-b border-[#4DA8C4]/30 bg-[#0a1628]/90 backdrop-blur-xl">
-                <div className="container-premium flex items-center justify-between py-4 px-6">
+            <div className="bg-white border-b border-[#E2E8F0] shadow-sm">
+                <div className="max-w-7xl mx-auto flex items-center justify-between py-4 px-6">
                     <div className="flex items-center gap-4">
                         <button 
                             onClick={onBack}
-                            className="flex items-center gap-2 px-4 py-2 bg-[#004B63] hover:bg-[#003d54] border border-[#4DA8C4]/50 rounded-lg transition-all"
+                            className="flex items-center gap-2 px-4 py-2 bg-[#F1F5F9] hover:bg-[#4DA8C4] hover:text-white border border-[#E2E8F0] rounded-lg transition-all duration-300"
                         >
-                            <i className="fa-solid fa-arrow-left text-[#4DA8C4]" />
-                            <span className="text-sm text-white">Volver</span>
+                            <i className="fa-solid fa-arrow-left text-[#4DA8C4] hover:text-white" />
+                            <span className="text-sm text-[#64748B] hover:text-white">Volver</span>
                         </button>
-                        <div className="h-8 w-px bg-[#4DA8C4]/30" />
+                        <div className="h-8 w-px bg-[#E2E8F0]" />
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] rounded-lg flex items-center justify-center">
                                 <i className="fa-solid fa-building text-white" />
                             </div>
                             <div>
-                                <h1 className="font-montserrat font-bold text-lg text-white">Consultoría B2B</h1>
-                                <p className="text-xs text-[#B2D8E5]">Herramientas de Análisis Empresarial</p>
+                                <h1 className="font-montserrat font-bold text-lg text-[#004B63]">Herramientas IA</h1>
+                                <p className="text-xs text-[#64748B]">Consultoría B2B de Edutechlife</p>
                             </div>
                         </div>
                     </div>
                     <div className="flex items-center gap-3">
-                        <span className="px-3 py-1 bg-[#66CCCC]/20 border border-[#66CCCC]/40 rounded-full text-xs text-[#66CCCC] font-mono">
+                        <span className="px-3 py-1 bg-[#66CCCC]/20 border border-[#66CCCC]/40 rounded-full text-xs text-[#004B63] font-mono font-semibold">
                             PREMIUM
                         </span>
                     </div>
@@ -263,53 +262,57 @@ Sé muy técnico y detallado. Tu respuesta debe poder ser entregada a un equipo 
             </div>
 
             {/* Main Content */}
-            <div className="container mx-auto px-6 py-8">
+            <div className="max-w-7xl mx-auto px-6 py-8">
                 {/* Tool Selector */}
                 <div className="flex gap-4 mb-8">
                     <button
                         onClick={() => setActiveTool('roi')}
-                        className={`flex-1 relative px-6 py-4 rounded-xl transition-all duration-300 ${
+                        className={`flex-1 relative px-6 py-5 rounded-2xl transition-all duration-300 ${
                             activeTool === 'roi' 
-                                ? 'bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white shadow-lg shadow-[#4DA8C4]/30' 
-                                : 'bg-[rgba(255,255,255,0.06)] text-[#B2D8E5] hover:bg-[rgba(255,255,255,0.1)] border border-[#4DA8C4]/30'
+                                ? 'bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white shadow-xl shadow-[#4DA8C4]/30' 
+                                : 'bg-white text-[#004B63] hover:shadow-lg border border-[#E2E8F0] hover:border-[#4DA8C4]'
                         }`}
                     >
-                        <div className="flex items-center justify-center gap-3">
-                            <i className="fa-solid fa-chart-line text-xl" />
+                        <div className="flex items-center justify-center gap-4">
+                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${activeTool === 'roi' ? 'bg-white/20' : 'bg-[#4DA8C4]/10'}`}>
+                                <i className={`fa-solid fa-chart-line text-2xl ${activeTool === 'roi' ? 'text-white' : 'text-[#4DA8C4]'}`} />
+                            </div>
                             <div className="text-left">
-                                <div className="font-montserrat font-bold">Calculadora ROI Neural</div>
-                                <div className="text-xs opacity-80">Análisis financiero con IA</div>
+                                <div className="font-montserrat font-bold text-lg">Calculadora ROI Neural</div>
+                                <div className={`text-sm ${activeTool === 'roi' ? 'text-white/80' : 'text-[#64748B]'}`}>Análisis financiero con IA</div>
                             </div>
                         </div>
                         {activeTool === 'roi' && (
-                            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-12 h-1 bg-[#66CCCC] rounded-full animate-pulse" />
+                            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-12 h-1 bg-[#66CCCC] rounded-full" />
                         )}
                     </button>
                     <button
                         onClick={() => setActiveTool('automation')}
-                        className={`flex-1 relative px-6 py-4 rounded-xl transition-all duration-300 ${
+                        className={`flex-1 relative px-6 py-5 rounded-2xl transition-all duration-300 ${
                             activeTool === 'automation' 
-                                ? 'bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white shadow-lg shadow-[#4DA8C4]/30' 
-                                : 'bg-[rgba(255,255,255,0.06)] text-[#B2D8E5] hover:bg-[rgba(255,255,255,0.1)] border border-[#4DA8C4]/30'
+                                ? 'bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white shadow-xl shadow-[#4DA8C4]/30' 
+                                : 'bg-white text-[#004B63] hover:shadow-lg border border-[#E2E8F0] hover:border-[#4DA8C4]'
                         }`}
                     >
-                        <div className="flex items-center justify-center gap-3">
-                            <i className="fa-solid fa-sitemap text-xl" />
+                        <div className="flex items-center justify-center gap-4">
+                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${activeTool === 'automation' ? 'bg-white/20' : 'bg-[#66CCCC]/10'}`}>
+                                <i className={`fa-solid fa-sitemap text-2xl ${activeTool === 'automation' ? 'text-white' : 'text-[#66CCCC]'}`} />
+                            </div>
                             <div className="text-left">
-                                <div className="font-montserrat font-bold">Arquitecto de Automatización</div>
-                                <div className="text-xs opacity-80">Workflows y sistemas IA</div>
+                                <div className="font-montserrat font-bold text-lg">Arquitecto de Automatización</div>
+                                <div className={`text-sm ${activeTool === 'automation' ? 'text-white/80' : 'text-[#64748B]'}`}>Workflows y sistemas IA</div>
                             </div>
                         </div>
                         {activeTool === 'automation' && (
-                            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-12 h-1 bg-[#66CCCC] rounded-full animate-pulse" />
+                            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-12 h-1 bg-[#66CCCC] rounded-full" />
                         )}
                     </button>
                 </div>
 
                 {/* AI Panels Grid */}
-                <div className={`${activeTool === 'roi' ? 'grid grid-cols-1 lg:grid-cols-2 gap-8' : 'grid grid-cols-1'}`}>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* ROI Calculator Panel */}
-                    <div className={activeTool === 'roi' ? 'block' : 'hidden lg:block'}>
+                    <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-lg overflow-hidden">
                         <AIPanel
                             title="CALCULADORA ROI NEURAL"
                             icon="fa-chart-line"
@@ -322,71 +325,64 @@ Ejemplo: Tenemos 50 empleados, queremos automatizar gestión de estudiantes y re
                         />
                         
                         {roiResult && (
-                            <div className="mt-6 flex gap-4">
-                                <button
-                                    onClick={() => handleDownloadPDF(roiResult, 'DIAGNÓSTICO ROI NEURAL', 'ROI')}
-                                    className="flex-1 px-6 py-4 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white rounded-xl font-montserrat font-bold hover:shadow-xl hover:shadow-[#4DA8C4]/30 transition-all duration-300 flex items-center justify-center gap-3 group"
-                                >
-                                    <i className="fa-solid fa-file-pdf text-lg group-hover:scale-110 transition-transform" />
-                                    <span>Descargar PDF</span>
-                                </button>
-                                <button
-                                    onClick={() => handleDownloadWord(roiResult, 'DIAGNÓSTICO ROI NEURAL', 'ROI')}
-                                    className="flex-1 px-6 py-4 bg-[rgba(255,255,255,0.06)] border border-[#4DA8C4]/50 text-[#4DA8C4] rounded-xl font-montserrat font-bold hover:bg-[#4DA8C4]/10 transition-all duration-300 flex items-center justify-center gap-3"
-                                >
-                                    <i className="fa-solid fa-file-word text-lg" />
-                                    <span>Descargar Word</span>
-                                </button>
+                            <div className="p-6 border-t border-[#E2E8F0] bg-[#F8FAFC]">
+                                <div className="flex gap-4">
+                                    <button
+                                        onClick={() => handleDownloadPDF(roiResult, 'DIAGNÓSTICO ROI NEURAL', 'ROI')}
+                                        className="flex-1 px-6 py-4 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white rounded-xl font-montserrat font-bold hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-3 group"
+                                    >
+                                        <i className="fa-solid fa-file-pdf text-lg group-hover:scale-110 transition-transform" />
+                                        <span>Descargar PDF</span>
+                                    </button>
+                                    <button
+                                        onClick={() => handleDownloadWord(roiResult, 'DIAGNÓSTICO ROI NEURAL', 'ROI')}
+                                        className="flex-1 px-6 py-4 bg-white border-2 border-[#4DA8C4] text-[#004B63] rounded-xl font-montserrat font-bold hover:bg-[#4DA8C4]/10 transition-all duration-300 flex items-center justify-center gap-3"
+                                    >
+                                        <i className="fa-solid fa-file-word text-lg text-[#4DA8C4]" />
+                                        <span>Descargar Word</span>
+                                    </button>
+                                </div>
                             </div>
                         )}
                     </div>
 
                     {/* Automation Architect Panel */}
-                    {(activeTool === 'automation' || activeTool === 'roi') && (
-                        <div className={activeTool === 'automation' ? 'block' : 'hidden lg:block'}>
-                            <AIPanel
-                                title="ARQUITECTO DE AUTOMATIZACIÓN"
-                                icon="fa-diagram-project"
-                                placeholder="Describe los procesos que deseas automatizar...
+                    <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-lg overflow-hidden">
+                        <AIPanel
+                            title="ARQUITECTO DE AUTOMATIZACIÓN"
+                            icon="fa-diagram-project"
+                            placeholder="Describe los procesos que deseas automatizar...
 Ejemplo: Necesito automatizar el proceso de admisión de estudiantes: recepción de documentos, validación de requisitos, entrevistas, y generación de contratos."
-                                systemPrompt={automationSystemPrompt}
-                            />
-                        </div>
-                    )}
+                            systemPrompt={automationSystemPrompt}
+                        />
+                    </div>
                 </div>
 
                 {/* Features Info */}
                 <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="p-6 bg-[rgba(255,255,255,0.03)] border border-[#4DA8C4]/20 rounded-xl backdrop-blur-sm">
-                        <div className="w-12 h-12 bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] rounded-xl flex items-center justify-center mb-4">
+                    <div className="p-6 bg-white border border-[#E2E8F0] rounded-2xl shadow-sm hover:shadow-lg transition-shadow">
+                        <div className="w-14 h-14 bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] rounded-xl flex items-center justify-center mb-4">
                             <i className="fa-solid fa-shield-halved text-white text-xl" />
                         </div>
-                        <h3 className="font-montserrat font-bold text-white mb-2">Datos Seguros</h3>
-                        <p className="text-sm text-[#B2D8E5]">Toda la información se procesa de forma segura y no se almacena en servidores externos.</p>
+                        <h3 className="font-montserrat font-bold text-[#004B63] mb-2">Datos Seguros</h3>
+                        <p className="text-sm text-[#64748B]">Toda la información se procesa de forma segura y no se almacena en servidores externos.</p>
                     </div>
-                    <div className="p-6 bg-[rgba(255,255,255,0.03)] border border-[#66CCCC]/20 rounded-xl backdrop-blur-sm">
-                        <div className="w-12 h-12 bg-gradient-to-br from-[#66CCCC] to-[#B2D8E5] rounded-xl flex items-center justify-center mb-4">
+                    <div className="p-6 bg-white border border-[#E2E8F0] rounded-2xl shadow-sm hover:shadow-lg transition-shadow">
+                        <div className="w-14 h-14 bg-gradient-to-br from-[#66CCCC] to-[#B2D8E5] rounded-xl flex items-center justify-center mb-4">
                             <i className="fa-solid fa-file-contract text-white text-xl" />
                         </div>
-                        <h3 className="font-montserrat font-bold text-white mb-2">Exportación Profesional</h3>
-                        <p className="text-sm text-[#B2D8E5]">Descarga tus análisis en PDF y Word con el membrete oficial de Edutechlife.</p>
+                        <h3 className="font-montserrat font-bold text-[#004B63] mb-2">Exportación Profesional</h3>
+                        <p className="text-sm text-[#64748B]">Descarga tus análisis en PDF y Word con el membrete oficial de Edutechlife.</p>
                     </div>
-                    <div className="p-6 bg-[rgba(255,255,255,0.03)] border border-[#004B63]/40 rounded-xl backdrop-blur-sm">
-                        <div className="w-12 h-12 bg-gradient-to-br from-[#004B63] to-[#4DA8C4] rounded-xl flex items-center justify-center mb-4">
+                    <div className="p-6 bg-white border border-[#E2E8F0] rounded-2xl shadow-sm hover:shadow-lg transition-shadow">
+                        <div className="w-14 h-14 bg-gradient-to-br from-[#004B63] to-[#4DA8C4] rounded-xl flex items-center justify-center mb-4">
                             <i className="fa-solid fa-headset text-white text-xl" />
                         </div>
-                        <h3 className="font-montserrat font-bold text-white mb-2">Soporte Dedicado</h3>
-                        <p className="text-sm text-[#B2D8E5]">¿Necesitas ayuda? Agenda una sesión con nuestros consultores B2B.</p>
+                        <h3 className="font-montserrat font-bold text-[#004B63] mb-2">Soporte Dedicado</h3>
+                        <p className="text-sm text-[#64748B]">¿Necesitas ayuda? Agenda una sesión con nuestros consultores B2B.</p>
                     </div>
                 </div>
             </div>
-
-            <style>{`
-                .container-premium {
-                    max-width: 1400px;
-                    margin: 0 auto;
-                }
-            `}</style>
         </div>
     );
 };

@@ -5,7 +5,8 @@ import XPProgressBar from './XPProgressBar';
 import MissionCard from './MissionCard';
 import SubjectGrid from './SubjectGrid';
 import { useCustomCursor } from '../hooks/useCustomCursor';
-import { LogOut, GraduationCap } from 'lucide-react';
+import { GraduationCap, Play, BookOpen, Trophy, TrendingUp, Mic, MessageCircle, Brain, LogOut, Download, FileText, Users, Clock, Target, Award } from 'lucide-react';
+import { callDeepseek } from '../utils/api';
 
 const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
     const [activeTab, setActiveTab] = useState('inicio');
@@ -15,302 +16,173 @@ const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
     const [streakDays, setStreakDays] = useState(7);
     const [missions, setMissions] = useState([]);
     const [subjects, setSubjects] = useState([]);
+    const [studentName, setStudentName] = useState('Estudiante');
+    const [studentData, setStudentData] = useState({
+        sessionStart: new Date(),
+        interactions: 0,
+        questionsAsked: 0,
+        missionsCompleted: 0,
+        timeSpent: 0,
+        topicsExplored: [],
+        moodHistory: [],
+        learningStyle: null,
+        lastActive: new Date()
+    });
+    const [showReportModal, setShowReportModal] = useState(false);
+    const [reportData, setReportData] = useState(null);
     
     const dashboardRef = useRef(null);
+    const sessionStartRef = useRef(new Date());
     useCustomCursor();
 
-    // Initialize dashboard data
     useEffect(() => {
-        // Sample missions data
-        setMissions([
-            {
-                id: 1,
-                title: 'Completa tu primer VAK Test',
-                description: 'Descubre tu estilo de aprendizaje preferido mediante un análisis personalizado',
-                type: 'quiz',
-                difficulty: 'easy',
-                duration: 15,
-                xpReward: 100,
-                progress: 100,
-                completed: true,
-                locked: false,
-                featured: true,
-                collaborative: false,
-                skills: ['Auto-conocimiento', 'Metacognición', 'Estilos de aprendizaje'],
-                badgeReward: 'Explorador VAK',
-                streakBonus: 10,
-                prerequisites: []
-            },
-            {
-                id: 2,
-                title: 'Sube tu primer documento al SmartBoard',
-                description: 'Analiza un documento con Valeria IA y obtén insights personalizados',
-                type: 'project',
-                difficulty: 'medium',
-                duration: 30,
-                xpReward: 150,
-                progress: 60,
-                completed: false,
-                locked: false,
-                featured: false,
-                collaborative: true,
-                skills: ['Análisis de texto', 'IA aplicada', 'Comprensión lectora'],
-                badgeReward: 'Analista Digital',
-                streakBonus: 15,
-                prerequisites: ['VAK Test completado']
-            },
-            {
-                id: 3,
-                title: 'Completa el módulo de Prompt Engineering',
-                description: 'Domina la comunicación con IA para obtener mejores resultados',
-                type: 'challenge',
-                difficulty: 'hard',
-                duration: 45,
-                xpReward: 200,
-                progress: 0,
-                completed: false,
-                locked: true,
-                featured: true,
-                collaborative: false,
-                skills: ['Prompt engineering', 'Comunicación con IA', 'Pensamiento crítico'],
-                badgeReward: 'Maestro de Prompts',
-                streakBonus: 20,
-                prerequisites: ['Documento analizado', 'Nivel 5+'],
-                requiredLevel: 5
-            },
-            {
-                id: 4,
-                title: 'Proyecto colaborativo de ciencias',
-                description: 'Trabaja en equipo para resolver un problema científico real',
-                type: 'collaboration',
-                difficulty: 'medium',
-                duration: 60,
-                xpReward: 180,
-                progress: 30,
-                completed: false,
-                locked: false,
-                featured: false,
-                collaborative: true,
-                skills: ['Trabajo en equipo', 'Método científico', 'Presentación'],
-                badgeReward: 'Científico Colaborativo',
-                streakBonus: 25,
-                prerequisites: []
-            },
-            {
-                id: 5,
-                title: 'Creación de portfolio digital',
-                description: 'Desarrolla tu portfolio digital con proyectos destacados',
-                type: 'creative',
-                difficulty: 'expert',
-                duration: 90,
-                xpReward: 300,
-                progress: 0,
-                completed: false,
-                locked: true,
-                featured: true,
-                collaborative: false,
-                skills: ['Diseño digital', 'Storytelling', 'Presentación personal'],
-                badgeReward: 'Creador Digital',
-                streakBonus: 30,
-                prerequisites: ['3 proyectos completados', 'Nivel 8+'],
-                requiredLevel: 8
-            }
-        ]);
-
-        // Sample subjects data
-        setSubjects([
-            {
-                id: 'matematicas',
-                name: 'Matemáticas Avanzadas',
-                icon: 'mathematics',
-                category: 'stem',
-                level: 'Avanzado',
-                teacher: 'Prof. Elena Rodríguez',
-                description: 'Domina conceptos matemáticos complejos desde álgebra hasta cálculo diferencial',
-                progress: 75,
-                lessons: 24,
-                quizzes: 12,
-                xp: 1200,
-                prerequisites: 0,
-                locked: false,
-                featured: true
-            },
-            {
-                id: 'fisica',
-                name: 'Física Moderna',
-                icon: 'physics',
-                category: 'stem',
-                level: 'Intermedio',
-                teacher: 'Dr. Carlos Méndez',
-                description: 'Explora los fundamentos de la física cuántica y relatividad',
-                progress: 60,
-                lessons: 18,
-                quizzes: 9,
-                xp: 900,
-                prerequisites: 1,
-                locked: false,
-                featured: false
-            },
-            {
-                id: 'programacion',
-                name: 'Programación con Python',
-                icon: 'programming',
-                category: 'tech',
-                level: 'Principiante',
-                teacher: 'Ing. Ana López',
-                description: 'Aprende los fundamentos de programación con Python desde cero',
-                progress: 45,
-                lessons: 30,
-                quizzes: 15,
-                xp: 1500,
-                prerequisites: 0,
-                locked: false,
-                featured: true
-            },
-            {
-                id: 'ia',
-                name: 'Inteligencia Artificial',
-                icon: 'data-science',
-                category: 'tech',
-                level: 'Avanzado',
-                teacher: 'Dra. Sofia Chen',
-                description: 'Introducción a machine learning y redes neuronales artificiales',
-                progress: 30,
-                lessons: 20,
-                quizzes: 10,
-                xp: 1000,
-                prerequisites: 2,
-                locked: true,
-                featured: true
-            },
-            {
-                id: 'historia',
-                name: 'Historia Universal',
-                icon: 'history',
-                category: 'humanities',
-                level: 'Intermedio',
-                teacher: 'Prof. Miguel Ángel',
-                description: 'Recorrido por los hitos más importantes de la historia mundial',
-                progress: 85,
-                lessons: 15,
-                quizzes: 8,
-                xp: 750,
-                prerequisites: 0,
-                locked: false,
-                featured: false
-            },
-            {
-                id: 'literatura',
-                name: 'Literatura Clásica',
-                icon: 'literature',
-                category: 'humanities',
-                level: 'Principiante',
-                teacher: 'Dra. Isabel García',
-                description: 'Análisis de obras maestras de la literatura universal',
-                progress: 40,
-                lessons: 12,
-                quizzes: 6,
-                xp: 600,
-                prerequisites: 0,
-                locked: false,
-                featured: false
-            },
-            {
-                id: 'musica',
-                name: 'Teoría Musical',
-                icon: 'music',
-                category: 'arts',
-                level: 'Intermedio',
-                teacher: 'Maestro Roberto',
-                description: 'Fundamentos de teoría musical y composición',
-                progress: 25,
-                lessons: 16,
-                quizzes: 8,
-                xp: 800,
-                prerequisites: 1,
-                locked: false,
-                featured: false
-            },
-            {
-                id: 'arte',
-                name: 'Arte Digital',
-                icon: 'art',
-                category: 'arts',
-                level: 'Principiante',
-                teacher: 'Artista Digital Luna',
-                description: 'Creación de arte digital con herramientas modernas',
-                progress: 10,
-                lessons: 22,
-                quizzes: 11,
-                xp: 1100,
-                prerequisites: 0,
-                locked: false,
-                featured: true
-            },
-            {
-                id: 'biologia',
-                name: 'Biología Molecular',
-                icon: 'biology',
-                category: 'stem',
-                level: 'Avanzado',
-                teacher: 'Dr. Javier Ruiz',
-                description: 'Estudio de la biología a nivel molecular y celular',
-                progress: 50,
-                lessons: 20,
-                quizzes: 10,
-                xp: 1000,
-                prerequisites: 2,
-                locked: true,
-                featured: false
-            }
-        ]);
-
-        // Animate dashboard entry
-        if (dashboardRef.current) {
-            // Simple fade-in animation
-            dashboardRef.current.style.opacity = '0';
-            dashboardRef.current.style.transform = 'translateY(20px)';
-            
-            setTimeout(() => {
-                if (dashboardRef.current) {
-                    dashboardRef.current.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-                    dashboardRef.current.style.opacity = '1';
-                    dashboardRef.current.style.transform = 'translateY(0)';
-                }
-            }, 100);
+        const savedData = localStorage.getItem('edutechlife_student_data');
+        if (savedData) {
+            const parsed = JSON.parse(savedData);
+            setStudentData(prev => ({ ...prev, ...parsed }));
         }
+
+        setMissions([
+            { id: 1, title: 'Completa tu primer VAK Test', description: 'Descubre tu estilo de aprendizaje preferido', type: 'quiz', difficulty: 'easy', duration: 15, xpReward: 100, progress: 100, completed: true, locked: false, featured: true, collaborative: false, skills: ['Auto-conocimiento', 'Metacognición'], badgeReward: 'Explorador VAK', streakBonus: 10, prerequisites: [] },
+            { id: 2, title: 'Sube tu primer documento', description: 'Analiza un documento con Valeria IA', type: 'project', difficulty: 'medium', duration: 30, xpReward: 150, progress: 60, completed: false, locked: false, featured: false, collaborative: true, skills: ['Análisis de texto', 'IA aplicada'], badgeReward: 'Analista Digital', streakBonus: 15, prerequisites: [] },
+            { id: 3, title: 'Módulo de Prompt Engineering', description: 'Domina la comunicación con IA', type: 'challenge', difficulty: 'hard', duration: 45, xpReward: 200, progress: 0, completed: false, locked: true, featured: true, collaborative: false, skills: ['Prompt engineering', 'Comunicación IA'], badgeReward: 'Maestro de Prompts', streakBonus: 20, prerequisites: [], requiredLevel: 5 },
+            { id: 4, title: 'Proyecto colaborativo de ciencias', description: 'Trabaja en equipo para resolver problemas', type: 'collaboration', difficulty: 'medium', duration: 60, xpReward: 180, progress: 30, completed: false, locked: false, featured: false, collaborative: true, skills: ['Trabajo en equipo', 'Método científico'], badgeReward: 'Científico Colaborativo', streakBonus: 25, prerequisites: [] },
+            { id: 5, title: 'Creación de portfolio digital', description: 'Desarrolla tu portfolio digital', type: 'creative', difficulty: 'expert', duration: 90, xpReward: 300, progress: 0, completed: false, locked: true, featured: true, collaborative: false, skills: ['Diseño digital', 'Storytelling'], badgeReward: 'Creador Digital', streakBonus: 30, prerequisites: [], requiredLevel: 8 }
+        ]);
+
+        setSubjects([
+            { id: 'matematicas', name: 'Matemáticas Avanzadas', icon: 'mathematics', category: 'stem', level: 'Avanzado', teacher: 'Prof. Elena Rodríguez', description: 'Domina conceptos matemáticos complejos', progress: 75, lessons: 24, quizzes: 12, xp: 1200, prerequisites: 0, locked: false, featured: true },
+            { id: 'fisica', name: 'Física Moderna', icon: 'physics', category: 'stem', level: 'Intermedio', teacher: 'Dr. Carlos Méndez', description: 'Explora los fundamentos de la física', progress: 60, lessons: 18, quizzes: 9, xp: 900, prerequisites: 1, locked: false, featured: true },
+            { id: 'quimica', name: 'Química Avanzada', icon: 'chemistry', category: 'stem', level: 'Avanzado', teacher: 'Dra. María López', description: 'Química orgánica e inorgánica', progress: 45, lessons: 20, quizzes: 10, xp: 1000, prerequisites: 1, locked: false, featured: false },
+            { id: 'literatura', name: 'Literatura Contemporánea', icon: 'literature', category: 'humanidades', level: 'Intermedio', teacher: 'Prof. Ana Torres', description: 'Análisis de obras contemporáneas', progress: 85, lessons: 16, quizzes: 8, xp: 800, prerequisites: 0, locked: false, featured: true },
+            { id: 'historia', name: 'Historia Universal', icon: 'history', category: 'humanidades', level: 'Principiante', teacher: 'Prof. Roberto Díaz', description: 'Historia desde el origen hasta hoy', progress: 30, lessons: 22, quizzes: 11, xp: 1100, prerequisites: 0, locked: false, featured: false },
+            { id: 'biologia', name: 'Biología Molecular', icon: 'biology', category: 'stem', level: 'Avanzado', teacher: 'Dr. Javier Ruiz', description: 'Estudio a nivel molecular', progress: 50, lessons: 20, quizzes: 10, xp: 1000, prerequisites: 2, locked: true, featured: false }
+        ]);
+
+        const timer = setInterval(() => {
+            setStudentData(prev => ({
+                ...prev,
+                timeSpent: Math.floor((new Date() - sessionStartRef.current) / 1000 / 60)
+            }));
+        }, 60000);
+
+        return () => clearInterval(timer);
     }, []);
+
+    useEffect(() => {
+        localStorage.setItem('edutechlife_student_data', JSON.stringify({
+            ...studentData,
+            lastActive: new Date()
+        }));
+    }, [studentData]);
+
+    const trackInteraction = (type, data = {}) => {
+        setStudentData(prev => ({
+            ...prev,
+            interactions: prev.interactions + 1,
+            [type]: (prev[type] || 0) + 1,
+            lastActive: new Date()
+        }));
+    };
 
     const handleMissionStart = (mission) => {
         if (!mission.locked) {
+            trackInteraction('missionsStarted');
             setValeriaState('thinking');
-            // Simulate mission start
             setTimeout(() => {
-                setValeriaState('speaking');
-                
-                // Valeria feedback
-                setTimeout(() => {
-                    setValeriaState('idle');
-                }, 2000);
-            }, 1500);
+                setValeriaState('idle');
+            }, 2000);
         }
     };
 
     const handleMissionComplete = (mission) => {
         if (mission.completed) {
-            console.log('View certificate for mission:', mission.id);
-            // Handle certificate view
+            trackInteraction('missionsCompleted');
+            setUserXP(prev => prev + mission.xpReward);
+            const newLevel = Math.floor((userXP + mission.xpReward) / 500) + 1;
+            if (newLevel > userLevel) setUserLevel(newLevel);
         }
     };
 
     const handleSubjectClick = (subject) => {
-        console.log('Selected subject:', subject);
-        // Handle subject selection
+        if (!subject.locked) {
+            trackInteraction('topicsExplored', [...(studentData.topicsExplored || []), subject.name]);
+            setActiveTab('materias');
+        }
     };
 
-    const handleValeriaMessage = (message) => {
-        console.log('Valeria message:', message);
-        // Handle chat messages
+    const handleValeriaQuestion = (question) => {
+        trackInteraction('questionsAsked');
+        callDeepseek(
+            `Estudiante pregunta: ${question}`,
+            'Eres Valeria, tutora virtual de Edutechlife. Responde de forma cálida, empática y en español latino. Usa emojis ocasionales. Mantén las respuestas cortas (2-3 oraciones máximo).',
+            false
+        );
+    };
+
+    const generateStudentReport = async () => {
+        setReportData({
+            studentName,
+            generatedAt: new Date(),
+            ...studentData,
+            xpActual: userXP,
+            nivelActual: userLevel,
+            diasRacha: streakDays,
+            promedioProgreso: Math.round(subjects.filter(s => !s.locked).reduce((acc, s) => acc + s.progress, 0) / subjects.filter(s => !s.locked).length),
+            totalMaterias: subjects.length,
+            materiasActivas: subjects.filter(s => s.progress > 0).length,
+            tiempoSesion: Math.floor((new Date() - sessionStartRef.current) / 1000 / 60)
+        });
+        setShowReportModal(true);
+    };
+
+    const downloadStudentReport = () => {
+        if (!reportData) return;
+        
+        const content = `
+EDUTECHLIFE - REPORTE DE ESTUDIANTE
+=====================================
+Fecha de generación: ${reportData.generatedAt.toLocaleString('es-ES')}
+Estudiante: ${reportData.studentName}
+
+RESUMEN DE ACTIVIDAD
+--------------------
+Tiempo en plataforma: ${reportData.timeSpent} minutos
+Interacciones totales: ${reportData.interactions}
+Preguntas a Valeria: ${reportData.questionsAsked}
+Misiones completadas: ${reportData.missionsCompleted}
+
+RENDIMIENTO ACADÉMICO
+----------------------
+Nivel actual: ${reportData.nivelActual}
+XP acumulado: ${reportData.xpActual}
+Racha de días: ${reportData.diasRacha}
+Promedio de progreso: ${reportData.promedioProgreso}%
+
+MATERIAS
+--------
+Total de materias: ${reportData.totalMaterias}
+Materias activas: ${reportData.materiasActivas}
+${subjects.filter(s => !s.locked).map(s => `- ${s.name}: ${s.progress}%`).join('\n')}
+
+RECOMENDACIONES
+---------------
+${reportData.promedioProgreso >= 80 ? '✅ El estudiante muestra excelente rendimiento. Considerar desafíos avanzados.' : ''}
+${reportData.promedioProgreso >= 50 && reportData.promedioProgreso < 80 ? '📚 El estudiante va bien. Sugerir más práctica en materias con bajo rendimiento.' : ''}
+${reportData.promedioProgreso < 50 ? '⚠️ El estudiante necesita apoyo adicional. Considerar tutorías personalizadas.' : ''}
+
+=====================================
+Documento generado por Edutechlife v2.286
+Plataforma de Neuro-Educación Premium
+`;
+
+        const blob = new Blob([content], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Reporte_${studentName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.txt`;
+        a.click();
+        URL.revokeObjectURL(url);
     };
 
     const renderActiveView = () => {
@@ -318,11 +190,11 @@ const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
             case 'inicio':
                 return (
                     <div className="space-y-6">
-                        {/* Header Section - Compact */}
+                        {/* Header Section */}
                         <div className="bg-gradient-to-r from-[#004B63] to-[#4DA8C4] p-4 rounded-2xl">
                             <div className="flex items-center justify-between">
                                 <div className="flex-1">
-                                    <h3 className="text-base font-bold text-white font-montserrat mb-1">¡Bienvenido de vuelta!</h3>
+                                    <h3 className="text-base font-bold text-white font-montserrat mb-1">¡Bienvenido, {studentName}!</h3>
                                     <p className="text-white/80 text-sm font-open-sans">
                                         Hoy tienes <span className="font-bold text-[#FFD166]">{missions.filter(m => !m.completed && !m.locked).length} misiones</span> pendientes 
                                         y <span className="font-bold text-[#FFD166]">{subjects.filter(s => s.progress > 0 && s.progress < 100).length} materias</span> para repasar.
@@ -342,19 +214,82 @@ const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
 
                         {/* Valeria Status */}
                         <div className="bg-white p-4 rounded-2xl border border-[#E2E8F0] shadow-sm">
-                            <div className="flex items-center gap-3">
-                                <div className="w-3 h-3 rounded-full bg-[#66CCCC] animate-pulse" />
-                                <span className="text-sm text-[#64748B] font-open-sans">Valeria está lista para ayudarte</span>
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-3 h-3 rounded-full bg-[#66CCCC] animate-pulse" />
+                                    <span className="text-sm text-[#64748B] font-open-sans">Valeria está lista para ayudarte</span>
+                                </div>
+                                <div className="flex gap-2">
+                                    <button 
+                                        onClick={() => setActiveTab('lab-ia')}
+                                        className="px-4 py-2 bg-[#4DA8C4]/10 text-[#4DA8C4] rounded-lg text-sm font-semibold hover:bg-[#4DA8C4]/20 transition-all"
+                                    >
+                                        <MessageCircle className="w-4 h-4 inline mr-1" />Chat con Valeria
+                                    </button>
+                                    <button 
+                                        onClick={() => onNavigate('vak')}
+                                        className="px-4 py-2 bg-[#66CCCC]/10 text-[#004B63] rounded-lg text-sm font-semibold hover:bg-[#66CCCC]/20 transition-all"
+                                    >
+                                        <Brain className="w-4 h-4 inline mr-1" />VAK Test
+                                    </button>
+                                </div>
                             </div>
+                        </div>
+
+                        {/* Quick Actions */}
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <button 
+                                onClick={() => setActiveTab('misiones')}
+                                className="bg-white p-4 rounded-xl border border-[#E2E8F0] shadow-sm hover:shadow-lg hover:border-[#4DA8C4] transition-all text-center group"
+                            >
+                                <div className="w-12 h-12 mx-auto bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                    <Target className="w-6 h-6 text-white" />
+                                </div>
+                                <p className="font-semibold text-[#004B63]">Misiones</p>
+                                <p className="text-xs text-[#64748B]">{missions.filter(m => !m.completed).length} pendientes</p>
+                            </button>
+                            <button 
+                                onClick={() => setActiveTab('materias')}
+                                className="bg-white p-4 rounded-xl border border-[#E2E8F0] shadow-sm hover:shadow-lg hover:border-[#66CCCC] transition-all text-center group"
+                            >
+                                <div className="w-12 h-12 mx-auto bg-gradient-to-br from-[#66CCCC] to-[#004B63] rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                    <BookOpen className="w-6 h-6 text-white" />
+                                </div>
+                                <p className="font-semibold text-[#004B63]">Materias</p>
+                                <p className="text-xs text-[#64748B]">{subjects.length} disponibles</p>
+                            </button>
+                            <button 
+                                onClick={() => generateStudentReport()}
+                                className="bg-white p-4 rounded-xl border border-[#E2E8F0] shadow-sm hover:shadow-lg hover:border-[#FFD166] transition-all text-center group"
+                            >
+                                <div className="w-12 h-12 mx-auto bg-gradient-to-br from-[#FFD166] to-[#FF8E53] rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                    <Download className="w-6 h-6 text-white" />
+                                </div>
+                                <p className="font-semibold text-[#004B63]">Mi Reporte</p>
+                                <p className="text-xs text-[#64748B]">Descargar</p>
+                            </button>
+                            <button 
+                                onClick={() => onNavigate('ialab')}
+                                className="bg-white p-4 rounded-xl border border-[#E2E8F0] shadow-sm hover:shadow-lg hover:border-[#FF6B9D] transition-all text-center group"
+                            >
+                                <div className="w-12 h-12 mx-auto bg-gradient-to-br from-[#FF6B9D] to-[#FF8E53] rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                    <Brain className="w-6 h-6 text-white" />
+                                </div>
+                                <p className="font-semibold text-[#004B63]">IA Lab</p>
+                                <p className="text-xs text-[#64748B]">Certifícate</p>
+                            </button>
                         </div>
 
                         {/* Missions Section */}
                         <div className="bg-white p-6 rounded-2xl border border-[#E2E8F0] shadow-sm">
                             <div className="flex items-center justify-between mb-6">
                                 <h3 className="text-xl font-bold text-[#004B63] font-montserrat">Misiones del Día</h3>
-                                <span className="text-sm font-mono text-[#4DA8C4] font-open-sans">
-                                    {missions.filter(m => m.completed).length}/{missions.length} completadas
-                                </span>
+                                <button 
+                                    onClick={() => setActiveTab('misiones')}
+                                    className="text-sm text-[#4DA8C4] font-semibold hover:underline"
+                                >
+                                    Ver todas →
+                                </button>
                             </div>
                             <div className="space-y-4">
                                 {missions.slice(0, 3).map(mission => (
@@ -373,7 +308,10 @@ const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
             case 'misiones':
                 return (
                     <div className="bg-white p-6 rounded-2xl border border-[#E2E8F0] shadow-sm">
-                        <h3 className="text-xl font-bold text-[#004B63] font-montserrat mb-6">Todas las Misiones</h3>
+                        <div className="flex items-center justify-between mb-6">
+                            <h3 className="text-xl font-bold text-[#004B63] font-montserrat">Todas las Misiones</h3>
+                            <span className="text-sm text-[#64748B]">{missions.filter(m => m.completed).length}/{missions.length} completadas</span>
+                        </div>
                         <div className="space-y-4">
                             {missions.map(mission => (
                                 <MissionCard
@@ -390,7 +328,10 @@ const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
             case 'materias':
                 return (
                     <div className="bg-white p-6 rounded-2xl border border-[#E2E8F0] shadow-sm">
-                        <h3 className="text-xl font-bold text-[#004B63] font-montserrat mb-6">Tus Materias</h3>
+                        <div className="flex items-center justify-between mb-6">
+                            <h3 className="text-xl font-bold text-[#004B63] font-montserrat">Tus Materias</h3>
+                            <span className="text-sm text-[#64748B]">{subjects.filter(s => !s.locked).length} activas</span>
+                        </div>
                         <SubjectGrid 
                             subjects={subjects}
                             onSelectSubject={handleSubjectClick}
@@ -400,27 +341,44 @@ const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
 
             case 'lab-ia':
                 return (
-                    <div className="bg-white p-6 rounded-2xl border border-[#E2E8F0] shadow-sm">
-                        <h3 className="text-xl font-bold text-[#004B63] font-montserrat mb-6">Laboratorio de IA</h3>
-                        <p className="text-[#64748B] font-open-sans mb-6">
-                            Explora herramientas avanzadas de inteligencia artificial 
-                            para potenciar tu aprendizaje.
-                        </p>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <button className="bg-gradient-to-br from-[#4DA8C4]/10 to-[#004B63]/5 p-6 rounded-2xl border border-[#E2E8F0] text-left hover:scale-[1.02] transition-all duration-300 hover:shadow-lg hover:border-[#4DA8C4]/30">
-                                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#4DA8C4] to-[#004B63] flex items-center justify-center mb-4 shadow-lg">
-                                    <span className="text-2xl">🤖</span>
-                                </div>
-                                <h4 className="font-bold text-[#004B63] font-montserrat mb-2">Chat con Valeria</h4>
-                                <p className="text-sm text-[#64748B] font-open-sans">Conversa con tu tutor IA sobre cualquier tema</p>
-                            </button>
-                            <button className="bg-gradient-to-br from-[#66CCCC]/10 to-[#4DA8C4]/5 p-6 rounded-2xl border border-[#E2E8F0] text-left hover:scale-[1.02] transition-all duration-300 hover:shadow-lg hover:border-[#66CCCC]/30">
-                                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#66CCCC] to-[#4DA8C4] flex items-center justify-center mb-4 shadow-lg">
-                                    <span className="text-2xl">🧠</span>
-                                </div>
-                                <h4 className="font-bold text-[#004B63] font-montserrat mb-2">VAK Test</h4>
-                                <p className="text-sm text-[#64748B] font-open-sans">Descubre tu estilo de aprendizaje preferido</p>
-                            </button>
+                    <div className="space-y-6">
+                        <div className="bg-white p-6 rounded-2xl border border-[#E2E8F0] shadow-sm">
+                            <h3 className="text-xl font-bold text-[#004B63] font-montserrat mb-4">Laboratorio de IA</h3>
+                            <p className="text-[#64748B] mb-6">
+                                Explora herramientas avanzadas de inteligencia artificial para potenciar tu aprendizaje.
+                            </p>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <button 
+                                    onClick={() => setActiveTab('inicio')}
+                                    className="bg-gradient-to-br from-[#4DA8C4]/10 to-[#004B63]/5 p-6 rounded-2xl border border-[#E2E8F0] text-left hover:scale-[1.02] transition-all hover:shadow-lg hover:border-[#4DA8C4]/30"
+                                >
+                                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#4DA8C4] to-[#004B63] flex items-center justify-center mb-4 shadow-lg">
+                                        <span className="text-2xl">🤖</span>
+                                    </div>
+                                    <h4 className="font-bold text-[#004B63] font-montserrat mb-2">Chat con Valeria</h4>
+                                    <p className="text-sm text-[#64748B]">Conversa con tu tutor IA</p>
+                                </button>
+                                <button 
+                                    onClick={() => onNavigate('vak')}
+                                    className="bg-gradient-to-br from-[#66CCCC]/10 to-[#4DA8C4]/5 p-6 rounded-2xl border border-[#E2E8F0] text-left hover:scale-[1.02] transition-all hover:shadow-lg hover:border-[#66CCCC]/30"
+                                >
+                                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#66CCCC] to-[#4DA8C4] flex items-center justify-center mb-4 shadow-lg">
+                                        <span className="text-2xl">🧠</span>
+                                    </div>
+                                    <h4 className="font-bold text-[#004B63] font-montserrat mb-2">VAK Test</h4>
+                                    <p className="text-sm text-[#64748B]">Descubre tu estilo de aprendizaje</p>
+                                </button>
+                                <button 
+                                    onClick={() => onNavigate('ialab')}
+                                    className="bg-gradient-to-br from-[#FFD166]/10 to-[#FF8E53]/5 p-6 rounded-2xl border border-[#E2E8F0] text-left hover:scale-[1.02] transition-all hover:shadow-lg hover:border-[#FFD166]/30"
+                                >
+                                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#FFD166] to-[#FF8E53] flex items-center justify-center mb-4 shadow-lg">
+                                        <span className="text-2xl">🏆</span>
+                                    </div>
+                                    <h4 className="font-bold text-[#004B63] font-montserrat mb-2">IA Lab Pro</h4>
+                                    <p className="text-sm text-[#64748B]">Certifícate en IA</p>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 );
@@ -437,30 +395,38 @@ const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                                 <div className="text-center p-6 rounded-xl bg-gradient-to-br from-[#4DA8C4]/10 to-transparent border border-[#E2E8F0]">
                                     <div className="text-3xl font-black text-[#4DA8C4] font-montserrat">
-                                        24h
+                                        {studentData.timeSpent || 0}min
                                     </div>
                                     <div className="text-sm text-[#64748B] font-open-sans mt-2">Tiempo total</div>
                                 </div>
                                 <div className="text-center p-6 rounded-xl bg-gradient-to-br from-[#66CCCC]/10 to-transparent border border-[#E2E8F0]">
                                     <div className="text-3xl font-black text-[#66CCCC] font-montserrat">
-                                        42
+                                        {studentData.interactions}
                                     </div>
-                                    <div className="text-sm text-[#64748B] font-open-sans mt-2">Misiones</div>
+                                    <div className="text-sm text-[#64748B] font-open-sans mt-2">Interacciones</div>
                                 </div>
                                 <div className="text-center p-6 rounded-xl bg-gradient-to-br from-[#FFD166]/10 to-transparent border border-[#E2E8F0]">
                                     <div className="text-3xl font-black text-[#FFD166] font-montserrat">
-                                        87%
+                                        {Math.round(subjects.filter(s => !s.locked).reduce((acc, s) => acc + s.progress, 0) / subjects.filter(s => !s.locked).length)}%
                                     </div>
                                     <div className="text-sm text-[#64748B] font-open-sans mt-2">Promedio</div>
                                 </div>
                                 <div className="text-center p-6 rounded-xl bg-gradient-to-br from-[#FF6B9D]/10 to-transparent border border-[#E2E8F0]">
                                     <div className="text-3xl font-black text-[#FF6B9D] font-montserrat">
-                                        14
+                                        {streakDays}
                                     </div>
                                     <div className="text-sm text-[#64748B] font-open-sans mt-2">Días racha</div>
                                 </div>
                             </div>
                         </div>
+
+                        <button
+                            onClick={generateStudentReport}
+                            className="w-full py-4 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white rounded-xl font-bold hover:shadow-xl transition-all flex items-center justify-center gap-2"
+                        >
+                            <Download className="w-5 h-5" />
+                            Descargar Reporte Completo
+                        </button>
                     </div>
                 );
 
@@ -470,58 +436,18 @@ const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
     };
 
     return (
-        <div 
-            ref={dashboardRef}
-            className="relative min-h-screen bg-gradient-to-br from-[#F8FAFC] via-[#FFFFFF] to-[#E2E8F0] overflow-hidden"
-        >
-            {/* Top Bar con Logo y Logout */}
-            <div className="bg-white border-b border-[#E2E8F0] px-6 py-4 shadow-sm">
-                <div className="flex items-center justify-between">
-                    {/* Logo y Título */}
-                    <div className="flex items-center gap-3">
-                        <img 
-                            src="/images/logo-edutechlife.webp" 
-                            alt="Edutechlife" 
-                            className="h-8 w-auto"
-                            style={{ maxHeight: '32px', width: 'auto' }}
-                        />
-                        <div className="border-l border-[#E2E8F0] pl-3">
-                            <h1 className="text-xl font-bold text-[#004B63] font-montserrat tracking-tight">
-                                SmartBoard
-                            </h1>
-                            <p className="text-xs text-[#64748B] font-open-sans">
-                                Plataforma Educativa
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* Botón de Logout */}
-                    <button
-                        onClick={onLogout}
-                        className="flex items-center gap-2 px-4 py-2.5 bg-[#F1F5F9] border border-[#E2E8F0] rounded-xl hover:bg-[#FF6B9D]/10 hover:border-[#FF6B9D]/20 transition-all duration-300 group"
-                    >
-                        <LogOut className="w-4 h-4 text-[#64748B] group-hover:text-[#FF6B9D] transition-colors" />
-                        <span className="text-sm font-semibold text-[#64748B] group-hover:text-[#FF6B9D] font-open-sans transition-colors">
-                            Cerrar Sesión
-                        </span>
-                    </button>
-                </div>
-            </div>
-            
-            {/* Dashboard Layout */}
-            <div className="flex h-[calc(100vh-73px)]">
-                {/* Sidebar Navigation */}
+        <div ref={dashboardRef} className="relative min-h-screen bg-gradient-to-br from-[#F8FAFC] via-[#FFFFFF] to-[#E2E8F0] overflow-hidden">
+            <div className="flex h-screen">
                 <div className="w-80">
                     <SidebarNavigation 
                         activeTab={activeTab}
                         onTabChange={setActiveTab}
                         onNavigate={onNavigate}
+                        onLogout={onLogout}
                     />
                 </div>
 
-                {/* Main Content Area */}
                 <div className="flex-1 flex flex-col overflow-hidden">
-                    {/* Content Area */}
                     <div className="flex-1 overflow-auto p-8">
                         <div className="max-w-7xl mx-auto">
                             {renderActiveView()}
@@ -529,14 +455,73 @@ const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
                     </div>
                 </div>
 
-                {/* Valeria Chat Panel */}
                 <div className="w-96">
                     <ValeriaChat
-                        studentName="Estudiante"
+                        studentName={studentName}
                         onNavigate={onNavigate}
+                        onInteraction={trackInteraction}
                     />
                 </div>
             </div>
+
+            {/* Report Modal */}
+            {showReportModal && reportData && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm">
+                    <div className="bg-white rounded-2xl p-8 max-w-2xl w-full mx-4 shadow-2xl max-h-[90vh] overflow-auto">
+                        <div className="flex items-center justify-between mb-6">
+                            <h3 className="text-2xl font-bold text-[#004B63]">Reporte de Aprendizaje</h3>
+                            <button 
+                                onClick={() => setShowReportModal(false)}
+                                className="text-[#64748B] hover:text-[#004B63]"
+                            >
+                                ✕
+                            </button>
+                        </div>
+                        
+                        <div className="space-y-6">
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="bg-[#4DA8C4]/10 p-4 rounded-xl">
+                                    <p className="text-sm text-[#64748B]">Nivel</p>
+                                    <p className="text-2xl font-bold text-[#4DA8C4]">{reportData.nivelActual}</p>
+                                </div>
+                                <div className="bg-[#66CCCC]/10 p-4 rounded-xl">
+                                    <p className="text-sm text-[#64748B]">XP Total</p>
+                                    <p className="text-2xl font-bold text-[#66CCCC]">{reportData.xpActual}</p>
+                                </div>
+                                <div className="bg-[#FFD166]/10 p-4 rounded-xl">
+                                    <p className="text-sm text-[#64748B]">Racha</p>
+                                    <p className="text-2xl font-bold text-[#FFD166]">{reportData.diasRacha} días</p>
+                                </div>
+                                <div className="bg-[#FF6B9D]/10 p-4 rounded-xl">
+                                    <p className="text-sm text-[#64748B]">Tiempo</p>
+                                    <p className="text-2xl font-bold text-[#FF6B9D]">{reportData.tiempoSesion}min</p>
+                                </div>
+                            </div>
+
+                            <div className="bg-[#F8FAFC] p-4 rounded-xl">
+                                <p className="text-sm text-[#64748B] mb-2">Interacciones con Valeria</p>
+                                <p className="text-lg font-bold text-[#004B63]">{reportData.questionsAsked} preguntas</p>
+                            </div>
+
+                            <div className="flex gap-3">
+                                <button
+                                    onClick={downloadStudentReport}
+                                    className="flex-1 py-3 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white rounded-xl font-bold hover:shadow-lg transition-all flex items-center justify-center gap-2"
+                                >
+                                    <Download className="w-5 h-5" />
+                                    Descargar Reporte
+                                </button>
+                                <button
+                                    onClick={() => setShowReportModal(false)}
+                                    className="px-6 py-3 border border-[#E2E8F0] text-[#64748B] rounded-xl font-semibold hover:bg-[#F8FAFC] transition-all"
+                                >
+                                    Cerrar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

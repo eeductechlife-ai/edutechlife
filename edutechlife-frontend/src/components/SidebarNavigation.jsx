@@ -7,10 +7,11 @@ import {
   BarChart3,
   ChevronRight,
   Award,
-  Clock
+  Clock,
+  LogOut
 } from 'lucide-react';
 
-const SidebarNavigation = ({ activeTab, onTabChange, onNavigate }) => {
+const SidebarNavigation = ({ activeTab, onTabChange, onNavigate, onLogout }) => {
   const [hoveredTab, setHoveredTab] = useState(null);
 
   const tabs = [
@@ -141,6 +142,17 @@ const SidebarNavigation = ({ activeTab, onTabChange, onNavigate }) => {
             ></div>
           </div>
         </div>
+
+        {/* Logout Button */}
+        <button
+          onClick={onLogout}
+          className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-3 bg-[#FF6B9D]/10 border border-[#FF6B9D]/20 rounded-xl hover:bg-[#FF6B9D]/20 transition-all duration-300 group"
+        >
+          <LogOut className="w-4 h-4 text-[#FF6B9D]" />
+          <span className="text-sm font-semibold text-[#FF6B9D] font-open-sans">
+            Cerrar Sesión
+          </span>
+        </button>
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import { PROMPT_VALERIO_DOCENTE } from '../constants/prompts';
 import { callDeepseek } from '../utils/api';
 import { speakTextConversational, iniciarReconocimiento } from '../utils/speech';
 import ValerioAvatar from './ValerioAvatar';
+import html2pdf from 'html2pdf.js';
 
 const IALab = ({ onBack }) => {
     const [activeMod, setActiveMod] = useState(1);
@@ -13,6 +14,8 @@ const IALab = ({ onBack }) => {
     const [loadMsg, setLoadMsg] = useState('');
     const [certName, setCertName] = useState('');
     const [showNameModal, setShowNameModal] = useState(false);
+    const [completedModules, setCompletedModules] = useState([]);
+    const [courseProgress, setCourseProgress] = useState(20);
     
     const [evalAnswers, setEvalAnswers] = useState({});
     const [evalSubmitted, setEvalSubmitted] = useState(false);
@@ -22,30 +25,30 @@ const IALab = ({ onBack }) => {
     const [coachMsg, setCoachMsg] = useState('');
     const [coachLoad, setCoachLoad] = useState(false);
     const [isListening, setIsListening] = useState(false);
-    const [isHandsFree, setIsHandsFree] = useState(false);
     const [avatarState, setAvatarState] = useState('idle');
     
     const recognitionRef = useRef(null);
     const fileInputRef = useRef(null);
     const loadingIntervalRef = useRef(null);
-    const speechSynthesisRef = useRef(null);
+    const containerRef = useRef(null);
+    const cursorRef = useRef(null);
 
-    const msgs = ['Analizando semántica...', 'Aplicando framework élite...', 'Optimizando parámetros...', 'Generando masterPrompt...'];
+    const msgs = ['Analizando contexto...', 'Aplicando técnicas élite...', 'Optimizando estructura...', 'Generando masterPrompt...'];
 
     const modules = [
-        { id: 1, title: 'Ingeniería de Prompts', icon: 'fa-terminal', color: '#00C2E0', topics: ['Mastery Framework', 'Contexto Dinámico', 'Zero-Shot Prompting', 'Chain-of-Thought'], challenge: 'Diseña un prompt que obligue a la IA a debatir la ética de su propia existencia.', desc: 'Domina el arte de comunicarte con la IA a nivel experto.' },
-        { id: 2, title: 'Potencia ChatGPT', icon: 'fa-robot', color: '#00E0FF', topics: ['Análisis Predictivo', 'GPTs Personalizados', 'Function Calling', 'System Prompts'], challenge: 'Estructura un GPT para análisis de mercados cuánticos.', desc: 'Desbloquea todo el potencial de los modelos GPT con técnicas avanzadas.' },
-        { id: 3, title: 'Rastreo Profundo', icon: 'fa-search', color: '#7C3AED', topics: ['Razonamiento Multimodal', 'Grounding Real-Time', 'Deep Research', 'Fact-Checking IA'], challenge: 'Genera una comparativa técnica de latencia entre arquitecturas IA.', desc: 'Técnicas de investigación profunda con IA para resultados de élite.' },
-        { id: 4, title: 'Inmersión NotebookLM', icon: 'fa-microphone', color: '#FB923C', topics: ['Curaduría de Fuentes', 'Síntesis de Conocimiento', 'Audio Overviews', 'Gestión Documental'], challenge: 'Genera un podcast analizando 5 papers sobre neuro-plasticidad.', desc: 'Convierte cualquier documento en conocimiento accionable con IA.' },
-        { id: 5, title: 'Proyecto Disruptivo', icon: 'fa-trophy', color: '#FBBF24', topics: ['Integración Total', 'MVP Inteligente', 'Pitch Deck IA', 'Roadmap Estratégico'], challenge: 'Propón una automatización integral para una industria local de alto nivel.', desc: 'Aplica todo lo aprendido en un proyecto de impacto real.' },
+        { id: 1, title: 'Ingeniería de Prompts', icon: 'fa-terminal', color: '#4DA8C4', topics: ['Mastery Framework', 'Contexto Dinámico', 'Zero-Shot Prompting', 'Chain-of-Thought'], challenge: 'Diseña un prompt que obligue a la IA a debatir la ética de su propia existencia.', desc: 'Domina el arte de comunicarte con la IA a nivel experto.', duration: '4h 30min', level: 'Avanzado', videos: 12, projects: 3 },
+        { id: 2, title: 'Potencia ChatGPT', icon: 'fa-robot', color: '#66CCCC', topics: ['Análisis Predictivo', 'GPTs Personalizados', 'Function Calling', 'System Prompts'], challenge: 'Estructura un GPT para análisis de mercados cuánticos.', desc: 'Desbloquea todo el potencial de los modelos GPT con técnicas avanzadas.', duration: '5h 00min', level: 'Avanzado', videos: 15, projects: 4 },
+        { id: 3, title: 'Rastreo Profundo', icon: 'fa-search', color: '#B2D8E5', topics: ['Razonamiento Multimodal', 'Grounding Real-Time', 'Deep Research', 'Fact-Checking IA'], challenge: 'Genera una comparativa técnica de latencia entre arquitecturas IA.', desc: 'Técnicas de investigación profunda con IA para resultados de élite.', duration: '3h 45min', level: 'Intermedio', videos: 10, projects: 2 },
+        { id: 4, title: 'Inmersión NotebookLM', icon: 'fa-microphone', color: '#004B63', topics: ['Curaduría de Fuentes', 'Síntesis de Conocimiento', 'Audio Overviews', 'Gestión Documental'], challenge: 'Genera un podcast analizando 5 papers sobre neuro-plasticidad.', desc: 'Convierte cualquier documento en conocimiento accionable con IA.', duration: '4h 00min', level: 'Intermedio', videos: 8, projects: 3 },
+        { id: 5, title: 'Proyecto Disruptivo', icon: 'fa-trophy', color: '#FFD166', topics: ['Integración Total', 'MVP Inteligente', 'Pitch Deck IA', 'Roadmap Estratégico'], challenge: 'Propón una automatización integral para una industria local de alto nivel.', desc: 'Aplica todo lo aprendido en un proyecto de impacto real.', duration: '6h 00min', level: 'Experto', videos: 6, projects: 5 },
     ];
 
     const evalQuestions = [
         { q: '¿Qué técnica de prompting guía al modelo paso a paso?', opts: ['Zero-Shot', 'Chain-of-Thought', 'Few-Shot', 'Role Play'], ans: 1 },
         { q: '¿Qué herramienta transforma documentos en podcasts de IA?', opts: ['ChatGPT', 'Midjourney', 'NotebookLM', 'Copilot'], ans: 2 },
-        { q: '¿Qué mide el ROI en un proyecto de automatización con IA?', opts: ['Velocidad de la red', 'Retorno sobre inversión', 'Número de usuarios', 'Calidad de la imagen'], ans: 1 },
         { q: '¿Qué modelo de IA genera texto e imágenes de forma multimodal?', opts: ['GPT-4o', 'Whisper', 'DALL-E 2', 'Stable Diffusion'], ans: 0 },
         { q: '¿Cuál es el objetivo principal de la Ingeniería de Prompts?', opts: ['Programar en Python', 'Diseñar interfaces gráficas', 'Comunicarse efectivamente con IA', 'Entrenar modelos desde cero'], ans: 2 },
+        { q: '¿Qué metodología permite solicitar a una IA que muestre su razonamiento?', opts: ['Zero-Shot', 'Chain-of-Thought', 'Few-Shot', 'Prompt Chaining'], ans: 1 },
     ];
 
     useEffect(() => {
@@ -58,8 +61,7 @@ const IALab = ({ onBack }) => {
 
             recognitionRef.current.onresult = (event) => {
                 const transcript = Array.from(event.results)
-                    .map(result => result[0])
-                    .map(result => result.transcript)
+                    .map(result => result[0].transcript)
                     .join('');
                 setCoachQ(transcript);
             };
@@ -73,42 +75,28 @@ const IALab = ({ onBack }) => {
 
     useEffect(() => {
         return () => {
-            if (loadingIntervalRef.current) {
-                clearInterval(loadingIntervalRef.current);
-            }
-            if (speechSynthesisRef.current) {
-                speechSynthesisRef.current.cancel();
-            }
+            if (loadingIntervalRef.current) clearInterval(loadingIntervalRef.current);
         };
     }, []);
 
     const askCoach = async () => {
-        const q = coachQ.trim(); if (!q) return;
+        const q = coachQ.trim();
+        if (!q) return;
         setCoachLoad(true);
         setAvatarState('thinking');
-        const prompt = `Estudiante: ${q}`;
-        const r = await callDeepseek(prompt, PROMPT_VALERIO_DOCENTE, false);
-        setCoachMsg(r); 
-        setCoachLoad(false); 
+        const r = await callDeepseek(`Estudiante: ${q}`, PROMPT_VALERIO_DOCENTE, false);
+        setCoachMsg(r);
+        setCoachLoad(false);
         setCoachQ('');
         setAvatarState('speaking');
-        doSpeak(r);
-        
-        setTimeout(() => {
-            if (speechSynthesisRef.current && speechSynthesisRef.current.speaking) {
-                speechSynthesisRef.current.onend = () => setAvatarState('idle');
-            } else {
-                setAvatarState('idle');
-            }
-        }, 500);
+        speakTextConversational(r, () => setAvatarState('idle'));
     };
 
     const toggleSpeech = () => {
         if (!recognitionRef.current) return;
         if (isListening) {
             recognitionRef.current.stop();
-            setIsHandsFree(false);
-            setAvatarState('thinking');
+            setIsListening(false);
         } else {
             setCoachQ('');
             setIsListening(true);
@@ -125,113 +113,130 @@ const IALab = ({ onBack }) => {
         const file = e.target.files[0];
         if (!file) return;
 
-        const MAX_SIZE = 5 * 1024 * 1024;
-        const ALLOWED_TYPES = ['.txt', '.md', '.pdf', '.doc', '.docx'];
-        
-        if (file.size > MAX_SIZE) {
-            setCoachMsg('El archivo excede el tamaño máximo de 5MB. Por favor intenta con un archivo más pequeño.');
-            return;
-        }
-        
-        const fileExt = '.' + file.name.split('.').pop().toLowerCase();
-        if (!ALLOWED_TYPES.includes(fileExt)) {
-            setCoachMsg('Tipo de archivo no permitido. Usa: .txt, .md, .pdf, .doc o .docx');
-            return;
-        }
-
         const reader = new FileReader();
         reader.onload = async (evt) => {
             const content = evt.target.result;
             setCoachLoad(true);
             setAvatarState('thinking');
             setCoachMsg('Leyendo el documento...');
-            const prompt = `El estudiante acaba de subir un documento con el siguiente contenido:\n\n${content}\n\nPregúntale de forma empática y motivadora qué desea hacer con la información, o si tiene preguntas al respecto (eres un profesor colombiano). Responde de forma muy natural y concisa (1 o 2 líneas).`;
-            const r = await callDeepseek(prompt, PROMPT_VALERIO_DOCENTE, false);
+            const r = await callDeepseek(
+                `Documento:\n${content}\n\nPregúntale de forma empática qué desea hacer con la información.`,
+                PROMPT_VALERIO_DOCENTE,
+                false
+            );
             setCoachMsg(r);
             setCoachLoad(false);
             setAvatarState('speaking');
-            doSpeak(r);
+            speakTextConversational(r, () => setAvatarState('idle'));
         };
         reader.readAsText(file);
         if (fileInputRef.current) fileInputRef.current.value = "";
     };
 
-    const doSpeak = (text) => {
-        if (!text) return;
-        setAvatarState('speaking');
-        const utterance = speakTextConversational(text);
-        if (utterance) {
-            speechSynthesisRef.current = utterance;
-            utterance.onend = () => setAvatarState('idle');
-        } else {
-            setTimeout(() => setAvatarState('idle'), 2000);
-        }
-    };
-
     const handleOptimize = async () => {
         if (!input.trim()) return;
-        setLoading(true); setGenData(null);
-        let idx = 0; setLoadMsg(msgs[0]);
-        loadingIntervalRef.current = setInterval(() => { idx = (idx + 1) % msgs.length; setLoadMsg(msgs[idx]); }, 1800);
-        const r = await callDeepseek(input, 'Eres el Arquitecto de Prompts élite de Edutechlife. Devuelve SOLO JSON con: masterPrompt (string) y feedback (string, máx 2 oraciones).', true);
-        if (loadingIntervalRef.current) {
-            clearInterval(loadingIntervalRef.current);
-            loadingIntervalRef.current = null;
-        }
+        setLoading(true);
+        setGenData(null);
+        let idx = 0;
+        setLoadMsg(msgs[0]);
+        loadingIntervalRef.current = setInterval(() => {
+            idx = (idx + 1) % msgs.length;
+            setLoadMsg(msgs[idx]);
+        }, 1800);
+        
+        const r = await callDeepseek(
+            input,
+            'Eres el Arquitecto de Prompts élite de Edutechlife. Devuelve SOLO JSON con: masterPrompt (string) y feedback (string, máx 2 oraciones).',
+            true
+        );
+        
+        if (loadingIntervalRef.current) clearInterval(loadingIntervalRef.current);
         if (!r.error) setGenData(r);
         setLoading(false);
     };
 
     const handleEvalSubmit = () => {
         let score = 0;
-        evalQuestions.forEach((q, i) => { if (evalAnswers[i] === q.ans) score++; });
+        evalQuestions.forEach((q, i) => {
+            if (evalAnswers[i] === q.ans) score++;
+        });
         setEvalScore(score);
         setEvalSubmitted(true);
-        if (score >= 3) setActiveTab('cert');
+        
+        if (score >= 3) {
+            if (!completedModules.includes(activeMod)) {
+                const newCompleted = [...completedModules, activeMod];
+                setCompletedModules(newCompleted);
+                setCourseProgress(Math.round((newCompleted.length / 5) * 100));
+            }
+            setActiveTab('cert');
+        }
     };
 
     const downloadCert = () => {
         const studentName = certName.trim() || 'Estudiante';
-        const canvas = document.createElement('canvas');
-        canvas.width = 1200; canvas.height = 840;
-        const ctx = canvas.getContext('2d');
-        const grad = ctx.createLinearGradient(0, 0, 1200, 840);
-        grad.addColorStop(0, '#0D2137'); grad.addColorStop(.5, '#0A3550'); grad.addColorStop(1, '#0D2137');
-        ctx.fillStyle = grad; ctx.fillRect(0, 0, 1200, 840);
-        ctx.strokeStyle = 'rgba(0,194,224,0.3)'; ctx.lineWidth = 2; ctx.strokeRect(30, 30, 1140, 780);
-        ctx.strokeStyle = 'rgba(0,194,224,0.1)'; ctx.lineWidth = 1; ctx.strokeRect(42, 42, 1116, 756);
-        const orbGrad = ctx.createRadialGradient(600, 0, 0, 600, 0, 400);
-        orbGrad.addColorStop(0, 'rgba(0,194,224,0.18)'); orbGrad.addColorStop(1, 'transparent');
-        ctx.fillStyle = orbGrad; ctx.fillRect(0, 0, 1200, 400);
-        ctx.fillStyle = 'rgba(0,194,224,0.6)'; ctx.font = 'bold 18px Arial'; ctx.textAlign = 'center';
-        ctx.fillText('E D U T E C H L I F E', 600, 130);
-        ctx.fillStyle = 'rgba(0,194,224,0.4)'; ctx.fillRect(400, 145, 400, 2);
-        ctx.fillStyle = 'rgba(255,255,255,0.25)'; ctx.font = 'bold 36px Arial';
-        ctx.fillText('CERTIFICADO DE EXCELENCIA', 600, 210);
-        ctx.fillStyle = 'rgba(255,255,255,0.5)'; ctx.font = '22px Arial';
-        ctx.fillText('Este certificado acredita que', 600, 290);
-        ctx.fillStyle = 'white'; ctx.font = 'bold 72px Arial';
-        ctx.fillText(studentName, 600, 390);
-        const nameGrad = ctx.createLinearGradient(300, 405, 900, 405);
-        nameGrad.addColorStop(0, 'transparent'); nameGrad.addColorStop(.5, 'rgba(0,194,224,0.8)'); nameGrad.addColorStop(1, 'transparent');
-        ctx.fillStyle = nameGrad; ctx.fillRect(300, 405, 600, 2);
-        ctx.fillStyle = 'rgba(255,255,255,0.5)'; ctx.font = '20px Arial';
-        ctx.fillText('ha completado satisfactoriamente el programa', 600, 460);
-        ctx.fillStyle = 'rgba(0,194,224,1)'; ctx.font = 'bold 32px Arial';
-        ctx.fillText(`Módulo ${activeMod}: ${modules.find(m => m.id === activeMod)?.title}`, 600, 510);
-        ctx.fillStyle = 'rgba(0,224,255,0.9)'; ctx.font = 'bold 20px Arial';
-        ctx.fillText(`Evaluación: ${evalScore}/5 — ${evalScore >= 5 ? 'Distinción' : evalScore >= 4 ? 'Sobresaliente' : 'Aprobado'}`, 600, 565);
-        ctx.fillStyle = 'rgba(255,255,255,0.3)'; ctx.font = '16px Arial';
-        ctx.fillText(`Fecha: ${new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' })}`, 600, 640);
-        ctx.strokeStyle = 'rgba(255,255,255,0.15)'; ctx.lineWidth = 1;
-        ctx.beginPath(); ctx.moveTo(400, 700); ctx.lineTo(800, 700); ctx.stroke();
-        ctx.fillStyle = 'rgba(255,255,255,0.3)'; ctx.font = '14px Arial';
-        ctx.fillText('Programa Edutechlife — Hyper-Intelligence', 600, 725);
-        const sealGrad = ctx.createRadialGradient(600, 780, 0, 600, 780, 40);
-        sealGrad.addColorStop(0, 'rgba(0,194,224,0.6)'); sealGrad.addColorStop(1, 'rgba(0,194,224,0.1)');
-        ctx.fillStyle = sealGrad; ctx.beginPath(); ctx.arc(600, 785, 35, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = 'white'; ctx.font = 'bold 20px Arial'; ctx.fillText('✓', 600, 793);
-        const link = document.createElement('a'); link.download = `certificado-edutechlife-modulo${activeMod}.png`; link.href = canvas.toDataURL(); link.click();
+        const curr = modules.find(m => m.id === activeMod);
+        
+        const container = document.createElement('div');
+        container.style.cssText = 'width: 1200px; min-height: 840px; background: linear-gradient(135deg, #004B63 0%, #0A3550 100%); padding: 60px; font-family: Montserrat, Arial, sans-serif; color: white;';
+        
+        container.innerHTML = `
+            <div style="text-align: center; margin-bottom: 40px;">
+                <img src="/images/logo-edutechlife.webp" style="height: 60px; margin-bottom: 20px;" onerror="this.style.display='none'" />
+                <div style="font-size: 24px; font-weight: 800; letter-spacing: 0.3em; color: #4DA8C4; margin-bottom: 10px;">E D U T E C H L I F E</div>
+                <div style="width: 200px; height: 2px; background: linear-gradient(90deg, transparent, #4DA8C4, transparent); margin: 0 auto;"></div>
+            </div>
+            
+            <div style="text-align: center; margin-bottom: 40px;">
+                <div style="font-size: 42px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 20px;">Certificado de Excelencia</div>
+                <div style="font-size: 18px; opacity: 0.8;">Este certificado acredita que</div>
+            </div>
+            
+            <div style="text-align: center; margin-bottom: 40px;">
+                <div style="font-size: 56px; font-weight: 900; color: #66CCCC; margin-bottom: 5px;">${studentName}</div>
+                <div style="width: 300px; height: 2px; background: linear-gradient(90deg, transparent, #66CCCC, transparent); margin: 0 auto;"></div>
+            </div>
+            
+            <div style="text-align: center; margin-bottom: 40px;">
+                <div style="font-size: 18px; opacity: 0.8; margin-bottom: 15px;">ha completado satisfactoriamente el programa</div>
+                <div style="font-size: 28px; font-weight: 700; color: #4DA8C4;">Módulo ${activeMod}: ${curr?.title}</div>
+            </div>
+            
+            <div style="text-align: center; margin-bottom: 40px;">
+                <div style="display: inline-block; padding: 10px 30px; background: rgba(77, 168, 196, 0.2); border: 2px solid #4DA8C4; border-radius: 30px; font-size: 18px; font-weight: 700;">
+                    Evaluación: ${evalScore}/5 — ${evalScore >= 4 ? 'SOBRESALIENTE' : evalScore >= 3 ? 'APROBADO' : 'EN PROGRESO'}
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-bottom: 30px;">
+                <div style="font-size: 14px; opacity: 0.6;">Fecha: ${new Date().toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+            </div>
+            
+            <div style="display: flex; justify-content: center; gap: 100px; margin-top: 40px;">
+                <div style="text-align: center;">
+                    <div style="width: 100px; height: 1px; background: rgba(255,255,255,0.3); margin-bottom: 10px;"></div>
+                    <div style="font-size: 12px; opacity: 0.6;">Director Académico</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="width: 100px; height: 1px; background: rgba(255,255,255,0.3); margin-bottom: 10px;"></div>
+                    <div style="font-size: 12px; opacity: 0.6;">Coordinador del Programa</div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                <div style="font-size: 11px; opacity: 0.4;">EDUTECHLIFE v2.286 — Hyper-Intelligence Lab | www.edutechlife.com</div>
+            </div>
+        `;
+
+        const opt = {
+            margin: 10,
+            filename: `Certificado_Edutechlife_Modulo${activeMod}_${studentName.replace(/\s+/g, '_')}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+        };
+
+        html2pdf().set(opt).from(container).save();
     };
 
     const handleDownloadCert = () => {
@@ -250,293 +255,451 @@ const IALab = ({ onBack }) => {
     };
 
     const curr = modules.find(m => m.id === activeMod);
-    const tabBtnStyle = (t) => ({
-        padding: '.6rem 1.4rem', borderRadius: '100px', border: '1px solid', cursor: 'pointer', transition: 'all .3s',
-        fontFamily: 'DM Mono', fontSize: '9px', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '.15em',
-        background: activeTab === t ? 'linear-gradient(135deg,var(--primary),var(--accent))' : 'transparent',
-        color: activeTab === t ? '#0A2540' : 'rgba(255,255,255,.5)',
-        borderColor: activeTab === t ? 'transparent' : 'rgba(255,255,255,.15)',
-    });
 
     return (
-        <div className="ia-lab-view">
-            <aside className="ia-lab-sidebar">
-                <div style={{ marginBottom: '2rem', paddingBottom: '1.5rem', borderBottom: '1px solid rgba(0,194,224,.1)' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '.5rem' }}>
-                        <div style={{ width: 36, height: 36, background: 'linear-gradient(135deg,var(--primary),var(--accent))', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(0,194,224,.4)', flexShrink: 0 }}>
-                            <i className="fa-solid fa-flask-vial" style={{ color: '#0A2540', fontSize: '1rem' }} />
-                        </div>
-                        <div>
-                            <div style={{ fontFamily: 'Syne', fontSize: '1rem', fontWeight: 800, color: 'white', letterSpacing: '-.01em' }}>IA LAB <span style={{ color: 'var(--primary)' }}>PRO</span></div>
-                            <div style={{ fontFamily: 'DM Mono', fontSize: '8px', color: 'rgba(255,255,255,.3)', textTransform: 'uppercase', letterSpacing: '.15em' }}>EDUTECHLIFE</div>
+        <div ref={containerRef} className="min-h-screen bg-gradient-to-br from-[#F8FAFC] via-[#FFFFFF] to-[#E2E8F0]">
+            {/* Header */}
+            <div className="bg-white border-b border-[#E2E8F0] shadow-sm">
+                <div className="max-w-7xl mx-auto flex items-center justify-between py-4 px-6">
+                    <div className="flex items-center gap-4">
+                        <button 
+                            onClick={onBack}
+                            className="flex items-center gap-2 px-4 py-2 bg-[#F1F5F9] hover:bg-[#4DA8C4] hover:text-white border border-[#E2E8F0] rounded-lg transition-all duration-300"
+                        >
+                            <i className="fa-solid fa-arrow-left text-[#4DA8C4] hover:text-white" />
+                            <span className="text-sm text-[#64748B] hover:text-white">Volver</span>
+                        </button>
+                        <div className="h-8 w-px bg-[#E2E8F0]" />
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] rounded-lg flex items-center justify-center">
+                                <i className="fa-solid fa-flask-vial text-white" />
+                            </div>
+                            <div>
+                                <h1 className="font-montserrat font-bold text-lg text-[#004B63]">IA Lab Pro</h1>
+                                <p className="text-xs text-[#64748B]">Hyper-Intelligence Certification</p>
+                            </div>
                         </div>
                     </div>
-                    <div style={{ marginTop: '1rem' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '.4rem' }}>
-                            <span style={{ fontFamily: 'DM Mono', fontSize: '8px', color: 'rgba(255,255,255,.3)', textTransform: 'uppercase', letterSpacing: '.15em' }}>Progreso general</span>
-                            <span style={{ fontFamily: 'DM Mono', fontSize: '8px', color: 'var(--primary)' }}>20%</span>
+                    <div className="flex items-center gap-3">
+                        <div className="px-4 py-2 bg-[#66CCCC]/20 border border-[#66CCCC]/40 rounded-full">
+                            <span className="text-sm font-semibold text-[#004B63]">{completedModules.length}/5 Módulos</span>
                         </div>
-                        <div className="xp-bar-bg"><div className="xp-bar-fill" style={{ width: '20%' }} /></div>
+                        <span className="px-3 py-1 bg-[#FFD166]/20 border border-[#FFD166]/40 rounded-full text-xs text-[#004B63] font-mono font-semibold">
+                            PREMIUM
+                        </span>
                     </div>
                 </div>
+            </div>
 
-                <nav style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 6 }}>
-                    <p style={{ fontFamily: 'DM Mono', fontSize: '8px', color: 'rgba(255,255,255,.2)', textTransform: 'uppercase', letterSpacing: '.2em', marginBottom: '.5rem', paddingLeft: '.4rem' }}>MÓDULOS</p>
-                    {modules.map(mod => (
-                        <button key={mod.id} onClick={() => { setActiveMod(mod.id); setGenData(null); setInput(''); setActiveTab('lab'); setEvalSubmitted(false); setEvalAnswers({}); }} className={`module-btn ${activeMod === mod.id ? 'active' : 'inactive'}`}>
-                            <div className="module-num">{mod.id}</div>
-                            <div style={{ flex: 1, minWidth: 0 }}>
-                                <p style={{ fontFamily: 'DM Mono', fontWeight: 500, fontSize: '10px', textTransform: 'uppercase', letterSpacing: '.12em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{mod.title}</p>
+            <div className="max-w-7xl mx-auto px-6 py-8">
+                <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                    {/* Sidebar - Module List */}
+                    <div className="lg:col-span-1">
+                        <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm overflow-hidden">
+                            {/* Progress */}
+                            <div className="p-6 border-b border-[#E2E8F0]">
+                                <div className="flex items-center justify-between mb-3">
+                                    <span className="text-xs font-semibold text-[#64748B] uppercase tracking-wide">Progreso</span>
+                                    <span className="text-sm font-bold text-[#4DA8C4]">{courseProgress}%</span>
+                                </div>
+                                <div className="h-3 bg-[#E2E8F0] rounded-full overflow-hidden">
+                                    <div 
+                                        className="h-full bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] rounded-full transition-all duration-500"
+                                        style={{ width: `${courseProgress}%` }}
+                                    />
+                                </div>
                             </div>
-                            <i className={`fa-solid ${mod.icon}`} style={{ fontSize: '11px', opacity: .5, flexShrink: 0 }} />
-                        </button>
-                    ))}
-                </nav>
 
-                {/* CORRECCIÓN AQUÍ: Se eliminó borderTop duplicado y se unificó el estilo */}
-                <button onClick={onBack} style={{ marginTop: '1.5rem', padding: '1rem 1.2rem', display: 'flex', alignItems: 'center', gap: 10, fontFamily: 'DM Mono', fontSize: '9px', color: 'rgba(255,255,255,.25)', textTransform: 'uppercase', letterSpacing: '.2em', background: 'transparent', border: 'none', borderTop: '1px solid rgba(255,255,255,.06)', cursor: 'pointer', transition: 'color .3s', width: '100%' }}
-                    onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,.7)'}
-                    onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,.25)'}>
-                    <i className="fa-solid fa-power-off text-xs" />VOLVER AL NÚCLEO
-                </button>
-            </aside>
-
-            <main className="ia-lab-content">
-                <div className="pizarra-bg" />
-                <div style={{ maxWidth: '60rem', margin: '0 auto', position: 'relative', zIndex: 1 }}>
-                    <div style={{ marginBottom: '2.5rem', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '2rem' }}>
-                        <div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '.75rem' }}>
-                                <div style={{ width: 40, height: 40, background: 'linear-gradient(135deg,rgba(0,194,224,.2),rgba(0,224,255,.1))', border: '1px solid rgba(0,194,224,.25)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                    <i className={`fa-solid ${curr.icon}`} style={{ color: 'var(--primary)', fontSize: '1rem' }} />
-                                </div>
-                                <span style={{ fontFamily: 'DM Mono', fontSize: '9px', color: 'rgba(0,194,224,.7)', textTransform: 'uppercase', letterSpacing: '.22em' }}>MÓDULO {activeMod} · IA LAB PRO</span>
-                            </div>
-                            <h2 style={{ fontFamily: 'Syne', fontWeight: 800, fontSize: 'clamp(2rem,4vw,3.2rem)', color: '#0A2540', letterSpacing: '-.02em', textTransform: 'uppercase', fontStyle: 'italic', lineHeight: .95 }}>{curr.title}</h2>
-                            <p style={{ color: '#5A7FA0', fontSize: '.9rem', marginTop: '.75rem', fontWeight: 300 }}>{curr.desc}</p>
-                        </div>
-                        <div style={{ display: 'flex', gap: 8, flexShrink: 0, background: 'rgba(10,37,64,.08)', padding: '6px', borderRadius: '100px', border: '1px solid rgba(0,194,224,.12)' }}>
-                            <button style={tabBtnStyle('lab')} onClick={() => setActiveTab('lab')}><i className="fa-solid fa-terminal" style={{ marginRight: 5 }} />Lab</button>
-                            <button style={tabBtnStyle('eval')} onClick={() => setActiveTab('eval')}><i className="fa-solid fa-clipboard-check" style={{ marginRight: 5 }} />Eval.</button>
-                            <button style={tabBtnStyle('cert')} onClick={() => setActiveTab('cert')}><i className="fa-solid fa-medal" style={{ marginRight: 5 }} />Cert.</button>
-                        </div>
-                    </div>
-
-                    {activeTab === 'lab' && (
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '2rem', alignItems: 'start' }}>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                                <div className="glass-card" style={{ padding: '2rem' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: '1.25rem', paddingBottom: '1rem', borderBottom: '1px solid rgba(0,194,224,.1)' }}>
-                                        <div style={{ width: 28, height: 28, background: 'linear-gradient(135deg,rgba(0,194,224,.15),rgba(0,224,255,.08))', border: '1px solid rgba(0,194,224,.2)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                            <i className="fa-solid fa-layer-group" style={{ color: 'var(--primary)', fontSize: '11px' }} />
-                                        </div>
-                                        <h3 style={{ fontFamily: 'DM Mono', fontSize: '9px', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '.22em', color: '#5A7FA0' }}>DOMINIO TÉCNICO</h3>
-                                    </div>
-                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '.85rem' }}>
-                                        {curr.topics.map((t, i) => (
-                                            <div key={i} className="lab-topic-chip">
-                                                <span>{t}</span>
-                                                <i className="fa-solid fa-sparkles" style={{ color: 'var(--primary)', fontSize: '10px', flexShrink: 0 }} />
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                <div className={`synth-panel${loading ? ' neural-glow' : ''}`}>
-                                    <div className="ai-panel-header">
-                                        <div className="ai-panel-icon"><i className="fa-solid fa-terminal" /></div>
-                                        <span className="ai-panel-title">SINTETIZADOR DE PROMPTS ÉLITE</span>
-                                        <div className="ai-panel-badge"><span className="ai-panel-badge-dot" />GEMINI LIVE</div>
-                                    </div>
-                                    <textarea value={input} onChange={e => setInput(e.target.value)} placeholder="Ingresa tu idea o prompt base para la transmutación..." className="ai-input-dark" rows={4} style={{ width: '100%' }} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleOptimize(); } }} />
-                                    <button onClick={handleOptimize} disabled={loading} className="ai-run-btn">
-                                        {loading ? <><span>Procesando</span><div className="ai-loading-bars"><span /><span /><span /><span /><span /></div></> : <><span>Sintetizar masterPrompt élite</span><i className="fa-solid fa-bolt text-xs relative z-10" /></>}
-                                    </button>
-                                    {loading && <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '1rem', marginTop: '1rem', background: 'rgba(0,194,224,.06)', border: '1px solid rgba(0,194,224,.15)', borderRadius: '1rem' }}>
-                                        <div className="ai-loading-bars"><span /><span /><span /><span /><span /></div>
-                                        <span style={{ fontFamily: 'DM Mono', fontSize: '10px', color: 'var(--primary)', letterSpacing: '.15em', textTransform: 'uppercase' }}>{loadMsg}</span>
-                                    </div>}
-                                    {genData && !loading && <>
-                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1.5rem', marginBottom: '.6rem' }}>
-                                            <span style={{ fontFamily: 'DM Mono', fontSize: '9px', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '.2em' }}>MASTER PROMPT GENERADO</span>
-                                            <button onClick={() => navigator.clipboard.writeText(genData.masterPrompt)} style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'transparent', border: '1px solid rgba(0,224,255,.25)', color: 'var(--accent)', fontFamily: 'DM Mono', fontSize: '8px', letterSpacing: '.12em', textTransform: 'uppercase', padding: '4px 12px', borderRadius: '100px', cursor: 'pointer', transition: 'all .25s' }} onMouseEnter={e => { e.currentTarget.style.background = 'rgba(0,224,255,.1)'; }} onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; }}>
-                                                <i className="fa-solid fa-copy text-xs" />Copiar
-                                            </button>
-                                        </div>
-                                        <div className="synth-result-code">{genData.masterPrompt}</div>
-                                        <div className="synth-feedback"><strong>Feedback:</strong> {genData.feedback}</div>
-                                    </>}
-                                </div>
-
-                                <div className="glass-card" style={{ padding: '1.5rem', background: 'linear-gradient(165deg,rgba(0,194,224,.08),rgba(0,37,64,.15))' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: '1rem' }}>
-                                        <ValerioAvatar state={avatarState} size={56} />
-                                        <div>
-                                            <h3 style={{ fontFamily: 'Syne', fontWeight: 700, fontSize: '1.1rem', color: 'white' }}>Tu Coach Virtual: Valerio</h3>
-                                            <div className="coach-subtitle">Método Socrático · IA Nativa</div>
-                                        </div>
-                                    </div>
-                                    <div style={{ marginBottom: '1rem' }}>
-                                        <textarea 
-                                            value={coachQ} 
-                                            onChange={e => setCoachQ(e.target.value)}
-                                            placeholder="Escribe tu pregunta para Valerio..."
-                                            className="ai-input-dark"
-                                            rows={2}
-                                            style={{ width: '100%', marginBottom: '0.75rem' }}
-                                        />
-                                        <div style={{ display: 'flex', gap: '0.5rem' }}>
-                                            <button onClick={askCoach} disabled={coachLoad || !coachQ.trim()} className="ai-run-btn" style={{ flex: 1 }}>
-                                                {coachLoad ? 'Pensando...' : 'Preguntar'}
-                                            </button>
-                                            <button onClick={toggleSpeech} className="ai-run-btn" style={{ width: 'auto', padding: '0 1rem', background: isListening ? 'rgba(239,68,68,0.2)' : 'rgba(255,255,255,0.05)', border: isListening ? '1px solid #EF4444' : '1px solid rgba(255,255,255,0.1)' }}>
-                                                <i className="fa-solid fa-microphone" style={{ color: isListening ? '#EF4444' : 'var(--primary)' }} />
-                                            </button>
-                                            <input type="file" ref={fileInputRef} onChange={handleFileUpload} style={{ display: 'none' }} accept=".txt,.md,.pdf,.doc,.docx" />
-                                            <button onClick={() => fileInputRef.current?.click()} className="ai-run-btn" style={{ width: 'auto', padding: '0 1rem' }}>
-                                                <i className="fa-solid fa-paperclip" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                    {coachMsg && (
-                                        <div className="mentor-bubble">
-                                            <div className="mentor-badge">
-                                                <i className="fa-solid fa-crown" />
-                                                <span>MENTOR JEFE</span>
-                                            </div>
-                                            <div className="mentor-content">
-                                                <ValerioAvatar state={avatarState} size={48} />
-                                                <div className="mentor-message">
-                                                    <p>{coachMsg}</p>
+                            {/* Module List */}
+                            <div className="p-4">
+                                <p className="text-xs font-semibold text-[#64748B] uppercase tracking-wide mb-4">Módulos del Curso</p>
+                                <div className="space-y-2">
+                                    {modules.map(mod => (
+                                        <button
+                                            key={mod.id}
+                                            onClick={() => { setActiveMod(mod.id); setGenData(null); setInput(''); setActiveTab('lab'); setEvalSubmitted(false); setEvalAnswers({}); }}
+                                            className={`w-full text-left p-4 rounded-xl transition-all duration-300 ${
+                                                activeMod === mod.id 
+                                                    ? 'bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white shadow-lg' 
+                                                    : completedModules.includes(mod.id)
+                                                        ? 'bg-[#66CCCC]/10 border-2 border-[#66CCCC]/30 text-[#004B63] hover:border-[#4DA8C4]'
+                                                        : 'bg-[#F8FAFC] border border-[#E2E8F0] text-[#64748B] hover:border-[#4DA8C4] hover:text-[#004B63]'
+                                            }`}
+                                        >
+                                            <div className="flex items-center gap-3">
+                                                <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold ${
+                                                    activeMod === mod.id 
+                                                        ? 'bg-white/20 text-white' 
+                                                        : completedModules.includes(mod.id)
+                                                            ? 'bg-[#66CCCC] text-white'
+                                                            : 'bg-[#E2E8F0] text-[#64748B]'
+                                                }`}>
+                                                    {completedModules.includes(mod.id) ? (
+                                                        <i className="fa-solid fa-check text-xs" />
+                                                    ) : (
+                                                        mod.id
+                                                    )}
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="font-semibold text-sm truncate">{mod.title}</p>
+                                                    <p className={`text-xs ${activeMod === mod.id ? 'text-white/70' : 'text-[#64748B]'}`}>
+                                                        {mod.duration}
+                                                    </p>
                                                 </div>
                                             </div>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div style={{ flexShrink: 0 }}>
-                                <div style={{ background: 'linear-gradient(165deg,#0D2137,#0A3550)', borderRadius: '2rem', padding: '2.5rem', color: 'white', border: '1px solid rgba(0,194,224,.18)', boxShadow: '0 20px 50px rgba(0,0,0,.15)', position: 'relative', overflow: 'hidden' }}>
-                                    <div style={{ position: 'absolute', top: -50, right: -50, width: 160, height: 160, background: 'radial-gradient(circle,rgba(0,194,224,.15),transparent 60%)', borderRadius: '50%', pointerEvents: 'none' }} />
-                                    <div style={{ position: 'absolute', bottom: -30, left: -30, width: 120, height: 120, background: 'radial-gradient(circle,rgba(0,224,255,.1),transparent 60%)', borderRadius: '50%', pointerEvents: 'none' }} />
-                                    <div style={{ width: 44, height: 44, background: 'linear-gradient(135deg,rgba(0,194,224,.25),rgba(0,224,255,.15))', border: '1px solid rgba(0,194,224,.3)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem', position: 'relative', zIndex: 1 }}>
-                                        <i className="fa-solid fa-bolt" style={{ color: 'var(--primary)', fontSize: '1.2rem' }} />
-                                    </div>
-                                    <span style={{ fontFamily: 'DM Mono', fontSize: '9px', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '.2em', position: 'relative', zIndex: 1 }}>DESAFÍO DEL MÓDULO</span>
-                                    <p style={{ fontSize: '.85rem', color: 'rgba(255,255,255,.65)', lineHeight: 1.75, fontStyle: 'italic', margin: '1rem 0 2rem', position: 'relative', zIndex: 1 }}>"{curr.challenge}"</p>
-                                    <button className="ai-run-btn" style={{ borderRadius: '1rem', position: 'relative', zIndex: 1 }}>
-                                        <span>Enviar solución</span><i className="fa-solid fa-paper-plane text-xs relative z-10" />
-                                    </button>
-                                </div>
-                                <div style={{ marginTop: '1rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '.75rem' }}>
-                                    {[{ label: 'Duración', val: '4h 30min', icon: 'fa-clock', c: 'var(--primary)' }, { label: 'Nivel', val: 'Avanzado', icon: 'fa-signal', c: 'var(--accent)' }, { label: 'Videos', val: '12', icon: 'fa-play', c: '#FBBF24' }, { label: 'Proyectos', val: '3', icon: 'fa-briefcase', c: '#FB923C' }].map((s, i) => (
-                                        <div key={i} style={{ background: 'white', border: '1px solid rgba(0,194,224,.12)', borderRadius: '1.1rem', padding: '1rem', display: 'flex', flexDirection: 'column', gap: 4, boxShadow: '0 2px 12px rgba(0,0,0,.04)' }}>
-                                            <i className={`fa-solid ${s.icon}`} style={{ color: s.c, fontSize: '.9rem' }} />
-                                            <div style={{ fontFamily: 'Syne', fontWeight: 800, fontSize: '1rem', color: '#0A2540' }}>{s.val}</div>
-                                            <div style={{ fontFamily: 'DM Mono', fontSize: '8px', color: '#5A7FA0', textTransform: 'uppercase', letterSpacing: '.1em' }}>{s.label}</div>
-                                        </div>
+                                        </button>
                                     ))}
                                 </div>
                             </div>
                         </div>
-                    )}
+                    </div>
 
-                    {activeTab === 'eval' && (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                            <div className="glass-card" style={{ padding: '2.5rem' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: '2rem', paddingBottom: '1.5rem', borderBottom: '1px solid rgba(0,194,224,.1)' }}>
-                                    <div style={{ width: 48, height: 48, background: 'linear-gradient(135deg,var(--primary),var(--accent))', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 6px 20px rgba(0,194,224,.3)', flexShrink: 0 }}>
-                                        <i className="fa-solid fa-clipboard-check" style={{ color: '#0A2540', fontSize: '1.3rem' }} />
+                    {/* Main Content */}
+                    <div className="lg:col-span-3 space-y-6">
+                        {/* Module Header */}
+                        <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm overflow-hidden">
+                            <div className="bg-gradient-to-r from-[#004B63] to-[#4DA8C4] p-6">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
+                                            <i className={`fa-solid ${curr.icon} text-2xl text-white`} />
+                                        </div>
+                                        <div>
+                                            <p className="text-white/70 text-xs uppercase tracking-wider">Módulo {activeMod} · IA Lab Pro</p>
+                                            <h2 className="text-2xl font-bold text-white font-montserrat">{curr.title}</h2>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <h3 style={{ fontFamily: 'Syne', fontWeight: 800, fontSize: '1.5rem', color: '#0A2540', textTransform: 'uppercase', letterSpacing: '-.01em' }}>Evaluación del Módulo</h3>
-                                        <p style={{ color: '#5A7FA0', fontSize: '.85rem', marginTop: 2 }}>Responde correctamente 3 de 5 preguntas para obtener tu certificado</p>
+                                    <div className="flex gap-2">
+                                        <button 
+                                            onClick={() => setActiveTab('lab')}
+                                            className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${activeTab === 'lab' ? 'bg-white text-[#004B63]' : 'bg-white/20 text-white hover:bg-white/30'}`}
+                                        >
+                                            <i className="fa-solid fa-terminal mr-2" />Lab
+                                        </button>
+                                        <button 
+                                            onClick={() => setActiveTab('eval')}
+                                            className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${activeTab === 'eval' ? 'bg-white text-[#004B63]' : 'bg-white/20 text-white hover:bg-white/30'}`}
+                                        >
+                                            <i className="fa-solid fa-clipboard-check mr-2" />Evaluación
+                                        </button>
+                                        <button 
+                                            onClick={() => setActiveTab('cert')}
+                                            className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${activeTab === 'cert' ? 'bg-white text-[#004B63]' : 'bg-white/20 text-white hover:bg-white/30'}`}
+                                        >
+                                            <i className="fa-solid fa-medal mr-2" />Certificado
+                                        </button>
                                     </div>
-                                    {!evalSubmitted && <div style={{ marginLeft: 'auto', background: 'rgba(0,194,224,.08)', border: '1px solid rgba(0,194,224,.15)', borderRadius: '100px', padding: '6px 16px', fontFamily: 'DM Mono', fontSize: '9px', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '.15em' }}>{Object.keys(evalAnswers).length}/5</div>}
+                                </div>
+                            </div>
+                            <div className="p-6">
+                                <p className="text-[#64748B]">{curr.desc}</p>
+                                <div className="flex flex-wrap gap-3 mt-4">
+                                    {curr.topics.map((topic, i) => (
+                                        <span key={i} className="px-3 py-1 bg-[#4DA8C4]/10 text-[#004B63] text-sm rounded-full font-medium">
+                                            <i className="fa-solid fa-sparkles mr-1 text-[#4DA8C4]" />
+                                            {topic}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Lab Tab */}
+                        {activeTab === 'lab' && (
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                <div className="lg:col-span-2 space-y-6">
+                                    {/* Prompt Synthesizer */}
+                                    <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm overflow-hidden">
+                                        <div className="bg-gradient-to-r from-[#004B63] to-[#4DA8C4] px-6 py-4">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                                                    <i className="fa-solid fa-terminal text-white" />
+                                                </div>
+                                                <div>
+                                                    <h3 className="font-bold text-white">Sintetizador de Prompts Élite</h3>
+                                                    <p className="text-white/70 text-xs">Transforma ideas en MasterPrompts profesionales</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="p-6">
+                                            <textarea
+                                                value={input}
+                                                onChange={e => setInput(e.target.value)}
+                                                placeholder="Ingresa tu idea o prompt base para la transmutación..."
+                                                className="w-full px-4 py-3 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] resize-none"
+                                                rows={4}
+                                                onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleOptimize(); } }}
+                                            />
+                                            <button
+                                                onClick={handleOptimize}
+                                                disabled={loading}
+                                                className="mt-4 w-full py-3 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white rounded-xl font-bold hover:shadow-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                                            >
+                                                {loading ? (
+                                                    <>
+                                                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                                        {loadMsg}
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <i className="fa-solid fa-bolt" />
+                                                        Sintetizar MasterPrompt
+                                                    </>
+                                                )}
+                                            </button>
+                                            {genData && !loading && (
+                                                <div className="mt-6 p-4 bg-[#F8FAFC] rounded-xl border border-[#E2E8F0]">
+                                                    <div className="flex items-center justify-between mb-3">
+                                                        <span className="text-sm font-bold text-[#004B63]">MASTER PROMPT GENERADO</span>
+                                                        <button 
+                                                            onClick={() => navigator.clipboard.writeText(genData.masterPrompt)}
+                                                            className="text-sm text-[#4DA8C4] hover:text-[#66CCCC] flex items-center gap-1"
+                                                        >
+                                                            <i className="fa-solid fa-copy" /> Copiar
+                                                        </button>
+                                                    </div>
+                                                    <div className="p-4 bg-[#0a1628] rounded-lg text-white text-sm font-mono whitespace-pre-wrap">
+                                                        {genData.masterPrompt}
+                                                    </div>
+                                                    <div className="mt-3 p-3 bg-[#66CCCC]/10 rounded-lg">
+                                                        <strong className="text-[#004B63]">Feedback:</strong> {genData.feedback}
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Valerio Coach */}
+                                    <div className="bg-gradient-to-br from-[#004B63] to-[#0A3550] rounded-2xl overflow-hidden">
+                                        <div className="p-6">
+                                            <div className="flex items-center gap-4 mb-6">
+                                                <ValerioAvatar state={avatarState} size={64} />
+                                                <div>
+                                                    <h3 className="font-bold text-white text-lg">Tu Coach Virtual: Valerio</h3>
+                                                    <p className="text-white/60 text-sm">Método Socrático · IA Nativa</p>
+                                                </div>
+                                            </div>
+                                            <textarea
+                                                value={coachQ}
+                                                onChange={e => setCoachQ(e.target.value)}
+                                                placeholder="Escribe tu pregunta para Valerio..."
+                                                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 resize-none focus:outline-none focus:ring-2 focus:ring-[#4DA8C4]"
+                                                rows={2}
+                                            />
+                                            <div className="flex gap-2 mt-3">
+                                                <button
+                                                    onClick={askCoach}
+                                                    disabled={coachLoad || !coachQ.trim()}
+                                                    className="flex-1 py-3 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-xl font-semibold hover:shadow-lg transition-all disabled:opacity-50"
+                                                >
+                                                    {coachLoad ? 'Pensando...' : 'Preguntar'}
+                                                </button>
+                                                <button
+                                                    onClick={toggleSpeech}
+                                                    className={`p-3 rounded-xl transition-all ${isListening ? 'bg-red-500 text-white' : 'bg-white/10 text-[#4DA8C4]'}`}
+                                                >
+                                                    <i className="fa-solid fa-microphone" />
+                                                </button>
+                                                <input type="file" ref={fileInputRef} onChange={handleFileUpload} style={{ display: 'none' }} accept=".txt,.md,.pdf,.doc,.docx" />
+                                                <button
+                                                    onClick={() => fileInputRef.current?.click()}
+                                                    className="p-3 rounded-xl bg-white/10 text-[#4DA8C4] hover:bg-white/20 transition-all"
+                                                >
+                                                    <i className="fa-solid fa-paperclip" />
+                                                </button>
+                                            </div>
+                                            {coachMsg && (
+                                                <div className="mt-6 p-4 bg-white/10 rounded-xl backdrop-blur-sm">
+                                                    <div className="flex items-start gap-3">
+                                                        <ValerioAvatar state={avatarState} size={40} />
+                                                        <p className="text-white/90">{coachMsg}</p>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Challenge Sidebar */}
+                                <div className="space-y-6">
+                                    <div className="bg-gradient-to-br from-[#004B63] to-[#0A3550] rounded-2xl p-6 text-white">
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                                                <i className="fa-solid fa-bolt text-[#FFD166]" />
+                                            </div>
+                                            <div>
+                                                <p className="text-xs text-white/60 uppercase tracking-wider">Desafío del Módulo</p>
+                                            </div>
+                                        </div>
+                                        <p className="text-white/80 italic mb-6">"{curr.challenge}"</p>
+                                        <button className="w-full py-3 bg-gradient-to-r from-[#FFD166] to-[#FF8E53] text-[#004B63] rounded-xl font-bold hover:shadow-lg transition-all">
+                                            <i className="fa-solid fa-paper-plane mr-2" />Enviar solución
+                                        </button>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <div className="bg-white p-4 rounded-xl border border-[#E2E8F0] text-center">
+                                            <i className="fa-solid fa-clock text-[#4DA8C4] text-lg mb-2" />
+                                            <p className="font-bold text-[#004B63]">{curr.duration}</p>
+                                            <p className="text-xs text-[#64748B]">Duración</p>
+                                        </div>
+                                        <div className="bg-white p-4 rounded-xl border border-[#E2E8F0] text-center">
+                                            <i className="fa-solid fa-signal text-[#66CCCC] text-lg mb-2" />
+                                            <p className="font-bold text-[#004B63]">{curr.level}</p>
+                                            <p className="text-xs text-[#64748B]">Nivel</p>
+                                        </div>
+                                        <div className="bg-white p-4 rounded-xl border border-[#E2E8F0] text-center">
+                                            <i className="fa-solid fa-play text-[#FFD166] text-lg mb-2" />
+                                            <p className="font-bold text-[#004B63]">{curr.videos}</p>
+                                            <p className="text-xs text-[#64748B]">Videos</p>
+                                        </div>
+                                        <div className="bg-white p-4 rounded-xl border border-[#E2E8F0] text-center">
+                                            <i className="fa-solid fa-briefcase text-[#FF8E53] text-lg mb-2" />
+                                            <p className="font-bold text-[#004B63]">{curr.projects}</p>
+                                            <p className="text-xs text-[#64748B]">Proyectos</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Evaluation Tab */}
+                        {activeTab === 'eval' && (
+                            <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm overflow-hidden">
+                                <div className="p-6 border-b border-[#E2E8F0]">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-14 h-14 bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] rounded-xl flex items-center justify-center">
+                                            <i className="fa-solid fa-clipboard-check text-2xl text-white" />
+                                        </div>
+                                        <div className="flex-1">
+                                            <h3 className="text-xl font-bold text-[#004B63]">Evaluación del Módulo</h3>
+                                            <p className="text-[#64748B] text-sm">Responde correctamente 3 de 5 preguntas para obtener tu certificado</p>
+                                        </div>
+                                        {!evalSubmitted && (
+                                            <div className="px-4 py-2 bg-[#4DA8C4]/10 rounded-full">
+                                                <span className="text-sm font-semibold text-[#004B63]">{Object.keys(evalAnswers).length}/5</span>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
 
                                 {!evalSubmitted ? (
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
+                                    <div className="p-6 space-y-6">
                                         {evalQuestions.map((q, qi) => (
                                             <div key={qi}>
-                                                <div style={{ display: 'flex', gap: 12, marginBottom: '.85rem', alignItems: 'flex-start' }}>
-                                                    <span style={{ width: 28, height: 28, background: 'linear-gradient(135deg,rgba(0,194,224,.15),rgba(0,224,255,.08))', border: '1px solid rgba(0,194,224,.2)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'DM Mono', fontSize: '11px', fontWeight: 500, color: 'var(--primary)', flexShrink: 0 }}>{qi + 1}</span>
-                                                    <p style={{ fontWeight: 600, fontSize: '.95rem', color: '#1E3A5F', lineHeight: 1.5 }}>{q.q}</p>
+                                                <div className="flex items-start gap-3 mb-3">
+                                                    <div className="w-8 h-8 bg-[#4DA8C4]/10 rounded-lg flex items-center justify-center text-[#4DA8C4] font-bold text-sm">{qi + 1}</div>
+                                                    <p className="font-semibold text-[#334155] flex-1">{q.q}</p>
                                                 </div>
-                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '.6rem', paddingLeft: '2.5rem' }}>
+                                                <div className="grid grid-cols-2 gap-3 ml-11">
                                                     {q.opts.map((opt, oi) => (
-                                                        <div key={oi} className={`eval-option${evalAnswers[qi] === oi ? ' selected' : ''}`} onClick={() => setEvalAnswers({ ...evalAnswers, [qi]: oi })}>
-                                                            <div className="eval-radio">{evalAnswers[qi] === oi && <div style={{ width: 8, height: 8, background: 'white', borderRadius: '50%' }} />}</div>
+                                                        <button
+                                                            key={oi}
+                                                            onClick={() => setEvalAnswers({ ...evalAnswers, [qi]: oi })}
+                                                            className={`p-4 rounded-xl border-2 text-left transition-all ${
+                                                                evalAnswers[qi] === oi
+                                                                    ? 'border-[#4DA8C4] bg-[#4DA8C4]/10 text-[#004B63]'
+                                                                    : 'border-[#E2E8F0] text-[#64748B] hover:border-[#4DA8C4]'
+                                                            }`}
+                                                        >
+                                                            <div className={`w-5 h-5 rounded-full border-2 mr-3 inline-flex items-center justify-center ${
+                                                                evalAnswers[qi] === oi ? 'border-[#4DA8C4] bg-[#4DA8C4]' : 'border-[#E2E8F0]'
+                                                            }`}>
+                                                                {evalAnswers[qi] === oi && <div className="w-2 h-2 bg-white rounded-full" />}
+                                                            </div>
                                                             {opt}
-                                                        </div>
+                                                        </button>
                                                     ))}
                                                 </div>
                                             </div>
                                         ))}
-                                        <button onClick={handleEvalSubmit} disabled={Object.keys(evalAnswers).length < 5} className="ai-run-btn" style={{ background: Object.keys(evalAnswers).length < 5 ? 'rgba(0,0,0,.1)' : 'linear-gradient(135deg,var(--primary),var(--accent))', color: Object.keys(evalAnswers).length < 5 ? '#9CA3AF' : '#0A2540', boxShadow: 'none', cursor: Object.keys(evalAnswers).length < 5 ? 'not-allowed' : 'pointer', marginTop: '.5rem' }}>
-                                            <span>Enviar evaluación</span><i className="fa-solid fa-check-circle text-sm relative z-10" />
+                                        <button
+                                            onClick={handleEvalSubmit}
+                                            disabled={Object.keys(evalAnswers).length < 5}
+                                            className="w-full py-4 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white rounded-xl font-bold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                        >
+                                            <i className="fa-solid fa-check-circle mr-2" />Enviar evaluación
                                         </button>
                                     </div>
                                 ) : (
-                                    <div style={{ textAlign: 'center', padding: '2rem' }}>
-                                        <div style={{ width: 80, height: 80, background: evalScore >= 3 ? 'linear-gradient(135deg,#10B981,#059669)' : 'linear-gradient(135deg,#EF4444,#DC2626)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', boxShadow: '0 8px 24px rgba(0,0,0,.15)' }}>
-                                            <i className={`fa-solid ${evalScore >= 3 ? 'fa-check' : 'fa-xmark'}`} style={{ color: 'white', fontSize: '2rem' }} />
+                                    <div className="p-12 text-center">
+                                        <div className={`w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-6 ${evalScore >= 3 ? 'bg-green-500' : 'bg-red-500'}`}>
+                                            <i className={`fa-solid ${evalScore >= 3 ? 'fa-check' : 'fa-times'} text-3xl text-white`} />
                                         </div>
-                                        <h3 style={{ fontFamily: 'Syne', fontWeight: 800, fontSize: '1.8rem', color: '#0A2540', marginBottom: '.5rem' }}>{evalScore >= 3 ? '¡Felicidades!' : 'Intenta de nuevo'}</h3>
-                                        <p style={{ color: '#5A7FA0', fontSize: '1rem', marginBottom: '1.5rem' }}>Obtuviste {evalScore} de 5 respuestas correctas</p>
-                                        {evalScore >= 3 && (
-                                            <button onClick={() => setActiveTab('cert')} className="ai-run-btn" style={{ display: 'inline-flex' }}>
-                                                <span>Ver certificado</span><i className="fa-solid fa-award text-sm relative z-10" />
+                                        <h3 className="text-2xl font-bold text-[#004B63] mb-2">{evalScore >= 3 ? '¡Felicidades!' : 'Intenta de nuevo'}</h3>
+                                        <p className="text-[#64748B] mb-6">Obtuviste {evalScore} de 5 respuestas correctas</p>
+                                        {evalScore >= 3 ? (
+                                            <button
+                                                onClick={() => setActiveTab('cert')}
+                                                className="px-8 py-3 bg-gradient-to-r from-[#FFD166] to-[#FF8E53] text-[#004B63] rounded-xl font-bold hover:shadow-lg transition-all"
+                                            >
+                                                <i className="fa-solid fa-award mr-2" />Ver certificado
                                             </button>
-                                        )}
-                                        {evalScore < 3 && (
-                                            <button onClick={() => { setEvalSubmitted(false); setEvalAnswers({}); }} className="ai-run-btn" style={{ display: 'inline-flex', background: 'rgba(0,0,0,.1)', color: '#5A7FA0' }}>
-                                                <span>Reintentar</span><i className="fa-solid fa-rotate-right text-sm relative z-10" />
+                                        ) : (
+                                            <button
+                                                onClick={() => { setEvalSubmitted(false); setEvalAnswers({}); }}
+                                                className="px-8 py-3 bg-[#E2E8F0] text-[#64748B] rounded-xl font-bold hover:bg-[#d1d5db] transition-all"
+                                            >
+                                                <i className="fa-solid fa-rotate-right mr-2" />Reintentar
                                             </button>
                                         )}
                                     </div>
                                 )}
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    {activeTab === 'cert' && (
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '2rem' }}>
-                            <div className="glass-card" style={{ padding: '3rem', textAlign: 'center', maxWidth: '600px', width: '100%' }}>
-                                <div style={{ width: 100, height: 100, background: 'linear-gradient(135deg,rgba(0,194,224,.2),rgba(0,224,255,.1))', border: '2px solid rgba(0,194,224,.3)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem' }}>
-                                    <i className="fa-solid fa-trophy" style={{ color: 'var(--primary)', fontSize: '2.5rem' }} />
+                        {/* Certificate Tab */}
+                        {activeTab === 'cert' && (
+                            <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm p-12 text-center">
+                                <div className="w-24 h-24 mx-auto bg-gradient-to-br from-[#FFD166] to-[#FF8E53] rounded-full flex items-center justify-center mb-6">
+                                    <i className="fa-solid fa-trophy text-4xl text-white" />
                                 </div>
-                                <h2 style={{ fontFamily: 'Syne', fontWeight: 800, fontSize: '2rem', color: '#0A2540', marginBottom: '1rem' }}>¡Certificado de Excelencia!</h2>
-                                <p style={{ color: '#5A7FA0', fontSize: '1rem', marginBottom: '2rem' }}>Has completado el módulo {activeMod}: {curr.title}</p>
-                                <button onClick={handleDownloadCert} className="ai-run-btn" style={{ margin: '0 auto' }}>
-                                    <span>Descargar Certificado</span><i className="fa-solid fa-download text-sm relative z-10" />
+                                <h2 className="text-3xl font-bold text-[#004B63] font-montserrat mb-4">¡Certificado de Excelencia!</h2>
+                                <p className="text-[#64748B] mb-8">Has completado el módulo {activeMod}: {curr.title}</p>
+                                <button
+                                    onClick={handleDownloadCert}
+                                    className="px-8 py-4 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white rounded-xl font-bold hover:shadow-xl transition-all"
+                                >
+                                    <i className="fa-solid fa-download mr-2" />Descargar Certificado PDF
                                 </button>
                             </div>
-                        </div>
-                    )}
-
-                    {showNameModal && (
-                        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10000 }}>
-                            <div style={{ background: '#0D2137', border: '1px solid rgba(0,194,224,0.3)', borderRadius: '1.5rem', padding: '2rem', maxWidth: '400px', width: '90%' }}>
-                                <h3 style={{ color: 'white', fontFamily: 'Syne', fontSize: '1.5rem', marginBottom: '1rem' }}>Ingresa tu nombre</h3>
-                                <p style={{ color: 'rgba(255,255,255,0.7)', marginBottom: '1.5rem', fontSize: '0.9rem' }}>Este nombre aparecerá en tu certificado</p>
-                                <input 
-                                    type="text" 
-                                    value={certName} 
-                                    onChange={(e) => setCertName(e.target.value)}
-                                    placeholder="Tu nombre completo"
-                                    style={{ width: '100%', padding: '1rem', borderRadius: '1rem', border: '1px solid rgba(0,194,224,0.3)', background: 'rgba(255,255,255,0.05)', color: 'white', fontSize: '1rem', marginBottom: '1.5rem', outline: 'none' }}
-                                    onKeyDown={(e) => e.key === 'Enter' && confirmNameAndDownload()}
-                                />
-                                <div style={{ display: 'flex', gap: '1rem' }}>
-                                    <button onClick={() => setShowNameModal(false)} style={{ flex: 1, padding: '1rem', borderRadius: '100px', border: '1px solid rgba(255,255,255,0.2)', background: 'transparent', color: 'rgba(255,255,255,0.7)', cursor: 'pointer' }}>Cancelar</button>
-                                    <button onClick={confirmNameAndDownload} disabled={!certName.trim()} style={{ flex: 1, padding: '1rem', borderRadius: '100px', border: 'none', background: certName.trim() ? 'linear-gradient(135deg, var(--primary), var(--accent))' : 'rgba(255,255,255,0.1)', color: certName.trim() ? 'white' : 'rgba(255,255,255,0.3)', cursor: certName.trim() ? 'pointer' : 'not-allowed' }}>Confirmar</button>
-                                </div>
-                            </div>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
-            </main>
+            </div>
+
+            {/* Name Modal */}
+            {showNameModal && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm">
+                    <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
+                        <h3 className="text-xl font-bold text-[#004B63] mb-2">Ingresa tu nombre</h3>
+                        <p className="text-[#64748B] mb-6">Este nombre aparecerá en tu certificado</p>
+                        <input
+                            type="text"
+                            value={certName}
+                            onChange={e => setCertName(e.target.value)}
+                            placeholder="Tu nombre completo"
+                            className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] mb-6"
+                            onKeyDown={e => e.key === 'Enter' && confirmNameAndDownload()}
+                        />
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => setShowNameModal(false)}
+                                className="flex-1 py-3 border border-[#E2E8F0] text-[#64748B] rounded-xl font-semibold hover:bg-[#F8FAFC] transition-all"
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                onClick={confirmNameAndDownload}
+                                disabled={!certName.trim()}
+                                className="flex-1 py-3 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white rounded-xl font-semibold disabled:opacity-50"
+                            >
+                                Confirmar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
