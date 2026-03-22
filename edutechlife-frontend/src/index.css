@@ -1206,8 +1206,15 @@
 
 /* Main content without extra space */
 main {
-  margin-bottom: 0 !important;
+  margin: 0 !important;
   padding-bottom: 0 !important;
+}
+
+/* Ensure html and body have no extra space */
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+  min-height: 100vh;
 }
 
 * {
@@ -6404,7 +6411,7 @@ h1, h2, h3, h4, h5 {
 }
 
 /* =========================
-   LOADING SCREEN - Premium v2286
+   LOADING SCREEN - Premium Corporate
    ========================= */
 .loading-screen {
   position: fixed;
@@ -6413,7 +6420,7 @@ h1, h2, h3, h4, h5 {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #004B63 0%, #0B2A3A 50%, #0A1628 100%);
+  background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 50%, #F8FAFC 100%);
   transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
@@ -6442,69 +6449,29 @@ h1, h2, h3, h4, h5 {
   margin-bottom: 3rem;
 }
 
-.brand-icon {
+.brand-logo {
   position: relative;
-  width: 100px;
-  height: 100px;
   margin-bottom: 1.5rem;
+  animation: brand-float 3s ease-in-out infinite;
 }
 
-.brand-icon-inner {
-  position: absolute;
-  inset: 15px;
-  background: linear-gradient(135deg, #4DA8C4, #66CCCC);
-  border-radius: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 10px 40px rgba(77, 168, 196, 0.4);
-  animation: brand-pulse 2s ease-in-out infinite;
+.brand-logo .logo-img {
+  width: 180px;
+  height: auto;
+  filter: drop-shadow(0 10px 30px rgba(27, 158, 186, 0.2));
 }
 
-.brand-icon-inner i {
-  font-size: 2.5rem;
-  color: white;
-}
-
-@keyframes brand-pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
-
-.brand-ring {
-  position: absolute;
-  inset: 0;
-  border: 2px solid rgba(77, 168, 196, 0.3);
-  border-radius: 50%;
-  animation: ring-expand 2s ease-out infinite;
-}
-
-.brand-ring.ring-2 {
-  animation-delay: 0.5s;
-  border-color: rgba(102, 204, 204, 0.2);
-}
-
-@keyframes ring-expand {
-  0% { transform: scale(0.8); opacity: 1; }
-  100% { transform: scale(1.4); opacity: 0; }
-}
-
-.brand-name {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1.75rem;
-  font-weight: 900;
-  color: white;
-  letter-spacing: -0.02em;
-  margin-bottom: 0.5rem;
+@keyframes brand-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
 .brand-tagline {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.25em;
-  color: rgba(255, 255, 255, 0.5);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #0A3044;
+  letter-spacing: 0.05em;
 }
 
 /* Progress Section */
@@ -6516,7 +6483,7 @@ h1, h2, h3, h4, h5 {
 .progress-bar-container {
   position: relative;
   height: 6px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(27, 158, 186, 0.15);
   border-radius: 3px;
   overflow: visible;
   margin-bottom: 0.75rem;
@@ -6524,7 +6491,7 @@ h1, h2, h3, h4, h5 {
 
 .progress-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #4DA8C4, #66CCCC, #4DA8C4);
+  background: linear-gradient(90deg, #1B9EBA, #0A3044, #1B9EBA);
   background-size: 200% 100%;
   border-radius: 3px;
   transition: width 0.4s ease;
@@ -6541,7 +6508,7 @@ h1, h2, h3, h4, h5 {
   top: 50%;
   width: 20px;
   height: 20px;
-  background: #66CCCC;
+  background: #1B9EBA;
   border-radius: 50%;
   transform: translate(-50%, -50%);
   filter: blur(8px);
@@ -6550,10 +6517,10 @@ h1, h2, h3, h4, h5 {
 }
 
 .progress-percentage {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #66CCCC;
+  color: #1B9EBA;
 }
 
 /* Status Section */
@@ -6573,7 +6540,7 @@ h1, h2, h3, h4, h5 {
 }
 
 .status-icon i {
-  color: #66CCCC;
+  color: #1B9EBA;
   font-size: 1rem;
 }
 
@@ -6585,7 +6552,7 @@ h1, h2, h3, h4, h5 {
 .status-dots .dot {
   width: 6px;
   height: 6px;
-  background: #66CCCC;
+  background: #1B9EBA;
   border-radius: 50%;
   animation: dot-bounce 1.4s ease-in-out infinite;
 }
@@ -6602,7 +6569,7 @@ h1, h2, h3, h4, h5 {
 .status-text {
   font-family: 'Open Sans', sans-serif;
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: #334155;
 }
 
 /* Features Section */
@@ -6610,7 +6577,7 @@ h1, h2, h3, h4, h5 {
   display: flex;
   gap: 2rem;
   padding-top: 2rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(27, 158, 186, 0.15);
 }
 
 .feature-item {
@@ -6622,16 +6589,16 @@ h1, h2, h3, h4, h5 {
 
 .feature-item i {
   font-size: 1.25rem;
-  color: rgba(77, 168, 196, 0.6);
+  color: rgba(27, 158, 186, 0.7);
 }
 
 .feature-item span {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.6rem;
-  font-weight: 500;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.05em;
+  color: #334155;
 }
 
 /* Background Effects */
@@ -6646,13 +6613,13 @@ h1, h2, h3, h4, h5 {
   position: absolute;
   border-radius: 50%;
   filter: blur(80px);
-  opacity: 0.3;
+  opacity: 0.4;
 }
 
 .bg-orb.orb-1 {
   width: 400px;
   height: 400px;
-  background: radial-gradient(circle, #4DA8C4, transparent 70%);
+  background: radial-gradient(circle, rgba(27, 158, 186, 0.15), transparent 70%);
   top: -100px;
   right: -100px;
   animation: orb-float-1 8s ease-in-out infinite;
@@ -6661,7 +6628,7 @@ h1, h2, h3, h4, h5 {
 .bg-orb.orb-2 {
   width: 300px;
   height: 300px;
-  background: radial-gradient(circle, #66CCCC, transparent 70%);
+  background: radial-gradient(circle, rgba(27, 158, 186, 0.12), transparent 70%);
   bottom: -50px;
   left: -50px;
   animation: orb-float-2 10s ease-in-out infinite;
@@ -6670,7 +6637,7 @@ h1, h2, h3, h4, h5 {
 .bg-orb.orb-3 {
   width: 200px;
   height: 200px;
-  background: radial-gradient(circle, #B2D8E5, transparent 70%);
+  background: radial-gradient(circle, rgba(27, 158, 186, 0.1), transparent 70%);
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);

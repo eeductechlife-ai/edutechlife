@@ -13,19 +13,17 @@ export default function Footer() {
   };
 
   return (
-      <footer className="w-full relative px-6 lg:px-8 py-12" style={{ background: '#0A3044' }}>
-        <div className="max-w-7xl mx-auto py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-10 md:mb-12">
+      <footer className="w-full px-6 lg:px-8 py-12 mt-auto" style={{ background: '#0A3044' }}>
+        <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
           <div className="lg:col-span-1">
-             <div className="mb-6">
                <img 
                  src="/images/logo-edutechlife.webp" 
                  alt="Edutechlife Logo" 
-                 className="h-12 w-auto transition-all duration-300 hover:scale-105"
-                 style={{ maxHeight: '48px', width: 'auto', filter: 'brightness(0) invert(1)' }}
+                 className="h-10 w-auto mb-4"
+                 style={{ maxHeight: '40px', width: 'auto', filter: 'brightness(0) invert(1)' }}
                />
-             </div>
-            <p className="text-white/70 text-sm leading-relaxed mb-6">
+            <p className="text-white/70 text-sm leading-relaxed mb-4">
               Transformando la educación con inteligencia artificial y metodologías 
               pedagógicas de vanguardia para las nuevas generaciones.
             </p>
@@ -49,10 +47,10 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="font-display font-bold text-white text-sm uppercase tracking-wider mb-6">
+            <h4 className="font-display font-bold text-white text-sm uppercase tracking-wider mb-4">
               Plataforma
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-2">
               {[
                 'IA Lab con Valerio',
                 'Test VAK',
@@ -71,10 +69,10 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="font-display font-bold text-white text-sm uppercase tracking-wider mb-6">
+            <h4 className="font-display font-bold text-white text-sm uppercase tracking-wider mb-4">
               Empresa
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-2">
               {[
                 'Sobre Nosotros',
                 'Metodología VAK',
@@ -93,10 +91,10 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="font-display font-bold text-white text-sm uppercase tracking-wider mb-6">
+            <h4 className="font-display font-bold text-white text-sm uppercase tracking-wider mb-4">
               Newsletter
             </h4>
-            <p className="text-white/60 text-sm mb-4">
+            <p className="text-white/60 text-sm mb-3">
               Recibe novidades educativas y actualizaciones de la plataforma.
             </p>
             {subscribed ? (
@@ -114,17 +112,17 @@ export default function Footer() {
                    className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm focus:outline-none focus:border-[#1B9EBA] transition-colors"
                    required
                  />
-                 <button
-                   type="submit"
-                   className="w-full py-3 rounded-xl bg-[#1B9EBA] text-white font-semibold text-sm hover:opacity-90 transition-opacity"
-                 >
-                   Suscribirme
-                 </button>
-              </form>
-            )}
-          </div>
-      </div>
-      <div className="border-t border-white/10 pt-8">
+                  <button
+                    type="submit"
+                    className="w-full py-3 rounded-xl bg-[#1B9EBA] text-white font-semibold text-sm hover:opacity-90 transition-opacity"
+                  >
+                    Suscribirme
+                  </button>
+               </form>
+             )}
+           </div>
+        </div>
+      <div className="border-t border-white/10 mt-8 pt-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-white/50 text-sm">
               © 2024 Edutechlife. Todos los derechos reservados.
@@ -144,7 +142,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full bg-[#1B9EBA]/5 blur-3xl translate-x-1/2 translate-y-1/2 pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-64 h-64 rounded-full bg-[#1B9EBA]/5 blur-3xl translate-x-1/2 translate-y-1/2 pointer-events-none" />
     </footer>
   );
 }

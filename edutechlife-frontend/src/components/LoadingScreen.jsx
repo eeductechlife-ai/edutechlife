@@ -47,15 +47,14 @@ const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
         <div className={`loading-screen ${isExiting ? 'exiting' : ''}`}>
             <div className="loading-content">
                 <div className="loading-brand">
-                    <div className="brand-icon">
-                        <div className="brand-icon-inner">
-                            <i className="fa-solid fa-graduation-cap" />
-                        </div>
-                        <div className="brand-ring" />
-                        <div className="brand-ring ring-2" />
+                    <div className="brand-logo">
+                        <img 
+                            src="/images/logo-edutechlife.webp" 
+                            alt="Edutechlife" 
+                            className="logo-img"
+                        />
                     </div>
-                    <span className="brand-name">EDUTECHLIFE</span>
-                    <span className="brand-tagline">Educación del Futuro</span>
+                    <span className="brand-tagline">Transformando la educación con IA</span>
                 </div>
 
                 <div className="loading-progress">
