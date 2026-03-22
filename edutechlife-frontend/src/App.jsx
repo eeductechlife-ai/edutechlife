@@ -118,8 +118,8 @@ const App = () => {
                      <>
                         <Hero onNavigate={handleNavigate} />
                         <Esencia />
+                        <Ecosystem onNavigate={handleNavigate} />
                         <Metodo />
-                        <Ecosystem onExplore={handleNavigate} />
                         <Aliados />
                         <FinalCTA onNavigate={handleNavigate} />
                     </>
