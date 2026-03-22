@@ -109,8 +109,9 @@ const App = () => {
                 <LoadingScreen onComplete={handleLoadingComplete} minDuration={3000} />
             )}
 
-            {/* Header - Navigation Premium */}
-            <header className="sticky top-0 left-0 right-0 z-[1000] bg-white/95 backdrop-blur-md border-b border-[#E2E8F0] shadow-sm">
+            {/* Header - Navigation Premium - Hidden on SmartBoard and Admin */}
+            {view !== 'smartboard' && view !== 'admin' && (
+                <header className="sticky top-0 left-0 right-0 z-[1000] bg-white/95 backdrop-blur-md border-b border-[#E2E8F0] shadow-sm">
                     <div className="container-premium flex items-center justify-between py-3">
                     {/* Logo Premium */}
                     <button 
@@ -183,6 +184,7 @@ const App = () => {
                     </div>
                 </div>
             </header>
+            )}
 
             {/* Main Content */}
             <main className="flex-grow">
