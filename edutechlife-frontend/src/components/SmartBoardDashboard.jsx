@@ -318,23 +318,46 @@ const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
             case 'inicio':
                 return (
                     <div className="space-y-6">
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            <div className="bg-white p-6 rounded-2xl border border-[#E2E8F0] shadow-sm hover:shadow-md transition-shadow">
-                                <h3 className="text-xl font-bold text-[#004B63] font-montserrat mb-4">¡Bienvenido de vuelta!</h3>
-                                <p className="text-[#64748B] font-open-sans mb-4">
-                                    Hoy tienes <span className="font-bold text-[#4DA8C4]">{missions.filter(m => !m.completed && !m.locked).length} misiones</span> pendientes 
-                                    y <span className="font-bold text-[#66CCCC]">{subjects.filter(s => s.progress > 0 && s.progress < 100).length} materias</span> para repasar.
-                                </p>
-                                <div className="flex items-center gap-2">
-                                    <div className="w-2 h-2 rounded-full bg-[#66CCCC] animate-pulse" />
-                                    <span className="text-sm text-[#64748B] font-open-sans">Valeria está lista para ayudarte</span>
+                        {/* Header Section - Compact and Organized */}
+                        <div className="bg-gradient-to-r from-[#004B63] to-[#4DA8C4] p-4 rounded-2xl">
+                            <div className="flex items-center justify-between">
+                                <div className="flex-1">
+                                    <h3 className="text-base font-bold text-white font-montserrat mb-1">¡Bienvenido de vuelta!</h3>
+                                    <p className="text-white/80 text-sm font-open-sans">
+                                        Hoy tienes <span className="font-bold text-[#FFD166]">{missions.filter(m => !m.completed && !m.locked).length} misiones</span> pendientes 
+                                        y <span className="font-bold text-[#FFD166]">{subjects.filter(s => s.progress > 0 && s.progress < 100).length} materias</span> para repasar.
+                                    </p>
                                 </div>
-                            </div>
-                            <div className="bg-white p-6 rounded-2xl border border-[#E2E8F0] shadow-sm">
-                                <XPProgressBar currentXP={userXP} level={userLevel} streak={streakDays} />
+                                <div className="flex items-center gap-3 pl-4 border-l border-white/20">
+                                    <div className="text-right mr-3">
+                                        <p className="text-2xl font-bold text-white font-montserrat">{userLevel}</p>
+                                        <p className="text-xs text-white/70 font-open-sans">Nivel</p>
+                                    </div>
+                                    <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                                        <GraduationCap className="w-7 h-7 text-white" />
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
+                        {/* Progress Section */}
+                        <div className="bg-white p-4 rounded-2xl border border-[#E2E8F0] shadow-sm">
+                            <div className="flex items-center justify-between mb-3">
+                                <h3 className="text-base font-bold text-[#004B63] font-montserrat">Progreso de Aprendizaje</h3>
+                                <span className="text-xs text-[#64748B] font-open-sans">Sigue avanzando hacia la excelencia</span>
+                            </div>
+                            <XPProgressBar currentXP={userXP} level={userLevel} streak={streakDays} />
+                        </div>
+
+                        {/* Valeria Status */}
+                        <div className="bg-white p-4 rounded-2xl border border-[#E2E8F0] shadow-sm">
+                            <div className="flex items-center gap-3">
+                                <div className="w-3 h-3 rounded-full bg-[#66CCCC] animate-pulse" />
+                                <span className="text-sm text-[#64748B] font-open-sans">Valeria está lista para ayudarte</span>
+                            </div>
+                        </div>
+
+                        {/* Missions Section */}
                         <div className="bg-white p-6 rounded-2xl border border-[#E2E8F0] shadow-sm">
                             <div className="flex items-center justify-between mb-6">
                                 <h3 className="text-xl font-bold text-[#004B63] font-montserrat">Misiones del Día</h3>
