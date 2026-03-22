@@ -270,7 +270,7 @@ const Ecosystem = ({ onExplore }) => {
         <SectionWrapper spacing="lg">
             <section
                 id="ecosystem"
-                 className="w-full relative py-20 px-6 lg:px-8 overflow-hidden"
+                 className="w-full relative px-6 lg:px-8 overflow-hidden"
                 style={{
                     background: 'linear-gradient(180deg, #ffffff 0%, #F8FAFC 50%, #ffffff 100%)',
                 }}

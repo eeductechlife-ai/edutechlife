@@ -6,7 +6,6 @@ import StatsBar from './components/StatsBar';
 import About from './components/About';
 import Ecosystem from './components/Ecosystem';
 import ProcessSection from './components/ProcessSection';
-import FinalCTA from './components/FinalCTA';
 import Footer from './components/Footer';
 import NeuroEntorno from './components/NeuroEntorno';
 import ProyectosNacional from './components/ProyectosNacional';
@@ -87,17 +86,14 @@ const App = () => {
                     {/* Logo Premium */}
                     <button 
                         onClick={() => handleNavigate('landing')}
-                        className="flex items-center gap-3 group"
+                        className="flex items-center group"
                     >
-                        <div className="relative">
-                            <div className="absolute -inset-2 bg-gradient-to-r from-[#4DA8C4]/20 to-[#66CCCC]/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                            <img 
-                                src="/images/logo-edutechlife.webp" 
-                                alt="Edutechlife" 
-                                className="h-8 w-auto relative z-10 transition-all duration-300 group-hover:scale-105"
-                                style={{ maxHeight: '32px', width: 'auto' }}
-                            />
-                        </div>
+                        <img 
+                            src="/images/logo-edutechlife.webp" 
+                            alt="Edutechlife" 
+                            className="h-6 w-auto transition-all duration-300 group-hover:opacity-80"
+                            style={{ maxHeight: '24px', width: 'auto' }}
+                        />
                     </button>
 
                     {/* CTA Button Premium */}
@@ -122,16 +118,12 @@ const App = () => {
             <main className="flex-grow">
                 {view === 'landing' && (
                      <>
-                        <Hero 
-                          onNavigateToLab={() => handleNavigate('neuroentorno')}
-                          onScrollToPilares={() => scrollToSection('ecosystem')}
-                        />
+                        <Hero />
                         <AllianceMarquee />
                         <StatsBar />
                         <About />
                         <Ecosystem onExplore={handleNavigate} />
                         <ProcessSection />
-                        <FinalCTA onNavigate={handleNavigate} />
                     </>
                 )}
 

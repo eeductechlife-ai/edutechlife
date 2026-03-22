@@ -44,7 +44,7 @@ const AllianceMarquee = () => {
 
      return (
         <SectionWrapper spacing="sm">
-             <section className="w-full py-20 px-6 lg:px-8 bg-white">
+             <section className="w-full px-6 lg:px-8 bg-white">
             <div className="max-w-7xl mx-auto">
                 <div className="alliance-label">
                     <span>Ecosistema de Nivel Mundial</span>

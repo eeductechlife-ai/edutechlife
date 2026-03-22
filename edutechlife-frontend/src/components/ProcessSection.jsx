@@ -53,7 +53,7 @@ export default function ProcessSection() {
 
     return (
         <SectionWrapper spacing="md">
-             <section ref={sectionRef} className="w-full relative py-20 overflow-hidden px-6 lg:px-8 bg-[#F8FAFC]">
+             <section ref={sectionRef} className="w-full relative overflow-hidden px-6 lg:px-8 bg-[#F8FAFC]">
       <div className="max-w-7xl mx-auto">
         <div className={`text-center mb-12 md:mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="inline-flex items-center gap-2 mb-6">
