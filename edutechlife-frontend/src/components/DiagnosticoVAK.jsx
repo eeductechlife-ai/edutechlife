@@ -324,7 +324,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
       voiceEngine.onFinalResult = null;
       voiceEngine.onError = null;
     };
-  }, [voiceMode, phase]);
+  }, [voiceMode, phase, startListening, handleUserSpeech]);
 
   // Add message to chat
   const addMessage = useCallback((role, content) => {

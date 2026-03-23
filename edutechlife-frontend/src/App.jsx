@@ -142,7 +142,7 @@ const App = () => {
 
                 {/* Pillar Pages */}
                 {view === 'ialab' && <IALab onBack={() => handleNavigate('landing')} />}
-                {view === 'neuroentorno' && <NeuroEntorno onBack={() => handleNavigate('landing')} />}
+                {view === 'neuroentorno' && <NeuroEntorno onBack={() => handleNavigate('landing')} onNavigate={handleNavigate} />}
                 {view === 'proyectos' && <ProyectosNacional onBack={() => handleNavigate('landing')} />}
                 {view === 'consultoria' && <Consultoria onBack={() => handleNavigate('landing')} />}
                 {view === 'consultoria-b2b' && <ConsultoriaB2B onBack={() => handleNavigate('landing')} />}
