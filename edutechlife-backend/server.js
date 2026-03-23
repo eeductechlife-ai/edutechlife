@@ -1,16 +1,38 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(cors());
+app.use(helmet());
 app.use(express.json());
+
+// Rate limiting
+const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per windowMs
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: 'Too many requests, please try again later.' }
+});
+
+// Apply rate limiting to API routes
+app.use('/api', apiLimiter);
 
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
+
+// Validate environment variables
+if (!DEEPSEEK_API_KEY || DEEPSEEK_API_KEY === 'your_api_key_here') {
+    console.warn('⚠️  WARNING: DEEPSEEK_API_KEY is not properly configured.');
+    console.warn('   Please set a valid API key in the .env file.');
+    console.warn('   Get your key from: https://platform.deepseek.com/');
+}
 
 async function fetchWithRetry(url, options, retries = 3) {
     for (let i = 0; i < retries; i++) {
@@ -28,6 +50,17 @@ async function fetchWithRetry(url, options, retries = 3) {
 
 app.post('/api/chat', async (req, res) => {
     const { prompt, systemPrompt, isJson } = req.body;
+
+    // Input validation
+    if (!prompt || typeof prompt !== 'string' || prompt.trim().length === 0) {
+        return res.status(400).json({ error: 'Prompt is required and must be a non-empty string' });
+    }
+    if (prompt.length > 5000) {
+        return res.status(400).json({ error: 'Prompt too long (max 5000 characters)' });
+    }
+    if (systemPrompt && (typeof systemPrompt !== 'string' || systemPrompt.length > 2000)) {
+        return res.status(400).json({ error: 'System prompt must be a string with max 2000 characters' });
+    }
 
     if (!DEEPSEEK_API_KEY) {
         return res.status(500).json({ error: 'API key not configured on server' });
@@ -73,6 +106,17 @@ app.post('/api/chat', async (req, res) => {
 
 app.post('/api/chat/stream', async (req, res) => {
     const { prompt, systemPrompt, isJson } = req.body;
+
+    // Input validation
+    if (!prompt || typeof prompt !== 'string' || prompt.trim().length === 0) {
+        return res.status(400).json({ error: 'Prompt is required and must be a non-empty string' });
+    }
+    if (prompt.length > 5000) {
+        return res.status(400).json({ error: 'Prompt too long (max 5000 characters)' });
+    }
+    if (systemPrompt && (typeof systemPrompt !== 'string' || systemPrompt.length > 2000)) {
+        return res.status(400).json({ error: 'System prompt must be a string with max 2000 characters' });
+    }
 
     if (!DEEPSEEK_API_KEY) {
         return res.status(500).json({ error: 'API key not configured on server' });

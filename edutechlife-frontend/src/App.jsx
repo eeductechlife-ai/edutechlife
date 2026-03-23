@@ -106,6 +106,7 @@ const App = () => {
     }]);
     const [botInput, setBotInput] = useState('');
     const [botLoading, setBotLoading] = useState(false);
+    const [isDarkMode, setIsDarkMode] = useState(false);
     const botMsgsEndRef = useRef(null);
 
     const scrollToBottom = () => {
@@ -155,6 +156,32 @@ const App = () => {
             clearTimeout(scrollTimeout);
         };
     }, []);
+
+    // Dark mode effect
+    useEffect(() => {
+        const storedTheme = localStorage.getItem('edutechlife-theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (storedTheme === 'dark' || (!storedTheme && prefersDark)) {
+            setIsDarkMode(true);
+            document.documentElement.classList.add('dark');
+        } else {
+            setIsDarkMode(false);
+            document.documentElement.classList.remove('dark');
+        }
+    }, []);
+
+    const toggleDarkMode = () => {
+        const newDarkMode = !isDarkMode;
+        setIsDarkMode(newDarkMode);
+        if (newDarkMode) {
+            document.documentElement.classList.add('dark');
+            localStorage.setItem('edutechlife-theme', 'dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+            localStorage.setItem('edutechlife-theme', 'light');
+        }
+    };
 
     const handleBotSend = async () => {
         if (!botInput.trim()) return;
@@ -207,7 +234,7 @@ const App = () => {
     }, []);
 
     return (
-        <div className="min-h-screen flex flex-col bg-transparent text-[#334155]" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+        <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100" style={{ fontFamily: "'Montserrat', sans-serif" }}>
             <Suspense fallback={null}>
                 <GlobalCanvas />
             </Suspense>
@@ -226,6 +253,7 @@ const App = () => {
                     <button 
                         onClick={() => handleNavigate('landing')}
                         className="flex items-center group"
+                        aria-label="Ir al inicio"
                     >
                         <img 
                             src="/images/logo-edutechlife.webp" 
@@ -233,6 +261,18 @@ const App = () => {
                             className="h-6 w-auto transition-all duration-300 group-hover:opacity-80"
                             style={{ maxHeight: '24px', width: 'auto' }}
                         />
+                    </button>
+                    {/* Dark mode toggle */}
+                    <button
+                        onClick={toggleDarkMode}
+                        className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 transition-colors"
+                        aria-label={isDarkMode ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+                    >
+                        {isDarkMode ? (
+                            <i className="fa-solid fa-sun text-yellow-500"></i>
+                        ) : (
+                            <i className="fa-solid fa-moon text-gray-700 dark:text-gray-300"></i>
+                        )}
                     </button>
                 </div>
             </header>
@@ -322,7 +362,7 @@ const App = () => {
                                     onKeyDown={(e) => e.key === 'Enter' && handleBotSend()}
                                     placeholder="Escribe un mensaje..."
                                 />
-                                <button onClick={handleBotSend}>
+                                <button onClick={handleBotSend} aria-label="Enviar mensaje">
                                     <i className="fa-solid fa-paper-plane"></i>
                                 </button>
                             </div>
@@ -331,6 +371,7 @@ const App = () => {
                     <button 
                         className="chatbot-toggle btn-glow shadow-neuro bg-white text-[#4DA8C4]"
                         onClick={() => setBotOpen(!botOpen)} 
+                        aria-label={botOpen ? 'Cerrar chat' : 'Abrir chat'}
                     >
                         <i className={`fa-solid ${botOpen ? 'fa-xmark' : 'fa-comment-dots'}`}></i>
                     </button>
