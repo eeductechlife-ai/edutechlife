@@ -109,6 +109,29 @@ const generateSampleDiagnosis = () => {
   return diag;
 };
 
+// Simple error boundary wrapper for Diagnóstico VAK to prevent white screen on runtime errors
+class DiagnosticoVAKErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  componentDidCatch(error, info) {
+    // Log error for debugging
+    console.error('Diagnóstico VAK render error:', error, info);
+    this.setState({ hasError: true });
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="diagnostico-vak-error" style={{ padding: 20 }}>
+          Ocurrió un error al cargar el Diagnóstico VAK. Por favor intenta recargar la página.
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 const DiagnosticoVAK = ({ onNavigate }) => {
   const [phase, setPhase] = useState('intro'); // intro | calibration | test | result
   const [studentName, setStudentName] = useState('');
@@ -293,7 +316,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   // The following block will be injected inline in the render where PdfTemplate is defined
 
   // Render
-  return (
+  const renderContent = () => (
     <div className="diagnostico-vak" style={{ display:'flex', gap: 20 }}>
       <PdfTemplate />
       <div style={{ flex: 1 }}>
@@ -380,10 +403,6 @@ const DiagnosticoVAK = ({ onNavigate }) => {
               <p>Perfil: {diagnosis.styleDetails.name}</p>
               <p>Porcentaje: {diagnosis.percentage}%</p>
               <p>Conteos: Visual {diagnosis.counts.visual}, Auditivo {diagnosis.counts.auditivo}, Kinestesico {diagnosis.counts.kinestesico}</p>
-              <p>Respuestas:</p>
-              <ul>
-                {diagnosis.answers.map((a,i)=> <li key={i}>{i+1}. {a.text} - {a.type}</li>)}
-              </ul>
               <p>Estrategias:</p>
               <ol>
                 {diagnosis.styleDetails.strategies.map((s,i)=> <li key={i}>{s}</li>)}
@@ -393,6 +412,11 @@ const DiagnosticoVAK = ({ onNavigate }) => {
         </div>
       </div>
     </div>
+  );
+  return (
+    <DiagnosticoVAKErrorBoundary>
+      {renderContent()}
+    </DiagnosticoVAKErrorBoundary>
   );
 };
 
