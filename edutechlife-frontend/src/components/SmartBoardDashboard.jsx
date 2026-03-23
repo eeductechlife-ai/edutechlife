@@ -4,7 +4,6 @@ import ValeriaChat from './ValeriaChat';
 import XPProgressBar from './XPProgressBar';
 import MissionCard from './MissionCard';
 import SubjectGrid from './SubjectGrid';
-import { useCustomCursor } from '../hooks/useCustomCursor';
 import { GraduationCap, Play, BookOpen, Trophy, TrendingUp, Mic, MessageCircle, Brain, LogOut, Download, FileText, Users, Clock, Target, Award } from 'lucide-react';
 import { callDeepseek } from '../utils/api';
 
@@ -33,7 +32,6 @@ const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
     
     const dashboardRef = useRef(null);
     const sessionStartRef = useRef(new Date());
-    useCustomCursor();
 
     useEffect(() => {
         const savedData = localStorage.getItem('edutechlife_student_data');
@@ -213,7 +211,7 @@ Plataforma de Neuro-Educación Premium
                         </div>
 
                         {/* Valeria Status */}
-                        <div className="bg-white/60 backdrop-blur-xl p-6 rounded-[2rem] border border-white/80 shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
+                        <div className="glass-card p-6 rounded-[2rem]">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-3">
                                     <div className="w-3 h-3 rounded-full bg-[#66CCCC] animate-pulse" />

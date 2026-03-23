@@ -76,7 +76,7 @@ export default defineConfig({
           ui: ['framer-motion', 'lucide-react'],
           charts: ['recharts'],
           pdf: ['html2pdf.js'],
-          utils: ['@studio-freight/lenis', 'marked']
+          utils: ['marked']
         }
       }
     },

@@ -4,6 +4,64 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ==================== PREMIUM CURSOR - ZERO LATENCY ==================== */
+:root {
+  --cursor-color: #004B63;
+  --cursor-color-hover: #4DA8C4;
+  --cursor-size: 20px;
+}
+
+html, body {
+  cursor: default;
+}
+
+a, button, [role="button"], input, textarea, select {
+  cursor: pointer;
+}
+
+a:hover, button:hover, [role="button"]:hover {
+  cursor: pointer;
+}
+
+/* ==================== ZERO-LAG PERFORMANCE ==================== */
+/* Scroll nativo de alto rendimiento - scroll hijacking eliminado */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==================== OPTIMIZED GLASSMORPHISM ==================== */
+/* Solo para elementos flotantes pequeños (navbar, menus) */
+.glass-nav {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+}
+
+/* Tarjetas grandes - color solido sin blur (0% GPU) */
+.glass-card {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(77, 168, 196, 0.2);
+}
+
+.glass-card-dark {
+  background: rgba(10, 22, 40, 0.95);
+  border: 1px solid rgba(77, 168, 196, 0.2);
+}
+
+/* Modal overlay sin blur */
+.solid-overlay {
+  background: rgba(248, 250, 252, 0.95);
+}
+
+/* Deshabilitar blur durante scroll (si se usa scroll throttling) */
+body.is-scrolling .glass-card,
+body.is-scrolling .glass-card-dark {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
 :root {
   /* Paleta de Colores Premium - Manteniendo identidad */
   --color-petroleum: #004B63;
@@ -9387,31 +9445,9 @@ h2, h3, h4, h5 {
 }
 
 /* Custom Cursor Styles for Premium Experience */
-.cursor-dot {
-  width: 8px;
-  height: 8px;
-  background-color: var(--color-corporate);
-  border-radius: 50%;
-  position: fixed;
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate(-50%, -50%);
-  transition: transform 0.1s ease;
-  mix-blend-mode: difference;
-}
-
-.cursor-outline {
-  width: 40px;
-  height: 40px;
-  border: 2px solid var(--color-mint);
-  border-radius: 50%;
-  position: fixed;
-  pointer-events: none;
-  z-index: 9998;
-  transform: translate(-50%, -50%);
-  transition: transform 0.15s ease;
-  mix-blend-mode: difference;
-  opacity: 0.6;
+/* Cursor nativo - zero lag */
+.cursor-dot, .cursor-outline {
+  display: none;
 }
 
 .cursor-dot.click {

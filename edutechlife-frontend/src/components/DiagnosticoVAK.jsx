@@ -412,13 +412,13 @@ const DiagnosticoVAK = ({ onNavigate }) => {
       <div className="justify-start mb-6 max-w-4xl mx-auto flex">
         <button 
           onClick={onNavigate ? () => onNavigate('ecosystem') : undefined}
-          className="flex items-center gap-2 px-4 py-2 bg-white/60 hover:bg-white border border-white/80 rounded-xl transition-all shadow-sm text-[#004B63] hover:text-[#4DA8C4] font-semibold text-sm backdrop-blur-md"
+          className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-gray-50 border border-gray-200 rounded-xl transition-all shadow-sm text-[#004B63] hover:text-[#4DA8C4] font-semibold text-sm"
         >
           <i className="fa-solid fa-arrow-left"></i> Volver al Ecosistema
         </button>
       </div>
 
-      <div className="max-w-4xl mx-auto bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_40px_rgba(0,0,0,0.04)] rounded-[2rem] overflow-hidden relative z-10">
+      <div className="max-w-4xl mx-auto glass-card rounded-[2rem] overflow-hidden relative z-10">
         
         {/* Hidden PDF template */}
         <div ref={pdfTemplateRef} style={{ display: 'none' }}>

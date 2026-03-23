@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import Lenis from '@studio-freight/lenis';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 const GlobalCanvas = lazy(() => import('./components/GlobalCanvas'));
 const IALab = lazy(() => import('./components/IALab'));
 import Hero from './components/Hero';
@@ -23,19 +22,20 @@ import AdminLoginModal from './components/AdminLoginModal';
 import LoadingScreen, { MiniLoader } from './components/LoadingScreen';
 import { callDeepseek } from './utils/api';
 
+/* ==================== PREMIUM CURSOR - ZERO LATENCY ==================== */
+/* Núcleo decursor maneja por CSS nativo - 0ms latencia */
+/* Aura visual con GPU acceleration - solo elementos interactivos */
 const CustomCursor = () => {
     const cursorX = useMotionValue(-100);
     const cursorY = useMotionValue(-100);
     
-    const springConfig = { damping: 15, stiffness: 150, mass: 0.1 };
+    const springConfig = { damping: 25, stiffness: 500, mass: 0.5 };
     const cursorXSpring = useSpring(cursorX, springConfig);
     const cursorYSpring = useSpring(cursorY, springConfig);
     
-    // Replace boolean state with motion value for 0 re-renders
     const isHovering = useMotionValue(0);
-    const scaleTransform = useTransform(isHovering, [0, 1], [1, 1.5]);
-    const bgTransform = useTransform(isHovering, [0, 1], ['transparent', 'rgba(255, 255, 255, 0.1)']);
-
+    const scaleTransform = useSpring(1, springConfig);
+    
     useEffect(() => {
         const moveCursor = (e) => {
             cursorX.set(e.clientX);
@@ -44,21 +44,21 @@ const CustomCursor = () => {
         
         const handleMouseOver = (e) => {
             const target = e.target;
-            if (target.closest('a') || target.closest('button') || target.closest('[role="button"]')) {
+            if (target.closest('a') || target.closest('button') || target.closest('[role="button"]') || target.closest('.interactive')) {
                 isHovering.set(1);
             }
         };
         
         const handleMouseOut = (e) => {
             const target = e.target;
-            if (target.closest('a') || target.closest('button') || target.closest('[role="button"]')) {
+            if (target.closest('a') || target.closest('button') || target.closest('[role="button"]') || target.closest('.interactive')) {
                 isHovering.set(0);
             }
         };
 
-        window.addEventListener('mousemove', moveCursor);
-        window.addEventListener('mouseover', handleMouseOver);
-        window.addEventListener('mouseout', handleMouseOut);
+        window.addEventListener('mousemove', moveCursor, { passive: true });
+        window.addEventListener('mouseover', handleMouseOver, { passive: true });
+        window.addEventListener('mouseout', handleMouseOut, { passive: true });
         
         return () => {
             window.removeEventListener('mousemove', moveCursor);
@@ -67,29 +67,38 @@ const CustomCursor = () => {
         };
     }, []);
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const current = isHovering.get();
+            scaleTransform.set(current === 1 ? 1.5 : 1);
+        }, 16);
+        return () => clearInterval(interval);
+    }, [isHovering, scaleTransform]);
+
     return (
-        <div className="hidden lg:block pointer-events-none fixed inset-0 z-[9999]">
+        <motion.div
+            className="hidden lg:block fixed inset-0 pointer-events-none z-[9999]"
+            style={{ x: cursorXSpring, y: cursorYSpring }}
+        >
             <motion.div
+                className="absolute w-8 h-8 rounded-full border-2 border-[#004B63]/60 pointer-events-none"
                 style={{
-                    x: cursorXSpring,
-                    y: cursorYSpring,
                     translateX: '-50%',
                     translateY: '-50%',
                     scale: scaleTransform,
-                    backgroundColor: bgTransform,
+                    backgroundColor: 'rgba(77, 168, 196, 0.15)',
+                    willChange: 'transform',
                 }}
-                className="fixed top-0 left-0 w-8 h-8 rounded-full border border-[rgba(0,75,99,0.5)] pointer-events-none will-change-transform"
             />
             <motion.div
+                className="absolute w-2 h-2 rounded-full bg-[#4DA8C4] pointer-events-none"
                 style={{
-                    x: cursorX,
-                    y: cursorY,
                     translateX: '-50%',
                     translateY: '-50%',
+                    willChange: 'transform',
                 }}
-                className="fixed top-0 left-0 w-[6px] h-[6px] rounded-full bg-[#4DA8C4] pointer-events-none will-change-transform"
             />
-        </div>
+        </motion.div>
     );
 };
 
@@ -120,40 +129,12 @@ const App = () => {
     useEffect(() => {
         const handleNavigate = (e) => {
             setView(e.detail);
-            window.scrollTo(0, 0);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         };
         window.addEventListener('navigate', handleNavigate);
         
-        // Lenis setup
-        const lenis = new Lenis({
-            duration: 1.2,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            direction: 'vertical',
-            gestureDirection: 'vertical',
-            smooth: true,
-        });
-
-        // Add Scroll Throttling
-        let scrollTimeout;
-        const onScroll = () => {
-            document.body.classList.add('is-scrolling');
-            clearTimeout(scrollTimeout);
-            scrollTimeout = setTimeout(() => {
-                document.body.classList.remove('is-scrolling');
-            }, 100);
-        };
-        lenis.on('scroll', onScroll);
-
-        function raf(time) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-        }
-        requestAnimationFrame(raf);
-        
         return () => {
             window.removeEventListener('navigate', handleNavigate);
-            lenis.destroy();
-            clearTimeout(scrollTimeout);
         };
     }, []);
 

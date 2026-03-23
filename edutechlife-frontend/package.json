@@ -10,7 +10,6 @@
     "qa:pdfs": "node scripts/qa/run-qa-pdfs.js"
   },
   "dependencies": {
-    "@studio-freight/lenis": "^1.0.42",
     "framer-motion": "^12.38.0",
     "html2pdf.js": "^0.10.1",
     "lucide-react": "^0.577.0",

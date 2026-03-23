@@ -56,11 +56,11 @@ const PilarModal = ({ pilar, isOpen, onClose }) => {
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8" onClick={onClose}>
-            {/* Bright Backdrop */}
-            <div className="absolute inset-0 bg-[#F8FAFC]/80 backdrop-blur-md" />
+            {/* Solid overlay - ZERO LAG performance */}
+            <div className="absolute inset-0 bg-gray-100/95" />
             
             <div 
-                className="relative w-full max-w-5xl max-h-[90vh] overflow-auto bg-white rounded-3xl shadow-[0_30px_60px_rgba(0,75,99,0.15)] border border-[#E2E8F0] animate-modal-in"
+                className="relative w-full max-w-5xl max-h-[90vh] overflow-auto bg-white rounded-3xl shadow-[0_30px_60px_rgba(0,75,99,0.15)] border border-[rgba(77,168,196,0.2)]"
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="relative overflow-hidden rounded-t-3xl bg-[#F8FAFC] border-b border-[#E2E8F0] p-8 md:p-12">

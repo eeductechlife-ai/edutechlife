@@ -266,8 +266,8 @@ const IALab = ({ onBack }) => {
             <div className="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#66CCCC]/20 rounded-full blur-[120px] pointer-events-none"></div>
             <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[#4DA8C4]/20 rounded-full blur-[120px] pointer-events-none"></div>
 
-            {/* Header */}
-            <div className="bg-white/70 backdrop-blur-xl border-b border-white/80 shadow-[0_4px_30px_rgba(0,0,0,0.03)] sticky top-0 z-50">
+            {/* Header - glass-nav para elemento pequeno */}
+            <div className="glass-nav border-b border-[rgba(77,168,196,0.2)] shadow-[0_4px_30px_rgba(0,0,0,0.03)] sticky top-0 z-50">
                 <div className="max-w-7xl mx-auto flex items-center justify-between py-4 px-6">
                     <div className="flex items-center gap-4">
                         <button 
@@ -303,7 +303,7 @@ const IALab = ({ onBack }) => {
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 relative z-10">
                     {/* Sidebar - Module List */}
                     <div className="lg:col-span-1">
-                        <div className="bg-white/60 backdrop-blur-2xl border border-white/60 shadow-[0_8px_30px_rgba(0,75,99,0.06)] rounded-[2rem] overflow-hidden">
+                        <div className="glass-card rounded-[2rem] overflow-hidden">
                             {/* Progress */}
                             <div className="p-6 border-b border-[#E2E8F0]">
                                 <div className="flex items-center justify-between mb-3">
