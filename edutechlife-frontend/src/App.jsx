@@ -53,20 +53,6 @@ const CustomCursor = () => {
     );
 };
 
-const NeuralMeshBackground = () => (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10 bg-[#0A1628]">
-        <div 
-            className="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] rounded-full mix-blend-screen filter blur-[100px] opacity-30 animate-[float_15s_ease-in-out_infinite]"
-            style={{ background: '#4DA8C4' }}
-        />
-        <div 
-            className="absolute bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] rounded-full mix-blend-screen filter blur-[120px] opacity-20 animate-[float_20s_ease-in-out_infinite_reverse]"
-            style={{ background: '#66CCCC' }}
-        />
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10 mix-blend-overlay" />
-    </div>
-);
-
 const App = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [view, setView] = useState('landing');
@@ -150,8 +136,7 @@ const App = () => {
     }, []);
 
     return (
-        <div className="min-h-screen flex flex-col bg-transparent text-[#e2e8f0]" style={{ fontFamily: "'Montserrat', sans-serif" }}>
-            <NeuralMeshBackground />
+        <div className="min-h-screen flex flex-col bg-[#F8FAFC] text-[#334155]" style={{ fontFamily: "'Montserrat', sans-serif" }}>
             <CustomCursor />
             
             {/* Loading Screen */}
@@ -223,15 +208,15 @@ const App = () => {
             {view !== 'smartboard' && view !== 'vak' && view !== 'ialab' && view !== 'admin' && (
                 <div className="chatbot-container">
                     {botOpen && (
-                        <div className="chatbot-window hyper-glass border border-[#4DA8C4]/30 shadow-[0_0_30px_rgba(77,168,196,0.2)]">
-                            <div className="chatbot-header bg-transparent border-b border-white/10">
+                        <div className="chatbot-window bg-white border border-[#E2E8F0] shadow-neuro">
+                            <div className="chatbot-header bg-[#F8FAFC] border-b border-[#E2E8F0] shadow-sm">
                                 <div className="chatbot-avatar relative">
                                     <div className="absolute inset-[-4px] rounded-full border-[1.5px] border-[#4DA8C4] animate-[pulse-ring_3s_infinite]" />
                                     <i className="fa-solid fa-robot relative z-10 text-white"></i>
                                 </div>
-                                <span className="font-montserrat font-semibold tracking-wide text-white">Nico AI</span>
-                                <button onClick={() => setBotOpen(false)} className="chatbot-close hover:text-[#4DA8C4] transition-colors">
-                                    <i className="fa-solid fa-xmark"></i>
+                                <span className="font-montserrat font-bold tracking-wide text-[#004B63]">Nico AI</span>
+                                <button onClick={() => setBotOpen(false)} className="chatbot-close hover:bg-[#4DA8C4]/10 transition-colors">
+                                    <i className="fa-solid fa-xmark text-[#004B63]"></i>
                                 </button>
                             </div>
                             <div className="chatbot-messages">
@@ -262,7 +247,7 @@ const App = () => {
                         </div>
                     )}
                     <button 
-                        className="chatbot-toggle btn-glow border border-[#4DA8C4]/50 shadow-[0_0_20px_rgba(77,168,196,0.3)] bg-[#0A1628]/80 text-[#4DA8C4]"
+                        className="chatbot-toggle btn-glow shadow-neuro bg-white text-[#4DA8C4]"
                         onClick={() => setBotOpen(!botOpen)} 
                     >
                         <i className={`fa-solid ${botOpen ? 'fa-xmark' : 'fa-comment-dots'}`}></i>
