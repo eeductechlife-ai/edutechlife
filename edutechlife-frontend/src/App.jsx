@@ -267,11 +267,17 @@ const App = () => {
                         <SmartBoardDashboard onNavigate={handleNavigate} onLogout={handleSmartboardLogout} />
                     )}
                     
-                    {/* Diagnóstico VAK - Versión conversacional con Dani */}
-                    {view === 'vak' && <VAKTest onNavigate={handleNavigate} />}
-                    
-                    {/* Versión simple (backup) */}
-                    {view === 'vak-simple' && <DiagnosticoVAK onNavigate={handleNavigate} />}
+                    {/* Diagnóstico VAK - Versiones perezosas */}
+                    {view === 'vak' && (
+                        <Suspense fallback={<div>Cargando Diagnóstico VAK...</div>}>
+                            <VAKTest onNavigate={handleNavigate} />
+                        </Suspense>
+                    )}
+                    {view === 'vak-simple' && (
+                        <Suspense fallback={<div>Cargando Diagnóstico VAK...</div>}>
+                            <DiagnosticoVAK onNavigate={handleNavigate} />
+                        </Suspense>
+                    )}
                     
                     {/* Admin Dashboard - Protected */}
                     {view === 'admin' && adminAuthenticated && (

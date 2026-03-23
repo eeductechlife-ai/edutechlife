@@ -10,7 +10,6 @@
     "qa:pdfs": "node scripts/qa/run-qa-pdfs.js"
   },
   "dependencies": {
-    "@react-spring/web": "^10.0.3",
     "@studio-freight/lenis": "^1.0.42",
     "framer-motion": "^12.38.0",
     "html2pdf.js": "^0.10.1",

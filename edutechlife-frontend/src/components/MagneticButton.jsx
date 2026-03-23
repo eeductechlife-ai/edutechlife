@@ -1,21 +1,21 @@
 import { useRef, useState, useEffect } from 'react';
-import { useSpring, animated } from '@react-spring/web';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 
 export default function MagneticButton({ 
   children, 
   onClick, 
   className = '',
   intensity = 0.3,
-  springConfig = { mass: 1, tension: 350, friction: 15 }
+  springConfig = { stiffness: 350, damping: 15, mass: 1 }
 }) {
   const buttonRef = useRef(null);
   const [ripples, setRipples] = useState([]);
   
-  const [{ x, y }, api] = useSpring(() => ({ 
-    x: 0, 
-    y: 0, 
-    config: springConfig 
-  }));
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  
+  const springX = useSpring(x, springConfig);
+  const springY = useSpring(y, springConfig);
 
   useEffect(() => {
     let rafId = null;
@@ -34,12 +34,11 @@ export default function MagneticButton({
       const magneticRadius = Math.max(rect.width, rect.height) / 2 + 40;
 
       if (distance < magneticRadius) {
-        api.start({
-          x: distanceX * intensity,
-          y: distanceY * intensity,
-        });
+        x.set(distanceX * intensity);
+        y.set(distanceY * intensity);
       } else {
-        api.start({ x: 0, y: 0 });
+        x.set(0);
+        y.set(0);
       }
       rafId = null;
     };
@@ -56,7 +55,7 @@ export default function MagneticButton({
       window.removeEventListener('mousemove', handleMouseMove);
       if (rafId) cancelAnimationFrame(rafId);
     };
-  }, [api, intensity]);
+  }, [intensity, x, y]);
 
   const handleClick = (e) => {
     if (!buttonRef.current) return;
@@ -79,12 +78,12 @@ export default function MagneticButton({
   };
 
   return (
-    <animated.button
+    <motion.button
       ref={buttonRef}
       className={`relative overflow-hidden cursor-none ${className}`}
-      style={{ x, y }}
+      style={{ x: springX, y: springY }}
       onClick={handleClick}
-      onMouseLeave={() => api.start({ x: 0, y: 0 })}
+      onMouseLeave={() => { x.set(0); y.set(0); }}
     >
       <span className="relative z-10 flex items-center justify-center pointer-events-none w-full h-full">
           {children}
@@ -97,20 +96,17 @@ export default function MagneticButton({
           onCompleted={() => handleRippleEnd(ripple.id)} 
         />
       ))}
-    </animated.button>
+    </motion.button>
   );
 }
 
 const Ripple = ({ x, y, onCompleted }) => {
-  const [style] = useSpring(() => ({
-    from: { transform: 'scale(0)', opacity: 0.8 },
-    to: { transform: 'scale(8)', opacity: 0 },
-    config: { duration: 700, easing: t => t * (2 - t) }, // liquid expansion smooth curve
-    onRest: onCompleted
-  }));
-
   return (
-    <animated.span
+    <motion.span
+      initial={{ scale: 0, opacity: 0.8 }}
+      animate={{ scale: 8, opacity: 0 }}
+      transition={{ duration: 0.7, ease: [0.25, 1, 0.5, 1] }}
+      onAnimationComplete={onCompleted}
       style={{
         position: 'absolute',
         top: y,
@@ -123,8 +119,7 @@ const Ripple = ({ x, y, onCompleted }) => {
         background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(102, 204, 204, 0.3))',
         backdropFilter: 'blur(2px)',
         pointerEvents: 'none',
-        zIndex: 1,
-        ...style
+        zIndex: 1
       }}
     />
   );
