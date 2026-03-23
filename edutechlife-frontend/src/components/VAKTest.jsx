@@ -17,7 +17,7 @@ const VAKTest = ({ onNavigate }) => {
     const [isHandsFree, setIsHandsFree] = useState(false);
     
     const [chatHistory, setChatHistory] = useState([
-        { role: 'assistant', text: '¡Hola! Soy tu guía de aprendizaje. Antes de empezar a descubrir tu estilo cognitivo...\n**¿Cómo te sientes hoy?**', type: 'text' }
+        { role: 'assistant', text: '¡Hola! Soy Dani, tu guía de aprendizaje. Antes de empezar a descubrir tu estilo cognitivo...\n**¿Cómo te sientes hoy?**', type: 'text' }
     ]);
     
     const chatEndRef = useRef(null);
@@ -206,7 +206,7 @@ const VAKTest = ({ onNavigate }) => {
         setAnswers([]); 
         setRes('');
         setChatHistory([
-            { role: 'assistant', text: '¡Hola! Soy tu guía de aprendizaje. Antes de empezar a descubrir tu estilo cognitivo...\n**¿Cómo te sientes hoy?**', type: 'text' }
+            { role: 'assistant', text: '¡Hola! Soy Dani, tu guía de aprendizaje. Antes de empezar a descubrir tu estilo cognitivo...\n**¿Cómo te sientes hoy?**', type: 'text' }
         ]);
     };
 
@@ -242,7 +242,7 @@ const VAKTest = ({ onNavigate }) => {
                 ${window.marked ? window.marked.parse(res) : res}
             </div>
             <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb; font-family: 'DM Mono', monospace; font-size: 10px; color: #6b7280; text-align: center;">
-                Generado automáticamente por Anto (IA Lab Pro) — Test de 10 factores — ${new Date().toLocaleDateString('es-CO')}
+                Generado automáticamente por Dani (Diagnóstico VAK) — Test de 10 factores — ${new Date().toLocaleDateString('es-CO')}
             </div>`;
         const opt = { margin: 10, filename: `edutechlife-diagnostico-vak-${userName || 'test'}-${Date.now()}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
         window.html2pdf().set(opt).from(container).save().then(() => setPdfLoad(false));
@@ -252,7 +252,7 @@ const VAKTest = ({ onNavigate }) => {
         <div className="ai-panel" style={{ display: 'flex', flexDirection: 'column', height: '650px', maxHeight: '80vh', padding: '0', overflow: 'hidden' }}>
             <div className="ai-panel-header" style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,.08)', flexShrink: 0, background: 'rgba(15,23,42,0.4)' }}>
                 <div className="ai-panel-icon"><i className="fa-solid fa-brain-circuit" /></div>
-                <span className="ai-panel-title">ANTO PSICÓLOGO VAK</span>
+                <span className="ai-panel-title">DANI PSICÓLOGO VAK</span>
                 <div className="ai-panel-badge"><span className="ai-panel-badge-dot" />TEST DINÁMICO</div>
                 
                 <button 

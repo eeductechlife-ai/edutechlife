@@ -14,6 +14,7 @@ import AutomationArchitect from './components/AutomationArchitect';
 import SmartBoardDashboard from './components/SmartBoardDashboard';
 import SmartBoardLogin from './components/SmartBoardLogin';
 import DiagnosticoVAK from './components/DiagnosticoVAK';
+import VAKTest from './components/VAKTest';
 import AdminDashboard from './components/AdminDashboard';
 import AdminLoginModal from './components/AdminLoginModal';
 import LoadingScreen, { MiniLoader } from './components/LoadingScreen';
@@ -156,8 +157,11 @@ const App = () => {
                     <SmartBoardDashboard onNavigate={handleNavigate} onLogout={handleSmartboardLogout} />
                 )}
                 
-                {/* Diagnóstico VAK - Fuera del SmartBoard */}
-                {view === 'vak' && <DiagnosticoVAK onNavigate={handleNavigate} />}
+                {/* Diagnóstico VAK - Versión conversacional con Dani */}
+                {view === 'vak' && <VAKTest onNavigate={handleNavigate} />}
+                
+                {/* Versión simple (backup) */}
+                {view === 'vak-simple' && <DiagnosticoVAK onNavigate={handleNavigate} />}
                 
                 {/* Admin Dashboard - Protected */}
                 {view === 'admin' && adminAuthenticated && (
