@@ -5,7 +5,6 @@ import Metodo from './components/Metodo';
 import Esencia from './components/Esencia';
 import Ecosystem from './components/Ecosystem';
 import Aliados from './components/Aliados';
-import FinalCTA from './components/FinalCTA';
 import Footer from './components/Footer';
 import NeuroEntorno from './components/NeuroEntorno';
 import ProyectosNacional from './components/ProyectosNacional';
@@ -125,8 +124,6 @@ const App = () => {
                             style={{ maxHeight: '24px', width: 'auto' }}
                         />
                     </button>
-
-                    
                 </div>
             </header>
             )}
@@ -140,7 +137,6 @@ const App = () => {
                         <Ecosystem onNavigate={handleNavigate} />
                         <Metodo />
                         <Aliados />
-                        <FinalCTA onNavigate={handleNavigate} />
                     </>
                 )}
 

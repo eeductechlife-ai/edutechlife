@@ -13,14 +13,24 @@ const PilarModal = ({ pilar, isOpen, onClose }) => {
             cta: 'Explorar NeuroEntornos'
         },
         proyectos: {
-            fullDesc: 'Proyectos SenaTIC y portafolio tecnológico con certificaciones internacionales. Formamos profesionales competitivos con experiencia práctica en las tecnologías más demandadas del mercado.',
+            fullDesc: 'Laboratorio de Inteligencia Artificial con certificación internacional. Aprende a crear prompts efectivos, desarrolla agentes IA y obtén tu certificación profesional.',
             features: [
-                { icon: 'fa-laptop-code', title: 'SenaTIC', desc: 'Proyectos colaborativos con el Servicio Nacional de Aprendizaje' },
-                { icon: 'fa-certificate', title: 'Certificaciones', desc: 'Preparación para certificaciones tecnológicas globales' },
-                { icon: 'fa-briefcase', title: 'Portafolio', desc: 'Construcción de proyectos reales para tu carrera profesional' },
-                { icon: 'fa-users', title: 'Mentoría', desc: 'Acompañamiento de expertos de la industria tecnológica' }
+                { icon: 'fa-robot', title: 'IA Lab Pro', desc: 'Plataforma completa de formación en inteligencia artificial' },
+                { icon: 'fa-wand-magic-sparkles', title: 'Prompt Engineering', desc: 'Domina el arte de comunicarte con IA' },
+                { icon: 'fa-certificate', title: 'Certificación', desc: 'Obtén tu certificado profesional reconocido' },
+                { icon: 'fa-users', title: 'Proyectos Reales', desc: 'Aplica tus conocimientos en proyectos prácticos' }
             ],
-            cta: 'Ver Proyectos'
+            cta: 'Ir al Laboratorio IA'
+        },
+        ialab: {
+            fullDesc: 'Laboratorio de Inteligencia Artificial con certificación internacional. Aprende a crear prompts efectivos, desarrolla agentes IA y obtén tu certificación profesional.',
+            features: [
+                { icon: 'fa-robot', title: 'IA Lab Pro', desc: 'Plataforma completa de formación en inteligencia artificial' },
+                { icon: 'fa-wand-magic-sparkles', title: 'Prompt Engineering', desc: 'Domina el arte de comunicarte con IA' },
+                { icon: 'fa-certificate', title: 'Certificación', desc: 'Obtén tu certificado profesional reconocido' },
+                { icon: 'fa-users', title: 'Proyectos Reales', desc: 'Aplica tus conocimientos en proyectos prácticos' }
+            ],
+            cta: 'Ir al Laboratorio IA'
         },
         consultoria: {
             fullDesc: 'Transformación digital para instituciones educativas y empresas. Desarrollamos agentes de IA personalizados que automatizan procesos, mejoran la eficiencia y garantizan un ROI measurable.',
@@ -219,16 +229,16 @@ const Ecosystem = memo(({ onNavigate }) => {
             onNavigate
         },
         {
-            id: 'proyectos',
-            icon: 'fa-laptop-code',
-            title: 'Proyectos de Impacto Nacional',
-            subtitle: 'Pilar 2',
+            id: 'ialab',
+            icon: 'fa-robot',
+            title: 'Laboratorio IA',
+            subtitle: 'Certificación Profesional',
             gradient: 'from-[#004B63] to-[#4DA8C4]',
             bgDark: false,
-            desc: 'Proyectos SenaTIC, portafolio tecnológico y certificaciones.',
+            desc: 'Aprende inteligencia artificial, crea prompts y obtén tu certificación.',
             stats: [
-                { num: '500+', label: 'Proyectos' },
-                { num: '50+', label: 'Tecnologías' }
+                { num: '5', label: 'Módulos' },
+                { num: '100%', label: 'Online' }
             ],
             onNavigate
         },

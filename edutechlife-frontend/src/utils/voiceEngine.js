@@ -13,23 +13,31 @@ class VoiceEngine {
     this.onFinalResult = null;
     this.onError = null;
     this.conversationMode = false;
-    this.autoRestartListening = false;
-    this.silenceTimer = null;
-    this.silenceThreshold = 1500;
+    this.listenTimeout = null;
+    this.maxListeningDuration = 15000;
     
     this.initVoices();
     this.initRecognition();
+  }
+
+  calculateSpeechDuration(text) {
+    const cleanText = text.replace(/[#*`_~🎉🎯💡✨👏👍🎨🎧🎮🎬📚©®™°•↑↓→←↔↕]/g, '');
+    const charsPerSecond = 15;
+    const baseTime = 500;
+    return Math.max(1500, baseTime + (cleanText.length / charsPerSecond) * 1000);
+  }
+
+  clearListenTimeout() {
+    if (this.listenTimeout) {
+      clearTimeout(this.listenTimeout);
+      this.listenTimeout = null;
+    }
   }
 
   initVoices() {
     const loadVoices = () => {
       const voices = this.synth.getVoices();
       this.currentVoice = this.selectBestVoice(voices);
-      
-      if (!this.currentVoice && voices.length > 0) {
-        const spanish = voices.filter(v => v.lang.includes('es') && !v.lang.includes('US'));
-        this.currentVoice = spanish[0] || voices[0];
-      }
     };
 
     loadVoices();
@@ -75,14 +83,14 @@ class VoiceEngine {
     this.recognition.continuous = true;
     this.recognition.interimResults = true;
     this.recognition.maxAlternatives = 1;
-    this.recognition.restartInMS = 10000;
 
     let finalTranscript = '';
-    let silenceTimer = null;
+    let lastResultIndex = 0;
 
     this.recognition.onstart = () => {
       this.isListening = true;
       finalTranscript = '';
+      lastResultIndex = 0;
       if (this.onListeningStart) this.onListeningStart();
     };
 
@@ -90,31 +98,25 @@ class VoiceEngine {
       this.isListening = false;
       if (this.onListeningEnd) this.onListeningEnd();
       
-      if (this.conversationMode && this.autoRestartListening && !this.isSpeaking) {
-        setTimeout(() => this.startListening(), 500);
-      }
-      
       if (finalTranscript.trim()) {
         if (this.onFinalResult) this.onFinalResult(finalTranscript.trim());
       }
       finalTranscript = '';
+      lastResultIndex = 0;
     };
 
     this.recognition.onresult = (event) => {
       let interimTranscript = '';
       
-      for (let i = event.resultIndex; i < event.results.length; i++) {
+      for (let i = lastResultIndex; i < event.results.length; i++) {
         const transcript = event.results[i][0].transcript;
         if (event.results[i].isFinal) {
           finalTranscript += ' ' + transcript.trim();
-          if (silenceTimer) clearTimeout(silenceTimer);
-          silenceTimer = setTimeout(() => {
-            this.recognition?.stop();
-          }, this.silenceThreshold);
         } else {
           interimTranscript += transcript;
         }
       }
+      lastResultIndex = event.results.length;
       
       if (this.onInterimResult) {
         this.onInterimResult(finalTranscript + ' ' + interimTranscript);
@@ -134,7 +136,7 @@ class VoiceEngine {
   speak(text, options = {}) {
     return new Promise((resolve, reject) => {
       if (this.isSpeaking) {
-        this.stop();
+        this.synth.cancel();
       }
 
       const { rate = 1.0, pitch = 1.05, volume = 1.0 } = options;
@@ -183,7 +185,7 @@ class VoiceEngine {
         utterance.onend = () => {
           currentIndex++;
           if (currentIndex < filteredSentences.length) {
-            setTimeout(speakNext, 80);
+            setTimeout(speakNext, 60);
           } else {
             this.isSpeaking = false;
             if (this.onSpeakEnd) this.onSpeakEnd();
@@ -215,16 +217,33 @@ class VoiceEngine {
   startListening() {
     if (!this.recognition || this.isListening) return;
     
+    this.clearListenTimeout();
+    
+    this.listenTimeout = setTimeout(() => {
+      if (this.isListening) {
+        this.stopListening();
+        if (this.onError) {
+          this.onError('no-speech');
+        }
+      }
+    }, this.maxListeningDuration);
+    
     try {
       this.recognition.start();
     } catch (e) {
       console.error('Recognition start error:', e);
+      this.clearListenTimeout();
     }
   }
 
   stopListening() {
+    this.clearListenTimeout();
     if (this.recognition) {
-      this.recognition.stop();
+      try {
+        this.recognition.stop();
+      } catch (e) {
+        // Ignore if not started
+      }
     }
     this.isListening = false;
     if (this.onListeningEnd) this.onListeningEnd();
@@ -239,30 +258,36 @@ class VoiceEngine {
 
   setConversationMode(enabled) {
     this.conversationMode = enabled;
-    this.autoRestartListening = enabled;
   }
 
-  setVoice(voiceName) {
-    const voices = this.synth.getVoices();
-    this.currentVoice = voices.find(v => 
-      v.name.toLowerCase().includes(voiceName.toLowerCase())
-    ) || this.currentVoice;
-  }
-
-  getAvailableVoices() {
-    return this.synth.getVoices().filter(v => v.lang.includes('es'));
+  setMaxListeningDuration(ms) {
+    this.maxListeningDuration = ms;
   }
 
   destroy() {
+    this.clearListenTimeout();
     this.stop();
     this.setConversationMode(false);
     if (this.recognition) {
-      this.recognition.abort();
+      try {
+        this.recognition.abort();
+      } catch (e) {
+        // Ignore
+      }
     }
   }
 }
 
-export const voiceEngine = new VoiceEngine();
+let voiceEngineInstance = null;
+
+export function getVoiceEngine() {
+  if (!voiceEngineInstance) {
+    voiceEngineInstance = new VoiceEngine();
+  }
+  return voiceEngineInstance;
+}
+
+export const voiceEngine = getVoiceEngine();
 
 export function speakText(text, options = {}) {
   return voiceEngine.speak(text, options);
@@ -282,10 +307,6 @@ export function stopAll() {
 
 export function setConversationMode(enabled) {
   voiceEngine.setConversationMode(enabled);
-}
-
-export function getAvailableVoices() {
-  return voiceEngine.getAvailableVoices();
 }
 
 export default voiceEngine;
