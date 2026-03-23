@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Eye, Download } from 'lucide-react';
 import html2pdf from 'html2pdf.js';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
+import { useInView } from 'framer-motion';
 
 const QUESTIONS = [
   { id: 1, text: '¿Cómo prefieres aprender a usar una nueva app en tu celular?', options: [
@@ -102,6 +103,8 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   const [error, setError] = useState(null);
   const [pdfLoading, setPdfLoading] = useState(false);
   const pdfTemplateRef = useRef(null);
+  const chartRef = useRef(null);
+  const isChartInView = useInView(chartRef);
 
   useEffect(() => {
     if (phase === 'intro') {
@@ -311,15 +314,17 @@ const DiagnosticoVAK = ({ onNavigate }) => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            <div className="h-64 h-[250px] w-full bg-white/40 rounded-3xl border border-white/60 p-4 shadow-sm">
-                <ResponsiveContainer width="100%" height="100%">
-                    <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarData}>
-                        <PolarGrid stroke="#E2E8F0" />
-                        <PolarAngleAxis dataKey="subject" tick={{ fill: '#004B63', fontSize: 13, fontWeight: 700, fontFamily: 'Montserrat' }} />
-                        <PolarRadiusAxis angle={30} domain={[0, 10]} tick={false} axisLine={false} />
-                        <Radar name="Estilo" dataKey="A" stroke={diagnosis.styleDetails.color} strokeWidth={3} fill={diagnosis.styleDetails.color} fillOpacity={0.3} />
-                    </RadarChart>
-                </ResponsiveContainer>
+            <div ref={chartRef} className="h-64 h-[250px] w-full bg-white/40 rounded-3xl border border-white/60 p-4 shadow-sm">
+                {isChartInView && (
+                    <ResponsiveContainer width="100%" height="100%">
+                        <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarData}>
+                            <PolarGrid stroke="#E2E8F0" />
+                            <PolarAngleAxis dataKey="subject" tick={{ fill: '#004B63', fontSize: 13, fontWeight: 700, fontFamily: 'Montserrat' }} />
+                            <PolarRadiusAxis angle={30} domain={[0, 10]} tick={false} axisLine={false} />
+                            <Radar name="Estilo" dataKey="A" stroke={diagnosis.styleDetails.color} strokeWidth={3} fill={diagnosis.styleDetails.color} fillOpacity={0.3} />
+                        </RadarChart>
+                    </ResponsiveContainer>
+                )}
             </div>
             
             <div className="space-y-4">

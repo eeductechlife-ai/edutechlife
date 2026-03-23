@@ -1,7 +1,7 @@
-import { memo, useEffect, useState, useRef, Suspense } from 'react';
-import gsap from 'gsap';
+import { memo, useEffect, useState, useRef, Suspense, lazy } from 'react';
+import { motion } from 'framer-motion';
 import MagneticButton from './MagneticButton';
-import NeuralOracle from './3D/NeuralOracle';
+const NeuralOracle = lazy(() => import('./3D/NeuralOracle'));
 import SplitTextReveal from './SplitTextReveal';
 
 // ==========================================
@@ -38,17 +38,6 @@ const Hero = memo(({ onNavigate }) => {
     const statsRef = useRef(null);
     const [statsVisible, setStatsVisible] = useState(false);
 
-    // Initial GSAP Reveal Animation
-    useEffect(() => {
-        const ctx = gsap.context(() => {
-            gsap.fromTo(".gsap-reveal", 
-                { opacity: 0, y: 40, filter: "blur(10px)" },
-                { opacity: 1, y: 0, filter: "blur(0px)", duration: 1.2, stagger: 0.15, ease: "power3.out" }
-            );
-        }, heroRef);
-        return () => ctx.revert();
-    }, []);
-
     // Intersection Observer for Stats Counter
     useEffect(() => {
         const observer = new IntersectionObserver(([entry]) => {
@@ -74,22 +63,43 @@ const Hero = memo(({ onNavigate }) => {
                     
                     {/* Left Column - Typography & CTAs */}
                     <div className="text-center lg:text-left pt-10 lg:pt-0">
-                        <div className="gsap-reveal inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full mb-8 border border-[#E2E8F0] shadow-sm">
+                        <motion.div 
+                            initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
+                            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                            transition={{ duration: 0.8 }}
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full mb-8 border border-[#E2E8F0] shadow-sm"
+                        >
                             <span className="w-2 h-2 bg-[#4DA8C4] rounded-full animate-pulse shadow-[0_0_8px_#4DA8C4]" />
                             <span className="text-xs font-bold text-[#004B63] uppercase tracking-widest font-montserrat">
                                 Neuro-Métricas V2 Activas
                             </span>
-                        </div>
+                        </motion.div>
 
-                        <h1 className="text-display display-1 mb-6">
+                        <motion.h1 
+                            initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
+                            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                            transition={{ duration: 0.8, delay: 0.1 }}
+                            className="text-display display-1 mb-6"
+                        >
                             <SplitTextReveal text="Liderando la Educación del Futuro" />
-                        </h1>
+                        </motion.h1>
 
-                        <p className="gsap-reveal text-xl md:text-2xl text-[#64748B] mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed font-light">
+                        <motion.p 
+                            initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
+                            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                            transition={{ duration: 0.8, delay: 0.2 }}
+                            className="text-xl md:text-2xl text-[#64748B] mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed font-light"
+                        >
                             Infraestructura cognitiva asistida por inteligencia artificial. Tu entorno de aprendizaje evoluciona y se ajusta <span className="font-semibold text-[#004B63]">en tiempo real</span> a tu neuro-ergonomía.
-                        </p>
+                        </motion.p>
 
-                        <div ref={statsRef} className="gsap-reveal flex flex-wrap justify-center lg:justify-start gap-8 mb-12">
+                        <motion.div 
+                            initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
+                            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                            transition={{ duration: 0.8, delay: 0.3 }}
+                            ref={statsRef} 
+                            className="flex flex-wrap justify-center lg:justify-start gap-8 mb-12"
+                        >
                             <div className="text-left">
                                 <div className="text-4xl font-black text-[#004B63] font-montserrat tracking-tight mb-1">
                                     {countEstudiantes.toLocaleString()}+
@@ -114,9 +124,14 @@ const Hero = memo(({ onNavigate }) => {
                                     Años Refinando
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
 
-                        <div className="gsap-reveal flex flex-col sm:flex-row gap-5 justify-center lg:justify-start">
+                        <motion.div 
+                            initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
+                            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                            transition={{ duration: 0.8, delay: 0.4 }}
+                            className="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start"
+                        >
                             <MagneticButton 
                                 onClick={() => onNavigate('ialab')}
                                 className="group btn-glow shadow-neuro-hover flex items-center justify-center gap-3 px-8 py-4 rounded-full text-lg font-bold font-montserrat"
@@ -132,15 +147,20 @@ const Hero = memo(({ onNavigate }) => {
                                 <i className="fa-solid fa-briefcase text-[#64748B] group-hover:text-[#004B63] transition-colors" />
                                 Integración B2B
                             </MagneticButton>
-                        </div>
+                        </motion.div>
                     </div>
 
                     {/* Right Column - 3D Interactive Oracle */}
-                    <div className="gsap-reveal pt-10 lg:pt-0">
+                    <motion.div 
+                        initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
+                        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                        transition={{ duration: 0.8, delay: 0.5 }}
+                        className="pt-10 lg:pt-0"
+                    >
                         <Suspense fallback={<div className="w-full h-[500px] flex items-center justify-center animate-pulse-glow" />}>
                             <NeuralOracle />
                         </Suspense>
-                    </div>
+                    </motion.div>
                 </div>
             </div>
             

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { 
   Calculator, Atom, Globe, BookOpen, Code, Music, Palette, Brain, TrendingUp, CheckCircle, PlayCircle, Lock, Zap
@@ -10,6 +10,7 @@ const TiltCard = ({ children, isCompleted, isHovered, onMouseEnter, onMouseLeave
 
     const mouseXSpring = useSpring(x, { stiffness: 300, damping: 20 });
     const mouseYSpring = useSpring(y, { stiffness: 300, damping: 20 });
+    const requestRef = useRef(null);
     
     // Rotate max 7.5 degrees based on mouse position
     const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["7.5deg", "-7.5deg"]);
@@ -17,12 +18,16 @@ const TiltCard = ({ children, isCompleted, isHovered, onMouseEnter, onMouseLeave
 
     const handleMouseMove = (e) => {
         const rect = e.currentTarget.getBoundingClientRect();
-        const width = rect.width;
-        const height = rect.height;
         const mouseX = e.clientX - rect.left;
         const mouseY = e.clientY - rect.top;
-        x.set(mouseX / width - 0.5);
-        y.set(mouseY / height - 0.5);
+        const width = rect.width;
+        const height = rect.height;
+
+        if (requestRef.current) cancelAnimationFrame(requestRef.current);
+        requestRef.current = requestAnimationFrame(() => {
+            x.set(mouseX / width - 0.5);
+            y.set(mouseY / height - 0.5);
+        });
     };
 
     const handleMouseLeave = (e) => {

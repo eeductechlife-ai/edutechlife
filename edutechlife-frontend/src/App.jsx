@@ -1,55 +1,93 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import Lenis from '@studio-freight/lenis';
-import GlobalCanvas from './components/GlobalCanvas';
-import IALab from './components/IALab';
+const GlobalCanvas = lazy(() => import('./components/GlobalCanvas'));
+const IALab = lazy(() => import('./components/IALab'));
 import Hero from './components/Hero';
 import Metodo from './components/Metodo';
 import Esencia from './components/Esencia';
 import Ecosystem from './components/Ecosystem';
 import Aliados from './components/Aliados';
 import Footer from './components/Footer';
-import NeuroEntorno from './components/NeuroEntorno';
-import ProyectosNacional from './components/ProyectosNacional';
-import Consultoria from './components/Consultoria';
-import ConsultoriaB2B from './components/ConsultoriaB2B';
-import AutomationArchitect from './components/AutomationArchitect';
-import SmartBoardDashboard from './components/SmartBoardDashboard';
-import SmartBoardLogin from './components/SmartBoardLogin';
-import DiagnosticoVAK from './components/DiagnosticoVAK';
-import VAKTest from './components/VAKTest';
+const NeuroEntorno = lazy(() => import('./components/NeuroEntorno'));
+const ProyectosNacional = lazy(() => import('./components/ProyectosNacional'));
+const Consultoria = lazy(() => import('./components/Consultoria'));
+const ConsultoriaB2B = lazy(() => import('./components/ConsultoriaB2B'));
+const AutomationArchitect = lazy(() => import('./components/AutomationArchitect'));
+const SmartBoardDashboard = lazy(() => import('./components/SmartBoardDashboard'));
+const SmartBoardLogin = lazy(() => import('./components/SmartBoardLogin'));
+const DiagnosticoVAK = lazy(() => import('./components/DiagnosticoVAK'));
+const VAKTest = lazy(() => import('./components/VAKTest'));
+const AdminDashboard = lazy(() => import('./components/AdminDashboard'));
 import AdminLoginModal from './components/AdminLoginModal';
 import LoadingScreen, { MiniLoader } from './components/LoadingScreen';
 import { callDeepseek } from './utils/api';
 
 const CustomCursor = () => {
-    const [cursorPos, setCursorPos] = useState({ x: -100, y: -100 });
-    const [isHovering, setIsHovering] = useState(false);
+    const cursorX = useMotionValue(-100);
+    const cursorY = useMotionValue(-100);
+    
+    const springConfig = { damping: 15, stiffness: 150, mass: 0.1 };
+    const cursorXSpring = useSpring(cursorX, springConfig);
+    const cursorYSpring = useSpring(cursorY, springConfig);
+    
+    // Replace boolean state with motion value for 0 re-renders
+    const isHovering = useMotionValue(0);
+    const scaleTransform = useTransform(isHovering, [0, 1], [1, 1.5]);
+    const bgTransform = useTransform(isHovering, [0, 1], ['transparent', 'rgba(255, 255, 255, 0.1)']);
 
     useEffect(() => {
         const moveCursor = (e) => {
-            setCursorPos({ x: e.clientX, y: e.clientY });
-            const target = e.target;
-            const isClickable = target.closest('a') !== null || 
-                                target.closest('button') !== null ||
-                                target.closest('[role="button"]') !== null;
-            setIsHovering(isClickable);
+            cursorX.set(e.clientX);
+            cursorY.set(e.clientY);
         };
+        
+        const handleMouseOver = (e) => {
+            const target = e.target;
+            if (target.closest('a') || target.closest('button') || target.closest('[role="button"]')) {
+                isHovering.set(1);
+            }
+        };
+        
+        const handleMouseOut = (e) => {
+            const target = e.target;
+            if (target.closest('a') || target.closest('button') || target.closest('[role="button"]')) {
+                isHovering.set(0);
+            }
+        };
+
         window.addEventListener('mousemove', moveCursor);
-        return () => window.removeEventListener('mousemove', moveCursor);
+        window.addEventListener('mouseover', handleMouseOver);
+        window.addEventListener('mouseout', handleMouseOut);
+        
+        return () => {
+            window.removeEventListener('mousemove', moveCursor);
+            window.removeEventListener('mouseover', handleMouseOver);
+            window.removeEventListener('mouseout', handleMouseOut);
+        };
     }, []);
 
-    // Show only when moving (if needed) but generally track
     return (
-        <div className="hidden lg:block pointer-events-none fixed inset-0 z-[9999999]">
-            <div 
-                id="custom-cursor-dot" 
-                className={isHovering ? 'cursor-hovered-dot' : ''}
-                style={{ left: `${cursorPos.x}px`, top: `${cursorPos.y}px` }}
+        <div className="hidden lg:block pointer-events-none fixed inset-0 z-[9999]">
+            <motion.div
+                style={{
+                    x: cursorXSpring,
+                    y: cursorYSpring,
+                    translateX: '-50%',
+                    translateY: '-50%',
+                    scale: scaleTransform,
+                    backgroundColor: bgTransform,
+                }}
+                className="fixed top-0 left-0 w-8 h-8 rounded-full border border-[rgba(0,75,99,0.5)] pointer-events-none will-change-transform"
             />
-            <div 
-                id="custom-cursor-ring" 
-                className={isHovering ? 'cursor-hovered-ring' : ''}
-                style={{ left: `${cursorPos.x}px`, top: `${cursorPos.y}px` }}
+            <motion.div
+                style={{
+                    x: cursorX,
+                    y: cursorY,
+                    translateX: '-50%',
+                    translateY: '-50%',
+                }}
+                className="fixed top-0 left-0 w-[6px] h-[6px] rounded-full bg-[#4DA8C4] pointer-events-none will-change-transform"
             />
         </div>
     );
@@ -93,6 +131,18 @@ const App = () => {
             gestureDirection: 'vertical',
             smooth: true,
         });
+
+        // Add Scroll Throttling
+        let scrollTimeout;
+        const onScroll = () => {
+            document.body.classList.add('is-scrolling');
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                document.body.classList.remove('is-scrolling');
+            }, 100);
+        };
+        lenis.on('scroll', onScroll);
+
         function raf(time) {
             lenis.raf(time);
             requestAnimationFrame(raf);
@@ -102,6 +152,7 @@ const App = () => {
         return () => {
             window.removeEventListener('navigate', handleNavigate);
             lenis.destroy();
+            clearTimeout(scrollTimeout);
         };
     }, []);
 
@@ -157,7 +208,9 @@ const App = () => {
 
     return (
         <div className="min-h-screen flex flex-col bg-transparent text-[#334155]" style={{ fontFamily: "'Montserrat', sans-serif" }}>
-            <GlobalCanvas />
+            <Suspense fallback={null}>
+                <GlobalCanvas />
+            </Suspense>
             <CustomCursor />
             
             {/* Loading Screen */}
@@ -187,42 +240,44 @@ const App = () => {
 
             {/* Main Content */}
             <main className="flex-grow">
-                {view === 'landing' && (
-                     <>
-                        <Hero onNavigate={handleNavigate} />
-                        <Esencia />
-                        <Ecosystem onNavigate={handleNavigate} />
-                        <Metodo />
-                        <Aliados />
-                    </>
-                )}
+                <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="w-12 h-12 border-4 border-[#4DA8C4] border-t-transparent rounded-full animate-spin"></div></div>}>
+                    {view === 'landing' && (
+                         <>
+                            <Hero onNavigate={handleNavigate} />
+                            <Esencia />
+                            <Ecosystem onNavigate={handleNavigate} />
+                            <Metodo />
+                            <Aliados />
+                        </>
+                    )}
 
-                {/* Pillar Pages */}
-                {view === 'ialab' && <IALab onBack={() => handleNavigate('landing')} />}
-                {view === 'neuroentorno' && <NeuroEntorno onBack={() => handleNavigate('landing')} onNavigate={handleNavigate} />}
-                {view === 'proyectos' && <ProyectosNacional onBack={() => handleNavigate('landing')} />}
-                {view === 'consultoria' && <Consultoria onBack={() => handleNavigate('landing')} />}
-                {view === 'consultoria-b2b' && <ConsultoriaB2B onBack={() => handleNavigate('landing')} />}
-                {view === 'automation' && <AutomationArchitect onBack={() => handleNavigate('landing')} />}
-                
-                {/* SmartBoard - Con Login */}
-                {view === 'smartboard' && !smartboardAuthenticated && (
-                    <SmartBoardLogin onLogin={handleSmartboardLogin} />
-                )}
-                {view === 'smartboard' && smartboardAuthenticated && (
-                    <SmartBoardDashboard onNavigate={handleNavigate} onLogout={handleSmartboardLogout} />
-                )}
-                
-                {/* Diagnóstico VAK - Versión conversacional con Dani */}
-                {view === 'vak' && <VAKTest onNavigate={handleNavigate} />}
-                
-                {/* Versión simple (backup) */}
-                {view === 'vak-simple' && <DiagnosticoVAK onNavigate={handleNavigate} />}
-                
-                {/* Admin Dashboard - Protected */}
-                {view === 'admin' && adminAuthenticated && (
-                    <AdminDashboard onLogout={handleAdminLogout} onBack={() => handleNavigate('landing')} />
-                )}
+                    {/* Pillar Pages */}
+                    {view === 'ialab' && <IALab onBack={() => handleNavigate('landing')} />}
+                    {view === 'neuroentorno' && <NeuroEntorno onBack={() => handleNavigate('landing')} onNavigate={handleNavigate} />}
+                    {view === 'proyectos' && <ProyectosNacional onBack={() => handleNavigate('landing')} />}
+                    {view === 'consultoria' && <Consultoria onBack={() => handleNavigate('landing')} />}
+                    {view === 'consultoria-b2b' && <ConsultoriaB2B onBack={() => handleNavigate('landing')} />}
+                    {view === 'automation' && <AutomationArchitect onBack={() => handleNavigate('landing')} />}
+                    
+                    {/* SmartBoard - Con Login */}
+                    {view === 'smartboard' && !smartboardAuthenticated && (
+                        <SmartBoardLogin onLogin={handleSmartboardLogin} />
+                    )}
+                    {view === 'smartboard' && smartboardAuthenticated && (
+                        <SmartBoardDashboard onNavigate={handleNavigate} onLogout={handleSmartboardLogout} />
+                    )}
+                    
+                    {/* Diagnóstico VAK - Versión conversacional con Dani */}
+                    {view === 'vak' && <VAKTest onNavigate={handleNavigate} />}
+                    
+                    {/* Versión simple (backup) */}
+                    {view === 'vak-simple' && <DiagnosticoVAK onNavigate={handleNavigate} />}
+                    
+                    {/* Admin Dashboard - Protected */}
+                    {view === 'admin' && adminAuthenticated && (
+                        <AdminDashboard onLogout={handleAdminLogout} onBack={() => handleNavigate('landing')} />
+                    )}
+                </Suspense>
             </main>
 
             {/* Floating Chatbot - Solo en páginas principales, no en Admin, VAK, IALab */}

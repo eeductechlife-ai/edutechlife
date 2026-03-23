@@ -18,13 +18,16 @@ export default function MagneticButton({
   }));
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      if (!buttonRef.current) return;
+    let rafId = null;
+    let lastEvent = null;
+
+    const computeMagneticPull = () => {
+      if (!buttonRef.current || !lastEvent) return;
       const rect = buttonRef.current.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
-      const distanceX = e.clientX - centerX;
-      const distanceY = e.clientY - centerY;
+      const distanceX = lastEvent.clientX - centerX;
+      const distanceY = lastEvent.clientY - centerY;
       const distance = Math.sqrt(distanceX ** 2 + distanceY ** 2);
 
       // Magnetic pull radius = element radius + 40px threshold
@@ -38,10 +41,21 @@ export default function MagneticButton({
       } else {
         api.start({ x: 0, y: 0 });
       }
+      rafId = null;
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    const handleMouseMove = (e) => {
+      lastEvent = { clientX: e.clientX, clientY: e.clientY };
+      if (!rafId) {
+        rafId = requestAnimationFrame(computeMagneticPull);
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, [api, intensity]);
 
   const handleClick = (e) => {

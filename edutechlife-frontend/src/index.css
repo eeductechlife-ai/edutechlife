@@ -90,6 +90,25 @@
   --aura-cyan: #06B6D4;
 }
 
+/* --- HARDWARE ACCELERATION FOR GLASSMORPHISM --- */
+[class*="backdrop-blur-"] {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* --- SCROLL THROTTLING (Disable expensive glassmorphism while scrolling) --- */
+body.is-scrolling [class*="backdrop-blur-"],
+body.is-scrolling .glass-card,
+body.is-scrolling .glass-dark,
+body.is-scrolling .glass-light,
+body.is-scrolling .glass-accent {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  background-color: rgba(248, 250, 252, 0.98) !important;
+}
+
 @layer components {
   /* ======================
      SISTEMA TIPOGRÁFICO PREMIUM
@@ -647,14 +666,6 @@
     }
   }
 
-  #custom-cursor-dot {
-    position: fixed; top: 0; left: 0; width: 6px; height: 6px;
-    background-color: var(--color-petroleum); border-radius: 50%;
-    pointer-events: none; z-index: 999999;
-    transform: translate(-50%, -50%);
-    transition: width 0.1s, height 0.1s;
-    box-shadow: 0 0 10px rgba(0, 75, 99, 0.4);
-  }
 
   /* Border Beam Animation */
   @keyframes spin-gradient {
@@ -685,31 +696,7 @@
     opacity: 1;
   }
   
-  #custom-cursor-ring {
-    position: fixed; top: 0; left: 0; width: 40px; height: 40px;
-    border: 1.5px solid rgba(77, 168, 196, 0.6); border-radius: 50%;
-    pointer-events: none; z-index: 999998;
-    transform: translate(-50%, -50%);
-    transition: width 0.2s, height 0.2s, background-color 0.2s ease-out, border-color 0.2s ease-out;
-    backdrop-filter: blur(3px) contrast(1.1);
-    -webkit-backdrop-filter: blur(3px) contrast(1.1);
-    box-shadow: inset 0 0 10px rgba(77, 168, 196, 0.1), 0 5px 15px rgba(0, 75, 99, 0.05);
-  }
-  
-  .cursor-hovered-dot {
-    width: 0 !important;
-    height: 0 !important;
-  }
-  
-  .cursor-hovered-ring {
-    width: 60px !important;
-    height: 60px !important;
-    background-color: rgba(77, 168, 196, 0.05) !important;
-    border-color: rgba(77, 168, 196, 0.8) !important;
-    backdrop-filter: blur(6px) contrast(1.3) brightness(1.1);
-    -webkit-backdrop-filter: blur(6px) contrast(1.3) brightness(1.1);
-    box-shadow: inset 0 0 20px rgba(77, 168, 196, 0.3), 0 10px 25px rgba(0, 75, 99, 0.15) !important;
-  }
+
 
   /* Deep Corporate Shadow */
   .shadow-neuro {

@@ -1,12 +1,6 @@
-import { memo, useState, useEffect, useRef, Suspense } from 'react';
+import { memo, useState, useEffect, useRef, Suspense, lazy } from 'react';
 import EcosystemTransform from './EcosystemTransform';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Canvas } from '@react-three/fiber';
-import { CrystalDNA, NeuralGraph, LightConstellation } from './3D/MicroModels';
-
-gsap.registerPlugin(ScrollTrigger);
 
 // ==========================================
 // Ecosystem Light Glassmorphism Modal
@@ -145,15 +139,20 @@ const TiltCard = ({ children, pilar, onClick }) => {
     const mouseYSpring = useSpring(y, { stiffness: 400, damping: 25 });
     const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["6deg", "-6deg"]);
     const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-6deg", "6deg"]);
+    const requestRef = useRef(null);
 
     const handleMouseMove = (e) => {
         const rect = e.currentTarget.getBoundingClientRect();
-        const width = rect.width;
-        const height = rect.height;
         const mouseX = e.clientX - rect.left;
         const mouseY = e.clientY - rect.top;
-        x.set(mouseX / width - 0.5);
-        y.set(mouseY / height - 0.5);
+        const width = rect.width;
+        const height = rect.height;
+
+        if (requestRef.current) cancelAnimationFrame(requestRef.current);
+        requestRef.current = requestAnimationFrame(() => {
+            x.set(mouseX / width - 0.5);
+            y.set(mouseY / height - 0.5);
+        });
     };
     
     const handleMouseLeave = () => { x.set(0); y.set(0); setIsHovered(false); };
@@ -165,7 +164,11 @@ const TiltCard = ({ children, pilar, onClick }) => {
             onMouseLeave={handleMouseLeave}
             onMouseEnter={() => setIsHovered(true)}
             onClick={onClick}
-            className="gsap-eco-reveal h-full rounded-3xl"
+            initial={{ opacity: 0, y: 50, filter: "blur(12px)" }}
+            whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            viewport={{ once: true, margin: "-10%" }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="h-full rounded-3xl"
         >
             <motion.div 
                 className="group relative h-full rounded-3xl p-8 text-left cursor-pointer transition-all duration-300 bg-white border-beam-card hover:shadow-neuro-hover"
@@ -188,29 +191,6 @@ const TiltCard = ({ children, pilar, onClick }) => {
 const Ecosystem = memo(({ onNavigate }) => {
     const [selectedPilar, setSelectedPilar] = useState(null);
     const sectionRef = useRef(null);
-
-    useEffect(() => {
-        const ctx = gsap.context(() => {
-            // Header Reveal
-            gsap.fromTo(".gsap-eco-header",
-                { opacity: 0, y: 30, filter: "blur(8px)" },
-                { 
-                    opacity: 1, y: 0, filter: "blur(0px)", duration: 1, ease: "power3.out",
-                    scrollTrigger: { trigger: sectionRef.current, start: "top 80%" }
-                }
-            );
-
-            // Cards Reveal
-            gsap.fromTo(".gsap-eco-reveal", 
-                { opacity: 0, y: 50, filter: "blur(12px)" },
-                { 
-                    opacity: 1, y: 0, filter: "blur(0px)", duration: 1, stagger: 0.15, ease: "power3.out",
-                    scrollTrigger: { trigger: sectionRef.current, start: "top 70%" }
-                }
-            );
-        }, sectionRef);
-        return () => ctx.revert();
-    }, []);
 
     const pilares = [
         {
@@ -242,7 +222,13 @@ const Ecosystem = memo(({ onNavigate }) => {
 
             <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 py-24">
                 {/* Header */}
-                <div className="gsap-eco-header text-center mb-20 max-w-3xl mx-auto">
+                <motion.div 
+                    initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
+                    whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                    className="text-center mb-20 max-w-3xl mx-auto"
+                >
                     <span className="inline-block px-4 py-1.5 bg-white border border-[#E2E8F0] rounded-full text-xs font-bold text-[#4DA8C4] uppercase tracking-widest mb-6 shadow-sm">
                         Plataforma Modular
                     </span>
@@ -255,7 +241,7 @@ const Ecosystem = memo(({ onNavigate }) => {
                     <p className="text-lg text-[#64748B] font-open-sans leading-relaxed">
                         Accede a herramientas estructuradas para potenciar la educación mediante la sinergia de neuro-ciencia e inteligencia artificial.
                     </p>
-                </div>
+                </motion.div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {pilares.map((pilar) => (
@@ -267,16 +253,36 @@ const Ecosystem = memo(({ onNavigate }) => {
                                     <span className="absolute top-4 left-4 z-20 text-[10px] font-bold uppercase tracking-widest px-3 py-1 bg-white border border-[#E2E8F0] text-[#004B63] rounded-full shadow-sm">
                                         {pilar.subtitle}
                                     </span>
-                                    <div className="absolute inset-0 z-10">
-                                        <Suspense fallback={<div className="w-full h-full flex items-center justify-center animate-pulse"><i className={`fa-solid ${pilar.icon} text-3xl text-[#4DA8C4]/30`} /></div>}>
-                                            <Canvas dpr={[1, 2]} camera={{ position: [0, 0, 3], fov: 45 }}>
-                                                <ambientLight intensity={0.6} />
-                                                <pointLight position={[10, 10, 10]} intensity={1} />
-                                                {pilar.id === 'neuroentorno' && <CrystalDNA isHovered={isHovered} />}
-                                                {pilar.id === 'ialab' && <NeuralGraph isHovered={isHovered} />}
-                                                {pilar.id === 'consultoria' && <LightConstellation isHovered={isHovered} />}
-                                            </Canvas>
-                                        </Suspense>
+                                    <div className="absolute inset-0 z-10 flex items-center justify-center">
+                                        {/* CSS Fallback para Modelos 3D Secundarios (One WebGL Rule) */}
+                                        {pilar.id === 'neuroentorno' && (
+                                            <motion.div 
+                                                animate={{ rotate: isHovered ? 180 : 0, scale: isHovered ? 1.2 : 1 }}
+                                                transition={{ type: "spring", stiffness: 100, damping: 20 }}
+                                                className="w-16 h-16 rounded-full border-4 border-[#4DA8C4]/30 border-t-[#4DA8C4] border-b-[#4DA8C4] mix-blend-multiply"
+                                            />
+                                        )}
+                                        {pilar.id === 'ialab' && (
+                                            <motion.div 
+                                                animate={{ scale: isHovered ? [1, 1.2, 1] : 1, opacity: isHovered ? [0.5, 1, 0.5] : 0.5 }}
+                                                transition={{ duration: 2, repeat: Infinity }}
+                                                className="w-12 h-12 bg-gradient-to-tr from-[#004B63] to-[#4DA8C4] rounded-lg rotate-45"
+                                            />
+                                        )}
+                                        {pilar.id === 'consultoria' && (
+                                            <div className="relative w-16 h-16">
+                                                <motion.div 
+                                                    animate={{ rotate: isHovered ? 360 : 0 }}
+                                                    transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                                                    className="absolute inset-0 border-2 border-dashed border-[#66CCCC] rounded-full"
+                                                />
+                                                <motion.div 
+                                                    animate={{ rotate: isHovered ? -360 : 0 }}
+                                                    transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+                                                    className="absolute inset-2 border-2 border-[#004B63]/20 rounded-full"
+                                                />
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
 
@@ -314,7 +320,13 @@ const Ecosystem = memo(({ onNavigate }) => {
                 </div>
 
                 {/* Direct Access Mini-Cards */}
-                <div className="gsap-eco-header mt-24 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
+                <motion.div 
+                    initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
+                    whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                    className="mt-24 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto"
+                >
                     {[
                         { id: 'vak', icon: 'fa-brain', title: 'Diagnóstico VAK', sub: 'Métrica V1' },
                         { id: 'ialab', icon: 'fa-flask', title: 'IA Lab Pro', sub: 'Entrenamiento' },
@@ -335,7 +347,7 @@ const Ecosystem = memo(({ onNavigate }) => {
                             </div>
                         </button>
                     ))}
-                </div>
+                </motion.div>
             </div>
 
             <PilarModal pilar={selectedPilar} isOpen={!!selectedPilar} onClose={() => setSelectedPilar(null)} />

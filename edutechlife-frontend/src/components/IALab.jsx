@@ -5,6 +5,7 @@ import { speakTextConversational, iniciarReconocimiento } from '../utils/speech'
 import ValerioAvatar from './ValerioAvatar';
 import html2pdf from 'html2pdf.js';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import { useInView } from 'framer-motion';
 
 const IALab = ({ onBack }) => {
     const [activeMod, setActiveMod] = useState(1);
@@ -33,6 +34,8 @@ const IALab = ({ onBack }) => {
     const loadingIntervalRef = useRef(null);
     const containerRef = useRef(null);
     const cursorRef = useRef(null);
+    const chartRef = useRef(null);
+    const isChartInView = useInView(chartRef);
 
     const msgs = ['Analizando contexto...', 'Aplicando técnicas élite...', 'Optimizando estructura...', 'Generando masterPrompt...'];
 
@@ -630,20 +633,22 @@ const IALab = ({ onBack }) => {
                                     </div>
                                 ) : (
                                     <div className="p-12 text-center">
-                                        <div className="w-48 h-48 mx-auto mb-8 relative">
-                                            <ResponsiveContainer width="100%" height="100%">
-                                                <PieChart>
-                                                    <Pie
-                                                        data={[{value: evalScore}, {value: 5 - evalScore}]}
-                                                        cx="50%" cy="50%" innerRadius={70} outerRadius={90}
-                                                        startAngle={90} endAngle={-270}
-                                                        dataKey="value" stroke="none"
-                                                    >
-                                                        <Cell fill={evalScore >= 3 ? '#4DA8C4' : '#FF6B9D'} />
-                                                        <Cell fill="#E2E8F0" />
-                                                    </Pie>
-                                                </PieChart>
-                                            </ResponsiveContainer>
+                                        <div ref={chartRef} className="w-48 h-48 mx-auto mb-8 relative">
+                                            {isChartInView && (
+                                                <ResponsiveContainer width="100%" height="100%">
+                                                    <PieChart>
+                                                        <Pie
+                                                            data={[{value: evalScore}, {value: 5 - evalScore}]}
+                                                            cx="50%" cy="50%" innerRadius={70} outerRadius={90}
+                                                            startAngle={90} endAngle={-270}
+                                                            dataKey="value" stroke="none"
+                                                        >
+                                                            <Cell fill={evalScore >= 3 ? '#4DA8C4' : '#FF6B9D'} />
+                                                            <Cell fill="#E2E8F0" />
+                                                        </Pie>
+                                                    </PieChart>
+                                                </ResponsiveContainer>
+                                            )}
                                             <div className="absolute inset-0 flex flex-col items-center justify-center">
                                                 <span className="text-4xl font-black text-[#004B63] font-montserrat tracking-tighter">{evalScore}</span>
                                                 <span className="text-xs text-[#64748B] uppercase tracking-widest font-bold mt-1">de 5</span>

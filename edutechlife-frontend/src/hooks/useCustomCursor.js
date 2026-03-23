@@ -5,6 +5,10 @@ export const useCustomCursor = () => {
   const cursorOutlineRef = useRef(null);
   const requestRef = useRef(null);
   const previousTimeRef = useRef(null);
+  const mousePos = useRef({ x: -100, y: -100 });
+  const outlinePos = useRef({ x: -100, y: -100 });
+  const dotScaleRef = useRef(1);
+  const outlineScaleRef = useRef(1);
 
   useEffect(() => {
     const cursorDot = document.createElement('div');
@@ -12,6 +16,14 @@ export const useCustomCursor = () => {
 
     cursorDot.className = 'cursor-dot';
     cursorOutline.className = 'cursor-outline';
+
+    // Remove CSS transitions on top/left to avoid layout thrashing
+    cursorDot.style.transition = 'width 0.2s, height 0.2s';
+    cursorOutline.style.transition = 'width 0.2s, height 0.2s';
+    
+    // Hardware acceleration base
+    cursorDot.style.willChange = 'transform';
+    cursorOutline.style.willChange = 'transform';
 
     document.body.appendChild(cursorDot);
     document.body.appendChild(cursorOutline);
@@ -22,34 +34,26 @@ export const useCustomCursor = () => {
     document.body.style.cursor = 'none';
 
     const mouseMoveHandler = (e) => {
-      if (cursorDotRef.current) {
-        cursorDotRef.current.style.left = `${e.clientX}px`;
-        cursorDotRef.current.style.top = `${e.clientY}px`;
-      }
+      mousePos.current.x = e.clientX;
+      mousePos.current.y = e.clientY;
     };
 
     const animate = (time) => {
       if (previousTimeRef.current !== undefined) {
-        const deltaTime = time - previousTimeRef.current;
+        const { x: targetX, y: targetY } = mousePos.current;
+        const { x: outlineX, y: outlineY } = outlinePos.current;
         
-        if (cursorOutlineRef.current && cursorDotRef.current) {
-          const outlineRect = cursorOutlineRef.current.getBoundingClientRect();
-          const dotRect = cursorDotRef.current.getBoundingClientRect();
-          
-          const outlineX = parseFloat(cursorOutlineRef.current.style.left || 0);
-          const outlineY = parseFloat(cursorOutlineRef.current.style.top || 0);
-          const targetX = parseFloat(cursorDotRef.current.style.left || 0);
-          const targetY = parseFloat(cursorDotRef.current.style.top || 0);
-          
-          const dx = targetX - outlineX;
-          const dy = targetY - outlineY;
-          
-          const speed = 0.15;
-          const newX = outlineX + dx * speed;
-          const newY = outlineY + dy * speed;
-          
-          cursorOutlineRef.current.style.left = `${newX}px`;
-          cursorOutlineRef.current.style.top = `${newY}px`;
+        const speed = 0.15;
+        const newX = outlineX + (targetX - outlineX) * speed;
+        const newY = outlineY + (targetY - outlineY) * speed;
+        
+        outlinePos.current = { x: newX, y: newY };
+        
+        if (cursorDotRef.current) {
+          cursorDotRef.current.style.transform = `translate3d(${targetX}px, ${targetY}px, 0) scale(${dotScaleRef.current})`;
+        }
+        if (cursorOutlineRef.current) {
+          cursorOutlineRef.current.style.transform = `translate3d(${newX}px, ${newY}px, 0) scale(${outlineScaleRef.current})`;
         }
       }
       
@@ -58,24 +62,16 @@ export const useCustomCursor = () => {
     };
 
     requestRef.current = requestAnimationFrame(animate);
-    window.addEventListener('mousemove', mouseMoveHandler);
+    window.addEventListener('mousemove', mouseMoveHandler, { passive: true });
 
     const handleMouseDown = () => {
-      if (cursorDotRef.current) {
-        cursorDotRef.current.style.transform = 'scale(0.8)';
-      }
-      if (cursorOutlineRef.current) {
-        cursorOutlineRef.current.style.transform = 'scale(1.2)';
-      }
+      dotScaleRef.current = 0.8;
+      outlineScaleRef.current = 1.2;
     };
 
     const handleMouseUp = () => {
-      if (cursorDotRef.current) {
-        cursorDotRef.current.style.transform = 'scale(1)';
-      }
-      if (cursorOutlineRef.current) {
-        cursorOutlineRef.current.style.transform = 'scale(1)';
-      }
+      dotScaleRef.current = 1;
+      outlineScaleRef.current = 1;
     };
 
     window.addEventListener('mousedown', handleMouseDown);
