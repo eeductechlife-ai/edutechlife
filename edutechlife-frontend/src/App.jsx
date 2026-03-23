@@ -15,10 +15,57 @@ import SmartBoardDashboard from './components/SmartBoardDashboard';
 import SmartBoardLogin from './components/SmartBoardLogin';
 import DiagnosticoVAK from './components/DiagnosticoVAK';
 import VAKTest from './components/VAKTest';
-import AdminDashboard from './components/AdminDashboard';
 import AdminLoginModal from './components/AdminLoginModal';
 import LoadingScreen, { MiniLoader } from './components/LoadingScreen';
 import { callDeepseek } from './utils/api';
+
+const CustomCursor = () => {
+    const [cursorPos, setCursorPos] = useState({ x: -100, y: -100 });
+    const [isHovering, setIsHovering] = useState(false);
+
+    useEffect(() => {
+        const moveCursor = (e) => {
+            setCursorPos({ x: e.clientX, y: e.clientY });
+            const target = e.target;
+            const isClickable = target.closest('a') !== null || 
+                                target.closest('button') !== null ||
+                                target.closest('[role="button"]') !== null;
+            setIsHovering(isClickable);
+        };
+        window.addEventListener('mousemove', moveCursor);
+        return () => window.removeEventListener('mousemove', moveCursor);
+    }, []);
+
+    // Show only when moving (if needed) but generally track
+    return (
+        <div className="hidden lg:block pointer-events-none fixed inset-0 z-[9999999]">
+            <div 
+                id="custom-cursor-dot" 
+                className={isHovering ? 'cursor-hovered-dot' : ''}
+                style={{ left: `${cursorPos.x}px`, top: `${cursorPos.y}px` }}
+            />
+            <div 
+                id="custom-cursor-ring" 
+                className={isHovering ? 'cursor-hovered-ring' : ''}
+                style={{ left: `${cursorPos.x}px`, top: `${cursorPos.y}px` }}
+            />
+        </div>
+    );
+};
+
+const NeuralMeshBackground = () => (
+    <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10 bg-[#0A1628]">
+        <div 
+            className="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] rounded-full mix-blend-screen filter blur-[100px] opacity-30 animate-[float_15s_ease-in-out_infinite]"
+            style={{ background: '#4DA8C4' }}
+        />
+        <div 
+            className="absolute bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] rounded-full mix-blend-screen filter blur-[120px] opacity-20 animate-[float_20s_ease-in-out_infinite_reverse]"
+            style={{ background: '#66CCCC' }}
+        />
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10 mix-blend-overlay" />
+    </div>
+);
 
 const App = () => {
     const [isLoading, setIsLoading] = useState(true);
@@ -103,7 +150,10 @@ const App = () => {
     }, []);
 
     return (
-        <div className="min-h-screen flex flex-col bg-[#F8FAFC] text-[#334155]" style={{ fontFamily: "'Open Sans', sans-serif" }}>
+        <div className="min-h-screen flex flex-col bg-transparent text-[#e2e8f0]" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+            <NeuralMeshBackground />
+            <CustomCursor />
+            
             {/* Loading Screen */}
             {isLoading && (
                 <LoadingScreen onComplete={handleLoadingComplete} minDuration={3000} />
@@ -173,13 +223,14 @@ const App = () => {
             {view !== 'smartboard' && view !== 'vak' && view !== 'ialab' && view !== 'admin' && (
                 <div className="chatbot-container">
                     {botOpen && (
-                        <div className="chatbot-window">
-                            <div className="chatbot-header">
-                                <div className="chatbot-avatar">
-                                    <i className="fa-solid fa-robot"></i>
+                        <div className="chatbot-window hyper-glass border border-[#4DA8C4]/30 shadow-[0_0_30px_rgba(77,168,196,0.2)]">
+                            <div className="chatbot-header bg-transparent border-b border-white/10">
+                                <div className="chatbot-avatar relative">
+                                    <div className="absolute inset-[-4px] rounded-full border-[1.5px] border-[#4DA8C4] animate-[pulse-ring_3s_infinite]" />
+                                    <i className="fa-solid fa-robot relative z-10 text-white"></i>
                                 </div>
-                                <span>Nico</span>
-                                <button onClick={() => setBotOpen(false)} className="chatbot-close">
+                                <span className="font-montserrat font-semibold tracking-wide text-white">Nico AI</span>
+                                <button onClick={() => setBotOpen(false)} className="chatbot-close hover:text-[#4DA8C4] transition-colors">
                                     <i className="fa-solid fa-xmark"></i>
                                 </button>
                             </div>
@@ -211,7 +262,7 @@ const App = () => {
                         </div>
                     )}
                     <button 
-                        className="chatbot-toggle"
+                        className="chatbot-toggle btn-glow border border-[#4DA8C4]/50 shadow-[0_0_20px_rgba(77,168,196,0.3)] bg-[#0A1628]/80 text-[#4DA8C4]"
                         onClick={() => setBotOpen(!botOpen)} 
                     >
                         <i className={`fa-solid ${botOpen ? 'fa-xmark' : 'fa-comment-dots'}`}></i>
