@@ -10,12 +10,14 @@
     "qa:pdfs": "node scripts/qa/run-qa-pdfs.js"
   },
   "dependencies": {
+    "framer-motion": "^12.38.0",
     "gsap": "^3.14.2",
     "html2pdf.js": "^0.10.1",
     "lucide-react": "^0.577.0",
     "marked": "^12.0.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "recharts": "^3.8.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.0",

@@ -81,6 +81,13 @@
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Antigravity Engine Variables */
+  --glass-refraction: 1.5;
+  --neon-cyan: #4DA8C4;
+  --neon-petroleum: #004B63;
+  --aura-violet: #8B5CF6;
+  --aura-cyan: #06B6D4;
 }
 
 @layer components {
@@ -489,6 +496,52 @@
   
   .animate-pulse-slow {
     animation: pulse 3s ease-in-out infinite;
+  }
+  
+  .animate-warp {
+    animation: warp-speed 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  /* Hyper-Glassmorphism Utilities */
+  .hyper-glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border: 1.5px solid transparent;
+    border-image: linear-gradient(135deg, var(--neon-cyan), var(--neon-petroleum)) 1;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  }
+  
+  /* 3D Utilities */
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  .glow-text {
+    text-shadow: 0 0 10px rgba(77, 168, 196, 0.6), 0 0 20px rgba(77, 168, 196, 0.4);
+  }
+  
+  .glow-box {
+    box-shadow: inset 0 0 20px rgba(77, 168, 196, 0.2), 0 0 15px rgba(77, 168, 196, 0.4);
+  }
+
+  /* Custom Scrollbar for Smooth Scroll Feel */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-navy);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-petroleum);
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-corporate);
   }
   
   /* ======================
@@ -4011,6 +4064,7 @@ h2, h3, h4, h5 {
   font-weight: 900;
   background: linear-gradient(135deg, #004B63, #4DA8C4);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   letter-spacing: -0.04em;
 }
@@ -8418,10 +8472,12 @@ h2, h3, h4, h5 {
   background: rgba(0, 75, 99, 0.1);
   outline: none;
   -webkit-appearance: none;
+  appearance: none;
 }
 
 .aa-slider-container input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
+  appearance: none;
   width: 20px;
   height: 20px;
   border-radius: 50%;

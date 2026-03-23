@@ -74,7 +74,7 @@ const STYLE_MAP = {
 const buildResultsURL = (diag) => {
   if (!diag) return '';
   try {
-    const base = (typeof window !== 'undefined' && window.location.origin) || 'https://edutechlife.co';
+    const base = 'https://edutechlife.co';
     const payload = encodeURIComponent(JSON.stringify({ 
       studentName: diag.studentName, 
       date: diag.date, 
@@ -99,6 +99,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   const [tempName, setTempName] = useState('');
   const [tempMood, setTempMood] = useState('');
   const [error, setError] = useState(null);
+  const [pdfLoading, setPdfLoading] = useState(false);
   const pdfTemplateRef = useRef(null);
 
   useEffect(() => {
@@ -106,12 +107,6 @@ const DiagnosticoVAK = ({ onNavigate }) => {
       setDate(new Date().toLocaleDateString());
     }
   }, [phase]);
-
-  useEffect(() => {
-    if (error) {
-      console.error('Diagnóstico VAK Error:', error);
-    }
-  }, [error]);
 
   const startTest = () => {
     setPhase('calibration');
@@ -170,10 +165,9 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     if (!diagnosis) return;
     
     const el = pdfTemplateRef.current;
-    if (!el) {
-      console.error('PDF template ref not found');
-      return;
-    }
+    if (!el) return;
+    
+    setPdfLoading(true);
     
     const fileName = `Diagnostico_VAK_${(diagnosis.studentName || 'estudiante').replace(/\s+/g, '_')}_${diagnosis.date || date}`;
     const opt = {
@@ -189,13 +183,15 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     } catch (e) {
       console.error('PDF error:', e);
       setError('Error al generar PDF');
+    } finally {
+      setPdfLoading(false);
     }
   };
 
   const renderIntro = () => (
     <div className="text-center p-6">
       <h2 className="text-2xl font-bold" style={{ color: '#004B63' }}>Diagnóstico VAK</h2>
-      <p className="text-[#64748B] mt-2">Una evaluación rápida para identificar tu estilo de aprendizaje.</p>
+      <p className="text-gray-500 mt-2">Una evaluación rápida para identificar tu estilo de aprendizaje.</p>
       <button 
         className="mt-4 px-6 py-2 rounded bg-[#4DA8C4] text-white hover:bg-[#3d8fae] transition-colors"
         onClick={startTest}
@@ -208,7 +204,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   const renderCalibration = () => (
     <div className="p-4">
       <div className="mb-4">
-        <label className="block mb-2 text-sm font-medium">Nombre del estudiante</label>
+        <label className="block mb-2 text-sm font-medium text-gray-700">Nombre del estudiante</label>
         <input 
           className="p-2 rounded w-full border border-gray-300" 
           placeholder="Escribe tu nombre" 
@@ -217,7 +213,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
         />
       </div>
       <div className="mb-4">
-        <label className="block mb-2 text-sm font-medium">¿Cómo te sientes hoy?</label>
+        <label className="block mb-2 text-sm font-medium text-gray-700">¿Cómo te sientes hoy?</label>
         <input 
           className="p-2 rounded w-full border border-gray-300" 
           placeholder="Describe tu ánimo" 
@@ -240,15 +236,15 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     
     return (
       <div className="p-4">
-        <div className="mb-2 text-sm text-[#64748B]">
+        <div className="mb-2 text-sm text-gray-500">
           Pregunta {currentQuestion + 1} de {QUESTIONS.length}
         </div>
-        <div className="text-xl font-semibold text-white mb-4">{question.text}</div>
+        <div className="text-xl font-semibold text-gray-800 mb-4">{question.text}</div>
         <div className="grid grid-cols-1 gap-3">
           {question.options.map((opt, i) => (
             <button 
               key={i} 
-              className="p-3 rounded bg-white/10 text-white hover:bg-white/20 transition-colors text-left"
+              className="p-3 rounded bg-gray-100 hover:bg-gray-200 transition-colors text-left"
               onClick={() => handleAnswer(opt)}
             >
               {String.fromCharCode(65 + i)}. {opt.text}
@@ -262,7 +258,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   const renderResults = () => {
     if (!diagnosis || !diagnosis.styleDetails) {
       return (
-        <div className="p-4 text-white">
+        <div className="p-4 text-gray-600">
           No hay resultados disponibles.
         </div>
       );
@@ -274,45 +270,46 @@ const DiagnosticoVAK = ({ onNavigate }) => {
       <div className="p-4 space-y-4">
         <div className="flex items-center gap-2">
           <Eye className="w-5 h-5" style={{ color: diagnosis.styleDetails.color }} />
-          <span className="text-white font-semibold">Perfil: {diagnosis.styleDetails.name}</span>
-          <span className="text-white/60">({diagnosis.percentage}%)</span>
+          <span className="text-gray-800 font-semibold">Perfil: {diagnosis.styleDetails.name}</span>
+          <span className="text-gray-500">({diagnosis.percentage}%)</span>
         </div>
         
         <div className="grid grid-cols-3 gap-4">
-          <div className="p-3 rounded bg-white/10" style={{ border: '1px solid #4DA8C440' }}>
-            <div className="text-xs text-[#64748B]">Visual</div>
+          <div className="p-3 rounded bg-gray-100">
+            <div className="text-xs text-gray-500">Visual</div>
             <div className="text-2xl font-bold" style={{ color: '#4DA8C4' }}>{diagnosis.counts?.visual || 0}</div>
           </div>
-          <div className="p-3 rounded bg-white/10" style={{ border: '1px solid #66CCCC40' }}>
-            <div className="text-xs text-[#64748B]">Auditivo</div>
+          <div className="p-3 rounded bg-gray-100">
+            <div className="text-xs text-gray-500">Auditivo</div>
             <div className="text-2xl font-bold" style={{ color: '#66CCCC' }}>{diagnosis.counts?.auditivo || 0}</div>
           </div>
-          <div className="p-3 rounded bg-white/10" style={{ border: '1px solid #FF6B9D40' }}>
-            <div className="text-xs text-[#64748B]">Kinestésico</div>
+          <div className="p-3 rounded bg-gray-100">
+            <div className="text-xs text-gray-500">Kinestésico</div>
             <div className="text-2xl font-bold" style={{ color: '#FF6B9D' }}>{diagnosis.counts?.kinestesico || 0}</div>
           </div>
         </div>
         
-        <div className="bg-white/10 p-4 rounded">
+        <div className="bg-gray-100 p-4 rounded">
           <div className="text-sm font-semibold" style={{ color: diagnosis.styleDetails.color }}>Descripción</div>
-          <div className="mt-1 text-white">{diagnosis.styleDetails.description}</div>
+          <div className="mt-1 text-gray-600">{diagnosis.styleDetails.description}</div>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {(diagnosis.styleDetails.strategies || []).map((s, idx) => (
-            <div key={idx} className="p-3 rounded bg-white/10">
-              <div className="text-xs" style={{ color: '#64748B' }}>Estrategia {idx + 1}</div>
-              <div className="mt-1 text-white">{s}</div>
+            <div key={idx} className="p-3 rounded bg-gray-100">
+              <div className="text-xs text-gray-500">Estrategia {idx + 1}</div>
+              <div className="mt-1 text-gray-700">{s}</div>
             </div>
           ))}
         </div>
         
         <button 
-          className="px-4 py-2 rounded bg-[#4DA8C4] text-white hover:bg-[#3d8fae] transition-colors flex items-center gap-2"
+          className="px-4 py-2 rounded bg-[#4DA8C4] text-white hover:bg-[#3d8fae] transition-colors flex items-center gap-2 disabled:opacity-50"
           onClick={exportPDF}
+          disabled={pdfLoading}
         >
           <Download className="w-4 h-4" />
-          Descargar PDF
+          {pdfLoading ? 'Generando...' : 'Descargar PDF'}
         </button>
         
         {qrUrl && (
