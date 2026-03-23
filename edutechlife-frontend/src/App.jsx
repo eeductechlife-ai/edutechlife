@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import Lenis from '@studio-freight/lenis';
+import GlobalCanvas from './components/GlobalCanvas';
 import IALab from './components/IALab';
 import Hero from './components/Hero';
 import Metodo from './components/Metodo';
@@ -82,7 +84,25 @@ const App = () => {
             window.scrollTo(0, 0);
         };
         window.addEventListener('navigate', handleNavigate);
-        return () => window.removeEventListener('navigate', handleNavigate);
+        
+        // Lenis setup
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            smooth: true,
+        });
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+        
+        return () => {
+            window.removeEventListener('navigate', handleNavigate);
+            lenis.destroy();
+        };
     }, []);
 
     const handleBotSend = async () => {
@@ -136,7 +156,8 @@ const App = () => {
     }, []);
 
     return (
-        <div className="min-h-screen flex flex-col bg-[#F8FAFC] text-[#334155]" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+        <div className="min-h-screen flex flex-col bg-transparent text-[#334155]" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+            <GlobalCanvas />
             <CustomCursor />
             
             {/* Loading Screen */}

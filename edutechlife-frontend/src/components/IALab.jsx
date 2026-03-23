@@ -4,6 +4,7 @@ import { callDeepseek } from '../utils/api';
 import { speakTextConversational, iniciarReconocimiento } from '../utils/speech';
 import ValerioAvatar from './ValerioAvatar';
 import html2pdf from 'html2pdf.js';
+import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
 const IALab = ({ onBack }) => {
     const [activeMod, setActiveMod] = useState(1);
@@ -257,9 +258,13 @@ const IALab = ({ onBack }) => {
     const curr = modules.find(m => m.id === activeMod);
 
     return (
-        <div ref={containerRef} className="min-h-screen bg-gradient-to-br from-[#F8FAFC] via-[#FFFFFF] to-[#E2E8F0]">
+        <div ref={containerRef} className="min-h-screen bg-[#F8FAFC] relative overflow-hidden font-open-sans">
+            {/* Ambient Background Glows */}
+            <div className="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#66CCCC]/20 rounded-full blur-[120px] pointer-events-none"></div>
+            <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[#4DA8C4]/20 rounded-full blur-[120px] pointer-events-none"></div>
+
             {/* Header */}
-            <div className="bg-white border-b border-[#E2E8F0] shadow-sm">
+            <div className="bg-white/70 backdrop-blur-xl border-b border-white/80 shadow-[0_4px_30px_rgba(0,0,0,0.03)] sticky top-0 z-50">
                 <div className="max-w-7xl mx-auto flex items-center justify-between py-4 px-6">
                     <div className="flex items-center gap-4">
                         <button 
@@ -292,10 +297,10 @@ const IALab = ({ onBack }) => {
             </div>
 
             <div className="max-w-7xl mx-auto px-6 py-8">
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 relative z-10">
                     {/* Sidebar - Module List */}
                     <div className="lg:col-span-1">
-                        <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm overflow-hidden">
+                        <div className="bg-white/60 backdrop-blur-2xl border border-white/60 shadow-[0_8px_30px_rgba(0,75,99,0.06)] rounded-[2rem] overflow-hidden">
                             {/* Progress */}
                             <div className="p-6 border-b border-[#E2E8F0]">
                                 <div className="flex items-center justify-between mb-3">
@@ -357,7 +362,7 @@ const IALab = ({ onBack }) => {
                     {/* Main Content */}
                     <div className="lg:col-span-3 space-y-6">
                         {/* Module Header */}
-                        <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm overflow-hidden">
+                        <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgba(0,75,99,0.06)] rounded-[2rem] overflow-hidden">
                             <div className="bg-gradient-to-r from-[#004B63] to-[#4DA8C4] p-6">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-4">
@@ -409,7 +414,7 @@ const IALab = ({ onBack }) => {
                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                 <div className="lg:col-span-2 space-y-6">
                                     {/* Prompt Synthesizer */}
-                                    <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm overflow-hidden">
+                                    <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgba(0,75,99,0.06)] rounded-[2rem] overflow-hidden">
                                         <div className="bg-gradient-to-r from-[#004B63] to-[#4DA8C4] px-6 py-4">
                                             <div className="flex items-center gap-3">
                                                 <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
@@ -470,7 +475,8 @@ const IALab = ({ onBack }) => {
                                     </div>
 
                                     {/* Valerio Coach */}
-                                    <div className="bg-gradient-to-br from-[#004B63] to-[#0A3550] rounded-2xl overflow-hidden">
+                                    <div className="bg-gradient-to-br from-[#004B63] to-[#0A3550] border border-white/10 shadow-[0_8px_32px_rgba(0,75,99,0.2)] rounded-[2rem] overflow-hidden relative">
+                                        <div className="absolute top-0 right-0 w-64 h-64 bg-[#4DA8C4] rounded-full blur-[100px] opacity-20 pointer-events-none"></div>
                                         <div className="p-6">
                                             <div className="flex items-center gap-4 mb-6">
                                                 <ValerioAvatar state={avatarState} size={64} />
@@ -522,7 +528,8 @@ const IALab = ({ onBack }) => {
 
                                 {/* Challenge Sidebar */}
                                 <div className="space-y-6">
-                                    <div className="bg-gradient-to-br from-[#004B63] to-[#0A3550] rounded-2xl p-6 text-white">
+                                    <div className="bg-gradient-to-br from-[#004B63] to-[#0A3550] rounded-[2rem] p-8 text-white border border-white/10 shadow-[0_8px_32px_rgba(0,75,99,0.2)] relative overflow-hidden">
+                                        <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#FFD166] rounded-full blur-[120px] opacity-10 pointer-events-none"></div>
                                         <div className="flex items-center gap-3 mb-4">
                                             <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
                                                 <i className="fa-solid fa-bolt text-[#FFD166]" />
@@ -537,23 +544,23 @@ const IALab = ({ onBack }) => {
                                         </button>
                                     </div>
 
-                                    <div className="grid grid-cols-2 gap-3">
-                                        <div className="bg-white p-4 rounded-xl border border-[#E2E8F0] text-center">
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="bg-white/60 backdrop-blur-xl p-5 rounded-2xl border border-white/80 text-center shadow-sm">
                                             <i className="fa-solid fa-clock text-[#4DA8C4] text-lg mb-2" />
                                             <p className="font-bold text-[#004B63]">{curr.duration}</p>
                                             <p className="text-xs text-[#64748B]">Duración</p>
                                         </div>
-                                        <div className="bg-white p-4 rounded-xl border border-[#E2E8F0] text-center">
+                                        <div className="bg-white/60 backdrop-blur-xl p-5 rounded-2xl border border-white/80 text-center shadow-sm">
                                             <i className="fa-solid fa-signal text-[#66CCCC] text-lg mb-2" />
                                             <p className="font-bold text-[#004B63]">{curr.level}</p>
                                             <p className="text-xs text-[#64748B]">Nivel</p>
                                         </div>
-                                        <div className="bg-white p-4 rounded-xl border border-[#E2E8F0] text-center">
+                                        <div className="bg-white/60 backdrop-blur-xl p-5 rounded-2xl border border-white/80 text-center shadow-sm">
                                             <i className="fa-solid fa-play text-[#FFD166] text-lg mb-2" />
                                             <p className="font-bold text-[#004B63]">{curr.videos}</p>
                                             <p className="text-xs text-[#64748B]">Videos</p>
                                         </div>
-                                        <div className="bg-white p-4 rounded-xl border border-[#E2E8F0] text-center">
+                                        <div className="bg-white/60 backdrop-blur-xl p-5 rounded-2xl border border-white/80 text-center shadow-sm">
                                             <i className="fa-solid fa-briefcase text-[#FF8E53] text-lg mb-2" />
                                             <p className="font-bold text-[#004B63]">{curr.projects}</p>
                                             <p className="text-xs text-[#64748B]">Proyectos</p>
@@ -565,7 +572,7 @@ const IALab = ({ onBack }) => {
 
                         {/* Evaluation Tab */}
                         {activeTab === 'eval' && (
-                            <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm overflow-hidden">
+                            <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgba(0,75,99,0.06)] rounded-[2rem] overflow-hidden">
                                 <div className="p-6 border-b border-[#E2E8F0]">
                                     <div className="flex items-center gap-4">
                                         <div className="w-14 h-14 bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] rounded-xl flex items-center justify-center">
@@ -623,10 +630,26 @@ const IALab = ({ onBack }) => {
                                     </div>
                                 ) : (
                                     <div className="p-12 text-center">
-                                        <div className={`w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-6 ${evalScore >= 3 ? 'bg-green-500' : 'bg-red-500'}`}>
-                                            <i className={`fa-solid ${evalScore >= 3 ? 'fa-check' : 'fa-times'} text-3xl text-white`} />
+                                        <div className="w-48 h-48 mx-auto mb-8 relative">
+                                            <ResponsiveContainer width="100%" height="100%">
+                                                <PieChart>
+                                                    <Pie
+                                                        data={[{value: evalScore}, {value: 5 - evalScore}]}
+                                                        cx="50%" cy="50%" innerRadius={70} outerRadius={90}
+                                                        startAngle={90} endAngle={-270}
+                                                        dataKey="value" stroke="none"
+                                                    >
+                                                        <Cell fill={evalScore >= 3 ? '#4DA8C4' : '#FF6B9D'} />
+                                                        <Cell fill="#E2E8F0" />
+                                                    </Pie>
+                                                </PieChart>
+                                            </ResponsiveContainer>
+                                            <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                                <span className="text-4xl font-black text-[#004B63] font-montserrat tracking-tighter">{evalScore}</span>
+                                                <span className="text-xs text-[#64748B] uppercase tracking-widest font-bold mt-1">de 5</span>
+                                            </div>
                                         </div>
-                                        <h3 className="text-2xl font-bold text-[#004B63] mb-2">{evalScore >= 3 ? '¡Felicidades!' : 'Intenta de nuevo'}</h3>
+                                        <h3 className="text-3xl font-black text-[#004B63] mb-3 font-montserrat">{evalScore >= 3 ? '¡Certificación Aprobada!' : 'Evaluación no superada'}</h3>
                                         <p className="text-[#64748B] mb-6">Obtuviste {evalScore} de 5 respuestas correctas</p>
                                         {evalScore >= 3 ? (
                                             <button
@@ -650,7 +673,8 @@ const IALab = ({ onBack }) => {
 
                         {/* Certificate Tab */}
                         {activeTab === 'cert' && (
-                            <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm p-12 text-center">
+                            <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgba(0,75,99,0.06)] rounded-[2rem] p-16 text-center relative overflow-hidden">
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#FFD166] rounded-full blur-[150px] opacity-20 pointer-events-none"></div>
                                 <div className="w-24 h-24 mx-auto bg-gradient-to-br from-[#FFD166] to-[#FF8E53] rounded-full flex items-center justify-center mb-6">
                                     <i className="fa-solid fa-trophy text-4xl text-white" />
                                 </div>

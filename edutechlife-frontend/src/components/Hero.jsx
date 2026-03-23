@@ -1,103 +1,8 @@
-import { memo, useEffect, useState, useRef } from 'react';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { memo, useEffect, useState, useRef, Suspense } from 'react';
 import gsap from 'gsap';
-
-// ==========================================
-// Magnetic Button Component
-// ==========================================
-const MagneticButton = ({ children, className, onClick }) => {
-    const buttonRef = useRef(null);
-    const [position, setPosition] = useState({ x: 0, y: 0 });
-
-    const handleMouseMove = (e) => {
-        const { clientX, clientY } = e;
-        const { left, top, width, height } = buttonRef.current.getBoundingClientRect();
-        // Attract cursor subtly up to 20px
-        const x = (clientX - (left + width / 2)) * 0.25; 
-        const y = (clientY - (top + height / 2)) * 0.25;
-        setPosition({ x, y });
-    };
-
-    const handleMouseLeave = () => {
-        setPosition({ x: 0, y: 0 });
-    };
-
-    return (
-        <motion.button
-            ref={buttonRef}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-            animate={{ x: position.x, y: position.y }}
-            transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
-            className={className}
-            onClick={onClick}
-        >
-            {children}
-        </motion.button>
-    );
-};
-
-// ==========================================
-// 3D Parallax Glass Orb Component
-// ==========================================
-const GlassOrb = () => {
-    const x = useMotionValue(0);
-    const y = useMotionValue(0);
-    const mouseXSpring = useSpring(x, { stiffness: 100, damping: 30 });
-    const mouseYSpring = useSpring(y, { stiffness: 100, damping: 30 });
-    
-    // Reverse movement for parallax feeling
-    const translateX = useTransform(mouseXSpring, [-1, 1], [30, -30]);
-    const translateY = useTransform(mouseYSpring, [-1, 1], [30, -30]);
-
-    useEffect(() => {
-        const handleMouseMove = (e) => {
-            const width = window.innerWidth;
-            const height = window.innerHeight;
-            x.set(e.clientX / width - 0.5);
-            y.set(e.clientY / height - 0.5);
-        };
-        window.addEventListener('mousemove', handleMouseMove);
-        return () => window.removeEventListener('mousemove', handleMouseMove);
-    }, [x, y]);
-
-    return (
-        <div className="relative w-full h-[500px] flex items-center justify-center pointer-events-none perspective-1000">
-            {/* Primary Orb Layer */}
-            <motion.div 
-                style={{ translateX, translateY }}
-                className="absolute w-80 h-80 rounded-full border border-white/60 bg-gradient-to-br from-white/80 to-[#B2D8E5]/30 backdrop-blur-xl shadow-neuro flex items-center justify-center"
-                animate={{ y: [-15, 15, -15] }}
-                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            >
-                {/* Inner Core */}
-                <div className="w-40 h-40 rounded-full bg-gradient-to-tr from-[#66CCCC]/40 to-[#4DA8C4]/40 blur-lg animate-pulse" />
-                
-                {/* Surface Reflection */}
-                <div className="absolute top-10 left-10 w-20 h-20 bg-white/60 rounded-full blur-md opacity-80" />
-            </motion.div>
-
-            {/* Orbiting Satellite Data Nodes */}
-            <motion.div 
-                style={{ translateX: translateY, translateY: translateX }}
-                className="absolute w-20 h-20 rounded-2xl border border-white/80 bg-white/40 backdrop-blur-lg shadow-neuro-hover right-[15%] top-[20%] flex items-center justify-center transform rotate-12"
-                animate={{ y: [10, -10, 10], rotate: [12, -5, 12] }}
-                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            >
-                <i className="fa-solid fa-atom text-2xl text-[#004B63]" />
-            </motion.div>
-
-            <motion.div 
-                style={{ translateX: useTransform(mouseXSpring, [-1, 1], [40, -40]), translateY: useTransform(mouseYSpring, [-1, 1], [-40, 40]) }}
-                className="absolute w-16 h-16 rounded-full border border-[#4DA8C4]/30 bg-[#4DA8C4]/10 backdrop-blur-md shadow-sm left-[20%] bottom-[25%] flex items-center justify-center"
-                animate={{ y: [-5, 15, -5] }}
-                transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-            >
-                <i className="fa-solid fa-brain text-xl text-[#004B63]" />
-            </motion.div>
-        </div>
-    );
-};
+import MagneticButton from './MagneticButton';
+import NeuralOracle from './3D/NeuralOracle';
+import SplitTextReveal from './SplitTextReveal';
 
 // ==========================================
 // Animated Counter for Stats
@@ -176,11 +81,8 @@ const Hero = memo(({ onNavigate }) => {
                             </span>
                         </div>
 
-                        <h1 className="gsap-reveal text-6xl md:text-7xl lg:text-8xl font-black font-montserrat tracking-[-0.03em] leading-[1.05] mb-6 text-[#004B63]">
-                            Educación que se 
-                            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC]">
-                                Adapta a ti.
-                            </span>
+                        <h1 className="text-display display-1 mb-6">
+                            <SplitTextReveal text="Liderando la Educación del Futuro" />
                         </h1>
 
                         <p className="gsap-reveal text-xl md:text-2xl text-[#64748B] mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed font-light">
@@ -233,9 +135,11 @@ const Hero = memo(({ onNavigate }) => {
                         </div>
                     </div>
 
-                    {/* Right Column - 3D Interactive Orb */}
+                    {/* Right Column - 3D Interactive Oracle */}
                     <div className="gsap-reveal pt-10 lg:pt-0">
-                        <GlassOrb />
+                        <Suspense fallback={<div className="w-full h-[500px] flex items-center justify-center animate-pulse-glow" />}>
+                            <NeuralOracle />
+                        </Suspense>
                     </div>
                 </div>
             </div>

@@ -42,10 +42,10 @@ const TiltCard = ({ children, isCompleted, isHovered, onMouseEnter, onMouseLeave
         >
             <motion.div 
                 style={{ rotateX, rotateY }}
-                className={`relative rounded-2xl border overflow-hidden transition-colors duration-500 h-full ${
+                className={`relative rounded-2xl overflow-hidden transition-colors duration-500 h-full border-beam-card ${
                     isCompleted
-                      ? 'border-[#66CCCC]/50 bg-gradient-to-br from-[#66CCCC]/10 to-[#4DA8C4]/5 shadow-[0_0_20px_rgba(102,204,204,0.2)]'
-                      : 'border-white/10 hover:border-[#4DA8C4]/50 hover:bg-[#0A1628]/60 bg-[#0A1628]/40 backdrop-blur-md'
+                      ? 'bg-gradient-to-br from-[#66CCCC]/10 to-[#4DA8C4]/5 shadow-[0_0_20px_rgba(102,204,204,0.2)]'
+                      : 'hover:bg-[#0A1628]/60 bg-[#0A1628]/40 backdrop-blur-md'
                   } ${isHovered ? 'shadow-[0_20px_40px_rgba(0,0,0,0.5)] z-10' : ''}`}
             >
                 {/* 3D Pop container */}

@@ -213,7 +213,7 @@ Plataforma de Neuro-Educación Premium
                         </div>
 
                         {/* Valeria Status */}
-                        <div className="bg-white p-4 rounded-2xl border border-[#E2E8F0] shadow-sm">
+                        <div className="bg-white/60 backdrop-blur-xl p-6 rounded-[2rem] border border-white/80 shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-3">
                                     <div className="w-3 h-3 rounded-full bg-[#66CCCC] animate-pulse" />
@@ -281,7 +281,7 @@ Plataforma de Neuro-Educación Premium
                         </div>
 
                         {/* Missions Section */}
-                        <div className="bg-white p-6 rounded-2xl border border-[#E2E8F0] shadow-sm">
+                        <div className="bg-white/60 backdrop-blur-2xl p-8 rounded-[2rem] border border-white/80 shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
                             <div className="flex items-center justify-between mb-6">
                                 <h3 className="text-xl font-bold text-[#004B63] font-montserrat">Misiones del Día</h3>
                                 <button 
@@ -307,7 +307,7 @@ Plataforma de Neuro-Educación Premium
 
             case 'misiones':
                 return (
-                    <div className="bg-white p-6 rounded-2xl border border-[#E2E8F0] shadow-sm">
+                    <div className="bg-white/60 backdrop-blur-2xl p-8 rounded-[2rem] border border-white/80 shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
                         <div className="flex items-center justify-between mb-6">
                             <h3 className="text-xl font-bold text-[#004B63] font-montserrat">Todas las Misiones</h3>
                             <span className="text-sm text-[#64748B]">{missions.filter(m => m.completed).length}/{missions.length} completadas</span>
@@ -327,7 +327,7 @@ Plataforma de Neuro-Educación Premium
 
             case 'materias':
                 return (
-                    <div className="bg-white p-6 rounded-2xl border border-[#E2E8F0] shadow-sm">
+                    <div className="bg-white/60 backdrop-blur-2xl p-8 rounded-[2rem] border border-white/80 shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
                         <div className="flex items-center justify-between mb-6">
                             <h3 className="text-xl font-bold text-[#004B63] font-montserrat">Tus Materias</h3>
                             <span className="text-sm text-[#64748B]">{subjects.filter(s => !s.locked).length} activas</span>
@@ -342,7 +342,7 @@ Plataforma de Neuro-Educación Premium
             case 'lab-ia':
                 return (
                     <div className="space-y-6">
-                        <div className="bg-white p-6 rounded-2xl border border-[#E2E8F0] shadow-sm">
+                        <div className="bg-white/60 backdrop-blur-2xl p-8 rounded-[2rem] border border-white/80 shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
                             <h3 className="text-xl font-bold text-[#004B63] font-montserrat mb-4">Laboratorio de IA</h3>
                             <p className="text-[#64748B] mb-6">
                                 Explora herramientas avanzadas de inteligencia artificial para potenciar tu aprendizaje.
@@ -386,11 +386,11 @@ Plataforma de Neuro-Educación Premium
             case 'progreso':
                 return (
                     <div className="space-y-6">
-                        <div className="bg-white p-6 rounded-2xl border border-[#E2E8F0] shadow-sm">
+                        <div className="bg-white/60 backdrop-blur-2xl p-8 rounded-[2rem] border border-white/80 shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
                             <XPProgressBar currentXP={userXP} level={userLevel} streak={streakDays} />
                         </div>
                         
-                        <div className="bg-white p-6 rounded-2xl border border-[#E2E8F0] shadow-sm">
+                        <div className="bg-white/60 backdrop-blur-2xl p-8 rounded-[2rem] border border-white/80 shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
                             <h3 className="text-xl font-bold text-[#004B63] font-montserrat mb-6">Estadísticas de Aprendizaje</h3>
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                                 <div className="text-center p-6 rounded-xl bg-gradient-to-br from-[#4DA8C4]/10 to-transparent border border-[#E2E8F0]">
@@ -436,8 +436,12 @@ Plataforma de Neuro-Educación Premium
     };
 
     return (
-        <div ref={dashboardRef} className="relative min-h-screen bg-gradient-to-br from-[#F8FAFC] via-[#FFFFFF] to-[#E2E8F0] overflow-hidden">
-            <div className="flex h-screen">
+        <div ref={dashboardRef} className="relative min-h-screen bg-[#F8FAFC] overflow-hidden">
+            {/* Ambient Background Glows */}
+            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#66CCCC]/20 rounded-full blur-[150px] pointer-events-none z-0"></div>
+            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[#4DA8C4]/20 rounded-full blur-[150px] pointer-events-none z-0"></div>
+
+            <div className="flex h-screen relative z-10">
                 <div className="w-80">
                     <SidebarNavigation 
                         activeTab={activeTab}

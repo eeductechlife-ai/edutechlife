@@ -1,9 +1,10 @@
-import { memo, useState, useEffect, useRef } from 'react';
-import EcosystemTransform from './EcosystemTransform';
+import { memo, useState, useEffect, useRef, Suspense } from 'react';
 import EcosystemTransform from './EcosystemTransform';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Canvas } from '@react-three/fiber';
+import { CrystalDNA, NeuralGraph, LightConstellation } from './3D/MicroModels';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -137,6 +138,7 @@ const PilarModal = ({ pilar, isOpen, onClose }) => {
 // 3D Tilt Card using Framer Motion
 // ==========================================
 const TiltCard = ({ children, pilar, onClick }) => {
+    const [isHovered, setIsHovered] = useState(false);
     const x = useMotionValue(0);
     const y = useMotionValue(0);
     const mouseXSpring = useSpring(x, { stiffness: 400, damping: 25 });
@@ -154,25 +156,26 @@ const TiltCard = ({ children, pilar, onClick }) => {
         y.set(mouseY / height - 0.5);
     };
     
-    const handleMouseLeave = () => { x.set(0); y.set(0); };
+    const handleMouseLeave = () => { x.set(0); y.set(0); setIsHovered(false); };
 
     return (
         <motion.div
             style={{ rotateX, rotateY, transformStyle: "preserve-3d", perspective: 1200 }}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
+            onMouseEnter={() => setIsHovered(true)}
             onClick={onClick}
             className="gsap-eco-reveal h-full rounded-3xl"
         >
             <motion.div 
-                className="group relative h-full rounded-3xl p-8 text-left cursor-pointer transition-all duration-300 bg-white border border-[#E2E8F0] hover:border-[#4DA8C4]/40 hover:shadow-neuro-hover"
+                className="group relative h-full rounded-3xl p-8 text-left cursor-pointer transition-all duration-300 bg-white border-beam-card hover:shadow-neuro-hover"
             >
                 {/* 3D Elevated Content */}
                 <div 
                     style={{ transform: "translateZ(30px)", transition: "transform 0.3s ease-out" }} 
                     className="relative z-10 w-full h-full flex flex-col group-hover:translate-z-[40px]"
                 >
-                    {children}
+                    {typeof children === 'function' ? children(isHovered) : children}
                 </div>
             </motion.div>
         </motion.div>
@@ -254,47 +257,58 @@ const Ecosystem = memo(({ onNavigate }) => {
                     </p>
                 </div>
 
-                {/* 3 Pilares Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {pilares.map((pilar) => (
                         <TiltCard key={pilar.id} pilar={pilar} onClick={() => setSelectedPilar(pilar)}>
-                            {/* Icon & Badge */}
-                            <div className="mb-6">
-                                <span className="inline-block text-[10px] font-bold uppercase tracking-widest px-3 py-1 bg-[#F8FAFC] border border-[#E2E8F0] text-[#004B63] rounded-full mb-5">
-                                    {pilar.subtitle}
-                                </span>
-                                <div className="w-16 h-16 rounded-2xl bg-white border border-[#E2E8F0] shadow-sm flex items-center justify-center group-hover:border-[#4DA8C4]/50 group-hover:scale-105 transition-all">
-                                    <i className={`fa-solid ${pilar.icon} text-2xl text-[#4DA8C4]`} />
-                                </div>
-                            </div>
-
-                            {/* Text */}
-                            <h3 className="text-2xl font-black mb-3 text-[#004B63] font-montserrat tracking-tight">
-                                {pilar.title}
-                            </h3>
-                            <p className="text-sm text-[#64748B] font-open-sans leading-relaxed mb-8 flex-grow">
-                                {pilar.desc}
-                            </p>
-
-                            {/* Stats */}
-                            <div className="flex gap-4 mb-6 border-t border-[#E2E8F0] pt-6">
-                                {pilar.stats.map((stat, sIndex) => (
-                                    <div key={sIndex}>
-                                        <div className="text-2xl font-black text-[#004B63] font-mono tracking-tighter">
-                                            {stat.num}
-                                        </div>
-                                        <div className="text-[10px] uppercase font-bold tracking-widest text-[#64748B]">
-                                            {stat.label}
-                                        </div>
+                            {(isHovered) => (
+                                <>
+                                {/* 3D Canvas MicroModel Header */}
+                                <div className="mb-6 relative h-40 w-full rounded-2xl bg-[#F8FAFC] shadow-inner flex items-center justify-center overflow-hidden border border-[#E2E8F0] group-hover:border-[#4DA8C4]/50 transition-colors">
+                                    <span className="absolute top-4 left-4 z-20 text-[10px] font-bold uppercase tracking-widest px-3 py-1 bg-white border border-[#E2E8F0] text-[#004B63] rounded-full shadow-sm">
+                                        {pilar.subtitle}
+                                    </span>
+                                    <div className="absolute inset-0 z-10">
+                                        <Suspense fallback={<div className="w-full h-full flex items-center justify-center animate-pulse"><i className={`fa-solid ${pilar.icon} text-3xl text-[#4DA8C4]/30`} /></div>}>
+                                            <Canvas dpr={[1, 2]} camera={{ position: [0, 0, 3], fov: 45 }}>
+                                                <ambientLight intensity={0.6} />
+                                                <pointLight position={[10, 10, 10]} intensity={1} />
+                                                {pilar.id === 'neuroentorno' && <CrystalDNA isHovered={isHovered} />}
+                                                {pilar.id === 'ialab' && <NeuralGraph isHovered={isHovered} />}
+                                                {pilar.id === 'consultoria' && <LightConstellation isHovered={isHovered} />}
+                                            </Canvas>
+                                        </Suspense>
                                     </div>
-                                ))}
-                            </div>
+                                </div>
 
-                            {/* CTA Link */}
-                            <div className="mt-auto flex items-center gap-2 font-bold text-[#4DA8C4] group-hover:gap-4 transition-all uppercase tracking-widest text-xs">
-                                <span>Explorar</span>
-                                <i className="fa-solid fa-arrow-right" />
-                            </div>
+                                {/* Text */}
+                                <h3 className="text-2xl font-black mb-3 text-[#004B63] font-montserrat tracking-tight">
+                                    {pilar.title}
+                                </h3>
+                                <p className="text-sm text-[#64748B] font-open-sans leading-relaxed mb-8 flex-grow">
+                                    {pilar.desc}
+                                </p>
+
+                                {/* Stats */}
+                                <div className="flex gap-4 mb-6 border-t border-[#E2E8F0] pt-6">
+                                    {pilar.stats.map((stat, sIndex) => (
+                                        <div key={sIndex}>
+                                            <div className="text-2xl font-black text-[#004B63] font-mono tracking-tighter">
+                                                {stat.num}
+                                            </div>
+                                            <div className="text-[10px] uppercase font-bold tracking-widest text-[#64748B]">
+                                                {stat.label}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/* CTA Link */}
+                                <div className="mt-auto flex items-center gap-2 font-bold text-[#4DA8C4] group-hover:gap-4 transition-all uppercase tracking-widest text-xs">
+                                    <span>Explorar</span>
+                                    <i className="fa-solid fa-arrow-right" />
+                                </div>
+                                </>
+                            )}
                         </TiltCard>
                     ))}
                 </div>
