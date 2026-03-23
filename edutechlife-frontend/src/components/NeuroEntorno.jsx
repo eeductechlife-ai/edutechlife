@@ -57,7 +57,7 @@ const testimoniosVAK = [
     {
         nombre: 'Carlos Andrés Ríos',
         rol: 'Estudiante - Medellín',
-        texto: 'El test VAK me reveló que soy kinestésico. Nunca lo había considerado, pero ahora estudio de forma completamente diferente y mis calificaciones subieron notablemente.',
+        texto: 'El Diagnóstico VAK me reveló que soy kinestésico. Nunca lo había considerado, pero ahora estudio de forma completamente diferente y mis calificaciones subieron notablemente.',
         img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100',
         perfil: 'Kinestésico',
         resultado: '+2 puntos GPA'
@@ -110,7 +110,7 @@ Eres Valerio, mentor educativo experto en neuroeducación y metodologías VAK de
     };
 
     const features = [
-        { icon: 'fa-brain', title: 'Test VAK Automatizado', desc: '10 preguntas científico-pedagógicas que determinan tu perfil de aprendizaje' },
+        { icon: 'fa-brain', title: 'Diagnóstico VAK Automatizado', desc: '10 preguntas científico-pedagógicas que determinan tu perfil de aprendizaje' },
         { icon: 'fa-user-check', title: 'Perfil Personalizado', desc: 'Análisis profundo con porcentajes de cada estilo de aprendizaje' },
         { icon: 'fa-book-open', title: 'Contenido Adaptado', desc: 'Recursos educativos diseñados para tu perfil específico' },
         { icon: 'fa-chart-line', title: 'Seguimiento Neuro', desc: 'Métricas de progreso basadas en indicadores neurocognitivos' },
@@ -137,7 +137,7 @@ Eres Valerio, mentor educativo experto en neuroeducación y metodologías VAK de
                     </h1>
                     <p className="pillar-subtitle" style={{ color: 'rgba(255,255,255,0.8)' }}>
                         IA que analiza procesos psicológicos y académicos en tiempo real. 
-                        Completa el test VAK y recibe un plan de estudio personalizado.
+                        Completa el Diagnóstico VAK y recibe un plan de estudio personalizado.
                     </p>
                     <div className="pillar-stats">
                         <div className="pillar-stat">
@@ -177,7 +177,7 @@ Eres Valerio, mentor educativo experto en neuroeducación y metodologías VAK de
                 </button>
                 <button className={`tab-btn ${activeTab === 'test' ? 'active' : ''}`} onClick={() => { setActiveTab('test'); setShowDiagnostico(true); }}>
                     <i className="fa-solid fa-clipboard-check" />
-                    Test VAK
+                    Diagnóstico VAK
                 </button>
                 <button className={`tab-btn ${activeTab === 'results' ? 'active' : ''}`} onClick={() => setActiveTab('results')} disabled={!testResult}>
                     <i className="fa-solid fa-chart-pie" />
@@ -222,7 +222,7 @@ Eres Valerio, mentor educativo experto en neuroeducación y metodologías VAK de
                                 className="px-8 py-4 rounded-full font-montserrat font-bold text-white"
                                 style={{ background: 'linear-gradient(135deg, #4DA8C4, #66CCCC)' }}
                             >
-                                Comenzar Test VAK
+                                Comenzar Diagnóstico VAK
                                 <i className="fa-solid fa-arrow-right ml-2" />
                             </button>
                         </div>
@@ -342,7 +342,7 @@ Eres Valerio, mentor educativo experto en neuroeducación y metodologías VAK de
                                 className="cta-testimonials"
                             >
                                 <i className="fa-solid fa-rocket" />
-                                Realizar Test VAK
+                                Realizar Diagnóstico VAK
                             </button>
                         </div>
                     </div>

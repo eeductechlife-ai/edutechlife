@@ -43,7 +43,7 @@ const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
         }
 
         setMissions([
-            { id: 1, title: 'Completa tu primer VAK Test', description: 'Descubre tu estilo de aprendizaje preferido', type: 'quiz', difficulty: 'easy', duration: 15, xpReward: 100, progress: 100, completed: true, locked: false, featured: true, collaborative: false, skills: ['Auto-conocimiento', 'Metacognición'], badgeReward: 'Explorador VAK', streakBonus: 10, prerequisites: [] },
+            { id: 1, title: 'Completa tu Diagnóstico VAK', description: 'Descubre tu estilo de aprendizaje preferido', type: 'quiz', difficulty: 'easy', duration: 15, xpReward: 100, progress: 100, completed: true, locked: false, featured: true, collaborative: false, skills: ['Auto-conocimiento', 'Metacognición'], badgeReward: 'Explorador VAK', streakBonus: 10, prerequisites: [] },
             { id: 2, title: 'Sube tu primer documento', description: 'Analiza un documento con Valeria IA', type: 'project', difficulty: 'medium', duration: 30, xpReward: 150, progress: 60, completed: false, locked: false, featured: false, collaborative: true, skills: ['Análisis de texto', 'IA aplicada'], badgeReward: 'Analista Digital', streakBonus: 15, prerequisites: [] },
             { id: 3, title: 'Módulo de Prompt Engineering', description: 'Domina la comunicación con IA', type: 'challenge', difficulty: 'hard', duration: 45, xpReward: 200, progress: 0, completed: false, locked: true, featured: true, collaborative: false, skills: ['Prompt engineering', 'Comunicación IA'], badgeReward: 'Maestro de Prompts', streakBonus: 20, prerequisites: [], requiredLevel: 5 },
             { id: 4, title: 'Proyecto colaborativo de ciencias', description: 'Trabaja en equipo para resolver problemas', type: 'collaboration', difficulty: 'medium', duration: 60, xpReward: 180, progress: 30, completed: false, locked: false, featured: false, collaborative: true, skills: ['Trabajo en equipo', 'Método científico'], badgeReward: 'Científico Colaborativo', streakBonus: 25, prerequisites: [] },
@@ -230,7 +230,7 @@ Plataforma de Neuro-Educación Premium
                                         onClick={() => onNavigate('vak')}
                                         className="px-4 py-2 bg-[#66CCCC]/10 text-[#004B63] rounded-lg text-sm font-semibold hover:bg-[#66CCCC]/20 transition-all"
                                     >
-                                        <Brain className="w-4 h-4 inline mr-1" />VAK Test
+                                        <Brain className="w-4 h-4 inline mr-1" />Diagnóstico VAK
                                     </button>
                                 </div>
                             </div>
@@ -365,7 +365,7 @@ Plataforma de Neuro-Educación Premium
                                     <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#66CCCC] to-[#4DA8C4] flex items-center justify-center mb-4 shadow-lg">
                                         <span className="text-2xl">🧠</span>
                                     </div>
-                                    <h4 className="font-bold text-[#004B63] font-montserrat mb-2">VAK Test</h4>
+                                    <h4 className="font-bold text-[#004B63] font-montserrat mb-2">Diagnóstico VAK</h4>
                                     <p className="text-sm text-[#64748B]">Descubre tu estilo de aprendizaje</p>
                                 </button>
                                 <button 

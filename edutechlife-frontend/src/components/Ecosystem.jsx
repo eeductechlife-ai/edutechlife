@@ -400,7 +400,7 @@ const Ecosystem = memo(({ onNavigate }) => {
                                     <i className="fa-solid fa-brain text-lg text-white" />
                                 </div>
                                 <div>
-                                    <h3 className="text-base font-bold text-[#004B63]">Test VAK</h3>
+                                    <h3 className="text-base font-bold text-[#004B63]">Diagnóstico VAK</h3>
                                     <p className="text-[#64748B] text-xs">Gratis</p>
                                 </div>
                             </div>

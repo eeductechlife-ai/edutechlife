@@ -53,7 +53,7 @@ export default function Footer() {
               {[
                 { label: 'IA Lab con Valerio', view: 'ialab' },
                 { label: 'SmartBoard', view: 'neuroentorno' },
-                { label: 'Test VAK', view: 'neuroentorno' },
+                { label: 'Diagnóstico VAK', view: 'vak' },
                 { label: 'ROI Calculator', view: 'consultoria' },
                 { label: 'Automation Architect', view: 'automation' },
               ].map((item, i) => (

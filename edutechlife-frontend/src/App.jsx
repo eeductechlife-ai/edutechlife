@@ -156,7 +156,7 @@ const App = () => {
                     <SmartBoardDashboard onNavigate={handleNavigate} onLogout={handleSmartboardLogout} />
                 )}
                 
-                {/* VAK Test - Fuera del SmartBoard */}
+                {/* Diagnóstico VAK - Fuera del SmartBoard */}
                 {view === 'vak' && <DiagnosticoVAK onNavigate={handleNavigate} />}
                 
                 {/* Admin Dashboard - Protected */}

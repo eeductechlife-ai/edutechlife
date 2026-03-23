@@ -32,7 +32,7 @@ const FinalCTA = memo(({ onNavigate }) => {
                                     <i className="fa-solid fa-brain text-2xl text-white" />
                                 </div>
                                 <div>
-                                    <h3 className="text-xl font-bold text-white">Test VAK Gratis</h3>
+                                    <h3 className="text-xl font-bold text-white">Diagnóstico VAK Gratis</h3>
                                     <p className="text-white/70 text-sm">Diagnóstico en 5 minutos</p>
                                 </div>
                             </div>

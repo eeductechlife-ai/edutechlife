@@ -8,7 +8,7 @@ const plans = [
         period: 'mes',
         description: 'Para individuos que quieren transformar su aprendizaje personal.',
         features: [
-            'Test VAK completo',
+            'Diagnóstico VAK completo',
             'Análisis de perfil de aprendizaje',
             'Plan de estudio personalizado',
             'Acceso a contenido STEAM',
@@ -70,8 +70,8 @@ const plans = [
 
 const faqs = [
     {
-        question: '¿Cómo funciona el test VAK?',
-        answer: 'El test VAK evalúa tus preferencias de aprendizaje en tres canales: Visual (imágenes y gráficos), Auditivo (sonidos y verbalizaciones) y Kinestésico (experiencias prácticas). Completarlo toma aproximadamente 15 minutos y te proporciona un perfil detallado con recomendaciones personalizadas.',
+        question:             '¿Cómo funciona el Diagnóstico VAK?',
+            answer: 'El Diagnóstico VAK evalúa tus preferencias de aprendizaje en tres canales: Visual (imágenes y gráficos), Auditivo (sonidos y verbalizaciones) y Kinestésico (experiencias prácticas). Completarlo toma aproximadamente 15 minutos y te proporciona un perfil detallado con recomendaciones personalizadas.',
     },
     {
         question: '¿Qué es el método STEAM?',
