@@ -390,60 +390,79 @@ const Ecosystem = memo(({ onNavigate }) => {
                 {/* Bottom CTA */}
                 <div className={`text-center mt-16 transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                     {/* Direct Access Cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-10">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto mb-10">
                         <button 
                             onClick={() => onNavigate('vak')}
-                            className="group p-6 bg-gradient-to-r from-[#66CCCC]/10 to-[#4DA8C4]/10 rounded-2xl border-2 border-[#4DA8C4]/30 text-left transition-all duration-300 hover:shadow-xl hover:border-[#4DA8C4] hover:scale-105"
+                            className="group p-5 bg-gradient-to-r from-[#66CCCC]/10 to-[#4DA8C4]/10 rounded-2xl border-2 border-[#4DA8C4]/30 text-left transition-all duration-300 hover:shadow-xl hover:border-[#4DA8C4] hover:scale-105"
                         >
-                            <div className="flex items-center gap-4 mb-3">
-                                <div className="w-12 h-12 bg-gradient-to-br from-[#66CCCC] to-[#4DA8C4] rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                                    <i className="fa-solid fa-brain text-xl text-white" />
+                            <div className="flex items-center gap-3 mb-2">
+                                <div className="w-10 h-10 bg-gradient-to-br from-[#66CCCC] to-[#4DA8C4] rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <i className="fa-solid fa-brain text-lg text-white" />
                                 </div>
                                 <div>
-                                    <h3 className="text-lg font-bold text-[#004B63]">Test VAK Gratis</h3>
-                                    <p className="text-[#64748B] text-sm">Sin registro</p>
+                                    <h3 className="text-base font-bold text-[#004B63]">Test VAK</h3>
+                                    <p className="text-[#64748B] text-xs">Gratis</p>
                                 </div>
                             </div>
-                            <p className="text-[#64748B] text-sm">
-                                Descubre tu estilo de aprendizaje en 5 minutos. Diagnóstico instantáneo y personalizado.
+                            <p className="text-[#64748B] text-xs">
+                                Descubre tu estilo de aprendizaje
                             </p>
-                            <div className="mt-3 flex items-center gap-2 text-[#4DA8C4] font-semibold text-sm">
-                                <span>Comenzar ahora</span>
-                                <i className="fa-solid fa-arrow-right text-xs group-hover:translate-x-2 transition-transform" />
+                        </button>
+
+                        <button 
+                            onClick={() => onNavigate('ialab')}
+                            className="group p-5 bg-gradient-to-r from-[#FF6B9D]/10 to-[#FF8E53]/10 rounded-2xl border-2 border-[#FF6B9D]/30 text-left transition-all duration-300 hover:shadow-xl hover:border-[#FF6B9D] hover:scale-105"
+                        >
+                            <div className="flex items-center gap-3 mb-2">
+                                <div className="w-10 h-10 bg-gradient-to-br from-[#FF6B9D] to-[#FF8E53] rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <i className="fa-solid fa-flask text-lg text-white" />
+                                </div>
+                                <div>
+                                    <h3 className="text-base font-bold text-[#004B63]">Laboratorio IA</h3>
+                                    <p className="text-[#64748B] text-xs">Certificación</p>
+                                </div>
                             </div>
+                            <p className="text-[#64748B] text-xs">
+                                Aprende a usar prompting IA
+                            </p>
                         </button>
 
                         <button 
                             onClick={() => onNavigate('consultoria-b2b')}
-                            className="group p-6 bg-gradient-to-r from-[#004B63]/10 to-[#4DA8C4]/10 rounded-2xl border-2 border-[#004B63]/30 text-left transition-all duration-300 hover:shadow-xl hover:border-[#004B63] hover:scale-105"
+                            className="group p-5 bg-gradient-to-r from-[#004B63]/10 to-[#4DA8C4]/10 rounded-2xl border-2 border-[#004B63]/30 text-left transition-all duration-300 hover:shadow-xl hover:border-[#004B63] hover:scale-105"
                         >
-                            <div className="flex items-center gap-4 mb-3">
-                                <div className="w-12 h-12 bg-gradient-to-br from-[#004B63] to-[#4DA8C4] rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                                    <i className="fa-solid fa-chart-line text-xl text-white" />
+                            <div className="flex items-center gap-3 mb-2">
+                                <div className="w-10 h-10 bg-gradient-to-br from-[#004B63] to-[#4DA8C4] rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <i className="fa-solid fa-robot text-lg text-white" />
                                 </div>
                                 <div>
-                                    <h3 className="text-lg font-bold text-[#004B63]">Herramientas IA</h3>
-                                    <p className="text-[#64748B] text-sm">ROI y Automatización</p>
+                                    <h3 className="text-base font-bold text-[#004B63]">Herramientas IA</h3>
+                                    <p className="text-[#64748B] text-xs">B2B</p>
                                 </div>
                             </div>
-                            <p className="text-[#64748B] text-sm">
-                                Calcula el ROI y diseña flujos de automatización con inteligencia artificial.
+                            <p className="text-[#64748B] text-xs">
+                                ROI y Automatización
                             </p>
-                            <div className="mt-3 flex items-center gap-2 text-[#004B63] font-semibold text-sm">
-                                <span>Acceder gratis</span>
-                                <i className="fa-solid fa-arrow-right text-xs group-hover:translate-x-2 transition-transform" />
+                        </button>
+
+                        <button 
+                            onClick={() => onNavigate('smartboard')}
+                            className="group p-5 bg-gradient-to-r from-[#B2D8E5]/20 to-[#66CCCC]/20 rounded-2xl border-2 border-[#66CCCC]/30 text-left transition-all duration-300 hover:shadow-xl hover:border-[#66CCCC] hover:scale-105"
+                        >
+                            <div className="flex items-center gap-3 mb-2">
+                                <div className="w-10 h-10 bg-gradient-to-br from-[#66CCCC] to-[#B2D8E5] rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <i className="fa-solid fa-chalkboard text-lg text-white" />
+                                </div>
+                                <div>
+                                    <h3 className="text-base font-bold text-[#004B63]">SmartBoard</h3>
+                                    <p className="text-[#64748B] text-xs">Estudiantes</p>
+                                </div>
                             </div>
+                            <p className="text-[#64748B] text-xs">
+                                Panel educativo interactivo
+                            </p>
                         </button>
                     </div>
-
-                    <button 
-                        onClick={() => onNavigate('ialab')}
-                        className="inline-flex items-center gap-3 px-8 py-4 bg-[#4DA8C4] text-white font-bold rounded-full transition-all duration-300 hover:bg-[#004B63] hover:shadow-xl hover:scale-105"
-                    >
-                        <i className="fa-solid fa-rocket" />
-                        <span>Comenzar ahora</span>
-                        <i className="fa-solid fa-arrow-right" />
-                    </button>
                 </div>
             </div>
 
