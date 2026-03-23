@@ -30,6 +30,8 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   const [pdfLoading, setPdfLoading] = useState(false);
   const [showPdfPreview, setShowPdfPreview] = useState(false);
   const [inputText, setInputText] = useState('');
+  const [error, setError] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
   
   // Voice States
   const [voiceMode, setVoiceMode] = useState(false);
@@ -47,6 +49,11 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
   const pdfTemplateRef = useRef(null);
+
+  // Component mount check
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
 
   // Valeria Profile
   const VALERIA_PROFILE = {
@@ -259,10 +266,12 @@ const DiagnosticoVAK = ({ onNavigate }) => {
         addMessage('assistant', VALERIA_PROFILE.greeting);
       }, 500);
     }
-  }, [phase]);
+  }, [phase, addMessage]);
 
   // Voice Engine Setup
   useEffect(() => {
+    if (!voiceEngine) return;
+    
     voiceEngine.onSpeakStart = () => {
       setIsSpeaking(true);
       setIsListening(false);
@@ -315,14 +324,16 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     setVoiceReady(true);
 
     return () => {
-      voiceEngine.stop();
-      voiceEngine.onSpeakStart = null;
-      voiceEngine.onSpeakEnd = null;
-      voiceEngine.onListeningStart = null;
-      voiceEngine.onListeningEnd = null;
-      voiceEngine.onInterimResult = null;
-      voiceEngine.onFinalResult = null;
-      voiceEngine.onError = null;
+      if (voiceEngine) {
+        voiceEngine.stop();
+        voiceEngine.onSpeakStart = null;
+        voiceEngine.onSpeakEnd = null;
+        voiceEngine.onListeningStart = null;
+        voiceEngine.onListeningEnd = null;
+        voiceEngine.onInterimResult = null;
+        voiceEngine.onFinalResult = null;
+        voiceEngine.onError = null;
+      }
     };
   }, [voiceMode, phase, startListening, handleUserSpeech]);
 
@@ -330,22 +341,24 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   const addMessage = useCallback((role, content) => {
     setMessages(prev => [...prev, { id: Date.now(), role, content, timestamp: new Date() }]);
     
-    if (role === 'assistant' && voiceMode) {
+    if (role === 'assistant' && voiceMode && voiceEngine) {
       setCurrentCaption(content);
-      voiceEngine.speak(content);
+      voiceEngine.speak(content).catch(err => console.warn('Speak error:', err));
     }
   }, [voiceMode]);
 
   // Stop speaking
   const stopSpeaking = useCallback(() => {
-    voiceEngine.stop();
+    if (voiceEngine) {
+      voiceEngine.stop();
+    }
     setIsSpeaking(false);
     setCurrentCaption('');
   }, []);
 
   // Start listening
   const startListening = useCallback(() => {
-    if (!voiceMode || isSpeaking) return;
+    if (!voiceMode || isSpeaking || !voiceEngine) return;
     
     setInterimTranscript('');
     voiceEngine.startListening();
@@ -353,7 +366,9 @@ const DiagnosticoVAK = ({ onNavigate }) => {
 
   // Stop listening
   const stopListening = useCallback(() => {
-    voiceEngine.stopListening();
+    if (voiceEngine) {
+      voiceEngine.stopListening();
+    }
     setIsListening(false);
     setInterimTranscript('');
   }, []);
@@ -657,6 +672,20 @@ const DiagnosticoVAK = ({ onNavigate }) => {
 
   // Get status icon
   const StatusIcon = isListening ? MicOff : isSpeaking ? Volume2 : Brain;
+
+  // Loading fallback
+  if (!isLoaded) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #0B0F19 0%, #0D1321 50%, #1a1f2e 100%)' }}>
+        <div className="text-center">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #4DA8C4, #66CCCC)' }}>
+            <Brain className="w-8 h-8 text-white" />
+          </div>
+          <p className="text-white/60">Cargando diagnóstico...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0B0F19 0%, #0D1321 50%, #1a1f2e 100%)' }}>

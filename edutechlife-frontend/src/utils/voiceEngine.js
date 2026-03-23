@@ -1,6 +1,10 @@
 class VoiceEngine {
   constructor() {
-    this.synth = window.speechSynthesis;
+    if (typeof window === 'undefined') {
+      return;
+    }
+    
+    this.synth = window.speechSynthesis || null;
     this.recognition = null;
     this.currentVoice = null;
     this.isSpeaking = false;
@@ -16,7 +20,9 @@ class VoiceEngine {
     this.listenTimeout = null;
     this.maxListeningDuration = 15000;
     
-    this.initVoices();
+    if (this.synth) {
+      this.initVoices();
+    }
     this.initRecognition();
   }
 
@@ -135,6 +141,11 @@ class VoiceEngine {
 
   speak(text, options = {}) {
     return new Promise((resolve, reject) => {
+      if (!this.synth) {
+        resolve();
+        return;
+      }
+      
       if (this.isSpeaking) {
         this.synth.cancel();
       }
@@ -203,11 +214,15 @@ class VoiceEngine {
         this.synth.speak(utterance);
       };
 
-      if (this.synth.getVoices().length === 0) {
-        this.synth.addEventListener('voiceschanged', () => {
-          this.currentVoice = this.selectBestVoice(this.synth.getVoices());
+      if (!this.synth || this.synth.getVoices().length === 0) {
+        if (this.synth) {
+          this.synth.addEventListener('voiceschanged', () => {
+            this.currentVoice = this.selectBestVoice(this.synth.getVoices());
+            setTimeout(speakNext, 50);
+          }, { once: true });
+        } else {
           setTimeout(speakNext, 50);
-        }, { once: true });
+        }
       } else {
         setTimeout(speakNext, 50);
       }
