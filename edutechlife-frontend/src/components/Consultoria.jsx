@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import AutomationArchitect from './AutomationArchitect';
+import { Icon } from '../utils/iconMapping.jsx';
 
 const Consultoria = ({ onBack }) => {
     const [activeTab, setActiveTab] = useState('servicios');
@@ -196,11 +197,11 @@ const Consultoria = ({ onBack }) => {
         <div className="pillar-page">
             <header className="pillar-header">
                 <button onClick={onBack} className="back-btn">
-                    <i className="fa-solid fa-arrow-left" />
+                    <Icon name="fa-arrow-left" />
                     <span>Volver</span>
                 </button>
                 <div className="pillar-badge" style={{ background: 'linear-gradient(135deg, #66CCCC, #4DA8C4)' }}>
-                    <i className="fa-solid fa-building" />
+                    <Icon name="fa-building" />
                     <span>PILAR 03</span>
                 </div>
             </header>
@@ -216,10 +217,10 @@ const Consultoria = ({ onBack }) => {
                     <div className="cta-buttons">
                         <button className="cta-primary" onClick={() => setActiveTab('contacto')}>
                             <span>Solicitar Cotización</span>
-                            <i className="fa-solid fa-arrow-right" />
+                            <Icon name="fa-arrow-right" />
                         </button>
                         <button className="cta-secondary" onClick={() => setActiveTab('casos')}>
-                            <i className="fa-solid fa-play" />
+                            <Icon name="fa-play" />
                             <span>Ver Casos de Éxito</span>
                         </button>
                     </div>
@@ -227,15 +228,15 @@ const Consultoria = ({ onBack }) => {
                 <div className="pillar-hero-visual">
                     <div className="consulting-visual">
                         <div className="cv-card">
-                            <i className="fa-solid fa-robot" />
+                            <Icon name="fa-robot" />
                             <span>Agente IA</span>
                         </div>
                         <div className="cv-card">
-                            <i className="fa-solid fa-users-cog" />
+                            <Icon name="fa-users-cog" />
                             <span>Capacitación</span>
                         </div>
                         <div className="cv-card">
-                            <i className="fa-solid fa-chart-pie" />
+                            <Icon name="fa-chart-pie" />
                             <span>Métricas</span>
                         </div>
                     </div>
@@ -244,23 +245,23 @@ const Consultoria = ({ onBack }) => {
 
             <div className="pillar-tabs">
                 <button className={`tab-btn ${activeTab === 'servicios' ? 'active' : ''}`} onClick={() => setActiveTab('servicios')}>
-                    <i className="fa-solid fa-cubes" />
+                    <Icon name="fa-cubes" />
                     Servicios
                 </button>
                 <button className={`tab-btn ${activeTab === 'casos' ? 'active' : ''}`} onClick={() => setActiveTab('casos')}>
-                    <i className="fa-solid fa-trophy" />
+                    <Icon name="fa-trophy" />
                     Casos de Éxito
                 </button>
                 <button className={`tab-btn ${activeTab === 'contacto' ? 'active' : ''}`} onClick={() => setActiveTab('contacto')}>
-                    <i className="fa-solid fa-envelope" />
+                    <Icon name="fa-envelope" />
                     Contacto
                 </button>
                 <button className={`tab-btn ${activeTab === 'roi' ? 'active' : ''}`} onClick={() => setActiveTab('roi')}>
-                    <i className="fa-solid fa-calculator" />
+                    <Icon name="fa-calculator" />
                     Calculadora ROI
                 </button>
                 <button className={`tab-btn ${activeTab === 'ai-tools' ? 'active' : ''}`} onClick={() => setActiveTab('ai-tools')}>
-                    <i className="fa-solid fa-brain" />
+                    <Icon name="fa-brain" />
                     Herramientas IA
                 </button>
             </div>
@@ -271,20 +272,20 @@ const Consultoria = ({ onBack }) => {
                         {servicios.map((s, i) => (
                             <div key={i} className="servicio-card" style={{ borderTop: `4px solid ${s.color}` }}>
                                 <div className="servicio-icon" style={{ background: `${s.color}15`, color: s.color }}>
-                                    <i className={`fa-solid ${s.icon}`} />
+                                    <Icon name={s.icon} />
                                 </div>
                                 <h3>{s.title}</h3>
                                 <p>{s.desc}</p>
-                                <div className="servicio-precio">
-                                    <i className="fa-solid fa-tag" />
-                                    <span>{s.precio}</span>
-                                </div>
+                                 <div className="servicio-precio">
+                                     <Icon name="fa-tag" />
+                                     <span>{s.precio}</span>
+                                 </div>
                                 <ul className="servicio-features">
                                     {s.features.map((f, fi) => (
-                                        <li key={fi}>
-                                            <i className="fa-solid fa-check" style={{ color: s.color }} />
-                                            {f}
-                                        </li>
+                                         <li key={fi}>
+                                             <Icon name="fa-check" style={{ color: s.color }} />
+                                             {f}
+                                         </li>
                                     ))}
                                 </ul>
                                 <button className="servicio-cta" onClick={() => { setContactForm(prev => ({...prev, servicio: s.title})); setActiveTab('contacto'); }}>
@@ -309,16 +310,16 @@ const Consultoria = ({ onBack }) => {
                                             <h4>{c.empresa}</h4>
                                             <span className="caso-sector">{c.sector}</span>
                                         </div>
-                                        <div className="caso-meta">
-                                            <span className="caso-duracion">{c.duracion}</span>
-                                            <i className={`fa-solid fa-chevron-${selectedCase === i ? 'up' : 'down'}`} />
-                                        </div>
+                                         <div className="caso-meta">
+                                             <span className="caso-duracion">{c.duracion}</span>
+                                             <Icon name={`fa-chevron-${selectedCase === i ? 'up' : 'down'}`} />
+                                         </div>
                                     </div>
                                     <p className="caso-desc">{c.desc}</p>
-                                    <div className="caso-resultado">
-                                        <i className="fa-solid fa-arrow-trend-up" />
-                                        <span>{c.resultado}</span>
-                                    </div>
+                                     <div className="caso-resultado">
+                                         <Icon name="fa-arrow-trend-up" />
+                                         <span>{c.resultado}</span>
+                                     </div>
                                     {selectedCase === i && (
                                         <div className="caso-expanded">
                                             <div className="caso-metrics">
@@ -350,7 +351,7 @@ const Consultoria = ({ onBack }) => {
                         </div>
                         <div className="demo-cta">
                             <div className="demo-content">
-                                <i className="fa-solid fa-video" />
+                                <Icon name="fa-video" />
                                 <div>
                                     <h3>¿Quieres ver una demo personalizada?</h3>
                                     <p>Agenda una sesión de 30 minutos con nuestro equipo</p>
@@ -359,12 +360,12 @@ const Consultoria = ({ onBack }) => {
                             <button className="demo-btn" onClick={handleDemoRequest}>
                                 {demoRequested ? (
                                     <>
-                                        <i className="fa-solid fa-check" />
+                                        <Icon name="fa-check" />
                                         ¡Solicitud Enviada!
                                     </>
                                 ) : (
                                     <>
-                                        <i className="fa-solid fa-calendar" />
+                                        <Icon name="fa-calendar" />
                                         Agendar Demo
                                     </>
                                 )}
@@ -380,27 +381,27 @@ const Consultoria = ({ onBack }) => {
                             <p>Completa el formulario y nos pondremos en contacto en menos de 24 horas.</p>
                             <div className="contact-methods">
                                 <div className="contact-method">
-                                    <i className="fa-solid fa-phone" />
+                                    <Icon name="fa-phone" />
                                     <span>+57 601 234 5678</span>
                                 </div>
                                 <div className="contact-method">
-                                    <i className="fa-solid fa-envelope" />
+                                    <Icon name="fa-envelope" />
                                     <span>consultoria@edutechlife.com</span>
                                 </div>
                                 <div className="contact-method">
-                                    <i className="fa-solid fa-location-dot" />
+                                    <Icon name="fa-location-dot" />
                                     <span>Manizales, Colombia</span>
                                 </div>
                             </div>
                             <div className="response-guarantee">
-                                <i className="fa-solid fa-shield-check" />
+                                <Icon name="fa-shield-check" />
                                 <span>Respuesta garantizada en menos de 24 horas</span>
                             </div>
                         </div>
                         <form className="contact-form" onSubmit={handleSubmit}>
                             {submitted ? (
                                 <div className="success-message">
-                                    <i className="fa-solid fa-check-circle" />
+                                    <Icon name="fa-check-circle" />
                                     <h3>¡Solicitud Enviada!</h3>
                                     <p>Uno de nuestros consultores se pondrá en contacto contigo en menos de 24 horas.</p>
                                     <button type="button" className="reset-form" onClick={() => { setSubmitted(false); setContactForm({ nombre: '', empresa: '', email: '', telefono: '', tamano: '', servicio: '', mensaje: '' }); setFormErrors({}); }}>
@@ -500,7 +501,7 @@ const Consultoria = ({ onBack }) => {
                                     </div>
                                     <button type="submit" className="submit-btn">
                                         <span>Enviar Solicitud</span>
-                                        <i className="fa-solid fa-paper-plane" />
+                                         <Icon name="fa-paper-plane" />
                                     </button>
                                 </>
                             )}
@@ -513,7 +514,7 @@ const Consultoria = ({ onBack }) => {
                         <div className="roi-neural-header">
                             <div className="neural-badge">
                                 <div className="neural-pulse" />
-                                <i className="fa-solid fa-brain" />
+                                <Icon name="fa-brain" />
                                 <span>ROI Neural Calculator</span>
                             </div>
                             <h2>Calculadora de Retorno de Inversión</h2>
@@ -523,7 +524,7 @@ const Consultoria = ({ onBack }) => {
                         <div className="roi-neural-grid">
                             <div className="roi-neural-card inputs-card">
                                 <div className="card-header">
-                                    <i className="fa-solid fa-sliders" />
+                                     <Icon name="fa-sliders" />
                                     <h3>Parámetros</h3>
                                 </div>
                                 
@@ -531,7 +532,7 @@ const Consultoria = ({ onBack }) => {
                                     <div className="roi-input-group">
                                         <div className="input-header">
                                             <label>
-                                                <i className="fa-solid fa-users" />
+                                                 <Icon name="fa-users" />
                                                 Empleados en tu organización
                                             </label>
                                             <span className="input-value">{roiData.empleados}</span>
@@ -554,7 +555,7 @@ const Consultoria = ({ onBack }) => {
                                     <div className="roi-input-group">
                                         <div className="input-header">
                                             <label>
-                                                <i className="fa-solid fa-clock" />
+                                                <Icon name="fa-clock" />
                                                 Horas ahorradas por empleado/mes
                                             </label>
                                             <span className="input-value">{roiData.horasAhorradas}h</span>
@@ -577,7 +578,7 @@ const Consultoria = ({ onBack }) => {
                                     <div className="roi-input-group">
                                         <div className="input-header">
                                             <label>
-                                                <i className="fa-solid fa-coins" />
+                                                 <Icon name="fa-coins" />
                                                 Costo promedio hora (COP)
                                             </label>
                                             <span className="input-value">${roiData.costoHora.toLocaleString()}</span>
@@ -600,7 +601,7 @@ const Consultoria = ({ onBack }) => {
                                     <div className="roi-input-group">
                                         <div className="input-header">
                                             <label>
-                                                <i className="fa-solid fa-calendar" />
+                                        <Icon name="fa-calendar" />
                                                 Duración del proyecto
                                             </label>
                                             <span className="input-value">{roiData.mesesProyecto} meses</span>
@@ -623,7 +624,7 @@ const Consultoria = ({ onBack }) => {
                                     <div className="roi-input-group">
                                         <div className="input-header">
                                             <label>
-                                                <i className="fa-solid fa-rocket" />
+                                                 <Icon name="fa-rocket" />
                                                 Inversión en implementación (COP)
                                             </label>
                                             <span className="input-value">${roiData.costoImplementacion.toLocaleString()}</span>
@@ -656,7 +657,7 @@ const Consultoria = ({ onBack }) => {
                                         </>
                                     ) : (
                                         <>
-                                            <i className="fa-solid fa-bolt" />
+                                             <Icon name="fa-bolt" />
                                             <span>Calcular ROI Neural</span>
                                         </>
                                     )}
@@ -665,14 +666,14 @@ const Consultoria = ({ onBack }) => {
 
                             <div className="roi-neural-card results-card">
                                 <div className="card-header">
-                                    <i className="fa-solid fa-chart-line" />
+                                    <Icon name="fa-chart-line" />
                                     <h3>Proyección Neural</h3>
                                 </div>
 
                                 {!roiResult ? (
                                     <div className="roi-placeholder">
                                         <div className="placeholder-icon">
-                                            <i className="fa-solid fa-brain" />
+                                            <Icon name="fa-brain" />
                                         </div>
                                         <p>Configura los parámetros y presiona "Calcular" para ver tu proyección de ROI</p>
                                         <div className="placeholder-glow" />
@@ -718,7 +719,7 @@ const Consultoria = ({ onBack }) => {
                                         <div className="result-metrics">
                                             <div className="metric-card">
                                                 <div className="metric-icon">
-                                                    <i className="fa-solid fa-arrow-trend-up" />
+                                                     <Icon name="fa-arrow-trend-up" />
                                                 </div>
                                                 <div className="metric-info">
                                                     <span className="metric-label">Ahorro Mensual</span>
@@ -728,7 +729,7 @@ const Consultoria = ({ onBack }) => {
 
                                             <div className="metric-card">
                                                 <div className="metric-icon">
-                                                    <i className="fa-solid fa-piggy-bank" />
+                                                     <Icon name="fa-piggy-bank" />
                                                 </div>
                                                 <div className="metric-info">
                                                     <span className="metric-label">Ahorro Total</span>
@@ -738,7 +739,7 @@ const Consultoria = ({ onBack }) => {
 
                                             <div className="metric-card">
                                                 <div className="metric-icon">
-                                                    <i className="fa-solid fa-clock" />
+                                                    <Icon name="fa-clock" />
                                                 </div>
                                                 <div className="metric-info">
                                                     <span className="metric-label">Payback</span>
@@ -748,7 +749,7 @@ const Consultoria = ({ onBack }) => {
 
                                             <div className="metric-card">
                                                 <div className="metric-icon">
-                                                    <i className="fa-solid fa-chart-pie" />
+                                                     <Icon name="fa-chart-pie" />
                                                 </div>
                                                 <div className="metric-info">
                                                     <span className="metric-label">Eficiencia</span>
@@ -787,7 +788,7 @@ const Consultoria = ({ onBack }) => {
                                 )}
 
                                 <div className="roi-disclaimer-neural">
-                                    <i className="fa-solid fa-shield-halved" />
+                                    <Icon name="fa-shield-halved" />
                                     <span>Cálculos basados en promedios de la industria. Los resultados reales pueden variar. Consulta con nuestros especialistas para un análisis personalizado.</span>
                                 </div>
                             </div>
@@ -799,7 +800,7 @@ const Consultoria = ({ onBack }) => {
                     <div className="ai-tools-section">
                         <div className="ai-tools-header">
                             <div className="neural-badge">
-                                <i className="fa-solid fa-brain" />
+                                <Icon name="fa-brain" />
                                 <span>Herramientas de Análisis IA</span>
                             </div>
                             <h2>Potencia tu Consultoría con Inteligencia Artificial</h2>
@@ -809,49 +810,49 @@ const Consultoria = ({ onBack }) => {
                         <div className="ai-tools-grid">
                             <div className="ai-tool-card" onClick={() => onNavigate('consultoria-b2b')}>
                                 <div className="ai-tool-icon">
-                                    <i className="fa-solid fa-chart-line" />
+                                     <Icon name="fa-chart-line" />
                                 </div>
                                 <h3>Calculadora ROI Neural</h3>
                                 <p>Calcula el retorno de inversión de implementaciones de IA con análisis financiero detallado</p>
                                 <div className="ai-tool-features">
-                                    <span><i className="fa-solid fa-check" /> ROI Proyectado</span>
-                                    <span><i className="fa-solid fa-check" /> Ahorro Estimado</span>
-                                    <span><i className="fa-solid fa-check" /> Análisis Porcentual</span>
+                                     <span><Icon name="fa-check" /> ROI Proyectado</span>
+                                     <span><Icon name="fa-check" /> Ahorro Estimado</span>
+                                     <span><Icon name="fa-check" /> Análisis Porcentual</span>
                                 </div>
                                 <div className="ai-tool-action">
                                     <span>Acceder</span>
-                                    <i className="fa-solid fa-arrow-right" />
+                                    <Icon name="fa-arrow-right" />
                                 </div>
                             </div>
 
                             <div className="ai-tool-card" onClick={() => onNavigate('consultoria-b2b')}>
                                 <div className="ai-tool-icon">
-                                    <i className="fa-solid fa-sitemap" />
+                                    <Icon name="fa-sitemap" />
                                 </div>
                                 <h3>Arquitecto de Automatización</h3>
                                 <p>Diseña workflows técnicos y sistemas de automatización paso a paso</p>
                                 <div className="ai-tool-features">
-                                    <span><i className="fa-solid fa-check" /> Workflows Detallados</span>
-                                    <span><i className="fa-solid fa-check" /> Especificaciones Técnicas</span>
-                                    <span><i className="fa-solid fa-check" /> Roadmap de Implementación</span>
+                                     <span><Icon name="fa-check" /> Workflows Detallados</span>
+                                     <span><Icon name="fa-check" /> Especificaciones Técnicas</span>
+                                     <span><Icon name="fa-check" /> Roadmap de Implementación</span>
                                 </div>
                                 <div className="ai-tool-action">
                                     <span>Acceder</span>
-                                    <i className="fa-solid fa-arrow-right" />
+                                    <Icon name="fa-arrow-right" />
                                 </div>
                             </div>
                         </div>
 
                         <div className="ai-tools-cta">
                             <div className="cta-content">
-                                <i className="fa-solid fa-rocket" />
+                                <Icon name="fa-rocket" />
                                 <div>
                                     <h3>¿Necesitas un análisis personalizado?</h3>
                                     <p>Agenda una sesión con nuestros consultores B2B para un diagnóstico específico</p>
                                 </div>
                             </div>
                             <button className="cta-btn" onClick={() => setActiveTab('contacto')}>
-                                <i className="fa-solid fa-calendar" />
+                                <Icon name="fa-calendar" />
                                 Agendar Consultoría
                             </button>
                         </div>

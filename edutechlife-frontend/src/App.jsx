@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { Sun, Moon, Bot, X, Send, MessageCircle } from 'lucide-react';
 const GlobalCanvas = lazy(() => import('./components/GlobalCanvas'));
 const IALab = lazy(() => import('./components/IALab'));
 import Hero from './components/Hero';
@@ -250,9 +251,9 @@ const App = () => {
                         aria-label={isDarkMode ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
                     >
                         {isDarkMode ? (
-                            <i className="fa-solid fa-sun text-yellow-500"></i>
+                            <Sun className="w-5 h-5 text-yellow-500" />
                         ) : (
-                            <i className="fa-solid fa-moon text-gray-700 dark:text-gray-300"></i>
+                            <Moon className="w-5 h-5 text-gray-700 dark:text-gray-300" />
                         )}
                     </button>
                 </div>
@@ -315,11 +316,11 @@ const App = () => {
                             <div className="chatbot-header bg-[#F8FAFC] border-b border-[#E2E8F0] shadow-sm">
                                 <div className="chatbot-avatar relative">
                                     <div className="absolute inset-[-4px] rounded-full border-[1.5px] border-[#4DA8C4] animate-[pulse-ring_3s_infinite]" />
-                                    <i className="fa-solid fa-robot relative z-10 text-white"></i>
+                                    <Bot className="relative z-10 text-white w-5 h-5" />
                                 </div>
                                 <span className="font-montserrat font-bold tracking-wide text-[#004B63]">Nico AI</span>
                                 <button onClick={() => setBotOpen(false)} className="chatbot-close hover:bg-[#4DA8C4]/10 transition-colors">
-                                    <i className="fa-solid fa-xmark text-[#004B63]"></i>
+                                    <X className="w-5 h-5 text-[#004B63]" />
                                 </button>
                             </div>
                             <div className="chatbot-messages">
@@ -344,7 +345,7 @@ const App = () => {
                                     placeholder="Escribe un mensaje..."
                                 />
                                 <button onClick={handleBotSend} aria-label="Enviar mensaje">
-                                    <i className="fa-solid fa-paper-plane"></i>
+                                    <Send className="w-5 h-5" />
                                 </button>
                             </div>
                         </div>
@@ -354,7 +355,7 @@ const App = () => {
                         onClick={() => setBotOpen(!botOpen)} 
                         aria-label={botOpen ? 'Cerrar chat' : 'Abrir chat'}
                     >
-                        <i className={`fa-solid ${botOpen ? 'fa-xmark' : 'fa-comment-dots'}`}></i>
+                        {botOpen ? <X className="w-5 h-5" /> : <MessageCircle className="w-5 h-5" />}
                     </button>
                 </div>
             )}

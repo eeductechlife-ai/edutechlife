@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { Icon } from '../utils/iconMapping.jsx';
 
 const Metodo = memo(() => {
     const steps = [
@@ -77,7 +78,7 @@ const Metodo = memo(() => {
 
                                 {/* Icon */}
                                 <div className="w-14 h-14 rounded-2xl bg-[#4DA8C4]/10 flex items-center justify-center mb-4">
-                                    <i className={`fa-solid ${step.icon} text-2xl text-[#4DA8C4]`} />
+                                    <Icon name={step.icon} className="text-2xl text-[#4DA8C4]" />
                                 </div>
 
                                 {/* Content */}
@@ -98,9 +99,9 @@ const Metodo = memo(() => {
                 {/* Bottom CTA */}
                 <div className="text-center mt-16">
                     <button className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#004B63] text-white font-bold rounded-full transition-all duration-300 hover:bg-[#4DA8C4] hover:shadow-xl">
-                        <i className="fa-solid fa-rocket text-lg" />
+                        <Icon name="fa-rocket" className="text-lg" />
                         <span className="text-lg">Comenzar Mi Transformación</span>
-                        <i className="fa-solid fa-arrow-right text-lg" />
+                        <Icon name="fa-arrow-right" className="text-lg" />
                     </button>
                 </div>
             </div>

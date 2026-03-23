@@ -1,4 +1,5 @@
 import { memo, useState, useEffect } from 'react';
+import { Icon } from '../utils/iconMapping.jsx';
 
 const Esencia = memo(() => {
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -63,15 +64,33 @@ const Esencia = memo(() => {
                     </p>
                 </div>
 
+                {/* Values Section - AFTER Header */}
+                <div className={`transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {values.map((value, index) => (
+                            <div 
+                                key={index}
+                                className="group bg-white rounded-2xl p-8 shadow-lg border border-[#E2E8F0] hover:shadow-xl hover:border-[#4DA8C4]/30 hover:-translate-y-2 transition-all duration-500"
+                            >
+                                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#4DA8C4]/10 to-[#004B63]/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                                     <Icon name={value.icon} className="text-3xl text-[#4DA8C4]" />
+                                </div>
+                                <h4 className="text-xl font-bold text-[#004B63] mb-2">{value.text}</h4>
+                                <p className="text-[#64748B] text-sm">{value.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
                 {/* Mission, Vision + Carousel */}
-                <div className={`grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16 transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                <div className={`grid grid-cols-1 lg:grid-cols-3 gap-8 mt-16 transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                     {/* Left Column - Mission & Vision */}
                     <div className="space-y-6">
                         {/* Mission */}
                         <div className="group bg-gradient-to-br from-[#004B63] to-[#4DA8C4] rounded-2xl p-8 text-white shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
                             <div className="flex items-center gap-4 mb-6">
                                 <div className="w-14 h-14 rounded-xl bg-white/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                    <i className="fa-solid fa-bullseye text-2xl" />
+                                    <Icon name="fa-bullseye" className="text-2xl" />
                                 </div>
                                 <div>
                                     <span className="text-xs font-semibold text-[#4DA8C4] uppercase tracking-wider">Objetivo</span>
@@ -83,7 +102,7 @@ const Esencia = memo(() => {
                             </p>
                             <div className="mt-6 pt-4 border-t border-white/20">
                                 <div className="flex items-center gap-2 text-[#4DA8C4]">
-                                    <i className="fa-solid fa-rocket" />
+                                    <Icon name="fa-rocket" />
                                     <span className="font-semibold text-sm">Impulsando el futuro</span>
                                 </div>
                             </div>
@@ -93,7 +112,7 @@ const Esencia = memo(() => {
                         <div className="group bg-[#F8FAFC] rounded-2xl p-8 shadow-lg border border-[#E2E8F0] hover:shadow-xl hover:border-[#4DA8C4]/30 transition-all duration-500 hover:-translate-y-1">
                             <div className="flex items-center gap-4 mb-6">
                                 <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#4DA8C4] to-[#004B63] flex items-center justify-center group-hover:scale-110 transition-transform">
-                                    <i className="fa-solid fa-eye text-2xl text-white" />
+                                    <Icon name="fa-eye" className="text-2xl text-white" />
                                 </div>
                                 <div>
                                     <span className="text-xs font-semibold text-[#4DA8C4] uppercase tracking-wider">Proyección</span>
@@ -105,7 +124,7 @@ const Esencia = memo(() => {
                             </p>
                             <div className="mt-6 pt-4 border-t border-[#E2E8F0]">
                                 <div className="flex items-center gap-2 text-[#4DA8C4]">
-                                    <i className="fa-solid fa-globe" />
+                                    <Icon name="fa-globe" />
                                     <span className="font-semibold text-sm text-[#004B63]">Liderazgo regional</span>
                                 </div>
                             </div>
@@ -137,9 +156,6 @@ const Esencia = memo(() => {
                             {/* Content */}
                             <div className="absolute inset-0 flex flex-col justify-end p-8">
                                 <div className="max-w-lg">
-                                    <span className="inline-block px-4 py-1 bg-[#4DA8C4] rounded-full text-sm font-semibold mb-4">
-                                        {currentSlide + 1} / {slides.length}
-                                    </span>
                                     <h3 className="text-2xl md:text-3xl font-bold text-white mb-3">
                                         {slides[currentSlide].title}
                                     </h3>
@@ -164,47 +180,15 @@ const Esencia = memo(() => {
                                 onClick={() => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)}
                                 className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all"
                             >
-                                <i className="fa-solid fa-chevron-left" />
+                                <Icon name="fa-chevron-left" />
                             </button>
                             <button 
                                 onClick={() => setCurrentSlide((prev) => (prev + 1) % slides.length)}
                                 className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all"
                             >
-                                <i className="fa-solid fa-chevron-right" />
+                                <Icon name="fa-chevron-right" />
                             </button>
                         </div>
-                    </div>
-                </div>
-
-                {/* Values Section */}
-                <div className={`transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-                    {/* Section Header */}
-                    <div className="text-center mb-12">
-                        <span className="inline-block text-sm font-bold text-[#4DA8C4] uppercase tracking-widest mb-4">
-                            Lo que nos define
-                        </span>
-                        <h3 className="text-3xl md:text-4xl font-black text-[#004B63] mb-4">
-                            Nuestros Valores
-                        </h3>
-                        <p className="text-[#64748B] max-w-xl mx-auto">
-                            Los principios que guían cada decisión y acción en nuestro camino hacia la excelencia educativa.
-                        </p>
-                    </div>
-
-                    {/* Values Grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {values.map((value, index) => (
-                            <div 
-                                key={index}
-                                className="group bg-white rounded-2xl p-8 shadow-lg border border-[#E2E8F0] hover:shadow-xl hover:border-[#4DA8C4]/30 hover:-translate-y-2 transition-all duration-500"
-                            >
-                                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#4DA8C4]/10 to-[#004B63]/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                                    <i className={`fa-solid ${value.icon} text-3xl text-[#4DA8C4]`} />
-                                </div>
-                                <h4 className="text-xl font-bold text-[#004B63] mb-2">{value.text}</h4>
-                                <p className="text-[#64748B] text-sm">{value.desc}</p>
-                            </div>
-                        ))}
                     </div>
                 </div>
             </div>

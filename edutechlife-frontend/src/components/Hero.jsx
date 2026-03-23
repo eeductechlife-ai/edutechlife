@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import MagneticButton from './MagneticButton';
 const NeuralOracle = lazy(() => import('./3D/NeuralOracle'));
 import SplitTextReveal from './SplitTextReveal';
+import { Icon } from '../utils/iconMapping.jsx';
 
 // ==========================================
 // Animated Counter for Stats
@@ -137,14 +138,14 @@ const Hero = memo(({ onNavigate }) => {
                                 className="group btn-glow shadow-neuro-hover flex items-center justify-center gap-3 px-8 py-4 rounded-full text-lg font-bold font-montserrat"
                             >
                                 <span className="text-[#004B63] group-hover:text-corporate transition-colors">Inicializar IA Lab</span>
-                                <i className="fa-solid fa-arrow-right text-[#4DA8C4] transition-transform duration-300 group-hover:translate-x-1" />
+                                <Icon name="fa-arrow-right" className="text-[#4DA8C4] transition-transform duration-300 group-hover:translate-x-1" />
                             </MagneticButton>
                             
                             <MagneticButton 
                                 onClick={() => onNavigate('consultoria')}
                                 className="group flex items-center justify-center gap-3 px-8 py-4 rounded-full text-lg font-bold font-montserrat bg-[#F8FAFC] border border-[#E2E8F0] hover:bg-white hover:border-[#4DA8C4]/50 transition-all duration-300 text-[#004B63]"
                             >
-                                <i className="fa-solid fa-briefcase text-[#64748B] group-hover:text-[#004B63] transition-colors" />
+                                <Icon name="fa-briefcase" className="text-[#64748B] group-hover:text-[#004B63] transition-colors" />
                                 Integración B2B
                             </MagneticButton>
                         </motion.div>

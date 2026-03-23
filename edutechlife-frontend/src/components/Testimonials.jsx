@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { Icon } from '../utils/iconMapping.jsx';
 
 const testimonials = [
     {
@@ -158,7 +159,7 @@ const Testimonials = () => {
                             className="absolute top-8 right-8 text-[#B2D8E5] opacity-20"
                             style={{ fontSize: '8rem', lineHeight: 1 }}
                         >
-                            <i className="fa-solid fa-quote-right" />
+                            <Icon name="fa-quote-right" />
                         </div>
 
                         {/* Progress Bar */}
@@ -185,7 +186,7 @@ const Testimonials = () => {
                                         className="absolute -bottom-2 -right-2 w-10 h-10 rounded-xl flex items-center justify-center text-white"
                                         style={{ background: 'linear-gradient(135deg, #4DA8C4, #66CCCC)' }}
                                     >
-                                        <i className={`fa-solid ${testimonials[activeIndex].logo}`} />
+                                        <Icon name={testimonials[activeIndex].logo} />
                                     </div>
                                 </div>
                                 <h4 className="font-montserrat font-bold text-lg text-[#004B63]">
@@ -196,9 +197,10 @@ const Testimonials = () => {
                                 </p>
                                 <div className="flex gap-1 justify-center md:justify-start">
                                     {[...Array(5)].map((_, i) => (
-                                        <i
+                                        <Icon
                                             key={i}
-                                            className="fa-solid fa-star text-sm"
+                                            name="fa-star"
+                                            className="text-sm"
                                             style={{ color: '#FBBF24' }}
                                         />
                                     ))}
@@ -217,7 +219,7 @@ const Testimonials = () => {
                                         border: '1px solid rgba(77, 168, 196, 0.2)',
                                     }}
                                 >
-                                    <i className="fa-solid fa-arrow-trend-up text-[#10B981]" />
+                                    <Icon name="fa-arrow-trend-up" className="text-[#10B981]" />
                                     <span className="font-montserrat font-bold text-sm text-[#004B63]">
                                         {testimonials[activeIndex].result}
                                     </span>
@@ -262,7 +264,7 @@ const Testimonials = () => {
                                 className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3"
                                 style={{ background: 'linear-gradient(135deg, rgba(77, 168, 196, 0.15), rgba(102, 204, 204, 0.1))' }}
                             >
-                                <i className={`fa-solid ${stat.icon} text-xl`} style={{ color: '#4DA8C4' }} />
+                                <Icon name={stat.icon} className="text-xl" style={{ color: '#4DA8C4' }} />
                             </div>
                             <div className="font-montserrat text-2xl md:text-3xl font-black text-[#004B63] mb-1">
                                 {stat.value}

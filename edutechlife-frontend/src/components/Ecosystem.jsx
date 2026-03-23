@@ -1,6 +1,6 @@
 import { memo, useState, useEffect, useRef, Suspense, lazy } from 'react';
-import EcosystemTransform from './EcosystemTransform';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { Icon } from '../utils/iconMapping.jsx';
 
 // ==========================================
 // Ecosystem Light Glassmorphism Modal
@@ -68,12 +68,12 @@ const PilarModal = ({ pilar, isOpen, onClose }) => {
                         onClick={onClose}
                         className="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 rounded-full bg-white border border-[#E2E8F0] shadow-sm flex items-center justify-center text-[#004B63] hover:bg-[#F8FAFC] transition-transform hover:scale-105"
                     >
-                        <i className="fa-solid fa-xmark text-lg" />
+                        <Icon name="fa-xmark" className="text-lg" />
                     </button>
 
                     <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center gap-6">
                         <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-white border border-[#E2E8F0] shadow-sm flex items-center justify-center">
-                            <i className={`fa-solid ${pilar.icon} text-4xl md:text-5xl text-[#4DA8C4]`} />
+                            <Icon name={pilar.icon} className="text-4xl md:text-5xl text-[#4DA8C4]" />
                         </div>
                         <div>
                             <span className="inline-block px-4 py-1 bg-[#4DA8C4]/10 rounded-full text-xs font-black uppercase tracking-widest text-[#4DA8C4] mb-4">
@@ -94,7 +94,7 @@ const PilarModal = ({ pilar, isOpen, onClose }) => {
                         {content.features.map((feature, index) => (
                             <div key={index} className="group flex items-start gap-4 p-5 bg-[#F8FAFC] rounded-2xl border border-[#E2E8F0] transition-colors hover:bg-white hover:border-[#4DA8C4]/30 hover:shadow-neuro">
                                 <div className="w-12 h-12 rounded-xl bg-white border border-[#E2E8F0] shadow-sm flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
-                                    <i className={`fa-solid ${feature.icon} text-lg text-[#66CCCC]`} />
+                                    <Icon name={feature.icon} className="text-lg text-[#66CCCC]" />
                                 </div>
                                 <div>
                                     <h4 className="font-bold text-[#004B63] mb-1 font-montserrat">{feature.title}</h4>
@@ -109,9 +109,9 @@ const PilarModal = ({ pilar, isOpen, onClose }) => {
                             onClick={() => { onClose(); pilar.onNavigate(pilar.id); }}
                             className="btn-glow inline-flex items-center gap-3 px-10 py-4 font-bold rounded-full font-montserrat bg-white"
                         >
-                            <i className="fa-solid fa-rocket text-[#4DA8C4]" />
+                            <Icon name="fa-rocket" className="text-[#4DA8C4]" />
                             <span className="text-[#004B63] group-hover:text-corporate">{content.cta}</span>
-                            <i className="fa-solid fa-arrow-right text-[#66CCCC]" />
+                            <Icon name="fa-arrow-right" className="text-[#66CCCC]" />
                         </button>
                     </div>
                 </div>
@@ -215,7 +215,6 @@ const Ecosystem = memo(({ onNavigate }) => {
 
   return (
     <section ref={sectionRef} className="relative w-full overflow-hidden bg-[#F8FAFC]">
-      <EcosystemTransform />
             {/* Soft Background Accents */}
             <div className="absolute top-0 right-[-10%] w-[600px] h-[600px] rounded-full bg-[#4DA8C4]/5 blur-[100px] pointer-events-none" />
             <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] rounded-full bg-[#66CCCC]/5 blur-[100px] pointer-events-none" />
@@ -244,79 +243,50 @@ const Ecosystem = memo(({ onNavigate }) => {
                 </motion.div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {pilares.map((pilar) => (
-                        <TiltCard key={pilar.id} pilar={pilar} onClick={() => setSelectedPilar(pilar)}>
-                            {(isHovered) => (
-                                <>
-                                {/* 3D Canvas MicroModel Header */}
-                                <div className="mb-6 relative h-40 w-full rounded-2xl bg-[#F8FAFC] shadow-inner flex items-center justify-center overflow-hidden border border-[#E2E8F0] group-hover:border-[#4DA8C4]/50 transition-colors">
-                                    <span className="absolute top-4 left-4 z-20 text-[10px] font-bold uppercase tracking-widest px-3 py-1 bg-white border border-[#E2E8F0] text-[#004B63] rounded-full shadow-sm">
-                                        {pilar.subtitle}
-                                    </span>
-                                    <div className="absolute inset-0 z-10 flex items-center justify-center">
-                                        {/* CSS Fallback para Modelos 3D Secundarios (One WebGL Rule) */}
-                                        {pilar.id === 'neuroentorno' && (
-                                            <motion.div 
-                                                animate={{ rotate: isHovered ? 180 : 0, scale: isHovered ? 1.2 : 1 }}
-                                                transition={{ type: "spring", stiffness: 100, damping: 20 }}
-                                                className="w-16 h-16 rounded-full border-4 border-[#4DA8C4]/30 border-t-[#4DA8C4] border-b-[#4DA8C4] mix-blend-multiply"
-                                            />
-                                        )}
-                                        {pilar.id === 'ialab' && (
-                                            <motion.div 
-                                                animate={{ scale: isHovered ? [1, 1.2, 1] : 1, opacity: isHovered ? [0.5, 1, 0.5] : 0.5 }}
-                                                transition={{ duration: 2, repeat: Infinity }}
-                                                className="w-12 h-12 bg-gradient-to-tr from-[#004B63] to-[#4DA8C4] rounded-lg rotate-45"
-                                            />
-                                        )}
-                                        {pilar.id === 'consultoria' && (
-                                            <div className="relative w-16 h-16">
-                                                <motion.div 
-                                                    animate={{ rotate: isHovered ? 360 : 0 }}
-                                                    transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                                                    className="absolute inset-0 border-2 border-dashed border-[#66CCCC] rounded-full"
-                                                />
-                                                <motion.div 
-                                                    animate={{ rotate: isHovered ? -360 : 0 }}
-                                                    transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-                                                    className="absolute inset-2 border-2 border-[#004B63]/20 rounded-full"
-                                                />
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
+                    {/* TARJETA 01 */}
+                    <div className="group bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden hover:shadow-[0_8px_40px_rgb(0,0,0,0.12)] transition-all duration-300 cursor-pointer" onClick={() => setSelectedPilar(pilares[0])}>
+                        <div className="h-64 w-full overflow-hidden">
+                            <img src="/images/eco-neuro.webp" alt="Neuro-Entorno Educativo" className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500" />
+                        </div>
+                        <div className="p-8">
+                            <div className="w-14 h-14 bg-[#4DA8C4]/10 rounded-2xl flex items-center justify-center mb-4">
+                                <Icon name="fa-brain" className="text-2xl text-[#4DA8C4]" />
+                            </div>
+                            <span className="text-5xl font-black text-gray-100">01</span>
+                            <h3 className="text-xl font-bold text-[#004B63] uppercase mt-6 mb-4">Neuro-Entorno Educativo</h3>
+                            <p className="text-gray-600 leading-relaxed">Acompañamiento integral basado en metodologías VAK y STEAM. Docentes con maestría analizan procesos psicológicos y académicos para potenciar cada estilo de aprendizaje con herramientas de IA personalizadas.</p>
+                        </div>
+                    </div>
 
-                                {/* Text */}
-                                <h3 className="text-2xl font-black mb-3 text-[#004B63] font-montserrat tracking-tight">
-                                    {pilar.title}
-                                </h3>
-                                <p className="text-sm text-[#64748B] font-open-sans leading-relaxed mb-8 flex-grow">
-                                    {pilar.desc}
-                                </p>
+                    {/* TARJETA 02 */}
+                    <div className="group bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden hover:shadow-[0_8px_40px_rgb(0,0,0,0.12)] transition-all duration-300 cursor-pointer" onClick={() => setSelectedPilar(pilares[1])}>
+                        <div className="h-64 w-full overflow-hidden">
+                            <img src="/images/eco-nacional.webp" alt="Proyectos de Impacto Nacional" className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500" />
+                        </div>
+                        <div className="p-8">
+                            <div className="w-14 h-14 bg-[#4DA8C4]/10 rounded-2xl flex items-center justify-center mb-4">
+                                <Icon name="fa-award" className="text-2xl text-[#4DA8C4]" />
+                            </div>
+                            <span className="text-5xl font-black text-gray-100">02</span>
+                            <h3 className="text-xl font-bold text-[#004B63] uppercase mt-6 mb-4">Proyectos de Impacto Nacional</h3>
+                            <p className="text-gray-600 leading-relaxed">Operadores oficiales SenaTIC. Certificamos a más de 6,000 estudiantes con respaldo internacional de IBM y Coursera. Maestros que forman maestros: más de 200 docentes colombianos transformados en líderes digitales.</p>
+                        </div>
+                    </div>
 
-                                {/* Stats */}
-                                <div className="flex gap-4 mb-6 border-t border-[#E2E8F0] pt-6">
-                                    {pilar.stats.map((stat, sIndex) => (
-                                        <div key={sIndex}>
-                                            <div className="text-2xl font-black text-[#004B63] font-mono tracking-tighter">
-                                                {stat.num}
-                                            </div>
-                                            <div className="text-[10px] uppercase font-bold tracking-widest text-[#64748B]">
-                                                {stat.label}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                {/* CTA Link */}
-                                <div className="mt-auto flex items-center gap-2 font-bold text-[#4DA8C4] group-hover:gap-4 transition-all uppercase tracking-widest text-xs">
-                                    <span>Explorar</span>
-                                    <i className="fa-solid fa-arrow-right" />
-                                </div>
-                                </>
-                            )}
-                        </TiltCard>
-                    ))}
+                    {/* TARJETA 03 */}
+                    <div className="group bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden hover:shadow-[0_8px_40px_rgb(0,0,0,0.12)] transition-all duration-300 cursor-pointer" onClick={() => setSelectedPilar(pilares[2])}>
+                        <div className="h-64 w-full overflow-hidden">
+                            <img src="/images/edutech-carrusel-6.webp" alt="Consultoría B2B y Automatización" className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500" />
+                        </div>
+                        <div className="p-8">
+                            <div className="w-14 h-14 bg-[#4DA8C4]/10 rounded-2xl flex items-center justify-center mb-4">
+                                <Icon name="fa-handshake" className="text-2xl text-[#4DA8C4]" />
+                            </div>
+                            <span className="text-5xl font-black text-gray-100">03</span>
+                            <h3 className="text-xl font-bold text-[#004B63] uppercase mt-6 mb-4">Consultoría B2B y Automatización</h3>
+                            <p className="text-gray-600 leading-relaxed">Transformamos organizaciones educativas y empresas con metodología STEAM aplicada. Agentes de IA personalizados y capacitación de alto nivel que generan productividad real desde el primer mes de implementación.</p>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Direct Access Mini-Cards */}
@@ -339,7 +309,7 @@ const Ecosystem = memo(({ onNavigate }) => {
                             className="group p-5 bg-white rounded-2xl border border-[#E2E8F0] text-left transition-all hover:border-[#4DA8C4]/50 hover:shadow-neuro flex items-center gap-4"
                         >
                             <div className="w-10 h-10 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl flex items-center justify-center text-[#4DA8C4] group-hover:bg-[#4DA8C4] group-hover:text-white transition-colors">
-                                <i className={`fa-solid ${item.icon}`} />
+                                 <Icon name={item.icon} className="w-4 h-4" />
                             </div>
                             <div>
                                 <h3 className="text-sm font-bold text-[#004B63] font-montserrat">{item.title}</h3>

@@ -70,6 +70,7 @@ export default {
         'particle-float': 'particle-float 6s ease-in-out infinite',
         'orb-float': 'orb-float 8s ease-in-out infinite',
         'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
+        'marquee': 'marquee 40s linear infinite',
       },
       keyframes: {
         'grid-move': {
@@ -88,6 +89,13 @@ export default {
           '0%, 100%': { opacity: '0.4' },
           '50%': { opacity: '0.8' },
         },
+        'marquee': {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-33.333%)' },
+        },
+      },
+      transitionProperty: {
+        'translate': 'transform',
       },
     },
   },

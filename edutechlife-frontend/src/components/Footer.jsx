@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Icon } from '../utils/iconMapping.jsx';
 
 export default function Footer() {
   const [email, setEmail] = useState('');
@@ -39,7 +40,7 @@ export default function Footer() {
                   aria-label={social.label}
                   className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:bg-[#4DA8C4] hover:text-white transition-all duration-300"
                 >
-                  <i className={`fa-solid ${social.icon} text-sm`}></i>
+                  <Icon name={social.icon} className="text-sm" />
                 </a>
               ))}
             </div>
@@ -104,7 +105,7 @@ export default function Footer() {
             </p>
             {subscribed ? (
                <div className="bg-white/10 rounded-xl p-4 text-center">
-                 <i className="fa-solid fa-check-circle text-[#4DA8C4] text-2xl mb-2"></i>
+                  <Icon name="fa-check-circle" className="text-[#4DA8C4] text-2xl mb-2" />
                  <p className="text-white text-sm">¡Gracias por suscribirte!</p>
                 </div>
             ) : (

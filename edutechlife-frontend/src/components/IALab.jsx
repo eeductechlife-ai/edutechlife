@@ -6,6 +6,7 @@ import ValerioAvatar from './ValerioAvatar';
 import html2pdf from 'html2pdf.js';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { useInView } from 'framer-motion';
+import { Icon } from '../utils/iconMapping.jsx';
 
 const IALab = ({ onBack }) => {
     const [activeMod, setActiveMod] = useState(1);
@@ -270,18 +271,18 @@ const IALab = ({ onBack }) => {
             <div className="glass-nav border-b border-[rgba(77,168,196,0.2)] shadow-[0_4px_30px_rgba(0,0,0,0.03)] sticky top-0 z-50">
                 <div className="max-w-7xl mx-auto flex items-center justify-between py-4 px-6">
                     <div className="flex items-center gap-4">
-                        <button 
-                            onClick={onBack}
-                            className="flex items-center gap-2 px-4 py-2 bg-[#F1F5F9] hover:bg-[#4DA8C4] hover:text-white border border-[#E2E8F0] rounded-lg transition-all duration-300"
-                        >
-                            <i className="fa-solid fa-arrow-left text-[#4DA8C4] hover:text-white" />
-                            <span className="text-sm text-[#64748B] hover:text-white">Volver</span>
-                        </button>
+                         <button
+                             onClick={onBack}
+                             className="flex items-center gap-2 px-4 py-2 bg-[#F1F5F9] hover:bg-[#4DA8C4] hover:text-white border border-[#E2E8F0] rounded-lg transition-all duration-300"
+                         >
+                             <Icon name="fa-arrow-left" className="text-[#4DA8C4] hover:text-white" />
+                             <span className="text-sm text-[#64748B] hover:text-white">Volver</span>
+                         </button>
                         <div className="h-8 w-px bg-[#E2E8F0]" />
                         <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] rounded-lg flex items-center justify-center">
-                                <i className="fa-solid fa-flask-vial text-white" />
-                            </div>
+                             <div className="w-10 h-10 bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] rounded-lg flex items-center justify-center">
+                                 <Icon name="fa-flask-vial" className="text-white" />
+                             </div>
                             <div>
                                 <h1 className="font-montserrat font-bold text-lg text-[#004B63]">IA Lab Pro</h1>
                                 <p className="text-xs text-[#64748B]">Hyper-Intelligence Certification</p>
@@ -343,7 +344,7 @@ const IALab = ({ onBack }) => {
                                                             : 'bg-[#E2E8F0] text-[#64748B]'
                                                 }`}>
                                                     {completedModules.includes(mod.id) ? (
-                                                        <i className="fa-solid fa-check text-xs" />
+                                                         <Icon name="fa-check" className="text-xs" />
                                                     ) : (
                                                         mod.id
                                                     )}
@@ -370,7 +371,7 @@ const IALab = ({ onBack }) => {
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-4">
                                         <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
-                                            <i className={`fa-solid ${curr.icon} text-2xl text-white`} />
+                                             <Icon name={curr.icon} className="text-2xl text-white" />
                                         </div>
                                         <div>
                                             <p className="text-white/70 text-xs uppercase tracking-wider">Módulo {activeMod} · IA Lab Pro</p>
@@ -382,19 +383,19 @@ const IALab = ({ onBack }) => {
                                             onClick={() => setActiveTab('lab')}
                                             className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${activeTab === 'lab' ? 'bg-white text-[#004B63]' : 'bg-white/20 text-white hover:bg-white/30'}`}
                                         >
-                                            <i className="fa-solid fa-terminal mr-2" />Lab
+                                            <Icon name="fa-terminal" className="mr-2" />Lab
                                         </button>
                                         <button 
                                             onClick={() => setActiveTab('eval')}
                                             className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${activeTab === 'eval' ? 'bg-white text-[#004B63]' : 'bg-white/20 text-white hover:bg-white/30'}`}
                                         >
-                                            <i className="fa-solid fa-clipboard-check mr-2" />Evaluación
+                                            <Icon name="fa-clipboard-check" className="mr-2" />Evaluación
                                         </button>
                                         <button 
                                             onClick={() => setActiveTab('cert')}
                                             className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${activeTab === 'cert' ? 'bg-white text-[#004B63]' : 'bg-white/20 text-white hover:bg-white/30'}`}
                                         >
-                                            <i className="fa-solid fa-medal mr-2" />Certificado
+                                            <Icon name="fa-medal" className="mr-2" />Certificado
                                         </button>
                                     </div>
                                 </div>
@@ -404,7 +405,7 @@ const IALab = ({ onBack }) => {
                                 <div className="flex flex-wrap gap-3 mt-4">
                                     {curr.topics.map((topic, i) => (
                                         <span key={i} className="px-3 py-1 bg-[#4DA8C4]/10 text-[#004B63] text-sm rounded-full font-medium">
-                                            <i className="fa-solid fa-sparkles mr-1 text-[#4DA8C4]" />
+                                            <Icon name="fa-sparkles" className="mr-1 text-[#4DA8C4]" />
                                             {topic}
                                         </span>
                                     ))}
@@ -421,7 +422,7 @@ const IALab = ({ onBack }) => {
                                         <div className="bg-gradient-to-r from-[#004B63] to-[#4DA8C4] px-6 py-4">
                                             <div className="flex items-center gap-3">
                                                 <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
-                                                    <i className="fa-solid fa-terminal text-white" />
+                                                    <Icon name="fa-terminal" className="text-white" />
                                                 </div>
                                                 <div>
                                                     <h3 className="font-bold text-white">Sintetizador de Prompts Élite</h3>
@@ -450,7 +451,7 @@ const IALab = ({ onBack }) => {
                                                     </>
                                                 ) : (
                                                     <>
-                                                        <i className="fa-solid fa-bolt" />
+                                                        <Icon name="fa-bolt" />
                                                         Sintetizar MasterPrompt
                                                     </>
                                                 )}
@@ -463,7 +464,7 @@ const IALab = ({ onBack }) => {
                                                             onClick={() => navigator.clipboard.writeText(genData.masterPrompt)}
                                                             className="text-sm text-[#4DA8C4] hover:text-[#66CCCC] flex items-center gap-1"
                                                         >
-                                                            <i className="fa-solid fa-copy" /> Copiar
+                                                            <Icon name="fa-copy" /> Copiar
                                                         </button>
                                                     </div>
                                                     <div className="p-4 bg-[#0a1628] rounded-lg text-white text-sm font-mono whitespace-pre-wrap">
@@ -507,14 +508,14 @@ const IALab = ({ onBack }) => {
                                                     onClick={toggleSpeech}
                                                     className={`p-3 rounded-xl transition-all ${isListening ? 'bg-red-500 text-white' : 'bg-white/10 text-[#4DA8C4]'}`}
                                                 >
-                                                    <i className="fa-solid fa-microphone" />
+                                                    <Icon name="fa-microphone" />
                                                 </button>
                                                 <input type="file" ref={fileInputRef} onChange={handleFileUpload} style={{ display: 'none' }} accept=".txt,.md,.pdf,.doc,.docx" />
                                                 <button
                                                     onClick={() => fileInputRef.current?.click()}
                                                     className="p-3 rounded-xl bg-white/10 text-[#4DA8C4] hover:bg-white/20 transition-all"
                                                 >
-                                                    <i className="fa-solid fa-paperclip" />
+                                                    <Icon name="fa-paperclip" />
                                                 </button>
                                             </div>
                                             {coachMsg && (
@@ -535,7 +536,7 @@ const IALab = ({ onBack }) => {
                                         <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#FFD166] rounded-full blur-[120px] opacity-10 pointer-events-none"></div>
                                         <div className="flex items-center gap-3 mb-4">
                                             <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                                                <i className="fa-solid fa-bolt text-[#FFD166]" />
+                                                <Icon name="fa-bolt" className="text-[#FFD166]" />
                                             </div>
                                             <div>
                                                 <p className="text-xs text-white/60 uppercase tracking-wider">Desafío del Módulo</p>
@@ -543,28 +544,28 @@ const IALab = ({ onBack }) => {
                                         </div>
                                         <p className="text-white/80 italic mb-6">"{curr.challenge}"</p>
                                         <button className="w-full py-3 bg-gradient-to-r from-[#FFD166] to-[#FF8E53] text-[#004B63] rounded-xl font-bold hover:shadow-lg transition-all">
-                                            <i className="fa-solid fa-paper-plane mr-2" />Enviar solución
+                                            <Icon name="fa-paper-plane" className="mr-2" />Enviar solución
                                         </button>
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="bg-white/60 backdrop-blur-xl p-5 rounded-2xl border border-white/80 text-center shadow-sm">
-                                            <i className="fa-solid fa-clock text-[#4DA8C4] text-lg mb-2" />
+                                            <Icon name="fa-clock" className="text-[#4DA8C4] text-lg mb-2" />
                                             <p className="font-bold text-[#004B63]">{curr.duration}</p>
                                             <p className="text-xs text-[#64748B]">Duración</p>
                                         </div>
                                         <div className="bg-white/60 backdrop-blur-xl p-5 rounded-2xl border border-white/80 text-center shadow-sm">
-                                            <i className="fa-solid fa-signal text-[#66CCCC] text-lg mb-2" />
+                                            <Icon name="fa-signal" className="text-[#66CCCC] text-lg mb-2" />
                                             <p className="font-bold text-[#004B63]">{curr.level}</p>
                                             <p className="text-xs text-[#64748B]">Nivel</p>
                                         </div>
                                         <div className="bg-white/60 backdrop-blur-xl p-5 rounded-2xl border border-white/80 text-center shadow-sm">
-                                            <i className="fa-solid fa-play text-[#FFD166] text-lg mb-2" />
+                                            <Icon name="fa-play" className="text-[#FFD166] text-lg mb-2" />
                                             <p className="font-bold text-[#004B63]">{curr.videos}</p>
                                             <p className="text-xs text-[#64748B]">Videos</p>
                                         </div>
                                         <div className="bg-white/60 backdrop-blur-xl p-5 rounded-2xl border border-white/80 text-center shadow-sm">
-                                            <i className="fa-solid fa-briefcase text-[#FF8E53] text-lg mb-2" />
+                                            <Icon name="fa-briefcase" className="text-[#FF8E53] text-lg mb-2" />
                                             <p className="font-bold text-[#004B63]">{curr.projects}</p>
                                             <p className="text-xs text-[#64748B]">Proyectos</p>
                                         </div>
@@ -579,7 +580,7 @@ const IALab = ({ onBack }) => {
                                 <div className="p-6 border-b border-[#E2E8F0]">
                                     <div className="flex items-center gap-4">
                                         <div className="w-14 h-14 bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] rounded-xl flex items-center justify-center">
-                                            <i className="fa-solid fa-clipboard-check text-2xl text-white" />
+                                            <Icon name="fa-clipboard-check" className="text-2xl text-white" />
                                         </div>
                                         <div className="flex-1">
                                             <h3 className="text-xl font-bold text-[#004B63]">Evaluación del Módulo</h3>
@@ -628,7 +629,7 @@ const IALab = ({ onBack }) => {
                                             disabled={Object.keys(evalAnswers).length < 5}
                                             className="w-full py-4 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white rounded-xl font-bold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                         >
-                                            <i className="fa-solid fa-check-circle mr-2" />Enviar evaluación
+                                            <Icon name="fa-check-circle" className="mr-2" />Enviar evaluación
                                         </button>
                                     </div>
                                 ) : (
@@ -661,14 +662,14 @@ const IALab = ({ onBack }) => {
                                                 onClick={() => setActiveTab('cert')}
                                                 className="px-8 py-3 bg-gradient-to-r from-[#FFD166] to-[#FF8E53] text-[#004B63] rounded-xl font-bold hover:shadow-lg transition-all"
                                             >
-                                                <i className="fa-solid fa-award mr-2" />Ver certificado
+                                                <Icon name="fa-award" className="mr-2" />Ver certificado
                                             </button>
                                         ) : (
                                             <button
                                                 onClick={() => { setEvalSubmitted(false); setEvalAnswers({}); }}
                                                 className="px-8 py-3 bg-[#E2E8F0] text-[#64748B] rounded-xl font-bold hover:bg-[#d1d5db] transition-all"
                                             >
-                                                <i className="fa-solid fa-rotate-right mr-2" />Reintentar
+                                                <Icon name="fa-rotate-right" className="mr-2" />Reintentar
                                             </button>
                                         )}
                                     </div>
@@ -681,7 +682,7 @@ const IALab = ({ onBack }) => {
                             <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgba(0,75,99,0.06)] rounded-[2rem] p-16 text-center relative overflow-hidden">
                                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#FFD166] rounded-full blur-[150px] opacity-20 pointer-events-none"></div>
                                 <div className="w-24 h-24 mx-auto bg-gradient-to-br from-[#FFD166] to-[#FF8E53] rounded-full flex items-center justify-center mb-6">
-                                    <i className="fa-solid fa-trophy text-4xl text-white" />
+                                    <Icon name="fa-trophy" className="text-4xl text-white" />
                                 </div>
                                 <h2 className="text-3xl font-bold text-[#004B63] font-montserrat mb-4">¡Certificado de Excelencia!</h2>
                                 <p className="text-[#64748B] mb-8">Has completado el módulo {activeMod}: {curr.title}</p>
@@ -689,7 +690,7 @@ const IALab = ({ onBack }) => {
                                     onClick={handleDownloadCert}
                                     className="px-8 py-4 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white rounded-xl font-bold hover:shadow-xl transition-all"
                                 >
-                                    <i className="fa-solid fa-download mr-2" />Descargar Certificado PDF
+                                    <Icon name="fa-download" className="mr-2" />Descargar Certificado PDF
                                 </button>
                             </div>
                         )}

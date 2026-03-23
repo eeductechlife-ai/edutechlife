@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { Icon } from '../utils/iconMapping.jsx';
 
 const plans = [
     {
@@ -238,8 +239,9 @@ const Pricing = () => {
                                                 className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
                                                 style={{ background: `${plan.color}20` }}
                                             >
-                                                <i
-                                                    className="fa-solid fa-check text-xs"
+                                                <Icon
+                                                    name="fa-check"
+                                                    className="text-xs"
                                                     style={{ color: plan.color }}
                                                 />
                                             </div>
@@ -249,7 +251,7 @@ const Pricing = () => {
                                     {plan.notIncluded.map((feature, fi) => (
                                         <li key={fi} className="flex items-start gap-3 opacity-40">
                                             <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 bg-[#F1F5F9]">
-                                                <i className="fa-solid fa-xmark text-xs text-[#64748B]" />
+                                                <Icon name="fa-xmark" className="text-xs text-[#64748B]" />
                                             </div>
                                             <span className="text-[#64748B] text-sm line-through">{feature}</span>
                                         </li>
@@ -308,8 +310,9 @@ const Pricing = () => {
                                 <span className="font-montserrat font-bold text-[#004B63] pr-4">
                                     {faq.question}
                                 </span>
-                                <i
-                                    className={`fa-solid fa-chevron-down text-sm text-[#4DA8C4] transition-transform duration-300 ${
+                                <Icon
+                                    name="fa-chevron-down"
+                                    className={`text-sm text-[#4DA8C4] transition-transform duration-300 ${
                                         openFaq === i ? 'rotate-180' : ''
                                     }`}
                                 />
@@ -336,7 +339,7 @@ const Pricing = () => {
                         href="#contacto"
                         className="inline-flex items-center gap-2 text-[#4DA8C4] font-montserrat font-bold hover:underline"
                     >
-                        <i className="fa-solid fa-envelope" />
+                        <Icon name="fa-envelope" />
                         Contáctanos directamente
                     </a>
                 </div>

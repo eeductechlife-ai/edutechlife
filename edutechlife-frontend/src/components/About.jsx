@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import SectionWrapper from './SectionWrapper';
+import { Icon } from '../utils/iconMapping.jsx';
 
 const carouselImages = [
     { src: '/images/edutech-carrusel-1.webp', alt: 'Estudiantes Edutechlife' },
@@ -103,12 +104,12 @@ const AboutCarousel = () => {
             {/* Floating Elements */}
             <div className="carousel-float carousel-float-1">
                 <div className="float-icon">
-                    <i className="fa-solid fa-brain" />
+                    <Icon name="fa-brain" />
                 </div>
             </div>
             <div className="carousel-float carousel-float-2">
                 <div className="float-icon">
-                    <i className="fa-solid fa-robot" />
+                    <Icon name="fa-robot" />
                 </div>
             </div>
 
@@ -118,14 +119,14 @@ const AboutCarousel = () => {
                 onClick={goToPrev}
                 aria-label="Imagen anterior"
             >
-                <i className="fa-solid fa-chevron-left" />
+                <Icon name="fa-chevron-left" />
             </button>
             <button 
                 className="carousel-arrow carousel-arrow-next" 
                 onClick={goToNext}
                 aria-label="Siguiente imagen"
             >
-                <i className="fa-solid fa-chevron-right" />
+                <Icon name="fa-chevron-right" />
             </button>
 
             {/* Progress Bar */}
@@ -154,7 +155,7 @@ const AboutCarousel = () => {
             {/* Caption */}
             <div className="carousel-caption">
                 <div className="caption-badge">
-                    <i className="fa-solid fa-sparkles" />
+                    <Icon name="fa-sparkles" />
                     <span>Nuestra Esencia</span>
                 </div>
             </div>
