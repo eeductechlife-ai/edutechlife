@@ -30,8 +30,6 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   const [pdfLoading, setPdfLoading] = useState(false);
   const [showPdfPreview, setShowPdfPreview] = useState(false);
   const [inputText, setInputText] = useState('');
-  const [error, setError] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
   
   // Voice States
   const [voiceMode, setVoiceMode] = useState(false);
@@ -49,11 +47,6 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
   const pdfTemplateRef = useRef(null);
-
-  // Component mount check
-  useEffect(() => {
-    setIsLoaded(true);
-  }, []);
 
   // Valeria Profile
   const VALERIA_PROFILE = {
@@ -341,15 +334,17 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   const addMessage = useCallback((role, content) => {
     setMessages(prev => [...prev, { id: Date.now(), role, content, timestamp: new Date() }]);
     
-    if (role === 'assistant' && voiceMode && voiceEngine) {
+    if (role === 'assistant' && voiceMode) {
       setCurrentCaption(content);
-      voiceEngine.speak(content).catch(err => console.warn('Speak error:', err));
+      if (voiceEngine && voiceEngine.speak) {
+        voiceEngine.speak(content).catch(err => console.warn('Speak error:', err));
+      }
     }
   }, [voiceMode]);
 
   // Stop speaking
   const stopSpeaking = useCallback(() => {
-    if (voiceEngine) {
+    if (voiceEngine && voiceEngine.stop) {
       voiceEngine.stop();
     }
     setIsSpeaking(false);
@@ -359,14 +354,16 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   // Start listening
   const startListening = useCallback(() => {
     if (!voiceMode || isSpeaking || !voiceEngine) return;
-    
+
     setInterimTranscript('');
-    voiceEngine.startListening();
+    if (voiceEngine && voiceEngine.startListening) {
+      voiceEngine.startListening();
+    }
   }, [voiceMode, isSpeaking]);
 
   // Stop listening
   const stopListening = useCallback(() => {
-    if (voiceEngine) {
+    if (voiceEngine && voiceEngine.stopListening) {
       voiceEngine.stopListening();
     }
     setIsListening(false);
@@ -379,10 +376,14 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     setVoiceMode(newMode);
     
     if (newMode) {
-      voiceEngine.setConversationMode(true);
-      addMessage('assistant', 'He activado el modo voz. Ahora puedes hablarme y te responderé en voz alta. Cuando veas el ícono verde del micrófono, puedes hablarme tu respuesta. 🎤');
+      if (voiceEngine && voiceEngine.setConversationMode) {
+        voiceEngine.setConversationMode(true);
+      }
+      addMessage('assistant', 'He activado el modo voz. Ahora puedes hablarme y te responderé en voz alta. Cuando veas el ícono verde del micrófono, puedes hablarme tu respuesta.');
     } else {
-      voiceEngine.setConversationMode(false);
+      if (voiceEngine && voiceEngine.setConversationMode) {
+        voiceEngine.setConversationMode(false);
+      }
       stopSpeaking();
       stopListening();
     }
@@ -672,20 +673,6 @@ const DiagnosticoVAK = ({ onNavigate }) => {
 
   // Get status icon
   const StatusIcon = isListening ? MicOff : isSpeaking ? Volume2 : Brain;
-
-  // Loading fallback
-  if (!isLoaded) {
-    return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #0B0F19 0%, #0D1321 50%, #1a1f2e 100%)' }}>
-        <div className="text-center">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #4DA8C4, #66CCCC)' }}>
-            <Brain className="w-8 h-8 text-white" />
-          </div>
-          <p className="text-white/60">Cargando diagnóstico...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0B0F19 0%, #0D1321 50%, #1a1f2e 100%)' }}>

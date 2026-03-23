@@ -297,12 +297,56 @@ let voiceEngineInstance = null;
 
 export function getVoiceEngine() {
   if (!voiceEngineInstance) {
-    voiceEngineInstance = new VoiceEngine();
+    try {
+      voiceEngineInstance = new VoiceEngine();
+    } catch (e) {
+      console.warn('VoiceEngine initialization failed:', e);
+      return null;
+    }
   }
   return voiceEngineInstance;
 }
 
-export const voiceEngine = getVoiceEngine();
+export const voiceEngine = {
+  speak: async (text, options) => {
+    const engine = getVoiceEngine();
+    if (engine && typeof engine.speak === 'function') {
+      return engine.speak(text, options);
+    }
+    return Promise.resolve();
+  },
+  startListening: () => {
+    const engine = getVoiceEngine();
+    if (engine && typeof engine.startListening === 'function') {
+      engine.startListening();
+    }
+  },
+  stopListening: () => {
+    const engine = getVoiceEngine();
+    if (engine && typeof engine.stopListening === 'function') {
+      engine.stopListening();
+    }
+  },
+  stop: () => {
+    const engine = getVoiceEngine();
+    if (engine && typeof engine.stop === 'function') {
+      engine.stop();
+    }
+  },
+  setConversationMode: (enabled) => {
+    const engine = getVoiceEngine();
+    if (engine && typeof engine.setConversationMode === 'function') {
+      engine.setConversationMode(enabled);
+    }
+  },
+  onSpeakStart: null,
+  onSpeakEnd: null,
+  onListeningStart: null,
+  onListeningEnd: null,
+  onInterimResult: null,
+  onFinalResult: null,
+  onError: null,
+};
 
 export function speakText(text, options = {}) {
   return voiceEngine.speak(text, options);
