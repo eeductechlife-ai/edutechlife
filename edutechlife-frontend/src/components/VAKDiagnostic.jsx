@@ -226,13 +226,7 @@ const VAKDiagnostic = memo(({ onNavigate, userName: initialName = '', initialMoo
   };
 
   const handleDownloadPDF = async () => {
-    console.log('[PDF] ===== INICIANDO GENERACIÓN DE PDF =====');
-    console.log('[PDF] Resultado disponible:', !!result);
-    console.log('[PDF] Usuario:', userName);
-    console.log('[PDF] html2pdf disponible:', typeof html2pdf);
-    
     if (!result) {
-      console.error('[PDF] Error: No hay resultado disponible');
       alert('Error: No hay resultado disponible');
       return;
     }
@@ -241,83 +235,77 @@ const VAKDiagnostic = memo(({ onNavigate, userName: initialName = '', initialMoo
     
     const dominantStyle = VAK_STYLES[result.dominant];
     const htmlContent = generatePDFHTML(result, dominantStyle, userName);
-    const filename = `Diagnostico-VAK-${userName || 'Estudiante'}-${new Date().toISOString().split('T')[0]}.pdf`;
     
+    // Método 1: Nueva ventana de impresión (más confiable)
     try {
-      console.log('[PDF] Generando plantilla HTML...');
-      console.log('[PDF] HTML generado, longitud:', htmlContent.length);
-      
+      const printWindow = window.open('', '_blank', 'width=800,height=900');
+      if (printWindow) {
+        printWindow.document.write(`
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="UTF-8">
+            <title>Diagnóstico VAK - ${userName || 'Estudiante'}</title>
+            <style>
+              @media print {
+                body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                .no-print { display: none; }
+              }
+              @media screen {
+                body { padding: 20px; }
+                .print-btn {
+                  position: fixed; top: 10px; right: 10px;
+                  padding: 10px 20px; background: #004B63; color: white;
+                  border: none; cursor: pointer; font-size: 14px;
+                  border-radius: 5px;
+                }
+                .print-btn:hover { background: #006080; }
+              }
+            </style>
+          </head>
+          <body>
+            <button class="print-btn no-print" onclick="window.print()">Imprimir / Guardar PDF</button>
+            ${htmlContent.replace('<!DOCTYPE html><html><head><meta charset="UTF-8"><style>', '<style>').replace('</style></head><body>', '</head><body>').replace('</body></html>', '')}
+          </body>
+          </html>
+        `);
+        printWindow.document.close();
+        setPdfLoading(false);
+        return;
+      }
+    } catch (e) {
+      console.error('Error con print window:', e);
+    }
+    
+    // Método 2: html2pdf como fallback
+    try {
       const container = document.createElement('div');
-      container.innerHTML = htmlContent;
-      container.style.width = '595px';
-      container.style.position = 'fixed';
-      container.style.left = '-9999px';
+      container.innerHTML = htmlContent.replace(/<!DOCTYPE html>|<html>|<head>|<\/head>|<body>|<\/body>|<\/html>/g, '');
+      container.style.position = 'absolute';
+      container.style.left = '0';
       container.style.top = '0';
+      container.style.width = '210mm';
+      container.style.background = 'white';
+      container.style.zIndex = '-1000';
       document.body.appendChild(container);
       
-      console.log('[PDF] Contenedor creado, intentando html2pdf...');
+      await new Promise(resolve => setTimeout(resolve, 500));
       
       const opt = {
-        margin: [10, 10, 10, 10],
-        filename: filename,
-        image: { type: 'png', quality: 0.98 },
-        html2canvas: { 
-          scale: 1,
-          useCORS: false,
-          letterRendering: false,
-          logging: false,
-          allowTaint: true,
-          backgroundColor: '#ffffff'
-        },
-        jsPDF: { 
-          unit: 'mm', 
-          format: 'a4', 
-          orientation: 'portrait' 
-        }
+        margin: 5,
+        filename: `Diagnostico-VAK-${userName || 'Estudiante'}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
-      await html2pdf()
-        .set(opt)
-        .from(container)
-        .save();
-      
-      console.log('[PDF] PDF guardado exitosamente');
+      await html2pdf().set(opt).from(container).save();
       document.body.removeChild(container);
-      
     } catch (error) {
-      console.error('[PDF] Error con html2pdf:', error);
-      console.error('[PDF] Stack trace:', error.stack);
-      
-      // Fallback: abrir en nueva ventana para imprimir
-      try {
-        console.log('[PDF] Intentando método alternativo...');
-        const printWindow = window.open('', '_blank');
-        if (printWindow) {
-          printWindow.document.write(`
-            <!DOCTYPE html>
-            <html>
-            <head>
-              <title>${filename}</title>
-              <style>
-                body { font-family: Arial, sans-serif; padding: 20px; }
-                @media print { body { padding: 0; } }
-              </style>
-            </head>
-            <body>${htmlContent}</body>
-            </html>
-          `);
-          printWindow.document.close();
-          printWindow.print();
-        } else {
-          throw new Error('No se pudo abrir ventana de impresión');
-        }
-      } catch (fallbackError) {
-        console.error('[PDF] Error en fallback:', fallbackError);
-        alert('Error al generar PDF. Por favor intenta de nuevo o contacta soporte.');
-      }
+      console.error('Error html2pdf:', error);
+      alert('Error al generar PDF. Usa Ctrl+P para imprimir la página.');
     } finally {
       setPdfLoading(false);
-      console.log('[PDF] ===== FIN GENERACIÓN PDF =====');
     }
   };
 
