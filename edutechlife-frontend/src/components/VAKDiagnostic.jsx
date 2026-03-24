@@ -69,6 +69,7 @@ const VAKDiagnostic = memo(({ onNavigate, userName: initialName = '', initialMoo
   const [tempMood, setTempMood] = useState(initialMood);
   const [result, setResult] = useState(null);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [pdfLoading, setPdfLoading] = useState(false);
   const sectionRef = useRef(null);
 
   const question = VAK_QUESTIONS[currentQuestion];
@@ -126,351 +127,294 @@ const VAKDiagnostic = memo(({ onNavigate, userName: initialName = '', initialMoo
   };
 
   const handleDownloadPDF = async () => {
-    const dominantStyle = VAK_STYLES[result.dominant];
-    const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
-    const margin = 15;
-    let y = 20;
+    setPdfLoading(true);
+    try {
+      const dominantStyle = VAK_STYLES[result.dominant];
+      const doc = new jsPDF();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const margin = 20;
+      const contentWidth = pageWidth - (margin * 2);
 
-    // Colores
-    const primaryColor = [0, 75, 99];
-    const accentColor = [77, 168, 196];
-    const secondaryColor = [102, 204, 204];
-    const pinkColor = [255, 107, 157];
-    const goldColor = [255, 209, 102];
-    const textColor = [51, 65, 85];
-    const lightBg = [248, 250, 252];
+      const colors = {
+        primary: [0, 75, 99],
+        accent: [77, 168, 196],
+        secondary: [102, 204, 204],
+        kinestesico: [255, 107, 157],
+        text: [71, 85, 105],
+        textLight: [100, 116, 139],
+        white: [255, 255, 255],
+        bg: [248, 250, 252],
+        cardBg: [255, 255, 255]
+      };
 
-    // Función para dibujar gráfico de dona
-    const drawDonutChart = (cx, cy, radius, values, colors) => {
-      const total = values.reduce((a, b) => a + b, 0);
-      let startAngle = -Math.PI / 2;
+      const getDominantColor = () => {
+        if (result.dominant === 'visual') return colors.accent;
+        if (result.dominant === 'auditivo') return colors.secondary;
+        return colors.kinestesico;
+      };
+
+      const drawCard = (x, y, w, h, radius = 8) => {
+        doc.setFillColor(...colors.cardBg);
+        doc.setDrawColor(226, 232, 240);
+        doc.setLineWidth(0.3);
+        doc.roundedRect(x, y, w, h, radius, radius, 'FD');
+      };
+
+      const drawSectionTitle = (title, y) => {
+        doc.setFontSize(12);
+        doc.setTextColor(...colors.primary);
+        doc.setFont('helvetica', 'bold');
+        doc.text(title, margin, y);
+        doc.setFont('helvetica', 'normal');
+      };
+
+      // ==================== HEADER ====================
+      doc.setFillColor(...colors.primary);
+      doc.rect(0, 0, pageWidth, 35, 'F');
+
+      doc.setFontSize(14);
+      doc.setTextColor(...colors.white);
+      doc.setFont('helvetica', 'bold');
+      doc.text('EDUTECHLIFE', margin, 15);
+
+      doc.setFontSize(8);
+      doc.setTextColor(...colors.secondary);
+      doc.text('Education Technology', margin, 22);
+
+      doc.setFillColor(...colors.accent);
+      doc.roundedRect(pageWidth - margin - 45, 10, 45, 14, 3, 3, 'F');
+      doc.setFontSize(7);
+      doc.setTextColor(...colors.white);
+      doc.text('DIAGNÓSTICO VAK', pageWidth - margin - 22.5, 18, { align: 'center' });
+
+      let y = 45;
+
+      // ==================== USER INFO ====================
+      doc.setFillColor(...colors.bg);
+      doc.roundedRect(margin, y, contentWidth, 18, 4, 4, 'F');
       
-      values.forEach((value, i) => {
-        const sliceAngle = (value / total) * 2 * Math.PI;
+      doc.setFontSize(9);
+      doc.setTextColor(...colors.text);
+      doc.text('Estudiante:', margin + 5, y + 7);
+      doc.setFont('helvetica', 'bold');
+      doc.text(userName || 'Estudiante', margin + 25, y + 7);
+      doc.setFont('helvetica', 'normal');
+      
+      doc.setTextColor(...colors.textLight);
+      doc.text('Fecha:', margin + 100, y + 7);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(...colors.text);
+      doc.text(new Date().toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' }), margin + 120, y + 7);
+      
+      y += 28;
+
+      // ==================== HERO RESULT CARD ====================
+      const heroColor = getDominantColor();
+      
+      // Gradient simulation
+      doc.setFillColor(heroColor[0], heroColor[1], heroColor[2]);
+      doc.rect(margin, y, contentWidth, 55, 'F');
+      doc.setFillColor(heroColor[0] - 20, heroColor[1] - 20, heroColor[2] - 20);
+      doc.rect(margin, y + 45, contentWidth, 10, 'F');
+
+      doc.setFontSize(10);
+      doc.setTextColor(255, 255, 255, 0.8);
+      doc.text('Tu estilo de aprendizaje dominante', margin + 10, y + 12);
+      
+      doc.setFontSize(22);
+      doc.setTextColor(...colors.white);
+      doc.setFont('helvetica', 'bold');
+      doc.text(dominantStyle.name, margin + 10, y + 30);
+      doc.setFont('helvetica', 'normal');
+
+      doc.setFontSize(32);
+      doc.setTextColor(...colors.white);
+      doc.text(`${result.percentage}%`, pageWidth - margin - 25, y + 35, { align: 'center' });
+
+      doc.setFontSize(8);
+      doc.setTextColor(255, 255, 255, 0.9);
+      doc.text('dominante', pageWidth - margin - 25, y + 42, { align: 'center' });
+
+      y += 65;
+
+      // ==================== CHART SECTION ====================
+      drawSectionTitle('Distribución de Estilos', y);
+      y += 10;
+
+      // Donut chart
+      const chartCenterX = margin + 40;
+      const chartCenterY = y + 30;
+      const chartRadius = 25;
+
+      doc.setFillColor(240, 240, 240);
+      doc.circle(chartCenterX, chartCenterY, chartRadius + 3, 'F');
+
+      const values = [result.percentages.visual, result.percentages.auditivo, result.percentages.kinestesico];
+      const chartColors = [colors.accent, colors.secondary, colors.kinestesico];
+      let startAngle = -Math.PI / 2;
+
+      values.forEach((val, i) => {
+        const sliceAngle = (val / 100) * 2 * Math.PI;
         const endAngle = startAngle + sliceAngle;
         
-        // Dibujar arco
-        doc.setFillColor(...colors[i]);
-        doc.setDrawColor(255, 255, 255);
-        doc.setLineWidth(2);
+        doc.setFillColor(...chartColors[i]);
         
-        // Crear camino del arco
-        const x1 = cx + radius * Math.cos(startAngle);
-        const y1 = cy + radius * Math.sin(startAngle);
-        const x2 = cx + radius * Math.cos(endAngle);
-        const y2 = cy + radius * Math.sin(endAngle);
-        
-        doc.circle(cx, cy, radius, 'F');
-        doc.setFillColor(255, 255, 255);
-        doc.circle(cx, cy, radius * 0.5, 'F');
+        // Draw arc sectors
+        const steps = 30;
+        for (let s = 0; s <= steps; s++) {
+          const angle = startAngle + (sliceAngle * s / steps);
+          const px = chartCenterX + chartRadius * Math.cos(angle);
+          const py = chartCenterY + chartRadius * Math.sin(angle);
+          if (s === 0) doc.moveTo(chartCenterX, chartCenterY);
+          doc.line(px, py);
+        }
+        doc.line(chartCenterX, chartCenterY);
+        doc.circle(chartCenterX, chartCenterY, chartRadius, 'FD');
         
         startAngle = endAngle;
       });
-    };
 
-    // Función para dibujar barra de progreso
-    const drawProgressBar = (x, barY, width, value, color, label) => {
-      const barHeight = 12;
-      
-      // Fondo de la barra
-      doc.setFillColor(226, 232, 240);
-      doc.roundedRect(x, barY, width, barHeight, 2, 2, 'F');
-      
-      // Barra de progreso
-      const fillWidth = (value / 100) * width;
-      doc.setFillColor(...color);
-      doc.roundedRect(x, barY, fillWidth, barHeight, 2, 2, 'F');
-      
-      // Porcentaje
-      doc.setFontSize(10);
-      doc.setTextColor(...textColor);
-      doc.text(`${value}%`, x + width + 5, barY + 8);
-      
-      // Etiqueta
-      doc.setFontSize(9);
-      doc.setTextColor(100, 116, 139);
-      doc.text(label, x, barY - 3);
-    };
+      // Center white
+      doc.setFillColor(...colors.white);
+      doc.circle(chartCenterX, chartCenterY, chartRadius * 0.55, 'F');
 
-    // ==================== HEADER ====================
-    // Fondo gradient del header
-    doc.setFillColor(...primaryColor);
-    doc.rect(0, 0, pageWidth, 45, 'F');
-    
-    // Logo como texto estilizado
-    doc.setFontSize(28);
-    doc.setTextColor(255, 255, 255);
-    doc.text('EDUTECHLIFE', pageWidth / 2, 18, { align: 'center' });
-    
-    doc.setFontSize(10);
-    doc.setTextColor(...secondaryColor);
-    doc.text('Transformando la educación con tecnología', pageWidth / 2, 28, { align: 'center' });
-    
-    // Badge diagnóstico
-    doc.setFillColor(...accentColor);
-    doc.roundedRect(pageWidth / 2 - 35, 33, 70, 8, 2, 2, 'F');
-    doc.setFontSize(8);
-    doc.setTextColor(255, 255, 255);
-    doc.text('DIAGNÓSTICO VAK', pageWidth / 2, 39, { align: 'center' });
-    
-    y = 55;
+      // Legend cards
+      const legendStartX = margin + 90;
+      const cardW = 35;
+      const cardH = 22;
+      const styles = [
+        { name: 'Visual', val: result.percentages.visual, color: colors.accent },
+        { name: 'Auditivo', val: result.percentages.auditivo, color: colors.secondary },
+        { name: 'Kinestésico', val: result.percentages.kinestesico, color: colors.kinestesico }
+      ];
 
-    // ==================== INFO ESTUDIANTE ====================
-    // Card de información
-    doc.setFillColor(...lightBg);
-    doc.roundedRect(margin, y, pageWidth - (margin * 2), 22, 3, 3, 'F');
-    
-    doc.setFontSize(11);
-    doc.setTextColor(...textColor);
-    doc.text(`👤 ${userName || 'Estudiante'}`, margin + 5, y + 8);
-    doc.text(`📅 ${new Date().toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' })}`, margin + 80, y + 8);
-    
-    y += 30;
-
-    // ==================== RESULTADO PRINCIPAL ====================
-    // Card grande de resultado
-    const dominantColor = dominantStyle.color === '#4DA8C4' ? accentColor : 
-                        dominantStyle.color === '#66CCCC' ? secondaryColor : pinkColor;
-    
-    doc.setFillColor(...dominantColor);
-    doc.roundedRect(margin, y, pageWidth - (margin * 2), 50, 5, 5, 'F');
-    
-    // Icono grande
-    const iconEmoji = dominantStyle.color === '#4DA8C4' ? '🧠' : 
-                      dominantStyle.color === '#66CCCC' ? '👂' : '✋';
-    doc.setFontSize(30);
-    doc.setTextColor(255, 255, 255);
-    doc.text(iconEmoji, margin + 15, y + 25);
-    
-    // Nombre del estilo
-    doc.setFontSize(18);
-    doc.setTextColor(255, 255, 255);
-    doc.text(dominantStyle.name, margin + 40, y + 18);
-    
-    // Porcentaje gigante
-    doc.setFontSize(32);
-    doc.setTextColor(255, 255, 255);
-    doc.text(`${result.percentage}%`, pageWidth - margin - 30, y + 30);
-    
-    // Descripción
-    doc.setFontSize(9);
-    doc.setTextColor(255, 255, 255);
-    const shortDesc = dominantStyle.description ? dominantStyle.description.substring(0, 80) + '...' : '';
-    doc.text(shortDesc, margin + 40, y + 38);
-    
-    y += 60;
-
-    // ==================== GRÁFICO DE DISTRIBUCIÓN ====================
-    // Título de sección
-    doc.setFontSize(14);
-    doc.setTextColor(...primaryColor);
-    doc.text('📊 Distribución de Estilos', margin, y);
-    y += 10;
-    
-    // Dibujar gráfico de dona manual
-    const chartCenterX = pageWidth / 2;
-    const chartCenterY = y + 25;
-    const chartRadius = 22;
-    
-    // Fondo del gráfico
-    doc.setFillColor(248, 250, 252);
-    doc.circle(chartCenterX, chartCenterY, chartRadius + 5, 'F');
-    
-    // Dibujar secciones del gráfico
-    const values = [result.percentages.visual, result.percentages.auditivo, result.percentages.kinestesico];
-    const colors = [accentColor, secondaryColor, pinkColor];
-    let startAngle = -Math.PI / 2;
-    
-    values.forEach((value, i) => {
-      const sliceAngle = (value / 100) * 2 * Math.PI;
-      const endAngle = startAngle + sliceAngle;
-      
-      // Arco
-      doc.setFillColor(...colors[i]);
-      doc.setDrawColor(255, 255, 255);
-      doc.setLineWidth(1);
-      
-      // Dibujar sector circular
-      const steps = 20;
-      for (let s = 0; s <= steps; s++) {
-        const angle = startAngle + (sliceAngle * s / steps);
-        const r = chartRadius;
-        const px = chartCenterX + r * Math.cos(angle);
-        const py = chartCenterY + r * Math.sin(angle);
-        if (s === 0) doc.moveTo(chartCenterX, chartCenterY);
-        doc.line(px, py);
-      }
-      doc.line(chartCenterX, chartCenterY);
-      doc.circle(chartCenterX, chartCenterY, chartRadius, 'FD');
-      
-      startAngle = endAngle;
-    });
-    
-    // Centro blanco (efecto dona)
-    doc.setFillColor(255, 255, 255);
-    doc.circle(chartCenterX, chartCenterY, chartRadius * 0.45, 'F');
-    
-    // Leyenda a la derecha
-    const legendX = pageWidth - margin - 55;
-    let legendY = y + 5;
-    
-    const legendItems = [
-      { label: 'Visual', value: result.percentages.visual, color: accentColor, icon: '🧠' },
-      { label: 'Auditivo', value: result.percentages.auditivo, color: secondaryColor, icon: '👂' },
-      { label: 'Kinestésico', value: result.percentages.kinestesico, color: pinkColor, icon: '✋' }
-    ];
-    
-    legendItems.forEach(item => {
-      doc.setFillColor(...item.color);
-      doc.roundedRect(legendX, legendY, 5, 5, 1, 1, 'F');
-      doc.setFontSize(9);
-      doc.setTextColor(...textColor);
-      doc.text(`${item.icon} ${item.label}: ${item.value}%`, legendX + 8, legendY + 4);
-      legendY += 8;
-    });
-    
-    y += 55;
-
-    // ==================== BARRAS DE PROGRESO ====================
-    doc.setFontSize(12);
-    doc.setTextColor(...primaryColor);
-    doc.text('📈 Nivel de Cada Estilo', margin, y);
-    y += 8;
-    
-    drawProgressBar(margin, y + 3, 120, result.percentages.visual, accentColor, '🧠 Visual');
-    y += 18;
-    drawProgressBar(margin, y + 3, 120, result.percentages.auditivo, secondaryColor, '👂 Auditivo');
-    y += 18;
-    drawProgressBar(margin, y + 3, 120, result.percentages.kinestesico, pinkColor, '✋ Kinestésico');
-    y += 30;
-
-    // ==================== CARACTERÍSTICAS ====================
-    if (dominantStyle.characteristics && dominantStyle.characteristics.length > 0) {
-      doc.setFontSize(14);
-      doc.setTextColor(...primaryColor);
-      doc.text('✨ Características', margin, y);
-      y += 8;
-      
-      const charIcons = ['👁️', '📝', '🧩', '🎨', '📖'];
-      dominantStyle.characteristics.forEach((char, i) => {
-        doc.setFillColor(240, 253, 250);
-        doc.roundedRect(margin, y, pageWidth - (margin * 2), 10, 2, 2, 'F');
+      styles.forEach((style, i) => {
+        const cardX = legendStartX + (i * (cardW + 5));
         
-        doc.setFontSize(8);
-        doc.text(charIcons[i] || '•', margin + 3, y + 7);
+        // Card background
+        doc.setFillColor(...colors.cardBg);
+        doc.setDrawColor(226, 232, 240);
+        doc.setLineWidth(0.3);
+        doc.roundedRect(cardX, y + 5, cardW, cardH, 4, 4, 'FD');
         
-        doc.setFontSize(9);
-        doc.setTextColor(...textColor);
-        doc.text(char, margin + 15, y + 7);
+        // Color indicator
+        doc.setFillColor(...style.color);
+        doc.circle(cardX + 5, y + 11, 3, 'F');
         
-        y += 12;
-      });
-      y += 5;
-    }
-
-    // ==================== ESTRATEGIAS ====================
-    if (dominantStyle.strategies && dominantStyle.strategies.length > 0) {
-      doc.setFontSize(14);
-      doc.setTextColor(...primaryColor);
-      doc.text('📋 Estrategias Recomendadas', margin, y);
-      y += 8;
-      
-      dominantStyle.strategies.forEach((strat, i) => {
-        doc.setFillColor(...accentColor);
-        doc.circle(margin + 3, y + 2, 2, 'F');
-        
-        doc.setFontSize(9);
-        doc.setTextColor(...textColor);
-        doc.text(`${i + 1}. ${strat}`, margin + 10, y + 5);
-        
-        y += 8;
-      });
-      y += 5;
-    }
-
-    // ==================== TIPS ====================
-    if (dominantStyle.tips && dominantStyle.tips.length > 0) {
-      doc.setFontSize(14);
-      doc.setTextColor(...primaryColor);
-      doc.text('💡 Tips para Mejorar', margin, y);
-      y += 8;
-      
-      // Box de tips con fondo colored
-      doc.setFillColor(255, 209, 102, 30);
-      doc.roundedRect(margin, y, pageWidth - (margin * 2), dominantStyle.tips.length * 8 + 6, 3, 3, 'F');
-      
-      dominantStyle.tips.forEach((tip, i) => {
-        doc.setFontSize(9);
-        doc.setTextColor(...textColor);
-        doc.text(`🌟 ${tip}`, margin + 5, y + 10 + (i * 8));
-      });
-      y += dominantStyle.tips.length * 8 + 15;
-    }
-
-    // ==================== CARRERAS ====================
-    if (dominantStyle.careers && dominantStyle.careers.length > 0) {
-      doc.setFontSize(14);
-      doc.setTextColor(...primaryColor);
-      doc.text('🎯 Carreras Afines', margin, y);
-      y += 8;
-      
-      let careersX = margin;
-      dominantStyle.careers.forEach((career, i) => {
-        doc.setFillColor(...accentColor);
-        doc.roundedRect(careersX, y, 25, 7, 2, 2, 'F');
-        
+        // Text
         doc.setFontSize(7);
-        doc.setTextColor(255, 255, 255);
-        const shortCareer = career.length > 10 ? career.substring(0, 10) : career;
-        doc.text(shortCareer, careersX + 12.5, y + 5, { align: 'center' });
-        
-        careersX += 28;
-      });
-      y += 20;
-    }
-
-    // ==================== RECURSOS ====================
-    if (dominantStyle.resources && dominantStyle.resources.length > 0) {
-      doc.setFontSize(14);
-      doc.setTextColor(...primaryColor);
-      doc.text('📚 Recursos Recomendados', margin, y);
-      y += 10;
-      
-      const resIcons = ['🎨', '📒', '📋'];
-      dominantStyle.resources.forEach((res, i) => {
-        doc.setFillColor(248, 250, 252);
-        doc.roundedRect(margin + (i * 60), y, 55, 18, 3, 3, 'F');
+        doc.setTextColor(...colors.textLight);
+        doc.text(style.name, cardX + 10, y + 9);
         
         doc.setFontSize(10);
-        doc.setTextColor(...accentColor);
-        doc.text(resIcons[i] || '📖', margin + (i * 60) + 5, y + 7);
-        
-        doc.setFontSize(8);
-        doc.setTextColor(...textColor);
-        doc.text(res.name, margin + (i * 60) + 5, y + 14);
+        doc.setTextColor(...colors.text);
+        doc.setFont('helvetica', 'bold');
+        doc.text(`${style.val}%`, cardX + 10, y + 16);
+        doc.setFont('helvetica', 'normal');
       });
-      y += 25;
+
+      y += 60;
+
+      // ==================== DETAILS CARDS ====================
+      const colWidth = (contentWidth - 10) / 2;
+
+      // Column 1: Características
+      drawSectionTitle('Características Principales', y);
+      y += 8;
+      
+      drawCard(margin, y, colWidth, 35);
+      
+      const charList = dominantStyle.characteristics?.slice(0, 3) || [];
+      doc.setFontSize(8);
+      doc.setTextColor(...colors.text);
+      charList.forEach((char, i) => {
+        doc.setFillColor(...colors.accent);
+        doc.circle(margin + 5, y + 8 + (i * 9), 2, 'F');
+        doc.text(char, margin + 10, y + 10 + (i * 9));
+      });
+      
+      y += 45;
+
+      // Column 2: Estrategias
+      drawSectionTitle('Estrategias Recomendadas', y);
+      y += 8;
+      
+      drawCard(margin, y, colWidth, 35);
+      
+      const stratList = dominantStyle.strategies?.slice(0, 3) || [];
+      doc.setFontSize(8);
+      doc.setTextColor(...colors.text);
+      stratList.forEach((strat, i) => {
+        doc.setFillColor(...colors.secondary);
+        doc.circle(margin + 5, y + 8 + (i * 9), 2, 'F');
+        doc.text(strat.substring(0, 35), margin + 10, y + 10 + (i * 9));
+      });
+      
+      y += 45;
+
+      // Second column (right side)
+      let yRight = 175;
+
+      // Tips
+      drawSectionTitle('Tips para Mejorar', yRight);
+      yRight += 8;
+      
+      drawCard(margin + colWidth + 10, yRight, colWidth, 35);
+      
+      const tipList = dominantStyle.tips?.slice(0, 3) || [];
+      doc.setFillColor(255, 209, 102);
+      tipList.forEach((tip, i) => {
+        doc.circle(margin + colWidth + 15, yRight + 8 + (i * 9), 2, 'F');
+        doc.setFontSize(8);
+        doc.setTextColor(...colors.text);
+        doc.text(tip.substring(0, 35), margin + colWidth + 20, yRight + 10 + (i * 9));
+      });
+      
+      yRight += 45;
+
+      // Carreras
+      drawSectionTitle('Carreras Afines', yRight);
+      yRight += 8;
+      
+      drawCard(margin + colWidth + 10, yRight, colWidth, 35);
+      
+      const careerList = dominantStyle.careers?.slice(0, 3) || [];
+      doc.setFontSize(7);
+      careerList.forEach((career, i) => {
+        const chipW = doc.getTextWidth(career) + 8;
+        const chipX = margin + colWidth + 15 + (i * 35);
+        
+        doc.setFillColor(...colors.accent);
+        doc.roundedRect(chipX, yRight + 5, chipW, 8, 2, 2, 'F');
+        
+        doc.setFontSize(6);
+        doc.setTextColor(...colors.white);
+        doc.text(career.substring(0, 8), chipX + chipW/2, yRight + 10, { align: 'center' });
+      });
+
+      yRight += 45;
+
+      // ==================== FOOTER ====================
+      doc.setFillColor(...colors.bg);
+      doc.rect(margin, yRight + 5, contentWidth, 25, 'F');
+      
+      doc.setFillColor(...colors.primary);
+      doc.rect(margin, yRight + 5, contentWidth, 0.5, 'F');
+      
+      doc.setFontSize(7);
+      doc.setTextColor(...colors.textLight);
+      doc.text('© 2024 Edutechlife - Transformando la educación con tecnología', pageWidth / 2, yRight + 15, { align: 'center' });
+      doc.text('www.edutechlife.co', pageWidth / 2, yRight + 21, { align: 'center' });
+
+      // Save
+      doc.save(`Diagnostico-VAK-${userName || 'Estudiante'}-${new Date().toISOString().split('T')[0]}.pdf`);
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      alert('Error al generar PDF: ' + error.message);
+    } finally {
+      setPdfLoading(false);
     }
-
-    // ==================== FOOTER ====================
-    const yFooter = pageHeight - 30;
-    
-    // Línea decorativa
-    doc.setFillColor(...primaryColor);
-    doc.rect(margin, yFooter - 5, pageWidth - (margin * 2), 0.5, 'F');
-    
-    doc.setFontSize(9);
-    doc.setTextColor(100, 116, 139);
-    doc.text('© 2024 Edutechlife - Transformando la educación con tecnología', pageWidth / 2, yFooter + 5, { align: 'center' });
-    
-    doc.setFontSize(10);
-    doc.setTextColor(...accentColor);
-    doc.text('🌐 www.edutechlife.co', pageWidth / 2, yFooter + 12, { align: 'center' });
-
-    // Guardar PDF
-    doc.save(`Diagnostico-VAK-${userName || 'Estudiante'}-${new Date().toISOString().split('T')[0]}.pdf`);
   };
 
   const chartData = result ? getVAKChartData(result.percentages) : [];
@@ -852,12 +796,22 @@ const VAKDiagnostic = memo(({ onNavigate, userName: initialName = '', initialMoo
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <motion.button
                     onClick={handleDownloadPDF}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-full font-semibold shadow-lg hover:shadow-xl transition-all"
+                    disabled={pdfLoading}
+                    whileHover={pdfLoading ? {} : { scale: 1.05 }}
+                    whileTap={pdfLoading ? {} : { scale: 0.98 }}
+                    className={`inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-full font-semibold shadow-lg hover:shadow-xl transition-all ${pdfLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
                   >
-                    <Icon name="fa-download" />
-                    Descargar Resultados PDF
+                    {pdfLoading ? (
+                      <>
+                        <span className="animate-spin">⏳</span>
+                        Generando PDF...
+                      </>
+                    ) : (
+                      <>
+                        <Icon name="fa-download" />
+                        Descargar Resultados PDF
+                      </>
+                    )}
                   </motion.button>
 
                   {onNavigate && (
