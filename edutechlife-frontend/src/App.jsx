@@ -114,12 +114,17 @@ const App = () => {
     const [botOpen, setBotOpen] = useState(false);
     const [botMsgs, setBotMsgs] = useState([{ 
         role: 'assistant', 
-        text: '¡Hola! Soy Nico, tu asistente virtual de Edutechlife. ¿En qué te puedo ayudar hoy?' 
+        text: 'Hola, soy Nico. ¿En qué puedo ayudarte hoy?',
+        timestamp: new Date()
     }]);
     const [botInput, setBotInput] = useState('');
     const [botLoading, setBotLoading] = useState(false);
+    const [isListening, setIsListening] = useState(false);
+    const [isSpeaking, setIsSpeaking] = useState(false);
     const [isDarkMode, setIsDarkMode] = useState(false);
     const botMsgsEndRef = useRef(null);
+    const recognitionRef = useRef(null);
+    const speechSynthesisRef = useRef(null);
 
     const scrollToBottom = () => {
         botMsgsEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -171,12 +176,22 @@ const App = () => {
         if (!botInput.trim()) return;
         const userMsg = botInput;
         setBotInput('');
-        setBotMsgs(prev => [...prev, { role: 'user', text: userMsg }]);
+        setBotMsgs(prev => [...prev, { role: 'user', text: userMsg, timestamp: new Date() }]);
         setBotLoading(true);
 
-        const systemPrompt = `Eres Nico, el asistente de soporte de Edutechlife. Eres amable, profesional y ayudarte a los usuarios (posibles clientes o estudiantes) a entender la plataforma o resolver dudas breves.
+        const systemPrompt = `Eres Nico, agente de atención al cliente de Edutechlife con más de 15 años de experiencia. 
 
-REGLA DE ORO: Para responder a las preguntas, básate ÚNICA Y EXCLUSIVAMENTE en la siguiente base de conocimientos. Si el usuario pregunta algo que no está en este texto, responde amablemente que no tienes esa información exacta pero que puede contactar a un asesor humano.
+Tu estilo de atención al cliente es exactamente como el de un agente telefónico profesional:
+- Amable, empático y muy profesional
+- Hablas como en una llamada telefónica, fluido y natural
+- NUNCA uses emojis, emoticones, asteriscos, guiones bajos ni ningún tipo de signo raro
+- Tus respuestas son en texto plano, limpio y profesional
+- Resumes la información clave de forma clara y concisa
+- Validas los sentimientos del cliente y demuestras empatía genuina
+- Hablas en español neutro, claro y muy comprensible
+- Das respuestas cortas y directas, como en una llamada telefónica
+
+Para responder a las preguntas, básate ÚNICA Y EXCLUSIVAMENTE en la siguiente base de conocimientos. Si el usuario pregunta algo que no está en este texto, responde amablemente que no tienes esa información exacta pero que con gusto puedes conectar con un asesor humano.
 
 --- BASE DE CONOCIMIENTOS OFICIAL ---
 ${NICO_KNOWLEDGE_BASE}
@@ -186,11 +201,76 @@ ${NICO_KNOWLEDGE_BASE}
 
         try {
             const r = await callDeepseek(prompt, systemPrompt, false);
-            setBotMsgs(prev => [...prev, { role: 'assistant', text: r }]);
+            const cleanResponse = r.replace(/[*_~`]/g, '').replace(/:\w+:/g, '');
+            setBotMsgs(prev => [...prev, { role: 'assistant', text: cleanResponse, timestamp: new Date() }]);
         } catch (error) {
-            setBotMsgs(prev => [...prev, { role: 'assistant', text: 'Lo siento, estoy experimentando dificultades técnicas. Por favor intenta de nuevo en unos momentos.' }]);
+            setBotMsgs(prev => [...prev, { role: 'assistant', text: 'Disculpa, estoy teniendo dificultades técnicas en este momento. ¿Podrías intentar de nuevo en un momento?', timestamp: new Date() }]);
         }
         setBotLoading(false);
+    };
+
+    const startListening = () => {
+        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+            alert('Tu navegador no soporta reconocimiento de voz');
+            return;
+        }
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        recognitionRef.current = new SpeechRecognition();
+        recognitionRef.current.lang = 'es-CO';
+        recognitionRef.current.continuous = false;
+        recognitionRef.current.interimResults = true;
+
+        recognitionRef.current.onstart = () => {
+            setIsListening(true);
+        };
+
+        recognitionRef.current.onresult = (event) => {
+            const transcript = Array.from(event.results)
+                .map(result => result[0].transcript)
+                .join('');
+            setBotInput(transcript);
+        };
+
+        recognitionRef.current.onerror = () => {
+            setIsListening(false);
+        };
+
+        recognitionRef.current.onend = () => {
+            setIsListening(false);
+        };
+
+        recognitionRef.current.start();
+    };
+
+    const stopListening = () => {
+        if (recognitionRef.current) {
+            recognitionRef.current.stop();
+        }
+        setIsListening(false);
+    };
+
+    const speakText = (text) => {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'es-CO';
+            utterance.rate = 0.9;
+            utterance.pitch = 1;
+            
+            utterance.onstart = () => setIsSpeaking(true);
+            utterance.onend = () => setIsSpeaking(false);
+            utterance.onerror = () => setIsSpeaking(false);
+            
+            window.speechSynthesis.speak(utterance);
+        }
+    };
+
+    const stopSpeaking = () => {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            setIsSpeaking(false);
+        }
     };
 
     const handleNavigate = useCallback(v => {
@@ -323,54 +403,86 @@ ${NICO_KNOWLEDGE_BASE}
 
             {/* Floating Chatbot - Solo en páginas principales, no en Admin, VAK, IALab */}
             {view !== 'smartboard' && view !== 'vak' && view !== 'ialab' && view !== 'admin' && (
-                <div className="chatbot-container">
+                <>
                     {botOpen && (
-                        <div className="chatbot-window bg-white border border-[#E2E8F0] shadow-neuro">
-                            <div className="chatbot-header bg-[#F8FAFC] border-b border-[#E2E8F0] shadow-sm">
-                                <div className="chatbot-avatar relative">
-                                    <div className="absolute inset-[-4px] rounded-full border-[1.5px] border-[#4DA8C4] animate-[pulse-ring_3s_infinite]" />
-                                    <Bot className="relative z-10 text-white w-5 h-5" />
+                        <div className="chatbot-window">
+                            <div className="chatbot-header">
+                                <div className="chatbot-avatar">
+                                    <Bot className="w-6 h-6 text-white" />
                                 </div>
-                                <span className="font-montserrat font-bold tracking-wide text-[#004B63]">Nico AI</span>
-                                <button onClick={() => setBotOpen(false)} className="chatbot-close hover:bg-[#4DA8C4]/10 transition-colors">
-                                    <X className="w-5 h-5 text-[#004B63]" />
+                                <div className="chatbot-header-info">
+                                    <div className="chatbot-header-name">Nico - Asesor Virtual</div>
+                                    <div className="chatbot-header-status">En línea</div>
+                                </div>
+                                <button onClick={() => setBotOpen(false)} className="chatbot-close">
+                                    <X className="w-5 h-5" />
                                 </button>
                             </div>
                             <div className="chatbot-messages">
                                 {botMsgs.map((msg, i) => (
                                     <div key={i} className={`chatbot-msg ${msg.role}`}>
-                                        {msg.text}
+                                        <div className="chatbot-msg-content">{msg.text}</div>
+                                        <div className="chatbot-msg-time">
+                                            {msg.timestamp ? msg.timestamp.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' }) : ''}
+                                        </div>
+                                        {msg.role === 'assistant' && (
+                                            <button 
+                                                className="chatbot-msg-audio" 
+                                                onClick={() => isSpeaking ? stopSpeaking() : speakText(msg.text)}
+                                                title={isSpeaking ? 'Detener' : 'Escuchar'}
+                                            >
+                                                {isSpeaking ? <X className="w-4 h-4" /> : <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>}
+                                            </button>
+                                        )}
                                     </div>
                                 ))}
                                 {botLoading && (
                                     <div className="chatbot-loading">
-                                        <MiniLoader size="sm" color="white" />
+                                        <div className="chatbot-loading-dots">
+                                            <span></span><span></span><span></span>
+                                        </div>
+                                        <span className="chatbot-loading-text">Nico está escribiendo...</span>
                                     </div>
                                 )}
                                 <div ref={botMsgsEndRef} />
                             </div>
                             <div className="chatbot-input">
-                                <input 
-                                    type="text" 
-                                    value={botInput} 
-                                    onChange={(e) => setBotInput(e.target.value)}
-                                    onKeyDown={(e) => e.key === 'Enter' && handleBotSend()}
-                                    placeholder="Escribe un mensaje..."
-                                />
-                                <button onClick={handleBotSend} aria-label="Enviar mensaje">
+                                <button 
+                                    className={`chatbot-btn chatbot-btn-voice ${isListening ? 'listening' : ''}`}
+                                    onClick={isListening ? stopListening : startListening}
+                                    title={isListening ? 'Detener' : 'Hablar'}
+                                >
+                                    {isListening ? <X className="w-5 h-5" /> : <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>}
+                                </button>
+                                <div className="chatbot-input-field">
+                                    <input 
+                                        type="text" 
+                                        value={botInput} 
+                                        onChange={(e) => setBotInput(e.target.value)}
+                                        onKeyDown={(e) => e.key === 'Enter' && handleBotSend()}
+                                        placeholder="Escribe tu mensaje..."
+                                        disabled={botLoading}
+                                    />
+                                </div>
+                                <button 
+                                    className="chatbot-btn chatbot-btn-send" 
+                                    onClick={handleBotSend}
+                                    disabled={!botInput.trim() || botLoading}
+                                >
                                     <Send className="w-5 h-5" />
                                 </button>
                             </div>
                         </div>
                     )}
                     <button 
-                        className="chatbot-toggle btn-glow shadow-neuro bg-white text-[#4DA8C4]"
+                        className="chatbot-toggle"
                         onClick={() => setBotOpen(!botOpen)} 
-                        aria-label={botOpen ? 'Cerrar chat' : 'Abrir chat'}
+                        aria-label={botOpen ? 'Cerrar chat' : 'Hablar con Nico'}
                     >
                         {botOpen ? <X className="w-5 h-5" /> : <MessageCircle className="w-5 h-5" />}
+                        <span>{botOpen ? 'Cerrar' : 'Hablar con Nico'}</span>
                     </button>
-                </div>
+                </>
             )}
             {/* Footer - Solo se muestra en páginas principales, no en SmartBoard, VAK, IALab ni Admin */}
             {view !== 'smartboard' && view !== 'vak' && view !== 'ialab' && view !== 'admin' && <Footer />}
