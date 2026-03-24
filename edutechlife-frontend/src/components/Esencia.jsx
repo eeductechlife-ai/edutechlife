@@ -37,10 +37,10 @@ const Esencia = memo(() => {
     }, [slides.length]);
 
     const values = [
-        { icon: 'fa-lightbulb', text: 'Innovación', desc: 'Siempre adelante' },
+        { icon: 'fa-robot', text: 'Innovación', desc: 'IA al servicio de la educación' },
         { icon: 'fa-heart', text: 'Pasión', desc: 'Por la educación' },
-        { icon: 'fa-handshake', text: 'Compromiso', desc: 'Con cada estudiante' },
-        { icon: 'fa-users', text: 'Comunidad', desc: 'Juntos crecemos' }
+        { icon: 'fa-shield-check', text: 'Compromiso', desc: 'Con cada estudiante' },
+        { icon: 'fa-school', text: 'Comunidad', desc: 'Juntos crecemos' }
     ];
 
     return (
@@ -77,13 +77,19 @@ const Esencia = memo(() => {
                         {values.map((value, index) => (
                             <div 
                                 key={index}
-                                className="group bg-white rounded-xl p-4 md:p-6 shadow-md border border-gray-100 hover:shadow-lg hover:border-[#4DA8C4]/30 hover:-translate-y-1 transition-all duration-300 text-center"
+                                className="group bg-white rounded-xl p-4 md:p-6 shadow-md border border-gray-100 hover:shadow-xl hover:border-[#4DA8C4]/40 hover:-translate-y-2 transition-all duration-300 text-center relative overflow-hidden"
                             >
-                                <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-gradient-to-br from-[#4DA8C4]/10 to-[#004B63]/10 flex items-center justify-center mb-3 md:mb-4 group-hover:scale-110 transition-transform duration-300 mx-auto">
-                                     <Icon name={value.icon} className="text-xl md:text-2xl text-[#4DA8C4]" />
+                                {/* Glow effect on hover */}
+                                <div className="absolute inset-0 bg-gradient-to-br from-[#4DA8C4]/5 to-[#004B63]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                <div className="absolute -top-10 -right-10 w-20 h-20 bg-[#4DA8C4]/10 rounded-full blur-2xl group-hover:blur-3xl transition-all duration-300" />
+                                
+                                <div className="relative z-10">
+                                    <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-[#4DA8C4]/15 to-[#004B63]/10 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-[#4DA8C4]/20 transition-all duration-300 mx-auto border border-[#4DA8C4]/20">
+                                        <Icon name={value.icon} className="text-2xl md:text-3xl text-[#004B63] group-hover:text-[#4DA8C4] transition-colors duration-300" />
+                                    </div>
+                                    <h4 className="text-base md:text-lg font-semibold text-[#004B63] mb-2 group-hover:glow-text-cyan transition-all duration-300">{value.text}</h4>
+                                    <p className="text-sm text-slate-600 leading-relaxed">{value.desc}</p>
                                 </div>
-                                <h4 className="text-base md:text-lg font-normal text-[#004B63] mb-1 md:mb-2">{value.text}</h4>
-                                <p className="text-base text-slate-600 leading-relaxed font-normal">{value.desc}</p>
                             </div>
                         ))}
                     </div>

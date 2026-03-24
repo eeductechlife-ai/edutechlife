@@ -7492,50 +7492,73 @@ h5 {
 
 .progress-bar-container {
   position: relative;
-  height: 6px;
-  background: rgba(27, 158, 186, 0.15);
-  border-radius: 3px;
+  height: 12px;
+  background: linear-gradient(135deg, rgba(0, 75, 99, 0.1) 0%, rgba(77, 168, 196, 0.08) 100%);
+  border: 1px solid rgba(77, 168, 196, 0.2);
+  border-radius: 8px;
   overflow: visible;
   margin-bottom: 0.75rem;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .progress-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #1B9EBA, #0A3044, #1B9EBA);
-  background-size: 200% 100%;
-  border-radius: 3px;
+  background: linear-gradient(90deg, #004B63, #4DA8C4, #66CCCC, #4DA8C4);
+  background-size: 300% 100%;
+  border-radius: 8px;
   transition: width 0.4s ease;
-  animation: progress-shine 1.5s ease-in-out infinite;
+  animation: progressShimmer 2s ease-in-out infinite;
+  box-shadow: 0 0 10px rgba(77, 168, 196, 0.3);
 }
 
-@keyframes progress-shine {
+@keyframes progressShimmer {
   0% {
-    background-position: 0% 0;
+    background-position: 0% 50%;
   }
-
+  50% {
+    background-position: 100% 50%;
+  }
   100% {
-    background-position: 200% 0;
+    background-position: 0% 50%;
   }
 }
 
 .progress-bar-glow {
   position: absolute;
   top: 50%;
-  width: 20px;
-  height: 20px;
-  background: #1B9EBA;
+  width: 24px;
+  height: 24px;
+  background: #4DA8C4;
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  filter: blur(8px);
-  opacity: 0.6;
+  filter: blur(6px);
+  opacity: 0.8;
   transition: left 0.4s ease;
+  box-shadow: 
+    0 0 15px rgba(77, 168, 196, 0.8),
+    0 0 30px rgba(77, 168, 196, 0.4),
+    0 0 45px rgba(77, 168, 196, 0.2);
+}
+
+.progress-bar-glow::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  background: #fff;
+  border-radius: 50%;
 }
 
 .progress-percentage {
   font-family: 'Montserrat', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #1B9EBA;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #004B63;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 10px rgba(0, 75, 99, 0.1);
 }
 
 /* Status Section */
@@ -7555,7 +7578,7 @@ h5 {
 }
 
 .status-icon i {
-  color: #1B9EBA;
+  color: #4DA8C4;
   font-size: 1rem;
 }
 
@@ -7567,9 +7590,10 @@ h5 {
 .status-dots .dot {
   width: 6px;
   height: 6px;
-  background: #1B9EBA;
+  background: #4DA8C4;
   border-radius: 50%;
   animation: dot-bounce 1.4s ease-in-out infinite;
+  box-shadow: 0 0 6px rgba(77, 168, 196, 0.5);
 }
 
 .status-dots .dot:nth-child(1) {
