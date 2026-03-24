@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import { Icon } from '../utils/iconMapping.jsx';
+import FloatingParticles from './FloatingParticles';
 
 const plans = [
     {
@@ -122,6 +124,11 @@ const Pricing = () => {
                 background: 'linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%)',
             }}
         >
+            <FloatingParticles count={20} className="z-0" />
+            
+            {/* Ambient Glows */}
+            <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-[#4DA8C4]/10 blur-[120px] pointer-events-none animate-[pulse-slow_8s_ease-in-out_infinite]" />
+            <div className="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full bg-[#66CCCC]/10 blur-[120px] pointer-events-none animate-[pulse-slow_8s_ease-in-out_infinite]" style={{ animationDelay: '-4s' }} />
             {/* Pricing Section */}
             <div className="max-w-7xl mx-auto mb-24">
                 {/* Header */}

@@ -18,6 +18,7 @@ const SmartBoardDashboard = lazy(() => import('./components/SmartBoardDashboard'
 const SmartBoardLogin = lazy(() => import('./components/SmartBoardLogin'));
 const DiagnosticoVAK = lazy(() => import('./components/DiagnosticoVAK'));
 const VAKTest = lazy(() => import('./components/VAKTest'));
+const VAKDiagnostic = lazy(() => import('./components/VAKDiagnostic'));
 const AdminDashboard = lazy(() => import('./components/AdminDashboard'));
 import AdminLoginModal from './components/AdminLoginModal';
 import LoadingScreen, { MiniLoader } from './components/LoadingScreen';
@@ -289,15 +290,20 @@ const App = () => {
                         <SmartBoardDashboard onNavigate={handleNavigate} onLogout={handleSmartboardLogout} />
                     )}
                     
-                    {/* Diagnóstico VAK - Versiones perezosas */}
+                    {/* Diagnóstico VAK - Nuevo componente premium */}
                     {view === 'vak' && (
                         <Suspense fallback={<div>Cargando Diagnóstico VAK...</div>}>
-                            <VAKTest onNavigate={handleNavigate} />
+                            <VAKDiagnostic onNavigate={handleNavigate} />
                         </Suspense>
                     )}
                     {view === 'vak-simple' && (
                         <Suspense fallback={<div>Cargando Diagnóstico VAK...</div>}>
-                            <DiagnosticoVAK onNavigate={handleNavigate} />
+                            <VAKDiagnostic onNavigate={handleNavigate} />
+                        </Suspense>
+                    )}
+                    {view === 'vak-premium' && (
+                        <Suspense fallback={<div>Cargando Diagnóstico VAK Premium...</div>}>
+                            <VAKDiagnostic onNavigate={handleNavigate} />
                         </Suspense>
                     )}
                     

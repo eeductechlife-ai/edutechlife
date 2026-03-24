@@ -378,8 +378,13 @@ const Ecosystem = memo(({ onNavigate }) => {
   return (
     <section ref={sectionRef} className="relative w-full overflow-hidden bg-[#F8FAFC]">
             {/* Soft Background Accents */}
-            <div className="absolute top-0 right-[-10%] w-[600px] h-[600px] rounded-full bg-[#4DA8C4]/5 blur-[100px] pointer-events-none" />
-            <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] rounded-full bg-[#66CCCC]/5 blur-[100px] pointer-events-none" />
+            <div className="absolute top-0 right-[-10%] w-[600px] h-[600px] rounded-full bg-[#4DA8C4]/5 blur-[100px] pointer-events-none animate-[pulse-slow_8s_ease-in-out_infinite]" />
+            <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] rounded-full bg-[#66CCCC]/5 blur-[100px] pointer-events-none animate-[pulse-slow_8s_ease-in-out_infinite]" style={{ animationDelay: '-4s' }} />
+            
+            {/* Floating decorative elements */}
+            <div className="absolute top-[15%] right-[20%] w-3 h-3 bg-[#4DA8C4]/40 rounded-full animate-[float-3d_6s_ease-in-out_infinite]" />
+            <div className="absolute top-[40%] left-[10%] w-2 h-2 bg-[#66CCCC]/50 rounded-full animate-[float-3d_8s_ease-in-out_infinite]" style={{ animationDelay: '-2s' }} />
+            <div className="absolute bottom-[20%] right-[15%] w-4 h-4 bg-[#FFD166]/30 rounded-full animate-[float-3d_7s_ease-in-out_infinite]" style={{ animationDelay: '-4s' }} />
 
             <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 py-24">
                 {/* Header */}
@@ -390,12 +395,12 @@ const Ecosystem = memo(({ onNavigate }) => {
                     transition={{ duration: 0.8, ease: "easeOut" }}
                     className="text-center mb-20 max-w-3xl mx-auto"
                 >
-                    <span className="text-sm font-normal text-[#4DA8C4] uppercase tracking-widest block mb-6">
+                    <span className="inline-block px-4 py-1 bg-[#4DA8C4]/10 rounded-full text-sm font-normal text-[#4DA8C4] uppercase tracking-widest mb-6 border border-[#4DA8C4]/20">
                         Plataforma Modular
                     </span>
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#004B63] tracking-tight mb-6">
                         Ecosistema
-                        <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC]">
+                        <span className="block gradient-text-animated">
                             Interconectado.
                         </span>
                     </h2>
@@ -405,60 +410,84 @@ const Ecosystem = memo(({ onNavigate }) => {
                 </motion.div>
 
                 {/* 3D Perspective Container */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8" style={{ perspective: '1000px' }}>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 perspective-3d">
                     {/* TARJETA 01 */}
-                    <div className="group bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden hover:shadow-[0_20px_60px_rgba(77,168,196,0.25)] transition-all duration-300 cursor-pointer" 
-                         onClick={() => setSelectedPilar(pilares[0])}
-                         style={{ transition: 'transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s ease' }}
-                         onMouseEnter={(e) => { e.currentTarget.style.transform = 'rotateX(5deg) rotateY(-5deg) translateY(-10px)'; }}
-                         onMouseLeave={(e) => { e.currentTarget.style.transform = 'rotateX(0) rotateY(0) translateY(0)'; }}
+                    <motion.div 
+                        className="group bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden hover:shadow-[0_20px_60px_rgba(77,168,196,0.35)] transition-all duration-300 cursor-pointer relative"
+                        onClick={() => setSelectedPilar(pilares[0])}
+                        initial={{ opacity: 0, y: 30, filter: 'blur(10px)' }}
+                        whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.1 }}
+                        whileHover={{ scale: 1.02 }}
+                        style={{ transformStyle: 'preserve-3d' }}
                     >
-                        <div className="h-64 w-full overflow-hidden">
+                        {/* Glow border effect */}
+                        <div className="absolute inset-0 rounded-3xl border-2 border-transparent group-hover:border-[#4DA8C4]/40 transition-all duration-300 animate-[border-glow_3s_ease-in-out_infinite]" />
+                        
+                        <div className="h-64 w-full overflow-hidden relative">
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#004B63]/30 to-transparent z-10" />
                             <img src="/images/eco-neuro.webp" alt="Neuro-Entorno Educativo" className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500" />
                         </div>
-                        <div className="p-8">
+                        <div className="p-8 relative z-10">
                             <CardWithLottie animationData={brainAnimation}>
-                                <h3 className="text-xl font-normal text-[#004B63] uppercase mt-6 mb-4">Neuro-Entorno Educativo</h3>
+                                <h3 className="text-xl font-normal text-[#004B63] uppercase mt-6 mb-4 group-hover:glow-text-cyan transition-all duration-300">Neuro-Entorno Educativo</h3>
                                 <p className="text-gray-600 leading-relaxed">Acompañamiento integral basado en metodologías VAK y STEAM. Docentes con maestría analizan procesos psicológicos y académicos para potenciar cada estilo de aprendizaje con herramientas de IA personalizadas.</p>
                             </CardWithLottie>
                         </div>
-                    </div>
+                    </motion.div>
 
                     {/* TARJETA 02 */}
-                    <div className="group bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden hover:shadow-[0_20px_60px_rgba(77,168,196,0.25)] transition-all duration-300 cursor-pointer" 
-                         onClick={() => setSelectedPilar(pilares[1])}
-                         style={{ transition: 'transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s ease' }}
-                         onMouseEnter={(e) => { e.currentTarget.style.transform = 'rotateX(5deg) rotateY(-5deg) translateY(-10px)'; }}
-                         onMouseLeave={(e) => { e.currentTarget.style.transform = 'rotateX(0) rotateY(0) translateY(0)'; }}
+                    <motion.div 
+                        className="group bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden hover:shadow-[0_20px_60px_rgba(77,168,196,0.35)] transition-all duration-300 cursor-pointer relative"
+                        onClick={() => setSelectedPilar(pilares[1])}
+                        initial={{ opacity: 0, y: 30, filter: 'blur(10px)' }}
+                        whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                        whileHover={{ scale: 1.02 }}
+                        style={{ transformStyle: 'preserve-3d' }}
                     >
-                        <div className="h-64 w-full overflow-hidden">
+                        {/* Glow border effect */}
+                        <div className="absolute inset-0 rounded-3xl border-2 border-transparent group-hover:border-[#66CCCC]/40 transition-all duration-300 animate-[border-glow_3s_ease-in-out_infinite]" style={{ animationDelay: '-1.5s' }} />
+                        
+                        <div className="h-64 w-full overflow-hidden relative">
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#004B63]/30 to-transparent z-10" />
                             <img src="/images/eco-nacional.webp" alt="Proyectos de Impacto Nacional" className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500" />
                         </div>
-                        <div className="p-8">
+                        <div className="p-8 relative z-10">
                             <CardWithLottie animationData={awardAnimation}>
-                                <h3 className="text-xl font-normal text-[#004B63] uppercase mt-6 mb-4">Proyectos de Impacto Nacional</h3>
+                                <h3 className="text-xl font-normal text-[#004B63] uppercase mt-6 mb-4 group-hover:glow-text-mint transition-all duration-300">Proyectos de Impacto Nacional</h3>
                                 <p className="text-gray-600 leading-relaxed">Operadores oficiales SenaTIC. Certificamos a más de 6,000 estudiantes con respaldo internacional de IBM y Coursera. Maestros que forman maestros: más de 200 docentes colombianos transformados en líderes digitales.</p>
                             </CardWithLottie>
                         </div>
-                    </div>
+                    </motion.div>
 
                     {/* TARJETA 03 */}
-                    <div className="group bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden hover:shadow-[0_20px_60px_rgba(77,168,196,0.25)] transition-all duration-300 cursor-pointer" 
-                         onClick={() => setSelectedPilar(pilares[2])}
-                         style={{ transition: 'transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s ease' }}
-                         onMouseEnter={(e) => { e.currentTarget.style.transform = 'rotateX(5deg) rotateY(-5deg) translateY(-10px)'; }}
-                         onMouseLeave={(e) => { e.currentTarget.style.transform = 'rotateX(0) rotateY(0) translateY(0)'; }}
+                    <motion.div 
+                        className="group bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden hover:shadow-[0_20px_60px_rgba(77,168,196,0.35)] transition-all duration-300 cursor-pointer relative"
+                        onClick={() => setSelectedPilar(pilares[2])}
+                        initial={{ opacity: 0, y: 30, filter: 'blur(10px)' }}
+                        whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.3 }}
+                        whileHover={{ scale: 1.02 }}
+                        style={{ transformStyle: 'preserve-3d' }}
                     >
-                        <div className="h-64 w-full overflow-hidden">
+                        {/* Glow border effect */}
+                        <div className="absolute inset-0 rounded-3xl border-2 border-transparent group-hover:border-[#FFD166]/50 transition-all duration-300 animate-[border-glow_3s_ease-in-out_infinite]" style={{ animationDelay: '-3s' }} />
+                        
+                        <div className="h-64 w-full overflow-hidden relative">
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#004B63]/30 to-transparent z-10" />
                             <img src="/images/edutech-carrusel-6.webp" alt="Consultoría B2B y Automatización" className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500" />
                         </div>
-                        <div className="p-8">
+                        <div className="p-8 relative z-10">
                             <CardWithLottie animationData={handshakeAnimation}>
-                                <h3 className="text-xl font-normal text-[#004B63] uppercase mt-6 mb-4">Consultoría B2B y Automatización</h3>
+                                <h3 className="text-xl font-normal text-[#004B63] uppercase mt-6 mb-4 group-hover:glow-text-cyan transition-all duration-300">Consultoría B2B y Automatización</h3>
                                 <p className="text-gray-600 leading-relaxed">Transformamos organizaciones educativas y empresas con metodología STEAM aplicada. Agentes de IA personalizados y capacitación de alto nivel que generan productividad real desde el primer mes de implementación.</p>
                             </CardWithLottie>
                         </div>
-                    </div>
+                    </motion.div>
                 </div>
 
                 {/* Direct Access Mini-Cards */}

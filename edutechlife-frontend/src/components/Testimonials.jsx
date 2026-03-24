@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import { Icon } from '../utils/iconMapping.jsx';
+import FloatingParticles from './FloatingParticles';
 
 const testimonials = [
     {
@@ -90,7 +92,7 @@ const Testimonials = () => {
         return () => clearInterval(interval);
     }, [isPaused]);
 
-    return (
+return (
         <section
             ref={sectionRef}
             className="py-24 px-5% relative overflow-hidden"
@@ -98,12 +100,20 @@ const Testimonials = () => {
                 background: 'linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 50%, #FFFFFF 100%)',
             }}
         >
+            <FloatingParticles count={15} className="z-0" colors={['#4DA8C4', '#66CCCC', '#FFD166']} />
+            
             {/* Background Elements */}
             <div className="absolute inset-0 opacity-30">
                 <div
                     className="absolute top-0 left-0 w-full h-full"
                     style={{
                         backgroundImage: `radial-gradient(circle at 20% 50%, rgba(77, 168, 196, 0.08) 0%, transparent 50%)`,
+                    }}
+                />
+                <div
+                    className="absolute bottom-0 right-0 w-full h-full"
+                    style={{
+                        backgroundImage: `radial-gradient(circle at 80% 50%, rgba(102, 204, 204, 0.08) 0%, transparent 50%)`,
                     }}
                 />
                 <div

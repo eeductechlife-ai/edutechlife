@@ -1,5 +1,7 @@
 import { memo, useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Icon } from '../utils/iconMapping.jsx';
+import FloatingParticles from './FloatingParticles';
 
 const Esencia = memo(() => {
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -43,6 +45,11 @@ const Esencia = memo(() => {
 
     return (
         <section id="esencia-section" className="relative w-full overflow-hidden bg-white">
+            <FloatingParticles count={15} className="z-0" />
+            
+            {/* Ambient Glows */}
+            <div className="absolute top-0 right-[-5%] w-[400px] h-[400px] rounded-full bg-[#4DA8C4]/10 blur-[100px] pointer-events-none animate-[pulse-slow_8s_ease-in-out_infinite]" />
+            <div className="absolute bottom-0 left-[-5%] w-[400px] h-[400px] rounded-full bg-[#66CCCC]/10 blur-[100px] pointer-events-none animate-[pulse-slow_8s_ease-in-out_infinite]" style={{ animationDelay: '-4s' }} />
             <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 py-20">
                 {/* Header */}
                 <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>

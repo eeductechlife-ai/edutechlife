@@ -1,13 +1,16 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { Brain, Mic, MicOff, Volume2, VolumeX, Send, User, Sparkles, MessageCircle, Settings, Subtitles, Keyboard, X, RefreshCw, History, Trash2 } from 'lucide-react';
+import { Brain, Mic, MicOff, Volume2, VolumeX, Send, User, Sparkles, MessageCircle, Settings, Subtitles, Keyboard, X, RefreshCw, History, Trash2, Loader2 } from 'lucide-react';
 import useVoiceConversation, { VOICE_STATES } from '../hooks/useVoiceConversation';
 import useConversationMemory from '../hooks/useConversationMemory';
+import { callDeepseek } from '../utils/api';
+import { PROMPT_VALERIO_DOCENTE } from '../constants/prompts';
 
 const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
   const [inputText, setInputText] = useState('');
   const [conversationStarted, setConversationStarted] = useState(false);
   const [conversationMode, setConversationMode] = useState(false);
   const [showCaptions, setShowCaptions] = useState(true);
+  const [isAILoading, setIsAILoading] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   
@@ -291,14 +294,38 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
     const context = generateContext();
     addMessage('user', text);
     setInputText('');
+    setIsAILoading(true);
     
-    const response = generateContextualResponse(text, context);
-    
-    setTimeout(() => {
-      addMessage('assistant', response);
-    }, 300);
-    
-    return { text: response };
+    try {
+      const vakResult = localStorage.getItem('vak_result');
+      let vakContext = '';
+      if (vakResult) {
+        const parsed = JSON.parse(vakResult);
+        vakContext = `\n## CONTEXTO VAK DEL ESTUDIANTE\n- Estilo dominante: ${parsed.dominant}\n- Porcentaje: ${parsed.percentage}%\n- Nombre: ${parsed.userName || 'No proporcionado'}\n\nCuando respondas, adapta tu explicación al estilo de aprendizaje del estudiante.`;
+      }
+      
+      const fullPrompt = `${PROMPT_VALERIO_DOCENTE}\n\n## CONTEXTO DE LA CONVERSACIÓN\n${context}\n${vakContext}\n\n## MENSAJE DEL ESTUDIANTE:\n${text}\n\nResponde de manera empática, práctica y orientada a ayudar al estudiante.`;
+      
+      const response = await callDeepseek(text, PROMPT_VALERIO_DOCENTE);
+      
+      if (response && !response.includes('Error:') && response.length > 10) {
+        setTimeout(() => {
+          addMessage('assistant', response);
+        }, 300);
+        setIsAILoading(false);
+        return { text: response };
+      } else {
+        throw new Error('Invalid response');
+      }
+    } catch (error) {
+      console.log('DeepSeek error, using fallback:', error);
+      setIsAILoading(false);
+      const response = generateContextualResponse(text, context);
+      setTimeout(() => {
+        addMessage('assistant', response);
+      }, 300);
+      return { text: response };
+    }
   }, [addMessage, generateContext, generateContextualResponse]);
 
   const {
@@ -658,6 +685,22 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
             </div>
           </div>
         ))}
+        
+        {isAILoading && (
+          <div className="flex justify-start animate-fadeIn">
+            <div className="flex gap-2">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#66CCCC] to-[#4DA8C4] flex items-center justify-center shadow-md">
+                <Brain className="w-5 h-5 text-white" />
+              </div>
+              <div className="bg-white rounded-2xl rounded-tl-none px-4 py-3 shadow-sm border border-[#E2E8F0]">
+                <div className="flex items-center gap-2">
+                  <Loader2 className="w-4 h-4 text-[#4DA8C4] animate-spin" />
+                  <span className="text-sm text-slate-500">Dani está pensando...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
         
         {isProcessing && (
           <div className="flex justify-start animate-fadeIn">
