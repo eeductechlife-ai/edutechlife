@@ -376,7 +376,7 @@ const Ecosystem = memo(({ onNavigate }) => {
     ];
 
   return (
-    <section ref={sectionRef} className="relative w-full overflow-hidden bg-[#F8FAFC]">
+    <section id="ecosystem" ref={sectionRef} className="relative w-full overflow-hidden bg-[#F8FAFC]">
             {/* Soft Background Accents */}
             <div className="absolute top-0 right-[-10%] w-[600px] h-[600px] rounded-full bg-[#4DA8C4]/5 blur-[100px] pointer-events-none animate-[pulse-slow_8s_ease-in-out_infinite]" />
             <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] rounded-full bg-[#66CCCC]/5 blur-[100px] pointer-events-none animate-[pulse-slow_8s_ease-in-out_infinite]" style={{ animationDelay: '-4s' }} />

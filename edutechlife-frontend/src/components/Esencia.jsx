@@ -44,7 +44,7 @@ const Esencia = memo(() => {
     ];
 
     return (
-        <section id="esencia-section" className="relative w-full overflow-hidden bg-white">
+        <section id="esencia" className="relative w-full overflow-hidden bg-white">
             <FloatingParticles count={15} className="z-0" />
             
             {/* Ambient Glows */}

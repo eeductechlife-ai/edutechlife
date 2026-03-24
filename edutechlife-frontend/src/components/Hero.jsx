@@ -57,11 +57,20 @@ const Hero = memo(({ onNavigate }) => {
             {/* Floating Particles Background - Enhanced 3D */}
             <FloatingParticles count={45} className="z-0" />
             
-            {/* 3D Ambient Elements - Left side only */}
-            <div className="absolute top-[15%] left-[10%] w-4 h-4 bg-[#4DA8C4]/30 rounded-full animate-[float-3d_6s_ease-in-out_infinite]" style={{ animationDelay: '-2s' }} />
-            <div className="absolute bottom-[30%] left-[20%] w-2 h-2 bg-[#66CCCC]/30 rounded-full animate-[float-3d_7s_ease-in-out_infinite]" style={{ animationDelay: '-1s' }} />
-            <div className="absolute top-[40%] left-[25%] w-3 h-3 bg-[#4DA8C4]/25 rounded-full animate-[float-3d_9s_ease-in-out_infinite]" style={{ animationDelay: '-3s' }} />
-            <div className="absolute bottom-[15%] left-[35%] w-3 h-3 bg-[#B2D8E5]/30 rounded-full animate-[float-3d_7s_ease-in-out_infinite]" style={{ animationDelay: '-6s' }} />
+            {/* 3D Ambient Elements - Left side (subtle) */}
+            <div className="absolute top-[15%] left-[10%] w-3 h-3 bg-[#4DA8C4]/15 rounded-full animate-[float-3d_6s_ease-in-out_infinite]" style={{ animationDelay: '-2s' }} />
+            <div className="absolute bottom-[30%] left-[20%] w-2 h-2 bg-[#66CCCC]/12 rounded-full animate-[float-3d_7s_ease-in-out_infinite]" style={{ animationDelay: '-1s' }} />
+            
+            {/* 3D Ambient Elements - Right side (more effects for balance) */}
+            <div className="absolute top-[10%] right-[10%] w-3 h-3 bg-[#4DA8C4]/15 rounded-full animate-[float-3d_8s_ease-in-out_infinite]" />
+            <div className="absolute top-[25%] right-[5%] w-2 h-2 bg-[#66CCCC]/12 rounded-full animate-[float-3d_10s_ease-in-out_infinite]" />
+            <div className="absolute top-[45%] right-[15%] w-4 h-4 bg-[#B2D8E5]/10 rounded-full animate-[float-3d_9s_ease-in-out_infinite]" />
+            <div className="absolute top-[65%] right-[8%] w-3 h-3 bg-[#4DA8C4]/12 rounded-full animate-[float-3d_7s_ease-in-out_infinite]" />
+            <div className="absolute bottom-[25%] right-[12%] w-2 h-2 bg-[#66CCCC]/10 rounded-full animate-[float-3d_11s_ease-in-out_infinite]" />
+            <div className="absolute bottom-[45%] right-[20%] w-3 h-3 bg-[#B2D8E5]/8 rounded-full animate-[float-3d_8s_ease-in-out_infinite]" />
+            
+            {/* Subtle center glow for balance */}
+            <div className="absolute top-1/2 right-1/4 w-40 h-40 bg-[#4DA8C4]/5 rounded-full blur-3xl pointer-events-none" />
             
             <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 py-20">
                 {/* Two-Column Layout */}

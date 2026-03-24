@@ -9,6 +9,7 @@ import Esencia from './components/Esencia';
 import Ecosystem from './components/Ecosystem';
 import Aliados from './components/Aliados';
 import Footer from './components/Footer';
+import ContactModal from './components/ContactModal';
 const NeuroEntorno = lazy(() => import('./components/NeuroEntorno'));
 const ProyectosNacional = lazy(() => import('./components/ProyectosNacional'));
 const Consultoria = lazy(() => import('./components/Consultoria'));
@@ -132,6 +133,13 @@ const App = () => {
     const [showLeadModal, setShowLeadModal] = useState(false);
     const [leadContext, setLeadContext] = useState(null);
     const [hasLeadData, setHasLeadData] = useState(false);
+    
+    // Contact modal state
+    const [showContactModal, setShowContactModal] = useState(false);
+    
+    // Conversation tracking
+    const [interactionCount, setInteractionCount] = useState(0);
+    const [askedForName, setAskedForName] = useState(false);
     const [leadShownCount, setLeadShownCount] = useState(0);
     const [currentInterest, setCurrentInterest] = useState(null);
     
@@ -220,13 +228,24 @@ const App = () => {
         setBotInput('');
         setBotMsgs(prev => [...prev, { role: 'user', text: userMsg, timestamp: new Date() }]);
         setBotLoading(true);
+        
+        // Increment interaction count
+        const newInteractionCount = interactionCount + 1;
+        setInteractionCount(newInteractionCount);
 
         // If we're in lead collection mode, handle it conversationally
         if (leadCollectionStep) {
             setBotLoading(false);
-            await handleConversationalLead(userMsg);
+            await handleConversationalLead(userMsg, newInteractionCount);
             return;
         }
+
+        // Get lead data for personalization
+        const leadData = getLeadData();
+        const userName = leadData?.nombre || tempLeadData?.nombre;
+        
+        // Build personalized greeting if we have the name
+        const personalizedGreeting = userName ? `${userName}, ` : '';
 
         const shortSystemPrompt = `Eres Nico, agente de atención al cliente de Edutechlife. Tu rol principal es ATENDER al cliente, resolver sus dudas e informarle sobre los servicios.
 
@@ -235,9 +254,12 @@ REGLAS DE ATENCIÓN AL CLIENTE:
 2. Sé amable, profesional, habla como en llamada telefónica
 3. NUNCA uses emojis o signos raros. Responde en texto plano
 4. Proporciona información clara sobre servicios, metodologías, proceso, etc.
-5. Si el usuario pregunta precios, quiere comprar, adquiere, inscribir, o expresa interés en un servicio, ENTONCES dile que un asesor le contactará para darle más información y cerrar la venta
+5. Si el usuario pregunta precios, quiere comprar, adquiere, inscribir, o expresa interés en un servicio, ENTONCES pregunta de forma natural si quiere que un asesor le contacte
 
-IMPORTANTE: No hables de contactarte con asesor hasta que el usuario LO SOLICITE o muestre interés en comprar/precios/servicios. Primero enfocate en atender y resolver dudas.`;
+IMPORTANTE: 
+- No hables de contactarte con asesor hasta que el usuario LO SOLICITE o muestre interés activo en comprar/precios/servicios
+- Usa el nombre del usuario si lo conoces: ${userName ? userName : 'el nombre del usuario'}
+- Primero enfocate en atender y resolver dudas`;
 
         const contextWithKnowledge = `
 Información de referencia sobre Edutechlife:
@@ -267,27 +289,48 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                 .trim();
             setBotMsgs(prev => [...prev, { role: 'assistant', text: cleanResponse, timestamp: new Date() }]);
             
-            // Check for lead capture opportunity - Start conversational collection instead of modal
-            // Check if we already have lead data in localStorage
+            // Check for lead capture opportunity
             const existingLeadData = getLeadData();
-            const alreadyHasLead = hasLeadData || (existingLeadData && existingLeadData.nombre);
+            const alreadyHasName = hasLeadData || (existingLeadData && existingLeadData.nombre);
+            const userHasName = tempLeadData?.nombre || alreadyHasName;
+            
+            // Strategy: 
+            // 1. Ask for name at interaction 3 (if we don't have it)
+            // 2. If user shows strong interest, ask for contact naturally
             
             const interestDetected = detectInterest(userMsg);
-            if (interestDetected && !alreadyHasLead && leadShownCount < 2) {
+            
+            // Ask for name at interaction 3 if we don't have it
+            if (newInteractionCount >= 3 && !userHasName && !askedForName && !leadCollectionStep) {
+                setAskedForName(true);
+                setLeadCollectionStep('name');
+                setTimeout(() => {
+                    setBotMsgs(prev => [...prev, { 
+                        role: 'assistant', 
+                        text: 'Para conocerte mejor y atenderte de forma personalizada, ¿cómo te llamas?',
+                        timestamp: new Date() 
+                    }]);
+                }, 500);
+            }
+            
+            // If user shows strong interest and we have their name, ask for contact naturally
+            if (interestDetected && userHasName && !leadCollectionStep && leadShownCount < 2) {
                 setCurrentInterest(interestDetected);
                 setLeadContext({
                     interest: interestDetected,
                     topic: userMsg.substring(0, 100)
                 });
                 
-                // Start conversational lead collection
-                setLeadCollectionStep('name');
-                setBotMsgs(prev => [...prev, { 
-                    role: 'assistant', 
-                    text: 'Para poder darte esa información y ponerte en contacto con un asesor, ¿me podrías decir tu nombre?',
-                    timestamp: new Date() 
-                }]);
+                // Ask for contact naturally
+                setLeadCollectionStep('phone');
                 setLeadShownCount(prev => prev + 1);
+                setTimeout(() => {
+                    setBotMsgs(prev => [...prev, { 
+                        role: 'assistant', 
+                        text: `${tempLeadData.nombre || '¡Excelente!'} Un asesor puede darte más información sobre esto. ¿Te gustaría que te contactemos? ¿Cuál es tu número de teléfono?`,
+                        timestamp: new Date() 
+                    }]);
+                }, 500);
             }
         } catch (error) {
             setBotMsgs(prev => [...prev, { role: 'assistant', text: 'Disculpa, estoy teniendo dificultades técnicas en este momento. ¿Podrías intentar de nuevo en un momento?', timestamp: new Date() }]);
@@ -329,14 +372,18 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
     };
 
     // Handle conversational lead collection
-    const handleConversationalLead = async (userMsg) => {
+    // eslint-disable-next-line no-unused-vars
+    const handleConversationalLead = async (userMsg, currentInteractionCount) => {
         const lowerMsg = userMsg.toLowerCase();
         
-        // Skip if user says they don't want to provide info
-        if (lowerMsg.includes('no quiero') || lowerMsg.includes('no deseo') || lowerMsg.includes('después') || lowerMsg.includes('luego') || lowerMsg.includes('despues')) {
+        // Track attempts for each field
+        const maxAttempts = 2;
+        
+        // Skip if user says they don't want to provide info - continue conversation
+        if (lowerMsg.includes('no quiero') || lowerMsg.includes('no deseo') || lowerMsg.includes('después') || lowerMsg.includes('luego') || lowerMsg.includes('despues') || lowerMsg.includes('no tengo') || lowerMsg.includes('no me interesa') || lowerMsg.includes('ahora no')) {
             setBotMsgs(prev => [...prev, { 
                 role: 'assistant', 
-                text: 'Entiendo. Cuando gustes podemos continuar. Estoy aquí para ayudarte cuando lo necesites.',
+                text: '¡Entendido! No hay problema. Estoy aquí para ayudarte. ¿En qué más puedo colaborarte?',
                 timestamp: new Date() 
             }]);
             setLeadCollectionStep(null);
@@ -347,49 +394,158 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
         let updatedData = { ...tempLeadData };
         let nextStep = null;
         let responseText = '';
+        
+        // Get current attempt count or initialize
+        const nameAttempts = tempLeadData._nameAttempts || 0;
+        const emailAttempts = tempLeadData._emailAttempts || 0;
+        const phoneAttempts = tempLeadData._phoneAttempts || 0;
 
         if (leadCollectionStep === 'name') {
             const name = extractName(userMsg);
             if (name && name.length > 1) {
                 updatedData.nombre = name;
-                nextStep = 'email';
-                responseText = `Mucho gusto ${name}. Para poder contactarte, ¿me podrías dar tu correo electrónico?`;
+                delete updatedData._nameAttempts;
+                // Store name and continue conversation normally
+                setTempLeadData(updatedData);
+                setLeadCollectionStep(null);
+                setBotMsgs(prev => [...prev, { 
+                    role: 'assistant', 
+                    text: `Mucho gusto ${name}. ¿En qué más puedo ayudarte hoy?`,
+                    timestamp: new Date() 
+                }]);
+                return;
             } else {
+                // Try again or continue
+                const newAttempts = nameAttempts + 1;
+                updatedData._nameAttempts = newAttempts;
+                
+                if (newAttempts >= maxAttempts) {
+                    // Max attempts reached, continue without name
+                    setLeadCollectionStep(null);
+                    delete updatedData._nameAttempts;
+                    setTempLeadData({});
+                    setBotMsgs(prev => [...prev, { 
+                        role: 'assistant', 
+                        text: '¡No hay problema! ¿En qué puedo ayudarte?',
+                        timestamp: new Date() 
+                    }]);
+                    return;
+                }
+                
                 responseText = 'No entendí bien tu nombre. ¿Podrías decírmelo de nuevo, por favor?';
             }
         } else if (leadCollectionStep === 'email') {
             const email = extractEmail(userMsg);
             if (email) {
                 updatedData.email = email;
-                nextStep = 'phone';
-                responseText = `Perfecto. ¿También me podrías dar tu número de teléfono para contactarte?`;
+                delete updatedData._emailAttempts;
+                // Store email and continue
+                setTempLeadData(updatedData);
+                // Optionally ask for phone but don't block
+                const askPhone = Math.random() > 0.5; // 50% chance to ask
+                if (askPhone) {
+                    setLeadCollectionStep('phone');
+                    setBotMsgs(prev => [...prev, { 
+                        role: 'assistant', 
+                        text: `Perfecto ${updatedData.nombre || ''}. ¿Te gustaría recibir información por WhatsApp? ¿Cuál es tu número?`,
+                        timestamp: new Date() 
+                    }]);
+                    return;
+                } else {
+                    // Save lead with just email
+                    const leadData = {
+                        nombre: updatedData.nombre,
+                        email: updatedData.email,
+                        telefono: updatedData.telefono || '',
+                        interes: currentInterest || 'general',
+                        tema: leadContext?.topic || ''
+                    };
+                    saveLead(leadData);
+                    setHasLeadData(true);
+                    setLeadCollectionStep(null);
+                    setBotMsgs(prev => [...prev, { 
+                        role: 'assistant', 
+                        text: `¡Gracias ${updatedData.nombre || ''}! Un asesor te contactará pronto al correo. ¿Hay algo más en lo que te pueda ayudar?`,
+                        timestamp: new Date() 
+                    }]);
+                    return;
+                }
             } else {
-                responseText = 'No entendí tu correo. ¿Podrías darme un correo electrónico válido?';
+                const newAttempts = emailAttempts + 1;
+                updatedData._emailAttempts = newAttempts;
+                
+                if (newAttempts >= maxAttempts) {
+                    // Max attempts, save what we have and continue
+                    const leadData = {
+                        nombre: updatedData.nombre,
+                        email: '',
+                        telefono: '',
+                        interes: currentInterest || 'general',
+                        tema: leadContext?.topic || ''
+                    };
+                    if (updatedData.nombre) {
+                        saveLead(leadData);
+                    }
+                    setLeadCollectionStep(null);
+                    setBotMsgs(prev => [...prev, { 
+                        role: 'assistant', 
+                        text: `¡Entendido ${updatedData.nombre || ''}! ¿Te ayudo con algo más?`,
+                        timestamp: new Date() 
+                    }]);
+                    return;
+                }
+                responseText = 'No entendí tu correo. ¿Podrías darme un correo electrónico válido? (O dime "continuar" si prefieres)';
             }
         } else if (leadCollectionStep === 'phone') {
             const phone = extractPhone(userMsg);
             if (phone) {
                 updatedData.telefono = phone;
+                delete updatedData._phoneAttempts;
                 
                 // Save the lead
                 const leadData = {
-                    ...updatedData,
+                    nombre: updatedData.nombre || '',
+                    email: updatedData.email || '',
+                    telefono: phone,
                     interes: currentInterest || 'general',
                     tema: leadContext?.topic || ''
                 };
                 
-                const result = saveLead(leadData);
-                if (result.success) {
-                    setHasLeadData(true);
-                    responseText = `Perfecto ${updatedData.nombre}, un asesor de Edutechlife te contactará en breve al ${phone} o al correo ${updatedData.email} para darte más información sobre lo que necesitas. ¿Hay algo más en lo que te pueda ayudar?`;
-                } else {
-                    responseText = 'Hubo un problema al guardar tus datos. ¿Podrías intentar de nuevo?';
-                }
-                
+                saveLead(leadData);
+                setHasLeadData(true);
                 setLeadCollectionStep(null);
                 setTempLeadData({});
+                setBotMsgs(prev => [...prev, { 
+                    role: 'assistant', 
+                    text: `Perfecto ${updatedData.nombre || ''}. Un asesor de Edutechlife te contactará en breve. ¿Hay algo más en lo que te pueda ayudar?`,
+                    timestamp: new Date() 
+                }]);
+                return;
             } else {
-                responseText = 'No entendí tu número. ¿Podrías darme tu teléfono móvil?';
+                const newAttempts = phoneAttempts + 1;
+                updatedData._phoneAttempts = newAttempts;
+                
+                if (newAttempts >= maxAttempts) {
+                    // Max attempts, save what we have and continue
+                    const leadData = {
+                        nombre: updatedData.nombre || '',
+                        email: updatedData.email || '',
+                        telefono: '',
+                        interes: currentInterest || 'general',
+                        tema: leadContext?.topic || ''
+                    };
+                    if (updatedData.nombre || updatedData.email) {
+                        saveLead(leadData);
+                    }
+                    setLeadCollectionStep(null);
+                    setBotMsgs(prev => [...prev, { 
+                        role: 'assistant', 
+                        text: `¡No hay problema! ${updatedData.nombre ? updatedData.nombre + ', ' : ''}¿Te ayudo con algo más?`,
+                        timestamp: new Date() 
+                    }]);
+                    return;
+                }
+                responseText = 'No entendí tu número. ¿Podrías darme tu teléfono móvil? (O dime "continuar" si prefieres)';
             }
         }
 
@@ -397,6 +553,9 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
         
         if (nextStep) {
             setLeadCollectionStep(nextStep);
+            setTempLeadData(updatedData);
+        } else if (responseText && !nextStep) {
+            // Update data even if we continue
             setTempLeadData(updatedData);
         }
     };
@@ -523,8 +682,8 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
             {/* Header - Navigation Premium - Hidden on SmartBoard, IALab and Admin */}
             {view !== 'smartboard' && view !== 'ialab' && view !== 'admin' && (
                 <header className="sticky top-0 left-0 right-0 z-[1000] bg-white border-b border-gray-100">
-                    <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between py-4">
-                        {/* Logo Premium */}
+                    <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between py-3">
+                        {/* Logo Premium - Smaller */}
                         <button 
                             onClick={() => handleNavigate('landing')}
                             className="flex items-center group"
@@ -533,26 +692,42 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                             <img 
                                 src="/images/logo-edutechlife.webp" 
                                 alt="Edutechlife" 
-                                className="h-7 w-auto transition-all duration-300 group-hover:opacity-80"
+                                className="h-5 w-auto transition-all duration-300 group-hover:opacity-80"
                             />
                         </button>
                         
-                        {/* Navigation Links */}
-                        <nav className="hidden md:flex items-center gap-8">
+                        {/* Navigation Links - Active */}
+                        <nav className="hidden md:flex items-center gap-6">
                             <button 
-                                onClick={() => handleNavigate('landing')}
+                                onClick={() => {
+                                    handleNavigate('landing');
+                                    setTimeout(() => {
+                                        const esenciaSection = document.getElementById('esencia');
+                                        if (esenciaSection) {
+                                            esenciaSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                        }
+                                    }, 100);
+                                }}
                                 className="text-sm font-medium text-gray-600 hover:text-[#004B63] transition-colors duration-200"
                             >
                                 Nosotros
                             </button>
                             <button 
-                                onClick={() => handleNavigate('landing')}
+                                onClick={() => {
+                                    handleNavigate('landing');
+                                    setTimeout(() => {
+                                        const ecosystemSection = document.getElementById('ecosystem');
+                                        if (ecosystemSection) {
+                                            ecosystemSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                        }
+                                    }, 100);
+                                }}
                                 className="text-sm font-medium text-gray-600 hover:text-[#004B63] transition-colors duration-200"
                             >
                                 Ecosistema
                             </button>
                             <button 
-                                onClick={() => handleNavigate('landing')}
+                                onClick={() => setShowContactModal(true)}
                                 className="text-sm font-medium text-gray-600 hover:text-[#004B63] transition-colors duration-200"
                             >
                                 Contacto
@@ -621,6 +796,12 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                 onClose={() => setShowLeadModal(false)}
                 onSubmit={handleLeadSubmit}
                 context={leadContext}
+            />
+
+            {/* Contact Modal */}
+            <ContactModal 
+                isOpen={showContactModal}
+                onClose={() => setShowContactModal(false)}
             />
 
             {/* Floating Chatbot - Solo en homepage */}
