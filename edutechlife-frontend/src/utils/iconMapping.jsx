@@ -233,7 +233,6 @@ export const faToLucideMap = {
   'fa-microchip-alt': Cpu,
   'fa-bookmark': Bookmark,
   'fa-users-cog': UsersRound,
-  'fa-flask-vial': FlaskConical,
   'fa-terminal': Terminal,
   'fa-clipboard-check': ClipboardCheck,
   'fa-medal': Award,
