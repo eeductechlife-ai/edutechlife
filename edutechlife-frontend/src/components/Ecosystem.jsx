@@ -1,6 +1,168 @@
 import { memo, useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Icon } from '../utils/iconMapping.jsx';
+import Lottie from 'lottie-react';
+
+// ==========================================
+// Lottie Animation Data (Inline JSON - Zero External Requests)
+// ==========================================
+const brainAnimation = {
+  v: "5.7.4",
+  fr: 30,
+  ip: 0,
+  op: 60,
+  w: 100,
+  h: 100,
+  nm: "Brain",
+  ddd: 0,
+  assets: [],
+  layers: [{
+    ddd: 0,
+    ind: 1,
+    ty: 4,
+    nm: "Circle",
+    sr: 1,
+    ks: {
+      o: { a: 0, k: 100 },
+      r: { a: 1, k: [{ i: { x: [0.833], y: [0.833] }, o: { x: [0.167], y: [0.167] }, t: 0, s: [0] }, { t: 60, s: [360] }] },
+      p: { a: 0, k: [50, 50, 0] },
+      a: { a: 0, k: [0, 0, 0] },
+      s: { a: 0, k: [100, 100, 100] }
+    },
+    ao: 0,
+    shapes: [{
+      ty: "el",
+      p: { a: 0, k: [0, 0] },
+      s: { a: 0, k: [80, 80] },
+      nm: "Ellipse"
+    }, {
+      ty: "st",
+      c: { a: 0, k: [0.302, 0.659, 0.769, 1] },
+      o: { a: 0, k: 100 },
+      w: { a: 0, k: 4 },
+      lc: 2,
+      lj: 1,
+      nm: "Stroke"
+    }]
+  }]
+};
+
+const awardAnimation = {
+  v: "5.7.4",
+  fr: 30,
+  ip: 0,
+  op: 60,
+  w: 100,
+  h: 100,
+  nm: "Award",
+  ddd: 0,
+  assets: [],
+  layers: [{
+    ddd: 0,
+    ind: 1,
+    ty: 4,
+    nm: "Star",
+    sr: 1,
+    ks: {
+      o: { a: 0, k: 100 },
+      r: { a: 0, k: 0 },
+      p: { a: 0, k: [50, 50, 0] },
+      a: { a: 0, k: [0, 0, 0] },
+      s: { a: 1, k: [{ i: { x: [0.667, 0.667, 0.667], y: [1, 1, 1] }, o: { x: [0.333, 0.333, 0.333], y: [0, 0, 0] }, t: 0, s: [100, 100, 100] }, { i: { x: [0.667, 0.667, 0.667], y: [1, 1, 1] }, o: { x: [0.333, 0.333, 0.333], y: [0, 0, 0] }, t: 30, s: [120, 120, 100] }, { t: 60, s: [100, 100, 100] }] }
+    },
+    ao: 0,
+    shapes: [{
+      ty: "sr",
+      p: { a: 0, k: [0, 0] },
+      or: { a: 0, k: 35 },
+      ir: { a: 0, k: 15 },
+      pt: { a: 0, k: 5 },
+      r: { a: 0, k: 0 },
+      nm: "Star"
+    }, {
+      ty: "fl",
+      c: { a: 0, k: [1, 0.82, 0.388, 1] },
+      o: { a: 0, k: 100 },
+      nm: "Fill"
+    }]
+  }]
+};
+
+const handshakeAnimation = {
+  v: "5.7.4",
+  fr: 30,
+  ip: 0,
+  op: 60,
+  w: 100,
+  h: 100,
+  nm: "Handshake",
+  ddd: 0,
+  assets: [],
+  layers: [{
+    ddd: 0,
+    ind: 1,
+    ty: 4,
+    nm: "Pulse",
+    sr: 1,
+    ks: {
+      o: { a: 1, k: [{ i: { x: [0.833], y: [0.833] }, o: { x: [0.167], y: [0.167] }, t: 0, s: [100] }, { t: 60, s: [0] }] },
+      r: { a: 0, k: 0 },
+      p: { a: 0, k: [50, 50, 0] },
+      a: { a: 0, k: [0, 0, 0] },
+      s: { a: 1, k: [{ i: { x: [0.667, 0.667, 0.667], y: [1, 1, 1] }, o: { x: [0.333, 0.333, 0.333], y: [0, 0, 0] }, t: 0, s: [100, 100, 100] }, { t: 60, s: [150, 150, 100] }] }
+    },
+    ao: 0,
+    shapes: [{
+      ty: "el",
+      p: { a: 0, k: [0, 0] },
+      s: { a: 0, k: [60, 60] },
+      nm: "Ellipse"
+    }, {
+      ty: "st",
+      c: { a: 0, k: [0.302, 0.659, 0.769, 1] },
+      o: { a: 0, k: 100 },
+      w: { a: 0, k: 3 },
+      lc: 2,
+      lj: 1,
+      nm: "Stroke"
+    }]
+  }]
+};
+
+// ==========================================
+// Card con Lottie Hover (Solo play en hover)
+// ==========================================
+const CardWithLottie = ({ children, animationData, onMouseEnter, onMouseLeave }) => {
+  const [lottieRef, setLottieRef] = useState(null);
+  
+  const handleMouseEnter = (e) => {
+    if (lottieRef) lottieRef.play();
+    if (onMouseEnter) onMouseEnter(e);
+  };
+  
+  const handleMouseLeave = (e) => {
+    if (lottieRef) lottieRef.pause();
+    if (onMouseLeave) onMouseLeave(e);
+  };
+  
+  return (
+    <div 
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <div className="w-14 h-14 mb-4">
+        <Lottie 
+          lottieRef={setLottieRef}
+          animationData={animationData}
+          loop={true}
+          autoplay={false}
+          className="w-full h-full"
+        />
+      </div>
+      {children}
+    </div>
+  );
+};
 
 // ==========================================
 // Ecosystem Light Glassmorphism Modal
@@ -76,13 +238,13 @@ const PilarModal = ({ pilar, isOpen, onClose }) => {
                             <Icon name={pilar.icon} className="text-4xl md:text-5xl text-[#4DA8C4]" />
                         </div>
                         <div>
-                            <span className="inline-block px-4 py-1 bg-[#4DA8C4]/10 rounded-full text-xs font-black uppercase tracking-widest text-[#4DA8C4] mb-4">
+                            <span className="inline-block px-4 py-1 bg-[#4DA8C4]/10 rounded-full text-xs font-bold uppercase tracking-widest text-[#4DA8C4] mb-4">
                                 {pilar.subtitle}
                             </span>
-                            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-[#004B63] mb-2 font-montserrat tracking-tight">
+                            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#004B63] mb-2 tracking-tight">
                                 {pilar.title}
                             </h2>
-                            <p className="text-[#64748B] text-lg max-w-xl font-open-sans">
+                            <p className="text-gray-600 leading-relaxed font-normal text-lg max-w-xl">
                                 {content.fullDesc}
                             </p>
                         </div>
@@ -97,8 +259,8 @@ const PilarModal = ({ pilar, isOpen, onClose }) => {
                                     <Icon name={feature.icon} className="text-lg text-[#66CCCC]" />
                                 </div>
                                 <div>
-                                    <h4 className="font-bold text-[#004B63] mb-1 font-montserrat">{feature.title}</h4>
-                                    <p className="text-sm text-[#64748B] font-open-sans">{feature.desc}</p>
+                                    <h4 className="font-bold text-[#004B63] mb-1">{feature.title}</h4>
+                                    <p className="text-gray-600 leading-relaxed font-normal text-sm">{feature.desc}</p>
                                 </div>
                             </div>
                         ))}
@@ -228,63 +390,76 @@ const Ecosystem = memo(({ onNavigate }) => {
                     transition={{ duration: 0.8, ease: "easeOut" }}
                     className="text-center mb-20 max-w-3xl mx-auto"
                 >
-                    <span className="inline-block px-4 py-1.5 bg-white border border-[#E2E8F0] rounded-full text-xs font-bold text-[#4DA8C4] uppercase tracking-widest mb-6 shadow-sm">
+                    <span className="text-sm font-bold text-[#4DA8C4] uppercase tracking-widest block mb-6">
                         Plataforma Modular
                     </span>
-                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#004B63] mb-6 font-montserrat tracking-tight">
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#004B63] tracking-tight mb-6">
                         Ecosistema
                         <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC]">
                             Interconectado.
                         </span>
                     </h2>
-                    <p className="text-lg text-[#64748B] font-open-sans leading-relaxed">
+                    <p className="text-base md:text-lg text-gray-600 leading-relaxed font-normal">
                         Accede a herramientas estructuradas para potenciar la educación mediante la sinergia de neuro-ciencia e inteligencia artificial.
                     </p>
                 </motion.div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {/* 3D Perspective Container */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8" style={{ perspective: '1000px' }}>
                     {/* TARJETA 01 */}
-                    <div className="group bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden hover:shadow-[0_8px_40px_rgb(0,0,0,0.12)] transition-all duration-300 cursor-pointer" onClick={() => setSelectedPilar(pilares[0])}>
+                    <div className="group bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden hover:shadow-[0_20px_60px_rgba(77,168,196,0.25)] transition-all duration-300 cursor-pointer" 
+                         onClick={() => setSelectedPilar(pilares[0])}
+                         style={{ transition: 'transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s ease' }}
+                         onMouseEnter={(e) => { e.currentTarget.style.transform = 'rotateX(5deg) rotateY(-5deg) translateY(-10px)'; }}
+                         onMouseLeave={(e) => { e.currentTarget.style.transform = 'rotateX(0) rotateY(0) translateY(0)'; }}
+                    >
                         <div className="h-64 w-full overflow-hidden">
                             <img src="/images/eco-neuro.webp" alt="Neuro-Entorno Educativo" className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500" />
                         </div>
                         <div className="p-8">
-                            <div className="w-14 h-14 bg-[#4DA8C4]/10 rounded-2xl flex items-center justify-center mb-4">
-                                <Icon name="fa-brain" className="text-2xl text-[#4DA8C4]" />
-                            </div>
-                            <span className="text-5xl font-black text-gray-100">01</span>
-                            <h3 className="text-xl font-bold text-[#004B63] uppercase mt-6 mb-4">Neuro-Entorno Educativo</h3>
-                            <p className="text-gray-600 leading-relaxed">Acompañamiento integral basado en metodologías VAK y STEAM. Docentes con maestría analizan procesos psicológicos y académicos para potenciar cada estilo de aprendizaje con herramientas de IA personalizadas.</p>
+                            <CardWithLottie animationData={brainAnimation}>
+                                <span className="text-5xl font-black text-gray-100">01</span>
+                                <h3 className="text-xl font-bold text-[#004B63] uppercase mt-6 mb-4">Neuro-Entorno Educativo</h3>
+                                <p className="text-gray-600 leading-relaxed">Acompañamiento integral basado en metodologías VAK y STEAM. Docentes con maestría analizan procesos psicológicos y académicos para potenciar cada estilo de aprendizaje con herramientas de IA personalizadas.</p>
+                            </CardWithLottie>
                         </div>
                     </div>
 
                     {/* TARJETA 02 */}
-                    <div className="group bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden hover:shadow-[0_8px_40px_rgb(0,0,0,0.12)] transition-all duration-300 cursor-pointer" onClick={() => setSelectedPilar(pilares[1])}>
+                    <div className="group bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden hover:shadow-[0_20px_60px_rgba(77,168,196,0.25)] transition-all duration-300 cursor-pointer" 
+                         onClick={() => setSelectedPilar(pilares[1])}
+                         style={{ transition: 'transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s ease' }}
+                         onMouseEnter={(e) => { e.currentTarget.style.transform = 'rotateX(5deg) rotateY(-5deg) translateY(-10px)'; }}
+                         onMouseLeave={(e) => { e.currentTarget.style.transform = 'rotateX(0) rotateY(0) translateY(0)'; }}
+                    >
                         <div className="h-64 w-full overflow-hidden">
                             <img src="/images/eco-nacional.webp" alt="Proyectos de Impacto Nacional" className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500" />
                         </div>
                         <div className="p-8">
-                            <div className="w-14 h-14 bg-[#4DA8C4]/10 rounded-2xl flex items-center justify-center mb-4">
-                                <Icon name="fa-award" className="text-2xl text-[#4DA8C4]" />
-                            </div>
-                            <span className="text-5xl font-black text-gray-100">02</span>
-                            <h3 className="text-xl font-bold text-[#004B63] uppercase mt-6 mb-4">Proyectos de Impacto Nacional</h3>
-                            <p className="text-gray-600 leading-relaxed">Operadores oficiales SenaTIC. Certificamos a más de 6,000 estudiantes con respaldo internacional de IBM y Coursera. Maestros que forman maestros: más de 200 docentes colombianos transformados en líderes digitales.</p>
+                            <CardWithLottie animationData={awardAnimation}>
+                                <span className="text-5xl font-black text-gray-100">02</span>
+                                <h3 className="text-xl font-bold text-[#004B63] uppercase mt-6 mb-4">Proyectos de Impacto Nacional</h3>
+                                <p className="text-gray-600 leading-relaxed">Operadores oficiales SenaTIC. Certificamos a más de 6,000 estudiantes con respaldo internacional de IBM y Coursera. Maestros que forman maestros: más de 200 docentes colombianos transformados en líderes digitales.</p>
+                            </CardWithLottie>
                         </div>
                     </div>
 
                     {/* TARJETA 03 */}
-                    <div className="group bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden hover:shadow-[0_8px_40px_rgb(0,0,0,0.12)] transition-all duration-300 cursor-pointer" onClick={() => setSelectedPilar(pilares[2])}>
+                    <div className="group bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden hover:shadow-[0_20px_60px_rgba(77,168,196,0.25)] transition-all duration-300 cursor-pointer" 
+                         onClick={() => setSelectedPilar(pilares[2])}
+                         style={{ transition: 'transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s ease' }}
+                         onMouseEnter={(e) => { e.currentTarget.style.transform = 'rotateX(5deg) rotateY(-5deg) translateY(-10px)'; }}
+                         onMouseLeave={(e) => { e.currentTarget.style.transform = 'rotateX(0) rotateY(0) translateY(0)'; }}
+                    >
                         <div className="h-64 w-full overflow-hidden">
                             <img src="/images/edutech-carrusel-6.webp" alt="Consultoría B2B y Automatización" className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500" />
                         </div>
                         <div className="p-8">
-                            <div className="w-14 h-14 bg-[#4DA8C4]/10 rounded-2xl flex items-center justify-center mb-4">
-                                <Icon name="fa-handshake" className="text-2xl text-[#4DA8C4]" />
-                            </div>
-                            <span className="text-5xl font-black text-gray-100">03</span>
-                            <h3 className="text-xl font-bold text-[#004B63] uppercase mt-6 mb-4">Consultoría B2B y Automatización</h3>
-                            <p className="text-gray-600 leading-relaxed">Transformamos organizaciones educativas y empresas con metodología STEAM aplicada. Agentes de IA personalizados y capacitación de alto nivel que generan productividad real desde el primer mes de implementación.</p>
+                            <CardWithLottie animationData={handshakeAnimation}>
+                                <span className="text-5xl font-black text-gray-100">03</span>
+                                <h3 className="text-xl font-bold text-[#004B63] uppercase mt-6 mb-4">Consultoría B2B y Automatización</h3>
+                                <p className="text-gray-600 leading-relaxed">Transformamos organizaciones educativas y empresas con metodología STEAM aplicada. Agentes de IA personalizados y capacitación de alto nivel que generan productividad real desde el primer mes de implementación.</p>
+                            </CardWithLottie>
                         </div>
                     </div>
                 </div>

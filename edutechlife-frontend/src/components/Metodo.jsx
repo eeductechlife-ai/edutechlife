@@ -46,13 +46,13 @@ const Metodo = memo(() => {
             <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 py-20 relative z-10">
                 {/* Section Header */}
                 <div className="text-center mb-16">
-                    <span className="inline-block text-sm font-bold text-[#4DA8C4] uppercase tracking-widest mb-4">
+                    <span className="text-sm font-bold text-[#4DA8C4] uppercase tracking-widest block mb-2">
                         Proceso Educativo
                     </span>
-                    <h2 className="text-4xl md:text-5xl font-black text-[#004B63] mb-6">
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#004B63] tracking-tight mb-6">
                         Nuestro Método
                     </h2>
-                    <p className="text-xl text-[#334155] max-w-3xl mx-auto">
+                    <p className="text-base md:text-lg text-gray-600 leading-relaxed font-normal max-w-3xl mx-auto">
                         Un proceso claro, diseñado por magísteres, guiado por Inteligencia Artificial y enfocado en resultados medibles.
                     </p>
                 </div>
@@ -85,7 +85,7 @@ const Metodo = memo(() => {
                                 <h3 className="text-xl font-bold text-[#004B63] mb-3">
                                     {step.title}
                                 </h3>
-                                <p className="text-[#334155] leading-relaxed">
+                                <p className="text-gray-600 leading-relaxed font-normal">
                                     {step.description}
                                 </p>
 

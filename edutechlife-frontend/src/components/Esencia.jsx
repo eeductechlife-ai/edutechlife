@@ -48,18 +48,18 @@ const Esencia = memo(() => {
                 <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                     <div className="inline-flex items-center gap-3 mb-4">
                         <div className="w-10 h-[2px] bg-gradient-to-r from-transparent to-[#4DA8C4]" />
-                        <span className="text-sm font-bold text-[#4DA8C4] uppercase tracking-[0.2em]">
+                        <span className="text-sm font-bold text-[#4DA8C4] uppercase tracking-widest block mb-2">
                             Quiénes Somos
                         </span>
                         <div className="w-10 h-[2px] bg-gradient-to-l from-transparent to-[#4DA8C4]" />
                     </div>
-                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#004B63] mb-4">
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#004B63] tracking-tight mb-6">
                         Nuestra{' '}
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4DA8C4] to-[#004B63]">
                             Esencia
                         </span>
                     </h2>
-                    <p className="text-lg text-[#64748B] max-w-2xl mx-auto">
+                    <p className="text-base md:text-lg text-gray-600 leading-relaxed font-normal max-w-2xl mx-auto">
                         Somos un equipo de magísteres, pedagogos y desarrolladores apasionados por transformar la educación mediante la inteligencia artificial.
                     </p>
                 </div>
@@ -75,8 +75,8 @@ const Esencia = memo(() => {
                                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#4DA8C4]/10 to-[#004B63]/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                                      <Icon name={value.icon} className="text-3xl text-[#4DA8C4]" />
                                 </div>
-                                <h4 className="text-xl font-bold text-[#004B63] mb-2">{value.text}</h4>
-                                <p className="text-[#64748B] text-sm">{value.desc}</p>
+                                <h4 className="text-xl md:text-2xl font-bold text-[#004B63] mb-3">{value.text}</h4>
+                                <p className="text-base text-gray-600 leading-relaxed font-normal">{value.desc}</p>
                             </div>
                         ))}
                     </div>
@@ -93,11 +93,11 @@ const Esencia = memo(() => {
                                     <Icon name="fa-bullseye" className="text-2xl" />
                                 </div>
                                 <div>
-                                    <span className="text-xs font-semibold text-[#4DA8C4] uppercase tracking-wider">Objetivo</span>
-                                    <h3 className="text-xl font-bold">Misión</h3>
+                                    <span className="text-sm font-bold text-[#4DA8C4] uppercase tracking-widest block mb-2">Objetivo</span>
+                                    <h3 className="text-xl md:text-2xl font-bold">Misión</h3>
                                 </div>
                             </div>
-                            <p className="text-white/90 leading-relaxed">
+                            <p className="text-base text-white/90 leading-relaxed font-normal">
                                 Democratizar la educación de calidad mediante herramientas de inteligencia artificial que se adapten al estilo de aprendizaje único de cada estudiante.
                             </p>
                             <div className="mt-6 pt-4 border-t border-white/20">
@@ -115,11 +115,11 @@ const Esencia = memo(() => {
                                     <Icon name="fa-eye" className="text-2xl text-white" />
                                 </div>
                                 <div>
-                                    <span className="text-xs font-semibold text-[#4DA8C4] uppercase tracking-wider">Proyección</span>
-                                    <h3 className="text-xl font-bold text-[#004B63]">Visión</h3>
+                                    <span className="text-sm font-bold text-[#4DA8C4] uppercase tracking-widest block mb-2">Proyección</span>
+                                    <h3 className="text-xl md:text-2xl font-bold text-[#004B63]">Visión</h3>
                                 </div>
                             </div>
-                            <p className="text-[#64748B] leading-relaxed">
+                            <p className="text-base text-gray-600 leading-relaxed font-normal">
                                 Ser la plataforma líder en Latinoamérica en la integración de metodologías pedagógicas con inteligencia artificial para formar profesionales del futuro.
                             </p>
                             <div className="mt-6 pt-4 border-t border-[#E2E8F0]">
@@ -156,7 +156,7 @@ const Esencia = memo(() => {
                             {/* Content */}
                             <div className="absolute inset-0 flex flex-col justify-end p-8">
                                 <div className="max-w-lg">
-                                    <h3 className="text-2xl md:text-3xl font-bold text-white mb-3">
+                                    <h3 className="text-xl md:text-2xl font-bold text-white mb-3">
                                         {slides[currentSlide].title}
                                     </h3>
                                 </div>

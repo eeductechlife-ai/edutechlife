@@ -129,7 +129,7 @@ const Testimonials = () => {
                         <div className="w-12 h-px bg-gradient-to-l from-transparent to-[#66CCCC]" />
                     </div>
 
-                    <h2 className="font-montserrat text-4xl md:text-5xl font-black text-[#004B63] mb-4">
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#004B63] tracking-tight mb-4">
                         Lo Que Dicen Nuestros
                         <span className="block mt-2" style={{
                             background: 'linear-gradient(135deg, #4DA8C4 0%, #66CCCC 100%)',
@@ -140,7 +140,7 @@ const Testimonials = () => {
                         </span>
                     </h2>
 
-                    <p className="text-[#64748B] text-lg max-w-2xl mx-auto">
+                    <p className="text-gray-600 leading-relaxed font-normal text-lg max-w-2xl mx-auto">
                         Más de 6,000 estudiantes y docentes han transformado su vida académica con nuestra metodología.
                     </p>
                 </div>

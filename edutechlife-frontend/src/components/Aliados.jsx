@@ -39,12 +39,12 @@ const Aliados = memo(() => {
                 <div className="text-center mb-16">
                     <div className="inline-flex items-center gap-3 mb-4">
                         <div className="w-10 h-[2px] bg-gradient-to-r from-transparent to-[#4DA8C4]" />
-                        <span className="text-sm font-bold text-[#4DA8C4] uppercase tracking-widest font-mono">
+                        <span className="text-sm font-bold text-[#4DA8C4] uppercase tracking-widest block mb-2">
                             Confían en nosotros
                         </span>
                         <div className="w-10 h-[2px] bg-gradient-to-l from-transparent to-[#4DA8C4]" />
                     </div>
-                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#004B63] mb-4">
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#004B63] tracking-tight mb-6">
                         Nuestros{' '}
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC]">
                             Aliados Estratégicos

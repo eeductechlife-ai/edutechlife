@@ -138,7 +138,7 @@ const Pricing = () => {
                         <div className="w-12 h-px bg-gradient-to-l from-transparent to-[#4DA8C4]" />
                     </div>
 
-                    <h2 className="font-montserrat text-4xl md:text-5xl font-black text-[#004B63] mb-4">
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#004B63] tracking-tight mb-4">
                         Elige Tu Camino Hacia
                         <span className="block mt-2" style={{
                             background: 'linear-gradient(135deg, #4DA8C4 0%, #66CCCC 100%)',
@@ -149,7 +149,7 @@ const Pricing = () => {
                         </span>
                     </h2>
 
-                    <p className="text-[#64748B] text-lg max-w-2xl mx-auto mb-8">
+                    <p className="text-gray-600 leading-relaxed font-normal text-lg max-w-2xl mx-auto mb-8">
                         Desde estudiantes individuales hasta instituciones completas, tenemos el plan perfecto para ti.
                     </p>
 

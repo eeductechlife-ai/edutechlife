@@ -1,7 +1,6 @@
-import { memo, useEffect, useState, useRef, Suspense, lazy } from 'react';
+import { memo, useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import MagneticButton from './MagneticButton';
-const NeuralOracle = lazy(() => import('./3D/NeuralOracle'));
 import SplitTextReveal from './SplitTextReveal';
 import { Icon } from '../utils/iconMapping.jsx';
 
@@ -71,7 +70,7 @@ const Hero = memo(({ onNavigate }) => {
                             className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full mb-8 border border-[#E2E8F0] shadow-sm"
                         >
                             <span className="w-2 h-2 bg-[#4DA8C4] rounded-full animate-pulse shadow-[0_0_8px_#4DA8C4]" />
-                            <span className="text-xs font-bold text-[#004B63] uppercase tracking-widest font-montserrat">
+                            <span className="text-sm font-bold text-[#4DA8C4] uppercase tracking-widest block">
                                 Neuro-Métricas V2 Activas
                             </span>
                         </motion.div>
@@ -80,7 +79,7 @@ const Hero = memo(({ onNavigate }) => {
                             initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
                             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                             transition={{ duration: 0.8, delay: 0.1 }}
-                            className="text-display display-1 mb-6"
+                            className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-[#004B63] tracking-tight leading-tight mb-6"
                         >
                             <SplitTextReveal text="Liderando la Educación del Futuro" />
                         </motion.h1>
@@ -89,7 +88,7 @@ const Hero = memo(({ onNavigate }) => {
                             initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
                             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                             transition={{ duration: 0.8, delay: 0.2 }}
-                            className="text-xl md:text-2xl text-[#64748B] mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed font-light"
+                            className="text-base md:text-lg text-gray-600 leading-relaxed font-normal mb-10 max-w-xl mx-auto lg:mx-0"
                         >
                             Infraestructura cognitiva asistida por inteligencia artificial. Tu entorno de aprendizaje evoluciona y se ajusta <span className="font-semibold text-[#004B63]">en tiempo real</span> a tu neuro-ergonomía.
                         </motion.p>
@@ -151,16 +150,32 @@ const Hero = memo(({ onNavigate }) => {
                         </motion.div>
                     </div>
 
-                    {/* Right Column - 3D Interactive Oracle */}
+                    {/* Right Column - 3D Video Hero */}
                     <motion.div 
                         initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
                         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                         transition={{ duration: 0.8, delay: 0.5 }}
-                        className="pt-10 lg:pt-0"
+                        className="pt-10 lg:pt-0 flex items-center justify-center"
                     >
-                        <Suspense fallback={<div className="w-full h-[500px] flex items-center justify-center animate-pulse-glow" />}>
-                            <NeuralOracle />
-                        </Suspense>
+                        <div className="relative w-full max-w-lg lg:max-w-xl aspect-square flex items-center justify-center">
+                            {/* Video WebM con fondo transparente - Simula orbe de IA */}
+                            <video 
+                                autoPlay 
+                                loop 
+                                muted 
+                                playsInline 
+                                className="w-full h-full object-contain pointer-events-none drop-shadow-2xl"
+                                style={{ filter: 'drop-shadow(0 0 30px rgba(77, 168, 196, 0.4))' }}
+                            >
+                                <source src="/videos/ai-orb.webm" type="video/webm" />
+                            </video>
+                            
+                            {/* Fallback: Gradiente animado si no hay video */}
+                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                <div className="w-64 h-64 rounded-full bg-gradient-to-br from-[#4DA8C4]/30 to-[#66CCCC]/20 animate-pulse-glow blur-xl" />
+                                <div className="absolute w-48 h-48 rounded-full bg-gradient-to-tr from-[#004B63]/20 to-transparent" />
+                            </div>
+                        </div>
                     </motion.div>
                 </div>
             </div>
