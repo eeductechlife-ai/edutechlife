@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, memo } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
-import { jsPDF } from 'jspdf';
+import html2pdf from 'html2pdf.js';
 import FloatingParticles from './FloatingParticles';
 import { Icon } from '../utils/iconMapping.jsx';
 import { VAK_QUESTIONS, VAK_STYLES, calculateVAKResult, getVAKChartData } from '../constants/vakData';
@@ -126,294 +126,257 @@ const VAKDiagnostic = memo(({ onNavigate, userName: initialName = '', initialMoo
     }, 600);
   };
 
+  const generatePDFHTML = (result, dominantStyle, userName) => {
+    const colors = {
+      primary: '#004B63',
+      accent: '#4DA8C4',
+      secondary: '#66CCCC',
+      kinestesico: '#FF6B9D',
+      text: '#475569',
+      textLight: '#64748B',
+      white: '#FFFFFF',
+      bg: '#F8FAFC'
+    };
+
+    const dominantColor = result.dominant === 'visual' ? colors.accent : 
+                         result.dominant === 'auditivo' ? colors.secondary : colors.kinestesico;
+
+    return `
+      <div style="font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; background: ${colors.bg}; color: ${colors.text};">
+        <!-- Header -->
+        <div style="background: linear-gradient(135deg, ${colors.primary} 0%, #006080 100%); color: white; padding: 25px 30px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <h1 style="margin: 0; font-size: 24px; font-weight: bold; letter-spacing: 1px;">EDUTECHLIFE</h1>
+            <p style="margin: 5px 0 0; font-size: 11px; opacity: 0.8;">Education Technology</p>
+          </div>
+          <div style="background: ${colors.accent}; padding: 8px 16px; border-radius: 20px; font-size: 11px; font-weight: 600;">
+            DIAGNÓSTICO VAK
+          </div>
+        </div>
+
+        <!-- User Info -->
+        <div style="background: ${colors.bg}; padding: 15px 30px; border-bottom: 1px solid #E2E8F0;">
+          <p style="margin: 0; font-size: 12px; color: ${colors.textLight};">
+            <strong style="color: ${colors.text};">Estudiante:</strong> ${userName || 'Estudiante'} &nbsp;|&nbsp; 
+            <strong style="color: ${colors.text};">Fecha:</strong> ${new Date().toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' })}
+          </p>
+        </div>
+
+        <!-- Hero Result -->
+        <div style="background: linear-gradient(135deg, ${dominantColor} 0%, ${dominantColor}dd 100%); padding: 30px; text-align: center; color: white;">
+          <p style="margin: 0 0 10px; font-size: 12px; opacity: 0.9;">Tu estilo de aprendizaje dominante</p>
+          <h2 style="margin: 0; font-size: 32px; font-weight: bold;">${dominantStyle.name}</h2>
+          <div style="font-size: 48px; font-weight: bold; margin: 10px 0;">${result.percentage}%</div>
+          <p style="margin: 0; font-size: 11px; opacity: 0.8;">dominante</p>
+        </div>
+
+        <!-- Chart Section -->
+        <div style="padding: 25px 30px; background: white;">
+          <h3 style="margin: 0 0 20px; font-size: 14px; color: ${colors.primary}; font-weight: 600;">Distribución de Estilos</h3>
+          
+          <!-- Style Cards -->
+          <div style="display: flex; gap: 15px; justify-content: center; margin-bottom: 20px;">
+            <div style="background: white; border: 1px solid #E2E8F0; border-radius: 12px; padding: 15px 20px; text-align: center; min-width: 100px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+              <div style="width: 12px; height: 12px; background: ${colors.accent}; border-radius: 50%; margin: 0 auto 8px;"></div>
+              <p style="margin: 0 0 5px; font-size: 11px; color: ${colors.textLight};">Visual</p>
+              <p style="margin: 0; font-size: 20px; font-weight: bold; color: ${colors.text};">${result.percentages.visual}%</p>
+            </div>
+            <div style="background: white; border: 1px solid #E2E8F0; border-radius: 12px; padding: 15px 20px; text-align: center; min-width: 100px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+              <div style="width: 12px; height: 12px; background: ${colors.secondary}; border-radius: 50%; margin: 0 auto 8px;"></div>
+              <p style="margin: 0 0 5px; font-size: 11px; color: ${colors.textLight};">Auditivo</p>
+              <p style="margin: 0; font-size: 20px; font-weight: bold; color: ${colors.text};">${result.percentages.auditivo}%</p>
+            </div>
+            <div style="background: white; border: 1px solid #E2E8F0; border-radius: 12px; padding: 15px 20px; text-align: center; min-width: 100px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+              <div style="width: 12px; height: 12px; background: ${colors.kinestesico}; border-radius: 50%; margin: 0 auto 8px;"></div>
+              <p style="margin: 0 0 5px; font-size: 11px; color: ${colors.textLight};">Kinestésico</p>
+              <p style="margin: 0; font-size: 20px; font-weight: bold; color: ${colors.text};">${result.percentages.kinestesico}%</p>
+            </div>
+          </div>
+
+          <!-- Progress Bars -->
+          <div style="margin-top: 20px;">
+            <div style="margin-bottom: 12px;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                <span style="font-size: 11px; color: ${colors.text};">Visual</span>
+                <span style="font-size: 11px; color: ${colors.textLight};">${result.percentages.visual}%</span>
+              </div>
+              <div style="background: #E2E8F0; border-radius: 4px; height: 8px; overflow: hidden;">
+                <div style="background: ${colors.accent}; width: ${result.percentages.visual}%; height: 100%; border-radius: 4px;"></div>
+              </div>
+            </div>
+            <div style="margin-bottom: 12px;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                <span style="font-size: 11px; color: ${colors.text};">Auditivo</span>
+                <span style="font-size: 11px; color: ${colors.textLight};">${result.percentages.auditivo}%</span>
+              </div>
+              <div style="background: #E2E8F0; border-radius: 4px; height: 8px; overflow: hidden;">
+                <div style="background: ${colors.secondary}; width: ${result.percentages.auditivo}%; height: 100%; border-radius: 4px;"></div>
+              </div>
+            </div>
+            <div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                <span style="font-size: 11px; color: ${colors.text};">Kinestésico</span>
+                <span style="font-size: 11px; color: ${colors.textLight};">${result.percentages.kinestesico}%</span>
+              </div>
+              <div style="background: #E2E8F0; border-radius: 4px; height: 8px; overflow: hidden;">
+                <div style="background: ${colors.kinestesico}; width: ${result.percentages.kinestesico}%; height: 100%; border-radius: 4px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Details Section -->
+        <div style="padding: 25px 30px; background: ${colors.bg};">
+          <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+            <!-- Características -->
+            <div style="flex: 1; min-width: 200px; background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+              <h4 style="margin: 0 0 15px; font-size: 13px; color: ${colors.primary}; font-weight: 600;">Características Principales</h4>
+              <ul style="margin: 0; padding: 0; list-style: none;">
+                ${(dominantStyle.characteristics || []).slice(0, 3).map(char => `
+                  <li style="margin-bottom: 8px; font-size: 11px; color: ${colors.text}; display: flex; align-items: flex-start;">
+                    <span style="color: ${colors.accent}; margin-right: 8px;">•</span>${char}
+                  </li>
+                `).join('')}
+              </ul>
+            </div>
+
+            <!-- Estrategias -->
+            <div style="flex: 1; min-width: 200px; background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+              <h4 style="margin: 0 0 15px; font-size: 13px; color: ${colors.primary}; font-weight: 600;">Estrategias Recomendadas</h4>
+              <ul style="margin: 0; padding: 0; list-style: none;">
+                ${(dominantStyle.strategies || []).slice(0, 3).map((strat, i) => `
+                  <li style="margin-bottom: 8px; font-size: 11px; color: ${colors.text}; display: flex; align-items: flex-start;">
+                    <span style="color: ${colors.secondary}; margin-right: 8px; font-weight: bold;">${i + 1}.</span>${strat.substring(0, 40)}
+                  </li>
+                `).join('')}
+              </ul>
+            </div>
+
+            <!-- Tips -->
+            <div style="flex: 1; min-width: 200px; background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+              <h4 style="margin: 0 0 15px; font-size: 13px; color: ${colors.primary}; font-weight: 600;">Tips para Mejorar</h4>
+              <ul style="margin: 0; padding: 0; list-style: none;">
+                ${(dominantStyle.tips || []).slice(0, 3).map(tip => `
+                  <li style="margin-bottom: 8px; font-size: 11px; color: ${colors.text}; display: flex; align-items: flex-start;">
+                    <span style="color: #FFD166; margin-right: 8px;">★</span>${tip.substring(0, 40)}
+                  </li>
+                `).join('')}
+              </ul>
+            </div>
+
+            <!-- Carreras -->
+            <div style="flex: 1; min-width: 200px; background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+              <h4 style="margin: 0 0 15px; font-size: 13px; color: ${colors.primary}; font-weight: 600;">Carreras Afines</h4>
+              <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                ${(dominantStyle.careers || []).slice(0, 4).map(career => `
+                  <span style="background: ${colors.accent}; color: white; padding: 6px 12px; border-radius: 15px; font-size: 10px; font-weight: 500;">${career}</span>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="background: ${colors.primary}; color: white; padding: 20px 30px; text-align: center;">
+          <p style="margin: 0 0 5px; font-size: 11px; opacity: 0.8;">© 2024 Edutechlife - Transformando la educación con tecnología</p>
+          <p style="margin: 0; font-size: 12px; font-weight: 600;">www.edutechlife.co</p>
+        </div>
+      </div>
+    `;
+  };
+
   const handleDownloadPDF = async () => {
+    console.log('[PDF] ===== INICIANDO GENERACIÓN DE PDF =====');
+    console.log('[PDF] Resultado disponible:', !!result);
+    console.log('[PDF] Usuario:', userName);
+    console.log('[PDF] html2pdf disponible:', typeof html2pdf);
+    
+    if (!result) {
+      console.error('[PDF] Error: No hay resultado disponible');
+      alert('Error: No hay resultado disponible');
+      return;
+    }
+
     setPdfLoading(true);
+    
+    const dominantStyle = VAK_STYLES[result.dominant];
+    const htmlContent = generatePDFHTML(result, dominantStyle, userName);
+    const filename = `Diagnostico-VAK-${userName || 'Estudiante'}-${new Date().toISOString().split('T')[0]}.pdf`;
+    
     try {
-      const dominantStyle = VAK_STYLES[result.dominant];
-      const doc = new jsPDF();
-      const pageWidth = doc.internal.pageSize.getWidth();
-      const pageHeight = doc.internal.pageSize.getHeight();
-      const margin = 20;
-      const contentWidth = pageWidth - (margin * 2);
-
-      const colors = {
-        primary: [0, 75, 99],
-        accent: [77, 168, 196],
-        secondary: [102, 204, 204],
-        kinestesico: [255, 107, 157],
-        text: [71, 85, 105],
-        textLight: [100, 116, 139],
-        white: [255, 255, 255],
-        bg: [248, 250, 252],
-        cardBg: [255, 255, 255]
+      console.log('[PDF] Generando plantilla HTML...');
+      console.log('[PDF] HTML generado, longitud:', htmlContent.length);
+      
+      const container = document.createElement('div');
+      container.innerHTML = htmlContent;
+      container.style.width = '595px';
+      container.style.position = 'fixed';
+      container.style.left = '-9999px';
+      container.style.top = '0';
+      document.body.appendChild(container);
+      
+      console.log('[PDF] Contenedor creado, intentando html2pdf...');
+      
+      const opt = {
+        margin: 0,
+        filename: filename,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { 
+          scale: 2, 
+          useCORS: true,
+          letterRendering: true,
+          logging: false
+        },
+        jsPDF: { 
+          unit: 'mm', 
+          format: 'a4', 
+          orientation: 'portrait' 
+        },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
       };
 
-      const getDominantColor = () => {
-        if (result.dominant === 'visual') return colors.accent;
-        if (result.dominant === 'auditivo') return colors.secondary;
-        return colors.kinestesico;
-      };
-
-      const drawCard = (x, y, w, h, radius = 8) => {
-        doc.setFillColor(...colors.cardBg);
-        doc.setDrawColor(226, 232, 240);
-        doc.setLineWidth(0.3);
-        doc.roundedRect(x, y, w, h, radius, radius, 'FD');
-      };
-
-      const drawSectionTitle = (title, y) => {
-        doc.setFontSize(12);
-        doc.setTextColor(...colors.primary);
-        doc.setFont('helvetica', 'bold');
-        doc.text(title, margin, y);
-        doc.setFont('helvetica', 'normal');
-      };
-
-      // ==================== HEADER ====================
-      doc.setFillColor(...colors.primary);
-      doc.rect(0, 0, pageWidth, 35, 'F');
-
-      doc.setFontSize(14);
-      doc.setTextColor(...colors.white);
-      doc.setFont('helvetica', 'bold');
-      doc.text('EDUTECHLIFE', margin, 15);
-
-      doc.setFontSize(8);
-      doc.setTextColor(...colors.secondary);
-      doc.text('Education Technology', margin, 22);
-
-      doc.setFillColor(...colors.accent);
-      doc.roundedRect(pageWidth - margin - 45, 10, 45, 14, 3, 3, 'F');
-      doc.setFontSize(7);
-      doc.setTextColor(...colors.white);
-      doc.text('DIAGNÓSTICO VAK', pageWidth - margin - 22.5, 18, { align: 'center' });
-
-      let y = 45;
-
-      // ==================== USER INFO ====================
-      doc.setFillColor(...colors.bg);
-      doc.roundedRect(margin, y, contentWidth, 18, 4, 4, 'F');
+      await html2pdf()
+        .set(opt)
+        .from(container)
+        .save();
       
-      doc.setFontSize(9);
-      doc.setTextColor(...colors.text);
-      doc.text('Estudiante:', margin + 5, y + 7);
-      doc.setFont('helvetica', 'bold');
-      doc.text(userName || 'Estudiante', margin + 25, y + 7);
-      doc.setFont('helvetica', 'normal');
+      console.log('[PDF] PDF guardado exitosamente');
+      document.body.removeChild(container);
       
-      doc.setTextColor(...colors.textLight);
-      doc.text('Fecha:', margin + 100, y + 7);
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(...colors.text);
-      doc.text(new Date().toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' }), margin + 120, y + 7);
-      
-      y += 28;
-
-      // ==================== HERO RESULT CARD ====================
-      const heroColor = getDominantColor();
-      
-      // Gradient simulation
-      doc.setFillColor(heroColor[0], heroColor[1], heroColor[2]);
-      doc.rect(margin, y, contentWidth, 55, 'F');
-      doc.setFillColor(heroColor[0] - 20, heroColor[1] - 20, heroColor[2] - 20);
-      doc.rect(margin, y + 45, contentWidth, 10, 'F');
-
-      doc.setFontSize(10);
-      doc.setTextColor(255, 255, 255, 0.8);
-      doc.text('Tu estilo de aprendizaje dominante', margin + 10, y + 12);
-      
-      doc.setFontSize(22);
-      doc.setTextColor(...colors.white);
-      doc.setFont('helvetica', 'bold');
-      doc.text(dominantStyle.name, margin + 10, y + 30);
-      doc.setFont('helvetica', 'normal');
-
-      doc.setFontSize(32);
-      doc.setTextColor(...colors.white);
-      doc.text(`${result.percentage}%`, pageWidth - margin - 25, y + 35, { align: 'center' });
-
-      doc.setFontSize(8);
-      doc.setTextColor(255, 255, 255, 0.9);
-      doc.text('dominante', pageWidth - margin - 25, y + 42, { align: 'center' });
-
-      y += 65;
-
-      // ==================== CHART SECTION ====================
-      drawSectionTitle('Distribución de Estilos', y);
-      y += 10;
-
-      // Donut chart
-      const chartCenterX = margin + 40;
-      const chartCenterY = y + 30;
-      const chartRadius = 25;
-
-      doc.setFillColor(240, 240, 240);
-      doc.circle(chartCenterX, chartCenterY, chartRadius + 3, 'F');
-
-      const values = [result.percentages.visual, result.percentages.auditivo, result.percentages.kinestesico];
-      const chartColors = [colors.accent, colors.secondary, colors.kinestesico];
-      let startAngle = -Math.PI / 2;
-
-      values.forEach((val, i) => {
-        const sliceAngle = (val / 100) * 2 * Math.PI;
-        const endAngle = startAngle + sliceAngle;
-        
-        doc.setFillColor(...chartColors[i]);
-        
-        // Draw arc sectors
-        const steps = 30;
-        for (let s = 0; s <= steps; s++) {
-          const angle = startAngle + (sliceAngle * s / steps);
-          const px = chartCenterX + chartRadius * Math.cos(angle);
-          const py = chartCenterY + chartRadius * Math.sin(angle);
-          if (s === 0) doc.moveTo(chartCenterX, chartCenterY);
-          doc.line(px, py);
-        }
-        doc.line(chartCenterX, chartCenterY);
-        doc.circle(chartCenterX, chartCenterY, chartRadius, 'FD');
-        
-        startAngle = endAngle;
-      });
-
-      // Center white
-      doc.setFillColor(...colors.white);
-      doc.circle(chartCenterX, chartCenterY, chartRadius * 0.55, 'F');
-
-      // Legend cards
-      const legendStartX = margin + 90;
-      const cardW = 35;
-      const cardH = 22;
-      const styles = [
-        { name: 'Visual', val: result.percentages.visual, color: colors.accent },
-        { name: 'Auditivo', val: result.percentages.auditivo, color: colors.secondary },
-        { name: 'Kinestésico', val: result.percentages.kinestesico, color: colors.kinestesico }
-      ];
-
-      styles.forEach((style, i) => {
-        const cardX = legendStartX + (i * (cardW + 5));
-        
-        // Card background
-        doc.setFillColor(...colors.cardBg);
-        doc.setDrawColor(226, 232, 240);
-        doc.setLineWidth(0.3);
-        doc.roundedRect(cardX, y + 5, cardW, cardH, 4, 4, 'FD');
-        
-        // Color indicator
-        doc.setFillColor(...style.color);
-        doc.circle(cardX + 5, y + 11, 3, 'F');
-        
-        // Text
-        doc.setFontSize(7);
-        doc.setTextColor(...colors.textLight);
-        doc.text(style.name, cardX + 10, y + 9);
-        
-        doc.setFontSize(10);
-        doc.setTextColor(...colors.text);
-        doc.setFont('helvetica', 'bold');
-        doc.text(`${style.val}%`, cardX + 10, y + 16);
-        doc.setFont('helvetica', 'normal');
-      });
-
-      y += 60;
-
-      // ==================== DETAILS CARDS ====================
-      const colWidth = (contentWidth - 10) / 2;
-
-      // Column 1: Características
-      drawSectionTitle('Características Principales', y);
-      y += 8;
-      
-      drawCard(margin, y, colWidth, 35);
-      
-      const charList = dominantStyle.characteristics?.slice(0, 3) || [];
-      doc.setFontSize(8);
-      doc.setTextColor(...colors.text);
-      charList.forEach((char, i) => {
-        doc.setFillColor(...colors.accent);
-        doc.circle(margin + 5, y + 8 + (i * 9), 2, 'F');
-        doc.text(char, margin + 10, y + 10 + (i * 9));
-      });
-      
-      y += 45;
-
-      // Column 2: Estrategias
-      drawSectionTitle('Estrategias Recomendadas', y);
-      y += 8;
-      
-      drawCard(margin, y, colWidth, 35);
-      
-      const stratList = dominantStyle.strategies?.slice(0, 3) || [];
-      doc.setFontSize(8);
-      doc.setTextColor(...colors.text);
-      stratList.forEach((strat, i) => {
-        doc.setFillColor(...colors.secondary);
-        doc.circle(margin + 5, y + 8 + (i * 9), 2, 'F');
-        doc.text(strat.substring(0, 35), margin + 10, y + 10 + (i * 9));
-      });
-      
-      y += 45;
-
-      // Second column (right side)
-      let yRight = 175;
-
-      // Tips
-      drawSectionTitle('Tips para Mejorar', yRight);
-      yRight += 8;
-      
-      drawCard(margin + colWidth + 10, yRight, colWidth, 35);
-      
-      const tipList = dominantStyle.tips?.slice(0, 3) || [];
-      doc.setFillColor(255, 209, 102);
-      tipList.forEach((tip, i) => {
-        doc.circle(margin + colWidth + 15, yRight + 8 + (i * 9), 2, 'F');
-        doc.setFontSize(8);
-        doc.setTextColor(...colors.text);
-        doc.text(tip.substring(0, 35), margin + colWidth + 20, yRight + 10 + (i * 9));
-      });
-      
-      yRight += 45;
-
-      // Carreras
-      drawSectionTitle('Carreras Afines', yRight);
-      yRight += 8;
-      
-      drawCard(margin + colWidth + 10, yRight, colWidth, 35);
-      
-      const careerList = dominantStyle.careers?.slice(0, 3) || [];
-      doc.setFontSize(7);
-      careerList.forEach((career, i) => {
-        const chipW = doc.getTextWidth(career) + 8;
-        const chipX = margin + colWidth + 15 + (i * 35);
-        
-        doc.setFillColor(...colors.accent);
-        doc.roundedRect(chipX, yRight + 5, chipW, 8, 2, 2, 'F');
-        
-        doc.setFontSize(6);
-        doc.setTextColor(...colors.white);
-        doc.text(career.substring(0, 8), chipX + chipW/2, yRight + 10, { align: 'center' });
-      });
-
-      yRight += 45;
-
-      // ==================== FOOTER ====================
-      doc.setFillColor(...colors.bg);
-      doc.rect(margin, yRight + 5, contentWidth, 25, 'F');
-      
-      doc.setFillColor(...colors.primary);
-      doc.rect(margin, yRight + 5, contentWidth, 0.5, 'F');
-      
-      doc.setFontSize(7);
-      doc.setTextColor(...colors.textLight);
-      doc.text('© 2024 Edutechlife - Transformando la educación con tecnología', pageWidth / 2, yRight + 15, { align: 'center' });
-      doc.text('www.edutechlife.co', pageWidth / 2, yRight + 21, { align: 'center' });
-
-      // Save
-      doc.save(`Diagnostico-VAK-${userName || 'Estudiante'}-${new Date().toISOString().split('T')[0]}.pdf`);
     } catch (error) {
-      console.error('Error generating PDF:', error);
-      alert('Error al generar PDF: ' + error.message);
+      console.error('[PDF] Error con html2pdf:', error);
+      console.error('[PDF] Stack trace:', error.stack);
+      
+      // Fallback: abrir en nueva ventana para imprimir
+      try {
+        console.log('[PDF] Intentando método alternativo...');
+        const printWindow = window.open('', '_blank');
+        if (printWindow) {
+          printWindow.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <title>${filename}</title>
+              <style>
+                body { font-family: Arial, sans-serif; padding: 20px; }
+                @media print { body { padding: 0; } }
+              </style>
+            </head>
+            <body>${htmlContent}</body>
+            </html>
+          `);
+          printWindow.document.close();
+          printWindow.print();
+        } else {
+          throw new Error('No se pudo abrir ventana de impresión');
+        }
+      } catch (fallbackError) {
+        console.error('[PDF] Error en fallback:', fallbackError);
+        alert('Error al generar PDF. Por favor intenta de nuevo o contacta soporte.');
+      }
     } finally {
       setPdfLoading(false);
+      console.log('[PDF] ===== FIN GENERACIÓN PDF =====');
     }
   };
 
