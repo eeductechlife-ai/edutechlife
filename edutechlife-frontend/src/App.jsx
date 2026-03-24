@@ -21,9 +21,11 @@ const VAKTest = lazy(() => import('./components/VAKTest'));
 const VAKDiagnostic = lazy(() => import('./components/VAKDiagnostic'));
 const AdminDashboard = lazy(() => import('./components/AdminDashboard'));
 import AdminLoginModal from './components/AdminLoginModal';
+import LeadCaptureModal from './components/LeadCaptureModal';
 import LoadingScreen, { MiniLoader } from './components/LoadingScreen';
 import { callDeepseek } from './utils/api';
 import { NICO_KNOWLEDGE_BASE } from './utils/knowledgeBase';
+import { detectInterest, shouldPromptForLead, saveLead } from './utils/leads';
 
 /* ==================== PREMIUM CURSOR - ZERO LATENCY ==================== */
 /* Núcleo decursor maneja por CSS nativo - 0ms latencia */
@@ -122,6 +124,14 @@ const App = () => {
     const [isListening, setIsListening] = useState(false);
     const [isSpeaking, setIsSpeaking] = useState(false);
     const [isDarkMode, setIsDarkMode] = useState(false);
+    
+    // Lead capture states
+    const [showLeadModal, setShowLeadModal] = useState(false);
+    const [leadContext, setLeadContext] = useState(null);
+    const [hasLeadData, setHasLeadData] = useState(false);
+    const [leadShownCount, setLeadShownCount] = useState(0);
+    const [currentInterest, setCurrentInterest] = useState(null);
+    
     const botMsgsEndRef = useRef(null);
     const recognitionRef = useRef(null);
     const speechSynthesisRef = useRef(null);
@@ -203,10 +213,35 @@ ${NICO_KNOWLEDGE_BASE}
             const r = await callDeepseek(prompt, systemPrompt, false);
             const cleanResponse = r.replace(/[*_~`]/g, '').replace(/:\w+:/g, '');
             setBotMsgs(prev => [...prev, { role: 'assistant', text: cleanResponse, timestamp: new Date() }]);
+            
+            // Check for lead capture opportunity
+            const interestDetected = detectInterest(userMsg);
+            if (interestDetected && !hasLeadData && leadShownCount < 2) {
+                setCurrentInterest(interestDetected);
+                setLeadContext({
+                    interest: interestDetected,
+                    topic: userMsg.substring(0, 100)
+                });
+                setShowLeadModal(true);
+                setLeadShownCount(prev => prev + 1);
+            }
         } catch (error) {
             setBotMsgs(prev => [...prev, { role: 'assistant', text: 'Disculpa, estoy teniendo dificultades técnicas en este momento. ¿Podrías intentar de nuevo en un momento?', timestamp: new Date() }]);
         }
         setBotLoading(false);
+    };
+
+    const handleLeadSubmit = (leadData) => {
+        const result = saveLead(leadData);
+        if (result.success) {
+            setHasLeadData(true);
+            setBotMsgs(prev => [...prev, { 
+                role: 'assistant', 
+                text: `Perfecto ${leadData.nombre}, un asesor de Edutechlife te contactará en breve para ayudarte con lo que necesitas.`,
+                timestamp: new Date() 
+            }]);
+        }
+        setShowLeadModal(false);
     };
 
     const startListening = () => {
@@ -400,6 +435,14 @@ ${NICO_KNOWLEDGE_BASE}
                     )}
                 </Suspense>
             </main>
+
+            {/* Lead Capture Modal */}
+            <LeadCaptureModal 
+                isOpen={showLeadModal}
+                onClose={() => setShowLeadModal(false)}
+                onSubmit={handleLeadSubmit}
+                context={leadContext}
+            />
 
             {/* Floating Chatbot - Solo en páginas principales, no en Admin, VAK, IALab */}
             {view !== 'smartboard' && view !== 'vak' && view !== 'ialab' && view !== 'admin' && (
