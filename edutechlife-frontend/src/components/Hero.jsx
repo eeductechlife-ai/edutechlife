@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import MagneticButton from './MagneticButton';
 import SplitTextReveal from './SplitTextReveal';
 import FloatingParticles from './FloatingParticles';
-import ParticlesOrb from './ParticlesOrb';
 import { Icon } from '../utils/iconMapping.jsx';
 
 // ==========================================
@@ -58,20 +57,11 @@ const Hero = memo(({ onNavigate }) => {
             {/* Floating Particles Background - Enhanced 3D */}
             <FloatingParticles count={45} className="z-0" />
             
-            {/* 3D Ambient Elements - Left side */}
+            {/* 3D Ambient Elements - Left side only */}
             <div className="absolute top-[15%] left-[10%] w-4 h-4 bg-[#4DA8C4]/30 rounded-full animate-[float-3d_6s_ease-in-out_infinite]" style={{ animationDelay: '-2s' }} />
             <div className="absolute bottom-[30%] left-[20%] w-2 h-2 bg-[#66CCCC]/30 rounded-full animate-[float-3d_7s_ease-in-out_infinite]" style={{ animationDelay: '-1s' }} />
             <div className="absolute top-[40%] left-[25%] w-3 h-3 bg-[#4DA8C4]/25 rounded-full animate-[float-3d_9s_ease-in-out_infinite]" style={{ animationDelay: '-3s' }} />
             <div className="absolute bottom-[15%] left-[35%] w-3 h-3 bg-[#B2D8E5]/30 rounded-full animate-[float-3d_7s_ease-in-out_infinite]" style={{ animationDelay: '-6s' }} />
-            
-            {/* 3D Ambient Elements - Right side (where video is) */}
-            <div className="absolute top-[10%] right-[5%] w-3 h-3 bg-[#4DA8C4]/20 rounded-full animate-[float-3d_8s_ease-in-out_infinite]" style={{ animationDelay: '-1s' }} />
-            <div className="absolute top-[25%] right-[10%] w-2 h-2 bg-[#66CCCC]/25 rounded-full animate-[float-3d_10s_ease-in-out_infinite]" style={{ animationDelay: '-3s' }} />
-            <div className="absolute top-[45%] right-[5%] w-4 h-4 bg-[#B2D8E5]/15 rounded-full animate-[float-3d_9s_ease-in-out_infinite]" style={{ animationDelay: '-5s' }} />
-            <div className="absolute top-[60%] right-[15%] w-3 h-3 bg-[#4DA8C4]/20 rounded-full animate-[float-3d_7s_ease-in-out_infinite]" style={{ animationDelay: '-7s' }} />
-            <div className="absolute bottom-[20%] right-[8%] w-2 h-2 bg-[#66CCCC]/20 rounded-full animate-[float-3d_11s_ease-in-out_infinite]" style={{ animationDelay: '-2s' }} />
-            <div className="absolute bottom-[40%] right-[12%] w-3 h-3 bg-[#B2D8E5]/15 rounded-full animate-[float-3d_8s_ease-in-out_infinite]" style={{ animationDelay: '-4s' }} />
-            <div className="absolute top-[75%] right-[5%] w-2 h-2 bg-[#4DA8C4]/15 rounded-full animate-[float-3d_10s_ease-in-out_infinite]" style={{ animationDelay: '-6s' }} />
             
             <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 py-20">
                 {/* Two-Column Layout */}
@@ -171,14 +161,14 @@ const Hero = memo(({ onNavigate }) => {
                         </motion.div>
                     </div>
 
-                    {/* Right Column - Particles Orb - Elegant 3D Effect */}
+                    {/* Right Column - Clean Space */}
                     <motion.div 
                         initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
                         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                         transition={{ duration: 0.8, delay: 0.5 }}
                         className="pt-10 lg:pt-0 flex items-center justify-center"
                     >
-                        <ParticlesOrb particleCount={50} size={220} />
+                        {/* Empty - Clean design */}
                     </motion.div>
                 </div>
             </div>

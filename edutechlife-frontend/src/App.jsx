@@ -522,35 +522,44 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
 
             {/* Header - Navigation Premium - Hidden on SmartBoard, IALab and Admin */}
             {view !== 'smartboard' && view !== 'ialab' && view !== 'admin' && (
-                <header className="sticky top-0 left-0 right-0 z-[1000] bg-white border-b border-[#E2E8F0] shadow-sm">
-                    <div className="container-premium flex items-center justify-between py-3">
-                    {/* Logo Premium */}
-                    <button 
-                        onClick={() => handleNavigate('landing')}
-                        className="flex items-center group"
-                        aria-label="Ir al inicio"
-                    >
-                        <img 
-                            src="/images/logo-edutechlife.webp" 
-                            alt="Edutechlife" 
-                            className="h-6 w-auto transition-all duration-300 group-hover:opacity-80"
-                            style={{ maxHeight: '24px', width: 'auto' }}
-                        />
-                    </button>
-                    {/* Dark mode toggle */}
-                    <button
-                        onClick={toggleDarkMode}
-                        className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 transition-colors"
-                        aria-label={isDarkMode ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
-                    >
-                        {isDarkMode ? (
-                            <Sun className="w-5 h-5 text-yellow-500" />
-                        ) : (
-                            <Moon className="w-5 h-5 text-gray-700 dark:text-gray-300" />
-                        )}
-                    </button>
-                </div>
-            </header>
+                <header className="sticky top-0 left-0 right-0 z-[1000] bg-white border-b border-gray-100">
+                    <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between py-4">
+                        {/* Logo Premium */}
+                        <button 
+                            onClick={() => handleNavigate('landing')}
+                            className="flex items-center group"
+                            aria-label="Ir al inicio"
+                        >
+                            <img 
+                                src="/images/logo-edutechlife.webp" 
+                                alt="Edutechlife" 
+                                className="h-7 w-auto transition-all duration-300 group-hover:opacity-80"
+                            />
+                        </button>
+                        
+                        {/* Navigation Links */}
+                        <nav className="hidden md:flex items-center gap-8">
+                            <button 
+                                onClick={() => handleNavigate('landing')}
+                                className="text-sm font-medium text-gray-600 hover:text-[#004B63] transition-colors duration-200"
+                            >
+                                Nosotros
+                            </button>
+                            <button 
+                                onClick={() => handleNavigate('landing')}
+                                className="text-sm font-medium text-gray-600 hover:text-[#004B63] transition-colors duration-200"
+                            >
+                                Ecosistema
+                            </button>
+                            <button 
+                                onClick={() => handleNavigate('landing')}
+                                className="text-sm font-medium text-gray-600 hover:text-[#004B63] transition-colors duration-200"
+                            >
+                                Contacto
+                            </button>
+                        </nav>
+                    </div>
+                </header>
             )}
 
             {/* Main Content */}
