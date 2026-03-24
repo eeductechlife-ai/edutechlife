@@ -174,18 +174,6 @@ body.is-scrolling .glass-card-dark {
   backface-visibility: hidden;
 }
 
-/* --- SCROLL THROTTLING (Disable expensive glassmorphism while scrolling) --- */
-body.is-scrolling [class*="backdrop-blur-"],
-body.is-scrolling .glass-card,
-body.is-scrolling .glass-dark,
-body.is-scrolling .glass-light,
-body.is-scrolling .glass-accent {
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  box-shadow: none !important;
-  background-color: rgba(248, 250, 252, 0.98) !important;
-}
-
 @layer components {
   /* ======================
      SISTEMA TIPOGRÁFICO PREMIUM

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import MagneticButton from './MagneticButton';
 import SplitTextReveal from './SplitTextReveal';
 import FloatingParticles from './FloatingParticles';
+import ParticlesOrb from './ParticlesOrb';
 import { Icon } from '../utils/iconMapping.jsx';
 
 // ==========================================
@@ -170,40 +171,14 @@ const Hero = memo(({ onNavigate }) => {
                         </motion.div>
                     </div>
 
-                    {/* Right Column - 3D Video Hero - Reduced Size */}
+                    {/* Right Column - Particles Orb - Elegant 3D Effect */}
                     <motion.div 
                         initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
                         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                         transition={{ duration: 0.8, delay: 0.5 }}
-                        className="pt-10 lg:pt-0 flex items-center justify-center perspective-3d"
+                        className="pt-10 lg:pt-0 flex items-center justify-center"
                     >
-                        <div className="relative w-full max-w-md lg:max-w-lg aspect-square flex items-center justify-center transform-style-3d">
-                            {/* Outer Glow Ring - Subtle */}
-                            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#4DA8C4]/10 to-[#66CCCC]/5 blur-lg animate-[pulse-glow_4s_ease-in-out_infinite]" />
-                            
-                            {/* Video WebM con fondo transparente - Simula orbe de IA */}
-                            <video 
-                                autoPlay 
-                                loop 
-                                muted 
-                                playsInline 
-                                className="w-full h-full object-contain pointer-events-none drop-shadow-xl relative z-10"
-                                style={{ filter: 'drop-shadow(0 0 30px rgba(77, 168, 196, 0.5))' }}
-                            >
-                                <source src="/videos/ai-orb.webm" type="video/webm" />
-                            </video>
-                            
-                            {/* Fallback: Gradiente animado si no hay video - Reduced */}
-                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                <div className="w-48 h-48 rounded-full bg-gradient-to-br from-[#4DA8C4]/20 to-[#66CCCC]/10 animate-pulse-glow blur-lg" />
-                                <div className="absolute w-36 h-36 rounded-full bg-gradient-to-tr from-[#004B63]/15 to-transparent animate-[pulse-slow_4s_ease-in-out_infinite]" />
-                            </div>
-                            
-                            {/* Floating decorative rings - Corporate colors only */}
-                            <div className="absolute w-16 h-16 border border-[#4DA8C4]/15 rounded-full animate-[float-3d_8s_ease-in-out_infinite]" style={{ animationDelay: '-2s', transform: 'translateZ(-20px)' }} />
-                            <div className="absolute w-24 h-24 border border-[#66CCCC]/8 rounded-full animate-[float-3d_10s_ease-in-out_infinite]" style={{ animationDelay: '-5s', transform: 'translateZ(-40px)' }} />
-                            <div className="absolute w-12 h-12 border border-[#B2D8E5]/10 rounded-full animate-[float-3d_12s_ease-in-out_infinite]" style={{ animationDelay: '-7s', transform: 'translateZ(-60px)' }} />
-                        </div>
+                        <ParticlesOrb particleCount={50} size={220} />
                     </motion.div>
                 </div>
             </div>

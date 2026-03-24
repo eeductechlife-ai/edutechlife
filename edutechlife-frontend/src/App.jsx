@@ -522,7 +522,7 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
 
             {/* Header - Navigation Premium - Hidden on SmartBoard, IALab and Admin */}
             {view !== 'smartboard' && view !== 'ialab' && view !== 'admin' && (
-                <header className="sticky top-0 left-0 right-0 z-[1000] bg-white/95 backdrop-blur-md border-b border-[#E2E8F0] shadow-sm">
+                <header className="sticky top-0 left-0 right-0 z-[1000] bg-white border-b border-[#E2E8F0] shadow-sm">
                     <div className="container-premium flex items-center justify-between py-3">
                     {/* Logo Premium */}
                     <button 

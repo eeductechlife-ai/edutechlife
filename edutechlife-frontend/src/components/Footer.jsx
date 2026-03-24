@@ -29,7 +29,7 @@ export default function Footer() {
             </p>
             <div className="flex gap-3 justify-center md:justify-start">
               {[
-                { icon: 'fa-brands fa-facebook-f', label: 'Facebook', href: 'https://www.facebook.com/edutechlife' },
+                { icon: 'fa-brands fa-facebook-f', label: 'Facebook', href: 'https://web.facebook.com/eductechlife/' },
                 { icon: 'fa-brands fa-instagram', label: 'Instagram', href: 'https://www.instagram.com/edu_techlife/' },
                 { icon: 'fa-brands fa-linkedin-in', label: 'LinkedIn', href: 'https://www.linkedin.com/company/edutechlife' },
                 { icon: 'fa-brands fa-youtube', label: 'YouTube', href: 'https://www.youtube.com/@edutechlife' },
