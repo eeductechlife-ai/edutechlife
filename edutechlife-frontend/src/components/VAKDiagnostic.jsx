@@ -70,6 +70,8 @@ const VAKDiagnostic = memo(({ onNavigate, userName: initialName = '', initialMoo
   const [result, setResult] = useState(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const [pdfLoading, setPdfLoading] = useState(false);
+  const [showUserForm, setShowUserForm] = useState(false);
+  const [userData, setUserData] = useState({ nombre: '', email: '', telefono: '' });
   const sectionRef = useRef(null);
 
   const question = VAK_QUESTIONS[currentQuestion];
@@ -126,7 +128,7 @@ const VAKDiagnostic = memo(({ onNavigate, userName: initialName = '', initialMoo
     }, 600);
   };
 
-  const generatePDFHTML = (result, dominantStyle, userName) => {
+  const generatePDFHTML = (result, dominantStyle, userName, userData = {}) => {
     const colors = {
       primary: '#004B63',
       accent: '#4DA8C4',
@@ -138,6 +140,9 @@ const VAKDiagnostic = memo(({ onNavigate, userName: initialName = '', initialMoo
       bg: '#F5F5F5'
     };
 
+    const displayName = userData.nombre || userName || 'Estudiante';
+    const displayEmail = userData.email || 'No proporcionado';
+    const displayPhone = userData.telefono || 'No proporcionado';
     const dominantColor = result.dominant === 'visual' ? colors.accent : 
                          result.dominant === 'auditivo' ? colors.secondary : colors.kinestesico;
 
@@ -184,7 +189,8 @@ const VAKDiagnostic = memo(({ onNavigate, userName: initialName = '', initialMoo
     </tr></table>
   </div>
   <div class="info">
-    <strong>Estudiante:</strong> ${userName || 'Estudiante'} | <strong>Fecha:</strong> ${new Date().toLocaleDateString('es-CO')}
+    <strong>Nombre:</strong> ${displayName} | <strong>Fecha:</strong> ${new Date().toLocaleDateString('es-CO')}<br>
+    <strong>Email:</strong> ${displayEmail} | <strong>Telefono:</strong> ${displayPhone}
   </div>
   <div class="hero">
     <p>Tu estilo de aprendizaje dominante</p>
@@ -234,7 +240,7 @@ const VAKDiagnostic = memo(({ onNavigate, userName: initialName = '', initialMoo
     setPdfLoading(true);
     
     const dominantStyle = VAK_STYLES[result.dominant];
-    const htmlContent = generatePDFHTML(result, dominantStyle, userName);
+    const htmlContent = generatePDFHTML(result, dominantStyle, userName, userData);
     
     // Método 1: Nueva ventana de impresión (más confiable)
     try {
@@ -245,7 +251,7 @@ const VAKDiagnostic = memo(({ onNavigate, userName: initialName = '', initialMoo
           <html>
           <head>
             <meta charset="UTF-8">
-            <title>Diagnóstico VAK - ${userName || 'Estudiante'}</title>
+            <title>Diagnostico VAK - ${userData.nombre || userName || 'Estudiante'}</title>
             <style>
               @media print {
                 body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -686,8 +692,76 @@ const VAKDiagnostic = memo(({ onNavigate, userName: initialName = '', initialMoo
 
               <motion.div variants={itemVariants} className="text-center space-y-4">
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  {showUserForm && (
+                    <motion.div 
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+                    >
+                      <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl">
+                        <h3 className="text-xl font-bold text-[#004B63] mb-4">Datos para el Reporte</h3>
+                        <p className="text-sm text-slate-600 mb-4">Ingresa tus datos para personalizar tu reporte</p>
+                        
+                        <div className="space-y-4">
+                          <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">Nombre completo</label>
+                            <input
+                              type="text"
+                              value={userData.nombre}
+                              onChange={(e) => setUserData({...userData, nombre: e.target.value})}
+                              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent"
+                              placeholder="Tu nombre"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">Correo electrónico</label>
+                            <input
+                              type="email"
+                              value={userData.email}
+                              onChange={(e) => setUserData({...userData, email: e.target.value})}
+                              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent"
+                              placeholder="tu@email.com"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">Teléfono (opcional)</label>
+                            <input
+                              type="tel"
+                              value={userData.telefono}
+                              onChange={(e) => setUserData({...userData, telefono: e.target.value})}
+                              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent"
+                              placeholder="Tu número de teléfono"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="flex gap-3 mt-6">
+                          <button
+                            onClick={() => setShowUserForm(false)}
+                            className="flex-1 px-4 py-2 border border-slate-300 text-slate-600 rounded-lg hover:bg-slate-50 transition"
+                          >
+                            Cancelar
+                          </button>
+                          <button
+                            onClick={() => {
+                              if (!userData.nombre.trim()) {
+                                alert('Por favor ingresa tu nombre');
+                                return;
+                              }
+                              setShowUserForm(false);
+                              handleDownloadPDF();
+                            }}
+                            className="flex-1 px-4 py-2 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-lg hover:opacity-90 transition"
+                          >
+                            Generar PDF
+                          </button>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+
                   <motion.button
-                    onClick={handleDownloadPDF}
+                    onClick={() => setShowUserForm(true)}
                     disabled={pdfLoading}
                     whileHover={pdfLoading ? {} : { scale: 1.05 }}
                     whileTap={pdfLoading ? {} : { scale: 0.98 }}
