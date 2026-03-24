@@ -7,18 +7,18 @@ const Aliados = memo(() => {
     const [isPaused, setIsPaused] = useState(false);
 
     const aliados = [
-        { id: 1, name: 'SENA', category: 'Educación Técnica', icon: GraduationCap, color: '#F97316' },
-        { id: 2, name: 'UNESCO', category: 'Organización Internacional', icon: Globe, color: '#3B82F6' },
-        { id: 3, name: 'Ministerio', category: 'Educación Nacional', icon: Building2, color: '#EF4444' },
-        { id: 4, name: 'Google', category: 'Tecnología', icon: Search, color: '#4285F4' },
-        { id: 5, name: 'Microsoft', category: 'Cloud Computing', icon: Cloud, color: '#00A4EF' },
-        { id: 6, name: 'AWS', category: 'Infraestructura', icon: Cloud, color: '#FF9900' },
-        { id: 7, name: 'ICETEX', category: 'Financiamiento', icon: Award, color: '#22C55E' },
-        { id: 8, name: 'Colciencias', category: 'Ciencia y Tecnología', icon: FlaskConical, color: '#8B5CF6' },
-        { id: 9, name: 'Apple', category: 'Tecnología', icon: Laptop, color: '#64748B' },
-        { id: 10, name: 'IBM', category: 'Inteligencia Artificial', icon: Cpu, color: '#0F62FE' },
-        { id: 11, name: 'Coursera', category: 'Educación Online', icon: Sparkles, color: '#0056D2' },
-        { id: 12, name: 'Steam', category: 'Educación STEM', icon: Cpu, color: '#14B8A6' },
+        { id: 1, name: 'SENA', category: 'Educación Técnica', icon: GraduationCap, color: '#004B63' },
+        { id: 2, name: 'UNESCO', category: 'Organización Internacional', icon: Globe, color: '#4DA8C4' },
+        { id: 3, name: 'Ministerio', category: 'Educación Nacional', icon: Building2, color: '#66CCCC' },
+        { id: 4, name: 'Google', category: 'Tecnología', icon: Search, color: '#004B63' },
+        { id: 5, name: 'Microsoft', category: 'Cloud Computing', icon: Cloud, color: '#4DA8C4' },
+        { id: 6, name: 'AWS', category: 'Infraestructura', icon: Cloud, color: '#66CCCC' },
+        { id: 7, name: 'ICETEX', category: 'Financiamiento', icon: Award, color: '#004B63' },
+        { id: 8, name: 'Colciencias', category: 'Ciencia y Tecnología', icon: FlaskConical, color: '#4DA8C4' },
+        { id: 9, name: 'Apple', category: 'Tecnología', icon: Laptop, color: '#66CCCC' },
+        { id: 10, name: 'IBM', category: 'Inteligencia Artificial', icon: Cpu, color: '#004B63' },
+        { id: 11, name: 'Coursera', category: 'Educación Online', icon: Sparkles, color: '#4DA8C4' },
+        { id: 12, name: 'Steam', category: 'Educación STEM', icon: Cpu, color: '#66CCCC' },
     ];
 
     const duplicatedAliados = [...aliados, ...aliados, ...aliados];
@@ -76,29 +76,29 @@ const Aliados = memo(() => {
                             {duplicatedAliados.map((aliado, index) => (
                                 <div 
                                     key={`${aliado.id}-${index}`}
-                                    className="group flex-shrink-0 bg-white/60 backdrop-blur-md border border-slate-200 rounded-2xl p-4 flex items-center gap-4 transition-all duration-300 cursor-pointer hover:[animation-play-state:paused]"
+                                    className="group flex-shrink-0 bg-white/60 backdrop-blur-md border border-gray-200 rounded-xl p-3 flex items-center gap-3 transition-all duration-300 cursor-pointer hover:[animation-play-state:paused]"
                                     style={{
-                                        minWidth: '280px',
+                                        minWidth: '220px',
                                     }}
                                 >
                                     {/* Icon Circle */}
                                     <div 
-                                        className="w-14 h-14 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+                                        className="w-10 h-10 rounded-lg flex items-center justify-center transition-transform duration-300 group-hover:scale-105"
                                         style={{
                                             background: `linear-gradient(135deg, ${aliado.color}20, ${aliado.color}10)`,
                                             border: `1px solid ${aliado.color}30`
                                         }}
                                     >
                                         <aliado.icon 
-                                            className="text-xl transition-colors duration-300" 
+                                            className="text-lg transition-colors duration-300" 
                                             style={{ color: aliado.color }}
                                         />
                                     </div>
                                     
                                     {/* Text Content */}
                                     <div className="flex flex-col">
-                                        <span className="font-bold text-slate-900">{aliado.name}</span>
-                                        <span className="font-mono text-xs tracking-widest text-slate-500 uppercase">
+                                        <span className="font-bold text-[#004B63]">{aliado.name}</span>
+                                        <span className="font-mono text-xs tracking-widest text-gray-600 uppercase">
                                             {aliado.category}
                                         </span>
                                     </div>

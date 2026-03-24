@@ -46,13 +46,13 @@ const Metodo = memo(() => {
             <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 py-20 relative z-10">
                 {/* Section Header */}
                 <div className="text-center mb-16">
-                    <span className="text-sm font-bold text-[#4DA8C4] uppercase tracking-widest block mb-2">
+                    <span className="text-sm font-normal text-[#4DA8C4] uppercase tracking-widest block mb-2">
                         Proceso Educativo
                     </span>
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#004B63] tracking-tight mb-6">
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-normal text-[#004B63] tracking-tight mb-6">
                         Nuestro Método
                     </h2>
-                    <p className="text-base md:text-lg text-gray-600 leading-relaxed font-normal max-w-3xl mx-auto">
+                    <p className="text-base text-slate-600 leading-relaxed font-normal max-w-3xl mx-auto">
                         Un proceso claro, diseñado por magísteres, guiado por Inteligencia Artificial y enfocado en resultados medibles.
                     </p>
                 </div>
@@ -82,10 +82,10 @@ const Metodo = memo(() => {
                                 </div>
 
                                 {/* Content */}
-                                <h3 className="text-xl font-bold text-[#004B63] mb-3">
+                                <h3 className="text-xl font-normal text-[#004B63] mb-3">
                                     {step.title}
                                 </h3>
-                                <p className="text-gray-600 leading-relaxed font-normal">
+                                <p className="text-base text-slate-600 leading-relaxed font-normal">
                                     {step.description}
                                 </p>
 
@@ -98,7 +98,7 @@ const Metodo = memo(() => {
 
                 {/* Bottom CTA */}
                 <div className="text-center mt-16">
-                    <button className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#004B63] text-white font-bold rounded-full transition-all duration-300 hover:bg-[#4DA8C4] hover:shadow-xl">
+                    <button className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#004B63] text-white font-normal rounded-full transition-all duration-300 hover:bg-[#4DA8C4] hover:shadow-xl">
                         <Icon name="fa-rocket" className="text-lg" />
                         <span className="text-lg">Comenzar Mi Transformación</span>
                         <Icon name="fa-arrow-right" className="text-lg" />

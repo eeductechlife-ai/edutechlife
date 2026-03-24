@@ -53,9 +53,9 @@ const Hero = memo(({ onNavigate }) => {
 
     return (
         <section ref={heroRef} className="relative w-full min-h-screen flex items-center overflow-hidden font-open-sans">
-            {/* Soft Ambient Glows */}
-            <div className="absolute top-[-10%] right-[-5%] w-[40vw] h-[40vw] rounded-full bg-[#4DA8C4]/10 blur-[120px] pointer-events-none" />
-            <div className="absolute bottom-[-10%] left-[-5%] w-[50vw] h-[50vw] rounded-full bg-[#66CCCC]/10 blur-[120px] pointer-events-none" />
+            {/* Soft Ambient Glows - Ambient Pulse Animation */}
+            <div className="absolute top-[-10%] right-[-5%] w-[40vw] h-[40vw] rounded-full bg-[#4DA8C4]/10 blur-[120px] pointer-events-none will-change-transform animate-[pulse-slow_8s_ease-in-out_infinite]" />
+            <div className="absolute bottom-[-10%] left-[-5%] w-[50vw] h-[50vw] rounded-full bg-[#66CCCC]/10 blur-[120px] pointer-events-none will-change-transform animate-[pulse-slow_8s_ease-in-out_infinite]" style={{ animationDelay: '-4s' }} />
             
             <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 py-20">
                 {/* Two-Column Layout */}
@@ -67,10 +67,10 @@ const Hero = memo(({ onNavigate }) => {
                             initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
                             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                             transition={{ duration: 0.8 }}
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full mb-8 border border-[#E2E8F0] shadow-sm"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-[#4DA8C4]/10 backdrop-blur-md rounded-full mb-10 border border-[#4DA8C4]/20"
                         >
                             <span className="w-2 h-2 bg-[#4DA8C4] rounded-full animate-pulse shadow-[0_0_8px_#4DA8C4]" />
-                            <span className="text-sm font-bold text-[#4DA8C4] uppercase tracking-widest block">
+                            <span className="text-xs font-normal text-[#004B63] uppercase tracking-[0.2em] block">
                                 Neuro-Métricas V2 Activas
                             </span>
                         </motion.div>
@@ -79,7 +79,7 @@ const Hero = memo(({ onNavigate }) => {
                             initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
                             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                             transition={{ duration: 0.8, delay: 0.1 }}
-                            className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-[#004B63] tracking-tight leading-tight mb-6"
+                            className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-[#004B63] tracking-tight leading-tight mb-8"
                         >
                             <SplitTextReveal text="Liderando la Educación del Futuro" />
                         </motion.h1>
@@ -88,39 +88,40 @@ const Hero = memo(({ onNavigate }) => {
                             initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
                             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                             transition={{ duration: 0.8, delay: 0.2 }}
-                            className="text-base md:text-lg text-gray-600 leading-relaxed font-normal mb-10 max-w-xl mx-auto lg:mx-0"
+                            className="text-base text-slate-600 leading-relaxed font-normal mb-12 max-w-xl mx-auto lg:mx-0"
                         >
-                            Infraestructura cognitiva asistida por inteligencia artificial. Tu entorno de aprendizaje evoluciona y se ajusta <span className="font-semibold text-[#004B63]">en tiempo real</span> a tu neuro-ergonomía.
+                            Infraestructura cognitiva asistida por inteligencia artificial. Tu entorno de aprendizaje evoluciona y se ajusta <span className="text-[#004B63]">en tiempo real</span> a tu neuro-ergonomía.
                         </motion.p>
 
+                        {/* Stats Container with Glassmorphism */}
                         <motion.div 
                             initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
                             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                             transition={{ duration: 0.8, delay: 0.3 }}
                             ref={statsRef} 
-                            className="flex flex-wrap justify-center lg:justify-start gap-8 mb-12"
+                            className="bg-white/60 backdrop-blur-xl border border-white/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-2xl p-6 mb-12 inline-flex flex-wrap justify-center lg:justify-start gap-8"
                         >
                             <div className="text-left">
                                 <div className="text-4xl font-black text-[#004B63] font-montserrat tracking-tight mb-1">
                                     {countEstudiantes.toLocaleString()}+
                                 </div>
-                                <div className="text-sm font-semibold text-[#64748B] uppercase tracking-widest">
+                                <div className="text-sm font-normal text-gray-600 uppercase tracking-widest">
                                     Estudiantes
                                 </div>
                             </div>
-                            <div className="text-left border-l border-[#E2E8F0] pl-8">
+                            <div className="text-left border-l border-gray-200/50 pl-8">
                                 <div className="text-4xl font-black text-[#4DA8C4] font-montserrat tracking-tight mb-1">
                                     {countExito}%
                                 </div>
-                                <div className="text-sm font-semibold text-[#64748B] uppercase tracking-widest">
+                                <div className="text-sm font-normal text-gray-600 uppercase tracking-widest">
                                     Tasa Éxito
                                 </div>
                             </div>
-                            <div className="text-left border-l border-[#E2E8F0] pl-8">
+                            <div className="text-left border-l border-gray-200/50 pl-8">
                                 <div className="text-4xl font-black text-[#66CCCC] font-montserrat tracking-tight mb-1">
                                     {countAños}+
                                 </div>
-                                <div className="text-sm font-semibold text-[#64748B] uppercase tracking-widest">
+                                <div className="text-sm font-normal text-gray-600 uppercase tracking-widest">
                                     Años Refinando
                                 </div>
                             </div>
@@ -134,17 +135,18 @@ const Hero = memo(({ onNavigate }) => {
                         >
                             <MagneticButton 
                                 onClick={() => onNavigate('ialab')}
-                                className="group btn-glow shadow-neuro-hover flex items-center justify-center gap-3 px-8 py-4 rounded-full text-lg font-bold font-montserrat"
+                                className="group relative overflow-hidden flex items-center justify-center gap-3 px-8 py-4 rounded-full text-lg font-bold bg-gradient-to-r from-[#004B63] to-[#006a8e] text-white hover:shadow-[0_0_20px_rgba(77,168,196,0.4)] transition-all duration-300"
                             >
-                                <span className="text-[#004B63] group-hover:text-corporate transition-colors">Inicializar IA Lab</span>
-                                <Icon name="fa-arrow-right" className="text-[#4DA8C4] transition-transform duration-300 group-hover:translate-x-1" />
+                                <span className="absolute inset-0 w-[150%] h-full -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-[sweep_1.5s_ease-in-out_infinite] skew-x-[-20deg]" />
+                                <span className="text-white relative z-10">Inicializar IA Lab</span>
+                                <Icon name="fa-arrow-right" className="text-white/80 relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
                             </MagneticButton>
                             
                             <MagneticButton 
                                 onClick={() => onNavigate('consultoria')}
-                                className="group flex items-center justify-center gap-3 px-8 py-4 rounded-full text-lg font-bold font-montserrat bg-[#F8FAFC] border border-[#E2E8F0] hover:bg-white hover:border-[#4DA8C4]/50 transition-all duration-300 text-[#004B63]"
+                                className="group flex items-center justify-center gap-3 px-8 py-4 rounded-full text-lg font-bold bg-transparent border-2 border-[#004B63] text-[#004B63] hover:bg-[#004B63] hover:text-white transition-all duration-300"
                             >
-                                <Icon name="fa-briefcase" className="text-[#64748B] group-hover:text-[#004B63] transition-colors" />
+                                <Icon name="fa-briefcase" className="text-[#004B63] group-hover:text-white transition-colors" />
                                 Integración B2B
                             </MagneticButton>
                         </motion.div>

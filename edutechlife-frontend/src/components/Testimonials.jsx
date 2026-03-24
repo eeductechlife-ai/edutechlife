@@ -123,7 +123,7 @@ const Testimonials = () => {
                 >
                     <div className="inline-flex items-center gap-3 mb-6">
                         <div className="w-12 h-px bg-gradient-to-r from-transparent to-[#66CCCC]" />
-                        <span className="font-mono text-xs font-semibold uppercase tracking-[0.3em] text-[#66CCCC]">
+                        <span className="font-mono text-xs font-normal uppercase tracking-[0.3em] text-[#66CCCC]">
                             Historias de Éxito
                         </span>
                         <div className="w-12 h-px bg-gradient-to-l from-transparent to-[#66CCCC]" />
@@ -140,7 +140,7 @@ const Testimonials = () => {
                         </span>
                     </h2>
 
-                    <p className="text-gray-600 leading-relaxed font-normal text-lg max-w-2xl mx-auto">
+                    <p className="text-base text-slate-600 leading-relaxed font-normal max-w-2xl mx-auto">
                         Más de 6,000 estudiantes y docentes han transformado su vida académica con nuestra metodología.
                     </p>
                 </div>
@@ -189,10 +189,10 @@ const Testimonials = () => {
                                         <Icon name={testimonials[activeIndex].logo} />
                                     </div>
                                 </div>
-                                <h4 className="font-montserrat font-bold text-lg text-[#004B63]">
+                                <h4 className="font-montserrat font-normal text-lg text-[#004B63]">
                                     {testimonials[activeIndex].name}
                                 </h4>
-                                <p className="text-[#64748B] text-sm mb-3">
+                                <p className="text-base text-slate-600 text-sm mb-3">
                                     {testimonials[activeIndex].role}
                                 </p>
                                 <div className="flex gap-1 justify-center md:justify-start">
@@ -209,7 +209,7 @@ const Testimonials = () => {
 
                             {/* Content */}
                             <div>
-                                <p className="text-[#4A4A4A] text-lg md:text-xl leading-relaxed italic mb-6">
+                                <p className="text-base text-slate-600 text-lg md:text-xl leading-relaxed italic mb-6">
                                     "{testimonials[activeIndex].content}"
                                 </p>
                                 <div
@@ -220,7 +220,7 @@ const Testimonials = () => {
                                     }}
                                 >
                                     <Icon name="fa-arrow-trend-up" className="text-[#10B981]" />
-                                    <span className="font-montserrat font-bold text-sm text-[#004B63]">
+                                    <span className="font-montserrat font-normal text-sm text-[#004B63]">
                                         {testimonials[activeIndex].result}
                                     </span>
                                 </div>
@@ -269,7 +269,7 @@ const Testimonials = () => {
                             <div className="font-montserrat text-2xl md:text-3xl font-black text-[#004B63] mb-1">
                                 {stat.value}
                             </div>
-                            <div className="text-[#64748B] text-sm">{stat.label}</div>
+                            <div className="text-base text-slate-600 text-sm">{stat.label}</div>
                         </div>
                     ))}
                 </div>

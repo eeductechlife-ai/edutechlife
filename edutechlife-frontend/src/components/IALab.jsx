@@ -284,16 +284,16 @@ const IALab = ({ onBack }) => {
                                  <Icon name="fa-flask-vial" className="text-white" />
                              </div>
                             <div>
-                                <h1 className="font-montserrat font-bold text-lg text-[#004B63]">IA Lab Pro</h1>
+                                <h1 className="font-montserrat font-normal text-lg text-[#004B63]">IA Lab Pro</h1>
                                 <p className="text-xs text-[#64748B]">Hyper-Intelligence Certification</p>
                             </div>
                         </div>
                     </div>
                     <div className="flex items-center gap-3">
                         <div className="px-4 py-2 bg-[#66CCCC]/20 border border-[#66CCCC]/40 rounded-full">
-                            <span className="text-sm font-semibold text-[#004B63]">{completedModules.length}/5 Módulos</span>
+                            <span className="text-sm font-normal text-[#004B63]">{completedModules.length}/5 Módulos</span>
                         </div>
-                        <span className="px-3 py-1 bg-[#FFD166]/20 border border-[#FFD166]/40 rounded-full text-xs text-[#004B63] font-mono font-semibold">
+                        <span className="px-3 py-1 bg-[#FFD166]/20 border border-[#FFD166]/40 rounded-full text-xs text-[#004B63] font-mono font-normal">
                             PREMIUM
                         </span>
                     </div>
@@ -308,8 +308,8 @@ const IALab = ({ onBack }) => {
                             {/* Progress */}
                             <div className="p-6 border-b border-[#E2E8F0]">
                                 <div className="flex items-center justify-between mb-3">
-                                    <span className="text-xs font-semibold text-[#64748B] uppercase tracking-wide">Progreso</span>
-                                    <span className="text-sm font-bold text-[#4DA8C4]">{courseProgress}%</span>
+                                    <span className="text-xs font-normal text-[#64748B] uppercase tracking-wide">Progreso</span>
+                                    <span className="text-sm font-normal text-[#4DA8C4]">{courseProgress}%</span>
                                 </div>
                                 <div className="h-3 bg-[#E2E8F0] rounded-full overflow-hidden">
                                     <div 
@@ -321,7 +321,7 @@ const IALab = ({ onBack }) => {
 
                             {/* Module List */}
                             <div className="p-4">
-                                <p className="text-xs font-semibold text-[#64748B] uppercase tracking-wide mb-4">Módulos del Curso</p>
+                                <p className="text-xs font-normal text-[#64748B] uppercase tracking-wide mb-4">Módulos del Curso</p>
                                 <div className="space-y-2">
                                     {modules.map(mod => (
                                         <button
@@ -336,7 +336,7 @@ const IALab = ({ onBack }) => {
                                             }`}
                                         >
                                             <div className="flex items-center gap-3">
-                                                <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold ${
+                                                <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-normal ${
                                                     activeMod === mod.id 
                                                         ? 'bg-white/20 text-white' 
                                                         : completedModules.includes(mod.id)
@@ -350,7 +350,7 @@ const IALab = ({ onBack }) => {
                                                     )}
                                                 </div>
                                                 <div className="flex-1 min-w-0">
-                                                    <p className="font-semibold text-sm truncate">{mod.title}</p>
+                                                    <p className="font-normal text-sm truncate">{mod.title}</p>
                                                     <p className={`text-xs ${activeMod === mod.id ? 'text-white/70' : 'text-[#64748B]'}`}>
                                                         {mod.duration}
                                                     </p>
@@ -375,25 +375,25 @@ const IALab = ({ onBack }) => {
                                         </div>
                                         <div>
                                             <p className="text-white/70 text-xs uppercase tracking-wider">Módulo {activeMod} · IA Lab Pro</p>
-                                            <h2 className="text-2xl font-bold text-white font-montserrat">{curr.title}</h2>
+                                            <h2 className="text-2xl font-normal text-white font-montserrat">{curr.title}</h2>
                                         </div>
                                     </div>
                                     <div className="flex gap-2">
                                         <button 
                                             onClick={() => setActiveTab('lab')}
-                                            className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${activeTab === 'lab' ? 'bg-white text-[#004B63]' : 'bg-white/20 text-white hover:bg-white/30'}`}
+                                            className={`px-4 py-2 rounded-full text-sm font-normal transition-all ${activeTab === 'lab' ? 'bg-white text-[#004B63]' : 'bg-white/20 text-white hover:bg-white/30'}`}
                                         >
                                             <Icon name="fa-terminal" className="mr-2" />Lab
                                         </button>
                                         <button 
                                             onClick={() => setActiveTab('eval')}
-                                            className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${activeTab === 'eval' ? 'bg-white text-[#004B63]' : 'bg-white/20 text-white hover:bg-white/30'}`}
+                                            className={`px-4 py-2 rounded-full text-sm font-normal transition-all ${activeTab === 'eval' ? 'bg-white text-[#004B63]' : 'bg-white/20 text-white hover:bg-white/30'}`}
                                         >
                                             <Icon name="fa-clipboard-check" className="mr-2" />Evaluación
                                         </button>
                                         <button 
                                             onClick={() => setActiveTab('cert')}
-                                            className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${activeTab === 'cert' ? 'bg-white text-[#004B63]' : 'bg-white/20 text-white hover:bg-white/30'}`}
+                                            className={`px-4 py-2 rounded-full text-sm font-normal transition-all ${activeTab === 'cert' ? 'bg-white text-[#004B63]' : 'bg-white/20 text-white hover:bg-white/30'}`}
                                         >
                                             <Icon name="fa-medal" className="mr-2" />Certificado
                                         </button>
@@ -401,10 +401,10 @@ const IALab = ({ onBack }) => {
                                 </div>
                             </div>
                             <div className="p-6">
-                                <p className="text-[#64748B]">{curr.desc}</p>
+                                <p className="text-base text-slate-600">{curr.desc}</p>
                                 <div className="flex flex-wrap gap-3 mt-4">
                                     {curr.topics.map((topic, i) => (
-                                        <span key={i} className="px-3 py-1 bg-[#4DA8C4]/10 text-[#004B63] text-sm rounded-full font-medium">
+                                        <span key={i} className="px-3 py-1 bg-[#4DA8C4]/10 text-[#004B63] text-sm rounded-full font-normal">
                                             <Icon name="fa-sparkles" className="mr-1 text-[#4DA8C4]" />
                                             {topic}
                                         </span>
@@ -425,7 +425,7 @@ const IALab = ({ onBack }) => {
                                                     <Icon name="fa-terminal" className="text-white" />
                                                 </div>
                                                 <div>
-                                                    <h3 className="font-bold text-white">Sintetizador de Prompts Élite</h3>
+                                                    <h3 className="font-normal text-white">Sintetizador de Prompts Élite</h3>
                                                     <p className="text-white/70 text-xs">Transforma ideas en MasterPrompts profesionales</p>
                                                 </div>
                                             </div>
@@ -442,7 +442,7 @@ const IALab = ({ onBack }) => {
                                             <button
                                                 onClick={handleOptimize}
                                                 disabled={loading}
-                                                className="mt-4 w-full py-3 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white rounded-xl font-bold hover:shadow-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                                                className="mt-4 w-full py-3 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white rounded-xl font-normal hover:shadow-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                                             >
                                                 {loading ? (
                                                     <>
@@ -459,7 +459,7 @@ const IALab = ({ onBack }) => {
                                             {genData && !loading && (
                                                 <div className="mt-6 p-4 bg-[#F8FAFC] rounded-xl border border-[#E2E8F0]">
                                                     <div className="flex items-center justify-between mb-3">
-                                                        <span className="text-sm font-bold text-[#004B63]">MASTER PROMPT GENERADO</span>
+                                                        <span className="text-sm font-normal text-[#004B63]">MASTER PROMPT GENERADO</span>
                                                         <button 
                                                             onClick={() => navigator.clipboard.writeText(genData.masterPrompt)}
                                                             className="text-sm text-[#4DA8C4] hover:text-[#66CCCC] flex items-center gap-1"
@@ -485,7 +485,7 @@ const IALab = ({ onBack }) => {
                                             <div className="flex items-center gap-4 mb-6">
                                                 <ValerioAvatar state={avatarState} size={64} />
                                                 <div>
-                                                    <h3 className="font-bold text-white text-lg">Tu Coach Virtual: Valerio</h3>
+                                                    <h3 className="font-normal text-white text-lg">Tu Coach Virtual: Valerio</h3>
                                                     <p className="text-white/60 text-sm">Método Socrático · IA Nativa</p>
                                                 </div>
                                             </div>
@@ -500,7 +500,7 @@ const IALab = ({ onBack }) => {
                                                 <button
                                                     onClick={askCoach}
                                                     disabled={coachLoad || !coachQ.trim()}
-                                                    className="flex-1 py-3 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-xl font-semibold hover:shadow-lg transition-all disabled:opacity-50"
+                                                    className="flex-1 py-3 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-xl font-normal hover:shadow-lg transition-all disabled:opacity-50"
                                                 >
                                                     {coachLoad ? 'Pensando...' : 'Preguntar'}
                                                 </button>
@@ -543,7 +543,7 @@ const IALab = ({ onBack }) => {
                                             </div>
                                         </div>
                                         <p className="text-white/80 italic mb-6">"{curr.challenge}"</p>
-                                        <button className="w-full py-3 bg-gradient-to-r from-[#FFD166] to-[#FF8E53] text-[#004B63] rounded-xl font-bold hover:shadow-lg transition-all">
+                                        <button className="w-full py-3 bg-gradient-to-r from-[#FFD166] to-[#FF8E53] text-[#004B63] rounded-xl font-normal hover:shadow-lg transition-all">
                                             <Icon name="fa-paper-plane" className="mr-2" />Enviar solución
                                         </button>
                                     </div>
@@ -551,23 +551,23 @@ const IALab = ({ onBack }) => {
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="bg-white/60 backdrop-blur-xl p-5 rounded-2xl border border-white/80 text-center shadow-sm">
                                             <Icon name="fa-clock" className="text-[#4DA8C4] text-lg mb-2" />
-                                            <p className="font-bold text-[#004B63]">{curr.duration}</p>
-                                            <p className="text-xs text-[#64748B]">Duración</p>
+                                            <p className="font-normal text-[#004B63]">{curr.duration}</p>
+                                            <p className="text-base text-slate-600">Duración</p>
                                         </div>
                                         <div className="bg-white/60 backdrop-blur-xl p-5 rounded-2xl border border-white/80 text-center shadow-sm">
                                             <Icon name="fa-signal" className="text-[#66CCCC] text-lg mb-2" />
-                                            <p className="font-bold text-[#004B63]">{curr.level}</p>
-                                            <p className="text-xs text-[#64748B]">Nivel</p>
+                                            <p className="font-normal text-[#004B63]">{curr.level}</p>
+                                            <p className="text-base text-slate-600">Nivel</p>
                                         </div>
                                         <div className="bg-white/60 backdrop-blur-xl p-5 rounded-2xl border border-white/80 text-center shadow-sm">
                                             <Icon name="fa-play" className="text-[#FFD166] text-lg mb-2" />
-                                            <p className="font-bold text-[#004B63]">{curr.videos}</p>
-                                            <p className="text-xs text-[#64748B]">Videos</p>
+                                            <p className="font-normal text-[#004B63]">{curr.videos}</p>
+                                            <p className="text-base text-slate-600">Videos</p>
                                         </div>
                                         <div className="bg-white/60 backdrop-blur-xl p-5 rounded-2xl border border-white/80 text-center shadow-sm">
                                             <Icon name="fa-briefcase" className="text-[#FF8E53] text-lg mb-2" />
-                                            <p className="font-bold text-[#004B63]">{curr.projects}</p>
-                                            <p className="text-xs text-[#64748B]">Proyectos</p>
+                                            <p className="font-normal text-[#004B63]">{curr.projects}</p>
+                                            <p className="text-base text-slate-600">Proyectos</p>
                                         </div>
                                     </div>
                                 </div>
@@ -583,12 +583,12 @@ const IALab = ({ onBack }) => {
                                             <Icon name="fa-clipboard-check" className="text-2xl text-white" />
                                         </div>
                                         <div className="flex-1">
-                                            <h3 className="text-xl font-bold text-[#004B63]">Evaluación del Módulo</h3>
-                                            <p className="text-[#64748B] text-sm">Responde correctamente 3 de 5 preguntas para obtener tu certificado</p>
+                                            <h3 className="text-xl font-normal text-[#004B63]">Evaluación del Módulo</h3>
+                                            <p className="text-base text-slate-600">Responde correctamente 3 de 5 preguntas para obtener tu certificado</p>
                                         </div>
                                         {!evalSubmitted && (
                                             <div className="px-4 py-2 bg-[#4DA8C4]/10 rounded-full">
-                                                <span className="text-sm font-semibold text-[#004B63]">{Object.keys(evalAnswers).length}/5</span>
+                                                <span className="text-sm font-normal text-[#004B63]">{Object.keys(evalAnswers).length}/5</span>
                                             </div>
                                         )}
                                     </div>
@@ -599,8 +599,8 @@ const IALab = ({ onBack }) => {
                                         {evalQuestions.map((q, qi) => (
                                             <div key={qi}>
                                                 <div className="flex items-start gap-3 mb-3">
-                                                    <div className="w-8 h-8 bg-[#4DA8C4]/10 rounded-lg flex items-center justify-center text-[#4DA8C4] font-bold text-sm">{qi + 1}</div>
-                                                    <p className="font-semibold text-[#334155] flex-1">{q.q}</p>
+                                                    <div className="w-8 h-8 bg-[#4DA8C4]/10 rounded-lg flex items-center justify-center text-[#4DA8C4] font-normal text-sm">{qi + 1}</div>
+                                                    <p className="font-normal text-[#334155] flex-1">{q.q}</p>
                                                 </div>
                                                 <div className="grid grid-cols-2 gap-3 ml-11">
                                                     {q.opts.map((opt, oi) => (
@@ -627,7 +627,7 @@ const IALab = ({ onBack }) => {
                                         <button
                                             onClick={handleEvalSubmit}
                                             disabled={Object.keys(evalAnswers).length < 5}
-                                            className="w-full py-4 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white rounded-xl font-bold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                            className="w-full py-4 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white rounded-xl font-normal hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                         >
                                             <Icon name="fa-check-circle" className="mr-2" />Enviar evaluación
                                         </button>
@@ -652,22 +652,22 @@ const IALab = ({ onBack }) => {
                                             )}
                                             <div className="absolute inset-0 flex flex-col items-center justify-center">
                                                 <span className="text-4xl font-black text-[#004B63] font-montserrat tracking-tighter">{evalScore}</span>
-                                                <span className="text-xs text-[#64748B] uppercase tracking-widest font-bold mt-1">de 5</span>
+                                                <span className="text-xs text-[#64748B] uppercase tracking-widest font-normal mt-1">de 5</span>
                                             </div>
                                         </div>
                                         <h3 className="text-3xl font-black text-[#004B63] mb-3 font-montserrat">{evalScore >= 3 ? '¡Certificación Aprobada!' : 'Evaluación no superada'}</h3>
-                                        <p className="text-[#64748B] mb-6">Obtuviste {evalScore} de 5 respuestas correctas</p>
+                                        <p className="text-base text-slate-600 mb-6">Obtuviste {evalScore} de 5 respuestas correctas</p>
                                         {evalScore >= 3 ? (
                                             <button
                                                 onClick={() => setActiveTab('cert')}
-                                                className="px-8 py-3 bg-gradient-to-r from-[#FFD166] to-[#FF8E53] text-[#004B63] rounded-xl font-bold hover:shadow-lg transition-all"
+                                                className="px-8 py-3 bg-gradient-to-r from-[#FFD166] to-[#FF8E53] text-[#004B63] rounded-xl font-normal hover:shadow-lg transition-all"
                                             >
                                                 <Icon name="fa-award" className="mr-2" />Ver certificado
                                             </button>
                                         ) : (
                                             <button
                                                 onClick={() => { setEvalSubmitted(false); setEvalAnswers({}); }}
-                                                className="px-8 py-3 bg-[#E2E8F0] text-[#64748B] rounded-xl font-bold hover:bg-[#d1d5db] transition-all"
+                                                className="px-8 py-3 bg-[#E2E8F0] text-[#64748B] rounded-xl font-normal hover:bg-[#d1d5db] transition-all"
                                             >
                                                 <Icon name="fa-rotate-right" className="mr-2" />Reintentar
                                             </button>
@@ -684,11 +684,11 @@ const IALab = ({ onBack }) => {
                                 <div className="w-24 h-24 mx-auto bg-gradient-to-br from-[#FFD166] to-[#FF8E53] rounded-full flex items-center justify-center mb-6">
                                     <Icon name="fa-trophy" className="text-4xl text-white" />
                                 </div>
-                                <h2 className="text-3xl font-bold text-[#004B63] font-montserrat mb-4">¡Certificado de Excelencia!</h2>
-                                <p className="text-[#64748B] mb-8">Has completado el módulo {activeMod}: {curr.title}</p>
+                                <h2 className="text-3xl font-normal text-[#004B63] font-montserrat mb-4">¡Certificado de Excelencia!</h2>
+                                <p className="text-base text-slate-600">Has completado el módulo {activeMod}: {curr.title}</p>
                                 <button
                                     onClick={handleDownloadCert}
-                                    className="px-8 py-4 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white rounded-xl font-bold hover:shadow-xl transition-all"
+                                    className="px-8 py-4 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white rounded-xl font-normal hover:shadow-xl transition-all"
                                 >
                                     <Icon name="fa-download" className="mr-2" />Descargar Certificado PDF
                                 </button>
@@ -702,8 +702,8 @@ const IALab = ({ onBack }) => {
             {showNameModal && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm">
                     <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
-                        <h3 className="text-xl font-bold text-[#004B63] mb-2">Ingresa tu nombre</h3>
-                        <p className="text-[#64748B] mb-6">Este nombre aparecerá en tu certificado</p>
+                        <h3 className="text-xl font-normal text-[#004B63] mb-2">Ingresa tu nombre</h3>
+                        <p className="text-base text-slate-600">Este nombre aparecerá en tu certificado</p>
                         <input
                             type="text"
                             value={certName}
@@ -715,14 +715,14 @@ const IALab = ({ onBack }) => {
                         <div className="flex gap-3">
                             <button
                                 onClick={() => setShowNameModal(false)}
-                                className="flex-1 py-3 border border-[#E2E8F0] text-[#64748B] rounded-xl font-semibold hover:bg-[#F8FAFC] transition-all"
+                                className="flex-1 py-3 border border-[#E2E8F0] text-[#64748B] rounded-xl font-normal hover:bg-[#F8FAFC] transition-all"
                             >
                                 Cancelar
                             </button>
                             <button
                                 onClick={confirmNameAndDownload}
                                 disabled={!certName.trim()}
-                                className="flex-1 py-3 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white rounded-xl font-semibold disabled:opacity-50"
+                                className="flex-1 py-3 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white rounded-xl font-normal disabled:opacity-50"
                             >
                                 Confirmar
                             </button>

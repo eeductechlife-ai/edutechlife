@@ -47,7 +47,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="font-display font-bold text-white text-sm uppercase tracking-wider mb-4">
+            <h4 className="font-display font-normal text-white text-sm uppercase tracking-wider mb-4">
               Herramientas
             </h4>
             <ul className="space-y-2">
@@ -72,7 +72,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="font-display font-bold text-white text-sm uppercase tracking-wider mb-4">
+            <h4 className="font-display font-normal text-white text-sm uppercase tracking-wider mb-4">
               Recursos
             </h4>
             <ul className="space-y-2">
@@ -97,7 +97,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="font-display font-bold text-white text-sm uppercase tracking-wider mb-4">
+            <h4 className="font-display font-normal text-white text-sm uppercase tracking-wider mb-4">
               Newsletter
             </h4>
             <p className="text-white/60 text-sm mb-3">
@@ -120,7 +120,7 @@ export default function Footer() {
                  />
                   <button
                     type="submit"
-                    className="w-full py-3 rounded-xl bg-[#4DA8C4] text-white font-semibold text-sm hover:opacity-90 transition-opacity"
+                    className="w-full py-3 rounded-xl bg-[#4DA8C4] text-white font-normal text-sm hover:opacity-90 transition-opacity"
                   >
                     Suscribirme
                   </button>

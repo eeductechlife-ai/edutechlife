@@ -48,35 +48,35 @@ const Esencia = memo(() => {
                 <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                     <div className="inline-flex items-center gap-3 mb-4">
                         <div className="w-10 h-[2px] bg-gradient-to-r from-transparent to-[#4DA8C4]" />
-                        <span className="text-sm font-bold text-[#4DA8C4] uppercase tracking-widest block mb-2">
+                        <span className="text-sm font-normal text-[#4DA8C4] uppercase tracking-widest block mb-2">
                             Quiénes Somos
                         </span>
                         <div className="w-10 h-[2px] bg-gradient-to-l from-transparent to-[#4DA8C4]" />
                     </div>
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#004B63] tracking-tight mb-6">
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-normal text-[#004B63] tracking-tight mb-6">
                         Nuestra{' '}
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4DA8C4] to-[#004B63]">
                             Esencia
                         </span>
                     </h2>
-                    <p className="text-base md:text-lg text-gray-600 leading-relaxed font-normal max-w-2xl mx-auto">
+                    <p className="text-base text-slate-600 leading-relaxed font-normal max-w-2xl mx-auto">
                         Somos un equipo de magísteres, pedagogos y desarrolladores apasionados por transformar la educación mediante la inteligencia artificial.
                     </p>
                 </div>
 
                 {/* Values Section - AFTER Header */}
                 <div className={`transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
                         {values.map((value, index) => (
                             <div 
                                 key={index}
-                                className="group bg-white rounded-2xl p-8 shadow-lg border border-[#E2E8F0] hover:shadow-xl hover:border-[#4DA8C4]/30 hover:-translate-y-2 transition-all duration-500"
+                                className="group bg-white rounded-xl p-4 md:p-6 shadow-md border border-gray-100 hover:shadow-lg hover:border-[#4DA8C4]/30 hover:-translate-y-1 transition-all duration-300 text-center"
                             >
-                                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#4DA8C4]/10 to-[#004B63]/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                                     <Icon name={value.icon} className="text-3xl text-[#4DA8C4]" />
+                                <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-gradient-to-br from-[#4DA8C4]/10 to-[#004B63]/10 flex items-center justify-center mb-3 md:mb-4 group-hover:scale-110 transition-transform duration-300 mx-auto">
+                                     <Icon name={value.icon} className="text-xl md:text-2xl text-[#4DA8C4]" />
                                 </div>
-                                <h4 className="text-xl md:text-2xl font-bold text-[#004B63] mb-3">{value.text}</h4>
-                                <p className="text-base text-gray-600 leading-relaxed font-normal">{value.desc}</p>
+                                <h4 className="text-base md:text-lg font-normal text-[#004B63] mb-1 md:mb-2">{value.text}</h4>
+                                <p className="text-base text-slate-600 leading-relaxed font-normal">{value.desc}</p>
                             </div>
                         ))}
                     </div>
@@ -93,8 +93,8 @@ const Esencia = memo(() => {
                                     <Icon name="fa-bullseye" className="text-2xl" />
                                 </div>
                                 <div>
-                                    <span className="text-sm font-bold text-[#4DA8C4] uppercase tracking-widest block mb-2">Objetivo</span>
-                                    <h3 className="text-xl md:text-2xl font-bold">Misión</h3>
+                                    <span className="text-sm font-normal text-[#4DA8C4] uppercase tracking-widest block mb-2">Objetivo</span>
+                                    <h3 className="text-xl md:text-2xl font-normal">Misión</h3>
                                 </div>
                             </div>
                             <p className="text-base text-white/90 leading-relaxed font-normal">
@@ -103,7 +103,7 @@ const Esencia = memo(() => {
                             <div className="mt-6 pt-4 border-t border-white/20">
                                 <div className="flex items-center gap-2 text-[#4DA8C4]">
                                     <Icon name="fa-rocket" />
-                                    <span className="font-semibold text-sm">Impulsando el futuro</span>
+                                    <span className="font-normal text-sm">Impulsando el futuro</span>
                                 </div>
                             </div>
                         </div>
@@ -115,8 +115,8 @@ const Esencia = memo(() => {
                                     <Icon name="fa-eye" className="text-2xl text-white" />
                                 </div>
                                 <div>
-                                    <span className="text-sm font-bold text-[#4DA8C4] uppercase tracking-widest block mb-2">Proyección</span>
-                                    <h3 className="text-xl md:text-2xl font-bold text-[#004B63]">Visión</h3>
+                                    <span className="text-sm font-normal text-[#4DA8C4] uppercase tracking-widest block mb-2">Proyección</span>
+                                    <h3 className="text-xl md:text-2xl font-normal text-[#004B63]">Visión</h3>
                                 </div>
                             </div>
                             <p className="text-base text-gray-600 leading-relaxed font-normal">
@@ -125,7 +125,7 @@ const Esencia = memo(() => {
                             <div className="mt-6 pt-4 border-t border-[#E2E8F0]">
                                 <div className="flex items-center gap-2 text-[#4DA8C4]">
                                     <Icon name="fa-globe" />
-                                    <span className="font-semibold text-sm text-[#004B63]">Liderazgo regional</span>
+                                    <span className="font-normal text-sm text-[#004B63]">Liderazgo regional</span>
                                 </div>
                             </div>
                         </div>
@@ -156,7 +156,7 @@ const Esencia = memo(() => {
                             {/* Content */}
                             <div className="absolute inset-0 flex flex-col justify-end p-8">
                                 <div className="max-w-lg">
-                                    <h3 className="text-xl md:text-2xl font-bold text-white mb-3">
+                                    <h3 className="text-xl md:text-2xl font-normal text-white mb-3">
                                         {slides[currentSlide].title}
                                     </h3>
                                 </div>

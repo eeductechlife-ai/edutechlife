@@ -132,7 +132,7 @@ const Pricing = () => {
                 >
                     <div className="inline-flex items-center gap-3 mb-6">
                         <div className="w-12 h-px bg-gradient-to-r from-transparent to-[#4DA8C4]" />
-                        <span className="font-mono text-xs font-semibold uppercase tracking-[0.3em] text-[#4DA8C4]">
+                        <span className="font-mono text-xs font-normal uppercase tracking-[0.3em] text-[#4DA8C4]">
                             Planes y Precios
                         </span>
                         <div className="w-12 h-px bg-gradient-to-l from-transparent to-[#4DA8C4]" />
@@ -149,7 +149,7 @@ const Pricing = () => {
                         </span>
                     </h2>
 
-                    <p className="text-gray-600 leading-relaxed font-normal text-lg max-w-2xl mx-auto mb-8">
+                    <p className="text-base text-slate-600 leading-relaxed font-normal max-w-2xl mx-auto mb-8">
                         Desde estudiantes individuales hasta instituciones completas, tenemos el plan perfecto para ti.
                     </p>
 
@@ -157,7 +157,7 @@ const Pricing = () => {
                     <div className="inline-flex items-center gap-4 p-1 bg-white rounded-full border border-[rgba(0,75,99,0.12)]">
                         <button
                             onClick={() => setBillingPeriod('monthly')}
-                            className={`px-6 py-2 rounded-full font-montserrat font-semibold text-sm transition-all ${
+                            className={`px-6 py-2 rounded-full font-montserrat font-normal text-sm transition-all ${
                                 billingPeriod === 'monthly'
                                     ? 'bg-[#4DA8C4] text-white'
                                     : 'text-[#64748B] hover:text-[#004B63]'
@@ -167,7 +167,7 @@ const Pricing = () => {
                         </button>
                         <button
                             onClick={() => setBillingPeriod('annual')}
-                            className={`px-6 py-2 rounded-full font-montserrat font-semibold text-sm transition-all ${
+                            className={`px-6 py-2 rounded-full font-montserrat font-normal text-sm transition-all ${
                                 billingPeriod === 'annual'
                                     ? 'bg-[#4DA8C4] text-white'
                                     : 'text-[#64748B] hover:text-[#004B63]'
@@ -210,12 +210,12 @@ const Pricing = () => {
                                 {/* Plan Header */}
                                 <div className="text-center mb-8">
                                     <h3
-                                        className="font-montserrat text-xl font-bold mb-2"
+                                        className="font-montserrat text-xl font-normal mb-2"
                                         style={{ color: plan.color }}
                                     >
                                         {plan.name}
                                     </h3>
-                                    <p className="text-[#64748B] text-sm mb-6">
+                                    <p className="text-base text-slate-600 mb-6">
                                         {plan.description}
                                     </p>
                                     <div className="flex items-baseline justify-center gap-1">
@@ -289,7 +289,7 @@ const Pricing = () => {
                     <h3 className="font-montserrat text-3xl font-black text-[#004B63] mb-2">
                         Preguntas Frecuentes
                     </h3>
-                    <p className="text-[#64748B]">
+                    <p className="text-base text-slate-600">
                         Resolvemos tus dudas más comunes
                     </p>
                 </div>
@@ -307,7 +307,7 @@ const Pricing = () => {
                                 onClick={() => setOpenFaq(openFaq === i ? null : i)}
                                 className="w-full px-6 py-5 flex items-center justify-between text-left"
                             >
-                                <span className="font-montserrat font-bold text-[#004B63] pr-4">
+                                <span className="font-montserrat font-normal text-[#004B63] pr-4">
                                     {faq.question}
                                 </span>
                                 <Icon
@@ -337,7 +337,7 @@ const Pricing = () => {
                     </p>
                     <a
                         href="#contacto"
-                        className="inline-flex items-center gap-2 text-[#4DA8C4] font-montserrat font-bold hover:underline"
+                        className="inline-flex items-center gap-2 text-[#4DA8C4] font-montserrat font-normal hover:underline"
                     >
                         <Icon name="fa-envelope" />
                         Contáctanos directamente

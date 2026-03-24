@@ -238,13 +238,13 @@ const PilarModal = ({ pilar, isOpen, onClose }) => {
                             <Icon name={pilar.icon} className="text-4xl md:text-5xl text-[#4DA8C4]" />
                         </div>
                         <div>
-                            <span className="inline-block px-4 py-1 bg-[#4DA8C4]/10 rounded-full text-xs font-bold uppercase tracking-widest text-[#4DA8C4] mb-4">
+                            <span className="inline-block px-4 py-1 bg-[#4DA8C4]/10 rounded-full text-xs font-normal uppercase tracking-widest text-[#4DA8C4] mb-4">
                                 {pilar.subtitle}
                             </span>
                             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#004B63] mb-2 tracking-tight">
                                 {pilar.title}
                             </h2>
-                            <p className="text-gray-600 leading-relaxed font-normal text-lg max-w-xl">
+                            <p className="text-base text-slate-600 leading-relaxed font-normal max-w-xl">
                                 {content.fullDesc}
                             </p>
                         </div>
@@ -259,8 +259,8 @@ const PilarModal = ({ pilar, isOpen, onClose }) => {
                                     <Icon name={feature.icon} className="text-lg text-[#66CCCC]" />
                                 </div>
                                 <div>
-                                    <h4 className="font-bold text-[#004B63] mb-1">{feature.title}</h4>
-                                    <p className="text-gray-600 leading-relaxed font-normal text-sm">{feature.desc}</p>
+                                    <h4 className="font-normal text-[#004B63] mb-1">{feature.title}</h4>
+                                    <p className="text-base text-slate-600 leading-relaxed font-normal">{feature.desc}</p>
                                 </div>
                             </div>
                         ))}
@@ -269,7 +269,7 @@ const PilarModal = ({ pilar, isOpen, onClose }) => {
                     <div className="text-center mt-12 pt-8 border-t border-[#E2E8F0]">
                         <button 
                             onClick={() => { onClose(); pilar.onNavigate(pilar.id); }}
-                            className="btn-glow inline-flex items-center gap-3 px-10 py-4 font-bold rounded-full font-montserrat bg-white"
+                            className="btn-glow inline-flex items-center gap-3 px-10 py-4 font-normal rounded-full font-montserrat bg-white"
                         >
                             <Icon name="fa-rocket" className="text-[#4DA8C4]" />
                             <span className="text-[#004B63] group-hover:text-corporate">{content.cta}</span>
@@ -390,7 +390,7 @@ const Ecosystem = memo(({ onNavigate }) => {
                     transition={{ duration: 0.8, ease: "easeOut" }}
                     className="text-center mb-20 max-w-3xl mx-auto"
                 >
-                    <span className="text-sm font-bold text-[#4DA8C4] uppercase tracking-widest block mb-6">
+                    <span className="text-sm font-normal text-[#4DA8C4] uppercase tracking-widest block mb-6">
                         Plataforma Modular
                     </span>
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#004B63] tracking-tight mb-6">
@@ -399,7 +399,7 @@ const Ecosystem = memo(({ onNavigate }) => {
                             Interconectado.
                         </span>
                     </h2>
-                    <p className="text-base md:text-lg text-gray-600 leading-relaxed font-normal">
+                    <p className="text-base text-slate-600 leading-relaxed font-normal">
                         Accede a herramientas estructuradas para potenciar la educación mediante la sinergia de neuro-ciencia e inteligencia artificial.
                     </p>
                 </motion.div>
@@ -418,8 +418,7 @@ const Ecosystem = memo(({ onNavigate }) => {
                         </div>
                         <div className="p-8">
                             <CardWithLottie animationData={brainAnimation}>
-                                <span className="text-5xl font-black text-gray-100">01</span>
-                                <h3 className="text-xl font-bold text-[#004B63] uppercase mt-6 mb-4">Neuro-Entorno Educativo</h3>
+                                <h3 className="text-xl font-normal text-[#004B63] uppercase mt-6 mb-4">Neuro-Entorno Educativo</h3>
                                 <p className="text-gray-600 leading-relaxed">Acompañamiento integral basado en metodologías VAK y STEAM. Docentes con maestría analizan procesos psicológicos y académicos para potenciar cada estilo de aprendizaje con herramientas de IA personalizadas.</p>
                             </CardWithLottie>
                         </div>
@@ -437,8 +436,7 @@ const Ecosystem = memo(({ onNavigate }) => {
                         </div>
                         <div className="p-8">
                             <CardWithLottie animationData={awardAnimation}>
-                                <span className="text-5xl font-black text-gray-100">02</span>
-                                <h3 className="text-xl font-bold text-[#004B63] uppercase mt-6 mb-4">Proyectos de Impacto Nacional</h3>
+                                <h3 className="text-xl font-normal text-[#004B63] uppercase mt-6 mb-4">Proyectos de Impacto Nacional</h3>
                                 <p className="text-gray-600 leading-relaxed">Operadores oficiales SenaTIC. Certificamos a más de 6,000 estudiantes con respaldo internacional de IBM y Coursera. Maestros que forman maestros: más de 200 docentes colombianos transformados en líderes digitales.</p>
                             </CardWithLottie>
                         </div>
@@ -456,8 +454,7 @@ const Ecosystem = memo(({ onNavigate }) => {
                         </div>
                         <div className="p-8">
                             <CardWithLottie animationData={handshakeAnimation}>
-                                <span className="text-5xl font-black text-gray-100">03</span>
-                                <h3 className="text-xl font-bold text-[#004B63] uppercase mt-6 mb-4">Consultoría B2B y Automatización</h3>
+                                <h3 className="text-xl font-normal text-[#004B63] uppercase mt-6 mb-4">Consultoría B2B y Automatización</h3>
                                 <p className="text-gray-600 leading-relaxed">Transformamos organizaciones educativas y empresas con metodología STEAM aplicada. Agentes de IA personalizados y capacitación de alto nivel que generan productividad real desde el primer mes de implementación.</p>
                             </CardWithLottie>
                         </div>
@@ -470,7 +467,7 @@ const Ecosystem = memo(({ onNavigate }) => {
                     whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
-                    className="mt-24 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto"
+                    className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 max-w-5xl mx-auto"
                 >
                     {[
                         { id: 'vak', icon: 'fa-brain', title: 'Diagnóstico VAK', sub: 'Métrica V1' },
@@ -481,14 +478,14 @@ const Ecosystem = memo(({ onNavigate }) => {
                         <button 
                             key={item.id}
                             onClick={() => onNavigate(item.id)}
-                            className="group p-5 bg-white rounded-2xl border border-[#E2E8F0] text-left transition-all hover:border-[#4DA8C4]/50 hover:shadow-neuro flex items-center gap-4"
+                            className="group p-5 md:p-6 bg-white rounded-xl border border-gray-200 text-left transition-all hover:border-[#4DA8C4]/50 hover:shadow-lg hover:-translate-y-1 flex items-center gap-4"
                         >
-                            <div className="w-10 h-10 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl flex items-center justify-center text-[#4DA8C4] group-hover:bg-[#4DA8C4] group-hover:text-white transition-colors">
-                                 <Icon name={item.icon} className="w-4 h-4" />
+                            <div className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-[#4DA8C4]/10 to-[#004B63]/10 border border-[#4DA8C4]/20 rounded-xl flex items-center justify-center text-[#4DA8C4] group-hover:bg-[#4DA8C4] group-hover:text-white transition-all group-hover:scale-110">
+                                 <Icon name={item.icon} className="w-5 h-5 md:w-6 md:h-6" />
                             </div>
                             <div>
-                                <h3 className="text-sm font-bold text-[#004B63] font-montserrat">{item.title}</h3>
-                                <p className="text-[10px] text-[#64748B] uppercase tracking-widest font-bold">{item.sub}</p>
+                                <h3 className="text-base md:text-lg font-normal text-[#004B63]">{item.title}</h3>
+                                <p className="text-xs md:text-sm text-gray-600 uppercase tracking-wider font-normal">{item.sub}</p>
                             </div>
                         </button>
                     ))}

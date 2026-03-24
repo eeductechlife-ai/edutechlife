@@ -71,6 +71,9 @@ export default {
         'orb-float': 'orb-float 8s ease-in-out infinite',
         'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
         'marquee': 'marquee 40s linear infinite',
+        'gradient': 'gradient 8s linear infinite',
+        'sweep': 'sweep 1.5s ease-in-out infinite',
+        'pulse-slow': 'pulse-slow 8s ease-in-out infinite',
       },
       keyframes: {
         'grid-move': {
@@ -92,6 +95,19 @@ export default {
         'marquee': {
           '0%': { transform: 'translateX(0)' },
           '100%': { transform: 'translateX(-33.333%)' },
+        },
+        'gradient': {
+          '0%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+          '100%': { backgroundPosition: '0% 50%' },
+        },
+        'sweep': {
+          '0%': { transform: 'translateX(-100%) skewX(-20deg)' },
+          '100%': { transform: 'translateX(200%) skewX(-20deg)' },
+        },
+        'pulse-slow': {
+          '0%, 100%': { transform: 'scale(1)', opacity: '0.5' },
+          '50%': { transform: 'scale(1.1)', opacity: '0.8' },
         },
       },
       transitionProperty: {
