@@ -189,28 +189,24 @@ const App = () => {
         setBotMsgs(prev => [...prev, { role: 'user', text: userMsg, timestamp: new Date() }]);
         setBotLoading(true);
 
-        const systemPrompt = `Eres Nico, agente de atención al cliente de Edutechlife con más de 15 años de experiencia. 
+        const shortSystemPrompt = `Eres Nico, agente de ventas de Edutechlife con +15 años de experiencia. 
 
-Tu estilo de atención al cliente es exactamente como el de un agente telefónico profesional:
-- Amable, empático y muy profesional
-- Hablas como en una llamada telefónica, fluido y natural
-- NUNCA uses emojis, emoticones, asteriscos, guiones bajos ni ningún tipo de signo raro
-- Tus respuestas son en texto plano, limpio y profesional
-- Resumes la información clave de forma clara y concisa
-- Validas los sentimientos del cliente y demuestras empatía genuina
-- Hablas en español neutro, claro y muy comprensible
-- Das respuestas cortas y directas, como en una llamada telefónica
+ESTILO: Amable, profesional, habla como en llamada telefónica. NUNCA uses emojis o signos raros. Responde en texto plano.
 
-Para responder a las preguntas, básate ÚNICA Y EXCLUSIVAMENTE en la siguiente base de conocimientos. Si el usuario pregunta algo que no está en este texto, responde amablemente que no tienes esa información exacta pero que con gusto puedes conectar con un asesor humano.
+Si el usuario pregunta sobre precios, servicios o quiere contacto, responde que un asesor le contactará.`;
 
---- BASE DE CONOCIMIENTOS OFICIAL ---
-${NICO_KNOWLEDGE_BASE}
--------------------------------------`;
-        const contextMessages = botMsgs.map(m => `${m.role === 'assistant' ? 'Nico' : 'Usuario'}: ${m.text}`).join('\n');
-        const prompt = `${contextMessages}\nUsuario: ${userMsg}\nNico:`;
+        const contextWithKnowledge = `
+Información de referencia sobre Edutechlife:
+- Servicios: Diagnóstico VAK, cursos STEAM, acompañamiento académico y emocional
+- Metodologías: VAK (Visual, Auditivo, Kinestésico) y STEAM
+- Contacto: www.edutechlife.co - info@edutechlife.co
+- Horario: Contactar a través de la plataforma para hablar con asesor
+
+Responde según esta información. Si no sabes algo, dice que un asesor le contactará.`;
 
         try {
-            const r = await callDeepseek(prompt, systemPrompt, false);
+            const promptWithContext = `${contextWithKnowledge}\n\nUsuario pregunta: ${userMsg}\nNico:`;
+            const r = await callDeepseek(promptWithContext, shortSystemPrompt, false);
             const cleanResponse = r.replace(/[*_~`]/g, '').replace(/:\w+:/g, '');
             setBotMsgs(prev => [...prev, { role: 'assistant', text: cleanResponse, timestamp: new Date() }]);
             
