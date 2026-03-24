@@ -57,19 +57,20 @@ const Hero = memo(({ onNavigate }) => {
             {/* Floating Particles Background - Enhanced 3D */}
             <FloatingParticles count={45} className="z-0" />
             
-            {/* Soft Ambient Glows - Enhanced with 3D Effect */}
-            <div className="absolute top-[-10%] right-[-5%] w-[40vw] h-[40vw] rounded-full bg-[#4DA8C4]/10 blur-[120px] pointer-events-none will-change-transform animate-[pulse-slow_8s_ease-in-out_infinite]" />
-            <div className="absolute bottom-[-10%] left-[-5%] w-[50vw] h-[50vw] rounded-full bg-[#66CCCC]/10 blur-[120px] pointer-events-none will-change-transform animate-[pulse-slow_8s_ease-in-out_infinite]" style={{ animationDelay: '-4s' }} />
-            
-            {/* Additional 3D Ambient Elements - More particles */}
+            {/* 3D Ambient Elements - Left side */}
             <div className="absolute top-[15%] left-[10%] w-4 h-4 bg-[#4DA8C4]/30 rounded-full animate-[float-3d_6s_ease-in-out_infinite]" style={{ animationDelay: '-2s' }} />
-            <div className="absolute top-[60%] right-[15%] w-3 h-3 bg-[#66CCCC]/40 rounded-full animate-[float-3d_8s_ease-in-out_infinite]" style={{ animationDelay: '-4s' }} />
-            <div className="absolute bottom-[30%] left-[20%] w-2 h-2 bg-[#FFD166]/30 rounded-full animate-[float-3d_7s_ease-in-out_infinite]" style={{ animationDelay: '-1s' }} />
+            <div className="absolute bottom-[30%] left-[20%] w-2 h-2 bg-[#66CCCC]/30 rounded-full animate-[float-3d_7s_ease-in-out_infinite]" style={{ animationDelay: '-1s' }} />
             <div className="absolute top-[40%] left-[25%] w-3 h-3 bg-[#4DA8C4]/25 rounded-full animate-[float-3d_9s_ease-in-out_infinite]" style={{ animationDelay: '-3s' }} />
-            <div className="absolute top-[25%] right-[30%] w-2 h-2 bg-[#66CCCC]/35 rounded-full animate-[float-3d_6s_ease-in-out_infinite]" style={{ animationDelay: '-5s' }} />
-            <div className="absolute bottom-[45%] right-[25%] w-4 h-4 bg-[#FFD166]/25 rounded-full animate-[float-3d_8s_ease-in-out_infinite]" style={{ animationDelay: '-2.5s' }} />
-            <div className="absolute bottom-[15%] left-[35%] w-3 h-3 bg-[#4DA8C4]/30 rounded-full animate-[float-3d_7s_ease-in-out_infinite]" style={{ animationDelay: '-6s' }} />
-            <div className="absolute top-[70%] left-[5%] w-2 h-2 bg-[#66CCCC]/25 rounded-full animate-[float-3d_9s_ease-in-out_infinite]" style={{ animationDelay: '-4.5s' }} />
+            <div className="absolute bottom-[15%] left-[35%] w-3 h-3 bg-[#B2D8E5]/30 rounded-full animate-[float-3d_7s_ease-in-out_infinite]" style={{ animationDelay: '-6s' }} />
+            
+            {/* 3D Ambient Elements - Right side (where video is) */}
+            <div className="absolute top-[10%] right-[5%] w-3 h-3 bg-[#4DA8C4]/20 rounded-full animate-[float-3d_8s_ease-in-out_infinite]" style={{ animationDelay: '-1s' }} />
+            <div className="absolute top-[25%] right-[10%] w-2 h-2 bg-[#66CCCC]/25 rounded-full animate-[float-3d_10s_ease-in-out_infinite]" style={{ animationDelay: '-3s' }} />
+            <div className="absolute top-[45%] right-[5%] w-4 h-4 bg-[#B2D8E5]/15 rounded-full animate-[float-3d_9s_ease-in-out_infinite]" style={{ animationDelay: '-5s' }} />
+            <div className="absolute top-[60%] right-[15%] w-3 h-3 bg-[#4DA8C4]/20 rounded-full animate-[float-3d_7s_ease-in-out_infinite]" style={{ animationDelay: '-7s' }} />
+            <div className="absolute bottom-[20%] right-[8%] w-2 h-2 bg-[#66CCCC]/20 rounded-full animate-[float-3d_11s_ease-in-out_infinite]" style={{ animationDelay: '-2s' }} />
+            <div className="absolute bottom-[40%] right-[12%] w-3 h-3 bg-[#B2D8E5]/15 rounded-full animate-[float-3d_8s_ease-in-out_infinite]" style={{ animationDelay: '-4s' }} />
+            <div className="absolute top-[75%] right-[5%] w-2 h-2 bg-[#4DA8C4]/15 rounded-full animate-[float-3d_10s_ease-in-out_infinite]" style={{ animationDelay: '-6s' }} />
             
             <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 py-20">
                 {/* Two-Column Layout */}
@@ -169,16 +170,16 @@ const Hero = memo(({ onNavigate }) => {
                         </motion.div>
                     </div>
 
-                    {/* Right Column - 3D Video Hero with Enhanced Glow */}
+                    {/* Right Column - 3D Video Hero - Reduced Size */}
                     <motion.div 
                         initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
                         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                         transition={{ duration: 0.8, delay: 0.5 }}
                         className="pt-10 lg:pt-0 flex items-center justify-center perspective-3d"
                     >
-                        <div className="relative w-full max-w-lg lg:max-w-xl aspect-square flex items-center justify-center transform-style-3d">
-                            {/* Outer Glow Ring */}
-                            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#4DA8C4]/20 to-[#66CCCC]/10 blur-xl animate-[pulse-glow_3s_ease-in-out_infinite]" />
+                        <div className="relative w-full max-w-md lg:max-w-lg aspect-square flex items-center justify-center transform-style-3d">
+                            {/* Outer Glow Ring - Subtle */}
+                            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#4DA8C4]/10 to-[#66CCCC]/5 blur-lg animate-[pulse-glow_4s_ease-in-out_infinite]" />
                             
                             {/* Video WebM con fondo transparente - Simula orbe de IA */}
                             <video 
@@ -186,21 +187,22 @@ const Hero = memo(({ onNavigate }) => {
                                 loop 
                                 muted 
                                 playsInline 
-                                className="w-full h-full object-contain pointer-events-none drop-shadow-2xl relative z-10"
-                                style={{ filter: 'drop-shadow(0 0 40px rgba(77, 168, 196, 0.6))' }}
+                                className="w-full h-full object-contain pointer-events-none drop-shadow-xl relative z-10"
+                                style={{ filter: 'drop-shadow(0 0 30px rgba(77, 168, 196, 0.5))' }}
                             >
                                 <source src="/videos/ai-orb.webm" type="video/webm" />
                             </video>
                             
-                            {/* Fallback: Gradiente animado si no hay video - Enhanced */}
+                            {/* Fallback: Gradiente animado si no hay video - Reduced */}
                             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                <div className="w-64 h-64 rounded-full bg-gradient-to-br from-[#4DA8C4]/30 to-[#66CCCC]/20 animate-pulse-glow blur-xl" />
-                                <div className="absolute w-48 h-48 rounded-full bg-gradient-to-tr from-[#004B63]/20 to-transparent animate-[pulse-slow_4s_ease-in-out_infinite]" />
+                                <div className="w-48 h-48 rounded-full bg-gradient-to-br from-[#4DA8C4]/20 to-[#66CCCC]/10 animate-pulse-glow blur-lg" />
+                                <div className="absolute w-36 h-36 rounded-full bg-gradient-to-tr from-[#004B63]/15 to-transparent animate-[pulse-slow_4s_ease-in-out_infinite]" />
                             </div>
                             
-                            {/* Floating decorative elements */}
-                            <div className="absolute w-20 h-20 border border-[#4DA8C4]/20 rounded-full animate-[float-3d_8s_ease-in-out_infinite]" style={{ animationDelay: '-2s', transform: 'translateZ(-20px)' }} />
-                            <div className="absolute w-32 h-32 border border-[#66CCCC]/10 rounded-full animate-[float-3d_10s_ease-in-out_infinite]" style={{ animationDelay: '-5s', transform: 'translateZ(-40px)' }} />
+                            {/* Floating decorative rings - Corporate colors only */}
+                            <div className="absolute w-16 h-16 border border-[#4DA8C4]/15 rounded-full animate-[float-3d_8s_ease-in-out_infinite]" style={{ animationDelay: '-2s', transform: 'translateZ(-20px)' }} />
+                            <div className="absolute w-24 h-24 border border-[#66CCCC]/8 rounded-full animate-[float-3d_10s_ease-in-out_infinite]" style={{ animationDelay: '-5s', transform: 'translateZ(-40px)' }} />
+                            <div className="absolute w-12 h-12 border border-[#B2D8E5]/10 rounded-full animate-[float-3d_12s_ease-in-out_infinite]" style={{ animationDelay: '-7s', transform: 'translateZ(-60px)' }} />
                         </div>
                     </motion.div>
                 </div>

@@ -517,7 +517,7 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
             
             {/* Loading Screen */}
             {isLoading && (
-                <LoadingScreen onComplete={handleLoadingComplete} minDuration={3000} />
+                <LoadingScreen onComplete={handleLoadingComplete} minDuration={2000} />
             )}
 
             {/* Header - Navigation Premium - Hidden on SmartBoard, IALab and Admin */}

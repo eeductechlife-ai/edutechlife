@@ -3,7 +3,7 @@ import { memo } from 'react';
 const FloatingParticles = ({ 
   count = 20, 
   className = '',
-  colors = ['#4DA8C4', '#66CCCC', '#004B63', '#B2D8E5', '#FFD166']
+  colors = ['#4DA8C4', '#66CCCC', '#004B63', '#B2D8E5']
 }) => {
   const particles = Array.from({ length: count }, (_, i) => ({
     id: i,

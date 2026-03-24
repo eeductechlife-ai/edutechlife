@@ -37,9 +37,9 @@ const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
                 setIsExiting(true);
                 const completeTimer = setTimeout(() => {
                     if (onComplete) onComplete();
-                }, 600);
+                }, 400);
                 return () => clearTimeout(completeTimer);
-            }, 400);
+            }, 200);
             return () => clearTimeout(exitTimer);
         }
     }, [progress, onComplete]);
@@ -49,10 +49,10 @@ const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
             {/* Floating Particles - Enhanced 3D */}
             <FloatingParticles count={55} className="z-1" />
 
-            {/* Additional 3D Floating Elements */}
+            {/* Additional 3D Floating Elements - Corporate colors only */}
             <div className="absolute top-[20%] left-[10%] w-4 h-4 bg-[#4DA8C4]/20 rounded-full animate-[float-3d_6s_ease-in-out_infinite]" style={{ animationDelay: '-2s' }} />
             <div className="absolute top-[60%] right-[15%] w-3 h-3 bg-[#66CCCC]/25 rounded-full animate-[float-3d_8s_ease-in-out_infinite]" style={{ animationDelay: '-4s' }} />
-            <div className="absolute bottom-[30%] left-[20%] w-2 h-2 bg-[#FFD166]/20 rounded-full animate-[float-3d_7s_ease-in-out_infinite]" style={{ animationDelay: '-1s' }} />
+            <div className="absolute bottom-[30%] left-[20%] w-2 h-2 bg-[#B2D8E5]/20 rounded-full animate-[float-3d_7s_ease-in-out_infinite]" style={{ animationDelay: '-1s' }} />
             <div className="absolute top-[40%] left-[25%] w-3 h-3 bg-[#4DA8C4]/15 rounded-full animate-[float-3d_9s_ease-in-out_infinite]" style={{ animationDelay: '-3s' }} />
             <div className="absolute top-[25%] right-[30%] w-2 h-2 bg-[#66CCCC]/20 rounded-full animate-[float-3d_6s_ease-in-out_infinite]" style={{ animationDelay: '-5s' }} />
 
