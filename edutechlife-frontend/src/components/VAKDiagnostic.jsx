@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, memo } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import html2pdf from 'html2pdf.js';
+import * as XLSX from 'xlsx';
 import FloatingParticles from './FloatingParticles';
 import { Icon } from '../utils/iconMapping.jsx';
 import { VAK_QUESTIONS, VAK_STYLES, calculateVAKResult, getVAKChartData } from '../constants/vakData';
@@ -231,6 +232,47 @@ const VAKDiagnostic = memo(({ onNavigate, userName: initialName = '', initialMoo
 </html>`;
   };
 
+  const saveToExcel = (userData, result, dominantStyle) => {
+    try {
+      const now = new Date();
+      const data = {
+        'Fecha': now.toLocaleDateString('es-CO'),
+        'Hora': now.toLocaleTimeString('es-CO'),
+        'Nombre': userData.nombre || '',
+        'Email': userData.email || '',
+        'Telefono': userData.telefono || '',
+        'Estilo Dominante': dominantStyle?.name || result?.dominant || '',
+        'Porcentaje': result?.percentage || '',
+        'Visual': result?.percentages?.visual || '',
+        'Auditivo': result?.percentages?.auditivo || '',
+        'Kinestesico': result?.percentages?.kinestesico || ''
+      };
+
+      // Get existing data from localStorage
+      const existingData = localStorage.getItem('vak_diagnostics');
+      let diagnostics = existingData ? JSON.parse(existingData) : [];
+      
+      // Add new entry
+      diagnostics.push(data);
+      
+      // Save back to localStorage
+      localStorage.setItem('vak_diagnostics', JSON.stringify(diagnostics));
+      
+      // Also create and download Excel file
+      const ws = XLSX.utils.json_to_sheet([data]);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Diagnosticos');
+      
+      // Generate filename with date
+      const filename = `Diagnosticos-VAK-${now.toISOString().split('T')[0]}.xlsx`;
+      XLSX.writeFile(wb, filename);
+      
+      console.log('[Excel] Datos guardados exitosamente');
+    } catch (error) {
+      console.error('[Excel] Error al guardar:', error);
+    }
+  };
+
   const handleDownloadPDF = async () => {
     if (!result) {
       alert('Error: No hay resultado disponible');
@@ -241,6 +283,9 @@ const VAKDiagnostic = memo(({ onNavigate, userName: initialName = '', initialMoo
     
     const dominantStyle = VAK_STYLES[result.dominant];
     const htmlContent = generatePDFHTML(result, dominantStyle, userName, userData);
+    
+    // Guardar datos en Excel
+    saveToExcel(userData, result, dominantStyle);
     
     // Método 1: Nueva ventana de impresión (más confiable)
     try {
@@ -259,18 +304,24 @@ const VAKDiagnostic = memo(({ onNavigate, userName: initialName = '', initialMoo
               }
               @media screen {
                 body { padding: 20px; }
-                .print-btn {
-                  position: fixed; top: 10px; right: 10px;
-                  padding: 10px 20px; background: #004B63; color: white;
+                .btn-container { position: fixed; top: 10px; right: 10px; display: flex; gap: 10px; }
+                .print-btn, .home-btn {
+                  padding: 10px 20px; color: white;
                   border: none; cursor: pointer; font-size: 14px;
-                  border-radius: 5px;
+                  border-radius: 5px; text-decoration: none;
                 }
+                .print-btn { background: #004B63; }
+                .home-btn { background: #4DA8C4; }
                 .print-btn:hover { background: #006080; }
+                .home-btn:hover { background: #66CCCC; }
               }
             </style>
           </head>
           <body>
-            <button class="print-btn no-print" onclick="window.print()">Imprimir / Guardar PDF</button>
+            <div class="btn-container no-print">
+              <button class="home-btn" onclick="window.location.href='/'">Volver al Inicio</button>
+              <button class="print-btn" onclick="window.print()">Imprimir / Guardar PDF</button>
+            </div>
             ${htmlContent.replace('<!DOCTYPE html><html><head><meta charset="UTF-8"><style>', '<style>').replace('</style></head><body>', '</head><body>').replace('</body></html>', '')}
           </body>
           </html>
