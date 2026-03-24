@@ -132,157 +132,97 @@ const VAKDiagnostic = memo(({ onNavigate, userName: initialName = '', initialMoo
       accent: '#4DA8C4',
       secondary: '#66CCCC',
       kinestesico: '#FF6B9D',
-      text: '#475569',
-      textLight: '#64748B',
+      text: '#333333',
+      textLight: '#666666',
       white: '#FFFFFF',
-      bg: '#F8FAFC'
+      bg: '#F5F5F5'
     };
 
     const dominantColor = result.dominant === 'visual' ? colors.accent : 
                          result.dominant === 'auditivo' ? colors.secondary : colors.kinestesico;
 
-    return `
-      <div style="font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; background: ${colors.bg}; color: ${colors.text};">
-        <!-- Header -->
-        <div style="background: linear-gradient(135deg, ${colors.primary} 0%, #006080 100%); color: white; padding: 25px 30px; display: flex; justify-content: space-between; align-items: center;">
-          <div>
-            <h1 style="margin: 0; font-size: 24px; font-weight: bold; letter-spacing: 1px;">EDUTECHLIFE</h1>
-            <p style="margin: 5px 0 0; font-size: 11px; opacity: 0.8;">Education Technology</p>
-          </div>
-          <div style="background: ${colors.accent}; padding: 8px 16px; border-radius: 20px; font-size: 11px; font-weight: 600;">
-            DIAGNÓSTICO VAK
-          </div>
-        </div>
+    const charList = (dominantStyle.characteristics || []).slice(0, 3).map(c => `<li>${c}</li>`).join('');
+    const stratList = (dominantStyle.strategies || []).slice(0, 3).map((s, i) => `<li>${i+1}. ${s.substring(0, 35)}</li>`).join('');
+    const tipList = (dominantStyle.tips || []).slice(0, 3).map(t => `<li>${t.substring(0, 35)}</li>`).join('');
+    const careerList = (dominantStyle.careers || []).slice(0, 4).map(c => `<span style="background:${colors.accent};color:white;padding:4px 8px;margin:2px;font-size:10px;">${c}</span>`).join('');
 
-        <!-- User Info -->
-        <div style="background: ${colors.bg}; padding: 15px 30px; border-bottom: 1px solid #E2E8F0;">
-          <p style="margin: 0; font-size: 12px; color: ${colors.textLight};">
-            <strong style="color: ${colors.text};">Estudiante:</strong> ${userName || 'Estudiante'} &nbsp;|&nbsp; 
-            <strong style="color: ${colors.text};">Fecha:</strong> ${new Date().toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' })}
-          </p>
-        </div>
-
-        <!-- Hero Result -->
-        <div style="background: linear-gradient(135deg, ${dominantColor} 0%, ${dominantColor}dd 100%); padding: 30px; text-align: center; color: white;">
-          <p style="margin: 0 0 10px; font-size: 12px; opacity: 0.9;">Tu estilo de aprendizaje dominante</p>
-          <h2 style="margin: 0; font-size: 32px; font-weight: bold;">${dominantStyle.name}</h2>
-          <div style="font-size: 48px; font-weight: bold; margin: 10px 0;">${result.percentage}%</div>
-          <p style="margin: 0; font-size: 11px; opacity: 0.8;">dominante</p>
-        </div>
-
-        <!-- Chart Section -->
-        <div style="padding: 25px 30px; background: white;">
-          <h3 style="margin: 0 0 20px; font-size: 14px; color: ${colors.primary}; font-weight: 600;">Distribución de Estilos</h3>
-          
-          <!-- Style Cards -->
-          <div style="display: flex; gap: 15px; justify-content: center; margin-bottom: 20px;">
-            <div style="background: white; border: 1px solid #E2E8F0; border-radius: 12px; padding: 15px 20px; text-align: center; min-width: 100px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-              <div style="width: 12px; height: 12px; background: ${colors.accent}; border-radius: 50%; margin: 0 auto 8px;"></div>
-              <p style="margin: 0 0 5px; font-size: 11px; color: ${colors.textLight};">Visual</p>
-              <p style="margin: 0; font-size: 20px; font-weight: bold; color: ${colors.text};">${result.percentages.visual}%</p>
-            </div>
-            <div style="background: white; border: 1px solid #E2E8F0; border-radius: 12px; padding: 15px 20px; text-align: center; min-width: 100px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-              <div style="width: 12px; height: 12px; background: ${colors.secondary}; border-radius: 50%; margin: 0 auto 8px;"></div>
-              <p style="margin: 0 0 5px; font-size: 11px; color: ${colors.textLight};">Auditivo</p>
-              <p style="margin: 0; font-size: 20px; font-weight: bold; color: ${colors.text};">${result.percentages.auditivo}%</p>
-            </div>
-            <div style="background: white; border: 1px solid #E2E8F0; border-radius: 12px; padding: 15px 20px; text-align: center; min-width: 100px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-              <div style="width: 12px; height: 12px; background: ${colors.kinestesico}; border-radius: 50%; margin: 0 auto 8px;"></div>
-              <p style="margin: 0 0 5px; font-size: 11px; color: ${colors.textLight};">Kinestésico</p>
-              <p style="margin: 0; font-size: 20px; font-weight: bold; color: ${colors.text};">${result.percentages.kinestesico}%</p>
-            </div>
-          </div>
-
-          <!-- Progress Bars -->
-          <div style="margin-top: 20px;">
-            <div style="margin-bottom: 12px;">
-              <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                <span style="font-size: 11px; color: ${colors.text};">Visual</span>
-                <span style="font-size: 11px; color: ${colors.textLight};">${result.percentages.visual}%</span>
-              </div>
-              <div style="background: #E2E8F0; border-radius: 4px; height: 8px; overflow: hidden;">
-                <div style="background: ${colors.accent}; width: ${result.percentages.visual}%; height: 100%; border-radius: 4px;"></div>
-              </div>
-            </div>
-            <div style="margin-bottom: 12px;">
-              <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                <span style="font-size: 11px; color: ${colors.text};">Auditivo</span>
-                <span style="font-size: 11px; color: ${colors.textLight};">${result.percentages.auditivo}%</span>
-              </div>
-              <div style="background: #E2E8F0; border-radius: 4px; height: 8px; overflow: hidden;">
-                <div style="background: ${colors.secondary}; width: ${result.percentages.auditivo}%; height: 100%; border-radius: 4px;"></div>
-              </div>
-            </div>
-            <div>
-              <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                <span style="font-size: 11px; color: ${colors.text};">Kinestésico</span>
-                <span style="font-size: 11px; color: ${colors.textLight};">${result.percentages.kinestesico}%</span>
-              </div>
-              <div style="background: #E2E8F0; border-radius: 4px; height: 8px; overflow: hidden;">
-                <div style="background: ${colors.kinestesico}; width: ${result.percentages.kinestesico}%; height: 100%; border-radius: 4px;"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Details Section -->
-        <div style="padding: 25px 30px; background: ${colors.bg};">
-          <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-            <!-- Características -->
-            <div style="flex: 1; min-width: 200px; background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-              <h4 style="margin: 0 0 15px; font-size: 13px; color: ${colors.primary}; font-weight: 600;">Características Principales</h4>
-              <ul style="margin: 0; padding: 0; list-style: none;">
-                ${(dominantStyle.characteristics || []).slice(0, 3).map(char => `
-                  <li style="margin-bottom: 8px; font-size: 11px; color: ${colors.text}; display: flex; align-items: flex-start;">
-                    <span style="color: ${colors.accent}; margin-right: 8px;">•</span>${char}
-                  </li>
-                `).join('')}
-              </ul>
-            </div>
-
-            <!-- Estrategias -->
-            <div style="flex: 1; min-width: 200px; background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-              <h4 style="margin: 0 0 15px; font-size: 13px; color: ${colors.primary}; font-weight: 600;">Estrategias Recomendadas</h4>
-              <ul style="margin: 0; padding: 0; list-style: none;">
-                ${(dominantStyle.strategies || []).slice(0, 3).map((strat, i) => `
-                  <li style="margin-bottom: 8px; font-size: 11px; color: ${colors.text}; display: flex; align-items: flex-start;">
-                    <span style="color: ${colors.secondary}; margin-right: 8px; font-weight: bold;">${i + 1}.</span>${strat.substring(0, 40)}
-                  </li>
-                `).join('')}
-              </ul>
-            </div>
-
-            <!-- Tips -->
-            <div style="flex: 1; min-width: 200px; background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-              <h4 style="margin: 0 0 15px; font-size: 13px; color: ${colors.primary}; font-weight: 600;">Tips para Mejorar</h4>
-              <ul style="margin: 0; padding: 0; list-style: none;">
-                ${(dominantStyle.tips || []).slice(0, 3).map(tip => `
-                  <li style="margin-bottom: 8px; font-size: 11px; color: ${colors.text}; display: flex; align-items: flex-start;">
-                    <span style="color: #FFD166; margin-right: 8px;">★</span>${tip.substring(0, 40)}
-                  </li>
-                `).join('')}
-              </ul>
-            </div>
-
-            <!-- Carreras -->
-            <div style="flex: 1; min-width: 200px; background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-              <h4 style="margin: 0 0 15px; font-size: 13px; color: ${colors.primary}; font-weight: 600;">Carreras Afines</h4>
-              <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                ${(dominantStyle.careers || []).slice(0, 4).map(career => `
-                  <span style="background: ${colors.accent}; color: white; padding: 6px 12px; border-radius: 15px; font-size: 10px; font-weight: 500;">${career}</span>
-                `).join('')}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Footer -->
-        <div style="background: ${colors.primary}; color: white; padding: 20px 30px; text-align: center;">
-          <p style="margin: 0 0 5px; font-size: 11px; opacity: 0.8;">© 2024 Edutechlife - Transformando la educación con tecnología</p>
-          <p style="margin: 0; font-size: 12px; font-weight: 600;">www.edutechlife.co</p>
-        </div>
-      </div>
-    `;
+    return `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #333; }
+    .header { background: ${colors.primary}; color: white; padding: 15px 20px; }
+    .header h1 { font-size: 20px; }
+    .header p { font-size: 10px; }
+    .badge { background: ${colors.accent}; color: white; padding: 4px 10px; font-size: 9px; }
+    .info { background: ${colors.bg}; padding: 10px 20px; font-size: 11px; border-bottom: 1px solid #ddd; }
+    .hero { background: ${dominantColor}; color: white; padding: 20px; text-align: center; }
+    .hero h2 { font-size: 24px; }
+    .hero .percent { font-size: 36px; font-weight: bold; }
+    .section { padding: 15px 20px; background: white; }
+    .section h3 { font-size: 12px; color: ${colors.primary}; margin-bottom: 10px; }
+    table { width: 100%; border-collapse: collapse; }
+    td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+    .color-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .progress { background: #eee; height: 6px; margin-top: 3px; }
+    .progress-bar { height: 100%; }
+    .cards { display: table; width: 100%; }
+    .card { display: table-cell; width: 25%; padding: 10px; border: 1px solid #ddd; }
+    .card h4 { font-size: 11px; color: ${colors.primary}; margin-bottom: 8px; }
+    .card ul { padding-left: 15px; font-size: 10px; }
+    .card li { margin-bottom: 4px; }
+    .footer { background: ${colors.primary}; color: white; padding: 12px; text-align: center; font-size: 10px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <table width="100%"><tr>
+      <td><h1>EDUTECHLIFE</h1><p>Education Technology</p></td>
+      <td align="right"><span class="badge">DIAGNOSTICO VAK</span></td>
+    </tr></table>
+  </div>
+  <div class="info">
+    <strong>Estudiante:</strong> ${userName || 'Estudiante'} | <strong>Fecha:</strong> ${new Date().toLocaleDateString('es-CO')}
+  </div>
+  <div class="hero">
+    <p>Tu estilo de aprendizaje dominante</p>
+    <h2>${dominantStyle.name}</h2>
+    <div class="percent">${result.percentage}%</div>
+    <p>dominante</p>
+  </div>
+  <div class="section">
+    <h3>Distribucion de Estilos</h3>
+    <table>
+      <tr>
+        <td><span class="color-dot" style="background:${colors.accent}"></span><br><strong>Visual</strong><br>${result.percentages.visual}%</td>
+        <td><span class="color-dot" style="background:${colors.secondary}"></span><br><strong>Auditivo</strong><br>${result.percentages.auditivo}%</td>
+        <td><span class="color-dot" style="background:${colors.kinestesico}"></span><br><strong>Kinestesico</strong><br>${result.percentages.kinestesico}%</td>
+      </tr>
+    </table>
+    <div style="margin-top:10px;">
+      <div>Visual: ${result.percentages.visual}%<div class="progress"><div class="progress-bar" style="width:${result.percentages.visual}%;background:${colors.accent}"></div></div></div>
+      <div style="margin-top:5px;">Auditivo: ${result.percentages.auditivo}%<div class="progress"><div class="progress-bar" style="width:${result.percentages.auditivo}%;background:${colors.secondary}"></div></div></div>
+      <div style="margin-top:5px;">Kinestesico: ${result.percentages.kinestesico}%<div class="progress"><div class="progress-bar" style="width:${result.percentages.kinestesico}%;background:${colors.kinestesico}"></div></div></div>
+    </div>
+  </div>
+  <div class="section">
+    <table class="cards">
+      <tr>
+        <td class="card"><h4>Caracteristicas</h4><ul>${charList}</ul></td>
+        <td class="card"><h4>Estrategias</h4><ul>${stratList}</ul></td>
+        <td class="card"><h4>Tips</h4><ul>${tipList}</ul></td>
+        <td class="card"><h4>Carreras</h4>${careerList}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="footer">
+    <p>Edutechlife - Transformando la educacion con tecnologia</p>
+    <p>www.edutechlife.co</p>
+  </div>
+</body>
+</html>`;
   };
 
   const handleDownloadPDF = async () => {
@@ -318,21 +258,22 @@ const VAKDiagnostic = memo(({ onNavigate, userName: initialName = '', initialMoo
       console.log('[PDF] Contenedor creado, intentando html2pdf...');
       
       const opt = {
-        margin: 0,
+        margin: [10, 10, 10, 10],
         filename: filename,
-        image: { type: 'jpeg', quality: 0.98 },
+        image: { type: 'png', quality: 0.98 },
         html2canvas: { 
-          scale: 2, 
-          useCORS: true,
-          letterRendering: true,
-          logging: false
+          scale: 1,
+          useCORS: false,
+          letterRendering: false,
+          logging: false,
+          allowTaint: true,
+          backgroundColor: '#ffffff'
         },
         jsPDF: { 
           unit: 'mm', 
           format: 'a4', 
           orientation: 'portrait' 
-        },
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+        }
       };
 
       await html2pdf()
