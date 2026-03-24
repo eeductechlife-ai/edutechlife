@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import FloatingParticles from './FloatingParticles';
 
 const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
@@ -15,17 +15,6 @@ const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
         { progress: 90, text: 'Sincronizando datos...' },
         { progress: 100, text: '¡Listo!' },
     ];
-
-    const fallingBalls = useMemo(() => {
-        return Array.from({ length: 20 }, (_, i) => ({
-            id: i,
-            left: Math.random() * 100,
-            delay: Math.random() * 3,
-            duration: 2 + Math.random() * 2,
-            size: 8 + Math.random() * 16,
-            color: i % 3 === 0 ? '#4DA8C4' : i % 3 === 1 ? '#004B63' : '#B2D8E5'
-        }));
-    }, []);
 
     useEffect(() => {
         let currentStep = 0;
@@ -59,25 +48,6 @@ const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
         <div className={`loading-screen ${isExiting ? 'exiting' : ''}`}>
             {/* Floating Particles - Like Hero */}
             <FloatingParticles count={30} className="z-1" />
-
-            {/* Falling Balls 3D Effect */}
-            <div className="falling-balls-container">
-                {fallingBalls.map((ball) => (
-                    <div
-                        key={ball.id}
-                        className="falling-ball"
-                        style={{
-                            left: `${ball.left}%`,
-                            animationDelay: `${ball.delay}s`,
-                            animationDuration: `${ball.duration}s`,
-                            width: `${ball.size}px`,
-                            height: `${ball.size}px`,
-                            background: `radial-gradient(circle at 30% 30%, ${ball.color}, ${ball.color}88)`,
-                            boxShadow: `inset -3px -3px 6px rgba(0,0,0,0.2), 0 4px 8px ${ball.color}40`
-                        }}
-                    />
-                ))}
-            </div>
 
             <div className="loading-content">
                 <div className="loading-brand">
@@ -120,13 +90,13 @@ const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
                 <div className="loading-features">
                     <div className="feature-item premium">
                         <div className="feature-icon">
-                            <i className="fa-solid fa-brain" />
+                            <i className="fa-solid fa-robot" />
                         </div>
                         <span>IA Integrada</span>
                     </div>
                     <div className="feature-item premium">
                         <div className="feature-icon">
-                            <i className="fa-solid fa-layer-group" />
+                            <i className="fa-solid fa-brain" />
                         </div>
                         <span>VAK Metodología</span>
                     </div>

@@ -256,7 +256,15 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
         try {
             const promptWithContext = `${conversationContext}${contextWithKnowledge}\n\nUsuario pregunta: ${userMsg}\nNico:`;
             const r = await callDeepseek(promptWithContext, shortSystemPrompt, false);
-            const cleanResponse = r.replace(/[*_~`]/g, '').replace(/:\w+:/g, '');
+            const cleanResponse = r
+                .replace(/\*\*(.*?)\*\*/g, '$1')  // Quitar **negrita**
+                .replace(/\*(.*?)\*/g, '$1')       // Quitar *cursiva*
+                .replace(/__(.*?)__/g, '$1')       // Quitar __subrayado__
+                .replace(/_(.*?)_/g, '$1')         // Quitar _cursiva_
+                .replace(/`(.*?)`/g, '$1')         // Quitar `código`
+                .replace(/:\w+:/g, '')             // Quitar emojis
+                .replace(/\n{3,}/g, '\n\n')       // Normalizar saltos de línea
+                .trim();
             setBotMsgs(prev => [...prev, { role: 'assistant', text: cleanResponse, timestamp: new Date() }]);
             
             // Check for lead capture opportunity - Start conversational collection instead of modal
