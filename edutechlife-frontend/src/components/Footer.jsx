@@ -29,14 +29,16 @@ export default function Footer() {
             </p>
             <div className="flex gap-3 justify-center md:justify-start">
               {[
-                { icon: 'fa-brands fa-facebook-f', label: 'Facebook' },
-                { icon: 'fa-brands fa-instagram', label: 'Instagram' },
-                { icon: 'fa-brands fa-linkedin-in', label: 'LinkedIn' },
-                { icon: 'fa-brands fa-youtube', label: 'YouTube' },
+                { icon: 'fa-brands fa-facebook-f', label: 'Facebook', href: 'https://www.facebook.com/edutechlife' },
+                { icon: 'fa-brands fa-instagram', label: 'Instagram', href: 'https://www.instagram.com/edu_techlife/' },
+                { icon: 'fa-brands fa-linkedin-in', label: 'LinkedIn', href: 'https://www.linkedin.com/company/edutechlife' },
+                { icon: 'fa-brands fa-youtube', label: 'YouTube', href: 'https://www.youtube.com/@edutechlife' },
               ].map((social, i) => (
                 <a
                   key={i}
-                  href="#"
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   aria-label={social.label}
                   className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:bg-[#4DA8C4] hover:text-white transition-all duration-300"
                 >

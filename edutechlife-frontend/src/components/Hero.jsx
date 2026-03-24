@@ -54,17 +54,22 @@ const Hero = memo(({ onNavigate }) => {
 
     return (
         <section ref={heroRef} className="relative w-full min-h-screen flex items-center overflow-hidden font-open-sans">
-            {/* Floating Particles Background */}
-            <FloatingParticles count={25} className="z-0" />
+            {/* Floating Particles Background - Enhanced 3D */}
+            <FloatingParticles count={45} className="z-0" />
             
             {/* Soft Ambient Glows - Enhanced with 3D Effect */}
             <div className="absolute top-[-10%] right-[-5%] w-[40vw] h-[40vw] rounded-full bg-[#4DA8C4]/10 blur-[120px] pointer-events-none will-change-transform animate-[pulse-slow_8s_ease-in-out_infinite]" />
             <div className="absolute bottom-[-10%] left-[-5%] w-[50vw] h-[50vw] rounded-full bg-[#66CCCC]/10 blur-[120px] pointer-events-none will-change-transform animate-[pulse-slow_8s_ease-in-out_infinite]" style={{ animationDelay: '-4s' }} />
             
-            {/* Additional 3D Ambient Elements */}
-            <div className="absolute top-[20%] left-[10%] w-4 h-4 bg-[#4DA8C4]/30 rounded-full animate-[float-3d_6s_ease-in-out_infinite]" style={{ animationDelay: '-2s' }} />
+            {/* Additional 3D Ambient Elements - More particles */}
+            <div className="absolute top-[15%] left-[10%] w-4 h-4 bg-[#4DA8C4]/30 rounded-full animate-[float-3d_6s_ease-in-out_infinite]" style={{ animationDelay: '-2s' }} />
             <div className="absolute top-[60%] right-[15%] w-3 h-3 bg-[#66CCCC]/40 rounded-full animate-[float-3d_8s_ease-in-out_infinite]" style={{ animationDelay: '-4s' }} />
             <div className="absolute bottom-[30%] left-[20%] w-2 h-2 bg-[#FFD166]/30 rounded-full animate-[float-3d_7s_ease-in-out_infinite]" style={{ animationDelay: '-1s' }} />
+            <div className="absolute top-[40%] left-[25%] w-3 h-3 bg-[#4DA8C4]/25 rounded-full animate-[float-3d_9s_ease-in-out_infinite]" style={{ animationDelay: '-3s' }} />
+            <div className="absolute top-[25%] right-[30%] w-2 h-2 bg-[#66CCCC]/35 rounded-full animate-[float-3d_6s_ease-in-out_infinite]" style={{ animationDelay: '-5s' }} />
+            <div className="absolute bottom-[45%] right-[25%] w-4 h-4 bg-[#FFD166]/25 rounded-full animate-[float-3d_8s_ease-in-out_infinite]" style={{ animationDelay: '-2.5s' }} />
+            <div className="absolute bottom-[15%] left-[35%] w-3 h-3 bg-[#4DA8C4]/30 rounded-full animate-[float-3d_7s_ease-in-out_infinite]" style={{ animationDelay: '-6s' }} />
+            <div className="absolute top-[70%] left-[5%] w-2 h-2 bg-[#66CCCC]/25 rounded-full animate-[float-3d_9s_ease-in-out_infinite]" style={{ animationDelay: '-4.5s' }} />
             
             <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 py-20">
                 {/* Two-Column Layout */}

@@ -3,17 +3,18 @@ import { memo } from 'react';
 const FloatingParticles = ({ 
   count = 20, 
   className = '',
-  colors = ['#4DA8C4', '#66CCCC', '#004B63']
+  colors = ['#4DA8C4', '#66CCCC', '#004B63', '#B2D8E5', '#FFD166']
 }) => {
   const particles = Array.from({ length: count }, (_, i) => ({
     id: i,
-    size: Math.random() * 6 + 2,
+    size: Math.random() * 10 + 4,
     left: Math.random() * 100,
     top: Math.random() * 100,
-    delay: Math.random() * 8,
-    duration: Math.random() * 6 + 6,
+    delay: Math.random() * 10,
+    duration: Math.random() * 8 + 8,
     color: colors[i % colors.length],
-    blur: Math.random() > 0.7 ? 'blur-sm' : '',
+    blur: Math.random() > 0.5 ? 'blur-sm' : '',
+    zIndex: Math.floor(Math.random() * 10),
   }));
 
   return (
@@ -31,30 +32,32 @@ const FloatingParticles = ({
             left: `${particle.left}%`,
             top: `${particle.top}%`,
             backgroundColor: particle.color,
-            opacity: Math.random() * 0.4 + 0.2,
-            animation: `particle-float ${particle.duration}s ease-in-out ${particle.delay}s infinite`,
+            opacity: Math.random() * 0.5 + 0.3,
+            animation: `particle-float-3d ${particle.duration}s ease-in-out ${particle.delay}s infinite`,
             willChange: 'transform, opacity',
+            zIndex: particle.zIndex,
+            boxShadow: `0 0 ${particle.size * 2}px ${particle.color}`,
           }}
         />
       ))}
       
       <style>{`
-        @keyframes particle-float {
+        @keyframes particle-float-3d {
           0%, 100% {
-            transform: translate(0, 0) scale(1);
+            transform: translate(0, 0) scale(1) translateZ(0);
             opacity: 0.3;
           }
           25% {
-            transform: translate(20px, -30px) scale(1.3);
-            opacity: 0.6;
+            transform: translate(30px, -40px) scale(1.4) translateZ(20px);
+            opacity: 0.7;
           }
           50% {
-            transform: translate(-15px, -60px) scale(0.7);
+            transform: translate(-20px, -80px) scale(0.6) translateZ(-20px);
             opacity: 0.2;
           }
           75% {
-            transform: translate(30px, -25px) scale(1.1);
-            opacity: 0.5;
+            transform: translate(40px, -30px) scale(1.2) translateZ(10px);
+            opacity: 0.6;
           }
         }
       `}</style>
