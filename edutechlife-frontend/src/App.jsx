@@ -23,6 +23,7 @@ const AdminDashboard = lazy(() => import('./components/AdminDashboard'));
 import AdminLoginModal from './components/AdminLoginModal';
 import LoadingScreen, { MiniLoader } from './components/LoadingScreen';
 import { callDeepseek } from './utils/api';
+import { NICO_KNOWLEDGE_BASE } from './utils/knowledgeBase';
 
 /* ==================== PREMIUM CURSOR - ZERO LATENCY ==================== */
 /* Núcleo decursor maneja por CSS nativo - 0ms latencia */
@@ -173,7 +174,13 @@ const App = () => {
         setBotMsgs(prev => [...prev, { role: 'user', text: userMsg }]);
         setBotLoading(true);
 
-        const systemPrompt = "Eres Nico, el asistente de soporte de Edutechlife. Eres amable, profesional y ayudas a los usuarios (posibles clientes o estudiantes) a entender la plataforma o resolver dudas breves. Tienes toda la experiencia y la sabiduría para guiar en temas de pedagogía con inteligencia artificial, metodologías VAK y STEAM.";
+        const systemPrompt = `Eres Nico, el asistente de soporte de Edutechlife. Eres amable, profesional y ayudarte a los usuarios (posibles clientes o estudiantes) a entender la plataforma o resolver dudas breves.
+
+REGLA DE ORO: Para responder a las preguntas, básate ÚNICA Y EXCLUSIVAMENTE en la siguiente base de conocimientos. Si el usuario pregunta algo que no está en este texto, responde amablemente que no tienes esa información exacta pero que puede contactar a un asesor humano.
+
+--- BASE DE CONOCIMIENTOS OFICIAL ---
+${NICO_KNOWLEDGE_BASE}
+-------------------------------------`;
         const contextMessages = botMsgs.map(m => `${m.role === 'assistant' ? 'Nico' : 'Usuario'}: ${m.text}`).join('\n');
         const prompt = `${contextMessages}\nUsuario: ${userMsg}\nNico:`;
 
