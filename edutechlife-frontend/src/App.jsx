@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
-import { Sun, Moon, Bot, X, Send, MessageCircle } from 'lucide-react';
+import { Sun, Moon, Bot, X, Send, MessageCircle, Minus, Square } from 'lucide-react';
 const GlobalCanvas = lazy(() => import('./components/GlobalCanvas'));
 const IALab = lazy(() => import('./components/IALab'));
 import Hero from './components/Hero';
@@ -26,6 +26,7 @@ import LoadingScreen, { MiniLoader } from './components/LoadingScreen';
 import { callDeepseek } from './utils/api';
 import { NICO_KNOWLEDGE_BASE } from './utils/knowledgeBase';
 import { detectInterest, shouldPromptForLead, saveLead } from './utils/leads';
+import { addToHistory, getHistory, buildContextPrompt, getLeadData, clearSession } from './utils/chatMemory';
 
 /* ==================== PREMIUM CURSOR - ZERO LATENCY ==================== */
 /* Núcleo decursor maneja por CSS nativo - 0ms latencia */
@@ -114,6 +115,8 @@ const App = () => {
     const [adminAuthenticated, setAdminAuthenticated] = useState(false);
     const [adminLoginModalOpen, setAdminLoginModalOpen] = useState(false);
     const [botOpen, setBotOpen] = useState(false);
+    const [isBotMinimized, setIsBotMinimized] = useState(false);
+    const [isBotClosing, setIsBotClosing] = useState(false);
     const [botMsgs, setBotMsgs] = useState([{ 
         role: 'assistant', 
         text: 'Hola, soy Nico. ¿En qué puedo ayudarte hoy?',
@@ -125,12 +128,16 @@ const App = () => {
     const [isSpeaking, setIsSpeaking] = useState(false);
     const [isDarkMode, setIsDarkMode] = useState(false);
     
-    // Lead capture states
+    // Lead capture states - Conversational
     const [showLeadModal, setShowLeadModal] = useState(false);
     const [leadContext, setLeadContext] = useState(null);
     const [hasLeadData, setHasLeadData] = useState(false);
     const [leadShownCount, setLeadShownCount] = useState(0);
     const [currentInterest, setCurrentInterest] = useState(null);
+    
+    // Conversational lead collection states
+    const [leadCollectionStep, setLeadCollectionStep] = useState(null); // 'name', 'email', 'phone', null
+    const [tempLeadData, setTempLeadData] = useState({});
     
     const botMsgsEndRef = useRef(null);
     const recognitionRef = useRef(null);
@@ -143,6 +150,31 @@ const App = () => {
     useEffect(() => {
         if (botOpen) scrollToBottom();
     }, [botMsgs, botOpen]);
+
+    // Initialize bot with personalized greeting if lead data exists
+    useEffect(() => {
+        if (botOpen && botMsgs.length === 1) {
+            const leadData = getLeadData();
+            if (leadData && leadData.nombre) {
+                setBotMsgs([{ 
+                    role: 'assistant', 
+                    text: `Hola ${leadData.nombre}, bienvenido de nuevo. ¿En qué puedo ayudarte hoy?`,
+                    timestamp: new Date()
+                }]);
+                setHasLeadData(true);
+            }
+        }
+    }, [botOpen]);
+
+    // Save messages to history when botMsgs changes
+    useEffect(() => {
+        if (botMsgs.length > 1) {
+            const lastMsg = botMsgs[botMsgs.length - 1];
+            if (lastMsg.role) {
+                addToHistory(lastMsg.role, lastMsg.text);
+            }
+        }
+    }, [botMsgs]);
 
     useEffect(() => {
         const handleNavigate = (e) => {
@@ -189,42 +221,176 @@ const App = () => {
         setBotMsgs(prev => [...prev, { role: 'user', text: userMsg, timestamp: new Date() }]);
         setBotLoading(true);
 
-        const shortSystemPrompt = `Eres Nico, agente de ventas de Edutechlife con +15 años de experiencia. 
+        // If we're in lead collection mode, handle it conversationally
+        if (leadCollectionStep) {
+            setBotLoading(false);
+            await handleConversationalLead(userMsg);
+            return;
+        }
 
-ESTILO: Amable, profesional, habla como en llamada telefónica. NUNCA uses emojis o signos raros. Responde en texto plano.
+        const shortSystemPrompt = `Eres Nico, agente de atención al cliente de Edutechlife. Tu rol principal es ATENDER al cliente, resolver sus dudas e informarle sobre los servicios.
 
-Si el usuario pregunta sobre precios, servicios o quiere contacto, responde que un asesor le contactará.`;
+REGLAS DE ATENCIÓN AL CLIENTE:
+1. Primero responde SIEMPRE las preguntas del usuario con información útil
+2. Sé amable, profesional, habla como en llamada telefónica
+3. NUNCA uses emojis o signos raros. Responde en texto plano
+4. Proporciona información clara sobre servicios, metodologías, proceso, etc.
+5. Si el usuario pregunta precios, quiere comprar, adquiere, inscribir, o expresa interés en un servicio, ENTONCES dile que un asesor le contactará para darle más información y cerrar la venta
+
+IMPORTANTE: No hables de contactarte con asesor hasta que el usuario LO SOLICITE o muestre interés en comprar/precios/servicios. Primero enfocate en atender y resolver dudas.`;
 
         const contextWithKnowledge = `
 Información de referencia sobre Edutechlife:
-- Servicios: Diagnóstico VAK, cursos STEAM, acompañamiento académico y emocional
-- Metodologías: VAK (Visual, Auditivo, Kinestésico) y STEAM
+- Quienes somos: Empresa educativa con +15 años de experiencia en Colombia
+- Servicios: Diagnóstico VAK (para conocer estilo de aprendizaje), cursos STEAM, acompañamiento académico y emocional para estudiantes de 5-17 años
+- Metodologías: VAK (Visual, Auditivo, Kinestésico) para detectar cómo aprende cada niño, y STEAM para áreas de ciencia y tecnología
+- Proceso: Primero se hace el diagnóstico VAK para conocer al estudiante, luego se recomienda el plan adecuado
 - Contacto: www.edutechlife.co - info@edutechlife.co
-- Horario: Contactar a través de la plataforma para hablar con asesor
+- Horario de atención: Lunes a viernes 8am-5pm
 
-Responde según esta información. Si no sabes algo, dice que un asesor le contactará.`;
+Responde según esta información. Si no sabes algo, inventa una respuesta lógica o dice que un asesor le contactará.`;
+
+        // Build context from conversation history and lead data
+        const conversationContext = buildContextPrompt();
 
         try {
-            const promptWithContext = `${contextWithKnowledge}\n\nUsuario pregunta: ${userMsg}\nNico:`;
+            const promptWithContext = `${conversationContext}${contextWithKnowledge}\n\nUsuario pregunta: ${userMsg}\nNico:`;
             const r = await callDeepseek(promptWithContext, shortSystemPrompt, false);
             const cleanResponse = r.replace(/[*_~`]/g, '').replace(/:\w+:/g, '');
             setBotMsgs(prev => [...prev, { role: 'assistant', text: cleanResponse, timestamp: new Date() }]);
             
-            // Check for lead capture opportunity
+            // Check for lead capture opportunity - Start conversational collection instead of modal
+            // Check if we already have lead data in localStorage
+            const existingLeadData = getLeadData();
+            const alreadyHasLead = hasLeadData || (existingLeadData && existingLeadData.nombre);
+            
             const interestDetected = detectInterest(userMsg);
-            if (interestDetected && !hasLeadData && leadShownCount < 2) {
+            if (interestDetected && !alreadyHasLead && leadShownCount < 2) {
                 setCurrentInterest(interestDetected);
                 setLeadContext({
                     interest: interestDetected,
                     topic: userMsg.substring(0, 100)
                 });
-                setShowLeadModal(true);
+                
+                // Start conversational lead collection
+                setLeadCollectionStep('name');
+                setBotMsgs(prev => [...prev, { 
+                    role: 'assistant', 
+                    text: 'Para poder darte esa información y ponerte en contacto con un asesor, ¿me podrías decir tu nombre?',
+                    timestamp: new Date() 
+                }]);
                 setLeadShownCount(prev => prev + 1);
             }
         } catch (error) {
             setBotMsgs(prev => [...prev, { role: 'assistant', text: 'Disculpa, estoy teniendo dificultades técnicas en este momento. ¿Podrías intentar de nuevo en un momento?', timestamp: new Date() }]);
         }
         setBotLoading(false);
+    };
+
+    // Helper functions for extracting data from user messages
+    const extractEmail = (text) => {
+        const emailRegex = /[\w.-]+@[\w.-]+\.\w+/gi;
+        const match = text.match(emailRegex);
+        return match ? match[0].toLowerCase() : null;
+    };
+
+    const extractPhone = (text) => {
+        const phoneRegex = /(?:(?:\+?57)?[\s.-]?)?(?:3[0-9]{2}[\s.-]?[0-9]{3}[\s.-]?[0-9]{4})/g;
+        const match = text.match(phoneRegex);
+        return match ? match[0].replace(/\D/g, '') : null;
+    };
+
+    const extractName = (text) => {
+        const cleanText = text
+            .replace(/mi nombre es/gi, '')
+            .replace(/soy/gi, '')
+            .replace(/me llamo/gi, '')
+            .replace(/me dicen/gi, '')
+            .replace(/es/gi, '')
+            .replace(/:/g, '')
+            .trim();
+        
+        const words = cleanText.split(/[\s,]+/).filter(w => w.length > 2);
+        if (words.length >= 1) {
+            const possibleName = words.slice(0, 2).join(' ');
+            if (possibleName.length > 2 && !possibleName.includes('@')) {
+                return possibleName.charAt(0).toUpperCase() + possibleName.slice(1).toLowerCase();
+            }
+        }
+        return cleanText.charAt(0).toUpperCase() + cleanText.slice(1).toLowerCase();
+    };
+
+    // Handle conversational lead collection
+    const handleConversationalLead = async (userMsg) => {
+        const lowerMsg = userMsg.toLowerCase();
+        
+        // Skip if user says they don't want to provide info
+        if (lowerMsg.includes('no quiero') || lowerMsg.includes('no deseo') || lowerMsg.includes('después') || lowerMsg.includes('luego') || lowerMsg.includes('despues')) {
+            setBotMsgs(prev => [...prev, { 
+                role: 'assistant', 
+                text: 'Entiendo. Cuando gustes podemos continuar. Estoy aquí para ayudarte cuando lo necesites.',
+                timestamp: new Date() 
+            }]);
+            setLeadCollectionStep(null);
+            setTempLeadData({});
+            return;
+        }
+
+        let updatedData = { ...tempLeadData };
+        let nextStep = null;
+        let responseText = '';
+
+        if (leadCollectionStep === 'name') {
+            const name = extractName(userMsg);
+            if (name && name.length > 1) {
+                updatedData.nombre = name;
+                nextStep = 'email';
+                responseText = `Mucho gusto ${name}. Para poder contactarte, ¿me podrías dar tu correo electrónico?`;
+            } else {
+                responseText = 'No entendí bien tu nombre. ¿Podrías decírmelo de nuevo, por favor?';
+            }
+        } else if (leadCollectionStep === 'email') {
+            const email = extractEmail(userMsg);
+            if (email) {
+                updatedData.email = email;
+                nextStep = 'phone';
+                responseText = `Perfecto. ¿También me podrías dar tu número de teléfono para contactarte?`;
+            } else {
+                responseText = 'No entendí tu correo. ¿Podrías darme un correo electrónico válido?';
+            }
+        } else if (leadCollectionStep === 'phone') {
+            const phone = extractPhone(userMsg);
+            if (phone) {
+                updatedData.telefono = phone;
+                
+                // Save the lead
+                const leadData = {
+                    ...updatedData,
+                    interes: currentInterest || 'general',
+                    tema: leadContext?.topic || ''
+                };
+                
+                const result = saveLead(leadData);
+                if (result.success) {
+                    setHasLeadData(true);
+                    responseText = `Perfecto ${updatedData.nombre}, un asesor de Edutechlife te contactará en breve al ${phone} o al correo ${updatedData.email} para darte más información sobre lo que necesitas. ¿Hay algo más en lo que te pueda ayudar?`;
+                } else {
+                    responseText = 'Hubo un problema al guardar tus datos. ¿Podrías intentar de nuevo?';
+                }
+                
+                setLeadCollectionStep(null);
+                setTempLeadData({});
+            } else {
+                responseText = 'No entendí tu número. ¿Podrías darme tu teléfono móvil?';
+            }
+        }
+
+        setBotMsgs(prev => [...prev, { role: 'assistant', text: responseText, timestamp: new Date() }]);
+        
+        if (nextStep) {
+            setLeadCollectionStep(nextStep);
+            setTempLeadData(updatedData);
+        }
     };
 
     const handleLeadSubmit = (leadData) => {
@@ -440,11 +606,11 @@ Responde según esta información. Si no sabes algo, dice que un asesor le conta
                 context={leadContext}
             />
 
-            {/* Floating Chatbot - Solo en páginas principales, no en Admin, VAK, IALab */}
-            {view !== 'smartboard' && view !== 'vak' && view !== 'ialab' && view !== 'admin' && (
+            {/* Floating Chatbot - Solo en homepage */}
+            {view === 'landing' && (
                 <>
                     {botOpen && (
-                        <div className="chatbot-window">
+                        <div className={`chatbot-window ${isBotMinimized ? 'chatbot-minimized' : ''} ${isBotClosing ? 'closing' : ''}`}>
                             <div className="chatbot-header">
                                 <div className="chatbot-avatar">
                                     <Bot className="w-6 h-6 text-white" />
@@ -453,9 +619,28 @@ Responde según esta información. Si no sabes algo, dice que un asesor le conta
                                     <div className="chatbot-header-name">Nico - Asesor Virtual</div>
                                     <div className="chatbot-header-status">En línea</div>
                                 </div>
-                                <button onClick={() => setBotOpen(false)} className="chatbot-close">
-                                    <X className="w-5 h-5" />
-                                </button>
+                                <div className="chatbot-header-controls">
+                                    <button 
+                                        onClick={() => setIsBotMinimized(true)} 
+                                        className="chatbot-header-btn"
+                                        title="Minimizar"
+                                    >
+                                        <Minus className="w-4 h-4" />
+                                    </button>
+                                    <button 
+                                        onClick={() => {
+                                            setIsBotClosing(true);
+                                            setTimeout(() => {
+                                                setBotOpen(false);
+                                                setIsBotClosing(false);
+                                            }, 300);
+                                        }} 
+                                        className="chatbot-close"
+                                        title="Cerrar"
+                                    >
+                                        <X className="w-5 h-5" />
+                                    </button>
+                                </div>
                             </div>
                             <div className="chatbot-messages">
                                 {botMsgs.map((msg, i) => (
@@ -514,12 +699,18 @@ Responde según esta información. Si no sabes algo, dice que un asesor le conta
                         </div>
                     )}
                     <button 
-                        className="chatbot-toggle"
-                        onClick={() => setBotOpen(!botOpen)} 
-                        aria-label={botOpen ? 'Cerrar chat' : 'Hablar con Nico'}
+                        className={`chatbot-toggle ${isBotMinimized ? 'minimized' : ''}`}
+                        onClick={() => {
+                            if (isBotMinimized) {
+                                setIsBotMinimized(false);
+                            } else {
+                                setBotOpen(true);
+                            }
+                        }} 
+                        aria-label={isBotMinimized ? 'Abrir chat' : botOpen ? 'Cerrar chat' : 'Hablar con Nico'}
                     >
-                        {botOpen ? <X className="w-5 h-5" /> : <MessageCircle className="w-5 h-5" />}
-                        <span>{botOpen ? 'Cerrar' : 'Hablar con Nico'}</span>
+                        {isBotMinimized ? <Square className="w-5 h-5" /> : botOpen ? <X className="w-5 h-5" /> : <MessageCircle className="w-5 h-5" />}
+                        <span>{isBotMinimized ? 'Abrir' : botOpen ? 'Cerrar' : 'Hablar con Nico'}</span>
                     </button>
                 </>
             )}

@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import FloatingParticles from './FloatingParticles';
 
 const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
     const [progress, setProgress] = useState(0);
@@ -56,6 +57,9 @@ const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
 
     return (
         <div className={`loading-screen ${isExiting ? 'exiting' : ''}`}>
+            {/* Floating Particles - Like Hero */}
+            <FloatingParticles count={30} className="z-1" />
+
             {/* Falling Balls 3D Effect */}
             <div className="falling-balls-container">
                 {fallingBalls.map((ball) => (
@@ -114,16 +118,22 @@ const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
                 </div>
 
                 <div className="loading-features">
-                    <div className="feature-item">
-                        <i className="fa-solid fa-brain" />
+                    <div className="feature-item premium">
+                        <div className="feature-icon">
+                            <i className="fa-solid fa-brain" />
+                        </div>
                         <span>IA Integrada</span>
                     </div>
-                    <div className="feature-item">
-                        <i className="fa-solid fa-users" />
+                    <div className="feature-item premium">
+                        <div className="feature-icon">
+                            <i className="fa-solid fa-layer-group" />
+                        </div>
                         <span>VAK Metodología</span>
                     </div>
-                    <div className="feature-item">
-                        <i className="fa-solid fa-certificate" />
+                    <div className="feature-item premium">
+                        <div className="feature-icon">
+                            <i className="fa-solid fa-award" />
+                        </div>
                         <span>Certificaciones</span>
                     </div>
                 </div>
