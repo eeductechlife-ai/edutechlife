@@ -24,24 +24,62 @@ const AdminDashboard = lazy(() => import('./components/AdminDashboard'));
 import AdminLoginModal from './components/AdminLoginModal';
 import LeadCaptureModal from './components/LeadCaptureModal';
 import LoadingScreen, { MiniLoader } from './components/LoadingScreen';
-import { callDeepseek } from './utils/api';
+import { callDeepseek, callDeepseekStream } from './utils/api';
+
+// Cache de preguntas frecuentes para respuestas instantáneas
+const responseCache = new Map();
+
+// Preguntas frecuentes con respuestas predefinidas
+const frequentQuestions = [
+  { patterns: ['hola', 'buenos días', 'buenas tardes', 'buenas noches', 'hello', 'hey'], 
+    response: '¡Hola! Soy Nico, tu asistente virtual de Edutechlife. ¿En qué puedo ayudarte hoy?' },
+  { patterns: ['servicios', 'qué hacen', 'a qué se dedican', 'qué ofrecen'], 
+    response: 'En Edutechlife ofrecemos: Diagnóstico VAK (para conocer el estilo de aprendizaje), Cursos STEAM, Acompañamiento académico y emocional, y Consultoría B2B. ¿Te gustaría más información sobre alguno?' },
+  { patterns: ['contacto', 'hablar con alguien', 'asesor', 'hablar con un experto'], 
+    response: '¡Con gusto! Un asesor te contactará pronto. ¿Me puedes dar tu nombre y teléfono?' },
+  { patterns: ['gracias', 'thank', 'thanks'], 
+    response: '¡De nada! Estoy aquí para ayudarte. ¿Hay algo más en lo que pueda colaborarte?' },
+  { patterns: ['adiós', 'bye', 'hasta luego', 'nos vemos'], 
+    response: '¡Hasta luego! Que tengas un excelente día. Cuando gustes, aquí estaré para ayudarte.' },
+];
+
+// Función para buscar en cache
+const getCachedResponse = (message) => {
+  const lowerMsg = message.toLowerCase().trim();
+  for (const faq of frequentQuestions) {
+    for (const pattern of faq.patterns) {
+      if (lowerMsg.includes(pattern)) {
+        return faq.response;
+      }
+    }
+  }
+  return null;
+};
 import { NICO_KNOWLEDGE_BASE } from './utils/knowledgeBase';
 import { detectInterest, shouldPromptForLead, saveLead } from './utils/leads';
 import { addToHistory, getHistory, buildContextPrompt, getLeadData, clearSession } from './utils/chatMemory';
 
 /* ==================== PREMIUM CURSOR - ZERO LATENCY ==================== */
 /* Núcleo decursor maneja por CSS nativo - 0ms latencia */
-/* Aura visual con GPU acceleration - solo elementos interactivos */
+/* Aura visual con GPU acceleration - siempre visible */
 const CustomCursor = () => {
     const cursorX = useMotionValue(-100);
     const cursorY = useMotionValue(-100);
     
-    const springConfig = { damping: 25, stiffness: 500, mass: 0.5 };
+    const springConfig = { damping: 30, stiffness: 400, mass: 0.5 };
     const cursorXSpring = useSpring(cursorX, springConfig);
     const cursorYSpring = useSpring(cursorY, springConfig);
     
     const isHovering = useMotionValue(0);
+    const isClicking = useMotionValue(0);
     const scaleTransform = useSpring(1, springConfig);
+    const clickScale = useSpring(1, { damping: 20, stiffness: 600 });
+    
+    // Trail positions
+    const trail1X = useSpring(cursorX, { damping: 35, stiffness: 300, mass: 0.8 });
+    const trail1Y = useSpring(cursorY, { damping: 35, stiffness: 300, mass: 0.8 });
+    const trail2X = useSpring(cursorX, { damping: 40, stiffness: 200, mass: 1.2 });
+    const trail2Y = useSpring(cursorY, { damping: 40, stiffness: 200, mass: 1.2 });
     
     useEffect(() => {
         const moveCursor = (e) => {
@@ -51,58 +89,124 @@ const CustomCursor = () => {
         
         const handleMouseOver = (e) => {
             const target = e.target;
-            if (target.closest('a') || target.closest('button') || target.closest('[role="button"]') || target.closest('.interactive')) {
+            if (target.closest('a') || target.closest('button') || target.closest('[role="button"]') || target.closest('.interactive') || target.closest('input') || target.closest('select') || target.closest('textarea')) {
                 isHovering.set(1);
             }
         };
         
         const handleMouseOut = (e) => {
             const target = e.target;
-            if (target.closest('a') || target.closest('button') || target.closest('[role="button"]') || target.closest('.interactive')) {
+            if (target.closest('a') || target.closest('button') || target.closest('[role="button"]') || target.closest('.interactive') || target.closest('input') || target.closest('select') || target.closest('textarea')) {
                 isHovering.set(0);
             }
+        };
+        
+        const handleMouseDown = () => {
+            isClicking.set(1);
+            clickScale.set(0.8);
+        };
+        
+        const handleMouseUp = () => {
+            isClicking.set(0);
+            clickScale.set(1);
         };
 
         window.addEventListener('mousemove', moveCursor, { passive: true });
         window.addEventListener('mouseover', handleMouseOver, { passive: true });
         window.addEventListener('mouseout', handleMouseOut, { passive: true });
+        window.addEventListener('mousedown', handleMouseDown, { passive: true });
+        window.addEventListener('mouseup', handleMouseUp, { passive: true });
         
         return () => {
             window.removeEventListener('mousemove', moveCursor);
             window.removeEventListener('mouseover', handleMouseOver);
             window.removeEventListener('mouseout', handleMouseOut);
+            window.removeEventListener('mousedown', handleMouseDown);
+            window.removeEventListener('mouseup', handleMouseUp);
         };
     }, []);
 
     useEffect(() => {
         const interval = setInterval(() => {
-            const current = isHovering.get();
-            scaleTransform.set(current === 1 ? 1.5 : 1);
+            const hovering = isHovering.get();
+            const clicking = isClicking.get();
+            const baseScale = clicking ? 0.8 : (hovering ? 1.8 : 1);
+            scaleTransform.set(baseScale);
         }, 16);
         return () => clearInterval(interval);
-    }, [isHovering, scaleTransform]);
+    }, [isHovering, isClicking, scaleTransform]);
 
     return (
         <motion.div
             className="hidden lg:block fixed inset-0 pointer-events-none z-[9999]"
             style={{ x: cursorXSpring, y: cursorYSpring }}
         >
+            {/* Trail 2 - furthest */}
             <motion.div
-                className="absolute w-8 h-8 rounded-full border-2 border-[#004B63]/60 pointer-events-none"
+                className="absolute w-12 h-12 rounded-full pointer-events-none"
+                style={{
+                    translateX: '-50%',
+                    translateY: '-50%',
+                    x: trail2X,
+                    y: trail2Y,
+                    scale: scaleTransform,
+                    backgroundColor: 'rgba(77, 168, 196, 0.03)',
+                    willChange: 'transform',
+                }}
+            />
+            
+            {/* Trail 1 - middle */}
+            <motion.div
+                className="absolute w-8 h-8 rounded-full pointer-events-none"
+                style={{
+                    translateX: '-50%',
+                    translateY: '-50%',
+                    x: trail1X,
+                    y: trail1Y,
+                    scale: scaleTransform,
+                    backgroundColor: 'rgba(77, 168, 196, 0.08)',
+                    willChange: 'transform',
+                }}
+            />
+            
+            {/* Outer ring - hover effect */}
+            <motion.div
+                className="absolute w-10 h-10 rounded-full border-2 pointer-events-none"
                 style={{
                     translateX: '-50%',
                     translateY: '-50%',
                     scale: scaleTransform,
-                    backgroundColor: 'rgba(77, 168, 196, 0.15)',
-                    willChange: 'transform',
+                    borderColor: isHovering ? 'rgba(77, 168, 196, 0.6)' : 'rgba(0, 75, 99, 0.3)',
+                    backgroundColor: isHovering ? 'rgba(77, 168, 196, 0.1)' : 'rgba(77, 168, 196, 0.05)',
+                    willChange: 'transform, borderColor, backgroundColor',
                 }}
             />
+            
+            {/* Main dot - always visible */}
             <motion.div
-                className="absolute w-2 h-2 rounded-full bg-[#4DA8C4] pointer-events-none"
+                className="absolute w-3 h-3 rounded-full pointer-events-none"
                 style={{
                     translateX: '-50%',
                     translateY: '-50%',
-                    willChange: 'transform',
+                    backgroundColor: isHovering ? '#004B63' : '#4DA8C4',
+                    scale: clickScale,
+                    willChange: 'transform, backgroundColor',
+                    boxShadow: isHovering 
+                        ? '0 0 10px rgba(0, 75, 99, 0.5)' 
+                        : '0 0 8px rgba(77, 168, 196, 0.4)',
+                }}
+            />
+            
+            {/* Click effect - pulse */}
+            <motion.div
+                className="absolute w-6 h-6 rounded-full pointer-events-none"
+                style={{
+                    translateX: '-50%',
+                    translateY: '-50%',
+                    scale: clickScale,
+                    backgroundColor: 'rgba(77, 168, 196, 0.3)',
+                    opacity: isClicking,
+                    willChange: 'transform, opacity',
                 }}
             />
         </motion.div>
@@ -272,21 +376,48 @@ Información de referencia sobre Edutechlife:
 
 Responde según esta información. Si no sabes algo, inventa una respuesta lógica o dice que un asesor le contactará.`;
 
-        // Build context from conversation history and lead data
-        const conversationContext = buildContextPrompt();
+        // Build context from conversation history and lead data (reducido a 5 mensajes)
+        const conversationHistory = getHistory().slice(-10); // Últimos 5 intercambios
+        
+        // Verificar cache primero
+        const cachedResponse = getCachedResponse(userMsg);
+        
+        if (cachedResponse) {
+          setBotMsgs(prev => [...prev, { role: 'assistant', text: cachedResponse, timestamp: new Date() }]);
+          setBotLoading(false);
+          return;
+        }
 
         try {
-            const promptWithContext = `${conversationContext}${contextWithKnowledge}\n\nUsuario pregunta: ${userMsg}\nNico:`;
-            const r = await callDeepseek(promptWithContext, shortSystemPrompt, false);
-            const cleanResponse = r
-                .replace(/\*\*(.*?)\*\*/g, '$1')  // Quitar **negrita**
-                .replace(/\*(.*?)\*/g, '$1')       // Quitar *cursiva*
-                .replace(/__(.*?)__/g, '$1')       // Quitar __subrayado__
-                .replace(/_(.*?)_/g, '$1')         // Quitar _cursiva_
-                .replace(/`(.*?)`/g, '$1')         // Quitar `código`
-                .replace(/:\w+:/g, '')             // Quitar emojis
-                .replace(/\n{3,}/g, '\n\n')       // Normalizar saltos de línea
-                .trim();
+            const historyContext = conversationHistory.length > 0 
+                ? `\nConversación anterior:\n${conversationHistory.map(m => `${m.role === 'user' ? 'Usuario' : 'Nico'}: ${m.text}`).join('\n')}\n`
+                : '';
+            
+            const promptWithContext = `${historyContext}${contextWithKnowledge}\n\nUsuario pregunta: ${userMsg}\nNico:`;
+            
+            // Usar streaming para percepción más rápida
+            const fullResponse = await callDeepseekStream(
+                promptWithContext, 
+                shortSystemPrompt, 
+                false,
+                (chunk) => {
+                    // Aquí podríamos mostrar el texto gradual pero por simplicidad
+                    // esperamos la respuesta completa
+                }
+            );
+            
+            const cleanResponse = fullResponse
+                ? fullResponse
+                    .replace(/\*\*(.*?)\*\*/g, '$1')
+                    .replace(/\*(.*?)\*/g, '$1')
+                    .replace(/__(.*?)__/g, '$1')
+                    .replace(/_(.*?)_/g, '$1')
+                    .replace(/`(.*?)`/g, '$1')
+                    .replace(/:\w+:/g, '')
+                    .replace(/\n{3,}/g, '\n\n')
+                    .trim()
+                : 'Disculpa, no pude generar una respuesta. ¿Podrías intentar de nuevo?';
+            
             setBotMsgs(prev => [...prev, { role: 'assistant', text: cleanResponse, timestamp: new Date() }]);
             
             // Check for lead capture opportunity
@@ -701,12 +832,6 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                             <button 
                                 onClick={() => {
                                     handleNavigate('landing');
-                                    setTimeout(() => {
-                                        const esenciaSection = document.getElementById('esencia');
-                                        if (esenciaSection) {
-                                            esenciaSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                        }
-                                    }, 100);
                                 }}
                                 className="text-sm font-medium text-gray-600 hover:text-[#004B63] transition-colors duration-200"
                             >
