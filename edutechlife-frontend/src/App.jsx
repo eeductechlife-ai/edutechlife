@@ -233,6 +233,7 @@ const App = () => {
     const [botLoading, setBotLoading] = useState(false);
     const [isListening, setIsListening] = useState(false);
     const [isSpeaking, setIsSpeaking] = useState(false);
+    const [audioMode, setAudioMode] = useState(false); // Modo conversación en audio
     const [isDarkMode, setIsDarkMode] = useState(false);
     
     // Lead capture states - Conversational
@@ -421,6 +422,14 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                 : 'Disculpa, no pude generar una respuesta. ¿Podrías intentar de nuevo?';
             
             setBotMsgs(prev => [...prev, { role: 'assistant', text: cleanResponse, timestamp: new Date() }]);
+            
+            // Si el modo audio está activado, reproducir automáticamente la respuesta
+            if (audioMode) {
+                setIsSpeaking(true);
+                await speakTextConversational(cleanResponse, 'nico', () => {
+                    setIsSpeaking(false);
+                });
+            }
             
             // Check for lead capture opportunity
             const existingLeadData = getLeadData();
@@ -1046,10 +1055,36 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                             <div className="chatbot-header">
                                 <div className="chatbot-avatar">
                                     <Bot className="w-6 h-6 text-white" />
+                                    <div className={`chatbot-avatar-status ${isSpeaking ? 'speaking' : isListening ? 'listening' : 'online'}`}></div>
                                 </div>
                                 <div className="chatbot-header-info">
                                     <div className="chatbot-header-name">Nico - Asesor Virtual</div>
-                                    <div className="chatbot-header-status">En línea</div>
+                                    <div className="chatbot-header-status">
+                                        {isSpeaking ? 'Hablando...' : isListening ? 'Escuchando' : 'En línea'}
+                                    </div>
+                                </div>
+                                {/* Toggle Modo Audio */}
+                                <div className="chatbot-mode-toggle">
+                                    <button 
+                                        className={`chatbot-mode-btn audio ${audioMode ? 'active' : ''}`}
+                                        onClick={() => setAudioMode(true)}
+                                        title="Modo Audio"
+                                    >
+                                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                                        </svg>
+                                        Audio
+                                    </button>
+                                    <button 
+                                        className={`chatbot-mode-btn text ${!audioMode ? 'active' : ''}`}
+                                        onClick={() => setAudioMode(false)}
+                                        title="Modo Texto"
+                                    >
+                                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                                        </svg>
+                                        Texto
+                                    </button>
                                 </div>
                                 <div className="chatbot-header-controls">
                                     <button 
@@ -1075,19 +1110,28 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                                 </div>
                             </div>
                             <div className="chatbot-messages">
+                                {/* Onda sonora cuando Nico está hablando */}
+                                {isSpeaking && (
+                                    <div className="sound-wave">
+                                        <div className="sound-wave-bar"></div>
+                                        <div className="sound-wave-bar"></div>
+                                        <div className="sound-wave-bar"></div>
+                                        <div className="sound-wave-bar"></div>
+                                    </div>
+                                )}
                                 {botMsgs.map((msg, i) => (
                                     <div key={i} className={`chatbot-msg ${msg.role}`}>
                                         <div className="chatbot-msg-content">{msg.text}</div>
                                         <div className="chatbot-msg-time">
                                             {msg.timestamp ? msg.timestamp.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' }) : ''}
                                         </div>
-                                        {msg.role === 'assistant' && (
+                                        {msg.role === 'assistant' && !audioMode && (
                                             <button 
-                                                className="chatbot-msg-audio" 
+                                                className={`chatbot-msg-audio ${isSpeaking ? 'speaking' : ''}`}
                                                 onClick={() => isSpeaking ? stopSpeaking() : speakText(msg.text)}
                                                 title={isSpeaking ? 'Detener' : 'Escuchar'}
                                             >
-                                                {isSpeaking ? <X className="w-4 h-4" /> : <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>}
+                                                {isSpeaking ? <X className="w-3 h-3" /> : <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>}
                                             </button>
                                         )}
                                     </div>

@@ -8,6 +8,7 @@ import {
   TrendingUp,
   Rocket,
   ArrowRight,
+  ArrowLeft,
   X,
   Sun,
   Moon,
@@ -58,11 +59,13 @@ import {
   Search,
   Filter,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
   TrendingDown,
   BarChart3,
   Home,
   Cpu,
-  ChevronRight,
   Star,
   Flame,
   Calculator,
@@ -120,14 +123,12 @@ import {
   Bookmark,
   UsersRound,
   CalculatorIcon as CalcIcon,
-  ChevronUp,
   Box,
   Terminal,
   ClipboardCheck,
   Tag,
   Mail,
   Check,
-   ArrowLeft,
   Handshake,
   FlaskConical,
   Video,
@@ -171,6 +172,7 @@ export const faToLucideMap = {
   'fa-users': Users,
   'fa-handshake': Handshake,
   'fa-flask-vial': FlaskConical,
+  'fa-flask': FlaskConical,
   'fa-building': Building2,
   'fa-chart-pie': PieChart,
   'fa-headset': Headphones,
@@ -221,6 +223,7 @@ export const faToLucideMap = {
   'fa-filter': Filter,
   'fa-chevron-down': ChevronDown,
   'fa-chevron-right': ChevronRight,
+  'fa-chevron-left': ChevronLeft,
   'fa-chart-line-down': TrendingDown,
   'fa-chart-bar': BarChart3,
   'fa-home': Home,
@@ -281,15 +284,17 @@ export function getLucideIcon(faClassName) {
     return faToLucideMap[key];
   }
   
-  // Fallback to generic icon
-  console.warn(`No Lucide mapping found for ${faClassName}, using Zap as fallback`);
-  return Zap;
+  // Fallback to null (silent)
+  return null;
 }
 
 // Component wrapper for easy usage
 export function Icon({ name, className = "w-5 h-5", ...props }) {
   const LucideIcon = getLucideIcon(name);
+  if (!LucideIcon) return null;
   return <LucideIcon className={className} {...props} />;
 }
 
 // Export all Lucide icons for convenience
+
+// Fix deploy 2
