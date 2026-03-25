@@ -158,16 +158,16 @@ const Hero = memo(({ onNavigate }) => {
                                 className="group relative overflow-hidden flex items-center justify-center gap-3 px-8 py-4 rounded-full text-lg font-bold bg-gradient-to-r from-[#004B63] to-[#006a8e] text-white hover:shadow-[0_0_30px_rgba(77,168,196,0.6)] transition-all duration-300 border border-[#4DA8C4]/30"
                             >
                                 <span className="absolute inset-0 w-[150%] h-full -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-[sweep_1.5s_ease-in-out_infinite] skew-x-[-20deg]" />
-                                <span className="text-white relative z-10">Inicializar IA Lab</span>
+                                <span className="text-white relative z-10">IA Lab Pro</span>
                                 <Icon name="fa-arrow-right" className="text-white/80 relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
                             </MagneticButton>
                             
                             <MagneticButton 
-                                onClick={() => onNavigate('consultoria')}
+                                onClick={() => onNavigate('smartboard')}
                                 className="group flex items-center justify-center gap-3 px-8 py-4 rounded-full text-lg font-bold bg-transparent border-2 border-[#004B63] text-[#004B63] hover:bg-[#004B63] hover:text-white hover:shadow-[0_0_20px_rgba(77,168,196,0.4)] transition-all duration-300"
                             >
-                                <Icon name="fa-briefcase" className="text-[#004B63] group-hover:text-white transition-colors" />
-                                Integración B2B
+                                <Icon name="fa-chalkboard" className="text-[#004B63] group-hover:text-white transition-colors" />
+                                SmartBoard
                             </MagneticButton>
                         </motion.div>
                     </div>

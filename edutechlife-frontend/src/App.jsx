@@ -812,23 +812,23 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
 
             {/* Header - Navigation Premium - Hidden on SmartBoard, IALab and Admin */}
             {view !== 'smartboard' && view !== 'ialab' && view !== 'admin' && (
-                <header className="sticky top-0 left-0 right-0 z-[1000] bg-white border-b border-gray-100">
+                <header className="sticky top-0 left-0 right-0 z-[1000] bg-white/90 backdrop-blur-sm shadow-sm border-b border-gray-100">
                     <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between py-3">
-                        {/* Logo Premium - Smaller */}
+                        {/* Logo */}
                         <button 
                             onClick={() => handleNavigate('landing')}
-                            className="flex items-center group"
+                            className="flex items-center"
                             aria-label="Ir al inicio"
                         >
                             <img 
                                 src="/images/logo-edutechlife.webp" 
                                 alt="Edutechlife" 
-                                className="h-5 w-auto transition-all duration-300 group-hover:opacity-80"
+                                className="h-7 w-auto"
                             />
                         </button>
                         
-                        {/* Navigation Links - Active */}
-                        <nav className="hidden md:flex items-center gap-6">
+                        {/* Navigation Links */}
+                        <nav className="hidden md:flex items-center gap-1">
                             <button 
                                 onClick={() => {
                                     handleNavigate('landing');
@@ -839,7 +839,7 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                                         }
                                     }, 100);
                                 }}
-                                className="text-sm font-medium text-gray-600 hover:text-[#004B63] transition-colors duration-200"
+                                className="px-4 py-2 text-base font-medium text-gray-600 hover:text-[#4DA8C4] hover:bg-[#4DA8C4]/10 active:bg-[#4DA8C4]/20 active:text-[#4DA8C4] active:shadow-[0_0_12px_rgba(77,168,196,0.3)] rounded-lg transition-all duration-200"
                             >
                                 Esencia
                             </button>
@@ -853,13 +853,13 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                                         }
                                     }, 100);
                                 }}
-                                className="text-sm font-medium text-gray-600 hover:text-[#004B63] transition-colors duration-200"
+                                className="px-4 py-2 text-base font-medium text-gray-600 hover:text-[#4DA8C4] hover:bg-[#4DA8C4]/10 active:bg-[#4DA8C4]/20 active:text-[#4DA8C4] active:shadow-[0_0_12px_rgba(77,168,196,0.3)] rounded-lg transition-all duration-200"
                             >
                                 Ecosistema
                             </button>
                             <button 
                                 onClick={() => setShowContactModal(true)}
-                                className="text-sm font-medium text-gray-600 hover:text-[#004B63] transition-colors duration-200"
+                                className="px-4 py-2 text-base font-medium text-gray-600 hover:text-[#4DA8C4] hover:bg-[#4DA8C4]/10 active:bg-[#4DA8C4]/20 active:text-[#4DA8C4] active:shadow-[0_0_12px_rgba(77,168,196,0.3)] rounded-lg transition-all duration-200"
                             >
                                 Contacto
                             </button>
