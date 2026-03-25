@@ -2,7 +2,7 @@ const VOICE_PROFILES = {
   valeria: { languageCode: 'es-US', name: 'es-US-Neural2-A', pitch: 1.2, speakingRate: 1.05 },
   valerio: { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: -2.0, speakingRate: 1.0 },
   sistema: { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: 0, speakingRate: 1.0 },
-  nico: { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 0, speakingRate: 1.0 }
+  nico: { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 0.0, speakingRate: 1.0 }
 };
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://edutechlife-q3blvmkur-eeductechlife-ais-projects.vercel.app';
@@ -21,6 +21,7 @@ export const speakTextConversational = async (text, profile = 'valeria', onEndCa
     safetyTimeout = null;
   }
 
+  const apiKey = import.meta.env.VITE_GOOGLE_TTS_API_KEY;
   const voice = VOICE_PROFILES[profile] || VOICE_PROFILES.valeria;
 
   const cleanup = () => {
@@ -42,24 +43,11 @@ export const speakTextConversational = async (text, profile = 'valeria', onEndCa
   }, 15000);
 
   try {
-    // Obtener token fresco del backend
-    console.log("Obteniendo token del backend...");
-    let accessToken;
-    
-    try {
-      const tokenRes = await fetch(`${API_BASE_URL}/api/voice-token`);
-      if (!tokenRes.ok) throw new Error('Failed to get token');
-      const tokenData = await tokenRes.json();
-      accessToken = tokenData.access_token;
-      console.log("Token obtenido correctamente");
-    } catch (tokenError) {
-      console.error("Error obteniendo token del backend:", tokenError);
-      if (onEndCallback) onEndCallback();
-      return;
-    }
+    console.log("Perfil de voz:", profile);
+    console.log("Voice config:", voice);
 
-    // Usar Google Cloud TTS API estándar
-    const response = await fetch(`${GOOGLE_TTS_URL}?key=${accessToken}`, {
+    // Usar API key directamente (la API de TTS funciona mejor así)
+    const response = await fetch(`${GOOGLE_TTS_URL}?key=${apiKey}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -72,13 +60,15 @@ export const speakTextConversational = async (text, profile = 'valeria', onEndCa
         },
         audioConfig: { 
           audioEncoding: 'MP3', 
-          pitch: voice.pitch, 
-          speakingRate: voice.speakingRate 
+          pitch: voice.pitch || 0, 
+          speakingRate: voice.speakingRate || 1.0 
         }
       })
     });
 
     const data = await response.json();
+    console.log("Response status:", response.status);
+    console.log("Response data:", data);
 
     if (data.error) {
       console.error("Error de Google TTS:", data.error);
@@ -87,12 +77,16 @@ export const speakTextConversational = async (text, profile = 'valeria', onEndCa
     }
 
     if (data.audioContent) {
+      console.log("Audio recibido, creando elemento de audio...");
       currentAudio = new Audio(`data:audio/mp3;base64,${data.audioContent}`);
+      
       currentAudio.onended = handleEnd;
-      currentAudio.onerror = () => {
+      currentAudio.onerror = (e) => {
+        console.error("Error reproduciendo audio:", e);
         cleanup();
         if (onEndCallback) onEndCallback();
       };
+      
       await currentAudio.play();
       console.log("¡Audio reproduciéndose!");
     } else {
