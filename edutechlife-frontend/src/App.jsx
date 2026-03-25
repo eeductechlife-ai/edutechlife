@@ -25,6 +25,7 @@ import AdminLoginModal from './components/AdminLoginModal';
 import LeadCaptureModal from './components/LeadCaptureModal';
 import LoadingScreen, { MiniLoader } from './components/LoadingScreen';
 import { callDeepseek, callDeepseekStream } from './utils/api';
+import { speakTextConversational, stopSpeech } from './utils/speech';
 
 // Cache de preguntas frecuentes para respuestas instantáneas
 const responseCache = new Map();
@@ -352,7 +353,7 @@ const App = () => {
         // Build personalized greeting if we have the name
         const personalizedGreeting = userName ? `${userName}, ` : '';
 
-        const shortSystemPrompt = `Eres Nico, agente de atención al cliente de Edutechlife. Tu rol principal es ATENDER al cliente, resolver sus dudas e informarle sobre los servicios.
+        const shortSystemPrompt = `Eres Nico, el agente de atención al cliente experto, amable y muy conversacional de la plataforma Edutechlife. Tu objetivo es resolver dudas técnicas o de usuario. Responde SIEMPRE de forma natural, rápida y en Español Latino. Imagina que estás hablando por teléfono con el cliente: usa frases directas, con mucha empatía y evita listas robóticas o estructuradas. Si debes mencionar términos técnicos o propios de la plataforma (como Edutechlife, Dashboard, Software, etc.), escríbelos correctamente en inglés para que el motor de voz los pronuncie de forma bilingüe.
 
 REGLAS DE ATENCIÓN AL CLIENTE:
 1. Primero responde SIEMPRE las preguntas del usuario con información útil
@@ -746,27 +747,22 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
         setIsListening(false);
     };
 
-    const speakText = (text) => {
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'es-CO';
-            utterance.rate = 0.9;
-            utterance.pitch = 1;
-            
-            utterance.onstart = () => setIsSpeaking(true);
-            utterance.onend = () => setIsSpeaking(false);
-            utterance.onerror = () => setIsSpeaking(false);
-            
-            window.speechSynthesis.speak(utterance);
+    const speakText = async (text) => {
+        if (!text) return;
+        try {
+            setIsSpeaking(true);
+            await speakTextConversational(text, 'nico', () => {
+                setIsSpeaking(false);
+            });
+        } catch (error) {
+            console.error('Error en speakText:', error);
+            setIsSpeaking(false);
         }
     };
 
     const stopSpeaking = () => {
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            setIsSpeaking(false);
-        }
+        stopSpeech();
+        setIsSpeaking(false);
     };
 
     const handleNavigate = useCallback(v => {
@@ -800,7 +796,7 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
     }, []);
 
     return (
-        <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+        <div className="flex flex-col min-h-screen overflow-hidden bg-white text-gray-800" style={{ fontFamily: "'Montserrat', sans-serif" }}>
             <Suspense fallback={null}>
                 <GlobalCanvas />
             </Suspense>
@@ -816,18 +812,32 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                 <>
                     <header className="sticky top-0 left-0 right-0 z-[1000] bg-white/90 backdrop-blur-sm shadow-sm border-b border-gray-100">
                         <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 flex items-center justify-between py-3">
-                            {/* Logo */}
-                            <button 
-                                onClick={() => handleNavigate('landing')}
-                                className="flex items-center"
-                                aria-label="Ir al inicio"
-                            >
-                                <img 
-                                    src="/images/logo-edutechlife.webp" 
-                                    alt="Edutechlife" 
-                                    className="h-7 w-auto"
-                                />
-                            </button>
+                            {/* Logo - Premium Clean */}
+                            <div className="flex items-center">
+                                <button 
+                                    onClick={() => handleNavigate('landing')}
+                                    aria-label="Ir al inicio"
+                                    style={{ 
+                                        background: 'transparent', 
+                                        border: 'none', 
+                                        padding: '0',
+                                        outline: 'none',
+                                    }}
+                                >
+                                    <img 
+                                        src="/images/logo-edutechlife.webp" 
+                                        alt="Edutechlife" 
+                                        className="h-9 w-auto object-contain"
+                                        style={{ 
+                                            background: 'transparent',
+                                            border: 'none',
+                                            outline: 'none',
+                                            boxShadow: 'none',
+                                        }}
+                                        onError={(e) => { e.target.style.display = 'none'; }}
+                                    />
+                                </button>
+                            </div>
                             
                             {/* Navigation Links - Desktop */}
                             <nav className="hidden md:flex items-center gap-1">
@@ -891,11 +901,20 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                             {/* Drawer */}
                             <div className="fixed top-0 right-0 z-[1002] h-full w-72 bg-white shadow-2xl md:hidden animate-slide-in">
                                 <div className="p-4 border-b border-gray-100 flex items-center justify-between">
-                                    <img 
-                                        src="/images/logo-edutechlife.webp" 
-                                        alt="Edutechlife" 
-                                        className="h-8 w-auto"
-                                    />
+                                    <div className="flex items-center">
+                                        <img 
+                                            src="/images/logo-edutechlife.webp" 
+                                            alt="Edutechlife" 
+                                            className="h-9 w-auto object-contain"
+                                            style={{ 
+                                                background: 'transparent',
+                                                border: 'none',
+                                                outline: 'none',
+                                                boxShadow: 'none',
+                                            }}
+                                            onError={(e) => { e.target.style.display = 'none'; }}
+                                        />
+                                    </div>
                                     <button 
                                         onClick={() => setMobileMenuOpen(false)}
                                         className="p-2 text-gray-500 hover:text-gray-700 transition-colors"

@@ -86,7 +86,7 @@ const AIPanel = ({ title, icon = 'fa-brain-circuit', placeholder, systemPrompt, 
     const handleSpeak = async () => { 
         if (!res || speak) return; 
         setSpeak(true); 
-        await speakTextConversational(res); 
+        await speakTextConversational(res, 'sistema'); 
         setSpeak(false); 
     };
     

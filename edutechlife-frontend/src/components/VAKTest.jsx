@@ -80,7 +80,7 @@ const VAKTest = ({ onNavigate }) => {
                 handleAnswer(qObj.options[selectedIndex]);
             } else {
                 setChatHistory(prev => [...prev, { role: 'assistant', text: "No te entendí bien, ¿puedes repetir tu respuesta?", type: 'text' }]);
-                speakTextConversational("No te entendí bien, ¿puedes repetir tu respuesta?", () => {
+                speakTextConversational("No te entendí bien, ¿puedes repetir tu respuesta?", 'valeria', () => {
                     if (isHandsFreeRef.current) iniciarReconocimiento(handleHandsFreeInput, handleHandsFreeTranscription, setIsListening);
                 });
             }
@@ -106,7 +106,7 @@ const VAKTest = ({ onNavigate }) => {
                 if (lastMsg.type === 'options' && lastMsg.options) {
                     text += ". Opciones: " + lastMsg.options.join(', o ');
                 }
-                speakTextConversational(text, () => {
+                speakTextConversational(text, 'valeria', () => {
                     if (isHandsFreeRef.current) {
                         iniciarReconocimiento(handleHandsFreeInput, handleHandsFreeTranscription, setIsListening);
                     }
@@ -125,7 +125,7 @@ const VAKTest = ({ onNavigate }) => {
             if (lastMsg.type === 'options' && lastMsg.options) {
                 textToSpeak += ". Opciones: " + lastMsg.options.join(', o ');
             }
-            speakTextConversational(textToSpeak, () => {
+            speakTextConversational(textToSpeak, 'valeria', () => {
                 speakingRef.current = false;
                 if (isHandsFreeRef.current && stepRef.current !== 'result' && stepRef.current !== 'loading') {
                     iniciarReconocimiento(handleHandsFreeInput, handleHandsFreeTranscription, setIsListening);
@@ -210,7 +210,7 @@ const VAKTest = ({ onNavigate }) => {
         ]);
     };
 
-    const handleSpeak = async () => { if (!res || speak) return; setSpeak(true); await speakTextConversational(res); setSpeak(false); };
+    const handleSpeak = async () => { if (!res || speak) return; setSpeak(true); await speakTextConversational(res, 'valeria'); setSpeak(false); };
     const handleCopy = () => {
         if (!res) return;
         navigator.clipboard.writeText(res).then(() => {

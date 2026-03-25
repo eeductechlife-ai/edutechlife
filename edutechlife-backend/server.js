@@ -8,7 +8,25 @@ const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.use(cors());
+app.use(cors({
+    origin: function(origin, callback) {
+        callback(null, true);
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// Middleware CORS para todas las rutas
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+    next();
+});
 app.use(helmet());
 app.use(express.json());
 
@@ -195,6 +213,48 @@ app.post('/api/chat/stream', async (req, res) => {
 
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', apiKeyConfigured: !!DEEPSEEK_API_KEY });
+});
+
+// Ruta para obtener token de Google Cloud (para Gemini TTS)
+app.get('/api/voice-token', async (req, res) => {
+    // 1. Configuración de encabezados para saltar el CORS
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+    res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+
+    // Responder a la petición preflight de los navegadores
+    if (req.method === 'OPTIONS') {
+        res.status(200).end();
+        return;
+    }
+    
+    try {
+        const { GoogleAuth } = require('google-auth-library');
+        
+        // 2. Limpieza de la llave privada (VITAL para evitar el 401)
+        const privateKey = process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n');
+        
+        if (!process.env.GOOGLE_CLIENT_EMAIL || !privateKey) {
+            return res.status(500).json({ error: 'Google credentials not configured' });
+        }
+        
+        const auth = new GoogleAuth({
+            scopes: ['https://www.googleapis.com/auth/cloud-platform'],
+            credentials: {
+                client_email: process.env.GOOGLE_CLIENT_EMAIL,
+                private_key: privateKey,
+            }
+        });
+        
+        const client = await auth.getClient();
+        const token = await client.getAccessToken();
+        
+        res.json({ access_token: token });
+    } catch (error) {
+        console.error('Error generating Google token:', error);
+        res.status(500).json({ error: error.message });
+    }
 });
 
 app.listen(PORT, () => {

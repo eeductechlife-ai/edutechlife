@@ -15,6 +15,7 @@ export function useVoiceConversation(options = {}) {
     conversationMode = false,
     voiceRate = 1.0,
     voicePitch = 1.05,
+    voiceProfile = 'valeria',
   } = options;
 
   const [state, setState] = useState(VOICE_STATES.IDLE);
@@ -123,8 +124,9 @@ export function useVoiceConversation(options = {}) {
     await voiceEngine.speak(text, {
       rate: voiceRate,
       pitch: voicePitch,
+      profile: voiceProfile,
     });
-  }, [voiceRate, voicePitch]);
+  }, [voiceRate, voicePitch, voiceProfile]);
 
   const startListening = useCallback(() => {
     if (state === VOICE_STATES.SPEAKING) return;

@@ -1,12 +1,19 @@
+import { speakTextConversational, stopSpeech } from './speech';
+
+const VOICE_PROFILES = {
+  valeria: { languageCode: 'es-US', name: 'es-US-Neural2-A', pitch: 1.2, speakingRate: 1.05 },
+  valerio: { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: -2.0, speakingRate: 1.0 },
+  sistema: { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: 0, speakingRate: 1.0 }
+};
+
 class VoiceEngine {
   constructor() {
     if (typeof window === 'undefined') {
       return;
     }
     
-    this.synth = window.speechSynthesis || null;
     this.recognition = null;
-    this.currentVoice = null;
+    this.currentProfile = 'valeria';
     this.isSpeaking = false;
     this.isListening = false;
     this.onSpeakStart = null;
@@ -20,17 +27,7 @@ class VoiceEngine {
     this.listenTimeout = null;
     this.maxListeningDuration = 15000;
     
-    if (this.synth) {
-      this.initVoices();
-    }
     this.initRecognition();
-  }
-
-  calculateSpeechDuration(text) {
-    const cleanText = text.replace(/[#*`_~🎉🎯💡✨👏👍🎨🎧🎮🎬📚©®™°•↑↓→←↔↕]/g, '');
-    const charsPerSecond = 15;
-    const baseTime = 500;
-    return Math.max(1500, baseTime + (cleanText.length / charsPerSecond) * 1000);
   }
 
   clearListenTimeout() {
@@ -38,43 +35,6 @@ class VoiceEngine {
       clearTimeout(this.listenTimeout);
       this.listenTimeout = null;
     }
-  }
-
-  initVoices() {
-    const loadVoices = () => {
-      const voices = this.synth.getVoices();
-      this.currentVoice = this.selectBestVoice(voices);
-    };
-
-    loadVoices();
-    if (this.synth.onvoiceschanged !== undefined) {
-      this.synth.onvoiceschanged = loadVoices;
-    }
-  }
-
-  selectBestVoice(voices) {
-    const priorityList = [
-      { lang: 'es-CO', name: ['Google'] },
-      { lang: 'es-MX', name: ['Google'] },
-      { lang: 'es-AR', name: ['Google'] },
-      { lang: 'es', name: ['Google', 'female', 'Female'] },
-      { lang: 'es', name: ['Laura', 'Sofia', 'Carmen', 'Lucia', 'Sabina'] },
-      { lang: 'es-ES', name: ['Google'] },
-      { lang: 'es', name: ['Google'] },
-      { lang: 'es', name: [] },
-    ];
-
-    for (const criteria of priorityList) {
-      const found = voices.find(v => {
-        const langMatch = v.lang.startsWith(criteria.lang) || criteria.lang === 'es';
-        const nameMatch = criteria.name.length === 0 || 
-          criteria.name.some(n => v.name.includes(n));
-        return langMatch && nameMatch && !v.name.includes('Male');
-      });
-      if (found) return found;
-    }
-
-    return voices[0] || null;
   }
 
   initRecognition() {
@@ -139,18 +99,15 @@ class VoiceEngine {
     };
   }
 
-  speak(text, options = {}) {
-    return new Promise((resolve, reject) => {
-      if (!this.synth) {
-        resolve();
-        return;
-      }
-      
-      if (this.isSpeaking) {
-        this.synth.cancel();
-      }
+  setVoiceProfile(profile) {
+    if (VOICE_PROFILES[profile]) {
+      this.currentProfile = profile;
+    }
+  }
 
-      const { rate = 1.0, pitch = 1.05, volume = 1.0 } = options;
+  speak(text, options = {}) {
+    return new Promise(async (resolve, reject) => {
+      const profile = options.profile || this.currentProfile;
       
       const cleanText = text
         .replace(/[#*`_~🎉🎯💡✨👏👍🎨🎧🎮🎬📚©®™°•↑↓→←↔↕]/g, '')
@@ -165,66 +122,17 @@ class VoiceEngine {
       this.isSpeaking = true;
       if (this.onSpeakStart) this.onSpeakStart();
 
-      const sentences = cleanText.match(/[^.!?]+[.!?]+/g) || [cleanText];
-      const filteredSentences = sentences.map(s => s.trim()).filter(s => s.length > 0);
-
-      if (filteredSentences.length === 0) {
-        filteredSentences.push(cleanText);
-      }
-
-      let currentIndex = 0;
-
-      const speakNext = () => {
-        if (currentIndex >= filteredSentences.length) {
+      try {
+        await speakTextConversational(cleanText, profile, () => {
           this.isSpeaking = false;
           if (this.onSpeakEnd) this.onSpeakEnd();
           resolve();
-          return;
-        }
-
-        const utterance = new SpeechSynthesisUtterance(filteredSentences[currentIndex]);
-        
-        if (this.currentVoice) {
-          utterance.voice = this.currentVoice;
-        }
-        
-        utterance.lang = 'es';
-        utterance.rate = rate;
-        utterance.pitch = pitch;
-        utterance.volume = volume;
-
-        utterance.onend = () => {
-          currentIndex++;
-          if (currentIndex < filteredSentences.length) {
-            setTimeout(speakNext, 60);
-          } else {
-            this.isSpeaking = false;
-            if (this.onSpeakEnd) this.onSpeakEnd();
-            resolve();
-          }
-        };
-
-        utterance.onerror = (e) => {
-          console.error('TTS error:', e);
-          this.isSpeaking = false;
-          if (this.onSpeakEnd) this.onSpeakEnd();
-          resolve();
-        };
-
-        this.synth.speak(utterance);
-      };
-
-      if (!this.synth || this.synth.getVoices().length === 0) {
-        if (this.synth) {
-          this.synth.addEventListener('voiceschanged', () => {
-            this.currentVoice = this.selectBestVoice(this.synth.getVoices());
-            setTimeout(speakNext, 50);
-          }, { once: true });
-        } else {
-          setTimeout(speakNext, 50);
-        }
-      } else {
-        setTimeout(speakNext, 50);
+        });
+      } catch (error) {
+        console.error('TTS error:', error);
+        this.isSpeaking = false;
+        if (this.onSpeakEnd) this.onSpeakEnd();
+        resolve();
       }
     });
   }
@@ -265,7 +173,7 @@ class VoiceEngine {
   }
 
   stop() {
-    this.synth.cancel();
+    stopSpeech();
     this.isSpeaking = false;
     if (this.onSpeakEnd) this.onSpeakEnd();
     this.stopListening();

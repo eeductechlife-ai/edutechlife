@@ -94,7 +94,7 @@ const IALab = ({ onBack }) => {
         setCoachLoad(false);
         setCoachQ('');
         setAvatarState('speaking');
-        speakTextConversational(r, () => setAvatarState('idle'));
+        speakTextConversational(r, 'valerio', () => setAvatarState('idle'));
     };
 
     const toggleSpeech = () => {
@@ -132,7 +132,7 @@ const IALab = ({ onBack }) => {
             setCoachMsg(r);
             setCoachLoad(false);
             setAvatarState('speaking');
-            speakTextConversational(r, () => setAvatarState('idle'));
+            speakTextConversational(r, 'valerio', () => setAvatarState('idle'));
         };
         reader.readAsText(file);
         if (fileInputRef.current) fileInputRef.current.value = "";

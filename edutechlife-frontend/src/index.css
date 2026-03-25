@@ -1,8 +1,411 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Open+Sans:wght@300;400&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Open+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ============================
+   EDUTECHLIFE DESIGN SYSTEM - GLOBAL BASE
+   Premium SASS Monochromatic Blue Palette
+   ============================ */
+
+@layer base {
+  /* === ROOT VARIABLES (CSS Custom Properties) === */
+  :root {
+    /* Paleta de Azules Corporativos - ÚNICA FUENTE DE VERDAD */
+    --color-petroleum: #004B63;
+    --color-corporate: #4DA8C4;
+    --color-soft-blue: #B2D8E5;
+    --color-mint: #66CCCC;
+    --color-navy: #0A1628;
+    
+    /* Sistema de Grises Premium (basados en azul) */
+    --color-slate-50: #F8FAFC;
+    --color-slate-100: #F1F5F9;
+    --color-slate-200: #E2E8F0;
+    --color-slate-300: #CBD5E1;
+    --color-slate-400: #94A3B8;
+    --color-slate-500: #64748B;
+    --color-slate-600: #475569;
+    --color-slate-700: #334155;
+    --color-slate-800: #1E293B;
+    --color-slate-900: #0F172A;
+    
+    /* Tipografía */
+    --font-display: 'Montserrat', system-ui, -apple-system, sans-serif;
+    --font-body: 'Open Sans', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
+    
+    /* Espaciado 8pt Grid */
+    --space-unit: 0.25rem;
+  }
+
+  /* === RESET & BASE === */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* === DOCUMENT STRUCTURE === */
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--color-slate-700);
+    background-color: #F8FAFC;
+    min-height: 100vh;
+  }
+
+  /* === TYPOGRAPHY SYSTEM === */
+  
+  /* Body Text - Open Sans */
+  p,
+  span,
+  div,
+  li,
+  td,
+  th {
+    font-family: var(--font-body);
+    color: var(--color-slate-700);
+  }
+
+  /* Headings - Montserrat */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .heading {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--color-petroleum);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  /* H1 - Display Level */
+  h1,
+  .h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+
+  /* H2 - Section Title */
+  h2,
+  .h2 {
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  /* H3 - Card Title */
+  h3,
+  .h3 {
+    font-size: clamp(1.25rem, 2vw, 1.5rem);
+    font-weight: 700;
+  }
+
+  /* H4 - Subtitle */
+  h4,
+  .h4 {
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+
+  /* H5 - Label */
+  h5,
+  .h5 {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  /* H6 - Small */
+  h6,
+  .h6 {
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  /* === LINKS === */
+  a {
+    font-family: var(--font-body);
+    color: var(--color-corporate);
+    text-decoration: none;
+    transition: color 0.2s ease, opacity 0.2s ease;
+  }
+
+  a:hover {
+    color: var(--color-petroleum);
+    opacity: 0.9;
+  }
+
+  a:focus-visible {
+    outline: 2px solid var(--color-corporate);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* === BUTTONS BASE === */
+  button,
+  [role="button"],
+  .btn {
+    font-family: var(--font-body);
+    font-weight: 500;
+    color: var(--color-corporate);
+    background: transparent;
+    border: 1px solid var(--color-slate-200);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  button:hover,
+  [role="button"]:hover,
+  .btn:hover {
+    color: var(--color-petroleum);
+    border-color: var(--color-corporate);
+    background: rgba(77, 168, 196, 0.05);
+  }
+
+  button:focus-visible,
+  [role="button"]:focus-visible {
+    outline: 2px solid var(--color-corporate);
+    outline-offset: 2px;
+  }
+
+  /* === FORM ELEMENTS === */
+  input,
+  textarea,
+  select {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--color-slate-800);
+    background: white;
+    border: 1px solid var(--color-slate-200);
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-slate-400);
+  }
+
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: none;
+    border-color: var(--color-corporate);
+    box-shadow: 0 0 0 3px rgba(77, 168, 196, 0.15);
+  }
+
+  /* === LISTS === */
+  ul,
+  ol {
+    font-family: var(--font-body);
+    color: var(--color-slate-700);
+    padding-left: 1.5rem;
+  }
+
+  li {
+    margin-bottom: 0.5rem;
+  }
+
+  /* === CODE & MONO === */
+  code,
+  pre,
+  kbd,
+  samp,
+  .mono {
+    font-family: var(--font-mono);
+  }
+
+  code {
+    font-size: 0.875em;
+    color: var(--color-corporate);
+    background: rgba(77, 168, 196, 0.1);
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+  }
+
+  pre {
+    background: var(--color-navy);
+    color: var(--color-soft-blue);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+  }
+
+  pre code {
+    background: none;
+    padding: 0;
+    color: inherit;
+  }
+
+  /* === TABLE === */
+  table {
+    font-family: var(--font-body);
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--color-petroleum);
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-bottom: 2px solid var(--color-slate-200);
+    background: var(--color-slate-50);
+  }
+
+  td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--color-slate-100);
+    color: var(--color-slate-600);
+  }
+
+  tr:hover td {
+    background: rgba(77, 168, 196, 0.03);
+  }
+
+  /* === UTILITY CLASSES - PREMIUM TEXT === */
+  .text-display {
+    font-family: var(--font-display);
+  }
+
+  .text-body {
+    font-family: var(--font-body);
+  }
+
+  .text-mono {
+    font-family: var(--font-mono);
+  }
+
+  /* Text Colors - Solo azules corporativos */
+  .text-petroleum { color: var(--color-petroleum); }
+  .text-corporate { color: var(--color-corporate); }
+  .text-mint { color: var(--color-mint); }
+  .text-soft-blue { color: var(--color-soft-blue); }
+  .text-navy { color: var(--color-navy); }
+
+  /* Text Slate (grises basados en azul) */
+  .text-slate-50 { color: var(--color-slate-50); }
+  .text-slate-100 { color: var(--color-slate-100); }
+  .text-slate-200 { color: var(--color-slate-200); }
+  .text-slate-300 { color: var(--color-slate-300); }
+  .text-slate-400 { color: var(--color-slate-400); }
+  .text-slate-500 { color: var(--color-slate-500); }
+  .text-slate-600 { color: var(--color-slate-600); }
+  .text-slate-700 { color: var(--color-slate-700); }
+  .text-slate-800 { color: var(--color-slate-800); }
+  .text-slate-900 { color: var(--color-slate-900); }
+
+  /* === UTILITY CLASSES - PREMIUM BACKGROUNDS === */
+  .bg-petroleum { background-color: var(--color-petroleum); }
+  .bg-corporate { background-color: var(--color-corporate); }
+  .bg-mint { background-color: var(--color-mint); }
+  .bg-soft-blue { background-color: var(--color-soft-blue); }
+  .bg-navy { background-color: var(--color-navy); }
+  .bg-slate-50 { background-color: var(--color-slate-50); }
+  .bg-slate-100 { background-color: var(--color-slate-100); }
+  .bg-white { background-color: white; }
+
+  /* === UTILITY CLASSES - PREMIUM BORDERS === */
+  .border-petroleum { border-color: var(--color-petroleum); }
+  .border-corporate { border-color: var(--color-corporate); }
+  .border-mint { border-color: var(--color-mint); }
+  .border-slate-100 { border-color: var(--color-slate-100); }
+  .border-slate-200 { border-color: var(--color-slate-200); }
+
+  /* === GRADIENT TEXT UTILITIES === */
+  .text-gradient-primary {
+    background: linear-gradient(135deg, var(--color-corporate) 0%, var(--color-mint) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-petroleum {
+    background: linear-gradient(135deg, var(--color-petroleum) 0%, var(--color-corporate) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-corporate {
+    background: linear-gradient(135deg, var(--color-corporate) 0%, var(--color-mint) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* === PREMIUM CARD BASE === */
+  .card {
+    background: white;
+    border: 1px solid var(--color-slate-200);
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 75, 99, 0.04);
+    transition: all 0.3s ease;
+  }
+
+  .card:hover {
+    box-shadow: 0 10px 25px rgba(0, 75, 99, 0.1);
+    border-color: rgba(77, 168, 196, 0.3);
+  }
+
+  /* === SELECTION === */
+  ::selection {
+    background: rgba(77, 168, 196, 0.3);
+    color: var(--color-petroleum);
+  }
+
+  ::-moz-selection {
+    background: rgba(77, 168, 196, 0.3);
+    color: var(--color-petroleum);
+  }
+
+  /* === SCROLLBAR (WebKit) === */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-slate-100);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-corporate);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-petroleum);
+  }
+
+  /* Firefox Scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-corporate) var(--color-slate-100);
+  }
+}
 
 /* ==================== PREMIUM CURSOR - ZERO LATENCY ==================== */
 :root {

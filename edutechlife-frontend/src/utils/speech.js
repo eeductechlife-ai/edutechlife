@@ -1,175 +1,201 @@
-export function speakTextConversational(text, onFinishSpeaking) {
-    if (!('speechSynthesis' in window)) {
-        console.warn('SpeechSynthesis not supported.');
-        if (onFinishSpeaking) onFinishSpeaking();
+const VOICE_PROFILES = {
+  valeria: { languageCode: 'es-US', name: 'es-US-Neural2-A', pitch: 1.2, speakingRate: 1.05 },
+  valerio: { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: -2.0, speakingRate: 1.0 },
+  sistema: { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: 0, speakingRate: 1.0 },
+  nico: { languageCode: 'es-419', name: 'Umbriel', modelName: 'gemini-2.5-flash-tts', pitch: 0, speakingRate: 1.0 }
+};
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://edutechlife-q3blvmkur-eeductechlife-ais-projects.vercel.app';
+const GOOGLE_TTS_URL = 'https://us-central1-aiplatform.googleapis.com/v1/projects/995366752358/locations/us-central1/publishers/google/models/gemini-2.5-flash-tts:streamGenerateContent';
+
+let currentAudio = null;
+let safetyTimeout = null;
+
+export const speakTextConversational = async (text, profile = 'valeria', onEndCallback) => {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio = null;
+  }
+  if (safetyTimeout) {
+    clearTimeout(safetyTimeout);
+    safetyTimeout = null;
+  }
+
+  const apiKey = import.meta.env.VITE_GOOGLE_TTS_API_KEY;
+  if (!apiKey && profile !== 'nico') {
+    console.error("Falta API Key de Google TTS");
+    if (onEndCallback) onEndCallback();
+    return;
+  }
+
+  const voice = VOICE_PROFILES[profile] || VOICE_PROFILES.valeria;
+
+  const cleanup = () => {
+    if (safetyTimeout) {
+      clearTimeout(safetyTimeout);
+      safetyTimeout = null;
+    }
+    currentAudio = null;
+  };
+
+  const handleEnd = () => {
+    cleanup();
+    if (onEndCallback) onEndCallback();
+  };
+
+  safetyTimeout = setTimeout(() => {
+    cleanup();
+    if (onEndCallback) onEndCallback();
+  }, 15000);
+
+  try {
+    if (profile === 'nico' && voice.modelName) {
+      // Obtener token fresco del backend
+      console.log("Obteniendo token del backend...");
+      let accessToken;
+      try {
+        const tokenRes = await fetch(`${API_BASE_URL}/api/voice-token`);
+        if (!tokenRes.ok) throw new Error('Failed to get token');
+        const tokenData = await tokenRes.json();
+        accessToken = tokenData.access_token;
+        console.log("Token obtenido correctamente");
+      } catch (tokenError) {
+        console.error("Error obteniendo token del backend:", tokenError);
+        if (onEndCallback) onEndCallback();
         return;
-    }
+      }
 
-    window.speechSynthesis.cancel();
-    
-    const cleanText = text.replace(/[#*`_~🎉🎯💡✨👏👍🎨🎧🎮🎬📚©®™°•↑↓→←↔↕]/g, '').replace(/\n+/g, ' ').trim();
-
-    if (!cleanText) {
-        if (onFinishSpeaking) onFinishSpeaking();
-        return;
-    }
-
-    const selectBestVoice = (voices) => {
-        const femaleLatinPriority = [
-            v => v.lang === 'es-CO' && v.name.includes('Google'),
-            v => v.lang === 'es-MX' && v.name.includes('Google'),
-            v => v.lang === 'es-AR' && v.name.includes('Google'),
-            v => v.lang === 'es-ES' && v.name.includes('Google') && !v.name.includes('Male'),
-            v => v.lang.includes('es') && v.name.includes('female') && v.name.includes('Google'),
-            v => v.lang.includes('es') && v.name.includes('Female'),
-            v => v.lang.includes('es') && (v.name.includes('Laura') || v.name.includes('Sofia') || v.name.includes('Carmen') || v.name.includes('Lucia')),
-            v => v.lang.includes('es') && v.name.includes('Microsoft') && v.name.includes('Sabina'),
-            v => v.lang === 'es-CO' && v.name.includes('Google'),
-            v => v.lang === 'es-MX' && v.name.includes('Google'),
-            v => v.lang === 'es-AR' && v.name.includes('Google'),
-            v => v.lang === 'es-ES' && v.name.includes('Google'),
-            v => v.lang.includes('es') && v.name.includes('Google'),
-        ];
-        
-        for (const matcher of femaleLatinPriority) {
-            const found = voices.find(matcher);
-            if (found) return found;
-        }
-        
-        const spanishVoices = voices.filter(v => v.lang.includes('es') && !v.lang.includes('US'));
-        if (spanishVoices.length > 0) {
-            return spanishVoices[0];
-        }
-        
-        return voices[0] || null;
-    };
-
-    const speakText = (textToSpeak, callback) => {
-        const msg = new SpeechSynthesisUtterance(textToSpeak);
-        
-        const voices = window.speechSynthesis.getVoices();
-        const selectedVoice = selectBestVoice(voices);
-        if (selectedVoice) {
-            msg.voice = selectedVoice;
-        }
-        
-        msg.lang = 'es';
-        msg.rate = 1.0;
-        msg.pitch = 1.05;
-        msg.volume = 1.0;
-
-        msg.onend = () => {
-            if (callback) callback();
-        };
-        msg.onerror = (e) => {
-            console.error('TTS error', e);
-            if (callback) callback();
-        };
-
-        window.speechSynthesis.speak(msg);
-    };
-
-    const sentences = cleanText.match(/[^.!?]+[.!?]+/g) || [cleanText];
-    const filteredSentences = sentences.map(s => s.trim()).filter(s => s.length > 0);
-
-    if (filteredSentences.length === 0) {
-        filteredSentences.push(cleanText);
-    }
-
-    let currentIndex = 0;
-    const speakNext = () => {
-        if (currentIndex >= filteredSentences.length) {
-            if (onFinishSpeaking) onFinishSpeaking();
-            return;
-        }
-        
-        const sentence = filteredSentences[currentIndex];
-        speakText(sentence, () => {
-            currentIndex++;
-            if (currentIndex < filteredSentences.length) {
-                setTimeout(speakNext, 80);
-            } else {
-                if (onFinishSpeaking) onFinishSpeaking();
+      const response = await fetch(GOOGLE_TTS_URL, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          contents: [{ role: "user", parts: [{ text }] }],
+          generationConfig: {
+            speechConfig: {
+              voiceConfig: { prebuiltVoiceConfig: { voiceName: "Umbriel" } }
             }
+          }
+        })
+      });
+
+      const data = await response.json();
+      console.log("Tipo de respuesta:", Array.isArray(data) ? "Array con " + data.length + " elementos" : "Objeto");
+      
+      // Ensamblar el audio de la respuesta (puede venir fragmentado)
+      let audioChunks = [];
+      if (Array.isArray(data)) {
+        data.forEach(chunk => {
+          const inlineData = chunk.candidates?.[0]?.content?.parts?.[0]?.inlineData;
+          if (inlineData?.data) {
+            // Convertimos cada pedazo de Base64 a un Uint8Array de inmediato
+            const binaryString = atob(inlineData.data);
+            const bytes = Uint8Array.from(binaryString, c => c.charCodeAt(0));
+            audioChunks.push(bytes);
+          }
         });
-    };
+        console.log("Chunks de audio recibidos:", audioChunks.length);
+      } else if (data.candidates && data.candidates[0].content.parts[0].inlineData) {
+        const binaryString = atob(data.candidates[0].content.parts[0].inlineData.data);
+        const bytes = Uint8Array.from(binaryString, c => c.charCodeAt(0));
+        audioChunks.push(bytes);
+      }
+      
+      if (audioChunks.length > 0) {
+        // Calculamos el tamaño total y creamos un solo bloque de datos
+        const totalLength = audioChunks.reduce((acc, chunk) => acc + chunk.length, 0);
+        const rawData = new Uint8Array(totalLength);
+        let offset = 0;
+        audioChunks.forEach(chunk => {
+          rawData.set(chunk, offset);
+          offset += chunk.length;
+        });
+        console.log("Audio ensamblado, tamaño total:", rawData.length);
+        
+        const wavHeader = new ArrayBuffer(44);
+        const view = new DataView(wavHeader);
+        view.setUint32(0, 0x52494646, false);
+        view.setUint32(4, 36 + rawData.length, true);
+        view.setUint32(8, 0x57415645, false);
+        view.setUint32(12, 0x666d7420, false);
+        view.setUint32(16, 16, true);
+        view.setUint16(20, 1, true);
+        view.setUint16(22, 1, true);
+        view.setUint32(24, 24000, true);
+        view.setUint32(28, 48000, true);
+        view.setUint16(32, 2, true);
+        view.setUint16(34, 16, true);
+        view.setUint32(36, 0x64617461, false);
+        view.setUint32(40, rawData.length, true);
 
-    if (window.speechSynthesis.getVoices().length === 0) {
-        window.speechSynthesis.addEventListener('voiceschanged', () => {
-            setTimeout(speakNext, 50);
-        }, { once: true });
-    } else {
-        setTimeout(speakNext, 50);
-    }
-}
+        const blob = new Blob([wavHeader, rawData], { type: 'audio/wav' });
+        currentAudio = new Audio(URL.createObjectURL(blob));
+        
+        currentAudio.onended = handleEnd;
+        currentAudio.onerror = () => {
+          cleanup();
+          if (onEndCallback) onEndCallback();
+        };
 
-export function iniciarReconocimiento(setQ, onResult, setIsListening) {
-    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-        console.warn('SpeechRecognition not supported');
+        await currentAudio.play();
+        console.log("¡Nico está hablando!");
         return;
+      } else {
+        console.error("No se recibió audio de Google:", data);
+        cleanup();
+        if (onEndCallback) onEndCallback();
+        return;
+      }
     }
 
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recognition = new SpeechRecognition();
-    
-    recognition.lang = 'es-CO';
-    recognition.continuous = true;
-    recognition.interimResults = true;
-    recognition.maxAlternatives = 1;
+    // API estándar de Cloud TTS
+    const response = await fetch(`https://texttospeech.googleapis.com/v1/text:synthesize?key=${apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        input: { text: text },
+        voice: { languageCode: voice.languageCode, name: voice.name },
+        audioConfig: { audioEncoding: 'MP3', pitch: voice.pitch, speakingRate: voice.speakingRate }
+      })
+    });
 
-    let finalTranscript = '';
-    let lastResultIndex = 0;
+    const data = await response.json();
 
-    recognition.onstart = () => {
-        finalTranscript = '';
-        lastResultIndex = 0;
-        if (setIsListening) setIsListening(true);
-    };
-
-    recognition.onend = () => {
-        if (setIsListening) setIsListening(false);
-        if (finalTranscript.trim() && onResult) {
-            onResult(finalTranscript.trim());
-        }
-        finalTranscript = '';
-        lastResultIndex = 0;
-    };
-
-    recognition.onresult = (event) => {
-        let interimTranscript = '';
-        
-        for (let i = lastResultIndex; i < event.results.length; i++) {
-            const transcript = event.results[i][0].transcript;
-            if (event.results[i].isFinal) {
-                finalTranscript += ' ' + transcript.trim();
-            } else {
-                interimTranscript += transcript;
-            }
-        }
-        lastResultIndex = event.results.length;
-
-        if (setQ) {
-            setQ(finalTranscript || interimTranscript);
-        }
-    };
-
-    recognition.onerror = (event) => {
-        console.error('SpeechRecognition error:', event.error);
-        if (setIsListening) setIsListening(false);
-        
-        if (event.error === 'no-speech' && finalTranscript.trim()) {
-            setTimeout(() => {
-                if (onResult) {
-                    onResult(finalTranscript.trim());
-                }
-            }, 300);
-        }
-    };
-
-    try {
-        recognition.start();
-    } catch(e) {
-        console.error('Recognition start error', e);
-        if (setIsListening) setIsListening(false);
+    if (data.error) {
+      console.error("Error de Google TTS:", data.error);
+      cleanup();
+      if (onEndCallback) onEndCallback();
+      return;
     }
-}
+
+    if (data.audioContent) {
+      currentAudio = new Audio(`data:audio/mp3;base64,${data.audioContent}`);
+      currentAudio.onended = handleEnd;
+      currentAudio.onerror = () => {
+        cleanup();
+        if (onEndCallback) onEndCallback();
+      };
+      await currentAudio.play();
+    } else {
+      cleanup();
+      if (onEndCallback) onEndCallback();
+    }
+  } catch (error) {
+    console.error("Error crítico en speech.js:", error);
+    cleanup();
+    if (onEndCallback) onEndCallback();
+  }
+};
+
+export const stopSpeech = () => {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio = null;
+  }
+  if (safetyTimeout) {
+    clearTimeout(safetyTimeout);
+    safetyTimeout = null;
+  }
+};

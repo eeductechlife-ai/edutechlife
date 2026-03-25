@@ -345,8 +345,9 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
   } = useVoiceConversation({
     onMessage: handleMessage,
     conversationMode,
-    voiceRate: 1.0,
-    voicePitch: 1.05,
+    voiceRate: 1.05,
+    voicePitch: 1.2,
+    voiceProfile: 'valeria',
   });
 
   useEffect(() => {
