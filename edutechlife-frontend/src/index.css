@@ -11222,6 +11222,20 @@ span:not(h1 span):not(h2 span):not(h3 span):not(.stat-number),
   }
 }
 
+/* Mobile Menu Drawer Animation */
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.3s ease-out forwards;
+}
+
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   *,

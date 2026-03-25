@@ -74,17 +74,17 @@ const Hero = memo(({ onNavigate }) => {
             {/* Subtle center glow for balance */}
             <div className="absolute top-1/2 right-1/4 w-40 h-40 bg-[#4DA8C4]/5 rounded-full blur-3xl pointer-events-none" />
             
-            <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 py-20">
+            <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
                 {/* Two-Column Layout */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-8 items-center">
                     
                     {/* Left Column - Typography & CTAs */}
-                    <div className="text-center lg:text-left pt-10 lg:pt-0">
+                    <div className="text-center lg:text-left pt-8 lg:pt-0">
                         <motion.div 
                             initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
                             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                             transition={{ duration: 0.8 }}
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-[#4DA8C4]/10 backdrop-blur-md rounded-full mb-10 border border-[#4DA8C4]/30 shadow-[0_0_20px_rgba(77,168,196,0.2)]"
+                            className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 bg-[#4DA8C4]/10 backdrop-blur-md rounded-full mb-6 sm:mb-10 border border-[#4DA8C4]/30 shadow-[0_0_20px_rgba(77,168,196,0.2)]"
                         >
                             <span className="w-2 h-2 bg-[#4DA8C4] rounded-full animate-pulse shadow-[0_0_10px_#4DA8C4]" />
                             <span className="text-xs font-normal text-[#004B63] uppercase tracking-[0.2em] block">
@@ -96,7 +96,7 @@ const Hero = memo(({ onNavigate }) => {
                             initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
                             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                             transition={{ duration: 0.8, delay: 0.1 }}
-                            className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-[#004B63] tracking-tight leading-tight mb-8"
+                            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#004B63] tracking-tight leading-tight mb-6 sm:mb-8"
                         >
                             <SplitTextReveal text="Liderando la Educación del Futuro" />
                         </motion.h1>
@@ -105,7 +105,7 @@ const Hero = memo(({ onNavigate }) => {
                             initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
                             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                             transition={{ duration: 0.8, delay: 0.2 }}
-                            className="text-base text-slate-600 leading-relaxed font-normal mb-12 max-w-xl mx-auto lg:mx-0"
+                            className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal mb-8 sm:mb-12 max-w-xl mx-auto lg:mx-0"
                         >
                             Infraestructura cognitiva asistida por inteligencia artificial. Tu entorno de aprendizaje evoluciona y se ajusta <span className="text-[#004B63]">en tiempo real</span> a tu neuro-ergonomía.
                         </motion.p>
@@ -116,7 +116,7 @@ const Hero = memo(({ onNavigate }) => {
                             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                             transition={{ duration: 0.8, delay: 0.3 }}
                             ref={statsRef} 
-                            className="bg-white/60 backdrop-blur-xl border border-white/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-2xl p-6 mb-12 inline-flex flex-wrap justify-center lg:justify-start gap-8 relative overflow-hidden"
+                            className="bg-white/60 backdrop-blur-xl border border-white/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-2xl p-4 sm:p-6 mb-8 sm:mb-12 inline-flex flex-wrap justify-center lg:justify-start gap-6 sm:gap-8 relative overflow-hidden"
                         >
                             {/* Animated Border Glow */}
                             <div className="absolute inset-0 border border-[#4DA8C4]/20 rounded-2xl animate-[border-glow_3s_ease-in-out_infinite]" />
@@ -151,11 +151,11 @@ const Hero = memo(({ onNavigate }) => {
                             initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
                             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                             transition={{ duration: 0.8, delay: 0.4 }}
-                            className="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start"
+                            className="flex flex-col sm:flex-row gap-3 sm:gap-5 justify-center lg:justify-start"
                         >
                             <MagneticButton 
                                 onClick={() => onNavigate('ialab')}
-                                className="group relative overflow-hidden flex items-center justify-center gap-3 px-8 py-4 rounded-full text-lg font-bold bg-gradient-to-r from-[#004B63] to-[#006a8e] text-white hover:shadow-[0_0_30px_rgba(77,168,196,0.6)] transition-all duration-300 border border-[#4DA8C4]/30"
+                                className="group relative overflow-hidden flex items-center justify-center gap-2 sm:gap-3 px-5 sm:px-8 py-3 sm:py-4 rounded-full text-base sm:text-lg font-bold bg-gradient-to-r from-[#004B63] to-[#006a8e] text-white hover:shadow-[0_0_30px_rgba(77,168,196,0.6)] transition-all duration-300 border border-[#4DA8C4]/30"
                             >
                                 <span className="absolute inset-0 w-[150%] h-full -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-[sweep_1.5s_ease-in-out_infinite] skew-x-[-20deg]" />
                                 <span className="text-white relative z-10">IA Lab Pro</span>
@@ -164,7 +164,7 @@ const Hero = memo(({ onNavigate }) => {
                             
                             <MagneticButton 
                                 onClick={() => onNavigate('smartboard')}
-                                className="group flex items-center justify-center gap-3 px-8 py-4 rounded-full text-lg font-bold bg-transparent border-2 border-[#004B63] text-[#004B63] hover:bg-[#004B63] hover:text-white hover:shadow-[0_0_20px_rgba(77,168,196,0.4)] transition-all duration-300"
+                                className="group flex items-center justify-center gap-2 sm:gap-3 px-5 sm:px-8 py-3 sm:py-4 rounded-full text-base sm:text-lg font-bold bg-transparent border-2 border-[#004B63] text-[#004B63] hover:bg-[#004B63] hover:text-white hover:shadow-[0_0_20px_rgba(77,168,196,0.4)] transition-all duration-300"
                             >
                                 <Icon name="fa-chalkboard" className="text-[#004B63] group-hover:text-white transition-colors" />
                                 SmartBoard
@@ -177,7 +177,7 @@ const Hero = memo(({ onNavigate }) => {
                         initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
                         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                         transition={{ duration: 0.8, delay: 0.5 }}
-                        className="pt-10 lg:pt-0 flex items-center justify-center"
+                        className="pt-8 lg:pt-0 flex items-center justify-center"
                     >
                         {/* Empty - Clean design */}
                     </motion.div>

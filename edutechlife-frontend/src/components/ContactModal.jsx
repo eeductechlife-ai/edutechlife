@@ -55,22 +55,22 @@ const ContactModal = ({ isOpen, onClose }) => {
       {/* Modal */}
       <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-hidden">
         {/* Header */}
-        <div className="bg-gradient-to-r from-[#004B63] to-[#006080] px-6 py-4 relative">
+        <div className="bg-white px-6 py-6 relative border-b border-gray-100">
           <button 
             onClick={handleClose}
-            className="absolute top-4 right-4 text-white/80 hover:text-white transition-colors"
+            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex flex-col items-center gap-3">
             <img 
-              src="https://eductechlife.com/wp-content/uploads/2023/08/LOGO-EDUTECH-LIFE-2023-1.png" 
+              src="/images/logo-edutechlife.webp" 
               alt="Edutechlife" 
-              className="h-12 w-auto"
+              className="h-16 w-auto object-contain"
             />
-            <h3 className="text-lg font-semibold text-white">Contáctanos</h3>
+            <h3 className="text-xl font-bold text-[#004B63]">Contáctanos</h3>
           </div>
         </div>
 
@@ -96,53 +96,53 @@ const ContactModal = ({ isOpen, onClose }) => {
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Nombre */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Nombre completo</label>
+                <label className="block text-sm font-semibold text-[#004B63] mb-1">Nombre completo</label>
                 <input
                   type="text"
                   name="nombre"
                   value={formData.nombre}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent outline-none transition-all"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#4DA8C4] focus:border-[#4DA8C4] outline-none transition-all text-[#004B63] placeholder-gray-400"
                   placeholder="Tu nombre"
                 />
               </div>
 
               {/* Email */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Correo electrónico</label>
+                <label className="block text-sm font-semibold text-[#004B63] mb-1">Correo electrónico</label>
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent outline-none transition-all"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#4DA8C4] focus:border-[#4DA8C4] outline-none transition-all text-[#004B63] placeholder-gray-400"
                   placeholder="tu@email.com"
                 />
               </div>
 
               {/* Teléfono */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+                <label className="block text-sm font-semibold text-[#004B63] mb-1">Teléfono</label>
                 <input
                   type="tel"
                   name="telefono"
                   value={formData.telefono}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent outline-none transition-all"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#4DA8C4] focus:border-[#4DA8C4] outline-none transition-all text-[#004B63] placeholder-gray-400"
                   placeholder="300 123 4567"
                 />
               </div>
 
               {/* Motivo */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Motivo de contacto</label>
+                <label className="block text-sm font-semibold text-[#004B63] mb-1">Motivo de contacto</label>
                 <select
                   name="motivo"
                   value={formData.motivo}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent outline-none transition-all bg-white"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#4DA8C4] focus:border-[#4DA8C4] outline-none transition-all bg-white text-[#004B63]"
                 >
                   <option value="">Selecciona un motivo</option>
                   <option value="informacion">Información sobre servicios</option>

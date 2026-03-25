@@ -216,6 +216,7 @@ const CustomCursor = () => {
 const App = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [view, setView] = useState('landing');
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [smartboardAuthenticated, setSmartboardAuthenticated] = useState(false);
     const [adminAuthenticated, setAdminAuthenticated] = useState(false);
     const [adminLoginModalOpen, setAdminLoginModalOpen] = useState(false);
@@ -812,60 +813,143 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
 
             {/* Header - Navigation Premium - Hidden on SmartBoard, IALab and Admin */}
             {view !== 'smartboard' && view !== 'ialab' && view !== 'admin' && (
-                <header className="sticky top-0 left-0 right-0 z-[1000] bg-white/90 backdrop-blur-sm shadow-sm border-b border-gray-100">
-                    <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between py-3">
-                        {/* Logo */}
-                        <button 
-                            onClick={() => handleNavigate('landing')}
-                            className="flex items-center"
-                            aria-label="Ir al inicio"
-                        >
-                            <img 
-                                src="/images/logo-edutechlife.webp" 
-                                alt="Edutechlife" 
-                                className="h-7 w-auto"
+                <>
+                    <header className="sticky top-0 left-0 right-0 z-[1000] bg-white/90 backdrop-blur-sm shadow-sm border-b border-gray-100">
+                        <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 flex items-center justify-between py-3">
+                            {/* Logo */}
+                            <button 
+                                onClick={() => handleNavigate('landing')}
+                                className="flex items-center"
+                                aria-label="Ir al inicio"
+                            >
+                                <img 
+                                    src="/images/logo-edutechlife.webp" 
+                                    alt="Edutechlife" 
+                                    className="h-7 w-auto"
+                                />
+                            </button>
+                            
+                            {/* Navigation Links - Desktop */}
+                            <nav className="hidden md:flex items-center gap-1">
+                                <button 
+                                    onClick={() => {
+                                        handleNavigate('landing');
+                                        setTimeout(() => {
+                                            const esenciaSection = document.getElementById('esencia');
+                                            if (esenciaSection) {
+                                                esenciaSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                            }
+                                        }, 100);
+                                    }}
+                                    className="px-4 py-2 text-base font-medium text-gray-600 hover:text-[#4DA8C4] hover:bg-[#4DA8C4]/10 active:bg-[#4DA8C4]/20 active:text-[#4DA8C4] active:shadow-[0_0_12px_rgba(77,168,196,0.3)] rounded-lg transition-all duration-200"
+                                >
+                                    Esencia
+                                </button>
+                                <button 
+                                    onClick={() => {
+                                        handleNavigate('landing');
+                                        setTimeout(() => {
+                                            const ecosystemSection = document.getElementById('ecosystem');
+                                            if (ecosystemSection) {
+                                                ecosystemSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                            }
+                                        }, 100);
+                                    }}
+                                    className="px-4 py-2 text-base font-medium text-gray-600 hover:text-[#4DA8C4] hover:bg-[#4DA8C4]/10 active:bg-[#4DA8C4]/20 active:text-[#4DA8C4] active:shadow-[0_0_12px_rgba(77,168,196,0.3)] rounded-lg transition-all duration-200"
+                                >
+                                    Ecosistema
+                                </button>
+                                <button 
+                                    onClick={() => setShowContactModal(true)}
+                                    className="px-4 py-2 text-base font-medium text-gray-600 hover:text-[#4DA8C4] hover:bg-[#4DA8C4]/10 active:bg-[#4DA8C4]/20 active:text-[#4DA8C4] active:shadow-[0_0_12px_rgba(77,168,196,0.3)] rounded-lg transition-all duration-200"
+                                >
+                                    Contacto
+                                </button>
+                            </nav>
+
+                            {/* Mobile Menu Button */}
+                            <button 
+                                onClick={() => setMobileMenuOpen(true)}
+                                className="md:hidden p-2 text-gray-600 hover:text-[#4DA8C4] transition-colors"
+                                aria-label="Abrir menú"
+                            >
+                                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                                </svg>
+                            </button>
+                        </div>
+                    </header>
+
+                    {/* Mobile Menu Drawer */}
+                    {mobileMenuOpen && (
+                        <>
+                            {/* Backdrop */}
+                            <div 
+                                className="fixed inset-0 z-[1001] bg-black/50 backdrop-blur-sm md:hidden"
+                                onClick={() => setMobileMenuOpen(false)}
                             />
-                        </button>
-                        
-                        {/* Navigation Links */}
-                        <nav className="hidden md:flex items-center gap-1">
-                            <button 
-                                onClick={() => {
-                                    handleNavigate('landing');
-                                    setTimeout(() => {
-                                        const esenciaSection = document.getElementById('esencia');
-                                        if (esenciaSection) {
-                                            esenciaSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                        }
-                                    }, 100);
-                                }}
-                                className="px-4 py-2 text-base font-medium text-gray-600 hover:text-[#4DA8C4] hover:bg-[#4DA8C4]/10 active:bg-[#4DA8C4]/20 active:text-[#4DA8C4] active:shadow-[0_0_12px_rgba(77,168,196,0.3)] rounded-lg transition-all duration-200"
-                            >
-                                Esencia
-                            </button>
-                            <button 
-                                onClick={() => {
-                                    handleNavigate('landing');
-                                    setTimeout(() => {
-                                        const ecosystemSection = document.getElementById('ecosystem');
-                                        if (ecosystemSection) {
-                                            ecosystemSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                        }
-                                    }, 100);
-                                }}
-                                className="px-4 py-2 text-base font-medium text-gray-600 hover:text-[#4DA8C4] hover:bg-[#4DA8C4]/10 active:bg-[#4DA8C4]/20 active:text-[#4DA8C4] active:shadow-[0_0_12px_rgba(77,168,196,0.3)] rounded-lg transition-all duration-200"
-                            >
-                                Ecosistema
-                            </button>
-                            <button 
-                                onClick={() => setShowContactModal(true)}
-                                className="px-4 py-2 text-base font-medium text-gray-600 hover:text-[#4DA8C4] hover:bg-[#4DA8C4]/10 active:bg-[#4DA8C4]/20 active:text-[#4DA8C4] active:shadow-[0_0_12px_rgba(77,168,196,0.3)] rounded-lg transition-all duration-200"
-                            >
-                                Contacto
-                            </button>
-                        </nav>
-                    </div>
-                </header>
+                            {/* Drawer */}
+                            <div className="fixed top-0 right-0 z-[1002] h-full w-72 bg-white shadow-2xl md:hidden animate-slide-in">
+                                <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+                                    <img 
+                                        src="/images/logo-edutechlife.webp" 
+                                        alt="Edutechlife" 
+                                        className="h-8 w-auto"
+                                    />
+                                    <button 
+                                        onClick={() => setMobileMenuOpen(false)}
+                                        className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
+                                    >
+                                        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <nav className="p-4 space-y-2">
+                                    <button 
+                                        onClick={() => {
+                                            handleNavigate('landing');
+                                            setMobileMenuOpen(false);
+                                            setTimeout(() => {
+                                                const esenciaSection = document.getElementById('esencia');
+                                                if (esenciaSection) {
+                                                    esenciaSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                                }
+                                            }, 100);
+                                        }}
+                                        className="w-full px-4 py-3 text-left text-base font-medium text-gray-600 hover:text-[#4DA8C4] hover:bg-[#4DA8C4]/10 rounded-lg transition-all duration-200"
+                                    >
+                                        Esencia
+                                    </button>
+                                    <button 
+                                        onClick={() => {
+                                            handleNavigate('landing');
+                                            setMobileMenuOpen(false);
+                                            setTimeout(() => {
+                                                const ecosystemSection = document.getElementById('ecosystem');
+                                                if (ecosystemSection) {
+                                                    ecosystemSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                                }
+                                            }, 100);
+                                        }}
+                                        className="w-full px-4 py-3 text-left text-base font-medium text-gray-600 hover:text-[#4DA8C4] hover:bg-[#4DA8C4]/10 rounded-lg transition-all duration-200"
+                                    >
+                                        Ecosistema
+                                    </button>
+                                    <button 
+                                        onClick={() => {
+                                            setShowContactModal(true);
+                                            setMobileMenuOpen(false);
+                                        }}
+                                        className="w-full px-4 py-3 text-left text-base font-medium text-gray-600 hover:text-[#4DA8C4] hover:bg-[#4DA8C4]/10 rounded-lg transition-all duration-200"
+                                    >
+                                        Contacto
+                                    </button>
+                                </nav>
+                            </div>
+                        </>
+                    )}
+                </>
             )}
 
             {/* Main Content */}
