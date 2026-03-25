@@ -14,7 +14,7 @@ const Esencia = memo(() => {
             },
             { threshold: 0.1 }
         );
-        const section = document.getElementById('esencia-section');
+        const section = document.getElementById('esencia');
         if (section) observer.observe(section);
         return () => observer.disconnect();
     }, []);

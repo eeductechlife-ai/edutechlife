@@ -832,10 +832,16 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                             <button 
                                 onClick={() => {
                                     handleNavigate('landing');
+                                    setTimeout(() => {
+                                        const esenciaSection = document.getElementById('esencia');
+                                        if (esenciaSection) {
+                                            esenciaSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                        }
+                                    }, 100);
                                 }}
                                 className="text-sm font-medium text-gray-600 hover:text-[#004B63] transition-colors duration-200"
                             >
-                                Nosotros
+                                Esencia
                             </button>
                             <button 
                                 onClick={() => {
