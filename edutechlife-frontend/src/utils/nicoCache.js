@@ -86,6 +86,18 @@ export const INSTANT_RESPONSES = new Map([
   ['resultados', 'El 95% de nuestros estudiantes mejoran sus calificaciones. El 87% aumenta su confianza académica. Tenemos casos de éxito documentados.'],
   ['tiempo', 'Los programas duran desde 1 mes (intensivo) hasta 1 año (completo). Adaptamos a tus objetivos y disponibilidad. ¿Qué meta tienes?'],
   ['horarios', 'Tenemos horarios flexibles: mañana, tarde y noche. También fines de semana. Adaptamos a tu disponibilidad. ¿Qué horario prefieres?'],
+  
+  // Consultas complejas comunes - Añadidas para mejorar cache hit rate
+  ['ia en educación', 'La IA en educación permite personalización total del aprendizaje, feedback instantáneo y adaptación al ritmo de cada estudiante. En EdutechLife integramos IA con metodología VAK para máxima efectividad.'],
+  ['ventajas edutechlife', 'Nuestras ventajas: 1) Metodología VAK científica, 2) Tutores certificados, 3) Tecnología de punta, 4) Bienestar emocional, 5) Resultados comprobados (95% mejora calificaciones).'],
+  ['mejorar concentración', 'Para mejorar concentración: 1) Identifica tu estilo VAK, 2) Establece rutinas, 3) Usa técnicas Pomodoro, 4) Minimiza distracciones, 5) Practica mindfulness. ¿Te gustaría una asesoría personalizada?'],
+  ['futuro educación', 'El futuro de la educación es personalizado, tecnológico y emocional. Combinamos IA, neurociencia y pedagogía para preparar a los estudiantes para los trabajos del mañana.'],
+  ['comparativa plataformas', 'EdutechLife se diferencia por: metodología VAK validada, enfoque integral (académico+emocional), tecnología propia, y resultados medibles. No solo somos una plataforma, somos un ecosistema educativo.'],
+  ['estudios caso éxito', 'Tenemos casos documentados: estudiantes que mejoraron 2 puntos su promedio, niños que descubrieron su pasión por la tecnología, adolescentes que superaron ansiedad académica. ¿Te interesa algún área específica?'],
+  ['tecnología educativa', 'Usamos: realidad aumentada para visuales, podcasts interactivos para auditivos, kits kinestésicos para prácticos. Tecnología al servicio del aprendizaje, no al revés.'],
+  ['neurociencia aprendizaje', 'Aplicamos principios de neurociencia: plasticidad cerebral, atención sostenida, memoria a largo plazo. Cada actividad está diseñada con base en evidencia científica.'],
+  ['bienestar emocional', 'El bienestar emocional es clave para el aprendizaje. Ofrecemos: técnicas de manejo de estrés, desarrollo de resiliencia, fortalecimiento de autoestima. Mente sana, aprendizaje óptimo.'],
+  ['preparación futuro', 'Preparamos para el futuro con: pensamiento crítico, creatividad, colaboración, comunicación, alfabetización digital. Habilidades del siglo XXI integradas en todos nuestros programas.'],
 ]);
 
 // ==================== NIVEL 2: CACHE EN MEMORIA LRU ====================
@@ -166,22 +178,78 @@ export const memoryCache = new LRUCache(1000);
 export function findInstantResponse(userMessage) {
   const lowerMsg = userMessage.toLowerCase().trim();
   
-  // Búsqueda exacta primero
+  // 1. Búsqueda exacta (más rápida)
   if (INSTANT_RESPONSES.has(lowerMsg)) {
     return INSTANT_RESPONSES.get(lowerMsg);
   }
   
-  // Búsqueda por palabras clave
-  for (const [key, response] of INSTANT_RESPONSES) {
-    if (lowerMsg.includes(key) && key.length > 3) {
-      return response;
+  // 2. Normalizar mensaje (quitar signos, espacios extra)
+  const normalizedMsg = lowerMsg
+    .replace(/[¿?¡!.,;:]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  
+  if (INSTANT_RESPONSES.has(normalizedMsg)) {
+    return INSTANT_RESPONSES.get(normalizedMsg);
+  }
+  
+  // 3. Búsqueda por palabras clave con prioridad
+  const words = normalizedMsg.split(' ');
+  
+  // Palabras clave prioritarias (más específicas primero)
+  const priorityKeywords = [
+    'vak', 'stem', 'steam', 'robótica', 'programación', 'ia', 'inteligencia artificial',
+    'neurociencia', 'emocional', 'bienestar', 'tutor', 'certificado', 'resultado',
+    'futuro', 'tecnología', 'educación', 'aprendizaje', 'concentración', 'ventaja'
+  ];
+  
+  // Buscar palabras prioritarias primero
+  for (const keyword of priorityKeywords) {
+    if (normalizedMsg.includes(keyword)) {
+      for (const [key, response] of INSTANT_RESPONSES) {
+        if (key.includes(keyword)) {
+          return response;
+        }
+      }
     }
   }
   
-  // Búsqueda en cache de memoria
-  const cached = memoryCache.get(lowerMsg);
-  if (cached) {
-    return cached;
+  // 4. Búsqueda general por palabras clave
+  for (const [key, response] of INSTANT_RESPONSES) {
+    // Si el mensaje contiene la clave completa
+    if (normalizedMsg.includes(key)) {
+      return response;
+    }
+    
+    // Si la clave contiene palabras del mensaje (para frases más largas)
+    const keyWords = key.split(' ');
+    if (keyWords.length > 1) {
+      let matchCount = 0;
+      for (const keyWord of keyWords) {
+        if (keyWord.length > 3 && normalizedMsg.includes(keyWord)) {
+          matchCount++;
+        }
+      }
+      // Si al menos 2 palabras coinciden (para evitar falsos positivos)
+      if (matchCount >= 2) {
+        return response;
+      }
+    }
+  }
+  
+  // 5. Búsqueda por similitud (para variaciones comunes)
+  const commonVariations = {
+    'hola': ['holiwis', 'ola', 'holis', 'buen día', 'buen dia'],
+    'qué es vak': ['metodologia vak', 'vak que es', 'que significa vak'],
+    'servicios': ['que ofrecen', 'a que se dedican', 'que hacen'],
+    'precios': ['cuanto cuesta', 'costo', 'valor', 'tarifa'],
+    'ia en educación': ['inteligencia artificial educación', 'ia en la educación', 'futuro educación ia'],
+  };
+  
+  for (const [baseQuery, variations] of Object.entries(commonVariations)) {
+    if (variations.includes(normalizedMsg) || variations.some(v => normalizedMsg.includes(v))) {
+      return INSTANT_RESPONSES.get(baseQuery);
+    }
   }
   
   return null;
@@ -218,21 +286,114 @@ export const SUGGESTED_QUESTIONS = [
 
 // Pre-cargar cache con respuestas comunes
 export function initializeCache() {
-  console.log('🔄 Inicializando cache de Nico...');
-  console.log(`📊 Respuestas instantáneas: ${INSTANT_RESPONSES.size}`);
-  console.log(`💾 Cache LRU tamaño máximo: ${memoryCache.maxSize}`);
+  // Pre-cargar respuestas comunes
+  console.log('✅ Cache de Nico inicializado con', INSTANT_RESPONSES.size, 'respuestas instantáneas');
+}
+
+// Función principal para obtener respuestas de Nico
+export async function getNicoResponse(userMessage, userName = 'amigo', userHistory = []) {
+  const startTime = Date.now();
+  const lowerMsg = userMessage.toLowerCase().trim();
   
-  // Agregar algunas respuestas al cache de memoria para empezar
-  const initialCache = [
-    ['hola nico', '¡Hola! Me encanta que me llames por mi nombre. 😊 Soy Nico, tu asistente de EdutechLife. ¿En qué puedo ayudarte?'],
-    ['nico ayuda', '¡Claro que sí! Estoy aquí para ayudarte con todo sobre EdutechLife. ¿Qué necesitas saber?'],
-    ['edutechlife vak', '¡Perfecta combinación! EdutechLife es la plataforma y VAK es nuestra metodología estrella. Juntos transformamos el aprendizaje.'],
-  ];
+  // Nivel 1: Respuestas instantáneas predefinidas
+  const instantResponse = findInstantResponse(lowerMsg);
+  if (instantResponse) {
+    const personalizedResponse = instantResponse.replace(/amigo/g, userName);
+    return {
+      response: personalizedResponse,
+      fromCache: true,
+      cacheLevel: 1,
+      responseTime: Date.now() - startTime
+    };
+  }
   
-  initialCache.forEach(([key, value]) => {
-    memoryCache.set(key, value);
+  // Nivel 2: Cache en memoria LRU
+  const cachedResponse = memoryCache.get(lowerMsg);
+  if (cachedResponse) {
+    const personalizedResponse = cachedResponse.replace(/amigo/g, userName);
+    return {
+      response: personalizedResponse,
+      fromCache: true,
+      cacheLevel: 2,
+      responseTime: Date.now() - startTime
+    };
+  }
+  
+  // Verificar si es similar a preguntas anteriores del usuario
+  if (userHistory.length > 0) {
+    // Buscar preguntas similares en el historial
+    const similarQuestions = userHistory.filter(prevMsg => {
+      const prevLower = prevMsg.toLowerCase();
+      // Similitud simple por palabras compartidas
+      const currentWords = new Set(lowerMsg.split(' '));
+      const prevWords = new Set(prevLower.split(' '));
+      let sharedWords = 0;
+      for (const word of currentWords) {
+        if (word.length > 3 && prevWords.has(word)) {
+          sharedWords++;
+        }
+      }
+      return sharedWords >= 2; // Al menos 2 palabras compartidas
+    });
+    
+    if (similarQuestions.length > 0) {
+      // Usar cache de pregunta similar
+      const similarResponse = memoryCache.get(similarQuestions[0].toLowerCase());
+      if (similarResponse) {
+        const personalizedResponse = similarResponse.replace(/amigo/g, userName);
+        // Añadir al cache para futuras consultas similares
+        memoryCache.set(lowerMsg, personalizedResponse);
+        return {
+          response: personalizedResponse,
+          fromCache: true,
+          cacheLevel: 2,
+          responseTime: Date.now() - startTime
+        };
+      }
+    }
+  }
+  
+  // Nivel 3: Backend (se maneja en el componente)
+  return {
+    response: null,
+    fromCache: false,
+    cacheLevel: 0,
+    responseTime: Date.now() - startTime
+  };
+}
+
+// Función para añadir respuestas al cache después de obtenerlas del backend
+export function addResponseToCache(userMessage, response, userName = 'amigo') {
+  const lowerMsg = userMessage.toLowerCase().trim();
+  const personalizedResponse = response.replace(/amigo/g, userName);
+  memoryCache.set(lowerMsg, personalizedResponse);
+  
+  // También añadir variaciones comunes
+  const variations = generateQueryVariations(userMessage);
+  variations.forEach(variation => {
+    memoryCache.set(variation.toLowerCase(), personalizedResponse);
   });
   
-  console.log('✅ Cache de Nico inicializado correctamente');
-  return getCacheStats();
+  return personalizedResponse;
+}
+
+// Generar variaciones comunes de una consulta
+function generateQueryVariations(query) {
+  const lower = query.toLowerCase();
+  const variations = [lower];
+  
+  // Variaciones con sinónimos comunes
+  const synonymMap = {
+    'qué': ['que', 'cual', 'como'],
+    'es': ['significa', 'representa', 'quiere decir'],
+    'cómo': ['como', 'de que manera', 'de que forma'],
+    'cuál': ['cual', 'que', 'cuales'],
+  };
+  
+  // Añadir variaciones simples
+  variations.push(lower.replace('?', ''));
+  variations.push(lower.replace('¿', ''));
+  variations.push(lower.replace(/[¿?]/g, ''));
+  
+  return variations.filter((v, i, a) => a.indexOf(v) === i); // Únicas
 }

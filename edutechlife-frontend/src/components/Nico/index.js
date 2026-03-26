@@ -1,1 +1,1 @@
-export { default as NicoSupport } from './NicoSupport';
+export { default as NicoSupport } from './NicoChat.optimized';
