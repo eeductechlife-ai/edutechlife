@@ -90,6 +90,10 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
       name: ['me llamo', 'soy', 'mi nombre', 'llámame', 'dime', 'yo soy'],
       remember: ['recuerdas', 'sabes mi nombre', 'cómo me llamo', 'quién soy', 'te acuerdas'],
       motivation: ['motivame', 'anímame', 'dame ánimos', 'palabras bonitas', 'frases', 'inspirame'],
+      schedule: ['horario', 'horarios', 'abren', 'cierran', 'a qué hora', 'cuando abren', 'cuando cierran', 'atención'],
+      location: ['dónde están', 'ubicación', 'dirección', 'direccion', 'donde queda', 'cómo llego', 'sucursal', 'sede'],
+      prices: ['precio', 'precios', 'cuánto cuesta', 'cuanto sale', 'cuánto vale', 'inversión', 'costo', 'plan', 'planes', 'paquete'],
+      noMore: ['no', 'nada', 'eso es todo', 'eso sería todo', 'no gracias', 'no necesito nada', 'ya no', 'eso', 'ya está', 'ya me voy', 'nada más', 'nada más gracias', 'eso es todo'],
     };
 
     for (const [key, keywords] of Object.entries(patterns)) {
@@ -131,8 +135,13 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
       sad: () => ['¿Quieres contarme qué pasó?', 'Estoy aquí para ti.'],
       nervous: () => ['Tranquilo/a. Respira y cuéntame qué te tiene así.'],
       help: () => ['¡Claro que sí! Dime qué necesitas.', 'Para eso estoy aquí.'],
-      thanks: () => ['¡De nada! ¿Hay algo más en lo que te pueda ayudar?', 'Para eso estoy.'],
-      bye: () => [`¡Hasta luego ${userName}! Vuelve pronto.`, '¡Chao! Aquí estaré cuando me necesites.'],
+      thanks: () => [
+        '¡De nada! 😊 ¿Qué más te gustaría saber?',
+        '¡Para eso estoy! ¿Hay algo más que te interese?',
+        '¡Con gusto! ¿Qué más quieres saber de EdutechLife?',
+      ],
+      bye: () => [`¡Hasta luego! Que te vaya muy bien. Vuelve cuando quieras 😊`, '¡Chao! Aquí estaré si me necesitas.'],
+      noMore: ['no', 'nada', 'eso es todo', 'eso sería todo', 'no gracias', 'no necesito nada', 'ya no', 'eso', 'ya está', 'ya me voy'],
       subject: () => ['¡Genial! ¿Qué quieres saber específicamente?', 'Perfecto. ¿Hay algo concreto?'],
       ai: () => [
         `¡Buena pregunta! Soy Nico, tu agente de atención de Edutechlife. Puedo ayudarte con lo que necesites.`,
@@ -146,11 +155,11 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
           setUserName(newName);
           nameLearnedRef.current = true;
           return [
-            `¡Mucho gusto ${newName}! Ahora sé cómo llamarte.`,
+            `¡Mucho gusto ${newName}! 😊 Ahora sé cómo llamarte.`,
             `¡Hola ${newName}! Encantado de conocerte.`,
           ];
         }
-        return ['¿Cómo te llamas? Me gustaría saber tu nombre.'];
+        return ['¿Cómo te llamas? Si prefieres no compartirlo, no hay problema 😊'];
       },
       remember: () => {
         if (memory.userName && memory.userName !== 'amigo') {
@@ -161,6 +170,23 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
       motivation: () => [
         '¡Tú puedes lograr lo que te propongas!',
         '¡Eres más capaz de lo que crees!',
+      ],
+      schedule: () => [
+        'Estamos de L a V de 9am a 6pm. ¿Te interesa agendar una cita?',
+        'Nuestro horario es lunes a viernes 9am-6pm. ¿Te puedo ayudar en algo más?',
+      ],
+      location: () => [
+        'Estamos en Ciudad de México. ¿Quieres que un asesor te dé la dirección exacta?',
+        'Tenemos sede en CDMX. ¿Te gustaría que te mandemos la ubicación por WhatsApp?',
+      ],
+      prices: () => [
+        'Tenemos varios planes según tus necesidades. ¿Me das tu contacto para que un asesor te informe?',
+        'Los precios varían según el programa. ¿Quieres que un asesor te llame con los detalles?',
+      ],
+      noMore: () => [
+        '¡Perfecto! 😊 Que te vaya muy bien. Cualquier duda, aquí estaré.',
+        '¡Genial! Fue un placer ayudarte. ¡Hasta pronto! 👋',
+        '¡Perfecto! Cualquier cosa, mándame mensaje cuando quieras. ¡ Chao! 😊',
       ],
     };
 
@@ -177,14 +203,20 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
     const userName = memory.userName || 'amigo';
     
     if (memory.conversationCount === 0 && !nameLearnedRef.current) {
-      return '¿Cómo te llamas? Me gustaría saber tu nombre.';
+      return '¿Cómo te llamas? Me gustaría saberte llamar por tu nombre.';
     }
 
     if (length < 10) {
-      return '¡Cuéntame más!';
+      return '¡Cuéntame más! ¿Qué más me puedes contar?';
     }
 
-    return '¿Qué más me puedes contar sobre eso?';
+    const followUps = [
+      '¿Hay algo más que quieras saber de EdutechLife?',
+      '¿Te interesa algo en específico?',
+      '¿Qué más te gustaría saber?',
+      '¿En qué más puedo ayudarte?',
+    ];
+    return followUps[Math.floor(Math.random() * followUps.length)];
   };
 
   const handleMessage = useCallback(async (text) => {
@@ -199,9 +231,7 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
       const response = await callDeepseek(text, PROMPT_NICO_SOPORTE);
       
       if (response && !response.includes('Error:') && response.length > 10) {
-        setTimeout(() => {
-          addMessage('assistant', response);
-        }, 300);
+        addMessage('assistant', response);
         setIsAILoading(false);
         
         learnFromUser(text, 'user_message');
@@ -213,9 +243,8 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
     } catch (error) {
       setIsAILoading(false);
       const response = generateContextualResponse(text, context);
-      setTimeout(() => {
-        addMessage('assistant', response);
-      }, 300);
+      addMessage('assistant', response);
+      
       return { text: response };
     }
   }, [addMessage, generateContext, generateContextualResponse, learnFromUser]);
@@ -316,11 +345,7 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
     }
     
     const { text: response } = await handleMessage(text);
-    
-    if (response && isAudioEnabled) {
-      speak(response);
-    }
-  }, [inputText, leadData, memory.conversationHistory, handleMessage, addMessage, createLead, isAudioEnabled, speak]);
+  }, [inputText, leadData, memory.conversationHistory, handleMessage, addMessage, createLead]);
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -369,14 +394,14 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
   };
 
   const getRespuestaSolicitudDatos = (leadData) => {
-    if (!leadData.nombre) {
-      return "¡Qué bueno que preguntes! Por cierto, ¿cómo te llamas? Así nuestro asesor sabe a quién contactar.";
+    if (!leadData.nombre && memory.conversationCount < 3) {
+      return "Por cierto, ¿cómo te llamas? Me gusta saber a quién le hablo 😊";
     }
     if (!leadData.telefono) {
-      return `Perfecto ${leadData.nombre}. ¿Me regalas tu número de teléfono para enviarte la información y que un asesor te contacte?`;
+      return `${leadData.nombre}, ¿me das tu WhatsApp para enviarte info y que un asesor te contacte?`;
     }
     if (!leadData.motivo) {
-      return "Última pregunta: ¿Cuál es tu principal interés o necesidad? Así sabemos cómo ayudarte mejor.";
+      return "¿Cuál es tu principal interés? Así te paso la mejor info.";
     }
     return null;
   };
@@ -404,8 +429,8 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
       incrementConversationCount();
       const userName = memory.userName;
       const greeting = userName && userName !== 'amigo'
-        ? `¡Hola ${userName}! Buenos días. ¿En qué te puedo colaborar hoy?`
-        : '¡Hola! Buenos días. ¿En qué te puedo colaborar?';
+        ? `¡Hola! 😊 ¿Cómo estás? Soy Nico, tu asistente de EdutechLife. ¿En qué te puedo ayudar?`
+        : '¡Hola! 😊 ¿Cómo estás? Soy Nico, tu asistente de EdutechLife. ¿En qué te puedo ayudar?';
       
       addMessage('assistant', greeting);
       setGreetingSent(true);
