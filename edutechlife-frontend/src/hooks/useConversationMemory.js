@@ -13,6 +13,7 @@ const DEFAULT_MEMORY = {
   },
   conversationHistory: [],
   factsAboutUser: [],
+  learnedKnowledge: [],
   lastConversation: null,
   conversationCount: 0,
   preferences: {
@@ -22,13 +23,21 @@ const DEFAULT_MEMORY = {
   },
   goals: [],
   challenges: [],
+  userContext: {
+    profession: null,
+    institution: null,
+    interests: [],
+    needs: [],
+    painPoints: [],
+  }
 };
 
 export function useConversationMemory(options = {}) {
   const { 
     persistKey = STORAGE_KEY,
-    maxHistoryLength = 50,
-    maxFactsLength = 100,
+    maxHistoryLength = 200,
+    maxFactsLength = 500,
+    maxLearnedKnowledge = 1000,
   } = options;
 
   const [memory, setMemory] = useState(() => {
@@ -87,6 +96,9 @@ export function useConversationMemory(options = {}) {
       { pattern: /(?:estoy|toy)\s+(?:estudiando|trabajando|en)\s+(.+?)(?:\.|,|$)/gi, type: 'studying' },
       { pattern: /(?:tengo|siento)\s+(.+?años)/gi, type: 'age' },
       { pattern: /(?:voy|vamos)\s+(?:a|bien|mal|en)\s+(.+?)(?:\.|,|$)/gi, type: 'plans' },
+      { pattern: /(?:trabajo|estudio|soy)\s+(?:en|de|estudiente|ingeniero|docente|médico|abogado)/gi, type: 'profession' },
+      { pattern: /(?:necesito|quiero|busco)\s+(.+?)(?:\.|,|$)/gi, type: 'needs' },
+      { pattern: /(?:mi problema|mi duda|me preocupa|me frustra)\s+(.+?)(?:\.|,|$)/gi, type: 'pain_points' },
     ];
 
     for (const { pattern, type } of factPatterns) {
@@ -114,9 +126,12 @@ export function useConversationMemory(options = {}) {
       if (updated.factsAboutUser.length > maxFactsLength) {
         updated.factsAboutUser = updated.factsAboutUser.slice(-maxFactsLength);
       }
+      if (updated.learnedKnowledge && updated.learnedKnowledge.length > maxLearnedKnowledge) {
+        updated.learnedKnowledge = updated.learnedKnowledge.slice(-maxLearnedKnowledge);
+      }
       return updated;
     });
-  }, [maxHistoryLength, maxFactsLength]);
+  }, [maxHistoryLength, maxFactsLength, maxLearnedKnowledge]);
 
   const addToHistory = useCallback((role, content) => {
     saveMemory({
@@ -197,6 +212,23 @@ export function useConversationMemory(options = {}) {
       context += `Datos recientes del usuario: ${recentFacts.map(f => f.content).join('. ')}. `;
     }
 
+    if (mem.learnedKnowledge && mem.learnedKnowledge.length > 0) {
+      const recentKnowledge = mem.learnedKnowledge.slice(-10);
+      context += `Información aprendida del usuario: ${recentKnowledge.map(k => k.content).join('. ')}. `;
+    }
+
+    if (mem.userContext) {
+      if (mem.userContext.profession) {
+        context += `El usuario es ${mem.userContext.profession}. `;
+      }
+      if (mem.userContext.institution) {
+        context += `Trabaja/estudia en ${mem.userContext.institution}. `;
+      }
+      if (mem.userContext.needs && mem.userContext.needs.length > 0) {
+        context += `Sus necesidades son: ${mem.userContext.needs.join(', ')}. `;
+      }
+    }
+
     return context;
   }, []);
 
@@ -230,6 +262,29 @@ export function useConversationMemory(options = {}) {
     saveMemory({ conversationCount: memoryRef.current.conversationCount + 1 });
   }, [saveMemory]);
 
+  const learnFromUser = useCallback((content, category = 'general') => {
+    if (!content || content.length < 3 || content.length > 200) return;
+    
+    const exists = memoryRef.current.learnedKnowledge?.some(
+      k => k.content.toLowerCase() === content.toLowerCase()
+    );
+    
+    if (!exists) {
+      saveMemory({
+        learnedKnowledge: [
+          ...(memoryRef.current.learnedKnowledge || []),
+          { content, category, timestamp: Date.now() }
+        ]
+      });
+    }
+  }, [saveMemory]);
+
+  const updateUserContext = useCallback((updates) => {
+    saveMemory({
+      userContext: { ...memoryRef.current.userContext, ...updates }
+    });
+  }, [saveMemory]);
+
   const clearMemory = useCallback(() => {
     saveMemory(DEFAULT_MEMORY);
   }, [saveMemory]);
@@ -259,6 +314,8 @@ export function useConversationMemory(options = {}) {
     getRecentHistory,
     getContextualPrompt,
     clearMemory,
+    learnFromUser,
+    updateUserContext,
   };
 }
 

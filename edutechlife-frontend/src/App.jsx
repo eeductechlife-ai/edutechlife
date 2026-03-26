@@ -21,6 +21,8 @@ const DiagnosticoVAK = lazy(() => import('./components/DiagnosticoVAK'));
 const VAKTest = lazy(() => import('./components/VAKTest'));
 const VAKDiagnostic = lazy(() => import('./components/VAKDiagnostic'));
 const AdminDashboard = lazy(() => import('./components/AdminDashboard'));
+import NicoPremiumTest from './components/NicoPremiumTest';
+import ValeriaChat from './components/ValeriaChat';
 import AdminLoginModal from './components/AdminLoginModal';
 import LeadCaptureModal from './components/LeadCaptureModal';
 import LoadingScreen, { MiniLoader } from './components/LoadingScreen';
@@ -1030,6 +1032,8 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                     {view === 'admin' && adminAuthenticated && (
                         <AdminDashboard onLogout={handleAdminLogout} onBack={() => handleNavigate('landing')} />
                     )}
+
+                    
                 </Suspense>
             </main>
 
@@ -1047,149 +1051,6 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                 onClose={() => setShowContactModal(false)}
             />
 
-            {/* Floating Chatbot - Solo en homepage */}
-            {view === 'landing' && (
-                <>
-                    {botOpen && (
-                        <div className={`chatbot-window ${isBotMinimized ? 'chatbot-minimized' : ''} ${isBotClosing ? 'closing' : ''}`}>
-                            <div className="chatbot-header">
-                                <div className="chatbot-avatar">
-                                    <Bot className="w-6 h-6 text-white" />
-                                    <div className={`chatbot-avatar-status ${isSpeaking ? 'speaking' : isListening ? 'listening' : 'online'}`}></div>
-                                </div>
-                                <div className="chatbot-header-info">
-                                    <div className="chatbot-header-name">Nico - Asesor Virtual</div>
-                                    <div className="chatbot-header-status">
-                                        {isSpeaking ? 'Hablando...' : isListening ? 'Escuchando' : 'En línea'}
-                                    </div>
-                                </div>
-                                {/* Toggle Modo Audio */}
-                                <div className="chatbot-mode-toggle">
-                                    <button 
-                                        className={`chatbot-mode-btn audio ${audioMode ? 'active' : ''}`}
-                                        onClick={() => setAudioMode(true)}
-                                        title="Modo Audio"
-                                    >
-                                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                                        </svg>
-                                        Audio
-                                    </button>
-                                    <button 
-                                        className={`chatbot-mode-btn text ${!audioMode ? 'active' : ''}`}
-                                        onClick={() => setAudioMode(false)}
-                                        title="Modo Texto"
-                                    >
-                                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                                        </svg>
-                                        Texto
-                                    </button>
-                                </div>
-                                <div className="chatbot-header-controls">
-                                    <button 
-                                        onClick={() => setIsBotMinimized(true)} 
-                                        className="chatbot-header-btn"
-                                        title="Minimizar"
-                                    >
-                                        <Minus className="w-4 h-4" />
-                                    </button>
-                                    <button 
-                                        onClick={() => {
-                                            setIsBotClosing(true);
-                                            setTimeout(() => {
-                                                setBotOpen(false);
-                                                setIsBotClosing(false);
-                                            }, 300);
-                                        }} 
-                                        className="chatbot-close"
-                                        title="Cerrar"
-                                    >
-                                        <X className="w-5 h-5" />
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="chatbot-messages">
-                                {/* Onda sonora cuando Nico está hablando */}
-                                {isSpeaking && (
-                                    <div className="sound-wave">
-                                        <div className="sound-wave-bar"></div>
-                                        <div className="sound-wave-bar"></div>
-                                        <div className="sound-wave-bar"></div>
-                                        <div className="sound-wave-bar"></div>
-                                    </div>
-                                )}
-                                {botMsgs.map((msg, i) => (
-                                    <div key={i} className={`chatbot-msg ${msg.role}`}>
-                                        <div className="chatbot-msg-content">{msg.text}</div>
-                                        <div className="chatbot-msg-time">
-                                            {msg.timestamp ? msg.timestamp.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' }) : ''}
-                                        </div>
-                                        {msg.role === 'assistant' && !audioMode && (
-                                            <button 
-                                                className={`chatbot-msg-audio ${isSpeaking ? 'speaking' : ''}`}
-                                                onClick={() => isSpeaking ? stopSpeaking() : speakText(msg.text)}
-                                                title={isSpeaking ? 'Detener' : 'Escuchar'}
-                                            >
-                                                {isSpeaking ? <X className="w-3 h-3" /> : <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>}
-                                            </button>
-                                        )}
-                                    </div>
-                                ))}
-                                {botLoading && (
-                                    <div className="chatbot-loading">
-                                        <div className="chatbot-loading-dots">
-                                            <span></span><span></span><span></span>
-                                        </div>
-                                        <span className="chatbot-loading-text">Nico está escribiendo...</span>
-                                    </div>
-                                )}
-                                <div ref={botMsgsEndRef} />
-                            </div>
-                            <div className="chatbot-input">
-                                <button 
-                                    className={`chatbot-btn chatbot-btn-voice ${isListening ? 'listening' : ''}`}
-                                    onClick={isListening ? stopListening : startListening}
-                                    title={isListening ? 'Detener' : 'Hablar'}
-                                >
-                                    {isListening ? <X className="w-5 h-5" /> : <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>}
-                                </button>
-                                <div className="chatbot-input-field">
-                                    <input 
-                                        type="text" 
-                                        value={botInput} 
-                                        onChange={(e) => setBotInput(e.target.value)}
-                                        onKeyDown={(e) => e.key === 'Enter' && handleBotSend()}
-                                        placeholder="Escribe tu mensaje..."
-                                        disabled={botLoading}
-                                    />
-                                </div>
-                                <button 
-                                    className="chatbot-btn chatbot-btn-send" 
-                                    onClick={handleBotSend}
-                                    disabled={!botInput.trim() || botLoading}
-                                >
-                                    <Send className="w-5 h-5" />
-                                </button>
-                            </div>
-                        </div>
-                    )}
-                    <button 
-                        className={`chatbot-toggle ${isBotMinimized ? 'minimized' : ''}`}
-                        onClick={() => {
-                            if (isBotMinimized) {
-                                setIsBotMinimized(false);
-                            } else {
-                                setBotOpen(true);
-                            }
-                        }} 
-                        aria-label={isBotMinimized ? 'Abrir chat' : botOpen ? 'Cerrar chat' : 'Hablar con Nico'}
-                    >
-                        {isBotMinimized ? <Square className="w-5 h-5" /> : botOpen ? <X className="w-5 h-5" /> : <MessageCircle className="w-5 h-5" />}
-                        <span>{isBotMinimized ? 'Abrir' : botOpen ? 'Cerrar' : 'Hablar con Nico'}</span>
-                    </button>
-                </>
-            )}
             {/* Footer - Solo se muestra en páginas principales, no en SmartBoard, VAK, IALab ni Admin */}
             {view !== 'smartboard' && view !== 'vak' && view !== 'ialab' && view !== 'admin' && <Footer />}
 
@@ -1199,6 +1060,9 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                 onClose={() => setAdminLoginModalOpen(false)}
                 onLogin={handleAdminLogin}
             />
+
+            {/* Nico Premium Widget - Flotante */}
+            <ValeriaChat />
         </div>
     );
 };

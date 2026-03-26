@@ -20,11 +20,14 @@ import {
   BarChart3,
   PieChart as PieChartIcon,
   RefreshCw,
-  Zap
+  Zap,
+  FolderOpen
 } from 'lucide-react';
 import { callDeepseek } from '../utils/api';
+import LeadsManager from './LeadsManager';
 
 const AdminDashboard = ({ onLogout, onBack }) => {
+  const [activeTab, setActiveTab] = useState('dashboard');
   const [activeSessions, setActiveSessions] = useState(1847);
   const [consultantMessages, setConsultantMessages] = useState([]);
   const [consultantInput, setConsultantInput] = useState('');
@@ -194,13 +197,37 @@ const AdminDashboard = ({ onLogout, onBack }) => {
               <span className="text-sm">Volver</span>
             </button>
             <div className="h-8 w-px bg-[#004B63]/50"></div>
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #004B63, #4DA8C4)' }}>
-                <Shield className="w-5 h-5 text-white" />
+            <div className="flex items-center gap-2">
+              <div className="w-5 h-5 rounded-md flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #004B63, #4DA8C4)' }}>
+                <Shield className="w-2.5 h-2.5 text-white" />
               </div>
               <div>
                 <h1 className="text-lg font-bold text-white font-montserrat">Command Center</h1>
                 <p className="text-xs text-[#B2D8E5]">Panel de Administración Edutechlife</p>
+              </div>
+              <div className="flex items-center gap-1 ml-6">
+                <button
+                  onClick={() => setActiveTab('dashboard')}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+                    activeTab === 'dashboard' 
+                      ? 'bg-[#4DA8C4]/30 text-white border border-[#4DA8C4]/50' 
+                      : 'text-[#66CCCC] hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  <BarChart3 className="w-4 h-4" />
+                  <span className="text-sm">Dashboard</span>
+                </button>
+                <button
+                  onClick={() => setActiveTab('leads')}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+                    activeTab === 'leads' 
+                      ? 'bg-[#4DA8C4]/30 text-white border border-[#4DA8C4]/50' 
+                      : 'text-[#66CCCC] hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  <FolderOpen className="w-4 h-4" />
+                  <span className="text-sm">Leads</span>
+                </button>
               </div>
             </div>
           </div>
@@ -220,6 +247,7 @@ const AdminDashboard = ({ onLogout, onBack }) => {
       </header>
 
       <div className="container mx-auto px-6 py-8">
+        <div className={activeTab === 'leads' ? 'hidden' : ''}>
         {/* KPI Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {kpis.map((kpi, index) => {
@@ -544,6 +572,8 @@ const AdminDashboard = ({ onLogout, onBack }) => {
             <p className="text-xs text-[#B2D8E5]">Satisfacción General</p>
           </div>
         </div>
+        </div>
+        {activeTab === 'leads' && <LeadsManager />}
       </div>
     </div>
   );
