@@ -3,7 +3,7 @@ import { Brain, Mic, MicOff, Volume2, VolumeX, Send, Sparkles, X, Loader2, Copy,
 import useConversationMemory from '../../hooks/useConversationMemory';
 import { callDeepseek } from '../../utils/api';
 import { speakTextConversational, stopSpeech } from '../../utils/speech';
-import { createSpeechRecognition, checkSpeechRecognitionSupport, requestMicrophonePermission, getSpeechRecognitionStatus } from '../../utils/speechRecognition.enhanced';
+import { createSpeechRecognition, checkSpeechRecognitionSupport, requestMicrophonePermission, getSpeechRecognitionStatus } from '../../utils/speechRecognition';
 
 const PROMPT_NICO_SOPORTE = `Eres NICO - Agente de Soporte Premium de EdutechLife.
 
