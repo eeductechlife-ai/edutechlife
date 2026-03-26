@@ -21,8 +21,7 @@ const DiagnosticoVAK = lazy(() => import('./components/DiagnosticoVAK'));
 const VAKTest = lazy(() => import('./components/VAKTest'));
 const VAKDiagnostic = lazy(() => import('./components/VAKDiagnostic'));
 const AdminDashboard = lazy(() => import('./components/AdminDashboard'));
-import NicoPremiumTest from './components/NicoPremiumTest';
-import ValeriaChat from './components/ValeriaChat';
+import { NicoSupport } from './components/Nico';
 import AdminLoginModal from './components/AdminLoginModal';
 import LeadCaptureModal from './components/LeadCaptureModal';
 import LoadingScreen, { MiniLoader } from './components/LoadingScreen';
@@ -1062,7 +1061,7 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
             />
 
             {/* Nico Premium Widget - Flotante */}
-            <ValeriaChat />
+            <NicoSupport />
         </div>
     );
 };

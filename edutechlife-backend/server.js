@@ -84,14 +84,17 @@ app.post('/api/chat', async (req, res) => {
         return res.status(500).json({ error: 'API key not configured on server' });
     }
 
+    const startTime = Date.now();
+
     const payload = { 
         model: 'deepseek-chat', 
         messages: [
             { role: 'system', content: systemPrompt }, 
             { role: 'user', content: prompt }
         ], 
-        temperature: 0.75, 
-        max_tokens: 1200 
+        temperature: 0.5, 
+        max_tokens: 500,
+        stream: false
     };
     
     if (isJson) payload.response_format = { type: 'json_object' };
@@ -114,6 +117,9 @@ app.post('/api/chat', async (req, res) => {
         if (!text) {
             return res.status(500).json({ error: 'No response from API' });
         }
+
+        const elapsed = Date.now() - startTime;
+        console.log(`[DeepSeek] Response time: ${elapsed}ms | Tokens: ~${text.split(' ').length}`);
 
         res.json({ result: text });
     } catch (e) {

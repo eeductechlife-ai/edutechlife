@@ -2,7 +2,7 @@ const VOICE_PROFILES = {
   valeria: { languageCode: 'es-US', name: 'es-US-Neural2-A', pitch: 1.2, speakingRate: 1.05 },
   valerio: { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: -2.0, speakingRate: 1.0 },
   sistema: { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: 0, speakingRate: 1.0 },
-  nico: { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 0.0, speakingRate: 1.0 }
+  nico: { languageCode: 'es-CO', name: 'es-CO-Neural2-B', pitch: 1.0, speakingRate: 1.05 }
 };
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://edutechlife-q3blvmkur-eeductechlife-ais-projects.vercel.app';

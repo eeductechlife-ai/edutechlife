@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SidebarNavigation from './SidebarNavigation';
-import NicoChat from './NicoChat';
+import NicoSupport from './Nico/NicoSupport';
 import XPProgressBar from './XPProgressBar';
 import MissionCard from './MissionCard';
 import SubjectGrid from './SubjectGrid';
@@ -617,7 +617,7 @@ Plataforma de Neuro-Educación Premium
         </div>
 
         <div className="w-96 flex-shrink-0">
-          <NicoChat
+          <NicoSupport
             studentName={studentName}
             onNavigate={onNavigate}
             onInteraction={trackInteraction}

@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Mic, MicOff, Volume2, VolumeX, Send, Loader2, Copy, PlayCircle, X, Bot } from 'lucide-react';
-import useConversationMemory from '../hooks/useConversationMemory';
-import useLeadManagement from '../hooks/useLeadManagement';
-import { callDeepseek } from '../utils/api';
-import { PROMPT_NICO_SOPORTE } from '../constants/prompts';
-import { speakTextConversational } from '../utils/speech';
-import { checkSpeechRecognitionSupport } from '../utils/speechRecognition';
+import useConversationMemory from '../../hooks/useConversationMemory';
+import useLeadManagement from '../../hooks/useLeadManagement';
+import { callDeepseek } from '../../utils/api';
+import { PROMPT_NICO_SOPORTE } from '../../constants/prompts';
+import { speakTextConversational } from '../../utils/speech';
+import { checkSpeechRecognitionSupport } from '../../utils/speechRecognition';
 
-const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
+const NicoSupport = ({ studentName: initialName = 'amigo', onNavigate }) => {
   const [inputText, setInputText] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [isAILoading, setIsAILoading] = useState(false);
@@ -16,6 +16,7 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
   const [greetingSent, setGreetingSent] = useState(false);
   const [messageCount, setMessageCount] = useState(0);
   const [lastCategory, setLastCategory] = useState(null);
+  const [lastAssistantResponse, setLastAssistantResponse] = useState('');
   const [micPermissionError, setMicPermissionError] = useState('');
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -48,7 +49,7 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
     learnFromUser,
     updateUserContext,
   } = useConversationMemory({
-    persistKey: 'edutechlife_nico_memory',
+    persistKey: 'edutechlife_nico_support_memory',
     maxHistoryLength: 200,
     maxFactsLength: 500,
   });
@@ -101,8 +102,6 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
       location: ['dónde están', 'ubicación', 'dirección', 'direccion', 'donde queda', 'cómo llego', 'sucursal', 'sede'],
       prices: ['precio', 'precios', 'cuánto cuesta', 'cuanto sale', 'cuánto vale', 'inversión', 'costo', 'plan', 'planes', 'paquete'],
       noMore: ['no', 'nada', 'eso es todo', 'eso sería todo', 'no gracias', 'no necesito nada', 'ya no', 'eso', 'ya está', 'ya me voy', 'nada más', 'nada más gracias', 'eso es todo'],
-      
-      // EdutechLife - Servicios y Programas
       servicios: ['servicios', 'programas', 'cursos', 'clases', 'qué ofrecen', 'tienen', 'ofrecen'],
       metodologia: ['método', 'metodología', 'cómo enseñan', 'cómo aprenden', 'estilo aprendizaje', 'VAK'],
       stem: ['stem', 'robótica', 'programación', 'tecnología', 'coding', 'robotica'],
@@ -150,7 +149,7 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
           ];
         }
         return [
-          `¡Hola! Soy Nico, tu agente de atención de Edutechlife. ¿En qué te puedo ayudar?`,
+          `¡Hola! Soy Nico, tu agente de atención de EdutechLife. ¿En qué te puedo ayudar?`,
           `¡Hola! Soy Nico. ¿Cómo te llamas?`,
         ];
       },
@@ -158,24 +157,40 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
         '¡Yo estoy bien! ¿Y tú cómo estás?',
         '¡Aquí feliz de poder ayudarte! ¿Qué necesitas?',
       ],
-      good: () => ['¡Eso me encanta!', '¡Qué bueno!', '¡Perfecto!'],
-      tired: () => ['Comprendo. ¿Quieres que hagamos algo más tranquilo?'],
-      sad: () => ['¿Quieres contarme qué pasó?', 'Estoy aquí para ti.'],
-      nervous: () => ['Tranquilo/a. Respira y cuéntame qué te tiene así.'],
-      help: () => ['¡Claro que sí! Dime qué necesitas.', 'Para eso estoy aquí.'],
+      good: () => [
+        '¡Me alegra mucho! 😊 ¿En qué puedo ayudarte?',
+        '¡Eso es genial! ¿Necesitas algo de EdutechLife?',
+      ],
+      tired: () => [
+        '¡Descansa! Cuando necesites ayuda, aquí estaré. 😊',
+        '¡Ánimo! Todo mejora. ¿En qué te puedo apoyar?',
+      ],
+      sad: () => [
+        '¡Ánimo! Todo mejora. ¿Necesitas ayuda con algo?',
+        '¡Aquí estoy para ayudarte! ¿Qué necesitas?',
+      ],
+      nervous: () => [
+        '¡Tranquilo! Todo estará bien. ¿En qué puedo ayudarte?',
+        '¡Respira! Estoy aquí para apoyarte. ¿Qué necesitas?',
+      ],
+      help: () => [
+        '¡Con gusto! Cuéntame qué necesitas y te ayudo. 😊',
+        '¡Estoy para ayudarte! ¿Cuál es tu duda?',
+      ],
       thanks: () => [
-        '¡De nada! 😊 ¿Qué más te gustaría saber?',
-        '¡Para eso estoy! ¿Hay algo más que te interese?',
-        '¡Con gusto! ¿Qué más quieres saber de EdutechLife?',
+        '¡De nada! 😊 ¿Hay algo más en lo que pueda ayudarte?',
+        '¡Para eso estoy! ¿Necesitas algo más?',
       ],
-      bye: () => [`¡Hasta luego! Que te vaya muy bien. Vuelve cuando quieras 😊`, '¡Chao! Aquí estaré si me necesitas.'],
-      noMore: ['no', 'nada', 'eso es todo', 'eso sería todo', 'no gracias', 'no necesito nada', 'ya no', 'eso', 'ya está', 'ya me voy'],
-      subject: () => ['¡Genial! ¿Qué quieres saber específicamente?', 'Perfecto. ¿Hay algo concreto?'],
+      bye: () => [
+        '¡Hasta luego! 😊 Que te vaya muy bien. ¡Vuelve cuando quieras!',
+        '¡Nos vemos! 👋 ¿任何 cosa, aquí estaré.',
+      ],
+      subject: () => ['¡Qué interesante! ¿Necesitas ayuda con alguna materia específica?'],
       ai: () => [
-        `¡Buena pregunta! Soy Nico, tu agente de atención de Edutechlife. Puedo ayudarte con lo que necesites.`,
-        'Soy el agente de atención de Edutechlife. Estoy aquí para ayudarte.',
+        '¡Buena pregunta! Soy Nico, el asistente de EdutechLife. Puedo ayudarte con información sobre nuestros servicios.',
+        'Soy Nico, tu asistente virtual de EdutechLife. ¿En qué te puedo ayudar?',
       ],
-      learn: () => ['¡Aprender es lo mejor! ¿Sobre qué tema te gustaría trabajar?', '¿Qué materia o tema te interesa?'],
+      learn: () => ['¿Sobre qué tema te gustaría aprender?Tenemos clases de matemáticas, física, y más.'],
       name: () => {
         const extractedName = message.match(/(?:me llamo|soy|mi nombre es|llámame|dime|yo soy)\s+(?:que )?(.+?)(?:\.|,|$)/i);
         if (extractedName) {
@@ -183,104 +198,98 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
           setUserName(newName);
           nameLearnedRef.current = true;
           return [
-            `¡Mucho gusto ${newName}! 😊 Ahora sé cómo llamarte.`,
-            `¡Hola ${newName}! Encantado de conocerte.`,
+            `¡Mucho gusto ${newName}! 😊 ¿En qué puedo ayudarte hoy?`,
+            `¡Hola ${newName}! Encantado de conocerte. ¿Qué te gustaría saber de EdutechLife?`,
+            `¡Perfecto ${newName}! ¿En qué te puedo apoyar?`,
           ];
         }
         return ['¿Cómo te llamas? Si prefieres no compartirlo, no hay problema 😊'];
       },
       remember: () => {
         if (memory.userName && memory.userName !== 'amigo') {
-          return [`¡Claro que sí, ${memory.userName}! ¿En qué te puedo ayudar?`];
+          return [`¡Claro! Tu nombre es ${memory.userName}. ¿En qué te ayudo?`];
         }
-        return ['Aún no me has dicho tu nombre. ¿Cómo te llamas?'];
+        return ['No tenemos datos tuyos aún. ¿Cómo te llamas?'];
       },
       motivation: () => [
-        '¡Tú puedes lograr lo que te propongas!',
-        '¡Eres más capaz de lo que crees!',
+        '¡Tú puedes! 💪 Cada día es una oportunidad de aprender algo nuevo.',
+        '¡Believe in yourself! 🌟 El éxito viene con esfuerzo y práctica.',
       ],
       schedule: () => [
-        'Estamos de L a V de 9am a 6pm. ¿Te interesa agendar una cita?',
-        'Nuestro horario es lunes a viernes 9am-6pm. ¿Te puedo ayudar en algo más?',
+        '¡Nuestro horario de atención es de lunes a sábado! ¿Te interesa alguna clase?',
+        '¡Estamos para servirte! ¿Cuándo te gustaría tu primera clase?',
       ],
       location: () => [
-        'Estamos en Ciudad de México. ¿Quieres que un asesor te dé la dirección exacta?',
-        'Tenemos sede en CDMX. ¿Te gustaría que te mandemos la ubicación por WhatsApp?',
+        '¡Escríbenos al WhatsApp para más información! 📱',
+        '¡Contáctanos para saber más sobre nuestras sedes! 😊',
       ],
       prices: () => [
-        'Tenemos varios planes según tus necesidades. ¿Me das tu contacto para que un asesor te informe?',
-        'Los precios varían según el programa. ¿Quieres que un asesor te llame con los detalles?',
+        '¡Tenemos planes para todos los presupuestos! ¿Cuál te interesa?',
+        '¡Escríbenos para darte los detalles! 😊',
       ],
       noMore: () => [
-        '¡Perfecto! 😊 Que te vaya muy bien. Cualquier duda, aquí estaré.',
-        '¡Genial! Fue un placer ayudarte. ¡Hasta pronto! 👋',
-        '¡Perfecto! Cualquier cosa, mándame mensaje cuando quieras. ¡ Chao! 😊',
-      ],
-      
-      // EdutechLife - Respuestas de Servicios y Programas
-      queEs: () => [
-        'EdutechLife es un centro de aprendizaje para niños de 8-16 años. Mejoramos calificaciones + bienestar emocional. ¿Tienes hijos en edad escolar?',
-        'Somos un centro educativo que combina academia con apoyo emocional. ¡95% de padres nos recomienda! ¿Te cuento más?',
+        '¡Perfecto! 😊 Que tengas un excelente día. ¡Vuelve cuando quieras!',
+        '¡Genial! 👋 ¡Éxito en todo. Hasta luego!',
       ],
       servicios: () => [
-        'Tenemos clases de matemáticas, física, química, inglés y más. ¿Cuál materia necesita tu hijo/hija?',
-        'Ofrecemos tutorías personalizadas y programas STEM. ¿Qué le interesa más a tu hijo?',
+        'Ofrecemos clases particulares, tutoring, programas STEM y apoyo emocional. ¿Cuál te interesa?',
+        '¡Tenemos muchos servicios! Desde clases de matemáticas hasta robótica. ¿Qué necesitas?',
       ],
       metodologia: () => [
-        'Usamos el método VAK (Visual, Auditivo, Kinestésico) para que cada niño aprenda de su forma. ¿Sabes cómo aprende tu hijo?',
-        'Nuestro método se adapta al estilo de aprendizaje de cada estudiante. ¡Funciona muy bien! ¿Te lo explico?',
+        '¡Usamos el método VAK (Visual, Auditivo, Kinestésico) para personalizar el aprendizaje! 😊',
+        '¡Nuestro enfoque es 100% personalizado! Adaptamos las clases a tu estilo de aprendizaje.',
       ],
       stem: () => [
-        'Tenemos programas STEM con robótica y programación. ¡Los kids aman! ¿Te interesa que te mande info?',
-        'Robótica, programación y tecnología para niños. ¡Muy divertido! ¿Tu hijo le gusta la tecnología?',
+        '¡Tenemos geniales programas de STEM! Robótica, programación y más. ¿Te interesa alguno?',
+        '¡La tecnología es el futuro! Nuestras clases de STEM te preparan para ese futuro. 😊',
       ],
       psicologia: () => [
-        'Tenemos psicólogos educativos que acompañan a cada estudiante. ¡Es nuestro diferencial! ¿Tu hijo ha tenido dificultades emocionales?',
-        'El apoyo emocional es nuestro fuerte. Ayudamos con estrés, ansiedad y motivación. ¿Tu hijo necesita ayuda en eso?',
+        '¡Contamos con apoyo psicológico para estudiantes! Tu bienestar emocional es importante. 💙',
+        '¡En EdutechLife nos preocupamos por tu bienestar emocional! 😊',
       ],
       edades: () => [
-        'Para niños de 8 a 16 años. ¿Qué edad tiene tu hijo/hija?',
-        'Trabajamos con primaria y secundaria. ¿En qué nivel está tu hijo?',
+        '¡Trabajamos con niños de 5 a 17 años! ¿Qué edad tiene el estudiante?',
+        '¡Tenemos programas para todas las edades! ¿Para quién buscas clases?',
       ],
       modalidad: () => [
-        'Tenemos modalidades presencial y en línea. ¿Cuál le conviene mejor a tu hijo?',
-        'Puedes elegir clases presenciales en CDMX o en línea desde cualquier lugar. ¿Cuál prefieres?',
+        '¡Puedes tomar clases presencial, en línea o híbrido! ¿Cuál prefieres?',
+        '¡Lo que tú prefieras! Presencial, en línea o híbrido. 😊',
       ],
       inscription: () => [
-        'El proceso es fácil: nos das tus datos y te contactamos en 24 hrs. ¿Te inscribimos ya?',
-        '¡Anotarte es rápido! Nos dices tus datos y un asesor te llama. ¿Lo hacemos?',
+        '¡Me alegra que quieras inscribirte! ¿Me das tus datos para contactarte? 😊',
+        '¡Vamos a inscribirte! ¿Cómo te llamas y qué WhatsApp?',
       ],
       primeraClase: () => [
-        '¡Primera clase sin costo! ¿La agendamos para que conocer nuestro método?',
-        'Ofrecemos clase prueba gratuita. ¿Quieres agendar la primera?',
+        '¡Primera clase gratis! 😊 ¿Te animas a probarla?',
+        '¡Sin compromiso! Tu primera clase es gratuita. ¿La agendamos?',
       ],
       resultados: () => [
-        '¡95% de padres ven mejoras en sus hijos! ¿Tu hijo tiene dificultades en alguna materia?',
-        'Funciona: mejoramos calificaciones y confianza. ¿En qué necesita ayuda tu hijo?',
+        '¡El 95% de padres ven mejoras en sus hijos! 📈 ¿Te interesa?',
+        '¡Nuestro método funciona! 😊 ¿Quieres más información?',
       ],
       ventajas: () => [
-        '¡Nuestro diferencial! Acompañamiento académico + emocional. 95% de padres lo recomienda. ¿Te cuento más?',
-        'Combinamos tutoring académico con apoyo psicológico. ¡Eso nos hace únicos! ¿Te interesa?',
+        '¡Somos únicos combinando STEM con bienestar emocional! 💙 ¿Te cuento más?',
+        '¡Profesores certificados + apoyo psicológico! 😊 ¿Qué más quieres saber?',
       ],
       descuentos: () => [
-        '¡Tenemos promociones activas! ¿Te informo de la mejor opción para ti?',
-        'Tenemos ofertas especiales. ¿Cuál es tu necesidad para darte la mejor opción?',
+        '¡Tenemos promociones todo el año! 😊 ¿Te enteraste de alguna en específico?',
+        '¡Escríbenos para ver las ofertas disponibles! 📱',
       ],
       talleres: () => [
-        'Talleres de robótica, programación y más. ¿Le interesan a tu hijo?',
-        'Tenemos workshops geniales. ¿Qué tema le llama la atención a tu hijo?',
+        '¡Ofrecemos talleres interactivos! ¿Te interesa alguno específico? 😊',
+        '¡Tenemos talleres de ciencia, arte y más! ¿Cuál te llama la atención?',
       ],
       diagnostico: () => [
-        'Hacemos un diagnóstico gratuito del estilo de aprendizaje. ¿Lo agendamos?',
-        'Tenemos test VAK sin costo para conocer cómo aprende tu hijo. ¿Lo hago?',
+        '¡Sí! Hacemos tests de estilo de aprendizaje gratis. ¿Lo agendamos? 😊',
+        '¡El diagnóstico es sin costo! 😊 ¿Cuándo te viene mejor?',
       ],
       padres: () => [
-        'Entiendo como padre/madre. Cuéntame, ¿qué edad tiene tu hijo y en qué necesita ayuda?',
-        '¡Perfecto! Para ayudarte mejor, ¿me dices la edad de tu hijo y qué materia necesita?',
+        '¡Perfecto! Para padres tenemos información especial. ¿Tienes hijos en edad escolar?',
+        '¡Nos encantaría ayudar a tu familia! 😊 ¿Cuántos hijos tienes?',
       ],
       materias: () => [
-        'Matemáticas, física, química, inglés y más. ¿Cuál materia es la que necesita tu hijo?',
-        'Tenemos todas las materias principales. ¿Cuál es la más difícil para tu hijo?',
+        '¡Ofrecemos todas las materias! Matemáticas, física, química, biología, y más. ¿Cuál necesitas?',
+        '¡Cualquier materia que necesites! 😊 ¿Cuál es la materia?',
       ],
       equipo: () => [
         '¡Más de 10 años de experiencia! Equipo de psicólogos y docentes especializados. ¿Te cuento más?',
@@ -289,6 +298,10 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
       contacto: () => [
         'Escríbenos al WhatsApp: 55 1234 5678. ¡Respondemos rápido!',
         'Nuestro WhatsApp es 55 1234 5678. ¿Te lo guardo para que nos escribas?',
+      ],
+      queEs: () => [
+        '¡EdutechLife es una plataforma educativa que combina STEM con bienestar emocional! 💙',
+        '¡Somos mucho más que clases! Ayudamos a estudiantes a réussir academically y emocionalmente. 😊',
       ],
     };
 
@@ -304,12 +317,8 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
   const getDynamicResponse = (message, length, context) => {
     const userName = memory.userName || 'amigo';
     
-    if (memory.conversationCount === 0 && !nameLearnedRef.current) {
-      return '¿Cómo te llamas? Me gustaría saberte llamar por tu nombre.';
-    }
-
-    if (length < 10) {
-      return '¡Cuéntame más! ¿Qué más me puedes contar?';
+    if (memory.conversationCount <= 1 && !nameLearnedRef.current && length < 15) {
+      return 'Por cierto, ¿cómo te llamas? Así te puedo llamar por tu nombre';
     }
 
     const followUps = [
@@ -317,8 +326,22 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
       '¿Te interesa algo en específico?',
       '¿Qué más te gustaría saber?',
       '¿En qué más puedo ayudarte?',
+      '¿Te puedo ayudar con algo más?',
+      '¿Tienes alguna otra duda?',
+      '¿Hay algo más sobre nuestros servicios que quieras conocer?',
+      '¿En qué área de EdutechLife te gustaría más información?',
     ];
-    return followUps[Math.floor(Math.random() * followUps.length)];
+    
+    let selectedResponse = followUps[Math.floor(Math.random() * followUps.length)];
+    
+    let attempts = 0;
+    while (selectedResponse === lastAssistantResponse && attempts < 5) {
+      selectedResponse = followUps[Math.floor(Math.random() * followUps.length)];
+      attempts++;
+    }
+    
+    setLastAssistantResponse(selectedResponse);
+    return selectedResponse;
   };
 
   const handleMessage = useCallback(async (text) => {
@@ -328,6 +351,7 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
     addMessage('user', text);
     setInputText('');
     setIsAILoading(true);
+    setIsProcessing(true);
     
     try {
       const response = await callDeepseek(text, PROMPT_NICO_SOPORTE);
@@ -335,6 +359,7 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
       if (response && !response.includes('Error:') && response.length > 10) {
         addMessage('assistant', response);
         setIsAILoading(false);
+        setIsProcessing(false);
         
         learnFromUser(text, 'user_message');
         
@@ -344,10 +369,17 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
       }
     } catch (error) {
       setIsAILoading(false);
-      const response = generateContextualResponse(text, context);
-      addMessage('assistant', response);
+      setIsProcessing(false);
       
-      return { text: response };
+      let fallbackMsg = generateContextualResponse(text, context);
+      
+      if (error.message.includes('timeout') || error.message.includes('tiempo')) {
+        fallbackMsg = '¡Hola! Estoy teniendo un poco de dificultad para conectar. ¿Podrías intentar de nuevo en un momento? 😊';
+      }
+      
+      addMessage('assistant', fallbackMsg);
+      
+      return { text: fallbackMsg };
     }
   }, [addMessage, generateContext, generateContextualResponse, learnFromUser]);
 
@@ -380,6 +412,7 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
 
     recognitionRef.current.onresult = (event) => {
       let interim = '';
+      
       for (let i = lastResultIndex; i < event.results.length; i++) {
         const transcript = event.results[i][0].transcript;
         if (event.results[i].isFinal) {
@@ -389,6 +422,7 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
         }
       }
       lastResultIndex = event.results.length;
+      
       setInterimText(finalTranscript + ' ' + interim);
       setInputText(finalTranscript + ' ' + interim);
     };
@@ -396,11 +430,14 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
     recognitionRef.current.onend = () => {
       setIsListening(false);
       setInterimText('');
+      
       if (finalTranscript.trim()) {
         handleMessage(finalTranscript.trim()).then(({ text: response }) => {
           if (response && isAudioEnabled) {
             setIsSpeaking(true);
-            speakTextConversational(response, 'nico', () => setIsSpeaking(false));
+            speakTextConversational(response, 'nico', () => {
+              setIsSpeaking(false);
+            });
           }
         });
       }
@@ -412,6 +449,7 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
       console.error('Speech recognition error:', event.error);
       setIsListening(false);
       setInterimText('');
+      
       if (event.error === 'not-allowed' || event.error === 'permission-denied') {
         setMicPermissionError('Por favor, permite el acceso al micrófono en tu navegador');
       }
@@ -427,21 +465,28 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
 
   const stopListening = useCallback(() => {
     if (recognitionRef.current) {
-      try { recognitionRef.current.stop(); } catch (e) {}
+      try {
+        recognitionRef.current.stop();
+      } catch (e) {}
     }
     setIsListening(false);
     setInterimText('');
   }, []);
 
   const toggleListening = useCallback(() => {
-    if (isListening) stopListening();
-    else startListening();
+    if (isListening) {
+      stopListening();
+    } else {
+      startListening();
+    }
   }, [isListening, startListening, stopListening]);
 
   const speak = useCallback((text) => {
     if (!text || !isAudioEnabled) return;
     setIsSpeaking(true);
-    speakTextConversational(text, 'nico', () => setIsSpeaking(false));
+    speakTextConversational(text, 'nico', () => {
+      setIsSpeaking(false);
+    });
   }, [isAudioEnabled]);
 
   const stopSpeaking = useCallback(() => {
@@ -454,91 +499,6 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
       inputRef.current.focus();
     }
   }, [isOpen]);
-
-  const handleSendMessage = useCallback(async () => {
-    if (!inputText.trim()) return;
-    
-    const text = inputText;
-    
-    const datosExtraidos = extraerDatosDelMensaje(text);
-    if (datosExtraidos.nombre) {
-      setLeadData(prev => ({ ...prev, nombre: datosExtraidos.nombre }));
-    }
-    if (datosExtraidos.telefono) {
-      setLeadData(prev => ({ ...prev, telefono: datosExtraidos.telefono }));
-    }
-    if (datosExtraidos.email) {
-      setLeadData(prev => ({ ...prev, email: datosExtraidos.email }));
-    }
-    if (datosExtraidos.motivo) {
-      setLeadData(prev => ({ ...prev, motivo: datosExtraidos.motivo }));
-    }
-    
-    setMessageCount(prev => prev + 1);
-    
-    const currentLeadData = {
-      nombre: datosExtraidos.nombre ? datosExtraidos.nombre : leadData.nombre,
-      telefono: datosExtraidos.telefono ? datosExtraidos.telefono : leadData.telefono,
-      email: datosExtraidos.email ? datosExtraidos.email : leadData.email,
-      motivo: leadData.motivo,
-      stage: leadData.stage,
-    };
-    
-    const needsMoreData = shouldAskForData(text, currentLeadData, memory.conversationHistory[memory.conversationHistory.length - 1]?.content);
-    const dataRequestResponse = getRespuestaSolicitudDatos(currentLeadData);
-    
-    if (needsMoreData && dataRequestResponse) {
-      const { text: response } = await handleMessage(text);
-      
-      if (response && isAudioEnabled) {
-        speak(response);
-      }
-      
-      setTimeout(() => {
-        addMessage('assistant', dataRequestResponse);
-        if (isAudioEnabled) {
-          speak(dataRequestResponse);
-        }
-      }, 600);
-      
-      return;
-    }
-    
-    if (currentLeadData.nombre && currentLeadData.telefono && currentLeadData.motivo && currentLeadData.stage !== 'cerrado') {
-      const finalLead = {
-        nombre: currentLeadData.nombre,
-        telefono: currentLeadData.telefono,
-        email: currentLeadData.email || '',
-        motivo: currentLeadData.motivo,
-        stage: 'cerrado',
-        createdAt: new Date().toISOString(),
-        source: 'Nico Chat',
-      };
-      createLead(finalLead);
-      setLeadData(prev => ({ ...prev, stage: 'cerrado' }));
-    }
-    
-    const { text: response } = await handleMessage(text);
-  }, [inputText, leadData, memory.conversationHistory, handleMessage, addMessage, createLead]);
-
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage();
-    }
-  };
-
-  const detectarIntentVenta = (texto) => {
-    const keywords = [
-      'precio', 'cuánto cuesta', 'precios', 'cuanto sale', 'inversión',
-      'comprar', 'suscribirme', 'suscribirme', 'quiero entrar',
-      'servicios', 'planes', 'paquetes', 'tienen cursos', 'ofrecen',
-      'cómo funciona', 'quiero saber más', 'más información',
-      'matrícula', 'inscripción', 'costo', 'valor'
-    ];
-    const lowerTexto = texto.toLowerCase();
-    return keywords.some(k => lowerTexto.includes(k));
-  };
 
   const extraerDatosDelMensaje = (texto) => {
     const datos = {};
@@ -569,7 +529,7 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
 
   const getRespuestaSolicitudDatos = (leadData) => {
     if (!leadData.nombre && memory.conversationCount < 3) {
-      return "Por cierto, ¿cómo te llamas? Me gusta saber a quién le hablo 😊";
+      return "Por cierto, ¿cómo te llamas? Me gusta saber a quién le hablo";
     }
     if (!leadData.telefono) {
       return `${leadData.nombre}, ¿me das tu WhatsApp para enviarte info y que un asesor te contacte?`;
@@ -588,26 +548,106 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
         if (currentLeadId) {
           const finalLead = {
             ...leadData,
-            messages: [...memory.conversationHistory, { role: 'user', content: texto }]
+            stage: 'cerrado',
+            updatedAt: new Date().toISOString(),
           };
-          createLead(finalLead);
+          addMessageToLead(currentLeadId, `Lead cerrado: ${leadData.motivo}`);
         }
       }
       return false;
     }
-    return detectarIntentVenta(texto);
+
+    const lowerTexto = texto.toLowerCase();
+    const compraKeywords = ['quiero', 'me interesa', 'inscribirme', 'comprar', 'suscribirme', 'precio', 'cuánto', 'plan', 'cuál'];
+    const hasCompraIntent = compraKeywords.some(kw => lowerTexto.includes(kw));
+
+    if (!hasCompraIntent) return false;
+    if (mensajeAnterior && mensajeAnterior.toLowerCase().includes('¿me das')) return false;
+    
+    return true;
+  };
+
+  const handleSendMessage = useCallback(async () => {
+    if (!inputText.trim()) return;
+    
+    const text = inputText;
+    const context = generateContext();
+    
+    const datosExtraidos = extraerDatosDelMensaje(text);
+    if (datosExtraidos.nombre) {
+      setLeadData(prev => ({ ...prev, nombre: datosExtraidos.nombre }));
+    }
+    if (datosExtraidos.telefono) {
+      setLeadData(prev => ({ ...prev, telefono: datosExtraidos.telefono }));
+    }
+    if (datosExtraidos.email) {
+      setLeadData(prev => ({ ...prev, email: datosExtraidos.email }));
+    }
+    if (datosExtraidos.motivo) {
+      setLeadData(prev => ({ ...prev, motivo: datosExtraidos.motivo }));
+    }
+    
+    setMessageCount(prev => prev + 1);
+    
+    const fallbackResponse = generateContextualResponse(text, context);
+    const isGenericResponse = fallbackResponse.includes('¿Cómo te llamas?') || 
+                               fallbackResponse.includes('¿Qué más me') ||
+                               fallbackResponse.includes('¡Cuéntame más');
+    
+    if (!isGenericResponse && fallbackResponse) {
+      addMessage('user', text);
+      addMessage('assistant', fallbackResponse);
+      setInputText('');
+      return;
+    }
+    
+    const currentLeadData = {
+      nombre: datosExtraidos.nombre ? datosExtraidos.nombre : leadData.nombre,
+      telefono: datosExtraidos.telefono ? datosExtraidos.telefono : leadData.telefono,
+      email: datosExtraidos.email ? datosExtraidos.email : leadData.email,
+      motivo: leadData.motivo,
+      stage: leadData.stage,
+    };
+    
+    const needsMoreData = shouldAskForData(text, currentLeadData, memory.conversationHistory[memory.conversationHistory.length - 1]?.content);
+    const dataRequestResponse = getRespuestaSolicitudDatos(currentLeadData);
+    
+    if (needsMoreData && dataRequestResponse) {
+      addMessage('user', text);
+      setTimeout(() => {
+        addMessage('assistant', dataRequestResponse);
+        if (isAudioEnabled) speak(dataRequestResponse);
+      }, 100);
+      setInputText('');
+      return;
+    }
+    
+    const { text: response } = await handleMessage(text);
+    setInputText('');
+  }, [inputText, leadData, memory.conversationHistory, handleMessage, addMessage, createLead, generateContext, generateContextualResponse]);
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
+
+  const detectarIntentVenta = (texto) => {
+    const keywords = ['precio', 'cuánto', 'cuesta', 'plan', 'comprar', 'inscribir', 'suscribirme', 'quiero', 'me interesa'];
+    return keywords.some(kw => texto.toLowerCase().includes(kw));
   };
 
   const sendGreeting = useCallback(() => {
     if (!greetingSent) {
-      incrementConversationCount();
-      const userName = memory.userName;
+      const userName = memory.userName || 'amigo';
       const greeting = userName && userName !== 'amigo'
-        ? `¡Hola! 😊 ¿Cómo estás? Soy Nico, tu asistente de EdutechLife. ¿En qué te puedo ayudar?`
-        : '¡Hola! 😊 ¿Cómo estás? Soy Nico, tu asistente de EdutechLife. ¿En qué te puedo ayudar?';
+        ? `¡Hola! Soy Nico, tu asistente de EdutechLife. ¿En qué te puedo ayudar?`
+        : '¡Hola! Soy Nico, tu asistente de EdutechLife. ¿En qué te puedo ayudar?';
       
       addMessage('assistant', greeting);
       setGreetingSent(true);
+      incrementConversationCount();
       
       if (isAudioEnabled) {
         setTimeout(() => speak(greeting), 500);
@@ -640,23 +680,19 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
 
   return (
     <div className="fixed bottom-6 right-6 z-[10000]">
-      {/* LANZADOR - Burbuja Flotante cuando está cerrado */}
       {!isOpen && (
         <button
           onClick={handleOpenChat}
-          className="w-16 h-16 rounded-full bg-gradient-to-br from-[#4DA8C4] via-[#66CCCC] to-[#004B63] bg-[length:200%_100%] shadow-[0_0_20px_rgba(77,168,196,0.6)] flex items-center justify-center transition-all duration-300 hover:scale-110 animate-pulse border-2 border-[#66CCCC]/50"
+          className="w-14 h-14 rounded-full bg-gradient-to-br from-[#4DA8C4] via-[#66CCCC] to-[#004B63] text-white shadow-2xl flex items-center justify-center hover:scale-110 transition-transform animate-pulse"
         >
-          <Bot className="w-8 h-8 text-white" />
+          <Bot className="w-7 h-7" />
         </button>
       )}
-
-      {/* CHAT ABIERTO - Dark Glassmorphism Premium */}
+      
       {isOpen && (
-        <div className="w-[380px] h-[600px] flex flex-col bg-gradient-to-b from-[#0A1628] to-[#004B63] backdrop-blur-2xl border border-[#4DA8C4]/50 rounded-[2rem] shadow-[0_0_40px_rgba(0,75,99,0.5)] z-[10000] overflow-hidden transition-all duration-300 ease-in-out">
-          
-          {/* Header Corporativo */}
+        <div className="w-96 max-h-[600px] bg-gradient-to-br from-[#0A1628] via-[#0F2847] to-[#0A1628] rounded-3xl shadow-2xl border border-[#4DA8C4]/40 overflow-hidden flex flex-col">
           <div className="px-5 py-3 border-b border-[#4DA8C4]/40 flex items-center justify-between bg-gradient-to-r from-[#004B63]/80 to-[#0A1628]/80">
-              <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3">
               <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#4DA8C4] via-[#66CCCC] to-[#004B63] flex items-center justify-center text-[#0A1628] font-bold shadow-lg shadow-[#4DA8C4]/30 border-2 border-[#66CCCC]/50">
                 N
               </div>
@@ -665,14 +701,13 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
                   NICO Soporte
                 </h3>
                 <p className="text-[#66CCCC] text-[10px] flex items-center gap-1">
-                  <span className={`w-1.5 h-1.5 rounded-full ${isListening ? 'bg-red-500 animate-pulse' : isSpeaking ? 'bg-green-500 animate-pulse' : 'bg-[#66CCCC] animate-pulse'}`}></span>
-                  {isListening ? 'Escuchando' : isSpeaking ? 'Hablando' : isProcessing ? 'Pensando' : 'En línea'}
+                  <span className={`w-1.5 h-1.5 rounded-full ${isListening ? 'bg-red-500 animate-pulse' : isSpeaking ? 'bg-green-500 animate-pulse' : isProcessing ? 'bg-yellow-400 animate-pulse' : 'bg-[#66CCCC] animate-pulse'}`}></span>
+                  {isListening ? 'Escuchando' : isSpeaking ? 'Hablando' : isProcessing ? 'Escribiendo' : 'En línea'}
                 </p>
               </div>
             </div>
             
             <div className="flex items-center gap-1">
-              {/* Interruptor Maestro de Audio */}
               <button
                 onClick={() => setIsAudioEnabled(!isAudioEnabled)}
                 className={`p-1.5 rounded-xl transition-all ${isAudioEnabled ? 'bg-[#4DA8C4] text-white shadow-lg' : 'bg-[#0A1628]/50 text-[#66CCCC] hover:text-white hover:bg-[#4DA8C4]'}`}
@@ -697,6 +732,8 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
                 onClick={() => {
                   setIsOpen(false);
                   setGreetingSent(false);
+                  clearMemory();
+                  setLastCategory(null);
                 }}
                 className="p-1.5 rounded-full bg-[#0A1628]/50 text-[#66CCCC] hover:text-white hover:bg-[#4DA8C4] transition-all"
               >
@@ -705,42 +742,43 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
             </div>
           </div>
 
-          {/* Messages */}
-          <div ref={messagesContainerRef} className="flex-1 overflow-y-auto p-4 flex flex-col gap-3 scrollbar-thin">
-            {memory.conversationHistory.length === 0 ? (
-              <div className="flex-1 flex items-center justify-center">
-                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#004B63]/30 border border-[#4DA8C4]/30">
-                  <Loader2 className="w-4 h-4 animate-spin text-[#66CCCC]" />
-                  <span className="text-[#66CCCC] text-xs font-medium">Conectando con Nico...</span>
-                </div>
+          <div 
+            ref={messagesContainerRef}
+            className="flex-1 overflow-y-auto p-4 space-y-3 scrollbar-thin scrollbar-thumb-[#4DA8C4]/50 scrollbar-track-transparent"
+            style={{ maxHeight: '420px' }}
+          >
+            {memory.conversationHistory.length === 0 && (
+              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#004B63]/30 border border-[#4DA8C4]/30">
+                <Bot className="w-4 h-4 text-[#66CCCC]" />
+                <span className="text-sm text-[#66CCCC]">¡Hola! Soy Nico, tu asistente de EdutechLife. ¿En qué te puedo ayudar?</span>
               </div>
-            ) : (
-              memory.conversationHistory.map((msg, index) => (
-                <div key={index} className={msg.role === 'user' ? 'self-end max-w-[85%]' : 'self-start max-w-[85%]'}>
-                  {msg.role === 'assistant' && (
-                    <div className="self-start max-w-[85%] p-4 rounded-2xl rounded-tl-none bg-gradient-to-br from-[#004B63]/60 to-[#0A1628] border border-[#4DA8C4]/40 shadow-lg relative group">
-                      <p className="whitespace-pre-wrap text-sm leading-relaxed text-white font-medium">{msg.content}</p>
-                      <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
-                        {isAudioEnabled && (
-                          <button onClick={() => handlePlayMessage(msg.content, index)} className="p-1 rounded-full bg-[#4DA8C4]/40 hover:bg-[#4DA8C4]/60 text-[#66CCCC]">
-                            {playingMessageId === index ? <VolumeX className="w-3 h-3" /> : <PlayCircle className="w-3 h-3" />}
-                          </button>
-                        )}
-                        <button onClick={() => handleCopyMessage(msg.content)} className="p-1 rounded-full bg-[#4DA8C4]/40 hover:bg-[#4DA8C4]/60 text-[#66CCCC]">
-                          <Copy className="w-3 h-3" />
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {msg.role === 'user' && (
-                    <div className="self-end max-w-[85%] p-4 rounded-2xl rounded-tr-none bg-gradient-to-r from-[#4DA8C4] via-[#66CCCC] to-[#4DA8C4] bg-[length:200%_100%] text-[#0A1628] font-bold shadow-lg border border-[#66CCCC]/30">
-                      <p className="whitespace-pre-wrap text-sm leading-relaxed">{msg.content}</p>
-                    </div>
-                  )}
-                </div>
-              ))
             )}
+            
+            {memory.conversationHistory.map((msg, index) => (
+              <div key={index} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                {msg.role === 'assistant' && (
+                  <div className="self-start max-w-[85%] p-4 rounded-2xl rounded-tl-none bg-gradient-to-br from-[#004B63]/60 to-[#0A1628] border border-[#4DA8C4]/40 shadow-lg relative group">
+                    <p className="whitespace-pre-wrap text-sm leading-relaxed text-white font-medium">{msg.content}</p>
+                    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+                      {isAudioEnabled && (
+                        <button onClick={() => handlePlayMessage(msg.content, index)} className="p-1 rounded-full bg-[#4DA8C4]/40 hover:bg-[#4DA8C4]/60 text-[#66CCCC]">
+                          {playingMessageId === index ? <VolumeX className="w-3 h-3" /> : <PlayCircle className="w-3 h-3" />}
+                        </button>
+                      )}
+                      <button onClick={() => handleCopyMessage(msg.content)} className="p-1 rounded-full bg-[#4DA8C4]/40 hover:bg-[#4DA8C4]/60 text-[#66CCCC]">
+                        <Copy className="w-3 h-3" />
+                      </button>
+                    </div>
+                  </div>
+                )}
+                
+                {msg.role === 'user' && (
+                  <div className="self-end max-w-[85%] p-4 rounded-2xl rounded-tr-none bg-gradient-to-r from-[#4DA8C4] via-[#66CCCC] to-[#4DA8C4] bg-[length:200%_100%] text-[#0A1628] font-bold shadow-lg border border-[#66CCCC]/30">
+                    <p className="whitespace-pre-wrap text-sm leading-relaxed">{msg.content}</p>
+                  </div>
+                )}
+              </div>
+            ))}
             
             {isAILoading && (
               <div className="self-start max-w-[85%]">
@@ -751,7 +789,7 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
                       <span className="w-2 h-2 bg-[#66CCCC] rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
                       <span className="w-2 h-2 bg-[#66CCCC] rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
                     </div>
-                    <span className="text-xs text-[#66CCCC] font-medium">Nico está pensando...</span>
+                    <span className="text-xs text-[#66CCCC] font-medium">{isProcessing ? 'Nico está escribiendo...' : 'Nico está pensando...'}</span>
                   </div>
                 </div>
               </div>
@@ -760,7 +798,6 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input Area - Siempre visible */}
           <div className="p-4 border-t border-[#4DA8C4]/30 bg-gradient-to-t from-[#004B63]/40 to-[#0A1628]">
             {micPermissionError && (
               <div className="mb-2 text-xs text-red-400 bg-red-500/20 px-3 py-1 rounded-lg">
@@ -809,4 +846,4 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
   );
 };
 
-export default ValeriaChat;
+export default NicoSupport;

@@ -1,14 +1,35 @@
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://edutechlife-backend.onrender.com';
 
-async function fetchWithRetry(url, options, retries = 3) {
+const TIMEOUT_MS = 10000; // 10 segundos timeout
+
+async function fetchWithTimeout(url, options, timeout = TIMEOUT_MS) {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeout);
+    
+    try {
+        const response = await fetch(url, {
+            ...options,
+            signal: controller.signal
+        });
+        clearTimeout(id);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return await response.json();
+    } catch (e) {
+        clearTimeout(id);
+        if (e.name === 'AbortError') {
+            throw new Error('Tiempo de espera agotado. Por favor, intenta de nuevo.');
+        }
+        throw e;
+    }
+}
+
+async function fetchWithRetry(url, options, retries = 2) {
     for (let i = 0; i < retries; i++) {
         try {
-            const response = await fetch(url, options);
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            return await response.json();
+            return await fetchWithTimeout(url, options, 10000);
         } catch (e) {
             if (i === retries - 1) throw e;
-            const delays = [1000, 2000, 4000];
+            const delays = [1000, 2000];
             await new Promise(r => setTimeout(r, delays[i]));
         }
     }
