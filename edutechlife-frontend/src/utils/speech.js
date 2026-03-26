@@ -2,7 +2,15 @@ const VOICE_PROFILES = {
   valeria: { languageCode: 'es-US', name: 'es-US-Neural2-A', pitch: 1.2, speakingRate: 1.05 },
   valerio: { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: -2.0, speakingRate: 1.0 },
   sistema: { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: 0, speakingRate: 1.0 },
-  nico: { languageCode: 'es-CO', name: 'es-CO-Neural2-B', pitch: 1.0, speakingRate: 1.05 }
+  nico: { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 1.0, speakingRate: 1.05 }
+};
+
+const VOICE_FALLBACKS = {
+  nico: [
+    { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 1.0, speakingRate: 1.05 },
+    { languageCode: 'es-US', name: 'es-US-Standard-A', pitch: 0, speakingRate: 1.0 },
+    { languageCode: 'es-ES', name: 'es-ES-Neural2-B', pitch: 1.0, speakingRate: 1.05 },
+  ]
 };
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://edutechlife-q3blvmkur-eeductechlife-ais-projects.vercel.app';
@@ -46,53 +54,62 @@ export const speakTextConversational = async (text, profile = 'valeria', onEndCa
     console.log("Perfil de voz:", profile);
     console.log("Voice config:", voice);
 
-    // Usar API key directamente (la API de TTS funciona mejor así)
-    const response = await fetch(`${GOOGLE_TTS_URL}?key=${apiKey}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        input: { text: text },
-        voice: { 
-          languageCode: voice.languageCode, 
-          name: voice.name 
-        },
-        audioConfig: { 
-          audioEncoding: 'MP3', 
-          pitch: voice.pitch || 0, 
-          speakingRate: voice.speakingRate || 1.0 
+    const voiceFallacks = VOICE_FALLBACKS[profile] || [];
+    let lastError = null;
+
+    for (const voiceOption of [voice, ...voiceFallacks]) {
+      try {
+        const response = await fetch(`${GOOGLE_TTS_URL}?key=${apiKey}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            input: { text: text },
+            voice: { 
+              languageCode: voiceOption.languageCode, 
+              name: voiceOption.name 
+            },
+            audioConfig: { 
+              audioEncoding: 'MP3', 
+              pitch: voiceOption.pitch || 0, 
+              speakingRate: voiceOption.speakingRate || 1.0 
+            }
+          })
+        });
+
+        const data = await response.json();
+        
+        if (data.error) {
+          console.warn(`Voice ${voiceOption.name} failed, trying fallback...`, data.error.message);
+          lastError = data.error;
+          continue;
         }
-      })
-    });
 
-    const data = await response.json();
-    console.log("Response status:", response.status);
-    console.log("Response data:", data);
-
-    if (data.error) {
-      console.error("Error de Google TTS:", data.error);
-      if (onEndCallback) onEndCallback();
-      return;
+        if (data.audioContent) {
+          console.log(`Audio received with voice: ${voiceOption.name}`);
+          currentAudio = new Audio(`data:audio/mp3;base64,${data.audioContent}`);
+          
+          currentAudio.onended = handleEnd;
+          currentAudio.onerror = (e) => {
+            console.error("Error reproduciendo audio:", e);
+            cleanup();
+            if (onEndCallback) onEndCallback();
+          };
+          
+          await currentAudio.play();
+          console.log("¡Audio reproduciéndose!");
+          return;
+        }
+      } catch (voiceError) {
+        console.warn(`Error with voice ${voiceOption.name}:`, voiceError);
+        lastError = voiceError;
+        continue;
+      }
     }
 
-    if (data.audioContent) {
-      console.log("Audio recibido, creando elemento de audio...");
-      currentAudio = new Audio(`data:audio/mp3;base64,${data.audioContent}`);
-      
-      currentAudio.onended = handleEnd;
-      currentAudio.onerror = (e) => {
-        console.error("Error reproduciendo audio:", e);
-        cleanup();
-        if (onEndCallback) onEndCallback();
-      };
-      
-      await currentAudio.play();
-      console.log("¡Audio reproduciéndose!");
-    } else {
-      console.error("No se recibió audio");
-      if (onEndCallback) onEndCallback();
-    }
+    console.error("All voice options failed:", lastError);
+    if (onEndCallback) onEndCallback();
   } catch (error) {
     console.error("Error en speakTextConversational:", error);
     cleanup();

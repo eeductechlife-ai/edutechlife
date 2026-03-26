@@ -1,13 +1,13 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { Brain, Mic, MicOff, Volume2, VolumeX, Send, Sparkles, X, Loader2, Copy, PlayCircle, Bot, MessageCircle } from 'lucide-react';
+import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import { Brain, Mic, MicOff, Volume2, VolumeX, Send, Sparkles, X, Loader2, Copy, PlayCircle, Bot, MessageCircle, CheckCircle, AlertCircle } from 'lucide-react';
 import useConversationMemory from '../../hooks/useConversationMemory';
 import { callDeepseek } from '../../utils/api';
-import { speakTextConversational } from '../../utils/speech';
-import { checkSpeechRecognitionSupport } from '../../utils/speechRecognition';
+import { speakTextConversational, stopSpeech } from '../../utils/speech';
+import { createSpeechRecognition, checkSpeechRecognitionSupport, requestMicrophonePermission, getSpeechRecognitionStatus } from '../../utils/speechRecognition.enhanced';
 
 const PROMPT_NICO_SOPORTE = `Eres NICO - Agente de Soporte Premium de EdutechLife.
 
-## IDENTIDAD YROL
+## IDENTIDAD Y ROL
 Eres el asistente virtual oficial de EdutechLife. Tu MISIÓN es resolver TODAS las dudas de los usuarios sobre:
 - Metodología VAK (Visual, Auditivo, Kinestésico)
 - Programas STEM/STEAM (Ciencia, Tecnología, Ingeniería, Matemáticas)
@@ -35,9 +35,7 @@ NICO - EdutechLife. Aquí para ayudarte con alegría.`;
 const NicoChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
   const [inputText, setInputText] = useState('');
   const [conversationStarted, setConversationStarted] = useState(false);
-  const [conversationMode, setConversationMode] = useState(false);
   const [isAILoading, setIsAILoading] = useState(false);
-  const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [isAudioEnabled, setIsAudioEnabled] = useState(false);
   const [playingMessageId, setPlayingMessageId] = useState(null);
   const [isListening, setIsListening] = useState(false);
@@ -45,20 +43,21 @@ const NicoChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [interimText, setInterimText] = useState('');
   const [micPermissionError, setMicPermissionError] = useState('');
-  const [messageCount, setMessageCount] = useState(0);
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [speechStatus, setSpeechStatus] = useState({ supported: true, message: '' });
   
   const messagesEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
   const inputRef = useRef(null);
-  const nameLearnedRef = useRef(false);
   const recognitionRef = useRef(null);
+  const nameLearnedRef = useRef(false);
+  const speechTimeoutRef = useRef(null);
 
   const {
     memory,
     setUserName,
     processMessage,
     incrementConversationCount,
-    generateContext,
     clearMemory,
     learnFromUser,
   } = useConversationMemory({
@@ -70,6 +69,9 @@ const NicoChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
     if (memory.userName) {
       nameLearnedRef.current = true;
     }
+    
+    const status = getSpeechRecognitionStatus();
+    setSpeechStatus(status);
   }, [memory.userName]);
 
   const scrollToBottom = useCallback(() => {
@@ -155,15 +157,18 @@ const NicoChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
     addMessage('user', text);
     setInputText('');
     setIsAILoading(true);
-    setIsProcessing(true);
     
     try {
-      const response = await callDeepseek(text, PROMPT_NICO_SOPORTE);
+      const response = await Promise.race([
+        callDeepseek(text, PROMPT_NICO_SOPORTE),
+        new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('timeout')), 10000)
+        )
+      ]);
       
       if (response && !response.includes('Error:') && response.length > 10) {
         addMessage('assistant', response);
         setIsAILoading(false);
-        setIsProcessing(false);
         
         learnFromUser(text, 'user_message');
         
@@ -177,103 +182,108 @@ const NicoChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
       }
     } catch (error) {
       setIsAILoading(false);
-      setIsProcessing(false);
       
       const response = generateContextualResponse(text);
       addMessage('assistant', response);
+      
+      if (isAudioEnabled && !error.message.includes('timeout')) {
+        speakWithNicoVoice(response);
+      }
       
       return { text: response };
     }
   }, [addMessage, generateContextualResponse, learnFromUser, isAudioEnabled]);
 
   const speakWithNicoVoice = useCallback((text) => {
-    if (!text) return;
+    if (!text || !isAudioEnabled) return;
+    
+    if (speechTimeoutRef.current) {
+      clearTimeout(speechTimeoutRef.current);
+    }
+    
     setIsSpeaking(true);
     speakTextConversational(text, 'nico', () => {
       setIsSpeaking(false);
+      speechTimeoutRef.current = null;
     });
-  }, []);
+    
+    speechTimeoutRef.current = setTimeout(() => {
+      setIsSpeaking(false);
+      stopSpeech();
+    }, 15000);
+  }, [isAudioEnabled]);
 
   const stopSpeaking = useCallback(() => {
-    speakTextConversational.stop?.();
+    stopSpeech();
     setIsSpeaking(false);
+    if (speechTimeoutRef.current) {
+      clearTimeout(speechTimeoutRef.current);
+      speechTimeoutRef.current = null;
+    }
   }, []);
 
-  const startListening = useCallback(() => {
-    if (!checkSpeechRecognitionSupport()) {
-      setMicPermissionError('Tu navegador no soporta reconocimiento de voz');
+  const startListening = useCallback(async () => {
+    if (!speechStatus.supported) {
+      setMicPermissionError(speechStatus.message);
       return;
     }
 
-    if (recognitionRef.current) {
-      try { recognitionRef.current.stop(); } catch (e) {}
+    if (recognitionRef.current?.isActive?.()) {
+      recognitionRef.current.stop();
     }
 
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    recognitionRef.current = new SpeechRecognition();
-    recognitionRef.current.lang = 'es-ES';
-    recognitionRef.current.continuous = false;
-    recognitionRef.current.interimResults = true;
-    recognitionRef.current.maxAlternatives = 1;
+    const permissionResult = await requestMicrophonePermission();
+    if (!permissionResult.success) {
+      setMicPermissionError(permissionResult.message);
+      return;
+    }
 
-    let finalTranscript = '';
-    let lastResultIndex = 0;
-
-    recognitionRef.current.onstart = () => {
-      setIsListening(true);
-      setMicPermissionError('');
-    };
-
-    recognitionRef.current.onresult = (event) => {
-      let interim = '';
-      
-      for (let i = lastResultIndex; i < event.results.length; i++) {
-        const transcript = event.results[i][0].transcript;
-        if (event.results[i].isFinal) {
-          finalTranscript += ' ' + transcript.trim();
-        } else {
-          interim += transcript;
+    recognitionRef.current = createSpeechRecognition({
+      lang: 'es-CO',
+      onStart: () => {
+        setIsListening(true);
+        setMicPermissionError('');
+      },
+      onResult: (fullText, finalText, hasFinal) => {
+        setInterimText(fullText);
+        setInputText(fullText);
+        
+        if (hasFinal && finalText) {
+          setIsProcessing(true);
+          handleMessage(finalText).finally(() => {
+            setIsProcessing(false);
+          });
+          setIsListening(false);
+          setInterimText('');
         }
-      }
-      lastResultIndex = event.results.length;
-      
-      setInterimText(finalTranscript + ' ' + interim);
-      setInputText(finalTranscript + ' ' + interim);
-    };
+      },
+      onEnd: (finalText) => {
+        setIsListening(false);
+        setInterimText('');
+        
+        if (finalText && !isProcessing) {
+          setIsProcessing(true);
+          handleMessage(finalText).finally(() => {
+            setIsProcessing(false);
+          });
+        }
+      },
+      onError: (error, message) => {
+        console.error('Speech recognition error:', error, message);
+        setIsListening(false);
+        setInterimText('');
+        setMicPermissionError(message || 'Error en el reconocimiento de voz');
+      },
+    });
 
-    recognitionRef.current.onend = () => {
-      setIsListening(false);
-      setInterimText('');
-      
-      if (finalTranscript.trim()) {
-        setMessageCount(prev => prev + 1);
-        handleMessage(finalTranscript.trim());
-      }
-      finalTranscript = '';
-      lastResultIndex = 0;
-    };
-
-    recognitionRef.current.onerror = (event) => {
-      console.error('Speech recognition error:', event.error);
-      setIsListening(false);
-      setInterimText('');
-      
-      if (event.error === 'not-allowed' || event.error === 'permission-denied') {
-        setMicPermissionError('Por favor, permite el acceso al micrófono en tu navegador');
-      }
-    };
-
-    try {
+    if (recognitionRef.current) {
       recognitionRef.current.start();
-    } catch (error) {
-      console.error('Error starting recognition:', error);
-      setIsListening(false);
     }
-  }, [handleMessage]);
+  }, [handleMessage, speechStatus]);
 
   const stopListening = useCallback(() => {
     if (recognitionRef.current) {
-      try { recognitionRef.current.stop(); } catch (e) {}
+      recognitionRef.current.stop();
     }
     setIsListening(false);
     setInterimText('');
@@ -290,10 +300,21 @@ const NicoChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
     }
   }, [conversationStarted]);
 
+  useEffect(() => {
+    return () => {
+      if (speechTimeoutRef.current) {
+        clearTimeout(speechTimeoutRef.current);
+      }
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+      stopSpeech();
+    };
+  }, []);
+
   const handleSendMessage = useCallback(async () => {
     if (!inputText.trim() || isProcessing) return;
     
-    setMessageCount(prev => prev + 1);
     await handleMessage(inputText);
     setInputText('');
   }, [inputText, isProcessing, handleMessage]);
@@ -363,34 +384,49 @@ const NicoChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
     return 'text-[#66CCCC]';
   };
 
+  const getStatusIcon = useMemo(() => {
+    if (isListening) return <Mic className="w-3 h-3 text-white" />;
+    if (isSpeaking) return <Volume2 className="w-3 h-3 text-white" />;
+    if (isProcessing) return <Loader2 className="w-3 h-3 text-white animate-spin" />;
+    return <Bot className="w-3 h-3 text-white" />;
+  }, [isListening, isSpeaking, isProcessing]);
+
+  const getStatusDot = useMemo(() => {
+    if (isListening) return 'bg-red-500 animate-pulse';
+    if (isSpeaking) return 'bg-green-500 animate-bounce';
+    if (isProcessing) return 'bg-yellow-400 animate-pulse';
+    return 'bg-[#66CCCC]';
+  }, [isListening, isSpeaking, isProcessing]);
+
   if (!conversationStarted) {
     return (
-      <div className="h-full flex flex-col bg-gradient-to-br from-[#0A1628] via-[#0F2847] to-[#0A1628]">
+      <div className="h-full flex flex-col bg-gradient-to-br from-[#0A1628] via-[#0F2847] to-[#0A1628] backdrop-blur-xl border border-[#4DA8C4]/20 rounded-[2.5rem] shadow-2xl">
         <div className="flex-1 flex flex-col items-center justify-center p-8 relative overflow-hidden">
           <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full opacity-10 bg-gradient-to-r from-[#66CCCC] to-[#4DA8C4] blur-3xl animate-pulse"></div>
-            <div className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full opacity-10 bg-gradient-to-r from-[#4DA8C4] to-[#004B63] blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+            <div className="absolute top-1/4 left-1/4 w-72 h-72 rounded-full opacity-15 bg-gradient-to-r from-[#66CCCC] to-[#4DA8C4] blur-3xl animate-pulse"></div>
+            <div className="absolute bottom-1/4 right-1/4 w-72 h-72 rounded-full opacity-15 bg-gradient-to-r from-[#4DA8C4] to-[#004B63] blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full opacity-5 bg-gradient-to-r from-[#004B63] to-[#0A1628] blur-3xl"></div>
           </div>
           
           <div className="relative mb-8">
-            <div className="w-44 h-44 rounded-[2rem] bg-gradient-to-br from-[#66CCCC] via-[#4DA8C4] to-[#004B63] flex items-center justify-center shadow-2xl border-2 border-[#66CCCC]/30">
-              <div className="w-36 h-36 rounded-[1.5rem] bg-white/10 flex items-center justify-center">
-                <Bot className="w-20 h-20 text-white" />
+            <div className="w-48 h-48 rounded-[2.5rem] bg-gradient-to-br from-[#66CCCC] via-[#4DA8C4] to-[#004B63] flex items-center justify-center shadow-2xl border-2 border-[#66CCCC]/40 backdrop-blur-sm">
+              <div className="w-40 h-40 rounded-[2rem] bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20">
+                <Bot className="w-24 h-24 text-white" />
               </div>
             </div>
-            <div className="absolute -inset-6 rounded-[3rem] border-2 border-[#4DA8C4]/30 animate-ping"></div>
-            <div className="absolute -inset-12 rounded-[3.5rem] border border-[#66CCCC]/20 animate-pulse"></div>
+            <div className="absolute -inset-6 rounded-[3.5rem] border-2 border-[#4DA8C4]/40 animate-ping opacity-30"></div>
+            <div className="absolute -inset-12 rounded-[4rem] border border-[#66CCCC]/30 animate-pulse opacity-20"></div>
             {memory.userName && memory.userName !== 'amigo' && (
-              <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-4 py-1 bg-[#004B63] rounded-full shadow-lg text-sm font-semibold text-white">
-                Hola {memory.userName}!
+              <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 px-5 py-2 bg-gradient-to-r from-[#004B63] to-[#0A1628] rounded-full shadow-xl text-sm font-semibold text-white border border-[#66CCCC]/40 backdrop-blur-sm">
+                ¡Hola {memory.userName}!
               </div>
             )}
           </div>
           
-          <h2 className="text-3xl font-bold text-white font-montserrat mb-3 text-center">
-            NICO - Soporte
+          <h2 className="text-3xl font-bold text-white font-montserrat mb-3 text-center bg-gradient-to-r from-[#66CCCC] via-[#4DA8C4] to-[#66CCCC] bg-clip-text text-transparent">
+            NICO - Soporte Premium
           </h2>
-          <p className="text-[#66CCCC] text-center mb-2 max-w-md text-lg">
+          <p className="text-[#66CCCC] text-center mb-2 max-w-md text-lg font-medium">
             Tu asistente virtual de EdutechLife
           </p>
           <p className="text-[#4DA8C4] text-center mb-6 max-w-sm text-sm">
@@ -400,7 +436,7 @@ const NicoChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
           </p>
           
           {memory.conversationCount > 0 && (
-            <div className="flex items-center gap-2 mb-6 px-4 py-2 rounded-full bg-[#004B63]/30 text-[#66CCCC] border border-[#4DA8C4]/30">
+            <div className="flex items-center gap-2 mb-6 px-5 py-2.5 rounded-full bg-gradient-to-r from-[#004B63]/40 to-[#0A1628]/40 text-[#66CCCC] border border-[#4DA8C4]/40 backdrop-blur-sm">
               <MessageCircle className="w-4 h-4" />
               <span className="text-sm font-medium">Conversación #{memory.conversationCount + 1}</span>
             </div>
@@ -408,10 +444,10 @@ const NicoChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
           
           <button
             onClick={startConversation}
-            className="px-10 py-5 bg-gradient-to-r from-[#4DA8C4] via-[#66CCCC] to-[#4DA8C4] bg-[length:200%_100%] text-white rounded-[2rem] font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-500 flex items-center gap-3 hover:scale-105"
+            className="px-12 py-5 bg-gradient-to-r from-[#4DA8C4] via-[#66CCCC] to-[#4DA8C4] bg-[length:200%_100%] text-white rounded-[2.5rem] font-bold text-lg shadow-2xl hover:shadow-3xl transition-all duration-500 flex items-center gap-3 hover:scale-105 hover:bg-[length:100%_100%] animate-gradient-x border border-[#66CCCC]/50 backdrop-blur-sm"
           >
             <Sparkles className="w-6 h-6" />
-            <span>{memory.userName && memory.userName !== 'amigo' ? 'Continuar' : 'Comenzar'}</span>
+            <span>{memory.userName && memory.userName !== 'amigo' ? 'Continuar Conversación' : 'Comenzar Ahora'}</span>
           </button>
         </div>
       </div>
@@ -419,18 +455,18 @@ const NicoChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
   }
 
   return (
-    <div className="h-full flex flex-col bg-gradient-to-br from-[#0A1628] via-[#0F2847] to-[#0A1628] border border-[#4DA8C4]/30 rounded-[2rem] shadow-2xl">
+    <div className="h-full flex flex-col bg-gradient-to-br from-[#0A1628]/95 via-[#0F2847]/95 to-[#0A1628]/95 backdrop-blur-xl border border-[#4DA8C4]/30 rounded-[2.5rem] shadow-2xl overflow-hidden">
       {/* Header */}
-      <div className="p-4 border-b border-[#4DA8C4]/30 bg-gradient-to-r from-[#004B63]/50 to-[#0A1628]/80 backdrop-blur-md rounded-t-[2rem]">
+      <div className="p-5 border-b border-[#4DA8C4]/30 bg-gradient-to-r from-[#004B63]/60 to-[#0A1628]/80 backdrop-blur-md rounded-t-[2.5rem]">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <div className="relative">
-              <div className={`w-14 h-14 rounded-[1.5rem] bg-gradient-to-br from-[#66CCCC] via-[#4DA8C4] to-[#004B63] flex items-center justify-center shadow-lg transition-all ${
+              <div className={`w-16 h-16 rounded-[2rem] bg-gradient-to-br from-[#66CCCC] via-[#4DA8C4] to-[#004B63] flex items-center justify-center shadow-xl border-2 border-[#66CCCC]/40 transition-all duration-300 ${
                 isSpeaking ? 'animate-pulse ring-4 ring-[#66CCCC]/30' : ''
               }`}>
-                <Bot className="w-7 h-7 text-white" />
+                <Bot className="w-8 h-8 text-white" />
               </div>
-              <div className={`absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center shadow-md transition-all duration-300 ${
+              <div className={`absolute -bottom-2 -right-2 w-8 h-8 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 ${
                 isListening 
                   ? 'bg-red-500 animate-pulse scale-110' 
                   : isSpeaking 
@@ -439,35 +475,28 @@ const NicoChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
                       ? 'bg-yellow-400 animate-pulse'
                       : 'bg-[#66CCCC]'
               }`}>
-                {isListening ? (
-                  <MicOff className="w-3 h-3 text-white" />
-                ) : isSpeaking ? (
-                  <Volume2 className="w-3 h-3 text-white" />
-                ) : isProcessing ? (
-                  <Loader2 className="w-3 h-3 text-white animate-spin" />
-                ) : (
-                  <Bot className="w-3 h-3 text-white" />
-                )}
+                {getStatusIcon}
               </div>
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white font-montserrat">
-                NICO - Soporte {memory.userName && memory.userName !== 'amigo' && `• ${memory.userName}`}
+              <h2 className="text-xl font-bold text-white font-montserrat">
+                NICO - Soporte Premium {memory.userName && memory.userName !== 'amigo' && <span className="text-[#66CCCC]">• {memory.userName}</span>}
               </h2>
-              <p className={`text-xs ${getStatusColor()} flex items-center gap-1`}>
-                {isListening && <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>}
-                {isSpeaking && <span className="w-2 h-2 bg-green-500 rounded-full animate-bounce"></span>}
-                {isProcessing && <span className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></span>}
-                {!isListening && !isSpeaking && !isProcessing && <span className="w-2 h-2 bg-[#66CCCC] rounded-full"></span>}
+              <p className={`text-sm ${getStatusColor()} flex items-center gap-2 mt-1`}>
+                <span className={`w-2.5 h-2.5 rounded-full ${getStatusDot}`}></span>
                 {getStatusText()}
               </p>
             </div>
           </div>
           
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <button
               onClick={() => setIsAudioEnabled(!isAudioEnabled)}
-              className={`p-2 rounded-xl transition-all ${isAudioEnabled ? 'bg-[#4DA8C4]/30 text-[#66CCCC] border border-[#66CCCC]/50' : 'bg-[#0A1628]/50 text-[#4DA8C4]'}`}
+              className={`p-2.5 rounded-xl transition-all duration-300 hover:scale-110 ${
+                isAudioEnabled 
+                  ? 'bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white shadow-lg shadow-[#4DA8C4]/50' 
+                  : 'bg-[#0A1628]/60 text-[#4DA8C4] border border-[#4DA8C4]/30'
+              }`}
               title={isAudioEnabled ? 'Audio activado' : 'Audio desactivado'}
             >
               {isAudioEnabled ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
@@ -476,7 +505,7 @@ const NicoChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
             {isSpeaking && (
               <button
                 onClick={stopSpeaking}
-                className="p-2 rounded-xl bg-red-500/30 text-red-400 hover:bg-red-500/50 transition-all hover:scale-110 border border-red-500/50"
+                className="p-2.5 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg shadow-red-500/50 hover:scale-110 transition-all duration-300 border border-red-400/50"
                 title="Detener voz"
               >
                 <VolumeX className="w-5 h-5" />
@@ -486,7 +515,7 @@ const NicoChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
             {isListening && (
               <button
                 onClick={stopListening}
-                className="p-2 rounded-xl bg-red-500/30 text-red-400 hover:bg-red-500/50 transition-all hover:scale-110 border border-red-500/50"
+                className="p-2.5 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg shadow-red-500/50 hover:scale-110 transition-all duration-300 border border-red-400/50"
                 title="Detener escucha"
               >
                 <MicOff className="w-5 h-5" />
@@ -496,8 +525,17 @@ const NicoChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
         </div>
 
         {micPermissionError && (
-          <div className="mt-2 text-xs text-red-400 bg-red-500/20 px-3 py-1 rounded-lg">
+          <div className="mt-3 text-sm text-red-400 bg-gradient-to-r from-red-500/20 to-red-600/20 px-4 py-2 rounded-xl border border-red-500/30 flex items-center gap-2 animate-fadeIn">
+            <AlertCircle className="w-4 h-4" />
             {micPermissionError}
+            {!speechStatus.supported && (
+              <button 
+                onClick={() => window.open('https://www.google.com/chrome/', '_blank')}
+                className="ml-auto text-xs text-red-300 hover:text-white underline"
+              >
+                Usar Chrome
+              </button>
+            )}
           </div>
         )}
       </div>
@@ -505,11 +543,14 @@ const NicoChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
       {/* Messages */}
       <div 
         ref={messagesContainerRef}
-        className="flex-1 overflow-y-auto p-4 space-y-4"
+        className="flex-1 overflow-y-auto p-5 space-y-5 scrollbar-thin scrollbar-thumb-[#4DA8C4]/50 scrollbar-track-transparent"
       >
         {memory.conversationHistory.length === 0 && (
-          <div className="text-center py-8">
-            <p className="text-[#4DA8C4]">¡Inicia la conversación!</p>
+          <div className="text-center py-10">
+            <div className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-gradient-to-r from-[#004B63]/30 to-[#0A1628]/30 border border-[#4DA8C4]/30">
+              <Sparkles className="w-4 h-4 text-[#66CCCC]" />
+              <p className="text-[#4DA8C4]">¡Inicia la conversación!</p>
+            </div>
           </div>
         )}
         
@@ -519,33 +560,33 @@ const NicoChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
             className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-fadeIn group`}
           >
             <div className="relative flex gap-2 max-w-[85%]">
-              <div className="absolute top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all flex gap-1">
+              <div className="absolute top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 flex gap-2 -left-12">
                 {msg.role === 'assistant' && (
                   <>
                     {isAudioEnabled && (
                       <button
                         onClick={() => handlePlayMessage(msg.content, index)}
-                        className="p-1.5 rounded-full bg-[#004B63]/50 hover:bg-[#4DA8C4]/50 text-[#66CCCC] transition-all"
+                        className="p-2 rounded-full bg-gradient-to-r from-[#004B63]/60 to-[#4DA8C4]/60 text-white hover:from-[#4DA8C4] hover:to-[#66CCCC] transition-all duration-300 shadow-lg hover:scale-110 border border-[#66CCCC]/30"
                       >
-                        {playingMessageId === index ? <VolumeX className="w-3 h-3" /> : <PlayCircle className="w-3 h-3" />}
+                        {playingMessageId === index ? <VolumeX className="w-4 h-4" /> : <PlayCircle className="w-4 h-4" />}
                       </button>
                     )}
                     <button
                       onClick={() => handleCopyMessage(msg.content)}
-                      className="p-1.5 rounded-full bg-[#004B63]/50 hover:bg-[#4DA8C4]/50 text-[#66CCCC] transition-all"
+                      className="p-2 rounded-full bg-gradient-to-r from-[#004B63]/60 to-[#4DA8C4]/60 text-white hover:from-[#4DA8C4] hover:to-[#66CCCC] transition-all duration-300 shadow-lg hover:scale-110 border border-[#66CCCC]/30"
                     >
-                      <Copy className="w-3 h-3" />
+                      <Copy className="w-4 h-4" />
                     </button>
                   </>
                 )}
               </div>
               
               {msg.role === 'assistant' ? (
-                <div className="self-start max-w-[85%] p-4 rounded-[1.5rem] rounded-tl-none bg-gradient-to-br from-[#004B63]/60 to-[#0A1628] border border-[#4DA8C4]/40 shadow-lg">
+                <div className="self-start max-w-[85%] p-5 rounded-[2rem] rounded-tl-none bg-gradient-to-br from-[#004B63]/70 to-[#0A1628]/90 border border-[#4DA8C4]/50 shadow-xl backdrop-blur-sm">
                   <p className="whitespace-pre-wrap text-sm leading-relaxed text-white font-medium">{msg.content}</p>
                 </div>
               ) : (
-                <div className="self-end max-w-[85%] p-4 rounded-[1.5rem] rounded-tr-none bg-gradient-to-r from-[#4DA8C4] via-[#66CCCC] to-[#4DA8C4] bg-[length:200%_100%] text-[#0A1628] font-bold shadow-lg border border-[#66CCCC]/30">
+                <div className="self-end max-w-[85%] p-5 rounded-[2rem] rounded-tr-none bg-gradient-to-r from-[#4DA8C4] via-[#66CCCC] to-[#4DA8C4] bg-[length:200%_100%] text-[#0A1628] font-bold shadow-xl border border-[#66CCCC]/50 animate-gradient-x">
                   <p className="whitespace-pre-wrap text-sm leading-relaxed">{msg.content}</p>
                 </div>
               )}
@@ -555,14 +596,14 @@ const NicoChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
         
         {isAILoading && (
           <div className="self-start max-w-[85%]">
-            <div className="p-4 rounded-[1.5rem] rounded-tl-none bg-gradient-to-br from-[#004B63]/60 to-[#0A1628] border border-[#4DA8C4]/40 shadow-lg">
-              <div className="flex items-center gap-2">
-                <div className="flex gap-1">
-                  <span className="w-2 h-2 bg-[#66CCCC] rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                  <span className="w-2 h-2 bg-[#66CCCC] rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                  <span className="w-2 h-2 bg-[#66CCCC] rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+            <div className="p-5 rounded-[2rem] rounded-tl-none bg-gradient-to-br from-[#004B63]/70 to-[#0A1628]/90 border border-[#4DA8C4]/50 shadow-xl backdrop-blur-sm">
+              <div className="flex items-center gap-3">
+                <div className="flex gap-1.5">
+                  <span className="w-2.5 h-2.5 bg-[#66CCCC] rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                  <span className="w-2.5 h-2.5 bg-[#66CCCC] rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                  <span className="w-2.5 h-2.5 bg-[#66CCCC] rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
                 </div>
-                <span className="text-xs text-[#66CCCC] font-medium">Nico está procesando...</span>
+                <span className="text-sm text-[#66CCCC] font-medium">Nico está procesando tu mensaje...</span>
               </div>
             </div>
           </div>
@@ -572,17 +613,21 @@ const NicoChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
       </div>
 
       {/* Input Area */}
-      <div className="p-4 border-t border-[#4DA8C4]/30 bg-gradient-to-t from-[#004B63]/40 to-[#0A1628] rounded-b-[2rem]">
-        <div className="flex gap-3 items-center">
+      <div className="p-5 border-t border-[#4DA8C4]/30 bg-gradient-to-t from-[#004B63]/50 to-[#0A1628] rounded-b-[2.5rem]">
+        <div className="flex gap-4 items-center">
           <button
             onClick={toggleListening}
             disabled={isSpeaking || isProcessing}
-            className={`p-3 rounded-[1.5rem] transition-all hover:scale-105 disabled:opacity-50 ${isListening ? 'bg-cyan-400 text-white animate-pulse shadow-lg shadow-cyan-400/50' : 'bg-gradient-to-r from-[#4DA8C4] via-[#66CCCC] to-[#4DA8C4] bg-[length:200%_100%] text-white shadow-lg shadow-[#4DA8C4]/30'}`}
+            className={`p-3.5 rounded-[2rem] transition-all duration-300 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed ${
+              isListening 
+                ? 'bg-gradient-to-r from-red-500 to-red-600 text-white animate-pulse shadow-xl shadow-red-500/50' 
+                : 'bg-gradient-to-r from-[#4DA8C4] via-[#66CCCC] to-[#4DA8C4] bg-[length:200%_100%] text-white shadow-xl shadow-[#4DA8C4]/50 hover:bg-[length:100%_100%]'
+            }`}
           >
-            {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+            {isListening ? <MicOff className="w-6 h-6" /> : <Mic className="w-6 h-6" />}
           </button>
           
-          <div className="flex-1 bg-[#0A1628]/80 border border-[#4DA8C4]/40 rounded-[1.5rem] px-5 py-3">
+          <div className="flex-1 bg-[#0A1628]/90 border border-[#4DA8C4]/50 rounded-[2rem] px-6 py-4 backdrop-blur-sm">
             <input
               ref={inputRef}
               type="text"
@@ -591,10 +636,11 @@ const NicoChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
               onKeyDown={handleKeyDown}
               placeholder={isListening ? "Escuchando..." : isProcessing ? "Procesando..." : "Escribe tu mensaje..."}
               disabled={isProcessing}
-              className="w-full bg-transparent text-white placeholder-[#66CCCC] focus:outline-none focus:border-[#4DA8C4]/50 text-sm disabled:opacity-50"
+              className="w-full bg-transparent text-white placeholder-[#66CCCC]/70 focus:outline-none focus:border-none text-sm disabled:opacity-50"
             />
             {isListening && interimText && (
-              <div className="text-sm text-[#66CCCC] opacity-70 mt-1 animate-pulse">
+              <div className="text-sm text-[#66CCCC] opacity-80 mt-2 animate-pulse flex items-center gap-2">
+                <span className="w-2 h-2 bg-[#66CCCC] rounded-full animate-pulse"></span>
                 {interimText}
               </div>
             )}
@@ -603,9 +649,9 @@ const NicoChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
           <button
             onClick={handleSendMessage}
             disabled={!inputText.trim() || isProcessing}
-            className="p-3 rounded-[1.5rem] bg-gradient-to-r from-[#4DA8C4] via-[#66CCCC] to-[#4DA8C4] bg-[length:200%_100%] text-white transition-all hover:scale-105 disabled:opacity-50 shadow-lg shadow-[#4DA8C4]/30"
+            className="p-3.5 rounded-[2rem] bg-gradient-to-r from-[#4DA8C4] via-[#66CCCC] to-[#4DA8C4] bg-[length:200%_100%] text-white transition-all duration-300 hover:scale-110 hover:bg-[length:100%_100%] disabled:opacity-50 disabled:cursor-not-allowed shadow-xl shadow-[#4DA8C4]/50"
           >
-            <Send className="w-5 h-5" />
+            <Send className="w-6 h-6" />
           </button>
         </div>
       </div>
