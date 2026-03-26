@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { Mic, MicOff, Volume2, VolumeX, Send, Loader2, Copy, PlayCircle, X, MessageCircle } from 'lucide-react';
+import { Mic, MicOff, Volume2, VolumeX, Send, Loader2, Copy, PlayCircle, X, Bot } from 'lucide-react';
 import useVoiceConversation, { VOICE_STATES } from '../hooks/useVoiceConversation';
 import useConversationMemory from '../hooks/useConversationMemory';
 import useLeadManagement from '../hooks/useLeadManagement';
@@ -15,6 +15,7 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
   const [playingMessageId, setPlayingMessageId] = useState(null);
   const [greetingSent, setGreetingSent] = useState(false);
   const [messageCount, setMessageCount] = useState(0);
+  const [lastCategory, setLastCategory] = useState(null);
   const [leadData, setLeadData] = useState({
     nombre: null,
     telefono: null,
@@ -94,16 +95,37 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
       location: ['dónde están', 'ubicación', 'dirección', 'direccion', 'donde queda', 'cómo llego', 'sucursal', 'sede'],
       prices: ['precio', 'precios', 'cuánto cuesta', 'cuanto sale', 'cuánto vale', 'inversión', 'costo', 'plan', 'planes', 'paquete'],
       noMore: ['no', 'nada', 'eso es todo', 'eso sería todo', 'no gracias', 'no necesito nada', 'ya no', 'eso', 'ya está', 'ya me voy', 'nada más', 'nada más gracias', 'eso es todo'],
+      
+      // EdutechLife - Servicios y Programas
+      servicios: ['servicios', 'programas', 'cursos', 'clases', 'qué ofrecen', 'tienen', 'ofrecen'],
+      metodologia: ['método', 'metodología', 'cómo enseñan', 'cómo aprenden', 'estilo aprendizaje', 'VAK'],
+      stem: ['stem', 'robótica', 'programación', 'tecnología', 'coding', 'robotica'],
+      psicologia: ['psicológico', 'emocional', 'bienestar', 'estrés', 'ansiedad', 'psicólogo', 'psicología'],
+      edades: ['edad', 'niños', 'niño', 'niña', 'adolescentes', 'adolescente', 'primaria', 'secundaria', 'kid', 'kids'],
+      modalidad: ['presencial', 'en línea', 'virtual', 'híbrido', 'online', 'presencial'],
+      inscription: ['inscribir', 'matricular', 'comenzar', 'iniciar', 'cómo empiezo', 'quiero apuntar'],
+      primeraClase: ['prueba', 'demo', 'gratis', 'sin costo', 'primera clase', 'gratuit'],
+      resultados: ['resultados', 'mejorar', 'efectividad', 'mejoras', 'funciona', 'efectivo'],
+      ventajas: ['ventajas', 'beneficios', 'por qué elegir', 'por qué ustedes', 'diferencial', 'qué los hace diferentes'],
+      descuentos: ['descuento', 'promoción', 'oferta', 'promociones'],
+      talleres: ['taller', 'talleres', 'workshop', 'actividad'],
+      diagnostico: ['diagnóstico', 'diagnostico', 'test', 'estilo', 'perfil aprendizaje'],
+      padres: ['padre', 'madre', 'papá', 'mamá', 'familia', 'familiar', 'pariente'],
+      materias: ['materia', 'materias', 'matemáticas', 'física', 'química', 'inglés', 'biología', 'historia'],
+      equipo: ['equipo', 'profesores', 'docentes', 'maestros', 'experiencia', 'años'],
+      contacto: ['teléfono', 'whatsapp', 'llamar', 'escribir', 'contactar', 'comunicar'],
+      queEs: ['qué es', 'qué hacen', 'en qué consiste', 'cómo funciona'],
     };
 
     for (const [key, keywords] of Object.entries(patterns)) {
       if (keywords.some(k => lowerMsg.includes(k))) {
+        setLastCategory(key);
         return getResponseByCategory(key, lowerMsg, msgLength, context);
       }
     }
     
     return getDynamicResponse(lowerMsg, msgLength, context);
-  }, [memory.userName]);
+  }, [memory.userName, setLastCategory]);
 
   const getResponseByCategory = (category, message, length, context) => {
     const userName = memory.userName || 'amigo';
@@ -187,6 +209,80 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
         '¡Perfecto! 😊 Que te vaya muy bien. Cualquier duda, aquí estaré.',
         '¡Genial! Fue un placer ayudarte. ¡Hasta pronto! 👋',
         '¡Perfecto! Cualquier cosa, mándame mensaje cuando quieras. ¡ Chao! 😊',
+      ],
+      
+      // EdutechLife - Respuestas de Servicios y Programas
+      queEs: () => [
+        'EdutechLife es un centro de aprendizaje para niños de 8-16 años. Mejoramos calificaciones + bienestar emocional. ¿Tienes hijos en edad escolar?',
+        'Somos un centro educativo que combina academia con apoyo emocional. ¡95% de padres nos recomienda! ¿Te cuento más?',
+      ],
+      servicios: () => [
+        'Tenemos clases de matemáticas, física, química, inglés y más. ¿Cuál materia necesita tu hijo/hija?',
+        'Ofrecemos tutorías personalizadas y programas STEM. ¿Qué le interesa más a tu hijo?',
+      ],
+      metodologia: () => [
+        'Usamos el método VAK (Visual, Auditivo, Kinestésico) para que cada niño aprenda de su forma. ¿Sabes cómo aprende tu hijo?',
+        'Nuestro método se adapta al estilo de aprendizaje de cada estudiante. ¡Funciona muy bien! ¿Te lo explico?',
+      ],
+      stem: () => [
+        'Tenemos programas STEM con robótica y programación. ¡Los kids aman! ¿Te interesa que te mande info?',
+        'Robótica, programación y tecnología para niños. ¡Muy divertido! ¿Tu hijo le gusta la tecnología?',
+      ],
+      psicologia: () => [
+        'Tenemos psicólogos educativos que acompañan a cada estudiante. ¡Es nuestro diferencial! ¿Tu hijo ha tenido dificultades emocionales?',
+        'El apoyo emocional es nuestro fuerte. Ayudamos con estrés, ansiedad y motivación. ¿Tu hijo necesita ayuda en eso?',
+      ],
+      edades: () => [
+        'Para niños de 8 a 16 años. ¿Qué edad tiene tu hijo/hija?',
+        'Trabajamos con primaria y secundaria. ¿En qué nivel está tu hijo?',
+      ],
+      modalidad: () => [
+        'Tenemos modalidades presencial y en línea. ¿Cuál le conviene mejor a tu hijo?',
+        'Puedes elegir clases presenciales en CDMX o en línea desde cualquier lugar. ¿Cuál prefieres?',
+      ],
+      inscription: () => [
+        'El proceso es fácil: nos das tus datos y te contactamos en 24 hrs. ¿Te inscribimos ya?',
+        '¡Anotarte es rápido! Nos dices tus datos y un asesor te llama. ¿Lo hacemos?',
+      ],
+      primeraClase: () => [
+        '¡Primera clase sin costo! ¿La agendamos para que conocer nuestro método?',
+        'Ofrecemos clase prueba gratuita. ¿Quieres agendar la primera?',
+      ],
+      resultados: () => [
+        '¡95% de padres ven mejoras en sus hijos! ¿Tu hijo tiene dificultades en alguna materia?',
+        'Funciona: mejoramos calificaciones y confianza. ¿En qué necesita ayuda tu hijo?',
+      ],
+      ventajas: () => [
+        '¡Nuestro diferencial! Acompañamiento académico + emocional. 95% de padres lo recomienda. ¿Te cuento más?',
+        'Combinamos tutoring académico con apoyo psicológico. ¡Eso nos hace únicos! ¿Te interesa?',
+      ],
+      descuentos: () => [
+        '¡Tenemos promociones activas! ¿Te informo de la mejor opción para ti?',
+        'Tenemos ofertas especiales. ¿Cuál es tu necesidad para darte la mejor opción?',
+      ],
+      talleres: () => [
+        'Talleres de robótica, programación y más. ¿Le interesan a tu hijo?',
+        'Tenemos workshops geniales. ¿Qué tema le llama la atención a tu hijo?',
+      ],
+      diagnostico: () => [
+        'Hacemos un diagnóstico gratuito del estilo de aprendizaje. ¿Lo agendamos?',
+        'Tenemos test VAK sin costo para conocer cómo aprende tu hijo. ¿Lo hago?',
+      ],
+      padres: () => [
+        'Entiendo como padre/madre. Cuéntame, ¿qué edad tiene tu hijo y en qué necesita ayuda?',
+        '¡Perfecto! Para ayudarte mejor, ¿me dices la edad de tu hijo y qué materia necesita?',
+      ],
+      materias: () => [
+        'Matemáticas, física, química, inglés y más. ¿Cuál materia es la que necesita tu hijo?',
+        'Tenemos todas las materias principales. ¿Cuál es la más difícil para tu hijo?',
+      ],
+      equipo: () => [
+        '¡Más de 10 años de experiencia! Equipo de psicólogos y docentes especializados. ¿Te cuento más?',
+        'Contamos con maestros certificados y psicólogos educativos. ¡Son los mejores!',
+      ],
+      contacto: () => [
+        'Escríbenos al WhatsApp: 55 1234 5678. ¡Respondemos rápido!',
+        'Nuestro WhatsApp es 55 1234 5678. ¿Te lo guardo para que nos escribas?',
       ],
     };
 
@@ -472,7 +568,7 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
           onClick={handleOpenChat}
           className="w-16 h-16 rounded-full bg-gradient-to-br from-[#4DA8C4] via-[#66CCCC] to-[#004B63] bg-[length:200%_100%] shadow-[0_0_20px_rgba(77,168,196,0.6)] flex items-center justify-center transition-all duration-300 hover:scale-110 animate-pulse border-2 border-[#66CCCC]/50"
         >
-          <MessageCircle className="w-7 h-7 text-white" />
+          <Bot className="w-8 h-8 text-white" />
         </button>
       )}
 
@@ -481,14 +577,14 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
         <div className="w-[380px] h-[600px] flex flex-col bg-gradient-to-b from-[#0A1628] to-[#004B63] backdrop-blur-2xl border border-[#4DA8C4]/50 rounded-[2rem] shadow-[0_0_40px_rgba(0,75,99,0.5)] z-[10000] overflow-hidden transition-all duration-300 ease-in-out">
           
           {/* Header Corporativo */}
-          <div className="px-5 py-4 border-b border-[#4DA8C4]/40 flex items-center justify-between bg-gradient-to-r from-[#004B63]/80 to-[#0A1628]/80">
+          <div className="px-5 py-3 border-b border-[#4DA8C4]/40 flex items-center justify-between bg-gradient-to-r from-[#004B63]/80 to-[#0A1628]/80">
               <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#4DA8C4] via-[#66CCCC] to-[#004B63] flex items-center justify-center text-[#0A1628] font-bold shadow-lg shadow-[#4DA8C4]/30 border-2 border-[#66CCCC]/50">
+              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#4DA8C4] via-[#66CCCC] to-[#004B63] flex items-center justify-center text-[#0A1628] font-bold shadow-lg shadow-[#4DA8C4]/30 border-2 border-[#66CCCC]/50">
                 N
               </div>
               <div>
                 <h3 className="text-white font-bold text-sm">
-                  NICO Soporte Corporativo
+                  NICO Soporte
                 </h3>
                 <p className="text-[#66CCCC] text-[10px] flex items-center gap-1">
                   <span className={`w-1.5 h-1.5 rounded-full ${isListening ? 'bg-red-500 animate-pulse' : isSpeaking ? 'bg-green-500 animate-pulse' : 'bg-[#66CCCC] animate-pulse'}`}></span>
@@ -501,20 +597,20 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
               {/* Interruptor Maestro de Audio */}
               <button
                 onClick={() => setIsAudioEnabled(!isAudioEnabled)}
-                className={`p-1.5 rounded-full transition-all ${isAudioEnabled ? 'bg-[#4DA8C4] text-white shadow-lg' : 'bg-[#0A1628]/50 text-[#66CCCC] hover:text-white hover:bg-[#4DA8C4]'}`}
+                className={`p-1.5 rounded-xl transition-all ${isAudioEnabled ? 'bg-[#4DA8C4] text-white shadow-lg' : 'bg-[#0A1628]/50 text-[#66CCCC] hover:text-white hover:bg-[#4DA8C4]'}`}
                 title={isAudioEnabled ? 'Audio Activado - Nico hablará' : 'Audio Desactivado'}
               >
                 {isAudioEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
               </button>
               
               {isSpeaking && isAudioEnabled && (
-                <button onClick={stop} className="p-1.5 rounded-full bg-red-500 text-white shadow-lg">
+                <button onClick={stop} className="p-1.5 rounded-xl bg-red-500 text-white shadow-lg">
                   <VolumeX className="w-3.5 h-3.5" />
                 </button>
               )}
               
               {isListening && (
-                <button onClick={stopListening} className="p-1.5 rounded-full bg-red-500 text-white shadow-lg">
+                <button onClick={stopListening} className="p-1.5 rounded-xl bg-red-500 text-white shadow-lg">
                   <MicOff className="w-3.5 h-3.5" />
                 </button>
               )}
@@ -572,8 +668,12 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
               <div className="self-start max-w-[85%]">
                 <div className="p-4 rounded-2xl rounded-tl-none bg-gradient-to-br from-[#004B63]/60 to-[#0A1628] border border-[#4DA8C4]/40 shadow-lg">
                   <div className="flex items-center gap-2">
-                    <Loader2 className="w-4 h-4 animate-spin text-[#66CCCC]" />
-                    <span className="text-xs text-[#66CCCC] font-medium">Nico está escribiendo...</span>
+                    <div className="flex gap-1">
+                      <span className="w-2 h-2 bg-[#66CCCC] rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                      <span className="w-2 h-2 bg-[#66CCCC] rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                      <span className="w-2 h-2 bg-[#66CCCC] rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                    </div>
+                    <span className="text-xs text-[#66CCCC] font-medium">Nico está pensando...</span>
                   </div>
                 </div>
               </div>
