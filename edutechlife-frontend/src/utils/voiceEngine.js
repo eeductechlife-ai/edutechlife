@@ -45,8 +45,8 @@ class VoiceEngine {
     }
 
     this.recognition = new SpeechRecognition();
-    this.recognition.lang = 'es-CO';
-    this.recognition.continuous = true;
+    this.recognition.lang = 'es-ES';
+    this.recognition.continuous = false;
     this.recognition.interimResults = true;
     this.recognition.maxAlternatives = 1;
 

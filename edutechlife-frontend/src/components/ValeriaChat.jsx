@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Mic, MicOff, Volume2, VolumeX, Send, Loader2, Copy, PlayCircle, X, Bot } from 'lucide-react';
-import useVoiceConversation, { VOICE_STATES } from '../hooks/useVoiceConversation';
 import useConversationMemory from '../hooks/useConversationMemory';
 import useLeadManagement from '../hooks/useLeadManagement';
 import { callDeepseek } from '../utils/api';
 import { PROMPT_NICO_SOPORTE } from '../constants/prompts';
 import { speakTextConversational } from '../utils/speech';
+import { checkSpeechRecognitionSupport } from '../utils/speechRecognition';
 
 const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
   const [inputText, setInputText] = useState('');
@@ -16,6 +16,11 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
   const [greetingSent, setGreetingSent] = useState(false);
   const [messageCount, setMessageCount] = useState(0);
   const [lastCategory, setLastCategory] = useState(null);
+  const [micPermissionError, setMicPermissionError] = useState('');
+  const [isListening, setIsListening] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [interimText, setInterimText] = useState('');
   const [leadData, setLeadData] = useState({
     nombre: null,
     telefono: null,
@@ -30,6 +35,7 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
   const messagesContainerRef = useRef(null);
   const inputRef = useRef(null);
   const nameLearnedRef = useRef(false);
+  const recognitionRef = useRef(null);
 
   const {
     memory,
@@ -345,31 +351,103 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
     }
   }, [addMessage, generateContext, generateContextualResponse, learnFromUser]);
 
-  const {
-    state: voiceState,
-    interimText,
-    currentCaption,
-    isListening,
-    isSpeaking,
-    isProcessing,
-    speak,
-    startListening,
-    stopListening,
-    stop,
-    toggleListening,
-  } = useVoiceConversation({
-    onMessage: handleMessage,
-    conversationMode: false,
-    voiceRate: 1.05,
-    voicePitch: 1.0,
-    voiceProfile: 'nico',
-  });
-
-  useEffect(() => {
-    if (voiceState === VOICE_STATES.SPEAKING && currentCaption && isAudioEnabled) {
-      speak(currentCaption);
+  const startListening = useCallback(() => {
+    if (!checkSpeechRecognitionSupport()) {
+      setMicPermissionError('Tu navegador no soporta reconocimiento de voz');
+      return;
     }
-  }, [voiceState, currentCaption, speak, isAudioEnabled]);
+
+    if (recognitionRef.current) {
+      try {
+        recognitionRef.current.stop();
+      } catch (e) {}
+    }
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognitionRef.current = new SpeechRecognition();
+    recognitionRef.current.lang = 'es-ES';
+    recognitionRef.current.continuous = false;
+    recognitionRef.current.interimResults = true;
+    recognitionRef.current.maxAlternatives = 1;
+
+    let finalTranscript = '';
+    let lastResultIndex = 0;
+
+    recognitionRef.current.onstart = () => {
+      setIsListening(true);
+      setMicPermissionError('');
+    };
+
+    recognitionRef.current.onresult = (event) => {
+      let interim = '';
+      for (let i = lastResultIndex; i < event.results.length; i++) {
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalTranscript += ' ' + transcript.trim();
+        } else {
+          interim += transcript;
+        }
+      }
+      lastResultIndex = event.results.length;
+      setInterimText(finalTranscript + ' ' + interim);
+      setInputText(finalTranscript + ' ' + interim);
+    };
+
+    recognitionRef.current.onend = () => {
+      setIsListening(false);
+      setInterimText('');
+      if (finalTranscript.trim()) {
+        handleMessage(finalTranscript.trim()).then(({ text: response }) => {
+          if (response && isAudioEnabled) {
+            setIsSpeaking(true);
+            speakTextConversational(response, 'nico', () => setIsSpeaking(false));
+          }
+        });
+      }
+      finalTranscript = '';
+      lastResultIndex = 0;
+    };
+
+    recognitionRef.current.onerror = (event) => {
+      console.error('Speech recognition error:', event.error);
+      setIsListening(false);
+      setInterimText('');
+      if (event.error === 'not-allowed' || event.error === 'permission-denied') {
+        setMicPermissionError('Por favor, permite el acceso al micrófono en tu navegador');
+      }
+    };
+
+    try {
+      recognitionRef.current.start();
+    } catch (error) {
+      console.error('Error starting recognition:', error);
+      setIsListening(false);
+    }
+  }, [handleMessage, isAudioEnabled]);
+
+  const stopListening = useCallback(() => {
+    if (recognitionRef.current) {
+      try { recognitionRef.current.stop(); } catch (e) {}
+    }
+    setIsListening(false);
+    setInterimText('');
+  }, []);
+
+  const toggleListening = useCallback(() => {
+    if (isListening) stopListening();
+    else startListening();
+  }, [isListening, startListening, stopListening]);
+
+  const speak = useCallback((text) => {
+    if (!text || !isAudioEnabled) return;
+    setIsSpeaking(true);
+    speakTextConversational(text, 'nico', () => setIsSpeaking(false));
+  }, [isAudioEnabled]);
+
+  const stopSpeaking = useCallback(() => {
+    speakTextConversational.stop?.();
+    setIsSpeaking(false);
+  }, []);
 
   useEffect(() => {
     if (isOpen && inputRef.current) {
@@ -604,7 +682,7 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
               </button>
               
               {isSpeaking && isAudioEnabled && (
-                <button onClick={stop} className="p-1.5 rounded-xl bg-red-500 text-white shadow-lg">
+                <button onClick={stopSpeaking} className="p-1.5 rounded-xl bg-red-500 text-white shadow-lg">
                   <VolumeX className="w-3.5 h-3.5" />
                 </button>
               )}
@@ -683,34 +761,47 @@ const ValeriaChat = ({ studentName: initialName = 'amigo', onNavigate }) => {
           </div>
 
           {/* Input Area - Siempre visible */}
-          <div className="p-4 border-t border-[#4DA8C4]/30 bg-gradient-to-t from-[#004B63]/40 to-[#0A1628] flex gap-3 items-center">
-            <button
-              onClick={toggleListening}
-              disabled={isSpeaking}
-              className={`p-3 rounded-full transition-all hover:scale-105 disabled:opacity-50 ${isListening ? 'bg-red-500 text-white animate-pulse' : 'bg-gradient-to-r from-[#4DA8C4] via-[#66CCCC] to-[#4DA8C4] bg-[length:200%_100%] text-white shadow-lg shadow-[#4DA8C4]/30'}`}
-            >
-              {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
-            </button>
+          <div className="p-4 border-t border-[#4DA8C4]/30 bg-gradient-to-t from-[#004B63]/40 to-[#0A1628]">
+            {micPermissionError && (
+              <div className="mb-2 text-xs text-red-400 bg-red-500/20 px-3 py-1 rounded-lg">
+                {micPermissionError}
+              </div>
+            )}
             
-            <div className="flex-1 bg-[#0A1628]/80 border border-[#4DA8C4]/40 rounded-full px-5 py-3">
-              <input
-                ref={inputRef}
-                type="text"
-                value={inputText || interimText}
-                onChange={(e) => setInputText(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Escribe tu mensaje..."
-                className="w-full bg-transparent text-white placeholder-[#66CCCC] focus:outline-none focus:border-[#4DA8C4]/50 text-sm"
-              />
+            <div className="flex gap-3 items-center">
+              <button
+                onClick={toggleListening}
+                disabled={isSpeaking}
+                className={`p-3 rounded-full transition-all hover:scale-105 disabled:opacity-50 ${isListening ? 'bg-cyan-400 text-white animate-pulse shadow-lg shadow-cyan-400/50' : 'bg-gradient-to-r from-[#4DA8C4] via-[#66CCCC] to-[#4DA8C4] bg-[length:200%_100%] text-white shadow-lg shadow-[#4DA8C4]/30'}`}
+              >
+                {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+              </button>
+              
+              <div className="flex-1 bg-[#0A1628]/80 border border-[#4DA8C4]/40 rounded-full px-5 py-3">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={inputText}
+                  onChange={(e) => setInputText(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder={isListening ? "Escuchando..." : "Escribe tu mensaje..."}
+                  className="w-full bg-transparent text-white placeholder-[#66CCCC] focus:outline-none focus:border-[#4DA8C4]/50 text-sm"
+                />
+                {isListening && interimText && (
+                  <div className="text-sm text-[#66CCCC] opacity-70 mt-1 animate-pulse">
+                    {interimText}
+                  </div>
+                )}
+              </div>
+              
+              <button
+                onClick={handleSendMessage}
+                disabled={!inputText.trim()}
+                className="p-3 rounded-full bg-gradient-to-r from-[#4DA8C4] via-[#66CCCC] to-[#4DA8C4] bg-[length:200%_100%] text-white transition-all hover:scale-105 disabled:opacity-50 shadow-lg shadow-[#4DA8C4]/30"
+              >
+                <Send className="w-5 h-5" />
+              </button>
             </div>
-            
-            <button
-              onClick={handleSendMessage}
-              disabled={!inputText.trim()}
-              className="p-3 rounded-full bg-gradient-to-r from-[#4DA8C4] via-[#66CCCC] to-[#4DA8C4] bg-[length:200%_100%] text-white transition-all hover:scale-105 disabled:opacity-50 shadow-lg shadow-[#4DA8C4]/30"
-            >
-              <Send className="w-5 h-5" />
-            </button>
           </div>
         </div>
       )}
