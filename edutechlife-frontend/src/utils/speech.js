@@ -109,7 +109,9 @@ export const speakTextConversational = async (text, profile = 'valeria', onEndCa
 
         if (data.audioContent) {
           console.log(`Audio received with voice: ${voiceOption.name}`);
+          console.log('✅ Audio de Google recibido');
           currentAudio = new Audio(`data:audio/mp3;base64,${data.audioContent}`);
+          currentAudio.volume = 1.0;
           
           currentAudio.onended = handleEnd;
           currentAudio.onerror = (e) => {

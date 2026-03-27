@@ -3,7 +3,7 @@ import { Mic, MicOff, Volume2, VolumeX, Send, X, Maximize2, Minimize2, Bot, Mess
 import useConversationMemory from '../../hooks/useConversationMemory';
 import useLeadManagement from '../../hooks/useLeadManagement';
 import { callDeepseek } from '../../utils/api';
-import { speakTextConversational } from '../../utils/speech';
+import { speakTextConversational, stopSpeech } from '../../utils/speech';
 import { createSpeechRecognition } from '../../utils/speechRecognition';
 
 const COLORS = {
@@ -60,23 +60,28 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
   const [interimTranscript, setInterimTranscript] = useState('');
   const [typingDots, setTypingDots] = useState(0);
   const [autoVoice, setAutoVoice] = useState(false);
+  const [messages, setMessages] = useState([]);
   
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   
   const { 
-    messages, 
-    addMessage, 
-    clearMessages, 
-    getConversationHistory,
-    saveConversation 
-  } = useConversationMemory('nico-chat');
+    memory = {}, 
+    processMessage = () => {}, 
+    clearMemory = () => {} 
+  } = useConversationMemory('nico-chat') || {};
   
   const { 
     currentLead, 
     updateLeadInfo, 
     saveLead 
   } = useLeadManagement();
+
+  useEffect(() => {
+    if (messages.length === 0 && memory?.conversationHistory?.length > 0) {
+      setMessages(memory.conversationHistory);
+    }
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -92,11 +97,15 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
 
     const userMessage = trimmedMessage;
     setMessage('');
-    addMessage({ 
+    
+    const userMessageObj = { 
       role: 'user', 
       content: userMessage,
       timestamp: new Date().toISOString()
-    });
+    };
+    
+    setMessages(prev => [...prev, userMessageObj]);
+    processMessage('user', userMessage);
     setIsLoading(true);
 
     try {
@@ -119,12 +128,15 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       
       const isCached = cached && (Date.now() - cached.timestamp) < CACHE_DURATION;
       
-      addMessage({ 
+      const assistantMessageObj = { 
         role: 'assistant', 
         content: response,
         timestamp: new Date().toISOString(),
         isCached: isCached
-      });
+      };
+      
+      setMessages(prev => [...prev, assistantMessageObj]);
+      processMessage('assistant', response);
       
       if (currentLead) {
         updateLeadInfo({ 
@@ -140,20 +152,20 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
         });
       }
 
-      // Auto-speak response if auto voice is enabled
-      if (autoVoice) {
-        setTimeout(() => {
-          handleSpeakResponse();
-        }, 500);
-      }
+      // Auto-speak response automatically
+      setTimeout(() => {
+        console.log('🔊 Activando respuesta de voz automática...');
+        handleSpeakResponse();
+      }, 200);
     } catch (error) {
       console.error('Error sending message:', error);
-      addMessage({ 
+      const errorMessageObj = { 
         role: 'assistant', 
         content: '⚠️ Error de conexión. Por favor, intenta de nuevo.',
         timestamp: new Date().toISOString(),
         isError: true
-      });
+      };
+      setMessages(prev => [...prev, errorMessageObj]);
     } finally {
       setIsLoading(false);
     }
@@ -163,12 +175,13 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
 
   useEffect(() => {
     const speechRecognition = createSpeechRecognition({
-      onResult: (text, isFinal) => {
-        if (isFinal) {
-          setMessage(text);
+      onResult: (interimText, finalText, hasFinal) => {
+        if (hasFinal) {
+          setMessage(finalText);
           setInterimTranscript('');
+          console.log('🎤 STT: Texto final reconocido:', finalText);
         } else {
-          setInterimTranscript(text);
+          setInterimTranscript(interimText);
         }
       },
       onEnd: () => {
@@ -185,8 +198,8 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
     setRecognition(speechRecognition);
     
     return () => {
-      if (recognition) {
-        recognition.stop();
+      if (speechRecognition) {
+        speechRecognition.stop();
       }
     };
   }, []);
@@ -236,7 +249,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
   };
 
   const handleSpeakResponse = async () => {
-    if (messages.length === 0) return;
+    if ((messages || []).length === 0) return;
     
     const lastAssistantMessage = messages
       .filter(m => m.role === 'assistant' && !m.isError)
@@ -245,16 +258,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
     if (!lastAssistantMessage) return;
 
     if (isSpeaking) {
-      // Stop current speech
-      try {
-        // We need to check if there's a stop function available
-        const speechModule = await import('../../utils/speech');
-        if (speechModule.stopSpeech) {
-          speechModule.stopSpeech();
-        }
-      } catch (error) {
-        console.error('Error stopping speech:', error);
-      }
+      stopSpeech();
       setIsSpeaking(false);
       return;
     }
@@ -262,6 +266,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
     setIsSpeaking(true);
     
     try {
+      console.log('🔊 Intentando reproducir voz neural...', lastAssistantMessage.content.substring(0, 100));
       // Use premium voice profile for better quality
       await speakTextConversational(
         lastAssistantMessage.content, 
@@ -271,7 +276,16 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
         }
       );
     } catch (error) {
-      console.error('Error speaking response:', error);
+      console.error('❌ Error de Google TTS (voz premium):', {
+        message: error.message,
+        name: error.name,
+        stack: error.stack,
+        code: error.code,
+        status: error.status,
+        statusText: error.statusText,
+        response: error.response ? await error.response.text().catch(() => 'Cannot read response') : 'No response',
+        fullError: JSON.stringify(error, Object.getOwnPropertyNames(error))
+      });
       setIsSpeaking(false);
       
       // Fallback to regular voice
@@ -284,7 +298,16 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
           }
         );
       } catch (fallbackError) {
-        console.error('Fallback voice error:', fallbackError);
+        console.error('❌ Error de Google TTS (fallback):', {
+          message: fallbackError.message,
+          name: fallbackError.name,
+          stack: fallbackError.stack,
+          code: fallbackError.code,
+          status: fallbackError.status,
+          statusText: fallbackError.statusText,
+          response: fallbackError.response ? await fallbackError.response.text().catch(() => 'Cannot read response') : 'No response',
+          fullError: JSON.stringify(fallbackError, Object.getOwnPropertyNames(fallbackError))
+        });
         setIsSpeaking(false);
       }
     }
@@ -309,16 +332,18 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
   };
 
   const clearChat = () => {
-    clearMessages();
+    setMessages([]);
+    clearMemory();
   };
 
   const clearCache = () => {
     responseCache.clear();
-    addMessage({
+    const cacheClearedMessage = {
       role: 'assistant',
       content: '✅ Caché limpiado. Las próximas respuestas se generarán desde cero.',
       timestamp: new Date().toISOString()
-    });
+    };
+    setMessages(prev => [...prev, cacheClearedMessage]);
   };
 
   const viewHistory = () => {
@@ -416,7 +441,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
             backgroundImage: `radial-gradient(circle at 20% 80%, ${COLORS.PETROLEUM}20 0%, transparent 50%)`
           }}
         >
-          {messages.length === 0 ? (
+          {(messages || []).length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center p-8">
               <div 
                 className="w-20 h-20 rounded-full flex items-center justify-center mb-4"
@@ -580,13 +605,13 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
             
             <button
               onClick={handleSpeakResponse}
-              disabled={messages.length === 0 || isSpeaking}
+              disabled={(messages || []).length === 0 || isSpeaking}
               className={`p-3 rounded-xl transition-all duration-300 ${
                 isSpeaking ? 'scale-105 ring-4 ring-opacity-50' : 'hover:scale-105'
               }`}
               style={{ 
                 backgroundColor: isSpeaking ? COLORS.MINT : COLORS.CORPORATE,
-                opacity: messages.length === 0 ? 0.5 : 1,
+                opacity: (messages || []).length === 0 ? 0.5 : 1,
                 boxShadow: isSpeaking ? `0 0 20px ${COLORS.MINT}80` : 'none'
               }}
               title={isSpeaking ? "Detener voz" : "Escuchar respuesta de Nico"}

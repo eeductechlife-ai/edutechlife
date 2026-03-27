@@ -49,7 +49,7 @@ export const createSpeechRecognition = (options = {}) => {
             console.warn('Error stopping recognition after silence:', e);
           }
         }
-      }, 3000);
+      }, 8000);
     }
   };
 
