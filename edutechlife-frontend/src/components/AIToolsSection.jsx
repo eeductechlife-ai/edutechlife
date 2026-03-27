@@ -89,7 +89,7 @@ function AIToolsSection({ onToolClick = () => {} }) {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#004B63] font-montserrat mb-3">
-              Potencia tu Ecosistema con nuestras <span className="text-[#4DA8C4]">Herramientas I.A.</span>
+              <span className="text-[#4DA8C4]">Herramientas IA</span> Edutechlife
             </h2>
             
             <p className="text-sm md:text-base text-[#64748B] max-w-2xl mx-auto">
