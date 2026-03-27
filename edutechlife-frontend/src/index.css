@@ -7742,7 +7742,7 @@ h5 {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 50%, #F8FAFC 100%);
+  background: #FFFFFF;
   transition: opacity 0.6s ease, transform 0.6s ease;
   overflow: hidden;
 }

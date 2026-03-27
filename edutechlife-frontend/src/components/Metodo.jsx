@@ -106,7 +106,7 @@ const Metodo = memo(() => {
 
                 {/* Bottom CTA */}
                 <div className="text-center mt-16">
-                    <button className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#004B63] text-white font-normal rounded-full transition-all duration-300 hover:bg-[#4DA8C4] hover:shadow-xl">
+                    <button className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#4DA8C4] text-white font-normal rounded-full transition-all duration-300 hover:bg-[#004B63] hover:shadow-xl">
                         <Icon name="fa-rocket" className="text-lg" />
                         <span className="text-lg">Comenzar Mi Transformación</span>
                         <Icon name="fa-arrow-right" className="text-lg" />

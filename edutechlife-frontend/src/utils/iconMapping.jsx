@@ -69,6 +69,10 @@ import {
   Star,
   Flame,
   Calculator,
+  FolderOpen,
+  CircleHelp,
+  LifeBuoy,
+  Hand,
   // Additional icons for coverage
 
   CalculatorIcon,
@@ -270,9 +274,14 @@ export const faToLucideMap = {
     'fa-bullseye': Target,
     'fa-facebook-f': Facebook,
     'fa-instagram': Instagram,
-    'fa-linkedin-in': Linkedin,
+  'fa-linkedin-in': Linkedin,
     'fa-youtube': Youtube,
-};
+    'fa-folder-open': FolderOpen,
+    'fa-circle-question': CircleHelp,
+    'fa-life-ring': LifeBuoy,
+    'fa-hand': Hand,
+    'fa-whatsapp': MessageCircle,
+  };
 
 // Helper function to get Lucide component from Font Awesome class name
 export function getLucideIcon(faClassName) {

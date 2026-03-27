@@ -96,20 +96,20 @@ const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
 
                 <div className="loading-features">
                     <div className="feature-item premium">
-                        <div className="feature-icon">
-                            <i className="fa-solid fa-robot" />
+                        <div className="feature-icon" style={{ background: 'linear-gradient(135deg, rgba(0, 75, 99, 0.1) 0%, rgba(77, 168, 196, 0.15) 100%)', border: '1px solid rgba(0, 75, 99, 0.2)' }}>
+                            <i className="fa-solid fa-robot" style={{ color: '#004B63' }} />
                         </div>
                         <span>IA Integrada</span>
                     </div>
                     <div className="feature-item premium">
-                        <div className="feature-icon">
-                            <i className="fa-solid fa-brain" />
+                        <div className="feature-icon" style={{ background: 'linear-gradient(135deg, rgba(0, 75, 99, 0.1) 0%, rgba(77, 168, 196, 0.15) 100%)', border: '1px solid rgba(0, 75, 99, 0.2)' }}>
+                            <i className="fa-solid fa-brain" style={{ color: '#004B63' }} />
                         </div>
                         <span>VAK Metodología</span>
                     </div>
                     <div className="feature-item premium">
-                        <div className="feature-icon">
-                            <i className="fa-solid fa-award" />
+                        <div className="feature-icon" style={{ background: 'linear-gradient(135deg, rgba(0, 75, 99, 0.1) 0%, rgba(77, 168, 196, 0.15) 100%)', border: '1px solid rgba(0, 75, 99, 0.2)' }}>
+                            <i className="fa-solid fa-award" style={{ color: '#004B63' }} />
                         </div>
                         <span>Certificaciones</span>
                     </div>

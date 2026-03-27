@@ -21,7 +21,7 @@ const DiagnosticoVAK = lazy(() => import('./components/DiagnosticoVAK'));
 const VAKTest = lazy(() => import('./components/VAKTest'));
 const VAKDiagnostic = lazy(() => import('./components/VAKDiagnostic'));
 const AdminDashboard = lazy(() => import('./components/AdminDashboard'));
-import { NicoSupport } from './components/Nico';
+import NicoModernSimple from './components/Nico/NicoModern.simple';
 import AdminLoginModal from './components/AdminLoginModal';
 import LeadCaptureModal from './components/LeadCaptureModal';
 import LoadingScreen, { MiniLoader } from './components/LoadingScreen';
@@ -806,7 +806,7 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
     }, []);
 
     return (
-        <div className="flex flex-col min-h-screen overflow-hidden bg-white text-gray-800" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+        <div className="flex flex-col min-h-screen overflow-hidden bg-white text-[#004B63]" style={{ fontFamily: "'Montserrat', sans-serif" }}>
             <Suspense fallback={null}>
                 <GlobalCanvas />
             </Suspense>
@@ -820,8 +820,8 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
             {/* Header - Navigation Premium - Hidden on SmartBoard, IALab and Admin */}
             {view !== 'smartboard' && view !== 'ialab' && view !== 'admin' && (
                 <>
-                    <header className="sticky top-0 left-0 right-0 z-[1000] bg-white/90 backdrop-blur-sm shadow-sm border-b border-gray-100">
-                        <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 flex items-center justify-between py-3">
+                    <header className="sticky top-0 left-0 right-0 z-[1000] bg-white backdrop-blur-md border-b border-[#004B63]/10">
+                        <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 flex items-center justify-between">
                             {/* Logo - Premium Clean */}
                             <div className="flex items-center">
                                 <button 
@@ -837,8 +837,11 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                                     <img 
                                         src="/images/logo-edutechlife.webp" 
                                         alt="Edutechlife" 
-                                        className="h-9 w-auto object-contain"
+                                        className="w-24 object-contain"
                                         style={{ 
+                                            height: '80px',
+                                            transform: 'scale(1.8)',
+                                            transformOrigin: 'left center',
                                             background: 'transparent',
                                             border: 'none',
                                             outline: 'none',
@@ -850,7 +853,7 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                             </div>
                             
                             {/* Navigation Links - Desktop */}
-                            <nav className="hidden md:flex items-center gap-1">
+                            <nav className="hidden md:flex items-center gap-3">
                                 <button 
                                     onClick={() => {
                                         handleNavigate('landing');
@@ -861,8 +864,9 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                                             }
                                         }, 100);
                                     }}
-                                    className="px-4 py-2 text-base font-medium text-gray-600 hover:text-[#4DA8C4] hover:bg-[#4DA8C4]/10 active:bg-[#4DA8C4]/20 active:text-[#4DA8C4] active:shadow-[0_0_12px_rgba(77,168,196,0.3)] rounded-lg transition-all duration-200"
+                                    className="px-4 py-2 text-sm font-semibold text-white bg-[#004B63] hover:bg-[#4DA8C4] rounded-full transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2"
                                 >
+                                    <i className="fa-solid fa-graduation-cap text-xs text-white"></i>
                                     Esencia
                                 </button>
                                 <button 
@@ -875,14 +879,16 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                                             }
                                         }, 100);
                                     }}
-                                    className="px-4 py-2 text-base font-medium text-gray-600 hover:text-[#4DA8C4] hover:bg-[#4DA8C4]/10 active:bg-[#4DA8C4]/20 active:text-[#4DA8C4] active:shadow-[0_0_12px_rgba(77,168,196,0.3)] rounded-lg transition-all duration-200"
+                                    className="px-4 py-2 text-sm font-semibold text-white bg-[#004B63] hover:bg-[#4DA8C4] rounded-full transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2"
                                 >
+                                    <i className="fa-solid fa-layer-group text-xs text-white"></i>
                                     Ecosistema
                                 </button>
                                 <button 
                                     onClick={() => setShowContactModal(true)}
-                                    className="px-4 py-2 text-base font-medium text-gray-600 hover:text-[#4DA8C4] hover:bg-[#4DA8C4]/10 active:bg-[#4DA8C4]/20 active:text-[#4DA8C4] active:shadow-[0_0_12px_rgba(77,168,196,0.3)] rounded-lg transition-all duration-200"
+                                    className="px-4 py-2 text-sm font-semibold text-white bg-[#4DA8C4] hover:bg-[#004B63] rounded-full transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2"
                                 >
+                                    <i className="fa-solid fa-envelope text-xs"></i>
                                     Contacto
                                 </button>
                             </nav>
@@ -890,7 +896,7 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                             {/* Mobile Menu Button */}
                             <button 
                                 onClick={() => setMobileMenuOpen(true)}
-                                className="md:hidden p-2 text-gray-600 hover:text-[#4DA8C4] transition-colors"
+                                className="md:hidden p-2 text-[#004B63] hover:text-[#4DA8C4] hover:bg-[#4DA8C4]/10 rounded-full transition-all duration-300"
                                 aria-label="Abrir menú"
                             >
                                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -910,13 +916,16 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                             />
                             {/* Drawer */}
                             <div className="fixed top-0 right-0 z-[1002] h-full w-72 bg-white shadow-2xl md:hidden animate-slide-in">
-                                <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+                                <div className="p-4 border-b border-[#4DA8C4]/20 flex items-center justify-between">
                                     <div className="flex items-center">
                                         <img 
                                             src="/images/logo-edutechlife.webp" 
                                             alt="Edutechlife" 
-                                            className="h-9 w-auto object-contain"
+                                            className="w-24 object-contain"
                                             style={{ 
+                                                height: '80px',
+                                            transform: 'scale(1.8)',
+                                                transformOrigin: 'left center',
                                                 background: 'transparent',
                                                 border: 'none',
                                                 outline: 'none',
@@ -927,14 +936,14 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                                     </div>
                                     <button 
                                         onClick={() => setMobileMenuOpen(false)}
-                                        className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
+                                        className="p-2 text-[#004B63] hover:text-[#4DA8C4] transition-colors rounded-full hover:bg-[#4DA8C4]/10"
                                     >
                                         <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                         </svg>
                                     </button>
                                 </div>
-                                <nav className="p-4 space-y-2">
+                                <nav className="p-4 space-y-3">
                                     <button 
                                         onClick={() => {
                                             handleNavigate('landing');
@@ -946,8 +955,9 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                                                 }
                                             }, 100);
                                         }}
-                                        className="w-full px-4 py-3 text-left text-base font-medium text-gray-600 hover:text-[#4DA8C4] hover:bg-[#4DA8C4]/10 rounded-lg transition-all duration-200"
+                                        className="w-full px-4 py-2.5 text-sm font-semibold text-white bg-[#004B63] hover:bg-[#4DA8C4] rounded-full transition-all duration-300 shadow-md flex items-center gap-3"
                                     >
+                                        <i className="fa-solid fa-graduation-cap text-xs text-white"></i>
                                         Esencia
                                     </button>
                                     <button 
@@ -961,8 +971,9 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                                                 }
                                             }, 100);
                                         }}
-                                        className="w-full px-4 py-3 text-left text-base font-medium text-gray-600 hover:text-[#4DA8C4] hover:bg-[#4DA8C4]/10 rounded-lg transition-all duration-200"
+                                        className="w-full px-4 py-2.5 text-sm font-semibold text-white bg-[#004B63] hover:bg-[#4DA8C4] rounded-full transition-all duration-300 shadow-md flex items-center gap-3"
                                     >
+                                        <i className="fa-solid fa-layer-group text-xs text-white"></i>
                                         Ecosistema
                                     </button>
                                     <button 
@@ -970,8 +981,9 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                                             setShowContactModal(true);
                                             setMobileMenuOpen(false);
                                         }}
-                                        className="w-full px-4 py-3 text-left text-base font-medium text-gray-600 hover:text-[#4DA8C4] hover:bg-[#4DA8C4]/10 rounded-lg transition-all duration-200"
+                                        className="w-full px-4 py-2.5 text-sm font-semibold text-white bg-[#4DA8C4] hover:bg-[#004B63] rounded-full transition-all duration-300 shadow-md flex items-center gap-3"
                                     >
+                                        <i className="fa-solid fa-envelope text-xs"></i>
                                         Contacto
                                     </button>
                                 </nav>
@@ -1061,7 +1073,7 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
             />
 
             {/* Nico Premium Widget - Flotante */}
-            <NicoSupport />
+            <NicoModernSimple />
         </div>
     );
 };
