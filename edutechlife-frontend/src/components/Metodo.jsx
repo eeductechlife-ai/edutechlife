@@ -6,25 +6,21 @@ import FloatingParticles from './FloatingParticles';
 const Metodo = memo(() => {
     const steps = [
         {
-            number: '01',
             title: 'Diagnóstico VAK',
             description: 'Identificamos tu estilo de aprendizaje único mediante nuestro sistema de IA.',
             icon: 'fa-brain'
         },
         {
-            number: '02',
             title: 'Ruta Personalizada',
             description: 'Diseñamos un currículo STEAM adaptado a tus fortalezas neuro-cognitivas.',
             icon: 'fa-route'
         },
         {
-            number: '03',
             title: 'Ejecución Práctica',
             description: 'Aplica lo aprendido en el SmartBoard interactivo con mentores expertos.',
             icon: 'fa-laptop-code'
         },
         {
-            number: '04',
             title: 'Certificación',
             description: 'Obtén credenciales oficiales respaldadas por gigantes tecnológicos globales.',
             icon: 'fa-certificate'
@@ -62,43 +58,57 @@ const Metodo = memo(() => {
                     </p>
                 </div>
 
-                {/* Steps Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {steps.map((step, index) => (
-                        <div 
-                            key={step.number}
-                            className="relative group"
-                        >
-                            {/* Connector Line (hidden on mobile, visible on lg) */}
-                            {index < steps.length - 1 && (
-                                <div className="hidden lg:block absolute top-16 left-1/2 w-full h-0.5 bg-gradient-to-r from-[#4DA8C4]/30 to-[#4DA8C4]/30 z-0" style={{ width: 'calc(100% - 4rem)', left: '2rem' }} />
-                            )}
+                {/* Camino de Pasos - Diseño de Círculos */}
+                <div className="relative">
+                    {/* Línea de conexión horizontal - solo desktop */}
+                    <div className="hidden lg:block absolute top-16 left-0 right-0 h-1 mx-8">
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#4DA8C4] via-[#66CCCC] to-[#4DA8C4] rounded-full opacity-30" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] animate-pulse-slow rounded-full" style={{ width: 'calc(100% - 8rem)', left: '4rem' }} />
+                    </div>
 
-                            {/* Card */}
-                            <div className="relative z-10 bg-[#F8FAFC] rounded-2xl p-8 h-full transition-all duration-300 hover:shadow-xl hover:-translate-y-2 border border-transparent hover:border-[#4DA8C4]/20">
-                                {/* Step Number */}
-                                <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-[#4DA8C4] to-[#004B63] text-white font-black text-lg mb-6">
-                                    {step.number}
+                    {/* Steps - Círculos */}
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4">
+                        {steps.map((step, index) => (
+                            <div 
+                                key={index}
+                                className="relative group flex flex-col items-center"
+                            >
+                                {/* Círculo grande con icono */}
+                                <motion.div 
+                                    whileHover={{ scale: 1.05 }}
+                                    className="relative z-10 w-28 h-28 lg:w-32 lg:h-32 rounded-full bg-white shadow-xl border-4 border-[#4DA8C4]/30 flex items-center justify-center mb-4 transition-all duration-300 group-hover:border-[#4DA8C4] group-hover:shadow-2xl group-hover:shadow-[#4DA8C4]/20"
+                                >
+                                    {/* Efecto de brillo en hover */}
+                                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#4DA8C4]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                    
+                                    {/* Icono centrado */}
+                                    <Icon name={step.icon} className="text-3xl lg:text-4xl text-[#4DA8C4] relative z-10" />
+                                    
+                                    {/* Punto indicador (último paso diferente color) */}
+                                    {index === steps.length - 1 && (
+                                        <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#66CCCC] border-4 border-white flex items-center justify-center">
+                                            <Icon name="fa-check" className="text-xs text-white" />
+                                        </div>
+                                    )}
+                                </motion.div>
+
+                                {/* Información centrada debajo del círculo */}
+                                <div className="text-center max-w-[180px] lg:max-w-[200px]">
+                                    <h3 className="text-base lg:text-lg font-semibold text-[#004B63] mb-2">
+                                        {step.title}
+                                    </h3>
+                                    <p className="text-xs lg:text-sm text-slate-600 leading-relaxed">
+                                        {step.description}
+                                    </p>
                                 </div>
 
-                                {/* Icon */}
-                                <div className="w-14 h-14 rounded-2xl bg-[#4DA8C4]/10 flex items-center justify-center mb-4">
-                                    <Icon name={step.icon} className="text-2xl text-[#4DA8C4]" />
-                                </div>
-
-                                {/* Content */}
-                                <h3 className="text-xl font-normal text-[#004B63] mb-3">
-                                    {step.title}
-                                </h3>
-                                <p className="text-base text-slate-600 leading-relaxed font-normal">
-                                    {step.description}
-                                </p>
-
-                                {/* Hover Accent */}
-                                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#4DA8C4] to-[#004B63] rounded-b-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                {/* Conector vertical para móvil - entre círculos */}
+                                {index < steps.length - 1 && (
+                                    <div className="lg:hidden absolute top-14 -bottom-6 left-1/2 w-0.5 h-6 bg-gradient-to-b from-[#4DA8C4]/50 to-[#4DA8C4]/20" />
+                                )}
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
 
                 {/* Bottom CTA */}
