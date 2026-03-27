@@ -25,7 +25,6 @@ export const createSpeechRecognition = (options = {}) => {
   recognition.maxAlternatives = maxAlternatives;
 
   let finalTranscript = '';
-  let lastResultIndex = 0;
   let isActive = false;
   let silenceTimer = null;
   let errorCount = 0;
@@ -49,7 +48,7 @@ export const createSpeechRecognition = (options = {}) => {
             console.warn('Error stopping recognition after silence:', e);
           }
         }
-      }, 8000);
+      }, 10000);
     }
   };
 
@@ -65,19 +64,42 @@ export const createSpeechRecognition = (options = {}) => {
     
     let interim = '';
     let hasFinal = false;
+    let newFinalText = '';
     
-    for (let i = lastResultIndex; i < event.results.length; i++) {
-      const transcript = event.results[i][0].transcript;
-      if (event.results[i].isFinal) {
-        finalTranscript += ' ' + transcript.trim();
+    console.log(`🎤 Evento de resultado: ${event.results.length} resultados`);
+    
+    // Procesar TODOS los resultados desde el principio
+    for (let i = 0; i < event.results.length; i++) {
+      const result = event.results[i];
+      const transcript = result[0].transcript;
+      
+      console.log(`  Resultado ${i}: "${transcript}" (isFinal: ${result.isFinal})`);
+      
+      if (result.isFinal) {
+        // Para resultados finales, agregar al texto final
+        newFinalText += (newFinalText ? ' ' : '') + transcript.trim();
         hasFinal = true;
       } else {
+        // Para resultados interinos, agregar al texto temporal
         interim += transcript;
       }
     }
-    lastResultIndex = event.results.length;
     
-    onResult(finalTranscript + ' ' + interim, finalTranscript.trim(), hasFinal);
+    // Si hay texto final nuevo, agregarlo al acumulado
+    if (newFinalText) {
+      finalTranscript += (finalTranscript ? ' ' : '') + newFinalText;
+      console.log(`✅ Texto final agregado: "${newFinalText}"`);
+      console.log(`📝 Texto final acumulado: "${finalTranscript}"`);
+    }
+    
+    if (interim) {
+      console.log(`🔍 Texto interino: "${interim}"`);
+    }
+    
+    // Enviar el texto completo: acumulado final + interino actual
+    const fullText = finalTranscript + (interim ? ' ' + interim : '');
+    console.log(`📤 Enviando texto completo: "${fullText}"`);
+    onResult(fullText, finalTranscript.trim(), hasFinal);
     
     if (!hasFinal) {
       resetSilenceTimer();
@@ -90,7 +112,6 @@ export const createSpeechRecognition = (options = {}) => {
     const finalText = finalTranscript.trim();
     onEnd(finalText);
     finalTranscript = '';
-    lastResultIndex = 0;
   };
 
   recognition.onerror = (event) => {

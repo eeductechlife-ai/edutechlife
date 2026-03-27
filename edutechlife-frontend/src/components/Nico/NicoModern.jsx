@@ -18,6 +18,30 @@ const COLORS = {
 const responseCache = new Map();
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
+const removeEmojis = (text) => {
+  if (!text) return '';
+  const emojiRanges = [
+    /[\u{1F600}-\u{1F64F}]/gu,  // Emoticons
+    /[\u{1F300}-\u{1F5FF}]/gu,  // Symbols & Pictographs
+    /[\u{1F680}-\u{1F6FF}]/gu,  // Transport & Map
+    /[\u{1F1E0}-\u{1F1FF}]/gu,  // Flags
+    /[\u{2600}-\u{26FF}]/gu,    // Misc Symbols
+    /[\u{2700}-\u{27BF}]/gu,    // Dingbats
+    /[\u{1F900}-\u{1F9FF}]/gu, // Supplemental
+    /[\u{1FA00}-\u{1FA6F}]/gu, // Chess
+    /[\u{1FA70}-\u{1FAFF}]/gu, // Symbols Extended
+    /[\u{1F018}-\u{1F270}]/gu,  // Misc Symbols Extended
+    /[\u{1F700}-\u{1F77F}]/gu,  // Alchemical
+  ];
+  
+  let cleanText = text;
+  emojiRanges.forEach(regex => {
+    cleanText = cleanText.replace(regex, '');
+  });
+  
+  return cleanText.replace(/\s+/g, ' ').trim();
+};
+
 const PROMPT_NICO_SOPORTE = `Eres NICO - Asistente de IA Premium de EdutechLife.
 
 ## IDENTIDAD Y ROL
@@ -37,9 +61,10 @@ Eres el asistente virtual oficial de EdutechLife. Tu MISIÓN es resolver dudas d
 
 ## FORMATO DE RESPUESTA
 - Máximo 15-20 palabras por respuesta
-- Usa emojis relevantes (1-2 máximo)
+- NO uses emojis en tus respuestas de texto
+- El sistema mostrará emojis automáticamente si son necesarios
 - Estructura: Respuesta directa + oferta de ayuda adicional
-- Ejemplo: "¡Claro! Ofrecemos clases de programación para niños desde 8 años. 😊 ¿Te interesa saber horarios?"
+- Ejemplo: "Claro, Ofrecemos clases de programacion para ninos desde 8 anos. Te interesa saber horarios?"
 
 ## INFO CLAVE
 - Servicios: Clases particulares, STEM, apoyo emocional
@@ -156,7 +181,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       setTimeout(() => {
         console.log('🔊 Activando respuesta de voz automática...');
         handleSpeakResponse();
-      }, 200);
+      }, 500);
     } catch (error) {
       console.error('Error sending message:', error);
       const errorMessageObj = { 
@@ -175,13 +200,20 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
 
   useEffect(() => {
     const speechRecognition = createSpeechRecognition({
-      onResult: (interimText, finalText, hasFinal) => {
-        if (hasFinal) {
-          setMessage(finalText);
-          setInterimTranscript('');
-          console.log('🎤 STT: Texto final reconocido:', finalText);
+      onResult: (fullText, finalText, hasFinal) => {
+        // Escribir cada palabra detectada directamente en el textarea
+        setMessage(fullText);
+        console.log('🎤 STT: Texto detectado:', fullText);
+        
+        // Mostrar texto interino si no es final
+        if (!hasFinal) {
+          // Extraer solo la parte interina (lo nuevo desde el último texto final)
+          const interimOnly = fullText.replace(finalText, '').trim();
+          if (interimOnly) {
+            setInterimTranscript(interimOnly);
+          }
         } else {
-          setInterimTranscript(interimText);
+          setInterimTranscript('');
         }
       },
       onEnd: () => {
@@ -265,11 +297,13 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
 
     setIsSpeaking(true);
     
+    const textToSpeak = removeEmojis(lastAssistantMessage.content);
+    
     try {
-      console.log('🔊 Intentando reproducir voz neural...', lastAssistantMessage.content.substring(0, 100));
+      console.log('🔊 Intentando reproducir voz neural...', textToSpeak.substring(0, 100));
       // Use premium voice profile for better quality
       await speakTextConversational(
-        lastAssistantMessage.content, 
+        textToSpeak, 
         'nico_premium', 
         () => {
           setIsSpeaking(false);
@@ -291,7 +325,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       // Fallback to regular voice
       try {
         await speakTextConversational(
-          lastAssistantMessage.content, 
+          textToSpeak, 
           'nico', 
           () => {
             setIsSpeaking(false);

@@ -71,6 +71,55 @@ export const speakTextConversational = async (text, profile = 'valeria', onEndCa
     if (onEndCallback) onEndCallback();
   }, 15000);
 
+  // Función para usar voz nativa del sistema (fallback)
+  const useNativeSpeech = () => {
+    if (typeof window === 'undefined' || !window.speechSynthesis) {
+      console.error('❌ SpeechSynthesis no está disponible en este navegador');
+      cleanup();
+      if (onEndCallback) onEndCallback();
+      return false;
+    }
+
+    try {
+      console.log('📢 Usando voz nativa del sistema (Fallback)');
+      
+      // Cancelar cualquier síntesis en curso
+      window.speechSynthesis.cancel();
+      
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'es-CO';
+      utterance.rate = 1.0;
+      utterance.pitch = 1.0;
+      utterance.volume = 1.0;
+      
+      utterance.onend = () => {
+        console.log('✅ Voz nativa completada');
+        handleEnd();
+      };
+      
+      utterance.onerror = (event) => {
+        console.error('❌ Error en voz nativa:', event.error);
+        cleanup();
+        if (onEndCallback) onEndCallback();
+      };
+      
+      window.speechSynthesis.speak(utterance);
+      return true;
+    } catch (nativeError) {
+      console.error('❌ Error al usar voz nativa:', nativeError);
+      cleanup();
+      if (onEndCallback) onEndCallback();
+      return false;
+    }
+  };
+
+  // Validación de API Key
+  if (!apiKey || apiKey.trim() === '') {
+    console.warn('⚠️ API Key de Google TTS no configurada, usando voz nativa');
+    useNativeSpeech();
+    return;
+  }
+
   try {
     console.log("Perfil de voz:", profile);
     console.log("Voice config:", voice);
@@ -132,11 +181,25 @@ export const speakTextConversational = async (text, profile = 'valeria', onEndCa
     }
 
     console.error("All voice options failed:", lastError);
-    if (onEndCallback) onEndCallback();
+    
+    // Intentar con voz nativa como último recurso
+    console.log('🔄 Todas las voces de Google fallaron, intentando con voz nativa...');
+    const nativeSuccess = useNativeSpeech();
+    
+    if (!nativeSuccess && onEndCallback) {
+      onEndCallback();
+    }
   } catch (error) {
     console.error("Error en speakTextConversational:", error);
-    cleanup();
-    if (onEndCallback) onEndCallback();
+    
+    // Intentar con voz nativa como último recurso
+    console.log('🔄 Error en Google TTS, intentando con voz nativa...');
+    const nativeSuccess = useNativeSpeech();
+    
+    if (!nativeSuccess) {
+      cleanup();
+      if (onEndCallback) onEndCallback();
+    }
   }
 };
 
@@ -148,6 +211,10 @@ export const stopSpeech = () => {
   if (safetyTimeout) {
     clearTimeout(safetyTimeout);
     safetyTimeout = null;
+  }
+  // También detener la síntesis de voz nativa si está activa
+  if (typeof window !== 'undefined' && window.speechSynthesis) {
+    window.speechSynthesis.cancel();
   }
 };
 
