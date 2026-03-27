@@ -173,17 +173,17 @@ const PilarModal = ({ pilar, isOpen, onClose }) => {
             fullDesc: 'Nuestro método NeuroEntornos Escolares integra diagnóstico VAK personalizado, inteligencia artificial con Valerio, y herramientas SmartBoard para crear espacios de aprendizaje únicos que se adaptan al cerebro de cada estudiante.',
             features: [
                 { icon: 'fa-brain', title: 'Diagnóstico VAK', desc: 'Identificamos tu estilo de aprendizaje: Visual, Auditivo o Kinestésico' },
-                { icon: 'fa-robot', title: 'IA Valerio', desc: 'Tutor inteligente que se adapta a tu ritmo y necesidades individuales' },
-                { icon: 'fa-chalkboard', title: 'SmartBoard', desc: 'Pizarras interactivas con tecnología de última generación' },
-                { icon: 'fa-chart-line', title: 'Seguimiento', desc: 'Métricas en tiempo real del progreso de cada estudiante' }
+                { icon: 'fa-chart-line', title: 'Seguimiento', desc: 'Métricas en tiempo real del progreso de cada estudiante' },
+                { icon: 'fa-users', title: 'Comunidad', desc: 'Red de apoyo entre estudiantes y docentes' },
+                { icon: 'fa-award', title: 'Certificación', desc: 'Credenciales reconocidas internacionalmente' }
             ],
             cta: 'Explorar NeuroEntornos'
         },
         ialab: {
             fullDesc: 'Laboratorio de Inteligencia Artificial con certificación internacional. Aprende a crear prompts efectivos, desarrolla agentes IA y obtén tu certificación profesional.',
             features: [
-                { icon: 'fa-robot', title: 'IA Lab Pro', desc: 'Plataforma completa de formación en inteligencia artificial' },
                 { icon: 'fa-wand-magic-sparkles', title: 'Prompt Engineering', desc: 'Domina el arte de comunicarte con IA' },
+                { icon: 'fa-code', title: 'Desarrollo IA', desc: 'Crea tus propios agentes inteligentes' },
                 { icon: 'fa-certificate', title: 'Certificación', desc: 'Obtén tu certificado profesional reconocido' },
                 { icon: 'fa-users', title: 'Proyectos Reales', desc: 'Aplica tus conocimientos en proyectos prácticos' }
             ],
@@ -193,8 +193,8 @@ const PilarModal = ({ pilar, isOpen, onClose }) => {
             fullDesc: 'Transformación digital para instituciones educativas y empresas. Desarrollamos agentes de IA personalizados que automatizan procesos, mejoran la eficiencia y garantizan un ROI measurable.',
             features: [
                 { icon: 'fa-building', title: 'Diagnóstico', desc: 'Análisis profundo de procesos y oportunidades de automatización' },
-                { icon: 'fa-robot', title: 'Agentes IA', desc: 'Sistemas inteligentes personalizados para cada necesidad' },
                 { icon: 'fa-chart-pie', title: 'ROI Garantizado', desc: '3x retorno de inversión promedio en el primer año' },
+                { icon: 'fa-cogs', title: 'Automatización', desc: 'Sistemas optimizados para cada proceso' },
                 { icon: 'fa-headset', title: 'Soporte 24/7', desc: 'Asistencia continua para maximizar el rendimiento' }
             ],
             cta: 'Solicitar Consultoría'
@@ -386,19 +386,16 @@ const Ecosystem = memo(({ onNavigate }) => {
             <div className="absolute top-[40%] left-[10%] w-2 h-2 bg-[#66CCCC]/50 rounded-full animate-[float-3d_8s_ease-in-out_infinite]" style={{ animationDelay: '-2s' }} />
             <div className="absolute bottom-[20%] right-[15%] w-4 h-4 bg-[#FFD166]/30 rounded-full animate-[float-3d_7s_ease-in-out_infinite]" style={{ animationDelay: '-4s' }} />
 
-            <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 py-24">
+            <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 py-16">
                 {/* Header */}
                 <motion.div 
                     initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
                     whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
-                    className="text-center mb-20 max-w-3xl mx-auto"
+                    className="text-center mb-8 max-w-3xl mx-auto"
                 >
-                    <span className="inline-block px-4 py-1 bg-[#4DA8C4]/10 rounded-full text-sm font-normal text-[#4DA8C4] uppercase tracking-widest mb-6 border border-[#4DA8C4]/20">
-                        Plataforma Modular
-                    </span>
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#004B63] tracking-tight mb-6">
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#004B63] tracking-tight mb-4">
                         Ecosistema
                         <span className="block gradient-text-animated">
                             Interconectado.
@@ -410,7 +407,7 @@ const Ecosystem = memo(({ onNavigate }) => {
                 </motion.div>
 
                 {/* 3D Perspective Container */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 perspective-3d">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 perspective-3d">
                     {/* TARJETA 01 */}
                     <motion.div 
                         className="group bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden hover:shadow-[0_20px_60px_rgba(77,168,196,0.35)] transition-all duration-300 cursor-pointer relative"
@@ -425,11 +422,11 @@ const Ecosystem = memo(({ onNavigate }) => {
                         {/* Glow border effect */}
                         <div className="absolute inset-0 rounded-3xl border-2 border-transparent group-hover:border-[#4DA8C4]/40 transition-all duration-300 animate-[border-glow_3s_ease-in-out_infinite]" />
                         
-                        <div className="h-64 w-full overflow-hidden relative">
+                        <div className="h-56 w-full overflow-hidden relative">
                             <div className="absolute inset-0 bg-gradient-to-t from-[#004B63]/30 to-transparent z-10" />
                             <img src="/images/eco-neuro.webp" alt="Neuro-Entorno Educativo" className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500" />
                         </div>
-                        <div className="p-8 relative z-10">
+                        <div className="p-6 relative z-10">
                             <CardWithLottie animationData={brainAnimation}>
                                 <h3 className="text-xl font-normal text-[#004B63] uppercase mt-6 mb-4 group-hover:glow-text-cyan transition-all duration-300">Neuro-Entorno Educativo</h3>
                                 <p className="text-gray-600 leading-relaxed">Acompañamiento integral basado en metodologías VAK y STEAM. Docentes con maestría analizan procesos psicológicos y académicos para potenciar cada estilo de aprendizaje con herramientas de IA personalizadas.</p>
@@ -451,11 +448,11 @@ const Ecosystem = memo(({ onNavigate }) => {
                         {/* Glow border effect */}
                         <div className="absolute inset-0 rounded-3xl border-2 border-transparent group-hover:border-[#66CCCC]/40 transition-all duration-300 animate-[border-glow_3s_ease-in-out_infinite]" style={{ animationDelay: '-1.5s' }} />
                         
-                        <div className="h-64 w-full overflow-hidden relative">
+                        <div className="h-56 w-full overflow-hidden relative">
                             <div className="absolute inset-0 bg-gradient-to-t from-[#004B63]/30 to-transparent z-10" />
                             <img src="/images/eco-nacional.webp" alt="Proyectos de Impacto Nacional" className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500" />
                         </div>
-                        <div className="p-8 relative z-10">
+                        <div className="p-6 relative z-10">
                             <CardWithLottie animationData={awardAnimation}>
                                 <h3 className="text-xl font-normal text-[#004B63] uppercase mt-6 mb-4 group-hover:glow-text-mint transition-all duration-300">Proyectos de Impacto Nacional</h3>
                                 <p className="text-gray-600 leading-relaxed">Operadores oficiales SenaTIC. Certificamos a más de 6,000 estudiantes con respaldo internacional de IBM y Coursera. Maestros que forman maestros: más de 200 docentes colombianos transformados en líderes digitales.</p>
@@ -477,11 +474,11 @@ const Ecosystem = memo(({ onNavigate }) => {
                         {/* Glow border effect */}
                         <div className="absolute inset-0 rounded-3xl border-2 border-transparent group-hover:border-[#FFD166]/50 transition-all duration-300 animate-[border-glow_3s_ease-in-out_infinite]" style={{ animationDelay: '-3s' }} />
                         
-                        <div className="h-64 w-full overflow-hidden relative">
+                        <div className="h-56 w-full overflow-hidden relative">
                             <div className="absolute inset-0 bg-gradient-to-t from-[#004B63]/30 to-transparent z-10" />
                             <img src="/images/edutech-carrusel-6.webp" alt="Consultoría B2B y Automatización" className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500" />
                         </div>
-                        <div className="p-8 relative z-10">
+                        <div className="p-6 relative z-10">
                             <CardWithLottie animationData={handshakeAnimation}>
                                 <h3 className="text-xl font-normal text-[#004B63] uppercase mt-6 mb-4 group-hover:glow-text-cyan transition-all duration-300">Consultoría B2B y Automatización</h3>
                                 <p className="text-gray-600 leading-relaxed">Transformamos organizaciones educativas y empresas con metodología STEAM aplicada. Agentes de IA personalizados y capacitación de alto nivel que generan productividad real desde el primer mes de implementación.</p>
@@ -489,36 +486,6 @@ const Ecosystem = memo(({ onNavigate }) => {
                         </div>
                     </motion.div>
                 </div>
-
-                {/* Direct Access Mini-Cards */}
-                <motion.div 
-                    initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
-                    whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8, ease: "easeOut" }}
-                    className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 max-w-5xl mx-auto"
-                >
-                    {[
-                        { id: 'vak', icon: 'fa-brain', title: 'Diagnóstico VAK', sub: 'Métrica V1' },
-                        { id: 'ialab', icon: 'fa-flask', title: 'IA Lab Pro', sub: 'Entrenamiento' },
-                        { id: 'consultoria', icon: 'fa-robot', title: 'Automatización', sub: 'B2B Analytics' },
-                        { id: 'smartboard', icon: 'fa-chalkboard', title: 'SmartBoard', sub: 'Pizarra Live' }
-                    ].map((item) => (
-                        <button 
-                            key={item.id}
-                            onClick={() => onNavigate(item.id)}
-                            className="group p-5 md:p-6 bg-white rounded-xl border border-gray-200 text-left transition-all hover:border-[#4DA8C4]/50 hover:shadow-lg hover:-translate-y-1 flex items-center gap-4"
-                        >
-                            <div className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-[#4DA8C4]/10 to-[#004B63]/10 border border-[#4DA8C4]/20 rounded-xl flex items-center justify-center text-[#4DA8C4] group-hover:bg-[#4DA8C4] group-hover:text-white transition-all group-hover:scale-110">
-                                 <Icon name={item.icon} className="w-5 h-5 md:w-6 md:h-6" />
-                            </div>
-                            <div>
-                                <h3 className="text-base md:text-lg font-normal text-[#004B63]">{item.title}</h3>
-                                <p className="text-xs md:text-sm text-gray-600 uppercase tracking-wider font-normal">{item.sub}</p>
-                            </div>
-                        </button>
-                    ))}
-                </motion.div>
             </div>
 
             <PilarModal pilar={selectedPilar} isOpen={!!selectedPilar} onClose={() => setSelectedPilar(null)} />

@@ -24,7 +24,7 @@ const Aliados = memo(() => {
     const duplicatedAliados = [...aliados, ...aliados, ...aliados];
 
     return (
-        <section ref={sectionRef} className="relative w-full py-20 lg:py-32 overflow-hidden bg-[#F8FAFC]">
+        <section id="aliados" ref={sectionRef} className="relative w-full py-20 lg:py-32 overflow-hidden bg-[#F8FAFC]">
             {/* Radial Gradient Background */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(77,168,196,0.08)_0%,transparent_50%),radial-gradient(circle_at_70%_50%,rgba(0,75,99,0.05)_0%,transparent_50%)]" />
             

@@ -7,6 +7,7 @@ import Hero from './components/Hero';
 import Metodo from './components/Metodo';
 import Esencia from './components/Esencia';
 import Ecosystem from './components/Ecosystem';
+import AIToolsSection from './components/AIToolsSection';
 import Aliados from './components/Aliados';
 import Footer from './components/Footer';
 import ContactModal from './components/ContactModal';
@@ -914,9 +915,10 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                                 className="fixed inset-0 z-[1001] bg-black/50 backdrop-blur-sm md:hidden"
                                 onClick={() => setMobileMenuOpen(false)}
                             />
-                            {/* Drawer */}
-                            <div className="fixed top-0 right-0 z-[1002] h-full w-72 bg-white shadow-2xl md:hidden animate-slide-in">
-                                <div className="p-4 border-b border-[#4DA8C4]/20 flex items-center justify-between">
+                            {/* Drawer - Expanded with scroll */}
+                            <div className="fixed top-0 right-0 z-[1002] h-full w-80 bg-white shadow-2xl md:hidden animate-slide-in flex flex-col">
+                                {/* Header */}
+                                <div className="p-4 border-b border-[#4DA8C4]/20 flex items-center justify-between flex-shrink-0">
                                     <div className="flex items-center">
                                         <img 
                                             src="/images/logo-edutechlife.webp" 
@@ -943,49 +945,134 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                                         </svg>
                                     </button>
                                 </div>
-                                <nav className="p-4 space-y-3">
-                                    <button 
-                                        onClick={() => {
-                                            handleNavigate('landing');
-                                            setMobileMenuOpen(false);
-                                            setTimeout(() => {
-                                                const esenciaSection = document.getElementById('esencia');
-                                                if (esenciaSection) {
-                                                    esenciaSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                                }
-                                            }, 100);
-                                        }}
-                                        className="w-full px-4 py-2.5 text-sm font-semibold text-white bg-[#004B63] hover:bg-[#4DA8C4] rounded-full transition-all duration-300 shadow-md flex items-center gap-3"
-                                    >
-                                        <i className="fa-solid fa-graduation-cap text-xs text-white"></i>
-                                        Esencia
-                                    </button>
-                                    <button 
-                                        onClick={() => {
-                                            handleNavigate('landing');
-                                            setMobileMenuOpen(false);
-                                            setTimeout(() => {
-                                                const ecosystemSection = document.getElementById('ecosystem');
-                                                if (ecosystemSection) {
-                                                    ecosystemSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                                }
-                                            }, 100);
-                                        }}
-                                        className="w-full px-4 py-2.5 text-sm font-semibold text-white bg-[#004B63] hover:bg-[#4DA8C4] rounded-full transition-all duration-300 shadow-md flex items-center gap-3"
-                                    >
-                                        <i className="fa-solid fa-layer-group text-xs text-white"></i>
-                                        Ecosistema
-                                    </button>
-                                    <button 
-                                        onClick={() => {
-                                            setShowContactModal(true);
-                                            setMobileMenuOpen(false);
-                                        }}
-                                        className="w-full px-4 py-2.5 text-sm font-semibold text-white bg-[#4DA8C4] hover:bg-[#004B63] rounded-full transition-all duration-300 shadow-md flex items-center gap-3"
-                                    >
-                                        <i className="fa-solid fa-envelope text-xs"></i>
-                                        Contacto
-                                    </button>
+                                {/* Navigation - Scrollable */}
+                                <nav className="flex-1 overflow-y-auto p-4 space-y-4">
+                                    {/* INICIO Section */}
+                                    <div>
+                                        <div className="text-xs font-bold text-[#4DA8C4] uppercase tracking-wider mb-2 px-3">🏠 Inicio</div>
+                                        <div className="space-y-2">
+                                            <button 
+                                                onClick={() => {
+                                                    handleNavigate('landing');
+                                                    setMobileMenuOpen(false);
+                                                    setTimeout(() => {
+                                                        const section = document.getElementById('esencia');
+                                                        if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                                    }, 100);
+                                                }}
+                                                className="w-full px-4 py-3.5 text-sm font-semibold text-[#004B63] bg-[#F8FAFC] hover:bg-[#4DA8C4]/10 rounded-xl transition-all duration-300 flex items-center gap-3"
+                                            >
+                                                <i className="fa-solid fa-heart text-[#4DA8C4]"></i>
+                                                Esencia
+                                            </button>
+                                            <button 
+                                                onClick={() => {
+                                                    handleNavigate('landing');
+                                                    setMobileMenuOpen(false);
+                                                    setTimeout(() => {
+                                                        const section = document.getElementById('ecosystem');
+                                                        if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                                    }, 100);
+                                                }}
+                                                className="w-full px-4 py-3.5 text-sm font-semibold text-[#004B63] bg-[#F8FAFC] hover:bg-[#4DA8C4]/10 rounded-xl transition-all duration-300 flex items-center gap-3"
+                                            >
+                                                <i className="fa-solid fa-layer-group text-[#4DA8C4]"></i>
+                                                Ecosistema
+                                            </button>
+                                            <button 
+                                                onClick={() => {
+                                                    handleNavigate('landing');
+                                                    setMobileMenuOpen(false);
+                                                    setTimeout(() => {
+                                                        const section = document.getElementById('herramientas');
+                                                        if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                                    }, 100);
+                                                }}
+                                                className="w-full px-4 py-3.5 text-sm font-semibold text-[#004B63] bg-[#F8FAFC] hover:bg-[#4DA8C4]/10 rounded-xl transition-all duration-300 flex items-center gap-3"
+                                            >
+                                                <i className="fa-solid fa-robot text-[#4DA8C4]"></i>
+                                                Herramientas I.A.
+                                            </button>
+                                            <button 
+                                                onClick={() => {
+                                                    handleNavigate('landing');
+                                                    setMobileMenuOpen(false);
+                                                    setTimeout(() => {
+                                                        const section = document.getElementById('metodo');
+                                                        if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                                    }, 100);
+                                                }}
+                                                className="w-full px-4 py-3.5 text-sm font-semibold text-[#004B63] bg-[#F8FAFC] hover:bg-[#4DA8C4]/10 rounded-xl transition-all duration-300 flex items-center gap-3"
+                                            >
+                                                <i className="fa-solid fa-route text-[#4DA8C4]"></i>
+                                                Método
+                                            </button>
+                                            <button 
+                                                onClick={() => {
+                                                    handleNavigate('landing');
+                                                    setMobileMenuOpen(false);
+                                                    setTimeout(() => {
+                                                        const section = document.getElementById('aliados');
+                                                        if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                                    }, 100);
+                                                }}
+                                                className="w-full px-4 py-3.5 text-sm font-semibold text-[#004B63] bg-[#F8FAFC] hover:bg-[#4DA8C4]/10 rounded-xl transition-all duration-300 flex items-center gap-3"
+                                            >
+                                                <i className="fa-solid fa-handshake text-[#4DA8C4]"></i>
+                                                Aliados
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* HERRAMIENTAS Section */}
+                                    <div>
+                                        <div className="text-xs font-bold text-[#66CCCC] uppercase tracking-wider mb-2 px-3">⚙️ Herramientas</div>
+                                        <div className="space-y-2">
+                                            <button 
+                                                onClick={() => { handleNavigate('vak'); setMobileMenuOpen(false); }}
+                                                className="w-full px-4 py-3.5 text-sm font-semibold text-white bg-gradient-to-r from-[#004B63] to-[#4DA8C4] hover:from-[#4DA8C4] hover:to-[#66CCCC] rounded-xl transition-all duration-300 flex items-center gap-3"
+                                            >
+                                                <i className="fa-solid fa-brain"></i>
+                                                Diagnóstico VAK
+                                            </button>
+                                            <button 
+                                                onClick={() => { handleNavigate('ialab'); setMobileMenuOpen(false); }}
+                                                className="w-full px-4 py-3.5 text-sm font-semibold text-white bg-gradient-to-r from-[#004B63] to-[#4DA8C4] hover:from-[#4DA8C4] hover:to-[#66CCCC] rounded-xl transition-all duration-300 flex items-center gap-3"
+                                            >
+                                                <i className="fa-solid fa-rocket"></i>
+                                                IA Lab Pro
+                                            </button>
+                                            <button 
+                                                onClick={() => { handleNavigate('smartboard'); setMobileMenuOpen(false); }}
+                                                className="w-full px-4 py-3.5 text-sm font-semibold text-white bg-gradient-to-r from-[#004B63] to-[#4DA8C4] hover:from-[#4DA8C4] hover:to-[#66CCCC] rounded-xl transition-all duration-300 flex items-center gap-3"
+                                            >
+                                                <i className="fa-solid fa-chalkboard"></i>
+                                                SmartBoard
+                                            </button>
+                                            <button 
+                                                onClick={() => { handleNavigate('automation'); setMobileMenuOpen(false); }}
+                                                className="w-full px-4 py-3.5 text-sm font-semibold text-white bg-gradient-to-r from-[#004B63] to-[#4DA8C4] hover:from-[#4DA8C4] hover:to-[#66CCCC] rounded-xl transition-all duration-300 flex items-center gap-3"
+                                            >
+                                                <i className="fa-solid fa-cogs"></i>
+                                                Automatización
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* CONTACTO Section */}
+                                    <div>
+                                        <div className="text-xs font-bold text-[#FFD166] uppercase tracking-wider mb-2 px-3">📞 Contacto</div>
+                                        <button 
+                                            onClick={() => {
+                                                setShowContactModal(true);
+                                                setMobileMenuOpen(false);
+                                            }}
+                                            className="w-full px-4 py-3.5 text-sm font-semibold text-white bg-[#FFD166] hover:bg-[#FF8E53] rounded-xl transition-all duration-300 flex items-center gap-3"
+                                        >
+                                            <i className="fa-solid fa-envelope"></i>
+                                            Contáctanos
+                                        </button>
+                                    </div>
                                 </nav>
                             </div>
                         </>
@@ -1001,6 +1088,20 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                             <Hero onNavigate={handleNavigate} />
                             <Esencia />
                             <Ecosystem onNavigate={handleNavigate} />
+                            <AIToolsSection 
+                                onToolClick={(toolId) => {
+                                    // Mapear herramientas a vistas existentes
+                                    const toolToView = {
+                                        'diagnostico-vak': 'vak',
+                                        'ia-lab-pro': 'ialab', 
+                                        'automatizacion': 'automation',
+                                        'smartboard': 'smartboard'
+                                    };
+                                    if (toolToView[toolId]) {
+                                        handleNavigate(toolToView[toolId]);
+                                    }
+                                }}
+                            />
                             <Metodo />
                             <Aliados />
                         </>

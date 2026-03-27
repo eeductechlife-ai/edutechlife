@@ -50,17 +50,10 @@ const Esencia = memo(() => {
             {/* Ambient Glows */}
             <div className="absolute top-0 right-[-5%] w-[400px] h-[400px] rounded-full bg-[#4DA8C4]/10 blur-[100px] pointer-events-none animate-[pulse-slow_8s_ease-in-out_infinite]" />
             <div className="absolute bottom-0 left-[-5%] w-[400px] h-[400px] rounded-full bg-[#66CCCC]/10 blur-[100px] pointer-events-none animate-[pulse-slow_8s_ease-in-out_infinite]" style={{ animationDelay: '-4s' }} />
-            <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 py-20">
+            <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 py-12">
                 {/* Header */}
-                <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-                    <div className="inline-flex items-center gap-3 mb-4">
-                        <div className="w-10 h-[2px] bg-gradient-to-r from-transparent to-[#4DA8C4]" />
-                        <span className="text-sm font-normal text-[#4DA8C4] uppercase tracking-widest block mb-2">
-                            Quiénes Somos
-                        </span>
-                        <div className="w-10 h-[2px] bg-gradient-to-l from-transparent to-[#4DA8C4]" />
-                    </div>
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-normal text-[#004B63] tracking-tight mb-6">
+                <div className={`text-center mb-8 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-normal text-[#004B63] tracking-tight mb-4">
                         Nuestra{' '}
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4DA8C4] to-[#004B63]">
                             Esencia
@@ -73,21 +66,21 @@ const Esencia = memo(() => {
 
                 {/* Values Section - AFTER Header */}
                 <div className={`transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                         {values.map((value, index) => (
                             <div 
                                 key={index}
-                                className="group bg-white rounded-xl p-4 md:p-6 shadow-md border border-gray-100 hover:shadow-xl hover:border-[#4DA8C4]/40 hover:-translate-y-2 transition-all duration-300 text-center relative overflow-hidden"
+                                className="group bg-white rounded-xl p-3 md:p-4 shadow-md border border-gray-100 hover:shadow-xl hover:border-[#4DA8C4]/40 hover:-translate-y-2 transition-all duration-300 text-center relative overflow-hidden"
                             >
                                 {/* Glow effect on hover */}
                                 <div className="absolute inset-0 bg-gradient-to-br from-[#4DA8C4]/5 to-[#004B63]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                                 <div className="absolute -top-10 -right-10 w-20 h-20 bg-[#4DA8C4]/10 rounded-full blur-2xl group-hover:blur-3xl transition-all duration-300" />
                                 
                                 <div className="relative z-10">
-                                    <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-[#4DA8C4]/15 to-[#004B63]/10 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-[#4DA8C4]/20 transition-all duration-300 mx-auto border border-[#4DA8C4]/20">
-                                        <Icon name={value.icon} className="text-2xl md:text-3xl text-[#004B63] group-hover:text-[#4DA8C4] transition-colors duration-300" />
+                                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br from-[#4DA8C4]/15 to-[#004B63]/10 flex items-center justify-center mb-3 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-[#4DA8C4]/20 transition-all duration-300 mx-auto border border-[#4DA8C4]/20">
+                                        <Icon name={value.icon} className="text-lg md:text-xl text-[#004B63] group-hover:text-[#4DA8C4] transition-colors duration-300" />
                                     </div>
-                                    <h4 className="text-base md:text-lg font-semibold text-[#004B63] mb-2 group-hover:glow-text-cyan transition-all duration-300">{value.text}</h4>
+                                    <h4 className="text-base md:text-lg font-semibold text-[#004B63] mb-1 group-hover:glow-text-cyan transition-all duration-300">{value.text}</h4>
                                     <p className="text-sm text-slate-600 leading-relaxed">{value.desc}</p>
                                 </div>
                             </div>
@@ -96,49 +89,49 @@ const Esencia = memo(() => {
                 </div>
 
                 {/* Mission, Vision + Carousel */}
-                <div className={`grid grid-cols-1 lg:grid-cols-3 gap-8 mt-16 transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                <div className={`grid grid-cols-1 lg:grid-cols-3 gap-6 mt-10 transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                     {/* Left Column - Mission & Vision */}
-                    <div className="space-y-6">
+                    <div className="space-y-5">
                         {/* Mission */}
-                        <div className="group bg-gradient-to-br from-[#004B63] to-[#4DA8C4] rounded-2xl p-8 text-white shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
-                            <div className="flex items-center gap-4 mb-6">
-                                <div className="w-14 h-14 rounded-xl bg-white/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                    <Icon name="fa-bullseye" className="text-2xl" />
+                        <div className="group bg-gradient-to-br from-[#004B63] to-[#4DA8C4] rounded-xl p-5 text-white shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <Icon name="fa-bullseye" className="text-lg" />
                                 </div>
                                 <div>
-                                    <span className="text-sm font-normal text-[#4DA8C4] uppercase tracking-widest block mb-2">Objetivo</span>
-                                    <h3 className="text-xl md:text-2xl font-normal">Misión</h3>
+                                    <span className="text-xs font-normal text-[#4DA8C4] uppercase tracking-widest block mb-1">Objetivo</span>
+                                    <h3 className="text-lg md:text-xl font-normal">Misión</h3>
                                 </div>
                             </div>
-                            <p className="text-base text-white/90 leading-relaxed font-normal">
+                            <p className="text-sm text-white/90 leading-relaxed font-normal">
                                 Democratizar la educación de calidad mediante herramientas de inteligencia artificial que se adapten al estilo de aprendizaje único de cada estudiante.
                             </p>
-                            <div className="mt-6 pt-4 border-t border-white/20">
+                            <div className="mt-4 pt-3 border-t border-white/20">
                                 <div className="flex items-center gap-2 text-[#4DA8C4]">
-                                    <Icon name="fa-rocket" />
-                                    <span className="font-normal text-sm">Impulsando el futuro</span>
+                                    <Icon name="fa-rocket" className="w-4 h-4" />
+                                    <span className="font-normal text-xs">Impulsando el futuro</span>
                                 </div>
                             </div>
                         </div>
 
                         {/* Vision */}
-                        <div className="group bg-[#F8FAFC] rounded-2xl p-8 shadow-lg border border-[#E2E8F0] hover:shadow-xl hover:border-[#4DA8C4]/30 transition-all duration-500 hover:-translate-y-1">
-                            <div className="flex items-center gap-4 mb-6">
-                                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#4DA8C4] to-[#004B63] flex items-center justify-center group-hover:scale-110 transition-transform">
-                                    <Icon name="fa-eye" className="text-2xl text-white" />
+                        <div className="group bg-[#F8FAFC] rounded-xl p-5 shadow-lg border border-[#E2E8F0] hover:shadow-xl hover:border-[#4DA8C4]/30 transition-all duration-500 hover:-translate-y-1">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#4DA8C4] to-[#004B63] flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <Icon name="fa-eye" className="text-lg text-white" />
                                 </div>
                                 <div>
-                                    <span className="text-sm font-normal text-[#4DA8C4] uppercase tracking-widest block mb-2">Proyección</span>
-                                    <h3 className="text-xl md:text-2xl font-normal text-[#004B63]">Visión</h3>
+                                    <span className="text-xs font-normal text-[#4DA8C4] uppercase tracking-widest block mb-1">Proyección</span>
+                                    <h3 className="text-lg md:text-xl font-normal text-[#004B63]">Visión</h3>
                                 </div>
                             </div>
-                            <p className="text-base text-gray-600 leading-relaxed font-normal">
+                            <p className="text-sm text-gray-600 leading-relaxed font-normal">
                                 Ser la plataforma líder en Latinoamérica en la integración de metodologías pedagógicas con inteligencia artificial para formar profesionales del futuro.
                             </p>
-                            <div className="mt-6 pt-4 border-t border-[#E2E8F0]">
+                            <div className="mt-4 pt-3 border-t border-[#E2E8F0]">
                                 <div className="flex items-center gap-2 text-[#4DA8C4]">
-                                    <Icon name="fa-globe" />
-                                    <span className="font-normal text-sm text-[#004B63]">Liderazgo regional</span>
+                                    <Icon name="fa-globe" className="w-4 h-4" />
+                                    <span className="font-normal text-xs text-[#004B63]">Liderazgo regional</span>
                                 </div>
                             </div>
                         </div>
