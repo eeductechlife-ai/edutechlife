@@ -441,7 +441,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
           background: `linear-gradient(135deg, ${COLORS.PETROLEUM} 0%, ${COLORS.CORPORATE} 100%)`
         }}
       >
-        <MessageSquare className="w-8 h-8 text-white" />
+        <Bot className="w-8 h-8 text-white" />
       </button>
     );
   }
