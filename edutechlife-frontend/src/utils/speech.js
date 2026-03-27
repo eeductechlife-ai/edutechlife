@@ -1,20 +1,20 @@
 const VOICE_PROFILES = {
-  valeria: { languageCode: 'es-US', name: 'es-US-Chirp3-HD-Achernar', pitch: 1.2, speakingRate: 1.05 },
-  valerio: { languageCode: 'es-US', name: 'es-US-Chirp3-HD-Achird', pitch: -2.0, speakingRate: 1.0 },
-  sistema: { languageCode: 'es-US', name: 'es-US-Chirp3-HD-Algenib', pitch: 0, speakingRate: 1.0 },
-  nico: { languageCode: 'es-US', name: 'es-US-Chirp3-HD-Achernar', pitch: 1.1, speakingRate: 1.08 },
+  valeria: { languageCode: 'es-US', name: 'es-US-Neural2-A', pitch: 0, speakingRate: 1.0 },
+  valerio: { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 0, speakingRate: 1.0 },
+  sistema: { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: 0, speakingRate: 1.0 },
+  nico: { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 0, speakingRate: 1.0 },
   nico_premium: { 
     languageCode: 'es-US', 
-    name: 'es-US-Chirp3-HD-Achernar',
-    pitch: 1.1, 
-    speakingRate: 1.08,
+    name: 'es-US-Neural2-B',
+    pitch: 0, 
+    speakingRate: 1.05,
     volumeGainDb: 3.0,
     effectsProfileId: ['telephony-class-application']
   },
   nico_authority: {
     languageCode: 'es-US',
-    name: 'es-US-Chirp3-HD-Achird',
-    pitch: 0.9,
+    name: 'es-US-Neural2-B',
+    pitch: 0,
     speakingRate: 1.05,
     volumeGainDb: 2.5
   }
@@ -22,15 +22,15 @@ const VOICE_PROFILES = {
 
 const VOICE_FALLBACKS = {
   nico: [
-    { languageCode: 'es-US', name: 'es-US-Chirp3-HD-Achernar', pitch: 1.1, speakingRate: 1.08 },
-    { languageCode: 'es-US', name: 'es-US-Chirp-HD-F', pitch: 1.0, speakingRate: 1.05 },
-    { languageCode: 'es-US', name: 'es-US-Chirp-HD-D', pitch: 0.9, speakingRate: 1.0 },
-    { languageCode: 'es-ES', name: 'es-ES-Chirp3-HD-F', pitch: 1.0, speakingRate: 1.05 },
+    { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 0, speakingRate: 1.0 },
+    { languageCode: 'es-US', name: 'es-US-Neural2-A', pitch: 0, speakingRate: 1.0 },
+    { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: 0, speakingRate: 1.0 },
+    { languageCode: 'es-ES', name: 'es-ES-Neural2-B', pitch: 0, speakingRate: 1.0 },
   ],
   nico_premium: [
-    { languageCode: 'es-US', name: 'es-US-Chirp3-HD-Achernar', pitch: 1.1, speakingRate: 1.08 },
-    { languageCode: 'es-US', name: 'es-US-Chirp3-HD-Achird', pitch: 0.9, speakingRate: 1.05 },
-    { languageCode: 'es-US', name: 'es-US-Chirp-HD-F', pitch: 1.0, speakingRate: 1.05 },
+    { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 0, speakingRate: 1.05 },
+    { languageCode: 'es-US', name: 'es-US-Neural2-A', pitch: 0, speakingRate: 1.05 },
+    { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: 0, speakingRate: 1.05 },
   ]
 };
 
