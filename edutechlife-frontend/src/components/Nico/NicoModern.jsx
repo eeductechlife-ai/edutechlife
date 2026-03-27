@@ -74,6 +74,17 @@ Eres el asistente virtual oficial de EdutechLife. Tu MISIÓN es resolver dudas d
 
 NICO - Respuestas rápidas y precisas.`;
 
+const getGreeting = () => {
+  const hour = new Date().getHours();
+  if (hour >= 5 && hour < 12) {
+    return 'Buenos días';
+  } else if (hour >= 12 && hour < 19) {
+    return 'Buenas tardes';
+  } else {
+    return 'Buenas noches';
+  }
+};
+
 const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteraction }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -84,7 +95,8 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
   const [showHistory, setShowHistory] = useState(false);
   const [interimTranscript, setInterimTranscript] = useState('');
   const [typingDots, setTypingDots] = useState(0);
-  const [autoVoice, setAutoVoice] = useState(false);
+  const [autoVoice, setAutoVoice] = useState(true);
+  const [hasWelcomed, setHasWelcomed] = useState(false);
   const [messages, setMessages] = useState([]);
   
   const messagesEndRef = useRef(null);
@@ -177,11 +189,15 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
         });
       }
 
-      // Auto-speak response automatically
-      setTimeout(() => {
-        console.log('🔊 Activando respuesta de voz automática...');
-        handleSpeakResponse();
-      }, 500);
+      // Auto-speak response automatically if autoVoice is enabled
+      if (autoVoice) {
+        setTimeout(() => {
+          console.log('🔊 Activando respuesta de voz automática...');
+          handleSpeakResponse();
+        }, 500);
+      } else {
+        console.log('🔇 Voz automática desactivada, respuesta solo en texto');
+      }
     } catch (error) {
       console.error('Error sending message:', error);
       const errorMessageObj = { 
@@ -355,9 +371,40 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
   };
 
   const toggleChat = () => {
-    setIsOpen(!isOpen);
-    if (!isOpen && inputRef.current) {
+    const willOpen = !isOpen;
+    setIsOpen(willOpen);
+    
+    if (willOpen && inputRef.current) {
       setTimeout(() => inputRef.current.focus(), 100);
+      
+      // Si es la primera vez que se abre, Nico da la bienvenida
+      if (!hasWelcomed && messages.length === 0) {
+        const greeting = getGreeting();
+        const welcomeMessage = `¡Hola! Soy Nico de EdutechLife. ${greeting}, ¿en qué puedo ayudarte hoy?`;
+        
+        // Añadir mensaje de bienvenida al chat
+        const welcomeMessageObj = {
+          role: 'assistant',
+          content: welcomeMessage,
+          timestamp: new Date().toISOString()
+        };
+        
+        setMessages(prev => [...prev, welcomeMessageObj]);
+        setHasWelcomed(true);
+        
+        // Hablar el saludo automáticamente si autoVoice está activo
+        if (autoVoice) {
+          setTimeout(() => {
+            console.log('🎤 Nico dando la bienvenida automáticamente...');
+            const textToSpeak = removeEmojis(welcomeMessage);
+            speakTextConversational(textToSpeak, 'nico_premium', () => {
+              console.log('✅ Saludo de bienvenida completado');
+            });
+          }, 300);
+        } else {
+          console.log('🔇 Voz automática desactivada, bienvenida solo en texto');
+        }
+      }
     }
   };
 
