@@ -1084,10 +1084,8 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
             <main className="flex-grow">
                 <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="w-12 h-12 border-4 border-[#4DA8C4] border-t-transparent rounded-full animate-spin"></div></div>}>
                     {view === 'landing' && (
-                         <>
+                          <>
                             <Hero onNavigate={handleNavigate} />
-                            <Esencia />
-                            <Ecosystem onNavigate={handleNavigate} />
                             <AIToolsSection 
                                 onToolClick={(toolId) => {
                                     // Mapear herramientas a vistas existentes
@@ -1102,6 +1100,8 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                                     }
                                 }}
                             />
+                            <Esencia />
+                            <Ecosystem onNavigate={handleNavigate} />
                             <Metodo />
                             <Aliados />
                         </>
