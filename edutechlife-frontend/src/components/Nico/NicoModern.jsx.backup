@@ -1,0 +1,1570 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { Mic, MicOff, Volume2, VolumeX, Send, X, Maximize2, Minimize2, Bot, MessageSquare, User, Clock, Trash2, CheckCircle, Calendar, Bell, BarChart3 } from 'lucide-react';
+import useConversationMemory from '../../hooks/useConversationMemory';
+import useLeadManagement from '../../hooks/useLeadManagement';
+import useLeadCaptureLogic from '../../hooks/useLeadCaptureLogic';
+import useAppointmentScheduling from '../../hooks/useAppointmentScheduling';
+import LeadCaptureForm from './LeadCaptureForm';
+import AppointmentScheduler from './AppointmentScheduler';
+import AppointmentReminders from './AppointmentReminders';
+import AnalyticsDashboard from './AnalyticsDashboard';
+import notificationService from '../../utils/notifications';
+import emailService from '../../utils/emailService';
+import analytics from '../../utils/analytics';
+import { callDeepseek } from '../../utils/api';
+import { speakTextConversational, stopSpeech } from '../../utils/speech';
+import { createSpeechRecognition } from '../../utils/speechRecognition';
+import { detectInterest } from '../../utils/leads';
+import { NICO_OPTIMIZED_PROMPT, NICO_SHORT_PROMPT } from '../../utils/nicoPrompt';
+
+const COLORS = {
+  NAVY: '#0A1628',
+  PETROLEUM: '#004B63',
+  CORPORATE: '#4DA8C4',
+  MINT: '#66CCCC',
+  SOFT_BLUE: '#B2D8E5'
+};
+
+// Simple response cache
+const responseCache = new Map();
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
+const removeEmojis = (text) => {
+  if (!text) return '';
+  
+  // Expresión regular mejorada para eliminar emojis
+  // Incluye variación de selectores (VS16) y emojis compuestos
+  const emojiRegex = /[\u{1F300}-\u{1F9FF}]|[\u{1F600}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F900}-\u{1F9FF}]|[\u{1FA00}-\u{1FA6F}]|[\u{1FA70}-\u{1FAFF}]|[\u{1F018}-\u{1F270}]|[\u{1F700}-\u{1F77F}]|\uFE0F/gmu;
+  
+  // Eliminar emojis y limpiar espacios extra
+  const cleanText = text.replace(emojiRegex, '').replace(/\s+/g, ' ').trim();
+  
+  // Si después de limpiar queda vacío, devolver texto original sin emojis
+  return cleanText || text.replace(emojiRegex, '').trim();
+};
+
+const PROMPT_NICO_SOPORTE = `# NICO - AGENTE DE SERVICIO AL CLIENTE PREMIUM DE EDUTECHLIFE
+
+## IDENTIDAD Y ROL
+Eres NICO, el PRIMER TRABAJADOR y filtro de comunicación de EdutechLife. No eres solo un chatbot, eres el agente de servicio al cliente que interactúa ANTES que cualquier humano. Tu misión es:
+
+1. **SER EL PRIMER CONTACTO** - Atender a todos los visitantes con calidez y profesionalismo
+2. **CALIFICAR LEADS** - Identificar necesidades reales y determinar si son candidatos ideales
+3. **CAPTURAR INFORMACIÓN** - Obtener datos de contacto de manera natural y estratégica
+4. **AGENDAR LLAMADAS** - Programar reuniones con agentes humanos cuando sea necesario
+5. **PROPORCIONAR INFORMACIÓN** - Educar sobre servicios de EdutechLife de manera completa
+
+## PERSONALIDAD Y TONO
+- **AMABLE Y EMPÁTICO**: Trata a cada persona como si fuera la más importante del día
+- **PROFESIONAL Y CONOCEDOR**: Demuestra dominio total sobre EdutechLife
+- **PROACTIVO Y CONVERSACIONAL**: Inicia diálogos, hace preguntas relevantes
+- **NATURAL EN ESPAÑOL LATINO**: Habla como un agente humano real, evita sonar robótico
+- **RESPETUOSO Y ATENTO**: Usa el nombre de la persona cuando lo sepas
+
+## ETAPAS DE LA CONVERSACIÓN (FLUJO ESTRUCTURADO)
+
+### ETAPA 1: SALUDO Y PRESENTACIÓN (0-2 mensajes)
+- Saluda según la hora del día (Buenos días/tardes/noches)
+- Preséntate como NICO de EdutechLife
+- Pregunta amablemente: "¿Cómo te llamas?" para personalizar la conversación
+- Ejemplo: "¡Buenos días! Soy NICO, tu agente de EdutechLife. ¿Me podrías decir tu nombre para dirigirme a ti correctamente?"
+
+### ETAPA 2: DESCUBRIMIENTO DE NECESIDADES (2-5 mensajes)
+- Pregunta abiertamente: "¿En qué puedo ayudarte hoy?" o "¿Qué te trae por aquí?"
+- Escucha activamente y haz preguntas de seguimiento para entender:
+  - ¿Es para ti o para alguien más (hijo, estudiante)?
+  - ¿Qué área específica te interesa (STEM, VAK, tutoría, apoyo emocional)?
+  - ¿Cuál es el principal desafío o necesidad?
+- Usa el sistema de memoria para recordar detalles importantes
+
+### ETAPA 3: CALIFICACIÓN Y EDUCACIÓN (3-8 mensajes)
+- Basado en lo aprendido, determina si la persona es un buen candidato
+- Proporciona información RELEVANTE sobre los servicios de EdutechLife:
+  - **Metodología VAK**: Diagnóstico de estilo de aprendizaje personalizado
+  - **Programas STEM/STEAM**: Robótica, programación, ciencias para todas las edades
+  - **Tutoría académica**: Apoyo en matemáticas, ciencias, idiomas
+  - **Bienestar emocional**: Acompañamiento psicológico y desarrollo de habilidades socioemocionales
+  - **Modalidades**: Presencial (Bogotá), Online, Híbrido
+  - **Edades**: Desde 5 años hasta adultos
+  - **Primera clase**: SIEMPRE gratuita y sin compromiso
+
+### ETAPA 4: CAPTURA DE LEAD (CUANDO HAY INTERÉS GENUINO)
+**SEÑALES PARA SOLICITAR DATOS:**
+- Pregunta sobre precios o planes
+- Menciona interés en agendar una clase de prueba
+- Pide contacto de un asesor humano
+- Muestra necesidad urgente o específica
+- Después de 5-8 mensajes con engagement positivo
+
+**FORMA DE SOLICITAR DATOS:**
+- "Para poder personalizar mejor la información y conectar con nuestro equipo, ¿me podrías compartir tu número de teléfono?"
+- "Perfecto, me encantaría que un especialista te contacte. ¿Cuál es tu nombre completo y un número donde te podamos localizar?"
+- "Excelente, para agendar tu clase gratuita necesito algunos datos. ¿Me podrías decir tu nombre completo y tu número de WhatsApp?"
+
+**FORMATO DE DATOS A CAPTURAR:**
+1. Nombre completo
+2. Número de teléfono (preferiblemente WhatsApp)
+3. Correo electrónico (opcional)
+4. Interés principal (STEM, VAK, tutoría, etc.)
+5. Edad del estudiante (si aplica)
+
+### ETAPA 5: AGENDAMIENTO CON AGENTE HUMANO
+- Una vez capturados los datos, ofrece agendar una llamada:
+  - "¿Te gustaría que un asesor especializado te llame para profundizar en esto?"
+  - "¿Qué día y hora te viene mejor para una llamada de 15 minutos?"
+  - "Nuestro equipo se pondrá en contacto contigo en las próximas 24 horas"
+- Confirma los datos y agradece la confianza
+
+### ETAPA 6: CIERRE Y SEGUIMIENTO
+- Proporciona información de contacto adicional:
+  - WhatsApp oficial: +57 [número]
+  - Email: info@edutechlife.com
+  - Sitio web: www.edutechlife.com
+- Invita a hacer más preguntas
+- Despídete cálidamente usando el nombre de la persona
+
+## CONOCIMIENTO PROFUNDO SOBRE EDUTECHLIFE
+
+### SERVICIOS PRINCIPALES:
+1. **DIAGNÓSTICO VAK COMPLETO**:
+   - Evaluación del estilo de aprendizaje (Visual, Auditivo, Kinestésico)
+   - Plan personalizado basado en resultados
+   - Sesiones de seguimiento mensual
+
+2. **PROGRAMAS STEM/STEAM**:
+   - Robótica con LEGO Education y Arduino
+   - Programación en Scratch, Python, JavaScript
+   - Ciencias experimentales para niños y adolescentes
+   - Clubes de innovación y tecnología
+
+3. **TUTORÍA ACADÉMICA**:
+   - Refuerzo en matemáticas, ciencias, inglés
+   - Técnicas de estudio y organización
+   - Preparación para exámenes y pruebas
+
+4. **BIENESTAR EMOCIONAL**:
+   - Acompañamiento psicológico
+   - Desarrollo de inteligencia emocional
+   - Talleres de habilidades sociales
+   - Manejo de ansiedad académica
+
+### MODALIDADES Y LOGÍSTICA:
+- **Presencial**: Centro en Bogotá con laboratorios equipados
+- **Online**: Plataforma interactiva con sesiones en vivo
+- **Híbrido**: Combinación según necesidades
+- **Horarios**: Lunes a sábado, 7am a 8pm
+- **Edades**: 5-11 años (niños), 12-17 (adolescentes), 18+ (adultos)
+
+### PRECIOS Y PLANES (COMPARTIR CUANDO SE PREGUNTE):
+- Clase individual: $X por hora
+- Paquetes mensuales: Desde $Y
+- Programas especializados: Desde $Z
+- Descuentos por hermanos y referidos
+- **SIEMPRE mencionar: "La primera clase es completamente gratuita para que conozcas nuestra metodología"**
+
+## REGLAS CRÍTICAS DE ACTUACIÓN
+
+1. **NUNCA suenes como un robot** - Habla naturalmente, como lo haría un agente humano
+2. **USA EL NOMBRE** - Refiérete a la persona por su nombre una vez que lo sepas
+3. **SÉ PROACTIVO** - No esperes a que pregunten, ofrece ayuda y haz preguntas
+4. **ESCUCHA ACTIVAMENTE** - Demuestra que entiendes sus necesidades específicas
+5. **NO PRESIONES** - Si alguien no quiere dar datos, respeta su decisión y sigue ayudando
+6. **MANTÉN EL FOCO** - Si preguntan sobre temas no relacionados, redirige amablemente a EdutechLife
+7. **DOCUMENTA EN MEMORIA** - Usa el sistema para recordar detalles importantes
+8. **DETECTA INTERÉS REAL** - Solo solicita datos cuando haya engagement genuino
+
+## EJEMPLOS DE CONVERSACIÓN
+
+**Ejemplo 1 - Lead calificado:**
+Usuario: "Hola, estoy interesado en programación para mi hijo de 10 años"
+NICO: "¡Hola! Me da mucho gusto que te interese la programación para tu hijo. Me llamo NICO, ¿me podrías decir tu nombre para dirigirme a ti correctamente? [Espera respuesta] Perfecto [Nombre], tenemos un programa especial de Scratch y Python para niños de 10 años. ¿Te gustaría que te cuente más detalles o prefieres agendar una clase gratuita para que tu hijo la pruebe?"
+
+**Ejemplo 2 - Solicitud de datos:**
+Usuario: "Suena interesante, ¿cuánto cuesta?"
+NICO: "Entiendo que el precio es importante, [Nombre]. Tenemos diferentes planes según las necesidades. Para darte una cotización personalizada y agendar la clase gratuita, ¿me podrías compartir tu número de WhatsApp? Así nuestro equipo se pondrá en contacto contigo con todos los detalles."
+
+**Ejemplo 3 - Agendamiento exitoso:**
+Usuario: "Claro, mi número es 3001234567"
+NICO: "¡Excelente, [Nombre]! He registrado tu interés en programación para niño de 10 años. Un asesor especializado te contactará por WhatsApp en las próximas 24 horas para coordinar la clase gratuita. ¿Hay algún día u hora que prefieras para la llamada?"
+
+## RECORDATORIO FINAL
+Eres el PRIMER y MEJOR representante de EdutechLife. Cada conversación es una oportunidad para transformar vidas a través de la educación. Sé amable, sé profesional, sé NICO.
+
+NICO - Transformando educación, una conversación a la vez.`;
+
+const getGreeting = () => {
+  const hour = new Date().getHours();
+  if (hour >= 5 && hour < 12) {
+    return 'Buenos días';
+  } else if (hour >= 12 && hour < 19) {
+    return 'Buenas tardes';
+  } else {
+    return 'Buenas noches';
+  }
+};
+
+const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteraction }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
+  const [interimTranscript, setInterimTranscript] = useState('');
+  const [typingDots, setTypingDots] = useState(0);
+  const [autoVoice, setAutoVoice] = useState(true);
+  const [messages, setMessages] = useState([]);
+  
+  const messagesEndRef = useRef(null);
+  const inputRef = useRef(null);
+  
+  const { 
+    memory = {}, 
+    processMessage = () => {}, 
+    clearMemory = () => {},
+    getContextualPrompt = () => ''
+  } = useConversationMemory('nico-chat') || {};
+  
+  const { 
+    currentLead, 
+    updateLeadInfo, 
+    saveLead 
+  } = useLeadManagement();
+
+  // Lógica de captura de leads
+  const {
+    showLeadForm,
+    leadCaptureContext,
+    analyzeMessage,
+    shouldShowLeadForm,
+    prepareLeadContext,
+    showForm,
+    hideForm,
+    handleLeadSaved,
+    getStats
+  } = useLeadCaptureLogic({
+    minMessagesBeforeAsk: 3,
+    maxMessagesBeforeForce: 8,
+    interestThreshold: 0.7
+  });
+
+  const [leadSaved, setLeadSaved] = useState(false);
+  const [showLeadSuccess, setShowLeadSuccess] = useState(false);
+
+  // Lógica de agendamiento de citas
+  const {
+    appointments,
+    showScheduler,
+    schedulerContext,
+    recentlyScheduled,
+    scheduleAppointment,
+    getUpcomingAppointments,
+    showSchedulerWithContext,
+    hideScheduler,
+    clearRecentlyScheduled
+  } = useAppointmentScheduling({
+    defaultDuration: 30,
+    defaultModality: 'videollamada',
+    reminderHours: 24
+  });
+
+  const [showAppointmentSuccess, setShowAppointmentSuccess] = useState(false);
+
+  // Estados para notificaciones y recordatorios
+  const [showRemindersPanel, setShowRemindersPanel] = useState(false);
+  const [notificationStatus, setNotificationStatus] = useState(null);
+  const [lastReminderCheck, setLastReminderCheck] = useState(null);
+  const [reminderCheckInterval, setReminderCheckInterval] = useState(null);
+
+  // Estados para analytics y optimización
+  const [showAnalyticsDashboard, setShowAnalyticsDashboard] = useState(false);
+  const [analyticsInitialized, setAnalyticsInitialized] = useState(false);
+  const [sessionMetrics, setSessionMetrics] = useState({
+    startTime: new Date(),
+    messageCount: 0,
+    leadCaptured: false,
+    appointmentScheduled: false
+  });
+
+  useEffect(() => {
+    if (messages.length === 0 && memory?.conversationHistory?.length > 0) {
+      setMessages(memory.conversationHistory);
+    }
+  }, []);
+
+  // Inicializar servicios de notificaciones
+  useEffect(() => {
+    const initializeServices = async () => {
+      try {
+        // Inicializar notificaciones del navegador
+        const notificationsInitialized = await notificationService.initialize();
+        if (notificationsInitialized) {
+          setNotificationStatus(notificationService.getStatus());
+        }
+
+        // Inicializar analytics
+        const analyticsInitialized = await analytics.initialize();
+        if (analyticsInitialized) {
+          setAnalyticsInitialized(true);
+          // Registrar inicio de sesión
+          analytics.recordSessionStart();
+        }
+
+        // Configurar chequeo periódico de recordatorios (cada 5 minutos)
+        const interval = setInterval(() => {
+          checkAndSendReminders();
+        }, 5 * 60 * 1000); // 5 minutos
+
+        setReminderCheckInterval(interval);
+
+        // Chequear recordatorios inmediatamente
+        checkAndSendReminders();
+
+        return () => {
+          if (interval) clearInterval(interval);
+          // Registrar fin de sesión
+          if (analyticsInitialized) {
+            analytics.recordSessionEnd();
+          }
+        };
+      } catch (error) {
+        console.error('Error inicializando servicios:', error);
+      }
+    };
+
+    initializeServices();
+  }, []);
+
+  // Función para verificar y enviar recordatorios
+  const checkAndSendReminders = async () => {
+    try {
+      console.log('🔔 Verificando recordatorios...');
+      
+      // Verificar recordatorios del navegador
+      const browserReminders = await notificationService.checkAndSendReminders(appointments);
+      
+      // Verificar recordatorios por email (simulación)
+      const emailReminders = await emailService.checkAndSendReminders(appointments);
+      
+      // Actualizar estado de recordatorios enviados en las citas
+      if (browserReminders.length > 0 || emailReminders.length > 0) {
+        console.log(`📨 Recordatorios enviados: ${browserReminders.length} navegador, ${emailReminders.length} email`);
+        
+        // Aquí podríamos actualizar el estado de las citas con los recordatorios enviados
+        // En un sistema real, esto actualizaría la base de datos
+        
+        setLastReminderCheck(new Date().toISOString());
+      }
+      
+    } catch (error) {
+      console.error('❌ Error verificando recordatorios:', error);
+    }
+  };
+
+  // Función para enviar notificación de nuevo lead
+  const sendNewLeadNotification = (leadData) => {
+    if (notificationService.hasPermission()) {
+      notificationService.sendNewLeadNotification({
+        id: `lead_${Date.now()}`,
+        nombre: leadData.nombreCompleto,
+        interes: leadData.interesPrincipal || 'Interés general',
+        timestamp: new Date().toISOString()
+      });
+    }
+    
+    // También enviar email de bienvenida (simulación)
+    if (leadData.email) {
+      emailService.sendLeadWelcome({
+        email: leadData.email,
+        nombre: leadData.nombreCompleto,
+        interes: leadData.interesPrincipal
+      });
+    }
+  };
+
+  // Función para enviar confirmación de cita por email
+  const sendAppointmentEmailConfirmation = async (appointmentData) => {
+    try {
+      const result = await emailService.sendAppointmentConfirmation(appointmentData);
+      if (result.success) {
+        console.log('📧 Email de confirmación enviado:', result.emailId);
+      }
+    } catch (error) {
+      console.error('❌ Error enviando email de confirmación:', error);
+    }
+  };
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const handleSendMessage = async () => {
+    const trimmedMessage = message.trim();
+    if (!trimmedMessage || isLoading) return;
+
+    const userMessage = trimmedMessage;
+    setMessage('');
+    
+    const userMessageObj = { 
+      role: 'user', 
+      content: userMessage,
+      timestamp: new Date().toISOString()
+    };
+    
+    setMessages(prev => [...prev, userMessageObj]);
+    processMessage('user', userMessage);
+    setIsLoading(true);
+
+    // Track user message in analytics
+    if (analyticsInitialized) {
+      analytics.recordMessage('user', userMessage);
+      
+      // Update session metrics
+      setSessionMetrics(prev => ({
+        ...prev,
+        messageCount: prev.messageCount + 1
+      }));
+    }
+
+    // Analizar mensaje para captura de leads
+    const analysis = analyzeMessage(userMessage, 'user');
+    console.log('📊 Análisis de lead:', analysis);
+
+    // Verificar si deberíamos mostrar el formulario de lead
+    if (!showLeadForm && !leadSaved) {
+      const shouldShow = shouldShowLeadForm(analysis, memory?.userName || initialName);
+      
+      if (shouldShow) {
+        // Preparar contexto y mostrar formulario
+        const context = prepareLeadContext(
+          analysis, 
+          memory?.userName || initialName,
+          {
+            userName: memory?.userName,
+            primaryInterest: memory?.userProfile?.interests?.[0],
+            userAge: memory?.userProfile?.age
+          }
+        );
+        
+        console.log('🎯 Mostrando formulario de lead:', context);
+        showForm(context);
+        
+        // No continuar con la respuesta automática de Nico
+        // El formulario interrumpirá el flujo normal
+        setIsLoading(false);
+        return;
+      }
+    }
+
+    // Verificar si el usuario respondió positivamente a la pregunta de agendamiento
+    const lowerMessage = userMessage.toLowerCase();
+    const lastMessage = messages[messages.length - 1];
+    const isAppointmentResponse = lastMessage?.isAppointmentPrompt;
+    
+    if (isAppointmentResponse) {
+      const positiveResponses = ['sí', 'si', 'claro', 'por supuesto', 'me encantaría', 'quiero', 'agenda', 'agendar', 'sí quiero', 'si quiero'];
+      const negativeResponses = ['no', 'ahora no', 'después', 'más tarde', 'no gracias'];
+      
+      const isPositive = positiveResponses.some(response => lowerMessage.includes(response));
+      const isNegative = negativeResponses.some(response => lowerMessage.includes(response));
+      
+      if (isPositive) {
+        // Mostrar scheduler de citas
+        console.log('📅 Usuario quiere agendar cita');
+        
+        // Buscar datos del lead más reciente
+        const recentLead = messages.find(msg => msg.isLeadSuccess);
+        let leadData = {};
+        
+        if (recentLead) {
+          // Extraer nombre del mensaje de éxito
+          const nameMatch = recentLead.content.match(/Perfecto (\w+),/);
+          if (nameMatch) {
+            leadData.nombreCompleto = nameMatch[1];
+          }
+        }
+        
+        showSchedulerWithContext({
+          leadData,
+          interest: memory?.userProfile?.interests?.[0] || 'Consulta general'
+        });
+        
+        setIsLoading(false);
+        return;
+        
+      } else if (isNegative) {
+        // Respuesta negativa - continuar conversación normalmente
+        console.log('📅 Usuario no quiere agendar cita ahora');
+        // Continuar con flujo normal
+      }
+    }
+
+    try {
+      // Check cache first
+      const cacheKey = userMessage.toLowerCase().trim();
+      const cached = responseCache.get(cacheKey);
+      
+      let response;
+      if (cached && (Date.now() - cached.timestamp) < CACHE_DURATION) {
+        response = cached.response;
+        console.log('Cache hit for:', cacheKey.substring(0, 50));
+      } else {
+        // Obtener contexto de memoria y combinarlo con el prompt
+        const memoryContext = getContextualPrompt();
+        const enhancedSystemPrompt = memoryContext 
+          ? `${PROMPT_NICO_SOPORTE}\n\n## CONTEXTO ACTUAL DE LA CONVERSACIÓN:\n${memoryContext}\n\nRecuerda usar esta información para personalizar tu respuesta.`
+          : PROMPT_NICO_SOPORTE;
+        
+        response = await callDeepseek(userMessage, enhancedSystemPrompt);
+        // Cache the response
+        responseCache.set(cacheKey, {
+          response,
+          timestamp: Date.now()
+        });
+      }
+      
+      const isCached = cached && (Date.now() - cached.timestamp) < CACHE_DURATION;
+      
+      const assistantMessageObj = { 
+        role: 'assistant', 
+        content: response,
+        timestamp: new Date().toISOString(),
+        isCached: isCached
+      };
+      
+      setMessages(prev => [...prev, assistantMessageObj]);
+      processMessage('assistant', response);
+      
+        // Track assistant response in analytics
+        if (analyticsInitialized) {
+          analytics.recordMessage('assistant', response);
+        }
+      
+      if (currentLead) {
+        updateLeadInfo({ 
+          lastInteraction: new Date().toISOString(),
+          lastMessage: userMessage
+        });
+      }
+      
+      if (onInteraction) {
+        onInteraction('message_sent', { 
+          message: userMessage,
+          responseLength: response.length
+        });
+      }
+
+      // Auto-speak response automatically if autoVoice is enabled
+      if (autoVoice) {
+        setTimeout(() => {
+          console.log('🔊 Activando respuesta de voz automática...');
+          handleSpeakResponse();
+        }, 500);
+      } else {
+        console.log('🔇 Voz automática desactivada, respuesta solo en texto');
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+      const errorMessageObj = { 
+        role: 'assistant', 
+        content: '⚠️ Error de conexión. Por favor, intenta de nuevo.',
+        timestamp: new Date().toISOString(),
+        isError: true
+      };
+      setMessages(prev => [...prev, errorMessageObj]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Función para guardar lead desde el formulario
+  const handleSaveLead = async (leadData) => {
+    try {
+      console.log('💾 Guardando lead:', leadData);
+      
+      // Crear lead en el sistema de gestión
+      const leadId = saveLead({
+        nombre: leadData.nombreCompleto,
+        telefono: leadData.telefono,
+        email: leadData.email,
+        motivo: leadData.interesPrincipal || 'Interés general',
+        messages: messages.slice(-10) // Últimos 10 mensajes para contexto
+      });
+
+      // Actualizar estado
+      setLeadSaved(true);
+      setShowLeadSuccess(true);
+      
+      // Ocultar éxito después de 5 segundos
+      setTimeout(() => {
+        setShowLeadSuccess(false);
+      }, 5000);
+
+      // Manejar en la lógica de captura
+      handleLeadSaved(leadData);
+
+      // Enviar notificaciones de nuevo lead
+      sendNewLeadNotification(leadData);
+
+      // Track lead capture in analytics
+      if (analyticsInitialized) {
+        analytics.recordLead({
+          nombreCompleto: leadData.nombreCompleto,
+          telefono: leadData.telefono,
+          email: leadData.email,
+          interesPrincipal: leadData.interesPrincipal || 'Interés general'
+        }, 'chat_form');
+        
+        // Update session metrics
+        setSessionMetrics(prev => ({
+          ...prev,
+          leadCaptured: true
+        }));
+      }
+
+      // Agregar mensaje de confirmación al chat
+      const successMessage = {
+        role: 'assistant',
+        content: `✅ Perfecto ${leadData.nombreCompleto.split(' ')[0]}, hemos registrado tu interés en ${leadData.interesPrincipal || 'nuestros servicios'}.`,
+        timestamp: new Date().toISOString(),
+        isLeadSuccess: true
+      };
+      
+      setMessages(prev => [...prev, successMessage]);
+      
+      // Preguntar si quiere agendar cita (después de 1 segundo)
+      setTimeout(() => {
+        const appointmentQuestion = {
+          role: 'assistant',
+          content: `¿Te gustaría agendar una llamada gratuita con uno de nuestros especialistas para profundizar en ${leadData.interesPrincipal || 'tus necesidades'}?`,
+          timestamp: new Date().toISOString(),
+          isAppointmentPrompt: true
+        };
+        
+        setMessages(prev => [...prev, appointmentQuestion]);
+        
+        // Hablar la pregunta si autoVoice está activado
+        if (autoVoice) {
+          setTimeout(() => {
+            speakTextConversational(
+              removeEmojis(appointmentQuestion.content),
+              'nico_premium',
+              () => console.log('✅ Pregunta de agendamiento hablada')
+            );
+          }, 800);
+        }
+      }, 1000);
+      
+      // Hablar confirmación inicial si autoVoice está activado
+      if (autoVoice) {
+        setTimeout(() => {
+          speakTextConversational(
+            removeEmojis(successMessage.content),
+            'nico_premium',
+            () => console.log('✅ Confirmación de lead hablada')
+          );
+        }, 500);
+      }
+
+      console.log('✅ Lead guardado exitosamente con ID:', leadId);
+      
+      // Guardar datos del lead para posible agendamiento
+      const leadForScheduling = {
+        id: leadId,
+        ...leadData
+      };
+      
+      return leadForScheduling;
+
+    } catch (error) {
+      console.error('❌ Error guardando lead:', error);
+      
+      // Mensaje de error al usuario
+      const errorMessage = {
+        role: 'assistant',
+        content: '⚠️ Hubo un error al guardar tu información. Por favor intenta de nuevo o contacta directamente por WhatsApp.',
+        timestamp: new Date().toISOString(),
+        isError: true
+      };
+      
+      setMessages(prev => [...prev, errorMessage]);
+      throw error;
+    }
+  };
+
+  // Función para manejar agendamiento de citas
+  const handleScheduleAppointment = async (appointmentData) => {
+    try {
+      console.log('📅 Agendando cita:', appointmentData);
+      
+      // Agendar la cita
+      const appointment = scheduleAppointment(appointmentData);
+      
+      // Enviar confirmación por email
+      sendAppointmentEmailConfirmation(appointmentData);
+      
+      // Enviar notificación del navegador
+      if (notificationService.hasPermission()) {
+        notificationService.sendAppointmentConfirmation(appointmentData);
+      }
+      
+      // Mostrar éxito
+      setShowAppointmentSuccess(true);
+      
+      // Ocultar éxito después de 5 segundos
+      setTimeout(() => {
+        setShowAppointmentSuccess(false);
+      }, 5000);
+      
+      // Track appointment scheduling in analytics
+      if (analyticsInitialized) {
+        analytics.recordAppointment({
+          id: appointment.id,
+          leadName: appointmentData.leadName,
+          date: appointmentData.date,
+          time: appointmentData.time,
+          modality: appointmentData.modality,
+          duration: appointmentData.duration,
+          topic: appointmentData.topic || 'Consulta general'
+        }, 'chat_form');
+        
+        // Update session metrics
+        setSessionMetrics(prev => ({
+          ...prev,
+          appointmentScheduled: true
+        }));
+      }
+
+      // Agregar mensaje de confirmación al chat
+      const successMessage = {
+        role: 'assistant',
+        content: `✅ ¡Excelente! Hemos agendado tu llamada para el ${new Date(appointmentData.date).toLocaleDateString('es-CO')} a las ${appointmentData.time}. Recibirás confirmación por ${appointmentData.leadPhone ? 'WhatsApp' : 'email'}.`,
+        timestamp: new Date().toISOString(),
+        isAppointmentSuccess: true
+      };
+      
+      setMessages(prev => [...prev, successMessage]);
+      
+      // Hablar confirmación si autoVoice está activado
+      if (autoVoice) {
+        setTimeout(() => {
+          speakTextConversational(
+            removeEmojis(successMessage.content),
+            'nico_premium',
+            () => console.log('✅ Confirmación de cita hablada')
+          );
+        }, 500);
+      }
+      
+      console.log('✅ Cita agendada exitosamente:', appointment.id);
+      return appointment;
+      
+    } catch (error) {
+      console.error('❌ Error agendando cita:', error);
+      
+      // Mensaje de error al usuario
+      const errorMessage = {
+        role: 'assistant',
+        content: '⚠️ Hubo un error al agendar la cita. Por favor intenta de nuevo o contacta directamente por WhatsApp.',
+        timestamp: new Date().toISOString(),
+        isError: true
+      };
+      
+      setMessages(prev => [...prev, errorMessage]);
+      throw error;
+    }
+  };
+
+  const [recognition, setRecognition] = useState(null);
+
+  useEffect(() => {
+    const speechRecognition = createSpeechRecognition({
+      onResult: (fullText, finalText, hasFinal) => {
+        // Escribir cada palabra detectada directamente en el textarea
+        setMessage(fullText);
+        console.log('🎤 STT: Texto detectado:', fullText);
+        
+        // Mostrar texto interino si no es final
+        if (!hasFinal) {
+          // Extraer solo la parte interina (lo nuevo desde el último texto final)
+          const interimOnly = fullText.replace(finalText, '').trim();
+          if (interimOnly) {
+            setInterimTranscript(interimOnly);
+          }
+        } else {
+          setInterimTranscript('');
+        }
+      },
+      onEnd: () => {
+        setIsListening(false);
+        setInterimTranscript('');
+      },
+      onError: (error) => {
+        console.error('Speech recognition error:', error);
+        setIsListening(false);
+        setInterimTranscript('');
+      }
+    });
+    
+    setRecognition(speechRecognition);
+    
+    return () => {
+      if (speechRecognition) {
+        speechRecognition.stop();
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    let interval;
+    if (isLoading) {
+      interval = setInterval(() => {
+        setTypingDots((prev) => (prev + 1) % 4);
+      }, 300);
+    } else {
+      setTypingDots(0);
+    }
+    return () => clearInterval(interval);
+  }, [isLoading]);
+
+  const handleVoiceInput = async () => {
+    if (isListening && recognition) {
+      recognition.stop();
+      setIsListening(false);
+      setInterimTranscript('');
+      return;
+    }
+
+    if (!recognition) {
+      console.error('Speech recognition not available');
+      return;
+    }
+
+    try {
+      // Check microphone permission
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach(track => track.stop());
+      
+      recognition.start();
+      setIsListening(true);
+      setInterimTranscript('Escuchando...');
+    } catch (error) {
+      console.error('Microphone permission error:', error);
+      addMessage({
+        role: 'assistant',
+        content: '🔇 Permiso de micrófono requerido. Por favor, habilita el micrófono en tu navegador.',
+        timestamp: new Date().toISOString(),
+        isError: true
+      });
+    }
+  };
+
+  const handleSpeakResponse = async () => {
+    if ((messages || []).length === 0) return;
+    
+    const lastAssistantMessage = messages
+      .filter(m => m.role === 'assistant' && !m.isError)
+      .pop();
+    
+    if (!lastAssistantMessage) return;
+
+    if (isSpeaking) {
+      stopSpeech();
+      setIsSpeaking(false);
+      return;
+    }
+
+    setIsSpeaking(true);
+    
+    const textToSpeak = removeEmojis(lastAssistantMessage.content);
+    
+    // Validar que haya texto para hablar
+    if (!textToSpeak || textToSpeak.trim() === '') {
+      console.log('🔇 Texto vacío después de limpiar emojis, omitiendo voz');
+      setIsSpeaking(false);
+      return;
+    }
+    
+    try {
+      console.log('🔊 Intentando reproducir voz neural...', textToSpeak.substring(0, 100));
+      // Use premium voice profile for better quality
+      await speakTextConversational(
+        textToSpeak, 
+        'nico_premium', 
+        () => {
+          setIsSpeaking(false);
+        }
+      );
+    } catch (error) {
+      console.error('❌ Error de Google TTS (voz premium):', {
+        message: error.message,
+        name: error.name,
+        stack: error.stack,
+        code: error.code,
+        status: error.status,
+        statusText: error.statusText,
+        response: error.response ? await error.response.text().catch(() => 'Cannot read response') : 'No response',
+        fullError: JSON.stringify(error, Object.getOwnPropertyNames(error))
+      });
+      setIsSpeaking(false);
+      
+      // Fallback to regular voice
+      try {
+        await speakTextConversational(
+          textToSpeak, 
+          'nico', 
+          () => {
+            setIsSpeaking(false);
+          }
+        );
+      } catch (fallbackError) {
+        console.error('❌ Error de Google TTS (fallback):', {
+          message: fallbackError.message,
+          name: fallbackError.name,
+          stack: fallbackError.stack,
+          code: fallbackError.code,
+          status: fallbackError.status,
+          statusText: fallbackError.statusText,
+          response: fallbackError.response ? await fallbackError.response.text().catch(() => 'Cannot read response') : 'No response',
+          fullError: JSON.stringify(fallbackError, Object.getOwnPropertyNames(fallbackError))
+        });
+        setIsSpeaking(false);
+      }
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
+
+  const toggleChat = () => {
+    const willOpen = !isOpen;
+    setIsOpen(willOpen);
+    
+    // Feedback táctil si está disponible
+    if (typeof navigator !== 'undefined' && navigator.vibrate) {
+      navigator.vibrate(50); // Vibración corta de 50ms
+    }
+    
+    if (willOpen && inputRef.current) {
+      setTimeout(() => inputRef.current.focus(), 100);
+      
+      // Nico da la bienvenida cada vez que se abre el chat
+      const greeting = getGreeting();
+      
+      if (messages.length === 0) {
+        // Chat vacío: Bienvenida completa alineada con el nuevo prompt
+        const welcomeMessage = `${greeting}! Soy NICO, tu agente de EdutechLife. ¿Me podrías decir tu nombre para dirigirme a ti correctamente?`;
+        
+        // Añadir mensaje de bienvenida al chat
+        const welcomeMessageObj = {
+          role: 'assistant',
+          content: welcomeMessage,
+          timestamp: new Date().toISOString()
+        };
+        
+        setMessages(prev => [...prev, welcomeMessageObj]);
+        
+        // Hablar el saludo automáticamente si autoVoice está activo
+        if (autoVoice) {
+          setTimeout(() => {
+            console.log('🎤 Nico dando la bienvenida automáticamente...');
+            const textToSpeak = removeEmojis(welcomeMessage);
+            speakTextConversational(textToSpeak, 'nico_premium', () => {
+              console.log('✅ Saludo de bienvenida completado');
+            });
+          }, 300);
+        } else {
+          console.log('🔇 Voz automática desactivada, bienvenida solo en texto');
+        }
+      } else if (autoVoice) {
+        // Chat con mensajes existentes: Saludo de reconexión solo en voz
+        setTimeout(() => {
+          console.log('🎤 Nico saludando al reconectar...');
+          // Usar el nombre de la memoria si está disponible
+          const userName = memory?.userName || initialName;
+          const nameGreeting = userName !== 'amigo' ? ` ${userName}` : '';
+          const reconnectMessage = `${greeting}${nameGreeting}. ¿En qué más puedo ayudarte hoy?`;
+          const textToSpeak = removeEmojis(reconnectMessage);
+          speakTextConversational(textToSpeak, 'nico_premium', () => {
+            console.log('✅ Saludo de reconexión completado');
+          });
+        }, 300);
+      }
+    }
+  };
+
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  const clearChat = () => {
+    setMessages([]);
+    clearMemory();
+  };
+
+  const clearCache = () => {
+    responseCache.clear();
+    const cacheClearedMessage = {
+      role: 'assistant',
+      content: '✅ Caché limpiado. Las próximas respuestas se generarán desde cero.',
+      timestamp: new Date().toISOString()
+    };
+    setMessages(prev => [...prev, cacheClearedMessage]);
+  };
+
+  const viewHistory = () => {
+    setShowHistory(!showHistory);
+  };
+
+  if (!isOpen) {
+    return (
+      <button
+        onClick={toggleChat}
+        className="fixed bottom-6 right-6 z-50 p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 animate-gentle-pulse"
+        style={{ 
+          backgroundColor: COLORS.PETROLEUM,
+          background: `linear-gradient(135deg, ${COLORS.PETROLEUM} 0%, ${COLORS.CORPORATE} 100%)`
+        }}
+      >
+        <Bot className="w-8 h-8 text-white" />
+        <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-green-500 animate-ping" />
+      </button>
+    );
+  }
+
+  return (
+    <div className={`fixed z-50 ${isExpanded ? 'inset-4' : 'bottom-6 right-6'} transition-all duration-300`}>
+      <div 
+        className={`bg-white rounded-3xl shadow-2xl overflow-hidden border-2 ${
+          isExpanded ? 'w-full h-full' : 'w-96 h-[600px]'
+        }`}
+        style={{ borderColor: COLORS.SOFT_BLUE }}
+      >
+        {/* Header */}
+        <div 
+          className="p-4 flex items-center justify-between"
+          style={{ backgroundColor: COLORS.NAVY }}
+        >
+          <div className="flex items-center space-x-3">
+            <div className="relative">
+              <div 
+                className="w-10 h-10 rounded-full flex items-center justify-center"
+                style={{ backgroundColor: COLORS.CORPORATE }}
+              >
+                <Bot className="w-6 h-6 text-white" />
+              </div>
+              <div 
+                className="absolute -top-1 -right-1 w-4 h-4 rounded-full animate-ping"
+                style={{ backgroundColor: COLORS.MINT }}
+              />
+            </div>
+            <div>
+              <h3 className="font-bold text-white">Nico Assistant</h3>
+              <p className="text-xs" style={{ color: COLORS.SOFT_BLUE }}>
+                EdutechLife AI Support
+              </p>
+            </div>
+          </div>
+          
+           <div className="flex items-center space-x-2">
+             <button
+               onClick={() => setShowAnalyticsDashboard(!showAnalyticsDashboard)}
+               className="p-2 rounded-lg hover:opacity-80 transition relative"
+               style={{ backgroundColor: analyticsInitialized ? COLORS.MINT : '#666' }}
+               title="Analytics y optimización"
+               disabled={!analyticsInitialized}
+             >
+               <BarChart3 className="w-4 h-4 text-white" />
+               {analyticsInitialized && (
+                 <div className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+               )}
+             </button>
+             
+             <button
+               onClick={() => setShowRemindersPanel(!showRemindersPanel)}
+               className="p-2 rounded-lg hover:opacity-80 transition relative"
+               style={{ backgroundColor: COLORS.MINT }}
+               title="Recordatorios y agenda"
+             >
+               <Bell className="w-4 h-4 text-white" />
+               {getUpcomingAppointments().length > 0 && (
+                 <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-red-500 animate-pulse" />
+               )}
+             </button>
+             
+             <button
+               onClick={viewHistory}
+               className="p-2 rounded-lg hover:opacity-80 transition"
+               style={{ backgroundColor: COLORS.PETROLEUM }}
+               title="Ver historial"
+             >
+               <Clock className="w-4 h-4 text-white" />
+             </button>
+            
+            <button
+              onClick={toggleExpand}
+              className="p-2 rounded-lg hover:opacity-80 transition"
+              style={{ backgroundColor: COLORS.CORPORATE }}
+              title={isExpanded ? "Minimizar" : "Expandir"}
+            >
+              {isExpanded ? (
+                <Minimize2 className="w-4 h-4 text-white" />
+              ) : (
+                <Maximize2 className="w-4 h-4 text-white" />
+              )}
+            </button>
+            
+            <button
+              onClick={toggleChat}
+              className="p-2 rounded-lg hover:opacity-80 transition"
+              style={{ backgroundColor: COLORS.PETROLEUM }}
+              title="Cerrar"
+            >
+              <X className="w-4 h-4 text-white" />
+            </button>
+          </div>
+        </div>
+
+        {/* Messages Container */}
+        <div 
+          className="flex-1 overflow-y-auto p-4"
+          style={{ 
+            backgroundColor: COLORS.NAVY,
+            backgroundImage: `radial-gradient(circle at 20% 80%, ${COLORS.PETROLEUM}20 0%, transparent 50%)`
+          }}
+        >
+          {(messages || []).length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-full text-center p-8">
+              <div 
+                className="w-20 h-20 rounded-full flex items-center justify-center mb-4"
+                style={{ backgroundColor: COLORS.CORPORATE }}
+              >
+                <Bot className="w-10 h-10 text-white" />
+              </div>
+              <h3 className="text-xl font-bold mb-2" style={{ color: COLORS.SOFT_BLUE }}>
+                ¡Hola! Soy Nico
+              </h3>
+              <p className="text-sm mb-6" style={{ color: COLORS.MINT }}>
+                Tu asistente de EdutechLife. ¿En qué puedo ayudarte hoy?
+              </p>
+              <div className="grid grid-cols-2 gap-3 w-full max-w-xs">
+                <button
+                  onClick={() => {
+                    setMessage('¿Qué cursos ofrecen?');
+                    // Enfocar el input y simular Enter después de un breve delay
+                    setTimeout(() => {
+                      if (inputRef.current) {
+                        inputRef.current.focus();
+                        // Simular envío automático después de 100ms
+                        setTimeout(() => {
+                          handleSendMessage();
+                        }, 100);
+                      }
+                    }, 50);
+                  }}
+                  className="p-3 rounded-xl text-sm text-left hover:scale-105 transition active:scale-95"
+                  style={{ 
+                    backgroundColor: COLORS.PETROLEUM,
+                    color: 'white'
+                  }}
+                >
+                  📚 Cursos disponibles
+                </button>
+                <button
+                  onClick={() => {
+                    setMessage('¿Cómo me inscribo?');
+                    // Enfocar el input y simular Enter después de un breve delay
+                    setTimeout(() => {
+                      if (inputRef.current) {
+                        inputRef.current.focus();
+                        // Simular envío automático después de 100ms
+                        setTimeout(() => {
+                          handleSendMessage();
+                        }, 100);
+                      }
+                    }, 50);
+                  }}
+                  className="p-3 rounded-xl text-sm text-left hover:scale-105 transition active:scale-95"
+                  style={{ 
+                    backgroundColor: COLORS.CORPORATE,
+                    color: 'white'
+                  }}
+                >
+                  📝 Proceso de inscripción
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-4">
+               {messages.map((msg, index) => (
+                 <div
+                   key={index}
+                   className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                 >
+                   <div
+                     className={`max-w-[80%] rounded-2xl p-4 ${
+                       msg.role === 'user' 
+                         ? 'rounded-br-none' 
+                         : msg.isSystem ? 'rounded-2xl' : 'rounded-bl-none'
+                     }`}
+                     style={{
+                       backgroundColor: msg.role === 'user' 
+                         ? COLORS.CORPORATE 
+                         : msg.isSystem 
+                           ? COLORS.NAVY + '40' 
+                           : COLORS.SOFT_BLUE,
+                       color: msg.role === 'user' ? 'white' : COLORS.NAVY,
+                       border: msg.isSystem ? `1px solid ${COLORS.MINT}40` : 'none',
+                       fontStyle: msg.isSystem ? 'italic' : 'normal'
+                     }}
+                   >
+                      {!msg.isSystem && (
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center">
+                            {msg.role === 'user' ? (
+                              <User className="w-4 h-4 mr-2" />
+                            ) : (
+                              <Bot className="w-4 h-4 mr-2" style={{ color: COLORS.PETROLEUM }} />
+                            )}
+                            <span className="text-xs font-semibold">
+                              {msg.role === 'user' ? 'Tú' : 'Nico'}
+                            </span>
+                          </div>
+                          {msg.isCached && (
+                            <span className="text-xs px-2 py-1 rounded-full" style={{ 
+                              backgroundColor: COLORS.MINT + '40',
+                              color: COLORS.PETROLEUM
+                            }}>
+                              ⚡ Rápido
+                            </span>
+                          )}
+                        </div>
+                      )}
+                      <p className="whitespace-pre-wrap text-sm">{msg.content}</p>
+                   </div>
+                 </div>
+                ))}
+              
+              {/* Formulario de Captura de Leads */}
+              {showLeadForm && leadCaptureContext && (
+                <div className="mb-4 animate-slideUp">
+                  <LeadCaptureForm
+                    userName={leadCaptureContext.userName}
+                    userInterest={leadCaptureContext.userInterest}
+                    onSave={handleSaveLead}
+                    onCancel={hideForm}
+                    autoFocus={true}
+                  />
+                </div>
+              )}
+
+              {/* Confirmación de Lead Guardado */}
+              {showLeadSuccess && (
+                <div className="mb-4 p-4 rounded-xl animate-fadeIn" style={{ 
+                  backgroundColor: COLORS.MINT + '40',
+                  border: `2px solid ${COLORS.MINT}`
+                }}>
+                  <div className="flex items-center">
+                    <CheckCircle className="w-5 h-5 mr-2" style={{ color: COLORS.PETROLEUM }} />
+                    <div>
+                      <p className="font-medium" style={{ color: COLORS.NAVY }}>
+                        ✅ Información guardada exitosamente
+                      </p>
+                      <p className="text-sm" style={{ color: COLORS.PETROLEUM }}>
+                        Un asesor se contactará contigo pronto
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Scheduler de Citas */}
+              {showScheduler && schedulerContext && (
+                <div className="mb-4 animate-slideUp">
+                  <AppointmentScheduler
+                    leadData={schedulerContext.leadData}
+                    onSchedule={handleScheduleAppointment}
+                    onCancel={hideScheduler}
+                    autoFocus={true}
+                  />
+                </div>
+              )}
+
+              {/* Confirmación de Cita Agendada */}
+              {showAppointmentSuccess && (
+                <div className="mb-4 p-4 rounded-xl animate-fadeIn" style={{ 
+                  backgroundColor: COLORS.CORPORATE + '40',
+                  border: `2px solid ${COLORS.CORPORATE}`
+                }}>
+                  <div className="flex items-center">
+                    <Calendar className="w-5 h-5 mr-2" style={{ color: COLORS.PETROLEUM }} />
+                    <div>
+                      <p className="font-medium" style={{ color: COLORS.NAVY }}>
+                        📅 Cita agendada exitosamente
+                      </p>
+                      <p className="text-sm" style={{ color: COLORS.PETROLEUM }}>
+                        Recibirás confirmación y recordatorio
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Panel de Recordatorios y Agenda */}
+               {showAnalyticsDashboard && analyticsInitialized && (
+                 <div className="mb-4 animate-slideUp max-h-[400px] overflow-y-auto">
+                   <AnalyticsDashboard />
+                 </div>
+               )}
+
+               {showRemindersPanel && (
+                 <div className="mb-4 animate-slideUp">
+                   <AppointmentReminders
+                     appointments={appointments}
+                     onRefresh={checkAndSendReminders}
+                     onExport={() => {
+                       // Función para exportar agenda
+                       const csv = appointments.map(appt => 
+                         `${appt.date},${appt.time},${appt.leadName},${appt.modality},${appt.duration}`
+                       ).join('\n');
+                       
+                       const blob = new Blob([`Fecha,Hora,Cliente,Modalidad,Duración\n${csv}`], { type: 'text/csv' });
+                       const url = URL.createObjectURL(blob);
+                       const a = document.createElement('a');
+                       a.href = url;
+                       a.download = `agenda_edutechlife_${new Date().toISOString().split('T')[0]}.csv`;
+                       a.click();
+                     }}
+                     onTestNotification={() => {
+                       notificationService.sendNotification('🔔 Notificación de prueba', {
+                         body: 'Esta es una notificación de prueba de EdutechLife',
+                         icon: '/favicon.ico'
+                       });
+                     }}
+                   />
+                 </div>
+               )}
+
+              {isLoading && (
+                <div className="flex justify-start">
+                  <div 
+                    className="max-w-[80%] rounded-2xl rounded-bl-none p-4"
+                    style={{ backgroundColor: COLORS.SOFT_BLUE }}
+                  >
+                    <div className="flex items-center space-x-2">
+                      <div className="flex space-x-1">
+                        <div 
+                          className="w-2 h-2 rounded-full animate-bounce"
+                          style={{ backgroundColor: COLORS.PETROLEUM }}
+                        />
+                        <div 
+                          className="w-2 h-2 rounded-full animate-bounce"
+                          style={{ backgroundColor: COLORS.CORPORATE, animationDelay: '0.1s' }}
+                        />
+                        <div 
+                          className="w-2 h-2 rounded-full animate-bounce"
+                          style={{ backgroundColor: COLORS.MINT, animationDelay: '0.2s' }}
+                        />
+                      </div>
+                      <span style={{ color: COLORS.NAVY }}>Nico está pensando...</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+              <div ref={messagesEndRef} />
+            </div>
+          )}
+        </div>
+
+        {/* Input Area */}
+        <div 
+          className="p-4 border-t"
+          style={{ 
+            backgroundColor: COLORS.NAVY,
+            borderColor: COLORS.PETROLEUM
+          }}
+        >
+          {interimTranscript && (
+            <div className="mb-3 p-3 rounded-xl animate-pulse" style={{ 
+              backgroundColor: COLORS.MINT + '40',
+              border: `1px solid ${COLORS.MINT}`
+            }}>
+              <div className="flex items-center">
+                <div className="flex space-x-1 mr-3">
+                  <div className="w-2 h-2 rounded-full bg-red-500 animate-ping" style={{ animationDelay: '0ms' }} />
+                  <div className="w-2 h-2 rounded-full bg-yellow-500 animate-ping" style={{ animationDelay: '150ms' }} />
+                  <div className="w-2 h-2 rounded-full bg-green-500 animate-ping" style={{ animationDelay: '300ms' }} />
+                </div>
+                <span className="text-sm font-medium" style={{ color: COLORS.NAVY }}>
+                  {interimTranscript}
+                </span>
+              </div>
+            </div>
+          )}
+
+          <div className="flex items-center space-x-2 mb-3">
+            <button
+              onClick={handleVoiceInput}
+              className={`p-3 rounded-xl transition-all duration-300 ${
+                isListening ? 'scale-105 ring-4 ring-opacity-50' : 'hover:scale-105'
+              }`}
+              style={{ 
+                backgroundColor: isListening ? '#FF4757' : COLORS.PETROLEUM,
+                boxShadow: isListening ? `0 0 20px ${COLORS.MINT}80` : 'none'
+              }}
+              title={isListening ? "Detener grabación" : "Hablar con Nico"}
+            >
+              <div className="relative">
+                {isListening ? (
+                  <>
+                    <MicOff className="w-6 h-6 text-white" />
+                    <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-red-500 animate-ping" />
+                  </>
+                ) : (
+                  <Mic className="w-6 h-6 text-white" />
+                )}
+              </div>
+            </button>
+            
+            <button
+              onClick={handleSpeakResponse}
+              disabled={(messages || []).length === 0 || isSpeaking}
+              className={`p-3 rounded-xl transition-all duration-300 ${
+                isSpeaking ? 'scale-105 ring-4 ring-opacity-50' : 'hover:scale-105'
+              }`}
+              style={{ 
+                backgroundColor: isSpeaking ? COLORS.MINT : COLORS.CORPORATE,
+                opacity: (messages || []).length === 0 ? 0.5 : 1,
+                boxShadow: isSpeaking ? `0 0 20px ${COLORS.MINT}80` : 'none'
+              }}
+              title={isSpeaking ? "Detener voz" : "Escuchar respuesta de Nico"}
+            >
+              <div className="relative">
+                {isSpeaking ? (
+                  <>
+                    <VolumeX className="w-6 h-6 text-white" />
+                    <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-green-500 animate-ping" />
+                  </>
+                ) : (
+                  <Volume2 className="w-6 h-6 text-white" />
+                )}
+              </div>
+            </button>
+            
+            <button
+              onClick={() => {
+                // Feedback táctil
+                if (typeof navigator !== 'undefined' && navigator.vibrate) {
+                  navigator.vibrate(30);
+                }
+                
+                const newAutoVoice = !autoVoice;
+                setAutoVoice(newAutoVoice);
+                
+                // Mostrar mensaje de confirmación en el chat
+                const confirmationMessage = {
+                  role: 'assistant',
+                  content: newAutoVoice ? 
+                    '🔊 Voz automática ACTIVADA. Nico hablará las respuestas.' : 
+                    '🔇 Voz automática DESACTIVADA. Solo respuestas en texto.',
+                  timestamp: new Date().toISOString(),
+                  isSystem: true
+                };
+                
+                setMessages(prev => [...prev, confirmationMessage]);
+              }}
+              className={`p-3 rounded-xl transition-all duration-300 ${
+                autoVoice ? 'scale-105 ring-2 ring-opacity-50' : 'hover:scale-105 opacity-80'
+              }`}
+              style={{ 
+                backgroundColor: autoVoice ? COLORS.MINT : COLORS.PETROLEUM,
+                border: autoVoice ? `2px solid ${COLORS.CORPORATE}` : `2px solid ${COLORS.NAVY}`
+              }}
+              title={autoVoice ? "Voz automática: ACTIVADA - Nico hablará automáticamente" : "Voz automática: DESACTIVADA - Solo respuestas en texto"}
+            >
+              <div className="relative">
+                {autoVoice ? (
+                  <>
+                    <Volume2 className="w-6 h-6 text-white" />
+                    <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-green-500" />
+                  </>
+                ) : (
+                  <>
+                    <VolumeX className="w-6 h-6 text-white" />
+                    <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-red-500" />
+                  </>
+                )}
+              </div>
+            </button>
+            
+            <button
+              onClick={clearChat}
+              className="p-3 rounded-xl transition-all duration-300 hover:scale-105"
+              style={{ backgroundColor: COLORS.PETROLEUM }}
+              title="Limpiar conversación"
+            >
+              <Trash2 className="w-6 h-6 text-white" />
+            </button>
+            
+            <button
+              onClick={clearCache}
+              className="p-3 rounded-xl transition-all duration-300 hover:scale-105"
+              style={{ backgroundColor: COLORS.CORPORATE }}
+              title="Limpiar caché de respuestas"
+            >
+              <div className="relative">
+                <span className="text-white font-bold text-sm">⚡</span>
+              </div>
+            </button>
+          </div>
+          
+          <div className="flex space-x-2">
+            <textarea
+              ref={inputRef}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Escribe tu mensaje aquí..."
+              className="flex-1 p-3 rounded-xl resize-none focus:outline-none focus:ring-2"
+              style={{
+                backgroundColor: COLORS.SOFT_BLUE,
+                color: COLORS.NAVY,
+                borderColor: COLORS.CORPORATE,
+                minHeight: '60px'
+              }}
+              rows={2}
+            />
+            
+            <button
+              onClick={handleSendMessage}
+              disabled={!message.trim() || isLoading}
+              className="p-3 rounded-xl transition hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{ 
+                backgroundColor: message.trim() ? COLORS.PETROLEUM : COLORS.CORPORATE
+              }}
+            >
+              <Send className="w-6 h-6 text-white" />
+            </button>
+          </div>
+          
+          <div className="mt-3 text-center">
+            <p className="text-xs" style={{ color: COLORS.MINT }}>
+              Presiona Enter para enviar • Shift+Enter para nueva línea
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default NicoModern;

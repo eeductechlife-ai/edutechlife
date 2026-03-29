@@ -48,7 +48,7 @@ export const createSpeechRecognition = (options = {}) => {
             console.warn('Error stopping recognition after silence:', e);
           }
         }
-      }, 10000);
+      }, 5000); // Reducido de 10s a 5s para mayor velocidad
     }
   };
 
@@ -66,14 +66,10 @@ export const createSpeechRecognition = (options = {}) => {
     let hasFinal = false;
     let newFinalText = '';
     
-    console.log(`🎤 Evento de resultado: ${event.results.length} resultados`);
-    
     // Procesar TODOS los resultados desde el principio
     for (let i = 0; i < event.results.length; i++) {
       const result = event.results[i];
       const transcript = result[0].transcript;
-      
-      console.log(`  Resultado ${i}: "${transcript}" (isFinal: ${result.isFinal})`);
       
       if (result.isFinal) {
         // Para resultados finales, agregar al texto final
@@ -88,17 +84,10 @@ export const createSpeechRecognition = (options = {}) => {
     // Si hay texto final nuevo, agregarlo al acumulado
     if (newFinalText) {
       finalTranscript += (finalTranscript ? ' ' : '') + newFinalText;
-      console.log(`✅ Texto final agregado: "${newFinalText}"`);
-      console.log(`📝 Texto final acumulado: "${finalTranscript}"`);
-    }
-    
-    if (interim) {
-      console.log(`🔍 Texto interino: "${interim}"`);
     }
     
     // Enviar el texto completo: acumulado final + interino actual
     const fullText = finalTranscript + (interim ? ' ' + interim : '');
-    console.log(`📤 Enviando texto completo: "${fullText}"`);
     onResult(fullText, finalTranscript.trim(), hasFinal);
     
     if (!hasFinal) {

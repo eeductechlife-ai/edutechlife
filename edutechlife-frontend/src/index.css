@@ -6402,6 +6402,14 @@ h5 {
   }
 }
 
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+.animate-slideUp {
+  animation: slideUp 0.4s ease forwards;
+}
+
 .modal-close {
   position: absolute;
   top: 1rem;
@@ -12246,6 +12254,22 @@ span:not(h1 span):not(h2 span):not(h3 span):not(.stat-number),
   animation: slide-in 0.3s ease-out forwards;
 }
 
+/* Gentle pulse animation for Nico button */
+@keyframes gentle-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(77, 168, 196, 0.7);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(77, 168, 196, 0);
+  }
+}
+
+.animate-gentle-pulse {
+  animation: gentle-pulse 2s infinite;
+}
+
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -12254,5 +12278,9 @@ span:not(h1 span):not(h2 span):not(h3 span):not(.stat-number),
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+  
+  .animate-gentle-pulse {
+    animation: none;
   }
 }
