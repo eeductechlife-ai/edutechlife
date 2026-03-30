@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { PROMPT_PSICOLOGO_VAK } from '../constants/prompts';
+import { getQuestionsByAge } from '../constants/vakData';
 import { callDeepseek } from '../utils/api';
 import { speakTextConversational, iniciarReconocimiento } from '../utils/speech';
 
@@ -7,6 +8,7 @@ const VAKTest = ({ onNavigate }) => {
     const [step, setStep] = useState('intro-greeting');
     const [feeling, setFeeling] = useState('');
     const [userName, setUserName] = useState('');
+    const [userAge, setUserAge] = useState('');
     const [answers, setAnswers] = useState([]);
     const [res, setRes] = useState('');
     const [load, setLoad] = useState(false);
@@ -15,9 +17,10 @@ const VAKTest = ({ onNavigate }) => {
     const [pdfLoad, setPdfLoad] = useState(false);
     const [isListening, setIsListening] = useState(false);
     const [isHandsFree, setIsHandsFree] = useState(false);
+    const [autoVoice, setAutoVoice] = useState(true);
     
     const [chatHistory, setChatHistory] = useState([
-        { role: 'assistant', text: '¡Hola! Soy Dani, tu guía de aprendizaje. Antes de empezar a descubrir tu estilo cognitivo...\n**¿Cómo te sientes hoy?**', type: 'text' }
+        { role: 'assistant', text: 'Hola, soy Dani, psicóloga de Edutechlife y experta en diagnóstico VAK. Para empezar, ¿cuál es tu nombre?', type: 'text' }
     ]);
     
     const chatEndRef = useRef(null);
@@ -34,55 +37,68 @@ const VAKTest = ({ onNavigate }) => {
         chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [chatHistory, step, load]);
 
-    const questions = [
-        { q: "¿Cómo prefieres aprender algo nuevo?", opts: ["Viendo gráficos o demostraciones", "Escuchando explicaciones", "Haciendo la tarea físicamente"] },
-        { q: "¿Qué recuerdas mejor después de unos días?", opts: ["Las caras y los lugares", "Los nombres y las conversaciones", "Las actividades y lo que hiciste"] },
-        { q: "Cuando tratas de concentrarte, ¿qué te distrae más?", opts: ["El desorden visual", "Los ruidos o voces", "La incomodidad o temperatura"] },
-        { q: "En tu tiempo libre prefieres...", opts: ["Ver películas o leer", "Escuchar música o podcasts", "Hacer deportes o manualidades"] },
-        { q: "¿Cómo organizas tus ideas para un proyecto?", opts: ["Haciendo esquemas o mapas mentales", "Hablando con otros o en voz alta", "Experimentando y tomando notas sueltas"] },
-        { q: "Si te pierdes, ¿qué haces para ubicarte?", opts: ["Miro un mapa o busco señales visuales", "Le pregunto a alguien por indicaciones", "Sigo mi instinto y exploro caminando"] },
-        { q: "¿Qué tipo de profesor prefieres?", opts: ["El que usa presentaciones ricas en imágenes", "El que domina la oratoria e invita al debate", "El que propone proyectos y laboratorios"] },
-        { q: "Cuando te enojas, tú tiendes a...", opts: ["Callar y fruncir el ceño", "Gritar o quejarte en voz alta", "Tensar el cuerpo y caminar rápido"] },
-        { q: "Para resolver un problema de matemáticas...", opts: ["Lo escribo para visualizar los números", "Me repito los pasos en la mente", "Uso los dedos o objetos para contar"] },
-        { q: "Si tuvieras que memorizar una contraseña...", opts: ["La escribo varias veces", "La repito en voz alta", "La tecleo en mi mente como si fuera un piano"] }
-    ];
+    useEffect(() => {
+        const lastMsg = chatHistory[chatHistory.length - 1];
+        if (autoVoice && lastMsg && lastMsg.role === 'assistant' && !speakingRef.current && !isHandsFree) {
+            speakingRef.current = true;
+            let textToSpeak = lastMsg.text;
+            if (lastMsg.type === 'options' && lastMsg.options) {
+                const optionsText = lastMsg.options.map((opt, i) => 
+                    `${opt.letra || String.fromCharCode(65 + i)}: ${opt.text}`
+                ).join(', o ');
+                textToSpeak += ". Opciones: " + optionsText;
+            }
+            
+            speakTextConversational(textToSpeak, 'valeria', () => {
+                speakingRef.current = false;
+            });
+        }
+    }, [chatHistory, autoVoice, isHandsFree]);
+
+    const [questions, setQuestions] = useState([]);
 
     const handleHandsFreeTranscription = (transcript) => {
         if (!transcript.trim()) return;
         
         const currentStep = stepRef.current;
         if (currentStep === 'intro-greeting') {
-            handleFeelingSubmit(transcript);
-        } else if (currentStep === 'intro-name') {
             handleNameSubmit(transcript);
-        } else if (typeof currentStep === 'number') {
-            const qObj = questions[currentStep];
-            if (!qObj) return;
+        } else if (currentStep === 'ask-mood') {
+            handleMoodSubmit(transcript);
+        } else if (currentStep === 'ask-age') {
+            handleAgeSubmit(transcript);
+        } else if (currentStep === 'test-active') {
+            const currentQuestionIndex = answers.length;
+            if (currentQuestionIndex < questions.length) {
+                const qObj = questions[currentQuestionIndex];
+                if (!qObj) return;
 
-            const spoken = transcript.toLowerCase();
-            let selectedIndex = -1;
+                const spoken = transcript.toLowerCase();
+                let selectedIndex = -1;
 
-            if (spoken.match(/\b(a|uno|primera|primero)\b/)) selectedIndex = 0;
-            else if (spoken.match(/\b(b|dos|segunda|segundo)\b/)) selectedIndex = 1;
-            else if (spoken.match(/\b(c|tres|tercera|tercero)\b/)) selectedIndex = 2;
-            else {
-                for (let i = 0; i < qObj.options.length; i++) {
-                    const optText = qObj.options[i].text.toLowerCase();
-                    const keywords = optText.split(' ').slice(0, 3).join(' ');
-                    if (spoken.includes(keywords) || optText.includes(spoken)) {
-                        selectedIndex = i;
-                        break;
+                if (spoken.match(/\b(a|uno|primera|primero)\b/)) selectedIndex = 0;
+                else if (spoken.match(/\b(b|dos|segunda|segundo)\b/)) selectedIndex = 1;
+                else if (spoken.match(/\b(c|tres|tercera|tercero)\b/)) selectedIndex = 2;
+                else if (spoken.match(/\b(d|cuatro|cuarta|cuarto)\b/)) selectedIndex = 3;
+                else {
+                    for (let i = 0; i < qObj.options.length; i++) {
+                        const optText = qObj.options[i].text.toLowerCase();
+                        const keywords = optText.split(' ').slice(0, 3).join(' ');
+                        if (spoken.includes(keywords) || optText.includes(spoken)) {
+                            selectedIndex = i;
+                            break;
+                        }
                     }
                 }
-            }
 
-            if (selectedIndex !== -1) {
-                handleAnswer(qObj.options[selectedIndex]);
-            } else {
-                setChatHistory(prev => [...prev, { role: 'assistant', text: "No te entendí bien, ¿puedes repetir tu respuesta?", type: 'text' }]);
-                speakTextConversational("No te entendí bien, ¿puedes repetir tu respuesta?", 'valeria', () => {
-                    if (isHandsFreeRef.current) iniciarReconocimiento(handleHandsFreeInput, handleHandsFreeTranscription, setIsListening);
-                });
+                if (selectedIndex !== -1 && qObj.options[selectedIndex]) {
+                    handleAnswer(qObj.options[selectedIndex]);
+                } else {
+                    setChatHistory(prev => [...prev, { role: 'assistant', text: "No te entendí bien, ¿puedes repetir tu respuesta?", type: 'text' }]);
+                    speakTextConversational("No te entendí bien, ¿puedes repetir tu respuesta?", 'valeria', () => {
+                        if (isHandsFreeRef.current) iniciarReconocimiento(handleHandsFreeInput, handleHandsFreeTranscription, setIsListening);
+                    });
+                }
             }
         }
     };
@@ -90,9 +106,11 @@ const VAKTest = ({ onNavigate }) => {
     const handleHandsFreeInput = (transcript) => {
         const currentStep = stepRef.current;
         if (currentStep === 'intro-greeting') {
-            setFeeling(transcript);
-        } else if (currentStep === 'intro-name') {
             setUserName(transcript);
+        } else if (currentStep === 'ask-mood') {
+            setFeeling(transcript);
+        } else if (currentStep === 'ask-age') {
+            setUserAge(transcript);
         }
     };
 
@@ -104,7 +122,10 @@ const VAKTest = ({ onNavigate }) => {
             if (lastMsg && lastMsg.role === 'assistant') {
                 let text = lastMsg.text;
                 if (lastMsg.type === 'options' && lastMsg.options) {
-                    text += ". Opciones: " + lastMsg.options.join(', o ');
+                    const optionsText = lastMsg.options.map((opt, i) => 
+                        `${opt.letra || String.fromCharCode(65 + i)}: ${opt.text}`
+                    ).join(', o ');
+                    text += ". Opciones: " + optionsText;
                 }
                 speakTextConversational(text, 'valeria', () => {
                     if (isHandsFreeRef.current) {
@@ -123,7 +144,10 @@ const VAKTest = ({ onNavigate }) => {
             speakingRef.current = true;
             let textToSpeak = lastMsg.text;
             if (lastMsg.type === 'options' && lastMsg.options) {
-                textToSpeak += ". Opciones: " + lastMsg.options.join(', o ');
+                const optionsText = lastMsg.options.map((opt, i) => 
+                    `${opt.letra || String.fromCharCode(65 + i)}: ${opt.text}`
+                ).join(', o ');
+                textToSpeak += ". Opciones: " + optionsText;
             }
             speakTextConversational(textToSpeak, 'valeria', () => {
                 speakingRef.current = false;
@@ -134,32 +158,82 @@ const VAKTest = ({ onNavigate }) => {
         }
     }, [chatHistory]);
 
-    const handleFeelingSubmit = (overrideText) => {
-        const finalFeeling = typeof overrideText === 'string' ? overrideText : feeling;
-        if (!finalFeeling.trim()) return;
-        setChatHistory(prev => [
-            ...prev, 
-            { role: 'user', text: finalFeeling },
-            { role: 'assistant', text: '¡Qué alegría escucharte! Para hacer tu diagnóstico mucho más personalizado e interactuar contigo, dime:\n**¿Cómo te llamas?**', type: 'text' }
-        ]);
-        setFeeling('');
-        setStep('intro-name');
-    };
-
     const handleNameSubmit = (overrideText) => {
         const finalUserName = typeof overrideText === 'string' ? overrideText : userName;
         if (!finalUserName.trim()) return;
         setChatHistory(prev => [
             ...prev, 
             { role: 'user', text: finalUserName },
-            { role: 'assistant', text: `¡Muy bien, ${finalUserName}! Empecemos el test. Te haré unas preguntas y tú eliges la respuesta que más vaya contigo.`, type: 'text' },
-            { role: 'assistant', text: questions[0].q, type: 'options', options: questions[0].opts }
+            { role: 'assistant', text: `¡Mucho gusto, ${finalUserName}! Cuéntame, ¿cómo te sientes el día de hoy?`, type: 'text' }
         ]);
-        setStep(0);
+        setUserName(finalUserName);
+        setStep('ask-mood');
+    };
+
+    const handleMoodSubmit = (overrideText) => {
+        const finalFeeling = typeof overrideText === 'string' ? overrideText : feeling;
+        if (!finalFeeling.trim()) return;
+        
+        let feedback = "¡Entendido! Vamos a hacer que este test sea súper dinámico.";
+        if (finalFeeling.toLowerCase().includes('bien') || finalFeeling.toLowerCase().includes('feliz') || finalFeeling.toLowerCase().includes('content')) {
+            feedback = "¡Me alegra que te sientas bien! Vamos a hacer que este test sea súper dinámico.";
+        } else if (finalFeeling.toLowerCase().includes('mal') || finalFeeling.toLowerCase().includes('triste') || finalFeeling.toLowerCase().includes('cansad')) {
+            feedback = "Entiendo cómo te sientes. Este test te ayudará a descubrir tu mejor forma de aprender. ¡Vamos a hacerlo dinámico!";
+        } else if (finalFeeling.toLowerCase().includes('nervios') || finalFeeling.toLowerCase().includes('ansied')) {
+            feedback = "No te preocupes, es normal sentirse así. Este test es muy amigable y te ayudará a conocerte mejor. ¡Vamos a hacerlo dinámico!";
+        }
+        
+        setChatHistory(prev => [
+            ...prev, 
+            { role: 'user', text: finalFeeling },
+            { role: 'assistant', text: `${feedback} ¿Cuántos años tienes? Así podré hacerte las preguntas adecuadas para ti.`, type: 'text' }
+        ]);
+        setFeeling(finalFeeling);
+        setStep('ask-age');
+    };
+
+    const handleAgeSubmit = (overrideText) => {
+        const finalAge = typeof overrideText === 'string' ? overrideText : userAge;
+        if (!finalAge.trim()) return;
+        
+        const ageNum = parseInt(finalAge);
+        if (isNaN(ageNum) || ageNum < 8 || ageNum > 16) {
+            setChatHistory(prev => [
+                ...prev, 
+                { role: 'user', text: finalAge },
+                { role: 'assistant', text: 'Por favor ingresa una edad válida entre 8 y 16 años.', type: 'text' }
+            ]);
+            return;
+        }
+        
+        const ageQuestions = getQuestionsByAge(ageNum);
+        setQuestions(ageQuestions);
+        setUserAge(finalAge);
+        
+        setChatHistory(prev => [
+            ...prev, 
+            { role: 'user', text: finalAge },
+            { role: 'assistant', text: '¡Perfecto! Empecemos con la primera pregunta.', type: 'text' }
+        ]);
+        
+        setTimeout(() => {
+            if (ageQuestions.length > 0) {
+                const firstQuestion = ageQuestions[0];
+                setChatHistory(prev => [
+                    ...prev,
+                    { role: 'assistant', text: firstQuestion.text, type: 'options', options: firstQuestion.options }
+                ]);
+                setStep('test-active');
+            }
+        }, 800);
     };
 
     const handleAnswer = (opt) => {
-        const newAns = [...answers, { q: questions[step].q, a: opt }];
+        const currentQuestionIndex = answers.length;
+        if (currentQuestionIndex >= questions.length) return;
+        
+        const currentQuestion = questions[currentQuestionIndex];
+        const newAns = [...answers, { q: currentQuestion.text, a: opt.text, type: opt.type }];
         setAnswers(newAns);
         
         setChatHistory(prev => {
@@ -168,18 +242,17 @@ const VAKTest = ({ onNavigate }) => {
                 newHist[newHist.length - 1].type = 'text';
                 delete newHist[newHist.length - 1].options;
             }
-            newHist.push({ role: 'user', text: opt });
+            newHist.push({ role: 'user', text: opt.text });
             return newHist;
         });
 
-        if (step < questions.length - 1) {
-            const nextStep = step + 1;
+        if (currentQuestionIndex < questions.length - 1) {
             setTimeout(() => {
+                const nextQuestion = questions[currentQuestionIndex + 1];
                 setChatHistory(prev => [
                     ...prev,
-                    { role: 'assistant', text: questions[nextStep].q, type: 'options', options: questions[nextStep].opts }
+                    { role: 'assistant', text: nextQuestion.text, type: 'options', options: nextQuestion.options }
                 ]);
-                setStep(nextStep);
             }, 500);
         } else {
             generateDiagnosis(newAns);
@@ -190,8 +263,19 @@ const VAKTest = ({ onNavigate }) => {
         setLoad(true);
         setStep('loading');
 
+        const farewellMessage = `¡Excelente trabajo, ${userName || 'amigo/a'}! He terminado de analizar tu perfil cognitivo. En la pantalla tienes tus resultados, por favor descárgalos en PDF. ¡Un abrazo!`;
+        
+        setChatHistory(prev => [
+            ...prev,
+            { role: 'assistant', text: farewellMessage, type: 'text' }
+        ]);
+
+        if (autoVoice) {
+            speakTextConversational(farewellMessage, 'valeria');
+        }
+
         const context = finalAnswers.map((x, i) => `${i + 1}. ${x.q} R: ${x.a}`).join(`\n`);
-        const prompt = `El estudiante se llama ${userName || 'Usuario'}. Evalúa estas respuestas al Test de Aprendizaje VAK:\n${context}\n\nActúa como un psicólogo experto en metodología VAK utilizando el siguiente rol: ${PROMPT_PSICOLOGO_VAK}. Dirígete a ${userName || 'el/la estudiante'} por su nombre de forma empática y motivadora. Su estado de ánimo inicial fue: "${feeling}". Dame un diagnóstico técnico pero fácil de entender. Incluye su estilo predominante, cómo funciona su cerebro para aprender, y 3 estrategias precisas para su tipo de aprendizaje.`;
+        const prompt = `El estudiante se llama ${userName || 'Usuario'}. Tiene ${userAge || 'edad no especificada'} años. Evalúa estas respuestas al Test de Aprendizaje VAK:\n${context}\n\nActúa como un psicólogo experto en metodología VAK utilizando el siguiente rol: ${PROMPT_PSICOLOGO_VAK}. Dirígete a ${userName || 'el/la estudiante'} por su nombre de forma empática y motivadora. Su estado de ánimo inicial fue: "${feeling}". Dame un diagnóstico técnico pero fácil de entender. Incluye su estilo predominante, cómo funciona su cerebro para aprender, y 3 estrategias precisas para su tipo de aprendizaje.`;
 
         const r = await callDeepseek(prompt, "Experto Psicopedagogo. Responde estructurado con subtítulos y bullet points.", false);
         setRes(r);
@@ -203,10 +287,12 @@ const VAKTest = ({ onNavigate }) => {
         setStep('intro-greeting'); 
         setFeeling(''); 
         setUserName(''); 
+        setUserAge('');
+        setQuestions([]);
         setAnswers([]); 
         setRes('');
         setChatHistory([
-            { role: 'assistant', text: '¡Hola! Soy Dani, tu guía de aprendizaje. Antes de empezar a descubrir tu estilo cognitivo...\n**¿Cómo te sientes hoy?**', type: 'text' }
+            { role: 'assistant', text: 'Hola, soy Dani, psicóloga de Edutechlife y experta en diagnóstico VAK. Para empezar, ¿cuál es tu nombre?', type: 'text' }
         ]);
     };
 
@@ -248,17 +334,53 @@ const VAKTest = ({ onNavigate }) => {
         window.html2pdf().set(opt).from(container).save().then(() => setPdfLoad(false));
     };
 
+    const progressPercentage = questions.length > 0 ? (answers.length / questions.length) * 100 : 0;
+
     return (
-        <div className="ai-panel" style={{ display: 'flex', flexDirection: 'column', height: '650px', maxHeight: '80vh', padding: '0', overflow: 'hidden' }}>
-            <div className="ai-panel-header" style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,.08)', flexShrink: 0, background: 'rgba(15,23,42,0.4)' }}>
+        <div className="ai-panel" style={{ display: 'flex', flexDirection: 'column', height: '650px', maxHeight: '80vh', padding: '0', overflow: 'hidden', background: '#0A1628' }}>
+            <style>
+                {`
+                @keyframes pulse {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: 0.7; }
+                }
+                @keyframes loading-bar {
+                    0%, 100% { transform: scaleY(0.3); }
+                    50% { transform: scaleY(1); }
+                }
+                .valerio-avatar-ring.listening {
+                    animation: pulse 1s infinite;
+                    box-shadow: 0 0 20px rgba(77, 168, 196, 0.8);
+                }
+                .valerio-avatar-ring.thinking {
+                    animation: pulse 1.5s infinite;
+                }
+                `}
+            </style>
+            <div className="ai-panel-header" style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,.08)', flexShrink: 0, background: 'rgba(15,23,42,0.8)', backdropFilter: 'blur(10px)' }}>
                 <div className="ai-panel-icon"><i className="fa-solid fa-brain-circuit" /></div>
                 <span className="ai-panel-title">DANI PSICÓLOGO VAK</span>
                 <div className="ai-panel-badge"><span className="ai-panel-badge-dot" />TEST DINÁMICO</div>
                 
                 <button 
-                    onClick={toggleHandsFree}
+                    onClick={() => setAutoVoice(!autoVoice)}
                     style={{
                         marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '8px',
+                        background: autoVoice ? 'rgba(0,194,224,0.1)' : 'rgba(255,255,255,0.05)',
+                        border: autoVoice ? '1px solid #00C2E0' : '1px solid rgba(255,255,255,0.1)',
+                        color: autoVoice ? '#00C2E0' : 'rgba(255,255,255,0.7)',
+                        padding: '6px 14px', borderRadius: '100px', fontSize: '10px',
+                        fontFamily: 'DM Mono', textTransform: 'uppercase', letterSpacing: '.1em',
+                        cursor: 'pointer', transition: 'all 0.3s'
+                    }}
+                >
+                    <i className={`fa-solid ${autoVoice ? 'fa-volume-high' : 'fa-volume-xmark'}`} /> {autoVoice ? 'Voz : ON' : 'Voz : OFF'}
+                </button>
+                
+                <button 
+                    onClick={toggleHandsFree}
+                    style={{
+                        display: 'flex', alignItems: 'center', gap: '8px',
                         background: isHandsFree ? 'rgba(16,185,129,0.1)' : 'rgba(255,255,255,0.05)',
                         border: isHandsFree ? '1px solid #10B981' : '1px solid rgba(255,255,255,0.1)',
                         color: isHandsFree ? '#10B981' : 'rgba(255,255,255,0.7)',
@@ -271,36 +393,122 @@ const VAKTest = ({ onNavigate }) => {
                 </button>
             </div>
 
-            <div style={{ flex: 1, overflowY: 'auto', padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+            {step === 'test-active' && questions.length > 0 && (
+                <div style={{ padding: '0.75rem 1.5rem', background: 'rgba(15,23,42,0.6)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                        <span style={{ fontSize: '12px', color: '#66CCCC', fontFamily: 'DM Mono', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                            PROGRESO DEL TEST
+                        </span>
+                        <span style={{ fontSize: '12px', color: '#4DA8C4', fontWeight: 'bold' }}>
+                            {answers.length} / {questions.length}
+                        </span>
+                    </div>
+                    <div style={{ width: '100%', height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', overflow: 'hidden' }}>
+                        <div 
+                            style={{ 
+                                width: `${progressPercentage}%`, 
+                                height: '100%', 
+                                background: 'linear-gradient(90deg, #4DA8C4, #66CCCC)',
+                                borderRadius: '4px',
+                                transition: 'width 0.5s ease-in-out',
+                                boxShadow: '0 0 10px rgba(77, 168, 196, 0.5)'
+                            }}
+                        />
+                    </div>
+                </div>
+            )}
+
+            <div style={{ flex: 1, overflowY: 'auto', padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.2rem', background: '#0A1628' }}>
                 {chatHistory.map((msg, idx) => (
                     <div key={idx} style={{ display: 'flex', gap: '1rem', alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start', maxWidth: '85%' }}>
-                        {msg.role === 'assistant' && (
-                            <div className={`valerio-avatar-ring ${isListening && idx === chatHistory.length - 1 ? 'listening' : ''}`} style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg,var(--primary),var(--accent))', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '4px' }}>
+                         {msg.role === 'assistant' && (
+                            <div className={`valerio-avatar-ring ${isListening && idx === chatHistory.length - 1 ? 'listening' : ''}`} style={{ 
+                                width: 36, 
+                                height: 36, 
+                                borderRadius: '50%', 
+                                background: 'linear-gradient(135deg, #4DA8C4, #66CCCC)', 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                justifyContent: 'center', 
+                                flexShrink: 0, 
+                                marginTop: '4px',
+                                border: '1px solid rgba(102, 204, 204, 0.5)',
+                                boxShadow: '0 2px 10px rgba(77, 168, 196, 0.4)'
+                            }}>
                                 <i className="fa-solid fa-robot" style={{ color: 'white', fontSize: '14px' }}></i>
                             </div>
                         )}
                         
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                             <div style={{
-                                background: msg.role === 'user' ? 'var(--primary)' : 'rgba(255,255,255,.05)',
-                                border: msg.role === 'user' ? 'none' : '1px solid rgba(255,255,255,.1)',
+                                background: msg.role === 'user' 
+                                    ? 'linear-gradient(135deg, #004B63, #4DA8C4)' 
+                                    : 'rgba(15,23,42,0.6)',
+                                border: msg.role === 'user' 
+                                    ? 'none' 
+                                    : '1px solid #4DA8C4',
                                 borderRadius: msg.role === 'user' ? '1rem 1rem 0 1rem' : '1rem 1rem 1rem 0',
                                 padding: '1rem 1.25rem',
                                 color: 'white',
                                 fontSize: '0.95rem',
                                 lineHeight: 1.5,
-                                fontFamily: 'var(--font-body)'
+                                fontFamily: 'var(--font-body)',
+                                backdropFilter: 'blur(10px)',
+                                boxShadow: msg.role === 'user' 
+                                    ? '0 4px 20px rgba(0, 75, 99, 0.3)' 
+                                    : '0 4px 20px rgba(77, 168, 196, 0.2)'
                             }} dangerouslySetInnerHTML={{ __html: window.marked ? window.marked.parseInline(msg.text) : msg.text }} />
 
-                            {msg.type === 'options' && (
+                             {msg.type === 'options' && (
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '4px' }}>
-                                    {msg.options.map((opt, i) => (
+                                     {msg.options.map((opt, i) => (
                                         <button key={i} onClick={() => handleAnswer(opt)} 
-                                            style={{ textAlign: 'left', background: 'rgba(0,194,224,.1)', border: '1px solid rgba(0,194,224,.25)', padding: '10px 16px', borderRadius: '1rem', color: 'rgba(255,255,255,.9)', fontSize: '.9rem', cursor: 'pointer', transition: 'all 0.2s' }}
-                                            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(0,194,224,.25)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-                                            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(0,194,224,.1)'; e.currentTarget.style.transform = 'translateY(0)'; }}
+                                            style={{ 
+                                                textAlign: 'left', 
+                                                background: 'rgba(15,23,42,0.7)', 
+                                                border: '1px solid #4DA8C4', 
+                                                padding: '14px 20px', 
+                                                borderRadius: '1rem', 
+                                                color: 'white', 
+                                                fontSize: '0.95rem', 
+                                                cursor: 'pointer', 
+                                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', 
+                                                display: 'flex', 
+                                                alignItems: 'center', 
+                                                gap: '16px',
+                                                backdropFilter: 'blur(10px)',
+                                                boxShadow: '0 4px 15px rgba(77, 168, 196, 0.2)'
+                                            }}
+                                            onMouseEnter={e => { 
+                                                e.currentTarget.style.background = 'rgba(77, 168, 196, 0.2)'; 
+                                                e.currentTarget.style.transform = 'translateY(-4px) scale(1.02)'; 
+                                                e.currentTarget.style.boxShadow = '0 8px 25px rgba(77, 168, 196, 0.4), 0 0 0 2px rgba(102, 204, 204, 0.3)';
+                                                e.currentTarget.style.borderColor = '#66CCCC';
+                                            }}
+                                            onMouseLeave={e => { 
+                                                e.currentTarget.style.background = 'rgba(15,23,42,0.7)'; 
+                                                e.currentTarget.style.transform = 'translateY(0) scale(1)'; 
+                                                e.currentTarget.style.boxShadow = '0 4px 15px rgba(77, 168, 196, 0.2)';
+                                                e.currentTarget.style.borderColor = '#4DA8C4';
+                                            }}
                                         >
-                                            {opt}
+                                            <span style={{ 
+                                                background: 'linear-gradient(135deg, #4DA8C4, #66CCCC)', 
+                                                color: 'white', 
+                                                width: '32px', 
+                                                height: '32px', 
+                                                borderRadius: '50%', 
+                                                display: 'flex', 
+                                                alignItems: 'center', 
+                                                justifyContent: 'center', 
+                                                fontSize: '14px', 
+                                                fontWeight: 'bold', 
+                                                flexShrink: 0,
+                                                boxShadow: '0 2px 8px rgba(77, 168, 196, 0.5)'
+                                            }}>
+                                                {opt.letra || String.fromCharCode(65 + i)}
+                                            </span>
+                                            <span style={{ flex: 1, textAlign: 'left', fontWeight: '500' }}>{opt.text}</span>
                                         </button>
                                     ))}
                                 </div>
@@ -308,8 +516,20 @@ const VAKTest = ({ onNavigate }) => {
                         </div>
 
                         {msg.role === 'user' && (
-                            <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(255,255,255,.1)', border: '1px solid rgba(255,255,255,.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '4px' }}>
-                                <i className="fa-solid fa-user" style={{ color: 'rgba(255,255,255,.7)', fontSize: '14px' }}></i>
+                            <div style={{ 
+                                width: 36, 
+                                height: 36, 
+                                borderRadius: '50%', 
+                                background: 'linear-gradient(135deg, #004B63, #4DA8C4)', 
+                                border: '1px solid rgba(77, 168, 196, 0.5)', 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                justifyContent: 'center', 
+                                flexShrink: 0, 
+                                marginTop: '4px',
+                                boxShadow: '0 2px 10px rgba(0, 75, 99, 0.3)'
+                            }}>
+                                <i className="fa-solid fa-user" style={{ color: 'white', fontSize: '14px' }}></i>
                             </div>
                         )}
                     </div>
@@ -317,14 +537,54 @@ const VAKTest = ({ onNavigate }) => {
 
                 {load && step === 'loading' && (
                     <div style={{ display: 'flex', gap: '1rem', alignSelf: 'flex-start', maxWidth: '85%' }}>
-                        <div className="valerio-avatar-ring thinking" style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg,var(--primary),var(--accent))', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '4px' }}>
+                        <div className="valerio-avatar-ring thinking" style={{ 
+                            width: 36, 
+                            height: 36, 
+                            borderRadius: '50%', 
+                            background: 'linear-gradient(135deg, #4DA8C4, #66CCCC)', 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center', 
+                            flexShrink: 0, 
+                            marginTop: '4px',
+                            border: '1px solid rgba(102, 204, 204, 0.5)',
+                            boxShadow: '0 2px 10px rgba(77, 168, 196, 0.4)',
+                            animation: 'pulse 1.5s infinite'
+                        }}>
                             <i className="fa-solid fa-robot" style={{ color: 'white', fontSize: '14px' }}></i>
                         </div>
-                        <div style={{ background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.1)', borderRadius: '1rem 1rem 1rem 0', padding: '1rem 1.25rem', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <div style={{ 
+                            background: 'rgba(15,23,42,0.6)', 
+                            border: '1px solid #4DA8C4', 
+                            borderRadius: '1rem 1rem 1rem 0', 
+                            padding: '1rem 1.25rem', 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            gap: '12px',
+                            backdropFilter: 'blur(10px)',
+                            boxShadow: '0 4px 20px rgba(77, 168, 196, 0.2)'
+                        }}>
                             <div className="ai-loading-bars" style={{ height: '20px' }}>
-                                <span style={{height:'100%'}} /><span style={{height:'100%'}} /><span style={{height:'100%'}} />
+                                <span style={{
+                                    height: '100%',
+                                    background: 'linear-gradient(90deg, #4DA8C4, #66CCCC)',
+                                    borderRadius: '2px',
+                                    animation: 'loading-bar 1.5s infinite ease-in-out'
+                                }} />
+                                <span style={{
+                                    height: '100%',
+                                    background: 'linear-gradient(90deg, #4DA8C4, #66CCCC)',
+                                    borderRadius: '2px',
+                                    animation: 'loading-bar 1.5s infinite ease-in-out 0.2s'
+                                }} />
+                                <span style={{
+                                    height: '100%',
+                                    background: 'linear-gradient(90deg, #4DA8C4, #66CCCC)',
+                                    borderRadius: '2px',
+                                    animation: 'loading-bar 1.5s infinite ease-in-out 0.4s'
+                                }} />
                             </div>
-                            <span style={{ color: 'var(--primary)', fontFamily: 'DM Mono', fontSize: '10px', textTransform: 'uppercase' }}>Analizando neuro-perfil...</span>
+                            <span style={{ color: '#66CCCC', fontFamily: 'DM Mono', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold' }}>ANALIZANDO NEURO-PERFIL...</span>
                         </div>
                     </div>
                 )}

@@ -1,7 +1,16 @@
 import { memo, useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Icon } from '../utils/iconMapping.jsx';
-import Lottie from 'lottie-react';
+// Cargar lottie dinámicamente para evitar problemas de importación
+let lottieInstance = null;
+
+const loadLottie = async () => {
+  if (!lottieInstance) {
+    const lottieModule = await import('lottie-web/build/player/esm/lottie.min.js');
+    lottieInstance = lottieModule.default;
+  }
+  return lottieInstance;
+};
 
 // ==========================================
 // Lottie Animation Data (Inline JSON - Zero External Requests)
@@ -133,15 +142,49 @@ const handshakeAnimation = {
 // Card con Lottie Hover (Solo play en hover)
 // ==========================================
 const CardWithLottie = ({ children, animationData, onMouseEnter, onMouseLeave }) => {
-  const [lottieRef, setLottieRef] = useState(null);
+  const animationContainer = useRef(null);
+  const animationInstance = useRef(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  
+  useEffect(() => {
+    let mounted = true;
+    
+    const initAnimation = async () => {
+      try {
+        const lottie = await loadLottie();
+        if (mounted && animationContainer.current && !animationInstance.current) {
+          animationInstance.current = lottie.loadAnimation({
+            container: animationContainer.current,
+            renderer: 'svg',
+            loop: true,
+            autoplay: false,
+            animationData: animationData
+          });
+          setIsLoaded(true);
+        }
+      } catch (error) {
+        console.error('Error loading Lottie animation:', error);
+      }
+    };
+    
+    initAnimation();
+    
+    return () => {
+      mounted = false;
+      if (animationInstance.current) {
+        animationInstance.current.destroy();
+        animationInstance.current = null;
+      }
+    };
+  }, [animationData]);
   
   const handleMouseEnter = (e) => {
-    if (lottieRef) lottieRef.play();
+    if (animationInstance.current) animationInstance.current.play();
     if (onMouseEnter) onMouseEnter(e);
   };
   
   const handleMouseLeave = (e) => {
-    if (lottieRef) lottieRef.pause();
+    if (animationInstance.current) animationInstance.current.pause();
     if (onMouseLeave) onMouseLeave(e);
   };
   
@@ -150,15 +193,7 @@ const CardWithLottie = ({ children, animationData, onMouseEnter, onMouseLeave })
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="w-14 h-14 mb-4">
-        <Lottie 
-          lottieRef={setLottieRef}
-          animationData={animationData}
-          loop={true}
-          autoplay={false}
-          className="w-full h-full"
-        />
-      </div>
+      <div className="w-14 h-14 mb-4" ref={animationContainer} />
       {children}
     </div>
   );

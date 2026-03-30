@@ -18,9 +18,8 @@ const ConsultoriaB2B = lazy(() => import('./components/ConsultoriaB2B'));
 const AutomationArchitect = lazy(() => import('./components/AutomationArchitect'));
 const SmartBoardDashboard = lazy(() => import('./components/SmartBoardDashboard'));
 const SmartBoardLogin = lazy(() => import('./components/SmartBoardLogin'));
-const DiagnosticoVAK = lazy(() => import('./components/DiagnosticoVAK'));
-const VAKTest = lazy(() => import('./components/VAKTest'));
-const VAKDiagnostic = lazy(() => import('./components/VAKDiagnostic'));
+// Unified VAK Diagnosis Component
+const VAKDiagnosis = lazy(() => import('./features/vak-diagnosis/VAKDiagnosisFixed'));
 const AdminDashboard = lazy(() => import('./components/AdminDashboard'));
 import NicoModern from './components/Nico/NicoModern';
 import AdminLoginModal from './components/AdminLoginModal';
@@ -886,6 +885,13 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                                     Ecosistema
                                 </button>
                                 <button 
+                                    onClick={() => handleNavigate('vak')}
+                                    className="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] hover:from-[#66CCCC] hover:to-[#4DA8C4] rounded-full transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2"
+                                >
+                                    <i className="fa-solid fa-brain text-xs"></i>
+                                    VAK Diagnosis
+                                </button>
+                                <button 
                                     onClick={() => setShowContactModal(true)}
                                     className="px-4 py-2 text-sm font-semibold text-white bg-[#4DA8C4] hover:bg-[#004B63] rounded-full transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2"
                                 >
@@ -1123,20 +1129,20 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                         <SmartBoardDashboard onNavigate={handleNavigate} onLogout={handleSmartboardLogout} />
                     )}
                     
-                    {/* Diagnóstico VAK - Nuevo componente premium */}
+                    {/* Unified VAK Diagnosis - Premium Experience */}
                     {view === 'vak' && (
-                        <Suspense fallback={<div>Cargando Diagnóstico VAK...</div>}>
-                            <VAKDiagnostic onNavigate={handleNavigate} />
+                        <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div></div>}>
+                            <VAKDiagnosis />
                         </Suspense>
                     )}
                     {view === 'vak-simple' && (
-                        <Suspense fallback={<div>Cargando Diagnóstico VAK...</div>}>
-                            <VAKDiagnostic onNavigate={handleNavigate} />
+                        <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div></div>}>
+                            <VAKDiagnosis />
                         </Suspense>
                     )}
                     {view === 'vak-premium' && (
-                        <Suspense fallback={<div>Cargando Diagnóstico VAK Premium...</div>}>
-                            <VAKDiagnostic onNavigate={handleNavigate} />
+                        <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div></div>}>
+                            <VAKDiagnosis />
                         </Suspense>
                     )}
                     

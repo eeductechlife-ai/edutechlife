@@ -328,6 +328,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
   
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+  const speechRecognitionRef = useRef(null);
   
   const { 
     memory = {}, 
@@ -418,6 +419,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       // Esc: Cerrar chat si está abierto
       if (e.key === 'Escape' && isOpen) {
         e.preventDefault();
+        resetChat();
         setIsOpen(false);
       }
       
@@ -901,19 +903,28 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
           setInterimTranscript('');
         }
       },
-      onEnd: () => {
+      onEnd: (finalText) => {
         setIsListening(false);
         setInterimTranscript('');
+        
+        // Si hay texto final, enviar automáticamente
+        if (finalText && finalText.trim() !== '') {
+          setMessage(finalText);
+          setTimeout(() => {
+            handleSendMessage();
+          }, 500);
+        }
       },
-      onError: (error) => {
-        console.error('Speech recognition error:', error);
+      onError: (error, message) => {
+        console.error('Speech recognition error:', error, message);
         setIsListening(false);
         setInterimTranscript('');
       }
     });
-    
-    setRecognition(speechRecognition);
-    
+
+    setRecognition(speechRecognition?.recognition || null);
+    speechRecognitionRef.current = speechRecognition;
+
     return () => {
       if (speechRecognition) {
         speechRecognition.stop();
@@ -1007,8 +1018,43 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
     }
   };
 
+  // Función para reiniciar completamente el chat
+  const resetChat = () => {
+    setMessages([]);
+    setMessage('');
+    setIsLoading(false);
+    setIsListening(false);
+    setIsSpeaking(false);
+    setShowSuggestions(true);
+    setShowedConversationOptions(false);
+    stopSpeech();
+    
+    // Limpiar memoria de conversación
+    clearMemory();
+    
+    // Limpiar caché de respuestas para esta sesión
+    responseCache.clear();
+    
+    // Detener reconocimiento de voz si está activo
+    if (speechRecognitionRef.current) {
+      speechRecognitionRef.current.stop();
+    }
+    
+    // Cerrar formularios si están abiertos
+    if (showLeadForm) hideForm();
+    if (showScheduler) hideScheduler();
+    setShowLeadSuccess(false);
+    setShowAppointmentSuccess(false);
+  };
+
   const toggleChat = () => {
     const willOpen = !isOpen;
+    
+    // Si se va a CERRAR el chat, reiniciar todo
+    if (!willOpen) {
+      resetChat();
+    }
+    
     setIsOpen(willOpen);
     
     // Feedback táctil si está disponible

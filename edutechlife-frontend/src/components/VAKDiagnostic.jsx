@@ -5,7 +5,7 @@ import html2pdf from 'html2pdf.js';
 import * as XLSX from 'xlsx';
 import FloatingParticles from './FloatingParticles';
 import { Icon } from '../utils/iconMapping.jsx';
-import { VAK_QUESTIONS, VAK_STYLES, calculateVAKResult, getVAKChartData } from '../constants/vakData';
+import { VAK_STYLES, calculateVAKResult, getVAKChartData, getQuestionsByAge } from '../constants/vakData';
 
 const cardVariants = {
   hidden: { opacity: 0, scale: 0.8, rotateX: -15, y: 30 },
@@ -72,12 +72,13 @@ const VAKDiagnostic = memo(({ onNavigate, userName: initialName = '', initialMoo
   const [showConfetti, setShowConfetti] = useState(false);
   const [pdfLoading, setPdfLoading] = useState(false);
   const [showUserForm, setShowUserForm] = useState(false);
-  const [userData, setUserData] = useState({ nombre: '', email: '', telefono: '' });
+  const [userData, setUserData] = useState({ nombre: '', email: '', telefono: '', edad: '' });
   const sectionRef = useRef(null);
 
-  const question = VAK_QUESTIONS[currentQuestion];
-  const progress = ((currentQuestion + 1) / VAK_QUESTIONS.length) * 100;
-  const isLastQuestion = currentQuestion === VAK_QUESTIONS.length - 1;
+  const questions = getQuestionsByAge(userData.edad ? parseInt(userData.edad) : 12);
+  const question = questions[currentQuestion];
+  const progress = ((currentQuestion + 1) / questions.length) * 100;
+  const isLastQuestion = currentQuestion === questions.length - 1;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -93,6 +94,14 @@ const VAKDiagnostic = memo(({ onNavigate, userName: initialName = '', initialMoo
   }, []);
 
   const handleStart = () => {
+    setPhase('age');
+  };
+
+  const handleAgeSubmit = () => {
+    if (!userData.edad || userData.edad < 8 || userData.edad > 16) {
+      alert('Por favor ingresa una edad válida entre 8 y 16 años');
+      return;
+    }
     setPhase('calibration');
   };
 
@@ -144,6 +153,7 @@ const VAKDiagnostic = memo(({ onNavigate, userName: initialName = '', initialMoo
     const displayName = userData.nombre || userName || 'Estudiante';
     const displayEmail = userData.email || 'No proporcionado';
     const displayPhone = userData.telefono || 'No proporcionado';
+    const displayAge = userData.edad || 'No proporcionada';
     const dominantColor = result.dominant === 'visual' ? colors.accent : 
                          result.dominant === 'auditivo' ? colors.secondary : colors.kinestesico;
 
@@ -191,7 +201,7 @@ const VAKDiagnostic = memo(({ onNavigate, userName: initialName = '', initialMoo
   </div>
   <div class="info">
     <strong>Nombre:</strong> ${displayName} | <strong>Fecha:</strong> ${new Date().toLocaleDateString('es-CO')}<br>
-    <strong>Email:</strong> ${displayEmail} | <strong>Telefono:</strong> ${displayPhone}
+    <strong>Email:</strong> ${displayEmail} | <strong>Telefono:</strong> ${displayPhone} | <strong>Edad:</strong> ${displayAge}
   </div>
   <div class="hero">
     <p>Tu estilo de aprendizaje dominante</p>
@@ -241,6 +251,7 @@ const VAKDiagnostic = memo(({ onNavigate, userName: initialName = '', initialMoo
         'Nombre': userData.nombre || '',
         'Email': userData.email || '',
         'Telefono': userData.telefono || '',
+        'Edad': userData.edad || '',
         'Estilo Dominante': dominantStyle?.name || result?.dominant || '',
         'Porcentaje': result?.percentage || '',
         'Visual': result?.percentages?.visual || '',
@@ -447,9 +458,51 @@ const VAKDiagnostic = memo(({ onNavigate, userName: initialName = '', initialMoo
                 ))}
               </motion.div>
             </motion.div>
-          )}
+           )}
 
-          {phase === 'calibration' && (
+           {phase === 'age' && (
+             <motion.div
+               key="age"
+               variants={containerVariants}
+               initial="hidden"
+               animate="visible"
+               className="py-16"
+             >
+               <motion.div variants={itemVariants} className="text-center mb-12">
+                 <h3 className="text-2xl font-bold text-[#004B63] mb-4">Para personalizar tu diagnóstico</h3>
+                 <p className="text-slate-600">¿Cuántos años tienes? (8-16 años)</p>
+               </motion.div>
+
+               <motion.div variants={itemVariants} className="max-w-md mx-auto space-y-6">
+                 <div>
+                   <label className="block text-sm font-medium text-slate-600 mb-2 uppercase tracking-wide">Tu edad</label>
+                   <input
+                     type="number"
+                     min="8"
+                     max="16"
+                     value={userData.edad}
+                     onChange={(e) => setUserData({...userData, edad: e.target.value})}
+                     className="w-full px-6 py-4 text-center text-3xl font-bold border-2 border-slate-300 rounded-2xl focus:ring-4 focus:ring-[#4DA8C4] focus:border-transparent"
+                     placeholder="Ej: 12"
+                     autoFocus
+                   />
+                   <p className="text-sm text-slate-500 mt-2">El diagnóstico se adaptará a tu edad</p>
+                 </div>
+
+                 <motion.button
+                   onClick={handleAgeSubmit}
+                   whileHover={{ scale: 1.05 }}
+                   whileTap={{ scale: 0.98 }}
+                   className="w-full py-4 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all"
+                 >
+                   Continuar
+                   <Icon name="fa-arrow-right" className="inline-block ml-2" />
+                 </motion.button>
+               </motion.div>
+             </motion.div>
+           )}
+
+           {phase === 'calibration' && (
             <motion.div
               key="calibration"
               variants={containerVariants}
@@ -457,10 +510,16 @@ const VAKDiagnostic = memo(({ onNavigate, userName: initialName = '', initialMoo
               animate="visible"
               className="py-16"
             >
-              <motion.div variants={itemVariants} className="text-center mb-12">
-                <h3 className="text-2xl font-bold text-[#004B63] mb-4">Antes de comenzar</h3>
-                <p className="text-slate-600">Cuéntanos un poco sobre ti</p>
-              </motion.div>
+               <motion.div variants={itemVariants} className="text-center mb-12">
+                 <h3 className="text-2xl font-bold text-[#004B63] mb-4">Antes de comenzar</h3>
+                 <p className="text-slate-600">Cuéntanos un poco sobre ti</p>
+                 {userData.edad && (
+                   <div className="inline-flex items-center gap-2 mt-2 px-4 py-2 bg-[#4DA8C4]/10 rounded-full">
+                     <Icon name="fa-user" className="text-[#4DA8C4]" />
+                     <span className="text-sm font-medium text-[#004B63]">Edad: {userData.edad} años</span>
+                   </div>
+                 )}
+               </motion.div>
 
               <motion.div variants={itemVariants} className="max-w-md mx-auto space-y-6">
                 <div>
@@ -523,7 +582,7 @@ const VAKDiagnostic = memo(({ onNavigate, userName: initialName = '', initialMoo
                     animate={{ scale: 1, opacity: 1 }}
                     className="px-4 py-1 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] rounded-full text-white font-bold shadow-lg"
                   >
-                    {currentQuestion + 1} / {VAK_QUESTIONS.length}
+                    {currentQuestion + 1} / {questions.length}
                   </motion.span>
                 </div>
                 
@@ -784,6 +843,19 @@ const VAKDiagnostic = memo(({ onNavigate, userName: initialName = '', initialMoo
                               placeholder="Tu número de teléfono"
                             />
                           </div>
+                          <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">Edad (8-16 años)</label>
+                            <input
+                              type="number"
+                              min="8"
+                              max="16"
+                              value={userData.edad}
+                              onChange={(e) => setUserData({...userData, edad: e.target.value})}
+                              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent"
+                              placeholder="Tu edad"
+                              required
+                            />
+                          </div>
                         </div>
 
                         <div className="flex gap-3 mt-6">
@@ -797,6 +869,10 @@ const VAKDiagnostic = memo(({ onNavigate, userName: initialName = '', initialMoo
                             onClick={() => {
                               if (!userData.nombre.trim()) {
                                 alert('Por favor ingresa tu nombre');
+                                return;
+                              }
+                              if (!userData.edad || userData.edad < 8 || userData.edad > 16) {
+                                alert('Por favor ingresa una edad válida entre 8 y 16 años');
                                 return;
                               }
                               setShowUserForm(false);

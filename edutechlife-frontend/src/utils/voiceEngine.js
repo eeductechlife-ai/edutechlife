@@ -1,7 +1,7 @@
 import { speakTextConversational, stopSpeech } from './speech';
 
 const VOICE_PROFILES = {
-  valeria: { languageCode: 'es-US', name: 'es-US-Neural2-A', pitch: 1.2, speakingRate: 1.05 },
+  valeria: { languageCode: 'es-US', name: 'es-US-Neural2-A', pitch: 0.2, speakingRate: 0.95 },
   valerio: { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: -2.0, speakingRate: 1.0 },
   sistema: { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: 0, speakingRate: 1.0 }
 };
