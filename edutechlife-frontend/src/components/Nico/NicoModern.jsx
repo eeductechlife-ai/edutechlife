@@ -1292,7 +1292,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
               />
             </div>
             <div>
-              <h3 className="font-bold text-white">Nico Assistant</h3>
+                <h3 className="font-bold text-white">Nico</h3>
               <p className="text-xs" style={{ color: COLORS.SOFT_BLUE }}>
                 EdutechLife AI Support
               </p>
