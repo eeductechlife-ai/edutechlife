@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
-import { Mic, MicOff, Volume2, VolumeX, Send, X, Bot, User, CheckCircle } from 'lucide-react';
+import { Mic, MicOff, Volume2, VolumeX, Send, X, Bot, User, CheckCircle, RotateCcw } from 'lucide-react';
 import useConversationMemory from '../../hooks/useConversationMemory';
 import useLeadManagement from '../../hooks/useLeadManagement';
 import useLeadCaptureLogic from '../../hooks/useLeadCaptureLogic';
@@ -1169,6 +1169,11 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
     setShowAppointmentSuccess(false);
   };
 
+  // Función para iniciar nueva conversación sin cerrar el chat
+  const startNewConversation = () => {
+    resetChat();
+  };
+
   const toggleChat = () => {
     const willOpen = !isOpen;
     
@@ -1327,15 +1332,25 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
                 <VolumeX className="w-4 h-4 text-white" />
               )}
             </button>
+            
+            {/* Botón Nueva Conversación */}
+            <button
+              onClick={startNewConversation}
+              className="p-2 rounded-lg hover:opacity-80 transition"
+              style={{ backgroundColor: COLORS.CORPORATE }}
+              title="Nueva Conversación"
+            >
+              <RotateCcw className="w-4 h-4 text-white" />
+            </button>
            
-           <button
-             onClick={toggleChat}
-             className="p-2 rounded-lg hover:opacity-80 transition"
-             style={{ backgroundColor: COLORS.PETROLEUM }}
-             title="Cerrar"
-           >
-             <X className="w-4 h-4 text-white" />
-           </button>
+            <button
+              onClick={toggleChat}
+              className="p-2 rounded-lg hover:opacity-80 transition"
+              style={{ backgroundColor: COLORS.PETROLEUM }}
+              title="Cerrar"
+            >
+              <X className="w-4 h-4 text-white" />
+            </button>
          </div>
         </div>
 
