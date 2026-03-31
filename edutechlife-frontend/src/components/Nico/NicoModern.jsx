@@ -192,7 +192,13 @@ const optimizeLongConversation = (messages, maxMessages = 20) => {
 // Función para detectar nombre, edad e intereses del mensaje
 const extractUserContext = (message) => {
   const lowerMessage = message.toLowerCase();
-  const context = { userName: null, detectedInterest: null, studentAge: null };
+  const context = { 
+    userName: null, 
+    detectedInterest: null, 
+    studentAge: null,
+    conversationStage: null,
+    detectedTopics: []
+  };
   
   // Extraer nombre
   const namePatterns = [
@@ -417,109 +423,152 @@ const getQuickResponse = (userMessage, userContext = {}) => {
 };
 
 // Función para generar sugerencias de preguntas basadas en el contexto
-const getQuestionSuggestions = (messages, currentTopic = '') => {
+const getQuestionSuggestions = (messages, userContext = {}) => {
   const suggestions = [];
+  const { conversationStage, detectedTopics = [], studentAge } = userContext;
   
-  // Si no hay mensajes o es el inicio de la conversación
-  if (messages.length <= 2) {
-    suggestions.push(
-      '¿Qué es VAK y cómo funciona?',
-      '¿Qué cursos de STEM ofrecen?',
-      '¿Cómo son las tutorías personalizadas?',
-      '¿Ofrecen clases de inglés?'
-    );
-  } else {
-    // Analizar el último mensaje para sugerencias contextuales
-    const lastMessage = messages[messages.length - 1]?.content?.toLowerCase() || '';
-    
-    if (lastMessage.includes('vak')) {
-      suggestions.push(
-        '¿Cómo se identifica mi estilo de aprendizaje?',
-        '¿Hay test VAK disponible?',
-        '¿Cuánto dura el proceso VAK?'
-      );
-    } else if (lastMessage.includes('stem')) {
-      suggestions.push(
-        '¿Para qué edades son los cursos STEM?',
-        '¿Necesito conocimientos previos?',
-        '¿Qué proyectos prácticos hacen?'
-      );
-    } else if (lastMessage.includes('tutoría') || lastMessage.includes('clase')) {
-      suggestions.push(
-        '¿Qué materias ofrecen?',
-        '¿Son clases individuales o grupales?',
-        '¿Qué horarios tienen?'
-      );
-    } else if (lastMessage.includes('precio') || lastMessage.includes('cuesta')) {
-      suggestions.push(
-        '¿Hay planes de pago?',
-        '¿Ofrecen becas o descuentos?',
-        '¿Incluyen materiales?'
-      );
-    } else {
-      // Sugerencias generales
-      suggestions.push(
-        '¿Tienen sedes presenciales?',
-        '¿Cómo me inscribo?',
-        '¿Ofrecen certificados?',
-        '¿Puedo probar una clase gratis?'
-      );
-    }
+  // Obtener los temas ya mencionados en la conversación
+  const lastMessages = messages.slice(-6).map(m => m.content.toLowerCase()).join(' ');
+  const mentionedTopics = [];
+  
+  if (lastMessages.includes('vak') || lastMessages.includes('estilo')) mentionedTopics.push('VAK');
+  if (lastMessages.includes('stem') || lastMessages.includes('robótica') || lastMessages.includes('programación')) mentionedTopics.push('STEM');
+  if (lastMessages.includes('tutoría') || lastMessages.includes('clase') || lastMessages.includes('matemática')) mentionedTopics.push('Tutoría');
+  if (lastMessages.includes('precio') || lastMessages.includes('cuesta') || lastMessages.includes('plan')) mentionedTopics.push('Precios');
+  if (lastMessages.includes('bienestar') || lastMessages.includes('psicología')) mentionedTopics.push('Bienestar');
+  if (lastMessages.includes('inglés') || lastMessages.includes('ingles')) mentionedTopics.push('Inglés');
+  
+  // Etapa 1: Inicio - Sin contexto previo
+  if (mentionedTopics.length === 0 || conversationStage === 'inicio') {
+    return [
+      '¿Qué servicios ofrecen?',
+      '¿Qué es el diagnóstico VAK?',
+      '¿Tienen clases de programación?',
+      '¿Cuál es el costo de las tutorías?'
+    ];
   }
   
-  return suggestions.slice(0, 4); // Máximo 4 sugerencias
+  // Etapa 2: Descubrimiento - Usuario mostró interés en un tema
+  if (mentionedTopics.includes('VAK')) {
+    suggestions.push(
+      '¿Cómo se hace el test VAK?',
+      '¿Cuánto tiempo dura el diagnóstico?',
+      '¿Es gratuito?',
+      '¿Qué incluye el resultado?'
+    );
+  } else if (mentionedTopics.includes('STEM')) {
+    suggestions.push(
+      '¿Para qué edad es適合?',
+      '¿Qué proyectos prácticos hacen?',
+      '¿Necesito conocimientos previos?',
+      '¿Tienen robots LEGO o Arduino?'
+    );
+  } else if (mentionedTopics.includes('Tutoría')) {
+    suggestions.push(
+      '¿Qué materias ofrecen?',
+      '¿Son clases individuales?',
+      '¿Cómo son los tutores?',
+      '¿Puedo tomar una clase de prueba?'
+    );
+  } else if (mentionedTopics.includes('Precios')) {
+    suggestions.push(
+      '¿Qué planes tienen disponibles?',
+      '¿Hay descuentos por pago anticipado?',
+      '¿Ofrecen becas?',
+      '¿Cómo funciona la primera clase gratuita?'
+    );
+  } else if (mentionedTopics.includes('Inglés')) {
+    suggestions.push(
+      '¿Qué nivel de inglés ofrecen?',
+      '¿Preparan para exámenes internacionales?',
+      '¿Tienen clases de conversación?',
+      '¿Cuántas clases por mes incluyen?'
+    );
+  } else {
+    //Sugerencias generales basadas en etapa
+    suggestions.push(
+      '¿Cómo me inscribo?',
+      '¿Tienen modalidad online?',
+      '¿Qué horarios tienen disponibles?',
+      '¿Primera clase es gratis?'
+    );
+  }
+  
+  return suggestions.slice(0, 4);
 };
 
 // Función para generar opciones de conversación después de 3 intercambios
-const getConversationOptions = (messages, conversationContext = {}) => {
+const getConversationOptions = (messages, userContext = {}) => {
   const userMessages = messages.filter(msg => msg.role === 'user').length;
+  const { conversationStage, detectedInterest, studentAge } = userContext;
   
-  // Solo mostrar opciones después de 3 preguntas del usuario
-  if (userMessages < 3) {
+  // Solo mostrar opciones después de 2 preguntas del usuario
+  if (userMessages < 2) {
     return null;
   }
   
   // Analizar el contexto de la conversación
-  const lastMessages = messages.slice(-4).map(msg => msg.content.toLowerCase()).join(' ');
+  const lastMessages = messages.slice(-6).map(msg => msg.content.toLowerCase()).join(' ');
+  
+  // Determinar etapa y tema
+  let currentStage = 'descubrimiento';
+  let currentTopic = null;
+  
+  // Detectar etapa basada en palabras clave
+  if (lastMessages.includes('inscribir') || lastMessages.includes('agendar') || lastMessages.includes('cómo empezar')) {
+    currentStage = 'accion';
+  } else if (lastMessages.includes('precio') || lastMessages.includes('cuesta') || lastMessages.includes('valor') || lastMessages.includes('plan')) {
+    currentStage = 'informacion';
+    currentTopic = 'Precios';
+  } else if (lastMessages.includes('vak') || lastMessages.includes('stem') || lastMessages.includes('tutoría')) {
+    currentStage = 'interes';
+    if (lastMessages.includes('vak')) currentTopic = 'VAK';
+    else if (lastMessages.includes('stem')) currentTopic = 'STEM';
+    else if (lastMessages.includes('tutoría')) currentTopic = 'Tutoría';
+  }
   
   const options = [];
   
-  // Opciones basadas en el contexto de la conversación
-  if (lastMessages.includes('vak') || lastMessages.includes('aprendizaje')) {
+  // Opciones según etapa y tema
+  if (currentStage === 'descubrimiento' || currentTopic === null) {
     options.push(
-      { text: 'Quiero hacer el test VAK', action: 'test_vak' },
-      { text: 'Más información sobre VAK', action: 'info_vak' },
-      { text: 'Agendar diagnóstico VAK', action: 'schedule_vak' }
+      { text: 'Conocer diagnóstico VAK', action: 'learn_vak' },
+      { text: 'Ver cursos STEM', action: 'explore_stem' },
+      { text: 'Información de tutorías', action: 'info_tutoring' }
     );
-  } else if (lastMessages.includes('stem') || lastMessages.includes('ciencia') || lastMessages.includes('tecnología')) {
+  } else if (currentTopic === 'VAK') {
     options.push(
-      { text: 'Ver proyectos STEM', action: 'view_stem' },
-      { text: 'Información de cursos STEM', action: 'info_stem' },
-      { text: 'Agendar clase demostrativa', action: 'demo_stem' }
+      { text: 'Agendar diagnóstico VAK', action: 'schedule_vak' },
+      { text: 'Más sobre estilos de aprendizaje', action: 'more_vak' },
+      { text: 'Ver otros servicios', action: 'other_services' }
     );
-  } else if (lastMessages.includes('tutoría') || lastMessages.includes('clase') || lastMessages.includes('profesor')) {
+  } else if (currentTopic === 'STEM') {
+    options.push(
+      { text: 'Ver proyectos de robótica', action: 'view_robotics' },
+      { text: 'Cursos de programación', action: 'view_programming' },
+      { text: 'Agendar clase demo', action: 'demo_stem' }
+    );
+  } else if (currentTopic === 'Tutoría') {
     options.push(
       { text: 'Ver materias disponibles', action: 'view_subjects' },
-      { text: 'Conocer tutores', action: 'meet_tutors' },
-      { text: 'Agendar tutoría de prueba', action: 'trial_tutoring' }
+      { text: 'Agendar tutoría de prueba', action: 'trial_tutoring' },
+      { text: 'Conocer tutores', action: 'meet_tutors' }
     );
-  } else if (lastMessages.includes('precio') || lastMessages.includes('cuesta') || lastMessages.includes('valor')) {
+  } else if (currentStage === 'informacion' || currentTopic === 'Precios') {
     options.push(
       { text: 'Ver planes y precios', action: 'view_pricing' },
       { text: 'Información de becas', action: 'info_scholarships' },
-      { text: 'Agendar asesoría personalizada', action: 'schedule_consultation' }
+      { text: 'Descuentos disponibles', action: 'view_discounts' }
     );
-  } else {
-    // Opciones generales si no hay contexto claro
+  } else if (currentStage === 'accion') {
     options.push(
-      { text: 'Conocer más sobre VAK', action: 'learn_vak' },
-      { text: 'Explorar cursos STEM', action: 'explore_stem' },
-      { text: 'Información de tutorías', action: 'info_tutoring' },
-      { text: 'Agendar llamada informativa', action: 'schedule_call' }
+      { text: 'Agendar llamada ahora', action: 'schedule_call' },
+      { text: 'Contactar por WhatsApp', action: 'contact_whatsapp' },
+      { text: 'Solicitar más información', action: 'request_info' }
     );
   }
   
-  return options.slice(0, 3); // Máximo 3 opciones
+  return options.slice(0, 3);
 };
 
 // Función para obtener saludo según hora del día
@@ -668,7 +717,10 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
   const [userContext, setUserContext] = useState({
     userName: null,
     detectedInterest: null,
-    studentAge: null
+    studentAge: null,
+    conversationStage: 'inicio', // 'inicio' | 'descubrimiento' | 'interes' | 'informacion' | 'accion'
+    detectedTopics: [], // Array de temas detectados ['VAK', 'STEM', 'Precios']
+    conversationPath: [] // Camino de la conversación para evitar repeticiones
   });
   
   const messagesEndRef = useRef(null);
@@ -872,12 +924,35 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
     
     // Detectar contexto del usuario (nombre, edad, intereses)
     const detectedContext = extractUserContext(userMessage);
-    setUserContext(prev => ({
-      ...prev,
-      userName: detectedContext.userName || prev.userName,
-      studentAge: detectedContext.studentAge || prev.studentAge,
-      detectedInterest: detectedContext.detectedInterest || prev.detectedInterest
-    }));
+    setUserContext(prev => {
+      // Actualizar temas detectados
+      const newTopics = [...prev.detectedTopics];
+      if (detectedContext.detectedInterest && !newTopics.includes(detectedContext.detectedInterest)) {
+        newTopics.push(detectedContext.detectedInterest);
+      }
+      
+      // Actualizar etapa basada en el mensaje
+      let newStage = prev.conversationStage;
+      const lowerMsg = userMessage.toLowerCase();
+      if (newTopics.length === 0) {
+        newStage = 'inicio';
+      } else if (lowerMsg.includes('precio') || lowerMsg.includes('cuesta') || lowerMsg.includes('plan')) {
+        newStage = 'informacion';
+      } else if (lowerMsg.includes('inscribir') || lowerMsg.includes('agendar') || lowerMsg.includes('cómo empezar')) {
+        newStage = 'accion';
+      } else if (newTopics.length > 0) {
+        newStage = 'interes';
+      }
+      
+      return {
+        ...prev,
+        userName: detectedContext.userName || prev.userName,
+        studentAge: detectedContext.studentAge || prev.studentAge,
+        detectedInterest: detectedContext.detectedInterest || prev.detectedInterest,
+        conversationStage: newStage,
+        detectedTopics: newTopics.slice(-5) // Mantener últimos 5 temas
+      };
+    });
     
     // Primero verificar si hay respuesta rápida disponible
     const quickResponse = getQuickResponse(userMessage, userContext);
@@ -1032,10 +1107,10 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       
       // Verificar si debemos mostrar opciones de conversación
       const userMessageCount = messages.filter(msg => msg.role === 'user').length + 1; // +1 por el mensaje actual
-      if (userMessageCount >= 3 && !showedConversationOptions) {
+      if (userMessageCount >= 2 && !showedConversationOptions) {
         // Esperar un momento antes de mostrar opciones
         setTimeout(() => {
-          const options = getConversationOptions([...messages, assistantMessageObj]);
+          const options = getConversationOptions([...messages, assistantMessageObj], userContext);
           if (options) {
             setShowedConversationOptions(true);
             
@@ -1768,12 +1843,12 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
                   </div>
                  ))}
                
-               {/* Sugerencias de preguntas contextuales */}
-               {showSuggestions && messages.length > 0 && !showLeadForm && !showScheduler && (
-                 <div className="mt-4 mb-2">
-                   <p className="text-xs font-medium mb-2 text-gray-500">¿Te interesa saber sobre...?</p>
-                   <div className="flex flex-wrap gap-2">
-                     {getQuestionSuggestions(messages).map((suggestion, index) => (
+                {/* Sugerencias de preguntas contextuales */}
+                {showSuggestions && messages.length > 0 && !showLeadForm && !showScheduler && (
+                  <div className="mt-4 mb-2">
+                    <p className="text-xs font-medium mb-2 text-gray-500">¿Te interesa saber sobre...?</p>
+                    <div className="flex flex-wrap gap-2">
+                      {getQuestionSuggestions(messages, userContext).map((suggestion, index) => (
                        <button
                          key={index}
                          onClick={() => {
