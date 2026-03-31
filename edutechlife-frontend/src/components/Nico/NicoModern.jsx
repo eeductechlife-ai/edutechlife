@@ -1267,10 +1267,10 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
 
   return (
      <div className={`fixed z-50 ${isExpanded ? 'inset-0 md:inset-4' : 'bottom-4 right-4 md:bottom-6 md:right-6'} transition-all duration-300`}>
-       <div 
-         className={`bg-white rounded-2xl md:rounded-3xl shadow-2xl overflow-hidden border-2 ${
-           isExpanded ? 'w-full h-full' : 'w-[calc(100vw-2rem)] md:w-96 h-[500px] md:h-[600px] max-w-md'
-         }`}
+        <div 
+          className={`flex flex-col bg-white rounded-2xl md:rounded-3xl shadow-2xl overflow-hidden border-2 ${
+            isExpanded ? 'w-full h-full' : 'w-[calc(100vw-2rem)] md:w-96 h-[500px] md:h-[600px] max-w-md'
+          }`}
          style={{ borderColor: COLORS.SOFT_BLUE }}
        >
         {/* Header */}
