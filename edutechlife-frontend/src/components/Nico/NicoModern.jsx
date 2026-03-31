@@ -155,90 +155,168 @@ const optimizeLongConversation = (messages, maxMessages = 20) => {
   return [...firstMessages, ...lastMessages];
 };
 
-// Sistema de respuestas rápidas para preguntas comunes
+// Base de conocimientos completa para Nico
 const getQuickResponse = (userMessage) => {
   const lowerMessage = userMessage.toLowerCase().trim();
   
-  // Preguntas sobre servicios
-  if (lowerMessage.includes('hola') || lowerMessage.includes('buenas')) {
-    return `Ofrecemos servicios educativos como VAK, STEM, tutorías y bienestar. ¿Te interesa alguno?`;
+  // ==================== SALUDOS ====================
+  if (lowerMessage.includes('hola') || lowerMessage.includes('buenas') || lowerMessage === 'hi') {
+    return null; // Dejar que el saludo inicial del chat maneje esto
   }
   
-  if (lowerMessage.includes('qué es') && lowerMessage.includes('vak')) {
-    return `VAK son estilos de aprendizaje: Visual, Auditivo y Kinestésico. Identificamos cómo aprendes mejor para personalizar tu educación.`;
+  // ==================== SERVICIOS - VAK ====================
+  if ((lowerMessage.includes('qué es') || lowerMessage.includes('que es') || lowerMessage.includes('definicion') || lowerMessage.includes('explic')) && (lowerMessage.includes('vak') || lowerMessage.includes('estilo'))) {
+    return 'VAK son los tres estilos de aprendizaje: Visual (aprendes viendo), Auditivo (aprendes escuchando) y Kinestésico (aprendes haciendo). Identificamos cuál es el tuyo con un diagnóstico gratuito de 30 minutos.';
   }
   
-  if (lowerMessage.includes('qué es') && lowerMessage.includes('stem')) {
-    return `STEM es Ciencia, Tecnología, Ingeniería y Matemáticas. Desarrollamos habilidades del futuro con proyectos prácticos.`;
+  if (lowerMessage.includes('diagnóstico') || lowerMessage.includes('test') || lowerMessage.includes('prueba')) {
+    if (lowerMessage.includes('vak')) {
+      return 'El diagnóstico VAK es un test gratuito de aproximadamente 30 minutos. Identifica tu estilo de aprendizaje para personalizar tu educación. ¿Te gustaría agendarlo?';
+    }
   }
   
-  if (lowerMessage.includes('tutoría') || lowerMessage.includes('clases')) {
-    return `Ofrecemos tutorías personalizadas en todas las materias. ¿Qué nivel educativo necesitas?`;
+  if (lowerMessage.includes('visual') || lowerMessage.includes('auditivo') || lowerMessage.includes('kinest') || lowerMessage.includes('quinest')) {
+    return 'Los estilos VAK son: Visual (mapas mentales, diagramas), Auditivo (podcasts, debates) y Kinestésico (experimentos, movimiento). ¿Cuál te interesa más?';
   }
   
-  if (lowerMessage.includes('precio') || lowerMessage.includes('cuesta')) {
-    return `Tenemos diferentes planes según tus necesidades. ¿Te gustaría una clase gratuita para conocer nuestros servicios?`;
+  // ==================== SERVICIOS - STEM ====================
+  if ((lowerMessage.includes('qué es') || lowerMessage.includes('que es')) && (lowerMessage.includes('stem') || lowerMessage.includes('steam'))) {
+    return 'STEM es Science, Technology, Engineering y Mathematics. Desarrollamos habilidades del futuro con proyectos prácticos de robótica y programación. Para niños desde 5 años.';
   }
   
-  if (lowerMessage.includes('clase gratuita') || lowerMessage.includes('prueba')) {
-    return `¡Excelente! Para agendar tu clase gratuita, necesito tu nombre y teléfono. ¿Me los compartes?`;
+  if (lowerMessage.includes('robótica') || lowerMessage.includes('robotica') || lowerMessage.includes('lego') || lowerMessage.includes('arduino')) {
+    return 'Ofrecemos robótica con LEGO y Arduino para niños y adolescentes. Aprenden construyen y programan robots reales. ¿Para qué edad sería?';
   }
   
-  if (lowerMessage.includes('contacto') || lowerMessage.includes('teléfono') || lowerMessage.includes('whatsapp')) {
-    return `Puedes contactarnos al WhatsApp: +57 300 123 4567 o visitar edutechlife.com`;
+  if (lowerMessage.includes('programación') || lowerMessage.includes('programacion') || lowerMessage.includes('scratch') || lowerMessage.includes('python') || lowerMessage.includes('javascript')) {
+    return 'Programación: Scratch para niños, Python y JavaScript para adolescentes. Desde cero hasta nivel avanzado. ¿Qué edad tiene el estudiante?';
   }
   
-  // Preguntas generales
-  if (lowerMessage.includes('quién eres') || lowerMessage.includes('qué haces')) {
-    return `Soy Nico, asistente virtual de EdutechLife. Ayudo a personas a encontrar el mejor camino educativo.`;
+  // ==================== SERVICIOS - TUTORÍAS ====================
+  if (lowerMessage.includes('tutoría') || lowerMessage.includes('tutoria') || lowerMessage.includes('clases') || lowerMessage.includes('profesor') || lowerMessage.includes('docente')) {
+    return 'Ofrecemos tutorías personalizadas en: Matemáticas, Ciencias, Inglés y Técnicas de estudio. Para todas las edades. ¿Qué materia necesitas?';
   }
   
-  if (lowerMessage.includes('ayuda') || lowerMessage.includes('información')) {
-    return `Con gusto te ayudo. ¿Te interesa VAK, STEM, tutorías o bienestar educativo?`;
+  if (lowerMessage.includes('matemática') || lowerMessage.includes('matematicas') || lowerMessage.includes('álgebra') || lowerMessage.includes('geometría') || lowerMessage.includes('calculo')) {
+    return 'Tenemos tutores especializados en matemáticas para todos los niveles: escolar, universitario y preparación para exámenes. ¿Qué tema necesitas reforzar?';
   }
   
-  // Más respuestas rápidas agregadas
-  if (lowerMessage.includes('edad') || lowerMessage.includes('años')) {
-    return `Trabajamos con todas las edades: niños, adolescentes y adultos. ¿Para qué edad necesitas los servicios?`;
+  if (lowerMessage.includes('ciencias') || lowerMessage.includes('física') || lowerMessage.includes('fisica') || lowerMessage.includes('química') || lowerMessage.includes('quimica') || lowerMessage.includes('biología') || lowerMessage.includes('biologia')) {
+    return 'Ofrecemos clases de física, química y biología para todos los niveles. ¿Qué materia y nivel necesitas?';
   }
   
-  if (lowerMessage.includes('horario') || lowerMessage.includes('horas')) {
-    return `Tenemos horarios flexibles: mañana, tarde y noche. ¿Qué horario te funciona mejor?`;
+  if (lowerMessage.includes('inglés') || lowerMessage.includes('ingles') || lowerMessage.includes('english') || lowerMessage.includes('idioma')) {
+    return 'Clases de inglés para todos los niveles: básico, intermedio, avanzado, preparación para exámenes (TOEFL, IELTS). ¿Cuál es tu nivel actual?';
   }
   
-  if (lowerMessage.includes('online') || lowerMessage.includes('virtual')) {
-    return `¡Sí! Ofrecemos clases 100% online y también presenciales. ¿Cuál prefieres?`;
+  if (lowerMessage.includes('técnicas') || lowerMessage.includes('tecnicas') || lowerMessage.includes('estudio') || lowerMessage.includes('aprender')) {
+    return 'Enseñamos técnicas de estudio efectivas: mapas mentales, resumen, memoria, gestión del tiempo. ¿Para qué edad buscas?';
   }
   
-  if (lowerMessage.includes('presencial') || lowerMessage.includes('físico')) {
-    return `Tenemos sedes en varias ciudades. ¿En qué ciudad te encuentras?`;
+  // ==================== SERVICIOS - BIENESTAR ====================
+  if (lowerMessage.includes('bienestar') || lowerMessage.includes('salud mental') || lowerMessage.includes('psicología') || lowerMessage.includes('psicologia') || lowerMessage.includes('emocional')) {
+    return 'Nuestro servicio de bienestar incluye: acompañamiento psicológico escolar, desarrollo de inteligencia emocional, manejo de ansiedad académica y coaching motivacional. ¿Qué necesitas?';
   }
   
-  if (lowerMessage.includes('gracias') || lowerMessage.includes('thank you')) {
-    return `¡De nada! Estoy aquí para ayudarte. ¿Hay algo más en lo que te pueda asistir?`;
+  if (lowerMessage.includes('ansiedad') || lowerMessage.includes('estrés') || lowerMessage.includes('estres') || lowerMessage.includes('presión')) {
+    return 'Ayudamos con manejo de ansiedad y estrés académico. Incluye técnicas de relajación, coaching y acompañamiento psicológico. ¿Para quién es?';
   }
   
-  if (lowerMessage.includes('adiós') || lowerMessage.includes('chao') || lowerMessage.includes('bye')) {
-    return `¡Fue un gusto ayudarte! Recuerda que puedes contactarnos al WhatsApp: +57 300 123 4567. ¡Hasta pronto!`;
+  // ==================== PRECIOS Y PLANES ====================
+  if (lowerMessage.includes('precio') || lowerMessage.includes('cuesta') || lowerMessage.includes('valor') || lowerMessage.includes('cuanto') || lowerMessage.includes('costo')) {
+    return 'Tenemos diferentes planes según tus necesidades. La primera clase es gratuita para que conozcas nuestro método. ¿Te interesa que te envíe información de planes?';
   }
   
-  if (lowerMessage.includes('nombre') && lowerMessage.includes('llamas')) {
-    return `Soy Nico, asistente de EdutechLife. ¿Cuál es tu nombre?`;
+  if (lowerMessage.includes('plan') || lowerMessage.includes('paquete') || lowerMessage.includes('mensual')) {
+    return 'Ofrecemos planes mensuales con descuento por pago anticipado, paquetes de clases y planes por hora. ¿Qué tipo de plan prefieres?';
   }
   
-  if (lowerMessage.includes('bienestar') || lowerMessage.includes('salud mental')) {
-    return `El bienestar educativo incluye apoyo emocional, manejo de estrés y técnicas de estudio. ¿Te interesa algún área específica?`;
+  if (lowerMessage.includes('descuento') || lowerMessage.includes('becas') || lowerMessage.includes('becas')) {
+    return 'Tenemos descuentos para hermanos y becas disponibles para casos especiales. ¿Te interesa alguna de estas opciones?';
   }
   
-  if (lowerMessage.includes('matemática') || lowerMessage.includes('matemáticas')) {
-    return `Tenemos tutores especializados en matemáticas para todos los niveles. ¿Qué tema necesitas reforzar?`;
+  // ==================== PRIMERA CLASE ====================
+  if (lowerMessage.includes('primera') || lowerMessage.includes('gratis') || lowerMessage.includes('gratuita') || lowerMessage.includes('prueba') || lowerMessage.includes('demo')) {
+    return 'La primera clase es SIEMPRE gratuita y sin compromiso. Dura aproximadamente 30-45 minutos para que conoces nuestro método. ¿Te gustaría agendar?';
   }
   
-  if (lowerMessage.includes('inglés') || lowerMessage.includes('english')) {
-    return `Ofrecemos clases de inglés para todos los niveles, desde básico hasta avanzado. ¿Qué nivel tienes?`;
+  // ==================== MODALIDADES ====================
+  if (lowerMessage.includes('online') || lowerMessage.includes('virtual') || lowerMessage.includes('remoto')) {
+    return 'Sí, tenemos clases 100% online por videollamada. Puedes tomar desde cualquier lugar. ¿Te interesa esta modalidad?';
   }
   
-  return null; // No hay respuesta rápida disponible
+  if (lowerMessage.includes('presencial') || lowerMessage.includes('físico') || lowerMessage.includes('fisico') || lowerMessage.includes('sede')) {
+    return 'Tenemos modalidad presencial en Bogotá y otras ciudades. También puedes optar por clases híbridas. ¿En qué ciudad te encuentras?';
+  }
+  
+  if (lowerMessage.includes('híbrido') || lowerMessage.includes('hibrido') || lowerMessage.includes('mixto')) {
+    return 'Sí, ofreciendo clases híbridas que combinan presencial y online. ¿Qué ciudad indicas para verificar disponibilidad?';
+  }
+  
+  // ==================== HORARIOS ====================
+  if (lowerMessage.includes('horario') || lowerMessage.includes('hora') || lowerMessage.includes('disponible')) {
+    return 'Nuestros horarios son: Mañana (8am-12pm), Tarde (2pm-6pm), Noche (6pm-8pm). Disponible de lunes a sábado. ¿Qué horario te funciona mejor?';
+  }
+  
+  if (lowerMessage.includes('lunes') || lowerMessage.includes('martes') || lowerMessage.includes('miercoles') || lowerMessage.includes('jueves') || lowerMessage.includes('viernes') || lowerMessage.includes('sábado') || lowerMessage.includes('sabado') || lowerMessage.includes('domingo')) {
+    return 'Estamos disponibles de lunes a sábado. ¿Qué día y horario te funciona mejor para una clase?';
+  }
+  
+  // ==================== EDADES ====================
+  if (lowerMessage.includes('niños') || lowerMessage.includes('ninos') || lowerMessage.includes('niña') || lowerMessage.includes('niño') || lowerMessage.includes('chico') || lowerMessage.includes('chica')) {
+    return 'Trabajamos con niños desde 5 años. Para esa edad ofrecemos programas de robótica con LEGO y programación con Scratch de forma lúdica. ¿Cuántos años tiene?';
+  }
+  
+  if (lowerMessage.includes('adolescentes') || lowerMessage.includes('joven') || lowerMessage.includes('juven') || lowerMessage.includes('teen')) {
+    return 'Para adolescentes (12-17 años) tenemos STEM avanzado, tutorías académicas y preparación para exámenes. ¿Qué necesita el estudiante?';
+  }
+  
+  if (lowerMessage.includes('adultos') || lowerMessage.includes('universitario') || lowerMessage.includes('profesional')) {
+    return 'Para adultos y universitarios offerizamos tutorías especializadas, preparación de exámenes y cursos de inglés. ¿Qué necesitas?';
+  }
+  
+  // ==================== INSCRIPCIÓN ====================
+  if (lowerMessage.includes('inscribir') || lowerMessage.includes('inscripcion') || lowerMessage.includes('empezar') || lowerMessage.includes('iniciar') || lowerMessage.includes('cómo comenzar') || lowerMessage.includes('comenzar')) {
+    return 'Para inscribirte es很简单: agendamos tu primera clase gratuita de 30-45 minutos. En esa sesión conocernos tus necesidades y diseñamos un plan personalizado. ¿Te gustaría agendar?';
+  }
+  
+  if (lowerMessage.includes('qué necesito') || lowerMessage.includes('requisito') || lowerMessage.includes('necesito')) {
+    return 'Solo necesitas tener interés en aprender. Para agendar la primera clase gratuita, solo necesitamos tu nombre y un contacto (whatsapp o email). ¿Me los compartes?';
+  }
+  
+  // ==================== CONTACTO ====================
+  if (lowerMessage.includes('contacto') || lowerMessage.includes('teléfono') || lowerMessage.includes('telefono') || lowerMessage.includes('whatsapp') || lowerMessage.includes('celular')) {
+    return 'Puedes contactarnos por WhatsApp: +57 300 123 4567, por email: info@edutechlife.com o en nuestra web: www.edutechlife.com';
+  }
+  
+  if (lowerMessage.includes('ubicación') || lowerMessage.includes('ubicacion') || lowerMessage.includes('dirección') || lowerMessage.includes('direccion') || lowerMessage.includes('donde')) {
+    return 'Tenemos sedes presenciales en Bogotá y otras ciudades. También puedes tomar clases online desde cualquier lugar. ¿En qué ciudad te encuentras?';
+  }
+  
+  if (lowerMessage.includes('web') || lowerMessage.includes('página') || lowerMessage.includes('pagina') || lowerMessage.includes('sitio')) {
+    return 'Visita nuestra web: www.edutechlife.com ahí encontrarás toda la información sobre servicios, precios y puedes agendar tu clase gratuita.';
+  }
+  
+  // ==================== IDENTIDAD ====================
+  if (lowerMessage.includes('quién eres') || lowerMessage.includes('quien eres') || lowerMessage.includes('qué haces') || lowerMessage.includes('que haces')) {
+    return 'Soy Nico, asistente virtual de EdutechLife. Ayudo a personas a encontrar el mejor camino educativo según sus necesidades.';
+  }
+  
+  // ==================== DESPEDIDAS ====================
+  if (lowerMessage.includes('gracias') || lowerMessage.includes('thank')) {
+    return 'De nada. Estoy aquí para ayudarte. ¿Hay algo más en lo que pueda asistirte?';
+  }
+  
+  if (lowerMessage.includes('adiós') || lowerMessage.includes('chao') || lowerMessage.includes('bye') || lowerMessage.includes('hasta luego')) {
+    return 'Fue un gusto ayudarte. Recuerda que puedes contactarnos al WhatsApp: +57 300 123 4567. ¡Hasta pronto!';
+  }
+  
+  // ==================== AYUDA ====================
+  if (lowerMessage.includes('ayuda') || lowerMessage.includes('información') || lowerMessage.includes('informacion') || lowerMessage.includes('duda')) {
+    return 'Con gusto te ayudo. Puedo informarte sobre VAK, STEM, tutorías, precios, horarios, modalidades o cualquier otra duda. ¿Qué necesitas saber?';
+  }
+  
+  return null; // No hay respuesta predefinida, usar IA
 };
 
 // Función para generar sugerencias de preguntas basadas en el contexto
