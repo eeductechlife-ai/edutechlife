@@ -63,39 +63,15 @@ class AnalyticsService {
     const eventsToSend = [...this.queue];
     
     try {
-      if (sync) {
-        // Envío sincrónico (para beforeunload)
-        navigator.sendBeacon(this.apiEndpoint + '/batch', JSON.stringify({
-          userId: this.userId,
-          sessionId: this.sessionId,
-          events: eventsToSend
-        }));
-        
-        // Limpiar cola local
-        this.queue = this.queue.filter(event => !eventsToSend.includes(event));
-        this.saveQueue();
-      } else {
-        // Envío asíncrono normal
-        const response = await fetch(this.apiEndpoint + '/batch', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            userId: this.userId,
-            sessionId: this.sessionId,
-            events: eventsToSend
-          })
-        });
-
-        if (response.ok) {
-          // Eliminar eventos enviados de la cola
-          this.queue = this.queue.filter(event => !eventsToSend.includes(event));
-          this.saveQueue();
-        }
-      }
+      // Simular envío exitoso (sin peticiones HTTP reales)
+      console.debug('📊 [Analytics Simulado] Eventos procesados y limpiados:', eventsToSend.length);
+      
+      // Limpiar cola localmente
+      this.queue = this.queue.filter(event => !eventsToSend.includes(event));
+      this.saveQueue();
+      
     } catch (error) {
-      console.error('Error sending analytics:', error);
+      console.error('Error en simulación de analytics:', error);
     } finally {
       this.isSending = false;
     }

@@ -1,5 +1,5 @@
 const VOICE_PROFILES = {
-  valeria: { languageCode: 'es-US', name: 'es-US-Neural2-A', pitch: 0.2, speakingRate: 0.95 },
+  valeria: { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 0, speakingRate: 1.0 },
   valerio: { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 0, speakingRate: 1.0 },
   sistema: { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: 0, speakingRate: 1.0 },
   nico: { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 0, speakingRate: 1.0 },
@@ -22,7 +22,7 @@ const VOICE_PROFILES = {
 
 const VOICE_FALLBACKS = {
   valeria: [
-    { languageCode: 'es-US', name: 'es-US-Neural2-A', pitch: 0.2, speakingRate: 0.95 },
+    { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 0, speakingRate: 1.0 },
     { languageCode: 'es-US', name: 'es-US-Journey-F', pitch: 0.0, speakingRate: 1.0 },
     { languageCode: 'es-ES', name: 'es-ES-Neural2-A', pitch: 0.0, speakingRate: 1.0 }
   ],
@@ -156,7 +156,8 @@ export const speakTextConversational = async (text, profile = 'valeria', onEndCa
         const data = await response.json();
         
         if (data.error) {
-          console.warn(`Voice ${voiceOption.name} failed, trying fallback...`, data.error.message);
+          window.alert('🚨 ERROR GOOGLE TTS: ' + data.error.message);
+          console.warn('Voice failed...', data.error.message);
           lastError = data.error;
           continue;
         }
@@ -179,7 +180,8 @@ export const speakTextConversational = async (text, profile = 'valeria', onEndCa
           return;
         }
       } catch (voiceError) {
-        console.warn(`Error with voice ${voiceOption.name}:`, voiceError);
+        window.alert('🚨 ERROR DE CONEXIÓN: ' + voiceError.message);
+        console.warn('Error with voice...', voiceError);
         lastError = voiceError;
         continue;
       }
