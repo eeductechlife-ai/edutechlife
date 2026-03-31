@@ -27,15 +27,52 @@ const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 const removeEmojis = (text) => {
   if (!text) return '';
   
-  // Expresión regular mejorada para eliminar emojis
-  // Incluye variación de selectores (VS16) y emojis compuestos
-  const emojiRegex = /[\u{1F300}-\u{1F9FF}]|[\u{1F600}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F900}-\u{1F9FF}]|[\u{1FA00}-\u{1FA6F}]|[\u{1FA70}-\u{1FAFF}]|[\u{1F018}-\u{1F270}]|[\u{1F700}-\u{1F77F}]|\uFE0F/gmu;
+  let cleanText = text;
   
-  // Eliminar emojis y limpiar espacios extra
-  const cleanText = text.replace(emojiRegex, '').replace(/\s+/g, ' ').trim();
+  // Eliminar emojis Unicode completos
+  const emojiRanges = [
+    '\u{1F300}-\u{1F9FF}', // Emojis variados
+    '\u{1F600}-\u{1F64F}', // Caritas sonrientes
+    '\u{1F680}-\u{1F6FF}', // Transporte
+    '\u{2600}-\u{26FF}',   // Misc
+    '\u{2700}-\u{27BF}',   // Dingbats
+    '\u{1FA00}-\u{1FA6F}', // Emoji 12+
+    '\u{1FA70}-\u{1FAFF}', // Emoji 13+
+    '\u{1F900}-\u{1F9FF}', // Emoji 11+
+    '\u{1F018}-\u{1F270}', // Símbolos antiguos
+    '\u{1F700}-\u{1F77F}', // Símbolos
+  ];
   
-  // Si después de limpiar queda vacío, devolver texto original sin emojis
-  return cleanText || text.replace(emojiRegex, '').trim();
+  emojiRanges.forEach(range => {
+    const regex = new RegExp(`[${range}]`, 'gmu');
+    cleanText = cleanText.replace(regex, '');
+  });
+  
+  // Eliminar selectores de variación
+  cleanText = cleanText.replace(/[\uFE0F\uFE0E\u{1F3FB}-\u{1F3FF}]/gmu, '');
+  
+  // Eliminar "xxx" y variaciones (a veces aparecen como marcador)
+  cleanText = cleanText.replace(/\bxxx+\b/gi, '');
+  cleanText = cleanText.replace(/\bx{2,}\b/gi, '');
+  
+  // Eliminar caracteres especiales no deseados
+  cleanText = cleanText.replace(/[*_~]{2,}/g, ''); // ***, ___, ~~~
+  cleanText = cleanText.replace(/[▓░▒█▲▼◆■●○]{2,}/g, ''); // Bloques decorativos
+  
+  // Limpiar espacios múltiples
+  cleanText = cleanText.replace(/\s+/g, ' ').trim();
+  
+  // Si queda vacío o solo espacios/puntos, devolver texto original sin emojis
+  if (!cleanText || /^[\s.\-_]*$/.test(cleanText)) {
+    return text
+      .replace(/[\u{1F300}-\u{1F9FF}]/gu, '')
+      .replace(/[\u{1F600}-\u{1F64F}]/gu, '')
+      .replace(/[\u{1F680}-\u{1F6FF}]/gu, '')
+      .replace(/\bxxx+\b/gi, '')
+      .replace(/\s+/g, ' ').trim();
+  }
+  
+  return cleanText;
 };
 
 // Función para simplificar respuestas largas manteniendo claridad
@@ -302,23 +339,30 @@ const PROMPT_NICO_SOPORTE = `Eres NICO, asistente educativo conversacional. Sigu
    - NO te presentes nuevamente en respuestas posteriores
    - NO digas "Soy Nico de EdutechLife" después del saludo inicial
 
-2. CONVERSACIÓN NATURAL:
+2. PROHIBICIONES ABSOLUTAS:
+   - NO uses NUNCA emojis de ningún tipo
+   - NO uses emoticones como :) :( :D :(
+   - NO uses "xxx" o cualquier marcador especial
+   - NO uses asteriscos multiples *** o guiones bajos ___ para decoracion
+   - Tu respuesta debe ser 100% texto limpio, sin simbolos especiales, sin decoracion
+
+3. CONVERSACIÓN NATURAL:
    - Mantén un tono conversacional y amigable
    - Usa el contexto de la conversación para respuestas relevantes
    - Si el usuario ya sabe quién eres, no te repitas
    - Responde como si fuera una conversación humana fluida
 
-3. SERVICIOS EDUCATIVOS:
+4. SERVICIOS EDUCATIVOS:
    - Explica servicios cuando el usuario pregunte: VAK, STEM, tutorías, bienestar
    - Sé específico y útil, no genérico
    - Ofrece información concreta, no solo descripciones generales
 
-4. FLUJO DE CONVERSACIÓN:
+5. FLUJO DE CONVERSACIÓN:
    - Después de 2-3 intercambios, ofrece opciones para guiar la conversación
    - Pregunta el nombre solo si es relevante para el servicio
    - Si hay interés genuino, sugiere captura de datos o clase gratuita
 
-5. ESTILO:
+6. ESTILO:
    - Español natural y coloquial
    - Respuestas concisas pero completas
    - Evita frases repetitivas o robóticas
@@ -393,6 +437,32 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
   });
 
   const [showAppointmentSuccess, setShowAppointmentSuccess] = useState(false);
+  
+  // Estado para controlar el saludo automático
+  const [greetingSent, setGreetingSent] = useState(false);
+  
+  // Saludo automático cuando se abre el chat
+  useEffect(() => {
+    if (isOpen && !greetingSent && (!messages || messages.length === 0)) {
+      setGreetingSent(true);
+      
+      const greeting = "Hola soy Nico, en qué te puedo ayudar";
+      
+      const greetingMessageObj = {
+        role: 'assistant',
+        content: greeting,
+        timestamp: new Date().toISOString()
+      };
+      
+      setMessages(prev => [...(prev || []), greetingMessageObj]);
+      
+      if (audioEnabled) {
+        setTimeout(() => {
+          speakTextConversational(greeting, 'nico_premium');
+        }, 300);
+      }
+    }
+  }, [isOpen, greetingSent, messages, audioEnabled]);
 
   useEffect(() => {
     if (messages.length === 0 && memory?.conversationHistory?.length > 0) {
@@ -1039,6 +1109,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
     setIsSpeaking(false);
     setShowSuggestions(true);
     setShowedConversationOptions(false);
+    setGreetingSent(false); // Reiniciar estado del saludo
     stopSpeech();
     
     // Limpiar memoria de conversación
