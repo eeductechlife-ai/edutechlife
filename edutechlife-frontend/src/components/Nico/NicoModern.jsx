@@ -29,6 +29,28 @@ const removeEmojis = (text) => {
   
   let cleanText = text;
   
+  // Eliminar formato markdown - Negritas **texto** -> texto
+  cleanText = cleanText.replace(/\*\*([^*]+)\*\*/g, '$1');
+  cleanText = cleanText.replace(/__([^_]+)__/g, '$1');
+  
+  // Eliminar formato markdown - Cursivas *texto* -> texto
+  cleanText = cleanText.replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '$1');
+  cleanText = cleanText.replace(/(?<!_)_([^_]+)_(?!_)/g, '$1');
+  
+  // Eliminar encabezados markdown # ## ###
+  cleanText = cleanText.replace(/^#{1,6}\s+/gm, '');
+  
+  // Eliminar listas con guiones o números - item
+  cleanText = cleanText.replace(/^[\s]*[-*+]\s+/gm, '');
+  cleanText = cleanText.replace(/^[\s]*\d+\.\s+/gm, '');
+  
+  // Eliminar enlaces [texto](url) -> texto
+  cleanText = cleanText.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
+  
+  // Eliminar bloques de código `codigo` -> codigo
+  cleanText = cleanText.replace(/`([^`]+)`/g, '$1');
+  cleanText = cleanText.replace(/```[\s\S]*?```/g, '');
+  
   // Eliminar emojis Unicode completos
   const emojiRanges = [
     '\u{1F300}-\u{1F9FF}', // Emojis variados
@@ -59,12 +81,18 @@ const removeEmojis = (text) => {
   cleanText = cleanText.replace(/[*_~]{2,}/g, ''); // ***, ___, ~~~
   cleanText = cleanText.replace(/[▓░▒█▲▼◆■●○]{2,}/g, ''); // Bloques decorativos
   
+  // Eliminar barras verticales consecutivas | |
+  cleanText = cleanText.replace(/\|{2,}/g, '');
+  
   // Limpiar espacios múltiples
   cleanText = cleanText.replace(/\s+/g, ' ').trim();
   
   // Si queda vacío o solo espacios/puntos, devolver texto original sin emojis
   if (!cleanText || /^[\s.\-_]*$/.test(cleanText)) {
     return text
+      .replace(/\*\*([^*]+)\*\*/g, '$1')
+      .replace(/__([^_]+)__/g, '$1')
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
       .replace(/[\u{1F300}-\u{1F9FF}]/gu, '')
       .replace(/[\u{1F600}-\u{1F64F}]/gu, '')
       .replace(/[\u{1F680}-\u{1F6FF}]/gu, '')
@@ -343,8 +371,10 @@ const PROMPT_NICO_SOPORTE = `Eres NICO, asistente educativo conversacional. Sigu
    - NO uses NUNCA emojis de ningún tipo
    - NO uses emoticones como :) :( :D :(
    - NO uses "xxx" o cualquier marcador especial
-   - NO uses asteriscos multiples *** o guiones bajos ___ para decoracion
-   - Tu respuesta debe ser 100% texto limpio, sin simbolos especiales, sin decoracion
+   - NO uses asteriscos simples * o multiples ** para negritas
+   - NO uses guiones bajos _ para cursivas
+   - NO uses formato markdown como # encabezados, listas con -, enlaces [texto](url)
+   - Tu respuesta debe ser 100% texto plano, sin formato, sin simbolos especiales, sin decoracion
 
 3. CONVERSACIÓN NATURAL:
    - Mantén un tono conversacional y amigable
@@ -584,10 +614,13 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
     // Primero verificar si hay respuesta rápida disponible
     const quickResponse = getQuickResponse(userMessage);
     if (quickResponse) {
+      // Limpiar texto antes de guardar y mostrar
+      const cleanResponse = removeEmojis(quickResponse);
+      
       // Respuesta inmediata sin llamar a API
       const assistantMessageObj = { 
         role: 'assistant', 
-        content: quickResponse,
+        content: cleanResponse,
         timestamp: new Date().toISOString(),
         isQuickResponse: true
       };
@@ -706,10 +739,13 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       // Simplificar respuesta si es muy larga
       const simplifiedResponse = simplifyResponse(response);
       
+      // Limpiar texto de markdown y emojis antes de guardar
+      const cleanResponse = removeEmojis(simplifiedResponse);
+      
       // Respuesta asistente optimizada
       const assistantMessageObj = { 
         role: 'assistant', 
-        content: simplifiedResponse,
+        content: cleanResponse,
         timestamp: new Date().toISOString(),
         wasSimplified: simplifiedResponse !== response
       };
@@ -757,7 +793,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       // Voz en paralelo para no bloquear interfaz
       if (audioEnabled) {
         setTimeout(() => {
-          const textToSpeak = removeEmojis(simplifiedResponse);
+          const textToSpeak = removeEmojis(cleanResponse);
           speakTextConversational(textToSpeak, 'nico_premium');
         }, 100); // Reducido a 100ms para respuesta más rápida
       }
@@ -766,11 +802,14 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       console.warn('⚠️ Error en respuesta:', error.message);
       
       // Respuesta de error rápida y útil
-      const errorMessage = `¡Hola! Parece que hubo un problema técnico. Como asistente de EdutechLife, puedo decirte que ofrecemos servicios educativos como VAK, STEM, tutorías y bienestar. ¿Te interesa alguno?`;
+      const errorMessage = `Hola soy Nico. Parece que hubo un problema técnico. Puedo decirte que ofrecemos servicios educativos como VAK, STEM, tutorías y bienestar. Te interesa alguno?`;
+      
+      // Limpiar texto antes de guardar
+      const cleanErrorMessage = removeEmojis(errorMessage);
       
       const errorMessageObj = { 
         role: 'assistant', 
-        content: errorMessage,
+        content: cleanErrorMessage,
         timestamp: new Date().toISOString()
       };
       
@@ -778,7 +817,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       
        if (audioEnabled) {
         setTimeout(() => {
-          speakTextConversational(errorMessage, 'nico_premium');
+          speakTextConversational(cleanErrorMessage, 'nico_premium');
         }, 100);
       }
     } finally {
@@ -826,7 +865,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       // Agregar mensaje de confirmación al chat
       const successMessage = {
         role: 'assistant',
-        content: `✅ Perfecto ${leadData.nombreCompleto.split(' ')[0]}, hemos registrado tu interés en ${leadData.interesPrincipal || 'nuestros servicios'}.`,
+        content: `Perfecto ${leadData.nombreCompleto.split(' ')[0]}, hemos registrado tu interes en ${leadData.interesPrincipal || 'nuestros servicios'}.`,
         timestamp: new Date().toISOString(),
         isLeadSuccess: true
       };
@@ -878,12 +917,12 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       return leadForScheduling;
 
     } catch (error) {
-      console.error('❌ Error guardando lead:', error);
+      console.error('Error guardando lead:', error);
       
       // Mensaje de error al usuario
       const errorMessage = {
         role: 'assistant',
-        content: '⚠️ Hubo un error al guardar tu información. Por favor intenta de nuevo o contacta directamente por WhatsApp.',
+        content: 'Hubo un error al guardar tu informacion. Por favor intenta de nuevo o contacta directamente por WhatsApp.',
         timestamp: new Date().toISOString(),
         isError: true
       };
@@ -928,7 +967,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       // Agregar mensaje de confirmación al chat
       const successMessage = {
         role: 'assistant',
-        content: `✅ ¡Excelente! Hemos agendado tu llamada para el ${new Date(appointmentData.date).toLocaleDateString('es-CO')} a las ${appointmentData.time}. Recibirás confirmación por ${appointmentData.leadPhone ? 'WhatsApp' : 'email'}.`,
+        content: `Excelente. Hemos agendado tu llamada para el ${new Date(appointmentData.date).toLocaleDateString('es-CO')} a las ${appointmentData.time}. Recibiras confirmacion por ${appointmentData.leadPhone ? 'WhatsApp' : 'email'}.`,
         timestamp: new Date().toISOString(),
         isAppointmentSuccess: true
       };
@@ -941,7 +980,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
           speakTextConversational(
             removeEmojis(successMessage.content),
             'nico_premium',
-            () => console.log('✅ Confirmación de cita hablada')
+            () => console.log('Confirmacion de cita hablada')
           );
         }, 500);
       }
