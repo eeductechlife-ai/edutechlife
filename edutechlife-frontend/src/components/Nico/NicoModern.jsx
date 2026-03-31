@@ -96,7 +96,7 @@ const getQuickResponse = (userMessage) => {
   
   // Preguntas sobre servicios
   if (lowerMessage.includes('hola') || lowerMessage.includes('buenas')) {
-    return `¡Hola! Ofrecemos servicios educativos como VAK, STEM, tutorías y bienestar. ¿Te interesa alguno?`;
+    return `Hola soy Nico, en qué te puedo ayudar. Ofrecemos servicios educativos como VAK, STEM, tutorías y bienestar. ¿Te interesa alguno?`;
   }
   
   if (lowerMessage.includes('qué es') && lowerMessage.includes('vak')) {
@@ -125,7 +125,7 @@ const getQuickResponse = (userMessage) => {
   
   // Preguntas generales
   if (lowerMessage.includes('quién eres') || lowerMessage.includes('qué haces')) {
-    return `Soy Nico, asistente virtual de EdutechLife. Ayudo a personas a encontrar el mejor camino educativo.`;
+    return `Hola soy Nico, en qué te puedo ayudar. Soy asistente virtual de EdutechLife. Ayudo a personas a encontrar el mejor camino educativo.`;
   }
   
   if (lowerMessage.includes('ayuda') || lowerMessage.includes('información')) {
@@ -158,7 +158,7 @@ const getQuickResponse = (userMessage) => {
   }
   
   if (lowerMessage.includes('nombre') && lowerMessage.includes('llamas')) {
-    return `¡Hola! Soy Nico, tu asistente educativo. ¿Cuál es tu nombre?`;
+    return `Hola soy Nico, en qué te puedo ayudar. Soy tu asistente educativo. ¿Cuál es tu nombre?`;
   }
   
   if (lowerMessage.includes('bienestar') || lowerMessage.includes('salud mental')) {
@@ -282,11 +282,23 @@ const getConversationOptions = (messages, conversationContext = {}) => {
   return options.slice(0, 3); // Máximo 3 opciones
 };
 
+// Función para obtener saludo según hora del día
+const getGreeting = () => {
+  const hour = new Date().getHours();
+  if (hour >= 5 && hour < 12) {
+    return 'Buenos días';
+  } else if (hour >= 12 && hour < 19) {
+    return 'Buenas tardes';
+  } else {
+    return 'Buenas noches';
+  }
+};
+
 // Prompt optimizado para conversación natural y fluida
 const PROMPT_NICO_SOPORTE = `Eres NICO, asistente educativo conversacional. Sigue estas reglas:
 
 1. PRESENTACIÓN:
-   - Solo preséntate en el PRIMER mensaje: "¡Hola! Soy Nico, tu asistente educativo"
+   - Solo preséntate en el PRIMER mensaje: "Hola soy Nico, en qué te puedo ayudar"
    - NO te presentes nuevamente en respuestas posteriores
    - NO digas "Soy Nico de EdutechLife" después del saludo inicial
 
@@ -1065,12 +1077,10 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
     if (willOpen && inputRef.current) {
       setTimeout(() => inputRef.current.focus(), 100);
       
-      // Saludo automático rápido al abrir el chat
-      const greeting = getGreeting();
-      
+      // Saludo automático inmediato al abrir el chat
       if (messages.length === 0) {
-        // Chat vacío: Bienvenida rápida y clara
-        const welcomeMessage = `¡Hola! Soy Nico, tu asistente educativo premium. ¿En qué puedo ayudarte hoy?`;
+        // Chat vacío: Saludo exacto solicitado
+        const welcomeMessage = `Hola soy Nico, en qué te puedo ayudar`;
         
         // Mensaje de bienvenida inmediato
         const welcomeMessageObj = {
@@ -1093,7 +1103,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
         setTimeout(() => {
           const userName = memory?.userName || initialName;
           const nameGreeting = userName !== 'amigo' ? ` ${userName}` : '';
-          const reconnectMessage = `${greeting}${nameGreeting}. ¿En qué más puedo ayudarte?`;
+          const reconnectMessage = `Hola soy Nico, en qué te puedo ayudar${nameGreeting}`;
           const textToSpeak = removeEmojis(reconnectMessage);
           speakTextConversational(textToSpeak, 'nico_premium');
         }, 50);
@@ -1235,18 +1245,18 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
               >
                 <Bot className="w-10 h-10 text-white" />
               </div>
-               <h3 className="text-xl font-bold mb-2" style={{ color: COLORS.SOFT_BLUE }}>
-                 ¡Hola! Soy Nico
-               </h3>
-               <p className="text-sm mb-6" style={{ color: COLORS.MINT }}>
-                 Tu asistente premium de EdutechLife
-               </p>
-                <p className="text-sm mb-6" style={{ color: COLORS.CORPORATE }}>
-                  Puedes preguntarme sobre nuestros servicios educativos: VAK, STEM, tutorías personalizadas o bienestar educativo.
+                <h3 className="text-xl font-bold mb-2" style={{ color: COLORS.SOFT_BLUE }}>
+                  Hola soy Nico
+                </h3>
+                <p className="text-sm mb-6" style={{ color: COLORS.MINT }}>
+                  En qué te puedo ayudar
                 </p>
-                <p className="text-xs italic mb-4" style={{ color: COLORS.MINT }}>
-                  Escribe tu pregunta en el campo de abajo para comenzar
-                </p>
+                 <p className="text-sm mb-6" style={{ color: COLORS.CORPORATE }}>
+                   Puedes preguntarme sobre nuestros servicios educativos: VAK, STEM, tutorías personalizadas o bienestar educativo.
+                 </p>
+                 <p className="text-xs italic mb-4" style={{ color: COLORS.MINT }}>
+                   Escribe tu pregunta en el campo de abajo para comenzar
+                 </p>
             </div>
           ) : (
              <div className="space-y-4">
