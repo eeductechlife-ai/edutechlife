@@ -161,7 +161,7 @@ const getQuickResponse = (userMessage) => {
   
   // Preguntas sobre servicios
   if (lowerMessage.includes('hola') || lowerMessage.includes('buenas')) {
-    return `Hola soy Nico, en qué te puedo ayudar. Ofrecemos servicios educativos como VAK, STEM, tutorías y bienestar. ¿Te interesa alguno?`;
+    return `Ofrecemos servicios educativos como VAK, STEM, tutorías y bienestar. ¿Te interesa alguno?`;
   }
   
   if (lowerMessage.includes('qué es') && lowerMessage.includes('vak')) {
@@ -190,7 +190,7 @@ const getQuickResponse = (userMessage) => {
   
   // Preguntas generales
   if (lowerMessage.includes('quién eres') || lowerMessage.includes('qué haces')) {
-    return `Hola soy Nico, en qué te puedo ayudar. Soy asistente virtual de EdutechLife. Ayudo a personas a encontrar el mejor camino educativo.`;
+    return `Soy Nico, asistente virtual de EdutechLife. Ayudo a personas a encontrar el mejor camino educativo.`;
   }
   
   if (lowerMessage.includes('ayuda') || lowerMessage.includes('información')) {
@@ -223,7 +223,7 @@ const getQuickResponse = (userMessage) => {
   }
   
   if (lowerMessage.includes('nombre') && lowerMessage.includes('llamas')) {
-    return `Hola soy Nico, en qué te puedo ayudar. Soy tu asistente educativo. ¿Cuál es tu nombre?`;
+    return `Soy Nico, asistente de EdutechLife. ¿Cuál es tu nombre?`;
   }
   
   if (lowerMessage.includes('bienestar') || lowerMessage.includes('salud mental')) {
@@ -363,7 +363,7 @@ const getGreeting = () => {
 const PROMPT_NICO_SOPORTE = `Eres NICO, asistente educativo conversacional. Sigue estas reglas:
 
 1. PRESENTACIÓN:
-   - Solo preséntate en el PRIMER mensaje: "Hola soy Nico, en qué te puedo ayudar"
+   - Solo preséntate en el PRIMER mensaje: "Hola soy Nico, asistente de EdutechLife. ¿En que puedo ayudarte?"
    - NO te presentes nuevamente en respuestas posteriores
    - NO digas "Soy Nico de EdutechLife" después del saludo inicial
 
@@ -476,7 +476,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
     if (isOpen && !greetingSent && (!messages || messages.length === 0)) {
       setGreetingSent(true);
       
-      const greeting = "Hola soy Nico, en qué te puedo ayudar";
+      const greeting = "Hola soy Nico, asistente de EdutechLife. ¿En que puedo ayudarte?";
       
       const greetingMessageObj = {
         role: 'assistant',
@@ -802,7 +802,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       console.warn('⚠️ Error en respuesta:', error.message);
       
       // Respuesta de error rápida y útil
-      const errorMessage = `Hola soy Nico. Parece que hubo un problema técnico. Puedo decirte que ofrecemos servicios educativos como VAK, STEM, tutorías y bienestar. Te interesa alguno?`;
+      const errorMessage = `Parece que hubo un problema técnico. Puedo decirte que ofrecemos servicios educativos como VAK, STEM, tutorías y bienestar. Te interesa alguno?`;
       
       // Limpiar texto antes de guardar
       const cleanErrorMessage = removeEmojis(errorMessage);
@@ -1195,7 +1195,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       // Saludo automático inmediato al abrir el chat
       if (messages.length === 0) {
         // Chat vacío: Saludo exacto solicitado
-        const welcomeMessage = `Hola soy Nico, en qué te puedo ayudar`;
+        const welcomeMessage = `Hola soy Nico, asistente de EdutechLife. ¿En que puedo ayudarte?`;
         
         // Mensaje de bienvenida inmediato
         const welcomeMessageObj = {
@@ -1218,7 +1218,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
         setTimeout(() => {
           const userName = memory?.userName || initialName;
           const nameGreeting = userName !== 'amigo' ? ` ${userName}` : '';
-          const reconnectMessage = `Hola soy Nico, en qué te puedo ayudar${nameGreeting}`;
+          const reconnectMessage = `Hola soy Nico, asistente de EdutechLife. ¿En que puedo ayudarte?${nameGreeting}`;
           const textToSpeak = removeEmojis(reconnectMessage);
           speakTextConversational(textToSpeak, 'nico_premium');
         }, 50);
@@ -1371,16 +1371,16 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
                 <Bot className="w-10 h-10 text-white" />
               </div>
                 <h3 className="text-xl font-bold mb-2" style={{ color: COLORS.SOFT_BLUE }}>
-                  Hola soy Nico
+                  Nico
                 </h3>
                 <p className="text-sm mb-6" style={{ color: COLORS.MINT }}>
-                  En qué te puedo ayudar
+                  Asistente de EdutechLife
                 </p>
                  <p className="text-sm mb-6" style={{ color: COLORS.CORPORATE }}>
-                   Puedes preguntarme sobre nuestros servicios educativos: VAK, STEM, tutorías personalizadas o bienestar educativo.
+                   Puedo ayudarte con información sobre nuestros servicios educativos: VAK, STEM, tutorías y bienestar.
                  </p>
                  <p className="text-xs italic mb-4" style={{ color: COLORS.MINT }}>
-                   Escribe tu pregunta en el campo de abajo para comenzar
+                   Escribe tu pregunta en el campo de abajo
                  </p>
             </div>
           ) : (
