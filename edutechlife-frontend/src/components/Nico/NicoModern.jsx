@@ -134,11 +134,14 @@ const removeGreetingMulletilla = (text) => {
   // Patrones de muletilla que la IA podría usar al inicio
   const mulletillaPatterns = [
     /^hola soy nico[\s,.]+/i,
+    /^hola[\s,]+soy nico[\s,.]+/i,
     /^soy nico[\s,.]+/i,
     /^soy nico de edutechlife[\s,.]+/i,
-    /^nico aquí[\s,.]+/i,
     /^soy el asistente nico[\s,.]+/i,
-    /^como nico[\s,.]+/i
+    /^nico aquí[\s,.]+/i,
+    /^como nico[\s,.]+/i,
+    /^nicolas[\s,.]+/i,
+    /^yo soy nico[\s,.]+/i
   ];
   
   let cleanText = text;
@@ -147,8 +150,8 @@ const removeGreetingMulletilla = (text) => {
     cleanText = cleanText.replace(pattern, '');
   }
   
-  // Limpiar espacios dobles resultantes
-  cleanText = cleanText.replace(/^\s+/, '').replace(/\s{2,}/g, ' ');
+  // Limpiar espacios y puntuación inicial resultantes
+  cleanText = cleanText.replace(/^[\s,.-]+/, '').replace(/\s{2,}/g, ' ');
   
   // Si la respuesta quedó vacía o muy corta, devolver original
   if (cleanText.trim().length < 5) {
@@ -879,8 +882,10 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
     // Primero verificar si hay respuesta rápida disponible
     const quickResponse = getQuickResponse(userMessage, userContext);
     if (quickResponse) {
-      // Limpiar texto antes de guardar y mostrar
-      const cleanResponse = removeEmojis(quickResponse);
+      // Primero eliminar muletilla de presentación
+      const noMulletilla = removeGreetingMulletilla(quickResponse);
+      // Luego limpiar emojis
+      const cleanResponse = removeEmojis(noMulletilla);
       
       // Respuesta inmediata sin llamar a API
       const assistantMessageObj = { 
@@ -899,7 +904,8 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       // Voz inmediata
       if (audioEnabled) {
         setTimeout(() => {
-          const textToSpeak = removeEmojis(quickResponse);
+          const noMulletillaVoice = removeGreetingMulletilla(quickResponse);
+          const textToSpeak = removeEmojis(noMulletillaVoice);
           speakTextConversational(textToSpeak, 'nico_premium');
         }, 50);
       }
@@ -1067,13 +1073,14 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       }
       
     } catch (error) {
-      console.warn('⚠️ Error en respuesta:', error.message);
+      console.warn('Error en respuesta:', error.message);
       
       // Respuesta de error rápida y útil
       const errorMessage = `Parece que hubo un problema técnico. Puedo decirte que ofrecemos servicios educativos como VAK, STEM, tutorías y bienestar. Te interesa alguno?`;
       
-      // Limpiar texto antes de guardar
-      const cleanErrorMessage = removeEmojis(errorMessage);
+      // Eliminar muletilla y limpiar texto
+      const noMulletillaError = removeGreetingMulletilla(errorMessage);
+      const cleanErrorMessage = removeEmojis(noMulletillaError);
       
       const errorMessageObj = { 
         role: 'assistant', 
