@@ -133,6 +133,7 @@ const removeGreetingMulletilla = (text) => {
   
   // Patrones de muletilla que la IA podría usar al inicio
   const mulletillaPatterns = [
+    // Presentaciones de Nico
     /^hola soy nico[\s,.]+/i,
     /^hola[\s,]+soy nico[\s,.]+/i,
     /^soy nico[\s,.]+/i,
@@ -141,7 +142,17 @@ const removeGreetingMulletilla = (text) => {
     /^nico aquí[\s,.]+/i,
     /^como nico[\s,.]+/i,
     /^nicolas[\s,.]+/i,
-    /^yo soy nico[\s,.]+/i
+    /^yo soy nico[\s,.]+/i,
+    // Saludos genéricos al inicio (no debe decir "Hola" al inicio de respuestas)
+    /^¡*hola[!.*]*[\s,]+/i,
+    /^buenos días[\s,!.*]*/i,
+    /^buenas tardes[\s,!.*]*/i,
+    /^buenas noches[\s,!.*]*/i,
+    /^que tal[\s,!.*]*/i,
+    /^buen día[\s,!.*]*/i,
+    // Saludos con nombre
+    /^hola\s+[a-záéíóúñ]+\s*,[\s,]+/i,
+    /^¡hola\s+[a-záéíóúñ]+!*\s*/i
   ];
   
   let cleanText = text;
@@ -150,12 +161,17 @@ const removeGreetingMulletilla = (text) => {
     cleanText = cleanText.replace(pattern, '');
   }
   
-  // Limpiar espacios y puntuación inicial resultantes
-  cleanText = cleanText.replace(/^[\s,.-]+/, '').replace(/\s{2,}/g, ' ');
+  // Limpiar espacios, puntuación y caracteres leftover resultantes
+  cleanText = cleanText.replace(/^[\s,.-¡!¿?]+/, '').replace(/\s{2,}/g, ' ');
   
   // Si la respuesta quedó vacía o muy corta, devolver original
   if (cleanText.trim().length < 5) {
     return text;
+  }
+  
+  // Asegurar que la primera letra sea mayúscula si hay texto
+  if (cleanText.length > 0) {
+    cleanText = cleanText.charAt(0).toUpperCase() + cleanText.slice(1);
   }
   
   return cleanText.trim();
@@ -262,9 +278,8 @@ const getQuickResponse = (userMessage, userContext = {}) => {
   
   // ==================== SALUDOS ====================
   if (lowerMessage.includes('hola') || lowerMessage.includes('buenas') || lowerMessage === 'hi') {
-    return userName 
-      ? `¡Hola ${userName}! ¿En qué puedo ayudarte?`
-      : null;
+    // No presentarise, solo responder directamente
+    return '¿En qué puedo ayudarte? Puedo informarte sobre VAK, STEM, tutorías, precios y más.';
   }
   
   // ==================== SERVICIOS - VAK ====================
@@ -402,7 +417,7 @@ const getQuickResponse = (userMessage, userContext = {}) => {
   
   // ==================== IDENTIDAD ====================
   if (lowerMessage.includes('quién eres') || lowerMessage.includes('quien eres') || lowerMessage.includes('qué haces') || lowerMessage.includes('que haces')) {
-    return 'Soy Nico, asistente virtual de EdutechLife. Ayudo a personas a encontrar el mejor camino educativo según sus necesidades.';
+    return 'Asistente virtual de EdutechLife. Ayudo a personas a encontrar el mejor camino educativo según sus necesidades.';
   }
   
   // ==================== DESPEDIDAS ====================
