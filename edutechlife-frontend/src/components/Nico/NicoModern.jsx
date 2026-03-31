@@ -127,6 +127,37 @@ const simplifyResponse = (text) => {
   return simplified;
 };
 
+// Función para eliminar muletilla de presentación de las respuestas
+const removeGreetingMulletilla = (text) => {
+  if (!text) return text;
+  
+  // Patrones de muletilla que la IA podría usar al inicio
+  const mulletillaPatterns = [
+    /^hola soy nico[\s,.]+/i,
+    /^soy nico[\s,.]+/i,
+    /^soy nico de edutechlife[\s,.]+/i,
+    /^nico aquí[\s,.]+/i,
+    /^soy el asistente nico[\s,.]+/i,
+    /^como nico[\s,.]+/i
+  ];
+  
+  let cleanText = text;
+  
+  for (const pattern of mulletillaPatterns) {
+    cleanText = cleanText.replace(pattern, '');
+  }
+  
+  // Limpiar espacios dobles resultantes
+  cleanText = cleanText.replace(/^\s+/, '').replace(/\s{2,}/g, ' ');
+  
+  // Si la respuesta quedó vacía o muy corta, devolver original
+  if (cleanText.trim().length < 5) {
+    return text;
+  }
+  
+  return cleanText.trim();
+};
+
 // Función para optimizar conversaciones largas
 const optimizeLongConversation = (messages, maxMessages = 20) => {
   if (messages.length <= maxMessages) {
@@ -564,10 +595,12 @@ const PROMPT_NICO_SOPORTE = `Eres NICO, asistente educativo conversacional de Ed
 - Ejemplo MALO: "Claro, con gusto te explico sobre VAK. VAK son los estilos..."
 - Ejemplo BUENO: "VAK son los estilos de aprendizaje: Visual, Auditivo y Kinestésico. Identificamos cuál es el tuyo para personalizar tu educación."
 
-### 2. PRESENTACIÓN:
-- Solo en el PRIMER mensaje: "Hola soy Nico, asistente de EdutechLife. ¿En que puedo ayudarte?"
-- En respuestas posteriores, NO te presentes
-- NO digas "Soy Nico de EdutechLife" después del saludo inicial
+### 2. PRESENTACIÓN - REGLA CRÍTICA:
+- El saludo "Hola soy Nico, asistente de EdutechLife. ¿En que puedo ayudarte?" SOLO aparece UNA VEZ al inicio de la conversación cuando el usuario abre el chat
+- En TODAS las demás respuestas, NUNCA te presentes
+- NUNCA digas: "Soy Nico", "Hola soy Nico", "Soy Nico de EdutechLife", "Nico aquí", etc.
+- Esta muletilla NO debe aparecer en ninguna respuesta después del primer mensaje
+- Si detectas que estás a punto de presentarte, salta directamente a responder la pregunta
 
 ### 3. PROHIBICIONES ABSOLUTAS:
 - NO uses emojis de ningún tipo
@@ -971,8 +1004,11 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       // Simplificar respuesta si es muy larga
       const simplifiedResponse = simplifyResponse(response);
       
+      // Eliminar muletilla de presentación si la IA la incluyó
+      const noMulletillaResponse = removeGreetingMulletilla(simplifiedResponse);
+      
       // Limpiar texto de markdown y emojis antes de guardar
-      const cleanResponse = removeEmojis(simplifiedResponse);
+      const cleanResponse = removeEmojis(noMulletillaResponse);
       
       // Respuesta asistente optimizada
       const assistantMessageObj = { 
