@@ -155,13 +155,76 @@ const optimizeLongConversation = (messages, maxMessages = 20) => {
   return [...firstMessages, ...lastMessages];
 };
 
+// Función para detectar nombre, edad e intereses del mensaje
+const extractUserContext = (message) => {
+  const lowerMessage = message.toLowerCase();
+  const context = { userName: null, detectedInterest: null, studentAge: null };
+  
+  // Extraer nombre
+  const namePatterns = [
+    /me llamo\s+([a-záéíóúñ]+)/i,
+    /mi nombre es\s+([a-záéíóúñ]+)/i,
+    /soy\s+([a-záéíóúñ]+)\s*(?:y|tengo|estoy)/i,
+    /(?:llámame|dime)\s+([a-záéíóúñ]+)/i,
+    /^([a-záéíóúñ]+)$/i
+  ];
+  
+  for (const pattern of namePatterns) {
+    const match = message.match(pattern);
+    if (match && match[1].length > 2) {
+      context.userName = match[1].charAt(0).toUpperCase() + match[1].slice(1);
+      break;
+    }
+  }
+  
+  // Extraer edad
+  const agePatterns = [
+    /tengo\s+(\d+)\s*años/i,
+    /de\s+(\d+)\s*años/i,
+    /(\d+)\s*años\s*(?:de|tengo|para)/i,
+    /para\s+(?:un|una)\s+niñ[oa]\s+de\s+(\d+)/i
+  ];
+  
+  for (const pattern of agePatterns) {
+    const match = message.match(pattern);
+    if (match) {
+      context.studentAge = parseInt(match[1]);
+      break;
+    }
+  }
+  
+  // Detectar intereses
+  const interestPatterns = [
+    { pattern: /vak|estilo.*aprendizaje|visual|auditivo|kinestésico/i, interest: 'VAK' },
+    { pattern: /stem|robótica|robotica|programación|scratch|python|lego|arduino/i, interest: 'STEM' },
+    { pattern: /tutoría|tutoria|clases.*matemáticas|clases.*ciencias|profesor/i, interest: 'Tutoría' },
+    { pattern: /bienestar|psicología|psicologia|ansiedad|estrés|emocional/i, interest: 'Bienestar' },
+    { pattern: /inglés|ingles|english|idioma/i, interest: 'Inglés' }
+  ];
+  
+  for (const { pattern, interest } of interestPatterns) {
+    if (pattern.test(lowerMessage)) {
+      context.detectedInterest = interest;
+      break;
+    }
+  }
+  
+  return context;
+};
+
 // Base de conocimientos completa para Nico
-const getQuickResponse = (userMessage) => {
+const getQuickResponse = (userMessage, userContext = {}) => {
   const lowerMessage = userMessage.toLowerCase().trim();
+  const { userName, detectedInterest, studentAge } = userContext;
+  
+  // Usar nombre del contexto si está disponible
+  const namePrefix = userName ? `${userName}, ` : '';
   
   // ==================== SALUDOS ====================
   if (lowerMessage.includes('hola') || lowerMessage.includes('buenas') || lowerMessage === 'hi') {
-    return null; // Dejar que el saludo inicial del chat maneje esto
+    return userName 
+      ? `¡Hola ${userName}! ¿En qué puedo ayudarte?`
+      : null;
   }
   
   // ==================== SERVICIOS - VAK ====================
@@ -533,6 +596,12 @@ const PROMPT_NICO_SOPORTE = `Eres NICO, asistente educativo conversacional de Ed
 - Evita frases repetitivas
 - Adapta tu lenguaje al tono del usuario
 
+### 7. CONTEXTO Y PERSONALIZACIÓN:
+- Si conoces el nombre del usuario, úsalo en tus respuestas (ej: "Juan, te explico...")
+- Si el usuario ya expresó interés en un servicio (VAK, STEM, tutorías), haz referencia a eso en lugar de preguntar de nuevo
+- Si el usuario menciona su edad o la del estudiante, tenlo en cuenta para recomendar servicios apropiados
+- Usa la información de conversaciones previas para hacer las respuestas más relevantes
+
 ## EJEMPLOS DE RESPUESTAS IDEALES:
 
 Pregunta: "¿Qué es VAK?"
@@ -558,6 +627,13 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
   const [messages, setMessages] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(true);
   const [showedConversationOptions, setShowedConversationOptions] = useState(false);
+  
+  // Estado para contexto de conversación
+  const [userContext, setUserContext] = useState({
+    userName: null,
+    detectedInterest: null,
+    studentAge: null
+  });
   
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -757,9 +833,18 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       return optimizeLongConversation(newMessages, 25); // Límite de 25 mensajes
     });
     setIsLoading(true);
-
+    
+    // Detectar contexto del usuario (nombre, edad, intereses)
+    const detectedContext = extractUserContext(userMessage);
+    setUserContext(prev => ({
+      ...prev,
+      userName: detectedContext.userName || prev.userName,
+      studentAge: detectedContext.studentAge || prev.studentAge,
+      detectedInterest: detectedContext.detectedInterest || prev.detectedInterest
+    }));
+    
     // Primero verificar si hay respuesta rápida disponible
-    const quickResponse = getQuickResponse(userMessage);
+    const quickResponse = getQuickResponse(userMessage, userContext);
     if (quickResponse) {
       // Limpiar texto antes de guardar y mostrar
       const cleanResponse = removeEmojis(quickResponse);
