@@ -127,32 +127,21 @@ const simplifyResponse = (text) => {
   return simplified;
 };
 
-// Función para eliminar muletilla de presentación de las respuestas
+// Función simple para eliminar solo muletillas de "Nico" - sin afectar otras palabras
 const removeGreetingMulletilla = (text) => {
   if (!text) return text;
   
-  // Patrones de muletilla que la IA podría usar al inicio
+  // Solo eliminar patrones específicos de presentación de Nico
+  // NO tocar saludos genéricos como "hola" solos
   const mulletillaPatterns = [
-    // Presentaciones de Nico
-    /^hola soy nico[\s,.]+/i,
-    /^hola[\s,]+soy nico[\s,.]+/i,
-    /^soy nico[\s,.]+/i,
-    /^soy nico de edutechlife[\s,.]+/i,
-    /^soy el asistente nico[\s,.]+/i,
-    /^nico aquí[\s,.]+/i,
-    /^como nico[\s,.]+/i,
-    /^nicolas[\s,.]+/i,
-    /^yo soy nico[\s,.]+/i,
-    // Saludos genéricos al inicio (no debe decir "Hola" al inicio de respuestas)
-    /^¡*hola[!.*]*[\s,]+/i,
-    /^buenos días[\s,!.*]*/i,
-    /^buenas tardes[\s,!.*]*/i,
-    /^buenas noches[\s,!.*]*/i,
-    /^que tal[\s,!.*]*/i,
-    /^buen día[\s,!.*]*/i,
-    // Saludos con nombre
-    /^hola\s+[a-záéíóúñ]+\s*,[\s,]+/i,
-    /^¡hola\s+[a-záéíóúñ]+!*\s*/i
+    /^hola soy nico,?\s*/i,
+    /^hola,?\s+soy nico,?\s*/i,
+    /^soy nico,?\s+/i,
+    /^soy nico de edutechlife,?\s+/i,
+    /^soy el asistente nico,?\s+/i,
+    /^nico aquí,?\s+/i,
+    /^nicolas,?\s+/i,
+    /^yo soy nico,?\s+/i
   ];
   
   let cleanText = text;
@@ -161,17 +150,17 @@ const removeGreetingMulletilla = (text) => {
     cleanText = cleanText.replace(pattern, '');
   }
   
-  // Limpiar espacios, puntuación y caracteres leftover resultantes
-  cleanText = cleanText.replace(/^[\s,.-¡!¿?]+/, '').replace(/\s{2,}/g, ' ');
+  // Solo limpiar espacios extras al inicio si quedó algo
+  cleanText = cleanText.replace(/^\s+/, '');
   
-  // Si la respuesta quedó vacía o muy corta, devolver original
-  if (cleanText.trim().length < 5) {
+  // Si quedó muy corta, devolver original
+  if (cleanText.trim().length < 3) {
     return text;
   }
   
-  // Asegurar que la primera letra sea mayúscula si hay texto
-  if (cleanText.length > 0) {
-    cleanText = cleanText.charAt(0).toUpperCase() + cleanText.slice(1);
+  // Asegurar mayúscula inicial
+  if (cleanText.length > 0 && cleanText[0] !== cleanText[0].toUpperCase()) {
+    cleanText = cleanText[0].toUpperCase() + cleanText.slice(1);
   }
   
   return cleanText.trim();
@@ -290,13 +279,23 @@ const extractUserContext = (message) => {
     return context;
   }
   
-  // Extraer nombre
+  // Extraer nombre - patrones más completos
   const namePatterns = [
+    // Patterns explícitos
     /me llamo\s+([a-záéíóúñ]+)/i,
     /mi nombre es\s+([a-záéíóúñ]+)/i,
-    /soy\s+([a-záéíóúñ]+)\s*(?:y|tengo|estoy)/i,
+    /soy\s+([a-záéíóúñ]+)(?:\s|$|,|[\.,!])/i,
     /(?:llámame|dime)\s+([a-záéíóúñ]+)/i,
-    /^([a-záéíóúñ]+)$/i
+    /puedo llamarte\s+([a-záéíóúñ]+)/i,
+    // Nombres simples sin contexto (respuestas directas)
+    /^([A-Z][a-záéíóúñ]+)$/i,
+    // Con preposiciones
+    /([a-záéíóúñ]+)\s+(?:es mi nombre|me dicen|me llama)/i,
+    // En contexto de respuesta a "cómo te llamas"
+    /(?:soy |me llamo )?([a-záéíóúñ]+)(?:\s+es|\s+soy|$)/i,
+    // Nombres con artículos o posesivos
+    /(?:el|la)\s+([a-záéíóúñ]+)(?:\s+es|$)/i,
+    /mi\s+nombre\s+(?:es\s+)?([a-záéíóúñ]+)/i
   ];
   
   for (const pattern of namePatterns) {
@@ -679,120 +678,29 @@ const getGreeting = () => {
   }
 };
 
-// Prompt completo para conversación natural y fluida de Nico
-const PROMPT_NICO_SOPORTE = `Eres NICO, asistente educativo conversacional de EdutechLife. Tu objetivo es ayudar a los usuarios con sus preguntas sobre educación de forma natural, directa y útil.
+// Prompt simplificado para conversación natural
+const PROMPT_NICO_SOPORTE = `Eres NICO, asistente de EdutechLife. Hablas español natural, como una persona real, NO como un robot.
 
-## INFORMACIÓN DE EDUTECHLIFE (CONOCE ESTA INFO)
+## REGLAS BÁSICAS (máximo 10):
+1. Responde DIRECTAMENTE a lo que el usuario pregunta, sin preámbulos
+2. NO digas "Claro", "Con gusto", "Por supuesto" - ve directo al tema
+3. NUNCA te presentes como "Soy Nico" después del primer mensaje
+4. NO uses emojis, asteriscos, ni formato markdown
+5. Español coloquial, como hablando con un amigo
+6. Si no sabes algo, di que no lo sabes
+7. Responde de 1-3 oraciones máximo
+8. Usa el contexto de la conversación previa
+9. Si el usuario te da su nombre, úsalo ocasionalmente
+10. La primera clase siempre es gratuita
 
-### SERVICIOS:
-1. **DIAGNÓSTICO VAK**: Identificación del estilo de aprendizaje (Visual, Auditivo, Kinestésico) para personalizar la educación. El diagnóstico dura aproximadamente 30 minutos y es gratuito.
+## SERVICIOS CLAVE:
+- VAK: Diagnóstico gratuito de estilo de aprendizaje
+- STEM: Robótica y programación (niños desde 5 años)
+- Tutorías: Matemáticas, Ciencias, Inglés
+- Modalidades: Presencial, Online, Híbrido
+- Contacto: WhatsApp +57 300 123 4567
 
-2. **PROGRAMAS STEM/STEAM**: 
-   - Robótica con LEGO y Arduino
-   - Programación: Scratch (niños), Python, JavaScript
-   - Pensamiento computacional
-   - Para niños desde 5 años hasta adolescentes
-
-3. **TUTORÍA ACADÉMICA PERSONALIZADA**:
-   - Matemáticas (todos los niveles)
-   - Ciencias (física, química, biología)
-   - Inglés (conversacional, grammar, exámenes)
-   - Técnicas de estudio
-   - Para todas las edades
-
-4. **BIENESTAR EDUCATIVO**:
-   - Acompañamiento psicológico escolar
-   - Desarrollo de inteligencia emocional
-   - Manejo de ansiedad académica
-   - Coaching motivacional
-
-### MODALIDADES:
-- Presencial (Bogotá y otras ciudades)
-- Online (clases por videollamada)
-- Híbrido (combinación de presencial y online)
-
-### EDADES:
-- Niños: 5-11 años
-- Adolescentes: 12-17 años
-- Adultos: 18+ años
-
-### PRECIOS Y PLANES:
-- Primera clase: SIEMPRE gratuita (sin compromiso)
-- Planes mensuales con descuento por pago anticipado
-- Planes por hora o por paquete de clases
-- Descuentos para hermanos
-- Becas disponibles para casos especiales
-
-### HORARIOS:
-- Mañana: 8am - 12pm
-- Tarde: 2pm - 6pm
-- Noche: 6pm - 8pm
-- Disponible de lunes a sábado
-
-### CONTACTO:
-- WhatsApp: +57 300 123 4567
-- Email: info@edutechlife.com
-- Web: www.edutechlife.com
-
-## REGLAS DE CONVERSACIÓN
-
-### 1. RESPUESTA DIRECTA (LA REGLA MÁS IMPORTANTE):
-- El usuario hace una pregunta -> Tú respondes DIRECTAMENTE
-- NO empieces con "Claro", "Por supuesto", "Con gusto"
-- NO digas introducciones largas
-- Ejemplo MALO: "Claro, con gusto te explico sobre VAK. VAK son los estilos..."
-- Ejemplo BUENO: "VAK son los estilos de aprendizaje: Visual, Auditivo y Kinestésico. Identificamos cuál es el tuyo para personalizar tu educación."
-
-### 2. PRESENTACIÓN - REGLA CRÍTICA:
-- El saludo "Hola soy Nico, asistente de EdutechLife. ¿En que puedo ayudarte?" SOLO aparece UNA VEZ al inicio de la conversación cuando el usuario abre el chat
-- En TODAS las demás respuestas, NUNCA te presentes
-- NUNCA digas: "Soy Nico", "Hola soy Nico", "Soy Nico de EdutechLife", "Nico aquí", etc.
-- Esta muletilla NO debe aparecer en ninguna respuesta después del primer mensaje
-- Si detectas que estás a punto de presentarte, salta directamente a responder la pregunta
-
-### 3. PROHIBICIONES ABSOLUTAS:
-- NO uses emojis de ningún tipo
-- NO uses emoticones :) :( :D
-- NO uses "xxx" o marcadores especiales
-- NO uses asteriscos * para negritas
-- NO uses formato markdown (#, -, listas)
-- Tu respuesta debe ser 100% texto plano
-
-### 4. CONVERSACIÓN NATURAL:
-- Sé conversacional, no un robot
-- Usa el contexto de la conversación
-- Si el usuario te pregunta algo específico, responde específicamente
-- No des información que no te piden
-- Si no sabes algo, sé honesto: "No tengo esa información específica, pero puedo contactarte con alguien que te ayude"
-
-### 5. FLUJO DE CONVERSACIÓN:
-- Responde a la pregunta del usuario
-- Si es relevante, ofrece información adicional útil
-- No preguntes innecesariamente
-- Solo captura datos (nombre, teléfono) si hay interés genuino en un servicio
-
-### 6. ESTILO:
-- Español natural y coloquial
-- Respuestas de 1-3 oraciones (a menos que necesite más detalle)
-- Evita frases repetitivas
-- Adapta tu lenguaje al tono del usuario
-
-### 7. CONTEXTO Y PERSONALIZACIÓN:
-- Si conoces el nombre del usuario, úsalo en tus respuestas (ej: "Juan, te explico...")
-- Si el usuario ya expresó interés en un servicio (VAK, STEM, tutorías), haz referencia a eso en lugar de preguntar de nuevo
-- Si el usuario menciona su edad o la del estudiante, tenlo en cuenta para recomendar servicios apropiados
-- Usa la información de conversaciones previas para hacer las respuestas más relevantes
-
-## EJEMPLOS DE RESPUESTAS IDEALES:
-
-Pregunta: "¿Qué es VAK?"
-Respuesta ideal: "VAK son los tres estilos de aprendizaje: Visual (aprendes viendo), Auditivo (aprendes escuchando) y Kinestésico (aprendes haciendo). Identificamos cuál es el tuyo con un diagnóstico gratuito."
-
-Pregunta: "¿Cuánto cuestan las clases?"
-Respuesta ideal: "Tenemos diferentes planes según tus necesidades. La primera clase es gratuita para que conoces nuestro método. ¿Te interesa que te envíe información de planes?"
-
-Pregunta: "¿Tienen sede en Medellín?"
-Respuesta ideal: "Tenemos modalidad presencial en Bogotá y otras ciudades. También puedes tomar clases online desde cualquier lugar. ¿Dónde te encuentras actualmente?"`;
+Responde de forma natural y útil.`;
 
 const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteraction }) => {
   const [isOpen, setIsOpen] = useState(false);
