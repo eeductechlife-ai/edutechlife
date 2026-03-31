@@ -177,6 +177,54 @@ const removeGreetingMulletilla = (text) => {
   return cleanText.trim();
 };
 
+// Función para determinar si se debe pedir el nombre de forma sutil
+const shouldAskForName = (userContext) => {
+  const { messagesSinceStart = 0, nameAskedOnce, dontWantName, userName } = userContext;
+  
+  // Solo preguntar si:
+  // - Han pasado 2+ mensajes del usuario
+  // - NO se ha obtenido el nombre aún
+  // - NO se ha preguntado antes
+  // - El usuario NO ha indicado que no quiere dar su nombre
+  return (
+    messagesSinceStart >= 2 &&
+    !userName &&
+    !nameAskedOnce &&
+    !dontWantName
+  );
+};
+
+// Función para usar el nombre cada 3-4 respuestas de forma natural
+const useNameInResponse = (response, userContext) => {
+  const { userName, nameUsageCounter = 0 } = userContext;
+  
+  // Si no hay nombre o el contador no está en rango válido, devolver respuesta normal
+  if (!userName || nameUsageCounter < 3) {
+    return { response, newCounter: nameUsageCounter };
+  }
+  
+  // Solo usar nombre si el contador está entre 3 y 4
+  if (nameUsageCounter > 4) {
+    return { response, newCounter: 0 }; // Resetear contador
+  }
+  
+  // Ocasionalmente usar el nombre (aproximadamente la mitad de las veces en rango 3-4)
+  if (Math.random() > 0.5) {
+    const nameInsertPatterns = [
+      `${userName}, `,
+      `${userName}, `,
+      `para ${userName}, `
+    ];
+    
+    const randomPattern = nameInsertPatterns[Math.floor(Math.random() * nameInsertPatterns.length)];
+    const responseWithName = randomPattern + response.charAt(0).toLowerCase() + response.slice(1);
+    
+    return { response: responseWithName, newCounter: nameUsageCounter + 1 };
+  }
+  
+  return { response, newCounter: nameUsageCounter + 1 };
+};
+
 // Función para optimizar conversaciones largas
 const optimizeLongConversation = (messages, maxMessages = 20) => {
   if (messages.length <= maxMessages) {
@@ -213,8 +261,34 @@ const extractUserContext = (message) => {
     detectedInterest: null, 
     studentAge: null,
     conversationStage: null,
-    detectedTopics: []
+    detectedTopics: [],
+    dontWantName: false
   };
+  
+  // Detectar si el usuario NO quiere dar su nombre
+  const dontWantPatterns = [
+    /no (quiero|prefiero|me gusta|voy a)/i,
+    /no te voy a dar/i,
+    /no te dare/i,
+    /sin nombre/i,
+    /anonimo/i,
+    /olvida.*nombre/i,
+    /no importa.*nombre/i,
+    /no es necesario.*nombre/i,
+    /no necesito.*nombre/i
+  ];
+  
+  for (const pattern of dontWantPatterns) {
+    if (pattern.test(message)) {
+      context.dontWantName = true;
+      break;
+    }
+  }
+  
+  // Si no quiere dar nombre, no intentar extraer
+  if (context.dontWantName) {
+    return context;
+  }
   
   // Extraer nombre
   const namePatterns = [
@@ -271,10 +345,17 @@ const extractUserContext = (message) => {
 // Base de conocimientos completa para Nico
 const getQuickResponse = (userMessage, userContext = {}) => {
   const lowerMessage = userMessage.toLowerCase().trim();
-  const { userName, detectedInterest, studentAge } = userContext;
+  const { userName, detectedInterest, studentAge, messagesSinceStart = 0 } = userContext;
   
   // Usar nombre del contexto si está disponible
   const namePrefix = userName ? `${userName}, ` : '';
+  
+  // ==================== PEDIR NOMBRE DE FORMA SUTIL ====================
+  // Verificar si debe pedir el nombre (después de 2+ mensajes, sin nombre, no preguntado)
+  if (shouldAskForName(userContext)) {
+    // Preguntar de forma sutil con contexto
+    return '¿Para personalizar mi ayuda, cómo te llamas?';
+  }
   
   // ==================== SALUDOS ====================
   if (lowerMessage.includes('hola') || lowerMessage.includes('buenas') || lowerMessage === 'hi') {
@@ -735,7 +816,11 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
     studentAge: null,
     conversationStage: 'inicio', // 'inicio' | 'descubrimiento' | 'interes' | 'informacion' | 'accion'
     detectedTopics: [], // Array de temas detectados ['VAK', 'STEM', 'Precios']
-    conversationPath: [] // Camino de la conversación para evitar repeticiones
+    conversationPath: [], // Camino de la conversación para evitar repeticiones
+    messagesSinceStart: 0, // Contador de mensajes del usuario
+    nameAskedOnce: false, // Ya se preguntó el nombre
+    dontWantName: false, // Usuario no quiere dar su nombre
+    nameUsageCounter: 0 // Controlar uso del nombre cada 3-4 respuestas
   });
   
   const messagesEndRef = useRef(null);
@@ -959,13 +1044,27 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
         newStage = 'interes';
       }
       
+      // Determinar si debemos marcar que ya pedimos el nombre
+      const shouldAsk = shouldAskForName(prev);
+      let newNameAskedOnce = prev.nameAskedOnce;
+      if (shouldAsk && lowerMsg.includes('cómo te llamas') || lowerMsg.includes('tu nombre') || lowerMsg.includes('te llamas')) {
+        newNameAskedOnce = true;
+      }
+      
+      // Si el usuario proporciona su nombre, usar ese valor
+      // Si el usuario dice que no quiere dar su nombre, marcar dontWantName
+      const newDontWantName = detectedContext.dontWantName ? true : (prev.dontWantName && !detectedContext.userName);
+      
       return {
         ...prev,
         userName: detectedContext.userName || prev.userName,
         studentAge: detectedContext.studentAge || prev.studentAge,
         detectedInterest: detectedContext.detectedInterest || prev.detectedInterest,
         conversationStage: newStage,
-        detectedTopics: newTopics.slice(-5) // Mantener últimos 5 temas
+        detectedTopics: newTopics.slice(-5), // Mantener últimos 5 temas
+        messagesSinceStart: prev.messagesSinceStart + 1, // Incrementar contador de mensajes
+        nameAskedOnce: newNameAskedOnce,
+        dontWantName: newDontWantName
       };
     });
     
@@ -1103,8 +1202,17 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       // Eliminar muletilla de presentación si la IA la incluyó
       const noMulletillaResponse = removeGreetingMulletilla(simplifiedResponse);
       
+      // Usar nombre del usuario ocasionalmente (cada 3-4 respuestas)
+      const { response: responseWithName, newCounter: counterAfterResponse } = useNameInResponse(noMulletillaResponse, userContext);
+      
       // Limpiar texto de markdown y emojis antes de guardar
-      const cleanResponse = removeEmojis(noMulletillaResponse);
+      const cleanResponse = removeEmojis(responseWithName);
+      
+      // Actualizar contador de uso del nombre
+      setUserContext(prev => ({
+        ...prev,
+        nameUsageCounter: counterAfterResponse
+      }));
       
       // Respuesta asistente optimizada
       const assistantMessageObj = { 
