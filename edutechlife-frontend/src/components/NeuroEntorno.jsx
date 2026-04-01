@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import ValerioAvatar from './ValerioAvatar';
-import DiagnosticoVAK from './DiagnosticoVAK';
+import DiagnosticoVAK from './DiagnosticoVAK/DiagnosticoVAK';
 import { callDeepseek } from '../utils/api';
 
 const contentByStyle = {
@@ -130,37 +130,193 @@ Eres Valerio, mentor educativo experto en neuroeducación y metodologías VAK de
             </header>
 
             <div className="pillar-hero" style={{ background: 'linear-gradient(135deg, #004B63 0%, #0B2A3A 100%)' }}>
-                <div className="pillar-hero-content">
-                    <div className="pillar-kicker">NEURO-ENTORNO EDUCATIVO</div>
-                    <h1 className="pillar-title" style={{ color: 'white' }}>
-                        Descubre Tu Estilo de Aprendizaje
-                    </h1>
-                    <p className="pillar-subtitle" style={{ color: 'rgba(255,255,255,0.8)' }}>
-                        IA que analiza procesos psicológicos y académicos en tiempo real. 
-                        Completa el Diagnóstico VAK y recibe un plan de estudio personalizado.
-                    </p>
-                    <div className="pillar-stats">
-                        <div className="pillar-stat">
-                            <span className="pillar-stat-value" style={{ background: 'linear-gradient(135deg, #fff, #B2D8E5)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>6,000+</span>
-                            <span className="pillar-stat-label" style={{ color: 'rgba(255,255,255,0.7)' }}>Estudiantes</span>
+                <div className="pillar-hero-content" style={{ display: 'flex !important', gap: '2rem !important', flexWrap: 'wrap !important', justifyContent: 'center', alignItems: 'flex-start' }}>
+                    <div className="pillar-kicker" style={{ width: '100%', marginBottom: '1rem' }}>NEURO-ENTORNO EDUCATIVO</div>
+                    
+                    {/* Layout horizontal: Izquierda = Cuadro diagnóstico, Derecha = Info VAK */}
+                    <div style={{
+                        display: 'flex !important',
+                        gap: '2rem !important',
+                        alignItems: 'flex-start !important',
+                        flexWrap: 'wrap !important',
+                        justifyContent: 'center',
+                        width: '100%'
+                    }}>
+                        {/* LADO IZQUIERDO: Cuadro de diagnóstico */}
+                        <div style={{
+                            flex: '1 1 350px',
+                            maxWidth: '420px',
+                            background: 'rgba(255, 255, 255, 0.95)',
+                            borderRadius: '20px',
+                            padding: '1.5rem',
+                            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
+                        }}>
+                            {/* Badge diagnóstico */}
+                            <div style={{
+                                background: 'linear-gradient(135deg, #004B63 0%, #0B2A3A 100%)',
+                                color: 'white',
+                                padding: '6px 16px',
+                                borderRadius: '100px',
+                                display: 'inline-block',
+                                marginBottom: '0.75rem',
+                                fontSize: '0.7rem',
+                                fontWeight: 'bold',
+                                letterSpacing: '0.1em'
+                            }}>
+                                DIAGNÓSTICO COGNITIVO
+                            </div>
+                            
+                            {/* Título */}
+                            <h2 style={{
+                                color: '#004B63',
+                                fontSize: '1.4rem',
+                                fontWeight: 'bold',
+                                marginBottom: '1rem',
+                                fontFamily: 'Montserrat, sans-serif'
+                            }}>
+                                Estilo de Aprendizaje VAK
+                            </h2>
+                            
+                            {/* Tarjetas VAK */}
+                            <div style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                gap: '0.75rem',
+                                marginBottom: '1rem',
+                                flexWrap: 'wrap'
+                            }}>
+                                <div style={{
+                                    background: 'linear-gradient(135deg, #4DA8C4 0%, #66CCCC 100%)',
+                                    color: 'white',
+                                    padding: '0.75rem 1rem',
+                                    borderRadius: '10px',
+                                    textAlign: 'center',
+                                    minWidth: '80px',
+                                    boxShadow: '0 4px 15px rgba(77, 168, 196, 0.4)'
+                                }}>
+                                    <i className="fa-solid fa-eye" style={{ fontSize: '1.2rem', marginBottom: '0.3rem' }} />
+                                    <div style={{ fontWeight: 'bold', fontSize: '0.75rem' }}>VISUAL</div>
+                                </div>
+                                
+                                <div style={{
+                                    background: 'linear-gradient(135deg, #66CCCC 0%, #4DA8C4 100%)',
+                                    color: 'white',
+                                    padding: '0.75rem 1rem',
+                                    borderRadius: '10px',
+                                    textAlign: 'center',
+                                    minWidth: '80px',
+                                    boxShadow: '0 4px 15px rgba(102, 204, 204, 0.4)'
+                                }}>
+                                    <i className="fa-solid fa-ear-listen" style={{ fontSize: '1.2rem', marginBottom: '0.3rem' }} />
+                                    <div style={{ fontWeight: 'bold', fontSize: '0.75rem' }}>AUDITIVO</div>
+                                </div>
+                                
+                                <div style={{
+                                    background: 'linear-gradient(135deg, #004B63 0%, #4DA8C4 100%)',
+                                    color: 'white',
+                                    padding: '0.75rem 1rem',
+                                    borderRadius: '10px',
+                                    textAlign: 'center',
+                                    minWidth: '80px',
+                                    boxShadow: '0 4px 15px rgba(0, 75, 99, 0.4)'
+                                }}>
+                                    <i className="fa-solid fa-hand" style={{ fontSize: '1.2rem', marginBottom: '0.3rem' }} />
+                                    <div style={{ fontWeight: 'bold', fontSize: '0.75rem' }}>KINEST</div>
+                                </div>
+                            </div>
+                            
+                            {/* Botón */}
+                            <button 
+                                onClick={() => onNavigate('vak')}
+                                style={{
+                                    background: 'linear-gradient(135deg, #4DA8C4 0%, #66CCCC 100%)',
+                                    color: 'white',
+                                    border: 'none',
+                                    padding: '12px 32px',
+                                    borderRadius: '100px',
+                                    fontSize: '0.95rem',
+                                    fontWeight: 'bold',
+                                    cursor: 'pointer',
+                                    width: '100%',
+                                    marginBottom: '1rem',
+                                    boxShadow: '0 4px 20px rgba(77, 168, 196, 0.5)'
+                                }}
+                            >
+                                Comenzar Evaluación
+                            </button>
+                            
+                            {/* Stats */}
+                            <div style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                gap: '1rem',
+                                flexWrap: 'wrap',
+                                color: '#666',
+                                fontSize: '0.8rem'
+                            }}>
+                                <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                                    <i className="fa-solid fa-clock" /> 3 min
+                                </span>
+                                <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                                    <i className="fa-solid fa-circle-question" /> 10 preguntas
+                                </span>
+                                <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                                    <i className="fa-solid fa-bullseye" /> 100% personal
+                                </span>
+                            </div>
                         </div>
-                        <div className="pillar-stat">
-                            <span className="pillar-stat-value" style={{ background: 'linear-gradient(135deg, #fff, #B2D8E5)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>98%</span>
-                            <span className="pillar-stat-label" style={{ color: 'rgba(255,255,255,0.7)' }}>Precisión</span>
-                        </div>
-                        <div className="pillar-stat">
-                            <span className="pillar-stat-value" style={{ background: 'linear-gradient(135deg, #fff, #B2D8E5)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>4.8/5</span>
-                            <span className="pillar-stat-label" style={{ color: 'rgba(255,255,255,0.7)' }}>Satisfacción</span>
-                        </div>
-                    </div>
-                </div>
-                <div className="pillar-hero-visual">
-                    <div className="neuro-animation">
-                        <div className="neuro-circle c1" />
-                        <div className="neuro-circle c2" />
-                        <div className="neuro-circle c3" />
-                        <div className="neuro-center">
-                            <i className="fa-solid fa-brain" />
+                        
+                        {/* LADO DERECHO: Información del método VAK */}
+                        <div style={{
+                            flex: '1 1 400px',
+                            maxWidth: '500px',
+                            color: 'white',
+                            padding: '1rem'
+                        }}>
+                            <h1 style={{
+                                fontSize: '2rem',
+                                fontWeight: 'bold',
+                                marginBottom: '1rem',
+                                fontFamily: 'Montserrat, sans-serif'
+                            }}>
+                                ¿Qué es el método VAK?
+                            </h1>
+                            <p style={{
+                                fontSize: '1.1rem',
+                                lineHeight: '1.7',
+                                opacity: 0.9,
+                                marginBottom: '1rem'
+                            }}>
+                                VAK es un modelo neuropsicológico que identifica cómo procesa información cada persona.
+                            </p>
+                            <ul style={{
+                                listStyle: 'none',
+                                padding: 0,
+                                margin: 0,
+                                fontSize: '1rem',
+                                lineHeight: '1.8'
+                            }}>
+                                <li style={{ marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                    <i className="fa-solid fa-eye" style={{ color: '#4DA8C4', fontSize: '1.2rem' }} />
+                                    <span><strong style={{ color: '#4DA8C4' }}>Visual:</strong> Aprende mejor con imágenes y gráficos</span>
+                                </li>
+                                <li style={{ marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                    <i className="fa-solid fa-ear-listen" style={{ color: '#66CCCC', fontSize: '1.2rem' }} />
+                                    <span><strong style={{ color: '#66CCCC' }}>Auditivo:</strong> Aprende mejor con sonidos y explicaciones</span>
+                                </li>
+                                <li style={{ marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                    <i className="fa-solid fa-hand" style={{ color: '#66CCCC', fontSize: '1.2rem' }} />
+                                    <span><strong style={{ color: '#66CCCC' }}>Kinestésico:</strong> Aprende mejor con experiencias prácticas</span>
+                                </li>
+                            </ul>
+                            <p style={{
+                                fontSize: '1rem',
+                                marginTop: '1.5rem',
+                                opacity: 0.85,
+                                fontStyle: 'italic'
+                            }}>
+                                Conocer tu estilo te permite estudiar de forma más eficiente.
+                            </p>
                         </div>
                     </div>
                 </div>

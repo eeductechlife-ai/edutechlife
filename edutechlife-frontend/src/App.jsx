@@ -19,7 +19,7 @@ const AutomationArchitect = lazy(() => import('./components/AutomationArchitect'
 const SmartBoardDashboard = lazy(() => import('./components/SmartBoardDashboard'));
 const SmartBoardLogin = lazy(() => import('./components/SmartBoardLogin'));
 // Unified VAK Diagnosis Component
-const VAKDiagnosis = lazy(() => import('./features/vak-diagnosis/VAKDiagnosisFixed'));
+const VAKDiagnosis = lazy(() => import('./components/DiagnosticoVAK'));
 const AdminDashboard = lazy(() => import('./components/AdminDashboard'));
 import NicoModern from './components/Nico/NicoModern';
 import AdminLoginModal from './components/AdminLoginModal';
@@ -1096,7 +1096,7 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                                 onToolClick={(toolId) => {
                                     // Mapear herramientas a vistas existentes
                                     const toolToView = {
-                                        'diagnostico-vak': 'vak',
+                                        'diagnostico-vak': 'neuroentorno',
                                         'ia-lab-pro': 'ialab', 
                                         'automatizacion': 'automation',
                                         'smartboard': 'smartboard'

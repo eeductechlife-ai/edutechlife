@@ -281,27 +281,25 @@ const extractUserContext = (message) => {
   
   // Extraer nombre - patrones más completos
   const namePatterns = [
-    // Patterns explícitos
-    /me llamo\s+([a-záéíóúñ]+)/i,
-    /mi nombre es\s+([a-záéíóúñ]+)/i,
-    /soy\s+([a-záéíóúñ]+)(?:\s|$|,|[\.,!])/i,
-    /(?:llámame|dime)\s+([a-záéíóúñ]+)/i,
-    /puedo llamarte\s+([a-záéíóúñ]+)/i,
-    // Nombres simples sin contexto (respuestas directas)
-    /^([A-Z][a-záéíóúñ]+)$/i,
+    // Patterns explícitos comunes
+    /me llamo\s+([a-záéíóúñ]+(?:\s+[a-záéíóúñ]+)?)/i,
+    /mi nombre es\s+([a-záéíóúñ]+(?:\s+[a-záéíóúñ]+)?)/i,
+    /soy\s+([a-záéíóúñ]+(?:\s+[a-záéíóúñ]+)?)/i,
+    /(?:llámame|dime|me dicen)\s+([a-záéíóúñ]+(?:\s+[a-záéíóúñ]+)?)/i,
+    // Nombres simples (respuestas directas) - más flexible
+    /^([a-záéíóúñ]+(?:\s+[a-záéíóúñ]+)?)$/i,
     // Con preposiciones
-    /([a-záéíóúñ]+)\s+(?:es mi nombre|me dicen|me llama)/i,
-    // En contexto de respuesta a "cómo te llamas"
-    /(?:soy |me llamo )?([a-záéíóúñ]+)(?:\s+es|\s+soy|$)/i,
+    /([a-záéíóúñ]+)\s+(?:es mi nombre|me dicen|me llama|me llaman)/i,
     // Nombres con artículos o posesivos
     /(?:el|la)\s+([a-záéíóúñ]+)(?:\s+es|$)/i,
-    /mi\s+nombre\s+(?:es\s+)?([a-záéíóúñ]+)/i
+    // Nombres compuestos comunes
+    /(?:soy |me llamo )?([a-záéíóúñ]+\s+[a-záéíóúñ]+)(?:\s+es|\s+soy|$)/i
   ];
   
   for (const pattern of namePatterns) {
     const match = message.match(pattern);
-    if (match && match[1].length > 2) {
-      context.userName = match[1].charAt(0).toUpperCase() + match[1].slice(1);
+    if (match && match[1] && match[1].length > 1) {
+      context.userName = match[1].charAt(0).toUpperCase() + match[1].slice(1).toLowerCase();
       break;
     }
   }
@@ -341,180 +339,88 @@ const extractUserContext = (message) => {
   return context;
 };
 
-// Base de conocimientos completa para Nico
+// Base de conocimientos simplificada para Nico
 const getQuickResponse = (userMessage, userContext = {}) => {
   const lowerMessage = userMessage.toLowerCase().trim();
-  const { userName, detectedInterest, studentAge, messagesSinceStart = 0 } = userContext;
+  const { userName, messagesSinceStart = 0 } = userContext;
   
-  // Usar nombre del contexto si está disponible
-  const namePrefix = userName ? `${userName}, ` : '';
-  
-  // ==================== PEDIR NOMBRE DE FORMA SUTIL ====================
-  // Verificar si debe pedir el nombre (después de 2+ mensajes, sin nombre, no preguntado)
+  // Pedir nombre después de 2 mensajes si no se tiene
   if (shouldAskForName(userContext)) {
-    // Preguntar de forma sutil con contexto
     return '¿Para personalizar mi ayuda, cómo te llamas?';
   }
   
-  // ==================== SALUDOS ====================
+  // Saludos
   if (lowerMessage.includes('hola') || lowerMessage.includes('buenas') || lowerMessage === 'hi') {
-    // No presentarise, solo responder directamente
-    return '¿En qué puedo ayudarte? Puedo informarte sobre VAK, STEM, tutorías, precios y más.';
+    return '¿En qué puedo ayudarte? Puedo informarte sobre VAK, STEM, tutorías y más.';
   }
   
-  // ==================== SERVICIOS - VAK ====================
-  if ((lowerMessage.includes('qué es') || lowerMessage.includes('que es') || lowerMessage.includes('definicion') || lowerMessage.includes('explic')) && (lowerMessage.includes('vak') || lowerMessage.includes('estilo'))) {
-    return 'VAK son los tres estilos de aprendizaje: Visual (aprendes viendo), Auditivo (aprendes escuchando) y Kinestésico (aprendes haciendo). Identificamos cuál es el tuyo con un diagnóstico gratuito de 30 minutos.';
+  // Qué es VAK
+  if ((lowerMessage.includes('qué es') || lowerMessage.includes('que es')) && (lowerMessage.includes('vak') || lowerMessage.includes('estilo'))) {
+    return 'VAK son los estilos de aprendizaje: Visual, Auditivo y Kinestésico. Identificamos el tuyo con un diagnóstico gratuito.';
   }
   
-  if (lowerMessage.includes('diagnóstico') || lowerMessage.includes('test') || lowerMessage.includes('prueba')) {
-    if (lowerMessage.includes('vak')) {
-      return 'El diagnóstico VAK es un test gratuito de aproximadamente 30 minutos. Identifica tu estilo de aprendizaje para personalizar tu educación. ¿Te gustaría agendarlo?';
-    }
-  }
-  
-  if (lowerMessage.includes('visual') || lowerMessage.includes('auditivo') || lowerMessage.includes('kinest') || lowerMessage.includes('quinest')) {
-    return 'Los estilos VAK son: Visual (mapas mentales, diagramas), Auditivo (podcasts, debates) y Kinestésico (experimentos, movimiento). ¿Cuál te interesa más?';
-  }
-  
-  // ==================== SERVICIOS - STEM ====================
+  // Qué es STEM
   if ((lowerMessage.includes('qué es') || lowerMessage.includes('que es')) && (lowerMessage.includes('stem') || lowerMessage.includes('steam'))) {
-    return 'STEM es Science, Technology, Engineering y Mathematics. Desarrollamos habilidades del futuro con proyectos prácticos de robótica y programación. Para niños desde 5 años.';
+    return 'STEM es ciencia, tecnología, ingeniería y matemáticas. Desarrollamos habilidades del futuro con proyectos de robótica y programación.';
   }
   
-  if (lowerMessage.includes('robótica') || lowerMessage.includes('robotica') || lowerMessage.includes('lego') || lowerMessage.includes('arduino')) {
-    return 'Ofrecemos robótica con LEGO y Arduino para niños y adolescentes. Aprenden construyen y programan robots reales. ¿Para qué edad sería?';
+  // Tutorías
+  if (lowerMessage.includes('tutoría') || lowerMessage.includes('tutoria') || lowerMessage.includes('clases') || lowerMessage.includes('profesor')) {
+    return 'Ofrecemos tutorías en Matemáticas, Ciencias, Inglés y técnicas de estudio. ¿Qué materia necesitas?';
   }
   
-  if (lowerMessage.includes('programación') || lowerMessage.includes('programacion') || lowerMessage.includes('scratch') || lowerMessage.includes('python') || lowerMessage.includes('javascript')) {
-    return 'Programación: Scratch para niños, Python y JavaScript para adolescentes. Desde cero hasta nivel avanzado. ¿Qué edad tiene el estudiante?';
+  // Precios
+  if (lowerMessage.includes('precio') || lowerMessage.includes('cuesta') || lowerMessage.includes('cuanto') || lowerMessage.includes('costo')) {
+    return 'Tenemos planes según tus necesidades. La primera clase es gratuita para que conozcas nuestro método.';
   }
   
-  // ==================== SERVICIOS - TUTORÍAS ====================
-  if (lowerMessage.includes('tutoría') || lowerMessage.includes('tutoria') || lowerMessage.includes('clases') || lowerMessage.includes('profesor') || lowerMessage.includes('docente')) {
-    return 'Ofrecemos tutorías personalizadas en: Matemáticas, Ciencias, Inglés y Técnicas de estudio. Para todas las edades. ¿Qué materia necesitas?';
-  }
-  
-  if (lowerMessage.includes('matemática') || lowerMessage.includes('matematicas') || lowerMessage.includes('álgebra') || lowerMessage.includes('geometría') || lowerMessage.includes('calculo')) {
-    return 'Tenemos tutores especializados en matemáticas para todos los niveles: escolar, universitario y preparación para exámenes. ¿Qué tema necesitas reforzar?';
-  }
-  
-  if (lowerMessage.includes('ciencias') || lowerMessage.includes('física') || lowerMessage.includes('fisica') || lowerMessage.includes('química') || lowerMessage.includes('quimica') || lowerMessage.includes('biología') || lowerMessage.includes('biologia')) {
-    return 'Ofrecemos clases de física, química y biología para todos los niveles. ¿Qué materia y nivel necesitas?';
-  }
-  
-  if (lowerMessage.includes('inglés') || lowerMessage.includes('ingles') || lowerMessage.includes('english') || lowerMessage.includes('idioma')) {
-    return 'Clases de inglés para todos los niveles: básico, intermedio, avanzado, preparación para exámenes (TOEFL, IELTS). ¿Cuál es tu nivel actual?';
-  }
-  
-  if (lowerMessage.includes('técnicas') || lowerMessage.includes('tecnicas') || lowerMessage.includes('estudio') || lowerMessage.includes('aprender')) {
-    return 'Enseñamos técnicas de estudio efectivas: mapas mentales, resumen, memoria, gestión del tiempo. ¿Para qué edad buscas?';
-  }
-  
-  // ==================== SERVICIOS - BIENESTAR ====================
-  if (lowerMessage.includes('bienestar') || lowerMessage.includes('salud mental') || lowerMessage.includes('psicología') || lowerMessage.includes('psicologia') || lowerMessage.includes('emocional')) {
-    return 'Nuestro servicio de bienestar incluye: acompañamiento psicológico escolar, desarrollo de inteligencia emocional, manejo de ansiedad académica y coaching motivacional. ¿Qué necesitas?';
-  }
-  
-  if (lowerMessage.includes('ansiedad') || lowerMessage.includes('estrés') || lowerMessage.includes('estres') || lowerMessage.includes('presión')) {
-    return 'Ayudamos con manejo de ansiedad y estrés académico. Incluye técnicas de relajación, coaching y acompañamiento psicológico. ¿Para quién es?';
-  }
-  
-  // ==================== PRECIOS Y PLANES ====================
-  if (lowerMessage.includes('precio') || lowerMessage.includes('cuesta') || lowerMessage.includes('valor') || lowerMessage.includes('cuanto') || lowerMessage.includes('costo')) {
-    return 'Tenemos diferentes planes según tus necesidades. La primera clase es gratuita para que conozcas nuestro método. ¿Te interesa que te envíe información de planes?';
-  }
-  
-  if (lowerMessage.includes('plan') || lowerMessage.includes('paquete') || lowerMessage.includes('mensual')) {
-    return 'Ofrecemos planes mensuales con descuento por pago anticipado, paquetes de clases y planes por hora. ¿Qué tipo de plan prefieres?';
-  }
-  
-  if (lowerMessage.includes('descuento') || lowerMessage.includes('becas') || lowerMessage.includes('becas')) {
-    return 'Tenemos descuentos para hermanos y becas disponibles para casos especiales. ¿Te interesa alguna de estas opciones?';
-  }
-  
-  // ==================== PRIMERA CLASE ====================
+  // Primera clase gratis
   if (lowerMessage.includes('primera') || lowerMessage.includes('gratis') || lowerMessage.includes('gratuita') || lowerMessage.includes('prueba') || lowerMessage.includes('demo')) {
-    return 'La primera clase es SIEMPRE gratuita y sin compromiso. Dura aproximadamente 30-45 minutos para que conoces nuestro método. ¿Te gustaría agendar?';
+    return 'La primera clase es gratuita y sin compromiso. Dura 30-45 minutos. ¿Te gustaría agendar?';
   }
   
-  // ==================== MODALIDADES ====================
-  if (lowerMessage.includes('online') || lowerMessage.includes('virtual') || lowerMessage.includes('remoto')) {
-    return 'Sí, tenemos clases 100% online por videollamada. Puedes tomar desde cualquier lugar. ¿Te interesa esta modalidad?';
+  // Modalidades
+  if (lowerMessage.includes('online') || lowerMessage.includes('virtual') || lowerMessage.includes('presencial') || lowerMessage.includes('híbrido')) {
+    return 'Tenemos modalidad presencial en Bogotá, online por videollamada e híbrida. ¿Cuál prefieres?';
   }
   
-  if (lowerMessage.includes('presencial') || lowerMessage.includes('físico') || lowerMessage.includes('fisico') || lowerMessage.includes('sede')) {
-    return 'Tenemos modalidad presencial en Bogotá y otras ciudades. También puedes optar por clases híbridas. ¿En qué ciudad te encuentras?';
+  // Programación/Robótica
+  if (lowerMessage.includes('programación') || lowerMessage.includes('robotica') || lowerMessage.includes('robótica') || lowerMessage.includes('scratch') || lowerMessage.includes('python') || lowerMessage.includes('lego')) {
+    return 'Ofrecemos robótica con LEGO y Arduino, programación con Scratch, Python y JavaScript. ¿Qué edad tiene el estudiante?';
   }
   
-  if (lowerMessage.includes('híbrido') || lowerMessage.includes('hibrido') || lowerMessage.includes('mixto')) {
-    return 'Sí, ofreciendo clases híbridas que combinan presencial y online. ¿Qué ciudad indicas para verificar disponibilidad?';
+  // Inglés
+  if (lowerMessage.includes('inglés') || lowerMessage.includes('ingles') || lowerMessage.includes('english')) {
+    return 'Clases de inglés para todos los niveles: básico, intermedio, avanzado y preparación para exámenes. ¿Cuál es tu nivel?';
   }
   
-  // ==================== HORARIOS ====================
-  if (lowerMessage.includes('horario') || lowerMessage.includes('hora') || lowerMessage.includes('disponible')) {
-    return 'Nuestros horarios son: Mañana (8am-12pm), Tarde (2pm-6pm), Noche (6pm-8pm). Disponible de lunes a sábado. ¿Qué horario te funciona mejor?';
+  // Contacto/WhatsApp
+  if (lowerMessage.includes('whatsapp') || lowerMessage.includes('contacto') || lowerMessage.includes('teléfono') || lowerMessage.includes('escribir')) {
+    return 'Puedes escribirnos al WhatsApp: +57 300 123 4567 o al email: info@edutechlife.com';
   }
   
-  if (lowerMessage.includes('lunes') || lowerMessage.includes('martes') || lowerMessage.includes('miercoles') || lowerMessage.includes('jueves') || lowerMessage.includes('viernes') || lowerMessage.includes('sábado') || lowerMessage.includes('sabado') || lowerMessage.includes('domingo')) {
-    return 'Estamos disponibles de lunes a sábado. ¿Qué día y horario te funciona mejor para una clase?';
+  // Inscripción
+  if (lowerMessage.includes('inscribir') || lowerMessage.includes('empezar') || lowerMessage.includes('iniciar') || lowerMessage.includes('cómo comenzar')) {
+    return 'Para comenzar, agendamos tu primera clase gratuita. En esa sesión conocernos tus necesidades. ¿Te gustaría agendar?';
   }
   
-  // ==================== EDADES ====================
-  if (lowerMessage.includes('niños') || lowerMessage.includes('ninos') || lowerMessage.includes('niña') || lowerMessage.includes('niño') || lowerMessage.includes('chico') || lowerMessage.includes('chica')) {
-    return 'Trabajamos con niños desde 5 años. Para esa edad ofrecemos programas de robótica con LEGO y programación con Scratch de forma lúdica. ¿Cuántos años tiene?';
+  // Acerca de EdutechLife
+  if (lowerMessage.includes('quién eres') || lowerMessage.includes('que es edutechlife') || lowerMessage.includes('qué hacen')) {
+    return 'Somos EdutechLife, una plataforma de educación que ofrece diagnóstico de aprendizaje, programas STEM y tutorías personalizadas.';
   }
   
-  if (lowerMessage.includes('adolescentes') || lowerMessage.includes('joven') || lowerMessage.includes('juven') || lowerMessage.includes('teen')) {
-    return 'Para adolescentes (12-17 años) tenemos STEM avanzado, tutorías académicas y preparación para exámenes. ¿Qué necesita el estudiante?';
-  }
-  
-  if (lowerMessage.includes('adultos') || lowerMessage.includes('universitario') || lowerMessage.includes('profesional')) {
-    return 'Para adultos y universitarios offerizamos tutorías especializadas, preparación de exámenes y cursos de inglés. ¿Qué necesitas?';
-  }
-  
-  // ==================== INSCRIPCIÓN ====================
-  if (lowerMessage.includes('inscribir') || lowerMessage.includes('inscripcion') || lowerMessage.includes('empezar') || lowerMessage.includes('iniciar') || lowerMessage.includes('cómo comenzar') || lowerMessage.includes('comenzar')) {
-    return 'Para inscribirte es很简单: agendamos tu primera clase gratuita de 30-45 minutos. En esa sesión conocernos tus necesidades y diseñamos un plan personalizado. ¿Te gustaría agendar?';
-  }
-  
-  if (lowerMessage.includes('qué necesito') || lowerMessage.includes('requisito') || lowerMessage.includes('necesito')) {
-    return 'Solo necesitas tener interés en aprender. Para agendar la primera clase gratuita, solo necesitamos tu nombre y un contacto (whatsapp o email). ¿Me los compartes?';
-  }
-  
-  // ==================== CONTACTO ====================
-  if (lowerMessage.includes('contacto') || lowerMessage.includes('teléfono') || lowerMessage.includes('telefono') || lowerMessage.includes('whatsapp') || lowerMessage.includes('celular')) {
-    return 'Puedes contactarnos por WhatsApp: +57 300 123 4567, por email: info@edutechlife.com o en nuestra web: www.edutechlife.com';
-  }
-  
-  if (lowerMessage.includes('ubicación') || lowerMessage.includes('ubicacion') || lowerMessage.includes('dirección') || lowerMessage.includes('direccion') || lowerMessage.includes('donde')) {
-    return 'Tenemos sedes presenciales en Bogotá y otras ciudades. También puedes tomar clases online desde cualquier lugar. ¿En qué ciudad te encuentras?';
-  }
-  
-  if (lowerMessage.includes('web') || lowerMessage.includes('página') || lowerMessage.includes('pagina') || lowerMessage.includes('sitio')) {
-    return 'Visita nuestra web: www.edutechlife.com ahí encontrarás toda la información sobre servicios, precios y puedes agendar tu clase gratuita.';
-  }
-  
-  // ==================== IDENTIDAD ====================
-  if (lowerMessage.includes('quién eres') || lowerMessage.includes('quien eres') || lowerMessage.includes('qué haces') || lowerMessage.includes('que haces')) {
-    return 'Asistente virtual de EdutechLife. Ayudo a personas a encontrar el mejor camino educativo según sus necesidades.';
-  }
-  
-  // ==================== DESPEDIDAS ====================
+  // Gratitud
   if (lowerMessage.includes('gracias') || lowerMessage.includes('thank')) {
-    return 'De nada. Estoy aquí para ayudarte. ¿Hay algo más en lo que pueda asistirte?';
+    return 'De nada. ¿Hay algo más en lo que pueda ayudarte?';
   }
   
-  if (lowerMessage.includes('adiós') || lowerMessage.includes('chao') || lowerMessage.includes('bye') || lowerMessage.includes('hasta luego')) {
-    return 'Fue un gusto ayudarte. Recuerda que puedes contactarnos al WhatsApp: +57 300 123 4567. ¡Hasta pronto!';
+  // Despedida
+  if (lowerMessage.includes('adiós') || lowerMessage.includes('chao') || lowerMessage.includes('bye')) {
+    return 'Fue un gusto ayudarte. Puedes contactarnos cuando quieras. ¡Hasta pronto!';
   }
   
-  // ==================== AYUDA ====================
-  if (lowerMessage.includes('ayuda') || lowerMessage.includes('información') || lowerMessage.includes('informacion') || lowerMessage.includes('duda')) {
-    return 'Con gusto te ayudo. Puedo informarte sobre VAK, STEM, tutorías, precios, horarios, modalidades o cualquier otra duda. ¿Qué necesitas saber?';
-  }
-  
-  return null; // No hay respuesta predefinida, usar IA
+  // Si no hay respuesta rápida, retorna null para que la IA responda
+  return null;
 };
 
 // Función para generar sugerencias de preguntas basadas en el contexto
@@ -684,13 +590,13 @@ const PROMPT_NICO_SOPORTE = `Eres NICO, asistente de EdutechLife. Hablas españo
 ## REGLAS BÁSICAS (máximo 10):
 1. Responde DIRECTAMENTE a lo que el usuario pregunta, sin preámbulos
 2. NO digas "Claro", "Con gusto", "Por supuesto" - ve directo al tema
-3. NUNCA te presentes como "Soy Nico" después del primer mensaje
-4. NO uses emojis, asteriscos, ni formato markdown
-5. Español coloquial, como hablando con un amigo
-6. Si no sabes algo, di que no lo sabes
-7. Responde de 1-3 oraciones máximo
-8. Usa el contexto de la conversación previa
-9. Si el usuario te da su nombre, úsalo ocasionalmente
+3. NUNCA digas "Hola" al inicio de tus respuestas - solo responde lo que preguntan
+4. NUNCA te presents como "Soy Nico" o "Hola soy Nico" - el usuario ya sabe quién eres
+5. NO uses emojis, asteriscos, ni formato markdown
+6. Español coloquial, como hablando con un amigo
+7. Si no sabes algo, di que no lo sabes
+8. Responde de 1-3 oraciones máximo
+9. Usa el contexto de la conversación previa
 10. La primera clase siempre es gratuita
 
 ## SERVICIOS CLAVE:
@@ -1091,9 +997,11 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       } else {
         // Contexto simplificado para velocidad
         const memoryContext = getContextualPrompt();
+        const userNameFromState = userContext?.userName;
+        const contextInfo = userNameFromState ? `El usuario se llama ${userNameFromState}.` : '';
         const enhancedSystemPrompt = memoryContext 
-          ? `${PROMPT_NICO_SOPORTE}\nContexto: ${memoryContext.substring(0, 200)}`
-          : PROMPT_NICO_SOPORTE;
+          ? `${PROMPT_NICO_SOPORTE}\nContexto: ${memoryContext.substring(0, 200)} ${contextInfo}`
+          : `${PROMPT_NICO_SOPORTE} ${contextInfo}`;
         
         response = await callDeepseek(userMessage, enhancedSystemPrompt);
         
