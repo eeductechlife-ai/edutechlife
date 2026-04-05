@@ -10,6 +10,7 @@
     "qa:pdfs": "node scripts/qa/run-qa-pdfs.js"
   },
   "dependencies": {
+    "@babel/plugin-transform-react-jsx": "^7.28.6",
     "@supabase/supabase-js": "^2.39.0",
     "canvas-confetti": "^1.9.4",
     "framer-motion": "^12.38.0",
