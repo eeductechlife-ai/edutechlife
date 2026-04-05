@@ -1215,8 +1215,8 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                 onClose={() => setShowContactModal(false)}
             />
 
-            {/* Footer - Solo se muestra en páginas principales, no en SmartBoard, VAK, Admin ni NeuroEntorno */}
-            {view !== 'smartboard' && view !== 'vak' && view !== 'admin' && view !== 'neuroentorno' && <Footer />}
+            {/* Footer - Solo se muestra en páginas principales, no en SmartBoard, VAK, Admin, NeuroEntorno ni IALab */}
+            {view !== 'smartboard' && view !== 'vak' && view !== 'admin' && view !== 'neuroentorno' && view !== 'ialab' && <Footer />}
 
             {/* Admin Login Modal */}
             <AdminLoginModal 
