@@ -477,6 +477,16 @@ const IALab = ({ onBack }) => {
                                     </div>
                                 </div>
                             </div>
+
+                            {/* Cerrar Sesión Button */}
+                            <div className="p-3 border-t border-[#E2E8F0]">
+                                <button
+                                    onClick={handleLogout}
+                                    className="w-full flex items-center justify-center gap-1 px-3 py-2 bg-[#004B63] text-white font-medium rounded-lg hover:bg-[#4DA8C4] transition-all duration-300 text-xs"
+                                >
+                                    <LogOut size={14} /> Cerrar Sesión
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -596,51 +606,47 @@ const IALab = ({ onBack }) => {
                                     </div>
 
                                     {/* Valerio Coach - Compact */}
-                                    <div className="bg-gradient-to-br from-[#004B63] to-[#0A3550] border border-white/10 shadow-[0_8px_32px_rgba(0,75,99,0.2)] rounded-[2rem] overflow-hidden relative">
-                                        <div className="absolute top-0 right-0 w-32 h-32 bg-[#4DA8C4] rounded-full blur-[80px] opacity-15 pointer-events-none"></div>
-                                        <div className="p-4">
-                                            <div className="flex items-center gap-3 mb-3">
-                                                <ValerioAvatar state={avatarState} size={36} />
+                                    <div className="bg-gradient-to-br from-[#004B63] to-[#0A3550] border border-white/10 shadow-[0_8px_32px_rgba(0,75,99,0.2)] rounded-2xl overflow-hidden relative">
+                                        <div className="absolute top-0 right-0 w-24 h-24 bg-[#4DA8C4] rounded-full blur-[60px] opacity-15 pointer-events-none"></div>
+                                        <div className="p-3">
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <ValerioAvatar state={avatarState} size={28} />
                                                 <div>
-                                                    <h3 className="font-normal text-white text-sm">Tu Coach: Valerio</h3>
-                                                    <p className="text-white/50 text-xs">IA Nativa</p>
+                                                    <h3 className="font-normal text-white text-xs">Valerio</h3>
                                                 </div>
                                             </div>
                                             <textarea
                                                 value={coachQ}
                                                 onChange={e => setCoachQ(e.target.value)}
-                                                placeholder="Pregunta a Valerio..."
-                                                className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/40 resize-none focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] text-sm"
-                                                rows={2}
+                                                placeholder="Pregunta..."
+                                                className="w-full px-2 py-1 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/40 resize-none focus:outline-none focus:ring-1 focus:ring-[#4DA8C4] text-xs"
+                                                rows={1}
                                             />
-                                            <div className="flex gap-2 mt-2">
+                                            <div className="flex gap-1 mt-2">
                                                 <button
                                                     onClick={askCoach}
                                                     disabled={coachLoad || !coachQ.trim()}
-                                                    className="flex-1 py-2 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-lg font-normal text-sm hover:shadow-lg transition-all disabled:opacity-50"
+                                                    className="flex-1 py-1.5 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-lg font-normal text-xs hover:shadow-lg transition-all disabled:opacity-50"
                                                 >
-                                                    {coachLoad ? 'Pensando...' : 'Preguntar'}
+                                                    {coachLoad ? '...' : 'Preguntar'}
                                                 </button>
                                                 <button
                                                     onClick={toggleSpeech}
-                                                    className={`p-2 rounded-lg transition-all ${isListening ? 'bg-red-500 text-white' : 'bg-white/10 text-[#4DA8C4]'}`}
+                                                    className={`p-1.5 rounded-lg transition-all ${isListening ? 'bg-red-500 text-white' : 'bg-white/10 text-[#4DA8C4]'}`}
                                                 >
-                                                    <Icon name="fa-microphone" className="text-sm" />
+                                                    <Icon name="fa-microphone" className="text-xs" />
                                                 </button>
                                                 <input type="file" ref={fileInputRef} onChange={handleFileUpload} style={{ display: 'none' }} accept=".txt,.md,.pdf,.doc,.docx" />
                                                 <button
                                                     onClick={() => fileInputRef.current?.click()}
-                                                    className="p-2 rounded-lg bg-white/10 text-[#4DA8C4] hover:bg-white/20 transition-all"
+                                                    className="p-1.5 rounded-lg bg-white/10 text-[#4DA8C4] hover:bg-white/20 transition-all"
                                                 >
-                                                    <Icon name="fa-paperclip" className="text-sm" />
+                                                    <Icon name="fa-paperclip" className="text-xs" />
                                                 </button>
                                             </div>
                                             {coachMsg && (
-                                                <div className="mt-3 p-3 bg-white/10 rounded-lg backdrop-blur-sm">
-                                                    <div className="flex items-start gap-2">
-                                                        <ValerioAvatar state={avatarState} size={24} />
-                                                        <p className="text-white/90 text-xs">{coachMsg}</p>
-                                                    </div>
+                                                <div className="mt-2 p-2 bg-white/10 rounded-lg backdrop-blur-sm">
+                                                    <p className="text-white/90 text-xs line-clamp-2">{coachMsg}</p>
                                                 </div>
                                             )}
                                         </div>
@@ -824,13 +830,6 @@ const IALab = ({ onBack }) => {
                     </div>
                 </div>
             )}
-            
-            <button
-                onClick={handleLogout}
-                className="fixed bottom-5 left-5 z-[100] flex items-center gap-2 px-5 py-3 bg-[#004B63] text-white font-medium rounded-xl hover:bg-[#4DA8C4] transition-all duration-300 shadow-lg"
-            >
-                <LogOut size={18} /> Cerrar Sesión
-            </button>
         </div>
     );
 };
