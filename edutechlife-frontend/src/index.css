@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Open+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap');
 @import './design-system/tokens.css';
+@import './components/Valentina/Valentina.css';
+@import './components/DiagnosticoVAK/DiagnosticoVAK.css';
 
 @tailwind base;
 @tailwind components;
@@ -12498,6 +12500,143 @@ span:not(h1 span):not(h2 span):not(h3 span):not(.stat-number),
   animation: gentle-pulse 2s infinite;
 }
 
+/* ==================== NEUROENTORNO PREMIUM ANIMATIONS ==================== */
+
+/* Border Pulse Animation for Premium Cards */
+@keyframes border-pulse {
+  0%, 100% {
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 0 0 rgba(77, 168, 196, 0.4);
+  }
+  50% {
+    border-color: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 0 0 4px rgba(77, 168, 196, 0.2);
+  }
+}
+
+/* Sparkle Effect for Premium Interactions */
+@keyframes sparkle {
+  0%, 100% {
+    transform: scale(0.8);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+/* Mini Float Animation for Particles */
+@keyframes float-mini {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+  }
+  33% {
+    transform: translateY(-4px) translateX(2px);
+  }
+  66% {
+    transform: translateY(2px) translateX(-2px);
+  }
+}
+
+/* Shake Animation for Kinesthetic Icon */
+@keyframes shake {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-5deg);
+  }
+  75% {
+    transform: rotate(5deg);
+  }
+}
+
+/* Sweep Animation for Button Effects */
+@keyframes sweep {
+  0% {
+    transform: translateX(-100%) skewX(-20deg);
+  }
+  100% {
+    transform: translateX(200%) skewX(-20deg);
+  }
+}
+
+/* Premium Pulse Animation */
+@keyframes premium-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 20px 40px rgba(0, 75, 99, 0.15);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 25px 50px rgba(0, 75, 99, 0.25);
+  }
+}
+
+/* Glassmorphism Pulse */
+@keyframes glass-pulse {
+  0%, 100% {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.1);
+  }
+  50% {
+    backdrop-filter: blur(15px);
+    background: rgba(255, 255, 255, 0.15);
+  }
+}
+
+/* Icon Glow Pulse */
+@keyframes icon-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.3));
+  }
+  50% {
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+  }
+}
+
+/* Text Reveal Animation */
+@keyframes text-reveal {
+  0% {
+    clip-path: inset(0 100% 0 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Gradient Shift Premium */
+@keyframes gradient-shift-premium {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* ==================== UTILITY CLASSES ==================== */
+
+.animate-premium-pulse {
+  animation: premium-pulse 3s ease-in-out infinite;
+}
+
+.animate-glass-pulse {
+  animation: glass-pulse 4s ease-in-out infinite;
+}
+
+.animate-icon-glow {
+  animation: icon-glow 2s ease-in-out infinite;
+}
+
+.animate-text-reveal {
+  animation: text-reveal 1.5s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+}
+
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -12509,6 +12648,13 @@ span:not(h1 span):not(h2 span):not(h3 span):not(.stat-number),
   }
   
   .animate-gentle-pulse {
+    animation: none;
+  }
+  
+  .animate-premium-pulse,
+  .animate-glass-pulse,
+  .animate-icon-glow,
+  .animate-text-reveal {
     animation: none;
   }
 }

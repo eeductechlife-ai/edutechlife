@@ -1,8 +1,142 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 
-const ValerioAvatar = ({ state = 'idle', size = 80 }) => {
+const ValerioAvatar = ({ state = 'idle', size = 80, onStateChange }) => {
     const canvasRef = useRef(null);
     const animationRef = useRef(null);
+    const [isMuted, setIsMuted] = useState(false);
+    const [isSpeaking, setIsSpeaking] = useState(false);
+    const [selectedVoice, setSelectedVoice] = useState(null);
+    const synthRef = useRef(null);
+
+    // Inicializar sintetizador de voz
+    useEffect(() => {
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            synthRef.current = window.speechSynthesis;
+            
+            const loadVoices = () => {
+                const voices = synthRef.current.getVoices();
+                // Buscar voz en español
+                const spanishVoices = voices.filter(voice => 
+                    voice.lang.startsWith('es') && voice.name.toLowerCase().includes('male')
+                );
+                
+                if (spanishVoices.length > 0) {
+                    // Preferir voces masculinas claras
+                    setSelectedVoice(spanishVoices.find(v => 
+                        v.name.includes('Google') || v.name.includes('Microsoft')
+                    ) || spanishVoices[0]);
+                } else {
+                    // Fallback: cualquier voz española
+                    const anySpanish = voices.find(voice => voice.lang.startsWith('es'));
+                    setSelectedVoice(anySpanish || voices[0]);
+                }
+            };
+
+            loadVoices();
+            synthRef.current.onvoiceschanged = loadVoices;
+        }
+
+        return () => {
+            if (synthRef.current) {
+                synthRef.current.cancel();
+            }
+        };
+    }, []);
+
+    // Detectar cuando está hablando para el efecto visual
+    useEffect(() => {
+        if (synthRef.current) {
+            const checkSpeaking = setInterval(() => {
+                setIsSpeaking(synthRef.current.speaking);
+            }, 100);
+            return () => clearInterval(checkSpeaking);
+        }
+    }, []);
+
+    // Función speak - puede ser llamada externamente
+    const speak = useCallback((text) => {
+        if (!synthRef.current || isMuted || !text) return;
+        
+        // Limpiar texto de markdown/asteriscos
+        const cleanText = text
+            .replace(/\*\*/g, '')
+            .replace(/\*/g, '')
+            .replace(/```/g, '')
+            .replace(/`/g, '')
+            .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+            .replace(/[_*~]/g, '')
+            .trim();
+
+        if (!cleanText) return;
+
+        // Detener cualquier habla anterior
+        synthRef.current.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        
+        if (selectedVoice) {
+            utterance.voice = selectedVoice;
+            utterance.lang = selectedVoice.lang;
+        } else {
+            utterance.lang = 'es-ES';
+        }
+
+        utterance.rate = 0.9; // Velocidad ligeramente más lenta para claridad
+        utterance.pitch = 1.0;
+        utterance.volume = 1.0;
+
+        utterance.onstart = () => {
+            setIsSpeaking(true);
+            if (onStateChange) onStateChange('speaking');
+        };
+
+        utterance.onend = () => {
+            setIsSpeaking(false);
+            if (onStateChange) onStateChange('idle');
+        };
+
+        utterance.onerror = () => {
+            setIsSpeaking(false);
+            if (onStateChange) onStateChange('idle');
+        };
+
+        synthRef.current.speak(utterance);
+    }, [isMuted, selectedVoice, onStateChange]);
+
+    // Exponer función speak al window para acceso externo
+    useEffect(() => {
+        window.valerioSpeak = speak;
+        return () => {
+            delete window.valerioSpeak;
+        };
+    }, [speak]);
+
+    // Función para silenciar
+    const toggleMute = () => {
+        if (isMuted) {
+            synthRef.current?.cancel();
+        }
+        setIsMuted(!isMuted);
+    };
+
+    // Efecto visual mientras habla
+    const getContainerClass = () => {
+        let baseClass = 'valerio-avatar-container relative inline-block';
+        if (isSpeaking) {
+            baseClass += ' animate-pulse';
+        }
+        return baseClass;
+    };
+
+    const getGlowStyle = () => {
+        if (isSpeaking) {
+            return {
+                boxShadow: '0 0 30px rgba(77, 168, 196, 0.6)',
+                transition: 'box-shadow 0.3s ease'
+            };
+        }
+        return {};
+    };
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -180,22 +314,42 @@ const ValerioAvatar = ({ state = 'idle', size = 80 }) => {
     };
 
     return (
-        <div className="valerio-avatar-container">
-            <canvas 
-                ref={canvasRef}
-                width={size}
-                height={size}
-                className="valerio-canvas"
-            />
+        <div className="flex flex-col items-center gap-2">
+            <div className="relative" style={getGlowStyle()}>
+                <canvas 
+                    ref={canvasRef}
+                    width={size}
+                    height={size}
+                    className="valerio-canvas"
+                />
+                
+                {/* Botón Mute */}
+                <button
+                    onClick={toggleMute}
+                    className="absolute -top-1 -right-1 w-6 h-6 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-gray-100 transition-colors"
+                    title={isMuted ? 'Activar sonido' : 'Silenciar'}
+                >
+                    {isMuted ? (
+                        <svg className="w-3 h-3 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.414-4.414a10 10 0 0114.14 0M17 14l2-2m0 0l2-2m-2 2l-2-2" />
+                        </svg>
+                    ) : (
+                        <svg className="w-3 h-3 text-[#004B63]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.414-4.414a10 10 0 0114.14 0" />
+                        </svg>
+                    )}
+                </button>
+            </div>
+            
             <div 
-                className="valerio-status"
+                className="valerio-status px-3 py-1 rounded-full text-xs font-medium border"
                 style={{ 
                     background: `${getStatusColor()}20`,
                     borderColor: `${getStatusColor()}40`,
                     color: getStatusColor()
                 }}
             >
-                <span className={`status-dot ${state}`} style={{ background: getStatusColor() }} />
+                <span className={`inline-block w-2 h-2 rounded-full mr-2 ${state}`} style={{ background: getStatusColor() }} />
                 {getStatusLabel()}
             </div>
         </div>

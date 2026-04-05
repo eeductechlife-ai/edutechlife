@@ -27,6 +27,9 @@ import LeadCaptureModal from './components/LeadCaptureModal';
 import LoadingScreen, { MiniLoader } from './components/LoadingScreen';
 import { callDeepseek, callDeepseekStream } from './utils/api';
 import { speakTextConversational, stopSpeech } from './utils/speech';
+import { StudentProvider } from './contexts/StudentContext';
+import { useAuth } from './context/AuthContext';
+import WelcomeScreen from './components/WelcomeScreen';
 
 // Cache de preguntas frecuentes para respuestas instantáneas
 const responseCache = new Map();
@@ -216,6 +219,7 @@ const CustomCursor = () => {
 };
 
 const App = () => {
+    const { user, loading: authLoading } = useAuth();
     const [isLoading, setIsLoading] = useState(true);
     const [view, setView] = useState('landing');
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -805,20 +809,58 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
         setIsLoading(false);
     }, []);
 
-    return (
-        <div className="flex flex-col min-h-screen overflow-hidden bg-white text-[#004B63]" style={{ fontFamily: "'Montserrat', sans-serif" }}>
-            <Suspense fallback={null}>
-                <GlobalCanvas />
-            </Suspense>
-            <CustomCursor />
+    // Componente ProtectedRoute para el Laboratorio
+    const ProtectedRoute = ({ children }) => {
+        // Timeout para no quedarse forever en "Verificando sesión"
+        const [showWelcome, setShowWelcome] = useState(false);
+        
+        useEffect(() => {
+            const timer = setTimeout(() => {
+                setShowWelcome(true);
+            }, 3000);
+            return () => clearTimeout(timer);
+        }, []);
+        
+        // Mientras carga Y no hay usuario Y no ha pasado el timeout, mostrar spinner
+        if (authLoading && !user && !showWelcome) {
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-[#004B63] to-[#0A3550] flex items-center justify-center">
+                    <div className="text-center">
+                        <div className="w-12 h-12 border-4 border-[#4DA8C4] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                        <p className="text-white/70">Verificando sesión...</p>
+                    </div>
+                </div>
+            );
+        }
+        
+        // Si ya pasó el timeout O ya hay usuario O ya no está cargando, mostrar lo que corresponda
+        if (!user) {
+            return <WelcomeScreen />;
+        }
+        
+        return children;
+    };
+
+    // Función para determinar si muestra la web completa o solo el lab
+    const isLabView = view === 'ialab';
+
+    // Renderizado según estado de autenticación - SOLO el laboratorio requiere login
+    const renderContent = () => {
+        // Siempre mostrar la estructura base
+        return (
+                <div className="flex flex-col min-h-screen overflow-hidden bg-white text-[#004B63]" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+                <Suspense fallback={null}>
+                    {view !== 'ialab' && view !== 'auth' && <GlobalCanvas />}
+                </Suspense>
+                <CustomCursor />
             
             {/* Loading Screen */}
             {isLoading && (
                 <LoadingScreen onComplete={handleLoadingComplete} minDuration={2000} />
             )}
 
-            {/* Header - Navigation Premium - Hidden on SmartBoard, IALab and Admin */}
-            {view !== 'smartboard' && view !== 'ialab' && view !== 'admin' && (
+            {/* Header - Navigation Premium - Hidden on SmartBoard, Admin, NeuroEntorno, VAK, IALab and Auth */}
+            {view !== 'smartboard' && view !== 'admin' && view !== 'neuroentorno' && view !== 'vak' && view !== 'ialab' && view !== 'auth' && (
                 <>
                     <header className="sticky top-0 left-0 right-0 z-[1000] bg-white backdrop-blur-md border-b border-[#004B63]/10">
                         <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 flex items-center justify-between">
@@ -913,8 +955,8 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                         </div>
                     </header>
 
-                    {/* Mobile Menu Drawer */}
-                    {mobileMenuOpen && (
+                    {/* Mobile Menu Drawer - Hidden on IALab and Auth */}
+                    {mobileMenuOpen && view !== 'ialab' && view !== 'auth' && (
                         <>
                             {/* Backdrop */}
                             <div 
@@ -1114,8 +1156,12 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                     )}
 
                     {/* Pillar Pages */}
-                    {view === 'ialab' && <IALab onBack={() => handleNavigate('landing')} />}
-                    {view === 'neuroentorno' && <NeuroEntorno onBack={() => handleNavigate('landing')} onNavigate={handleNavigate} />}
+                    {view === 'ialab' && (
+                        <ProtectedRoute>
+                            <IALab onBack={() => handleNavigate('landing')} />
+                        </ProtectedRoute>
+                    )}
+                    {view === 'neuroentorno' && <NeuroEntorno onBack={() => { handleNavigate('landing'); setTimeout(() => { const ecosystem = document.getElementById('ecosystem'); if (ecosystem) ecosystem.scrollIntoView({ behavior: 'smooth' }); }, 100); }} onNavigate={handleNavigate} />}
                     {view === 'proyectos' && <ProyectosNacional onBack={() => handleNavigate('landing')} />}
                     {view === 'consultoria' && <Consultoria onBack={() => handleNavigate('landing')} />}
                     {view === 'consultoria-b2b' && <ConsultoriaB2B onBack={() => handleNavigate('landing')} />}
@@ -1169,8 +1215,8 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                 onClose={() => setShowContactModal(false)}
             />
 
-            {/* Footer - Solo se muestra en páginas principales, no en SmartBoard, VAK, IALab ni Admin */}
-            {view !== 'smartboard' && view !== 'vak' && view !== 'ialab' && view !== 'admin' && <Footer />}
+            {/* Footer - Solo se muestra en páginas principales, no en SmartBoard, VAK, Admin ni NeuroEntorno */}
+            {view !== 'smartboard' && view !== 'vak' && view !== 'admin' && view !== 'neuroentorno' && <Footer />}
 
             {/* Admin Login Modal */}
             <AdminLoginModal 
@@ -1179,9 +1225,18 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                 onLogin={handleAdminLogin}
             />
 
-            {/* Nico Premium Widget - Flotante */}
-            <NicoModern />
-        </div>
+            {/* Nico Premium Widget - Flotante - Hidden on VAK, IALab and Auth */}
+            {view !== 'vak' && view !== 'vak-simple' && view !== 'vak-premium' && view !== 'ialab' && view !== 'auth' && (
+              <NicoModern />
+            )}
+            </div>
+        );
+    };
+
+    return (
+        <StudentProvider>
+            {renderContent()}
+        </StudentProvider>
     );
 };
 

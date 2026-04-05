@@ -7,8 +7,13 @@ import html2pdf from 'html2pdf.js';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { useInView } from 'framer-motion';
 import { Icon } from '../utils/iconMapping.jsx';
+import { useAuth } from '../context/AuthContext';
+import { getAllProgress, saveProgress, PROGRESS_STATUS, saveLastLesson, getUserLastProgress } from '../lib/progress';
+import { LogOut } from 'lucide-react';
 
 const IALab = ({ onBack }) => {
+    const { user, isLoading: authLoading, signOut } = useAuth();
+    
     const [activeMod, setActiveMod] = useState(1);
     const [activeTab, setActiveTab] = useState('lab');
     const [input, setInput] = useState('');
@@ -19,6 +24,8 @@ const IALab = ({ onBack }) => {
     const [showNameModal, setShowNameModal] = useState(false);
     const [completedModules, setCompletedModules] = useState([]);
     const [courseProgress, setCourseProgress] = useState(20);
+    const [visitedModules, setVisitedModules] = useState([1]);
+    const [isLoadingProgress, setIsLoadingProgress] = useState(true);
     
     const [evalAnswers, setEvalAnswers] = useState({});
     const [evalSubmitted, setEvalSubmitted] = useState(false);
@@ -83,6 +90,81 @@ const IALab = ({ onBack }) => {
             if (loadingIntervalRef.current) clearInterval(loadingIntervalRef.current);
         };
     }, []);
+
+    // Cargar progreso desde Supabase al iniciar
+    useEffect(() => {
+        const loadProgress = async () => {
+            try {
+                const progressData = await getAllProgress();
+                
+                const completed = progressData
+                    .filter(p => p.status === PROGRESS_STATUS.COMPLETED)
+                    .map(p => p.module_id);
+                setCompletedModules(completed);
+
+                const visited = progressData.map(p => p.module_id);
+                if (visited.length > 0) {
+                    setVisitedModules(visited);
+                }
+
+                const mainModulesCompleted = completed.filter(id => id <= 4).length;
+                setCourseProgress(Math.round((mainModulesCompleted / 4) * 100));
+
+                const lastProgress = await getUserLastProgress();
+                if (lastProgress && lastProgress.last_lesson_id) {
+                    setActiveMod(lastProgress.module_id);
+                }
+            } catch (error) {
+                console.error('Error cargando progreso:', error);
+            } finally {
+                setIsLoadingProgress(false);
+            }
+        };
+
+        if (!authLoading) {
+            loadProgress();
+        }
+    }, [authLoading]);
+
+    const handleModuleClick = async (moduleId) => {
+        if (!visitedModules.includes(moduleId)) {
+            setVisitedModules([...visitedModules, moduleId]);
+        }
+        setActiveMod(moduleId);
+        setActiveTab('lab');
+        
+        try {
+            await saveLastLesson(moduleId, `module_${moduleId}_start`);
+        } catch (error) {
+            console.error('Error guardando última lección:', error);
+        }
+    };
+
+    const handleLogout = async () => {
+        try {
+            await saveLastLesson(activeMod, `module_${activeMod}_last`);
+            
+            for (const moduleId of visitedModules) {
+                if (!completedModules.includes(moduleId)) {
+                    await saveProgress(moduleId, PROGRESS_STATUS.IN_PROGRESS, {
+                        lastActivityAt: new Date().toISOString()
+                    });
+                }
+            }
+            
+            await signOut();
+            
+            if (onBack) {
+                onBack();
+            }
+        } catch (error) {
+            console.error('Error al cerrar sesión:', error);
+            await signOut();
+            if (onBack) {
+                onBack();
+            }
+        }
+    };
 
     const askCoach = async () => {
         const q = coachQ.trim();
@@ -360,6 +442,41 @@ const IALab = ({ onBack }) => {
                                     ))}
                                 </div>
                             </div>
+
+                            {/* Module Info Box */}
+                            <div className="p-4 border-t border-[#E2E8F0]">
+                                <p className="text-xs font-normal text-[#64748B] uppercase tracking-wide mb-3">Detalles del Módulo</p>
+                                <div className="bg-[#F8FAFC] rounded-xl p-4 space-y-3">
+                                    <div className="flex justify-between items-center">
+                                        <div className="flex items-center gap-2">
+                                            <Icon name="fa-clock" className="text-[#4DA8C4] text-sm" />
+                                            <span className="text-sm text-[#64748B]">Duración</span>
+                                        </div>
+                                        <span className="text-sm font-medium text-[#004B63]">{curr?.duration}</span>
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                        <div className="flex items-center gap-2">
+                                            <Icon name="fa-signal" className="text-[#66CCCC] text-sm" />
+                                            <span className="text-sm text-[#64748B]">Nivel</span>
+                                        </div>
+                                        <span className="text-sm font-medium text-[#004B63]">{curr?.level}</span>
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                        <div className="flex items-center gap-2">
+                                            <Icon name="fa-play" className="text-[#FFD166] text-sm" />
+                                            <span className="text-sm text-[#64748B]">Videos</span>
+                                        </div>
+                                        <span className="text-sm font-medium text-[#004B63]">{curr?.videos}</span>
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                        <div className="flex items-center gap-2">
+                                            <Icon name="fa-briefcase" className="text-[#FF8E53] text-sm" />
+                                            <span className="text-sm text-[#64748B]">Proyectos</span>
+                                        </div>
+                                        <span className="text-sm font-medium text-[#004B63]">{curr?.projects}</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -478,51 +595,51 @@ const IALab = ({ onBack }) => {
                                         </div>
                                     </div>
 
-                                    {/* Valerio Coach */}
+                                    {/* Valerio Coach - Compact */}
                                     <div className="bg-gradient-to-br from-[#004B63] to-[#0A3550] border border-white/10 shadow-[0_8px_32px_rgba(0,75,99,0.2)] rounded-[2rem] overflow-hidden relative">
-                                        <div className="absolute top-0 right-0 w-64 h-64 bg-[#4DA8C4] rounded-full blur-[100px] opacity-20 pointer-events-none"></div>
-                                        <div className="p-6">
-                                            <div className="flex items-center gap-4 mb-6">
-                                                <ValerioAvatar state={avatarState} size={64} />
+                                        <div className="absolute top-0 right-0 w-32 h-32 bg-[#4DA8C4] rounded-full blur-[80px] opacity-15 pointer-events-none"></div>
+                                        <div className="p-4">
+                                            <div className="flex items-center gap-3 mb-3">
+                                                <ValerioAvatar state={avatarState} size={36} />
                                                 <div>
-                                                    <h3 className="font-normal text-white text-lg">Tu Coach Virtual: Valerio</h3>
-                                                    <p className="text-white/60 text-sm">Método Socrático · IA Nativa</p>
+                                                    <h3 className="font-normal text-white text-sm">Tu Coach: Valerio</h3>
+                                                    <p className="text-white/50 text-xs">IA Nativa</p>
                                                 </div>
                                             </div>
                                             <textarea
                                                 value={coachQ}
                                                 onChange={e => setCoachQ(e.target.value)}
-                                                placeholder="Escribe tu pregunta para Valerio..."
-                                                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 resize-none focus:outline-none focus:ring-2 focus:ring-[#4DA8C4]"
+                                                placeholder="Pregunta a Valerio..."
+                                                className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/40 resize-none focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] text-sm"
                                                 rows={2}
                                             />
-                                            <div className="flex gap-2 mt-3">
+                                            <div className="flex gap-2 mt-2">
                                                 <button
                                                     onClick={askCoach}
                                                     disabled={coachLoad || !coachQ.trim()}
-                                                    className="flex-1 py-3 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-xl font-normal hover:shadow-lg transition-all disabled:opacity-50"
+                                                    className="flex-1 py-2 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-lg font-normal text-sm hover:shadow-lg transition-all disabled:opacity-50"
                                                 >
                                                     {coachLoad ? 'Pensando...' : 'Preguntar'}
                                                 </button>
                                                 <button
                                                     onClick={toggleSpeech}
-                                                    className={`p-3 rounded-xl transition-all ${isListening ? 'bg-red-500 text-white' : 'bg-white/10 text-[#4DA8C4]'}`}
+                                                    className={`p-2 rounded-lg transition-all ${isListening ? 'bg-red-500 text-white' : 'bg-white/10 text-[#4DA8C4]'}`}
                                                 >
-                                                    <Icon name="fa-microphone" />
+                                                    <Icon name="fa-microphone" className="text-sm" />
                                                 </button>
                                                 <input type="file" ref={fileInputRef} onChange={handleFileUpload} style={{ display: 'none' }} accept=".txt,.md,.pdf,.doc,.docx" />
                                                 <button
                                                     onClick={() => fileInputRef.current?.click()}
-                                                    className="p-3 rounded-xl bg-white/10 text-[#4DA8C4] hover:bg-white/20 transition-all"
+                                                    className="p-2 rounded-lg bg-white/10 text-[#4DA8C4] hover:bg-white/20 transition-all"
                                                 >
-                                                    <Icon name="fa-paperclip" />
+                                                    <Icon name="fa-paperclip" className="text-sm" />
                                                 </button>
                                             </div>
                                             {coachMsg && (
-                                                <div className="mt-6 p-4 bg-white/10 rounded-xl backdrop-blur-sm">
-                                                    <div className="flex items-start gap-3">
-                                                        <ValerioAvatar state={avatarState} size={40} />
-                                                        <p className="text-white/90">{coachMsg}</p>
+                                                <div className="mt-3 p-3 bg-white/10 rounded-lg backdrop-blur-sm">
+                                                    <div className="flex items-start gap-2">
+                                                        <ValerioAvatar state={avatarState} size={24} />
+                                                        <p className="text-white/90 text-xs">{coachMsg}</p>
                                                     </div>
                                                 </div>
                                             )}
@@ -530,9 +647,9 @@ const IALab = ({ onBack }) => {
                                     </div>
                                 </div>
 
-                                {/* Challenge Sidebar */}
-                                <div className="space-y-6">
-                                    <div className="bg-gradient-to-br from-[#004B63] to-[#0A3550] rounded-[2rem] p-8 text-white border border-white/10 shadow-[0_8px_32px_rgba(0,75,99,0.2)] relative overflow-hidden">
+                                {/* Challenge Sidebar - Taller */}
+                                <div className="lg:col-span-1">
+                                    <div className="bg-gradient-to-br from-[#004B63] to-[#0A3550] rounded-[2rem] p-6 text-white border border-white/10 shadow-[0_8px_32px_rgba(0,75,99,0.2)] relative overflow-hidden" style={{ minHeight: '320px' }}>
                                         <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#FFD166] rounded-full blur-[120px] opacity-10 pointer-events-none"></div>
                                         <div className="flex items-center gap-3 mb-4">
                                             <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
@@ -546,29 +663,6 @@ const IALab = ({ onBack }) => {
                                         <button className="w-full py-3 bg-gradient-to-r from-[#FFD166] to-[#FF8E53] text-[#004B63] rounded-xl font-normal hover:shadow-lg transition-all">
                                             <Icon name="fa-paper-plane" className="mr-2" />Enviar solución
                                         </button>
-                                    </div>
-
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="bg-white/60 backdrop-blur-xl p-5 rounded-2xl border border-white/80 text-center shadow-sm">
-                                            <Icon name="fa-clock" className="text-[#4DA8C4] text-lg mb-2" />
-                                            <p className="font-normal text-[#004B63]">{curr.duration}</p>
-                                            <p className="text-base text-slate-600">Duración</p>
-                                        </div>
-                                        <div className="bg-white/60 backdrop-blur-xl p-5 rounded-2xl border border-white/80 text-center shadow-sm">
-                                            <Icon name="fa-signal" className="text-[#66CCCC] text-lg mb-2" />
-                                            <p className="font-normal text-[#004B63]">{curr.level}</p>
-                                            <p className="text-base text-slate-600">Nivel</p>
-                                        </div>
-                                        <div className="bg-white/60 backdrop-blur-xl p-5 rounded-2xl border border-white/80 text-center shadow-sm">
-                                            <Icon name="fa-play" className="text-[#FFD166] text-lg mb-2" />
-                                            <p className="font-normal text-[#004B63]">{curr.videos}</p>
-                                            <p className="text-base text-slate-600">Videos</p>
-                                        </div>
-                                        <div className="bg-white/60 backdrop-blur-xl p-5 rounded-2xl border border-white/80 text-center shadow-sm">
-                                            <Icon name="fa-briefcase" className="text-[#FF8E53] text-lg mb-2" />
-                                            <p className="font-normal text-[#004B63]">{curr.projects}</p>
-                                            <p className="text-base text-slate-600">Proyectos</p>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -730,6 +824,13 @@ const IALab = ({ onBack }) => {
                     </div>
                 </div>
             )}
+            
+            <button
+                onClick={handleLogout}
+                className="fixed bottom-5 left-5 z-[100] flex items-center gap-2 px-5 py-3 bg-[#004B63] text-white font-medium rounded-xl hover:bg-[#4DA8C4] transition-all duration-300 shadow-lg"
+            >
+                <LogOut size={18} /> Cerrar Sesión
+            </button>
         </div>
     );
 };

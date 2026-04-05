@@ -1,8 +1,30 @@
 const VOICE_PROFILES = {
-  valeria: { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 0, speakingRate: 1.0 },
-  valerio: { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 0, speakingRate: 1.0 },
-  sistema: { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: 0, speakingRate: 1.0 },
-  nico: { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 0, speakingRate: 1.0 },
+  valeria: { 
+    languageCode: 'es-US', 
+    name: 'es-US-Journey-F', 
+    pitch: 0, // Journey no soporta pitch
+    speakingRate: 0.95,
+    volumeGainDb: 2.5
+  },
+  valerio: { 
+    languageCode: 'es-US', 
+    name: 'es-US-Journey-F', 
+    pitch: 0, // Journey no soporta pitch
+    speakingRate: 0.95,
+    volumeGainDb: 2.5
+  },
+  sistema: { 
+    languageCode: 'es-US', 
+    name: 'es-US-Neural2-C', 
+    pitch: 0, 
+    speakingRate: 1.0 
+  },
+  nico: { 
+    languageCode: 'es-US', 
+    name: 'es-US-Neural2-B', 
+    pitch: 0, 
+    speakingRate: 1.0 
+  },
   nico_premium: { 
     languageCode: 'es-US', 
     name: 'es-US-Neural2-B',
@@ -17,14 +39,39 @@ const VOICE_PROFILES = {
     pitch: 0,
     speakingRate: 1.05,
     volumeGainDb: 2.5
+  },
+  // Perfiles de voz para Valeria - Guía VAK (Journey-F - moderna y natural)
+  valentina: {
+    languageCode: 'es-US',
+    name: 'es-US-Journey-F', // ✅ Voz femenina moderna Journey
+    pitch: 0, // Journey no soporta pitch - establecido en 0
+    speakingRate: 0.95,
+    volumeGainDb: 2.5,
+    effectsProfileId: ['telephony-class-application']
+  },
+  valentina_child: { // Para niños más pequeños (6-10 años)
+    languageCode: 'es-US',
+    name: 'es-US-Journey-F', // ✅ Journey - más amigable
+    pitch: 0, // Journey no soporta pitch - establecido en 0
+    speakingRate: 0.85, // Más lento para mejor comprensión
+    volumeGainDb: 3.0,
+    effectsProfileId: ['telephony-class-application']
+  },
+  valentina_teen: { // Para adolescentes (15-17 años)
+    languageCode: 'es-US',
+    name: 'es-US-Journey-F', // ✅ Journey
+    pitch: 0, // Journey no soporta pitch
+    speakingRate: 1.0,
+    volumeGainDb: 2.0,
+    effectsProfileId: ['telephony-class-application']
   }
 };
 
 const VOICE_FALLBACKS = {
   valeria: [
-    { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 0, speakingRate: 1.0 },
-    { languageCode: 'es-US', name: 'es-US-Journey-F', pitch: 0.0, speakingRate: 1.0 },
-    { languageCode: 'es-ES', name: 'es-ES-Neural2-A', pitch: 0.0, speakingRate: 1.0 }
+    { languageCode: 'es-US', name: 'es-US-Journey-F', pitch: 0, speakingRate: 0.95 },
+    { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: 0, speakingRate: 1.0 },
+    { languageCode: 'es-ES', name: 'es-ES-Neural2-A', pitch: 0, speakingRate: 0.95 }
   ],
   nico: [
     { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 0, speakingRate: 1.0 },
@@ -36,6 +83,21 @@ const VOICE_FALLBACKS = {
     { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 0, speakingRate: 1.05 },
     { languageCode: 'es-US', name: 'es-US-Neural2-A', pitch: 0, speakingRate: 1.05 },
     { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: 0, speakingRate: 1.05 },
+  ],
+  valentina: [
+    { languageCode: 'es-US', name: 'es-US-Journey-F', pitch: 0, speakingRate: 0.95 },
+    { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: 0, speakingRate: 1.0 },
+    { languageCode: 'es-ES', name: 'es-ES-Neural2-A', pitch: 0, speakingRate: 0.95 }
+  ],
+  valentina_child: [
+    { languageCode: 'es-US', name: 'es-US-Journey-F', pitch: 0, speakingRate: 0.85 },
+    { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: 0, speakingRate: 0.9 },
+    { languageCode: 'es-ES', name: 'es-ES-Neural2-A', pitch: 0, speakingRate: 0.85 }
+  ],
+  valentina_teen: [
+    { languageCode: 'es-US', name: 'es-US-Journey-F', pitch: 0, speakingRate: 1.0 },
+    { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: 0, speakingRate: 1.1 },
+    { languageCode: 'es-ES', name: 'es-ES-Neural2-A', pitch: 0, speakingRate: 1.0 }
   ]
 };
 
@@ -45,7 +107,7 @@ const GOOGLE_TTS_URL = 'https://texttospeech.googleapis.com/v1/text:synthesize';
 let currentAudio = null;
 let safetyTimeout = null;
 
-export const speakTextConversational = async (text, profile = 'valeria', onEndCallback) => {
+const speakTextConversational = async (text, profile = 'valeria', onEndCallback) => {
   if (currentAudio) {
     currentAudio.pause();
     currentAudio = null;
@@ -210,7 +272,7 @@ export const speakTextConversational = async (text, profile = 'valeria', onEndCa
   }
 };
 
-export const stopSpeech = () => {
+const stopSpeech = () => {
   if (currentAudio) {
     currentAudio.pause();
     currentAudio = null;
@@ -227,7 +289,7 @@ export const stopSpeech = () => {
 
 let recognitionInstance = null;
 
-export const iniciarReconocimiento = (setQ, onFinalResult, setIsListening) => {
+const iniciarReconocimiento = (setQ, onFinalResult, setIsListening) => {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRecognition) {
     console.warn('SpeechRecognition no disponible');
@@ -286,3 +348,63 @@ export const iniciarReconocimiento = (setQ, onFinalResult, setIsListening) => {
     setIsListening(false);
   }
 };
+
+/**
+ * Función específica para hablar como Valentina
+ * @param {string} text - Texto a hablar
+ * @param {number} age - Edad del usuario (6-17)
+ * @param {function} onEndCallback - Callback al terminar
+ * @returns {Promise} - Promesa del speech
+ */
+export const speakAsValentina = async (text, age = 12, onEndCallback) => {
+  // Determinar perfil de voz según edad
+  let profile = 'valentina'; // Default (11-14 años)
+  
+  if (age >= 6 && age <= 10) {
+    profile = 'valentina_child'; // Niños
+  } else if (age >= 15 && age <= 17) {
+    profile = 'valentina_teen'; // Adolescentes
+  }
+  
+  return await speakTextConversational(text, profile, onEndCallback);
+};
+
+/**
+ * Obtener configuración de voz para Valentina según edad
+ * @param {number} age - Edad del usuario
+ * @returns {object} - Configuración de voz
+ */
+export const getValentinaVoiceConfig = (age = 12) => {
+  if (age >= 6 && age <= 10) {
+    return {
+      profile: 'valentina_child',
+      rate: 0.9,
+      pitch: 0.3,
+      description: 'Voz amigable para niños'
+    };
+  } else if (age >= 11 && age <= 14) {
+    return {
+      profile: 'valentina',
+      rate: 1.0,
+      pitch: 0.2,
+      description: 'Voz profesional estándar'
+    };
+  } else if (age >= 15 && age <= 17) {
+    return {
+      profile: 'valentina_teen',
+      rate: 1.1,
+      pitch: 0.1,
+      description: 'Voz profesional para adolescentes'
+    };
+  }
+  
+  // Default
+  return {
+    profile: 'valentina',
+    rate: 1.0,
+    pitch: 0.2,
+    description: 'Voz profesional estándar'
+  };
+};
+
+export { speakTextConversational, stopSpeech, iniciarReconocimiento };

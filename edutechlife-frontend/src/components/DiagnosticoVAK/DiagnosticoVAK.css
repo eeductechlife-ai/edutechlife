@@ -1,0 +1,2480 @@
+/**
+ * DIAGNÓSTICO VAK - ESTILOS MEJORADOS
+ * Sistema de diseño unificado con paleta corporativa EdutechLife
+ */
+
+/* ==================== VARIABLES CSS PREMIUM ==================== */
+:root {
+  /* Colores corporativos premium */
+  --color-corporate-premium: #004B63;
+  --color-corporate-light-premium: #4DA8C4;
+  --color-corporate-mint-premium: #66CCCC;
+  --color-corporate-pale-premium: #B2D8E5;
+  
+  /* Colores de texto premium */
+  --color-petroleum-premium: #004B63;
+  --color-gray-500-premium: #6B7280;
+  --color-gray-400-premium: #9CA3AF;
+  --color-gray-600-premium: #4B5563;
+  
+  /* Colores semánticos premium */
+  --color-semantic-error-500-premium: #EF4444;
+  --color-semantic-success-500-premium: #10B981;
+  
+  /* Variables de accesibilidad */
+  --focus-ring-width: 3px;
+  --focus-ring-color: rgba(77, 168, 196, 0.5);
+  --focus-ring-offset: 2px;
+  
+  /* Colores VAK específicos */
+  --color-vak-visual-50: rgba(77, 168, 196, 0.1);
+  --color-vak-visual-200: rgba(77, 168, 196, 0.3);
+  --color-vak-visual-500: #4DA8C4;
+  --color-vak-visual-600: #3D8CA4;
+  --color-vak-visual-900: #1A5A6E;
+  
+  --color-vak-auditivo-50: rgba(102, 204, 204, 0.1);
+  --color-vak-auditivo-200: rgba(102, 204, 204, 0.3);
+  --color-vak-auditivo-500: #66CCCC;
+  --color-vak-auditivo-600: #52A3A3;
+  --color-vak-auditivo-900: #2D7373;
+  
+  --color-vak-kinestesico-50: rgba(0, 194, 224, 0.1);
+  --color-vak-kinestesico-200: rgba(0, 194, 224, 0.3);
+  --color-vak-kinestesico-500: #00C2E0;
+  --color-vak-kinestesico-600: #009BB4;
+  --color-vak-kinestesico-900: #006A7A;
+}
+
+/* ==================== UTILIDADES ESPECÍFICAS VAK ==================== */
+
+/* Tipografía VAK */
+.vak-display {
+  font-family: var(--font-family-display);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.vak-body {
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-relaxed);
+}
+
+.vak-mono {
+  font-family: var(--font-family-mono);
+  font-weight: var(--font-weight-medium);
+}
+
+/* Tipografía VAK Premium */
+.vak-display-premium {
+  font-family: var(--font-family-display);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-tight);
+  color: var(--color-petroleum-premium);
+}
+
+.vak-body-premium {
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-relaxed);
+  color: var(--color-gray-500-premium);
+}
+
+.vak-text-premium-body {
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-relaxed);
+}
+
+.vak-text-premium-small {
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-normal);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+/* Contenedores VAK */
+.vak-container {
+  background: var(--color-background-light);
+  border-radius: var(--border-radius-3xl);
+  border: var(--border-width-medium) solid var(--color-gray-200);
+  box-shadow: var(--shadow-lg);
+}
+
+.vak-container-glass {
+  background: var(--color-background-glass);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: var(--border-width-medium) solid var(--color-gray-200);
+  border-radius: var(--border-radius-3xl);
+  box-shadow: var(--shadow-glass-colored);
+}
+
+/* Badges y etiquetas VAK */
+.vak-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--border-radius-full);
+  font-family: var(--font-family-display);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-xs);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+}
+
+.vak-badge-primary {
+  background: var(--gradient-primary-diagonal);
+  color: white;
+  border: var(--border-width-thin) solid rgba(255, 255, 255, 0.2);
+}
+
+.vak-badge-secondary {
+  background: var(--color-gray-100);
+  color: var(--color-gray-700);
+  border: var(--border-width-thin) solid var(--color-gray-200);
+}
+
+.vak-badge-visual {
+  background: var(--color-vak-visual-50);
+  color: var(--color-vak-visual-600);
+  border: var(--border-width-thin) solid var(--color-vak-visual-200);
+}
+
+.vak-badge-auditivo {
+  background: var(--color-vak-auditivo-50);
+  color: var(--color-vak-auditivo-600);
+  border: var(--border-width-thin) solid var(--color-vak-auditivo-200);
+}
+
+.vak-badge-kinestesico {
+  background: var(--color-vak-kinestesico-50);
+  color: var(--color-vak-kinestesico-600);
+  border: var(--border-width-thin) solid var(--color-vak-kinestesico-200);
+}
+
+/* Botones VAK */
+.vak-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3) var(--spacing-6);
+  border-radius: var(--border-radius-xl);
+  font-family: var(--font-family-display);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-base);
+  transition: all var(--animation-duration-normal) var(--animation-timing-spring);
+  border: var(--border-width-medium) solid transparent;
+  cursor: pointer;
+}
+
+.vak-btn-primary {
+  background: var(--gradient-primary-diagonal);
+  color: white;
+  box-shadow: var(--shadow-lg);
+}
+
+.vak-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xl);
+}
+
+.vak-btn-primary:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-md);
+}
+
+.vak-btn-secondary {
+  background: white;
+  color: var(--color-petroleum);
+  border-color: var(--color-gray-300);
+  box-shadow: var(--shadow-sm);
+}
+
+.vak-btn-secondary:hover {
+  border-color: var(--color-corporate);
+  box-shadow: var(--shadow-md);
+}
+
+/* Tarjetas de opción VAK */
+.vak-option-card {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  padding: var(--spacing-4);
+  background: white;
+  border: var(--border-width-medium) solid var(--color-gray-200);
+  border-radius: var(--border-radius-xl);
+  transition: all var(--animation-duration-normal) var(--animation-timing-spring);
+  cursor: pointer;
+  text-align: left;
+}
+
+.vak-option-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-corporate);
+  box-shadow: var(--shadow-xl);
+}
+
+.vak-option-card:active {
+  transform: translateY(-2px);
+}
+
+.vak-option-card-visual:hover {
+  border-color: var(--color-vak-visual-500);
+  background: var(--color-vak-visual-50);
+}
+
+.vak-option-card-auditivo:hover {
+  border-color: var(--color-vak-auditivo-500);
+  background: var(--color-vak-auditivo-50);
+}
+
+.vak-option-card-kinestesico:hover {
+  border-color: var(--color-vak-kinestesico-500);
+  background: var(--color-vak-kinestesico-50);
+}
+
+.vak-option-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: var(--border-radius-lg);
+  background: var(--color-gray-50);
+  border: var(--border-width-medium) solid var(--color-gray-200);
+  font-size: var(--font-size-2xl);
+  transition: all var(--animation-duration-normal) var(--animation-timing-spring);
+}
+
+.vak-option-card:hover .vak-option-icon {
+  transform: scale(1.1);
+  border-color: var(--color-corporate);
+}
+
+.vak-option-card-visual:hover .vak-option-icon {
+  background: var(--color-vak-visual-500);
+  color: white;
+  border-color: var(--color-vak-visual-500);
+}
+
+.vak-option-card-auditivo:hover .vak-option-icon {
+  background: var(--color-vak-auditivo-500);
+  color: white;
+  border-color: var(--color-vak-auditivo-500);
+}
+
+.vak-option-card-kinestesico:hover .vak-option-icon {
+  background: var(--color-vak-kinestesico-500);
+  color: white;
+  border-color: var(--color-vak-kinestesico-500);
+}
+
+/* Progress bar VAK */
+.vak-progress-container {
+  height: 0.75rem;
+  background: var(--color-gray-100);
+  border-radius: var(--border-radius-full);
+  overflow: hidden;
+  position: relative;
+}
+
+.vak-progress-bar {
+  height: 100%;
+  background: var(--gradient-vak-visual);
+  border-radius: var(--border-radius-full);
+  position: relative;
+  overflow: hidden;
+}
+
+.vak-progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 100%
+  );
+  animation: vak-shimmer 2s infinite;
+}
+
+@keyframes vak-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+.vak-progress-dot {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--border-radius-full);
+  background: var(--color-gray-300);
+  transition: all var(--animation-duration-normal) var(--animation-timing-spring);
+}
+
+.vak-progress-dot-active {
+  background: var(--color-corporate);
+  transform: translateY(-50%) scale(1.5);
+  box-shadow: 0 0 0 4px rgba(77, 168, 196, 0.2);
+}
+
+.vak-progress-dot-completed {
+  background: var(--color-corporate);
+}
+
+/* Inputs VAK */
+.vak-input {
+  width: 100%;
+  padding: var(--spacing-3) var(--spacing-4);
+  border: var(--border-width-medium) solid var(--color-gray-200);
+  border-radius: var(--border-radius-xl);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-base);
+  color: var(--color-petroleum);
+  background: white;
+  transition: all var(--animation-duration-normal) var(--animation-timing-spring);
+}
+
+.vak-input:focus {
+  outline: none;
+  border-color: var(--color-corporate);
+  box-shadow: 0 0 0 3px rgba(77, 168, 196, 0.2);
+}
+
+.vak-input-error {
+  border-color: var(--color-semantic-error-500);
+}
+
+.vak-input-error:focus {
+  border-color: var(--color-semantic-error-600);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+/* Mood selector VAK */
+.vak-mood-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3);
+  border: var(--border-width-medium) solid var(--color-gray-200);
+  border-radius: var(--border-radius-lg);
+  background: white;
+  cursor: pointer;
+  transition: all var(--animation-duration-normal) var(--animation-timing-spring);
+}
+
+.vak-mood-option:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-gray-300);
+  box-shadow: var(--shadow-md);
+}
+
+.vak-mood-option-selected {
+  border-color: var(--color-corporate);
+  background: linear-gradient(135deg, var(--color-corporate) 0%, var(--color-mint) 100%);
+  color: white;
+  box-shadow: var(--shadow-lg);
+}
+
+.vak-mood-emoji {
+  font-size: var(--font-size-3xl);
+  transition: transform var(--animation-duration-normal) var(--animation-timing-spring);
+}
+
+.vak-mood-option:hover .vak-mood-emoji {
+  transform: scale(1.2);
+}
+
+.vak-mood-option-selected .vak-mood-emoji {
+  transform: scale(1.3);
+}
+
+/* Resultados VAK */
+.vak-result-hero {
+  position: relative;
+  padding: var(--spacing-8) var(--spacing-6);
+  border-radius: var(--border-radius-3xl);
+  overflow: hidden;
+  text-align: center;
+}
+
+.vak-result-hero-visual {
+  background: linear-gradient(135deg, var(--color-vak-visual-500) 0%, var(--color-vak-visual-900) 100%);
+}
+
+.vak-result-hero-auditivo {
+  background: linear-gradient(135deg, var(--color-vak-auditivo-500) 0%, var(--color-vak-auditivo-900) 100%);
+}
+
+.vak-result-hero-kinestesico {
+  background: linear-gradient(135deg, var(--color-vak-kinestesico-500) 0%, var(--color-vak-kinestesico-900) 100%);
+}
+
+.vak-result-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+}
+
+.vak-result-percentage {
+  font-family: var(--font-family-display);
+  font-weight: var(--font-weight-black);
+  font-size: var(--font-size-8xl);
+  line-height: 1;
+  text-shadow: 0 0 40px rgba(255, 255, 255, 0.5);
+  background: linear-gradient(to bottom, white, rgba(255, 255, 255, 0.8));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.vak-result-icon {
+  width: 5rem;
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius-2xl);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: var(--border-width-medium) solid rgba(255, 255, 255, 0.3);
+  margin: 0 auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .vak-option-card {
+    padding: var(--spacing-3);
+    gap: var(--spacing-3);
+  }
+  
+  .vak-option-icon {
+    width: 3rem;
+    height: 3rem;
+    font-size: var(--font-size-xl);
+  }
+  
+  .vak-result-percentage {
+    font-size: var(--font-size-6xl);
+  }
+  
+  .vak-result-icon {
+    width: 4rem;
+    height: 4rem;
+  }
+}
+
+/* Animaciones específicas */
+@keyframes vak-pulse-slow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.vak-pulse-slow {
+  animation: vak-pulse-slow 3s ease-in-out infinite;
+}
+
+@keyframes vak-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.vak-float {
+  animation: vak-float 6s ease-in-out infinite;
+}
+
+/* Utilidades de espaciado VAK */
+.vak-space-y-4 > * + * {
+  margin-top: var(--spacing-4);
+}
+
+.vak-space-y-6 > * + * {
+  margin-top: var(--spacing-6);
+}
+
+.vak-space-y-8 > * + * {
+  margin-top: var(--spacing-8);
+}
+
+.vak-gap-4 {
+  gap: var(--spacing-4);
+}
+
+.vak-gap-6 {
+  gap: var(--spacing-6);
+}
+
+/* Gradientes decorativos */
+.vak-gradient-orb {
+  position: absolute;
+  border-radius: var(--border-radius-full);
+  filter: blur(80px);
+  opacity: 0.3;
+  animation: vak-pulse-slow 4s ease-in-out infinite;
+}
+
+.vak-gradient-orb-1 {
+  background: var(--color-corporate);
+  width: 12rem;
+  height: 12rem;
+  top: -6rem;
+  right: -6rem;
+}
+
+.vak-gradient-orb-2 {
+  background: var(--color-mint);
+  width: 10rem;
+  height: 10rem;
+  bottom: -5rem;
+  left: -5rem;
+  animation-delay: 1s;
+}
+
+.vak-gradient-orb-3 {
+  background: var(--color-accent);
+  width: 8rem;
+  height: 8rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation-delay: 2s;
+}
+
+/* ==================== BARRA DE CONTROLES VALERIA ==================== */
+
+.valeria-controls-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-bottom: 2px solid var(--color-corporate);
+}
+
+.valeria-controls-bar .valeria-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.valeria-controls-bar .valeria-logo-icon {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--color-corporate), var(--color-mint));
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.valeria-controls-bar .valeria-logo-text {
+  font-family: var(--font-family-display);
+  font-weight: 700;
+  color: var(--color-petroleum);
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+
+.valeria-controls-bar .valeria-btn-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-gray-100);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 20px;
+}
+
+.valeria-controls-bar .valeria-btn-toggle:hover {
+  background: var(--color-gray-200);
+  transform: scale(1.05);
+}
+
+.valeria-controls-bar .valeria-btn-toggle.muted {
+  background: #FEE2E2;
+}
+
+.valeria-controls-bar .valeria-btn-toggle.muted:hover {
+  background: #FECACA;
+}
+
+.valeria-controls-bar .valeria-volume-slider {
+  width: 80px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--color-gray-200);
+  appearance: none;
+  cursor: pointer;
+}
+
+.valeria-controls-bar .valeria-volume-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--color-corporate);
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.valeria-controls-bar .valeria-volume-slider::-webkit-slider-thumb:hover {
+  background: var(--color-petroleum);
+  transform: scale(1.1);
+}
+
+.valeria-controls-bar .valeria-volume-slider:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.valeria-controls-bar .valeria-volume-label {
+  font-size: 12px;
+  color: var(--color-gray-500);
+  font-weight: 500;
+  min-width: 35px;
+  text-align: right;
+}
+
+/* ==================== CONTENEDOR DE PREGUNTA PREMIUM ==================== */
+
+.vak-question-container-premium {
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(248, 252, 253, 0.95) 100%);
+  border: 2px solid rgba(77, 168, 196, 0.15);
+  border-radius: 28px;
+  box-shadow: 0 12px 40px rgba(0, 75, 99, 0.1),
+              0 4px 20px rgba(0, 75, 99, 0.06);
+  padding: 2.5rem;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vak-question-container-premium::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(77, 168, 196, 0.3) 50%,
+    transparent 100%);
+}
+
+.vak-question-container-premium::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 70%);
+  opacity: 0;
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.vak-question-container-premium:hover::after {
+  opacity: 0.3;
+}
+
+.vak-question-number-premium {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #4DA8C4, #66CCCC);
+  box-shadow: 0 8px 32px rgba(77, 168, 196, 0.4),
+              inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+.vak-question-number-text {
+  font-family: var(--font-family-display);
+  font-weight: 800;
+  font-size: 2.5rem;
+  color: white;
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.vak-question-number-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, 
+    rgba(255, 255, 255, 0.3) 0%,
+    transparent 70%);
+  animation: vak-premium-pulse 3s infinite;
+}
+
+@keyframes vak-premium-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.8; }
+}
+
+.vak-question-text-premium {
+  font-family: var(--font-family-display);
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 1.4;
+  color: #004B63;
+  margin-bottom: 2rem;
+  text-align: center;
+  padding: 0 1rem;
+  letter-spacing: -0.01em;
+}
+
+@media (min-width: 768px) {
+  .vak-question-text-premium {
+    font-size: 1.75rem;
+  }
+}
+
+/* ==================== CONTROLES PREMIUM ==================== */
+
+/* Botón toggle voz premium */
+.valeria-btn-toggle-premium {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, #4DA8C4, #66CCCC);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(77, 168, 196, 0.3);
+}
+
+.valeria-btn-toggle-premium:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(77, 168, 196, 0.4);
+}
+
+.valeria-btn-toggle-premium:active {
+  transform: scale(0.98);
+}
+
+.valeria-btn-toggle-premium.muted {
+  background: linear-gradient(135deg, #9CA3AF, #6B7280);
+  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+}
+
+.valeria-btn-toggle-premium.muted:hover {
+  background: linear-gradient(135deg, #6B7280, #4B5563);
+  box-shadow: 0 6px 20px rgba(107, 114, 128, 0.4);
+}
+
+.valeria-icon-premium {
+  width: 22px;
+  height: 22px;
+  color: white;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.valeria-btn-toggle-premium:hover .valeria-icon-premium {
+  transform: scale(1.1);
+}
+
+/* Botón repetir pregunta premium */
+.valeria-btn-repeat-premium {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(248, 252, 253, 0.9) 100%);
+  border: 2px solid rgba(77, 168, 196, 0.2);
+  border-radius: 50px;
+  color: #004B63;
+  font-family: var(--font-family-display);
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 75, 99, 0.08);
+}
+
+.valeria-btn-repeat-premium:hover:not(:disabled) {
+  border-color: #4DA8C4;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(77, 168, 196, 0.15);
+}
+
+.valeria-btn-repeat-premium:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.valeria-btn-repeat-premium:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.valeria-icon-repeat {
+  width: 18px;
+  height: 18px;
+  color: #4DA8C4;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.valeria-btn-repeat-premium:hover:not(:disabled) .valeria-icon-repeat {
+  color: #004B63;
+  transform: rotate(15deg);
+}
+
+/* Indicador de voz activa */
+.valeria-speaking-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: linear-gradient(135deg, var(--color-corporate), var(--color-mint));
+  color: white;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  animation: pulse 1.5s infinite;
+}
+
+.valeria-speaking-indicator .wave {
+  width: 3px;
+  height: 12px;
+  background: white;
+  border-radius: 2px;
+  animation: wave 0.8s infinite ease-in-out;
+}
+
+.valeria-speaking-indicator .wave:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.valeria-speaking-indicator .wave:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+@keyframes wave {
+  0%, 100% { height: 4px; }
+  50% { height: 12px; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+/* Botón comenzar */
+.valeria-btn-start {
+  padding: 10px 24px;
+  background: linear-gradient(135deg, var(--color-petroleum), var(--color-corporate));
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-family: var(--font-family-display);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 75, 99, 0.3);
+}
+
+.valeria-btn-start:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 75, 99, 0.4);
+}
+
+.valeria-btn-start:active {
+  transform: translateY(0);
+}
+
+/* Botón repetir pregunta */
+.valeria-btn-repeat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: white;
+  border: 2px solid var(--color-corporate);
+  border-radius: 25px;
+  color: var(--color-corporate);
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.valeria-btn-repeat:hover:not(:disabled) {
+  background: var(--color-corporate);
+  color: white;
+}
+
+.valeria-btn-repeat:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Contenido principal con margen superior */
+.valeria-main-content {
+  padding-top: 70px; /* Espacio para barra fija */
+}
+
+/* Transición suave entre fases */
+.valeria-fade-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.valeria-fade-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.valeria-fade-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.valeria-fade-exit-active {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* ==================== AVATAR DE VALERIA ==================== */
+
+.valeria-avatar-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.valeria-avatar {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, var(--color-corporate), var(--color-mint));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(77, 168, 196, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.valeria-avatar.speaking {
+  animation: valeria-speak-pulse 1.5s infinite ease-in-out;
+  box-shadow: 0 6px 20px rgba(77, 168, 196, 0.5);
+}
+
+.valeria-avatar-emoji {
+  font-size: 24px;
+  line-height: 1;
+  transition: transform 0.3s ease;
+}
+
+.valeria-avatar:hover .valeria-avatar-emoji {
+  transform: scale(1.1);
+}
+
+.valeria-avatar-pulse {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-corporate), var(--color-mint));
+  opacity: 0;
+  z-index: 1;
+  animation: valeria-pulse-ring 1.5s infinite ease-out;
+}
+
+@keyframes valeria-speak-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes valeria-pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+.valeria-logo-content {
+  display: flex;
+  flex-direction: column;
+  margin-left: 12px;
+}
+
+.valeria-logo-text {
+  font-family: var(--font-family-display);
+  font-weight: 700;
+  color: var(--color-petroleum);
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.valeria-logo-subtitle {
+  font-family: var(--font-family-body);
+  font-size: 11px;
+  color: var(--color-gray-500);
+  font-weight: 500;
+}
+
+/* Ocultar el logo antiguo cuando tenemos el avatar */
+.valeria-controls-bar .valeria-logo {
+  display: flex;
+  align-items: center;
+}
+
+.valeria-controls-bar .valeria-logo-icon {
+  display: none;
+}
+
+/* ==================== OPCIONES DE PREGUNTA ==================== */
+
+.vak-option-letter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--color-gray-100);
+  border: 2px solid var(--color-gray-200);
+  font-family: var(--font-family-display);
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: var(--color-petroleum);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.vak-option-card:hover .vak-option-letter {
+  background: var(--color-corporate);
+  border-color: var(--color-corporate);
+  color: white;
+  transform: scale(1.1);
+}
+
+.vak-option-card-visual:hover .vak-option-letter {
+  background: var(--color-vak-visual-500);
+  border-color: var(--color-vak-visual-500);
+}
+
+.vak-option-card-auditivo:hover .vak-option-letter {
+  background: var(--color-vak-auditivo-500);
+  border-color: var(--color-vak-auditivo-500);
+}
+
+.vak-option-card-kinestesico:hover .vak-option-letter {
+  background: var(--color-vak-kinestesico-500);
+  border-color: var(--color-vak-kinestesico-500);
+}
+
+/* ==================== SISTEMA VISUAL PREMIUM SAAS ==================== */
+
+/* Sistema de sombras premium corporativas */
+.vak-shadow-premium-sm {
+  box-shadow: 0 2px 8px rgba(0, 75, 99, 0.08),
+              0 1px 3px rgba(0, 75, 99, 0.04);
+}
+
+.vak-shadow-premium-md {
+  box-shadow: 0 4px 20px rgba(0, 75, 99, 0.1),
+              0 2px 6px rgba(0, 75, 99, 0.06);
+}
+
+.vak-shadow-premium-lg {
+  box-shadow: 0 8px 32px rgba(0, 75, 99, 0.12),
+              0 4px 12px rgba(0, 75, 99, 0.08);
+}
+
+.vak-shadow-premium-xl {
+  box-shadow: 0 16px 48px rgba(0, 75, 99, 0.15),
+              0 8px 24px rgba(0, 75, 99, 0.1);
+}
+
+/* Bordes premium corporativos */
+.vak-border-premium {
+  border: 2px solid rgba(77, 168, 196, 0.15);
+  border-radius: 16px;
+}
+
+.vak-border-premium-thin {
+  border: 1px solid rgba(77, 168, 196, 0.1);
+  border-radius: 12px;
+}
+
+.vak-border-premium-thick {
+  border: 3px solid rgba(77, 168, 196, 0.2);
+  border-radius: 20px;
+}
+
+/* Gradientes premium corporativos */
+.vak-gradient-premium-primary {
+  background: linear-gradient(135deg,
+    rgba(0, 75, 99, 0.95) 0%,
+    rgba(0, 75, 99, 0.85) 50%,
+    rgba(77, 168, 196, 0.9) 100%);
+}
+
+.vak-gradient-premium-secondary {
+  background: linear-gradient(135deg,
+    rgba(77, 168, 196, 0.95) 0%,
+    rgba(77, 168, 196, 0.85) 50%,
+    rgba(102, 204, 204, 0.9) 100%);
+}
+
+.vak-gradient-premium-light {
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(248, 252, 253, 0.9) 100%);
+}
+
+.vak-gradient-premium-glass {
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.85) 0%,
+    rgba(248, 252, 253, 0.75) 100%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Transiciones premium */
+.vak-transition-premium {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vak-transition-premium-slow {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vak-transition-premium-fast {
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Efectos hover premium */
+.vak-hover-lift {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vak-hover-lift:hover {
+  transform: translateY(-4px);
+}
+
+.vak-hover-glow {
+  transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vak-hover-glow:hover {
+  box-shadow: 0 8px 32px rgba(77, 168, 196, 0.2);
+}
+
+.vak-hover-border {
+  transition: border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vak-hover-border:hover {
+  border-color: #4DA8C4;
+}
+
+/* Tipografía premium */
+.vak-text-premium-display {
+  font-family: var(--font-family-display);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.vak-text-premium-title {
+  font-family: var(--font-family-display);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.vak-text-premium-body {
+  font-family: var(--font-family-body);
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+}
+
+.vak-text-premium-small {
+  font-family: var(--font-family-body);
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+}
+
+/* Colores premium corporativos */
+.vak-color-premium-petroleum {
+  color: #004B63;
+}
+
+.vak-color-premium-corporate {
+  color: #4DA8C4;
+}
+
+.vak-color-premium-mint {
+  color: #66CCCC;
+}
+
+.vak-color-premium-accent {
+  color: #B2D8E5;
+}
+
+.vak-bg-premium-petroleum {
+  background-color: #004B63;
+}
+
+.vak-bg-premium-corporate {
+  background-color: #4DA8C4;
+}
+
+.vak-bg-premium-mint {
+  background-color: #66CCCC;
+}
+
+.vak-bg-premium-accent {
+  background-color: #B2D8E5;
+}
+
+/* Utilidades premium */
+.vak-rounded-premium-sm {
+  border-radius: 8px;
+}
+
+.vak-rounded-premium-md {
+  border-radius: 16px;
+}
+
+.vak-rounded-premium-lg {
+  border-radius: 24px;
+}
+
+.vak-rounded-premium-xl {
+  border-radius: 32px;
+}
+
+.vak-rounded-premium-full {
+  border-radius: 9999px;
+}
+
+.vak-padding-premium-sm {
+  padding: 0.75rem 1rem;
+}
+
+.vak-padding-premium-md {
+  padding: 1rem 1.5rem;
+}
+
+.vak-padding-premium-lg {
+  padding: 1.5rem 2rem;
+}
+
+.vak-padding-premium-xl {
+  padding: 2rem 3rem;
+}
+
+/* Estados premium */
+.vak-state-premium-success {
+  border-color: #10B981;
+  background-color: rgba(16, 185, 129, 0.1);
+}
+
+.vak-state-premium-error {
+  border-color: #EF4444;
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+.vak-state-premium-warning {
+  border-color: #F59E0B;
+  background-color: rgba(245, 158, 11, 0.1);
+}
+
+.vak-state-premium-info {
+  border-color: #4DA8C4;
+  background-color: rgba(77, 168, 196, 0.1);
+}
+
+/* Animaciones premium suaves */
+@keyframes vak-premium-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.vak-animate-premium-fade-in {
+  animation: vak-premium-fade-in 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes vak-premium-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.vak-animate-premium-scale-in {
+  animation: vak-premium-scale-in 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes vak-premium-shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.vak-shimmer-premium {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: vak-premium-shimmer 2s infinite;
+}
+
+/* ==================== TARJETAS DE OPCIONES PREMIUM ==================== */
+
+.vak-option-card-premium {
+  composes: vak-option-card;
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(248, 252, 253, 0.95) 100%);
+  border: 2px solid rgba(77, 168, 196, 0.12);
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 75, 99, 0.06),
+              0 2px 6px rgba(0, 75, 99, 0.04);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.vak-option-card-premium::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(77, 168, 196, 0.3) 50%,
+    transparent 100%);
+}
+
+.vak-option-card-premium::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg,
+    rgba(77, 168, 196, 0) 0%,
+    rgba(77, 168, 196, 0.03) 100%);
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.vak-option-card-premium:hover::after {
+  opacity: 1;
+}
+
+.vak-option-card-premium:hover {
+  border-color: #4DA8C4;
+  box-shadow: 0 12px 40px rgba(77, 168, 196, 0.15),
+              0 6px 24px rgba(77, 168, 196, 0.1),
+              inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  transform: translateY(-6px) scale(1.01);
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(248, 252, 253, 0.98) 100%);
+}
+
+.vak-option-card-premium:active {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(77, 168, 196, 0.1);
+}
+
+/* Variantes VAK para tarjetas premium */
+.vak-option-card-premium-visual:hover {
+  border-color: var(--color-vak-visual-500);
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(77, 168, 196, 0.05) 100%);
+}
+
+.vak-option-card-premium-auditivo:hover {
+  border-color: var(--color-vak-auditivo-500);
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(102, 204, 204, 0.05) 100%);
+}
+
+.vak-option-card-premium-kinestesico:hover {
+  border-color: var(--color-vak-kinestesico-500);
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(0, 194, 224, 0.05) 100%);
+}
+
+/* Letra de opción premium */
+.vak-option-letter-premium {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4DA8C4, #66CCCC);
+  color: white;
+  font-family: var(--font-family-display);
+  font-weight: 700;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(77, 168, 196, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+}
+
+.vak-option-card-premium:hover .vak-option-letter-premium {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(77, 168, 196, 0.4);
+}
+
+/* Texto de opción premium */
+.vak-option-text-premium {
+  font-family: var(--font-family-body);
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #004B63;
+  text-align: left;
+}
+
+/* Icono de opción premium (NEUTRAL - no revela tipo VAK) */
+.vak-option-icon-premium {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(248, 252, 253, 0.9) 100%);
+  border: 2px solid rgba(77, 168, 196, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 1rem;
+  flex-shrink: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 75, 99, 0.08);
+}
+
+.vak-option-icon-emoji {
+  font-size: 1.5rem;
+  line-height: 1;
+  display: block;
+}
+
+.vak-option-card-premium:hover .vak-option-icon-premium {
+  border-color: #4DA8C4;
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(77, 168, 196, 0.15);
+}
+
+/* Flecha premium */
+.vak-option-arrow-premium {
+  color: rgba(77, 168, 196, 0.6);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+}
+
+.vak-option-card-premium:hover .vak-option-arrow-premium {
+  color: #4DA8C4;
+  transform: translateX(4px);
+}
+
+/* ==================== HERO DE RESULTADOS PREMIUM ==================== */
+
+.vak-result-hero-premium {
+  position: relative;
+  padding: 3rem 2rem;
+  border-radius: 28px;
+  overflow: hidden;
+  text-align: center;
+  background: linear-gradient(135deg,
+    rgba(0, 75, 99, 0.98) 0%,
+    rgba(0, 75, 99, 0.92) 50%,
+    rgba(77, 168, 196, 0.95) 100%);
+  border: 3px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 20px 60px rgba(0, 75, 99, 0.25),
+              inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.vak-result-hero-premium::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 30% 20%,
+    rgba(255, 255, 255, 0.15) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+.vak-result-hero-premium::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 100%);
+}
+
+/* Variantes VAK para hero premium */
+.vak-result-hero-premium-visual {
+  background: linear-gradient(135deg,
+    rgba(0, 75, 99, 0.98) 0%,
+    rgba(77, 168, 196, 0.95) 100%);
+}
+
+.vak-result-hero-premium-auditivo {
+  background: linear-gradient(135deg,
+    rgba(0, 75, 99, 0.98) 0%,
+    rgba(102, 204, 204, 0.95) 100%);
+}
+
+.vak-result-hero-premium-kinestesico {
+  background: linear-gradient(135deg,
+    rgba(0, 75, 99, 0.98) 0%,
+    rgba(0, 194, 224, 0.95) 100%);
+}
+
+/* Contenido del hero premium */
+.vak-result-hero-content-premium {
+  position: relative;
+  z-index: 2;
+}
+
+/* Emoji premium */
+.vak-result-emoji-premium {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  display: inline-block;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
+  animation: vak-premium-float 6s ease-in-out infinite;
+}
+
+@keyframes vak-premium-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+/* Badge de bienvenida premium */
+.vak-result-badge-premium {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  margin-bottom: 2rem;
+}
+
+/* Icono del estilo premium */
+.vak-result-icon-premium {
+  width: 80px;
+  height: 80px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.vak-result-icon-premium svg {
+  width: 40px;
+  height: 40px;
+  color: white;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+/* Título del estilo premium */
+.vak-result-title-premium {
+  font-family: var(--font-family-display);
+  font-weight: 800;
+  font-size: 2.5rem;
+  line-height: 1.1;
+  color: white;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  letter-spacing: -0.02em;
+}
+
+/* Porcentaje premium */
+.vak-result-percentage-premium {
+  font-family: var(--font-family-display);
+  font-weight: 900;
+  font-size: 5rem;
+  line-height: 1;
+  color: white;
+  margin: 1rem 0;
+  text-shadow: 0 0 40px rgba(255, 255, 255, 0.5),
+               0 4px 12px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(to bottom, #FFFFFF, #B2D8E5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.vak-result-percentage-label-premium {
+  font-family: var(--font-family-body);
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 0.5rem;
+}
+
+/* Tiempo premium */
+.vak-result-time-premium {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-top: 1.5rem;
+}
+
+.vak-result-time-premium svg {
+  width: 20px;
+  height: 20px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Descripción premium */
+.vak-result-description-premium {
+  font-family: var(--font-family-body);
+  font-weight: 400;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 600px;
+  margin: 2rem auto 0;
+}
+
+/* ==================== GRÁFICA RADAR PREMIUM ==================== */
+
+.vak-radar-container-premium {
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(248, 252, 253, 0.95) 100%);
+  border: 2px solid rgba(77, 168, 196, 0.15);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(0, 75, 99, 0.08);
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.vak-radar-container-premium::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(77, 168, 196, 0.3) 50%,
+    transparent 100%);
+}
+
+.vak-radar-title-premium {
+  font-family: var(--font-family-display);
+  font-weight: 700;
+  font-size: 1rem;
+  color: #004B63;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.vak-radar-title-premium::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4DA8C4;
+  display: inline-block;
+  animation: vak-premium-pulse 2s infinite;
+}
+
+@keyframes vak-premium-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Estilos para Recharts premium */
+.recharts-polar-grid-premium line {
+  stroke: rgba(77, 168, 196, 0.15);
+  stroke-width: 1;
+}
+
+.recharts-polar-angle-axis-premium text {
+  fill: #004B63;
+  font-family: var(--font-family-display);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.recharts-polar-radius-axis-premium line {
+  stroke: rgba(77, 168, 196, 0.1);
+}
+
+.recharts-radar-premium polygon {
+  stroke-width: 3;
+  fill-opacity: 0.25;
+  filter: drop-shadow(0 4px 8px rgba(77, 168, 196, 0.2));
+}
+
+.recharts-radar-premium .recharts-radar-polygon {
+  stroke: #4DA8C4;
+  fill: #4DA8C4;
+}
+
+.recharts-radar-premium .recharts-radar-polygon-fill {
+  fill: url(#vak-radar-gradient-premium);
+}
+
+/* Gradiente para el radar */
+#vak-radar-gradient-premium stop:first-child {
+  stop-color: #4DA8C4;
+  stop-opacity: 0.8;
+}
+
+#vak-radar-gradient-premium stop:last-child {
+  stop-color: #66CCCC;
+  stop-opacity: 0.3;
+}
+
+/* ==================== ELEMENTOS SECUNDARIOS PREMIUM ==================== */
+
+/* Badges premium */
+.vak-badge-premium {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-family: var(--font-family-display);
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vak-badge-premium-primary {
+  background: linear-gradient(135deg, #4DA8C4, #66CCCC);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 12px rgba(77, 168, 196, 0.3);
+}
+
+.vak-badge-premium-secondary {
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(248, 252, 253, 0.9) 100%);
+  color: #004B63;
+  border: 1px solid rgba(77, 168, 196, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 75, 99, 0.08);
+}
+
+.vak-badge-premium-success {
+  background: linear-gradient(135deg, #10B981, #34D399);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.vak-badge-premium-warning {
+  background: linear-gradient(135deg, #F59E0B, #FBBF24);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.vak-badge-premium-error {
+  background: linear-gradient(135deg, #EF4444, #F87171);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Botones premium */
+.vak-btn-premium {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  border-radius: 16px;
+  font-family: var(--font-family-display);
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Estilos de foco para accesibilidad */
+.vak-btn-premium:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.vak-input-premium:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.vak-icon-container-premium:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* Mejoras de contraste para accesibilidad */
+@media (prefers-contrast: high) {
+  .vak-btn-premium-primary {
+    border: 2px solid white;
+  }
+  
+  .vak-badge-premium-primary {
+    border: 2px solid white;
+  }
+  
+  .vak-container-premium {
+    border: 2px solid var(--color-corporate-premium);
+  }
+}
+
+/* Soporte para modo oscuro del sistema */
+@media (prefers-color-scheme: dark) {
+  .vak-container-premium {
+    background: linear-gradient(135deg,
+      rgba(30, 41, 59, 0.98) 0%,
+      rgba(51, 65, 85, 0.95) 100%);
+    border-color: rgba(77, 168, 196, 0.3);
+  }
+  
+  .vak-input-premium {
+    background: linear-gradient(135deg,
+      rgba(30, 41, 59, 0.95) 0%,
+      rgba(51, 65, 85, 0.9) 100%);
+    border-color: rgba(77, 168, 196, 0.3);
+    color: #E2E8F0;
+  }
+  
+  .vak-input-premium::placeholder {
+    color: rgba(226, 232, 240, 0.5);
+  }
+}
+
+/* Optimizaciones de rendimiento para dispositivos de gama media/baja */
+@media (prefers-reduced-motion: reduce) {
+  .vak-btn-premium::before,
+  .vak-btn-premium:hover::before {
+    animation: none;
+    transition: none;
+  }
+  
+  .vak-result-emoji-premium {
+    animation: none;
+  }
+  
+  .vak-radar-title-premium::before {
+    animation: none;
+  }
+  
+  .vak-option-card-premium:hover {
+    transform: none;
+  }
+  
+  .vak-icon-container-premium:hover {
+    transform: none;
+  }
+  
+  .vak-strategy-card-premium:hover {
+    transform: none;
+  }
+  
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Optimizaciones para pantallas pequeñas (móviles) */
+@media (max-width: 640px) {
+  .vak-btn-premium {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.9375rem;
+  }
+  
+  .vak-container-premium {
+    padding: 1.5rem;
+    border-radius: 20px;
+  }
+  
+  .vak-input-premium {
+    padding: 0.875rem 1rem;
+  }
+  
+  .vak-icon-container-premium {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .vak-icon-premium {
+    width: 20px;
+    height: 20px;
+  }
+  
+  /* Reducir efectos visuales en móviles para mejor rendimiento */
+  .vak-btn-premium::before {
+    display: none;
+  }
+  
+  .vak-container-premium::before {
+    display: none;
+  }
+}
+
+.vak-btn-premium::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%);
+  transition: left 0.6s ease;
+}
+
+.vak-btn-premium:hover::before {
+  left: 100%;
+}
+
+.vak-btn-premium-primary {
+  background: linear-gradient(135deg, #4DA8C4, #66CCCC);
+  color: white;
+  box-shadow: 0 8px 24px rgba(77, 168, 196, 0.4);
+}
+
+.vak-btn-premium-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(77, 168, 196, 0.5);
+}
+
+.vak-btn-premium-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 16px rgba(77, 168, 196, 0.3);
+}
+
+.vak-btn-premium-secondary {
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(248, 252, 253, 0.9) 100%);
+  color: #004B63;
+  border: 2px solid rgba(77, 168, 196, 0.3);
+  box-shadow: 0 4px 16px rgba(0, 75, 99, 0.1);
+}
+
+.vak-btn-premium-secondary:hover {
+  border-color: #4DA8C4;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(77, 168, 196, 0.2);
+}
+
+.vak-btn-premium-ghost {
+  background: transparent;
+  color: #4DA8C4;
+  border: 2px solid rgba(77, 168, 196, 0.3);
+}
+
+.vak-btn-premium-ghost:hover {
+  background: rgba(77, 168, 196, 0.1);
+  border-color: #4DA8C4;
+  transform: translateY(-2px);
+}
+
+/* Formularios premium */
+.vak-form-group-premium {
+  margin-bottom: 1.5rem;
+}
+
+.vak-label-premium {
+  display: block;
+  font-family: var(--font-family-display);
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #004B63;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.02em;
+}
+
+.vak-input-premium {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  border: 2px solid rgba(77, 168, 196, 0.2);
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(248, 252, 253, 0.9) 100%);
+  font-family: var(--font-family-body);
+  font-size: 1rem;
+  color: #004B63;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 75, 99, 0.05);
+}
+
+.vak-input-premium:focus {
+  outline: none;
+  border-color: #4DA8C4;
+  box-shadow: 0 0 0 4px rgba(77, 168, 196, 0.2),
+              0 4px 16px rgba(77, 168, 196, 0.1);
+  transform: translateY(-1px);
+}
+
+.vak-input-premium::placeholder {
+  color: rgba(0, 75, 99, 0.5);
+}
+
+.vak-input-premium-error {
+  border-color: #EF4444;
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(254, 242, 242, 0.9) 100%);
+}
+
+.vak-input-premium-error:focus {
+  border-color: #EF4444;
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2);
+}
+
+.vak-input-premium-success {
+  border-color: #10B981;
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(236, 253, 245, 0.9) 100%);
+}
+
+.vak-input-premium-success:focus {
+  border-color: #10B981;
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
+}
+
+.vak-form-help-premium {
+  font-family: var(--font-family-body);
+  font-size: 0.75rem;
+  color: rgba(0, 75, 99, 0.6);
+  margin-top: 0.5rem;
+  line-height: 1.4;
+}
+
+.vak-form-error-premium {
+  font-family: var(--font-family-body);
+  font-size: 0.75rem;
+  color: #EF4444;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Iconos premium */
+.vak-icon-container-premium {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(248, 252, 253, 0.9) 100%);
+  border: 2px solid rgba(77, 168, 196, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 75, 99, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vak-icon-container-premium:hover {
+  border-color: #4DA8C4;
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 24px rgba(77, 168, 196, 0.15);
+}
+
+.vak-icon-premium {
+  color: #4DA8C4;
+  width: 24px;
+  height: 24px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vak-icon-container-premium:hover .vak-icon-premium {
+  color: #004B63;
+  transform: scale(1.1);
+}
+
+/* Tarjetas de estrategia premium */
+.vak-strategy-card-premium {
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(248, 252, 253, 0.9) 100%);
+  border: 2px solid rgba(77, 168, 196, 0.15);
+  border-radius: 20px;
+  padding: 1.5rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.vak-strategy-card-premium::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, #4DA8C4, #66CCCC);
+}
+
+.vak-strategy-card-premium:hover {
+  transform: translateY(-4px);
+  border-color: #4DA8C4;
+  box-shadow: 0 12px 32px rgba(77, 168, 196, 0.15);
+}
+
+.vak-strategy-number-premium {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #4DA8C4, #66CCCC);
+  color: white;
+  font-family: var(--font-family-display);
+  font-weight: 700;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.vak-strategy-title-premium {
+  font-family: var(--font-family-display);
+  font-weight: 600;
+  font-size: 1rem;
+  color: #004B63;
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+}
+
+.vak-strategy-description-premium {
+  font-family: var(--font-family-body);
+  font-size: 0.875rem;
+  color: rgba(0, 75, 99, 0.7);
+  line-height: 1.5;
+}
+
+/* Contenedores premium */
+.vak-container-premium {
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(248, 252, 253, 0.95) 100%);
+  border: 2px solid rgba(77, 168, 196, 0.15);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(0, 75, 99, 0.08);
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.vak-container-premium::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(77, 168, 196, 0.3) 50%,
+    transparent 100%);
+}
+
+.vak-container-premium-glass {
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.85) 0%,
+    rgba(248, 252, 253, 0.75) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 75, 99, 0.1),
+              inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* Utilidades de espaciado premium */
+.vak-space-y-premium-4 > * + * {
+  margin-top: 1rem;
+}
+
+.vak-space-y-premium-6 > * + * {
+  margin-top: 1.5rem;
+}
+
+.vak-space-y-premium-8 > * + * {
+  margin-top: 2rem;
+}
+
+.vak-gap-premium-4 {
+  gap: 1rem;
+}
+
+.vak-gap-premium-6 {
+  gap: 1.5rem;
+}
+
+.vak-gap-premium-8 {
+  gap: 2rem;
+}
+
+/* ==================== ANIMACIONES 3D PARA BÓVEDAS ==================== */
+
+@keyframes orb-1 {
+  0%, 100% {
+    transform: translate(0, 0) translateZ(100px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -20px) translateZ(120px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 30px) translateZ(80px) scale(0.9);
+  }
+}
+
+@keyframes orb-2 {
+  0%, 100% {
+    transform: translate(0, 0) translateZ(80px) scale(1);
+  }
+  33% {
+    transform: translate(-40px, 10px) translateZ(100px) scale(1.05);
+  }
+  66% {
+    transform: translate(20px, -30px) translateZ(60px) scale(0.95);
+  }
+}
+
+@keyframes orb-3 {
+  0%, 100% {
+    transform: translate(0, 0) translateZ(50px) scale(1);
+  }
+  50% {
+    transform: translate(0, 0) translateZ(70px) scale(1.15);
+  }
+}
+
+@keyframes float-3d {
+  0%, 100% {
+    transform: translateY(0) translateZ(var(--z-depth, 0px));
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(-20px) translateZ(calc(var(--z-depth, 0px) + 20px));
+    opacity: 1;
+  }
+}
+
+.animate-orb-1 {
+  animation: orb-1 15s ease-in-out infinite;
+}
+
+.animate-orb-2 {
+  animation: orb-2 18s ease-in-out infinite;
+}
+
+.animate-orb-3 {
+  animation: orb-3 12s ease-in-out infinite;
+}
+
+.animate-float-3d {
+  animation: float-3d 6s ease-in-out infinite;
+  --z-depth: 0px;
+}
+
+/* ==================== OPCIONES DE RESPUESTA MODERNAS ==================== */
+
+/* Estilos para opciones limpias y modernas */
+.vak-option-modern {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(229, 231, 235, 0.8);
+  border-radius: 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vak-option-modern:hover {
+  border-color: #4DA8C4;
+  background: rgba(255, 255, 255, 0.95);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(77, 168, 196, 0.1);
+}
+
+.vak-option-letter {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, rgba(77, 168, 196, 0.1), rgba(102, 204, 204, 0.1));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #0A1628;
+  transition: all 0.3s ease;
+}
+
+.vak-option-modern:hover .vak-option-letter {
+  background: linear-gradient(135deg, rgba(77, 168, 196, 0.2), rgba(102, 204, 204, 0.2));
+  transform: scale(1.05);
+}
+
+.vak-option-text {
+  color: #374151;
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+.vak-option-icon-simple {
+  color: #4DA8C4;
+  font-size: 1.25rem;
+}
+
+.vak-option-selector {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 2px solid #E5E7EB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.vak-option-modern:hover .vak-option-selector {
+  border-color: #4DA8C4;
+}
+
+.vak-option-selector-arrow {
+  color: #9CA3AF;
+  transition: all 0.3s ease;
+}
+
+.vak-option-modern:hover .vak-option-selector-arrow {
+  color: #4DA8C4;
+}

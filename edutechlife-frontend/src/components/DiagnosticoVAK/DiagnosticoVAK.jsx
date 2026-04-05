@@ -1,45 +1,20 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Eye, Download, Brain, Eye as EyeIcon, Ear, Hand, Sparkles, ArrowRight, Check, PartyPopper } from 'lucide-react';
+import React, { useEffect, useState, useRef, lazy, Suspense } from 'react';
+import { Eye, Download, Brain, Sparkles, ArrowRight, Check, Volume, VolumeOff, RotateCcw, Video, Headphones, Activity, Target, Zap, Users, Globe, Cpu, Lightbulb, Wrench, ListOrdered, CheckSquare, CheckCircle2, Rocket, List, BookOpen, Mic, MessageCircle, Smile, Meh, Frown, Info, Clock } from 'lucide-react';
 import html2pdf from 'html2pdf.js';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import { useInView, motion, AnimatePresence } from 'framer-motion';
+import { useStudent } from '../../contexts/StudentContext';
+import useValentinaAgent from '../../hooks/useValentinaAgent';
+import './DiagnosticoVAK.css';
 
 // Componente de Confetti
 const Confetti = ({ active }) => {
-  const colors = ['#4DA8C4', '#66CCCC', '#00C2E0', '#FFD700', '#FF6B9D', '#8B5CF6'];
-  const confettiCount = 50;
-  
   if (!active) return null;
   
+  // Versión simplificada sin window para evitar errores SSR
   return (
     <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
-      {[...Array(confettiCount)].map((_, i) => (
-        <motion.div
-          key={i}
-          initial={{
-            x: Math.random() * window.innerWidth,
-            y: -20,
-            rotate: 0,
-            scale: 1
-          }}
-          animate={{
-            y: window.innerHeight + 20,
-            x: Math.random() * window.innerWidth + (Math.random() - 0.5) * 200,
-            rotate: Math.random() * 720 - 360,
-            scale: [1, 0.8, 0]
-          }}
-          transition={{
-            duration: 2 + Math.random() * 2,
-            delay: Math.random() * 0.5,
-            ease: 'easeOut'
-          }}
-          className="absolute w-3 h-3 rounded-sm"
-          style={{
-            backgroundColor: colors[Math.floor(Math.random() * colors.length)],
-            boxShadow: '0 0 10px rgba(255,255,255,0.5)'
-          }}
-        />
-      ))}
+      <div className="text-center text-6xl opacity-50 animate-pulse">🎊</div>
     </div>
   );
 };
@@ -49,51 +24,106 @@ const Celebration = ({ active, styleName }) => {
   if (!active) return null;
   
   return (
-    <motion.div 
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="fixed inset-0 pointer-events-none z-40 flex items-center justify-center"
-    >
-      {/* Fuegos artificiales */}
-      {[...Array(5)].map((_, i) => (
-        <motion.div
-          key={i}
-          initial={{ 
-            x: Math.random() * window.innerWidth,
-            y: window.innerHeight,
-            scale: 0
-          }}
-          animate={{ 
-            y: Math.random() * window.innerHeight * 0.5,
-            scale: [0, 1.5, 0]
-          }}
-          transition={{
-            duration: 1.5,
-            delay: i * 0.3,
-            repeat: 2,
-            repeatDelay: 0.5
-          }}
-          className="absolute"
-        >
-          <div className="text-6xl">🎆</div>
-        </motion.div>
-      ))}
-      
-      {/* Mensaje de celebración */}
-      <motion.div
-        initial={{ scale: 0, rotate: -20 }}
-        animate={{ scale: 1, rotate: 0 }}
-        transition={{ delay: 0.5, type: 'spring', stiffness: 200 }}
-        className="absolute top-1/4 left-1/2 -translate-x-1/2 bg-white rounded-3xl shadow-2xl p-6 flex items-center gap-4"
-      >
+    <div className="fixed inset-0 pointer-events-none z-40 flex items-center justify-center">
+      <div className="bg-white rounded-3xl shadow-2xl p-6 flex items-center gap-4 animate-pulse">
         <div className="text-5xl">🎉</div>
         <div>
           <h3 className="text-2xl font-bold text-[var(--color-petroleum)]">¡Completado!</h3>
           <p className="text-[var(--color-gray-500)]">Eres un aprendiz <span className="font-bold text-[var(--color-corporate)]">{styleName}</span></p>
         </div>
         <div className="text-5xl">🎊</div>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
+  );
+};
+
+// Mapeo de expresiones a emojis
+const EXPRESSION_EMOJIS = {
+  neutral: '🧠',
+  happy: '😊',
+  excited: '🤩',
+  thinking: '🤔',
+  encouraging: '💪',
+  celebrating: '🎉',
+  calm: '😌',
+  proud: '🌟',
+  concerned: '😟',
+  curious: '🤓',
+};
+
+// Componentes de Valeria - Guía del Diagnóstico
+const ValeriaControls = ({ 
+  valeriaEnabled, 
+  setValeriaEnabled, 
+  valeriaVolume, 
+  setValeriaVolume,
+  isSpeaking,
+  valeriaExpression,
+  onStart,
+  showStart 
+}) => {
+  const currentEmoji = EXPRESSION_EMOJIS[valeriaExpression] || EXPRESSION_EMOJIS.neutral;
+  
+  return (
+    <div className="valeria-controls-bar">
+      <div className="max-w-6xl mx-auto px-4 flex items-center justify-between py-3">
+        <div className="valeria-logo">
+          <div className="valeria-avatar-container">
+            <div className={`valeria-avatar ${isSpeaking ? 'speaking' : ''}`}>
+              <span className="valeria-avatar-emoji">{currentEmoji}</span>
+            </div>
+            {isSpeaking && (
+              <div className="valeria-avatar-pulse"></div>
+            )}
+          </div>
+          <div className="valeria-logo-content">
+            <span className="valeria-logo-text">Valeria</span>
+            <span className="valeria-logo-subtitle">Psicóloga VAK</span>
+          </div>
+        </div>
+        
+        <div className="flex items-center gap-4">
+          {isSpeaking && (
+            <div className="valeria-speaking-indicator">
+              <div className="wave"></div>
+              <div className="wave"></div>
+              <div className="wave"></div>
+              <span>Hablando...</span>
+            </div>
+          )}
+          
+          <button
+            onClick={() => setValeriaEnabled(!valeriaEnabled)}
+            className={`valeria-btn-toggle-premium ${!valeriaEnabled ? 'muted' : ''}`}
+            title={valeriaEnabled ? "Silenciar voz" : "Activar voz"}
+          >
+            {valeriaEnabled ? <Volume className="valeria-icon-premium" /> : <VolumeOff className="valeria-icon-premium" />}
+          </button>
+          
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.1"
+            value={valeriaVolume}
+            onChange={(e) => setValeriaVolume(parseFloat(e.target.value))}
+            className="valeria-volume-slider"
+            disabled={!valeriaEnabled}
+            title="Volumen"
+          />
+          
+          <span className="valeria-volume-label">
+            {Math.round(valeriaVolume * 100)}%
+          </span>
+          
+          {showStart && (
+            <button onClick={onStart} className="valeria-btn-start">
+              Comenzar
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
 
@@ -177,7 +207,7 @@ const STYLE_MAP = {
     bgGradient: 'linear-gradient(135deg, rgba(77, 168, 196, 0.15), rgba(77, 168, 196, 0.05))',
     description: 'Tu cerebro procesa mejor la información cuando la ves. Aprendes más fácil con imágenes, gráficos, colores y diagramas.',
     strategies: ['Usa colores y subrayados en tus notas', 'Crea mapas mentales y diagramas', 'Prefiere videos educativos', 'Usa flashcards con imágenes', 'Organiza en esquemas visuales'],
-    icon: EyeIcon,
+    icon: 'Video', // Icono más moderno y corporativo
     tip: 'Visiona el contenido antes de estudiarlo para mejor comprensión'
   },
   auditivo: { 
@@ -185,8 +215,8 @@ const STYLE_MAP = {
     color: 'var(--color-mint)', 
     bgGradient: 'linear-gradient(135deg, rgba(102, 204, 204, 0.15), rgba(102, 204, 204, 0.05))',
     description: 'Aprendes mejor escuchando y hablando. Retienes información a través de conversaciones y audio.',
-    strategies: ['Graba y escucha tus notas', 'Explica en voz alta lo que aprendes', 'Escucha podcasts educativos', 'Participa en debates y discusiones', 'Usa grabadora para clases'],
-    icon: Ear,
+    strategies: ['Graba y escucha tus notas', 'Explica en voz alto lo que aprendes', 'Escucha podcasts educativos', 'Participa en debates y discusiones', 'Usa grabadora para clases'],
+    icon: 'Headphones', // Icono más moderno y corporativo
     tip: 'Graba tus notas y escúchalas en tus momentos de ocio'
   },
   kinestesico: { 
@@ -195,7 +225,7 @@ const STYLE_MAP = {
     bgGradient: 'linear-gradient(135deg, rgba(0, 194, 224, 0.15), rgba(0, 194, 224, 0.05))',
     description: 'Necesitas moverte y practicar para aprender. Tu mejor aprendizaje viene de la experiencia práctica.',
     strategies: ['Toma notas a mano', 'Haz pausas activas cada 25 minutos', 'Practica con ejercicios reales', 'Usa el cuerpo para memorizar', 'Aprende haciendo proyectos'],
-    icon: Hand,
+    icon: 'Activity', // Icono más moderno y corporativo
     tip: 'Estudiar de pie o caminando mejora tu concentración'
   }
 };
@@ -218,40 +248,169 @@ const buildResultsURL = (diag) => {
   }
 };
 
+// Función para obtener el componente de icono basado en el nombre
+const getIconComponent = (iconName) => {
+  switch (iconName) {
+    case 'Eye': return Eye;
+    case 'Video': return Video;
+    case 'Headphones': return Headphones;
+    case 'Activity': return Activity;
+    case 'Wrench': return Wrench;
+    case 'ListOrdered': return ListOrdered;
+    case 'CheckSquare': return CheckSquare;
+    case 'Users': return Users;
+    case 'List': return List;
+    case 'BookOpen': return BookOpen;
+    case 'Mic': return Mic;
+    case 'MessageCircle': return MessageCircle;
+    case 'Target': return Target;
+    case 'Zap': return Zap;
+    case 'Globe': return Globe;
+    case 'Cpu': return Cpu;
+    case 'Lightbulb': return Lightbulb;
+    default: return Video;
+  }
+};
+
 const DiagnosticoVAK = ({ onNavigate }) => {
+  const { studentInfo, updateStudentInfo } = useStudent();
+  
   const [phase, setPhase] = useState('intro');
-  const [studentName, setStudentName] = useState('');
-  const [studentEmail, setStudentEmail] = useState('');
-  const [studentPhone, setStudentPhone] = useState('');
-  const [studentMood, setStudentMood] = useState('');
+  const [studentName, setStudentName] = useState(studentInfo.name || '');
+  const [studentAge, setStudentAge] = useState(studentInfo.age || '');
+  const [studentEmail, setStudentEmail] = useState(studentInfo.email || '');
+  const [studentPhone, setStudentPhone] = useState(studentInfo.phone || '');
+  const [studentMood, setStudentMood] = useState(studentInfo.mood || '');
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState([]);
-  const [diagnosis, setDiagnosis] = useState(null);
+  const [diagnosis, setDiagnosis] = useState(studentInfo.diagnosis || null);
   const [date, setDate] = useState('');
-  const [tempName, setTempName] = useState('');
-  const [tempEmail, setTempEmail] = useState('');
-  const [tempPhone, setTempPhone] = useState('');
-  const [tempMood, setTempMood] = useState('');
+  const [tempName, setTempName] = useState(studentInfo.name || '');
+  const [tempAge, setTempAge] = useState(studentInfo.age || '');
+  const [tempEmail, setTempEmail] = useState(studentInfo.email || '');
+  const [tempPhone, setTempPhone] = useState(studentInfo.phone || '');
+  const [tempMood, setTempMood] = useState(studentInfo.mood || '');
   const [error, setError] = useState(null);
   const [pdfLoading, setPdfLoading] = useState(false);
-  const [selectedMoodOption, setSelectedMoodOption] = useState(null);
+  const [selectedMoodOption, setSelectedMoodOption] = useState(() => {
+    return MOOD_OPTIONS.find(m => m.value === studentInfo.mood) || null;
+  });
   const [emailError, setEmailError] = useState(false);
+  const [ageError, setAgeError] = useState(false);
   const [startTime, setStartTime] = useState(null);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
   const [highContrast, setHighContrast] = useState(false);
   const [showSaveIndicator, setShowSaveIndicator] = useState(false);
+  
+  // Estados para Valeria
+  const [valeriaEnabled, setValeriaEnabled] = useState(true);
+  const [valeriaVolume, setValeriaVolume] = useState(1.0);
+  const [valentinaIntroComplete, setValentinaIntroComplete] = useState(false);
+  
   const pdfTemplateRef = useRef(null);
   const chartRef = useRef(null);
   const isChartInView = useInView(chartRef);
   const timerRef = useRef(null);
+  
+  // Hook de Valeria actualizado con nuevos métodos conversacionales
+  const {
+    isValentinaSpeaking,
+    valeriaExpression,
+    setValeriaVolume: setHookVolume,
+    startWelcomeSequence,
+    confirmNameAndAskAge,
+    confirmAgeAndAskEmail,
+    confirmEmailAndAskPhone,
+    confirmPhoneAndAskMood,
+    giveMoodFeedback,
+    transitionToTest,
+    readQuestionWithOptions,
+    giveEncouragement,
+    giveEncouragementNoName,
+    giveProgressUpdate,
+    announceResults,
+    announceTestEnd,
+    farewell
+  } = useValentinaAgent({
+    studentName: tempName,
+    studentAge: parseInt(tempAge) || 12,
+    studentMood,
+    phase,
+    currentQuestion,
+    totalQuestions: QUESTIONS.length,
+    diagnosis,
+    enabled: valeriaEnabled
+  });
+
+  // Efecto: Hablar al entrar en intro
+  useEffect(() => {
+    if (phase === 'intro' && valeriaEnabled) {
+      const timer = setTimeout(() => {
+        startWelcomeSequence(() => {
+          // Cuando Valeria termina de hablar, habilitar el botón
+          setValentinaIntroComplete(true);
+        });
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [phase, valeriaEnabled]);
+
+  // Efecto: Leer pregunta al entrar en fase test
+  useEffect(() => {
+    if (phase === 'test' && currentQuestion < QUESTIONS.length && valeriaEnabled) {
+      const q = QUESTIONS[currentQuestion];
+      readQuestionWithOptions(q.text, q.options, currentQuestion + 1, QUESTIONS.length);
+    }
+  }, [currentQuestion, phase, valeriaEnabled]);
 
   useEffect(() => {
     if (phase === 'intro') {
       setDate(new Date().toLocaleDateString());
     }
   }, [phase]);
+
+  // Efecto conversacional: Detectar cuando se escribe el nombre y confirmar
+  useEffect(() => {
+    if (phase === 'calibration' && tempName.length >= 2 && valeriaEnabled) {
+      const timer = setTimeout(async () => {
+        await confirmNameAndAskAge(tempName);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [tempName, phase, valeriaEnabled]);
+
+  // Efecto conversacional: Detectar cuando se escribe la edad y confirmar
+  useEffect(() => {
+    const age = parseInt(tempAge);
+    if (phase === 'calibration' && tempAge.length >= 1 && age >= 6 && age <= 17 && valeriaEnabled) {
+      const timer = setTimeout(async () => {
+        await confirmAgeAndAskEmail(tempName, age);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [tempAge, phase, valeriaEnabled]);
+
+  // Efecto conversacional: Detectar cuando se escribe el email y confirmar
+  useEffect(() => {
+    if (phase === 'calibration' && tempEmail.length > 0 && validateEmail(tempEmail) && valeriaEnabled) {
+      const timer = setTimeout(async () => {
+        await confirmEmailAndAskPhone();
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [tempEmail, phase, valeriaEnabled]);
+
+  // Efecto conversacional: Detectar cuando se escribe el teléfono y confirmar
+  useEffect(() => {
+    if (phase === 'calibration' && tempPhone.length >= 7 && valeriaEnabled) {
+      const timer = setTimeout(async () => {
+        await confirmPhoneAndAskMood(tempName);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [tempPhone, phase, valeriaEnabled]);
 
   // Timer para mostrar tiempo en resultados
   useEffect(() => {
@@ -283,6 +442,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
           // Restaurar progreso si existe
           setPhase(parsed.phase || 'intro');
           setStudentName(parsed.studentName || '');
+          setStudentAge(parsed.studentAge || ''); // Nuevo: cargar edad
           setStudentEmail(parsed.studentEmail || '');
           setStudentPhone(parsed.studentPhone || '');
           setStudentMood(parsed.studentMood || '');
@@ -301,6 +461,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     const progressData = {
       phase,
       studentName,
+      studentAge, // Nuevo: guardar edad
       studentEmail,
       studentPhone,
       studentMood,
@@ -316,7 +477,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
       setShowSaveIndicator(true);
       setTimeout(() => setShowSaveIndicator(false), 1500);
     }
-  }, [phase, studentName, studentEmail, studentPhone, studentMood, currentQuestion, answers, startTime]);
+  }, [phase, studentName, studentAge, studentEmail, studentPhone, studentMood, currentQuestion, answers, startTime]);
 
   // Limpiar localStorage al completar el test
   const clearProgress = () => {
@@ -336,9 +497,9 @@ const DiagnosticoVAK = ({ onNavigate }) => {
         e.preventDefault();
         toggleHighContrast();
       }
-      // Escape: Volver al ecosistema
+      // Escape: Volver al diagnóstico
       if (e.key === 'Escape' && onNavigate) {
-        onNavigate('ecosystem');
+        onNavigate('neuroentorno');
       }
     };
     
@@ -359,39 +520,82 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   };
 
   const startTest = () => {
+    // IMPORTANTE: Si Valeria aún no termina de hablar, no hacer nada
+    if (valeriaEnabled && !valentinaIntroComplete) {
+      return;
+    }
+    
+    // Hacer que Valeria explique el diagnóstico antes de mostrar la vista de datos
+    if (valeriaEnabled) {
+      const introMessage = "¡Hola! Soy Valeria, tu psicóloga de EdutechLife. Vamos a comenzar con tu diagnóstico de estilo de aprendizaje VAK. Este diagnóstico identificará cómo procesas y retienes información de manera más efectiva. Existen tres estilos principales: visual, auditivo y kinestésico. El estilo visual aprende mejor viendo imágenes y diagramas. El auditivo aprende mejor escuchando y hablando. Y el kinestésico aprende mejor haciendo y practicando. Para personalizar tu experiencia y darte las mejores estrategias, necesito que me compartas tu nombre y cómo te sientes hoy. Esto me ayudará a adaptar mis consejos a tu estado emocional actual. Cuando estés listo, ingresa tu nombre y selecciona cómo te sientes.";
+      speakTextConversational(introMessage, 'valeria', () => {
+        // IMPORTANTE: Solo cambiar de fase cuando Valeria TERMINE de hablar
+        setValentinaIntroComplete(true);
+        setPhase('calibration');
+      });
+    } else {
+      // Si no está habilitado el audio, mostrar directamente la pantalla de datos
+      setValentinaIntroComplete(true);
+      setPhase('calibration');
+    }
+  };
+
+  const handleStart = async () => {
     setPhase('calibration');
   };
 
-  const submitCalibration = () => {
-    if (!tempName.trim()) return;
+  const submitCalibration = async () => {
+    if (!studentName.trim()) return;
     
-    // Validar email si se proporcionó
-    if (tempEmail.trim() && !validateEmail(tempEmail.trim())) {
-      setEmailError(true);
-      return;
-    }
-    setEmailError(false);
-    
-    setStudentName(tempName.trim());
-    setStudentEmail(tempEmail.trim());
-    setStudentPhone(tempPhone.trim());
-    setStudentMood(selectedMoodOption?.value || 'neutral');
+    setStudentName(studentName.trim());
     setStartTime(Date.now());
     setElapsedTime(0);
-    setPhase('test');
-    setCurrentQuestion(0);
+    
+    // Actualizar información del estudiante en el contexto global
+    updateStudentInfo({
+      name: studentName.trim(),
+      mood: studentMood || 'neutral'
+    });
+    
+    // IMPORTANTE: Hacer la transición al test SOLO después de que Valentina termine de hablar
+    if (valeriaEnabled) {
+      await transitionToTest(studentName.trim());
+      // No necesitamos setTimeout adicional porque transitionToTest ya espera a que Valentina termine
+      setPhase('test');
+      setCurrentQuestion(0);
+    } else {
+      // Si no está habilitado el audio, cambiar directamente
+      setPhase('test');
+      setCurrentQuestion(0);
+    }
   };
 
-  const handleAnswer = (option) => {
+  const handleAnswer = async (option) => {
     try {
       const idx = currentQuestion;
       const entry = { index: idx, text: option.text, type: option.type };
       const nextAnswers = [...answers, entry];
       setAnswers(nextAnswers);
       
+      // Dar aliento SIN mencionar nombre
+      if (valeriaEnabled) {
+        await giveEncouragementNoName();
+      }
+      
+      // Verificar progreso cada 3 preguntas (3, 6, 9)
+      if (valeriaEnabled && ((idx + 1) === 3 || (idx + 1) === 6 || (idx + 1) === 9)) {
+        await new Promise(resolve => setTimeout(resolve, 500));
+        await giveProgressUpdate();
+      }
+      
       if (idx < QUESTIONS.length - 1) {
         setCurrentQuestion(idx + 1);
       } else {
+        // Es el último pregunta
+        if (valeriaEnabled) {
+          await announceTestEnd();
+        }
+        
         const c = { visual: 0, auditivo: 0, kinestesico: 0 };
         nextAnswers.forEach(a => {
           if (a.type === 'visual') c.visual++;
@@ -420,6 +624,12 @@ const DiagnosticoVAK = ({ onNavigate }) => {
         };
         
         setDiagnosis(res);
+        
+        // Actualizar diagnóstico en el contexto global
+        updateStudentInfo({
+          diagnosis: res
+        });
+        
         // Activar celebración antes de mostrar resultados
         setShowConfetti(true);
         setShowCelebration(true);
@@ -429,6 +639,12 @@ const DiagnosticoVAK = ({ onNavigate }) => {
         
         setTimeout(() => {
           setPhase('result');
+          // Anunciar resultados después de un momento
+          if (valeriaEnabled) {
+            setTimeout(() => {
+              announceResults();
+            }, 1000);
+          }
         }, 2000); // Mostrar celebración por 2 segundos
       }
     } catch (err) {
@@ -444,6 +660,14 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     
     setPdfLoading(true);
     
+    // Mensaje de Valentina al exportar
+    const exportMessage = `¡Excelente ${studentName}! Estoy generando tu informe personalizado con todos los detalles de tu diagnóstico VAK. Este documento incluye mis recomendaciones como psicóloga educativa.`;
+    
+    // Mostrar mensaje de Valentina
+    setValentinaMessage(exportMessage);
+    addToChatHistory(exportMessage, 'valentina');
+    speakAsValentina(exportMessage);
+    
     const fileName = `Diagnostico_VAK_${(diagnosis.studentName || 'estudiante').replace(/\s+/g, '_')}_${diagnosis.date || date}`;
     const opt = {
       margin: [15, 15, 15, 15],
@@ -455,9 +679,25 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     
     try {
       await html2pdf().set(opt).from(el).save();
+      
+      // Mensaje de éxito
+      const successMessage = `¡Listo ${studentName}! Tu informe se ha descargado correctamente. Recuerda que puedes consultarme cualquier duda sobre tus estrategias de aprendizaje.`;
+      setTimeout(() => {
+        setValentinaMessage(successMessage);
+        addToChatHistory(successMessage, 'valentina');
+        speakAsValentina(successMessage);
+      }, 1000);
+      
     } catch (e) {
       console.error('PDF error:', e);
       setError('Error al generar PDF');
+      
+      // Mensaje de error de Valentina
+      const errorMessage = `Oh no ${studentName}, hubo un problema al generar tu informe. Por favor, intenta nuevamente o contáctanos para ayuda.`;
+      setValentinaMessage(errorMessage);
+      addToChatHistory(errorMessage, 'valentina');
+      speakAsValentina(errorMessage);
+      
     } finally {
       setPdfLoading(false);
     }
@@ -468,338 +708,462 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     return mood || MOOD_OPTIONS[6];
   };
 
-  const renderIntro = () => (
-    <div className="text-center p-8 md:p-12 relative">
-      <div className="absolute top-0 left-1/4 w-40 h-40 bg-[var(--color-corporate)]/20 rounded-full blur-[80px] animate-pulse-slow"></div>
-      <div className="absolute bottom-10 right-1/4 w-32 h-32 bg-[var(--color-mint)]/20 rounded-full blur-[60px] animate-pulse-slow" style={{ animationDelay: '1s' }}></div>
-      <div className="absolute top-1/3 right-10 w-24 h-24 bg-[var(--color-accent)]/15 rounded-full blur-[50px] animate-pulse-slow" style={{ animationDelay: '2s' }}></div>
+  // Generar comentario de Valentina para el diagnóstico
+  const getValentinaCommentary = () => {
+    if (!diagnosis || !studentAge) return '';
+    
+    const age = parseInt(studentAge);
+    let ageGroup = 'teen';
+    if (age >= 6 && age <= 10) ageGroup = 'child';
+    else if (age >= 11 && age <= 14) ageGroup = 'preteen';
+    
+    const style = diagnosis.predominantStyle;
+    const percentage = diagnosis.percentage;
+    
+    const comments = {
+      visual: {
+        child: `¡Hola ${studentName}! Como psicóloga educativa, veo que eres un aprendiz visual (${percentage}%). Esto significa que aprendes mejor viendo imágenes, colores y diagramas. Te recomiendo usar muchos colores en tus notas y ver videos educativos. ¡Dibujar lo que aprendes te ayudará mucho!`,
+        preteen: `Hola ${studentName}, como tu psicóloga educativa, he identificado que tu estilo predominante es visual (${percentage}%). Tu cerebro procesa mejor la información cuando la ves. Te sugiero crear mapas mentales, usar flashcards con imágenes y organizar tu estudio con esquemas visuales.`,
+        teen: `Estimado ${studentName}, según mi análisis como psicóloga especializada en VAK, tu perfil es predominantemente visual (${percentage}%). Esto indica que retienes mejor la información a través de estímulos visuales. Estrategias efectivas incluyen: infografías, diagramas de flujo, y el uso de colores para categorizar información.`
+      },
+      auditivo: {
+        child: `¡Hola ${studentName}! Soy Valeria, tu psicóloga. Descubrí que aprendes mejor escuchando (${percentage}%). ¡Eso es genial! Te recomiendo grabar tus clases, escuchar cuentos educativos y explicar lo que aprendes en voz alta. ¡Tu oído es tu superpoder!`,
+        preteen: `Hola ${studentName}, como psicóloga educativa de EdutechLife, he determinado que tu estilo de aprendizaje es auditivo (${percentage}%). Aprendes mejor a través del sonido y la palabra hablada. Te aconsejo: grabar tus notas, participar en debates, y usar podcasts educativos.`,
+        teen: `${studentName}, mi evaluación como psicóloga especialista en metodología VAK revela que tu estilo predominante es auditivo (${percentage}%). Esto significa que procesas información eficientemente a través del canal auditivo. Recomendaciones: grabaciones de clases, discusiones grupales, y explicaciones verbales.`
+      },
+      kinestesico: {
+        child: `¡Hola ${studentName}! ¡Qué emocionante! Como psicóloga, veo que aprendes mejor moviéndote y tocando (${percentage}%). Eres un aprendiz kinestésico. Te sugiero: estudiar caminando, hacer experimentos, y usar tus manos para aprender. ¡El movimiento es tu aliado!`,
+        preteen: `Hola ${studentName}, según mi análisis como psicóloga educativa, tu estilo de aprendizaje es kinestésico (${percentage}%). Necesitas actividad física y experiencia práctica para aprender efectivamente. Recomiendo: tomar notas a mano, hacer pausas activas, y proyectos prácticos.`,
+        teen: `Estimado ${studentName}, mi diagnóstico como psicóloga especializada en VAK indica que tu perfil es kinestésico (${percentage}%). Aprendes mejor a través de la experiencia práctica y el movimiento. Estrategias recomendadas: aprendizaje basado en proyectos, simulaciones, y estudio con intervalos de actividad.`
+      }
+    };
+    
+    return comments[style]?.[ageGroup] || `Hola ${studentName}, como psicóloga educativa de EdutechLife, he analizado tu perfil VAK. Tu estilo predominante es ${style} (${percentage}%). Esto te brinda ventajas específicas en tu proceso de aprendizaje.`;
+  };
+
+  const renderWelcome = () => (
+    <div className="min-h-[80vh] flex items-center justify-center p-4 relative">
+      {/* Efectos de fondo */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full bg-gradient-to-br from-[#4DA8C4]/10 to-[#66CCCC]/5 blur-3xl"></div>
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 rounded-full bg-gradient-to-tr from-[#66CCCC]/10 to-[#4DA8C4]/5 blur-3xl"></div>
+      </div>
       
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="relative"
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-4xl relative z-10"
       >
-        {/* Icono Brain 3D con efectos */}
-        <div className="w-32 h-32 mx-auto mb-8 relative perspective-500">
-          {/* Capa de brillo posterior */}
-          <div className="absolute inset-4 bg-gradient-to-br from-[var(--color-corporate)] to-[var(--color-mint)] rounded-3xl blur-xl opacity-60 animate-pulse"></div>
-          
-          {/* Tarjeta 3D principal */}
-          <motion.div 
-            whileHover={{ rotateX: 10, rotateY: -10, scale: 1.05 }}
-            transition={{ type: 'spring', stiffness: 300 }}
-            className="relative w-full h-full bg-gradient-to-br from-[var(--color-corporate)] to-[var(--color-mint)] rounded-3xl flex items-center justify-center shadow-[var(--shadow-xl)] border border-white/20"
-          >
-            <Brain className="w-16 h-16 text-white drop-shadow-lg" />
-            
-            {/* Partículas decorativas */}
-            <div className="absolute top-2 right-2 w-3 h-3 bg-white/60 rounded-full animate-ping"></div>
-            <div className="absolute bottom-3 left-3 w-2 h-2 bg-white/40 rounded-full animate-ping" style={{ animationDelay: '0.5s' }}></div>
-          </motion.div>
-        </div>
-        
-        {/* Badge con glow */}
+        {/* ENCABEZADO */}
         <motion.div 
-          initial={{ opacity: 0, scale: 0.8 }}
+          initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.2 }}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-[var(--color-corporate)]/20 mb-4 shadow-[var(--shadow-md)]"
+          className="text-center mb-8"
         >
-          <Sparkles className="w-4 h-4 text-[var(--color-corporate)] animate-pulse" />
-          <span className="text-sm font-bold text-[var(--color-corporate)] tracking-wide">DIAGNÓSTICO COGNITIVO</span>
-          <div className="w-2 h-2 bg-[var(--color-corporate)] rounded-full animate-pulse"></div>
+          <div className="inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] shadow-2xl mb-6">
+            <Brain size={48} strokeWidth={1.5} className="text-white" />
+          </div>
+          <h1 className="text-3xl md:text-4xl font-extrabold text-[#004B63] mb-3 tracking-tight">
+            Diagnóstico VAK
+          </h1>
+          <p className="text-lg text-[#4DA8C4] font-medium">
+            Descubre tu estilo de aprendizaje
+          </p>
         </motion.div>
-        
-        <motion.h2 
+
+        {/* SECCIÓN: ¿QUÉ ES? */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="bg-white rounded-3xl p-6 md:p-8 shadow-xl border border-[#B2D8E5]/50 mb-6"
+        >
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] flex items-center justify-center">
+              <Target size={24} strokeWidth={2} className="text-white" />
+            </div>
+            <h2 className="text-xl font-bold text-[#004B63]">¿Qué es el diagnóstico VAK?</h2>
+          </div>
+          <p className="text-[#004B63]/80 leading-relaxed text-base">
+            El diagnóstico <span className="font-bold text-[#4DA8C4]">VAK</span> identifica tu estilo de aprendizaje predominante: 
+            <span className="font-semibold"> Visual</span>, 
+            <span className="font-semibold"> Auditivo</span> o 
+            <span className="font-semibold"> Kinestésico</span>. 
+            Conocer tu estilo te permite recibir <span className="font-semibold text-[#4DA8C4]">estrategias personalizadas</span> para mejorar tu rendimiento académico.
+          </p>
+        </motion.div>
+
+        {/* SECCIÓN: LOS 3 ESTILOS */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="mb-6"
+        >
+          <h2 className="text-xl font-bold text-[#004B63] mb-4 text-center">Los 3 Estilos de Aprendizaje</h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* VISUAL */}
+            <div className="bg-white rounded-2xl p-6 shadow-lg border-l-4 border-[#4DA8C4] hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <div className="w-16 h-16 rounded-2xl bg-[#4DA8C4]/10 flex items-center justify-center mb-4 mx-auto">
+                <Eye size={32} strokeWidth={1.5} className="text-[#4DA8C4]" />
+              </div>
+              <h3 className="text-lg font-bold text-[#4DA8C4] text-center mb-3 uppercase tracking-wide">Visual</h3>
+              <p className="text-sm text-[#004B63]/70 text-center mb-4">
+                Aprende mejor viendo
+              </p>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-sm text-[#004B63]/80">
+                  <CheckCircle2 size={16} strokeWidth={2} className="text-[#4DA8C4] shrink-0" />
+                  <span>Imágenes y videos</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-[#004B63]/80">
+                  <CheckCircle2 size={16} strokeWidth={2} className="text-[#4DA8C4] shrink-0" />
+                  <span>Mapas mentales</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-[#004B63]/80">
+                  <CheckCircle2 size={16} strokeWidth={2} className="text-[#4DA8C4] shrink-0" />
+                  <span>Diagramas</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-[#004B63]/80">
+                  <CheckCircle2 size={16} strokeWidth={2} className="text-[#4DA8C4] shrink-0" />
+                  <span>Colores y esquemas</span>
+                </div>
+              </div>
+            </div>
+
+            {/* AUDITIVO */}
+            <div className="bg-white rounded-2xl p-6 shadow-lg border-l-4 border-[#66CCCC] hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <div className="w-16 h-16 rounded-2xl bg-[#66CCCC]/10 flex items-center justify-center mb-4 mx-auto">
+                <Headphones size={32} strokeWidth={1.5} className="text-[#66CCCC]" />
+              </div>
+              <h3 className="text-lg font-bold text-[#66CCCC] text-center mb-3 uppercase tracking-wide">Auditivo</h3>
+              <p className="text-sm text-[#004B63]/70 text-center mb-4">
+                Aprende mejor escuchando
+              </p>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-sm text-[#004B63]/80">
+                  <CheckCircle2 size={16} strokeWidth={2} className="text-[#66CCCC] shrink-0" />
+                  <span>Podcasts y audio</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-[#004B63]/80">
+                  <CheckCircle2 size={16} strokeWidth={2} className="text-[#66CCCC] shrink-0" />
+                  <span>Debates y discussions</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-[#004B63]/80">
+                  <CheckCircle2 size={16} strokeWidth={2} className="text-[#66CCCC] shrink-0" />
+                  <span>Explicar en voz alta</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-[#004B63]/80">
+                  <CheckCircle2 size={16} strokeWidth={2} className="text-[#66CCCC] shrink-0" />
+                  <span>Música y ritmos</span>
+                </div>
+              </div>
+            </div>
+
+            {/* KINESTÉSICO */}
+            <div className="bg-white rounded-2xl p-6 shadow-lg border-l-4 border-[#00C2E0] hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <div className="w-16 h-16 rounded-2xl bg-[#00C2E0]/10 flex items-center justify-center mb-4 mx-auto">
+                <Activity size={32} strokeWidth={1.5} className="text-[#00C2E0]" />
+              </div>
+              <h3 className="text-lg font-bold text-[#00C2E0] text-center mb-3 uppercase tracking-wide">Kinestésico</h3>
+              <p className="text-sm text-[#004B63]/70 text-center mb-4">
+                Aprende mejor haciendo
+              </p>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-sm text-[#004B63]/80">
+                  <CheckCircle2 size={16} strokeWidth={2} className="text-[#00C2E0] shrink-0" />
+                  <span>Experimentos prácticos</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-[#004B63]/80">
+                  <CheckCircle2 size={16} strokeWidth={2} className="text-[#00C2E0] shrink-0" />
+                  <span>Movimiento y pausas</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-[#004B63]/80">
+                  <CheckCircle2 size={16} strokeWidth={2} className="text-[#00C2E0] shrink-0" />
+                  <span>Proyectos manuales</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-[#004B63]/80">
+                  <CheckCircle2 size={16} strokeWidth={2} className="text-[#00C2E0] shrink-0" />
+                  <span>Juegos de roles</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* SECCIÓN: ¿QUÉ RECIBIRÁS? */}
+        <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="display-2 text-[var(--color-petroleum)] mb-4"
+          className="bg-gradient-to-br from-[#004B63] to-[#4DA8C4] rounded-3xl p-6 md:p-8 shadow-xl mb-6"
         >
-          Estilo de Aprendizaje <span className="text-gradient-primary">VAK</span>
-        </motion.h2>
-        
-        <motion.p 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="body-lg text-[var(--color-gray-500)] max-w-lg mx-auto mb-8"
-        >
-          Una evaluación científica para identificar cómo procesas y retienes información de manera más efectiva. ¡Descubrirás tu superpower para aprender!
-        </motion.p>
+          <h2 className="text-xl font-bold text-white mb-6 text-center">¿Qué recibirás?</h2>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 text-center">
+              <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mx-auto mb-3">
+                <Sparkles size={24} strokeWidth={2} className="text-white" />
+              </div>
+              <p className="text-white font-semibold text-sm">Diagnóstico Personalizado</p>
+            </div>
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 text-center">
+              <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mx-auto mb-3">
+                <Lightbulb size={24} strokeWidth={2} className="text-white" />
+              </div>
+              <p className="text-white font-semibold text-sm">Estrategias Adaptadas</p>
+            </div>
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 text-center">
+              <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mx-auto mb-3">
+                <Download size={24} strokeWidth={2} className="text-white" />
+              </div>
+              <p className="text-white font-semibold text-sm">Informe PDF</p>
+            </div>
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 text-center">
+              <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mx-auto mb-3">
+                <Zap size={24} strokeWidth={2} className="text-white" />
+              </div>
+              <p className="text-white font-semibold text-sm">Tips Prácticos</p>
+            </div>
+          </div>
+        </motion.div>
 
-        {/* Tarjetas de estilos con efectos 3D */}
+        {/* SECCIÓN: ¿QUÉ ESPERAR? */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="flex flex-wrap justify-center gap-4 mb-10"
+          transition={{ delay: 0.4 }}
+          className="bg-white rounded-3xl p-6 shadow-lg border border-[#B2D8E5]/50 mb-6"
         >
-          {[
-            { icon: EyeIcon, label: 'Visual', color: 'var(--color-corporate)', bg: 'from-[var(--color-corporate)]/10 to-transparent' },
-            { icon: Ear, label: 'Auditivo', color: 'var(--color-mint)', bg: 'from-[var(--color-mint)]/10 to-transparent' },
-            { icon: Hand, label: 'Kinestésico', color: 'var(--color-accent)', bg: 'from-[var(--color-accent)]/10 to-transparent' }
-          ].map((item, idx) => (
-            <motion.div 
-              key={idx}
-              initial={{ opacity: 0, scale: 0.8, rotateY: 90 }}
-              animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-              transition={{ delay: 0.6 + idx * 0.1, type: 'spring', stiffness: 200 }}
-              whileHover={{ scale: 1.08, y: -5, rotateX: 5 }}
-              className="perspective-100 group"
-            >
-              <div className={`px-6 py-4 rounded-2xl bg-gradient-to-r ${item.bg} white border border-[var(--color-gray-200)] shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-xl)] hover:border-[var(--color-corporate)]/30 transition-all duration-300 flex items-center gap-3`}>
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-white shadow-md group-hover:scale-110 transition-transform">
-                  <item.icon className="w-5 h-5" style={{ color: item.color }} />
-                </div>
-                <span className="text-sm font-bold text-[var(--color-petroleum)]">{item.label}</span>
+          <h2 className="text-xl font-bold text-[#004B63] mb-6 text-center">¿Qué esperar?</h2>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <div className="text-center">
+              <div className="w-14 h-14 rounded-2xl bg-[#4DA8C4]/10 flex items-center justify-center mx-auto mb-2">
+                <Clock size={28} strokeWidth={2} className="text-[#4DA8C4]" />
               </div>
-            </motion.div>
-          ))}
+              <p className="text-2xl font-bold text-[#004B63]">3 min</p>
+              <p className="text-xs text-[#004B63]/60">Duración</p>
+            </div>
+            <div className="text-center">
+              <div className="w-14 h-14 rounded-2xl bg-[#66CCCC]/10 flex items-center justify-center mx-auto mb-2">
+                <List size={28} strokeWidth={2} className="text-[#66CCCC]" />
+              </div>
+              <p className="text-2xl font-bold text-[#004B63]">10</p>
+              <p className="text-xs text-[#004B63]/60">Preguntas</p>
+            </div>
+            <div className="text-center">
+              <div className="w-14 h-14 rounded-2xl bg-[#00C2E0]/10 flex items-center justify-center mx-auto mb-2">
+                <Target size={28} strokeWidth={2} className="text-[#00C2E0]" />
+              </div>
+              <p className="text-2xl font-bold text-[#004B63]">100%</p>
+              <p className="text-xs text-[#004B63]/60">Personalizado</p>
+            </div>
+            <div className="text-center">
+              <div className="w-14 h-14 rounded-2xl bg-[#10B981]/10 flex items-center justify-center mx-auto mb-2">
+                <CheckCircle2 size={28} strokeWidth={2} className="text-[#10B981]" />
+              </div>
+              <p className="text-2xl font-bold text-[#004B63]">100%</p>
+              <p className="text-xs text-[#004B63]/60">Confidencial</p>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-3 text-sm">
+            <span className="inline-flex items-center gap-2 bg-[#B2D8E5]/30 text-[#004B63] px-4 py-2 rounded-full">
+              <Check size={16} strokeWidth={2} className="text-[#4DA8C4]" />
+              No hay respuestas incorrectas
+            </span>
+            <span className="inline-flex items-center gap-2 bg-[#B2D8E5]/30 text-[#004B63] px-4 py-2 rounded-full">
+              <Check size={16} strokeWidth={2} className="text-[#4DA8C4]" />
+              Responde honestamente
+            </span>
+            <span className="inline-flex items-center gap-2 bg-[#B2D8E5]/30 text-[#004B63] px-4 py-2 rounded-full">
+              <Check size={16} strokeWidth={2} className="text-[#4DA8C4]" />
+              Valeria te guiará paso a paso
+            </span>
+          </div>
         </motion.div>
-        
-        {/* Botón principal con efectos especiales */}
-        <motion.button 
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.8, type: 'spring', stiffness: 200 }}
-          whileHover={{ scale: 1.08, boxShadow: '0 20px 40px rgba(77,168,196,0.4)' }}
-          whileTap={{ scale: 0.98 }}
-          className="btn-primary px-12 py-5 text-lg shadow-[var(--shadow-lg)] relative overflow-hidden"
-          onClick={startTest}
+
+        {/* BOTÓN COMENZAR */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
         >
-          {/* Efecto de brillo animado */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-shimmer"></div>
-          <span className="relative z-10 flex items-center gap-3">
-            <Sparkles className="w-5 h-5" />
-            Comenzar Evaluación
-            <ArrowRight className="w-5 h-5" />
-          </span>
-        </motion.button>
-        
-        {/* Info con animación */}
+          <motion.button
+            whileHover={valentinaIntroComplete ? { scale: 1.02 } : {}}
+            whileTap={valentinaIntroComplete ? { scale: 0.98 } : {}}
+            onClick={startTest}
+            disabled={!valentinaIntroComplete}
+            className={`w-full rounded-2xl py-5 px-8 shadow-xl transition-all duration-300 ${
+              valentinaIntroComplete
+                ? 'bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] hover:shadow-2xl'
+                : 'bg-[#B2D8E5] cursor-not-allowed'
+            }`}
+          >
+            <span className="text-lg font-bold text-white flex items-center justify-center gap-3">
+              {valentinaIntroComplete ? (
+                <>
+                  <Rocket size={24} strokeWidth={2} />
+                  Comenzar Diagnóstico
+                </>
+              ) : (
+                <>
+                  <Volume size={24} strokeWidth={2} className="animate-pulse" />
+                  Esperando a Valeria...
+                </>
+              )}
+            </span>
+          </motion.button>
+        </motion.div>
+
+        {/* FOOTER */}
         <motion.p 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-          className="text-xs text-[var(--color-gray-400)] mt-6 flex items-center justify-center gap-4"
+          transition={{ delay: 0.6 }}
+          className="text-center text-sm text-[#004B63]/50 mt-6"
         >
-          <span className="flex items-center gap-1">
-            <span className="w-1.5 h-1.5 bg-[var(--color-corporate)] rounded-full animate-pulse"></span>
-            3 minutos
-          </span>
-          <span className="w-px h-3 bg-[var(--color-gray-300)]"></span>
-          <span className="flex items-center gap-1">
-            <span className="w-1.5 h-1.5 bg-[var(--color-mint)] rounded-full animate-pulse" style={{ animationDelay: '0.3s' }}></span>
-            10 preguntas
-          </span>
-          <span className="w-px h-3 bg-[var(--color-gray-300)]"></span>
-          <span className="flex items-center gap-1">
-            <span className="w-1.5 h-1.5 bg-[var(--color-accent)] rounded-full animate-pulse" style={{ animationDelay: '0.6s' }}></span>
-            100% personalizado
-          </span>
+          Desarrollado por <span className="font-semibold text-[#4DA8C4]">EdutechLife</span>
         </motion.p>
       </motion.div>
     </div>
   );
 
   const renderCalibration = () => (
-    <div className="p-8 md:p-10 max-w-xl mx-auto">
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-center mb-8"
-      >
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--color-mint)]/10 border border-[var(--color-mint)]/20 mb-3">
-          <span className="text-sm font-semibold text-[var(--color-mint)]">ETAPA 1/4</span>
-        </div>
-        <h3 className="heading-2 text-[var(--color-petroleum)]">Configuremos tu experiencia</h3>
-        <p className="text-[var(--color-gray-500)] mt-2">Completa tus datos para personalizar tu resultado</p>
-      </motion.div>
+    <div className="min-h-[80vh] flex items-center justify-center p-4 relative">
+      {/* Efectos 3D de fondo para intro */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-32 h-32 rounded-full bg-[#4DA8C4]/10 blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/3 right-1/4 w-40 h-40 rounded-full bg-[#66CCCC]/10 blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+      </div>
       
       <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="space-y-5"
+        initial={{ opacity: 0, y: 30, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.6, type: 'spring' }}
+        className="w-full max-w-md text-center relative z-10"
+        style={{ transformStyle: 'preserve-3d' }}
       >
-        <div className="relative">
-          <label className="block text-sm font-semibold text-[var(--color-petroleum)] mb-2 flex items-center gap-2">
-            <span className="w-6 h-6 rounded-lg bg-[var(--color-corporate)]/10 flex items-center justify-center">👤</span>
-            Nombre completo
-          </label>
-          <input 
-            className="w-full px-5 py-4 rounded-2xl bg-white border-2 border-[var(--color-gray-200)] focus:border-[var(--color-corporate)] focus:shadow-[0_0_20px_rgba(77,168,196,0.2)] transition-all duration-300 text-[var(--color-petroleum)] font-semibold placeholder-[var(--color-gray-400)]"
-            placeholder="¿Cómo te llamas?"
-            value={tempName} 
-            onChange={(e) => setTempName(e.target.value)} 
-            onKeyDown={(e) => e.key === 'Enter' && submitCalibration()}
-          />
-        </div>
-        
-        <div className="relative">
-          <label className="block text-sm font-semibold text-[var(--color-petroleum)] mb-2 flex items-center gap-2">
-            <span className="w-6 h-6 rounded-lg bg-[var(--color-corporate)]/10 flex items-center justify-center">📧</span>
-            Correo electrónico <span className="text-[var(--color-gray-400)]">(opcional)</span>
-          </label>
+        {/* Título principal con efecto 3D */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="mb-8"
+        >
+          <h1 className="text-2xl font-extrabold text-[#0A1628] text-center">
+            Cuéntame sobre ti
+          </h1>
+          <p className="text-sm text-slate-600 leading-relaxed mt-2">
+            Completa estos datos para personalizar tu diagnóstico VAK
+          </p>
+        </motion.div>
+
+        {/* Input Nombre - Estilo píldora con efecto 3D */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="mb-6"
+        >
           <div className="relative">
-            <input 
-              type="email"
-              className={`w-full px-5 py-4 rounded-2xl bg-white border-2 transition-all duration-300 text-[var(--color-petroleum)] font-semibold placeholder-[var(--color-gray-400)] ${
-                emailError 
-                  ? 'border-red-400 focus:border-red-500 focus:shadow-[0_0_20px_rgba(239,68,68,0.2)]' 
-                  : 'border-[var(--color-gray-200)] focus:border-[var(--color-corporate)] focus:shadow-[0_0_20px_rgba(77,168,196,0.2)]'
-              }`}
-              placeholder="tu@email.com"
-              value={tempEmail} 
-              onChange={(e) => {
-                setTempEmail(e.target.value);
-                if (emailError) setEmailError(false);
-              }}
-              onKeyDown={(e) => e.key === 'Enter' && submitCalibration()}
+            <input
+              type="text"
+              value={studentName}
+              onChange={(e) => setStudentName(e.target.value)}
+              placeholder="Tu nombre completo"
+              className="w-full rounded-full border-2 border-gray-200 bg-white/80 backdrop-blur-sm px-6 py-4 text-base font-medium text-slate-600 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#4DA8C4]/30 focus:border-transparent transition-all shadow-lg"
             />
-            {tempEmail && !emailError && validateEmail(tempEmail) && (
-              <div className="absolute right-4 top-1/2 -translate-y-1/2 text-green-500">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-            )}
+            <div className="absolute -bottom-1 left-4 right-4 h-2 bg-gradient-to-r from-transparent via-[#4DA8C4]/20 to-transparent rounded-full blur-sm"></div>
           </div>
-          {emailError && (
-            <motion.p 
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-red-500 text-sm mt-2 flex items-center gap-2"
-            >
-              <span>⚠️</span> Por favor ingresa un correo válido
-            </motion.p>
-          )}
-        </div>
-        
-        <div className="relative">
-          <label className="block text-sm font-semibold text-[var(--color-petroleum)] mb-2 flex items-center gap-2">
-            <span className="w-6 h-6 rounded-lg bg-[var(--color-corporate)]/10 flex items-center justify-center">📱</span>
-            Teléfono (opcional)
-          </label>
-          <input 
-            type="tel"
-            className="w-full px-5 py-4 rounded-2xl bg-white border-2 border-[var(--color-gray-200)] focus:border-[var(--color-corporate)] focus:shadow-[0_0_20px_rgba(77,168,196,0.2)] transition-all duration-300 text-[var(--color-petroleum)] font-semibold placeholder-[var(--color-gray-400)]"
-            placeholder="+51 999 999 999"
-            value={tempPhone} 
-            onChange={(e) => setTempPhone(e.target.value)} 
-            onKeyDown={(e) => e.key === 'Enter' && submitCalibration()}
-          />
-        </div>
-        
-        <div>
-          <label className="block text-sm font-semibold text-[var(--color-petroleum)] mb-3 flex items-center gap-2">
-            <span className="w-6 h-6 rounded-lg bg-[var(--color-mint)]/10 flex items-center justify-center">✨</span>
-            ¿Cómo te sientes hoy?
-          </label>
-          <p className="text-xs text-[var(--color-gray-500)] mb-4">Tu respuesta ayudará a personalizar tu experiencia y resultados</p>
-          
-          <div className="grid grid-cols-4 gap-3">
-            {MOOD_OPTIONS.map((mood, idx) => {
-              const isSelected = selectedMoodOption?.value === mood.value;
+        </motion.div>
+
+        {/* Selector de Ánimo - 3 tarjetas con iconos Soft Outline */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="mb-8"
+        >
+          <p className="text-xs font-medium text-slate-400 uppercase tracking-wider mb-4">¿Cómo te sientes hoy?</p>
+          <div className="grid grid-cols-3 gap-4">
+            {[
+              { value: 'happy', label: 'Bien', icon: Smile, color: 'from-[#4DA8C4] to-[#66CCCC]' },
+              { value: 'neutral', label: 'Regular', icon: Meh, color: 'from-gray-400 to-gray-300' },
+              { value: 'sad', label: 'Mal', icon: Frown, color: 'from-gray-500 to-gray-400' }
+            ].map((mood) => {
+              const IconComponent = mood.icon;
               return (
                 <motion.button
                   key={mood.value}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: idx * 0.05 }}
-                  whileHover={{ scale: 1.08, y: -8 }}
-                  whileTap={{ scale: 0.92 }}
-                  onClick={() => setSelectedMoodOption(mood)}
-                  className={`relative p-4 rounded-2xl border-2 transition-all duration-300 flex flex-col items-center gap-2 overflow-hidden ${
-                    isSelected
-                      ? 'border-[var(--color-corporate)] shadow-[0_0_30px_rgba(77,168,196,0.3)]'
-                      : 'border-[var(--color-gray-200)] bg-white hover:border-[var(--color-gray-300)] hover:shadow-[var(--shadow-lg)]'
+                  whileHover={{ scale: 1.05, y: -3 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setStudentMood(mood.value)}
+                  className={`relative rounded-2xl p-4 flex flex-col items-center justify-center transition-all overflow-hidden ${
+                    studentMood === mood.value
+                      ? 'bg-gradient-to-br from-white to-cyan-50 ring-2 ring-[#4DA8C4] shadow-lg'
+                      : 'bg-white/80 backdrop-blur-sm border border-gray-200 shadow-md'
                   }`}
-                  style={{
-                    background: isSelected ? `linear-gradient(135deg, ${mood.color}10, white)` : undefined
-                  }}
+                  style={{ transformStyle: 'preserve-3d' }}
                 >
-                  {/* Fondo decorativo */}
-                  {!isSelected && (
-                    <div className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-300"
-                      style={{
-                        background: `radial-gradient(circle at center, ${mood.color}15 0%, transparent 70%)`
-                      }}
-                    />
+                  {/* Efecto de fondo gradiente cuando está seleccionado */}
+                  {studentMood === mood.value && (
+                    <div className={`absolute inset-0 bg-gradient-to-br ${mood.color} opacity-10`}></div>
                   )}
                   
-                  {/* Emoji con efecto */}
-                  <div className={`relative text-4xl transition-all duration-300 ${isSelected ? 'scale-125' : ''}`}>
-                    {mood.emoji}
-                    {isSelected && (
-                      <div className="absolute -inset-2 rounded-full animate-ping opacity-30" style={{ backgroundColor: mood.color }} />
-                    )}
+                  {/* Icono Soft Outline */}
+                  <div className="w-12 h-12 rounded-xl bg-[#4DA8C4]/10 flex items-center justify-center mb-2 relative z-10">
+                    <IconComponent size={24} strokeWidth={2} className="text-[#4DA8C4]" />
                   </div>
+                  <span className="text-xs font-medium text-slate-400 uppercase tracking-wider relative z-10">{mood.label}</span>
                   
-                  {/* Label */}
-                  <span className={`text-xs font-bold relative z-10 transition-colors duration-300 ${
-                    isSelected ? 'text-[var(--color-petroleum)]' : 'text-[var(--color-gray-600)]'
-                  }`}>
-                    {mood.label}
-                  </span>
-                  
-                  {/* Indicador de selección */}
-                  {isSelected && (
-                    <motion.div 
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full flex items-center justify-center shadow-lg"
-                      style={{ backgroundColor: mood.color }}
-                    >
-                      <Check className="w-3.5 h-3.5 text-white" />
-                    </motion.div>
-                  )}
+                  {/* Efecto de sombra 3D */}
+                  <div className="absolute -bottom-1 left-2 right-2 h-2 bg-black/5 blur-sm rounded-full"></div>
                 </motion.button>
               );
             })}
           </div>
-          
-          {/* Feedback visual del mood seleccionado */}
-          <AnimatePresence>
-            {selectedMoodOption && (
-              <motion.div
-                initial={{ opacity: 0, y: 10, height: 0 }}
-                animate={{ opacity: 1, y: 0, height: 'auto' }}
-                exit={{ opacity: 0, y: 10, height: 0 }}
-                className="mt-4 p-4 rounded-2xl border-2"
-                style={{
-                  borderColor: selectedMoodOption.color,
-                  background: `linear-gradient(135deg, ${selectedMoodOption.color}15, white)`
-                }}
-              >
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl">{selectedMoodOption.emoji}</span>
-                  <div>
-                    <p className="text-sm font-semibold text-[var(--color-petroleum)]">
-                      ¡Perfecto! Te sientes {selectedMoodOption.label.toLowerCase()}
-                    </p>
-                    <p className="text-xs text-[var(--color-gray-500)]">
-                      {selectedMoodOption.message}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-        
-        <motion.button 
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          className="btn-primary w-full py-4 text-lg mt-6 shadow-[var(--shadow-lg)]"
-          onClick={submitCalibration}
-          disabled={!tempName.trim()}
+        </motion.div>
+
+        {/* Botón Continuar - Estilo píldora con efecto flotante 3D */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
         >
-          <Sparkles className="w-5 h-5 mr-2" />
-          Iniciar Test
-        </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.05, y: -3 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={submitCalibration}
+            disabled={!studentName.trim()}
+            className="relative w-full bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-full py-4 px-6 shadow-xl hover:shadow-2xl transition-all overflow-hidden group disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{ transformStyle: 'preserve-3d' }}
+          >
+            {/* Efecto de brillo animado */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+            
+            <span className="relative z-10 text-base font-semibold flex items-center justify-center gap-2">
+              Iniciar Diagnóstico
+              <ArrowRight size={20} strokeWidth={2} />
+            </span>
+            
+            {/* Efecto de sombra 3D */}
+            <div className="absolute -bottom-2 left-4 right-4 h-3 bg-gradient-to-r from-[#4DA8C4]/30 to-[#66CCCC]/30 blur-md rounded-full"></div>
+          </motion.button>
+        </motion.div>
+
+        {/* Información adicional */}
+        <motion.p 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="text-xs text-slate-400 uppercase tracking-wider mt-6"
+        >
+          Solo tomará 3 minutos • 10 preguntas • 100% confidencial
+        </motion.p>
       </motion.div>
     </div>
   );
@@ -809,152 +1173,111 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     if (!question) return null;
     
     const progress = ((currentQuestion + 1) / QUESTIONS.length) * 100;
-    const questionsRemaining = QUESTIONS.length - currentQuestion - 1;
-    const estimatedTime = questionsRemaining * 15; // ~15 segundos por pregunta
     
     return (
-      <div className="p-6 md:p-10">
-        {/* Header con progreso y tiempo */}
-        <motion.div 
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6"
-        >
-          <div className="flex items-center gap-3 px-4 py-2.5 rounded-full bg-white border border-[var(--color-corporate)]/20 shadow-[var(--shadow-sm)]">
-            <div className="relative">
-              <span className="w-2.5 h-2.5 rounded-full bg-[var(--color-corporate)] animate-pulse"></span>
-            </div>
-            <span className="text-sm font-bold text-[var(--color-corporate)] tracking-wide">PREGUNTA {currentQuestion + 1} / {QUESTIONS.length}</span>
+      <div className="max-w-3xl mx-auto p-4">
+        {/* Top Bar con número de pregunta */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="text-xs font-medium text-slate-400 uppercase tracking-wider">Pregunta</div>
+          <div className="bg-[#66CCCC] text-white rounded-full px-3 py-1 text-xs font-semibold">
+            {currentQuestion + 1} / {QUESTIONS.length}
           </div>
-          
-          {/* Indicador de tiempo */}
-          <div className="flex items-center gap-4 text-sm">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[var(--color-mint)]/10 border border-[var(--color-mint)]/20">
-              <svg className="w-4 h-4 text-[var(--color-mint)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span className="font-mono text-[var(--color-petroleum)]">{formatTime(elapsedTime)}</span>
-            </div>
-            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[var(--color-gray-100)] border border-[var(--color-gray-200)]">
-              <span className="text-[var(--color-gray-500)]">~</span>
-              <span className="font-mono text-[var(--color-gray-600)]">{Math.ceil(estimatedTime / 60)}:{(estimatedTime % 60).toString().padStart(2, '0')} min</span>
-              <span className="text-xs text-[var(--color-gray-400)]">restante</span>
-            </div>
-          </div>
-        </motion.div>
-        
-        {/* Progress bar mejorado con shimmer */}
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="relative h-2.5 bg-[var(--color-gray-100)] rounded-full mb-8 overflow-hidden"
-        >
-          <motion.div 
-            initial={{ width: 0 }}
-            animate={{ width: `${progress}%` }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
-            className="h-full rounded-full bg-gradient-to-r from-[var(--color-corporate)] via-[var(--color-mint)] to-[var(--color-corporate)] relative overflow-hidden"
-          >
-            {/* Efecto shimmer en la barra */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-shimmer"></div>
-          </motion.div>
-          
-          {/* Puntos de progreso */}
-          {[...Array(10)].map((_, i) => (
-            <div 
-              key={i} 
-              className={`absolute top-1/2 -translate-y-1/2 w-2 h-2 rounded-full transition-all duration-300 ${
-                i < currentQuestion 
-                  ? 'bg-[var(--color-corporate)] left-[10%]' 
-                  : i === currentQuestion 
-                    ? 'bg-[var(--color-corporate)] scale-150' 
-                    : 'bg-[var(--color-gray-300)]'
-              }`}
-              style={{ left: `${i * 10 + 5}%` }}
+        </div>
+
+        {/* Barra de progreso fina */}
+        <div className="mb-8">
+          <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+            <motion.div 
+              initial={{ width: 0 }}
+              animate={{ width: `${progress}%` }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+              className="h-full bg-[#4DA8C4] rounded-full"
             />
-          ))}
-        </motion.div>
-        
-        {/* Pregunta con diseño mejorado */}
+          </div>
+        </div>
+
+        {/* Pregunta sin recuadro - Diseño limpio y moderno */}
         <motion.div
           key={currentQuestion}
-          initial={{ opacity: 0, y: 20, rotateX: -10 }}
-          animate={{ opacity: 1, y: 0, rotateX: 0 }}
-          transition={{ duration: 0.5, type: 'spring' }}
-          className="perspective-1000"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="mb-10"
         >
-          {/* Número de pregunta decorativo */}
-          <div className="text-center mb-6">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-3xl bg-gradient-to-br from-[var(--color-corporate)] to-[var(--color-mint)] shadow-[var(--shadow-lg)] mb-4">
-              <span className="text-3xl font-bold text-white">{currentQuestion + 1}</span>
-            </div>
-          </div>
-          
-          <h3 className="heading-2 text-[var(--color-petroleum)] mb-8 leading-relaxed text-center px-4">
+          <h2 className="text-2xl md:text-3xl font-extrabold text-[#0A1628] text-center leading-tight">
             {question.text}
-          </h3>
-          
-          <div className="grid grid-cols-1 gap-4">
-            {question.options.map((opt, i) => (
-              <motion.button
-                key={i}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.1, type: 'spring', stiffness: 100 }}
-                whileHover={{ 
-                  scale: 1.01, 
-                  y: -6,
-                  rotateX: 2,
-                  rotateY: -2
-                }}
-                whileTap={{ scale: 0.98 }}
-                className="relative p-5 rounded-2xl bg-white border-2 border-[var(--color-gray-200] 
-                  hover:border-[var(--color-corporate)] 
-                  hover:shadow-[0_20px_40px_rgba(77,168,196,0.15),0_0_0_1px_rgba(77,168,196,0.1)]
-                  transition-all duration-300 text-left flex items-center gap-4 group
-                  perspective-500"
-                onClick={() => handleAnswer(opt)}
-              >
-                {/* Efecto de brillo en el borde */}
-                <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                  style={{
-                    background: 'linear-gradient(135deg, transparent 40%, rgba(77,168,196,0.1) 50%, transparent 60%)'
-                  }}
-                />
-                
-                {/* Número con efecto 3D y gradiente */}
-                <div className="relative w-14 h-14 rounded-xl flex items-center justify-center text-2xl shrink-0
-                  bg-gradient-to-br from-[var(--color-gray-50)] to-[var(--color-gray-100)]
-                  border-2 border-[var(--color-gray-200]
-                  group-hover:from-[var(--color-corporate)] group-hover:to-[var(--color-mint)]
-                  group-hover:border-[var(--color-corporate)]
-                  group-hover:text-white
-                  transition-all duration-300 shadow-lg group-hover:shadow-[var(--shadow-lg)]"
+          </h2>
+
+          {/* Opciones de Respuesta - Diseño Soft Outline / Minimalist */}
+          <div className="space-y-4 max-w-2xl mx-auto">
+            {question.options.map((opt, i) => {
+              const letter = String.fromCharCode(65 + i);
+              const IconComponent = typeof opt.icon === 'string' ? getIconComponent(opt.icon) : opt.icon;
+              
+              return (
+                <motion.button
+                  key={i}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                  whileHover={isValentinaSpeaking ? {} : { scale: 1.01, x: 5 }}
+                  whileTap={isValentinaSpeaking ? {} : { scale: 0.99 }}
+                  onClick={() => !isValentinaSpeaking && handleAnswer(opt)}
+                  disabled={isValentinaSpeaking}
+                  className={`w-full text-left p-5 rounded-2xl backdrop-blur-sm border transition-all duration-300 group relative overflow-hidden ${
+                    isValentinaSpeaking 
+                      ? 'bg-gray-100/50 border-gray-200 cursor-not-allowed opacity-60' 
+                      : 'bg-white/80 border-gray-100 hover:border-[#4DA8C4]'
+                  }`}
                 >
-                  <span className="group-hover:scale-110 transition-transform">{opt.icon}</span>
+                  {/* Efecto de fondo sutil al hover */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#4DA8C4]/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
                   
-                  {/* Indicador de selección */}
-                  <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[var(--color-corporate)] opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                    <span className="text-white text-xs">✓</span>
+                  <div className="flex items-center gap-4 relative z-10">
+                    {/* Letra de la opción - Estilo moderno y limpio */}
+                    <div className="w-10 h-10 shrink-0 rounded-xl bg-[#4DA8C4]/10 flex items-center justify-center group-hover:bg-[#4DA8C4]/20 transition-all">
+                      <span className="text-base font-bold text-[#4DA8C4]">{letter}</span>
+                    </div>
+                    
+                    {/* Texto de la opción */}
+                    <div className="flex-1 text-base font-medium text-slate-600 leading-relaxed">
+                      {opt.text}
+                    </div>
+                    
+                    {/* Icono integrado - Contenedor Soft Outline */}
+                    {IconComponent && (
+                      <div className="w-10 h-10 shrink-0 rounded-xl bg-[#4DA8C4]/10 flex items-center justify-center text-[#4DA8C4] group-hover:bg-[#4DA8C4]/20 transition-all">
+                        <IconComponent size={20} strokeWidth={2} />
+                      </div>
+                    )}
                   </div>
-                </div>
-                
-                {/* Texto de la opción */}
-                <div className="flex-1">
-                  <span className="text-base font-semibold text-[var(--color-gray-700)] group-hover:text-[var(--color-petroleum)] transition-colors block">
-                    {opt.text}
-                  </span>
-                  <span className="text-xs text-[var(--color-gray-400)] group-hover:text-[var(--color-corporate)] transition-colors">
-                    Opción {String.fromCharCode(65 + i)}
-                  </span>
-                </div>
-                
-                {/* Flecha animada */}
-                <ArrowRight className="w-6 h-6 text-[var(--color-gray-300)] group-hover:text-[var(--color-corporate)] group-hover:translate-x-2 group-hover:scale-110 transition-all duration-300" />
-              </motion.button>
-            ))}
+                </motion.button>
+              );
+            })}
+          </div>
+
+          {/* Botón para repetir la pregunta - Icono Soft Outline */}
+          <div className="flex justify-center mt-8">
+            <button
+              onClick={() => {
+                if (!isValentinaSpeaking) {
+                  readQuestionWithOptions(question.text, question.options, currentQuestion + 1, QUESTIONS.length);
+                }
+              }}
+              disabled={isValentinaSpeaking}
+              className="text-[#4DA8C4] text-xs font-medium uppercase tracking-wider flex items-center gap-2 hover:text-[#66CCCC] transition-colors px-4 py-2 rounded-full hover:bg-[#4DA8C4]/5"
+              title="Escuchar la pregunta de nuevo"
+            >
+              <RotateCcw size={16} strokeWidth={2} />
+              <span>Repetir pregunta</span>
+            </button>
           </div>
         </motion.div>
+
+        {/* Indicador de tiempo */}
+        <div className="text-center">
+          <span className="text-xs text-slate-400 uppercase tracking-wider">Tiempo transcurrido: {formatTime(elapsedTime)}</span>
+        </div>
       </div>
     );
   };
@@ -962,14 +1285,14 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   const renderResults = () => {
     if (!diagnosis || !diagnosis.styleDetails) {
       return (
-        <div className="p-10 text-center text-[var(--color-gray-500)]">
+        <div className="p-10 text-center text-gray-500">
           No hay resultados disponibles.
         </div>
       );
     }
     
     const qrUrl = buildResultsURL(diagnosis);
-    const StyleIcon = diagnosis.styleDetails.icon;
+    const StyleIcon = getIconComponent(diagnosis.styleDetails?.icon || 'Eye');
     const moodFeedback = getMoodFeedback();
     
     const radarData = [
@@ -979,324 +1302,218 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     ];
     
     return (
-      <div className="p-6 md:p-10 space-y-6">
-        {/* HERO SECTION - Resultado principal con efectos 3D */}
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.8, rotateX: -20 }}
-          animate={{ opacity: 1, scale: 1, rotateX: 0 }}
-          transition={{ duration: 0.8, type: 'spring' }}
-          className="relative rounded-3xl overflow-hidden text-center py-12 px-6 perspective-1000"
-          style={{ background: diagnosis.styleDetails.bgGradient }}
-        >
-          {/* Capas de fondo */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-petroleum)] via-[var(--color-navy)] to-[var(--color-petroleum)]"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-mint)]/20 via-transparent to-transparent"></div>
-          
-          {/* Orbes decorativos */}
-          <div className="absolute top-0 right-0 w-80 h-80 bg-[var(--color-corporate)] rounded-full blur-[140px] opacity-25 animate-pulse-slow"></div>
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-[var(--color-mint)] rounded-full blur-[120px] opacity-25 animate-pulse-slow" style={{ animationDelay: '1s' }}></div>
-          
-          {/* Grid decorativo */}
-          <div className="absolute inset-0 opacity-10"
-            style={{
-              backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-              backgroundSize: '30px 30px'
-            }}
-          ></div>
-          
-          <div className="relative z-10">
-            {/* Emoji con animación */}
-            <motion.div 
-              initial={{ scale: 0, rotate: -180 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{ delay: 0.3, type: 'spring', stiffness: 200 }}
-              className="text-7xl mb-4 inline-block"
-            >
-              {moodFeedback.emoji}
-              <span className="absolute -inset-4 rounded-full animate-ping opacity-30" style={{ backgroundColor: moodFeedback.color }}></span>
-            </motion.div>
-            
-            {/* Badge de bienvenida */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/15 border border-white/20 backdrop-blur-md mb-4"
-            >
-              <span className="text-2xl">👋</span>
-              <span className="text-lg font-bold text-white">Hola, {diagnosis.studentName}!</span>
-              <span className="w-2 h-2 bg-[var(--color-mint)] rounded-full animate-pulse"></span>
-            </motion.div>
-            
-            {/* Mensaje personalizado */}
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="text-white/90 text-lg mb-8 max-w-lg mx-auto leading-relaxed"
-            >
-              {moodFeedback.message}
-            </motion.p>
-            
-            {/* Icono del estilo con efecto 3D */}
-            <motion.div 
-              initial={{ scale: 0, rotateY: 180 }}
-              animate={{ scale: 1, rotateY: 0 }}
-              transition={{ delay: 0.6, type: 'spring' }}
-              className="relative inline-block mb-6"
-            >
-              <div className="w-28 h-28 mx-auto rounded-3xl bg-white/10 flex items-center justify-center border border-white/30 backdrop-blur-md shadow-[0_0_40px_rgba(77,168,196,0.3)] perspective-500"
-                style={{ transformStyle: 'preserve-3d' }}
-              >
-                <StyleIcon className="w-14 h-14 text-white" style={{ filter: 'drop-shadow(0 0 20px rgba(77,168,196,0.5))' }} />
-              </div>
-              {/* Anillo decorativo */}
-              <div className="absolute -inset-4 rounded-3xl border-2 border-white/20 animate-pulse-slow"></div>
-            </motion.div>
-            
-            {/* Título del estilo */}
-            <motion.h3 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7 }}
-              className="text-3xl md:text-4xl font-black text-white mb-4 tracking-wide"
-              style={{ 
-                textShadow: '0 0 40px rgba(77, 168, 196, 0.6), 0 0 80px rgba(77, 168, 196, 0.3)',
-                letterSpacing: '0.05em'
-              }}
-            >
-              {diagnosis.styleDetails.name}
-            </motion.h3>
-            
-            {/* Porcentaje con efecto especial */}
-            <motion.div 
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.8, type: 'spring', stiffness: 300 }}
-              className="mb-6"
-            >
-              <div className="text-8xl md:text-9xl font-black text-white font-mono tracking-tighter relative inline-block"
-                style={{
-                  textShadow: '0 0 60px rgba(102, 204, 204, 0.8), 0 0 120px rgba(102, 204, 204, 0.4)'
-                }}
-              >
-                {diagnosis.percentage}%
-                {/* Efecto de brillo */}
-                <div className="absolute inset-0 bg-gradient-to-b from-white/30 to-transparent rounded-t-lg"></div>
-              </div>
-              <div className="text-white/60 text-sm mt-2 uppercase tracking-widest">de coincidencia</div>
-            </motion.div>
-            
-            {/* Tiempo empleado */}
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.85 }}
-              className="inline-flex items-center gap-3 px-4 py-2 rounded-xl bg-white/10 border border-white/20 backdrop-blur-md mt-2"
-            >
-              <svg className="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span className="text-white/80 font-mono text-sm">
-                Tiempo: <span className="text-white font-bold">{formatTime(diagnosis.timeSpent || elapsedTime)}</span>
-              </span>
-            </motion.div>
-            
-            {/* Descripción */}
-            <motion.p 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.9 }}
-              className="text-white/80 max-w-md mx-auto text-base leading-relaxed"
-            >
-              {diagnosis.styleDetails.description}
-            </motion.p>
-          </div>
-        </motion.div>
-        
-        {/* Sección de métricas con gráfico y barras */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Gráfico Radar */}
-            <motion.div 
-              ref={chartRef} 
-              initial={{ opacity: 0, x: -30, rotateY: -30 }}
-              animate={{ opacity: 1, x: 0, rotateY: 0 }}
-              transition={{ delay: 1, type: 'spring' }}
-              className="h-[300px] w-full bg-white rounded-3xl border border-[var(--color-gray-200)] p-6 shadow-[var(--shadow-lg)] perspective-1000"
-            >
-              <div className="text-sm font-bold text-[var(--color-petroleum)] mb-4 flex items-center gap-2">
-                <span className="w-3 h-3 bg-[var(--color-corporate)] rounded-full animate-pulse"></span>
-                Distribución de Estilos
-              </div>
-                {isChartInView && (
-                    <ResponsiveContainer width="100%" height="85%">
-                        <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarData}>
-                            <PolarGrid stroke="var(--color-gray-200)" />
-                            <PolarAngleAxis 
-                              dataKey="subject" 
-                              tick={{ 
-                                fill: 'var(--color-petroleum)', 
-                                fontSize: 13, 
-                                fontWeight: 700, 
-                                fontFamily: 'var(--font-display)' 
-                              }} 
-                            />
-                            <PolarRadiusAxis angle={30} domain={[0, 10]} tick={false} axisLine={false} />
-                            <Radar 
-                              name="Estilo" 
-                              dataKey="A" 
-                              stroke="var(--color-corporate)" 
-                              strokeWidth={3} 
-                              fill="var(--color-corporate)" 
-                              fillOpacity={0.3} 
-                            />
-                        </RadarChart>
-                    </ResponsiveContainer>
-                )}
-            </motion.div>
-            
-            {/* Barras de puntuación */}
-            <div className="space-y-4">
-                {[
-                  { key: 'visual', label: 'Visual', icon: '👁️', color: 'var(--color-corporate)', barColor: 'from-[var(--color-corporate)] to-[var(--color-mint)]' },
-                  { key: 'auditivo', label: 'Auditivo', icon: '👂', color: 'var(--color-mint)', barColor: 'from-[var(--color-mint)] to-[var(--color-accent)]' },
-                  { key: 'kinestesico', label: 'Kinestésico', icon: '⚡', color: 'var(--color-accent)', barColor: 'from-[var(--color-accent)] to-[var(--color-corporate)]' }
-                ].map((item, idx) => (
-                  <motion.div 
-                    key={item.key}
-                    initial={{ opacity: 0, x: 30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 1.1 + idx * 0.1 }}
-                    className="p-5 rounded-2xl bg-white border border-[var(--color-gray-200)] shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-md)] transition-all"
-                  >
-                    <div className="flex justify-between items-center mb-3">
-                        <div className="flex items-center gap-3">
-                            <span className="text-2xl">{item.icon}</span>
-                            <span className="font-bold text-[var(--color-petroleum)]">{item.label}</span>
-                        </div>
-                        <div className="text-mono-counter" style={{ color: item.color }}>
-                          {diagnosis.counts?.[item.key] || 0}
-                          <span className="text-sm text-[var(--color-gray-400)]">/10</span>
-                        </div>
-                    </div>
-                    {/* Barra de progreso animada */}
-                    <div className="h-3 bg-[var(--color-gray-100)] rounded-full overflow-hidden">
-                      <motion.div 
-                        initial={{ width: 0 }}
-                        animate={{ width: `${(diagnosis.counts?.[item.key] || 0) * 10}%` }}
-                        transition={{ delay: 1.3 + idx * 0.1, duration: 0.8, ease: 'easeOut' }}
-                        className={`h-full rounded-full bg-gradient-to-r ${item.barColor}`}
-                      >
-                        <div className="h-full w-full bg-gradient-to-r from-white/30 to-transparent animate-shimmer"></div>
-                      </motion.div>
-                    </div>
-                  </motion.div>
-                ))}
-            </div>
+      <div className="max-w-6xl mx-auto p-4 space-y-8">
+        {/* Header del resultado */}
+        <div className="text-center mb-8">
+          <h1 className="text-2xl font-extrabold text-[#0A1628] text-center">
+            ¡Diagnóstico Completado!
+          </h1>
+          <p className="text-sm text-slate-600 leading-relaxed mt-2">
+            Hola, <span className="font-semibold text-[#4DA8C4]">{diagnosis.studentName}</span>. Aquí están tus resultados.
+          </p>
         </div>
-        
-        {/* Consejo personalizado */}
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.5 }}
-          className="p-6 rounded-3xl bg-gradient-to-br from-[var(--color-corporate)]/10 via-[var(--color-mint)]/10 to-[var(--color-accent)]/10 border-2 border-[var(--color-corporate)]/20 relative overflow-hidden"
-        >
-          {/* Fondo decorativo */}
-          <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--color-corporate)]/10 rounded-full blur-[40px]"></div>
-          <div className="absolute bottom-0 left-0 w-24 h-24 bg-[var(--color-mint)]/10 rounded-full blur-[30px]"></div>
+
+        {/* Layout dividido en 2 columnas con efecto 3D */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative">
+          {/* Efecto de conexión 3D entre columnas */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-64 bg-gradient-to-b from-[#4DA8C4] to-[#66CCCC] opacity-20 hidden md:block"></div>
           
-          <div className="relative z-10">
-            <div className="flex items-center gap-3 mb-4">
-              <span className="text-3xl">💡</span>
-              <span className="text-lg font-bold text-[var(--color-petroleum)]">CONSEJO PERSONALIZADO</span>
-              <span className="px-3 py-1 rounded-full bg-[var(--color-corporate)]/20 text-xs font-bold text-[var(--color-corporate)]">
-                {moodFeedback.label}
-              </span>
+          {/* Columna Izquierda (Dominante) - Estrategias con efecto 3D */}
+          <motion.div
+            initial={{ opacity: 0, x: -30, rotateY: -10 }}
+            animate={{ opacity: 1, x: 0, rotateY: 0 }}
+            transition={{ type: 'spring', stiffness: 100 }}
+            className="rounded-[2rem] bg-gradient-to-br from-[#E6F4F1] to-white border border-[#B2D8E5] p-6 relative overflow-hidden"
+            style={{
+              transformStyle: 'preserve-3d',
+              perspective: '1000px'
+            }}
+          >
+            {/* Efecto de profundidad 3D */}
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#4DA8C4] to-transparent opacity-30"></div>
+            <div className="absolute top-4 left-4 w-16 h-16 rounded-full bg-[#4DA8C4]/10 blur-xl"></div>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 rounded-2xl bg-[#4DA8C4] flex items-center justify-center">
+                <StyleIcon size={24} strokeWidth={2} className="text-white" />
+              </div>
+              <div>
+                <h2 className="text-xl font-extrabold text-[#4DA8C4] uppercase tracking-wide">
+                  {diagnosis.styleDetails.name}
+                </h2>
+                <p className="text-sm text-slate-600 leading-relaxed">
+                  {diagnosis.percentage}% de coincidencia
+                </p>
+              </div>
             </div>
-            <p className="text-[var(--color-gray-700)] text-lg leading-relaxed">
-              {diagnosis.styleDetails.tip}
+
+            <p className="text-sm text-slate-600 leading-relaxed mb-6">
+              {diagnosis.styleDetails.description}
             </p>
-          </div>
-        </motion.div>
-        
-        {/* Estrategias recomendadas */}
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.6 }}
-        >
-            <div className="text-lg font-bold text-[var(--color-petroleum)] mb-4 flex items-center gap-3">
-              <span className="text-2xl">🎯</span> 
-              <span>Estrategias Recomendadas</span>
-              <span className="text-sm text-[var(--color-gray-400)]">(Basado en tu perfil)</span>
+
+            <div className="space-y-4">
+              <h3 className="text-sm font-semibold text-slate-700">Estrategias Recomendadas</h3>
+              {(diagnosis.styleDetails.strategies || []).slice(0, 5).map((strategy, idx) => (
+                <div key={idx} className="flex items-start gap-3">
+                  <div className="w-6 h-6 shrink-0 rounded-full bg-[#4DA8C4]/10 flex items-center justify-center mt-0.5">
+                    <CheckCircle2 className="w-5 h-5 text-[#4DA8C4]" size={20} strokeWidth={2} />
+                  </div>
+                  <span className="text-sm font-medium text-slate-700 leading-relaxed">{strategy}</span>
+                </div>
+              ))}
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {(diagnosis.styleDetails.strategies || []).slice(0, 3).map((s, idx) => (
-                <motion.div 
-                  key={idx}
-                  initial={{ opacity: 0, scale: 0.8, rotateY: -30 }}
-                  animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-                  transition={{ delay: 1.7 + idx * 0.1, type: 'spring' }}
-                  whileHover={{ scale: 1.03, y: -5 }}
-                  className="p-5 rounded-2xl bg-white border-2 border-[var(--color-gray-200)] shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-xl)] hover:border-[var(--color-corporate)]/30 transition-all duration-300 relative overflow-hidden group"
-                >
-                    {/* Barra superior */}
-                    <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[var(--color-corporate)] via-[var(--color-mint)] to-[var(--color-accent)]"></div>
-                    
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="w-8 h-8 rounded-xl bg-[var(--color-corporate)]/10 flex items-center justify-center text-[var(--color-corporate)] font-bold text-sm">
-                        {idx + 1}
-                      </div>
-                      <div className="text-mono-sm text-[var(--color-gray-400)]">Estrategia</div>
-                    </div>
-                    <div className="text-[var(--color-petroleum)] font-semibold text-base leading-relaxed group-hover:text-[var(--color-corporate)] transition-colors">
-                      {s}
-                    </div>
-                </motion.div>
-            ))}
+
+            {/* Consejo personalizado */}
+            <div className="mt-8 p-4 bg-white rounded-2xl border border-gray-100">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 rounded-lg bg-[#4DA8C4]/10 flex items-center justify-center">
+                  <Lightbulb size={18} strokeWidth={2} className="text-[#4DA8C4]" />
+                </div>
+                <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Consejo del día</span>
+              </div>
+              <p className="text-sm text-slate-600 leading-relaxed">{diagnosis.styleDetails.tip}</p>
             </div>
-        </motion.div>
-        
-        {/* Botones de acción */}
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2 }}
-          className="pt-6 border-t border-[var(--color-gray-200)] flex flex-col md:flex-row items-center justify-between gap-6"
-        >
-            <motion.button 
-              whileHover={{ scale: 1.05, boxShadow: '0 10px 40px rgba(77,168,196,0.4)' }}
-              whileTap={{ scale: 0.98 }}
-              className="btn-primary px-10 py-5 text-lg flex items-center gap-3 shadow-[var(--shadow-lg)] relative overflow-hidden"
-              onClick={exportPDF}
-              disabled={pdfLoading}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-shimmer"></div>
-              <Download className="w-5 h-5 relative z-10" />
-              <span className="relative z-10">{pdfLoading ? 'Generando...' : 'Descargar Resultados'}</span>
-            </motion.button>
+          </motion.div>
+
+          {/* Columna Derecha (Gráfica) con efecto 3D */}
+          <motion.div
+            initial={{ opacity: 0, x: 30, rotateY: 10 }}
+            animate={{ opacity: 1, x: 0, rotateY: 0 }}
+            transition={{ type: 'spring', stiffness: 100, delay: 0.1 }}
+            className="bg-white rounded-[2rem] shadow-sm p-6 relative overflow-hidden"
+            style={{
+              transformStyle: 'preserve-3d',
+              perspective: '1000px'
+            }}
+          >
+            {/* Efecto de profundidad 3D */}
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#66CCCC] to-transparent opacity-30"></div>
+            <div className="absolute bottom-4 right-4 w-20 h-20 rounded-full bg-[#66CCCC]/10 blur-xl"></div>
+            <h3 className="text-sm font-semibold text-slate-700 mb-6">Distribución VAK</h3>
             
-            {qrUrl && (
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 2.1 }}
-              className="flex items-center gap-4 bg-white p-4 rounded-2xl shadow-[var(--shadow-md)] border-2 border-[var(--color-gray-200)] hover:border-[var(--color-corporate)]/30 transition-all"
-            >
-                <div className="relative">
-                  <img src={qrUrl} alt="QR" className="w-16 h-16 rounded-xl" />
-                  <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-[var(--color-corporate)] rounded-full flex items-center justify-center">
-                    <span className="text-white text-xs">✓</span>
+            {/* Placeholder estilizado para Radar Chart */}
+            <div className="h-64 flex items-center justify-center mb-6">
+              <div className="relative w-48 h-48">
+                {/* Círculo base */}
+                <div className="absolute inset-0 border-2 border-gray-100 rounded-full"></div>
+                
+                {/* Líneas del radar */}
+                <div className="absolute inset-8 border-2 border-gray-200 rounded-full"></div>
+                <div className="absolute inset-16 border-2 border-gray-300 rounded-full"></div>
+                
+                {/* Puntos de datos */}
+                <div 
+                  className="absolute w-3 h-3 bg-[#4DA8C4] rounded-full transform -translate-x-1/2 -translate-y-1/2"
+                  style={{ top: '50%', left: `${50 + (diagnosis.counts?.visual || 0) * 4}%` }}
+                />
+                <div 
+                  className="absolute w-3 h-3 bg-[#66CCCC] rounded-full transform -translate-x-1/2 -translate-y-1/2"
+                  style={{ top: `${50 - (diagnosis.counts?.auditivo || 0) * 4}%`, left: '50%' }}
+                />
+                <div 
+                  className="absolute w-3 h-3 bg-[#B2D8E5] rounded-full transform -translate-x-1/2 -translate-y-1/2"
+                  style={{ top: `${50 + (diagnosis.counts?.kinestesico || 0) * 4}%`, left: `${50 - (diagnosis.counts?.kinestesico || 0) * 4}%` }}
+                />
+                
+                {/* Etiquetas */}
+                <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 text-sm font-medium text-[#4DA8C4]">
+                  Visual: {diagnosis.counts?.visual || 0}/10
+                </div>
+                <div className="absolute top-1/2 -right-2 transform -translate-y-1/2 text-sm font-medium text-[#66CCCC]">
+                  Auditivo: {diagnosis.counts?.auditivo || 0}/10
+                </div>
+                <div className="absolute -bottom-2 left-1/4 transform -translate-x-1/2 text-sm font-medium text-[#B2D8E5]">
+                  Kinestésico: {diagnosis.counts?.kinestesico || 0}/10
+                </div>
+              </div>
+            </div>
+
+            {/* Barras de porcentaje */}
+            <div className="space-y-4">
+              {[
+                { key: 'visual', label: 'Visual', color: '#4DA8C4', value: diagnosis.counts?.visual || 0 },
+                { key: 'auditivo', label: 'Auditivo', color: '#66CCCC', value: diagnosis.counts?.auditivo || 0 },
+                { key: 'kinestesico', label: 'Kinestésico', color: '#B2D8E5', value: diagnosis.counts?.kinestesico || 0 }
+              ].map((item) => (
+                <div key={item.key} className="space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="font-medium uppercase tracking-wider" style={{ color: item.color }}>{item.label}</span>
+                    <span className="text-slate-600 font-medium">{item.value}/10</span>
+                  </div>
+                  <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                    <motion.div 
+                      initial={{ width: 0 }}
+                      animate={{ width: `${item.value * 10}%` }}
+                      transition={{ duration: 0.8, ease: 'easeOut' }}
+                      className="h-full rounded-full"
+                      style={{ backgroundColor: item.color }}
+                    />
                   </div>
                 </div>
-                <div>
-                    <div className="text-xs font-bold text-[var(--color-petroleum)] uppercase tracking-wider">Verificar</div>
-                    <div className="text-xs text-[var(--color-gray-400)] font-mono mt-1">edutechlife.co</div>
-                </div>
-            </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Action Buttons (Inferiores) con iconos Soft Outline */}
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, type: 'spring' }}
+          className="flex flex-col sm:flex-row gap-6 justify-center items-center mt-10"
+        >
+          <motion.button
+            whileHover={{ scale: 1.08, y: -5 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={generatePDF}
+            disabled={pdfLoading}
+            className="relative bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-full px-8 py-4 shadow-xl flex items-center gap-3 overflow-hidden group"
+            style={{
+              transformStyle: 'preserve-3d'
+            }}
+          >
+            {/* Efecto de brillo 3D */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+            
+            {pdfLoading ? (
+              <>
+                <div className="relative z-10 w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin"></div>
+                <span className="relative z-10 text-base font-semibold">Generando PDF...</span>
+              </>
+            ) : (
+              <>
+                <Download size={20} strokeWidth={2} className="relative z-10" />
+                <span className="relative z-10 text-base font-semibold">Descargar PDF del Resultado</span>
+              </>
             )}
+            
+            {/* Efecto de sombra 3D */}
+            <div className="absolute -bottom-2 left-4 right-4 h-4 bg-gradient-to-r from-[#4DA8C4]/30 to-[#66CCCC]/30 blur-md rounded-full"></div>
+          </motion.button>
+          
+          <motion.button
+            whileHover={{ scale: 1.08, y: -5 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => onNavigate && onNavigate('neuroentorno')}
+            className="relative bg-white border-2 border-[#0A1628] text-[#0A1628] rounded-full px-8 py-4 flex items-center gap-3 overflow-hidden group"
+            style={{
+              transformStyle: 'preserve-3d'
+            }}
+          >
+            {/* Efecto de brillo 3D */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#0A1628]/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+            
+            <Rocket size={20} strokeWidth={2} className="relative z-10" />
+            <span className="relative z-10 text-base font-semibold">Ir a IA Lab</span>
+            
+            {/* Efecto de sombra 3D */}
+            <div className="absolute -bottom-2 left-4 right-4 h-4 bg-[#0A1628]/10 blur-md rounded-full"></div>
+          </motion.button>
         </motion.div>
+
+        {/* Información adicional */}
+        <div className="text-center mt-6">
+          <p className="text-xs text-slate-400 uppercase tracking-wider">Tiempo total: {formatTime(diagnosis.timeSpent || elapsedTime)} • Estado de ánimo: {moodFeedback.label}</p>
+        </div>
       </div>
     );
   };
@@ -1314,7 +1531,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   );
 
   return (
-    <div className={`min-h-screen section-bg-gradient py-6 md:py-10 px-3 md:px-4 relative overflow-hidden ${highContrast ? 'high-contrast-mode' : ''}`} style={highContrast ? {
+    <div className={`min-h-screen bg-[#F8FAFC] py-6 md:py-10 px-3 md:px-4 relative overflow-hidden font-sans antialiased ${highContrast ? 'high-contrast-mode' : ''}`} style={highContrast ? {
       '--color-petroleum': '#000000',
       '--color-corporate': '#000000',
       '--color-gray-100': '#ffffff',
@@ -1361,69 +1578,138 @@ const DiagnosticoVAK = ({ onNavigate }) => {
         )}
       </button>
       
-      {/* FONDO 3D - ETAPA 2 */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        {/* Grid 3D perspectiva */}
+      {/* Barra de controles de Valeria */}
+      <ValeriaControls
+        valeriaEnabled={valeriaEnabled}
+        setValeriaEnabled={setValeriaEnabled}
+        valeriaVolume={valeriaVolume}
+        setValeriaVolume={setHookVolume}
+        isSpeaking={isValentinaSpeaking}
+        valeriaExpression={valeriaExpression}
+        showStart={phase === 'intro'}
+        onStart={handleStart}
+      />
+
+      {/* EFECTO 3D CON BÓVEDAS - Como en el resto de la página */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        {/* Grid 3D perspectiva con bóvedas */}
         <div 
-          className="absolute inset-0 opacity-[0.03] hidden sm:block"
+          className="absolute inset-0 opacity-[0.08]"
           style={{
             backgroundImage: `
-              linear-gradient(rgba(77, 168, 196, 0.3) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(77, 168, 196, 0.3) 1px, transparent 1px)
+              linear-gradient(rgba(77, 168, 196, 0.4) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(77, 168, 196, 0.4) 1px, transparent 1px)
             `,
-            backgroundSize: '50px 50px',
-            transform: 'perspective(500px) rotateX(60deg)',
-            transformOrigin: 'center top'
+            backgroundSize: '60px 60px',
+            transform: 'perspective(800px) rotateX(65deg)',
+            transformOrigin: 'center top',
+            backgroundPosition: 'center center'
           }}
         ></div>
         
-        {/* Orbes flotantes animados */}
-        <div className="absolute top-[5%] left-[5%] w-96 h-96 rounded-full animate-orb-1 opacity-40" 
-          style={{ background: 'radial-gradient(circle, rgba(77, 168, 196, 0.4) 0%, transparent 70%)' }}></div>
-        <div className="absolute bottom-[10%] right-[5%] w-80 h-80 rounded-full animate-orb-2 opacity-30" 
-          style={{ background: 'radial-gradient(circle, rgba(102, 204, 204, 0.4) 0%, transparent 70%)' }}></div>
-        <div className="absolute top-1/2 left-1/3 w-56 h-56 rounded-full animate-orb-3 opacity-25" 
-          style={{ background: 'radial-gradient(circle, rgba(0, 194, 224, 0.4) 0%, transparent 70%)' }}></div>
+        {/* Bóvedas flotantes animadas - Efecto 3D */}
+        <div className="absolute top-[10%] left-[10%] w-[400px] h-[400px] rounded-full animate-orb-1 opacity-30" 
+          style={{ 
+            background: 'radial-gradient(circle at 30% 30%, rgba(77, 168, 196, 0.6) 0%, rgba(77, 168, 196, 0.2) 40%, transparent 70%)',
+            filter: 'blur(60px)',
+            transform: 'translateZ(100px)'
+          }}></div>
         
-        {/* Partículas flotantes */}
-        {[...Array(15)].map((_, i) => (
+        <div className="absolute bottom-[15%] right-[10%] w-[350px] h-[350px] rounded-full animate-orb-2 opacity-25" 
+          style={{ 
+            background: 'radial-gradient(circle at 70% 70%, rgba(102, 204, 204, 0.5) 0%, rgba(102, 204, 204, 0.15) 40%, transparent 70%)',
+            filter: 'blur(50px)',
+            transform: 'translateZ(80px)',
+            animationDelay: '1.5s'
+          }}></div>
+        
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full animate-orb-3 opacity-20" 
+          style={{ 
+            background: 'radial-gradient(circle at center, rgba(0, 194, 224, 0.4) 0%, rgba(0, 194, 224, 0.1) 30%, transparent 60%)',
+            filter: 'blur(70px)',
+            transform: 'translateZ(50px)',
+            animationDelay: '3s'
+          }}></div>
+        
+        {/* Partículas de conexión 3D */}
+        {[...Array(20)].map((_, i) => (
           <div 
             key={i}
-            className="absolute w-1.5 h-1.5 bg-white/40 rounded-full animate-float"
+            className="absolute w-2 h-2 bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] rounded-full animate-float-3d"
             style={{
-              left: `${10 + Math.random() * 80}%`,
-              top: `${10 + Math.random() * 80}%`,
-              animationDelay: `${i * 0.4}s`,
-              animationDuration: `${3 + Math.random() * 2}s`
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${i * 0.3}s`,
+              animationDuration: `${8 + Math.random() * 4}s`,
+              boxShadow: '0 0 20px rgba(77, 168, 196, 0.5)',
+              transform: `translateZ(${Math.random() * 100}px)`
             }}
           />
         ))}
         
-        {/* Zonas de glow decorativas */}
-        <div className="fixed top-[5%] left-[25%] w-32 h-32 bg-[var(--color-corporate)]/5 rounded-full blur-[60px] animate-pulse-slow pointer-events-none"></div>
-        <div className="fixed bottom-[15%] left-[10%] w-40 h-40 bg-[var(--color-mint)]/5 rounded-full blur-[80px] animate-pulse-slow pointer-events-none" style={{ animationDelay: '1.5s' }}></div>
-        <div className="fixed top-[40%] right-[15%] w-28 h-28 bg-[var(--color-accent)]/5 rounded-full blur-[50px] animate-pulse-slow pointer-events-none" style={{ animationDelay: '2s' }}></div>
-      </div>
-
-      <div className="max-w-4xl mx-auto mb-4 md:mb-6 flex justify-start">
-        <button 
-          onClick={onNavigate ? () => onNavigate('ecosystem') : undefined}
-          className="btn-ghost flex items-center gap-2 px-4 py-2.5 text-sm"
-        >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        {/* Líneas de conexión 3D */}
+        <div className="absolute inset-0">
+          <svg className="w-full h-full" style={{ opacity: 0.1 }}>
+            <defs>
+              <linearGradient id="line-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#4DA8C4" stopOpacity="0.3" />
+                <stop offset="100%" stopColor="#66CCCC" stopOpacity="0.3" />
+              </linearGradient>
+            </defs>
+            {[...Array(8)].map((_, i) => {
+              const x1 = 10 + Math.random() * 80;
+              const y1 = 10 + Math.random() * 80;
+              const x2 = 10 + Math.random() * 80;
+              const y2 = 10 + Math.random() * 80;
+              return (
+                <line 
+                  key={i}
+                  x1={`${x1}%`}
+                  y1={`${y1}%`}
+                  x2={`${x2}%`}
+                  y2={`${y2}%`}
+                  stroke="url(#line-gradient)"
+                  strokeWidth="1"
+                  strokeDasharray="5,5"
+                >
+                  <animate 
+                    attributeName="stroke-dashoffset"
+                    from="0"
+                    to="20"
+                    dur={`${3 + Math.random() * 2}s`}
+                    repeatCount="indefinite"
+                  />
+                </line>
+              );
+            })}
           </svg>
-          <span className="hidden sm:inline">Volver al Ecosistema</span>
-          <span className="sm:hidden">Volver</span>
-        </button>
+        </div>
+        
+        {/* Capa de desenfoque para profundidad */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#F8FAFC]/30 backdrop-blur-[1px]"></div>
       </div>
 
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="max-w-4xl mx-auto glass-card rounded-2xl md:rounded-[2rem] overflow-hidden relative z-10 shadow-[var(--shadow-xl)]"
-      >
-        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[var(--color-corporate)] via-[var(--color-mint)] to-[var(--color-petroleum)]"></div>
+      <div className="max-w-6xl mx-auto">
+        {/* Botón de volver (solo visible cuando hay navegación) */}
+        {onNavigate && (
+          <div className="mb-6">
+            <button 
+              onClick={() => onNavigate('neuroentorno')}
+              className="text-[#4DA8C4] hover:text-[#66CCCC] flex items-center gap-2 transition-colors"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              <span>Volver al Dashboard</span>
+            </button>
+          </div>
+        )}
+
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-4 md:p-6"
+        >
         
         <div ref={pdfTemplateRef} style={{ display: 'none' }}>
           {diagnosis && (
@@ -1506,9 +1792,29 @@ const DiagnosticoVAK = ({ onNavigate }) => {
               </div>
 
               {/* Consejo */}
-              <div style={{ padding: '20px', background: 'linear-gradient(135deg, rgba(77,168,196,0.1), rgba(102,204,204,0.1))', borderRadius: '12px', borderLeft: '4px solid #4DA8C4', marginBottom: '30px' }}>
+              <div style={{ padding: '20px', background: 'linear-gradient(135deg, rgba(77,168,196,0.1), rgba(102,204,204,0.1))', borderRadius: '12px', borderLeft: '4px solid #4DA8C4', marginBottom: '20px' }}>
                 <h4 style={{ color: '#004B63', margin: '0 0 10px 0', fontSize: '14px', textTransform: 'uppercase' }}>💡 Consejo Personalizado</h4>
                 <p style={{ margin: 0, color: '#334155', fontSize: '14px', lineHeight: '1.6' }}>{diagnosis.styleDetails?.tip}</p>
+              </div>
+
+              {/* Comentario de Valeria - Psicóloga Educativa */}
+              <div style={{ padding: '20px', background: 'linear-gradient(135deg, rgba(102,204,204,0.1), rgba(77,168,196,0.1))', borderRadius: '12px', borderLeft: '4px solid #66CCCC', marginBottom: '30px', position: 'relative' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
+                  <div style={{ width: '40px', height: '40px', background: 'linear-gradient(135deg, #4DA8C4, #66CCCC)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <span style={{ color: 'white', fontSize: '18px' }}>👩‍🏫</span>
+                  </div>
+                  <div>
+                    <h4 style={{ color: '#004B63', margin: '0 0 2px 0', fontSize: '14px', fontWeight: '700' }}>Valeria Rodríguez</h4>
+                    <p style={{ margin: 0, color: '#64748B', fontSize: '11px' }}>Psicóloga Educativa • Especialista VAK</p>
+                  </div>
+                </div>
+                <p style={{ margin: 0, color: '#334155', fontSize: '13px', lineHeight: '1.6', fontStyle: 'italic' }}>
+                  {getValentinaCommentary()}
+                </p>
+                <div style={{ marginTop: '15px', paddingTop: '10px', borderTop: '1px dashed #E2E8F0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ fontSize: '11px', color: '#64748B' }}>EdutechLife • 12 años de experiencia</span>
+                  <span style={{ fontSize: '10px', color: '#94A3B8', background: '#F1F5F9', padding: '2px 6px', borderRadius: '4px' }}>VAK Certified</span>
+                </div>
               </div>
 
               {/* Tiempo */}
@@ -1544,7 +1850,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
               }}
               className="perspective-1000"
             >
-              {phase === 'intro' && renderIntro()}
+              {phase === 'intro' && renderWelcome()}
               {phase === 'calibration' && renderCalibration()}
               {phase === 'test' && renderTest()}
               {phase === 'result' && renderResults()}
@@ -1552,6 +1858,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
           </AnimatePresence>
         )}
       </motion.div>
+      </div>
     </div>
   );
 };

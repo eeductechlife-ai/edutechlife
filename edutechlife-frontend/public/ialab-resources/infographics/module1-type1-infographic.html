@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tipos de IA y Machine Learning - IALab EdutechLife</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .infographic {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(45, 122, 148, 0.12);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2D7A94 0%, #4DA8C4 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .header .subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            color: #2D7A94;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #B2D8E5;
+        }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+        
+        .card {
+            background: #f8fbfe;
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid #4DA8C4;
+        }
+        
+        .card h3 {
+            font-family: 'Montserrat', sans-serif;
+            color: #2D7A94;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .card p {
+            color: #5a6c7d;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        
+        .card.highlight {
+            background: linear-gradient(135deg, #e8f4f8 0%, #d0e8ef 100%);
+            border-left-color: #2D7A94;
+        }
+        
+        .diagram {
+            background: #f0f7fa;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .diagram-box {
+            display: inline-block;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            margin: 5px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .diagram-box.main {
+            background: linear-gradient(135deg, #2D7A94, #4DA8C4);
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+        }
+        
+        .arrow {
+            display: inline-block;
+            color: #4DA8C4;
+            font-size: 20px;
+            margin: 0 10px;
+        }
+        
+        .key-points {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .key-point {
+            background: #e8f4f8;
+            color: #2D7A94;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        .footer {
+            background: #f8fbfe;
+            padding: 20px 30px;
+            text-align: center;
+            border-top: 1px solid #e8f0f5;
+        }
+        
+        .footer p {
+            color: #5a6c7d;
+            font-size: 12px;
+        }
+        
+        .footer .brand {
+            font-family: 'Montserrat', sans-serif;
+            color: #2D7A94;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .grid-2, .grid-4 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="infographic">
+        <div class="header">
+            <h1>Tipos de IA y Machine Learning</h1>
+            <div class="subtitle">Módulo 1: Fundamentos de IA • IALab EdutechLife</div>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <h2 class="section-title">🧠 ¿Qué es la Inteligencia Artificial?</h2>
+                <p style="color: #5a6c7d; line-height: 1.7; margin-bottom: 20px;">
+                    La IA es la capacidad de las máquinas de realizar tareas que normalmente requieren inteligencia humana: 
+                    aprendizaje, razonamiento, resolución de problemas, percepción y lenguaje.
+                </p>
+                
+                <div class="diagram">
+                    <div class="diagram-box main">INTELIGENCIA ARTIFICIAL</div>
+                    <span class="arrow">→</span>
+                    <div class="diagram-box">Narrow IA</div>
+                    <span class="arrow">→</span>
+                    <div class="diagram-box">General IA</div>
+                    <span class="arrow">→</span>
+                    <div class="diagram-box">Super IA</div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">📊 Tipos de Machine Learning</h2>
+                <div class="grid-3" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                    <div class="card">
+                        <h3>🎯 Aprendizaje Supervisado</h3>
+                        <p>El modelo aprende de datos etiquetados. <strong>Ejemplo:</strong> Clasificación de correos spam.</p>
+                        <div class="key-points" style="margin-top: 10px;">
+                            <span class="key-point">Clasificación</span>
+                            <span class="key-point">Regresión</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>🔍 Aprendizaje No Supervisado</h3>
+                        <p>El modelo encuentra patrones en datos sin etiquetas. <strong>Ejemplo:</strong> Segmentación de clientes.</p>
+                        <div class="key-points" style="margin-top: 10px;">
+                            <span class="key-point">Clustering</span>
+                            <span class="key-point">Reducción</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>🎮 Aprendizaje por Refuerzo</h3>
+                        <p>El modelo aprende por prueba y error recibe recompensas o castigos. <strong>Ejemplo:</strong> Juegos.</p>
+                        <div class="key-points" style="margin-top: 10px;">
+                            <span class="key-point">Agentes</span>
+                            <span class="key-point">Premio</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">🏗️ Ramas de la IA</h2>
+                <div class="grid-4">
+                    <div class="card highlight">
+                        <h3>NLP</h3>
+                        <p>Procesamiento de lenguaje natural</p>
+                    </div>
+                    <div class="card highlight">
+                        <h3>Computer Vision</h3>
+                        <p>Visión por computadora</p>
+                    </div>
+                    <div class="card highlight">
+                        <h3>Robótica</h3>
+                        <p>Sistemas físicos automatizados</p>
+                    </div>
+                    <div class="card highlight">
+                        <h3>Expert Systems</h3>
+                        <p>Sistemas de conocimiento</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">💡 Conceptos Clave</h2>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="padding: 10px 0; border-bottom: 1px solid #e8f0f5; display: flex; align-items: center;">
+                        <span style="color: #4DA8C4; margin-right: 10px;">✓</span>
+                        <strong>Data:</strong> Los datos son el combustible de la IA
+                    </li>
+                    <li style="padding: 10px 0; border-bottom: 1px solid #e8f0f5; display: flex; align-items: center;">
+                        <span style="color: #4DA8C4; margin-right: 10px;">✓</span>
+                        <strong>Model:</strong> Algoritmo que aprende de los datos
+                    </li>
+                    <li style="padding: 10px 0; border-bottom: 1px solid #e8f0f5; display: flex; align-items: center;">
+                        <span style="color: #4DA8C4; margin-right: 10px;">✓</span>
+                        <strong>Training:</strong> Proceso de enseñar al modelo
+                    </li>
+                    <li style="padding: 10px 0; display: flex; align-items: center;">
+                        <span style="color: #4DA8C4; margin-right: 10px;">✓</span>
+                        <strong>Inference:</strong> Uso del modelo para predicciones
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><span class="brand">IALab</span> • Inteligencia Artificial Aplicada • 12 Horas • <span class="brand">EdutechLife</span></p>
+        </div>
+    </div>
+</body>
+</html>

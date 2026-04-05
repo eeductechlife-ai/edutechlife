@@ -1,0 +1,219 @@
+/* Estilos responsive para Valentina - Psicóloga Educativa */
+
+.valentina-avatar-container {
+  position: relative;
+  display: inline-block;
+}
+
+.valentina-canvas {
+  display: block;
+  border-radius: 50%;
+  box-shadow: 0 4px 20px rgba(0, 75, 99, 0.15);
+}
+
+.valentina-status {
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  border: 1px solid;
+  backdrop-filter: blur(10px);
+  z-index: 10;
+}
+
+.status-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-right: 5px;
+  animation: pulse 2s infinite;
+}
+
+.status-dot.listening {
+  animation: pulse 1s infinite;
+}
+
+.status-dot.thinking {
+  animation: pulse 1.5s infinite;
+}
+
+.status-dot.speaking {
+  animation: pulse 0.8s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Estilos responsive para el panel de chat */
+.valentina-chat-container {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.valentina-chat-bubble {
+  max-width: 85%;
+  padding: 10px 14px;
+  border-radius: 18px;
+  margin-bottom: 8px;
+  position: relative;
+  word-wrap: break-word;
+}
+
+.valentina-chat-bubble.valentina {
+  background: linear-gradient(135deg, rgba(77, 168, 196, 0.1), rgba(102, 204, 204, 0.1));
+  border: 1px solid rgba(77, 168, 196, 0.2);
+  margin-right: auto;
+  border-bottom-left-radius: 4px;
+}
+
+.valentina-chat-bubble.user {
+  background: linear-gradient(135deg, rgba(0, 75, 99, 0.1), rgba(0, 75, 99, 0.05));
+  border: 1px solid rgba(0, 75, 99, 0.15);
+  margin-left: auto;
+  border-bottom-right-radius: 4px;
+}
+
+.valentina-chat-timestamp {
+  font-size: 10px;
+  color: #64748B;
+  margin-top: 4px;
+  text-align: right;
+}
+
+/* Controles responsive */
+.valentina-controls {
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+  background: white;
+  border-top: 1px solid #E2E8F0;
+}
+
+.valentina-control-button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid #E2E8F0;
+  background: white;
+  color: #004B63;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.valentina-control-button:hover {
+  background: #F8FAFC;
+  border-color: #4DA8C4;
+  transform: translateY(-1px);
+}
+
+.valentina-control-button:active {
+  transform: translateY(0);
+}
+
+.valentina-control-button.primary {
+  background: linear-gradient(135deg, #4DA8C4, #66CCCC);
+  color: white;
+  border: none;
+}
+
+.valentina-control-button.primary:hover {
+  background: linear-gradient(135deg, #3D98B4, #56BCBC);
+  box-shadow: 0 4px 12px rgba(77, 168, 196, 0.3);
+}
+
+/* Media queries para dispositivos móviles */
+@media (max-width: 768px) {
+  .valentina-chat-container {
+    max-height: 300px;
+  }
+  
+  .valentina-chat-bubble {
+    max-width: 90%;
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+  
+  .valentina-controls {
+    flex-wrap: wrap;
+  }
+  
+  .valentina-control-button {
+    min-width: calc(50% - 4px);
+    font-size: 12px;
+    padding: 8px;
+  }
+  
+  .valentina-status {
+    font-size: 10px;
+    padding: 3px 8px;
+    bottom: -22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .valentina-chat-container {
+    max-height: 250px;
+  }
+  
+  .valentina-control-button {
+    min-width: 100%;
+    margin-bottom: 4px;
+  }
+  
+  .valentina-chat-bubble {
+    max-width: 95%;
+    font-size: 13px;
+  }
+}
+
+/* Animaciones para el avatar */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.valentina-avatar-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.valentina-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+/* Estilos para modo alto contraste */
+.high-contrast-mode .valentina-chat-bubble.valentina {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid #4DA8C4;
+}
+
+.high-contrast-mode .valentina-chat-bubble.user {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid #004B63;
+}
+
+.high-contrast-mode .valentina-control-button {
+  border: 2px solid #004B63;
+}
+
+.high-contrast-mode .valentina-control-button.primary {
+  border: 2px solid #4DA8C4;
+}

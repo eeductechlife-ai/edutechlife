@@ -65,7 +65,6 @@ const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
                             className="logo-img"
                         />
                     </div>
-                    <span className="brand-tagline">Transformando la educación con IA</span>
                 </div>
 
                 <div className="loading-progress">

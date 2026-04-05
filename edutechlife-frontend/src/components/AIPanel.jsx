@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { callDeepseekStream } from '../utils/api';
 import { speakTextConversational, iniciarReconocimiento } from '../utils/speech';
+import { evaluateWithDeepseek } from '../services/aiEvaluationService';
+import { saveProgress, PROGRESS_STATUS } from '../lib/progress';
 
-const AIPanel = ({ title, icon = 'fa-brain-circuit', placeholder, systemPrompt, isJson = false, onResult }) => {
+const AIPanel = ({ title, icon = 'fa-brain-circuit', placeholder, systemPrompt, isJson = false, onResult, moduleId = 1 }) => {
     const [q, setQ] = useState('');
     const [res, setRes] = useState('');
     const [displayedRes, setDisplayedRes] = useState('');
@@ -98,6 +100,60 @@ const AIPanel = ({ title, icon = 'fa-brain-circuit', placeholder, systemPrompt, 
         });
     };
 
+    // Evaluar prompt con Deepseek y guardar en Supabase
+    const handleEvaluateWithDeepseek = async () => {
+        if (!q.trim()) return;
+        
+        setLoad(true);
+        setMsg('Evaluando tu prompt con IA...');
+        
+        try {
+            const result = await evaluateWithDeepseek(q, moduleId);
+            
+            if (result.success) {
+                setRes(JSON.stringify(result.data, null, 2));
+                setDisplayedRes(JSON.stringify(result.data, null, 2));
+                
+                // Guardar en Supabase
+                await saveProgress(moduleId, PROGRESS_STATUS.COMPLETED, {
+                    evaluationScore: result.data.score,
+                    evaluationLevel: result.data.level,
+                    feedback: result.data.feedback,
+                    improvedPrompt: result.data.improvedPrompt,
+                    evaluatedAt: new Date().toISOString()
+                });
+
+                // Hacer que Valerio hable el feedback
+                if (result.data.feedback && window.valerioSpeak) {
+                    setTimeout(() => {
+                        const rawText = result.data.feedback.join('. ');
+                        const cleanText = rawText
+                            .replace(/\*\*/g, '')
+                            .replace(/\*/g, '')
+                            .replace(/`/g, '')
+                            .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+                            .replace(/[_*~]/g, '')
+                            .trim();
+                        window.valerioSpeak(cleanText);
+                    }, 1500);
+                }
+                
+                if (onResult) {
+                    onResult(result.data);
+                }
+            } else {
+                setRes(`Error: ${result.error}`);
+                setDisplayedRes(`Error: ${result.error}`);
+            }
+        } catch (error) {
+            console.error('Error en evaluación:', error);
+            setRes('Error al evaluar el prompt');
+            setDisplayedRes('Error al evaluar el prompt');
+        } finally {
+            setLoad(false);
+        }
+    };
+
     const handleDownloadPDF = () => {
         if (!res) return;
         setPdfLoad(true);
@@ -154,9 +210,12 @@ const AIPanel = ({ title, icon = 'fa-brain-circuit', placeholder, systemPrompt, 
                 onChange={e => setQ(e.target.value)} 
                 onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); run(); } }} 
             />
-            <div style={{ display: 'flex', gap: '10px' }}>
-                <button onClick={() => run()} disabled={load} className="ai-run-btn" style={{ flex: 1, marginTop: 0 }}>
-                    {load ? <><span>Procesando</span><div className="ai-loading-bars"><span /><span /><span /><span /><span /></div></> : <><span>Ejecutar análisis neural</span><i className="fa-solid fa-bolt text-xs relative z-10" /></>}
+            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                <button onClick={() => run()} disabled={load} className="ai-run-btn" style={{ flex: 1, marginTop: 0, minWidth: '120px' }}>
+                    {load ? <><span>Procesando</span><div className="ai-loading-bars"><span /><span /><span /><span /><span /></div></> : <><span>Ejecutar</span><i className="fa-solid fa-bolt text-xs relative z-10" /></>}
+                </button>
+                <button onClick={() => handleEvaluateWithDeepseek()} disabled={load || !q.trim()} className="ai-run-btn" style={{ flex: 1, marginTop: 0, minWidth: '120px', background: 'linear-gradient(135deg, #004B63, #4DA8C4)' }}>
+                    {load ? <><span>Evaluando</span><div className="ai-loading-bars"><span /><span /><span /><span /><span /></div></> : <><span>Evaluar</span><i className="fa-solid fa-robot text-xs relative z-10" /></>}
                 </button>
                 <button 
                     onClick={() => iniciarReconocimiento(setQ, run, setIsListening)} 

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checklist de Proyecto Final - IALab EdutechLife</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%); min-height: 100vh; padding: 20px; }
+        .infographic { max-width: 900px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 8px 32px rgba(45, 122, 148, 0.12); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #B2D8E5 0%, #2D7A94 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-family: 'Montserrat', sans-serif; font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+        .header .subtitle { font-size: 14px; opacity: 0.9; }
+        .content { padding: 30px; }
+        .section { margin-bottom: 30px; }
+        .section-title { font-family: 'Montserrat', sans-serif; color: #2D7A94; font-size: 18px; font-weight: 600; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #B2D8E5; }
+        .checklist-group { margin-bottom: 20px; }
+        .checklist-group h4 { font-family: 'Montserrat', sans-serif; color: #4DA8C4; font-size: 14px; margin-bottom: 12px; display: flex; align-items: center; }
+        .checklist-group h4 span { margin-right: 8px; font-size: 18px; }
+        .check-item { display: flex; align-items: center; margin-bottom: 10px; padding: 10px; background: #f8fbfe; border-radius: 8px; }
+        .check-circle { width: 22px; height: 22px; border: 2px solid #4DA8C4; border-radius: 50%; margin-right: 12px; display: flex; align-items: center; justify-content: center; color: #4DA8C4; font-size: 12px; flex-shrink: 0; }
+        .check-item span { color: #5a6c7d; font-size: 13px; }
+        .timeline { display: flex; gap: 15px; margin: 20px 0; }
+        .timeline-item { flex: 1; background: linear-gradient(135deg, #e8f4f8 0%, #f5fafc 100%); border-radius: 12px; padding: 20px; text-align: center; border: 2px solid #B2D8E5; }
+        .timeline-item.active { background: linear-gradient(135deg, #2D7A94, #4DA8C4); color: white; border-color: #2D7A94; }
+        .timeline-item .day { font-family: 'Montserrat', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 5px; }
+        .timeline-item .label { font-size: 11px; }
+        .project-box { background: linear-gradient(135deg, #f0f9f9 0%, #e8f8f8 100%); border-radius: 12px; padding: 25px; margin-top: 20px; }
+        .project-box h4 { font-family: 'Montserrat', sans-serif; color: #2D7A94; margin-bottom: 15px; font-size: 14px; }
+        .project-elements { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .project-element { background: white; padding: 15px; border-radius: 8px; border-left: 3px solid #66CCCC; }
+        .project-element h5 { color: #2D7A94; font-family: 'Montserrat', sans-serif; font-size: 12px; margin-bottom: 5px; }
+        .project-element p { color: #5a6c7d; font-size: 11px; }
+        .footer { background: #f8fbfe; padding: 20px 30px; text-align: center; border-top: 1px solid #e8f0f5; }
+        .footer p { color: #5a6c7d; font-size: 12px; }
+        .footer .brand { font-family: 'Montserrat', sans-serif; color: #2D7A94; font-weight: 600; }
+        @media (max-width: 768px) { .timeline { flex-direction: column; } .project-elements { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="infographic">
+        <div class="header">
+            <h1>Checklist de Proyecto Final</h1>
+            <div class="subtitle">Módulo 4: Proyecto Final • IALab EdutechLife</div>
+        </div>
+        <div class="content">
+            <div class="section">
+                <h2 class="section-title">📅 Cronograma Sugerido (3 Semanas)</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="day">Sem 1</div>
+                        <div class="label">Planificación</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="day">Sem 2</div>
+                        <div class="label">Desarrollo</div>
+                    </div>
+                    <div class="timeline-item active">
+                        <div class="day">Sem 3</div>
+                        <div class="label">Entrega</div>
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <h2 class="section-title">✅ Tu Checklist de Proyecto</h2>
+                <div class="checklist-group">
+                    <h4><span>📋</span> Planificación</h4>
+                    <div class="check-item"><div class="check-circle">1</div><span>Definí el problema a resolver con IA</span></div>
+                    <div class="check-item"><div class="check-circle">2</div><span>Identifiqué mi audiencia objetivo</span></div>
+                    <div class="check-item"><div class="check-circle">3</div><span>Investigué soluciones existentes</span></div>
+                    <div class="check-item"><div class="check-circle">4</div><span>Definí métricas de éxito</span></div>
+                    <div class="check-item"><div class="check-circle">5</div><span>Creé el documento de especificación</span></div>
+                </div>
+                <div class="checklist-group">
+                    <h4><span>🎯</span> Desarrollo</h4>
+                    <div class="check-item"><div class="check-circle">6</div><span>Desarrollé el prompt principal (MasterPrompt)</span></div>
+                    <div class="check-item"><div class="check-circle">7</div><span>Probé con diferentes entradas</span></div>
+                    <div class="check-item"><div class="check-circle">8</div><span>Iteré y mejoré basado en resultados</span></div>
+                    <div class="check-item"><div class="check-circle">9</div><span>Documenté el proceso y decisiones</span></div>
+                </div>
+                <div class="checklist-group">
+                    <h4><span>📦</span> Entregable Final</h4>
+                    <div class="check-item"><div class="check-circle">10</div><span>Preparé presentación del proyecto</span></div>
+                    <div class="check-item"><div class="check-circle">11</div><span>Incluí ejemplos de uso</span></div>
+                    <div class="check-item"><div class="check-circle">12</div><span>Completé la evaluación del módulo</span></div>
+                </div>
+            </div>
+            <div class="section">
+                <div class="project-box">
+                    <h4>📁 Elementos del Proyecto Final</h4>
+                    <div class="project-elements">
+                        <div class="project-element">
+                            <h5>🎭 Prompt Principal</h5>
+                            <p>MasterPrompt completo y optimizado</p>
+                        </div>
+                        <div class="project-element">
+                            <h5>📊 Casos de Uso</h5>
+                            <p>3+ ejemplos documentados</p>
+                        </div>
+                        <div class="project-element">
+                            <h5>📝 Documentación</h5>
+                            <p>Explicación de decisiones técnicas</p>
+                        </div>
+                        <div class="project-element">
+                            <h5>📈 Métricas</h5>
+                            <p>Resultados y limitaciones</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <p><span class="brand">IALab</span> • Inteligencia Artificial Aplicada • 12 Horas • <span class="brand">EdutechLife</span></p>
+        </div>
+    </div>
+</body>
+</html>
