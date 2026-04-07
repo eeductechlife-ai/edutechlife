@@ -383,10 +383,10 @@ const IALab = ({ onBack }) => {
             </div>
 
             <div className="max-w-7xl mx-auto px-6 py-8">
-                <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 relative z-10">
-                    {/* Sidebar - Module List */}
-                    <div className="lg:col-span-2">
-                        <div className="glass-card rounded-[2rem] overflow-hidden">
+                 <div className="flex flex-col lg:flex-row gap-8 relative z-10">
+                     {/* Sidebar - Module List */}
+                     <div className="w-full lg:w-[27%]">
+                         <div className="glass-card rounded-[2rem] overflow-hidden">
                              {/* Progress Circle - Dinámico */}
                              <div className="flex flex-col items-center p-6 border-b border-[#E2E8F0] shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] bg-white rounded-[2rem] mb-4">
                                  {/* Círculo de Progreso SVG */}
@@ -549,8 +549,8 @@ const IALab = ({ onBack }) => {
                          </div>
                      </div>
 
-                    {/* Main Content */}
-                    <div className="lg:col-span-3 space-y-6">
+                     {/* Main Content */}
+                     <div className="w-full lg:w-[73%] space-y-6">
                         {/* Module Header */}
                         <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgba(0,75,99,0.06)] rounded-[2rem] overflow-hidden">
                             <div className="bg-gradient-to-r from-[#004B63] via-[#00BCD4] to-[#4DA8C4] p-6">
@@ -600,7 +600,7 @@ const IALab = ({ onBack }) => {
                         </div>
 
                         {/* Cuadro Teórico Principal - Introducción */}
-                        <div className="w-full ml-28 mb-8 border-2 border-slate-900 bg-white rounded-[2rem] p-8 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] transition-all duration-300">
+                         <div className="w-full ml-20 mb-8 border-2 border-slate-900 bg-white rounded-[2rem] p-8 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] transition-all duration-300">
                             <h2 className="text-xl font-bold text-[#004B63] mb-2">Ingeniería de Prompts: El Arte de Comunicarse con la IA</h2>
                             <p className="text-slate-600 mb-6">Domina el arte de comunicarte con la IA a nivel experto.</p>
                             
@@ -648,7 +648,7 @@ const IALab = ({ onBack }) => {
                         </div>
 
                         {/* Cuadro de Videos - Simetría 50% */}
-                        <div className="flex flex-row gap-8 items-stretch w-full ml-28 mb-8">
+                         <div className="flex flex-row gap-8 items-stretch w-full ml-20 mb-8">
                             {/* Columna Izquierda - Videos (50%) */}
                             <div className="w-1/2 border-2 border-slate-900 bg-white rounded-[2rem] p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:-translate-y-1 transition-all duration-300 flex flex-col gap-4">
                                 <h3 className="text-lg font-bold text-[#004B63]">Videos Explicativos: Ingeniería de Prompts</h3>
@@ -1039,13 +1039,6 @@ const IALab = ({ onBack }) => {
                     </div>
                 </div>
             </div>
-            
-            <button
-                onClick={handleLogout}
-                className="fixed bottom-5 left-5 z-[100] flex items-center gap-2 px-5 py-3 bg-[#004B63] text-white font-medium rounded-xl hover:bg-[#4DA8C4] transition-all duration-300 shadow-lg"
-            >
-                <LogOut size={18} /> Cerrar Sesión
-            </button>
                                             </div>
                                             {coachMsg && (
                                                 <div className="mt-3 p-3 bg-white/10 rounded-lg backdrop-blur-sm">
