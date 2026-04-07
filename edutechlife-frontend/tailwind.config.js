@@ -7,53 +7,54 @@ export default {
   ],
   theme: {
     extend: {
-      colors: {
-        // Brand colors from design tokens
-        petroleum: 'var(--color-petroleum)',
-        corporate: 'var(--color-corporate)',
-        'soft-blue': 'var(--color-soft-blue)',
-        mint: 'var(--color-mint)',
-        navy: 'var(--color-navy)',
+       colors: {
+        // Brand colors corporativos
+        'brand-primary': '#004B63',
+        'brand-accent': '#00BCD4',
+        petroleum: '#004B63',
+        corporate: '#00BCD4',
+        'soft-blue': '#B2D8E5',
+        mint: '#66CCCC',
+        navy: '#0A1628',
         
-        // Semantic colors from design tokens
-        primary: 'var(--color-primary)',
-        'primary-dark': 'var(--color-primary-dark)',
-        'primary-light': 'var(--color-primary-light)',
-        secondary: 'var(--color-secondary)',
-        accent: 'var(--color-accent)',
-        success: 'var(--color-success)',
-        warning: 'var(--color-warning)',
-        error: 'var(--color-error)',
-        info: 'var(--color-info)',
+        // Semantic colors
+        primary: '#004B63',
+        'primary-dark': '#00334A',
+        'primary-light': '#4DA8C4',
+        secondary: '#00BCD4',
+        accent: '#00BCD4',
+        success: '#10B981',
+        warning: '#F59E0B',
+        error: '#EF4444',
+        info: '#3B82F6',
         
         // Background colors
-        'bg-dark': 'var(--color-bg-dark)',
-        'bg-light': 'var(--color-bg-light)',
-        'bg-card': 'var(--color-bg-card)',
-        'bg-card-dark': 'var(--color-bg-card-dark)',
-        'bg-glass': 'var(--color-bg-glass)',
-        'bg-glass-dark': 'var(--color-bg-glass-dark)',
+        'bg-dark': '#E8F4F8',
+        'bg-light': '#F8FAFC',
+        'bg-card': '#FFFFFF',
+        'bg-card-dark': '#0A1628',
+        'bg-glass': 'rgba(77, 168, 196, 0.12)',
+        'bg-glass-dark': 'rgba(77, 168, 196, 0.2)',
         
         // Text colors
-        'text-main': 'var(--color-text-main)',
-        'text-sub': 'var(--color-text-sub)',
-        'text-light': 'var(--color-text-light)',
-        'text-dark': 'var(--color-text-dark)',
-        'text-inverse': 'var(--color-text-inverse)',
+        'text-main': '#334155',
+        'text-sub': '#64748B',
+        'text-light': '#94A3B8',
+        'text-dark': '#1E293B',
+        'text-inverse': '#FFFFFF',
         
         // Border colors
-        'border-light': 'var(--color-border-light)',
-        'border-dark': 'var(--color-border-dark)',
-        'border-glass': 'var(--color-border-glass)',
+        'border-light': '#E2E8F0',
+        'border-dark': '#CBD5E1',
+        'border-glass': 'rgba(255, 255, 255, 0.2)',
       },
-      fontFamily: {
-        display: ['Montserrat', 'sans-serif'],
-        body: ['Open Sans', 'sans-serif'],
+       fontFamily: {
+        sans: ['Inter', 'Geist', 'system-ui', '-apple-system', 'sans-serif'],
+        display: ['Inter', 'Geist', 'system-ui', '-apple-system', 'sans-serif'],
+        body: ['Inter', 'Geist', 'system-ui', '-apple-system', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
-        montserrat: ['Montserrat', 'sans-serif'],
-        'jetbrains-mono': ['JetBrains Mono', 'monospace'],
-        'open-sans': ['Open Sans', 'sans-serif'],
-        sans: ['Open Sans', 'sans-serif'],
+        inter: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        geist: ['Geist', 'system-ui', '-apple-system', 'sans-serif'],
       },
       backgroundColor: {
         petroleum: 'var(--color-petroleum)',
@@ -112,11 +113,17 @@ export default {
         'glass-lg': 'var(--backdrop-blur-glass-lg)',
         'premium': 'var(--backdrop-blur-premium)',
       },
-      borderRadius: {
-        'glass': 'var(--radius-glass)',
-        'glass-lg': 'var(--radius-glass-lg)',
-        'pill': 'var(--radius-pill)',
-        'premium': 'var(--radius-premium)',
+       borderRadius: {
+        'glass': '1rem',
+        'glass-lg': '1.5rem',
+        'pill': '9999px',
+        'premium': '1.5rem',
+        DEFAULT: '0.5rem',
+        md: '0.75rem',
+        lg: '1rem',
+        xl: '1.5rem',
+        '2xl': '2rem',
+        '3xl': '3rem',
       },
       animation: {
         'grid-move': 'grid-move 24s linear infinite',

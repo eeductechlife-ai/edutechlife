@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Open+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Geist:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
 @import './design-system/tokens.css';
 @import './components/Valentina/Valentina.css';
 @import './components/DiagnosticoVAK/DiagnosticoVAK.css';
@@ -15,9 +15,9 @@
 @layer base {
   /* === ROOT VARIABLES (CSS Custom Properties) === */
   :root {
-    /* Paleta de Azules Corporativos - ÚNICA FUENTE DE VERDAD - Colores más claros */
-    --color-petroleum: #2D7A94;
-    --color-corporate: #4DA8C4;
+    /* Paleta de Azules Corporativos - ÚNICA FUENTE DE VERDAD */
+    --color-petroleum: #004B63;
+    --color-corporate: #00BCD4;
     --color-soft-blue: #B2D8E5;
     --color-mint: #66CCCC;
     --color-navy: #4A6B7C;

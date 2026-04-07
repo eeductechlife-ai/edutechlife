@@ -9,7 +9,7 @@ import { useInView } from 'framer-motion';
 import { Icon } from '../utils/iconMapping.jsx';
 import { useAuth } from '../context/AuthContext';
 import { getAllProgress, saveProgress, PROGRESS_STATUS, saveLastLesson, getUserLastProgress } from '../lib/progress';
-import { LogOut } from 'lucide-react';
+import { LogOut, Lightbulb } from 'lucide-react';
 
 const IALab = ({ onBack }) => {
     const { user, isLoading: authLoading, signOut } = useAuth();
@@ -36,6 +36,7 @@ const IALab = ({ onBack }) => {
     const [coachLoad, setCoachLoad] = useState(false);
     const [isListening, setIsListening] = useState(false);
     const [avatarState, setAvatarState] = useState('idle');
+    const [showValerioDrawer, setShowValerioDrawer] = useState(false);
     
     const recognitionRef = useRef(null);
     const fileInputRef = useRef(null);
@@ -108,7 +109,7 @@ const IALab = ({ onBack }) => {
                 }
 
                 const mainModulesCompleted = completed.filter(id => id <= 4).length;
-                setCourseProgress(Math.round((mainModulesCompleted / 4) * 100));
+                setCourseProgress(Math.min(Math.round((mainModulesCompleted / 4) * 100), 100));
 
                 const lastProgress = await getUserLastProgress();
                 if (lastProgress && lastProgress.last_lesson_id) {
@@ -138,6 +139,13 @@ const IALab = ({ onBack }) => {
         } catch (error) {
             console.error('Error guardando última lección:', error);
         }
+    };
+
+    const isModuleLocked = (moduleId) => {
+        // Module 1 is always unlocked
+        if (moduleId === 1) return false;
+        // Module is unlocked if it's completed or visited
+        return !completedModules.includes(moduleId) && !visitedModules.includes(moduleId);
     };
 
     const handleLogout = async () => {
@@ -254,7 +262,7 @@ const IALab = ({ onBack }) => {
             if (!completedModules.includes(activeMod)) {
                 const newCompleted = [...completedModules, activeMod];
                 setCompletedModules(newCompleted);
-                setCourseProgress(Math.round((newCompleted.length / 5) * 100));
+                setCourseProgress(Math.min(Math.round((newCompleted.length / 5) * 100), 100));
             }
             setActiveTab('cert');
         }
@@ -352,16 +360,8 @@ const IALab = ({ onBack }) => {
             {/* Header - glass-nav para elemento pequeno */}
             <div className="glass-nav border-b border-[rgba(77,168,196,0.2)] shadow-[0_4px_30px_rgba(0,0,0,0.03)] sticky top-0 z-50">
                 <div className="max-w-7xl mx-auto flex items-center justify-between py-4 px-6">
-                    <div className="flex items-center gap-4">
-                         <button
-                             onClick={onBack}
-                             className="flex items-center gap-2 px-4 py-2 bg-[#F1F5F9] hover:bg-[#4DA8C4] hover:text-white border border-[#E2E8F0] rounded-lg transition-all duration-300"
-                         >
-                             <Icon name="fa-arrow-left" className="text-[#4DA8C4] hover:text-white" />
-                             <span className="text-sm text-[#64748B] hover:text-white">Volver</span>
-                         </button>
-                        <div className="h-8 w-px bg-[#E2E8F0]" />
-                        <div className="flex items-center gap-3">
+                     <div className="flex items-center gap-4">
+                         <div className="flex items-center gap-3">
                              <div className="w-10 h-10 bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] rounded-lg flex items-center justify-center">
                                  <Icon name="fa-flask-vial" className="text-white" />
                              </div>
@@ -383,23 +383,63 @@ const IALab = ({ onBack }) => {
             </div>
 
             <div className="max-w-7xl mx-auto px-6 py-8">
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 relative z-10">
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 relative z-10">
                     {/* Sidebar - Module List */}
-                    <div className="lg:col-span-1">
+                    <div className="lg:col-span-2">
                         <div className="glass-card rounded-[2rem] overflow-hidden">
-                            {/* Progress */}
-                            <div className="p-6 border-b border-[#E2E8F0]">
-                                <div className="flex items-center justify-between mb-3">
-                                    <span className="text-xs font-normal text-[#64748B] uppercase tracking-wide">Progreso</span>
-                                    <span className="text-sm font-normal text-[#4DA8C4]">{courseProgress}%</span>
-                                </div>
-                                <div className="h-3 bg-[#E2E8F0] rounded-full overflow-hidden">
-                                    <div 
-                                        className="h-full bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] rounded-full transition-all duration-500"
-                                        style={{ width: `${courseProgress}%` }}
-                                    />
-                                </div>
-                            </div>
+                             {/* Progress Circle - Dinámico */}
+                             <div className="flex flex-col items-center p-6 border-b border-[#E2E8F0] shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] bg-white rounded-[2rem] mb-4">
+                                 {/* Círculo de Progreso SVG */}
+                                 <div className="relative w-32 h-32 mb-4">
+                                     <svg className="w-full h-full transform -rotate-90">
+                                         {/* Círculo Base */}
+                                         <circle
+                                             cx="64"
+                                             cy="64"
+                                             r="56"
+                                             stroke="#E2E8F0"
+                                             strokeWidth="8"
+                                             fill="none"
+                                             className="stroke-slate-100"
+                                         />
+                                         {/* Círculo de Progreso */}
+                                         <circle
+                                             cx="64"
+                                             cy="64"
+                                             r="56"
+                                             stroke="#00BCD4"
+                                             strokeWidth="8"
+                                             fill="none"
+                                             strokeLinecap="round"
+                                             strokeDasharray="351.858"
+                                             strokeDashoffset={351.858 - (351.858 * Math.min(completedModules.length * 20, 100)) / 100}
+                                             className="transition-all duration-500"
+                                         />
+                                     </svg>
+                                     {/* Texto Central */}
+                                     <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                         <span className="text-2xl font-black text-[#004B63]">
+                                             {Math.min(completedModules.length * 20, 100)}%
+                                         </span>
+                                         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1">
+                                             Nivel de Maestría
+                                         </span>
+                                     </div>
+                                 </div>
+                                 {/* Información de Progreso */}
+                                 <div className="text-center">
+                                     <p className="text-xs font-normal text-[#64748B] mb-1">
+                                         {completedModules.length} de 5 módulos completados
+                                     </p>
+                                      <div className="flex items-center justify-center gap-1">
+                                          {[1, 2, 3, 4, 5].map((num) => (
+                                              <div 
+                                                  key={num}
+                                                  className={`w-2 h-2 rounded-full ${completedModules.includes(num) ? 'bg-[#00BCD4]' : 'bg-slate-200'}`}
+                                              />
+                                          ))}
+                                      </div>
+                                  </div>
 
                             {/* Module List */}
                             <div className="p-4">
@@ -408,14 +448,28 @@ const IALab = ({ onBack }) => {
                                     {modules.map(mod => (
                                         <button
                                             key={mod.id}
-                                            onClick={() => { setActiveMod(mod.id); setGenData(null); setInput(''); setActiveTab('lab'); setEvalSubmitted(false); setEvalAnswers({}); }}
+                                            onClick={() => { 
+                                                // Allow viewing any module, but track as visited
+                                                if (!visitedModules.includes(mod.id)) {
+                                                    setVisitedModules([...visitedModules, mod.id]);
+                                                }
+                                                setActiveMod(mod.id); 
+                                                setGenData(null); 
+                                                setInput(''); 
+                                                setActiveTab('lab'); 
+                                                setEvalSubmitted(false); 
+                                                setEvalAnswers({}); 
+                                            }}
                                             className={`w-full text-left p-4 rounded-xl transition-all duration-300 ${
                                                 activeMod === mod.id 
-                                                    ? 'bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white shadow-lg' 
+                                                    ? 'bg-gradient-to-r from-[#004B63] via-[#00BCD4] to-[#4DA8C4] text-white shadow-lg' 
                                                     : completedModules.includes(mod.id)
                                                         ? 'bg-[#66CCCC]/10 border-2 border-[#66CCCC]/30 text-[#004B63] hover:border-[#4DA8C4]'
-                                                        : 'bg-[#F8FAFC] border border-[#E2E8F0] text-[#64748B] hover:border-[#4DA8C4] hover:text-[#004B63]'
+                                                        : visitedModules.includes(mod.id)
+                                                            ? 'bg-[#F8FAFC] border border-[#E2E8F0] text-[#004B63] hover:border-[#4DA8C4]'
+                                                            : 'bg-[#F8FAFC]/50 border border-[#E2E8F0]/50 text-[#64748B]/50 hover:border-[#4DA8C4]/50'
                                             }`}
+                                            disabled={!visitedModules.includes(mod.id) && !completedModules.includes(mod.id) && mod.id > 1}
                                         >
                                             <div className="flex items-center gap-3">
                                                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-normal ${
@@ -423,12 +477,16 @@ const IALab = ({ onBack }) => {
                                                         ? 'bg-white/20 text-white' 
                                                         : completedModules.includes(mod.id)
                                                             ? 'bg-[#66CCCC] text-white'
-                                                            : 'bg-[#E2E8F0] text-[#64748B]'
+                                                            : visitedModules.includes(mod.id)
+                                                                ? 'bg-[#E2E8F0] text-[#004B63]'
+                                                                : 'bg-[#E2E8F0]/50 text-[#64748B]/50'
                                                 }`}>
                                                     {completedModules.includes(mod.id) ? (
                                                          <Icon name="fa-check" className="text-xs" />
-                                                    ) : (
+                                                    ) : visitedModules.includes(mod.id) ? (
                                                         mod.id
+                                                    ) : (
+                                                        <Icon name="fa-lock" className="text-xs" />
                                                     )}
                                                 </div>
                                                 <div className="flex-1 min-w-0">
@@ -446,7 +504,7 @@ const IALab = ({ onBack }) => {
                             {/* Module Info Box */}
                             <div className="p-4 border-t border-[#E2E8F0]">
                                 <p className="text-xs font-normal text-[#64748B] uppercase tracking-wide mb-3">Detalles del Módulo</p>
-                                <div className="bg-[#F8FAFC] rounded-xl p-4 space-y-3">
+                                <div className="bg-[#F8FAFC] rounded-xl p-4 space-y-3 h-fit max-h-[300px] overflow-y-auto">
                                     <div className="flex justify-between items-center">
                                         <div className="flex items-center gap-2">
                                             <Icon name="fa-clock" className="text-[#4DA8C4] text-sm" />
@@ -475,26 +533,27 @@ const IALab = ({ onBack }) => {
                                         </div>
                                         <span className="text-sm font-medium text-[#004B63]">{curr?.projects}</span>
                                     </div>
-                                </div>
-                            </div>
+                                 </div>
+                             </div>
 
-                            {/* Cerrar Sesión Button */}
-                            <div className="p-3 border-t border-[#E2E8F0]">
-                                <button
-                                    onClick={handleLogout}
-                                    className="w-full flex items-center justify-center gap-1 px-3 py-2 bg-[#004B63] text-white font-medium rounded-lg hover:bg-[#4DA8C4] transition-all duration-300 text-xs"
-                                >
-                                    <LogOut size={14} /> Cerrar Sesión
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                             {/* Logout Button - Bottom of Sidebar */}
+                             <div className="mt-auto pt-6 pb-4 border-t border-slate-100">
+                                 <button
+                                     onClick={handleLogout}
+                                     className="flex items-center gap-3 w-full px-6 py-3 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all duration-300 group"
+                                 >
+                                     <LogOut className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                                     <span className="font-bold text-sm tracking-tight">Cerrar Sesión</span>
+                                 </button>
+                             </div>
+                         </div>
+                     </div>
 
                     {/* Main Content */}
                     <div className="lg:col-span-3 space-y-6">
                         {/* Module Header */}
                         <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgba(0,75,99,0.06)] rounded-[2rem] overflow-hidden">
-                            <div className="bg-gradient-to-r from-[#004B63] to-[#4DA8C4] p-6">
+                            <div className="bg-gradient-to-r from-[#004B63] via-[#00BCD4] to-[#4DA8C4] p-6">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-4">
                                         <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
@@ -540,13 +599,178 @@ const IALab = ({ onBack }) => {
                             </div>
                         </div>
 
+                        {/* Cuadro Teórico Principal - Introducción */}
+                        <div className="w-full ml-28 mb-8 border-2 border-slate-900 bg-white rounded-[2rem] p-8 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] transition-all duration-300">
+                            <h2 className="text-xl font-bold text-[#004B63] mb-2">Ingeniería de Prompts: El Arte de Comunicarse con la IA</h2>
+                            <p className="text-slate-600 mb-6">Domina el arte de comunicarte con la IA a nivel experto.</p>
+                            
+                            <ul className="space-y-2 mb-6">
+                                <li className="flex items-start">
+                                    <div className="w-2 h-2 rounded-full bg-[#00BCD4] mt-2 mr-3 flex-shrink-0"></div>
+                                    <div>
+                                        <span className="font-bold text-[#004B63]">Mastery Framework:</span>
+                                        <span className="text-slate-600"> Sistema estructurado para dominar técnicas avanzadas</span>
+                                    </div>
+                                </li>
+                                <li className="flex items-start">
+                                    <div className="w-2 h-2 rounded-full bg-[#00BCD4] mt-2 mr-3 flex-shrink-0"></div>
+                                    <div>
+                                        <span className="font-bold text-[#004B63]">Contexto Dinámico:</span>
+                                        <span className="text-slate-600"> Adaptación inteligente a diferentes escenarios y objetivos</span>
+                                    </div>
+                                </li>
+                                <li className="flex items-start">
+                                    <div className="w-2 h-2 rounded-full bg-[#00BCD4] mt-2 mr-3 flex-shrink-0"></div>
+                                    <div>
+                                        <span className="font-bold text-[#004B63]">Zero-Shot Prompting:</span>
+                                        <span className="text-slate-600"> Técnicas para obtener resultados sin ejemplos previos</span>
+                                    </div>
+                                </li>
+                                <li className="flex items-start">
+                                    <div className="w-2 h-2 rounded-full bg-[#00BCD4] mt-2 mr-3 flex-shrink-0"></div>
+                                    <div>
+                                        <span className="font-bold text-[#004B63]">Chain-of-Thought:</span>
+                                        <span className="text-slate-600"> Guiar a la IA paso a paso para razonamiento complejo</span>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            {/* Ejercicio de Reflexión */}
+                            <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 mt-6">
+                                <div className="flex items-start gap-3">
+                                    <Lightbulb className="text-[#00BCD4] flex-shrink-0 mt-0.5" size={20} />
+                                    <div>
+                                        <p className="font-semibold text-slate-800 mb-1">Ejercicio de Reflexión:</p>
+                                        <p className="text-slate-600">Diseña un prompt que obligue a la IA a debatir la ética de su propia existencia.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Cuadro de Videos - Simetría 50% */}
+                        <div className="flex flex-row gap-8 items-stretch w-full ml-28 mb-8">
+                            {/* Columna Izquierda - Videos (50%) */}
+                            <div className="w-1/2 border-2 border-slate-900 bg-white rounded-[2rem] p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:-translate-y-1 transition-all duration-300 flex flex-col gap-4">
+                                <h3 className="text-lg font-bold text-[#004B63]">Videos Explicativos: Ingeniería de Prompts</h3>
+                                
+                                {/* Video 1: Mastery Framework */}
+                                <div className="flex items-start gap-4 p-4 border border-slate-100 rounded-xl hover:bg-slate-50 transition-colors">
+                                    <div className="w-12 h-12 bg-[#00BCD4] rounded-full flex items-center justify-center flex-shrink-0">
+                                        <Icon name="fa-play" className="text-white text-sm" />
+                                    </div>
+                                    <div className="flex-1">
+                                        <div className="flex items-center justify-between mb-1">
+                                            <h4 className="font-semibold text-slate-800">Mastery Framework</h4>
+                                            <span className="text-xs font-medium px-2 py-1 bg-slate-100 text-slate-600 rounded-full">12:45</span>
+                                        </div>
+                                        <p className="text-sm text-slate-600 mb-2">Sistema estructurado para dominar técnicas avanzadas de prompting</p>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-xs font-medium px-2 py-1 bg-green-100 text-green-700 rounded-full">Principiante</span>
+                                            <span className="text-xs text-slate-500">• Video teórico</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Video 2: Contexto Dinámico */}
+                                <div className="flex items-start gap-4 p-4 border border-slate-100 rounded-xl hover:bg-slate-50 transition-colors">
+                                    <div className="w-12 h-12 bg-[#00BCD4] rounded-full flex items-center justify-center flex-shrink-0">
+                                        <Icon name="fa-play" className="text-white text-sm" />
+                                    </div>
+                                    <div className="flex-1">
+                                        <div className="flex items-center justify-between mb-1">
+                                            <h4 className="font-semibold text-slate-800">Contexto Dinámico</h4>
+                                            <span className="text-xs font-medium px-2 py-1 bg-slate-100 text-slate-600 rounded-full">18:30</span>
+                                        </div>
+                                        <p className="text-sm text-slate-600 mb-2">Adaptación inteligente a diferentes escenarios y objetivos</p>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-xs font-medium px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full">Intermedio</span>
+                                            <span className="text-xs text-slate-500">• Caso práctico</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Video 3: Zero-Shot Prompting */}
+                                <div className="flex items-start gap-4 p-4 border border-slate-100 rounded-xl hover:bg-slate-50 transition-colors">
+                                    <div className="w-12 h-12 bg-[#00BCD4] rounded-full flex items-center justify-center flex-shrink-0">
+                                        <Icon name="fa-play" className="text-white text-sm" />
+                                    </div>
+                                    <div className="flex-1">
+                                        <div className="flex items-center justify-between mb-1">
+                                            <h4 className="font-semibold text-slate-800">Zero-Shot Prompting</h4>
+                                            <span className="text-xs font-medium px-2 py-1 bg-slate-100 text-slate-600 rounded-full">22:15</span>
+                                        </div>
+                                        <p className="text-sm text-slate-600 mb-2">Técnicas para obtener resultados sin ejemplos previos</p>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-xs font-medium px-2 py-1 bg-red-100 text-red-700 rounded-full">Avanzado</span>
+                                            <span className="text-xs text-slate-500">• Demostración en vivo</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {/* Columna Derecha - Recursos Descargables (50%) */}
+                            <div className="w-1/2 border-2 border-slate-900 bg-white rounded-[2rem] p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+                                <h3 className="text-lg font-bold text-[#004B63]">Recursos Descargables: Ingeniería de Prompts</h3>
+                                
+                                {/* Lista de Archivos */}
+                                <div className="space-y-4">
+                                    {/* Item 1: PDF */}
+                                    <div className="flex items-center justify-between p-4 border border-slate-100 rounded-xl hover:bg-slate-50 transition-colors">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-12 h-12 bg-[#FF6B6B]/10 rounded-lg flex items-center justify-center">
+                                                <Icon name="fa-file-pdf" className="text-[#FF6B6B] text-lg" />
+                                            </div>
+                                            <div>
+                                                <h4 className="font-semibold text-slate-800">Plantilla MasterPrompt Pro</h4>
+                                                <p className="text-sm text-slate-600">Estructura profesional para prompts élite</p>
+                                            </div>
+                                        </div>
+                                        <Icon name="fa-download" className="text-[#00BCD4] text-lg hover:scale-110 transition-transform" />
+                                    </div>
+
+                                    {/* Item 2: Excel */}
+                                    <div className="flex items-center justify-between p-4 border border-slate-100 rounded-xl hover:bg-slate-50 transition-colors">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-12 h-12 bg-[#4ECDC4]/10 rounded-lg flex items-center justify-center">
+                                                <Icon name="fa-table" className="text-[#4ECDC4] text-lg" />
+                                            </div>
+                                            <div>
+                                                <h4 className="font-semibold text-slate-800">Checklist de Evaluación Avanzada</h4>
+                                                <p className="text-sm text-slate-600">Métricas y criterios para análisis profundo</p>
+                                            </div>
+                                        </div>
+                                        <Icon name="fa-download" className="text-[#00BCD4] text-lg hover:scale-110 transition-transform" />
+                                    </div>
+
+                                    {/* Item 3: JSON */}
+                                    <div className="flex items-center justify-between p-4 border border-slate-100 rounded-xl hover:bg-slate-50 transition-colors">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-12 h-12 bg-[#FFD166]/10 rounded-lg flex items-center justify-center">
+                                                <Icon name="fa-code" className="text-[#FFD166] text-lg" />
+                                            </div>
+                                            <div>
+                                                <h4 className="font-semibold text-slate-800">Templates JSON para APIs</h4>
+                                                <p className="text-sm text-slate-600">Estructuras listas para integración</p>
+                                            </div>
+                                        </div>
+                                        <Icon name="fa-download" className="text-[#00BCD4] text-lg hover:scale-110 transition-transform" />
+                                    </div>
+                                </div>
+
+                                {/* Botón de Acción */}
+                                <button className="w-full bg-[#00BCD4] text-white font-bold rounded-xl py-3 mt-4 hover:bg-[#00A5C4] transition-colors flex items-center justify-center gap-2">
+                                    <Icon name="fa-download" />
+                                    Descargar Todos los Recursos
+                                </button>
+                            </div>
+                        </div>
+
                         {/* Lab Tab */}
                         {activeTab === 'lab' && (
-                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                                <div className="lg:col-span-2 space-y-6">
+                            <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                                <div className="lg:col-span-3 space-y-6">
                                     {/* Prompt Synthesizer */}
-                                    <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgba(0,75,99,0.06)] rounded-[2rem] overflow-hidden">
-                                        <div className="bg-gradient-to-r from-[#004B63] to-[#4DA8C4] px-6 py-4">
+                                    <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgba(0,75,99,0.06)] rounded-[2rem] overflow-hidden h-fit max-h-[500px]">
+                                        <div className="bg-gradient-to-r from-[#004B63] via-[#00BCD4] to-[#4DA8C4] px-6 py-4">
                                             <div className="flex items-center gap-3">
                                                 <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
                                                     <Icon name="fa-terminal" className="text-white" />
@@ -561,20 +785,26 @@ const IALab = ({ onBack }) => {
                                             <textarea
                                                 value={input}
                                                 onChange={e => setInput(e.target.value)}
-                                                placeholder="Ingresa tu idea o prompt base para la transmutación..."
-                                                className="w-full px-4 py-3 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] resize-none"
+                                                placeholder={isModuleLocked(activeMod) ? "Desbloquea este módulo para usar el sintetizador..." : "Ingresa tu idea o prompt base para la transmutación..."}
+                                                className={`w-full px-4 py-3 ${isModuleLocked(activeMod) ? 'bg-[#F8FAFC]/50 border-[#E2E8F0]/50 text-[#64748B]/50' : 'bg-[#F8FAFC] border-[#E2E8F0]'} border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] resize-none`}
                                                 rows={4}
-                                                onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleOptimize(); } }}
+                                                onKeyDown={e => { if (!isModuleLocked(activeMod) && e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleOptimize(); } }}
+                                                disabled={isModuleLocked(activeMod)}
                                             />
                                             <button
                                                 onClick={handleOptimize}
-                                                disabled={loading}
-                                                className="mt-4 w-full py-3 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white rounded-xl font-normal hover:shadow-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                                                disabled={loading || isModuleLocked(activeMod)}
+                                                className={`mt-4 w-full py-3 ${isModuleLocked(activeMod) ? 'bg-gradient-to-r from-[#64748B]/50 to-[#94A3B8]/50' : 'bg-gradient-to-r from-[#004B63] via-[#00BCD4] to-[#4DA8C4]'} text-white rounded-xl font-normal hover:shadow-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2`}
                                             >
                                                 {loading ? (
                                                     <>
                                                         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                                                         {loadMsg}
+                                                    </>
+                                                ) : isModuleLocked(activeMod) ? (
+                                                    <>
+                                                        <Icon name="fa-lock" />
+                                                        Módulo Bloqueado
                                                     </>
                                                 ) : (
                                                     <>
@@ -606,47 +836,223 @@ const IALab = ({ onBack }) => {
                                     </div>
 
                                     {/* Valerio Coach - Compact */}
-                                    <div className="bg-gradient-to-br from-[#004B63] to-[#0A3550] border border-white/10 shadow-[0_8px_32px_rgba(0,75,99,0.2)] rounded-2xl overflow-hidden relative">
-                                        <div className="absolute top-0 right-0 w-24 h-24 bg-[#4DA8C4] rounded-full blur-[60px] opacity-15 pointer-events-none"></div>
-                                        <div className="p-3">
-                                            <div className="flex items-center gap-2 mb-2">
-                                                <ValerioAvatar state={avatarState} size={28} />
+                                    <div className="bg-gradient-to-br from-[#004B63] to-[#0A3550] border border-white/10 shadow-[0_8px_32px_rgba(0,75,99,0.2)] rounded-[2rem] overflow-hidden relative h-fit max-h-[400px]">
+                                        <div className="absolute top-0 right-0 w-32 h-32 bg-[#4DA8C4] rounded-full blur-[80px] opacity-15 pointer-events-none"></div>
+                                        <div className="p-4">
+                                            <div className="flex items-center gap-3 mb-3">
+                                                <ValerioAvatar state={avatarState} size={36} />
                                                 <div>
-                                                    <h3 className="font-normal text-white text-xs">Valerio</h3>
+                                                    <h3 className="font-normal text-white text-sm">Tu Coach: Valerio</h3>
+                                                    <p className="text-white/50 text-xs">IA Nativa</p>
                                                 </div>
                                             </div>
                                             <textarea
                                                 value={coachQ}
                                                 onChange={e => setCoachQ(e.target.value)}
-                                                placeholder="Pregunta..."
-                                                className="w-full px-2 py-1 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/40 resize-none focus:outline-none focus:ring-1 focus:ring-[#4DA8C4] text-xs"
-                                                rows={1}
+                                                placeholder={isModuleLocked(activeMod) ? "Desbloquea este módulo para consultar a Valerio..." : "Pregunta a Valerio..."}
+                                                className={`w-full px-3 py-2 ${isModuleLocked(activeMod) ? 'bg-white/5 border-white/10 text-white/30' : 'bg-white/10 border-white/20 text-white'} border rounded-lg placeholder-white/40 resize-none focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] text-sm`}
+                                                rows={2}
+                                                disabled={isModuleLocked(activeMod)}
                                             />
-                                            <div className="flex gap-1 mt-2">
+                                            <div className="flex gap-2 mt-2">
                                                 <button
                                                     onClick={askCoach}
-                                                    disabled={coachLoad || !coachQ.trim()}
-                                                    className="flex-1 py-1.5 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-lg font-normal text-xs hover:shadow-lg transition-all disabled:opacity-50"
+                                                    disabled={coachLoad || !coachQ.trim() || isModuleLocked(activeMod)}
+                                                    className={`flex-1 py-2 ${isModuleLocked(activeMod) ? 'bg-gradient-to-r from-[#64748B]/50 to-[#94A3B8]/50' : 'bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC]'} text-white rounded-lg font-normal text-sm hover:shadow-lg transition-all disabled:opacity-50`}
                                                 >
-                                                    {coachLoad ? '...' : 'Preguntar'}
+                                                    {isModuleLocked(activeMod) ? 'Módulo Bloqueado' : coachLoad ? 'Pensando...' : 'Preguntar'}
                                                 </button>
                                                 <button
                                                     onClick={toggleSpeech}
-                                                    className={`p-1.5 rounded-lg transition-all ${isListening ? 'bg-red-500 text-white' : 'bg-white/10 text-[#4DA8C4]'}`}
+                                                    className={`p-2 rounded-lg transition-all ${isListening ? 'bg-red-500 text-white' : 'bg-white/10 text-[#4DA8C4]'}`}
                                                 >
-                                                    <Icon name="fa-microphone" className="text-xs" />
-                                                </button>
-                                                <input type="file" ref={fileInputRef} onChange={handleFileUpload} style={{ display: 'none' }} accept=".txt,.md,.pdf,.doc,.docx" />
-                                                <button
-                                                    onClick={() => fileInputRef.current?.click()}
-                                                    className="p-1.5 rounded-lg bg-white/10 text-[#4DA8C4] hover:bg-white/20 transition-all"
-                                                >
-                                                    <Icon name="fa-paperclip" className="text-xs" />
-                                                </button>
+                                                    <Icon name="fa-microphone" className="text-sm" />
+            </button>
+            
+            {/* Valerio FAB - Cerebro Corporativo */}
+            <button 
+                className="fixed bottom-8 right-8 w-16 h-16 bg-white border-2 border-[#004B63] rounded-full shadow-2xl drop-shadow-xl hover:scale-105 transition-all duration-300 z-50 flex items-center justify-center group"
+                onClick={() => setShowValerioDrawer(!showValerioDrawer)}
+            >
+                {/* SVG Cerebro Corporativo */}
+                <svg 
+                    width="32" 
+                    height="32" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="group-hover:scale-110 transition-transform duration-300"
+                >
+                    {/* Cerebro principal - Azul Petróleo */}
+                    <path 
+                        d="M12 3C8.5 3 6 5.5 6 9C6 10.5 6.5 12 7.5 13C8.5 14 9.5 15 10 16C10.5 17 11 18 12 18C13 18 13.5 17 14 16C14.5 15 15.5 14 16.5 13C17.5 12 18 10.5 18 9C18 5.5 15.5 3 12 3Z" 
+                        fill="#004B63"
+                    />
+                    {/* Lóbulos superiores */}
+                    <path 
+                        d="M9 7C8.5 7 8 7.5 8 8C8 8.5 8.5 9 9 9C9.5 9 10 8.5 10 8C10 7.5 9.5 7 9 7Z" 
+                        fill="#00BCD4"
+                    />
+                    <path 
+                        d="M15 7C14.5 7 14 7.5 14 8C14 8.5 14.5 9 15 9C15.5 9 16 8.5 16 8C16 7.5 15.5 7 15 7Z" 
+                        fill="#00BCD4"
+                    />
+                    {/* Líneas de actividad neuronal - Cyan glow */}
+                    <path 
+                        d="M12 5C11.5 5 11 5.5 11 6C11 6.5 11.5 7 12 7C12.5 7 13 6.5 13 6C13 5.5 12.5 5 12 5Z" 
+                        fill="#00BCD4"
+                        className="animate-pulse"
+                    />
+                    <path 
+                        d="M10 10C9.5 10 9 10.5 9 11C9 11.5 9.5 12 10 12C10.5 12 11 11.5 11 11C11 10.5 10.5 10 10 10Z" 
+                        fill="#00BCD4"
+                        opacity="0.7"
+                    />
+                    <path 
+                        d="M14 10C13.5 10 13 10.5 13 11C13 11.5 13.5 12 14 12C14.5 12 15 11.5 15 11C15 10.5 14.5 10 14 10Z" 
+                        fill="#00BCD4"
+                        opacity="0.7"
+                    />
+                    {/* Efecto de brillo interno */}
+                    <circle 
+                        cx="12" 
+                        cy="12" 
+                        r="8" 
+                        fill="url(#brain-glow)"
+                        opacity="0.15"
+                    />
+                    <defs>
+                        <radialGradient id="brain-glow">
+                            <stop offset="0%" stopColor="#00BCD4" />
+                            <stop offset="100%" stopColor="#004B63" stopOpacity="0" />
+                        </radialGradient>
+                    </defs>
+                </svg>
+            </button>
+
+            {/* Valerio Drawer */}
+            <div className={`fixed inset-0 z-[60] transition-all duration-300 ${showValerioDrawer ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+                {/* Overlay */}
+                <div 
+                    className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+                    onClick={() => setShowValerioDrawer(false)}
+                />
+                
+                {/* Drawer Panel */}
+                <div className={`absolute right-0 top-0 h-full w-full max-w-md bg-gradient-to-b from-[#004B63] to-[#0A3550] shadow-2xl transition-transform duration-300 ${showValerioDrawer ? 'translate-x-0' : 'translate-x-full'}`}>
+                    {/* Drawer Header */}
+                    <div className="p-6 border-b border-white/10">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <ValerioAvatar state={avatarState} size={48} />
+                                <div>
+                                    <h3 className="text-xl font-normal text-white">Valerio IA</h3>
+                                    <p className="text-white/60 text-sm">Tu coach de IA nativo</p>
+                                </div>
+                            </div>
+                            <button 
+                                onClick={() => setShowValerioDrawer(false)}
+                                className="w-10 h-10 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors flex items-center justify-center"
+                            >
+                                <Icon name="fa-times" />
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Chat Messages */}
+                    <div className="flex-1 p-6 overflow-y-auto max-h-[calc(100vh-280px)]">
+                        <div className="space-y-4">
+                            {/* Welcome Message */}
+                            <div className="flex items-start gap-3">
+                                <ValerioAvatar state="idle" size={32} />
+                                <div className="bg-white/10 rounded-2xl rounded-tl-none p-4 max-w-[80%]">
+                                    <p className="text-white/90 text-sm">¡Hola! Soy Valerio, tu coach de IA. Puedo ayudarte con:</p>
+                                    <ul className="mt-2 space-y-1 text-white/70 text-sm">
+                                        <li>• Optimización de prompts</li>
+                                        <li>• Explicaciones técnicas</li>
+                                        <li>• Estrategias de aprendizaje</li>
+                                        <li>• Feedback en tiempo real</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            {/* User Message Example */}
+                            {coachMsg && (
+                                <div className="flex justify-end">
+                                    <div className="bg-[#4DA8C4] rounded-2xl rounded-tr-none p-4 max-w-[80%]">
+                                        <p className="text-white text-sm">{coachQ}</p>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Valerio Response */}
+                            {coachMsg && (
+                                <div className="flex items-start gap-3">
+                                    <ValerioAvatar state="thinking" size={32} />
+                                    <div className="bg-white/10 rounded-2xl rounded-tl-none p-4 max-w-[80%]">
+                                        <p className="text-white/90 text-sm">{coachMsg}</p>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Input Area */}
+                    <div className="p-6 border-t border-white/10">
+                        <div className="flex gap-2">
+                            <textarea
+                                value={coachQ}
+                                onChange={e => setCoachQ(e.target.value)}
+                                placeholder="Pregunta a Valerio..."
+                                className="flex-1 px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 resize-none focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] text-sm"
+                                rows={2}
+                                onKeyDown={e => {
+                                    if (e.key === 'Enter' && !e.shiftKey) {
+                                        e.preventDefault();
+                                        askCoach();
+                                    }
+                                }}
+                            />
+                            <div className="flex flex-col gap-2">
+                                <button
+                                    onClick={askCoach}
+                                    disabled={coachLoad || !coachQ.trim()}
+                                    className="px-4 py-3 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-xl font-normal hover:shadow-lg transition-all disabled:opacity-50 flex items-center justify-center"
+                                >
+                                    {coachLoad ? (
+                                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                    ) : (
+                                        <Icon name="fa-paper-plane" />
+                                    )}
+                                </button>
+                                <button
+                                    onClick={toggleSpeech}
+                                    className={`px-4 py-3 rounded-xl transition-all ${isListening ? 'bg-red-500 text-white' : 'bg-white/10 text-[#4DA8C4]'}`}
+                                >
+                                    <Icon name="fa-microphone" />
+                                </button>
+                            </div>
+                        </div>
+                        <p className="mt-2 text-white/40 text-xs text-center">
+                            Presiona Enter para enviar • Shift+Enter para nueva línea
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <button
+                onClick={handleLogout}
+                className="fixed bottom-5 left-5 z-[100] flex items-center gap-2 px-5 py-3 bg-[#004B63] text-white font-medium rounded-xl hover:bg-[#4DA8C4] transition-all duration-300 shadow-lg"
+            >
+                <LogOut size={18} /> Cerrar Sesión
+            </button>
                                             </div>
                                             {coachMsg && (
-                                                <div className="mt-2 p-2 bg-white/10 rounded-lg backdrop-blur-sm">
-                                                    <p className="text-white/90 text-xs line-clamp-2">{coachMsg}</p>
+                                                <div className="mt-3 p-3 bg-white/10 rounded-lg backdrop-blur-sm">
+                                                    <div className="flex items-start gap-2">
+                                                        <ValerioAvatar state={avatarState} size={24} />
+                                                        <p className="text-white/90 text-xs">{coachMsg}</p>
+                                                    </div>
                                                 </div>
                                             )}
                                         </div>
@@ -654,8 +1060,8 @@ const IALab = ({ onBack }) => {
                                 </div>
 
                                 {/* Challenge Sidebar - Taller */}
-                                <div className="lg:col-span-1">
-                                    <div className="bg-gradient-to-br from-[#004B63] to-[#0A3550] rounded-[2rem] p-6 text-white border border-white/10 shadow-[0_8px_32px_rgba(0,75,99,0.2)] relative overflow-hidden" style={{ minHeight: '320px' }}>
+                                <div className="lg:col-span-2">
+                                    <div className="bg-gradient-to-br from-[#004B63] to-[#0A3550] rounded-[2rem] p-6 text-white border border-white/10 shadow-[0_8px_32px_rgba(0,75,99,0.2)] relative overflow-hidden h-fit max-h-[400px]">
                                         <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#FFD166] rounded-full blur-[120px] opacity-10 pointer-events-none"></div>
                                         <div className="flex items-center gap-3 mb-4">
                                             <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
@@ -666,8 +1072,12 @@ const IALab = ({ onBack }) => {
                                             </div>
                                         </div>
                                         <p className="text-white/80 italic mb-6">"{curr.challenge}"</p>
-                                        <button className="w-full py-3 bg-gradient-to-r from-[#FFD166] to-[#FF8E53] text-[#004B63] rounded-xl font-normal hover:shadow-lg transition-all">
-                                            <Icon name="fa-paper-plane" className="mr-2" />Enviar solución
+                                        <button 
+                                            className={`w-full py-3 ${isModuleLocked(activeMod) ? 'bg-gradient-to-r from-[#64748B]/50 to-[#94A3B8]/50 text-[#64748B]/70' : 'bg-gradient-to-r from-[#FFD166] to-[#FF8E53] text-[#004B63]'} rounded-xl font-normal hover:shadow-lg transition-all`}
+                                            disabled={isModuleLocked(activeMod)}
+                                        >
+                                            <Icon name={isModuleLocked(activeMod) ? "fa-lock" : "fa-paper-plane"} className="mr-2" />
+                                            {isModuleLocked(activeMod) ? 'Módulo Bloqueado' : 'Enviar solución'}
                                         </button>
                                     </div>
                                 </div>
@@ -676,17 +1086,17 @@ const IALab = ({ onBack }) => {
 
                         {/* Evaluation Tab */}
                         {activeTab === 'eval' && (
-                            <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgba(0,75,99,0.06)] rounded-[2rem] overflow-hidden">
+                            <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgba(0,75,99,0.06)] rounded-[2rem] overflow-hidden h-fit max-h-[600px] overflow-y-auto">
                                 <div className="p-6 border-b border-[#E2E8F0]">
                                     <div className="flex items-center gap-4">
-                                        <div className="w-14 h-14 bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] rounded-xl flex items-center justify-center">
-                                            <Icon name="fa-clipboard-check" className="text-2xl text-white" />
+                                        <div className={`w-14 h-14 ${isModuleLocked(activeMod) ? 'bg-gradient-to-br from-[#64748B]/50 to-[#94A3B8]/50' : 'bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC]'} rounded-xl flex items-center justify-center`}>
+                                            <Icon name={isModuleLocked(activeMod) ? "fa-lock" : "fa-clipboard-check"} className="text-2xl text-white" />
                                         </div>
                                         <div className="flex-1">
-                                            <h3 className="text-xl font-normal text-[#004B63]">Evaluación del Módulo</h3>
-                                            <p className="text-base text-slate-600">Responde correctamente 3 de 5 preguntas para obtener tu certificado</p>
+                                            <h3 className="text-xl font-normal text-[#004B63]">{isModuleLocked(activeMod) ? 'Módulo Bloqueado' : 'Evaluación del Módulo'}</h3>
+                                            <p className="text-base text-slate-600">{isModuleLocked(activeMod) ? 'Completa el módulo anterior para desbloquear esta evaluación' : 'Responde correctamente 3 de 5 preguntas para obtener tu certificado'}</p>
                                         </div>
-                                        {!evalSubmitted && (
+                                        {!isModuleLocked(activeMod) && !evalSubmitted && (
                                             <div className="px-4 py-2 bg-[#4DA8C4]/10 rounded-full">
                                                 <span className="text-sm font-normal text-[#004B63]">{Object.keys(evalAnswers).length}/5</span>
                                             </div>
@@ -694,7 +1104,21 @@ const IALab = ({ onBack }) => {
                                     </div>
                                 </div>
 
-                                {!evalSubmitted ? (
+                                {isModuleLocked(activeMod) ? (
+                                    <div className="p-12 text-center">
+                                        <div className="w-32 h-32 mx-auto mb-6 bg-gradient-to-br from-[#64748B]/10 to-[#94A3B8]/10 rounded-full flex items-center justify-center">
+                                            <Icon name="fa-lock" className="text-5xl text-[#64748B]/50" />
+                                        </div>
+                                        <h3 className="text-2xl font-normal text-[#64748B] mb-3">Módulo Bloqueado</h3>
+                                        <p className="text-[#64748B] mb-6">Completa el módulo anterior para desbloquear esta evaluación y obtener tu certificado.</p>
+                                        <button 
+                                            onClick={() => setActiveMod(activeMod - 1)}
+                                            className="px-8 py-3 bg-gradient-to-r from-[#004B63] via-[#00BCD4] to-[#4DA8C4] text-white rounded-xl font-normal hover:shadow-lg transition-all"
+                                        >
+                                            <Icon name="fa-arrow-left" className="mr-2" />Ir al módulo anterior
+                                        </button>
+                                    </div>
+                                ) : !evalSubmitted ? (
                                     <div className="p-6 space-y-6">
                                         {evalQuestions.map((q, qi) => (
                                             <div key={qi}>
@@ -704,15 +1128,16 @@ const IALab = ({ onBack }) => {
                                                 </div>
                                                 <div className="grid grid-cols-2 gap-3 ml-11">
                                                     {q.opts.map((opt, oi) => (
-                                                        <button
-                                                            key={oi}
-                                                            onClick={() => setEvalAnswers({ ...evalAnswers, [qi]: oi })}
-                                                            className={`p-4 rounded-xl border-2 text-left transition-all ${
-                                                                evalAnswers[qi] === oi
-                                                                    ? 'border-[#4DA8C4] bg-[#4DA8C4]/10 text-[#004B63]'
-                                                                    : 'border-[#E2E8F0] text-[#64748B] hover:border-[#4DA8C4]'
-                                                            }`}
-                                                        >
+                                                     <button
+                                                         key={oi}
+                                                         onClick={() => setEvalAnswers({ ...evalAnswers, [qi]: oi })}
+                                                         className={`p-4 rounded-xl border-2 text-left transition-all ${
+                                                             evalAnswers[qi] === oi
+                                                                 ? 'border-[#4DA8C4] bg-[#4DA8C4]/10 text-[#004B63]'
+                                                                 : 'border-[#E2E8F0] text-[#64748B] hover:border-[#4DA8C4]'
+                                                         }`}
+                                                         disabled={isModuleLocked(activeMod)}
+                                                     >
                                                             <div className={`w-5 h-5 rounded-full border-2 mr-3 inline-flex items-center justify-center ${
                                                                 evalAnswers[qi] === oi ? 'border-[#4DA8C4] bg-[#4DA8C4]' : 'border-[#E2E8F0]'
                                                             }`}>
@@ -726,10 +1151,11 @@ const IALab = ({ onBack }) => {
                                         ))}
                                         <button
                                             onClick={handleEvalSubmit}
-                                            disabled={Object.keys(evalAnswers).length < 5}
-                                            className="w-full py-4 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white rounded-xl font-normal hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                            disabled={Object.keys(evalAnswers).length < 5 || isModuleLocked(activeMod)}
+                                            className={`w-full py-4 ${isModuleLocked(activeMod) ? 'bg-gradient-to-r from-[#64748B]/50 to-[#94A3B8]/50' : 'bg-gradient-to-r from-[#004B63] via-[#00BCD4] to-[#4DA8C4]'} text-white rounded-xl font-normal hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed`}
                                         >
-                                            <Icon name="fa-check-circle" className="mr-2" />Enviar evaluación
+                                            <Icon name={isModuleLocked(activeMod) ? "fa-lock" : "fa-check-circle"} className="mr-2" />
+                                            {isModuleLocked(activeMod) ? 'Módulo Bloqueado' : 'Enviar evaluación'}
                                         </button>
                                     </div>
                                 ) : (
@@ -779,19 +1205,52 @@ const IALab = ({ onBack }) => {
 
                         {/* Certificate Tab */}
                         {activeTab === 'cert' && (
-                            <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgba(0,75,99,0.06)] rounded-[2rem] p-16 text-center relative overflow-hidden">
+                            <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgba(0,75,99,0.06)] rounded-[2rem] p-16 text-center relative overflow-hidden h-fit max-h-[500px]">
                                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#FFD166] rounded-full blur-[150px] opacity-20 pointer-events-none"></div>
-                                <div className="w-24 h-24 mx-auto bg-gradient-to-br from-[#FFD166] to-[#FF8E53] rounded-full flex items-center justify-center mb-6">
-                                    <Icon name="fa-trophy" className="text-4xl text-white" />
-                                </div>
-                                <h2 className="text-3xl font-normal text-[#004B63] font-montserrat mb-4">¡Certificado de Excelencia!</h2>
-                                <p className="text-base text-slate-600">Has completado el módulo {activeMod}: {curr.title}</p>
-                                <button
-                                    onClick={handleDownloadCert}
-                                    className="px-8 py-4 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white rounded-xl font-normal hover:shadow-xl transition-all"
-                                >
-                                    <Icon name="fa-download" className="mr-2" />Descargar Certificado PDF
-                                </button>
+                                
+                                {isModuleLocked(activeMod) ? (
+                                    <>
+                                        <div className="w-24 h-24 mx-auto bg-gradient-to-br from-[#64748B]/50 to-[#94A3B8]/50 rounded-full flex items-center justify-center mb-6">
+                                            <Icon name="fa-lock" className="text-4xl text-white" />
+                                        </div>
+                                        <h2 className="text-3xl font-normal text-[#64748B] font-montserrat mb-4">Módulo Bloqueado</h2>
+                                        <p className="text-base text-slate-600 mb-6">Completa la evaluación del módulo {activeMod} para desbloquear tu certificado.</p>
+                                        <button
+                                            onClick={() => setActiveTab('eval')}
+                                            className="px-8 py-4 bg-gradient-to-r from-[#004B63] via-[#00BCD4] to-[#4DA8C4] text-white rounded-xl font-normal hover:shadow-xl transition-all"
+                                        >
+                                            <Icon name="fa-clipboard-check" className="mr-2" />Ir a Evaluación
+                                        </button>
+                                    </>
+                                ) : evalScore >= 3 ? (
+                                    <>
+                                        <div className="w-24 h-24 mx-auto bg-gradient-to-br from-[#FFD166] to-[#FF8E53] rounded-full flex items-center justify-center mb-6">
+                                            <Icon name="fa-trophy" className="text-4xl text-white" />
+                                        </div>
+                                        <h2 className="text-3xl font-normal text-[#004B63] font-montserrat mb-4">¡Certificado de Excelencia!</h2>
+                                        <p className="text-base text-slate-600">Has completado el módulo {activeMod}: {curr.title}</p>
+                                        <button
+                                            onClick={handleDownloadCert}
+                                            className="px-8 py-4 bg-gradient-to-r from-[#004B63] via-[#00BCD4] to-[#4DA8C4] text-white rounded-xl font-normal hover:shadow-xl transition-all"
+                                        >
+                                            <Icon name="fa-download" className="mr-2" />Descargar Certificado PDF
+                                        </button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="w-24 h-24 mx-auto bg-gradient-to-br from-[#FF6B9D] to-[#FF8E53] rounded-full flex items-center justify-center mb-6">
+                                            <Icon name="fa-exclamation-triangle" className="text-4xl text-white" />
+                                        </div>
+                                        <h2 className="text-3xl font-normal text-[#004B63] font-montserrat mb-4">Evaluación Pendiente</h2>
+                                        <p className="text-base text-slate-600 mb-6">Necesitas aprobar la evaluación (3/5) para obtener tu certificado.</p>
+                                        <button
+                                            onClick={() => setActiveTab('eval')}
+                                            className="px-8 py-4 bg-gradient-to-r from-[#004B63] via-[#00BCD4] to-[#4DA8C4] text-white rounded-xl font-normal hover:shadow-xl transition-all"
+                                        >
+                                            <Icon name="fa-clipboard-check" className="mr-2" />Ir a Evaluación
+                                        </button>
+                                    </>
+                                )}
                             </div>
                         )}
                     </div>
@@ -799,8 +1258,8 @@ const IALab = ({ onBack }) => {
             </div>
 
             {/* Name Modal */}
-            {showNameModal && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm">
+            <div className={`fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm transition-all duration-300 ${showNameModal ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+                {showNameModal && (
                     <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
                         <h3 className="text-xl font-normal text-[#004B63] mb-2">Ingresa tu nombre</h3>
                         <p className="text-base text-slate-600">Este nombre aparecerá en tu certificado</p>
@@ -822,16 +1281,17 @@ const IALab = ({ onBack }) => {
                             <button
                                 onClick={confirmNameAndDownload}
                                 disabled={!certName.trim()}
-                                className="flex-1 py-3 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white rounded-xl font-normal disabled:opacity-50"
+                                className="flex-1 py-3 bg-gradient-to-r from-[#004B63] via-[#00BCD4] to-[#4DA8C4] text-white rounded-xl font-normal disabled:opacity-50"
                             >
                                 Confirmar
                             </button>
                         </div>
                     </div>
-                </div>
-            )}
+                )}
+            </div>
         </div>
-    );
+    </div>
+);
 };
 
 export default IALab;

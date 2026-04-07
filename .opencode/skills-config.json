@@ -1,0 +1,75 @@
+{
+  "version": "1.0.0",
+  "description": "Configuración centralizada de skills para Edutechlife",
+  "skills": {
+    "frontend-design": {
+      "triggers": ["ui", "diseño", "tailwind", "estilos", "layout", "css", "interfaz"],
+      "priority": "high",
+      "category": "frontend",
+      "description": "Diseño de interfaces premium con Tailwind CSS para Edutechlife",
+      "color": "#004B63"
+    },
+    "shadcn-ui-setup": {
+      "triggers": ["shadcn", "componentes", "ui components", "dark mode", "tema", "theme"],
+      "priority": "high",
+      "category": "frontend",
+      "description": "Configuración de componentes Shadcn UI con soporte dark mode",
+      "color": "#00BCD4"
+    },
+    "ai-rag-pipeline": {
+      "triggers": ["rag", "research", "busqueda", "investigacion", "pipeline", "sources", "ia"],
+      "priority": "medium",
+      "category": "ai",
+      "description": "Pipelines RAG para investigación y fact-checking con IA",
+      "color": "#66CCCC"
+    },
+    "clerk-setup": {
+      "triggers": ["auth", "clerk", "autenticacion", "login", "signup", "usuario"],
+      "priority": "high",
+      "category": "backend",
+      "description": "Autenticación Clerk para proyectos web",
+      "color": "#4DA8C4"
+    },
+    "stripe-setup": {
+      "triggers": ["stripe", "pago", "payments", "checkout", "precio", "producto"],
+      "priority": "medium",
+      "category": "payments",
+      "description": "Configuración de pagos Stripe para e-commerce",
+      "color": "#635BFF"
+    },
+    "recipe-create-classroom-course": {
+      "triggers": ["classroom", "google classroom", "curso", "educacion", "estudiantes"],
+      "priority": "low",
+      "category": "education",
+      "description": "Creación de cursos en Google Classroom",
+      "color": "#4285F4"
+    }
+  },
+  "categories": {
+    "frontend": {
+      "label": "Desarrollo Frontend",
+      "color": "#004B63",
+      "skills": ["frontend-design", "shadcn-ui-setup"]
+    },
+    "backend": {
+      "label": "Desarrollo Backend",
+      "color": "#4DA8C4",
+      "skills": ["clerk-setup"]
+    },
+    "ai": {
+      "label": "Inteligencia Artificial",
+      "color": "#66CCCC",
+      "skills": ["ai-rag-pipeline"]
+    },
+    "payments": {
+      "label": "Pagos",
+      "color": "#635BFF",
+      "skills": ["stripe-setup"]
+    },
+    "education": {
+      "label": "Educación",
+      "color": "#4285F4",
+      "skills": ["recipe-create-classroom-course"]
+    }
+  }
+}
