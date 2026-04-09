@@ -50,6 +50,23 @@ const isEvaluationLocked = (currentModule) => {
 - **Candados Visuales:** Iconos de candado para módulos no completados
 - **Estado Activo:** `bg-[#004B63]/10 border-l-4 border-[#004B63]`
 
+#### 6. Dashboard Grid Layout (lines 767-996)
+- **Estructura:** Grid de 2 columnas responsive `grid-cols-1 lg:grid-cols-2`
+- **Columna Izquierda:** Desafío del Curso con botones naranja/amarillo
+- **Columna Derecha:** Muro de Insights (comunidad premium)
+- **Responsive:** `max-w-[calc(100%-2rem)] mx-auto` para alineación perfecta
+
+#### 7. Muro de Insights (lines 799-996)
+- **Estado:** Expandible/colapsable con `isInsightsExpanded`
+- **Contenido:** Feed tipo Discord Premium/LinkedIn de Élite
+- **Interacciones:** Upvotes, comentarios, badges de verificación
+- **Diseño:** `flex flex-col` para mantener simetría de columna
+
+#### 8. AI Prompt Synthesizer (lines 1159-1197)
+- **Framework RTF:** Role-Task-Format para prompts estructurados
+- **Feedback Técnico:** Validación en tiempo real
+- **Interactividad:** Botón de copia y aplicación práctica
+
 ## Design System
 
 ### Typography Scale (Base 16px)
@@ -90,14 +107,15 @@ X-Small: 11px (0.6875rem) - font-normal (solo etiquetas)
 const [currentModule, setCurrentModule] = useState(1);
 const [completedModules, setCompletedModules] = useState([]);
 const [showCertificate, setShowCertificate] = useState(false);
+const [isInsightsExpanded, setIsInsightsExpanded] = useState(false); // Control Muro de Insights
 ```
 
 ## Performance Optimizations
 
 ### Bundle Size
-- **IALab Component:** 48.80 kB (gzipped: 11.63 kB)
-- **CSS Total:** 358.60 kB (gzipped: 55.71 kB)
-- **Build Time:** ~36-48 segundos
+- **IALab Component:** 61.54 kB (gzipped: 13.37 kB)
+- **CSS Total:** 361.89 kB (gzipped: 56.08 kB)
+- **Build Time:** ~50-60 segundos
 
 ### Code Splitting
 - Importación dinámica de `progress.js`
@@ -121,9 +139,12 @@ const [showCertificate, setShowCertificate] = useState(false);
 - [ ] Navegación entre módulos
 - [ ] Lógica de bloqueo de evaluaciones
 - [ ] Visibilidad de certificado (solo Módulo 5)
-- [ ] Responsive design
+- [ ] Responsive design (grid dashboard)
 - [ ] Estados hover/disabled
 - [ ] Tooltips informativos
+- [ ] Expansión del Muro de Insights
+- [ ] Sintetizador de prompts interactivo
+- [ ] Alineación perfecta de cuadros
 
 ## Future Enhancements (FASE 6)
 - Certificados NFT
@@ -139,7 +160,6 @@ const [showCertificate, setShowCertificate] = useState(false);
 - Vite (build tool)
 
 ---
-
 **Last Updated:** April 8, 2026  
-**Component Version:** SaaS Premium v3  
-**Status:** Production Ready
+**Component Version:** SaaS Premium v4 (Dashboard Grid + Community Hub)  
+**Status:** Production Ready - Testing Complete

@@ -47,6 +47,9 @@ const IALabFixed = ({ onBack }) => {
     // Estado para animaciones de entrada secuencial de acordeones
     const [visibleAccordions, setVisibleAccordions] = useState([]);
     
+    // Estado para controlar expansión del Muro de Insights
+    const [isInsightsExpanded, setIsInsightsExpanded] = useState(false);
+    
     // Estado para manejar acordeones de temas
     const [openAccordions, setOpenAccordions] = useState({
         1: true,  // Ingeniería de Prompts abierto por defecto
@@ -57,10 +60,23 @@ const IALabFixed = ({ onBack }) => {
         6: false  // Ejercicio de Reflexión
     });
     
+    // Estado para dropdowns del Sidebar
+    const [sidebarDropdowns, setSidebarDropdowns] = useState({
+        videos: true,      // Videos del Módulo expandido por defecto
+        recursos: true     // Recursos Descargables expandido por defecto
+    });
+    
     const toggleAccordion = (id) => {
         setOpenAccordions(prev => ({
             ...prev,
             [id]: !prev[id]
+        }));
+    };
+    
+    const toggleSidebarDropdown = (dropdown) => {
+        setSidebarDropdowns(prev => ({
+            ...prev,
+            [dropdown]: !prev[dropdown]
         }));
     };
     
@@ -117,7 +133,18 @@ const IALabFixed = ({ onBack }) => {
         
         const r = await callDeepseek(
             input,
-            'Eres el Arquitecto de Prompts élite de Edutechlife. Devuelve SOLO JSON con: masterPrompt (string) y feedback (string, máx 2 oraciones).',
+            `Eres el Arquitecto de Prompts Élite de Edutechlife. Analiza la siguiente idea del usuario y genera:
+1. Un MASTER PROMPT estructurado usando el framework RTF (Rol, Tarea, Formato)
+2. Un FEEDBACK TÉCNICO detallado explicando las técnicas de ingeniería de prompts aplicadas
+
+ESTRUCTURA REQUERIDA (JSON):
+{
+  "masterPrompt": "Prompt estructurado con RTF: Rol claro, Tarea específica, Formato definido",
+  "feedback": "Explicación técnica detallada (3-4 oraciones) mencionando técnicas como: Few-Shot Prompting, Chain-of-Thought, Contexto Dinámico, Delimitación de Tono, etc.",
+  "techniques": ["Lista", "de", "técnicas", "aplicadas"]
+}
+
+IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`,
             true
         );
         
@@ -301,10 +328,10 @@ const IALabFixed = ({ onBack }) => {
             {/* Contenedor de Layout (Nivel 2) */}
             <div ref={containerRef} className="flex flex-row items-start min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50/50 relative font-open-sans">
                 {/* Sidebar Izquierdo (25%) - Flujo natural sin scroll interno - Premium */}
-                <aside className="w-[25%] sticky top-20 h-auto border-r border-slate-100/60 bg-white/98 backdrop-blur-xl z-30">
-                    <div className="p-8">
-                         {/* Progress Circle - Dinámico - Premium */}
-                         <div className="flex flex-col items-center p-8 border-b border-slate-100/50 bg-white border border-slate-50 shadow-[0_30px_60px_rgba(0,0,0,0.05)] rounded-[28px] mb-6">
+                <aside className="w-[25%] sticky top-20 h-auto border-r border-[#004B63]/20 bg-gradient-to-b from-white via-white/95 to-[#F8FAFC]/90 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,75,99,0.08)] z-30">
+                     <div className="px-6 py-8">
+                           {/* Progress Circle - Dinámico - Premium */}
+                           <div className="flex flex-col items-center p-6 border-b border-slate-100/50 bg-white border border-slate-50 shadow-[0_30px_60px_rgba(0,0,0,0.05)] rounded-[28px] mb-6 w-full">
                             {/* Círculo de Progreso SVG */}
                             <div className="relative w-32 h-32 mb-4">
                                 <svg className="w-full h-full transform -rotate-90">
@@ -337,30 +364,30 @@ const IALabFixed = ({ onBack }) => {
                                      <span className="text-2xl font-bold text-[#004B63]">
                                          {Math.min(completedModules.length * 20, 100)}%
                                      </span>
-                                     <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider mt-1">
-                                         Nivel de Maestría
-                                     </span>
+                                      <span className="text-xs font-semibold text-[#004B63] uppercase tracking-wider mt-1">
+                                          Nivel de Maestría
+                                      </span>
                                 </div>
                             </div>
                             {/* Información de Progreso */}
                             <div className="text-center">
-                                 <p className="text-sm font-normal text-slate-600 mb-2 leading-relaxed">
-                                     {completedModules.length} de 5 módulos completados
-                                 </p>
+                                  <p className="text-sm font-medium text-[#334155] mb-2 leading-relaxed">
+                                      {completedModules.length} de 5 módulos completados
+                                  </p>
                                 <div className="flex items-center justify-center gap-1">
                                     {[1, 2, 3, 4, 5].map((num) => (
-                                        <div 
-                                            key={num}
-                                            className={`w-2 h-2 rounded-full ${completedModules.includes(num) ? 'bg-[#00BCD4]' : 'bg-slate-200'}`}
-                                        />
+                                         <div 
+                                             key={num}
+                                             className={`w-2 h-2 rounded-full ${completedModules.includes(num) ? 'bg-[#00BCD4]' : 'bg-gray-200'}`}
+                                         />
                                     ))}
                                 </div>
                             </div>
 
-                            {/* Module List */}
-                            <div className="p-4">
-                                <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider mb-4">Módulos del Curso</p>
-                                <div className="space-y-2">
+                              {/* Module List */}
+                              <div className="px-6 w-full mb-4">
+                                   <p className="text-xs font-bold tracking-widest text-[#004B63]/80 uppercase mb-3">MÓDULOS DEL CURSO</p>
+                                  <div className="space-y-1 w-full">
                                     {modules.map(mod => (
                                         <button
                                             key={mod.id}
@@ -375,26 +402,26 @@ const IALabFixed = ({ onBack }) => {
                                                 setEvalSubmitted(false); 
                                                 setEvalAnswers({}); 
                                             }}
-                                            className={`w-full text-left p-5 rounded-2xl transition-all duration-500 ease-out hover:scale-[1.02] hover:shadow-md ${
-                                                activeMod === mod.id 
-                                                    ? 'bg-gradient-to-r from-[#00374A] via-[#00BCD4] to-[#4DA8C4] text-white shadow-lg border border-white/20' 
-                                                    : completedModules.includes(mod.id)
-                                                        ? 'bg-cyan-50/30 backdrop-blur-sm border-2 border-cyan-200/50 text-[#00374A] hover:border-cyan-300 hover:shadow-sm'
-                                                        : visitedModules.includes(mod.id)
-                                                            ? 'bg-white border border-slate-100 text-[#00374A] hover:border-slate-200 hover:shadow-sm'
-                                                             : 'bg-white border border-slate-100 text-slate-500 hover:border-slate-200 hover:shadow-sm'
-                                            }`}
+                                              className={`w-full text-left p-4 rounded-xl transition-all duration-300 ease-out hover:scale-[1.01] hover:shadow-sm ${
+                                                 activeMod === mod.id 
+                                                     ? 'bg-gradient-to-r from-[#004B63] via-[#00BCD4] to-[#00BCD4]/80 text-white shadow-lg border border-white/20' 
+                                                     : completedModules.includes(mod.id)
+                                                         ? 'bg-[#00BCD4]/10 border-2 border-[#00BCD4]/30 text-[#004B63] hover:border-[#00BCD4]/50 hover:shadow-sm'
+                                                         : visitedModules.includes(mod.id)
+                                                             ? 'bg-white border border-gray-200 text-[#334155] hover:border-gray-300 hover:shadow-sm'
+                                                              : 'bg-gray-50 border border-gray-100 text-[#64748B] hover:border-gray-200 hover:shadow-sm'
+                                             }`}
                                          >
-                                            <div className="flex items-center gap-3">
-                                                <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-normal ${
-                                                    activeMod === mod.id 
-                                                        ? 'bg-white/20 text-white' 
-                                                        : completedModules.includes(mod.id)
-                                                            ? 'bg-[#66CCCC] text-white'
-                                                            : visitedModules.includes(mod.id)
-                                                                ? 'bg-[#E2E8F0] text-[#004B63]'
-                                                                 : 'bg-[#E2E8F0] text-slate-500'
-                                                }`}>
+                                             <div className="flex items-center gap-2">
+                                                  <div className={`w-7 h-7 rounded flex items-center justify-center text-xs font-normal ${
+                                                     activeMod === mod.id 
+                                                         ? 'bg-white/20 text-white' 
+                                                         : completedModules.includes(mod.id)
+                                                             ? 'bg-[#00BCD4] text-white'
+                                                             : visitedModules.includes(mod.id)
+                                                                 ? 'bg-gray-200 text-[#004B63]'
+                                                                  : 'bg-gray-200 text-[#64748B]'
+                                                 }`}>
                                                     {completedModules.includes(mod.id) ? (
                                                         <Icon name="fa-check" className="text-xs" />
                                                     ) : visitedModules.includes(mod.id) ? (
@@ -403,64 +430,176 @@ const IALabFixed = ({ onBack }) => {
                                                         <Icon name="fa-lock" className="text-xs" />
                                                     )}
                                                 </div>
-                                                <div className="flex-1 min-w-0">
-                                                    <p className="font-normal text-sm truncate">{mod.title}</p>
-                                                     <p className={`text-sm ${activeMod === mod.id ? 'text-white/80' : 'text-slate-500'}`}>
-                                                         {mod.duration}
-                                                     </p>
-                                                </div>
-                                            </div>
-                                        </button>
-                                    ))}
-                                </div>
+                                                 <div className="flex-1 min-w-0">
+                                                      <p className="font-semibold text-sm truncate">{mod.title}</p>
+                                                       <p className={`text-xs ${activeMod === mod.id ? 'text-white/80' : 'text-[#64748B]'}`}>
+                                                           {mod.duration}
+                                                       </p>
+                                                  </div>
+                                             </div>
+                                         </button>
+                                     ))}
+                                  </div>
                             </div>
 
-                            {/* Module Info Box */}
-                            <div className="bg-white border border-slate-100 shadow-sm rounded-2xl p-6 mt-4">
-                                <p className="text-[11px] font-medium uppercase tracking-wider text-slate-500 mb-4">DETALLES DEL MÓDULO</p>
-                                <div className="space-y-4">
-                                    <div className="flex justify-between items-center">
-                                        <div className="flex items-center gap-2">
-                                            <Icon name="fa-clock" className="text-[#00BCD4] text-sm" />
-                                             <span className="text-sm text-slate-600">Duración</span>
-                                        </div>
-                                        <span className="text-sm font-semibold text-[#00374A]">{curr?.duration}</span>
-                                    </div>
-                                    <div className="flex justify-between items-center">
-                                        <div className="flex items-center gap-2">
-                                            <Icon name="fa-signal" className="text-[#00BCD4] text-sm" />
-                                             <span className="text-sm text-slate-600">Nivel</span>
-                                        </div>
-                                        <span className="text-sm font-semibold text-[#00374A]">{curr?.level}</span>
-                                    </div>
-                                    <div className="flex justify-between items-center">
-                                        <div className="flex items-center gap-2">
-                                            <Icon name="fa-play" className="text-[#00BCD4] text-sm" />
-                                             <span className="text-sm text-slate-600">Videos</span>
-                                        </div>
-                                        <span className="text-sm font-semibold text-[#00374A]">{curr?.videos}</span>
-                                    </div>
-                                    <div className="flex justify-between items-center">
-                                        <div className="flex items-center gap-2">
-                                            <Icon name="fa-briefcase" className="text-[#00BCD4] text-sm" />
-                                             <span className="text-sm text-slate-600">Proyectos</span>
-                                        </div>
-                                        <span className="text-sm font-semibold text-[#00374A]">{curr?.projects}</span>
-                                    </div>
-                                </div>
-                            </div>
+                               {/* Sección: Videos del Módulo - Fusión Nativa */}
+                               <div className="px-6 mb-4">
+                                   <div className="flex items-center justify-between mb-2">
+                                       <div className="flex items-center gap-2">
+                                           <Icon name="fa-video-camera" className="text-slate-400 text-xs" />
+                                            <span className="text-xs font-bold tracking-widest text-[#004B63]/80 uppercase">🎥 VIDEOS DEL MÓDULO</span>
+                                       </div>
+                                       <Icon 
+                                           name={sidebarDropdowns.videos ? "fa-chevron-up" : "fa-chevron-down"} 
+                                           className="text-slate-400 text-xs transition-transform duration-300 cursor-pointer"
+                                           onClick={() => toggleSidebarDropdown('videos')}
+                                       />
+                                   </div>
+                                  
+                                   {sidebarDropdowns.videos && (
+                                       <div className="space-y-1 animate-fadeIn">
+                                           {/* Video 1: Mastery Framework */}
+                                           <div className="flex items-center gap-2 p-2 hover:bg-slate-50/50 rounded transition-all duration-200 cursor-pointer">
+                                               <div className="w-5 h-5 bg-[#00BCD4]/10 rounded flex items-center justify-center flex-shrink-0">
+                                                   <Icon name="fa-play" className="text-[#00BCD4] text-[10px]" />
+                                               </div>
+                                               <div className="flex-1 min-w-0">
+                                                   <p className="text-sm font-medium text-[#334155] truncate">Mastery Framework</p>
+                                                   <div className="flex items-center gap-2 mt-1">
+                                                       <span className="text-xs font-medium px-2 py-1 bg-green-50 text-green-700 rounded">Principiante</span>
+                                                       <span className="text-xs text-[#64748B]">12:45</span>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                           
+                                           {/* Video 2: Contexto Dinámico */}
+                                           <div className="flex items-center gap-2 p-2 hover:bg-slate-50/50 rounded transition-all duration-200 cursor-pointer">
+                                               <div className="w-5 h-5 bg-[#00BCD4]/10 rounded flex items-center justify-center flex-shrink-0">
+                                                   <Icon name="fa-play" className="text-[#00BCD4] text-[10px]" />
+                                               </div>
+                                               <div className="flex-1 min-w-0">
+                                                   <p className="text-sm font-medium text-[#334155] truncate">Contexto Dinámico</p>
+                                                   <div className="flex items-center gap-2 mt-1">
+                                                       <span className="text-xs font-medium px-2 py-1 bg-yellow-50 text-yellow-700 rounded">Intermedio</span>
+                                                       <span className="text-xs text-[#64748B]">18:30</span>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                           
+                                           {/* Video 3: Zero-Shot Prompting */}
+                                           <div className="flex items-center gap-2 p-2 hover:bg-slate-50/50 rounded transition-all duration-200 cursor-pointer">
+                                               <div className="w-5 h-5 bg-[#00BCD4]/10 rounded flex items-center justify-center flex-shrink-0">
+                                                   <Icon name="fa-play" className="text-[#00BCD4] text-[10px]" />
+                                               </div>
+                                               <div className="flex-1 min-w-0">
+                                                   <p className="text-sm font-medium text-[#334155] truncate">Zero-Shot Prompting</p>
+                                                   <div className="flex items-center gap-2 mt-1">
+                                                       <span className="text-xs font-medium px-2 py-1 bg-red-50 text-red-700 rounded">Avanzado</span>
+                                                       <span className="text-xs text-[#64748B]">22:15</span>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                       </div>
+                                   )}
+                               </div>
 
-                            {/* Logout Button - Bottom of Sidebar */}
-                            <div className="mt-6 pt-6 border-t border-slate-50">
-                                <button
-                                    onClick={handleLogout}
-                                     className="text-sm font-medium text-slate-500 hover:text-red-500 transition-colors flex items-center gap-2"
-                                >
-                                    <LogOut className="w-4 h-4" />
-                                    <span>Cerrar Sesión</span>
-                                </button>
-                            </div>
-                        </div>
+                               {/* Sección: Recursos Descargables - Fusión Nativa */}
+                               <div className="px-6 mb-4">
+                                   <div className="flex items-center justify-between mb-2">
+                                       <div className="flex items-center gap-2">
+                                           <Icon name="fa-clipboard" className="text-slate-400 text-xs" />
+                                            <span className="text-xs font-bold tracking-widest text-[#004B63]/80 uppercase">📂 RECURSOS DESCARGABLES</span>
+                                       </div>
+                                       <Icon 
+                                           name={sidebarDropdowns.recursos ? "fa-chevron-up" : "fa-chevron-down"} 
+                                           className="text-slate-400 text-xs transition-transform duration-300 cursor-pointer"
+                                           onClick={() => toggleSidebarDropdown('recursos')}
+                                       />
+                                   </div>
+                                  
+                                   {sidebarDropdowns.recursos && (
+                                       <div className="space-y-1 animate-fadeIn">
+                                           {/* Recurso 1: Plantilla MasterPrompt Pro */}
+                                           <button className="w-full flex items-center gap-2 p-2 hover:bg-slate-50/50 rounded transition-all duration-200 text-left">
+                                               <div className="w-5 h-5 bg-[#FF6B6B]/10 rounded flex items-center justify-center flex-shrink-0">
+                                                   <Icon name="fa-file-pdf" className="text-[#FF6B6B] text-[10px]" />
+                                               </div>
+                                               <div className="flex-1 min-w-0">
+                                                   <p className="text-sm font-medium text-[#334155] truncate">Plantilla MasterPrompt Pro</p>
+                                                   <div className="flex items-center gap-1.5 mt-1">
+                                                       <span className="text-xs font-medium px-2 py-1 bg-[#FF6B6B]/10 text-[#FF6B6B] rounded">PDF</span>
+                                                   </div>
+                                               </div>
+                                               <Icon name="fa-download" className="text-slate-400 text-[10px] hover:text-[#00BCD4] transition-colors" />
+                                           </button>
+                                           
+                                           {/* Recurso 2: Checklist de Evaluación */}
+                                           <button className="w-full flex items-center gap-2 p-2 hover:bg-slate-50/50 rounded transition-all duration-200 text-left">
+                                               <div className="w-5 h-5 bg-[#4ECDC4]/10 rounded flex items-center justify-center flex-shrink-0">
+                                                   <Icon name="fa-table" className="text-[#4ECDC4] text-[10px]" />
+                                               </div>
+                                               <div className="flex-1 min-w-0">
+                                                   <p className="text-sm font-medium text-[#334155] truncate">Checklist de Evaluación</p>
+                                                   <div className="flex items-center gap-1.5 mt-1">
+                                                       <span className="text-xs font-medium px-2 py-1 bg-[#4ECDC4]/10 text-[#4ECDC4] rounded">Cheatsheet</span>
+                                                   </div>
+                                               </div>
+                                               <Icon name="fa-download" className="text-slate-400 text-[10px] hover:text-[#00BCD4] transition-colors" />
+                                           </button>
+                                           
+                                           {/* Recurso 3: Templates JSON para APIs */}
+                                           <button className="w-full flex items-center gap-2 p-2 hover:bg-slate-50/50 rounded transition-all duration-200 text-left">
+                                               <div className="w-5 h-5 bg-[#FFD166]/10 rounded flex items-center justify-center flex-shrink-0">
+                                                   <Icon name="fa-code" className="text-[#FFD166] text-[10px]" />
+                                               </div>
+                                               <div className="flex-1 min-w-0">
+                                                   <p className="text-sm font-medium text-[#334155] truncate">Templates JSON para APIs</p>
+                                                   <div className="flex items-center gap-1.5 mt-1">
+                                                       <span className="text-xs font-medium px-2 py-1 bg-[#FFD166]/10 text-[#FFD166] rounded">JSON</span>
+                                                   </div>
+                                               </div>
+                                               <Icon name="fa-download" className="text-slate-400 text-[10px] hover:text-[#00BCD4] transition-colors" />
+                                           </button>
+                                       </div>
+                                   )}
+                               </div>
+
+                               {/* Sección: Detalles del Curso - Fusión Nativa */}
+                               <div className="px-6 mb-4">
+                                   <p className="text-xs font-bold tracking-widest text-[#004B63]/80 uppercase mb-3">DETALLES DEL CURSO</p>
+                                   <div className="space-y-1.5">
+                                       <div className="flex justify-between items-center">
+                                           <div className="flex items-center gap-2">
+                                               <Icon name="fa-clock" className="text-[#00BCD4] text-[10px]" />
+                                           <span className="text-sm text-[#64748B]">Duración</span>
+                                       </div>
+                                       <span className="text-sm font-semibold text-[#004B63]">{curr?.duration}</span>
+                                       </div>
+                                       <div className="flex justify-between items-center">
+                                           <div className="flex items-center gap-2">
+                                               <Icon name="fa-signal" className="text-[#00BCD4] text-[10px]" />
+                                           <span className="text-sm text-[#64748B]">Nivel</span>
+                                       </div>
+                                       <span className="text-sm font-semibold text-[#004B63]">{curr?.level}</span>
+                                       </div>
+                                       <div className="flex justify-between items-center">
+                                           <div className="flex items-center gap-2">
+                                               <Icon name="fa-play" className="text-[#00BCD4] text-[10px]" />
+                                           <span className="text-sm text-[#64748B]">Videos</span>
+                                       </div>
+                                       <span className="text-sm font-semibold text-[#004B63]">{curr?.videos}</span>
+                                       </div>
+                                       <div className="flex justify-between items-center">
+                                           <div className="flex items-center gap-2">
+                                               <Icon name="fa-briefcase" className="text-[#00BCD4] text-[10px]" />
+                                           <span className="text-sm text-[#64748B]">Proyectos</span>
+                                       </div>
+                                       <span className="text-sm font-semibold text-[#004B63]">{curr?.projects}</span>
+                                       </div>
+                                   </div>
+                               </div>
+
+                          </div>
                     </div>
                 </aside>
 
@@ -526,8 +665,8 @@ const IALabFixed = ({ onBack }) => {
                                      </div>
                                 </div>
                             </div>
-                             <div className="p-8">
-                                  <div className="mb-10">
+                              <div className="p-8 max-w-[calc(100%-2rem)] mx-auto">
+                                   <div className="mb-10">
                                        <div className="mb-4">
                                            <p className="text-[12px] font-black uppercase tracking-[0.2em] text-[#00374A] opacity-80 mb-3">OBJETIVO CENTRAL DEL MÓDULO</p>
                                            <div className="w-12 h-1 bg-[#00BCD4] rounded-full"></div>
@@ -558,7 +697,7 @@ const IALabFixed = ({ onBack }) => {
                           {/* Cuadro de Introducción - Acordeón Interactivo SaaS Premium v4 */}
                           <div className="bg-white border border-slate-50 shadow-[0_40px_100px_rgba(0,0,0,0.06)] rounded-[28px] p-12 mb-8 w-full transition-all duration-500 ease-out hover:shadow-[0_50px_120px_rgba(0,0,0,0.08)]">
                               <h2 className="text-2xl font-bold tracking-tight text-[#00374A] mb-3">Ingeniería de Prompts: El Arte de Comunicarse con la IA</h2>
-                               <p className="text-[15px] font-normal text-slate-400 leading-relaxed mb-10">Domina el arte de comunicarte con la I.A a nivel experto.</p>
+                                <p className="text-xl font-medium text-slate-200 leading-relaxed max-w-3xl mb-10">Domina el arte de comunicarte con la I.A a nivel experto.</p>
                               
                               {/* Acordeón 1: Ingeniería de Prompts – Comunícate Mejor con la IA */}
                               <div className={`bg-white border border-slate-100 rounded-[18px] mb-4 transition-all duration-300 ease-out hover:shadow-lg hover:bg-cyan-50/20 transform ${openAccordions[1] ? 'border-[#00BCD4]/20' : ''} ${visibleAccordions.includes(1) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} transition-all duration-500 ease-out`}>
@@ -567,8 +706,8 @@ const IALabFixed = ({ onBack }) => {
                                       className="flex items-center justify-between w-full text-left group p-5"
                                   >
                                       <div className="flex items-center gap-4">
-                                          <div className="w-8 h-8 rounded-full bg-[#00BCD4]/10 flex items-center justify-center">
-                                              <Icon name="fa-lightbulb" className="text-sm text-[#00BCD4]" />
+                                          <div className="w-8 h-8 rounded-full bg-[#00374A]/10 flex items-center justify-center">
+                                              <Icon name="fa-lightbulb" className="text-sm text-[#00374A]" />
                                           </div>
                                           <h3 className={`text-[15px] font-semibold transition-colors duration-300 ${openAccordions[1] ? 'text-[#00BCD4]' : 'text-[#00374A]'}`}>
                                               <span className="font-normal text-slate-500">Ingeniería de Prompts</span> – Comunícate Mejor con la IA
@@ -595,8 +734,8 @@ const IALabFixed = ({ onBack }) => {
                                       className="flex items-center justify-between w-full text-left group p-5"
                                   >
                                       <div className="flex items-center gap-4">
-                                          <div className="w-8 h-8 rounded-full bg-[#00BCD4]/10 flex items-center justify-center">
-                                              <Icon name="fa-book" className="text-sm text-[#00BCD4]" />
+                                          <div className="w-8 h-8 rounded-full bg-[#00374A]/10 flex items-center justify-center">
+                                              <Icon name="fa-book-open" className="text-sm text-[#00374A]" />
                                           </div>
                                           <h3 className={`text-[15px] font-semibold transition-colors duration-300 ${openAccordions[2] ? 'text-[#00BCD4]' : 'text-[#00374A]'}`}>
                                               <span className="font-normal text-slate-500">El Método para Dominar la IA</span> (Mastery Framework)
@@ -623,8 +762,8 @@ const IALabFixed = ({ onBack }) => {
                                       className="flex items-center justify-between w-full text-left group p-5"
                                   >
                                       <div className="flex items-center gap-4">
-                                          <div className="w-8 h-8 rounded-full bg-[#00BCD4]/10 flex items-center justify-center">
-                                              <Icon name="fa-cogs" className="text-sm text-[#00BCD4]" />
+                                          <div className="w-8 h-8 rounded-full bg-[#00374A]/10 flex items-center justify-center">
+                                              <Icon name="fa-map" className="text-sm text-[#00374A]" />
                                           </div>
                                           <h3 className={`text-[15px] font-semibold transition-colors duration-300 ${openAccordions[3] ? 'text-[#00BCD4]' : 'text-[#00374A]'}`}>
                                               <span className="font-normal text-slate-500">Adapta la IA a Cada Situación</span> (Contexto Dinámico)
@@ -651,8 +790,8 @@ const IALabFixed = ({ onBack }) => {
                                       className="flex items-center justify-between w-full text-left group p-5"
                                   >
                                       <div className="flex items-center gap-4">
-                                          <div className="w-8 h-8 rounded-full bg-[#00BCD4]/10 flex items-center justify-center">
-                                              <Icon name="fa-bolt" className="text-sm text-[#00BCD4]" />
+                                          <div className="w-8 h-8 rounded-full bg-[#00374A]/10 flex items-center justify-center">
+                                              <Icon name="fa-bolt" className="text-sm text-[#00374A]" />
                                           </div>
                                           <h3 className={`text-[15px] font-semibold transition-colors duration-300 ${openAccordions[4] ? 'text-[#00BCD4]' : 'text-[#00374A]'}`}>
                                               <span className="font-normal text-slate-500">Resultados Rápidos con IA</span> (Zero-Shot Prompting)
@@ -679,8 +818,8 @@ const IALabFixed = ({ onBack }) => {
                                       className="flex items-center justify-between w-full text-left group p-5"
                                   >
                                       <div className="flex items-center gap-4">
-                                          <div className="w-8 h-8 rounded-full bg-[#00BCD4]/10 flex items-center justify-center">
-                                              <Icon name="fa-sitemap" className="text-sm text-[#00BCD4]" />
+                                          <div className="w-8 h-8 rounded-full bg-[#00374A]/10 flex items-center justify-center">
+                                              <Icon name="fa-sitemap" className="text-sm text-[#00374A]" />
                                           </div>
                                            <h3 className={`text-[15px] font-semibold transition-colors duration-300 ${openAccordions[5] ? 'text-[#00BCD4]' : 'text-[#00374A]'}`}>
                                                <span className="font-normal text-slate-500">Haz que la IA Piense Paso a Paso</span> (Chain-of-Thought)
@@ -707,8 +846,8 @@ const IALabFixed = ({ onBack }) => {
                                       className="flex items-center justify-between w-full text-left group p-5"
                                   >
                                       <div className="flex items-center gap-4">
-                                          <div className="w-8 h-8 rounded-full bg-[#00BCD4]/10 flex items-center justify-center">
-                                              <Icon name="fa-brain" className="text-sm text-[#00BCD4]" />
+                                          <div className="w-8 h-8 rounded-full bg-[#00374A]/10 flex items-center justify-center">
+                                              <Icon name="fa-brain" className="text-sm text-[#00374A]" />
                                           </div>
                                           <h3 className={`text-[15px] font-semibold transition-colors duration-300 ${openAccordions[6] ? 'text-[#00BCD4]' : 'text-[#00374A]'}`}>
                                               <span className="font-normal text-slate-500">Ejercicio de Reflexión</span> – Más Allá de Usar la IA
@@ -747,223 +886,333 @@ const IALabFixed = ({ onBack }) => {
                                      </div>
                                  )}
                              </div>
-                         </div>
+                          </div>
 
-                          {/* Cuadro de Recursos Descargables - Ancho completo */}
-                          <div className="bg-white border border-slate-50 shadow-[0_30px_60px_rgba(0,0,0,0.05)] rounded-[28px] p-10 mb-8 w-full transition-all duration-500 ease-out hover:shadow-xl">
-                              <h3 className="text-2xl font-bold tracking-normal text-[#00374A] mb-6">Recursos Descargables: Ingeniería de Prompts</h3>
+                             {/* Contenedor Grid: Laboratorio y Comunidad - Dashboard de Dos Columnas */}
+                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full mt-10 max-w-[calc(100%-2rem)] mx-auto">
+                                 {/* Columna Izquierda: Desafío del Curso */}
+                                 <div className="bg-gradient-to-br from-white to-[#F8FAFC] border border-slate-50 shadow-[0_30px_60px_rgba(0,0,0,0.05)] rounded-[28px] p-10 transition-all duration-500 ease-out hover:shadow-xl h-full flex flex-col">
+                              <div className="flex items-center gap-4 mb-6">
+                                  <div className="w-12 h-12 bg-gradient-to-r from-[#FFD166] to-[#FF8E53] rounded-xl flex items-center justify-center">
+                                      <Icon name="fa-bolt" className="text-white text-xl" />
+                                  </div>
+                                  <div>
+                                      <h3 className="text-2xl font-bold tracking-normal text-[#00374A]">Desafío del Curso</h3>
+                                      <p className="text-sm text-slate-500">Aplica lo aprendido en un reto práctico</p>
+                                  </div>
+                              </div>
                              
-                             {/* Lista de Archivos en fila horizontal */}
-                             <div className="flex flex-row gap-6 mb-8">
-                                  {/* Item 1: PDF */}
-                                  <div className="flex-1 flex flex-col items-center p-6 border border-slate-100 rounded-2xl hover:bg-[#F8FAFC] transition-all duration-300 hover:scale-[1.02] hover:shadow-lg">
-                                      <div className="w-16 h-16 bg-[#FF6B6B]/10 rounded-xl flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110">
-                                          <Icon name="fa-file-pdf" className="text-[#FF6B6B] text-2xl" />
-                                      </div>
-                                      <div className="text-center">
-                                          <h4 className="text-base font-semibold text-slate-800 mb-2">Plantilla MasterPrompt Pro</h4>
-                                          <p className="text-sm text-slate-500 mb-4 leading-relaxed">Estructura avanzada para prompts de élite</p>
-                                          <button className="text-sm text-[#00BCD4] font-medium hover:text-[#0097A7] flex items-center gap-2 transition-all duration-300 hover:scale-105">
-                                              <Icon name="fa-download" />
-                                              Descargar
-                                          </button>
-                                      </div>
-                                  </div>
-
-                                  {/* Item 2: Cheatsheet */}
-                                  <div className="flex-1 flex flex-col items-center p-6 border border-slate-100 rounded-2xl hover:bg-[#F8FAFC] transition-all duration-300 hover:scale-[1.02] hover:shadow-lg">
-                                      <div className="w-16 h-16 bg-[#4ECDC4]/10 rounded-xl flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110">
-                                          <Icon name="fa-table" className="text-[#4ECDC4] text-2xl" />
-                                      </div>
-                                      <div className="text-center">
-                                          <h4 className="text-base font-semibold text-slate-800 mb-2">Checklist de Evaluación</h4>
-                                          <p className="text-sm text-slate-500 mb-4 leading-relaxed">Métricas y criterios para análisis profundo</p>
-                                          <button className="text-sm text-[#00BCD4] font-medium hover:text-[#0097A7] flex items-center gap-2 transition-all duration-300 hover:scale-105">
-                                              <Icon name="fa-download" />
-                                              Descargar
-                                          </button>
-                                      </div>
-                                  </div>
-
-                                  {/* Item 3: JSON */}
-                                  <div className="flex-1 flex flex-col items-center p-6 border border-slate-100 rounded-2xl hover:bg-[#F8FAFC] transition-all duration-300 hover:scale-[1.02] hover:shadow-lg">
-                                      <div className="w-16 h-16 bg-[#FFD166]/10 rounded-xl flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110">
-                                          <Icon name="fa-code" className="text-[#FFD166] text-2xl" />
-                                      </div>
-                                      <div className="text-center">
-                                          <h4 className="text-base font-semibold text-slate-800 mb-2">Templates JSON para APIs</h4>
-                                          <p className="text-sm text-slate-500 mb-4 leading-relaxed">Estructuras listas para integración</p>
-                                          <button className="text-sm text-[#00BCD4] font-medium hover:text-[#0097A7] flex items-center gap-2 transition-all duration-300 hover:scale-105">
-                                              <Icon name="fa-download" />
-                                              Descargar
-                                          </button>
-                                      </div>
-                                  </div>
+                             <div className="bg-gradient-to-r from-[#FFD166]/10 to-[#FF8E53]/10 border border-[#FFD166]/20 rounded-xl p-5 mb-4">
+                                 <p className="text-base font-medium text-slate-800 italic mb-3">"{modules.find(m => m.id === activeMod)?.challenge || 'Crea un prompt para resolver un problema complejo de tu industria.'}"</p>
+                                 <div className="flex items-center gap-2 text-slate-600 text-sm">
+                                     <Icon name="fa-clock" className="text-[#FF8E53]" />
+                                     <span>Tiempo estimado: 45 min</span>
+                                 </div>
                              </div>
                              
-                             {/* Botón de Acción Principal */}
-                             <button className="w-full bg-gradient-to-r from-[#00374A] to-[#004B63] text-white font-semibold rounded-xl py-4 hover:shadow-lg transition-all flex items-center justify-center gap-3 text-base">
-                                 <Icon name="fa-download" />
-                                 Descargar Todos los Recursos
-                             </button>
-                         </div>
+                              <div className="flex gap-4">
+                                  <button className="flex-1 bg-gradient-to-r from-[#FFD166] to-[#FF8E53] text-white font-bold rounded-xl py-3 hover:opacity-90 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg flex items-center justify-center gap-2">
+                                      <Icon name="fa-play" />
+                                      Iniciar Desafío
+                                  </button>
+                                  <button className="flex-1 bg-slate-100 text-slate-700 font-bold rounded-xl py-3 hover:bg-slate-200 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg flex items-center justify-center gap-2">
+                                      <Icon name="fa-lightbulb" />
+                                      Ver Solución
+                                  </button>
+                              </div>
+                           </div>
 
-                          {/* Cuadro de Desafío del Curso */}
-                          <div className="bg-gradient-to-br from-white to-[#F8FAFC] border border-slate-50 shadow-[0_30px_60px_rgba(0,0,0,0.05)] rounded-[28px] p-10 mb-8 w-full transition-all duration-500 ease-out hover:shadow-xl">
-                             <div className="flex items-center gap-4 mb-6">
-                                 <div className="w-12 h-12 bg-gradient-to-r from-[#FFD166] to-[#FF8E53] rounded-xl flex items-center justify-center">
-                                     <Icon name="fa-bolt" className="text-white text-xl" />
-                                 </div>
-                                 <div>
-                                     <h3 className="text-2xl font-bold tracking-normal text-[#00374A]">Desafío del Curso</h3>
-                                     <p className="text-sm text-slate-500">Aplica lo aprendido en un reto práctico</p>
-                                 </div>
-                             </div>
-                            
-                            <div className="bg-gradient-to-r from-[#FFD166]/10 to-[#FF8E53]/10 border border-[#FFD166]/20 rounded-xl p-5 mb-4">
-                                <p className="text-base font-medium text-slate-800 italic mb-3">"{modules.find(m => m.id === activeMod)?.challenge || 'Crea un prompt para resolver un problema complejo de tu industria.'}"</p>
-                                <div className="flex items-center gap-2 text-slate-600 text-sm">
-                                    <Icon name="fa-clock" className="text-[#FF8E53]" />
-                                    <span>Tiempo estimado: 45 min</span>
+                                 {/* Columna Derecha: Muro de Insights */}
+                                 <div className={`bg-white shadow-[0_30px_60px_rgba(0,0,0,0.05)] rounded-[28px] p-10 w-full transition-all duration-500 h-full flex flex-col ${isInsightsExpanded ? 'h-fit' : 'h-fit'}`}>
+                                {/* Cabecera del Muro */}
+                                <div className="mb-8">
+                                    <h3 className="text-2xl font-bold text-[#00374A] mb-3">Muro de Insights: The Prompt Collective</h3>
+                                    <p className="text-[15px] text-slate-500 mb-8 max-w-2xl">Co-crea, debate y descubre los prompts que están redefiniendo la industria.</p>
+                                    
+                                    {/* Acción Rápida - Input Box */}
+                                    <div className="bg-slate-50 border border-slate-100 p-4 rounded-xl text-slate-400 text-sm cursor-pointer hover:bg-slate-100 transition-all duration-300 flex items-center gap-3">
+                                        <Icon name="fa-pen" className="text-slate-400" />
+                                        <span>¿Qué prompt descubriste hoy? Compártelo con la comunidad...</span>
+                                    </div>
                                 </div>
-                            </div>
-                            
-                             <div className="flex gap-4">
-                                 <button className="flex-1 bg-gradient-to-r from-[#FFD166] to-[#FF8E53] text-white font-bold rounded-xl py-3 hover:opacity-90 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg flex items-center justify-center gap-2">
-                                     <Icon name="fa-play" />
-                                     Iniciar Desafío
-                                 </button>
-                                 <button className="flex-1 bg-slate-100 text-slate-700 font-bold rounded-xl py-3 hover:bg-slate-200 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg flex items-center justify-center gap-2">
-                                     <Icon name="fa-lightbulb" />
-                                     Ver Solución
-                                 </button>
-                             </div>
-                        </div>
-
-                         {/* Fila 2: Acción y Multimedia (2x2 Grid) */}
-                         <div className="grid grid-cols-2 gap-8 w-full">
-                              {/* Lado Izquierdo: Cuadro de Videos Explicativos */}
-                              <div className="bg-gradient-to-br from-white to-[#F8FAFC] border border-slate-50 shadow-[0_30px_60px_rgba(0,0,0,0.05)] rounded-[28px] p-10 h-full transition-all duration-500 ease-out hover:shadow-xl">
-                                 <h3 className="text-2xl font-bold tracking-normal text-[#00374A] mb-6">Videos Explicativos: Ingeniería de Prompts</h3>
                                 
-                                 {/* Video 1: Mastery Framework */}
-                                 <div className="flex items-start gap-3 p-3 border border-slate-100 rounded-xl hover:bg-slate-50 transition-all duration-300 hover:scale-[1.01] mb-3">
-                                     <div className="w-12 h-12 bg-[#00BCD4] rounded-full flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
-                                         <Icon name="fa-play" className="text-white text-sm" />
-                                     </div>
-                                    <div className="flex-1">
-                                        <div className="flex items-center justify-between mb-1">
-                                             <h4 className="text-base font-semibold text-slate-800">Mastery Framework</h4>
-                                              <span className="text-[11px] font-medium px-2 py-1 bg-slate-100 text-slate-600 rounded-full">12:45</span>
+                                {/* Último comentario destacado (siempre visible) */}
+                                <div className="border border-slate-100 rounded-2xl p-4 hover:shadow-lg transition-all duration-300 hover:border-slate-200 mb-6">
+                                    <div className="flex items-start gap-3">
+                                        {/* Avatar */}
+                                        <div className="w-8 h-8 bg-gradient-to-r from-[#004B63] to-[#00BCD4] rounded-full flex items-center justify-center text-white font-semibold text-xs">
+                                            MS
                                         </div>
-                                          <p className="text-sm text-slate-500 mb-2 leading-relaxed">Sistema estructurado para dominar técnicas avanzadas de prompting</p>
-                                        <div className="flex items-center gap-2">
-                                              <span className="text-[11px] font-medium px-2 py-1 bg-green-100 text-green-700 rounded-full">Principiante</span>
-                                             <span className="text-[11px] text-slate-500">• Video teórico</span>
+                                        
+                                        <div className="flex-1">
+                                            {/* Metadatos compactos */}
+                                            <div className="flex items-center justify-between mb-2">
+                                                <div>
+                                                    <div className="flex items-center gap-2">
+                                                        <h4 className="font-semibold text-[#00374A] text-sm">María Solano</h4>
+                                                        <Icon name="fa-star" className="text-[#FFD166] text-xs" />
+                                                        <span className="text-[10px] px-2 py-0.5 bg-cyan-100 text-cyan-800 rounded-full">Prompt Master Nivel 3</span>
+                                                    </div>
+                                                    <p className="text-[10px] text-slate-500 mt-0.5">Hace 2 horas</p>
+                                                </div>
+                                            </div>
+                                            
+                                            {/* Prompt compacto */}
+                                            <div className="bg-cyan-50/50 p-3 rounded-lg mb-2">
+                                                <div className="font-mono text-cyan-800 text-[11px] leading-relaxed line-clamp-2">
+                                                    "Actúa como un arquitecto de sistemas educativos. Diseña un framework de evaluación que combine métricas cuantitativas, análisis cualitativo y retroalimentación en tiempo real."
+                                                </div>
+                                            </div>
+                                            
+                                            {/* Interacciones compactas */}
+                                            <div className="flex items-center justify-between">
+                                                <div className="flex items-center gap-4">
+                                                    <div className="flex items-center gap-1">
+                                                        <button className="text-slate-400 hover:text-cyan-600 transition-colors">
+                                                            <Icon name="fa-chevron-up" className="text-xs" />
+                                                        </button>
+                                                        <span className="text-xs font-medium text-slate-700 mx-1">24</span>
+                                                    </div>
+                                                    <button className="flex items-center gap-1 text-slate-500 hover:text-cyan-600 transition-colors">
+                                                        <Icon name="fa-comment" className="text-xs" />
+                                                        <span className="text-xs">8</span>
+                                                    </button>
+                                                </div>
+                                                <div className="flex items-center gap-1 text-[10px] text-cyan-700 bg-cyan-50 px-2 py-0.5 rounded-full">
+                                                    <Icon name="fa-check-circle" className="text-cyan-600 text-xs" />
+                                                    <span>Verificado</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-
-                                 {/* Video 2: Contexto Dinámico */}
-                                 <div className="flex items-start gap-3 p-3 border border-slate-100 rounded-xl hover:bg-slate-50 transition-all duration-300 hover:scale-[1.01] mb-3">
-                                     <div className="w-12 h-12 bg-[#00BCD4] rounded-full flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
-                                         <Icon name="fa-play" className="text-white text-sm" />
-                                     </div>
-                                    <div className="flex-1">
-                                        <div className="flex items-center justify-between mb-1">
-                                             <h4 className="text-base font-semibold text-slate-800">Contexto Dinámico</h4>
-                                              <span className="text-[11px] font-medium px-2 py-1 bg-slate-100 text-slate-600 rounded-full">18:30</span>
-                                        </div>
-                                          <p className="text-sm text-slate-500 mb-2 leading-relaxed">Adaptación inteligente a diferentes escenarios y objetivos</p>
-                                        <div className="flex items-center gap-2">
-                                              <span className="text-[11px] font-medium px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full">Intermedio</span>
-                                             <span className="text-[11px] text-slate-500">• Caso práctico</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                 {/* Video 3: Zero-Shot Prompting */}
-                                 <div className="flex items-start gap-3 p-3 border border-slate-100 rounded-xl hover:bg-slate-50 transition-all duration-300 hover:scale-[1.01]">
-                                     <div className="w-12 h-12 bg-[#00BCD4] rounded-full flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
-                                         <Icon name="fa-play" className="text-white text-sm" />
-                                     </div>
-                                    <div className="flex-1">
-                                        <div className="flex items-center justify-between mb-1">
-                                             <h4 className="text-base font-semibold text-slate-800">Zero-Shot Prompting</h4>
-                                              <span className="text-[11px] font-medium px-2 py-1 bg-slate-100 text-slate-600 rounded-full">22:15</span>
-                                        </div>
-                                          <p className="text-sm text-slate-500 mb-2 leading-relaxed">Técnicas para obtener resultados sin ejemplos previos</p>
-                                        <div className="flex items-center gap-2">
-                                              <span className="text-[11px] font-medium px-2 py-1 bg-red-100 text-red-700 rounded-full">Avanzado</span>
-                                             <span className="text-[11px] text-slate-500">• Demostración en vivo</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                              {/* Lado Derecho: Sintetizador de Prompts Élite */}
-                              <div className="bg-gradient-to-br from-white to-[#F8FAFC] border border-slate-50 shadow-[0_30px_60px_rgba(0,0,0,0.05)] rounded-[28px] p-10 h-full transition-all duration-500 ease-out hover:shadow-xl">
-                                 <div className="mb-8">
-                                     <div className="flex items-center gap-4 mb-4">
-                                         <div className="w-12 h-12 bg-gradient-to-r from-[#004B63] to-[#00BCD4] rounded-xl flex items-center justify-center">
-                                             <Icon name="fa-terminal" className="text-white text-xl" />
-                                         </div>
-                                         <div>
-                                             <h3 className="text-2xl font-bold tracking-normal text-[#00374A]">Sintetizador de Prompts Élite</h3>
-                                             <p className="text-sm text-slate-600">Transforma ideas en MasterPrompts profesionales</p>
-                                         </div>
-                                     </div>
-                                 </div>
                                 
-                                <textarea
-                                    value={input}
-                                    onChange={e => setInput(e.target.value)}
-                                    placeholder="Ingresa tu idea o prompt base para la transmutación..."
-                                    className="w-full px-4 py-3 bg-[#F8FAFC] border-[#E2E8F0] border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] resize-none mb-4"
-                                    rows={4}
-                                    onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleOptimize(); } }}
-                                />
+                                 {/* Efecto de degradado para indicar más contenido (solo cuando colapsado) */}
+                                 {!isInsightsExpanded && (
+                                     <div className="relative h-12 -mt-12 bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none flex-shrink-0"></div>
+                                 )}
                                 
-                                 <button
-                                    onClick={handleOptimize}
-                                    disabled={loading}
-                                    className="w-full py-3 bg-gradient-to-r from-[#004B63] via-[#00BCD4] to-[#4DA8C4] text-white rounded-xl font-bold hover:shadow-lg transition-all duration-300 hover:scale-[1.02] disabled:opacity-50 flex items-center justify-center gap-2"
-                                >
-                                    {loading ? (
-                                        <>
-                                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                            {loadMsg}
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Icon name="fa-bolt" />
-                                            Sintetizar MasterPrompt
-                                        </>
-                                    )}
-                                </button>
-                                
-                                {genData && !loading && (
-                                    <div className="mt-6 p-4 bg-[#F8FAFC] rounded-xl border border-[#E2E8F0]">
-                                        <div className="flex items-center justify-between mb-3">
-                                            <span className="text-sm font-bold text-[#004B63]">MASTER PROMPT GENERADO</span>
-                                            <button 
-                                                onClick={() => navigator.clipboard.writeText(genData.masterPrompt)}
-                                                className="text-sm text-[#4DA8C4] hover:text-[#66CCCC] flex items-center gap-1"
-                                            >
-                                                <Icon name="fa-copy" /> Copiar
-                                            </button>
+                                 {/* Comentarios adicionales (solo visibles cuando expandido) */}
+                                 {isInsightsExpanded && (
+                                     <div className="space-y-4 mt-6 animate-fadeIn flex-grow">
+                                        {/* Tarjeta 2: Post de Discusión */}
+                                        <div className="border border-slate-100 rounded-2xl p-4 hover:shadow-lg transition-all duration-300 hover:border-slate-200">
+                                            <div className="flex items-start gap-3">
+                                                {/* Avatar */}
+                                                <div className="w-8 h-8 bg-gradient-to-r from-[#FF8E53] to-[#FFD166] rounded-full flex items-center justify-center text-white font-semibold text-xs">
+                                                    AC
+                                                </div>
+                                                
+                                                <div className="flex-1">
+                                                    {/* Metadatos compactos */}
+                                                    <div className="flex items-center justify-between mb-2">
+                                                        <div>
+                                                            <div className="flex items-center gap-2">
+                                                                <h4 className="font-semibold text-[#00374A] text-sm">Andrés Cortés</h4>
+                                                                <span className="text-[10px] px-2 py-0.5 bg-slate-100 text-slate-700 rounded-full">Arquitecto de IA</span>
+                                                            </div>
+                                                            <p className="text-[10px] text-slate-500 mt-0.5">Hace 5 horas</p>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    {/* Prompt compacto */}
+                                                    <div className="bg-cyan-50/50 p-3 rounded-lg mb-2">
+                                                        <div className="font-mono text-cyan-800 text-[11px] leading-relaxed line-clamp-2">
+                                                            "Analiza dataset de feedback: categoriza en críticas, bugs, sugerencias, elogios. Prioriza por impacto UX, esfuerzo, roadmap."
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    {/* Interacciones compactas */}
+                                                    <div className="flex items-center justify-between">
+                                                        <div className="flex items-center gap-4">
+                                                            <div className="flex items-center gap-1">
+                                                                <button className="text-slate-400 hover:text-cyan-600 transition-colors">
+                                                                    <Icon name="fa-chevron-up" className="text-xs" />
+                                                                </button>
+                                                                <span className="text-xs font-medium text-slate-700 mx-1">17</span>
+                                                            </div>
+                                                            <button className="flex items-center gap-1 text-slate-500 hover:text-cyan-600 transition-colors">
+                                                                <Icon name="fa-comment" className="text-xs" />
+                                                                <span className="text-xs">5</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="p-4 bg-[#0a1628] rounded-lg text-white text-sm font-mono whitespace-pre-wrap">
-                                            {genData.masterPrompt}
+                                        
+                                        {/* Tarjeta 3: Post de Innovación */}
+                                        <div className="border border-slate-100 rounded-2xl p-4 hover:shadow-lg transition-all duration-300 hover:border-slate-200">
+                                            <div className="flex items-start gap-3">
+                                                {/* Avatar */}
+                                                <div className="w-8 h-8 bg-gradient-to-r from-[#00BCD4] to-[#4DA8C4] rounded-full flex items-center justify-center text-white font-semibold text-xs">
+                                                    VR
+                                                </div>
+                                                
+                                                <div className="flex-1">
+                                                    {/* Metadatos compactos */}
+                                                    <div className="flex items-center justify-between mb-2">
+                                                        <div>
+                                                            <div className="flex items-center gap-2">
+                                                                <h4 className="font-semibold text-[#00374A] text-sm">Valeria Ríos</h4>
+                                                                <Icon name="fa-star" className="text-[#FFD166] text-xs" />
+                                                                <span className="text-[10px] px-2 py-0.5 bg-cyan-100 text-cyan-800 rounded-full">Innovación</span>
+                                                            </div>
+                                                            <p className="text-[10px] text-slate-500 mt-0.5">Ayer</p>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    {/* Prompt compacto */}
+                                                    <div className="bg-cyan-50/50 p-3 rounded-lg mb-2">
+                                                        <div className="font-mono text-cyan-800 text-[11px] leading-relaxed line-clamp-2">
+                                                            "Mentor pensamiento crítico: 3 pasos para identificar sesgos, formular preguntas desafiantes, proponer alternativas."
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    {/* Interacciones compactas */}
+                                                    <div className="flex items-center justify-between">
+                                                        <div className="flex items-center gap-4">
+                                                            <div className="flex items-center gap-1">
+                                                                <button className="text-slate-400 hover:text-cyan-600 transition-colors">
+                                                                    <Icon name="fa-chevron-up" className="text-xs" />
+                                                                </button>
+                                                                <span className="text-xs font-medium text-slate-700 mx-1">31</span>
+                                                            </div>
+                                                            <button className="flex items-center gap-1 text-slate-500 hover:text-cyan-600 transition-colors">
+                                                                <Icon name="fa-comment" className="text-xs" />
+                                                                <span className="text-xs">12</span>
+                                                            </button>
+                                                        </div>
+                                                        <div className="flex items-center gap-1 text-[10px] text-cyan-700 bg-cyan-50 px-2 py-0.5 rounded-full">
+                                                            <Icon name="fa-bolt" className="text-cyan-600 text-xs" />
+                                                            <span>Trending</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="mt-3 p-3 bg-[#66CCCC]/10 rounded-lg">
-                                            <strong className="text-[#004B63]">Feedback:</strong> {genData.feedback}
+                                        
+                                        {/* Footer del Muro (solo cuando expandido) */}
+                                        <div className="mt-6 pt-4 border-t border-slate-100 text-center">
+                                            <p className="text-xs text-slate-500">Mostrando 3 de 47 insights activos</p>
                                         </div>
                                     </div>
                                 )}
+                                
+                                {/* Botón de Expansión/Contracción */}
+                                <div className="text-center mt-6">
+                                    <button 
+                                        onClick={() => setIsInsightsExpanded(!isInsightsExpanded)}
+                                        className="text-cyan-600 hover:text-[#00374A] font-bold text-xs uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2 mx-auto group"
+                                    >
+                                        {isInsightsExpanded ? (
+                                            <>
+                                                <span>Contraer muro</span>
+                                                <Icon name="fa-chevron-up" className="text-xs group-hover:translate-y-[-2px] transition-transform duration-300" />
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span>Explorar toda la conversación</span>
+                                                <Icon name="fa-chevron-down" className="text-xs group-hover:translate-y-[2px] transition-transform duration-300 animate-bounce" />
+                                            </>
+                                        )}
+                                    </button>
+                                 </div>
+                             </div>
                             </div>
-                        </div>
-                    </div>
+
+
+
+                            {/* Sintetizador de Prompts Élite - Ahora arriba del grid */}
+                           <div className="bg-gradient-to-br from-white to-[#F8FAFC] border border-slate-50 shadow-[0_30px_60px_rgba(0,0,0,0.05)] rounded-[28px] p-10 mb-8 w-full transition-all duration-500 ease-out hover:shadow-xl mt-10">
+                                  <div className="mb-8">
+                                      <div className="flex items-center gap-4 mb-4">
+                                       <div className="w-12 h-12 bg-gradient-to-r from-[#004B63] to-[#00BCD4] rounded-xl flex items-center justify-center">
+                                           <Icon name="fa-atom" className="text-white text-xl" />
+                                       </div>
+                                          <div>
+                                              <h3 className="text-2xl font-bold tracking-normal text-[#00374A]">Sintetizador de Prompts Élite</h3>
+                                              <p className="text-sm text-slate-600">Transforma ideas en MasterPrompts profesionales</p>
+                                          </div>
+                                      </div>
+                                  </div>
+                                 
+                                  <textarea
+                                     value={input}
+                                     onChange={e => setInput(e.target.value)}
+                                     placeholder="Describe tu idea o prompt base para optimización profesional..."
+                                     className="w-full px-4 py-3 bg-slate-50 border-slate-200 border rounded-xl focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 resize-none mb-4 text-[14px]"
+                                     rows={4}
+                                     onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleOptimize(); } }}
+                                 />
+                                 
+                                   <button
+                                     onClick={handleOptimize}
+                                     disabled={loading}
+                                     className="w-full py-3 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white rounded-xl font-bold hover:shadow-lg transition-all duration-300 hover:scale-[1.02] disabled:opacity-50 flex items-center justify-center gap-2"
+                                 >
+                                     {loading ? (
+                                         <>
+                                             <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                             {loadMsg}
+                                         </>
+                                     ) : (
+                                         <>
+                                             <Icon name="fa-microchip" />
+                                             Sintetizar Prompt Maestro
+                                         </>
+                                     )}
+                                 </button>
+                                 
+                                 {genData && !loading && (
+                                     <div className="mt-6 space-y-4">
+                                         {/* Caja de Resultado - Prompt Élite */}
+                                         <div className="bg-[#0B1120] text-emerald-400 font-mono p-6 rounded-xl relative animate-fadeIn" style={{ animationDelay: '0.1s' }}>
+                                             <div className="flex items-center gap-2 mb-4">
+                                                 <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                                                 <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                                                 <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                                                 <span className="text-slate-500 text-xs ml-2">master-prompt.rtf</span>
+                                             </div>
+                                             <div className="text-[14px] leading-relaxed whitespace-pre-wrap">
+                                                 {genData.masterPrompt}
+                                             </div>
+                                             <button 
+                                                 onClick={() => navigator.clipboard.writeText(genData.masterPrompt)}
+                                                 className="absolute top-4 right-4 text-xs text-slate-400 hover:text-emerald-400 flex items-center gap-1 bg-slate-900/50 px-2 py-1 rounded"
+                                             >
+                                                 <Icon name="fa-copy" className="text-xs" /> Copiar
+                                             </button>
+                                         </div>
+                                         
+                                         {/* Caja de Retroalimentación Técnica */}
+                                         <div className="bg-cyan-50 border-l-4 border-cyan-400 p-6 rounded-r-xl animate-fadeIn" style={{ animationDelay: '0.3s' }}>
+                                             <div className="flex items-center gap-2 mb-3">
+                                                 <Icon name="fa-lightbulb" className="text-cyan-600" />
+                                                 <h4 className="text-base font-bold text-[#00374A]">Análisis Técnico</h4>
+                                             </div>
+                                             <p className="text-slate-700 text-[14px] leading-relaxed mb-3">
+                                                 {genData.feedback}
+                                             </p>
+                                             
+                                             {/* Técnicas Aplicadas */}
+                                             {genData.techniques && (
+                                                 <div className="mt-4">
+                                                     <p className="text-sm font-medium text-slate-600 mb-2">Técnicas aplicadas:</p>
+                                                     <div className="flex flex-wrap gap-2">
+                                                         {genData.techniques.map((tech, index) => (
+                                                             <span key={index} className="text-xs px-3 py-1 bg-cyan-100 text-cyan-800 rounded-full">
+                                                                 {tech}
+                                                             </span>
+                                                         ))}
+                                                     </div>
+                                                 </div>
+                                             )}
+                                         </div>
+                                     </div>
+                                 )}
+                             </div>
+                         </div>
                 </main>
             </div>
 
