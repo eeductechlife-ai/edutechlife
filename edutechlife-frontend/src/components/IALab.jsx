@@ -10,6 +10,7 @@ import { Icon } from '../utils/iconMapping.jsx';
 import { useAuth } from '../context/AuthContext';
 import { getAllProgress, saveProgress, PROGRESS_STATUS, saveLastLesson, getUserLastProgress } from '../lib/progress';
 import { LogOut, Lightbulb } from 'lucide-react';
+import UserDropdownMenu from './UserDropdownMenu';
 
 const IALabFixed = ({ onBack }) => {
     const { user, isLoading: authLoading, signOut } = useAuth();
@@ -50,10 +51,53 @@ const IALabFixed = ({ onBack }) => {
     // Estado para controlar expansión del Muro de Insights
     const [insightsExpanded, setInsightsExpanded] = useState(false);
     
-    // Estado para controlar dropdowns del sidebar
+    // Estados para funcionalidad de botones - Functional Button Engine v1
+    const [currentLessonIndex, setCurrentLessonIndex] = useState(0);
+    const [isSynthesizerOpen, setIsSynthesizerOpen] = useState(false);
+    const [isMarkingComplete, setIsMarkingComplete] = useState(false);
+    const [isSubmittingQuiz, setIsSubmittingQuiz] = useState(false);
+    const [quizAnswers, setQuizAnswers] = useState({});
+    const [isQuizValid, setIsQuizValid] = useState(false);
+    
+    // Estados para sistema de evaluación mejorado
+    const [quizScore, setQuizScore] = useState(null);
+    const [quizPassed, setQuizPassed] = useState(false);
+    const [quizResult, setQuizResult] = useState(null);
+    const [showScoreResult, setShowScoreResult] = useState(false);
+    const [dailyAttemptsCount, setDailyAttemptsCount] = useState(0);
+    const [lastAttemptDate, setLastAttemptDate] = useState(null);
+    const [quizAttempts, setQuizAttempts] = useState([]);
+    const [showReadyToAdvance, setShowReadyToAdvance] = useState(false);
+    const [showEvaluationQuiz, setShowEvaluationQuiz] = useState(false);
+    
+    // Estados para modal de examen y seguridad
+    const [showExamModal, setShowExamModal] = useState(false);
+    const [showExitConfirmation, setShowExitConfirmation] = useState(false);
+    const [showSecurityWarning, setShowSecurityWarning] = useState(false);
+    const [securityWarningCount, setSecurityWarningCount] = useState(0);
+    
+    // Estados para sistema de seguridad avanzado - Protocolo exam-integrity-lockdown
+    const [screenshotProtectionActive, setScreenshotProtectionActive] = useState(false);
+    const [securityViolations, setSecurityViolations] = useState(0);
+    const [attemptsPenalized, setAttemptsPenalized] = useState(0);
+    const [keyboardLockActive, setKeyboardLockActive] = useState(false);
+    const [showSecurityStatus, setShowSecurityStatus] = useState(false);
+    const [securityMessage, setSecurityMessage] = useState('');
+    const [showSecurityMessage, setShowSecurityMessage] = useState(false);
+    
+    // Estados para timer sugerido
+    const [suggestedTime] = useState(20 * 60); // 20 minutos en segundos
+    const [timeElapsed, setTimeElapsed] = useState(0);
+    const [isTimerRunning, setIsTimerRunning] = useState(false);
+    const [showTimeWarning, setShowTimeWarning] = useState(false);
+    
+    // Estados para navegación del quiz
+    const [currentQuestion, setCurrentQuestion] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+    
     const [sidebarDropdowns, setSidebarDropdowns] = useState({
-        videos: true,  // Expandido por defecto para mejor UX
-        recursos: false
+        videos: true,
+        recursos: true
     });
     
     // Estado para controlar acordeones del Cuadro de Introducción
@@ -78,6 +122,172 @@ const IALabFixed = ({ onBack }) => {
     
     const msgs = ['Analizando contexto...', 'Aplicando técnicas élite...', 'Optimizando estructura...', 'Generando masterPrompt...'];
     
+    // Lecciones/Temas del Módulo 1 (6 temas como especificado)
+    const moduleLessons = [
+        { id: 1, title: 'Ingeniería de Prompts – Comunícate Mejor con la IA', description: 'Aprende a dar instrucciones claras a la IA' },
+        { id: 2, title: 'El Método para Dominar la IA (Mastery Framework)', description: 'Estructura tus prompts con estrategia' },
+        { id: 3, title: 'Adapta la IA a Cada Situación (Contexto Dinámico)', description: 'Personaliza respuestas según necesidades' },
+        { id: 4, title: 'Resultados Rápidos con IA (Zero-Shot Prompting)', description: 'Obtén buenos resultados sin ejemplos' },
+        { id: 5, title: 'Haz que la IA Piense Paso a Paso (Chain-of-Thought)', description: 'Guía el razonamiento de la IA' },
+        { id: 6, title: 'Ejercicio de Reflexión – Más Allá de Usar la IA', description: 'Reflexiona sobre el impacto ético de la IA' }
+    ];
+    
+    // Sistema de Evaluación Mejorado - 8 preguntas con mezcla de dificultad
+    const quizQuestions = [
+        {
+            id: 'q1',
+            question: '¿Cuál es el propósito principal de la ingeniería de prompts?',
+            options: [
+                { id: 'q1_a', label: 'Hacer preguntas más largas a la IA' },
+                { id: 'q1_b', label: 'Dar instrucciones claras y efectivas para obtener resultados útiles' },
+                { id: 'q1_c', label: 'Usar palabras técnicas complicadas' },
+                { id: 'q1_d', label: 'Hacer que la IA escriba código automáticamente' }
+            ],
+            correctAnswer: 'q1_b',
+            topic: 'Ingeniería de Prompts',
+            difficulty: 'fácil',
+            feedback: 'Debes volver a interactuar con el tema "Ingeniería de Prompts – Comunícate Mejor con la IA"'
+        },
+        {
+            id: 'q2',
+            question: '¿Qué técnica permite guiar el razonamiento de la IA paso a paso?',
+            options: [
+                { id: 'q2_a', label: 'Zero-Shot Prompting' },
+                { id: 'q2_b', label: 'Chain-of-Thought' },
+                { id: 'q2_c', label: 'Few-Shot Prompting' },
+                { id: 'q2_d', label: 'Contexto Dinámico' }
+            ],
+            correctAnswer: 'q2_b',
+            topic: 'Chain-of-Thought',
+            difficulty: 'medio',
+            feedback: 'Revisa el tema "Haz que la IA Piense Paso a Paso (Chain-of-Thought)"'
+        },
+        {
+            id: 'q3',
+            question: '¿Cuál es una ventaja clave del método RTF (Rol, Tarea, Formato)?',
+            options: [
+                { id: 'q3_a', label: 'Hace las preguntas más cortas' },
+                { id: 'q3_b', label: 'Estructura las instrucciones para obtener respuestas organizadas y alineadas' },
+                { id: 'q3_c', label: 'Elimina la necesidad de contexto' },
+                { id: 'q3_d', label: 'Automatiza completamente el proceso' }
+            ],
+            correctAnswer: 'q3_b',
+            topic: 'Método Mastery Framework',
+            difficulty: 'fácil',
+            feedback: 'Repasa "El Método para Dominar la IA (Mastery Framework)"'
+        },
+        {
+            id: 'q4',
+            question: '¿Qué es el "Zero-Shot Prompting" y cuándo es más efectivo?',
+            options: [
+                { id: 'q4_a', label: 'Dar 0 instrucciones a la IA' },
+                { id: 'q4_b', label: 'Obtener buenos resultados sin proporcionar ejemplos previos' },
+                { id: 'q4_c', label: 'Usar prompts con 0 palabras' },
+                { id: 'q4_d', label: 'Reiniciar la conversación con la IA' }
+            ],
+            correctAnswer: 'q4_b',
+            topic: 'Zero-Shot Prompting',
+            difficulty: 'medio',
+            feedback: 'Consulta "Resultados Rápidos con IA (Zero-Shot Prompting)"'
+        },
+        {
+            id: 'q5',
+            question: '¿Cómo se aplica el "Contexto Dinámico" en prompts complejos?',
+            options: [
+                { id: 'q5_a', label: 'Haciendo prompts más largos automáticamente' },
+                { id: 'q5_b', label: 'Personalizando respuestas según necesidades específicas del usuario' },
+                { id: 'q5_c', label: 'Eliminando la necesidad de pensar en el contexto' },
+                { id: 'q5_d', label: 'Usando siempre el mismo contexto para todas las preguntas' }
+            ],
+            correctAnswer: 'q5_b',
+            topic: 'Contexto Dinámico',
+            difficulty: 'difícil',
+            feedback: 'Estudia "Adapta la IA a Cada Situación (Contexto Dinámico)"'
+        },
+        {
+            id: 'q6',
+            question: '¿Qué consideraciones éticas son clave al usar IA generativa?',
+            options: [
+                { id: 'q6_a', label: 'Solo la velocidad de respuesta' },
+                { id: 'q6_b', label: 'Sesgos, privacidad, transparencia y uso responsable' },
+                { id: 'q6_c', label: 'El costo de la API' },
+                { id: 'q6_d', label: 'La cantidad de tokens usados' }
+            ],
+            correctAnswer: 'q6_b',
+            topic: 'Ética y Reflexión',
+            difficulty: 'medio',
+            feedback: 'Reflexiona con "Ejercicio de Reflexión – Más Allá de Usar la IA"'
+        },
+        {
+            id: 'q7',
+            question: '¿Cuál es la diferencia entre "Few-Shot" y "Zero-Shot" prompting?',
+            options: [
+                { id: 'q7_a', label: 'Few-Shot proporciona ejemplos, Zero-Shot no' },
+                { id: 'q7_b', label: 'Zero-Shot es más rápido que Few-Shot' },
+                { id: 'q7_c', label: 'Few-Shot usa menos palabras' },
+                { id: 'q7_d', label: 'No hay diferencia significativa' }
+            ],
+            correctAnswer: 'q7_a',
+            topic: 'Zero-Shot Prompting',
+            difficulty: 'difícil',
+            feedback: 'Compara técnicas en "Resultados Rápidos con IA (Zero-Shot Prompting)"'
+        },
+        {
+            id: 'q8',
+            question: '¿Cómo se estructura un prompt usando RTF para análisis de mercado?',
+            options: [
+                { id: 'q8_a', label: 'Pidiendo directamente "analiza el mercado"' },
+                { id: 'q8_b', label: 'Definiendo Rol: Analista, Tarea: Analizar tendencias, Formato: Reporte estructurado' },
+                { id: 'q8_c', label: 'Usando la menor cantidad de palabras posible' },
+                { id: 'q8_d', label: 'Copiando prompts de internet' }
+            ],
+            correctAnswer: 'q8_b',
+            topic: 'Método Mastery Framework',
+            difficulty: 'difícil',
+            feedback: 'Aplica "El Método para Dominar la IA (Mastery Framework)" en casos prácticos'
+        }
+    ];
+
+    const TOTAL_QUESTIONS = quizQuestions.length; // 8
+    const PASSING_SCORE = 70; // 70% mínimo
+    const DAILY_ATTEMPTS_LIMIT = 2;
+    const SUGGESTED_TIME_MINUTES = 20;
+    
+    // Constantes de seguridad para examen
+    const MAX_SECURITY_WARNINGS = 3;
+    const SECURITY_WARNING_MESSAGES = [
+        "Advertencia: No cambies de ventana durante el examen",
+        "Segunda advertencia: El sistema detectó que abriste otra ventana",
+        "Última advertencia: Si vuelves a cambiar de ventana, el examen se cerrará automáticamente"
+    ];
+    
+    // Constantes para protocolo exam-integrity-lockdown
+    const SECURITY_VIOLATION_PENALTY = 1; // Intentos perdidos por 3 infracciones
+    const SCREENSHOT_OVERLAY_DURATION = 5000; // 5 segundos
+    const SECURITY_MESSAGE_DURATION = 3000; // 3 segundos
+    const SECURITY_LOG_PREFIX = 'exam_security_logs';
+    
+    // Sistema de Clases de Botones - UI Button Master Overhaul
+    const buttonClasses = {
+        // Botón Primario - Acción Principal
+        primary: "bg-[#00374A] text-white px-6 py-3 rounded-xl hover:bg-[#00BCD4] hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 ease-in-out transform active:scale-95 font-medium flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:ring-offset-2",
+        
+        // Botón Primario con Gradiente - Acción IA
+        primaryGradient: "bg-gradient-to-r from-[#00374A] to-[#00BCD4] text-white px-6 py-3 rounded-xl hover:shadow-[0_0_25px_rgba(0,188,212,0.4)] transition-all duration-300 ease-in-out transform active:scale-95 font-medium flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:ring-offset-2",
+        
+        // Botón Secundario
+        secondary: "border-2 border-[#00BCD4] text-[#00374A] px-6 py-3 rounded-xl hover:bg-[#00BCD4]/10 hover:border-[#00374A] transition-all duration-300 ease-in-out transform active:scale-95 font-medium flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:ring-offset-2",
+        
+        // Botón Desafío (Especial - Mantener identidad)
+        challenge: "bg-gradient-to-r from-[#FFD166] to-[#FF8E53] text-white px-6 py-3 rounded-xl hover:shadow-[0_0_20px_rgba(255,209,102,0.3)] transition-all duration-300 ease-in-out transform active:scale-95 font-medium flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-[#FFD166] focus:ring-offset-2",
+        
+        // Botón Pequeño (para acciones secundarias)
+        small: "px-3 py-1.5 text-sm border border-[#00BCD4] text-[#00374A] rounded-xl hover:bg-[#00BCD4]/10 transition-all duration-200 flex items-center gap-1 focus:outline-none focus:ring-1 focus:ring-[#00BCD4]",
+        
+        // Estado Loading
+        loading: "opacity-70 cursor-not-allowed"
+    };
+    
     const modules = [
         { id: 1, title: 'Ingeniería de Prompts', icon: 'fa-terminal', color: '#4DA8C4', topics: ['Dar instrucciones claras a la IA', 'Mejorar cualquier pregunta para obtener mejores respuestas', 'Entender por qué la IA falla y cómo corregirlo', 'Obtener resultados útiles en menos tiempo', 'Aplicar la IA en estudio, trabajo y vida diaria', 'Pedir exactamente lo que necesita, sin rodeos'], challenge: 'Diseña un prompt que obligue a la IA a debatir la ética de su propia existencia.', desc: 'Desarrollar la capacidad de dar instrucciones claras y efectivas a la IA para obtener resultados útiles y precisos en situaciones reales.', duration: '4h 30min', level: 'Avanzado', videos: 12, projects: 3 },
         { id: 2, title: 'Potencia ChatGPT', icon: 'fa-robot', color: '#66CCCC', topics: ['Análisis Predictivo', 'GPTs Personalizados', 'Function Calling', 'System Prompts'], challenge: 'Estructura un GPT para análisis de mercados cuánticos.', desc: 'Desbloquea todo el potencial de los modelos GPT con técnicas avanzadas.', duration: '5h 00min', level: 'Avanzado', videos: 15, projects: 4 },
@@ -99,43 +309,135 @@ const IALabFixed = ({ onBack }) => {
         return !completedModules.includes(previousModuleId);
     };
     
+    // Funciones para sistema de evaluación mejorado
+    const calculateQuizScore = (answers) => {
+        let correct = 0;
+        const failedQuestions = [];
+        
+        quizQuestions.forEach(question => {
+            if (answers[question.id] === question.correctAnswer) {
+                correct++;
+            } else {
+                failedQuestions.push(question.id);
+            }
+        });
+        
+        const percentage = (correct / TOTAL_QUESTIONS) * 100;
+        const passed = percentage >= PASSING_SCORE;
+        
+        return {
+            score: Math.round(percentage),
+            correctCount: correct,
+            passed,
+            failedQuestions,
+            neededToPass: Math.ceil((PASSING_SCORE / 100) * TOTAL_QUESTIONS) // = 6
+        };
+    };
+    
+    const canAttemptQuiz = () => {
+        const today = new Date().toDateString();
+        const lastAttempt = lastAttemptDate ? new Date(lastAttemptDate).toDateString() : null;
+        
+        // Si es un nuevo día, resetear contador
+        if (lastAttempt !== today) {
+            setDailyAttemptsCount(0);
+            setLastAttemptDate(new Date().toISOString());
+            return true;
+        }
+        
+        // Verificar límite diario
+        return dailyAttemptsCount < DAILY_ATTEMPTS_LIMIT;
+    };
+    
+    const generateTopicFeedback = (failedQuestions) => {
+        // Agrupar preguntas falladas por tema
+        const topicsNeedingReview = {};
+        
+        failedQuestions.forEach(questionId => {
+            const question = quizQuestions.find(q => q.id === questionId);
+            if (question && question.topic) {
+                if (!topicsNeedingReview[question.topic]) {
+                    topicsNeedingReview[question.topic] = [];
+                }
+                topicsNeedingReview[question.topic].push(question);
+            }
+        });
+        
+        // Generar mensajes personalizados
+        const feedbackMessages = [];
+        
+        Object.keys(topicsNeedingReview).forEach(topic => {
+            const questions = topicsNeedingReview[topic];
+            const count = questions.length;
+            
+            let message = '';
+            if (count === 1) {
+                message = `Debes volver a interactuar con el tema "${topic}".`;
+            } else if (count === 2) {
+                message = `Necesitas reforzar el tema "${topic}" (${count} preguntas falladas).`;
+            } else {
+                message = `Es prioritario que revises el tema "${topic}" (${count} preguntas falladas).`;
+            }
+            
+            // Agregar feedback específico de cada pregunta
+            questions.forEach(question => {
+                if (question.feedback) {
+                    message += ` ${question.feedback}`;
+                }
+            });
+            
+            feedbackMessages.push(message);
+        });
+        
+        return feedbackMessages;
+    };
+    
+    const resetQuizForRetry = () => {
+        setQuizAnswers({});
+        setQuizScore(null);
+        setQuizPassed(false);
+        setQuizResult(null);
+        setShowScoreResult(false);
+        setCurrentQuestion(0);
+        setCurrentPage(1);
+        setTimeElapsed(0);
+        setIsTimerRunning(false);
+        setShowTimeWarning(false);
+        
+        // Resetear estados de seguridad (pero mantener contadores de penalización)
+        setSecurityWarningCount(0);
+        setScreenshotProtectionActive(false);
+        setShowSecurityStatus(false);
+        setShowSecurityMessage(false);
+        // Nota: No resetear securityViolations ni attemptsPenalized para mantener registro
+    };
+    
+    const scrollToLesson = (topic) => {
+        // Buscar la lección correspondiente al tema
+        const lessonIndex = moduleLessons.findIndex(lesson => 
+            lesson.title.includes(topic) || topic.includes(lesson.title.split(' – ')[0])
+        );
+        
+        if (lessonIndex !== -1) {
+            setCurrentLessonIndex(lessonIndex);
+            // Scroll a la sección de lecciones
+            setTimeout(() => {
+                const lessonSection = document.querySelector('.cuadro-introduccion');
+                if (lessonSection) {
+                    lessonSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 100);
+        }
+    };
+    
     // Función para toggle de acordeones
     const toggleAccordion = (id) => {
         setOpenAccordions(prev => ({ ...prev, [id]: !prev[id] }));
     };
     
-    const handleLogout = async () => {
-        try {
-            await signOut();
-        } catch (error) {
-            console.error('Error al cerrar sesión:', error);
-        }
-    };
 
-    // Funciones para el dropdown de perfil
-    const handleProfileInfo = () => {
-        setShowProfileDropdown(false);
-        console.log('Abrir información de perfil');
-        // Aquí se podría abrir un modal o redirigir a una página de perfil
-    };
 
-    const handleChangePassword = () => {
-        setShowProfileDropdown(false);
-        console.log('Abrir modal de cambio de contraseña');
-        // Aquí se podría abrir un modal para cambiar contraseña
-    };
 
-    const handleMyCertificates = () => {
-        setShowProfileDropdown(false);
-        console.log('Abrir mis certificados');
-        // Aquí se podría abrir un modal o redirigir a certificados
-    };
-
-    const handleSettings = () => {
-        setShowProfileDropdown(false);
-        console.log('Abrir configuración');
-        // Aquí se podría abrir un modal o redirigir a configuración
-    };
     
     // Función para sintetizar prompts en el laboratorio
     const handleOptimize = async () => {
@@ -205,7 +507,669 @@ IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`,
         return () => timers.forEach(timer => clearTimeout(timer));
     }, []);
     
-    // Resto de funciones del componente...
+    // Effect para el timer sugerido
+    useEffect(() => {
+        let interval;
+        if (isTimerRunning && timeElapsed < suggestedTime) {
+            interval = setInterval(() => {
+                setTimeElapsed(prev => {
+                    const newTime = prev + 1;
+                    
+                    // Mostrar advertencia a los 15 minutos
+                    if (newTime === 15 * 60) {
+                        setShowTimeWarning(true);
+                    }
+                    
+                    return newTime;
+                });
+            }, 1000);
+        }
+        
+        return () => clearInterval(interval);
+    }, [isTimerRunning, timeElapsed, suggestedTime]);
+    
+    // Effect para resetear estados al cambiar de módulo
+    useEffect(() => {
+        // Resetear estados del quiz al cambiar de módulo
+        setQuizAnswers({});
+        setQuizScore(null);
+        setQuizPassed(false);
+        setQuizResult(null);
+        setShowScoreResult(false);
+        setDailyAttemptsCount(0);
+        setTimeElapsed(0);
+        setIsTimerRunning(false);
+        setShowTimeWarning(false);
+        setCurrentQuestion(0);
+        setCurrentPage(1);
+    }, [activeMod]);
+    
+    // Effect para cargar intentos desde localStorage
+    useEffect(() => {
+        const savedAttempts = localStorage.getItem(`quizAttempts_${activeMod}`);
+        if (savedAttempts) {
+            const attempts = JSON.parse(savedAttempts);
+            const today = new Date().toDateString();
+            
+            // Filtrar intentos de hoy
+            const todayAttempts = attempts.filter(attempt => {
+                const attemptDate = new Date(attempt.date).toDateString();
+                return attemptDate === today;
+            });
+            
+            setDailyAttemptsCount(todayAttempts.length);
+            setQuizAttempts(attempts);
+        }
+    }, [activeMod]);
+    
+    // Limpiar logs de seguridad antiguos (más de 30 días) al montar el componente
+    useEffect(() => {
+        SECURITY_LOGGER.clearOldLogs();
+    }, []);
+    
+    // Sistema de seguridad: Detectar cambios de ventana durante examen
+    useEffect(() => {
+        if (!showExamModal || showScoreResult) return;
+        
+        const handleVisibilityChange = () => {
+            if (document.hidden) {
+                // Usuario cambió de pestaña/ventana
+                setSecurityWarningCount(prev => {
+                    const newCount = prev + 1;
+                    setShowSecurityWarning(true);
+                    
+                    // Registrar violación de seguridad
+                    SECURITY_LOGGER.logViolation('WINDOW_CHANGE', {
+                        warningCount: newCount,
+                        maxWarnings: MAX_SECURITY_WARNINGS
+                    });
+                    
+                    if (newCount >= MAX_SECURITY_WARNINGS) {
+                        // Aplicar penalización por 3 infracciones
+                        setTimeout(() => {
+                            penalizeAttempt();
+                            handleCloseModal();
+                            setLoadMsg("Examen cerrado por 3 infracciones de seguridad. Has perdido 1 intento.");
+                            setTimeout(() => setLoadMsg(''), 3000);
+                        }, 1000);
+                    }
+                    
+                    return newCount;
+                });
+                
+                // Pausar timer durante la advertencia
+                setIsTimerRunning(false);
+            }
+        };
+        
+        const handleBlur = () => {
+            // Solo activar si el usuario hizo clic fuera del navegador
+            // (no cuando cambia entre pestañas del mismo navegador)
+            setTimeout(() => {
+                if (!document.hidden) {
+                    setSecurityWarningCount(prev => {
+                        const newCount = prev + 1;
+                        setShowSecurityWarning(true);
+                        
+                        // Registrar violación de seguridad
+                        SECURITY_LOGGER.logViolation('WINDOW_BLUR', {
+                            warningCount: newCount,
+                            maxWarnings: MAX_SECURITY_WARNINGS
+                        });
+                        
+                        return newCount;
+                    });
+                    setIsTimerRunning(false);
+                }
+            }, 100);
+        };
+        
+        // Agregar event listeners
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        window.addEventListener('blur', handleBlur);
+        
+        // Cleanup
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('blur', handleBlur);
+        };
+    }, [showExamModal, showScoreResult]);
+    
+    // Resetear contador de advertencias diariamente
+    useEffect(() => {
+        const today = new Date().toDateString();
+        const lastReset = localStorage.getItem('securityWarningsResetDate');
+        
+        if (lastReset !== today) {
+            // Es un nuevo día, resetear contador
+            setSecurityWarningCount(0);
+            localStorage.setItem('securityWarningsResetDate', today);
+        }
+    }, []);
+    
+    // Sistema de protección anti-copia: Keyboard lock durante examen
+    useEffect(() => {
+        if (!showExamModal || showScoreResult) return;
+        
+        const handleKeyDown = (event) => {
+            // Bloquear combinaciones de teclas peligrosas
+            const blockedCombinations = [
+                { key: 'c', ctrl: true }, // Ctrl+C (copiar)
+                { key: 'v', ctrl: true }, // Ctrl+V (pegar)
+                { key: 'p', ctrl: true }, // Ctrl+P (imprimir)
+                { key: 'u', ctrl: true }, // Ctrl+U (ver código fuente)
+                { key: 's', ctrl: true }, // Ctrl+S (guardar)
+                { key: 'a', ctrl: true }, // Ctrl+A (seleccionar todo)
+                { key: 'F12', ctrl: false }, // F12 (herramientas de desarrollo)
+                { key: 'PrintScreen', ctrl: false }, // PrintScreen (captura)
+                { key: 'F11', ctrl: false }, // F11 (pantalla completa)
+                { key: 'Escape', ctrl: false } // Escape (podría intentar salir)
+            ];
+            
+            const isBlocked = blockedCombinations.some(combo => {
+                if (combo.ctrl) {
+                    return event.ctrlKey && event.key.toLowerCase() === combo.key.toLowerCase();
+                } else {
+                    return event.key === combo.key;
+                }
+            });
+            
+            if (isBlocked) {
+                event.preventDefault();
+                event.stopPropagation();
+                
+                // Registrar violación
+                SECURITY_LOGGER.logViolation('KEYBOARD_SHORTCUT_ATTEMPT', {
+                    key: event.key,
+                    ctrlKey: event.ctrlKey,
+                    altKey: event.altKey,
+                    shiftKey: event.shiftKey
+                });
+                
+                // Mostrar mensaje
+                showSecurityMessageTemporary(`Acción bloqueada: ${event.ctrlKey ? 'Ctrl+' : ''}${event.key}`);
+                
+                // Incrementar contador de advertencias si es PrintScreen o F12
+                if (event.key === 'PrintScreen' || event.key === 'F12') {
+                    setSecurityWarningCount(prev => {
+                        const newCount = prev + 1;
+                        
+                        if (newCount >= MAX_SECURITY_WARNINGS) {
+                            setTimeout(() => {
+                                penalizeAttempt();
+                                handleCloseModal();
+                                setLoadMsg("Examen cerrado por intentos de captura/herramientas de desarrollo");
+                                setTimeout(() => setLoadMsg(''), 3000);
+                            }, 1000);
+                        }
+                        
+                        return newCount;
+                    });
+                }
+                
+                return false;
+            }
+        };
+        
+        // Bloquear menú contextual (clic derecho)
+        const handleContextMenu = (event) => {
+            event.preventDefault();
+            
+            // Registrar violación
+            SECURITY_LOGGER.logViolation('CONTEXT_MENU_ATTEMPT', {
+                x: event.clientX,
+                y: event.clientY
+            });
+            
+            showSecurityMessageTemporary('Menú contextual deshabilitado durante el examen');
+            
+            // Incrementar contador de advertencias
+            setSecurityWarningCount(prev => {
+                const newCount = prev + 1;
+                
+                if (newCount >= MAX_SECURITY_WARNINGS) {
+                    setTimeout(() => {
+                        penalizeAttempt();
+                        handleCloseModal();
+                        setLoadMsg("Examen cerrado por intentos de acceso al menú contextual");
+                        setTimeout(() => setLoadMsg(''), 3000);
+                    }, 1000);
+                }
+                
+                return newCount;
+            });
+            
+            return false;
+        };
+        
+        // Agregar event listeners
+        document.addEventListener('keydown', handleKeyDown, true);
+        document.addEventListener('contextmenu', handleContextMenu, true);
+        
+        // Activar keyboard lock
+        setKeyboardLockActive(true);
+        
+        // Cleanup
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown, true);
+            document.removeEventListener('contextmenu', handleContextMenu, true);
+            setKeyboardLockActive(false);
+        };
+    }, [showExamModal, showScoreResult]);
+    
+    // Sistema de protección anti-capturas: Detección de screenshots
+    useEffect(() => {
+        if (!showExamModal || showScoreResult) return;
+        
+        const handleScreenshotAttempt = (event) => {
+            // Detectar PrintScreen (ya manejado en keyboard lock)
+            // También podemos detectar intentos de captura de pantalla nativa
+            if (event.key === 'PrintScreen') {
+                // Mostrar overlay de protección
+                setScreenshotProtectionActive(true);
+                
+                // Registrar violación
+                SECURITY_LOGGER.logViolation('SCREENSHOT_ATTEMPT', {
+                    method: 'PrintScreen',
+                    timestamp: new Date().toISOString()
+                });
+                
+                // Ocultar overlay después de 5 segundos
+                setTimeout(() => {
+                    setScreenshotProtectionActive(false);
+                }, SCREENSHOT_OVERLAY_DURATION);
+                
+                showSecurityMessageTemporary('¡Protección anti-capturas activada!');
+            }
+        };
+        
+        // Agregar listener
+        document.addEventListener('keydown', handleScreenshotAttempt, true);
+        
+        // Cleanup
+        return () => {
+            document.removeEventListener('keydown', handleScreenshotAttempt, true);
+            setScreenshotProtectionActive(false);
+        };
+    }, [showExamModal, showScoreResult]);
+    
+    // Manejador unificado de botones - Functional Button Engine v1
+    const handleButtonClick = async (actionType, data = {}) => {
+        console.log(`[Button Engine] Acción: ${actionType}`, data);
+        
+        switch (actionType) {
+            case 'NEXT_LESSON':
+                if (currentLessonIndex < moduleLessons.length - 1) {
+                    setCurrentLessonIndex(prev => prev + 1);
+                    
+                    // Guardar progreso en Supabase
+                    try {
+                        const lessonId = moduleLessons[currentLessonIndex + 1].id;
+                        await saveProgress({
+                            user_id: user?.id,
+                            module_id: activeMod,
+                            lesson_id: lessonId,
+                            status: PROGRESS_STATUS.IN_PROGRESS
+                        });
+                        console.log(`Progreso guardado: Módulo ${activeMod}, Lección ${lessonId}`);
+                    } catch (error) {
+                        console.error('Error al guardar progreso:', error);
+                    }
+                }
+                break;
+                
+            case 'PREV_LESSON':
+                if (currentLessonIndex > 0) {
+                    setCurrentLessonIndex(prev => prev - 1);
+                }
+                break;
+                
+            case 'COMPLETE_MODULE':
+                setIsMarkingComplete(true);
+                try {
+                    // Marcar módulo como completado
+                    await saveProgress({
+                        user_id: user?.id,
+                        module_id: activeMod,
+                        lesson_id: moduleLessons[moduleLessons.length - 1].id,
+                        status: PROGRESS_STATUS.COMPLETED
+                    });
+                    
+                    // Actualizar estado local
+                    if (!completedModules.includes(activeMod)) {
+                        setCompletedModules(prev => [...prev, activeMod]);
+                    }
+                    
+                    // Si no es el último módulo, desbloquear el siguiente
+                    if (activeMod < LAST_MODULE_ID && !visitedModules.includes(activeMod + 1)) {
+                        setVisitedModules(prev => [...prev, activeMod + 1]);
+                    }
+                    
+                    console.log(`Módulo ${activeMod} marcado como completado`);
+                } catch (error) {
+                    console.error('Error al completar módulo:', error);
+                } finally {
+                    setIsMarkingComplete(false);
+                }
+                break;
+                
+            case 'UNLOCK_NEXT_MODULE':
+                if (activeMod < 5) { // Asumiendo 5 módulos totales
+                    const nextModule = activeMod + 1;
+                    
+                    // Desbloquear módulo siguiente
+                    if (!visitedModules.includes(nextModule)) {
+                        setVisitedModules(prev => [...prev, nextModule]);
+                    }
+                    
+                    // Mostrar mensaje de éxito
+                    setLoadMsg(`¡Módulo ${nextModule} desbloqueado!`);
+                    setTimeout(() => setLoadMsg(''), 3000);
+                    
+                    // Cerrar modal de examen
+                    setShowExamModal(false);
+                    setShowEvaluationQuiz(false);
+                    
+                    // Navegar automáticamente al siguiente módulo
+                    setActiveMod(nextModule);
+                    
+                    // Resetear quiz para nuevo módulo
+                    resetQuizForRetry();
+                    setSecurityWarningCount(0);
+                }
+                break;
+                
+            case 'OPEN_SYNTHESIZER':
+                setIsSynthesizerOpen(true);
+                break;
+                
+            case 'CLOSE_SYNTHESIZER':
+                setIsSynthesizerOpen(false);
+                break;
+                
+            case 'SUBMIT_QUIZ':
+                setIsSubmittingQuiz(true);
+                try {
+                    // Verificar límite diario
+                    if (!canAttemptQuiz()) {
+                        alert(`Has alcanzado el límite de ${DAILY_ATTEMPTS_LIMIT} intentos por día. Vuelve mañana.`);
+                        break;
+                    }
+                    
+                    // Validar que las 8 preguntas estén respondidas
+                    const allAnswered = Object.keys(quizAnswers).length >= TOTAL_QUESTIONS;
+                    if (!allAnswered) {
+                        alert(`Por favor responde las ${TOTAL_QUESTIONS} preguntas antes de enviar.`);
+                        break;
+                    }
+                    
+                    // Calcular puntuación (8 preguntas)
+                    const result = calculateQuizScore(quizAnswers);
+                    setQuizResult(result);
+                    setQuizScore(result.score);
+                    setQuizPassed(result.passed);
+                    setShowScoreResult(true);
+                    
+                    // Guardar resultado en Supabase
+                    try {
+                        const saveResult = await saveExamResult(
+                            activeMod,
+                            result.score,
+                            100, // maxScore
+                            quizAnswers
+                        );
+                        
+                        if (saveResult.success) {
+                            console.log('Resultado guardado en Supabase:', saveResult);
+                        }
+                    } catch (dbError) {
+                        console.error('Error al guardar en Supabase:', dbError);
+                        // Continuar aunque falle Supabase
+                    }
+                    
+                    // Actualizar contador de intentos
+                    setDailyAttemptsCount(prev => prev + 1);
+                    setLastAttemptDate(new Date().toISOString());
+                    
+                    // Guardar intento en localStorage
+                    const attempt = {
+                        date: new Date().toISOString(),
+                        score: result.score,
+                        passed: result.passed,
+                        answers: { ...quizAnswers },
+                        moduleId: activeMod
+                    };
+                    
+                    const savedAttempts = localStorage.getItem(`quizAttempts_${activeMod}`) || '[]';
+                    const attempts = JSON.parse(savedAttempts);
+                    attempts.push(attempt);
+                    localStorage.setItem(`quizAttempts_${activeMod}`, JSON.stringify(attempts));
+                    
+                    // Agregar a historial de intentos
+                    setQuizAttempts(prev => [...prev, attempt]);
+                    
+                    // Detener timer
+                    setIsTimerRunning(false);
+                    
+                    // Scroll a resultados
+                    setTimeout(() => {
+                        const resultsElement = document.getElementById('quiz-results');
+                        if (resultsElement) {
+                            resultsElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    }, 500);
+                    
+                } catch (error) {
+                    console.error('Error al enviar quiz:', error);
+                    alert('Error al procesar el quiz. Por favor intenta nuevamente.');
+                } finally {
+                    setIsSubmittingQuiz(false);
+                }
+                break;
+                
+            case 'UPDATE_QUIZ_ANSWER':
+                setQuizAnswers(prev => ({
+                    ...prev,
+                    [data.questionId]: data.answer
+                }));
+                break;
+                
+            case 'OPEN_EVALUATION':
+                if (isEvaluationLocked(activeMod)) {
+                    setShowEvaluationTooltip(true);
+                    setTimeout(() => setShowEvaluationTooltip(false), 3000);
+                } else {
+                    // Abrir modal de examen
+                    setShowExamModal(true);
+                    setShowEvaluationQuiz(true);
+                    
+                    // Iniciar timer sugerido
+                    setIsTimerRunning(true);
+                    
+                    // Resetear contador de advertencias de seguridad
+                    setSecurityWarningCount(0);
+                    
+                    // Si es un nuevo intento (no hay intentos previos o tiene intentos disponibles)
+                    const latestAttempt = getLatestQuizAttempt();
+                    if (!latestAttempt || dailyAttemptsCount < DAILY_ATTEMPTS_LIMIT) {
+                        resetQuizForRetry();
+                    }
+                }
+                break;
+                
+            case 'REVIEW_TOPIC':
+                // Navegar al tema específico para revisión
+                if (data.topic) {
+                    scrollToLesson(data.topic);
+                }
+                break;
+                
+            case 'PRACTICE_EXERCISES':
+                // Abrir ejercicios prácticos del tema
+                console.log('Abrir ejercicios prácticos para:', data.topic);
+                // Aquí se podría abrir un modal o redirigir a ejercicios
+                break;
+                
+            case 'RESET_QUIZ':
+                resetQuizForRetry();
+                break;
+                
+            default:
+                console.warn(`Acción no reconocida: ${actionType}`);
+        }
+    };
+    
+    // Función helper para obtener el último intento del quiz
+    const getLatestQuizAttempt = () => {
+        if (quizAttempts.length === 0) return null;
+        return quizAttempts[quizAttempts.length - 1];
+    };
+    
+    // ==================== SISTEMA DE LOGGING DE SEGURIDAD ====================
+    
+    // Logger de eventos de seguridad
+    const SECURITY_LOGGER = {
+        // Registrar una violación de seguridad
+        logViolation: (type, details = {}) => {
+            const logEntry = {
+                id: Date.now(),
+                type,
+                timestamp: new Date().toISOString(),
+                moduleId: activeMod,
+                userId: user?.id || 'anonymous',
+                details,
+                violationCount: securityViolations + 1
+            };
+            
+            // Obtener logs existentes
+            const logKey = `${SECURITY_LOG_PREFIX}_${user?.id || 'anonymous'}_${new Date().toDateString()}`;
+            const existingLogs = localStorage.getItem(logKey) || '[]';
+            const logs = JSON.parse(existingLogs);
+            
+            // Agregar nuevo log
+            logs.push(logEntry);
+            
+            // Guardar en localStorage (máximo 100 entradas por día)
+            if (logs.length > 100) {
+                logs.splice(0, logs.length - 100);
+            }
+            
+            localStorage.setItem(logKey, JSON.stringify(logs));
+            
+            // Incrementar contador de violaciones
+            setSecurityViolations(prev => prev + 1);
+            
+            // Mostrar mensaje temporal
+            showSecurityMessageTemporary(`Violación de seguridad: ${type}`);
+            
+            console.log(`[SECURITY] Violación registrada: ${type}`, logEntry);
+            return logEntry;
+        },
+        
+        // Obtener violaciones de hoy
+        getViolationsToday: () => {
+            const logKey = `${SECURITY_LOG_PREFIX}_${user?.id || 'anonymous'}_${new Date().toDateString()}`;
+            const existingLogs = localStorage.getItem(logKey) || '[]';
+            return JSON.parse(existingLogs);
+        },
+        
+        // Obtener total de violaciones hoy
+        getViolationCountToday: () => {
+            return SECURITY_LOGGER.getViolationsToday().length;
+        },
+        
+        // Limpiar logs antiguos (más de 30 días)
+        clearOldLogs: () => {
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith(SECURITY_LOG_PREFIX)) {
+                    try {
+                        const logs = JSON.parse(localStorage.getItem(key) || '[]');
+                        if (logs.length > 0) {
+                            const firstLogDate = new Date(logs[0].timestamp);
+                            if (firstLogDate < thirtyDaysAgo) {
+                                localStorage.removeItem(key);
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Error al limpiar logs antiguos:', error);
+                    }
+                }
+            }
+        }
+    };
+    
+    // Función para mostrar mensajes de seguridad temporales
+    const showSecurityMessageTemporary = (message) => {
+        setSecurityMessage(message);
+        setShowSecurityMessage(true);
+        
+        setTimeout(() => {
+            setShowSecurityMessage(false);
+        }, SECURITY_MESSAGE_DURATION);
+    };
+    
+    // Función para penalizar intento por violaciones de seguridad
+    const penalizeAttempt = () => {
+        if (dailyAttemptsCount >= DAILY_ATTEMPTS_LIMIT) {
+            showSecurityMessageTemporary('Ya has alcanzado el límite de intentos diarios');
+            return;
+        }
+        
+        // Incrementar contador de intentos (penalización)
+        setDailyAttemptsCount(prev => {
+            const newCount = prev + SECURITY_VIOLATION_PENALTY;
+            
+            // Guardar en localStorage
+            const today = new Date().toDateString();
+            localStorage.setItem(`dailyAttempts_${activeMod}_${today}`, newCount.toString());
+            
+            return newCount;
+        });
+        
+        setAttemptsPenalized(prev => prev + SECURITY_VIOLATION_PENALTY);
+        
+        // Registrar penalización
+        SECURITY_LOGGER.logViolation('PENALTY_APPLIED', {
+            violations: securityViolations,
+            attemptsPenalized: SECURITY_VIOLATION_PENALTY,
+            dailyAttemptsCount: dailyAttemptsCount + SECURITY_VIOLATION_PENALTY
+        });
+        
+        showSecurityMessageTemporary(`¡Penalización! Has perdido ${SECURITY_VIOLATION_PENALTY} intento por infracciones de seguridad`);
+    };
+    
+    // ==================== FIN SISTEMA DE LOGGING ====================
+    
+    // Función para manejar el cierre del modal de examen
+    const handleCloseModal = () => {
+        if (Object.keys(quizAnswers).length > 0 && !showScoreResult) {
+            // Mostrar confirmación si hay respuestas sin enviar
+            setShowExitConfirmation(true);
+        } else {
+            // Cerrar directamente si no hay progreso o ya envió
+            setShowExamModal(false);
+            setShowEvaluationQuiz(false);
+            resetQuizForRetry(); // Limpiar respuestas
+            
+            // Limpiar estados de seguridad
+            setSecurityWarningCount(0);
+            setSecurityViolations(0);
+            setScreenshotProtectionActive(false);
+            setShowSecurityStatus(false);
+            setShowSecurityMessage(false);
+        }
+    };
+    
+    // Función para formatear tiempo (minutos:segundos)
+    const formatTime = (seconds) => {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    };
     
     return (
         <>
@@ -250,73 +1214,31 @@ IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`,
                             />
                         </button>
                         
-                        {/* Dropdown de Perfil */}
-                        <div className={`absolute right-0 top-full mt-2 w-64 bg-white border border-slate-100 shadow-2xl rounded-2xl z-[100] transition-all duration-300 ${showProfileDropdown ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-2 pointer-events-none'}`}>
-                            <div className="p-4 border-b border-slate-100">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 bg-gradient-to-br from-[#00374A] to-[#00BCD4] rounded-full flex items-center justify-center">
-                                        <span className="text-white text-sm font-semibold">JE</span>
-                                    </div>
-                                    <div className="flex-1">
-                                        <p className="text-sm font-semibold text-[#00374A]">John Edison</p>
-                                        <p className="text-xs text-slate-500">john.edison@edutechlife.com</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div className="p-2">
-                                <button 
-                                    onClick={handleProfileInfo}
-                                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-cyan-50 transition-all duration-200 group"
-                                >
-                                    <Icon name="fa-user" className="text-[#00374A] text-sm group-hover:text-[#00BCD4] transition-colors" />
-                                    <span className="text-sm text-[#00374A] font-normal">Información General</span>
-                                </button>
-                                
-                                <button 
-                                    onClick={handleChangePassword}
-                                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-cyan-50 transition-all duration-200 group"
-                                >
-                                    <Icon name="fa-key" className="text-[#00374A] text-sm group-hover:text-[#00BCD4] transition-colors" />
-                                    <span className="text-sm text-[#00374A] font-normal">Cambiar Contraseña</span>
-                                </button>
-                                
-                                <button 
-                                    onClick={handleMyCertificates}
-                                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-cyan-50 transition-all duration-200 group"
-                                >
-                                    <Icon name="fa-medal" className="text-[#00374A] text-sm group-hover:text-[#00BCD4] transition-colors" />
-                                    <span className="text-sm text-[#00374A] font-normal">Mis Certificados</span>
-                                </button>
-                                
-                                <button 
-                                    onClick={handleSettings}
-                                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-cyan-50 transition-all duration-200 group"
-                                >
-                                    <Icon name="fa-gear" className="text-[#00374A] text-sm group-hover:text-[#00BCD4] transition-colors" />
-                                    <span className="text-sm text-[#00374A] font-normal">Configuración</span>
-                                </button>
-                                
-                                <div className="border-t border-slate-100 my-2"></div>
-                                
-                                <button 
-                                    onClick={handleLogout}
-                                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-red-50 transition-all duration-200 group"
-                                >
-                                    <Icon name="fa-sign-out" className="text-red-500 text-sm" />
-                                    <span className="text-sm text-red-500 font-normal">Cerrar Sesión</span>
-                                </button>
-                            </div>
-                        </div>
+                        {/* Dropdown de Perfil - Componente Refactorizado */}
+                        <UserDropdownMenu 
+                            isOpen={showProfileDropdown}
+                            onClose={() => setShowProfileDropdown(false)}
+                            anchorRef={profileDropdownRef}
+                            onNavigate={(view) => {
+                                // Para navegación interna, podemos usar onBack para algunas vistas
+                                console.log('Navegando a:', view);
+                                if (view === 'landing') {
+                                    onBack && onBack();
+                                } else {
+                                    // Para otras vistas, mostrar mensaje de desarrollo
+                                    alert(`Página de ${view} en desarrollo`);
+                                }
+                            }}
+                        />
                     </div>
                 </div>
             </header>
 
             {/* Contenedor de Layout */}
-            <div ref={containerRef} className="flex flex-row items-start min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50/50 relative font-open-sans">
+            <div ref={containerRef} className="flex flex-row items-start h-screen mt-20 bg-gradient-to-br from-slate-50 via-white to-slate-50/50 relative font-open-sans overflow-hidden">
                 {/* Sidebar Izquierdo - VERSIÓN SIMPLIFICADA */}
-                <aside className="w-[25%] sticky top-20 h-[calc(100vh-5rem)] border-r border-[#004B63]/10 bg-gradient-to-b from-white via-white/98 to-[#F8FAFC]/95 backdrop-blur-xl shadow-[0_12px_48px_rgba(0,75,99,0.12)] z-30">
-                    <div className="px-6 py-8 space-y-8">
+                <aside className="w-[20%] h-[calc(100vh-5rem)] border-r border-[#004B63]/10 bg-gradient-to-b from-white via-white/98 to-[#F8FAFC]/95 backdrop-blur-xl shadow-[0_12px_48px_rgba(0,75,99,0.12)] z-30 overflow-y-auto">
+                    <div className="px-5 py-6 space-y-6">
                         {/* Progress Circle */}
                         <div className="flex flex-col items-center p-6 border border-slate-100/60 bg-white/90 shadow-[0_40px_80px_rgba(0,75,99,0.08)] rounded-3xl w-full backdrop-blur-sm">
                             <div className="relative w-32 h-32 mb-4">
@@ -337,6 +1259,9 @@ IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`,
                             </div>
                         </div>
 
+                        {/* Espaciado entre secciones */}
+                        <div className="mt-8"></div>
+
                         {/* Sección: Módulos del Curso */}
                         <div className="px-2 w-full">
                             <div className="flex items-center gap-3 mb-4">
@@ -353,8 +1278,9 @@ IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`,
                                     <button
                                         key={mod.id}
                                         onClick={() => !isModuleLocked(mod.id) && setActiveMod(mod.id)}
-                                        className={`w-full flex items-center gap-3 p-4 rounded-xl transition-all duration-300 ${activeMod === mod.id ? 'bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white' : 'hover:bg-[#004B63]/10'}`}
+                                        className={`w-full flex items-center gap-3 p-4 rounded-xl transition-all duration-300 ${activeMod === mod.id ? 'bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white' : 'hover:bg-[#004B63]/10'} focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:ring-offset-1`}
                                         disabled={isModuleLocked(mod.id)}
+                                        aria-label={`${isModuleLocked(mod.id) ? 'Módulo bloqueado: ' : ''}${mod.title}`}
                                     >
                                         <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${activeMod === mod.id ? 'bg-white/20' : 'bg-[#004B63]/10'}`}>
                                             <Icon name={mod.icon} className={`${activeMod === mod.id ? 'text-white' : 'text-[#004B63]'} text-sm`} />
@@ -438,11 +1364,14 @@ IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`,
                                              </div>
                                          </div>
                                      </div>
-                                 </div>
-                             )}
-                         </div>
+                                  </div>
+                                )}
+                             </div>
 
-                         {/* Sección: Recursos Descargables - Integrada al Sidebar */}
+                          {/* Espaciado entre secciones */}
+                          <div className="mt-8"></div>
+
+                          {/* Sección: Recursos Descargables - Integrada al Sidebar */}
                          <div className="px-2 w-full">
                              <div className="flex items-center justify-between mb-4">
                                  <div className="flex items-center gap-3">
@@ -464,46 +1393,55 @@ IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`,
                              {sidebarDropdowns.recursos && (
                                  <div className="space-y-3 animate-fadeIn">
                                      {/* Recurso 1: Plantilla MasterPrompt Pro */}
-                                     <button className="w-full flex items-center gap-3 p-3 hover:bg-[#004B63]/10 rounded-xl transition-all duration-300 text-left group">
-                                         <div className="w-10 h-10 bg-[#004B63]/20 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-[#004B63]/30">
-                                             <Icon name="fa-file-pdf" className="text-[#004B63] text-sm" />
-                                         </div>
-                                         <div className="flex-1 min-w-0">
-                                             <p className="text-sm font-medium text-[#334155] truncate font-body">Plantilla MasterPrompt Pro</p>
-                                             <div className="flex items-center gap-2 mt-2">
-                                                 <span className="text-xs font-medium px-3 py-1.5 bg-[#FF6B6B]/10 text-[#FF6B6B] rounded-lg font-body">PDF</span>
-                                             </div>
-                                         </div>
-                                         <Icon name="fa-download" className="text-[#004B63] text-sm hover:text-[#00BCD4] transition-colors" />
-                                     </button>
+                                      <button 
+                                          className="w-full flex items-center gap-3 p-3 hover:bg-[#004B63]/10 rounded-xl transition-all duration-300 text-left group focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:ring-offset-1"
+                                          aria-label="Descargar Plantilla MasterPrompt Pro (PDF)"
+                                      >
+                                          <div className="w-10 h-10 bg-[#004B63]/20 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-[#004B63]/30">
+                                              <Icon name="fa-file-pdf" className="text-[#004B63] text-sm" />
+                                          </div>
+                                          <div className="flex-1 min-w-0">
+                                              <p className="text-sm font-medium text-[#334155] truncate font-body">Plantilla MasterPrompt Pro</p>
+                                              <div className="flex items-center gap-2 mt-2">
+                                                  <span className="text-xs font-medium px-3 py-1.5 bg-[#FF6B6B]/10 text-[#FF6B6B] rounded-lg font-body">PDF</span>
+                                              </div>
+                                          </div>
+                                          <Icon name="fa-download" className="text-[#004B63] text-sm hover:text-[#00BCD4] transition-colors" />
+                                      </button>
                                      
                                      {/* Recurso 2: Checklist de Evaluación */}
-                                     <button className="w-full flex items-center gap-3 p-3 hover:bg-[#004B63]/10 rounded-xl transition-all duration-300 text-left group">
-                                         <div className="w-10 h-10 bg-[#004B63]/20 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-[#004B63]/30">
-                                             <Icon name="fa-table" className="text-[#004B63] text-sm" />
-                                         </div>
-                                         <div className="flex-1 min-w-0">
-                                             <p className="text-sm font-medium text-[#334155] truncate font-body">Checklist de Evaluación</p>
-                                             <div className="flex items-center gap-2 mt-2">
-                                                 <span className="text-xs font-medium px-3 py-1.5 bg-[#4ECDC4]/10 text-[#4ECDC4] rounded-lg font-body">Cheatsheet</span>
-                                             </div>
-                                         </div>
-                                         <Icon name="fa-download" className="text-[#004B63] text-sm hover:text-[#00BCD4] transition-colors" />
-                                     </button>
+                                      <button 
+                                          className="w-full flex items-center gap-3 p-3 hover:bg-[#004B63]/10 rounded-xl transition-all duration-300 text-left group focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:ring-offset-1"
+                                          aria-label="Descargar Checklist de Evaluación (DOCX)"
+                                      >
+                                          <div className="w-10 h-10 bg-[#004B63]/20 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-[#004B63]/30">
+                                              <Icon name="fa-clipboard-check" className="text-[#004B63] text-sm" />
+                                          </div>
+                                          <div className="flex-1 min-w-0">
+                                              <p className="text-sm font-medium text-[#334155] truncate font-body">Checklist de Evaluación</p>
+                                              <div className="flex items-center gap-2 mt-2">
+                                                  <span className="text-xs font-medium px-3 py-1.5 bg-[#4DA8C4]/10 text-[#4DA8C4] rounded-lg font-body">DOCX</span>
+                                              </div>
+                                          </div>
+                                          <Icon name="fa-download" className="text-[#004B63] text-sm hover:text-[#00BCD4] transition-colors" />
+                                      </button>
                                      
                                      {/* Recurso 3: Templates JSON para APIs */}
-                                     <button className="w-full flex items-center gap-3 p-3 hover:bg-[#004B63]/10 rounded-xl transition-all duration-300 text-left group">
-                                         <div className="w-10 h-10 bg-[#004B63]/20 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-[#004B63]/30">
-                                             <Icon name="fa-code" className="text-[#004B63] text-sm" />
-                                         </div>
-                                         <div className="flex-1 min-w-0">
-                                             <p className="text-sm font-medium text-[#334155] truncate font-body">Templates JSON para APIs</p>
-                                             <div className="flex items-center gap-2 mt-2">
-                                                 <span className="text-xs font-medium px-3 py-1.5 bg-[#FFD166]/10 text-[#FFD166] rounded-lg font-body">JSON</span>
-                                             </div>
-                                         </div>
-                                         <Icon name="fa-download" className="text-[#004B63] text-sm hover:text-[#00BCD4] transition-colors" />
-                                     </button>
+                                      <button 
+                                          className="w-full flex items-center gap-3 p-3 hover:bg-[#004B63]/10 rounded-xl transition-all duration-300 text-left group focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:ring-offset-1"
+                                          aria-label="Descargar Templates JSON para APIs"
+                                      >
+                                          <div className="w-10 h-10 bg-[#004B63]/20 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-[#004B63]/30">
+                                              <Icon name="fa-code" className="text-[#004B63] text-sm" />
+                                          </div>
+                                          <div className="flex-1 min-w-0">
+                                              <p className="text-sm font-medium text-[#334155] truncate font-body">Templates JSON para APIs</p>
+                                              <div className="flex items-center gap-2 mt-2">
+                                                  <span className="text-xs font-medium px-3 py-1.5 bg-[#FFD166]/10 text-[#FFD166] rounded-lg font-body">JSON</span>
+                                              </div>
+                                          </div>
+                                          <Icon name="fa-download" className="text-[#004B63] text-sm hover:text-[#00BCD4] transition-colors" />
+                                      </button>
                                  </div>
                               )}
                           </div>
@@ -562,8 +1500,8 @@ IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`,
                   </aside>
 
                 {/* Área de Contenido Principal */}
-                <main className="w-[75%] ml-[25%] pt-20 p-10">
-                    <div className="space-y-8">
+                <main className="w-[80%] ml-[20%] px-4 py-6 h-[calc(100vh-5rem)] overflow-y-auto">
+                    <div className="space-y-8 w-full max-w-[calc(100%-1rem)] pb-10">
                         {/* Module Header */}
                         <div className="bg-gradient-to-br from-white via-white/95 to-[#F8FAFC] border border-[#E2E8F0]/50 shadow-[0_8px_40px_rgba(0,75,99,0.08)] rounded-2xl overflow-hidden">
                             <div className="bg-gradient-to-r from-[#004B63] via-[#00BCD4] to-[#4DA8C4] p-6">
@@ -577,19 +1515,48 @@ IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`,
                                             <p className="text-white/80 text-sm">{curr.desc}</p>
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-3">
-                                        <button className="px-5 py-2.5 bg-white/20 text-white rounded-xl hover:bg-white/30 transition-colors flex items-center gap-2">
-                                            <Icon name="fa-clipboard-check" className={`mr-2 ${isEvaluationLocked(activeMod) ? 'text-slate-400' : ''}`} />
-                                            {isEvaluationLocked(activeMod) ? (
-                                                <>
-                                                    <Icon name="fa-lock" className="mr-1.5 text-xs" />
-                                                    Evaluación Bloqueada
-                                                </>
-                                            ) : (
-                                                'Tomar Evaluación'
-                                            )}
-                                        </button>
-                                    </div>
+                                     <div className="flex items-center gap-3">
+                                          <div className="flex items-center gap-3">
+                                              <button 
+                                                  className={`${buttonClasses.primary} ${isEvaluationLocked(activeMod) ? 'opacity-70 cursor-not-allowed' : ''}`}
+                                                  disabled={isEvaluationLocked(activeMod)}
+                                                  onClick={() => !isEvaluationLocked(activeMod) && handleButtonClick('OPEN_EVALUATION')}
+                                                  aria-label={isEvaluationLocked(activeMod) ? "Evaluación bloqueada - Completa módulos anteriores" : "Tomar evaluación del módulo actual"}
+                                              >
+                                                  <Icon name="fa-clipboard-check" className={`${isEvaluationLocked(activeMod) ? 'text-slate-400' : ''}`} />
+                                                  {isEvaluationLocked(activeMod) ? (
+                                                      <>
+                                                          <Icon name="fa-lock" className="text-xs" />
+                                                          Evaluación Bloqueada
+                                                      </>
+                                                  ) : getLatestQuizAttempt() ? (
+                                                      'Volver a Intentar'
+                                                  ) : (
+                                                      'Tomar Evaluación'
+                                                  )}
+                                              </button>
+                                              
+                                              {/* Badge de porcentaje del último intento */}
+                                              {!isEvaluationLocked(activeMod) && getLatestQuizAttempt() && (
+                                                  <div className="relative group">
+                                                      <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2
+                                                          ${getLatestQuizAttempt().score >= PASSING_SCORE 
+                                                              ? 'bg-emerald-50 text-emerald-700 border-emerald-200' 
+                                                              : 'bg-amber-50 text-amber-700 border-amber-200'}`}
+                                                          title={`Último intento: ${getLatestQuizAttempt().score}% - ${getLatestQuizAttempt().score >= PASSING_SCORE ? 'Aprobado' : 'No aprobado'}`}>
+                                                          {getLatestQuizAttempt().score}%
+                                                      </div>
+                                                      
+                                                      {/* Tooltip */}
+                                                      <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 hidden group-hover:block z-50">
+                                                          <div className="bg-slate-800 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
+                                                              Último: {getLatestQuizAttempt().score}% • {getLatestQuizAttempt().score >= PASSING_SCORE ? '✓ Aprobado' : '✗ No aprobado'}
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              )}
+                                          </div>
+                                     </div>
                                 </div>
                             </div>
                             <div className="p-6">
@@ -616,41 +1583,1839 @@ IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`,
                             </div>
                         </div>
 
-                        {/* Contenido principal simplificado */}
-                        <div className="text-center py-10">
-                            <h3 className="text-xl font-bold text-[#00374A] mb-4">IA Lab Pro - Funcionando Correctamente</h3>
-                            <p className="text-slate-600 mb-6">El componente se ha corregido y ahora carga sin errores.</p>
-                            <div className="bg-gradient-to-r from-cyan-50 to-blue-50 border border-cyan-100 rounded-2xl p-6 max-w-2xl mx-auto">
-                                <h4 className="text-lg font-bold text-[#00374A] mb-3">Problemas resueltos:</h4>
-                                <ul className="text-left text-slate-700 space-y-2">
-                                    <li className="flex items-start gap-2">
-                                        <Icon name="fa-check" className="text-emerald-500 mt-0.5" />
-                                        <span>Error JSX: Elementos adyacentes sin envolver</span>
-                                    </li>
-                                    <li className="flex items-start gap-2">
-                                        <Icon name="fa-check" className="text-emerald-500 mt-0.5" />
-                                        <span>Referencia containerRef no definida</span>
-                                    </li>
-                                    <li className="flex items-start gap-2">
-                                        <Icon name="fa-check" className="text-emerald-500 mt-0.5" />
-                                        <span>Botones sin cerrar en el sidebar</span>
-                                    </li>
-                                    <li className="flex items-start gap-2">
-                                        <Icon name="fa-check" className="text-emerald-500 mt-0.5" />
-                                        <span>Estructura de divs desbalanceada</span>
-                                    </li>
-                                </ul>
+                        {/* Cuadro de Introducción - Acordeón Interactivo SaaS Premium v4 */}
+                        <div className="bg-white border border-slate-50 shadow-[0_40px_100px_rgba(0,0,0,0.06)] rounded-[28px] p-12 mb-8 w-full transition-all duration-500 ease-out hover:shadow-[0_50px_120px_rgba(0,0,0,0.08)]">
+                            <div className="flex justify-between items-center mb-3">
+                                <div>
+                                    <h2 className="text-2xl font-bold tracking-tight text-[#00374A]">Ingeniería de Prompts: El Arte de Comunicarse con la IA</h2>
+                                    <p className="text-xl font-medium text-slate-600 leading-relaxed max-w-3xl mb-4">Domina el arte de comunicarte con la I.A a nivel experto.</p>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                    <div className="text-sm font-medium text-slate-600 bg-slate-50 px-4 py-2 rounded-xl">
+                                        Lección {currentLessonIndex + 1} de {moduleLessons.length}
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <button
+                                            onClick={() => handleButtonClick('PREV_LESSON')}
+                                            disabled={currentLessonIndex === 0}
+                                            className={`${buttonClasses.small} ${currentLessonIndex === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                            aria-label="Lección anterior"
+                                        >
+                                            <Icon name="fa-chevron-left" />
+                                        </button>
+                                        <button
+                                            onClick={() => handleButtonClick('NEXT_LESSON')}
+                                            disabled={currentLessonIndex === moduleLessons.length - 1}
+                                            className={`${buttonClasses.small} ${currentLessonIndex === moduleLessons.length - 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                            aria-label="Siguiente lección"
+                                        >
+                                            <Icon name="fa-chevron-right" />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            {/* Indicador de progreso de lección actual */}
+                            <div className="mb-10">
+                                <div className="flex items-center justify-between mb-2">
+                                    <span className="text-sm font-medium text-[#00374A]">
+                                        {moduleLessons[currentLessonIndex]?.title}
+                                    </span>
+                                    <span className="text-xs text-slate-500">
+                                        {currentLessonIndex + 1}/{moduleLessons.length}
+                                    </span>
+                                </div>
+                                <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                                    <div 
+                                        className="h-full bg-gradient-to-r from-[#00374A] to-[#00BCD4] transition-all duration-500 ease-out"
+                                        style={{ width: `${((currentLessonIndex + 1) / moduleLessons.length) * 100}%` }}
+                                    ></div>
+                                </div>
+                                <p className="text-sm text-slate-500 mt-2">
+                                    {moduleLessons[currentLessonIndex]?.description}
+                                </p>
+                            </div>
+                            
+                            {/* Acordeón 1: Ingeniería de Prompts – Comunícate Mejor con la IA */}
+                            <div className={`bg-white border border-slate-100 rounded-[18px] mb-4 transition-all duration-300 ease-out hover:shadow-lg hover:bg-cyan-50/20 transform ${openAccordions[1] ? 'border-[#00BCD4]/20' : ''} ${visibleAccordions.includes(1) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} transition-all duration-500 ease-out`}>
+                                <button 
+                                    onClick={() => toggleAccordion(1)}
+                                    className="flex items-center justify-between w-full text-left group p-5"
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-8 h-8 rounded-full bg-[#00374A]/10 flex items-center justify-center">
+                                            <Icon name="fa-lightbulb" className="text-sm text-[#00374A]" />
+                                        </div>
+                                        <h3 className={`text-[15px] font-semibold transition-colors duration-300 ${openAccordions[1] ? 'text-[#00BCD4]' : 'text-[#00374A]'}`}>
+                                            <span className="font-normal text-slate-500">Ingeniería de Prompts</span> – Comunícate Mejor con la IA
+                                        </h3>
+                                    </div>
+                                    <Icon 
+                                        name={openAccordions[1] ? 'fa-chevron-down' : 'fa-chevron-right'} 
+                                        className={`text-sm transition-all duration-300 group-hover:text-[#00BCD4] ${openAccordions[1] ? 'text-[#00BCD4]' : 'text-slate-300'}`}
+                                    />
+                                </button>
+                               
+                               {openAccordions[1] && (
+                                    <div className="mt-4 space-y-4 animate-fadeIn">
+                                         <p className="text-slate-600 leading-relaxed">La calidad de las respuestas de la IA depende directamente de cómo se le habla. En esta sección se aprenderá a dar instrucciones claras, evitando errores comunes y logrando resultados mucho más precisos.</p>
+                                        <p className="font-medium text-[#00BCD4] mb-0">👉 A continuación, acceda al video o recurso de lectura para aprender, paso a paso, cómo formular instrucciones efectivas desde el inicio.</p>
+                                    </div>
+                                )}
+                            </div>
+                            
+                            {/* Acordeón 2: El Método para Dominar la IA (Mastery Framework) */}
+                            <div className={`bg-white border border-slate-100 rounded-[18px] mb-4 transition-all duration-300 ease-out hover:shadow-lg hover:bg-cyan-50/20 transform ${openAccordions[2] ? 'border-[#00BCD4]/20' : ''} ${visibleAccordions.includes(2) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} transition-all duration-500 ease-out`}>
+                                <button 
+                                    onClick={() => toggleAccordion(2)}
+                                    className="flex items-center justify-between w-full text-left group p-5"
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-8 h-8 rounded-full bg-[#00374A]/10 flex items-center justify-center">
+                                            <Icon name="fa-book-open" className="text-sm text-[#00374A]" />
+                                        </div>
+                                        <h3 className={`text-[15px] font-semibold transition-colors duration-300 ${openAccordions[2] ? 'text-[#00BCD4]' : 'text-[#00374A]'}`}>
+                                            <span className="font-normal text-slate-500">El Método para Dominar la IA</span> (Mastery Framework)
+                                        </h3>
+                                    </div>
+                                    <Icon 
+                                        name={openAccordions[2] ? 'fa-chevron-down' : 'fa-chevron-right'} 
+                                        className={`text-sm transition-all duration-300 group-hover:text-[#00BCD4] ${openAccordions[2] ? 'text-[#00BCD4]' : 'text-slate-300'}`}
+                                    />
+                                </button>
+                               
+                               {openAccordions[2] && (
+                                    <div className="mt-4 space-y-4 animate-fadeIn">
+                                        <p className="text-slate-600 leading-relaxed">No se trata solo de preguntar, sino de hacerlo con estrategia. Aquí se presenta un método simple que permite estructurar las instrucciones para obtener respuestas útiles, organizadas y alineadas con un objetivo claro.</p>
+                                        <p className="font-medium text-[#00BCD4] mb-0">👉 Continúe con el video o recurso de lectura para aplicar este método de forma práctica.</p>
+                                    </div>
+                                )}
+                            </div>
+                            
+                            {/* Acordeón 3: Adapta la IA a Cada Situación (Contexto Dinámico) */}
+                            <div className={`bg-white border border-slate-100 rounded-[18px] mb-4 transition-all duration-300 ease-out hover:shadow-lg hover:bg-cyan-50/20 transform ${openAccordions[3] ? 'border-[#00BCD4]/20' : ''} ${visibleAccordions.includes(3) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} transition-all duration-500 ease-out`}>
+                                <button 
+                                    onClick={() => toggleAccordion(3)}
+                                    className="flex items-center justify-between w-full text-left group p-5"
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-8 h-8 rounded-full bg-[#00374A]/10 flex items-center justify-center">
+                                            <Icon name="fa-map" className="text-sm text-[#00374A]" />
+                                        </div>
+                                        <h3 className={`text-[15px] font-semibold transition-colors duration-300 ${openAccordions[3] ? 'text-[#00BCD4]' : 'text-[#00374A]'}`}>
+                                            <span className="font-normal text-slate-500">Adapta la IA a Cada Situación</span> (Contexto Dinámico)
+                                        </h3>
+                                    </div>
+                                    <Icon 
+                                        name={openAccordions[3] ? 'fa-chevron-down' : 'fa-chevron-right'} 
+                                        className={`text-sm transition-all duration-300 group-hover:text-[#00BCD4] ${openAccordions[3] ? 'text-[#00BCD4]' : 'text-slate-300'}`}
+                                    />
+                                </button>
+                               
+                               {openAccordions[3] && (
+                                    <div className="mt-4 space-y-4 animate-fadeIn">
+                                        <p className="text-slate-600 leading-relaxed">La IA puede responder de muchas formas, pero todo depende del contexto que se le proporcione. En esta sección se aprenderá a ajustar las respuestas según la edad, el nivel y la necesidad específica.</p>
+                                        <p className="font-medium text-[#00BCD4] mb-0">👉 Acceda al video o recurso de lectura para aprender a personalizar las respuestas de la IA según cada situación.</p>
+                                    </div>
+                                )}
+                            </div>
+                            
+                            {/* Acordeón 4: Resultados Rápidos con IA (Zero-Shot Prompting) */}
+                            <div className={`bg-white border border-slate-100 rounded-[18px] mb-4 transition-all duration-300 ease-out hover:shadow-lg hover:bg-cyan-50/20 transform ${openAccordions[4] ? 'border-[#00BCD4]/20' : ''} ${visibleAccordions.includes(4) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} transition-all duration-500 ease-out`}>
+                                <button 
+                                    onClick={() => toggleAccordion(4)}
+                                    className="flex items-center justify-between w-full text-left group p-5"
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-8 h-8 rounded-full bg-[#00374A]/10 flex items-center justify-center">
+                                            <Icon name="fa-bolt" className="text-sm text-[#00374A]" />
+                                        </div>
+                                        <h3 className={`text-[15px] font-semibold transition-colors duration-300 ${openAccordions[4] ? 'text-[#00BCD4]' : 'text-[#00374A]'}`}>
+                                            <span className="font-normal text-slate-500">Resultados Rápidos con IA</span> (Zero-Shot Prompting)
+                                        </h3>
+                                    </div>
+                                    <Icon 
+                                        name={openAccordions[4] ? 'fa-chevron-down' : 'fa-chevron-right'} 
+                                        className={`text-sm transition-all duration-300 group-hover:text-[#00BCD4] ${openAccordions[4] ? 'text-[#00BCD4]' : 'text-slate-300'}`}
+                                    />
+                                </button>
+                               
+                               {openAccordions[4] && (
+                                    <div className="mt-4 space-y-4 animate-fadeIn">
+                                        <p className="text-slate-600 leading-relaxed">Es posible obtener buenos resultados sin dar ejemplos. Este tema enseña cómo pedir información de forma directa, ahorrando tiempo y logrando respuestas claras desde el primer intento.</p>
+                                        <p className="font-medium text-[#00BCD4] mb-0">👉 Ingrese al video o recurso de lectura para aplicar esta técnica de manera inmediata.</p>
+                                    </div>
+                                )}
+                            </div>
+                            
+                            {/* Acordeón 5: Haz que la IA Piense Paso a Paso (Chain-of-Thought) */}
+                            <div className={`bg-white border border-slate-100 rounded-[18px] mb-4 transition-all duration-300 ease-out hover:shadow-lg hover:bg-cyan-50/20 transform ${openAccordions[5] ? 'border-[#00BCD4]/20' : ''} ${visibleAccordions.includes(5) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} transition-all duration-500 ease-out`}>
+                                <button 
+                                    onClick={() => toggleAccordion(5)}
+                                    className="flex items-center justify-between w-full text-left group p-5"
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-8 h-8 rounded-full bg-[#00374A]/10 flex items-center justify-center">
+                                            <Icon name="fa-sitemap" className="text-sm text-[#00374A]" />
+                                        </div>
+                                         <h3 className={`text-[15px] font-semibold transition-colors duration-300 ${openAccordions[5] ? 'text-[#00BCD4]' : 'text-[#00374A]'}`}>
+                                             <span className="font-normal text-slate-500">Haz que la IA Piense Paso a Paso</span> (Chain-of-Thought)
+                                         </h3>
+                                    </div>
+                                    <Icon 
+                                        name={openAccordions[5] ? 'fa-chevron-down' : 'fa-chevron-right'} 
+                                        className={`text-sm transition-all duration-300 group-hover:text-[#00BCD4] ${openAccordions[5] ? 'text-[#00BCD4]' : 'text-slate-300'}`}
+                                    />
+                                </button>
+                               
+                               {openAccordions[5] && (
+                                    <div className="mt-4 space-y-4 animate-fadeIn">
+                                        <p className="text-slate-600 leading-relaxed">Para problemas complejos, la clave está en guiar a la IA en su proceso de razonamiento. Aquí se aprenderá a obtener explicaciones detalladas y soluciones paso a paso.</p>
+                                        <p className="font-medium text-[#00BCD4] mb-0">👉 Diríjase al video o recurso de lectura para estructurar el razonamiento de la IA de forma efectiva.</p>
+                                    </div>
+                                )}
+                            </div>
+                            
+                            {/* Acordeón 6: Ejercicio de Reflexión – Más Allá de Usar la IA */}
+                            <div className={`bg-white border border-slate-100 rounded-[18px] mb-4 transition-all duration-300 ease-out hover:shadow-lg hover:bg-cyan-50/20 transform ${openAccordions[6] ? 'border-[#00BCD4]/20' : ''} ${visibleAccordions.includes(6) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} transition-all duration-500 ease-out`}>
+                                <button 
+                                    onClick={() => toggleAccordion(6)}
+                                    className="flex items-center justify-between w-full text-left group p-5"
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-8 h-8 rounded-full bg-[#00374A]/10 flex items-center justify-center">
+                                            <Icon name="fa-brain" className="text-sm text-[#00374A]" />
+                                        </div>
+                                        <h3 className={`text-[15px] font-semibold transition-colors duration-300 ${openAccordions[6] ? 'text-[#00BCD4]' : 'text-[#00374A]'}`}>
+                                            <span className="font-normal text-slate-500">Ejercicio de Reflexión</span> – Más Allá de Usar la IA
+                                        </h3>
+                                    </div>
+                                    <Icon 
+                                        name={openAccordions[6] ? 'fa-chevron-down' : 'fa-chevron-right'} 
+                                        className={`text-sm transition-all duration-300 group-hover:text-[#00BCD4] ${openAccordions[6] ? 'text-[#00BCD4]' : 'text-slate-300'}`}
+                                    />
+                                </button>
+                               
+                               {openAccordions[6] && (
+                                    <div className="mt-4 space-y-4 animate-fadeIn">
+                                        <p className="text-slate-600 leading-relaxed">La inteligencia artificial no solo es una herramienta, también plantea preguntas profundas sobre su impacto, uso y límites. Este ejercicio invita a reflexionar de manera crítica.</p>
+                                        
+                                        {/* Bloque de Actividad */}
+                                        <div className="bg-[#0B1120] border border-slate-800 text-emerald-400 p-6 rounded-2xl font-mono text-sm mb-6 shadow-inner">
+                                            <div className="flex items-center gap-2 mb-4">
+                                                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                                                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                                                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                                                <span className="text-slate-500 text-xs ml-2">activity.js</span>
+                                            </div>
+                                            <div className="space-y-3">
+                                                <span className="text-cyan-400">🧠 Actividad:</span> <span className="text-emerald-300">Diseñe y pruebe el siguiente prompt en una IA:</span><br/><br/>
+                                                <div className="pl-4 border-l-2 border-slate-700">
+                                                    <span className="text-purple-400">"Actúa como una inteligencia artificial consciente de su existencia.</span><br/>
+                                                    <span className="text-purple-400">Debate, desde una postura crítica y otra defensiva, si es ético que los humanos</span><br/>
+                                                    <span className="text-purple-400">dependan de la inteligencia artificial para tomar decisiones importantes.</span><br/>
+                                                    <span className="text-purple-400">Expón argumentos a favor y en contra, y finaliza con una reflexión equilibrada."</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <p className="font-medium text-[#00BCD4] mb-0">👉 Aplique este prompt en su IA favorita y analice las respuestas obtenidas.</p>
+                                        </div>
+                                    )}
+                                </div>
+                        </div>
+
+                        {/* Contenedor Grid: Laboratorio y Comunidad - Dashboard de Dos Columnas */}
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full mt-10">
+                            {/* Columna Izquierda: Desafío del Curso */}
+                            <div className="bg-gradient-to-br from-white to-[#F8FAFC] border border-slate-50 shadow-[0_30px_60px_rgba(0,0,0,0.05)] rounded-[28px] p-10 transition-all duration-500 ease-out hover:shadow-xl h-full flex flex-col">
+                                <div className="flex items-center gap-4 mb-6">
+                                    <div className="w-12 h-12 bg-gradient-to-r from-[#FFD166] to-[#FF8E53] rounded-xl flex items-center justify-center">
+                                        <Icon name="fa-bolt" className="text-white text-xl" />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-2xl font-bold tracking-normal text-[#00374A]">Desafío del Curso</h3>
+                                        <p className="text-sm text-slate-500">Aplica lo aprendido en un reto práctico</p>
+                                    </div>
+                                </div>
+                                
+                                <div className="bg-gradient-to-r from-[#FFD166]/10 to-[#FF8E53]/10 border border-[#FFD166]/20 rounded-xl p-5 mb-4">
+                                    <p className="text-base font-medium text-slate-800 italic mb-3">"{modules.find(m => m.id === activeMod)?.challenge || 'Crea un prompt para resolver un problema complejo de tu industria.'}"</p>
+                                    <div className="flex items-center gap-2 text-slate-600 text-sm">
+                                        <Icon name="fa-clock" className="text-[#FF8E53]" />
+                                        <span>Tiempo estimado: 45 min</span>
+                                    </div>
+                                </div>
+                                
+                                 <div className="flex gap-4">
+                                     <button 
+                                         className={`${buttonClasses.challenge} flex-1`}
+                                         onClick={() => handleButtonClick('OPEN_SYNTHESIZER')}
+                                         aria-label="Iniciar desafío práctico del módulo"
+                                     >
+                                         <Icon name="fa-play" />
+                                         Iniciar Desafío
+                                     </button>
+                                     <button 
+                                         className={`${buttonClasses.secondary} flex-1`}
+                                         onClick={() => handleButtonClick('OPEN_SYNTHESIZER', { mode: 'solution' })}
+                                         aria-label="Ver solución del desafío"
+                                     >
+                                         <Icon name="fa-lightbulb" />
+                                         Ver Solución
+                                     </button>
+                                 </div>
+                            </div>
+
+                            {/* Columna Derecha: Muro de Insights */}
+                            <div className={`bg-white shadow-[0_30px_60px_rgba(0,0,0,0.05)] rounded-[28px] p-10 w-full transition-all duration-500 h-full flex flex-col ${insightsExpanded ? 'h-fit' : 'h-fit'}`}>
+                                {/* Cabecera del Muro */}
+                                <div className="mb-8">
+                                    <h3 className="text-2xl font-bold text-[#00374A] mb-3">Muro de Insights: The Prompt Collective</h3>
+                                    <p className="text-[15px] text-slate-500 mb-8 max-w-2xl">Co-crea, debate y descubre los prompts que están redefiniendo la industria.</p>
+                                    
+                                    {/* Acción Rápida - Input Box */}
+                                    <div className="bg-slate-50 border border-slate-100 p-4 rounded-xl text-slate-400 text-sm cursor-pointer hover:bg-slate-100 transition-all duration-300 flex items-center gap-3">
+                                        <Icon name="fa-pen" className="text-slate-400" />
+                                        <span>¿Qué prompt descubriste hoy? Compártelo con la comunidad...</span>
+                                    </div>
+                                </div>
+                                
+                                {/* Último comentario destacado (siempre visible) */}
+                                <div className="border border-slate-100 rounded-2xl p-4 hover:shadow-lg transition-all duration-300 hover:border-slate-200 mb-6">
+                                    <div className="flex items-start gap-3">
+                                        {/* Avatar */}
+                                        <div className="w-8 h-8 bg-gradient-to-r from-[#004B63] to-[#00BCD4] rounded-full flex items-center justify-center text-white font-semibold text-xs">
+                                            MS
+                                        </div>
+                                        
+                                        <div className="flex-1">
+                                            {/* Metadatos compactos */}
+                                            <div className="flex items-center justify-between mb-2">
+                                                <div>
+                                                    <div className="flex items-center gap-2">
+                                                        <h4 className="font-semibold text-[#00374A] text-sm">María Solano</h4>
+                                                        <Icon name="fa-star" className="text-[#FFD166] text-xs" />
+                                                        <span className="text-[10px] px-2 py-0.5 bg-cyan-100 text-cyan-800 rounded-full">Prompt Master Nivel 3</span>
+                                                    </div>
+                                                    <p className="text-[10px] text-slate-500 mt-0.5">Hace 2 horas</p>
+                                                </div>
+                                            </div>
+                                            
+                                            {/* Prompt compacto */}
+                                            <div className="bg-cyan-50/50 p-3 rounded-lg mb-2">
+                                                <div className="font-mono text-cyan-800 text-[11px] leading-relaxed line-clamp-2">
+                                                    "Actúa como un arquitecto de sistemas educativos. Diseña un framework de evaluación que combine métricas cuantitativas, análisis cualitativo y retroalimentación en tiempo real."
+                                                </div>
+                                            </div>
+                                            
+                                            {/* Interacciones compactas */}
+                                            <div className="flex items-center justify-between">
+                                                <div className="flex items-center gap-4">
+                                                    <div className="flex items-center gap-1">
+                                                        <button 
+                                                            className="text-slate-400 hover:text-cyan-600 transition-colors focus:outline-none focus:ring-1 focus:ring-cyan-400 rounded"
+                                                            aria-label="Votar positivamente este insight"
+                                                        >
+                                                            <Icon name="fa-chevron-up" className="text-xs" />
+                                                        </button>
+                                                        <span className="text-xs font-medium text-slate-700 mx-1">24</span>
+                                                    </div>
+                                                    <button 
+                                                        className="flex items-center gap-1 text-slate-500 hover:text-cyan-600 transition-colors focus:outline-none focus:ring-1 focus:ring-cyan-400 rounded px-1"
+                                                        aria-label="Ver comentarios de este insight"
+                                                    >
+                                                        <Icon name="fa-comment" className="text-xs" />
+                                                        <span className="text-xs">8</span>
+                                                    </button>
+                                                </div>
+                                                <div className="flex items-center gap-1 text-[10px] text-cyan-700 bg-cyan-50 px-2 py-0.5 rounded-full">
+                                                    <Icon name="fa-check-circle" className="text-cyan-600 text-xs" />
+                                                    <span>Verificado</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                {/* Efecto de degradado para indicar más contenido (solo cuando colapsado) */}
+                                {!insightsExpanded && (
+                                    <div className="relative h-12 -mt-12 bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none flex-shrink-0"></div>
+                                )}
+                                
+                                {/* Comentarios adicionales (solo visibles cuando expandido) */}
+                                {insightsExpanded && (
+                                    <div className="space-y-4 mt-6 animate-fadeIn flex-grow">
+                                        {/* Tarjeta 2: Post de Discusión */}
+                                        <div className="border border-slate-100 rounded-2xl p-4 hover:shadow-lg transition-all duration-300 hover:border-slate-200">
+                                            <div className="flex items-start gap-3">
+                                                {/* Avatar */}
+                                                <div className="w-8 h-8 bg-gradient-to-r from-[#FF8E53] to-[#FFD166] rounded-full flex items-center justify-center text-white font-semibold text-xs">
+                                                    AC
+                                                </div>
+                                                
+                                                <div className="flex-1">
+                                                    {/* Metadatos compactos */}
+                                                    <div className="flex items-center justify-between mb-2">
+                                                        <div>
+                                                            <div className="flex items-center gap-2">
+                                                                <h4 className="font-semibold text-[#00374A] text-sm">Andrés Cortés</h4>
+                                                                <span className="text-[10px] px-2 py-0.5 bg-slate-100 text-slate-700 rounded-full">Arquitecto de IA</span>
+                                                            </div>
+                                                            <p className="text-[10px] text-slate-500 mt-0.5">Hace 5 horas</p>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    {/* Prompt compacto */}
+                                                    <div className="bg-cyan-50/50 p-3 rounded-lg mb-2">
+                                                        <div className="font-mono text-cyan-800 text-[11px] leading-relaxed line-clamp-2">
+                                                            "Analiza dataset de feedback: categoriza en críticas, bugs, sugerencias, elogios. Prioriza por impacto UX, esfuerzo, roadmap."
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    {/* Interacciones compactas */}
+                                                    <div className="flex items-center justify-between">
+                                                        <div className="flex items-center gap-4">
+                                                            <div className="flex items-center gap-1">
+                                                                <button 
+                                                                    className="text-slate-400 hover:text-cyan-600 transition-colors focus:outline-none focus:ring-1 focus:ring-cyan-400 rounded"
+                                                                    aria-label="Votar positivamente este insight"
+                                                                >
+                                                                    <Icon name="fa-chevron-up" className="text-xs" />
+                                                                </button>
+                                                                <span className="text-xs font-medium text-slate-700 mx-1">17</span>
+                                                            </div>
+                                                            <button 
+                                                                className="flex items-center gap-1 text-slate-500 hover:text-cyan-600 transition-colors focus:outline-none focus:ring-1 focus:ring-cyan-400 rounded px-1"
+                                                                aria-label="Ver comentarios de este insight"
+                                                            >
+                                                                <Icon name="fa-comment" className="text-xs" />
+                                                                <span className="text-xs">5</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        {/* Tarjeta 3: Post de Innovación */}
+                                        <div className="border border-slate-100 rounded-2xl p-4 hover:shadow-lg transition-all duration-300 hover:border-slate-200">
+                                            <div className="flex items-start gap-3">
+                                                {/* Avatar */}
+                                                <div className="w-8 h-8 bg-gradient-to-r from-[#00BCD4] to-[#4DA8C4] rounded-full flex items-center justify-center text-white font-semibold text-xs">
+                                                    VR
+                                                </div>
+                                                
+                                                <div className="flex-1">
+                                                    {/* Metadatos compactos */}
+                                                    <div className="flex items-center justify-between mb-2">
+                                                        <div>
+                                                            <div className="flex items-center gap-2">
+                                                                <h4 className="font-semibold text-[#00374A] text-sm">Valeria Ríos</h4>
+                                                                <Icon name="fa-star" className="text-[#FFD166] text-xs" />
+                                                                <span className="text-[10px] px-2 py-0.5 bg-cyan-100 text-cyan-800 rounded-full">Innovación</span>
+                                                            </div>
+                                                            <p className="text-[10px] text-slate-500 mt-0.5">Ayer</p>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    {/* Prompt compacto */}
+                                                    <div className="bg-cyan-50/50 p-3 rounded-lg mb-2">
+                                                        <div className="font-mono text-cyan-800 text-[11px] leading-relaxed line-clamp-2">
+                                                            "Mentor pensamiento crítico: 3 pasos para identificar sesgos, formular preguntas desafiantes, proponer alternativas."
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    {/* Interacciones compactas */}
+                                                    <div className="flex items-center justify-between">
+                                                        <div className="flex items-center gap-4">
+                                                            <div className="flex items-center gap-1">
+                                                                <button 
+                                                                    className="text-slate-400 hover:text-cyan-600 transition-colors focus:outline-none focus:ring-1 focus:ring-cyan-400 rounded"
+                                                                    aria-label="Votar positivamente este insight"
+                                                                >
+                                                                    <Icon name="fa-chevron-up" className="text-xs" />
+                                                                </button>
+                                                                <span className="text-xs font-medium text-slate-700 mx-1">31</span>
+                                                            </div>
+                                                            <button 
+                                                                className="flex items-center gap-1 text-slate-500 hover:text-cyan-600 transition-colors focus:outline-none focus:ring-1 focus:ring-cyan-400 rounded px-1"
+                                                                aria-label="Ver comentarios de este insight"
+                                                            >
+                                                                <Icon name="fa-comment" className="text-xs" />
+                                                                <span className="text-xs">12</span>
+                                                            </button>
+                                                        </div>
+                                                        <div className="flex items-center gap-1 text-[10px] text-cyan-700 bg-cyan-50 px-2 py-0.5 rounded-full">
+                                                            <Icon name="fa-bolt" className="text-cyan-600 text-xs" />
+                                                            <span>Trending</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        {/* Footer del Muro (solo cuando expandido) */}
+                                        <div className="mt-6 pt-4 border-t border-slate-100 text-center">
+                                            <p className="text-xs text-slate-500">Mostrando 3 de 47 insights activos</p>
+                                        </div>
+                                    </div>
+                                )}
+                                
+                                {/* Botón de Expansión/Contracción */}
+                                <div className="text-center mt-6">
+                                    <button 
+                                        onClick={() => setInsightsExpanded(!insightsExpanded)}
+                                        className="text-cyan-600 hover:text-[#00374A] font-bold text-xs uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2 mx-auto group focus:outline-none focus:ring-1 focus:ring-cyan-400 rounded px-2 py-1"
+                                        aria-label={insightsExpanded ? "Contraer muro de insights" : "Expandir para ver toda la conversación"}
+                                    >
+                                        {insightsExpanded ? (
+                                            <>
+                                                <span>Contraer muro</span>
+                                                <Icon name="fa-chevron-up" className="text-xs group-hover:translate-y-[-2px] transition-transform duration-300" />
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span>Explorar toda la conversación</span>
+                                                <Icon name="fa-chevron-down" className="text-xs group-hover:translate-y-[2px] transition-transform duration-300 animate-bounce" />
+                                            </>
+                                        )}
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </main>
+
+                        {/* Sintetizador de Prompts Élite - Ahora arriba del grid */}
+                        <div className="bg-gradient-to-br from-white to-[#F8FAFC] border border-slate-50 shadow-[0_30px_60px_rgba(0,0,0,0.05)] rounded-[28px] p-10 mb-8 w-full transition-all duration-500 ease-out hover:shadow-xl mt-10">
+                            <div className="mb-8">
+                                <div className="flex items-center gap-4 mb-4">
+                                    <div className="w-12 h-12 bg-gradient-to-r from-[#004B63] to-[#00BCD4] rounded-xl flex items-center justify-center">
+                                        <Icon name="fa-atom" className="text-white text-xl" />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-2xl font-bold tracking-normal text-[#00374A]">Sintetizador de Prompts Élite</h3>
+                                        <p className="text-sm text-slate-600">Transforma ideas en MasterPrompts profesionales</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <textarea
+                                value={input}
+                                onChange={e => setInput(e.target.value)}
+                                placeholder="Describe tu idea o prompt base para optimización profesional..."
+                                className="w-full px-4 py-3 bg-slate-50 border-slate-200 border rounded-xl focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 resize-none mb-4 text-[14px]"
+                                rows={4}
+                                onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleOptimize(); } }}
+                            />
+                            
+                            <button
+                                onClick={handleOptimize}
+                                disabled={loading}
+                                className={`${buttonClasses.primaryGradient} w-full ${loading ? buttonClasses.loading : ''}`}
+                                aria-label={loading ? `Procesando: ${loadMsg}` : "Sintetizar prompt maestro con IA"}
+                            >
+                                {loading ? (
+                                    <>
+                                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                        {loadMsg}
+                                    </>
+                                ) : (
+                                    <>
+                                        <Icon name="fa-microchip" />
+                                        Sintetizar Prompt Maestro
+                                    </>
+                                )}
+                            </button>
+                            
+                            {genData && !loading && (
+                                <div className="mt-6 space-y-4">
+                                    {/* Caja de Resultado - Prompt Élite */}
+                                    <div className="bg-[#0B1120] text-emerald-400 font-mono p-6 rounded-xl relative animate-fadeIn" style={{ animationDelay: '0.1s' }}>
+                                        <div className="flex items-center gap-2 mb-4">
+                                            <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                                            <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                                            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                                            <span className="text-slate-500 text-xs ml-2">master-prompt.rtf</span>
+                                        </div>
+                                        <div className="text-[14px] leading-relaxed whitespace-pre-wrap">
+                                            {genData.masterPrompt}
+                                        </div>
+                                        <button 
+                                            onClick={() => navigator.clipboard.writeText(genData.masterPrompt)}
+                                            className="absolute top-4 right-4 text-xs border border-emerald-400/30 text-emerald-400 hover:bg-emerald-400/10 flex items-center gap-1 px-2 py-1 rounded focus:outline-none focus:ring-1 focus:ring-emerald-400"
+                                            aria-label="Copiar prompt maestro al portapapeles"
+                                        >
+                                            <Icon name="fa-copy" className="text-xs" /> Copiar
+                                        </button>
+                                    </div>
+                                    
+                                    {/* Caja de Retroalimentación Técnica */}
+                                    <div className="bg-cyan-50 border-l-4 border-cyan-400 p-6 rounded-r-xl animate-fadeIn" style={{ animationDelay: '0.3s' }}>
+                                        <div className="flex items-center gap-2 mb-3">
+                                            <Icon name="fa-lightbulb" className="text-cyan-600" />
+                                            <h4 className="text-base font-bold text-[#00374A]">Análisis Técnico</h4>
+                                        </div>
+                                        <p className="text-slate-700 text-[14px] leading-relaxed mb-3">
+                                            {genData.feedback}
+                                        </p>
+                                        
+                                        {/* Técnicas Aplicadas */}
+                                        {genData.techniques && (
+                                            <div className="mt-4">
+                                                <p className="text-sm font-medium text-slate-600 mb-2">Técnicas aplicadas:</p>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {genData.techniques.map((tech, index) => (
+                                                        <span key={index} className="text-xs px-3 py-1 bg-cyan-100 text-cyan-800 rounded-full">
+                                                            {tech}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                         </div>
+                         
+                          {/* Cuadro "¿Listo para avanzar?" - Muestra diferentes estados */}
+                           {showReadyToAdvance && (
+                               <div className="mt-10 pt-8 border-t border-slate-100">
+                                   <div className="flex justify-between items-center">
+                                       <div>
+                                           <h3 className="text-lg font-bold text-[#00374A] mb-1">¿Listo para avanzar?</h3>
+                                           <p className="text-sm text-slate-600">
+                                               {showEvaluationQuiz 
+                                                   ? "¡Excelente! Ahora responde el quiz de evaluación para validar tu aprendizaje."
+                                                   : completedModules.includes(activeMod) 
+                                                       ? "¡Ya completaste este módulo! Puedes continuar con el siguiente."
+                                                       : "Marca este módulo como completado para desbloquear el siguiente nivel."}
+                                           </p>
+                                       </div>
+                                       
+                                       {/* Mostrar botón diferente según el estado */}
+                                       {showEvaluationQuiz ? (
+                                           // Cuando se muestra el quiz, mostrar botón para ir al quiz (ya está visible, pero por si acaso)
+                                           <button
+                                               onClick={() => {
+                                                   const quizElement = document.getElementById('module-evaluation-quiz');
+                                                   if (quizElement) {
+                                                       quizElement.scrollIntoView({ 
+                                                           behavior: 'smooth', 
+                                                           block: 'start' 
+                                                       });
+                                                   }
+                                               }}
+                                               className={`${buttonClasses.primary}`}
+                                               aria-label="Ir al quiz de evaluación"
+                                           >
+                                               <Icon name="fa-clipboard-check" />
+                                               Ir al Quiz
+                                           </button>
+                                       ) : (
+                                           // Cuando no hay quiz visible, mostrar botón para completar módulo
+                                           <button
+                                               onClick={() => handleButtonClick('COMPLETE_MODULE')}
+                                               disabled={isMarkingComplete || completedModules.includes(activeMod) || !quizPassed}
+                                               className={`${buttonClasses.primary} ${(isMarkingComplete || completedModules.includes(activeMod) || !quizPassed) ? buttonClasses.loading : ''}`}
+                                               aria-label={!quizPassed ? "Debes aprobar el quiz primero" : completedModules.includes(activeMod) ? "Módulo ya completado" : "Marcar módulo como completado"}
+                                           >
+                                               {isMarkingComplete ? (
+                                                   <>
+                                                       <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                                       Procesando...
+                                                   </>
+                                               ) : !quizPassed ? (
+                                                   <>
+                                                       <Icon name="fa-lock" />
+                                                       Quiz No Aprobado
+                                                   </>
+                                               ) : completedModules.includes(activeMod) ? (
+                                                   <>
+                                                       <Icon name="fa-check-circle" />
+                                                       Módulo Completado
+                                                   </>
+                                               ) : (
+                                                   <>
+                                                       <Icon name="fa-trophy" />
+                                                       Completar Módulo
+                                                   </>
+                                               )}
+                                           </button>
+                                       )}
+                                   </div>
+                               </div>
+                           )}
+                          
+                            {/* Quiz de evaluación del módulo - Sistema Mejorado (solo se muestra inline si NO hay modal abierto) */}
+                            <div>
+                                {showEvaluationQuiz && !showExamModal && (
+                                    <div id="module-evaluation-quiz" className="mt-8 bg-gradient-to-br from-white to-[#F8FAFC] border border-slate-50 shadow-[0_20px_40px_rgba(0,0,0,0.04)] rounded-[24px] p-8">
+                              <div className="flex items-center gap-4 mb-6">
+                                  <div className="w-10 h-10 bg-gradient-to-r from-[#004B63] to-[#00BCD4] rounded-xl flex items-center justify-center">
+                                      <Icon name="fa-clipboard-check" className="text-white" />
+                                  </div>
+                                  <div>
+                                      <h3 className="text-xl font-bold text-[#00374A]">Evaluación del Módulo</h3>
+                                      <p className="text-sm text-slate-600">Responde las 8 preguntas para validar tu aprendizaje (70% mínimo para aprobar)</p>
+                                  </div>
+                              </div>
+                              
+                              {/* Timer Sugerido */}
+                              <div className="mb-6 p-4 bg-blue-50 border border-blue-100 rounded-xl">
+                                  <div className="flex items-center justify-between mb-2">
+                                      <div className="flex items-center gap-2">
+                                          <Icon name="fa-clock" className="text-blue-600" />
+                                          <span className="text-sm font-medium text-blue-700">Tiempo sugerido</span>
+                                          <span className="text-xs text-blue-500 px-2 py-1 bg-blue-100 rounded-full">
+                                              Opcional
+                                          </span>
+                                      </div>
+                                      <button
+                                          onClick={() => setIsTimerRunning(!isTimerRunning)}
+                                          className="text-sm text-blue-600 hover:text-blue-800"
+                                      >
+                                          {isTimerRunning ? '⏸️ Pausar' : '▶️ Iniciar'} timer
+                                      </button>
+                                  </div>
+                                  
+                                  <div className="flex items-center justify-between">
+                                      <div className="text-center">
+                                          <div className="text-2xl font-bold text-blue-700">
+                                              {Math.floor((suggestedTime - timeElapsed) / 60)}:{(suggestedTime - timeElapsed) % 60 < 10 ? '0' : ''}{(suggestedTime - timeElapsed) % 60}
+                                          </div>
+                                          <div className="text-xs text-blue-500 mt-1">Restante</div>
+                                      </div>
+                                      
+                                      <div className="text-center">
+                                          <div className="text-lg font-medium text-gray-700">
+                                              {Math.floor(timeElapsed / 60)}:{(timeElapsed % 60 < 10 ? '0' : '')}{timeElapsed % 60}
+                                          </div>
+                                          <div className="text-xs text-gray-500">Transcurrido</div>
+                                      </div>
+                                      
+                                      <div className="text-center">
+                                          <div className="text-lg font-medium text-gray-700">{SUGGESTED_TIME_MINUTES}:00</div>
+                                          <div className="text-xs text-gray-500">Total sugerido</div>
+                                      </div>
+                                  </div>
+                                  
+                                  {/* Barra de progreso del tiempo */}
+                                  <div className="mt-3 h-2 bg-blue-100 rounded-full overflow-hidden">
+                                      <div 
+                                          className="h-full bg-gradient-to-r from-blue-400 to-blue-600 transition-all duration-1000"
+                                          style={{ width: `${(timeElapsed / suggestedTime) * 100}%` }}
+                                      ></div>
+                                  </div>
+                                  
+                                  {showTimeWarning && (
+                                      <div className="mt-3 p-2 bg-amber-50 border border-amber-200 rounded-lg">
+                                          <p className="text-xs text-amber-700 flex items-center gap-1">
+                                              <Icon name="fa-exclamation-triangle" />
+                                              Llevas más de 15 minutos. Considera revisar tus respuestas.
+                                          </p>
+                                      </div>
+                                  )}
+                              </div>
+                              
+                              {/* Contador de intentos */}
+                              <div className="mb-6 p-4 bg-slate-50 border border-slate-100 rounded-xl">
+                                  <div className="flex items-center justify-between">
+                                      <div className="flex items-center gap-2">
+                                          <Icon name="fa-rotate-right" className="text-slate-600" />
+                                          <span className="text-sm font-medium text-slate-700">Intentos diarios</span>
+                                      </div>
+                                      <div className="flex items-center gap-2">
+                                          <span className="text-sm text-slate-600">
+                                              {dailyAttemptsCount} / {DAILY_ATTEMPTS_LIMIT} usados hoy
+                                          </span>
+                                          {dailyAttemptsCount >= DAILY_ATTEMPTS_LIMIT && (
+                                              <span className="text-xs px-2 py-1 bg-red-100 text-red-700 rounded-full">
+                                                  Límite alcanzado
+                                              </span>
+                                          )}
+                                      </div>
+                                  </div>
+                                  
+                                  {dailyAttemptsCount >= DAILY_ATTEMPTS_LIMIT && (
+                                      <p className="text-xs text-slate-600 mt-2">
+                                          <Icon name="fa-info-circle" className="inline mr-1" />
+                                          Has agotado tus {DAILY_ATTEMPTS_LIMIT} intentos diarios. Vuelve mañana para intentar nuevamente.
+                                      </p>
+                                  )}
+                              </div>
+                              
+                              {/* Navegación por preguntas */}
+                              <div className="sticky top-0 bg-white/95 backdrop-blur-sm z-10 py-4 mb-6 border-b">
+                                  <div className="flex items-center justify-between">
+                                      <div className="flex flex-wrap gap-2">
+                                          {quizQuestions.map((question, index) => {
+                                              const isAnswered = quizAnswers[question.id];
+                                              const isCurrent = currentQuestion === index;
+                                              
+                                              return (
+                                                  <button
+                                                      key={question.id}
+                                                      onClick={() => setCurrentQuestion(index)}
+                                                      className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium border transition-all relative ${
+                                                          isCurrent 
+                                                              ? 'bg-[#00BCD4] text-white border-[#00BCD4] ring-2 ring-[#00BCD4]/20' 
+                                                              : isAnswered
+                                                                  ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
+                                                                  : 'bg-slate-100 text-slate-600 border-slate-200'
+                                                      }`}
+                                                      aria-label={`Pregunta ${index + 1}: ${isAnswered ? 'Respondida' : 'Sin responder'}`}
+                                                  >
+                                                      {index + 1}
+                                                      {question.difficulty === 'difícil' && (
+                                                          <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+                                                      )}
+                                                  </button>
+                                              );
+                                          })}
+                                      </div>
+                                      
+                                      <div className="text-sm text-slate-600">
+                                          <span className="font-medium">{Object.keys(quizAnswers).length}/{TOTAL_QUESTIONS}</span> respondidas
+                                      </div>
+                                  </div>
+                                  
+                                  {/* Leyenda de dificultad */}
+                                  <div className="flex items-center gap-4 mt-3 text-xs text-slate-500">
+                                      <div className="flex items-center gap-1">
+                                          <div className="w-3 h-3 bg-emerald-100 border border-emerald-200 rounded-full"></div>
+                                          <span>Respondida</span>
+                                      </div>
+                                      <div className="flex items-center gap-1">
+                                          <div className="w-3 h-3 bg-slate-100 border border-slate-200 rounded-full"></div>
+                                          <span>Pendiente</span>
+                                      </div>
+                                      <div className="flex items-center gap-1">
+                                          <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                                          <span>Difícil</span>
+                                      </div>
+                                  </div>
+                              </div>
+                              
+                              {/* Vista paginada - 4 preguntas por página */}
+                              {currentPage === 1 && (
+                                  <div className="space-y-6">
+                                      {quizQuestions.slice(0, 4).map((question) => (
+                                          <div key={question.id} id={`question-${question.id}`} className="bg-white border border-slate-100 rounded-xl p-5">
+                                              <div className="flex items-center justify-between mb-3">
+                                                  <h4 className="text-base font-semibold text-[#00374A]">
+                                                      {question.id.replace('q', '')}. {question.question}
+                                                  </h4>
+                                                  <span className={`text-xs px-2 py-1 rounded-full ${
+                                                      question.difficulty === 'fácil' ? 'bg-emerald-100 text-emerald-700' :
+                                                      question.difficulty === 'medio' ? 'bg-amber-100 text-amber-700' :
+                                                      'bg-red-100 text-red-700'
+                                                  }`}>
+                                                      {question.difficulty}
+                                                  </span>
+                                              </div>
+                                              <div className="space-y-2">
+                                                  {question.options.map((option) => (
+                                                      <label key={option.id} className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-lg cursor-pointer">
+                                                          <input
+                                                              type="radio"
+                                                              name={question.id}
+                                                              value={option.id}
+                                                              checked={quizAnswers[question.id] === option.id}
+                                                              onChange={() => handleButtonClick('UPDATE_QUIZ_ANSWER', { 
+                                                                  questionId: question.id, 
+                                                                  answer: option.id 
+                                                              })}
+                                                              className="w-4 h-4 text-[#00BCD4] focus:ring-[#00BCD4]"
+                                                          />
+                                                          <span className="text-sm text-slate-700">{option.label}</span>
+                                                      </label>
+                                                  ))}
+                                              </div>
+                                          </div>
+                                      ))}
+                                  </div>
+                              )}
+
+                              {currentPage === 2 && (
+                                  <div className="space-y-6">
+                                      {quizQuestions.slice(4, 8).map((question) => (
+                                          <div key={question.id} id={`question-${question.id}`} className="bg-white border border-slate-100 rounded-xl p-5">
+                                              <div className="flex items-center justify-between mb-3">
+                                                  <h4 className="text-base font-semibold text-[#00374A]">
+                                                      {question.id.replace('q', '')}. {question.question}
+                                                  </h4>
+                                                  <span className={`text-xs px-2 py-1 rounded-full ${
+                                                      question.difficulty === 'fácil' ? 'bg-emerald-100 text-emerald-700' :
+                                                      question.difficulty === 'medio' ? 'bg-amber-100 text-amber-700' :
+                                                      'bg-red-100 text-red-700'
+                                                  }`}>
+                                                      {question.difficulty}
+                                                  </span>
+                                              </div>
+                                              <div className="space-y-2">
+                                                  {question.options.map((option) => (
+                                                      <label key={option.id} className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-lg cursor-pointer">
+                                                          <input
+                                                              type="radio"
+                                                              name={question.id}
+                                                              value={option.id}
+                                                              checked={quizAnswers[question.id] === option.id}
+                                                              onChange={() => handleButtonClick('UPDATE_QUIZ_ANSWER', { 
+                                                                  questionId: question.id, 
+                                                                  answer: option.id 
+                                                              })}
+                                                              className="w-4 h-4 text-[#00BCD4] focus:ring-[#00BCD4]"
+                                                          />
+                                                          <span className="text-sm text-slate-700">{option.label}</span>
+                                                      </label>
+                                                  ))}
+                                              </div>
+                                          </div>
+                                      ))}
+                                  </div>
+                              )}
+
+                              {/* Navegación entre páginas */}
+                              <div className="flex justify-between items-center mt-8 pt-6 border-t">
+                                  <button
+                                      onClick={() => setCurrentPage(1)}
+                                      disabled={currentPage === 1}
+                                      className={`px-4 py-2 rounded-lg ${currentPage === 1 ? 'bg-slate-100 text-slate-400' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'}`}
+                                  >
+                                      ← Página 1 (1-4)
+                                  </button>
+                                  
+                                  <div className="text-sm text-slate-600">
+                                      Página {currentPage} de 2
+                                  </div>
+                                  
+                                  <button
+                                      onClick={() => setCurrentPage(2)}
+                                      disabled={currentPage === 2}
+                                      className={`px-4 py-2 rounded-lg ${currentPage === 2 ? 'bg-slate-100 text-slate-400' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'}`}
+                                  >
+                                      Página 2 (5-8) →
+                                  </button>
+                              </div>
+                              
+                              {/* Sección de envío */}
+                              <div className="mt-8 pt-6 border-t border-slate-100">
+                                  <div className="flex justify-between items-center">
+                                      <div>
+                                          <p className="text-sm text-slate-600">
+                                              {Object.keys(quizAnswers).length === TOTAL_QUESTIONS 
+                                                  ? `¡Todas las ${TOTAL_QUESTIONS} preguntas respondidas!`
+                                                  : `Respuestas: ${Object.keys(quizAnswers).length}/${TOTAL_QUESTIONS}`}
+                                          </p>
+                                          {Object.keys(quizAnswers).length === TOTAL_QUESTIONS && (
+                                              <p className="text-sm text-emerald-600 font-medium mt-1">
+                                                  ¡Listo para enviar! (Mínimo {PASSING_SCORE}% para aprobar)
+                                              </p>
+                                          )}
+                                      </div>
+                                      <button
+                                          onClick={() => handleButtonClick('SUBMIT_QUIZ')}
+                                          disabled={isSubmittingQuiz || Object.keys(quizAnswers).length < TOTAL_QUESTIONS || dailyAttemptsCount >= DAILY_ATTEMPTS_LIMIT}
+                                          className={`${buttonClasses.primary} ${isSubmittingQuiz || Object.keys(quizAnswers).length < TOTAL_QUESTIONS || dailyAttemptsCount >= DAILY_ATTEMPTS_LIMIT ? buttonClasses.loading : ''}`}
+                                          aria-label={Object.keys(quizAnswers).length < TOTAL_QUESTIONS ? `Completa las ${TOTAL_QUESTIONS} preguntas para enviar` : "Enviar evaluación"}
+                                      >
+                                          {isSubmittingQuiz ? (
+                                              <>
+                                                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                                  Enviando...
+                                              </>
+                                          ) : (
+                                              <>
+                                                  <Icon name="fa-paper-plane" />
+                                                  Enviar Evaluación
+                                              </>
+                                          )}
+                                      </button>
+                                  </div>
+                              </div>
+                              
+                              {/* Sección de resultados */}
+                              {showScoreResult && quizResult && (
+                                  <div id="quiz-results" className="mt-8 pt-6 border-t border-slate-100">
+                                      <div className={`p-6 rounded-xl mb-4 ${quizPassed ? 'bg-emerald-50 border border-emerald-200' : 'bg-amber-50 border border-amber-200'}`}>
+                                          <div className="flex items-center justify-between">
+                                              <div>
+                                                  <h4 className={`text-xl font-bold ${quizPassed ? 'text-emerald-800' : 'text-amber-800'}`}>
+                                                      {quizPassed ? '🎉 ¡Felicidades! Has aprobado' : '📚 Necesitas reforzar conocimientos'}
+                                                  </h4>
+                                                  <p className={`text-sm ${quizPassed ? 'text-emerald-600' : 'text-amber-600'} mt-1`}>
+                                                      {quizPassed 
+                                                          ? `Lograste ${quizResult.correctCount}/${TOTAL_QUESTIONS} correctas (${quizScore}%)`
+                                                          : `Obtuviste ${quizResult.correctCount}/${TOTAL_QUESTIONS} correctas. Necesitas ${quizResult.neededToPass} para aprobar.`
+                                                      }
+                                                  </p>
+                                              </div>
+                                              <div className={`px-4 py-2 rounded-full ${quizPassed ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}`}>
+                                                  <span className="font-bold">{quizPassed ? 'APROBADO' : 'NO APROBADO'}</span>
+                                              </div>
+                                          </div>
+                                          
+                                          {/* Información de intentos */}
+                                          <div className="mt-4 pt-4 border-t border-opacity-30">
+                                              <div className="flex items-center justify-between text-sm">
+                                                  <span className={quizPassed ? 'text-emerald-600' : 'text-amber-600'}>
+                                                      Intentos hoy: {dailyAttemptsCount}/{DAILY_ATTEMPTS_LIMIT}
+                                                  </span>
+                                                  {!quizPassed && dailyAttemptsCount < DAILY_ATTEMPTS_LIMIT && (
+                                                      <button
+                                                          onClick={() => handleButtonClick('RESET_QUIZ')}
+                                                          className="px-3 py-1 bg-amber-100 text-amber-700 rounded-lg hover:bg-amber-200 transition-colors"
+                                                      >
+                                                          Reintentar ({DAILY_ATTEMPTS_LIMIT - dailyAttemptsCount} restantes)
+                                                      </button>
+                                                  )}
+                                              </div>
+                                          </div>
+                                      </div>
+                                      
+                                      {/* Retroalimentación temática si no pasó */}
+                                      {!quizPassed && quizResult.failedQuestions.length > 0 && (
+                                          <div className="mt-6 p-6 bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 rounded-xl">
+                                              <div className="flex items-center gap-3 mb-4">
+                                                  <div className="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center">
+                                                      <Icon name="fa-lightbulb" className="text-amber-600" />
+                                                  </div>
+                                                  <div>
+                                                      <h4 className="text-lg font-bold text-amber-800">Plan de Mejora Personalizado</h4>
+                                                      <p className="text-sm text-amber-600">Basado en tus respuestas incorrectas</p>
+                                                  </div>
+                                              </div>
+                                              
+                                              <div className="space-y-4">
+                                                  {/* Temas a reforzar */}
+                                                  <div>
+                                                      <h5 className="font-medium text-amber-700 mb-2">Temas a reforzar:</h5>
+                                                      <div className="space-y-2">
+                                                          {generateTopicFeedback(quizResult.failedQuestions).map((feedback, index) => (
+                                                              <div key={index} className="flex items-start gap-2 p-3 bg-white/50 rounded-lg">
+                                                                  <Icon name="fa-book-open" className="text-amber-500 mt-0.5" />
+                                                                  <p className="text-sm text-amber-800">{feedback}</p>
+                                                              </div>
+                                                          ))}
+                                                      </div>
+                                                  </div>
+                                                  
+                                                  {/* Enlaces directos a lecciones */}
+                                                  <div>
+                                                      <h5 className="font-medium text-amber-700 mb-2">Enlaces directos:</h5>
+                                                      <div className="flex flex-wrap gap-2">
+                                                          {Array.from(new Set(quizResult.failedQuestions.map(qId => {
+                                                              const question = quizQuestions.find(q => q.id === qId);
+                                                              return question ? question.topic : null;
+                                                          }).filter(Boolean))).map(topic => (
+                                                              <button
+                                                                  key={topic}
+                                                                  onClick={() => scrollToLesson(topic)}
+                                                                  className="px-3 py-1.5 bg-amber-100 text-amber-700 rounded-full text-sm hover:bg-amber-200 transition-colors"
+                                                              >
+                                                                  {topic}
+                                                              </button>
+                                                          ))}
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      )}
+                                  </div>
+                               )}
+                                    </div>
+                                )}
+                            </div>
+                       </div>
+                 </main>
             </div>
 
             {/* Valerio FAB */}
-            <button 
-                className="fixed bottom-8 right-8 w-16 h-16 bg-gradient-to-br from-white to-[#F8FAFC] border border-[#E2E8F0]/50 rounded-full shadow-[0_8px_30px_rgba(0,75,99,0.12)] hover:scale-105 transition-all duration-300 z-50 flex items-center justify-center group hover:shadow-[0_12px_40px_rgba(0,75,99,0.16)]"
-                onClick={() => setShowValerioDrawer(!showValerioDrawer)}
-            >
+            {/* Modal de Examen - Pantalla Completa con Sidebar Simplificado */}
+            {showExamModal && (
+                <div 
+                    className="fixed inset-0 z-[100] flex bg-white exam-protection-modal"
+                    style={{
+                        // Protección anti-selección de texto
+                        userSelect: 'none',
+                        WebkitUserSelect: 'none',
+                        MozUserSelect: 'none',
+                        msUserSelect: 'none',
+                        
+                        // Protección anti-arrastre de imágenes
+                        WebkitUserDrag: 'none',
+                        userDrag: 'none',
+                        
+                        // Protección anti-copia
+                        WebkitTouchCallout: 'none'
+                    }}
+                >
+                    {/* Sidebar Simplificado - Solo Módulos (20%) */}
+                    <div className="w-1/5 border-r border-[#004B63]/10 bg-gradient-to-b from-white via-white/98 to-[#F8FAFC]/95 overflow-y-auto">
+                        <div className="px-5 py-6 space-y-6">
+                            {/* Título del Sidebar en Modal */}
+                            <div className="px-2 w-full">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="text-[#004B63]">
+                                        <Icon name="fa-layer-group" className="text-sm" />
+                                    </div>
+                                    <h3 className="text-sm font-bold tracking-[0.15em] uppercase text-[#004B63] font-display">
+                                        MÓDULOS
+                                    </h3>
+                                    <div className="flex-1 h-px bg-gradient-to-r from-[#004B63]/20 via-[#00BCD4]/30 to-transparent"></div>
+                                </div>
+                                
+                                {/* Lista de Módulos Simplificada */}
+                                <div className="space-y-2">
+                                    {modules.map((mod) => (
+                                        <button
+                                            key={mod.id}
+                                            onClick={() => {
+                                                // Mostrar mensaje si intenta cambiar de módulo durante examen
+                                                if (Object.keys(quizAnswers).length > 0 && !showScoreResult) {
+                                                    setLoadMsg("Termina el examen actual primero");
+                                                    setTimeout(() => setLoadMsg(''), 3000);
+                                                } else if (!isModuleLocked(mod.id)) {
+                                                    // Permitir cambiar solo si no hay examen en progreso
+                                                    setActiveMod(mod.id);
+                                                    resetQuizForRetry();
+                                                    setSecurityWarningCount(0);
+                                                }
+                                            }}
+                                            className={`w-full flex items-center gap-3 p-4 rounded-xl transition-all duration-300 ${activeMod === mod.id ? 'bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white' : 'hover:bg-[#004B63]/10'} focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:ring-offset-1`}
+                                            disabled={isModuleLocked(mod.id) || (Object.keys(quizAnswers).length > 0 && !showScoreResult)}
+                                            aria-label={`${isModuleLocked(mod.id) ? 'Módulo bloqueado: ' : ''}${mod.title}`}
+                                        >
+                                            <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${activeMod === mod.id ? 'bg-white/20' : 'bg-[#004B63]/10'}`}>
+                                                <Icon name={mod.icon} className={`${activeMod === mod.id ? 'text-white' : 'text-[#004B63]'} text-sm`} />
+                                            </div>
+                                            <div className="flex-1 min-w-0 text-left">
+                                                <p className="font-semibold text-sm truncate font-body">{mod.title}</p>
+                                                <p className={`text-xs ${activeMod === mod.id ? 'text-white/80' : 'text-[#64748B]'} font-body`}>
+                                                    {mod.duration}
+                                                </p>
+                                            </div>
+                                            {isModuleLocked(mod.id) && (
+                                                <Icon name="fa-lock" className="text-xs text-slate-400" />
+                                            )}
+                                            {!isModuleLocked(mod.id) && completedModules.includes(mod.id) && (
+                                                <Icon name="fa-check" className="text-xs text-emerald-500" />
+                                            )}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                            
+                            {/* Información del Módulo Actual */}
+                            <div className="px-2 w-full mt-8">
+                                <div className="p-4 bg-slate-50/50 rounded-xl border border-slate-100">
+                                    <p className="text-xs text-slate-600 mb-2">Examen actual:</p>
+                                    <p className="text-sm font-semibold text-[#004B63]">
+                                        Módulo {activeMod}: {modules.find(m => m.id === activeMod)?.title}
+                                    </p>
+                                    <p className="text-xs text-slate-500 mt-1">
+                                        {Object.keys(quizAnswers).length}/{TOTAL_QUESTIONS} preguntas respondidas
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {/* Contenido del Examen (80%) */}
+                    <div className="w-4/5 flex flex-col">
+                        {/* Header del Modal */}
+                        <div className="sticky top-0 bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between z-10 shadow-sm">
+                            <button 
+                                onClick={handleCloseModal}
+                                className="flex items-center gap-2 text-slate-600 hover:text-slate-800 hover:bg-slate-100 px-3 py-2 rounded-lg transition-colors"
+                            >
+                                <Icon name="fa-arrow-left" className="text-sm" />
+                                <span className="text-sm font-medium">Salir</span>
+                            </button>
+                            
+                            <div className="text-center">
+                                <h2 className="text-xl font-bold text-[#00374A]">
+                                    Evaluación - Módulo {activeMod}
+                                </h2>
+                                <p className="text-sm text-slate-600 mt-1">
+                                    {modules.find(m => m.id === activeMod)?.title}
+                                </p>
+                            </div>
+                            
+                            {/* Timer y Estado */}
+                            <div className="flex items-center gap-4">
+                                <div className="text-right">
+                                    <div className="text-lg font-bold text-[#00BCD4]">
+                                        {formatTime(suggestedTime - timeElapsed)}
+                                    </div>
+                                    <div className="text-xs text-slate-500">Tiempo restante</div>
+                                </div>
+                                
+                                <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center">
+                                    <span className="text-sm font-bold text-slate-700">
+                                        {Object.keys(quizAnswers).length}/{TOTAL_QUESTIONS}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {/* Contenido del Quiz */}
+                        <div className="flex-1 overflow-y-auto p-6">
+                            {/* Contenido completo del quiz - Mismo que inline pero sin el contenedor externo */}
+                            <div className="bg-gradient-to-br from-white to-[#F8FAFC] border border-slate-50 shadow-[0_20px_40px_rgba(0,0,0,0.04)] rounded-[24px] p-8">
+                               <div className="flex items-center gap-4 mb-6">
+                                   <div className="w-10 h-10 bg-gradient-to-r from-[#004B63] to-[#00BCD4] rounded-xl flex items-center justify-center">
+                                       <Icon name="fa-clipboard-check" className="text-white" />
+                                   </div>
+                                   <div>
+                                       <h3 className="text-xl font-bold text-[#00374A]">Evaluación del Módulo</h3>
+                                       <p className="text-sm text-slate-600">Responde las 8 preguntas para validar tu aprendizaje (70% mínimo para aprobar)</p>
+                                   </div>
+                               </div>
+                               
+                               {/* Timer Sugerido */}
+                               <div className="mb-6 p-4 bg-blue-50 border border-blue-100 rounded-xl">
+                                   <div className="flex items-center justify-between mb-2">
+                                       <div className="flex items-center gap-2">
+                                           <Icon name="fa-clock" className="text-blue-600" />
+                                           <span className="text-sm font-medium text-blue-700">Tiempo sugerido</span>
+                                           <span className="text-xs text-blue-500 px-2 py-1 bg-blue-100 rounded-full">
+                                               Opcional
+                                           </span>
+                                       </div>
+                                       <button
+                                           onClick={() => setIsTimerRunning(!isTimerRunning)}
+                                           className="text-sm text-blue-600 hover:text-blue-800"
+                                       >
+                                           {isTimerRunning ? '⏸️ Pausar' : '▶️ Iniciar'} timer
+                                       </button>
+                                   </div>
+                                   
+                                   <div className="flex items-center justify-between">
+                                       <div className="text-center">
+                                           <div className="text-2xl font-bold text-blue-700">
+                                               {Math.floor((suggestedTime - timeElapsed) / 60)}:{(suggestedTime - timeElapsed) % 60 < 10 ? '0' : ''}{(suggestedTime - timeElapsed) % 60}
+                                           </div>
+                                           <div className="text-xs text-blue-500 mt-1">Restante</div>
+                                       </div>
+                                       
+                                       <div className="text-center">
+                                           <div className="text-lg font-medium text-gray-700">
+                                               {Math.floor(timeElapsed / 60)}:{(timeElapsed % 60 < 10 ? '0' : '')}{timeElapsed % 60}
+                                           </div>
+                                           <div className="text-xs text-gray-500">Transcurrido</div>
+                                       </div>
+                                       
+                                       <div className="text-center">
+                                           <div className="text-lg font-medium text-gray-700">{SUGGESTED_TIME_MINUTES}:00</div>
+                                           <div className="text-xs text-gray-500">Total sugerido</div>
+                                       </div>
+                                   </div>
+                                   
+                                   {/* Barra de progreso del tiempo */}
+                                   <div className="mt-3 h-2 bg-blue-100 rounded-full overflow-hidden">
+                                       <div 
+                                           className="h-full bg-gradient-to-r from-blue-400 to-blue-600 transition-all duration-1000"
+                                           style={{ width: `${(timeElapsed / suggestedTime) * 100}%` }}
+                                       ></div>
+                                   </div>
+                                   
+                                   {showTimeWarning && (
+                                       <div className="mt-3 p-2 bg-amber-50 border border-amber-200 rounded-lg">
+                                           <p className="text-xs text-amber-700 flex items-center gap-1">
+                                               <Icon name="fa-exclamation-triangle" />
+                                               Llevas más de 15 minutos. Considera revisar tus respuestas.
+                                           </p>
+                                       </div>
+                                   )}
+                               </div>
+                               
+                               {/* Contador de intentos */}
+                               <div className="mb-6 p-4 bg-slate-50 border border-slate-100 rounded-xl">
+                                   <div className="flex items-center justify-between">
+                                       <div className="flex items-center gap-2">
+                                           <Icon name="fa-rotate-right" className="text-slate-600" />
+                                           <span className="text-sm font-medium text-slate-700">Intentos diarios</span>
+                                       </div>
+                                       <div className="flex items-center gap-2">
+                                           <span className="text-sm text-slate-600">
+                                               {dailyAttemptsCount} / {DAILY_ATTEMPTS_LIMIT} usados hoy
+                                           </span>
+                                           {dailyAttemptsCount >= DAILY_ATTEMPTS_LIMIT && (
+                                               <span className="text-xs px-2 py-1 bg-red-100 text-red-700 rounded-full">
+                                                   Límite alcanzado
+                                               </span>
+                                           )}
+                                       </div>
+                                   </div>
+                                   
+                                   {dailyAttemptsCount >= DAILY_ATTEMPTS_LIMIT && (
+                                       <p className="text-xs text-slate-600 mt-2">
+                                           <Icon name="fa-info-circle" className="inline mr-1" />
+                                           Has agotado tus {DAILY_ATTEMPTS_LIMIT} intentos diarios. Vuelve mañana para intentar nuevamente.
+                                       </p>
+                                   )}
+                               </div>
+                               
+                               {/* Navegación por preguntas */}
+                               <div className="sticky top-0 bg-white/95 backdrop-blur-sm z-10 py-4 mb-6 border-b">
+                                   <div className="flex items-center justify-between">
+                                       <div className="flex flex-wrap gap-2">
+                                           {quizQuestions.map((question, index) => {
+                                               const isAnswered = quizAnswers[question.id];
+                                               const isCurrent = currentQuestion === index;
+                                               
+                                               return (
+                                                   <button
+                                                       key={question.id}
+                                                       onClick={() => setCurrentQuestion(index)}
+                                                       className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium border transition-all relative ${
+                                                           isCurrent 
+                                                               ? 'bg-[#00BCD4] text-white border-[#00BCD4] ring-2 ring-[#00BCD4]/20' 
+                                                               : isAnswered
+                                                                   ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
+                                                                   : 'bg-slate-100 text-slate-600 border-slate-200'
+                                                       }`}
+                                                       aria-label={`Pregunta ${index + 1}: ${isAnswered ? 'Respondida' : 'Sin responder'}`}
+                                                   >
+                                                       {index + 1}
+                                                       {question.difficulty === 'difícil' && (
+                                                           <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+                                                       )}
+                                                   </button>
+                                               );
+                                           })}
+                                       </div>
+                                       
+                                       <div className="text-sm text-slate-600">
+                                           <span className="font-medium">{Object.keys(quizAnswers).length}/{TOTAL_QUESTIONS}</span> respondidas
+                                       </div>
+                                   </div>
+                                   
+                                   {/* Leyenda de dificultad */}
+                                   <div className="flex items-center gap-4 mt-3 text-xs text-slate-500">
+                                       <div className="flex items-center gap-1">
+                                           <div className="w-3 h-3 bg-emerald-100 border border-emerald-200 rounded-full"></div>
+                                           <span>Respondida</span>
+                                       </div>
+                                       <div className="flex items-center gap-1">
+                                           <div className="w-3 h-3 bg-slate-100 border border-slate-200 rounded-full"></div>
+                                           <span>Pendiente</span>
+                                       </div>
+                                       <div className="flex items-center gap-1">
+                                           <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                                           <span>Difícil</span>
+                                       </div>
+                                   </div>
+                               </div>
+                               
+                               {/* Vista paginada - 4 preguntas por página */}
+                               {currentPage === 1 && (
+                                   <div className="space-y-6">
+                                       {quizQuestions.slice(0, 4).map((question) => (
+                                           <div key={question.id} id={`question-${question.id}`} className="bg-white border border-slate-100 rounded-xl p-5">
+                                               <div className="flex items-center justify-between mb-3">
+                                                   <h4 className="text-base font-semibold text-[#00374A]">
+                                                       {question.id.replace('q', '')}. {question.question}
+                                                   </h4>
+                                                   <span className={`text-xs px-2 py-1 rounded-full ${
+                                                       question.difficulty === 'fácil' ? 'bg-emerald-100 text-emerald-700' :
+                                                       question.difficulty === 'medio' ? 'bg-amber-100 text-amber-700' :
+                                                       'bg-red-100 text-red-700'
+                                                   }`}>
+                                                       {question.difficulty}
+                                                   </span>
+                                               </div>
+                                               <div className="space-y-2">
+                                                   {question.options.map((option) => (
+                                                       <label key={option.id} className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-lg cursor-pointer">
+                                                           <input
+                                                               type="radio"
+                                                               name={question.id}
+                                                               value={option.id}
+                                                               checked={quizAnswers[question.id] === option.id}
+                                                               onChange={() => handleButtonClick('UPDATE_QUIZ_ANSWER', { 
+                                                                   questionId: question.id, 
+                                                                   answer: option.id 
+                                                               })}
+                                                               className="w-4 h-4 text-[#00BCD4] focus:ring-[#00BCD4]"
+                                                           />
+                                                           <span className="text-sm text-slate-700">{option.label}</span>
+                                                       </label>
+                                                   ))}
+                                               </div>
+                                           </div>
+                                       ))}
+                                   </div>
+                               )}
+
+                               {currentPage === 2 && (
+                                   <div className="space-y-6">
+                                       {quizQuestions.slice(4, 8).map((question) => (
+                                           <div key={question.id} id={`question-${question.id}`} className="bg-white border border-slate-100 rounded-xl p-5">
+                                               <div className="flex items-center justify-between mb-3">
+                                                   <h4 className="text-base font-semibold text-[#00374A]">
+                                                       {question.id.replace('q', '')}. {question.question}
+                                                   </h4>
+                                                   <span className={`text-xs px-2 py-1 rounded-full ${
+                                                       question.difficulty === 'fácil' ? 'bg-emerald-100 text-emerald-700' :
+                                                       question.difficulty === 'medio' ? 'bg-amber-100 text-amber-700' :
+                                                       'bg-red-100 text-red-700'
+                                                   }`}>
+                                                       {question.difficulty}
+                                                   </span>
+                                               </div>
+                                               <div className="space-y-2">
+                                                   {question.options.map((option) => (
+                                                       <label key={option.id} className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-lg cursor-pointer">
+                                                           <input
+                                                               type="radio"
+                                                               name={question.id}
+                                                               value={option.id}
+                                                               checked={quizAnswers[question.id] === option.id}
+                                                               onChange={() => handleButtonClick('UPDATE_QUIZ_ANSWER', { 
+                                                                   questionId: question.id, 
+                                                                   answer: option.id 
+                                                               })}
+                                                               className="w-4 h-4 text-[#00BCD4] focus:ring-[#00BCD4]"
+                                                           />
+                                                           <span className="text-sm text-slate-700">{option.label}</span>
+                                                       </label>
+                                                   ))}
+                                               </div>
+                                           </div>
+                                       ))}
+                                   </div>
+                               )}
+
+                               {/* Navegación entre páginas */}
+                               <div className="flex justify-between items-center mt-8 pt-6 border-t">
+                                   <button
+                                       onClick={() => setCurrentPage(1)}
+                                       disabled={currentPage === 1}
+                                       className={`px-4 py-2 rounded-lg ${currentPage === 1 ? 'bg-slate-100 text-slate-400' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'}`}
+                                   >
+                                       ← Página 1 (1-4)
+                                   </button>
+                                   
+                                   <div className="text-sm text-slate-600">
+                                       Página {currentPage} de 2
+                                   </div>
+                                   
+                                   <button
+                                       onClick={() => setCurrentPage(2)}
+                                       disabled={currentPage === 2}
+                                       className={`px-4 py-2 rounded-lg ${currentPage === 2 ? 'bg-slate-100 text-slate-400' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'}`}
+                                   >
+                                       Página 2 (5-8) →
+                                   </button>
+                               </div>
+                               
+                               {/* Sección de envío */}
+                               <div className="mt-8 pt-6 border-t border-slate-100">
+                                   <div className="flex justify-between items-center">
+                                       <div>
+                                           <p className="text-sm text-slate-600">
+                                               {Object.keys(quizAnswers).length === TOTAL_QUESTIONS 
+                                                   ? `¡Todas las ${TOTAL_QUESTIONS} preguntas respondidas!`
+                                                   : `Respuestas: ${Object.keys(quizAnswers).length}/${TOTAL_QUESTIONS}`}
+                                           </p>
+                                           {Object.keys(quizAnswers).length === TOTAL_QUESTIONS && (
+                                               <p className="text-sm text-emerald-600 font-medium mt-1">
+                                                   ¡Listo para enviar! (Mínimo {PASSING_SCORE}% para aprobar)
+                                               </p>
+                                           )}
+                                       </div>
+                                       <button
+                                           onClick={() => handleButtonClick('SUBMIT_QUIZ')}
+                                           disabled={isSubmittingQuiz || Object.keys(quizAnswers).length < TOTAL_QUESTIONS || dailyAttemptsCount >= DAILY_ATTEMPTS_LIMIT}
+                                           className={`${buttonClasses.primary} ${isSubmittingQuiz || Object.keys(quizAnswers).length < TOTAL_QUESTIONS || dailyAttemptsCount >= DAILY_ATTEMPTS_LIMIT ? buttonClasses.loading : ''}`}
+                                           aria-label={Object.keys(quizAnswers).length < TOTAL_QUESTIONS ? `Completa las ${TOTAL_QUESTIONS} preguntas para enviar` : "Enviar evaluación"}
+                                       >
+                                           {isSubmittingQuiz ? (
+                                               <>
+                                                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                                   Enviando...
+                                               </>
+                                           ) : (
+                                               <>
+                                                   <Icon name="fa-paper-plane" />
+                                                   Enviar Evaluación
+                                               </>
+                                           )}
+                                       </button>
+                                   </div>
+                               </div>
+                               
+                               {/* Sección de resultados */}
+                               {showScoreResult && quizResult && (
+                                   <div id="quiz-results" className="mt-8 pt-6 border-t border-slate-100">
+                                       <div className={`p-6 rounded-xl mb-4 ${quizPassed ? 'bg-emerald-50 border border-emerald-200' : 'bg-amber-50 border border-amber-200'}`}>
+                                           <div className="flex items-center justify-between">
+                                               <div>
+                                                   <h4 className={`text-xl font-bold ${quizPassed ? 'text-emerald-800' : 'text-amber-800'}`}>
+                                                       {quizPassed ? '🎉 ¡Felicidades! Has aprobado' : '📚 Necesitas reforzar conocimientos'}
+                                                   </h4>
+                                                   <p className={`text-sm ${quizPassed ? 'text-emerald-600' : 'text-amber-600'} mt-1`}>
+                                                       {quizPassed 
+                                                           ? `Lograste ${quizResult.correctCount}/${TOTAL_QUESTIONS} correctas (${quizScore}%)`
+                                                           : `Obtuviste ${quizResult.correctCount}/${TOTAL_QUESTIONS} correctas. Necesitas ${quizResult.neededToPass} para aprobar.`
+                                                       }
+                                                   </p>
+                                               </div>
+                                               <div className={`px-4 py-2 rounded-full ${quizPassed ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}`}>
+                                                   <span className="font-bold">{quizPassed ? 'APROBADO' : 'NO APROBADO'}</span>
+                                               </div>
+                                           </div>
+                                           
+                                           {/* Información de intentos */}
+                                           <div className="mt-4 pt-4 border-t border-opacity-30">
+                                               <div className="flex items-center justify-between text-sm">
+                                                   <span className={quizPassed ? 'text-emerald-600' : 'text-amber-600'}>
+                                                       Intentos hoy: {dailyAttemptsCount}/{DAILY_ATTEMPTS_LIMIT}
+                                                   </span>
+                                                   {!quizPassed && dailyAttemptsCount < DAILY_ATTEMPTS_LIMIT && (
+                                                       <button
+                                                           onClick={() => handleButtonClick('RESET_QUIZ')}
+                                                           className="px-3 py-1 bg-amber-100 text-amber-700 rounded-lg hover:bg-amber-200 transition-colors"
+                                                       >
+                                                           Reintentar ({DAILY_ATTEMPTS_LIMIT - dailyAttemptsCount} restantes)
+                                                       </button>
+                                                   )}
+                                               </div>
+                                           </div>
+                                       </div>
+                                       
+                                       {/* Retroalimentación temática si no pasó */}
+                                       {!quizPassed && quizResult.failedQuestions.length > 0 && (
+                                           <div className="mt-6 p-6 bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 rounded-xl">
+                                               <div className="flex items-center gap-3 mb-4">
+                                                   <div className="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center">
+                                                       <Icon name="fa-lightbulb" className="text-amber-600" />
+                                                   </div>
+                                                   <div>
+                                                       <h4 className="text-lg font-bold text-amber-800">Plan de Mejora Personalizado</h4>
+                                                       <p className="text-sm text-amber-600">Basado en tus respuestas incorrectas</p>
+                                                   </div>
+                                               </div>
+                                               
+                                               <div className="space-y-4">
+                                                   {/* Temas a reforzar */}
+                                                   <div>
+                                                       <h5 className="font-medium text-amber-700 mb-2">Temas a reforzar:</h5>
+                                                       <div className="space-y-2">
+                                                           {generateTopicFeedback(quizResult.failedQuestions).map((feedback, index) => (
+                                                               <div key={index} className="flex items-start gap-2 p-3 bg-white/50 rounded-lg">
+                                                                   <Icon name="fa-book-open" className="text-amber-500 mt-0.5" />
+                                                                   <p className="text-sm text-amber-800">{feedback}</p>
+                                                               </div>
+                                                           ))}
+                                                       </div>
+                                                   </div>
+                                                   
+                                                   {/* Enlaces directos a lecciones */}
+                                                   <div>
+                                                       <h5 className="font-medium text-amber-700 mb-2">Enlaces directos:</h5>
+                                                       <div className="flex flex-wrap gap-2">
+                                                           {Array.from(new Set(quizResult.failedQuestions.map(qId => {
+                                                               const question = quizQuestions.find(q => q.id === qId);
+                                                               return question ? question.topic : null;
+                                                           }).filter(Boolean))).map(topic => (
+                                                               <button
+                                                                   key={topic}
+                                                                   onClick={() => scrollToLesson(topic)}
+                                                                   className="px-3 py-1.5 bg-amber-100 text-amber-700 rounded-full text-sm hover:bg-amber-200 transition-colors"
+                                                               >
+                                                                   {topic}
+                                                               </button>
+                                                           ))}
+                                                       </div>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                       )}
+                                       
+                                       {/* Botones Post-Examen Mejorados */}
+                                       <div className="mt-8 pt-6 border-t border-slate-200">
+                                           <div className="flex flex-col items-center gap-4">
+                                               
+                                               {quizPassed ? (
+                                                   // BOTÓN SI APRUEBA - Desbloquear siguiente módulo
+                                                   <div className="space-y-4 w-full">
+                                                       <button
+                                                           onClick={() => handleButtonClick('UNLOCK_NEXT_MODULE')}
+                                                           className="w-full py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold rounded-xl hover:from-emerald-600 hover:to-emerald-700 shadow-lg transition-all"
+                                                       >
+                                                           <div className="flex items-center justify-center gap-3">
+                                                               <Icon name="fa-trophy" className="text-2xl" />
+                                                               <span className="text-lg">🎉 ¡Felicidades! Ir al Módulo {activeMod + 1}</span>
+                                                           </div>
+                                                       </button>
+                                                       
+                                                       <p className="text-center text-sm text-emerald-600">
+                                                           El candado del módulo {activeMod + 1} se desbloqueará automáticamente
+                                                       </p>
+                                                   </div>
+                                               ) : dailyAttemptsCount < DAILY_ATTEMPTS_LIMIT ? (
+                                                   // BOTÓN SI NO APRUEBA PERO TIENE INTENTOS
+                                                   <button
+                                                       onClick={() => handleButtonClick('RESET_QUIZ')}
+                                                       className="w-full py-4 bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold rounded-xl hover:from-amber-600 hover:to-amber-700 shadow-lg transition-all"
+                                                   >
+                                                       <div className="flex items-center justify-center gap-3">
+                                                           <Icon name="fa-rotate-right" className="text-2xl" />
+                                                           <span className="text-lg">🔄 Intentar Nuevamente ({DAILY_ATTEMPTS_LIMIT - dailyAttemptsCount} restantes)</span>
+                                                       </div>
+                                                   </button>
+                                               ) : (
+                                                   // MENSAJE SI NO TIENE INTENTOS
+                                                   <div className="text-center p-6 bg-slate-100 rounded-xl border border-slate-200 w-full">
+                                                       <Icon name="fa-clock" className="text-3xl text-slate-500 mb-3" />
+                                                       <p className="text-slate-700 font-medium mb-2">
+                                                           Límite de intentos alcanzado
+                                                       </p>
+                                                       <p className="text-slate-600 text-sm">
+                                                           Vuelve mañana para intentar nuevamente
+                                                       </p>
+                                                   </div>
+                                               )}
+                                               
+                                               {/* Botón para cerrar modal */}
+                                               <button
+                                                   onClick={() => setShowExamModal(false)}
+                                                   className="px-4 py-2 text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors"
+                                               >
+                                                   Volver al contenido del módulo
+                                               </button>
+                                           </div>
+                                       </div>
+                                   </div>
+                               )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+            
+            {/* Modal de Confirmación al Salir */}
+            {showExitConfirmation && (
+                <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+                    <div className="bg-white p-6 rounded-xl shadow-2xl max-w-md w-full mx-4">
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center">
+                                <Icon name="fa-exclamation-triangle" className="text-amber-600" />
+                            </div>
+                            <h3 className="text-lg font-bold text-slate-800">¿Salir del examen?</h3>
+                        </div>
+                        
+                        <p className="text-slate-600 mb-6">
+                            Tienes <span className="font-bold">{Object.keys(quizAnswers).length}</span> respuestas sin enviar.
+                            Si sales ahora, perderás todo tu progreso.
+                        </p>
+                        
+                        <div className="flex gap-3">
+                            <button 
+                                onClick={() => {
+                                    setShowExitConfirmation(false);
+                                    resetQuizForRetry();
+                                    setShowExamModal(false);
+                                    setShowEvaluationQuiz(false);
+                                    setSecurityWarningCount(0);
+                                }}
+                                className="flex-1 py-3 bg-red-500 text-white font-medium rounded-lg hover:bg-red-600 transition-colors"
+                            >
+                                Salir y perder progreso
+                            </button>
+                            <button 
+                                onClick={() => setShowExitConfirmation(false)}
+                                className="flex-1 py-3 bg-slate-200 text-slate-700 font-medium rounded-lg hover:bg-slate-300 transition-colors"
+                            >
+                                Continuar examen
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            
+            {/* Overlay de Protección Anti-Capturas */}
+            {screenshotProtectionActive && showExamModal && (
+                <div className="fixed inset-0 z-[115] flex items-center justify-center bg-red-900/90 backdrop-blur-md">
+                    <div className="text-center p-8 max-w-2xl">
+                        <div className="w-24 h-24 mx-auto mb-6 bg-white/20 rounded-full flex items-center justify-center animate-pulse">
+                            <Icon name="fa-shield-alt" className="text-white text-4xl" />
+                        </div>
+                        
+                        <h3 className="text-3xl font-bold text-white mb-4">
+                            ¡PROTECCIÓN ANTI-CAPTURAS ACTIVADA!
+                        </h3>
+                        
+                        <p className="text-xl text-white/90 mb-2">
+                            Se detectó un intento de captura de pantalla
+                        </p>
+                        
+                        <p className="text-white/80 mb-6">
+                            El examen se protegerá automáticamente por {SCREENSHOT_OVERLAY_DURATION / 1000} segundos
+                        </p>
+                        
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 rounded-full">
+                            <Icon name="fa-exclamation-triangle" className="text-white" />
+                            <span className="text-white font-medium">
+                                Infracción de seguridad registrada
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            )}
+            
+            {/* Modal de Advertencia de Seguridad */}
+            {showSecurityWarning && (
+                <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/70 backdrop-blur-sm">
+                    <div className="bg-white p-8 rounded-2xl shadow-2xl max-w-lg w-full mx-4 text-center">
+                        <div className="w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full flex items-center justify-center">
+                            <Icon name="fa-shield-exclamation" className="text-red-600 text-2xl" />
+                        </div>
+                        
+                        <h3 className="text-xl font-bold text-slate-800 mb-3">
+                            {SECURITY_WARNING_MESSAGES[Math.min(securityWarningCount - 1, MAX_SECURITY_WARNINGS - 1)]}
+                        </h3>
+                        
+                        <p className="text-slate-600 mb-2">
+                            Advertencia {securityWarningCount} de {MAX_SECURITY_WARNINGS}
+                        </p>
+                        
+                         <p className="text-sm text-slate-500 mb-4">
+                             El timer se ha pausado. Continuará cuando confirmes.
+                         </p>
+                         
+                         {/* Información de penalización */}
+                         <div className="mb-6 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                             <div className="flex items-center gap-2">
+                                 <Icon name="fa-exclamation-triangle" className="text-amber-600 text-sm" />
+                                 <p className="text-xs text-amber-700">
+                                     <span className="font-semibold">Protocolo de seguridad:</span> {MAX_SECURITY_WARNINGS} infracciones = pérdida de {SECURITY_VIOLATION_PENALTY} intento
+                                 </p>
+                             </div>
+                             <p className="text-xs text-amber-600 mt-1">
+                                 Infracciones actuales: {securityWarningCount}/{MAX_SECURITY_WARNINGS}
+                                 {attemptsPenalized > 0 && ` • Intentos perdidos: ${attemptsPenalized}`}
+                             </p>
+                         </div>
+                         
+                         <div className="space-y-3">
+                             <button
+                                 onClick={() => {
+                                     setShowSecurityWarning(false);
+                                     setIsTimerRunning(true); // Reanudar timer
+                                 }}
+                                 className="w-full py-3 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 transition-colors"
+                             >
+                                 Entendido, continuar examen
+                             </button>
+                             
+                             {securityWarningCount >= MAX_SECURITY_WARNINGS && (
+                                 <button
+                                     onClick={() => {
+                                         setShowSecurityWarning(false);
+                                         penalizeAttempt();
+                                         handleCloseModal();
+                                         setLoadMsg("Examen cerrado por 3 infracciones de seguridad. Has perdido 1 intento.");
+                                         setTimeout(() => setLoadMsg(''), 3000);
+                                     }}
+                                     className="w-full py-3 bg-red-500 text-white font-medium rounded-lg hover:bg-red-600 transition-colors"
+                                 >
+                                     Cerrar examen (penalización aplicada)
+                                 </button>
+                             )}
+                         </div>
+                    </div>
+                </div>
+             )}
+             
+             {/* Panel de Estado de Seguridad (flotante) */}
+             {showExamModal && !showScoreResult && (
+                 <div className="fixed top-4 right-4 z-[90]">
+                     <button
+                         onClick={() => setShowSecurityStatus(!showSecurityStatus)}
+                         className="mb-2 w-10 h-10 bg-white/90 backdrop-blur-sm border border-slate-200 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-105 transition-all"
+                         title="Estado de seguridad"
+                     >
+                         <Icon name="fa-shield-alt" className={`text-sm ${
+                             securityWarningCount === 0 ? 'text-emerald-500' :
+                             securityWarningCount === 1 ? 'text-amber-500' :
+                             'text-red-500'
+                         }`} />
+                     </button>
+                     
+                     {showSecurityStatus && (
+                         <div className="bg-white/95 backdrop-blur-sm border border-slate-200 rounded-xl shadow-2xl p-4 min-w-64">
+                             <div className="flex items-center justify-between mb-3">
+                                 <h4 className="font-bold text-slate-800">Estado de Seguridad</h4>
+                                 <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                     securityWarningCount === 0 ? 'bg-emerald-100 text-emerald-800' :
+                                     securityWarningCount === 1 ? 'bg-amber-100 text-amber-800' :
+                                     'bg-red-100 text-red-800'
+                                 }`}>
+                                     {securityWarningCount === 0 ? 'SEGURO' :
+                                      securityWarningCount === 1 ? 'EN RIESGO' : 'ALTO RIESGO'}
+                                 </span>
+                             </div>
+                             
+                             <div className="space-y-3">
+                                 <div>
+                                     <div className="flex justify-between text-sm mb-1">
+                                         <span className="text-slate-600">Infracciones:</span>
+                                         <span className="font-semibold">{securityWarningCount}/{MAX_SECURITY_WARNINGS}</span>
+                                     </div>
+                                     <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                                         <div 
+                                             className={`h-full rounded-full ${
+                                                 securityWarningCount === 0 ? 'bg-emerald-500' :
+                                                 securityWarningCount === 1 ? 'bg-amber-500' :
+                                                 'bg-red-500'
+                                             }`}
+                                             style={{ width: `${(securityWarningCount / MAX_SECURITY_WARNINGS) * 100}%` }}
+                                         ></div>
+                                     </div>
+                                 </div>
+                                 
+                                 <div className="flex justify-between text-sm">
+                                     <span className="text-slate-600">Intentos perdidos:</span>
+                                     <span className="font-semibold text-red-600">{attemptsPenalized}</span>
+                                 </div>
+                                 
+                                 <div className="flex justify-between text-sm">
+                                     <span className="text-slate-600">Violaciones totales:</span>
+                                     <span className="font-semibold">{securityViolations}</span>
+                                 </div>
+                                 
+                                 <div className="pt-3 border-t border-slate-100">
+                                     <p className="text-xs text-slate-500">
+                                         <Icon name="fa-info-circle" className="inline mr-1" />
+                                         {MAX_SECURITY_WARNINGS} infracciones = {SECURITY_VIOLATION_PENALTY} intento perdido
+                                     </p>
+                                 </div>
+                             </div>
+                         </div>
+                     )}
+                 </div>
+             )}
+             
+             {/* Mensajes Temporales de Seguridad */}
+             {showSecurityMessage && (
+                 <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-[95] animate-fade-in">
+                     <div className="bg-slate-800/90 backdrop-blur-sm text-white px-4 py-3 rounded-lg shadow-2xl max-w-md">
+                         <div className="flex items-center gap-2">
+                             <Icon name="fa-shield-exclamation" className="text-amber-300" />
+                             <p className="text-sm font-medium">{securityMessage}</p>
+                         </div>
+                     </div>
+                 </div>
+             )}
+             
+              <button 
+                  className="fixed bottom-8 right-8 w-16 h-16 bg-gradient-to-br from-white to-[#F8FAFC] border border-[#E2E8F0]/50 rounded-full shadow-[0_8px_30px_rgba(0,75,99,0.12)] hover:scale-105 transition-all duration-300 z-50 flex items-center justify-center group hover:shadow-[0_12px_40px_rgba(0,75,99,0.16)]"
+                  onClick={() => setShowValerioDrawer(!showValerioDrawer)}
+              >
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:scale-110 transition-transform duration-300">
                     <path d="M12 3C8.5 3 6 5.5 6 9C6 10.5 6.5 12 7.5 13C8.5 14 9.5 15 10 16C10.5 17 11 18 12 18C13 18 13.5 17 14 16C14.5 15 15.5 14 16.5 13C17.5 12 18 10.5 18 9C18 5.5 15.5 3 12 3Z" fill="#004B63" />
                     <path d="M9 7C8.5 7 8 7.5 8 8C8 8.5 8.5 9 9 9C9.5 9 10 8.5 10 8C10 7.5 9.5 7 9 7Z" fill="#00BCD4" />
@@ -658,6 +3423,40 @@ IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`,
                     <path d="M12 5C11.5 5 11 5.5 11 6C11 6.5 11.5 7 12 7C12.5 7 13 6.5 13 6C13 5.5 12.5 5 12 5Z" fill="#00BCD4" className="animate-pulse" />
                 </svg>
             </button>
+            {/* Estilos de protección anti-impresión */}
+            <style>
+                {`
+                    @media print {
+                        .exam-protection-modal,
+                        .exam-protection-modal * {
+                            display: none !important;
+                            visibility: hidden !important;
+                            opacity: 0 !important;
+                        }
+                        
+                        body::before {
+                            content: "⚠️ IMPRESIÓN BLOQUEADA - Este examen está protegido por el protocolo de seguridad Edutechlife";
+                            display: block !important;
+                            font-size: 24px;
+                            font-weight: bold;
+                            text-align: center;
+                            color: red;
+                            padding: 40px;
+                            background: white;
+                        }
+                    }
+                    
+                    /* Animación para mensajes temporales */
+                    @keyframes fade-in {
+                        from { opacity: 0; transform: translate(-50%, -10px); }
+                        to { opacity: 1; transform: translate(-50%, 0); }
+                    }
+                    
+                    .animate-fade-in {
+                        animation: fade-in 0.3s ease-out;
+                    }
+                `}
+            </style>
         </>
     );
 };
