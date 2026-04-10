@@ -5,7 +5,7 @@ import { speakTextConversational, iniciarReconocimiento } from '../utils/speech'
 import ValerioAvatar from './ValerioAvatar';
 import html2pdf from 'html2pdf.js';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
-import { useInView, motion, AnimatePresence } from 'framer-motion';
+import { useInView } from 'framer-motion';
 import { Icon } from '../utils/iconMapping.jsx';
 import { useAuth } from '../context/AuthContext';
 import { getAllProgress, saveProgress, PROGRESS_STATUS, saveLastLesson, getUserLastProgress } from '../lib/progress';
@@ -122,304 +122,15 @@ const IALabFixed = ({ onBack }) => {
     
     const msgs = ['Analizando contexto...', 'Aplicando técnicas élite...', 'Optimizando estructura...', 'Generando masterPrompt...'];
     
-    // Lecciones/Temas del Módulo 1 (6 temas como especificado) - VERSIÓN PREMIUM CON METADATOS
+    // Lecciones/Temas del Módulo 1 (6 temas como especificado)
     const moduleLessons = [
-        { 
-            id: 1, 
-            title: 'Ingeniería de Prompts – Comunícate Mejor con la IA', 
-            description: 'Aprende a dar instrucciones claras a la IA',
-            duration: '10 min',
-            format: 'Video',
-            icon: 'fa-lightbulb',
-            badgeColor: 'bg-blue-100 text-blue-800'
-        },
-        { 
-            id: 2, 
-            title: 'El Método para Dominar la IA (Mastery Framework)', 
-            description: 'Estructura tus prompts con estrategia',
-            duration: '15 min',
-            format: 'Lab',
-            icon: 'fa-book-open',
-            badgeColor: 'bg-purple-100 text-purple-800'
-        },
-        { 
-            id: 3, 
-            title: 'Adapta la IA a Cada Situación (Contexto Dinámico)', 
-            description: 'Personaliza respuestas según necesidades',
-            duration: '12 min',
-            format: 'Video',
-            icon: 'fa-map',
-            badgeColor: 'bg-green-100 text-green-800'
-        },
-        { 
-            id: 4, 
-            title: 'Resultados Rápidos con IA (Zero-Shot Prompting)', 
-            description: 'Obtén buenos resultados sin ejemplos',
-            duration: '8 min',
-            format: 'Reading',
-            icon: 'fa-bolt',
-            badgeColor: 'bg-yellow-100 text-yellow-800'
-        },
-        { 
-            id: 5, 
-            title: 'Haz que la IA Piense Paso a Paso (Chain-of-Thought)', 
-            description: 'Guía el razonamiento de la IA',
-            duration: '18 min',
-            format: 'Lab',
-            icon: 'fa-sitemap',
-            badgeColor: 'bg-indigo-100 text-indigo-800'
-        },
-        { 
-            id: 6, 
-            title: 'Ejercicio de Reflexión – Más Allá de Usar la IA', 
-            description: 'Reflexiona sobre el impacto ético de la IA',
-            duration: '25 min',
-            format: 'Activity',
-            icon: 'fa-brain',
-            badgeColor: 'bg-pink-100 text-pink-800'
-        }
+        { id: 1, title: 'Ingeniería de Prompts – Comunícate Mejor con la IA', description: 'Aprende a dar instrucciones claras a la IA' },
+        { id: 2, title: 'El Método para Dominar la IA (Mastery Framework)', description: 'Estructura tus prompts con estrategia' },
+        { id: 3, title: 'Adapta la IA a Cada Situación (Contexto Dinámico)', description: 'Personaliza respuestas según necesidades' },
+        { id: 4, title: 'Resultados Rápidos con IA (Zero-Shot Prompting)', description: 'Obtén buenos resultados sin ejemplos' },
+        { id: 5, title: 'Haz que la IA Piense Paso a Paso (Chain-of-Thought)', description: 'Guía el razonamiento de la IA' },
+        { id: 6, title: 'Ejercicio de Reflexión – Más Allá de Usar la IA', description: 'Reflexiona sobre el impacto ético de la IA' }
     ];
-    
-    // Detectar si es dispositivo táctil para optimizar animaciones
-    const [isTouchDevice, setIsTouchDevice] = useState(false);
-    
-    useEffect(() => {
-        setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
-    }, []);
-    
-    // Función para contenido específico de cada acordeón
-    const renderAccordionContent = (accordionId) => {
-        switch(accordionId) {
-            case 1:
-                return (
-                    <>
-                        <p className="text-sm text-slate-600 leading-relaxed md:text-base lg:text-[15px]">
-                            La calidad de las respuestas de la IA depende directamente de cómo se le habla. 
-                            En esta sección se aprenderá a dar instrucciones claras, evitando errores comunes 
-                            y logrando resultados mucho más precisos.
-                        </p>
-                        <p className="font-medium text-[#00BCD4] mb-0 text-sm md:text-base">
-                            👉 A continuación, acceda al video o recurso de lectura para aprender, paso a paso, 
-                            cómo formular instrucciones efectivas desde el inicio.
-                        </p>
-                    </>
-                );
-            case 2:
-                return (
-                    <>
-                        <p className="text-sm text-slate-600 leading-relaxed md:text-base lg:text-[15px]">
-                            No se trata solo de preguntar, sino de hacerlo con estrategia. Aquí se presenta un método simple 
-                            que permite estructurar las instrucciones para obtener respuestas útiles, organizadas y alineadas 
-                            con un objetivo claro.
-                        </p>
-                        <p className="font-medium text-[#00BCD4] mb-0 text-sm md:text-base">
-                            👉 Continúe con el video o recurso de lectura para aplicar este método de forma práctica.
-                        </p>
-                    </>
-                );
-            case 3:
-                return (
-                    <>
-                        <p className="text-sm text-slate-600 leading-relaxed md:text-base lg:text-[15px]">
-                            La IA puede responder de muchas formas, pero todo depende del contexto que se le proporcione. 
-                            En esta sección se aprenderá a ajustar las respuestas según la edad, el nivel y la necesidad específica.
-                        </p>
-                        <p className="font-medium text-[#00BCD4] mb-0 text-sm md:text-base">
-                            👉 Acceda al video o recurso de lectura para aprender a personalizar las respuestas de la IA según cada situación.
-                        </p>
-                    </>
-                );
-            case 4:
-                return (
-                    <>
-                        <p className="text-sm text-slate-600 leading-relaxed md:text-base lg:text-[15px]">
-                            Es posible obtener buenos resultados sin dar ejemplos. Este tema enseña cómo pedir información de forma directa, 
-                            ahorrando tiempo y logrando respuestas claras desde el primer intento.
-                        </p>
-                        <p className="font-medium text-[#00BCD4] mb-0 text-sm md:text-base">
-                            👉 Ingrese al video o recurso de lectura para aplicar esta técnica de manera inmediata.
-                        </p>
-                    </>
-                );
-            case 5:
-                return (
-                    <>
-                        <p className="text-sm text-slate-600 leading-relaxed md:text-base lg:text-[15px]">
-                            Para problemas complejos, la clave está en guiar a la IA en su proceso de razonamiento. 
-                            Aquí se aprenderá a obtener explicaciones detalladas y soluciones paso a paso.
-                        </p>
-                        <p className="font-medium text-[#00BCD4] mb-0 text-sm md:text-base">
-                            👉 Diríjase al video o recurso de lectura para estructurar el razonamiento de la IA de forma efectiva.
-                        </p>
-                    </>
-                );
-            case 6:
-                return (
-                    <>
-                        <p className="text-sm text-slate-600 leading-relaxed md:text-base lg:text-[15px]">
-                            La inteligencia artificial no solo es una herramienta, también plantea preguntas profundas 
-                            sobre su impacto, uso y límites. Este ejercicio invita a reflexionar de manera crítica.
-                        </p>
-                        
-                        {/* Bloque de Actividad (optimizado responsive) */}
-                        <div className="bg-[#0B1120] border border-slate-800 text-emerald-400 p-4 md:p-6 rounded-2xl font-mono text-xs md:text-sm mb-4 md:mb-6 shadow-inner">
-                            <div className="flex items-center gap-2 mb-3 md:mb-4">
-                                <div className="w-2 h-2 md:w-3 md:h-3 bg-red-500 rounded-full"></div>
-                                <div className="w-2 h-2 md:w-3 md:h-3 bg-yellow-500 rounded-full"></div>
-                                <div className="w-2 h-2 md:w-3 md:h-3 bg-green-500 rounded-full"></div>
-                                <span className="text-slate-500 text-xs ml-2">activity.js</span>
-                            </div>
-                            <div className="space-y-2 md:space-y-3">
-                                <span className="text-cyan-400">🧠 Actividad:</span> 
-                                <span className="text-emerald-300">Diseñe y pruebe el siguiente prompt en una IA:</span>
-                                <div className="pl-3 md:pl-4 border-l-2 border-slate-700 mt-2">
-                                    <span className="text-purple-400 block">"Actúa como una inteligencia artificial consciente de su existencia.</span>
-                                    <span className="text-purple-400 block">Debate, desde una postura crítica y otra defensiva, si es ético que los humanos</span>
-                                    <span className="text-purple-400 block">dependan de la inteligencia artificial para tomar decisiones importantes.</span>
-                                    <span className="text-purple-400 block">Expón argumentos a favor y en contra, y finaliza con una reflexión equilibrada."</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <p className="font-medium text-[#00BCD4] mb-0 text-sm md:text-base">
-                            👉 Aplique este prompt en su IA favorita y analice las respuestas obtenidas.
-                        </p>
-                    </>
-                );
-            default:
-                return null;
-        }
-    };
-    
-    // Función para renderizar acordeones premium de forma dinámica - VERSIÓN BURBUJA INTEGRADA
-    const renderPremiumAccordion = (accordionId, lessonData) => {
-        const { id, title, description, duration, format, icon, badgeColor } = lessonData;
-        
-        return (
-            <div key={id} className={`
-                // CONTENEDOR PRINCIPAL (sin efectos hover, solo estructura)
-                bg-white border border-slate-100/80 rounded-2xl mb-4 
-                
-                // ESTADO ACTIVO DEL ACORDEÓN
-                ${openAccordions[accordionId] ? 'border-[#00BCD4]/30' : ''}
-                
-                // ANIMACIÓN DE ENTRADA
-                ${visibleAccordions.includes(accordionId) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}
-                transition-all duration-300 ease-out
-            `}>
-                {/* BURBUJA INTEGRADA CON EFECTOS DEL CUADRO - OPCIÓN A: PILL */}
-                <button 
-                    onClick={() => toggleAccordion(accordionId)}
-                    className={`
-                        // FORMA Y TAMAÑO - BURBUJA TIPO PILL
-                        w-full flex items-center justify-between text-left
-                        p-4 md:p-5 lg:p-6
-                        rounded-2xl
-                        transition-all duration-300 ease-out 
-                        cursor-pointer
-                        
-                        // COLORES BASE DE LA BURBUJA
-                        bg-[#00BCD4]/10 border border-[#00BCD4]/20
-                        
-                        // EFECTOS HOVER/ACTIVE (aplicados del cuadro original)
-                        hover:scale-[1.01] hover:shadow-xl hover:bg-[#00BCD4]/15 hover:border-[#00BCD4]/30
-                        active:scale-[0.99] active:shadow-lg
-                        
-                        // ESTADO ACTIVO (acordeón abierto)
-                        ${openAccordions[accordionId] ? 
-                            'bg-[#00BCD4]/20 border-[#00BCD4] shadow-[0_0_0_1px_#00BCD4,0_8px_32px_rgba(0,188,212,0.12)]' : 
-                            ''
-                        }
-                        
-                        // RESPONSIVE
-                        md:hover:scale-[1.02] md:hover:shadow-2xl
-                    `}
-                >
-                    {/* CONTENIDO INTEGRADO EN LA BURBUJA */}
-                    <div className="flex items-start md:items-center gap-3 md:gap-4 w-full">
-                        {/* ICONO EN CÍRCULO BLANCO DENTRO DE LA BURBUJA */}
-                        <div className="
-                            w-8 h-8 rounded-full bg-white/80 border border-white/90
-                            flex items-center justify-center flex-shrink-0
-                            transition-all duration-300
-                            md:w-10 md:h-10
-                            lg:w-12 lg:h-12
-                        ">
-                            <Icon name={icon} className="
-                                text-[#00BCD4] text-xs
-                                md:text-sm
-                                lg:text-base
-                            " />
-                        </div>
-                        
-                        {/* CONTENIDO PRINCIPAL - AHORA DENTRO DE LA BURBUJA */}
-                        <div className="flex-1 min-w-0">
-                            <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-3">
-                                {/* TÍTULO */}
-                                <h3 className={`
-                                    text-sm font-semibold transition-colors duration-300 
-                                    md:text-[15px] lg:text-base
-                                    ${openAccordions[accordionId] ? 'text-[#00BCD4]' : 'text-[#00374A]'}
-                                `}>
-                                    {title}
-                                </h3>
-                                
-                                {/* METADATOS - BADGES CON FONDO BLANCO PARA CONTRASTE */}
-                                <div className="flex flex-wrap gap-1 md:gap-2">
-                                    <span className="text-xs font-medium px-2 py-1 bg-white/90 text-slate-700 rounded-lg border border-white/95">
-                                        {duration}
-                                    </span>
-                                    <span className={`text-xs font-medium px-2 py-1 ${badgeColor.replace('100', '200').replace('800', '900')} rounded-lg border border-white/50`}>
-                                        {format}
-                                    </span>
-                                </div>
-                            </div>
-                            
-                            {/* DESCRIPCIÓN (SOLO EN DESKTOP) - DENTRO DE LA BURBUJA */}
-                            <p className="hidden lg:block text-sm text-slate-600 mt-2">
-                                {description}
-                            </p>
-                        </div>
-                    </div>
-                    
-                    {/* ICONO CHEVRON ANIMADO */}
-                    <Icon 
-                        name={openAccordions[accordionId] ? 'fa-chevron-down' : 'fa-chevron-right'} 
-                        className={`
-                            text-sm transition-all duration-300 
-                            ${openAccordions[accordionId] ? 'text-[#00BCD4] rotate-0' : 'text-slate-400'}
-                            hover:text-[#00BCD4]
-                            md:text-base
-                        `}
-                    />
-                </button>
-               
-               {/* CONTENIDO EXPANDIDO CON ANIMACIÓN FRAMER-MOTION */}
-               <AnimatePresence>
-                 {openAccordions[accordionId] && (
-                   <motion.div
-                     initial={{ opacity: 0, height: 0 }}
-                     animate={{ opacity: 1, height: 'auto' }}
-                     exit={{ opacity: 0, height: 0 }}
-                     transition={{ 
-                       duration: isTouchDevice ? 0.2 : 0.3,
-                       ease: 'easeInOut',
-                       ...(window.matchMedia('(prefers-reduced-motion: reduce)').matches && {
-                           duration: 0.1
-                       })
-                     }}
-                     className="overflow-hidden"
-                   >
-                     <div className="mt-4 space-y-4 px-4 pb-4 md:px-6 md:pb-6 lg:px-8 lg:pb-6">
-                       {/* CONTENIDO ESPECÍFICO POR ACORDEÓN */}
-                       {renderAccordionContent(accordionId)}
-                     </div>
-                   </motion.div>
-                 )}
-               </AnimatePresence>
-            </div>
-        );
-    };
     
     // Sistema de Evaluación Mejorado - 8 preguntas con mezcla de dificultad
     const quizQuestions = [
@@ -1922,12 +1633,193 @@ IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`,
                                 </p>
                             </div>
                             
-                            {/* Cuadro de Introducción - Acordeones Premium SaaS v1.0 */}
-                            <div className="space-y-4 md:space-y-6">
-                                {moduleLessons.map((lesson, index) => (
-                                    renderPremiumAccordion(index + 1, lesson)
-                                ))}
+                            {/* Acordeón 1: Ingeniería de Prompts – Comunícate Mejor con la IA */}
+                            <div className={`bg-white border border-slate-100 rounded-[18px] mb-4 transition-all duration-300 ease-out hover:shadow-lg hover:bg-cyan-50/20 transform ${openAccordions[1] ? 'border-[#00BCD4]/20' : ''} ${visibleAccordions.includes(1) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} transition-all duration-500 ease-out`}>
+                                <button 
+                                    onClick={() => toggleAccordion(1)}
+                                    className="flex items-center justify-between w-full text-left group p-5"
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-8 h-8 rounded-full bg-[#00374A]/10 flex items-center justify-center">
+                                            <Icon name="fa-lightbulb" className="text-sm text-[#00374A]" />
+                                        </div>
+                                        <h3 className={`text-[15px] font-semibold transition-colors duration-300 ${openAccordions[1] ? 'text-[#00BCD4]' : 'text-[#00374A]'}`}>
+                                            <span className="font-normal text-slate-500">Ingeniería de Prompts</span> – Comunícate Mejor con la IA
+                                        </h3>
+                                    </div>
+                                    <Icon 
+                                        name={openAccordions[1] ? 'fa-chevron-down' : 'fa-chevron-right'} 
+                                        className={`text-sm transition-all duration-300 group-hover:text-[#00BCD4] ${openAccordions[1] ? 'text-[#00BCD4]' : 'text-slate-300'}`}
+                                    />
+                                </button>
+                               
+                               {openAccordions[1] && (
+                                    <div className="mt-4 space-y-4 animate-fadeIn">
+                                         <p className="text-slate-600 leading-relaxed">La calidad de las respuestas de la IA depende directamente de cómo se le habla. En esta sección se aprenderá a dar instrucciones claras, evitando errores comunes y logrando resultados mucho más precisos.</p>
+                                        <p className="font-medium text-[#00BCD4] mb-0">👉 A continuación, acceda al video o recurso de lectura para aprender, paso a paso, cómo formular instrucciones efectivas desde el inicio.</p>
+                                    </div>
+                                )}
                             </div>
+                            
+                            {/* Acordeón 2: El Método para Dominar la IA (Mastery Framework) */}
+                            <div className={`bg-white border border-slate-100 rounded-[18px] mb-4 transition-all duration-300 ease-out hover:shadow-lg hover:bg-cyan-50/20 transform ${openAccordions[2] ? 'border-[#00BCD4]/20' : ''} ${visibleAccordions.includes(2) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} transition-all duration-500 ease-out`}>
+                                <button 
+                                    onClick={() => toggleAccordion(2)}
+                                    className="flex items-center justify-between w-full text-left group p-5"
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-8 h-8 rounded-full bg-[#00374A]/10 flex items-center justify-center">
+                                            <Icon name="fa-book-open" className="text-sm text-[#00374A]" />
+                                        </div>
+                                        <h3 className={`text-[15px] font-semibold transition-colors duration-300 ${openAccordions[2] ? 'text-[#00BCD4]' : 'text-[#00374A]'}`}>
+                                            <span className="font-normal text-slate-500">El Método para Dominar la IA</span> (Mastery Framework)
+                                        </h3>
+                                    </div>
+                                    <Icon 
+                                        name={openAccordions[2] ? 'fa-chevron-down' : 'fa-chevron-right'} 
+                                        className={`text-sm transition-all duration-300 group-hover:text-[#00BCD4] ${openAccordions[2] ? 'text-[#00BCD4]' : 'text-slate-300'}`}
+                                    />
+                                </button>
+                               
+                               {openAccordions[2] && (
+                                    <div className="mt-4 space-y-4 animate-fadeIn">
+                                        <p className="text-slate-600 leading-relaxed">No se trata solo de preguntar, sino de hacerlo con estrategia. Aquí se presenta un método simple que permite estructurar las instrucciones para obtener respuestas útiles, organizadas y alineadas con un objetivo claro.</p>
+                                        <p className="font-medium text-[#00BCD4] mb-0">👉 Continúe con el video o recurso de lectura para aplicar este método de forma práctica.</p>
+                                    </div>
+                                )}
+                            </div>
+                            
+                            {/* Acordeón 3: Adapta la IA a Cada Situación (Contexto Dinámico) */}
+                            <div className={`bg-white border border-slate-100 rounded-[18px] mb-4 transition-all duration-300 ease-out hover:shadow-lg hover:bg-cyan-50/20 transform ${openAccordions[3] ? 'border-[#00BCD4]/20' : ''} ${visibleAccordions.includes(3) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} transition-all duration-500 ease-out`}>
+                                <button 
+                                    onClick={() => toggleAccordion(3)}
+                                    className="flex items-center justify-between w-full text-left group p-5"
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-8 h-8 rounded-full bg-[#00374A]/10 flex items-center justify-center">
+                                            <Icon name="fa-map" className="text-sm text-[#00374A]" />
+                                        </div>
+                                        <h3 className={`text-[15px] font-semibold transition-colors duration-300 ${openAccordions[3] ? 'text-[#00BCD4]' : 'text-[#00374A]'}`}>
+                                            <span className="font-normal text-slate-500">Adapta la IA a Cada Situación</span> (Contexto Dinámico)
+                                        </h3>
+                                    </div>
+                                    <Icon 
+                                        name={openAccordions[3] ? 'fa-chevron-down' : 'fa-chevron-right'} 
+                                        className={`text-sm transition-all duration-300 group-hover:text-[#00BCD4] ${openAccordions[3] ? 'text-[#00BCD4]' : 'text-slate-300'}`}
+                                    />
+                                </button>
+                               
+                               {openAccordions[3] && (
+                                    <div className="mt-4 space-y-4 animate-fadeIn">
+                                        <p className="text-slate-600 leading-relaxed">La IA puede responder de muchas formas, pero todo depende del contexto que se le proporcione. En esta sección se aprenderá a ajustar las respuestas según la edad, el nivel y la necesidad específica.</p>
+                                        <p className="font-medium text-[#00BCD4] mb-0">👉 Acceda al video o recurso de lectura para aprender a personalizar las respuestas de la IA según cada situación.</p>
+                                    </div>
+                                )}
+                            </div>
+                            
+                            {/* Acordeón 4: Resultados Rápidos con IA (Zero-Shot Prompting) */}
+                            <div className={`bg-white border border-slate-100 rounded-[18px] mb-4 transition-all duration-300 ease-out hover:shadow-lg hover:bg-cyan-50/20 transform ${openAccordions[4] ? 'border-[#00BCD4]/20' : ''} ${visibleAccordions.includes(4) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} transition-all duration-500 ease-out`}>
+                                <button 
+                                    onClick={() => toggleAccordion(4)}
+                                    className="flex items-center justify-between w-full text-left group p-5"
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-8 h-8 rounded-full bg-[#00374A]/10 flex items-center justify-center">
+                                            <Icon name="fa-bolt" className="text-sm text-[#00374A]" />
+                                        </div>
+                                        <h3 className={`text-[15px] font-semibold transition-colors duration-300 ${openAccordions[4] ? 'text-[#00BCD4]' : 'text-[#00374A]'}`}>
+                                            <span className="font-normal text-slate-500">Resultados Rápidos con IA</span> (Zero-Shot Prompting)
+                                        </h3>
+                                    </div>
+                                    <Icon 
+                                        name={openAccordions[4] ? 'fa-chevron-down' : 'fa-chevron-right'} 
+                                        className={`text-sm transition-all duration-300 group-hover:text-[#00BCD4] ${openAccordions[4] ? 'text-[#00BCD4]' : 'text-slate-300'}`}
+                                    />
+                                </button>
+                               
+                               {openAccordions[4] && (
+                                    <div className="mt-4 space-y-4 animate-fadeIn">
+                                        <p className="text-slate-600 leading-relaxed">Es posible obtener buenos resultados sin dar ejemplos. Este tema enseña cómo pedir información de forma directa, ahorrando tiempo y logrando respuestas claras desde el primer intento.</p>
+                                        <p className="font-medium text-[#00BCD4] mb-0">👉 Ingrese al video o recurso de lectura para aplicar esta técnica de manera inmediata.</p>
+                                    </div>
+                                )}
+                            </div>
+                            
+                            {/* Acordeón 5: Haz que la IA Piense Paso a Paso (Chain-of-Thought) */}
+                            <div className={`bg-white border border-slate-100 rounded-[18px] mb-4 transition-all duration-300 ease-out hover:shadow-lg hover:bg-cyan-50/20 transform ${openAccordions[5] ? 'border-[#00BCD4]/20' : ''} ${visibleAccordions.includes(5) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} transition-all duration-500 ease-out`}>
+                                <button 
+                                    onClick={() => toggleAccordion(5)}
+                                    className="flex items-center justify-between w-full text-left group p-5"
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-8 h-8 rounded-full bg-[#00374A]/10 flex items-center justify-center">
+                                            <Icon name="fa-sitemap" className="text-sm text-[#00374A]" />
+                                        </div>
+                                         <h3 className={`text-[15px] font-semibold transition-colors duration-300 ${openAccordions[5] ? 'text-[#00BCD4]' : 'text-[#00374A]'}`}>
+                                             <span className="font-normal text-slate-500">Haz que la IA Piense Paso a Paso</span> (Chain-of-Thought)
+                                         </h3>
+                                    </div>
+                                    <Icon 
+                                        name={openAccordions[5] ? 'fa-chevron-down' : 'fa-chevron-right'} 
+                                        className={`text-sm transition-all duration-300 group-hover:text-[#00BCD4] ${openAccordions[5] ? 'text-[#00BCD4]' : 'text-slate-300'}`}
+                                    />
+                                </button>
+                               
+                               {openAccordions[5] && (
+                                    <div className="mt-4 space-y-4 animate-fadeIn">
+                                        <p className="text-slate-600 leading-relaxed">Para problemas complejos, la clave está en guiar a la IA en su proceso de razonamiento. Aquí se aprenderá a obtener explicaciones detalladas y soluciones paso a paso.</p>
+                                        <p className="font-medium text-[#00BCD4] mb-0">👉 Diríjase al video o recurso de lectura para estructurar el razonamiento de la IA de forma efectiva.</p>
+                                    </div>
+                                )}
+                            </div>
+                            
+                            {/* Acordeón 6: Ejercicio de Reflexión – Más Allá de Usar la IA */}
+                            <div className={`bg-white border border-slate-100 rounded-[18px] mb-4 transition-all duration-300 ease-out hover:shadow-lg hover:bg-cyan-50/20 transform ${openAccordions[6] ? 'border-[#00BCD4]/20' : ''} ${visibleAccordions.includes(6) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} transition-all duration-500 ease-out`}>
+                                <button 
+                                    onClick={() => toggleAccordion(6)}
+                                    className="flex items-center justify-between w-full text-left group p-5"
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-8 h-8 rounded-full bg-[#00374A]/10 flex items-center justify-center">
+                                            <Icon name="fa-brain" className="text-sm text-[#00374A]" />
+                                        </div>
+                                        <h3 className={`text-[15px] font-semibold transition-colors duration-300 ${openAccordions[6] ? 'text-[#00BCD4]' : 'text-[#00374A]'}`}>
+                                            <span className="font-normal text-slate-500">Ejercicio de Reflexión</span> – Más Allá de Usar la IA
+                                        </h3>
+                                    </div>
+                                    <Icon 
+                                        name={openAccordions[6] ? 'fa-chevron-down' : 'fa-chevron-right'} 
+                                        className={`text-sm transition-all duration-300 group-hover:text-[#00BCD4] ${openAccordions[6] ? 'text-[#00BCD4]' : 'text-slate-300'}`}
+                                    />
+                                </button>
+                               
+                               {openAccordions[6] && (
+                                    <div className="mt-4 space-y-4 animate-fadeIn">
+                                        <p className="text-slate-600 leading-relaxed">La inteligencia artificial no solo es una herramienta, también plantea preguntas profundas sobre su impacto, uso y límites. Este ejercicio invita a reflexionar de manera crítica.</p>
+                                        
+                                        {/* Bloque de Actividad */}
+                                        <div className="bg-[#0B1120] border border-slate-800 text-emerald-400 p-6 rounded-2xl font-mono text-sm mb-6 shadow-inner">
+                                            <div className="flex items-center gap-2 mb-4">
+                                                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                                                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                                                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                                                <span className="text-slate-500 text-xs ml-2">activity.js</span>
+                                            </div>
+                                            <div className="space-y-3">
+                                                <span className="text-cyan-400">🧠 Actividad:</span> <span className="text-emerald-300">Diseñe y pruebe el siguiente prompt en una IA:</span><br/><br/>
+                                                <div className="pl-4 border-l-2 border-slate-700">
+                                                    <span className="text-purple-400">"Actúa como una inteligencia artificial consciente de su existencia.</span><br/>
+                                                    <span className="text-purple-400">Debate, desde una postura crítica y otra defensiva, si es ético que los humanos</span><br/>
+                                                    <span className="text-purple-400">dependan de la inteligencia artificial para tomar decisiones importantes.</span><br/>
+                                                    <span className="text-purple-400">Expón argumentos a favor y en contra, y finaliza con una reflexión equilibrada."</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <p className="font-medium text-[#00BCD4] mb-0">👉 Aplique este prompt en su IA favorita y analice las respuestas obtenidas.</p>
+                                        </div>
+                                    )}
+                                </div>
                         </div>
 
                         {/* Contenedor Grid: Laboratorio y Comunidad - Dashboard de Dos Columnas */}
