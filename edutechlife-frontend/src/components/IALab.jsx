@@ -8,9 +8,14 @@ import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { useInView, motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../utils/iconMapping.jsx';
 import { useAuth } from '../context/AuthContext';
-import { getAllProgress, saveProgress, PROGRESS_STATUS, saveLastLesson, getUserLastProgress } from '../lib/progress';
+import { getAllProgress, saveProgress, PROGRESS_STATUS, saveLastLesson, getUserLastProgress, getProgress } from '../lib/progress';
 import { LogOut, Lightbulb } from 'lucide-react';
 import UserDropdownMenu from './UserDropdownMenu';
+import PlatformOptimizedCard from './PlatformOptimizedCard';
+import ChallengeCard from './ChallengeCard';
+import ForumCommunity from './forum/ForumCommunity';
+import ErrorBoundary from './forum/ErrorBoundary';
+import { FORUM_COMPONENTS, FORUM_TYPOGRAPHY, FORUM_EFFECTS, cn, GRADIENTS } from './forum/forumDesignSystem';
 
 const IALabFixed = ({ onBack }) => {
     const { user, isLoading: authLoading, signOut } = useAuth();
@@ -183,9 +188,123 @@ const IALabFixed = ({ onBack }) => {
     // Detectar si es dispositivo táctil para optimizar animaciones
     const [isTouchDevice, setIsTouchDevice] = useState(false);
     
+    // Estados para protocolo universal-adaptive-challenge
+    const [isStartingChallenge, setIsStartingChallenge] = useState(false);
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+    const [isChallengeCompleted, setIsChallengeCompleted] = useState(false);
+    const [challengeScore, setChallengeScore] = useState(0);
+    const [isIOS, setIsIOS] = useState(false);
+    const [isAndroid, setIsAndroid] = useState(false);
+    
     useEffect(() => {
+        // Detectar dispositivo táctil
         setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
+        
+        // Detectar iOS
+        setIsIOS(/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream);
+        
+        // Detectar Android
+        setIsAndroid(/Android/.test(navigator.userAgent));
+        
+        // Optimizaciones específicas por plataforma
+        if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+            // Optimizaciones para Safari iOS
+            document.documentElement.style.setProperty('--tap-highlight-color', 'rgba(0, 188, 212, 0.1)');
+        }
+        
+        if (/Android/.test(navigator.userAgent)) {
+            // Optimizaciones para Chrome Android
+            document.documentElement.style.setProperty('--scroll-behavior', 'smooth');
+            // Prevenir zoom en inputs en Android
+            const metaViewport = document.querySelector('meta[name="viewport"]');
+            if (metaViewport) {
+                metaViewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+            }
+        }
+        
+        // Optimizaciones para Safari en general
+        if (/Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent)) {
+            // Mejorar rendimiento de animaciones en Safari
+            document.documentElement.style.setProperty('--animation-timing', 'cubic-bezier(0.4, 0, 0.2, 1)');
+        }
+        
+        // Optimizar para dispositivos con pantallas de alta densidad (Retina, HiDPI)
+        if (window.devicePixelRatio >= 2) {
+            document.documentElement.style.setProperty('--image-rendering', 'crisp-edges');
+        }
     }, []);
+    
+    // Cargar progreso del desafío desde Supabase
+    useEffect(() => {
+        const loadChallengeProgress = async () => {
+            try {
+                // Solo cargar si hay un usuario autenticado
+                if (!user?.id) {
+                    console.log('Usuario no autenticado, usando estado por defecto');
+                    setIsLoadingProgress(false);
+                    return;
+                }
+                
+                console.log(`Cargando progreso del desafío para módulo ${activeMod}, usuario ${user.id}`);
+                
+                // Cargar progreso específico del módulo actual
+                const progress = await getProgress(activeMod);
+                
+                if (progress) {
+                    console.log('Progreso cargado:', progress);
+                    
+                    // Actualizar estados basados en el progreso
+                    const { status, challenge_completed, challenge_started_at, challenge_score } = progress;
+                    
+                    // Si el desafío ya fue completado, actualizar estados
+                    if (challenge_completed) {
+                        setIsChallengeCompleted(true);
+                        setIsButtonDisabled(true);
+                        setChallengeScore(challenge_score || 0);
+                        console.log(`Desafío ya completado, puntuación: ${challenge_score || 0}%, botón deshabilitado`);
+                    } else {
+                        setIsChallengeCompleted(false);
+                        setChallengeScore(0);
+                    }
+                    
+                    // Si el desafío está en progreso, mostrar estado apropiado
+                    if (status === 'in_progress' && challenge_started_at) {
+                        const startedTime = new Date(challenge_started_at);
+                        const now = new Date();
+                        const diffMinutes = (now - startedTime) / (1000 * 60);
+                        
+                        // Si pasaron más de 45 minutos desde que empezó, marcar como expirado
+                        if (diffMinutes > 45) {
+                            console.log('Desafío expirado (más de 45 minutos)');
+                            setIsButtonDisabled(false); // Permitir reiniciar
+                        } else {
+                            console.log(`Desafío en progreso, ${Math.round(45 - diffMinutes)} minutos restantes`);
+                            setIsStartingChallenge(false);
+                            setIsButtonDisabled(false);
+                        }
+                    }
+                } else {
+                    console.log('No se encontró progreso para este módulo');
+                }
+                
+            } catch (error) {
+                console.error('Error al cargar progreso del desafío:', error);
+                
+                // En caso de error, mostrar estado por defecto
+                setIsButtonDisabled(false);
+                
+            } finally {
+                // Siempre marcar como cargado (incluso en error)
+                setIsLoadingProgress(false);
+                console.log('Carga de progreso completada');
+            }
+        };
+        
+        // Iniciar carga
+        loadChallengeProgress();
+        
+        // Recargar cuando cambie el módulo activo o el usuario
+    }, [activeMod, user?.id]);
     
     // Función para contenido específico de cada acordeón
     const renderAccordionContent = (accordionId) => {
@@ -559,19 +678,19 @@ const IALabFixed = ({ onBack }) => {
     // Sistema de Clases de Botones - UI Button Master Overhaul
     const buttonClasses = {
         // Botón Primario - Acción Principal
-        primary: "bg-[#00374A] text-white px-6 py-3 rounded-xl hover:bg-[#00BCD4] hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 ease-in-out transform active:scale-95 font-medium flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:ring-offset-2",
+        primary: "bg-[#00374A] text-white px-6 py-3 rounded-xl hover:bg-[#00BCD4] hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 ease-in-out transform active:scale-95 font-medium flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:ring-offset-2 min-h-[52px] touch-manipulation",
         
         // Botón Primario con Gradiente - Acción IA
-        primaryGradient: "bg-gradient-to-r from-[#00374A] to-[#00BCD4] text-white px-6 py-3 rounded-xl hover:shadow-[0_0_25px_rgba(0,188,212,0.4)] transition-all duration-300 ease-in-out transform active:scale-95 font-medium flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:ring-offset-2",
+        primaryGradient: "bg-gradient-to-r from-[#00374A] to-[#00BCD4] text-white px-6 py-3 rounded-xl hover:shadow-[0_0_25px_rgba(0,188,212,0.4)] transition-all duration-300 ease-in-out transform active:scale-95 font-medium flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:ring-offset-2 min-h-[52px] touch-manipulation",
         
         // Botón Secundario
-        secondary: "border-2 border-[#00BCD4] text-[#00374A] px-6 py-3 rounded-xl hover:bg-[#00BCD4]/10 hover:border-[#00374A] transition-all duration-300 ease-in-out transform active:scale-95 font-medium flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:ring-offset-2",
+        secondary: "border-2 border-[#00BCD4] text-[#00374A] px-6 py-3 rounded-xl hover:bg-[#00BCD4]/10 hover:border-[#00374A] transition-all duration-300 ease-in-out transform active:scale-95 font-medium flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:ring-offset-2 min-h-[52px] touch-manipulation",
         
         // Botón Desafío (Especial - Mantener identidad)
-        challenge: "bg-gradient-to-r from-[#FFD166] to-[#FF8E53] text-white px-6 py-3 rounded-xl hover:shadow-[0_0_20px_rgba(255,209,102,0.3)] transition-all duration-300 ease-in-out transform active:scale-95 font-medium flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-[#FFD166] focus:ring-offset-2",
+        challenge: "bg-gradient-to-r from-[#FFD166] to-[#FF8E53] text-white px-6 py-3 rounded-xl hover:shadow-[0_0_20px_rgba(255,209,102,0.3)] transition-all duration-300 ease-in-out transform active:scale-95 font-medium flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-[#FFD166] focus:ring-offset-2 min-h-[52px] touch-manipulation",
         
         // Botón Pequeño (para acciones secundarias)
-        small: "px-3 py-1.5 text-sm border border-[#00BCD4] text-[#00374A] rounded-xl hover:bg-[#00BCD4]/10 transition-all duration-200 flex items-center gap-1 focus:outline-none focus:ring-1 focus:ring-[#00BCD4]",
+        small: "px-3 py-1.5 text-sm border border-[#00BCD4] text-[#00374A] rounded-xl hover:bg-[#00BCD4]/10 transition-all duration-200 flex items-center gap-1 focus:outline-none focus:ring-1 focus:ring-[#00BCD4] touch-manipulation",
         
         // Estado Loading
         loading: "opacity-70 cursor-not-allowed"
@@ -740,9 +859,12 @@ const IALabFixed = ({ onBack }) => {
             setLoadMsg(msgs[idx]);
         }, 1800);
         
-        const r = await callDeepseek(
-            input,
-            `Eres el Arquitecto de Prompts Élite de Edutechlife. Analiza la siguiente idea del usuario y genera:
+        try {
+            // Llamada directa a la API para el sintetizador de prompts
+            const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://edutechlife-backend.onrender.com';
+            const url = `${API_BASE_URL}/api/chat`;
+            
+            const systemPrompt = `Eres el Arquitecto de Prompts Élite de Edutechlife. Analiza la siguiente idea del usuario y genera:
 1. Un MASTER PROMPT estructurado usando el framework RTF (Rol, Tarea, Formato)
 2. Un FEEDBACK TÉCNICO detallado explicando las técnicas de ingeniería de prompts aplicadas
 
@@ -753,13 +875,68 @@ ESTRUCTURA REQUERIDA (JSON):
   "techniques": ["Lista", "de", "técnicas", "aplicadas"]
 }
 
-IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`,
-            true
-        );
-        
-        if (loadingIntervalRef.current) clearInterval(loadingIntervalRef.current);
-        if (!r.error) setGenData(r);
-        setLoading(false);
+IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`;
+            
+            const payload = { 
+                prompt: input,
+                systemPrompt: systemPrompt,
+                isJson: true
+            };
+            
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 15000);
+            
+            const response = await fetch(url, { 
+                method: 'POST', 
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }, 
+                body: JSON.stringify(payload),
+                mode: 'cors',
+                credentials: 'omit',
+                signal: controller.signal
+            });
+            
+            clearTimeout(timeoutId);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            
+            // Parsear el JSON de la respuesta
+            const result = JSON.parse(data.result.replace(/```json|```/g, '').trim());
+            
+            // Validar que tenga la estructura esperada
+            if (!result.masterPrompt || !result.feedback) {
+                throw new Error('Respuesta de IA no tiene la estructura esperada');
+            }
+            
+            // Asegurar que techniques sea un array
+            if (!result.techniques || !Array.isArray(result.techniques)) {
+                result.techniques = ["Few-Shot Prompting", "Chain-of-Thought", "Contexto Dinámico"];
+            }
+            
+            setGenData(result);
+            
+        } catch (error) {
+            console.error('Error en síntesis de prompt:', error);
+            // Datos de respaldo para demostración
+            setGenData({
+                masterPrompt: `🔹 ROL: Arquitecto de Prompts Élite\n🔹 TAREA: Analizar y optimizar "${input.substring(0, 50)}..."\n🔹 FORMATO: Estructura RTF con contexto dinámico\n\n📋 PROMPT MAESTRO:\n"Como experto en ingeniería de prompts, analiza la idea proporcionada y genera un prompt optimizado usando técnicas élite como Few-Shot, Chain-of-Thought y delimitación de contexto. Proporciona una versión estructurada con rol claro, tarea específica y formato definido."`,
+                feedback: `✅ Técnicas aplicadas: Few-Shot Prompting (ejemplos contextuales), Chain-of-Thought (razonamiento paso a paso), Contexto Dinámico (adaptación al input).\n\n🔧 Optimizaciones: Estructura RTF (Rol-Tarea-Formato), delimitación clara de instrucciones, tono profesional manteniendo accesibilidad.\n\n🎯 Resultado: Prompt listo para implementación con alta tasa de éxito en modelos de IA avanzados.`,
+                techniques: ["Few-Shot Prompting", "Chain-of-Thought", "Contexto Dinámico", "Delimitación de Tono"]
+            });
+        } finally {
+            if (loadingIntervalRef.current) clearInterval(loadingIntervalRef.current);
+            setLoading(false);
+        }
     };
     
     const curr = modules.find(m => m.id === activeMod) || modules[0];
@@ -1083,6 +1260,29 @@ IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`,
     }, [showExamModal, showScoreResult]);
     
     // Manejador unificado de botones - Functional Button Engine v1
+    // Función para manejar clics en desafíos con debounce y feedback universal
+    const handleChallengeClick = async (actionType, data = {}) => {
+        if (isButtonDisabled) {
+            console.log('⏳ Botón deshabilitado temporalmente (debounce activo)');
+            return;
+        }
+        
+        setIsButtonDisabled(true);
+        setIsStartingChallenge(true);
+        
+        try {
+            await handleButtonClick(actionType, data);
+        } catch (error) {
+            console.error('❌ Error al procesar desafío:', error);
+        } finally {
+            // Re-enable después de 1 segundo (previene clics múltiples)
+            setTimeout(() => {
+                setIsButtonDisabled(false);
+                setIsStartingChallenge(false);
+            }, 1000);
+        }
+    };
+    
     const handleButtonClick = async (actionType, data = {}) => {
         console.log(`[Button Engine] Acción: ${actionType}`, data);
         
@@ -1094,12 +1294,11 @@ IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`,
                     // Guardar progreso en Supabase
                     try {
                         const lessonId = moduleLessons[currentLessonIndex + 1].id;
-                        await saveProgress({
-                            user_id: user?.id,
-                            module_id: activeMod,
-                            lesson_id: lessonId,
-                            status: PROGRESS_STATUS.IN_PROGRESS
-                        });
+                        await saveProgress(
+                            activeMod,
+                            PROGRESS_STATUS.IN_PROGRESS,
+                            { lesson_id: lessonId }
+                        );
                         console.log(`Progreso guardado: Módulo ${activeMod}, Lección ${lessonId}`);
                     } catch (error) {
                         console.error('Error al guardar progreso:', error);
@@ -1117,12 +1316,11 @@ IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`,
                 setIsMarkingComplete(true);
                 try {
                     // Marcar módulo como completado
-                    await saveProgress({
-                        user_id: user?.id,
-                        module_id: activeMod,
-                        lesson_id: moduleLessons[moduleLessons.length - 1].id,
-                        status: PROGRESS_STATUS.COMPLETED
-                    });
+                    await saveProgress(
+                        activeMod,
+                        PROGRESS_STATUS.COMPLETED,
+                        { lesson_id: moduleLessons[moduleLessons.length - 1].id }
+                    );
                     
                     // Actualizar estado local
                     if (!completedModules.includes(activeMod)) {
@@ -1169,7 +1367,70 @@ IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`,
                 break;
                 
             case 'OPEN_SYNTHESIZER':
+                // GUARDAR PROGRESO EN SUPABASE AL INICIAR DESAFÍO
+                try {
+                    if (user?.id) {
+                        const challengeData = {
+                            challenge_started_at: new Date().toISOString(),
+                            challenge_mode: data.mode || 'practice', // 'practice' o 'solution'
+                            challenge_completed: false,
+                            challenge_estimated_time: 45, // minutos
+                            module_title: modules.find(m => m.id === activeMod)?.title || 'Desafío'
+                        };
+                        
+                        await saveProgress(
+                            activeMod,
+                            PROGRESS_STATUS.IN_PROGRESS,
+                            challengeData
+                        );
+                        
+                        console.log('✅ Desafío iniciado - progreso guardado en Supabase:', challengeData);
+                        
+                        // Actualizar estado local
+                        setIsChallengeCompleted(false);
+                        setIsButtonDisabled(false); // Permitir interactuar mientras el desafío está en progreso
+                    }
+                } catch (error) {
+                    console.error('❌ Error al guardar inicio de desafío:', error);
+                }
+                
                 setIsSynthesizerOpen(true);
+                break;
+                
+            case 'COMPLETE_CHALLENGE':
+                // MARCAR DESAFÍO COMO COMPLETADO EN SUPABASE
+                try {
+                    if (user?.id) {
+                        const challengeData = {
+                            challenge_completed: true,
+                            challenge_completed_at: new Date().toISOString(),
+                            challenge_score: data.score || 100, // Puntuación opcional
+                            status: PROGRESS_STATUS.COMPLETED
+                        };
+                        
+                        await saveProgress(
+                            activeMod,
+                            PROGRESS_STATUS.COMPLETED,
+                            challengeData
+                        );
+                        
+                        console.log('✅ Desafío completado - progreso actualizado en Supabase:', challengeData);
+                        
+                        // Actualizar estado local
+                        setIsChallengeCompleted(true);
+                        setIsButtonDisabled(true);
+                        setChallengeScore(data.score || 100);
+                        
+                        // Mostrar mensaje de éxito con puntuación
+                        if (data.showMessage !== false) {
+                            const score = data.score || 100;
+                            const isApproved = score >= 70;
+                            alert(`🎉 ¡Desafío completado con éxito! Puntuación: ${score}%${isApproved ? ' (Aprobado)' : ' (Reprobado - necesitas 70% para aprobar)'}. Tu progreso ha sido guardado.`);
+                        }
+                    }
+                } catch (error) {
+                    console.error('❌ Error al marcar desafío como completado:', error);
+                }
                 break;
                 
             case 'CLOSE_SYNTHESIZER':
@@ -1296,7 +1557,12 @@ IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`,
             case 'PRACTICE_EXERCISES':
                 // Abrir ejercicios prácticos del tema
                 console.log('Abrir ejercicios prácticos para:', data.topic);
-                // Aquí se podría abrir un modal o redirigir a ejercicios
+                // Mostrar modal con ejercicios prácticos
+                alert(`📝 **Ejercicios Prácticos: ${data.topic || 'Tema Actual'}**\n\n` +
+                      `1. Crea 3 prompts diferentes para resolver el mismo problema\n` +
+                      `2. Evalúa la efectividad de cada prompt\n` +
+                      `3. Refina el mejor prompt basado en los resultados\n\n` +
+                      `*La funcionalidad completa de ejercicios estará disponible próximamente.*`);
                 break;
                 
             case 'RESET_QUIZ':
@@ -1654,8 +1920,8 @@ IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`,
                                          </div>
                                      </div>
                                   </div>
-                                )}
-                             </div>
+                                 )}
+                              </div>
 
                           {/* Espaciado entre secciones */}
                           <div className="mt-8"></div>
@@ -1730,10 +1996,10 @@ IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`,
                                               </div>
                                           </div>
                                           <Icon name="fa-download" className="text-[#004B63] text-sm hover:text-[#00BCD4] transition-colors" />
-                                      </button>
-                                 </div>
-                              )}
-                          </div>
+                                       </button>
+                                  </div>
+                                  )}
+                              </div>
 
                          {/* Sección: Detalles del Curso */}
                          <div className="px-2 w-full">
@@ -1932,274 +2198,135 @@ IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`,
 
                         {/* Contenedor Grid: Laboratorio y Comunidad - Dashboard de Dos Columnas */}
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full mt-10">
-                            {/* Columna Izquierda: Desafío del Curso */}
-                            <div className="bg-gradient-to-br from-white to-[#F8FAFC] border border-slate-50 shadow-[0_30px_60px_rgba(0,0,0,0.05)] rounded-[28px] p-10 transition-all duration-500 ease-out hover:shadow-xl h-full flex flex-col">
-                                <div className="flex items-center gap-4 mb-6">
-                                    <div className="w-12 h-12 bg-gradient-to-r from-[#FFD166] to-[#FF8E53] rounded-xl flex items-center justify-center">
-                                        <Icon name="fa-bolt" className="text-white text-xl" />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-2xl font-bold tracking-normal text-[#00374A]">Desafío del Curso</h3>
-                                        <p className="text-sm text-slate-500">Aplica lo aprendido en un reto práctico</p>
-                                    </div>
-                                </div>
-                                
-                                <div className="bg-gradient-to-r from-[#FFD166]/10 to-[#FF8E53]/10 border border-[#FFD166]/20 rounded-xl p-5 mb-4">
-                                    <p className="text-base font-medium text-slate-800 italic mb-3">"{modules.find(m => m.id === activeMod)?.challenge || 'Crea un prompt para resolver un problema complejo de tu industria.'}"</p>
-                                    <div className="flex items-center gap-2 text-slate-600 text-sm">
-                                        <Icon name="fa-clock" className="text-[#FF8E53]" />
-                                        <span>Tiempo estimado: 45 min</span>
-                                    </div>
-                                </div>
-                                
-                                 <div className="flex gap-4">
+                              {/* Columna Izquierda: Desafío del Curso - COMPONENTE REUTILIZABLE PREMIUM */}
+                                <ChallengeCard
+                                   title="Desafío del Curso"
+                                   description="Aplica lo aprendido en un reto práctico"
+                                   challengeText={modules.find(m => m.id === activeMod)?.challenge || 'Crea un prompt para resolver un problema complejo de tu industria.'}
+                                   estimatedTime="45 min"
+                                   score={challengeScore}
+                                   isLoading={isLoadingProgress}
+                                   isCompleted={isChallengeCompleted}
+                                   isStarting={isStartingChallenge}
+                                   isDisabled={isButtonDisabled}
+                                   onStartChallenge={() => handleChallengeClick('OPEN_SYNTHESIZER')}
+                                   onViewSolution={() => handleChallengeClick('OPEN_SYNTHESIZER', { mode: 'solution' })}
+                                   onReviewCompleted={() => {
+                                       // TODO: Implementar navegación a "Mis Proyectos" cuando exista
+                                       // Por ahora, mostrar modal con detalles del desafío completado
+                                       const isApproved = challengeScore >= 70;
+                                       const message = `📊 **Resumen del Desafío Completado**\n\n` +
+                                                      `• **Puntuación:** ${challengeScore}%\n` +
+                                                      `• **Estado:** ${isApproved ? '✅ Aprobado' : '⚠️ Reprobado (necesitas 70%)'}\n` +
+                                                      `• **Módulo:** ${modules.find(m => m.id === activeMod)?.title || 'Desafío del Curso'}\n` +
+                                                      `• **Fecha de completado:** ${new Date().toLocaleDateString()}\n\n` +
+                                                      `*La funcionalidad de "Mis Proyectos" estará disponible próximamente.*`;
+                                       
+                                       alert(message);
+                                   }}
+                                   onRetryChallenge={async () => {
+                                       if (confirm('¿Quieres realizar una versión avanzada de este desafío?\n\nTu puntuación anterior se conservará como referencia.')) {
+                                           try {
+                                               // Guardar historial del intento anterior
+                                               if (user?.id && challengeScore > 0) {
+                                                   const historyData = {
+                                                       previous_score: challengeScore,
+                                                       previous_completed_at: new Date().toISOString(),
+                                                       retry_initiated_at: new Date().toISOString(),
+                                                       is_advanced_version: true
+                                                   };
+                                                   
+                                                   await saveProgress(
+                                                       activeMod,
+                                                       PROGRESS_STATUS.IN_PROGRESS,
+                                                       historyData
+                                                   );
+                                               }
+                                               
+                                               // Reiniciar estados locales
+                                               setIsChallengeCompleted(false);
+                                               setIsButtonDisabled(false);
+                                               setChallengeScore(0);
+                                               
+                                               console.log('Desafío avanzado iniciado - historial guardado');
+                                               alert('🎯 Desafío avanzado iniciado. ¡Demuestra que puedes superar tu puntuación anterior!');
+                                               
+                                           } catch (error) {
+                                               console.error('Error al iniciar desafío avanzado:', error);
+                                               alert('⚠️ Error al iniciar el desafío avanzado. Intenta nuevamente.');
+                                           }
+                                       }
+                                   }}
+                                />
+
+                              {/* Columna Derecha: Muro de Insights */}
+                              <div className={`bg-white shadow-[0_30px_60px_rgba(0,0,0,0.05)] rounded-[28px] p-6 w-full transition-all duration-300 flex flex-col overflow-hidden
+                                ${insightsExpanded 
+                                  ? 'min-h-[500px] max-h-[calc(100vh-300px)]' 
+                                  : 'h-[400px]'
+                                }`}>
+                                 <ErrorBoundary>
+                                    <ForumCommunity 
+                                      compact={!insightsExpanded}
+                                      showHeader={insightsExpanded}
+                                      showInput={true}
+                                      showStats={insightsExpanded}
+                                      limit={insightsExpanded ? 20 : 5}
+                                    />
+                                 </ErrorBoundary>
+                                 
+                                 {/* Botón de Expansión/Contracción */}
+                                 <div className="text-center mt-6">
                                      <button 
-                                         className={`${buttonClasses.challenge} flex-1`}
-                                         onClick={() => handleButtonClick('OPEN_SYNTHESIZER')}
-                                         aria-label="Iniciar desafío práctico del módulo"
+                                         onClick={() => setInsightsExpanded(!insightsExpanded)}
+                                         className="text-cyan-600 hover:text-[#00374A] font-bold text-xs uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2 mx-auto group focus:outline-none focus:ring-1 focus:ring-cyan-400 rounded px-2 py-1"
+                                         aria-label={insightsExpanded ? "Contraer muro de insights" : "Expandir para ver toda la conversación"}
                                      >
-                                         <Icon name="fa-play" />
-                                         Iniciar Desafío
-                                     </button>
-                                     <button 
-                                         className={`${buttonClasses.secondary} flex-1`}
-                                         onClick={() => handleButtonClick('OPEN_SYNTHESIZER', { mode: 'solution' })}
-                                         aria-label="Ver solución del desafío"
-                                     >
-                                         <Icon name="fa-lightbulb" />
-                                         Ver Solución
+                                         {insightsExpanded ? (
+                                             <>
+                                                 <span>Contraer muro</span>
+                                                 <Icon name="fa-chevron-up" className="text-xs group-hover:translate-y-[-2px] transition-transform duration-300" />
+                                             </>
+                                         ) : (
+                                             <>
+                                                 <span>Explorar toda la conversación</span>
+                                                 <Icon name="fa-chevron-down" className="text-xs group-hover:translate-y-[2px] transition-transform duration-300 animate-bounce" />
+                                             </>
+                                         )}
                                      </button>
                                  </div>
-                            </div>
-
-                            {/* Columna Derecha: Muro de Insights */}
-                            <div className={`bg-white shadow-[0_30px_60px_rgba(0,0,0,0.05)] rounded-[28px] p-10 w-full transition-all duration-500 h-full flex flex-col ${insightsExpanded ? 'h-fit' : 'h-fit'}`}>
-                                {/* Cabecera del Muro */}
-                                <div className="mb-8">
-                                    <h3 className="text-2xl font-bold text-[#00374A] mb-3">Muro de Insights: The Prompt Collective</h3>
-                                    <p className="text-[15px] text-slate-500 mb-8 max-w-2xl">Co-crea, debate y descubre los prompts que están redefiniendo la industria.</p>
-                                    
-                                    {/* Acción Rápida - Input Box */}
-                                    <div className="bg-slate-50 border border-slate-100 p-4 rounded-xl text-slate-400 text-sm cursor-pointer hover:bg-slate-100 transition-all duration-300 flex items-center gap-3">
-                                        <Icon name="fa-pen" className="text-slate-400" />
-                                        <span>¿Qué prompt descubriste hoy? Compártelo con la comunidad...</span>
-                                    </div>
-                                </div>
-                                
-                                {/* Último comentario destacado (siempre visible) */}
-                                <div className="border border-slate-100 rounded-2xl p-4 hover:shadow-lg transition-all duration-300 hover:border-slate-200 mb-6">
-                                    <div className="flex items-start gap-3">
-                                        {/* Avatar */}
-                                        <div className="w-8 h-8 bg-gradient-to-r from-[#004B63] to-[#00BCD4] rounded-full flex items-center justify-center text-white font-semibold text-xs">
-                                            MS
-                                        </div>
-                                        
-                                        <div className="flex-1">
-                                            {/* Metadatos compactos */}
-                                            <div className="flex items-center justify-between mb-2">
-                                                <div>
-                                                    <div className="flex items-center gap-2">
-                                                        <h4 className="font-semibold text-[#00374A] text-sm">María Solano</h4>
-                                                        <Icon name="fa-star" className="text-[#FFD166] text-xs" />
-                                                        <span className="text-[10px] px-2 py-0.5 bg-cyan-100 text-cyan-800 rounded-full">Prompt Master Nivel 3</span>
-                                                    </div>
-                                                    <p className="text-[10px] text-slate-500 mt-0.5">Hace 2 horas</p>
-                                                </div>
-                                            </div>
-                                            
-                                            {/* Prompt compacto */}
-                                            <div className="bg-cyan-50/50 p-3 rounded-lg mb-2">
-                                                <div className="font-mono text-cyan-800 text-[11px] leading-relaxed line-clamp-2">
-                                                    "Actúa como un arquitecto de sistemas educativos. Diseña un framework de evaluación que combine métricas cuantitativas, análisis cualitativo y retroalimentación en tiempo real."
-                                                </div>
-                                            </div>
-                                            
-                                            {/* Interacciones compactas */}
-                                            <div className="flex items-center justify-between">
-                                                <div className="flex items-center gap-4">
-                                                    <div className="flex items-center gap-1">
-                                                        <button 
-                                                            className="text-slate-400 hover:text-cyan-600 transition-colors focus:outline-none focus:ring-1 focus:ring-cyan-400 rounded"
-                                                            aria-label="Votar positivamente este insight"
-                                                        >
-                                                            <Icon name="fa-chevron-up" className="text-xs" />
-                                                        </button>
-                                                        <span className="text-xs font-medium text-slate-700 mx-1">24</span>
-                                                    </div>
-                                                    <button 
-                                                        className="flex items-center gap-1 text-slate-500 hover:text-cyan-600 transition-colors focus:outline-none focus:ring-1 focus:ring-cyan-400 rounded px-1"
-                                                        aria-label="Ver comentarios de este insight"
-                                                    >
-                                                        <Icon name="fa-comment" className="text-xs" />
-                                                        <span className="text-xs">8</span>
-                                                    </button>
-                                                </div>
-                                                <div className="flex items-center gap-1 text-[10px] text-cyan-700 bg-cyan-50 px-2 py-0.5 rounded-full">
-                                                    <Icon name="fa-check-circle" className="text-cyan-600 text-xs" />
-                                                    <span>Verificado</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                {/* Efecto de degradado para indicar más contenido (solo cuando colapsado) */}
-                                {!insightsExpanded && (
-                                    <div className="relative h-12 -mt-12 bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none flex-shrink-0"></div>
-                                )}
-                                
-                                {/* Comentarios adicionales (solo visibles cuando expandido) */}
-                                {insightsExpanded && (
-                                    <div className="space-y-4 mt-6 animate-fadeIn flex-grow">
-                                        {/* Tarjeta 2: Post de Discusión */}
-                                        <div className="border border-slate-100 rounded-2xl p-4 hover:shadow-lg transition-all duration-300 hover:border-slate-200">
-                                            <div className="flex items-start gap-3">
-                                                {/* Avatar */}
-                                                <div className="w-8 h-8 bg-gradient-to-r from-[#FF8E53] to-[#FFD166] rounded-full flex items-center justify-center text-white font-semibold text-xs">
-                                                    AC
-                                                </div>
-                                                
-                                                <div className="flex-1">
-                                                    {/* Metadatos compactos */}
-                                                    <div className="flex items-center justify-between mb-2">
-                                                        <div>
-                                                            <div className="flex items-center gap-2">
-                                                                <h4 className="font-semibold text-[#00374A] text-sm">Andrés Cortés</h4>
-                                                                <span className="text-[10px] px-2 py-0.5 bg-slate-100 text-slate-700 rounded-full">Arquitecto de IA</span>
-                                                            </div>
-                                                            <p className="text-[10px] text-slate-500 mt-0.5">Hace 5 horas</p>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    {/* Prompt compacto */}
-                                                    <div className="bg-cyan-50/50 p-3 rounded-lg mb-2">
-                                                        <div className="font-mono text-cyan-800 text-[11px] leading-relaxed line-clamp-2">
-                                                            "Analiza dataset de feedback: categoriza en críticas, bugs, sugerencias, elogios. Prioriza por impacto UX, esfuerzo, roadmap."
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    {/* Interacciones compactas */}
-                                                    <div className="flex items-center justify-between">
-                                                        <div className="flex items-center gap-4">
-                                                            <div className="flex items-center gap-1">
-                                                                <button 
-                                                                    className="text-slate-400 hover:text-cyan-600 transition-colors focus:outline-none focus:ring-1 focus:ring-cyan-400 rounded"
-                                                                    aria-label="Votar positivamente este insight"
-                                                                >
-                                                                    <Icon name="fa-chevron-up" className="text-xs" />
-                                                                </button>
-                                                                <span className="text-xs font-medium text-slate-700 mx-1">17</span>
-                                                            </div>
-                                                            <button 
-                                                                className="flex items-center gap-1 text-slate-500 hover:text-cyan-600 transition-colors focus:outline-none focus:ring-1 focus:ring-cyan-400 rounded px-1"
-                                                                aria-label="Ver comentarios de este insight"
-                                                            >
-                                                                <Icon name="fa-comment" className="text-xs" />
-                                                                <span className="text-xs">5</span>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        {/* Tarjeta 3: Post de Innovación */}
-                                        <div className="border border-slate-100 rounded-2xl p-4 hover:shadow-lg transition-all duration-300 hover:border-slate-200">
-                                            <div className="flex items-start gap-3">
-                                                {/* Avatar */}
-                                                <div className="w-8 h-8 bg-gradient-to-r from-[#00BCD4] to-[#4DA8C4] rounded-full flex items-center justify-center text-white font-semibold text-xs">
-                                                    VR
-                                                </div>
-                                                
-                                                <div className="flex-1">
-                                                    {/* Metadatos compactos */}
-                                                    <div className="flex items-center justify-between mb-2">
-                                                        <div>
-                                                            <div className="flex items-center gap-2">
-                                                                <h4 className="font-semibold text-[#00374A] text-sm">Valeria Ríos</h4>
-                                                                <Icon name="fa-star" className="text-[#FFD166] text-xs" />
-                                                                <span className="text-[10px] px-2 py-0.5 bg-cyan-100 text-cyan-800 rounded-full">Innovación</span>
-                                                            </div>
-                                                            <p className="text-[10px] text-slate-500 mt-0.5">Ayer</p>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    {/* Prompt compacto */}
-                                                    <div className="bg-cyan-50/50 p-3 rounded-lg mb-2">
-                                                        <div className="font-mono text-cyan-800 text-[11px] leading-relaxed line-clamp-2">
-                                                            "Mentor pensamiento crítico: 3 pasos para identificar sesgos, formular preguntas desafiantes, proponer alternativas."
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    {/* Interacciones compactas */}
-                                                    <div className="flex items-center justify-between">
-                                                        <div className="flex items-center gap-4">
-                                                            <div className="flex items-center gap-1">
-                                                                <button 
-                                                                    className="text-slate-400 hover:text-cyan-600 transition-colors focus:outline-none focus:ring-1 focus:ring-cyan-400 rounded"
-                                                                    aria-label="Votar positivamente este insight"
-                                                                >
-                                                                    <Icon name="fa-chevron-up" className="text-xs" />
-                                                                </button>
-                                                                <span className="text-xs font-medium text-slate-700 mx-1">31</span>
-                                                            </div>
-                                                            <button 
-                                                                className="flex items-center gap-1 text-slate-500 hover:text-cyan-600 transition-colors focus:outline-none focus:ring-1 focus:ring-cyan-400 rounded px-1"
-                                                                aria-label="Ver comentarios de este insight"
-                                                            >
-                                                                <Icon name="fa-comment" className="text-xs" />
-                                                                <span className="text-xs">12</span>
-                                                            </button>
-                                                        </div>
-                                                        <div className="flex items-center gap-1 text-[10px] text-cyan-700 bg-cyan-50 px-2 py-0.5 rounded-full">
-                                                            <Icon name="fa-bolt" className="text-cyan-600 text-xs" />
-                                                            <span>Trending</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        {/* Footer del Muro (solo cuando expandido) */}
-                                        <div className="mt-6 pt-4 border-t border-slate-100 text-center">
-                                            <p className="text-xs text-slate-500">Mostrando 3 de 47 insights activos</p>
-                                        </div>
-                                    </div>
-                                )}
-                                
-                                {/* Botón de Expansión/Contracción */}
-                                <div className="text-center mt-6">
-                                    <button 
-                                        onClick={() => setInsightsExpanded(!insightsExpanded)}
-                                        className="text-cyan-600 hover:text-[#00374A] font-bold text-xs uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2 mx-auto group focus:outline-none focus:ring-1 focus:ring-cyan-400 rounded px-2 py-1"
-                                        aria-label={insightsExpanded ? "Contraer muro de insights" : "Expandir para ver toda la conversación"}
-                                    >
-                                        {insightsExpanded ? (
-                                            <>
-                                                <span>Contraer muro</span>
-                                                <Icon name="fa-chevron-up" className="text-xs group-hover:translate-y-[-2px] transition-transform duration-300" />
-                                            </>
-                                        ) : (
-                                            <>
-                                                <span>Explorar toda la conversación</span>
-                                                <Icon name="fa-chevron-down" className="text-xs group-hover:translate-y-[2px] transition-transform duration-300 animate-bounce" />
-                                            </>
-                                        )}
-                                    </button>
-                                </div>
-                            </div>
+                             </div>
                         </div>
 
                         {/* Sintetizador de Prompts Élite - Ahora arriba del grid */}
-                        <div className="bg-gradient-to-br from-white to-[#F8FAFC] border border-slate-50 shadow-[0_30px_60px_rgba(0,0,0,0.05)] rounded-[28px] p-10 mb-8 w-full transition-all duration-500 ease-out hover:shadow-xl mt-10">
+                        <div className={cn(
+                            FORUM_COMPONENTS.CARD_GLASS,
+                            "p-8 md:p-10 mb-8 w-full mt-10",
+                            FORUM_EFFECTS.TRANSITION_ALL,
+                            FORUM_EFFECTS.HOVER_SHADOW
+                        )}>
                             <div className="mb-8">
                                 <div className="flex items-center gap-4 mb-4">
-                                    <div className="w-12 h-12 bg-gradient-to-r from-[#004B63] to-[#00BCD4] rounded-xl flex items-center justify-center">
+                                    <div className={cn(
+                                        "w-12 h-12 rounded-xl flex items-center justify-center",
+                                        GRADIENTS.PRIMARY,
+                                        FORUM_EFFECTS.SHADOW_SM
+                                    )}>
                                         <Icon name="fa-atom" className="text-white text-xl" />
                                     </div>
                                     <div>
-                                        <h3 className="text-2xl font-bold tracking-normal text-[#00374A]">Sintetizador de Prompts Élite</h3>
-                                        <p className="text-sm text-slate-600">Transforma ideas en MasterPrompts profesionales</p>
+                                        <h3 className={cn(
+                                            FORUM_TYPOGRAPHY.DISPLAY.LG,
+                                            FORUM_TYPOGRAPHY.TEXT_PRIMARY
+                                        )}>
+                                            Sintetizador de Prompts Élite
+                                        </h3>
+                                        <p className={cn(
+                                            FORUM_TYPOGRAPHY.BODY.SM,
+                                            FORUM_TYPOGRAPHY.TEXT_LIGHT
+                                        )}>
+                                            Transforma ideas en MasterPrompts profesionales
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -2208,7 +2335,11 @@ IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`,
                                 value={input}
                                 onChange={e => setInput(e.target.value)}
                                 placeholder="Describe tu idea o prompt base para optimización profesional..."
-                                className="w-full px-4 py-3 bg-slate-50 border-slate-200 border rounded-xl focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 resize-none mb-4 text-[14px]"
+                                className={cn(
+                                    FORUM_COMPONENTS.TEXTAREA_BASE,
+                                    "mb-4",
+                                    FORUM_TYPOGRAPHY.BODY.MD
+                                )}
                                 rows={4}
                                 onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleOptimize(); } }}
                             />
@@ -2216,18 +2347,32 @@ IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`,
                             <button
                                 onClick={handleOptimize}
                                 disabled={loading}
-                                className={`${buttonClasses.primaryGradient} w-full ${loading ? buttonClasses.loading : ''}`}
+                                className={cn(
+                                    GRADIENTS.PRIMARY,
+                                    "w-full px-6 py-3 rounded-xl",
+                                    "text-white",
+                                    FORUM_TYPOGRAPHY.MEDIUM,
+                                    FORUM_EFFECTS.TRANSITION_ALL,
+                                    FORUM_EFFECTS.HOVER_SCALE,
+                                    "flex items-center justify-center gap-2",
+                                    "focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:ring-offset-2",
+                                    "disabled:opacity-70 disabled:cursor-not-allowed",
+                                    loading && "opacity-70 cursor-not-allowed"
+                                )}
                                 aria-label={loading ? `Procesando: ${loadMsg}` : "Sintetizar prompt maestro con IA"}
                             >
                                 {loading ? (
                                     <>
-                                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                        {loadMsg}
+                                        <div className={cn(
+                                            "w-5 h-5 border-2 border-white border-t-transparent rounded-full",
+                                            FORUM_EFFECTS.ANIMATION_SPIN
+                                        )} />
+                                        <span>{loadMsg}</span>
                                     </>
                                 ) : (
                                     <>
                                         <Icon name="fa-microchip" />
-                                        Sintetizar Prompt Maestro
+                                        <span>Sintetizar Prompt Maestro</span>
                                     </>
                                 )}
                             </button>
@@ -2235,19 +2380,40 @@ IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`,
                             {genData && !loading && (
                                 <div className="mt-6 space-y-4">
                                     {/* Caja de Resultado - Prompt Élite */}
-                                    <div className="bg-[#0B1120] text-emerald-400 font-mono p-6 rounded-xl relative animate-fadeIn" style={{ animationDelay: '0.1s' }}>
+                                    <div className={cn(
+                                        FORUM_COMPONENTS.CARD_ACCENT,
+                                        "font-mono p-6 relative",
+                                        FORUM_EFFECTS.ANIMATION_FADE_IN
+                                    )} style={{ animationDelay: '0.1s' }}>
                                         <div className="flex items-center gap-2 mb-4">
                                             <div className="w-3 h-3 bg-red-500 rounded-full"></div>
                                             <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
                                             <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                                            <span className="text-slate-500 text-xs ml-2">master-prompt.rtf</span>
+                                            <span className={cn(
+                                                FORUM_TYPOGRAPHY.BODY.XS,
+                                                FORUM_TYPOGRAPHY.TEXT_LIGHT,
+                                                "ml-2"
+                                            )}>
+                                                master-prompt.rtf
+                                            </span>
                                         </div>
-                                        <div className="text-[14px] leading-relaxed whitespace-pre-wrap">
+                                        <div className={cn(
+                                            "text-[14px] leading-relaxed whitespace-pre-wrap",
+                                            "text-[#004B63]",  // Color específico solicitado
+                                            FORUM_TYPOGRAPHY.BODY.MD
+                                        )}>
                                             {genData.masterPrompt}
                                         </div>
                                         <button 
                                             onClick={() => navigator.clipboard.writeText(genData.masterPrompt)}
-                                            className="absolute top-4 right-4 text-xs border border-emerald-400/30 text-emerald-400 hover:bg-emerald-400/10 flex items-center gap-1 px-2 py-1 rounded focus:outline-none focus:ring-1 focus:ring-emerald-400"
+                                            className={cn(
+                                                "absolute top-4 right-4 text-xs",
+                                                "border border-[#00BCD4]/30 text-[#00BCD4]",
+                                                "hover:bg-[#00BCD4]/10",
+                                                "flex items-center gap-1 px-2 py-1 rounded",
+                                                FORUM_EFFECTS.TRANSITION_ALL,
+                                                "focus:outline-none focus:ring-1 focus:ring-[#00BCD4]"
+                                            )}
                                             aria-label="Copiar prompt maestro al portapapeles"
                                         >
                                             <Icon name="fa-copy" className="text-xs" /> Copiar
@@ -2255,22 +2421,46 @@ IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`,
                                     </div>
                                     
                                     {/* Caja de Retroalimentación Técnica */}
-                                    <div className="bg-cyan-50 border-l-4 border-cyan-400 p-6 rounded-r-xl animate-fadeIn" style={{ animationDelay: '0.3s' }}>
+                                    <div className={cn(
+                                        "bg-[#00BCD4]/5",  // Fondo cian con 5% de opacidad
+                                        "border-l-4 border-[#00BCD4]",
+                                        "p-6 rounded-r-xl",
+                                        FORUM_EFFECTS.ANIMATION_FADE_IN
+                                    )} style={{ animationDelay: '0.3s' }}>
                                         <div className="flex items-center gap-2 mb-3">
-                                            <Icon name="fa-lightbulb" className="text-cyan-600" />
-                                            <h4 className="text-base font-bold text-[#00374A]">Análisis Técnico</h4>
+                                            <Icon name="fa-lightbulb" className="text-[#00BCD4]" />
+                                            <h4 className={cn(
+                                                FORUM_TYPOGRAPHY.BODY.LG,
+                                                FORUM_TYPOGRAPHY.SEMIBOLD,
+                                                FORUM_TYPOGRAPHY.TEXT_PRIMARY
+                                            )}>
+                                                Análisis Técnico
+                                            </h4>
                                         </div>
-                                        <p className="text-slate-700 text-[14px] leading-relaxed mb-3">
+                                        <p className={cn(
+                                            FORUM_TYPOGRAPHY.BODY.MD,
+                                            "leading-relaxed mb-3",
+                                            FORUM_TYPOGRAPHY.TEXT_SECONDARY
+                                        )}>
                                             {genData.feedback}
                                         </p>
                                         
                                         {/* Técnicas Aplicadas */}
                                         {genData.techniques && (
                                             <div className="mt-4">
-                                                <p className="text-sm font-medium text-slate-600 mb-2">Técnicas aplicadas:</p>
+                                                <p className={cn(
+                                                    FORUM_TYPOGRAPHY.BODY.SM,
+                                                    FORUM_TYPOGRAPHY.MEDIUM,
+                                                    FORUM_TYPOGRAPHY.TEXT_LIGHT,
+                                                    "mb-2"
+                                                )}>
+                                                    Técnicas aplicadas:
+                                                </p>
                                                 <div className="flex flex-wrap gap-2">
                                                     {genData.techniques.map((tech, index) => (
-                                                        <span key={index} className="text-xs px-3 py-1 bg-cyan-100 text-cyan-800 rounded-full">
+                                                        <span key={index} className={cn(
+                                                            FORUM_COMPONENTS.BADGE_SECONDARY
+                                                        )}>
                                                             {tech}
                                                         </span>
                                                     ))}
@@ -3210,10 +3400,10 @@ IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`,
                                                        <h5 className="font-medium text-amber-700 mb-2">Temas a reforzar:</h5>
                                                        <div className="space-y-2">
                                                            {generateTopicFeedback(quizResult.failedQuestions).map((feedback, index) => (
-                                                               <div key={index} className="flex items-start gap-2 p-3 bg-white/50 rounded-lg">
-                                                                   <Icon name="fa-book-open" className="text-amber-500 mt-0.5" />
-                                                                   <p className="text-sm text-amber-800">{feedback}</p>
-                                                               </div>
+                                                                <div key={index} className="flex items-start gap-2 p-3 bg-white/50 rounded-lg">
+                                                                    <Icon name="fa-book-open" className="text-amber-500 mt-0.5" />
+                                                                    <p className="text-sm text-amber-800">{feedback}</p>
+                                                                </div>
                                                            ))}
                                                        </div>
                                                    </div>
