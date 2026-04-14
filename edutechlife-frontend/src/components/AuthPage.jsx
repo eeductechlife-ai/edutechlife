@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { Brain, Mail, Phone, User, ArrowRight, ArrowLeft, Lock, Eye, EyeOff, CheckCircle, X, Loader2 } from 'lucide-react';
 
 const AuthPage = () => {
-  const { signUp, signIn } = useAuth();
+  const { signUp, signIn, generatePassword } = useAuth();
   const [activeTab, setActiveTab] = useState('login');
   const [formData, setFormData] = useState({
     full_name: '',
@@ -56,25 +56,69 @@ const AuthPage = () => {
     setError('');
 
     try {
-      const result = await signUp(formData.email, {
+      // Generar contraseña automáticamente usando la función del AuthContext
+      const { generatePassword } = useAuth();
+      const passwordResult = await generatePassword();
+      const generatedPassword = passwordResult.password;
+      
+      console.log('📝 Registrando usuario con metadata:', {
+        email: formData.email,
         full_name: formData.full_name,
         phone: formData.phone,
         role: 'student'
       });
 
+      // Llamar a signUp con la nueva firma que incluye password y metadata
+      const result = await signUp(
+        formData.email, 
+        generatedPassword, 
+        {
+          full_name: formData.full_name,
+          phone: formData.phone,
+          role: 'student',
+          user_count: passwordResult.userCount
+        }
+      );
+
+      console.log('📊 Resultado del registro:', result);
+
       if (result.success) {
-        setSuccess({
-          password: result.generatedPassword,
-          message: result.message
-        });
-        
-        setTimeout(async () => {
-          await signIn(formData.email, result.generatedPassword);
-        }, 3000);
+        if (result.requiresEmailConfirmation) {
+          // Caso: Email de confirmación requerido
+          setSuccess({
+            password: generatedPassword,
+            message: '✅ ¡Registro exitoso! 📧 Revisa tu correo electrónico para confirmar tu cuenta. Una vez confirmada, podrás ingresar con la contraseña generada.',
+            requiresConfirmation: true
+          });
+        } else {
+          // Caso: Registro inmediato (sin confirmación de email)
+          setSuccess({
+            password: generatedPassword,
+            message: '✅ ¡Registro exitoso! Ya puedes iniciar sesión con la contraseña generada.',
+            requiresConfirmation: false
+          });
+          
+          // Intentar login automático después de 2 segundos
+          setTimeout(async () => {
+            try {
+              const loginResult = await signIn(formData.email, generatedPassword);
+              if (loginResult.success) {
+                console.log('✅ Login automático exitoso después del registro');
+                // Redirigir al dashboard o IALab
+                window.location.href = '/dashboard';
+              } else {
+                console.warn('⚠️ Login automático falló, usuario debe iniciar sesión manualmente');
+              }
+            } catch (loginErr) {
+              console.error('❌ Error en login automático:', loginErr);
+            }
+          }, 2000);
+        }
       } else {
         setError(result.error || 'Error al registrar usuario');
       }
     } catch (err) {
+      console.error('❌ Error en registro:', err);
       setError('Error de conexión. Intenta nuevamente.');
     } finally {
       setLoading(false);
@@ -114,29 +158,48 @@ const AuthPage = () => {
                   <CheckCircle className="w-10 h-10 text-green-600" />
                 </div>
                 
-                <h2 className="text-2xl font-black text-[#004B63] font-montserrat mb-4">
-                  ¡Registro Exitoso!
-                </h2>
-                
-                <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-4 mb-4">
-                  <p className="text-sm text-gray-600 mb-2">
-                    Tu contraseña de acceso es:
-                  </p>
-                  <div className="bg-[#004B63] rounded-xl py-3 px-4">
-                    <p className="text-[#FFD166] font-mono text-xl font-bold tracking-wider">
-                      {success.password}
-                    </p>
-                  </div>
-                </div>
-                
-                <p className="text-gray-600 text-sm mb-4">
-                  ¡Guárdala bien! La necesitas para acceder al IALab.
-                </p>
-                
-                <div className="flex items-center justify-center gap-2 text-green-600">
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  <span className="text-sm font-medium">Iniciando sesión...</span>
-                </div>
+                 <h2 className="text-2xl font-black text-[#004B63] font-montserrat mb-4">
+                   {success.requiresConfirmation ? '✅ Registro Completado' : '🎉 ¡Registro Exitoso!'}
+                 </h2>
+                 
+                 <div className="space-y-4">
+                   {/* Mensaje principal */}
+                   <div className={`p-4 rounded-2xl ${success.requiresConfirmation ? 'bg-blue-50 border border-blue-200' : 'bg-green-50 border border-green-200'}`}>
+                     <p className={`text-sm ${success.requiresConfirmation ? 'text-blue-700' : 'text-green-700'}`}>
+                       {success.message}
+                     </p>
+                   </div>
+                   
+                   {/* Contraseña generada */}
+                   <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-4">
+                     <p className="text-sm text-gray-600 mb-2">
+                       Tu contraseña de acceso es:
+                     </p>
+                     <div className="bg-gradient-to-r from-[#004B63] to-[#4DA8C4] rounded-xl py-3 px-4">
+                       <p className="text-white font-mono text-xl font-bold tracking-wider text-center">
+                         {success.password}
+                       </p>
+                     </div>
+                     <p className="text-gray-500 text-xs mt-2 text-center">
+                       ¡Guárdala bien! La necesitas para acceder al IALab.
+                     </p>
+                   </div>
+                   
+                   {/* Estado */}
+                   {success.requiresConfirmation ? (
+                     <div className="flex items-center justify-center gap-2 text-blue-600">
+                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                       </svg>
+                       <span className="text-sm font-medium">Revisa tu correo electrónico</span>
+                     </div>
+                   ) : (
+                     <div className="flex items-center justify-center gap-2 text-green-600">
+                       <Loader2 className="w-4 h-4 animate-spin" />
+                       <span className="text-sm font-medium">Redirigiendo al IALab...</span>
+                     </div>
+                   )}
+                 </div>
               </div>
             </motion.div>
           </motion.div>
@@ -244,11 +307,11 @@ const AuthPage = () => {
                   </div>
                 )}
 
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full py-4 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white font-bold text-lg rounded-xl hover:shadow-lg hover:shadow-[#4DA8C4]/30 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-                >
+                 <button
+                   type="submit"
+                   disabled={loading}
+                   className="w-full py-4 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white font-bold text-lg rounded-xl hover:shadow-xl hover:shadow-[#4DA8C4]/40 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 hover:scale-[1.02] active:scale-[0.98]"
+                 >
                   {loading ? (
                     <>
                       <Loader2 className="w-5 h-5 animate-spin" />
@@ -334,11 +397,11 @@ const AuthPage = () => {
                   </div>
                 )}
 
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full py-4 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white font-bold text-lg rounded-xl hover:shadow-lg hover:shadow-[#4DA8C4]/30 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-                >
+                 <button
+                   type="submit"
+                   disabled={loading}
+                   className="w-full py-4 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white font-bold text-lg rounded-xl hover:shadow-xl hover:shadow-[#4DA8C4]/40 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 hover:scale-[1.02] active:scale-[0.98]"
+                 >
                   {loading ? (
                     <>
                       <Loader2 className="w-5 h-5 animate-spin" />

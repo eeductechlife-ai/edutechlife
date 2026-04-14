@@ -32,6 +32,7 @@ import { speakTextConversational, stopSpeech } from './utils/speech';
 import { StudentProvider } from './contexts/StudentContext';
 import { useAuth } from './context/AuthContext';
 import WelcomeScreen from './components/WelcomeScreen';
+import AuthCallback from './components/AuthCallback';
 
 // Cache de preguntas frecuentes para respuestas instantáneas
 const responseCache = new Map();
@@ -224,6 +225,37 @@ const App = () => {
     const { user, loading: authLoading } = useAuth();
     const [isLoading, setIsLoading] = useState(true);
     const [view, setView] = useState('landing');
+    
+    // Manejar callback de autenticación de Supabase
+    useEffect(() => {
+        // Verificar si estamos en un callback de autenticación
+        const urlParams = new URLSearchParams(window.location.search);
+        const accessToken = urlParams.get('access_token');
+        const refreshToken = urlParams.get('refresh_token');
+        const type = urlParams.get('type');
+        const error = urlParams.get('error');
+        const errorDescription = urlParams.get('error_description');
+        
+        console.log('URL params de autenticación:', { 
+            accessToken: accessToken ? 'PRESENTE' : 'ausente',
+            refreshToken: refreshToken ? 'PRESENTE' : 'ausente',
+            type,
+            error,
+            errorDescription 
+        });
+        
+        if (type === 'signup' || type === 'recovery' || accessToken) {
+            // Estamos en un callback de autenticación
+            console.log('📧 Detectado callback de autenticación, tipo:', type);
+            setView('auth-callback');
+            
+            // Limpiar la URL para que no se vean los tokens
+            window.history.replaceState({}, document.title, window.location.pathname);
+        } else if (error) {
+            console.error('❌ Error en callback de autenticación:', error, errorDescription);
+            // Podríamos mostrar un mensaje de error o redirigir
+        }
+    }, []);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [smartboardAuthenticated, setSmartboardAuthenticated] = useState(false);
     const [adminAuthenticated, setAdminAuthenticated] = useState(false);
@@ -1200,11 +1232,14 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                     )}
 
                     {/* JWT Integration Test (temporal - solo para desarrollo) */}
-                    {view === 'jwt-test' && (
-                        <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div></div>}>
-                            <JWTIntegrationTestPage />
-                        </Suspense>
-                    )}
+                     {view === 'jwt-test' && (
+                         <JWTIntegrationTestPage onBack={() => handleNavigate('landing')} />
+                     )}
+                     
+                     {/* Auth Callback - Para confirmación de email */}
+                     {view === 'auth-callback' && (
+                         <AuthCallback />
+                     )}
 
                     
                 </Suspense>

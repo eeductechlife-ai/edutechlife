@@ -87,8 +87,21 @@ const WelcomeScreen = () => {
       console.log('Resultado del registro:', result);
 
       if (result.success) {
-        setSuccess('¡Registro exitoso! Revisa tu correo para confirmar tu cuenta y poder ingresar.');
-        console.log('=== REGISTRO EXITOSO ===');
+        if (result.requiresEmailConfirmation) {
+          setSuccess('¡Registro exitoso! 📧 Revisa tu correo electrónico para confirmar tu cuenta. Una vez confirmada, podrás ingresar con tus credenciales.');
+          console.log('=== REGISTRO EXITOSO - EMAIL DE CONFIRMACIÓN ENVIADO ===');
+        } else {
+          setSuccess('¡Registro exitoso! Ya puedes iniciar sesión con tus credenciales.');
+          console.log('=== REGISTRO EXITOSO ===');
+        }
+        
+        // Limpiar formulario después de registro exitoso
+        setFormData({
+          full_name: '',
+          email: '',
+          phone: '',
+          password: ''
+        });
       } else {
         console.error('Error en registro:', result.error);
         setError(result.error || 'Error al registrar usuario');

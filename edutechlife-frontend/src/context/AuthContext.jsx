@@ -74,6 +74,8 @@ export const AuthProvider = ({ children }) => {
       setUser(session?.user || null);
       if (session?.user) {
         fetchProfile(session.user.id);
+        // Procesar formularios pendientes cuando el usuario se autentica
+        setTimeout(() => processPendingForms(), 1000);
       } else {
         setLoading(false);
       }
@@ -81,7 +83,11 @@ export const AuthProvider = ({ children }) => {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user || null);
-      if (!session?.user) {
+      if (session?.user) {
+        fetchProfile(session.user.id);
+        // Procesar formularios pendientes cuando el usuario se autentica
+        setTimeout(() => processPendingForms(), 1000);
+      } else {
         setProfile(null);
         setLoading(false);
       }
@@ -125,6 +131,7 @@ export const AuthProvider = ({ children }) => {
             role: userData.role || 'student',
             phone: userData.phone || '',
           },
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
       });
 
@@ -138,11 +145,33 @@ export const AuthProvider = ({ children }) => {
       if (data.user) {
         console.log('Usuario creado en auth.users, userId:', data.user.id);
         
+        // Guardar datos del formulario en form_submissions (si el usuario confirma email)
+        // Nota: Esto se ejecutará después de que el usuario confirme su email
+        // Para datos inmediatos, podríamos guardar en localStorage temporalmente
+        const formData = {
+          full_name: userData.full_name,
+          email: email,
+          phone: userData.phone || '',
+          role: userData.role || 'student',
+          registration_date: new Date().toISOString(),
+          source: 'welcome_screen'
+        };
+        
+        // Guardar en localStorage temporalmente hasta que el usuario confirme email
+        localStorage.setItem('pending_registration_data', JSON.stringify({
+          email: email,
+          form_data: formData,
+          timestamp: new Date().toISOString()
+        }));
+        
+        console.log('Datos de formulario guardados temporalmente:', formData);
+        
         console.log('=== REGISTRO EXITOSO ===');
         return { 
           success: true, 
           user: data.user,
-          message: 'Registro exitoso' 
+          message: 'Registro exitoso. Por favor revisa tu correo para confirmar tu cuenta.',
+          requiresEmailConfirmation: true
         };
       }
 
@@ -222,12 +251,81 @@ export const AuthProvider = ({ children }) => {
       if (error) throw error;
       setUser(null);
       setProfile(null);
-      return { success: true };
     } catch (err) {
+      console.error('Error signing out:', err);
       setError(err.message);
-      return { success: false, error: err.message };
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Función para guardar datos de formulario en Supabase
+  const saveFormData = async (formType, formData) => {
+    try {
+      console.log('Guardando datos de formulario:', { formType, formData });
+      
+      if (!user) {
+        console.warn('Usuario no autenticado, guardando en localStorage temporalmente');
+        const pendingForms = JSON.parse(localStorage.getItem('pending_forms') || '[]');
+        pendingForms.push({
+          formType,
+          formData,
+          timestamp: new Date().toISOString()
+        });
+        localStorage.setItem('pending_forms', JSON.stringify(pendingForms));
+        return { success: true, storedLocally: true };
+      }
+
+      const { data, error } = await supabase
+        .from('form_submissions')
+        .insert([
+          {
+            user_id: user.id,
+            form_type: formType,
+            data: formData
+          }
+        ])
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      console.log('Datos de formulario guardados en Supabase:', data);
+      return { success: true, data };
+    } catch (err) {
+      console.error('Error guardando datos de formulario:', err);
+      return { success: false, error: err.message };
+    }
+  };
+
+  // Función para procesar formularios pendientes cuando el usuario se autentica
+  const processPendingForms = async () => {
+    try {
+      if (!user) return;
+
+      const pendingForms = JSON.parse(localStorage.getItem('pending_forms') || '[]');
+      const pendingRegistration = JSON.parse(localStorage.getItem('pending_registration_data') || 'null');
+      
+      console.log('Procesando formularios pendientes:', { pendingForms, pendingRegistration });
+
+      // Procesar datos de registro pendiente
+      if (pendingRegistration && pendingRegistration.email === user.email) {
+        await saveFormData('initial', pendingRegistration.form_data);
+        localStorage.removeItem('pending_registration_data');
+        console.log('Datos de registro procesados');
+      }
+
+      // Procesar otros formularios pendientes
+      for (const pendingForm of pendingForms) {
+        await saveFormData(pendingForm.formType, pendingForm.formData);
+      }
+
+      if (pendingForms.length > 0) {
+        localStorage.removeItem('pending_forms');
+        console.log(`${pendingForms.length} formularios pendientes procesados`);
+      }
+    } catch (err) {
+      console.error('Error procesando formularios pendientes:', err);
     }
   };
 
@@ -277,6 +375,12 @@ export const AuthProvider = ({ children }) => {
     signUp,
     signIn,
     signOut,
+    createProfile,
+    getUserCount,
+    generatePassword,
+    generateEDLPassword,
+    saveFormData,
+    processPendingForms,
     updateProfile,
     resetPassword,
     isTeacher,
@@ -285,7 +389,23 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider
+      value={{
+        user,
+        profile,
+        loading,
+        error,
+        signUp,
+        signIn,
+        signOut,
+        createProfile,
+        getUserCount,
+        generatePassword,
+        generateEDLPassword,
+        saveFormData, // Nueva función para guardar datos de formulario
+        processPendingForms, // Nueva función para procesar formularios pendientes
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
