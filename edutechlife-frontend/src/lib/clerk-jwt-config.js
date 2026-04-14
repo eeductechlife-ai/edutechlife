@@ -91,7 +91,7 @@ export const getClerkJWTForSupabase = async (clerkClient) => {
 /**
  * Crea un cliente Supabase que usa JWT de Clerk
  */
-export const createSupabaseClientWithClerkJWT = (clerkClient) => {
+export const createSupabaseClientWithClerkJWT = async (clerkClient) => {
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
   const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
   
@@ -100,35 +100,41 @@ export const createSupabaseClientWithClerkJWT = (clerkClient) => {
     return null;
   }
   
-  // Importar dinámicamente para evitar problemas de SSR
-  const { createClient } = require('@supabase/supabase-js');
-  
-  return createClient(supabaseUrl, supabaseAnonKey, {
-    auth: {
-      autoRefreshToken: false, // Clerk maneja la sesión
-      persistSession: false,   // No persistir sesión en localStorage
-      detectSessionInUrl: false,
-      
-      // Override para usar token de Clerk
-      storageKey: 'clerk-supabase-token',
-      storage: {
-        getItem: async (key) => {
-          if (key === 'clerk-supabase-token' && clerkClient?.session) {
-            const token = await getClerkJWTForSupabase(clerkClient);
-            return JSON.stringify({ access_token: token });
-          }
-          return null;
+  try {
+    // Importar dinámicamente para evitar problemas de SSR
+    // Usar import() en lugar de require() para compatibilidad con ESM
+    const { createClient } = await import('@supabase/supabase-js');
+    
+    return createClient(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        autoRefreshToken: false, // Clerk maneja la sesión
+        persistSession: false,   // No persistir sesión en localStorage
+        detectSessionInUrl: false,
+        
+        // Override para usar token de Clerk
+        storageKey: 'clerk-supabase-token',
+        storage: {
+          getItem: async (key) => {
+            if (key === 'clerk-supabase-token' && clerkClient?.session) {
+              const token = await getClerkJWTForSupabase(clerkClient);
+              return JSON.stringify({ access_token: token });
+            }
+            return null;
+          },
+          setItem: () => {}, // No-op, Clerk maneja el token
+          removeItem: () => {}, // No-op
         },
-        setItem: () => {}, // No-op, Clerk maneja el token
-        removeItem: () => {}, // No-op
       },
-    },
-    global: {
-      headers: {
-        'X-Client-Info': 'edutechlife-clerk-integration',
+      global: {
+        headers: {
+          'X-Client-Info': 'edutechlife-clerk-integration',
+        },
       },
-    },
-  });
+    });
+  } catch (error) {
+    console.error('Error creando cliente Supabase con Clerk JWT:', error);
+    return null;
+  }
 };
 
 /**
