@@ -89,7 +89,7 @@ export const ClerkUserButtonWithShadcn = ({ showName = false }) => {
 /**
  * Componente ClerkSignIn personalizado con shadcn styling
  */
-export const ClerkSignInWithShadcn = ({ redirectUrl = '/dashboard' }) => {
+export const ClerkSignInWithShadcn = ({ redirectUrl = '/ialab' }) => {
   return {
     render: () => {
       console.log('ClerkSignInWithShadcn: Componente de placeholder');
@@ -101,7 +101,7 @@ export const ClerkSignInWithShadcn = ({ redirectUrl = '/dashboard' }) => {
 /**
  * Componente ClerkSignUp personalizado con shadcn styling
  */
-export const ClerkSignUpWithShadcn = ({ redirectUrl = '/dashboard' }) => {
+export const ClerkSignUpWithShadcn = ({ redirectUrl = '/ialab' }) => {
   return {
     render: () => {
       console.log('ClerkSignUpWithShadcn: Componente de placeholder');

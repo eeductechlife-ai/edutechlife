@@ -12,8 +12,8 @@ export const clerkConfig = {
     // Para SPA, necesitamos configurar las URLs de sign-in/sign-up
     signInUrl: '/sign-in',
     signUpUrl: '/sign-up',
-    afterSignInUrl: '/dashboard',
-    afterSignUpUrl: '/dashboard',
+    afterSignInUrl: '/ialab',
+    afterSignUpUrl: '/ialab',
     
     // Appearance personalizado para Edutechlife
     appearance: {
@@ -44,8 +44,8 @@ export const clerkConfig = {
 export const supabaseIntegrationConfig = {
   // URLs para redirección después de autenticación
   redirectUrls: {
-    signIn: '/dashboard',
-    signUp: '/dashboard',
+    signIn: '/ialab',
+    signUp: '/ialab',
     signOut: '/',
   },
   

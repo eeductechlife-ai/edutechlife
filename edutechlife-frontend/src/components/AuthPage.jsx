@@ -35,7 +35,7 @@ const AuthPage = () => {
     try {
       const result = await signIn(formData.email, formData.password);
       if (!result.success) {
-        setError(result.error || 'Error al iniciar sesión');
+        setError(result.error || 'Error al iniciar sesión. Verifica tu email y contraseña.');
       }
     } catch (err) {
       setError('Error de conexión. Intenta nuevamente.');
@@ -87,14 +87,14 @@ const AuthPage = () => {
           // Caso: Email de confirmación requerido
           setSuccess({
             password: generatedPassword,
-            message: '✅ ¡Registro exitoso! 📧 Revisa tu correo electrónico para confirmar tu cuenta. Una vez confirmada, podrás ingresar con la contraseña generada.',
+            message: '✅ ¡Registro exitoso! 📧 Revisa tu correo electrónico para confirmar tu cuenta. Una vez confirmada, podrás acceder al IALab (Laboratorio de Inteligencia Artificial) con la contraseña generada.',
             requiresConfirmation: true
           });
         } else {
           // Caso: Registro inmediato (sin confirmación de email)
           setSuccess({
             password: generatedPassword,
-            message: '✅ ¡Registro exitoso! Ya puedes iniciar sesión con la contraseña generada.',
+            message: '✅ ¡Registro exitoso! Ya puedes acceder al IALab (Laboratorio de Inteligencia Artificial) con la contraseña generada.',
             requiresConfirmation: false
           });
           
@@ -102,11 +102,11 @@ const AuthPage = () => {
           setTimeout(async () => {
             try {
               const loginResult = await signIn(formData.email, generatedPassword);
-              if (loginResult.success) {
-                console.log('✅ Login automático exitoso después del registro');
-                // Redirigir al dashboard o IALab
-                window.location.href = '/dashboard';
-              } else {
+               if (loginResult.success) {
+                 console.log('✅ Login automático exitoso después del registro');
+                 // Redirigir al IALab
+                 window.location.href = '/ialab';
+               } else {
                 console.warn('⚠️ Login automático falló, usuario debe iniciar sesión manualmente');
               }
             } catch (loginErr) {
@@ -115,7 +115,7 @@ const AuthPage = () => {
           }, 2000);
         }
       } else {
-        setError(result.error || 'Error al registrar usuario');
+        setError(result.error || 'Error al registrar usuario. Por favor verifica tus datos e intenta nuevamente.');
       }
     } catch (err) {
       console.error('❌ Error en registro:', err);
@@ -158,9 +158,14 @@ const AuthPage = () => {
                   <CheckCircle className="w-10 h-10 text-green-600" />
                 </div>
                 
-                 <h2 className="text-2xl font-black text-[#004B63] font-montserrat mb-4">
-                   {success.requiresConfirmation ? '✅ Registro Completado' : '🎉 ¡Registro Exitoso!'}
-                 </h2>
+                  <h2 className="text-2xl font-black text-[#004B63] font-montserrat mb-4">
+                    {success.requiresConfirmation ? '✅ Registro Completado' : '🎉 ¡Acceso al IALab Confirmado!'}
+                  </h2>
+                  <p className="text-sm text-gray-600 mb-6 text-center">
+                    {success.requiresConfirmation 
+                      ? 'Tu cuenta está casi lista. Confirma tu email para desbloquear el IALab.' 
+                      : '¡Bienvenido al Laboratorio de Inteligencia Artificial de EdutechLife!'}
+                  </p>
                  
                  <div className="space-y-4">
                    {/* Mensaje principal */}
@@ -172,9 +177,9 @@ const AuthPage = () => {
                    
                    {/* Contraseña generada */}
                    <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-4">
-                     <p className="text-sm text-gray-600 mb-2">
-                       Tu contraseña de acceso es:
-                     </p>
+                      <p className="text-sm text-gray-600 mb-2">
+                        Tu contraseña para acceder al IALab es:
+                      </p>
                      <div className="bg-gradient-to-r from-[#004B63] to-[#4DA8C4] rounded-xl py-3 px-4">
                        <p className="text-white font-mono text-xl font-bold tracking-wider text-center">
                          {success.password}

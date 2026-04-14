@@ -98,16 +98,50 @@ export const AuthProvider = ({ children }) => {
 
   const fetchProfile = async (userId) => {
     try {
+      console.log('🔍 Buscando perfil para usuario ID:', userId);
+      
       const { data, error } = await supabase
         .from('profiles')
-        .select('*')
+        .select('id, full_name, email, phone, role, created_at, updated_at, avatar_url')
         .eq('id', userId)
         .single();
 
-      if (error) throw error;
-      setProfile(data);
+      if (error) {
+        console.error('❌ Error en consulta de perfil:', error);
+        throw error;
+      }
+      
+      console.log('✅ Perfil encontrado:', {
+        id: data?.id,
+        full_name: data?.full_name,
+        email: data?.email,
+        phone: data?.phone,
+        role: data?.role
+      });
+      
+      // Asegurar que data.full_name esté disponible
+      const profileData = {
+        id: data.id,
+        full_name: data.full_name || '',
+        email: data.email || '',
+        phone: data.phone || '',
+        role: data.role || 'student',
+        created_at: data.created_at,
+        updated_at: data.updated_at,
+        avatar_url: data.avatar_url
+      };
+      
+      setProfile(profileData);
     } catch (err) {
-      console.error('Error fetching profile:', err);
+      console.error('❌ Error cargando perfil:', err);
+      // Si no hay perfil, crear uno básico
+      setProfile({
+        id: userId,
+        full_name: '',
+        email: '',
+        phone: '',
+        role: 'student'
+      });
     } finally {
       setLoading(false);
     }
@@ -189,7 +223,7 @@ export const AuthProvider = ({ children }) => {
 
   const createProfile = async (userId, userData) => {
     try {
-      console.log('Creando perfil para usuario:', userId, 'con datos:', userData);
+      console.log('📝 Creando perfil para usuario:', userId, 'con datos:', userData);
       const { data, error } = await supabase
         .from('profiles')
         .insert([
@@ -204,16 +238,39 @@ export const AuthProvider = ({ children }) => {
             user_count: userData.user_count || null,
           },
         ])
-        .select()
+        .select('id, full_name, email, phone, role, created_at, updated_at, avatar_url')
         .single();
 
-      console.log('Resultado de createProfile - data:', data, 'error:', error);
+      console.log('📊 Resultado de createProfile:', {
+        success: !error,
+        data: data ? {
+          id: data.id,
+          full_name: data.full_name,
+          email: data.email,
+          phone: data.phone,
+          role: data.role
+        } : null,
+        error: error?.message
+      });
 
       if (error) throw error;
-      setProfile(data);
-      return data;
+      
+      // Asegurar estructura consistente
+      const profileData = {
+        id: data.id,
+        full_name: data.full_name || '',
+        email: data.email || '',
+        phone: data.phone || '',
+        role: data.role || 'student',
+        created_at: data.created_at,
+        updated_at: data.updated_at,
+        avatar_url: data.avatar_url
+      };
+      
+      setProfile(profileData);
+      return profileData;
     } catch (err) {
-      console.error('Error creating profile:', err);
+      console.error('❌ Error creando perfil:', err);
       throw err;
     }
   };
@@ -333,17 +390,36 @@ export const AuthProvider = ({ children }) => {
     if (!user) return { success: false, error: 'No user logged in' };
 
     try {
+      console.log('📝 Actualizando perfil para usuario:', user.id, 'con updates:', updates);
+      
       const { data, error } = await supabase
         .from('profiles')
-        .update(updates)
+        .update({
+          ...updates,
+          updated_at: new Date().toISOString()
+        })
         .eq('id', user.id)
-        .select()
+        .select('id, full_name, email, phone, role, created_at, updated_at, avatar_url')
         .single();
 
       if (error) throw error;
-      setProfile(data);
-      return { success: true, data };
+      
+      // Asegurar estructura consistente
+      const profileData = {
+        id: data.id,
+        full_name: data.full_name || '',
+        email: data.email || '',
+        phone: data.phone || '',
+        role: data.role || 'student',
+        created_at: data.created_at,
+        updated_at: data.updated_at,
+        avatar_url: data.avatar_url
+      };
+      
+      setProfile(profileData);
+      return { success: true, data: profileData };
     } catch (err) {
+      console.error('❌ Error actualizando perfil:', err);
       setError(err.message);
       return { success: false, error: err.message };
     }

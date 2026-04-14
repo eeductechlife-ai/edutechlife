@@ -237,7 +237,7 @@ export const createSPAUrls = (basePath = '') => ({
   signUp: `${basePath}/sign-up`,
   signOut: `${basePath}/`,
   userProfile: `${basePath}/profile`,
-  home: `${basePath}/dashboard`,
+  home: `${basePath}/ialab`,
 });
 
 /**

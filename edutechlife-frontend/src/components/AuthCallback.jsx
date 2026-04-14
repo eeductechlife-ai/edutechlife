@@ -53,11 +53,11 @@ const AuthCallback = () => {
             }
           }
 
-          setStatus('✅ ¡Email confirmado exitosamente! Redirigiendo al dashboard...');
+          setStatus('✅ ¡Email confirmado exitosamente! Redirigiendo al IALab...');
           
-          // Redirigir al dashboard después de 2 segundos
+          // Redirigir al IALab después de 2 segundos
           setTimeout(() => {
-            navigate('/dashboard');
+            navigate('/ialab');
           }, 2000);
         } else {
           setStatus('⚠️ No se pudo autenticar al usuario. Redirigiendo al login...');

@@ -7,16 +7,44 @@ let ClerkProvider, useClerk, useUser;
 let isClerkInstalled = false;
 let clerkModule = null;
 
+// Función para cargar script desde CDN
+const loadScript = (src) => {
+  return new Promise((resolve, reject) => {
+    if (document.querySelector(`script[src="${src}"]`)) {
+      resolve();
+      return;
+    }
+    
+    const script = document.createElement('script');
+    script.src = src;
+    script.async = true;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
+    document.head.appendChild(script);
+  });
+};
+
 // Función para cargar Clerk dinámicamente
 const loadClerk = async () => {
   try {
+    // Primero intentar cargar desde CDN oficial si no está disponible
+    if (!window.Clerk) {
+      try {
+        console.log('📦 Cargando Clerk desde CDN oficial...');
+        await loadScript('https://cdn.jsdelivr.net/npm/@clerk/clerk-js@6/dist/clerk.browser.js');
+        console.log('✅ Clerk cargado desde CDN');
+      } catch (cdnError) {
+        console.warn('⚠ No se pudo cargar Clerk desde CDN:', cdnError.message);
+      }
+    }
+    
     // Intentar importar Clerk como ES module
     clerkModule = await import('@clerk/react');
     ClerkProvider = clerkModule.ClerkProvider;
     useClerk = clerkModule.useClerk;
     useUser = clerkModule.useUser;
     isClerkInstalled = true;
-    console.log('✓ Clerk está instalado y listo (ES module)');
+    console.log('✅ Clerk está instalado y listo (ES module)');
     return true;
   } catch (error) {
     console.warn('⚠ Clerk no está disponible, usando modo simulación:', error.message);
