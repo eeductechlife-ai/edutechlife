@@ -15,22 +15,54 @@ export default {
       '2xl': '1536px',
     },
     extend: {
-       colors: {
-        // Brand colors corporativos
-        'brand-primary': '#004B63',
-        'brand-accent': '#00BCD4',
-        petroleum: '#004B63',
-        corporate: '#00BCD4',
-        'soft-blue': '#B2D8E5',
-        mint: '#66CCCC',
-        navy: '#0A1628',
+        colors: {
+          // Variables CSS para shadcn/ui
+          background: 'hsl(var(--background))',
+          foreground: 'hsl(var(--foreground))',
+          card: {
+            DEFAULT: 'hsl(var(--card))',
+            foreground: 'hsl(var(--card-foreground))',
+          },
+          popover: {
+            DEFAULT: 'hsl(var(--popover))',
+            foreground: 'hsl(var(--popover-foreground))',
+          },
+          primary: {
+            DEFAULT: 'hsl(var(--primary))',
+            foreground: 'hsl(var(--primary-foreground))',
+          },
+          secondary: {
+            DEFAULT: 'hsl(var(--secondary))',
+            foreground: 'hsl(var(--secondary-foreground))',
+          },
+          muted: {
+            DEFAULT: 'hsl(var(--muted))',
+            foreground: 'hsl(var(--muted-foreground))',
+          },
+          accent: {
+            DEFAULT: 'hsl(var(--accent))',
+            foreground: 'hsl(var(--accent-foreground))',
+          },
+          destructive: {
+            DEFAULT: 'hsl(var(--destructive))',
+            foreground: 'hsl(var(--destructive-foreground))',
+          },
+          border: 'hsl(var(--border))',
+          input: 'hsl(var(--input))',
+          ring: 'hsl(var(--ring))',
+          
+         // Brand colors corporativos
+         'brand-primary': '#004B63',
+         'brand-accent': '#00BCD4',
+         petroleum: '#004B63',
+         corporate: '#00BCD4',
+         'soft-blue': '#B2D8E5',
+         mint: '#66CCCC',
+         navy: '#0A1628',
         
-        // Semantic colors
-        primary: '#004B63',
+        // Semantic colors (compatibilidad con sistema existente)
         'primary-dark': '#00334A',
         'primary-light': '#4DA8C4',
-        secondary: '#00BCD4',
-        accent: '#00BCD4',
         success: '#10B981',
         warning: '#F59E0B',
         error: '#EF4444',
@@ -122,13 +154,14 @@ export default {
         'premium': 'var(--backdrop-blur-premium)',
       },
        borderRadius: {
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
         'glass': '1rem',
         'glass-lg': '1.5rem',
         'pill': '9999px',
         'premium': '1.5rem',
         DEFAULT: '0.5rem',
-        md: '0.75rem',
-        lg: '1rem',
         xl: '1.5rem',
         '2xl': '2rem',
         '3xl': '3rem',

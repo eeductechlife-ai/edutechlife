@@ -160,18 +160,13 @@ const ChallengeCard = ({
                 </div>
             </div>
             
-            {/* CONTENEDOR DEL DESAFÍO PREMIUM - GLASSMORPHISM */}
-             <div 
+             {/* CONTENEDOR DEL DESAFÍO PREMIUM - ESTÉTICA CORPORATIVA EDUTECHLIFE */}
+              <div 
                 className={`
                     rounded-2xl p-6 mb-6 
-                    backdrop-blur-sm
+                    bg-white/80 backdrop-blur-md
                     shadow-[0_20px_60px_rgba(0,0,0,0.08)]
-                     dark:shadow-[0_20px_60px_rgba(0,188,212,0.12)]
-                    border border-white/50 dark:border-slate-700/50
-                      ${isCompleted 
-                        ? 'bg-gradient-to-br from-emerald-50/80 via-white to-emerald-50/60 dark:from-emerald-900/30 dark:via-slate-800 dark:to-emerald-900/20' 
-                        : 'bg-gradient-to-br from-soft-blue/20 via-white to-mint/20 dark:from-petroleum/10 dark:via-slate-800 dark:to-corporate/10'
-                    }
+                    border border-[#00BCD4]/20
                     relative overflow-hidden
                 `}
                 style={{
@@ -181,35 +176,35 @@ const ChallengeCard = ({
                     })
                 }}
             >
-                {/* Efecto de brillo sutil */}
-                <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-white/30 to-transparent rounded-full -translate-x-1/2 -translate-y-1/2 blur-xl"></div>
+                {/* Efecto de brillo sutil - Mantenido pero más sutil */}
+                <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#00BCD4]/10 to-transparent rounded-full -translate-x-1/2 -translate-y-1/2 blur-xl"></div>
                 
                 {/* Contenido del desafío */}
                 <div className="relative z-10">
                     {/* Badge de estado */}
                     <div className="flex items-center gap-3 mb-6">
                         <div className={`flex items-center gap-2 px-4 py-2 rounded-full ${isCompleted ? 'bg-emerald-100' : 'bg-corporate/20'}`}>
-                            <Icon 
+                             <Icon 
                                 name={isCompleted ? "fa-check-circle" : "fa-hourglass-half"} 
-                                className={isCompleted ? "text-emerald-600" : "text-corporate"} 
+                                className="text-[#00BCD4]" 
                             />
-                            <span className={`text-sm font-semibold ${isCompleted ? 'text-emerald-800' : 'text-corporate'}`}>
+                            <span className="text-sm font-semibold text-[#00BCD4]">
                                 {isCompleted ? 'Completado' : `⏱️ ${estimatedTime}`}
                             </span>
                         </div>
-                        <div className="text-sm text-text-light dark:text-slate-400">
+                        <div className="text-sm text-slate-600">
                             {isCompleted ? '✅ Verificado' : '🔄 En progreso'}
                         </div>
                     </div>
                     
                      {/* Texto del desafío con tipografía premium */}
                     <div className="mb-4">
-                        <div className="text-xs font-semibold text-corporate uppercase tracking-wider mb-2">
+                         <div className="text-xl font-bold text-[#004B63] mb-2">
                             {isCompleted ? 'Reto Superado' : 'Desafío del Módulo'}
                         </div>
-                         <p className="text-base font-medium text-text-dark dark:text-slate-200 leading-relaxed italic border-l-4 border-corporate pl-4 py-2">
-                            "{challengeText}"
-                        </p>
+                          <p className="text-base font-medium text-[#004B63]/90 italic leading-relaxed border-l-4 border-[#00BCD4] pl-4 py-2">
+                             "{challengeText}"
+                         </p>
                         
                         {/* Barra de progreso de puntuación (solo cuando completado) */}
                         {isCompleted && score > 0 && (
@@ -236,16 +231,16 @@ const ChallengeCard = ({
                     {/* Metadatos adicionales */}
                     <div className="flex items-center justify-between pt-4 border-t border-border-light dark:border-slate-700">
                         <div className="flex items-center gap-4">
-                            <div className="flex items-center gap-2">
-                                <Icon name="fa-brain" className="text-corporate" />
-                                 <span className="text-sm text-text-sub dark:text-slate-300">Aplicación Práctica</span>
+                             <div className="flex items-center gap-2">
+                                <Icon name="fa-brain" className="text-[#00BCD4]" />
+                                 <span className="text-sm text-slate-600">Aplicación Práctica</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <Icon name="fa-chart-line" className="text-corporate" />
-                                 <span className="text-sm text-text-sub dark:text-slate-300">Nivel {isCompleted ? 'Avanzado' : 'Intermedio'}</span>
+                                <Icon name="fa-chart-line" className="text-[#00BCD4]" />
+                                 <span className="text-sm text-slate-600">Nivel {isCompleted ? 'Avanzado' : 'Intermedio'}</span>
                             </div>
                         </div>
-                        <div className="text-sm font-medium text-corporate">
+                        <div className="text-sm font-medium text-[#00BCD4]">
                             {isCompleted ? '💯 100% Completado' : '🎯 Objetivo Claro'}
                         </div>
                     </div>

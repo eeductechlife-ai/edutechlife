@@ -100,6 +100,7 @@ export default defineConfig({
       }
     },
     rollupOptions: {
+      external: ['@solana/web3.js'],
       output: {
         manualChunks: {
           'react-vendor': ['react', 'react-dom'],
@@ -127,9 +128,21 @@ export default defineConfig({
       'framer-motion',
       'lucide-react',
       'canvas-confetti',
-      'prop-types'
+      'prop-types',
+      '@clerk/react',
+      '@clerk/ui'
     ],
-    exclude: ['lottie-web']
+    exclude: ['lottie-web', '@solana/web3.js']
+  },
+  esbuild: {
+    loader: 'jsx',
+    include: /src\/.*\.jsx?$/,
+    exclude: [],
+  },
+  resolve: {
+    alias: {
+      '@solana/web3.js': '/Users/home/Desktop/edutechlife/edutechlife-frontend/src/solana-stub.js'
+    }
   },
   preview: {
     port: 4173,

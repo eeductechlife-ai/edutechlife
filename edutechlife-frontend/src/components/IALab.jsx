@@ -10,7 +10,7 @@ import { Icon } from '../utils/iconMapping.jsx';
 import { useAuth } from '../context/AuthContext';
 import { getAllProgress, saveProgress, PROGRESS_STATUS, saveLastLesson, getUserLastProgress, getProgress } from '../lib/progress';
 import { LogOut, Lightbulb } from 'lucide-react';
-import UserDropdownMenu from './UserDropdownMenu';
+import UserDropdownMenuSimplified from './UserDropdownMenuSimplified';
 import PlatformOptimizedCard from './PlatformOptimizedCard';
 import ChallengeCard from './ChallengeCard';
 import ForumCommunity from './forum/ForumCommunity';
@@ -44,8 +44,7 @@ const IALabFixed = ({ onBack }) => {
     const [avatarState, setAvatarState] = useState('idle');
     const [showValerioDrawer, setShowValerioDrawer] = useState(false);
     
-    // Estado para controlar dropdown de perfil de usuario
-    const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+
     
     // Estado para mostrar tooltip de evaluación bloqueada
     const [showEvaluationTooltip, setShowEvaluationTooltip] = useState(false);
@@ -121,7 +120,7 @@ const IALabFixed = ({ onBack }) => {
     const containerRef = useRef(null);
     const cursorRef = useRef(null);
     const chartRef = useRef(null);
-    const profileDropdownRef = useRef(null);
+
     
     const isChartInView = useInView(chartRef);
     
@@ -941,22 +940,7 @@ IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`;
     
     const curr = modules.find(m => m.id === activeMod) || modules[0];
     
-    // Effect para cerrar dropdown al hacer clic fuera
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target)) {
-                setShowProfileDropdown(false);
-            }
-        };
 
-        if (showProfileDropdown) {
-            document.addEventListener('mousedown', handleClickOutside);
-        }
-
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [showProfileDropdown]);
     
     // Effect para animación de entrada secuencial de acordeones
     useEffect(() => {
@@ -1750,42 +1734,19 @@ IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`;
                         <span className="text-sm font-semibold">{completedModules.length}/5 Módulos</span>
                     </div>
                     
-                    {/* Botón de Perfil de Usuario */}
-                    <div className="relative" ref={profileDropdownRef}>
-                        <button
-                            onClick={() => setShowProfileDropdown(!showProfileDropdown)}
-                            className="flex items-center gap-3 px-4 py-2 bg-white/10 backdrop-blur-md border border-slate-200/50 rounded-full hover:bg-white/20 hover:border-slate-300 transition-all duration-300"
-                        >
-                            <div className="w-8 h-8 bg-gradient-to-br from-[#00374A] to-[#00BCD4] rounded-full flex items-center justify-center">
-                                <span className="text-white text-sm font-semibold">JE</span>
-                            </div>
-                            <div className="flex flex-col items-start">
-                                <span className="text-sm font-semibold text-[#00374A]">John Edison</span>
-                                <span className="text-xs text-slate-500">Estudiante</span>
-                            </div>
-                            <Icon 
-                                name={showProfileDropdown ? 'fa-chevron-up' : 'fa-chevron-down'} 
-                                className="text-slate-500 text-sm transition-transform duration-300"
-                            />
-                        </button>
-                        
-                        {/* Dropdown de Perfil - Componente Refactorizado */}
-                        <UserDropdownMenu 
-                            isOpen={showProfileDropdown}
-                            onClose={() => setShowProfileDropdown(false)}
-                            anchorRef={profileDropdownRef}
-                            onNavigate={(view) => {
-                                // Para navegación interna, podemos usar onBack para algunas vistas
-                                console.log('Navegando a:', view);
-                                if (view === 'landing') {
-                                    onBack && onBack();
-                                } else {
-                                    // Para otras vistas, mostrar mensaje de desarrollo
-                                    alert(`Página de ${view} en desarrollo`);
-                                }
-                            }}
-                        />
-                    </div>
+                    {/* Dropdown de Perfil de Usuario - Componente Premium 100% Funcional */}
+                    <UserDropdownMenuSimplified 
+                        onNavigate={(view) => {
+                            console.log('Navegando a:', view);
+                            if (view === 'landing') {
+                                onBack && onBack();
+                            } else if (view === 'certificados') {
+                                // Para certificados, mostrar información
+                                alert('Sistema de certificados:\n\n• Certificado VAK Básico\n• Certificado VAK Avanzado\n• Certificado EdutechLife Pro\n\nLos certificados se generan automáticamente al completar cursos.');
+                            }
+                            // Para otras vistas, el componente maneja sus propios modales
+                        }}
+                    />
                 </div>
             </header>
 

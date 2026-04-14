@@ -6,13 +6,19 @@ import { forumService } from '../../lib/forumService';
 import { useAuth } from '../../context/AuthContext';
 import { FORUM_COMPONENTS, FORUM_TYPOGRAPHY, FORUM_EFFECTS, cn } from './forumDesignSystem';
 import LazyImage from './LazyImage';
+import { Icon } from '../../utils/iconMapping.jsx';
 
 const PostCard = ({ 
   post, 
   onVoteChange, 
   onCommentAdded,
   compact = false,
-  showComments = true 
+  showComments = true,
+  // Nuevas props para sistema de likes mejorado
+  onLikeToggle,
+  likeState = null,
+  likeColor = '#004B63',
+  likeIcon = 'fa-heart'
 }) => {
   const { user } = useAuth();
   const [isVoting, setIsVoting] = useState(false);
@@ -55,6 +61,13 @@ const PostCard = ({
   const handleUpvote = async () => {
     if (!user || !post?.id || isVoting) return;
     
+    // Si hay un manejador de likes mejorado, usarlo
+    if (onLikeToggle) {
+      onLikeToggle(post.id, post.upvotes || 0);
+      return;
+    }
+    
+    // Sistema de votos original (backward compatibility)
     setIsVoting(true);
     try {
       const newVoteStatus = await forumService.toggleVote(post.id);
@@ -263,40 +276,39 @@ const PostCard = ({
         {/* Acciones - Diseño corporativo */}
         <div className="flex items-center justify-between pt-2 sm:pt-3 border-t border-[#004B63]/10">
           <div className="flex items-center gap-2 sm:gap-4">
-             {/* Botón de voto */}
+             {/* Botón de LIKE (NUEVO SISTEMA VISIBLE) */}
              <button
-               onClick={handleUpvote}
+               onClick={() => onLikeToggle && onLikeToggle(post.id, post.upvotes || 0)}
                onKeyDown={(e) => {
                  if (e.key === 'Enter' || e.key === ' ') {
                    e.preventDefault();
-                   handleUpvote();
+                   onLikeToggle && onLikeToggle(post.id, post.upvotes || 0);
                  }
                }}
-               disabled={isVoting || !user}
-               aria-label={userVote === 'upvote' ? 'Quitar voto positivo' : 'Votar positivamente'}
-               aria-pressed={userVote === 'upvote'}
+               disabled={!user || (likeState && likeState.isLoading)}
+               aria-label={likeState && likeState.userLiked ? 'Quitar me gusta' : 'Dar me gusta'}
+               aria-pressed={likeState && likeState.userLiked}
                className={cn(
                  "flex items-center gap-1 sm:gap-2 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg",
                  FORUM_EFFECTS.TRANSITION_ALL,
                  FORUM_EFFECTS.HOVER_SCALE,
-                 userVote === 'upvote'
-                   ? "bg-gradient-to-r from-[#00BCD4]/20 to-[#004B63]/10 text-[#004B63] border border-[#00BCD4]/30 shadow-[#00BCD4]/20"
+                 likeState && likeState.userLiked
+                   ? "bg-gradient-to-r from-[#00BCD4]/20 to-[#004B63]/10 text-[#00BCD4] border border-[#00BCD4]/30 shadow-[#00BCD4]/20"
                    : "bg-[#004B63]/5 text-[#004B63]/70 hover:bg-[#004B63]/10",
                  "disabled:opacity-50 disabled:cursor-not-allowed",
-                 userVote === 'upvote' && "button-pulse",
+                 likeState && likeState.userLiked && "button-pulse",
                  "focus:outline-none focus:ring-2 focus:ring-[#00BCD4]/50 focus:ring-offset-2"
                )}
                tabIndex={user ? 0 : -1}
              >
-              <svg 
+              <Icon 
+                name={likeIcon || (likeState && likeState.userLiked ? 'fa-heart' : 'fa-heart')}
                 className={cn(
                   "w-3 h-3 sm:w-4 sm:h-4",
-                  userVote === 'upvote' ? 'fill-current' : ''
-                )} 
-                viewBox="0 0 20 20"
-              >
-                <path d="M10 3.22l-6.65 6.65a.75.75 0 001.06 1.06L10 5.34l5.59 5.59a.75.75 0 001.06-1.06L10 3.22z" />
-              </svg>
+                  likeState && likeState.isLoading && "animate-spin"
+                )}
+                style={{ color: likeColor || (likeState && likeState.userLiked ? '#00BCD4' : '#004B63') }}
+              />
               <span className={cn(
                 "text-xs sm:text-sm",
                 FORUM_TYPOGRAPHY.MEDIUM

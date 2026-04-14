@@ -21,6 +21,8 @@ const SmartBoardLogin = lazy(() => import('./components/SmartBoardLogin'));
 // Unified VAK Diagnosis Component
 const VAKDiagnosis = lazy(() => import('./components/DiagnosticoVAK'));
 const AdminDashboard = lazy(() => import('./components/AdminDashboard'));
+// JWT Integration Test (temporal)
+const JWTIntegrationTestPage = lazy(() => import('./components/test/JWTIntegrationTestPage'));
 import NicoModern from './components/Nico/NicoModern';
 import AdminLoginModal from './components/AdminLoginModal';
 import LeadCaptureModal from './components/LeadCaptureModal';
@@ -1197,6 +1199,13 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                         <AdminDashboard onLogout={handleAdminLogout} onBack={() => handleNavigate('landing')} />
                     )}
 
+                    {/* JWT Integration Test (temporal - solo para desarrollo) */}
+                    {view === 'jwt-test' && (
+                        <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div></div>}>
+                            <JWTIntegrationTestPage />
+                        </Suspense>
+                    )}
+
                     
                 </Suspense>
             </main>
@@ -1217,6 +1226,20 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
 
             {/* Footer - Solo se muestra en páginas principales, no en SmartBoard, VAK, Admin, NeuroEntorno ni IALab */}
             {view !== 'smartboard' && view !== 'vak' && view !== 'admin' && view !== 'neuroentorno' && view !== 'ialab' && <Footer />}
+
+            {/* Botón secreto para pruebas JWT (solo en desarrollo) */}
+            {import.meta.env.DEV && view === 'landing' && (
+              <button
+                onClick={() => handleNavigate('jwt-test')}
+                className="fixed bottom-4 right-4 z-50 w-10 h-10 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group"
+                title="Prueba Integración JWT Clerk-Supabase"
+              >
+                <span className="text-xs font-bold">JWT</span>
+                <div className="absolute -top-8 right-0 bg-[#004B63] text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                  Prueba JWT Integration
+                </div>
+              </button>
+            )}
 
             {/* Admin Login Modal */}
             <AdminLoginModal 
