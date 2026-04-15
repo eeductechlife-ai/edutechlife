@@ -15,9 +15,14 @@ export const useClerkAuth = () => {
   try {
     // Verificar si Clerk está disponible globalmente
     if (typeof window !== 'undefined' && window.Clerk) {
-      const { useUser, useClerk } = window.Clerk;
-      const { user, isLoaded, isSignedIn } = useUser();
-      const clerk = useClerk();
+      // En Clerk v5+, los hooks no están en window.Clerk directamente
+      // Usamos el cliente Clerk directamente desde window.Clerk
+      const clerk = window.Clerk;
+      
+      // Obtener usuario actual del cliente Clerk
+      const user = clerk.user;
+      const isLoaded = clerk.loaded;
+      const isSignedIn = !!clerk.user;
       
       return {
         isLoaded,
@@ -32,11 +37,10 @@ export const useClerkAuth = () => {
           return { success: true };
         },
         openUserProfile: () => {
-          if (clerk && clerk.openUserProfile) {
-            return clerk.openUserProfile();
-          }
-          console.log('Clerk openUserProfile no disponible');
-          window.alert('Perfil de usuario - Abre modal de perfil personalizado');
+          // En Clerk v5+, openUserProfile no existe directamente
+          // Redirigimos al perfil personalizado
+          console.log('Redirigiendo a perfil personalizado');
+          window.location.href = '/profile';
         },
         redirectToSignIn: () => {
           if (clerk && clerk.redirectToSignIn) {

@@ -331,9 +331,11 @@ export const getPostsOptimized = async ({
     const to = from + limit - 1;
     
     // Usar la vista optimizada que ya incluye información de usuario
+    // NOTA: La vista NO soporta relaciones embebidas (forum_comments(count), forum_votes(count))
+    // Hacemos consulta básica primero, luego obtenemos counts por separado
     let query = supabase
       .from('forum_posts_with_users')
-      .select('*, forum_comments(count), forum_votes(count)', { count: 'exact' })
+      .select('*')
       .range(from, to);
     
     // Aplicar filtros
@@ -369,10 +371,41 @@ export const getPostsOptimized = async ({
       };
     }
     
+    // Obtener IDs de posts para consultar counts por separado
+    const postIds = data.map(post => post.id);
+    
+    // Obtener contadores de comentarios y votos en paralelo
+    const [commentsResult, votesResult] = await Promise.allSettled([
+      supabase
+        .from('forum_comments')
+        .select('post_id')
+        .in('post_id', postIds),
+      supabase
+        .from('forum_votes')
+        .select('post_id')
+        .in('post_id', postIds)
+    ]);
+    
+    // Procesar contadores de comentarios
+    const commentCountMap = {};
+    if (commentsResult.status === 'fulfilled' && commentsResult.value.data) {
+      commentsResult.value.data.forEach(item => {
+        commentCountMap[item.post_id] = (commentCountMap[item.post_id] || 0) + 1;
+      });
+    }
+    
+    // Procesar contadores de votos
+    const voteCountMap = {};
+    if (votesResult.status === 'fulfilled' && votesResult.value.data) {
+      votesResult.value.data.forEach(item => {
+        voteCountMap[item.post_id] = (voteCountMap[item.post_id] || 0) + 1;
+      });
+    }
+    
     // Procesar los datos para el formato esperado
     const enrichedPosts = data.map(post => {
-      const commentCount = post.forum_comments?.[0]?.count || 0;
-      const voteCount = post.forum_votes?.[0]?.count || 0;
+      const commentCount = commentCountMap[post.id] || 0;
+      const voteCount = voteCountMap[post.id] || 0;
       
       return {
         id: post.id,
@@ -1250,6 +1283,7 @@ export const subscribeToForumUpdates = (onUpdate, onError) => {
 export const forumService = {
   // Posts
   getPosts,
+  getPostsOptimized,
   createPost,
   updatePost,
   deletePost,

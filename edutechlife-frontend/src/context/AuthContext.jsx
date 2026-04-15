@@ -102,7 +102,7 @@ export const AuthProvider = ({ children }) => {
       
       const { data, error } = await supabase
         .from('profiles')
-        .select('id, full_name, email, phone, role, created_at, updated_at, avatar_url')
+        .select('id, full_name, email, phone, role')
         .eq('id', userId)
         .single();
 
@@ -125,10 +125,7 @@ export const AuthProvider = ({ children }) => {
         full_name: data.full_name || '',
         email: data.email || '',
         phone: data.phone || '',
-        role: data.role || 'student',
-        created_at: data.created_at,
-        updated_at: data.updated_at,
-        avatar_url: data.avatar_url
+        role: data.role || 'student'
       };
       
       setProfile(profileData);
@@ -226,19 +223,16 @@ export const AuthProvider = ({ children }) => {
       console.log('📝 Creando perfil para usuario:', userId, 'con datos:', userData);
       const { data, error } = await supabase
         .from('profiles')
-        .insert([
+        .upsert([
           {
             id: userId,
-            email: userData.email,
-            full_name: userData.full_name,
-            role: userData.role || 'student',
-            avatar_url: null,
-            phone: userData.phone || '',
-            plain_password: userData.plain_password || null,
-            user_count: userData.user_count || null,
+            full_name: profileData.full_name || '',
+            email: profileData.email || '',
+            phone: profileData.phone || '',
+            role: profileData.role || 'student',
           },
         ])
-        .select('id, full_name, email, phone, role, created_at, updated_at, avatar_url')
+        .select('id, full_name, email, phone, role')
         .single();
 
       console.log('📊 Resultado de createProfile:', {
@@ -261,10 +255,7 @@ export const AuthProvider = ({ children }) => {
         full_name: data.full_name || '',
         email: data.email || '',
         phone: data.phone || '',
-        role: data.role || 'student',
-        created_at: data.created_at,
-        updated_at: data.updated_at,
-        avatar_url: data.avatar_url
+        role: data.role || 'student'
       };
       
       setProfile(profileData);
@@ -399,7 +390,7 @@ export const AuthProvider = ({ children }) => {
           updated_at: new Date().toISOString()
         })
         .eq('id', user.id)
-        .select('id, full_name, email, phone, role, created_at, updated_at, avatar_url')
+        .select('id, full_name, email, phone, role')
         .single();
 
       if (error) throw error;
@@ -410,10 +401,7 @@ export const AuthProvider = ({ children }) => {
         full_name: data.full_name || '',
         email: data.email || '',
         phone: data.phone || '',
-        role: data.role || 'student',
-        created_at: data.created_at,
-        updated_at: data.updated_at,
-        avatar_url: data.avatar_url
+        role: data.role || 'student'
       };
       
       setProfile(profileData);
