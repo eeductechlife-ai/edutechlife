@@ -203,6 +203,7 @@ export const evaluateAndSave = async (studentPrompt, moduleId, userId = null) =>
       moduleId,
       PROGRESS_STATUS.COMPLETED,
       {
+        score: result.data.score, // Guardar score en el campo principal
         evaluationScore: result.data.score,
         evaluationLevel: result.data.level,
         evaluatedPrompt: studentPrompt,
@@ -225,21 +226,28 @@ export const getEvaluationHistory = async (moduleId) => {
   const { supabase } = await import('../lib/supabase');
   
   try {
+    // Asegurar que moduleId sea número
+    const numericModuleId = Number(moduleId);
+    if (isNaN(numericModuleId)) {
+      console.error('moduleId debe ser un número:', moduleId);
+      return [];
+    }
+
     const { data, error } = await supabase
       .from('user_progress')
-      .select('metadata, updated_at')
-      .eq('module_id', moduleId)
-      .not('metadata', 'is', null)
+      .select('completed_lessons, updated_at, score')
+      .eq('module_id', numericModuleId)
+      .not('completed_lessons', 'is', null)
       .order('updated_at', { ascending: false })
       .limit(10);
 
     if (error) throw error;
     
     return data
-      ?.filter(item => item.metadata?.evaluationScore)
+      ?.filter(item => item.completed_lessons?.evaluationScore || item.score)
       .map(item => ({
-        score: item.metadata.evaluationScore,
-        level: item.metadata.evaluationLevel,
+        score: item.completed_lessons?.evaluationScore || item.score || 0,
+        level: item.completed_lessons?.evaluationLevel || 'Novato',
         evaluatedAt: item.updated_at,
       })) || [];
   } catch (error) {

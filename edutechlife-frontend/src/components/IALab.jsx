@@ -8,7 +8,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { useInView, motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../utils/iconMapping.jsx';
 import { useAuth } from '../context/AuthContext';
-import { getAllProgress, saveProgress, PROGRESS_STATUS, saveLastLesson, getUserLastProgress, getProgress } from '../lib/progress';
+import { getAllProgress, saveProgress, PROGRESS_STATUS, saveLastLesson, getUserLastProgress, getProgress, getCompletedModules } from '../lib/progress';
 import { LogOut, Lightbulb } from 'lucide-react';
 import UserDropdownMenuSimplified from './UserDropdownMenuSimplified';
 import PlatformOptimizedCard from './PlatformOptimizedCard';
@@ -250,25 +250,30 @@ const IALabFixed = ({ onBack }) => {
                 const progress = await getProgress(activeMod);
                 
                 if (progress) {
-                    console.log('Progreso cargado:', progress);
+                    console.log('Progreso cargado (nueva estructura):', progress);
                     
-                    // Actualizar estados basados en el progreso
-                    const { status, challenge_completed, challenge_started_at, challenge_score } = progress;
+                    // Actualizar estados basados en el progreso (nueva estructura)
+                    const { is_completed, score, completed_lessons, updated_at } = progress;
                     
-                    // Si el desafío ya fue completado, actualizar estados
-                    if (challenge_completed) {
+                    // Si el módulo ya fue completado, actualizar estados
+                    if (is_completed) {
                         setIsChallengeCompleted(true);
                         setIsButtonDisabled(true);
-                        setChallengeScore(challenge_score || 0);
-                        console.log(`Desafío ya completado, puntuación: ${challenge_score || 0}%, botón deshabilitado`);
+                        setChallengeScore(score || 0);
+                        console.log(`Módulo ya completado, puntuación: ${score || 0}%, botón deshabilitado`);
+                        
+                        // Añadir a completedModules si no está
+                        if (!completedModules.includes(activeMod)) {
+                            setCompletedModules(prev => [...prev, activeMod]);
+                        }
                     } else {
                         setIsChallengeCompleted(false);
                         setChallengeScore(0);
                     }
                     
-                    // Si el desafío está en progreso, mostrar estado apropiado
-                    if (status === 'in_progress' && challenge_started_at) {
-                        const startedTime = new Date(challenge_started_at);
+                    // Verificar si hay desafío en progreso en completed_lessons
+                    if (completed_lessons && completed_lessons.challenge_started_at) {
+                        const startedTime = new Date(completed_lessons.challenge_started_at);
                         const now = new Date();
                         const diffMinutes = (now - startedTime) / (1000 * 60);
                         
@@ -304,6 +309,30 @@ const IALabFixed = ({ onBack }) => {
         
         // Recargar cuando cambie el módulo activo o el usuario
     }, [activeMod, user?.id]);
+    
+    // Cargar módulos completados al inicio
+    useEffect(() => {
+        const loadCompletedModules = async () => {
+            try {
+                if (!user?.id) return;
+                
+                // Usar la nueva función getCompletedModules
+                const completed = await getCompletedModules();
+                console.log('Módulos completados cargados:', completed);
+                
+                setCompletedModules(completed);
+                
+                // Calcular progreso total
+                const totalProgress = completed.length * 20; // 20% por módulo
+                setCourseProgress(Math.min(100, totalProgress));
+                
+            } catch (error) {
+                console.error('Error al cargar módulos completados:', error);
+            }
+        };
+        
+        loadCompletedModules();
+    }, [user?.id]);
     
     // Función para contenido específico de cada acordeón
     const renderAccordionContent = (accordionId) => {
@@ -1303,7 +1332,10 @@ IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`;
                     await saveProgress(
                         activeMod,
                         PROGRESS_STATUS.COMPLETED,
-                        { lesson_id: moduleLessons[moduleLessons.length - 1].id }
+                        { 
+                            lesson_id: moduleLessons[moduleLessons.length - 1].id,
+                            score: 100 // Puntuación por completar módulo
+                        }
                     );
                     
                     // Actualizar estado local
@@ -1389,7 +1421,7 @@ IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`;
                             challenge_completed: true,
                             challenge_completed_at: new Date().toISOString(),
                             challenge_score: data.score || 100, // Puntuación opcional
-                            status: PROGRESS_STATUS.COMPLETED
+                            score: data.score || 100, // Guardar también en campo principal
                         };
                         
                         await saveProgress(
@@ -2653,83 +2685,77 @@ IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`;
                               </div>
                               
                               {/* Vista paginada - 4 preguntas por página */}
-                              {currentPage === 1 && (
-                                  <div className="space-y-6">
-                                      {quizQuestions.slice(0, 4).map((question) => (
-                                          <div key={question.id} id={`question-${question.id}`} className="bg-white border border-slate-100 rounded-xl p-5">
-                                              <div className="flex items-center justify-between mb-3">
-                                                  <h4 className="text-base font-semibold text-[#00374A]">
-                                                      {question.id.replace('q', '')}. {question.question}
-                                                  </h4>
-                                                  <span className={`text-xs px-2 py-1 rounded-full ${
-                                                      question.difficulty === 'fácil' ? 'bg-emerald-100 text-emerald-700' :
-                                                      question.difficulty === 'medio' ? 'bg-amber-100 text-amber-700' :
-                                                      'bg-red-100 text-red-700'
-                                                  }`}>
-                                                      {question.difficulty}
-                                                  </span>
-                                              </div>
-                                              <div className="space-y-2">
-                                                  {question.options.map((option) => (
-                                                      <label key={option.id} className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-lg cursor-pointer">
-                                                          <input
-                                                              type="radio"
-                                                              name={question.id}
-                                                              value={option.id}
-                                                              checked={quizAnswers[question.id] === option.id}
-                                                              onChange={() => handleButtonClick('UPDATE_QUIZ_ANSWER', { 
-                                                                  questionId: question.id, 
-                                                                  answer: option.id 
-                                                              })}
-                                                              className="w-4 h-4 text-[#00BCD4] focus:ring-[#00BCD4]"
-                                                          />
-                                                          <span className="text-sm text-slate-700">{option.label}</span>
-                                                      </label>
-                                                  ))}
-                                              </div>
-                                          </div>
-                                      ))}
-                                  </div>
-                              )}
+                               {currentPage === 1 && (
+                                   <div className="space-y-6">
+                                       {quizQuestions.slice(0, 4).map((question) => (
+                                           <div key={question.id} id={`question-${question.id}`} className="bg-white border border-slate-100 rounded-xl p-5">
+                                               <div className="flex items-center justify-between mb-3">
+                                                   <h4 className="text-base font-semibold text-[#00374A]">
+                                                       {question.id.replace('q', '')}. {question.question}
+                                                   </h4>
+                                                   <span className="text-xs font-medium px-2 py-1 bg-[#00BCD4]/10 text-[#00BCD4] rounded-full">
+                                                       1 punto
+                                                   </span>
+                                               </div>
+                                               <div className="space-y-2">
+                                                   {question.options.map((option) => (
+                                                       <label key={option.id} htmlFor={`quiz-${question.id}-${option.id}`} className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-lg cursor-pointer">
+                                                           <input
+                                                               type="radio"
+                                                               id={`quiz-${question.id}-${option.id}`}
+                                                               name={question.id}
+                                                               value={option.id}
+                                                               checked={quizAnswers[question.id] === option.id}
+                                                               onChange={() => handleButtonClick('UPDATE_QUIZ_ANSWER', { 
+                                                                   questionId: question.id, 
+                                                                   answer: option.id 
+                                                               })}
+                                                               className="w-4 h-4 text-[#00BCD4] focus:ring-[#00BCD4]"
+                                                           />
+                                                           <span className="text-sm text-slate-700">{option.label}</span>
+                                                       </label>
+                                                   ))}
+                                               </div>
+                                           </div>
+                                       ))}
+                                   </div>
+                               )}
 
-                              {currentPage === 2 && (
-                                  <div className="space-y-6">
-                                      {quizQuestions.slice(4, 8).map((question) => (
-                                          <div key={question.id} id={`question-${question.id}`} className="bg-white border border-slate-100 rounded-xl p-5">
-                                              <div className="flex items-center justify-between mb-3">
-                                                  <h4 className="text-base font-semibold text-[#00374A]">
-                                                      {question.id.replace('q', '')}. {question.question}
-                                                  </h4>
-                                                  <span className={`text-xs px-2 py-1 rounded-full ${
-                                                      question.difficulty === 'fácil' ? 'bg-emerald-100 text-emerald-700' :
-                                                      question.difficulty === 'medio' ? 'bg-amber-100 text-amber-700' :
-                                                      'bg-red-100 text-red-700'
-                                                  }`}>
-                                                      {question.difficulty}
-                                                  </span>
-                                              </div>
-                                              <div className="space-y-2">
-                                                  {question.options.map((option) => (
-                                                      <label key={option.id} className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-lg cursor-pointer">
-                                                          <input
-                                                              type="radio"
-                                                              name={question.id}
-                                                              value={option.id}
-                                                              checked={quizAnswers[question.id] === option.id}
-                                                              onChange={() => handleButtonClick('UPDATE_QUIZ_ANSWER', { 
-                                                                  questionId: question.id, 
-                                                                  answer: option.id 
-                                                              })}
-                                                              className="w-4 h-4 text-[#00BCD4] focus:ring-[#00BCD4]"
-                                                          />
-                                                          <span className="text-sm text-slate-700">{option.label}</span>
-                                                      </label>
-                                                  ))}
-                                              </div>
-                                          </div>
-                                      ))}
-                                  </div>
-                              )}
+                                {currentPage === 2 && (
+                                    <div className="space-y-6">
+                                        {quizQuestions.slice(4, 8).map((question) => (
+                                            <div key={question.id} id={`question-${question.id}`} className="bg-white border border-slate-100 rounded-xl p-5">
+                                                <div className="flex items-center justify-between mb-3">
+                                                    <h4 className="text-base font-semibold text-[#00374A]">
+                                                        {question.id.replace('q', '')}. {question.question}
+                                                    </h4>
+                                                    <span className="text-xs font-medium px-2 py-1 bg-[#00BCD4]/10 text-[#00BCD4] rounded-full">
+                                                        1 punto
+                                                    </span>
+                                                </div>
+                                                <div className="space-y-2">
+                                                    {question.options.map((option) => (
+                                                        <label key={option.id} htmlFor={`quiz-${question.id}-${option.id}`} className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-lg cursor-pointer">
+                                                            <input
+                                                                type="radio"
+                                                                id={`quiz-${question.id}-${option.id}`}
+                                                                name={question.id}
+                                                                value={option.id}
+                                                                checked={quizAnswers[question.id] === option.id}
+                                                                onChange={() => handleButtonClick('UPDATE_QUIZ_ANSWER', { 
+                                                                    questionId: question.id, 
+                                                                    answer: option.id 
+                                                                })}
+                                                                className="w-4 h-4 text-[#00BCD4] focus:ring-[#00BCD4]"
+                                                            />
+                                                            <span className="text-sm text-slate-700">{option.label}</span>
+                                                        </label>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
 
                               {/* Navegación entre páginas */}
                               <div className="flex justify-between items-center mt-8 pt-6 border-t">

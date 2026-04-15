@@ -139,62 +139,83 @@ const LeadCaptureModal = ({ isOpen, onClose, onSubmit, context }) => {
               </p>
             </div>
 
-            <form onSubmit={handleSubmit}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                <input
-                  type="text"
-                  name="nombre"
-                  value={formData.nombre}
-                  onChange={handleChange}
-                  placeholder="Tu nombre completo"
-                  style={{
-                    width: '100%',
-                    padding: '0.75rem 1rem',
-                    border: '1px solid #E2E8F0',
-                    borderRadius: '8px',
-                    fontSize: '0.9rem',
-                    outline: 'none',
-                    transition: 'border-color 0.2s'
-                  }}
-                  onFocus={(e) => e.target.style.borderColor = '#4DA8C4'}
-                  onBlur={(e) => e.target.style.borderColor = '#E2E8F0'}
-                />
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="Tu correo electrónico"
-                  style={{
-                    width: '100%',
-                    padding: '0.75rem 1rem',
-                    border: '1px solid #E2E8F0',
-                    borderRadius: '8px',
-                    fontSize: '0.9rem',
-                    outline: 'none',
-                    transition: 'border-color 0.2s'
-                  }}
-                  onFocus={(e) => e.target.style.borderColor = '#4DA8C4'}
-                  onBlur={(e) => e.target.style.borderColor = '#E2E8F0'}
-                />
-                <input
-                  type="tel"
-                  name="telefono"
-                  value={formData.telefono}
-                  onChange={handleChange}
-                  placeholder="Tu número de teléfono (opcional)"
-                  style={{
-                    width: '100%',
-                    padding: '0.75rem 1rem',
-                    border: '1px solid #E2E8F0',
-                    borderRadius: '8px',
-                    fontSize: '0.9rem',
-                    outline: 'none',
-                    transition: 'border-color 0.2s'
-                  }}
-                  onFocus={(e) => e.target.style.borderColor = '#4DA8C4'}
-                  onBlur={(e) => e.target.style.borderColor = '#E2E8F0'}
-                />
+             <form onSubmit={handleSubmit}>
+               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                 <div>
+                   <label htmlFor="lead-nombre" style={{ display: 'block', marginBottom: '0.25rem', fontSize: '0.875rem', color: '#004B63', fontWeight: '500' }}>
+                     Nombre completo *
+                   </label>
+                   <input
+                     type="text"
+                     id="lead-nombre"
+                     name="nombre"
+                     value={formData.nombre}
+                     onChange={handleChange}
+                     placeholder="Tu nombre completo"
+                     style={{
+                       width: '100%',
+                       padding: '0.75rem 1rem',
+                       border: '1px solid #E2E8F0',
+                       borderRadius: '8px',
+                       fontSize: '0.9rem',
+                       outline: 'none',
+                       transition: 'border-color 0.2s'
+                     }}
+                     onFocus={(e) => e.target.style.borderColor = '#4DA8C4'}
+                     onBlur={(e) => e.target.style.borderColor = '#E2E8F0'}
+                     autoComplete="name"
+                   />
+                 </div>
+                 <div>
+                   <label htmlFor="lead-email" style={{ display: 'block', marginBottom: '0.25rem', fontSize: '0.875rem', color: '#004B63', fontWeight: '500' }}>
+                     Correo electrónico *
+                   </label>
+                   <input
+                     type="email"
+                     id="lead-email"
+                     name="email"
+                     value={formData.email}
+                     onChange={handleChange}
+                     placeholder="Tu correo electrónico"
+                     style={{
+                       width: '100%',
+                       padding: '0.75rem 1rem',
+                       border: '1px solid #E2E8F0',
+                       borderRadius: '8px',
+                       fontSize: '0.9rem',
+                       outline: 'none',
+                       transition: 'border-color 0.2s'
+                     }}
+                     onFocus={(e) => e.target.style.borderColor = '#4DA8C4'}
+                     onBlur={(e) => e.target.style.borderColor = '#E2E8F0'}
+                     autoComplete="email"
+                   />
+                 </div>
+                 <div>
+                   <label htmlFor="lead-telefono" style={{ display: 'block', marginBottom: '0.25rem', fontSize: '0.875rem', color: '#004B63', fontWeight: '500' }}>
+                     Teléfono (opcional)
+                   </label>
+                   <input
+                     type="tel"
+                     id="lead-telefono"
+                     name="telefono"
+                     value={formData.telefono}
+                     onChange={handleChange}
+                     placeholder="Tu número de teléfono (opcional)"
+                     style={{
+                       width: '100%',
+                       padding: '0.75rem 1rem',
+                       border: '1px solid #E2E8F0',
+                       borderRadius: '8px',
+                       fontSize: '0.9rem',
+                       outline: 'none',
+                       transition: 'border-color 0.2s'
+                     }}
+                     onFocus={(e) => e.target.style.borderColor = '#4DA8C4'}
+                     onBlur={(e) => e.target.style.borderColor = '#E2E8F0'}
+                     autoComplete="tel"
+                   />
+                 </div>
               </div>
 
               <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.25rem' }}>

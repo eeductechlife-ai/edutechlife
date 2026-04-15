@@ -2271,29 +2271,29 @@ function ModalContacto({ onClose }) {
             <div>
               <h4 className="font-bold mb-4" style={{ color: '#004B63' }}>Envíanos un mensaje</h4>
               <form onSubmit={handleSubmit} className="space-y-3">
-                <div>
-                  <label className="block text-sm font-semibold mb-1" style={{ color: '#004B63' }}>Nombre completo</label>
-                  <input type="text" name="nombre" value={formData.nombre} onChange={handleChange} required className="w-full px-4 py-2.5 rounded-xl text-sm" style={{ border: '2px solid #E5E7EB', color: '#004B63', outline: 'none' }} placeholder="Tu nombre" onFocus={(e) => e.target.style.borderColor = '#4DA8C4'} onBlur={(e) => e.target.style.borderColor = '#E5E7EB' } />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold mb-1" style={{ color: '#004B63' }}>Correo electrónico</label>
-                  <input type="email" name="email" value={formData.email} onChange={handleChange} required className="w-full px-4 py-2.5 rounded-xl text-sm" style={{ border: '2px solid #E5E7EB', color: '#004B63', outline: 'none' }} placeholder="tu@email.com" onFocus={(e) => e.target.style.borderColor = '#4DA8C4'} onBlur={(e) => e.target.style.borderColor = '#E5E7EB' } />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold mb-1" style={{ color: '#004B63' }}>Teléfono</label>
-                  <input type="tel" name="telefono" value={formData.telefono} onChange={handleChange} className="w-full px-4 py-2.5 rounded-xl text-sm" style={{ border: '2px solid #E5E7EB', color: '#004B63', outline: 'none' }} placeholder="300 123 4567" onFocus={(e) => e.target.style.borderColor = '#4DA8C4'} onBlur={(e) => e.target.style.borderColor = '#E5E7EB' } />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold mb-1" style={{ color: '#004B63' }}>Motivo de contacto</label>
-                  <select name="motivo" value={formData.motivo} onChange={handleChange} className="w-full px-4 py-2.5 rounded-xl text-sm bg-white" style={{ border: '2px solid #E5E7EB', color: '#004B63', outline: 'none' }} onFocus={(e) => e.target.style.borderColor = '#4DA8C4'} onBlur={(e) => e.target.style.borderColor = '#E5E7EB' }>
-                    <option value="">Selecciona un motivo</option>
-                    <option value="informacion">Información sobre servicios</option>
-                    <option value="diagnostico">Diagnóstico VAK</option>
-                    <option value="cursos">Cursos STEAM</option>
-                    <option value="consultoria">Consultoría B2B</option>
-                    <option value="otro">Otro</option>
-                  </select>
-                </div>
+                 <div>
+                   <label htmlFor="footer-nombre" className="block text-sm font-semibold mb-1" style={{ color: '#004B63' }}>Nombre completo</label>
+                   <input type="text" id="footer-nombre" name="nombre" value={formData.nombre} onChange={handleChange} required className="w-full px-4 py-2.5 rounded-xl text-sm" style={{ border: '2px solid #E5E7EB', color: '#004B63', outline: 'none' }} placeholder="Tu nombre" onFocus={(e) => e.target.style.borderColor = '#4DA8C4'} onBlur={(e) => e.target.style.borderColor = '#E5E7EB' } autoComplete="name" />
+                 </div>
+                 <div>
+                   <label htmlFor="footer-email" className="block text-sm font-semibold mb-1" style={{ color: '#004B63' }}>Correo electrónico</label>
+                   <input type="email" id="footer-email" name="email" value={formData.email} onChange={handleChange} required className="w-full px-4 py-2.5 rounded-xl text-sm" style={{ border: '2px solid #E5E7EB', color: '#004B63', outline: 'none' }} placeholder="tu@email.com" onFocus={(e) => e.target.style.borderColor = '#4DA8C4'} onBlur={(e) => e.target.style.borderColor = '#E5E7EB' } autoComplete="email" />
+                 </div>
+                 <div>
+                   <label htmlFor="footer-telefono" className="block text-sm font-semibold mb-1" style={{ color: '#004B63' }}>Teléfono</label>
+                   <input type="tel" id="footer-telefono" name="telefono" value={formData.telefono} onChange={handleChange} className="w-full px-4 py-2.5 rounded-xl text-sm" style={{ border: '2px solid #E5E7EB', color: '#004B63', outline: 'none' }} placeholder="300 123 4567" onFocus={(e) => e.target.style.borderColor = '#4DA8C4'} onBlur={(e) => e.target.style.borderColor = '#E5E7EB' } autoComplete="tel" />
+                 </div>
+                 <div>
+                   <label htmlFor="footer-motivo" className="block text-sm font-semibold mb-1" style={{ color: '#004B63' }}>Motivo de contacto</label>
+                   <select id="footer-motivo" name="motivo" value={formData.motivo} onChange={handleChange} className="w-full px-4 py-2.5 rounded-xl text-sm bg-white" style={{ border: '2px solid #E5E7EB', color: '#004B63', outline: 'none' }} onFocus={(e) => e.target.style.borderColor = '#4DA8C4'} onBlur={(e) => e.target.style.borderColor = '#E5E7EB' }>
+                     <option value="">Selecciona un motivo</option>
+                     <option value="informacion">Información sobre servicios</option>
+                     <option value="diagnostico">Diagnóstico VAK</option>
+                     <option value="cursos">Cursos STEAM</option>
+                     <option value="consultoria">Consultoría B2B</option>
+                     <option value="otro">Otro</option>
+                   </select>
+                 </div>
                 <button type="submit" className="w-full py-3 font-semibold rounded-xl transition-all duration-300" style={{ background: 'linear-gradient(to right, #004B63, #4DA8C4)', color: '#FFFFFF', boxShadow: '0 4px 15px rgba(77, 168, 196, 0.3)' }} onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 6px 20px rgba(77, 168, 196, 0.5)'} onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 4px 15px rgba(77, 168, 196, 0.3)'}>
                   Enviar mensaje
                 </button>

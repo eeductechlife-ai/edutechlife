@@ -56,39 +56,43 @@ const SmartBoardLogin = ({ onLogin }) => {
           </div>
 
           <form onSubmit={handleSubmit} className="p-8 space-y-6">
-            {/* Username */}
-            <div>
-              <label className="block text-sm font-semibold text-[#004B63] font-open-sans mb-2">
-                Usuario
-              </label>
-              <div className="relative">
-                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#64748B]" />
-                <input
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder="Ingresa tu usuario"
-                  className="w-full pl-12 pr-4 py-3 rounded-xl border border-[#E2E8F0] focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] font-open-sans transition-all"
-                  required
-                />
-              </div>
-            </div>
+             {/* Username */}
+             <div>
+               <label htmlFor="smartboard-username" className="block text-sm font-semibold text-[#004B63] font-open-sans mb-2">
+                 Usuario
+               </label>
+               <div className="relative">
+                 <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#64748B]" />
+                 <input
+                   type="text"
+                   id="smartboard-username"
+                   value={username}
+                   onChange={(e) => setUsername(e.target.value)}
+                   placeholder="Ingresa tu usuario"
+                   className="w-full pl-12 pr-4 py-3 rounded-xl border border-[#E2E8F0] focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] font-open-sans transition-all"
+                   required
+                   autoComplete="username"
+                 />
+               </div>
+             </div>
 
-            {/* Password */}
-            <div>
-              <label className="block text-sm font-semibold text-[#004B63] font-open-sans mb-2">
-                Contraseña
-              </label>
-              <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#64748B]" />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Ingresa tu contraseña"
-                  className="w-full pl-12 pr-12 py-3 rounded-xl border border-[#E2E8F0] focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] font-open-sans transition-all"
-                  required
-                />
+             {/* Password */}
+             <div>
+               <label htmlFor="smartboard-password" className="block text-sm font-semibold text-[#004B63] font-open-sans mb-2">
+                 Contraseña
+               </label>
+               <div className="relative">
+                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#64748B]" />
+                 <input
+                   type={showPassword ? 'text' : 'password'}
+                   id="smartboard-password"
+                   value={password}
+                   onChange={(e) => setPassword(e.target.value)}
+                   placeholder="Ingresa tu contraseña"
+                   className="w-full pl-12 pr-12 py-3 rounded-xl border border-[#E2E8F0] focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] font-open-sans transition-all"
+                   required
+                   autoComplete="current-password"
+                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}

@@ -411,94 +411,105 @@ const Consultoria = ({ onBack }) => {
                             ) : (
                                 <>
                                     <div className="form-row">
-                                        <div className="form-field">
-                                            <label>Nombre Completo *</label>
-                                            <input
-                                                type="text"
-                                                placeholder="Ej: Juan Pérez"
-                                                value={contactForm.nombre}
-                                                onChange={(e) => setContactForm({...contactForm, nombre: e.target.value})}
-                                                className={formErrors.nombre ? 'error' : ''}
-                                            />
-                                            {formErrors.nombre && <span className="field-error">{formErrors.nombre}</span>}
-                                        </div>
-                                        <div className="form-field">
-                                            <label>Empresa / Institución *</label>
-                                            <input
-                                                type="text"
-                                                placeholder="Ej: Colegio San Ignacio"
-                                                value={contactForm.empresa}
-                                                onChange={(e) => setContactForm({...contactForm, empresa: e.target.value})}
-                                                className={formErrors.empresa ? 'error' : ''}
-                                            />
-                                            {formErrors.empresa && <span className="field-error">{formErrors.empresa}</span>}
-                                        </div>
+                                         <div className="form-field">
+                                             <label htmlFor="consultoria-nombre">Nombre Completo *</label>
+                                             <input
+                                                 type="text"
+                                                 id="consultoria-nombre"
+                                                 placeholder="Ej: Juan Pérez"
+                                                 value={contactForm.nombre}
+                                                 onChange={(e) => setContactForm({...contactForm, nombre: e.target.value})}
+                                                 className={formErrors.nombre ? 'error' : ''}
+                                                 autoComplete="name"
+                                             />
+                                             {formErrors.nombre && <span className="field-error">{formErrors.nombre}</span>}
+                                         </div>
+                                         <div className="form-field">
+                                             <label htmlFor="consultoria-empresa">Empresa / Institución *</label>
+                                             <input
+                                                 type="text"
+                                                 id="consultoria-empresa"
+                                                 placeholder="Ej: Colegio San Ignacio"
+                                                 value={contactForm.empresa}
+                                                 onChange={(e) => setContactForm({...contactForm, empresa: e.target.value})}
+                                                 className={formErrors.empresa ? 'error' : ''}
+                                                 autoComplete="organization"
+                                             />
+                                             {formErrors.empresa && <span className="field-error">{formErrors.empresa}</span>}
+                                         </div>
                                     </div>
                                     <div className="form-row">
-                                        <div className="form-field">
-                                            <label>Correo Electrónico *</label>
-                                            <input
-                                                type="email"
-                                                placeholder="Ej: juan@colegio.edu.co"
-                                                value={contactForm.email}
-                                                onChange={(e) => setContactForm({...contactForm, email: e.target.value})}
-                                                className={formErrors.email ? 'error' : ''}
-                                            />
-                                            {formErrors.email && <span className="field-error">{formErrors.email}</span>}
-                                        </div>
-                                        <div className="form-field">
-                                            <label>Teléfono *</label>
-                                            <input
-                                                type="tel"
-                                                placeholder="Ej: +57 300 123 4567"
-                                                value={contactForm.telefono}
-                                                onChange={(e) => setContactForm({...contactForm, telefono: e.target.value})}
-                                                className={formErrors.telefono ? 'error' : ''}
-                                            />
-                                            {formErrors.telefono && <span className="field-error">{formErrors.telefono}</span>}
-                                        </div>
+                                         <div className="form-field">
+                                             <label htmlFor="consultoria-email">Correo Electrónico *</label>
+                                             <input
+                                                 type="email"
+                                                 id="consultoria-email"
+                                                 placeholder="Ej: juan@colegio.edu.co"
+                                                 value={contactForm.email}
+                                                 onChange={(e) => setContactForm({...contactForm, email: e.target.value})}
+                                                 className={formErrors.email ? 'error' : ''}
+                                                 autoComplete="email"
+                                             />
+                                             {formErrors.email && <span className="field-error">{formErrors.email}</span>}
+                                         </div>
+                                         <div className="form-field">
+                                             <label htmlFor="consultoria-telefono">Teléfono *</label>
+                                             <input
+                                                 type="tel"
+                                                 id="consultoria-telefono"
+                                                 placeholder="Ej: +57 300 123 4567"
+                                                 value={contactForm.telefono}
+                                                 onChange={(e) => setContactForm({...contactForm, telefono: e.target.value})}
+                                                 className={formErrors.telefono ? 'error' : ''}
+                                                 autoComplete="tel"
+                                             />
+                                             {formErrors.telefono && <span className="field-error">{formErrors.telefono}</span>}
+                                         </div>
                                     </div>
                                     <div className="form-row">
-                                        <div className="form-field">
-                                            <label>Tamaño de Organización</label>
-                                            <select
-                                                value={contactForm.tamano}
-                                                onChange={(e) => setContactForm({...contactForm, tamano: e.target.value})}
-                                            >
-                                                <option value="">Selecciona...</option>
-                                                <option value="micro">Micro (1-10 empleados)</option>
-                                                <option value="pequeña">Pequeña (11-50 empleados)</option>
-                                                <option value="mediana">Mediana (51-200 empleados)</option>
-                                                <option value="grande">Grande (201+ empleados)</option>
-                                            </select>
-                                        </div>
-                                        <div className="form-field">
-                                            <label>Servicio de Interés *</label>
-                                            <select
-                                                value={contactForm.servicio}
-                                                onChange={(e) => setContactForm({...contactForm, servicio: e.target.value})}
-                                                className={formErrors.servicio ? 'error' : ''}
-                                            >
-                                                <option value="">Selecciona...</option>
-                                                <option value="Agentes de IA Personalizados">Agentes de IA Personalizados</option>
-                                                <option value="Capacitación STEAM">Capacitación STEAM</option>
-                                                <option value="Consultoría Estratégica">Consultoría Estratégica</option>
-                                                <option value="Paquete Completo">Paquete Completo</option>
-                                            </select>
-                                            {formErrors.servicio && <span className="field-error">{formErrors.servicio}</span>}
-                                        </div>
+                                         <div className="form-field">
+                                             <label htmlFor="consultoria-tamano">Tamaño de Organización</label>
+                                             <select
+                                                 id="consultoria-tamano"
+                                                 value={contactForm.tamano}
+                                                 onChange={(e) => setContactForm({...contactForm, tamano: e.target.value})}
+                                             >
+                                                 <option value="">Selecciona...</option>
+                                                 <option value="micro">Micro (1-10 empleados)</option>
+                                                 <option value="pequeña">Pequeña (11-50 empleados)</option>
+                                                 <option value="mediana">Mediana (51-200 empleados)</option>
+                                                 <option value="grande">Grande (201+ empleados)</option>
+                                             </select>
+                                         </div>
+                                         <div className="form-field">
+                                             <label htmlFor="consultoria-servicio">Servicio de Interés *</label>
+                                             <select
+                                                 id="consultoria-servicio"
+                                                 value={contactForm.servicio}
+                                                 onChange={(e) => setContactForm({...contactForm, servicio: e.target.value})}
+                                                 className={formErrors.servicio ? 'error' : ''}
+                                             >
+                                                 <option value="">Selecciona...</option>
+                                                 <option value="Agentes de IA Personalizados">Agentes de IA Personalizados</option>
+                                                 <option value="Capacitación STEAM">Capacitación STEAM</option>
+                                                 <option value="Consultoría Estratégica">Consultoría Estratégica</option>
+                                                 <option value="Paquete Completo">Paquete Completo</option>
+                                             </select>
+                                             {formErrors.servicio && <span className="field-error">{formErrors.servicio}</span>}
+                                         </div>
                                     </div>
-                                    <div className="form-field">
-                                        <label>¿En qué podemos ayudarte? *</label>
-                                        <textarea
-                                            placeholder="Cuéntanos sobre tu organización y qué objetivos quieres alcanzar..."
-                                            rows={4}
-                                            value={contactForm.mensaje}
-                                            onChange={(e) => setContactForm({...contactForm, mensaje: e.target.value})}
-                                            className={formErrors.mensaje ? 'error' : ''}
-                                        />
-                                        {formErrors.mensaje && <span className="field-error">{formErrors.mensaje}</span>}
-                                    </div>
+                                     <div className="form-field">
+                                         <label htmlFor="consultoria-mensaje">¿En qué podemos ayudarte? *</label>
+                                         <textarea
+                                             id="consultoria-mensaje"
+                                             placeholder="Cuéntanos sobre tu organización y qué objetivos quieres alcanzar..."
+                                             rows={4}
+                                             value={contactForm.mensaje}
+                                             onChange={(e) => setContactForm({...contactForm, mensaje: e.target.value})}
+                                             className={formErrors.mensaje ? 'error' : ''}
+                                         />
+                                         {formErrors.mensaje && <span className="field-error">{formErrors.mensaje}</span>}
+                                     </div>
                                     <button type="submit" className="submit-btn">
                                         <span>Enviar Solicitud</span>
                                          <Icon name="fa-paper-plane" />

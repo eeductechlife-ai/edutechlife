@@ -187,120 +187,126 @@ const ChangePasswordModal = ({ onClose, onSuccess }) => {
 
           {/* Formulario */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Contraseña Actual */}
-            <div>
-              <label className="block text-sm font-medium text-[#004B63] mb-1">
-                Contraseña Actual
-              </label>
-              <div className="relative">
-                 <input
-                  type={showCurrentPassword ? 'text' : 'password'}
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                  className="w-full px-3 py-2.5 border border-[#E2E8F0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:border-transparent pr-10 text-sm"
-                  placeholder="Ingresa tu contraseña actual"
-                  disabled={loading}
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#64748B] hover:text-[#004B63]"
-                  disabled={loading}
-                >
-                  <Icon name={showCurrentPassword ? 'fa-eye-slash' : 'fa-eye'} />
-                </button>
-              </div>
-            </div>
+             {/* Contraseña Actual */}
+             <div>
+               <label htmlFor="password-current" className="block text-sm font-medium text-[#004B63] mb-1">
+                 Contraseña Actual
+               </label>
+               <div className="relative">
+                  <input
+                   type={showCurrentPassword ? 'text' : 'password'}
+                   id="password-current"
+                   value={currentPassword}
+                   onChange={(e) => setCurrentPassword(e.target.value)}
+                   className="w-full px-3 py-2.5 border border-[#E2E8F0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:border-transparent pr-10 text-sm"
+                   placeholder="Ingresa tu contraseña actual"
+                   disabled={loading}
+                   required
+                   autoComplete="current-password"
+                 />
+                 <button
+                   type="button"
+                   onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#64748B] hover:text-[#004B63]"
+                   disabled={loading}
+                 >
+                   <Icon name={showCurrentPassword ? 'fa-eye-slash' : 'fa-eye'} />
+                 </button>
+               </div>
+             </div>
 
-            {/* Nueva Contraseña */}
-            <div>
-              <label className="block text-sm font-medium text-[#004B63] mb-1">
-                Nueva Contraseña
-              </label>
-              <div className="relative">
-                 <input
-                  type={showNewPassword ? 'text' : 'password'}
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  className="w-full px-3 py-2.5 border border-[#E2E8F0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:border-transparent pr-10 text-sm"
-                  placeholder="Mínimo 8 caracteres, mayúscula, minúscula, número y especial"
-                  disabled={loading}
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowNewPassword(!showNewPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#64748B] hover:text-[#004B63]"
-                  disabled={loading}
-                >
-                  <Icon name={showNewPassword ? 'fa-eye-slash' : 'fa-eye'} />
-                </button>
-              </div>
-              
-              {/* Indicador de fortaleza */}
-              {newPassword && (
-                <div className="mt-2">
-                  <div className="flex justify-between text-xs mb-1">
-                    <span className="text-[#64748B]">Fortaleza:</span>
-                    <span className="font-medium" style={{ color: getStrengthColor() }}>
-                      {getStrengthText()}
-                    </span>
-                  </div>
-                  <div className="w-full bg-[#E2E8F0] rounded-full h-2">
-                    <div 
-                      className="h-2 rounded-full transition-all duration-300"
-                      style={{ 
-                        width: `${passwordStrength}%`,
-                        backgroundColor: getStrengthColor()
-                      }}
-                    ></div>
-                  </div>
+              {/* Nueva Contraseña */}
+              <div>
+                <label htmlFor="password-new" className="block text-sm font-medium text-[#004B63] mb-1">
+                  Nueva Contraseña
+                </label>
+                <div className="relative">
+                   <input
+                    type={showNewPassword ? 'text' : 'password'}
+                    id="password-new"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    className="w-full px-3 py-2.5 border border-[#E2E8F0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:border-transparent pr-10 text-sm"
+                    placeholder="Mínimo 8 caracteres, mayúscula, minúscula, número y especial"
+                    disabled={loading}
+                    required
+                    autoComplete="new-password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowNewPassword(!showNewPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#64748B] hover:text-[#004B63]"
+                    disabled={loading}
+                  >
+                    <Icon name={showNewPassword ? 'fa-eye-slash' : 'fa-eye'} />
+                  </button>
                 </div>
-              )}
-            </div>
-
-            {/* Confirmar Nueva Contraseña */}
-            <div>
-              <label className="block text-sm font-medium text-[#004B63] mb-1">
-                Confirmar Nueva Contraseña
-              </label>
-              <div className="relative">
-                 <input
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full px-3 py-2.5 border border-[#E2E8F0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:border-transparent pr-10 text-sm"
-                  placeholder="Repite la nueva contraseña"
-                  disabled={loading}
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#64748B] hover:text-[#004B63]"
-                  disabled={loading}
-                >
-                  <Icon name={showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'} />
-                </button>
+               
+               {/* Indicador de fortaleza */}
+               {newPassword && (
+                 <div className="mt-2">
+                   <div className="flex justify-between text-xs mb-1">
+                     <span className="text-[#64748B]">Fortaleza:</span>
+                     <span className="font-medium" style={{ color: getStrengthColor() }}>
+                       {getStrengthText()}
+                     </span>
+                   </div>
+                   <div className="w-full bg-[#E2E8F0] rounded-full h-2">
+                     <div 
+                       className="h-2 rounded-full transition-all duration-300"
+                       style={{ 
+                         width: `${passwordStrength}%`,
+                         backgroundColor: getStrengthColor()
+                       }}
+                     ></div>
+                   </div>
+                 </div>
+               )}
               </div>
-              
-              {/* Validación de coincidencia */}
-              {confirmPassword && newPassword !== confirmPassword && (
-                <p className="text-xs text-[#EF4444] mt-1">
-                  <Icon name="fa-exclamation-circle" className="mr-1" />
-                  Las contraseñas no coinciden
-                </p>
-              )}
-              {confirmPassword && newPassword === confirmPassword && (
-                <p className="text-xs text-[#10B981] mt-1">
-                  <Icon name="fa-check-circle" className="mr-1" />
-                  Las contraseñas coinciden
-                </p>
-              )}
-            </div>
 
-            {/* Requisitos de contraseña */}
+             {/* Confirmar Nueva Contraseña */}
+             <div>
+               <label htmlFor="password-confirm" className="block text-sm font-medium text-[#004B63] mb-1">
+                 Confirmar Nueva Contraseña
+               </label>
+               <div className="relative">
+                  <input
+                   type={showConfirmPassword ? 'text' : 'password'}
+                   id="password-confirm"
+                   value={confirmPassword}
+                   onChange={(e) => setConfirmPassword(e.target.value)}
+                   className="w-full px-3 py-2.5 border border-[#E2E8F0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:border-transparent pr-10 text-sm"
+                   placeholder="Repite la nueva contraseña"
+                   disabled={loading}
+                   required
+                   autoComplete="new-password"
+                 />
+                 <button
+                   type="button"
+                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#64748B] hover:text-[#004B63]"
+                   disabled={loading}
+                 >
+                   <Icon name={showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'} />
+                 </button>
+               </div>
+             </div>
+              
+               {/* Validación de coincidencia */}
+               {confirmPassword && newPassword !== confirmPassword && (
+                 <p className="text-xs text-[#EF4444] mt-1">
+                   <Icon name="fa-exclamation-circle" className="mr-1" />
+                   Las contraseñas no coinciden
+                 </p>
+               )}
+               {confirmPassword && newPassword === confirmPassword && (
+                 <p className="text-xs text-[#10B981] mt-1">
+                   <Icon name="fa-check-circle" className="mr-1" />
+                   Las contraseñas coinciden
+                 </p>
+               )}
+
+             {/* Requisitos de contraseña */}
             <div className="bg-[#F8FAFC] p-4 rounded-lg border border-[#E2E8F0]">
               <p className="text-sm font-medium text-[#004B63] mb-2">Requisitos de seguridad:</p>
               <ul className="text-xs text-[#64748B] space-y-1">

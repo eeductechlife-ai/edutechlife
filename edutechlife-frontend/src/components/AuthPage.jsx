@@ -265,46 +265,50 @@ const AuthPage = () => {
                 onSubmit={handleLogin}
                 className="space-y-4"
               >
-                <div>
-                  <label className="block text-white/80 text-sm mb-2 font-medium">
-                    Email
-                  </label>
-                  <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" />
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      placeholder="tu@email.com"
-                      className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent transition-all"
-                    />
-                  </div>
-                </div>
+                 <div>
+                   <label htmlFor="auth-email" className="block text-white/80 text-sm mb-2 font-medium">
+                     Email
+                   </label>
+                   <div className="relative">
+                     <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" />
+                     <input
+                       type="email"
+                       id="auth-email"
+                       name="email"
+                       value={formData.email}
+                       onChange={handleChange}
+                       placeholder="tu@email.com"
+                       className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent transition-all"
+                       autoComplete="email"
+                     />
+                   </div>
+                 </div>
 
-                <div>
-                  <label className="block text-white/80 text-sm mb-2 font-medium">
-                    Contraseña
-                  </label>
-                  <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" />
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      name="password"
-                      value={formData.password}
-                      onChange={handleChange}
-                      placeholder="••••••••"
-                      className="w-full pl-12 pr-12 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent transition-all"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white"
-                    >
-                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                    </button>
-                  </div>
-                </div>
+                 <div>
+                   <label htmlFor="auth-password" className="block text-white/80 text-sm mb-2 font-medium">
+                     Contraseña
+                   </label>
+                   <div className="relative">
+                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" />
+                     <input
+                       type={showPassword ? 'text' : 'password'}
+                       id="auth-password"
+                       name="password"
+                       value={formData.password}
+                       onChange={handleChange}
+                       placeholder="••••••••"
+                       className="w-full pl-12 pr-12 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent transition-all"
+                       autoComplete="current-password"
+                     />
+                     <button
+                       type="button"
+                       onClick={() => setShowPassword(!showPassword)}
+                       className="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white"
+                     >
+                       {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                     </button>
+                   </div>
+                 </div>
 
                 {error && (
                   <div className="p-3 bg-red-500/20 border border-red-500/40 rounded-xl">
@@ -339,56 +343,62 @@ const AuthPage = () => {
                 onSubmit={handleRegister}
                 className="space-y-4"
               >
-                <div>
-                  <label className="block text-white/80 text-sm mb-2 font-medium">
-                    Nombre Completo *
-                  </label>
-                  <div className="relative">
-                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" />
-                    <input
-                      type="text"
-                      name="full_name"
-                      value={formData.full_name}
-                      onChange={handleChange}
-                      placeholder="Tu nombre completo"
-                      className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent transition-all"
-                    />
-                  </div>
-                </div>
+                 <div>
+                   <label htmlFor="auth-full_name" className="block text-white/80 text-sm mb-2 font-medium">
+                     Nombre Completo *
+                   </label>
+                   <div className="relative">
+                     <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" />
+                     <input
+                       type="text"
+                       id="auth-full_name"
+                       name="full_name"
+                       value={formData.full_name}
+                       onChange={handleChange}
+                       placeholder="Tu nombre completo"
+                       className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent transition-all"
+                       autoComplete="name"
+                     />
+                   </div>
+                 </div>
 
-                <div>
-                  <label className="block text-white/80 text-sm mb-2 font-medium">
-                    Email *
-                  </label>
-                  <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" />
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      placeholder="tu@email.com"
-                      className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent transition-all"
-                    />
-                  </div>
-                </div>
+                 <div>
+                   <label htmlFor="auth-email-register" className="block text-white/80 text-sm mb-2 font-medium">
+                     Email *
+                   </label>
+                   <div className="relative">
+                     <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" />
+                     <input
+                       type="email"
+                       id="auth-email-register"
+                       name="email"
+                       value={formData.email}
+                       onChange={handleChange}
+                       placeholder="tu@email.com"
+                       className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent transition-all"
+                       autoComplete="email"
+                     />
+                   </div>
+                 </div>
 
-                <div>
-                  <label className="block text-white/80 text-sm mb-2 font-medium">
-                    Teléfono (WhatsApp)
-                  </label>
-                  <div className="relative">
-                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" />
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      placeholder="+57 300 123 4567"
-                      className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent transition-all"
-                    />
-                  </div>
-                </div>
+                 <div>
+                   <label htmlFor="auth-phone" className="block text-white/80 text-sm mb-2 font-medium">
+                     Teléfono (WhatsApp)
+                   </label>
+                   <div className="relative">
+                     <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" />
+                     <input
+                       type="tel"
+                       id="auth-phone"
+                       name="phone"
+                       value={formData.phone}
+                       onChange={handleChange}
+                       placeholder="+57 300 123 4567"
+                       className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent transition-all"
+                       autoComplete="tel"
+                     />
+                   </div>
+                 </div>
 
                 <div className="bg-yellow-500/20 border border-yellow-500/40 rounded-xl p-3">
                   <p className="text-yellow-200 text-sm text-center">

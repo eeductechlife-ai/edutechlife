@@ -2,90 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { getSafeConfig } from '../lib/clerk-config';
 import { syncUserWithSupabase, setupAutoSync } from '../services/clerk-supabase-sync';
 
-// Importaciones dinámicas para Clerk con ES modules
-let ClerkProvider, useClerk, useUser;
-let isClerkInstalled = false;
-let clerkModule = null;
+// Importar Clerk directamente (ya está instalado como dependencia)
+import { ClerkProvider, useClerk, useUser } from '@clerk/react';
 
-// Función para cargar script desde CDN
-const loadScript = (src) => {
-  return new Promise((resolve, reject) => {
-    if (document.querySelector(`script[src="${src}"]`)) {
-      resolve();
-      return;
-    }
-    
-    const script = document.createElement('script');
-    script.src = src;
-    script.async = true;
-    script.onload = () => resolve();
-    script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
-    document.head.appendChild(script);
-  });
-};
-
-// Función para cargar Clerk dinámicamente
-const loadClerk = async () => {
-  try {
-    // Primero intentar cargar desde CDN oficial si no está disponible
-    if (!window.Clerk) {
-      try {
-        console.log('📦 Cargando Clerk desde CDN oficial...');
-        await loadScript('https://cdn.jsdelivr.net/npm/@clerk/clerk-js@6/dist/clerk.browser.js');
-        console.log('✅ Clerk cargado desde CDN');
-      } catch (cdnError) {
-        console.warn('⚠ No se pudo cargar Clerk desde CDN:', cdnError.message);
-      }
-    }
-    
-    // Intentar importar Clerk como ES module
-    clerkModule = await import('@clerk/react');
-    ClerkProvider = clerkModule.ClerkProvider;
-    useClerk = clerkModule.useClerk;
-    useUser = clerkModule.useUser;
-    isClerkInstalled = true;
-    console.log('✅ Clerk está instalado y listo (ES module)');
-    return true;
-  } catch (error) {
-    console.warn('⚠ Clerk no está disponible, usando modo simulación:', error.message);
-    return false;
-  }
-};
-
-// Componentes de simulación para desarrollo
-const MockClerkProvider = ({ children, ...props }) => {
-  console.log('ClerkProvider (simulación) renderizado');
-  return <>{children}</>;
-};
-
-const mockUseClerk = () => {
-  console.log('useClerk (simulación) llamado');
-  return {
-    addListener: () => console.log('addListener (simulación) llamado'),
-    signOut: async () => {
-      console.log('signOut (simulación) llamado');
-      return Promise.resolve();
-    },
-    openUserProfile: () => {
-      console.log('openUserProfile (simulación) llamado');
-      window.alert('Perfil de usuario - Funcionalidad en desarrollo con Clerk');
-    },
-  };
-};
-
-const mockUseUser = () => {
-  console.log('useUser (simulación) llamado');
-  return { 
-    user: null, 
-    isLoaded: true, 
-    isSignedIn: false 
-  };
-};
-
-// Inicializar con valores por defecto
-ClerkProvider = MockClerkProvider;
-useClerk = mockUseClerk;
-useUser = mockUseUser;
+let isClerkInstalled = true; // Asumir que está instalado ya que es una dependencia
 
 /**
  * Provider wrapper que integra Clerk con el sistema existente de Supabase
@@ -97,23 +17,35 @@ useUser = mockUseUser;
  */
 const ClerkProviderWrapper = ({ children }) => {
   const config = getSafeConfig();
-  const [isClerkLoaded, setIsClerkLoaded] = useState(false);
   
-  // Cargar Clerk dinámicamente al montar el componente
-  useEffect(() => {
-    const initializeClerk = async () => {
-      const loaded = await loadClerk();
-      setIsClerkLoaded(loaded);
-    };
+  // Verificar críticamente que la publishableKey esté presente
+  if (!config.publishableKey || !config.publishableKey.startsWith('pk_')) {
+    console.error('❌ ERROR CRÍTICO: Clerk publishableKey no válida o faltante');
+    console.error('Configuración recibida:', config);
+    console.error('Por favor, verifica que:');
+    console.error('1. El archivo .env.local existe en la raíz del proyecto');
+    console.error('2. Contiene: VITE_CLERK_PUBLISHABLE_KEY=pk_test_c3RhYmxlLW1pbmstNzEuY2xlcmsuYWNjb3VudHMuZGV2JA');
+    console.error('3. El servidor de desarrollo se reinició después de crear el archivo');
     
-    initializeClerk();
-  }, []);
-  
-  // Si Clerk no está cargado, usar modo simulación
-  if (!isClerkLoaded) {
-    console.log('Usando modo simulación de Clerk');
+    // Mostrar un mensaje de error en UI para desarrollo
+    return (
+      <div className="p-4 bg-red-50 border border-red-200 rounded-lg m-4">
+        <h2 className="text-red-800 font-bold">Error de Configuración Clerk</h2>
+        <p className="text-red-700 text-sm mt-2">
+          Falta la publishableKey de Clerk. Verifica el archivo .env.local y reinicia el servidor.
+        </p>
+        <pre className="mt-2 p-2 bg-red-100 text-xs overflow-auto">
+          {JSON.stringify(config, null, 2)}
+        </pre>
+      </div>
+    );
   }
   
+  console.log('✅ Clerk configurado correctamente:', {
+    hasPublishableKey: !!config.publishableKey,
+    keyPreview: config.publishableKey.slice(0, 20) + '...'
+  });
+
   return (
     <ClerkProvider {...config}>
       <ClerkSupabaseBridge>

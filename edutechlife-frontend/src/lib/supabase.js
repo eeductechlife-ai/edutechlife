@@ -28,6 +28,20 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     persistSession: true,
     detectSessionInUrl: true,
   },
+  global: {
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    },
+  },
+  db: {
+    schema: 'public',
+  },
 });
+
+// Hacer disponible globalmente para debugging y acceso directo
+if (typeof window !== 'undefined') {
+  window.supabase = supabase;
+}
 
 export default supabase;
