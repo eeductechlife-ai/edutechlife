@@ -1,11 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Button } from './ui/button-simple';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card-simple';
-import { Icon } from '../utils/iconMapping.jsx';
-import { useAuth } from '../context/AuthContext';
-import { useClerkAuth, getClerkUserInfo } from '../utils/clerk-utils';
+import { useUser, useAuth } from '@clerk/react';
 import UserProfileSmartCard from './UserProfileSmartCard';
-import ChangePasswordModal from './modals/ChangePasswordModal';
+import { useClerkAuth, getClerkUserInfo } from '../utils/clerk-utils';
 
 /**
  * UserDropdownMenuSimplified - Versión simplificada sin dependencias externas
@@ -17,24 +13,19 @@ import ChangePasswordModal from './modals/ChangePasswordModal';
  * 4. Fácil de mantener
  */
 const UserDropdownMenuSimplified = ({ onNavigate }) => {
-  const { user: supabaseUser, profile, signOut } = useAuth();
   const { user: clerkUser, isSignedIn: isClerkSignedIn, signOut: clerkSignOut, openUserProfile } = useClerkAuth();
+  const { user: clerkUserOfficial } = useUser();
+  const { signOut: clerkSignOutOfficial } = useAuth();
   
   const [isOpen, setIsOpen] = useState(false);
-  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const dropdownRef = useRef(null);
   
-  // Determinar qué usuario usar (Clerk tiene prioridad)
-  const activeUser = clerkUser || supabaseUser;
-  const activeProfile = profile;
+  // Clerk es el ÚNICO proveedor de identidad
+  const activeUser = clerkUser || clerkUserOfficial;
   
-  // Obtener información del usuario
-  const userInfo = getClerkUserInfo(clerkUser || {
-    fullName: activeProfile?.full_name || 'Usuario',
-    primaryEmailAddress: { emailAddress: supabaseUser?.email || 'usuario@edutechlife.com' },
-    imageUrl: null,
-  });
+  // Obtener información del usuario exclusivamente de Clerk
+  const userInfo = getClerkUserInfo(activeUser);
   
   // Cerrar dropdown al hacer clic fuera
   useEffect(() => {
@@ -53,13 +44,16 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
     };
   }, [isOpen]);
   
-  // Manejar logout
+  // Manejar logout exclusivamente con Clerk
   const handleLogout = async () => {
     try {
-      if (isClerkSignedIn && clerkSignOut) {
+      // Usar Clerk oficial si está disponible, si no usar nuestro wrapper
+      if (clerkSignOutOfficial) {
+        await clerkSignOutOfficial();
+      } else if (clerkSignOut) {
         await clerkSignOut();
       } else {
-        await signOut();
+        console.error('No hay método de logout disponible');
       }
       
       setIsOpen(false);
@@ -137,9 +131,9 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
             <div className="text-sm font-semibold text-petroleum truncate">
               {userInfo.displayName || 'John Edison'}
             </div>
-            <div className="text-xs text-slate-500 truncate">
-              {activeProfile?.role === 'teacher' ? 'Profesor' : 'Estudiante'}
-            </div>
+             <div className="text-xs text-slate-500 truncate">
+               {userInfo.role === 'teacher' ? 'Profesor' : 'Estudiante'}
+             </div>
           </div>
           
           {/* Icono ChevronDown */}
@@ -173,9 +167,9 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
                     {userInfo.displayEmail}
                   </p>
                   <div className="flex items-center gap-1.5 mt-2">
-                    <span className="text-xs px-2.5 py-1 bg-slate-100 text-slate-700 rounded-full border border-slate-200">
-                      {activeProfile?.role === 'teacher' ? 'Profesor' : 'Estudiante'}
-                    </span>
+                     <span className="text-xs px-2.5 py-1 bg-slate-100 text-slate-700 rounded-full border border-slate-200">
+                       {userInfo.role === 'teacher' ? 'Profesor' : 'Estudiante'}
+                     </span>
                     {isClerkSignedIn && (
                       <span className="text-xs px-2.5 py-1 bg-corporate/10 text-corporate rounded-full border border-corporate/20">
                         Clerk
@@ -277,20 +271,10 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
         onClose={() => setIsProfileOpen(false)}
         onOpenChangePassword={() => {
           setIsProfileOpen(false);
-          setIsChangePasswordOpen(true);
+          // Clerk maneja la gestión de cuenta, incluyendo cambio de contraseña
+          alert('Para gestionar tu cuenta (cambiar contraseña, email, etc.), usa la interfaz de Clerk.');
         }}
       />
-
-      {/* 🔐 Modal de Cambio de Contraseña */}
-      {isChangePasswordOpen && (
-        <ChangePasswordModal
-          onClose={() => setIsChangePasswordOpen(false)}
-          onSuccess={() => {
-            setIsChangePasswordOpen(false);
-            alert('✅ Contraseña cambiada exitosamente');
-          }}
-        />
-      )}
 
 
     </>

@@ -1,0 +1,19 @@
+{
+  "timestamp": "2026-04-16T01:41:00.777Z",
+  "score": 100,
+  "checks": {
+    "envVars": true,
+    "files": true,
+    "sqlSchema": true
+  },
+  "envVars": [
+    "VITE_CLERK_PUBLISHABLE_KEY",
+    "VITE_CLERK_SECRET_KEY",
+    "VITE_SUPABASE_URL",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_SERVICE_ROLE_KEY",
+    "VITE_DEEPSEEK_API_KEY",
+    "VITE_GOOGLE_TTS_API_KEY"
+  ],
+  "nextSteps": "Ejecutar SQL y configurar JWT"
+}

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useUser, useAuth } from '@clerk/react';
 import { 
   DropdownMenu,
   DropdownMenuTrigger,
@@ -13,7 +14,6 @@ import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 import { Icon } from '../utils/iconMapping.jsx';
-import { useAuth } from '../context/AuthContext';
 import { useClerkAuth, getClerkUserInfo } from '../utils/clerk-utils';
 
 /**
@@ -26,30 +26,24 @@ import { useClerkAuth, getClerkUserInfo } from '../utils/clerk-utils';
  * 4. Funcionalidades 100% operativas
  */
 const UserDropdownMenuPremium = ({ onNavigate }) => {
-  const { user: supabaseUser, profile, signOut } = useAuth();
   const { user: clerkUser, isSignedIn: isClerkSignedIn, signOut: clerkSignOut, openUserProfile } = useClerkAuth();
+  const { user: clerkUserOfficial } = useUser();
+  const { signOut: clerkSignOutOfficial } = useAuth();
   
-  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  // Clerk es el ÚNICO proveedor de identidad
+  const activeUser = clerkUser || clerkUserOfficial;
+  const userInfo = getClerkUserInfo(activeUser);
   
-  // Determinar qué usuario usar (Clerk tiene prioridad)
-  const activeUser = clerkUser || supabaseUser;
-  const activeProfile = profile;
-  
-  // Obtener información del usuario
-  const userInfo = getClerkUserInfo(clerkUser || {
-    fullName: activeProfile?.full_name || 'Usuario',
-    primaryEmailAddress: { emailAddress: supabaseUser?.email || 'usuario@edutechlife.com' },
-    imageUrl: null,
-  });
-  
-  // Manejar logout
+  // Manejar logout exclusivamente con Clerk
   const handleLogout = async () => {
     try {
-      if (isClerkSignedIn && clerkSignOut) {
+      // Usar Clerk oficial si está disponible, si no usar nuestro wrapper
+      if (clerkSignOutOfficial) {
+        await clerkSignOutOfficial();
+      } else if (clerkSignOut) {
         await clerkSignOut();
       } else {
-        await signOut();
+        console.error('No hay método de logout disponible');
       }
       
       if (onNavigate) {
@@ -137,7 +131,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
                 </p>
                 <div className="flex items-center gap-1 mt-1">
                   <span className="text-xs px-2 py-0.5 bg-cyan-50 text-[#00BCD4] rounded-full">
-                    {activeProfile?.role === 'teacher' ? 'Profesor' : 'Estudiante'}
+                    {userInfo.role === 'teacher' ? 'Profesor' : 'Estudiante'}
                   </span>
                   {isClerkSignedIn && (
                     <span className="text-xs px-2 py-0.5 bg-green-50 text-green-600 rounded-full">

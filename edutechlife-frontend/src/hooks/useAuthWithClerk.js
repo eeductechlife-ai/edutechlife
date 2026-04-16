@@ -6,30 +6,27 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useClerkAuth } from '../utils/clerk-utils';
 import { useAuth as useSupabaseAuth } from '../context/AuthContext';
-import { supabase } from '../lib/supabase';
-import { 
-  getClerkJWTForSupabase, 
-  mapClerkUserToSupabase,
-  debugClerkJWT 
-} from '../lib/clerk-jwt-config';
+import { useSupabase } from './useSupabase';
+import { mapClerkUserToSupabase } from '../lib/clerk-jwt-config';
 
 /**
  * Hook principal para autenticación unificada
+ * Ahora usa useSupabase() que maneja JWT de Clerk automáticamente
  */
 export const useAuthWithClerk = () => {
   // Hooks individuales
   const clerkAuth = useClerkAuth();
   const supabaseAuth = useSupabaseAuth();
+  const { supabase, isLoading: supabaseLoading, session, debugJWT } = useSupabase();
   
   // Estado unificado
   const [unifiedUser, setUnifiedUser] = useState(null);
   const [unifiedProfile, setUnifiedProfile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [jwtToken, setJwtToken] = useState(null);
 
   /**
-   * Sincroniza usuario de Clerk con Supabase
+   * Sincroniza usuario de Clerk con Supabase usando el nuevo cliente con JWT
    */
   const syncUserWithSupabase = useCallback(async (clerkUser) => {
     if (!clerkUser) {
@@ -41,9 +38,9 @@ export const useAuthWithClerk = () => {
     try {
       setIsLoading(true);
       
-      // Verificar que Clerk esté disponible
-      if (!window.Clerk) {
-        console.warn('⚠️ Clerk no está disponible en window');
+      // Verificar que tenemos cliente Supabase configurado
+      if (!supabase) {
+        console.warn('⚠️ Cliente Supabase no disponible');
         setUnifiedUser(mapClerkUserToSupabase(clerkUser));
         setIsLoading(false);
         return;
@@ -51,41 +48,15 @@ export const useAuthWithClerk = () => {
       
       // Timeout para prevenir bloqueo (10 segundos)
       const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error('Timeout: La sincronización con Clerk tardó demasiado')), 10000);
+        setTimeout(() => reject(new Error('Timeout: La sincronización tardó demasiado')), 10000);
       });
       
       const syncPromise = (async () => {
-        // 1. Obtener token JWT de Clerk
-        let token = null;
-        try {
-          token = await getClerkJWTForSupabase(window.Clerk);
-          setJwtToken(token);
-        } catch (tokenError) {
-          console.warn('No se pudo obtener token JWT de Clerk:', tokenError);
-          // Continuar sin token
-        }
-        
-        // 2. Usar token para autenticarse con Supabase (si existe)
-        if (token) {
-          try {
-            const { data: { session }, error: sessionError } = await supabase.auth.setSession({
-              access_token: token,
-              refresh_token: '',
-            });
-            
-            if (sessionError) {
-              console.error('Error setting Supabase session with Clerk JWT:', sessionError);
-              // Continuar con datos de Clerk aunque falle Supabase
-            }
-          } catch (sessionError) {
-            console.error('Error en setSession de Supabase:', sessionError);
-          }
-        }
-        
-        // 3. Obtener perfil de Supabase usando el user ID de Clerk
         const clerkUserId = clerkUser.id;
         let supabaseProfile = null;
         
+        // 1. Obtener perfil de Supabase usando el user ID de Clerk
+        // NOTA: El cliente supabase ya tiene JWT de Clerk si hay sesión
         if (clerkUserId) {
           try {
             const { data: profileData, error: profileError } = await supabase
@@ -104,7 +75,7 @@ export const useAuthWithClerk = () => {
               supabaseProfile = profileData;
             }
             
-            // 4. Si no existe perfil, crear uno
+            // 2. Si no existe perfil, crear uno
             if (!supabaseProfile) {
               const newProfile = {
                 id: clerkUserId,
@@ -138,7 +109,7 @@ export const useAuthWithClerk = () => {
           }
         }
         
-        // 5. Combinar datos
+        // 3. Combinar datos
         const combinedUser = {
           // Datos de Clerk
           clerkId: clerkUser.id,
@@ -158,7 +129,7 @@ export const useAuthWithClerk = () => {
           // Metadata
           isClerkSignedIn: true,
           hasSupabaseProfile: !!supabaseProfile,
-          jwtToken: token,
+          hasClerkJWT: !!session, // Indica si tenemos JWT de Clerk
         };
         
         setUnifiedUser(combinedUser);
@@ -181,7 +152,7 @@ export const useAuthWithClerk = () => {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [supabase, session]);
 
   /**
    * Manejar sign out unificado
@@ -248,28 +219,28 @@ export const useAuthWithClerk = () => {
         await window.Clerk.user.update(clerkUpdates);
       }
       
-      // Actualizar Supabase si hay cambios
-      if (Object.keys(supabaseUpdates).length > 0 && unifiedUser.clerkId) {
-        const { data, error } = await supabase
-          .from('profiles')
-          .update(supabaseUpdates)
-          .eq('id', unifiedUser.clerkId)
-          .select('id, full_name, phone, email, role, avatar_url, created_at, updated_at')
-          .single();
+        // Actualizar Supabase si hay cambios
+        if (Object.keys(supabaseUpdates).length > 0 && unifiedUser.clerkId && supabase) {
+          const { data, error } = await supabase
+            .from('profiles')
+            .update(supabaseUpdates)
+            .eq('id', unifiedUser.clerkId)
+            .select('id, full_name, phone, email, role, avatar_url, created_at, updated_at')
+            .single();
+            
+          if (error) throw error;
           
-        if (error) throw error;
-        
-        setUnifiedProfile(data);
-        
-        // Actualizar usuario unificado
-        setUnifiedUser(prev => ({
-          ...prev,
-          ...(supabaseUpdates.full_name && { fullName: supabaseUpdates.full_name }),
-          ...(supabaseUpdates.phone && { phone: supabaseUpdates.phone }),
-          ...(supabaseUpdates.role && { role: supabaseUpdates.role }),
-          profileData: data,
-        }));
-      }
+          setUnifiedProfile(data);
+          
+          // Actualizar usuario unificado
+          setUnifiedUser(prev => ({
+            ...prev,
+            ...(supabaseUpdates.full_name && { fullName: supabaseUpdates.full_name }),
+            ...(supabaseUpdates.phone && { phone: supabaseUpdates.phone }),
+            ...(supabaseUpdates.role && { role: supabaseUpdates.role }),
+            profileData: data,
+          }));
+        }
       
       return { success: true };
     } catch (err) {
@@ -292,16 +263,11 @@ export const useAuthWithClerk = () => {
   }, []);
 
   /**
-   * Debuggear integración JWT
+   * Debuggear integración JWT (usa el debugJWT de useSupabase)
    */
-  const debugJWT = useCallback(async () => {
-    if (!window.Clerk) {
-      console.log('Clerk no está disponible en window');
-      return;
-    }
-    
-    return await debugClerkJWT(window.Clerk);
-  }, []);
+  const debugJWTIntegration = useCallback(async () => {
+    return await debugJWT();
+  }, [debugJWT]);
 
   // Efecto para sincronizar cuando cambia el usuario de Clerk
   useEffect(() => {
@@ -353,20 +319,20 @@ export const useAuthWithClerk = () => {
     // Estado
     user: unifiedUser,
     profile: unifiedProfile,
-    isLoading: isLoading || clerkAuth.isLoaded === false,
+    isLoading: isLoading || clerkAuth.isLoaded === false || supabaseLoading,
     error,
-    jwtToken,
     
     // Métodos
     signOut,
     updateProfile,
     changePassword,
-    debugJWT,
+    debugJWT: debugJWTIntegration,
     
     // Flags
     isSignedIn: !!unifiedUser,
     isClerkSignedIn: clerkAuth.isSignedIn,
     hasSupabaseProfile: !!unifiedProfile,
+    hasClerkJWT: !!session,
     
     // Datos específicos (helpers)
     fullName: unifiedUser?.fullName || 'Usuario',
@@ -374,6 +340,9 @@ export const useAuthWithClerk = () => {
     phone: unifiedUser?.phone || '',
     role: unifiedUser?.role || 'student',
     avatarUrl: unifiedUser?.imageUrl || null,
+    
+    // Cliente Supabase con JWT (para uso directo)
+    supabase,
   };
 };
 

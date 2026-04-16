@@ -1,16 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
-import { AuthProvider } from './context/AuthContext'
 import ClerkProviderWrapper from './providers/ClerkProviderWrapper'
+import { AuthProvider } from './context/AuthContext'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <AuthProvider>
-      <ClerkProviderWrapper>
+    <ClerkProviderWrapper>
+      <AuthProvider>
         <App />
-      </ClerkProviderWrapper>
-    </AuthProvider>
+      </AuthProvider>
+    </ClerkProviderWrapper>
   </React.StrictMode>,
 )

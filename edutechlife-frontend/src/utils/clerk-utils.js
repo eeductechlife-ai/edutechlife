@@ -169,12 +169,21 @@ export const getClerkUserInfo = (clerkUser) => {
     return 'usuario@edutechlife.com';
   };
 
+  // Obtener rol de los metadatos públicos
+  const getRole = () => {
+    if (clerkUser.publicMetadata?.role) {
+      return clerkUser.publicMetadata.role;
+    }
+    return 'student'; // Valor por defecto
+  };
+
   return {
     initials: getInitials(),
     displayName: getDisplayName(),
     displayEmail: getDisplayEmail(),
     avatarUrl: clerkUser.imageUrl,
     userId: clerkUser.id,
+    role: getRole(),
   };
 };
 

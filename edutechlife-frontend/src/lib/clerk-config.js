@@ -34,24 +34,11 @@ export const clerkConfig = {
   afterSignInUrl: '/ialab',
   afterSignUpUrl: '/ialab',
   
-  // Appearance personalizado para Edutechlife
+  // Appearance minimalista - Clerk maneja sus propios estilos
   appearance: {
     variables: {
-      colorPrimary: '#004B63', // Azul Petróleo
-      colorTextOnPrimaryBackground: '#FFFFFF',
-      colorText: '#00374A',
-      colorBackground: '#FFFFFF',
-      colorInputBackground: '#F8FAFC',
-      colorInputText: '#00374A',
-      borderRadius: '0.75rem',
-    },
-    elements: {
-      card: 'shadow-lg rounded-2xl border border-slate-100',
-      headerTitle: 'text-[#00374A] font-semibold',
-      headerSubtitle: 'text-slate-500',
-      socialButtonsBlockButton: 'border border-slate-200 hover:bg-cyan-50',
-      formButtonPrimary: 'bg-gradient-to-r from-[#004B63] to-[#00BCD4] hover:opacity-90',
-      footerActionLink: 'text-[#00BCD4] hover:text-[#004B63]',
+      colorPrimary: '#004B63',
+      colorPrimaryHover: '#0A3550',
     }
   }
 };

@@ -23,6 +23,7 @@ const VAKDiagnosis = lazy(() => import('./components/DiagnosticoVAK'));
 const AdminDashboard = lazy(() => import('./components/AdminDashboard'));
 // JWT Integration Test (temporal)
 const JWTIntegrationTestPage = lazy(() => import('./components/test/JWTIntegrationTestPage'));
+const SignUpPage = lazy(() => import('./components/SignUpPage'));
 import NicoModern from './components/Nico/NicoModern';
 import AdminLoginModal from './components/AdminLoginModal';
 import LeadCaptureModal from './components/LeadCaptureModal';
@@ -869,7 +870,7 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
         
         // Si ya pasó el timeout O ya hay usuario O ya no está cargando, mostrar lo que corresponda
         if (!user) {
-            return <WelcomeScreen />;
+            return <WelcomeScreen onNavigate={handleNavigate} />;
         }
         
         return children;
@@ -1235,7 +1236,14 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                      {view === 'jwt-test' && (
                          <JWTIntegrationTestPage onBack={() => handleNavigate('landing')} />
                      )}
-                     
+
+                    {/* Sign Up Page */}
+                    {view === 'sign-up' && (
+                        <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div></div>}>
+                            <SignUpPage onBack={() => handleNavigate('landing')} />
+                        </Suspense>
+                    )}
+                      
                      {/* Auth Callback - Para confirmación de email */}
                      {view === 'auth-callback' && (
                          <AuthCallback />

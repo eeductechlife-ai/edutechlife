@@ -1,16 +1,22 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useUser } from '@clerk/react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card-simple';
-import { useClerkAuth } from '../utils/clerk-utils';
+import { useClerkAuth, getClerkUserInfo } from '../utils/clerk-utils';
 import { supabase } from '../lib/supabase';
 
 const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangePassword }) => {
   const { user: clerkUser, signOut } = useClerkAuth();
+  const { user: clerkUserOfficial } = useUser();
   
-  // Estados del perfil
+  // Clerk es el ÚNICO proveedor de identidad
+  const activeUser = clerkUser || clerkUserOfficial;
+  const userInfo = getClerkUserInfo(activeUser);
+  
+  // Estados del perfil (datos extendidos desde Supabase)
   const [profileData, setProfileData] = useState({
-    full_name: '',
+    full_name: userInfo.displayName || '',
     phone: '',
-    email: ''
+    email: userInfo.displayEmail || ''
   });
   
   // Estado de sincronización
@@ -75,8 +81,8 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangePassword }) => {
 
   // useEffect para cargar datos al abrir el modal
   useEffect(() => {
-    if (!isOpen || !clerkUser?.id) {
-      console.log('⚠️ useEffect: No se ejecuta - isOpen:', isOpen, 'clerkUser?.id:', clerkUser?.id);
+    if (!isOpen || !activeUser?.id) {
+      console.log('⚠️ useEffect: No se ejecuta - isOpen:', isOpen, 'activeUser?.id:', activeUser?.id);
       return;
     }
 
@@ -85,36 +91,39 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangePassword }) => {
       console.log('📥 Iniciando carga de perfil...');
       
       try {
-        // Buscar perfil usando el ID del usuario
-        let profile = await loadProfileFromSupabase(clerkUser.id);
+        // Primero establecer datos básicos de Clerk
+        const clerkData = {
+          full_name: userInfo.displayName || '',
+          email: userInfo.displayEmail || '',
+          phone: ''
+        };
         
-        // Si no existe, crear perfil
-        if (!profile) {
+        // Buscar datos extendidos del perfil desde Supabase (si existe)
+        let extendedProfile = await loadProfileFromSupabase(activeUser.id);
+        
+        // Si no existe, crear perfil con datos de Clerk
+        if (!extendedProfile) {
           console.log('🔄 Perfil no encontrado, creando...');
-          profile = await createProfile(
-            clerkUser.id,
-            clerkUser.emailAddress || clerkUser.primaryEmailAddress?.emailAddress,
-            clerkUser.fullName || ''
+          extendedProfile = await createProfile(
+            activeUser.id,
+            userInfo.displayEmail,
+            userInfo.displayName
           );
         }
         
-        // Actualizar estado con los datos
-        if (profile) {
-          console.log('📝 Actualizando estado con:', profile);
+        // Combinar datos: Clerk (identidad) + Supabase (datos extendidos)
+        if (extendedProfile) {
+          console.log('📝 Actualizando estado con datos combinados');
           setProfileData({
-            full_name: profile.full_name || '',
-            phone: profile.phone || '',
-            email: profile.email || ''
+            full_name: clerkData.full_name || extendedProfile.full_name || '',
+            phone: extendedProfile.phone || '',
+            email: clerkData.email || extendedProfile.email || ''
           });
           setIsSynced(true);
         } else {
-          // Fallback: usar datos de Clerk
-          console.log('⚠️ No se pudo obtener perfil, usando datos de Clerk');
-          setProfileData({
-            full_name: clerkUser.fullName || '',
-            phone: '',
-            email: clerkUser.emailAddress || clerkUser.primaryEmailAddress?.emailAddress || ''
-          });
+          // Usar solo datos de Clerk
+          console.log('⚠️ No se pudo obtener perfil extendido, usando solo datos de Clerk');
+          setProfileData(clerkData);
           setIsSynced(false);
         }
       } catch (err) {
@@ -126,11 +135,11 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangePassword }) => {
     };
 
     loadProfile();
-  }, [isOpen, clerkUser?.id]);
+  }, [isOpen, activeUser?.id, userInfo]);
 
   // Función para guardar campo en Supabase
   const saveField = async (field, value) => {
-    if (!clerkUser?.id) return;
+    if (!activeUser?.id) return;
     
     setIsSaving(true);
     
@@ -150,7 +159,7 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangePassword }) => {
       const { error } = await supabase
         .from('profiles')
         .update(updateData)
-        .eq('id', clerkUser.id);
+        .eq('id', activeUser.id);
       
       if (error) {
         console.log('Error al guardar:', error);
@@ -397,21 +406,23 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangePassword }) => {
               </div>
             </div>
 
-            {/* Sección de acciones */}
-            <div className="sticky bottom-0 bg-white/95 backdrop-blur-md -mx-4 -mb-4 px-4 pb-4 pt-3 border-t border-slate-200/50 mt-4">
-              <div className="space-y-2">
-                <button 
-                  className="w-full flex items-center justify-start px-4 py-2.5 bg-white border border-slate-200 rounded-full hover:bg-slate-50 transition-all"
-                  onClick={() => {
-                    onClose();
-                    onOpenChangePassword();
-                  }}
-                >
-                  <svg className="w-4 h-4 text-[#1e293b] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
-                  </svg>
-                  <span className="text-sm font-medium text-slate-700">Cambiar contraseña</span>
-                </button>
+             {/* Sección de acciones */}
+             <div className="sticky bottom-0 bg-white/95 backdrop-blur-md -mx-4 -mb-4 px-4 pb-4 pt-3 border-t border-slate-200/50 mt-4">
+               <div className="space-y-2">
+                 <button 
+                   className="w-full flex items-center justify-start px-4 py-2.5 bg-white border border-slate-200 rounded-full hover:bg-slate-50 transition-all"
+                   onClick={() => {
+                     onClose();
+                     // En lugar de abrir modal personalizado, Clerk maneja la gestión de cuenta
+                     // Los usuarios pueden cambiar contraseña en su perfil de Clerk
+                     alert('Para cambiar tu contraseña, ve a la configuración de tu cuenta en Clerk.');
+                   }}
+                 >
+                   <svg className="w-4 h-4 text-[#1e293b] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                   </svg>
+                   <span className="text-sm font-medium text-slate-700">Gestionar cuenta (Clerk)</span>
+                 </button>
                 
                 <button 
                   className="w-full flex items-center justify-start px-4 py-2.5 bg-white border border-slate-200 rounded-full hover:bg-red-50 hover:border-red-200 hover:text-red-600 transition-all"

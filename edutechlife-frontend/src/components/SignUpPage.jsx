@@ -1,10 +1,10 @@
-import { SignIn, SignUp } from '@clerk/react';
+import { SignUp } from '@clerk/react';
 import { esES } from '@clerk/localizations';
 import { motion } from 'framer-motion';
 import FloatingParticles from './FloatingParticles';
-import { Brain, CheckCircle } from 'lucide-react';
+import { Brain, CheckCircle, ArrowLeft } from 'lucide-react';
 
-const WelcomeScreen = ({ onNavigate }) => {
+const SignUpPage = ({ onBack }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#004B63] to-[#0A3550] flex items-center justify-center p-4 relative overflow-hidden">
       <FloatingParticles />
@@ -16,6 +16,15 @@ const WelcomeScreen = ({ onNavigate }) => {
           backgroundSize: '100px 100px'
         }} />
       </div>
+
+      {/* Back Button */}
+      <button
+        onClick={onBack}
+        className="absolute top-6 left-6 z-20 flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm text-white rounded-xl hover:bg-white/30 transition-all"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        <span className="text-sm font-medium">Volver</span>
+      </button>
 
       {/* Main Card */}
       <motion.div 
@@ -35,13 +44,13 @@ const WelcomeScreen = ({ onNavigate }) => {
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold">Edutechlife</h1>
-                  <p className="text-white/80 text-sm">Laboratorio IA</p>
+                  <p className="text-white/80 text-sm">Crea tu cuenta</p>
                 </div>
               </div>
 
               {/* Welcome Text */}
               <div className="mb-8">
-                <h2 className="text-3xl font-bold mb-4">Bienvenido al futuro del aprendizaje</h2>
+                <h2 className="text-3xl font-bold mb-4">Únete a nuestra comunidad educativa</h2>
                 <p className="text-white/90 leading-relaxed">
                   Accede a <strong>IA Generativa</strong>, <strong>Prompts</strong>, <strong>APIs</strong>, <strong>DeepResearch</strong>, <strong>Canvas</strong> y <strong>NotebookLM</strong> en un ecosistema educativo diseñado para potenciar tu aprendizaje.
                 </p>
@@ -68,7 +77,7 @@ const WelcomeScreen = ({ onNavigate }) => {
                    <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
                      <CheckCircle className="w-5 h-5" />
                    </div>
-                   <span className="text-white/90">Seguimiento académico</span>
+                   <span className="text-white/90">Seguimiento académico completo</span>
                  </div>
                </div>
             </div>
@@ -76,57 +85,41 @@ const WelcomeScreen = ({ onNavigate }) => {
             {/* Footer */}
             <div className="mt-8 pt-6 border-t border-white/20">
               <p className="text-white/70 text-sm">
-                ¿Necesitas ayuda? <a href="mailto:info@edutechlife.co" className="text-white hover:underline">info@edutechlife.co</a>
+                ¿Ya tienes cuenta? <button onClick={onBack} className="text-white hover:underline font-medium">Inicia sesión aquí</button>
               </p>
             </div>
           </div>
 
-           {/* Right Side - Clerk Authentication */}
-          <div className="lg:w-3/5 p-8 lg:p-12">
+          {/* Right Side - Clerk SignUp Component */}
+          <div className="lg:w-3/5 p-8 lg:p-12 flex flex-col justify-center items-center">
             {/* Header */}
-            <div className="mb-8 text-center w-full">
+            <div className="mb-6 text-center w-full">
               <h3 className="text-2xl font-bold text-[#004B63] mb-2">
-                Accede a tu Laboratorio
+                Crea tu cuenta
               </h3>
               <p className="text-[#4DA8C4]">
-                Tu puerta al futuro de la IA educativa
+                Completa el formulario para comenzar
               </p>
             </div>
 
-            {/* Zona Superior: Formulario de Credenciales */}
-            <div className="mb-8">
-              <div className="w-full min-h-[400px]">
-                <SignIn 
-                  fallbackRedirectUrl="/ialab"
-                  signUpUrl="/sign-up"
-                  appearance={{
-                    variables: {
-                      colorPrimary: '#004B63',
-                      colorPrimaryHover: '#0A3550',
-                    }
-                  }}
-                />
-              </div>
-            </div>
+               {/* Clerk SignUp Component - Clean */}
+               <div className="w-full flex justify-center items-center min-h-[500px] py-8">
+                 <SignUp 
+                   signInUrl="/"
+                   appearance={{
+                     variables: {
+                       colorPrimary: '#004B63',
+                       colorPrimaryHover: '#0A3550',
+                     }
+                   }}
+                 />
+               </div>
 
-            {/* Zona Inferior: Call To Action Principal */}
-            <div className="mt-8 pt-8 border-t border-gray-100">
-              <div className="text-center">
-                <p className="text-[#4DA8C4] text-sm mb-4">
-                  ¿Eres nuevo en Edutechlife?
-                </p>
-                <button
-                  onClick={() => onNavigate && onNavigate('sign-up')}
-                  className="w-full max-w-md mx-auto py-4 bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#4DA8C4] hover:from-[#4DA8C4] hover:to-[#004B63] text-white font-bold text-lg rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
-                >
-                  ¡Regístrate Gratis!
-                </button>
-                <p className="text-center text-[#4DA8C4]/80 text-xs mt-4">
-                  Tu información está protegida con los más altos estándares de seguridad.
-                  <br />
-                  Comienza tu viaje educativo hoy mismo.
-                </p>
-              </div>
+            {/* Info */}
+            <div className="mt-6 pt-6 border-t border-gray-200 w-full max-w-sm">
+              <p className="text-center text-[#4DA8C4] text-sm">
+                Al registrarte, aceptas nuestros <a href="#" className="text-[#004B63] hover:underline">Términos de servicio</a> y <a href="#" className="text-[#004B63] hover:underline">Política de privacidad</a>.
+              </p>
             </div>
           </div>
         </div>
@@ -135,4 +128,4 @@ const WelcomeScreen = ({ onNavigate }) => {
   );
 };
 
-export default WelcomeScreen;
+export default SignUpPage;

@@ -1,15 +1,15 @@
 /**
  * Configuración para integración JWT Clerk-Supabase
- * Template ID: 5d74d508-85ee-4a7c-9d50-87005f9b8a90
- * Algoritmo: Legacy HS256 (Shared Secret)
+ * Template name: 'supabase' (configurado en Clerk Dashboard)
+ * IMPORTANTE: El template en Clerk debe llamarse 'supabase'
  */
 
 /**
  * Configuración del JWT Template de Clerk para Supabase
  */
 export const clerkSupabaseJWTConfig = {
-  // ID del template JWT configurado en Clerk
-  templateId: '5d74d508-85ee-4a7c-9d50-87005f9b8a90',
+  // Nombre del template JWT configurado en Clerk (debe ser 'supabase')
+  templateName: 'supabase',
   
   // Algoritmo de firma
   algorithm: 'HS256',
@@ -62,18 +62,18 @@ export const clerkSupabaseJWTConfig = {
 
 /**
  * Obtiene el token JWT de Clerk para usar con Supabase
+ * @param {Object} session - Sesión de Clerk (de useSession)
+ * @returns {Promise<string|null>} Token JWT o null si no disponible
  */
-export const getClerkJWTForSupabase = async (clerkClient) => {
-  if (!clerkClient || !clerkClient.session) {
-    console.warn('Clerk client o session no disponible');
+export const getClerkJWTForSupabase = async (session) => {
+  if (!session || !session.getToken) {
+    console.warn('Sesión de Clerk no disponible');
     return null;
   }
   
   try {
-    // Clerk SDK v4+ usa getToken() en la session
-    const token = await clerkClient.session.getToken({
-      template: clerkSupabaseJWTConfig.templateId,
-    });
+    // Usar template name 'supabase' (configurado en Clerk Dashboard)
+    const token = await session.getToken({ template: 'supabase' });
     
     if (!token) {
       console.warn('No se pudo obtener token JWT de Clerk');
@@ -90,8 +90,10 @@ export const getClerkJWTForSupabase = async (clerkClient) => {
 
 /**
  * Crea un cliente Supabase que usa JWT de Clerk
+ * @param {Object} session - Sesión de Clerk (de useSession)
+ * @returns {Promise<Object|null>} Cliente Supabase configurado o null si error
  */
-export const createSupabaseClientWithClerkJWT = async (clerkClient) => {
+export const createSupabaseClientWithClerkJWT = async (session) => {
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
   const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
   
@@ -101,22 +103,20 @@ export const createSupabaseClientWithClerkJWT = async (clerkClient) => {
   }
   
   try {
-    // Importar dinámicamente para evitar problemas de SSR
-    // Usar import() en lugar de require() para compatibilidad con ESM
     const { createClient } = await import('@supabase/supabase-js');
     
     return createClient(supabaseUrl, supabaseAnonKey, {
       auth: {
         autoRefreshToken: false, // Clerk maneja la sesión
-        persistSession: false,   // No persistir sesión en localStorage
+        persistSession: false,   // No persistir en localStorage
         detectSessionInUrl: false,
         
-        // Override para usar token de Clerk
+        // Override storage para usar token de Clerk
         storageKey: 'clerk-supabase-token',
         storage: {
           getItem: async (key) => {
-            if (key === 'clerk-supabase-token' && clerkClient?.session) {
-              const token = await getClerkJWTForSupabase(clerkClient);
+            if (key === 'clerk-supabase-token' && session?.getToken) {
+              const token = await session.getToken({ template: 'supabase' });
               return JSON.stringify({ access_token: token });
             }
             return null;
@@ -127,8 +127,11 @@ export const createSupabaseClientWithClerkJWT = async (clerkClient) => {
       },
       global: {
         headers: {
-          'X-Client-Info': 'edutechlife-clerk-integration',
+          'X-Client-Info': 'edutechlife-clerk-jwt',
         },
+      },
+      db: {
+        schema: 'public',
       },
     });
   } catch (error) {
@@ -179,14 +182,14 @@ export const isClerkJWTConfigured = () => {
 /**
  * Helper para debuggear el JWT
  */
-export const debugClerkJWT = async (clerkClient) => {
-  if (!clerkClient) {
-    console.log('❌ Clerk client no disponible');
+export const debugClerkJWT = async (session) => {
+  if (!session || !session.getToken) {
+    console.log('❌ Sesión de Clerk no disponible');
     return;
   }
   
   try {
-    const token = await getClerkJWTForSupabase(clerkClient);
+    const token = await session.getToken({ template: 'supabase' });
     
     if (!token) {
       console.log('❌ No se pudo obtener token');
@@ -203,7 +206,7 @@ export const debugClerkJWT = async (clerkClient) => {
     const payload = JSON.parse(atob(parts[1]));
     
     console.log('🔍 Debug JWT de Clerk:');
-    console.log('  - Template ID:', clerkSupabaseJWTConfig.templateId);
+    console.log('  - Template name:', 'supabase');
     console.log('  - User ID:', payload.sub);
     console.log('  - Expira:', new Date(payload.exp * 1000).toISOString());
     console.log('  - Claims Supabase:', payload['https://supabase.com/jwt/claims']);
