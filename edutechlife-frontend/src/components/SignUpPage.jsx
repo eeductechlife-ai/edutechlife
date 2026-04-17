@@ -102,14 +102,42 @@ const SignUpPage = ({ onBack }) => {
               </p>
             </div>
 
-               {/* Clerk SignUp Component - Clean */}
-               <div className="w-full flex justify-center items-center min-h-[500px] py-8">
+                {/* Clerk SignUp Component - Premium */}
+               <div className="w-full min-h-[500px] sm:min-h-[550px] py-6 sm:py-8">
                  <SignUp 
                    signInUrl="/"
+                   fallbackRedirectUrl="/ialab"
                    appearance={{
                      variables: {
                        colorPrimary: '#004B63',
                        colorPrimaryHover: '#0A3550',
+                       colorText: '#00374A',
+                       colorBackground: '#FFFFFF',
+                       colorInputBackground: '#F8FAFC',
+                       colorInputText: '#00374A',
+                       colorInputPlaceholder: '#64748B',
+                       colorDanger: '#DC2626',
+                       colorSuccess: '#059669',
+                       borderRadius: '0.75rem',
+                       fontSize: { base: '14px', sm: '15px', md: '16px' },
+                       fontFamily: "'Montserrat', sans-serif",
+                       fontSmoothing: 'antialiased',
+                       fontWeight: {
+                         normal: '400',
+                         medium: '500',
+                         bold: '600',
+                       },
+                       spacingUnit: { base: '0.2rem', sm: '0.25rem', md: '0.3rem' },
+                       animation: {
+                         slow: '400ms',
+                         default: '250ms',
+                         fast: '150ms',
+                       },
+                       shadow: {
+                         sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+                         md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+                         lg: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
+                       },
                      }
                    }}
                  />

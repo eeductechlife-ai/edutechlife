@@ -227,36 +227,23 @@ const App = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [view, setView] = useState('landing');
     
-    // Manejar callback de autenticación de Supabase
-    useEffect(() => {
-        // Verificar si estamos en un callback de autenticación
-        const urlParams = new URLSearchParams(window.location.search);
-        const accessToken = urlParams.get('access_token');
-        const refreshToken = urlParams.get('refresh_token');
-        const type = urlParams.get('type');
-        const error = urlParams.get('error');
-        const errorDescription = urlParams.get('error_description');
-        
-        console.log('URL params de autenticación:', { 
-            accessToken: accessToken ? 'PRESENTE' : 'ausente',
-            refreshToken: refreshToken ? 'PRESENTE' : 'ausente',
-            type,
-            error,
-            errorDescription 
-        });
-        
-        if (type === 'signup' || type === 'recovery' || accessToken) {
-            // Estamos en un callback de autenticación
-            console.log('📧 Detectado callback de autenticación, tipo:', type);
-            setView('auth-callback');
-            
-            // Limpiar la URL para que no se vean los tokens
-            window.history.replaceState({}, document.title, window.location.pathname);
-        } else if (error) {
-            console.error('❌ Error en callback de autenticación:', error, errorDescription);
-            // Podríamos mostrar un mensaje de error o redirigir
-        }
-    }, []);
+    // NOTA: Clerk maneja sus propios callbacks de autenticación
+    // Este useEffect era para Supabase Auth y ha sido deshabilitado
+    // Clerk no usa parámetros URL como access_token, refresh_token, type
+    // useEffect(() => {
+    //     const urlParams = new URLSearchParams(window.location.search);
+    //     const accessToken = urlParams.get('access_token');
+    //     const refreshToken = urlParams.get('refresh_token');
+    //     const type = urlParams.get('type');
+    //     const error = urlParams.get('error');
+    //     const errorDescription = urlParams.get('error_description');
+    //     
+    //     if (type === 'signup' || type === 'recovery' || accessToken) {
+    //         console.log('⚠️ Detectado callback de Supabase Auth (deshabilitado para Clerk)');
+    //         // No hacer nada - Clerk maneja sus propios callbacks
+    //         window.history.replaceState({}, document.title, window.location.pathname);
+    //     }
+    // }, []);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [smartboardAuthenticated, setSmartboardAuthenticated] = useState(false);
     const [adminAuthenticated, setAdminAuthenticated] = useState(false);
@@ -1244,10 +1231,10 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                         </Suspense>
                     )}
                       
-                     {/* Auth Callback - Para confirmación de email */}
-                     {view === 'auth-callback' && (
+                     {/* Auth Callback - Para confirmación de email (deshabilitado para Clerk) */}
+                     {/* {view === 'auth-callback' && (
                          <AuthCallback />
-                     )}
+                     )} */}
 
                     
                 </Suspense>
