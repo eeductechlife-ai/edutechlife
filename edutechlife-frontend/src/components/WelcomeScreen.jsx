@@ -3,8 +3,37 @@ import { esES } from '@clerk/localizations';
 import { motion } from 'framer-motion';
 import FloatingParticles from './FloatingParticles';
 import { Brain, CheckCircle } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
 const WelcomeScreen = ({ onNavigate }) => {
+  const [searchParams] = useSearchParams();
+  const [isSignUpMode, setIsSignUpMode] = useState(false);
+  
+  // Obtener returnTo de los parámetros de URL O de sessionStorage (para App.jsx)
+  const urlReturnTo = searchParams.get('returnTo');
+  const storageReturnTo = sessionStorage.getItem('clerk_return_to');
+  const returnTo = urlReturnTo || (storageReturnTo ? `/${storageReturnTo}` : '/ialab');
+  
+  // Verificar si estamos en modo registro desde URL
+  useEffect(() => {
+    const action = searchParams.get('action');
+    if (action === 'signup') {
+      setIsSignUpMode(true);
+    }
+  }, [searchParams]);
+  
+  // Limpiar sessionStorage después de leerlo
+  if (storageReturnTo) {
+    sessionStorage.removeItem('clerk_return_to');
+  }
+  
+  console.log('🔀 WelcomeScreen: Parámetros de URL:', Object.fromEntries(searchParams.entries()));
+  console.log('🔀 WelcomeScreen: returnTo de URL:', urlReturnTo);
+  console.log('🔀 WelcomeScreen: returnTo de storage:', storageReturnTo);
+  console.log('🔀 WelcomeScreen: returnTo final:', returnTo);
+  console.log('🔀 WelcomeScreen: Modo:', isSignUpMode ? 'Registro' : 'Inicio de sesión');
+  
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#004B63] to-[#0A3550] flex items-center justify-center p-3 sm:p-4 md:p-6 relative overflow-hidden">
       <FloatingParticles />
@@ -126,58 +155,98 @@ const WelcomeScreen = ({ onNavigate }) => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="w-full lg:w-3/5 p-5 sm:p-6 md:p-8 lg:p-10 bg-gradient-to-b from-white to-blue-50/20"
           >
-            {/* Header */}
-            <div className="mb-6 sm:mb-8 text-center">
-              <h3 className="text-xl sm:text-2xl font-bold text-[#00374A] mb-2">
-                Accede a tu Laboratorio
-              </h3>
-              <p className="text-[#4DA8C4] text-sm sm:text-base">
-                Inicia tu viaje educativo transformador
-              </p>
-            </div>
+             {/* Header */}
+             <div className="mb-6 sm:mb-8 text-center">
+               <h3 className="text-xl sm:text-2xl font-bold text-[#00374A] mb-2">
+                 {isSignUpMode ? 'Crea tu Cuenta' : 'Accede a tu Laboratorio'}
+               </h3>
+               <p className="text-[#4DA8C4] text-sm sm:text-base">
+                 {isSignUpMode ? 'Únete a la revolución educativa con IA' : 'Inicia tu viaje educativo transformador'}
+               </p>
+             </div>
 
-            {/* Zona Superior: Formulario de Credenciales */}
-            <div className="mb-6 sm:mb-8">
-              <div className="w-full min-h-[350px] sm:min-h-[400px]">
-                <SignIn 
-                  fallbackRedirectUrl="/ialab"
-                  signUpUrl="/sign-up"
-                  appearance={{
-                    variables: {
-                      colorPrimary: '#004B63',
-                      colorPrimaryHover: '#0A3550',
-                      colorText: '#00374A',
-                      colorBackground: '#FFFFFF',
-                      colorInputBackground: '#F8FAFC',
-                      colorInputText: '#00374A',
-                      colorInputPlaceholder: '#64748B',
-                      colorDanger: '#DC2626',
-                      colorSuccess: '#059669',
-                      borderRadius: '0.75rem',
-                      fontSize: { base: '14px', sm: '15px', md: '16px' },
-                      fontFamily: "'Montserrat', sans-serif",
-                      fontSmoothing: 'antialiased',
-                      fontWeight: {
-                        normal: '400',
-                        medium: '500',
-                        bold: '600',
-                      },
-                      spacingUnit: { base: '0.2rem', sm: '0.25rem', md: '0.3rem' },
-                      animation: {
-                        slow: '400ms',
-                        default: '250ms',
-                        fast: '150ms',
-                      },
-                      shadow: {
-                        sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
-                        md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-                        lg: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
-                      },
-                    }
-                  }}
-                />
-              </div>
-            </div>
+             {/* Zona Superior: Formulario de Credenciales */}
+             <div className="mb-6 sm:mb-8">
+               <div className="w-full min-h-[350px] sm:min-h-[400px]">
+                 {isSignUpMode ? (
+                   <SignUp 
+                     fallbackRedirectUrl={returnTo}
+                     signInUrl="/login"
+                     appearance={{
+                       variables: {
+                         colorPrimary: '#004B63',
+                         colorPrimaryHover: '#0A3550',
+                         colorText: '#00374A',
+                         colorBackground: '#FFFFFF',
+                         colorInputBackground: '#F8FAFC',
+                         colorInputText: '#00374A',
+                         colorInputPlaceholder: '#64748B',
+                         colorDanger: '#DC2626',
+                         colorSuccess: '#059669',
+                         borderRadius: '0.75rem',
+                         fontSize: { base: '14px', sm: '15px', md: '16px' },
+                         fontFamily: "'Montserrat', sans-serif",
+                         fontSmoothing: 'antialiased',
+                         fontWeight: {
+                           normal: '400',
+                           medium: '500',
+                           bold: '600',
+                         },
+                         spacingUnit: { base: '0.2rem', sm: '0.25rem', md: '0.3rem' },
+                         animation: {
+                           slow: '400ms',
+                           default: '250ms',
+                           fast: '150ms',
+                         },
+                         shadow: {
+                           sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+                           md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+                           lg: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
+                         },
+                       }
+                     }}
+                   />
+                 ) : (
+                   <SignIn 
+                     fallbackRedirectUrl={returnTo}
+                     signUpUrl="/login?action=signup"
+                     appearance={{
+                       variables: {
+                         colorPrimary: '#004B63',
+                         colorPrimaryHover: '#0A3550',
+                         colorText: '#00374A',
+                         colorBackground: '#FFFFFF',
+                         colorInputBackground: '#F8FAFC',
+                         colorInputText: '#00374A',
+                         colorInputPlaceholder: '#64748B',
+                         colorDanger: '#DC2626',
+                         colorSuccess: '#059669',
+                         borderRadius: '0.75rem',
+                         fontSize: { base: '14px', sm: '15px', md: '16px' },
+                         fontFamily: "'Montserrat', sans-serif",
+                         fontSmoothing: 'antialiased',
+                         fontWeight: {
+                           normal: '400',
+                           medium: '500',
+                           bold: '600',
+                         },
+                         spacingUnit: { base: '0.2rem', sm: '0.25rem', md: '0.3rem' },
+                         animation: {
+                           slow: '400ms',
+                           default: '250ms',
+                           fast: '150ms',
+                         },
+                         shadow: {
+                           sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+                           md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+                           lg: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
+                         },
+                       }
+                     }}
+                   />
+                 )}
+               </div>
+             </div>
 
             {/* Zona Inferior: Call To Action Principal */}
             <motion.div 
@@ -186,25 +255,25 @@ const WelcomeScreen = ({ onNavigate }) => {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-gray-100"
             >
-              <div className="text-center">
-                <p className="text-[#4DA8C4] text-sm sm:text-base mb-4">
-                  ¿Eres nuevo en Edutechlife?
-                </p>
-                <motion.button
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => onNavigate && onNavigate('sign-up')}
-                  className="w-full max-w-md mx-auto py-3 sm:py-4 min-h-[44px] sm:min-h-[48px] bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#4DA8C4] hover:from-[#4DA8C4] hover:to-[#004B63] text-white font-semibold sm:font-bold text-base sm:text-lg rounded-xl sm:rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-[#004B63]/30 focus:ring-offset-2"
-                  aria-label="Regístrate gratis en Edutechlife"
-                >
-                  ¡Regístrate Gratis!
-                </motion.button>
-                <p className="text-center text-[#4DA8C4]/80 text-xs sm:text-sm mt-3 sm:mt-4">
-                  Tu información está protegida con los más altos estándares de seguridad.
-                  <br className="hidden sm:block" />
-                  Comienza tu viaje educativo hoy mismo.
-                </p>
-              </div>
+               <div className="text-center">
+                 <p className="text-[#4DA8C4] text-sm sm:text-base mb-4">
+                   {isSignUpMode ? '¿Ya tienes una cuenta?' : '¿Eres nuevo en Edutechlife?'}
+                 </p>
+                 <motion.button
+                   whileHover={{ scale: 1.02, y: -2 }}
+                   whileTap={{ scale: 0.98 }}
+                   onClick={() => setIsSignUpMode(!isSignUpMode)}
+                   className="w-full max-w-md mx-auto py-3 sm:py-4 min-h-[44px] sm:min-h-[48px] bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#4DA8C4] hover:from-[#4DA8C4] hover:to-[#004B63] text-white font-semibold sm:font-bold text-base sm:text-lg rounded-xl sm:rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-[#004B63]/30 focus:ring-offset-2"
+                   aria-label={isSignUpMode ? "Iniciar sesión en Edutechlife" : "Regístrate gratis en Edutechlife"}
+                 >
+                   {isSignUpMode ? 'Iniciar Sesión' : '¡Regístrate Gratis!'}
+                 </motion.button>
+                 <p className="text-center text-[#4DA8C4]/80 text-xs sm:text-sm mt-3 sm:mt-4">
+                   Tu información está protegida con los más altos estándares de seguridad.
+                   <br className="hidden sm:block" />
+                   {isSignUpMode ? 'Accede a tu cuenta para continuar.' : 'Comienza tu viaje educativo hoy mismo.'}
+                 </p>
+               </div>
             </motion.div>
           </motion.div>
         </div>

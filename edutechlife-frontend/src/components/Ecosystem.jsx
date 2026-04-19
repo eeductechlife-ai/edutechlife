@@ -303,7 +303,7 @@ const PilarModal = ({ pilar, isOpen, onClose }) => {
 
                     <div className="text-center mt-12 pt-8 border-t border-[#E2E8F0]">
                         <button 
-                            onClick={() => { onClose(); pilar.onNavigate(pilar.id); }}
+                            onClick={() => { onClose(); window.location.href = `/${pilar.id}`; }}
                             className="btn-glow inline-flex items-center gap-3 px-10 py-4 font-normal rounded-full font-montserrat bg-white"
                         >
                             <Icon name="fa-rocket" className="text-[#4DA8C4]" />
@@ -385,7 +385,7 @@ const TiltCard = ({ children, pilar, onClick }) => {
 // ==========================================
 // Ecosystem Component (Light Theme)
 // ==========================================
-const Ecosystem = memo(({ onNavigate }) => {
+const Ecosystem = memo(() => {
     const [selectedPilar, setSelectedPilar] = useState(null);
     const sectionRef = useRef(null);
 
@@ -394,19 +394,19 @@ const Ecosystem = memo(({ onNavigate }) => {
             id: 'neuroentorno', icon: 'fa-brain', title: 'NeuroEntornos Escolares', subtitle: 'Pilar 1',
             desc: 'Diagnóstico VAK, IA Lab con Valerio, SmartBoard y herramientas neuropedagógicas.',
             stats: [{ num: '6,000+', label: 'Estudiantes' }, { num: '98%', label: 'Efectividad' }],
-            onNavigate
+            onNavigate: () => window.location.href = '/neuroentorno'
         },
         {
             id: 'ialab', icon: 'fa-robot', title: 'Laboratorio IA', subtitle: 'Certificación Profesional',
             desc: 'Aprende inteligencia artificial, crea prompts y obtén tu certificación.',
             stats: [{ num: '5', label: 'Módulos' }, { num: '100%', label: 'Online' }],
-            onNavigate
+            onNavigate: () => window.location.href = '/ialab'
         },
         {
             id: 'consultoria', icon: 'fa-handshake', title: 'Consultoría B2B y Automatización', subtitle: 'Pilar 3',
             desc: 'Transformación digital, agentes IA personalizados y ROI garantizado.',
             stats: [{ num: '100+', label: 'Instituciones' }, { num: '3x', label: 'ROI Promedio' }],
-            onNavigate
+            onNavigate: () => window.location.href = '/consultoria'
         }
     ];
 

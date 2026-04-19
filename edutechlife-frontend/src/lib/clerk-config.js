@@ -31,8 +31,8 @@ export const clerkConfig = {
   // Para SPA (Single Page Application) - REQUERIDO
   signInUrl: '/sign-in',
   signUpUrl: '/sign-up',
-  afterSignInUrl: '/ialab',
-  afterSignUpUrl: '/ialab',
+  afterSignInUrl: '/ialab',  // FLUJO DIRECTO: Login → IA Lab Dashboard
+  afterSignUpUrl: '/ialab',  // FLUJO DIRECTO: Registro → IA Lab Dashboard
   
   // Appearance minimalista - Clerk maneja sus propios estilos
   appearance: {
@@ -49,8 +49,8 @@ export const clerkConfig = {
 export const supabaseIntegrationConfig = {
   // URLs para redirección después de autenticación
   redirectUrls: {
-    signIn: '/ialab',
-    signUp: '/ialab',
+    signIn: '/ialab',  // FLUJO DIRECTO: Login → IA Lab Dashboard
+    signUp: '/ialab',  // FLUJO DIRECTO: Registro → IA Lab Dashboard
     signOut: '/',
   },
   

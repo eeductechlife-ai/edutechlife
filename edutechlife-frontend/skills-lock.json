@@ -1,6 +1,11 @@
 {
   "version": 1,
   "skills": {
+    "clerk-react-patterns": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "computedHash": "9bbc28d1825bda0f31a33660b3e339719bc0ad2a30696dfde14ef6b9493371b0"
+    },
     "magic-ui": {
       "source": "magicuidesign/magicui",
       "sourceType": "github",

@@ -1,39 +1,16 @@
-import { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { Sun, Moon, Bot, X, Send, MessageCircle, Minus, Square } from 'lucide-react';
-const GlobalCanvas = lazy(() => import('./components/GlobalCanvas'));
-const IALab = lazy(() => import('./components/IALab'));
-import Hero from './components/Hero';
-import Metodo from './components/Metodo';
-import Esencia from './components/Esencia';
-import Ecosystem from './components/Ecosystem';
-import AIToolsSection from './components/AIToolsSection';
-import Aliados from './components/Aliados';
-import Footer from './components/Footer';
-import ContactModal from './components/ContactModal';
-const NeuroEntorno = lazy(() => import('./components/NeuroEntorno'));
-const ProyectosNacional = lazy(() => import('./components/ProyectosNacional'));
-const Consultoria = lazy(() => import('./components/Consultoria'));
-const ConsultoriaB2B = lazy(() => import('./components/ConsultoriaB2B'));
-const AutomationArchitect = lazy(() => import('./components/AutomationArchitect'));
-const SmartBoardDashboard = lazy(() => import('./components/SmartBoardDashboard'));
-const SmartBoardLogin = lazy(() => import('./components/SmartBoardLogin'));
-// Unified VAK Diagnosis Component
-const VAKDiagnosis = lazy(() => import('./components/DiagnosticoVAK'));
-const AdminDashboard = lazy(() => import('./components/AdminDashboard'));
-// JWT Integration Test (temporal)
-const JWTIntegrationTestPage = lazy(() => import('./components/test/JWTIntegrationTestPage'));
-const SignUpPage = lazy(() => import('./components/SignUpPage'));
+import AppRoutes from './routes/index.jsx';
 import NicoModern from './components/Nico/NicoModern';
 import AdminLoginModal from './components/AdminLoginModal';
 import LeadCaptureModal from './components/LeadCaptureModal';
-import LoadingScreen, { MiniLoader } from './components/LoadingScreen';
-import { callDeepseek, callDeepseekStream } from './utils/api';
+import ContactModal from './components/ContactModal';
+import LoadingScreen from './components/LoadingScreen';
+import { callDeepseekStream } from './utils/api';
 import { speakTextConversational, stopSpeech } from './utils/speech';
 import { StudentProvider } from './contexts/StudentContext';
 import { useAuth } from './context/AuthContext';
-import WelcomeScreen from './components/WelcomeScreen';
-import AuthCallback from './components/AuthCallback';
 
 // Cache de preguntas frecuentes para respuestas instantáneas
 const responseCache = new Map();
@@ -225,29 +202,7 @@ const CustomCursor = () => {
 const App = () => {
     const { user, loading: authLoading } = useAuth();
     const [isLoading, setIsLoading] = useState(true);
-    const [view, setView] = useState('landing');
-    
-    // NOTA: Clerk maneja sus propios callbacks de autenticación
-    // Este useEffect era para Supabase Auth y ha sido deshabilitado
-    // Clerk no usa parámetros URL como access_token, refresh_token, type
-    // useEffect(() => {
-    //     const urlParams = new URLSearchParams(window.location.search);
-    //     const accessToken = urlParams.get('access_token');
-    //     const refreshToken = urlParams.get('refresh_token');
-    //     const type = urlParams.get('type');
-    //     const error = urlParams.get('error');
-    //     const errorDescription = urlParams.get('error_description');
-    //     
-    //     if (type === 'signup' || type === 'recovery' || accessToken) {
-    //         console.log('⚠️ Detectado callback de Supabase Auth (deshabilitado para Clerk)');
-    //         // No hacer nada - Clerk maneja sus propios callbacks
-    //         window.history.replaceState({}, document.title, window.location.pathname);
-    //     }
-    // }, []);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const [smartboardAuthenticated, setSmartboardAuthenticated] = useState(false);
-    const [adminAuthenticated, setAdminAuthenticated] = useState(false);
-    const [adminLoginModalOpen, setAdminLoginModalOpen] = useState(false);
     const [botOpen, setBotOpen] = useState(false);
     const [isBotMinimized, setIsBotMinimized] = useState(false);
     const [isBotClosing, setIsBotClosing] = useState(false);
@@ -283,7 +238,6 @@ const App = () => {
     
     const botMsgsEndRef = useRef(null);
     const recognitionRef = useRef(null);
-    const speechSynthesisRef = useRef(null);
 
     const scrollToBottom = () => {
         botMsgsEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -317,18 +271,6 @@ const App = () => {
             }
         }
     }, [botMsgs]);
-
-    useEffect(() => {
-        const handleNavigate = (e) => {
-            setView(e.detail);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        };
-        window.addEventListener('navigate', handleNavigate);
-        
-        return () => {
-            window.removeEventListener('navigate', handleNavigate);
-        };
-    }, []);
 
     // Dark mode effect
     useEffect(() => {
@@ -801,496 +743,44 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
         setIsSpeaking(false);
     };
 
-    const handleNavigate = useCallback(v => {
-        setView(v);
-        window.scrollTo(0, 0);
-    }, []);
-
-    const handleSmartboardLogin = useCallback((user) => {
-        setSmartboardAuthenticated(true);
-        setView('smartboard');
-    }, []);
-
-    const handleSmartboardLogout = useCallback(() => {
-        setSmartboardAuthenticated(false);
-        setView('landing');
-    }, []);
-
-    const handleAdminLogin = useCallback(() => {
-        setAdminAuthenticated(true);
-        setAdminLoginModalOpen(false);
-        setView('admin');
-    }, []);
-
-    const handleAdminLogout = useCallback(() => {
-        setAdminAuthenticated(false);
-        setView('landing');
-    }, []);
-
-    const handleLoadingComplete = useCallback(() => {
+    const handleLoadingComplete = () => {
         setIsLoading(false);
-    }, []);
-
-    // Componente ProtectedRoute para el Laboratorio
-    const ProtectedRoute = ({ children }) => {
-        // Timeout para no quedarse forever en "Verificando sesión"
-        const [showWelcome, setShowWelcome] = useState(false);
-        
-        useEffect(() => {
-            const timer = setTimeout(() => {
-                setShowWelcome(true);
-            }, 3000);
-            return () => clearTimeout(timer);
-        }, []);
-        
-        // Mientras carga Y no hay usuario Y no ha pasado el timeout, mostrar spinner
-        if (authLoading && !user && !showWelcome) {
-            return (
-                <div className="min-h-screen bg-gradient-to-br from-[#004B63] to-[#0A3550] flex items-center justify-center">
-                    <div className="text-center">
-                        <div className="w-12 h-12 border-4 border-[#4DA8C4] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                        <p className="text-white/70">Verificando sesión...</p>
-                    </div>
-                </div>
-            );
-        }
-        
-        // Si ya pasó el timeout O ya hay usuario O ya no está cargando, mostrar lo que corresponda
-        if (!user) {
-            return <WelcomeScreen onNavigate={handleNavigate} />;
-        }
-        
-        return children;
     };
 
-    // Función para determinar si muestra la web completa o solo el lab
-    const isLabView = view === 'ialab';
-
-    // Renderizado según estado de autenticación - SOLO el laboratorio requiere login
-    const renderContent = () => {
-        // Siempre mostrar la estructura base
-        return (
-                <div className="flex flex-col min-h-screen overflow-hidden bg-white text-[#004B63]" style={{ fontFamily: "'Montserrat', sans-serif" }}>
-                <Suspense fallback={null}>
-                    {view !== 'ialab' && view !== 'auth' && <GlobalCanvas />}
-                </Suspense>
-                <CustomCursor />
-            
-            {/* Loading Screen */}
-            {isLoading && (
-                <LoadingScreen onComplete={handleLoadingComplete} minDuration={2000} />
-            )}
-
-            {/* Header - Navigation Premium - Hidden on SmartBoard, Admin, NeuroEntorno, VAK, IALab and Auth */}
-            {view !== 'smartboard' && view !== 'admin' && view !== 'neuroentorno' && view !== 'vak' && view !== 'ialab' && view !== 'auth' && (
-                <>
-                    <header className="sticky top-0 left-0 right-0 z-[1000] bg-white backdrop-blur-md border-b border-[#004B63]/10">
-                        <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 flex items-center justify-between">
-                            {/* Logo - Premium Clean */}
-                            <div className="flex items-center">
-                                <button 
-                                    onClick={() => handleNavigate('landing')}
-                                    aria-label="Ir al inicio"
-                                    style={{ 
-                                        background: 'transparent', 
-                                        border: 'none', 
-                                        padding: '0',
-                                        outline: 'none',
-                                    }}
-                                >
-                                    <img 
-                                        src="/images/logo-edutechlife.webp" 
-                                        alt="Edutechlife" 
-                                        className="w-24 object-contain"
-                                        style={{ 
-                                            height: '80px',
-                                            transform: 'scale(1.8)',
-                                            transformOrigin: 'left center',
-                                            background: 'transparent',
-                                            border: 'none',
-                                            outline: 'none',
-                                            boxShadow: 'none',
-                                        }}
-                                        onError={(e) => { e.target.style.display = 'none'; }}
-                                    />
-                                </button>
-                            </div>
-                            
-                            {/* Navigation Links - Desktop */}
-                            <nav className="hidden md:flex items-center gap-3">
-                                <button 
-                                    onClick={() => {
-                                        handleNavigate('landing');
-                                        setTimeout(() => {
-                                            const esenciaSection = document.getElementById('esencia');
-                                            if (esenciaSection) {
-                                                esenciaSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                            }
-                                        }, 100);
-                                    }}
-                                    className="px-4 py-2 text-sm font-semibold text-white bg-[#004B63] hover:bg-[#4DA8C4] rounded-full transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2"
-                                >
-                                    <i className="fa-solid fa-graduation-cap text-xs text-white"></i>
-                                    Esencia
-                                </button>
-                                <button 
-                                    onClick={() => {
-                                        handleNavigate('landing');
-                                        setTimeout(() => {
-                                            const ecosystemSection = document.getElementById('ecosystem');
-                                            if (ecosystemSection) {
-                                                ecosystemSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                            }
-                                        }, 100);
-                                    }}
-                                    className="px-4 py-2 text-sm font-semibold text-white bg-[#004B63] hover:bg-[#4DA8C4] rounded-full transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2"
-                                >
-                                    <i className="fa-solid fa-layer-group text-xs text-white"></i>
-                                    Ecosistema
-                                </button>
-                                <button 
-                                    onClick={() => handleNavigate('vak')}
-                                    className="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] hover:from-[#66CCCC] hover:to-[#4DA8C4] rounded-full transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2"
-                                >
-                                    <i className="fa-solid fa-brain text-xs"></i>
-                                    VAK Diagnosis
-                                </button>
-                                <button 
-                                    onClick={() => setShowContactModal(true)}
-                                    className="px-4 py-2 text-sm font-semibold text-white bg-[#4DA8C4] hover:bg-[#004B63] rounded-full transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2"
-                                >
-                                    <i className="fa-solid fa-envelope text-xs"></i>
-                                    Contacto
-                                </button>
-                            </nav>
-
-                            {/* Mobile Menu Button */}
-                            <button 
-                                onClick={() => setMobileMenuOpen(true)}
-                                className="md:hidden p-2 text-[#004B63] hover:text-[#4DA8C4] hover:bg-[#4DA8C4]/10 rounded-full transition-all duration-300"
-                                aria-label="Abrir menú"
-                            >
-                                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                                </svg>
-                            </button>
-                        </div>
-                    </header>
-
-                    {/* Mobile Menu Drawer - Hidden on IALab and Auth */}
-                    {mobileMenuOpen && view !== 'ialab' && view !== 'auth' && (
-                        <>
-                            {/* Backdrop */}
-                            <div 
-                                className="fixed inset-0 z-[1001] bg-black/50 backdrop-blur-sm md:hidden"
-                                onClick={() => setMobileMenuOpen(false)}
-                            />
-                            {/* Drawer - Expanded with scroll */}
-                            <div className="fixed top-0 right-0 z-[1002] h-full w-80 bg-white shadow-2xl md:hidden animate-slide-in flex flex-col">
-                                {/* Header */}
-                                <div className="p-4 border-b border-[#4DA8C4]/20 flex items-center justify-between flex-shrink-0">
-                                    <div className="flex items-center">
-                                        <img 
-                                            src="/images/logo-edutechlife.webp" 
-                                            alt="Edutechlife" 
-                                            className="w-24 object-contain"
-                                            style={{ 
-                                                height: '80px',
-                                            transform: 'scale(1.8)',
-                                                transformOrigin: 'left center',
-                                                background: 'transparent',
-                                                border: 'none',
-                                                outline: 'none',
-                                                boxShadow: 'none',
-                                            }}
-                                            onError={(e) => { e.target.style.display = 'none'; }}
-                                        />
-                                    </div>
-                                    <button 
-                                        onClick={() => setMobileMenuOpen(false)}
-                                        className="p-2 text-[#004B63] hover:text-[#4DA8C4] transition-colors rounded-full hover:bg-[#4DA8C4]/10"
-                                    >
-                                        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </button>
-                                </div>
-                                {/* Navigation - Scrollable */}
-                                <nav className="flex-1 overflow-y-auto p-4 space-y-4">
-                                    {/* INICIO Section */}
-                                    <div>
-                                        <div className="text-xs font-bold text-[#4DA8C4] uppercase tracking-wider mb-2 px-3">🏠 Inicio</div>
-                                        <div className="space-y-2">
-                                            <button 
-                                                onClick={() => {
-                                                    handleNavigate('landing');
-                                                    setMobileMenuOpen(false);
-                                                    setTimeout(() => {
-                                                        const section = document.getElementById('esencia');
-                                                        if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                                    }, 100);
-                                                }}
-                                                className="w-full px-4 py-3.5 text-sm font-semibold text-[#004B63] bg-[#F8FAFC] hover:bg-[#4DA8C4]/10 rounded-xl transition-all duration-300 flex items-center gap-3"
-                                            >
-                                                <i className="fa-solid fa-heart text-[#4DA8C4]"></i>
-                                                Esencia
-                                            </button>
-                                            <button 
-                                                onClick={() => {
-                                                    handleNavigate('landing');
-                                                    setMobileMenuOpen(false);
-                                                    setTimeout(() => {
-                                                        const section = document.getElementById('ecosystem');
-                                                        if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                                    }, 100);
-                                                }}
-                                                className="w-full px-4 py-3.5 text-sm font-semibold text-[#004B63] bg-[#F8FAFC] hover:bg-[#4DA8C4]/10 rounded-xl transition-all duration-300 flex items-center gap-3"
-                                            >
-                                                <i className="fa-solid fa-layer-group text-[#4DA8C4]"></i>
-                                                Ecosistema
-                                            </button>
-                                            <button 
-                                                onClick={() => {
-                                                    handleNavigate('landing');
-                                                    setMobileMenuOpen(false);
-                                                    setTimeout(() => {
-                                                        const section = document.getElementById('herramientas');
-                                                        if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                                    }, 100);
-                                                }}
-                                                className="w-full px-4 py-3.5 text-sm font-semibold text-[#004B63] bg-[#F8FAFC] hover:bg-[#4DA8C4]/10 rounded-xl transition-all duration-300 flex items-center gap-3"
-                                            >
-                                                <i className="fa-solid fa-robot text-[#4DA8C4]"></i>
-                                                Herramientas I.A.
-                                            </button>
-                                            <button 
-                                                onClick={() => {
-                                                    handleNavigate('landing');
-                                                    setMobileMenuOpen(false);
-                                                    setTimeout(() => {
-                                                        const section = document.getElementById('metodo');
-                                                        if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                                    }, 100);
-                                                }}
-                                                className="w-full px-4 py-3.5 text-sm font-semibold text-[#004B63] bg-[#F8FAFC] hover:bg-[#4DA8C4]/10 rounded-xl transition-all duration-300 flex items-center gap-3"
-                                            >
-                                                <i className="fa-solid fa-route text-[#4DA8C4]"></i>
-                                                Método
-                                            </button>
-                                            <button 
-                                                onClick={() => {
-                                                    handleNavigate('landing');
-                                                    setMobileMenuOpen(false);
-                                                    setTimeout(() => {
-                                                        const section = document.getElementById('aliados');
-                                                        if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                                    }, 100);
-                                                }}
-                                                className="w-full px-4 py-3.5 text-sm font-semibold text-[#004B63] bg-[#F8FAFC] hover:bg-[#4DA8C4]/10 rounded-xl transition-all duration-300 flex items-center gap-3"
-                                            >
-                                                <i className="fa-solid fa-handshake text-[#4DA8C4]"></i>
-                                                Aliados
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    {/* HERRAMIENTAS Section */}
-                                    <div>
-                                        <div className="text-xs font-bold text-[#66CCCC] uppercase tracking-wider mb-2 px-3">⚙️ Herramientas</div>
-                                        <div className="space-y-2">
-                                            <button 
-                                                onClick={() => { handleNavigate('vak'); setMobileMenuOpen(false); }}
-                                                className="w-full px-4 py-3.5 text-sm font-semibold text-white bg-gradient-to-r from-[#004B63] to-[#4DA8C4] hover:from-[#4DA8C4] hover:to-[#66CCCC] rounded-xl transition-all duration-300 flex items-center gap-3"
-                                            >
-                                                <i className="fa-solid fa-brain"></i>
-                                                Diagnóstico VAK
-                                            </button>
-                                            <button 
-                                                onClick={() => { handleNavigate('ialab'); setMobileMenuOpen(false); }}
-                                                className="w-full px-4 py-3.5 text-sm font-semibold text-white bg-gradient-to-r from-[#004B63] to-[#4DA8C4] hover:from-[#4DA8C4] hover:to-[#66CCCC] rounded-xl transition-all duration-300 flex items-center gap-3"
-                                            >
-                                                <i className="fa-solid fa-rocket"></i>
-                                                IA Lab Pro
-                                            </button>
-                                            <button 
-                                                onClick={() => { handleNavigate('smartboard'); setMobileMenuOpen(false); }}
-                                                className="w-full px-4 py-3.5 text-sm font-semibold text-white bg-gradient-to-r from-[#004B63] to-[#4DA8C4] hover:from-[#4DA8C4] hover:to-[#66CCCC] rounded-xl transition-all duration-300 flex items-center gap-3"
-                                            >
-                                                <i className="fa-solid fa-chalkboard"></i>
-                                                SmartBoard
-                                            </button>
-                                            <button 
-                                                onClick={() => { handleNavigate('automation'); setMobileMenuOpen(false); }}
-                                                className="w-full px-4 py-3.5 text-sm font-semibold text-white bg-gradient-to-r from-[#004B63] to-[#4DA8C4] hover:from-[#4DA8C4] hover:to-[#66CCCC] rounded-xl transition-all duration-300 flex items-center gap-3"
-                                            >
-                                                <i className="fa-solid fa-cogs"></i>
-                                                Automatización
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    {/* CONTACTO Section */}
-                                    <div>
-                                        <div className="text-xs font-bold text-[#FFD166] uppercase tracking-wider mb-2 px-3">📞 Contacto</div>
-                                        <button 
-                                            onClick={() => {
-                                                setShowContactModal(true);
-                                                setMobileMenuOpen(false);
-                                            }}
-                                            className="w-full px-4 py-3.5 text-sm font-semibold text-white bg-[#FFD166] hover:bg-[#FF8E53] rounded-xl transition-all duration-300 flex items-center gap-3"
-                                        >
-                                            <i className="fa-solid fa-envelope"></i>
-                                            Contáctanos
-                                        </button>
-                                    </div>
-                                </nav>
-                            </div>
-                        </>
-                    )}
-                </>
-            )}
-
-            {/* Main Content */}
-            <main className="flex-grow">
-                <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="w-12 h-12 border-4 border-[#4DA8C4] border-t-transparent rounded-full animate-spin"></div></div>}>
-                    {view === 'landing' && (
-                          <>
-                            <Hero onNavigate={handleNavigate} />
-                            <AIToolsSection 
-                                onToolClick={(toolId) => {
-                                    // Mapear herramientas a vistas existentes
-                                    const toolToView = {
-                                        'diagnostico-vak': 'neuroentorno',
-                                        'ia-lab-pro': 'ialab', 
-                                        'automatizacion': 'automation',
-                                        'smartboard': 'smartboard'
-                                    };
-                                    if (toolToView[toolId]) {
-                                        handleNavigate(toolToView[toolId]);
-                                    }
-                                }}
-                            />
-                            <Esencia />
-                            <Ecosystem onNavigate={handleNavigate} />
-                            <Metodo />
-                            <Aliados />
-                        </>
-                    )}
-
-                    {/* Pillar Pages */}
-                    {view === 'ialab' && (
-                        <ProtectedRoute>
-                            <IALab onBack={() => handleNavigate('landing')} />
-                        </ProtectedRoute>
-                    )}
-                    {view === 'neuroentorno' && <NeuroEntorno onBack={() => { handleNavigate('landing'); setTimeout(() => { const ecosystem = document.getElementById('ecosystem'); if (ecosystem) ecosystem.scrollIntoView({ behavior: 'smooth' }); }, 100); }} onNavigate={handleNavigate} />}
-                    {view === 'proyectos' && <ProyectosNacional onBack={() => handleNavigate('landing')} />}
-                    {view === 'consultoria' && <Consultoria onBack={() => handleNavigate('landing')} />}
-                    {view === 'consultoria-b2b' && <ConsultoriaB2B onBack={() => handleNavigate('landing')} />}
-                    {view === 'automation' && <AutomationArchitect onBack={() => handleNavigate('landing')} />}
-                    
-                    {/* SmartBoard - Con Login */}
-                    {view === 'smartboard' && !smartboardAuthenticated && (
-                        <SmartBoardLogin onLogin={handleSmartboardLogin} />
-                    )}
-                    {view === 'smartboard' && smartboardAuthenticated && (
-                        <SmartBoardDashboard onNavigate={handleNavigate} onLogout={handleSmartboardLogout} />
-                    )}
-                    
-                    {/* Unified VAK Diagnosis - Premium Experience */}
-                    {view === 'vak' && (
-                        <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div></div>}>
-                            <VAKDiagnosis />
-                        </Suspense>
-                    )}
-                    {view === 'vak-simple' && (
-                        <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div></div>}>
-                            <VAKDiagnosis />
-                        </Suspense>
-                    )}
-                    {view === 'vak-premium' && (
-                        <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div></div>}>
-                            <VAKDiagnosis />
-                        </Suspense>
-                    )}
-                    
-                    {/* Admin Dashboard - Protected */}
-                    {view === 'admin' && adminAuthenticated && (
-                        <AdminDashboard onLogout={handleAdminLogout} onBack={() => handleNavigate('landing')} />
-                    )}
-
-                    {/* JWT Integration Test (temporal - solo para desarrollo) */}
-                     {view === 'jwt-test' && (
-                         <JWTIntegrationTestPage onBack={() => handleNavigate('landing')} />
-                     )}
-
-                    {/* Sign Up Page */}
-                    {view === 'sign-up' && (
-                        <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div></div>}>
-                            <SignUpPage onBack={() => handleNavigate('landing')} />
-                        </Suspense>
-                    )}
-                      
-                     {/* Auth Callback - Para confirmación de email (deshabilitado para Clerk) */}
-                     {/* {view === 'auth-callback' && (
-                         <AuthCallback />
-                     )} */}
-
-                    
-                </Suspense>
-            </main>
-
-            {/* Lead Capture Modal */}
-            <LeadCaptureModal 
-                isOpen={showLeadModal}
-                onClose={() => setShowLeadModal(false)}
-                onSubmit={handleLeadSubmit}
-                context={leadContext}
-            />
-
-            {/* Contact Modal */}
-            <ContactModal 
-                isOpen={showContactModal}
-                onClose={() => setShowContactModal(false)}
-            />
-
-            {/* Footer - Solo se muestra en páginas principales, no en SmartBoard, VAK, Admin, NeuroEntorno ni IALab */}
-            {view !== 'smartboard' && view !== 'vak' && view !== 'admin' && view !== 'neuroentorno' && view !== 'ialab' && <Footer />}
-
-            {/* Botón secreto para pruebas JWT (solo en desarrollo) */}
-            {import.meta.env.DEV && view === 'landing' && (
-              <button
-                onClick={() => handleNavigate('jwt-test')}
-                className="fixed bottom-4 right-4 z-50 w-10 h-10 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group"
-                title="Prueba Integración JWT Clerk-Supabase"
-              >
-                <span className="text-xs font-bold">JWT</span>
-                <div className="absolute -top-8 right-0 bg-[#004B63] text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                  Prueba JWT Integration
-                </div>
-              </button>
-            )}
-
-            {/* Admin Login Modal */}
-            <AdminLoginModal 
-                isOpen={adminLoginModalOpen}
-                onClose={() => setAdminLoginModalOpen(false)}
-                onLogin={handleAdminLogin}
-            />
-
-            {/* Nico Premium Widget - Flotante - Hidden on VAK, IALab and Auth */}
-            {view !== 'vak' && view !== 'vak-simple' && view !== 'vak-premium' && view !== 'ialab' && view !== 'auth' && (
-              <NicoModern />
-            )}
-            </div>
-        );
-    };
-
+    // Renderizado principal con AppRoutes y componentes globales
     return (
         <StudentProvider>
-            {renderContent()}
+            <div className="flex flex-col min-h-screen overflow-hidden bg-white text-[#004B63]" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+                <CustomCursor />
+                
+                {/* Loading Screen */}
+                {isLoading && (
+                    <LoadingScreen onComplete={handleLoadingComplete} minDuration={2000} />
+                )}
+                
+                {/* AppRoutes maneja toda la navegación */}
+                <AppRoutes />
+                
+                {/* Lead Capture Modal */}
+                <LeadCaptureModal 
+                    isOpen={showLeadModal}
+                    onClose={() => setShowLeadModal(false)}
+                    onSubmit={handleLeadSubmit}
+                    context={leadContext}
+                />
+                
+                {/* Contact Modal */}
+                <ContactModal 
+                    isOpen={showContactModal}
+                    onClose={() => setShowContactModal(false)}
+                />
+                
+                {/* Nico Premium Widget - Flotante */}
+                <NicoModern />
+            </div>
         </StudentProvider>
     );
+
 };
 
 export default App;

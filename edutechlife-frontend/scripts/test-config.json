@@ -1,0 +1,105 @@
+{
+  "testing": {
+    "baseUrl": "http://localhost:5174",
+    "timeout": 30000,
+    "headless": true,
+    "screenshotOnFailure": true
+  },
+  "users": {
+    "ialab": {
+      "email": "ialab-test@edutechlife.com",
+      "role": "ialab",
+      "password": "test-password-123"
+    },
+    "smartboard": {
+      "email": "smartboard-test@edutechlife.com",
+      "role": "smartboard",
+      "password": "test-password-123"
+    },
+    "admin": {
+      "email": "admin-test@edutechlife.com",
+      "role": "admin",
+      "password": "test-password-123"
+    },
+    "noRole": {
+      "email": "norole-test@edutechlife.com",
+      "role": null,
+      "password": "test-password-123"
+    }
+  },
+  "routes": {
+    "public": [
+      "/",
+      "/neuroentorno",
+      "/proyectos",
+      "/consultoria",
+      "/consultoria-b2b",
+      "/automation",
+      "/vak",
+      "/vak-simple",
+      "/vak-premium"
+    ],
+    "protected": {
+      "ialab": ["/ialab"],
+      "smartboard": ["/smartboard"],
+      "admin": ["/admin"]
+    },
+    "test": [
+      "/route-test",
+      "/jwt-integration-test",
+      "/auth-migration-dashboard",
+      "/jwt-test"
+    ]
+  },
+  "assertions": {
+    "unauthenticated": {
+      "canAccess": ["public"],
+      "cannotAccess": ["protected"],
+      "redirectsTo": "/"
+    },
+    "ialab": {
+      "canAccess": ["public", "/ialab"],
+      "cannotAccess": ["/smartboard", "/admin"],
+      "redirectsFrom": {
+        "/smartboard": "/ialab",
+        "/admin": "/ialab"
+      }
+    },
+    "smartboard": {
+      "canAccess": ["public", "/smartboard"],
+      "cannotAccess": ["/ialab", "/admin"],
+      "redirectsFrom": {
+        "/ialab": "/smartboard",
+        "/admin": "/smartboard"
+      }
+    },
+    "admin": {
+      "canAccess": ["public", "/admin"],
+      "cannotAccess": ["/ialab", "/smartboard"],
+      "redirectsFrom": {
+        "/ialab": "/admin",
+        "/smartboard": "/admin"
+      }
+    }
+  },
+  "jwt": {
+    "template": "supabase",
+    "requiredClaims": ["sub", "role"],
+    "supabaseIntegration": {
+      "tables": ["profiles", "user_progress"],
+      "rlsEnabled": true
+    }
+  },
+  "monitoring": {
+    "logs": {
+      "level": "debug",
+      "file": "./logs/auth-testing.log"
+    },
+    "metrics": [
+      "auth_success_rate",
+      "redirect_accuracy",
+      "page_load_time",
+      "jwt_validity_rate"
+    ]
+  }
+}

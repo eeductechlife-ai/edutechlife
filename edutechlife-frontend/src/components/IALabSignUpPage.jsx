@@ -5,13 +5,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import FloatingParticles from './FloatingParticles';
 import { Brain, CheckCircle, ArrowLeft } from 'lucide-react';
 
-const SignUpPage = ({ onBack }) => {
+const IALabSignUpPage = ({ onBack }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
-  const returnTo = searchParams.get('returnTo') || '/auth-router';
-  
-  console.log('🔀 SignUpPage: returnTo:', returnTo);
+  const returnTo = searchParams.get('returnTo') || '/ialab';
   
   const handleBackToLogin = () => {
     // Navegar a /login con el parámetro returnTo
@@ -61,16 +59,16 @@ const SignUpPage = ({ onBack }) => {
                 </div>
               </div>
 
-              {/* Welcome Text */}
-              <div className="mb-8">
-                <h2 className="text-3xl font-bold mb-4">Únete a nuestra comunidad educativa</h2>
-                <p className="text-white/90 leading-relaxed">
-                  Accede a <strong>IA Generativa</strong>, <strong>Prompts</strong>, <strong>APIs</strong>, <strong>DeepResearch</strong>, <strong>Canvas</strong> y <strong>NotebookLM</strong> en un ecosistema educativo diseñado para potenciar tu aprendizaje.
-                </p>
-                <p className="text-white/80 mt-4 text-sm italic">
-                  "La ética en la IA no es un complemento, es el fundamento de una educación transformadora."
-                </p>
-              </div>
+               {/* Welcome Text específico para IALAB */}
+               <div className="mb-8">
+                 <h2 className="text-3xl font-bold mb-4">Únete a IA Lab Pro</h2>
+                 <p className="text-white/90 leading-relaxed">
+                   Accede a <strong>IA Generativa avanzada</strong>, <strong>Prompts profesionales</strong>, <strong>APIs empresariales</strong>, <strong>DeepResearch</strong> y <strong>herramientas de productividad</strong> diseñadas para profesionales y adultos.
+                 </p>
+                 <p className="text-white/80 mt-4 text-sm italic">
+                   "Potencia tu carrera y proyectos con las herramientas de IA más avanzadas."
+                 </p>
+               </div>
 
                {/* Features */}
                <div className="space-y-4">
@@ -97,9 +95,9 @@ const SignUpPage = ({ onBack }) => {
 
             {/* Footer */}
             <div className="mt-8 pt-6 border-t border-white/20">
-               <p className="text-white/70 text-sm">
-                 ¿Ya tienes cuenta? <button onClick={handleBackToLogin} className="text-white hover:underline font-medium">Inicia sesión aquí</button>
-               </p>
+              <p className="text-white/70 text-sm">
+                  ¿Ya tienes cuenta? <button onClick={handleBackToLogin} className="text-white hover:underline font-medium">Inicia sesión aquí</button>
+              </p>
             </div>
           </div>
 
@@ -107,53 +105,60 @@ const SignUpPage = ({ onBack }) => {
           <div className="lg:w-3/5 p-8 lg:p-12 flex flex-col justify-center items-center">
             {/* Header */}
             <div className="mb-6 text-center w-full">
-              <h3 className="text-2xl font-bold text-[#004B63] mb-2">
-                Crea tu cuenta
-              </h3>
-              <p className="text-[#4DA8C4]">
-                Completa el formulario para comenzar
-              </p>
+               <h3 className="text-2xl font-bold text-[#004B63] mb-2">
+                 Regístrate en IA Lab Pro
+               </h3>
+               <p className="text-[#4DA8C4]">
+                 Completa el formulario para adultos (18+ años)
+               </p>
             </div>
 
                 {/* Clerk SignUp Component - Premium */}
                <div className="w-full min-h-[500px] sm:min-h-[550px] py-6 sm:py-8">
-                  <SignUp 
-                    signInUrl="/"
-                    fallbackRedirectUrl={returnTo}
-                   appearance={{
-                     variables: {
-                       colorPrimary: '#004B63',
-                       colorPrimaryHover: '#0A3550',
-                       colorText: '#00374A',
-                       colorBackground: '#FFFFFF',
-                       colorInputBackground: '#F8FAFC',
-                       colorInputText: '#00374A',
-                       colorInputPlaceholder: '#64748B',
-                       colorDanger: '#DC2626',
-                       colorSuccess: '#059669',
-                       borderRadius: '0.75rem',
-                       fontSize: { base: '14px', sm: '15px', md: '16px' },
-                       fontFamily: "'Montserrat', sans-serif",
-                       fontSmoothing: 'antialiased',
-                       fontWeight: {
-                         normal: '400',
-                         medium: '500',
-                         bold: '600',
-                       },
-                       spacingUnit: { base: '0.2rem', sm: '0.25rem', md: '0.3rem' },
-                       animation: {
-                         slow: '400ms',
-                         default: '250ms',
-                         fast: '150ms',
-                       },
-                       shadow: {
-                         sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
-                         md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-                         lg: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
-                       },
-                     }
-                   }}
-                 />
+                   <SignUp 
+                     signInUrl="/"
+                     fallbackRedirectUrl={returnTo}
+                    appearance={{
+                      variables: {
+                        colorPrimary: '#004B63',
+                        colorPrimaryHover: '#0A3550',
+                        colorText: '#00374A',
+                        colorBackground: '#FFFFFF',
+                        colorInputBackground: '#F8FAFC',
+                        colorInputText: '#00374A',
+                        colorInputPlaceholder: '#64748B',
+                        colorDanger: '#DC2626',
+                        colorSuccess: '#059669',
+                        borderRadius: '0.75rem',
+                        fontSize: { base: '14px', sm: '15px', md: '16px' },
+                        fontFamily: "'Montserrat', sans-serif",
+                        fontSmoothing: 'antialiased',
+                        fontWeight: {
+                          normal: '400',
+                          medium: '500',
+                          bold: '600',
+                        },
+                        spacingUnit: { base: '0.2rem', sm: '0.25rem', md: '0.3rem' },
+                        animation: {
+                          slow: '400ms',
+                          default: '250ms',
+                          fast: '150ms',
+                        },
+                        shadow: {
+                          sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+                          md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+                          lg: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
+                        },
+                      }
+                    }}
+                    // Metadata específica para IALAB (adultos)
+                    metadata={{
+                      user_type: 'adult',
+                      platform: 'ialab',
+                      age_range: '18+',
+                      registration_source: 'ialab_signup'
+                    }}
+                  />
                </div>
 
             {/* Info */}
@@ -169,4 +174,4 @@ const SignUpPage = ({ onBack }) => {
   );
 };
 
-export default SignUpPage;
+export default IALabSignUpPage;

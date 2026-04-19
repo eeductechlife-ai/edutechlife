@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useUser, useAuth } from '@clerk/react';
+import React, { useState, useEffect } from 'react';
+import { useUser, useClerk } from '@clerk/react';
 import { 
   DropdownMenu,
   DropdownMenuTrigger,
@@ -12,56 +12,64 @@ import {
 import { Button } from './ui/button';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import { Icon } from '../utils/iconMapping.jsx';
-import { useClerkAuth, getClerkUserInfo } from '../utils/clerk-utils';
+import { getClerkUserInfo } from '../utils/clerk-utils';
 
 /**
  * UserDropdownMenuPremium - Componente premium con shadcn/ui
  * 
  * Características:
  * 1. Diseño premium con shadcn components
- * 2. Integración con Clerk (cuando esté disponible)
+ * 2. Integración oficial con Clerk (@clerk/react)
  * 3. Estilos corporativos Edutechlife
- * 4. Funcionalidades 100% operativas
+ * 4. Funcionalidades 100% operativas con fallback robusto
  */
 const UserDropdownMenuPremium = ({ onNavigate }) => {
-  const { user: clerkUser, isSignedIn: isClerkSignedIn, signOut: clerkSignOut, openUserProfile } = useClerkAuth();
-  const { user: clerkUserOfficial } = useUser();
-  const { signOut: clerkSignOutOfficial } = useAuth();
+  // Estados faltantes - CRÍTICO para estabilización
+  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  
+  // Integración oficial Clerk - Patrón recomendado
+  const { user, isLoaded, isSignedIn } = useUser();
+  const { signOut, openUserProfile } = useClerk();
+  
+  // Manejo de estado de carga - Patrón clerk-react-patterns
+  useEffect(() => {
+    if (isLoaded) {
+      setIsLoading(false);
+    }
+  }, [isLoaded]);
   
   // Clerk es el ÚNICO proveedor de identidad
-  const activeUser = clerkUser || clerkUserOfficial;
-  const userInfo = getClerkUserInfo(activeUser);
+  const userInfo = getClerkUserInfo(user);
   
-  // Manejar logout exclusivamente con Clerk
+  // Manejar logout exclusivamente con Clerk oficial
   const handleLogout = async () => {
     try {
-      // Usar Clerk oficial si está disponible, si no usar nuestro wrapper
-      if (clerkSignOutOfficial) {
-        await clerkSignOutOfficial();
-      } else if (clerkSignOut) {
-        await clerkSignOut();
+      if (signOut) {
+        await signOut();
       } else {
-        console.error('No hay método de logout disponible');
+        console.error('[CLERK-AUTH] No hay método de logout disponible');
       }
       
       if (onNavigate) {
         onNavigate('landing');
       }
     } catch (error) {
-      console.error('Error al cerrar sesión:', error);
+      console.error('[CLERK-AUTH] Error al cerrar sesión:', error);
     }
   };
   
-  // Manejar perfil
+  // Manejar perfil con Clerk oficial - Patrón clerk-react-patterns
   const handleProfile = () => {
     if (openUserProfile) {
       openUserProfile();
-    } else if (onNavigate) {
-      onNavigate('perfil');
     } else {
-      alert('Página de perfil en desarrollo');
+      setIsProfileOpen(true);
+      console.log('[CLERK-AUTH] Modal de perfil personalizado activado');
     }
   };
   
@@ -79,11 +87,54 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
     }
   };
   
-  // Manejar cambio de contraseña
+  // Manejar cambio de contraseña integrado con Clerk
   const handleChangePassword = () => {
-    setIsChangePasswordOpen(true);
+    if (openUserProfile) {
+      // Clerk v5+ - intentar redirigir a sección de seguridad
+      console.log('[CLERK-AUTH] Redirigiendo a perfil de Clerk para cambio de contraseña');
+      window.location.href = '/user-profile?section=security';
+    } else {
+      setIsChangePasswordOpen(true);
+      console.log('[CLERK-AUTH] Modal de cambio de contraseña personalizado activado');
+    }
   };
   
+  // Blindaje del componente - Evita colapso total
+  if (isLoading) {
+    return (
+      <Button 
+        variant="ghost" 
+        className="relative h-10 w-10 rounded-full p-0"
+        aria-label="Cargando menú de usuario"
+        disabled
+      >
+        <Avatar className="h-10 w-10 border-2 border-white">
+          <AvatarFallback className="bg-slate-200 animate-pulse">
+            <div className="h-4 w-4 bg-slate-300 rounded-full"></div>
+          </AvatarFallback>
+        </Avatar>
+      </Button>
+    );
+  }
+  
+  // Fallback para usuarios no autenticados
+  if (!isSignedIn) {
+    return (
+      <Button 
+        variant="ghost" 
+        className="relative h-10 w-10 rounded-full p-0 hover:bg-cyan-50"
+        aria-label="Iniciar sesión"
+        onClick={() => window.location.href = '/login'}
+      >
+        <Avatar className="h-10 w-10 border-2 border-white">
+          <AvatarFallback className="bg-gradient-to-br from-slate-400 to-slate-600 text-white">
+            <Icon name="fa-user" className="text-sm" />
+          </AvatarFallback>
+        </Avatar>
+      </Button>
+    );
+  }
+
   return (
     <>
       <DropdownMenu>
@@ -130,10 +181,10 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
                   {userInfo.displayEmail}
                 </p>
                 <div className="flex items-center gap-1 mt-1">
-                  <span className="text-xs px-2 py-0.5 bg-cyan-50 text-[#00BCD4] rounded-full">
+                   <span className="text-xs px-2 py-0.5 bg-cyan-50 text-[#00BCD4] rounded-full">
                     {userInfo.role === 'teacher' ? 'Profesor' : 'Estudiante'}
                   </span>
-                  {isClerkSignedIn && (
+                  {isSignedIn && (
                     <span className="text-xs px-2 py-0.5 bg-green-50 text-green-600 rounded-full">
                       Clerk
                     </span>
@@ -211,21 +262,21 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
             <DialogTitle className="text-[#00374A]">Cambiar Contraseña</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-4">
-            <p className="text-sm text-slate-600">
-              {isClerkSignedIn 
+             <p className="text-sm text-slate-600">
+              {isSignedIn 
                 ? 'Utiliza la funcionalidad de cambio de contraseña de Clerk desde tu perfil.'
-                : 'Esta funcionalidad estará disponible cuando se complete la integración con Clerk.'
+                : 'Esta funcionalidad estará disponible cuando inicies sesión.'
               }
             </p>
             <div className="bg-cyan-50 p-4 rounded-lg">
               <p className="text-sm text-[#004B63] font-medium">
-                {isClerkSignedIn 
+                {isSignedIn 
                   ? '✅ Clerk está configurado para gestión segura de contraseñas.'
-                  : '⚠ Para una gestión segura de contraseñas, instala Clerk completamente.'
+                  : '⚠ Para una gestión segura de contraseñas, inicia sesión primero.'
                 }
               </p>
             </div>
-            {isClerkSignedIn && (
+            {isSignedIn && (
               <Button 
                 onClick={() => {
                   setIsChangePasswordOpen(false);
@@ -288,10 +339,72 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
               </CardContent>
             </Card>
           </div>
-        </DialogContent>
-      </Dialog>
-    </>
-  );
+       </DialogContent>
+     </Dialog>
+     
+     {/* Modal de Perfil Personalizado */}
+     <Dialog open={isProfileOpen} onOpenChange={setIsProfileOpen}>
+       <DialogContent className="sm:max-w-lg">
+         <DialogHeader>
+           <DialogTitle className="text-[#00374A]">Perfil de Usuario</DialogTitle>
+         </DialogHeader>
+         <div className="space-y-6 py-4">
+           <div className="flex items-center gap-4">
+             <Avatar className="h-16 w-16 border-2 border-white shadow-md">
+               {userInfo.avatarUrl ? (
+                 <AvatarImage src={userInfo.avatarUrl} alt={userInfo.displayName} />
+               ) : (
+                 <AvatarFallback className="bg-gradient-to-br from-[#004B63] to-[#00BCD4] text-white text-xl font-semibold">
+                   {userInfo.initials}
+                 </AvatarFallback>
+               )}
+             </Avatar>
+             <div>
+               <h3 className="text-lg font-semibold text-[#00374A]">{userInfo.displayName}</h3>
+               <p className="text-sm text-slate-500">{userInfo.displayEmail}</p>
+               <p className="text-xs text-slate-400 mt-1">ID: {user?.id || 'No disponible'}</p>
+             </div>
+           </div>
+           
+           <Card>
+             <CardHeader className="pb-3">
+               <CardTitle className="text-lg text-[#00374A]">Información de la Cuenta</CardTitle>
+             </CardHeader>
+             <CardContent className="space-y-4">
+               <div className="grid grid-cols-2 gap-4">
+                 <div>
+                   <p className="text-sm font-medium text-slate-500">Rol</p>
+                   <p className="text-sm text-[#00374A]">{userInfo.role === 'teacher' ? 'Profesor' : 'Estudiante'}</p>
+                 </div>
+                 <div>
+                   <p className="text-sm font-medium text-slate-500">Estado</p>
+                   <p className="text-sm text-green-600">Activo</p>
+                 </div>
+               </div>
+               
+               <div className="pt-4 border-t border-slate-100">
+                 <p className="text-sm text-slate-600 mb-3">
+                   Para gestionar tu perfil completo, utiliza la interfaz oficial de Clerk.
+                 </p>
+                 <Button 
+                   onClick={() => {
+                     setIsProfileOpen(false);
+                     if (openUserProfile) {
+                       openUserProfile();
+                     }
+                   }}
+                   className="w-full bg-gradient-to-r from-[#004B63] to-[#00BCD4] hover:opacity-90"
+                 >
+                   Abrir Perfil Completo
+                 </Button>
+               </div>
+             </CardContent>
+           </Card>
+         </div>
+       </DialogContent>
+     </Dialog>
+   </>
+ );
 };
 
 export default UserDropdownMenuPremium;
