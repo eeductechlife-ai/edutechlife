@@ -2,6 +2,7 @@ import React from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useIALabContext } from '../../context/IALabContext';
+import LessonCardDetailed from './LessonCardDetailed';
 
 /**
  * COMPONENTE: IALabContentAccordion
@@ -182,130 +183,23 @@ const IALabContentAccordion = () => {
     }
   };
   
-  // Renderizar acordeón premium
-  const renderPremiumAccordion = (accordionId, lesson) => {
+  // Renderizar tarjeta detallada premium
+  const renderDetailedLessonCard = (accordionId, lesson) => {
     const isVisible = visibleAccordions.includes(accordionId);
     const isOpen = openAccordions[accordionId];
     
     if (!isVisible) return null;
     
     return (
-      <div 
+      <LessonCardDetailed
         key={accordionId}
-        className={`
-          bg-gradient-to-br from-white via-white/98 to-slate-50/80 
-          border border-slate-100 
-          shadow-[0_8px_32px_rgba(0,0,0,0.04)] 
-          rounded-2xl overflow-hidden
-          transition-all duration-500 ease-out
-          hover:shadow-[0_12px_48px_rgba(0,0,0,0.06)]
-          ${isOpen ? 'ring-2 ring-[#00BCD4]/20' : ''}
-        `}
-        style={{
-          animationDelay: `${(accordionId - 1) * 0.1}s`,
-          animationFillMode: 'both'
-        }}
-      >
-        {/* HEADER DEL ACORDEÓN */}
-        <button
-          onClick={() => toggleAccordion(accordionId)}
-          className="w-full flex items-center justify-between p-6 md:p-8 text-left focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:ring-offset-2 rounded-2xl"
-          aria-expanded={isOpen}
-          aria-controls={`accordion-content-${accordionId}`}
-        >
-          {/* CONTENIDO IZQUIERDA: Número y título */}
-          <div className="flex items-center gap-4 md:gap-6">
-            {/* NÚMERO DE LECCIÓN CON BADGE */}
-            <div className={`
-              w-12 h-12 md:w-14 md:h-14 
-              rounded-xl md:rounded-2xl 
-              flex items-center justify-center 
-              flex-shrink-0
-              ${lesson.badgeColor}
-              shadow-sm
-              transition-all duration-300
-              ${isOpen ? 'scale-105' : ''}
-            `}>
-              <span className="text-lg md:text-xl font-bold">{accordionId}</span>
-            </div>
-            
-            {/* TÍTULO Y DESCRIPCIÓN */}
-            <div className="flex-1 min-w-0">
-              <h3 className="text-lg md:text-xl font-bold text-[#00374A] mb-1 md:mb-2 leading-tight">
-                {lesson.title}
-              </h3>
-              <p className="text-sm text-slate-600 font-body leading-relaxed hidden md:block">
-                {lesson.description}
-              </p>
-              
-              {/* METADATOS (SOLO EN MÓVIL O SI NO ESTÁ ABIERTO) */}
-              {!isOpen && (
-                <div className="flex items-center gap-3 mt-2 md:hidden">
-                  <span className={`text-xs font-medium px-2 py-1 rounded-lg ${lesson.badgeColor}`}>
-                    {lesson.format}
-                  </span>
-                  <span className="text-xs text-slate-500 font-body">
-                    <Icon name="fa-clock" className="text-xs mr-1" />
-                    {lesson.duration}
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
-          
-          {/* CONTENIDO DERECHA: Metadatos y chevron */}
-          <div className="flex items-center gap-4 md:gap-6">
-            {/* METADATOS (SOLO EN ESCRITORIO Y SI NO ESTÁ ABIERTO) */}
-            {!isOpen && (
-              <div className="hidden md:flex items-center gap-4">
-                <span className={`text-sm font-medium px-3 py-1.5 rounded-lg ${lesson.badgeColor}`}>
-                  {lesson.format}
-                </span>
-                <div className="flex items-center gap-2 text-slate-500">
-                  <Icon name="fa-clock" className="text-sm" />
-                  <span className="text-sm font-medium">{lesson.duration}</span>
-                </div>
-              </div>
-            )}
-            
-            {/* ICONO CHEVRON ANIMADO */}
-            <Icon 
-              name={isOpen ? 'fa-chevron-down' : 'fa-chevron-right'} 
-              className={`
-                text-sm transition-all duration-300 
-                ${isOpen ? 'text-[#00BCD4] rotate-0' : 'text-slate-400'}
-                hover:text-[#00BCD4]
-                md:text-base
-              `}
-            />
-          </div>
-        </button>
-        
-        {/* CONTENIDO EXPANDIDO CON ANIMACIÓN FRAMER-MOTION */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ 
-                duration: isTouchDevice ? 0.2 : 0.3,
-                ease: 'easeInOut',
-                ...(window.matchMedia('(prefers-reduced-motion: reduce)').matches && {
-                  duration: 0.1
-                })
-              }}
-              className="overflow-hidden"
-              id={`accordion-content-${accordionId}`}
-            >
-              <div className="mt-4 space-y-4 px-4 pb-4 md:px-6 md:pb-6 lg:px-8 lg:pb-6">
-                {/* CONTENIDO ESPECÍFICO POR ACORDEÓN */}
-                {renderAccordionContent(accordionId)}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+        lesson={lesson}
+        lessonId={accordionId}
+        isOpen={isOpen}
+        onToggle={toggleAccordion}
+        renderContent={renderAccordionContent}
+        isTouchDevice={isTouchDevice}
+      />
     );
   };
   
@@ -362,10 +256,10 @@ const IALabContentAccordion = () => {
         </p>
       </div>
       
-      {/* Cuadro de Introducción - Acordeones Premium SaaS v1.0 */}
-      <div className="space-y-4 md:space-y-6">
+      {/* Cuadro de Introducción - Tarjetas Detalladas Premium SaaS v2.0 */}
+      <div className="space-y-6 md:space-y-8">
         {moduleLessons.map((lesson, index) => (
-          renderPremiumAccordion(index + 1, lesson)
+          renderDetailedLessonCard(index + 1, lesson)
         ))}
       </div>
     </div>

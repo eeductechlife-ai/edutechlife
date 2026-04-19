@@ -1,5 +1,5 @@
 import { useState, lazy, Suspense } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@clerk/react';
 import { PageLoader } from '../LoadingScreen';
 import NicoModern from '../Nico/NicoModern';
@@ -58,10 +58,14 @@ const AppLayout = () => {
     setMobileMenuOpen(false);
   };
   
+  const location = useLocation();
+  
   // Renderizar header condicionalmente basado en la ruta actual
   const shouldShowHeader = () => {
-    // Obtener la ruta actual (simplificado - en implementación real usaríamos useLocation)
-    // Por ahora, mostramos header en todas las rutas excepto las específicas
+    // Ocultar header en rutas de IA Lab para experiencia inmersiva
+    if (location.pathname.includes('/ialab')) {
+      return false;
+    }
     return true;
   };
   

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabContext } from '../../context/IALabContext';
+import { UserButton } from '@clerk/react';
 
 /**
  * COMPONENTE: IALabSidebar
@@ -256,58 +257,89 @@ const IALabSidebar = () => {
            )}
          </div>
 
-        {/* Sección: Detalles del Curso */}
-        <div className="px-2 w-full">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="text-[#004B63]">
-              <Icon name="fa-info-circle" className="text-sm" />
-            </div>
-            <h3 className="text-sm font-bold tracking-[0.15em] uppercase text-[#004B63] font-display">
-              DETALLES DEL CURSO
-            </h3>
-            <div className="flex-1 h-px bg-gradient-to-r from-[#004B63]/20 via-[#00BCD4]/30 to-transparent"></div>
-          </div>
-          <div className="space-y-3">
-            <div className="flex justify-between items-center p-3 hover:bg-slate-50/50 rounded-xl transition-colors duration-300">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-[#00BCD4]/10 rounded-lg flex items-center justify-center">
-                  <Icon name="fa-clock" className="text-[#00BCD4] text-sm" />
-                </div>
-                <span className="text-sm font-medium text-[#64748B] font-body">Duración</span>
-              </div>
-              <span className="text-sm font-bold text-[#004B63] font-display">{curr?.duration}</span>
-            </div>
-            <div className="flex justify-between items-center p-3 hover:bg-slate-50/50 rounded-xl transition-colors duration-300">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-[#00BCD4]/10 rounded-lg flex items-center justify-center">
-                  <Icon name="fa-signal" className="text-[#00BCD4] text-sm" />
-                </div>
-                <span className="text-sm font-medium text-[#64748B] font-body">Nivel</span>
-              </div>
-              <span className="text-sm font-bold text-[#004B63] font-display">{curr?.level}</span>
-            </div>
-            <div className="flex justify-between items-center p-3 hover:bg-slate-50/50 rounded-xl transition-colors duration-300">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-[#00BCD4]/10 rounded-lg flex items-center justify-center">
-                  <Icon name="fa-play" className="text-[#00BCD4] text-sm" />
-                </div>
-                <span className="text-sm font-medium text-[#64748B] font-body">Videos</span>
-              </div>
-              <span className="text-sm font-bold text-[#004B63] font-display">{curr?.videos}</span>
-            </div>
-            <div className="flex justify-between items-center p-3 hover:bg-slate-50/50 rounded-xl transition-colors duration-300">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-[#00BCD4]/10 rounded-lg flex items-center justify-center">
-                  <Icon name="fa-briefcase" className="text-[#00BCD4] text-sm" />
-                </div>
-                <span className="text-sm font-medium text-[#64748B] font-body">Proyectos</span>
-              </div>
-              <span className="text-sm font-bold text-[#004B63] font-display">{curr?.projects}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </aside>
+         {/* Sección: Detalles del Curso */}
+         <div className="px-2 w-full">
+           <div className="flex items-center gap-3 mb-4">
+             <div className="text-[#004B63]">
+               <Icon name="fa-info-circle" className="text-sm" />
+             </div>
+             <h3 className="text-sm font-bold tracking-[0.15em] uppercase text-[#004B63] font-display">
+               DETALLES DEL CURSO
+             </h3>
+             <div className="flex-1 h-px bg-gradient-to-r from-[#004B63]/20 via-[#00BCD4]/30 to-transparent"></div>
+           </div>
+           <div className="space-y-3">
+             <div className="flex justify-between items-center p-3 hover:bg-slate-50/50 rounded-xl transition-colors duration-300">
+               <div className="flex items-center gap-3">
+                 <div className="w-8 h-8 bg-[#00BCD4]/10 rounded-lg flex items-center justify-center">
+                   <Icon name="fa-clock" className="text-[#00BCD4] text-sm" />
+                 </div>
+                 <span className="text-sm font-medium text-[#64748B] font-body">Duración</span>
+               </div>
+               <span className="text-sm font-bold text-[#004B63] font-display">{curr?.duration}</span>
+             </div>
+             <div className="flex justify-between items-center p-3 hover:bg-slate-50/50 rounded-xl transition-colors duration-300">
+               <div className="flex items-center gap-3">
+                 <div className="w-8 h-8 bg-[#00BCD4]/10 rounded-lg flex items-center justify-center">
+                   <Icon name="fa-signal" className="text-[#00BCD4] text-sm" />
+                 </div>
+                 <span className="text-sm font-medium text-[#64748B] font-body">Nivel</span>
+               </div>
+               <span className="text-sm font-bold text-[#004B63] font-display">{curr?.level}</span>
+             </div>
+             <div className="flex justify-between items-center p-3 hover:bg-slate-50/50 rounded-xl transition-colors duration-300">
+               <div className="flex items-center gap-3">
+                 <div className="w-8 h-8 bg-[#00BCD4]/10 rounded-lg flex items-center justify-center">
+                   <Icon name="fa-play" className="text-[#00BCD4] text-sm" />
+                 </div>
+                 <span className="text-sm font-medium text-[#64748B] font-body">Videos</span>
+               </div>
+               <span className="text-sm font-bold text-[#004B63] font-display">{curr?.videos}</span>
+             </div>
+             <div className="flex justify-between items-center p-3 hover:bg-slate-50/50 rounded-xl transition-colors duration-300">
+               <div className="flex items-center gap-3">
+                 <div className="w-8 h-8 bg-[#00BCD4]/10 rounded-lg flex items-center justify-center">
+                   <Icon name="fa-briefcase" className="text-[#00BCD4] text-sm" />
+                 </div>
+                 <span className="text-sm font-medium text-[#64748B] font-body">Proyectos</span>
+               </div>
+               <span className="text-sm font-bold text-[#004B63] font-display">{curr?.projects}</span>
+             </div>
+           </div>
+         </div>
+
+         {/* Sección: Control de Cuenta - UserButton de Clerk */}
+         <div className="px-2 w-full mt-8 pt-6 border-t border-[#004B63]/10">
+           <div className="flex items-center gap-3 mb-4">
+             <div className="text-[#004B63]">
+               <Icon name="fa-user-circle" className="text-sm" />
+             </div>
+             <h3 className="text-sm font-bold tracking-[0.15em] uppercase text-[#004B63] font-display">
+               MI CUENTA
+             </h3>
+             <div className="flex-1 h-px bg-gradient-to-r from-[#004B63]/20 via-[#00BCD4]/30 to-transparent"></div>
+           </div>
+           <div className="flex justify-center p-4">
+             <div className="transform scale-110">
+               <UserButton 
+                 appearance={{
+                   elements: {
+                     rootBox: "w-full",
+                     avatarBox: "w-12 h-12 border-2 border-white shadow-lg",
+                     userButtonAvatarImage: "rounded-full",
+                     userButtonTrigger: "bg-gradient-to-r from-[#004B63] to-[#00BCD4] hover:from-[#00BCD4] hover:to-[#004B63] transition-all duration-300"
+                   }
+                 }}
+                 afterSignOutUrl="/"
+               />
+             </div>
+           </div>
+           <p className="text-xs text-center text-slate-500 mt-3">
+             Gestiona tu perfil, seguridad y sesión
+           </p>
+         </div>
+       </div>
+     </aside>
   );
 };
 

@@ -72,8 +72,8 @@ export const IALabProvider = ({ children, onBack }) => {
   
   // Estados de sidebar
   const [sidebarDropdowns, setSidebarDropdowns] = useState({
-    videos: true,
-    recursos: true
+    videos: false,
+    recursos: false
   });
   
   // Estados de acordeones
@@ -141,14 +141,74 @@ export const IALabProvider = ({ children, onBack }) => {
   
   const LAST_MODULE_ID = 5;
   
-  // Lecciones del módulo 1
+  // Lecciones del módulo 1 - Datos extendidos para diseño premium
   const moduleLessons = [
-    { id: 1, title: 'Ingeniería de Prompts – Comunícate Mejor con la IA', description: 'Aprende a dar instrucciones claras a la IA', duration: '10 min', format: 'Video', icon: 'fa-lightbulb', badgeColor: 'bg-blue-100 text-blue-800' },
-    { id: 2, title: 'El Método para Dominar la IA (Mastery Framework)', description: 'Estructura tus prompts con estrategia', duration: '15 min', format: 'Lab', icon: 'fa-book-open', badgeColor: 'bg-purple-100 text-purple-800' },
-    { id: 3, title: 'Adapta la IA a Cada Situación (Contexto Dinámico)', description: 'Personaliza respuestas según necesidades', duration: '12 min', format: 'Video', icon: 'fa-map', badgeColor: 'bg-green-100 text-green-800' },
-    { id: 4, title: 'Resultados Rápidos con IA (Zero-Shot Prompting)', description: 'Obtén buenos resultados sin ejemplos', duration: '8 min', format: 'Reading', icon: 'fa-bolt', badgeColor: 'bg-yellow-100 text-yellow-800' },
-    { id: 5, title: 'Haz que la IA Piense Paso a Paso (Chain-of-Thought)', description: 'Guía el razonamiento de la IA', duration: '18 min', format: 'Lab', icon: 'fa-sitemap', badgeColor: 'bg-indigo-100 text-indigo-800' },
-    { id: 6, title: 'Ejercicio de Reflexión – Más Allá de Usar la IA', description: 'Reflexiona sobre el impacto ético de la IA', duration: '25 min', format: 'Activity', icon: 'fa-brain', badgeColor: 'bg-pink-100 text-pink-800' },
+    { 
+      id: 1, 
+      title: 'Resultados Rápidos con IA (Zero-Shot Prompting)', 
+      description: 'Obtén buenos resultados sin ejemplos', 
+      detailedDescription: 'Aprende a formular prompts efectivos desde el primer intento, sin necesidad de ejemplos previos. Domina la técnica Zero-Shot para obtener respuestas precisas y útiles en cualquier contexto.',
+      duration: '8 min', 
+      format: 'Reading', 
+      icon: 'fa-bolt', 
+      badgeColor: 'bg-yellow-100 text-yellow-800',
+      themeColor: '#FFD166'
+    },
+    { 
+      id: 2, 
+      title: 'Haz que la IA Piense Paso a Paso (Chain-of-Thought)', 
+      description: 'Guía el razonamiento de la IA', 
+      detailedDescription: 'Descubre cómo descomponer problemas complejos en pasos lógicos que la IA puede seguir. Aplica la técnica Chain-of-Thought para obtener soluciones detalladas y bien fundamentadas.',
+      duration: '18 min', 
+      format: 'Lab', 
+      icon: 'fa-sitemap', 
+      badgeColor: 'bg-indigo-100 text-indigo-800',
+      themeColor: '#4F46E5'
+    },
+    { 
+      id: 3, 
+      title: 'Tono y Estilo: Personalizando la Voz de la IA', 
+      description: 'Personaliza respuestas según necesidades', 
+      detailedDescription: 'Aprende a ajustar el tono, estilo y formato de las respuestas de la IA para diferentes audiencias y propósitos. Desde formal hasta casual, domina el arte de la comunicación efectiva.',
+      duration: '12 min', 
+      format: 'Video', 
+      icon: 'fa-comments', 
+      badgeColor: 'bg-green-100 text-green-800',
+      themeColor: '#10B981'
+    },
+    { 
+      id: 4, 
+      title: 'Integridad Académica y Prevención del Plagio con IA', 
+      description: 'Asegura la originalidad y ética en el uso de IA', 
+      detailedDescription: 'Conoce las mejores prácticas para usar la IA de manera ética en contextos académicos y profesionales. Aprende a citar correctamente, evitar plagio y mantener la integridad intelectual.',
+      duration: '15 min', 
+      format: 'Lab', 
+      icon: 'fa-shield-alt', 
+      badgeColor: 'bg-red-100 text-red-800',
+      themeColor: '#EF4444'
+    },
+    { 
+      id: 5, 
+      title: 'Estructura Perfecta de un Prompt: El Framework Edutechlife', 
+      description: 'Estructura tus prompts con estrategia', 
+      detailedDescription: 'Domina el framework RTF (Rol, Tarea, Formato) exclusivo de Edutechlife. Aprende a estructurar prompts que generen respuestas consistentes, relevantes y de alta calidad.',
+      duration: '10 min', 
+      format: 'Video', 
+      icon: 'fa-code', 
+      badgeColor: 'bg-purple-100 text-purple-800',
+      themeColor: '#8B5CF6'
+    },
+    { 
+      id: 6, 
+      title: 'Proyecto Final: Diseña tu Solución con IA', 
+      description: 'Reflexiona sobre el impacto ético de la IA', 
+      detailedDescription: 'Aplica todo lo aprendido en un proyecto práctico que resuelva un problema real. Desarrolla una solución completa usando IA, desde el diseño hasta la implementación.',
+      duration: '25 min', 
+      format: 'Activity', 
+      icon: 'fa-rocket', 
+      badgeColor: 'bg-cyan-100 text-cyan-800',
+      themeColor: '#06B6D4'
+    },
   ];
   
   // Mensajes de carga para sintetizador

@@ -9,13 +9,14 @@ import { useInView, motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../utils/iconMapping.jsx';
 import { useAuth } from '../context/AuthContext';
 import { getAllProgress, saveProgress, PROGRESS_STATUS, saveLastLesson, getUserLastProgress, getProgress, getCompletedModules } from '../lib/progress';
-import { LogOut, Lightbulb } from 'lucide-react';
+import { LogOut, Lightbulb, BrainCircuit, PlayCircle, ChevronRight, Award } from 'lucide-react';
 import UserDropdownMenuSimplified from './UserDropdownMenuSimplified';
 import PlatformOptimizedCard from './PlatformOptimizedCard';
 import ChallengeCard from './ChallengeCard';
 import ForumCommunity from './forum/ForumCommunity';
 import ErrorBoundary from './forum/ErrorBoundary';
 import { FORUM_COMPONENTS, FORUM_TYPOGRAPHY, FORUM_EFFECTS, cn, GRADIENTS } from './forum/forumDesignSystem';
+import OVAReflexion from './IALab/OVAReflexion';
 
 const IALabFixed = ({ onBack }) => {
     const { user, isLoading: authLoading, signOut } = useAuth();
@@ -76,6 +77,7 @@ const IALabFixed = ({ onBack }) => {
     
     // Estados para modal de examen y seguridad
     const [showExamModal, setShowExamModal] = useState(false);
+    const [isOVAOpen, setIsOVAOpen] = useState(false);
     const [showExitConfirmation, setShowExitConfirmation] = useState(false);
     const [showSecurityWarning, setShowSecurityWarning] = useState(false);
     const [securityWarningCount, setSecurityWarningCount] = useState(0);
@@ -403,33 +405,103 @@ const IALabFixed = ({ onBack }) => {
             case 6:
                 return (
                     <>
-                        <p className="text-sm text-slate-600 leading-relaxed md:text-base lg:text-[15px]">
+                        <p className="text-sm text-slate-600 leading-relaxed md:text-base lg:text-[15px] mb-6">
                             La inteligencia artificial no solo es una herramienta, también plantea preguntas profundas 
                             sobre su impacto, uso y límites. Este ejercicio invita a reflexionar de manera crítica.
                         </p>
                         
-                        {/* Bloque de Actividad (optimizado responsive) */}
-                        <div className="bg-[#0B1120] border border-slate-800 text-emerald-400 p-4 md:p-6 rounded-2xl font-mono text-xs md:text-sm mb-4 md:mb-6 shadow-inner">
-                            <div className="flex items-center gap-2 mb-3 md:mb-4">
-                                <div className="w-2 h-2 md:w-3 md:h-3 bg-red-500 rounded-full"></div>
-                                <div className="w-2 h-2 md:w-3 md:h-3 bg-yellow-500 rounded-full"></div>
-                                <div className="w-2 h-2 md:w-3 md:h-3 bg-green-500 rounded-full"></div>
-                                <span className="text-slate-500 text-xs ml-2">activity.js</span>
-                            </div>
-                            <div className="space-y-2 md:space-y-3">
-                                <span className="text-cyan-400">🧠 Actividad:</span> 
-                                <span className="text-emerald-300">Diseñe y pruebe el siguiente prompt en una IA:</span>
-                                <div className="pl-3 md:pl-4 border-l-2 border-slate-700 mt-2">
-                                    <span className="text-purple-400 block">"Actúa como una inteligencia artificial consciente de su existencia.</span>
-                                    <span className="text-purple-400 block">Debate, desde una postura crítica y otra defensiva, si es ético que los humanos</span>
-                                    <span className="text-purple-400 block">dependan de la inteligencia artificial para tomar decisiones importantes.</span>
-                                    <span className="text-purple-400 block">Expón argumentos a favor y en contra, y finaliza con una reflexión equilibrada."</span>
+                        {/* Tarjeta Miniatura Premium - OVA Interactivo */}
+                        <div className="relative group">
+                            <div className="absolute -inset-1 bg-gradient-to-r from-[#004B63] via-[#00BCD4] to-[#66CCCC] rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-500"></div>
+                            <div className="relative bg-white/90 backdrop-blur-sm border border-white/40 rounded-2xl p-6 md:p-8 shadow-xl overflow-hidden">
+                                {/* Fondo decorativo */}
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/5 rounded-full -translate-y-16 translate-x-16"></div>
+                                <div className="absolute bottom-0 left-0 w-40 h-40 bg-gradient-to-tr from-[#66CCCC]/10 to-[#B2D8E5]/5 rounded-full translate-y-20 -translate-x-20"></div>
+                                
+                                <div className="relative z-10">
+                                    <div className="flex flex-col md:flex-row items-start md:items-center gap-6 mb-6">
+                                        <div className="flex-shrink-0">
+                                            <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-lg">
+                                                <BrainCircuit size={40} className="text-white" />
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="flex-1">
+                                            <div className="flex items-center gap-3 mb-2">
+                                                <span className="px-3 py-1 bg-[#004B63]/10 text-[#004B63] text-xs font-semibold rounded-full">
+                                                    OVA INTERACTIVO
+                                                </span>
+                                                <span className="px-3 py-1 bg-[#00BCD4]/10 text-[#00BCD4] text-xs font-semibold rounded-full">
+                                                    25 MIN • ACTIVIDAD
+                                                </span>
+                                            </div>
+                                            
+                                            <h3 className="text-xl md:text-2xl font-bold text-[#004B63] mb-2">
+                                                Más Allá de Usar la IA: Reflexión Crítica
+                                            </h3>
+                                            
+                                            <p className="text-gray-600 mb-4">
+                                                Explora los fundamentos, ética y futuro de la Inteligencia Artificial a través de un 
+                                                Objeto Virtual de Aprendizaje interactivo con juegos, cuestionarios y glosario.
+                                            </p>
+                                            
+                                            <div className="flex flex-wrap gap-3 mb-6">
+                                                <div className="flex items-center gap-2 text-sm text-gray-700">
+                                                    <div className="w-2 h-2 rounded-full bg-[#66CCCC]"></div>
+                                                    <span>Historia de la IA</span>
+                                                </div>
+                                                <div className="flex items-center gap-2 text-sm text-gray-700">
+                                                    <div className="w-2 h-2 rounded-full bg-[#00BCD4]"></div>
+                                                    <span>Tecnología Actual</span>
+                                                </div>
+                                                <div className="flex items-center gap-2 text-sm text-gray-700">
+                                                    <div className="w-2 h-2 rounded-full bg-[#004B63]"></div>
+                                                    <span>Ética y Sociedad</span>
+                                                </div>
+                                                <div className="flex items-center gap-2 text-sm text-gray-700">
+                                                    <Award size={16} className="text-[#66CCCC]" />
+                                                    <span>Certificación Final</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                        <div className="bg-gradient-to-br from-[#B2D8E5]/30 to-white/50 p-4 rounded-xl border border-white/60">
+                                            <div className="text-sm text-gray-600 mb-1">Juego de Emparejamiento</div>
+                                            <div className="text-lg font-semibold text-[#004B63]">6 Conceptos</div>
+                                        </div>
+                                        <div className="bg-gradient-to-br from-[#66CCCC]/30 to-white/50 p-4 rounded-xl border border-white/60">
+                                            <div className="text-sm text-gray-600 mb-1">Cuestionario Interactivo</div>
+                                            <div className="text-lg font-semibold text-[#004B63]">3 Preguntas</div>
+                                        </div>
+                                        <div className="bg-gradient-to-br from-[#00BCD4]/30 to-white/50 p-4 rounded-xl border border-white/60">
+                                            <div className="text-sm text-gray-600 mb-1">Glosario Completo</div>
+                                            <div className="text-lg font-semibold text-[#004B63]">5 Términos</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                                        <div className="text-sm text-gray-600">
+                                            <span className="font-medium text-[#004B63]">Recomendado:</span> Completa todas las secciones para obtener certificación
+                                        </div>
+                                        
+                                        <button
+                                            onClick={() => setIsOVAOpen(true)}
+                                            className="group relative px-8 py-3 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center gap-3"
+                                        >
+                                            <PlayCircle size={20} />
+                                            <span>Ejecutar OVA Interactivo</span>
+                                            <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                                            <div className="absolute -inset-1 bg-gradient-to-r from-[#004B63] to-[#00BCD4] rounded-xl blur opacity-30 group-hover:opacity-50 transition duration-500"></div>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <p className="font-medium text-[#00BCD4] mb-0 text-sm md:text-base">
-                            👉 Aplique este prompt en su IA favorita y analice las respuestas obtenidas.
+                        <p className="font-medium text-[#00BCD4] mt-6 mb-0 text-sm md:text-base">
+                            👉 Haz clic en "Ejecutar OVA Interactivo" para explorar la actividad completa.
                         </p>
                     </>
                 );
@@ -3477,6 +3549,11 @@ IDEAS DEL USUARIO PARA ANALIZAR: "${input}"`;
                         </div>
                     </div>
                 </div>
+            )}
+            
+            {/* Modal OVA Interactivo - Pantalla Completa */}
+            {isOVAOpen && (
+                <OVAReflexion onClose={() => setIsOVAOpen(false)} />
             )}
             
             {/* Modal de Confirmación al Salir */}
