@@ -78,7 +78,7 @@ export const useIALabSynthesizer = () => {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${import.meta.env.VITE_DEEPSEEK_API_KEY}`
+                            'Authorization': `Bearer ${import.meta.env.VITE_DEEPSEEK_API_KEY || ''}`
                         },
                         body: JSON.stringify({
                             model: 'deepseek-chat',
@@ -263,6 +263,7 @@ export const useIALabSynthesizer = () => {
             return null;
         } finally {
             setLoading(false);
+            setLoadMsg('');
         }
     }, []);
 
@@ -461,7 +462,7 @@ export const useIALabSynthesizer = () => {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${import.meta.env.VITE_DEEPSEEK_API_KEY}`
+                        'Authorization': `Bearer ${import.meta.env.VITE_DEEPSEEK_API_KEY || ''}`
                     },
                     body: JSON.stringify({
                         model: 'deepseek-chat',
@@ -500,10 +501,11 @@ export const useIALabSynthesizer = () => {
                 
             } catch (error) {
                 console.error('DeepSeek API Error:', error);
-                setApiError(`Error con DeepSeek API: ${error.message}`);
+                setApiError(`Error con DeepSeek API: ${error.message}. Verifica que la API key esté configurada en VITE_DEEPSEEK_API_KEY`);
                 return null;
             } finally {
                 setIsGenerating(false);
+                setLoadMsg('');
             }
         },
         

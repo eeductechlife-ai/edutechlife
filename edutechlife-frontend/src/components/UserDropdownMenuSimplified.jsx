@@ -112,7 +112,7 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
   
   return (
     <>
-      <div className="relative" ref={dropdownRef}>
+      <div className="relative z-50" ref={dropdownRef}>
         {/* Smart-Pill: Botón profesional para Navbar */}
         <button
           className="flex items-center gap-3 h-12 min-w-[200px] pl-2 pr-4 rounded-full bg-white/80 backdrop-blur-md border border-corporate/20 shadow-sm hover:bg-corporate/5 transition-all duration-200"
@@ -150,7 +150,7 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
         
         {/* Dropdown menu - Estilo SaaS Premium */}
         {isOpen && (
-          <div className="absolute right-0 top-full mt-2 w-80 border border-slate-100 shadow-2xl shadow-slate-200/50 rounded-2xl bg-white z-50 animate-in fade-in-0 zoom-in-95">
+          <div className="absolute right-0 top-full mt-2 w-80 border border-slate-100 shadow-2xl shadow-slate-200/50 rounded-2xl bg-white z-[999] animate-in fade-in-0 zoom-in-95">
             {/* Header con información del usuario */}
             <div className="p-5 border-b border-slate-100 bg-slate-50">
               <div className="flex items-center gap-3">

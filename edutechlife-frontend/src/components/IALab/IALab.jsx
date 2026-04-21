@@ -3,6 +3,7 @@ import { IALabProvider, useIALabContext } from '../../context/IALabContext';
 import IALabHeader from './IALabHeader';
 import IALabSidebar from './IALabSidebar';
 import IALabModuleHeader from './IALabModuleHeader';
+import ModuleOverviewCard from './ModuleOverviewCard';
 import IALabContentAccordion from './IALabContentAccordion';
 import IALabChallengeSection from './IALabChallengeSection';
 import IALabForumSection from './IALabForumSection';
@@ -55,29 +56,38 @@ const IALabContent = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-[#F8FAFC] via-white to-[#F8FAFC]/50">
-                {/* Header principal */}
+        <div className="flex flex-col h-screen overflow-visible bg-gradient-to-br from-[#F8FAFC] via-white to-[#F8FAFC]/50">
+                {/* Header principal - ocupa altura natural y no flota sobre contenido */}
                 <IALabHeader onAction={handleGlobalAction} />
                 
-                {/* Layout principal */}
-                <div className="flex">
-                    {/* Sidebar (20%) */}
+                {/* Layout principal - Flexbox estricto para evitar overlap */}
+                <div className="flex flex-1 overflow-hidden">
+                    {/* Sidebar - ancho fijo 256px (w-64) */}
                     <IALabSidebar />
                     
-                    {/* Área de Contenido Principal (80%) */}
-                    <main className="w-[80%] ml-[20%] px-4 py-6 h-[calc(100vh-5rem)] overflow-y-auto">
-                        <div className="space-y-8 w-full max-w-[calc(100%-1rem)] pb-10">
-                            {/* Module Header con botón de evaluación */}
-                            <IALabModuleHeader onAction={handleGlobalAction} />
-                            
-                            {/* Cuadro de Introducción - Acordeón Interactivo */}
-                            <IALabContentAccordion />
+                    {/* Área de Contenido Principal - ocupa resto con scroll */}
+                    <main className="flex-1 overflow-y-auto px-4 py-6">
+                        <div className="space-y-10 w-full max-w-[calc(100%-1rem)] pb-10">
+                            {/* 1. PRIMERO: TÍTULO PRINCIPAL ARRIBA DEL TODO */}
+                            <div className="relative z-30">
+                              <IALabModuleHeader onAction={handleGlobalAction} />
+                            </div>
+
+                            {/* 2. SEGUNDO: TARJETA DE RESUMEN EN EL MEDIO */}
+                            <ModuleOverviewCard />
+
+                            {/* 3. TERCERO: ACORDEONES/LECCIONES ABAJO */}
+                            <div className="mt-6">
+                              <IALabContentAccordion />
+                            </div>
                             
                             {/* Sintetizador de Prompts Élite */}
-                            <IALabSynthesizer />
+                            <div className="mt-10">
+                              <IALabSynthesizer />
+                            </div>
                             
                             {/* Contenedor Grid: Desafío y Comunidad */}
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full mt-10">
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full mt-12">
                                 {/* Columna Izquierda: Desafío del Curso */}
                                 <ErrorBoundary>
                                     <IALabChallengeSection />
@@ -131,12 +141,12 @@ const IALabContent = () => {
                     </>
                 )}
                 
-                {/* FAB de Valerio */}
-                <button 
-                    className="fixed bottom-8 right-8 w-16 h-16 bg-gradient-to-br from-white to-[#F8FAFC] border border-[#E2E8F0]/50 rounded-full shadow-[0_8px_30px_rgba(0,75,99,0.12)] hover:scale-105 transition-all duration-300 z-50 flex items-center justify-center group hover:shadow-[0_12px_40px_rgba(0,75,99,0.16)]"
-                    onClick={() => handleGlobalAction('OPEN_VALERIO')}
-                    aria-label="Abrir panel de coach IA Valerio"
-                >
+                 {/* FAB de Valerio - posicionado relativo al viewport */}
+                 <button 
+                     className="fixed bottom-8 right-8 w-16 h-16 bg-gradient-to-br from-white to-[#F8FAFC] border border-[#E2E8F0]/50 rounded-full shadow-[0_8px_30px_rgba(0,75,99,0.12)] hover:scale-105 transition-all duration-300 z-50 flex items-center justify-center group hover:shadow-[0_12px_40px_rgba(0,75,99,0.16)]"
+                     onClick={() => handleGlobalAction('OPEN_VALERIO')}
+                     aria-label="Abrir panel de coach IA Valerio"
+                 >
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:scale-110 transition-transform duration-300">
                         <path d="M12 3C8.5 3 6 5.5 6 9C6 10.5 6.5 12 7.5 13C8.5 14 9.5 15 10 16C10.5 17 11 18 12 18C13 18 13.5 17 14 16C14.5 15 15.5 14 16.5 13C17.5 12 18 10.5 18 9C18 5.5 15.5 3 12 3Z" fill="#004B63" />
                         <path d="M9 7C8.5 7 8 7.5 8 8C8 8.5 8.5 9 9 9C9.5 9 10 8.5 10 8C10 7.5 9.5 7 9 7Z" fill="#00BCD4" />

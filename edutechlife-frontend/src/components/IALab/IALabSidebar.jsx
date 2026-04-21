@@ -31,8 +31,8 @@ const IALabSidebar = () => {
   
   const curr = getCurrentModule();
   
-  return (
-    <aside className="w-[20%] h-[calc(100vh-5rem)] border-r border-[#004B63]/10 bg-gradient-to-b from-white via-white/98 to-[#F8FAFC]/95 backdrop-blur-xl shadow-[0_12px_48px_rgba(0,75,99,0.12)] z-30 overflow-y-auto">
+   return (
+     <aside className="w-64 flex-shrink-0 border-r border-[#004B63]/10 bg-gradient-to-b from-white via-white/98 to-[#F8FAFC]/95 backdrop-blur-xl shadow-[0_12px_48px_rgba(0,75,99,0.12)] overflow-y-auto">
       <div className="px-5 py-6 space-y-6">
         {/* Progress Circle */}
         <div className="flex flex-col items-center p-6 border border-slate-100/60 bg-white/90 shadow-[0_40px_80px_rgba(0,75,99,0.08)] rounded-3xl w-full backdrop-blur-sm">

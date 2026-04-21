@@ -203,67 +203,13 @@ const IALabContentAccordion = () => {
     );
   };
   
-  return (
-    <div className="bg-white border border-slate-50 shadow-[0_40px_100px_rgba(0,0,0,0.06)] rounded-[28px] p-12 mb-8 w-full transition-all duration-500 ease-out hover:shadow-[0_50px_120px_rgba(0,0,0,0.08)]">
-      <div className="flex justify-between items-center mb-3">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight text-[#00374A]">Ingeniería de Prompts: El Arte de Comunicarse con la IA</h2>
-          <p className="text-xl font-medium text-slate-600 leading-relaxed max-w-3xl mb-4">Domina el arte de comunicarte con la I.A a nivel experto.</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <div className="text-sm font-medium text-slate-600 bg-slate-50 px-4 py-2 rounded-xl">
-            Lección {currentLessonIndex + 1} de {moduleLessons.length}
-          </div>
-          <div className="flex gap-2">
-            <button
-              onClick={() => handleButtonClick('PREV_LESSON')}
-              disabled={currentLessonIndex === 0}
-              className={`${buttonClasses.small} ${currentLessonIndex === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
-              aria-label="Lección anterior"
-            >
-              <Icon name="fa-chevron-left" />
-            </button>
-            <button
-              onClick={() => handleButtonClick('NEXT_LESSON')}
-              disabled={currentLessonIndex === moduleLessons.length - 1}
-              className={`${buttonClasses.small} ${currentLessonIndex === moduleLessons.length - 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
-              aria-label="Siguiente lección"
-            >
-              <Icon name="fa-chevron-right" />
-            </button>
-          </div>
-        </div>
-      </div>
-      
-      {/* Indicador de progreso de lección actual */}
-      <div className="mb-10">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-[#00374A]">
-            {moduleLessons[currentLessonIndex]?.title}
-          </span>
-          <span className="text-xs text-slate-500">
-            {currentLessonIndex + 1}/{moduleLessons.length}
-          </span>
-        </div>
-        <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
-          <div 
-            className="h-full bg-gradient-to-r from-[#00374A] to-[#00BCD4] transition-all duration-500 ease-out"
-            style={{ width: `${((currentLessonIndex + 1) / moduleLessons.length) * 100}%` }}
-          ></div>
-        </div>
-        <p className="text-sm text-slate-500 mt-2">
-          {moduleLessons[currentLessonIndex]?.description}
-        </p>
-      </div>
-      
-      {/* Cuadro de Introducción - Tarjetas Detalladas Premium SaaS v2.0 */}
-      <div className="space-y-6 md:space-y-8">
-        {moduleLessons.map((lesson, index) => (
-          renderDetailedLessonCard(index + 1, lesson)
-        ))}
-      </div>
-    </div>
-  );
+   return (
+     <div className="space-y-6 md:space-y-8">
+       {moduleLessons.map((lesson, index) => (
+         renderDetailedLessonCard(index + 1, lesson)
+       ))}
+     </div>
+   );
 };
 
 export default IALabContentAccordion;

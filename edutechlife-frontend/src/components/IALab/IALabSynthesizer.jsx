@@ -31,7 +31,9 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
         getSuggestions,
         getQuickAnalysis,
         isValidInput,
-        getTechniquesForDisplay
+        getTechniquesForDisplay,
+        apiError,
+        isGenerating
     } = useIALabSynthesizer();
 
     // Obtener módulo actual para contexto
@@ -752,35 +754,74 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
         )
     );
 
-    // Render error
-    const renderError = () => (
-        error && (
-            <div className={cn(
-                "bg-red-50 border border-red-200",
-                "p-6 rounded-xl",
-                FORUM_EFFECTS.ANIMATION_FADE_IN
-            )}>
-                <div className="flex items-center gap-3">
-                    <Icon name="fa-exclamation-triangle" className="text-red-500 text-xl" />
-                    <div>
-                        <h4 className={cn(
-                            FORUM_TYPOGRAPHY.BODY.LG,
-                            FORUM_TYPOGRAPHY.SEMIBOLD,
-                            "text-red-700"
-                        )}>
-                            Error de optimización
-                        </h4>
-                        <p className={cn(
-                            FORUM_TYPOGRAPHY.BODY.SM,
-                            "text-red-600 mt-1"
-                        )}>
-                            {error}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        )
-    );
+     // Render error
+     const renderError = () => (
+         error && (
+             <div className={cn(
+                 "bg-red-50 border border-red-200",
+                 "p-6 rounded-xl",
+                 FORUM_EFFECTS.ANIMATION_FADE_IN
+             )}>
+                 <div className="flex items-center gap-3">
+                     <Icon name="fa-exclamation-triangle" className="text-red-500 text-xl" />
+                     <div>
+                         <h4 className={cn(
+                             FORUM_TYPOGRAPHY.BODY.LG,
+                             FORUM_TYPOGRAPHY.SEMIBOLD,
+                             "text-red-700"
+                         )}>
+                             Error de optimización
+                         </h4>
+                         <p className={cn(
+                             FORUM_TYPOGRAPHY.BODY.SM,
+                             "text-red-600 mt-1"
+                         )}>
+                             {error}
+                         </p>
+                     </div>
+                 </div>
+             </div>
+         )
+     );
+
+     // Render API error (específico para DeepSeek)
+     const renderApiError = () => (
+         apiError && (
+             <div className={cn(
+                 "bg-amber-50 border border-amber-200",
+                 "p-6 rounded-xl",
+                 FORUM_EFFECTS.ANIMATION_FADE_IN,
+                 "mt-4"
+             )}>
+                 <div className="flex items-center gap-3">
+                     <Icon name="fa-info-circle" className="text-amber-500 text-xl" />
+                     <div>
+                         <h4 className={cn(
+                             FORUM_TYPOGRAPHY.BODY.LG,
+                             FORUM_TYPOGRAPHY.SEMIBOLD,
+                             "text-amber-700"
+                         )}>
+                             Información de API
+                         </h4>
+                         <p className={cn(
+                             FORUM_TYPOGRAPHY.BODY.SM,
+                             "text-amber-600 mt-1"
+                         )}>
+                             {apiError}
+                         </p>
+                         <div className="mt-3 text-xs text-amber-700">
+                             <p className="font-medium">Solución automática:</p>
+                             <ul className="list-disc pl-4 mt-1 space-y-1">
+                                 <li>El sistema ha cambiado automáticamente al modo local</li>
+                                 <li>Puedes continuar usando todas las funciones básicas</li>
+                                 <li>Para usar DeepSeek AI, configura VITE_DEEPSEEK_API_KEY en tu archivo .env</li>
+                             </ul>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         )
+     );
 
     return (
         <div className={cn(
@@ -800,6 +841,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                      {genData && genData.deepSeekData && renderDeepSeekResults()}
                      {genData && !genData.deepSeekData && renderLocalResult()}
                     {renderError()}
+                    {renderApiError()}
                     {renderHistory()}
                 </>
             )}
