@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { PageLoader } from '../LoadingScreen';
 
 // Lazy load del componente IALab
-const IALab = lazy(() => import('../IALab'));
+const IALab = lazy(() => import('../IALab/IALab'));
 
 /**
  * Página AILab (Artificial Intelligence Lab)

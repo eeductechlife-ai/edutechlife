@@ -1,46 +1,39 @@
 /**
  * Modal de Cambio de Contraseña Funcional
- * Integración con Supabase Auth
+ * NOTA: Con Clerk, el cambio de contraseña se maneja a través del User Profile de Clerk
+ * Este modal es informativo y redirige al dashboard de Clerk
  */
 
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card-simple';
 import { Button } from '../ui/button-simple';
 import { Icon } from '../../utils/iconMapping.jsx';
-import { supabase } from '../../lib/supabase';
+import { useUser } from '@clerk/react';
 
 const ChangePasswordModal = ({ onClose, onSuccess }) => {
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const { user } = useUser();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [showInstructions, setShowInstructions] = useState(true);
 
-  // Validaciones de contraseña
-  const validatePassword = (password) => {
-    const errors = [];
-    
-    if (password.length < 8) {
-      errors.push('Mínimo 8 caracteres');
+  const handleOpenClerkProfile = () => {
+    setLoading(true);
+    try {
+      // Clerk maneja el cambio de contraseña a través de su dashboard
+      // Redirigir al usuario al User Profile de Clerk
+      window.location.href = '/user-profile';
+      // Nota: La ruta /user-profile debe estar configurada en Clerk para manejar el cambio de contraseña
+    } catch (err) {
+      console.error('Error al redirigir a Clerk:', err);
+      setError('No se pudo acceder a la configuración de cuenta');
+    } finally {
+      setLoading(false);
     }
-    if (!/[A-Z]/.test(password)) {
-      errors.push('Al menos una mayúscula');
-    }
-    if (!/[a-z]/.test(password)) {
-      errors.push('Al menos una minúscula');
-    }
-    if (!/\d/.test(password)) {
-      errors.push('Al menos un número');
-    }
-    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-      errors.push('Al menos un carácter especial');
-    }
-    
-    return errors;
+  };
+
+  const handleClose = () => {
+    if (onClose) onClose();
   };
 
   const handleSubmit = async (e) => {
@@ -140,21 +133,24 @@ const ChangePasswordModal = ({ onClose, onSuccess }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 backdrop-blur-sm p-4 pt-20">
-      <Card className="w-full max-w-md mx-auto border border-[#E2E8F0] shadow-2xl max-h-[80vh] overflow-hidden">
-        <CardHeader className="border-b border-[#E2E8F0] bg-gradient-to-r from-[#004B63]/5 to-[#00BCD4]/5 sticky top-0 z-10">
+    <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-20">
+      <Card className="w-full max-w-md mx-auto border border-[#E2E8F0] shadow-2xl max-h-[80vh] overflow-hidden relative">
+        {/* Botón de cerrar flotante */}
+        <button 
+          onClick={handleClose}
+          className="absolute top-4 right-4 z-50 p-2 text-slate-400 bg-white/50 hover:bg-slate-100 hover:text-slate-800 rounded-full backdrop-blur-sm transition-all duration-200"
+          aria-label="Cerrar modal"
+          disabled={loading}
+        >
+          <Icon name="fa-times" className="text-lg" />
+        </button>
+        
+        <CardHeader className="border-b border-[#E2E8F0] bg-gradient-to-r from-[#004B63]/5 to-[#00BCD4]/5 sticky top-0 z-10 pt-12">
           <div className="flex items-center justify-between">
             <CardTitle className="text-[#004B63] font-display font-bold flex items-center gap-2">
               <Icon name="fa-key" className="text-[#00BCD4]" />
               Cambiar Contraseña
             </CardTitle>
-            <button 
-              onClick={onClose}
-              className="text-[#94A3B8] hover:text-[#004B63] transition-colors p-1 rounded-lg hover:bg-[#B2D8E5]/30"
-              disabled={loading}
-            >
-              <Icon name="fa-times" className="text-lg" />
-            </button>
           </div>
         </CardHeader>
         
@@ -185,159 +181,61 @@ const ChangePasswordModal = ({ onClose, onSuccess }) => {
             </div>
           )}
 
-          {/* Formulario */}
-          <form onSubmit={handleSubmit} className="space-y-4">
-             {/* Contraseña Actual */}
-             <div>
-               <label htmlFor="password-current" className="block text-sm font-medium text-[#004B63] mb-1">
-                 Contraseña Actual
-               </label>
-               <div className="relative">
-                  <input
-                   type={showCurrentPassword ? 'text' : 'password'}
-                   id="password-current"
-                   value={currentPassword}
-                   onChange={(e) => setCurrentPassword(e.target.value)}
-                   className="w-full px-3 py-2.5 border border-[#E2E8F0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:border-transparent pr-10 text-sm"
-                   placeholder="Ingresa tu contraseña actual"
-                   disabled={loading}
-                   required
-                   autoComplete="current-password"
-                 />
-                 <button
-                   type="button"
-                   onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#64748B] hover:text-[#004B63]"
-                   disabled={loading}
-                 >
-                   <Icon name={showCurrentPassword ? 'fa-eye-slash' : 'fa-eye'} />
-                 </button>
-               </div>
-             </div>
-
-              {/* Nueva Contraseña */}
+          {/* Información Clerk */}
+          <div className="p-4 bg-[#EFF6FF] border border-[#3B82F6]/30 rounded-lg">
+            <div className="flex items-start gap-3">
+              <Icon name="fa-info-circle" className="text-[#3B82F6] mt-0.5 flex-shrink-0" />
               <div>
-                <label htmlFor="password-new" className="block text-sm font-medium text-[#004B63] mb-1">
-                  Nueva Contraseña
-                </label>
-                <div className="relative">
-                   <input
-                    type={showNewPassword ? 'text' : 'password'}
-                    id="password-new"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full px-3 py-2.5 border border-[#E2E8F0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:border-transparent pr-10 text-sm"
-                    placeholder="Mínimo 8 caracteres, mayúscula, minúscula, número y especial"
-                    disabled={loading}
-                    required
-                    autoComplete="new-password"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowNewPassword(!showNewPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#64748B] hover:text-[#004B63]"
-                    disabled={loading}
-                  >
-                    <Icon name={showNewPassword ? 'fa-eye-slash' : 'fa-eye'} />
-                  </button>
-                </div>
-               
-               {/* Indicador de fortaleza */}
-               {newPassword && (
-                 <div className="mt-2">
-                   <div className="flex justify-between text-xs mb-1">
-                     <span className="text-[#64748B]">Fortaleza:</span>
-                     <span className="font-medium" style={{ color: getStrengthColor() }}>
-                       {getStrengthText()}
-                     </span>
-                   </div>
-                   <div className="w-full bg-[#E2E8F0] rounded-full h-2">
-                     <div 
-                       className="h-2 rounded-full transition-all duration-300"
-                       style={{ 
-                         width: `${passwordStrength}%`,
-                         backgroundColor: getStrengthColor()
-                       }}
-                     ></div>
-                   </div>
-                 </div>
-               )}
+                <p className="font-medium text-[#1E40AF]">Gestión de Contraseña con Clerk</p>
+                <p className="text-sm text-[#1E40AF] mt-1">
+                  Edutechlife utiliza Clerk para la autenticación. Para cambiar tu contraseña, 
+                  debes acceder a tu perfil de usuario en Clerk.
+                </p>
               </div>
+            </div>
+          </div>
 
-             {/* Confirmar Nueva Contraseña */}
-             <div>
-               <label htmlFor="password-confirm" className="block text-sm font-medium text-[#004B63] mb-1">
-                 Confirmar Nueva Contraseña
-               </label>
-               <div className="relative">
-                  <input
-                   type={showConfirmPassword ? 'text' : 'password'}
-                   id="password-confirm"
-                   value={confirmPassword}
-                   onChange={(e) => setConfirmPassword(e.target.value)}
-                   className="w-full px-3 py-2.5 border border-[#E2E8F0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:border-transparent pr-10 text-sm"
-                   placeholder="Repite la nueva contraseña"
-                   disabled={loading}
-                   required
-                   autoComplete="new-password"
-                 />
-                 <button
-                   type="button"
-                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#64748B] hover:text-[#004B63]"
-                   disabled={loading}
-                 >
-                   <Icon name={showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'} />
-                 </button>
-               </div>
-             </div>
-              
-               {/* Validación de coincidencia */}
-               {confirmPassword && newPassword !== confirmPassword && (
-                 <p className="text-xs text-[#EF4444] mt-1">
-                   <Icon name="fa-exclamation-circle" className="mr-1" />
-                   Las contraseñas no coinciden
-                 </p>
-               )}
-               {confirmPassword && newPassword === confirmPassword && (
-                 <p className="text-xs text-[#10B981] mt-1">
-                   <Icon name="fa-check-circle" className="mr-1" />
-                   Las contraseñas coinciden
-                 </p>
-               )}
+          {/* Instrucciones */}
+          <div className="space-y-4">
+            <div>
+              <h3 className="text-sm font-medium text-[#004B63] mb-2">Pasos para cambiar tu contraseña:</h3>
+              <ol className="text-sm text-[#64748B] space-y-2 pl-5 list-decimal">
+                <li>Haz clic en "Abrir Configuración de Cuenta"</li>
+                <li>Serás redirigido al dashboard de Clerk</li>
+                <li>En la sección "Seguridad", busca "Cambiar Contraseña"</li>
+                <li>Sigue las instrucciones de Clerk para actualizar tu contraseña</li>
+                <li>Una vez completado, regresa a Edutechlife</li>
+              </ol>
+            </div>
 
-             {/* Requisitos de contraseña */}
             <div className="bg-[#F8FAFC] p-4 rounded-lg border border-[#E2E8F0]">
-              <p className="text-sm font-medium text-[#004B63] mb-2">Requisitos de seguridad:</p>
+              <p className="text-sm font-medium text-[#004B63] mb-2">Requisitos de seguridad de Clerk:</p>
               <ul className="text-xs text-[#64748B] space-y-1">
-                <li className={`flex items-center gap-2 ${newPassword.length >= 8 ? 'text-[#10B981]' : ''}`}>
-                  <Icon name={newPassword.length >= 8 ? 'fa-check-circle' : 'fa-circle'} className="text-xs" />
+                <li className="flex items-center gap-2">
+                  <Icon name="fa-check-circle" className="text-[#10B981] text-xs" />
                   Mínimo 8 caracteres
                 </li>
-                <li className={`flex items-center gap-2 ${/[A-Z]/.test(newPassword) ? 'text-[#10B981]' : ''}`}>
-                  <Icon name={/[A-Z]/.test(newPassword) ? 'fa-check-circle' : 'fa-circle'} className="text-xs" />
-                  Al menos una mayúscula (A-Z)
+                <li className="flex items-center gap-2">
+                  <Icon name="fa-check-circle" className="text-[#10B981] text-xs" />
+                  Combinación de mayúsculas y minúsculas
                 </li>
-                <li className={`flex items-center gap-2 ${/[a-z]/.test(newPassword) ? 'text-[#10B981]' : ''}`}>
-                  <Icon name={/[a-z]/.test(newPassword) ? 'fa-check-circle' : 'fa-circle'} className="text-xs" />
-                  Al menos una minúscula (a-z)
+                <li className="flex items-center gap-2">
+                  <Icon name="fa-check-circle" className="text-[#10B981] text-xs" />
+                  Al menos un número
                 </li>
-                <li className={`flex items-center gap-2 ${/\d/.test(newPassword) ? 'text-[#10B981]' : ''}`}>
-                  <Icon name={/\d/.test(newPassword) ? 'fa-check-circle' : 'fa-circle'} className="text-xs" />
-                  Al menos un número (0-9)
-                </li>
-                <li className={`flex items-center gap-2 ${/[!@#$%^&*(),.?":{}|<>]/.test(newPassword) ? 'text-[#10B981]' : ''}`}>
-                  <Icon name={/[!@#$%^&*(),.?":{}|<>]/.test(newPassword) ? 'fa-check-circle' : 'fa-circle'} className="text-xs" />
-                  Al menos un carácter especial (!@#$% etc.)
+                <li className="flex items-center gap-2">
+                  <Icon name="fa-check-circle" className="text-[#10B981] text-xs" />
+                  No usar contraseñas comunes
                 </li>
               </ul>
             </div>
+          </div>
 
             {/* Botones de acción */}
             <div className="flex gap-3 pt-4 border-t border-[#E2E8F0]">
               <Button 
                 type="button"
-                onClick={onClose}
+                onClick={handleClose}
                 variant="outline"
                 className="flex-1 border-[#E2E8F0] text-[#64748B] hover:border-[#004B63] hover:text-[#004B63]"
                 disabled={loading}
@@ -345,21 +243,24 @@ const ChangePasswordModal = ({ onClose, onSuccess }) => {
                 Cancelar
               </Button>
               <Button 
-                type="submit"
+                type="button"
+                onClick={handleOpenClerkProfile}
                 className="flex-1 bg-gradient-to-r from-[#004B63] to-[#00BCD4] hover:opacity-90 text-white"
-                disabled={loading || !currentPassword || !newPassword || !confirmPassword}
+                disabled={loading}
               >
                 {loading ? (
                   <>
                     <Icon name="fa-spinner" className="animate-spin mr-2" />
-                    Procesando...
+                    Redirigiendo...
                   </>
                 ) : (
-                  'Cambiar Contraseña'
+                  <>
+                    <Icon name="fa-external-link-alt" className="mr-2" />
+                    Abrir Configuración de Cuenta
+                  </>
                 )}
               </Button>
             </div>
-          </form>
 
           {/* Información adicional */}
           <div className="text-xs text-[#64748B] text-center">

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IALabProvider } from '../../context/IALabContext';
+import { IALabProvider, useIALabContext } from '../../context/IALabContext';
 import IALabHeader from './IALabHeader';
 import IALabSidebar from './IALabSidebar';
 import IALabModuleHeader from './IALabModuleHeader';
@@ -8,8 +8,9 @@ import IALabChallengeSection from './IALabChallengeSection';
 import IALabForumSection from './IALabForumSection';
 import IALabSynthesizer from './IALabSynthesizer';
 import IALabEvaluationModal from './IALabEvaluationModal';
+import IALabEvaluationModalPremium from './IALabEvaluationModalPremium';
 import IALabValerioPanel from './IALabValerioPanel';
-import ErrorBoundary from '../ErrorBoundary';
+import ErrorBoundary from '../forum/ErrorBoundary';
 
 /**
  * Componente principal wrapper para IALab - Arquitectura modular premium
@@ -18,9 +19,20 @@ import ErrorBoundary from '../ErrorBoundary';
  * 
  * @returns {JSX.Element} Componente IALab completo
  */
-const IALab = () => {
+const IALabContent = () => {
+    const { showPremiumEvaluationModal, setShowPremiumEvaluationModal } = useIALabContext();
     const [showExamModal, setShowExamModal] = useState(false);
     const [showValerioPanel, setShowValerioPanel] = useState(false);
+
+    // Debug logging
+    React.useEffect(() => {
+        console.log('🎯 [DEBUG] IALabContent montado');
+        console.log('🎯 [DEBUG] Estado showPremiumEvaluationModal:', showPremiumEvaluationModal);
+    }, []);
+
+    React.useEffect(() => {
+        console.log('🎯 [DEBUG] showPremiumEvaluationModal actualizado:', showPremiumEvaluationModal);
+    }, [showPremiumEvaluationModal]);
 
     // Handler para acciones globales
     const handleGlobalAction = (action, data) => {
@@ -43,8 +55,7 @@ const IALab = () => {
     };
 
     return (
-        <IALabProvider>
-            <div className="min-h-screen bg-gradient-to-br from-[#F8FAFC] via-white to-[#F8FAFC]/50">
+        <div className="min-h-screen bg-gradient-to-br from-[#F8FAFC] via-white to-[#F8FAFC]/50">
                 {/* Header principal */}
                 <IALabHeader onAction={handleGlobalAction} />
                 
@@ -105,6 +116,19 @@ const IALab = () => {
                             onClose={() => handleGlobalAction('CLOSE_VALERIO')}
                         />
                     </ErrorBoundary>
+                )}
+                
+                {/* Modal de Evaluación Premium (Nuevo Desafío) */}
+                {showPremiumEvaluationModal && (
+                    <>
+                        {console.log('🎯 [DEBUG] Condición showPremiumEvaluationModal es TRUE, renderizando modal...')}
+                        <ErrorBoundary>
+                            <IALabEvaluationModalPremium 
+                                isOpen={showPremiumEvaluationModal}
+                                onClose={() => setShowPremiumEvaluationModal(false)}
+                            />
+                        </ErrorBoundary>
+                    </>
                 )}
                 
                 {/* FAB de Valerio */}
@@ -186,6 +210,16 @@ const IALab = () => {
                     `}
                 </style>
             </div>
+    );
+};
+
+/**
+ * Componente principal wrapper que provee el contexto
+ */
+const IALab = () => {
+    return (
+        <IALabProvider>
+            <IALabContent />
         </IALabProvider>
     );
 };

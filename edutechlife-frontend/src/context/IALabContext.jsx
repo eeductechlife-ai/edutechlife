@@ -123,6 +123,9 @@ export const IALabProvider = ({ children, onBack }) => {
   const [isChallengeCompleted, setIsChallengeCompleted] = useState(false);
   const [challengeScore, setChallengeScore] = useState(0);
   
+  // Estados del nuevo modal de evaluación premium
+  const [showPremiumEvaluationModal, setShowPremiumEvaluationModal] = useState(false);
+  
   // Estados de dispositivo
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
@@ -401,6 +404,10 @@ export const IALabProvider = ({ children, onBack }) => {
     setIsChallengeCompleted,
     challengeScore,
     setChallengeScore,
+    
+    // Estados del nuevo modal de evaluación premium
+    showPremiumEvaluationModal,
+    setShowPremiumEvaluationModal,
     
     // Estados de dispositivo
     isTouchDevice,

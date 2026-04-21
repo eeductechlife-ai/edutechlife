@@ -19,7 +19,6 @@ const ProtectedRoute = ({ children }) => {
   
   // Si no está autenticado, redirigir a login (NO a /)
   if (!isSignedIn) {
-    console.log('[CLERK-AUTH] ProtectedRoute: Usuario no autenticado, redirigiendo a /login');
     const currentPath = window.location.pathname;
     const redirectUrl = `/login?returnTo=${encodeURIComponent(currentPath)}`;
     return <Navigate to={redirectUrl} replace />;

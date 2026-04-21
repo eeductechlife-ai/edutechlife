@@ -126,20 +126,23 @@ const CertificatesModal = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <Card className="w-full max-w-4xl mx-4 border border-cyan-500/20 shadow-2xl">
-        <CardHeader className="border-b border-cyan-100/50 bg-gradient-to-r from-[#004B63]/10 to-[#00BCD4]/10">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <Card className="w-full max-w-4xl mx-4 border border-cyan-500/20 shadow-2xl relative">
+        {/* Botón de cerrar flotante */}
+        <button 
+          onClick={onClose}
+          className="absolute top-4 right-4 z-50 p-2 text-slate-400 bg-white/50 hover:bg-slate-100 hover:text-slate-800 rounded-full backdrop-blur-sm transition-all duration-200"
+          aria-label="Cerrar modal"
+        >
+          <Icon name="fa-times" className="text-lg" />
+        </button>
+        
+        <CardHeader className="border-b border-cyan-100/50 bg-gradient-to-r from-[#004B63]/10 to-[#00BCD4]/10 pt-12">
           <div className="flex items-center justify-between">
             <CardTitle className="text-[#004B63] font-display font-bold flex items-center gap-2">
               <Icon name="fa-award" className="text-[#00BCD4]" />
               Mis Certificados
             </CardTitle>
-            <button 
-              onClick={onClose}
-              className="text-slate-400 hover:text-[#004B63] transition-colors p-1.5 rounded-lg hover:bg-cyan-50"
-            >
-              <Icon name="fa-times" className="text-lg" />
-            </button>
           </div>
         </CardHeader>
         

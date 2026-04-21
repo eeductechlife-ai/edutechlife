@@ -1,15 +1,30 @@
 {
   "version": 1,
   "skills": {
+    "API Integration Specialist": {
+      "source": "davila7/claude-code-templates",
+      "sourceType": "github",
+      "computedHash": "41a9a263301aa03a79d9241ff8af596cdd33eec48c792e1b4b95b4de9c9cb7ae"
+    },
     "ai-rag-pipeline": {
       "source": "inferen-sh/skills",
       "sourceType": "github",
       "computedHash": "0a094c7b4f3bfab05b1a1b31aa93d9e11c85e7310c00272a21a6fe28e0b9bde8"
     },
+    "clerk-nextjs-patterns": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "computedHash": "722d79f7610ff60878d5b73b8f53faa51aff729c43b44222faedc7fa926e332f"
+    },
     "clerk-setup": {
       "source": "clerk/skills",
       "sourceType": "github",
       "computedHash": "790a6272ff39129de170a192cc1966bf84b3a4983b55e9e843b8f979aba56208"
+    },
+    "frontend-architecture": {
+      "source": "manutej/luxor-claude-marketplace",
+      "sourceType": "github",
+      "computedHash": "b448e66cf8bd318b1f4835a55370cf2c57e61abbc8078ca81954eb5f7e4b08ff"
     },
     "frontend-design": {
       "source": "anthropics/skills",
@@ -30,6 +45,11 @@
       "source": "forever-efficient/pitfal-solutions-website",
       "sourceType": "github",
       "computedHash": "89569f6934868028a7fe1d1e03fbd31f691ab3f0a728cc84f8c768abc53676ec"
+    },
+    "ui-ux-designer": {
+      "source": "lotosbin/claude-skills",
+      "sourceType": "github",
+      "computedHash": "42c6f46cc45913d21f55b7c1814bde21b90103cadf7f2f6f80bc001efffa7c86"
     }
   }
 }

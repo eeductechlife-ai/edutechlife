@@ -198,14 +198,13 @@ function AIToolsSection() {
                       mode="modal"
                       forceRedirectUrl="/ialab"
                       afterSignUpUrl="/ialab"
+                      className={`w-full py-2.5 px-4 text-sm font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group-hover:scale-[1.02] ${isPremium ? 'bg-gradient-to-r from-[#004B63] via-[#4DA8C4] to-[#66CCCC] text-white shadow-[0_4px_15px_rgba(0,75,99,0.3)] hover:shadow-[0_8px_25px_rgba(0,75,99,0.4)]' : 'bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white hover:shadow-[0_8px_20px_rgba(77,168,196,0.3)] hover:from-[#4DA8C4] hover:to-[#66CCCC]'}`}
                     >
-                      <button 
-                        className={`w-full py-2.5 px-4 text-sm font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group-hover:scale-[1.02] ${isPremium ? 'bg-gradient-to-r from-[#004B63] via-[#4DA8C4] to-[#66CCCC] text-white shadow-[0_4px_15px_rgba(0,75,99,0.3)] hover:shadow-[0_8px_25px_rgba(0,75,99,0.4)]' : 'bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white hover:shadow-[0_8px_20px_rgba(77,168,196,0.3)] hover:from-[#4DA8C4] hover:to-[#66CCCC]'}`}
-                      >
+                      <>
                         <span>{tool.buttonText}</span>
                         <Icon name="fa-arrow-right" className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                      </button>
-                     </SignUpButton>
+                      </>
+                    </SignUpButton>
                    ) : (
                     <button
                      onClick={(e) => {

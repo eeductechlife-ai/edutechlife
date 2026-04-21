@@ -229,7 +229,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder={`Escribe tu prompt aquí (mínimo 10 caracteres)...\n\nEjemplos:\n• "Explica la fotosíntesis para estudiantes de 12 años"\n• "Crea un plan de marketing para una startup tech"\n• "Analiza las ventajas y desventajas del trabajo remoto"`}
+                placeholder={`Escribe tu idea básica aquí (ej: "educacion", "marketing", "salud")...\n\nEjemplos de ideas básicas:\n• "educacion" → Generará prompt para crear contenido educativo\n• "marketing digital" → Generará prompt para estrategias de marketing\n• "salud mental" → Generará prompt para consejos de bienestar\n• "tecnologia" → Generará prompt para explicaciones técnicas\n• "finanzas personales" → Generará prompt para gestión financiera`}
                 className={cn(
                     FORUM_COMPONENTS.TEXTAREA_BASE,
                     "mb-4",
@@ -243,9 +243,9 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
             {renderQuickAnalysis()}
             
             <div className="flex items-center justify-between">
-                <div className="text-sm text-slate-500">
-                    {input.length}/1000 caracteres • {isValidInput(input) ? '✅ Listo para optimizar' : `⚠️ Mínimo ${10 - input.length} caracteres más`}
-                </div>
+                 <div className="text-sm text-slate-500">
+                     {input.length}/500 caracteres • {isValidInput(input) ? '✅ Listo para generar con DeepSeek' : `⚠️ Mínimo ${3 - input.length} caracteres más`}
+                 </div>
                 
                 <button
                     onClick={handleOptimize}
@@ -262,7 +262,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                         "disabled:opacity-70 disabled:cursor-not-allowed",
                         loading && "opacity-70 cursor-not-allowed"
                     )}
-                    aria-label={loading ? `Procesando: ${loadMsg}` : "Optimizar prompt con análisis educativo"}
+                     aria-label={loading ? `Procesando: ${loadMsg}` : "Generar prompt maestro con DeepSeek AI"}
                 >
                     {loading ? (
                         <>
@@ -272,12 +272,12 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                             )} />
                             <span>{loadMsg}</span>
                         </>
-                    ) : (
-                        <>
-                            <Icon name="fa-microchip" />
-                            <span>Optimizar Prompt</span>
-                        </>
-                    )}
+                     ) : (
+                         <>
+                             <Icon name="fa-brain" />
+                             <span>Generar con DeepSeek AI</span>
+                         </>
+                     )}
                 </button>
             </div>
         </div>
@@ -327,8 +327,201 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
         </div>
     );
 
-    // Render resultado optimizado
-    const renderResult = () => {
+    // Render resultados de DeepSeek - Dashboard Analítico Premium
+    const renderDeepSeekResults = () => {
+        if (!genData || !genData.deepSeekData) return null;
+        
+        const deepSeekData = genData.deepSeekData;
+        
+        return (
+            <div className="mt-8 space-y-8 animate-in fade-in duration-500">
+                {/* ==================== ENCABEZADO PREMIUM DASHBOARD ==================== */}
+                <div className="mb-8">
+                    <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-lg">
+                                <Icon name="fa-brain" className="text-white text-xl" />
+                            </div>
+                            <div>
+                                <h3 className="text-2xl font-bold text-slate-800 font-sans">Dashboard Analítico de Prompt</h3>
+                                <p className="text-slate-600 font-sans">Tu idea transformada en prompt profesional por DeepSeek AI</p>
+                            </div>
+                        </div>
+                        <div className="px-4 py-2 bg-gradient-to-r from-[#004B63]/10 to-[#00BCD4]/10 rounded-full border border-[#004B63]/20">
+                            <span className="text-sm font-bold text-[#004B63] font-sans">🚀 LIVE</span>
+                        </div>
+                    </div>
+                    
+                    {/* Stats bar */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                        <div className="bg-white p-4 rounded-xl border border-slate-100">
+                            <div className="text-sm text-slate-500 mb-1 font-sans">Modelo</div>
+                            <div className="font-bold text-slate-800 font-sans">deepseek-chat</div>
+                        </div>
+                        <div className="bg-white p-4 rounded-xl border border-slate-100">
+                            <div className="text-sm text-slate-500 mb-1 font-sans">Temperatura</div>
+                            <div className="font-bold text-slate-800 font-sans">0.7</div>
+                        </div>
+                        <div className="bg-white p-4 rounded-xl border border-slate-100">
+                            <div className="text-sm text-slate-500 mb-1 font-sans">Tokens</div>
+                            <div className="font-bold text-slate-800 font-sans">~{Math.round(deepSeekData.prompt_maestro.length / 4)}</div>
+                        </div>
+                        <div className="bg-white p-4 rounded-xl border border-slate-100">
+                            <div className="text-sm text-slate-500 mb-1 font-sans">Calidad</div>
+                            <div className="font-bold text-green-600 font-sans">Premium</div>
+                        </div>
+                    </div>
+                </div>
+                
+                {/* ==================== GRID DE ESTRUCTURA PREMIUM - ROL, TAREA, FORMATO ==================== */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8 animate-in slide-in-from-bottom-4 duration-300">
+                    {/* Tarjeta ROL */}
+                    <div className="bg-white border border-slate-100 shadow-lg shadow-slate-200/40 rounded-3xl p-6 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 relative overflow-hidden">
+                        <div className="flex items-center gap-2 mb-3">
+                            <Icon name="fa-user-tie" className="text-[#004B63]" />
+                            <span className="text-xs font-black text-[#004B63] tracking-widest uppercase font-sans">ROL</span>
+                        </div>
+                        <p className="text-slate-800 font-medium leading-relaxed font-sans">{deepSeekData.rol}</p>
+                        <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-[#004B63]/5 rounded-full blur-sm"></div>
+                    </div>
+                    
+                    {/* Tarjeta TAREA */}
+                    <div className="bg-white border border-slate-100 shadow-lg shadow-slate-200/40 rounded-3xl p-6 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 relative overflow-hidden">
+                        <div className="flex items-center gap-2 mb-3">
+                            <Icon name="fa-target" className="text-[#00BCD4]" />
+                            <span className="text-xs font-black text-[#00BCD4] tracking-widest uppercase font-sans">TAREA</span>
+                        </div>
+                        <p className="text-slate-800 font-medium leading-relaxed font-sans">{deepSeekData.tarea}</p>
+                        <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-[#00BCD4]/5 rounded-full blur-sm"></div>
+                    </div>
+                    
+                    {/* Tarjeta FORMATO */}
+                    <div className="bg-white border border-slate-100 shadow-lg shadow-slate-200/40 rounded-3xl p-6 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 relative overflow-hidden">
+                        <div className="flex items-center gap-2 mb-3">
+                            <Icon name="fa-file-alt" className="text-[#4F46E5]" />
+                            <span className="text-xs font-black text-[#4F46E5] tracking-widest uppercase font-sans">FORMATO</span>
+                        </div>
+                        <p className="text-slate-800 font-medium leading-relaxed font-sans">{deepSeekData.formato}</p>
+                        <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-[#4F46E5]/5 rounded-full blur-sm"></div>
+                    </div>
+                </div>
+                
+                {/* ==================== BLOQUE DEL PROMPT MAESTRO - TERMINAL PREMIUM ==================== */}
+                <div className="bg-slate-900 text-slate-100 rounded-[2.5rem] p-8 relative shadow-2xl overflow-hidden mb-8 animate-in zoom-in duration-400">
+                    {/* Header de la terminal */}
+                    <div className="flex items-center justify-between mb-6">
+                        <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-2">
+                                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                                <div className="w-3 h-3 bg-amber-500 rounded-full"></div>
+                                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <Icon name="fa-terminal" className="text-slate-400" />
+                                <span className="text-sm font-bold text-slate-300 font-sans">PROMPT_MAESTRO.js</span>
+                            </div>
+                        </div>
+                        
+                        {/* Botón Copiar Premium - FUNCIONALIDAD PRESERVADA */}
+                        <button 
+                            onClick={() => copyToClipboard(deepSeekData.prompt_maestro)}
+                            className="absolute top-6 right-6 bg-white/10 hover:bg-white/20 text-white backdrop-blur-md px-4 py-2 rounded-2xl text-sm font-bold flex items-center gap-2 transition-all hover:scale-105 active:scale-95 font-sans"
+                            aria-label="Copiar prompt maestro al portapapeles"
+                        >
+                            <Icon name="fa-copy" className="text-sm" /> Copiar
+                        </button>
+                    </div>
+                    
+                    {/* Contenido del prompt */}
+                    <div className="font-mono font-medium leading-relaxed text-lg text-slate-200 whitespace-pre-wrap bg-slate-800/50 rounded-2xl p-6 border border-slate-700/50">
+                        {deepSeekData.prompt_maestro}
+                    </div>
+                    
+                    {/* Footer de la terminal */}
+                    <div className="mt-6 pt-4 border-t border-slate-700/50 flex items-center justify-between text-sm text-slate-400 font-sans">
+                        <div className="flex items-center gap-4">
+                            <span className="flex items-center gap-1">
+                                <Icon name="fa-code" className="text-xs" />
+                                <span>Prompt Engineering</span>
+                            </span>
+                            <span className="flex items-center gap-1">
+                                <Icon name="fa-brain" className="text-xs" />
+                                <span>DeepSeek AI</span>
+                            </span>
+                        </div>
+                        <div className="text-xs">
+                            {deepSeekData.prompt_maestro.split(' ').length} palabras • {deepSeekData.prompt_maestro.length} caracteres
+                        </div>
+                    </div>
+                </div>
+                
+                {/* ==================== BLOQUE DE ANÁLISIS TÉCNICO - NOTA DEL PROFESOR ==================== */}
+                <div className="bg-gradient-to-r from-indigo-50 to-blue-50 border-l-4 border-[#004B63] rounded-r-3xl rounded-l-md p-8 shadow-sm relative mb-8 overflow-hidden animate-in slide-in-from-right-4 duration-300">
+                    {/* Icono de bombillo en el fondo */}
+                    <Icon 
+                        name="fa-lightbulb" 
+                        className="absolute right-4 bottom-4 text-[#004B63]/10 opacity-20 w-32 h-32" 
+                    />
+                    
+                    {/* Header del análisis */}
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center">
+                            <Icon name="fa-lightbulb" className="text-white" />
+                        </div>
+                        <div>
+                            <h4 className="text-lg font-bold text-[#004B63] font-sans">💡 Análisis Técnico</h4>
+                            <p className="text-sm text-[#004B63] font-sans">Feedback educativo sobre tu idea</p>
+                        </div>
+                    </div>
+                    
+                    {/* Contenido del análisis */}
+                    <div className="relative z-10">
+                        <p className="text-slate-700 font-medium leading-relaxed mb-6 font-sans">
+                            {deepSeekData.analisis_tecnico}
+                        </p>
+                        
+                        {/* Píldoras de técnicas aplicadas */}
+                        <div className="flex flex-wrap gap-2">
+                            <span className="bg-white border border-[#004B63]/20 text-[#004B63] px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
+                                Estructura RTF
+                            </span>
+                            <span className="bg-white border border-[#00BCD4]/20 text-[#00BCD4] px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
+                                Especificidad
+                            </span>
+                            <span className="bg-white border border-[#4F46E5]/20 text-[#4F46E5] px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
+                                Claridad
+                            </span>
+                            <span className="bg-white border border-slate-200 text-slate-600 px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
+                                Contexto
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                
+                {/* ==================== FOOTER INFORMATIVO ==================== */}
+                <div className="bg-gradient-to-r from-slate-50 to-white p-6 rounded-2xl border border-slate-200">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <Icon name="fa-info-circle" className="text-slate-400" />
+                            <div>
+                                <p className="text-sm font-medium text-slate-700 font-sans">Generado con DeepSeek API</p>
+                                <p className="text-xs text-slate-500 font-sans">Modelo: deepseek-chat • Temperatura: 0.7 • Response Format: JSON</p>
+                            </div>
+                        </div>
+                        <button 
+                            onClick={() => window.location.reload()}
+                            className="px-4 py-2 text-sm font-medium text-[#004B63] bg-[#004B63]/10 hover:bg-[#004B63]/20 rounded-lg transition-colors font-sans"
+                        >
+                            <Icon name="fa-rotate-right" className="mr-2" /> Generar Nuevo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    // Render resultado optimizado (para resultados locales)
+    const renderLocalResult = () => {
         if (!genData) return null;
         
         return (
@@ -604,7 +797,8 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                     {renderHeader()}
                     {renderInputArea()}
                     {renderSuggestions()}
-                    {genData && renderResult()}
+                     {genData && genData.deepSeekData && renderDeepSeekResults()}
+                     {genData && !genData.deepSeekData && renderLocalResult()}
                     {renderError()}
                     {renderHistory()}
                 </>

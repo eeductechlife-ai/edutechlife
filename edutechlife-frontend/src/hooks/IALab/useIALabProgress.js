@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useIALabContext } from '../../context/IALabContext';
 import { 
   getAllProgress, 
@@ -32,10 +32,16 @@ export const useIALabProgress = () => {
     courseProgress,
     setCourseProgress,
     currentLessonIndex,
-    setCurrentLessonIndex
+    setCurrentLessonIndex,
+    isChallengeCompleted,
+    challengeScore,
+    quizPassed,
+    quizScore,
+    modules
   } = useIALabContext();
   
   const [progressError, setProgressError] = useState(null);
+  const hasLoadedRef = useRef(false);
   
   // ==================== CARGAR PROGRESO INICIAL ====================
   
@@ -118,10 +124,10 @@ export const useIALabProgress = () => {
       console.log(`Guardando progreso: módulo ${moduleId}, estado: ${status}`);
       
       const result = await saveProgress(
-        user.id,
         moduleId,
         status,
-        additionalData
+        additionalData,
+        user.id
       );
       
       if (result.success) {
@@ -244,19 +250,30 @@ export const useIALabProgress = () => {
   
   // Cargar progreso al montar o cuando cambia el usuario
   useEffect(() => {
+    // GUARDIA CRÍTICA: Solo ejecutar si hay usuario válido
+    if (!user?.id) {
+      setIsLoadingProgress(false);
+      return;
+    }
+    
+    // Evitar llamadas duplicadas
+    if (hasLoadedRef.current) return;
+    
     loadUserProgress();
-  }, [loadUserProgress]);
+    hasLoadedRef.current = true;
+  }, [user?.id]); // Dependencia específica, no la función completa
   
   // Guardar lección actual cuando cambia (con debounce)
   useEffect(() => {
-    if (!user || !user.id || currentLessonIndex === 0) return;
+    // GUARDIA: Solo si hay usuario y lessonIndex válido
+    if (!user?.id || currentLessonIndex === 0) return;
     
     const timer = setTimeout(() => {
       saveCurrentLesson();
     }, 1000); // Debounce de 1 segundo
     
     return () => clearTimeout(timer);
-  }, [user, currentLessonIndex, saveCurrentLesson]);
+  }, [user?.id, currentLessonIndex]); // Dependencias específicas
   
   // ==================== RETURN ====================
   
@@ -276,6 +293,12 @@ export const useIALabProgress = () => {
     
     // Constantes
     PROGRESS_STATUS,
+    
+    // Estados del desafío (para componentes que los necesiten)
+    isChallengeCompleted,
+    challengeScore,
+    quizPassed,
+    quizScore
   };
 };
 

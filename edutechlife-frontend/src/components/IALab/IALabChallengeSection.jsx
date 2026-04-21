@@ -30,7 +30,7 @@ const IALabChallengeSection = ({
         setIsStartingChallenge,
         isButtonDisabled,
         setIsButtonDisabled,
-        handleChallengeClick
+        setShowPremiumEvaluationModal
     } = useIALabContext();
 
     const { saveProgress, PROGRESS_STATUS, isLoadingProgress } = useIALabProgress();
@@ -75,11 +75,12 @@ const IALabChallengeSection = ({
 
     // Handlers específicos para IALab
     const handleStartChallenge = () => {
-        handleChallengeClick('OPEN_SYNTHESIZER');
+        setShowPremiumEvaluationModal(true);
     };
 
     const handleViewSolution = () => {
-        handleChallengeClick('OPEN_SYNTHESIZER', { mode: 'solution' });
+        // TODO: Implementar vista de solución experta
+        alert('La funcionalidad de "Solución Experta" estará disponible próximamente.');
     };
 
     const handleReviewCompleted = () => {

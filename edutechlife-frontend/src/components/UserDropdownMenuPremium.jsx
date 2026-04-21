@@ -69,7 +69,6 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
       openUserProfile();
     } else {
       setIsProfileOpen(true);
-      console.log('[CLERK-AUTH] Modal de perfil personalizado activado');
     }
   };
   
@@ -91,11 +90,9 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
   const handleChangePassword = () => {
     if (openUserProfile) {
       // Clerk v5+ - intentar redirigir a sección de seguridad
-      console.log('[CLERK-AUTH] Redirigiendo a perfil de Clerk para cambio de contraseña');
       window.location.href = '/user-profile?section=security';
     } else {
       setIsChangePasswordOpen(true);
-      console.log('[CLERK-AUTH] Modal de cambio de contraseña personalizado activado');
     }
   };
   

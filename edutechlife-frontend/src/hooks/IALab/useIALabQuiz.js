@@ -54,7 +54,9 @@ export const useIALabQuiz = () => {
     showSecurityMessage,
     setShowSecurityMessage,
     securityMessage,
-    setSecurityMessage
+    setSecurityMessage,
+    attemptsPenalized,
+    setAttemptsPenalized
   } = useIALabContext();
   
   // ==================== CONSTANTES ====================
@@ -281,6 +283,12 @@ export const useIALabQuiz = () => {
     return feedbackMessages;
   }, []);
   
+  // Obtener el último intento del quiz
+  const getLatestQuizAttempt = useCallback(() => {
+    if (quizAttempts.length === 0) return null;
+    return quizAttempts[quizAttempts.length - 1];
+  }, [quizAttempts]);
+  
   // Resetear quiz para reintento
   const resetQuizForRetry = useCallback(() => {
     setQuizAnswers({});
@@ -405,17 +413,11 @@ export const useIALabQuiz = () => {
   
   // Cerrar modal de evaluación
   const closeEvaluationModal = useCallback((forceClose = false) => {
-    if (Object.keys(quizAnswers).length > 0 && !showScoreResult && !forceClose) {
-      // Mostrar confirmación si hay respuestas sin enviar
-      setShowExitConfirmation(true);
-      return false;
-    } else {
-      // Cerrar directamente si no hay progreso o ya envió
-      setShowExamModal(false);
-      resetQuizForRetry();
-      return true;
-    }
-  }, [quizAnswers, showScoreResult, resetQuizForRetry, setShowExamModal, setShowExitConfirmation]);
+    // Cerrar directamente (sin confirmación de salida)
+    setShowExamModal(false);
+    resetQuizForRetry();
+    return true;
+  }, [resetQuizForRetry, setShowExamModal]);
   
   // ==================== FUNCIONES DE SEGURIDAD ====================
   
@@ -542,12 +544,6 @@ export const useIALabQuiz = () => {
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   }, []);
   
-  // Obtener el último intento del quiz
-  const getLatestQuizAttempt = useCallback(() => {
-    if (quizAttempts.length === 0) return null;
-    return quizAttempts[quizAttempts.length - 1];
-  }, [quizAttempts]);
-  
   // ==================== RETURN ====================
   
   return {
@@ -566,8 +562,6 @@ export const useIALabQuiz = () => {
     currentPage,
     showExamModal,
     securityWarningCount,
-    showExitConfirmation,
-    showSecurityWarning,
     screenshotProtectionActive,
     showSecurityMessage,
     securityMessage,
@@ -611,8 +605,6 @@ export const useIALabQuiz = () => {
     setCurrentPage,
     setShowExamModal,
     setSecurityWarningCount,
-    setShowExitConfirmation,
-    setShowSecurityWarning,
     setScreenshotProtectionActive,
     setShowSecurityMessage,
     setSecurityMessage,
