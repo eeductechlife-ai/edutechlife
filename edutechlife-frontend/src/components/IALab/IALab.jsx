@@ -4,10 +4,13 @@ import IALabHeader from './IALabHeader';
 import IALabSidebar from './IALabSidebar';
 import IALabModuleHeader from './IALabModuleHeader';
 import ModuleOverviewCard from './ModuleOverviewCard';
+import ModuleInfoSection from './ModuleInfoSection';
 import IALabContentAccordion from './IALabContentAccordion';
 import IALabChallengeSection from './IALabChallengeSection';
 import IALabForumSection from './IALabForumSection';
+import IALabForumOptimized from './IALabForumOptimized';
 import IALabSynthesizer from './IALabSynthesizer';
+import ReactivePromptStation from './ReactivePromptStation';
 import IALabEvaluationModal from './IALabEvaluationModal';
 import IALabEvaluationModalPremium from './IALabEvaluationModalPremium';
 import IALabValerioPanel from './IALabValerioPanel';
@@ -73,7 +76,12 @@ const IALabContent = () => {
                               <IALabModuleHeader onAction={handleGlobalAction} />
                             </div>
 
-                            {/* 2. SEGUNDO: TARJETA DE RESUMEN EN EL MEDIO */}
+                            {/* 2. SEGUNDO: SECCIÓN INFORMATIVA DEL MÓDULO */}
+                            <div className="mt-8">
+                              <ModuleInfoSection />
+                            </div>
+
+                            {/* 3. TERCERO: TARJETA DE RESUMEN EN EL MEDIO */}
                             <ModuleOverviewCard />
 
                             {/* 3. TERCERO: ACORDEONES/LECCIONES ABAJO */}
@@ -81,9 +89,9 @@ const IALabContent = () => {
                               <IALabContentAccordion />
                             </div>
                             
-                            {/* Sintetizador de Prompts Élite */}
+                            {/* Estación Reactiva de Prompts - Fusión Sintetizador + Dashboard */}
                             <div className="mt-10">
-                              <IALabSynthesizer />
+                              <ReactivePromptStation />
                             </div>
                             
                             {/* Contenedor Grid: Desafío y Comunidad */}
@@ -93,14 +101,11 @@ const IALabContent = () => {
                                     <IALabChallengeSection />
                                 </ErrorBoundary>
                                 
-                                {/* Columna Derecha: Comunidad IALab */}
+                                {/* Columna Derecha: Comunidad IALab Optimizada */}
                                 <ErrorBoundary>
-                                    <IALabForumSection 
+                                    <IALabForumOptimized 
                                         compact={false}
-                                        showHeader={true}
-                                        showInput={true}
-                                        showStats={true}
-                                        limit={10}
+                                        initialLimit={5}
                                     />
                                 </ErrorBoundary>
                             </div>

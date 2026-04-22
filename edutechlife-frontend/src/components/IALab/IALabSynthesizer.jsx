@@ -49,7 +49,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
     // Handler para optimizar prompt
     const handleOptimize = async () => {
         if (!isValidInput(input)) {
-            alert('El prompt debe tener entre 10 y 1000 caracteres');
+            alert(`El prompt debe tener entre 3 y 500 caracteres (actual: ${input.length})`);
             return;
         }
         
@@ -687,72 +687,79 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
     };
 
     // Render historial
-    const renderHistory = () => (
-        history.length > 0 && (
-            <div className="mt-8 pt-6 border-t border-slate-100">
-                <div className="flex items-center justify-between mb-4">
-                    <h4 className={cn(
-                        FORUM_TYPOGRAPHY.BODY.LG,
-                        FORUM_TYPOGRAPHY.SEMIBOLD,
-                        FORUM_TYPOGRAPHY.TEXT_PRIMARY
-                    )}>
-                        📋 Historial reciente
-                    </h4>
-                    <button
-                        onClick={clearHistory}
-                        className="text-sm text-slate-500 hover:text-red-500 transition-colors duration-300"
-                        aria-label="Limpiar historial"
-                    >
-                        <Icon name="fa-trash" className="mr-1" /> Limpiar
-                    </button>
-                </div>
-                
-                <div className="space-y-3">
-                    {history.slice(0, 5).map((item, index) => (
-                        <button
-                            key={index}
-                            onClick={() => loadFromHistory(index)}
-                            className={cn(
-                                "w-full text-left p-4 rounded-xl",
-                                "bg-white border border-slate-100",
-                                "hover:bg-[#00BCD4]/5 hover:border-[#00BCD4]/30",
-                                FORUM_EFFECTS.TRANSITION_ALL,
-                                "focus:outline-none focus:ring-2 focus:ring-[#00BCD4]/50"
-                            )}
-                        >
-                            <div className="flex items-start justify-between">
-                                <div className="flex-1 min-w-0">
-                                    <p className={cn(
-                                        FORUM_TYPOGRAPHY.BODY.SM,
-                                        "text-[#00374A] truncate"
-                                    )}>
-                                        {item.input}
-                                    </p>
-                                    <div className="flex items-center gap-2 mt-2">
-                                        <span className="text-xs text-slate-500">
-                                            {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                        </span>
-                                        <span className="text-xs px-2 py-0.5 bg-[#004B63]/10 text-[#004B63] rounded-full">
-                                            {item.output.techniqueApplied.name}
-                                        </span>
-                                        <span className={cn(
-                                            "text-xs px-2 py-0.5 rounded-full",
-                                            item.output.analysis.score >= 70 ? "bg-green-100 text-green-800" :
-                                            item.output.analysis.score >= 50 ? "bg-yellow-100 text-yellow-800" :
-                                            "bg-red-100 text-red-800"
-                                        )}>
-                                            {item.output.analysis.score}/100
-                                        </span>
-                                    </div>
-                                </div>
-                                <Icon name="fa-chevron-right" className="text-slate-400 ml-2 flex-shrink-0" />
-                            </div>
-                        </button>
-                    ))}
-                </div>
-            </div>
-        )
-    );
+     const renderHistory = () => (
+         history.length > 0 && (
+             <div className="mt-8 pt-6 border-t border-slate-100">
+                 <div className="flex items-center justify-between mb-4">
+                     <h4 className={cn(
+                         FORUM_TYPOGRAPHY.BODY.LG,
+                         FORUM_TYPOGRAPHY.SEMIBOLD,
+                         FORUM_TYPOGRAPHY.TEXT_PRIMARY
+                     )}>
+                         📋 Historial reciente
+                     </h4>
+                     <button
+                         onClick={clearHistory}
+                         className="text-sm text-slate-500 hover:text-red-500 transition-colors duration-300"
+                         aria-label="Limpiar historial"
+                     >
+                         <Icon name="fa-trash" className="mr-1" /> Limpiar
+                     </button>
+                 </div>
+                 
+                 <div className="space-y-3">
+                     {history.slice(0, 5).map((item, index) => {
+                         // Verificar que el item tenga la estructura correcta
+                         if (!item || !item.originalPrompt || !item.techniqueApplied || !item.analysis) {
+                             return null;
+                         }
+                         
+                         return (
+                             <button
+                                 key={index}
+                                 onClick={() => loadFromHistory(index)}
+                                 className={cn(
+                                     "w-full text-left p-4 rounded-xl",
+                                     "bg-white border border-slate-100",
+                                     "hover:bg-[#00BCD4]/5 hover:border-[#00BCD4]/30",
+                                     FORUM_EFFECTS.TRANSITION_ALL,
+                                     "focus:outline-none focus:ring-2 focus:ring-[#00BCD4]/50"
+                                 )}
+                             >
+                                 <div className="flex items-start justify-between">
+                                     <div className="flex-1 min-w-0">
+                                         <p className={cn(
+                                             FORUM_TYPOGRAPHY.BODY.SM,
+                                             "text-[#00374A] truncate"
+                                         )}>
+                                             {item.originalPrompt}
+                                         </p>
+                                         <div className="flex items-center gap-2 mt-2">
+                                             <span className="text-xs text-slate-500">
+                                                 {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                             </span>
+                                             <span className="text-xs px-2 py-0.5 bg-[#004B63]/10 text-[#004B63] rounded-full">
+                                                 {item.techniqueApplied.name}
+                                             </span>
+                                             <span className={cn(
+                                                 "text-xs px-2 py-0.5 rounded-full",
+                                                 item.analysis.score >= 70 ? "bg-green-100 text-green-800" :
+                                                 item.analysis.score >= 50 ? "bg-yellow-100 text-yellow-800" :
+                                                 "bg-red-100 text-red-800"
+                                             )}>
+                                                 {item.analysis.score}/100
+                                             </span>
+                                         </div>
+                                     </div>
+                                     <Icon name="fa-chevron-right" className="text-slate-400 ml-2 flex-shrink-0" />
+                                 </div>
+                             </button>
+                         );
+                     })}
+                 </div>
+             </div>
+         )
+     );
 
      // Render error
      const renderError = () => (

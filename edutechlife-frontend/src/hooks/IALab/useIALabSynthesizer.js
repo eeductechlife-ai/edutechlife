@@ -47,6 +47,8 @@ export const useIALabSynthesizer = () => {
 
     // Optimizar prompt con DeepSeek API o análisis local
     const optimizePrompt = useCallback(async (userPrompt) => {
+        console.log('🚀 [DEBUG] optimizePrompt llamado con:', userPrompt.substring(0, 50) + '...');
+        
         if (!userPrompt.trim()) {
             setError('Por favor, ingresa una idea para convertir en prompt');
             return null;
@@ -72,13 +74,17 @@ export const useIALabSynthesizer = () => {
             const deepSeekResult = await (async () => {
                 setIsGenerating(true);
                 setLoadMsg('Conectando con DeepSeek API...');
+                console.log('🔗 [DEBUG] Intentando conectar con DeepSeek API...');
                 
                 try {
+                    const apiKey = import.meta.env.VITE_DEEPSEEK_API_KEY || '';
+                    console.log('🔑 [DEBUG] API Key presente:', apiKey ? 'Sí (longitud: ' + apiKey.length + ')' : 'No');
+                    
                     const response = await fetch('https://api.deepseek.com/chat/completions', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${import.meta.env.VITE_DEEPSEEK_API_KEY || ''}`
+                            'Authorization': `Bearer ${apiKey}`
                         },
                         body: JSON.stringify({
                             model: 'deepseek-chat',
@@ -100,23 +106,29 @@ export const useIALabSynthesizer = () => {
                         })
                     });
                     
+                    console.log('📡 [DEBUG] Respuesta de API recibida. Status:', response.status);
+                    
                     if (!response.ok) {
                         const errorText = await response.text();
+                        console.error('❌ [DEBUG] Error de API:', response.status, errorText);
                         throw new Error(`API Error ${response.status}: ${errorText}`);
                     }
                     
                     const data = await response.json();
+                    console.log('✅ [DEBUG] Datos de API recibidos:', data);
                     
                     if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+                        console.error('❌ [DEBUG] Estructura de respuesta inválida:', data);
                         throw new Error('Respuesta de API inválida');
                     }
                     
                     const result = JSON.parse(data.choices[0].message.content);
+                    console.log('🎯 [DEBUG] Resultado parseado:', result);
                     setDeepSeekResult(result);
                     return result;
                     
                 } catch (error) {
-                    console.error('DeepSeek API Error:', error);
+                    console.error('❌ [DEBUG] DeepSeek API Error completo:', error);
                     setApiError(`Error con DeepSeek API: ${error.message}. Usando sistema local...`);
                     return null;
                 } finally {
@@ -277,8 +289,8 @@ export const useIALabSynthesizer = () => {
     // Cargar prompt del historial
     const loadFromHistory = useCallback((index) => {
         if (history[index]) {
-            setInput(history[index].input);
-            setGenData(history[index].output);
+            setInput(history[index].originalPrompt || '');
+            setGenData(history[index]);
         }
     }, [history]);
 
@@ -297,8 +309,11 @@ export const useIALabSynthesizer = () => {
         // Calcular técnica favorita
         const techniqueCount = {};
         history.forEach(item => {
-            const tech = item.output.techniqueApplied.name;
-            techniqueCount[tech] = (techniqueCount[tech] || 0) + 1;
+            // Verificar que el item tenga la estructura correcta
+            if (item && item.techniqueApplied && item.techniqueApplied.name) {
+                const tech = item.techniqueApplied.name;
+                techniqueCount[tech] = (techniqueCount[tech] || 0) + 1;
+            }
         });
         
         const favoriteTechnique = Object.entries(techniqueCount)
@@ -306,14 +321,20 @@ export const useIALabSynthesizer = () => {
 
         // Calcular score promedio
         const averageScore = Math.round(
-            history.reduce((sum, item) => sum + item.output.analysis.score, 0) / history.length
+            history.reduce((sum, item) => {
+                // Verificar que el item tenga análisis
+                if (item && item.analysis && item.analysis.score) {
+                    return sum + item.analysis.score;
+                }
+                return sum;
+            }, 0) / (history.length || 1)
         );
 
         // Calcular tendencia de mejora (comparar primeros vs últimos)
         let improvementTrend = 0;
         if (history.length >= 3) {
-            const firstScores = history.slice(-3).map(item => item.output.analysis.score);
-            const lastScores = history.slice(0, 3).map(item => item.output.analysis.score);
+            const firstScores = history.slice(-3).map(item => item && item.analysis ? item.analysis.score : 0);
+            const lastScores = history.slice(0, 3).map(item => item && item.analysis ? item.analysis.score : 0);
             const firstAvg = firstScores.reduce((a, b) => a + b, 0) / firstScores.length;
             const lastAvg = lastScores.reduce((a, b) => a + b, 0) / lastScores.length;
             improvementTrend = Math.round(lastAvg - firstAvg);
@@ -326,7 +347,12 @@ export const useIALabSynthesizer = () => {
             averageScore,
             improvementTrend,
             averageLength: Math.round(
-                history.reduce((sum, item) => sum + item.input.length, 0) / history.length
+                history.reduce((sum, item) => {
+                    if (item && item.originalPrompt) {
+                        return sum + item.originalPrompt.length;
+                    }
+                    return sum;
+                }, 0) / (history.length || 1)
             )
         };
     }, [history]);
@@ -397,7 +423,7 @@ export const useIALabSynthesizer = () => {
 
     // Obtener análisis rápido (para preview en tiempo real)
     const getQuickAnalysis = useCallback((text) => {
-        if (!text || text.trim().length < 5) return null;
+        if (!text || text.trim().length < 3) return null;
         
         try {
             const analysis = analyzePromptQuality(text);
@@ -413,7 +439,8 @@ export const useIALabSynthesizer = () => {
                 technique: promptType.technique,
                 icon: promptType.icon,
                 wordCount: text.split(/\s+/).length,
-                suggestions: analysis.suggestions.slice(0, 2)
+                suggestions: analysis.suggestions.slice(0, 2),
+                analysis: analysis.analysis // Incluir análisis completo
             };
         } catch (err) {
             console.error('Error in quick analysis:', err);
