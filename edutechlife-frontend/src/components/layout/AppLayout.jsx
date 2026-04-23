@@ -1,12 +1,11 @@
 import { useState, lazy, Suspense } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '@clerk/react';
+import { useAuth, useUser } from '@clerk/react';
 import { PageLoader } from '../LoadingScreen';
 import NicoModern from '../Nico/NicoModern';
 import ContactModal from '../ContactModal';
 import LeadCaptureModal from '../LeadCaptureModal';
 import AdminLoginModal from '../AdminLoginModal';
-import { useClerkAuth } from '../../utils/clerk-utils';
 import UserDropdownMenuPremium from '../UserDropdownMenuPremium';
 import UserDropdownMenuSimplified from '../UserDropdownMenuSimplified';
 import ScrollToTop from './ScrollToTop';
@@ -17,7 +16,7 @@ const GlobalCanvas = lazy(() => import('../GlobalCanvas'));
 const AppLayout = () => {
   const navigate = useNavigate();
   const { isSignedIn } = useAuth();
-  const clerkAuth = useClerkAuth();
+  const { user: clerkUser } = useUser();
   
   // Estados para modales y menú móvil
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -142,10 +141,10 @@ const AppLayout = () => {
                 </button>
                 
                 {/* User Dropdown para usuarios autenticados */}
-                {isSignedIn && clerkAuth.user && (
+                {isSignedIn && clerkUser && (
                   <div className="ml-2">
                     <UserDropdownMenuPremium 
-                      userInfo={clerkAuth.user}
+                      userInfo={clerkUser}
                       onNavigate={navigate}
                     />
                   </div>
@@ -203,10 +202,10 @@ const AppLayout = () => {
                 {/* Mobile Menu Content */}
                 <div className="flex-1 overflow-y-auto p-4">
                   {/* User Info Section */}
-                  {isSignedIn && clerkAuth.user && (
+                  {isSignedIn && clerkUser && (
                     <div className="mb-6 pb-4 border-b border-[#4DA8C4]/10">
                       <UserDropdownMenuSimplified 
-                        userInfo={clerkAuth.user}
+                        userInfo={clerkUser}
                         onNavigate={navigate}
                       />
                     </div>
