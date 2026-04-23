@@ -1,24 +1,17 @@
 /**
- * Configuración de Clerk para Vite/React SPA
- * Sistema híbrido: Clerk frontend + Supabase backend
+ * Configuración de Clerk para Edutechlife
+ * Corregido para despliegue en Vercel
  */
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
-let clerkPublishableKey;
-
+// Verificación simple para evitar bloqueos
 if (!PUBLISHABLE_KEY) {
-  console.error('❌ ERROR: VITE_CLERK_PUBLISHABLE_KEY no está definida en .env');
-  const fallbackKey = 'pk_test_demo_key_for_development';
-  console.warn(`⚠ Usando clave de desarrollo: ${fallbackKey}`);
-  clerkPublishableKey = fallbackKey;
-} else {
-  console.log('✅ Clerk Publishable Key configurada correctamente');
-  clerkPublishableKey = PUBLISHABLE_KEY;
+  console.warn('⚠ VITE_CLERK_PUBLISHABLE_KEY no detectada. Verifica las Environment Variables en Vercel.');
 }
 
 export const clerkConfig = {
-  publishableKey: clerkPublishableKey,
+  publishableKey: PUBLISHABLE_KEY || 'pk_test_placeholder',
   signInUrl: '/sign-in',
   signUpUrl: '/sign-up',
   afterSignInUrl: '/ialab',
@@ -29,9 +22,10 @@ export const clerkConfig = {
       colorPrimaryHover: '#0A3550',
     }
   },
-  clerkJSUrl: 'https://cdn.clerk.com/clerk-js@6/dist/clerk.browser.js',
+  // URL forzada sin barras extras y usando el CDN oficial de Clerk
+  clerkJSUrl: 'https://cdn.clerk.com/clerk-js@latest/dist/clerk.browser.js',
 };
 
 export const isClerkConfigured = () => {
-  return PUBLISHABLE_KEY && PUBLISHABLE_KEY.startsWith('pk_');
+  return !!PUBLISHABLE_KEY;
 };
