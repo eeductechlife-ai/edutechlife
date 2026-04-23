@@ -15,9 +15,15 @@ import { clerkConfig } from '../lib/clerk-config';
  */
 const ClerkProviderWrapper = ({ children }) => {
   return (
-    <ClerkProvider 
-      {...clerkConfig}
+    <ClerkProvider
+      publishableKey={clerkConfig.publishableKey}
+      signInUrl={clerkConfig.signInUrl}
+      signUpUrl={clerkConfig.signUpUrl}
+      afterSignInUrl={clerkConfig.afterSignInUrl}
+      afterSignUpUrl={clerkConfig.afterSignUpUrl}
+      appearance={clerkConfig.appearance}
       localization={esES}
+      clerkJSUrl="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@6/dist/clerk.browser.js"
     >
       {children}
     </ClerkProvider>
