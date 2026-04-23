@@ -1,0 +1,43 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: edutechlife-frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./edutechlife-frontend
+        run: npm ci
+
+      - name: Build application
+        working-directory: ./edutechlife-frontend
+        run: npm run build
+        env:
+          VITE_CLERK_PUBLISHABLE_KEY: ${{ secrets.VITE_CLERK_PUBLISHABLE_KEY }}
+
+      - name: Deploy via rsync over SSH
+        uses: burnett01/rsync-deployments@7.0.1
+        with:
+          switches: -avz --delete
+          path: edutechlife-frontend/dist/
+          remote_path: /var/www/edutechlife.co/html
+          remote_host: 143.198.177.36
+          remote_user: root
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}

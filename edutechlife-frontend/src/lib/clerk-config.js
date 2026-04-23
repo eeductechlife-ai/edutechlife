@@ -28,7 +28,8 @@ export const clerkConfig = {
       colorPrimary: '#004B63',
       colorPrimaryHover: '#0A3550',
     }
-  }
+  },
+  clerkJSUrl: 'https://cdn.clerk.com/clerk-js@6/dist/clerk.browser.js',
 };
 
 export const isClerkConfigured = () => {
