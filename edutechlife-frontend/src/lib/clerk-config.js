@@ -29,7 +29,7 @@ export const clerkConfig = {
       colorPrimaryHover: '#0A3550',
     }
   },
-  clerkJSUrl: 'https://cdn.jsdelivr.net/npm/@clerk/clerk-js@6/dist/clerk.browser.js',
+  clerkJSUrl: 'https://cdn.clerk.com/clerk-js@6/dist/clerk.browser.js',
 };
 
 export const isClerkConfigured = () => {
