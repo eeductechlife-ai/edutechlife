@@ -21,32 +21,26 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Obtener perfil del usuario (simulado para evitar errores 401)
+  // Obtener perfil del usuario
   const fetchProfile = useCallback(async (userId) => {
     if (!session || !userId) return;
 
     try {
       setLoading(true);
       
-      // SOLUCIÓN TEMPORAL: Desactivar consultas a profiles que causan error 401
-      console.log('🔇 Consulta fetchProfile desactivada temporalmente (evitar error 401)');
-      console.log('   Razón: RLS bloqueando acceso a profiles para usuarios autenticados');
-      
-      // Usar perfil simulado para desarrollo
-      const simulatedProfile = {
-        id: userId,
-        full_name: session?.user?.fullName || 'Usuario Demo',
-        email: session?.user?.emailAddresses?.[0]?.emailAddress || 'demo@edutechlife.com',
-        role: 'student',
-        simulated: true
+      // Usar datos reales de Clerk
+      const clerkUser = {
+        id: session.user.id,
+        full_name: session.user.fullName || 'Usuario',
+        email: session.user.emailAddresses?.[0]?.emailAddress || '',
+        role: 'student'
       };
       
-      console.log(`✅ Perfil simulado para ${userId.substring(0, 8)}`);
-      setProfile(simulatedProfile);
+      setProfile(clerkUser);
       setError(null);
       
     } catch (err) {
-      console.warn('⚠️ Error no crítico en fetchProfile:', err.message);
+      console.warn('⚠️ Error en fetchProfile:', err.message);
       // Crear perfil local mínimo usando datos de session
       const clerkFullName = session?.user?.fullName || 'Usuario Edutechlife';
       const clerkEmail = session?.user?.emailAddresses?.[0]?.emailAddress || '';
@@ -151,40 +145,33 @@ export const AuthProvider = ({ children }) => {
     return signUp(email, password, metadata);
   }, [signUp]);
 
-  // Actualizar perfil en Supabase (simulado para evitar errores 401)
+  // Actualizar perfil en Supabase
   const updateProfile = useCallback(async (updates) => {
     if (!supabase || !user?.id) {
       throw new Error('No hay usuario autenticado o cliente Supabase');
     }
 
     try {
-      // SOLUCIÓN TEMPORAL: Desactivar actualización que causa error 401
-      console.log('🔇 Actualización de perfil desactivada temporalmente (evitar error 401)');
-      
-      // Simular actualización exitosa para desarrollo
-      const simulatedData = {
-        id: user.id,
-        full_name: updates.full_name || profile?.full_name || 'Usuario Demo',
-        phone: updates.phone || profile?.phone || '',
-        email: profile?.email || 'demo@edutechlife.com',
-        role: updates.role || profile?.role || 'student',
-        avatar_url: updates.avatar_url || profile?.avatar_url || '',
-        created_at: profile?.created_at || new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        simulated: true
-      };
-      
+      // Actualización real con Supabase
+      const { data, error: updateError } = await supabase
+        .from('profiles')
+        .update(updates)
+        .eq('id', user.id)
+        .select()
+        .single();
+
+      if (updateError) throw updateError;
+
       // Actualizar perfil local
-      setProfile(simulatedData);
-      console.log('✅ Perfil actualizado simulado');
-      return { error: null, data: simulatedData };
+      setProfile(data);
+      return { error: null, data };
       
     } catch (err) {
       console.error('Error updating profile:', err);
       setError(err.message);
       return { error: err, data: null };
     }
-  }, [supabase, user, profile]);
+  }, [supabase, user]);
 
   const value = {
     // Estado

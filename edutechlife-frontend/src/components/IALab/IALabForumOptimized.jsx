@@ -150,7 +150,7 @@ const IALabForumOptimized = ({
             className={cn(
                 "bg-white/80 border border-cyan-100 rounded-3xl backdrop-blur-sm shadow-lg",
                 "flex flex-col",
-                compact ? "h-96" : "h-[500px]",
+                compact ? "h-96" : "h-fit",
                 className
             )}
             {...rest}
@@ -232,7 +232,7 @@ const IALabForumOptimized = ({
                         )}
                     </div>
                     <div>
-                        <h3 className="text-sm font-bold text-slate-800">
+                         <h3 className="text-lg font-bold text-[#004B63]">
                             Comunidad IALab
                             {showLiveIndicator && (
                                 <span className="ml-2 text-xs font-normal text-cyan-500 live-pulse">

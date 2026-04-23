@@ -1,0 +1,128 @@
+<svg width="400" height="300" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fondo con gradiente -->
+  <rect width="400" height="300" rx="20" fill="url(#gradient-bg)"/>
+  
+  <!-- Gradientes -->
+  <defs>
+    <linearGradient id="gradient-bg" x1="0" y1="0" x2="400" y2="300" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6B21A8"/>
+      <stop offset="1" stop-color="#9333EA"/>
+    </linearGradient>
+    
+    <linearGradient id="gradient-brain" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00BCD4"/>
+      <stop offset="0.5" stop-color="#9333EA"/>
+      <stop offset="1" stop-color="#EC4899"/>
+    </linearGradient>
+    
+    <linearGradient id="gradient-circuit" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FBBF24"/>
+      <stop offset="1" stop-color="#F59E0B"/>
+    </linearGradient>
+    
+    <radialGradient id="gradient-glow" cx="0.5" cy="0.5" r="0.5" gradientUnits="objectBoundingBox">
+      <stop stop-color="#FFFFFF" stop-opacity="0.3"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  
+  <!-- Cerebro central -->
+  <g transform="translate(200, 120)">
+    <!-- Cerebro -->
+    <path d="M-60,0 C-60,-40 -20,-60 0,-60 C20,-60 60,-40 60,0 C60,40 20,60 0,60 C-20,60 -60,40 -60,0 Z" 
+          fill="url(#gradient-brain)" opacity="0.9"/>
+    
+    <!-- Surcos cerebrales -->
+    <path d="M-40,-20 C-30,-30 -10,-30 0,-30 C10,-30 30,-30 40,-20" 
+          stroke="white" stroke-width="3" stroke-opacity="0.3" fill="none"/>
+    <path d="M-30,0 C-20,-10 20,-10 30,0" 
+          stroke="white" stroke-width="3" stroke-opacity="0.3" fill="none"/>
+    <path d="M-40,20 C-30,10 -10,10 0,10 C10,10 30,10 40,20" 
+          stroke="white" stroke-width="3" stroke-opacity="0.3" fill="none"/>
+    
+    <!-- Circuitos integrados -->
+    <!-- Circuito 1 -->
+    <g transform="translate(-50, -40)">
+      <rect x="-15" y="-15" width="30" height="30" rx="6" fill="url(#gradient-circuit)" opacity="0.9"/>
+      <path d="M-8,-8 L8,8 M-8,8 L8,-8" stroke="white" stroke-width="2" stroke-opacity="0.8"/>
+    </g>
+    
+    <!-- Circuito 2 -->
+    <g transform="translate(50, -40)">
+      <circle cx="0" cy="0" r="15" fill="#00BCD4" opacity="0.9"/>
+      <path d="M0,-10 L0,10 M-10,0 L10,0" stroke="white" stroke-width="2" stroke-opacity="0.8"/>
+    </g>
+    
+    <!-- Circuito 3 -->
+    <g transform="translate(-50, 40)">
+      <rect x="-12" y="-12" width="24" height="24" rx="4" fill="#EC4899" opacity="0.9"/>
+      <path d="M-6,-6 L6,6" stroke="white" stroke-width="2" stroke-opacity="0.8"/>
+      <circle cx="0" cy="0" r="3" fill="white" opacity="0.8"/>
+    </g>
+    
+    <!-- Circuito 4 -->
+    <g transform="translate(50, 40)">
+      <polygon points="-15,-10 15,-10 0,15" fill="#9333EA" opacity="0.9"/>
+      <circle cx="0" cy="-5" r="3" fill="white" opacity="0.8"/>
+    </g>
+    
+    <!-- Nodos de conexión -->
+    <circle cx="-30" cy="-30" r="5" fill="#FBBF24"/>
+    <circle cx="30" cy="-30" r="5" fill="#00BCD4"/>
+    <circle cx="-30" cy="30" r="5" fill="#EC4899"/>
+    <circle cx="30" cy="30" r="5" fill="#9333EA"/>
+    
+    <!-- Líneas de conexión animadas -->
+    <path d="M-30,-30 L-50,-40" stroke="#FBBF24" stroke-width="2" stroke-dasharray="4,4">
+      <animate attributeName="stroke-dashoffset" from="0" to="8" dur="1s" repeatCount="indefinite"/>
+    </path>
+    <path d="M30,-30 L50,-40" stroke="#00BCD4" stroke-width="2" stroke-dasharray="4,4">
+      <animate attributeName="stroke-dashoffset" from="0" to="8" dur="1s" repeatCount="indefinite" begin="0.2s"/>
+    </path>
+    <path d="M-30,30 L-50,40" stroke="#EC4899" stroke-width="2" stroke-dasharray="4,4">
+      <animate attributeName="stroke-dashoffset" from="0" to="8" dur="1s" repeatCount="indefinite" begin="0.4s"/>
+    </path>
+    <path d="M30,30 L50,40" stroke="#9333EA" stroke-width="2" stroke-dasharray="4,4">
+      <animate attributeName="stroke-dashoffset" from="0" to="8" dur="1s" repeatCount="indefinite" begin="0.6s"/>
+    </path>
+  </g>
+  
+  <!-- Texto de título -->
+  <text x="200" y="270" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-weight="bold" font-size="20">
+    Infografía Interactiva: Prompt Engineering
+  </text>
+  
+  <!-- Texto de descripción -->
+  <text x="200" y="290" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="Arial, sans-serif" font-size="14">
+    OVA Interactivo · 5 secciones · 15 minutos
+  </text>
+  
+  <!-- Badge OVA INTERACTIVO -->
+  <g transform="translate(320, 30)">
+    <!-- Fondo del badge -->
+    <rect x="-50" y="-15" width="100" height="30" rx="15" fill="rgba(255,255,255,0.2)"/>
+    <rect x="-48" y="-13" width="96" height="26" rx="13" fill="url(#gradient-circuit)"/>
+    
+    <!-- Texto del badge -->
+    <text x="0" y="5" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-weight="bold" font-size="12">
+      OVA INTERACTIVO
+    </text>
+  </g>
+  
+  <!-- Partículas flotantes -->
+  <circle cx="50" cy="80" r="3" fill="white" opacity="0.6">
+    <animate attributeName="cy" values="80;70;80" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="350" cy="100" r="2" fill="#00BCD4" opacity="0.7">
+    <animate attributeName="cy" values="100;90;100" dur="2.5s" repeatCount="indefinite" begin="0.5s"/>
+  </circle>
+  <circle cx="80" cy="200" r="2.5" fill="#EC4899" opacity="0.7">
+    <animate attributeName="cx" values="80;90;80" dur="3s" repeatCount="indefinite" begin="1s"/>
+  </circle>
+  <circle cx="320" cy="180" r="2" fill="#FBBF24" opacity="0.7">
+    <animate attributeName="cx" values="320;310;320" dur="2.8s" repeatCount="indefinite" begin="0.8s"/>
+  </circle>
+  
+  <!-- Efecto de brillo -->
+  <rect width="400" height="300" rx="20" fill="url(#gradient-glow)"/>
+</svg>

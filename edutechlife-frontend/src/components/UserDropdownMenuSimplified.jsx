@@ -170,11 +170,11 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
                       <span className="text-[10px] px-2 py-0.5 bg-indigo-50 text-indigo-700 uppercase font-bold rounded-full">
                         {userInfo.role === 'teacher' ? 'Profesor' : 'Estudiante'}
                       </span>
-                     {isClerkSignedIn && (
-                       <span className="text-[10px] px-2 py-0.5 bg-slate-100 text-slate-600 uppercase font-bold rounded-full">
-                         Clerk
-                       </span>
-                     )}
+                      {isClerkSignedIn && (
+                        <span className="text-[10px] px-2 py-0.5 bg-slate-100 text-slate-600 uppercase font-bold rounded-full">
+                          Clerk
+                        </span>
+                      )}
                    </div>
                 </div>
               </div>

@@ -49,17 +49,12 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
   // Manejar logout exclusivamente con Clerk oficial
   const handleLogout = async () => {
     try {
-      if (signOut) {
-        await signOut();
-      } else {
-        console.error('[CLERK-AUTH] No hay método de logout disponible');
-      }
-      
+      await signOut();
       if (onNavigate) {
         onNavigate('landing');
       }
     } catch (error) {
-      console.error('[CLERK-AUTH] Error al cerrar sesión:', error);
+      console.error('Error al cerrar sesión:', error);
     }
   };
   
@@ -97,17 +92,20 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
   };
   
   // Blindaje del componente - Evita colapso total
-  if (isLoading) {
+  if (!isSignedIn) {
     return (
       <Button 
         variant="ghost" 
         className="relative h-10 w-10 rounded-full p-0"
-        aria-label="Cargando menú de usuario"
-        disabled
+        aria-label="Usuario no autenticado"
+        onClick={() => {
+          // Redirigir a login si no está autenticado
+          window.location.href = '/login';
+        }}
       >
         <Avatar className="h-10 w-10 border-2 border-white">
-          <AvatarFallback className="bg-slate-200 animate-pulse">
-            <div className="h-4 w-4 bg-slate-300 rounded-full"></div>
+          <AvatarFallback className="bg-slate-100 text-slate-400">
+            <Icon name="user" size={16} />
           </AvatarFallback>
         </Avatar>
       </Button>
@@ -181,11 +179,11 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
                     <span className="text-[10px] px-2 py-0.5 bg-indigo-50 text-indigo-700 uppercase font-bold rounded-full">
                      {userInfo.role === 'teacher' ? 'Profesor' : 'Estudiante'}
                    </span>
-                   {isSignedIn && (
-                     <span className="text-[10px] px-2 py-0.5 bg-slate-100 text-slate-600 uppercase font-bold rounded-full">
-                       Clerk
-                     </span>
-                   )}
+                    {isSignedIn && (
+                      <span className="text-[10px] px-2 py-0.5 bg-slate-100 text-slate-600 uppercase font-bold rounded-full">
+                        Clerk
+                      </span>
+                    )}
                  </div>
               </div>
             </div>
@@ -272,7 +270,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
             </div>
             
             <div className="space-y-4">
-              <p className="text-sm text-slate-600">
+               <p className="text-sm text-slate-600">
                 {isSignedIn 
                   ? 'Utiliza la funcionalidad de cambio de contraseña de Clerk desde tu perfil.'
                   : 'Esta funcionalidad estará disponible cuando inicies sesión.'

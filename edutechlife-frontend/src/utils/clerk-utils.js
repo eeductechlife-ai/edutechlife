@@ -78,36 +78,8 @@ export const useClerkAuth = () => {
     console.warn('Error al usar Clerk hooks:', error.message);
   }
   
-  // Fallback a modo simulación
-  const mockClerkState = {
-    isLoaded: true,
-    isSignedIn: false,
-    user: null,
-    clerk: null,
-    signOut: async () => {
-      console.log('Mock signOut called');
-      return { success: true };
-    },
-    openUserProfile: () => {
-      console.log('Mock openUserProfile called');
-      window.alert('Perfil de usuario - Funcionalidad en desarrollo con Clerk');
-    },
-    redirectToSignIn: () => {
-      console.log('Mock redirectToSignIn called');
-      window.location.href = '/sign-in';
-    },
-    redirectToSignUp: () => {
-      console.log('Mock redirectToSignUp called');
-      window.location.href = '/sign-up';
-    },
-    getJWTForSupabase: async () => {
-      console.log('Mock getJWTForSupabase called');
-      return 'mock-jwt-token-for-development';
-    },
-    isJWTConfigured: () => false,
-  };
-
-  return mockClerkState;
+  // Si Clerk no está disponible, lanzar error
+  throw new Error('Clerk no está disponible. Asegúrate de que ClerkProvider esté configurado correctamente.');
 };
 
 /**

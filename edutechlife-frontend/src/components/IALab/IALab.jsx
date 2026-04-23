@@ -59,7 +59,7 @@ const IALabContent = () => {
     };
 
     return (
-        <div className="flex flex-col h-screen overflow-visible bg-gradient-to-br from-[#F8FAFC] via-white to-[#F8FAFC]/50">
+        <div className="flex flex-col h-screen overflow-hidden bg-gradient-to-br from-[#F8FAFC] via-white to-[#F8FAFC]/50">
                 {/* Header principal - ocupa altura natural y no flota sobre contenido */}
                 <IALabHeader onAction={handleGlobalAction} />
                 
@@ -68,9 +68,9 @@ const IALabContent = () => {
                     {/* Sidebar - ancho fijo 256px (w-64) */}
                     <IALabSidebar />
                     
-                    {/* Área de Contenido Principal - ocupa resto con scroll */}
-                    <main className="flex-1 overflow-y-auto px-4 py-6">
-                        <div className="space-y-10 w-full max-w-[calc(100%-1rem)] pb-10">
+                    {/* Área de Contenido Principal - scroll propio */}
+                    <main className="flex-1 overflow-y-auto h-full px-4 py-6">
+                        <div className="space-y-4 w-full max-w-[calc(100%-1rem)] pb-10">
                             {/* 1. PRIMERO: TÍTULO PRINCIPAL ARRIBA DEL TODO */}
                             <div className="relative z-30">
                               <IALabModuleHeader onAction={handleGlobalAction} />
@@ -95,7 +95,7 @@ const IALabContent = () => {
                             </div>
                             
                             {/* Contenedor Grid: Desafío y Comunidad */}
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full mt-12">
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full mt-8">
                                 {/* Columna Izquierda: Desafío del Curso */}
                                 <ErrorBoundary>
                                     <IALabChallengeSection />

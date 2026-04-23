@@ -182,9 +182,9 @@ const IALabChallengeSection = ({
                 </div>
                 <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                          <h3 className="text-2xl font-bold text-[#00374A] font-display">
-                             {isChallengeCompleted ? '🎉 Desafío Completado' : 'Desafío del Curso'}
-                         </h3>
+                           <h3 className="text-lg font-bold text-[#004B63] font-display">
+                              {isChallengeCompleted ? '🎉 Desafío Completado' : 'Desafío del Curso'}
+                          </h3>
                          {isChallengeCompleted && (
                             <div className="flex items-center gap-2">
                                 <span className={`px-3 py-1 ${scoreBgColor} ${scoreColor} text-sm font-semibold rounded-full`}>
@@ -240,9 +240,9 @@ const IALabChallengeSection = ({
                     
                      {/* Texto del desafío con tipografía premium */}
                     <div className="mb-4">
-                         <div className="text-xl font-bold text-[#004B63] mb-2">
-                            {isChallengeCompleted ? 'Reto Superado' : 'Desafío del Módulo'}
-                        </div>
+                          <div className="text-lg font-bold text-[#004B63] mb-2">
+                             {isChallengeCompleted ? 'Reto Superado' : 'Desafío del Módulo'}
+                         </div>
                           <p className="text-base font-medium text-[#004B63]/90 italic leading-relaxed border-l-4 border-[#00BCD4] pl-4 py-2">
                              "{challengeText}"
                          </p>
@@ -414,13 +414,13 @@ const IALabChallengeSection = ({
         </>
     );
 
-    return (
+        return (
         <PlatformOptimizedCard
             className={`
-                h-full flex flex-col
+                h-fit flex flex-col
                 bg-white
                 rounded-[28px]
-                p-8 md:p-10
+                p-6 md:p-8
                 ${className}
             `.trim()}
             style={style}
