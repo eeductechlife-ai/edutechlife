@@ -22,7 +22,8 @@ export const clerkConfig = {
       colorPrimaryHover: '#0A3550',
     }
   },
-
+  domain: 'https://stable-mink-71.clerk.accounts.dev',
+  isSatellite: false,
 };
 
 export const isClerkConfigured = () => {
