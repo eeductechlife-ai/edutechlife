@@ -13,6 +13,7 @@ const ClerkProviderWrapper = ({ children }) => {
       afterSignUpUrl={clerkConfig.afterSignUpUrl}
       appearance={clerkConfig.appearance}
       localization={esES}
+      __internal_clerkJSUrl="https://cdn.clerk.com/clerk-js@6/dist/clerk.browser.js"
     >
       {children}
     </ClerkProvider>
