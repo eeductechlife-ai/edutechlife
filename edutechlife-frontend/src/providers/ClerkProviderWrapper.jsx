@@ -27,3 +27,4 @@ const ClerkProviderWrapper = ({ children }) => {
 };
 
 export default ClerkProviderWrapper;
+// Hash de seguridad: 1777037754
