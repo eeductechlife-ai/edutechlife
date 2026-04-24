@@ -1,19 +1,38 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ClerkProvider } from '@clerk/react';
 import { esES } from '@clerk/localizations';
 import { clerkConfig } from '../lib/clerk-config';
 
-/**
- * ClerkProviderWrapper - Envuelve la aplicación con ClerkProvider
- * 
- * IMPORTANTE: NO bloquea el renderizado con ClerkLoading/ClerkLoaded.
- * La Landing Page (ruta /) debe ser pública y cargar instantáneamente.
- * Clerk se inicializa en segundo plano mientras el usuario ve la Landing.
- * 
- * El bloqueo "Cargando..." SOLO aparece cuando el usuario navega a una ruta
- * protegida y auth aún no ha cargado (manejado en RoleProtectedRoute y AuthContext).
- */
+const CLERK_JS_URL = 'https://cdn.clerk.com/clerk-js@6/dist/clerk.browser.js';
+
 const ClerkProviderWrapper = ({ children }) => {
+  const [scriptReady, setScriptReady] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (window.Clerk) {
+      setScriptReady(true);
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = CLERK_JS_URL;
+    script.async = true;
+    script.crossOrigin = 'anonymous';
+    script.onload = () => setScriptReady(true);
+    script.onerror = () => {
+      console.error('Failed to load Clerk JS from CDN');
+      setScriptReady(true);
+    };
+    document.head.appendChild(script);
+    return () => {
+      if (script.parentNode) script.parentNode.removeChild(script);
+    };
+  }, []);
+
+  if (!scriptReady) {
+    return <>{children}</>;
+  }
+
   return (
     <ClerkProvider
       publishableKey={clerkConfig.publishableKey}
@@ -23,7 +42,6 @@ const ClerkProviderWrapper = ({ children }) => {
       afterSignUpUrl={clerkConfig.afterSignUpUrl}
       appearance={clerkConfig.appearance}
       localization={esES}
-      clerkJSUrl="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@6/dist/clerk.browser.js"
     >
       {children}
     </ClerkProvider>
