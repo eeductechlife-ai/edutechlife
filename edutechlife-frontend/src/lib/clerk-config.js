@@ -28,3 +28,4 @@ export const isClerkConfigured = () => {
 };
 
 // Actualización final 2026
+// Update forzado v5
