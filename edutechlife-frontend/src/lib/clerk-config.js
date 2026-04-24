@@ -5,11 +5,6 @@
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
-// Verificación simple para evitar bloqueos
-if (!PUBLISHABLE_KEY) {
-  console.warn('⚠ VITE_CLERK_PUBLISHABLE_KEY no detectada. Verifica las Environment Variables en Vercel.');
-}
-
 export const clerkConfig = {
   publishableKey: PUBLISHABLE_KEY || 'pk_test_placeholder',
   signInUrl: '/sign-in',
@@ -22,6 +17,8 @@ export const clerkConfig = {
       colorPrimaryHover: '#0A3550',
     }
   },
+  // ESTA LÍNEA ES LA QUE REPARA EL ERROR DE LAS 3 BARRAS
+  clerkJSUrl: 'https://cdn.clerk.com/clerk-js@latest/dist/clerk.browser.js',
   domain: 'https://stable-mink-71.clerk.accounts.dev',
   isSatellite: false,
 };
