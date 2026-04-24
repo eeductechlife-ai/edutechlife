@@ -1,6 +1,5 @@
 /**
  * Configuración de Clerk para Edutechlife
- * Corregido para despliegue en Vercel
  */
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -17,15 +16,8 @@ export const clerkConfig = {
       colorPrimaryHover: '#0A3550',
     }
   },
-  // ESTA LÍNEA ES LA QUE REPARA EL ERROR DE LAS 3 BARRAS
-  clerkJSUrl: 'https://cdn.clerk.com/clerk-js@latest/dist/clerk.browser.js',
-  domain: 'https://stable-mink-71.clerk.accounts.dev',
-  isSatellite: false,
 };
 
 export const isClerkConfigured = () => {
   return !!PUBLISHABLE_KEY;
 };
-
-// Actualización final 2026
-// Update forzado v5
