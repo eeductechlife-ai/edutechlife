@@ -26,3 +26,5 @@ export const clerkConfig = {
 export const isClerkConfigured = () => {
   return !!PUBLISHABLE_KEY;
 };
+
+// Actualización final 2026
