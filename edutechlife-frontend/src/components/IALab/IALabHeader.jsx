@@ -34,8 +34,7 @@ const IALabHeader = () => {
               <Icon name="fa-flask-vial" className="text-white text-sm" />
             </div>
             <div>
-              <h1 className="font-bold text-xl md:text-2xl text-[#00374A] tracking-tight font-sans">IA Lab Pro</h1>
-              <p className="text-xs md:text-sm text-slate-500 font-normal leading-relaxed">Hyper-Intelligence Certification</p>
+              <h1 className="font-bold text-xl md:text-2xl text-[#00374A] tracking-tight font-sans">Introducción a la I.A Generativa</h1>
             </div>
           </div>
         </div>

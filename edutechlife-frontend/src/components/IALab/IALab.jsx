@@ -13,6 +13,7 @@ import IALabSynthesizer from './IALabSynthesizer';
 import ReactivePromptStation from './ReactivePromptStation';
 import IALabEvaluationModal from './IALabEvaluationModal';
 import IALabEvaluationModalPremium from './IALabEvaluationModalPremium';
+import IALabQuizModal from './IALabQuizModal';
 import IALabValerioPanel from './IALabValerioPanel';
 import ErrorBoundary from '../forum/ErrorBoundary';
 
@@ -26,6 +27,7 @@ import ErrorBoundary from '../forum/ErrorBoundary';
 const IALabContent = () => {
     const { showPremiumEvaluationModal, setShowPremiumEvaluationModal } = useIALabContext();
     const [showExamModal, setShowExamModal] = useState(false);
+    const [showQuizModal, setShowQuizModal] = useState(false);
     const [showValerioPanel, setShowValerioPanel] = useState(false);
 
     // Debug logging
@@ -44,11 +46,17 @@ const IALabContent = () => {
             case 'OPEN_EVALUATION':
                 setShowExamModal(true);
                 break;
+            case 'OPEN_QUIZ':
+                setShowQuizModal(true);
+                break;
             case 'OPEN_VALERIO':
                 setShowValerioPanel(true);
                 break;
             case 'CLOSE_EVALUATION':
                 setShowExamModal(false);
+                break;
+            case 'CLOSE_QUIZ':
+                setShowQuizModal(false);
                 break;
             case 'CLOSE_VALERIO':
                 setShowValerioPanel(false);
@@ -86,7 +94,7 @@ const IALabContent = () => {
                             </div>
 
                             {/* 3. TERCERO: TARJETA DE RESUMEN EN EL MEDIO */}
-                            <ModuleOverviewCard />
+                            <ModuleOverviewCard onAction={handleGlobalAction} />
 
                             {/* 3. TERCERO: ACORDEONES/LECCIONES ABAJO */}
                             <div className="mt-6">
@@ -123,6 +131,16 @@ const IALabContent = () => {
                         <IALabEvaluationModal 
                             isOpen={showExamModal}
                             onClose={() => handleGlobalAction('CLOSE_EVALUATION')}
+                        />
+                    </ErrorBoundary>
+                )}
+                
+                {/* Modal de Examen (8 preguntas) */}
+                {showQuizModal && (
+                    <ErrorBoundary>
+                        <IALabQuizModal
+                            isOpen={showQuizModal}
+                            onClose={() => handleGlobalAction('CLOSE_QUIZ')}
                         />
                     </ErrorBoundary>
                 )}

@@ -13,6 +13,7 @@ export { default as IALabChallengeSection } from './IALabChallengeSection';
 export { default as IALabForumSection } from './IALabForumSection';
 export { default as IALabSynthesizer } from './IALabSynthesizer';
 export { default as IALabEvaluationModal } from './IALabEvaluationModal';
+export { default as IALabQuizModal } from './IALabQuizModal';
 export { default as IALabValerioPanel } from './IALabValerioPanel';
 
 // Hooks especializados

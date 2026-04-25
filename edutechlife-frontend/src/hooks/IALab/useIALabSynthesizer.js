@@ -176,12 +176,7 @@ export const useIALabSynthesizer = () => {
                             `Tarea específica: ${deepSeekResult.tarea}`,
                             `Formato estructurado: ${deepSeekResult.formato}`
                         ],
-                        educationalInsights: [
-                            '✅ Prompt generado con IA especializada en ingeniería de prompts',
-                            '🎯 Estructura profesional aplicada automáticamente',
-                            '📊 Análisis técnico educativo incluido',
-                            '🚀 Optimización basada en mejores prácticas de la industria'
-                        ],
+                        educationalInsights: '',
                         beforeAfterComparison: {
                             before: { score: 40, clarity: 3, specificity: 2, context: 2, structure: 1 },
                             after: { score: 95, clarity: 9, specificity: 9, context: 9, structure: 9 },

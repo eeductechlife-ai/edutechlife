@@ -17,7 +17,7 @@ import TopicResourcesModal from './TopicResourcesModal';
  * @returns {JSX.Element} Componente Hero Card premium
  */
 
-const ModuleOverviewCard = () => {
+const ModuleOverviewCard = ({ onAction }) => {
   // Estado para el modal de recursos
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [isResourcesModalOpen, setIsResourcesModalOpen] = useState(false);
@@ -26,7 +26,7 @@ const ModuleOverviewCard = () => {
     badge: {
       duration: "1h 28min • MÓDULO 1"
     },
-    title: "Hoja de Ruta: Domina las Instrucciones",
+    title: "Domina las Instrucciones",
     description: "Desarrolla la capacidad de dar instrucciones claras y efectivas a la IA para obtener resultados útiles y precisos en situaciones reales a través de 4 etapas prácticas.",
     topics: [
       "Introducción a la Inteligencia Artificial Generativa",
@@ -36,8 +36,7 @@ const ModuleOverviewCard = () => {
     ],
     stats: [
       { title: "Contenido", value: "4 Lecciones" },
-      { title: "Práctica", value: "4 Labs & Retos" },
-      { title: "Tiempo Estimado", value: "1h 28 min" }
+      { title: "Práctica", value: "4 Labs & Retos" }
     ]
   };
 
@@ -96,23 +95,35 @@ const ModuleOverviewCard = () => {
              </div>
            </div>
            
-           {/* Grid inferior de estadísticas */}
-           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-               {moduleData.stats.map((stat, index) => (
-                <div 
-                  key={index}
-                  className="bg-white rounded-xl p-4 border border-[#004B63]/6 flex flex-col items-center justify-center text-center hover:shadow-md hover:border-[#004B63]/20 transition-all duration-300"
-                >
-                  <div className="text-xl font-bold text-[#004B63] mb-1">
-                    {stat.value}
-                  </div>
-                  <div className="text-sm text-slate-500 font-medium">
-                    {stat.title}
-                  </div>
-                  <div className="w-10 h-0.5 bg-gradient-to-r from-[#004B63] to-[#00BCD4] rounded-full mt-3"></div>
+            {/* Grid inferior: Stats + Botón examen */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+                {moduleData.stats.map((stat, index) => (
+                 <div 
+                   key={index}
+                   className="bg-white rounded-xl p-4 border border-[#004B63]/6 flex flex-col items-center justify-center text-center hover:shadow-md hover:border-[#004B63]/20 transition-all duration-300"
+                 >
+                   <div className="text-xl font-bold text-[#004B63] mb-1">
+                     {stat.value}
+                   </div>
+                   <div className="text-sm text-slate-500 font-medium">
+                     {stat.title}
+                   </div>
+                   <div className="w-10 h-0.5 bg-gradient-to-r from-[#004B63] to-[#00BCD4] rounded-full mt-3"></div>
+                 </div>
+               ))}
+              {/* Botón: Examen del Módulo */}
+              <button
+                onClick={() => onAction('OPEN_QUIZ')}
+                className="bg-gradient-to-r from-[#00BCD4] to-[#4DD0E1] rounded-xl p-4 flex flex-col items-center justify-center text-center hover:shadow-lg hover:shadow-[#00BCD4]/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 group cursor-pointer border-0"
+              >
+                <div className="flex items-center gap-2 mb-1">
+                  <Icon name="fa-clipboard-check" className="text-white text-lg" />
+                  <div className="text-lg font-bold text-white">Examen</div>
                 </div>
-              ))}
-           </div>
+                <div className="text-sm text-white/80 font-medium">del Módulo</div>
+                <div className="w-10 h-0.5 bg-white/40 rounded-full mt-3 group-hover:w-16 transition-all duration-300"></div>
+              </button>
+            </div>
            
             {/* Elemento decorativo de borde superior */}
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#00BCD4] rounded-t-2xl" />
