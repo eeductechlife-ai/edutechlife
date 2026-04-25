@@ -6,7 +6,7 @@ const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 export const clerkConfig = {
   publishableKey: PUBLISHABLE_KEY || 'pk_test_placeholder',
-  signInUrl: '/sign-in',
+  signInUrl: '/login',
   signUpUrl: '/sign-up',
   afterSignInUrl: '/ialab',
   afterSignUpUrl: '/ialab',

@@ -14,14 +14,14 @@ const IALabModuleHeader = ({ onAction }) => {
   const curr = modules.find(m => m.id === activeMod) || modules[0];
   
   return (
-    <div className="bg-gradient-to-br from-white via-white/95 to-[#F8FAFC] border border-[#E2E8F0]/50 shadow-[0_8px_40px_rgba(0,75,99,0.08)] rounded-2xl overflow-hidden">
-      <div className="bg-gradient-to-r from-[#004B63] via-[#00BCD4] to-[#4DA8C4] p-6">
+    <div className="bg-white rounded-2xl shadow-sm border border-[#004B63]/8 overflow-hidden">
+      <div className="bg-gradient-to-r from-[#004B63] to-[#00BCD4] p-5 md:p-6">
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
-            <div className="text-2xl text-white font-bold">IA</div>
+          <div className="w-12 h-12 bg-white/15 rounded-xl flex items-center justify-center shadow-inner">
+            <div className="text-xl text-white font-bold">IA</div>
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-white">Ingeniería de Prompts: El Arte de Comunicarse con la IA</h2>
+            <h1 className="text-xl md:text-2xl font-bold text-white leading-tight">Ingeniería de Prompts: El Arte de Comunicarse con la IA</h1>
           </div>
         </div>
       </div>

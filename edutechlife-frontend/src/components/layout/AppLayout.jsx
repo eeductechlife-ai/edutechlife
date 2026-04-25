@@ -314,8 +314,8 @@ const AppLayout = () => {
       
       {/* Footer - Se renderiza condicionalmente en el componente de rutas */}
       
-      {/* Nico Chatbot */}
-      <NicoModern 
+      {/* Nico Chatbot - oculto en IALab (solo Valerio) */}
+      {!location.pathname.includes('/ialab') && <NicoModern 
         isOpen={botOpen}
         isMinimized={isBotMinimized}
         isClosing={isBotClosing}
@@ -342,7 +342,7 @@ const AppLayout = () => {
           setBotInput('');
         }}
         onNavigate={navigate}
-      />
+      />}
       
       {/* Modales Globales */}
       <ContactModal 

@@ -11,107 +11,101 @@ import { motion } from 'framer-motion';
  * @param {string} props.className - Clases CSS adicionales
  */
 const ModuleInfoSection = ({ className = '', ...rest }) => {
-    // Lista de "Lo que aprenderás"
+    // Lista de "Lo que aprenderás" - 4 más impactantes
     const learningPoints = [
         "Dar instrucciones claras a la IA.",
         "Mejorar cualquier pregunta para obtener mejores respuestas.",
         "Entender por qué la IA falla y cómo corregirlo.",
-        "Obtener resultados útiles en menos tiempo.",
-        "Aplicar la IA en estudio, trabajo y vida diaria.",
-        "Pedir exactamente lo que necesita, sin rodeos."
+        "Aplicar la IA en estudio, trabajo y vida diaria."
     ];
 
     return (
         <div 
             className={cn(
-                "bg-white rounded-[2.5rem] shadow-[0_8px_30px_rgba(0,75,99,0.06)] border border-slate-100/50",
-                "p-4",
-                "space-y-2",
+                "relative z-10 bg-white rounded-2xl border border-[#004B63]/8 shadow-sm p-5 md:p-8 overflow-hidden",
+                "space-y-6",
                 className
             )}
             {...rest}
         >
-            {/* Objetivo General - Ultra Compacto */}
-            <div className="space-y-1">
-                <h3 className="text-sm font-semibold text-slate-700">
+            {/* Elementos decorativos de fondo */}
+            <div className="absolute -top-6 -right-6 w-32 h-32 bg-gradient-to-br from-[#004B63]/6 to-[#00BCD4]/4 rounded-full blur-2xl pointer-events-none"></div>
+            <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-tr from-[#004B63]/4 to-[#00BCD4]/2 rounded-full blur-2xl pointer-events-none"></div>
+
+            {/* Elemento decorativo de borde superior */}
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#00BCD4] rounded-t-2xl" />
+
+            {/* Objetivo General */}
+            <div className="space-y-3">
+                <h3 className="text-lg md:text-xl font-bold text-[#004B63]">
                     Objetivo General
                 </h3>
-                <div className="bg-white border border-slate-100 rounded-lg p-2">
-                    <p className="text-slate-700 leading-tight text-[12px] font-medium">
-                        "Desarrollar la capacidad de dar instrucciones claras y efectivas a la IA para obtener resultados útiles y precisos en situaciones reales."
+                    <p className="text-slate-600 text-sm md:text-base leading-relaxed">
+                        Desarrollar la capacidad de dar instrucciones claras y efectivas a la IA para obtener resultados útiles y precisos en situaciones reales.
                     </p>
-                </div>
             </div>
 
-            {/* Lo que aprenderás - The Knowledge Grid Micro-Compacto */}
-            <div className="space-y-1">
-                <h3 className="text-sm font-semibold text-slate-700">
+            {/* Lo que aprenderás - Knowledge Grid */}
+            <div className="space-y-3">
+                <h3 className="text-lg md:text-xl font-bold text-[#004B63]">
                     Lo que aprenderás
                 </h3>
-                <div className="bg-white border border-slate-100 rounded-lg p-2">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1.5">
-                        {learningPoints.map((point, index) => (
-                            <motion.div 
-                                key={index}
-                                initial={{ opacity: 0, y: 8 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: index * 0.03 }}
-                                className={cn(
-                                    "flex items-start gap-2 p-2",
-                                    "bg-slate-50/50 border border-slate-100/50 rounded",
-                                    "hover:bg-white hover:border-slate-200",
-                                    "transition-all duration-150 group"
-                                )}
-                            >
-                                {/* Icono de check circular verde micro */}
-                                <div className="flex-shrink-0 w-4 h-4 rounded-full bg-emerald-500/10 flex items-center justify-center group-hover:bg-emerald-500/15 transition-colors duration-150">
-                                    <Icon 
-                                        name="fa-check" 
-                                        className="text-emerald-600 w-3 h-3" 
-                                    />
-                                </div>
-                                
-                                {/* Texto del punto - Tipografía micro */}
-                                <p className="text-slate-700 text-[12px] leading-tight font-medium">
-                                    {point}
-                                </p>
-                            </motion.div>
-                        ))}
-                    </div>
+                <div className="grid grid-cols-2 gap-2">
+                    {learningPoints.map((point, index) => (
+                        <motion.div 
+                            key={index}
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.03 }}
+                            whileHover={{ y: -2, transition: { duration: 0.2 } }}
+                            className={cn(
+                                "flex items-start gap-3 px-4 py-3 rounded-lg",
+                                "bg-slate-50 border border-slate-100",
+                                "hover:bg-white hover:border-[#004B63]/25 hover:shadow-sm hover:scale-[1.02]",
+                                "transition-all duration-300 group"
+                            )}
+                        >
+                            <div className="flex-shrink-0 w-4 h-4 rounded-full bg-[#004B63]/10 flex items-center justify-center group-hover:bg-[#004B63]/15 transition-colors mt-0.5">
+                                <Icon 
+                                    name="fa-check" 
+                                    className="text-[#004B63] w-2.5 h-2.5" 
+                                />
+                            </div>
+                            <p className="text-sm text-slate-700 leading-snug font-medium">
+                                {point}
+                            </p>
+                        </motion.div>
+                    ))}
                 </div>
             </div>
 
-            {/* Desafío del Módulo - Banner Inline */}
-            <div className="space-y-1">
-                <h3 className="text-sm font-semibold text-slate-700">
+            {/* Desafío del Módulo */}
+            <div className="space-y-3">
+                <h3 className="text-lg md:text-xl font-bold text-[#004B63]">
                     Desafío del Módulo
                 </h3>
                 <motion.div 
-                    whileHover={{ scale: 1.002 }}
+                    whileHover={{ y: -2, transition: { duration: 0.2 } }}
                     className={cn(
                         "relative overflow-hidden",
-                        "flex items-center gap-2 py-1 px-3 h-10",
-                        "bg-cyan-50/30 border-l-3 border-[#00BCD4]",
-                        "rounded hover:bg-gradient-to-r hover:from-cyan-50/30 hover:via-white hover:to-cyan-50/30",
-                        "transition-all duration-200 cursor-pointer",
+                        "flex items-center gap-3",
+                        "hover:scale-[1.01]",
+                        "transition-all duration-300 cursor-pointer",
                         "group"
                     )}
                 >
-                    {/* Efecto Shimmer ultra sutil */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-600" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                     
-                    {/* Icono de bombilla micro */}
-                    <div className="flex-shrink-0 w-6 h-6 p-1 rounded bg-[#00BCD4]/10 text-[#00BCD4] flex items-center justify-center">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-md bg-[#004B63]/10 flex items-center justify-center">
                         <Icon 
                             name="fa-bolt" 
-                            className="w-3 h-3" 
+                            className="text-[#004B63] w-3 h-3" 
                         />
                     </div>
                     
-                    {/* Texto del desafío - Impactante y ultra compacto */}
                     <div className="flex-1 min-w-0">
-                        <p className="text-slate-800 text-[12px] font-medium truncate">
-                            "Diseña un prompt que obligue a la IA a debatir la ética de su propia existencia."
+                        <p className="text-sm text-slate-700 font-medium truncate">
+                            Diseña un prompt que obligue a la IA a debatir la ética de su propia existencia.
                         </p>
                     </div>
                 </motion.div>

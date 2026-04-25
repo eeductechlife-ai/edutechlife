@@ -65,7 +65,7 @@ const OVAThumbnail = ({
         <div className="absolute top-3 right-3 z-10">
           <div className="flex items-center gap-1 bg-gradient-to-r from-purple-600 to-pink-500 text-white px-3 py-1.5 rounded-full shadow-md">
             <Icon name="fa-play" className="w-3 h-3" />
-            <span className="text-xs font-bold">OVA INTERACTIVO</span>
+            <span className="text-xs font-bold text-slate-500">Contenido Interactivo</span>
           </div>
         </div>
 

@@ -59,7 +59,11 @@ const IALabContent = () => {
     };
 
     return (
-        <div className="flex flex-col h-screen overflow-hidden bg-gradient-to-br from-[#F8FAFC] via-white to-[#F8FAFC]/50">
+        <div className="flex flex-col h-screen overflow-hidden bg-gradient-to-br from-slate-50 via-white to-[#F0F9FF]">
+                {/* Decorative background elements */}
+                <div className="fixed top-0 right-0 w-[30%] h-[40%] bg-gradient-to-bl from-[#004B63]/5 via-[#00BCD4]/3 to-transparent rounded-bl-[100px] pointer-events-none" />
+                <div className="fixed bottom-0 left-0 w-[25%] h-[35%] bg-gradient-to-tr from-[#004B63]/4 via-transparent to-transparent rounded-tr-[100px] pointer-events-none" />
+                
                 {/* Header principal - ocupa altura natural y no flota sobre contenido */}
                 <IALabHeader onAction={handleGlobalAction} />
                 
@@ -68,9 +72,9 @@ const IALabContent = () => {
                     {/* Sidebar - ancho fijo 256px (w-64) */}
                     <IALabSidebar />
                     
-                    {/* Área de Contenido Principal - scroll propio */}
-                    <main className="flex-1 overflow-y-auto h-full px-4 py-6">
-                        <div className="space-y-4 w-full max-w-[calc(100%-1rem)] pb-10">
+                     {/* Área de Contenido Principal - scroll propio */}
+                     <main className="flex-1 overflow-y-auto h-full px-5 py-5 md:px-8 md:py-6">
+                         <div className="space-y-6 w-full max-w-5xl pb-20">
                             {/* 1. PRIMERO: TÍTULO PRINCIPAL ARRIBA DEL TODO */}
                             <div className="relative z-30">
                               <IALabModuleHeader onAction={handleGlobalAction} />
@@ -148,15 +152,15 @@ const IALabContent = () => {
                 
                  {/* FAB de Valerio - posicionado relativo al viewport */}
                  <button 
-                     className="fixed bottom-8 right-8 w-16 h-16 bg-gradient-to-br from-white to-[#F8FAFC] border border-[#E2E8F0]/50 rounded-full shadow-[0_8px_30px_rgba(0,75,99,0.12)] hover:scale-105 transition-all duration-300 z-50 flex items-center justify-center group hover:shadow-[0_12px_40px_rgba(0,75,99,0.16)]"
+                     className="fixed bottom-8 right-8 w-16 h-16 bg-gradient-to-br from-[#004B63] to-[#00BCD4] rounded-2xl shadow-[0_12px_40px_rgba(0,75,99,0.25)] hover:shadow-[0_20px_50px_rgba(0,75,99,0.35)] hover:scale-105 active:scale-95 transition-all duration-300 z-50 flex items-center justify-center group"
                      onClick={() => handleGlobalAction('OPEN_VALERIO')}
                      aria-label="Abrir panel de coach IA Valerio"
                  >
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:scale-110 transition-transform duration-300">
-                        <path d="M12 3C8.5 3 6 5.5 6 9C6 10.5 6.5 12 7.5 13C8.5 14 9.5 15 10 16C10.5 17 11 18 12 18C13 18 13.5 17 14 16C14.5 15 15.5 14 16.5 13C17.5 12 18 10.5 18 9C18 5.5 15.5 3 12 3Z" fill="#004B63" />
-                        <path d="M9 7C8.5 7 8 7.5 8 8C8 8.5 8.5 9 9 9C9.5 9 10 8.5 10 8C10 7.5 9.5 7 9 7Z" fill="#00BCD4" />
-                        <path d="M15 7C14.5 7 14 7.5 14 8C14 8.5 14.5 9 15 9C15.5 9 16 8.5 16 8C16 7.5 15.5 7 15 7Z" fill="#00BCD4" />
-                        <path d="M12 5C11.5 5 11 5.5 11 6C11 6.5 11.5 7 12 7C12.5 7 13 6.5 13 6C13 5.5 12.5 5 12 5Z" fill="#00BCD4" className="animate-pulse" />
+                        <path d="M12 3C8.5 3 6 5.5 6 9C6 10.5 6.5 12 7.5 13C8.5 14 9.5 15 10 16C10.5 17 11 18 12 18C13 18 13.5 17 14 16C14.5 15 15.5 14 16.5 13C17.5 12 18 10.5 18 9C18 5.5 15.5 3 12 3Z" fill="white" />
+                        <path d="M9 7C8.5 7 8 7.5 8 8C8 8.5 8.5 9 9 9C9.5 9 10 8.5 10 8C10 7.5 9.5 7 9 7Z" fill="#0A3550" />
+                        <path d="M15 7C14.5 7 14 7.5 14 8C14 8.5 14.5 9 15 9C15.5 9 16 8.5 16 8C16 7.5 15.5 7 15 7Z" fill="#0A3550" />
+                        <path d="M12 5C11.5 5 11 5.5 11 6C11 6.5 11.5 7 12 7C12.5 7 13 6.5 13 6C13 5.5 12.5 5 12 5Z" fill="white" className="animate-pulse" />
                     </svg>
                 </button>
                 

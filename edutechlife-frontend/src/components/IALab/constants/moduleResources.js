@@ -57,12 +57,9 @@ export const moduleResources = {
 
   "¿Qué es un Prompt?": {
     title: "Dominando los Prompts",
-    description: "Definición, estructura y componentes esenciales de un prompt efectivo para comunicación con IA.",
+    description: "Un prompt es la instrucción o mensaje que le damos a la IA para que realice una tarea específica. Es la clave para comunicarnos efectivamente con modelos como ChatGPT y obtener resultados precisos. Explora los recursos disponibles para aprender a dominarlos.",
     learningObjectives: [
-      "Definir exactamente qué es un prompt en el contexto de IA",
-      "Identificar los 4 componentes esenciales de un buen prompt",
-      "Diferenciar entre prompts instructivos, creativos y analíticos",
-      "Evitar errores comunes en la formulación de prompts"
+      "Comprender qué es un prompt y cómo usarlo para comunicarte efectivamente con la IA"
     ],
     estimatedTime: "18 minutos",
     difficulty: "Principiante",
@@ -329,7 +326,9 @@ export const getResourceIcon = (type) => {
     video: "🎬",
     document: "📄",
     image: "🖼️",
-    interactive: "🕹️"
+    interactive: "🕹️",
+    "pdf-thumbnail": "📄",
+    "ova-thumbnail": "🧠"
   };
   return icons[type] || "📎";
 };
@@ -340,7 +339,9 @@ export const getResourceColor = (type) => {
     video: "text-red-500",
     document: "text-blue-500",
     image: "text-green-500",
-    interactive: "text-purple-500"
+    interactive: "text-purple-500",
+    "pdf-thumbnail": "text-[#004B63]",
+    "ova-thumbnail": "text-[#004B63]"
   };
   return colors[type] || "text-slate-500";
 };

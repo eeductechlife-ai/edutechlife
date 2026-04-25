@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { Sun, Moon, Bot, X, Send, MessageCircle, Minus, Square } from 'lucide-react';
 import AppRoutes from './routes/index.jsx';
@@ -200,6 +201,8 @@ const CustomCursor = () => {
 };
 
 const App = () => {
+    const location = useLocation();
+    const isIALabRoute = location.pathname.includes('/ialab');
     const { user, loading: authLoading } = useAuth();
     const [isLoading, setIsLoading] = useState(true);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -775,8 +778,8 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                     onClose={() => setShowContactModal(false)}
                 />
                 
-                {/* Nico Premium Widget - Flotante */}
-                <NicoModern />
+                {/* Nico Premium Widget - oculto en IALab */}
+                {!isIALabRoute && <NicoModern />}
             </div>
         </StudentProvider>
     );

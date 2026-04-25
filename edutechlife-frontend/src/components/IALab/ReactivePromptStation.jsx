@@ -92,7 +92,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
 
     // Determinar color de métrica basado en puntuación
     const getMetricColor = (score) => {
-        if (score >= 70) return 'text-cyan-500';
+        if (score >= 70) return 'text-[#004B63]';
         if (score >= 40) return 'text-amber-500';
         return 'text-slate-400';
     };
@@ -114,7 +114,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
     return (
         <div 
             className={cn(
-                "bg-white/80 border border-cyan-100 rounded-3xl p-5 md:p-8 backdrop-blur-sm shadow-lg",
+                "bg-white rounded-2xl p-5 md:p-8 shadow-sm border border-[#004B63]/8",
                 "flex flex-col md:flex-row gap-5 md:gap-8",
                 className
             )}
@@ -131,12 +131,12 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                         placeholder="Escribe tu idea aquí..."
                         className={cn(
                             "w-full h-48 md:h-56",
-                            "bg-white/95 border border-cyan-100 rounded-2xl",
+                            "bg-white border border-slate-200 rounded-xl",
                             "px-4 py-3",
-                            "text-slate-800 placeholder:text-slate-400/70",
+                            "text-slate-700 placeholder:text-slate-400/70",
                             FORUM_TYPOGRAPHY.BODY,
                             "resize-none",
-                            "focus:outline-none focus:ring-2 focus:ring-cyan-300/50 focus:border-cyan-300",
+                            "focus:outline-none focus:ring-2 focus:ring-[#004B63]/20 focus:border-[#004B63]/30",
                             FORUM_EFFECTS.TRANSITION_ALL,
                             "shadow-sm"
                         )}
@@ -173,7 +173,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                             FORUM_EFFECTS.TRANSITION_ALL,
                             FORUM_EFFECTS.HOVER_SCALE,
                             "flex items-center justify-center gap-2",
-                            "focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:ring-offset-2",
+                            "focus:outline-none focus:ring-2 focus:ring-[#004B63]/30 focus:ring-offset-2",
                             "disabled:opacity-70 disabled:cursor-not-allowed",
                             loading && "opacity-70 cursor-not-allowed"
                         )}
@@ -243,11 +243,11 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                                 >
                                     {/* Icono y Nombre */}
                                     <div className="flex items-center gap-2">
-                                        <Icon 
+                                         <Icon 
                                             name={iconName} 
                                             className={cn(
                                                 "text-xs",
-                                                score >= 70 ? "text-cyan-500" : 
+                                                score >= 70 ? "text-[#004B63]" : 
                                                 score >= 40 ? "text-amber-500" : "text-slate-400"
                                             )}
                                         />
@@ -266,7 +266,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                                             <div 
                                                 className={cn(
                                                     "h-full rounded-full",
-                                                    score >= 70 ? "bg-cyan-500" : 
+                                                    score >= 70 ? "bg-[#004B63]" : 
                                                     score >= 40 ? "bg-amber-500" : "bg-slate-300"
                                                 )}
                                                 style={{ width: `${score}%` }}
@@ -301,7 +301,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                                 <div className="flex items-center gap-1">
                                     <span className={cn(
                                         "text-xs font-semibold",
-                                        quickAnalysis.level === 'Excelente' ? "text-cyan-600" :
+                                        quickAnalysis.level === 'Excelente' ? "text-[#004B63]" :
                                         quickAnalysis.level === 'Bueno' ? "text-cyan-500" :
                                         quickAnalysis.level === 'Aceptable' ? "text-amber-500" :
                                         "text-slate-400"

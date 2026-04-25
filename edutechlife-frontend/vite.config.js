@@ -101,8 +101,7 @@ export default defineConfig({
       'lucide-react',
       'canvas-confetti',
       'prop-types',
-      '@clerk/react',
-      '@clerk/ui'
+      '@clerk/react'
     ],
     exclude: ['lottie-web', '@solana/web3.js']
   },

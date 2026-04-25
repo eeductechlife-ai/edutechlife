@@ -37,9 +37,9 @@ const IALabChallengeSection = ({
 
     // Sistema de clases de botones premium con colores corporativos
     const buttonClasses = {
-        challenge: "bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white px-8 py-4 rounded-2xl hover:shadow-[0_0_30px_rgba(0,75,99,0.4)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 ease-out font-semibold flex items-center justify-center gap-3 focus:outline-none focus:ring-3 focus:ring-[#00BCD4]/50 focus:ring-offset-4 min-h-[60px] touch-manipulation text-base tracking-tight",
+         challenge: "bg-gradient-to-r from-[#004B63] to-[#0A3550] text-white px-8 py-4 rounded-2xl hover:shadow-[0_0_30px_rgba(0,75,99,0.35)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 ease-out font-semibold flex items-center justify-center gap-3 focus:outline-none focus:ring-3 focus:ring-[#004B63]/30 focus:ring-offset-4 min-h-[60px] touch-manipulation text-base tracking-tight",
         
-        secondary: "border-3 border-[#00BCD4] text-[#004B63] px-8 py-4 rounded-2xl hover:bg-[#00BCD4]/8 hover:border-[#00BCD4]/80 hover:shadow-[0_0_20px_rgba(0,188,212,0.15)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 ease-out font-semibold flex items-center justify-center gap-3 focus:outline-none focus:ring-3 focus:ring-[#00BCD4]/50 focus:ring-offset-4 min-h-[60px] touch-manipulation text-base tracking-tight",
+         secondary: "border-2 border-[#004B63]/20 text-[#004B63] px-8 py-4 rounded-2xl hover:bg-[#004B63]/5 hover:border-[#004B63]/40 hover:shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 ease-out font-semibold flex items-center justify-center gap-3 focus:outline-none focus:ring-3 focus:ring-[#004B63]/30 focus:ring-offset-4 min-h-[60px] touch-manipulation text-base tracking-tight",
         
         completed: "bg-gradient-to-r from-emerald-500 to-emerald-400 text-white px-8 py-4 rounded-2xl hover:shadow-[0_0_30px_rgba(16,185,129,0.4)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 ease-out font-semibold flex items-center justify-center gap-3 focus:outline-none focus:ring-3 focus:ring-emerald-500/50 focus:ring-offset-4 min-h-[60px] touch-manipulation text-base tracking-tight"
     };
@@ -213,23 +213,23 @@ const IALabChallengeSection = ({
                     rounded-2xl p-6 mb-6 
                     bg-white/80 backdrop-blur-md
                     shadow-[0_20px_60px_rgba(0,0,0,0.08)]
-                    border border-[#00BCD4]/20
+                    border border-[#004B63]/10
                     relative overflow-hidden
                 `}
             >
                 {/* Efecto de brillo sutil */}
-                <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#00BCD4]/10 to-transparent rounded-full -translate-x-1/2 -translate-y-1/2 blur-xl"></div>
+                <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#004B63]/5 to-transparent rounded-full -translate-x-1/2 -translate-y-1/2 blur-xl"></div>
                 
                 {/* Contenido del desafío */}
                 <div className="relative z-10">
                     {/* Badge de estado */}
                     <div className="flex items-center gap-3 mb-6">
-                        <div className={`flex items-center gap-2 px-4 py-2 rounded-full ${isChallengeCompleted ? 'bg-emerald-100' : 'bg-[#00BCD4]/20'}`}>
-                             <Icon 
+                         <div className={`flex items-center gap-2 px-4 py-2 rounded-full ${isChallengeCompleted ? 'bg-emerald-100' : 'bg-[#004B63]/8'}`}>
+                              <Icon 
                                 name={isChallengeCompleted ? "fa-check-circle" : "fa-hourglass-half"} 
-                                className="text-[#00BCD4]" 
+                                className="text-[#004B63]" 
                             />
-                            <span className="text-sm font-semibold text-[#00BCD4]">
+                            <span className="text-sm font-semibold text-[#004B63]">
                                 {isChallengeCompleted ? 'Completado' : `⏱️ ${estimatedTime}`}
                             </span>
                         </div>
@@ -243,7 +243,7 @@ const IALabChallengeSection = ({
                           <div className="text-lg font-bold text-[#004B63] mb-2">
                              {isChallengeCompleted ? 'Reto Superado' : 'Desafío del Módulo'}
                          </div>
-                          <p className="text-base font-medium text-[#004B63]/90 italic leading-relaxed border-l-4 border-[#00BCD4] pl-4 py-2">
+                           <p className="text-base font-medium text-[#004B63]/90 italic leading-relaxed border-l-4 border-[#004B63] pl-4 py-2">
                              "{challengeText}"
                          </p>
                         
@@ -272,16 +272,16 @@ const IALabChallengeSection = ({
                     {/* Metadatos adicionales */}
                     <div className="flex items-center justify-between pt-4 border-t border-slate-200">
                         <div className="flex items-center gap-4">
-                             <div className="flex items-center gap-2">
-                                <Icon name="fa-brain" className="text-[#00BCD4]" />
-                                 <span className="text-sm text-slate-600">Aplicación Práctica</span>
+                              <div className="flex items-center gap-2">
+                                <Icon name="fa-brain" className="text-[#004B63]" />
+                                  <span className="text-sm text-slate-600">Aplicación Práctica</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <Icon name="fa-chart-line" className="text-[#00BCD4]" />
-                                 <span className="text-sm text-slate-600">Nivel {isChallengeCompleted ? 'Avanzado' : 'Intermedio'}</span>
+                                <Icon name="fa-chart-line" className="text-[#004B63]" />
+                                  <span className="text-sm text-slate-600">Nivel {isChallengeCompleted ? 'Avanzado' : 'Intermedio'}</span>
                             </div>
                         </div>
-                        <div className="text-sm font-medium text-[#00BCD4]">
+                        <div className="text-sm font-medium text-[#004B63]">
                             {isChallengeCompleted ? '💯 100% Completado' : '🎯 Objetivo Claro'}
                         </div>
                     </div>
@@ -390,12 +390,12 @@ const IALabChallengeSection = ({
                <div className="mt-6 pt-6 border-t border-slate-200">
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-2">
-                            <div className="w-2 h-2 bg-[#00BCD4] rounded-full"></div>
-                             <span className="text-sm text-slate-600">Dificultad: {isChallengeCompleted ? 'Dominada' : 'Media-Alta'}</span>
-                        </div>
                          <div className="flex items-center gap-2">
-                             <div className="w-2 h-2 bg-[#00BCD4] rounded-full"></div>
+                             <div className="w-2 h-2 bg-[#004B63] rounded-full"></div>
+                              <span className="text-sm text-slate-600">Dificultad: {isChallengeCompleted ? 'Dominada' : 'Media-Alta'}</span>
+                         </div>
+                          <div className="flex items-center gap-2">
+                              <div className="w-2 h-2 bg-[#004B63] rounded-full"></div>
                              <span className="text-sm text-slate-600">Impacto: Alto</span>
                         </div>
                     </div>

@@ -117,9 +117,9 @@ const SignUpPage = ({ onBack }) => {
 
                 {/* Clerk SignUp Component - Premium */}
                <div className="w-full min-h-[500px] sm:min-h-[550px] py-6 sm:py-8">
-                  <SignUp 
-                    signInUrl="/"
-                    fallbackRedirectUrl={returnTo}
+                   <SignUp 
+                     signInUrl="/login"
+                     fallbackRedirectUrl={returnTo}
                    appearance={{
                      variables: {
                        colorPrimary: '#004B63',

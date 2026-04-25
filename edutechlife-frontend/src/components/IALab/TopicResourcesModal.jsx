@@ -184,15 +184,12 @@ const TopicResourcesModal = ({
                 </div>
               </div>
 
-              <div className="px-4 sm:px-6 py-3 sm:py-4 bg-slate-50/50 border-b border-slate-100">
-                <p className="text-slate-700 leading-relaxed text-sm sm:text-base">
-                  {topicResources.description}
-                </p>
+              <div className="px-4 sm:px-6 py-3 sm:py-4 bg-white border-b border-slate-100">
                 {topicResources.learningObjectives && topicResources.learningObjectives.length > 0 && (
-                  <div className="mt-3 sm:mt-4">
+                  <div className="mb-3 sm:mb-4">
                     <h4 className="font-semibold text-slate-800 mb-2 flex items-center gap-2 text-sm sm:text-base">
                       <Icon name="fa-bullseye" className="text-[#00BCD4] w-4 h-4 sm:w-5 sm:h-5" />
-                      Objetivos de aprendizaje
+                      Objetivo de aprendizaje
                     </h4>
                     <ul className="space-y-1.5">
                       {topicResources.learningObjectives.map((objective, index) => (
@@ -204,6 +201,9 @@ const TopicResourcesModal = ({
                     </ul>
                   </div>
                 )}
+                <p className="text-slate-600 leading-relaxed text-sm sm:text-base">
+                  {topicResources.description}
+                </p>
               </div>
 
               <div className="flex-1 overflow-hidden flex flex-col">
@@ -241,17 +241,14 @@ const TopicResourcesModal = ({
               <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-slate-100 bg-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
                 <div className="flex items-center gap-3 w-full sm:w-auto">
                   <div className={cn(
-                    "w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center flex-shrink-0 text-white text-sm sm:text-lg",
-                    resources[activeResourceIndex]?.type === 'video' ? "bg-red-500" :
-                    resources[activeResourceIndex]?.type === 'document' ? "bg-blue-500" :
-                    resources[activeResourceIndex]?.type === 'image' ? "bg-green-500" :
-                    resources[activeResourceIndex]?.type === 'interactive' ? "bg-purple-500" :
-                    "bg-slate-500"
+                    "w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center flex-shrink-0",
+                    "bg-[#004B63]/10 text-[#004B63] text-sm sm:text-lg"
                   )}>
-                    {resources[activeResourceIndex]?.type === 'video' ? '🎬' :
-                     resources[activeResourceIndex]?.type === 'document' ? '📄' :
-                     resources[activeResourceIndex]?.type === 'image' ? '🖼️' :
-                     resources[activeResourceIndex]?.type === 'interactive' ? '🕹️' : '📎'}
+                    {resources[activeResourceIndex]?.type === 'video' ? <Icon name="fa-play" className="text-[#004B63]" /> :
+                     resources[activeResourceIndex]?.type === 'document' || resources[activeResourceIndex]?.type === 'pdf-thumbnail' ? <Icon name="fa-file-lines" className="text-[#004B63]" /> :
+                     resources[activeResourceIndex]?.type === 'image' ? <Icon name="fa-image" className="text-[#004B63]" /> :
+                     resources[activeResourceIndex]?.type === 'ova-thumbnail' ? <Icon name="fa-brain" className="text-[#004B63]" /> :
+                     resources[activeResourceIndex]?.type === 'interactive' ? <Icon name="fa-puzzle-piece" className="text-[#004B63]" /> : <Icon name="fa-file" className="text-[#004B63]" />}
                   </div>
                   <div className="flex-1 min-w-0">
                     <h4 className="font-semibold text-slate-800 text-xs sm:text-sm truncate">

@@ -112,11 +112,11 @@ const IALabForumOptimized = ({
 
     // Función para generar color de gradiente basado en nombre
     const getAvatarGradient = (name) => {
-        if (!name) return 'from-cyan-600 to-cyan-400';
+        if (!name) return 'from-[#004B63] to-[#0A3550]';
         
         const colors = [
-            'from-cyan-600 to-cyan-400',
-            'from-blue-600 to-cyan-400',
+            'from-[#004B63] to-[#0A3550]',
+            'from-[#0A3550] to-[#00BCD4]',
             'from-indigo-600 to-blue-400',
             'from-violet-600 to-indigo-400',
             'from-purple-600 to-violet-400'
@@ -148,7 +148,7 @@ const IALabForumOptimized = ({
     return (
         <div 
             className={cn(
-                "bg-white/80 border border-cyan-100 rounded-3xl backdrop-blur-sm shadow-lg",
+                "bg-white rounded-2xl shadow-sm border border-[#004B63]/8",
                 "flex flex-col",
                 compact ? "h-96" : "h-fit",
                 className
@@ -220,14 +220,14 @@ const IALabForumOptimized = ({
                 }
             `}</style>
             {/* Header del Foro */}
-            <div className="flex items-center justify-between p-4 md:p-6 border-b border-cyan-100/50">
+            <div className="flex items-center justify-between p-4 md:p-6 border-b border-[#004B63]/8">
                 <div className="flex items-center gap-3">
                     <div className="relative">
-                        <Icon name="fa-comments" className="text-cyan-500 text-lg" />
+                         <Icon name="fa-comments" className="text-[#004B63] text-lg" />
                         {showLiveIndicator && (
                             <div className="absolute -top-1 -right-1 w-3 h-3">
-                                <div className="absolute inset-0 bg-cyan-500 rounded-full animate-ping opacity-75" />
-                                <div className="absolute inset-0 bg-cyan-500 rounded-full" />
+                                <div className="absolute inset-0 bg-[#004B63] rounded-full animate-ping opacity-75" />
+                                <div className="absolute inset-0 bg-[#004B63] rounded-full" />
                             </div>
                         )}
                     </div>
@@ -235,7 +235,7 @@ const IALabForumOptimized = ({
                          <h3 className="text-lg font-bold text-[#004B63]">
                             Comunidad IALab
                             {showLiveIndicator && (
-                                <span className="ml-2 text-xs font-normal text-cyan-500 live-pulse">
+                                 <span className="ml-2 text-xs font-normal text-[#004B63] live-pulse">
                                     • En vivo
                                 </span>
                             )}
@@ -288,7 +288,7 @@ const IALabForumOptimized = ({
                     // Estado de carga
                     <div className="flex items-center justify-center h-full">
                         <div className="text-center">
-                            <div className="w-8 h-8 border-2 border-cyan-200 border-t-cyan-500 rounded-full animate-spin mx-auto mb-3" />
+                            <div className="w-8 h-8 border-2 border-[#004B63]/20 border-t-[#004B63] rounded-full animate-spin mx-auto mb-3" />
                             <p className="text-sm text-slate-500">Cargando conversaciones...</p>
                         </div>
                     </div>
@@ -300,18 +300,18 @@ const IALabForumOptimized = ({
                             <p className="text-sm text-slate-600 mb-2">{error}</p>
                             <button
                                 onClick={() => loadForumPosts(initialLimit)}
-                                className="text-xs text-cyan-500 hover:text-cyan-600 font-medium"
-                            >
-                                Reintentar
-                            </button>
+                                    className="text-xs text-[#004B63] hover:text-[#0A3550] font-medium"
+                                    >
+                                        Ver {forumPosts.length - initialLimit} mensajes más ↓
+                                    </button>
                         </div>
                     </div>
                 ) : visiblePosts.length === 0 ? (
                     // Estado vacío
                     <div className="flex items-center justify-center h-full">
                         <div className="text-center p-4">
-                            <div className="w-12 h-12 bg-gradient-to-br from-cyan-100 to-cyan-50 rounded-2xl flex items-center justify-center mx-auto mb-3">
-                                <Icon name="fa-comment-dots" className="text-cyan-400 text-xl" />
+                            <div className="w-12 h-12 bg-gradient-to-br from-[#004B63]/10 to-[#004B63]/5 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                                <Icon name="fa-comment-dots" className="text-[#004B63] text-xl" />
                             </div>
                             <h4 className="text-sm font-semibold text-slate-700 mb-1">
                                 ¡Sé el primero en comentar!
@@ -365,7 +365,7 @@ const IALabForumOptimized = ({
                                                         {post.profiles?.full_name || 'Usuario'}
                                                     </span>
                                                     {post.tags?.includes('Mentor') && (
-                                                        <span className="px-1.5 py-0.5 bg-cyan-100 text-cyan-700 text-[10px] font-medium rounded-full">
+                                                            <span className="px-1.5 py-0.5 bg-[#004B63]/8 text-[#004B63] text-[10px] font-medium rounded-full">
                                                             Mentor
                                                         </span>
                                                     )}
@@ -383,8 +383,8 @@ const IALabForumOptimized = ({
                                             className={cn(
                                                 "flex items-center gap-1",
                                                 "text-xs font-medium",
-                                                isLiked ? "text-cyan-500" : "text-slate-400",
-                                                "hover:text-cyan-600",
+                                                isLiked ? "text-[#004B63]" : "text-slate-400",
+                                                "hover:text-[#0A3550]",
                                                 "transition-colors",
                                                 "disabled:opacity-50 disabled:cursor-not-allowed"
                                             )}
@@ -442,7 +442,7 @@ const IALabForumOptimized = ({
                             <div className="text-center pt-2">
                                 <button
                                     onClick={handleLoadMore}
-                                    className="text-xs text-cyan-500 hover:text-cyan-600 font-medium"
+                                className="text-xs text-[#004B63] hover:text-[#0A3550] font-medium"
                                 >
                                     Ver {forumPosts.length - initialLimit} mensajes más ↓
                                 </button>
@@ -456,7 +456,7 @@ const IALabForumOptimized = ({
             </div>
 
             {/* Input para enviar mensajes (Fijo en parte inferior) */}
-            <div className="border-t border-cyan-100/50 p-4 md:p-6">
+            <div className="border-t border-[#004B63]/8 p-4 md:p-6">
                 <form onSubmit={handleSubmitMessage} className="relative">
                     <div className="flex items-center gap-3">
                         {/* Avatar del usuario actual */}
@@ -483,9 +483,9 @@ const IALabForumOptimized = ({
                                 disabled={isSubmitting || !user}
                                 className={cn(
                                     "w-full px-4 py-3 pr-12",
-                                    "bg-white/95 border border-cyan-100 rounded-2xl",
+                                    "bg-white border border-slate-200 rounded-xl",
                                     "text-sm text-slate-700 placeholder:text-slate-400/70",
-                                    "focus:outline-none focus:ring-2 focus:ring-cyan-300/30 focus:border-cyan-300",
+                                    "focus:outline-none focus:ring-2 focus:ring-[#004B63]/20 focus:border-[#004B63]/30",
                                     "disabled:opacity-50 disabled:cursor-not-allowed",
                                     "transition-all duration-200",
                                     "shadow-sm focus:shadow-md"
@@ -512,9 +512,9 @@ const IALabForumOptimized = ({
                             disabled={!newMessage.trim() || isSubmitting || !user}
                             className={cn(
                                 "px-4 py-3 rounded-2xl",
-                                "bg-gradient-to-r from-cyan-500 via-cyan-400 to-cyan-600",
+                                "bg-gradient-to-r from-[#004B63] to-[#0A3550]",
                                 "text-white text-sm font-medium",
-                                "hover:from-cyan-600 hover:via-cyan-500 hover:to-cyan-700",
+                                "hover:from-[#0A3550] hover:to-[#00374A]",
                                 "disabled:from-slate-300 disabled:to-slate-400 disabled:cursor-not-allowed",
                                 "transition-all duration-200",
                                 "flex items-center justify-center gap-2",
@@ -542,7 +542,7 @@ const IALabForumOptimized = ({
                     {!user && (
                         <div className="mt-2 text-center">
                             <p className="text-xs text-slate-500">
-                                <a href="/auth" className="text-cyan-500 hover:text-cyan-600 font-medium">
+                                <a href="/auth" className="text-[#004B63] hover:text-[#0A3550] font-medium">
                                     Inicia sesión
                                 </a> para participar en la conversación
                             </p>

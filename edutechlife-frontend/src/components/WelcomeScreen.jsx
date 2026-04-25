@@ -168,11 +168,15 @@ const WelcomeScreen = ({ onNavigate }) => {
              {/* Zona Superior: Formulario de Credenciales */}
              <div className="mb-6 sm:mb-8">
                <div className="w-full min-h-[350px] sm:min-h-[400px]">
-                 {isSignUpMode ? (
-                   <SignUp 
-                     fallbackRedirectUrl={returnTo}
-                     signInUrl="/login"
-                     appearance={{
+                   {isSignUpMode ? (
+                    <SignUp 
+                      fallbackRedirectUrl={returnTo}
+                      signInUrl="/login"
+                      metadata={{
+                        platform: 'ialab',
+                        registration_source: 'welcome_signup'
+                      }}
+                      appearance={{
                        variables: {
                          colorPrimary: '#004B63',
                          colorPrimaryHover: '#0A3550',

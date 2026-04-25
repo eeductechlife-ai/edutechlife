@@ -102,13 +102,13 @@ const LessonCardDetailed = ({
   return (
     <div 
       className={`
-        bg-gradient-to-br from-white via-white/98 to-slate-50/80 
+        bg-white
         border ${colors.border}
-        shadow-[0_8px_32px_rgba(0,0,0,0.04)] 
+        shadow-sm
         rounded-2xl overflow-hidden
-        transition-all duration-500 ease-out
-        hover:shadow-[0_12px_48px_rgba(0,0,0,0.06)]
-        ${isOpen ? 'ring-2 ring-[#00BCD4]/20' : ''}
+        transition-all duration-300 ease-out
+        hover:shadow-lg hover:-translate-y-0.5
+        ${isOpen ? 'ring-2 ring-[#004B63]/15' : ''}
       `}
       style={{
         animationDelay: `${(lessonId - 1) * 0.1}s`,
@@ -118,7 +118,7 @@ const LessonCardDetailed = ({
       {/* HEADER DE LA TARJETA - DISEÑO PREMIUM */}
       <button
         onClick={() => onToggle(lessonId)}
-        className="w-full flex items-start justify-between p-6 md:p-8 text-left focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:ring-offset-2 rounded-2xl"
+        className="w-full flex items-start justify-between p-5 md:p-6 text-left focus:outline-none focus:ring-2 focus:ring-[#004B63]/30 focus:ring-offset-2 rounded-2xl"
         aria-expanded={isOpen}
         aria-controls={`lesson-content-${lessonId}`}
       >
@@ -167,9 +167,9 @@ const LessonCardDetailed = ({
             </h3>
             
             {/* DESCRIPCIÓN DETALLADA */}
-            <p className="text-sm md:text-base text-slate-600 font-body leading-relaxed mb-3">
-              {lesson.detailedDescription || lesson.description}
-            </p>
+             <p className="text-sm md:text-base text-slate-600 leading-relaxed mb-3">
+               {lesson.detailedDescription || lesson.description}
+             </p>
             
             {/* METADATOS Y PÍLDORAS INFORMATIVAS */}
             <div className="flex flex-wrap items-center gap-2 md:gap-3">
@@ -183,7 +183,7 @@ const LessonCardDetailed = ({
               {infoPills[lessonId]?.map((pill, index) => (
                 <span 
                   key={index}
-                  className="px-3 py-1 text-xs font-medium rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200"
+                  className="px-2.5 py-0.5 text-xs font-medium rounded-full bg-[#004B63]/5 text-[#004B63] border border-[#004B63]/10"
                 >
                   {pill}
                 </span>
@@ -218,12 +218,12 @@ const LessonCardDetailed = ({
           {/* ICONO CHEVRON ANIMADO */}
           <Icon 
             name={isOpen ? 'fa-chevron-down' : 'fa-chevron-right'} 
-            className={`
-              text-lg transition-all duration-300 
-              ${isOpen ? 'text-[#00BCD4] rotate-0' : 'text-slate-400'}
-              hover:text-[#00BCD4]
-              md:text-xl
-            `}
+               className={`
+                 text-lg transition-all duration-300 
+                 ${isOpen ? 'text-[#004B63] rotate-0' : 'text-slate-400'}
+                 hover:text-[#004B63]
+                 md:text-xl
+               `}
           />
         </div>
       </button>

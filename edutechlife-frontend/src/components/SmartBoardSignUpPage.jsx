@@ -119,7 +119,8 @@ const SmartBoardSignUpPage = ({ onBack }) => {
             {/* Clerk SignUp Component - Configurado para SmartBoard */}
             <div className="w-full min-h-[500px] sm:min-h-[550px] py-6 sm:py-8">
               <SignUp 
-                signInUrl="/"
+                signInUrl="/login"
+                afterSignUpUrl="/smartboard"
                 fallbackRedirectUrl={returnTo}
                 appearance={{
                   variables: {

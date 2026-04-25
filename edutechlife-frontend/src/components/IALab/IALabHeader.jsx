@@ -27,21 +27,21 @@ const IALabHeader = () => {
       <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[#4DA8C4]/20 rounded-full blur-[120px] pointer-events-none"></div>
 
         {/* Encabezado Global - NO fixed, parte del flujo flexbox */}
-        <header className="relative z-50 w-full h-20 shrink-0 bg-gradient-to-r from-white via-white/98 to-white/95 backdrop-blur-xl border-b border-slate-100/80 px-10 flex items-center justify-between shadow-[0_8px_32px_rgba(0,55,74,0.08)]">
+        <header className="relative z-50 w-full h-18 shrink-0 bg-gradient-to-r from-white via-white/99 to-[#F8FAFC]/98 backdrop-blur-xl border-b border-[#004B63]/8 px-6 md:px-10 flex items-center justify-between shadow-[0_4px_24px_rgba(0,75,99,0.06)]">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-[#00374A] via-[#00BCD4] to-[#4DA8C4] rounded-xl flex items-center justify-center shadow-sm">
-              <Icon name="fa-flask-vial" className="text-white" />
+            <div className="w-10 h-10 bg-gradient-to-br from-[#004B63] via-[#0A3550] to-[#00BCD4] rounded-xl flex items-center justify-center shadow-md shadow-[#004B63]/20">
+              <Icon name="fa-flask-vial" className="text-white text-sm" />
             </div>
             <div>
-              <h1 className="font-bold text-2xl text-[#00374A] tracking-tight">IA Lab Pro</h1>
-              <p className="text-sm text-slate-600 font-normal leading-relaxed">Hyper-Intelligence Certification</p>
+              <h1 className="font-bold text-xl md:text-2xl text-[#00374A] tracking-tight font-sans">IA Lab Pro</h1>
+              <p className="text-xs md:text-sm text-slate-500 font-normal leading-relaxed">Hyper-Intelligence Certification</p>
             </div>
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <div className="px-5 py-2.5 bg-cyan-50/40 backdrop-blur-md border border-cyan-100/50 text-cyan-700 rounded-full hover:bg-cyan-50/60 hover:scale-[1.02] hover:shadow-sm transition-all duration-500 ease-out">
-            <span className="text-sm font-semibold">{completedModules.length}/5 Módulos</span>
+          <div className="px-4 py-2 bg-[#004B63]/8 backdrop-blur-md border border-[#004B63]/15 text-[#004B63] rounded-xl font-semibold text-sm transition-all duration-300 hover:bg-[#004B63]/12 hover:shadow-sm">
+            <span>{completedModules.length}/5 Módulos</span>
           </div>
           
           {/* Botón de Perfil de Usuario - Componente Premium 100% Funcional */}
