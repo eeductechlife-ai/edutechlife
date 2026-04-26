@@ -20,6 +20,7 @@ import { Icon } from '../../utils/iconMapping.jsx';
 import { cn } from '../forum/forumDesignSystem';
 import QueEsPrompt_OVA_Original from './QueEsPrompt_OVA_Original';
 import useFullscreen from './hooks/useFullscreen';
+import pdfDoc from '../../assets/docs/guia-anatomia-prompt.pdf';
 
 /**
  * Componente para visualizar videos (YouTube/Vimeo)
@@ -362,7 +363,7 @@ const InteractiveViewer = ({ resource }) => {
  * Componente para PDF Thumbnail (con doble clic para vista inmersiva)
  */
 const PDFThumbnailViewer = ({ resource }) => {
-  const openFullScreen = () => window.open(resource.url, '_blank');
+  const openFullScreen = () => window.open(pdfDoc, '_blank');
 
   return (
     <div className="w-full h-full flex flex-col">
@@ -378,7 +379,7 @@ const PDFThumbnailViewer = ({ resource }) => {
       </div>
       <div className="flex-1 bg-slate-50 rounded-2xl overflow-hidden">
         <iframe
-          src={resource.url}
+          src={pdfDoc}
           title={resource.title}
           className="w-full h-full min-h-[60vh] rounded-lg border-0"
           allowFullScreen
