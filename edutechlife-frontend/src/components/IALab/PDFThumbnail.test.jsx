@@ -12,7 +12,7 @@ import PDFThumbnail from './PDFThumbnail';
 describe('PDFThumbnail Component', () => {
   const mockProps = {
     title: "Guía: Anatomía de un Prompt",
-    pdfUrl: "/guia-anatomia-prompt.pdf",
+    pdfUrl: "/Doc/guia-anatomia-prompt.pdf",
     description: "Documento PDF con estructura detallada de prompts efectivos",
     size: "2.4 MB",
     pages: 12

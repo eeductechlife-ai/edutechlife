@@ -10,6 +10,8 @@
  * - Metadatos completos para cada recurso
  */
 
+import guiaAnatomiaPromptPdf from '../../../assets/docs/guia-anatomia-prompt.pdf';
+
 export const moduleResources = {
   // MÓDULO 1: INGENIERÍA DE PROMPTS
   "Introducción a la Inteligencia Artificial Generativa": {
@@ -89,7 +91,7 @@ export const moduleResources = {
         id: "prompt-guide-1",
         type: "pdf-thumbnail",
         title: "Guía: Anatomía de un Prompt",
-        url: "/guia-anatomia-prompt.pdf",
+        url: guiaAnatomiaPromptPdf,
         pages: 12,
         format: "PDF",
         size: "4.0 MB",

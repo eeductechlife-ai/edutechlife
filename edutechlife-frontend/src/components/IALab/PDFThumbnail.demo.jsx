@@ -30,7 +30,7 @@ const PDFThumbnailDemo = () => {
             <h2 className="text-xl font-bold text-slate-800">1. Miniatura Básica</h2>
             <PDFThumbnail
               title="Guía: Anatomía de un Prompt"
-              pdfUrl="/guia-anatomia-prompt.pdf"
+              pdfUrl="/Doc/guia-anatomia-prompt.pdf"
               description="Documento PDF con estructura detallada de prompts efectivos"
               size="4.0 MB"
               pages={12}
@@ -51,7 +51,7 @@ const PDFThumbnailDemo = () => {
             <h2 className="text-xl font-bold text-slate-800">2. Documento Largo</h2>
             <PDFThumbnail
               title="Manual Completo de IA Generativa"
-              pdfUrl="/guia-anatomia-prompt.pdf"
+              pdfUrl="/Doc/guia-anatomia-prompt.pdf"
               description="Guía extensa con 50+ páginas de contenido avanzado sobre IA Generativa y sus aplicaciones en educación."
               size="15.2 MB"
               pages={52}
@@ -72,7 +72,7 @@ const PDFThumbnailDemo = () => {
             <h2 className="text-xl font-bold text-slate-800">3. Cheatsheet Técnica</h2>
             <PDFThumbnail
               title="Cheatsheet: Prompt Engineering"
-              pdfUrl="/guia-anatomia-prompt.pdf"
+              pdfUrl="/Doc/guia-anatomia-prompt.pdf"
               description="Referencia rápida con patrones, estructuras y ejemplos de prompts para diferentes modelos de IA."
               size="3.1 MB"
               pages={8}

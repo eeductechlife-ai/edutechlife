@@ -16,13 +16,14 @@ import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { cn } from '../forum/forumDesignSystem';
+import guiaAnatomiaPromptPdf from '../../assets/docs/guia-anatomia-prompt.pdf';
 
 /**
  * Componente principal PDFThumbnail
  */
 const PDFThumbnail = ({ 
   title = "Guía: Anatomía de un Prompt",
-  pdfUrl = "/guia-anatomia-prompt.pdf",
+  pdfUrl = guiaAnatomiaPromptPdf,
   description = "Documento PDF con estructura detallada de prompts efectivos",
   size = "4.0 MB",
   pages = 12,

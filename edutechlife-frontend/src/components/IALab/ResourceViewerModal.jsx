@@ -361,85 +361,29 @@ const InteractiveViewer = ({ resource }) => {
 /**
  * Componente para PDF Thumbnail (con doble clic para vista inmersiva)
  */
-const PDFThumbnailViewer = ({ resource, onOpenImmersiveView }) => {
-  const [isImmersiveViewOpen, setIsImmersiveViewOpen] = useState(false);
-  const iframeRef = useRef(null);
-
-  // Manejar clic simple para abrir PDF en nueva pestaña
-  const handleClick = () => {
-    window.open(resource.url, '_blank');
-  };
-
-  // Manejar doble clic para abrir visualización inmersiva
-  const handleDoubleClick = () => {
-    if (onOpenImmersiveView) {
-      onOpenImmersiveView(resource);
-    }
-  };
+const PDFThumbnailViewer = ({ resource }) => {
+  const openFullScreen = () => window.open(resource.url, '_blank');
 
   return (
-    <div className="w-full h-full">
-      {/* Miniatura del PDF */}
-      <div 
-        onClick={handleClick}
-        onDoubleClick={handleDoubleClick}
-        className="group relative w-full h-full bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer overflow-hidden flex flex-col"
-        aria-label={`Abrir ${resource.title} (clic para nueva pestaña, doble clic para vista inmersiva)`}
-        title="Clic para abrir en nueva pestaña | Doble clic para vista inmersiva"
-      >
-        {/* Contenido de la miniatura */}
-        <div className="flex-1 p-6 flex flex-col items-center justify-center">
-          {/* Icono grande de PDF */}
-          <div className="w-32 h-32 rounded-3xl bg-gradient-to-br from-blue-500 to-cyan-400 shadow-2xl flex items-center justify-center mb-6">
-            <Icon name="fa-file-pdf" className="text-white text-5xl" />
-          </div>
-          
-          {/* Título */}
-          <h4 className="font-bold text-slate-800 text-xl text-center mb-3">
-            {resource.title}
-          </h4>
-          
-          {/* Descripción */}
-          <p className="text-slate-600 text-center mb-6">
-            {resource.description}
-          </p>
-
-          {/* Metadatos */}
-          <div className="flex items-center gap-6 text-sm text-slate-500">
-            <div className="flex items-center gap-2">
-              <Icon name="fa-file" className="w-4 h-4" />
-              <span>{resource.pages || 12} páginas</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Icon name="fa-weight-hanging" className="w-4 h-4" />
-              <span>{resource.size || "4.0 MB"}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Icon name="fa-pdf" className="w-4 h-4 text-red-500" />
-              <span>PDF</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Indicador de acción */}
-        <div className="p-4 border-t border-slate-100 bg-slate-50/50">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <Icon name="fa-mouse-pointer" className="w-4 h-4 text-[#004B63]" />
-                <span className="text-sm text-slate-600 font-medium">Clic: Abrir PDF</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Icon name="fa-expand" className="w-4 h-4 text-[#00BCD4]" />
-                <span className="text-sm text-slate-600 font-medium">Doble clic: Vista inmersiva</span>
-              </div>
-            </div>
-            <Icon 
-              name="fa-arrow-up-right-from-square" 
-              className="w-5 h-5 text-[#00BCD4]" 
-            />
-          </div>
-        </div>
+    <div className="w-full h-full flex flex-col">
+      <div className="flex justify-end items-center mb-2 px-1">
+        <button
+          onClick={openFullScreen}
+          className="text-sm font-medium text-[#004B63] bg-slate-100 hover:bg-slate-200 py-1.5 px-3 rounded-md transition-colors flex items-center gap-2"
+        >
+          <Icon name="fa-expand" className="w-3.5 h-3.5" />
+          Abrir en pantalla completa
+          <Icon name="fa-arrow-up-right-from-square" className="w-3 h-3" />
+        </button>
+      </div>
+      <div className="flex-1 bg-slate-50 rounded-2xl overflow-hidden">
+        <iframe
+          src={resource.url}
+          title={resource.title}
+          className="w-full h-full min-h-[60vh] rounded-lg border-0"
+          allowFullScreen
+          loading="lazy"
+        />
       </div>
     </div>
   );
@@ -604,10 +548,7 @@ const ResourceViewerModal = ({
           return <InteractiveViewer resource={resource} />;
         
         case 'pdf-thumbnail':
-          return <PDFThumbnailViewer 
-            resource={resource} 
-            onOpenImmersiveView={onOpenImmersiveView}
-          />;
+          return <PDFThumbnailViewer resource={resource} />;
         
         case 'ova-thumbnail':
           return <OVAThumbnailViewer 
