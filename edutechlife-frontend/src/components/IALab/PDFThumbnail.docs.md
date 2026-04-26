@@ -39,7 +39,7 @@ function MyComponent() {
   return (
     <PDFThumbnail
       title="Guía: Anatomía de un Prompt"
-      pdfUrl="/Docs/guia_edutechlife_modulo1.pdf"
+      pdfUrl="/guia-anatomia-prompt.pdf"
       description="Documento PDF con estructura detallada de prompts efectivos"
       size="4.0 MB"
       pages={12}
@@ -53,7 +53,7 @@ function MyComponent() {
 | Prop | Tipo | Requerido | Default | Descripción |
 |------|------|-----------|---------|-------------|
 | `title` | string | ✅ | "Guía: Anatomía de un Prompt" | Título del documento |
-| `pdfUrl` | string | ✅ | "/Docs/guia_edutechlife_modulo1.pdf" | URL del archivo PDF |
+| `pdfUrl` | string | ✅ | "/guia-anatomia-prompt.pdf" | URL del archivo PDF |
 | `description` | string | ✅ | "Documento PDF con estructura..." | Descripción del contenido |
 | `size` | string | ✅ | "2.4 MB" | Tamaño del archivo |
 | `pages` | number | ✅ | 12 | Número de páginas |
@@ -120,7 +120,7 @@ El componente se integra automáticamente con `ResourceViewer.jsx` cuando el tip
 {
   type: 'pdf-thumbnail',
   title: 'Guía: Anatomía de un Prompt',
-  url: '/Docs/guia_edutechlife_modulo1.pdf',
+  url: '/guia-anatomia-prompt.pdf',
   // ... más props
 }
 ```
@@ -171,7 +171,7 @@ role="presentation" // Para overlay de fondo
 
 1. **PDF no se carga**
    - Verificar que la URL sea correcta
-   - Asegurar que el archivo exista en `/public/Docs/`
+    - Asegurar que el archivo exista en `/public/`
    - Verificar permisos del servidor
 
 2. **Doble clic no funciona**

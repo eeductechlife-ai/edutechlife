@@ -24,7 +24,8 @@ const ModuleOverviewCard = ({ onAction }) => {
   // Datos hardcodeados según especificaciones
   const moduleData = {
     badge: {
-      duration: "1h 28min • MÓDULO 1"
+      duration: "1h 28min",
+      module: "MÓDULO 1"
     },
     title: "Domina las Instrucciones",
     description: "Desarrolla la capacidad de dar instrucciones claras y efectivas a la IA para obtener resultados útiles y precisos en situaciones reales a través de 4 etapas prácticas.",
@@ -48,7 +49,10 @@ const ModuleOverviewCard = ({ onAction }) => {
           <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-tr from-[#004B63]/4 to-[#00BCD4]/2 rounded-full blur-2xl"></div>
           
 {/* Badge superior */}
-            <div className="flex flex-wrap items-center gap-3 mb-6">
+            <div className="flex items-center justify-between mb-6">
+              <div className="px-4 py-2 bg-white border border-[#004B63]/15 text-[#004B63] text-sm font-semibold rounded-full shadow-sm">
+                {moduleData.badge.module}
+              </div>
               <div className="px-4 py-2 bg-white border border-[#004B63]/15 text-[#004B63] text-sm font-semibold rounded-full shadow-sm">
                 {moduleData.badge.duration}
               </div>

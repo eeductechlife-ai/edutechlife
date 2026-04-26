@@ -23,7 +23,7 @@ const TestFuncionalidad = () => {
       }
 
       // Verificar que el archivo PDF existe
-      const pdfUrl = "/Docs/guia-anatomia-prompt.pdf";
+      const pdfUrl = "/guia-anatomia-prompt.pdf";
       
       // Simular verificación de archivo (en producción se haría una petición HEAD)
       setTestResults(prev => ({
@@ -141,7 +141,7 @@ const TestFuncionalidad = () => {
                   </li>
                   <li className="flex items-center gap-2">
                     <span className={`w-4 h-4 rounded-full ${testResults.pdf.passed ? 'bg-green-500' : 'bg-red-500'}`}></span>
-                    Archivo PDF en /Docs/guia-anatomia-prompt.pdf
+                    Archivo PDF en /guia-anatomia-prompt.pdf
                   </li>
                   <li className="flex items-center gap-2">
                     <span className={`w-4 h-4 rounded-full ${testResults.pdf.passed ? 'bg-green-500' : 'bg-red-500'}`}></span>

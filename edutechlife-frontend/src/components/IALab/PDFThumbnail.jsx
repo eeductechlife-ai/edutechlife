@@ -22,7 +22,7 @@ import { cn } from '../forum/forumDesignSystem';
  */
 const PDFThumbnail = ({ 
   title = "Guía: Anatomía de un Prompt",
-  pdfUrl = "/Docs/guia-anatomia-prompt.pdf",
+  pdfUrl = "/guia-anatomia-prompt.pdf",
   description = "Documento PDF con estructura detallada de prompts efectivos",
   size = "4.0 MB",
   pages = 12,

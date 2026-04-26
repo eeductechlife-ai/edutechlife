@@ -89,7 +89,7 @@ export const moduleResources = {
         id: "prompt-guide-1",
         type: "pdf-thumbnail",
         title: "Guía: Anatomía de un Prompt",
-        url: "/Docs/guia-anatomia-prompt.pdf",
+        url: "/guia-anatomia-prompt.pdf",
         pages: 12,
         format: "PDF",
         size: "4.0 MB",

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { cn } from '../forum/forumDesignSystem';
-import ResourceViewer from './ResourceViewer';
 import ResourceSelector from './ResourceSelector';
 import ResourceViewerModal from './ResourceViewerModal';
 import QueEsPrompt_OVA_Original from './QueEsPrompt_OVA_Original';
@@ -218,28 +217,35 @@ const TopicResourcesModal = ({
                   />
                 </div>
 
-                <div className="flex-1 p-6 overflow-auto">
-                  {resources[activeResourceIndex] ? (
-                    <ResourceViewer
-                      resource={resources[activeResourceIndex]}
-                      onOpenViewerModal={() => handleOpenViewerModal(activeResourceIndex)}
-                      onOpenImmersiveView={handleOpenImmersivePdf}
-                      onOpenOVA={handleOpenOVA}
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-slate-50 rounded-2xl">
-                      <div className="text-center">
-                        <Icon name="fa-file-circle-question" className="text-slate-400 text-4xl mb-4" />
-                        <p className="text-slate-500 font-medium">Selecciona un recurso para ver detalles</p>
-                        <p className="text-slate-400 text-sm mt-2">Haz clic en cualquier recurso de la lista superior</p>
-                      </div>
+                <div className="flex-1 flex items-center justify-center p-6">
+                  <div className="text-center max-w-sm">
+                    <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 border border-[#004B63]/10 flex items-center justify-center mb-5">
+                      {resources[activeResourceIndex]?.type === 'video' ? <Icon name="fa-play" className="text-[#004B63] text-3xl" /> :
+                       resources[activeResourceIndex]?.type === 'pdf-thumbnail' ? <Icon name="fa-file-pdf" className="text-[#004B63] text-3xl" /> :
+                       resources[activeResourceIndex]?.type === 'ova-thumbnail' ? <Icon name="fa-brain" className="text-[#004B63] text-3xl" /> :
+                       <Icon name="fa-file" className="text-[#004B63] text-3xl" />}
                     </div>
-                  )}
+                    <h3 className="text-lg font-bold text-slate-800 mb-1">
+                      {resources[activeResourceIndex]?.title || "Selecciona un recurso"}
+                    </h3>
+                    <p className="text-sm text-slate-500 mb-5">
+                      {resources[activeResourceIndex]?.type === 'video' ? 'Video' :
+                       resources[activeResourceIndex]?.type === 'pdf-thumbnail' ? `${resources[activeResourceIndex]?.format} • ${resources[activeResourceIndex]?.pages} páginas` :
+                       resources[activeResourceIndex]?.type === 'ova-thumbnail' ? 'OVA Interactivo' : 'Recurso'}
+                    </p>
+                    <button
+                      onClick={() => handleOpenViewerModal(activeResourceIndex)}
+                      className="px-6 py-3 bg-gradient-to-r from-[#00BCD4] to-[#4DD0E1] text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 font-medium flex items-center gap-2 mx-auto"
+                    >
+                      <Icon name="fa-expand" className="text-sm" />
+                      <span>Abrir recurso</span>
+                    </button>
+                  </div>
                 </div>
               </div>
 
-              <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-slate-100 bg-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
-                <div className="flex items-center gap-3 w-full sm:w-auto">
+              <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-slate-100 bg-white flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3 min-w-0">
                   <div className={cn(
                     "w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center flex-shrink-0",
                     "bg-[#004B63]/10 text-[#004B63] text-sm sm:text-lg"
@@ -250,7 +256,7 @@ const TopicResourcesModal = ({
                      resources[activeResourceIndex]?.type === 'ova-thumbnail' ? <Icon name="fa-brain" className="text-[#004B63]" /> :
                      resources[activeResourceIndex]?.type === 'interactive' ? <Icon name="fa-puzzle-piece" className="text-[#004B63]" /> : <Icon name="fa-file" className="text-[#004B63]" />}
                   </div>
-                  <div className="flex-1 min-w-0">
+                  <div className="min-w-0">
                     <h4 className="font-semibold text-slate-800 text-xs sm:text-sm truncate">
                       {resources[activeResourceIndex]?.title || "Selecciona un recurso"}
                     </h4>
@@ -265,59 +271,43 @@ const TopicResourcesModal = ({
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between sm:justify-end gap-2 sm:gap-3 w-full sm:w-auto">
-                  <div className="flex items-center gap-1 sm:gap-2">
-                    <button
-                      onClick={() => {
-                        if (activeResourceIndex > 0) {
-                          const newIndex = activeResourceIndex - 1;
-                          setActiveResourceIndex(newIndex);
-                          handleOpenViewerModal(newIndex);
-                        }
-                      }}
-                      disabled={activeResourceIndex <= 0}
-                      className={cn(
-                        "p-1.5 sm:p-2 rounded-lg transition-all duration-200",
-                        activeResourceIndex <= 0 ? "text-slate-400 cursor-not-allowed" : "text-slate-700 hover:bg-slate-100 hover:scale-105"
-                      )}
-                      aria-label="Recurso anterior"
-                    >
-                      <Icon name="fa-chevron-left" className="w-4 h-4 sm:w-5 sm:h-5" />
-                    </button>
-                    <div className="px-2 py-1 sm:px-3 sm:py-1 bg-slate-100 rounded-lg text-slate-700 font-medium text-xs sm:text-sm">
-                      {activeResourceIndex + 1} / {resources.length}
-                    </div>
-                    <button
-                      onClick={() => {
-                        if (activeResourceIndex < resources.length - 1) {
-                          const newIndex = activeResourceIndex + 1;
-                          setActiveResourceIndex(newIndex);
-                          handleOpenViewerModal(newIndex);
-                        }
-                      }}
-                      disabled={activeResourceIndex >= resources.length - 1}
-                      className={cn(
-                        "p-1.5 sm:p-2 rounded-lg transition-all duration-200",
-                        activeResourceIndex >= resources.length - 1 ? "text-slate-400 cursor-not-allowed" : "text-slate-700 hover:bg-slate-100 hover:scale-105"
-                      )}
-                      aria-label="Siguiente recurso"
-                    >
-                      <Icon name="fa-chevron-right" className="w-4 h-4 sm:w-5 sm:h-5" />
-                    </button>
-                  </div>
-
+                <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
                   <button
-                    onClick={() => handleOpenViewerModal(activeResourceIndex)}
+                    onClick={() => {
+                      if (activeResourceIndex > 0) {
+                        const newIndex = activeResourceIndex - 1;
+                        setActiveResourceIndex(newIndex);
+                        handleOpenViewerModal(newIndex);
+                      }
+                    }}
+                    disabled={activeResourceIndex <= 0}
                     className={cn(
-                      "px-3 py-1.5 sm:px-5 sm:py-2.5 rounded-lg sm:rounded-xl",
-                      "bg-[#00BCD4] text-white font-medium",
-                      "hover:bg-[#00BCD4]/90 hover:scale-105 transition-all duration-200",
-                      "flex items-center gap-1 sm:gap-2 text-xs sm:text-sm"
+                      "p-1.5 sm:p-2 rounded-lg transition-all duration-200",
+                      activeResourceIndex <= 0 ? "text-slate-400 cursor-not-allowed" : "text-slate-700 hover:bg-slate-100 hover:scale-105"
                     )}
+                    aria-label="Recurso anterior"
                   >
-                    <Icon name="fa-expand" className="w-3 h-3 sm:w-4 sm:h-4" />
-                    <span className="hidden sm:inline">Abrir en vista completa</span>
-                    <span className="sm:hidden">Vista completa</span>
+                    <Icon name="fa-chevron-left" className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </button>
+                  <div className="px-2 py-1 sm:px-3 sm:py-1 bg-slate-100 rounded-lg text-slate-700 font-medium text-xs sm:text-sm">
+                    {activeResourceIndex + 1} / {resources.length}
+                  </div>
+                  <button
+                    onClick={() => {
+                      if (activeResourceIndex < resources.length - 1) {
+                        const newIndex = activeResourceIndex + 1;
+                        setActiveResourceIndex(newIndex);
+                        handleOpenViewerModal(newIndex);
+                      }
+                    }}
+                    disabled={activeResourceIndex >= resources.length - 1}
+                    className={cn(
+                      "p-1.5 sm:p-2 rounded-lg transition-all duration-200",
+                      activeResourceIndex >= resources.length - 1 ? "text-slate-400 cursor-not-allowed" : "text-slate-700 hover:bg-slate-100 hover:scale-105"
+                    )}
+                    aria-label="Siguiente recurso"
+                  >
+                    <Icon name="fa-chevron-right" className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
                 </div>
               </div>

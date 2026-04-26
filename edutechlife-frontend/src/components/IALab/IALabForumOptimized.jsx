@@ -4,23 +4,6 @@ import { useAuth } from '../../context/AuthContext';
 import useIALabForum from '../../hooks/IALab/useIALabForum';
 import { cn } from '../forum/forumDesignSystem';
 
-/**
- * Foro Optimizado IALab - Componente premium compacto y visualmente impactante
- * 
- * Características:
- * - Altura controlada con scroll elegante
- * - Burbujas de mensaje con glassmorphism
- * - Avatares con gradientes circulares
- * - Carga dinámica (últimos 5 mensajes + scroll para más)
- * - Animaciones de entrada suaves
- * - Input fijo en parte inferior
- * - Identidad visual Edutechlife completa
- * 
- * @param {Object} props
- * @param {boolean} props.compact - Modo compacto
- * @param {number} props.initialLimit - Límite inicial de mensajes (default: 5)
- * @param {string} props.className - Clases CSS adicionales
- */
 const IALabForumOptimized = ({
     compact = false,
     initialLimit = 5,
@@ -40,7 +23,6 @@ const IALabForumOptimized = ({
         formatLikeCount
     } = useIALabForum();
 
-    // Estados para el foro optimizado
     const [visiblePosts, setVisiblePosts] = useState([]);
     const [showAll, setShowAll] = useState(false);
     const [newMessage, setNewMessage] = useState('');
@@ -49,12 +31,10 @@ const IALabForumOptimized = ({
     const messagesEndRef = useRef(null);
     const messagesContainerRef = useRef(null);
 
-    // Cargar posts iniciales
     useEffect(() => {
         loadForumPosts(showAll ? 20 : initialLimit);
     }, [loadForumPosts, showAll, initialLimit]);
 
-    // Actualizar posts visibles
     useEffect(() => {
         if (forumPosts.length > 0) {
             const postsToShow = showAll ? forumPosts : forumPosts.slice(0, initialLimit);
@@ -62,14 +42,12 @@ const IALabForumOptimized = ({
         }
     }, [forumPosts, showAll, initialLimit]);
 
-    // Scroll automático al último mensaje
     useEffect(() => {
         if (messagesEndRef.current && !isLoading) {
             messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     }, [visiblePosts, isLoading]);
 
-    // Handler para enviar mensaje
     const handleSubmitMessage = async (e) => {
         e.preventDefault();
         if (!newMessage.trim() || !user) return;
@@ -82,11 +60,8 @@ const IALabForumOptimized = ({
                 tags: ['Chat']
             });
             setNewMessage('');
-            
-            // Indicador de actividad en vivo
             setShowLiveIndicator(true);
             setTimeout(() => setShowLiveIndicator(false), 3000);
-            
         } catch (err) {
             console.error('Error al enviar mensaje:', err);
         } finally {
@@ -94,12 +69,10 @@ const IALabForumOptimized = ({
         }
     };
 
-    // Handler para cargar más mensajes
     const handleLoadMore = () => {
         setShowAll(true);
     };
 
-    // Función para obtener iniciales del nombre
     const getInitials = (name) => {
         if (!name) return '?';
         return name
@@ -110,10 +83,9 @@ const IALabForumOptimized = ({
             .substring(0, 2);
     };
 
-    // Función para generar color de gradiente basado en nombre
     const getAvatarGradient = (name) => {
         if (!name) return 'from-[#004B63] to-[#0A3550]';
-        
+
         const colors = [
             'from-[#004B63] to-[#0A3550]',
             'from-[#0A3550] to-[#00BCD4]',
@@ -121,12 +93,11 @@ const IALabForumOptimized = ({
             'from-violet-600 to-indigo-400',
             'from-purple-600 to-violet-400'
         ];
-        
+
         const hash = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
         return colors[hash % colors.length];
     };
 
-    // Formatear fecha relativa
     const formatRelativeTime = (dateString) => {
         const date = new Date(dateString);
         const now = new Date();
@@ -142,115 +113,81 @@ const IALabForumOptimized = ({
         return date.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
     };
 
-    // Estadísticas del foro
     const forumStats = getForumStats();
 
     return (
-        <div 
+        <div
             className={cn(
-                "bg-white rounded-2xl shadow-sm border border-[#004B63]/8",
-                "flex flex-col",
+                "relative z-10 bg-white rounded-2xl shadow-sm border border-[#004B63]/8",
+                "flex flex-col overflow-hidden",
                 compact ? "h-96" : "h-fit",
                 className
             )}
             {...rest}
         >
-            {/* Estilos para animaciones y efectos visuales */}
+            {/* Elementos decorativos */}
+            <div className="absolute -top-6 -right-6 w-32 h-32 bg-gradient-to-br from-[#004B63]/6 to-[#00BCD4]/4 rounded-full blur-2xl pointer-events-none"></div>
+            <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-tr from-[#004B63]/4 to-[#00BCD4]/2 rounded-full blur-2xl pointer-events-none"></div>
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#00BCD4] rounded-t-2xl" />
+
+            {/* Estilos para animaciones */}
             <style>{`
                 @keyframes fadeInUp {
-                    from {
-                        opacity: 0;
-                        transform: translateY(10px);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
+                    from { opacity: 0; transform: translateY(10px); }
+                    to { opacity: 1; transform: translateY(0); }
                 }
                 @keyframes livePulse {
-                    0%, 100% {
-                        opacity: 1;
-                        transform: scale(1);
-                    }
-                    50% {
-                        opacity: 0.7;
-                        transform: scale(1.05);
-                    }
+                    0%, 100% { opacity: 1; transform: scale(1); }
+                    50% { opacity: 0.7; transform: scale(1.05); }
                 }
-                .animate-in {
-                    animation-duration: 300ms;
-                    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-                    animation-fill-mode: both;
-                }
-                .fade-in-up {
-                    animation-name: fadeInUp;
-                }
-                .animation-delay-100 {
-                    animation-delay: 100ms;
-                }
-                .animation-delay-200 {
-                    animation-delay: 200ms;
-                }
-                .animation-delay-300 {
-                    animation-delay: 300ms;
-                }
-                .live-pulse {
-                    animation: livePulse 2s ease-in-out infinite;
-                }
-                .scrollbar-thin::-webkit-scrollbar {
-                    width: 6px;
-                }
-                .scrollbar-thin::-webkit-scrollbar-track {
-                    background: transparent;
-                }
-                .scrollbar-thin::-webkit-scrollbar-thumb {
-                    background-color: rgba(0, 188, 212, 0.3);
-                    border-radius: 20px;
-                    transition: background-color 0.2s;
-                }
-                .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-                    background-color: rgba(0, 188, 212, 0.5);
-                }
-                .message-bubble {
-                    transition: all 0.3s ease;
-                }
-                .message-bubble:hover {
-                    transform: translateY(-2px);
-                    box-shadow: 0 8px 25px rgba(0, 188, 212, 0.1);
-                }
+                .animate-in { animation-duration: 300ms; animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1); animation-fill-mode: both; }
+                .fade-in-up { animation-name: fadeInUp; }
+                .animation-delay-100 { animation-delay: 100ms; }
+                .animation-delay-200 { animation-delay: 200ms; }
+                .animation-delay-300 { animation-delay: 300ms; }
+                .live-pulse { animation: livePulse 2s ease-in-out infinite; }
+                .scrollbar-thin::-webkit-scrollbar { width: 6px; }
+                .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+                .scrollbar-thin::-webkit-scrollbar-thumb { background-color: rgba(0, 188, 212, 0.3); border-radius: 20px; }
+                .scrollbar-thin::-webkit-scrollbar-thumb:hover { background-color: rgba(0, 188, 212, 0.5); }
+                .message-bubble { transition: all 0.3s ease; }
+                .message-bubble:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(0, 75, 99, 0.08); }
             `}</style>
-            {/* Header del Foro */}
+
+            {/* Header */}
             <div className="flex items-center justify-between p-4 md:p-6 border-b border-[#004B63]/8">
-                <div className="flex items-center gap-3">
-                    <div className="relative">
-                         <Icon name="fa-comments" className="text-[#004B63] text-lg" />
+                <div className="flex items-center gap-4">
+                    <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-[#004B63] to-[#0A3550] flex items-center justify-center flex-shrink-0">
+                        <Icon name="fa-comments" className="text-white text-sm" />
                         {showLiveIndicator && (
                             <div className="absolute -top-1 -right-1 w-3 h-3">
-                                <div className="absolute inset-0 bg-[#004B63] rounded-full animate-ping opacity-75" />
-                                <div className="absolute inset-0 bg-[#004B63] rounded-full" />
+                                <div className="absolute inset-0 bg-emerald-500 rounded-full animate-ping opacity-75" />
+                                <div className="absolute inset-0 bg-emerald-500 rounded-full" />
                             </div>
                         )}
                     </div>
                     <div>
-                         <h3 className="text-lg font-bold text-[#004B63]">
-                            Comunidad IALab
+                        <div className="flex items-center gap-2">
+                            <h3 className="text-lg font-bold text-[#004B63]">
+                                Comunidad IALab
+                            </h3>
                             {showLiveIndicator && (
-                                 <span className="ml-2 text-xs font-normal text-[#004B63] live-pulse">
-                                    • En vivo
+                                <span className="flex items-center gap-1 px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[10px] font-semibold rounded-full">
+                                    <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full live-pulse" />
+                                    En vivo
                                 </span>
                             )}
-                        </h3>
+                        </div>
                         <p className="text-xs text-slate-500">
-                            {forumStats.totalPosts} debates • {forumStats.totalComments} respuestas
+                            {forumStats.totalPosts} debates &middot; {forumStats.totalComments} respuestas
                         </p>
                     </div>
                 </div>
 
-                {/* Indicador de actividad */}
                 <div className="flex items-center gap-2">
                     <div className="flex -space-x-2">
                         {forumPosts.slice(0, 3).map((post, index) => (
-                            <div 
+                            <div
                                 key={post.id}
                                 className={cn(
                                     "w-6 h-6 rounded-full border-2 border-white",
@@ -273,19 +210,17 @@ const IALabForumOptimized = ({
                 </div>
             </div>
 
-            {/* Área de Mensajes con Scroll Elegante */}
-            <div 
+            {/* Área de Mensajes */}
+            <div
                 ref={messagesContainerRef}
                 className={cn(
                     "flex-1 overflow-y-auto",
                     "px-4 md:px-6 py-4",
-                    "scrollbar-thin scrollbar-thumb-cyan-200/50 scrollbar-track-transparent",
-                    "hover:scrollbar-thumb-cyan-300/60"
+                    "scrollbar-thin"
                 )}
                 style={{ maxHeight: '400px' }}
             >
                 {isLoading ? (
-                    // Estado de carga
                     <div className="flex items-center justify-center h-full">
                         <div className="text-center">
                             <div className="w-8 h-8 border-2 border-[#004B63]/20 border-t-[#004B63] rounded-full animate-spin mx-auto mb-3" />
@@ -293,36 +228,33 @@ const IALabForumOptimized = ({
                         </div>
                     </div>
                 ) : error ? (
-                    // Estado de error
                     <div className="flex items-center justify-center h-full">
                         <div className="text-center p-4">
                             <Icon name="fa-exclamation-triangle" className="text-amber-500 text-2xl mb-3" />
                             <p className="text-sm text-slate-600 mb-2">{error}</p>
                             <button
                                 onClick={() => loadForumPosts(initialLimit)}
-                                    className="text-xs text-[#004B63] hover:text-[#0A3550] font-medium"
-                                    >
-                                        Ver {forumPosts.length - initialLimit} mensajes más ↓
-                                    </button>
+                                className="text-xs text-[#004B63] hover:text-[#0A3550] font-medium"
+                            >
+                                Intentar de nuevo
+                            </button>
                         </div>
                     </div>
                 ) : visiblePosts.length === 0 ? (
-                    // Estado vacío
                     <div className="flex items-center justify-center h-full">
                         <div className="text-center p-4">
-                            <div className="w-12 h-12 bg-gradient-to-br from-[#004B63]/10 to-[#004B63]/5 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                            <div className="w-14 h-14 mx-auto rounded-xl bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 border border-[#004B63]/10 flex items-center justify-center mb-4">
                                 <Icon name="fa-comment-dots" className="text-[#004B63] text-xl" />
                             </div>
-                            <h4 className="text-sm font-semibold text-slate-700 mb-1">
-                                ¡Sé el primero en comentar!
+                            <h4 className="text-sm font-bold text-slate-800 mb-1">
+                                Sé el primero en comentar
                             </h4>
-                            <p className="text-xs text-slate-500 max-w-xs">
+                            <p className="text-xs text-slate-500 max-w-xs mx-auto">
                                 Inicia una conversación sobre IA educativa y prompt engineering
                             </p>
                         </div>
                     </div>
                 ) : (
-                    // Lista de mensajes
                     <div className="space-y-3">
                         {visiblePosts.map((post, index) => {
                             const isLiked = likeStates[post.id]?.userLiked || false;
@@ -333,9 +265,7 @@ const IALabForumOptimized = ({
                                 <div
                                     key={post.id}
                                     className={cn(
-                                        "bg-white/40 backdrop-blur-sm border border-white/20",
-                                        "rounded-2xl p-4",
-                                        "shadow-sm",
+                                        "bg-white border border-[#004B63]/6 rounded-xl p-4",
                                         "message-bubble",
                                         "animate-in fade-in-up",
                                         index === 0 ? "animation-delay-100" :
@@ -343,10 +273,8 @@ const IALabForumOptimized = ({
                                         index === 2 ? "animation-delay-300" : ""
                                     )}
                                 >
-                                    {/* Header del mensaje */}
                                     <div className="flex items-start justify-between mb-3">
                                         <div className="flex items-center gap-3">
-                                            {/* Avatar con gradiente */}
                                             <div className={cn(
                                                 "w-8 h-8 rounded-full",
                                                 "bg-gradient-to-tr",
@@ -365,7 +293,7 @@ const IALabForumOptimized = ({
                                                         {post.profiles?.full_name || 'Usuario'}
                                                     </span>
                                                     {post.tags?.includes('Mentor') && (
-                                                            <span className="px-1.5 py-0.5 bg-[#004B63]/8 text-[#004B63] text-[10px] font-medium rounded-full">
+                                                        <span className="px-1.5 py-0.5 bg-[#004B63]/5 text-[#004B63] text-[10px] font-medium rounded-full">
                                                             Mentor
                                                         </span>
                                                     )}
@@ -376,29 +304,27 @@ const IALabForumOptimized = ({
                                             </div>
                                         </div>
 
-                                        {/* Acciones del mensaje */}
                                         <button
                                             onClick={() => toggleLike(post.id)}
                                             disabled={isLoadingLike || !user}
                                             className={cn(
                                                 "flex items-center gap-1",
                                                 "text-xs font-medium",
-                                                isLiked ? "text-[#004B63]" : "text-slate-400",
-                                                "hover:text-[#0A3550]",
+                                                isLiked ? "text-red-500" : "text-slate-400",
+                                                "hover:text-red-500",
                                                 "transition-colors",
                                                 "disabled:opacity-50 disabled:cursor-not-allowed"
                                             )}
                                         >
                                             {isLoadingLike ? (
-                                                <div className="w-3 h-3 border border-cyan-200 border-t-cyan-500 rounded-full animate-spin" />
+                                                <div className="w-3 h-3 border border-[#004B63]/20 border-t-[#004B63] rounded-full animate-spin" />
                                             ) : (
-                                                <Icon name={isLiked ? "fa-heart" : "fa-heart"} />
+                                                <Icon name={isLiked ? "fa-heart" : "fa-heart"} className={isLiked ? "fill-current" : ""} />
                                             )}
                                             <span>{formatLikeCount(likeCount)}</span>
                                         </button>
                                     </div>
 
-                                    {/* Contenido del mensaje */}
                                     <div className="mb-3">
                                         <h4 className="text-sm font-semibold text-slate-800 mb-1">
                                             {post.title}
@@ -408,13 +334,12 @@ const IALabForumOptimized = ({
                                         </p>
                                     </div>
 
-                                    {/* Etiquetas y estadísticas */}
                                     <div className="flex items-center justify-between">
                                         <div className="flex flex-wrap gap-1">
                                             {post.tags?.slice(0, 2).map((tag, tagIndex) => (
                                                 <span
                                                     key={tagIndex}
-                                                    className="px-2 py-0.5 bg-slate-100 text-slate-600 text-[10px] font-medium rounded-full"
+                                                    className="px-2 py-0.5 bg-[#004B63]/5 text-[#004B63] text-[10px] font-medium rounded-full"
                                                 >
                                                     {tag}
                                                 </span>
@@ -437,33 +362,30 @@ const IALabForumOptimized = ({
                             );
                         })}
 
-                        {/* Botón para cargar más mensajes */}
                         {!showAll && forumPosts.length > initialLimit && (
                             <div className="text-center pt-2">
                                 <button
                                     onClick={handleLoadMore}
-                                className="text-xs text-[#004B63] hover:text-[#0A3550] font-medium"
+                                    className="text-xs text-[#004B63] hover:text-[#0A3550] font-medium"
                                 >
                                     Ver {forumPosts.length - initialLimit} mensajes más ↓
                                 </button>
                             </div>
                         )}
 
-                        {/* Elemento para scroll automático */}
                         <div ref={messagesEndRef} />
                     </div>
                 )}
             </div>
 
-            {/* Input para enviar mensajes (Fijo en parte inferior) */}
+            {/* Input */}
             <div className="border-t border-[#004B63]/8 p-4 md:p-6">
                 <form onSubmit={handleSubmitMessage} className="relative">
                     <div className="flex items-center gap-3">
-                        {/* Avatar del usuario actual */}
                         {user && (
                             <div className={cn(
                                 "w-8 h-8 rounded-full flex-shrink-0",
-                                "bg-gradient-to-tr from-cyan-600 to-cyan-400",
+                                "bg-gradient-to-tr from-[#004B63] to-[#0A3550]",
                                 "flex items-center justify-center",
                                 "shadow-sm"
                             )}>
@@ -473,7 +395,6 @@ const IALabForumOptimized = ({
                             </div>
                         )}
 
-                        {/* Input de texto */}
                         <div className="flex-1 relative">
                             <input
                                 type="text"
@@ -485,7 +406,7 @@ const IALabForumOptimized = ({
                                     "w-full px-4 py-3 pr-12",
                                     "bg-white border border-slate-200 rounded-xl",
                                     "text-sm text-slate-700 placeholder:text-slate-400/70",
-                                    "focus:outline-none focus:ring-2 focus:ring-[#004B63]/20 focus:border-[#004B63]/30",
+                                    "focus:outline-none focus:ring-2 focus:ring-[#00BCD4]/20 focus:border-[#00BCD4]/30",
                                     "disabled:opacity-50 disabled:cursor-not-allowed",
                                     "transition-all duration-200",
                                     "shadow-sm focus:shadow-md"
@@ -493,7 +414,6 @@ const IALabForumOptimized = ({
                                 maxLength={500}
                             />
 
-                            {/* Contador de caracteres */}
                             {newMessage.length > 0 && (
                                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                                     <span className={cn(
@@ -506,23 +426,21 @@ const IALabForumOptimized = ({
                             )}
                         </div>
 
-                        {/* Botón de enviar con gradiente premium */}
                         <button
                             type="submit"
                             disabled={!newMessage.trim() || isSubmitting || !user}
                             className={cn(
-                                "px-4 py-3 rounded-2xl",
-                                "bg-gradient-to-r from-[#004B63] to-[#0A3550]",
+                                "px-4 py-3 rounded-xl",
+                                "bg-gradient-to-r from-[#004B63] to-[#00BCD4]",
                                 "text-white text-sm font-medium",
-                                "hover:from-[#0A3550] hover:to-[#00374A]",
+                                "hover:shadow-[0_0_15px_rgba(0,188,212,0.3)]",
                                 "disabled:from-slate-300 disabled:to-slate-400 disabled:cursor-not-allowed",
                                 "transition-all duration-200",
                                 "flex items-center justify-center gap-2",
-                                "shadow-sm hover:shadow-md",
+                                "shadow-sm",
                                 "relative overflow-hidden group"
                             )}
                         >
-                            {/* Efecto de brillo en hover */}
                             <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500" />
                             {isSubmitting ? (
                                 <>
@@ -538,7 +456,6 @@ const IALabForumOptimized = ({
                         </button>
                     </div>
 
-                    {/* Mensaje para usuarios no autenticados */}
                     {!user && (
                         <div className="mt-2 text-center">
                             <p className="text-xs text-slate-500">
