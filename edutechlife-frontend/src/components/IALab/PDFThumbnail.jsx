@@ -16,7 +16,7 @@ import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { cn } from '../forum/forumDesignSystem';
-import guiaAnatomiaPromptPdf from '../../assets/docs/guia-anatomia-prompt.pdf';
+import guiaAnatomiaPromptPdf from '@/assets/docs/guia-anatomia-prompt.pdf?url';
 
 /**
  * Componente principal PDFThumbnail

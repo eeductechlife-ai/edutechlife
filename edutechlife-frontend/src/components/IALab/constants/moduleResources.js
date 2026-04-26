@@ -10,7 +10,7 @@
  * - Metadatos completos para cada recurso
  */
 
-import guiaAnatomiaPromptPdf from '../../../assets/docs/guia-anatomia-prompt.pdf';
+import guiaAnatomiaPromptPdf from '@/assets/docs/guia-anatomia-prompt.pdf?url';
 
 export const moduleResources = {
   // MÓDULO 1: INGENIERÍA DE PROMPTS
