@@ -316,9 +316,11 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                                 <span>{copied ? "Copiado" : "Copiar"}</span>
                             </button>
                         </div>
-                        <p className="text-slate-700 text-sm leading-relaxed font-mono whitespace-pre-wrap">
-                            {genData.optimizedPrompt}
-                        </p>
+                        <div className="overflow-x-auto">
+                          <p className="text-slate-700 text-sm leading-relaxed font-mono whitespace-pre-wrap">
+                              {genData.optimizedPrompt}
+                          </p>
+                        </div>
                     </div>
 
                     <div className="bg-[#004B63]/5 border-l-4 border-[#004B63] rounded-r-xl p-4 md:p-5">

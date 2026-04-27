@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Icon } from '../../utils/iconMapping.jsx';
 import { IALabProvider, useIALabContext } from '../../context/IALabContext';
 import IALabHeader from './IALabHeader';
 import IALabSidebar from './IALabSidebar';
@@ -29,6 +30,7 @@ const IALabContent = () => {
     const [showExamModal, setShowExamModal] = useState(false);
     const [showQuizModal, setShowQuizModal] = useState(false);
     const [showValerioPanel, setShowValerioPanel] = useState(false);
+    const [showMobileMenu, setShowMobileMenu] = useState(false);
 
     // Debug logging
     React.useEffect(() => {
@@ -77,11 +79,40 @@ const IALabContent = () => {
                 
                 {/* Layout principal - Flexbox estricto para evitar overlap */}
                 <div className="flex flex-1 overflow-hidden">
-                    {/* Sidebar - ancho fijo 256px (w-64) */}
-                    <IALabSidebar />
+                    {/* Sidebar - oculto en móviles, visible desde lg */}
+                    <div className="hidden lg:flex">
+                      <IALabSidebar />
+                    </div>
+                    
+                    {/* Botón hamburguesa para móvil */}
+                    <button
+                      className="lg:hidden fixed top-20 left-4 z-40 w-10 h-10 bg-gradient-to-br from-[#004B63] to-[#00BCD4] rounded-xl shadow-lg shadow-[#004B63]/20 flex items-center justify-center text-white hover:scale-105 active:scale-95 transition-all duration-300"
+                      onClick={() => setShowMobileMenu(true)}
+                      aria-label="Abrir menú de navegación"
+                    >
+                      <Icon name="fa-bars" className="text-sm" />
+                    </button>
+
+                    {/* Drawer móvil con overlay */}
+                    {showMobileMenu && (
+                      <div className="fixed inset-0 z-50 lg:hidden">
+                        <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowMobileMenu(false)} />
+                        <div className="absolute left-0 top-0 bottom-0 w-72 bg-white shadow-2xl overflow-y-auto">
+                          <div className="flex justify-end p-4">
+                            <button
+                              onClick={() => setShowMobileMenu(false)}
+                              className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200 transition-colors"
+                            >
+                              <Icon name="fa-xmark" className="text-sm" />
+                            </button>
+                          </div>
+                          <IALabSidebar />
+                        </div>
+                      </div>
+                    )}
                     
                      {/* Área de Contenido Principal - scroll propio */}
-                     <main className="flex-1 overflow-y-auto h-full px-5 py-5 md:px-8 md:py-6">
+                     <main className="flex-1 overflow-y-auto h-full px-4 py-4 md:px-8 md:py-6 lg:px-10 lg:py-8">
                          <div className="space-y-6 w-full max-w-5xl pb-20">
                             {/* 1. PRIMERO: TÍTULO PRINCIPAL ARRIBA DEL TODO */}
                             <div className="relative z-30">
@@ -170,7 +201,7 @@ const IALabContent = () => {
                 
                  {/* FAB de Valerio - posicionado relativo al viewport */}
                  <button 
-                     className="fixed bottom-8 right-8 w-16 h-16 bg-gradient-to-br from-[#004B63] to-[#00BCD4] rounded-2xl shadow-[0_12px_40px_rgba(0,75,99,0.25)] hover:shadow-[0_20px_50px_rgba(0,75,99,0.35)] hover:scale-105 active:scale-95 transition-all duration-300 z-50 flex items-center justify-center group"
+                     className="fixed bottom-4 right-4 lg:bottom-8 lg:right-8 w-12 h-12 lg:w-16 lg:h-16 bg-gradient-to-br from-[#004B63] to-[#00BCD4] rounded-xl lg:rounded-2xl shadow-[0_12px_40px_rgba(0,75,99,0.25)] hover:shadow-[0_20px_50px_rgba(0,75,99,0.35)] hover:scale-105 active:scale-95 transition-all duration-300 z-50 flex items-center justify-center group"
                      onClick={() => handleGlobalAction('OPEN_VALERIO')}
                      aria-label="Abrir panel de coach IA Valerio"
                  >

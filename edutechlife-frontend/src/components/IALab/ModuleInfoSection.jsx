@@ -50,7 +50,7 @@ const ModuleInfoSection = ({ className = '', ...rest }) => {
                 <h3 className="text-lg md:text-xl font-bold text-[#004B63]">
                     Lo que aprenderás
                 </h3>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {learningPoints.map((point, index) => (
                         <motion.div 
                             key={index}
