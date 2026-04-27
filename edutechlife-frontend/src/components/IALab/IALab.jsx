@@ -26,7 +26,7 @@ import ErrorBoundary from '../forum/ErrorBoundary';
  * @returns {JSX.Element} Componente IALab completo
  */
 const IALabContent = () => {
-    const { showPremiumEvaluationModal, setShowPremiumEvaluationModal } = useIALabContext();
+    const { showPremiumEvaluationModal, setShowPremiumEvaluationModal, user, completedModules } = useIALabContext();
     const [showExamModal, setShowExamModal] = useState(false);
     const [showQuizModal, setShowQuizModal] = useState(false);
     const [showValerioPanel, setShowValerioPanel] = useState(false);
@@ -74,8 +74,22 @@ const IALabContent = () => {
                 <div className="fixed top-0 right-0 w-[30%] h-[40%] bg-gradient-to-bl from-[#004B63]/5 via-[#00BCD4]/3 to-transparent rounded-bl-[100px] pointer-events-none" />
                 <div className="fixed bottom-0 left-0 w-[25%] h-[35%] bg-gradient-to-tr from-[#004B63]/4 via-transparent to-transparent rounded-tr-[100px] pointer-events-none" />
                 
-                {/* Header principal - ocupa altura natural y no flota sobre contenido */}
-                <IALabHeader onAction={handleGlobalAction} />
+                {/* Mobile Header - solo en móviles */}
+                <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white/95 backdrop-blur-sm z-50 flex items-center justify-between px-4 border-b border-slate-100">
+                  <h1 className="text-2xl font-bold text-[#004B63] tracking-tight">IA Lab</h1>
+                  <button
+                    onClick={() => setShowMobileMenu(true)}
+                    className="h-10 w-10 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-colors shadow-sm"
+                    aria-label="Abrir menú"
+                  >
+                    <Icon name="fa-bars" className="w-5 h-5" />
+                  </button>
+                </div>
+
+                {/* Header principal - oculto en móviles */}
+                <div className="hidden md:block">
+                  <IALabHeader onAction={handleGlobalAction} />
+                </div>
                 
                 {/* Layout principal - Flexbox estricto para evitar overlap */}
                 <div className="flex flex-1 overflow-hidden">
@@ -83,22 +97,23 @@ const IALabContent = () => {
                     <div className="hidden lg:flex">
                       <IALabSidebar />
                     </div>
-                    
-                    {/* Botón hamburguesa para móvil */}
-                    <button
-                      className="lg:hidden fixed top-20 left-4 z-40 w-10 h-10 bg-gradient-to-br from-[#004B63] to-[#00BCD4] rounded-xl shadow-lg shadow-[#004B63]/20 flex items-center justify-center text-white hover:scale-105 active:scale-95 transition-all duration-300"
-                      onClick={() => setShowMobileMenu(true)}
-                      aria-label="Abrir menú de navegación"
-                    >
-                      <Icon name="fa-bars" className="text-sm" />
-                    </button>
 
                     {/* Drawer móvil con overlay */}
                     {showMobileMenu && (
                       <div className="fixed inset-0 z-50 lg:hidden">
                         <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowMobileMenu(false)} />
                         <div className="absolute left-0 top-0 bottom-0 w-72 bg-white shadow-2xl overflow-y-auto">
-                          <div className="flex justify-end p-4">
+                          {/* Perfil del usuario en el drawer */}
+                          <div className="flex items-center justify-between p-4 border-b border-slate-100">
+                            <div className="flex items-center gap-3">
+                              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#004B63] to-[#0A3550] flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                                {user?.full_name ? user.full_name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'U'}
+                              </div>
+                              <div>
+                                <p className="text-sm font-semibold text-slate-800 leading-tight">{user?.full_name || 'Usuario'}</p>
+                                <p className="text-xs text-slate-500">{completedModules.length}/5 Módulos</p>
+                              </div>
+                            </div>
                             <button
                               onClick={() => setShowMobileMenu(false)}
                               className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200 transition-colors"
@@ -112,8 +127,24 @@ const IALabContent = () => {
                     )}
                     
                      {/* Área de Contenido Principal - scroll propio */}
-                     <main className="flex-1 overflow-y-auto h-full px-4 py-4 md:px-8 md:py-6 lg:px-10 lg:py-8">
-                         <div className="space-y-6 w-full max-w-5xl pb-20">
+                     <main className="flex-1 overflow-y-auto h-full px-4 pt-20 pb-4 md:px-8 md:py-6 lg:px-10 lg:py-8">
+                          <div className="space-y-6 w-full max-w-5xl pb-20">
+                            {/* Info bar móvil - solo visible en móvil */}
+                            <div className="md:hidden flex items-center justify-between px-4 py-3 bg-white rounded-xl border border-[#004B63]/8 shadow-sm">
+                              <div className="flex items-center gap-2">
+                                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#004B63] to-[#0A3550] flex items-center justify-center text-white text-xs font-bold">
+                                  {user?.full_name ? user.full_name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'U'}
+                                </div>
+                                <div>
+                                  <p className="text-xs font-semibold text-slate-800 leading-tight">{user?.full_name || 'Usuario'}</p>
+                                  <p className="text-[10px] text-slate-500">Módulo 1 de 5</p>
+                                </div>
+                              </div>
+                              <div className="px-3 py-1.5 bg-[#004B63]/8 border border-[#004B63]/15 text-[#004B63] rounded-lg font-semibold text-xs">
+                                {completedModules.length}/5 Módulos
+                              </div>
+                            </div>
+
                             {/* 1. PRIMERO: TÍTULO PRINCIPAL ARRIBA DEL TODO */}
                             <div className="relative z-30">
                               <IALabModuleHeader onAction={handleGlobalAction} />
