@@ -11,6 +11,7 @@ import IALabChallengeSection from './IALabChallengeSection';
 import IALabForumSection from './IALabForumSection';
 import IALabForumOptimized from './IALabForumOptimized';
 import IALabSynthesizer from './IALabSynthesizer';
+import IALabTutoriasVirtuales from './IALabTutoriasVirtuales';
 import ReactivePromptStation from './ReactivePromptStation';
 import IALabEvaluationModal from './IALabEvaluationModal';
 import IALabEvaluationModalPremium from './IALabEvaluationModalPremium';
@@ -181,7 +182,12 @@ const IALabContent = () => {
                                         compact={false}
                                         initialLimit={5}
                                     />
-                                </ErrorBoundary>
+                                    </ErrorBoundary>
+                                </div>
+
+                            {/* Tutorías Virtuales */}
+                            <div className="mt-6">
+                              <IALabTutoriasVirtuales />
                             </div>
                         </div>
                     </main>

@@ -100,14 +100,14 @@ const LessonCardDetailed = ({
   };
 
   return (
-    <div 
+    <motion.div 
+      whileHover={{ scale: 1.02, y: -4 }}
+      transition={{ duration: 0.2 }}
       className={`
         bg-white
         border ${colors.border}
-        shadow-sm
+        shadow-[0px_4px_16px_rgba(17,17,26,0.05)]
         rounded-2xl overflow-hidden
-        transition-all duration-300 ease-out
-        hover:shadow-lg hover:-translate-y-0.5
         ${isOpen ? 'ring-2 ring-[#004B63]/15' : ''}
       `}
       style={{
@@ -278,7 +278,7 @@ const LessonCardDetailed = ({
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 };
 

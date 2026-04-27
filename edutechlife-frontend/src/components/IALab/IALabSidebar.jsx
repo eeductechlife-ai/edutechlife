@@ -1,7 +1,6 @@
 import React from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabContext } from '../../context/IALabContext';
-import { UserButton } from '@clerk/react';
 
 /**
  * COMPONENTE: IALabSidebar
@@ -312,37 +311,6 @@ const IALabSidebar = () => {
                 <span className="text-xs font-bold text-[#004B63]">{curr?.projects}</span>
               </div>
             </div>
-          </div>
-
-          {/* Sección: Control de Cuenta - UserButton de Clerk */}
-          <div className="px-1 w-full mt-6 pt-5 border-t border-[#004B63]/8">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="text-[#004B63]">
-                <Icon name="fa-user-circle" className="text-sm" />
-              </div>
-              <h3 className="text-xs font-bold tracking-[0.12em] uppercase text-[#004B63]">
-                MI CUENTA
-              </h3>
-              <div className="flex-1 h-px bg-gradient-to-r from-[#004B63]/20 via-[#00BCD4]/20 to-transparent"></div>
-            </div>
-            <div className="flex justify-center p-3">
-              <div className="transform scale-110">
-                <UserButton 
-                  appearance={{
-                    elements: {
-                      rootBox: "w-full",
-                      avatarBox: "w-11 h-11 border-2 border-[#004B63]/10 shadow-md",
-                      userButtonAvatarImage: "rounded-full",
-                      userButtonTrigger: "bg-gradient-to-r from-[#004B63] to-[#0A3550] hover:from-[#0A3550] hover:to-[#004B63] transition-all duration-300 shadow-sm"
-                    }
-                  }}
-                  afterSignOutUrl="/"
-                />
-              </div>
-            </div>
-            <p className="text-xs text-center text-slate-400 mt-2">
-              Gestiona tu perfil, seguridad y sesión
-            </p>
           </div>
        </div>
      </aside>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { motion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useAuth } from '../../context/AuthContext';
 import useIALabForum from '../../hooks/IALab/useIALabForum';
@@ -116,9 +117,11 @@ const IALabForumOptimized = ({
     const forumStats = getForumStats();
 
     return (
-        <div
+        <motion.div
+            whileHover={{ scale: 1.02, y: -4 }}
+            transition={{ duration: 0.2 }}
             className={cn(
-                "relative z-10 bg-white rounded-2xl shadow-sm border border-[#004B63]/8",
+                "relative z-10 bg-white rounded-2xl shadow-[0px_4px_16px_rgba(17,17,26,0.05)] border border-slate-100",
                 "flex flex-col overflow-hidden",
                 compact ? "h-96" : "h-fit",
                 className
@@ -426,12 +429,15 @@ const IALabForumOptimized = ({
                             )}
                         </div>
 
-                        <button
+                        <motion.button
                             type="submit"
+                            whileHover={{ scale: 1.03 }}
+                            whileTap={{ scale: 0.97 }}
+                            transition={{ type: "spring", stiffness: 400, damping: 17 }}
                             disabled={!newMessage.trim() || isSubmitting || !user}
                             className={cn(
                                 "px-4 py-3 rounded-xl",
-                                "bg-gradient-to-r from-[#004B63] to-[#00BCD4]",
+                                "bg-gradient-to-r from-[#004B63] via-[#003A4D] to-[#06B6D4]",
                                 "text-white text-sm font-medium",
                                 "hover:shadow-[0_0_15px_rgba(0,188,212,0.3)]",
                                 "disabled:from-slate-300 disabled:to-slate-400 disabled:cursor-not-allowed",
@@ -453,7 +459,7 @@ const IALabForumOptimized = ({
                                     <span>Enviar</span>
                                 </>
                             )}
-                        </button>
+                        </motion.button>
                     </div>
 
                     {!user && (
@@ -467,7 +473,7 @@ const IALabForumOptimized = ({
                     )}
                 </form>
             </div>
-        </div>
+        </motion.div>
     );
 };
 

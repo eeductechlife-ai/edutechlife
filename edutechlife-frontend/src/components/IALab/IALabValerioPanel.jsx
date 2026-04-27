@@ -64,17 +64,11 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
     // Inicializar mensaje de bienvenida
     useEffect(() => {
         if (isOpen && conversation.length === 0) {
-            const welcomeMessage = `¡Hola! Soy Valerio, tu coach de IA en Edutechlife. 
+            const welcomeMessage = `¡Hola! Qué gusto tenerte por acá. Soy Valerio, tu coach, y veo que estás en el módulo "${currentModule?.title}" — ¡qué tema tan interesante!
 
-Actualmente estás en el módulo **"${currentModule?.title}"** (nivel ${userLevel < 3 ? 'principiante' : userLevel < 6 ? 'intermedio' : 'avanzado'}).
+No importa si esto es nuevo para ti, estamos en nivel ${userLevel < 3 ? 'principiante' : userLevel < 6 ? 'intermedio' : 'avanzado'}, y lo iremos descubriendo juntos.
 
-¿En qué puedo ayudarte hoy? Puedo:
-• Explicar conceptos del módulo
-• Dar ejemplos prácticos
-• Ayudar con el desafío del curso
-• Responder tus preguntas sobre IA
-
-¡Estoy aquí para apoyarte en tu aprendizaje!`;
+Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, ayudarte con el desafío, o simplemente conversar sobre lo que estás aprendiendo. ¿Por dónde te gustaría empezar?`;
             
             setMessage(welcomeMessage);
             setConversation([{
@@ -120,77 +114,42 @@ Actualmente estás en el módulo **"${currentModule?.title}"** (nivel ${userLeve
             let response = '';
             
             if (inputText.toLowerCase().includes('explic') || inputText.toLowerCase().includes('qué es')) {
-                response = `**Sobre "${currentModule?.title}":**
+                const topicList = currentModule?.topics?.join(', ') || 'conceptos clave de IA';
+                response = `¡Claro que sí! Vamos a verlo con calma.
 
-Este módulo se enfoca en ${currentModule?.topics?.join(', ') || 'conceptos clave de IA'}.
+Estamos en el módulo de ${currentModule?.title || 'este tema'}, donde exploramos ${topicList}. La idea es que entiendas cómo funciona cada concepto y por qué es importante, no solo que lo memorices.
 
-**Conceptos principales:**
-1. ${currentModule?.topics?.[0] || 'Fundamentos de prompts'}
-2. ${currentModule?.topics?.[1] || 'Técnicas avanzadas'}
-3. ${currentModule?.topics?.[2] || 'Aplicaciones prácticas'}
+Como vas en nivel ${userLevel < 3 ? 'principiante' : userLevel < 6 ? 'intermedio' : 'avanzado'}, te sugiero ${userLevel < 3 ? 'empezar por lo básico: familiarízate con los fundamentos y practica con ejemplos sencillos. No te preocupes si al principio no sale perfecto, cada intento cuenta' : userLevel < 6 ? 'profundizar en las técnicas intermedias y aplicarlas a casos reales. Ya tienes una base sólida, ahora es momento de retarte un poco más' : 'explorar las aplicaciones avanzadas. Estás en un nivel donde puedes innovar y optimizar para obtener resultados profesionales'}.
 
-**Para tu nivel (${userLevel < 3 ? 'principiante' : userLevel < 6 ? 'intermedio' : 'avanzado'}):**
-Te recomiendo ${userLevel < 3 ? 'empezar con los conceptos básicos y practicar con ejemplos simples.' : userLevel < 6 ? 'profundizar en las técnicas intermedias y aplicar a casos reales.' : 'explorar las aplicaciones avanzadas y optimizar para producción.'}
-
-¿Te gustaría que profundice en algún aspecto específico?`;
+Dime, ¿hay algo en particular de este tema que te gustaría que te explique con más detalle?`;
             } else if (inputText.toLowerCase().includes('ejemplo') || inputText.toLowerCase().includes('cómo hacer')) {
-                response = `**Ejemplo práctico para "${currentModule?.title}":**
+                response = `Buena pregunta, me encanta que quieras ver esto en acción.
 
-**Contexto:** ${currentModule?.challenge || 'Crear un prompt efectivo para resolver problemas complejos'}
+Pensemos en el desafío de este módulo: ${currentModule?.challenge || 'crear algo práctico con lo aprendido'}. Una forma de abordarlo es así:
 
-**Ejemplo paso a paso:**
+Primero, pregúntate: ¿qué quiero lograr exactamente? Tener claro el objetivo es clave. Luego, piensa en el rol que necesitas que la IA asuma y dale contexto suficiente para que entienda tu situación.
 
-1. **Identifica el objetivo:** ¿Qué quieres lograr con el prompt?
-2. **Define el rol:** Especifica el expertise requerido
-3. **Establece el contexto:** Proporciona información relevante
-4. **Especifica el formato:** Define cómo quieres la respuesta
-5. **Agrega restricciones:** Límites y consideraciones importantes
+Un ejemplo concreto sería algo como: "Actúa como experto en ${currentModule?.topics?.[0] || 'ingeniería de prompts'} y ayúdame a resolver esto. Necesito una solución paso a paso que incluya análisis, implementación y consideraciones importantes."
 
-**Ejemplo concreto:**
-\`\`\`
-Como experto en ${currentModule?.topics?.[0] || 'ingeniería de prompts'}, necesito que actúes como consultor para resolver [problema específico]. Proporciona una solución estructurada con:
-- Análisis del problema
-- Pasos de implementación  
-- Consideraciones técnicas
-- Ejemplos de código si aplica
-- Limitaciones y alternativas
-
-Mantén un tono ${userLevel < 3 ? 'educativo y accesible' : 'técnico y profesional'}.
-\`\`\`
-
-¿Te sirve este ejemplo o necesitas uno más específico?`;
+¿Vas viendo por dónde va la cosa? Si quieres, podemos construir un ejemplo juntos paso a paso.`;
             } else if (inputText.toLowerCase().includes('desafío') || inputText.toLowerCase().includes('retro')) {
-                response = `**Para el desafío "${currentModule?.challenge}":**
+                response = `Entiendo, los desafíos a veces pueden parecer complicados al principio, pero tranquilo, vamos por partes.
 
-**Estrategia recomendada:**
+Para el desafío de ${currentModule?.challenge || 'este módulo'}, te recomiendo esta estrategia:
 
-1. **Análisis inicial:** Lee cuidadosamente el enunciado del desafío
-2. **Planificación:** Divide el problema en partes manejables
-3. **Investigación:** Revisa los conceptos del módulo relacionados
-4. **Implementación:** Aplica lo aprendido paso a paso
-5. **Validación:** Verifica que cumples con los requisitos
+Primero, tómate un momento para leer bien el enunciado y entender qué se pide exactamente. Luego, divide el problema en partes más pequeñas — es más fácil resolver varios pasos pequeños que uno gigante.
 
-**Consejos específicos:**
-- ${userLevel < 3 ? 'Enfócate en entender los conceptos básicos primero' : userLevel < 6 ? 'Experimenta con diferentes enfoques y técnicas' : 'Optimiza para eficiencia y escalabilidad'}
-- Documenta tu proceso de pensamiento
-- Pide feedback si te atascas
-- Celebra los pequeños logros
+${userLevel < 3 ? 'Enfócate en comprender los conceptos básicos antes de intentar resolverlo todo. No hay prisa' : userLevel < 6 ? 'Prueba diferentes enfoques y compara resultados. La experimentación es tu mejor herramienta' : 'Busca optimizar no solo la solución sino también tu proceso. Piensa en escalabilidad y eficiencia'}.
 
-**Recuerda:** El objetivo es aprender, no solo completar el desafío. ¡Tómate tu tiempo!`;
+Y recuerda: el objetivo real es aprender en el camino, no solo llegar al final. Cada intento, incluso si no sale perfecto, te está enseñando algo valioso. Cuéntame cómo te va y si te atascas en algún punto, aquí estoy.`;
             } else {
-                response = `**Entiendo que preguntas:** "${inputText}"
+                response = `Entiendo tu pregunta sobre "${inputText}". Déjame pensar cómo puedo ayudarte mejor con eso.
 
-Como coach de IA especializado en ${currentModule?.title}, te recomiendo:
+Considerando que estás en ${currentModule?.title || 'este módulo'}, te sugiero que revises el material que ya tienes disponible, porque allí encuentras las bases para responder tu duda. Luego, practica con ejemplos relacionados — la práctica es la que realmente fija los conceptos.
 
-1. **Revisar el material del módulo** relacionado con tu pregunta
-2. **Practicar con ejemplos** para internalizar los conceptos
-3. **Consultar la comunidad** si necesitas perspectivas adicionales
-4. **Experimentar** con diferentes enfoques
+Y si quieres, también puedes consultar con la comunidad del foro, a veces una perspectiva diferente es justo lo que necesitas.
 
-**Para profundizar más:**
-¿Te gustaría que te explique algún concepto específico del módulo o prefieres un ejemplo práctico relacionado con tu pregunta?
-
-¡Estoy aquí para ayudarte a dominar ${currentModule?.title || 'la ingeniería de prompts'}!`;
+¿Te gustaría que te explique algún concepto en particular o prefieres un ejemplo práctico relacionado con tu pregunta? Lo que más te sirva, aquí estoy para eso.`;
             }
 
             // Agregar respuesta a la conversación

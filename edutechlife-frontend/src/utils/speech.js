@@ -8,9 +8,9 @@ const VOICE_PROFILES = {
   },
   valerio: { 
     languageCode: 'es-US', 
-    name: 'es-US-Journey-F', 
-    pitch: 0, // Journey no soporta pitch
-    speakingRate: 0.95,
+    name: 'es-US-Neural2-D', 
+    pitch: 0,
+    speakingRate: 1.0,
     volumeGainDb: 2.5
   },
   sistema: { 
@@ -72,6 +72,12 @@ const VOICE_FALLBACKS = {
     { languageCode: 'es-US', name: 'es-US-Journey-F', pitch: 0, speakingRate: 0.95 },
     { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: 0, speakingRate: 1.0 },
     { languageCode: 'es-ES', name: 'es-ES-Neural2-A', pitch: 0, speakingRate: 0.95 }
+  ],
+  valerio: [
+    { languageCode: 'es-US', name: 'es-US-Neural2-D', pitch: 0, speakingRate: 1.0 },
+    { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 0, speakingRate: 1.0 },
+    { languageCode: 'es-ES', name: 'es-ES-Neural2-B', pitch: 0, speakingRate: 1.0 },
+    { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: 0, speakingRate: 1.0 }
   ],
   nico: [
     { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 0, speakingRate: 1.0 },

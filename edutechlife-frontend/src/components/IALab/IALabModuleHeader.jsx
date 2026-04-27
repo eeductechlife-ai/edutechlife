@@ -14,7 +14,7 @@ const IALabModuleHeader = ({ onAction }) => {
   const curr = modules.find(m => m.id === activeMod) || modules[0];
   
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-[#004B63]/8 overflow-hidden">
+    <div className="bg-white rounded-2xl shadow-[0px_4px_16px_rgba(17,17,26,0.05)] border border-slate-100 overflow-hidden">
       <div className="bg-gradient-to-r from-[#004B63] to-[#00BCD4] p-5 md:p-6">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 bg-white/15 rounded-xl flex items-center justify-center shadow-inner">

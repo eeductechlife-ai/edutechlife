@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import TopicResourcesModal from './TopicResourcesModal';
 
@@ -43,7 +44,11 @@ const ModuleOverviewCard = ({ onAction }) => {
 
     return (
       <React.Fragment>
-        <div className="relative z-10 bg-white rounded-2xl border border-[#004B63]/8 shadow-sm p-5 md:p-8 overflow-hidden mb-8">
+        <motion.div
+        whileHover={{ scale: 1.02, y: -4 }}
+        transition={{ duration: 0.2 }}
+        className="relative z-10 bg-white rounded-2xl border border-slate-100 shadow-[0px_4px_16px_rgba(17,17,26,0.05)] p-5 md:p-8 overflow-hidden mb-8"
+      >
           {/* Elementos decorativos de fondo */}
           <div className="absolute -top-6 -right-6 w-32 h-32 bg-gradient-to-br from-[#004B63]/6 to-[#00BCD4]/4 rounded-full blur-2xl"></div>
           <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-tr from-[#004B63]/4 to-[#00BCD4]/2 rounded-full blur-2xl"></div>
@@ -77,8 +82,11 @@ const ModuleOverviewCard = ({ onAction }) => {
 {/* Temas en grid 2x2 */}
                 <div className="grid grid-cols-2 gap-2 mt-4">
                   {moduleData.topics.map((tema, index) => (
-                    <button
+                    <motion.button
                       key={index}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 17 }}
                       onClick={() => {
                         setSelectedTopic({
                           title: tema,
@@ -86,14 +94,14 @@ const ModuleOverviewCard = ({ onAction }) => {
                         });
                         setIsResourcesModalOpen(true);
                       }}
-                      className="flex items-center gap-1.5 px-3 py-2 bg-slate-50 border border-slate-100 rounded-lg hover:bg-white hover:border-[#004B63]/25 hover:shadow-sm transition-all duration-300 cursor-pointer hover:scale-[1.02] active:scale-[0.98] group"
+                      className="flex items-center gap-1.5 px-3 py-2 bg-slate-50 border border-slate-100 rounded-lg hover:bg-white hover:border-[#004B63]/25 hover:shadow-sm transition-all duration-300 cursor-pointer group"
                       aria-label={`Ver recursos del tema: ${tema}`}
                     >
                       <div className="w-2 h-2 rounded-full bg-[#004B63] flex-shrink-0 group-hover:scale-125 transition-transform duration-300"></div>
                       <span className="text-sm text-slate-700 group-hover:text-[#004B63] group-hover:font-semibold transition-colors duration-300 line-clamp-1 text-left">
                         {tema}
                       </span>
-                    </button>
+                    </motion.button>
                   ))}
                 </div>
              </div>
@@ -115,23 +123,26 @@ const ModuleOverviewCard = ({ onAction }) => {
                    <div className="w-10 h-0.5 bg-gradient-to-r from-[#004B63] to-[#00BCD4] rounded-full mt-3"></div>
                  </div>
                ))}
-              {/* Botón: Examen del Módulo */}
-              <button
-                onClick={() => onAction('OPEN_QUIZ')}
-                className="bg-gradient-to-r from-[#00BCD4] to-[#4DD0E1] rounded-xl p-4 flex flex-col items-center justify-center text-center hover:shadow-lg hover:shadow-[#00BCD4]/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 group cursor-pointer border-0"
-              >
+               {/* Botón: Examen del Módulo */}
+               <motion.button
+                 onClick={() => onAction('OPEN_QUIZ')}
+                 whileHover={{ scale: 1.05 }}
+                 whileTap={{ scale: 0.95 }}
+                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                 className="bg-gradient-to-br from-[#004B63] via-[#004B63] to-[#06B6D4] rounded-xl p-4 flex flex-col items-center justify-center text-center hover:from-[#003a4d] hover:via-[#004B63] hover:to-[#08c5e6] hover:shadow-lg transition-all duration-300 shadow-md hover:shadow-xl group cursor-pointer border-0"
+               >
                 <div className="flex items-center gap-2 mb-1">
                   <Icon name="fa-clipboard-check" className="text-white text-lg" />
                   <div className="text-lg font-bold text-white">Examen</div>
                 </div>
                 <div className="text-sm text-white/80 font-medium">del Módulo</div>
                 <div className="w-10 h-0.5 bg-white/40 rounded-full mt-3 group-hover:w-16 transition-all duration-300"></div>
-              </button>
+              </motion.button>
             </div>
            
             {/* Elemento decorativo de borde superior */}
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#00BCD4] rounded-t-2xl" />
-         </div>
+         </motion.div>
 
          {/* Modal Central Premium para recursos del tema */}
          <TopicResourcesModal

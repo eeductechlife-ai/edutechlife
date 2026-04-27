@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { motion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import useIALabSynthesizer from '../../hooks/IALab/useIALabSynthesizer';
 import { cn } from '../forum/forumDesignSystem';
@@ -103,10 +104,20 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
 
     const improvements = genData?.feedback?.improvements || [];
 
+    const isLoading = loading;
     return (
-        <div 
+        <motion.div
+            whileHover={{ scale: 1.02, y: -4 }}
+            transition={{ duration: 0.2 }}
+            animate={isLoading ? {
+                boxShadow: [
+                    "0px 4px 16px rgba(17,17,26,0.05)",
+                    "0px 0px 30px rgba(0,75,99,0.15)",
+                    "0px 4px 16px rgba(17,17,26,0.05)"
+                ]
+            } : {}}
             className={cn(
-                "relative z-10 bg-white rounded-2xl p-5 md:p-8 shadow-sm border border-[#004B63]/8 overflow-hidden",
+                "relative z-10 bg-white rounded-2xl p-5 md:p-8 shadow-[0px_4px_16px_rgba(17,17,26,0.05)] border border-slate-100 overflow-hidden",
                 "space-y-6",
                 className
             )}
@@ -166,16 +177,17 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                     </div>
 
                     <div className="mt-6">
-                        <button
+                        <motion.button
                             onClick={handleOptimize}
                             disabled={loading || !isValidInput(input)}
+                            whileHover={{ scale: 1.03 }}
+                            whileTap={{ scale: 0.97 }}
+                            transition={{ type: "spring", stiffness: 400, damping: 17 }}
                             className={cn(
                                 "w-full px-6 py-3 rounded-xl",
-                                "bg-gradient-to-r from-[#004B63] to-[#00BCD4]",
-                                "hover:from-[#00BCD4] hover:to-[#004B63]",
+                                "bg-gradient-to-r from-[#004B63] via-[#003A4D] to-[#06B6D4]",
                                 "text-white font-semibold",
                                 "shadow-md shadow-[#004B63]/20 hover:shadow-lg hover:shadow-[#004B63]/30",
-                                "hover:scale-[1.02] active:scale-[0.98]",
                                 "transition-all duration-300",
                                 "flex items-center justify-center gap-2",
                                 "focus:outline-none focus:ring-2 focus:ring-[#00BCD4]/30 focus:ring-offset-2",
@@ -194,7 +206,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                                     <span>Generar Prompt Profesional</span>
                                 </>
                             )}
-                        </button>
+                        </motion.button>
 
                         {error && (
                             <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg">
@@ -357,7 +369,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                     </div>
                 </div>
             )}
-        </div>
+        </motion.div>
     );
 };
 

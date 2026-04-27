@@ -15,20 +15,20 @@ const ValerioAvatar = ({ state = 'idle', size = 80, onStateChange }) => {
             
             const loadVoices = () => {
                 const voices = synthRef.current.getVoices();
-                // Buscar voz en español
                 const spanishVoices = voices.filter(voice => 
-                    voice.lang.startsWith('es') && voice.name.toLowerCase().includes('male')
+                    voice.lang.startsWith('es')
                 );
                 
                 if (spanishVoices.length > 0) {
-                    // Preferir voces masculinas claras
-                    setSelectedVoice(spanishVoices.find(v => 
-                        v.name.includes('Google') || v.name.includes('Microsoft')
-                    ) || spanishVoices[0]);
+                    const preferred = spanishVoices.find(v => 
+                        v.name.includes('Neural2') || 
+                        v.name.includes('WaveNet') || 
+                        v.name.includes('Google') || 
+                        v.name.includes('Microsoft')
+                    );
+                    setSelectedVoice(preferred || spanishVoices[0]);
                 } else {
-                    // Fallback: cualquier voz española
-                    const anySpanish = voices.find(voice => voice.lang.startsWith('es'));
-                    setSelectedVoice(anySpanish || voices[0]);
+                    setSelectedVoice(voices[0]);
                 }
             };
 
@@ -81,8 +81,8 @@ const ValerioAvatar = ({ state = 'idle', size = 80, onStateChange }) => {
             utterance.lang = 'es-ES';
         }
 
-        utterance.rate = 0.9; // Velocidad ligeramente más lenta para claridad
-        utterance.pitch = 1.0;
+        utterance.rate = 1.0;
+        utterance.pitch = 1.1;
         utterance.volume = 1.0;
 
         utterance.onstart = () => {

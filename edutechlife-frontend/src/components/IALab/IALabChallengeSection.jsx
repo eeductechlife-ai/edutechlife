@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabContext } from '../../context/IALabContext';
 import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
@@ -189,8 +190,11 @@ const IALabChallengeSection = ({
             <div className="flex flex-col sm:flex-row gap-3">
                 {isChallengeCompleted ? (
                     <>
-                        <button
-                            className={`flex-1 px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-400 text-white rounded-xl hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 font-semibold flex items-center justify-center gap-2 text-sm ${
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                            className={`flex-1 px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-400 text-white rounded-xl hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all duration-300 font-semibold flex items-center justify-center gap-2 text-sm ${
                                 isButtonDisabled ? 'opacity-70 cursor-not-allowed' : ''
                             }`}
                             onClick={handleReviewCompleted}
@@ -198,9 +202,12 @@ const IALabChallengeSection = ({
                         >
                             <Icon name="fa-trophy" className="text-sm" />
                             <span>Ver Resultado</span>
-                        </button>
-                        <button
-                            className={`flex-1 px-6 py-3 border-2 border-[#004B63]/15 text-[#004B63] rounded-xl hover:bg-[#004B63]/5 hover:border-[#004B63]/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 font-semibold flex items-center justify-center gap-2 text-sm ${
+                        </motion.button>
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                            className={`flex-1 px-6 py-3 border-2 border-[#004B63]/15 text-[#004B63] rounded-xl hover:bg-[#004B63]/5 hover:border-[#004B63]/30 transition-all duration-300 font-semibold flex items-center justify-center gap-2 text-sm ${
                                 isButtonDisabled ? 'opacity-70 cursor-not-allowed' : ''
                             }`}
                             onClick={handleRetryChallenge}
@@ -208,12 +215,15 @@ const IALabChallengeSection = ({
                         >
                             <Icon name="fa-rocket" className="text-sm" />
                             <span>Versión Avanzada</span>
-                        </button>
+                        </motion.button>
                     </>
                 ) : (
                     <>
-                        <button
-                            className={`flex-1 px-6 py-3 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 font-semibold flex items-center justify-center gap-2 text-sm ${
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                            className={`flex-1 px-6 py-3 bg-gradient-to-r from-[#004B63] via-[#003A4D] to-[#06B6D4] text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 font-semibold flex items-center justify-center gap-2 text-sm ${
                                 isStartingChallenge || isButtonDisabled ? 'opacity-70 cursor-not-allowed' : ''
                             }`}
                             onClick={handleStartChallenge}
@@ -230,9 +240,12 @@ const IALabChallengeSection = ({
                                     <span>Iniciar Desafío</span>
                                 </>
                             )}
-                        </button>
-                        <button
-                            className={`flex-1 px-6 py-3 border-2 border-[#004B63]/15 text-[#004B63] rounded-xl hover:bg-[#004B63]/5 hover:border-[#004B63]/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 font-semibold flex items-center justify-center gap-2 text-sm ${
+                        </motion.button>
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                            className={`flex-1 px-6 py-3 border-2 border-[#004B63]/15 text-[#004B63] rounded-xl hover:bg-[#004B63]/5 hover:border-[#004B63]/30 transition-all duration-300 font-semibold flex items-center justify-center gap-2 text-sm ${
                                 isButtonDisabled ? 'opacity-70 cursor-not-allowed' : ''
                             }`}
                             onClick={handleViewSolution}
@@ -240,7 +253,7 @@ const IALabChallengeSection = ({
                         >
                             <Icon name="fa-graduation-cap" className="text-sm" />
                             <span>Solución Experta</span>
-                        </button>
+                        </motion.button>
                     </>
                 )}
             </div>
@@ -263,8 +276,10 @@ const IALabChallengeSection = ({
     );
 
     return (
-        <div
-            className={`relative z-10 bg-white rounded-2xl border border-[#004B63]/8 shadow-sm p-5 md:p-8 overflow-hidden ${className}`}
+        <motion.div
+            whileHover={{ scale: 1.02, y: -4 }}
+            transition={{ duration: 0.2 }}
+            className={`relative z-10 bg-white rounded-2xl border border-slate-100 shadow-[0px_4px_16px_rgba(17,17,26,0.05)] p-5 md:p-8 overflow-hidden ${className}`}
             style={style}
             {...rest}
         >
@@ -273,7 +288,7 @@ const IALabChallengeSection = ({
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#00BCD4] rounded-t-2xl" />
 
             {isLoadingProgress ? renderSkeleton() : renderContent()}
-        </div>
+        </motion.div>
     );
 };
 
