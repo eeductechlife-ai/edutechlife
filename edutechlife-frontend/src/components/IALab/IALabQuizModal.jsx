@@ -107,10 +107,10 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
   };
 
   const renderHeader = () => (
-    <div className="sticky top-0 bg-slate-900/95 backdrop-blur-md border-b border-slate-700/50 px-6 py-4 flex items-center justify-between z-50">
+    <div className="bg-gradient-to-r from-[#004B63] to-[#00BCD4] px-6 py-4 flex items-center justify-between z-50">
       <button
         onClick={handleClose}
-        className="flex items-center gap-2 text-slate-300 hover:text-white hover:bg-slate-800/50 px-3 py-2 rounded-lg transition-colors"
+        className="flex items-center gap-2 text-white/80 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition-colors"
       >
         <Icon name="fa-arrow-left" className="text-sm" />
         <span className="text-sm font-medium">Salir</span>
@@ -120,8 +120,8 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
         {isTimerRunning && (
           <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg ${
             timeElapsed > SUGGESTED_TIME_SECONDS * 0.8
-              ? 'bg-red-500/20 border border-red-500/30 text-red-300'
-              : 'bg-slate-800 border border-slate-700 text-slate-300'
+              ? 'bg-red-50 border border-red-200 text-red-600'
+              : 'bg-white/10 border border-white/20 text-white/90'
           }`}>
             <Icon name="fa-clock" className="text-sm" />
             <span className="text-sm font-mono font-bold">{formatTime(timeElapsed)}</span>
@@ -129,20 +129,20 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
         )}
 
         <div className="flex items-center gap-3">
-          <span className="text-sm text-slate-300">
+          <span className="text-sm text-white/80">
             {currentQuestion + 1} de {TOTAL_QUESTIONS}
           </span>
-          <div className="w-32 h-2 bg-slate-700 rounded-full overflow-hidden">
+          <div className="w-32 h-2 bg-white/20 rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-[#00BCD4] to-[#4DD0E1] transition-all duration-500"
+              className="h-full bg-[#004B63] transition-all duration-500"
               style={{ width: `${((currentQuestion + 1) / TOTAL_QUESTIONS) * 100}%` }}
             ></div>
           </div>
         </div>
 
         {showSecurityMessage && (
-          <div className="px-3 py-1.5 bg-amber-500/20 border border-amber-500/30 rounded-lg">
-            <span className="text-xs text-amber-300">{securityMessage}</span>
+          <div className="px-3 py-1.5 bg-amber-50 border border-amber-200 rounded-lg">
+            <span className="text-xs text-amber-700">{securityMessage}</span>
           </div>
         )}
       </div>
@@ -154,18 +154,18 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
     if (!question) return null;
 
     return (
-      <div className="max-w-3xl mx-auto p-6">
+      <div className="p-6">
         <div className="mb-6">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-[#00BCD4] to-[#4DD0E1] flex items-center justify-center shadow-lg shadow-[#00BCD4]/20">
+          <div className="flex items-start gap-3 mb-4">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-lg shadow-[#004B63]/20 mt-0.5 flex-shrink-0">
               <span className="text-white font-bold text-sm">{currentQuestion + 1}</span>
             </div>
-            <div>
-              <h2 className="text-xl font-bold text-white leading-tight">
+            <div className="min-w-0 flex-1">
+              <h2 className="text-lg md:text-xl font-bold text-slate-800 leading-relaxed">
                 {question.question}
               </h2>
-              <div className="flex items-center gap-2 mt-1">
-                <span className="text-xs text-slate-400">{question.topic}</span>
+              <div className="flex items-center gap-2 mt-2">
+                <span className="text-xs text-slate-500">{question.topic}</span>
                 <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${getDifficultyColor(question.difficulty)}`}>
                   {question.difficulty}
                 </span>
@@ -174,30 +174,30 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
           </div>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-2.5 max-w-4xl">
           {question.options.map((option) => {
             const isSelected = selectedAnswer === option.id;
             return (
               <button
                 key={option.id}
                 onClick={() => handleSelectAnswer(option.id)}
-                className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-300 flex items-center gap-3 ${
+                className={`w-full text-left p-3.5 rounded-xl border-2 transition-all duration-300 flex items-start gap-3 ${
                   isSelected
-                    ? 'border-[#00BCD4] bg-[#00BCD4]/10 shadow-[0_0_15px_rgba(0,188,212,0.15)]'
-                    : 'border-slate-700/50 bg-slate-800/50 hover:bg-slate-800 hover:border-slate-600'
+                    ? 'border-[#00BCD4] bg-[#00BCD4]/5 shadow-[0_0_15px_rgba(0,188,212,0.15)]'
+                    : 'border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300'
                 }`}
               >
-                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
+                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all duration-300 ${
                   isSelected
                     ? 'border-[#00BCD4] bg-[#00BCD4]'
-                    : 'border-slate-500'
+                    : 'border-slate-300'
                 }`}>
                   {isSelected && (
                     <div className="w-2 h-2 rounded-full bg-white"></div>
                   )}
                 </div>
                 <span className={`text-sm md:text-base leading-relaxed ${
-                  isSelected ? 'text-white font-medium' : 'text-slate-300'
+                  isSelected ? 'text-[#004B63] font-medium' : 'text-slate-700'
                 }`}>
                   {option.label}
                 </span>
@@ -210,18 +210,18 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
   };
 
   const renderNavigation = () => (
-    <div className="sticky bottom-0 bg-slate-900/95 backdrop-blur-md border-t border-slate-700/50 px-6 py-4 flex items-center justify-between">
+    <div className="bg-white border-t border-slate-200 px-6 py-4 flex items-center justify-between">
       <button
         onClick={handlePrev}
         disabled={currentQuestion === 0}
-        className="px-5 py-2.5 border-2 border-slate-600 text-slate-300 rounded-xl hover:bg-slate-800/50 hover:border-slate-500 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+        className="px-5 py-2.5 border-2 border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:border-slate-300 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
       >
         <Icon name="fa-arrow-left" className="text-sm" />
         <span className="text-sm font-medium">Anterior</span>
       </button>
 
       <div className="flex items-center gap-3">
-        <span className="text-sm text-slate-400">
+        <span className="text-sm text-slate-500">
           {Object.keys(quizAnswers).length} de {TOTAL_QUESTIONS} respondidas
         </span>
       </div>
@@ -230,7 +230,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
         <button
           onClick={handleNext}
           disabled={!selectedAnswer}
-          className="px-5 py-2.5 bg-gradient-to-r from-[#00BCD4] to-[#4DD0E1] text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          className="px-5 py-2.5 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
         >
           <span className="text-sm font-medium">Siguiente</span>
           <Icon name="fa-arrow-right" className="text-sm" />
@@ -269,13 +269,13 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
           <div className="text-center mb-8">
             <div className={`w-28 h-28 mx-auto rounded-full flex items-center justify-center mb-6 ${
               passed
-                ? 'bg-gradient-to-br from-emerald-500/20 to-emerald-600/20'
-                : 'bg-gradient-to-br from-red-500/20 to-red-600/20'
+                ? 'bg-emerald-50'
+                : 'bg-red-50'
             }`}>
               <div className="relative">
                 <Icon
                   name={passed ? 'fa-trophy' : 'fa-exclamation-circle'}
-                  className={`text-5xl ${passed ? 'text-emerald-400' : 'text-red-400'}`}
+                  className={`text-5xl ${passed ? 'text-emerald-500' : 'text-red-500'}`}
                 />
                 <div className={`absolute -top-2 -right-2 w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold ${
                   passed ? 'bg-emerald-500' : 'bg-red-500'
@@ -284,28 +284,28 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
                 </div>
               </div>
             </div>
-            <h2 className={`text-2xl font-bold mb-2 ${passed ? 'text-emerald-400' : 'text-red-400'}`}>
+            <h2 className={`text-2xl font-bold mb-2 ${passed ? 'text-emerald-600' : 'text-red-600'}`}>
               {passed ? '¡Examen Aprobado!' : 'Examen No Aprobado'}
             </h2>
-            <p className="text-slate-400">
+            <p className="text-slate-600">
               {passed
                 ? 'Has demostrado comprensión de los temas del módulo.'
                 : `No alcanzaste el mínimo de ${PASSING_SCORE}%. Revisa los temas y vuelve a intentarlo.`}
             </p>
           </div>
 
-          <div className="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-6 mb-6">
+          <div className="bg-white border border-slate-200 shadow-sm rounded-2xl p-6 mb-6">
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div className="text-center">
-                <div className="text-3xl font-bold text-white mb-1">{quizResult.correctCount}</div>
-                <div className="text-xs text-slate-400">Correctas</div>
+                <div className="text-3xl font-bold text-slate-800 mb-1">{quizResult.correctCount}</div>
+                <div className="text-xs text-slate-500">Correctas</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-white mb-1">{TOTAL_QUESTIONS - quizResult.correctCount}</div>
-                <div className="text-xs text-slate-400">Incorrectas</div>
+                <div className="text-3xl font-bold text-slate-800 mb-1">{TOTAL_QUESTIONS - quizResult.correctCount}</div>
+                <div className="text-xs text-slate-500">Incorrectas</div>
               </div>
             </div>
-            <div className="w-full h-3 bg-slate-700 rounded-full overflow-hidden">
+            <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
               <div
                 className={`h-full rounded-full transition-all duration-1000 ${
                   passed
@@ -316,23 +316,23 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
               ></div>
             </div>
             <div className="flex justify-between mt-2">
-              <span className="text-xs text-slate-500">0%</span>
-              <span className="text-xs text-slate-500">{PASSING_SCORE}% mínimo</span>
-              <span className="text-xs text-slate-500">100%</span>
+              <span className="text-xs text-slate-400">0%</span>
+              <span className="text-xs text-slate-400">{PASSING_SCORE}% mínimo</span>
+              <span className="text-xs text-slate-400">100%</span>
             </div>
           </div>
 
           <div className="flex flex-col gap-3">
             <button
               onClick={handleClose}
-              className="w-full py-3 bg-gradient-to-r from-[#00BCD4] to-[#4DD0E1] text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 font-medium"
+              className="w-full py-3 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 font-medium"
             >
               Volver al módulo
             </button>
             {!passed && dailyAttemptsCount < DAILY_ATTEMPTS_LIMIT && (
               <button
                 onClick={handleRetry}
-                className="w-full py-3 border-2 border-slate-600 text-slate-300 rounded-xl hover:bg-slate-800/50 hover:border-slate-500 transition-all duration-300 font-medium"
+                className="w-full py-3 border-2 border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:border-slate-300 transition-all duration-300 font-medium"
               >
                 Reintentar examen
               </button>
@@ -347,7 +347,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          className="fixed inset-0 z-[100] bg-slate-900/95 backdrop-blur-md flex flex-col"
+          className="fixed inset-0 z-[100] bg-slate-50 flex flex-col min-h-0"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -355,7 +355,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
         >
           {renderHeader()}
 
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 overflow-y-auto min-h-0">
             <AnimatePresence mode="wait">
               {showScoreResult ? (
                 <motion.div
@@ -376,7 +376,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
                   exit={{ opacity: 0, x: -50 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <div className="max-w-3xl mx-auto py-8">
+                  <div className="max-w-4xl mx-auto py-6">
                     {renderQuestion()}
                   </div>
                 </motion.div>

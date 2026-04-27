@@ -28,9 +28,9 @@ export const moduleResources = {
         id: "intro-video-1",
         type: "video",
         title: "Video Introductorio: ¿Qué es la IA Generativa?",
-        url: "https://www.youtube.com/embed/jgpJVI3tDbY",
-        duration: "5:30",
-        thumbnail: "https://img.youtube.com/vi/jgpJVI3tDbY/maxresdefault.jpg",
+        url: "https://www.youtube.com/embed/jnePzCTKEqs?start=3",
+        duration: "14:00",
+        thumbnail: "https://img.youtube.com/vi/jnePzCTKEqs/maxresdefault.jpg",
         provider: "youtube",
         description: "Explicación visual de los conceptos fundamentales con ejemplos prácticos."
       },
@@ -323,23 +323,22 @@ export const formatFileSize = (size) => {
 // Obtener icono por tipo de recurso
 export const getResourceIcon = (type) => {
   const icons = {
-    video: "🎬",
-    document: "📄",
-    image: "🖼️",
-    interactive: "🕹️",
-    "pdf-thumbnail": "📄",
-    "ova-thumbnail": "🧠"
+    video: "fa-video",
+    document: "fa-file-lines",
+    image: "fa-image",
+    interactive: "fa-puzzle-piece",
+    "pdf-thumbnail": "fa-file-pdf",
+    "ova-thumbnail": "fa-brain"
   };
-  return icons[type] || "📎";
+  return icons[type] || "fa-file";
 };
 
-// Obtener color por tipo de recurso (para UI)
 export const getResourceColor = (type) => {
   const colors = {
-    video: "text-red-500",
-    document: "text-blue-500",
-    image: "text-green-500",
-    interactive: "text-purple-500",
+    video: "text-[#06B6D4]",
+    document: "text-[#004B63]",
+    image: "text-[#06B6D4]",
+    interactive: "text-[#004B63]",
     "pdf-thumbnail": "text-[#004B63]",
     "ova-thumbnail": "text-[#004B63]"
   };

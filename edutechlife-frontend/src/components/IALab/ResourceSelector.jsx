@@ -125,19 +125,24 @@ const ResourceSelector = ({
                   "min-w-[140px]",
                   isActive
                     ? "bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white shadow-md"
-                    : "bg-slate-50 hover:bg-slate-100 text-slate-700 hover:shadow-sm"
+                    : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"
                 )}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 aria-pressed={isActive}
                 aria-label={`Ver recursos de tipo ${type} (${data.count} disponible${data.count !== 1 ? 's' : ''})`}
               >
-                {/* Icono del tipo */}
                 <div className={cn(
-                  "w-10 h-10 rounded-lg flex items-center justify-center text-xl",
-                  isActive ? "bg-white/20" : data.color.replace('text-', 'bg-').replace('500', '100')
+                  "w-10 h-10 rounded-lg flex items-center justify-center",
+                  isActive ? "bg-white/20" : "bg-slate-100"
                 )}>
-                  {data.icon}
+                  <Icon
+                    name={getResourceIcon(type)}
+                    className={cn(
+                      "w-5 h-5",
+                      isActive ? "text-white" : "text-slate-500"
+                    )}
+                  />
                 </div>
 
                 {/* Información del tipo */}
@@ -194,19 +199,20 @@ const ResourceSelector = ({
                     "transition-all duration-150",
                     "text-sm",
                     isCurrentActive
-                      ? "bg-[#00BCD4] text-white shadow-sm"
+                      ? "bg-cyan-50 border border-cyan-200 text-[#004B63] font-medium"
                       : "bg-white border border-slate-200 text-slate-700 hover:border-[#00BCD4]/30 hover:shadow-sm"
                   )}
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                   aria-current={isCurrentActive ? 'page' : undefined}
                 >
-                  <span className={cn(
-                    "text-base",
-                    isCurrentActive ? "text-white" : getResourceColor(resource.type)
-                  )}>
-                    {getResourceIcon(resource.type)}
-                  </span>
+                  <Icon
+                    name={getResourceIcon(resource.type)}
+                    className={cn(
+                      "w-4 h-4",
+                      isCurrentActive ? "text-[#004B63]" : "text-slate-500"
+                    )}
+                  />
                   <span className="truncate max-w-[180px]">{resource.title}</span>
                   {isCurrentActive && (
                     <Icon name="fa-check" className="w-3 h-3 ml-1" />

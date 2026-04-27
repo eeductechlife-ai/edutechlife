@@ -165,7 +165,10 @@ import {
     Facebook,
     Instagram,
     Linkedin,
-    Youtube
+    Youtube,
+    Puzzle,
+    FileImage,
+    Image
 } from 'lucide-react';
 
 // Mapping of Font Awesome class names to Lucide components
@@ -304,6 +307,11 @@ export const faToLucideMap = {
   'fa-trash-alt': Trash2,
   'fa-language': Globe2,
   'fa-file-alt': File,
+  'fa-file': File,
+  'fa-file-pdf': FileImage,
+  'fa-file-lines': FileText,
+  'fa-image': Image,
+  'fa-puzzle-piece': Puzzle,
   'fa-comments': MessageSquare,
   'fa-exclamation-triangle': TriangleAlert,
   };

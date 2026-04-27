@@ -141,7 +141,7 @@ const TopicResourcesModal = ({
               )}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 border-b border-slate-200 bg-gradient-to-r from-[#004B63] to-[#006D8F]">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 border-b border-slate-200 bg-gradient-to-r from-[#004B63] to-[#00BCD4]">
                 <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0 w-full sm:w-auto">
                   <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-sm flex-shrink-0">
                     <Icon name="fa-book-open" className="text-white text-lg sm:text-xl" />
@@ -185,28 +185,23 @@ const TopicResourcesModal = ({
 
               <div className="px-4 sm:px-6 py-3 sm:py-4 bg-white border-b border-slate-100">
                 {topicResources.learningObjectives && topicResources.learningObjectives.length > 0 && (
-                  <div className="mb-3 sm:mb-4">
-                    <h4 className="font-semibold text-slate-800 mb-2 flex items-center gap-2 text-sm sm:text-base">
-                      <Icon name="fa-bullseye" className="text-[#00BCD4] w-4 h-4 sm:w-5 sm:h-5" />
+                  <div className="mb-4">
+                    <h4 className="font-semibold text-[#004B63] mb-2 flex items-center gap-2 text-sm sm:text-base">
+                      <Icon name="fa-bullseye" className="text-[#06B6D4] w-4 h-4 sm:w-5 sm:h-5" />
                       Objetivo de aprendizaje
                     </h4>
-                    <ul className="space-y-1.5">
-                      {topicResources.learningObjectives.map((objective, index) => (
-                        <li key={index} className="flex items-start gap-2 text-xs sm:text-sm text-slate-600">
-                          <Icon name="fa-check" className="text-emerald-500 mt-0.5 flex-shrink-0 w-3 h-3 sm:w-4 sm:h-4" />
-                          <span>{objective}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    <p className="text-sm sm:text-base text-slate-600 leading-relaxed ml-7">
+                      {topicResources.learningObjectives[0]}
+                    </p>
                   </div>
                 )}
-                <p className="text-slate-600 leading-relaxed text-sm sm:text-base">
+                <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
                   {topicResources.description}
                 </p>
               </div>
 
-              <div className="flex-1 overflow-hidden flex flex-col">
-                <div className="px-6 pt-4 pb-2 border-b border-slate-100">
+              <div className="overflow-hidden">
+                <div className="px-6 pt-4 pb-4 border-b border-slate-100">
                   <ResourceSelector
                     resources={resources}
                     activeResourceIndex={activeResourceIndex}
@@ -216,45 +211,19 @@ const TopicResourcesModal = ({
                     }}
                   />
                 </div>
-
-                <div className="flex-1 flex items-center justify-center p-6">
-                  <div className="text-center max-w-sm">
-                    <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 border border-[#004B63]/10 flex items-center justify-center mb-5">
-                      {resources[activeResourceIndex]?.type === 'video' ? <Icon name="fa-play" className="text-[#004B63] text-3xl" /> :
-                       resources[activeResourceIndex]?.type === 'pdf-thumbnail' ? <Icon name="fa-file-pdf" className="text-[#004B63] text-3xl" /> :
-                       resources[activeResourceIndex]?.type === 'ova-thumbnail' ? <Icon name="fa-brain" className="text-[#004B63] text-3xl" /> :
-                       <Icon name="fa-file" className="text-[#004B63] text-3xl" />}
-                    </div>
-                    <h3 className="text-lg font-bold text-slate-800 mb-1">
-                      {resources[activeResourceIndex]?.title || "Selecciona un recurso"}
-                    </h3>
-                    <p className="text-sm text-slate-500 mb-5">
-                      {resources[activeResourceIndex]?.type === 'video' ? 'Video' :
-                       resources[activeResourceIndex]?.type === 'pdf-thumbnail' ? `${resources[activeResourceIndex]?.format} • ${resources[activeResourceIndex]?.pages} páginas` :
-                       resources[activeResourceIndex]?.type === 'ova-thumbnail' ? 'OVA Interactivo' : 'Recurso'}
-                    </p>
-                    <button
-                      onClick={() => handleOpenViewerModal(activeResourceIndex)}
-                      className="px-6 py-3 bg-gradient-to-r from-[#00BCD4] to-[#4DD0E1] text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 font-medium flex items-center gap-2 mx-auto"
-                    >
-                      <Icon name="fa-expand" className="text-sm" />
-                      <span>Abrir recurso</span>
-                    </button>
-                  </div>
-                </div>
               </div>
 
               <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-slate-100 bg-white flex items-center justify-between gap-3">
                 <div className="flex items-center gap-3 min-w-0">
                   <div className={cn(
                     "w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center flex-shrink-0",
-                    "bg-[#004B63]/10 text-[#004B63] text-sm sm:text-lg"
+                    "bg-[#004B63]/8 text-[#004B63] text-sm sm:text-lg"
                   )}>
-                    {resources[activeResourceIndex]?.type === 'video' ? <Icon name="fa-play" className="text-[#004B63]" /> :
-                     resources[activeResourceIndex]?.type === 'document' || resources[activeResourceIndex]?.type === 'pdf-thumbnail' ? <Icon name="fa-file-lines" className="text-[#004B63]" /> :
-                     resources[activeResourceIndex]?.type === 'image' ? <Icon name="fa-image" className="text-[#004B63]" /> :
-                     resources[activeResourceIndex]?.type === 'ova-thumbnail' ? <Icon name="fa-brain" className="text-[#004B63]" /> :
-                     resources[activeResourceIndex]?.type === 'interactive' ? <Icon name="fa-puzzle-piece" className="text-[#004B63]" /> : <Icon name="fa-file" className="text-[#004B63]" />}
+                    {resources[activeResourceIndex]?.type === 'video' ? <Icon name="fa-video" className="text-[#06B6D4] w-4 h-4 sm:w-5 sm:h-5" /> :
+                     resources[activeResourceIndex]?.type === 'document' || resources[activeResourceIndex]?.type === 'pdf-thumbnail' ? <Icon name="fa-file-lines" className="text-[#06B6D4] w-4 h-4 sm:w-5 sm:h-5" /> :
+                     resources[activeResourceIndex]?.type === 'image' ? <Icon name="fa-image" className="text-[#06B6D4] w-4 h-4 sm:w-5 sm:h-5" /> :
+                     resources[activeResourceIndex]?.type === 'ova-thumbnail' ? <Icon name="fa-brain" className="text-[#06B6D4] w-4 h-4 sm:w-5 sm:h-5" /> :
+                     resources[activeResourceIndex]?.type === 'interactive' ? <Icon name="fa-puzzle-piece" className="text-[#06B6D4] w-4 h-4 sm:w-5 sm:h-5" /> : <Icon name="fa-file" className="text-[#06B6D4] w-4 h-4 sm:w-5 sm:h-5" />}
                   </div>
                   <div className="min-w-0">
                     <h4 className="font-semibold text-slate-800 text-xs sm:text-sm truncate">
@@ -282,14 +251,14 @@ const TopicResourcesModal = ({
                     }}
                     disabled={activeResourceIndex <= 0}
                     className={cn(
-                      "p-1.5 sm:p-2 rounded-lg transition-all duration-200",
-                      activeResourceIndex <= 0 ? "text-slate-400 cursor-not-allowed" : "text-slate-700 hover:bg-slate-100 hover:scale-105"
+                      "w-8 h-8 sm:w-10 sm:h-10 rounded-xl border border-slate-200 transition-all duration-200 flex items-center justify-center",
+                      activeResourceIndex <= 0 ? "text-slate-400 cursor-not-allowed opacity-40" : "text-[#004B63] hover:bg-slate-100 hover:border-[#004B63]/20"
                     )}
                     aria-label="Recurso anterior"
                   >
                     <Icon name="fa-chevron-left" className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
-                  <div className="px-2 py-1 sm:px-3 sm:py-1 bg-slate-100 rounded-lg text-slate-700 font-medium text-xs sm:text-sm">
+                  <div className="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-sm font-medium">
                     {activeResourceIndex + 1} / {resources.length}
                   </div>
                   <button
@@ -302,8 +271,8 @@ const TopicResourcesModal = ({
                     }}
                     disabled={activeResourceIndex >= resources.length - 1}
                     className={cn(
-                      "p-1.5 sm:p-2 rounded-lg transition-all duration-200",
-                      activeResourceIndex >= resources.length - 1 ? "text-slate-400 cursor-not-allowed" : "text-slate-700 hover:bg-slate-100 hover:scale-105"
+                      "w-8 h-8 sm:w-10 sm:h-10 rounded-xl border border-slate-200 transition-all duration-200 flex items-center justify-center",
+                      activeResourceIndex >= resources.length - 1 ? "text-slate-400 cursor-not-allowed opacity-40" : "text-[#004B63] hover:bg-slate-100 hover:border-[#004B63]/20"
                     )}
                     aria-label="Siguiente recurso"
                   >
@@ -335,10 +304,10 @@ const TopicResourcesModal = ({
           {immersivePdfModalOpen && immersivePdfResource && (
             <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
               <div className="relative w-full h-full max-w-6xl bg-white rounded-3xl overflow-hidden shadow-2xl flex flex-col">
-                <div className="flex items-center justify-between p-6 border-b border-slate-200 bg-gradient-to-r from-[#004B63] to-[#006D8F]">
+                <div className="flex items-center justify-between p-6 border-b border-slate-200/10 bg-gradient-to-r from-[#004B63] to-[#00BCD4]">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
-                      <Icon name="fa-file-pdf" className="text-white text-xl" />
+                    <div className="bg-white/10 p-3 rounded-xl">
+                      <Icon name="fa-file-pdf" className="text-[#06B6D4] text-xl" />
                     </div>
                     <div>
                       <h2 className="text-xl font-bold text-white">{immersivePdfResource.title}</h2>
@@ -351,9 +320,9 @@ const TopicResourcesModal = ({
                   </div>
                   <button
                     onClick={handleCloseViewerModals}
-                    className="px-5 py-2.5 bg-white text-[#004B63] hover:bg-slate-100 rounded-xl transition-colors duration-200 flex items-center gap-2 font-medium shadow-sm"
+                    className="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-colors duration-200 flex items-center gap-2 font-medium border-none"
                   >
-                    <Icon name="fa-times" className="w-5 h-5" />
+                    <Icon name="fa-times" className="w-5 h-5 text-white" />
                     Cerrar
                   </button>
                 </div>

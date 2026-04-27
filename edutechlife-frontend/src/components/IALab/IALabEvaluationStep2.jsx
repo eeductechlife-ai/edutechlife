@@ -150,14 +150,14 @@ Eres un [especificar rol experto]
     return (
         <div className="space-y-8">
             {/* Instrucciones */}
-            <div className="bg-slate-900/50 rounded-xl p-5 border border-slate-700/50">
+            <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
                 <div className="flex items-center gap-3 mb-3">
                     <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[#004B63] to-[#00BCD4] flex items-center justify-center">
                         <Icon name="fa-magic" className="text-white text-lg" />
                     </div>
                     <div>
-                        <h3 className="text-lg font-bold text-white">Optimiza este prompt</h3>
-                        <p className="text-slate-400 text-sm">
+                        <h3 className="text-lg font-bold text-slate-800">Optimiza este prompt</h3>
+                        <p className="text-slate-500 text-sm">
                             Mejora el prompt mal redactado haciéndolo más específico, claro y efectivo
                         </p>
                     </div>
@@ -169,16 +169,16 @@ Eres un [especificar rol experto]
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <Icon name="fa-exclamation-triangle" className="text-amber-500" />
-                        <h4 className="text-lg font-semibold text-white">Prompt a optimizar</h4>
+                        <h4 className="text-lg font-semibold text-slate-800">Prompt a optimizar</h4>
                     </div>
-                    <span className="px-3 py-1 bg-amber-500/20 text-amber-300 text-xs font-medium rounded-full">
+                    <span className="px-3 py-1 bg-amber-50 text-amber-600 text-xs font-medium rounded-full">
                         Necesita mejora
                     </span>
                 </div>
-                <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-5">
+                <div className="bg-amber-50 border border-amber-200 rounded-xl p-5">
                     <div className="flex items-start gap-3">
                         <Icon name="fa-comment-dots" className="text-amber-500 mt-1" />
-                        <p className="text-amber-300 italic leading-relaxed">
+                        <p className="text-amber-700 italic leading-relaxed">
                             "{exercise}"
                         </p>
                     </div>
@@ -190,15 +190,15 @@ Eres un [especificar rol experto]
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <Icon name="fa-check-circle" className="text-emerald-500" />
-                        <h4 className="text-lg font-semibold text-white">Tu versión optimizada</h4>
+                        <h4 className="text-lg font-semibold text-slate-800">Tu versión optimizada</h4>
                     </div>
                     <div className="flex items-center gap-4">
-                        <span className={`text-sm ${characterCount < 50 ? 'text-red-400' : 'text-emerald-400'}`}>
+                        <span className={`text-sm ${characterCount < 50 ? 'text-red-500' : 'text-emerald-600'}`}>
                             {characterCount} caracteres
                         </span>
                         <button
                             onClick={() => setShowSuggestions(!showSuggestions)}
-                            className="text-sm text-slate-400 hover:text-white"
+                            className="text-sm text-slate-500 hover:text-slate-700"
                         >
                             {showSuggestions ? 'Ocultar sugerencias' : 'Mostrar sugerencias'}
                         </button>
@@ -210,16 +210,16 @@ Eres un [especificar rol experto]
                         value={optimizedPrompt}
                         onChange={(e) => setOptimizedPrompt(e.target.value)}
                         placeholder="Escribe aquí tu prompt optimizado. Sé específico, claro y estructurado..."
-                        className="w-full h-64 bg-slate-900/50 border-2 border-slate-700 rounded-xl p-5 text-white placeholder-slate-500 focus:outline-none focus:border-[#00BCD4] focus:ring-2 focus:ring-[#00BCD4]/20 resize-none font-mono text-sm leading-relaxed"
+                        className="w-full h-64 bg-white border-2 border-slate-200 rounded-xl p-5 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-[#00BCD4] focus:ring-2 focus:ring-[#00BCD4]/20 resize-none font-mono text-sm leading-relaxed"
                         spellCheck="false"
                         autoFocus
                     />
                     
                     {/* Contador de caracteres en esquina inferior derecha */}
                     <div className={`absolute bottom-3 right-3 px-2 py-1 rounded text-xs font-medium ${
-                        characterCount < 50 ? 'bg-red-500/20 text-red-400' :
-                        characterCount < 100 ? 'bg-amber-500/20 text-amber-400' :
-                        'bg-emerald-500/20 text-emerald-400'
+                        characterCount < 50 ? 'bg-red-50 text-red-600' :
+                        characterCount < 100 ? 'bg-amber-50 text-amber-600' :
+                        'bg-emerald-50 text-emerald-600'
                     }`}>
                         {characterCount}/500
                     </div>
@@ -231,7 +231,7 @@ Eres un [especificar rol experto]
                 <div className="space-y-6">
                     <div className="flex items-center gap-2">
                         <Icon name="fa-lightbulb" className="text-[#00BCD4]" />
-                        <h4 className="text-lg font-semibold text-white">Sugerencias para mejorar</h4>
+                        <h4 className="text-lg font-semibold text-slate-800">Sugerencias para mejorar</h4>
                     </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -239,19 +239,19 @@ Eres un [especificar rol experto]
                             <button
                                 key={index}
                                 onClick={() => handleImprovementClick(suggestion)}
-                                className="bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700 rounded-xl p-4 text-left transition-all duration-200 hover:border-[#00BCD4]/30 group"
+                                className="bg-white hover:bg-slate-50 border border-slate-200 rounded-xl p-4 text-left transition-all duration-200 hover:border-[#00BCD4]/30 group"
                             >
                                 <div className="flex items-start gap-3 mb-3">
                                     <div className="w-10 h-10 rounded-lg bg-[#00BCD4]/10 flex items-center justify-center flex-shrink-0 group-hover:bg-[#00BCD4]/20">
                                         <span className="text-[#00BCD4] font-bold">{index + 1}</span>
                                     </div>
                                     <div>
-                                        <h5 className="font-semibold text-white mb-1">{suggestion.title}</h5>
-                                        <p className="text-slate-400 text-sm">{suggestion.description}</p>
+                                        <h5 className="font-semibold text-slate-800 mb-1">{suggestion.title}</h5>
+                                        <p className="text-slate-500 text-sm">{suggestion.description}</p>
                                     </div>
                                 </div>
-                                <div className="bg-slate-900/50 rounded-lg p-3 border border-slate-700">
-                                    <p className="text-sm text-slate-300 italic">{suggestion.example}</p>
+                                <div className="bg-slate-50 rounded-lg p-3 border border-slate-200">
+                                    <p className="text-sm text-slate-600 italic">{suggestion.example}</p>
                                 </div>
                             </button>
                         ))}
@@ -261,7 +261,7 @@ Eres un [especificar rol experto]
                     <div className="space-y-4">
                         <div className="flex items-center gap-2">
                             <Icon name="fa-copy" className="text-[#004B63]" />
-                            <h4 className="text-lg font-semibold text-white">Plantillas de estructura</h4>
+                            <h4 className="text-lg font-semibold text-slate-800">Plantillas de estructura</h4>
                         </div>
                         
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -269,15 +269,15 @@ Eres un [especificar rol experto]
                                 <button
                                     key={index}
                                     onClick={() => applyTemplate(template.template)}
-                                    className="bg-slate-800/30 hover:bg-slate-700/30 border border-slate-700 rounded-xl p-4 text-left transition-all duration-200 hover:border-[#004B63]/30 group"
+                                    className="bg-white hover:bg-slate-50 border border-slate-200 rounded-xl p-4 text-left transition-all duration-200 hover:border-[#004B63]/30 group"
                                 >
                                     <div className="flex items-center gap-3 mb-3">
                                         <div className="w-10 h-10 rounded-lg bg-[#004B63]/10 flex items-center justify-center group-hover:bg-[#004B63]/20">
                                             <Icon name="fa-file-alt" className="text-[#004B63]" />
                                         </div>
-                                        <h5 className="font-semibold text-white">{template.name}</h5>
+                                        <h5 className="font-semibold text-slate-800">{template.name}</h5>
                                     </div>
-                                    <p className="text-slate-400 text-sm">
+                                    <p className="text-slate-500 text-sm">
                                         Haz clic para usar esta estructura como base para tu prompt optimizado.
                                     </p>
                                 </button>
@@ -288,10 +288,10 @@ Eres un [especificar rol experto]
             )}
 
             {/* Checklist de calidad */}
-            <div className="bg-slate-900/50 rounded-xl p-5 border border-slate-700/50">
+            <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
                 <div className="flex items-center gap-3 mb-4">
                     <Icon name="fa-clipboard-check" className="text-emerald-500" />
-                    <h4 className="text-lg font-semibold text-white">Checklist de calidad</h4>
+                    <h4 className="text-lg font-semibold text-slate-800">Checklist de calidad</h4>
                 </div>
                 
                 <div className="space-y-3">
@@ -305,15 +305,15 @@ Eres un [especificar rol experto]
                     ].map((item, index) => (
                         <div key={index} className="flex items-center gap-3">
                             <div className={`w-5 h-5 rounded flex items-center justify-center flex-shrink-0 ${
-                                item.met ? 'bg-emerald-500/20 border border-emerald-500/30' : 'bg-slate-800/50 border border-slate-700'
+                                item.met ? 'bg-emerald-50 border border-emerald-200' : 'bg-white border border-slate-200'
                             }`}>
                                 {item.met ? (
                                     <Icon name="fa-check" className="text-emerald-500 text-xs" />
                                 ) : (
-                                    <div className="w-2 h-2 rounded-full bg-slate-500"></div>
+                                    <div className="w-2 h-2 rounded-full bg-slate-300"></div>
                                 )}
                             </div>
-                            <span className={`text-sm ${item.met ? 'text-emerald-400' : 'text-slate-400'}`}>
+                            <span className={`text-sm ${item.met ? 'text-emerald-600' : 'text-slate-500'}`}>
                                 {item.text}
                             </span>
                         </div>

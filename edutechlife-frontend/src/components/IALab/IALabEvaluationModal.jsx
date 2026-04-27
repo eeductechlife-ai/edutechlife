@@ -130,10 +130,10 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false }) => {
 
     // Render header con progreso
     const renderHeader = () => (
-        <div className="sticky top-0 bg-slate-900/95 backdrop-blur-md border-b border-slate-700/50 px-6 py-4 flex items-center justify-between z-50">
+        <div className="bg-gradient-to-r from-[#004B63] to-[#00BCD4] border-b border-white/10 px-6 py-4 flex items-center justify-between z-50">
             <button 
                 onClick={handleCloseModal}
-                className="flex items-center gap-2 text-slate-300 hover:text-white hover:bg-slate-800/50 px-3 py-2 rounded-lg transition-colors"
+                className="flex items-center gap-2 text-white/80 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition-colors"
                 disabled={state.loading || isSavingGrade}
             >
                 <Icon name="fa-arrow-left" className="text-sm" />
@@ -143,10 +143,10 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false }) => {
             <div className="flex items-center gap-6">
                 {/* Barra de progreso */}
                 <div className="flex items-center gap-3">
-                    <div className="text-sm text-slate-300">Paso {state.step} de 3</div>
-                    <div className="w-32 h-2 bg-slate-700 rounded-full overflow-hidden">
+                    <div className="text-sm text-white/80">Paso {state.step} de 3</div>
+                    <div className="w-32 h-2 bg-white/20 rounded-full overflow-hidden">
                         <div 
-                            className="h-full bg-gradient-to-r from-[#00BCD4] to-[#0097A7] transition-all duration-500"
+                            className="h-full bg-[#004B63] transition-all duration-500"
                             style={{ width: `${(state.step / 3) * 100}%` }}
                         ></div>
                     </div>
@@ -155,7 +155,7 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false }) => {
                 {/* Indicador de seguridad */}
                 {securityWarning && (
                     <div className="px-3 py-1.5 bg-amber-500/20 border border-amber-500/30 rounded-lg">
-                        <span className="text-xs text-amber-300">{securityWarning}</span>
+                        <span className="text-xs text-amber-200">{securityWarning}</span>
                     </div>
                 )}
             </div>
@@ -168,10 +168,10 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false }) => {
             <div className="w-20 h-20 rounded-full bg-gradient-to-r from-[#004B63]/20 to-[#00BCD4]/20 flex items-center justify-center mb-6">
                 <div className="w-10 h-10 border-3 border-[#00BCD4] border-t-transparent rounded-full animate-spin"></div>
             </div>
-            <h3 className="text-xl font-bold text-white mb-2">
-                {state.step === 'loading' ? 'La IA está diseñando tu desafío...' : 'DeepSeek está evaluando tus respuestas...'}
+            <h3 className="text-xl font-bold text-slate-700 mb-2">
+                {state.step === 'loading' ? 'La IA está diseñando tu desafío...' : 'Edutechlife está evaluando tus respuestas...'}
             </h3>
-            <p className="text-slate-400 text-center max-w-md">
+            <p className="text-slate-500 text-center max-w-md">
                 Esto puede tomar unos segundos. Por favor, espera mientras procesamos tu evaluación.
             </p>
         </div>
@@ -183,11 +183,11 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false }) => {
             <div className="w-20 h-20 rounded-full bg-red-500/20 flex items-center justify-center mb-6">
                 <Icon name="fa-exclamation-triangle" className="text-red-400 text-3xl" />
             </div>
-            <h3 className="text-xl font-bold text-white mb-2">Error al cargar la evaluación</h3>
-            <p className="text-slate-400 text-center max-w-md mb-6">{state.error}</p>
+            <h3 className="text-xl font-bold text-slate-700 mb-2">Error al cargar la evaluación</h3>
+            <p className="text-slate-500 text-center max-w-md mb-6">{state.error}</p>
             <button
                 onClick={generateExercises}
-                className="px-6 py-3 bg-gradient-to-r from-[#00BCD4] to-[#0097A7] text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300"
+                className="px-6 py-3 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300"
             >
                 <Icon name="fa-redo" className="mr-2" />
                 Reintentar
@@ -200,8 +200,7 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false }) => {
         if (!state.exercises) return null;
 
         return (
-            <div className="flex-1 overflow-y-auto">
-                <div className="max-w-4xl mx-auto p-6">
+            <div className="max-w-4xl mx-auto p-6 pb-20">
                     {/* Título del paso actual */}
                     <div className="mb-8">
                         <div className="flex items-center gap-3 mb-4">
@@ -209,12 +208,12 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false }) => {
                                 <Icon name="fa-clipboard-check" className="text-white text-xl" />
                             </div>
                             <div>
-                                <h2 className="text-2xl font-bold text-white">
+                                <h2 className="text-2xl font-bold text-slate-800">
                                     {state.step === 1 && 'Paso 1: Identificar'}
                                     {state.step === 2 && 'Paso 2: Optimizar'}
                                     {state.step === 3 && 'Paso 3: Crear'}
                                 </h2>
-                                <p className="text-slate-400">
+                                <p className="text-slate-500">
                                     {state.step === 1 && 'Analiza el escenario y clasifica los elementos clave'}
                                     {state.step === 2 && 'Mejora el prompt mal redactado'}
                                     {state.step === 3 && 'Crea un prompt desde cero para el caso de uso'}
@@ -225,7 +224,7 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false }) => {
 
                     {/* Contenido del paso actual */}
                     <div 
-                        className="bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-6 mb-8"
+                        className="bg-white border border-slate-200 rounded-2xl p-6 mb-8"
                         onCopy={handleSecurityEvent}
                         onPaste={handleSecurityEvent}
                         onCut={handleSecurityEvent}
@@ -259,14 +258,14 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false }) => {
                         <button
                             onClick={handlePrevStep}
                             disabled={state.step === 1 || state.loading}
-                            className="px-6 py-3 border-2 border-slate-600 text-slate-300 rounded-xl hover:bg-slate-800/50 hover:border-slate-500 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="px-6 py-3 border-2 border-slate-200 text-slate-700 rounded-xl hover:bg-slate-100 hover:border-slate-300 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <Icon name="fa-arrow-left" className="mr-2" />
                             Anterior
                         </button>
 
                         <div className="flex items-center gap-4">
-                            <span className="text-sm text-slate-400">
+                            <span className="text-sm text-slate-500">
                                 Paso {state.step} de 3
                             </span>
                             
@@ -274,7 +273,7 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false }) => {
                                 <button
                                     onClick={handleNextStep}
                                     disabled={!state.responses[`ej${state.step}`] || state.loading}
-                                    className="px-6 py-3 bg-gradient-to-r from-[#00BCD4] to-[#0097A7] text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="px-6 py-3 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     Siguiente
                                     <Icon name="fa-arrow-right" className="ml-2" />
@@ -301,111 +300,107 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false }) => {
                         </div>
                     </div>
                 </div>
-            </div>
         );
     };
 
     // Track previous step for animation direction
     const prevStepRef = useRef(state.step);
-    
+
     useEffect(() => {
         prevStepRef.current = state.step;
     }, [state.step]);
 
     return (
-        <AnimatePresence>
-            {isVisible && (
-                <motion.div 
-                    className="fixed inset-0 z-[100] bg-slate-900/95 backdrop-blur-md flex flex-col"
-                    onCopy={handleSecurityEvent}
-                    onPaste={handleSecurityEvent}
-                    onCut={handleSecurityEvent}
-                    onContextMenu={handleSecurityEvent}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                >
-            {/* Overlay de seguridad */}
-            <div 
-                className="absolute inset-0"
-                onCopy={handleSecurityEvent}
-                onPaste={handleSecurityEvent}
-                onCut={handleSecurityEvent}
-                onContextMenu={handleSecurityEvent}
-            />
+            <AnimatePresence>
+                {isVisible && (
+                    <motion.div 
+                        className="fixed inset-0 z-[100] bg-slate-50 flex flex-col"
+                        onCopy={handleSecurityEvent}
+                        onPaste={handleSecurityEvent}
+                        onCut={handleSecurityEvent}
+                        onContextMenu={handleSecurityEvent}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <div 
+                            className="absolute inset-0"
+                            onCopy={handleSecurityEvent}
+                            onPaste={handleSecurityEvent}
+                            onCut={handleSecurityEvent}
+                            onContextMenu={handleSecurityEvent}
+                        />
 
-            {/* Contenido del modal */}
-            <div className="relative min-h-screen flex flex-col">
-                {renderHeader()}
+                        <div className="relative flex flex-col min-h-0 flex-1">
+                            {renderHeader()}
 
-                <div className="flex-1 overflow-hidden">
-                    <AnimatePresence mode="wait">
-                        {state.loading ? (
-                            <motion.div
-                                key="loading"
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -20 }}
-                                transition={{ duration: 0.3 }}
-                                className="h-full"
-                            >
-                                {renderLoading()}
-                            </motion.div>
-                        ) : state.error ? (
-                            <motion.div
-                                key="error"
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -20 }}
-                                transition={{ duration: 0.3 }}
-                                className="h-full"
-                            >
-                                {renderError()}
-                            </motion.div>
-                        ) : state.step === 'results' ? (
-                            <motion.div
-                                key="results"
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -20 }}
-                                transition={{ duration: 0.3 }}
-                                className="h-full"
-                            >
-                                <IALabEvaluationResults
-                                    evaluation={state.evaluation}
-                                    onClose={handleCloseModal}
-                                />
-                            </motion.div>
-                        ) : (
-                            <motion.div
-                                key={`step-${state.step}`}
-                                initial={{ opacity: 0, x: state.step > prevStepRef.current ? 50 : -50 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: state.step > prevStepRef.current ? -50 : 50 }}
-                                transition={{ duration: 0.3 }}
-                                className="h-full"
-                            >
-                                {renderContent()}
-                            </motion.div>
+                            <div className="flex-1 overflow-y-auto min-h-0">
+                                <AnimatePresence mode="wait">
+                                    {state.loading ? (
+                                        <motion.div
+                                            key="loading"
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: -20 }}
+                                            transition={{ duration: 0.3 }}
+                                            className="h-full"
+                                        >
+                                            {renderLoading()}
+                                        </motion.div>
+                                    ) : state.error ? (
+                                        <motion.div
+                                            key="error"
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: -20 }}
+                                            transition={{ duration: 0.3 }}
+                                            className="h-full"
+                                        >
+                                            {renderError()}
+                                        </motion.div>
+                                    ) : state.step === 'results' ? (
+                                        <motion.div
+                                            key="results"
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: -20 }}
+                                            transition={{ duration: 0.3 }}
+                                            className="h-full"
+                                        >
+                                            <IALabEvaluationResults
+                                                evaluation={state.evaluation}
+                                                onClose={handleCloseModal}
+                                            />
+                                        </motion.div>
+                                    ) : (
+                                        <motion.div
+                                            key={`step-${state.step}`}
+                                            initial={{ opacity: 0, x: state.step > prevStepRef.current ? 50 : -50 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            exit={{ opacity: 0, x: state.step > prevStepRef.current ? -50 : 50 }}
+                                            transition={{ duration: 0.3 }}
+                                            className="h-fit"
+                                        >
+                                            {renderContent()}
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </div>
+                        </div>
+
+                        {securityWarning && (
+                            <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 px-4 py-3 bg-amber-500/90 text-white rounded-xl shadow-lg animate-fade-in">
+                                <div className="flex items-center gap-2">
+                                    <Icon name="fa-shield-alt" />
+                                    <span className="text-sm font-medium">{securityWarning}</span>
+                                </div>
+                            </div>
                         )}
-                    </AnimatePresence>
-                </div>
-            </div>
-
-            {/* Toast de seguridad */}
-            {securityWarning && (
-                <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 px-4 py-3 bg-amber-500/90 text-white rounded-xl shadow-lg animate-fade-in">
-                    <div className="flex items-center gap-2">
-                        <Icon name="fa-shield-alt" />
-                        <span className="text-sm font-medium">{securityWarning}</span>
-                    </div>
-                </div>
-            )}
-        </motion.div>
-            )}
-        </AnimatePresence>
-    );
-};
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        );
+    };
 
 export default IALabEvaluationModal;

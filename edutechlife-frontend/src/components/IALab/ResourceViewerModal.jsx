@@ -99,8 +99,8 @@ const DocumentViewer = ({ resource }) => {
       {/* Header del documento */}
       <div className="flex items-center justify-between p-4 border-b border-slate-100 bg-slate-50/50">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-            <Icon name="fa-file-pdf" className="text-blue-600 w-5 h-5" />
+          <div className="bg-white border border-slate-200 p-2 rounded-lg">
+            <Icon name="fa-file-pdf" className="text-[#06B6D4] w-5 h-5" />
           </div>
           <div>
             <h4 className="font-semibold text-slate-800">{resource.title}</h4>
@@ -207,8 +207,8 @@ const ImageViewer = ({ resource }) => {
       {/* Header de la imagen */}
       <div className="flex items-center justify-between p-4 border-b border-slate-100">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-            <Icon name="fa-image" className="text-green-600 w-5 h-5" />
+          <div className="bg-white border border-slate-200 p-2 rounded-lg">
+            <Icon name="fa-image" className="text-[#06B6D4] w-5 h-5" />
           </div>
           <div>
             <h4 className="font-semibold text-slate-800">{resource.title}</h4>
@@ -296,12 +296,11 @@ const ImageViewer = ({ resource }) => {
  */
 const InteractiveViewer = ({ resource }) => {
   return (
-    <div className="w-full h-full flex flex-col bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl overflow-hidden border border-purple-100">
-      {/* Header interactivo */}
-      <div className="flex items-center justify-between p-4 border-b border-purple-100/50">
+    <div className="w-full h-full flex flex-col bg-gradient-to-br from-[#004B63]/5 to-[#06B6D4]/5 rounded-2xl overflow-hidden border border-[#004B63]/10">
+      <div className="flex items-center justify-between p-4 border-b border-[#004B63]/10">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-            <Icon name="fa-gamepad" className="text-purple-600 w-5 h-5" />
+          <div className="bg-white border border-slate-200 p-2 rounded-lg">
+            <Icon name="fa-puzzle-piece" className="text-[#06B6D4] w-5 h-5" />
           </div>
           <div>
             <h4 className="font-semibold text-slate-800">{resource.title}</h4>
@@ -312,15 +311,15 @@ const InteractiveViewer = ({ resource }) => {
           </div>
         </div>
 
-        <div className="px-4 py-2 bg-purple-100 text-purple-700 rounded-lg font-medium">
-          🕹️ Interactivo
+        <div className="px-4 py-2 bg-[#004B63]/10 text-[#004B63] rounded-lg font-medium text-sm">
+          <Icon name="fa-bolt" className="w-4 h-4 inline mr-1" />
+          Interactivo
         </div>
       </div>
 
-      {/* Contenido interactivo */}
       <div className="flex-1 flex flex-col items-center justify-center p-8">
         <div className="text-center max-w-md">
-          <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+          <div className="w-20 h-20 bg-gradient-to-br from-[#004B63] to-[#06B6D4] rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
             <Icon name="fa-bolt" className="text-white text-2xl" />
           </div>
           
@@ -332,24 +331,22 @@ const InteractiveViewer = ({ resource }) => {
             {resource.description || "Este recurso interactivo está diseñado para aprendizaje práctico."}
           </p>
 
-          {/* Simulación de recurso interactivo */}
-          <div className="bg-white rounded-xl p-6 border border-purple-100 shadow-sm mb-6">
+          <div className="bg-white rounded-xl p-6 border border-[#004B63]/10 shadow-sm mb-6">
             <div className="flex items-center justify-between mb-4">
               <span className="text-sm font-medium text-slate-700">Simulación activa</span>
               <span className="text-xs px-2 py-1 bg-emerald-100 text-emerald-700 rounded">En tiempo real</span>
             </div>
             
-            <div className="h-32 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border border-purple-100 flex items-center justify-center">
+            <div className="h-32 bg-gradient-to-r from-[#004B63]/5 to-[#06B6D4]/5 rounded-lg border border-[#004B63]/10 flex items-center justify-center">
               <div className="text-center">
-                <Icon name="fa-spinner" className="text-purple-500 text-2xl mb-2 animate-spin" />
+                <Icon name="fa-spinner" className="text-[#06B6D4] text-2xl mb-2 animate-spin" />
                 <p className="text-sm text-slate-600">Cargando experiencia interactiva...</p>
               </div>
             </div>
           </div>
 
-          {/* Información adicional */}
           <div className="text-sm text-slate-500">
-            <p>ℹ️ Este es un recurso interactivo que requiere interacción del usuario.</p>
+            <p>Este es un recurso interactivo que requiere interacción del usuario.</p>
             <p>En producción, aquí se cargaría la herramienta interactiva real.</p>
           </div>
         </div>
@@ -402,62 +399,55 @@ const OVAThumbnailViewer = ({ resource, onOpenOVA }) => {
 
   return (
     <div className="w-full h-full">
-      {/* Miniatura del OVA */}
       <div 
         onClick={handleClick}
-        className="group relative w-full h-full bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl border border-purple-100 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden flex flex-col"
+        className="group relative w-full h-full bg-gradient-to-br from-[#004B63]/5 to-[#06B6D4]/5 rounded-2xl border border-[#004B63]/10 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden flex flex-col"
         aria-label={`Abrir ${resource.title}`}
         title="Haz clic para abrir el OVA interactivo"
       >
-        {/* Contenido de la miniatura */}
         <div className="flex-1 p-6 flex flex-col items-center justify-center">
-          {/* Icono grande del OVA */}
-          <div className="w-32 h-32 rounded-3xl bg-gradient-to-br from-purple-500 to-pink-500 shadow-2xl flex items-center justify-center mb-6">
-            <span className="text-white text-4xl">🧠</span>
+          <div className="w-32 h-32 rounded-3xl bg-gradient-to-br from-[#004B63] to-[#0A3550] shadow-2xl flex items-center justify-center mb-6">
+            <Icon name="fa-brain" className="text-white text-4xl" />
           </div>
           
-          {/* Título */}
           <h4 className="font-bold text-slate-800 text-xl text-center mb-3">
             {resource.title}
           </h4>
           
-          {/* Descripción */}
           <p className="text-slate-600 text-center mb-6">
             {resource.description}
           </p>
 
-          {/* Metadatos */}
           <div className="grid grid-cols-2 gap-4 w-full max-w-md">
-            <div className="bg-white/50 rounded-xl p-4 border border-purple-100">
+            <div className="bg-white/50 rounded-xl p-4 border border-[#004B63]/10">
               <div className="flex items-center gap-2 mb-2">
-                <Icon name="fa-clock" className="w-4 h-4 text-purple-500" />
+                <Icon name="fa-clock" className="w-4 h-4 text-[#06B6D4]" />
                 <span className="text-sm font-medium text-slate-700">Tiempo estimado</span>
               </div>
-              <p className="text-lg font-bold text-purple-700">{resource.estimatedTime || "15 minutos"}</p>
+              <p className="text-lg font-bold text-[#004B63]">{resource.estimatedTime || "15 minutos"}</p>
             </div>
             
-            <div className="bg-white/50 rounded-xl p-4 border border-purple-100">
+            <div className="bg-white/50 rounded-xl p-4 border border-[#004B63]/10">
               <div className="flex items-center gap-2 mb-2">
-                <Icon name="fa-chart-line" className="w-4 h-4 text-purple-500" />
+                <Icon name="fa-chart-line" className="w-4 h-4 text-[#06B6D4]" />
                 <span className="text-sm font-medium text-slate-700">Dificultad</span>
               </div>
-              <p className="text-lg font-bold text-purple-700">{resource.difficulty || "Intermedio"}</p>
+              <p className="text-lg font-bold text-[#004B63]">{resource.difficulty || "Intermedio"}</p>
             </div>
           </div>
         </div>
 
-        {/* Indicador de acción */}
-        <div className="p-4 border-t border-purple-100/50 bg-white/30">
+        <div className="p-4 border-t border-[#004B63]/10 bg-white/30">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Icon name="fa-hand-pointer" className="w-5 h-5 text-purple-500" />
+              <Icon name="fa-hand-pointer" className="w-5 h-5 text-[#06B6D4]" />
               <span className="text-sm text-slate-700 font-medium">
                 Haz clic para explorar el laboratorio interactivo
               </span>
             </div>
             <div className="flex items-center gap-1">
-              <span className="text-sm text-purple-600 font-bold">EXPLORAR</span>
-              <Icon name="fa-arrow-right" className="w-5 h-5 text-purple-500" />
+              <span className="text-sm text-[#004B63] font-bold">EXPLORAR</span>
+              <Icon name="fa-arrow-right" className="w-5 h-5 text-[#004B63]" />
             </div>
           </div>
         </div>
@@ -650,31 +640,21 @@ const ResourceViewerModal = ({
                   onClick={(e) => e.stopPropagation()}
                 >
               {/* Header del modal */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 border-b border-slate-200 bg-gradient-to-r from-[#004B63] to-[#006D8F]">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 border-b border-slate-200/10 bg-[#004B63]">
                 <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0 w-full sm:w-auto">
-                  {/* Icono según tipo de recurso */}
-                  <div className={cn(
-                    "w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0",
-                    resource.type === 'video' ? "bg-red-500" :
-                    resource.type === 'document' ? "bg-blue-500" :
-                    resource.type === 'image' ? "bg-green-500" :
-                    resource.type === 'interactive' ? "bg-purple-500" :
-                    resource.type === 'pdf-thumbnail' ? "bg-red-500" :
-                    resource.type === 'ova-thumbnail' ? "bg-purple-500" :
-                    "bg-slate-500"
-                  )}>
-                    {resource.type === 'video' ? '🎬' :
-                     resource.type === 'document' ? '📄' :
-                     resource.type === 'image' ? '🖼️' :
-                     resource.type === 'interactive' ? '🕹️' :
-                     resource.type === 'pdf-thumbnail' ? <Icon name="fa-file-pdf" className="text-white text-lg sm:text-xl" /> :
-                     resource.type === 'ova-thumbnail' ? <span className="text-white text-lg sm:text-xl">🧠</span> :
-                     '📎'}
+                  <div className="bg-white/10 p-2 rounded-lg flex-shrink-0">
+                    {resource.type === 'video' ? <Icon name="fa-video" className="text-[#06B6D4] w-5 h-5 sm:w-6 sm:h-6" /> :
+                     resource.type === 'document' ? <Icon name="fa-file-lines" className="text-[#06B6D4] w-5 h-5 sm:w-6 sm:h-6" /> :
+                     resource.type === 'image' ? <Icon name="fa-image" className="text-[#06B6D4] w-5 h-5 sm:w-6 sm:h-6" /> :
+                     resource.type === 'interactive' ? <Icon name="fa-puzzle-piece" className="text-[#06B6D4] w-5 h-5 sm:w-6 sm:h-6" /> :
+                     resource.type === 'pdf-thumbnail' ? <Icon name="fa-file-pdf" className="text-[#06B6D4] w-5 h-5 sm:w-6 sm:h-6" /> :
+                     resource.type === 'ova-thumbnail' ? <Icon name="fa-brain" className="text-[#06B6D4] w-5 h-5 sm:w-6 sm:h-6" /> :
+                     <Icon name="fa-file" className="text-[#06B6D4] w-5 h-5 sm:w-6 sm:h-6" />}
                   </div>
                   
                   {/* Título y metadatos */}
                   <div className="flex-1 min-w-0">
-                    <h2 className="text-lg sm:text-xl font-bold text-white truncate">
+                    <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight truncate">
                       {resource.title}
                     </h2>
                     <div className="flex flex-wrap items-center gap-1 sm:gap-3 text-white/80 text-xs sm:text-sm mt-1">
@@ -704,14 +684,11 @@ const ResourceViewerModal = ({
                 {/* Botón de cerrar */}
                 <button
                   onClick={onClose}
-                  className={cn(
-                    "mt-3 sm:mt-0 ml-0 sm:ml-4 px-4 py-2 sm:px-5 sm:py-2.5 bg-white text-[#004B63] hover:bg-slate-100 rounded-lg sm:rounded-xl",
-                    "transition-colors duration-200 flex items-center gap-2 font-medium shadow-sm flex-shrink-0 w-full sm:w-auto justify-center sm:justify-start"
-                  )}
+                  className="mt-3 sm:mt-0 ml-0 sm:ml-4 px-4 py-2 sm:px-5 sm:py-2.5 bg-white/10 hover:bg-white/20 text-white border-none rounded-lg sm:rounded-xl transition-colors duration-200 flex items-center gap-2 font-medium flex-shrink-0 w-full sm:w-auto justify-center sm:justify-start"
                   aria-label="Cerrar visor y volver al tema"
                 >
-                  <Icon name="fa-times" className="w-4 h-4 sm:w-5 sm:h-5" />
-                  <span className="text-sm sm:text-base">Cerrar</span>
+                  <Icon name="fa-times" className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                  <span className="text-sm sm:text-base text-white">Cerrar</span>
                 </button>
               </div>
 
@@ -732,10 +709,10 @@ const ResourceViewerModal = ({
                         onClick={onPreviousResource}
                         disabled={currentIndex <= 0}
                         className={cn(
-                          "px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg flex items-center gap-1 sm:gap-2 transition-colors duration-200 text-sm sm:text-base",
+                          "px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg flex items-center gap-1 sm:gap-2 transition-colors duration-200 text-sm sm:text-base font-medium",
                           currentIndex <= 0
                             ? "text-slate-400 cursor-not-allowed"
-                            : "text-slate-700 hover:bg-slate-100"
+                            : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-[#004B63]"
                         )}
                         aria-label="Recurso anterior"
                       >
@@ -751,10 +728,10 @@ const ResourceViewerModal = ({
                         onClick={onNextResource}
                         disabled={currentIndex >= totalResources - 1}
                         className={cn(
-                          "px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg flex items-center gap-1 sm:gap-2 transition-colors duration-200 text-sm sm:text-base",
+                          "px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg flex items-center gap-1 sm:gap-2 transition-colors duration-200 text-sm sm:text-base font-medium",
                           currentIndex >= totalResources - 1
                             ? "text-slate-400 cursor-not-allowed"
-                            : "text-slate-700 hover:bg-slate-100"
+                            : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-[#004B63]"
                         )}
                         aria-label="Siguiente recurso"
                       >
@@ -768,10 +745,10 @@ const ResourceViewerModal = ({
                   <button
                     onClick={handleMarkAsViewed}
                     className={cn(
-                      "px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-200 flex items-center gap-2 sm:gap-3 text-sm sm:text-base w-full sm:w-auto justify-center",
+                      "px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-200 flex items-center gap-2 sm:gap-3 text-sm sm:text-base w-full sm:w-auto justify-center border-none",
                       isMarkedAsViewed
                         ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
-                        : "bg-[#00BCD4] text-white hover:bg-[#00BCD4]/90 hover:scale-105"
+                        : "bg-gradient-to-r from-[#004B63] to-[#06B6D4] hover:from-[#003A4D] hover:to-[#08c5e6] text-white shadow-md hover:shadow-lg"
                     )}
                   >
                     {isMarkedAsViewed ? (

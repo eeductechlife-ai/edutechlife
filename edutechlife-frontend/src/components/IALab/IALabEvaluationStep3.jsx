@@ -136,14 +136,14 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
     return (
         <div className="space-y-8">
             {/* Instrucciones */}
-            <div className="bg-slate-900/50 rounded-xl p-5 border border-slate-700/50">
+            <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
                 <div className="flex items-center gap-3 mb-3">
                     <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[#004B63] to-[#00BCD4] flex items-center justify-center">
                         <Icon name="fa-plus-circle" className="text-white text-lg" />
                     </div>
                     <div>
-                        <h3 className="text-lg font-bold text-white">Crea un prompt desde cero</h3>
-                        <p className="text-slate-400 text-sm">
+                        <h3 className="text-lg font-bold text-slate-800">Crea un prompt desde cero</h3>
+                        <p className="text-slate-500 text-sm">
                             Diseña un prompt efectivo para el caso de uso proporcionado
                         </p>
                     </div>
@@ -154,12 +154,12 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
             <div className="space-y-4">
                 <div className="flex items-center gap-2">
                     <Icon name="fa-briefcase" className="text-[#00BCD4]" />
-                    <h4 className="text-lg font-semibold text-white">Caso de uso</h4>
+                    <h4 className="text-lg font-semibold text-slate-800">Caso de uso</h4>
                 </div>
-                <div className="bg-slate-900/30 rounded-xl p-5 border border-slate-700/30">
+                <div className="bg-slate-50/50 rounded-xl p-5 border border-slate-200">
                     <div className="flex items-start gap-3">
                         <Icon name="fa-star" className="text-[#00BCD4] mt-1" />
-                        <p className="text-slate-200 leading-relaxed">
+                        <p className="text-slate-700 leading-relaxed">
                             {exercise}
                         </p>
                     </div>
@@ -167,14 +167,14 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
             </div>
 
             {/* Tabs: Editor vs Constructor */}
-            <div className="border-b border-slate-700">
+            <div className="border-b border-slate-200">
                 <div className="flex space-x-1">
                     <button
                         onClick={() => setActiveTab('editor')}
                         className={`px-4 py-3 text-sm font-medium rounded-t-lg transition-colors ${
                             activeTab === 'editor'
-                                ? 'bg-slate-800 text-white border-b-2 border-[#00BCD4]'
-                                : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+                                ? 'bg-white text-[#004B63] border-b-2 border-[#00BCD4]'
+                                : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
                         }`}
                     >
                         <Icon name="fa-edit" className="mr-2" />
@@ -184,8 +184,8 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                         onClick={() => setActiveTab('constructor')}
                         className={`px-4 py-3 text-sm font-medium rounded-t-lg transition-colors ${
                             activeTab === 'constructor'
-                                ? 'bg-slate-800 text-white border-b-2 border-[#00BCD4]'
-                                : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+                                ? 'bg-white text-[#004B63] border-b-2 border-[#00BCD4]'
+                                : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
                         }`}
                     >
                         <Icon name="fa-puzzle-piece" className="mr-2" />
@@ -200,16 +200,16 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                             <Icon name="fa-keyboard" className="text-emerald-500" />
-                            <h4 className="text-lg font-semibold text-white">Editor de Prompt</h4>
+                            <h4 className="text-lg font-semibold text-slate-800">Editor de Prompt</h4>
                         </div>
                         <div className="flex items-center gap-4">
-                            <span className={`text-sm ${characterCount < 100 ? 'text-red-400' : 'text-emerald-400'}`}>
+                            <span className={`text-sm ${characterCount < 100 ? 'text-red-500' : 'text-emerald-600'}`}>
                                 {characterCount} caracteres
                             </span>
                             <button
                                 onClick={generateWithAI}
                                 disabled={isGenerating}
-                                className="px-4 py-2 bg-[#00BCD4]/20 text-[#00BCD4] rounded-lg hover:bg-[#00BCD4]/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                className="px-4 py-2 bg-[#00BCD4]/10 text-[#00BCD4] rounded-lg hover:bg-[#00BCD4]/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                             >
                                 {isGenerating ? (
                                     <>
@@ -231,16 +231,15 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                             value={createdPrompt}
                             onChange={(e) => setCreatedPrompt(e.target.value)}
                             placeholder={`## Rol\nEres un experto en...\n\n## Contexto\nTrabajando para...\n\n## Objetivo\nCrear un...\n\n## Audiencia\nDirigido a...\n\n## Requisitos\n- Requisito 1\n- Requisito 2\n\n## Formato de respuesta\nEn formato de...`}
-                            className="w-full h-80 bg-slate-900/50 border-2 border-slate-700 rounded-xl p-5 text-white placeholder-slate-500 focus:outline-none focus:border-[#00BCD4] focus:ring-2 focus:ring-[#00BCD4]/20 resize-none font-mono text-sm leading-relaxed"
+                            className="w-full h-80 bg-white border-2 border-slate-200 rounded-xl p-5 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-[#00BCD4] focus:ring-2 focus:ring-[#00BCD4]/20 resize-none font-mono text-sm leading-relaxed"
                             spellCheck="false"
                             autoFocus
                         />
                         
-                        {/* Contador de caracteres */}
                         <div className={`absolute bottom-3 right-3 px-2 py-1 rounded text-xs font-medium ${
-                            characterCount < 100 ? 'bg-red-500/20 text-red-400' :
-                            characterCount < 200 ? 'bg-amber-500/20 text-amber-400' :
-                            'bg-emerald-500/20 text-emerald-400'
+                            characterCount < 100 ? 'bg-red-50 text-red-600' :
+                            characterCount < 200 ? 'bg-amber-50 text-amber-600' :
+                            'bg-emerald-50 text-emerald-600'
                         }`}>
                             {characterCount}/1000
                         </div>
@@ -251,23 +250,22 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                             <Icon name="fa-cubes" className="text-[#004B63]" />
-                            <h4 className="text-lg font-semibold text-white">Constructor Modular</h4>
+                            <h4 className="text-lg font-semibold text-slate-800">Constructor Modular</h4>
                         </div>
                         <button
                             onClick={() => setCreatedPrompt('')}
-                            className="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg hover:bg-slate-700 transition-colors"
+                            className="px-4 py-2 bg-white border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 transition-colors"
                         >
                             <Icon name="fa-trash" className="mr-2" />
                             Limpiar todo
                         </button>
                     </div>
 
-                    {/* Componentes modulares */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {Object.entries(promptComponents).map(([type, components]) => (
-                            <div key={type} className="bg-slate-800/30 rounded-xl p-4 border border-slate-700">
+                            <div key={type} className="bg-white rounded-xl p-4 border border-slate-200">
                                 <div className="flex items-center gap-2 mb-3">
-                                    <div className="w-8 h-8 rounded-lg bg-[#004B63]/20 flex items-center justify-center">
+                                    <div className="w-8 h-8 rounded-lg bg-[#004B63]/10 flex items-center justify-center">
                                         <Icon 
                                             name={
                                                 type === 'role' ? 'fa-user-tie' :
@@ -280,7 +278,7 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                                             className="text-[#004B63]" 
                                         />
                                     </div>
-                                    <h5 className="font-semibold text-white capitalize">{type}</h5>
+                                    <h5 className="font-semibold text-slate-800 capitalize">{type}</h5>
                                 </div>
                                 
                                 <div className="space-y-2">
@@ -288,14 +286,14 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                                         <button
                                             key={index}
                                             onClick={() => addComponent(type, component)}
-                                            className="w-full text-left p-3 bg-slate-900/50 hover:bg-slate-800/50 rounded-lg border border-slate-700 hover:border-[#004B63]/30 transition-colors group"
+                                            className="w-full text-left p-3 bg-slate-50 hover:bg-white rounded-lg border border-slate-200 hover:border-[#004B63]/30 transition-colors group"
                                         >
                                             <div className="flex items-start gap-2">
                                                 <Icon 
                                                     name="fa-plus" 
-                                                    className="text-slate-500 group-hover:text-[#004B63] mt-1 flex-shrink-0" 
+                                                    className="text-slate-400 group-hover:text-[#004B63] mt-1 flex-shrink-0" 
                                                 />
-                                                <span className="text-sm text-slate-300 group-hover:text-white">
+                                                <span className="text-sm text-slate-600 group-hover:text-slate-900">
                                                     {component}
                                                 </span>
                                             </div>
@@ -306,22 +304,21 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                         ))}
                     </div>
 
-                    {/* Vista previa del prompt construido */}
                     <div className="space-y-4">
                         <div className="flex items-center gap-2">
                             <Icon name="fa-eye" className="text-emerald-500" />
-                            <h4 className="text-lg font-semibold text-white">Vista previa</h4>
+                            <h4 className="text-lg font-semibold text-slate-800">Vista previa</h4>
                         </div>
                         
-                        <div className="bg-slate-900/50 rounded-xl p-5 border border-slate-700">
+                        <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
                             {createdPrompt ? (
-                                <pre className="text-slate-200 text-sm leading-relaxed whitespace-pre-wrap font-mono">
+                                <pre className="text-slate-700 text-sm leading-relaxed whitespace-pre-wrap font-mono">
                                     {createdPrompt}
                                 </pre>
                             ) : (
                                 <div className="text-center py-8">
-                                    <Icon name="fa-cube" className="text-slate-600 text-3xl mb-3" />
-                                    <p className="text-slate-500">
+                                    <Icon name="fa-cube" className="text-slate-300 text-3xl mb-3" />
+                                    <p className="text-slate-400">
                                         Añade componentes para construir tu prompt
                                     </p>
                                 </div>
@@ -332,19 +329,19 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
             )}
 
             {/* Guía de creación */}
-            <div className="bg-slate-900/50 rounded-xl p-5 border border-slate-700/50">
+            <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
                 <div className="flex items-center gap-3 mb-4">
                     <Icon name="fa-graduation-cap" className="text-amber-500" />
-                    <h4 className="text-lg font-semibold text-white">Guía para prompts efectivos</h4>
+                    <h4 className="text-lg font-semibold text-slate-800">Guía para prompts efectivos</h4>
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-3">
-                        <h5 className="font-medium text-white flex items-center gap-2">
+                        <h5 className="font-medium text-slate-700 flex items-center gap-2">
                             <div className="w-2 h-2 bg-[#00BCD4] rounded-full"></div>
                             Estructura recomendada
                         </h5>
-                        <ol className="space-y-2 text-sm text-slate-400">
+                        <ol className="space-y-2 text-sm text-slate-500">
                             <li className="flex items-start gap-2">
                                 <span className="text-[#00BCD4] font-bold">1.</span>
                                 <span>Comienza con el <strong>Rol</strong> específico del asistente</span>
@@ -373,11 +370,11 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                     </div>
                     
                     <div className="space-y-3">
-                        <h5 className="font-medium text-white flex items-center gap-2">
+                        <h5 className="font-medium text-slate-700 flex items-center gap-2">
                             <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
                             Consejos clave
                         </h5>
-                        <ul className="space-y-2 text-sm text-slate-400">
+                        <ul className="space-y-2 text-sm text-slate-500">
                             <li className="flex items-start gap-2">
                                 <Icon name="fa-check" className="text-emerald-500 mt-0.5 flex-shrink-0" />
                                 <span>Sé <strong>específico</strong> en lugar de general</span>
