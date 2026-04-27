@@ -155,7 +155,7 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                                 <p className="text-[#00BCD4] text-sm">{selectedElements.rol}</p>
                                 <button
                                     onClick={() => handleElementSelect('rol', '')}
-                                    className="text-slate-400 hover:text-slate-700"
+                                    className="text-slate-500 hover:text-slate-900"
                                 >
                                     <Icon name="fa-times" />
                                 </button>
@@ -191,7 +191,7 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                                 <p className="text-[#004B63] text-sm">{selectedElements.contexto}</p>
                                 <button
                                     onClick={() => handleElementSelect('contexto', '')}
-                                    className="text-slate-400 hover:text-slate-700"
+                                    className="text-slate-500 hover:text-slate-900"
                                 >
                                     <Icon name="fa-times" />
                                 </button>
@@ -227,7 +227,7 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                                 <p className="text-emerald-500 text-sm">{selectedElements.tarea}</p>
                                 <button
                                     onClick={() => handleElementSelect('tarea', '')}
-                                    className="text-slate-400 hover:text-slate-700"
+                                    className="text-slate-500 hover:text-slate-900"
                                 >
                                     <Icon name="fa-times" />
                                 </button>

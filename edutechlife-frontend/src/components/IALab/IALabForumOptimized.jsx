@@ -313,7 +313,7 @@ const IALabForumOptimized = ({
                                             className={cn(
                                                 "flex items-center gap-1",
                                                 "text-xs font-medium",
-                                                isLiked ? "text-red-500" : "text-slate-400",
+                                                isLiked ? "text-red-500" : "text-slate-500",
                                                 "hover:text-red-500",
                                                 "transition-colors",
                                                 "disabled:opacity-50 disabled:cursor-not-allowed"

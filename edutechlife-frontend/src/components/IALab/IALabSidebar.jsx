@@ -33,9 +33,10 @@ const IALabSidebar = () => {
    return (
       <aside className="w-64 flex-shrink-0 border-r border-[#004B63]/8 bg-gradient-to-b from-white via-white to-slate-50/80 backdrop-blur-xl shadow-[0_8px_40px_rgba(0,75,99,0.06)] overflow-y-auto">
        <div className="px-4 py-5 space-y-5">
-         {/* Progress Circle */}
-         <div className="flex flex-col items-center p-5 bg-white rounded-2xl shadow-sm border border-[#004B63]/8 w-full">
-           <div className="relative w-28 h-28 mb-3">
+          {/* Progress Circle */}
+          <div className="relative overflow-hidden flex flex-col items-center p-5 bg-white rounded-2xl shadow-[0px_4px_16px_rgba(17,17,26,0.05)] border border-slate-100 w-full">
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#00BCD4]" />
+            <div className="relative w-28 h-28 mb-3">
              <svg className="w-full h-full transform -rotate-90">
                <circle cx="56" cy="56" r="48" stroke="#E2E8F0" strokeWidth="8" fill="none" />
                <circle cx="56" cy="56" r="48" stroke="url(#sidebar-progress-grad)" strokeWidth="8" fill="none" strokeLinecap="round" strokeDasharray="301.593" strokeDashoffset={301.593 - (301.593 * Math.min(completedModules.length * 20, 100)) / 100} className="transition-all duration-700 ease-out" />
@@ -87,12 +88,12 @@ const IALabSidebar = () => {
                   </div>
                   <div className="flex-1 min-w-0 text-left">
                     <p className="font-semibold text-sm truncate">{mod.title}</p>
-                    <p className={`text-xs ${activeMod === mod.id ? 'text-white/80' : 'text-slate-400'}`}>
+                    <p className={`text-xs ${activeMod === mod.id ? 'text-white/80' : 'text-slate-500'}`}>
                       {mod.duration}
                     </p>
                   </div>
                   {isModuleLocked(mod.id) && (
-                    <Icon name="fa-lock" className="text-xs text-slate-300" />
+                    <Icon name="fa-lock" className="text-xs text-[#004B63]/40" />
                   )}
                   {!isModuleLocked(mod.id) && completedModules.includes(mod.id) && (
                     <Icon name="fa-check" className="text-xs text-emerald-500" />
@@ -145,7 +146,7 @@ const IALabSidebar = () => {
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-slate-700 truncate">Contexto Dinámico</p>
                     <div className="flex items-center gap-2 mt-1">
-                      <span className="text-xs font-medium px-2 py-0.5 bg-blue-50 text-blue-700 rounded-md">Intermedio</span>
+                      <span className="text-xs font-medium px-2 py-0.5 bg-slate-100 text-slate-700 rounded-md">Intermedio</span>
                       <span className="text-xs text-slate-400">18:20</span>
                     </div>
                   </div>
@@ -159,7 +160,7 @@ const IALabSidebar = () => {
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-slate-700 truncate">Chain-of-Thought</p>
                     <div className="flex items-center gap-2 mt-1">
-                      <span className="text-xs font-medium px-2 py-0.5 bg-purple-50 text-purple-700 rounded-md">Avanzado</span>
+                      <span className="text-xs font-medium px-2 py-0.5 bg-[#004B63]/10 text-[#004B63] rounded-md">Avanzado</span>
                       <span className="text-xs text-slate-400">22:10</span>
                     </div>
                   </div>
@@ -173,7 +174,7 @@ const IALabSidebar = () => {
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-slate-700 truncate">Zero-Shot Prompting</p>
                     <div className="flex items-center gap-2 mt-1">
-                      <span className="text-xs font-medium px-2 py-0.5 bg-amber-50 text-amber-700 rounded-md">Intermedio</span>
+                      <span className="text-xs font-medium px-2 py-0.5 bg-slate-100 text-slate-700 rounded-md">Intermedio</span>
                       <span className="text-xs text-slate-400">15:30</span>
                     </div>
                   </div>

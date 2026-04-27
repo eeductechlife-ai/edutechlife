@@ -223,7 +223,7 @@ const IALabChallengeSection = ({
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                            className={`flex-1 px-6 py-3 bg-gradient-to-r from-[#004B63] via-[#003A4D] to-[#06B6D4] text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 font-semibold flex items-center justify-center gap-2 text-sm ${
+                            className={`w-full px-6 py-3 bg-gradient-to-r from-[#004B63] via-[#003A4D] to-[#06B6D4] text-white rounded-xl hover:bg-white hover:text-[#004B63] hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 font-semibold flex items-center justify-center gap-2 text-sm ${
                                 isStartingChallenge || isButtonDisabled ? 'opacity-70 cursor-not-allowed' : ''
                             }`}
                             onClick={handleStartChallenge}
@@ -236,23 +236,10 @@ const IALabChallengeSection = ({
                                 </>
                             ) : (
                                 <>
-                                    <Icon name="fa-play-circle" className="text-sm" />
-                                    <span>Iniciar Desafío</span>
+                                    <Icon name="fa-play-circle" className="text-sm text-white hover:text-[#004B63]" />
+                                    <span className="text-sm text-white hover:text-[#004B63]">Iniciar Desafío</span>
                                 </>
                             )}
-                        </motion.button>
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                            className={`flex-1 px-6 py-3 border-2 border-[#004B63]/15 text-[#004B63] rounded-xl hover:bg-[#004B63]/5 hover:border-[#004B63]/30 transition-all duration-300 font-semibold flex items-center justify-center gap-2 text-sm ${
-                                isButtonDisabled ? 'opacity-70 cursor-not-allowed' : ''
-                            }`}
-                            onClick={handleViewSolution}
-                            disabled={isButtonDisabled}
-                        >
-                            <Icon name="fa-graduation-cap" className="text-sm" />
-                            <span>Solución Experta</span>
                         </motion.button>
                     </>
                 )}

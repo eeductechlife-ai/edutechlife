@@ -291,7 +291,7 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                                             <div className="flex items-start gap-2">
                                                 <Icon 
                                                     name="fa-plus" 
-                                                    className="text-slate-400 group-hover:text-[#004B63] mt-1 flex-shrink-0" 
+                                                    className="text-slate-500 group-hover:text-[#004B63] mt-1 flex-shrink-0" 
                                                 />
                                                 <span className="text-sm text-slate-600 group-hover:text-slate-900">
                                                     {component}

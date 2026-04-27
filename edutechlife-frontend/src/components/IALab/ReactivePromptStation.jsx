@@ -22,6 +22,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
     const [quickAnalysis, setQuickAnalysis] = useState(null);
     const [charCount, setCharCount] = useState(input.length);
     const [copied, setCopied] = useState(false);
+    const [isResultOpen, setIsResultOpen] = useState(true);
 
     const handleInputChange = useCallback((e) => {
         const text = e.target.value;
@@ -44,6 +45,12 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
             setQuickAnalysis(analysis);
         }
     }, [input, getQuickAnalysis]);
+
+    useEffect(() => {
+        if (genData?.optimizedPrompt) {
+            setIsResultOpen(true);
+        }
+    }, [genData]);
 
     const handleOptimize = async () => {
         if (!isValidInput(input)) {
@@ -187,11 +194,12 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                                 "w-full px-6 py-3 rounded-xl",
                                 "bg-gradient-to-r from-[#004B63] via-[#003A4D] to-[#06B6D4]",
                                 "text-white font-semibold",
+                                "hover:bg-white hover:text-[#004B63]",
                                 "shadow-md shadow-[#004B63]/20 hover:shadow-lg hover:shadow-[#004B63]/30",
                                 "transition-all duration-300",
                                 "flex items-center justify-center gap-2",
                                 "focus:outline-none focus:ring-2 focus:ring-[#00BCD4]/30 focus:ring-offset-2",
-                                "disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+                                "disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:bg-transparent disabled:hover:text-white"
                             )}
                             aria-label={loading ? "Analizando y mejorando..." : "Generar prompt profesional"}
                         >
@@ -202,8 +210,8 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                                 </>
                             ) : (
                                 <>
-                                    <Icon name="fa-wand-magic-sparkles" />
-                                    <span>Generar Prompt Profesional</span>
+                                    <Icon name="fa-wand-magic-sparkles" className="text-sm text-white hover:text-[#004B63]" />
+                                    <span className="text-sm text-white hover:text-[#004B63]">Generar Prompt Profesional</span>
                                 </>
                             )}
                         </motion.button>
@@ -310,63 +318,85 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
 
             {genData && genData.optimizedPrompt && (
                 <div className="space-y-4 pt-4 border-t border-[#004B63]/10">
-                    <div className="relative bg-gradient-to-br from-[#004B63]/5 to-[#00BCD4]/8 rounded-xl p-5 md:p-6 border border-[#00BCD4]/20 shadow-xl shadow-[#00BCD4]/5">
-                        <div className="flex items-center justify-between mb-3">
-                            <div className="flex items-center gap-2">
-                                <div className="w-6 h-6 rounded-md bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center">
-                                    <Icon name="fa-terminal" className="text-white w-3.5 h-3.5" />
-                                </div>
-                                <span className="text-xs font-bold tracking-[0.12em] uppercase text-[#004B63]">
-                                    Prompt Generado
-                                </span>
+                    <div
+                        onClick={() => setIsResultOpen(!isResultOpen)}
+                        className="flex items-center justify-between px-4 py-3 rounded-xl bg-[#004B63]/5 hover:bg-[#004B63]/10 border border-[#00BCD4]/20 cursor-pointer transition-colors duration-200"
+                    >
+                        <div className="flex items-center gap-2">
+                            <Icon name="fa-terminal" className="text-[#004B63] w-4 h-4" />
+                            <span className="text-xs font-bold tracking-[0.12em] uppercase text-[#004B63]">
+                                Resultado
+                            </span>
+                            <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 ${
+                                isResultOpen ? 'bg-[#004B63]/10' : 'bg-[#06B6D4]/15'
+                            }`}>
+                                <Icon
+                                    name={isResultOpen ? "fa-chevron-up" : "fa-chevron-down"}
+                                    className={`w-3 h-3 ${isResultOpen ? 'text-[#004B63]' : 'text-[#06B6D4]'}`}
+                                />
                             </div>
-                            <button
-                                onClick={handleCopy}
-                                className="flex items-center gap-1.5 px-3 py-1.5 bg-[#004B63]/10 hover:bg-[#004B63]/20 text-[#004B63] text-xs font-semibold rounded-lg transition-all duration-200"
-                            >
-                                <Icon name={copied ? "fa-check" : "fa-copy"} className="w-3 h-3" />
-                                <span>{copied ? "Copiado" : "Copiar"}</span>
-                            </button>
                         </div>
-                        <div className="overflow-x-auto">
-                          <p className="text-slate-700 text-sm leading-relaxed font-mono whitespace-pre-wrap">
-                              {genData.optimizedPrompt}
-                          </p>
-                        </div>
+                        <button
+                            onClick={(e) => { e.stopPropagation(); handleCopy(); }}
+                            className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-[#004B63] text-xs font-semibold rounded-lg transition-all duration-200"
+                        >
+                            <Icon name={copied ? "fa-check" : "fa-copy"} className="w-3 h-3" />
+                            <span>{copied ? "Copiado" : "Copiar"}</span>
+                        </button>
                     </div>
 
-                    <div className="bg-[#004B63]/5 border-l-4 border-[#004B63] rounded-r-xl p-4 md:p-5">
-                        <div className="flex items-center gap-2 mb-3">
-                            <div className="w-7 h-7 rounded-md bg-[#004B63]/10 flex items-center justify-center flex-shrink-0">
-                                <Icon name="fa-lightbulb" className="text-[#004B63] w-3.5 h-3.5" />
-                            </div>
-                            <span className="font-semibold text-[#004B63] text-sm">Feedback Educativo</span>
-                        </div>
-                        <p className="text-slate-600 text-sm md:text-base leading-relaxed">
-                            {genData.feedback?.educationalInsights || genData.feedback?.summary || ''}
-                        </p>
-                        {improvements.length > 0 && (
-                            <>
-                                <div className="my-3 border-t border-[#004B63]/10" />
-                                <div className="flex items-center gap-2 mb-2">
-                                    <div className="w-5 h-5 rounded-md bg-[#004B63]/10 flex items-center justify-center flex-shrink-0">
-                                        <Icon name="fa-list-check" className="text-[#004B63] w-2.5 h-2.5" />
+                    {isResultOpen && (
+                        <>
+                            <div className="relative bg-gradient-to-br from-[#004B63]/5 to-[#00BCD4]/8 rounded-xl p-5 md:p-6 border border-[#00BCD4]/20 shadow-xl shadow-[#00BCD4]/5">
+                                <div className="flex items-center gap-2 mb-4">
+                                    <div className="w-6 h-6 rounded-md bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center">
+                                        <Icon name="fa-terminal" className="text-white w-3.5 h-3.5" />
                                     </div>
-                                    <span className="text-xs font-semibold text-[#004B63] uppercase tracking-wider">Mejoras aplicadas</span>
+                                    <span className="text-xs font-bold tracking-[0.12em] uppercase text-[#004B63]">
+                                        Prompt Generado
+                                    </span>
                                 </div>
-                                <ul className="space-y-2">
-                                    {improvements.map((imp, i) => (
-                                        <li key={i} className="flex items-start gap-2.5 text-sm text-slate-600">
-                                            <div className="w-5 h-5 rounded-full bg-[#004B63]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                                <Icon name="fa-check" className="text-[#004B63] w-2.5 h-2.5" />
+                                <div className="overflow-x-auto">
+                                  <p className="text-slate-700 text-sm leading-relaxed font-mono whitespace-pre-wrap">
+                                      {genData.optimizedPrompt}
+                                  </p>
+                                </div>
+                            </div>
+
+                            <div className="bg-[#004B63]/5 border-l-4 border-[#004B63] rounded-r-xl p-4 md:p-5">
+                                <div className="flex items-center gap-2 mb-3">
+                                    <div className="w-7 h-7 rounded-md bg-[#004B63]/10 flex items-center justify-center flex-shrink-0">
+                                        <Icon name="fa-lightbulb" className="text-[#004B63] w-3.5 h-3.5" />
+                                    </div>
+                                    <span className="font-semibold text-[#004B63] text-sm">Feedback Educativo</span>
+                                </div>
+                                <p className="text-slate-600 text-sm md:text-base leading-relaxed">
+                                    {genData.feedback?.educationalInsights || genData.feedback?.summary || ''}
+                                </p>
+                                {improvements.length > 0 && (
+                                    <>
+                                        <div className="my-3 border-t border-[#004B63]/10" />
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <div className="w-5 h-5 rounded-md bg-[#004B63]/10 flex items-center justify-center flex-shrink-0">
+                                                <Icon name="fa-list-check" className="text-[#004B63] w-2.5 h-2.5" />
                                             </div>
-                                            <span className="leading-snug">{imp}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </>
-                        )}
-                    </div>
+                                            <span className="text-xs font-semibold text-[#004B63] uppercase tracking-wider">Mejoras aplicadas</span>
+                                        </div>
+                                        <ul className="space-y-2">
+                                            {improvements.map((imp, i) => (
+                                                <li key={i} className="flex items-start gap-2.5 text-sm text-slate-600">
+                                                    <div className="w-5 h-5 rounded-full bg-[#004B63]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                                        <Icon name="fa-check" className="text-[#004B63] w-2.5 h-2.5" />
+                                                    </div>
+                                                    <span className="leading-snug">{imp}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </>
+                                )}
+                            </div>
+                        </>
+                    )}
                 </div>
             )}
         </motion.div>

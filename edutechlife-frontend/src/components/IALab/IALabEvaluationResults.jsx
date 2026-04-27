@@ -110,7 +110,7 @@ const IALabEvaluationResults = ({ evaluation, onClose }) => {
                                         className={`px-4 py-3 text-sm font-medium rounded-t-lg transition-colors ${
                                             activeTab === tab
                                                 ? 'bg-white text-[#004B63] border-b-2 border-[#00BCD4]'
-                                                : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
+                                                : 'text-slate-600 hover:text-[#004B63] hover:bg-slate-50'
                                         }`}
                                     >
                                         <Icon 
