@@ -10,8 +10,6 @@
  * - Metadatos completos para cada recurso
  */
 
-import pdfDoc from '../../../assets/docs/guia-anatomia-prompt.pdf';
-
 export const moduleResources = {
   // MÓDULO 1: INGENIERÍA DE PROMPTS
   "Introducción a la Inteligencia Artificial Generativa": {
@@ -70,9 +68,9 @@ export const moduleResources = {
         id: "prompt-video-1",
         type: "video",
         title: "Explicación Visual: Anatomía de un Prompt",
-        url: "https://www.youtube.com/embed/7Pq-S557XQU",
+        url: "https://www.youtube.com/embed/6f-FwOE5wIY",
         duration: "7:15",
-        thumbnail: "https://img.youtube.com/vi/7Pq-S557XQU/maxresdefault.jpg",
+        thumbnail: "https://img.youtube.com/vi/6f-FwOE5wIY/maxresdefault.jpg",
         provider: "youtube",
         description: "Desglose visual de las partes que componen un prompt efectivo."
       },
@@ -91,7 +89,7 @@ export const moduleResources = {
         id: "prompt-guide-1",
         type: "pdf-thumbnail",
         title: "Guía: Anatomía de un Prompt",
-        url: pdfDoc,
+        url: "/Doc/guia-anatomia-prompt.pdf",
         pages: 12,
         format: "PDF",
         size: "4.0 MB",
