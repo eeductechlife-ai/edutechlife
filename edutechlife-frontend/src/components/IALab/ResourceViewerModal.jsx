@@ -386,71 +386,11 @@ const PDFThumbnailViewer = ({ resource }) => {
   );
 };
 
-/**
- * Componente para OVA Thumbnail
- */
-const OVAThumbnailViewer = ({ resource, onOpenOVA }) => {
-  // Manejar clic para abrir OVA
-  const handleClick = () => {
-    if (onOpenOVA) {
-      onOpenOVA(resource);
-    }
-  };
-
+const OVAViewer = ({ resource, onClose }) => {
   return (
-    <div className="w-full h-full">
-      <div 
-        onClick={handleClick}
-        className="group relative w-full h-full bg-gradient-to-br from-[#004B63]/5 to-[#06B6D4]/5 rounded-2xl border border-[#004B63]/10 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden flex flex-col"
-        aria-label={`Abrir ${resource.title}`}
-        title="Haz clic para abrir el OVA interactivo"
-      >
-        <div className="flex-1 p-6 flex flex-col items-center justify-center">
-          <div className="w-32 h-32 rounded-3xl bg-gradient-to-br from-[#004B63] to-[#0A3550] shadow-2xl flex items-center justify-center mb-6">
-            <Icon name="fa-brain" className="text-white text-4xl" />
-          </div>
-          
-          <h4 className="font-bold text-slate-800 text-xl text-center mb-3">
-            {resource.title}
-          </h4>
-          
-          <p className="text-slate-600 text-center mb-6">
-            {resource.description}
-          </p>
-
-          <div className="grid grid-cols-2 gap-4 w-full max-w-md">
-            <div className="bg-white/50 rounded-xl p-4 border border-[#004B63]/10">
-              <div className="flex items-center gap-2 mb-2">
-                <Icon name="fa-clock" className="w-4 h-4 text-[#06B6D4]" />
-                <span className="text-sm font-medium text-slate-700">Tiempo estimado</span>
-              </div>
-              <p className="text-lg font-bold text-[#004B63]">{resource.estimatedTime || "15 minutos"}</p>
-            </div>
-            
-            <div className="bg-white/50 rounded-xl p-4 border border-[#004B63]/10">
-              <div className="flex items-center gap-2 mb-2">
-                <Icon name="fa-chart-line" className="w-4 h-4 text-[#06B6D4]" />
-                <span className="text-sm font-medium text-slate-700">Dificultad</span>
-              </div>
-              <p className="text-lg font-bold text-[#004B63]">{resource.difficulty || "Intermedio"}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="p-4 border-t border-[#004B63]/10 bg-white/30">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Icon name="fa-hand-pointer" className="w-5 h-5 text-[#06B6D4]" />
-              <span className="text-sm text-slate-700 font-medium">
-                Haz clic para explorar el laboratorio interactivo
-              </span>
-            </div>
-            <div className="flex items-center gap-1">
-              <span className="text-sm text-[#004B63] font-bold">EXPLORAR</span>
-              <Icon name="fa-arrow-right" className="w-5 h-5 text-[#004B63]" />
-            </div>
-          </div>
-        </div>
+    <div className="w-full h-full min-h-[70vh] flex flex-col bg-white rounded-2xl border border-slate-200">
+      <div className="flex-1 relative">
+        <QueEsPrompt_OVA_Original onClose={onClose} />
       </div>
     </div>
   );
@@ -541,9 +481,9 @@ const ResourceViewerModal = ({
           return <PDFThumbnailViewer resource={resource} />;
         
         case 'ova-thumbnail':
-          return <OVAThumbnailViewer 
+          return <OVAViewer 
             resource={resource} 
-            onOpenOVA={onOpenOVA}
+            onClose={onClose}
           />;
         
         default:
@@ -634,7 +574,7 @@ const ResourceViewerModal = ({
                     "w-full max-w-6xl bg-white rounded-2xl sm:rounded-3xl shadow-2xl",
                     "pointer-events-auto overflow-hidden",
                     "flex flex-col",
-                    "h-[90vh] max-h-[90vh]", // 90% de altura como solicitado
+                    "h-[90vh] max-h-[900px]",
                     "mx-2 sm:mx-4" // Margenes responsive
                   )}
                   onClick={(e) => e.stopPropagation()}
@@ -694,7 +634,7 @@ const ResourceViewerModal = ({
 
               {/* Contenido principal del recurso */}
               <div className="flex-1 p-3 sm:p-4 md:p-6 overflow-auto">
-                <div className="w-full h-full min-h-[300px] sm:min-h-[400px]">
+                <div className="w-full h-full min-h-[70vh]">
                   {renderViewer()}
                 </div>
               </div>
