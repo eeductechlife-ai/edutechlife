@@ -89,7 +89,7 @@ export const moduleResources = {
         id: "prompt-guide-1",
         type: "pdf-thumbnail",
         title: "Guía: Anatomía de un Prompt",
-        url: "/Doc/guia-anatomia-prompt.pdf",
+        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/recursos-edutechlife/guia_edutechlife_modulo1.pdf",
         pages: 12,
         format: "PDF",
         size: "249 KB",
