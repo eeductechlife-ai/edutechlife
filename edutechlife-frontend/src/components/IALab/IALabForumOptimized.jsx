@@ -440,7 +440,7 @@ const IALabForumOptimized = ({
                                 "bg-gradient-to-r from-[#004B63] via-[#003A4D] to-[#06B6D4]",
                                 "text-white text-sm font-medium",
                                 "hover:shadow-[0_0_15px_rgba(0,188,212,0.3)]",
-                                "disabled:from-slate-300 disabled:to-slate-400 disabled:cursor-not-allowed",
+                                "disabled:opacity-50 disabled:cursor-not-allowed",
                                 "transition-all duration-200",
                                 "flex items-center justify-center gap-2",
                                 "shadow-sm",
