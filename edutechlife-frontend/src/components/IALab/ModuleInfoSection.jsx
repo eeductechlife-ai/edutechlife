@@ -107,7 +107,7 @@ const ModuleInfoSection = ({ className = '', ...rest }) => {
                     
                     <div className="flex-1 min-w-0">
                         <p className="text-sm text-slate-700 font-medium truncate">
-                            Diseña un prompt que obligue a la IA a debatir la ética de su propia existencia.
+                            ¡Llegó el momento de la práctica! Aplica todo lo aprendido en este módulo resolviendo un caso real. Atrévete a consolidar tu aprendizaje, supera el reto y lleva tus conocimientos al siguiente nivel.
                         </p>
                     </div>
                 </motion.div>
