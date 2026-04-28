@@ -61,6 +61,18 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
             }
         });
 
+        // Garantizar mínimo 3 opciones por categoría
+        const ensureMinimum = (elements, defaults) => {
+            return elements.length >= 3 ? elements : [...elements, ...defaults.slice(0, 3 - elements.length)];
+        };
+        const rolDefaults = ["Eres un experto en inteligencia artificial", "Actúas como consultor especializado en tecnología", "Tu rol es analista y estratega digital"];
+        const contextoDefaults = ["En un entorno educativo innovador", "Para una empresa que busca transformación digital", "En el contexto de un proyecto de mejora continua"];
+        const tareaDefaults = ["Debes analizar y resolver el desafío planteado", "Necesitas estructurar una solución paso a paso", "Crea un plan detallado con objetivos medibles"];
+
+        possibleElements.rol = ensureMinimum(possibleElements.rol, rolDefaults);
+        possibleElements.contexto = ensureMinimum(possibleElements.contexto, contextoDefaults);
+        possibleElements.tarea = ensureMinimum(possibleElements.tarea, tareaDefaults);
+
         return possibleElements;
     };
 
@@ -114,6 +126,11 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                         <p className="text-slate-500 text-sm">
                             Analiza el escenario y clasifica cada parte como Rol, Contexto o Tarea
                         </p>
+                        <div className="mt-3 p-4 bg-blue-50 border border-blue-100 rounded-xl">
+                            <p className="text-xs text-slate-600 leading-relaxed">
+                                <strong className="text-[#004B63]">¿Cómo resolver este ejercicio?</strong> Lee atentamente el escenario. Debajo encontrarás fragmentos de texto que debes arrastrar hacia la columna correcta. Si no ves 3 opciones, busca frases como "Eres un...", "Trabajando para..." o "Debes..." en el texto del escenario para identificarlas.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -146,7 +163,7 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                         <h4 className="text-lg font-semibold text-slate-800">Rol</h4>
                     </div>
                     <p className="text-slate-500 text-sm mb-4">
-                        ¿Quién eres en este escenario? (experto, consultor, especialista)
+                        ¿Quién eres? Arrastra aquí frases que definan el rol del asistente.
                     </p>
                     
                     {selectedElements.rol ? (
@@ -182,7 +199,7 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                         <h4 className="text-lg font-semibold text-slate-800">Contexto</h4>
                     </div>
                     <p className="text-slate-500 text-sm mb-4">
-                        ¿Dónde y bajo qué circunstancias? (empresa, industria, situación)
+                        ¿Dónde? Arrastra aquí frases sobre la situación o entorno.
                     </p>
                     
                     {selectedElements.contexto ? (
@@ -218,7 +235,7 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                         <h4 className="text-lg font-semibold text-slate-800">Tarea</h4>
                     </div>
                     <p className="text-slate-500 text-sm mb-4">
-                        ¿Qué debes lograr? (objetivo específico, entregable)
+                        ¿Qué debes hacer? Arrastra aquí frases sobre la tarea u objetivo.
                     </p>
                     
                     {selectedElements.tarea ? (

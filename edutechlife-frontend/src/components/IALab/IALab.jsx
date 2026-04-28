@@ -27,7 +27,7 @@ import ErrorBoundary from '../forum/ErrorBoundary';
  * @returns {JSX.Element} Componente IALab completo
  */
 const IALabContent = () => {
-    const { showPremiumEvaluationModal, setShowPremiumEvaluationModal, user, completedModules } = useIALabContext();
+    const { showPremiumEvaluationModal, setShowPremiumEvaluationModal, user, completedModules, calculateGlobalProgress } = useIALabContext();
     const [showExamModal, setShowExamModal] = useState(false);
     const [showQuizModal, setShowQuizModal] = useState(false);
     const [showValerioPanel, setShowValerioPanel] = useState(false);
@@ -128,7 +128,7 @@ const IALabContent = () => {
                               </div>
                               <div>
                                 <p className="text-sm font-semibold text-slate-800 leading-tight">{user?.full_name || 'Usuario'}</p>
-                                <p className="text-xs text-slate-500">{completedModules.length}/5 Módulos</p>
+                                <p className="text-xs text-slate-500">{calculateGlobalProgress()}% Completado</p>
                               </div>
                             </div>
                             <button
@@ -158,7 +158,7 @@ const IALabContent = () => {
                                 </div>
                               </div>
                               <div className="px-3 py-1.5 bg-[#004B63]/8 border border-[#004B63]/15 text-[#004B63] rounded-lg font-semibold text-xs">
-                                {completedModules.length}/5 Módulos
+                                {calculateGlobalProgress()}% Completado
                               </div>
                             </div>
 

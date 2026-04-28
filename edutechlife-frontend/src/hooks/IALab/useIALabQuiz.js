@@ -62,8 +62,8 @@ export const useIALabQuiz = () => {
   // ==================== CONSTANTES ====================
   
   const TOTAL_QUESTIONS = 8;
-  const PASSING_SCORE = 70; // 70% mínimo
-  const DAILY_ATTEMPTS_LIMIT = 2;
+  const PASSING_SCORE = 75; // 75% mínimo para aprobar
+  const DAILY_ATTEMPTS_LIMIT = 3; // Cambiado de 2 a 3 intentos diarios
   const SUGGESTED_TIME_MINUTES = 20;
   const SUGGESTED_TIME_SECONDS = SUGGESTED_TIME_MINUTES * 60;
   
@@ -219,7 +219,7 @@ export const useIALabQuiz = () => {
       correctCount: correct,
       passed,
       failedQuestions,
-      neededToPass: Math.ceil((PASSING_SCORE / 100) * TOTAL_QUESTIONS) // = 6
+      neededToPass: Math.ceil((PASSING_SCORE / 100) * TOTAL_QUESTIONS)
     };
   }, []);
   
@@ -403,7 +403,13 @@ export const useIALabQuiz = () => {
     if (!latestAttempt || dailyAttemptsCount < DAILY_ATTEMPTS_LIMIT) {
       resetQuizForRetry();
     }
-    
+
+    // Barajar preguntas y opciones cada intento
+    const shuffled = [...quizQuestions].sort(() => Math.random() - 0.5);
+    shuffled.forEach(q => {
+      q.options = [...q.options].sort(() => Math.random() - 0.5);
+    });
+
     return true;
   }, [
     canAttemptQuiz, setShowExamModal, setIsTimerRunning, setSecurityWarningCount,

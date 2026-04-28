@@ -36,6 +36,16 @@ export const IALabProvider = ({ children, onBack }) => {
   const [courseProgress, setCourseProgress] = useState(20);
   const [visitedModules, setVisitedModules] = useState([1]);
   const [isLoadingProgress, setIsLoadingProgress] = useState(true);
+
+  // Sistema de notas y progreso gamificado por módulo
+  const INITIAL_MODULE_PROGRESS = {
+    1: { exam: false, challenge: false, resourcesCompleted: false, community: false, currentScore: 0, isUnlocked: true },
+    2: { exam: false, challenge: false, resourcesCompleted: false, community: false, currentScore: 0, isUnlocked: false },
+    3: { exam: false, challenge: false, resourcesCompleted: false, community: false, currentScore: 0, isUnlocked: false },
+    4: { exam: false, challenge: false, resourcesCompleted: false, community: false, currentScore: 0, isUnlocked: false },
+    5: { exam: false, challenge: false, resourcesCompleted: false, community: false, currentScore: 0, isUnlocked: false },
+  };
+  const [moduleProgress, setModuleProgress] = useState(INITIAL_MODULE_PROGRESS);
   
   // Estados de evaluación (solo modal - eliminado quiz inline)
   const [showExamModal, setShowExamModal] = useState(false);
@@ -219,11 +229,11 @@ export const IALabProvider = ({ children, onBack }) => {
   
   // ==================== FUNCIONES DE UTILIDAD ====================
   
-  // Determinar si un módulo está bloqueado
+  // Determinar si un módulo está bloqueado (sistema gamificado)
   const isModuleLocked = useCallback((moduleId) => {
     if (moduleId === 1) return false;
-    return !completedModules.includes(moduleId) && !visitedModules.includes(moduleId);
-  }, [completedModules, visitedModules]);
+    return !moduleProgress[moduleId]?.isUnlocked;
+  }, [moduleProgress]);
   
   // Determinar si la evaluación está bloqueada
   const isEvaluationLocked = useCallback((moduleId) => {
@@ -236,6 +246,54 @@ export const IALabProvider = ({ children, onBack }) => {
   const getCurrentModule = useCallback(() => {
     return modules.find(m => m.id === activeMod) || modules[0];
   }, [activeMod]);
+
+  // ==================== SISTEMA DE NOTAS GAMIFICADO ====================
+  
+  const WEIGHTS = { exam: 40, challenge: 30, resources: 20, community: 10 };
+
+  // Calcular score de un módulo basado en actividades completadas
+  const calculateModuleScore = useCallback((moduleId) => {
+    const mod = moduleProgress[moduleId];
+    if (!mod) return 0;
+    let score = 0;
+    if (mod.exam) score += WEIGHTS.exam;
+    if (mod.challenge) score += WEIGHTS.challenge;
+    if (mod.resourcesCompleted) score += WEIGHTS.resources;
+    if (mod.community) score += WEIGHTS.community;
+    return score;
+  }, [moduleProgress]);
+
+  // Calcular progreso global (5 módulos x 20% cada uno)
+  const calculateGlobalProgress = useCallback(() => {
+    let passedModules = 0;
+    for (let i = 1; i <= 5; i++) {
+      if (calculateModuleScore(i) >= 80) passedModules++;
+    }
+    return passedModules * 20;
+  }, [calculateModuleScore]);
+
+  // Actualizar una actividad del módulo y recalcular score
+  const updateModuleActivity = useCallback((moduleId, activity, value) => {
+    setModuleProgress(prev => {
+      const updated = { ...prev[moduleId], [activity]: value };
+      let score = 0;
+      if (updated.exam) score += WEIGHTS.exam;
+      if (updated.challenge) score += WEIGHTS.challenge;
+      if (updated.resourcesCompleted) score += WEIGHTS.resources;
+      if (updated.community) score += WEIGHTS.community;
+      updated.currentScore = score;
+      
+      // Auto-unlock siguiente módulo si este se aprueba (>=80%)
+      if (moduleId < 5 && score >= 80) {
+        return {
+          ...prev,
+          [moduleId]: updated,
+          [moduleId + 1]: { ...prev[moduleId + 1], isUnlocked: true }
+        };
+      }
+      return { ...prev, [moduleId]: updated };
+    });
+  }, []);
   
   // Obtener el último intento del quiz
   const getLatestQuizAttempt = useCallback(() => {
@@ -268,6 +326,12 @@ export const IALabProvider = ({ children, onBack }) => {
     isLoadingProgress,
     setIsLoadingProgress,
     
+    // Sistema de notas gamificado
+    moduleProgress,
+    calculateModuleScore,
+    calculateGlobalProgress,
+    updateModuleActivity,
+
     // Estados de evaluación
     showExamModal,
     setShowExamModal,

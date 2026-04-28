@@ -42,6 +42,8 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false }) => {
     const [securityWarning, setSecurityWarning] = useState('');
     const [isSavingGrade, setIsSavingGrade] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
+    const [securityViolations, setSecurityViolations] = useState(0);
+    const MAX_SECURITY_VIOLATIONS = 3;
 
     // Debug logging
     console.log('🎯 [DEBUG] IALabEvaluationModal renderizando');
@@ -64,12 +66,72 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false }) => {
         }
     }, [isOpen]);
 
+    // Reset violaciones al abrir el modal
+    useEffect(() => {
+        if (isOpen) setSecurityViolations(0);
+    }, [isOpen]);
+
+    // Seguridad: detección de cambio de ventana
+    useEffect(() => {
+        if (!isVisible || state.step === 'results' || state.loading) return;
+        const handleVisibilityChange = () => {
+            if (document.hidden) {
+                const newCount = securityViolations + 1;
+                setSecurityViolations(newCount);
+                if (newCount >= MAX_SECURITY_VIOLATIONS) {
+                    alert('Has excedido el máximo de infracciones por cambio de ventana. El desafío se cerrará.');
+                    resetEvaluation();
+                    onClose();
+                } else {
+                    setSecurityWarning(`⚠️ Alerta ${newCount}/${MAX_SECURITY_VIOLATIONS}: No cambies de ventana durante el desafío`);
+                    setTimeout(() => setSecurityWarning(''), 3000);
+                }
+            }
+        };
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+    }, [isVisible, state.step, state.loading, securityViolations, resetEvaluation, onClose]);
+
+    // Seguridad: bloquear atajos de teclado
+    useEffect(() => {
+        if (!isVisible || state.step === 'results') return;
+        const handleKeyDown = (e) => {
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'v' || e.key === 'p' || e.key === 's' || e.key === 'u')) {
+                e.preventDefault(); e.stopPropagation();
+            }
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+                e.preventDefault();
+            }
+        };
+        document.addEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [isVisible, state.step]);
+
+    // Seguridad: bloquear capturas de pantalla e impresión
+    useEffect(() => {
+        if (!isVisible || state.step === 'results') return;
+        const handleBeforePrint = () => {
+            alert('⚠️ Capturas de pantalla e impresión bloqueadas por seguridad.');
+            setSecurityViolations(prev => prev + 1);
+        };
+        window.addEventListener('beforeprint', handleBeforePrint);
+        return () => window.removeEventListener('beforeprint', handleBeforePrint);
+    }, [isVisible, state.step]);
+
     // Medidas de seguridad: prevenir copy/paste/context menu
     const handleSecurityEvent = useCallback((e) => {
         e.preventDefault();
-        setSecurityWarning('⚠️ Escribe tus propias respuestas para aprender mejor');
+        const newCount = securityViolations + 1;
+        setSecurityViolations(newCount);
+        if (newCount >= MAX_SECURITY_VIOLATIONS) {
+            alert('Has excedido el máximo de infracciones de seguridad. El desafío se cerrará.');
+            resetEvaluation();
+            onClose();
+        } else {
+            setSecurityWarning(`⚠️ Advertencia ${newCount}/${MAX_SECURITY_VIOLATIONS}: Escribe tus propias respuestas`);
+        }
         setTimeout(() => setSecurityWarning(''), 3000);
-    }, []);
+    }, [securityViolations, resetEvaluation, onClose]);
 
     // Handler para cerrar modal (con confirmación si hay progreso)
     const handleCloseModal = useCallback(() => {
@@ -331,6 +393,19 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false }) => {
                             onCut={handleSecurityEvent}
                             onContextMenu={handleSecurityEvent}
                         />
+
+                        {/* Watermark de seguridad anti-screenshot */}
+                        {state.step !== 'results' && (
+                            <div className="fixed inset-0 pointer-events-none z-[101] opacity-[0.03] select-none" style={{
+                                background: `repeating-linear-gradient(45deg, #004B63, #004B63 2px, transparent 2px, transparent 60px)`,
+                            }}>
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <span className="text-[#004B63] text-8xl font-bold transform -rotate-12 select-none" style={{ whiteSpace: 'nowrap' }}>
+                                        EDUTECHLIFE
+                                    </span>
+                                </div>
+                            </div>
+                        )}
 
                         <div className="relative flex flex-col min-h-0 flex-1">
                             {renderHeader()}

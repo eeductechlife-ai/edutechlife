@@ -25,7 +25,9 @@ const IALabSidebar = () => {
     toggleSidebarDropdown,
     modules,
     isModuleLocked,
-    getCurrentModule
+    getCurrentModule,
+    calculateGlobalProgress,
+    calculateModuleScore
   } = useIALabContext();
   
   const curr = getCurrentModule();
@@ -39,7 +41,7 @@ const IALabSidebar = () => {
             <div className="relative w-28 h-28 mb-3">
              <svg className="w-full h-full transform -rotate-90">
                <circle cx="56" cy="56" r="48" stroke="#E2E8F0" strokeWidth="8" fill="none" />
-               <circle cx="56" cy="56" r="48" stroke="url(#sidebar-progress-grad)" strokeWidth="8" fill="none" strokeLinecap="round" strokeDasharray="301.593" strokeDashoffset={301.593 - (301.593 * Math.min(completedModules.length * 20, 100)) / 100} className="transition-all duration-700 ease-out" />
+                <circle cx="56" cy="56" r="48" stroke="url(#sidebar-progress-grad)" strokeWidth="8" fill="none" strokeLinecap="round" strokeDasharray="301.593" strokeDashoffset={301.593 - (301.593 * Math.min(calculateGlobalProgress(), 100)) / 100} className="transition-all duration-700 ease-out" />
                <defs>
                  <linearGradient id="sidebar-progress-grad" x1="0%" y1="0%" x2="100%" y2="100%">
                    <stop offset="0%" stopColor="#004B63" />
@@ -49,8 +51,8 @@ const IALabSidebar = () => {
              </svg>
              <div className="absolute inset-0 flex items-center justify-center">
                <div className="text-center">
-                 <div className="text-2xl font-bold text-[#004B63]">{Math.min(completedModules.length * 20, 100)}%</div>
-                  <div className="text-xs text-slate-400 mt-0.5">Completado</div>
+                  <div className="text-2xl font-bold text-[#004B63]">{calculateGlobalProgress()}%</div>
+                   <div className="text-xs text-slate-400 mt-0.5">Completado</div>
                </div>
              </div>
            </div>
@@ -95,7 +97,7 @@ const IALabSidebar = () => {
                   {isModuleLocked(mod.id) && (
                     <Icon name="fa-lock" className="text-xs text-[#004B63]/40" />
                   )}
-                  {!isModuleLocked(mod.id) && completedModules.includes(mod.id) && (
+                  {!isModuleLocked(mod.id) && calculateModuleScore(mod.id) >= 80 && (
                     <Icon name="fa-check" className="text-xs text-emerald-500" />
                   )}
                 </button>

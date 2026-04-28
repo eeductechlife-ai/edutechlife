@@ -38,6 +38,54 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
 
+  // Security handlers
+  const preventDefaultEvent = (e) => e.preventDefault();
+
+  // Detectar cambio de ventana/tab y cerrar examen a la 3ra infracción
+  useEffect(() => {
+    if (!isVisible || showScoreResult) return;
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        const newCount = (securityWarningCount || 0) + 1;
+        if (newCount >= MAX_SECURITY_WARNINGS) {
+          alert(SECURITY_WARNING_MESSAGES[2]);
+          closeEvaluationModal();
+          onClose();
+        } else {
+          alert(SECURITY_WARNING_MESSAGES[newCount - 1]);
+        }
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [isVisible, showScoreResult, securityWarningCount]);
+
+  // Bloquear atajos de teclado (Ctrl+C, Ctrl+V, Ctrl+P, F12)
+  useEffect(() => {
+    if (!isVisible || showScoreResult) return;
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'v' || e.key === 'p' || e.key === 's' || e.key === 'u')) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+        e.preventDefault();
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isVisible, showScoreResult]);
+
+  // Bloquear capturas de pantalla / impresión
+  useEffect(() => {
+    if (!isVisible || showScoreResult) return;
+    const handleBeforePrint = () => {
+      alert('⚠️ Capturas de pantalla e impresión bloqueadas por seguridad del examen.');
+    };
+    window.addEventListener('beforeprint', handleBeforePrint);
+    return () => window.removeEventListener('beforeprint', handleBeforePrint);
+  }, [isVisible, showScoreResult]);
+
   useEffect(() => {
     if (isOpen) {
       setIsVisible(true);
@@ -348,6 +396,10 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
       {isVisible && (
         <motion.div
           className="fixed inset-0 z-[100] bg-slate-50 flex flex-col min-h-0"
+          onCopy={preventDefaultEvent}
+          onPaste={preventDefaultEvent}
+          onCut={preventDefaultEvent}
+          onContextMenu={preventDefaultEvent}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -356,6 +408,18 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
           {renderHeader()}
 
           <div className="flex-1 overflow-y-auto min-h-0">
+            {/* Watermark de seguridad - anti-screenshot */}
+            {!showScoreResult && (
+              <div className="fixed inset-0 pointer-events-none z-[101] opacity-[0.03] select-none" style={{
+                background: `repeating-linear-gradient(45deg, #004B63, #004B63 2px, transparent 2px, transparent 60px)`,
+              }}>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-[#004B63] text-8xl font-bold transform -rotate-12 select-none" style={{ whiteSpace: 'nowrap' }}>
+                    EXAMEN EDUTECHLIFE
+                  </span>
+                </div>
+              </div>
+            )}
             <AnimatePresence mode="wait">
               {showScoreResult ? (
                 <motion.div

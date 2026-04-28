@@ -8,8 +8,11 @@ const IALabHeader = () => {
   const {
     completedModules,
     user,
-    onBack
+    onBack,
+    calculateGlobalProgress
   } = useIALabContext();
+
+  const globalProgress = calculateGlobalProgress();
 
   return (
     <header className="h-16 flex items-center justify-between px-6 bg-white border-b border-slate-200 w-full">
@@ -21,7 +24,7 @@ const IALabHeader = () => {
       </div>
       <div className="flex items-center gap-4">
         <div className="px-3 py-1.5 bg-[#004B63]/8 border border-[#004B63]/15 text-[#004B63] rounded-lg font-semibold text-xs">
-          {completedModules.length}/5 Módulos
+          {globalProgress}% Completado
         </div>
         <button
           className="relative flex items-center justify-center p-2 bg-transparent hover:opacity-80 transition-opacity"
