@@ -3,9 +3,7 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "rewrites": [
-    { "source": "/Doc/(.*)", "destination": "/Doc/$1" },
-    { "source": "/images/(.*)", "destination": "/images/$1" },
-    { "source": "/ialab-resources/(.*)", "destination": "/ialab-resources/$1" },
+    { "handle": "filesystem" },
     {
       "source": "/api/:path*",
       "destination": "https://edutechlife-backend.onrender.com/api/:path*"
