@@ -114,7 +114,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
     const isLoading = loading;
     return (
         <motion.div
-            whileHover={{ scale: 1.02, y: -4 }}
+            whileHover={{ scale: 1.02, y: -4, boxShadow: "0px 8px 25px rgba(17,17,26,0.1)" }}
             transition={{ duration: 0.2 }}
             animate={isLoading ? {
                 boxShadow: [

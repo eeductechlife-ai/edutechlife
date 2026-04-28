@@ -92,7 +92,7 @@ export const moduleResources = {
         url: "/Doc/guia-anatomia-prompt.pdf",
         pages: 12,
         format: "PDF",
-        size: "4.0 MB",
+        size: "249 KB",
         description: "Documento completo con estructura detallada de prompts efectivos, técnicas avanzadas y ejemplos prácticos.",
         thumbnailType: "premium",
         immersiveView: true

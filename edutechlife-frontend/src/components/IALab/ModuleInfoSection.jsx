@@ -21,7 +21,7 @@ const ModuleInfoSection = ({ className = '', ...rest }) => {
 
     return (
         <motion.div 
-            whileHover={{ scale: 1.02, y: -4 }}
+            whileHover={{ scale: 1.02, y: -4, boxShadow: "0px 8px 25px rgba(17,17,26,0.1)" }}
             transition={{ duration: 0.2 }}
             className={cn(
                 "relative z-10 bg-white rounded-2xl border border-slate-100 shadow-[0px_4px_16px_rgba(17,17,26,0.05)] p-5 md:p-8 overflow-hidden",

@@ -1,20 +1,17 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { useIALabContext } from '../../context/IALabContext';
-
-/**
- * COMPONENTE: IALabModuleHeader
- * 
- * Responsabilidad: Título principal limpio y minimalista del módulo actual
- * - Solo muestra el título principal del módulo
- * - Eliminada toda la UI redundante que ahora está en ModuleOverviewCard
- */
 
 const IALabModuleHeader = ({ onAction }) => {
   const { activeMod, modules } = useIALabContext();
   const curr = modules.find(m => m.id === activeMod) || modules[0];
   
   return (
-    <div className="bg-white rounded-2xl shadow-[0px_4px_16px_rgba(17,17,26,0.05)] border border-slate-100 overflow-hidden">
+    <motion.div
+      whileHover={{ scale: 1.02, y: -4, boxShadow: "0px 8px 25px rgba(17,17,26,0.1)" }}
+      transition={{ duration: 0.2 }}
+      className="bg-white rounded-2xl shadow-[0px_4px_16px_rgba(17,17,26,0.05)] border border-slate-100 overflow-hidden"
+    >
       <div className="bg-gradient-to-r from-[#004B63] to-[#00BCD4] p-5 md:p-6">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 bg-white/15 rounded-xl flex items-center justify-center shadow-inner">
@@ -25,7 +22,7 @@ const IALabModuleHeader = ({ onAction }) => {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

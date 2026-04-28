@@ -45,7 +45,7 @@ const ModuleOverviewCard = ({ onAction }) => {
     return (
       <React.Fragment>
         <motion.div
-        whileHover={{ scale: 1.02, y: -4 }}
+        whileHover={{ scale: 1.02, y: -4, boxShadow: "0px 8px 25px rgba(17,17,26,0.1)" }}
         transition={{ duration: 0.2 }}
         className="relative z-10 bg-white rounded-2xl border border-slate-100 shadow-[0px_4px_16px_rgba(17,17,26,0.05)] p-5 md:p-8 overflow-hidden mb-8"
       >
@@ -94,11 +94,11 @@ const ModuleOverviewCard = ({ onAction }) => {
                         });
                         setIsResourcesModalOpen(true);
                       }}
-                      className="flex items-center gap-1.5 px-3 py-2 bg-slate-50 border border-slate-100 rounded-lg hover:bg-white hover:border-[#004B63]/25 hover:shadow-sm transition-all duration-300 cursor-pointer group"
+                      className="flex items-center gap-1.5 px-3 py-2 bg-slate-50 border border-slate-100 rounded-lg hover:bg-[#004B63] hover:border-[#004B63] hover:shadow-md transition-all duration-300 cursor-pointer group"
                       aria-label={`Ver recursos del tema: ${tema}`}
                     >
-                      <div className="w-2 h-2 rounded-full bg-[#004B63] flex-shrink-0 group-hover:scale-125 transition-transform duration-300"></div>
-                      <span className="text-sm text-slate-700 group-hover:text-[#004B63] group-hover:font-semibold transition-colors duration-300 line-clamp-1 text-left">
+                      <div className="w-2 h-2 rounded-full bg-[#004B63] flex-shrink-0 group-hover:scale-125 group-hover:bg-white transition-all duration-300"></div>
+                      <span className="text-sm text-slate-700 group-hover:text-white group-hover:font-semibold transition-colors duration-300 line-clamp-1 text-left">
                         {tema}
                       </span>
                     </motion.button>

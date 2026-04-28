@@ -90,9 +90,9 @@ const IALabForumOptimized = ({
         const colors = [
             'from-[#004B63] to-[#0A3550]',
             'from-[#0A3550] to-[#00BCD4]',
-            'from-indigo-600 to-blue-400',
-            'from-violet-600 to-indigo-400',
-            'from-purple-600 to-violet-400'
+            'from-[#004B63] to-[#00BCD4]',
+            'from-[#0A3550] to-[#06B6D4]',
+            'from-[#004B63] to-[#0A3550]'
         ];
 
         const hash = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
@@ -118,7 +118,7 @@ const IALabForumOptimized = ({
 
     return (
         <motion.div
-            whileHover={{ scale: 1.02, y: -4 }}
+            whileHover={{ scale: 1.02, y: -4, boxShadow: "0px 8px 25px rgba(17,17,26,0.1)" }}
             transition={{ duration: 0.2 }}
             className={cn(
                 "relative z-10 bg-white rounded-2xl shadow-[0px_4px_16px_rgba(17,17,26,0.05)] border border-slate-100",
@@ -158,7 +158,7 @@ const IALabForumOptimized = ({
             `}</style>
 
             {/* Header */}
-            <div className="flex items-center justify-between p-4 md:p-6 border-b border-[#004B63]/8">
+            <div className="flex items-center justify-between p-4 md:p-6 border-b border-slate-100">
                 <div className="flex items-center gap-4">
                     <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-[#004B63] to-[#0A3550] flex items-center justify-center flex-shrink-0">
                         <Icon name="fa-comments" className="text-white text-sm" />
@@ -268,7 +268,7 @@ const IALabForumOptimized = ({
                                 <div
                                     key={post.id}
                                     className={cn(
-                                        "bg-white border border-[#004B63]/6 rounded-xl p-4",
+                                        "bg-white border border-slate-100 rounded-xl p-4",
                                         "message-bubble",
                                         "animate-in fade-in-up",
                                         index === 0 ? "animation-delay-100" :
@@ -382,7 +382,7 @@ const IALabForumOptimized = ({
             </div>
 
             {/* Input */}
-            <div className="border-t border-[#004B63]/8 p-4 md:p-6">
+            <div className="border-t border-slate-100 p-4 md:p-6">
                 <form onSubmit={handleSubmitMessage} className="relative">
                     <div className="flex items-center gap-3">
                         {user && (
