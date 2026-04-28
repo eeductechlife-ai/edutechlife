@@ -79,12 +79,10 @@ Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, ayudarte con e
             }]);
             
             // Hablar el mensaje de bienvenida
-            setTimeout(() => {
-                if (window.valerioSpeak) {
-                    window.valerioSpeak(welcomeMessage);
-                    setValerioState('speaking');
-                }
-            }, 1000);
+            if (window.valerioSpeak) {
+                window.valerioSpeak(welcomeMessage);
+                setValerioState('speaking');
+            }
         }
     }, [isOpen, currentModule, userLevel, conversation.length]);
 

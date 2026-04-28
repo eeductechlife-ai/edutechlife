@@ -222,7 +222,7 @@ const TopicResourcesModal = ({
                     {resources[activeResourceIndex]?.type === 'video' ? <Icon name="fa-video" className="text-[#06B6D4] w-4 h-4 sm:w-5 sm:h-5" /> :
                      resources[activeResourceIndex]?.type === 'document' || resources[activeResourceIndex]?.type === 'pdf-thumbnail' ? <Icon name="fa-file-lines" className="text-[#06B6D4] w-4 h-4 sm:w-5 sm:h-5" /> :
                      resources[activeResourceIndex]?.type === 'image' ? <Icon name="fa-image" className="text-[#06B6D4] w-4 h-4 sm:w-5 sm:h-5" /> :
-                     resources[activeResourceIndex]?.type === 'ova-thumbnail' ? <Icon name="fa-brain" className="text-[#06B6D4] w-4 h-4 sm:w-5 sm:h-5" /> :
+                     resources[activeResourceIndex]?.type === 'ova-thumbnail' || resources[activeResourceIndex]?.type === 'ova' ? <Icon name="fa-brain" className="text-[#06B6D4] w-4 h-4 sm:w-5 sm:h-5" /> :
                      resources[activeResourceIndex]?.type === 'interactive' ? <Icon name="fa-puzzle-piece" className="text-[#06B6D4] w-4 h-4 sm:w-5 sm:h-5" /> : <Icon name="fa-file" className="text-[#06B6D4] w-4 h-4 sm:w-5 sm:h-5" />}
                   </div>
                   <div className="min-w-0">

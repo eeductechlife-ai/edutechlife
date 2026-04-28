@@ -71,6 +71,11 @@ const ValerioAvatar = ({ state = 'idle', size = 80, onStateChange }) => {
 
         // Detener cualquier habla anterior
         synthRef.current.cancel();
+        // Forzar reinicio del motor de voz (necesario en Android Chrome)
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.pause();
+            window.speechSynthesis.resume();
+        }
 
         const utterance = new SpeechSynthesisUtterance(cleanText);
         
@@ -78,7 +83,7 @@ const ValerioAvatar = ({ state = 'idle', size = 80, onStateChange }) => {
             utterance.voice = selectedVoice;
             utterance.lang = selectedVoice.lang;
         } else {
-            utterance.lang = 'es-ES';
+            utterance.lang = 'es-CO';
         }
 
         utterance.rate = 1.0;

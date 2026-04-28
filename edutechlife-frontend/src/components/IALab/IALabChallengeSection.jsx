@@ -48,7 +48,7 @@ const IALabChallengeSection = ({
         const message = `📊 **Resumen del Desafío Completado**\n\n` +
                        `• **Puntuación:** ${challengeScore}%\n` +
                        `• **Estado:** ${isApproved ? '✅ Aprobado' : '⚠️ Reprobado (necesitas 70%)'}\n` +
-                       `• **Módulo:** ${currentModule?.title || 'Desafío del Curso'}\n` +
+                       `• **Módulo:** ${currentModule?.title || 'Desafío del Módulo'}\n` +
                        `• **Fecha de completado:** ${new Date().toLocaleDateString()}\n\n` +
                        `*La funcionalidad de "Mis Proyectos" estará disponible próximamente.*`;
         alert(message);
@@ -110,7 +110,7 @@ const IALabChallengeSection = ({
                 <div className="flex-1">
                     <div className="flex items-center gap-3 mb-1">
                         <h3 className="text-lg md:text-xl font-bold text-[#004B63]">
-                            {isChallengeCompleted ? 'Desafío Completado' : 'Desafío del Curso'}
+                            {isChallengeCompleted ? 'Desafío Completado' : 'Desafío del Módulo'}
                         </h3>
                         {isChallengeCompleted && (
                             <span className={`px-3 py-0.5 text-xs font-semibold rounded-full ${scoreBgColor} ${scoreColor}`}>
@@ -141,11 +141,8 @@ const IALabChallengeSection = ({
                 </div>
 
                 <div className="mb-3">
-                    <h4 className="text-sm font-bold text-[#004B63] mb-2">
-                        {isChallengeCompleted ? 'Reto Superado' : 'Desafío del Módulo'}
-                    </h4>
                     <p className="text-sm text-slate-700 leading-relaxed border-l-2 border-[#004B63] pl-4 py-1">
-                        &ldquo;{challengeText}&rdquo;
+                        {challengeText}
                     </p>
                 </div>
 

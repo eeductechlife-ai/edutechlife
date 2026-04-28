@@ -111,7 +111,7 @@ const IALabSidebar = () => {
                   <Icon name="fa-video-camera" className="text-sm" />
                 </div>
                 <h3 className="text-xs font-bold tracking-[0.12em] uppercase text-[#004B63]">
-                  VIDEOS DEL MÓDULO
+                  VIDEOS EXTRAS
                 </h3>
                 <div className="flex-1 h-px bg-gradient-to-r from-[#004B63]/20 via-[#00BCD4]/20 to-transparent"></div>
               </div>

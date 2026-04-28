@@ -35,26 +35,8 @@ export const moduleResources = {
         description: "Desglose visual de las partes que componen un prompt efectivo."
       },
       {
-        id: "intro-pdf-1",
-        type: "document",
-        title: "Guía de Conceptos Básicos (PDF)",
-        url: "/documents/ia-fundamentals-guide.pdf",
-        pages: 12,
-        format: "PDF",
-        size: "2.4 MB",
-        description: "Documento descargable con definiciones, ejemplos y ejercicios de reflexión."
-      },
-      {
-        id: "intro-infographic-1",
-        type: "image",
-        title: "Infografía: Evolución de la IA",
-        url: "/infographics/ia-evolution-timeline.png",
-        interactive: true,
-        description: "Línea de tiempo visual desde los primeros algoritmos hasta ChatGPT-4."
-      },
-      {
         id: "intro-ova-1",
-        type: "ova-thumbnail",
+        type: "ova",
         title: "Laboratorio: Ética en la I.A.",
         description: "OVA completo con 5 secciones interactivas y simulador integrado.",
         estimatedTime: "15 minutos",

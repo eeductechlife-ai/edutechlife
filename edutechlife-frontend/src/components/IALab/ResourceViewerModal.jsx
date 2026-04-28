@@ -493,6 +493,7 @@ const ResourceViewerModal = ({
           return <PDFThumbnailViewer resource={resource} />;
         
         case 'ova-thumbnail':
+        case 'ova':
           return <OVAViewer 
             resource={resource} 
             onClose={onClose}
@@ -600,7 +601,7 @@ const ResourceViewerModal = ({
                      resource.type === 'image' ? <Icon name="fa-image" className="text-[#06B6D4] w-5 h-5 sm:w-6 sm:h-6" /> :
                      resource.type === 'interactive' ? <Icon name="fa-puzzle-piece" className="text-[#06B6D4] w-5 h-5 sm:w-6 sm:h-6" /> :
                      resource.type === 'pdf-thumbnail' ? <Icon name="fa-file-pdf" className="text-[#06B6D4] w-5 h-5 sm:w-6 sm:h-6" /> :
-                     resource.type === 'ova-thumbnail' ? <Icon name="fa-brain" className="text-[#06B6D4] w-5 h-5 sm:w-6 sm:h-6" /> :
+                     resource.type === 'ova-thumbnail' || resource.type === 'ova' ? <Icon name="fa-brain" className="text-[#06B6D4] w-5 h-5 sm:w-6 sm:h-6" /> :
                      <Icon name="fa-file" className="text-[#06B6D4] w-5 h-5 sm:w-6 sm:h-6" />}
                   </div>
                   
