@@ -17,7 +17,7 @@ const IALabHeader = () => {
         <div className="w-9 h-9 bg-gradient-to-br from-[#004B63] via-[#0A3550] to-[#00BCD4] rounded-xl flex items-center justify-center shadow-sm shadow-[#004B63]/15">
           <Icon name="fa-flask-vial" className="text-white text-sm" />
         </div>
-        <h1 className="text-lg font-bold text-[#004B63] tracking-tight">Introducción a la I.A Generativa</h1>
+        <h1 className="text-lg font-bold text-[#004B63] tracking-tight truncate">Introducción a la I.A Generativa</h1>
       </div>
       <div className="flex items-center gap-4">
         <div className="px-3 py-1.5 bg-[#004B63]/8 border border-[#004B63]/15 text-[#004B63] rounded-lg font-semibold text-xs">

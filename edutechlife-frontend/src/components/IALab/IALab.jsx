@@ -43,6 +43,22 @@ const IALabContent = () => {
         console.log('🎯 [DEBUG] showPremiumEvaluationModal actualizado:', showPremiumEvaluationModal);
     }, [showPremiumEvaluationModal]);
 
+    // Reset scroll al inicio al cargar el dashboard
+    React.useEffect(() => {
+        const forceScrollToTop = () => {
+            const mainEl = document.querySelector('main');
+            if (mainEl) {
+                mainEl.scrollTop = 0;
+                requestAnimationFrame(() => {
+                    mainEl.scrollTop = 0;
+                });
+            }
+        };
+        forceScrollToTop();
+        window.addEventListener('popstate', forceScrollToTop);
+        return () => window.removeEventListener('popstate', forceScrollToTop);
+    }, []);
+
     // Handler para acciones globales
     const handleGlobalAction = (action, data) => {
         switch (action) {

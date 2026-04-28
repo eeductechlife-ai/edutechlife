@@ -387,6 +387,18 @@ const PDFThumbnailViewer = ({ resource }) => {
 };
 
 const OVAViewer = ({ resource, onClose }) => {
+  if (resource.url) {
+    return (
+      <div className="w-full h-full min-h-[70vh] flex flex-col bg-white rounded-2xl border border-slate-200 overflow-hidden">
+        <iframe
+          src={resource.url}
+          title={resource.title}
+          className="w-full h-full min-h-[70vh] rounded-2xl border-0"
+          allowFullScreen
+        />
+      </div>
+    );
+  }
   return (
     <div className="w-full h-full min-h-[70vh] flex flex-col bg-white rounded-2xl border border-slate-200">
       <div className="flex-1 relative">

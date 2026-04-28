@@ -216,8 +216,8 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
         disabled={currentQuestion === 0}
         className="px-5 py-2.5 border-2 border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:border-slate-300 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
       >
-        <Icon name="fa-arrow-left" className="text-sm" />
-        <span className="text-sm font-medium">Anterior</span>
+                        <Icon name="fa-arrow-left" className="text-sm" />
+                        <span className="hidden sm:inline text-sm font-medium">Anterior</span>
       </button>
 
       <div className="flex items-center gap-3">
@@ -232,8 +232,8 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
           disabled={!selectedAnswer}
           className="px-5 py-2.5 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
         >
-          <span className="text-sm font-medium">Siguiente</span>
-          <Icon name="fa-arrow-right" className="text-sm" />
+                          <span className="text-sm font-medium">Siguiente</span>
+                          <Icon name="fa-arrow-right" className="text-sm hidden sm:inline" />
         </button>
       ) : (
         <button

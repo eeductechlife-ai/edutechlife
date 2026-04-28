@@ -80,7 +80,7 @@ const ModuleOverviewCard = ({ onAction }) => {
                </p>
                
 {/* Temas en grid 2x2 */}
-                <div className="grid grid-cols-2 gap-2 mt-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-4">
                   {moduleData.topics.map((tema, index) => (
                     <motion.button
                       key={index}

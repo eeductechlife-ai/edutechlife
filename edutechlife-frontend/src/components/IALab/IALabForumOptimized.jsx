@@ -221,7 +221,7 @@ const IALabForumOptimized = ({
                     "px-4 md:px-6 py-4",
                     "scrollbar-thin"
                 )}
-                style={{ maxHeight: '400px' }}
+                style={{ maxHeight: typeof window !== 'undefined' && window.innerWidth < 768 ? '50vh' : '400px' }}
             >
                 {isLoading ? (
                     <div className="flex items-center justify-center h-full">
@@ -456,7 +456,7 @@ const IALabForumOptimized = ({
                             ) : (
                                 <>
                                     <Icon name="fa-paper-plane" />
-                                    <span>Enviar</span>
+                                    <span className="hidden sm:inline">Enviar</span>
                                 </>
                             )}
                         </motion.button>

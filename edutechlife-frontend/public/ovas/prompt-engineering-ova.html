@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Infografía Interactiva - Edutechlife</title>
+   <style>
+       * {
+           box-sizing: border-box;
+           margin: 0;
+           padding: 0;
+       }
+
+       body {
+           font-family: system-ui, -apple-system, sans-serif;
+           background-color: #f8fafc;
+           display: flex;
+           justify-content: center;
+           align-items: flex-start;
+           min-height: 100vh;
+           padding: 1rem;
+       }
+
+       .interactive-container {
+           position: relative;
+           max-width: 950px;
+           width: 100%;
+           margin: 0 auto;
+           border-radius: 16px;
+           overflow: hidden;
+           box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+           background-color: #ffffff;
+           padding: 2.5rem 2rem;
+           border-top: 8px solid #2093b5;
+       }
+
+       .interactive-container::before {
+           content: '';
+           position: absolute;
+           top: 0;
+           left: 0;
+           right: 0;
+           bottom: 0;
+           background: radial-gradient(circle at top right, rgba(32,147,181,0.04) 0%, transparent 60%);
+           z-index: 0;
+           pointer-events: none;
+       }
+
+       .main-title {
+           position: relative;
+           z-index: 1;
+           color: #1a365d;
+           text-align: center;
+           font-size: 2rem;
+           margin-bottom: 2.5rem;
+           font-weight: 800;
+           line-height: 1.2;
+       }
+
+       .main-title span {
+           color: #2093b5;
+           font-size: 1.5rem;
+           font-weight: 600;
+       }
+
+       .grid-layout {
+           position: relative;
+           z-index: 1;
+           display: grid;
+           grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+           gap: 1rem;
+       }
+
+       .hotspot {
+           background-color: #ffffff;
+           border: 2px solid #e2e8f0;
+           border-radius: 12px;
+           padding: 1rem 1.2rem;
+           cursor: pointer;
+           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+           display: flex;
+           align-items: center;
+           justify-content: flex-start;
+           gap: 12px;
+           font-size: 1rem;
+           font-weight: 700;
+           color: #2d3748;
+           text-align: left;
+           box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+       }
+
+       .hotspot:hover {
+           transform: translateY(-3px);
+           background-color: #f7fafc;
+           border-color: #2093b5;
+           box-shadow: 0 8px 16px rgba(32, 147, 181, 0.15);
+           color: #1a365d;
+       }
+
+       .icon {
+           font-size: 1.5rem;
+           background: #f0f8fa;
+           padding: 8px;
+           border-radius: 50%;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           flex-shrink: 0;
+       }
+
+       .modal {
+           display: none;
+           position: fixed;
+           top: 0;
+           left: 0;
+           width: 100%;
+           height: 100%;
+           background-color: rgba(26, 54, 93, 0.7);
+           z-index: 100;
+           opacity: 0;
+           transition: opacity 0.3s ease;
+           backdrop-filter: blur(6px);
+       }
+
+       .modal.active {
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           opacity: 1;
+       }
+
+       .modal-content {
+           background-color: #ffffff;
+           padding: 2rem;
+           border-radius: 16px;
+           max-width: 500px;
+           width: 90%;
+           position: relative;
+           box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+           transform: translateY(20px) scale(0.95);
+           transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+           border-left: 8px solid #2093b5;
+       }
+
+       .modal.active .modal-content {
+           transform: translateY(0) scale(1);
+       }
+
+       .close-btn {
+           position: absolute;
+           top: 12px;
+           right: 16px;
+           font-size: 2rem;
+           color: #a0aec0;
+           cursor: pointer;
+           transition: color 0.2s;
+           line-height: 1;
+           background: none;
+           border: none;
+       }
+
+       .close-btn:hover {
+           color: #e53e3e;
+       }
+
+       #modal-title {
+           color: #1a365d;
+           margin-bottom: 1rem;
+           font-size: 1.4rem;
+           padding-right: 30px;
+           font-weight: 800;
+       }
+
+       #modal-text {
+           color: #4a5568;
+           line-height: 1.7;
+           font-size: 1rem;
+       }
+
+       @media (max-width: 600px) {
+           .main-title {
+               font-size: 1.5rem;
+           }
+           .main-title span {
+               font-size: 1.1rem;
+           }
+           body {
+               padding: 0.5rem;
+           }
+           .interactive-container {
+               padding: 1.5rem 1rem;
+           }
+           .grid-layout {
+               grid-template-columns: 1fr;
+           }
+       }
+   </style>
+</head>
+<body>
+
+<div class="interactive-container">
+
+   <h1 class="main-title">Prompt Engineering <br><span>Cómo comunicarte con la IA</span></h1>
+
+   <div class="grid-layout">
+       <button class="hotspot" data-title="¿Qué es un Prompt?" data-content="Es la instrucción o punto de partida que le damos a la Inteligencia Artificial. En un entorno de aprendizaje, un buen prompt marca la diferencia entre una respuesta genérica y un recurso verdaderamente útil para el proceso educativo.">
+           <span class="icon">🧠</span> ¿Qué es un Prompt?
+       </button>
+
+       <button class="hotspot" data-title="¿Por qué importa la calidad?" data-content="La calidad de la entrada determina la calidad de la salida (Garbage In, Garbage Out). Una instrucción clara reduce alucinaciones y genera materiales más precisos y adaptados al nivel cognitivo deseado.">
+           <span class="icon">✨</span> Importancia de Calidad
+       </button>
+
+       <button class="hotspot" data-title="Tipos de Prompts" data-content="Existen prompts directos (Zero-shot), con ejemplos (Few-shot) o de cadena de pensamiento (Chain-of-Thought). Explorar diferentes tipos permite desde generar ideas rápidas hasta resolver problemas lógicos complejos.">
+           <span class="icon">📋</span> Tipos de Prompts
+       </button>
+
+       <button class="hotspot" data-title="Anatomía de un Prompt Efectivo" data-content="Un prompt robusto se compone de: Instrucción principal, Contexto, Datos de entrada y Formato de salida esperado. Cuanto más estructurado, mejores resultados.">
+           <span class="icon">🧩</span> Anatomía Efectiva
+       </button>
+
+       <button class="hotspot" data-title="Plantilla Universal" data-content="Rol + Contexto + Tarea + Restricciones. Ejemplo: 'Actúa como un diseñador instruccional experto (Rol). Para un curso virtual (Contexto), redacta 5 preguntas de opción múltiple (Tarea) utilizando un lenguaje accesible (Restricción).'">
+           <span class="icon">🏅</span> Plantilla Universal
+       </button>
+
+       <button class="hotspot" data-title="Ingeniería de Prompts y Estrategias" data-content="Es la habilidad sistemática de diseñar, refinar y optimizar las instrucciones para obtener el máximo rendimiento de los modelos de lenguaje en tareas específicas.">
+           <span class="icon">⚙️</span> Ingeniería y Estrategias
+       </button>
+
+       <button class="hotspot" data-title="Errores Comunes" data-content="Asumir contexto (la IA no sabe quién es tu audiencia si no se lo dices), usar ambigüedades, hacer solicitudes demasiado amplias o no iterar sobre la primera respuesta obtenida.">
+           <span class="icon">⚠️</span> Errores Comunes
+       </button>
+
+       <button class="hotspot" data-title="Conclusión y Cierre" data-content="Dominar el arte de los prompts no es solo interactuar con tecnología; es desarrollar un pensamiento crítico y estructurado que potencia exponencialmente nuestras capacidades cognitivas y profesionales.">
+           <span class="icon">🚀</span> Conclusión y Cierre
+       </button>
+   </div>
+
+   <div id="info-modal" class="modal">
+       <div class="modal-content">
+           <button class="close-btn">&times;</button>
+           <h3 id="modal-title">Título</h3>
+           <p id="modal-text">Contenido detallado...</p>
+       </div>
+   </div>
+</div>
+
+<script>
+   document.addEventListener('DOMContentLoaded', () => {
+       const hotspots = document.querySelectorAll('.hotspot');
+       const modal = document.getElementById('info-modal');
+       const modalTitle = document.getElementById('modal-title');
+       const modalText = document.getElementById('modal-text');
+       const closeBtn = document.querySelector('.close-btn');
+
+       hotspots.forEach(btn => {
+           btn.addEventListener('click', () => {
+               const title = btn.getAttribute('data-title');
+               const content = btn.getAttribute('data-content');
+               modalTitle.textContent = title;
+               modalText.textContent = content;
+               modal.style.display = 'flex';
+               setTimeout(() => {
+                   modal.classList.add('active');
+               }, 10);
+           });
+       });
+
+       const closeModal = () => {
+           modal.classList.remove('active');
+           setTimeout(() => {
+               modal.style.display = 'none';
+           }, 300);
+       };
+
+       closeBtn.addEventListener('click', closeModal);
+
+       modal.addEventListener('click', (e) => {
+           if (e.target === modal) {
+               closeModal();
+           }
+       });
+
+       document.addEventListener('keydown', (e) => {
+           if (e.key === 'Escape' && modal.classList.contains('active')) {
+               closeModal();
+           }
+       });
+   });
+</script>
+</body>
+</html>
