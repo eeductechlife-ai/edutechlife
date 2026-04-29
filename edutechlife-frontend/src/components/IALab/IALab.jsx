@@ -7,12 +7,8 @@ import IALabModuleHeader from './IALabModuleHeader';
 import ModuleOverviewCard from './ModuleOverviewCard';
 import ModuleInfoSection from './ModuleInfoSection';
 import IALabContentAccordion from './IALabContentAccordion';
-import IALabChallengeSection from './IALabChallengeSection';
-import IALabForumSection from './IALabForumSection';
-import IALabForumOptimized from './IALabForumOptimized';
-import IALabSynthesizer from './IALabSynthesizer';
-import IALabTutoriasVirtuales from './IALabTutoriasVirtuales';
 import ReactivePromptStation from './ReactivePromptStation';
+import IALabTutoriasVirtuales from './IALabTutoriasVirtuales';
 import IALabEvaluationModal from './IALabEvaluationModal';
 import IALabEvaluationModalPremium from './IALabEvaluationModalPremium';
 import IALabQuizModal from './IALabQuizModal';
@@ -188,22 +184,6 @@ const IALabContent = () => {
                               <ReactivePromptStation />
                             </div>
                             
-                            {/* Contenedor Grid: Desafío y Comunidad */}
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full mt-8">
-                                {/* Columna Izquierda: Desafío del Curso */}
-                                <ErrorBoundary>
-                                    <IALabChallengeSection />
-                                </ErrorBoundary>
-                                
-                                {/* Columna Derecha: Comunidad IALab Optimizada */}
-                                <ErrorBoundary>
-                                    <IALabForumOptimized 
-                                        compact={false}
-                                        initialLimit={5}
-                                    />
-                                    </ErrorBoundary>
-                                </div>
-
                             {/* Tutorías Virtuales */}
                             <div className="mt-6">
                               <IALabTutoriasVirtuales />
