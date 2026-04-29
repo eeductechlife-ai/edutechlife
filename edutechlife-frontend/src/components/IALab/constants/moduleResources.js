@@ -27,30 +27,23 @@ export const moduleResources = {
       {
         id: "intro-video-1",
         type: "video",
-        title: "Video Introductorio: ¿Qué es la IA Generativa?",
-        url: "https://www.youtube.com/embed/jnePzCTKEqs?start=3",
-        duration: "14:00",
-        thumbnail: "https://img.youtube.com/vi/jnePzCTKEqs/maxresdefault.jpg",
+        title: "Explicación Visual: Anatomía de un Prompt",
+        url: "https://www.youtube.com/embed/6f-FwOE5wIY",
+        duration: "7:15",
+        thumbnail: "https://img.youtube.com/vi/6f-FwOE5wIY/maxresdefault.jpg",
         provider: "youtube",
-        description: "Explicación visual de los conceptos fundamentales con ejemplos prácticos."
+        description: "Desglose visual de las partes que componen un prompt efectivo."
       },
       {
-        id: "intro-pdf-1",
-        type: "document",
-        title: "Guía de Conceptos Básicos (PDF)",
-        url: "/documents/ia-fundamentals-guide.pdf",
-        pages: 12,
-        format: "PDF",
-        size: "2.4 MB",
-        description: "Documento descargable con definiciones, ejemplos y ejercicios de reflexión."
-      },
-      {
-        id: "intro-infographic-1",
-        type: "image",
-        title: "Infografía: Evolución de la IA",
-        url: "/infographics/ia-evolution-timeline.png",
-        interactive: true,
-        description: "Línea de tiempo visual desde los primeros algoritmos hasta ChatGPT-4."
+        id: "intro-ova-1",
+        type: "ova-thumbnail",
+        title: "Laboratorio: Ética en la I.A.",
+        description: "OVA completo con 5 secciones interactivas y simulador integrado.",
+        estimatedTime: "15 minutos",
+        difficulty: "Intermedio",
+        interactiveElements: 5,
+        thumbnailType: "premium",
+        fullscreen: true
       }
     ]
   },
@@ -67,23 +60,12 @@ export const moduleResources = {
       {
         id: "prompt-video-1",
         type: "video",
-        title: "Explicación Visual: Anatomía de un Prompt",
-        url: "https://www.youtube.com/embed/6f-FwOE5wIY",
-        duration: "7:15",
-        thumbnail: "https://img.youtube.com/vi/6f-FwOE5wIY/maxresdefault.jpg",
+        title: "Video Introductorio: ¿Qué es la IA Generativa?",
+        url: "https://www.youtube.com/embed/jnePzCTKEqs?start=3",
+        duration: "14:00",
+        thumbnail: "https://img.youtube.com/vi/jnePzCTKEqs/maxresdefault.jpg",
         provider: "youtube",
-        description: "Desglose visual de las partes que componen un prompt efectivo."
-      },
-      {
-        id: "prompt-ova-1",
-        type: "ova-thumbnail",
-        title: "Laboratorio: Ética en la I.A.",
-        description: "OVA completo sobre anatomía de prompts con 5 secciones interactivas y simulador integrado.",
-        estimatedTime: "15 minutos",
-        difficulty: "Intermedio",
-        interactiveElements: 5,
-        thumbnailType: "premium",
-        fullscreen: true
+        description: "Explicación visual de los conceptos fundamentales con ejemplos prácticos."
       },
       {
         id: "prompt-guide-1",
@@ -96,6 +78,16 @@ export const moduleResources = {
         description: "Documento completo con estructura detallada de prompts efectivos, técnicas avanzadas y ejemplos prácticos.",
         thumbnailType: "premium",
         immersiveView: true
+      },
+      {
+        id: "prompt-ova-html-1",
+        type: "ova-thumbnail",
+        title: "Infografía Interactiva: Prompt Engineering",
+        url: "/ovas/prompt-engineering-ova.html",
+        description: "Infografía interactiva sobre cómo comunicarte con la IA mediante prompts efectivos.",
+        estimatedTime: "10 minutos",
+        difficulty: "Principiante",
+        fullscreen: true
       }
     ]
   },

@@ -54,20 +54,11 @@ const ModuleInfoSection = ({ className = '', ...rest }) => {
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {learningPoints.map((point, index) => (
-                        <motion.div 
+                        <div 
                             key={index}
-                            initial={{ opacity: 0, y: 8 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: index * 0.03 }}
-                            whileHover={{ y: -2, transition: { duration: 0.2 } }}
-                            className={cn(
-                                "flex items-start gap-3 px-4 py-3 rounded-lg",
-                                "bg-slate-50 border border-slate-100",
-                                "hover:bg-white hover:border-[#004B63]/25 hover:shadow-sm hover:scale-[1.02]",
-                                "transition-all duration-300 group"
-                            )}
+                            className="flex items-start gap-3 px-4 py-3 rounded-lg bg-slate-50 border border-slate-100"
                         >
-                            <div className="flex-shrink-0 w-4 h-4 rounded-full bg-[#004B63]/10 flex items-center justify-center group-hover:bg-[#004B63]/15 transition-colors mt-0.5">
+                            <div className="flex-shrink-0 w-4 h-4 rounded-full bg-[#004B63]/10 flex items-center justify-center mt-0.5">
                                 <Icon 
                                     name="fa-check" 
                                     className="text-[#004B63] w-2.5 h-2.5" 
@@ -76,41 +67,9 @@ const ModuleInfoSection = ({ className = '', ...rest }) => {
                             <p className="text-sm text-slate-700 leading-snug font-medium">
                                 {point}
                             </p>
-                        </motion.div>
+                        </div>
                     ))}
                 </div>
-            </div>
-
-            {/* Desafío del Módulo */}
-            <div className="space-y-3">
-                <h3 className="text-lg md:text-xl font-bold text-[#004B63]">
-                    Desafío del Módulo
-                </h3>
-                <motion.div 
-                    whileHover={{ y: -2, transition: { duration: 0.2 } }}
-                    className={cn(
-                        "relative overflow-hidden",
-                        "flex items-center gap-3",
-                        "hover:scale-[1.01]",
-                        "transition-all duration-300 cursor-pointer",
-                        "group"
-                    )}
-                >
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-                    
-                    <div className="flex-shrink-0 w-6 h-6 rounded-md bg-[#004B63]/10 flex items-center justify-center">
-                        <Icon 
-                            name="fa-bolt" 
-                            className="text-[#004B63] w-3 h-3" 
-                        />
-                    </div>
-                    
-                    <div className="flex-1 min-w-0">
-                        <p className="text-sm text-slate-700 font-medium truncate">
-                            ¡Llegó el momento de la práctica! Aplica todo lo aprendido en este módulo resolviendo un caso real. Atrévete a consolidar tu aprendizaje, supera el reto y lleva tus conocimientos al siguiente nivel.
-                        </p>
-                    </div>
-                </motion.div>
             </div>
         </motion.div>
     );

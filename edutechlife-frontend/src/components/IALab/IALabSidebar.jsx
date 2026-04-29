@@ -36,30 +36,30 @@ const IALabSidebar = () => {
       <aside className="w-56 xl:w-64 flex-shrink-0 border-r border-[#004B63]/8 bg-gradient-to-b from-white via-white to-slate-50/80 backdrop-blur-xl shadow-[0_8px_40px_rgba(0,75,99,0.06)] overflow-y-auto">
        <div className="px-4 py-5 space-y-5">
           {/* Progress Circle */}
-          <div className="relative overflow-hidden flex flex-col items-center p-5 bg-white rounded-2xl shadow-[0px_4px_16px_rgba(17,17,26,0.05)] border border-slate-100 w-full">
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#00BCD4]" />
-            <div className="relative w-28 h-28 mb-3">
-             <svg className="w-full h-full transform -rotate-90">
-               <circle cx="56" cy="56" r="48" stroke="#E2E8F0" strokeWidth="8" fill="none" />
-                <circle cx="56" cy="56" r="48" stroke="url(#sidebar-progress-grad)" strokeWidth="8" fill="none" strokeLinecap="round" strokeDasharray="301.593" strokeDashoffset={301.593 - (301.593 * Math.min(calculateGlobalProgress(), 100)) / 100} className="transition-all duration-700 ease-out" />
-               <defs>
-                 <linearGradient id="sidebar-progress-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                   <stop offset="0%" stopColor="#004B63" />
-                   <stop offset="100%" stopColor="#00BCD4" />
-                 </linearGradient>
-               </defs>
-             </svg>
-             <div className="absolute inset-0 flex items-center justify-center">
-               <div className="text-center">
-                  <div className="text-2xl font-bold text-[#004B63]">{calculateGlobalProgress()}%</div>
-                   <div className="text-xs text-slate-400 mt-0.5">Completado</div>
-               </div>
-             </div>
-           </div>
-           <div className="text-center">
-             <h3 className="text-sm font-bold text-[#004B63] mb-0.5">Progreso del Curso</h3>
-             <p className="text-xs text-slate-500">Avanza completando módulos</p>
-           </div>
+           <div className="relative overflow-hidden flex flex-col items-center p-4 bg-white rounded-2xl shadow-[0px_4px_16px_rgba(17,17,26,0.05)] border border-slate-100 w-full">
+             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#00BCD4]" />
+             <div className="relative w-24 h-24 mb-2">
+              <svg className="w-full h-full transform -rotate-90">
+                <circle cx="48" cy="48" r="40" stroke="#E2E8F0" strokeWidth="6" fill="none" />
+                 <circle cx="48" cy="48" r="40" stroke="url(#sidebar-progress-grad)" strokeWidth="6" fill="none" strokeLinecap="round" strokeDasharray="251.327" strokeDashoffset={251.327 - (251.327 * Math.min(calculateGlobalProgress(), 100)) / 100} className="transition-all duration-700 ease-out" />
+                <defs>
+                  <linearGradient id="sidebar-progress-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#004B63" />
+                    <stop offset="100%" stopColor="#00BCD4" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="text-center">
+                   <div className="text-lg font-bold text-[#004B63]">{calculateGlobalProgress()}%</div>
+                    <div className="text-[10px] text-slate-400 mt-0.5">Completado</div>
+                </div>
+              </div>
+            </div>
+            <div className="text-center">
+              <h3 className="text-xs font-bold text-[#004B63] mb-0.5">Progreso del Curso</h3>
+              <p className="text-[10px] text-slate-500">Avanza completando módulos</p>
+            </div>
          </div>
 
         {/* Espaciado entre secciones */}

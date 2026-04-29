@@ -6,13 +6,8 @@ import { useIALabContext } from '../../context/IALabContext';
 
 const IALabHeader = () => {
   const {
-    completedModules,
-    user,
-    onBack,
-    calculateGlobalProgress
+    onBack
   } = useIALabContext();
-
-  const globalProgress = calculateGlobalProgress();
 
   return (
     <header className="h-16 flex items-center justify-between px-6 bg-white border-b border-slate-200 w-full">
@@ -23,9 +18,6 @@ const IALabHeader = () => {
         <h1 className="text-lg font-bold text-[#004B63] tracking-tight truncate">Introducción a la I.A Generativa</h1>
       </div>
       <div className="flex items-center gap-4">
-        <div className="px-3 py-1.5 bg-[#004B63]/8 border border-[#004B63]/15 text-[#004B63] rounded-lg font-semibold text-xs">
-          {globalProgress}% Completado
-        </div>
         <button
           className="relative flex items-center justify-center p-2 bg-transparent hover:opacity-80 transition-opacity"
           aria-label="Notificaciones"
