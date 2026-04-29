@@ -68,6 +68,9 @@ const IALabContent = () => {
             case 'OPEN_QUIZ':
                 setShowQuizModal(true);
                 break;
+            case 'OPEN_CHALLENGE':
+                setShowPremiumEvaluationModal(true);
+                break;
             case 'OPEN_VALERIO':
                 setShowValerioPanel(true);
                 break;

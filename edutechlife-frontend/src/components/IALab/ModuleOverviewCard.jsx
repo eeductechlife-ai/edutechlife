@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import TopicResourcesModal from './TopicResourcesModal';
+import IALabForumOptimized from './IALabForumOptimized';
+import ErrorBoundary from '../forum/ErrorBoundary';
 
 /**
  * COMPONENTE: ModuleOverviewCard
@@ -22,6 +24,7 @@ const ModuleOverviewCard = ({ onAction }) => {
   // Estado para el modal de recursos
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [isResourcesModalOpen, setIsResourcesModalOpen] = useState(false);
+  const [isForumOpen, setIsForumOpen] = useState(false);
   // Datos hardcodeados según especificaciones
   const moduleData = {
     badge: {
@@ -107,38 +110,68 @@ const ModuleOverviewCard = ({ onAction }) => {
              </div>
            </div>
            
-            {/* Grid inferior: Stats + Botón examen */}
+            {/* Grid inferior: 3 iconos */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-                {moduleData.stats.map((stat, index) => (
-                 <div 
-                   key={index}
-                   className="bg-white rounded-xl p-4 border border-[#004B63]/6 flex flex-col items-center justify-center text-center hover:shadow-md hover:border-[#004B63]/20 transition-all duration-300"
-                 >
-                   <div className="text-xl font-bold text-[#004B63] mb-1">
-                     {stat.value}
-                   </div>
-                   <div className="text-sm text-slate-500 font-medium">
-                     {stat.title}
-                   </div>
-                   <div className="w-10 h-0.5 bg-gradient-to-r from-[#004B63] to-[#00BCD4] rounded-full mt-3"></div>
-                 </div>
-               ))}
-               {/* Botón: Examen del Módulo */}
-               <motion.button
-                 onClick={() => onAction('OPEN_QUIZ')}
-                 whileHover={{ scale: 1.05 }}
-                 whileTap={{ scale: 0.95 }}
-                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                 className="bg-gradient-to-br from-[#004B63] via-[#004B63] to-[#06B6D4] rounded-xl p-4 flex flex-col items-center justify-center text-center hover:from-[#003a4d] hover:via-[#004B63] hover:to-[#08c5e6] hover:shadow-lg transition-all duration-300 shadow-md hover:shadow-xl group cursor-pointer border-0"
-               >
-                <div className="flex items-center gap-2 mb-1">
-                  <Icon name="fa-clipboard-check" className="text-white text-lg" />
-                  <div className="text-lg font-bold text-white">Examen</div>
+                {/* Icono: Comunidad */}
+                <div className="flex flex-col items-center gap-2">
+                  <motion.button
+                    onClick={() => setIsForumOpen(!isForumOpen)}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                    className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer border-0"
+                    title="Comunidad IALab"
+                  >
+                    <Icon name="fa-comments" className="text-white w-7 h-7 md:w-8 md:h-8" />
+                  </motion.button>
+                  <span className="text-sm font-bold text-[#004B63] text-center">Comunidad IALab</span>
                 </div>
-                <div className="text-sm text-white/80 font-medium">del Módulo</div>
-                <div className="w-10 h-0.5 bg-white/40 rounded-full mt-3 group-hover:w-16 transition-all duration-300"></div>
-              </motion.button>
-            </div>
+                {/* Icono: Desafío */}
+                <div className="flex flex-col items-center gap-2">
+                  <motion.button
+                    onClick={() => onAction('OPEN_CHALLENGE')}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                    className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer border-0"
+                    title="Desafío del Módulo"
+                  >
+                    <Icon name="fa-rocket" className="text-white w-7 h-7 md:w-8 md:h-8" />
+                  </motion.button>
+                  <span className="text-sm font-bold text-[#004B63] text-center">Desafío</span>
+                </div>
+                {/* Icono: Examen */}
+                <div className="flex flex-col items-center gap-2">
+                  <motion.button
+                    onClick={() => onAction('OPEN_QUIZ')}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                    className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer border-0"
+                    title="Examen del Módulo"
+                  >
+                    <Icon name="fa-clipboard-check" className="text-white w-7 h-7 md:w-8 md:h-8" />
+                  </motion.button>
+                  <span className="text-sm font-bold text-[#004B63] text-center">Examen</span>
+                </div>
+             </div>
+
+             {/* Foro expandible */}
+             <AnimatePresence>
+               {isForumOpen && (
+                 <motion.div
+                   initial={{ opacity: 0, height: 0 }}
+                   animate={{ opacity: 1, height: 'auto' }}
+                   exit={{ opacity: 0, height: 0 }}
+                   transition={{ duration: 0.3 }}
+                   className="mt-6 overflow-hidden"
+                 >
+                   <ErrorBoundary>
+                     <IALabForumOptimized compact={false} initialLimit={3} />
+                   </ErrorBoundary>
+                 </motion.div>
+               )}
+             </AnimatePresence>
            
             {/* Elemento decorativo de borde superior */}
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#00BCD4] rounded-t-2xl" />
