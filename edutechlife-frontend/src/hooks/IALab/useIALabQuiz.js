@@ -56,7 +56,8 @@ export const useIALabQuiz = () => {
     securityMessage,
     setSecurityMessage,
     attemptsPenalized,
-    setAttemptsPenalized
+    setAttemptsPenalized,
+    updateModuleActivity
   } = useIALabContext();
   
   // ==================== CONSTANTES ====================
@@ -324,6 +325,11 @@ export const useIALabQuiz = () => {
       setQuizPassed(result.passed);
       setQuizResult(result);
       setShowScoreResult(true);
+
+      // Registrar en el sistema de progreso gamificado
+      if (result.passed) {
+        updateModuleActivity(activeMod, 'exam', true);
+      }
       
       // Guardar intento en localStorage
       const attempt = {

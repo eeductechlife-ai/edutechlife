@@ -1,32 +1,49 @@
 import React, { useEffect, useState, useRef, lazy, Suspense } from 'react';
-import { Eye, Download, Brain, Sparkles, ArrowRight, Check, Volume, VolumeOff, RotateCcw, Video, Headphones, Activity, Target, Zap, Users, Globe, Cpu, Lightbulb, Wrench, ListOrdered, CheckSquare, CheckCircle2, Rocket, List, BookOpen, Mic, MessageCircle, Smile, Meh, Frown, Info, Clock } from 'lucide-react';
+import { Eye, Download, Brain, Sparkles, ArrowRight, Check, Volume, VolumeOff, RotateCcw, Video, Headphones, Activity, Target, Zap, Users, Globe, Cpu, Lightbulb, Wrench, ListOrdered, CheckSquare, CheckCircle2, Rocket, List, BookOpen, Mic, MessageCircle, Smile, Meh, Frown, Clock, Shield, User, Mail, Phone, Music, Star, Heart, AlertCircle, Search } from 'lucide-react';
 import html2pdf from 'html2pdf.js';
+import { speakTextConversational } from '../../utils/speech';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import { useInView, motion, AnimatePresence } from 'framer-motion';
 import { useStudent } from '../../contexts/StudentContext';
 import useValentinaAgent from '../../hooks/useValentinaAgent';
+import { getQuestionsByAge, getAgeGroupKey } from '../../data/vakQuestions';
 import './DiagnosticoVAK.css';
 
 // Componente de Confetti
 const Confetti = ({ active }) => {
   if (!active) return null;
   
-  // Versión simplificada sin window para evitar errores SSR
   return (
     <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
-      <div className="text-center text-6xl opacity-50 animate-pulse">🎊</div>
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2">
+        <Sparkles size={64} strokeWidth={1} className="text-[#4DA8C4] opacity-50 animate-pulse" />
+      </div>
+      {[...Array(12)].map((_, i) => (
+        <div
+          key={i}
+          className="absolute w-3 h-3 rounded-full opacity-60"
+          style={{
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+            background: ['#4DA8C4', '#66CCCC', '#B2D8E5'][i % 3],
+            animation: `confetti-fall ${1 + Math.random() * 2}s ease-in ${Math.random() * 0.5}s infinite`
+          }}
+        />
+      ))}
     </div>
   );
 };
 
-// Componente de celebración con fuegos artificiales
+// Componente de celebración
 const Celebration = ({ active, styleName }) => {
   if (!active) return null;
   
   return (
     <div className="fixed inset-0 pointer-events-none z-40 flex items-center justify-center">
       <div className="bg-white rounded-3xl shadow-2xl p-6 flex items-center gap-4 animate-pulse">
-        <div className="text-5xl">🎉</div>
+        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] flex items-center justify-center">
+          <Sparkles size={32} strokeWidth={1.5} className="text-white" />
+        </div>
         <div>
           <h3 className="text-2xl font-bold text-[var(--color-petroleum)]">¡Completado!</h3>
           <p className="text-[var(--color-gray-500)]">Eres un aprendiz <span className="font-bold text-[var(--color-corporate)]">{styleName}</span></p>
@@ -37,18 +54,18 @@ const Celebration = ({ active, styleName }) => {
   );
 };
 
-// Mapeo de expresiones a emojis
-const EXPRESSION_EMOJIS = {
-  neutral: '🧠',
-  happy: '😊',
-  excited: '🤩',
-  thinking: '🤔',
-  encouraging: '💪',
-  celebrating: '🎉',
-  calm: '😌',
-  proud: '🌟',
-  concerned: '😟',
-  curious: '🤓',
+// Mapeo de expresiones a iconos y colores EdutechLife
+const EXPRESSION_CONFIG = {
+  neutral: { color: '#4DA8C4', bgColor: '#4DA8C4/20' },
+  happy: { color: '#66CCCC', bgColor: '#66CCCC/20' },
+  excited: { color: '#4DA8C4', bgColor: '#4DA8C4/30' },
+  thinking: { color: '#004B63', bgColor: '#004B63/15' },
+  encouraging: { color: '#66CCCC', bgColor: '#66CCCC/25' },
+  celebrating: { color: '#4DA8C4', bgColor: '#4DA8C4/30' },
+  calm: { color: '#B2D8E5', bgColor: '#B2D8E5/20' },
+  proud: { color: '#4DA8C4', bgColor: '#4DA8C4/25' },
+  concerned: { color: '#004B63', bgColor: '#004B63/10' },
+  curious: { color: '#66CCCC', bgColor: '#66CCCC/20' },
 };
 
 // Componentes de Valeria - Guía del Diagnóstico
@@ -62,18 +79,19 @@ const ValeriaControls = ({
   onStart,
   showStart 
 }) => {
-  const currentEmoji = EXPRESSION_EMOJIS[valeriaExpression] || EXPRESSION_EMOJIS.neutral;
+  const config = EXPRESSION_CONFIG[valeriaExpression] || EXPRESSION_CONFIG.neutral;
   
   return (
     <div className="valeria-controls-bar">
       <div className="max-w-6xl mx-auto px-4 flex items-center justify-between py-3">
         <div className="valeria-logo">
           <div className="valeria-avatar-container">
-            <div className={`valeria-avatar ${isSpeaking ? 'speaking' : ''}`}>
-              <span className="valeria-avatar-emoji">{currentEmoji}</span>
+            <div className={`valeria-avatar ${isSpeaking ? 'speaking' : ''}`}
+              style={{ background: `linear-gradient(135deg, ${config.color}22, ${config.color}44)` }}>
+              <Brain size={20} strokeWidth={2} style={{ color: config.color }} />
             </div>
             {isSpeaking && (
-              <div className="valeria-avatar-pulse"></div>
+              <div className="valeria-avatar-pulse" style={{ borderColor: config.color }}></div>
             )}
           </div>
           <div className="valeria-logo-content">
@@ -127,77 +145,10 @@ const ValeriaControls = ({
   );
 };
 
-const QUESTIONS = [
-  { id: 1, text: '¿Cómo prefieres aprender a usar una nueva app en tu celular?', options: [
-    { text: 'Tutoriales en video', type: 'visual', icon: '📹' },
-    { text: 'Explicación paso a paso', type: 'auditivo', icon: '🎧' },
-    { text: 'Prueba y error', type: 'kinestesico', icon: '🧪' },
-    { text: 'Opiniones de otros usuarios', type: 'visual', icon: '💬' }
-  ]},
-  { id: 2, text: 'En clase, ¿cómo retienes mejor la información?', options: [
-    { text: 'Notas con colores', type: 'visual', icon: '🎨' },
-    { text: 'Grabo la clase', type: 'auditivo', icon: '🎙️' },
-    { text: 'Hago experimentos', type: 'kinestesico', icon: '🔬' },
-    { text: 'Resúmenes orales', type: 'auditivo', icon: '📝' }
-  ]},
-  { id: 3, text: '¿Qué haces para memorizar fechas?', options: [
-    { text: 'Tarjetas visuales', type: 'visual', icon: '🃏' },
-    { text: 'Listas orales', type: 'auditivo', icon: '📢' },
-    { text: 'Recitar moviéndote', type: 'kinestesico', icon: '🏃' },
-    { text: 'Escribir repetidamente', type: 'kinestesico', icon: '✍️' }
-  ]},
-  { id: 4, text: 'Un nuevo control en un juego. ¿Qué haces?', options: [
-    { text: 'Leer instrucciones', type: 'visual', icon: '📖' },
-    { text: 'Escuchar indicaciones', type: 'auditivo', icon: '👂' },
-    { text: 'Practicar moviéndote', type: 'kinestesico', icon: '🎮' },
-    { text: 'Ver un tutorial', type: 'visual', icon: '▶️' }
-  ]},
-  { id: 5, text: 'Como explicas una idea a un amigo que no entiende un tema?', options: [
-    { text: 'Dibujo o esquema', type: 'visual', icon: '🎯' },
-    { text: 'Explicación verbal', type: 'auditivo', icon: '🗣️' },
-    { text: 'Demostración física', type: 'kinestesico', icon: '👋' },
-    { text: 'Audio explicando', type: 'auditivo', icon: '🎵' }
-  ]},
-  { id: 6, text: 'Tipo de contenido en redes', options: [
-    { text: 'Imágenes y textos', type: 'visual', icon: '🖼️' },
-    { text: 'Podcasts', type: 'auditivo', icon: '🎧' },
-    { text: 'Manuales prácticos', type: 'kinestesico', icon: '📚' },
-    { text: 'Infografías', type: 'visual', icon: '📊' }
-  ]},
-  { id: 7, text: 'Investigar para un trabajo. ¿Cómo lo haces?', options: [
-    { text: 'Imágenes y videos', type: 'visual', icon: '🔍' },
-    { text: 'Documentales', type: 'auditivo', icon: '🎬' },
-    { text: 'Experimentos', type: 'kinestesico', icon: '⚗️' },
-    { text: 'Páginas organizadas', type: 'visual', icon: '📋' }
-  ]},
-  { id: 8, text: 'Qué te relaja después de un día de clases?', options: [
-    { text: 'Ver vídeos', type: 'visual', icon: '📺' },
-    { text: 'Música/podcasts', type: 'auditivo', icon: '🎵' },
-    { text: 'Deporte o movimiento', type: 'kinestesico', icon: '⚽' },
-    { text: 'Videojuegos/manualidades', type: 'kinestesico', icon: '🎨' }
-  ]},
-  { id: 9, text: 'Un tema nuevo. ¿Cómo aprendes mejor?', options: [
-    { text: 'Con gráficos', type: 'visual', icon: '📈' },
-    { text: 'Con explicaciones orales', type: 'auditivo', icon: '👨‍🏫' },
-    { text: 'Con ejercicios prácticos', type: 'kinestesico', icon: '✏️' },
-    { text: 'Notas con colores', type: 'visual', icon: '🌈' }
-  ]},
-  { id: 10, text: '¿Cómo te preparas para una presentación?', options: [
-    { text: 'Diapositivas y tarjetas', type: 'visual', icon: '📑' },
-    { text: 'Ensayo en voz alta', type: 'auditivo', icon: '🎤' },
-    { text: 'Práctica frente a un espejo', type: 'kinestesico', icon: '🪞' },
-    { text: 'Grabo mi voz y escucho', type: 'auditivo', icon: '🎙️' }
-  ]}
-];
-
 const MOOD_OPTIONS = [
-  { value: 'happy', label: 'Feliz', emoji: '😊', color: '#22C55E', message: '¡Qué genial que estás con buena energía! Este entusiasmo va a potenciar tu experiencia de aprendizaje.' },
-  { value: 'excited', label: 'Emocionado', emoji: '🎉', color: '#F59E0B', message: '¡Tu energía es increíble! Vamos a descubrir tu estilo de aprendizaje.' },
-  { value: 'calm', label: 'Tranquilo', emoji: '😌', color: '#3B82F6', message: 'Perfecto, la calma te ayudará a reflexionar y obtener resultados precisos.' },
-  { value: 'curious', label: 'Curioso', emoji: '🤔', color: '#8B5CF6', message: '¡La curiosidad es clave! Estás a punto de descubrir algo genial sobre ti.' },
-  { value: 'tired', label: 'Cansado', emoji: '😴', color: '#6B7280', message: '¡Aún cansado puedes descubrir mucho! Este test es rápido y fácil.' },
-  { value: 'stressed', label: 'Estresado', emoji: '😰', color: '#EF4444', message: 'No te preocupes, este test te dará herramientas para entender mejor tu aprendizaje.' },
-  { value: 'neutral', label: 'Neutral', emoji: '😐', color: '#4DA8C4', message: '¡Perfecto! Vamos a descubrir tu estilo de aprendizaje.' },
+  { value: 'happy', label: 'Bien', message: '¡Qué genial que estás con buena energía! Vamos a pasarlo muy bien.' },
+  { value: 'neutral', label: 'Regular', message: 'Gracias por compartir. Estoy aquí para acompañarte en cada paso.' },
+  { value: 'sad', label: 'No muy bien', message: 'Entiendo cómo te sientes. Este diagnóstico te ayudará a conocerte mejor.' }
 ];
 
 const STYLE_MAP = {
@@ -255,6 +206,10 @@ const getIconComponent = (iconName) => {
     case 'Video': return Video;
     case 'Headphones': return Headphones;
     case 'Activity': return Activity;
+    case 'Sparkles': return Sparkles;
+    case 'Rocket': return Rocket;
+    case 'Music': return Music;
+    case 'Volume': return Volume;
     case 'Wrench': return Wrench;
     case 'ListOrdered': return ListOrdered;
     case 'CheckSquare': return CheckSquare;
@@ -309,6 +264,24 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   const [valeriaVolume, setValeriaVolume] = useState(1.0);
   const [valentinaIntroComplete, setValentinaIntroComplete] = useState(false);
   
+  // Estados para datos del padre/tutor
+  const [parentName, setParentName] = useState('');
+  const [parentPhone, setParentPhone] = useState('');
+  const [parentEmail, setParentEmail] = useState('');
+  
+  // Habeas Data
+  const [habeasDataAccepted, setHabeasDataAccepted] = useState(false);
+  const [showHabeasModal, setShowHabeasModal] = useState(false);
+  
+  // Feedback de ánimo
+  const [moodFeedbackText, setMoodFeedbackText] = useState('');
+  const [showMoodFeedback, setShowMoodFeedback] = useState(false);
+  
+  // Preguntas por edad
+  const [ageQuestions, setAgeQuestions] = useState(() => 
+    getQuestionsByAge(parseInt(studentInfo.age) || 12)
+  );
+  
   const pdfTemplateRef = useRef(null);
   const chartRef = useRef(null);
   const isChartInView = useInView(chartRef);
@@ -339,7 +312,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     studentMood,
     phase,
     currentQuestion,
-    totalQuestions: QUESTIONS.length,
+    totalQuestions: ageQuestions.length,
     diagnosis,
     enabled: valeriaEnabled
   });
@@ -359,9 +332,9 @@ const DiagnosticoVAK = ({ onNavigate }) => {
 
   // Efecto: Leer pregunta al entrar en fase test
   useEffect(() => {
-    if (phase === 'test' && currentQuestion < QUESTIONS.length && valeriaEnabled) {
-      const q = QUESTIONS[currentQuestion];
-      readQuestionWithOptions(q.text, q.options, currentQuestion + 1, QUESTIONS.length);
+    if (phase === 'test' && currentQuestion < ageQuestions.length && valeriaEnabled) {
+      const q = ageQuestions[currentQuestion];
+      readQuestionWithOptions(q.text, q.options, currentQuestion + 1, ageQuestions.length);
     }
   }, [currentQuestion, phase, valeriaEnabled]);
 
@@ -371,46 +344,25 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     }
   }, [phase]);
 
-  // Efecto conversacional: Detectar cuando se escribe el nombre y confirmar
+  // Efecto conversacional: Confirmar nombre y pedir edad
   useEffect(() => {
-    if (phase === 'calibration' && tempName.length >= 2 && valeriaEnabled) {
+    if (phase === 'calibration' && studentName.length >= 2 && valeriaEnabled) {
       const timer = setTimeout(async () => {
-        await confirmNameAndAskAge(tempName);
-      }, 500);
+        await confirmNameAndAskAge(studentName);
+      }, 800);
       return () => clearTimeout(timer);
     }
-  }, [tempName, phase, valeriaEnabled]);
+  }, [studentName, phase, valeriaEnabled]);
 
-  // Efecto conversacional: Detectar cuando se escribe la edad y confirmar
+  // Efecto conversacional: Dar feedback cuando se selecciona el ánimo
   useEffect(() => {
-    const age = parseInt(tempAge);
-    if (phase === 'calibration' && tempAge.length >= 1 && age >= 6 && age <= 17 && valeriaEnabled) {
+    if (phase === 'calibration' && studentMood && valeriaEnabled) {
       const timer = setTimeout(async () => {
-        await confirmAgeAndAskEmail(tempName, age);
-      }, 500);
+        await giveMoodFeedback(studentMood, studentName);
+      }, 600);
       return () => clearTimeout(timer);
     }
-  }, [tempAge, phase, valeriaEnabled]);
-
-  // Efecto conversacional: Detectar cuando se escribe el email y confirmar
-  useEffect(() => {
-    if (phase === 'calibration' && tempEmail.length > 0 && validateEmail(tempEmail) && valeriaEnabled) {
-      const timer = setTimeout(async () => {
-        await confirmEmailAndAskPhone();
-      }, 500);
-      return () => clearTimeout(timer);
-    }
-  }, [tempEmail, phase, valeriaEnabled]);
-
-  // Efecto conversacional: Detectar cuando se escribe el teléfono y confirmar
-  useEffect(() => {
-    if (phase === 'calibration' && tempPhone.length >= 7 && valeriaEnabled) {
-      const timer = setTimeout(async () => {
-        await confirmPhoneAndAskMood(tempName);
-      }, 500);
-      return () => clearTimeout(timer);
-    }
-  }, [tempPhone, phase, valeriaEnabled]);
+  }, [studentMood, phase, valeriaEnabled]);
 
   // Timer para mostrar tiempo en resultados
   useEffect(() => {
@@ -520,24 +472,8 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   };
 
   const startTest = () => {
-    // IMPORTANTE: Si Valeria aún no termina de hablar, no hacer nada
-    if (valeriaEnabled && !valentinaIntroComplete) {
-      return;
-    }
-    
-    // Hacer que Valeria explique el diagnóstico antes de mostrar la vista de datos
-    if (valeriaEnabled) {
-      const introMessage = "¡Hola! Soy Valeria, tu psicóloga de EdutechLife. Vamos a comenzar con tu diagnóstico de estilo de aprendizaje VAK. Este diagnóstico identificará cómo procesas y retienes información de manera más efectiva. Existen tres estilos principales: visual, auditivo y kinestésico. El estilo visual aprende mejor viendo imágenes y diagramas. El auditivo aprende mejor escuchando y hablando. Y el kinestésico aprende mejor haciendo y practicando. Para personalizar tu experiencia y darte las mejores estrategias, necesito que me compartas tu nombre y cómo te sientes hoy. Esto me ayudará a adaptar mis consejos a tu estado emocional actual. Cuando estés listo, ingresa tu nombre y selecciona cómo te sientes.";
-      speakTextConversational(introMessage, 'valeria', () => {
-        // IMPORTANTE: Solo cambiar de fase cuando Valeria TERMINE de hablar
-        setValentinaIntroComplete(true);
-        setPhase('calibration');
-      });
-    } else {
-      // Si no está habilitado el audio, mostrar directamente la pantalla de datos
-      setValentinaIntroComplete(true);
-      setPhase('calibration');
-    }
+    if (valeriaEnabled && !valentinaIntroComplete) return;
+    setPhase('calibration');
   };
 
   const handleStart = async () => {
@@ -545,26 +481,34 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   };
 
   const submitCalibration = async () => {
-    if (!studentName.trim()) return;
+    if (!studentName.trim() || !studentAge || !studentMood) return;
+    
+    const age = parseInt(studentAge);
+    if (age < 6 || age > 17) {
+      setError('La edad debe estar entre 6 y 17 años');
+      return;
+    }
     
     setStudentName(studentName.trim());
+    setStudentAge(studentAge);
     setStartTime(Date.now());
     setElapsedTime(0);
+    
+    // Actualizar preguntas según la edad
+    setAgeQuestions(getQuestionsByAge(age));
     
     // Actualizar información del estudiante en el contexto global
     updateStudentInfo({
       name: studentName.trim(),
+      age: studentAge,
       mood: studentMood || 'neutral'
     });
     
-    // IMPORTANTE: Hacer la transición al test SOLO después de que Valentina termine de hablar
     if (valeriaEnabled) {
       await transitionToTest(studentName.trim());
-      // No necesitamos setTimeout adicional porque transitionToTest ya espera a que Valentina termine
       setPhase('test');
       setCurrentQuestion(0);
     } else {
-      // Si no está habilitado el audio, cambiar directamente
       setPhase('test');
       setCurrentQuestion(0);
     }
@@ -588,7 +532,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
         await giveProgressUpdate();
       }
       
-      if (idx < QUESTIONS.length - 1) {
+      if (idx < ageQuestions.length - 1) {
         setCurrentQuestion(idx + 1);
       } else {
         // Es el último pregunta
@@ -611,9 +555,13 @@ const DiagnosticoVAK = ({ onNavigate }) => {
         const style = STYLE_MAP[predominant];
         const res = {
           studentName: studentName || 'Estudiante',
+          studentAge: studentAge || '',
           studentEmail: studentEmail,
           studentPhone: studentPhone,
           studentMood: studentMood,
+          parentName: parentName || '',
+          parentPhone: parentPhone || '',
+          parentEmail: parentEmail || '',
           date: date,
           timeSpent: elapsedTime,
           counts: c,
@@ -638,7 +586,9 @@ const DiagnosticoVAK = ({ onNavigate }) => {
         clearProgress();
         
         setTimeout(() => {
-          setPhase('result');
+          setShowConfetti(false);
+          setShowCelebration(false);
+          setPhase('parentdata');
           // Anunciar resultados después de un momento
           if (valeriaEnabled) {
             setTimeout(() => {
@@ -652,21 +602,13 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     }
   };
 
-  const exportPDF = async () => {
+  const generatePDF = async () => {
     if (!diagnosis) return;
     
     const el = pdfTemplateRef.current;
     if (!el) return;
     
     setPdfLoading(true);
-    
-    // Mensaje de Valentina al exportar
-    const exportMessage = `¡Excelente ${studentName}! Estoy generando tu informe personalizado con todos los detalles de tu diagnóstico VAK. Este documento incluye mis recomendaciones como psicóloga educativa.`;
-    
-    // Mostrar mensaje de Valentina
-    setValentinaMessage(exportMessage);
-    addToChatHistory(exportMessage, 'valentina');
-    speakAsValentina(exportMessage);
     
     const fileName = `Diagnostico_VAK_${(diagnosis.studentName || 'estudiante').replace(/\s+/g, '_')}_${diagnosis.date || date}`;
     const opt = {
@@ -679,25 +621,9 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     
     try {
       await html2pdf().set(opt).from(el).save();
-      
-      // Mensaje de éxito
-      const successMessage = `¡Listo ${studentName}! Tu informe se ha descargado correctamente. Recuerda que puedes consultarme cualquier duda sobre tus estrategias de aprendizaje.`;
-      setTimeout(() => {
-        setValentinaMessage(successMessage);
-        addToChatHistory(successMessage, 'valentina');
-        speakAsValentina(successMessage);
-      }, 1000);
-      
     } catch (e) {
       console.error('PDF error:', e);
       setError('Error al generar PDF');
-      
-      // Mensaje de error de Valentina
-      const errorMessage = `Oh no ${studentName}, hubo un problema al generar tu informe. Por favor, intenta nuevamente o contáctanos para ayuda.`;
-      setValentinaMessage(errorMessage);
-      addToChatHistory(errorMessage, 'valentina');
-      speakAsValentina(errorMessage);
-      
     } finally {
       setPdfLoading(false);
     }
@@ -705,10 +631,55 @@ const DiagnosticoVAK = ({ onNavigate }) => {
 
   const getMoodFeedback = () => {
     const mood = MOOD_OPTIONS.find(m => m.value === studentMood);
-    return mood || MOOD_OPTIONS[6];
+    return mood || MOOD_OPTIONS[1];
   };
 
-  // Generar comentario de Valentina para el diagnóstico
+  const getCaracteristicasEstilo = (style) => {
+    const map = {
+      visual: ['Aprende mejor viendo imágenes y colores', 'Prefiere mapas mentales y esquemas', 'Recuerda caras con facilidad', 'Se distrae con ruidos fuertes', 'Buena memoria visual', 'Organizado y detallista'],
+      auditivo: ['Aprende mejor escuchando y hablando', 'Prefiere debates y explicaciones verbales', 'Buena memoria auditiva', 'Disfruta la música y los ritmos', 'Se expresa bien verbalmente', 'Puede distraerse con estímulos visuales'],
+      kinestesico: ['Aprende mejor haciendo y experimentando', 'Prefiere actividades prácticas', 'Buena coordinación motora', 'Necesita movimiento para concentrarse', 'Aprendizaje experiencial', 'Disfruta los deportes y las manualidades']
+    };
+    return map[style] || map.visual;
+  };
+
+  const getTipsPadres = (style) => {
+    const map = {
+      visual: [
+        'Crea un espacio de estudio visualmente organizado con colores y esquemas',
+        'Utiliza calendarios visuales y listas de tareas con dibujos',
+        'Refuerza el aprendizaje con documentales y videos educativos',
+        'Anímalo a usar mapas mentales y resúmenes con colores',
+        'Evita distracciones auditivas durante el estudio'
+      ],
+      auditivo: [
+        'Lee en voz alta los temas de estudio o pídele que te explique lo aprendido',
+        'Graba las lecciones importantes para que pueda repasarlas después',
+        'Utiliza podcasts educativos y audiolibros como recurso complementario',
+        'Fomenta discusiones y debates sobre temas escolares',
+        'Crea rimas o canciones para memorizar conceptos clave'
+      ],
+      kinestesico: [
+        'Permite pausas activas frecuentes durante el estudio',
+        'Utiliza experimentos prácticos y proyectos manuales para reforzar conceptos',
+        'Anímalo a caminar mientras repasa o estudia',
+        'Proporciona materiales manipulables (maquetas, rompecabezas educativos)',
+        'Integra el movimiento y la actividad física en la rutina de aprendizaje'
+      ]
+    };
+    return map[style] || map.visual;
+  };
+
+  const getCarrerasRecomendadas = (style) => {
+    const map = {
+      visual: ['Diseño Gráfico', 'Arquitectura', 'Cine y Audiovisuales', 'Fotografía', 'Desarrollo Web y UX/UI', 'Ilustración Digital'],
+      auditivo: ['Música y Composición', 'Periodismo', 'Derecho', 'Psicología', 'Docencia', 'Idiomas y Traducción'],
+      kinestesico: ['Ingeniería', 'Medicina y Cirugía', 'Deportes', 'Gastronomía', 'Artes Escénicas', 'Diseño Industrial']
+    };
+    return map[style] || map.visual;
+  };
+
+  // Generar comentario de Valeria para el diagnóstico
   const getValentinaCommentary = () => {
     if (!diagnosis || !studentAge) return '';
     
@@ -863,29 +834,29 @@ const DiagnosticoVAK = ({ onNavigate }) => {
             </div>
 
             {/* KINESTÉSICO */}
-            <div className="bg-white rounded-2xl p-6 shadow-lg border-l-4 border-[#00C2E0] hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-              <div className="w-16 h-16 rounded-2xl bg-[#00C2E0]/10 flex items-center justify-center mb-4 mx-auto">
-                <Activity size={32} strokeWidth={1.5} className="text-[#00C2E0]" />
+            <div className="bg-white rounded-2xl p-6 shadow-lg border-l-4 border-[#4DA8C4] hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <div className="w-16 h-16 rounded-2xl bg-[#4DA8C4]/10 flex items-center justify-center mb-4 mx-auto">
+                <Activity size={32} strokeWidth={1.5} className="text-[#4DA8C4]" />
               </div>
-              <h3 className="text-lg font-bold text-[#00C2E0] text-center mb-3 uppercase tracking-wide">Kinestésico</h3>
+              <h3 className="text-lg font-bold text-[#4DA8C4] text-center mb-3 uppercase tracking-wide">Kinestésico</h3>
               <p className="text-sm text-[#004B63]/70 text-center mb-4">
                 Aprende mejor haciendo
               </p>
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-sm text-[#004B63]/80">
-                  <CheckCircle2 size={16} strokeWidth={2} className="text-[#00C2E0] shrink-0" />
+                  <CheckCircle2 size={16} strokeWidth={2} className="text-[#4DA8C4] shrink-0" />
                   <span>Experimentos prácticos</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-[#004B63]/80">
-                  <CheckCircle2 size={16} strokeWidth={2} className="text-[#00C2E0] shrink-0" />
+                  <CheckCircle2 size={16} strokeWidth={2} className="text-[#4DA8C4] shrink-0" />
                   <span>Movimiento y pausas</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-[#004B63]/80">
-                  <CheckCircle2 size={16} strokeWidth={2} className="text-[#00C2E0] shrink-0" />
+                  <CheckCircle2 size={16} strokeWidth={2} className="text-[#4DA8C4] shrink-0" />
                   <span>Proyectos manuales</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-[#004B63]/80">
-                  <CheckCircle2 size={16} strokeWidth={2} className="text-[#00C2E0] shrink-0" />
+                  <CheckCircle2 size={16} strokeWidth={2} className="text-[#4DA8C4] shrink-0" />
                   <span>Juegos de roles</span>
                 </div>
               </div>
@@ -955,15 +926,15 @@ const DiagnosticoVAK = ({ onNavigate }) => {
               <p className="text-xs text-[#004B63]/60">Preguntas</p>
             </div>
             <div className="text-center">
-              <div className="w-14 h-14 rounded-2xl bg-[#00C2E0]/10 flex items-center justify-center mx-auto mb-2">
-                <Target size={28} strokeWidth={2} className="text-[#00C2E0]" />
+              <div className="w-14 h-14 rounded-2xl bg-[#4DA8C4]/10 flex items-center justify-center mx-auto mb-2">
+                <Target size={28} strokeWidth={2} className="text-[#4DA8C4]" />
               </div>
               <p className="text-2xl font-bold text-[#004B63]">100%</p>
               <p className="text-xs text-[#004B63]/60">Personalizado</p>
             </div>
             <div className="text-center">
-              <div className="w-14 h-14 rounded-2xl bg-[#10B981]/10 flex items-center justify-center mx-auto mb-2">
-                <CheckCircle2 size={28} strokeWidth={2} className="text-[#10B981]" />
+              <div className="w-14 h-14 rounded-2xl bg-[#4DA8C4]/10 flex items-center justify-center mx-auto mb-2">
+                <CheckCircle2 size={28} strokeWidth={2} className="text-[#4DA8C4]" />
               </div>
               <p className="text-2xl font-bold text-[#004B63]">100%</p>
               <p className="text-xs text-[#004B63]/60">Confidencial</p>
@@ -1032,12 +1003,103 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     </div>
   );
 
+  const handleMoodSelect = (moodValue) => {
+    setStudentMood(moodValue);
+    const mensajes = {
+      happy: '¡Qué alegría verte así! Vamos a pasarlo muy bien con este diagnóstico.',
+      neutral: 'Gracias por compartir cómo te sientes. Estoy aquí para guiarte.',
+      sad: 'Entiendo que no te sientas del todo bien. Este diagnóstico te ayudará a conocerte mejor y descubrirás cómo aprender de la forma que más te gusta. ¡Vamos juntos!'
+    };
+    setMoodFeedbackText(mensajes[moodValue] || mensajes.neutral);
+    setShowMoodFeedback(true);
+    setTimeout(() => setShowMoodFeedback(false), 4000);
+  };
+
+  const renderHabeasDataModal = () => (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={() => setShowHabeasModal(false)}>
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        onClick={(e) => e.stopPropagation()}
+        className="bg-white rounded-3xl p-6 md:p-8 max-w-lg w-full max-h-[80vh] overflow-y-auto shadow-2xl"
+      >
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-[#4DA8C4]/10 flex items-center justify-center">
+              <Shield size={20} strokeWidth={2} className="text-[#4DA8C4]" />
+            </div>
+            <h2 className="text-lg font-bold text-[#004B63]">Habeas Data</h2>
+          </div>
+          <button onClick={() => setShowHabeasModal(false)} className="text-[#004B63]/40 hover:text-[#004B63]">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+        
+        <div className="space-y-4 text-sm text-[#004B63]/80">
+          <div className="bg-[#B2D8E5]/20 rounded-2xl p-4">
+            <h3 className="font-bold text-[#004B63] mb-2">POLÍTICA DE TRATAMIENTO DE DATOS PERSONALES</h3>
+            <p className="mb-2"><span className="font-semibold">EDUTECHLIFE S.A.S.</span></p>
+            <p className="text-xs text-[#004B63]/60">De acuerdo con la Ley 1581 de 2012 de la República de Colombia</p>
+          </div>
+          
+          <div>
+            <h4 className="font-semibold text-[#004B63] mb-1">1. Responsable del Tratamiento</h4>
+            <p>EdutechLife S.A.S., con domicilio en Colombia. Correo de contacto: protecciondedatos@edutechlife.com</p>
+          </div>
+          
+          <div>
+            <h4 className="font-semibold text-[#004B63] mb-1">2. Finalidad del Tratamiento</h4>
+            <p>Los datos personales recolectados (nombre, edad, correo electrónico, teléfono) serán utilizados exclusivamente para:</p>
+            <ul className="list-disc pl-5 mt-1 space-y-1">
+              <li>Generar el diagnóstico de estilo de aprendizaje VAK.</li>
+              <li>Enviar el informe de resultados al correo electrónico registrado.</li>
+              <li>Fines estadísticos anonimizados para la mejora continua del servicio.</li>
+            </ul>
+          </div>
+          
+          <div>
+            <h4 className="font-semibold text-[#004B63] mb-1">3. Derechos del Titular</h4>
+            <p>Como titular de los datos, tienes derecho a:</p>
+            <ul className="list-disc pl-5 mt-1 space-y-1">
+              <li>Conocer, actualizar y rectificar tus datos personales.</li>
+              <li>Solicitar prueba de la autorización otorgada.</li>
+              <li>Ser informado sobre el uso dado a tus datos.</li>
+              <li>Revocar la autorización en cualquier momento.</li>
+              <li>Acceder de forma gratuita a tus datos personales.</li>
+            </ul>
+          </div>
+          
+          <div>
+            <h4 className="font-semibold text-[#004B63] mb-1">4. Atención de Consultas y Reclamos</h4>
+            <p>Para cualquier consulta o reclamo relacionado con el tratamiento de tus datos personales, puedes contactarnos a través de:</p>
+            <p className="mt-1">Correo: protecciondedatos@edutechlife.com</p>
+          </div>
+          
+          <div>
+            <h4 className="font-semibold text-[#004B63] mb-1">5. Vigencia</h4>
+            <p>Los datos personales serán conservados durante el tiempo necesario para cumplir con las finalidades descritas y de acuerdo con las disposiciones legales aplicables.</p>
+          </div>
+        </div>
+        
+        <button
+          onClick={() => {
+            setHabeasDataAccepted(true);
+            setShowHabeasModal(false);
+          }}
+          className="w-full mt-6 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-2xl py-3 font-bold text-sm hover:shadow-lg transition-all"
+        >
+          Aceptar y continuar
+        </button>
+      </motion.div>
+    </div>
+  );
+
   const renderCalibration = () => (
     <div className="min-h-[80vh] flex items-center justify-center p-4 relative">
-      {/* Efectos 3D de fondo para intro */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-32 h-32 rounded-full bg-[#4DA8C4]/10 blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/3 right-1/4 w-40 h-40 rounded-full bg-[#66CCCC]/10 blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+      {/* Efectos de fondo */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full bg-gradient-to-br from-[#4DA8C4]/10 to-[#66CCCC]/5 blur-3xl"></div>
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 rounded-full bg-gradient-to-tr from-[#66CCCC]/10 to-[#4DA8C4]/5 blur-3xl"></div>
       </div>
       
       <motion.div 
@@ -1047,132 +1109,190 @@ const DiagnosticoVAK = ({ onNavigate }) => {
         className="w-full max-w-md text-center relative z-10"
         style={{ transformStyle: 'preserve-3d' }}
       >
-        {/* Título principal con efecto 3D */}
+        {/* Título */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
           className="mb-8"
         >
-          <h1 className="text-2xl font-extrabold text-[#0A1628] text-center">
+          <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] flex items-center justify-center shadow-lg mb-4">
+            <User size={32} strokeWidth={2} className="text-white" />
+          </div>
+          <h1 className="text-2xl font-extrabold text-[#004B63] text-center">
             Cuéntame sobre ti
           </h1>
-          <p className="text-sm text-slate-600 leading-relaxed mt-2">
-            Completa estos datos para personalizar tu diagnóstico VAK
+          <p className="text-sm text-[#004B63]/70 leading-relaxed mt-2">
+            Completa tus datos para personalizar tu diagnóstico
           </p>
         </motion.div>
 
-        {/* Input Nombre - Estilo píldora con efecto 3D */}
+        {/* Input Nombre */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="mb-6"
+          transition={{ delay: 0.15 }}
+          className="mb-4"
         >
+          <label className="text-xs font-medium text-[#004B63]/60 uppercase tracking-wider mb-2 block text-left">
+            Tu nombre
+          </label>
           <div className="relative">
             <input
               type="text"
               value={studentName}
               onChange={(e) => setStudentName(e.target.value)}
-              placeholder="Tu nombre completo"
-              className="w-full rounded-full border-2 border-gray-200 bg-white/80 backdrop-blur-sm px-6 py-4 text-base font-medium text-slate-600 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#4DA8C4]/30 focus:border-transparent transition-all shadow-lg"
+              placeholder="Escribe tu nombre completo"
+              className="w-full rounded-2xl border-2 border-[#B2D8E5]/50 bg-white px-5 py-3.5 text-base font-medium text-[#004B63] placeholder-[#004B63]/30 focus:outline-none focus:ring-2 focus:ring-[#4DA8C4]/30 focus:border-[#4DA8C4] transition-all shadow-md"
             />
-            <div className="absolute -bottom-1 left-4 right-4 h-2 bg-gradient-to-r from-transparent via-[#4DA8C4]/20 to-transparent rounded-full blur-sm"></div>
           </div>
         </motion.div>
 
-        {/* Selector de Ánimo - 3 tarjetas con iconos Soft Outline */}
+        {/* Input Edad */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="mb-8"
+          transition={{ delay: 0.2 }}
+          className="mb-4"
         >
-          <p className="text-xs font-medium text-slate-400 uppercase tracking-wider mb-4">¿Cómo te sientes hoy?</p>
-          <div className="grid grid-cols-3 gap-4">
+          <label className="text-xs font-medium text-[#004B63]/60 uppercase tracking-wider mb-2 block text-left">
+            Tu edad
+          </label>
+          <div className="relative">
+            <input
+              type="number"
+              min="6"
+              max="17"
+              value={studentAge}
+              onChange={(e) => setStudentAge(e.target.value)}
+              placeholder="Entre 6 y 17 años"
+              className="w-full rounded-2xl border-2 border-[#B2D8E5]/50 bg-white px-5 py-3.5 text-base font-medium text-[#004B63] placeholder-[#004B63]/30 focus:outline-none focus:ring-2 focus:ring-[#4DA8C4]/30 focus:border-[#4DA8C4] transition-all shadow-md"
+            />
+          </div>
+        </motion.div>
+
+        {/* Selector de Ánimo */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+          className="mb-6"
+        >
+          <label className="text-xs font-medium text-[#004B63]/60 uppercase tracking-wider mb-3 block text-left">¿Cómo te sientes hoy?</label>
+          <div className="grid grid-cols-3 gap-3">
             {[
-              { value: 'happy', label: 'Bien', icon: Smile, color: 'from-[#4DA8C4] to-[#66CCCC]' },
-              { value: 'neutral', label: 'Regular', icon: Meh, color: 'from-gray-400 to-gray-300' },
-              { value: 'sad', label: 'Mal', icon: Frown, color: 'from-gray-500 to-gray-400' }
+              { value: 'happy', label: 'Bien', icon: Smile },
+              { value: 'neutral', label: 'Regular', icon: Meh },
+              { value: 'sad', label: 'No muy bien', icon: Frown }
             ].map((mood) => {
               const IconComponent = mood.icon;
               return (
                 <motion.button
                   key={mood.value}
-                  whileHover={{ scale: 1.05, y: -3 }}
+                  whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => setStudentMood(mood.value)}
-                  className={`relative rounded-2xl p-4 flex flex-col items-center justify-center transition-all overflow-hidden ${
+                  onClick={() => handleMoodSelect(mood.value)}
+                  className={`relative rounded-2xl p-4 flex flex-col items-center justify-center transition-all ${
                     studentMood === mood.value
-                      ? 'bg-gradient-to-br from-white to-cyan-50 ring-2 ring-[#4DA8C4] shadow-lg'
-                      : 'bg-white/80 backdrop-blur-sm border border-gray-200 shadow-md'
+                      ? 'bg-[#4DA8C4]/10 ring-2 ring-[#4DA8C4] shadow-lg'
+                      : 'bg-white/80 border-2 border-[#B2D8E5]/30 shadow-sm hover:shadow-md'
                   }`}
-                  style={{ transformStyle: 'preserve-3d' }}
                 >
-                  {/* Efecto de fondo gradiente cuando está seleccionado */}
-                  {studentMood === mood.value && (
-                    <div className={`absolute inset-0 bg-gradient-to-br ${mood.color} opacity-10`}></div>
-                  )}
-                  
-                  {/* Icono Soft Outline */}
-                  <div className="w-12 h-12 rounded-xl bg-[#4DA8C4]/10 flex items-center justify-center mb-2 relative z-10">
-                    <IconComponent size={24} strokeWidth={2} className="text-[#4DA8C4]" />
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-2 ${
+                    studentMood === mood.value ? 'bg-[#4DA8C4]/20' : 'bg-[#4DA8C4]/5'
+                  }`}>
+                    <IconComponent size={24} strokeWidth={2} className={
+                      studentMood === mood.value ? 'text-[#4DA8C4]' : 'text-[#4DA8C4]'
+                    } />
                   </div>
-                  <span className="text-xs font-medium text-slate-400 uppercase tracking-wider relative z-10">{mood.label}</span>
-                  
-                  {/* Efecto de sombra 3D */}
-                  <div className="absolute -bottom-1 left-2 right-2 h-2 bg-black/5 blur-sm rounded-full"></div>
+                  <span className={`text-xs font-semibold uppercase tracking-wider ${
+                    studentMood === mood.value ? 'text-[#004B63]' : 'text-[#004B63]/60'
+                  }`}>{mood.label}</span>
                 </motion.button>
               );
             })}
           </div>
+          
+          {/* Feedback de ánimo */}
+          {showMoodFeedback && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="mt-4 p-4 bg-[#4DA8C4]/10 rounded-2xl border border-[#4DA8C4]/20"
+            >
+              <p className="text-sm text-[#004B63] font-medium leading-relaxed">
+                {moodFeedbackText}
+              </p>
+            </motion.div>
+          )}
         </motion.div>
 
-        {/* Botón Continuar - Estilo píldora con efecto flotante 3D */}
+        {/* Habeas Data */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
+          transition={{ delay: 0.3 }}
+          className="mb-6"
+        >
+          <div className="flex items-start gap-3 bg-[#B2D8E5]/20 rounded-2xl p-4">
+            <input
+              type="checkbox"
+              checked={habeasDataAccepted}
+              onChange={(e) => setHabeasDataAccepted(e.target.checked)}
+              className="w-5 h-5 mt-0.5 rounded-md border-2 border-[#4DA8C4] text-[#4DA8C4] focus:ring-[#4DA8C4] cursor-pointer accent-[#4DA8C4]"
+            />
+            <div className="text-left">
+              <p className="text-xs text-[#004B63]/80 leading-relaxed">
+                Acepto las <span className="font-semibold text-[#4DA8C4]">políticas de tratamiento de datos personales</span> de EdutechLife.
+              </p>
+              <button
+                onClick={() => setShowHabeasModal(true)}
+                className="text-xs text-[#4DA8C4] font-medium hover:underline mt-1"
+              >
+                Ver documento Habeas Data
+              </button>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Botón Iniciar */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35 }}
         >
           <motion.button
-            whileHover={{ scale: 1.05, y: -3 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={studentName.trim() && studentAge && studentMood && habeasDataAccepted ? { scale: 1.02 } : {}}
+            whileTap={studentName.trim() && studentAge && studentMood && habeasDataAccepted ? { scale: 0.98 } : {}}
             onClick={submitCalibration}
-            disabled={!studentName.trim()}
-            className="relative w-full bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-full py-4 px-6 shadow-xl hover:shadow-2xl transition-all overflow-hidden group disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{ transformStyle: 'preserve-3d' }}
+            disabled={!studentName.trim() || !studentAge || !studentMood || !habeasDataAccepted}
+            className={`w-full rounded-2xl py-4 px-6 shadow-xl transition-all ${
+              studentName.trim() && studentAge && studentMood && habeasDataAccepted
+                ? 'bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] hover:shadow-2xl'
+                : 'bg-[#B2D8E5] cursor-not-allowed'
+            }`}
           >
-            {/* Efecto de brillo animado */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
-            
-            <span className="relative z-10 text-base font-semibold flex items-center justify-center gap-2">
+            <span className={`text-lg font-bold flex items-center justify-center gap-2 ${
+              studentName.trim() && studentAge && studentMood && habeasDataAccepted ? 'text-white' : 'text-[#004B63]/50'
+            }`}>
               Iniciar Diagnóstico
               <ArrowRight size={20} strokeWidth={2} />
             </span>
-            
-            {/* Efecto de sombra 3D */}
-            <div className="absolute -bottom-2 left-4 right-4 h-3 bg-gradient-to-r from-[#4DA8C4]/30 to-[#66CCCC]/30 blur-md rounded-full"></div>
           </motion.button>
         </motion.div>
-
-        {/* Información adicional */}
-        <motion.p 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="text-xs text-slate-400 uppercase tracking-wider mt-6"
-        >
-          Solo tomará 3 minutos • 10 preguntas • 100% confidencial
-        </motion.p>
       </motion.div>
+
+      {/* Modal Habeas Data */}
+      {showHabeasModal && renderHabeasDataModal()}
     </div>
   );
 
   const renderTest = () => {
-    const question = QUESTIONS[currentQuestion];
+    const question = ageQuestions[currentQuestion];
     if (!question) return null;
     
-    const progress = ((currentQuestion + 1) / QUESTIONS.length) * 100;
+    const progress = ((currentQuestion + 1) / ageQuestions.length) * 100;
     
     return (
       <div className="max-w-3xl mx-auto p-4">
@@ -1180,7 +1300,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
         <div className="flex items-center justify-between mb-6">
           <div className="text-xs font-medium text-slate-400 uppercase tracking-wider">Pregunta</div>
           <div className="bg-[#66CCCC] text-white rounded-full px-3 py-1 text-xs font-semibold">
-            {currentQuestion + 1} / {QUESTIONS.length}
+            {currentQuestion + 1} / {ageQuestions.length}
           </div>
         </div>
 
@@ -1204,7 +1324,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
           transition={{ duration: 0.4 }}
           className="mb-10"
         >
-          <h2 className="text-2xl md:text-3xl font-extrabold text-[#0A1628] text-center leading-tight">
+          <h2 className="text-2xl md:text-3xl font-extrabold text-[#004B63] text-center leading-tight">
             {question.text}
           </h2>
 
@@ -1261,7 +1381,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
             <button
               onClick={() => {
                 if (!isValentinaSpeaking) {
-                  readQuestionWithOptions(question.text, question.options, currentQuestion + 1, QUESTIONS.length);
+                  readQuestionWithOptions(question.text, question.options, currentQuestion + 1, ageQuestions.length);
                 }
               }}
               disabled={isValentinaSpeaking}
@@ -1278,6 +1398,111 @@ const DiagnosticoVAK = ({ onNavigate }) => {
         <div className="text-center">
           <span className="text-xs text-slate-400 uppercase tracking-wider">Tiempo transcurrido: {formatTime(elapsedTime)}</span>
         </div>
+      </div>
+    );
+  };
+
+  const renderParentData = () => {
+    const isValid = parentName.trim() && parentPhone.trim() && parentEmail.trim() && validateEmail(parentEmail);
+    
+    return (
+      <div className="min-h-[80vh] flex items-center justify-center p-4 relative">
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-0 right-1/4 w-96 h-96 rounded-full bg-gradient-to-br from-[#66CCCC]/10 to-[#4DA8C4]/5 blur-3xl"></div>
+        </div>
+        
+        <motion.div 
+          initial={{ opacity: 0, y: 30, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          className="w-full max-w-md relative z-10"
+        >
+          {/* Header */}
+          <motion.div className="text-center mb-8">
+            <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] flex items-center justify-center shadow-lg mb-4">
+              <Sparkles size={32} strokeWidth={2} className="text-white" />
+            </div>
+            <h1 className="text-2xl font-extrabold text-[#004B63] mb-2">¡Casi terminamos!</h1>
+            <p className="text-sm text-[#004B63]/70 leading-relaxed">
+              Completa los datos del acudiente para enviar los resultados de tu diagnóstico VAK
+            </p>
+          </motion.div>
+          
+          {/* Form */}
+          <div className="space-y-4">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+              <label className="text-xs font-medium text-[#004B63]/60 uppercase tracking-wider mb-2 block">
+                <User size={14} strokeWidth={2} className="inline mr-1 text-[#4DA8C4]" />
+                Nombre del acudiente
+              </label>
+              <input
+                type="text"
+                value={parentName}
+                onChange={(e) => setParentName(e.target.value)}
+                placeholder="Nombre completo del padre o tutor"
+                className="w-full rounded-2xl border-2 border-[#B2D8E5]/50 bg-white px-5 py-3.5 text-base font-medium text-[#004B63] placeholder-[#004B63]/30 focus:outline-none focus:ring-2 focus:ring-[#4DA8C4]/30 focus:border-[#4DA8C4] transition-all shadow-md"
+              />
+            </motion.div>
+            
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
+              <label className="text-xs font-medium text-[#004B63]/60 uppercase tracking-wider mb-2 block">
+                <Phone size={14} strokeWidth={2} className="inline mr-1 text-[#4DA8C4]" />
+                Teléfono de contacto
+              </label>
+              <input
+                type="tel"
+                value={parentPhone}
+                onChange={(e) => setParentPhone(e.target.value)}
+                placeholder="Ej: 300 123 4567"
+                className="w-full rounded-2xl border-2 border-[#B2D8E5]/50 bg-white px-5 py-3.5 text-base font-medium text-[#004B63] placeholder-[#004B63]/30 focus:outline-none focus:ring-2 focus:ring-[#4DA8C4]/30 focus:border-[#4DA8C4] transition-all shadow-md"
+              />
+            </motion.div>
+            
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+              <label className="text-xs font-medium text-[#004B63]/60 uppercase tracking-wider mb-2 block">
+                <Mail size={14} strokeWidth={2} className="inline mr-1 text-[#4DA8C4]" />
+                Correo electrónico
+              </label>
+              <input
+                type="email"
+                value={parentEmail}
+                onChange={(e) => setParentEmail(e.target.value)}
+                placeholder="correo@ejemplo.com"
+                className="w-full rounded-2xl border-2 border-[#B2D8E5]/50 bg-white px-5 py-3.5 text-base font-medium text-[#004B63] placeholder-[#004B63]/30 focus:outline-none focus:ring-2 focus:ring-[#4DA8C4]/30 focus:border-[#4DA8C4] transition-all shadow-md"
+              />
+            </motion.div>
+          </div>
+          
+          {/* Botón continuar */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="mt-8"
+          >
+            <motion.button
+              whileHover={isValid ? { scale: 1.02 } : {}}
+              whileTap={isValid ? { scale: 0.98 } : {}}
+              onClick={() => {
+                if (isValid) {
+                  updateStudentInfo({
+                    parentName: parentName.trim(),
+                    parentPhone: parentPhone.trim(),
+                    parentEmail: parentEmail.trim()
+                  });
+                  setPhase('result');
+                }
+              }}
+              disabled={!isValid}
+              className={`w-full rounded-2xl py-4 px-6 shadow-xl transition-all font-bold text-lg ${
+                isValid
+                  ? 'bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white hover:shadow-2xl'
+                  : 'bg-[#B2D8E5] text-[#004B63]/50 cursor-not-allowed'
+              }`}
+            >
+              Ver mis resultados
+            </motion.button>
+          </motion.div>
+        </motion.div>
       </div>
     );
   };
@@ -1305,7 +1530,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
       <div className="max-w-6xl mx-auto p-4 space-y-8">
         {/* Header del resultado */}
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-extrabold text-[#0A1628] text-center">
+          <h1 className="text-2xl font-extrabold text-[#004B63] text-center">
             ¡Diagnóstico Completado!
           </h1>
           <p className="text-sm text-slate-600 leading-relaxed mt-2">
@@ -1494,19 +1719,40 @@ const DiagnosticoVAK = ({ onNavigate }) => {
             whileHover={{ scale: 1.08, y: -5 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => onNavigate && onNavigate('neuroentorno')}
-            className="relative bg-white border-2 border-[#0A1628] text-[#0A1628] rounded-full px-8 py-4 flex items-center gap-3 overflow-hidden group"
+            className="relative bg-white border-2 border-[#004B63] text-[#004B63] rounded-full px-8 py-4 flex items-center gap-3 overflow-hidden group"
             style={{
               transformStyle: 'preserve-3d'
             }}
           >
             {/* Efecto de brillo 3D */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#0A1628]/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#004B63]/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
             
             <Rocket size={20} strokeWidth={2} className="relative z-10" />
             <span className="relative z-10 text-base font-semibold">Ir a IA Lab</span>
             
             {/* Efecto de sombra 3D */}
-            <div className="absolute -bottom-2 left-4 right-4 h-4 bg-[#0A1628]/10 blur-md rounded-full"></div>
+            <div className="absolute -bottom-2 left-4 right-4 h-4 bg-[#004B63]/10 blur-md rounded-full"></div>
+          </motion.button>
+          
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => {
+              setPhase('intro');
+              setStudentName('');
+              setStudentAge('');
+              setStudentMood('');
+              setCurrentQuestion(0);
+              setAnswers([]);
+              setDiagnosis(null);
+              setError(null);
+              setHabeasDataAccepted(false);
+              setValentinaIntroComplete(false);
+            }}
+            className="text-[#004B63]/50 hover:text-[#4DA8C4] text-sm font-medium flex items-center justify-center gap-2 transition-colors"
+          >
+            <RotateCcw size={16} strokeWidth={2} />
+            Volver al inicio
           </motion.button>
         </motion.div>
 
@@ -1711,24 +1957,24 @@ const DiagnosticoVAK = ({ onNavigate }) => {
           className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-4 md:p-6"
         >
         
-        <div ref={pdfTemplateRef} style={{ display: 'none' }}>
+        <div ref={pdfTemplateRef} style={{ position: 'absolute', left: '-9999px', top: 0, width: '210mm', backgroundColor: '#ffffff' }}>
           {diagnosis && (
             <div style={{ padding: '40px', fontFamily: 'Montserrat, sans-serif', backgroundColor: '#ffffff' }}>
-              {/* Header con logo */}
+              {/* Header */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '20px', borderBottom: '3px solid #4DA8C4', marginBottom: '30px' }}>
                 <div>
-                  <h1 style={{ color: '#004B63', margin: '0 0 5px 0', fontSize: '24px', fontWeight: '800' }}>Dictamen Oficial VAK</h1>
+                  <h1 style={{ color: '#004B63', margin: '0 0 5px 0', fontSize: '24px', fontWeight: '800' }}>Dictamen Psicopedagógico VAK</h1>
                   <p style={{ margin: 0, color: '#64748B', fontSize: '14px' }}>Edutechlife • Inteligencia Cognitiva</p>
                 </div>
                 <div style={{ textAlign: 'right' }}>
                   <div style={{ width: '60px', height: '60px', background: 'linear-gradient(135deg, #4DA8C4, #66CCCC)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <span style={{ color: 'white', fontSize: '24px' }}>🧠</span>
+                    <span style={{ color: 'white', fontSize: '24px', fontWeight: 'bold' }}>VAK</span>
                   </div>
                 </div>
               </div>
               
-              {/* Información del estudiante */}
-              <div style={{ background: '#F8FAFC', padding: '20px', borderRadius: '12px', marginBottom: '30px' }}>
+              {/* Datos del estudiante */}
+              <div style={{ background: '#F8FAFC', padding: '20px', borderRadius: '12px', marginBottom: '20px' }}>
                 <h3 style={{ color: '#004B63', margin: '0 0 15px 0', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px', borderBottom: '1px solid #E2E8F0', paddingBottom: '10px' }}>Datos del Estudiante</h3>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
                   <div>
@@ -1736,18 +1982,40 @@ const DiagnosticoVAK = ({ onNavigate }) => {
                     <p style={{ margin: 0, color: '#004B63', fontSize: '16px', fontWeight: '600' }}>{diagnosis.studentName}</p>
                   </div>
                   <div>
+                    <p style={{ margin: '0 0 5px 0', color: '#64748B', fontSize: '12px' }}>Edad</p>
+                    <p style={{ margin: 0, color: '#004B63', fontSize: '16px' }}>{studentAge || 'No especificada'} años</p>
+                  </div>
+                  <div>
                     <p style={{ margin: '0 0 5px 0', color: '#64748B', fontSize: '12px' }}>Fecha de evaluación</p>
                     <p style={{ margin: 0, color: '#004B63', fontSize: '16px' }}>{diagnosis.date}</p>
                   </div>
                   <div>
-                    <p style={{ margin: '0 0 5px 0', color: '#64748B', fontSize: '12px' }}>Correo electrónico</p>
-                    <p style={{ margin: 0, color: '#004B63', fontSize: '14px' }}>{diagnosis.studentEmail || 'No proporcionado'}</p>
-                  </div>
-                  <div>
                     <p style={{ margin: '0 0 5px 0', color: '#64748B', fontSize: '12px' }}>Estado de ánimo</p>
                     <p style={{ margin: 0, color: '#004B63', fontSize: '14px' }}>
-                      {MOOD_OPTIONS.find(m => m.value === diagnosis.studentMood)?.emoji} {MOOD_OPTIONS.find(m => m.value === diagnosis.studentMood)?.label || 'Neutral'}
+                      {diagnosis.studentMood === 'happy' && 'Bien'}
+                      {diagnosis.studentMood === 'neutral' && 'Regular'}
+                      {diagnosis.studentMood === 'sad' && 'No muy bien'}
+                      {!diagnosis.studentMood && 'Neutral'}
                     </p>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Datos del acudiente */}
+              <div style={{ background: '#F0FDFF', padding: '20px', borderRadius: '12px', marginBottom: '30px' }}>
+                <h3 style={{ color: '#004B63', margin: '0 0 15px 0', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px', borderBottom: '1px solid #E2E8F0', paddingBottom: '10px' }}>Datos del Acudiente</h3>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+                  <div>
+                    <p style={{ margin: '0 0 5px 0', color: '#64748B', fontSize: '12px' }}>Nombre</p>
+                    <p style={{ margin: 0, color: '#004B63', fontSize: '14px', fontWeight: '500' }}>{parentName || 'No registrado'}</p>
+                  </div>
+                  <div>
+                    <p style={{ margin: '0 0 5px 0', color: '#64748B', fontSize: '12px' }}>Teléfono</p>
+                    <p style={{ margin: 0, color: '#004B63', fontSize: '14px' }}>{parentPhone || 'No registrado'}</p>
+                  </div>
+                  <div>
+                    <p style={{ margin: '0 0 5px 0', color: '#64748B', fontSize: '12px' }}>Correo electrónico</p>
+                    <p style={{ margin: 0, color: '#004B63', fontSize: '14px' }}>{parentEmail || 'No registrado'}</p>
                   </div>
                 </div>
               </div>
@@ -1763,25 +2031,44 @@ const DiagnosticoVAK = ({ onNavigate }) => {
               {/* Puntuaciones */}
               <div style={{ display: 'flex', gap: '20px', marginBottom: '30px' }}>
                 <div style={{ flex: 1, padding: '20px', border: '2px solid #4DA8C4', borderRadius: '12px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '24px', marginBottom: '5px' }}>👁️</div>
-                  <div style={{ fontSize: '12px', color: '#64748B' }}>Visual</div>
+                  <div style={{ fontSize: '12px', color: '#4DA8C4', fontWeight: 'bold', marginBottom: '5px' }}>VISUAL</div>
                   <div style={{ fontSize: '32px', fontWeight: 'bold', color: '#4DA8C4' }}>{diagnosis.counts?.visual || 0}<span style={{ fontSize: '16px', color: '#64748B' }}>/10</span></div>
                 </div>
                 <div style={{ flex: 1, padding: '20px', border: '2px solid #66CCCC', borderRadius: '12px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '24px', marginBottom: '5px' }}>👂</div>
-                  <div style={{ fontSize: '12px', color: '#64748B' }}>Auditivo</div>
+                  <div style={{ fontSize: '12px', color: '#66CCCC', fontWeight: 'bold', marginBottom: '5px' }}>AUDITIVO</div>
                   <div style={{ fontSize: '32px', fontWeight: 'bold', color: '#66CCCC' }}>{diagnosis.counts?.auditivo || 0}<span style={{ fontSize: '16px', color: '#64748B' }}>/10</span></div>
                 </div>
-                <div style={{ flex: 1, padding: '20px', border: '2px solid #00C2E0', borderRadius: '12px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '24px', marginBottom: '5px' }}>⚡</div>
-                  <div style={{ fontSize: '12px', color: '#64748B' }}>Kinestésico</div>
-                  <div style={{ fontSize: '32px', fontWeight: 'bold', color: '#00C2E0' }}>{diagnosis.counts?.kinestesico || 0}<span style={{ fontSize: '16px', color: '#64748B' }}>/10</span></div>
+                <div style={{ flex: 1, padding: '20px', border: '2px solid #4DA8C4', borderRadius: '12px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '12px', color: '#B2D8E5', fontWeight: 'bold', marginBottom: '5px' }}>KINESTÉSICO</div>
+                  <div style={{ fontSize: '32px', fontWeight: 'bold', color: '#4DA8C4' }}>{diagnosis.counts?.kinestesico || 0}<span style={{ fontSize: '16px', color: '#64748B' }}>/10</span></div>
+                </div>
+              </div>
+
+              {/* Introducción */}
+              <div style={{ marginBottom: '25px', padding: '20px', background: '#FAFBFC', borderRadius: '12px' }}>
+                <h4 style={{ color: '#004B63', margin: '0 0 10px 0', fontSize: '16px' }}>Introducción</h4>
+                <p style={{ margin: 0, color: '#334155', fontSize: '14px', lineHeight: '1.8' }}>
+                  {getValentinaCommentary()}
+                </p>
+              </div>
+
+              {/* Características */}
+              <div style={{ marginBottom: '25px' }}>
+                <h4 style={{ color: '#004B63', marginBottom: '15px', fontSize: '16px', borderBottom: '2px solid #4DA8C4', paddingBottom: '8px' }}>Características del {diagnosis.styleDetails?.name}</h4>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                  {getCaracteristicasEstilo(diagnosis.predominantStyle).map((c, i) => (
+                    <div key={i} style={{ padding: '12px', background: '#F0FDFF', borderRadius: '8px' }}>
+                      <p style={{ margin: 0, color: '#004B63', fontSize: '13px' }}>
+                        <span style={{ color: '#4DA8C4', fontWeight: 'bold' }}>•</span> {c}
+                      </p>
+                    </div>
+                  ))}
                 </div>
               </div>
 
               {/* Estrategias */}
               <div style={{ marginBottom: '30px' }}>
-                <h4 style={{ color: '#004B63', marginBottom: '20px', fontSize: '18px', borderBottom: '2px solid #4DA8C4', paddingBottom: '10px' }}>📚 Estrategias de Aprendizaje Recomendadas</h4>
+                <h4 style={{ color: '#004B63', marginBottom: '20px', fontSize: '18px', borderBottom: '2px solid #4DA8C4', paddingBottom: '10px' }}>Estrategias de Aprendizaje</h4>
                 <ul style={{ paddingLeft: '20px', color: '#334155', lineHeight: '2' }}>
                   {(diagnosis.styleDetails?.strategies || []).map((s, i) => (
                     <li key={i} style={{ marginBottom: '12px', fontSize: '14px' }}>
@@ -1791,17 +2078,37 @@ const DiagnosticoVAK = ({ onNavigate }) => {
                 </ul>
               </div>
 
-              {/* Consejo */}
+              {/* Tips para padres */}
+              <div style={{ padding: '20px', background: 'linear-gradient(135deg, rgba(77,168,196,0.08), rgba(102,204,204,0.08))', borderRadius: '12px', borderLeft: '4px solid #66CCCC', marginBottom: '20px' }}>
+                <h4 style={{ color: '#004B63', margin: '0 0 10px 0', fontSize: '15px', textTransform: 'uppercase' }}>Tips para Padres</h4>
+                <ul style={{ paddingLeft: '20px', margin: 0, color: '#334155' }}>
+                  {getTipsPadres(diagnosis.predominantStyle).map((t, i) => (
+                    <li key={i} style={{ fontSize: '13px', marginBottom: '8px', lineHeight: '1.6' }}>{t}</li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Carreras recomendadas */}
+              <div style={{ marginBottom: '25px' }}>
+                <h4 style={{ color: '#004B63', marginBottom: '15px', fontSize: '16px', borderBottom: '2px solid #66CCCC', paddingBottom: '8px' }}>Carreras Recomendadas</h4>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                  {getCarrerasRecomendadas(diagnosis.predominantStyle).map((c, i) => (
+                    <span key={i} style={{ padding: '8px 16px', background: '#F0FDFF', borderRadius: '20px', color: '#004B63', fontSize: '13px', fontWeight: '500', border: '1px solid #B2D8E5' }}>{c}</span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Consejo personalizado */}
               <div style={{ padding: '20px', background: 'linear-gradient(135deg, rgba(77,168,196,0.1), rgba(102,204,204,0.1))', borderRadius: '12px', borderLeft: '4px solid #4DA8C4', marginBottom: '20px' }}>
-                <h4 style={{ color: '#004B63', margin: '0 0 10px 0', fontSize: '14px', textTransform: 'uppercase' }}>💡 Consejo Personalizado</h4>
+                <h4 style={{ color: '#004B63', margin: '0 0 10px 0', fontSize: '14px', textTransform: 'uppercase' }}>Consejo Personalizado</h4>
                 <p style={{ margin: 0, color: '#334155', fontSize: '14px', lineHeight: '1.6' }}>{diagnosis.styleDetails?.tip}</p>
               </div>
 
-              {/* Comentario de Valeria - Psicóloga Educativa */}
-              <div style={{ padding: '20px', background: 'linear-gradient(135deg, rgba(102,204,204,0.1), rgba(77,168,196,0.1))', borderRadius: '12px', borderLeft: '4px solid #66CCCC', marginBottom: '30px', position: 'relative' }}>
+              {/* Comentario de Valeria */}
+              <div style={{ padding: '20px', background: 'linear-gradient(135deg, rgba(102,204,204,0.1), rgba(77,168,196,0.1))', borderRadius: '12px', borderLeft: '4px solid #66CCCC', marginBottom: '25px', position: 'relative' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
                   <div style={{ width: '40px', height: '40px', background: 'linear-gradient(135deg, #4DA8C4, #66CCCC)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <span style={{ color: 'white', fontSize: '18px' }}>👩‍🏫</span>
+                    <span style={{ color: 'white', fontSize: '18px', fontWeight: 'bold' }}>VR</span>
                   </div>
                   <div>
                     <h4 style={{ color: '#004B63', margin: '0 0 2px 0', fontSize: '14px', fontWeight: '700' }}>Valeria Rodríguez</h4>
@@ -1811,25 +2118,21 @@ const DiagnosticoVAK = ({ onNavigate }) => {
                 <p style={{ margin: 0, color: '#334155', fontSize: '13px', lineHeight: '1.6', fontStyle: 'italic' }}>
                   {getValentinaCommentary()}
                 </p>
-                <div style={{ marginTop: '15px', paddingTop: '10px', borderTop: '1px dashed #E2E8F0', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ fontSize: '11px', color: '#64748B' }}>EdutechLife • 12 años de experiencia</span>
-                  <span style={{ fontSize: '10px', color: '#94A3B8', background: '#F1F5F9', padding: '2px 6px', borderRadius: '4px' }}>VAK Certified</span>
-                </div>
               </div>
 
               {/* Tiempo */}
               {diagnosis.timeSpent && (
                 <div style={{ textAlign: 'center', padding: '15px', background: '#F8FAFC', borderRadius: '8px', marginBottom: '20px' }}>
                   <p style={{ margin: 0, color: '#64748B', fontSize: '12px' }}>
-                    ⏱️ Tiempo de evaluación: <strong>{Math.floor(diagnosis.timeSpent / 60)}:{(diagnosis.timeSpent % 60).toString().padStart(2, '0')} minutos</strong>
+                    Tiempo de evaluacion: <strong>{Math.floor(diagnosis.timeSpent / 60)}:{(diagnosis.timeSpent % 60).toString().padStart(2, '0')} minutos</strong>
                   </p>
                 </div>
               )}
 
               {/* Footer */}
               <div style={{ marginTop: '40px', paddingTop: '20px', borderTop: '1px dashed #ccc', textAlign: 'center', fontSize: '11px', color: '#999' }}>
-                <p style={{ margin: '0 0 5px 0' }}>Documento generado automáticamente por el Ecosistema Edutechlife</p>
-                <p style={{ margin: 0 }}>ID: {Math.random().toString(36).substring(2, 10).toUpperCase()}-{Date.now().toString().slice(-6)} | edutechlife.co</p>
+                <p style={{ margin: '0 0 5px 0' }}>Documento generado por EdutechLife • Inteligencia Cognitiva</p>
+                <p style={{ margin: 0 }}>Ley 1581 de 2012 | Habeas Data | edutechlife.co</p>
               </div>
             </div>
           )}
@@ -1853,6 +2156,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
               {phase === 'intro' && renderWelcome()}
               {phase === 'calibration' && renderCalibration()}
               {phase === 'test' && renderTest()}
+              {phase === 'parentdata' && renderParentData()}
               {phase === 'result' && renderResults()}
             </motion.div>
           </AnimatePresence>

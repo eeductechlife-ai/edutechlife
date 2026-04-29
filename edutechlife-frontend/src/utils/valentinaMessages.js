@@ -95,7 +95,7 @@ No hay respuestas correctas o incorrectas, solo tu forma de ser.
       return messages[mood] || messages.neutral;
     },
 
-    transitionToTest: (name) => `¡Excelente, ${name}! Vamos a comenzar. Te haré 10 preguntas y yo te las leeré una por una. Tú selecciona la opción que mejor te describa. No hay respuestas correctas o incorrectas, solo tu verdad. ¿Listos? ¡Aquí va la primera!`,
+    transitionToTest: (name) => `¡Excelente, ${name}! Vamos a comenzar. Yo te leeré cada pregunta en voz alta y tú seleccionarás la opción que mejor te describa. No hay respuestas correctas o incorrectas, solo tu verdad. ¿Listos? ¡Aquí va la primera!`,
 
     progressMessages: {
       3: (name) => `¡${name}! Ya vamos por la pregunta 4. Casi terminamos la primera mitad. ¡Tu cerebro está trabajando de manera excelente! ¡Sigue así!`,
@@ -164,7 +164,7 @@ Al final, te daré un reporte personalizado con estrategias específicas para me
       return messages[mood] || messages.neutral;
     },
 
-    transitionToTest: (name) => `¡Perfecto, ${name}! Vamos a comenzar el diagnóstico. Te haré 10 preguntas sobre cómo prefieres aprender. Yo te las leeré una por una y tú seleccionarás la que mejor refleje tu forma natural de aprender. No hay respuestas correctas o incorrectas. ¿Listos? Aquí va la primera pregunta.`,
+    transitionToTest: (name) => `¡Perfecto, ${name}! Vamos a comenzar el diagnóstico. Yo te leeré las preguntas una por una y tú seleccionarás la que mejor refleje tu forma natural de aprender. No hay respuestas correctas o incorrectas. ¿Listos? Aquí va la primera pregunta.`,
 
     progressMessages: {
       3: (name) => `¡${name}! Ya vamos por la pregunta 4. Casi completamos la primera mitad del diagnóstico. ¡Tu cerebro está funcionando muy bien! Continúa así.`,
@@ -233,7 +233,7 @@ El objetivo: identificar tu estilo de aprendizaje predominante. Esto te dará in
       return messages[mood] || messages.neutral;
     },
 
-    transitionToTest: (name) => `Perfecto, ${name}. Iniciamos el diagnóstico. 10 preguntas sobre tus preferencias de aprendizaje. Las leeré una por una. Selecciona la respuesta que mejor refleje cómo aprendes naturalmente. Sin presión, solo autoconocimiento.`,
+    transitionToTest: (name) => `Perfecto, ${name}. Iniciamos el diagnóstico. Te leeré las preguntas una por una. Selecciona la respuesta que mejor refleje cómo aprendes naturalmente. Sin presión, solo autoconocimiento.`,
 
     progressMessages: {
       3: (name) => `${name}, vamos por la pregunta 4. Primera mitad casi completa. Tu procesamiento cognitivo está funcionando muy bien.`,

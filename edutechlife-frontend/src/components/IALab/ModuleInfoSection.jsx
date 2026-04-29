@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 
 /**
  * Sección Informativa del Módulo - Ingeniería de Prompts
- * Contiene: Objetivo General, Lo que aprenderás
+ * Contiene: Objetivo General, Lo que aprenderás, Desafío del Módulo
  * 
  * @param {Object} props
  * @param {string} props.className - Clases CSS adicionales
@@ -81,6 +81,37 @@ const ModuleInfoSection = ({ className = '', ...rest }) => {
                 </div>
             </div>
 
+            {/* Desafío del Módulo */}
+            <div className="space-y-3">
+                <h3 className="text-lg md:text-xl font-bold text-[#004B63]">
+                    Desafío del Módulo
+                </h3>
+                <motion.div 
+                    whileHover={{ y: -2, transition: { duration: 0.2 } }}
+                    className={cn(
+                        "relative overflow-hidden",
+                        "flex items-center gap-3",
+                        "hover:scale-[1.01]",
+                        "transition-all duration-300 cursor-pointer",
+                        "group"
+                    )}
+                >
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                    
+                    <div className="flex-shrink-0 w-6 h-6 rounded-md bg-[#004B63]/10 flex items-center justify-center">
+                        <Icon 
+                            name="fa-bolt" 
+                            className="text-[#004B63] w-3 h-3" 
+                        />
+                    </div>
+                    
+                    <div className="flex-1 min-w-0">
+                        <p className="text-sm text-slate-700 font-medium truncate">
+                            ¡Llegó el momento de la práctica! Aplica todo lo aprendido en este módulo resolviendo un caso real. Atrévete a consolidar tu aprendizaje, supera el reto y lleva tus conocimientos al siguiente nivel.
+                        </p>
+                    </div>
+                </motion.div>
+            </div>
         </motion.div>
     );
 };

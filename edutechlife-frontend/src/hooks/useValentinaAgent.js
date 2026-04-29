@@ -33,6 +33,7 @@ export default function useValentinaAgent(options = {}) {
   const isMountedRef = useRef(true);
   const currentAudioRef = useRef(null);
   const speakingPromiseRef = useRef(null);
+  const speakingRef = useRef(false); // Ref para evitar stale closure en speakAsValentina
 
   // Efecto de limpieza
   useEffect(() => {
@@ -62,8 +63,8 @@ export default function useValentinaAgent(options = {}) {
   const speakAsValentina = useCallback(async (text) => {
     if (!text || !isMountedRef.current || !valentinaMode) return;
     
-    // Si ya está hablando, esperar a que termine
-    if (isValentinaSpeaking) {
+    // Si ya está hablando, esperar a que termine (usar ref para evitar stale closure)
+    if (speakingRef.current) {
       try {
         await speakingPromiseRef.current;
       } catch (e) {
@@ -73,6 +74,7 @@ export default function useValentinaAgent(options = {}) {
     
     speakingPromiseRef.current = new Promise(async (resolve) => {
       try {
+        speakingRef.current = true;
         setIsValentinaSpeaking(true);
         
         const { speakAsValentina: valSpeak } = await import('../utils/speech');
@@ -87,6 +89,7 @@ export default function useValentinaAgent(options = {}) {
         console.warn('Error al hablar como Valeria:', error);
       } finally {
         if (isMountedRef.current) {
+          speakingRef.current = false;
           setIsValentinaSpeaking(false);
         }
         resolve();
@@ -94,7 +97,7 @@ export default function useValentinaAgent(options = {}) {
     });
     
     await speakingPromiseRef.current;
-  }, [valentinaMode, studentAge]);
+  }, [valentinaMode, studentAge, isValentinaSpeaking]);
 
   /**
    * Detener el habla actual
@@ -271,13 +274,11 @@ export default function useValentinaAgent(options = {}) {
     
     await explainDiagnosis();
     await delay(2000);
-    await askForName();
     
-    // Ejecutar callback si se proporcionó
     if (onComplete && typeof onComplete === 'function') {
       onComplete();
     }
-  }, [explainDiagnosis, askForName, valentinaMode]);
+  }, [explainDiagnosis, valentinaMode]);
 
   // ==================== MÉTODOS DEL DIAGNÓSTICO ====================
 
@@ -330,7 +331,7 @@ export default function useValentinaAgent(options = {}) {
    */
   const giveProgressUpdate = useCallback(async () => {
     if (!isMountedRef.current || !valentinaMode) return;
-    if (currentQuestion < 3 || currentQuestion >= 9) return;
+    if (currentQuestion < 2 || currentQuestion >= 9) return;
     
     setValeriaExpression('proud');
     const age = parseInt(studentAge) || 12;

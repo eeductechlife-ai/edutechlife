@@ -80,7 +80,7 @@ const ModuleOverviewCard = ({ onAction }) => {
                </p>
                
 {/* Temas en grid 2x2 */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-4">
+                <div className="grid grid-cols-2 gap-2 mt-4">
                   {moduleData.topics.map((tema, index) => (
                     <motion.button
                       key={index}
@@ -94,11 +94,11 @@ const ModuleOverviewCard = ({ onAction }) => {
                         });
                         setIsResourcesModalOpen(true);
                       }}
-                      className="flex items-center justify-center gap-2 px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl hover:bg-[#004B63] hover:border-[#004B63] hover:shadow-md transition-all duration-300 cursor-pointer group"
+                      className="flex items-center gap-1.5 px-3 py-2 bg-slate-50 border border-slate-100 rounded-lg hover:bg-[#004B63] hover:border-[#004B63] hover:shadow-md transition-all duration-300 cursor-pointer group"
                       aria-label={`Ver recursos del tema: ${tema}`}
                     >
                       <div className="w-2 h-2 rounded-full bg-[#004B63] flex-shrink-0 group-hover:scale-125 group-hover:bg-white transition-all duration-300"></div>
-                      <span className="text-sm md:text-base text-slate-700 group-hover:text-white group-hover:font-semibold transition-colors duration-300 line-clamp-1 text-left">
+                      <span className="text-sm text-slate-700 group-hover:text-white group-hover:font-semibold transition-colors duration-300 line-clamp-1 text-left">
                         {tema}
                       </span>
                     </motion.button>
@@ -110,14 +110,14 @@ const ModuleOverviewCard = ({ onAction }) => {
             {/* Grid inferior: Stats + Botón examen */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
                 {moduleData.stats.map((stat, index) => (
-                  <div 
-                    key={index}
-                    className="bg-white rounded-xl p-3 border border-[#004B63]/6 flex flex-col items-center justify-center text-center hover:shadow-md hover:border-[#004B63]/20 transition-all duration-300"
-                  >
-                    <div className="text-lg font-bold text-[#004B63] mb-1">
-                      {stat.value}
-                    </div>
-                    <div className="text-xs text-slate-500 font-medium">
+                 <div 
+                   key={index}
+                   className="bg-white rounded-xl p-4 border border-[#004B63]/6 flex flex-col items-center justify-center text-center hover:shadow-md hover:border-[#004B63]/20 transition-all duration-300"
+                 >
+                   <div className="text-xl font-bold text-[#004B63] mb-1">
+                     {stat.value}
+                   </div>
+                   <div className="text-sm text-slate-500 font-medium">
                      {stat.title}
                    </div>
                    <div className="w-10 h-0.5 bg-gradient-to-r from-[#004B63] to-[#00BCD4] rounded-full mt-3"></div>
