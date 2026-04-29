@@ -94,9 +94,9 @@ const SidebarAccordionSection = ({
         className={cn(
           "w-full flex items-start gap-2.5",
           "p-2.5 rounded-lg",
-          "bg-white/50 backdrop-blur-sm",
-          "border border-white/30",
-          "hover:bg-white/70 hover:border-white/40",
+          "bg-slate-50",
+          "border border-slate-100",
+          "hover:bg-slate-100 hover:border-slate-200",
           "transition-all duration-150",
           "text-left",
           "group"
@@ -200,9 +200,9 @@ const SidebarAccordionSection = ({
         className={cn(
           "w-full flex items-center justify-between",
           "p-2.5 rounded-lg",
-          "bg-white/60 backdrop-blur-sm",
-          "border border-white/30",
-          "hover:bg-white/80",
+          "bg-slate-50",
+          "border border-slate-100",
+          "hover:bg-slate-100",
           "transition-all duration-150",
           "group"
         )}
@@ -265,8 +265,8 @@ const SidebarAccordionSection = ({
           ) : (
             <div className={cn(
               "p-3 rounded-lg",
-              "bg-white/40 backdrop-blur-sm",
-              "border border-white/20",
+              "bg-slate-50",
+              "border border-slate-100",
               "text-center"
             )}>
               <p className={cn(
@@ -284,7 +284,7 @@ const SidebarAccordionSection = ({
           <div className={cn(
             "flex items-center justify-between",
             "pt-2 mt-2",
-            "border-t border-white/20"
+            "border-t border-slate-100"
           )}>
             <button className={cn(
               CompactTypography.TINY,

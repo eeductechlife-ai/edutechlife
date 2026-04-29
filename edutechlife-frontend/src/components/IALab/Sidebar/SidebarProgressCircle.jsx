@@ -28,11 +28,11 @@ const SidebarProgressCircle = ({
     <div className={cn(
       "flex flex-col items-center",
       "p-4 rounded-2xl",
-      "bg-white/85 backdrop-blur-md",
-      "border border-cyan-100/50",
-      "shadow-[0_8px_30px_rgba(0,188,212,0.08)]",
+      "bg-white",
+      "border border-slate-200/60",
+      "shadow-sm",
       "transition-all duration-200",
-      "hover:shadow-[0_12px_40px_rgba(0,188,212,0.12)]",
+      "hover:shadow",
       className
     )}>
       {/* Header compacto con icono */}

@@ -98,9 +98,9 @@ const ControlCenterUnified = () => {
       <div className={cn(
         "flex items-center justify-between",
         "p-2.5 rounded-lg",
-        "bg-white/40 backdrop-blur-sm",
-        "border border-white/20",
-        "hover:bg-white/50",
+        "bg-slate-50",
+        "border border-slate-100",
+        "hover:bg-slate-100",
         "transition-all duration-150"
       )}>
         <div className="flex items-center gap-2">
@@ -151,9 +151,9 @@ const ControlCenterUnified = () => {
       <div className={cn(
         "flex items-start gap-2.5 p-2.5",
         "rounded-lg",
-        "bg-white/30 backdrop-blur-sm",
-        "border border-white/15",
-        "hover:bg-white/40",
+        "bg-slate-50",
+        "border border-slate-100",
+        "hover:bg-slate-100",
         "transition-all duration-150",
         "cursor-pointer"
       )}>
@@ -186,17 +186,17 @@ const ControlCenterUnified = () => {
   
     return (
     <div className={cn(
-      "bg-white rounded-[2.5rem] shadow-[0_8px_30px_rgba(0,75,99,0.06)] border border-slate-100/50",
+      "bg-white rounded-[2.5rem] shadow-sm border border-slate-200/60",
       "overflow-hidden",
-      "hover:shadow-[0_12px_40px_rgba(0,75,99,0.1)] hover:border-slate-200/60",
+      "hover:shadow hover:border-slate-200",
       "transition-all duration-200"
     )}>
         {/* Header compacto del Control Center */}
       <div className={cn(
         "flex items-center justify-between",
         "px-6 py-4",
-        "border-b border-slate-100/50",
-        "bg-gradient-to-r from-[#004B63]/5 to-[#00BCD4]/5"
+        "border-b border-slate-200/60",
+        "bg-slate-50"
       )}>
         <div className="flex items-center gap-2.5">
            <div className={cn(
@@ -296,12 +296,12 @@ const ControlCenterUnified = () => {
            </form>
          </div>
          
-         <div className={cn(
-           "flex items-center justify-between",
-           "px-4 py-2.5",
-           "border-t border-white/20",
-           "bg-white/30 backdrop-blur-sm"
-         )}>
+          <div className={cn(
+            "flex items-center justify-between",
+            "px-4 py-2.5",
+            "border-t border-slate-100",
+            "bg-slate-50"
+          )}>
            <div className="flex items-center gap-3">
              <div className="flex items-center gap-1.5">
                <LEDIndicator type="live" size="sm" />

@@ -23,6 +23,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
     const [charCount, setCharCount] = useState(input.length);
     const [copied, setCopied] = useState(false);
     const [isResultOpen, setIsResultOpen] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
 
     const handleInputChange = useCallback((e) => {
         const text = e.target.value;
@@ -124,25 +125,47 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                 ]
             } : {}}
             className={cn(
-                "relative z-10 bg-white rounded-2xl p-5 md:p-8 shadow-[0px_4px_16px_rgba(17,17,26,0.05)] border border-slate-100 overflow-hidden",
+                "relative z-10 bg-white rounded-2xl p-5 md:p-8 shadow-sm border border-slate-200/60 overflow-hidden",
                 "space-y-6",
                 className
             )}
             {...rest}
         >
-            <div className="absolute -top-6 -right-6 w-32 h-32 bg-gradient-to-br from-[#004B63]/6 to-[#00BCD4]/4 rounded-full blur-2xl pointer-events-none" />
-            <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-tr from-[#004B63]/4 to-[#00BCD4]/2 rounded-full blur-2xl pointer-events-none" />
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#00BCD4] rounded-t-2xl" />
 
-            <div>
-                <h2 className="text-lg md:text-xl font-bold text-[#004B63]">
-                    Sintetizador de Prompts
-                </h2>
-                <p className="text-slate-600 text-sm md:text-base leading-relaxed mt-1">
-                    Escribe una idea básica y la IA la transformará en una instrucción maestra
-                </p>
+            <div
+                onClick={() => setIsOpen(!isOpen)}
+                className="flex items-center justify-between cursor-pointer group"
+            >
+                <div className="flex-1">
+                    <h2 className="text-lg md:text-xl font-bold text-[#004B63] group-hover:text-[#00BCD4] transition-colors duration-300">
+                        Herramientas para la creacion de Promts
+                    </h2>
+                    <p className="text-slate-600 text-sm md:text-base leading-relaxed mt-1">
+                        Escribe una idea básica y la IA la transformará en una instrucción maestra
+                    </p>
+                    {!isOpen && (
+                        <div className="mt-4">
+                            <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-[#004B63] to-[#00BCD4] rounded-xl shadow-sm hover:from-[#0A3550] hover:to-[#0097A7] hover:shadow group-hover:scale-105 transition-all duration-300 cursor-pointer">
+                                <Icon name="fa-hand-pointer" className="w-4 h-4 text-white" />
+                                <span className="text-sm font-bold text-white tracking-wide">Abrir Herramientas para la creacion de Promts</span>
+                                <Icon name="fa-chevron-right" className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform duration-300" />
+                            </div>
+                        </div>
+                    )}
+                </div>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ml-4 transition-all duration-300 ${
+                    isOpen ? 'bg-[#004B63]/10 rotate-180' : 'bg-[#06B6D4]/15 group-hover:scale-110'
+                }`}>
+                    <Icon
+                        name={isOpen ? "fa-chevron-up" : "fa-chevron-down"}
+                        className={`w-3.5 h-3.5 transition-all duration-300 ${isOpen ? 'text-[#004B63]' : 'text-[#06B6D4] group-hover:text-[#004B63]'}`}
+                    />
+                </div>
             </div>
 
+            {isOpen && (
+            <>
             <div className="flex flex-col md:flex-row gap-5 md:gap-8">
                 <div className="flex-1 flex flex-col">
                     <div className="flex-1">
@@ -347,7 +370,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
 
                     {isResultOpen && (
                         <>
-                            <div className="relative bg-gradient-to-br from-[#004B63]/5 to-[#00BCD4]/8 rounded-xl p-5 md:p-6 border border-[#00BCD4]/20 shadow-xl shadow-[#00BCD4]/5">
+                            <div className="relative bg-white rounded-xl p-5 md:p-6 border border-slate-200/60 shadow-sm">
                                 <div className="flex items-center gap-2 mb-4">
                                     <div className="w-6 h-6 rounded-md bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center">
                                         <Icon name="fa-terminal" className="text-white w-3.5 h-3.5" />
@@ -398,6 +421,8 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                         </>
                     )}
                 </div>
+            )}
+            </>
             )}
         </motion.div>
     );

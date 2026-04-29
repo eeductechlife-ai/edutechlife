@@ -50,31 +50,31 @@ export const GLASS_COLORS = {
  * Mantiene bordes cyan pero los hace más sutiles, añade glassmorphism
  */
 export const GlassPanel = {
-  // Nivel 1: Panel estándar (evolución de tarjetas actuales)
+  // Nivel 1: Panel estandar (fondo solido blanco)
   STANDARD: cn(
-    "bg-white/85 backdrop-blur-md",
-    "border border-cyan-100/50",
-    "shadow-[0_8px_30px_rgba(0,188,212,0.08)]",
+    "bg-white",
+    "border border-slate-200/60",
+    "shadow-sm",
     "rounded-2xl",
     "transition-all duration-200",
-    "hover:shadow-[0_12px_40px_rgba(0,188,212,0.12)] hover:border-cyan-200/60"
+    "hover:shadow hover:border-slate-200"
   ),
   
   // Nivel 2: Panel elevado (para elementos interactivos)
   ELEVATED: cn(
-    "bg-white/90 backdrop-blur-lg",
-    "border border-white/30",
-    "shadow-[0_12px_40px_rgba(0,75,99,0.10)]",
+    "bg-white",
+    "border border-slate-200/60",
+    "shadow",
     "rounded-2xl",
     "transition-all duration-200",
-    "hover:shadow-[0_16px_50px_rgba(0,75,99,0.15)]"
+    "hover:shadow-md"
   ),
   
   // Nivel 3: Panel compacto (para micro-UI)
   COMPACT: cn(
-    "bg-white/80 backdrop-blur-sm",
-    "border border-white/20",
-    "shadow-[0_4px_20px_rgba(0,188,212,0.06)]",
+    "bg-white",
+    "border border-slate-200/60",
+    "shadow-sm",
     "rounded-xl",
     "transition-all duration-150"
   ),
@@ -94,13 +94,13 @@ export const MicroBorder = {
  */
 export const ShadowSystem = {
   // Sombras cyan sutiles (reemplazan sombras negras genéricas)
-  CYAN_SM: "shadow-[0_4px_15px_rgba(0,188,212,0.08)]",
-  CYAN_MD: "shadow-[0_8px_30px_rgba(0,188,212,0.12)]",
-  CYAN_LG: "shadow-[0_12px_40px_rgba(0,188,212,0.15)]",
+  CYAN_SM: "shadow-sm",
+  CYAN_MD: "shadow",
+  CYAN_LG: "shadow-lg",
   
   // Sombras petroleum para estructura
-  PETROLEUM_SM: "shadow-[0_4px_20px_rgba(0,75,99,0.06)]",
-  PETROLEUM_MD: "shadow-[0_8px_32px_rgba(0,75,99,0.08)]",
+  PETROLEUM_SM: "shadow-sm",
+  PETROLEUM_MD: "shadow",
   
   // Sombras interiores para profundidad
   INNER_CYAN: "shadow-inset-[0_2px_8px_rgba(0,188,212,0.05)]",
@@ -171,9 +171,9 @@ export const EvolvedButtons = {
     "bg-gradient-to-r from-cyan-600 to-cyan-500",
     "text-white font-medium",
     "px-4 py-2.5 rounded-xl",
-    "shadow-[0_4px_15px_rgba(0,188,212,0.25)]",
+    "shadow-sm",
     "hover:from-cyan-700 hover:to-cyan-600",
-    "hover:shadow-[0_6px_20px_rgba(0,188,212,0.35)]",
+    "hover:shadow",
     "active:scale-[0.98]",
     "transition-all duration-200",
     "disabled:from-slate-300 disabled:to-slate-400 disabled:shadow-none"
@@ -181,24 +181,24 @@ export const EvolvedButtons = {
   
   // Botón glass sutil
   GLASS_SECONDARY: cn(
-    "bg-white/80 backdrop-blur-sm",
-    "border border-white/30",
+    "bg-white",
+    "border border-slate-200",
     "text-slate-700 font-medium",
     "px-3.5 py-2 rounded-xl",
-    "shadow-[0_2px_10px_rgba(0,75,99,0.05)]",
-    "hover:bg-white/90 hover:border-white/40",
-    "hover:shadow-[0_4px_15px_rgba(0,75,99,0.08)]",
+    "shadow-sm",
+    "hover:bg-slate-50 hover:border-slate-300",
+    "hover:shadow",
     "active:scale-[0.98]",
     "transition-all duration-150"
   ),
   
   // Botón micro para acciones compactas
   MICRO_ACTION: cn(
-    "bg-white/70 backdrop-blur-sm",
-    "border border-white/20",
+    "bg-white",
+    "border border-slate-200",
     "text-slate-600 text-xs font-medium",
     "px-2.5 py-1.5 rounded-lg",
-    "hover:bg-white/85",
+    "hover:bg-slate-50",
     "active:scale-[0.97]",
     "transition-all duration-100"
   ),
@@ -210,7 +210,7 @@ export const EvolvedButtons = {
 export const EvolvedInputs = {
   // Textarea premium compacta
   TEXTAREA_COMPACT: cn(
-    "bg-white/90 backdrop-blur-sm",
+    "bg-white",
     "border border-cyan-100/40",
     "text-slate-700 placeholder:text-slate-400/70",
     "rounded-xl",
@@ -222,7 +222,7 @@ export const EvolvedInputs = {
   
   // Input micro para formularios compactos
   INPUT_MICRO: cn(
-    "bg-white/85 backdrop-blur-sm",
+    "bg-white",
     "border border-slate-100",
     "text-slate-700 placeholder:text-slate-400/60",
     "rounded-lg",
@@ -268,8 +268,8 @@ export const WhiteCard = {
   BASE: cn(
     "bg-white",                          // Sólido, limpieza absoluta
     "rounded-[2.5rem]",                  // Curvatura amplia y moderna (40px)
-    "shadow-[0_8px_30px_rgba(0,75,99,0.06)]", // Sombra ambiental con toque de azul petróleo
-    "border border-slate-100/50",        // Contorno sutil
+    "shadow-sm",                         // Sombra sutil
+    "border border-slate-200/60",        // Contorno definido
     "transition-all duration-200"        // Transiciones suaves
   ),
   
@@ -281,8 +281,8 @@ export const WhiteCard = {
   
   // Estados interactivos
   HOVER: cn(
-    "hover:shadow-[0_12px_40px_rgba(0,75,99,0.1)]",
-    "hover:border-slate-200/60"
+    "hover:shadow",
+    "hover:border-slate-200"
   ),
   
   FOCUS: "focus:outline-none focus:ring-2 focus:ring-cyan-300/30 focus:ring-offset-2",
@@ -316,7 +316,7 @@ export const WhiteCardPanel = {
     WhiteCard.BASE,
     WhiteCard.PADDING_MD,
     "text-center",
-    "hover:shadow-[0_10px_35px_rgba(0,75,99,0.08)]"
+    "hover:shadow"
   ),
   
   // Panel para formularios y entrada de datos

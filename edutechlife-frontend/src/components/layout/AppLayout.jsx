@@ -314,8 +314,8 @@ const AppLayout = () => {
       
       {/* Footer - Se renderiza condicionalmente en el componente de rutas */}
       
-      {/* Nico Chatbot - oculto en IALab (solo Valerio) */}
-      {!location.pathname.includes('/ialab') && <NicoModern 
+       {/* Nico Chatbot - oculto en IALab y VAK (solo Valerio/Valentina) */}
+       {!location.pathname.includes('/ialab') && !location.pathname.includes('/vak') && <NicoModern 
         isOpen={botOpen}
         isMinimized={isBotMinimized}
         isClosing={isBotClosing}

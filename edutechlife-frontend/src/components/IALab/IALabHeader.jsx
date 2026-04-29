@@ -10,7 +10,7 @@ const IALabHeader = () => {
   } = useIALabContext();
 
   return (
-    <header className="h-16 flex items-center justify-between px-6 bg-white border-b border-slate-200 w-full">
+    <header className="h-16 flex items-center justify-between px-6 bg-white border-b border-slate-200 w-full shadow-sm">
       <div className="flex items-center gap-3">
         <div className="w-9 h-9 bg-gradient-to-br from-[#004B63] via-[#0A3550] to-[#00BCD4] rounded-xl flex items-center justify-center shadow-sm shadow-[#004B63]/15">
           <Icon name="fa-flask-vial" className="text-white text-sm" />

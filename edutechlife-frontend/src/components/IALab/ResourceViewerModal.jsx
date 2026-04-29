@@ -52,11 +52,11 @@ const VideoViewer = ({ resource }) => {
           onClick={toggleFullscreen}
           className={cn(
             "px-4 py-2 rounded-xl flex items-center gap-2",
-            "bg-white/90 backdrop-blur-sm border border-white/20",
+            "bg-white border border-slate-200/60",
             "text-slate-800 font-medium text-sm",
-            "hover:bg-white hover:scale-105",
+            "hover:bg-slate-50 hover:scale-105",
             "transition-all duration-200",
-            "shadow-lg"
+            "shadow-sm"
           )}
           aria-label={isFullscreen ? "Salir de pantalla completa" : "Pantalla completa"}
         >
@@ -154,7 +154,7 @@ const DocumentViewer = ({ resource }) => {
         {/* Overlay de navegación para PDFs */}
         {resource.pages && resource.pages > 1 && (
           <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
-            <div className="flex items-center gap-3 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-xl border border-slate-200 shadow-lg">
+            <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-xl border border-slate-200 shadow-sm">
               <button
                 onClick={() => setPage(prev => Math.max(1, prev - 1))}
                 disabled={page <= 1}
@@ -584,7 +584,7 @@ const ResourceViewerModal = ({
                   animate="visible"
                   exit="exit"
                   className={cn(
-                    "w-full max-w-6xl bg-white rounded-2xl sm:rounded-3xl shadow-2xl",
+                    "w-full max-w-6xl bg-white rounded-2xl sm:rounded-3xl shadow-xl",
                     "pointer-events-auto overflow-hidden",
                     "flex flex-col",
                     "h-[90vh] max-h-[900px]",

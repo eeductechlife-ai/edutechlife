@@ -117,10 +117,10 @@ export function applyEvolvedStyles(baseClass, componentType = 'panel') {
   }
   
   const evolvedClasses = {
-    panel: "bg-white/85 backdrop-blur-md border border-cyan-100/50 rounded-2xl shadow-[0_8px_30px_rgba(0,188,212,0.08)]",
-    card: "bg-white/90 backdrop-blur-sm border border-white/30 rounded-xl shadow-[0_4px_20px_rgba(0,75,99,0.06)]",
-    input: "bg-white/85 backdrop-blur-sm border border-slate-100 rounded-lg focus:ring-1 focus:ring-cyan-300/20",
-    button: "bg-gradient-to-r from-cyan-600 to-cyan-500 text-white rounded-xl shadow-[0_4px_15px_rgba(0,188,212,0.25)] hover:shadow-[0_6px_20px_rgba(0,188,212,0.35)]",
+    panel: "bg-white border border-slate-200/60 rounded-2xl shadow-sm",
+    card: "bg-white border border-slate-200/60 rounded-xl shadow-sm",
+    input: "bg-white border border-slate-200 rounded-lg focus:ring-1 focus:ring-cyan-300/20",
+    button: "bg-gradient-to-r from-cyan-600 to-cyan-500 text-white rounded-xl shadow-sm hover:shadow",
   };
   
   return `${baseClass} ${evolvedClasses[componentType] || ''}`;

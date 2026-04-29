@@ -115,7 +115,7 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
       <div className="relative z-50" ref={dropdownRef}>
         {/* Smart-Pill: Botón profesional para Navbar */}
         <button
-          className="flex items-center gap-3 h-12 min-w-[200px] pl-2 pr-4 rounded-full bg-white/80 backdrop-blur-md border border-corporate/20 shadow-sm hover:bg-corporate/5 transition-all duration-200"
+          className="flex items-center gap-3 h-12 min-w-[200px] pl-2 pr-4 rounded-full bg-white border border-slate-200/60 shadow-sm hover:bg-slate-50 transition-all duration-200"
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Menú de usuario"
         >

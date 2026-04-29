@@ -125,7 +125,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                         FORUM_TYPOGRAPHY.DISPLAY.LG,
                         FORUM_TYPOGRAPHY.TEXT_PRIMARY
                     )}>
-                        Sintetizador de Prompts Élite
+                        Herramientas para la creacion de Promts
                     </h3>
                     <p className={cn(
                         FORUM_TYPOGRAPHY.BODY.SM,
@@ -303,10 +303,10 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                         key={index}
                         onClick={() => handleSuggestionClick(suggestion)}
                         className={cn(
-                            "text-left p-4 rounded-xl border border-[#00BCD4]/20",
-                            "bg-gradient-to-r from-white to-[#00BCD4]/5",
-                            "hover:bg-gradient-to-r hover:from-[#00BCD4]/10 hover:to-[#004B63]/10",
-                            "hover:border-[#00BCD4]/40 hover:shadow-[0_4px_20px_rgba(0,188,212,0.1)]",
+                            "text-left p-4 rounded-xl border border-slate-200/60",
+                            "bg-white",
+                            "hover:bg-slate-50",
+                            "hover:border-[#00BCD4]/40 hover:shadow-sm",
                             FORUM_EFFECTS.TRANSITION_ALL,
                             "focus:outline-none focus:ring-2 focus:ring-[#00BCD4]/50"
                         )}
@@ -378,7 +378,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                 {/* ==================== GRID DE ESTRUCTURA PREMIUM - ROL, TAREA, FORMATO ==================== */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8 animate-in slide-in-from-bottom-4 duration-300">
                     {/* Tarjeta ROL */}
-                    <div className="bg-white border border-slate-100 shadow-lg shadow-slate-200/40 rounded-3xl p-6 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 relative overflow-hidden">
+                    <div className="bg-white border border-slate-200/60 shadow-sm rounded-3xl p-6 hover:-translate-y-1 hover:shadow transition-all duration-300 relative overflow-hidden">
                         <div className="flex items-center gap-2 mb-3">
                             <Icon name="fa-user-tie" className="text-[#004B63]" />
                             <span className="text-xs font-black text-[#004B63] tracking-widest uppercase font-sans">ROL</span>
@@ -388,7 +388,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                     </div>
                     
                     {/* Tarjeta TAREA */}
-                    <div className="bg-white border border-slate-100 shadow-lg shadow-slate-200/40 rounded-3xl p-6 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 relative overflow-hidden">
+                    <div className="bg-white border border-slate-200/60 shadow-sm rounded-3xl p-6 hover:-translate-y-1 hover:shadow transition-all duration-300 relative overflow-hidden">
                         <div className="flex items-center gap-2 mb-3">
                             <Icon name="fa-target" className="text-[#00BCD4]" />
                             <span className="text-xs font-black text-[#00BCD4] tracking-widest uppercase font-sans">TAREA</span>
@@ -398,7 +398,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                     </div>
                     
                     {/* Tarjeta FORMATO */}
-                    <div className="bg-white border border-slate-100 shadow-lg shadow-slate-200/40 rounded-3xl p-6 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 relative overflow-hidden">
+                    <div className="bg-white border border-slate-200/60 shadow-sm rounded-3xl p-6 hover:-translate-y-1 hover:shadow transition-all duration-300 relative overflow-hidden">
                         <div className="flex items-center gap-2 mb-3">
                             <Icon name="fa-file-alt" className="text-[#4F46E5]" />
                             <span className="text-xs font-black text-[#4F46E5] tracking-widest uppercase font-sans">FORMATO</span>
@@ -427,7 +427,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                         {/* Botón Copiar Premium - FUNCIONALIDAD PRESERVADA */}
                         <button 
                             onClick={() => copyToClipboard(deepSeekData.prompt_maestro)}
-                            className="absolute top-6 right-6 bg-white/10 hover:bg-white/20 text-white backdrop-blur-md px-4 py-2 rounded-2xl text-sm font-bold flex items-center gap-2 transition-all hover:scale-105 active:scale-95 font-sans"
+                            className="absolute top-6 right-6 bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2 transition-all hover:scale-105 active:scale-95 font-sans"
                             aria-label="Copiar prompt maestro al portapapeles"
                         >
                             <Icon name="fa-copy" className="text-sm" /> Copiar

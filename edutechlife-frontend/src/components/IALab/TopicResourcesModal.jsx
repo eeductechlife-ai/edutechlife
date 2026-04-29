@@ -134,7 +134,7 @@ const TopicResourcesModal = ({
               animate="visible"
               exit="exit"
               className={cn(
-                "w-full max-w-4xl bg-white rounded-2xl sm:rounded-3xl shadow-2xl",
+                "w-full max-w-4xl bg-white rounded-2xl sm:rounded-3xl shadow-xl",
                 "pointer-events-auto overflow-hidden flex flex-col",
                 "h-[90vh] max-h-[90vh] mx-2 sm:mx-4",
                 className
@@ -143,7 +143,7 @@ const TopicResourcesModal = ({
             >
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 border-b border-slate-200 bg-gradient-to-r from-[#004B63] to-[#00BCD4]">
                 <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0 w-full sm:w-auto">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-sm flex-shrink-0">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0">
                     <Icon name="fa-book-open" className="text-white text-lg sm:text-xl" />
                   </div>
                   <div className="flex-1 min-w-0">

@@ -550,7 +550,7 @@ const IALab = ({ onBack }) => {
                 {/* Main Content */}
                 <div className="w-full lg:w-[73%] space-y-6">
                         {/* Module Header */}
-                        <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgba(0,75,99,0.06)] rounded-[2rem] overflow-hidden">
+                        <div className="bg-white border border-slate-200/60 shadow-sm rounded-[2rem] overflow-hidden">
                             <div className="bg-gradient-to-r from-[#004B63] via-[#00BCD4] to-[#4DA8C4] p-6">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-4">
@@ -767,14 +767,14 @@ const IALab = ({ onBack }) => {
                             <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
                                 <div className="lg:col-span-3 space-y-6">
                                     {/* Prompt Synthesizer */}
-                                    <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgba(0,75,99,0.06)] rounded-[2rem] overflow-hidden h-fit max-h-[500px]">
+                                    <div className="bg-white border border-slate-200/60 shadow-sm rounded-[2rem] overflow-hidden h-fit max-h-[500px]">
                                         <div className="bg-gradient-to-r from-[#004B63] via-[#00BCD4] to-[#4DA8C4] px-6 py-4">
                                             <div className="flex items-center gap-3">
                                                 <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
                                                     <Icon name="fa-terminal" className="text-white" />
                                                 </div>
                                                 <div>
-                                                    <h3 className="font-normal text-white">Sintetizador de Prompts Élite</h3>
+                                                    <h3 className="font-normal text-white">Herramientas para la creacion de Promts</h3>
                                                     <p className="text-white/70 text-xs">Transforma ideas en MasterPrompts profesionales</p>
                                                 </div>
                                             </div>
@@ -872,13 +872,14 @@ const IALab = ({ onBack }) => {
                                  </div>
                               </div>
         ) : activeTab === 'eval' ? (
-            <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgba(0,75,99,0.06)] rounded-[2rem] overflow-hidden h-fit max-h-[600px] overflow-y-auto">
+             <div className="bg-white border border-slate-200/60 shadow-sm rounded-[2rem] overflow-hidden h-fit max-h-[600px] overflow-y-auto">
+
 
 
 
                                 {/* Challenge Sidebar - Taller */}
                                 <div className="lg:col-span-2">
-                                    <div className="bg-gradient-to-br from-[#004B63] to-[#0A3550] rounded-[2rem] p-6 text-white border border-white/10 shadow-[0_8px_32px_rgba(0,75,99,0.2)] relative overflow-hidden h-fit max-h-[400px]">
+                                    <div className="bg-gradient-to-br from-[#004B63] to-[#0A3550] rounded-[2rem] p-6 text-white border border-white/10 shadow-lg relative overflow-hidden h-fit max-h-[400px]">
                                         <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#FFD166] rounded-full blur-[120px] opacity-10 pointer-events-none"></div>
                                         <div className="flex items-center gap-3 mb-4">
                                             <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
@@ -900,7 +901,7 @@ const IALab = ({ onBack }) => {
                                 </div>
                              </div>
                         ) : activeTab === 'eval' ? (
-                            <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgba(0,75,99,0.06)] rounded-[2rem] overflow-hidden h-fit max-h-[600px] overflow-y-auto">
+                            <div className="bg-white border border-slate-200/60 shadow-sm rounded-[2rem] overflow-hidden h-fit max-h-[600px] overflow-y-auto">
                                 <div className="p-6 border-b border-[#E2E8F0]">
                                     <div className="flex items-center gap-4">
                                         <div className={`w-14 h-14 ${isModuleLocked(activeMod) ? 'bg-gradient-to-br from-[#64748B]/50 to-[#94A3B8]/50' : 'bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC]'} rounded-xl flex items-center justify-center`}>
@@ -1016,7 +1017,7 @@ const IALab = ({ onBack }) => {
                                 )}
                             </div>
                         ) : activeTab === 'cert' ? (
-                            <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgba(0,75,99,0.06)] rounded-[2rem] p-16 text-center relative overflow-hidden h-fit max-h-[500px]">
+                            <div className="bg-white border border-slate-200/60 shadow-sm rounded-[2rem] p-16 text-center relative overflow-hidden h-fit max-h-[500px]">
                                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#FFD166] rounded-full blur-[150px] opacity-20 pointer-events-none"></div>
                                 
                                 {isModuleLocked(activeMod) ? (
@@ -1105,7 +1106,7 @@ const IALab = ({ onBack }) => {
     
     {/* Valerio FAB - Cerebro Corporativo */}
     <button 
-        className="fixed bottom-8 right-8 w-16 h-16 bg-white border-2 border-[#004B63] rounded-full shadow-2xl drop-shadow-xl hover:scale-105 transition-all duration-300 z-50 flex items-center justify-center group"
+        className="fixed bottom-8 right-8 w-16 h-16 bg-white border-2 border-[#004B63] rounded-full shadow-lg hover:scale-105 transition-all duration-300 z-50 flex items-center justify-center group"
         onClick={() => setShowValerioDrawer(!showValerioDrawer)}
     >
         <div className="w-8 h-8 bg-[#004B63] rounded-full"></div>

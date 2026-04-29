@@ -209,7 +209,7 @@ const IALabContentAccordionOptimized = () => {
           WhiteCard.COMPACT,
           "overflow-hidden",
           "transition-all duration-200",
-          isOpen && "shadow-[0_8px_30px_rgba(0,188,212,0.12)]"
+          isOpen && "shadow"
         )}
       >
         {/* Header del acordeón */}

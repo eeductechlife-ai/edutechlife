@@ -103,9 +103,9 @@ const SidebarCourseDetails = ({
       className={cn(
         "flex items-center justify-between",
         "p-2.5 rounded-lg",
-        "bg-white/50 backdrop-blur-sm",
-        "border border-white/30",
-        "hover:bg-white/70",
+        "bg-slate-50",
+        "border border-slate-100",
+        "hover:bg-slate-100",
         "transition-all duration-150",
         "group"
       )}
@@ -205,8 +205,8 @@ const SidebarCourseDetails = ({
       {/* Métricas adicionales */}
       <div className={cn(
         "p-3 rounded-xl",
-        "bg-gradient-to-br from-cyan-500/5 via-white/90 to-cyan-400/3",
-        "border border-cyan-500/10"
+        "bg-gradient-to-br from-cyan-50 to-white",
+        "border border-cyan-100"
       )}>
         <h4 className={cn(
           CompactTypography.SUBHEADING,
@@ -260,7 +260,7 @@ const SidebarCourseDetails = ({
         {/* Footer con insights */}
         <div className={cn(
           "mt-3 pt-2",
-          "border-t border-cyan-500/10"
+          "border-t border-cyan-100"
         )}>
           <p className={cn(
             CompactTypography.MICRO,
@@ -276,10 +276,10 @@ const SidebarCourseDetails = ({
         <button className={cn(
           "flex items-center justify-center gap-1.5",
           "p-2 rounded-lg",
-          "bg-white/60 backdrop-blur-sm",
-          "border border-white/30",
+          "bg-slate-50",
+          "border border-slate-100",
           "text-slate-700 text-sm font-medium",
-          "hover:bg-white/80",
+          "hover:bg-slate-100",
           "transition-all duration-150"
         )}>
           <Download className="w-3.5 h-3.5" />

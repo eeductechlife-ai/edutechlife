@@ -405,12 +405,12 @@ const OVAReflexion = ({ onClose }) => {
 
   return (
     <div className="fixed inset-0 z-[100] bg-white overflow-y-auto">
-      <button onClick={onClose} className="fixed top-6 right-6 z-[100] bg-slate-900/80 backdrop-blur-md text-white px-6 py-3 rounded-full font-black text-sm hover:bg-rose-500 transition-all shadow-2xl flex items-center gap-2">
+      <button onClick={onClose} className="fixed top-6 right-6 z-[100] bg-slate-900 text-white px-6 py-3 rounded-full font-black text-sm hover:bg-rose-500 transition-all shadow-lg flex items-center gap-2">
         <X size={20} /> Cerrar OVA
       </button>
       
       <div className="min-h-screen bg-gradient-to-b from-blue-50/20 to-white">
-        <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-sm border-b border-gray-200">
+        <div className="sticky top-0 z-10 bg-white border-b border-gray-200">
           <div className="container mx-auto px-4 py-4">
             <div className="flex justify-between items-center">
               <div className="flex items-center space-x-4">
@@ -538,7 +538,7 @@ const OVAReflexion = ({ onClose }) => {
               <h3 className="text-2xl font-bold mb-2">¡Felicidades!</h3>
               <p className="mb-6">Has completado el OVA Interactivo sobre Inteligencia Artificial</p>
               
-              <div className="bg-white/20 backdrop-blur-sm rounded-xl p-6 mb-6">
+              <div className="bg-white/20 rounded-xl p-6 mb-6">
                 <div className="text-4xl font-bold mb-2">{quizScore}/{quizQuestions.length}</div>
                 <div className="text-sm opacity-90">Puntuación en cuestionario</div>
               </div>

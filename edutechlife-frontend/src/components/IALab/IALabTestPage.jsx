@@ -180,7 +180,7 @@ const IALabTestPage = () => {
           </h3>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
+            <div className="bg-white/20 rounded-xl p-6">
               <div className="text-3xl font-bold mb-2">4</div>
               <div className="font-bold mb-2">Componentes Principales</div>
               <p className="text-white/80 text-sm">
@@ -188,7 +188,7 @@ const IALabTestPage = () => {
               </p>
             </div>
             
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
+            <div className="bg-white/20 rounded-xl p-6">
               <div className="text-3xl font-bold mb-2">15+</div>
               <div className="font-bold mb-2">Endpoints Backend</div>
               <p className="text-white/80 text-sm">
@@ -196,7 +196,7 @@ const IALabTestPage = () => {
               </p>
             </div>
             
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
+            <div className="bg-white/20 rounded-xl p-6">
               <div className="text-3xl font-bold mb-2">100%</div>
               <div className="font-bold mb-2">Integración Corporativa</div>
               <p className="text-white/80 text-sm">

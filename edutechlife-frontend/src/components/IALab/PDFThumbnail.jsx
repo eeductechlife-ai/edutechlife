@@ -77,7 +77,7 @@ const PDFThumbnail = ({
       >
         {/* Indicador de interactividad */}
         <div className="absolute top-3 right-3 z-10">
-          <div className="flex items-center gap-1 bg-[#004B63]/10 backdrop-blur-sm px-2 py-1 rounded-full">
+          <div className="flex items-center gap-1 bg-[#004B63]/10 px-2 py-1 rounded-full">
             <Icon 
               name="fa-expand" 
               className="w-3 h-3 text-[#004B63] opacity-0 group-hover:opacity-100 transition-opacity duration-200" 
@@ -96,22 +96,22 @@ const PDFThumbnail = ({
             {/* Imagen SVG de previsualización */}
             <div className="w-full h-full flex items-center justify-center">
               <div className="relative">
-                <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-400 shadow-2xl flex items-center justify-center">
+                <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-400 shadow-lg flex items-center justify-center">
                   <Icon name="fa-file-pdf" className="text-white text-3xl" />
                 </div>
                 
                 {/* Efectos visuales */}
-                <div className="absolute -top-2 -right-2 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                <div className="absolute -top-2 -right-2 w-10 h-10 rounded-full bg-white/30 flex items-center justify-center">
                   <Icon name="fa-expand" className="text-white w-4 h-4" />
                 </div>
-                <div className="absolute -bottom-2 -left-2 w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                <div className="absolute -bottom-2 -left-2 w-8 h-8 rounded-full bg-white/30 flex items-center justify-center">
                   <Icon name="fa-book" className="text-white w-3 h-3" />
                 </div>
               </div>
             </div>
             
             {/* Indicador de páginas */}
-            <div className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1">
+            <div className="absolute bottom-3 right-3 bg-white px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
               <Icon name="fa-file" className="w-3 h-3 text-blue-600" />
               <span className="text-xs font-bold text-blue-700">{pages} páginas</span>
             </div>
@@ -193,7 +193,7 @@ const PDFThumbnail = ({
               {/* Header del visor inmersivo */}
               <div className="flex items-center justify-between p-6 border-b border-slate-200 bg-gradient-to-r from-[#004B63] to-[#006D8F]">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                  <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
                     <Icon name="fa-file-pdf" className="text-white text-xl" />
                   </div>
                   <div>
@@ -214,7 +214,7 @@ const PDFThumbnail = ({
                   <a
                     href={pdfUrl}
                     download
-                    className="px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-xl transition-colors duration-200 flex items-center gap-2 font-medium backdrop-blur-sm"
+                    className="px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-xl transition-colors duration-200 flex items-center gap-2 font-medium"
                   >
                     <Icon name="fa-download" className="w-4 h-4" />
                     Descargar
@@ -244,7 +244,7 @@ const PDFThumbnail = ({
 
                 {/* Overlay de instrucciones */}
                 <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2">
-                  <div className="bg-white/90 backdrop-blur-sm px-4 py-3 rounded-xl border border-slate-200 shadow-lg flex items-center gap-3">
+                  <div className="bg-white px-4 py-3 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
                     <Icon name="fa-mouse-pointer" className="w-4 h-4 text-[#004B63]" />
                     <span className="text-sm text-slate-700 font-medium">
                       Usa la rueda del mouse para hacer zoom • Arrastra para desplazarte

@@ -1936,21 +1936,6 @@ const DiagnosticoVAK = ({ onNavigate }) => {
       </div>
 
       <div className="max-w-6xl mx-auto">
-        {/* Botón de volver (solo visible cuando hay navegación) */}
-        {onNavigate && (
-          <div className="mb-6">
-            <button 
-              onClick={() => onNavigate('neuroentorno')}
-              className="text-[#4DA8C4] hover:text-[#66CCCC] flex items-center gap-2 transition-colors"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-              <span>Volver al Dashboard</span>
-            </button>
-          </div>
-        )}
-
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

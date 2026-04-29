@@ -34,14 +34,25 @@ const ModuleOverviewCard = ({ onAction }) => {
     title: "Domina las Instrucciones",
     description: "Desarrolla la capacidad de dar instrucciones claras y efectivas a la IA para obtener resultados útiles y precisos en situaciones reales a través de 4 etapas prácticas.",
     topics: [
-      "Introducción a la Inteligencia Artificial Generativa",
-      "¿Qué es un Prompt?",
-      "Estructura Básica de un Prompt Efectivo",
-      "Técnicas de Refinamiento"
+      { 
+        title: "Introducción a la Inteligencia Artificial Generativa", 
+        icon: "fa-brain", 
+        resources: 2 
+      },
+      { 
+        title: "¿Qué es un Prompt?", 
+        icon: "fa-comments", 
+        resources: 3 
+      },
+      { 
+        title: "Estructura Básica de un Prompt Efectivo", 
+        icon: "fa-sitemap", 
+        resources: 3 
+      }
     ],
     stats: [
-      { title: "Contenido", value: "4 Lecciones" },
-      { title: "Práctica", value: "4 Labs & Retos" }
+      { title: "Contenido", value: "3 Lecciones" },
+      { title: "Práctica", value: "3 Labs & Retos" }
     ]
   };
 
@@ -50,18 +61,15 @@ const ModuleOverviewCard = ({ onAction }) => {
         <motion.div
         whileHover={{ scale: 1.02, y: -4, boxShadow: "0px 8px 25px rgba(17,17,26,0.1)" }}
         transition={{ duration: 0.2 }}
-        className="relative z-10 bg-white rounded-2xl border border-slate-100 shadow-[0px_4px_16px_rgba(17,17,26,0.05)] p-5 md:p-8 overflow-hidden mb-8"
+        className="relative z-10 bg-white rounded-2xl border border-slate-200/60 shadow-sm p-5 md:p-8 overflow-hidden mb-8"
       >
-          {/* Elementos decorativos de fondo */}
-          <div className="absolute -top-6 -right-6 w-32 h-32 bg-gradient-to-br from-[#004B63]/6 to-[#00BCD4]/4 rounded-full blur-2xl"></div>
-          <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-tr from-[#004B63]/4 to-[#00BCD4]/2 rounded-full blur-2xl"></div>
           
 {/* Badge superior */}
             <div className="flex items-center justify-between mb-6">
-              <div className="px-4 py-2 bg-white border border-[#004B63]/15 text-[#004B63] text-sm font-semibold rounded-full shadow-sm">
+              <div className="px-4 py-2 bg-white border border-slate-200/60 text-[#004B63] text-sm font-semibold rounded-full shadow-sm">
                 {moduleData.badge.module}
               </div>
-              <div className="px-4 py-2 bg-white border border-[#004B63]/15 text-[#004B63] text-sm font-semibold rounded-full shadow-sm">
+              <div className="px-4 py-2 bg-white border border-slate-200/60 text-[#004B63] text-sm font-semibold rounded-full shadow-sm">
                 {moduleData.badge.duration}
               </div>
             </div>
@@ -69,41 +77,59 @@ const ModuleOverviewCard = ({ onAction }) => {
            {/* Contenido principal con icono destacado */}
            <div className="flex flex-col md:flex-row gap-6 items-start">
               {/* Icono destacado - Izquierda */}
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#004B63] to-[#0A3550] shadow-md shadow-[#004B63]/20 flex items-center justify-center text-white flex-shrink-0">
+              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#004B63] to-[#0A3550] shadow-sm flex items-center justify-center text-white flex-shrink-0">
                 <Icon name="fa-brain" className="text-2xl" />
               </div>
              
              {/* Texto principal */}
              <div className="flex-1">
-               <h3 className="text-lg md:text-xl font-bold text-[#004B63] mb-3">
+               <h3 className="text-xl md:text-2xl font-bold text-[#004B63] mb-2 leading-tight">
                  {moduleData.title}
                </h3>
-               <p className="text-slate-600 text-sm md:text-base leading-relaxed mb-5">
+               <p className="text-slate-600 text-sm md:text-base leading-relaxed mb-5 max-w-2xl">
                  {moduleData.description}
                </p>
                
-{/* Temas en grid 2x2 */}
-                <div className="grid grid-cols-2 gap-2 mt-4">
+                {/* Temas en columna única - Tarjetas premium */}
+                <div className="flex flex-col gap-3 mt-4">
                   {moduleData.topics.map((tema, index) => (
                     <motion.button
                       key={index}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                      whileHover={{ scale: 1.01, x: 4 }}
+                      whileTap={{ scale: 0.99 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 20 }}
                       onClick={() => {
                         setSelectedTopic({
-                          title: tema,
+                          title: tema.title,
                           index: index + 1
                         });
                         setIsResourcesModalOpen(true);
                       }}
-                      className="flex items-center gap-1.5 px-3 py-2 bg-slate-50 border border-slate-100 rounded-lg hover:bg-[#004B63] hover:border-[#004B63] hover:shadow-md transition-all duration-300 cursor-pointer group"
-                      aria-label={`Ver recursos del tema: ${tema}`}
+                      className="group flex items-center gap-4 w-full px-5 py-4 bg-white border border-slate-200/60 border-l-4 border-l-[#004B63] rounded-xl shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50 transition-all duration-300 cursor-pointer text-left"
+                      aria-label={`Ver recursos del tema: ${tema.title}`}
                     >
-                      <div className="w-2 h-2 rounded-full bg-[#004B63] flex-shrink-0 group-hover:scale-125 group-hover:bg-white transition-all duration-300"></div>
-                      <span className="text-sm text-slate-700 group-hover:text-white group-hover:font-semibold transition-colors duration-300 line-clamp-1 text-left">
-                        {tema}
-                      </span>
+                      {/* Icono temático */}
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center flex-shrink-0 group-hover:from-[#004B63]/20 group-hover:to-[#00BCD4]/20 transition-all duration-300">
+                        <Icon name={tema.icon} className="text-xl text-[#004B63] group-hover:text-[#004B63] transition-colors duration-300" />
+                      </div>
+                      
+                      {/* Título y metadatos */}
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-base font-semibold text-slate-800 group-hover:text-[#004B63] transition-colors duration-300 truncate">
+                          {tema.title}
+                        </h4>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#004B63]/5 rounded-full text-xs font-medium text-[#004B63] group-hover:bg-[#004B63]/10 transition-colors duration-300">
+                            <Icon name="fa-file" className="w-3 h-3" />
+                            {tema.resources} recursos
+                          </span>
+                        </div>
+                      </div>
+                      
+                      {/* Chevron de acción */}
+                      <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center flex-shrink-0 group-hover:bg-[#004B63] group-hover:shadow-md transition-all duration-300">
+                        <Icon name="fa-chevron-right" className="text-sm text-slate-400 group-hover:text-white group-hover:translate-x-0.5 transition-all duration-300" />
+                      </div>
                     </motion.button>
                   ))}
                 </div>

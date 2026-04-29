@@ -225,8 +225,8 @@ const IALabForumPremium = ({
                    "bg-white",
                    "border border-slate-100",
                    "text-slate-800",
-                   "shadow-[0_4px_15px_rgba(0,75,99,0.04)]"
-                 ),
+                    "shadow-sm"
+                  ),
              isPopular && !isCurrentUser && "border-amber-200 bg-amber-50"
            )}>
              <p className={cn(
@@ -314,11 +314,11 @@ const IALabForumPremium = ({
 
   return (
     <div className={cn(
-      "bg-white rounded-[2.5rem] shadow-[0_8px_30px_rgba(0,75,99,0.06)] border border-slate-100/50",
+      "bg-white rounded-[2.5rem] shadow-sm border border-slate-200/60",
       "flex flex-col",
       compact ? "h-[400px]" : "h-[500px]",
       "overflow-hidden",
-      "hover:shadow-[0_12px_40px_rgba(0,75,99,0.1)] hover:border-slate-200/60",
+      "hover:shadow hover:border-slate-200",
       "transition-all duration-200",
       className
     )}>
@@ -530,7 +530,7 @@ const IALabForumPremium = ({
                  isSubmitting
                    ? "bg-slate-100 text-slate-400 cursor-not-allowed"
                    : newMessage.trim()
-                   ? "bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white shadow-lg hover:shadow-xl"
+                    ? "bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white shadow-sm hover:shadow"
                    : "bg-slate-100 text-slate-400"
                )}
             >

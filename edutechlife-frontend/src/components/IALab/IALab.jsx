@@ -85,13 +85,9 @@ const IALabContent = () => {
     };
 
     return (
-        <div className="flex flex-col h-screen overflow-hidden bg-gradient-to-br from-slate-50 via-white to-[#F0F9FF]">
-                {/* Decorative background elements */}
-                <div className="fixed top-0 right-0 w-[30%] h-[40%] bg-gradient-to-bl from-[#004B63]/5 via-[#00BCD4]/3 to-transparent rounded-bl-[100px] pointer-events-none" />
-                <div className="fixed bottom-0 left-0 w-[25%] h-[35%] bg-gradient-to-tr from-[#004B63]/4 via-transparent to-transparent rounded-tr-[100px] pointer-events-none" />
-                
+        <div className="flex flex-col h-screen overflow-hidden bg-[#F8FAFC]">
                 {/* Mobile Header - solo en móviles */}
-                <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white/95 backdrop-blur-sm z-50 flex items-center justify-between px-4 border-b border-slate-100">
+                <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white z-50 flex items-center justify-between px-4 border-b border-slate-200">
                   <h1 className="text-2xl font-bold text-[#004B63] tracking-tight">IA Lab</h1>
                   <button
                     onClick={() => setShowMobileMenu(true)}
@@ -118,7 +114,7 @@ const IALabContent = () => {
                     {showMobileMenu && (
                       <div className="fixed inset-0 z-50 lg:hidden">
                         <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowMobileMenu(false)} />
-                        <div className="absolute left-0 top-0 bottom-0 w-72 bg-white shadow-2xl overflow-y-auto">
+                        <div className="absolute left-0 top-0 bottom-0 w-72 bg-white shadow-xl overflow-y-auto">
                           {/* Perfil del usuario en el drawer */}
                           <div className="flex items-center justify-between p-4 border-b border-slate-100">
                             <div className="flex items-center gap-3">
@@ -237,7 +233,7 @@ const IALabContent = () => {
                 
                  {/* FAB de Valerio - posicionado relativo al viewport */}
                  <button 
-                     className="fixed bottom-4 right-4 lg:bottom-8 lg:right-8 w-12 h-12 lg:w-16 lg:h-16 bg-gradient-to-br from-[#004B63] to-[#00BCD4] rounded-xl lg:rounded-2xl shadow-[0_12px_40px_rgba(0,75,99,0.25)] hover:shadow-[0_20px_50px_rgba(0,75,99,0.35)] hover:scale-105 active:scale-95 transition-all duration-300 z-50 flex items-center justify-center group"
+                     className="fixed bottom-4 right-4 lg:bottom-8 lg:right-8 w-12 h-12 lg:w-16 lg:h-16 bg-gradient-to-br from-[#004B63] to-[#00BCD4] rounded-xl lg:rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 z-50 flex items-center justify-center group"
                      onClick={() => handleGlobalAction('OPEN_VALERIO')}
                      aria-label="Abrir panel de coach IA Valerio"
                  >

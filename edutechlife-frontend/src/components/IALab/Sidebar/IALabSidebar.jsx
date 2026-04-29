@@ -48,11 +48,11 @@ const IALabSidebar = ({ data, handlers }) => {
         className={cn(
           "fixed top-4 left-4 z-50",
           "p-2.5 rounded-xl",
-          "bg-white/85 backdrop-blur-md",
-          "border border-cyan-100/50",
-          "shadow-[0_8px_30px_rgba(0,188,212,0.12)]",
+          "bg-white",
+          "border border-slate-200/60",
+          "shadow-sm",
           "text-cyan-600",
-          "hover:bg-white/90",
+          "hover:bg-slate-50",
           "transition-all duration-200"
         )}
         aria-label="Abrir sidebar"
@@ -71,8 +71,8 @@ const IALabSidebar = ({ data, handlers }) => {
       "transition-all duration-300",
       isMobile && [
         "fixed top-0 left-0 z-40",
-        "shadow-[0_0_50px_rgba(0,75,99,0.15)]",
-        "backdrop-blur-xl"
+        "shadow-lg",
+        "bg-white"
       ],
       isCollapsed && "transform -translate-x-full"
     )}>
@@ -82,7 +82,7 @@ const IALabSidebar = ({ data, handlers }) => {
           "flex items-center justify-between",
           "px-4 py-3",
           "border-b border-cyan-100/50",
-          "bg-white/90 backdrop-blur-md"
+          "bg-white"
         )}>
           <h2 className={cn(
             "text-sm font-bold text-slate-800"
@@ -113,10 +113,10 @@ const IALabSidebar = ({ data, handlers }) => {
             className={cn(
               "w-full flex items-center justify-center gap-1.5",
               "p-2 rounded-lg mb-2",
-              "bg-white/60 backdrop-blur-sm",
-              "border border-white/30",
+              "bg-white",
+              "border border-slate-200/60",
               "text-slate-600 text-sm font-medium",
-              "hover:bg-white/80",
+              "hover:bg-slate-50",
               "transition-all duration-150"
             )}
             aria-label={isCollapsed ? "Expandir sidebar" : "Colapsar sidebar"}
@@ -145,8 +145,8 @@ const IALabSidebar = ({ data, handlers }) => {
         {/* Module List */}
         <div className={cn(
           "p-3 rounded-xl",
-          "bg-white/60 backdrop-blur-sm",
-          "border border-white/30"
+          "bg-white",
+          "border border-slate-200/60"
         )}>
           <SidebarModuleList
             modules={modules}
@@ -184,8 +184,8 @@ const IALabSidebar = ({ data, handlers }) => {
         {/* Course Details */}
         <div className={cn(
           "p-3 rounded-xl",
-          "bg-white/60 backdrop-blur-sm",
-          "border border-white/30"
+          "bg-white",
+          "border border-slate-200/60"
         )}>
           <SidebarCourseDetails
             course={course}
@@ -195,8 +195,8 @@ const IALabSidebar = ({ data, handlers }) => {
         {/* User Section */}
         <div className={cn(
           "p-3 rounded-xl",
-          "bg-white/60 backdrop-blur-sm",
-          "border border-white/30"
+          "bg-white",
+          "border border-slate-200/60"
         )}>
           <SidebarUserSection
             user={user}
