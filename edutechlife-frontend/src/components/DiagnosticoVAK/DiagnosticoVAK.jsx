@@ -307,8 +307,8 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     announceTestEnd,
     farewell
   } = useValentinaAgent({
-    studentName: tempName,
-    studentAge: parseInt(tempAge) || 12,
+    studentName: studentName,
+    studentAge: parseInt(studentAge) || 12,
     studentMood,
     phase,
     currentQuestion,
@@ -608,6 +608,9 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     const el = pdfTemplateRef.current;
     if (!el) return;
     
+    // Force any pending state updates to complete before rendering PDF
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
     setPdfLoading(true);
     
     const fileName = `Diagnostico_VAK_${(diagnosis.studentName || 'estudiante').replace(/\s+/g, '_')}_${diagnosis.date || date}`;
@@ -681,9 +684,10 @@ const DiagnosticoVAK = ({ onNavigate }) => {
 
   // Generar comentario de Valeria para el diagnóstico
   const getValentinaCommentary = () => {
-    if (!diagnosis || !studentAge) return '';
+    if (!diagnosis || !studentAge || studentAge === '') return '';
     
     const age = parseInt(studentAge);
+    if (isNaN(age)) return '';
     let ageGroup = 'teen';
     if (age >= 6 && age <= 10) ageGroup = 'child';
     else if (age >= 11 && age <= 14) ageGroup = 'preteen';
@@ -726,23 +730,6 @@ const DiagnosticoVAK = ({ onNavigate }) => {
         transition={{ duration: 0.5 }}
         className="w-full max-w-4xl relative z-10"
       >
-        {/* ENCABEZADO */}
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="text-center mb-8"
-        >
-          <div className="inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] shadow-2xl mb-6">
-            <Brain size={48} strokeWidth={1.5} className="text-white" />
-          </div>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-[#004B63] mb-3 tracking-tight">
-            Diagnóstico VAK
-          </h1>
-          <p className="text-lg text-[#4DA8C4] font-medium">
-            Descubre tu estilo de aprendizaje
-          </p>
-        </motion.div>
-
         {/* SECCIÓN: ¿QUÉ ES? */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -1718,7 +1705,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
           <motion.button
             whileHover={{ scale: 1.08, y: -5 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => onNavigate && onNavigate('neuroentorno')}
+            onClick={() => window.location.href = '/'}
             className="relative bg-white border-2 border-[#004B63] text-[#004B63] rounded-full px-8 py-4 flex items-center gap-3 overflow-hidden group"
             style={{
               transformStyle: 'preserve-3d'
@@ -1728,7 +1715,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#004B63]/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
             
             <Rocket size={20} strokeWidth={2} className="relative z-10" />
-            <span className="relative z-10 text-base font-semibold">Ir a IA Lab</span>
+            <span className="relative z-10 text-base font-semibold">Ir a inicio</span>
             
             {/* Efecto de sombra 3D */}
             <div className="absolute -bottom-2 left-4 right-4 h-4 bg-[#004B63]/10 blur-md rounded-full"></div>

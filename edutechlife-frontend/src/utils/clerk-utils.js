@@ -37,10 +37,19 @@ export const useClerkAuth = () => {
           return { success: true };
         },
         openUserProfile: () => {
-          // En Clerk v5+, openUserProfile no existe directamente
-          // Redirigimos al perfil personalizado
-          console.log('Redirigiendo a perfil personalizado');
-          window.location.href = '/profile';
+          // En Clerk v6+, intentamos usar openUserProfile nativo
+          if (window.Clerk && typeof window.Clerk.openUserProfile === 'function') {
+            window.Clerk.openUserProfile();
+            return;
+          }
+          // Fallback: usar mountUserProfile si está disponible
+          if (clerk && typeof clerk.mountUserProfile === 'function') {
+            console.log('Usando mountUserProfile');
+            return;
+          }
+          // Último recurso: redirigir a configuración de cuenta
+          console.log('Redirigiendo a configuración de cuenta Clerk');
+          window.open('https://accounts.clerk.com', '_blank');
         },
         redirectToSignIn: () => {
           if (clerk && clerk.redirectToSignIn) {

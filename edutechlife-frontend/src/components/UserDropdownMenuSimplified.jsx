@@ -1,6 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useUser, useAuth } from '@clerk/react';
 import UserProfileSmartCard from './UserProfileSmartCard';
+import HelpModal from './modals/HelpModal';
+import ChangePasswordModal from './modals/ChangePasswordModal';
+import CertificatesModal from './modals/CertificatesModal';
+import ChangeAvatarModal from './modals/ChangeAvatarModal';
 import { useClerkAuth, getClerkUserInfo } from '../utils/clerk-utils';
 import { Icon } from '../utils/iconMapping.jsx';
 
@@ -19,7 +23,6 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
   const { signOut: clerkSignOutOfficial } = useAuth();
   
   const [isOpen, setIsOpen] = useState(false);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const dropdownRef = useRef(null);
   
   // Clerk es el ÚNICO proveedor de identidad
@@ -68,6 +71,10 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
   
   // Estados para modales
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isHelpOpen, setIsHelpOpen] = useState(false);
+  const [isSecurityOpen, setIsSecurityOpen] = useState(false);
+  const [isCertificatesOpen, setIsCertificatesOpen] = useState(false);
+  const [isAvatarOpen, setIsAvatarOpen] = useState(false);
   
   // 🏆 MI PERFIL - Abre modal de perfil completo
   const handleProfile = () => {
@@ -75,28 +82,23 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
     setIsProfileOpen(true);
   };
   
-  // ⚙ CONFIGURACIÓN - Abre tarjeta de perfil
-  const handleSettings = () => {
-    setIsOpen(false);
-    setIsProfileOpen(true);
-  };
-  
-  // 🎓 MIS CERTIFICADOS - Abre tarjeta de perfil
+  // 🎓 MIS CERTIFICADOS - Abre modal de certificados
   const handleCertificates = () => {
     setIsOpen(false);
-    setIsProfileOpen(true);
+    setIsCertificatesOpen(true);
   };
   
-  // 🔐 SEGURIDAD - Abre tarjeta de perfil
-  const handleSecurity = () => {
-    setIsOpen(false);
-    setIsProfileOpen(true);
-  };
-  
-  // ❓ AYUDA Y SOPORTE - Abre tarjeta de perfil
+  // ❓ AYUDA Y SOPORTE - Abre modal de ayuda
   const handleHelp = () => {
     setIsOpen(false);
-    setIsProfileOpen(true);
+    setIsHelpOpen(true);
+  };
+
+  // 📷 CAMBIAR FOTO - Abre modal de cambio de avatar
+  const handleAvatarClick = (e) => {
+    e.stopPropagation();
+    setIsOpen(false);
+    setIsAvatarOpen(true);
   };
   
   // Obtener iniciales para avatar
@@ -115,39 +117,51 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
     <>
       <div className="relative z-50" ref={dropdownRef}>
         {/* Smart-Pill: Botón profesional para Navbar */}
-        <button
-          className="flex items-center gap-3 h-12 min-w-[200px] pl-2 pr-4 rounded-full bg-white border border-slate-200/60 shadow-sm hover:bg-slate-50 transition-all duration-200"
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label="Menú de usuario"
-        >
-          {/* Avatar circular */}
-          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center border-2 border-white shadow-sm">
-            <span className="text-white font-semibold text-sm">
-              {getUserInitials()}
-            </span>
-          </div>
-          
-          {/* Texto: Nombre completo arriba, rol abajo */}
-          <div className="flex-1 min-w-0 text-left">
-            <div className="text-sm font-semibold text-petroleum truncate">
-              {userInfo.displayName || 'John Edison'}
-            </div>
-             <div className="text-xs text-slate-500 truncate">
-               {userInfo.role === 'teacher' ? 'Profesor' : 'Estudiante'}
-             </div>
-          </div>
-          
-          {/* Icono ChevronDown */}
-          <svg 
-            className="w-4 h-4 text-slate-400 flex-shrink-0" 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24" 
-            xmlns="http://www.w3.org/2000/svg"
+        <div className="flex items-center h-12 min-w-[200px] rounded-full bg-white border border-slate-200/60 shadow-sm">
+          {/* Avatar clickeable para cambiar foto */}
+          <button
+            onClick={handleAvatarClick}
+            className="flex-shrink-0 w-9 h-9 rounded-full overflow-hidden border-2 border-white shadow-sm hover:ring-2 hover:ring-[#00BCD4]/50 hover:ring-offset-2 transition-all duration-200 cursor-pointer"
+            aria-label="Cambiar foto de perfil"
+            title="Cambiar foto de perfil"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-          </svg>
-        </button>
+            {userInfo.avatarUrl ? (
+              <img src={userInfo.avatarUrl} alt={userInfo.displayName} className="w-full h-full object-cover" />
+            ) : (
+              <div className="w-full h-full bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center">
+                <span className="text-white font-semibold text-sm">{getUserInitials()}</span>
+              </div>
+            )}
+          </button>
+
+          {/* Área clickeable para dropdown */}
+          <button
+            className="flex-1 flex items-center gap-2 pl-2 pr-3 min-w-0"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label="Menú de usuario"
+          >
+            {/* Texto: Nombre completo arriba, rol abajo */}
+            <div className="flex-1 min-w-0 text-left">
+              <div className="text-sm font-semibold text-petroleum truncate">
+                {userInfo.displayName || 'John Edison'}
+              </div>
+               <div className="text-xs text-slate-500 truncate">
+                 {userInfo.role === 'teacher' ? 'Profesor' : 'Estudiante'}
+               </div>
+            </div>
+
+            {/* Icono ChevronDown */}
+            <svg
+              className="w-4 h-4 text-slate-400 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+        </div>
         
         {/* Dropdown menu - Estilo IALab Premium Compacto */}
         {isOpen && (
@@ -155,11 +169,21 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
             {/* Header con información del usuario - Gradiente corporativo */}
             <div className="p-3 bg-gradient-to-r from-[#004B63] to-[#0A3550]">
               <div className="flex items-center gap-2.5">
-                <div className="h-8 w-8 rounded-full bg-white/20 flex items-center justify-center border border-white/30">
-                  <span className="text-white font-semibold text-xs">
-                    {getUserInitials()}
-                  </span>
-                </div>
+                {/* Avatar clickeable en el dropdown */}
+                <button
+                  onClick={handleAvatarClick}
+                  className="h-8 w-8 rounded-full overflow-hidden border border-white/30 hover:ring-2 hover:ring-white/50 transition-all duration-200 flex-shrink-0 cursor-pointer"
+                  aria-label="Cambiar foto de perfil"
+                  title="Cambiar foto de perfil"
+                >
+                  {userInfo.avatarUrl ? (
+                    <img src={userInfo.avatarUrl} alt={userInfo.displayName} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full bg-white/20 flex items-center justify-center">
+                      <span className="text-white font-semibold text-xs">{getUserInitials()}</span>
+                    </div>
+                  )}
+                </button>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-semibold text-white truncate">
                     {userInfo.displayName}
@@ -184,17 +208,6 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
                 <span className="text-xs font-semibold text-slate-800 group-hover:text-[#004B63] transition-colors duration-300">Mi Perfil</span>
               </button>
               
-              {/* ⚙ CONFIGURACIÓN */}
-              <button
-                className="group flex items-center gap-2.5 w-full px-3 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-[#004B63] rounded-lg shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50 transition-all duration-300 cursor-pointer text-left"
-                onClick={handleSettings}
-              >
-                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center flex-shrink-0 group-hover:from-[#004B63]/20 group-hover:to-[#00BCD4]/20 transition-all duration-300">
-                  <Icon name="fa-cog" className="text-sm text-[#004B63]" />
-                </div>
-                <span className="text-xs font-semibold text-slate-800 group-hover:text-[#004B63] transition-colors duration-300">Configuración</span>
-              </button>
-              
               {/* 🎓 MIS CERTIFICADOS */}
               <button
                 className="group flex items-center gap-2.5 w-full px-3 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-[#004B63] rounded-lg shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50 transition-all duration-300 cursor-pointer text-left"
@@ -204,17 +217,6 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
                   <Icon name="fa-certificate" className="text-sm text-[#004B63]" />
                 </div>
                 <span className="text-xs font-semibold text-slate-800 group-hover:text-[#004B63] transition-colors duration-300">Mis Certificados</span>
-              </button>
-              
-              {/* 🔐 SEGURIDAD */}
-              <button
-                className="group flex items-center gap-2.5 w-full px-3 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-[#004B63] rounded-lg shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50 transition-all duration-300 cursor-pointer text-left"
-                onClick={handleSecurity}
-              >
-                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center flex-shrink-0 group-hover:from-[#004B63]/20 group-hover:to-[#00BCD4]/20 transition-all duration-300">
-                  <Icon name="fa-shield-halved" className="text-sm text-[#004B63]" />
-                </div>
-                <span className="text-xs font-semibold text-slate-800 group-hover:text-[#004B63] transition-colors duration-300">Seguridad</span>
               </button>
               
               {/* ❓ AYUDA Y SOPORTE */}
@@ -249,15 +251,24 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
 
       
       {/* 🏆 Modal de Mi Perfil - SMART CARD */}
-      <UserProfileSmartCard 
+      <UserProfileSmartCard
         isOpen={isProfileOpen}
         onClose={() => setIsProfileOpen(false)}
-        onOpenChangePassword={() => {
-          setIsProfileOpen(false);
-          // Clerk maneja la gestión de cuenta, incluyendo cambio de contraseña
-          alert('Para gestionar tu cuenta (cambiar contraseña, email, etc.), usa la interfaz de Clerk.');
-        }}
+        onOpenChangePassword={() => setIsSecurityOpen(true)}
+        onOpenChangeAvatar={() => setIsAvatarOpen(true)}
       />
+
+      {/* ❓ Modal de Ayuda y Soporte */}
+      <HelpModal isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
+
+      {/* 🔐 Modal de Seguridad - Cambio de Contraseña */}
+      <ChangePasswordModal isOpen={isSecurityOpen} onClose={() => setIsSecurityOpen(false)} />
+
+      {/* 🎓 Modal de Mis Certificados */}
+      <CertificatesModal isOpen={isCertificatesOpen} onClose={() => setIsCertificatesOpen(false)} />
+
+      {/* 📷 Modal de Cambiar Foto de Perfil */}
+      <ChangeAvatarModal isOpen={isAvatarOpen} onClose={() => setIsAvatarOpen(false)} />
 
 
     </>

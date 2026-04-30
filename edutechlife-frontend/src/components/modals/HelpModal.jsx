@@ -1,14 +1,8 @@
-/**
- * Modal de Ayuda y Soporte - Centro de ayuda y contacto
- * Diseño premium con estilos corporativos Edutechlife
- */
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card-simple';
-import { Button } from '../ui/button-simple';
 import { Icon } from '../../utils/iconMapping.jsx';
 
-const HelpModal = ({ onClose }) => {
+const HelpModal = ({ isOpen, onClose }) => {
   const [activeTab, setActiveTab] = useState('faq');
   const [contactForm, setContactForm] = useState({
     name: '',
@@ -29,15 +23,15 @@ const HelpModal = ({ onClose }) => {
       questions: [
         {
           q: '¿Cómo cambio mi contraseña?',
-          a: 'Puedes cambiar tu contraseña desde la sección "Seguridad" en tu perfil. Si usas Clerk, haz clic en "Cambiar Contraseña" para abrir el panel de seguridad de Clerk.',
+          a: 'Ve a "Seguridad" en tu perfil. Si usas Clerk, haz clic en "Gestionar cuenta" para abrir el panel de Clerk.',
         },
         {
           q: '¿Cómo actualizo mi información personal?',
-          a: 'Haz clic en tu avatar > "Mi Perfil" > ícono de lápiz. Puedes editar tu nombre y teléfono directamente.',
+          a: 'Haz clic en tu avatar > "Mi Perfil". Puedes editar tu nombre y teléfono directamente.',
         },
         {
           q: '¿Cómo elimino mi cuenta?',
-          a: 'Contacta a soporte@edutechlife.com para solicitar la eliminación de tu cuenta. Procesaremos tu solicitud en 48 horas.',
+          a: 'Contacta a soporte@edutechlife.com para solicitar la eliminación de tu cuenta.',
         },
       ],
     },
@@ -48,15 +42,15 @@ const HelpModal = ({ onClose }) => {
       questions: [
         {
           q: '¿Cómo accedo a mis cursos?',
-          a: 'Todos tus cursos están disponibles en el Dashboard principal. Haz clic en "Continuar" para retomar donde lo dejaste.',
+          a: 'Todos tus cursos están en el Dashboard principal. Haz clic en "Continuar" para retomar.',
         },
         {
           q: '¿Cómo descargo mis certificados?',
-          a: 'Ve a "Mis Certificados" en el menú de usuario. Los certificados completados tienen botón de descarga en formato PDF.',
+          a: 'Ve a "Mis Certificados" en el menú de usuario. Los certificados completados tienen botón de descarga PDF.',
         },
         {
           q: '¿Los certificados tienen validez oficial?',
-          a: 'Sí, todos nuestros certificados son digitales, verificables y tienen validez en el ámbito educativo y profesional.',
+          a: 'Sí, todos nuestros certificados son digitales, verificables y tienen validez educativa y profesional.',
         },
       ],
     },
@@ -67,34 +61,15 @@ const HelpModal = ({ onClose }) => {
       questions: [
         {
           q: 'La página no carga correctamente',
-          a: 'Intenta: 1) Recargar la página (Ctrl+F5), 2) Limpiar caché del navegador, 3) Probar en modo incógnito.',
+          a: 'Intenta: 1) Recargar (Ctrl+F5), 2) Limpiar caché, 3) Modo incógnito.',
         },
         {
           q: 'No puedo iniciar sesión',
-          a: 'Verifica tu conexión a internet y que estés usando el correo correcto. Si usas Clerk, asegúrate de haber confirmado tu email.',
+          a: 'Verifica tu conexión y correo correcto. Si usas Clerk, confirma tu email primero.',
         },
         {
           q: 'Los videos no se reproducen',
-          a: 'Asegúrate de tener la última versión de tu navegador y que JavaScript esté habilitado. Prueba con Chrome o Firefox.',
-        },
-      ],
-    },
-    {
-      id: 'billing',
-      title: 'Facturación y Pagos',
-      icon: 'fa-credit-card',
-      questions: [
-        {
-          q: '¿Cómo obtengo mi factura?',
-          a: 'Las facturas se envían automáticamente al email registrado después de cada pago. También puedes solicitarlas a facturacion@edutechlife.com.',
-        },
-        {
-          q: '¿Qué métodos de pago aceptan?',
-          a: 'Aceptamos tarjetas de crédito/débito (Visa, MasterCard, Amex), PayPal y transferencias bancarias.',
-        },
-        {
-          q: '¿Ofrecen reembolsos?',
-          a: 'Sí, ofrecemos reembolsos dentro de los primeros 14 días si no has completado más del 20% del curso.',
+          a: 'Asegúrate de tener la última versión del navegador y JavaScript habilitado.',
         },
       ],
     },
@@ -105,7 +80,6 @@ const HelpModal = ({ onClose }) => {
     { value: 'technical', label: 'Soporte Técnico' },
     { value: 'billing', label: 'Facturación y Pagos' },
     { value: 'courses', label: 'Cursos y Contenido' },
-    { value: 'partnership', label: 'Alianzas y Colaboraciones' },
     { value: 'other', label: 'Otro' },
   ];
 
@@ -114,26 +88,13 @@ const HelpModal = ({ onClose }) => {
     setIsSubmitting(true);
     
     try {
-      // Simular envío de formulario
       await new Promise(resolve => setTimeout(resolve, 1500));
-      
       console.log('📧 Formulario de contacto enviado:', contactForm);
-      
-      // Resetear formulario
-      setContactForm({
-        name: '',
-        email: '',
-        subject: '',
-        message: '',
-        category: 'general',
-      });
-      
+      setContactForm({ name: '', email: '', subject: '', message: '', category: 'general' });
       setSubmitSuccess(true);
       setTimeout(() => setSubmitSuccess(false), 5000);
-      
     } catch (error) {
       console.error('❌ Error al enviar formulario:', error);
-      alert('❌ Error al enviar el mensaje. Por favor, inténtalo de nuevo.');
     } finally {
       setIsSubmitting(false);
     }
@@ -144,89 +105,76 @@ const HelpModal = ({ onClose }) => {
     setContactForm(prev => ({ ...prev, [name]: value }));
   };
 
-  const openChat = () => {
-    alert('💬 Chat de soporte abierto. Nuestro equipo te atenderá en breve.');
-    // Aquí se integraría con un servicio de chat como Intercom, Crisp, etc.
-  };
-
-  const scheduleCall = () => {
-    const calendarUrl = 'https://calendly.com/edutechlife-soporte/30min';
-    window.open(calendarUrl, '_blank');
-  };
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <Card className="w-full max-w-4xl mx-4 border border-cyan-500/20 shadow-2xl relative">
-        {/* Botón de cerrar flotante */}
+      <div className="fixed inset-0 bg-black/20" onClick={onClose} />
+      <Card className="w-full max-w-2xl bg-white rounded-xl border border-slate-200/60 shadow-lg max-h-[85vh] overflow-hidden relative z-10 animate-in fade-in-0 zoom-in-95 duration-300">
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 z-50 p-2 text-slate-400 bg-white/50 hover:bg-slate-100 hover:text-slate-800 rounded-full backdrop-blur-sm transition-all duration-200"
+          className="absolute top-4 right-4 z-50 p-2 text-slate-400 bg-white hover:bg-slate-100 hover:text-slate-800 rounded-full transition-all duration-200"
           aria-label="Cerrar modal"
         >
           <Icon name="fa-times" className="text-lg" />
         </button>
         
-        <CardHeader className="border-b border-cyan-100/50 bg-gradient-to-r from-[#004B63]/10 to-[#00BCD4]/10 pt-12">
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-[#004B63] font-display font-bold flex items-center gap-2">
-              <Icon name="fa-question-circle" className="text-[#00BCD4]" />
+        <CardHeader className="border-b border-slate-200/60 bg-white sticky top-0 z-10 pt-12">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center">
+              <Icon name="fa-question-circle" className="text-[#004B63]" />
+            </div>
+            <CardTitle className="text-slate-800 font-bold text-sm">
               Ayuda y Soporte
             </CardTitle>
           </div>
         </CardHeader>
         
-        <CardContent className="p-6 space-y-6 max-h-[70vh] overflow-y-auto">
-          {/* Pestañas */}
-          <div className="border-b border-slate-200">
-            <div className="flex flex-wrap gap-2">
-              <button
-                onClick={() => setActiveTab('faq')}
-                className={`px-4 py-2 rounded-t-lg transition-all ${activeTab === 'faq' ? 'bg-[#004B63] text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}
-              >
-                <Icon name="fa-question" className="mr-2" />
-                Preguntas Frecuentes
-              </button>
-              
-              <button
-                onClick={() => setActiveTab('contact')}
-                className={`px-4 py-2 rounded-t-lg transition-all ${activeTab === 'contact' ? 'bg-[#004B63] text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}
-              >
-                <Icon name="fa-envelope" className="mr-2" />
-                Contactar Soporte
-              </button>
-              
-              <button
-                onClick={() => setActiveTab('resources')}
-                className={`px-4 py-2 rounded-t-lg transition-all ${activeTab === 'resources' ? 'bg-[#004B63] text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}
-              >
-                <Icon name="fa-book" className="mr-2" />
-                Recursos
-              </button>
+        <CardContent className="p-4 overflow-y-auto" style={{ maxHeight: 'calc(85vh - 80px)' }}>
+          <div className="space-y-4">
+            <div className="flex gap-2">
+              {[
+                { id: 'faq', label: 'Preguntas Frecuentes', icon: 'fa-question' },
+                { id: 'contact', label: 'Contactar', icon: 'fa-envelope' },
+                { id: 'resources', label: 'Recursos', icon: 'fa-book' },
+              ].map(tab => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-300 ${
+                    activeTab === tab.id
+                      ? 'bg-white border border-slate-200/60 border-l-4 border-l-[#004B63] shadow-sm text-[#004B63]'
+                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  }`}
+                >
+                  <Icon name={tab.icon} className="text-xs" />
+                  <span className="hidden sm:inline">{tab.label}</span>
+                </button>
+              ))}
             </div>
-          </div>
-          
-          {/* Contenido de pestañas */}
-          {activeTab === 'faq' && (
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            {activeTab === 'faq' && (
+              <div className="space-y-3">
                 {faqCategories.map(category => (
-                  <div key={category.id} className="border border-slate-200 rounded-xl p-4 hover:border-cyan-300 transition-colors">
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="w-10 h-10 rounded-lg bg-cyan-100 flex items-center justify-center text-cyan-600">
-                        <Icon name={category.icon} />
+                  <div key={category.id} className="border border-slate-200/60 rounded-xl bg-white overflow-hidden">
+                    <div className="px-4 py-3 bg-slate-50/50 border-b border-slate-200/60">
+                      <div className="flex items-center gap-2">
+                        <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center">
+                          <Icon name={category.icon} className="text-[#004B63] text-xs" />
+                        </div>
+                        <h3 className="font-semibold text-[#004B63] text-sm">{category.title}</h3>
                       </div>
-                      <h3 className="font-bold text-[#004B63]">{category.title}</h3>
                     </div>
                     
-                    <div className="space-y-3">
+                    <div className="p-3 space-y-2">
                       {category.questions.map((item, index) => (
                         <details key={index} className="group">
-                          <summary className="flex items-center justify-between cursor-pointer p-2 rounded-lg hover:bg-slate-50">
-                            <span className="font-medium text-slate-700">{item.q}</span>
-                            <Icon name="fa-chevron-down" className="text-slate-400 group-open:rotate-180 transition-transform" />
+                          <summary className="flex items-center justify-between cursor-pointer px-2 py-2 rounded-lg hover:bg-slate-50 list-none">
+                            <span className="font-medium text-slate-700 text-sm">{item.q}</span>
+                            <Icon name="fa-chevron-down" className="text-slate-400 text-xs group-open:rotate-180 transition-transform duration-300 flex-shrink-0 ml-2" />
                           </summary>
-                          <div className="p-3 bg-slate-50 rounded-lg mt-1">
-                            <p className="text-slate-600">{item.a}</p>
+                          <div className="px-2 py-2 bg-slate-50 rounded-lg mt-1 ml-2 mr-2">
+                            <p className="text-slate-600 text-sm">{item.a}</p>
                           </div>
                         </details>
                       ))}
@@ -234,310 +182,251 @@ const HelpModal = ({ onClose }) => {
                   </div>
                 ))}
               </div>
-              
-              <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-                <div className="flex items-start gap-3">
-                  <Icon name="fa-lightbulb" className="text-amber-500 text-xl mt-0.5" />
-                  <div>
-                    <h4 className="font-semibold text-amber-800 mb-1">¿No encontraste tu respuesta?</h4>
-                    <p className="text-amber-700">
-                      Nuestro equipo de soporte está disponible para ayudarte. Usa el formulario de contacto o chatea con nosotros en vivo.
-                    </p>
-                  </div>
+            )}
+            
+            {activeTab === 'contact' && (
+              <div className="space-y-4">
+                <div className="grid grid-cols-3 gap-3">
+                  <button
+                    onClick={() => alert('💬 Chat de soporte abierto. Nuestro equipo te atenderá en breve.')}
+                    className="p-3 border border-slate-200/60 rounded-xl text-center hover:border-[#00BCD4] hover:bg-slate-50 transition-all duration-300"
+                  >
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center mx-auto mb-2">
+                      <Icon name="fa-comments" className="text-[#004B63]" />
+                    </div>
+                    <h4 className="font-semibold text-[#004B63] text-xs">Chat en Vivo</h4>
+                    <p className="text-[10px] text-slate-500 mt-1">9am-6pm</p>
+                  </button>
+                  
+                  <button
+                    onClick={() => window.open('https://calendly.com/edutechlife-soporte/30min', '_blank')}
+                    className="p-3 border border-slate-200/60 rounded-xl text-center hover:border-[#00BCD4] hover:bg-slate-50 transition-all duration-300"
+                  >
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center mx-auto mb-2">
+                      <Icon name="fa-phone" className="text-[#004B63]" />
+                    </div>
+                    <h4 className="font-semibold text-[#004B63] text-xs">Llamada</h4>
+                    <p className="text-[10px] text-slate-500 mt-1">Calendly</p>
+                  </button>
+                  
+                  <a
+                    href="mailto:soporte@edutechlife.com"
+                    className="p-3 border border-slate-200/60 rounded-xl text-center hover:border-[#00BCD4] hover:bg-slate-50 transition-all duration-300"
+                  >
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center mx-auto mb-2">
+                      <Icon name="fa-envelope" className="text-[#004B63]" />
+                    </div>
+                    <h4 className="font-semibold text-[#004B63] text-xs">Email</h4>
+                    <p className="text-[10px] text-slate-500 mt-1">24h respuesta</p>
+                  </a>
                 </div>
-              </div>
-            </div>
-          )}
-          
-          {activeTab === 'contact' && (
-            <div className="space-y-6">
-              {/* Canales de contacto rápidos */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <button
-                  onClick={openChat}
-                  className="p-4 border border-cyan-200 rounded-xl text-center hover:border-cyan-400 hover:bg-cyan-50 transition-colors group"
-                >
-                  <div className="w-12 h-12 rounded-full bg-cyan-100 flex items-center justify-center mx-auto mb-3 group-hover:bg-cyan-200 transition-colors">
-                    <Icon name="fa-comments" className="text-cyan-600 text-xl" />
-                  </div>
-                  <h4 className="font-bold text-[#004B63]">Chat en Vivo</h4>
-                  <p className="text-sm text-slate-600 mt-1">Respuesta inmediata</p>
-                  <p className="text-xs text-cyan-600 mt-2">Disponible 9am-6pm</p>
-                </button>
                 
-                <button
-                  onClick={scheduleCall}
-                  className="p-4 border border-emerald-200 rounded-xl text-center hover:border-emerald-400 hover:bg-emerald-50 transition-colors group"
-                >
-                  <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center mx-auto mb-3 group-hover:bg-emerald-200 transition-colors">
-                    <Icon name="fa-phone" className="text-emerald-600 text-xl" />
-                  </div>
-                  <h4 className="font-bold text-[#004B63]">Llamada Programada</h4>
-                  <p className="text-sm text-slate-600 mt-1">30 minutos personalizados</p>
-                  <p className="text-xs text-emerald-600 mt-2">Agenda en Calendly</p>
-                </button>
-                
-                <div className="p-4 border border-slate-200 rounded-xl text-center">
-                  <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-3">
-                    <Icon name="fa-envelope" className="text-slate-600 text-xl" />
-                  </div>
-                  <h4 className="font-bold text-[#004B63]">Correo Electrónico</h4>
-                  <p className="text-sm text-slate-600 mt-1">soporte@edutechlife.com</p>
-                  <p className="text-xs text-slate-600 mt-2">Respuesta en 24h</p>
-                </div>
-              </div>
-              
-              {/* Formulario de contacto */}
-              <div className="border border-slate-200 rounded-xl p-5">
-                <h3 className="font-bold text-[#004B63] text-lg mb-4">Envíanos un Mensaje</h3>
-                
-                {submitSuccess && (
-                  <div className="mb-4 p-3 bg-emerald-50 border border-emerald-200 rounded-lg">
-                    <p className="text-emerald-700 flex items-center gap-2">
-                      <Icon name="fa-check-circle" className="text-emerald-500" />
-                      ✅ Mensaje enviado exitosamente. Te responderemos en 24 horas.
-                    </p>
-                  </div>
-                )}
-                
-                <form onSubmit={handleContactSubmit} className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="border border-slate-200/60 rounded-xl p-4 bg-white">
+                  <h3 className="font-semibold text-[#004B63] text-sm mb-3">Envíanos un Mensaje</h3>
+                  
+                  {submitSuccess && (
+                    <div className="mb-3 p-3 bg-emerald-50 border border-emerald-200 rounded-lg">
+                      <p className="text-emerald-700 text-xs flex items-center gap-2">
+                        <Icon name="fa-check-circle" className="text-emerald-500" />
+                        ✅ Mensaje enviado. Te responderemos en 24 horas.
+                      </p>
+                    </div>
+                  )}
+                  
+                  <form onSubmit={handleContactSubmit} className="space-y-3">
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-medium text-slate-600 mb-1">Nombre *</label>
+                        <input
+                          type="text"
+                          name="name"
+                          value={contactForm.name}
+                          onChange={handleInputChange}
+                          required
+                          className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00BCD4]/50 focus:border-[#00BCD4] text-sm"
+                          placeholder="Tu nombre"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-slate-600 mb-1">Email *</label>
+                        <input
+                          type="email"
+                          name="email"
+                          value={contactForm.email}
+                          onChange={handleInputChange}
+                          required
+                          className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00BCD4]/50 focus:border-[#00BCD4] text-sm"
+                          placeholder="tu@email.com"
+                        />
+                      </div>
+                    </div>
+                    
                     <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-1">
-                        Nombre Completo *
-                      </label>
+                      <label className="block text-xs font-medium text-slate-600 mb-1">Categoría *</label>
+                      <select
+                        name="category"
+                        value={contactForm.category}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00BCD4]/50 focus:border-[#00BCD4] text-sm"
+                      >
+                        {contactCategories.map(option => (
+                          <option key={option.value} value={option.value}>{option.label}</option>
+                        ))}
+                      </select>
+                    </div>
+                    
+                    <div>
+                      <label className="block text-xs font-medium text-slate-600 mb-1">Asunto *</label>
                       <input
                         type="text"
-                        name="name"
-                        value={contactForm.name}
+                        name="subject"
+                        value={contactForm.subject}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
-                        placeholder="Tu nombre"
+                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00BCD4]/50 focus:border-[#00BCD4] text-sm"
+                        placeholder="¿En qué podemos ayudarte?"
                       />
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-1">
-                        Correo Electrónico *
-                      </label>
-                      <input
-                        type="email"
-                        name="email"
-                        value={contactForm.email}
+                      <label className="block text-xs font-medium text-slate-600 mb-1">Mensaje *</label>
+                      <textarea
+                        name="message"
+                        value={contactForm.message}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
-                        placeholder="tu@email.com"
+                        rows={3}
+                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00BCD4]/50 focus:border-[#00BCD4] resize-none text-sm"
+                        placeholder="Describe tu consulta con detalle..."
                       />
                     </div>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">
-                      Categoría *
-                    </label>
-                    <select
-                      name="category"
-                      value={contactForm.category}
-                      onChange={handleInputChange}
-                      required
-                      className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent bg-white"
-                    >
-                      {contactCategories.map(option => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">
-                      Asunto *
-                    </label>
-                    <input
-                      type="text"
-                      name="subject"
-                      value={contactForm.subject}
-                      onChange={handleInputChange}
-                      required
-                      className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
-                      placeholder="¿En qué podemos ayudarte?"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">
-                      Mensaje *
-                    </label>
-                    <textarea
-                      name="message"
-                      value={contactForm.message}
-                      onChange={handleInputChange}
-                      required
-                      rows={4}
-                      className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent resize-none"
-                      placeholder="Describe tu consulta o problema con detalle..."
-                    ></textarea>
-                  </div>
-                  
-                  <div className="flex items-center gap-3">
-                    <Button
-                      type="submit"
-                      className="bg-gradient-to-r from-[#004B63] to-[#00BCD4] hover:opacity-90 text-white"
-                      disabled={isSubmitting}
-                    >
-                      {isSubmitting ? (
-                        <span className="flex items-center gap-2">
-                          <Icon name="fa-spinner" className="animate-spin" />
-                          Enviando...
-                        </span>
-                      ) : (
-                        <span className="flex items-center gap-2">
-                          <Icon name="fa-paper-plane" />
-                          Enviar Mensaje
-                        </span>
-                      )}
-                    </Button>
                     
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => setContactForm({
-                        name: '',
-                        email: '',
-                        subject: '',
-                        message: '',
-                        category: 'general',
-                      })}
-                      className="border-slate-300 text-slate-600 hover:bg-slate-50"
-                    >
-                      Limpiar Formulario
-                    </Button>
-                  </div>
-                </form>
+                    <div className="flex gap-2">
+                      <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="flex items-center justify-center gap-1.5 px-4 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-[#004B63] rounded-lg shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50 transition-all duration-300 text-xs font-semibold text-slate-800 disabled:opacity-50"
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <Icon name="fa-spinner" className="animate-spin" />
+                            Enviando...
+                          </>
+                        ) : (
+                          <>
+                            <Icon name="fa-paper-plane" />
+                            Enviar
+                          </>
+                        )}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setContactForm({ name: '', email: '', subject: '', message: '', category: 'general' })}
+                        className="flex items-center justify-center gap-1.5 px-4 py-2.5 bg-white border border-slate-200/60 rounded-lg shadow-sm hover:bg-slate-50 transition-all duration-300 text-xs font-semibold text-slate-600"
+                      >
+                        <Icon name="fa-eraser" />
+                        Limpiar
+                      </button>
+                    </div>
+                  </form>
+                </div>
               </div>
-            </div>
-          )}
-          
-          {activeTab === 'resources' && (
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="border border-slate-200 rounded-xl p-5">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center">
-                      <Icon name="fa-book-open" className="text-purple-600 text-xl" />
+            )}
+            
+            {activeTab === 'resources' && (
+              <div className="space-y-3">
+                <div className="border border-slate-200/60 rounded-xl p-4 bg-white">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center">
+                      <Icon name="fa-book-open" className="text-[#004B63] text-xs" />
                     </div>
-                    <div>
-                      <h3 className="font-bold text-[#004B63]">Guías y Tutoriales</h3>
-                      <p className="text-sm text-slate-600">Aprende a usar todas las funciones</p>
-                    </div>
+                    <h3 className="font-semibold text-[#004B63] text-sm">Guías y Tutoriales</h3>
                   </div>
                   
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     {[
                       'Guía de inicio rápido',
                       'Tutorial: Cómo tomar un curso',
                       'Manual del Dashboard',
                       'Configuración avanzada',
-                      'Preguntas técnicas comunes',
                     ].map((item, index) => (
                       <a
                         key={index}
                         href="#"
-                        className="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 group"
+                        className="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-slate-50 transition-colors"
                       >
-                        <span className="text-slate-700 group-hover:text-[#004B63]">{item}</span>
-                        <Icon name="fa-download" className="text-slate-400 group-hover:text-cyan-500" />
+                        <span className="text-sm text-slate-700 hover:text-[#004B63]">{item}</span>
+                        <Icon name="fa-chevron-right" className="text-slate-400 text-xs" />
                       </a>
                     ))}
                   </div>
                 </div>
                 
-                <div className="border border-slate-200 rounded-xl p-5">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-full bg-rose-100 flex items-center justify-center">
-                      <Icon name="fa-video" className="text-rose-600 text-xl" />
+                <div className="border border-slate-200/60 rounded-xl p-4 bg-white">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center">
+                      <Icon name="fa-video" className="text-[#004B63] text-xs" />
                     </div>
-                    <div>
-                      <h3 className="font-bold text-[#004B63]">Videos Explicativos</h3>
-                      <p className="text-sm text-slate-600">Aprende visualmente</p>
-                    </div>
+                    <h3 className="font-semibold text-[#004B63] text-sm">Videos Explicativos</h3>
                   </div>
                   
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     {[
                       { title: 'Tour por la plataforma', duration: '5:23' },
                       { title: 'Cómo completar un curso', duration: '8:45' },
                       { title: 'Gestión de certificados', duration: '6:12' },
-                      { title: 'Configuración de perfil', duration: '4:38' },
                     ].map((video, index) => (
-                      <div key={index} className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50">
-                        <div className="w-16 h-12 bg-slate-200 rounded-lg flex items-center justify-center">
-                          <Icon name="fa-play" className="text-slate-600" />
+                      <div key={index} className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50 transition-colors">
+                        <div className="w-12 h-8 bg-slate-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <Icon name="fa-play" className="text-slate-600 text-xs" />
                         </div>
-                        <div className="flex-1">
-                          <p className="font-medium text-slate-700">{video.title}</p>
-                          <p className="text-xs text-slate-500">{video.duration}</p>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-slate-700 text-sm truncate">{video.title}</p>
+                          <p className="text-[10px] text-slate-500">{video.duration}</p>
                         </div>
-                        <button className="text-cyan-600 hover:text-cyan-700">
+                        <button className="text-[#00BCD4] hover:text-[#004B63] transition-colors">
                           <Icon name="fa-play-circle" />
                         </button>
                       </div>
                     ))}
                   </div>
                 </div>
-              </div>
-              
-              <div className="bg-slate-50 border border-slate-200 rounded-xl p-5">
-                <h3 className="font-bold text-[#004B63] mb-3">Comunidad y Foros</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <a href="#" className="p-3 border border-slate-300 rounded-lg hover:border-cyan-400 hover:bg-white transition-colors text-center">
-                    <Icon name="fa-users" className="text-cyan-600 text-2xl mx-auto mb-2" />
-                    <p className="font-medium text-[#004B63]">Foro de Estudiantes</p>
-                    <p className="text-sm text-slate-600">Comparte y aprende</p>
-                  </a>
-                  
-                  <a href="#" className="p-3 border border-slate-300 rounded-lg hover:border-cyan-400 hover:bg-white transition-colors text-center">
-                    <Icon name="fa-lightbulb" className="text-amber-600 text-2xl mx-auto mb-2" />
-                    <p className="font-medium text-[#004B63]">Ideas y Sugerencias</p>
-                    <p className="text-sm text-slate-600">Ayúdanos a mejorar</p>
-                  </a>
-                  
-                  <a href="#" className="p-3 border border-slate-300 rounded-lg hover:border-cyan-400 hover:bg-white transition-colors text-center">
-                    <Icon name="fa-newspaper" className="text-emerald-600 text-2xl mx-auto mb-2" />
-                    <p className="font-medium text-[#004B63]">Blog y Noticias</p>
-                    <p className="text-sm text-slate-600">Últimas actualizaciones</p>
-                  </a>
+                
+                <div className="border border-slate-200/60 rounded-xl p-4 bg-white">
+                  <h3 className="font-semibold text-[#004B63] text-sm mb-3">Comunidad</h3>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { icon: 'fa-users', label: 'Foro', desc: 'Comparte y aprende' },
+                      { icon: 'fa-lightbulb', label: 'Ideas', desc: 'Sugerencias' },
+                      { icon: 'fa-newspaper', label: 'Blog', desc: 'Noticias' },
+                    ].map((item, index) => (
+                      <a
+                        key={index}
+                        href="#"
+                        className="p-3 border border-slate-200/60 rounded-lg hover:border-[#00BCD4] hover:bg-slate-50 transition-all text-center"
+                      >
+                        <Icon name={item.icon} className="text-[#004B63] mb-1.5" />
+                        <p className="font-medium text-[#004B63] text-xs">{item.label}</p>
+                        <p className="text-[10px] text-slate-500">{item.desc}</p>
+                      </a>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-          
-          {/* Información de contacto fija */}
-          <div className="border-t border-slate-200 pt-4">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div>
-                <p className="font-medium text-[#004B63]">¿Necesitas ayuda urgente?</p>
-                <p className="text-sm text-slate-600">Estamos aquí para ayudarte</p>
-              </div>
-              
-              <div className="flex flex-wrap gap-3">
-                <Button
-                  onClick={openChat}
-                  variant="outline"
-                  className="border-cyan-500 text-cyan-600 hover:bg-cyan-50"
-                >
-                  <Icon name="fa-comments" className="mr-2" />
-                  Chat en Vivo
-                </Button>
-                
+            )}
+            
+            <div className="border-t border-slate-200/60 pt-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-semibold text-[#004B63] text-sm">¿Necesitas ayuda urgente?</p>
+                  <p className="text-xs text-slate-500">Estamos aquí para ayudarte</p>
+                </div>
                 <a href="mailto:soporte@edutechlife.com">
-                  <Button className="bg-gradient-to-r from-[#004B63] to-[#00BCD4] hover:opacity-90 text-white">
-                    <Icon name="fa-envelope" className="mr-2" />
+                  <button className="flex items-center gap-1.5 px-4 py-2.5 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white rounded-lg hover:opacity-90 transition-opacity text-xs font-semibold">
+                    <Icon name="fa-envelope" />
                     Enviar Email
-                  </Button>
+                  </button>
                 </a>
               </div>
             </div>

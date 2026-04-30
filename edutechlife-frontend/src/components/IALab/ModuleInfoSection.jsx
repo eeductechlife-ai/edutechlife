@@ -64,12 +64,12 @@ const ModuleInfoSection = ({ className = '', ...rest }) => {
                         {learningPoints.map((point, index) => (
                             <div 
                                 key={index}
-                                className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg bg-slate-50/80 border border-slate-100"
+                                className="flex items-center gap-2.5 px-2 py-1.5 rounded-lg"
                             >
-                                <div className="w-6 h-6 rounded-md bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center flex-shrink-0">
+                                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center flex-shrink-0 shadow-sm">
                                     <Icon 
                                         name={point.icon} 
-                                        className="text-[#004B63] text-xs" 
+                                        className="text-white text-xs" 
                                     />
                                 </div>
                                 <p className="text-sm text-slate-700 font-medium leading-tight">
