@@ -46,20 +46,22 @@ const SidebarAccordionSection = ({
     const iconMap = {
       videos: {
         icon: <Play className="w-3.5 h-3.5" />,
-        color: "text-cyan-600",
-        bg: "bg-cyan-500/10"
+        color: "text-[#004B63]",
+        bg: "bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10"
       },
       recursos: {
-        pdf: { icon: <FileText className="w-3.5 h-3.5" />, color: "text-rose-600", bg: "bg-rose-500/10" },
-        json: { icon: <Code className="w-3.5 h-3.5" />, color: "text-amber-600", bg: "bg-amber-500/10" },
-        templates: { icon: <Clipboard className="w-3.5 h-3.5" />, color: "text-purple-600", bg: "bg-purple-500/10" },
-        caseStudies: { icon: <ChartBar className="w-3.5 h-3.5" />, color: "text-blue-600", bg: "bg-blue-500/10" },
-        default: { icon: <BookOpen className="w-3.5 h-3.5" />, color: "text-slate-600", bg: "bg-slate-100" }
+        pdf: { icon: <FileText className="w-3.5 h-3.5" />, color: "text-[#004B63]", bg: "bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10" },
+        documento: { icon: <FileText className="w-3.5 h-3.5" />, color: "text-[#004B63]", bg: "bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10" },
+        document: { icon: <FileText className="w-3.5 h-3.5" />, color: "text-[#004B63]", bg: "bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10" },
+        json: { icon: <Code className="w-3.5 h-3.5" />, color: "text-[#004B63]", bg: "bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10" },
+        templates: { icon: <Clipboard className="w-3.5 h-3.5" />, color: "text-[#004B63]", bg: "bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10" },
+        caseStudies: { icon: <ChartBar className="w-3.5 h-3.5" />, color: "text-[#004B63]", bg: "bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10" },
+        default: { icon: <BookOpen className="w-3.5 h-3.5" />, color: "text-[#004B63]", bg: "bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10" }
       },
       custom: {
         icon: <Zap className="w-3.5 h-3.5" />,
-        color: "text-slate-600",
-        bg: "bg-slate-100"
+        color: "text-[#004B63]",
+        bg: "bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10"
       }
     };
 
@@ -74,12 +76,12 @@ const SidebarAccordionSection = ({
   // Mapeo de badges por nivel
   const getLevelBadge = (level) => {
     const levelConfig = {
-      principiante: { color: "text-emerald-600", bg: "bg-emerald-500/10", label: "Principiante" },
-      intermedio: { color: "text-amber-600", bg: "bg-amber-500/10", label: "Intermedio" },
-      avanzado: { color: "text-purple-600", bg: "bg-purple-500/10", label: "Avanzado" },
-      experto: { color: "text-rose-600", bg: "bg-rose-500/10", label: "Experto" }
+      principiante: { color: "text-emerald-600", bg: "bg-gradient-to-br from-emerald-500/10 to-emerald-600/5", label: "Principiante" },
+      intermedio: { color: "text-amber-600", bg: "bg-gradient-to-br from-amber-500/10 to-amber-600/5", label: "Intermedio" },
+      avanzado: { color: "text-purple-600", bg: "bg-gradient-to-br from-purple-500/10 to-purple-600/5", label: "Avanzado" },
+      experto: { color: "text-rose-600", bg: "bg-gradient-to-br from-rose-500/10 to-rose-600/5", label: "Experto" }
     };
-    return levelConfig[level?.toLowerCase()] || { color: "text-slate-600", bg: "bg-slate-100", label: level };
+    return levelConfig[level?.toLowerCase()] || { color: "text-slate-600", bg: "bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10", label: level };
   };
 
   // Renderizar item individual
@@ -94,10 +96,10 @@ const SidebarAccordionSection = ({
         className={cn(
           "w-full flex items-start gap-2.5",
           "p-2.5 rounded-lg",
-          "bg-slate-50",
-          "border border-slate-100",
-          "hover:bg-slate-100 hover:border-slate-200",
-          "transition-all duration-150",
+          "bg-white",
+          "border border-slate-200/60 border-l-4 border-l-[#004B63]",
+          "shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50",
+          "transition-all duration-300",
           "text-left",
           "group"
         )}
@@ -105,7 +107,7 @@ const SidebarAccordionSection = ({
       >
         {/* Icono */}
         <div className={cn(
-          "p-1.5 rounded-md flex-shrink-0",
+          "p-1.5 rounded-lg flex-shrink-0",
           iconConfig.bg,
           iconConfig.color
         )}>
@@ -199,11 +201,11 @@ const SidebarAccordionSection = ({
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
           "w-full flex items-center justify-between",
-          "p-2.5 rounded-lg",
-          "bg-slate-50",
-          "border border-slate-100",
-          "hover:bg-slate-100",
-          "transition-all duration-150",
+          "p-2.5 rounded-xl",
+          "bg-white",
+          "border border-slate-200/60 border-l-4 border-l-[#004B63]",
+          "shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50",
+          "transition-all duration-300",
           "group"
         )}
         aria-expanded={isOpen}
@@ -212,10 +214,9 @@ const SidebarAccordionSection = ({
         <div className="flex items-center gap-2.5">
           {/* Icono de sección */}
           <div className={cn(
-            "p-1.5 rounded-md",
-            "bg-cyan-500/10",
-            "text-cyan-600",
-            "group-hover:bg-cyan-500/15"
+            "p-1.5 rounded-lg",
+            "bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10",
+            "text-[#004B63]"
           )}>
             {typeof icon === 'string' ? (
               <Icon name={icon} className="w-3.5 h-3.5" />
@@ -265,8 +266,8 @@ const SidebarAccordionSection = ({
           ) : (
             <div className={cn(
               "p-3 rounded-lg",
-              "bg-slate-50",
-              "border border-slate-100",
+              "bg-slate-50/50",
+              "border border-slate-200/60",
               "text-center"
             )}>
               <p className={cn(
@@ -284,7 +285,7 @@ const SidebarAccordionSection = ({
           <div className={cn(
             "flex items-center justify-between",
             "pt-2 mt-2",
-            "border-t border-slate-100"
+            "border-t border-slate-200/60"
           )}>
             <button className={cn(
               CompactTypography.TINY,

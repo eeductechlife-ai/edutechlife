@@ -36,7 +36,7 @@ export const moduleResources = {
       },
       {
         id: "intro-ova-1",
-        type: "ova-thumbnail",
+        type: "ova",
         title: "Laboratorio: Ética en la I.A.",
         description: "OVA completo con 5 secciones interactivas y simulador integrado.",
         estimatedTime: "15 minutos",
@@ -69,7 +69,7 @@ export const moduleResources = {
       },
       {
         id: "prompt-guide-1",
-        type: "pdf-thumbnail",
+        type: "pdf",
         title: "Guía: Anatomía de un Prompt",
         url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/recursos-edutechlife/guia_edutechlife_modulo1.pdf",
         pages: 12,
@@ -81,7 +81,7 @@ export const moduleResources = {
       },
       {
         id: "prompt-ova-html-1",
-        type: "ova-thumbnail",
+        type: "ova",
         title: "Infografía Interactiva: Prompt Engineering",
         url: "/ovas/prompt-engineering-ova.html",
         description: "Infografía interactiva sobre cómo comunicarte con la IA mediante prompts efectivos.",
@@ -316,23 +316,33 @@ export const formatFileSize = (size) => {
 export const getResourceIcon = (type) => {
   const icons = {
     video: "fa-video",
+    documento: "fa-file-lines",
+    pdf: "fa-file-pdf",
+    ova: "fa-brain",
+    imagen: "fa-image",
+    interactivo: "fa-puzzle-piece",
     document: "fa-file-lines",
-    image: "fa-image",
-    interactive: "fa-puzzle-piece",
     "pdf-thumbnail": "fa-file-pdf",
-    "ova-thumbnail": "fa-brain"
+    "ova-thumbnail": "fa-brain",
+    image: "fa-image",
+    interactive: "fa-puzzle-piece"
   };
   return icons[type] || "fa-file";
 };
 
 export const getResourceColor = (type) => {
   const colors = {
-    video: "text-[#06B6D4]",
+    video: "text-[#004B63]",
+    documento: "text-[#004B63]",
+    pdf: "text-[#004B63]",
+    ova: "text-[#004B63]",
+    imagen: "text-[#004B63]",
+    interactivo: "text-[#004B63]",
     document: "text-[#004B63]",
-    image: "text-[#06B6D4]",
-    interactive: "text-[#004B63]",
     "pdf-thumbnail": "text-[#004B63]",
-    "ova-thumbnail": "text-[#004B63]"
+    "ova-thumbnail": "text-[#004B63]",
+    image: "text-[#004B63]",
+    interactive: "text-[#004B63]"
   };
   return colors[type] || "text-slate-500";
 };

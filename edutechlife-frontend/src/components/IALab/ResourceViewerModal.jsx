@@ -95,12 +95,12 @@ const DocumentViewer = ({ resource }) => {
   const { isFullscreen, toggleFullscreen } = useFullscreen(iframeRef);
 
   return (
-    <div className="w-full h-full flex flex-col bg-white rounded-2xl overflow-hidden border border-slate-200">
+    <div className="w-full h-full flex flex-col bg-white rounded-2xl overflow-hidden border border-slate-200/60">
       {/* Header del documento */}
-      <div className="flex items-center justify-between p-4 border-b border-slate-100 bg-slate-50/50">
+      <div className="flex items-center justify-between p-4 border-b border-slate-200/60 bg-white">
         <div className="flex items-center gap-3">
-          <div className="bg-white border border-slate-200 p-2 rounded-lg">
-            <Icon name="fa-file-pdf" className="text-[#06B6D4] w-5 h-5" />
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center">
+            <Icon name="fa-file-pdf" className="text-[#004B63] w-5 h-5" />
           </div>
           <div>
             <h4 className="font-semibold text-slate-800">{resource.title}</h4>
@@ -118,8 +118,8 @@ const DocumentViewer = ({ resource }) => {
             onClick={toggleFullscreen}
             className={cn(
               "px-4 py-2 rounded-lg flex items-center gap-2",
-              "bg-slate-100 text-slate-700 font-medium",
-              "hover:bg-slate-200 hover:scale-105",
+              "bg-white border border-slate-200/60 text-slate-700 font-medium",
+              "hover:bg-slate-50 hover:scale-105",
               "transition-all duration-200"
             )}
           >
@@ -134,7 +134,7 @@ const DocumentViewer = ({ resource }) => {
           <a
             href={resource.url}
             download
-            className="px-4 py-2 bg-[#00BCD4] text-white rounded-lg hover:bg-[#00BCD4]/90 transition-colors duration-200 flex items-center gap-2 font-medium"
+            className="px-4 py-2 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white rounded-lg hover:from-[#003A4D] hover:to-[#00A5B8] transition-colors duration-200 flex items-center gap-2 font-medium"
           >
             <Icon name="fa-download" className="w-4 h-4" />
             Descargar
@@ -203,17 +203,17 @@ const ImageViewer = ({ resource }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   return (
-    <div className="w-full h-full flex flex-col bg-white rounded-2xl overflow-hidden border border-slate-200">
+    <div className="w-full h-full flex flex-col bg-white rounded-2xl overflow-hidden border border-slate-200/60">
       {/* Header de la imagen */}
-      <div className="flex items-center justify-between p-4 border-b border-slate-100">
+      <div className="flex items-center justify-between p-4 border-b border-slate-200/60">
         <div className="flex items-center gap-3">
-          <div className="bg-white border border-slate-200 p-2 rounded-lg">
-            <Icon name="fa-image" className="text-[#06B6D4] w-5 h-5" />
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center">
+            <Icon name="fa-image" className="text-[#004B63] w-5 h-5" />
           </div>
           <div>
             <h4 className="font-semibold text-slate-800">{resource.title}</h4>
             {resource.interactive && (
-              <span className="text-sm text-purple-600 font-medium">Interactiva</span>
+              <span className="text-sm text-[#004B63] font-medium">Interactiva</span>
             )}
           </div>
         </div>
@@ -224,8 +224,8 @@ const ImageViewer = ({ resource }) => {
             onClick={toggleFullscreen}
             className={cn(
               "px-4 py-2 rounded-lg flex items-center gap-2",
-              "bg-slate-100 text-slate-700 font-medium",
-              "hover:bg-slate-200 hover:scale-105",
+              "bg-white border border-slate-200/60 text-slate-700 font-medium",
+              "hover:bg-slate-50 hover:scale-105",
               "transition-all duration-200"
             )}
           >
@@ -240,7 +240,7 @@ const ImageViewer = ({ resource }) => {
           <a
             href={resource.url}
             download
-            className="px-4 py-2 bg-[#00BCD4] text-white rounded-lg hover:bg-[#00BCD4]/90 transition-colors duration-200 flex items-center gap-2 font-medium"
+            className="px-4 py-2 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white rounded-lg hover:from-[#003A4D] hover:to-[#00A5B8] transition-colors duration-200 flex items-center gap-2 font-medium"
           >
             <Icon name="fa-download" className="w-4 h-4" />
             Descargar
@@ -256,7 +256,7 @@ const ImageViewer = ({ resource }) => {
         {/* Estado de carga */}
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-12 h-12 border-4 border-[#00BCD4]/20 border-t-[#00BCD4] rounded-full animate-spin"></div>
+            <div className="w-12 h-12 border-4 border-[#004B63]/20 border-t-[#004B63] rounded-full animate-spin"></div>
           </div>
         )}
 
@@ -296,11 +296,11 @@ const ImageViewer = ({ resource }) => {
  */
 const InteractiveViewer = ({ resource }) => {
   return (
-    <div className="w-full h-full flex flex-col bg-gradient-to-br from-[#004B63]/5 to-[#06B6D4]/5 rounded-2xl overflow-hidden border border-[#004B63]/10">
-      <div className="flex items-center justify-between p-4 border-b border-[#004B63]/10">
+    <div className="w-full h-full flex flex-col bg-white rounded-2xl overflow-hidden border border-slate-200/60">
+      <div className="flex items-center justify-between p-4 border-b border-slate-200/60">
         <div className="flex items-center gap-3">
-          <div className="bg-white border border-slate-200 p-2 rounded-lg">
-            <Icon name="fa-puzzle-piece" className="text-[#06B6D4] w-5 h-5" />
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center">
+            <Icon name="fa-puzzle-piece" className="text-[#004B63] w-5 h-5" />
           </div>
           <div>
             <h4 className="font-semibold text-slate-800">{resource.title}</h4>
@@ -311,7 +311,7 @@ const InteractiveViewer = ({ resource }) => {
           </div>
         </div>
 
-        <div className="px-4 py-2 bg-[#004B63]/10 text-[#004B63] rounded-lg font-medium text-sm">
+        <div className="px-4 py-2 bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 text-[#004B63] rounded-lg font-medium text-sm">
           <Icon name="fa-bolt" className="w-4 h-4 inline mr-1" />
           Interactivo
         </div>
@@ -319,7 +319,7 @@ const InteractiveViewer = ({ resource }) => {
 
       <div className="flex-1 flex flex-col items-center justify-center p-8">
         <div className="text-center max-w-md">
-          <div className="w-20 h-20 bg-gradient-to-br from-[#004B63] to-[#06B6D4] rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+          <div className="w-20 h-20 bg-gradient-to-br from-[#004B63] to-[#00BCD4] rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
             <Icon name="fa-bolt" className="text-white text-2xl" />
           </div>
           
@@ -331,13 +331,13 @@ const InteractiveViewer = ({ resource }) => {
             {resource.description || "Este recurso interactivo está diseñado para aprendizaje práctico."}
           </p>
 
-          <div className="bg-white rounded-xl p-6 border border-[#004B63]/10 shadow-sm mb-6">
+          <div className="bg-white rounded-xl p-6 border border-slate-200/60 shadow-sm mb-6">
             <div className="flex items-center justify-between mb-4">
               <span className="text-sm font-medium text-slate-700">Simulación activa</span>
               <span className="text-xs px-2 py-1 bg-emerald-100 text-emerald-700 rounded">En tiempo real</span>
             </div>
             
-            <div className="h-32 bg-gradient-to-r from-[#004B63]/5 to-[#06B6D4]/5 rounded-lg border border-[#004B63]/10 flex items-center justify-center">
+            <div className="h-32 bg-gradient-to-r from-[#004B63]/5 to-[#00BCD4]/5 rounded-lg border border-slate-200/60 flex items-center justify-center">
               <div className="text-center">
                 <Icon name="fa-spinner" className="text-[#06B6D4] text-2xl mb-2 animate-spin" />
                 <p className="text-sm text-slate-600">Cargando experiencia interactiva...</p>
@@ -480,20 +480,24 @@ const ResourceViewerModal = ({
         case 'video':
           return <VideoViewer resource={resource} />;
         
+        case 'documento':
         case 'document':
           return <DocumentViewer resource={resource} />;
         
+        case 'imagen':
         case 'image':
           return <ImageViewer resource={resource} />;
         
+        case 'interactivo':
         case 'interactive':
           return <InteractiveViewer resource={resource} />;
         
+        case 'pdf':
         case 'pdf-thumbnail':
           return <PDFThumbnailViewer resource={resource} />;
         
-        case 'ova-thumbnail':
         case 'ova':
+        case 'ova-thumbnail':
           return <OVAViewer 
             resource={resource} 
             onClose={onClose}
@@ -596,13 +600,13 @@ const ResourceViewerModal = ({
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 border-b border-slate-200/10 bg-[#004B63]">
                 <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0 w-full sm:w-auto">
                   <div className="bg-white/10 p-2 rounded-lg flex-shrink-0">
-                    {resource.type === 'video' ? <Icon name="fa-video" className="text-[#06B6D4] w-5 h-5 sm:w-6 sm:h-6" /> :
-                     resource.type === 'document' ? <Icon name="fa-file-lines" className="text-[#06B6D4] w-5 h-5 sm:w-6 sm:h-6" /> :
-                     resource.type === 'image' ? <Icon name="fa-image" className="text-[#06B6D4] w-5 h-5 sm:w-6 sm:h-6" /> :
-                     resource.type === 'interactive' ? <Icon name="fa-puzzle-piece" className="text-[#06B6D4] w-5 h-5 sm:w-6 sm:h-6" /> :
-                     resource.type === 'pdf-thumbnail' ? <Icon name="fa-file-pdf" className="text-[#06B6D4] w-5 h-5 sm:w-6 sm:h-6" /> :
-                     resource.type === 'ova-thumbnail' || resource.type === 'ova' ? <Icon name="fa-brain" className="text-[#06B6D4] w-5 h-5 sm:w-6 sm:h-6" /> :
-                     <Icon name="fa-file" className="text-[#06B6D4] w-5 h-5 sm:w-6 sm:h-6" />}
+                    {(resource.type === 'video') ? <Icon name="fa-video" className="text-white w-5 h-5 sm:w-6 sm:h-6" /> :
+                     (resource.type === 'document' || resource.type === 'documento') ? <Icon name="fa-file-lines" className="text-white w-5 h-5 sm:w-6 sm:h-6" /> :
+                     (resource.type === 'image' || resource.type === 'imagen') ? <Icon name="fa-image" className="text-white w-5 h-5 sm:w-6 sm:h-6" /> :
+                     (resource.type === 'interactive' || resource.type === 'interactivo') ? <Icon name="fa-puzzle-piece" className="text-white w-5 h-5 sm:w-6 sm:h-6" /> :
+                     (resource.type === 'pdf' || resource.type === 'pdf-thumbnail') ? <Icon name="fa-file-pdf" className="text-white w-5 h-5 sm:w-6 sm:h-6" /> :
+                     (resource.type === 'ova' || resource.type === 'ova-thumbnail') ? <Icon name="fa-brain" className="text-white w-5 h-5 sm:w-6 sm:h-6" /> :
+                     <Icon name="fa-file" className="text-white w-5 h-5 sm:w-6 sm:h-6" />}
                   </div>
                   
                   {/* Título y metadatos */}
@@ -653,7 +657,7 @@ const ResourceViewerModal = ({
               </div>
 
               {/* Footer con navegación y acciones */}
-              <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-slate-200 bg-white">
+              <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-slate-200/60 bg-white">
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
                   {/* Navegación entre recursos */}
                   {totalResources > 1 && (
@@ -701,7 +705,7 @@ const ResourceViewerModal = ({
                       "px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-200 flex items-center gap-2 sm:gap-3 text-sm sm:text-base w-full sm:w-auto justify-center border-none",
                       isMarkedAsViewed
                         ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
-                        : "bg-gradient-to-r from-[#004B63] to-[#06B6D4] hover:from-[#003A4D] hover:to-[#08c5e6] text-white shadow-md hover:shadow-lg"
+                        : "bg-gradient-to-r from-[#004B63] to-[#00BCD4] hover:from-[#003A4D] hover:to-[#00A5B8] text-white shadow-md hover:shadow-lg"
                     )}
                   >
                     {isMarkedAsViewed ? (

@@ -50,41 +50,24 @@ const ResourceViewer = ({
     try {
       switch (resource.type) {
         case 'video':
-        case 'document':
-        case 'image':
-        case 'interactive':
-          // Para tipos básicos, mostrar miniatura simple
           return (
             <div 
               onClick={() => onOpenViewerModal && onOpenViewerModal()}
               className="group relative w-full h-full bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer overflow-hidden flex flex-col"
             >
               <div className="flex-1 p-6 flex flex-col items-center justify-center">
-                {/* Icono según tipo */}
                 <div className={cn(
                   "w-24 h-24 rounded-2xl flex items-center justify-center mb-6",
-                  resource.type === 'video' ? "bg-red-500" :
-                  resource.type === 'document' ? "bg-blue-500" :
-                  resource.type === 'image' ? "bg-green-500" :
-                  "bg-purple-500"
+                  "bg-gradient-to-br from-[#004B63] to-[#00BCD4]"
                 )}>
-                  {resource.type === 'video' ? '🎬' :
-                   resource.type === 'document' ? '📄' :
-                   resource.type === 'image' ? '🖼️' :
-                   '🕹️'}
+                  <Icon name="fa-video" className="text-white text-3xl" />
                 </div>
-                
-                {/* Título */}
                 <h4 className="font-bold text-slate-800 text-lg text-center mb-3">
                   {resource.title}
                 </h4>
-                
-                {/* Descripción */}
                 <p className="text-slate-600 text-center mb-6">
                   {resource.description || "Haz clic para ver este recurso"}
                 </p>
-                
-                {/* Indicador de acción */}
                 <div className="flex items-center gap-2 text-sm text-[#00BCD4] font-medium">
                   <Icon name="fa-expand" className="w-4 h-4" />
                   <span>Haz clic para abrir</span>
@@ -93,6 +76,91 @@ const ResourceViewer = ({
             </div>
           );
         
+        case 'documento':
+        case 'document':
+          return (
+            <div 
+              onClick={() => onOpenViewerModal && onOpenViewerModal()}
+              className="group relative w-full h-full bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer overflow-hidden flex flex-col"
+            >
+              <div className="flex-1 p-6 flex flex-col items-center justify-center">
+                <div className={cn(
+                  "w-24 h-24 rounded-2xl flex items-center justify-center mb-6",
+                  "bg-gradient-to-br from-[#004B63] to-[#00BCD4]"
+                )}>
+                  <Icon name="fa-file-lines" className="text-white text-3xl" />
+                </div>
+                <h4 className="font-bold text-slate-800 text-lg text-center mb-3">
+                  {resource.title}
+                </h4>
+                <p className="text-slate-600 text-center mb-6">
+                  {resource.description || "Haz clic para ver este recurso"}
+                </p>
+                <div className="flex items-center gap-2 text-sm text-[#00BCD4] font-medium">
+                  <Icon name="fa-expand" className="w-4 h-4" />
+                  <span>Haz clic para abrir</span>
+                </div>
+              </div>
+            </div>
+          );
+        
+        case 'imagen':
+        case 'image':
+          return (
+            <div 
+              onClick={() => onOpenViewerModal && onOpenViewerModal()}
+              className="group relative w-full h-full bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer overflow-hidden flex flex-col"
+            >
+              <div className="flex-1 p-6 flex flex-col items-center justify-center">
+                <div className={cn(
+                  "w-24 h-24 rounded-2xl flex items-center justify-center mb-6",
+                  "bg-gradient-to-br from-[#004B63] to-[#00BCD4]"
+                )}>
+                  <Icon name="fa-image" className="text-white text-3xl" />
+                </div>
+                <h4 className="font-bold text-slate-800 text-lg text-center mb-3">
+                  {resource.title}
+                </h4>
+                <p className="text-slate-600 text-center mb-6">
+                  {resource.description || "Haz clic para ver este recurso"}
+                </p>
+                <div className="flex items-center gap-2 text-sm text-[#00BCD4] font-medium">
+                  <Icon name="fa-expand" className="w-4 h-4" />
+                  <span>Haz clic para abrir</span>
+                </div>
+              </div>
+            </div>
+          );
+        
+        case 'interactivo':
+        case 'interactive':
+          return (
+            <div 
+              onClick={() => onOpenViewerModal && onOpenViewerModal()}
+              className="group relative w-full h-full bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer overflow-hidden flex flex-col"
+            >
+              <div className="flex-1 p-6 flex flex-col items-center justify-center">
+                <div className={cn(
+                  "w-24 h-24 rounded-2xl flex items-center justify-center mb-6",
+                  "bg-gradient-to-br from-[#004B63] to-[#00BCD4]"
+                )}>
+                  <Icon name="fa-puzzle-piece" className="text-white text-3xl" />
+                </div>
+                <h4 className="font-bold text-slate-800 text-lg text-center mb-3">
+                  {resource.title}
+                </h4>
+                <p className="text-slate-600 text-center mb-6">
+                  {resource.description || "Haz clic para ver este recurso"}
+                </p>
+                <div className="flex items-center gap-2 text-sm text-[#00BCD4] font-medium">
+                  <Icon name="fa-expand" className="w-4 h-4" />
+                  <span>Haz clic para abrir</span>
+                </div>
+              </div>
+            </div>
+          );
+        
+        case 'pdf':
         case 'pdf-thumbnail':
           return <PDFThumbnail 
             title={resource.title}
@@ -103,6 +171,7 @@ const ResourceViewer = ({
             onOpenImmersiveView={() => onOpenImmersiveView && onOpenImmersiveView(resource)}
           />;
         
+        case 'ova':
         case 'ova-thumbnail':
           return <OVAThumbnail 
             title={resource.title}

@@ -32,7 +32,7 @@ const ModuleOverviewCard = ({ onAction }) => {
       module: "MÓDULO 1"
     },
     title: "Domina las Instrucciones",
-    description: "Desarrolla la capacidad de dar instrucciones claras y efectivas a la IA para obtener resultados útiles y precisos en situaciones reales a través de 4 etapas prácticas.",
+    description: "En este módulo, hemos diseñado una ruta estratégica que te llevará desde los fundamentos de la Inteligencia Artificial Generativa hasta la creación de instrucciones de alto impacto.\n\nTu misión: Explorar cada tema y sus recursos multimedia (videos, guías y laboratorios). Notarás que tu barra de progreso cobrará vida con cada paso que des. No te detengas: cada recurso completado te acerca un 20% más a tu certificación global. ¡El poder de las instrucciones claras está en tus manos!",
     topics: [
       { 
         title: "Introducción a la Inteligencia Artificial Generativa", 
@@ -81,14 +81,29 @@ const ModuleOverviewCard = ({ onAction }) => {
                 <Icon name="fa-brain" className="text-2xl" />
               </div>
              
-             {/* Texto principal */}
-             <div className="flex-1">
-               <h3 className="text-xl md:text-2xl font-bold text-[#004B63] mb-2 leading-tight">
+              {/* Texto principal */}
+             <div className="flex-1 max-w-3xl">
+               <h3 className="text-xl md:text-2xl font-bold text-[#004B63] mb-3 leading-tight">
                  {moduleData.title}
                </h3>
-               <p className="text-slate-600 text-sm md:text-base leading-relaxed mb-5 max-w-2xl">
-                 {moduleData.description}
+               
+               {/* Introducción */}
+               <p className="text-slate-600 text-[15px] md:text-base leading-relaxed mb-4 text-justify">
+                 En este módulo, hemos diseñado una ruta estratégica que te llevará desde los fundamentos de la Inteligencia Artificial Generativa hasta la creación de instrucciones de alto impacto.
                </p>
+               
+               {/* Tu Misión - Subtítulo destacado */}
+               <div className="flex items-start gap-3 mb-5">
+                 <div className="w-8 h-8 rounded-lg bg-[#00BCD4]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                   <Icon name="fa-rocket" className="text-[#00BCD4] text-sm" />
+                 </div>
+                 <div className="flex-1">
+                   <h4 className="text-base font-bold text-[#004B63] mb-1">Tu misión:</h4>
+                   <p className="text-slate-600 text-[15px] md:text-base leading-relaxed text-justify">
+                     Explorar cada tema y sus recursos multimedia (videos, guías y laboratorios). Notarás que tu barra de progreso cobrará vida con cada paso que des. No te detengas: cada recurso completado te acerca un 20% más a tu certificación global. ¡El poder de las instrucciones claras está en tus manos!
+                   </p>
+                 </div>
+               </div>
                
                 {/* Temas en columna única - Tarjetas premium */}
                 <div className="flex flex-col gap-3 mt-4">
@@ -133,52 +148,71 @@ const ModuleOverviewCard = ({ onAction }) => {
                     </motion.button>
                   ))}
                 </div>
-             </div>
-           </div>
-           
-            {/* Grid inferior: 3 iconos */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+              
+              {/* Es hora de la acción */}
+              <div className="flex items-start gap-3 mt-6">
+                <div className="w-8 h-8 rounded-lg bg-[#004B63]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <Icon name="fa-bolt" className="text-[#004B63] text-sm" />
+                </div>
+                <div className="flex-1">
+                  <h4 className="text-base font-bold text-[#004B63] mb-1">¡Es hora de la acción!</h4>
+                  <p className="text-slate-600 text-[15px] md:text-base leading-relaxed text-justify">
+                    La teoría terminó; ahora comienza la acción. Para desbloquear tu acceso al siguiente nivel, debes alcanzar un puntaje mínimo del <span className="font-semibold text-[#00BCD4]">80%</span> en las actividades de este módulo.
+                  </p>
+                  <p className="text-slate-600 text-[15px] md:text-base leading-relaxed mt-2 text-justify">
+                    Tu participación en la comunidad, el examen y el desafío final son las llaves de tu progreso. Cada punto te acerca a la maestría en IA que las empresas buscan hoy.
+                  </p>
+                  <p className="text-[#004B63] font-semibold text-[15px] md:text-base leading-relaxed mt-2">
+                    ¿Estás listo para el reto? Supera el 80% y avanza.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Grid inferior: 3 iconos */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
                 {/* Icono: Comunidad */}
-                <div className="flex flex-col items-center gap-2">
+                <div className="flex flex-col items-center gap-3">
                   <motion.button
                     onClick={() => setIsForumOpen(!isForumOpen)}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                    className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer border-0"
+                    className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border-0"
                     title="Comunidad IALab"
                   >
-                    <Icon name="fa-comments" className="text-white w-7 h-7 md:w-8 md:h-8" />
+                    <Icon name="fa-comments" className="text-white w-9 h-9 md:w-10 md:h-10" />
                   </motion.button>
-                  <span className="text-sm font-bold text-[#004B63] text-center">Comunidad IALab</span>
+                  <span className="text-lg font-extrabold text-[#004B63] text-center">Comunidad IALab</span>
                 </div>
                 {/* Icono: Desafío */}
-                <div className="flex flex-col items-center gap-2">
+                <div className="flex flex-col items-center gap-3">
                   <motion.button
                     onClick={() => onAction('OPEN_CHALLENGE')}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                    className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer border-0"
+                    className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border-0"
                     title="Desafío del Módulo"
                   >
-                    <Icon name="fa-rocket" className="text-white w-7 h-7 md:w-8 md:h-8" />
+                    <Icon name="fa-rocket" className="text-white w-9 h-9 md:w-10 md:h-10" />
                   </motion.button>
-                  <span className="text-sm font-bold text-[#004B63] text-center">Desafío</span>
+                  <span className="text-lg font-extrabold text-[#004B63] text-center">Desafío</span>
                 </div>
                 {/* Icono: Examen */}
-                <div className="flex flex-col items-center gap-2">
+                <div className="flex flex-col items-center gap-3">
                   <motion.button
                     onClick={() => onAction('OPEN_QUIZ')}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                    className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer border-0"
+                    className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border-0"
                     title="Examen del Módulo"
                   >
-                    <Icon name="fa-clipboard-check" className="text-white w-7 h-7 md:w-8 md:h-8" />
+                    <Icon name="fa-clipboard-check" className="text-white w-9 h-9 md:w-10 md:h-10" />
                   </motion.button>
-                  <span className="text-sm font-bold text-[#004B63] text-center">Examen</span>
+                  <span className="text-lg font-extrabold text-[#004B63] text-center">Examen</span>
                 </div>
              </div>
 

@@ -166,28 +166,36 @@ const TopicResourcesModal = ({
                 </button>
               </div>
 
-              <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-slate-600 px-4 sm:px-6 py-3 bg-slate-50/50 border-b border-slate-100">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-slate-600 px-4 sm:px-6 py-3 bg-white border-b border-slate-200/60">
                 <div className="flex items-center gap-1 sm:gap-2">
-                  <Icon name="fa-clock" className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <div className="w-6 h-6 rounded-md bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center">
+                    <Icon name="fa-clock" className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#004B63]" />
+                  </div>
                   <span>{topicResources.estimatedTime}</span>
                 </div>
                 <div className="flex items-center gap-1 sm:gap-2">
-                  <Icon name="fa-chart-line" className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <div className="w-6 h-6 rounded-md bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center">
+                    <Icon name="fa-chart-line" className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#004B63]" />
+                  </div>
                   <span className="px-1.5 sm:px-2 py-0.5 bg-slate-100 rounded-full text-slate-700 font-medium text-xs sm:text-sm">
                     {topicResources.difficulty}
                   </span>
                 </div>
                 <div className="flex items-center gap-1 sm:gap-2">
-                  <Icon name="fa-layer-group" className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <div className="w-6 h-6 rounded-md bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center">
+                    <Icon name="fa-layer-group" className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#004B63]" />
+                  </div>
                   <span>{resources.length} recurso{resources.length !== 1 ? 's' : ''}</span>
                 </div>
               </div>
 
-              <div className="px-4 sm:px-6 py-3 sm:py-4 bg-white border-b border-slate-100">
+              <div className="px-4 sm:px-6 py-3 sm:py-4 bg-white border-b border-slate-200/60">
                 {topicResources.learningObjectives && topicResources.learningObjectives.length > 0 && (
                   <div className="mb-4">
                     <h4 className="font-semibold text-[#004B63] mb-2 flex items-center gap-2 text-sm sm:text-base">
-                      <Icon name="fa-bullseye" className="text-[#06B6D4] w-4 h-4 sm:w-5 sm:h-5" />
+                      <div className="w-6 h-6 rounded-md bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center">
+                        <Icon name="fa-bullseye" className="text-[#004B63] w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                      </div>
                       Objetivo de aprendizaje
                     </h4>
                     <p className="text-sm sm:text-base text-slate-600 leading-relaxed ml-7">
@@ -201,7 +209,7 @@ const TopicResourcesModal = ({
               </div>
 
               <div className="overflow-hidden">
-                <div className="px-6 pt-4 pb-4 border-b border-slate-100">
+                <div className="px-6 pt-4 pb-4 border-b border-slate-200/60">
                   <ResourceSelector
                     resources={resources}
                     activeResourceIndex={activeResourceIndex}
@@ -213,17 +221,17 @@ const TopicResourcesModal = ({
                 </div>
               </div>
 
-              <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-slate-100 bg-white flex items-center justify-between gap-3">
+              <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-slate-200/60 bg-white flex items-center justify-between gap-3">
                 <div className="flex items-center gap-3 min-w-0">
                   <div className={cn(
                     "w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center flex-shrink-0",
-                    "bg-[#004B63]/8 text-[#004B63] text-sm sm:text-lg"
+                    "bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 text-[#004B63] text-sm sm:text-lg"
                   )}>
-                    {resources[activeResourceIndex]?.type === 'video' ? <Icon name="fa-video" className="text-[#06B6D4] w-4 h-4 sm:w-5 sm:h-5" /> :
-                     resources[activeResourceIndex]?.type === 'document' || resources[activeResourceIndex]?.type === 'pdf-thumbnail' ? <Icon name="fa-file-lines" className="text-[#06B6D4] w-4 h-4 sm:w-5 sm:h-5" /> :
-                     resources[activeResourceIndex]?.type === 'image' ? <Icon name="fa-image" className="text-[#06B6D4] w-4 h-4 sm:w-5 sm:h-5" /> :
-                     resources[activeResourceIndex]?.type === 'ova-thumbnail' || resources[activeResourceIndex]?.type === 'ova' ? <Icon name="fa-brain" className="text-[#06B6D4] w-4 h-4 sm:w-5 sm:h-5" /> :
-                     resources[activeResourceIndex]?.type === 'interactive' ? <Icon name="fa-puzzle-piece" className="text-[#06B6D4] w-4 h-4 sm:w-5 sm:h-5" /> : <Icon name="fa-file" className="text-[#06B6D4] w-4 h-4 sm:w-5 sm:h-5" />}
+                    {resources[activeResourceIndex]?.type === 'video' ? <Icon name="fa-video" className="text-[#004B63] w-4 h-4 sm:w-5 sm:h-5" /> :
+                     (resources[activeResourceIndex]?.type === 'document' || resources[activeResourceIndex]?.type === 'documento' || resources[activeResourceIndex]?.type === 'pdf' || resources[activeResourceIndex]?.type === 'pdf-thumbnail') ? <Icon name="fa-file-lines" className="text-[#004B63] w-4 h-4 sm:w-5 sm:h-5" /> :
+                     (resources[activeResourceIndex]?.type === 'image' || resources[activeResourceIndex]?.type === 'imagen') ? <Icon name="fa-image" className="text-[#004B63] w-4 h-4 sm:w-5 sm:h-5" /> :
+                     (resources[activeResourceIndex]?.type === 'ova' || resources[activeResourceIndex]?.type === 'ova-thumbnail') ? <Icon name="fa-brain" className="text-[#004B63] w-4 h-4 sm:w-5 sm:h-5" /> :
+                     (resources[activeResourceIndex]?.type === 'interactive' || resources[activeResourceIndex]?.type === 'interactivo') ? <Icon name="fa-puzzle-piece" className="text-[#004B63] w-4 h-4 sm:w-5 sm:h-5" /> : <Icon name="fa-file" className="text-[#004B63] w-4 h-4 sm:w-5 sm:h-5" />}
                   </div>
                   <div className="min-w-0">
                     <h4 className="font-semibold text-slate-800 text-xs sm:text-sm truncate">
@@ -251,14 +259,14 @@ const TopicResourcesModal = ({
                     }}
                     disabled={activeResourceIndex <= 0}
                     className={cn(
-                      "w-8 h-8 sm:w-10 sm:h-10 rounded-xl border border-slate-200 transition-all duration-200 flex items-center justify-center",
-                      activeResourceIndex <= 0 ? "text-slate-400 cursor-not-allowed opacity-40" : "text-[#004B63] hover:bg-slate-100 hover:border-[#004B63]/20"
+                      "w-8 h-8 sm:w-10 sm:h-10 rounded-xl border border-slate-200/60 border-l-4 border-l-[#004B63] transition-all duration-200 flex items-center justify-center bg-white shadow-sm",
+                      activeResourceIndex <= 0 ? "text-slate-400 cursor-not-allowed opacity-40" : "text-[#004B63] hover:bg-slate-50 hover:border-l-[#00BCD4] hover:shadow"
                     )}
                     aria-label="Recurso anterior"
                   >
                     <Icon name="fa-chevron-left" className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
-                  <div className="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-sm font-medium">
+                  <div className="px-3 py-1 bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 text-[#004B63] rounded-full text-sm font-medium">
                     {activeResourceIndex + 1} / {resources.length}
                   </div>
                   <button
@@ -271,8 +279,8 @@ const TopicResourcesModal = ({
                     }}
                     disabled={activeResourceIndex >= resources.length - 1}
                     className={cn(
-                      "w-8 h-8 sm:w-10 sm:h-10 rounded-xl border border-slate-200 transition-all duration-200 flex items-center justify-center",
-                      activeResourceIndex >= resources.length - 1 ? "text-slate-400 cursor-not-allowed opacity-40" : "text-[#004B63] hover:bg-slate-100 hover:border-[#004B63]/20"
+                      "w-8 h-8 sm:w-10 sm:h-10 rounded-xl border border-slate-200/60 border-l-4 border-l-[#004B63] transition-all duration-200 flex items-center justify-center bg-white shadow-sm",
+                      activeResourceIndex >= resources.length - 1 ? "text-slate-400 cursor-not-allowed opacity-40" : "text-[#004B63] hover:bg-slate-50 hover:border-l-[#00BCD4] hover:shadow"
                     )}
                     aria-label="Siguiente recurso"
                   >

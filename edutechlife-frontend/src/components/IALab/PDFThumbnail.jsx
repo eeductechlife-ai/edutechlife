@@ -71,7 +71,7 @@ const PDFThumbnail = ({
         transition={{ duration: 0.3 }}
         onClick={handleClick}
         onDoubleClick={handleDoubleClick}
-        className="group relative w-full bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer overflow-hidden hover:scale-[1.02] active:scale-[0.98]"
+        className="group relative w-full bg-white rounded-2xl border border-slate-200/60 border-l-4 border-l-[#004B63] shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer overflow-hidden hover:scale-[1.02] active:scale-[0.98]"
         aria-label={`Abrir ${title} (clic para nueva pestaña, doble clic para vista inmersiva)`}
         title="Clic para abrir en nueva pestaña | Doble clic para vista inmersiva"
       >
@@ -92,11 +92,11 @@ const PDFThumbnail = ({
         <div className="p-5">
         {/* Imagen de previsualización premium */}
         <div className="mb-4 relative">
-          <div className="w-full h-40 rounded-xl overflow-hidden bg-gradient-to-br from-blue-500/20 to-cyan-400/20 border border-blue-200 flex items-center justify-center">
+          <div className="w-full h-40 rounded-xl overflow-hidden bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 border border-slate-200/60 flex items-center justify-center">
             {/* Imagen SVG de previsualización */}
             <div className="w-full h-full flex items-center justify-center">
               <div className="relative">
-                <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-400 shadow-lg flex items-center justify-center">
+                <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] shadow-lg flex items-center justify-center">
                   <Icon name="fa-file-pdf" className="text-white text-3xl" />
                 </div>
                 
@@ -112,8 +112,8 @@ const PDFThumbnail = ({
             
             {/* Indicador de páginas */}
             <div className="absolute bottom-3 right-3 bg-white px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
-              <Icon name="fa-file" className="w-3 h-3 text-blue-600" />
-              <span className="text-xs font-bold text-blue-700">{pages} páginas</span>
+              <Icon name="fa-file" className="w-3 h-3 text-[#004B63]" />
+              <span className="text-xs font-bold text-[#004B63]">{pages} páginas</span>
             </div>
           </div>
         </div>
@@ -139,14 +139,14 @@ const PDFThumbnail = ({
                 <span>{size}</span>
               </div>
               <div className="flex items-center gap-1">
-                <Icon name="fa-pdf" className="w-3 h-3 text-red-500" />
+                <Icon name="fa-pdf" className="w-3 h-3 text-[#004B63]" />
                 <span>PDF</span>
               </div>
             </div>
           </div>
 
           {/* Indicador de acción */}
-          <div className="mt-4 pt-4 border-t border-slate-100">
+          <div className="mt-4 pt-4 border-t border-slate-200/60">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-1">
@@ -191,7 +191,7 @@ const PDFThumbnail = ({
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header del visor inmersivo */}
-              <div className="flex items-center justify-between p-6 border-b border-slate-200 bg-gradient-to-r from-[#004B63] to-[#006D8F]">
+              <div className="flex items-center justify-between p-6 border-b border-slate-200 bg-gradient-to-r from-[#004B63] to-[#00BCD4]">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
                     <Icon name="fa-file-pdf" className="text-white text-xl" />

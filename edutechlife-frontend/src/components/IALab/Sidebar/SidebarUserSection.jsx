@@ -41,7 +41,7 @@ const SidebarUserSection = ({
     <div className={cn("space-y-3", className)}>
       {/* Header de sección */}
       <div className="flex items-center gap-2">
-        <div className="p-1.5 rounded-md bg-[#06B6D4]/10 text-[#06B6D4]">
+        <div className="p-1.5 rounded-md bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 text-[#004B63]">
           <User className="w-4 h-4" />
         </div>
         <h3 className="text-xs font-semibold tracking-wider uppercase text-[#004B63]">
@@ -51,7 +51,7 @@ const SidebarUserSection = ({
       </div>
 
       {/* User Card premium */}
-      <div className="relative overflow-hidden bg-white rounded-2xl border border-slate-100 shadow-[0px_4px_16px_rgba(17,17,26,0.05)]">
+      <div className="relative overflow-hidden bg-white rounded-2xl border border-slate-200/60 shadow-sm">
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#00BCD4] rounded-t-2xl" />
         <div className="p-3 pt-4">
           <div className="flex items-center gap-3">
@@ -62,7 +62,7 @@ const SidebarUserSection = ({
                   appearance={{
                     elements: {
                       rootBox: "w-12 h-12",
-                      avatarBox: "w-12 h-12 border-2 border-white shadow-[0_4px_15px_rgba(0,188,212,0.25)] hover:shadow-[0_6px_20px_rgba(0,188,212,0.35)] transition-all duration-200",
+                      avatarBox: "w-12 h-12 border-2 border-white shadow-sm hover:shadow transition-all duration-200",
                       userButtonAvatarImage: "rounded-full"
                     }
                   }}
@@ -88,14 +88,18 @@ const SidebarUserSection = ({
               {/* Badges rápidos */}
               <div className="flex items-center gap-1.5 mt-1">
                 <div className="flex items-center gap-0.5">
-                  <Star className="w-3 h-3 text-[#06B6D4]" />
+                  <div className="p-0.5 rounded bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10">
+                    <Star className="w-3 h-3 text-[#004B63]" />
+                  </div>
                   <span className="text-[10px] text-[#004B63] font-medium">
                     {userStats.points} pts
                   </span>
                 </div>
                 <div className="w-1 h-1 rounded-full bg-slate-300" />
                 <div className="flex items-center gap-0.5">
-                  <Award className="w-3 h-3 text-[#06B6D4]" />
+                  <div className="p-0.5 rounded bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10">
+                    <Award className="w-3 h-3 text-[#004B63]" />
+                  </div>
                   <span className="text-[10px] text-[#004B63] font-medium">
                     {userStats.badges} badges
                   </span>
@@ -105,7 +109,7 @@ const SidebarUserSection = ({
           </div>
 
           {/* Streak y estadísticas */}
-          <div className="grid grid-cols-3 gap-2 mt-3 pt-3 border-t border-slate-100">
+          <div className="grid grid-cols-3 gap-2 mt-3 pt-3 border-t border-slate-200/60">
             <div className="text-center">
               <div className="text-lg font-bold text-slate-800">
                 {userStats.streak}
@@ -147,10 +151,10 @@ const SidebarUserSection = ({
                 console.log('Navigate to profile');
               }
             }}
-            className="w-full flex items-center justify-between p-2.5 rounded-lg bg-white border border-slate-100 hover:bg-slate-50 transition-all duration-150 group"
+            className="w-full flex items-center justify-between p-2.5 rounded-lg bg-white border border-slate-200/60 border-l-4 border-l-[#004B63] shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50 transition-all duration-300 group"
           >
             <div className="flex items-center gap-2.5">
-              <div className="p-1.5 rounded-md bg-slate-100 text-slate-600 group-hover:bg-slate-200 transition-colors duration-150">
+              <div className="p-1.5 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 text-[#004B63] group-hover:from-[#004B63]/20 group-hover:to-[#00BCD4]/20 transition-all duration-300">
                 {option.icon}
               </div>
               <span className="text-sm text-slate-700 font-medium group-hover:text-slate-800">
@@ -170,14 +174,16 @@ const SidebarUserSection = ({
       {/* Botón de cerrar sesión */}
       <button
         onClick={onSignOut}
-        className="w-full flex items-center justify-center gap-2 p-2.5 rounded-lg bg-white border border-slate-100 text-slate-700 text-sm font-medium hover:bg-slate-50 hover:text-slate-800 transition-all duration-150 group"
+        className="w-full flex items-center justify-center gap-2 p-2.5 rounded-lg bg-white border border-slate-200/60 border-l-4 border-l-rose-400 shadow-sm hover:shadow hover:border-l-rose-500 hover:bg-rose-50/50 transition-all duration-300 group"
       >
-        <LogOut className="w-4 h-4 text-slate-500 group-hover:text-slate-700" />
-        <span>Cerrar sesión</span>
+        <div className="p-1.5 rounded-lg bg-gradient-to-br from-rose-400/10 to-rose-500/10 text-rose-500 group-hover:from-rose-400/20 group-hover:to-rose-500/20 transition-all duration-300">
+          <LogOut className="w-4 h-4" />
+        </div>
+        <span className="text-sm font-medium text-rose-600 group-hover:text-rose-700 transition-colors duration-300">Cerrar sesión</span>
       </button>
 
       {/* Footer con información de cuenta */}
-      <div className="pt-2 mt-2 border-t border-slate-100">
+      <div className="pt-2 mt-2 border-t border-slate-200/60">
         <p className="text-[10px] text-slate-500 text-center">
           Último acceso: Hoy, 14:30
         </p>

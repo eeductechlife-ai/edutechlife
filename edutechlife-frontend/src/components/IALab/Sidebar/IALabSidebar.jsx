@@ -1,6 +1,5 @@
 import React from 'react';
 import { cn } from '../../forum/forumDesignSystem';
-import { GlassPanel } from '../GlassDesignSystem';
 import SidebarProgressCircle from './SidebarProgressCircle';
 import SidebarModuleList from './SidebarModuleList';
 import SidebarAccordionSection from './SidebarAccordionSection';
@@ -64,10 +63,10 @@ const IALabSidebar = ({ data, handlers }) => {
 
   return (
     <aside className={cn(
-      GlassPanel.ELEVATED,
+      "bg-white",
       "w-64 flex-shrink-0",
       "h-screen overflow-y-auto",
-      "border-r border-cyan-100/50",
+      "border-r border-slate-200/60",
       "transition-all duration-300",
       isMobile && [
         "fixed top-0 left-0 z-40",
@@ -81,7 +80,7 @@ const IALabSidebar = ({ data, handlers }) => {
         <div className={cn(
           "flex items-center justify-between",
           "px-4 py-3",
-          "border-b border-cyan-100/50",
+          "border-b border-slate-200/60",
           "bg-white"
         )}>
           <h2 className={cn(
@@ -208,7 +207,7 @@ const IALabSidebar = ({ data, handlers }) => {
         {/* Footer del sidebar */}
         <div className={cn(
           "pt-4 mt-4",
-          "border-t border-cyan-100/50"
+          "border-t border-slate-200/60"
         )}>
           <p className={cn(
             "text-xs text-center text-slate-500"

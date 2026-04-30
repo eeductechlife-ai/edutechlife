@@ -52,38 +52,38 @@ const SidebarModuleList = ({
     // Configuración por estado
     const stateConfig = {
       active: {
-        bg: "bg-gradient-to-r from-cyan-600 to-cyan-500",
-        text: "text-white",
-        iconBg: "bg-white/20",
-        iconColor: "text-white",
-        border: "border-cyan-500/30",
-        shadow: "shadow-[0_4px_15px_rgba(0,188,212,0.25)]"
+        bg: "bg-white",
+        text: "text-[#004B63]",
+        iconBg: "bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10",
+        iconColor: "text-[#004B63]",
+        border: "border-l-4 border-l-[#004B63]",
+        shadow: "shadow-sm"
       },
       completed: {
-        bg: "bg-white/85",
+        bg: "bg-white",
         text: "text-slate-800",
-        iconBg: "bg-emerald-500/10",
-        iconColor: "text-emerald-600",
-        border: "border-emerald-100",
+        iconBg: "bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10",
+        iconColor: "text-[#004B63]",
+        border: "border-l-4 border-l-emerald-500",
         shadow: "shadow-sm"
       },
       locked: {
-        bg: "bg-white/60",
+        bg: "bg-slate-50/50",
         text: "text-slate-500",
         iconBg: "bg-slate-100",
         iconColor: "text-slate-400",
-        border: "border-slate-100",
+        border: "border-l-4 border-l-slate-200",
         shadow: "",
         opacity: "opacity-70"
       },
       default: {
-        bg: "bg-white/70",
+        bg: "bg-white",
         text: "text-slate-700",
-        iconBg: "bg-cyan-500/10",
-        iconColor: "text-cyan-600",
-        border: "border-white/30",
-        shadow: "",
-        hover: "hover:bg-white/85 hover:shadow-sm"
+        iconBg: "bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10",
+        iconColor: "text-[#004B63]",
+        border: "border-l-4 border-l-[#004B63]",
+        shadow: "shadow-sm",
+        hover: "hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50"
       }
     };
 
@@ -123,17 +123,17 @@ const SidebarModuleList = ({
           <div className={cn(
             "w-6 h-6 rounded-md flex items-center justify-center",
             "text-xs font-bold",
-            isActive ? "bg-white/30 text-white" :
-            isCompleted ? "bg-emerald-500/15 text-emerald-600" :
+            isActive ? "bg-gradient-to-br from-[#004B63]/20 to-[#00BCD4]/20 text-[#004B63]" :
+            isCompleted ? "bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 text-[#004B63]" :
             isLocked ? "bg-slate-100 text-slate-400" :
-            "bg-cyan-500/10 text-cyan-600"
+            "bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 text-[#004B63]"
           )}>
             {module.id}
           </div>
 
           {/* Icono del módulo */}
           <div className={cn(
-            "p-1.5 rounded-md",
+            "p-1.5 rounded-lg",
             config.iconBg,
             config.iconColor
           )}>
@@ -161,7 +161,7 @@ const SidebarModuleList = ({
                 <CheckCircle className="w-3 h-3 text-emerald-500" />
               )}
               {isActive && (
-                <PlayCircle className="w-3 h-3 text-white/80" />
+                <PlayCircle className="w-3 h-3 text-[#004B63]" />
               )}
             </div>
           </div>
@@ -172,7 +172,7 @@ const SidebarModuleList = ({
               <Clock className="w-3 h-3 text-slate-400" />
               <span className={cn(
                 CompactTypography.MICRO,
-                isActive ? "text-white/80" : "text-slate-500"
+                isActive ? "text-[#004B63]/70" : "text-slate-500"
               )}>
                 {module.duration}
               </span>
@@ -182,9 +182,9 @@ const SidebarModuleList = ({
             {module.level && (
               <span className={cn(
                 "px-1.5 py-0.5 rounded text-xs font-medium",
-                module.level === 'Principiante' ? "bg-emerald-500/10 text-emerald-600" :
-                module.level === 'Intermedio' ? "bg-amber-500/10 text-amber-600" :
-                module.level === 'Avanzado' ? "bg-purple-500/10 text-purple-600" :
+                module.level === 'Principiante' ? "bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 text-emerald-600" :
+                module.level === 'Intermedio' ? "bg-gradient-to-br from-amber-500/10 to-amber-600/5 text-amber-600" :
+                module.level === 'Avanzado' ? "bg-gradient-to-br from-purple-500/10 to-purple-600/5 text-purple-600" :
                 "bg-slate-100 text-slate-600"
               )}>
                 {module.level}
@@ -202,8 +202,8 @@ const SidebarModuleList = ({
       <div className="flex items-center gap-2 mb-2">
         <div className={cn(
           "p-1.5 rounded-md",
-          "bg-cyan-500/10",
-          "text-cyan-600"
+          "bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10",
+          "text-[#004B63]"
         )}>
           <BookOpen className="w-4 h-4" />
         </div>
@@ -213,7 +213,7 @@ const SidebarModuleList = ({
         )}>
           Módulos del Curso
         </h3>
-        <div className="flex-1 h-px bg-gradient-to-r from-cyan-500/20 via-cyan-400/10 to-transparent" />
+        <div className="flex-1 h-px bg-gradient-to-r from-[#004B63]/20 via-[#00BCD4]/10 to-transparent" />
       </div>
 
       {/* Lista de módulos */}
@@ -225,7 +225,7 @@ const SidebarModuleList = ({
       <div className={cn(
         "flex items-center justify-between",
         "pt-2 mt-2",
-        "border-t border-slate-100/50"
+        "border-t border-slate-200/60"
       )}>
         <div className="flex items-center gap-1.5">
           <div className="flex items-center gap-1">

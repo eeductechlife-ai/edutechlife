@@ -39,8 +39,8 @@ const SidebarProgressCircle = ({
       <div className="flex items-center gap-2 mb-3 self-start">
         <div className={cn(
           "p-1.5 rounded-md",
-          "bg-cyan-500/10",
-          "text-cyan-600"
+          "bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10",
+          "text-[#004B63]"
         )}>
           <Target className="w-4 h-4" />
         </div>
@@ -153,7 +153,7 @@ const SidebarProgressCircle = ({
         {progress >= 50 && (
           <div className={cn(
             "flex items-center gap-1.5 mt-2 pt-2",
-            "border-t border-slate-100/50"
+            "border-t border-slate-200/60"
           )}>
             <Award className="w-3.5 h-3.5 text-amber-500" />
             <span className={cn(

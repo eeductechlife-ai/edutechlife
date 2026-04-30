@@ -45,8 +45,8 @@ const SidebarCourseDetails = ({
       label: 'Duración',
       value: courseData.duration,
       icon: <Clock className="w-3.5 h-3.5" />,
-      color: 'text-cyan-600',
-      bg: 'bg-cyan-500/10',
+      color: 'text-[#004B63]',
+      bg: 'bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10',
       description: 'Tiempo total estimado'
     },
     {
@@ -54,8 +54,8 @@ const SidebarCourseDetails = ({
       label: 'Nivel',
       value: courseData.level,
       icon: <TrendingUp className="w-3.5 h-3.5" />,
-      color: 'text-amber-600',
-      bg: 'bg-amber-500/10',
+      color: 'text-[#004B63]',
+      bg: 'bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10',
       description: 'Dificultad del curso'
     },
     {
@@ -63,8 +63,8 @@ const SidebarCourseDetails = ({
       label: 'Videos',
       value: courseData.videos,
       icon: <Video className="w-3.5 h-3.5" />,
-      color: 'text-purple-600',
-      bg: 'bg-purple-500/10',
+      color: 'text-[#004B63]',
+      bg: 'bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10',
       description: 'Contenido en video'
     },
     {
@@ -72,8 +72,8 @@ const SidebarCourseDetails = ({
       label: 'Proyectos',
       value: courseData.projects,
       icon: <Briefcase className="w-3.5 h-3.5" />,
-      color: 'text-emerald-600',
-      bg: 'bg-emerald-500/10',
+      color: 'text-[#004B63]',
+      bg: 'bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10',
       description: 'Proyectos prácticos'
     },
     {
@@ -81,8 +81,8 @@ const SidebarCourseDetails = ({
       label: 'Estudiantes',
       value: courseData.students,
       icon: <Users className="w-3.5 h-3.5" />,
-      color: 'text-blue-600',
-      bg: 'bg-blue-500/10',
+      color: 'text-[#004B63]',
+      bg: 'bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10',
       description: 'Total inscritos'
     },
     {
@@ -90,8 +90,8 @@ const SidebarCourseDetails = ({
       label: 'Rating',
       value: courseData.rating,
       icon: <Star className="w-3.5 h-3.5" />,
-      color: 'text-amber-600',
-      bg: 'bg-amber-500/10',
+      color: 'text-[#004B63]',
+      bg: 'bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10',
       description: 'Puntuación promedio'
     }
   ];
@@ -103,10 +103,10 @@ const SidebarCourseDetails = ({
       className={cn(
         "flex items-center justify-between",
         "p-2.5 rounded-lg",
-        "bg-slate-50",
-        "border border-slate-100",
-        "hover:bg-slate-100",
-        "transition-all duration-150",
+        "bg-white",
+        "border border-slate-200/60 border-l-4 border-l-[#004B63]",
+        "shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50",
+        "transition-all duration-300",
         "group"
       )}
       title={item.description}
@@ -114,7 +114,7 @@ const SidebarCourseDetails = ({
       <div className="flex items-center gap-2.5">
         {/* Icono */}
         <div className={cn(
-          "p-1.5 rounded-md",
+          "p-1.5 rounded-lg",
           item.bg,
           item.color
         )}>
@@ -183,8 +183,8 @@ const SidebarCourseDetails = ({
       <div className="flex items-center gap-2">
         <div className={cn(
           "p-1.5 rounded-md",
-          "bg-cyan-500/10",
-          "text-cyan-600"
+          "bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10",
+          "text-[#004B63]"
         )}>
           <BarChart3 className="w-4 h-4" />
         </div>
@@ -194,7 +194,7 @@ const SidebarCourseDetails = ({
         )}>
           Detalles del Curso
         </h3>
-        <div className="flex-1 h-px bg-gradient-to-r from-cyan-500/20 via-cyan-400/10 to-transparent" />
+        <div className="flex-1 h-px bg-gradient-to-r from-[#004B63]/20 via-[#00BCD4]/10 to-transparent" />
       </div>
 
       {/* Grid de detalles */}
@@ -205,15 +205,17 @@ const SidebarCourseDetails = ({
       {/* Métricas adicionales */}
       <div className={cn(
         "p-3 rounded-xl",
-        "bg-gradient-to-br from-cyan-50 to-white",
-        "border border-cyan-100"
+        "bg-white",
+        "border border-slate-200/60"
       )}>
         <h4 className={cn(
           CompactTypography.SUBHEADING,
           "text-slate-800 font-semibold mb-2",
           "flex items-center gap-1.5"
         )}>
-          <TrendingUp className="w-3.5 h-3.5 text-cyan-500" />
+          <div className="p-1 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 text-[#004B63]">
+            <TrendingUp className="w-3.5 h-3.5" />
+          </div>
           Métricas Clave
         </h4>
 
@@ -222,10 +224,10 @@ const SidebarCourseDetails = ({
             <div key={metric.id} className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
                 <div className={cn(
-                  "p-1 rounded",
-                  metric.trend === 'up' ? "bg-emerald-500/10 text-emerald-600" :
-                  metric.trend === 'down' ? "bg-rose-500/10 text-rose-600" :
-                  "bg-slate-100 text-slate-600"
+                  "p-1 rounded-lg",
+                  metric.trend === 'up' ? "bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 text-[#004B63]" :
+                  metric.trend === 'down' ? "bg-gradient-to-br from-rose-400/10 to-rose-500/10 text-rose-500" :
+                  "bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 text-[#004B63]"
                 )}>
                   {metric.icon}
                 </div>
@@ -260,7 +262,7 @@ const SidebarCourseDetails = ({
         {/* Footer con insights */}
         <div className={cn(
           "mt-3 pt-2",
-          "border-t border-cyan-100"
+          "border-t border-slate-200/60"
         )}>
           <p className={cn(
             CompactTypography.MICRO,
@@ -276,11 +278,11 @@ const SidebarCourseDetails = ({
         <button className={cn(
           "flex items-center justify-center gap-1.5",
           "p-2 rounded-lg",
-          "bg-slate-50",
-          "border border-slate-100",
+          "bg-white",
+          "border border-slate-200/60 border-l-4 border-l-[#004B63]",
           "text-slate-700 text-sm font-medium",
-          "hover:bg-slate-100",
-          "transition-all duration-150"
+          "shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50",
+          "transition-all duration-300"
         )}>
           <Download className="w-3.5 h-3.5" />
           Programa
@@ -289,11 +291,11 @@ const SidebarCourseDetails = ({
         <button className={cn(
           "flex items-center justify-center gap-1.5",
           "p-2 rounded-lg",
-          "bg-gradient-to-r from-cyan-600/10 to-cyan-500/10",
-          "border border-cyan-500/20",
-          "text-cyan-600 text-sm font-medium",
-          "hover:from-cyan-600/15 hover:to-cyan-500/15",
-          "transition-all duration-150"
+          "bg-white",
+          "border border-slate-200/60 border-l-4 border-l-[#004B63]",
+          "text-[#004B63] text-sm font-medium",
+          "shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50",
+          "transition-all duration-300"
         )}>
           <Share2 className="w-3.5 h-3.5" />
           Compartir
