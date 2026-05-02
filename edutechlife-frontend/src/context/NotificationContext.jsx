@@ -24,10 +24,19 @@ export const NotificationProvider = ({ children }) => {
         .order('created_at', { ascending: false })
         .limit(50);
 
-      if (error) throw error;
+      if (error) {
+        if (error.code === '42P01') {
+          console.warn('[NOTIFICATIONS] Table does not exist, using empty state');
+          setNotifications([]);
+          return;
+        }
+        throw error;
+      }
       setNotifications(data || []);
     } catch (err) {
-      console.error('Error fetching notifications:', err.message);
+      const msg = err?.message || err?.toString() || 'Unknown error';
+      console.error('[NOTIFICATIONS] Error fetching:', msg);
+      setNotifications([]);
     } finally {
       setLoading(false);
     }
@@ -57,7 +66,11 @@ export const NotificationProvider = ({ children }) => {
           );
         }
       )
-      .subscribe();
+      .subscribe((status) => {
+        if (status === 'CHANNEL_ERROR') {
+          console.warn('[NOTIFICATIONS] Realtime subscription error');
+        }
+      });
 
     return () => {
       supabase.removeChannel(channel);
@@ -72,7 +85,10 @@ export const NotificationProvider = ({ children }) => {
         .eq('id', id)
         .eq('user_id', user.id);
 
-      if (error) throw error;
+      if (error) {
+        if (error.code !== '42P01') throw error;
+        return;
+      }
 
       setNotifications((prev) =>
         prev.map((n) =>
@@ -80,7 +96,8 @@ export const NotificationProvider = ({ children }) => {
         )
       );
     } catch (err) {
-      console.error('Error marking notification as read:', err.message);
+      const msg = err?.message || err?.toString() || 'Unknown error';
+      console.error('[NOTIFICATIONS] Error marking as read:', msg);
     }
   };
 
@@ -92,13 +109,17 @@ export const NotificationProvider = ({ children }) => {
         .eq('user_id', user.id)
         .eq('is_read', false);
 
-      if (error) throw error;
+      if (error) {
+        if (error.code !== '42P01') throw error;
+        return;
+      }
 
       setNotifications((prev) =>
         prev.map((n) => ({ ...n, is_read: true, read_at: new Date().toISOString() }))
       );
     } catch (err) {
-      console.error('Error marking all as read:', err.message);
+      const msg = err?.message || err?.toString() || 'Unknown error';
+      console.error('[NOTIFICATIONS] Error marking all as read:', msg);
     }
   };
 
@@ -110,11 +131,15 @@ export const NotificationProvider = ({ children }) => {
         .eq('id', id)
         .eq('user_id', user.id);
 
-      if (error) throw error;
+      if (error) {
+        if (error.code !== '42P01') throw error;
+        return;
+      }
 
       setNotifications((prev) => prev.filter((n) => n.id !== id));
     } catch (err) {
-      console.error('Error dismissing notification:', err.message);
+      const msg = err?.message || err?.toString() || 'Unknown error';
+      console.error('[NOTIFICATIONS] Error dismissing:', msg);
     }
   };
 
@@ -125,11 +150,15 @@ export const NotificationProvider = ({ children }) => {
         .delete()
         .eq('user_id', user.id);
 
-      if (error) throw error;
+      if (error) {
+        if (error.code !== '42P01') throw error;
+        return;
+      }
 
       setNotifications([]);
     } catch (err) {
-      console.error('Error clearing notifications:', err.message);
+      const msg = err?.message || err?.toString() || 'Unknown error';
+      console.error('[NOTIFICATIONS] Error clearing:', msg);
     }
   };
 
@@ -149,10 +178,17 @@ export const NotificationProvider = ({ children }) => {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        if (error.code === '42P01') {
+          console.warn('[NOTIFICATIONS] Table does not exist, cannot create notification');
+          return null;
+        }
+        throw error;
+      }
       return data;
     } catch (err) {
-      console.error('Error creating notification:', err.message);
+      const msg = err?.message || err?.toString() || 'Unknown error';
+      console.error('[NOTIFICATIONS] Error creating:', msg);
       return null;
     }
   };

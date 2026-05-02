@@ -28,7 +28,7 @@ const IALabDashboard = ({ onModuleSelect, modules = [] }) => {
   const [streakDays, setStreakDays] = useState(0);
   const [promptsGenerated, setPromptsGenerated] = useState(0);
   
-  const { user, loading: authLoading } = useAuth();
+  const { user, isLoaded } = useAuth();
   
   // Cargar progreso desde Supabase
   const loadProgressFromSupabase = useCallback(async () => {
@@ -97,17 +97,16 @@ const IALabDashboard = ({ onModuleSelect, modules = [] }) => {
 
   // Cargar datos cuando cambia el usuario
   useEffect(() => {
-    if (!authLoading) {
-      if (!user) {
-        // Usuario no logueado - mostrar modal de login
-        setShowLoginModal(true);
-        setIsLoadingProgress(false);
-      } else {
-        setShowLoginModal(false);
-        loadProgressFromSupabase();
-      }
+    if (!isLoaded) return;
+    
+    if (!user) {
+      setShowLoginModal(true);
+      setIsLoadingProgress(false);
+    } else {
+      setShowLoginModal(false);
+      loadProgressFromSupabase();
     }
-  }, [user, authLoading, loadProgressFromSupabase]);
+  }, [user, isLoaded, loadProgressFromSupabase]);
 
   // Efecto para mostrar bienvenida
   useEffect(() => {

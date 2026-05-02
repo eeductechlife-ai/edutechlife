@@ -1,18 +1,18 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useIALabContext } from '../../context/IALabContext';
+import { useSupabase } from '../useSupabase';
 import { 
-  getAllProgress, 
-  saveProgress, 
-  PROGRESS_STATUS, 
-  saveLastLesson, 
-  getUserLastProgress, 
-  getProgress 
+  setSupabaseClient,
+  createProgressService,
+  PROGRESS_STATUS,
+  countModuleResources
 } from '../../lib/progress';
 
 /**
  * HOOK: useIALabProgress
  * 
  * Responsabilidad: Gestión del progreso del usuario en Supabase
+ * - Inyecta cliente Supabase con JWT de Clerk
  * - Cargar progreso al iniciar
  * - Guardar progreso al completar módulos/lecciones
  * - Sincronizar con estados del contexto
@@ -22,6 +22,7 @@ import {
 export const useIALabProgress = () => {
   const {
     user,
+    isLoaded,
     activeMod,
     completedModules,
     setCompletedModules,
@@ -37,18 +38,93 @@ export const useIALabProgress = () => {
     challengeScore,
     quizPassed,
     quizScore,
-    modules
+    modules,
+    updateModuleActivity
   } = useIALabContext();
+  
+  // Obtener cliente Supabase con JWT de Clerk
+  const { supabase: supabaseClient, isLoading: supabaseLoading } = useSupabase();
+  
+  // Crear servicio de progreso con el cliente inyectado
+  const progressService = useMemo(() => {
+    if (!supabaseClient) return null;
+    // Inyectar cliente para compatibilidad backward
+    setSupabaseClient(supabaseClient);
+    return createProgressService(supabaseClient);
+  }, [supabaseClient]);
   
   const [progressError, setProgressError] = useState(null);
   const hasLoadedRef = useRef(false);
+  
+  // ==================== PERSISTENCIA LOCAL ====================
+  
+  const CACHE_KEY = 'ialab_progress_cache';
+  const CACHE_DURATION = 3600000; // 1 hora
+  
+  const saveToCache = useCallback((data) => {
+    try {
+      const cacheData = {
+        ...data,
+        timestamp: Date.now(),
+        userId: user?.id
+      };
+      localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
+      console.log('[PROGRESS] Estado guardado en caché local');
+    } catch (e) {
+      console.warn('[PROGRESS] Error guardando caché:', e);
+    }
+  }, [user?.id]);
+  
+  const loadFromCache = useCallback(() => {
+    try {
+      const cached = localStorage.getItem(CACHE_KEY);
+      if (!cached) return null;
+      
+      const data = JSON.parse(cached);
+      
+      // Verificar que es del mismo usuario y no expiró
+      if (data.userId !== user?.id) return null;
+      if (Date.now() - data.timestamp > CACHE_DURATION) {
+        localStorage.removeItem(CACHE_KEY);
+        return null;
+      }
+      
+      console.log('[PROGRESS] Cargado desde caché local');
+      return data;
+    } catch (e) {
+      console.warn('[PROGRESS] Error cargando caché:', e);
+      return null;
+    }
+  }, [user?.id]);
+  
+  // Restaurar progreso desde caché inmediatamente (UX instantánea)
+  const restoreFromCache = useCallback(() => {
+    const cached = loadFromCache();
+    if (cached) {
+      if (typeof cached.courseProgress === 'number') setCourseProgress(cached.courseProgress);
+      if (Array.isArray(cached.completedModules)) setCompletedModules(cached.completedModules);
+      if (Array.isArray(cached.visitedModules)) {
+        setVisitedModules(prev => {
+          const merged = [...new Set([...prev, ...cached.visitedModules])];
+          return merged.sort((a, b) => a - b);
+        });
+      }
+      return true;
+    }
+    return false;
+  }, [loadFromCache, setCourseProgress, setCompletedModules, setVisitedModules]);
   
   // ==================== CARGAR PROGRESO INICIAL ====================
   
   const loadUserProgress = useCallback(async () => {
     if (!user || !user.id) {
-      console.log('Usuario no autenticado, saltando carga de progreso');
+      console.log('[PROGRESS] Usuario no autenticado, saltando carga de progreso');
       setIsLoadingProgress(false);
+      return;
+    }
+    
+    if (!progressService) {
+      console.log('[PROGRESS] Servicio de progreso no disponible, esperando cliente Supabase...');
       return;
     }
     
@@ -56,61 +132,93 @@ export const useIALabProgress = () => {
       setIsLoadingProgress(true);
       setProgressError(null);
       
-      console.log(`Cargando progreso para usuario: ${user.id}`);
+      // Paso 1: Restaurar caché inmediatamente para UX instantánea
+      const hasCache = restoreFromCache();
+      if (hasCache) {
+        console.log('[PROGRESS] Caché restaurado, cargando DB en segundo plano...');
+      }
       
-      // 1. Obtener todo el progreso del usuario
-      const allProgress = await getAllProgress(user.id);
+      console.log(`[PROGRESS] Cargando progreso para usuario: ${user.id.substring(0, 12)}...`);
+      
+      // 2. Obtener todo el progreso del usuario
+      const allProgress = await progressService.getAllProgress(user.id);
       
       if (allProgress && allProgress.length > 0) {
-        // 2. Extraer módulos completados
-        const completed = allProgress
-          .filter(p => p.status === PROGRESS_STATUS.COMPLETED)
+        // 3. Filtrar filas resumen
+        const summaryRows = allProgress.filter(p => !p.activity_type && !p.resource_id);
+        
+        // 4. Extraer módulos completados
+        const completed = summaryRows
+          .filter(p => p.is_completed || (p.module_score && p.module_score >= 80))
           .map(p => p.module_id);
         
-        // 3. Extraer módulos visitados (cualquier estado)
-        const visited = allProgress.map(p => p.module_id);
+        // 5. Extraer módulos visitados
+        const visited = [...new Set(allProgress.map(p => p.module_id))];
         
-        // 4. Actualizar estados
+        // 6. Actualizar estados
         setCompletedModules(completed);
         setVisitedModules(prev => {
           const uniqueVisited = [...new Set([...prev, ...visited])];
           return uniqueVisited.sort((a, b) => a - b);
         });
         
-        // 5. Calcular progreso general del curso
-        const progressPercentage = Math.min((completed.length / 5) * 100, 100);
-        setCourseProgress(progressPercentage);
+        // 7. Calcular progreso global real
+        const globalProgress = await progressService.calculateGlobalProgressFromDB(user.id);
+        setCourseProgress(globalProgress || 0);
         
-        console.log(`Progreso cargado: ${completed.length}/5 módulos completados (${progressPercentage}%)`);
+        console.log(`[PROGRESS] Progreso cargado: ${completed.length}/5 módulos completados, progreso global: ${globalProgress}%`);
         
-        // 6. Obtener última lección vista si existe
-        const lastProgress = await getUserLastProgress(user.id);
+        // 8. Cargar moduleProgress desde la DB para cada módulo
+        for (let modId = 1; modId <= 5; modId++) {
+          try {
+            const breakdown = await progressService.getModuleBreakdown(modId, user.id);
+            if (breakdown) {
+              if (breakdown.exam.passed) updateModuleActivity(modId, 'exam', true);
+              if (breakdown.challenge.score > 0) updateModuleActivity(modId, 'challenge', true);
+              if (breakdown.resources.earned > 0) updateModuleActivity(modId, 'resourcesCompleted', true);
+              if (breakdown.community.commented) updateModuleActivity(modId, 'community', true);
+            }
+          } catch (err) {
+            console.error(`[PROGRESS] Error cargando módulo ${modId}:`, err);
+          }
+        }
+        
+        // 9. Guardar en caché local
+        saveToCache({
+          courseProgress: globalProgress || 0,
+          completedModules: completed,
+          visitedModules: visited
+        });
+        
+        // 10. Obtener última lección vista
+        const lastProgress = await progressService.getUserLastProgress(user.id);
         if (lastProgress && lastProgress.module_id === activeMod) {
-          const lastLessonData = lastProgress.progress_data?.last_lesson_index;
-          if (lastLessonData !== undefined && lastLessonData >= 0) {
-            setCurrentLessonIndex(Math.min(lastLessonData, 5)); // Máximo 6 lecciones (0-5)
+          const lastLessonData = lastProgress.last_lesson_id || lastProgress.current_lesson;
+          if (lastLessonData && lastLessonData >= 0) {
+            setCurrentLessonIndex(Math.min(lastLessonData, 5));
           }
         }
       } else {
-        console.log('Usuario sin progreso previo, iniciando desde cero');
-        // Usuario nuevo, mantener valores por defecto
+        console.log('[PROGRESS] Usuario sin progreso previo, iniciando desde cero');
         setCompletedModules([]);
-        setVisitedModules([1]); // Módulo 1 siempre visitado
-        setCourseProgress(20); // 20% por defecto (módulo 1 iniciado)
+        setVisitedModules([1]);
+        setCourseProgress(0);
       }
       
     } catch (error) {
-      console.error('Error cargando progreso:', error);
+      console.error('[PROGRESS] Error cargando progreso:', error);
       setProgressError(error.message || 'Error al cargar progreso');
       
-      // Fallback: mantener valores por defecto
-      setCompletedModules([]);
-      setVisitedModules([1]);
-      setCourseProgress(20);
+      // Fallback: mantener valores del caché o valores por defecto
+      if (!loadFromCache()) {
+        setCompletedModules([]);
+        setVisitedModules([1]);
+        setCourseProgress(0);
+      }
     } finally {
       setIsLoadingProgress(false);
     }
-  }, [user, activeMod, setCompletedModules, setVisitedModules, setCourseProgress, setCurrentLessonIndex, setIsLoadingProgress]);
+  }, [user, activeMod, setCompletedModules, setVisitedModules, setCourseProgress, setCurrentLessonIndex, setIsLoadingProgress, updateModuleActivity, restoreFromCache, saveToCache, loadFromCache, progressService]);
   
   // ==================== GUARDAR PROGRESO ====================
   
@@ -120,10 +228,14 @@ export const useIALabProgress = () => {
       return { success: false, error: 'Usuario no autenticado' };
     }
     
+    if (!progressService) {
+      return { success: false, error: 'Servicio de progreso no disponible' };
+    }
+    
     try {
       console.log(`Guardando progreso: módulo ${moduleId}, estado: ${status}`);
       
-      const result = await saveProgress(
+      const result = await progressService.saveProgress(
         moduleId,
         status,
         additionalData,
@@ -133,9 +245,7 @@ export const useIALabProgress = () => {
       if (result.success) {
         console.log(`Progreso guardado exitosamente para módulo ${moduleId}`);
         
-        // Actualizar estados locales según el tipo de progreso
         if (status === PROGRESS_STATUS.COMPLETED) {
-          // Agregar a módulos completados si no está ya
           setCompletedModules(prev => {
             if (!prev.includes(moduleId)) {
               return [...prev, moduleId].sort((a, b) => a - b);
@@ -143,7 +253,6 @@ export const useIALabProgress = () => {
             return prev;
           });
           
-          // Actualizar progreso general del curso
           const newCompleted = [...completedModules, moduleId].filter((v, i, a) => a.indexOf(v) === i);
           const progressPercentage = Math.min((newCompleted.length / 5) * 100, 100);
           setCourseProgress(progressPercentage);
@@ -151,7 +260,6 @@ export const useIALabProgress = () => {
           console.log(`Módulo ${moduleId} marcado como completado. Progreso total: ${progressPercentage}%`);
         }
         
-        // Siempre agregar a módulos visitados
         setVisitedModules(prev => {
           if (!prev.includes(moduleId)) {
             return [...prev, moduleId].sort((a, b) => a - b);
@@ -169,7 +277,7 @@ export const useIALabProgress = () => {
       console.error('Excepción guardando progreso:', error);
       return { success: false, error: error.message || 'Error desconocido' };
     }
-  }, [user, completedModules, setCompletedModules, setVisitedModules, setCourseProgress]);
+  }, [user, completedModules, setCompletedModules, setVisitedModules, setCourseProgress, progressService]);
   
   // ==================== GUARDAR ÚLTIMA LECCIÓN ====================
   
@@ -179,12 +287,15 @@ export const useIALabProgress = () => {
       return { success: false, error: 'Usuario no autenticado' };
     }
     
+    if (!progressService) {
+      return { success: false, error: 'Servicio de progreso no disponible' };
+    }
+    
     try {
-      const result = await saveLastLesson(
-        user.id,
+      const result = await progressService.saveLastLesson(
         activeMod,
         currentLessonIndex,
-        { timestamp: new Date().toISOString() }
+        user.id
       );
       
       if (result.success) {
@@ -199,7 +310,7 @@ export const useIALabProgress = () => {
       console.error('Excepción guardando lección actual:', error);
       return { success: false, error: error.message || 'Error desconocido' };
     }
-  }, [user, activeMod, currentLessonIndex]);
+  }, [user, activeMod, currentLessonIndex, progressService]);
   
   // ==================== COMPLETAR MÓDULO ====================
   
@@ -246,22 +357,144 @@ export const useIALabProgress = () => {
     }
   }, [user, activeMod, saveModuleProgress, isChallengeCompleted, challengeScore, quizPassed, quizScore]);
   
+  // ==================== NUEVAS FUNCIONES DE TRACKING ====================
+  
+  const trackResourceViewed = useCallback(async (moduleId, resourceId, resourceType) => {
+    if (!user?.id) return { success: false, error: 'Usuario no autenticado' };
+    if (!progressService) return { success: false, error: 'Servicio no disponible' };
+    try {
+      const total = countModuleResources(moduleId);
+      const result = await progressService.saveResourceViewed(moduleId, resourceId, resourceType, total, user.id);
+      if (result.success) {
+        if (result.viewedCount >= Math.ceil(total * 0.8)) {
+          updateModuleActivity(moduleId, 'resourcesCompleted', true);
+        }
+        const newProgress = await progressService.calculateGlobalProgressFromDB(user.id);
+        setCourseProgress(newProgress);
+      }
+      return result;
+    } catch (error) {
+      console.error('Error tracking resource:', error);
+      return { success: false, error: error.message };
+    }
+  }, [user, setCourseProgress, updateModuleActivity, progressService]);
+  
+  const trackExamResult = useCallback(async (moduleId, score, passed) => {
+    if (!user?.id) return { success: false, error: 'Usuario no autenticado' };
+    if (!progressService) return { success: false, error: 'Servicio no disponible' };
+    try {
+      const result = await progressService.saveExamProgress(moduleId, score, passed, user.id);
+      if (result.success) {
+        updateModuleActivity(moduleId, 'exam', passed);
+        const newProgress = await progressService.calculateGlobalProgressFromDB(user.id);
+        setCourseProgress(newProgress);
+      }
+      return result;
+    } catch (error) {
+      console.error('Error tracking exam:', error);
+      return { success: false, error: error.message };
+    }
+  }, [user, setCourseProgress, updateModuleActivity, progressService]);
+  
+  const trackChallengeResult = useCallback(async (moduleId, score) => {
+    if (!user?.id) return { success: false, error: 'Usuario no autenticado' };
+    if (!progressService) return { success: false, error: 'Servicio no disponible' };
+    try {
+      const result = await progressService.saveChallengeProgress(moduleId, score, user.id);
+      if (result.success) {
+        updateModuleActivity(moduleId, 'challenge', true);
+        const newProgress = await progressService.calculateGlobalProgressFromDB(user.id);
+        setCourseProgress(newProgress);
+      }
+      return result;
+    } catch (error) {
+      console.error('Error tracking challenge:', error);
+      return { success: false, error: error.message };
+    }
+  }, [user, setCourseProgress, updateModuleActivity, progressService]);
+  
+  const trackCommunityComment = useCallback(async (moduleId) => {
+    if (!user?.id) return { success: false, error: 'Usuario no autenticado' };
+    if (!progressService) return { success: false, error: 'Servicio no disponible' };
+    try {
+      const result = await progressService.saveCommunityProgress(moduleId, user.id);
+      if (result.success) {
+        updateModuleActivity(moduleId, 'community', true);
+        const newProgress = await progressService.calculateGlobalProgressFromDB(user.id);
+        setCourseProgress(newProgress);
+      }
+      return result;
+    } catch (error) {
+      console.error('Error tracking community:', error);
+      return { success: false, error: error.message };
+    }
+  }, [user, setCourseProgress, updateModuleActivity, progressService]);
+  
+  const loadModuleBreakdown = useCallback(async (moduleId) => {
+    if (!user?.id) return null;
+    if (!progressService) return null;
+    try {
+      return await progressService.getModuleBreakdown(moduleId, user.id);
+    } catch (error) {
+      console.error('Error loading module breakdown:', error);
+      return null;
+    }
+  }, [user, progressService]);
+  
   // ==================== EFFECTS ====================
   
-  // Cargar progreso al montar o cuando cambia el usuario
+  // Cargar progreso al montar o cuando cambia el usuario o el cliente Supabase
   useEffect(() => {
-    // GUARDIA CRÍTICA: Solo ejecutar si hay usuario válido
+    if (!isLoaded) {
+      console.log('[PROGRESS] Clerk no cargado, esperando');
+      return;
+    }
+    
     if (!user?.id) {
+      console.log('[PROGRESS] Usuario no autenticado, saltando carga de progreso');
       setIsLoadingProgress(false);
       return;
     }
     
-    // Evitar llamadas duplicadas
-    if (hasLoadedRef.current) return;
+    if (!progressService) {
+      console.log('[PROGRESS] Cliente Supabase no disponible, esperando...');
+      return;
+    }
     
     loadUserProgress();
-    hasLoadedRef.current = true;
-  }, [user?.id]); // Dependencia específica, no la función completa
+  }, [user?.id, isLoaded, progressService]);
+  
+  // Guardar en caché al salir del AI Lab (cleanup)
+  useEffect(() => {
+    return () => {
+      saveToCache({
+        courseProgress,
+        completedModules,
+        visitedModules
+      });
+    };
+  }, [courseProgress, completedModules, visitedModules, saveToCache]);
+  
+  // Guardar al cerrar pestaña/navegador
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      try {
+        const cacheData = {
+          courseProgress,
+          completedModules,
+          visitedModules,
+          timestamp: Date.now(),
+          userId: user?.id
+        };
+        localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
+      } catch (e) {
+        // Silenciar errores en beforeunload
+      }
+    };
+    
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [courseProgress, completedModules, visitedModules, user?.id]);
   
   // Guardar lección actual cuando cambia (con debounce)
   useEffect(() => {
@@ -279,26 +512,33 @@ export const useIALabProgress = () => {
   
   return {
     // Estados
-    isLoadingProgress,
+    isLoadingProgress: isLoadingProgress || supabaseLoading,
     progressError,
     completedModules,
     visitedModules,
     courseProgress,
     
-    // Funciones
+    // Funciones existentes
     loadUserProgress,
     saveModuleProgress,
     saveCurrentLesson,
     completeCurrentModule,
     
+    // Nuevas funciones de tracking
+    trackResourceViewed,
+    trackExamResult,
+    trackChallengeResult,
+    trackCommunityComment,
+    loadModuleBreakdown,
+    
     // Constantes
     PROGRESS_STATUS,
     
-    // Estados del desafío (para componentes que los necesiten)
+    // Estados del desafío
     isChallengeCompleted,
     challengeScore,
     quizPassed,
-    quizScore
+    quizScore,
   };
 };
 

@@ -139,7 +139,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
             >
                 <div className="flex-1">
                     <h2 className="text-lg md:text-xl font-bold text-[#004B63] group-hover:text-[#00BCD4] transition-colors duration-300">
-                        Herramientas para la creacion de Promts
+                        Herramientas para la Creación de Prompts
                     </h2>
                     <p className="text-slate-600 text-sm md:text-base leading-relaxed mt-1">
                         Escribe una idea básica y la IA la transformará en una instrucción maestra
@@ -148,7 +148,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                         <div className="mt-4">
                             <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-[#004B63] to-[#00BCD4] rounded-xl shadow-sm hover:from-[#0A3550] hover:to-[#0097A7] hover:shadow group-hover:scale-105 transition-all duration-300 cursor-pointer">
                                 <Icon name="fa-hand-pointer" className="w-4 h-4 text-white" />
-                                <span className="text-sm font-bold text-white tracking-wide">Abrir Herramientas para la creacion de Promts</span>
+                                <span className="text-sm font-bold text-white tracking-wide">Abrir Herramientas para la Creación de Prompts</span>
                                 <Icon name="fa-chevron-right" className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform duration-300" />
                             </div>
                         </div>

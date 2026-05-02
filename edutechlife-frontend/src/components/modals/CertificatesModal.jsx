@@ -38,8 +38,8 @@ const CertificatesModal = ({ isOpen, onClose }) => {
             .eq('user_id', user.id)
             .maybeSingle(),
           supabase
-            .from('course_progress')
-            .select('module_id, lesson_id, is_completed, score')
+            .from('user_progress')
+            .select('module_id, activity_type, is_completed, score')
             .eq('user_id', user.id),
         ]);
 

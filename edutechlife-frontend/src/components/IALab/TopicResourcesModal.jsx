@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { cn } from '../forum/forumDesignSystem';
+import { useIALabContext } from '../../context/IALabContext';
+import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
 import ResourceSelector from './ResourceSelector';
 import ResourceViewerModal from './ResourceViewerModal';
 import QueEsPrompt_OVA_Original from './QueEsPrompt_OVA_Original';
@@ -13,6 +15,9 @@ const TopicResourcesModal = ({
   topicData = null,
   className = ''
 }) => {
+  const { activeMod, markResourceAsViewed: markResourceInContext } = useIALabContext();
+  const { trackResourceViewed } = useIALabProgress();
+  
   const [activeResourceIndex, setActiveResourceIndex] = useState(0);
   const [viewerModalOpen, setViewerModalOpen] = useState(false);
   const [selectedResource, setSelectedResource] = useState(null);
@@ -72,8 +77,14 @@ const TopicResourcesModal = ({
     setImmersivePdfResource(null);
   };
 
-  const handleMarkAsViewed = (resourceId) => {
+  const handleMarkAsViewed = async (resourceId) => {
     console.log(`Recurso ${resourceId} marcado como visto`);
+    if (resourceId && activeMod) {
+      markResourceInContext(activeMod, resourceId);
+      const resource = resources.find(r => r.id === resourceId);
+      const resourceType = resource?.type || 'document';
+      await trackResourceViewed(activeMod, resourceId, resourceType);
+    }
   };
 
   const handlePreviousResource = () => {

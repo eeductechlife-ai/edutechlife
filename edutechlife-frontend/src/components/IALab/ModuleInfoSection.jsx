@@ -23,20 +23,20 @@ const ModuleInfoSection = ({ className = '', ...rest }) => {
             whileHover={{ scale: 1.01, y: -2, boxShadow: "0px 8px 25px rgba(17,17,26,0.1)" }}
             transition={{ duration: 0.2 }}
             className={cn(
-                "relative z-10 bg-white rounded-2xl border border-slate-100 shadow-[0px_4px_16px_rgba(17,17,26,0.05)] overflow-hidden",
+                "relative z-10 bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden",
                 className
             )}
             {...rest}
         >
             {/* Elementos decorativos de fondo */}
-            <div className="absolute -top-6 -right-6 w-24 h-24 bg-gradient-to-br from-[#004B63]/5 to-[#00BCD4]/3 rounded-full blur-2xl pointer-events-none"></div>
-            <div className="absolute -bottom-4 -left-4 w-24 h-24 bg-gradient-to-tr from-[#004B63]/3 to-[#00BCD4]/2 rounded-full blur-2xl pointer-events-none"></div>
+            <div className="absolute -top-6 -right-6 w-24 h-24 bg-gradient-to-br from-[#004B63]/6 to-[#00BCD4]/4 rounded-full blur-2xl pointer-events-none"></div>
+            <div className="absolute -bottom-4 -left-4 w-24 h-24 bg-gradient-to-tr from-[#004B63]/4 to-[#00BCD4]/4 rounded-full blur-2xl pointer-events-none"></div>
 
             {/* Elemento decorativo de borde superior */}
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#00BCD4] rounded-t-2xl" />
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#00BCD4] rounded-t-2xl" />
 
             {/* Contenido principal */}
-            <div className="p-4 md:p-6">
+            <div className="p-5 md:p-8">
                 {/* Header con objetivo */}
                 <div className="flex items-start gap-3 mb-4">
                     <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#004B63] to-[#0A3550] shadow-md shadow-[#004B63]/15 flex items-center justify-center flex-shrink-0">

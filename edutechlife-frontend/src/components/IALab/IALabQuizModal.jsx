@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabQuiz } from '../../hooks/IALab/useIALabQuiz';
+import { useIALabContext } from '../../context/IALabContext';
+import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const IALabQuizModal = ({ isOpen, onClose }) => {
@@ -33,6 +35,9 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
     setCurrentQuestion,
     formatTime,
   } = useIALabQuiz();
+
+  const { activeMod } = useIALabContext();
+  const { trackExamResult } = useIALabProgress();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -127,8 +132,12 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
   const handleSubmit = async () => {
     if (isSubmitting) return;
     setIsSubmitting(true);
-    await submitQuiz();
+    const submitResult = await submitQuiz();
     setIsSubmitting(false);
+    
+    if (submitResult?.success && submitResult?.result && activeMod) {
+      await trackExamResult(activeMod, submitResult.result.score, submitResult.result.passed);
+    }
   };
 
   const handleClose = () => {

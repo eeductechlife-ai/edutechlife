@@ -30,8 +30,17 @@ CREATE POLICY "Allow anon to read forum_votes" ON forum_votes
 FOR SELECT USING (true);
 
 -- Permite a usuarios anónimos leer user_progress
+DROP POLICY IF EXISTS "user_progress_insert_policy" ON user_progress;
+DROP POLICY IF EXISTS "user_progress_update_policy" ON user_progress;
+DROP POLICY IF EXISTS "user_progress_delete_policy" ON user_progress;
 CREATE POLICY "Allow anon to read user_progress" ON user_progress
 FOR SELECT USING (true);
+CREATE POLICY "user_progress_insert_policy" ON user_progress
+FOR INSERT WITH CHECK (true);
+CREATE POLICY "user_progress_update_policy" ON user_progress
+FOR UPDATE USING (true);
+CREATE POLICY "user_progress_delete_policy" ON user_progress
+FOR DELETE USING (true);
 
 -- Permite a usuarios anónimos crear posts (solo desarrollo)
 CREATE POLICY "Allow anon to insert forum_posts" ON forum_posts

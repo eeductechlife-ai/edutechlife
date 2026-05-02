@@ -203,7 +203,7 @@ const CustomCursor = () => {
 const App = () => {
     const location = useLocation();
     const isIALabRoute = location.pathname.includes('/ialab');
-    const { user, loading: authLoading } = useAuth();
+    const { user, isLoaded } = useAuth();
     const [isLoading, setIsLoading] = useState(true);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [botOpen, setBotOpen] = useState(false);

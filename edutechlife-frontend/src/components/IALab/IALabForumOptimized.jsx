@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useAuth } from '../../context/AuthContext';
+import { useIALabContext } from '../../context/IALabContext';
+import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
 import useIALabForum from '../../hooks/IALab/useIALabForum';
 import { cn } from '../forum/forumDesignSystem';
 
@@ -12,6 +14,8 @@ const IALabForumOptimized = ({
     ...rest
 }) => {
     const { user } = useAuth();
+    const { activeMod } = useIALabContext();
+    const { trackCommunityComment } = useIALabProgress();
     const {
         forumPosts,
         isLoading,
@@ -24,6 +28,7 @@ const IALabForumOptimized = ({
         formatLikeCount
     } = useIALabForum();
 
+    const [hasTrackedCommunity, setHasTrackedCommunity] = useState(false);
     const [visiblePosts, setVisiblePosts] = useState([]);
     const [showAll, setShowAll] = useState(false);
     const [newMessage, setNewMessage] = useState('');
@@ -60,6 +65,12 @@ const IALabForumOptimized = ({
                 content: newMessage.trim(),
                 tags: ['Chat']
             });
+            
+            if (activeMod && !hasTrackedCommunity) {
+                await trackCommunityComment(activeMod);
+                setHasTrackedCommunity(true);
+            }
+            
             setNewMessage('');
             setShowLiveIndicator(true);
             setTimeout(() => setShowLiveIndicator(false), 3000);

@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { useAuth } from './AuthContext';
+import { usePersistentProgress } from '../hooks/usePersistentProgress';
 
 /**
  * CONTEXTO GLOBAL IALab - Estado compartido entre componentes
@@ -25,7 +26,25 @@ export const useIALabContext = () => {
 };
 
 export const IALabProvider = ({ children, onBack }) => {
-  const { user, isLoading: authLoading, signOut } = useAuth();
+  const { user, isLoaded: authLoaded, signOut } = useAuth();
+  const {
+    courseProgress: persistentCourseProgress,
+    completedModules: persistentCompletedModules,
+    completedVideos,
+    completedExams,
+    completedInfographics,
+    completedActivities,
+    isLoading: progressLoading,
+    syncStatus,
+    isUsingJWT,
+    userId: progressUserId,
+    markVideoComplete: syncMarkVideoComplete,
+    markModuleComplete: syncMarkModuleComplete,
+    markExamComplete: syncMarkExamComplete,
+    markInfographicComplete: syncMarkInfographicComplete,
+    markActivityComplete: syncMarkActivityComplete,
+    refreshProgress
+  } = usePersistentProgress();
   
   // ==================== ESTADOS PRINCIPALES ====================
   
@@ -33,9 +52,20 @@ export const IALabProvider = ({ children, onBack }) => {
   const [activeMod, setActiveMod] = useState(1);
   const [activeTab, setActiveTab] = useState('lab');
   const [completedModules, setCompletedModules] = useState([]);
-  const [courseProgress, setCourseProgress] = useState(20);
+  const [courseProgress, setCourseProgress] = useState(0);
   const [visitedModules, setVisitedModules] = useState([1]);
   const [isLoadingProgress, setIsLoadingProgress] = useState(true);
+
+  // Sincronizar progreso persistente con el contexto local
+  useEffect(() => {
+    if (persistentCourseProgress > 0) {
+      setCourseProgress(persistentCourseProgress);
+    }
+    if (persistentCompletedModules.length > 0) {
+      setCompletedModules(persistentCompletedModules);
+    }
+    setIsLoadingProgress(progressLoading);
+  }, [persistentCourseProgress, persistentCompletedModules, progressLoading]);
 
   // Sistema de notas y progreso gamificado por módulo
   const INITIAL_MODULE_PROGRESS = {
@@ -248,8 +278,8 @@ export const IALabProvider = ({ children, onBack }) => {
   }, [activeMod]);
 
   // ==================== SISTEMA DE NOTAS GAMIFICADO ====================
-  
-  const WEIGHTS = { exam: 40, challenge: 30, resources: 20, community: 10 };
+  // Pesos: Examen 35% + Desafío 30% + Recursos 30% + Comunidad 5% = 100%
+  const WEIGHTS = { exam: 35, challenge: 30, resources: 30, community: 5 };
 
   // Calcular score de un módulo basado en actividades completadas
   const calculateModuleScore = useCallback((moduleId) => {
@@ -265,12 +295,23 @@ export const IALabProvider = ({ children, onBack }) => {
 
   // Calcular progreso global (5 módulos x 20% cada uno)
   const calculateGlobalProgress = useCallback(() => {
-    let passedModules = 0;
+    let total = 0;
     for (let i = 1; i <= 5; i++) {
-      if (calculateModuleScore(i) >= 80) passedModules++;
+      const score = calculateModuleScore(i);
+      total += (score / 100) * 20;
     }
-    return passedModules * 20;
+    return Math.min(100, Math.round(total));
   }, [calculateModuleScore]);
+
+  // SYNC: Cuando moduleProgress cambia, actualizar courseProgress localmente
+  // Esto da feedback inmediato al usuario mientras DB sync en segundo plano
+  useEffect(() => {
+    const newProgress = calculateGlobalProgress();
+    setCourseProgress(prev => {
+      // Solo actualizar si es mayor (no retroceder)
+      return Math.max(prev, newProgress);
+    });
+  }, [moduleProgress, calculateGlobalProgress]);
 
   // Actualizar una actividad del módulo y recalcular score
   const updateModuleActivity = useCallback((moduleId, activity, value) => {
@@ -284,6 +325,64 @@ export const IALabProvider = ({ children, onBack }) => {
       updated.currentScore = score;
       
       // Auto-unlock siguiente módulo si este se aprueba (>=80%)
+      if (moduleId < 5 && score >= 80) {
+        return {
+          ...prev,
+          [moduleId]: updated,
+          [moduleId + 1]: { ...prev[moduleId + 1], isUnlocked: true }
+        };
+      }
+      return { ...prev, [moduleId]: updated };
+    });
+  }, []);
+  
+  // Marcar recurso como visto (tracking granular)
+  const markResourceAsViewed = useCallback((moduleId, resourceId) => {
+    setModuleProgress(prev => {
+      const mod = prev[moduleId];
+      if (!mod) return prev;
+      
+      const viewedResources = mod.viewedResources || [];
+      if (viewedResources.includes(resourceId)) return prev;
+      
+      const newViewed = [...viewedResources, resourceId];
+      const totalResources = 8;
+      const resourcesPct = Math.round((newViewed.length / totalResources) * 100);
+      const resourcesCompleted = resourcesPct >= 80;
+      
+      const updated = { ...mod, viewedResources: newViewed, resourcesCompleted, resourcesPct };
+      let score = 0;
+      if (updated.exam) score += WEIGHTS.exam;
+      if (updated.challenge) score += WEIGHTS.challenge;
+      if (updated.resourcesCompleted) score += WEIGHTS.resources;
+      if (updated.community) score += WEIGHTS.community;
+      updated.currentScore = score;
+      
+      if (moduleId < 5 && score >= 80) {
+        return {
+          ...prev,
+          [moduleId]: updated,
+          [moduleId + 1]: { ...prev[moduleId + 1], isUnlocked: true }
+        };
+      }
+      return { ...prev, [moduleId]: updated };
+    });
+  }, []);
+  
+  // Marcar comentario en comunidad
+  const markCommunityComment = useCallback((moduleId) => {
+    setModuleProgress(prev => {
+      const mod = prev[moduleId];
+      if (!mod || mod.community) return prev;
+      
+      const updated = { ...mod, community: true };
+      let score = 0;
+      if (updated.exam) score += WEIGHTS.exam;
+      if (updated.challenge) score += WEIGHTS.challenge;
+      if (updated.resourcesCompleted) score += WEIGHTS.resources;
+      if (updated.community) score += WEIGHTS.community;
+      updated.currentScore = score;
+      
       if (moduleId < 5 && score >= 80) {
         return {
           ...prev,
@@ -331,6 +430,8 @@ export const IALabProvider = ({ children, onBack }) => {
     calculateModuleScore,
     calculateGlobalProgress,
     updateModuleActivity,
+    markResourceAsViewed,
+    markCommunityComment,
 
     // Estados de evaluación
     showExamModal,
@@ -494,9 +595,24 @@ export const IALabProvider = ({ children, onBack }) => {
     getLatestQuizAttempt,
     toggleSidebarDropdown,
     
+    // Persistencia de progreso (Clerk + Supabase)
+    syncStatus,
+    isUsingJWT,
+    userId: progressUserId,
+    completedVideos,
+    completedExams,
+    completedInfographics,
+    completedActivities,
+    markVideoComplete: syncMarkVideoComplete,
+    markModuleComplete: syncMarkModuleComplete,
+    markExamComplete: syncMarkExamComplete,
+    markInfographicComplete: syncMarkInfographicComplete,
+    markActivityComplete: syncMarkActivityComplete,
+    refreshProgress,
+    
     // Auth y navegación
     user,
-    authLoading,
+    isLoaded: authLoaded,
     signOut,
     onBack,
   };

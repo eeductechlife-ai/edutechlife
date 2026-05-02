@@ -18,6 +18,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { cn } from '../forum/forumDesignSystem';
+import { useIALabContext } from '../../context/IALabContext';
+import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
 import QueEsPrompt_OVA_Original from './QueEsPrompt_OVA_Original';
 import useFullscreen from './hooks/useFullscreen';
 
@@ -424,6 +426,9 @@ const ResourceViewerModal = ({
   onOpenImmersiveView = null,
   onOpenOVA = null
 }) => {
+  const { activeMod, markResourceAsViewed: markResourceInContext } = useIALabContext();
+  const { trackResourceViewed } = useIALabProgress();
+  
   // Estado para controlar si se marcó como visto
   const [isMarkedAsViewed, setIsMarkedAsViewed] = useState(false);
 
@@ -559,10 +564,15 @@ const ResourceViewerModal = ({
   };
 
   // Manejar "Marcar como visto"
-  const handleMarkAsViewed = () => {
+  const handleMarkAsViewed = async () => {
     setIsMarkedAsViewed(true);
     if (onMarkAsViewed) {
       onMarkAsViewed(resource.id);
+    }
+    if (resource?.id && activeMod) {
+      markResourceInContext(activeMod, resource.id);
+      const resourceType = resource.type || 'document';
+      await trackResourceViewed(activeMod, resource.id, resourceType);
     }
   };
 

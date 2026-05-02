@@ -10,7 +10,7 @@ import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
  */
 const IALabEvaluationModalPremium = ({ isOpen, onClose }) => {
     const { user, activeMod } = useIALabContext();
-    const { saveProgress, PROGRESS_STATUS } = useIALabProgress();
+    const { saveProgress, PROGRESS_STATUS, trackChallengeResult } = useIALabProgress();
     
     // Efecto para guardar progreso cuando el modal se monta
     useEffect(() => {
@@ -27,7 +27,6 @@ const IALabEvaluationModalPremium = ({ isOpen, onClose }) => {
                     );
                     console.log('📝 Progreso de desafío premium guardado');
                 } catch (error) {
-                    // Error NO crítico - solo registrar, no bloquear UI
                     console.warn('⚠️ Error no crítico al guardar progreso:', error);
                 }
             };
@@ -41,6 +40,11 @@ const IALabEvaluationModalPremium = ({ isOpen, onClose }) => {
             isOpen={isOpen}
             onClose={onClose}
             isPremium={true}
+            onComplete={(score) => {
+                if (score && activeMod) {
+                    trackChallengeResult(activeMod, score);
+                }
+            }}
         />
     );
 };

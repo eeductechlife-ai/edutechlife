@@ -27,7 +27,7 @@ import { motion, AnimatePresence } from 'framer-motion';
  * @param {Function} props.onClose - Handler para cerrar modal
  * @param {boolean} props.isPremium - Indica si es el modal premium del desafío
  */
-const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false }) => {
+const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, onComplete }) => {
     const { user } = useAuth();
     const {
         state,
@@ -177,6 +177,9 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false }) => {
                 const saveResult = await saveGradeToSupabase(evaluation);
                 
                 if (saveResult.success) {
+                    if (onComplete) {
+                        onComplete(evaluation.score || evaluation.totalScore || 0);
+                    }
                     setStep('results');
                 } else {
                     alert(`❌ Error al guardar tu nota: ${saveResult.error}`);

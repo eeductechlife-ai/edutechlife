@@ -18,15 +18,12 @@ const IALabSidebar = () => {
   const {
     activeMod,
     setActiveMod,
-    completedModules,
-    visitedModules,
     courseProgress,
     sidebarDropdowns,
     toggleSidebarDropdown,
     modules,
     isModuleLocked,
     getCurrentModule,
-    calculateGlobalProgress,
     calculateModuleScore
   } = useIALabContext();
   
@@ -41,7 +38,7 @@ const IALabSidebar = () => {
              <div className="relative w-24 h-24 mb-2">
               <svg className="w-full h-full transform -rotate-90">
                 <circle cx="48" cy="48" r="40" stroke="#E2E8F0" strokeWidth="6" fill="none" />
-                 <circle cx="48" cy="48" r="40" stroke="url(#sidebar-progress-grad)" strokeWidth="6" fill="none" strokeLinecap="round" strokeDasharray="251.327" strokeDashoffset={251.327 - (251.327 * Math.min(calculateGlobalProgress(), 100)) / 100} className="transition-all duration-700 ease-out" />
+                 <circle cx="48" cy="48" r="40" stroke="url(#sidebar-progress-grad)" strokeWidth="6" fill="none" strokeLinecap="round" strokeDasharray="251.327" strokeDashoffset={251.327 - (251.327 * Math.min(courseProgress, 100)) / 100} className="transition-all duration-700 ease-out" />
                 <defs>
                   <linearGradient id="sidebar-progress-grad" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="#004B63" />
@@ -51,7 +48,7 @@ const IALabSidebar = () => {
               </svg>
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center">
-                   <div className="text-lg font-bold text-[#004B63]">{calculateGlobalProgress()}%</div>
+                    <div className="text-lg font-bold text-[#004B63]">{Math.round(courseProgress)}%</div>
                     <div className="text-[10px] text-slate-400 mt-0.5">Completado</div>
                 </div>
               </div>
@@ -77,31 +74,47 @@ const IALabSidebar = () => {
               <div className="flex-1 h-px bg-gradient-to-r from-[#004B63]/20 via-[#00BCD4]/20 to-transparent"></div>
             </div>
             <div className="space-y-1.5">
-              {modules.map((mod) => (
-                <button
-                  key={mod.id}
-                  onClick={() => !isModuleLocked(mod.id) && setActiveMod(mod.id)}
-                  className={`w-full flex items-center gap-2.5 p-3 rounded-xl transition-all duration-300 ${activeMod === mod.id ? 'bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white shadow-md shadow-[#004B63]/15' : 'hover:bg-[#004B63]/5 text-slate-700'} focus:outline-none focus:ring-2 focus:ring-[#004B63]/30 focus:ring-offset-1`}
-                  disabled={isModuleLocked(mod.id)}
-                  aria-label={`${isModuleLocked(mod.id) ? 'Módulo bloqueado: ' : ''}${mod.title}`}
-                >
-                  <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors duration-300 ${activeMod === mod.id ? 'bg-white/20' : 'bg-[#004B63]/8'}`}>
-                    <Icon name={mod.icon} className={`${activeMod === mod.id ? 'text-white' : 'text-[#004B63]'} text-sm`} />
-                  </div>
-                  <div className="flex-1 min-w-0 text-left">
-                    <p className="font-semibold text-sm truncate">{mod.title}</p>
-                    <p className={`text-xs ${activeMod === mod.id ? 'text-white/80' : 'text-slate-500'}`}>
-                      {mod.duration}
-                    </p>
-                  </div>
-                  {isModuleLocked(mod.id) && (
-                    <Icon name="fa-lock" className="text-xs text-[#004B63]/40" />
-                  )}
-                  {!isModuleLocked(mod.id) && calculateModuleScore(mod.id) >= 80 && (
-                    <Icon name="fa-check" className="text-xs text-emerald-500" />
-                  )}
-                </button>
-              ))}
+              {modules.map((mod) => {
+                const modScore = calculateModuleScore(mod.id);
+                const isLocked = isModuleLocked(mod.id);
+                const isActive = activeMod === mod.id;
+                
+                return (
+                  <button
+                    key={mod.id}
+                    onClick={() => !isLocked && setActiveMod(mod.id)}
+                    className={`w-full flex items-center gap-2.5 p-3 rounded-xl transition-all duration-300 ${isActive ? 'bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white shadow-md shadow-[#004B63]/15' : 'hover:bg-[#004B63]/5 text-slate-700'} focus:outline-none focus:ring-2 focus:ring-[#004B63]/30 focus:ring-offset-1`}
+                    disabled={isLocked}
+                    aria-label={`${isLocked ? 'Módulo bloqueado: ' : ''}${mod.title}`}
+                  >
+                    <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors duration-300 ${isActive ? 'bg-white/20' : 'bg-[#004B63]/8'}`}>
+                      <Icon name={mod.icon} className={`${isActive ? 'text-white' : 'text-[#004B63]'} text-sm`} />
+                    </div>
+                    <div className="flex-1 min-w-0 text-left">
+                      <p className="font-semibold text-sm truncate">{mod.title}</p>
+                      <div className="flex items-center gap-1.5 mt-1">
+                        {modScore > 0 && (
+                          <div className="flex-1 h-1 bg-slate-200 rounded-full overflow-hidden">
+                            <div 
+                              className={`h-full rounded-full transition-all duration-500 ${isActive ? 'bg-white/60' : 'bg-[#00BCD4]'}`}
+                              style={{ width: `${modScore}%` }}
+                            />
+                          </div>
+                        )}
+                        <span className={`text-[10px] font-medium ${isActive ? 'text-white/80' : 'text-slate-500'}`}>
+                          {Math.round(modScore)}%
+                        </span>
+                      </div>
+                    </div>
+                    {isLocked && (
+                      <Icon name="fa-lock" className="text-xs text-[#004B63]/40" />
+                    )}
+                    {!isLocked && modScore >= 80 && (
+                      <Icon name="fa-check" className="text-xs text-emerald-500" />
+                    )}
+                  </button>
+                );
+              })}
             </div>
          </div>
 

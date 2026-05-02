@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, useCallback, useContext } from 'react';
-import { useSession, useClerk } from '@clerk/react';
+import { useUser, useClerk } from '@clerk/react';
 import { useSupabase } from '../hooks/useSupabase';
 
 const AuthContext = createContext();
@@ -12,7 +12,7 @@ const processPendingForms = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const { session, isLoaded: clerkLoaded } = useSession();
+  const { user: clerkUser, isLoaded: clerkIsLoaded } = useUser();
   const { signOut: clerkSignOut, openSignIn, openSignUp } = useClerk();
   const { supabase, isLoading: supabaseLoading } = useSupabase();
   
@@ -23,27 +23,25 @@ export const AuthProvider = ({ children }) => {
 
   // Obtener perfil del usuario
   const fetchProfile = useCallback(async (userId) => {
-    if (!session || !userId) return;
+    if (!clerkUser || !userId) return;
 
     try {
       setLoading(true);
       
-      // Usar datos reales de Clerk
-      const clerkUser = {
-        id: session.user.id,
-        full_name: session.user.fullName || 'Usuario',
-        email: session.user.emailAddresses?.[0]?.emailAddress || '',
+      const clerkUserData = {
+        id: clerkUser.id,
+        full_name: clerkUser.fullName || 'Usuario',
+        email: clerkUser.emailAddresses?.[0]?.emailAddress || '',
         role: 'student'
       };
       
-      setProfile(clerkUser);
+      setProfile(clerkUserData);
       setError(null);
       
     } catch (err) {
       console.warn('⚠️ Error en fetchProfile:', err.message);
-      // Crear perfil local mínimo usando datos de session
-      const clerkFullName = session?.user?.fullName || 'Usuario Edutechlife';
-      const clerkEmail = session?.user?.emailAddresses?.[0]?.emailAddress || '';
+      const clerkFullName = clerkUser?.fullName || 'Usuario Edutechlife';
+      const clerkEmail = clerkUser?.emailAddresses?.[0]?.emailAddress || '';
       
       setProfile({
         id: userId,
@@ -54,26 +52,26 @@ export const AuthProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  }, [session]);
+  }, [clerkUser]);
 
   // Sincronizar usuario cuando cambia la sesión de Clerk
   useEffect(() => {
-    if (!clerkLoaded) return;
+    if (!clerkIsLoaded) return;
 
-    if (session?.user) {
+    if (clerkUser) {
       // Usuario autenticado
-      const clerkUser = {
-        id: session.user.id,
-        email: session.user.emailAddresses?.[0]?.emailAddress,
-        fullName: session.user.fullName,
-        firstName: session.user.firstName,
-        lastName: session.user.lastName,
-        imageUrl: session.user.imageUrl,
-        createdAt: session.user.createdAt,
+      const localUser = {
+        id: clerkUser.id,
+        email: clerkUser.emailAddresses?.[0]?.emailAddress,
+        fullName: clerkUser.fullName,
+        firstName: clerkUser.firstName,
+        lastName: clerkUser.lastName,
+        imageUrl: clerkUser.imageUrl,
+        createdAt: clerkUser.createdAt,
       };
       
-      setUser(clerkUser);
-      fetchProfile(session.user.id);
+      setUser(localUser);
+      fetchProfile(clerkUser.id);
       setTimeout(() => processPendingForms(), 1000);
     } else {
       // Usuario no autenticado
@@ -81,7 +79,7 @@ export const AuthProvider = ({ children }) => {
       setProfile(null);
       setLoading(false);
     }
-  }, [session, clerkLoaded, fetchProfile]);
+  }, [clerkUser, clerkIsLoaded, fetchProfile]);
 
   // Sign in con Clerk (abre modal de login de Clerk)
   const signIn = useCallback(async (email, password) => {
@@ -132,6 +130,19 @@ export const AuthProvider = ({ children }) => {
       setUser(null);
       setProfile(null);
       setError(null);
+      
+      // Limpiar localStorage de progreso (los datos permanecen en Supabase)
+      const progressKeys = [
+        'ialab_completed_videos',
+        'ialab_completed_modules',
+        'ialab_completed_exams',
+        'ialab_completed_infographics',
+        'ialab_completed_activities',
+        'ialab_overall_progress',
+        'ialab_sync_queue'
+      ];
+      progressKeys.forEach(key => localStorage.removeItem(key));
+      console.log('🧹 Progreso local limpiado al cerrar sesión');
     } catch (err) {
       console.error('Error signing out:', err);
       setError(err.message);
@@ -177,7 +188,8 @@ export const AuthProvider = ({ children }) => {
     // Estado
     user,
     profile,
-    loading: loading || !clerkLoaded || supabaseLoading,
+    isLoaded: clerkIsLoaded,
+    loading: loading || !clerkIsLoaded || supabaseLoading,
     error,
     
     // Acciones

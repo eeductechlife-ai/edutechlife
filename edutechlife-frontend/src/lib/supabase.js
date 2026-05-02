@@ -60,23 +60,20 @@ export const createClerkSupabaseClient = (clerkToken = null) => {
   
   const fetchWithClerkToken = async (url, options = {}) => {
     const headers = new Headers(options?.headers || {});
+    const method = options.method || 'GET';
     
-    // INCLUIR API KEY DE SUPABASE (CRÍTICO)
-    // La API key es requerida para todas las peticiones a Supabase
+    // CRÍTICO: apikey siempre debe estar presente (forzar sin condicional)
     headers.set('apikey', supabaseAnonKey);
-    headers.set('Authorization', `Bearer ${supabaseAnonKey}`);
     
-    // Inyectar token JWT de Clerk si está disponible (sobrescribe Authorization)
+    // Authorization: Clerk token si disponible, sino anon key
     if (clerkToken) {
       headers.set('Authorization', `Bearer ${clerkToken}`);
-      if (import.meta.env.DEV) {
-        console.log('✅ [CLERK-JWT] Token inyectado en petición Supabase');
-      }
+    } else if (!headers.has('Authorization')) {
+      headers.set('Authorization', `Bearer ${supabaseAnonKey}`);
     }
     
     // Log para desarrollo
     if (import.meta.env.DEV) {
-      const method = options.method || 'GET';
       console.log(`🌐 [Supabase] ${method} ${url.replace(supabaseUrl, '')}`);
       
       // Mostrar headers (sin tokens por seguridad)
@@ -86,7 +83,7 @@ export const createClerkSupabaseClient = (clerkToken = null) => {
         if (lowerKey !== 'authorization' && lowerKey !== 'apikey') {
           headersObj[key] = value;
         } else if (lowerKey === 'apikey') {
-          headersObj[key] = '***' + value.substring(value.length - 4); // Mostrar solo últimos 4 chars
+          headersObj[key] = '***' + value.substring(value.length - 4);
         }
       });
       if (Object.keys(headersObj).length > 0) {
@@ -94,22 +91,18 @@ export const createClerkSupabaseClient = (clerkToken = null) => {
       }
     }
     
-    // Usar fetch nativo del navegador (sin interceptor global)
     const response = await fetch(url, {
       ...options,
       headers,
     });
     
-    // Log de respuesta para desarrollo
     if (import.meta.env.DEV) {
       const status = response.status;
       const statusText = response.statusText;
       
       if (status === 401) {
         console.warn(`⚠️ [Supabase] 401 Unauthorized: ${method} ${url.replace(supabaseUrl, '')}`);
-        console.warn('   Razón: RLS (Row Level Security) está bloqueando acceso anónimo');
-        console.warn('   Solución: Configurar políticas RLS en Supabase Dashboard');
-        console.warn('   Temporal: El sistema usará datos simulados');
+        console.warn('   Razón: RLS (Row Level Security) está bloqueando acceso');
       } else if (status >= 400) {
         console.warn(`⚠️ [Supabase] ${status} ${statusText}: ${method} ${url.replace(supabaseUrl, '')}`);
       } else if (status === 200 || status === 201) {
@@ -122,8 +115,8 @@ export const createClerkSupabaseClient = (clerkToken = null) => {
 
   const client = createClient(supabaseUrl, supabaseAnonKey, {
     auth: {
-      autoRefreshToken: !clerkToken, // Clerk maneja la sesión si hay token
-      persistSession: !clerkToken,   // No persistir si Clerk maneja la sesión
+      autoRefreshToken: !clerkToken,
+      persistSession: !clerkToken,
       detectSessionInUrl: !clerkToken,
       storageKey: clerkToken ? `sb-${supabaseUrl.split('//')[1].split('.')[0]}-auth-token-jwt` : `sb-${supabaseUrl.split('//')[1].split('.')[0]}-auth-token`,
     },
@@ -132,6 +125,7 @@ export const createClerkSupabaseClient = (clerkToken = null) => {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'apikey': supabaseAnonKey,
         'X-Client-Info': clerkToken ? 'edutechlife-clerk-jwt' : 'edutechlife-supabase-base',
       },
     },

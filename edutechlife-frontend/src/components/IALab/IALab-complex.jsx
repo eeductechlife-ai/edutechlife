@@ -12,7 +12,7 @@ import { getAllProgress, saveProgress, PROGRESS_STATUS, saveLastLesson, getUserL
 import { LogOut, Lightbulb } from 'lucide-react';
 
 const IALab = ({ onBack }) => {
-    const { user, isLoading: authLoading, signOut } = useAuth();
+    const { user, isLoaded } = useAuth();
     
     const [activeMod, setActiveMod] = useState(1);
     const [activeTab, setActiveTab] = useState('lab');
@@ -122,10 +122,10 @@ const IALab = ({ onBack }) => {
             }
         };
 
-        if (!authLoading) {
+        if (isLoaded) {
             loadProgress();
         }
-    }, [authLoading]);
+    }, [isLoaded]);
 
     const handleModuleClick = async (moduleId) => {
         if (!visitedModules.includes(moduleId)) {

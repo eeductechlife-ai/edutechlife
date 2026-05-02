@@ -12,6 +12,7 @@ import {
   Star,
   Award
 } from 'lucide-react';
+import { useNotification } from '../../../context/NotificationContext';
 
 const SidebarUserSection = ({ 
   user = {},
@@ -19,6 +20,7 @@ const SidebarUserSection = ({
   onSettings,
   className = ''
 }) => {
+  const { unreadCount } = useNotification();
   const userStats = {
     streak: 7,
     level: 'Avanzado',
@@ -162,9 +164,9 @@ const SidebarUserSection = ({
               </span>
             </div>
 
-            {option.id === 'notifications' && (
-              <div className="px-1.5 py-0.5 rounded-full bg-red-50 text-red-600 text-[10px] font-medium">
-                3
+            {option.id === 'notifications' && unreadCount > 0 && (
+              <div className="px-1.5 py-0.5 rounded-full bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white text-[10px] font-medium">
+                {unreadCount > 99 ? '99+' : unreadCount}
               </div>
             )}
           </button>
