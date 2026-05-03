@@ -60,11 +60,16 @@ const IALabForumOptimized = ({
 
         setIsSubmitting(true);
         try {
-            await createPost({
+            const result = await createPost({
                 title: `Mensaje de ${user.full_name || user.email}`,
                 content: newMessage.trim(),
                 tags: ['Chat']
             });
+            
+            if (!result.success) {
+                console.error('Error al crear post:', result.error);
+                return;
+            }
             
             if (activeMod && !hasTrackedCommunity) {
                 await trackCommunityComment(activeMod);

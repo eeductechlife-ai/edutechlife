@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useUser, useAuth } from '@clerk/react';
 import UserProfileSmartCard from './UserProfileSmartCard';
 import HelpModal from './modals/HelpModal';
-import ChangePasswordModal from './modals/ChangePasswordModal';
 import CertificatesModal from './modals/CertificatesModal';
 import ChangeAvatarModal from './modals/ChangeAvatarModal';
 import { useClerkAuth, getClerkUserInfo } from '../utils/clerk-utils';
@@ -25,8 +24,20 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   
-  // Clerk es el ÚNICO proveedor de identidad
+  const [profileName, setProfileName] = useState(null);
+
   const activeUser = clerkUser || clerkUserOfficial;
+  const displayName = profileName || activeUser?.fullName || activeUser?.firstName || userInfo.displayName || 'John Edison';
+
+  useEffect(() => {
+    const handleProfileUpdate = (event) => {
+      if (event.detail?.full_name) {
+        setProfileName(event.detail.full_name);
+      }
+    };
+    window.addEventListener('profile-updated', handleProfileUpdate);
+    return () => window.removeEventListener('profile-updated', handleProfileUpdate);
+  }, []);
   
   // Obtener información del usuario exclusivamente de Clerk
   const userInfo = getClerkUserInfo(activeUser);
@@ -72,7 +83,6 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
   // Estados para modales
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
-  const [isSecurityOpen, setIsSecurityOpen] = useState(false);
   const [isCertificatesOpen, setIsCertificatesOpen] = useState(false);
   const [isAvatarOpen, setIsAvatarOpen] = useState(false);
   
@@ -103,8 +113,8 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
   
   // Obtener iniciales para avatar
   const getUserInitials = () => {
-    if (userInfo.displayName) {
-      const names = userInfo.displayName.split(' ');
+    if (displayName) {
+      const names = displayName.split(' ');
       if (names.length >= 2) {
         return `${names[0][0]}${names[1][0]}`.toUpperCase();
       }
@@ -126,7 +136,7 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
             title="Cambiar foto de perfil"
           >
             {userInfo.avatarUrl ? (
-              <img src={userInfo.avatarUrl} alt={userInfo.displayName} className="w-full h-full object-cover" />
+              <img src={userInfo.avatarUrl} alt={displayName} className="w-full h-full object-cover" />
             ) : (
               <div className="w-full h-full bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center">
                 <span className="text-white font-semibold text-sm">{getUserInitials()}</span>
@@ -143,7 +153,7 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
             {/* Texto: Nombre completo arriba, rol abajo */}
             <div className="flex-1 min-w-0 text-left">
               <div className="text-sm font-semibold text-petroleum truncate">
-                {userInfo.displayName || 'John Edison'}
+                {displayName}
               </div>
                <div className="text-xs text-slate-500 truncate">
                  {userInfo.role === 'teacher' ? 'Profesor' : 'Estudiante'}
@@ -177,7 +187,7 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
                   title="Cambiar foto de perfil"
                 >
                   {userInfo.avatarUrl ? (
-                    <img src={userInfo.avatarUrl} alt={userInfo.displayName} className="w-full h-full object-cover" />
+                    <img src={userInfo.avatarUrl} alt={displayName} className="w-full h-full object-cover" />
                   ) : (
                     <div className="w-full h-full bg-white/20 flex items-center justify-center">
                       <span className="text-white font-semibold text-xs">{getUserInitials()}</span>
@@ -186,7 +196,7 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
                 </button>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-semibold text-white truncate">
-                    {userInfo.displayName}
+                    {displayName}
                   </p>
                    <p className="text-[10px] text-white/70 truncate">
                      {userInfo.displayEmail}
@@ -254,20 +264,13 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
       <UserProfileSmartCard
         isOpen={isProfileOpen}
         onClose={() => setIsProfileOpen(false)}
-        onOpenChangePassword={() => setIsSecurityOpen(true)}
         onOpenChangeAvatar={() => setIsAvatarOpen(true)}
       />
 
-      {/* ❓ Modal de Ayuda y Soporte */}
       <HelpModal isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
 
-      {/* 🔐 Modal de Seguridad - Cambio de Contraseña */}
-      <ChangePasswordModal isOpen={isSecurityOpen} onClose={() => setIsSecurityOpen(false)} />
-
-      {/* 🎓 Modal de Mis Certificados */}
       <CertificatesModal isOpen={isCertificatesOpen} onClose={() => setIsCertificatesOpen(false)} />
 
-      {/* 📷 Modal de Cambiar Foto de Perfil */}
       <ChangeAvatarModal isOpen={isAvatarOpen} onClose={() => setIsAvatarOpen(false)} />
 
 

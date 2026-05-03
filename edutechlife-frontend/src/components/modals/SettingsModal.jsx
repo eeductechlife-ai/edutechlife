@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card-simple';
 import { Button } from '../ui/button-simple';
 import { Icon } from '../../utils/iconMapping.jsx';
 
-const SettingsModal = ({ onClose }) => {
+const SettingsModal = ({ isOpen, onClose }) => {
   const [notifications, setNotifications] = useState({
     email: true,
     push: true,
@@ -21,6 +21,8 @@ const SettingsModal = ({ onClose }) => {
   const [autoSave, setAutoSave] = useState(true);
   const [loading, setLoading] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+
+  if (!isOpen) return null;
 
   const handleSaveSettings = async () => {
     setLoading(true);

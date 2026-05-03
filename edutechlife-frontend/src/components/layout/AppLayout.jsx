@@ -8,6 +8,7 @@ import LeadCaptureModal from '../LeadCaptureModal';
 import AdminLoginModal from '../AdminLoginModal';
 import UserDropdownMenuPremium from '../UserDropdownMenuPremium';
 import UserDropdownMenuSimplified from '../UserDropdownMenuSimplified';
+import { ProgressProvider } from '../../context/ProgressContext';
 import ScrollToTop from './ScrollToTop';
 
 // Lazy load components
@@ -69,10 +70,11 @@ const AppLayout = () => {
   };
   
   return (
-    <div className="flex flex-col min-h-screen overflow-hidden bg-white text-[#004B63]" style={{ fontFamily: "'Montserrat', sans-serif" }}>
-      <Suspense fallback={null}>
-        <GlobalCanvas />
-      </Suspense>
+    <ProgressProvider>
+      <div className="flex flex-col min-h-screen overflow-hidden bg-white text-[#004B63]" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+        <Suspense fallback={null}>
+          <GlobalCanvas />
+        </Suspense>
       
       {/* Header - Navigation Premium */}
       {shouldShowHeader() && (
@@ -363,7 +365,8 @@ const AppLayout = () => {
           navigate('/admin');
         }}
       />
-    </div>
+      </div>
+    </ProgressProvider>
   );
 };
 

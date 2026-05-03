@@ -36,6 +36,10 @@ const IALabSidebar = ({ data, handlers }) => {
     onUserSettings,
     onSignOut,
     onToggleSidebar,
+    onProfile,
+    onNotifications,
+    onBilling,
+    onHelp,
     isModuleLocked
   } = handlers;
 
@@ -199,7 +203,11 @@ const IALabSidebar = ({ data, handlers }) => {
         )}>
           <SidebarUserSection
             user={user}
+            onProfile={onProfile}
             onSettings={onUserSettings}
+            onNotifications={onNotifications}
+            onBilling={onBilling}
+            onHelp={onHelp}
             onSignOut={onSignOut}
           />
         </div>

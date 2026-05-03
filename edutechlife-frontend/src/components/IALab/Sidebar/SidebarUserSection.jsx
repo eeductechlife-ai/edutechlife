@@ -5,7 +5,6 @@ import {
   User,
   Settings,
   LogOut,
-  Shield,
   Bell,
   CreditCard,
   HelpCircle,
@@ -16,8 +15,12 @@ import { useNotification } from '../../../context/NotificationContext';
 
 const SidebarUserSection = ({ 
   user = {},
-  onSignOut,
+  onProfile,
   onSettings,
+  onNotifications,
+  onBilling,
+  onHelp,
+  onSignOut,
   className = ''
 }) => {
   const { unreadCount } = useNotification();
@@ -30,14 +33,13 @@ const SidebarUserSection = ({
     enrolledCourses: 5
   };
 
-  const userOptions = [
-    { id: 'profile', label: 'Mi Perfil', icon: <User className="w-3.5 h-3.5" /> },
-    { id: 'settings', label: 'Configuración', icon: <Settings className="w-3.5 h-3.5" /> },
-    { id: 'notifications', label: 'Notificaciones', icon: <Bell className="w-3.5 h-3.5" /> },
-    { id: 'security', label: 'Seguridad', icon: <Shield className="w-3.5 h-3.5" /> },
-    { id: 'billing', label: 'Facturación', icon: <CreditCard className="w-3.5 h-3.5" /> },
-    { id: 'help', label: 'Ayuda', icon: <HelpCircle className="w-3.5 h-3.5" /> }
-  ];
+  const optionHandlers = {
+    profile: onProfile,
+    settings: onSettings,
+    notifications: onNotifications,
+    billing: onBilling,
+    help: onHelp,
+  };
 
   return (
     <div className={cn("space-y-3", className)}>
@@ -144,15 +146,16 @@ const SidebarUserSection = ({
 
       {/* Opciones de usuario */}
       <div className="space-y-1">
-        {userOptions.map(option => (
+        {[
+          { id: 'profile', label: 'Mi Perfil', icon: <User className="w-3.5 h-3.5" /> },
+          { id: 'settings', label: 'Configuración', icon: <Settings className="w-3.5 h-3.5" /> },
+          { id: 'notifications', label: 'Notificaciones', icon: <Bell className="w-3.5 h-3.5" /> },
+          { id: 'billing', label: 'Facturación', icon: <CreditCard className="w-3.5 h-3.5" /> },
+          { id: 'help', label: 'Ayuda', icon: <HelpCircle className="w-3.5 h-3.5" /> }
+        ].map(option => (
           <button
             key={option.id}
-            onClick={() => {
-              if (option.id === 'settings') onSettings?.();
-              if (option.id === 'profile') {
-                console.log('Navigate to profile');
-              }
-            }}
+            onClick={optionHandlers[option.id]}
             className="w-full flex items-center justify-between p-2.5 rounded-lg bg-white border border-slate-200/60 border-l-4 border-l-[#004B63] shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50 transition-all duration-300 group"
           >
             <div className="flex items-center gap-2.5">

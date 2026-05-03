@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { useAuth } from './AuthContext';
-import { usePersistentProgress } from '../hooks/usePersistentProgress';
+import { useProgressContext } from './ProgressContext';
 
 /**
  * CONTEXTO GLOBAL IALab - Estado compartido entre componentes
@@ -44,28 +44,26 @@ export const IALabProvider = ({ children, onBack }) => {
     markInfographicComplete: syncMarkInfographicComplete,
     markActivityComplete: syncMarkActivityComplete,
     refreshProgress
-  } = usePersistentProgress();
-  
+  } = useProgressContext();
+
+  // completedModules y courseProgress vienen del ProgressContext global
+  const completedModules = persistentCompletedModules;
+  const courseProgress = persistentCourseProgress;
+  const setCompletedModules = (val) => console.warn('setCompletedModules is deprecated, use progress context directly');
+  const setCourseProgress = (val) => console.warn('setCourseProgress is deprecated, use progress context directly');
+
   // ==================== ESTADOS PRINCIPALES ====================
   
   // Navegación y progreso
   const [activeMod, setActiveMod] = useState(1);
   const [activeTab, setActiveTab] = useState('lab');
-  const [completedModules, setCompletedModules] = useState([]);
-  const [courseProgress, setCourseProgress] = useState(0);
   const [visitedModules, setVisitedModules] = useState([1]);
   const [isLoadingProgress, setIsLoadingProgress] = useState(true);
 
-  // Sincronizar progreso persistente con el contexto local
+  // Sync loading state from global progress context
   useEffect(() => {
-    if (persistentCourseProgress > 0) {
-      setCourseProgress(persistentCourseProgress);
-    }
-    if (persistentCompletedModules.length > 0) {
-      setCompletedModules(persistentCompletedModules);
-    }
     setIsLoadingProgress(progressLoading);
-  }, [persistentCourseProgress, persistentCompletedModules, progressLoading]);
+  }, [progressLoading]);
 
   // Sistema de notas y progreso gamificado por módulo
   const INITIAL_MODULE_PROGRESS = {
@@ -303,15 +301,8 @@ export const IALabProvider = ({ children, onBack }) => {
     return Math.min(100, Math.round(total));
   }, [calculateModuleScore]);
 
-  // SYNC: Cuando moduleProgress cambia, actualizar courseProgress localmente
-  // Esto da feedback inmediato al usuario mientras DB sync en segundo plano
-  useEffect(() => {
-    const newProgress = calculateGlobalProgress();
-    setCourseProgress(prev => {
-      // Solo actualizar si es mayor (no retroceder)
-      return Math.max(prev, newProgress);
-    });
-  }, [moduleProgress, calculateGlobalProgress]);
+  // Nota: courseProgress ahora viene del ProgressContext global (usePersistentProgress)
+  // El cálculo gamificado (calculateGlobalProgress) se mantiene para desbloqueo de módulos
 
   // Actualizar una actividad del módulo y recalcular score
   const updateModuleActivity = useCallback((moduleId, activity, value) => {
@@ -409,7 +400,7 @@ export const IALabProvider = ({ children, onBack }) => {
   }, []);
   
   // ==================== CONTEXTO VALUE ====================
-  
+
   const contextValue = {
     // Estados
     activeMod,

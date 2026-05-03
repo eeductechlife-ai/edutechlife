@@ -1,7 +1,10 @@
 import React from 'react';
+import { useUser, useClerk } from '@clerk/react';
 import { useIALabContext } from '../../../context/IALabContext';
 import useSidebarState from '../../../hooks/IALab/useSidebarState';
+import useSidebarUserActions from '../../../hooks/IALab/useSidebarUserActions';
 import IALabSidebar from './IALabSidebar';
+import SidebarUserModals from './SidebarUserModals';
 
 /**
  * IALabSidebarContainer - Componente container que maneja lógica del sidebar
@@ -12,7 +15,8 @@ import IALabSidebar from './IALabSidebar';
  * - Gestionar navegación entre módulos
  */
 const IALabSidebarContainer = () => {
-  // Contexto global IALab
+  const { user: clerkUser } = useUser();
+  const { signOut } = useClerk();
   const {
     activeMod,
     setActiveMod,
@@ -22,56 +26,43 @@ const IALabSidebarContainer = () => {
     getCurrentModule
   } = useIALabContext();
 
-  // Estado del sidebar
   const sidebarState = useSidebarState({
     videos: false,
     recursos: false
   });
 
-  // Obtener datos del módulo actual
+  const { openModals, closeModal, handlers: userHandlers } = useSidebarUserActions();
+
   const currentModule = getCurrentModule();
 
-  // Handler para seleccionar módulo
   const handleModuleSelect = (moduleId) => {
     if (!sidebarState.isModuleLocked(moduleId)) {
       setActiveMod(moduleId);
     }
   };
 
-  // Handler para items de secciones
   const handleSectionItemClick = (item) => {
     console.log('Item clicked:', item);
-    // Aquí se podría implementar lógica específica por tipo de item
-    // Ej: abrir video, descargar recurso, etc.
   };
 
-  // Handler para configuración de usuario
-  const handleUserSettings = () => {
-    console.log('Open user settings');
-    // Aquí se podría integrar con Clerk o abrir modal de configuración
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      window.location.href = '/';
+    } catch (err) {
+      console.error('Error signing out:', err);
+    }
   };
 
-  // Handler para cerrar sesión
-  const handleSignOut = () => {
-    console.log('Sign out');
-    // Aquí se integraría con Clerk signOut
-  };
-
-  // Preparar datos para componentes presentacionales
   const sidebarData = {
-    // Progreso
     progress: sidebarState.getProgress(),
     completedModules: sidebarState.getCompletedModules(),
     totalModules: modules.length,
-    
-    // Módulos
     modules: sidebarState.getModuleData().map(module => ({
       ...module,
       isLocked: sidebarState.isModuleLocked(module.id)
     })),
     activeMod,
-    
-    // Secciones colapsables
     sections: {
       videos: {
         ...sidebarState.getSectionData('videos'),
@@ -82,47 +73,44 @@ const IALabSidebarContainer = () => {
         isOpen: !sidebarState.isSectionCollapsed('recursos')
       }
     },
-    
-    // Detalles del curso
     course: {
       ...sidebarState.getCourseData(),
       ...currentModule
     },
-    
-    // Usuario
     user: {
-      name: 'Usuario Edutechlife',
-      email: 'usuario@edutechlife.com'
+      name: clerkUser?.fullName || clerkUser?.firstName || 'Usuario Edutechlife',
+      email: clerkUser?.primaryEmailAddress?.emailAddress || 'usuario@edutechlife.com',
+      imageUrl: clerkUser?.imageUrl
     },
-    
-    // Estado responsive
     isMobile: sidebarState.isMobile,
     isCollapsed: sidebarState.isCollapsed
   };
 
-  // Handlers para componentes presentacionales
   const handlers = {
-    // Navegación
     onModuleSelect: handleModuleSelect,
     onSectionToggle: sidebarState.toggleSection,
     onSectionItemClick: handleSectionItemClick,
-    
-    // Usuario
-    onUserSettings: handleUserSettings,
+    onUserSettings: userHandlers.onSettings,
     onSignOut: handleSignOut,
-    
-    // Responsive
     onToggleSidebar: sidebarState.toggleSidebar,
-    
-    // Utilidades
-    isModuleLocked: sidebarState.isModuleLocked
+    isModuleLocked: sidebarState.isModuleLocked,
+    onProfile: userHandlers.onProfile,
+    onNotifications: userHandlers.onNotifications,
+    onBilling: userHandlers.onBilling,
+    onHelp: userHandlers.onHelp
   };
 
   return (
-    <IALabSidebar
-      data={sidebarData}
-      handlers={handlers}
-    />
+    <>
+      <IALabSidebar
+        data={sidebarData}
+        handlers={handlers}
+      />
+      <SidebarUserModals
+        openModals={openModals}
+        closeModal={closeModal}
+      />
+    </>
   );
 };
 

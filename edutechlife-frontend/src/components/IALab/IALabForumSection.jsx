@@ -267,10 +267,11 @@ const IALabForumSection = ({
                 
                 <textarea
                     value={newPostContent}
-                    onChange={(e) => setNewPostContent(e.target.value)}
+                    onChange={(e) => setNewPostContent(e.target.value.slice(0, 500))}
                     placeholder="¿Qué quieres compartir con la comunidad?..."
                     className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:border-transparent text-[#00374A] placeholder-slate-400 min-h-[120px] resize-none"
                     disabled={isCreatingPost}
+                    maxLength={500}
                 />
                 
                 <div className="flex items-center justify-between">

@@ -1,15 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useUser } from '@clerk/react';
+import { useUser, useClerk } from '@clerk/react';
 import { supabase } from '../lib/supabase';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card-simple';
+import { useProgressContext } from '../context/ProgressContext';
+import { Card, CardContent } from './ui/card-simple';
 import { Icon } from '../utils/iconMapping.jsx';
 
 const COURSE_NAME = 'Introducción a la Inteligencia Artificial Generativa';
 const TOTAL_LESSONS = 24;
 const TOTAL_MODULES = 5;
 
-const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangePassword, onOpenChangeAvatar }) => {
+const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
   const { user: clerkUser, isLoaded: clerkIsLoaded } = useUser();
+  const { openUserProfile } = useClerk();
+  const { courseProgress, completedModules, completedVideos, completedExams, completedInfographics, completedActivities, isLoading: progressLoading } = useProgressContext();
 
   const [profileData, setProfileData] = useState({
     full_name: '',
@@ -18,6 +21,11 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangePassword, onOpenCha
     role: 'student',
     total_learning_hours: 0,
     created_at: null,
+  });
+
+  const [pendingChanges, setPendingChanges] = useState({
+    full_name: '',
+    phone: '',
   });
 
   const [stats, setStats] = useState({
@@ -33,6 +41,8 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangePassword, onOpenCha
   const [editingField, setEditingField] = useState(null);
   const [tempValue, setTempValue] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+  const [saveMessage, setSaveMessage] = useState(null);
+  const [phoneError, setPhoneError] = useState('');
 
   const nameInputRef = useRef(null);
   const phoneInputRef = useRef(null);
@@ -60,6 +70,23 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangePassword, onOpenCha
     return colors[role] || colors.student;
   };
 
+  const validatePhone = (phone) => {
+    if (!phone || phone.length === 0) return '';
+    const digits = phone.replace(/\D/g, '');
+    if (digits.length === 10 && !digits.startsWith('3')) {
+      return 'Debe comenzar con 3 (celular Colombia)';
+    }
+    if (digits.length > 0 && digits.length < 10) {
+      return `Faltan ${10 - digits.length} dígitos`;
+    }
+    return '';
+  };
+
+  const hasPendingChanges = () => {
+    return pendingChanges.full_name !== profileData.full_name ||
+           pendingChanges.phone !== profileData.phone;
+  };
+
   const loadProfileData = async () => {
     if (!clerkUser?.id || !clerkIsLoaded) return;
 
@@ -76,11 +103,14 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangePassword, onOpenCha
       email: clerkEmail,
       role: clerkRole,
     }));
+    setPendingChanges({
+      full_name: clerkName,
+      phone: '',
+    });
 
     try {
-      const [profileRes, progressRes, certRes] = await Promise.all([
+      const [profileRes, certRes] = await Promise.all([
         supabase.from('profiles').select('id, full_name, email, phone, role, total_learning_hours, created_at').eq('id', clerkUser.id).maybeSingle(),
-        supabase.rpc('get_user_overall_progress', { p_user_id: clerkUser.id }),
         supabase.from('certificates').select('id, overall_score').eq('user_id', clerkUser.id).maybeSingle(),
       ]);
 
@@ -89,15 +119,21 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangePassword, onOpenCha
 
       if (profileRes.data) {
         const p = profileRes.data;
+        const name = p.full_name || clerkName;
+        const phone = p.phone || '';
         setProfileData((prev) => ({
           ...prev,
-          full_name: p.full_name || clerkName,
+          full_name: name,
           email: p.email || clerkEmail,
-          phone: p.phone || '',
+          phone: phone,
           role: p.role || clerkRole,
           total_learning_hours: p.total_learning_hours || 0,
           created_at: p.created_at || createdAt,
         }));
+        setPendingChanges({
+          full_name: name,
+          phone: phone,
+        });
         learningHours = p.total_learning_hours || 0;
         if (p.created_at) createdAt = p.created_at;
         setIsSynced(true);
@@ -111,18 +147,18 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangePassword, onOpenCha
             role: clerkRole,
           });
         } catch {
-          // Ignorar error de duplicado
         }
       }
 
-      const completedLessons = progressRes.data?.[0]?.completed_lessons || 0;
-      const completedModules = progressRes.data?.[0]?.completed_modules || 0;
-      const percentage = progressRes.data?.[0]?.percentage || 0;
+      // Progreso viene del contexto global (usePersistentProgress)
+      const completedLessons = completedVideos.length + completedInfographics.length + completedActivities.length + Object.values(completedExams).filter(Boolean).length;
+      const completedModulesCount = completedModules.length;
+      const progressPercent = courseProgress;
 
       setStats({
         completedLessons: Number(completedLessons),
-        completedModules: Number(completedModules),
-        progressPercent: Math.round(Number(percentage)),
+        completedModules: Number(completedModulesCount),
+        progressPercent: Math.round(Number(progressPercent)),
         certificates: certRes.data ? 1 : 0,
         bestScore: certRes.data?.overall_score || 0,
         learningHours,
@@ -149,34 +185,21 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangePassword, onOpenCha
     loadProfileData();
   }, [isOpen, clerkUser?.id, clerkIsLoaded]);
 
-  const saveField = async (field, value) => {
-    if (!clerkUser?.id) return;
-
-    setIsSaving(true);
-
-    try {
-      const updateData = {};
-      if (field === 'full_name') updateData.full_name = value;
-      if (field === 'phone') updateData.phone = value;
-
-      const { error } = await supabase.from('profiles').update(updateData).eq('id', clerkUser.id);
-
-      if (error) {
-        console.warn('Error saving:', error.message);
-      }
-
-      setProfileData((prev) => ({ ...prev, [field]: value }));
-    } catch (err) {
-      console.warn('Exception saving:', err.message);
-    } finally {
-      setIsSaving(false);
-      setEditingField(null);
-    }
-  };
+  // Actualizar stats cuando cambia el progreso global (mientras el modal está abierto)
+  useEffect(() => {
+    if (!isOpen) return;
+    setStats((prev) => ({
+      ...prev,
+      completedLessons: completedVideos.length + completedInfographics.length + completedActivities.length + Object.values(completedExams).filter(Boolean).length,
+      completedModules: completedModules.length,
+      progressPercent: Math.round(courseProgress),
+    }));
+  }, [isOpen, courseProgress, completedModules, completedVideos, completedExams, completedInfographics, completedActivities]);
 
   const startEditing = (field) => {
     setEditingField(field);
     setTempValue(profileData[field] || '');
+    setPhoneError('');
     setTimeout(() => {
       if (field === 'full_name' && nameInputRef.current) {
         nameInputRef.current.focus();
@@ -188,25 +211,100 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangePassword, onOpenCha
     }, 50);
   };
 
-  const handleSave = (field) => {
-    const newValue = tempValue.trim();
-    if (newValue !== profileData[field] && newValue.length > 0) {
-      saveField(field, newValue);
+  const handleTempChange = (field, value) => {
+    if (field === 'phone') {
+      const digits = value.replace(/\D/g, '');
+      setTempValue(digits);
+      setPhoneError(validatePhone(digits));
+      setPendingChanges((prev) => ({ ...prev, phone: digits }));
     } else {
-      setEditingField(null);
+      setTempValue(value);
+      setPendingChanges((prev) => ({ ...prev, full_name: value }));
     }
   };
 
-  const handleKeyDown = (e, field) => {
-    if (e.key === 'Enter') handleSave(field);
-    if (e.key === 'Escape') { setEditingField(null); setTempValue(''); }
+  const handleCancelEdit = () => {
+    setEditingField(null);
+    setTempValue('');
+    setPhoneError('');
+  };
+
+  const handleSaveAll = async () => {
+    if (!clerkUser?.id || !hasPendingChanges()) return;
+
+    setIsSaving(true);
+    setSaveMessage(null);
+
+    try {
+      const updates = {};
+      if (pendingChanges.full_name !== profileData.full_name) {
+        updates.full_name = pendingChanges.full_name;
+      }
+      if (pendingChanges.phone !== profileData.phone) {
+        updates.phone = pendingChanges.phone;
+      }
+
+      if (Object.keys(updates).length === 0) {
+        setIsSaving(false);
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from('profiles')
+        .upsert({ id: clerkUser.id, ...updates, updated_at: new Date().toISOString() }, { onConflict: 'id' })
+        .select()
+        .single();
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      try {
+        const nameParts = pendingChanges.full_name.trim().split(' ');
+        await clerkUser.update({
+          firstName: nameParts[0],
+          lastName: nameParts.slice(1).join(' '),
+        });
+      } catch (err) {
+        console.warn('No se pudo actualizar Clerk:', err.message);
+      }
+
+      setProfileData((prev) => ({ ...prev, ...updates }));
+      setPendingChanges((prev) => ({ ...prev }));
+
+      window.dispatchEvent(new CustomEvent('profile-updated', {
+        detail: { full_name: updates.full_name, phone: updates.phone }
+      }));
+
+      setSaveMessage({ type: 'success', text: 'Cambios guardados exitosamente' });
+      setTimeout(() => setSaveMessage(null), 3000);
+    } catch (err) {
+      console.error('Error saving profile:', err.message);
+      setSaveMessage({ type: 'error', text: 'Error al guardar. Intenta de nuevo.' });
+      setTimeout(() => setSaveMessage(null), 3000);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleOpenChangePassword = () => {
+    try {
+      if (openUserProfile) {
+        openUserProfile();
+        onClose();
+        return;
+      }
+    } catch (err) {
+      console.warn('openUserProfile failed:', err);
+    }
+    window.open('https://accounts.clerk.com', '_blank');
+    onClose();
   };
 
   const handleLogout = async () => {
     if (window.confirm('¿Cerrar sesión?')) {
       try {
         if (window.Clerk?.signOut) await window.Clerk.signOut();
-        else if (window.Clerk) await window.Clerk.signOut();
       } catch (err) {
         console.error('Error signing out:', err);
       }
@@ -225,12 +323,13 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangePassword, onOpenCha
   const displayEmail = profileData.email || clerkUser?.primaryEmailAddress?.emailAddress || '';
   const displayName = profileData.full_name || clerkUser?.fullName || clerkUser?.firstName || 'Usuario';
 
+  const currentModule = Math.min(completedModules.length + 1, TOTAL_MODULES);
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="fixed inset-0 bg-black/20" onClick={onClose} />
 
-      <Card className="w-full max-w-md bg-white rounded-xl border border-slate-200/60 shadow-lg max-h-[90vh] overflow-hidden relative z-10 animate-in fade-in-0 zoom-in-95 duration-300">
-        {/* Botón cerrar */}
+      <Card className="w-full max-w-md bg-white rounded-xl border border-slate-200/60 shadow-lg max-h-[90vh] overflow-hidden relative z-10 animate-in fade-in-0 zoom-in-95 duration-300 flex flex-col">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 z-50 p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-all duration-200"
@@ -279,7 +378,7 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangePassword, onOpenCha
         </div>
 
         {/* Contenido scrolleable */}
-        <CardContent className="p-5 overflow-y-auto" style={{ maxHeight: 'calc(90vh - 240px)' }}>
+        <CardContent className="p-5 overflow-y-auto flex-1">
           {/* Barra de progreso visual */}
           {stats.progressPercent > 0 && (
             <div className="mb-5">
@@ -295,6 +394,14 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangePassword, onOpenCha
               </div>
             </div>
           )}
+
+          {/* Módulo actual */}
+          <div className="mb-5 flex items-center justify-center gap-2 py-2 bg-gradient-to-r from-[#004B63]/5 to-[#00BCD4]/5 rounded-lg border border-[#004B63]/10">
+            <Icon name="fa-location-dot" className="text-[#004B63] text-sm" />
+            <span className="text-sm font-bold text-[#004B63]">
+              Módulo {currentModule} de {TOTAL_MODULES}
+            </span>
+          </div>
 
           {/* Curso */}
           <div className="mb-5 p-3 bg-gradient-to-r from-[#004B63]/5 to-[#00BCD4]/5 border border-[#004B63]/10 rounded-xl">
@@ -338,21 +445,25 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangePassword, onOpenCha
               <div>
                 <label className="text-[10px] font-medium text-slate-500 block mb-1">Teléfono</label>
                 {editingField === 'phone' ? (
-                  <div className="relative">
-                    <input
-                      ref={phoneInputRef}
-                      type="tel"
-                      value={tempValue}
-                      onChange={(e) => setTempValue(e.target.value.replace(/\D/g, ''))}
-                      onBlur={() => handleSave('phone')}
-                      onKeyDown={(e) => handleKeyDown(e, 'phone')}
-                      className="w-full pl-9 pr-8 py-2.5 bg-white border border-slate-200 rounded-full focus:outline-none focus:ring-2 focus:ring-[#00BCD4]/50 focus:border-[#00BCD4] text-xs"
-                      placeholder="3001234567"
-                      maxLength="10"
-                      disabled={isSaving}
-                    />
-                    <Icon name="fa-phone" className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs" />
-                    {isSaving && <Icon name="fa-spinner" className="absolute right-3 top-1/2 -translate-y-1/2 text-[#00BCD4] text-xs animate-spin" />}
+                  <div>
+                    <div className="relative">
+                      <input
+                        ref={phoneInputRef}
+                        type="tel"
+                        value={tempValue}
+                        onChange={(e) => handleTempChange('phone', e.target.value)}
+                        onKeyDown={(e) => { if (e.key === 'Escape') handleCancelEdit(); }}
+                        className="w-full pl-9 pr-8 py-2.5 bg-white border border-slate-200 rounded-full focus:outline-none focus:ring-2 focus:ring-[#00BCD4]/50 focus:border-[#00BCD4] text-xs"
+                        placeholder="3001234567"
+                        maxLength="10"
+                        disabled={isSaving}
+                      />
+                      <Icon name="fa-phone" className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs" />
+                      <button onClick={handleCancelEdit} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors">
+                        <Icon name="fa-times" className="text-xs" />
+                      </button>
+                    </div>
+                    {phoneError && <p className="text-[10px] text-amber-600 mt-1 ml-2">{phoneError}</p>}
                   </div>
                 ) : (
                   <div
@@ -379,15 +490,16 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangePassword, onOpenCha
                       ref={nameInputRef}
                       type="text"
                       value={tempValue}
-                      onChange={(e) => setTempValue(e.target.value)}
-                      onBlur={() => handleSave('full_name')}
-                      onKeyDown={(e) => handleKeyDown(e, 'full_name')}
+                      onChange={(e) => handleTempChange('full_name', e.target.value)}
+                      onKeyDown={(e) => { if (e.key === 'Escape') handleCancelEdit(); }}
                       className="w-full pl-9 pr-8 py-2.5 bg-white border border-slate-200 rounded-full focus:outline-none focus:ring-2 focus:ring-[#00BCD4]/50 focus:border-[#00BCD4] text-xs"
                       placeholder="Tu nombre completo"
                       disabled={isSaving}
                     />
                     <Icon name="fa-user" className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs" />
-                    {isSaving && <Icon name="fa-spinner" className="absolute right-3 top-1/2 -translate-y-1/2 text-[#00BCD4] text-xs animate-spin" />}
+                    <button onClick={handleCancelEdit} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors">
+                      <Icon name="fa-times" className="text-xs" />
+                    </button>
                   </div>
                 ) : (
                   <div
@@ -404,6 +516,39 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangePassword, onOpenCha
               </div>
             </div>
           </div>
+
+          {/* Botón Guardar Cambios */}
+          {hasPendingChanges() && (
+            <div className="mb-5">
+              <button
+                onClick={handleSaveAll}
+                disabled={isSaving || (phoneError && tempValue.length > 0)}
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white font-semibold text-sm rounded-lg shadow-sm hover:shadow-md hover:opacity-90 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSaving ? (
+                  <>
+                    <Icon name="fa-spinner" className="animate-spin" />
+                    Guardando...
+                  </>
+                ) : (
+                  <>
+                    <Icon name="fa-save" />
+                    Guardar Cambios
+                  </>
+                )}
+              </button>
+            </div>
+          )}
+
+          {/* Feedback de guardado */}
+          {saveMessage && (
+            <div className={`mb-5 p-3 rounded-lg border ${saveMessage.type === 'success' ? 'bg-emerald-50 border-emerald-200' : 'bg-rose-50 border-rose-200'}`}>
+              <p className={`text-xs flex items-center gap-2 ${saveMessage.type === 'success' ? 'text-emerald-600' : 'text-rose-600'}`}>
+                <Icon name={saveMessage.type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} className={saveMessage.type === 'success' ? 'text-emerald-500' : 'text-rose-500'} />
+                {saveMessage.text}
+              </p>
+            </div>
+          )}
 
           {/* Acciones */}
           <div>
@@ -424,35 +569,13 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangePassword, onOpenCha
               </button>
 
               <button
-                onClick={() => { onClose(); if (onOpenChangePassword) onOpenChangePassword(); }}
+                onClick={handleOpenChangePassword}
                 className="w-full flex items-center gap-3 px-4 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-[#004B63] rounded-lg shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50 transition-all duration-300 text-left"
               >
                 <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center flex-shrink-0">
                   <Icon name="fa-key" className="text-[#004B63] text-xs" />
                 </div>
                 <span className="text-xs font-semibold text-slate-800">Cambiar Contraseña</span>
-              </button>
-
-              <button
-                onClick={() => { onClose(); window.dispatchEvent(new CustomEvent('open-security-modal')); }}
-                className="w-full flex items-center gap-3 px-4 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-[#004B63] rounded-lg shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50 transition-all duration-300 text-left"
-              >
-                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center flex-shrink-0">
-                  <Icon name="fa-shield-halved" className="text-[#004B63] text-xs" />
-                </div>
-                <span className="text-xs font-semibold text-slate-800">Seguridad</span>
-              </button>
-
-              <div className="border-t border-slate-200/60 my-1" />
-
-              <button
-                onClick={handleLogout}
-                className="w-full flex items-center gap-3 px-4 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-rose-400 rounded-lg shadow-sm hover:shadow hover:border-l-rose-500 hover:bg-rose-50/50 transition-all duration-300 text-left"
-              >
-                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-rose-400/10 to-rose-500/10 flex items-center justify-center flex-shrink-0">
-                  <Icon name="fa-sign-out-alt" className="text-rose-500 text-xs" />
-                </div>
-                <span className="text-xs font-semibold text-rose-600">Cerrar Sesión</span>
               </button>
             </div>
           </div>
