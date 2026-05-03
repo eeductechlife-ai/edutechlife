@@ -43,8 +43,8 @@ const IALabContentAccordionOptimized = () => {
     {
       id: 1,
       title: "Introducción a la Inteligencia Artificial Generativa",
-      duration: "12 min",
-      status: "completed", // completed, in-progress, locked
+      duration: "20 min",
+      status: "in-progress",
       icon: <Brain className="w-4 h-4" />,
       content: "Comprende los fundamentos de la IA generativa y su aplicación en educación. Aprende cómo los modelos como GPT-4 transforman la creación de contenido educativo.",
       objectives: [
@@ -57,8 +57,8 @@ const IALabContentAccordionOptimized = () => {
     {
       id: 2,
       title: "¿Qué es un Prompt?",
-      duration: "15 min",
-      status: "in-progress",
+      duration: "20 min",
+      status: "locked",
       icon: <Zap className="w-4 h-4" />,
       content: "Domina el arte de comunicarte con IA. Un prompt efectivo es la diferencia entre resultados genéricos y soluciones personalizadas.",
       objectives: [
@@ -71,7 +71,7 @@ const IALabContentAccordionOptimized = () => {
     {
       id: 3,
       title: "Estructura Básica de un Prompt Efectivo",
-      duration: "18 min",
+      duration: "20 min",
       status: "locked",
       icon: <Target className="w-4 h-4" />,
       content: "Aprende la fórmula mágica: Contexto + Instrucción + Formato = Resultado preciso. Desglose paso a paso con ejemplos reales.",
@@ -81,53 +81,11 @@ const IALabContentAccordionOptimized = () => {
         "Evaluar calidad de resultados"
       ],
       type: "teoría"
-    },
-    {
-      id: 4,
-      title: "Técnicas de Refinamiento",
-      duration: "22 min",
-      status: "locked",
-      icon: <Sparkles className="w-4 h-4" />,
-      content: "Itera y mejora tus prompts. Aprende técnicas como chain-of-thought, few-shot learning y role-playing para resultados premium.",
-      objectives: [
-        "Aplicar técnicas de refinamiento",
-        "Iterar basado en feedback",
-        "Optimizar para precisión"
-      ],
-      type: "práctica"
-    },
-    {
-      id: 5,
-      title: "Práctica Asistida 1: Modificando Variables",
-      duration: "25 min",
-      status: "locked",
-      icon: <BarChart3 className="w-4 h-4" />,
-      content: "Laboratorio práctico donde ajustarás variables clave en prompts reales. Feedback inmediato del sistema de evaluación.",
-      objectives: [
-        "Manipular 5 variables clave",
-        "Analizar impacto en resultados",
-        "Documentar aprendizajes"
-      ],
-      type: "laboratorio"
-    },
-    {
-      id: 6,
-      title: "Actividad 1: Crea tu primer Prompt",
-      duration: "30 min",
-      status: "locked",
-      icon: <BookOpen className="w-4 h-4" />,
-      content: "Proyecto final del módulo. Desarrolla un prompt completo para un caso educativo real y recibe evaluación detallada.",
-      objectives: [
-        "Diseñar prompt completo",
-        "Aplicar todas las técnicas",
-        "Presentar para evaluación"
-      ],
-      type: "proyecto"
     }
   ]);
 
-  const [openAccordion, setOpenAccordion] = useState(2); // Lección 2 en progreso por defecto
-  const [currentLessonIndex, setCurrentLessonIndex] = useState(1);
+  const [openAccordion, setOpenAccordion] = useState(1); // Lección 1 en progreso por defecto
+  const [currentLessonIndex, setCurrentLessonIndex] = useState(0);
 
   // Toggle acordeón
   const toggleAccordion = (lessonId) => {
@@ -383,7 +341,7 @@ const IALabContentAccordionOptimized = () => {
             CompactTypography.TINY,
             "text-slate-500 mt-0.5"
           )}>
-            6 lecciones • 2h 2min total
+            3 lecciones • 1h 00min total
           </p>
         </div>
 
@@ -441,7 +399,7 @@ const IALabContentAccordionOptimized = () => {
             Progreso del módulo
           </span>
           <span className={cn(CompactTypography.TINY, "text-[#00BCD4] font-bold")}>
-            33% completado
+            0% completado
           </span>
         </div>
         <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
@@ -467,7 +425,7 @@ const IALabContentAccordionOptimized = () => {
         <div className="flex items-center gap-6">
           <div className="text-center">
             <div className={cn(CompactTypography.HEADING, "text-[#004B63] font-bold")}>
-              2/6
+              0/3
             </div>
             <div className={cn(CompactTypography.MICRO, "text-slate-500")}>
               Completadas
@@ -476,7 +434,7 @@ const IALabContentAccordionOptimized = () => {
           
           <div className="text-center">
             <div className={cn(CompactTypography.HEADING, "text-[#004B63] font-bold")}>
-              1h 2min
+              1h 00min
             </div>
             <div className={cn(CompactTypography.MICRO, "text-slate-500")}>
               Restante

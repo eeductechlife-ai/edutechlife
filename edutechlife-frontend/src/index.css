@@ -1269,7 +1269,7 @@ body.is-scrolling .glass-card-dark {
     a,
     button,
     [role="button"] {
-      cursor: none !important;
+      cursor: none;
     }
   }
 

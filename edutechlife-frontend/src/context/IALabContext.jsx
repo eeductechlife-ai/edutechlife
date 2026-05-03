@@ -99,7 +99,7 @@ export const IALabProvider = ({ children, onBack }) => {
   const [showSecurityMessage, setShowSecurityMessage] = useState(false);
   
   // Estados de timer
-  const [suggestedTime] = useState(20 * 60); // 20 minutos en segundos
+  const [suggestedTime] = useState(25 * 60); // 25 minutos en segundos
   const [timeElapsed, setTimeElapsed] = useState(0);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [showTimeWarning, setShowTimeWarning] = useState(false);
@@ -173,7 +173,7 @@ export const IALabProvider = ({ children, onBack }) => {
   
   // Módulos del curso (idénticos al original)
   const modules = [
-    { id: 1, title: 'Ingeniería de Prompts', icon: 'fa-terminal', color: '#4DA8C4', topics: ['Dar instrucciones claras a la IA', 'Mejorar cualquier pregunta para obtener mejores respuestas', 'Entender por qué la IA falla y cómo corregirlo', 'Obtener resultados útiles en menos tiempo', 'Aplicar la IA en estudio, trabajo y vida diaria', 'Pedir exactamente lo que necesita, sin rodeos'], challenge: '¡Llegó el momento de la práctica! Aplica todo lo aprendido en este módulo resolviendo un caso real. Atrévete a consolidar tu aprendizaje, supera el reto y lleva tus conocimientos al siguiente nivel.', desc: 'En este módulo, hemos diseñado una ruta estratégica que te llevará desde los fundamentos de la Inteligencia Artificial Generativa hasta la creación de instrucciones de alto impacto. Tu misión: Explorar cada tema y sus recursos multimedia (videos, guías y laboratorios). Notarás que tu barra de progreso cobrará vida con cada paso que des. No te detengas: cada recurso completado te acerca un 20% más a tu certificación global. ¡El poder de las instrucciones claras está en tus manos!', duration: '4h 30min', level: 'Avanzado', videos: 12, projects: 3 },
+    { id: 1, title: 'Ingeniería de Prompts', icon: 'fa-terminal', color: '#4DA8C4', topics: ['Dar instrucciones claras a la IA', 'Mejorar cualquier pregunta para obtener mejores respuestas', 'Entender por qué la IA falla y cómo corregirlo', 'Obtener resultados útiles en menos tiempo', 'Aplicar la IA en estudio, trabajo y vida diaria', 'Pedir exactamente lo que necesita, sin rodeos'], challenge: '¡Llegó el momento de la práctica! Aplica todo lo aprendido en este módulo resolviendo un caso real. Atrévete a consolidar tu aprendizaje, supera el reto y lleva tus conocimientos al siguiente nivel.', desc: 'En este módulo, hemos diseñado una ruta estratégica que te llevará desde los fundamentos de la Inteligencia Artificial Generativa hasta la creación de instrucciones de alto impacto. Tu misión: Explorar cada tema y sus recursos multimedia (videos, guías y laboratorios). Notarás que tu barra de progreso cobrará vida con cada paso que des. No te detengas: cada recurso completado te acerca un 20% más a tu certificación global. ¡El poder de las instrucciones claras está en tus manos!', duration: '2h', level: 'Avanzado', videos: 12, projects: 3 },
     { id: 2, title: 'Potencia ChatGPT', icon: 'fa-robot', color: '#66CCCC', topics: ['Análisis Predictivo', 'GPTs Personalizados', 'Function Calling', 'System Prompts'], challenge: 'Estructura un GPT para análisis de mercados cuánticos.', desc: 'Desbloquea todo el potencial de los modelos GPT con técnicas avanzadas.', duration: '5h 00min', level: 'Avanzado', videos: 15, projects: 4 },
     { id: 3, title: 'Rastreo Profundo', icon: 'fa-search', color: '#B2D8E5', topics: ['Razonamiento Multimodal', 'Grounding Real-Time', 'Deep Research', 'Fact-Checking IA'], challenge: 'Genera una comparativa técnica de latencia entre arquitecturas IA.', desc: 'Técnicas de investigación profunda con IA para resultados de élite.', duration: '3h 45min', level: 'Intermedio', videos: 10, projects: 2 },
     { id: 4, title: 'Inmersión NotebookLM', icon: 'fa-microphone', color: '#004B63', topics: ['Curaduría de Fuentes', 'Síntesis de Conocimiento', 'Audio Overviews', 'Gestión Documental'], challenge: 'Genera un podcast analizando 5 papers sobre neuro-plasticidad.', desc: 'Convierte cualquier documento en conocimiento accionable con IA.', duration: '4h 00min', level: 'Intermedio', videos: 8, projects: 3 },
@@ -186,69 +186,36 @@ export const IALabProvider = ({ children, onBack }) => {
   const moduleLessons = [
     { 
       id: 1, 
-      title: 'Resultados Rápidos con IA (Zero-Shot Prompting)', 
-      description: 'Obtén buenos resultados sin ejemplos', 
-      detailedDescription: 'Aprende a formular prompts efectivos desde el primer intento, sin necesidad de ejemplos previos. Domina la técnica Zero-Shot para obtener respuestas precisas y útiles en cualquier contexto.',
-      duration: '8 min', 
+      title: 'Introducción a la Inteligencia Artificial Generativa', 
+      description: 'Comprende los fundamentos de la IA generativa', 
+      detailedDescription: 'Comprende los fundamentos de la IA generativa y su aplicación en educación. Aprende cómo los modelos como GPT-4 transforman la creación de contenido educativo.',
+      duration: '20 min', 
       format: 'Reading', 
-      icon: 'fa-bolt', 
+      icon: 'fa-brain', 
       badgeColor: 'bg-yellow-100 text-yellow-800',
       themeColor: '#FFD166'
     },
     { 
       id: 2, 
-      title: 'Haz que la IA Piense Paso a Paso (Chain-of-Thought)', 
-      description: 'Guía el razonamiento de la IA', 
-      detailedDescription: 'Descubre cómo descomponer problemas complejos en pasos lógicos que la IA puede seguir. Aplica la técnica Chain-of-Thought para obtener soluciones detalladas y bien fundamentadas.',
-      duration: '18 min', 
+      title: '¿Qué es un Prompt?', 
+      description: 'Domina el arte de comunicarte con IA', 
+      detailedDescription: 'Domina el arte de comunicarte con IA. Un prompt efectivo es la diferencia entre resultados genéricos y soluciones personalizadas.',
+      duration: '20 min', 
       format: 'Lab', 
-      icon: 'fa-sitemap', 
+      icon: 'fa-comments', 
       badgeColor: 'bg-indigo-100 text-indigo-800',
       themeColor: '#4F46E5'
     },
     { 
       id: 3, 
-      title: 'Tono y Estilo: Personalizando la Voz de la IA', 
-      description: 'Personaliza respuestas según necesidades', 
-      detailedDescription: 'Aprende a ajustar el tono, estilo y formato de las respuestas de la IA para diferentes audiencias y propósitos. Desde formal hasta casual, domina el arte de la comunicación efectiva.',
-      duration: '12 min', 
+      title: 'Estructura Básica de un Prompt Efectivo', 
+      description: 'Aprende la fórmula mágica de prompts', 
+      detailedDescription: 'Aprende la fórmula mágica: Contexto + Instrucción + Formato = Resultado preciso. Desglose paso a paso con ejemplos reales.',
+      duration: '20 min', 
       format: 'Video', 
-      icon: 'fa-comments', 
+      icon: 'fa-sitemap', 
       badgeColor: 'bg-green-100 text-green-800',
       themeColor: '#10B981'
-    },
-    { 
-      id: 4, 
-      title: 'Integridad Académica y Prevención del Plagio con IA', 
-      description: 'Asegura la originalidad y ética en el uso de IA', 
-      detailedDescription: 'Conoce las mejores prácticas para usar la IA de manera ética en contextos académicos y profesionales. Aprende a citar correctamente, evitar plagio y mantener la integridad intelectual.',
-      duration: '15 min', 
-      format: 'Lab', 
-      icon: 'fa-shield-alt', 
-      badgeColor: 'bg-red-100 text-red-800',
-      themeColor: '#EF4444'
-    },
-    { 
-      id: 5, 
-      title: 'Estructura Perfecta de un Prompt: El Framework Edutechlife', 
-      description: 'Estructura tus prompts con estrategia', 
-      detailedDescription: 'Domina el framework RTF (Rol, Tarea, Formato) exclusivo de Edutechlife. Aprende a estructurar prompts que generen respuestas consistentes, relevantes y de alta calidad.',
-      duration: '10 min', 
-      format: 'Video', 
-      icon: 'fa-code', 
-      badgeColor: 'bg-purple-100 text-purple-800',
-      themeColor: '#8B5CF6'
-    },
-    { 
-      id: 6, 
-      title: 'Proyecto Final: Diseña tu Solución con IA', 
-      description: 'Reflexiona sobre el impacto ético de la IA', 
-      detailedDescription: 'Aplica todo lo aprendido en un proyecto práctico que resuelva un problema real. Desarrolla una solución completa usando IA, desde el diseño hasta la implementación.',
-      duration: '25 min', 
-      format: 'Activity', 
-      icon: 'fa-rocket', 
-      badgeColor: 'bg-cyan-100 text-cyan-800',
-      themeColor: '#06B6D4'
     },
   ];
   

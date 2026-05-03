@@ -33,7 +33,7 @@ const IALabChallengeSection = ({
 
     const currentModule = modules.find(m => m.id === activeMod);
     const challengeText = currentModule?.challenge || 'Crea un prompt para resolver un problema complejo de tu industria.';
-    const estimatedTime = "45 min";
+    const estimatedTime = "25 min";
 
     const handleStartChallenge = () => {
         setShowPremiumEvaluationModal(true);

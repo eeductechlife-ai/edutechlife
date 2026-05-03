@@ -65,7 +65,7 @@ export const useIALabQuiz = () => {
   const TOTAL_QUESTIONS = 8;
   const PASSING_SCORE = 75; // 75% mínimo para aprobar
   const DAILY_ATTEMPTS_LIMIT = 3; // Cambiado de 2 a 3 intentos diarios
-  const SUGGESTED_TIME_MINUTES = 20;
+  const SUGGESTED_TIME_MINUTES = 25;
   const SUGGESTED_TIME_SECONDS = SUGGESTED_TIME_MINUTES * 60;
   
   // Constantes de seguridad

@@ -53,20 +53,19 @@ const CustomCursor = () => {
     const cursorX = useMotionValue(-100);
     const cursorY = useMotionValue(-100);
     
-    const springConfig = { damping: 30, stiffness: 400, mass: 0.5 };
+    const springConfig = { damping: 25, stiffness: 600, mass: 0.3 };
     const cursorXSpring = useSpring(cursorX, springConfig);
     const cursorYSpring = useSpring(cursorY, springConfig);
     
     const isHovering = useMotionValue(0);
     const isClicking = useMotionValue(0);
     const scaleTransform = useSpring(1, springConfig);
-    const clickScale = useSpring(1, { damping: 20, stiffness: 600 });
+    const clickScale = useSpring(1, { damping: 15, stiffness: 800 });
     
-    // Trail positions
-    const trail1X = useSpring(cursorX, { damping: 35, stiffness: 300, mass: 0.8 });
-    const trail1Y = useSpring(cursorY, { damping: 35, stiffness: 300, mass: 0.8 });
-    const trail2X = useSpring(cursorX, { damping: 40, stiffness: 200, mass: 1.2 });
-    const trail2Y = useSpring(cursorY, { damping: 40, stiffness: 200, mass: 1.2 });
+    const trail1X = useSpring(cursorX, { damping: 28, stiffness: 450, mass: 0.5 });
+    const trail1Y = useSpring(cursorY, { damping: 28, stiffness: 450, mass: 0.5 });
+    const trail2X = useSpring(cursorX, { damping: 32, stiffness: 350, mass: 0.7 });
+    const trail2Y = useSpring(cursorY, { damping: 32, stiffness: 350, mass: 0.7 });
     
     useEffect(() => {
         const moveCursor = (e) => {
@@ -114,86 +113,69 @@ const CustomCursor = () => {
     }, []);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            const hovering = isHovering.get();
-            const clicking = isClicking.get();
-            const baseScale = clicking ? 0.8 : (hovering ? 1.8 : 1);
-            scaleTransform.set(baseScale);
-        }, 16);
-        return () => clearInterval(interval);
-    }, [isHovering, isClicking, scaleTransform]);
+        const unsubscribeHover = isHovering.onChange((val) => {
+            scaleTransform.set(isClicking.get() ? 0.8 : (val ? 1.3 : 1));
+        });
+        const unsubscribeClick = isClicking.onChange((val) => {
+            scaleTransform.set(val ? 0.8 : (isHovering.get() ? 1.3 : 1));
+        });
+        return () => {
+            unsubscribeHover();
+            unsubscribeClick();
+        };
+    }, [scaleTransform]);
 
     return (
         <motion.div
             className="hidden lg:block fixed inset-0 pointer-events-none z-[9999]"
             style={{ x: cursorXSpring, y: cursorYSpring }}
         >
-            {/* Trail 2 - furthest */}
             <motion.div
-                className="absolute w-12 h-12 rounded-full pointer-events-none"
+                className="absolute w-8 h-8 rounded-full pointer-events-none"
                 style={{
                     translateX: '-50%',
                     translateY: '-50%',
                     x: trail2X,
                     y: trail2Y,
                     scale: scaleTransform,
-                    backgroundColor: 'rgba(77, 168, 196, 0.03)',
+                    backgroundColor: 'rgba(77, 168, 196, 0.04)',
                     willChange: 'transform',
                 }}
             />
             
-            {/* Trail 1 - middle */}
             <motion.div
-                className="absolute w-8 h-8 rounded-full pointer-events-none"
+                className="absolute w-5 h-5 rounded-full pointer-events-none"
                 style={{
                     translateX: '-50%',
                     translateY: '-50%',
                     x: trail1X,
                     y: trail1Y,
                     scale: scaleTransform,
-                    backgroundColor: 'rgba(77, 168, 196, 0.08)',
+                    backgroundColor: 'rgba(77, 168, 196, 0.12)',
                     willChange: 'transform',
                 }}
             />
             
-            {/* Outer ring - hover effect */}
             <motion.div
-                className="absolute w-10 h-10 rounded-full border-2 pointer-events-none"
+                className="absolute w-8 h-8 rounded-full border-2 pointer-events-none"
                 style={{
                     translateX: '-50%',
                     translateY: '-50%',
                     scale: scaleTransform,
                     borderColor: isHovering ? 'rgba(77, 168, 196, 0.6)' : 'rgba(0, 75, 99, 0.3)',
                     backgroundColor: isHovering ? 'rgba(77, 168, 196, 0.1)' : 'rgba(77, 168, 196, 0.05)',
-                    willChange: 'transform, borderColor, backgroundColor',
+                    willChange: 'transform',
                 }}
             />
             
-            {/* Main dot - always visible */}
             <motion.div
-                className="absolute w-3 h-3 rounded-full pointer-events-none"
+                className="absolute w-2.5 h-2.5 rounded-full pointer-events-none"
                 style={{
                     translateX: '-50%',
                     translateY: '-50%',
                     backgroundColor: isHovering ? '#004B63' : '#4DA8C4',
                     scale: clickScale,
-                    willChange: 'transform, backgroundColor',
-                    boxShadow: isHovering 
-                        ? '0 0 10px rgba(0, 75, 99, 0.5)' 
-                        : '0 0 8px rgba(77, 168, 196, 0.4)',
-                }}
-            />
-            
-            {/* Click effect - pulse */}
-            <motion.div
-                className="absolute w-6 h-6 rounded-full pointer-events-none"
-                style={{
-                    translateX: '-50%',
-                    translateY: '-50%',
-                    scale: clickScale,
-                    backgroundColor: 'rgba(77, 168, 196, 0.3)',
-                    opacity: isClicking,
-                    willChange: 'transform, opacity',
+                    willChange: 'transform',
                 }}
             />
         </motion.div>

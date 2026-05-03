@@ -212,9 +212,7 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
                 className="group flex items-center gap-2.5 w-full px-3 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-[#004B63] rounded-lg shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50 transition-all duration-300 cursor-pointer text-left"
                 onClick={handleProfile}
               >
-                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center flex-shrink-0 group-hover:from-[#004B63]/20 group-hover:to-[#00BCD4]/20 transition-all duration-300">
-                  <Icon name="fa-user-circle" className="text-sm text-[#004B63]" />
-                </div>
+                <Icon name="fa-user-circle" className="text-sm text-[#004B63] flex-shrink-0" />
                 <span className="text-xs font-semibold text-slate-800 group-hover:text-[#004B63] transition-colors duration-300">Mi Perfil</span>
               </button>
               
@@ -223,9 +221,7 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
                 className="group flex items-center gap-2.5 w-full px-3 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-[#004B63] rounded-lg shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50 transition-all duration-300 cursor-pointer text-left"
                 onClick={handleCertificates}
               >
-                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center flex-shrink-0 group-hover:from-[#004B63]/20 group-hover:to-[#00BCD4]/20 transition-all duration-300">
-                  <Icon name="fa-certificate" className="text-sm text-[#004B63]" />
-                </div>
+                <Icon name="fa-certificate" className="text-sm text-[#004B63] flex-shrink-0" />
                 <span className="text-xs font-semibold text-slate-800 group-hover:text-[#004B63] transition-colors duration-300">Mis Certificados</span>
               </button>
               
@@ -234,9 +230,7 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
                 className="group flex items-center gap-2.5 w-full px-3 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-[#004B63] rounded-lg shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50 transition-all duration-300 cursor-pointer text-left"
                 onClick={handleHelp}
               >
-                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center flex-shrink-0 group-hover:from-[#004B63]/20 group-hover:to-[#00BCD4]/20 transition-all duration-300">
-                  <Icon name="fa-question-circle" className="text-sm text-[#004B63]" />
-                </div>
+                <Icon name="fa-question-circle" className="text-sm text-[#004B63] flex-shrink-0" />
                 <span className="text-xs font-semibold text-slate-800 group-hover:text-[#004B63] transition-colors duration-300">Ayuda y Soporte</span>
               </button>
               
@@ -248,9 +242,7 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
                 className="group flex items-center gap-2.5 w-full px-3 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-rose-400 rounded-lg shadow-sm hover:shadow hover:border-l-rose-500 hover:bg-rose-50/50 transition-all duration-300 cursor-pointer text-left"
                 onClick={handleLogout}
               >
-                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-rose-400/10 to-rose-500/10 flex items-center justify-center flex-shrink-0 group-hover:from-rose-400/20 group-hover:to-rose-500/20 transition-all duration-300">
-                  <Icon name="fa-sign-out-alt" className="text-sm text-rose-500" />
-                </div>
+                <Icon name="fa-sign-out-alt" className="text-sm text-rose-500 flex-shrink-0" />
                 <span className="text-xs font-semibold text-rose-600 group-hover:text-rose-700 transition-colors duration-300">Cerrar Sesión</span>
               </button>
             </div>

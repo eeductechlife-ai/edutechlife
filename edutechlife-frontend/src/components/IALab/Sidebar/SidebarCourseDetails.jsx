@@ -28,7 +28,7 @@ const SidebarCourseDetails = ({
 }) => {
   // Datos por defecto
   const courseData = {
-    duration: course.duration || "2h 30min",
+    duration: course.duration || "2h",
     level: course.level || "Intermedio",
     videos: course.videos || "12 videos",
     projects: course.projects || "3 proyectos",

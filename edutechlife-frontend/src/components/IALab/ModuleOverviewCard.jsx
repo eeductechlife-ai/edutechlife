@@ -28,7 +28,7 @@ const ModuleOverviewCard = ({ onAction }) => {
   // Datos hardcodeados según especificaciones
   const moduleData = {
     badge: {
-      duration: "1h 28min",
+      duration: "2h",
       module: "MÓDULO 1"
     },
     title: "Domina las Instrucciones",
@@ -37,17 +37,20 @@ const ModuleOverviewCard = ({ onAction }) => {
       { 
         title: "Introducción a la Inteligencia Artificial Generativa", 
         icon: "fa-brain", 
-        resources: 2 
+        resources: 2,
+        duration: "20 min"
       },
       { 
         title: "¿Qué es un Prompt?", 
         icon: "fa-comments", 
-        resources: 3 
+        resources: 3,
+        duration: "20 min"
       },
       { 
         title: "Estructura Básica de un Prompt Efectivo", 
         icon: "fa-sitemap", 
-        resources: 3 
+        resources: 3,
+        duration: "20 min"
       }
     ],
     stats: [
@@ -94,9 +97,7 @@ const ModuleOverviewCard = ({ onAction }) => {
                
                {/* Tu Misión - Subtítulo destacado */}
                <div className="flex items-start gap-3 mb-5">
-                 <div className="w-8 h-8 rounded-lg bg-[#00BCD4]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                   <Icon name="fa-rocket" className="text-[#00BCD4] text-sm" />
-                 </div>
+                  <Icon name="fa-rocket" className="text-[#00BCD4] text-sm flex-shrink-0 mt-0.5" />
                  <div className="flex-1">
                    <h4 className="text-base font-bold text-[#004B63] mb-1">Tu misión:</h4>
                    <p className="text-slate-600 text-[15px] md:text-base leading-relaxed text-justify">
@@ -124,9 +125,7 @@ const ModuleOverviewCard = ({ onAction }) => {
                       aria-label={`Ver recursos del tema: ${tema.title}`}
                     >
                       {/* Icono temático */}
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center flex-shrink-0 group-hover:from-[#004B63]/20 group-hover:to-[#00BCD4]/20 transition-all duration-300">
-                        <Icon name={tema.icon} className="text-xl text-[#004B63] group-hover:text-[#004B63] transition-colors duration-300" />
-                      </div>
+                      <Icon name={tema.icon} className="text-xl text-[#004B63] flex-shrink-0" />
                       
                       {/* Título y metadatos */}
                       <div className="flex-1 min-w-0">
@@ -134,26 +133,26 @@ const ModuleOverviewCard = ({ onAction }) => {
                           {tema.title}
                         </h4>
                         <div className="flex items-center gap-2 mt-1">
-                          <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#004B63]/5 rounded-full text-xs font-medium text-[#004B63] group-hover:bg-[#004B63]/10 transition-colors duration-300">
-                            <Icon name="fa-file" className="w-3 h-3" />
-                            {tema.resources} recursos
-                          </span>
-                        </div>
+                           <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium text-[#004B63]">
+                             <Icon name="fa-file" className="w-3 h-3" />
+                             {tema.resources} recursos
+                           </span>
+                           <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium text-[#00BCD4] bg-[#00BCD4]/10">
+                             <Icon name="fa-clock" className="w-3 h-3" />
+                             {tema.duration}
+                           </span>
+                         </div>
                       </div>
                       
                       {/* Chevron de acción */}
-                      <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center flex-shrink-0 group-hover:bg-[#004B63] group-hover:shadow-md transition-all duration-300">
-                        <Icon name="fa-chevron-right" className="text-sm text-slate-400 group-hover:text-white group-hover:translate-x-0.5 transition-all duration-300" />
-                      </div>
+                      <Icon name="fa-chevron-right" className="text-sm text-slate-400 flex-shrink-0 group-hover:translate-x-0.5 transition-all duration-300" />
                     </motion.button>
                   ))}
                 </div>
               
               {/* Es hora de la acción */}
               <div className="flex items-start gap-3 mt-6">
-                <div className="w-8 h-8 rounded-lg bg-[#004B63]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <Icon name="fa-bolt" className="text-[#004B63] text-sm" />
-                </div>
+                  <Icon name="fa-bolt" className="text-[#004B63] text-sm flex-shrink-0 mt-0.5" />
                 <div className="flex-1">
                   <h4 className="text-base font-bold text-[#004B63] mb-1">¡Es hora de la acción!</h4>
                   <p className="text-slate-600 text-[15px] md:text-base leading-relaxed text-justify">
@@ -179,12 +178,12 @@ const ModuleOverviewCard = ({ onAction }) => {
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                    className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border-0"
+                    className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-lg hover:bg-[#00BCD4]/90 hover:shadow-xl transition-all duration-300 cursor-pointer border-0"
                     title="Comunidad IALab"
                   >
                     <Icon name="fa-comments" className="text-white w-9 h-9 md:w-10 md:h-10" />
                   </motion.button>
-                  <span className="text-lg font-extrabold text-[#004B63] text-center">Comunidad IALab</span>
+                  <span className="text-base font-semibold text-[#004B63] tracking-wide text-center">Comunidad IALab</span>
                 </div>
                 {/* Icono: Desafío */}
                 <div className="flex flex-col items-center gap-3">
@@ -193,12 +192,12 @@ const ModuleOverviewCard = ({ onAction }) => {
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                    className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border-0"
+                    className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-lg hover:bg-[#00BCD4]/90 hover:shadow-xl transition-all duration-300 cursor-pointer border-0"
                     title="Desafío del Módulo"
                   >
                     <Icon name="fa-rocket" className="text-white w-9 h-9 md:w-10 md:h-10" />
                   </motion.button>
-                  <span className="text-lg font-extrabold text-[#004B63] text-center">Desafío</span>
+                  <span className="text-base font-semibold text-[#004B63] tracking-wide text-center">Desafío</span>
                 </div>
                 {/* Icono: Examen */}
                 <div className="flex flex-col items-center gap-3">
@@ -207,12 +206,12 @@ const ModuleOverviewCard = ({ onAction }) => {
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                    className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border-0"
+                    className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-lg hover:bg-[#00BCD4]/90 hover:shadow-xl transition-all duration-300 cursor-pointer border-0"
                     title="Examen del Módulo"
                   >
                     <Icon name="fa-clipboard-check" className="text-white w-9 h-9 md:w-10 md:h-10" />
                   </motion.button>
-                  <span className="text-lg font-extrabold text-[#004B63] text-center">Examen</span>
+                  <span className="text-base font-semibold text-[#004B63] tracking-wide text-center">Examen</span>
                 </div>
              </div>
 

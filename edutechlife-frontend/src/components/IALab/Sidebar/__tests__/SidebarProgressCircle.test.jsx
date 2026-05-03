@@ -44,7 +44,7 @@ describe('SidebarProgressCircle', () => {
     render(<SidebarProgressCircle {...defaultProps} />);
     
     expect(screen.getByText('Tiempo restante')).toBeInTheDocument();
-    expect(screen.getByText('~2h 30min')).toBeInTheDocument();
+    expect(screen.getByText('~1h 00min')).toBeInTheDocument();
   });
 
   test('shows achievement badge when progress >= 50%', () => {

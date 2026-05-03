@@ -145,7 +145,7 @@ const SidebarProgressCircle = ({
             CompactTypography.SUBHEADING,
             "text-slate-800 font-semibold"
           )}>
-            ~2h 30min
+            ~1h 00min
           </span>
         </div>
 
