@@ -22,6 +22,7 @@ const AutomationArchitectPage = lazy(() => import('../components/pages/Automatio
 const VAKDiagnosisPage = lazy(() => import('../components/pages/VAKDiagnosisPage'));
 const IALabDashboardPage = lazy(() => import('../components/pages/IALabDashboardPage'));
 const SmartBoardStatsPage = lazy(() => import('../components/pages/SmartBoardStatsPage'));
+const IALabProLandingPage = lazy(() => import('../components/pages/IALabProLandingPage'));
 
 // Componente wrapper para IALabSignUpPage que maneja navegación
 const IALabSignUpPageWrapper = () => {
@@ -147,6 +148,13 @@ const AppRoutes = () => {
         <Route path="vak-premium" element={
           <Suspense fallback={<PageLoader message="Cargando Diagnóstico VAK Premium..." />}>
             <VAKDiagnosisPage variant="premium" />
+          </Suspense>
+        } />
+        
+        {/* IA Lab Pro - Public landing page */}
+        <Route path="ialab-pro" element={
+          <Suspense fallback={<PageLoader message="Cargando IA Lab Pro..." />}>
+            <IALabProLandingPage />
           </Suspense>
         } />
         

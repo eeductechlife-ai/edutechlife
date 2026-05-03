@@ -113,32 +113,32 @@ const AppLayout = () => {
               
               {/* Navigation Links - Desktop */}
               <nav className="hidden md:flex items-center gap-3">
-                <button 
-                  onClick={() => navigateToSection('/', 'esencia')}
-                  className="px-4 py-2 text-sm font-semibold text-white bg-[#004B63] hover:bg-[#4DA8C4] rounded-full transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2"
-                >
-                  <i className="fa-solid fa-graduation-cap text-xs text-white"></i>
-                  Esencia
-                </button>
-                <button 
-                  onClick={() => navigateToSection('/', 'ecosystem')}
-                  className="px-4 py-2 text-sm font-semibold text-white bg-[#004B63] hover:bg-[#4DA8C4] rounded-full transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2"
-                >
-                  <i className="fa-solid fa-layer-group text-xs text-white"></i>
-                  Ecosistema
-                </button>
-                <button 
-                  onClick={() => navigate('/vak')}
-                  className="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] hover:from-[#66CCCC] hover:to-[#4DA8C4] rounded-full transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2"
-                >
-                  <i className="fa-solid fa-brain text-xs"></i>
-                  VAK Diagnosis
-                </button>
+                {/* Dropdown Iniciar Sesión */}
+                <div className="relative group">
+                  <button className="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] hover:from-[#66CCCC] hover:to-[#4DA8C4] rounded-full transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2">
+                    <i className="fa-solid fa-right-to-bracket text-xs text-white"></i>
+                    Iniciar Sesión
+                    <i className="fa-solid fa-chevron-down text-[10px] text-white ml-1"></i>
+                  </button>
+                  
+                  {/* Dropdown menu */}
+                  <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-[#4DA8C4]/10 p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                    <button onClick={() => navigate('/ialab')} className="w-full text-left px-3 py-2 text-sm font-semibold text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors flex items-center gap-2">
+                      <i className="fa-solid fa-robot text-[#4DA8C4]"></i>
+                      IA Lab Pro
+                    </button>
+                    <button onClick={() => navigate('/smartboard')} className="w-full text-left px-3 py-2 text-sm font-semibold text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors flex items-center gap-2">
+                      <i className="fa-solid fa-chalkboard text-[#4DA8C4]"></i>
+                      SmartBoard
+                    </button>
+                  </div>
+                </div>
+                
                 <button 
                   onClick={openContactModal}
                   className="px-4 py-2 text-sm font-semibold text-white bg-[#4DA8C4] hover:bg-[#004B63] rounded-full transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2"
                 >
-                  <i className="fa-solid fa-envelope text-xs"></i>
+                  <i className="fa-solid fa-envelope text-xs text-white"></i>
                   Contacto
                 </button>
                 
@@ -219,18 +219,6 @@ const AppLayout = () => {
                       <h3 className="text-xs font-semibold text-[#4DA8C4] uppercase tracking-wider mb-2">INICIO</h3>
                       <div className="space-y-1">
                         <button 
-                          onClick={() => navigateToSection('/', 'esencia')}
-                          className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
-                        >
-                          Esencia
-                        </button>
-                        <button 
-                          onClick={() => navigateToSection('/', 'ecosystem')}
-                          className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
-                        >
-                          Ecosistema
-                        </button>
-                        <button 
                           onClick={() => navigate('/')}
                           className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
                         >
@@ -255,12 +243,6 @@ const AppLayout = () => {
                       <h3 className="text-xs font-semibold text-[#4DA8C4] uppercase tracking-wider mb-2">HERRAMIENTAS</h3>
                       <div className="space-y-1">
                         <button 
-                          onClick={() => navigate('/vak')}
-                          className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
-                        >
-                          Diagnóstico VAK
-                        </button>
-                        <button 
                           onClick={() => navigate('/ialab')}
                           className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
                         >
@@ -271,6 +253,12 @@ const AppLayout = () => {
                           className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
                         >
                           SmartBoard
+                        </button>
+                        <button 
+                          onClick={() => navigate('/vak')}
+                          className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
+                        >
+                          Diagnóstico VAK
                         </button>
                         <button 
                           onClick={() => navigate('/automation')}

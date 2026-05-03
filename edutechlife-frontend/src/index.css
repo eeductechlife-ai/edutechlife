@@ -12900,3 +12900,26 @@ span:not(h1 span):not(h2 span):not(h3 span):not(.stat-number),
     animation: none;
   }
 }
+
+/* ======================
+   CLERK BUTTON TEXT VISIBILITY FIX
+   Forzar texto blanco en botón "Continuar"
+   ====================== */
+.cl-formButtonPrimary,
+.cl-formButtonPrimary *,
+.cl-formButtonPrimary::before,
+.cl-formButtonPrimary::after,
+.cl-button--primary,
+.cl-button--primary *,
+[data-cl-element="formButtonPrimary"],
+[data-cl-element="formButtonPrimary"] *,
+.cl-card button[type="submit"],
+.cl-card button[type="submit"] * {
+  color: #ffffff !important;
+}
+
+.cl-formButtonPrimary:hover *,
+.cl-button--primary:hover *,
+.cl-card button[type="submit"]:hover * {
+  color: #ffffff !important;
+}

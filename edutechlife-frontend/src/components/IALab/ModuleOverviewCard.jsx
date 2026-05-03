@@ -28,8 +28,8 @@ const ModuleOverviewCard = ({ onAction }) => {
   // Datos hardcodeados según especificaciones
   const moduleData = {
     badge: {
-      duration: "2h",
-      module: "MÓDULO 1"
+      duration: "10h",
+      module: "5 MÓDULOS"
     },
     title: "Domina las Instrucciones",
     description: "En este módulo, hemos diseñado una ruta estratégica que te llevará desde los fundamentos de la Inteligencia Artificial Generativa hasta la creación de instrucciones de alto impacto.\n\nTu misión: Explorar cada tema y sus recursos multimedia (videos, guías y laboratorios). Notarás que tu barra de progreso cobrará vida con cada paso que des. No te detengas: cada recurso completado te acerca un 20% más a tu certificación global. ¡El poder de las instrucciones claras está en tus manos!",

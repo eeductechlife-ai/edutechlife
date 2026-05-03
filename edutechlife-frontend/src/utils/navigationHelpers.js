@@ -20,8 +20,8 @@ export const mapViewToRoute = (view) => {
     'ialab': '/ialab',
     'lab-ia': '/ialab',
     'ialab-pro': '/ialab',
-    'ialab-dashboard': '/ialab/dashboard',
-    'ialab-estadisticas': '/ialab/dashboard',
+    'ialab-dashboard': '/ialab',
+    'ialab-estadisticas': '/ialab',
     
     'vak': '/vak',
     'diagnostico-vak': '/vak',

@@ -10,12 +10,10 @@ const WelcomeScreen = ({ onNavigate }) => {
   const [searchParams] = useSearchParams();
   const [isSignUpMode, setIsSignUpMode] = useState(false);
   
-  // Obtener returnTo de los parámetros de URL O de sessionStorage (para App.jsx)
   const urlReturnTo = searchParams.get('returnTo');
   const storageReturnTo = sessionStorage.getItem('clerk_return_to');
   const returnTo = urlReturnTo || (storageReturnTo ? `/${storageReturnTo}` : '/ialab');
   
-  // Verificar si estamos en modo registro desde URL
   useEffect(() => {
     const action = searchParams.get('action');
     if (action === 'signup') {
@@ -23,263 +21,155 @@ const WelcomeScreen = ({ onNavigate }) => {
     }
   }, [searchParams]);
   
-  // Limpiar sessionStorage después de leerlo
   if (storageReturnTo) {
     sessionStorage.removeItem('clerk_return_to');
   }
   
-  console.log('🔀 WelcomeScreen: Parámetros de URL:', Object.fromEntries(searchParams.entries()));
-  console.log('🔀 WelcomeScreen: returnTo de URL:', urlReturnTo);
-  console.log('🔀 WelcomeScreen: returnTo de storage:', storageReturnTo);
-  console.log('🔀 WelcomeScreen: returnTo final:', returnTo);
-  console.log('🔀 WelcomeScreen: Modo:', isSignUpMode ? 'Registro' : 'Inicio de sesión');
+  const clerkAppearance = {
+    variables: {
+      colorPrimary: '#004B63',
+      colorPrimaryHover: '#0A3550',
+      colorText: '#00374A',
+      colorTextSecondary: '#4DA8C4',
+      colorBackground: '#FFFFFF',
+      colorInputBackground: '#F8FAFC',
+      colorInputText: '#00374A',
+      colorInputPlaceholder: '#64748B',
+      colorDanger: '#DC2626',
+      colorSuccess: '#059669',
+      colorButtonText: '#FFFFFF',
+      colorButtonPrimary: '#004B63',
+      colorButtonPrimaryHover: '#0A3550',
+      borderRadius: '0.75rem',
+      fontFamily: "'Montserrat', sans-serif",
+    },
+    elements: {
+      formButtonPrimary: '!bg-[#004B63] hover:!bg-[#0A3550] font-semibold py-3 px-6 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg',
+      card: 'shadow-none border-none',
+      headerTitle: 'text-2xl font-bold text-[#004B63] text-center',
+      headerSubtitle: 'text-[#4DA8C4] text-center',
+      socialButtonsBlockButton: 'border-gray-200 hover:bg-gray-50 transition-colors',
+      formFieldLabel: 'text-[#00374A] font-medium',
+      formFieldInput: 'border-gray-200 focus:border-[#004B63] focus:ring-[#004B63]/20 rounded-lg',
+      footerActionLink: 'text-[#004B63] hover:text-[#4DA8C4] font-semibold',
+    }
+  };
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#004B63] to-[#0A3550] flex items-center justify-center p-3 sm:p-4 md:p-6 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-[#004B63] to-[#0A3550] flex items-center justify-center p-4 md:p-6 relative overflow-hidden">
       <FloatingParticles />
       
-      {/* Background Pattern - Optimizado para performance */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle at 25px 25px, white 2%, transparent 0%), radial-gradient(circle at 75px 75px, white 2%, transparent 0%)`,
+          backgroundImage: `radial-gradient(circle at 25px 25px, white 2%, transparent 0%)`,
           backgroundSize: '100px 100px'
         }} />
       </div>
 
-      {/* Main Card - Mobile First Design */}
       <motion.div 
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
-        className="relative z-10 w-full max-w-4xl bg-white/98 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-xl sm:shadow-2xl overflow-hidden border border-white/20"
+        className="relative z-10 w-full max-w-5xl bg-white rounded-2xl md:rounded-3xl shadow-2xl overflow-hidden border border-white/20"
       >
-        <div className="flex flex-col lg:flex-row">
-          {/* Left Side - Brand & Info (Mobile: hidden, Tablet+: visible) */}
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="hidden md:block lg:w-2/5 bg-gradient-to-br from-[#004B63] to-[#4DA8C4] p-6 sm:p-8 lg:p-10 text-white flex flex-col justify-between"
-          >
+        <div className="flex flex-col md:flex-row">
+          {/* Left Side - Brand & Info */}
+          <div className="hidden md:flex md:w-2/5 bg-gradient-to-br from-[#004B63] via-[#00334A] to-[#4DA8C4] p-8 lg:p-12 text-white flex-col justify-between">
             <div>
               {/* Logo */}
-              <div className="flex items-center gap-3 mb-6 sm:mb-8">
-                <motion.div 
-                  whileHover={{ scale: 1.05 }}
-                  className="w-10 h-10 sm:w-12 sm:h-12 bg-white/20 rounded-xl flex items-center justify-center"
-                >
-                  <Brain className="w-5 h-5 sm:w-7 sm:h-7" />
-                </motion.div>
+              <div className="flex items-center gap-3 mb-10">
+                <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                  <Brain className="w-7 h-7" />
+                </div>
                 <div>
-                  <h1 className="text-xl sm:text-2xl font-bold">Edutechlife</h1>
-                  <p className="text-white/80 text-xs sm:text-sm">Laboratorio IA</p>
+                  <h1 className="text-2xl font-bold">Edutechlife</h1>
+                  <p className="text-white/80 text-sm">IA Lab Pro</p>
                 </div>
               </div>
 
-              {/* Welcome Text */}
-              <div className="mb-6 sm:mb-8">
-                <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Bienvenido al futuro del aprendizaje</h2>
-                <p className="text-white/90 leading-relaxed text-sm sm:text-base">
-                  Accede a <strong>IA Generativa</strong>, <strong>Prompts</strong>, <strong>APIs</strong>, <strong>DeepResearch</strong>, <strong>Canvas</strong> y <strong>NotebookLM</strong> en un ecosistema educativo diseñado para potenciar tu aprendizaje.
+              {/* Welcome Message */}
+              <div className="mb-10">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-full mb-6">
+                  <span className="text-[#66CCCC] text-xs font-semibold uppercase tracking-wider">Plataforma SaaS Premium</span>
+                </div>
+                <h2 className="text-3xl lg:text-4xl font-bold mb-4 leading-tight text-white">
+                  Domina la IA Generativa
+                </h2>
+                <p className="text-white text-base leading-relaxed mb-4">
+                  Transforma tu forma de aprender y trabajar con inteligencia artificial. 
+                  Un curso diseñado para llevarte desde los fundamentos hasta la creación 
+                  de soluciones reales con herramientas de vanguardia.
                 </p>
-                <p className="text-white/80 mt-3 sm:mt-4 text-xs sm:text-sm italic">
-                  "La ética en la IA no es un complemento, es el fundamento de una educación transformadora."
+                <p className="text-white/80 text-sm">
+                  <span className="text-[#66CCCC] font-semibold">10 horas</span> de contenido · 
+                  <span className="text-[#66CCCC] font-semibold"> 5 módulos</span> prácticos · 
+                  Certificación profesional
                 </p>
               </div>
 
-              {/* Features */}
-              <div className="space-y-3 sm:space-y-4">
-                <motion.div 
-                  whileHover={{ x: 5 }}
-                  className="flex items-center gap-3"
-                >
-                  <div className="w-7 h-7 sm:w-8 sm:h-8 bg-white/20 rounded-lg flex items-center justify-center">
-                    <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </div>
-                  <span className="text-white/90 text-sm sm:text-base">Tu puerta al futuro de la IA</span>
-                </motion.div>
-                <motion.div 
-                  whileHover={{ x: 5 }}
-                  className="flex items-center gap-3"
-                >
-                  <div className="w-7 h-7 sm:w-8 sm:h-8 bg-white/20 rounded-lg flex items-center justify-center">
-                    <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </div>
-                  <span className="text-white/90 text-sm sm:text-base">Herramientas IA avanzadas</span>
-                </motion.div>
-                <motion.div 
-                  whileHover={{ x: 5 }}
-                  className="flex items-center gap-3"
-                >
-                  <div className="w-7 h-7 sm:w-8 sm:h-8 bg-white/20 rounded-lg flex items-center justify-center">
-                    <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </div>
-                  <span className="text-white/90 text-sm sm:text-base">Seguimiento académico</span>
-                </motion.div>
+              {/* Benefits */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-3 p-3 bg-white/10 backdrop-blur-sm rounded-lg">
+                  <CheckCircle className="w-5 h-5 text-white flex-shrink-0" />
+                  <span className="text-white font-medium">Certificación incluida</span>
+                </div>
+                <div className="flex items-center gap-3 p-3 bg-white/10 backdrop-blur-sm rounded-lg">
+                  <CheckCircle className="w-5 h-5 text-white flex-shrink-0" />
+                  <span className="text-white font-medium">Soporte 24/7</span>
+                </div>
+                <div className="flex items-center gap-3 p-3 bg-white/10 backdrop-blur-sm rounded-lg">
+                  <CheckCircle className="w-5 h-5 text-white flex-shrink-0" />
+                  <span className="text-white font-medium">Soporte personalizado</span>
+                </div>
               </div>
             </div>
 
             {/* Footer */}
-            <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-white/20">
-              <p className="text-white/70 text-xs sm:text-sm">
-                ¿Necesitas ayuda? <a href="mailto:info@edutechlife.co" className="text-white hover:underline focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-transparent rounded">info@edutechlife.co</a>
+            <div className="pt-6 border-t border-white/20">
+              <p className="text-white/70 text-sm">
+                ¿Necesitas ayuda? <a href="mailto:info@edutechlife.co" className="text-white hover:underline">info@edutechlife.co</a>
               </p>
             </div>
-          </motion.div>
+          </div>
 
-          {/* Mobile Header (solo visible en móvil) */}
-          <motion.div 
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="md:hidden bg-gradient-to-r from-[#004B63] to-[#4DA8C4] p-6 text-white"
-          >
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
-                <Brain className="w-6 h-6" />
+          {/* Right Side - Authentication */}
+          <div className="w-full md:w-3/5 p-6 sm:p-8 lg:p-12 bg-white">
+            {/* Form Header */}
+            <div className="mb-8 text-center">
+              <div className="inline-flex items-center justify-center mb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-[#004B63] to-[#4DA8C4] rounded-xl flex items-center justify-center shadow-lg">
+                  <Brain className="w-6 h-6 text-white" />
+                </div>
               </div>
-              <div className="text-center">
-                <h1 className="text-xl font-bold">Edutechlife</h1>
-                <p className="text-white/80 text-sm">Laboratorio IA</p>
-              </div>
+              <h3 className="text-2xl lg:text-3xl font-bold text-[#004B63] mb-2">
+                {isSignUpMode ? 'Comienza tu Transformación' : 'Bienvenido al Futuro del Aprendizaje'}
+              </h3>
+              <p className="text-[#4DA8C4] text-base max-w-md mx-auto">
+                {isSignUpMode 
+                  ? 'Únete a miles de estudiantes que ya dominan la IA generativa' 
+                  : 'Accede a tu laboratorio de IA y continúa tu camino hacia la maestría'}
+              </p>
             </div>
-            <p className="text-white/90 text-center text-sm">
-              Tu puerta al futuro de la IA educativa
-            </p>
-          </motion.div>
 
-          {/* Right Side - Authentication Zone (Full width en móvil) */}
-          <motion.div 
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="w-full lg:w-3/5 p-5 sm:p-6 md:p-8 lg:p-10 bg-gradient-to-b from-white to-blue-50/20"
-          >
-             {/* Header */}
-             <div className="mb-6 sm:mb-8 text-center">
-               <h3 className="text-xl sm:text-2xl font-bold text-[#00374A] mb-2">
-                 {isSignUpMode ? 'Crea tu Cuenta' : 'Accede a tu Laboratorio'}
-               </h3>
-               <p className="text-[#4DA8C4] text-sm sm:text-base">
-                 {isSignUpMode ? 'Únete a la revolución educativa con IA' : 'Inicia tu viaje educativo transformador'}
-               </p>
-             </div>
-
-             {/* Zona Superior: Formulario de Credenciales */}
-             <div className="mb-6 sm:mb-8">
-               <div className="w-full min-h-[350px] sm:min-h-[400px]">
-                   {isSignUpMode ? (
-                    <SignUp 
-                      fallbackRedirectUrl={returnTo}
-                      signInUrl="/login"
-                      metadata={{
-                        platform: 'ialab',
-                        registration_source: 'welcome_signup'
-                      }}
-                      appearance={{
-                       variables: {
-                         colorPrimary: '#004B63',
-                         colorPrimaryHover: '#0A3550',
-                         colorText: '#00374A',
-                         colorBackground: '#FFFFFF',
-                         colorInputBackground: '#F8FAFC',
-                         colorInputText: '#00374A',
-                         colorInputPlaceholder: '#64748B',
-                         colorDanger: '#DC2626',
-                         colorSuccess: '#059669',
-                         borderRadius: '0.75rem',
-                         fontSize: { base: '14px', sm: '15px', md: '16px' },
-                         fontFamily: "'Montserrat', sans-serif",
-                         fontSmoothing: 'antialiased',
-                         fontWeight: {
-                           normal: '400',
-                           medium: '500',
-                           bold: '600',
-                         },
-                         spacingUnit: { base: '0.2rem', sm: '0.25rem', md: '0.3rem' },
-                         animation: {
-                           slow: '400ms',
-                           default: '250ms',
-                           fast: '150ms',
-                         },
-                         shadow: {
-                           sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
-                           md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-                           lg: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
-                         },
-                       }
-                     }}
-                   />
-                 ) : (
-                   <SignIn 
-                     fallbackRedirectUrl={returnTo}
-                     signUpUrl="/login?action=signup"
-                     appearance={{
-                       variables: {
-                         colorPrimary: '#004B63',
-                         colorPrimaryHover: '#0A3550',
-                         colorText: '#00374A',
-                         colorBackground: '#FFFFFF',
-                         colorInputBackground: '#F8FAFC',
-                         colorInputText: '#00374A',
-                         colorInputPlaceholder: '#64748B',
-                         colorDanger: '#DC2626',
-                         colorSuccess: '#059669',
-                         borderRadius: '0.75rem',
-                         fontSize: { base: '14px', sm: '15px', md: '16px' },
-                         fontFamily: "'Montserrat', sans-serif",
-                         fontSmoothing: 'antialiased',
-                         fontWeight: {
-                           normal: '400',
-                           medium: '500',
-                           bold: '600',
-                         },
-                         spacingUnit: { base: '0.2rem', sm: '0.25rem', md: '0.3rem' },
-                         animation: {
-                           slow: '400ms',
-                           default: '250ms',
-                           fast: '150ms',
-                         },
-                         shadow: {
-                           sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
-                           md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-                           lg: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
-                         },
-                       }
-                     }}
-                   />
-                 )}
-               </div>
-             </div>
-
-            {/* Zona Inferior: Call To Action Principal */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-gray-100"
-            >
-               <div className="text-center">
-                 <p className="text-[#4DA8C4] text-sm sm:text-base mb-4">
-                   {isSignUpMode ? '¿Ya tienes una cuenta?' : '¿Eres nuevo en Edutechlife?'}
-                 </p>
-                 <motion.button
-                   whileHover={{ scale: 1.02, y: -2 }}
-                   whileTap={{ scale: 0.98 }}
-                   onClick={() => setIsSignUpMode(!isSignUpMode)}
-                   className="w-full max-w-md mx-auto py-3 sm:py-4 min-h-[44px] sm:min-h-[48px] bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#4DA8C4] hover:from-[#4DA8C4] hover:to-[#004B63] text-white font-semibold sm:font-bold text-base sm:text-lg rounded-xl sm:rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-[#004B63]/30 focus:ring-offset-2"
-                   aria-label={isSignUpMode ? "Iniciar sesión en Edutechlife" : "Regístrate gratis en Edutechlife"}
-                 >
-                   {isSignUpMode ? 'Iniciar Sesión' : '¡Regístrate Gratis!'}
-                 </motion.button>
-                 <p className="text-center text-[#4DA8C4]/80 text-xs sm:text-sm mt-3 sm:mt-4">
-                   Tu información está protegida con los más altos estándares de seguridad.
-                   <br className="hidden sm:block" />
-                   {isSignUpMode ? 'Accede a tu cuenta para continuar.' : 'Comienza tu viaje educativo hoy mismo.'}
-                 </p>
-               </div>
-            </motion.div>
-          </motion.div>
+            {/* Clerk Form */}
+            <div className="w-full min-h-[480px] flex items-center justify-center">
+              {isSignUpMode ? (
+                <SignUp 
+                  fallbackRedirectUrl={returnTo}
+                  signInUrl="/login"
+                  appearance={clerkAppearance}
+                  localization={esES}
+                />
+              ) : (
+                <SignIn 
+                  fallbackRedirectUrl={returnTo}
+                  signUpUrl="/login?action=signup"
+                  appearance={clerkAppearance}
+                  localization={esES}
+                />
+              )}
+            </div>
+          </div>
         </div>
       </motion.div>
     </div>

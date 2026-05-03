@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { SignUpButton } from '@clerk/react';
 import { Icon } from '../utils/iconMapping.jsx';
 import FloatingParticles from './FloatingParticles';
 
@@ -70,9 +69,9 @@ function AIToolsSection() {
     // Mapeo de herramientas a rutas
     const routeMap = {
       'diagnostico-vak': '/vak',
-      'ia-lab-pro': '/auth-router', // Usará Clerk directamente en el botón
+      'ia-lab-pro': '/ialab-pro',
       'automatizacion': '/automation',
-      'smartboard': '/auth-router' // Usará Clerk directamente en el botón
+      'smartboard': '/auth-router'
     };
     
     const targetRoute = routeMap[toolId];
@@ -194,21 +193,23 @@ function AIToolsSection() {
                 </div>
 
                   {tool.id === 'ia-lab-pro' || tool.id === 'smartboard' ? (
-                    <SignUpButton 
-                      mode="modal"
-                      forceRedirectUrl="/ialab"
-                      afterSignUpUrl="/ialab"
-                      className={`w-full py-2.5 px-4 text-sm font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group-hover:scale-[1.02] ${isPremium ? 'bg-gradient-to-r from-[#004B63] via-[#4DA8C4] to-[#66CCCC] text-white shadow-[0_4px_15px_rgba(0,75,99,0.3)] hover:shadow-[0_8px_25px_rgba(0,75,99,0.4)]' : 'bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white hover:shadow-[0_8px_20px_rgba(77,168,196,0.3)] hover:from-[#4DA8C4] hover:to-[#66CCCC]'}`}
-                    >
-                      <>
+                    <div className={`w-full rounded-xl overflow-hidden transition-all duration-300 group-hover:scale-[1.02] ${isPremium ? 'shadow-[0_4px_15px_rgba(0,75,99,0.3)] group-hover:shadow-[0_8px_25px_rgba(0,75,99,0.4)]' : 'shadow-[0_4px_15px_rgba(0,75,99,0.3)] group-hover:shadow-[0_8px_25px_rgba(0,75,99,0.4)]'}`} onClick={(e) => e.stopPropagation()}>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const returnTo = tool.id === 'ia-lab-pro' ? '/ialab' : '/smartboard';
+                          navigate(`/login?returnTo=${encodeURIComponent(returnTo)}`);
+                        }}
+                        className={`w-full py-2.5 px-4 text-sm font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 ${isPremium ? 'bg-gradient-to-r from-[#004B63] via-[#4DA8C4] to-[#66CCCC] text-white hover:from-[#4DA8C4] hover:to-[#66CCCC]' : 'bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white hover:from-[#4DA8C4] hover:to-[#66CCCC]'}`}
+                      >
                         <span>{tool.buttonText}</span>
                         <Icon name="fa-arrow-right" className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                      </>
-                    </SignUpButton>
+                      </button>
+                    </div>
                    ) : (
                     <button
                      onClick={(e) => {
-                       e.stopPropagation(); // Evitar doble clic
+                       e.stopPropagation();
                        handleToolClick(tool.id);
                      }}
                      className={`w-full py-2.5 px-4 text-sm font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group-hover:scale-[1.02] ${isPremium ? 'bg-gradient-to-r from-[#004B63] via-[#4DA8C4] to-[#66CCCC] text-white shadow-[0_4px_15px_rgba(0,75,99,0.3)] hover:shadow-[0_8px_25px_rgba(0,75,99,0.4)]' : 'bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white hover:shadow-[0_8px_20px_rgba(77,168,196,0.3)] hover:from-[#4DA8C4] hover:to-[#66CCCC]'}`}
@@ -216,7 +217,7 @@ function AIToolsSection() {
                      <span>{tool.buttonText}</span>
                      <Icon name="fa-arrow-right" className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                    </button>
-                 )}
+                  )}
 
                 <div className={`absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t transition-opacity duration-300 ${isPremium ? 'from-[#004B63]/10 to-transparent opacity-100' : 'from-[#4DA8C4]/5 to-transparent opacity-0 group-hover:opacity-100'}`} />
               </div>
