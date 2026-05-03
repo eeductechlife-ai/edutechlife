@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '@clerk/react';
 import { Icon } from '../../utils/iconMapping.jsx';
+import NicoModern from '../Nico/NicoModern';
 
 const IALabProLandingPage = () => {
   const navigate = useNavigate();
@@ -134,58 +135,6 @@ const IALabProLandingPage = () => {
       icon: 'fa-graduation-cap',
       status: 'coming-soon'
     },
-    {
-      id: 'deep-research',
-      title: 'Deep Research con IA',
-      description: 'Técnicas de investigación profunda asistida por inteligencia artificial generativa.',
-      category: 'ia-generativa',
-      modules: 3,
-      duration: '5h',
-      level: 'Intermedio',
-      hasCertificate: true,
-      route: '/ialab',
-      icon: 'fa-search',
-      status: 'coming-soon'
-    },
-    {
-      id: 'ia-imagenes',
-      title: 'Generación de Imágenes con IA',
-      description: 'Crea imágenes profesionales y arte digital con modelos de generación de imágenes.',
-      category: 'desarrollo',
-      modules: 4,
-      duration: '8h',
-      level: 'Principiante',
-      hasCertificate: true,
-      route: '/ialab',
-      icon: 'fa-palette',
-      status: 'coming-soon'
-    },
-    {
-      id: 'ia-video',
-      title: 'Creación de Video con IA',
-      description: 'Producción de videos profesionales usando herramientas de inteligencia artificial.',
-      category: 'desarrollo',
-      modules: 4,
-      duration: '10h',
-      level: 'Intermedio',
-      hasCertificate: true,
-      route: '/ialab',
-      icon: 'fa-video',
-      status: 'coming-soon'
-    },
-    {
-      id: 'ia-audio',
-      title: 'Audio y Voz con IA',
-      description: 'Generación de audio, podcast y clonación de voz con inteligencia artificial.',
-      category: 'desarrollo',
-      modules: 3,
-      duration: '6h',
-      level: 'Principiante',
-      hasCertificate: true,
-      route: '/ialab',
-      icon: 'fa-microphone',
-      status: 'coming-soon'
-    },
   ];
 
   const filteredCourses = activeCategory === 'all'
@@ -193,7 +142,7 @@ const IALabProLandingPage = () => {
     : courses.filter(c => c.category === activeCategory);
 
   const stats = [
-    { icon: 'fa-brain', value: '20+', label: 'Cursos' },
+    { icon: 'fa-brain', value: '8+', label: 'Cursos' },
     { icon: 'fa-clock', value: '200h+', label: 'Contenido' },
     { icon: 'fa-trophy', value: 'Certificados', label: 'Profesionales' },
     { icon: 'fa-headset', value: '24/7', label: 'Soporte' }
@@ -500,6 +449,8 @@ const IALabProLandingPage = () => {
           </div>
         </div>
       </section>
+
+      <NicoModern />
     </div>
   );
 };

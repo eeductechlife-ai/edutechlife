@@ -159,6 +159,7 @@ const WelcomeScreen = ({ onNavigate }) => {
                   signInUrl="/login"
                   appearance={clerkAppearance}
                   localization={esES}
+                  afterSignUpUrl={returnTo}
                 />
               ) : (
                 <SignIn 

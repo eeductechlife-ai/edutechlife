@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
-import { useAuth } from './AuthContext';
+import { useUser, useClerk, useAuth as useClerkAuth } from '@clerk/react';
 import { useProgressContext } from './ProgressContext';
 
 /**
@@ -26,7 +26,36 @@ export const useIALabContext = () => {
 };
 
 export const IALabProvider = ({ children, onBack }) => {
-  const { user, isLoaded: authLoaded, signOut } = useAuth();
+  const { user: clerkUser } = useUser();
+  const { signOut: clerkSignOut } = useClerk();
+  const { isLoaded: authLoaded } = useClerkAuth();
+
+  // Transform Clerk user to match expected format across IALab components
+  const user = clerkUser ? {
+    id: clerkUser.id,
+    full_name: clerkUser.fullName || 'Usuario',
+    email: clerkUser.emailAddresses?.[0]?.emailAddress || '',
+    fullName: clerkUser.fullName,
+    firstName: clerkUser.firstName,
+    lastName: clerkUser.lastName,
+    imageUrl: clerkUser.imageUrl,
+    createdAt: clerkUser.createdAt,
+  } : null;
+
+  const signOut = async () => {
+    await clerkSignOut();
+    const progressKeys = [
+      'ialab_completed_videos',
+      'ialab_completed_modules',
+      'ialab_completed_exams',
+      'ialab_completed_infographics',
+      'ialab_completed_activities',
+      'ialab_overall_progress',
+      'ialab_sync_queue'
+    ];
+    progressKeys.forEach(key => localStorage.removeItem(key));
+  };
+
   const {
     courseProgress: persistentCourseProgress,
     completedModules: persistentCompletedModules,
@@ -43,14 +72,16 @@ export const IALabProvider = ({ children, onBack }) => {
     markExamComplete: syncMarkExamComplete,
     markInfographicComplete: syncMarkInfographicComplete,
     markActivityComplete: syncMarkActivityComplete,
-    refreshProgress
+    refreshProgress,
+    setCompletedModules: setPersistentCompletedModules,
+    setCourseProgress: setPersistentCourseProgress,
   } = useProgressContext();
 
   // completedModules y courseProgress vienen del ProgressContext global
   const completedModules = persistentCompletedModules;
   const courseProgress = persistentCourseProgress;
-  const setCompletedModules = (val) => console.warn('setCompletedModules is deprecated, use progress context directly');
-  const setCourseProgress = (val) => console.warn('setCourseProgress is deprecated, use progress context directly');
+  const setCompletedModules = setPersistentCompletedModules;
+  const setCourseProgress = setPersistentCourseProgress;
 
   // ==================== ESTADOS PRINCIPALES ====================
   

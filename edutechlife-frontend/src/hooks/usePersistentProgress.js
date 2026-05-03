@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useUser, useAuth as useClerkAuth } from '@clerk/react';
 import { useSupabase } from './useSupabase';
 import { 
   syncProgressToSupabase, 
@@ -42,12 +42,13 @@ const TOTAL_ITEMS = MODULE_CONFIG.reduce((acc, m) =>
  * @returns {Object} Estado y funciones de progreso
  */
 export const usePersistentProgress = () => {
-  const { user, isAuthenticated, signOut } = useAuth();
+  const { user: clerkUser } = useUser();
+  const { isSignedIn } = useClerkAuth();
   const { supabase, isLoading: supabaseLoading, isUsingJWT, userId: supabaseUserId } = useSupabase();
   
   // Use userId from Supabase hook (extracted from JWT token) as primary source
-  const userId = supabaseUserId || user?.id;
-  const isUserReady = isAuthenticated && userId;
+  const userId = supabaseUserId || clerkUser?.id;
+  const isUserReady = isSignedIn && userId;
   
   const [completedVideos, setCompletedVideos] = useState([]);
   const [completedModules, setCompletedModules] = useState([]);
@@ -478,7 +479,9 @@ export const usePersistentProgress = () => {
     markActivityComplete,
     resetProgress,
     refreshProgress,
-    totalItems: TOTAL_ITEMS
+    totalItems: TOTAL_ITEMS,
+    setCompletedModules,
+    setCourseProgress,
   };
 };
 

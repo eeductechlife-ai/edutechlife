@@ -59,7 +59,6 @@ export const AuthProvider = ({ children }) => {
     if (!clerkIsLoaded) return;
 
     if (clerkUser) {
-      // Usuario autenticado
       const localUser = {
         id: clerkUser.id,
         email: clerkUser.emailAddresses?.[0]?.emailAddress,
@@ -73,13 +72,45 @@ export const AuthProvider = ({ children }) => {
       setUser(localUser);
       fetchProfile(clerkUser.id);
       setTimeout(() => processPendingForms(), 1000);
+
+      const syncProfileToSupabase = async () => {
+        if (!supabase) return;
+        
+        try {
+          const { data: existing } = await supabase
+            .from('profiles')
+            .select('id')
+            .eq('id', clerkUser.id)
+            .single();
+
+          if (!existing) {
+            const { error } = await supabase
+              .from('profiles')
+              .insert({
+                id: clerkUser.id,
+                full_name: clerkUser.fullName || 'Usuario',
+                email: clerkUser.emailAddresses?.[0]?.emailAddress || '',
+                role: 'student',
+              });
+
+            if (error) {
+              console.warn('Profile sync warning:', error.message);
+            } else {
+              console.log('Profile synced to Supabase:', clerkUser.id);
+            }
+          }
+        } catch (err) {
+          console.warn('Profile sync failed:', err.message);
+        }
+      };
+
+      syncProfileToSupabase();
     } else {
-      // Usuario no autenticado
       setUser(null);
       setProfile(null);
       setLoading(false);
     }
-  }, [clerkUser, clerkIsLoaded, fetchProfile]);
+  }, [clerkUser, clerkIsLoaded, fetchProfile, supabase]);
 
   // Sign in con Clerk (abre modal de login de Clerk)
   const signIn = useCallback(async (email, password) => {

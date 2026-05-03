@@ -12903,23 +12903,18 @@ span:not(h1 span):not(h2 span):not(h3 span):not(.stat-number),
 
 /* ======================
    CLERK BUTTON TEXT VISIBILITY FIX
-   Forzar texto blanco en botón "Continuar"
+   Using only public API selectors (no structural CSS)
    ====================== */
 .cl-formButtonPrimary,
 .cl-formButtonPrimary *,
-.cl-formButtonPrimary::before,
-.cl-formButtonPrimary::after,
 .cl-button--primary,
-.cl-button--primary *,
-[data-cl-element="formButtonPrimary"],
-[data-cl-element="formButtonPrimary"] *,
-.cl-card button[type="submit"],
-.cl-card button[type="submit"] * {
+.cl-button--primary * {
   color: #ffffff !important;
 }
 
+.cl-formButtonPrimary:hover,
 .cl-formButtonPrimary:hover *,
-.cl-button--primary:hover *,
-.cl-card button[type="submit"]:hover * {
+.cl-button--primary:hover,
+.cl-button--primary:hover * {
   color: #ffffff !important;
 }
