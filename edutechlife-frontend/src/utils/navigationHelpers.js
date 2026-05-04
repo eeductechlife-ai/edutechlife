@@ -42,6 +42,7 @@ export const mapViewToRoute = (view) => {
     
     // Plataformas
     'smartboard': '/smartboard',
+    'smartboard-app': '/smartboard/app',
     'smartboard-estadisticas': '/smartboard/estadisticas',
     'smartboard-progreso': '/smartboard/estadisticas',
     'admin': '/admin',
@@ -109,7 +110,7 @@ export const createNavigateHandler = (navigate) => {
  */
 export const isValidRoute = (route) => {
   // Lista de rutas válidas en la aplicación
-  const validRoutes = [
+   const validRoutes = [
     '/',
     '/ialab',
     '/ialab/dashboard',
@@ -122,6 +123,7 @@ export const isValidRoute = (route) => {
     '/consultoria-b2b',
     '/automation',
     '/smartboard',
+    '/smartboard/app',
     '/smartboard/estadisticas',
     '/admin',
     '/sign-up',
@@ -156,6 +158,7 @@ export const getViewFromRoute = (pathname) => {
     '/consultoria-b2b': 'consultoria-b2b',
     '/automation': 'automation',
     '/smartboard': 'smartboard',
+    '/smartboard/app': 'smartboard-app',
     '/smartboard/estadisticas': 'smartboard-estadisticas',
     '/admin': 'admin',
     '/sign-up': 'sign-up',

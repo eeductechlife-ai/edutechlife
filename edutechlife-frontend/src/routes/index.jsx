@@ -13,6 +13,8 @@ const IALabSignUpPage = lazy(() => import('../components/IALabSignUpPage'));
 const SmartBoardSignUpPage = lazy(() => import('../components/SmartBoardSignUpPage'));
 const AILabPage = lazy(() => import('../components/pages/AILabPage'));
 const SmartBoardPage = lazy(() => import('../components/pages/SmartBoardPage'));
+const SmartBoardLandingPage = lazy(() => import('../components/pages/SmartBoardLandingPage'));
+const NotFoundPage = lazy(() => import('../components/pages/NotFoundPage'));
 const AdminPage = lazy(() => import('../components/pages/AdminPage'));
 const NeuroEntornoPage = lazy(() => import('../components/pages/NeuroEntornoPage'));
 const ProyectosNacionalPage = lazy(() => import('../components/pages/ProyectosNacionalPage'));
@@ -158,6 +160,13 @@ const AppRoutes = () => {
           </Suspense>
         } />
         
+        {/* SmartBoard - Public landing page (entorno gráfico original) */}
+        <Route path="smartboard" element={
+          <Suspense fallback={<PageLoader message="Cargando SmartBoard..." />}>
+            <SmartBoardLandingPage />
+          </Suspense>
+        } />
+        
         {/* Rutas protegidas por autenticación */}
         <Route path="ialab" element={
           <RoleProtectedRoute requiredRole="ialab">
@@ -167,7 +176,7 @@ const AppRoutes = () => {
           </RoleProtectedRoute>
         } />
         
-        <Route path="smartboard" element={
+        <Route path="smartboard/app" element={
           <RoleProtectedRoute requiredRole="smartboard">
             <Suspense fallback={<PageLoader message="Preparando SmartBoard..." />}>
               <SmartBoardPage />
@@ -254,20 +263,7 @@ const AppRoutes = () => {
         } />
         
         {/* Ruta 404 - Not Found */}
-        <Route path="*" element={
-          <div className="min-h-screen flex items-center justify-center">
-            <div className="text-center">
-              <h1 className="text-4xl font-bold text-[#004B63] mb-4">404</h1>
-              <p className="text-lg text-[#4DA8C4]">Página no encontrada</p>
-              <button 
-                onClick={() => window.location.href = '/'}
-                className="mt-6 px-6 py-3 bg-[#004B63] text-white rounded-full hover:bg-[#4DA8C4] transition-colors"
-              >
-                Volver al inicio
-              </button>
-            </div>
-          </div>
-        } />
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
   );

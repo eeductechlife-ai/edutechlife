@@ -62,8 +62,7 @@ const AppLayout = () => {
   
   // Renderizar header condicionalmente basado en la ruta actual
   const shouldShowHeader = () => {
-    // Ocultar header en rutas de IA Lab para experiencia inmersiva
-    if (location.pathname.includes('/ialab')) {
+    if (location.pathname.includes('/ialab') || location.pathname === '/login') {
       return false;
     }
     return true;

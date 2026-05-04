@@ -1,6 +1,12 @@
 {
   "version": 1,
   "skills": {
+    "agency-agents-ai-specialists": {
+      "source": "aradotso/trending-skills",
+      "sourceType": "github",
+      "skillPath": "skills/agency-agents-ai-specialists/SKILL.md",
+      "computedHash": "e062d1a5cf18bf4e2f2c88298cc1deb7b2f2327ac6866d3fdd26818c2e94c2a2"
+    },
     "clerk-react-patterns": {
       "source": "clerk/skills",
       "sourceType": "github",

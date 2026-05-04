@@ -3,10 +3,11 @@ import { esES } from '@clerk/localizations';
 import { motion } from 'framer-motion';
 import FloatingParticles from './FloatingParticles';
 import { Brain, CheckCircle } from 'lucide-react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 const WelcomeScreen = ({ onNavigate }) => {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [isSignUpMode, setIsSignUpMode] = useState(false);
   
@@ -78,13 +79,12 @@ const WelcomeScreen = ({ onNavigate }) => {
             <div>
               {/* Logo */}
               <div className="flex items-center gap-3 mb-10">
-                <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
-                  <Brain className="w-7 h-7" />
-                </div>
-                <div>
-                  <h1 className="text-2xl font-bold">Edutechlife</h1>
-                  <p className="text-white/80 text-sm">IA Lab Pro</p>
-                </div>
+                <img 
+                  src="/images/logo-edutechlife.webp" 
+                  alt="Edutechlife" 
+                  className="h-8 w-auto object-contain opacity-95 hover:opacity-100 transition-opacity duration-300"
+                  onError={(e) => { e.target.style.display = 'none'; }}
+                />
               </div>
 
               {/* Welcome Message */}
@@ -169,6 +169,21 @@ const WelcomeScreen = ({ onNavigate }) => {
                   localization={esES}
                 />
               )}
+            </div>
+
+            {/* Back to IA Lab Pro Button */}
+            <div className="mt-6 flex justify-center">
+              <motion.button
+                onClick={() => navigate('/ialab-pro')}
+                whileHover={{ scale: 1.03, x: -2 }}
+                whileTap={{ scale: 0.97 }}
+                className="inline-flex items-center gap-2 px-6 py-3 bg-transparent border-2 border-[#004B63]/25 text-[#004B63] font-semibold text-sm rounded-xl hover:bg-[#004B63]/5 hover:border-[#004B63]/40 transition-all duration-300"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m0 0l11 11" />
+                </svg>
+                Volver a IA Lab Pro
+              </motion.button>
             </div>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import { memo, useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import MagneticButton from './MagneticButton';
 import SplitTextReveal from './SplitTextReveal';
 import FloatingParticles from './FloatingParticles';
@@ -37,6 +38,7 @@ const useAnimatedCounter = (target, duration = 2000, start = false) => {
 const Hero = memo(() => {
     const heroRef = useRef(null);
     const statsRef = useRef(null);
+    const navigate = useNavigate();
     const [statsVisible, setStatsVisible] = useState(false);
 
     useEffect(() => {
@@ -158,7 +160,7 @@ const Hero = memo(() => {
                     >
                         {/* Primary CTA */}
                         <MagneticButton 
-                            onClick={() => window.location.href = '/ialab'}
+                            onClick={() => navigate('/ialab')}
                             className="group relative overflow-hidden flex items-center justify-center gap-3 px-8 sm:px-12 py-4 rounded-full text-base sm:text-lg font-bold bg-[#4DA8C4] text-white shadow-lg hover:bg-[#004B63] hover:-translate-y-1 transition-all duration-300"
                         >
                             <span className="absolute inset-0 w-[150%] h-full -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-[sweep_1.5s_ease-in-out_infinite] skew-x-[-20deg]" />
@@ -168,7 +170,7 @@ const Hero = memo(() => {
                         
                         {/* Secondary CTA - Ghost Style */}
                         <MagneticButton 
-                            onClick={() => window.location.href = '/smartboard'}
+                            onClick={() => navigate('/smartboard')}
                             className="group flex items-center justify-center gap-3 px-8 sm:px-12 py-4 rounded-full text-base sm:text-lg font-bold bg-transparent border-2 border-[#004B63] text-[#004B63] hover:bg-[#004B63] hover:text-white transition-all duration-300"
                         >
                             <Icon name="fa-chalkboard" className="text-[#004B63] group-hover:text-white transition-colors duration-300" />

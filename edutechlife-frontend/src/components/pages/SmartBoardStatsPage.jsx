@@ -12,7 +12,7 @@ const SmartBoardStatsPage = () => {
   const navigate = useNavigate();
 
   const handleBack = () => {
-    navigate('/smartboard');
+    navigate('/smartboard/app');
   };
 
   return (

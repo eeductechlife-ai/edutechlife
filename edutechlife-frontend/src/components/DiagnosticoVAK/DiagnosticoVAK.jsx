@@ -603,10 +603,22 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   };
 
   const generatePDF = async () => {
-    if (!diagnosis) return;
+    if (!diagnosis) {
+      console.error('No diagnosis available for PDF');
+      return;
+    }
     
     const el = pdfTemplateRef.current;
-    if (!el) return;
+    if (!el) {
+      console.error('PDF template ref not found');
+      return;
+    }
+    
+    // Debug: Check if template has content
+    console.log('PDF Template content length:', el.innerHTML.length, 'chars');
+    console.log('Diagnosis:', diagnosis);
+    console.log('StudentAge:', studentAge);
+    console.log('Valentina commentary:', getValentinaCommentary());
     
     // Force any pending state updates to complete before rendering PDF
     await new Promise(resolve => setTimeout(resolve, 100));
@@ -618,7 +630,23 @@ const DiagnosticoVAK = ({ onNavigate }) => {
       margin: [15, 15, 15, 15],
       filename: `${fileName}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true, letterRendering: true, logging: false },
+      html2canvas: { 
+        scale: 2, 
+        useCORS: true, 
+        letterRendering: true, 
+        logging: true,
+        onclone: (clonedDoc) => {
+          // Ensure cloned document has proper styling for PDF
+          const clonedEl = clonedDoc.querySelector('[data-pdf-template]');
+          if (clonedEl) {
+            clonedEl.style.opacity = '1';
+            clonedEl.style.position = 'relative';
+            clonedEl.style.left = '0';
+            clonedEl.style.pointerEvents = 'auto';
+            clonedEl.style.overflow = 'visible';
+          }
+        }
+      },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
     
@@ -626,7 +654,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
       await html2pdf().set(opt).from(el).save();
     } catch (e) {
       console.error('PDF error:', e);
-      setError('Error al generar PDF');
+      setError('Error al generar PDF: ' + e.message);
     } finally {
       setPdfLoading(false);
     }
@@ -684,22 +712,25 @@ const DiagnosticoVAK = ({ onNavigate }) => {
 
   // Generar comentario de Valeria para el diagnóstico
   const getValentinaCommentary = () => {
-    if (!diagnosis || !studentAge || studentAge === '') return '';
+    if (!diagnosis) return '';
     
-    const age = parseInt(studentAge);
-    if (isNaN(age)) return '';
-    let ageGroup = 'teen';
+    // Use diagnosis.studentAge (which is set correctly in the diagnosis object)
+    const age = parseInt(diagnosis.studentAge) || parseInt(studentAge);
+    if (!age || isNaN(age)) return '';
+    
+    const ageGroup = 'teen';
     if (age >= 6 && age <= 10) ageGroup = 'child';
     else if (age >= 11 && age <= 14) ageGroup = 'preteen';
     
     const style = diagnosis.predominantStyle;
     const percentage = diagnosis.percentage;
+    const name = diagnosis.studentName || studentName || 'Estudiante';
     
     const comments = {
       visual: {
-        child: `¡Hola ${studentName}! Como psicóloga educativa, veo que eres un aprendiz visual (${percentage}%). Esto significa que aprendes mejor viendo imágenes, colores y diagramas. Te recomiendo usar muchos colores en tus notas y ver videos educativos. ¡Dibujar lo que aprendes te ayudará mucho!`,
-        preteen: `Hola ${studentName}, como tu psicóloga educativa, he identificado que tu estilo predominante es visual (${percentage}%). Tu cerebro procesa mejor la información cuando la ves. Te sugiero crear mapas mentales, usar flashcards con imágenes y organizar tu estudio con esquemas visuales.`,
-        teen: `Estimado ${studentName}, según mi análisis como psicóloga especializada en VAK, tu perfil es predominantemente visual (${percentage}%). Esto indica que retienes mejor la información a través de estímulos visuales. Estrategias efectivas incluyen: infografías, diagramas de flujo, y el uso de colores para categorizar información.`
+        child: `¡Hola ${name}! Como psicóloga educativa, veo que eres un aprendiz visual (${percentage}%). Esto significa que aprendes mejor viendo imágenes, colores y diagramas. Te recomiendo usar muchos colores en tus notas y ver videos educativos. ¡Dibujar lo que aprendes te ayudará mucho!`,
+        preteen: `Hola ${name}, como tu psicóloga educativa, he identificado que tu estilo predominante es visual (${percentage}%). Tu cerebro procesa mejor la información cuando la ves. Te sugiero crear mapas mentales, usar flashcards con imágenes y organizar tu estudio con esquemas visuales.`,
+        teen: `Estimado ${name}, según mi análisis como psicóloga especializada en VAK, tu perfil es predominantemente visual (${percentage}%). Esto indica que retienes mejor la información a través de estímulos visuales. Estrategias efectivas incluyen: infografías, diagramas de flujo, y el uso de colores para categorizar información.`
       },
       auditivo: {
         child: `¡Hola ${studentName}! Soy Valeria, tu psicóloga. Descubrí que aprendes mejor escuchando (${percentage}%). ¡Eso es genial! Te recomiendo grabar tus clases, escuchar cuentos educativos y explicar lo que aprendes en voz alta. ¡Tu oído es tu superpoder!`,
@@ -713,7 +744,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
       }
     };
     
-    return comments[style]?.[ageGroup] || `Hola ${studentName}, como psicóloga educativa de EdutechLife, he analizado tu perfil VAK. Tu estilo predominante es ${style} (${percentage}%). Esto te brinda ventajas específicas en tu proceso de aprendizaje.`;
+      return comments[style]?.[ageGroup] || `Hola ${name}, como psicóloga educativa de EdutechLife, he analizado tu perfil VAK. Tu estilo predominante es ${style} (${percentage}%). Esto te brinda ventajas específicas en tu proceso de aprendizaje.`;
   };
 
   const renderWelcome = () => (
@@ -1929,7 +1960,18 @@ const DiagnosticoVAK = ({ onNavigate }) => {
           className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-4 md:p-6"
         >
         
-        <div ref={pdfTemplateRef} style={{ position: 'absolute', left: '-9999px', top: 0, width: '210mm', backgroundColor: '#ffffff' }}>
+        <div ref={pdfTemplateRef} data-pdf-template="true" style={{ 
+          position: 'fixed', 
+          top: 0, 
+          left: 0, 
+          width: '210mm', 
+          backgroundColor: '#ffffff',
+          opacity: 0,
+          pointerEvents: 'none',
+          zIndex: -9999,
+          overflow: 'hidden',
+          fontFamily: 'Montserrat, sans-serif'
+        }}>
           {diagnosis && (
             <div style={{ padding: '40px', fontFamily: 'Montserrat, sans-serif', backgroundColor: '#ffffff' }}>
               {/* Header */}
