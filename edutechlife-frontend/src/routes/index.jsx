@@ -10,10 +10,11 @@ import { PageLoader } from '../components/LoadingScreen';
 // Lazy load para componentes pesados
 const WelcomeScreen = lazy(() => import('../components/WelcomeScreen'));
 const IALabSignUpPage = lazy(() => import('../components/IALabSignUpPage'));
-const SmartBoardSignUpPage = lazy(() => import('../components/SmartBoardSignUpPage'));
+const SmartBoardSignUpPage = lazy(() => import('../components/IALabSignUpPage'));
 const AILabPage = lazy(() => import('../components/pages/AILabPage'));
 const SmartBoardPage = lazy(() => import('../components/pages/SmartBoardPage'));
 const SmartBoardLandingPage = lazy(() => import('../components/pages/SmartBoardLandingPage'));
+const SmartBoardKidsDashboard = lazy(() => import('../components/kids-dashboard/SmartBoardKidsDashboard'));
 const NotFoundPage = lazy(() => import('../components/pages/NotFoundPage'));
 const AdminPage = lazy(() => import('../components/pages/AdminPage'));
 const NeuroEntornoPage = lazy(() => import('../components/pages/NeuroEntornoPage'));
@@ -160,9 +161,9 @@ const AppRoutes = () => {
           </Suspense>
         } />
         
-        {/* SmartBoard - Public landing page (entorno gráfico original) */}
+        {/* SmartBoard Kids Dashboard - Dashboard para niños 8-16 años */}
         <Route path="smartboard" element={
-          <Suspense fallback={<PageLoader message="Cargando SmartBoard..." />}>
+          <Suspense fallback={<PageLoader message="Cargando SmartBoard Kids..." />}>
             <SmartBoardLandingPage />
           </Suspense>
         } />
@@ -263,7 +264,11 @@ const AppRoutes = () => {
         } />
         
         {/* Ruta 404 - Not Found */}
-        <Route path="*" element={<NotFoundPage />} />
+        <Route path="*" element={
+          <Suspense fallback={<PageLoader message="Cargando..." />}>
+            <NotFoundPage />
+          </Suspense>
+        } />
       </Route>
     </Routes>
   );

@@ -194,43 +194,37 @@ const useIALabEvaluation = () => {
         }
     }, []);
 
-    // Guardar nota en Supabase
-    const saveGradeToSupabase = useCallback(async (evaluation) => {
+    // Guardar nota en Supabase (usa user_progress, no student_grades)
+    const saveGradeToSupabase = useCallback(async (evaluation, moduleId = 1) => {
         if (!user?.id) {
             return { success: false, error: 'Usuario no autenticado' };
         }
 
         try {
+            const numericModuleId = Number(moduleId) || 1;
             const { data, error } = await supabase
-                .from('student_grades')
-                .insert([{
+                .from('user_progress')
+                .upsert({
                     user_id: user.id,
-                    module_id: 'modulo_1_prompts',
-                    challenge_name: 'desafio_premium_1',
+                    module_id: numericModuleId,
+                    activity_type: 'challenge',
+                    resource_id: null,
                     score: evaluation.notaGlobal,
-                    feedback_json: evaluation,
-                    created_at: new Date().toISOString()
-                }])
+                    completed_lessons: {
+                        feedback_ej1: evaluation.feedback_ej1,
+                        feedback_ej2: evaluation.feedback_ej2,
+                        feedback_ej3: evaluation.feedback_ej3
+                    },
+                    is_completed: true,
+                    updated_at: new Date().toISOString()
+                }, {
+                    onConflict: 'user_id,module_id,activity_type,resource_id',
+                    ignoreDuplicates: false,
+                })
                 .select()
-                .single();
+                .maybeSingle();
 
-            if (error) {
-                // Intentar crear la tabla si no existe
-                console.warn('Tabla student_grades no encontrada, creando...');
-                
-                // En una implementación real, aquí se ejecutaría SQL para crear la tabla
-                // Por ahora, simulamos éxito para continuar con el flujo
-                console.log('Simulando guardado exitoso (en producción se crearía la tabla)');
-                
-                return { 
-                    success: true, 
-                    data: { 
-                        id: 'simulated-' + Date.now(),
-                        user_id: user.id,
-                        score: evaluation.notaGlobal
-                    } 
-                };
-            }
+            if (error) throw error;
 
             return { success: true, data };
 

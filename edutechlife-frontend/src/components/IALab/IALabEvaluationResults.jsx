@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
+import { useIALabContext } from '../../context/IALabContext';
 
 const IALabEvaluationResults = ({ evaluation, onClose }) => {
+    const { activeMod } = useIALabContext();
     const [gradeSaved, setGradeSaved] = useState(false);
     const [activeTab, setActiveTab] = useState('overview');
 
@@ -54,7 +56,7 @@ const IALabEvaluationResults = ({ evaluation, onClose }) => {
                             </div>
                             <div>
                                 <h2 className="text-2xl font-bold text-slate-800">
-                                    {isApproved ? 'Resultado del Desafío del Módulo 1' : 'Resultado del Desafío del Módulo 1'}
+                                    {isApproved ? `Resultado del Desafío del Módulo ${activeMod}` : `Resultado del Desafío del Módulo ${activeMod}`}
                                 </h2>
                                 <p className="text-slate-500">
                                     Edutechlife ha analizado tus respuestas y proporcionado feedback detallado
@@ -86,7 +88,7 @@ const IALabEvaluationResults = ({ evaluation, onClose }) => {
                             <Icon name="fa-chart-line" className="text-[#004B63] text-xl" />
                             <div>
                                 <h3 className="text-lg font-bold text-[#004B63] mb-1">
-                                    Este desafío equivale al 30% de tu nota del Módulo 1
+                                    Este desafío equivale al 30% de tu nota del Módulo {activeMod}
                                 </h3>
                                 <p className="text-slate-600 text-sm">
                                     Tu desempeño en esta evaluación impacta directamente en tu progreso general del curso.

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 
 /**
@@ -12,15 +12,15 @@ import { Icon } from '../../utils/iconMapping.jsx';
  */
 const IALabEvaluationStep3 = ({ exercise, response, onResponseChange }) => {
     const [createdPrompt, setCreatedPrompt] = useState(response || '');
-    const [characterCount, setCharacterCount] = useState(0);
+    const [characterCount, setCharacterCount] = useState(response?.length || 0);
     const [activeTab, setActiveTab] = useState('editor');
     const [isGenerating, setIsGenerating] = useState(false);
 
-    // Actualizar contador de caracteres
-    useEffect(() => {
-        setCharacterCount(createdPrompt.length);
-        onResponseChange(createdPrompt);
-    }, [createdPrompt, onResponseChange]);
+    const handleChange = (value) => {
+        setCreatedPrompt(value);
+        setCharacterCount(value.length);
+        onResponseChange(value);
+    };
 
     // Componentes de prompt (para construcción modular)
     const promptComponents = {
@@ -95,6 +95,8 @@ ${promptComponents.audience[Math.floor(Math.random() * promptComponents.audience
 ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.length)]}`;
 
             setCreatedPrompt(aiPrompt);
+            setCharacterCount(aiPrompt.length);
+            onResponseChange(aiPrompt);
             setIsGenerating(false);
         }, 1500);
     };
@@ -111,10 +113,11 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
             }
         });
 
+        let newContent;
         if (sectionIndex === -1 || !lines.some(line => line.trim() === `## ${type.charAt(0).toUpperCase() + type.slice(1)}`)) {
             // Añadir nueva sección
             const newSection = `## ${type.charAt(0).toUpperCase() + type.slice(1)}\n${component}`;
-            setCreatedPrompt(prev => prev ? `${prev}\n\n${newSection}` : newSection);
+            newContent = createdPrompt ? `${createdPrompt}\n\n${newSection}` : newSection;
         } else {
             // Añadir a sección existente
             const newLines = [...lines];
@@ -129,8 +132,11 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                     break;
                 }
             }
-            setCreatedPrompt(newLines.join('\n'));
+            newContent = newLines.join('\n');
         }
+        setCreatedPrompt(newContent);
+        setCharacterCount(newContent.length);
+        onResponseChange(newContent);
     };
 
     return (
@@ -229,7 +235,7 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                     <div className="relative">
                         <textarea
                             value={createdPrompt}
-                            onChange={(e) => setCreatedPrompt(e.target.value)}
+                            onChange={(e) => handleChange(e.target.value)}
                             placeholder={`## Rol\nEres un experto en...\n\n## Contexto\nTrabajando para...\n\n## Objetivo\nCrear un...\n\n## Audiencia\nDirigido a...\n\n## Requisitos\n- Requisito 1\n- Requisito 2\n\n## Formato de respuesta\nEn formato de...`}
                             className="w-full h-80 bg-white border-2 border-slate-200 rounded-xl p-5 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-[#00BCD4] focus:ring-2 focus:ring-[#00BCD4]/20 resize-none font-mono text-sm leading-relaxed"
                             spellCheck="false"
@@ -253,7 +259,7 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                             <h4 className="text-lg font-semibold text-slate-800">Constructor Modular</h4>
                         </div>
                         <button
-                            onClick={() => setCreatedPrompt('')}
+                            onClick={() => handleChange('')}
                             className="px-4 py-2 bg-white border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 transition-colors"
                         >
                             <Icon name="fa-trash" className="mr-2" />

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
+import { useIALabContext } from '../../context/IALabContext';
 import TopicResourcesModal from './TopicResourcesModal';
 import IALabForumOptimized from './IALabForumOptimized';
 import ErrorBoundary from '../forum/ErrorBoundary';
@@ -9,50 +10,63 @@ import ErrorBoundary from '../forum/ErrorBoundary';
  * COMPONENTE: ModuleOverviewCard
  * 
  * Responsabilidad: Hero Card premium con Glassmorphism para overview del módulo
- * - Badge superior "OVA INTERACTIVO" y "1h 28min • MÓDULO 1"
- * - Título interno "Hoja de Ruta: Domina las Instrucciones"
- * - Descripción detallada del módulo
- * - 6 bullet points horizontales con temas del temario (AHORA CLICKEABLES)
- * - Grid inferior de 3 estadísticas (Contenido, Práctica, Tiempo Estimado)
- * - Estilo Glassmorphism premium con gradientes corporativos Edutechlife
- * - Integración con Modal Central Premium para visualizar recursos
+ * - Módulo 1: Datos hardcodeados originales (intactos)
+ * - Módulos 2-5: Datos dinámicos desde moduleContent
+ * - Badge superior con duración y nivel
+ * - Temas clickeables con modal de recursos
+ * - Grid inferior de estadísticas
+ * - Estilo Glassmorphism premium
+ * - Integración con Foro y Desafío
  * 
  * @returns {JSX.Element} Componente Hero Card premium
  */
 
 const ModuleOverviewCard = ({ onAction }) => {
+  const { activeMod, modules, moduleContent } = useIALabContext();
+  
   // Estado para el modal de recursos
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [isResourcesModalOpen, setIsResourcesModalOpen] = useState(false);
   const [isForumOpen, setIsForumOpen] = useState(false);
-  // Datos hardcodeados según especificaciones
-  const moduleData = {
+  
+  // Módulo 1: Datos hardcodeados originales (INTACTOS)
+  const module1Data = {
     badge: {
       duration: "10h",
       module: "5 MÓDULOS"
     },
     title: "Domina las Instrucciones",
-    description: "En este módulo, hemos diseñado una ruta estratégica que te llevará desde los fundamentos de la Inteligencia Artificial Generativa hasta la creación de instrucciones de alto impacto.\n\nTu misión: Explorar cada tema y sus recursos multimedia (videos, guías y laboratorios). Notarás que tu barra de progreso cobrará vida con cada paso que des. No te detengas: cada recurso completado te acerca un 20% más a tu certificación global. ¡El poder de las instrucciones claras está en tus manos!",
+    description: "En este módulo, hemos diseñado una ruta estratégica que te llevará desde los fundamentos de la Inteligencia Artificial Generativa hasta la creación de instrucciones de alto impacto.",
+    mission: "Explorar cada tema y sus recursos multimedia (videos, guías y laboratorios). Notarás que tu barra de progreso cobrará vida con cada paso que des. No te detengas: cada recurso completado te acerca un 20% más a tu certificación global. ¡El poder de las instrucciones claras está en tus manos!",
+    missionIcon: "fa-rocket",
+    icon: "fa-brain",
     topics: [
-      { 
-        title: "Introducción a la Inteligencia Artificial Generativa", 
-        icon: "fa-brain", 
-        resources: 2,
-        duration: "20 min"
-      },
-      { 
-        title: "¿Qué es un Prompt?", 
-        icon: "fa-comments", 
-        resources: 3,
-        duration: "20 min"
-      },
-      { 
-        title: "Estructura Básica de un Prompt Efectivo", 
-        icon: "fa-sitemap", 
-        resources: 3,
-        duration: "20 min"
-      }
+      { title: "Introducción a la Inteligencia Artificial Generativa", icon: "fa-brain", resources: 2, duration: "20 min" },
+      { title: "¿Qué es un Prompt?", icon: "fa-comments", resources: 3, duration: "20 min" },
+      { title: "Estructura Básica de un Prompt Efectivo", icon: "fa-sitemap", resources: 3, duration: "20 min" }
     ],
+    stats: [
+      { title: "Contenido", value: "3 Lecciones" },
+      { title: "Práctica", value: "3 Labs & Retos" }
+    ]
+  };
+  
+  // Datos dinámicos según módulo activo
+  const isModule1 = activeMod === 1;
+  const currentModule = modules.find(m => m.id === activeMod) || modules[0];
+  const dynamicContent = moduleContent[activeMod];
+  
+  const moduleData = isModule1 ? module1Data : {
+    badge: {
+      duration: currentModule?.duration || "10h",
+      module: `${currentModule?.level || 'AVANZADO'}`
+    },
+    title: dynamicContent?.overviewData?.title || currentModule?.title || "Módulo",
+    description: dynamicContent?.overviewData?.description || currentModule?.desc || "",
+    mission: dynamicContent?.overviewData?.mission || "",
+    missionIcon: "fa-bolt",
+    icon: currentModule?.icon || "fa-graduation-cap",
+    topics: dynamicContent?.overviewData?.topics || [],
     stats: [
       { title: "Contenido", value: "3 Lecciones" },
       { title: "Práctica", value: "3 Labs & Retos" }
@@ -81,7 +95,7 @@ const ModuleOverviewCard = ({ onAction }) => {
            <div className="flex flex-col md:flex-row gap-6 items-start">
               {/* Icono destacado - Izquierda */}
               <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#004B63] to-[#0A3550] shadow-sm flex items-center justify-center text-white flex-shrink-0">
-                <Icon name="fa-brain" className="text-2xl" />
+                <Icon name={moduleData.icon} className="text-2xl" />
               </div>
              
               {/* Texto principal */}
@@ -95,16 +109,16 @@ const ModuleOverviewCard = ({ onAction }) => {
                  En este módulo, hemos diseñado una ruta estratégica que te llevará desde los fundamentos de la Inteligencia Artificial Generativa hasta la creación de instrucciones de alto impacto.
                </p>
                
-               {/* Tu Misión - Subtítulo destacado */}
-               <div className="flex items-start gap-3 mb-5">
-                  <Icon name="fa-rocket" className="text-[#00BCD4] text-sm flex-shrink-0 mt-0.5" />
-                 <div className="flex-1">
-                   <h4 className="text-base font-bold text-[#004B63] mb-1">Tu misión:</h4>
-                   <p className="text-slate-600 text-[15px] md:text-base leading-relaxed text-justify">
-                     Explorar cada tema y sus recursos multimedia (videos, guías y laboratorios). Notarás que tu barra de progreso cobrará vida con cada paso que des. No te detengas: cada recurso completado te acerca un 20% más a tu certificación global. ¡El poder de las instrucciones claras está en tus manos!
-                   </p>
-                 </div>
-               </div>
+                {/* Tu Misión - Subtítulo destacado */}
+                <div className="flex items-start gap-3 mb-5">
+                   <Icon name={moduleData.missionIcon} className="text-[#00BCD4] text-sm flex-shrink-0 mt-0.5" />
+                  <div className="flex-1">
+                    <h4 className="text-base font-bold text-[#004B63] mb-1">Tu misión:</h4>
+                    <p className="text-slate-600 text-[15px] md:text-base leading-relaxed text-justify">
+                      {moduleData.mission}
+                    </p>
+                  </div>
+                </div>
                
                 {/* Temas en columna única - Tarjetas premium */}
                 <div className="flex flex-col gap-3 mt-4">

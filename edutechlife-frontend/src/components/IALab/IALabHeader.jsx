@@ -8,7 +8,7 @@ import { useNotification } from '../../context/NotificationContext';
 import { useCourseReminders } from '../../hooks/useCourseReminders';
 
 const IALabHeader = () => {
-  const { onBack } = useIALabContext();
+  const { onBack, courseCompleted, setShowCertificateModal } = useIALabContext();
   const { unreadCount } = useNotification();
   const [notifOpen, setNotifOpen] = useState(false);
 
@@ -21,7 +21,18 @@ const IALabHeader = () => {
         <div className="w-9 h-9 bg-gradient-to-br from-[#004B63] via-[#0A3550] to-[#00BCD4] rounded-xl flex items-center justify-center shadow-sm shadow-[#004B63]/15">
           <Icon name="fa-flask-vial" className="text-white text-sm" />
         </div>
-        <h1 className="text-lg font-bold text-[#004B63] tracking-tight truncate">Introducción a la I.A Generativa</h1>
+        {courseCompleted ? (
+          <button
+            onClick={() => setShowCertificateModal(true)}
+            className="text-lg font-bold text-[#004B63] tracking-tight truncate hover:text-[#00BCD4] transition-colors duration-200 flex items-center gap-2 group"
+            title="Ver certificado"
+          >
+            <span>Introducción a la I.A Generativa</span>
+            <Icon name="fa-award" className="text-[#FFD166] text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+          </button>
+        ) : (
+          <h1 className="text-lg font-bold text-[#004B63] tracking-tight truncate">Introducción a la I.A Generativa</h1>
+        )}
       </div>
       <div className="flex items-center gap-4">
         {/* Campana de notificaciones */}
@@ -47,7 +58,7 @@ const IALabHeader = () => {
             if (view === 'landing') {
               onBack && onBack();
             } else if (view === 'certificados') {
-              alert('Sistema de certificados:\n\n• Certificado VAK Básico\n• Certificado VAK Avanzado\n• Certificado EdutechLife Pro\n\nLos certificados se generan automáticamente al completar cursos.');
+              setShowCertificateModal(true);
             }
           }}
         />

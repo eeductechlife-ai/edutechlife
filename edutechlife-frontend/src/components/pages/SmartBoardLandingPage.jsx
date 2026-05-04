@@ -1,20 +1,23 @@
 import { lazy, Suspense } from 'react';
+import { SmartBoardKidsProvider } from '../../context/SmartBoardKidsContext';
 import { PageLoader } from '../LoadingScreen';
 
-// Lazy load del componente SmartBoard original (GUI con analizador de documentos, líneas de investigación, VAK)
-const SmartBoard = lazy(() => import('../SmartBoard'));
+// Lazy load del nuevo SmartBoard Kids Dashboard (8-16 años)
+const SmartBoardKidsDashboard = lazy(() => import('../kids-dashboard/SmartBoardKidsDashboard'));
 
 /**
- * Página pública de aterrizaje de SmartBoard
+ * Página de entrada a SmartBoard para niños 8-16 años
  * Ruta: /smartboard
- * Contiene el entorno gráfico original con todas las funcionalidades visuales
- * No requiere autenticación - página pública
+ * Contiene el dashboard completo con Dani tutor, VAK, puntos, calendario y noticias
+ * Requiere autenticación para acceder al dashboard completo
  */
 const SmartBoardLandingPage = () => {
   return (
-    <Suspense fallback={<PageLoader message="Cargando SmartBoard..." />}>
-      <SmartBoard />
-    </Suspense>
+    <SmartBoardKidsProvider>
+      <Suspense fallback={<PageLoader message="Cargando SmartBoard Kids..." />}>
+        <SmartBoardKidsDashboard />
+      </Suspense>
+    </SmartBoardKidsProvider>
   );
 };
 

@@ -2,7 +2,6 @@ import { useState, lazy, Suspense } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth, useUser } from '@clerk/react';
 import { PageLoader } from '../LoadingScreen';
-import NicoModern from '../Nico/NicoModern';
 import ContactModal from '../ContactModal';
 import LeadCaptureModal from '../LeadCaptureModal';
 import AdminLoginModal from '../AdminLoginModal';
@@ -24,17 +23,6 @@ const AppLayout = () => {
   const [showContactModal, setShowContactModal] = useState(false);
   const [showLeadCaptureModal, setShowLeadCaptureModal] = useState(false);
   const [adminLoginModalOpen, setAdminLoginModalOpen] = useState(false);
-  
-  // Estados para Nico (chatbot)
-  const [botOpen, setBotOpen] = useState(false);
-  const [isBotMinimized, setIsBotMinimized] = useState(false);
-  const [isBotClosing, setIsBotClosing] = useState(false);
-  const [botMsgs, setBotMsgs] = useState([{ 
-    role: 'assistant', 
-    text: 'Hola, soy Nico. ¿En qué puedo ayudarte hoy?',
-    timestamp: new Date()
-  }]);
-  const [botInput, setBotInput] = useState('');
   
   // Función para navegación con scroll a secciones
   const navigateToSection = (route, sectionId = null) => {
@@ -293,65 +281,27 @@ const AppLayout = () => {
         </>
       )}
       
-      {/* Main Content Area */}
-      <main className="flex-1">
-        <ScrollToTop />
-        <Suspense fallback={<PageLoader message="Cargando contenido..." />}>
-          <Outlet />
-        </Suspense>
-      </main>
+        {/* Main Content Area */}
+        <main className="flex-1">
+          <ScrollToTop />
+          <Suspense fallback={<PageLoader message="Cargando contenido..." />}>
+            <Outlet />
+          </Suspense>
+        </main>
       
-      {/* Footer - Se renderiza condicionalmente en el componente de rutas */}
-      
-       {/* Nico Chatbot - oculto en IALab y VAK (solo Valerio/Valentina) */}
-       {!location.pathname.includes('/ialab') && !location.pathname.includes('/vak') && <NicoModern 
-        isOpen={botOpen}
-        isMinimized={isBotMinimized}
-        isClosing={isBotClosing}
-        messages={botMsgs}
-        inputValue={botInput}
-        onInputChange={setBotInput}
-        onToggle={() => {
-          if (isBotClosing) return;
-          if (botOpen) {
-            setIsBotClosing(true);
-            setTimeout(() => {
-              setBotOpen(false);
-              setIsBotClosing(false);
-            }, 300);
-          } else {
-            setBotOpen(true);
-            setIsBotMinimized(false);
-          }
-        }}
-        onMinimize={() => setIsBotMinimized(true)}
-        onSend={() => {
-          // Lógica para enviar mensaje (se implementará después)
-          console.log('Enviar mensaje:', botInput);
-          setBotInput('');
-        }}
-        onNavigate={navigate}
-      />}
-      
-      {/* Modales Globales */}
-      <ContactModal 
-        isOpen={showContactModal}
-        onClose={() => setShowContactModal(false)}
-      />
-      
-      <LeadCaptureModal 
-        isOpen={showLeadCaptureModal}
-        onClose={() => setShowLeadCaptureModal(false)}
-      />
-      
-      <AdminLoginModal 
-        isOpen={adminLoginModalOpen}
-        onClose={() => setAdminLoginModalOpen(false)}
-        onLogin={() => {
-          setAdminLoginModalOpen(false);
-          navigate('/admin');
-        }}
-      />
+        {/* Modales Globales */}
+        <ContactModal 
+          isOpen={showContactModal} 
+          onClose={() => setShowContactModal(false)} 
+        />
+        <LeadCaptureModal 
+          isOpen={showLeadCaptureModal} 
+          onClose={() => setShowLeadCaptureModal(false)} 
+        />
+        <AdminLoginModal 
+          isOpen={adminLoginModalOpen} 
+          onClose={() => setAdminLoginModalOpen(false)} 
+        />
       </div>
     </ProgressProvider>
   );

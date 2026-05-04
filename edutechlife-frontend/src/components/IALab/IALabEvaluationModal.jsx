@@ -19,6 +19,7 @@ import { motion, AnimatePresence } from 'framer-motion';
  * - Generación dinámica de ejercicios por DeepSeek
  * - Evaluación automática por DeepSeek
  * - Persistencia de notas en Supabase con Clerk auth
+ * - Auto-save de borradores con debounce
  * - Medidas de seguridad estrictas (no copy/paste)
  * - Diseño Edutechlife premium (#004B63, #00BCD4)
  * 
@@ -26,8 +27,9 @@ import { motion, AnimatePresence } from 'framer-motion';
  * @param {boolean} props.isOpen - Estado de apertura del modal
  * @param {Function} props.onClose - Handler para cerrar modal
  * @param {boolean} props.isPremium - Indica si es el modal premium del desafío
+ * @param {number} props.moduleId - ID del módulo actual para auto-save
  */
-const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, onComplete }) => {
+const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, onComplete }) => {
     const { user } = useAuth();
     const {
         state,
@@ -44,10 +46,12 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, onComplete }
     const [isVisible, setIsVisible] = useState(false);
     const [securityViolations, setSecurityViolations] = useState(0);
     const MAX_SECURITY_VIOLATIONS = 3;
+    const saveDraftTimerRef = useRef(null);
+    const hasRestoredDraftRef = useRef(false);
 
     // Debug logging
     console.log('🎯 [DEBUG] IALabEvaluationModal renderizando');
-    console.log('🎯 [DEBUG] Props:', { isOpen, isPremium });
+    console.log('🎯 [DEBUG] Props:', { isOpen, isPremium, moduleId });
 
     // Inicializar evaluación cuando se abre el modal
     useEffect(() => {
@@ -55,6 +59,95 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, onComplete }
             generateExercises();
         }
     }, [isOpen, state.exercises, state.loading, generateExercises]);
+
+    // Restaurar borrador guardado al abrir el modal
+    useEffect(() => {
+        if (isOpen && user?.id && moduleId && !hasRestoredDraftRef.current) {
+            hasRestoredDraftRef.current = true;
+            const restoreDraft = async () => {
+                try {
+                    const { data, error } = await supabase
+                        .from('user_progress')
+                        .select('completed_lessons')
+                        .eq('user_id', user.id)
+                        .eq('module_id', moduleId)
+                        .eq('activity_type', 'challenge_draft')
+                        .is('resource_id', null)
+                        .maybeSingle();
+
+                    if (error) throw error;
+                    if (data?.completed_lessons) {
+                        const draft = data.completed_lessons;
+                        if (draft.ej1) setResponse('ej1', draft.ej1);
+                        if (draft.ej2) setResponse('ej2', draft.ej2);
+                        if (draft.ej3) setResponse('ej3', draft.ej3);
+                        console.log('📝 Borrador de desafío restaurado');
+                    }
+                } catch (err) {
+                    console.warn('⚠️ Error restaurando borrador:', err);
+                }
+            };
+            restoreDraft();
+        }
+    }, [isOpen, user?.id, moduleId]);
+
+    // Auto-save de borradores con debounce
+    useEffect(() => {
+        if (!isOpen || !user?.id || !moduleId) return;
+        if (!state.responses.ej1 && !state.responses.ej2 && !state.responses.ej3) return;
+
+        if (saveDraftTimerRef.current) {
+            clearTimeout(saveDraftTimerRef.current);
+        }
+
+        saveDraftTimerRef.current = setTimeout(async () => {
+            try {
+                await supabase
+                    .from('user_progress')
+                    .upsert({
+                        user_id: user.id,
+                        module_id: moduleId,
+                        activity_type: 'challenge_draft',
+                        resource_id: null,
+                        completed_lessons: { ...state.responses },
+                        is_completed: false,
+                        updated_at: new Date().toISOString(),
+                    }, {
+                        onConflict: 'user_id,module_id,activity_type,resource_id',
+                    });
+                console.log('💾 Borrador auto-guardado');
+            } catch (err) {
+                console.warn('⚠️ Error auto-guardando borrador:', err);
+            }
+        }, 1500);
+
+        return () => {
+            if (saveDraftTimerRef.current) {
+                clearTimeout(saveDraftTimerRef.current);
+            }
+        };
+    }, [state.responses, isOpen, user?.id, moduleId]);
+
+    // Limpiar borrador al completar el desafío
+    useEffect(() => {
+        if (state.step === 'results' && user?.id && moduleId) {
+            const clearDraft = async () => {
+                try {
+                    await supabase
+                        .from('user_progress')
+                        .delete()
+                        .eq('user_id', user.id)
+                        .eq('module_id', moduleId)
+                        .eq('activity_type', 'challenge_draft')
+                        .is('resource_id', null);
+                    console.log('🗑️ Borrador limpiado tras completar desafío');
+                } catch (err) {
+                    console.warn('⚠️ Error limpiando borrador:', err);
+                }
+            };
+            clearDraft();
+        }
+    }, [state.step, user?.id, moduleId]);
 
     // Animación de entrada/salida
     useEffect(() => {
@@ -136,12 +229,14 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, onComplete }
     // Handler para cerrar modal (con confirmación si hay progreso)
     const handleCloseModal = useCallback(() => {
         if (state.step > 1 || state.responses.ej1 || state.responses.ej2 || state.responses.ej3) {
-            if (confirm('⚠️ Tienes progreso sin guardar. ¿Estás seguro de que quieres salir? Tu progreso se perderá.')) {
+            if (confirm('⚠️ Tienes progreso sin guardar. ¿Estás seguro de que quieres salir? Tu progreso se guardará como borrador.')) {
                 resetEvaluation();
+                hasRestoredDraftRef.current = false;
                 onClose();
             }
         } else {
             resetEvaluation();
+            hasRestoredDraftRef.current = false;
             onClose();
         }
     }, [state.step, state.responses, resetEvaluation, onClose]);
@@ -174,11 +269,11 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, onComplete }
             if (evaluation) {
                 // Guardar nota en Supabase
                 setIsSavingGrade(true);
-                const saveResult = await saveGradeToSupabase(evaluation);
+                const saveResult = await saveGradeToSupabase(evaluation, moduleId);
                 
                 if (saveResult.success) {
                     if (onComplete) {
-                        onComplete(evaluation.score || evaluation.totalScore || 0);
+                        onComplete(evaluation.notaGlobal || 0);
                     }
                     setStep('results');
                 } else {
@@ -191,7 +286,7 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, onComplete }
         } finally {
             setIsSavingGrade(false);
         }
-    }, [state.responses, evaluateAnswers, saveGradeToSupabase, setStep]);
+    }, [state.responses, evaluateAnswers, saveGradeToSupabase, setStep, moduleId, onComplete]);
 
     // Render header con progreso
     const renderHeader = () => (

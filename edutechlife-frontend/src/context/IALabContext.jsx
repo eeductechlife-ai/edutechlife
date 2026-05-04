@@ -1,6 +1,8 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect, useMemo } from 'react';
 import { useUser, useClerk, useAuth as useClerkAuth } from '@clerk/react';
 import { useProgressContext } from './ProgressContext';
+import { moduleContent } from '../components/IALab/constants/moduleContent';
+import { supabase } from '../lib/supabase';
 
 /**
  * CONTEXTO GLOBAL IALab - Estado compartido entre componentes
@@ -96,6 +98,28 @@ export const IALabProvider = ({ children, onBack }) => {
     setIsLoadingProgress(progressLoading);
   }, [progressLoading]);
 
+  // Cargar certificado existente al iniciar
+  useEffect(() => {
+    if (!user?.id) return;
+    const loadExistingCert = async () => {
+      try {
+        const { data } = await supabase
+          .from('certificates')
+          .select('*')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        if (data) {
+          setStoredCertificate(data);
+          setCertName(data.cert_name || '');
+          setCourseCompleted(true);
+        }
+      } catch (err) {
+        console.error('Error cargando certificado:', err);
+      }
+    };
+    loadExistingCert();
+  }, [user?.id]);
+
   // Sistema de notas y progreso gamificado por módulo
   const INITIAL_MODULE_PROGRESS = {
     1: { exam: false, challenge: false, resourcesCompleted: false, community: false, currentScore: 0, isUnlocked: true },
@@ -173,6 +197,10 @@ export const IALabProvider = ({ children, onBack }) => {
   // Estados de certificado
   const [certName, setCertName] = useState('');
   const [showNameModal, setShowNameModal] = useState(false);
+  const [courseCompleted, setCourseCompleted] = useState(false);
+  const [showCertificateModal, setShowCertificateModal] = useState(false);
+  const [storedCertificate, setStoredCertificate] = useState(null);
+  const [certificateGenerating, setCertificateGenerating] = useState(false);
   
   // Estados de evaluación antigua (mantener compatibilidad)
   const [evalAnswers, setEvalAnswers] = useState({});
@@ -213,8 +241,8 @@ export const IALabProvider = ({ children, onBack }) => {
   
   const LAST_MODULE_ID = 5;
   
-  // Lecciones del módulo 1 - Datos extendidos para diseño premium
-  const moduleLessons = [
+  // Lecciones del módulo 1 - Datos originales (INTACTOS)
+  const module1Lessons = [
     { 
       id: 1, 
       title: 'Introducción a la Inteligencia Artificial Generativa', 
@@ -249,6 +277,12 @@ export const IALabProvider = ({ children, onBack }) => {
       themeColor: '#10B981'
     },
   ];
+  
+  // Lecciones dinámicas según módulo activo (Módulo 1 intacto, 2-5 desde moduleContent)
+  const moduleLessons = useMemo(() => {
+    if (activeMod === 1) return module1Lessons;
+    return moduleContent[activeMod]?.lessons || [];
+  }, [activeMod]);
   
   // Mensajes de carga para sintetizador
   const msgs = ['Analizando contexto...', 'Aplicando técnicas élite...', 'Optimizando estructura...', 'Generando masterPrompt...'];
@@ -382,6 +416,105 @@ export const IALabProvider = ({ children, onBack }) => {
       return { ...prev, [moduleId]: updated };
     });
   }, []);
+  
+  // Verificar si el curso está completo (80%+ y todos los módulos aprobados)
+  // Usa dos fuentes: moduleProgress (sistema gamificado) Y completedModules (ProgressContext)
+  const checkCourseCompletion = useCallback(() => {
+    // Contar módulos completados vía sistema gamificado (score >= 80%)
+    const modulesApprovedByScore = [1, 2, 3, 4, 5].filter(
+      id => calculateModuleScore(id) >= 80
+    ).length;
+    
+    // Contar módulos completados vía ProgressContext
+    const modulesInContext = completedModules.length;
+    
+    // Usar el mayor de los dos conteos (para cubrir ambos sistemas de tracking)
+    const effectiveModulesCompleted = Math.max(modulesApprovedByScore, modulesInContext);
+    
+    // Contar exámenes completados
+    const examsInContext = Object.values(completedExams).filter(Boolean).length;
+    const examsByScore = [1, 2, 3, 4, 5].filter(
+      id => moduleProgress[id]?.exam
+    ).length;
+    const effectiveExamsCompleted = Math.max(examsInContext, examsByScore);
+    
+    const progressThreshold = courseProgress >= 80;
+    
+    // Criterio: progreso >= 80% Y al menos 5 módulos completados (por cualquier sistema)
+    const isCompleted = effectiveModulesCompleted >= 5 && progressThreshold;
+    setCourseCompleted(isCompleted);
+    return isCompleted;
+  }, [completedModules, completedExams, courseProgress, moduleProgress, calculateModuleScore]);
+  
+  // Verificar completitud del curso cuando cambia el progreso
+  useEffect(() => {
+    checkCourseCompletion();
+  }, [checkCourseCompletion]);
+  
+  // Generar y guardar certificado en Supabase
+  const generateCertificate = useCallback(async (overrideName) => {
+    if (!user?.id) {
+      console.error('❌ generateCertificate: user.id no disponible');
+      return { success: false, error: 'Usuario no autenticado' };
+    }
+    
+    setCertificateGenerating(true);
+    try {
+      const existingCert = await supabase
+        .from('certificates')
+        .select('*')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      
+      if (existingCert.error) {
+        console.error('❌ Error buscando certificado existente:', existingCert.error.message);
+      }
+      
+      if (existingCert.data) {
+        setStoredCertificate(existingCert.data);
+        setCertificateGenerating(false);
+        return existingCert.data;
+      }
+      
+      const studentName = (overrideName || certName).trim() || user.full_name || 'Estudiante';
+      
+      const moduleScores = [1, 2, 3, 4, 5].map(id => calculateModuleScore(id));
+      const overallScore = Math.round(moduleScores.reduce((a, b) => a + b, 0) / 5);
+      
+      const certData = {
+        user_id: user.id,
+        cert_name: studentName,
+        overall_score: Math.max(overallScore, 80),
+        modules_completed: 5
+      };
+      
+      console.log('📝 Insertando certificado:', certData);
+      
+      const { data, error } = await supabase
+        .from('certificates')
+        .insert(certData)
+        .select()
+        .single();
+      
+      if (error) {
+        console.error('❌ Error de Supabase al insertar certificado:', error);
+        console.error('   Detalles:', error.details);
+        console.error('   Hint:', error.hint);
+        console.error('   Code:', error.code);
+        throw new Error(error.message || 'Error al generar certificado');
+      }
+      
+      console.log('✅ Certificado generado exitosamente:', data);
+      setStoredCertificate(data);
+      setCourseCompleted(true);
+      return data;
+    } catch (err) {
+      console.error('❌ Error generando certificado:', err);
+      return { success: false, error: err.message || 'Error desconocido' };
+    } finally {
+      setCertificateGenerating(false);
+    }
+  }, [user, certName, calculateModuleScore]);
   
   // Obtener el último intento del quiz
   const getLatestQuizAttempt = useCallback(() => {
@@ -528,6 +661,15 @@ export const IALabProvider = ({ children, onBack }) => {
     setCertName,
     showNameModal,
     setShowNameModal,
+    courseCompleted,
+    setCourseCompleted,
+    showCertificateModal,
+    setShowCertificateModal,
+    storedCertificate,
+    setStoredCertificate,
+    certificateGenerating,
+    checkCourseCompletion,
+    generateCertificate,
     
     // Estados de evaluación antigua
     evalAnswers,
@@ -575,6 +717,7 @@ export const IALabProvider = ({ children, onBack }) => {
     modules,
     LAST_MODULE_ID,
     moduleLessons,
+    moduleContent,
     msgs,
     
     // Funciones de utilidad

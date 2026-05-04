@@ -134,6 +134,585 @@ export const moduleResources = {
         description: "Análisis detallado de un prompt real para análisis de datasets."
       }
     ]
+  },
+
+  // ============================================================================
+  // MÓDULO 2: POTENCIA CHATGPT
+  // ============================================================================
+  "Fundamentos de ChatGPT y Modelos GPT": {
+    title: "Fundamentos de ChatGPT y Modelos GPT",
+    description: "Aprende a aprovechar todo el potencial de ChatGPT, desde la interfaz básica hasta técnicas avanzadas de interacción.",
+    learningObjectives: [
+      "Navegar eficientemente por la interfaz de ChatGPT",
+      "Configurar conversaciones para diferentes propósitos",
+      "Aplicar técnicas de prompt engineering específicas para ChatGPT",
+      "Identificar las limitaciones y mejores usos de ChatGPT"
+    ],
+    estimatedTime: "25 minutos",
+    difficulty: "Principiante",
+    resources: [
+      {
+        id: "chatgpt-video-1",
+        type: "video",
+        title: "Tutorial: Primeros Pasos con ChatGPT",
+        url: "https://www.youtube.com/embed/gFjVXUJnGfE",
+        duration: "12:30",
+        thumbnail: "https://img.youtube.com/vi/gFjVXUJnGfE/maxresdefault.jpg",
+        provider: "youtube",
+        description: "Guía completa para comenzar a usar ChatGPT de manera efectiva."
+      },
+      {
+        id: "chatgpt-guide-1",
+        type: "pdf",
+        title: "Guía Completa de ChatGPT",
+        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/recursos-edutechlife/guia_edutechlife_modulo1.pdf",
+        pages: 18,
+        format: "PDF",
+        size: "3.5 MB",
+        description: "Manual completo con tips, trucos y mejores prácticas para ChatGPT.",
+        thumbnailType: "premium",
+        immersiveView: true
+      },
+      {
+        id: "chatgpt-ova-1",
+        type: "ova",
+        title: "Laboratorio: Experimentando con ChatGPT",
+        description: "Práctica guiada con diferentes tipos de prompts y análisis de resultados.",
+        estimatedTime: "15 minutos",
+        difficulty: "Intermedio",
+        interactiveElements: 4,
+        thumbnailType: "premium",
+        fullscreen: true
+      }
+    ]
+  },
+
+  "System Prompts y Configuración Avanzada": {
+    title: "System Prompts y Configuración Avanzada",
+    description: "Crea flujos de trabajo eficientes usando ChatGPT para tareas cotidianas de redacción, análisis y organización.",
+    learningObjectives: [
+      "Diseñar flujos de trabajo repetitivos con ChatGPT",
+      "Automatizar tareas de redacción y edición",
+      "Integrar ChatGPT en procesos de trabajo existentes",
+      "Medir la productividad ganada con IA"
+    ],
+    estimatedTime: "20 minutos",
+    difficulty: "Intermedio",
+    resources: [
+      {
+        id: "workflow-video-1",
+        type: "video",
+        title: "Flujos de Trabajo Avanzados",
+        url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        duration: "15:20",
+        thumbnail: "https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+        provider: "youtube",
+        description: "Cómo estructurar tareas complejas en flujos automatizados con ChatGPT."
+      },
+      {
+        id: "workflow-template-1",
+        type: "document",
+        title: "Plantillas de Flujos de Trabajo",
+        url: "/templates/chatgpt-workflow-templates.json",
+        format: "JSON",
+        size: "1.8 MB",
+        description: "10 plantillas listas para implementar en tu día a día."
+      },
+      {
+        id: "workflow-ova-1",
+        type: "ova",
+        title: "Simulador: Crea tu Primer Flujo",
+        description: "Ejercicio interactivo para diseñar tu primer flujo de trabajo automatizado.",
+        estimatedTime: "20 minutos",
+        difficulty: "Intermedio",
+        interactiveElements: 6,
+        thumbnailType: "premium",
+        fullscreen: true
+      }
+    ]
+  },
+
+  "Function Calling y APIs de OpenAI": {
+    title: "Function Calling y APIs de OpenAI",
+    description: "Descubre cómo crear y usar GPTs personalizados y acciones para automatizar tareas complejas.",
+    learningObjectives: [
+      "Crear GPTs personalizados para necesidades específicas",
+      "Configurar acciones para conectar con APIs externas",
+      "Compartir y utilizar GPTs de la comunidad",
+      "Evaluar cuándo usar un GPT personalizado vs ChatGPT estándar"
+    ],
+    estimatedTime: "30 minutos",
+    difficulty: "Avanzado",
+    resources: [
+      {
+        id: "gpts-video-1",
+        type: "video",
+        title: "Tutorial: Creando tu Primer GPT",
+        url: "https://www.youtube.com/embed/VkZ0VKR3Oe8",
+        duration: "18:45",
+        thumbnail: "https://img.youtube.com/vi/VkZ0VKR3Oe8/maxresdefault.jpg",
+        provider: "youtube",
+        description: "Paso a paso para crear un GPT personalizado funcional."
+      },
+      {
+        id: "gpts-guide-1",
+        type: "pdf",
+        title: "Guía de GPTs y Acciones",
+        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/recursos-edutechlife/guia_edutechlife_modulo1.pdf",
+        pages: 22,
+        format: "PDF",
+        size: "4.2 MB",
+        description: "Manual completo sobre GPTs, acciones y automatizaciones.",
+        thumbnailType: "premium",
+        immersiveView: true
+      },
+      {
+        id: "gpts-ova-1",
+        type: "ova",
+        title: "Laboratorio: Construye un GPT",
+        description: "Práctica guiada para crear un GPT especializado en tu área.",
+        estimatedTime: "25 minutos",
+        difficulty: "Avanzado",
+        interactiveElements: 8,
+        thumbnailType: "premium",
+        fullscreen: true
+      }
+    ]
+  },
+
+  // ============================================================================
+  // MÓDULO 3: DOMINA GEMINI
+  // ============================================================================
+  "Introducción a Google Gemini": {
+    title: "Introducción a Google Gemini",
+    description: "Conoce Gemini, la IA multimodal de Google capaz de procesar texto, imágenes, audio y video simultáneamente.",
+    learningObjectives: [
+      "Comprender las capacidades multimodales de Gemini",
+      "Utilizar Gemini con diferentes tipos de entrada",
+      "Comparar Gemini con otros modelos de IA",
+      "Aplicar Gemini en contextos creativos y analíticos"
+    ],
+    estimatedTime: "25 minutos",
+    difficulty: "Principiante",
+    resources: [
+      {
+        id: "gemini-video-1",
+        type: "video",
+        title: "Introducción a Gemini",
+        url: "https://www.youtube.com/embed/XV-2xnFMJqI",
+        duration: "14:10",
+        thumbnail: "https://img.youtube.com/vi/XV-2xnFMJqI/maxresdefault.jpg",
+        provider: "youtube",
+        description: "Visión general de las capacidades multimodales de Gemini."
+      },
+      {
+        id: "gemini-guide-1",
+        type: "pdf",
+        title: "Manual de Gemini",
+        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/recursos-edutechlife/guia_edutechlife_modulo1.pdf",
+        pages: 16,
+        format: "PDF",
+        size: "2.8 MB",
+        description: "Guía completa para aprovechar Gemini en diferentes contextos.",
+        thumbnailType: "premium",
+        immersiveView: true
+      },
+      {
+        id: "gemini-ova-1",
+        type: "ova",
+        title: "Laboratorio: Experimenta con Multimodalidad",
+        description: "Práctica con entradas de texto, imagen y audio en Gemini.",
+        estimatedTime: "15 minutos",
+        difficulty: "Intermedio",
+        interactiveElements: 5,
+        thumbnailType: "premium",
+        fullscreen: true
+      }
+    ]
+  },
+
+  "Razonamiento Multimodal y Grounding": {
+    title: "Razonamiento Multimodal y Grounding",
+    description: "Aprende a integrar Gemini en Google Docs, Sheets, Gmail y otras herramientas de Workspace.",
+    learningObjectives: [
+      "Usar Gemini dentro de Google Docs para redacción",
+      "Analizar datos con Gemini en Google Sheets",
+      "Gestionar correos electrónicos con Gemini en Gmail",
+      "Crear presentaciones asistidas por Gemini"
+    ],
+    estimatedTime: "30 minutos",
+    difficulty: "Intermedio",
+    resources: [
+      {
+        id: "workspace-video-1",
+        type: "video",
+        title: "Gemini + Google Workspace: Tutorial Completo",
+        url: "https://www.youtube.com/embed/0pQKzGzZjZ0",
+        duration: "20:15",
+        thumbnail: "https://img.youtube.com/vi/0pQKzGzZjZ0/maxresdefault.jpg",
+        provider: "youtube",
+        description: "Integración completa de Gemini en el ecosistema Google."
+      },
+      {
+        id: "workspace-template-1",
+        type: "document",
+        title: "Plantillas para Google Workspace",
+        url: "/templates/gemini-workspace-templates.json",
+        format: "JSON",
+        size: "2.1 MB",
+        description: "Prompts optimizados para cada herramienta de Workspace."
+      },
+      {
+        id: "workspace-ova-1",
+        type: "ova",
+        title: "Simulador: Workspace con Gemini",
+        description: "Práctica interactiva con las integraciones de Gemini.",
+        estimatedTime: "20 minutos",
+        difficulty: "Intermedio",
+        interactiveElements: 7,
+        thumbnailType: "premium",
+        fullscreen: true
+      }
+    ]
+  },
+
+  "Deep Research y Fact-Checking con IA": {
+    title: "Deep Research y Fact-Checking con IA",
+    description: "Casos reales de uso profesional de Gemini en marketing, programación, educación e investigación.",
+    learningObjectives: [
+      "Aplicar Gemini en estrategias de marketing",
+      "Usar Gemini para asistencia en programación",
+      "Implementar Gemini en procesos educativos",
+      "Leverage Gemini para investigación académica"
+    ],
+    estimatedTime: "25 minutos",
+    difficulty: "Avanzado",
+    resources: [
+      {
+        id: "gemini-cases-video-1",
+        type: "video",
+        title: "Casos de Éxito con Gemini",
+        url: "https://www.youtube.com/embed/1pG8VvJGQgE",
+        duration: "16:30",
+        thumbnail: "https://img.youtube.com/vi/1pG8VvJGQgE/maxresdefault.jpg",
+        provider: "youtube",
+        description: "Testimonios y demostraciones de uso profesional."
+      },
+      {
+        id: "gemini-cases-guide-1",
+        type: "pdf",
+        title: "Guía de Casos de Uso",
+        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/recursos-edutechlife/guia_edutechlife_modulo1.pdf",
+        pages: 24,
+        format: "PDF",
+        size: "5.1 MB",
+        description: "20 casos de uso detallados con prompts incluidos.",
+        thumbnailType: "premium",
+        immersiveView: true
+      },
+      {
+        id: "gemini-cases-ova-1",
+        type: "ova",
+        title: "Laboratorio: Casos Prácticos",
+        description: "Resuelve problemas reales usando Gemini como asistente.",
+        estimatedTime: "25 minutos",
+        difficulty: "Avanzado",
+        interactiveElements: 6,
+        thumbnailType: "premium",
+        fullscreen: true
+      }
+    ]
+  },
+
+  // ============================================================================
+  // MÓDULO 4: NOTEBOOKLM
+  // ============================================================================
+  "¿Qué es NotebookLM y para qué sirve?": {
+    title: "¿Qué es NotebookLM y para qué sirve?",
+    description: "Descubre NotebookLM, la herramienta de Google para investigación asistida por IA con fuentes personalizadas.",
+    learningObjectives: [
+      "Crear notebooks con fuentes personalizadas",
+      "Hacer preguntas específicas sobre tus documentos",
+      "Generar resúmenes inteligentes de contenido",
+      "Comparar información entre múltiples fuentes"
+    ],
+    estimatedTime: "20 minutos",
+    difficulty: "Principiante",
+    resources: [
+      {
+        id: "notebooklm-video-1",
+        type: "video",
+        title: "Primeros Pasos con NotebookLM",
+        url: "https://www.youtube.com/embed/3eGqDMhqjEY",
+        duration: "11:45",
+        thumbnail: "https://img.youtube.com/vi/3eGqDMhqjEY/maxresdefault.jpg",
+        provider: "youtube",
+        description: "Introducción práctica a NotebookLM."
+      },
+      {
+        id: "notebooklm-guide-1",
+        type: "pdf",
+        title: "Guía de NotebookLM",
+        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/recursos-edutechlife/guia_edutechlife_modulo1.pdf",
+        pages: 14,
+        format: "PDF",
+        size: "2.3 MB",
+        description: "Manual completo para investigadores y estudiantes.",
+        thumbnailType: "premium",
+        immersiveView: true
+      },
+      {
+        id: "notebooklm-ova-1",
+        type: "ova",
+        title: "Laboratorio: Crea tu Notebook",
+        description: "Práctica guiada creando un notebook con tus propias fuentes.",
+        estimatedTime: "15 minutos",
+        difficulty: "Intermedio",
+        interactiveElements: 4,
+        thumbnailType: "premium",
+        fullscreen: true
+      }
+    ]
+  },
+
+  "Curaduría de Fuentes y Síntesis de Documentos": {
+    title: "Curaduría de Fuentes y Síntesis de Documentos",
+    description: "Aprende a generar resúmenes, FAQ y briefings conectados a tus fuentes originales.",
+    learningObjectives: [
+      "Generar resúmenes ejecutivos automáticos",
+      "Crear FAQs basadas en tus documentos",
+      "Conectar respuestas a fuentes originales",
+      "Validar la precisión de la información generada"
+    ],
+    estimatedTime: "25 minutos",
+    difficulty: "Intermedio",
+    resources: [
+      {
+        id: "notebook-summary-video-1",
+        type: "video",
+        title: "Resúmenes Inteligentes con NotebookLM",
+        url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        duration: "13:20",
+        thumbnail: "https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+        provider: "youtube",
+        description: "Técnicas avanzadas de resumen y análisis."
+      },
+      {
+        id: "notebook-summary-template-1",
+        type: "document",
+        title: "Plantillas de Resumen",
+        url: "/templates/notebooklm-summary-templates.json",
+        format: "JSON",
+        size: "1.5 MB",
+        description: "Estructuras de resumen predefinidas para diferentes contextos."
+      },
+      {
+        id: "notebook-summary-ova-1",
+        type: "ova",
+        title: "Simulador: Análisis de Documentos",
+        description: "Practica generando resúmenes de documentos complejos.",
+        estimatedTime: "20 minutos",
+        difficulty: "Intermedio",
+        interactiveElements: 5,
+        thumbnailType: "premium",
+        fullscreen: true
+      }
+    ]
+  },
+
+  "Audio Overviews y Gestión Documental con IA": {
+    title: "Audio Overviews y Gestión Documental con IA",
+    description: "Explora la función de Audio Overview que convierte tus notas en conversaciones de podcast generadas por IA.",
+    learningObjectives: [
+      "Generar Audio Overviews de tus notebooks",
+      "Personalizar el estilo y tono del audio",
+      "Usar audio para aprendizaje y repaso",
+      "Compartir Audio Overviews con equipos"
+    ],
+    estimatedTime: "20 minutos",
+    difficulty: "Avanzado",
+    resources: [
+      {
+        id: "notebook-audio-video-1",
+        type: "video",
+        title: "Audio Overview: Tu Contenido en Podcast",
+        url: "https://www.youtube.com/embed/gFjVXUJnGfE",
+        duration: "10:50",
+        thumbnail: "https://img.youtube.com/vi/gFjVXUJnGfE/maxresdefault.jpg",
+        provider: "youtube",
+        description: "Cómo transformar documentos en conversaciones de audio."
+      },
+      {
+        id: "notebook-audio-guide-1",
+        type: "pdf",
+        title: "Guía de Audio Overview",
+        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/recursos-edutechlife/guia_edutechlife_modulo1.pdf",
+        pages: 10,
+        format: "PDF",
+        size: "1.8 MB",
+        description: "Mejores prácticas para Audio Overviews efectivos.",
+        thumbnailType: "premium",
+        immersiveView: true
+      },
+      {
+        id: "notebook-audio-ova-1",
+        type: "ova",
+        title: "Laboratorio: Crea tu Podcast IA",
+        description: "Genera y personaliza tu primer Audio Overview.",
+        estimatedTime: "15 minutos",
+        difficulty: "Avanzado",
+        interactiveElements: 3,
+        thumbnailType: "premium",
+        fullscreen: true
+      }
+    ]
+  },
+
+  // ============================================================================
+  // MÓDULO 5: ÉTICA Y PRIVACIDAD
+  // ============================================================================
+  "Ética en la Inteligencia Artificial": {
+    title: "Ética en la Inteligencia Artificial",
+    description: "Aprende a reconocer y mitigar los sesgos inherentes en los modelos de IA generativa.",
+    learningObjectives: [
+      "Identificar tipos comunes de sesgos en IA",
+      "Detectar sesgos en respuestas generadas",
+      "Aplicar estrategias para reducir sesgos",
+      "Evaluar la equidad de resultados de IA"
+    ],
+    estimatedTime: "20 minutos",
+    difficulty: "Intermedio",
+    resources: [
+      {
+        id: "bias-video-1",
+        type: "video",
+        title: "Sesgos en IA: Explicación y Ejemplos",
+        url: "https://www.youtube.com/embed/59bV1ZcgB0Q",
+        duration: "12:15",
+        thumbnail: "https://img.youtube.com/vi/59bV1ZcgB0Q/maxresdefault.jpg",
+        provider: "youtube",
+        description: "Análisis detallado de cómo los sesgos afectan las respuestas de IA."
+      },
+      {
+        id: "bias-guide-1",
+        type: "pdf",
+        title: "Guía de Detección de Sesgos",
+        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/recursos-edutechlife/guia_edutechlife_modulo1.pdf",
+        pages: 15,
+        format: "PDF",
+        size: "2.6 MB",
+        description: "Framework para identificar y corregir sesgos en IA.",
+        thumbnailType: "premium",
+        immersiveView: true
+      },
+      {
+        id: "bias-ova-1",
+        type: "ova",
+        title: "Laboratorio: Detecta el Sesgo",
+        description: "Ejercicios interactivos para identificar sesgos en respuestas de IA.",
+        estimatedTime: "15 minutos",
+        difficulty: "Intermedio",
+        interactiveElements: 6,
+        thumbnailType: "premium",
+        fullscreen: true
+      }
+    ]
+  },
+
+  "Sesgos Algorítmicos y Equidad": {
+    title: "Sesgos Algorítmicos y Equidad",
+    description: "Estrategias prácticas para proteger tus datos personales y corporativos al usar herramientas de IA.",
+    learningObjectives: [
+      "Comprender cómo las IA procesan tus datos",
+      "Identificar riesgos de privacidad",
+      "Aplicar mejores prácticas de protección",
+      "Configurar opciones de privacidad en herramientas de IA"
+    ],
+    estimatedTime: "25 minutos",
+    difficulty: "Intermedio",
+    resources: [
+      {
+        id: "privacy-video-1",
+        type: "video",
+        title: "Privacidad y IA: Lo que Debes Saber",
+        url: "https://www.youtube.com/embed/8XxSC2L6QoE",
+        duration: "14:40",
+        thumbnail: "https://img.youtube.com/vi/8XxSC2L6QoE/maxresdefault.jpg",
+        provider: "youtube",
+        description: "Guía completa sobre privacidad en el uso de IA."
+      },
+      {
+        id: "privacy-guide-1",
+        type: "pdf",
+        title: "Manual de Privacidad en IA",
+        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/recursos-edutechlife/guia_edutechlife_modulo1.pdf",
+        pages: 20,
+        format: "PDF",
+        size: "3.8 MB",
+        description: "Protocolos y checklists de seguridad para uso de IA.",
+        thumbnailType: "premium",
+        immersiveView: true
+      },
+      {
+        id: "privacy-ova-1",
+        type: "ova",
+        title: "Simulador: Evaluación de Riesgos",
+        description: "Evalúa escenarios reales de riesgo de privacidad con IA.",
+        estimatedTime: "20 minutos",
+        difficulty: "Intermedio",
+        interactiveElements: 5,
+        thumbnailType: "premium",
+        fullscreen: true
+      }
+    ]
+  },
+
+  "Privacidad, Regulación y IA Responsable": {
+    title: "Privacidad, Regulación y IA Responsable",
+    description: "Marco ético para el uso responsable de IA en educación, trabajo y vida personal.",
+    learningObjectives: [
+      "Aplicar principios éticos al usar IA",
+      "Reconocer usos inapropiados de IA",
+      "Promover transparencia en el uso de IA",
+      "Desarrollar políticas de uso responsable"
+    ],
+    estimatedTime: "20 minutos",
+    difficulty: "Avanzado",
+    resources: [
+      {
+        id: "ethics-video-1",
+        type: "video",
+        title: "IA Ética: Principios y Práctica",
+        url: "https://www.youtube.com/embed/jnePzVXUJnG",
+        duration: "16:25",
+        thumbnail: "https://img.youtube.com/vi/jnePzVXUJnG/maxresdefault.jpg",
+        provider: "youtube",
+        description: "Fundamentos de ética aplicada a la IA generativa."
+      },
+      {
+        id: "ethics-guide-1",
+        type: "pdf",
+        title: "Código de Ética para Uso de IA",
+        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/recursos-edutechlife/guia_edutechlife_modulo1.pdf",
+        pages: 18,
+        format: "PDF",
+        size: "3.2 MB",
+        description: "Marco ético completo con casos prácticos.",
+        thumbnailType: "premium",
+        immersiveView: true
+      },
+      {
+        id: "ethics-ova-1",
+        type: "ova",
+        title: "Laboratorio: dilemas Éticos",
+        description: "Resuelve dilemas éticos reales relacionados con el uso de IA.",
+        estimatedTime: "25 minutos",
+        difficulty: "Avanzado",
+        interactiveElements: 8,
+        thumbnailType: "premium",
+        fullscreen: true
+      }
+    ]
   }
 };
 

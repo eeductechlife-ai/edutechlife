@@ -7,11 +7,12 @@ import LessonCardDetailed from './LessonCardDetailed';
 /**
  * COMPONENTE: IALabContentAccordion
  * 
- * Responsabilidad: 6 acordeones premium de lecciones del módulo
+ * Responsabilidad: Acordeones premium de lecciones del módulo
+ * - Módulo 1: Contenido hardcodeado original (intacto)
+ * - Módulos 2-5: Contenido dinámico desde moduleContent
  * - Navegación entre lecciones (botones anterior/siguiente)
  * - Barra de progreso de lección
  * - Acordeones con animaciones framer-motion
- * - Contenido específico por lección
  * - Estados de dispositivo táctil para optimización
  */
 
@@ -24,8 +25,14 @@ const IALabContentAccordion = () => {
     setOpenAccordions,
     visibleAccordions,
     isTouchDevice,
-    handleButtonClick
+    handleButtonClick,
+    activeMod,
+    moduleContent
   } = useIALabContext();
+  
+  const isModule1 = activeMod === 1;
+  const dynamicContent = moduleContent[activeMod];
+  const accordionData = dynamicContent?.accordionContent || {};
   
   // Clases de botones (extraídas del original para consistencia)
   const buttonClasses = {
@@ -41,13 +48,128 @@ const IALabContentAccordion = () => {
     }));
   };
   
+  // Renderiza contenido dinámico genérico para módulos 2-5
+  const renderDynamicAccordionContent = (lesson, accordionId) => {
+    const lessonData = accordionData[accordionId];
+    if (!lessonData) {
+      return (
+        <div className="space-y-4">
+          <div className="bg-gradient-to-r from-slate-50 to-slate-100 border border-slate-200 rounded-xl p-5">
+            <h4 className="text-lg font-bold text-slate-800 mb-3">{lesson.title}</h4>
+            <p className="text-slate-700 leading-relaxed">
+              {lesson.description}
+            </p>
+          </div>
+        </div>
+      );
+    }
+    
+    const colorMap = {
+      blue: { gradient: 'from-blue-50 to-cyan-50', border: 'border-blue-100', title: 'text-blue-800', text: 'text-blue-700' },
+      purple: { gradient: 'from-purple-50 to-violet-50', border: 'border-purple-100', title: 'text-purple-800', text: 'text-purple-700' },
+      emerald: { gradient: 'from-emerald-50 to-teal-50', border: 'border-emerald-100', title: 'text-emerald-800', text: 'text-emerald-700' },
+      amber: { gradient: 'from-amber-50 to-orange-50', border: 'border-amber-100', title: 'text-amber-800', text: 'text-amber-700' },
+      rose: { gradient: 'from-rose-50 to-pink-50', border: 'border-rose-100', title: 'text-rose-800', text: 'text-rose-700' }
+    };
+    const colors = colorMap[lessonData.color || 'blue'];
+    
+    return (
+      <div className="space-y-4">
+        {/* Objetivo Principal */}
+        <div className={`bg-gradient-to-r ${colors.gradient} border ${colors.border} rounded-xl p-5`}>
+          <h4 className={`text-lg font-bold ${colors.title} mb-3`}>🎯 {lessonData.objective?.title || "Objetivo Principal"}</h4>
+          <p className={colors.text}>{lessonData.objective?.description || lesson.description}</p>
+        </div>
+        
+        {/* Logros / Qué lograrás */}
+        {lessonData.achievements && (
+          <div className="bg-white border border-slate-100 rounded-xl p-4">
+            <h5 className="font-bold text-slate-800 mb-2 flex items-center gap-2">
+              <Icon name="fa-check-circle" className="text-emerald-500" />
+              {lessonData.achievements.title || "¿Qué lograrás?"}
+            </h5>
+            <ul className="space-y-2 text-sm text-slate-600">
+              {lessonData.achievements.items.map((item, i) => (
+                <li key={i} className="flex items-start gap-2">
+                  <Icon name="fa-check" className="text-emerald-500 mt-0.5 flex-shrink-0" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        
+        {/* Advertencias / Errores comunes */}
+        {lessonData.warnings && (
+          <div className="bg-white border border-slate-100 rounded-xl p-4">
+            <h5 className="font-bold text-slate-800 mb-2 flex items-center gap-2">
+              <Icon name="fa-exclamation-triangle" className="text-amber-500" />
+              {lessonData.warnings.title || "Errores comunes"}
+            </h5>
+            <ul className="space-y-2 text-sm text-slate-600">
+              {lessonData.warnings.items.map((item, i) => (
+                <li key={i} className="flex items-start gap-2">
+                  <Icon name="fa-times" className="text-red-500 mt-0.5 flex-shrink-0" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        
+        {/* Ejemplo práctico */}
+        {lessonData.example && (
+          <div className="bg-gradient-to-r from-slate-50 to-slate-100 border border-slate-200 rounded-xl p-5">
+            <h5 className="font-bold text-slate-800 mb-3">💡 {lessonData.example.title || "Ejemplo práctico"}</h5>
+            {lessonData.example.bad && lessonData.example.good && (
+              <div className="bg-white border border-slate-300 rounded-lg p-4 font-mono text-sm">
+                <div className="text-slate-500 mb-2">❌ <span className="font-semibold">{lessonData.example.badLabel || "Incorrecto"}:</span> {lessonData.example.bad}</div>
+                <div className="text-emerald-600">✅ <span className="font-semibold">{lessonData.example.goodLabel || "Correcto"}:</span> {lessonData.example.good}</div>
+              </div>
+            )}
+            {lessonData.example.content && (
+              <p className="text-slate-700 text-sm">{lessonData.example.content}</p>
+            )}
+          </div>
+        )}
+        
+        {/* Contenido adicional genérico si no hay nada más específico */}
+        {!lessonData.achievements && !lessonData.warnings && !lessonData.example && (
+          <div className="bg-white border border-slate-100 rounded-xl p-4">
+            <h5 className="font-bold text-slate-800 mb-2">📚 Contenido clave</h5>
+            <ul className="space-y-2 text-sm text-slate-600">
+              <li className="flex items-start gap-2">
+                <Icon name="fa-check" className="text-emerald-500 mt-0.5 flex-shrink-0" />
+                Conceptos fundamentales de esta lección
+              </li>
+              <li className="flex items-start gap-2">
+                <Icon name="fa-check" className="text-emerald-500 mt-0.5 flex-shrink-0" />
+                Ejemplos prácticos aplicables
+              </li>
+              <li className="flex items-start gap-2">
+                <Icon name="fa-check" className="text-emerald-500 mt-0.5 flex-shrink-0" />
+                Ejercicios para practicar
+              </li>
+            </ul>
+          </div>
+        )}
+      </div>
+    );
+  };
+  
   // Renderizar contenido específico del acordeón
   const renderAccordionContent = (accordionId) => {
     const lesson = moduleLessons[accordionId - 1];
     if (!lesson) return null;
     
+    // Módulos 2-5: usar contenido dinámico
+    if (!isModule1) {
+      return renderDynamicAccordionContent(lesson, accordionId);
+    }
+    
+    // Módulo 1: Contenido hardcodeado original (INTACTO)
     switch (accordionId) {
-      case 1: // Ingeniería de Prompts
+      case 1:
         return (
           <div className="space-y-4">
             <div className="bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-100 rounded-xl p-5">
@@ -108,7 +230,7 @@ const IALabContentAccordion = () => {
           </div>
         );
       
-      case 2: // Mastery Framework
+      case 2:
         return (
           <div className="space-y-4">
             <div className="bg-gradient-to-r from-purple-50 to-violet-50 border border-purple-100 rounded-xl p-5">
@@ -148,9 +270,6 @@ const IALabContentAccordion = () => {
             </div>
           </div>
         );
-      
-      // Los demás acordeones seguirían patrones similares
-      // Por brevedad, muestro solo los primeros 2 como ejemplo
       
       default:
         return (

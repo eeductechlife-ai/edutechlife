@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 
 /**
@@ -12,14 +12,14 @@ import { Icon } from '../../utils/iconMapping.jsx';
  */
 const IALabEvaluationStep2 = ({ exercise, response, onResponseChange }) => {
     const [optimizedPrompt, setOptimizedPrompt] = useState(response || '');
-    const [characterCount, setCharacterCount] = useState(0);
+    const [characterCount, setCharacterCount] = useState(response?.length || 0);
     const [showSuggestions, setShowSuggestions] = useState(true);
 
-    // Actualizar contador de caracteres
-    useEffect(() => {
-        setCharacterCount(optimizedPrompt.length);
-        onResponseChange(optimizedPrompt);
-    }, [optimizedPrompt, onResponseChange]);
+    const handleChange = (value) => {
+        setOptimizedPrompt(value);
+        setCharacterCount(value.length);
+        onResponseChange(value);
+    };
 
     // Sugerencias de mejora predefinidas
     const improvementSuggestions = [
@@ -208,7 +208,7 @@ Eres un [especificar rol experto]
                 <div className="relative">
                     <textarea
                         value={optimizedPrompt}
-                        onChange={(e) => setOptimizedPrompt(e.target.value)}
+                        onChange={(e) => handleChange(e.target.value)}
                         placeholder="Escribe aquí tu prompt optimizado. Sé específico, claro y estructurado..."
                         className="w-full h-64 bg-white border-2 border-slate-200 rounded-xl p-5 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-[#00BCD4] focus:ring-2 focus:ring-[#00BCD4]/20 resize-none font-mono text-sm leading-relaxed"
                         spellCheck="false"

@@ -146,9 +146,9 @@ const ValeriaControls = ({
 };
 
 const MOOD_OPTIONS = [
-  { value: 'happy', label: 'Bien', message: '¡Qué genial que estás con buena energía! Vamos a pasarlo muy bien.' },
-  { value: 'neutral', label: 'Regular', message: 'Gracias por compartir. Estoy aquí para acompañarte en cada paso.' },
-  { value: 'sad', label: 'No muy bien', message: 'Entiendo cómo te sientes. Este diagnóstico te ayudará a conocerte mejor.' }
+  { value: 'happy', label: 'Bien', icon: 'Smile', message: '¡Qué genial que estás con buena energía! Vamos a pasarlo muy bien.' },
+  { value: 'neutral', label: 'Regular', icon: 'Meh', message: 'Gracias por compartir. Estoy aquí para acompañarte en cada paso.' },
+  { value: 'sad', label: 'No muy bien', icon: 'Frown', message: 'Entiendo cómo te sientes. Este diagnóstico te ayudará a conocerte mejor.' }
 ];
 
 const STYLE_MAP = {
@@ -282,7 +282,6 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     getQuestionsByAge(parseInt(studentInfo.age) || 12)
   );
   
-  const pdfTemplateRef = useRef(null);
   const chartRef = useRef(null);
   const isChartInView = useInView(chartRef);
   const timerRef = useRef(null);
@@ -604,28 +603,49 @@ const DiagnosticoVAK = ({ onNavigate }) => {
 
   const generatePDF = async () => {
     if (!diagnosis) {
-      console.error('No diagnosis available for PDF');
+      console.error('No hay diagnóstico disponible para PDF');
+      setError('No hay información de diagnóstico para generar el PDF');
       return;
     }
     
-    const el = pdfTemplateRef.current;
+    const el = document.getElementById('document-preview-content');
     if (!el) {
-      console.error('PDF template ref not found');
+      console.error('No se encontró el elemento del documento preview');
+      setError('Error interno: No se puede generar el PDF en este momento');
       return;
     }
     
-    // Debug: Check if template has content
-    console.log('PDF Template content length:', el.innerHTML.length, 'chars');
-    console.log('Diagnosis:', diagnosis);
-    console.log('StudentAge:', studentAge);
-    console.log('Valentina commentary:', getValentinaCommentary());
+    // Verificar que el elemento tenga contenido
+    const contentLength = el.innerHTML.length;
+    console.log('Contenido del documento preview - longitud:', contentLength, 'caracteres');
     
-    // Force any pending state updates to complete before rendering PDF
-    await new Promise(resolve => setTimeout(resolve, 100));
+    if (!contentLength || contentLength < 100) {
+      console.error('El documento preview está vacío o es muy corto');
+      setError('El contenido del PDF está vacío. Por favor, recarga la página e intenta de nuevo.');
+      return;
+    }
+    
+    // Verificar que el diagnóstico tenga los datos necesarios
+    console.log('Diagnóstico para PDF:', { 
+      studentName: diagnosis.studentName, 
+      predominantStyle: diagnosis.predominantStyle,
+      hasStyleDetails: !!diagnosis.styleDetails 
+    });
+    
+    if (!diagnosis.styleDetails) {
+      console.warn('styleDetails falta, recuperando desde STYLE_MAP...');
+      const recoveredStyle = STYLE_MAP[diagnosis.predominantStyle];
+      if (recoveredStyle) {
+        const updatedDiagnosis = { ...diagnosis, styleDetails: recoveredStyle };
+        setDiagnosis(updatedDiagnosis);
+        // Esperar a que se actualice el estado
+        await new Promise(resolve => setTimeout(resolve, 300));
+      }
+    }
     
     setPdfLoading(true);
     
-    const fileName = `Diagnostico_VAK_${(diagnosis.studentName || 'estudiante').replace(/\s+/g, '_')}_${diagnosis.date || date}`;
+    const fileName = `Diagnostico_VAK_${(diagnosis.studentName || 'estudiante').replace(/\s+/g, '_')}_${diagnosis.date || new Date().toISOString().split('T')[0]}`;
     const opt = {
       margin: [15, 15, 15, 15],
       filename: `${fileName}.pdf`,
@@ -635,26 +655,18 @@ const DiagnosticoVAK = ({ onNavigate }) => {
         useCORS: true, 
         letterRendering: true, 
         logging: true,
-        onclone: (clonedDoc) => {
-          // Ensure cloned document has proper styling for PDF
-          const clonedEl = clonedDoc.querySelector('[data-pdf-template]');
-          if (clonedEl) {
-            clonedEl.style.opacity = '1';
-            clonedEl.style.position = 'relative';
-            clonedEl.style.left = '0';
-            clonedEl.style.pointerEvents = 'auto';
-            clonedEl.style.overflow = 'visible';
-          }
-        }
+        backgroundColor: '#ffffff'
       },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
     
     try {
+      console.log('Iniciando generación de PDF...');
       await html2pdf().set(opt).from(el).save();
+      console.log('PDF generado exitosamente');
     } catch (e) {
-      console.error('PDF error:', e);
-      setError('Error al generar PDF: ' + e.message);
+      console.error('Error al generar PDF:', e);
+      setError(`Error al generar PDF: ${e.message || 'Error desconocido'}`);
     } finally {
       setPdfLoading(false);
     }
@@ -718,7 +730,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     const age = parseInt(diagnosis.studentAge) || parseInt(studentAge);
     if (!age || isNaN(age)) return '';
     
-    const ageGroup = 'teen';
+    let ageGroup = 'teen';
     if (age >= 6 && age <= 10) ageGroup = 'child';
     else if (age >= 11 && age <= 14) ageGroup = 'preteen';
     
@@ -1606,96 +1618,138 @@ const DiagnosticoVAK = ({ onNavigate }) => {
             </div>
 
             {/* Consejo personalizado */}
-            <div className="mt-8 p-4 bg-white rounded-2xl border border-gray-100">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="w-8 h-8 rounded-lg bg-[#4DA8C4]/10 flex items-center justify-center">
-                  <Lightbulb size={18} strokeWidth={2} className="text-[#4DA8C4]" />
-                </div>
-                <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Consejo del día</span>
-              </div>
-              <p className="text-sm text-slate-600 leading-relaxed">{diagnosis.styleDetails.tip}</p>
+            <div className="mt-6 p-4 bg-[#F0FDFF] rounded-xl border-l-4 border-[#4DA8C4]">
+              <p className="text-xs text-[#004B63] font-medium mb-1">Consejo Personalizado</p>
+              <p className="text-sm text-slate-600 leading-relaxed">{diagnosis.styleDetails?.tip}</p>
             </div>
           </motion.div>
 
-          {/* Columna Derecha (Gráfica) con efecto 3D */}
+          {/* Columna Derecha - Gráficos y Puntuaciones */}
           <motion.div
             initial={{ opacity: 0, x: 30, rotateY: 10 }}
             animate={{ opacity: 1, x: 0, rotateY: 0 }}
-            transition={{ type: 'spring', stiffness: 100, delay: 0.1 }}
-            className="bg-white rounded-[2rem] shadow-sm p-6 relative overflow-hidden"
-            style={{
-              transformStyle: 'preserve-3d',
-              perspective: '1000px'
-            }}
+            transition={{ type: 'spring', stiffness: 100, delay: 0.2 }}
+            className="space-y-6"
+            style={{ transformStyle: 'preserve-3d' }}
           >
-            {/* Efecto de profundidad 3D */}
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#66CCCC] to-transparent opacity-30"></div>
-            <div className="absolute bottom-4 right-4 w-20 h-20 rounded-full bg-[#66CCCC]/10 blur-xl"></div>
-            <h3 className="text-sm font-semibold text-slate-700 mb-6">Distribución VAK</h3>
-            
-            {/* Placeholder estilizado para Radar Chart */}
-            <div className="h-64 flex items-center justify-center mb-6">
-              <div className="relative w-48 h-48">
-                {/* Círculo base */}
-                <div className="absolute inset-0 border-2 border-gray-100 rounded-full"></div>
-                
-                {/* Líneas del radar */}
-                <div className="absolute inset-8 border-2 border-gray-200 rounded-full"></div>
-                <div className="absolute inset-16 border-2 border-gray-300 rounded-full"></div>
-                
-                {/* Puntos de datos */}
-                <div 
-                  className="absolute w-3 h-3 bg-[#4DA8C4] rounded-full transform -translate-x-1/2 -translate-y-1/2"
-                  style={{ top: '50%', left: `${50 + (diagnosis.counts?.visual || 0) * 4}%` }}
-                />
-                <div 
-                  className="absolute w-3 h-3 bg-[#66CCCC] rounded-full transform -translate-x-1/2 -translate-y-1/2"
-                  style={{ top: `${50 - (diagnosis.counts?.auditivo || 0) * 4}%`, left: '50%' }}
-                />
-                <div 
-                  className="absolute w-3 h-3 bg-[#B2D8E5] rounded-full transform -translate-x-1/2 -translate-y-1/2"
-                  style={{ top: `${50 + (diagnosis.counts?.kinestesico || 0) * 4}%`, left: `${50 - (diagnosis.counts?.kinestesico || 0) * 4}%` }}
-                />
-                
-                {/* Etiquetas */}
-                <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 text-sm font-medium text-[#4DA8C4]">
-                  Visual: {diagnosis.counts?.visual || 0}/10
+            {/* Radar Chart */}
+            <div className="bg-white rounded-[2rem] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+              <h3 className="text-lg font-bold text-[#004B63] mb-4">Perfil VAK</h3>
+              <div className="w-full aspect-square max-w-[300px] mx-auto" ref={chartRef}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <RadarChart data={radarData}>
+                    <PolarGrid stroke="#E2E8F0" />
+                    <PolarAngleAxis dataKey="subject" tick={{ fill: '#64748B', fontSize: 12 }} />
+                    <PolarRadiusAxis angle={30} domain={[0, 10]} tick={{ fill: '#94A3B8', fontSize: 10 }} />
+                    <Radar
+                      name="Puntuación"
+                      dataKey="A"
+                      stroke="#4DA8C4"
+                      fill="#4DA8C4"
+                      fillOpacity={0.6}
+                    />
+                  </RadarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            {/* Puntuaciones numéricas */}
+            <div className="bg-white rounded-[2rem] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+              <h3 className="text-lg font-bold text-[#004B63] mb-4">Puntuaciones</h3>
+              
+              {/* Visual */}
+              <div className="mb-4">
+                <div className="flex justify-between text-sm mb-1">
+                  <span className="font-medium" style={{ color: '#4DA8C4' }}>Visual</span>
+                  <span className="text-slate-600">{diagnosis.counts?.visual || 0}/10</span>
                 </div>
-                <div className="absolute top-1/2 -right-2 transform -translate-y-1/2 text-sm font-medium text-[#66CCCC]">
-                  Auditivo: {diagnosis.counts?.auditivo || 0}/10
+                <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    animate={{ width: `${(diagnosis.counts?.visual || 0) * 10}%` }}
+                    transition={{ duration: 0.8, ease: 'easeOut' }}
+                    className="h-full rounded-full"
+                    style={{ backgroundColor: '#4DA8C4' }}
+                  />
                 </div>
-                <div className="absolute -bottom-2 left-1/4 transform -translate-x-1/2 text-sm font-medium text-[#B2D8E5]">
-                  Kinestésico: {diagnosis.counts?.kinestesico || 0}/10
+              </div>
+
+              {/* Auditivo */}
+              <div className="mb-4">
+                <div className="flex justify-between text-sm mb-1">
+                  <span className="font-medium" style={{ color: '#66CCCC' }}>Auditivo</span>
+                  <span className="text-slate-600">{diagnosis.counts?.auditivo || 0}/10</span>
+                </div>
+                <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    animate={{ width: `${(diagnosis.counts?.auditivo || 0) * 10}%` }}
+                    transition={{ duration: 0.8, ease: 'easeOut', delay: 0.1 }}
+                    className="h-full rounded-full"
+                    style={{ backgroundColor: '#66CCCC' }}
+                  />
+                </div>
+              </div>
+
+              {/* Kinestésico */}
+              <div>
+                <div className="flex justify-between text-sm mb-1">
+                  <span className="font-medium" style={{ color: '#B2D8E5' }}>Kinestésico</span>
+                  <span className="text-slate-600">{diagnosis.counts?.kinestesico || 0}/10</span>
+                </div>
+                <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    animate={{ width: `${(diagnosis.counts?.kinestesico || 0) * 10}%` }}
+                    transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
+                    className="h-full rounded-full"
+                    style={{ backgroundColor: '#B2D8E5' }}
+                  />
                 </div>
               </div>
             </div>
 
-            {/* Barras de porcentaje */}
-            <div className="space-y-4">
-              {[
-                { key: 'visual', label: 'Visual', color: '#4DA8C4', value: diagnosis.counts?.visual || 0 },
-                { key: 'auditivo', label: 'Auditivo', color: '#66CCCC', value: diagnosis.counts?.auditivo || 0 },
-                { key: 'kinestesico', label: 'Kinestésico', color: '#B2D8E5', value: diagnosis.counts?.kinestesico || 0 }
-              ].map((item) => (
-                <div key={item.key} className="space-y-2">
-                  <div className="flex justify-between text-xs">
-                    <span className="font-medium uppercase tracking-wider" style={{ color: item.color }}>{item.label}</span>
-                    <span className="text-slate-600 font-medium">{item.value}/10</span>
+            {/* Estado de ánimo y tiempo */}
+            <div className="bg-white rounded-[2rem] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <div className="w-10 h-10 rounded-xl bg-[#F0FDFF] flex items-center justify-center" style={{ color: moodFeedback.color }}>
+                    {React.createElement(getIconComponent(moodFeedback.icon), { size: 20, strokeWidth: 2 })}
                   </div>
-                  <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                    <motion.div 
-                      initial={{ width: 0 }}
-                      animate={{ width: `${item.value * 10}%` }}
-                      transition={{ duration: 0.8, ease: 'easeOut' }}
-                      className="h-full rounded-full"
-                      style={{ backgroundColor: item.color }}
-                    />
+                  <div>
+                    <p className="text-sm font-medium text-[#004B63]">Estado de ánimo</p>
+                    <p className="text-xs text-slate-500">{moodFeedback.label}</p>
                   </div>
                 </div>
-              ))}
+                <div className="text-right">
+                  <p className="text-sm font-medium text-[#004B63]">Tiempo</p>
+                  <p className="text-xs text-slate-500">{formatTime(diagnosis.timeSpent || elapsedTime)}</p>
+                </div>
+              </div>
             </div>
           </motion.div>
         </div>
+
+        {/* Botón para ver documento completo */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, type: 'spring' }}
+          className="flex justify-center mt-6"
+        >
+          <motion.button
+            whileHover={{ scale: 1.08, y: -5 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setPhase('document-preview')}
+            className="relative bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-full px-8 py-4 shadow-xl flex items-center gap-3 overflow-hidden group"
+            style={{ transformStyle: 'preserve-3d' }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+            <Eye size={20} strokeWidth={2} className="relative z-10" />
+            <span className="relative z-10 text-base font-semibold">Ver Documento Completo</span>
+            <div className="absolute -bottom-2 left-4 right-4 h-4 bg-gradient-to-r from-[#4DA8C4]/30 to-[#66CCCC]/30 blur-md rounded-full"></div>
+          </motion.button>
+        </motion.div>
 
         {/* Action Buttons (Inferiores) con iconos Soft Outline */}
         <motion.div 
@@ -1779,6 +1833,403 @@ const DiagnosticoVAK = ({ onNavigate }) => {
           <p className="text-xs text-slate-400 uppercase tracking-wider">Tiempo total: {formatTime(diagnosis.timeSpent || elapsedTime)} • Estado de ánimo: {moodFeedback.label}</p>
         </div>
       </div>
+    );
+  };
+
+  const renderDocumentPreview = () => {
+    if (!diagnosis) {
+      return (
+        <div className="p-10 text-center text-gray-500">
+          No hay diagnóstico disponible para mostrar.
+        </div>
+      );
+    }
+    
+    const StyleIcon = getIconComponent(diagnosis.styleDetails?.icon || 'Eye');
+    
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, type: 'spring' }}
+        className="max-w-4xl mx-auto"
+      >
+        {/* Document Preview Container - Print Optimized - Compact */}
+        <div id="document-preview-content" style={{
+          backgroundColor: '#ffffff',
+          padding: '30px',
+          fontFamily: 'Montserrat, sans-serif',
+          color: '#334155',
+          lineHeight: '1.5',
+          fontSize: '13px'
+        }}>
+          {/* Header - Compact */}
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingBottom: '15px',
+            borderBottom: '2px solid #4DA8C4',
+            marginBottom: '20px'
+          }}>
+            <div>
+              <h1 style={{
+                color: '#004B63',
+                margin: '0 0 3px 0',
+                fontSize: '20px',
+                fontWeight: '800'
+              }}>Dictamen Psicopedagógico VAK</h1>
+              <p style={{
+                margin: 0,
+                color: '#64748B',
+                fontSize: '11px'
+              }}>Edutechlife • Inteligencia Cognitiva</p>
+            </div>
+            <div style={{ textAlign: 'right' }}>
+              <div style={{
+                width: '50px',
+                height: '50px',
+                background: 'linear-gradient(135deg, #4DA8C4, #66CCCC)',
+                borderRadius: '10px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <span style={{ color: 'white', fontSize: '20px', fontWeight: 'bold' }}>VAK</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Student & Parent Data - Side by side - Compact */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: '15px',
+            marginBottom: '20px'
+          }}>
+            {/* Student Data - Compact */}
+            <div style={{
+              background: '#F8FAFC',
+              padding: '12px',
+              borderRadius: '8px'
+            }}>
+              <h3 style={{
+                color: '#004B63',
+                margin: '0 0 8px 0',
+                fontSize: '11px',
+                textTransform: 'uppercase',
+                letterSpacing: '1px',
+                borderBottom: '1px solid #E2E8F0',
+                paddingBottom: '6px'
+              }}>Estudiante</h3>
+              <div style={{ fontSize: '12px', marginBottom: '4px' }}>
+                <span style={{ color: '#64748B', marginRight: '5px' }}>Nombre:</span>
+                <span style={{ color: '#004B63', fontWeight: '600' }}>{diagnosis.studentName}</span>
+              </div>
+              <div style={{ fontSize: '12px', marginBottom: '4px' }}>
+                <span style={{ color: '#64748B', marginRight: '5px' }}>Edad:</span>
+                <span style={{ color: '#004B63' }}>{diagnosis.studentAge || studentAge || 'N/A'} años</span>
+              </div>
+              <div style={{ fontSize: '12px', marginBottom: '4px' }}>
+                <span style={{ color: '#64748B', marginRight: '5px' }}>Fecha:</span>
+                <span style={{ color: '#004B63' }}>{diagnosis.date}</span>
+              </div>
+              <div style={{ fontSize: '12px' }}>
+                <span style={{ color: '#64748B', marginRight: '5px' }}>Ánimo:</span>
+                <span style={{ color: '#004B63' }}>{(() => {
+                  const mood = MOOD_OPTIONS.find(m => m.value === (diagnosis.studentMood || studentMood));
+                  return mood ? mood.label : 'Neutral';
+                })()}</span>
+              </div>
+            </div>
+
+            {/* Parent Data - Compact */}
+            <div style={{
+              background: '#F0FDFF',
+              padding: '12px',
+              borderRadius: '8px'
+            }}>
+              <h3 style={{
+                color: '#004B63',
+                margin: '0 0 8px 0',
+                fontSize: '11px',
+                textTransform: 'uppercase',
+                letterSpacing: '1px',
+                borderBottom: '1px solid #E2E8F0',
+                paddingBottom: '6px'
+              }}>Acudiente</h3>
+              <div style={{ fontSize: '12px', marginBottom: '4px' }}>
+                <span style={{ color: '#64748B', marginRight: '5px' }}>Nombre:</span>
+                <span style={{ color: '#004B63' }}>{parentName || 'N/A'}</span>
+              </div>
+              <div style={{ fontSize: '12px', marginBottom: '4px' }}>
+                <span style={{ color: '#64748B', marginRight: '5px' }}>Tel:</span>
+                <span style={{ color: '#004B63' }}>{parentPhone || 'N/A'}</span>
+              </div>
+              <div style={{ fontSize: '12px' }}>
+                <span style={{ color: '#64748B', marginRight: '5px' }}>Email:</span>
+                <span style={{ color: '#004B63' }}>{parentEmail || 'N/A'}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Main Result - Lighter background for better readability */}
+          <div style={{
+            margin: '20px 0',
+            padding: '20px',
+            background: 'linear-gradient(135deg, #4DA8C4 0%, #66CCCC 100%)',
+            borderRadius: '12px',
+            textAlign: 'center',
+            color: 'white'
+          }}>
+            <p style={{ margin: '0 0 8px 0', color: 'rgba(255,255,255,0.9)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '2px' }}>Perfil de Aprendizaje</p>
+            <h2 style={{ margin: '0 0 10px 0', fontSize: '28px', fontWeight: '800' }}>{diagnosis.styleDetails?.name}</h2>
+            <div style={{ fontSize: '48px', fontWeight: '800', margin: '8px 0' }}>{diagnosis.percentage}%</div>
+            <p style={{ margin: 0, opacity: 0.9, fontSize: '13px', lineHeight: '1.4' }}>{diagnosis.styleDetails?.description}</p>
+          </div>
+
+          {/* Scores - Compact horizontal layout */}
+          <div style={{
+            display: 'flex',
+            gap: '10px',
+            marginBottom: '20px'
+          }}>
+            <div style={{
+              flex: 1,
+              padding: '10px',
+              border: '1.5px solid #4DA8C4',
+              borderRadius: '8px',
+              textAlign: 'center'
+            }}>
+              <div style={{ fontSize: '11px', color: '#4DA8C4', fontWeight: 'bold', marginBottom: '3px' }}>VISUAL</div>
+              <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#4DA8C4' }}>{diagnosis.counts?.visual || 0}<span style={{ fontSize: '12px', color: '#64748B' }}>/10</span></div>
+            </div>
+            <div style={{
+              flex: 1,
+              padding: '10px',
+              border: '1.5px solid #66CCCC',
+              borderRadius: '8px',
+              textAlign: 'center'
+            }}>
+              <div style={{ fontSize: '11px', color: '#66CCCC', fontWeight: 'bold', marginBottom: '3px' }}>AUDITIVO</div>
+              <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#66CCCC' }}>{diagnosis.counts?.auditivo || 0}<span style={{ fontSize: '12px', color: '#64748B' }}>/10</span></div>
+            </div>
+            <div style={{
+              flex: 1,
+              padding: '10px',
+              border: '1.5px solid #B2D8E5',
+              borderRadius: '8px',
+              textAlign: 'center'
+            }}>
+              <div style={{ fontSize: '11px', color: '#B2D8E5', fontWeight: 'bold', marginBottom: '3px' }}>KINESTÉSICO</div>
+              <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#4DA8C4' }}>{diagnosis.counts?.kinestesico || 0}<span style={{ fontSize: '12px', color: '#64748B' }}>/10</span></div>
+            </div>
+          </div>
+
+          {/* 2-Column Layout for Content */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: '15px',
+            marginBottom: '20px'
+          }}>
+            {/* Left Column */}
+            <div>
+              {/* Characteristics - Compact */}
+              <div style={{ marginBottom: '15px' }}>
+                <h4 style={{
+                  color: '#004B63',
+                  marginBottom: '8px',
+                  fontSize: '13px',
+                  borderBottom: '1.5px solid #4DA8C4',
+                  paddingBottom: '5px'
+                }}>Características</h4>
+                <div style={{ fontSize: '11px' }}>
+                  {getCaracteristicasEstilo(diagnosis.predominantStyle).slice(0, 3).map((c, i) => (
+                    <div key={i} style={{ marginBottom: '4px' }}>
+                      <span style={{ color: '#4DA8C4', fontWeight: 'bold', marginRight: '4px' }}>•</span>{c}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Tips for Parents - Compact */}
+              <div style={{
+                padding: '10px',
+                background: 'linear-gradient(135deg, rgba(77,168,196,0.08), rgba(102,204,204,0.08))',
+                borderRadius: '8px',
+                borderLeft: '3px solid #66CCCC'
+              }}>
+                <h4 style={{
+                  color: '#004B63',
+                  margin: '0 0 6px 0',
+                  fontSize: '11px',
+                  textTransform: 'uppercase'
+                }}>Tips para Padres</h4>
+                <div style={{ fontSize: '10px', lineHeight: '1.4' }}>
+                  {getTipsPadres(diagnosis.predominantStyle).slice(0, 3).map((t, i) => (
+                    <div key={i} style={{ marginBottom: '3px' }}>{t}</div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column */}
+            <div>
+              {/* Strategies - Compact */}
+              <div style={{ marginBottom: '15px' }}>
+                <h4 style={{
+                  color: '#004B63',
+                  marginBottom: '8px',
+                  fontSize: '13px',
+                  borderBottom: '1.5px solid #4DA8C4',
+                  paddingBottom: '5px'
+                }}>Estrategias</h4>
+                <ol style={{ paddingLeft: '16px', margin: 0, fontSize: '11px', lineHeight: '1.5' }}>
+                  {(diagnosis.styleDetails?.strategies || []).slice(0, 4).map((s, i) => (
+                    <li key={i} style={{ marginBottom: '4px' }}>{s}</li>
+                  ))}
+                </ol>
+              </div>
+
+              {/* Recommended Careers - Compact */}
+              <div>
+                <h4 style={{
+                  color: '#004B63',
+                  marginBottom: '8px',
+                  fontSize: '13px',
+                  borderBottom: '1.5px solid #66CCCC',
+                  paddingBottom: '5px'
+                }}>Carreras</h4>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
+                  {getCarrerasRecomendadas(diagnosis.predominantStyle).slice(0, 3).map((c, i) => (
+                    <span key={i} style={{
+                      padding: '4px 8px',
+                      background: '#F0FDFF',
+                      borderRadius: '12px',
+                      color: '#004B63',
+                      fontSize: '10px',
+                      fontWeight: '500',
+                      border: '1px solid #B2D8E5'
+                    }}>{c}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Valeria's Commentary - Compact */}
+          <div style={{
+            padding: '12px',
+            background: 'linear-gradient(135deg, rgba(102,204,204,0.1), rgba(77,168,196,0.1))',
+            borderRadius: '8px',
+            borderLeft: '3px solid #66CCCC',
+            marginBottom: '15px'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+              <div style={{
+                width: '30px',
+                height: '30px',
+                background: 'linear-gradient(135deg, #4DA8C4, #66CCCC)',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <span style={{ color: 'white', fontSize: '12px', fontWeight: 'bold' }}>VR</span>
+              </div>
+              <div>
+                <h4 style={{ color: '#004B63', margin: '0', fontSize: '12px', fontWeight: '700' }}>Valeria Rodríguez</h4>
+                <p style={{ margin: 0, color: '#64748B', fontSize: '10px' }}>Psicóloga Educativa • Especialista VAK</p>
+              </div>
+            </div>
+            <p style={{ margin: 0, color: '#334155', fontSize: '11px', lineHeight: '1.5', fontStyle: 'italic' }}>
+              {getValentinaCommentary()}
+            </p>
+          </div>
+
+          {/* Personalized Advice - Compact */}
+          {diagnosis.styleDetails?.tip && (
+            <div style={{
+              padding: '10px',
+              background: 'linear-gradient(135deg, rgba(77,168,196,0.1), rgba(102,204,204,0.1))',
+              borderRadius: '8px',
+              borderLeft: '3px solid #4DA8C4',
+              marginBottom: '15px'
+            }}>
+              <h4 style={{ color: '#004B63', margin: '0 0 5px 0', fontSize: '11px', textTransform: 'uppercase' }}>Consejo Personalizado</h4>
+              <p style={{ margin: 0, color: '#334155', fontSize: '11px', lineHeight: '1.4' }}>{diagnosis.styleDetails?.tip}</p>
+            </div>
+          )}
+
+          {/* Footer - Compact */}
+          <div style={{
+            marginTop: '20px',
+            paddingTop: '12px',
+            borderTop: '1px dashed #ccc',
+            textAlign: 'center',
+            fontSize: '10px',
+            color: '#999'
+          }}>
+            <p style={{ margin: '0 0 3px 0' }}>Documento generado por EdutechLife • Inteligencia Cognitiva</p>
+            <p style={{ margin: 0 }}>Ley 1581 de 2012 | Habeas Data | edutechlife.co</p>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, type: 'spring' }}
+          className="flex flex-col sm:flex-row gap-6 justify-center items-center mt-10"
+        >
+          <motion.button
+            whileHover={{ scale: 1.08, y: -5 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={generatePDF}
+            disabled={pdfLoading}
+            className="relative bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-full px-8 py-4 shadow-xl flex items-center gap-3 overflow-hidden group"
+            style={{ transformStyle: 'preserve-3d' }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+            {pdfLoading ? (
+              <>
+                <div className="relative z-10 w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin"></div>
+                <span className="relative z-10 text-base font-semibold">Generando PDF...</span>
+              </>
+            ) : (
+              <>
+                <Download size={20} strokeWidth={2} className="relative z-10" />
+                <span className="relative z-10 text-base font-semibold">Descargar PDF</span>
+              </>
+            )}
+            <div className="absolute -bottom-2 left-4 right-4 h-4 bg-gradient-to-r from-[#4DA8C4]/30 to-[#66CCCC]/30 blur-md rounded-full"></div>
+          </motion.button>
+
+          <motion.button
+            whileHover={{ scale: 1.08, y: -5 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setPhase('result')}
+            className="relative bg-white border-2 border-[#004B63] text-[#004B63] rounded-full px-8 py-4 flex items-center gap-3 overflow-hidden group"
+            style={{ transformStyle: 'preserve-3d' }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#004B63]/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+            <ArrowRight size={20} strokeWidth={2} className="relative z-10" />
+            <span className="relative z-10 text-base font-semibold">Volver a Resultados</span>
+            <div className="absolute -bottom-2 left-4 right-4 h-4 bg-[#004B63]/10 blur-md rounded-full"></div>
+          </motion.button>
+
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => window.location.href = '/'}
+            className="text-[#004B63]/50 hover:text-[#4DA8C4] text-sm font-medium flex items-center justify-center gap-2 transition-colors"
+          >
+            <Rocket size={16} strokeWidth={2} />
+            <span>Ir a inicio</span>
+          </motion.button>
+        </motion.div>
+      </motion.div>
     );
   };
 
@@ -1960,198 +2411,6 @@ const DiagnosticoVAK = ({ onNavigate }) => {
           className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-4 md:p-6"
         >
         
-        <div ref={pdfTemplateRef} data-pdf-template="true" style={{ 
-          position: 'fixed', 
-          top: 0, 
-          left: 0, 
-          width: '210mm', 
-          backgroundColor: '#ffffff',
-          opacity: 0,
-          pointerEvents: 'none',
-          zIndex: -9999,
-          overflow: 'hidden',
-          fontFamily: 'Montserrat, sans-serif'
-        }}>
-          {diagnosis && (
-            <div style={{ padding: '40px', fontFamily: 'Montserrat, sans-serif', backgroundColor: '#ffffff' }}>
-              {/* Header */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '20px', borderBottom: '3px solid #4DA8C4', marginBottom: '30px' }}>
-                <div>
-                  <h1 style={{ color: '#004B63', margin: '0 0 5px 0', fontSize: '24px', fontWeight: '800' }}>Dictamen Psicopedagógico VAK</h1>
-                  <p style={{ margin: 0, color: '#64748B', fontSize: '14px' }}>Edutechlife • Inteligencia Cognitiva</p>
-                </div>
-                <div style={{ textAlign: 'right' }}>
-                  <div style={{ width: '60px', height: '60px', background: 'linear-gradient(135deg, #4DA8C4, #66CCCC)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <span style={{ color: 'white', fontSize: '24px', fontWeight: 'bold' }}>VAK</span>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Datos del estudiante */}
-              <div style={{ background: '#F8FAFC', padding: '20px', borderRadius: '12px', marginBottom: '20px' }}>
-                <h3 style={{ color: '#004B63', margin: '0 0 15px 0', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px', borderBottom: '1px solid #E2E8F0', paddingBottom: '10px' }}>Datos del Estudiante</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-                  <div>
-                    <p style={{ margin: '0 0 5px 0', color: '#64748B', fontSize: '12px' }}>Nombre completo</p>
-                    <p style={{ margin: 0, color: '#004B63', fontSize: '16px', fontWeight: '600' }}>{diagnosis.studentName}</p>
-                  </div>
-                  <div>
-                    <p style={{ margin: '0 0 5px 0', color: '#64748B', fontSize: '12px' }}>Edad</p>
-                    <p style={{ margin: 0, color: '#004B63', fontSize: '16px' }}>{studentAge || 'No especificada'} años</p>
-                  </div>
-                  <div>
-                    <p style={{ margin: '0 0 5px 0', color: '#64748B', fontSize: '12px' }}>Fecha de evaluación</p>
-                    <p style={{ margin: 0, color: '#004B63', fontSize: '16px' }}>{diagnosis.date}</p>
-                  </div>
-                  <div>
-                    <p style={{ margin: '0 0 5px 0', color: '#64748B', fontSize: '12px' }}>Estado de ánimo</p>
-                    <p style={{ margin: 0, color: '#004B63', fontSize: '14px' }}>
-                      {diagnosis.studentMood === 'happy' && 'Bien'}
-                      {diagnosis.studentMood === 'neutral' && 'Regular'}
-                      {diagnosis.studentMood === 'sad' && 'No muy bien'}
-                      {!diagnosis.studentMood && 'Neutral'}
-                    </p>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Datos del acudiente */}
-              <div style={{ background: '#F0FDFF', padding: '20px', borderRadius: '12px', marginBottom: '30px' }}>
-                <h3 style={{ color: '#004B63', margin: '0 0 15px 0', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px', borderBottom: '1px solid #E2E8F0', paddingBottom: '10px' }}>Datos del Acudiente</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-                  <div>
-                    <p style={{ margin: '0 0 5px 0', color: '#64748B', fontSize: '12px' }}>Nombre</p>
-                    <p style={{ margin: 0, color: '#004B63', fontSize: '14px', fontWeight: '500' }}>{parentName || 'No registrado'}</p>
-                  </div>
-                  <div>
-                    <p style={{ margin: '0 0 5px 0', color: '#64748B', fontSize: '12px' }}>Teléfono</p>
-                    <p style={{ margin: 0, color: '#004B63', fontSize: '14px' }}>{parentPhone || 'No registrado'}</p>
-                  </div>
-                  <div>
-                    <p style={{ margin: '0 0 5px 0', color: '#64748B', fontSize: '12px' }}>Correo electrónico</p>
-                    <p style={{ margin: 0, color: '#004B63', fontSize: '14px' }}>{parentEmail || 'No registrado'}</p>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Resultado principal */}
-              <div style={{ margin: '30px 0', padding: '30px', background: 'linear-gradient(135deg, #004B63 0%, #0A3550 100%)', borderRadius: '16px', textAlign: 'center', color: 'white' }}>
-                <p style={{ margin: '0 0 10px 0', color: '#66CCCC', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '2px' }}>Perfil de Aprendizaje</p>
-                <h2 style={{ margin: '0 0 15px 0', fontSize: '32px', fontWeight: '800' }}>{diagnosis.styleDetails?.name}</h2>
-                <div style={{ fontSize: '56px', fontWeight: '800', margin: '10px 0' }}>{diagnosis.percentage}%</div>
-                <p style={{ margin: 0, opacity: 0.8, fontSize: '14px' }}>{diagnosis.styleDetails?.description}</p>
-              </div>
-
-              {/* Puntuaciones */}
-              <div style={{ display: 'flex', gap: '20px', marginBottom: '30px' }}>
-                <div style={{ flex: 1, padding: '20px', border: '2px solid #4DA8C4', borderRadius: '12px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '12px', color: '#4DA8C4', fontWeight: 'bold', marginBottom: '5px' }}>VISUAL</div>
-                  <div style={{ fontSize: '32px', fontWeight: 'bold', color: '#4DA8C4' }}>{diagnosis.counts?.visual || 0}<span style={{ fontSize: '16px', color: '#64748B' }}>/10</span></div>
-                </div>
-                <div style={{ flex: 1, padding: '20px', border: '2px solid #66CCCC', borderRadius: '12px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '12px', color: '#66CCCC', fontWeight: 'bold', marginBottom: '5px' }}>AUDITIVO</div>
-                  <div style={{ fontSize: '32px', fontWeight: 'bold', color: '#66CCCC' }}>{diagnosis.counts?.auditivo || 0}<span style={{ fontSize: '16px', color: '#64748B' }}>/10</span></div>
-                </div>
-                <div style={{ flex: 1, padding: '20px', border: '2px solid #4DA8C4', borderRadius: '12px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '12px', color: '#B2D8E5', fontWeight: 'bold', marginBottom: '5px' }}>KINESTÉSICO</div>
-                  <div style={{ fontSize: '32px', fontWeight: 'bold', color: '#4DA8C4' }}>{diagnosis.counts?.kinestesico || 0}<span style={{ fontSize: '16px', color: '#64748B' }}>/10</span></div>
-                </div>
-              </div>
-
-              {/* Introducción */}
-              <div style={{ marginBottom: '25px', padding: '20px', background: '#FAFBFC', borderRadius: '12px' }}>
-                <h4 style={{ color: '#004B63', margin: '0 0 10px 0', fontSize: '16px' }}>Introducción</h4>
-                <p style={{ margin: 0, color: '#334155', fontSize: '14px', lineHeight: '1.8' }}>
-                  {getValentinaCommentary()}
-                </p>
-              </div>
-
-              {/* Características */}
-              <div style={{ marginBottom: '25px' }}>
-                <h4 style={{ color: '#004B63', marginBottom: '15px', fontSize: '16px', borderBottom: '2px solid #4DA8C4', paddingBottom: '8px' }}>Características del {diagnosis.styleDetails?.name}</h4>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                  {getCaracteristicasEstilo(diagnosis.predominantStyle).map((c, i) => (
-                    <div key={i} style={{ padding: '12px', background: '#F0FDFF', borderRadius: '8px' }}>
-                      <p style={{ margin: 0, color: '#004B63', fontSize: '13px' }}>
-                        <span style={{ color: '#4DA8C4', fontWeight: 'bold' }}>•</span> {c}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Estrategias */}
-              <div style={{ marginBottom: '30px' }}>
-                <h4 style={{ color: '#004B63', marginBottom: '20px', fontSize: '18px', borderBottom: '2px solid #4DA8C4', paddingBottom: '10px' }}>Estrategias de Aprendizaje</h4>
-                <ul style={{ paddingLeft: '20px', color: '#334155', lineHeight: '2' }}>
-                  {(diagnosis.styleDetails?.strategies || []).map((s, i) => (
-                    <li key={i} style={{ marginBottom: '12px', fontSize: '14px' }}>
-                      <strong>{i + 1}.</strong> {s}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Tips para padres */}
-              <div style={{ padding: '20px', background: 'linear-gradient(135deg, rgba(77,168,196,0.08), rgba(102,204,204,0.08))', borderRadius: '12px', borderLeft: '4px solid #66CCCC', marginBottom: '20px' }}>
-                <h4 style={{ color: '#004B63', margin: '0 0 10px 0', fontSize: '15px', textTransform: 'uppercase' }}>Tips para Padres</h4>
-                <ul style={{ paddingLeft: '20px', margin: 0, color: '#334155' }}>
-                  {getTipsPadres(diagnosis.predominantStyle).map((t, i) => (
-                    <li key={i} style={{ fontSize: '13px', marginBottom: '8px', lineHeight: '1.6' }}>{t}</li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Carreras recomendadas */}
-              <div style={{ marginBottom: '25px' }}>
-                <h4 style={{ color: '#004B63', marginBottom: '15px', fontSize: '16px', borderBottom: '2px solid #66CCCC', paddingBottom: '8px' }}>Carreras Recomendadas</h4>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-                  {getCarrerasRecomendadas(diagnosis.predominantStyle).map((c, i) => (
-                    <span key={i} style={{ padding: '8px 16px', background: '#F0FDFF', borderRadius: '20px', color: '#004B63', fontSize: '13px', fontWeight: '500', border: '1px solid #B2D8E5' }}>{c}</span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Consejo personalizado */}
-              <div style={{ padding: '20px', background: 'linear-gradient(135deg, rgba(77,168,196,0.1), rgba(102,204,204,0.1))', borderRadius: '12px', borderLeft: '4px solid #4DA8C4', marginBottom: '20px' }}>
-                <h4 style={{ color: '#004B63', margin: '0 0 10px 0', fontSize: '14px', textTransform: 'uppercase' }}>Consejo Personalizado</h4>
-                <p style={{ margin: 0, color: '#334155', fontSize: '14px', lineHeight: '1.6' }}>{diagnosis.styleDetails?.tip}</p>
-              </div>
-
-              {/* Comentario de Valeria */}
-              <div style={{ padding: '20px', background: 'linear-gradient(135deg, rgba(102,204,204,0.1), rgba(77,168,196,0.1))', borderRadius: '12px', borderLeft: '4px solid #66CCCC', marginBottom: '25px', position: 'relative' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
-                  <div style={{ width: '40px', height: '40px', background: 'linear-gradient(135deg, #4DA8C4, #66CCCC)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <span style={{ color: 'white', fontSize: '18px', fontWeight: 'bold' }}>VR</span>
-                  </div>
-                  <div>
-                    <h4 style={{ color: '#004B63', margin: '0 0 2px 0', fontSize: '14px', fontWeight: '700' }}>Valeria Rodríguez</h4>
-                    <p style={{ margin: 0, color: '#64748B', fontSize: '11px' }}>Psicóloga Educativa • Especialista VAK</p>
-                  </div>
-                </div>
-                <p style={{ margin: 0, color: '#334155', fontSize: '13px', lineHeight: '1.6', fontStyle: 'italic' }}>
-                  {getValentinaCommentary()}
-                </p>
-              </div>
-
-              {/* Tiempo */}
-              {diagnosis.timeSpent && (
-                <div style={{ textAlign: 'center', padding: '15px', background: '#F8FAFC', borderRadius: '8px', marginBottom: '20px' }}>
-                  <p style={{ margin: 0, color: '#64748B', fontSize: '12px' }}>
-                    Tiempo de evaluacion: <strong>{Math.floor(diagnosis.timeSpent / 60)}:{(diagnosis.timeSpent % 60).toString().padStart(2, '0')} minutos</strong>
-                  </p>
-                </div>
-              )}
-
-              {/* Footer */}
-              <div style={{ marginTop: '40px', paddingTop: '20px', borderTop: '1px dashed #ccc', textAlign: 'center', fontSize: '11px', color: '#999' }}>
-                <p style={{ margin: '0 0 5px 0' }}>Documento generado por EdutechLife • Inteligencia Cognitiva</p>
-                <p style={{ margin: 0 }}>Ley 1581 de 2012 | Habeas Data | edutechlife.co</p>
-              </div>
-            </div>
-          )}
-        </div>
-        
         {error ? renderError() : (
           <AnimatePresence mode="wait">
             <motion.div
@@ -2172,6 +2431,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
               {phase === 'test' && renderTest()}
               {phase === 'parentdata' && renderParentData()}
               {phase === 'result' && renderResults()}
+              {phase === 'document-preview' && renderDocumentPreview()}
             </motion.div>
           </AnimatePresence>
         )}

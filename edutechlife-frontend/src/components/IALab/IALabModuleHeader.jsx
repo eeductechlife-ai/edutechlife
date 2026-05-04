@@ -15,10 +15,10 @@ const IALabModuleHeader = ({ onAction }) => {
       <div className="bg-gradient-to-r from-[#004B63] to-[#00BCD4] p-5 md:p-6">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 bg-white/15 rounded-xl flex items-center justify-center shadow-inner">
-            <div className="text-xl text-white font-bold">1</div>
+            <div className="text-xl text-white font-bold">{activeMod}</div>
           </div>
           <div>
-            <h1 className="text-xl md:text-2xl font-bold text-white leading-tight">Ingeniería de Prompts: El Arte de Comunicarse con la IA</h1>
+            <h1 className="text-xl md:text-2xl font-bold text-white leading-tight">{curr?.title}</h1>
           </div>
         </div>
       </div>

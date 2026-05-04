@@ -2,21 +2,55 @@ import React from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { cn } from '../forum/forumDesignSystem';
 import { motion } from 'framer-motion';
+import { useIALabContext } from '../../context/IALabContext';
 
 /**
- * Sección Informativa del Módulo - Ingeniería de Prompts
+ * Sección Informativa del Módulo - Dinámica por módulo activo
  * Contiene: Objetivo General, Lo que aprenderás, Desafío del Módulo
+ * - Módulo 1: Datos hardcodeados originales (intactos)
+ * - Módulos 2-5: Datos dinámicos desde moduleContent
  * 
  * @param {Object} props
  * @param {string} props.className - Clases CSS adicionales
  */
 const ModuleInfoSection = ({ className = '', ...rest }) => {
-    const learningPoints = [
-        { text: "Instrucciones claras a la IA", icon: "fa-bullseye" },
-        { text: "Mejorar preguntas y respuestas", icon: "fa-wand-magic-sparkles" },
-        { text: "Detectar y corregir errores", icon: "fa-exclamation-triangle" },
-        { text: "Aplicar IA en estudio y trabajo", icon: "fa-rocket" }
-    ];
+    const { activeMod, moduleContent } = useIALabContext();
+    
+    // Módulo 1: Datos originales (INTACTOS)
+    const module1Data = {
+        objective: "Desarrolla habilidades de ",
+        objectiveHighlight: "prompt engineering",
+        objectiveSuffix: " para obtener resultados precisos de la IA en contextos reales.",
+        learningPoints: [
+            { text: "Instrucciones claras a la IA", icon: "fa-bullseye" },
+            { text: "Mejorar preguntas y respuestas", icon: "fa-wand-magic-sparkles" },
+            { text: "Detectar y corregir errores", icon: "fa-exclamation-triangle" },
+            { text: "Aplicar IA en estudio y trabajo", icon: "fa-rocket" }
+        ]
+    };
+    
+    // Datos dinámicos según módulo activo
+    const isModule1 = activeMod === 1;
+    const dynamicContent = moduleContent[activeMod];
+    
+    const moduleData = isModule1 ? module1Data : {
+        objective: dynamicContent?.objective || "",
+        objectiveHighlight: null,
+        objectiveSuffix: "",
+        learningPoints: dynamicContent?.learningPoints || []
+    };
+    
+    // Render objetivo con o sin highlight
+    const renderObjective = () => {
+        if (moduleData.objectiveHighlight) {
+            return (
+                <>
+                    {moduleData.objective}<span className="font-semibold text-[#004B63]">{moduleData.objectiveHighlight}</span>{moduleData.objectiveSuffix}
+                </>
+            );
+        }
+        return moduleData.objective;
+    };
 
     return (
         <motion.div 
@@ -47,7 +81,7 @@ const ModuleInfoSection = ({ className = '', ...rest }) => {
                             Objetivo del Módulo
                         </h3>
                         <p className="text-sm text-slate-600 leading-snug mt-1">
-                            Desarrolla habilidades de <span className="font-semibold text-[#004B63]">prompt engineering</span> para obtener resultados precisos de la IA en contextos reales.
+                            {renderObjective()}
                         </p>
                     </div>
                 </div>
@@ -61,7 +95,7 @@ const ModuleInfoSection = ({ className = '', ...rest }) => {
                         Lo que aprenderás
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        {learningPoints.map((point, index) => (
+                        {moduleData.learningPoints.map((point, index) => (
                             <div 
                                 key={index}
                                 className="flex items-center gap-2.5 px-2 py-1.5 rounded-lg"

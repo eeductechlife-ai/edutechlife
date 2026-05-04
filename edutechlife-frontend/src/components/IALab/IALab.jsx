@@ -14,6 +14,7 @@ import IALabEvaluationModalPremium from './IALabEvaluationModalPremium';
 import IALabQuizModal from './IALabQuizModal';
 import IALabValerioPanel from './IALabValerioPanel';
 import ErrorBoundary from '../forum/ErrorBoundary';
+import CertificatesModal from '../modals/CertificatesModal';
 
 /**
  * Componente principal wrapper para IALab - Arquitectura modular premium
@@ -23,7 +24,7 @@ import ErrorBoundary from '../forum/ErrorBoundary';
  * @returns {JSX.Element} Componente IALab completo
  */
 const IALabContent = () => {
-    const { showPremiumEvaluationModal, setShowPremiumEvaluationModal, user, completedModules, courseProgress } = useIALabContext();
+    const { showPremiumEvaluationModal, setShowPremiumEvaluationModal, user, completedModules, courseProgress, activeMod, showCertificateModal, setShowCertificateModal } = useIALabContext();
     const [showExamModal, setShowExamModal] = useState(false);
     const [showQuizModal, setShowQuizModal] = useState(false);
     const [showValerioPanel, setShowValerioPanel] = useState(false);
@@ -149,7 +150,7 @@ const IALabContent = () => {
                                 </div>
                                 <div>
                                   <p className="text-xs font-semibold text-slate-800 leading-tight">{user?.full_name || 'Usuario'}</p>
-                                  <p className="text-[10px] text-slate-500">Módulo 1 de 5</p>
+                                  <p className="text-[10px] text-slate-500">Módulo {activeMod} de 5</p>
                                 </div>
                               </div>
                               <div className="px-3 py-1.5 bg-[#004B63]/8 border border-[#004B63]/15 text-[#004B63] rounded-lg font-semibold text-xs">
@@ -230,6 +231,13 @@ const IALabContent = () => {
                         </ErrorBoundary>
                     </>
                 )}
+                
+                {/* Modal de Certificado del Curso */}
+                <CertificatesModal
+                    isOpen={showCertificateModal}
+                    onClose={() => setShowCertificateModal(false)}
+                    initialTab="certificate"
+                />
                 
                  {/* FAB de Valerio - posicionado relativo al viewport */}
                  <button 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabContext } from '../../context/IALabContext';
+import CourseCompletionSection from './CourseCompletionSection';
 
 /**
  * COMPONENTE: IALabSidebar
@@ -24,7 +25,13 @@ const IALabSidebar = () => {
     modules,
     isModuleLocked,
     getCurrentModule,
-    calculateModuleScore
+    calculateModuleScore,
+    courseCompleted,
+    setShowCertificateModal,
+    storedCertificate,
+    generateCertificate,
+    certificateGenerating,
+    completedModules
   } = useIALabContext();
   
   const curr = getCurrentModule();
@@ -326,10 +333,29 @@ const IALabSidebar = () => {
                 </div>
                 <span className="text-xs font-bold text-[#004B63]">{curr?.projects}</span>
               </div>
-            </div>
           </div>
-       </div>
-     </aside>
+        </div>
+
+        {/* Sección: Certificación del Curso */}
+        <div className="px-1 w-full mt-4">
+          <CourseCompletionSection
+            courseCompleted={courseCompleted}
+            courseProgress={courseProgress}
+            completedModulesCount={completedModules.length}
+            onViewCertificate={() => {
+              if (!storedCertificate) {
+                generateCertificate().then(() => {
+                  setShowCertificateModal(true);
+                });
+              } else {
+                setShowCertificateModal(true);
+              }
+            }}
+            isGenerating={certificateGenerating}
+          />
+        </div>
+      </div>
+    </aside>
   );
 };
 
