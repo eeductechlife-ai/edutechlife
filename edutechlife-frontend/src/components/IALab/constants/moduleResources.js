@@ -139,9 +139,9 @@ export const moduleResources = {
   // ============================================================================
   // MÓDULO 2: POTENCIA CHATGPT
   // ============================================================================
-  "Fundamentos de ChatGPT y Modelos GPT": {
-    title: "Fundamentos de ChatGPT y Modelos GPT",
-    description: "Aprende a aprovechar todo el potencial de ChatGPT, desde la interfaz básica hasta técnicas avanzadas de interacción.",
+  "Guía Completa de ChatGPT": {
+    title: "Guía Completa de ChatGPT",
+    description: "Recurso integral de Edutechlife que cubre todos los aspectos de ChatGPT: desde la interfaz básica hasta técnicas avanzadas de prompt engineering y automatización.",
     learningObjectives: [
       "Navegar eficientemente por la interfaz de ChatGPT",
       "Configurar conversaciones para diferentes propósitos",
@@ -155,77 +155,70 @@ export const moduleResources = {
         id: "chatgpt-video-1",
         type: "video",
         title: "Tutorial: Primeros Pasos con ChatGPT",
-        url: "https://www.youtube.com/embed/gFjVXUJnGfE",
+        url: "https://www.youtube.com/embed/iOlo-K7yj2M",
         duration: "12:30",
-        thumbnail: "https://img.youtube.com/vi/gFjVXUJnGfE/maxresdefault.jpg",
+        thumbnail: "https://img.youtube.com/vi/iOlo-K7yj2M/maxresdefault.jpg",
         provider: "youtube",
         description: "Guía completa para comenzar a usar ChatGPT de manera efectiva."
       },
       {
-        id: "chatgpt-guide-1",
+        id: "chatgpt-guide-modulo2",
         type: "pdf",
         title: "Guía Completa de ChatGPT",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/recursos-edutechlife/guia_edutechlife_modulo1.pdf",
-        pages: 18,
+        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/Las-Herramientas-Integradas-de-ChatGPT.pdf/guia_edutechlife_modulo2.pdf",
+        pages: 25,
         format: "PDF",
-        size: "3.5 MB",
-        description: "Manual completo con tips, trucos y mejores prácticas para ChatGPT.",
+        size: "4.2 MB",
+        description: "Guía oficial de Edutechlife - Módulo 2: Las Herramientas Integradas de ChatGPT. Manual completo con tips, trucos y mejores prácticas.",
         thumbnailType: "premium",
         immersiveView: true
       },
       {
-        id: "chatgpt-ova-1",
-        type: "ova",
-        title: "Laboratorio: Experimentando con ChatGPT",
-        description: "Práctica guiada con diferentes tipos de prompts y análisis de resultados.",
-        estimatedTime: "15 minutos",
-        difficulty: "Intermedio",
-        interactiveElements: 4,
+        id: "chatgpt-ova-ecosystem",
+        type: "ova_interactive",
+        title: "Dominando el Ecosistema ChatGPT",
+        description: "Guía interactiva completa: evolución de modelos GPT, modos de operación, herramientas integradas, automatización y el arte del prompt estratégico.",
+        estimatedTime: "20 minutos",
+        difficulty: "Principiante",
+        interactiveElements: 5,
         thumbnailType: "premium",
         fullscreen: true
       }
     ]
   },
 
-  "System Prompts y Configuración Avanzada": {
-    title: "System Prompts y Configuración Avanzada",
-    description: "Crea flujos de trabajo eficientes usando ChatGPT para tareas cotidianas de redacción, análisis y organización.",
+  "Plantillas de Flujos de Trabajo": {
+    title: "Plantillas de Flujos de Trabajo",
+    description: "Descubre las herramientas integradas de ChatGPT y aprende a crear flujos de trabajo automatizados que potencien tu productividad profesional y académica.",
     learningObjectives: [
-      "Diseñar flujos de trabajo repetitivos con ChatGPT",
-      "Automatizar tareas de redacción y edición",
-      "Integrar ChatGPT en procesos de trabajo existentes",
-      "Medir la productividad ganada con IA"
+      "Identificar las 5 herramientas clave del ecosistema ChatGPT",
+      "Seleccionar la herramienta correcta según el tipo de tarea",
+      "Combinar múltiples herramientas en flujos de trabajo eficientes",
+      "Resolver escenarios reales usando las herramientas integradas"
     ],
-    estimatedTime: "20 minutos",
+    estimatedTime: "30 minutos",
     difficulty: "Intermedio",
     resources: [
       {
-        id: "workflow-video-1",
-        type: "video",
-        title: "Flujos de Trabajo Avanzados",
-        url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-        duration: "15:20",
-        thumbnail: "https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
-        provider: "youtube",
-        description: "Cómo estructurar tareas complejas en flujos automatizados con ChatGPT."
+        id: "workflow-pdf-modulo2",
+        type: "pdf",
+        title: "Las Herramientas Integradas de ChatGPT",
+        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/modulo%202%20guia%20de%20intro/Las-Herramientas-Integradas-de-ChatGPT.pdf",
+        pages: 20,
+        format: "PDF",
+        size: "4.8 MB",
+        description: "Guía completa de las herramientas integradas de ChatGPT: Búsqueda Web, Intérprete de Código, DALL-E 3, Canvas y Proyectos.",
+        thumbnailType: "premium",
+        immersiveView: true
       },
       {
-        id: "workflow-template-1",
-        type: "document",
-        title: "Plantillas de Flujos de Trabajo",
-        url: "/templates/chatgpt-workflow-templates.json",
-        format: "JSON",
-        size: "1.8 MB",
-        description: "10 plantillas listas para implementar en tu día a día."
-      },
-      {
-        id: "workflow-ova-1",
-        type: "ova",
+        id: "workflow-ova-herramientas",
+        type: "ova_interactive",
         title: "Simulador: Crea tu Primer Flujo",
-        description: "Ejercicio interactivo para diseñar tu primer flujo de trabajo automatizado.",
-        estimatedTime: "20 minutos",
+        description: "Explora interactivamente cada herramienta de ChatGPT, escucha explicaciones en audio y completa un desafío práctico con escenarios reales.",
+        estimatedTime: "25 minutos",
         difficulty: "Intermedio",
-        interactiveElements: 6,
+        interactiveElements: 5,
         thumbnailType: "premium",
         fullscreen: true
       }

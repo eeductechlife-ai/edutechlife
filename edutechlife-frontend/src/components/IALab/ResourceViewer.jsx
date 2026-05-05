@@ -12,12 +12,15 @@
  * - Delegación a ResourceViewerModal para visualización completa
  */
 
-import React, { useState } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { cn } from '../forum/forumDesignSystem';
 import PDFThumbnail from './PDFThumbnail';
 import OVAThumbnail from './OVAThumbnail';
+
+const OVAChatGPTTools = lazy(() => import('./OVAChatGPTTools.jsx'));
+const OVAEcosystemGuide = lazy(() => import('./OVAEcosystemGuide.jsx'));
 
 
 
@@ -181,6 +184,22 @@ const ResourceViewer = ({
             interactiveElements={resource.interactiveElements}
             onOpenOVA={() => onOpenOVA && onOpenOVA(resource)}
           />;
+        
+        case 'ova_interactive':
+          return (
+            <Suspense fallback={
+              <div className="w-full h-64 flex items-center justify-center bg-slate-50 rounded-2xl">
+                <div className="text-center">
+                  <div className="animate-spin w-8 h-8 border-4 border-[#004B63] border-t-transparent rounded-full mx-auto mb-3"></div>
+                  <p className="text-slate-500 font-medium">Cargando simulador interactivo...</p>
+                </div>
+              </div>
+            }>
+              <div className="w-full rounded-2xl overflow-hidden border border-slate-200 shadow-lg">
+                {resource.id === 'chatgpt-ova-ecosystem' ? <OVAEcosystemGuide /> : <OVAChatGPTTools />}
+              </div>
+            </Suspense>
+          );
         
         default:
           return (

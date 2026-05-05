@@ -14,7 +14,7 @@
  * - Botón "Marcar como visto" en este modal
  */
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { cn } from '../forum/forumDesignSystem';
@@ -22,6 +22,9 @@ import { useIALabContext } from '../../context/IALabContext';
 import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
 import QueEsPrompt_OVA_Original from './QueEsPrompt_OVA_Original';
 import useFullscreen from './hooks/useFullscreen';
+
+const OVAChatGPTTools = lazy(() => import('./OVAChatGPTTools.jsx'));
+const OVAEcosystemGuide = lazy(() => import('./OVAEcosystemGuide.jsx'));
 
 /**
  * Componente para visualizar videos (YouTube/Vimeo)
@@ -508,6 +511,20 @@ const ResourceViewerModal = ({
             onClose={onClose}
           />;
         
+        case 'ova_interactive':
+          return (
+            <Suspense fallback={
+              <div className="w-full h-full flex items-center justify-center bg-slate-50">
+                <div className="text-center">
+                  <div className="animate-spin w-10 h-10 border-4 border-[#004B63] border-t-transparent rounded-full mx-auto mb-4"></div>
+                  <p className="text-slate-500 font-bold">Cargando simulador interactivo...</p>
+                </div>
+              </div>
+            }>
+              {resource.id === 'chatgpt-ova-ecosystem' ? <OVAEcosystemGuide /> : <OVAChatGPTTools />}
+            </Suspense>
+          );
+        
         default:
           return (
             <div className="w-full h-full flex items-center justify-center bg-amber-50 rounded-2xl">
@@ -615,7 +632,7 @@ const ResourceViewerModal = ({
                      (resource.type === 'image' || resource.type === 'imagen') ? <Icon name="fa-image" className="text-white w-5 h-5 sm:w-6 sm:h-6" /> :
                      (resource.type === 'interactive' || resource.type === 'interactivo') ? <Icon name="fa-puzzle-piece" className="text-white w-5 h-5 sm:w-6 sm:h-6" /> :
                      (resource.type === 'pdf' || resource.type === 'pdf-thumbnail') ? <Icon name="fa-file-pdf" className="text-white w-5 h-5 sm:w-6 sm:h-6" /> :
-                     (resource.type === 'ova' || resource.type === 'ova-thumbnail') ? <Icon name="fa-brain" className="text-white w-5 h-5 sm:w-6 sm:h-6" /> :
+                      (resource.type === 'ova' || resource.type === 'ova-thumbnail' || resource.type === 'ova_interactive') ? <Icon name="fa-brain" className="text-white w-5 h-5 sm:w-6 sm:h-6" /> :
                      <Icon name="fa-file" className="text-white w-5 h-5 sm:w-6 sm:h-6" />}
                   </div>
                   

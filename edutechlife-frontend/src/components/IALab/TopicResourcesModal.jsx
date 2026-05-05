@@ -241,7 +241,7 @@ const TopicResourcesModal = ({
                     {resources[activeResourceIndex]?.type === 'video' ? <Icon name="fa-video" className="text-[#004B63] w-4 h-4 sm:w-5 sm:h-5" /> :
                      (resources[activeResourceIndex]?.type === 'document' || resources[activeResourceIndex]?.type === 'documento' || resources[activeResourceIndex]?.type === 'pdf' || resources[activeResourceIndex]?.type === 'pdf-thumbnail') ? <Icon name="fa-file-lines" className="text-[#004B63] w-4 h-4 sm:w-5 sm:h-5" /> :
                      (resources[activeResourceIndex]?.type === 'image' || resources[activeResourceIndex]?.type === 'imagen') ? <Icon name="fa-image" className="text-[#004B63] w-4 h-4 sm:w-5 sm:h-5" /> :
-                     (resources[activeResourceIndex]?.type === 'ova' || resources[activeResourceIndex]?.type === 'ova-thumbnail') ? <Icon name="fa-brain" className="text-[#004B63] w-4 h-4 sm:w-5 sm:h-5" /> :
+                      (resources[activeResourceIndex]?.type === 'ova' || resources[activeResourceIndex]?.type === 'ova-thumbnail' || resources[activeResourceIndex]?.type === 'ova_interactive') ? <Icon name="fa-brain" className="text-[#004B63] w-4 h-4 sm:w-5 sm:h-5" /> :
                      (resources[activeResourceIndex]?.type === 'interactive' || resources[activeResourceIndex]?.type === 'interactivo') ? <Icon name="fa-puzzle-piece" className="text-[#004B63] w-4 h-4 sm:w-5 sm:h-5" /> : <Icon name="fa-file" className="text-[#004B63] w-4 h-4 sm:w-5 sm:h-5" />}
                   </div>
                   <div className="min-w-0">

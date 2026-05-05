@@ -336,24 +336,21 @@ const IALabSidebar = () => {
           </div>
         </div>
 
-        {/* Sección: Certificación del Curso */}
-        <div className="px-1 w-full mt-4">
-          <CourseCompletionSection
-            courseCompleted={courseCompleted}
-            courseProgress={courseProgress}
-            completedModulesCount={completedModules.length}
-            onViewCertificate={() => {
-              if (!storedCertificate) {
-                generateCertificate().then(() => {
-                  setShowCertificateModal(true);
-                });
-              } else {
+        {/* Sección: Certificación del Curso - Solo visible cuando tiene certificado */}
+        {storedCertificate && (
+          <div className="px-1 w-full mt-4">
+            <CourseCompletionSection
+              hasCertificate={!!storedCertificate}
+              courseCompleted={courseCompleted}
+              courseProgress={courseProgress}
+              completedModulesCount={completedModules.length}
+              onViewCertificate={() => {
                 setShowCertificateModal(true);
-              }
-            }}
-            isGenerating={certificateGenerating}
-          />
-        </div>
+              }}
+              isGenerating={certificateGenerating}
+            />
+          </div>
+        )}
       </div>
     </aside>
   );

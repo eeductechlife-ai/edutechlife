@@ -14,11 +14,55 @@ const MODULE_CONFIG = [
   { id: 2, videos: 2, infographics: 3, hasExam: true, hasActivity: true },
   { id: 3, videos: 2, infographics: 3, hasExam: true, hasActivity: true },
   { id: 4, videos: 2, infographics: 3, hasExam: true, hasActivity: true },
-  { id: 5, videos: 1, infographics: 2, hasExam: false, hasProject: true }
+  { id: 5, videos: 1, infographics: 2, hasExam: true, hasActivity: true }
 ];
 
-const TOTAL_ITEMS = MODULE_CONFIG.reduce((acc, m) => 
-  acc + m.videos + m.infographics + (m.hasExam ? 1 : 0) + (m.hasActivity ? 1 : 0), 0);
+const MODULE_WEIGHTS = { exam: 35, challenge: 30, resources: 30, community: 5 };
+const MODULE_PERCENTAGE = 20;
+
+const calculateModuleProgressInternal = (moduleId, completedVideos, completedExams, completedInfographics, completedActivities) => {
+  const config = MODULE_CONFIG.find(m => m.id === moduleId);
+  if (!config) return 0;
+
+  const moduleVideos = completedVideos.filter(v => v.startsWith(`m${moduleId}`));
+  const moduleInfographics = completedInfographics.filter(i => i.startsWith(`i${moduleId}`));
+  const moduleActivities = completedActivities.filter(a => a.startsWith(`a${moduleId}`));
+  const examPassed = completedExams[moduleId];
+
+  let moduleScore = 0;
+
+  const totalResources = config.videos + config.infographics;
+  if (totalResources > 0) {
+    const resourcesCompleted = moduleVideos.length + moduleInfographics.length;
+    const resourcesPct = resourcesCompleted / totalResources;
+    if (resourcesPct >= 0.8) {
+      moduleScore += MODULE_WEIGHTS.resources;
+    }
+  }
+
+  if (examPassed) {
+    moduleScore += MODULE_WEIGHTS.exam;
+  }
+
+  if (moduleActivities.length > 0) {
+    moduleScore += MODULE_WEIGHTS.challenge;
+  }
+
+  return moduleScore;
+};
+
+const calculateGlobalProgressInternal = (completedModules, completedVideos, completedExams, completedInfographics, completedActivities) => {
+  let totalProgress = 0;
+
+  for (let i = 1; i <= 5; i++) {
+    const moduleScore = calculateModuleProgressInternal(i, completedVideos, completedExams, completedInfographics, completedActivities);
+    const moduleCompleted = completedModules.includes(i);
+    const effectiveScore = Math.max(moduleScore, moduleCompleted ? 100 : 0);
+    totalProgress += (effectiveScore / 100) * MODULE_PERCENTAGE;
+  }
+
+  return Math.min(100, Math.round(totalProgress));
+};
 
 export const useCourseProgress = () => {
   const [completedVideos, setCompletedVideos] = useState([]);
@@ -30,17 +74,7 @@ export const useCourseProgress = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const calculateProgress = useCallback((videos, modules, exams, infographics, activities) => {
-    const modulesCompleted = modules.length;
-    const examsCompleted = Object.values(exams).filter(Boolean).length;
-    const videosCompleted = videos.length;
-    const infographicsCompleted = infographics.length;
-    const activitiesCompleted = activities.length;
-    
-    const totalProgressItems = MODULE_CONFIG.reduce((acc, m) => 
-      acc + m.videos + m.infographics + (m.hasExam ? 1 : 0) + (m.hasActivity ? 1 : 0), 0);
-    const completedItems = modulesCompleted + examsCompleted + videosCompleted + infographicsCompleted + activitiesCompleted;
-    
-    return Math.min(100, Math.round((completedItems / totalProgressItems) * 100));
+    return calculateGlobalProgressInternal(modules, videos, exams, infographics, activities);
   }, []);
 
   const loadProgress = useCallback(() => {
@@ -167,32 +201,30 @@ export const useCourseProgress = () => {
   }, [completedVideos, completedModules, completedExams, completedInfographics, completedActivities, calculateProgress, courseProgress]);
 
   const getModuleProgress = useCallback((moduleId) => {
-    const config = MODULE_CONFIG.find(m => m.id === moduleId);
-    if (!config) return 0;
-    
-    const moduleVideos = completedVideos.filter(v => v.startsWith(`m${moduleId}`));
-    const moduleInfographics = completedInfographics.filter(i => i.startsWith(`i${moduleId}`));
-    const moduleActivities = completedActivities.filter(a => a.startsWith(`a${moduleId}`));
-    const examPassed = completedExams[moduleId];
-    
-    const totalItems = config.videos + config.infographics + (config.hasExam ? 1 : 0) + (config.hasActivity ? 1 : 0);
-    const completedItems = moduleVideos.length + moduleInfographics.length + moduleActivities.length + (examPassed ? 1 : 0);
-    
-    return Math.round((completedItems / totalItems) * 100);
+    return calculateModuleProgressInternal(moduleId, completedVideos, completedExams, completedInfographics, completedActivities);
   }, [completedVideos, completedExams, completedInfographics, completedActivities]);
 
   const getModuleStats = useCallback((moduleId) => {
     const config = MODULE_CONFIG.find(m => m.id === moduleId);
-    if (!config) return { completed: 0, total: config?.videos || 0 };
-    
+    if (!config) return { completed: 0, total: 0, score: 0 };
+
     const moduleVideos = completedVideos.filter(v => v.startsWith(`m${moduleId}`));
     const moduleInfographics = completedInfographics.filter(i => i.startsWith(`i${moduleId}`));
     const moduleActivities = completedActivities.filter(a => a.startsWith(`a${moduleId}`));
     const examPassed = completedExams[moduleId];
-    
+
+    const totalResources = config.videos + config.infographics;
+    const resourcesCompleted = moduleVideos.length + moduleInfographics.length;
+
     return {
-      completed: moduleVideos.length + moduleInfographics.length + moduleActivities.length + (examPassed ? 1 : 0),
-      total: config.videos + config.infographics + (config.hasExam ? 1 : 0) + (config.hasActivity ? 1 : 0)
+      videosWatched: moduleVideos.length,
+      totalVideos: config.videos,
+      infographicsViewed: moduleInfographics.length,
+      totalInfographics: config.infographics,
+      activityCompleted: moduleActivities.length > 0,
+      examPassed,
+      resourcesPct: totalResources > 0 ? Math.round((resourcesCompleted / totalResources) * 100) : 0,
+      score: calculateModuleProgressInternal(moduleId, completedVideos, completedExams, completedInfographics, completedActivities)
     };
   }, [completedVideos, completedExams, completedInfographics, completedActivities]);
 
@@ -228,8 +260,7 @@ export const useCourseProgress = () => {
     markInfographicComplete,
     markActivityComplete,
     resetProgress,
-    refreshProgress: loadProgress,
-    totalItems: TOTAL_ITEMS
+    refreshProgress: loadProgress
   };
 };
 

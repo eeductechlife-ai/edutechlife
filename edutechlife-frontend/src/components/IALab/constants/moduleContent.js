@@ -55,31 +55,31 @@ export const moduleContent = {
       description: "En este módulo, desbloquearás el verdadero potencial de ChatGPT. Desde configurar prompts de sistema profesionales hasta crear GPTs personalizados que trabajan por ti.",
       mission: "Explorar cada lección y sus recursos multimedia. Cada paso te acerca a dominar la IA más usada del mundo. ¡Prepárate para llevar tus habilidades al siguiente nivel!",
       topics: [
-        { title: "Fundamentos de ChatGPT y Modelos GPT", icon: "fa-brain", resources: 3, duration: "20 min" },
-        { title: "System Prompts y Configuración Avanzada", icon: "fa-sliders", resources: 3, duration: "20 min" },
+        { title: "Guía Completa de ChatGPT", icon: "fa-book-open", resources: 3, duration: "20 min" },
+        { title: "Plantillas de Flujos de Trabajo", icon: "fa-layer-group", resources: 3, duration: "20 min" },
         { title: "Function Calling y APIs de OpenAI", icon: "fa-code", resources: 3, duration: "20 min" }
       ]
     },
     lessons: [
       {
         id: 1,
-        title: "Fundamentos de ChatGPT y Modelos GPT",
-        description: "Comprende la arquitectura detrás de ChatGPT",
-        detailedDescription: "Comprende la arquitectura detrás de ChatGPT y los modelos GPT. Aprende cómo funciona el entrenamiento, las diferencias entre versiones y cómo aprovechar cada modelo según tus necesidades.",
+        title: "Guía Completa de ChatGPT",
+        description: "Domina ChatGPT con la guía completa de Edutechlife",
+        detailedDescription: "Accede a la Guía Completa de ChatGPT de Edutechlife: un recurso integral que cubre desde los fundamentos hasta técnicas avanzadas. Aprende a aprovechar cada modelo, configura conversaciones efectivas y domina las mejores prácticas para obtener resultados profesionales.",
         duration: "20 min",
         format: "Reading",
-        icon: "fa-brain",
+        icon: "fa-book-open",
         badgeColor: "bg-cyan-100 text-cyan-800",
         themeColor: "#66CCCC"
       },
       {
         id: 2,
-        title: "System Prompts y Configuración Avanzada",
-        description: "Configura el comportamiento de tu asistente IA",
-        detailedDescription: "Configura el comportamiento de tu asistente IA con System Prompts. Define tono, estilo, restricciones y capacidades para obtener respuestas consistentes y profesionales.",
+        title: "Plantillas de Flujos de Trabajo",
+        description: "Automatiza tareas repetitivas con flujos de trabajo inteligentes",
+        detailedDescription: "Descubre las herramientas integradas de ChatGPT y crea flujos de trabajo automatizados. Desde búsqueda web en tiempo real hasta generación de imágenes y análisis de datos con Python. Aprende cuándo usar cada herramienta para maximizar tu productividad.",
         duration: "20 min",
         format: "Lab",
-        icon: "fa-sliders",
+        icon: "fa-layer-group",
         badgeColor: "bg-purple-100 text-purple-800",
         themeColor: "#9333EA"
       },
@@ -98,14 +98,14 @@ export const moduleContent = {
     accordionContent: {
       1: {
         objective: "🎯 Objetivo Principal",
-        objectiveDesc: "Comprender cómo funciona ChatGPT por dentro y elegir el modelo correcto para cada tarea.",
+        objectiveDesc: "Dominar ChatGPT en su totalidad mediante la guía completa de Edutechlife, desde fundamentos hasta técnicas avanzadas.",
         achievements: [
-          { icon: "fa-check", text: "Entender la arquitectura de los modelos GPT" },
-          { icon: "fa-check", text: "Diferenciar entre GPT-3.5, GPT-4 y modelos especializados" },
+          { icon: "fa-check", text: "Comprender la arquitectura y evolución de los modelos GPT" },
+          { icon: "fa-check", text: "Aplicar técnicas de prompt engineering profesionales" },
           { icon: "fa-check", text: "Seleccionar el modelo óptimo según costo y capacidad" }
         ],
         warnings: [
-          { icon: "fa-times", text: "Usar el modelo más caro para todo" },
+          { icon: "fa-times", text: "Usar el modelo más caro para tareas simples" },
           { icon: "fa-times", text: "Ignorar los límites de contexto (tokens)" },
           { icon: "fa-times", text: "No conocer las actualizaciones de nuevos modelos" }
         ],
@@ -116,22 +116,22 @@ export const moduleContent = {
         }
       },
       2: {
-        objective: "🏗️ System Prompts: El Cerebro de tu Asistente",
-        objectiveDesc: "Aprende a configurar el comportamiento base de ChatGPT con instrucciones de sistema que definen su personalidad y capacidades.",
+        objective: "🏗️ Herramientas Integradas: El Ecosistema Completo de ChatGPT",
+        objectiveDesc: "Domina todas las herramientas integradas de ChatGPT: Búsqueda Web, Intérprete de Código, DALL-E 3, Canvas y Proyectos. Aprende a combinarlas en flujos de trabajo profesionales.",
         achievements: [
-          { icon: "fa-check", text: "Crear System Prompts para roles específicos" },
-          { icon: "fa-check", text: "Definir tono, formato y restricciones de respuesta" },
-          { icon: "fa-check", text: "Usar variables dinámicas en prompts de sistema" }
+          { icon: "fa-check", text: "Identificar cuándo usar cada herramienta integrada" },
+          { icon: "fa-check", text: "Combinar múltiples herramientas en un solo flujo de trabajo" },
+          { icon: "fa-check", text: "Crear automatizaciones que resuelvan problemas reales" }
         ],
         warnings: [
-          { icon: "fa-times", text: "System Prompts demasiado largos o confusos" },
-          { icon: "fa-times", text: "No probar el comportamiento antes de usarlo" },
-          { icon: "fa-times", text: "Mezclar instrucciones contradictorias" }
+          { icon: "fa-times", text: "Usar DALL-E 3 para texto largo o logos de marcas" },
+          { icon: "fa-times", text: "Confiar en la base de entrenamiento para datos actuales" },
+          { icon: "fa-times", text: "No organizar proyectos por objetivos específicos" }
         ],
         example: {
-          label: "Ejemplo de System Prompt",
-          weak: "❌ Débil: Sé un experto en marketing",
-          strong: "✅ Fuerte: Eres un estratega de marketing digital con 10 años de experiencia en e-commerce. Responde con datos concretos, métricas y ejemplos accionables. Usa un tono profesional pero cercano. Siempre incluye al menos 3 recomendaciones prácticas."
+          label: "Ejemplo de flujo integrado",
+          weak: "❌ Aislado: Pedir datos actualizados sin activar Búsqueda Web → resultado desactualizado",
+          strong: "✅ Integrado: Buscar datos actuales (Browse) → analizarlos con Python (Code Interpreter) → generar infografía (DALL-E 3) → editar en Canvas"
         }
       },
       3: {
