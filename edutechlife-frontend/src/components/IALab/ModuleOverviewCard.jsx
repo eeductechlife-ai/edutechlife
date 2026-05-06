@@ -22,7 +22,7 @@ import ErrorBoundary from '../forum/ErrorBoundary';
  */
 
 const ModuleOverviewCard = ({ onAction }) => {
-  const { activeMod, modules, moduleContent, completedExams, challengeScores, completedActivities } = useIALabContext();
+  const { activeMod, modules, moduleContent, completedExams, challengeScores, moduleProgress } = useIALabContext();
   
   // Estado para el modal de recursos
   const [selectedTopic, setSelectedTopic] = useState(null);
@@ -187,7 +187,7 @@ const ModuleOverviewCard = ({ onAction }) => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
                 {/* Icono: Comunidad */}
                 <div className="flex flex-col items-center gap-3">
-                  {completedActivities?.includes('a' + activeMod) ? (
+                  {moduleProgress?.[activeMod]?.community ? (
                     <div className="flex flex-col items-center gap-2">
                       <motion.button
                         onClick={() => setIsForumOpen(!isForumOpen)}
@@ -231,7 +231,7 @@ const ModuleOverviewCard = ({ onAction }) => {
                         title="Ver resultado del desafío"
                       >
                         <Icon name="fa-rocket" className="text-white w-9 h-9 md:w-10 md:h-10" />
-                        <div className="absolute -top-1 -right-1 w-8 h-8 rounded-full bg-white border-2 border-emerald-500 flex items-center justify-center shadow-sm">
+                        <div className="absolute -top-0.5 -right-0.5 w-8 h-8 rounded-full bg-white border-[3px] border-emerald-500 flex items-center justify-center shadow-sm">
                           <span className="text-[10px] font-bold text-emerald-600">{challengeScores[activeMod]}%</span>
                         </div>
                       </motion.button>
@@ -265,7 +265,7 @@ const ModuleOverviewCard = ({ onAction }) => {
                         title="Ver resultado del examen"
                       >
                         <Icon name="fa-clipboard-check" className="text-white w-9 h-9 md:w-10 md:h-10" />
-                        <div className="absolute -top-1 -right-1 w-8 h-8 rounded-full bg-white border-2 border-emerald-500 flex items-center justify-center shadow-sm">
+                        <div className="absolute -top-0.5 -right-0.5 w-8 h-8 rounded-full bg-white border-[3px] border-emerald-500 flex items-center justify-center shadow-sm">
                           <span className="text-[10px] font-bold text-emerald-600">{completedExams[activeMod]}%</span>
                         </div>
                       </motion.button>

@@ -13,6 +13,8 @@ import IALabEvaluationModal from './IALabEvaluationModal';
 import IALabEvaluationModalPremium from './IALabEvaluationModalPremium';
 import IALabQuizModal from './IALabQuizModal';
 import IALabValerioPanel from './IALabValerioPanel';
+import ExamResultViewer from './ExamResultViewer';
+import ChallengeResultViewer from './ChallengeResultViewer';
 import ErrorBoundary from '../forum/ErrorBoundary';
 import CertificatesModal from '../modals/CertificatesModal';
 
@@ -249,52 +251,23 @@ const IALabContent = () => {
 
                 {/* Modal de Resultado de Examen */}
                 {showExamResult && (
-                    <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={() => setShowExamResult(false)}>
-                        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden animate-in fade-in-0 zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
-                            <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 px-6 py-6 text-center">
-                                <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-3">
-                                    <Icon name="fa-clipboard-check" className="text-white text-2xl" />
-                                </div>
-                                <h3 className="text-white font-bold text-lg font-montserrat">Resultado del Examen</h3>
-                                <p className="text-white/70 text-xs mt-1">Módulo {activeMod}</p>
-                            </div>
-                            <div className="p-6 text-center">
-                                <div className="text-5xl font-bold text-emerald-600 font-montserrat mb-2">{completedExams?.[activeMod]}%</div>
-                                <p className="text-sm text-slate-500 mb-6">
-                                    {completedExams?.[activeMod] >= 80 ? '¡Examen aprobado!' : 'Examen completado'}
-                                </p>
-                                <button onClick={() => setShowExamResult(false)}
-                                    className="w-full py-3 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white rounded-xl font-bold text-sm hover:shadow-lg transition-all duration-200 active:scale-95">
-                                    Cerrar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <ExamResultViewer
+                        moduleId={activeMod}
+                        score={completedExams?.[activeMod] || 80}
+                        onClose={() => setShowExamResult(false)}
+                    />
                 )}
 
                 {/* Modal de Resultado de Desafío */}
                 {showChallengeResult && (
-                    <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={() => setShowChallengeResult(false)}>
-                        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden animate-in fade-in-0 zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
-                            <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 px-6 py-6 text-center">
-                                <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-3">
-                                    <Icon name="fa-rocket" className="text-white text-2xl" />
-                                </div>
-                                <h3 className="text-white font-bold text-lg font-montserrat">Resultado del Desafío</h3>
-                                <p className="text-white/70 text-xs mt-1">Módulo {activeMod}</p>
-                            </div>
-                            <div className="p-6 text-center">
-                                <div className="text-5xl font-bold text-emerald-600 font-montserrat mb-2">{challengeScores?.[activeMod]}%</div>
-                                <p className="text-sm text-slate-500 mb-6">
-                                    {challengeScores?.[activeMod] >= 80 ? '¡Desafío completado!' : 'Desafío entregado'}
-                                </p>
-                                <button onClick={() => setShowChallengeResult(false)}
-                                    className="w-full py-3 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white rounded-xl font-bold text-sm hover:shadow-lg transition-all duration-200 active:scale-95">
-                                    Cerrar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <ChallengeResultViewer
+                        moduleId={activeMod}
+                        onClose={() => setShowChallengeResult(false)}
+                        onRetry={() => {
+                            setShowChallengeResult(false);
+                            setShowPremiumEvaluationModal(true);
+                        }}
+                    />
                 )}
                 
                  {/* FAB de Valerio - posicionado relativo al viewport */}

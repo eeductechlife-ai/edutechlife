@@ -99,7 +99,7 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
     setIsOpen(false);
     setIsCertificatesOpen(true);
   };
-  
+
   // ❓ AYUDA Y SOPORTE - Abre modal de ayuda
   const handleHelp = () => {
     setIsOpen(false);
@@ -241,7 +241,7 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
                 <Icon name="fa-certificate" className="text-sm text-[#004B63] flex-shrink-0" />
                 <span className="text-xs font-semibold text-slate-800 group-hover:text-[#004B63] transition-colors duration-300">Mis Certificados</span>
               </button>
-              
+
               {/* ❓ AYUDA Y SOPORTE */}
               <button
                 className="group flex items-center gap-2.5 w-full px-3 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-[#004B63] rounded-lg shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50 transition-all duration-300 cursor-pointer text-left"

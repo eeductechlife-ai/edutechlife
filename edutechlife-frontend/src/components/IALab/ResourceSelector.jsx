@@ -23,6 +23,7 @@ import { getResourceIcon, getResourceColor } from './constants/moduleResources';
 const ResourceSelector = ({ 
   resources = [], 
   activeResourceIndex = 0, 
+  completedIds = [],
   onResourceSelect,
   className = ''
 }) => {
@@ -85,8 +86,8 @@ const ResourceSelector = ({
             </div>
             <h3 className="font-semibold text-slate-800 text-sm">Recursos del Tema</h3>
           </div>
-          <div className="text-xs text-slate-500">
-            {resources.length} recurso{resources.length !== 1 ? 's' : ''}
+          <div className="text-xs text-slate-500 flex items-center gap-2">
+            <span>{completedIds.filter(id => resources.some(r => r.id === id)).length}/{resources.length} visto{resources.length !== 1 ? 's' : ''}</span>
           </div>
         </div>
       </div>
@@ -95,6 +96,7 @@ const ResourceSelector = ({
       <div className="p-2 space-y-1.5 max-h-64 overflow-y-auto">
         {resources.map((resource, index) => {
           const isActive = index === activeResourceIndex;
+          const isCompleted = completedIds.includes(resource.id);
           
           return (
             <motion.button
@@ -107,7 +109,9 @@ const ResourceSelector = ({
                 "text-left",
                 isActive
                   ? "bg-white border border-slate-200/60 border-l-4 border-l-[#004B63] shadow-sm"
-                  : "bg-white border border-slate-200/60 shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50"
+                  : isCompleted
+                    ? "bg-emerald-50/40 border border-emerald-200/60 border-l-4 border-l-emerald-400 shadow-sm"
+                    : "bg-white border border-slate-200/60 shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50"
               )}
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.99 }}
@@ -117,22 +121,27 @@ const ResourceSelector = ({
               {/* Icono con gradiente corporativo */}
               <div className={cn(
                 "w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0",
-                "bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10",
-                "transition-all duration-300"
+                "transition-all duration-300",
+                isCompleted
+                  ? "bg-gradient-to-br from-emerald-500/10 to-emerald-600/10"
+                  : "bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10"
               )}>
                 <Icon
-                  name={getResourceIcon(resource.type)}
-                  className="text-[#004B63] w-4 h-4"
+                  name={isCompleted ? 'fa-check-circle' : getResourceIcon(resource.type)}
+                  className={isCompleted ? "text-emerald-600 w-4 h-4" : "text-[#004B63] w-4 h-4"}
                 />
               </div>
 
               {/* Información del recurso */}
               <div className="flex-1 min-w-0">
                 <div className={cn(
-                  "text-sm font-semibold truncate transition-colors duration-300",
-                  isActive ? "text-[#004B63]" : "text-slate-800"
+                  "text-sm font-semibold truncate transition-colors duration-300 flex items-center gap-2",
+                  isActive ? "text-[#004B63]" : isCompleted ? "text-emerald-700" : "text-slate-800"
                 )}>
                   {resource.title}
+                  {isCompleted && (
+                    <span className="text-[10px] font-bold text-emerald-600 bg-emerald-100 px-1.5 py-0.5 rounded-md flex-shrink-0">Completado</span>
+                  )}
                 </div>
                 <div className="text-xs text-slate-500 mt-0.5">
                   {getResourceMetadata(resource)}
@@ -156,9 +165,9 @@ const ResourceSelector = ({
       <div className="px-4 py-2 border-t border-slate-200/60 bg-white">
         <div className="flex items-center justify-between text-xs">
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-[#00BCD4] animate-pulse"></div>
-            <span className="text-slate-600">Activo:</span>
-            <span className="font-medium text-[#004B63] truncate max-w-[200px]">
+            <div className={`w-2 h-2 rounded-full ${completedIds.includes(resources[activeResourceIndex]?.id) ? 'bg-emerald-500' : 'bg-[#00BCD4] animate-pulse'}`}></div>
+            <span className="text-slate-600">{completedIds.includes(resources[activeResourceIndex]?.id) ? 'Completado:' : 'Activo:'}</span>
+            <span className={`font-medium truncate max-w-[200px] ${completedIds.includes(resources[activeResourceIndex]?.id) ? 'text-emerald-600' : 'text-[#004B63]'}`}>
               {resources[activeResourceIndex]?.title || 'Ninguno'}
             </span>
           </div>

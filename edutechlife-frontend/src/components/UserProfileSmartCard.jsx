@@ -6,7 +6,6 @@ import { Card, CardContent } from './ui/card-simple';
 import { Icon } from '../utils/iconMapping.jsx';
 
 const COURSE_NAME = 'Introducción a la Inteligencia Artificial Generativa';
-const TOTAL_LESSONS = 24;
 const TOTAL_MODULES = 5;
 
 const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
@@ -323,8 +322,6 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
   const displayEmail = profileData.email || clerkUser?.primaryEmailAddress?.emailAddress || '';
   const displayName = profileData.full_name || clerkUser?.fullName || clerkUser?.firstName || 'Usuario';
 
-  const currentModule = Math.min(completedModules.length + 1, TOTAL_MODULES);
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="fixed inset-0 bg-black/20" onClick={onClose} />
@@ -359,49 +356,8 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
           </div>
         </div>
 
-        {/* Estadísticas - overlapping el header */}
-        <div className="px-5 -mt-8 relative z-10">
-          <div className="bg-white rounded-xl border border-slate-200/60 shadow-md p-3 grid grid-cols-3 gap-2">
-            <div className="text-center">
-              <p className="text-xl font-bold text-[#004B63]">{stats.progressPercent}%</p>
-              <p className="text-[10px] text-slate-500 font-medium">Progreso</p>
-            </div>
-            <div className="text-center border-x border-slate-200/60">
-              <p className="text-xl font-bold text-[#00BCD4]">{stats.completedModules}/{TOTAL_MODULES}</p>
-              <p className="text-[10px] text-slate-500 font-medium">Módulos</p>
-            </div>
-            <div className="text-center">
-              <p className="text-xl font-bold text-emerald-600">{stats.certificates}</p>
-              <p className="text-[10px] text-slate-500 font-medium">Certificados</p>
-            </div>
-          </div>
-        </div>
-
         {/* Contenido scrolleable */}
         <CardContent className="p-5 overflow-y-auto flex-1">
-          {/* Barra de progreso visual */}
-          {stats.progressPercent > 0 && (
-            <div className="mb-5">
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-xs font-semibold text-slate-700">Avance del curso</span>
-                <span className="text-[10px] text-slate-500">{stats.completedLessons}/{TOTAL_LESSONS} lecciones</span>
-              </div>
-              <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-[#004B63] to-[#00BCD4] rounded-full transition-all duration-700"
-                  style={{ width: `${stats.progressPercent}%` }}
-                />
-              </div>
-            </div>
-          )}
-
-          {/* Módulo actual */}
-          <div className="mb-5 flex items-center justify-center gap-2 py-2 bg-gradient-to-r from-[#004B63]/5 to-[#00BCD4]/5 rounded-lg border border-[#004B63]/10">
-            <Icon name="fa-location-dot" className="text-[#004B63] text-sm" />
-            <span className="text-sm font-bold text-[#004B63]">
-              Módulo {currentModule} de {TOTAL_MODULES}
-            </span>
-          </div>
 
           {/* Curso */}
           <div className="mb-5 p-3 bg-gradient-to-r from-[#004B63]/5 to-[#00BCD4]/5 border border-[#004B63]/10 rounded-xl">

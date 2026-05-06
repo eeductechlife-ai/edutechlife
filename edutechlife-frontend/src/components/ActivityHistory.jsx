@@ -128,7 +128,7 @@ const ModuleProgressCard = ({ moduleId, title, icon, score, config, completedVid
 };
 
 const TABS = [
-  { key: 'modules', icon: 'fa-layer-group', label: 'Módulos y Notas' },
+  { key: 'modules', icon: 'fa-cubes', label: 'Módulos y Notas' },
   { key: 'activities', icon: 'fa-list', label: 'Actividades' },
   { key: 'stats', icon: 'fa-chart-bar', label: 'Estadísticas' },
 ];
@@ -219,15 +219,13 @@ const ActivityHistory = ({ isOpen, onClose }) => {
         {/* Stats cards */}
         <div className="grid grid-cols-4 gap-3 px-6 py-5 bg-gradient-to-b from-[#004B63]/[0.02] to-white border-b border-slate-200/40">
           {[
-            { icon: 'fa-tachometer-alt', value: `${Math.round(courseProgress || 0)}%`, label: 'Progreso', gradient: 'from-[#004B63]/10 to-[#00BCD4]/10', color: '#004B63' },
-            { icon: 'fa-layer-group', value: `${completedCount}/5`, label: 'Módulos', gradient: 'from-emerald-500/10 to-emerald-600/10', color: '#10B981' },
-            { icon: 'fa-file-alt', value: `${totalExams}/5`, label: 'Exámenes', gradient: 'from-[#00BCD4]/10 to-[#00BCD4]/20', color: '#00BCD4' },
-            { icon: 'fa-trophy', value: `${totalChallenges}/5`, label: 'Desafíos', gradient: 'from-amber-500/10 to-amber-600/10', color: '#F59E0B' },
+            { icon: 'fa-chart-line', value: `${Math.round(courseProgress || 0)}%`, label: 'Progreso', gradient: 'from-[#004B63]/10 to-[#00BCD4]/10', color: '#004B63' },
+            { icon: 'fa-cubes', value: `${completedCount}/5`, label: 'Módulos', gradient: 'from-emerald-500/10 to-emerald-600/10', color: '#10B981' },
+            { icon: 'fa-clipboard-check', value: `${totalExams}/5`, label: 'Exámenes', gradient: 'from-[#00BCD4]/10 to-[#00BCD4]/20', color: '#00BCD4' },
+            { icon: 'fa-rocket', value: `${totalChallenges}/5`, label: 'Desafíos', gradient: 'from-amber-500/10 to-amber-600/10', color: '#F59E0B' },
           ].map((item, i) => (
-            <div key={i} className="group bg-white rounded-xl border border-slate-200/40 shadow-sm p-3 text-center hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-              <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${item.gradient} flex items-center justify-center mx-auto mb-1.5 group-hover:scale-110 transition-transform duration-200`}>
-                <Icon name={item.icon} className="text-sm" style={{ color: item.color }} />
-              </div>
+            <div key={i} className="group bg-white rounded-xl border border-slate-200/60 shadow-sm p-3 text-center hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+              <Icon name={item.icon} className="text-xl mx-auto mb-1.5 group-hover:scale-110 transition-transform duration-200" style={{ color: item.color }} />
               <p className="text-lg font-bold font-montserrat tracking-tight" style={{ color: item.color }}>{item.value}</p>
               <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">{item.label}</p>
             </div>

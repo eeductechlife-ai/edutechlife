@@ -3,11 +3,33 @@ import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabContext } from '../../context/IALabContext';
 import { useActivityTracker } from '../../hooks/useActivityTracker';
 
-const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge' }) => {
+const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge', onRetry }) => {
     const { activeMod } = useIALabContext();
     const { trackActivity } = useActivityTracker();
     const [gradeSaved, setGradeSaved] = useState(false);
     const [activeTab, setActiveTab] = useState('overview');
+    const [remainingAttempts, setRemainingAttempts] = useState(3);
+
+    useEffect(() => {
+        if (activityType !== 'challenge') return;
+        const today = new Date().toISOString().split('T')[0];
+        const key = `challenge_attempts_m${activeMod}_${today}`;
+        const stored = localStorage.getItem(key);
+        const current = stored !== null ? parseInt(stored, 10) : 3;
+        setRemainingAttempts(current);
+    }, [activityType, activeMod]);
+
+    const handleRetry = () => {
+        if (activityType !== 'challenge' || remainingAttempts <= 0) return;
+        const today = new Date().toISOString().split('T')[0];
+        const key = `challenge_attempts_m${activeMod}_${today}`;
+        const stored = localStorage.getItem(key);
+        const current = stored !== null ? parseInt(stored, 10) : 3;
+        const newVal = Math.max(0, current - 1);
+        localStorage.setItem(key, String(newVal));
+        setRemainingAttempts(newVal);
+        if (onRetry) onRetry();
+    };
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -500,15 +522,25 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
 
                                 <div className="grid grid-cols-2 gap-3">
                                     <div className="text-center bg-slate-50 rounded-lg p-3">
-                                        <div className="text-2xl font-bold text-slate-800">3</div>
+                                        <div className="text-2xl font-bold text-slate-800">{remainingAttempts}</div>
                                         <div className="text-xs text-slate-500">Ejercicios</div>
                                     </div>
-                                    <div className="text-center bg-slate-50 rounded-lg p-3">
-                                        <div className="text-2xl font-bold text-slate-800">
-                                            {isApproved ? '80%+' : 'Reintentar'}
+                                    {isApproved ? (
+                                        <div className="text-center bg-slate-50 rounded-lg p-3">
+                                            <div className="text-2xl font-bold text-slate-800">80%+</div>
+                                            <div className="text-xs text-slate-500">Aprobado</div>
                                         </div>
-                                        <div className="text-xs text-slate-500">{isApproved ? 'Aprobado' : 'Mínimo'}</div>
-                                    </div>
+                                    ) : remainingAttempts <= 0 ? (
+                                        <div className="text-center bg-slate-100 rounded-lg px-2.5 py-2.5 opacity-60">
+                                            <div className="font-bold text-slate-400 text-[13px] leading-tight">Reintentar</div>
+                                            <div className="text-[10px] text-slate-400">Máximo diario alcanzado</div>
+                                        </div>
+                                    ) : (
+                                        <button onClick={handleRetry} className="text-center bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg px-2.5 py-2.5 w-full transition-all duration-200 cursor-pointer">
+                                            <div className="font-bold text-amber-700 text-[13px] leading-tight">Reintentar</div>
+                                            <div className="text-[10px] text-amber-600">Mínimo</div>
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         </div>

@@ -25,6 +25,15 @@ const TopicResourcesModal = ({
   const [ovaModalOpen, setOvaModalOpen] = useState(false);
   const [immersivePdfModalOpen, setImmersivePdfModalOpen] = useState(false);
   const [immersivePdfResource, setImmersivePdfResource] = useState(null);
+  const [viewedIds, setViewedIds] = useState([]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const stored = localStorage.getItem('ialab_viewed_resources');
+    if (stored) {
+      try { setViewedIds(JSON.parse(stored)); } catch {}
+    }
+  }, [isOpen]);
 
   const topicResources = topicData ? getResourcesForTopic(topicData.title) : null;
   const resources = topicResources?.resources || [];
@@ -84,6 +93,11 @@ const TopicResourcesModal = ({
       const resource = resources.find(r => r.id === resourceId);
       const resourceType = resource?.type || 'document';
       await trackResourceViewed(activeMod, resourceId, resourceType);
+      if (!viewedIds.includes(resourceId)) {
+        const newViewed = [...viewedIds, resourceId];
+        setViewedIds(newViewed);
+        localStorage.setItem('ialab_viewed_resources', JSON.stringify(newViewed));
+      }
     }
   };
 
@@ -224,6 +238,7 @@ const TopicResourcesModal = ({
                   <ResourceSelector
                     resources={resources}
                     activeResourceIndex={activeResourceIndex}
+                    completedIds={viewedIds}
                     onResourceSelect={(index) => {
                       setActiveResourceIndex(index);
                       handleOpenViewerModal(index);
