@@ -4,7 +4,7 @@
 
 CREATE TABLE IF NOT EXISTS notifications (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  user_id TEXT NOT NULL,
   type TEXT NOT NULL CHECK (type IN ('lesson_reminder', 'exam_reminder', 'module_complete', 'certificate_earned', 'course_update', 'general')),
   title TEXT NOT NULL,
   message TEXT NOT NULL,
@@ -16,24 +16,23 @@ CREATE TABLE IF NOT EXISTS notifications (
 
 COMMENT ON TABLE notifications IS 'Notificaciones del sistema IALab para estudiantes';
 
--- RLS
+-- RLS - Compatible con Clerk (user_id es TEXT, no UUID)
 ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
 
--- Políticas
+-- Políticas para Clerk JWT (user_id en claim 'sub')
 CREATE POLICY IF NOT EXISTS "Users can view own notifications" ON notifications
-  FOR SELECT USING (auth.uid() = user_id);
+  FOR SELECT USING (user_id = current_setting('request.jwt.claims', true)::json->>'sub');
 
-CREATE POLICY IF NOT EXISTS "System can insert notifications" ON notifications
-  FOR INSERT WITH CHECK (auth.jwt() ->> 'role' = 'service_role');
+CREATE POLICY IF NOT EXISTS "Users can insert own notifications" ON notifications
+  FOR INSERT WITH CHECK (user_id = current_setting('request.jwt.claims', true)::json->>'sub');
 
 CREATE POLICY IF NOT EXISTS "Users can update own notifications" ON notifications
-  FOR UPDATE USING (auth.uid() = user_id)
-  WITH CHECK (auth.uid() = user_id);
+  FOR UPDATE USING (user_id = current_setting('request.jwt.claims', true)::json->>'sub');
 
 CREATE POLICY IF NOT EXISTS "Users can delete own notifications" ON notifications
-  FOR DELETE USING (auth.uid() = user_id);
+  FOR DELETE USING (user_id = current_setting('request.jwt.claims', true)::json->>'sub');
 
-CREATE POLICY IF NOT EXISTS "Service role can manage all notifications" ON notifications
+CREATE POLICY IF NOT EXISTS "Service role full access" ON notifications
   FOR ALL USING (auth.jwt() ->> 'role' = 'service_role');
 
 -- Índices

@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, useMemo } from 'react';
 import { useUser, useClerk, useAuth as useClerkAuth } from '@clerk/react';
 import { useProgressContext } from './ProgressContext';
+import { useNotification } from './NotificationContext';
+import { useActivityTracker } from '../hooks/useActivityTracker';
 import { moduleContent } from '../components/IALab/constants/moduleContent';
 import { supabase } from '../lib/supabase';
 
@@ -65,6 +67,7 @@ export const IALabProvider = ({ children, onBack }) => {
     completedExams,
     completedInfographics,
     completedActivities,
+    challengeScores,
     isLoading: progressLoading,
     syncStatus,
     isUsingJWT,
@@ -74,10 +77,15 @@ export const IALabProvider = ({ children, onBack }) => {
     markExamComplete: syncMarkExamComplete,
     markInfographicComplete: syncMarkInfographicComplete,
     markActivityComplete: syncMarkActivityComplete,
+    markChallengeComplete: syncMarkChallengeComplete,
     refreshProgress,
     setCompletedModules: setPersistentCompletedModules,
     setCourseProgress: setPersistentCourseProgress,
+    recordLastTopic,
   } = useProgressContext();
+
+  const { createNotification } = useNotification();
+  const { trackActivity, getModuleActivities } = useActivityTracker();
 
   // completedModules y courseProgress vienen del ProgressContext global
   const completedModules = persistentCompletedModules;
@@ -311,16 +319,16 @@ export const IALabProvider = ({ children, onBack }) => {
   // Pesos: Examen 35% + Desafío 30% + Recursos 30% + Comunidad 5% = 100%
   const WEIGHTS = { exam: 35, challenge: 30, resources: 30, community: 5 };
 
-  // Calcular score de un módulo basado en actividades completadas
+  // Calcular score de un módulo basado en actividades completadas (proporcional)
   const calculateModuleScore = useCallback((moduleId) => {
     const mod = moduleProgress[moduleId];
     if (!mod) return 0;
     let score = 0;
-    if (mod.exam) score += WEIGHTS.exam;
-    if (mod.challenge) score += WEIGHTS.challenge;
+    score += mod.examEarned || (mod.exam ? WEIGHTS.exam : 0);
+    score += mod.challengeEarned || (mod.challenge ? WEIGHTS.challenge : 0);
     if (mod.resourcesCompleted) score += WEIGHTS.resources;
     if (mod.community) score += WEIGHTS.community;
-    return score;
+    return Math.min(100, Math.round(score * 10) / 10);
   }, [moduleProgress]);
 
   // Calcular progreso global (5 módulos x 20% cada uno)
@@ -336,19 +344,60 @@ export const IALabProvider = ({ children, onBack }) => {
   // Nota: courseProgress ahora viene del ProgressContext global (usePersistentProgress)
   // El cálculo gamificado (calculateGlobalProgress) se mantiene para desbloqueo de módulos
 
-  // Actualizar una actividad del módulo y recalcular score
-  const updateModuleActivity = useCallback((moduleId, activity, value) => {
+  // Actualizar una actividad del modulo y recalcular score
+  // activity: 'exam', 'challenge', 'resourcesCompleted', 'community'
+  // value: boolean o score numérico
+  // score: score numérico real (para calculo proporcional)
+  const updateModuleActivity = useCallback(async (moduleId, activity, value, score) => {
+    let newScore = 0;
+    let justCompleted = false;
+
     setModuleProgress(prev => {
-      const updated = { ...prev[moduleId], [activity]: value };
-      let score = 0;
-      if (updated.exam) score += WEIGHTS.exam;
-      if (updated.challenge) score += WEIGHTS.challenge;
-      if (updated.resourcesCompleted) score += WEIGHTS.resources;
-      if (updated.community) score += WEIGHTS.community;
-      updated.currentScore = score;
+      const prevMod = prev[moduleId];
+      const prevScore = prevMod?.currentScore || 0;
       
-      // Auto-unlock siguiente módulo si este se aprueba (>=80%)
-      if (moduleId < 5 && score >= 80) {
+      const updated = { ...prevMod };
+      
+      if (activity === 'exam' && typeof score === 'number') {
+        updated.examScore = score;
+        updated.exam = score >= 80;
+        updated.examEarned = (score / 100) * WEIGHTS.exam;
+      } else if (activity === 'exam') {
+        updated.exam = !!value;
+        updated.examEarned = value ? WEIGHTS.exam : 0;
+      }
+      
+      if (activity === 'challenge' && typeof score === 'number') {
+        updated.challengeScore = score;
+        updated.challenge = score >= 80;
+        updated.challengeEarned = (score / 100) * WEIGHTS.challenge;
+      } else if (activity === 'challenge') {
+        updated.challenge = !!value;
+        updated.challengeEarned = value ? WEIGHTS.challenge : 0;
+      }
+      
+      if (activity === 'resourcesCompleted') {
+        updated.resourcesCompleted = !!value;
+      }
+      
+      if (activity === 'community') {
+        updated.community = !!value;
+      }
+      
+      let scoreCalc = 0;
+      scoreCalc += updated.examEarned || (updated.exam ? WEIGHTS.exam : 0);
+      scoreCalc += updated.challengeEarned || (updated.challenge ? WEIGHTS.challenge : 0);
+      if (updated.resourcesCompleted) scoreCalc += WEIGHTS.resources;
+      if (updated.community) scoreCalc += WEIGHTS.community;
+      updated.currentScore = Math.min(100, Math.round(scoreCalc * 10) / 10);
+      newScore = updated.currentScore;
+      
+      if (prevScore < 80 && scoreCalc >= 80) {
+        justCompleted = true;
+      }
+      
+      // Auto-unlock siguiente modulo si este se aprueba (>=80%)
+      if (moduleId < 5 && scoreCalc >= 80) {
         return {
           ...prev,
           [moduleId]: updated,
@@ -357,7 +406,28 @@ export const IALabProvider = ({ children, onBack }) => {
       }
       return { ...prev, [moduleId]: updated };
     });
-  }, []);
+
+    if (justCompleted) {
+      const moduleName = modules.find(m => m.id === moduleId)?.title || `Modulo ${moduleId}`;
+      console.log('[NOTIFICATIONS] Disparando module_complete para:', moduleName, 'score:', newScore);
+      const result = await createNotification({
+        type: 'module_complete',
+        title: `✅ ${moduleName} Completado`,
+        message: `¡Felicitaciones! Aprobaste con ${newScore}% de calificacion. ${moduleId < 5 ? 'El siguiente modulo ya esta desbloqueado.' : '¡Has completado todos los modulos!'}`,
+        metadata: { moduleId, score: newScore },
+      });
+      console.log('[NOTIFICATIONS] Resultado module_complete:', result);
+
+      await trackActivity({
+        moduleId,
+        type: 'resource',
+        resourceId: `m${moduleId}_module_complete`,
+        title: `${moduleName} - Módulo Completado`,
+        score: newScore,
+        metadata: { action: 'module_approved', score: newScore }
+      });
+    }
+  }, [createNotification, modules]);
   
   // Marcar recurso como visto (tracking granular)
   const markResourceAsViewed = useCallback((moduleId, resourceId) => {
@@ -375,13 +445,13 @@ export const IALabProvider = ({ children, onBack }) => {
       
       const updated = { ...mod, viewedResources: newViewed, resourcesCompleted, resourcesPct };
       let score = 0;
-      if (updated.exam) score += WEIGHTS.exam;
-      if (updated.challenge) score += WEIGHTS.challenge;
+      score += updated.examEarned || (updated.exam ? WEIGHTS.exam : 0);
+      score += updated.challengeEarned || (updated.challenge ? WEIGHTS.challenge : 0);
       if (updated.resourcesCompleted) score += WEIGHTS.resources;
       if (updated.community) score += WEIGHTS.community;
-      updated.currentScore = score;
+      updated.currentScore = Math.min(100, Math.round(score * 10) / 10);
       
-      if (moduleId < 5 && score >= 80) {
+      if (moduleId < 5 && updated.currentScore >= 80) {
         return {
           ...prev,
           [moduleId]: updated,
@@ -400,13 +470,13 @@ export const IALabProvider = ({ children, onBack }) => {
       
       const updated = { ...mod, community: true };
       let score = 0;
-      if (updated.exam) score += WEIGHTS.exam;
-      if (updated.challenge) score += WEIGHTS.challenge;
+      score += updated.examEarned || (updated.exam ? WEIGHTS.exam : 0);
+      score += updated.challengeEarned || (updated.challenge ? WEIGHTS.challenge : 0);
       if (updated.resourcesCompleted) score += WEIGHTS.resources;
       if (updated.community) score += WEIGHTS.community;
-      updated.currentScore = score;
+      updated.currentScore = Math.min(100, Math.round(score * 10) / 10);
       
-      if (moduleId < 5 && score >= 80) {
+      if (moduleId < 5 && updated.currentScore >= 80) {
         return {
           ...prev,
           [moduleId]: updated,
@@ -431,8 +501,8 @@ export const IALabProvider = ({ children, onBack }) => {
     // Usar el mayor de los dos conteos (para cubrir ambos sistemas de tracking)
     const effectiveModulesCompleted = Math.max(modulesApprovedByScore, modulesInContext);
     
-    // Contar exámenes completados
-    const examsInContext = Object.values(completedExams).filter(Boolean).length;
+    // Contar exámenes completados (score >= 80%)
+    const examsInContext = Object.values(completedExams).filter(s => typeof s === 'number' ? s >= 80 : s).length;
     const examsByScore = [1, 2, 3, 4, 5].filter(
       id => moduleProgress[id]?.exam
     ).length;
@@ -450,6 +520,106 @@ export const IALabProvider = ({ children, onBack }) => {
   useEffect(() => {
     checkCourseCompletion();
   }, [checkCourseCompletion]);
+
+  // Notificar cuando el estudiante completa y certifica el curso (5 modulos aprobados + 80% progreso)
+  useEffect(() => {
+    if (!user?.id) return;
+
+    const isFullyComplete = checkCourseCompletion();
+    const hasNotified = localStorage.getItem('ialab_notified_certification');
+    
+    if (isFullyComplete && !hasNotified) {
+      localStorage.setItem('ialab_notified_certification', 'true');
+      console.log('[NOTIFICATIONS] Disparando certificate_earned, progress:', courseProgress);
+      createNotification({
+        type: 'certificate_earned',
+        title: '🎓 ¡Curso Completado y Certificado!',
+        message: `Felicitaciones, has aprobado los 5 modulos con ${Math.round(courseProgress)}% de progreso general. Tu certificado ya esta disponible para descargar.`,
+        metadata: { progress: courseProgress, allModulesApproved: true },
+      }).then(result => {
+        console.log('[NOTIFICATIONS] Resultado certificate_earned:', result);
+      });
+
+      trackActivity({
+        moduleId: 0,
+        type: 'resource',
+        resourceId: 'course_completed',
+        title: 'Curso Completado y Certificado',
+        score: Math.round(courseProgress),
+        metadata: { action: 'course_certified', progress: courseProgress }
+      });
+    }
+  }, [courseCompleted, courseProgress, user?.id, createNotification, checkCourseCompletion]);
+
+  // Backfill: Notificar módulos ya completados antes del sistema de notificaciones
+  const backfillRef = React.useRef(false);
+  useEffect(() => {
+    if (!user?.id || !completedModules.length || backfillRef.current) return;
+
+    const backfilledKey = `ialab_notifs_backfilled_${user.id}`;
+    if (localStorage.getItem(backfilledKey)) return;
+
+    completedModules.forEach(modId => {
+      if (modId < 1 || modId > 5) return;
+      const moduleName = modules.find(m => m.id === modId)?.title || `Modulo ${modId}`;
+      const score = Math.max(calculateModuleScore(modId), 80);
+
+      createNotification({
+        type: 'module_complete',
+        title: `✅ ${moduleName} Completado`,
+        message: `¡Felicitaciones! Aprobaste con ${score}% de calificacion.`,
+        metadata: { moduleId: modId, score, backfilled: true },
+      });
+    });
+
+    backfillRef.current = true;
+    localStorage.setItem(backfilledKey, 'true');
+  }, [user?.id, completedModules, modules, calculateModuleScore, createNotification]);
+
+  // Notificar al entrar a un nuevo modulo (motivacional)
+  const lastModuleNotifiedRef = React.useRef(0);
+  useEffect(() => {
+    if (!user?.id || activeMod === 1 || activeMod === lastModuleNotifiedRef.current) return;
+
+    const mod = modules.find(m => m.id === activeMod);
+    if (!mod) return;
+
+    // Calcular score del modulo anterior para dar contexto
+    const prevModuleId = activeMod - 1;
+    const prevScore = calculateModuleScore(prevModuleId);
+    const prevPassed = prevScore >= 80;
+
+    let title, message;
+
+    if (prevPassed) {
+      title = `🚀 ¡Modulo ${activeMod} desbloqueado!`;
+      message = `${mod.title} ya esta disponible. ${prevModuleId < 5 ? `Superaste el modulo anterior con ${prevScore}%. ¡Sigue avanzando!` : '¡Ultimo modulo del curso!'}`;
+    } else if (prevModuleId >= 1) {
+      title = `📖 ${mod.title}`;
+      message = `Explora el contenido de este modulo. Recuerda completar todas las actividades para aprobar.`;
+    } else {
+      title = `📖 ${mod.title}`;
+      message = `Nuevo modulo disponible. Explora los recursos y completa las actividades.`;
+    }
+
+    createNotification({
+      type: 'course_update',
+      title,
+      message,
+      metadata: { moduleId: activeMod, action: 'module_entered' },
+    });
+    console.log('[NOTIFICATIONS] Disparando module_entered para modulo:', activeMod);
+
+    trackActivity({
+      moduleId: activeMod,
+      type: 'resource',
+      resourceId: `m${activeMod}_module_entered`,
+      title: `${mod.title} - Módulo Iniciado`,
+      metadata: { action: 'module_started', prevScore }
+    });
+
+    lastModuleNotifiedRef.current = activeMod;
+  }, [activeMod, user?.id, createNotification, modules, calculateModuleScore]);
   
   // Generar y guardar certificado en Supabase
   const generateCertificate = useCallback(async (overrideName) => {
@@ -507,6 +677,23 @@ export const IALabProvider = ({ children, onBack }) => {
       console.log('✅ Certificado generado exitosamente:', data);
       setStoredCertificate(data);
       setCourseCompleted(true);
+
+      await createNotification({
+        type: 'certificate_earned',
+        title: '🎓 ¡Certificado Generado!',
+        message: `Felicitaciones ${studentName}, has completado el curso con ${Math.max(overallScore, 80)}% de calificacion. Tu certificado ya esta disponible.`,
+        metadata: { score: Math.max(overallScore, 80), certId: data.id, studentName },
+      });
+
+      await trackActivity({
+        moduleId: 0,
+        type: 'resource',
+        resourceId: `certificate_${data.id}`,
+        title: `Certificado Generado - ${studentName}`,
+        score: Math.max(overallScore, 80),
+        metadata: { action: 'certificate_generated', certId: data.id, studentName }
+      });
+
       return data;
     } catch (err) {
       console.error('❌ Error generando certificado:', err);
@@ -514,7 +701,7 @@ export const IALabProvider = ({ children, onBack }) => {
     } finally {
       setCertificateGenerating(false);
     }
-  }, [user, certName, calculateModuleScore]);
+  }, [user, certName, calculateModuleScore, createNotification]);
   
   // Obtener el último intento del quiz
   const getLatestQuizAttempt = useCallback(() => {
@@ -735,12 +922,15 @@ export const IALabProvider = ({ children, onBack }) => {
     completedExams,
     completedInfographics,
     completedActivities,
+    challengeScores,
     markVideoComplete: syncMarkVideoComplete,
     markModuleComplete: syncMarkModuleComplete,
     markExamComplete: syncMarkExamComplete,
     markInfographicComplete: syncMarkInfographicComplete,
     markActivityComplete: syncMarkActivityComplete,
+    markChallengeComplete: syncMarkChallengeComplete,
     refreshProgress,
+    recordLastTopic,
     
     // Auth y navegación
     user,

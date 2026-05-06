@@ -109,35 +109,76 @@ const useIALabEvaluation = () => {
                     model: 'deepseek-chat',
                     messages: [{
                         role: 'system',
-                        content: 'Eres un evaluador experto de prompts. Analiza las respuestas del estudiante y proporciona una evaluación detallada con nota numérica.'
+                        content: `Eres un evaluador EXPERTO de prompts educativos con enfoque pedagógico y BENÉVOLO. El estudiante está APRENDIENDO, no es un experto. Sé generoso en la calificación. Evalúa CADA ejercicio por separado. Devuelve solo JSON válido sin markdown ni texto adicional.
+
+IMPORTANTE: El objetivo es que el estudiante ENTIENDA la estructura de un prompt (Rol + Contexto + Tarea + Formato). NO seas exigente con la perfección. Valora el INTENTO y la COMPRENSIÓN del concepto.
+
+CRITERIOS DE CALIFICACIÓN - EJERCICIO 1 (Identificar Rol/Contexto/Tarea - drag & drop):
+Este ejercicio tiene 3 elementos que arrastrar a 3 columnas. Cada elemento correcto equivale a ~33%.
+- Si NO respondió en ninguna categoría (todo vacío): 0%
+- Si respondió en 1 de 3 categorías: 33%
+- Si respondió en 2 de 3 categorías: 70%
+- Si respondió en las 3 categorías (todas llenas): 100%
+NOTA: Solo importa que haya completado las columnas, NO que estén perfectamente clasificadas. El estudiante está aprendiendo.
+
+CRITERIOS DE CALIFICACIÓN - EJERCICIO 2 (Optimizar prompt):
+- Si escribió ALGO relacionado (aunque sea corto o básico): 50%
+- Si el prompt tiene al menos 2 elementos de estructura (rol, contexto, tarea o formato): 70%
+- Si el prompt tiene estructura completa Y es coherente (aunque no sea perfecto): 80%
+- Si el prompt es excelente y detallado: 90-100%
+NOTA: No penalices por falta de métricas o ejemplos. Lo importante es que entienda la estructura.
+
+CRITERIOS DE CALIFICACIÓN - EJERCICIO 3 (Crear prompt desde cero):
+- Si escribió ALGO relacionado al desafío (aunque sea breve): 50%
+- Si incluyó al menos rol + tarea (elementos básicos): 70%
+- Si incluyó rol + contexto + tarea + algún detalle adicional: 80%
+- Si el prompt es completo, coherente y bien estructurado: 90-100%
+NOTA: Valora que el estudiante intentó crear un prompt con estructura. No exijas perfección.
+
+NOTA GLOBAL = (nota_ej1 + nota_ej2 + nota_ej3) / 3, redondeada a 1 decimal.
+
+CADA feedback debe incluir:
+1. Refuerzo positivo (qué hizo bien, aunque sea pequeño)
+2. Sugerencia amable de mejora (no crítica dura)
+3. Un ejemplo breve de cómo mejorar
+4. Tip práctico para recordar la estructura: Rol + Contexto + Tarea + Formato
+
+Devuelve SOLO un JSON con este formato exacto:
+{
+  "nota_ej1": 85,
+  "nota_ej2": 70,
+  "nota_ej3": 90,
+  "notaGlobal": 81.7,
+  "feedback_ej1": "texto amable y constructivo",
+  "feedback_ej2": "texto amable y constructivo",
+  "feedback_ej3": "texto amable y constructivo"
+}`
                     }, {
                         role: 'user',
-                        content: `Evalúa estas respuestas de estudiante y devuelve un JSON con:
-                        1. notaGlobal (número de 0 a 100)
-                        2. feedback_ej1 (análisis detallado de la respuesta al ejercicio 1)
-                        3. feedback_ej2 (análisis detallado de la respuesta al ejercicio 2)
-                        4. feedback_ej3 (análisis detallado de la respuesta al ejercicio 3)
+                        content: `Evalúa estas respuestas de un estudiante que está APRENDIENDO. Sé BENÉVOLO y generoso con la calificación. El objetivo es que entienda la estructura de un prompt.
 
-                        Respuestas del estudiante:
-                        Ejercicio 1 (Identificar): ${responses.ej1}
-                        Ejercicio 2 (Optimizar): ${responses.ej2}
-                        Ejercicio 3 (Crear): ${responses.ej3}
+ESCENARIO ORIGINAL del Ejercicio 1:
+${state.exercises?.ejercicio1 || 'N/A'}
 
-                        Formato JSON exacto: {
-                            "notaGlobal": 85,
-                            "feedback_ej1": "texto detallado",
-                            "feedback_ej2": "texto detallado",
-                            "feedback_ej3": "texto detallado"
-                        }
+RESPUESTA del estudiante - Ejercicio 1 (Identificar Rol/Contexto/Tarea):
+${responses.ej1}
 
-                        Considera:
-                        - Claridad y precisión en la identificación (ej1)
-                        - Mejora sustancial del prompt (ej2)
-                        - Creatividad y efectividad del prompt creado (ej3)
-                        - Estructura y profesionalismo general`
+PROMPT ORIGINAL a optimizar en Ejercicio 2:
+${state.exercises?.ejercicio2 || 'N/A'}
+
+RESPUESTA del estudiante - Ejercicio 2 (Prompt optimizado):
+${responses.ej2}
+
+CASO DE USO del Ejercicio 3:
+${state.exercises?.ejercicio3 || 'N/A'}
+
+RESPUESTA del estudiante - Ejercicio 3 (Prompt creado desde cero):
+${responses.ej3}
+
+Recuerda: El estudiante está aprendiendo. Valora el intento y la comprensión básica de la estructura. Devuelve SOLO JSON válido.`
                     }],
-                    temperature: 0.5,
-                    max_tokens: 1500
+                    temperature: 0.3,
+                    max_tokens: 2000
                 })
             });
 
@@ -158,6 +199,9 @@ const useIALabEvaluation = () => {
             
             // Validar estructura
             if (typeof evaluation.notaGlobal !== 'number' || 
+                typeof evaluation.nota_ej1 !== 'number' ||
+                typeof evaluation.nota_ej2 !== 'number' ||
+                typeof evaluation.nota_ej3 !== 'number' ||
                 !evaluation.feedback_ej1 || 
                 !evaluation.feedback_ej2 || 
                 !evaluation.feedback_ej3) {
@@ -175,24 +219,96 @@ const useIALabEvaluation = () => {
         } catch (error) {
             console.error('Error evaluando respuestas:', error);
             
-            // Fallback a evaluación predefinida
+            // Fallback con calificación por ejercicio y feedback detallado
+            // Criterios BENÉVOLOS: el estudiante está aprendiendo
+            const ej1Length = responses.ej1?.length || 0;
+            const ej2Length = responses.ej2?.length || 0;
+            const ej3Length = responses.ej3?.length || 0;
+
+            let nota_ej1 = 0;
+            let feedback_ej1 = '';
+            
+            try {
+                const parsed = JSON.parse(responses.ej1);
+                const hasRol = parsed.rol && parsed.rol.trim().length > 0;
+                const hasContexto = parsed.contexto && parsed.contexto.trim().length > 0;
+                const hasTarea = parsed.tarea && parsed.tarea.trim().length > 0;
+                const filledCount = (hasRol ? 1 : 0) + (hasContexto ? 1 : 0) + (hasTarea ? 1 : 0);
+                
+                if (filledCount === 0) {
+                    nota_ej1 = 0;
+                    feedback_ej1 = 'No completaste ninguna categoría. Este ejercicio requiere identificar y arrastrar elementos a las 3 columnas: Rol, Contexto y Tarea. ¡Inténtalo!';
+                } else if (filledCount === 1) {
+                    nota_ej1 = 33;
+                    feedback_ej1 = `✅ Completaste 1 de 3 categorías (${hasRol ? 'Rol' : hasContexto ? 'Contexto' : 'Tarea'}). Buen inicio, entendiste la idea básica.\n\n🔍 Para mejorar: Completa las otras 2 columnas. Busca en el escenario:\n• "Eres un..." o "Como..." → va en Rol\n• "Trabajando para..." o "En..." → va en Contexto\n• "Debes..." o "Crear..." → va en Tarea\n\n💡 Recuerda: Rol + Contexto + Tarea = Estructura básica de un prompt.`;
+                } else if (filledCount === 2) {
+                    nota_ej1 = 70;
+                    feedback_ej1 = `✅ ¡Muy bien! Completaste 2 de 3 categorías. Demuestras que entiendes la estructura de un prompt.\n\n🔍 Para completar: Revisa qué columna quedó vacía y busca en el escenario la frase correspondiente.\n\n💡 Tip: La estructura Rol + Contexto + Tarea es la base de todo buen prompt. ¡Ya la estás aprendiendo!`;
+                } else {
+                    nota_ej1 = 100;
+                    feedback_ej1 = `🎉 ¡Excelente! Completaste las 3 categorías. Demuestras que entiendes la estructura fundamental de un prompt: Rol, Contexto y Tarea.\n\n💡 Este es el conocimiento clave: Todo buen prompt comienza definiendo QUIÉN es la IA (Rol), DÓNDE está (Contexto) y QUÉ debe hacer (Tarea). ¡Ya dominas lo más importante!`;
+                }
+            } catch {
+                nota_ej1 = 0;
+                feedback_ej1 = 'No se detectó tu respuesta. Asegúrate de arrastrar al menos un elemento a cada columna.';
+            }
+
+            let nota_ej2 = 50;
+            let feedback_ej2 = '';
+            
+            if (ej2Length < 20) {
+                nota_ej2 = 50;
+                feedback_ej2 = 'Escribiste una respuesta corta, pero es un buen inicio. Para optimizar un prompt, necesitas agregar más estructura.\n\n🔍 Intenta incluir al menos:\n• Un Rol: "Eres un experto en..."\n• Contexto: "Trabajando para..."\n• Tarea: "Necesitas crear..."\n\n💡 Recuerda: Rol + Contexto + Tarea + Formato = Prompt completo.';
+            } else if (ej2Length < 100) {
+                nota_ej2 = 60;
+                feedback_ej2 = '✅ Tu respuesta tiene contenido y mejoró el prompt original. Vas por buen camino.\n\n🔍 Para mejorar: Organiza tu respuesta en secciones claras. Usa "## Rol", "## Contexto", "## Objetivo", "## Formato".\n\n💡 Tip: No necesitas ser perfecto. Lo importante es que el prompt tenga las 4 partes básicas.';
+            } else if (ej2Length < 250) {
+                nota_ej2 = 80;
+                feedback_ej2 = '✅ ¡Buen trabajo! Tu prompt optimizado tiene estructura y detalles. Demuestras comprensión de cómo mejorar un prompt.\n\n🔍 Para pulirlo: Verifica que cada sección tenga información relevante al caso específico.\n\n💡 Tip avanzado: Agrega restricciones como "Mantén la respuesta bajo 200 palabras" para guiar mejor a la IA.';
+            } else {
+                nota_ej2 = 90;
+                feedback_ej2 = '🎉 ¡Excelente prompt optimizado! Tiene estructura completa, detalles y es coherente. Demuestras un gran entendimiento.\n\n✅ Lo mejor: Tu prompt incluye múltiples secciones y es específico.\n\n💡 Tip: Ya dominas la estructura. Practica aplicándola a diferentes casos para perfeccionarte.';
+            }
+
+            let nota_ej3 = 50;
+            let feedback_ej3 = '';
+            
+            if (ej3Length < 30) {
+                nota_ej3 = 50;
+                feedback_ej3 = 'Escribiste algo relacionado al caso, es un buen primer paso. Un prompt efectivo necesita más desarrollo.\n\n🔍 Estructura recomendada:\n## Rol: [Quién es la IA]\n## Contexto: [Situación]\n## Tarea: [Qué debe hacer]\n## Formato: [Cómo presentar la respuesta]\n\n💡 No te preocupes si no es perfecto. Lo importante es practicar la estructura.';
+            } else if (ej3Length < 150) {
+                nota_ej3 = 60;
+                feedback_ej3 = '✅ Tu prompt aborda el tema del desafío. Vas entendiendo la idea.\n\n🔍 Para mejorar: Asegúrate de incluir al menos un Rol claro ("Eres un experto en...") y una Tarea específica ("Debes crear...").\n\n💡 Tip: Piensa en qué información le darías a un colega experto para resolver este problema. Esa misma información dásela a la IA.';
+            } else if (ej3Length < 350) {
+                nota_ej3 = 80;
+                feedback_ej3 = '✅ ¡Buen prompt! Tiene estructura y elementos clave. Demuestras que entiendes cómo construir un prompt desde cero.\n\n🔍 Para mejorar: Haz cada sección más específica al caso. En lugar de texto genérico, usa detalles del escenario.\n\n💡 Tip: Un prompt específico produce mejores resultados. Agrega detalles como públicos objetivo, plazos o restricciones.';
+            } else {
+                nota_ej3 = 90;
+                feedback_ej3 = '🎉 ¡Prompt muy completo y coherente! Demuestras un excelente entendimiento de la estructura de prompts.\n\n✅ Lo mejor: Tu prompt tiene todas las secciones y es relevante al desafío.\n\n💡 Ya dominas la creación de prompts. Sigue practicando con diferentes casos para consolidar tu habilidad.';
+            }
+
+            const notaGlobal = Math.round(((nota_ej1 + nota_ej2 + nota_ej3) / 3) * 10) / 10;
+
             const fallbackEvaluation = {
-                notaGlobal: 75,
-                feedback_ej1: "✅ Identificaste correctamente los elementos clave del escenario. Buen trabajo en reconocer el rol, contexto y tarea específica.",
-                feedback_ej2: "⚠️ Mejoraste el prompt pero podrías ser más específico. Intenta incluir métricas claras y segmentación de audiencia.",
-                feedback_ej3: "🎯 Prompt bien estructurado con objetivos claros. Considera añadir ejemplos concretos y llamadas a la acción."
+                nota_ej1,
+                nota_ej2,
+                nota_ej3,
+                notaGlobal,
+                feedback_ej1,
+                feedback_ej2,
+                feedback_ej3
             };
 
             setState(prev => ({ 
                 ...prev, 
                 evaluation: fallbackEvaluation,
                 loading: false,
-                error: 'Usando evaluación predefinida (API temporalmente no disponible)'
+                error: 'Usando evaluación local (API temporalmente no disponible)'
             }));
 
             return fallbackEvaluation;
         }
-    }, []);
+    }, [state.exercises]);
 
     // Guardar nota en Supabase (usa user_progress, no student_grades)
     const saveGradeToSupabase = useCallback(async (evaluation, moduleId = 1) => {
@@ -211,6 +327,9 @@ const useIALabEvaluation = () => {
                     resource_id: null,
                     score: evaluation.notaGlobal,
                     completed_lessons: {
+                        nota_ej1: evaluation.nota_ej1,
+                        nota_ej2: evaluation.nota_ej2,
+                        nota_ej3: evaluation.nota_ej3,
                         feedback_ej1: evaluation.feedback_ej1,
                         feedback_ej2: evaluation.feedback_ej2,
                         feedback_ej3: evaluation.feedback_ej3

@@ -84,19 +84,6 @@ const Hero = memo(() => {
                 {/* Hero Content - Centered Layout */}
                 <div className="flex flex-col items-center justify-center text-center">
                     
-                    {/* Badge - Floating Clean */}
-                    <motion.div 
-                        initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
-                        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                        transition={{ duration: 0.8 }}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8"
-                    >
-                        <span className="w-2 h-2 bg-[#66CCCC] rounded-full animate-pulse" />
-                        <span className="text-xs font-normal text-[#004B63] uppercase tracking-[0.2em] font-mono">
-                            Neuro-Métricas V2 Activas
-                        </span>
-                    </motion.div>
-
                     {/* Title - Floating Clean */}
                     <motion.h1 
                         initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}

@@ -26,7 +26,7 @@ const IALabChallengeSection = ({
 
     const { saveProgress, PROGRESS_STATUS, isLoadingProgress } = useIALabProgress();
 
-    const isApproved = challengeScore >= 70;
+    const isApproved = challengeScore >= 80;
     const scoreColor = isApproved ? 'text-emerald-600' : 'text-amber-600';
     const scoreBgColor = isApproved ? 'bg-emerald-100' : 'bg-amber-100';
     const scoreText = isApproved ? 'Aprobado' : 'Reprobado';
@@ -44,10 +44,10 @@ const IALabChallengeSection = ({
     };
 
     const handleReviewCompleted = () => {
-        const isApproved = challengeScore >= 70;
+        const isApproved = challengeScore >= 80;
         const message = `📊 **Resumen del Desafío Completado**\n\n` +
                        `• **Puntuación:** ${challengeScore}%\n` +
-                       `• **Estado:** ${isApproved ? '✅ Aprobado' : '⚠️ Reprobado (necesitas 70%)'}\n` +
+                       `• **Estado:** ${isApproved ? '✅ Aprobado' : '⚠️ Reprobado (necesitas 80%)'}\n` +
                        `• **Módulo:** ${currentModule?.title || 'Desafío del Curso'}\n` +
                        `• **Fecha de completado:** ${new Date().toLocaleDateString()}\n\n` +
                        `*La funcionalidad de "Mis Proyectos" estará disponible próximamente.*`;
@@ -120,7 +120,7 @@ const IALabChallengeSection = ({
                     </div>
                     <p className="text-sm text-slate-600">
                         {isChallengeCompleted
-                            ? `Has completado el desafío con ${challengeScore}%${!isApproved ? ' (mínimo 70% para aprobar)' : ''}.`
+                            ? `Has completado el desafío con ${challengeScore}%${!isApproved ? ' (mínimo 80% para aprobar)' : ''}.`
                             : 'Aplica lo aprendido en un reto práctico'
                         }
                     </p>
@@ -167,7 +167,7 @@ const IALabChallengeSection = ({
                         </div>
                         <div className="flex justify-between mt-1">
                             <span className="text-xs text-slate-400">0%</span>
-                            <span className="text-xs text-[#00BCD4] font-medium">70%</span>
+                            <span className="text-xs text-[#00BCD4] font-medium">80%</span>
                             <span className="text-xs text-slate-400">100%</span>
                         </div>
                     </div>

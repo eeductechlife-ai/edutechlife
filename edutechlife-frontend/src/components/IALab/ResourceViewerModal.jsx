@@ -429,7 +429,7 @@ const ResourceViewerModal = ({
   onOpenImmersiveView = null,
   onOpenOVA = null
 }) => {
-  const { activeMod, markResourceAsViewed: markResourceInContext } = useIALabContext();
+  const { activeMod, markResourceAsViewed: markResourceInContext, recordLastTopic } = useIALabContext();
   const { trackResourceViewed } = useIALabProgress();
   
   // Estado para controlar si se marcó como visto
@@ -590,6 +590,25 @@ const ResourceViewerModal = ({
       markResourceInContext(activeMod, resource.id);
       const resourceType = resource.type || 'document';
       await trackResourceViewed(activeMod, resource.id, resourceType);
+
+      // Registrar ultimo tema visto para notificaciones de inactividad
+      if (recordLastTopic) {
+        const typeLabels = {
+          video: 'Video',
+          infographic: 'Infografia',
+          document: 'Documento',
+          ova_interactive: 'OVA Interactivo',
+          lab: 'Laboratorio',
+          reading: 'Lectura',
+        };
+        recordLastTopic(
+          activeMod,
+          '',
+          resourceType,
+          resource.title || `${typeLabels[resourceType] || 'Recurso'}`,
+          resource.id
+        );
+      }
     }
   };
 

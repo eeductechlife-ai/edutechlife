@@ -1,15 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabContext } from '../../context/IALabContext';
+import { useActivityTracker } from '../../hooks/useActivityTracker';
 
-const IALabEvaluationResults = ({ evaluation, onClose }) => {
+const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge' }) => {
     const { activeMod } = useIALabContext();
+    const { trackActivity } = useActivityTracker();
     const [gradeSaved, setGradeSaved] = useState(false);
     const [activeTab, setActiveTab] = useState('overview');
 
     useEffect(() => {
         const timer = setTimeout(() => {
             setGradeSaved(true);
+            if (evaluation?.notaGlobal) {
+                trackActivity({
+                    moduleId: activeMod,
+                    type: activityType,
+                    resourceId: `m${activeMod}_${activityType}`,
+                    title: `${activityType === 'exam' ? 'Examen' : 'Desafío'} Módulo ${activeMod}`,
+                    score: evaluation.notaGlobal,
+                    metadata: {
+                        nota_ej1: evaluation.nota_ej1,
+                        nota_ej2: evaluation.nota_ej2,
+                        nota_ej3: evaluation.nota_ej3,
+                        feedback_ej1: evaluation.feedback_ej1,
+                        feedback_ej2: evaluation.feedback_ej2,
+                        feedback_ej3: evaluation.feedback_ej3,
+                    }
+                });
+            }
         }, 1500);
         return () => clearTimeout(timer);
     }, []);
@@ -35,7 +54,7 @@ const IALabEvaluationResults = ({ evaluation, onClose }) => {
         );
     }
 
-    const isApproved = evaluation.notaGlobal >= 70;
+    const isApproved = evaluation.notaGlobal >= 80;
     const scoreColor = isApproved ? 'text-emerald-600' : 'text-[#004B63]';
     const scoreBgColor = isApproved ? 'bg-emerald-50 border-emerald-200' : 'bg-[#004B63]/5 border-[#004B63]/10';
     const scoreBarColor = isApproved ? 'from-emerald-500 to-emerald-400' : 'from-[#004B63] to-[#00BCD4]';
@@ -156,7 +175,7 @@ const IALabEvaluationResults = ({ evaluation, onClose }) => {
                                             <div className="space-y-4">
                                                 <div>
                                                     <div className="flex items-center justify-between mb-1">
-                                                        <span className="text-slate-500">Estado</span>
+                                                        <span className="text-slate-500">Estado (mínimo 80%)</span>
                                                         <span className={`px-3 py-1 rounded-full text-sm font-medium ${
                                                             isApproved ? 'bg-emerald-50 text-emerald-600' : 'bg-[#004B63]/10 text-[#004B63]'
                                                         }`}>
@@ -172,7 +191,7 @@ const IALabEvaluationResults = ({ evaluation, onClose }) => {
                                                     </div>
                                                 </div>
 
-                                                <div className="grid grid-cols-2 gap-4">
+                                                 <div className="grid grid-cols-2 gap-4">
                                                     <div className="bg-slate-50 rounded-lg p-4">
                                                         <div className="text-2xl font-bold text-slate-800 mb-1">
                                                             {isApproved ? 'Alto' : 'Medio'}
@@ -186,36 +205,86 @@ const IALabEvaluationResults = ({ evaluation, onClose }) => {
                                                         <div className="text-sm text-slate-500">Ejercicios completados</div>
                                                     </div>
                                                 </div>
+
+                                                <div className="pt-4 border-t border-slate-100">
+                                                    <h4 className="text-sm font-semibold text-slate-600 mb-3">Desglose por Ejercicio</h4>
+                                                    <div className="space-y-2">
+                                                        <div className="flex items-center justify-between text-sm">
+                                                            <span className="text-slate-500">Ej 1: Identificar</span>
+                                                            <span className={`font-semibold ${
+                                                                (evaluation.nota_ej1 || 0) >= 80 ? 'text-emerald-600' :
+                                                                (evaluation.nota_ej1 || 0) >= 60 ? 'text-amber-600' : 'text-red-600'
+                                                            }`}>{evaluation.nota_ej1 || 0}%</span>
+                                                        </div>
+                                                        <div className="flex items-center justify-between text-sm">
+                                                            <span className="text-slate-500">Ej 2: Optimizar</span>
+                                                            <span className={`font-semibold ${
+                                                                (evaluation.nota_ej2 || 0) >= 80 ? 'text-emerald-600' :
+                                                                (evaluation.nota_ej2 || 0) >= 60 ? 'text-amber-600' : 'text-red-600'
+                                                            }`}>{evaluation.nota_ej2 || 0}%</span>
+                                                        </div>
+                                                        <div className="flex items-center justify-between text-sm">
+                                                            <span className="text-slate-500">Ej 3: Crear</span>
+                                                            <span className={`font-semibold ${
+                                                                (evaluation.nota_ej3 || 0) >= 80 ? 'text-emerald-600' :
+                                                                (evaluation.nota_ej3 || 0) >= 60 ? 'text-amber-600' : 'text-red-600'
+                                                            }`}>{evaluation.nota_ej3 || 0}%</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* Recomendaciones */}
+                                {/* Recomendaciones personalizadas */}
                                 <div className="bg-white border border-slate-200 rounded-2xl p-6">
-                                    <h3 className="text-xl font-bold text-slate-800 mb-4">Recomendaciones</h3>
+                                    <h3 className="text-xl font-bold text-slate-800 mb-4">Recomendaciones Personalizadas</h3>
                                     <div className="space-y-4">
                                         {isApproved ? (
                                             <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
                                                 <div className="flex items-center gap-3 mb-2">
                                                     <Icon name="fa-star" className="text-emerald-500" />
-                                                    <h4 className="font-semibold text-slate-800">¡Excelente trabajo!</h4>
+                                                    <h4 className="font-semibold text-slate-800">¡Felicitaciones! Desafío Aprobado</h4>
                                                 </div>
                                                 <p className="text-slate-600">
-                                                    Has demostrado un entendimiento sólido de los principios de diseño de prompts. 
-                                                    Continúa practicando con casos más complejos para alcanzar el nivel experto.
+                                                    {evaluation.notaGlobal >= 90 
+                                                        ? 'Desempeño excepcional. Dominas los principios de diseño de prompts. Estás listo para casos más complejos.'
+                                                        : evaluation.notaGlobal >= 85
+                                                        ? 'Muy buen trabajo. Tienes una base sólida. Practica con casos más complejos para alcanzar el nivel experto.'
+                                                        : 'Aprobaste el desafío. Revisa el feedback de cada ejercicio para identificar áreas de mejora y perfeccionar tus habilidades.'
+                                                    }
                                                 </p>
                                             </div>
                                         ) : (
                                             <div className="bg-[#004B63]/5 border border-[#004B63]/10 rounded-xl p-4">
                                                 <div className="flex items-center gap-3 mb-2">
                                                     <Icon name="fa-lightbulb" className="text-[#004B63]" />
-                                                    <h4 className="font-semibold text-slate-800">Áreas de mejora</h4>
+                                                    <h4 className="font-semibold text-slate-800">No te desanimes, puedes mejorar</h4>
                                                 </div>
-                                                <p className="text-slate-600">
-                                                    Enfócate en ser más específico en tus prompts y definir métricas claras. 
-                                                    Revisa los ejercicios del módulo antes de intentar nuevamente.
+                                                <p className="text-slate-600 mb-3">
+                                                    Necesitas 80% para aprobar. Aquí tienes recomendaciones específicas basadas en tu desempeño:
                                                 </p>
+                                                <div className="space-y-2">
+                                                    {(evaluation.nota_ej1 || 0) < 80 && (
+                                                        <div className="flex items-start gap-2 text-sm text-slate-600">
+                                                            <Icon name="fa-search" className="text-[#00BCD4] mt-0.5" />
+                                                            <span><strong>Ejercicio 1:</strong> Practica identificando Rol, Contexto y Tarea en cualquier texto. Busca "Eres un..." para el Rol, "trabajando para..." para Contexto, y "debes/crear..." para Tarea.</span>
+                                                        </div>
+                                                    )}
+                                                    {(evaluation.nota_ej2 || 0) < 80 && (
+                                                        <div className="flex items-start gap-2 text-sm text-slate-600">
+                                                            <Icon name="fa-magic" className="text-emerald-500 mt-0.5" />
+                                                            <span><strong>Ejercicio 2:</strong> Usa la estructura ## Rol + ## Contexto + ## Objetivo + ## Audiencia + ## Formato. Agrega métricas específicas y ejemplos concretos.</span>
+                                                        </div>
+                                                    )}
+                                                    {(evaluation.nota_ej3 || 0) < 80 && (
+                                                        <div className="flex items-start gap-2 text-sm text-slate-600">
+                                                            <Icon name="fa-plus-circle" className="text-[#004B63] mt-0.5" />
+                                                            <span><strong>Ejercicio 3:</strong> Construye prompts completos desde cero. Incluye restricciones claras, ejemplos de lo que esperas, y el formato exacto de respuesta.</span>
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
                                         )}
 
@@ -264,6 +333,7 @@ const IALabEvaluationResults = ({ evaluation, onClose }) => {
                                     { 
                                         title: 'Ejercicio 1: Identificar', 
                                         feedback: evaluation.feedback_ej1,
+                                        nota: evaluation.nota_ej1,
                                         icon: 'fa-search',
                                         color: 'text-[#00BCD4]',
                                         bgColor: 'bg-[#00BCD4]/10'
@@ -271,6 +341,7 @@ const IALabEvaluationResults = ({ evaluation, onClose }) => {
                                     { 
                                         title: 'Ejercicio 2: Optimizar', 
                                         feedback: evaluation.feedback_ej2,
+                                        nota: evaluation.nota_ej2,
                                         icon: 'fa-magic',
                                         color: 'text-emerald-500',
                                         bgColor: 'bg-emerald-500/10'
@@ -278,6 +349,7 @@ const IALabEvaluationResults = ({ evaluation, onClose }) => {
                                     { 
                                         title: 'Ejercicio 3: Crear', 
                                         feedback: evaluation.feedback_ej3,
+                                        nota: evaluation.nota_ej3,
                                         icon: 'fa-plus-circle',
                                         color: 'text-[#004B63]',
                                         bgColor: 'bg-[#004B63]/10'
@@ -288,9 +360,29 @@ const IALabEvaluationResults = ({ evaluation, onClose }) => {
                                             <div className={`w-12 h-12 rounded-xl ${exercise.bgColor} flex items-center justify-center`}>
                                                 <Icon name={exercise.icon} className={`${exercise.color} text-lg`} />
                                             </div>
-                                            <div>
+                                            <div className="flex-1">
                                                 <h3 className="text-lg font-bold text-slate-800">{exercise.title}</h3>
                                                 <p className="text-slate-500 text-sm">Análisis detallado de Edutechlife</p>
+                                            </div>
+                                            <div className={`px-4 py-2 rounded-lg text-lg font-bold ${
+                                                exercise.nota >= 80 ? 'bg-emerald-50 text-emerald-600' :
+                                                exercise.nota >= 60 ? 'bg-amber-50 text-amber-600' :
+                                                'bg-red-50 text-red-600'
+                                            }`}>
+                                                {exercise.nota}%
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="mb-3">
+                                            <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                                                <div 
+                                                    className={`h-full rounded-full transition-all duration-500 ${
+                                                        exercise.nota >= 80 ? 'bg-gradient-to-r from-emerald-500 to-emerald-400' :
+                                                        exercise.nota >= 60 ? 'bg-gradient-to-r from-amber-500 to-amber-400' :
+                                                        'bg-gradient-to-r from-red-500 to-red-400'
+                                                    }`}
+                                                    style={{ width: `${exercise.nota}%` }}
+                                                ></div>
                                             </div>
                                         </div>
                                         
@@ -315,7 +407,7 @@ const IALabEvaluationResults = ({ evaluation, onClose }) => {
                             <div className="space-y-4">
                                 <div>
                                     <div className="flex items-center justify-between mb-1">
-                                        <span className="text-slate-500">Puntuación</span>
+                                        <span className="text-slate-500">Puntuación Global</span>
                                         <span className={`text-lg font-bold ${scoreColor}`}>
                                             {evaluation.notaGlobal}/100
                                         </span>
@@ -328,6 +420,66 @@ const IALabEvaluationResults = ({ evaluation, onClose }) => {
                                     </div>
                                 </div>
 
+                                <div className="pt-4 border-t border-slate-100">
+                                    <h4 className="text-sm font-semibold text-slate-600 mb-3">Notas por Ejercicio</h4>
+                                    <div className="space-y-3">
+                                        <div>
+                                            <div className="flex items-center justify-between mb-1">
+                                                <span className="text-sm text-slate-500">Ej 1: Identificar</span>
+                                                <span className={`text-sm font-bold ${
+                                                    (evaluation.nota_ej1 || 0) >= 80 ? 'text-emerald-600' :
+                                                    (evaluation.nota_ej1 || 0) >= 60 ? 'text-amber-600' : 'text-red-600'
+                                                }`}>{evaluation.nota_ej1 || 0}%</span>
+                                            </div>
+                                            <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                                <div 
+                                                    className={`h-full rounded-full ${
+                                                        (evaluation.nota_ej1 || 0) >= 80 ? 'bg-emerald-500' :
+                                                        (evaluation.nota_ej1 || 0) >= 60 ? 'bg-amber-500' : 'bg-red-500'
+                                                    }`}
+                                                    style={{ width: `${evaluation.nota_ej1 || 0}%` }}
+                                                ></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div className="flex items-center justify-between mb-1">
+                                                <span className="text-sm text-slate-500">Ej 2: Optimizar</span>
+                                                <span className={`text-sm font-bold ${
+                                                    (evaluation.nota_ej2 || 0) >= 80 ? 'text-emerald-600' :
+                                                    (evaluation.nota_ej2 || 0) >= 60 ? 'text-amber-600' : 'text-red-600'
+                                                }`}>{evaluation.nota_ej2 || 0}%</span>
+                                            </div>
+                                            <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                                <div 
+                                                    className={`h-full rounded-full ${
+                                                        (evaluation.nota_ej2 || 0) >= 80 ? 'bg-emerald-500' :
+                                                        (evaluation.nota_ej2 || 0) >= 60 ? 'bg-amber-500' : 'bg-red-500'
+                                                    }`}
+                                                    style={{ width: `${evaluation.nota_ej2 || 0}%` }}
+                                                ></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div className="flex items-center justify-between mb-1">
+                                                <span className="text-sm text-slate-500">Ej 3: Crear</span>
+                                                <span className={`text-sm font-bold ${
+                                                    (evaluation.nota_ej3 || 0) >= 80 ? 'text-emerald-600' :
+                                                    (evaluation.nota_ej3 || 0) >= 60 ? 'text-amber-600' : 'text-red-600'
+                                                }`}>{evaluation.nota_ej3 || 0}%</span>
+                                            </div>
+                                            <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                                <div 
+                                                    className={`h-full rounded-full ${
+                                                        (evaluation.nota_ej3 || 0) >= 80 ? 'bg-emerald-500' :
+                                                        (evaluation.nota_ej3 || 0) >= 60 ? 'bg-amber-500' : 'bg-red-500'
+                                                    }`}
+                                                    style={{ width: `${evaluation.nota_ej3 || 0}%` }}
+                                                ></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div className={`rounded-xl p-4 border ${scoreBgColor}`}>
                                     <div className="flex items-center gap-3 mb-2">
                                         <Icon 
@@ -335,13 +487,13 @@ const IALabEvaluationResults = ({ evaluation, onClose }) => {
                                             className={isApproved ? 'text-emerald-500' : 'text-[#004B63]'}
                                         />
                                         <h4 className={`font-semibold ${isApproved ? 'text-emerald-700' : 'text-[#004B63]'}`}>
-                                            {isApproved ? 'Desempeño destacado' : 'Progreso registrado'}
+                                            {isApproved ? '¡Desafío Aprobado!' : 'No alcanzaste el 80% mínimo'}
                                         </h4>
                                     </div>
                                     <p className={`text-sm ${isApproved ? 'text-emerald-600' : 'text-slate-600'}`}>
                                         {isApproved 
-                                            ? 'Has demostrado dominio en diseño de prompts'
-                                            : 'Continúa practicando para mejorar tu puntuación'
+                                            ? 'Has demostrado dominio en diseño de prompts. ¡Excelente trabajo!'
+                                            : 'Necesitas 80% para aprobar. Revisa el feedback de cada ejercicio y vuelve a intentarlo.'
                                         }
                                     </p>
                                 </div>
@@ -353,9 +505,9 @@ const IALabEvaluationResults = ({ evaluation, onClose }) => {
                                     </div>
                                     <div className="text-center bg-slate-50 rounded-lg p-3">
                                         <div className="text-2xl font-bold text-slate-800">
-                                            {isApproved ? 'Alto' : 'Medio'}
+                                            {isApproved ? '80%+' : 'Reintentar'}
                                         </div>
-                                        <div className="text-xs text-slate-500">Nivel</div>
+                                        <div className="text-xs text-slate-500">{isApproved ? 'Aprobado' : 'Mínimo'}</div>
                                     </div>
                                 </div>
                             </div>

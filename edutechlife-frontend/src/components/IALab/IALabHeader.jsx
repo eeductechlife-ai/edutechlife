@@ -6,14 +6,18 @@ import NotificationPanel from '../NotificationPanel';
 import { useIALabContext } from '../../context/IALabContext';
 import { useNotification } from '../../context/NotificationContext';
 import { useCourseReminders } from '../../hooks/useCourseReminders';
+import { useBrowserNotifications } from '../../hooks/useBrowserNotifications';
 
 const IALabHeader = () => {
   const { onBack, courseCompleted, setShowCertificateModal } = useIALabContext();
-  const { unreadCount } = useNotification();
+  const { unreadCount, createNotification } = useNotification();
   const [notifOpen, setNotifOpen] = useState(false);
 
   // Activar recordatorios de curso al montar
   useCourseReminders();
+  
+  // Notificaciones del navegador (push)
+  useBrowserNotifications();
 
   return (
     <header className="h-16 flex items-center justify-between px-6 bg-white border-b border-slate-200 w-full shadow-sm">

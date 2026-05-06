@@ -1,95 +1,163 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import { useUser } from '@clerk/react';
 import { useNotification } from '../context/NotificationContext';
-import { supabase } from '../lib/supabase';
+import { useProgressContext } from '../context/ProgressContext';
 
 const MODULE_NAMES = {
-  1: 'Fundamentos de IA',
-  2: 'Prompt Engineering',
-  3: 'Herramientas de IA',
-  4: 'Ética y Seguridad',
-  5: 'Proyecto Final',
+  1: 'Ingenieria de Prompts',
+  2: 'Potencia ChatGPT',
+  3: 'Rastreo Profundo',
+  4: 'Inmersion NotebookLM',
+  5: 'Proyecto Disruptivo',
 };
 
-const REMINDER_DAYS = 3;
+const REMINDER_DAYS = 2;
 const STORAGE_KEY = 'ialab_last_reminder_check';
+const LAST_NOTIFIED_ABSENCE = 'ialab_last_notified_absence';
+const NOTIFIED_EXAMS_KEY = 'ialab_notified_exams';
 
 export const useCourseReminders = () => {
   const { user } = useUser();
   const { createNotification } = useNotification();
+  const { completedModules, completedExams, courseProgress } = useProgressContext();
   const hasCheckedRef = useRef(false);
+
+  const getNextModule = useCallback((completedMods) => {
+    return [1, 2, 3, 4, 5].find(m => !completedMods.includes(m));
+  }, []);
+
+  const getLastViewedTopic = useCallback(() => {
+    try {
+      const raw = localStorage.getItem('ialab_last_viewed_topic');
+      if (!raw) return null;
+      return JSON.parse(raw);
+    } catch {
+      return null;
+    }
+  }, []);
+
+  const checkInactivity = useCallback(async () => {
+    if (!user?.id) return;
+
+    const now = new Date();
+    const lastCheck = localStorage.getItem(STORAGE_KEY);
+    
+    if (lastCheck) {
+      const hoursSinceCheck = (now - new Date(lastCheck)) / (1000 * 60 * 60);
+      if (hoursSinceCheck < 24) return;
+    }
+
+    if (completedModules.length >= 5) return;
+
+    const lastActivity = localStorage.getItem('ialab_last_activity_date');
+    if (!lastActivity) {
+      localStorage.setItem('ialab_last_activity_date', now.toISOString());
+      return;
+    }
+
+    const daysSince = (now - new Date(lastActivity)) / (1000 * 60 * 60 * 24);
+    if (daysSince < REMINDER_DAYS) return;
+
+    const daysFloor = Math.floor(daysSince);
+    const lastNotifiedDays = parseInt(localStorage.getItem(LAST_NOTIFIED_ABSENCE) || '0');
+
+    if (daysFloor <= lastNotifiedDays) return;
+
+    const nextModule = getNextModule(completedModules);
+    if (!nextModule) return;
+
+    const moduleName = MODULE_NAMES[nextModule] || `Modulo ${nextModule}`;
+    const lastTopic = getLastViewedTopic();
+
+    let title, message;
+
+    const topicContext = lastTopic
+      ? `Tu ultima clase fue: "${lastTopic.resourceTitle}" en ${lastTopic.moduleName}.`
+      : '';
+
+    if (daysFloor >= 7) {
+      title = '¡Te extranamos!';
+      message = `Han pasado ${daysFloor} dias sin estudiar. ${topicContext} ${moduleName} te esta esperando. ¡Vuelve y continua tu progreso!`;
+    } else if (daysFloor >= 4) {
+      title = '¡No te pierdas!';
+      message = `${daysFloor} dias sin avanzar. ${topicContext} Retoma ${moduleName} y sigue aprendiendo.`;
+    } else {
+      title = '¡Vuelve a aprender!';
+      message = `${daysFloor} dias sin estudiar. ${topicContext} Continua con: ${moduleName}`;
+    }
+
+    await createNotification({
+      type: 'lesson_reminder',
+      title,
+      message,
+      metadata: { moduleId: nextModule, daysInactive: daysFloor },
+    });
+
+    localStorage.setItem(LAST_NOTIFIED_ABSENCE, daysFloor.toString());
+    localStorage.setItem(STORAGE_KEY, now.toISOString());
+  }, [user?.id, completedModules, createNotification, getNextModule, getLastViewedTopic]);
+
+  const checkPendingExams = useCallback(async () => {
+    if (!user?.id) return;
+
+    const now = new Date();
+    const lastCheck = localStorage.getItem(STORAGE_KEY);
+    if (lastCheck) {
+      const hoursSinceCheck = (now - new Date(lastCheck)) / (1000 * 60 * 60);
+      if (hoursSinceCheck < 24) return;
+    }
+
+    const notifiedExamsStr = localStorage.getItem(NOTIFIED_EXAMS_KEY) || '[]';
+    let notifiedExams;
+    try {
+      notifiedExams = JSON.parse(notifiedExamsStr);
+    } catch {
+      notifiedExams = [];
+    }
+
+    const incompleteExams = [1, 2, 3, 4, 5].filter(m => {
+      const examScore = completedExams[m];
+      const isApproved = typeof examScore === 'number' ? examScore >= 80 : !!examScore;
+      return !isApproved && m <= completedModules.length + 1;
+    });
+
+    for (const modId of incompleteExams) {
+      if (notifiedExams.includes(modId)) continue;
+
+      const moduleName = MODULE_NAMES[modId] || `Modulo ${modId}`;
+
+      await createNotification({
+        type: 'exam_reminder',
+        title: 'Desafio pendiente',
+        message: `Tienes el desafio de ${moduleName} sin completar. ¡No lo dejes para despues!`,
+        metadata: { moduleId: modId },
+      });
+
+      notifiedExams.push(modId);
+    }
+
+    if (notifiedExams.length > 0) {
+      localStorage.setItem(NOTIFIED_EXAMS_KEY, JSON.stringify(notifiedExams));
+    }
+  }, [user?.id, completedModules, completedExams, createNotification]);
 
   useEffect(() => {
     if (!user?.id || hasCheckedRef.current) return;
+    hasCheckedRef.current = true;
 
-    checkReminders();
-  }, [user?.id]);
+    checkInactivity();
+    checkPendingExams();
+  }, [user?.id, checkInactivity, checkPendingExams]);
 
-  const checkReminders = async () => {
-    if (!user?.id) return;
+  useEffect(() => {
+    if (!user?.id || !hasCheckedRef.current) return;
 
-    const lastCheck = localStorage.getItem(STORAGE_KEY);
-    const now = new Date();
+    const timer = setTimeout(() => {
+      checkInactivity();
+    }, 5000);
 
-    if (lastCheck) {
-      const lastCheckDate = new Date(lastCheck);
-      const hoursSince = (now - lastCheckDate) / (1000 * 60 * 60);
-      if (hoursSince < 24) return;
-    }
+    return () => clearTimeout(timer);
+  }, [courseProgress, completedModules, user?.id, checkInactivity]);
 
-    try {
-      const { data: progress, error } = await supabase
-        .from('user_progress')
-        .select('module_id, activity_type, is_completed, updated_at')
-        .eq('user_id', user.id)
-        .order('updated_at', { ascending: false });
-
-      if (error) throw error;
-
-      const completedLessons = (progress || []).filter((p) => p.is_completed);
-      const incompleteLessons = (progress || []).filter((p) => !p.is_completed);
-
-      if (completedLessons.length === 0 && incompleteLessons.length === 0) return;
-
-      const lastCompleted = completedLessons[0];
-      if (lastCompleted?.completed_at) {
-        const daysSinceLastActivity = (now - new Date(lastCompleted.completed_at)) / (1000 * 60 * 60 * 24);
-
-        if (daysSinceLastActivity >= REMINDER_DAYS && incompleteLessons.length > 0) {
-          const nextLesson = incompleteLessons[0];
-          const moduleName = MODULE_NAMES[nextLesson.module_id] || `Módulo ${nextLesson.module_id}`;
-
-          await createNotification({
-            type: 'lesson_reminder',
-            title: '¡Sigue aprendiendo!',
-            message: `Llevas ${Math.floor(daysSinceLastActivity)} días sin estudiar. Continúa con: ${moduleName}`,
-            metadata: { moduleId: nextLesson.module_id, daysInactive: Math.floor(daysSinceLastActivity) },
-          });
-        }
-      }
-
-      const pendingExams = (progress || []).filter(
-        (p) => p.content_type === 'exam' && !p.is_completed
-      );
-
-      if (pendingExams.length > 0) {
-        const examModule = pendingExams[0];
-        const moduleName = MODULE_NAMES[examModule.module_id] || `Módulo ${examModule.module_id}`;
-
-        await createNotification({
-          type: 'exam_reminder',
-          title: 'Examen pendiente',
-          message: `Tienes el examen de ${moduleName} sin completar. ¡No lo dejes para después!`,
-          metadata: { moduleId: examModule.module_id },
-        });
-      }
-    } catch (err) {
-      console.error('Error checking course reminders:', err.message);
-    } finally {
-      localStorage.setItem(STORAGE_KEY, now.toISOString());
-      hasCheckedRef.current = true;
-    }
-  };
-
-  return { checkReminders };
+  return { checkInactivity, checkPendingExams };
 };

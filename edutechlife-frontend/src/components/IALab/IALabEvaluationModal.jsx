@@ -226,20 +226,12 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
         setTimeout(() => setSecurityWarning(''), 3000);
     }, [securityViolations, resetEvaluation, onClose]);
 
-    // Handler para cerrar modal (con confirmación si hay progreso)
+    // Handler para cerrar modal
     const handleCloseModal = useCallback(() => {
-        if (state.step > 1 || state.responses.ej1 || state.responses.ej2 || state.responses.ej3) {
-            if (confirm('⚠️ Tienes progreso sin guardar. ¿Estás seguro de que quieres salir? Tu progreso se guardará como borrador.')) {
-                resetEvaluation();
-                hasRestoredDraftRef.current = false;
-                onClose();
-            }
-        } else {
-            resetEvaluation();
-            hasRestoredDraftRef.current = false;
-            onClose();
-        }
-    }, [state.step, state.responses, resetEvaluation, onClose]);
+        resetEvaluation();
+        hasRestoredDraftRef.current = false;
+        onClose();
+    }, [resetEvaluation, onClose]);
 
     // Handler para avanzar al siguiente paso
     const handleNextStep = useCallback(() => {

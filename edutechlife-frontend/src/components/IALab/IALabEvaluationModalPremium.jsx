@@ -9,7 +9,7 @@ import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
  * SEPARACIÓN DE CONCERNS: La lógica de guardado se ejecuta aquí
  */
 const IALabEvaluationModalPremium = ({ isOpen, onClose }) => {
-    const { user, activeMod, setIsChallengeCompleted, setChallengeScore, markActivityComplete, markExamComplete, markModuleComplete, refreshProgress } = useIALabContext();
+    const { user, activeMod, setIsChallengeCompleted, setChallengeScore, markActivityComplete, markExamComplete, markChallengeComplete, updateModuleActivity, refreshProgress, recordLastTopic, modules } = useIALabContext();
     const { saveProgress, PROGRESS_STATUS, trackChallengeResult } = useIALabProgress();
     const [isProcessing, setIsProcessing] = useState(false);
     
@@ -42,20 +42,36 @@ const IALabEvaluationModalPremium = ({ isOpen, onClose }) => {
         
         try {
             // Guardar desafío en user_progress (ruta IALab)
-            await trackChallengeResult(activeMod, score);
+            const challengeResult = await trackChallengeResult(activeMod, score);
             
-            // Marcar examen como completado en ProgressContext (esto también marca el módulo)
-            await markExamComplete(activeMod);
+            // Marcar desafio en sistema gamificado (solo suma progreso si score >= 80%)
+            await updateModuleActivity(activeMod, 'challenge', score >= 80, score);
             
             // Marcar como actividad completada en ProgressContext (ruta global)
             await markActivityComplete(activeMod);
+            
+            // Sincronizar con localStorage si el desafio fue aprobado
+            if (markChallengeComplete && score >= 80) {
+                await markChallengeComplete(activeMod, score);
+            }
+            
+            // Registrar ultimo tema visto (desafio/examen del modulo)
+            const moduleName = modules?.find(m => m.id === activeMod)?.title || `Modulo ${activeMod}`;
+            if (recordLastTopic) {
+              recordLastTopic(activeMod, moduleName, 'exam', `Desafio - ${moduleName}`, `exam_${activeMod}`);
+            }
+            
+            // Actualizar estado UI
+            setIsChallengeCompleted(true);
+            setChallengeScore(score);
             
             // Recargar progreso global desde la DB para asegurar consistencia
             setTimeout(() => {
                 refreshProgress?.();
             }, 1000);
             
-            console.log(`✅ Desafío completado: módulo ${activeMod}, nota ${score}%`);
+            const passed = score >= 80;
+            console.log(`✅ Desafío completado: módulo ${activeMod}, nota ${score}% ${passed ? '(APROBADO)' : '(REPROBADO - no suma progreso)'}`);
         } catch (error) {
             console.error('❌ Error procesando resultado del desafío:', error);
         } finally {

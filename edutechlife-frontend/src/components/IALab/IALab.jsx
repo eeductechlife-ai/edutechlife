@@ -24,11 +24,13 @@ import CertificatesModal from '../modals/CertificatesModal';
  * @returns {JSX.Element} Componente IALab completo
  */
 const IALabContent = () => {
-    const { showPremiumEvaluationModal, setShowPremiumEvaluationModal, user, completedModules, courseProgress, activeMod, showCertificateModal, setShowCertificateModal } = useIALabContext();
+    const { showPremiumEvaluationModal, setShowPremiumEvaluationModal, user, completedModules, courseProgress, activeMod, showCertificateModal, setShowCertificateModal, completedExams, challengeScores } = useIALabContext();
     const [showExamModal, setShowExamModal] = useState(false);
     const [showQuizModal, setShowQuizModal] = useState(false);
     const [showValerioPanel, setShowValerioPanel] = useState(false);
     const [showMobileMenu, setShowMobileMenu] = useState(false);
+    const [showExamResult, setShowExamResult] = useState(false);
+    const [showChallengeResult, setShowChallengeResult] = useState(false);
 
     // Debug logging
     React.useEffect(() => {
@@ -67,6 +69,12 @@ const IALabContent = () => {
                 break;
             case 'OPEN_CHALLENGE':
                 setShowPremiumEvaluationModal(true);
+                break;
+            case 'SHOW_EXAM_RESULT':
+                setShowExamResult(true);
+                break;
+            case 'SHOW_CHALLENGE_RESULT':
+                setShowChallengeResult(true);
                 break;
             case 'OPEN_VALERIO':
                 setShowValerioPanel(true);
@@ -238,6 +246,56 @@ const IALabContent = () => {
                     onClose={() => setShowCertificateModal(false)}
                     initialTab="certificate"
                 />
+
+                {/* Modal de Resultado de Examen */}
+                {showExamResult && (
+                    <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={() => setShowExamResult(false)}>
+                        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden animate-in fade-in-0 zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
+                            <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 px-6 py-6 text-center">
+                                <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-3">
+                                    <Icon name="fa-clipboard-check" className="text-white text-2xl" />
+                                </div>
+                                <h3 className="text-white font-bold text-lg font-montserrat">Resultado del Examen</h3>
+                                <p className="text-white/70 text-xs mt-1">Módulo {activeMod}</p>
+                            </div>
+                            <div className="p-6 text-center">
+                                <div className="text-5xl font-bold text-emerald-600 font-montserrat mb-2">{completedExams?.[activeMod]}%</div>
+                                <p className="text-sm text-slate-500 mb-6">
+                                    {completedExams?.[activeMod] >= 80 ? '¡Examen aprobado!' : 'Examen completado'}
+                                </p>
+                                <button onClick={() => setShowExamResult(false)}
+                                    className="w-full py-3 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white rounded-xl font-bold text-sm hover:shadow-lg transition-all duration-200 active:scale-95">
+                                    Cerrar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Modal de Resultado de Desafío */}
+                {showChallengeResult && (
+                    <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={() => setShowChallengeResult(false)}>
+                        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden animate-in fade-in-0 zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
+                            <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 px-6 py-6 text-center">
+                                <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-3">
+                                    <Icon name="fa-rocket" className="text-white text-2xl" />
+                                </div>
+                                <h3 className="text-white font-bold text-lg font-montserrat">Resultado del Desafío</h3>
+                                <p className="text-white/70 text-xs mt-1">Módulo {activeMod}</p>
+                            </div>
+                            <div className="p-6 text-center">
+                                <div className="text-5xl font-bold text-emerald-600 font-montserrat mb-2">{challengeScores?.[activeMod]}%</div>
+                                <p className="text-sm text-slate-500 mb-6">
+                                    {challengeScores?.[activeMod] >= 80 ? '¡Desafío completado!' : 'Desafío entregado'}
+                                </p>
+                                <button onClick={() => setShowChallengeResult(false)}
+                                    className="w-full py-3 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white rounded-xl font-bold text-sm hover:shadow-lg transition-all duration-200 active:scale-95">
+                                    Cerrar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
                 
                  {/* FAB de Valerio - posicionado relativo al viewport */}
                  <button 

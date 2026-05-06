@@ -246,6 +246,7 @@ const transformProgressData = (data) => {
   const completedExams = {};
   const completedInfographics = [];
   const completedActivities = [];
+  const challengeScores = {};
 
   data?.forEach(record => {
     if (!record.is_completed) return;
@@ -261,9 +262,9 @@ const transformProgressData = (data) => {
         }
         break;
       case 'exam':
-        if (record.resource_id) {
-          const examModuleId = record.resource_id.replace('exam_', '');
-          completedExams[examModuleId] = true;
+        if (record.score !== null && record.score !== undefined) {
+          const examModuleId = record.module_id || record.resource_id?.replace('exam_', '');
+          completedExams[examModuleId] = record.score;
         } else if (record.module_id) {
           completedExams[record.module_id] = true;
         }
@@ -273,6 +274,11 @@ const transformProgressData = (data) => {
         break;
       case 'activity':
         completedActivities.push(record.resource_id);
+        break;
+      case 'challenge':
+        if (record.module_id && record.score !== null && record.score !== undefined) {
+          challengeScores[record.module_id] = record.score;
+        }
         break;
     }
   });
@@ -286,6 +292,7 @@ const transformProgressData = (data) => {
       completedExams,
       completedInfographics,
       completedActivities,
+      challengeScores,
       recordCount: data?.length || 0
     }
   };
@@ -310,12 +317,17 @@ export const mergeProgress = (localData, remoteData) => {
     return { ...local, ...remote };
   };
 
+  const mergeChallengeScores = (local, remote) => {
+    return { ...local, ...remote };
+  };
+
   return {
     completedVideos: mergeArrays(localData.completedVideos || [], remoteData.completedVideos || []),
     completedModules: mergeArrays(localData.completedModules || [], remoteData.completedModules || []),
     completedExams: mergeExams(localData.completedExams || {}, remoteData.completedExams || {}),
     completedInfographics: mergeArrays(localData.completedInfographics || [], remoteData.completedInfographics || []),
-    completedActivities: mergeArrays(localData.completedActivities || [], remoteData.completedActivities || [])
+    completedActivities: mergeArrays(localData.completedActivities || [], remoteData.completedActivities || []),
+    challengeScores: mergeChallengeScores(localData.challengeScores || {}, remoteData.challengeScores || {})
   };
 };
 

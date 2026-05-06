@@ -22,7 +22,7 @@ import ErrorBoundary from '../forum/ErrorBoundary';
  */
 
 const ModuleOverviewCard = ({ onAction }) => {
-  const { activeMod, modules, moduleContent } = useIALabContext();
+  const { activeMod, modules, moduleContent, completedExams, challengeScores, completedActivities } = useIALabContext();
   
   // Estado para el modal de recursos
   const [selectedTopic, setSelectedTopic] = useState(null);
@@ -187,45 +187,105 @@ const ModuleOverviewCard = ({ onAction }) => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
                 {/* Icono: Comunidad */}
                 <div className="flex flex-col items-center gap-3">
-                  <motion.button
-                    onClick={() => setIsForumOpen(!isForumOpen)}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                    className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-lg hover:bg-[#00BCD4]/90 hover:shadow-xl transition-all duration-300 cursor-pointer border-0"
-                    title="Comunidad IALab"
-                  >
-                    <Icon name="fa-comments" className="text-white w-9 h-9 md:w-10 md:h-10" />
-                  </motion.button>
-                  <span className="text-base font-semibold text-[#004B63] tracking-wide text-center">Comunidad IALab</span>
+                  {completedActivities?.includes('a' + activeMod) ? (
+                    <div className="flex flex-col items-center gap-2">
+                      <motion.button
+                        onClick={() => setIsForumOpen(!isForumOpen)}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border-0 relative"
+                        title="Ver comunidad"
+                      >
+                        <Icon name="fa-comments" className="text-white w-9 h-9 md:w-10 md:h-10" />
+                        <div className="absolute -top-1 -right-1 w-8 h-8 rounded-full bg-white border-2 border-emerald-500 flex items-center justify-center shadow-sm">
+                          <Icon name="fa-check" className="text-emerald-500 text-[10px]" />
+                        </div>
+                      </motion.button>
+                      <span className="text-base font-semibold text-emerald-600 tracking-wide text-center">Comunidad</span>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center gap-3">
+                      <motion.button
+                        onClick={() => setIsForumOpen(!isForumOpen)}
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                        className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-lg hover:bg-[#00BCD4]/90 hover:shadow-xl transition-all duration-300 cursor-pointer border-0"
+                        title="Comunidad IALab"
+                      >
+                        <Icon name="fa-comments" className="text-white w-9 h-9 md:w-10 md:h-10" />
+                      </motion.button>
+                      <span className="text-base font-semibold text-[#004B63] tracking-wide text-center">Comunidad IALab</span>
+                    </div>
+                  )}
                 </div>
                 {/* Icono: Desafío */}
                 <div className="flex flex-col items-center gap-3">
-                  <motion.button
-                    onClick={() => onAction('OPEN_CHALLENGE')}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                    className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-lg hover:bg-[#00BCD4]/90 hover:shadow-xl transition-all duration-300 cursor-pointer border-0"
-                    title="Desafío del Módulo"
-                  >
-                    <Icon name="fa-rocket" className="text-white w-9 h-9 md:w-10 md:h-10" />
-                  </motion.button>
-                  <span className="text-base font-semibold text-[#004B63] tracking-wide text-center">Desafío</span>
+                  {challengeScores?.[activeMod] ? (
+                    <div className="flex flex-col items-center gap-2">
+                      <motion.button
+                        onClick={() => onAction('SHOW_CHALLENGE_RESULT')}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border-0 relative"
+                        title="Ver resultado del desafío"
+                      >
+                        <Icon name="fa-rocket" className="text-white w-9 h-9 md:w-10 md:h-10" />
+                        <div className="absolute -top-1 -right-1 w-8 h-8 rounded-full bg-white border-2 border-emerald-500 flex items-center justify-center shadow-sm">
+                          <span className="text-[10px] font-bold text-emerald-600">{challengeScores[activeMod]}%</span>
+                        </div>
+                      </motion.button>
+                      <span className="text-base font-semibold text-emerald-600 tracking-wide text-center">Desafío: {challengeScores[activeMod]}%</span>
+                    </div>
+                  ) : (
+                    <>
+                      <motion.button
+                        onClick={() => onAction('OPEN_CHALLENGE')}
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                        className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-lg hover:bg-[#00BCD4]/90 hover:shadow-xl transition-all duration-300 cursor-pointer border-0"
+                        title="Desafío del Módulo"
+                      >
+                        <Icon name="fa-rocket" className="text-white w-9 h-9 md:w-10 md:h-10" />
+                      </motion.button>
+                      <span className="text-base font-semibold text-[#004B63] tracking-wide text-center">Desafío</span>
+                    </>
+                  )}
                 </div>
                 {/* Icono: Examen */}
                 <div className="flex flex-col items-center gap-3">
-                  <motion.button
-                    onClick={() => onAction('OPEN_QUIZ')}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                    className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-lg hover:bg-[#00BCD4]/90 hover:shadow-xl transition-all duration-300 cursor-pointer border-0"
-                    title="Examen del Módulo"
-                  >
-                    <Icon name="fa-clipboard-check" className="text-white w-9 h-9 md:w-10 md:h-10" />
-                  </motion.button>
-                  <span className="text-base font-semibold text-[#004B63] tracking-wide text-center">Examen</span>
+                  {completedExams?.[activeMod] ? (
+                    <div className="flex flex-col items-center gap-2">
+                      <motion.button
+                        onClick={() => onAction('SHOW_EXAM_RESULT')}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border-0 relative"
+                        title="Ver resultado del examen"
+                      >
+                        <Icon name="fa-clipboard-check" className="text-white w-9 h-9 md:w-10 md:h-10" />
+                        <div className="absolute -top-1 -right-1 w-8 h-8 rounded-full bg-white border-2 border-emerald-500 flex items-center justify-center shadow-sm">
+                          <span className="text-[10px] font-bold text-emerald-600">{completedExams[activeMod]}%</span>
+                        </div>
+                      </motion.button>
+                      <span className="text-base font-semibold text-emerald-600 tracking-wide text-center">Examen: {completedExams[activeMod]}%</span>
+                    </div>
+                  ) : (
+                    <>
+                      <motion.button
+                        onClick={() => onAction('OPEN_QUIZ')}
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                        className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-lg hover:bg-[#00BCD4]/90 hover:shadow-xl transition-all duration-300 cursor-pointer border-0"
+                        title="Examen del Módulo"
+                      >
+                        <Icon name="fa-clipboard-check" className="text-white w-9 h-9 md:w-10 md:h-10" />
+                      </motion.button>
+                      <span className="text-base font-semibold text-[#004B63] tracking-wide text-center">Examen</span>
+                    </>
+                  )}
                 </div>
              </div>
 

@@ -4,6 +4,7 @@ import UserProfileSmartCard from './UserProfileSmartCard';
 import HelpModal from './modals/HelpModal';
 import CertificatesModal from './modals/CertificatesModal';
 import ChangeAvatarModal from './modals/ChangeAvatarModal';
+import ActivityHistory from './ActivityHistory';
 import { useClerkAuth, getClerkUserInfo } from '../utils/clerk-utils';
 import { Icon } from '../utils/iconMapping.jsx';
 
@@ -85,6 +86,7 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [isCertificatesOpen, setIsCertificatesOpen] = useState(false);
   const [isAvatarOpen, setIsAvatarOpen] = useState(false);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   
   // 🏆 MI PERFIL - Abre modal de perfil completo
   const handleProfile = () => {
@@ -102,6 +104,12 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
   const handleHelp = () => {
     setIsOpen(false);
     setIsHelpOpen(true);
+  };
+
+  // 📋 MI HISTORIAL - Abre historial de aprendizaje
+  const handleHistory = () => {
+    setIsOpen(false);
+    setIsHistoryOpen(true);
   };
 
   // 📷 CAMBIAR FOTO - Abre modal de cambio de avatar
@@ -216,6 +224,15 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
                 <span className="text-xs font-semibold text-slate-800 group-hover:text-[#004B63] transition-colors duration-300">Mi Perfil</span>
               </button>
               
+              {/* 📋 MI HISTORIAL DE APRENDIZAJE */}
+              <button
+                className="group flex items-center gap-2.5 w-full px-3 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-[#004B63] rounded-lg shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50 transition-all duration-300 cursor-pointer text-left"
+                onClick={handleHistory}
+              >
+                <Icon name="fa-clock" className="text-sm text-[#004B63] flex-shrink-0" />
+                <span className="text-xs font-semibold text-slate-800 group-hover:text-[#004B63] transition-colors duration-300">Mi Historial de Aprendizaje</span>
+              </button>
+              
               {/* 🎓 MIS CERTIFICADOS */}
               <button
                 className="group flex items-center gap-2.5 w-full px-3 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-[#004B63] rounded-lg shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50 transition-all duration-300 cursor-pointer text-left"
@@ -264,6 +281,8 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
       <CertificatesModal isOpen={isCertificatesOpen} onClose={() => setIsCertificatesOpen(false)} />
 
       <ChangeAvatarModal isOpen={isAvatarOpen} onClose={() => setIsAvatarOpen(false)} />
+
+      <ActivityHistory isOpen={isHistoryOpen} onClose={() => setIsHistoryOpen(false)} />
 
 
     </>

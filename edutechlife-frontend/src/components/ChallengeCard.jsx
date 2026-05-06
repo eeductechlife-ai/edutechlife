@@ -7,7 +7,7 @@ import { usePlatformDetection } from '../hooks/usePlatformDetection';
  * Componente premium reutilizable para mostrar desafíos del curso
  * Con diseño SaaS premium, optimizaciones por plataforma y estados dinámicos
  * Soporta modo dark/light automático usando sistema de colores de tailwind.config.js
- * Sistema de puntuación: 0-100% con aprobación al 70%
+ * Sistema de puntuación: 0-100% con aprobación al 80%
  * 
  * @param {Object} props
  * @param {string} props.title - Título del desafío (default: "Desafío del Curso")
@@ -77,7 +77,7 @@ const ChallengeCard = ({
     };
 
     // Lógica de puntuación
-    const isApproved = score >= 70;
+    const isApproved = score >= 80;
     const scoreColor = isApproved ? 'text-success' : 'text-warning';
     const scoreBgColor = isApproved ? 'bg-success/10' : 'bg-warning/10';
     const scoreText = isApproved ? 'Aprobado' : 'Reprobado';
@@ -153,7 +153,7 @@ const ChallengeCard = ({
                     </div>
                       <p className="text-sm text-text-sub dark:text-slate-300 font-medium leading-relaxed">
                         {isCompleted 
-                            ? `¡Felicidades! Has completado el desafío con una puntuación de ${score}%${isApproved ? ' (Aprobado)' : ' (Necesitas al menos 70% para aprobar)'}.` 
+                            ? `¡Felicidades! Has completado el desafío con una puntuación de ${score}%${isApproved ? ' (Aprobado)' : ' (Necesitas al menos 80% para aprobar)'}.` 
                             : description
                         }
                     </p>
@@ -221,7 +221,7 @@ const ChallengeCard = ({
                                 </div>
                                 <div className="flex items-center justify-between mt-1">
                                     <span className="text-xs text-text-light">0%</span>
-                                    <span className="text-xs font-medium text-corporate">70% para aprobar</span>
+                                    <span className="text-xs font-medium text-corporate">80% para aprobar</span>
                                     <span className="text-xs text-text-light">100%</span>
                                 </div>
                             </div>

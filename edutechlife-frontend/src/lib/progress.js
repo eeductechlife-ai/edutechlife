@@ -783,24 +783,26 @@ export const createProgressService = (db) => {
         const challengeProgress = progressData?.find(p => p.activity_type === 'challenge');
         const communityProgress = progressData?.find(p => p.activity_type === 'community_comment');
 
-        const examPassed = examProgress?.is_completed || false;
         const examScore = examProgress?.score || 0;
+        const examPassed = examScore >= 80;
         const challengeScore = challengeProgress?.score || 0;
+        const challengePassed = challengeScore >= 80;
 
+        const examEarned = Math.round((examScore / 100) * 35 * 10) / 10;
+        const challengeEarned = Math.round((challengeScore / 100) * 30 * 10) / 10;
         const resourcesPct = totalResources > 0 ? Math.round((resourcesViewed / totalResources) * 30 * 10) / 10 : 0;
-        const earned = (examPassed ? 35 : 0) + 
-                       Math.round((challengeScore / 100) * 30 * 10) / 10 + 
-                       resourcesPct + 
-                       (communityProgress?.community_comment ? 5 : 0);
+        const communityEarned = communityProgress?.community_comment ? 5 : 0;
+        
+        const earned = examEarned + challengeEarned + resourcesPct + communityEarned;
 
-        console.log(`[PROGRESS] Módulo ${moduleId}: exam=${examPassed?35:0}, challenge=${challengeScore}, resources=${resourcesViewed}/${totalResources}=${resourcesPct}, community=${communityProgress?.community_comment?5:0}, total=${Math.min(100, Math.round(earned))}`);
+        console.log(`[PROGRESS] Módulo ${moduleId}: exam=${examEarned}(score:${examScore}), challenge=${challengeEarned}(score:${challengeScore}), resources=${resourcesViewed}/${totalResources}=${resourcesPct}, community=${communityEarned}, total=${Math.min(100, Math.round(earned))}`);
 
         return {
           moduleId: numericModuleId,
-          exam: { passed: examPassed, score: examScore, weight: 35, earned: examPassed ? 35 : 0 },
-          challenge: { score: challengeScore, weight: 30, earned: Math.round((challengeScore / 100) * 30 * 10) / 10 },
+          exam: { passed: examPassed, score: examScore, weight: 35, earned: examEarned },
+          challenge: { passed: challengePassed, score: challengeScore, weight: 30, earned: challengeEarned },
           resources: { viewed: resourcesViewed, total: totalResources, weight: 30, earned: resourcesPct },
-          community: { commented: !!communityProgress?.community_comment, weight: 5, earned: communityProgress?.community_comment ? 5 : 0 },
+          community: { commented: !!communityProgress?.community_comment, weight: 5, earned: communityEarned },
           moduleScore: Math.min(100, Math.round(earned)),
           moduleProgressPct: Math.min(20, Math.round((earned / 100) * 20 * 10) / 10)
         };

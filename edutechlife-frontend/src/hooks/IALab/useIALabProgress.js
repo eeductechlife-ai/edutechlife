@@ -385,7 +385,8 @@ export const useIALabProgress = () => {
     try {
       const result = await progressService.saveExamProgress(moduleId, score, passed, user.id);
       if (result.success) {
-        updateModuleActivity(moduleId, 'exam', passed);
+        // Actualizar progreso con score proporcional (siempre actualiza, pero suma proporcional)
+        updateModuleActivity(moduleId, 'exam', score >= 80, score);
         const newProgress = await progressService.calculateGlobalProgressFromDB(user.id);
         setCourseProgress(newProgress);
       }
@@ -402,7 +403,8 @@ export const useIALabProgress = () => {
     try {
       const result = await progressService.saveChallengeProgress(moduleId, score, user.id);
       if (result.success) {
-        updateModuleActivity(moduleId, 'challenge', true);
+        // Actualizar progreso con score proporcional (siempre actualiza, pero suma proporcional)
+        updateModuleActivity(moduleId, 'challenge', score >= 80, score);
         const newProgress = await progressService.calculateGlobalProgressFromDB(user.id);
         setCourseProgress(newProgress);
       }
