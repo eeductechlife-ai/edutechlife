@@ -111,8 +111,13 @@ const GOOGLE_TTS_URL = 'https://texttospeech.googleapis.com/v1/text:synthesize';
 
 let currentAudio = null;
 let safetyTimeout = null;
+let isSpeaking = false;
 
 const speakTextConversational = async (text, profile = 'valeria', onEndCallback) => {
+  if (isSpeaking) {
+    stopSpeech();
+  }
+
   if (currentAudio) {
     currentAudio.pause();
     currentAudio = null;
@@ -126,6 +131,7 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback)
   const voice = VOICE_PROFILES[profile] || VOICE_PROFILES.valeria;
 
   const cleanup = () => {
+    isSpeaking = false;
     if (safetyTimeout) {
       clearTimeout(safetyTimeout);
       safetyTimeout = null;
@@ -138,10 +144,12 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback)
     if (onEndCallback) onEndCallback();
   };
 
+  isSpeaking = true;
+
   safetyTimeout = setTimeout(() => {
     cleanup();
     if (onEndCallback) onEndCallback();
-  }, 15000);
+  }, 10000);
 
   // Función para usar voz nativa del sistema (fallback)
   const useNativeSpeech = () => {
@@ -176,6 +184,7 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback)
       };
       
       window.speechSynthesis.speak(utterance);
+      isSpeaking = true;
       return true;
     } catch (nativeError) {
       console.error('❌ Error al usar voz nativa:', nativeError);
@@ -278,6 +287,7 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback)
 };
 
 const stopSpeech = () => {
+  isSpeaking = false;
   if (currentAudio) {
     currentAudio.pause();
     currentAudio = null;

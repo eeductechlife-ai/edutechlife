@@ -43,16 +43,6 @@ const ValerioAvatar = ({ state = 'idle', size = 80, onStateChange }) => {
         };
     }, []);
 
-    // Detectar cuando está hablando para el efecto visual
-    useEffect(() => {
-        if (synthRef.current) {
-            const checkSpeaking = setInterval(() => {
-                setIsSpeaking(synthRef.current.speaking);
-            }, 100);
-            return () => clearInterval(checkSpeaking);
-        }
-    }, []);
-
     // Función speak - puede ser llamada externamente
     const speak = useCallback((text) => {
         if (!synthRef.current || isMuted || !text) return;
@@ -100,12 +90,19 @@ const ValerioAvatar = ({ state = 'idle', size = 80, onStateChange }) => {
             if (onStateChange) onStateChange('idle');
         };
 
-        utterance.onerror = () => {
+        utterance.onerror = (event) => {
+            console.error('Valerio: error en speechSynthesis:', event?.error || event);
             setIsSpeaking(false);
             if (onStateChange) onStateChange('idle');
         };
 
-        synthRef.current.speak(utterance);
+        try {
+            synthRef.current.speak(utterance);
+        } catch (err) {
+            console.error('Valerio: excepción al hablar:', err);
+            setIsSpeaking(false);
+            if (onStateChange) onStateChange('idle');
+        }
     }, [isMuted, selectedVoice, onStateChange]);
 
     // Exponer función speak al window para acceso externo

@@ -29,7 +29,7 @@ export const moduleResources = {
         type: "video",
         title: "Explicación Visual: Anatomía de un Prompt",
         url: "https://www.youtube.com/embed/6f-FwOE5wIY",
-        duration: "7:15",
+        duration: "6:06",
         thumbnail: "https://img.youtube.com/vi/6f-FwOE5wIY/maxresdefault.jpg",
         provider: "youtube",
         description: "Desglose visual de las partes que componen un prompt efectivo."
@@ -62,7 +62,7 @@ export const moduleResources = {
         type: "video",
         title: "Video Introductorio: ¿Qué es la IA Generativa?",
         url: "https://www.youtube.com/embed/jnePzCTKEqs?start=3",
-        duration: "14:00",
+        duration: "4:30",
         thumbnail: "https://img.youtube.com/vi/jnePzCTKEqs/maxresdefault.jpg",
         provider: "youtube",
         description: "Explicación visual de los conceptos fundamentales con ejemplos prácticos."
@@ -156,7 +156,7 @@ export const moduleResources = {
         type: "video",
         title: "Tutorial: Primeros Pasos con ChatGPT",
         url: "https://www.youtube.com/embed/iOlo-K7yj2M",
-        duration: "12:30",
+        duration: "5:43",
         thumbnail: "https://img.youtube.com/vi/iOlo-K7yj2M/maxresdefault.jpg",
         provider: "youtube",
         description: "Guía completa para comenzar a usar ChatGPT de manera efectiva."
@@ -485,7 +485,7 @@ export const moduleResources = {
         type: "video",
         title: "Resúmenes Inteligentes con NotebookLM",
         url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-        duration: "13:20",
+        duration: "3:33",
         thumbnail: "https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
         provider: "youtube",
         description: "Técnicas avanzadas de resumen y análisis."

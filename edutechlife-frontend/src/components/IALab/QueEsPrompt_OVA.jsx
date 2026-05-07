@@ -15,6 +15,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { cn } from '../forum/forumDesignSystem';
+import { speakTextConversational, stopSpeech } from '../../utils/speech';
 
 /**
  * Componente principal QueEsPrompt_OVA
@@ -163,6 +164,54 @@ const QueEsPrompt_OVA = ({ onClose }) => {
     }
   ];
 
+  // Textos narrativos para cada sección (voz Valerio)
+  const sectionNarrations = {
+    0: "Bienvenido a la primera sección: ¿Qué es un Prompt?. " +
+       "Un prompt es la forma de comunicarnos con modelos de inteligencia artificial como ChatGPT. " +
+       "Es la instrucción o consulta que le damos a la IA para obtener una respuesta específica. " +
+       "Piensa en un prompt como dar instrucciones a un asistente muy inteligente pero literal. " +
+       "Necesita claridad y precisión. Por ejemplo: traduce este texto al inglés, " +
+       "genera una imagen de un paisaje, analiza estos datos, o escribe un correo profesional. " +
+       "Recuerda: un buen prompt es como un mapa, cuanto más detallado, más fácil llegar al destino.",
+    1: "Ahora exploraremos la anatomía de un prompt efectivo. " +
+       "Un buen prompt tiene cuatro componentes esenciales. " +
+       "Primero, el contexto: dale a la IA información de fondo para entender la tarea. " +
+       "Segundo, la instrucción: indica la acción específica que quieres que realice. " +
+       "Tercero, el formato: especifica cómo quieres que se estructure la respuesta. " +
+       "Y cuarto, las restricciones: establece límites o condiciones claras. " +
+       "Domina estos cuatro elementos y tus prompts serán mucho más efectivos.",
+    2: "Pasemos a los tipos de prompts. Existen cuatro categorías principales. " +
+       "Los instructivos: dan órdenes directas, ideales para tareas técnicas como análisis o traducción. " +
+       "Los creativos: buscan generar contenido original, como escribir un poema o diseñar algo nuevo. " +
+       "Los analíticos: piden evaluación o análisis profundo de información. " +
+       "Y los conversacionales: simulan un diálogo, perfectos para tutoría o consultoría. " +
+       "Cada tipo tiene un propósito distinto, elige el adecuado según tu objetivo.",
+    3: "Ahora veremos técnicas avanzadas para llevar tus prompts al siguiente nivel. " +
+       "Few-Shot Prompting: consiste en dar ejemplos antes de la tarea para mejorar la precisión de la IA. " +
+       "Chain of Thought: pide a la IA que explique su razonamiento paso a paso, obteniendo resultados más lógicos. " +
+       "Role Playing: asigna un rol específico a la IA, como actuar como un profesor experto, para respuestas más contextualizadas. " +
+       "E Iterative Refinement: refina el prompt basado en respuestas previas, mejorando progresivamente los resultados. " +
+       "Practica estas técnicas para convertirte en un verdadero maestro de la ingeniería de prompts.",
+    4: "Has llegado al simulador interactivo. " +
+       "Aquí puedes practicar todo lo aprendido construyendo tus propios prompts. " +
+       "Selecciona el tipo de prompt, agrega contexto, escribe tu instrucción principal, " +
+       "elige el formato de respuesta y las restricciones que prefieras. " +
+       "Luego prueba tu prompt y observa cómo mejora con cada ajuste. " +
+       "La práctica hace al maestro, ¡así que experimenta y diviértete aprendiendo!"
+  };
+
+  const [audioPlaying, setAudioPlaying] = useState(false);
+  const [audioLoading, setAudioLoading] = useState(false);
+  const [showAudioTip, setShowAudioTip] = useState(true);
+
+  // Mostrar tooltip de audio al abrir y ocultar tras 4 segundos
+  useEffect(() => {
+    if (showAudioTip) {
+      const timer = setTimeout(() => setShowAudioTip(false), 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [showAudioTip]);
+
   // Manejar entrada a pantalla completa
   const handleFullscreen = () => {
     if (!document.fullscreenElement) {
@@ -185,6 +234,54 @@ const QueEsPrompt_OVA = ({ onClose }) => {
       document.removeEventListener('fullscreenchange', handleFullscreenChange);
     };
   }, []);
+
+  // Narrar sección activa automáticamente con fade-out
+  const sectionChangeTimerRef = useRef(null);
+  useEffect(() => {
+    if (sectionChangeTimerRef.current) clearTimeout(sectionChangeTimerRef.current);
+    if (audioPlaying) {
+      sectionChangeTimerRef.current = setTimeout(() => {
+        stopSpeech();
+        setAudioPlaying(false);
+        const text = sectionNarrations[activeSection];
+        if (text) {
+          setAudioLoading(true);
+          speakTextConversational(text, 'valerio', () => { setAudioPlaying(false); setAudioLoading(false); });
+          setAudioPlaying(true);
+        }
+      }, 300);
+    } else {
+      const text = sectionNarrations[activeSection];
+      if (text) {
+        setAudioLoading(true);
+        speakTextConversational(text, 'valerio', () => { setAudioPlaying(false); setAudioLoading(false); });
+        setAudioPlaying(true);
+      }
+    }
+    return () => {
+      if (sectionChangeTimerRef.current) clearTimeout(sectionChangeTimerRef.current);
+    };
+  }, [activeSection]);
+
+  // Detener audio al desmontar
+  useEffect(() => {
+    return () => { stopSpeech(); };
+  }, []);
+
+  const toggleAudio = () => {
+    if (audioPlaying) {
+      stopSpeech();
+      setAudioPlaying(false);
+      setAudioLoading(false);
+    } else if (!audioLoading) {
+      const text = sectionNarrations[activeSection];
+      if (text) {
+        setAudioLoading(true);
+        speakTextConversational(text, 'valerio', () => { setAudioPlaying(false); setAudioLoading(false); });
+        setAudioPlaying(true);
+      }
+    }
+  };
 
   // Manejar completar sección
   const handleCompleteSection = (sectionId) => {
@@ -488,6 +585,17 @@ const QueEsPrompt_OVA = ({ onClose }) => {
                 <p className="text-white/70">
                   Aprende la anatomía de un prompt efectivo de forma interactiva
                 </p>
+                {showAudioTip && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    className="flex items-center gap-1.5 mt-1 text-xs text-cyan-300"
+                  >
+                    <Icon name="fa-volume-high" className="w-3 h-3" />
+                    <span>Este OVA tiene narración automática 🔊</span>
+                  </motion.div>
+                )}
               </div>
             </div>
 
@@ -505,6 +613,24 @@ const QueEsPrompt_OVA = ({ onClose }) => {
                   {completedSections.length}/{sections.length} secciones
                 </div>
               </div>
+
+              {/* Botón audio */}
+              <button
+                onClick={toggleAudio}
+                disabled={audioLoading}
+                className={`px-4 py-2 rounded-lg transition-colors duration-200 flex items-center gap-2 ${
+                  audioLoading ? 'bg-amber-500/20 text-amber-300 border border-amber-400/30' :
+                  audioPlaying ? 'bg-cyan-500/30 text-cyan-300 border border-cyan-400/50' : 'bg-white/10 hover:bg-white/20 text-white'
+                }`}
+                title={audioLoading ? 'Cargando audio...' : audioPlaying ? 'Detener audio' : 'Reproducir audio'}
+              >
+                {audioLoading ? (
+                  <Icon name="fa-spinner" className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Icon name={audioPlaying ? 'fa-volume-high' : 'fa-volume-off'} className="w-4 h-4" />
+                )}
+                {audioLoading ? 'Cargando...' : audioPlaying ? 'Audio activo' : 'Audio'}
+              </button>
 
               {/* Botón pantalla completa */}
               <button

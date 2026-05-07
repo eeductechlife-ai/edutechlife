@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { Bell } from 'lucide-react';
+import React, { useState, useRef } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import UserDropdownMenuSimplified from '../UserDropdownMenuSimplified';
 import NotificationPanel from '../NotificationPanel';
@@ -12,6 +11,7 @@ const IALabHeader = () => {
   const { onBack, courseCompleted, setShowCertificateModal } = useIALabContext();
   const { unreadCount, createNotification } = useNotification();
   const [notifOpen, setNotifOpen] = useState(false);
+  const notifTriggerRef = useRef(null);
 
   // Activar recordatorios de curso al montar
   useCourseReminders();
@@ -42,19 +42,37 @@ const IALabHeader = () => {
         {/* Campana de notificaciones */}
         <div className="relative">
           <button
+            ref={notifTriggerRef}
             onClick={() => setNotifOpen(!notifOpen)}
-            className="relative flex items-center justify-center p-2 bg-transparent hover:opacity-80 transition-opacity rounded-lg"
+            className={`relative flex items-center justify-center p-2 rounded-xl border bg-white transition-all duration-200 group ${
+              notifOpen
+                ? 'border-[#004B63]/30 shadow-sm bg-gradient-to-br from-[#004B63]/5 to-[#00BCD4]/5'
+                : 'border-transparent hover:border-[#004B63]/20 hover:shadow-sm hover:bg-slate-50'
+            }`}
             aria-label="Notificaciones"
           >
-            <Bell className={`w-6 h-6 ${unreadCount > 0 ? 'text-[#004B63]' : 'text-[#06B6D4]'}`} />
+            <Icon
+              name="fa-bell"
+              className={`text-lg transition-all duration-200 ${
+                notifOpen
+                  ? 'text-[#00BCD4]'
+                  : unreadCount > 0
+                    ? 'text-[#004B63]'
+                    : 'text-[#00BCD4] group-hover:text-[#004B63]'
+              }`}
+            />
             {unreadCount > 0 && (
-              <span className="absolute top-0 right-0 flex items-center justify-center min-w-[18px] h-[18px] text-[10px] font-bold text-white bg-gradient-to-r from-[#004B63] to-[#00BCD4] rounded-full border-2 border-white px-1">
+              <span className="absolute -top-0.5 -right-0.5 flex items-center justify-center min-w-[18px] h-[18px] text-[10px] font-bold text-white bg-gradient-to-r from-[#004B63] to-[#00BCD4] rounded-full border-2 border-white px-1 shadow-sm">
                 {unreadCount > 99 ? '99+' : unreadCount}
               </span>
             )}
           </button>
 
-          <NotificationPanel isOpen={notifOpen} onClose={() => setNotifOpen(false)} />
+          <NotificationPanel
+            isOpen={notifOpen}
+            onClose={() => setNotifOpen(false)}
+            triggerRef={notifTriggerRef}
+          />
         </div>
 
         <UserDropdownMenuSimplified

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Volume2, 
   TrendingUp, 
@@ -237,15 +237,25 @@ const OVAEcosystemGuide = () => {
   const [activeSectionId, setActiveSectionId] = useState('evolution');
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [speechSynthesisAvailable, setSpeechSynthesisAvailable] = useState(true);
+  const selectedVoiceRef = useRef(null);
 
   useEffect(() => {
     if (!('speechSynthesis' in window)) {
       setSpeechSynthesisAvailable(false);
+      return;
     }
+    const loadVoices = () => {
+      const voices = window.speechSynthesis.getVoices();
+      const spanishVoices = voices.filter(v => v.lang.startsWith('es'));
+      selectedVoiceRef.current = spanishVoices.find(v =>
+        v.name.includes('Neural2') || v.name.includes('WaveNet') ||
+        v.name.includes('Google') || v.name.includes('Microsoft')
+      ) || spanishVoices[0] || voices[0];
+    };
+    loadVoices();
+    window.speechSynthesis.onvoiceschanged = loadVoices;
     return () => {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-      }
+      window.speechSynthesis.cancel();
     };
   }, []);
 
@@ -262,8 +272,9 @@ const OVAEcosystemGuide = () => {
     
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'es-ES';
-    utterance.rate = 1.0;
-    utterance.pitch = 1.0;
+    utterance.rate = 0.95;
+    utterance.pitch = 1.05;
+    if (selectedVoiceRef.current) utterance.voice = selectedVoiceRef.current;
     
     utterance.onend = () => setIsSpeaking(false);
     utterance.onerror = () => setIsSpeaking(false);

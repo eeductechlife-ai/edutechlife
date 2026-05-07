@@ -82,8 +82,8 @@ const IALabDashboard = ({ onModuleSelect, modules = [] }) => {
         setStreakDays(streak);
       }
 
-      // Calcular tiempo total (aproximado: 150 min por módulo completado)
-      setTotalTimeSpent(completedCount * 150);
+      // Calcular tiempo total (aproximado: 120 min por módulo completado = 2h)
+      setTotalTimeSpent(completedCount * 120);
 
       // Contar prompts evaluados
       setPromptsGenerated(scoresWithValue.length);
@@ -157,9 +157,9 @@ const IALabDashboard = ({ onModuleSelect, modules = [] }) => {
   
   const defaultModules = [
     { id: 1, title: 'Ingeniería de Prompts', subtitle: 'Mastery Framework, Zero-Shot, CoT', color: '#4DA8C4', duration: '2h', lessons: 3, icon: Brain },
-    { id: 2, title: 'Potencia ChatGPT', subtitle: 'GPTs personalizados, Function Calling', color: '#66CCCC', duration: '2h 30min', lessons: 8, icon: Terminal },
-    { id: 3, title: 'Gemini Deep Research', subtitle: 'Razonamiento Multimodal, Deep Research', color: '#B2D8E5', duration: '2h 30min', lessons: 8, icon: Rocket },
-    { id: 4, title: 'Notebook LM Mastery', subtitle: 'Curaduría, Síntesis, Audio Overviews', color: '#004B63', duration: '2h 30min', lessons: 8, icon: Trophy }
+    { id: 2, title: 'Potencia ChatGPT', subtitle: 'GPTs personalizados, Function Calling', color: '#66CCCC', duration: '2h', lessons: 8, icon: Terminal },
+    { id: 3, title: 'Gemini Deep Research', subtitle: 'Razonamiento Multimodal, Deep Research', color: '#B2D8E5', duration: '2h', lessons: 8, icon: Rocket },
+    { id: 4, title: 'Notebook LM Mastery', subtitle: 'Curaduría, Síntesis, Audio Overviews', color: '#004B63', duration: '2h', lessons: 8, icon: Trophy }
   ];
 
   const courseModules = modules.length > 0 ? modules : defaultModules;

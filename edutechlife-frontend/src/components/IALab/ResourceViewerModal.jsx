@@ -29,7 +29,7 @@ const OVAEcosystemGuide = lazy(() => import('./OVAEcosystemGuide.jsx'));
 /**
  * Componente para visualizar videos (YouTube/Vimeo)
  */
-const VideoViewer = ({ resource }) => {
+const VideoViewer = ({ resource, youtubeDuration, durationLoading }) => {
   const videoRef = useRef(null);
   const { isFullscreen, toggleFullscreen } = useFullscreen(videoRef);
 
@@ -72,12 +72,10 @@ const VideoViewer = ({ resource }) => {
           {isFullscreen ? "Salir" : "Pantalla completa"}
         </button>
 
-        {/* Indicador de duración */}
-        {resource.duration && (
-          <div className="px-3 py-1.5 bg-black/70 text-white text-sm font-medium rounded-lg">
-            {resource.duration}
-          </div>
-        )}
+        {/* Indicador de duración sincronizado con YouTube */}
+        <div className="px-3 py-1.5 bg-black/70 text-white text-sm font-medium rounded-lg">
+          {durationLoading ? '...' : (youtubeDuration || resource.duration)}
+        </div>
       </div>
 
       {/* Indicador de pantalla completa */}
@@ -427,7 +425,9 @@ const ResourceViewerModal = ({
   currentIndex = 0,
   totalResources = 0,
   onOpenImmersiveView = null,
-  onOpenOVA = null
+  onOpenOVA = null,
+  youtubeDuration = null,
+  durationLoading = false
 }) => {
   const { activeMod, markResourceAsViewed: markResourceInContext, recordLastTopic } = useIALabContext();
   const { trackResourceViewed } = useIALabProgress();
@@ -486,7 +486,7 @@ const ResourceViewerModal = ({
     try {
       switch (resourceType || resource.type) {
         case 'video':
-          return <VideoViewer resource={resource} />;
+          return <VideoViewer resource={resource} youtubeDuration={youtubeDuration} durationLoading={durationLoading} />;
         
         case 'documento':
         case 'document':
@@ -661,9 +661,9 @@ const ResourceViewerModal = ({
                       {resource.title}
                     </h2>
                     <div className="flex flex-wrap items-center gap-1 sm:gap-3 text-white/80 text-xs sm:text-sm mt-1">
-                      {resource.type === 'video' && resource.duration && (
+                      {resource.type === 'video' && (
                         <>
-                          <span>{resource.duration}</span>
+                          <span>{durationLoading ? '...' : (youtubeDuration || resource.duration)}</span>
                           <span>•</span>
                         </>
                       )}

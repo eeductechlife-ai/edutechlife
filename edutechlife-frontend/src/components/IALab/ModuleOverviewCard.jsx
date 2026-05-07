@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabContext } from '../../context/IALabContext';
+import { getResourcesForTopic } from './constants/moduleResources';
 import TopicResourcesModal from './TopicResourcesModal';
 import IALabForumOptimized from './IALabForumOptimized';
 import ErrorBoundary from '../forum/ErrorBoundary';
@@ -28,11 +29,19 @@ const ModuleOverviewCard = ({ onAction }) => {
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [isResourcesModalOpen, setIsResourcesModalOpen] = useState(false);
   const [isForumOpen, setIsForumOpen] = useState(false);
+  const [viewedIds, setViewedIds] = useState([]);
+
+  useEffect(() => {
+    const stored = localStorage.getItem('ialab_viewed_resources');
+    if (stored) {
+      try { setViewedIds(JSON.parse(stored)); } catch {}
+    }
+  }, [isResourcesModalOpen]);
   
   // Módulo 1: Datos hardcodeados originales (INTACTOS)
   const module1Data = {
     badge: {
-      duration: "10h",
+      duration: "2h",
       module: "5 MÓDULOS"
     },
     title: "Domina las Instrucciones",
@@ -122,7 +131,38 @@ const ModuleOverviewCard = ({ onAction }) => {
                
                 {/* Temas en columna única - Tarjetas premium */}
                 <div className="flex flex-col gap-3 mt-4">
-                  {moduleData.topics.map((tema, index) => (
+                  {moduleData.topics.map((tema, index) => {
+                    const topicResources = getResourcesForTopic(tema.title);
+                    const topicResourceIds = topicResources?.resources?.map(r => r.id) || [];
+                    const isTopicCompleted = topicResourceIds.length > 0 && topicResourceIds.every(id => viewedIds.includes(id));
+
+                    const calculateTopicDuration = (topicTitle) => {
+                      const topicData = getResourcesForTopic(topicTitle);
+                      if (!topicData?.resources) return "20 min";
+                      
+                      let totalSeconds = 0;
+                      topicData.resources.forEach(resource => {
+                        if (resource.type === 'video' && resource.duration) {
+                          const parts = resource.duration.split(':').map(Number);
+                          if (parts.length === 2) {
+                            totalSeconds += parts[0] * 60 + parts[1];
+                          } else if (parts.length === 3) {
+                            totalSeconds += parts[0] * 3600 + parts[1] * 60 + parts[2];
+                          }
+                        } else if (resource.estimatedTime) {
+                          const match = resource.estimatedTime.match(/(\d+)/);
+                          if (match) totalSeconds += parseInt(match[1]) * 60;
+                        } else if (resource.pages) {
+                          totalSeconds += Math.max(5, Math.ceil(resource.pages / 2)) * 60;
+                        }
+                      });
+                      
+                      const hours = Math.floor(totalSeconds / 3600);
+                      const minutes = Math.floor((totalSeconds % 3600) / 60);
+                      if (hours > 0) return `${hours}h ${minutes}min`;
+                      return `${minutes} min`;
+                    };
+                    return (
                     <motion.button
                       key={index}
                       whileHover={{ scale: 1.01, x: 4 }}
@@ -135,16 +175,25 @@ const ModuleOverviewCard = ({ onAction }) => {
                         });
                         setIsResourcesModalOpen(true);
                       }}
-                      className="group flex items-center gap-4 w-full px-5 py-4 bg-white border border-slate-200/60 border-l-4 border-l-[#004B63] rounded-xl shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50 transition-all duration-300 cursor-pointer text-left"
+                      className={`group flex items-center gap-4 w-full px-5 py-4 bg-white border border-slate-200/60 rounded-xl shadow-sm hover:shadow hover:bg-slate-50 transition-all duration-300 cursor-pointer text-left ${
+                        isTopicCompleted
+                          ? 'border-l-4 border-l-emerald-500'
+                          : 'border-l-4 border-l-[#004B63] hover:border-l-[#00BCD4]'
+                      }`}
                       aria-label={`Ver recursos del tema: ${tema.title}`}
                     >
                       {/* Icono temático */}
-                      <Icon name={tema.icon} className="text-xl text-[#004B63] flex-shrink-0" />
+                      <Icon name={tema.icon} className={`text-xl flex-shrink-0 ${isTopicCompleted ? 'text-emerald-600' : 'text-[#004B63]'}`} />
                       
                       {/* Título y metadatos */}
                       <div className="flex-1 min-w-0">
-                        <h4 className="text-base font-semibold text-slate-800 group-hover:text-[#004B63] transition-colors duration-300 truncate">
+                        <h4 className={`text-base font-semibold truncate transition-colors duration-300 flex items-center gap-2 ${
+                          isTopicCompleted ? 'text-emerald-700' : 'text-slate-800 group-hover:text-[#004B63]'
+                        }`}>
                           {tema.title}
+                          {isTopicCompleted && (
+                            <span className="text-[10px] font-bold text-emerald-600 bg-emerald-100 px-1.5 py-0.5 rounded-md flex-shrink-0">Completado</span>
+                          )}
                         </h4>
                         <div className="flex items-center gap-2 mt-1">
                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium text-[#004B63]">
@@ -153,15 +202,19 @@ const ModuleOverviewCard = ({ onAction }) => {
                            </span>
                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium text-[#00BCD4] bg-[#00BCD4]/10">
                              <Icon name="fa-clock" className="w-3 h-3" />
-                             {tema.duration}
+                              {calculateTopicDuration(tema.title)}
                            </span>
                          </div>
                       </div>
                       
-                      {/* Chevron de acción */}
-                      <Icon name="fa-chevron-right" className="text-sm text-slate-400 flex-shrink-0 group-hover:translate-x-0.5 transition-all duration-300" />
+                      {/* Indicador de completado o chevron */}
+                      {isTopicCompleted ? (
+                        <Icon name="fa-check-circle" className="text-emerald-500 text-base flex-shrink-0" />
+                      ) : (
+                        <Icon name="fa-chevron-right" className="text-sm text-slate-400 flex-shrink-0 group-hover:translate-x-0.5 transition-all duration-300" />
+                      )}
                     </motion.button>
-                  ))}
+                  )})}
                 </div>
               
               {/* Es hora de la acción */}

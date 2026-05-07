@@ -241,7 +241,7 @@ export const useSidebarState = (initialState = {}) => {
   // Datos del curso actual
   const getCourseData = useCallback(() => {
     return {
-      duration: '2h 30min',
+      duration: '2h',
       level: 'Intermedio',
       videos: '12 videos',
       projects: '3 proyectos',

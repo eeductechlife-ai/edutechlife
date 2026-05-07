@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import ValerioAvatar from '../ValerioAvatar';
 import { useIALabContext } from '../../context/IALabContext';
+import { speakTextConversational, stopSpeech } from '../../utils/speech';
 
 /**
  * Componente premium para panel de coach IA Valerio
@@ -25,10 +26,23 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
     const [userInput, setUserInput] = useState('');
     const [isProcessing, setIsProcessing] = useState(false);
     const [quickActions, setQuickActions] = useState([]);
+    const welcomeSpokenRef = useRef(false);
 
     // Módulo actual
     const currentModule = modules.find(m => m.id === activeMod);
     const userLevel = completedModules.length;
+
+    // Detener audio cuando se cierra el panel
+    useEffect(() => {
+        if (!isOpen) {
+            stopSpeech();
+            setValerioState('idle');
+            welcomeSpokenRef.current = false;
+        }
+        return () => {
+            stopSpeech();
+        };
+    }, [isOpen]);
 
     // Inicializar acciones rápidas basadas en contexto
     useEffect(() => {
@@ -61,9 +75,11 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
         setQuickActions(actions);
     }, [currentModule, userLevel]);
 
-    // Inicializar mensaje de bienvenida
+    // Inicializar mensaje de bienvenida (solo una vez por apertura)
     useEffect(() => {
-        if (isOpen && conversation.length === 0) {
+        if (isOpen && !welcomeSpokenRef.current) {
+            welcomeSpokenRef.current = true;
+
             const welcomeMessage = `¡Hola! Qué gusto tenerte por acá. Soy Valerio, tu coach, y veo que estás en el módulo "${currentModule?.title}" — ¡qué tema tan interesante!
 
 No importa si esto es nuevo para ti, estamos en nivel ${userLevel < 3 ? 'principiante' : userLevel < 6 ? 'intermedio' : 'avanzado'}, y lo iremos descubriendo juntos.
@@ -79,12 +95,12 @@ Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, ayudarte con e
             }]);
             
             // Hablar el mensaje de bienvenida
-            if (window.valerioSpeak) {
-                window.valerioSpeak(welcomeMessage);
-                setValerioState('speaking');
-            }
+            setValerioState('speaking');
+            speakTextConversational(welcomeMessage, 'valerio', () => {
+                setValerioState('idle');
+            });
         }
-    }, [isOpen, currentModule, userLevel, conversation.length]);
+    }, [isOpen]);
 
     // Procesar entrada del usuario
     const processUserInput = useCallback(async (inputText) => {
@@ -106,7 +122,7 @@ Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, ayudarte con e
 
         try {
             // Simulación de respuesta de IA (en producción se conectaría a un modelo real)
-            await new Promise(resolve => setTimeout(resolve, 1500));
+            await new Promise(resolve => setTimeout(resolve, 800));
 
             // Generar respuesta basada en el contexto
             let response = '';
@@ -162,10 +178,8 @@ Y si quieres, también puedes consultar con la comunidad del foro, a veces una p
             setMessage(response);
             
             // Hablar la respuesta
-            if (window.valerioSpeak) {
-                window.valerioSpeak(response);
-                setValerioState('speaking');
-            }
+            setValerioState('speaking');
+            speakTextConversational(response, 'valerio', () => setValerioState('idle'));
 
         } catch (error) {
             console.error('Error processing user input:', error);
@@ -181,13 +195,8 @@ Y si quieres, también puedes consultar con la comunidad del foro, a veces una p
             setMessage('Lo siento, hubo un error procesando tu pregunta. Por favor, intenta nuevamente.');
         } finally {
             setIsProcessing(false);
-            setTimeout(() => {
-                if (valerioState === 'speaking') {
-                    setValerioState('idle');
-                }
-            }, 3000);
         }
-    }, [currentModule, userLevel, isProcessing, valerioState]);
+    }, [currentModule, userLevel, isProcessing]);
 
     // Handler para acción rápida
     const handleQuickAction = (action) => {
@@ -305,11 +314,11 @@ Y si quieres, también puedes consultar con la comunidad del foro, a veces una p
                         </div>
                         
                         <button
-                            onClick={onClose}
-                            className="text-white hover:text-slate-200 transition-colors"
+                            onClick={() => { stopSpeech(); onClose(); }}
+                            className="text-white hover:text-slate-200 transition-colors p-2 rounded-lg hover:bg-white/10"
                             aria-label="Cerrar panel"
                         >
-                            <Icon name="fa-times" className="text-xl" />
+                            <Icon name="fa-xmark" className="text-xl" />
                         </button>
                     </div>
                     

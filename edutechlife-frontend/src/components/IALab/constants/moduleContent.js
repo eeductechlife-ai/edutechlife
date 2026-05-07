@@ -46,9 +46,9 @@ export const moduleContent = {
     objective: "Conviértete en un experto en ChatGPT y crea asistentes inteligentes que automaticen tu trabajo diario.",
     learningPoints: [
       { text: "Dominar System Prompts avanzados", icon: "fa-sliders" },
-      { text: "Conectar GPT con APIs externas", icon: "fa-plug" },
+      { text: "Conectar GPT con APIs externas", icon: "fa-code" },
       { text: "Crear tu propio GPT personalizado", icon: "fa-robot" },
-      { text: "Automatizar flujos de trabajo", icon: "fa-gears" }
+      { text: "Automatizar flujos de trabajo", icon: "fa-cog" }
     ],
     overviewData: {
       title: "Desbloquea ChatGPT al Máximo",
@@ -162,9 +162,9 @@ export const moduleContent = {
   3: {
     objective: "Usa Google Gemini para investigar a fondo, verificar datos y analizar información como un profesional.",
     learningPoints: [
-      { text: "Analizar texto, imagen y código juntos", icon: "fa-layer-group" },
-      { text: "Obtener datos en tiempo real", icon: "fa-satellite-dish" },
-      { text: "Investigar temas a profundidad", icon: "fa-microscope" },
+      { text: "Analizar texto, imagen y código juntos", icon: "fa-cubes" },
+      { text: "Obtener datos en tiempo real", icon: "fa-signal" },
+      { text: "Investigar temas a profundidad", icon: "fa-search" },
       { text: "Verificar información con IA", icon: "fa-shield-alt" }
     ],
     overviewData: {
@@ -281,7 +281,7 @@ export const moduleContent = {
     learningPoints: [
       { text: "Seleccionar y curar tus fuentes", icon: "fa-book-open" },
       { text: "Sintetizar documentos con IA", icon: "fa-file-alt" },
-      { text: "Crear podcasts desde tus archivos", icon: "fa-podcast" },
+      { text: "Crear podcasts desde tus archivos", icon: "fa-microphone" },
       { text: "Gestionar documentación inteligente", icon: "fa-folder-open" }
     ],
     overviewData: {
@@ -396,8 +396,8 @@ export const moduleContent = {
   5: {
     objective: "Aprende a usar la IA de forma responsable, ética y legal con frameworks que las empresas exigen hoy.",
     learningPoints: [
-      { text: "Detectar sesgos algorítmicos", icon: "fa-balance-scale" },
-      { text: "Conocer la regulación IA vigente", icon: "fa-gavel" },
+      { text: "Detectar sesgos algorítmicos", icon: "fa-shield-check" },
+      { text: "Conocer la regulación IA vigente", icon: "fa-briefcase" },
       { text: "Proteger datos y privacidad", icon: "fa-lock" },
       { text: "Crear protocolos éticos de IA", icon: "fa-clipboard-check" }
     ],

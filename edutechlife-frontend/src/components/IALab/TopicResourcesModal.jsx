@@ -4,6 +4,7 @@ import { Icon } from '../../utils/iconMapping.jsx';
 import { cn } from '../forum/forumDesignSystem';
 import { useIALabContext } from '../../context/IALabContext';
 import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
+import { useYouTubeDuration } from '../../hooks/useYouTubeDuration';
 import ResourceSelector from './ResourceSelector';
 import ResourceViewerModal from './ResourceViewerModal';
 import QueEsPrompt_OVA_Original from './QueEsPrompt_OVA_Original';
@@ -37,6 +38,10 @@ const TopicResourcesModal = ({
 
   const topicResources = topicData ? getResourcesForTopic(topicData.title) : null;
   const resources = topicResources?.resources || [];
+
+  const currentResource = resources[activeResourceIndex];
+  const currentVideoUrl = currentResource?.type === 'video' ? currentResource?.url : null;
+  const { duration: youtubeDuration, loading: durationLoading } = useYouTubeDuration(currentVideoUrl);
 
   useEffect(() => {
     if (topicData && resources.length > 0) {
@@ -264,8 +269,10 @@ const TopicResourcesModal = ({
                       {resources[activeResourceIndex]?.title || "Selecciona un recurso"}
                     </h4>
                     <div className="flex items-center gap-1 sm:gap-2 text-xs text-slate-500">
-                      {resources[activeResourceIndex]?.type === 'video' && resources[activeResourceIndex]?.duration && (
-                        <span>{resources[activeResourceIndex]?.duration}</span>
+                      {resources[activeResourceIndex]?.type === 'video' && (
+                        <span>
+                          {durationLoading ? 'Cargando...' : (youtubeDuration || resources[activeResourceIndex]?.duration)}
+                        </span>
                       )}
                       {resources[activeResourceIndex]?.format && (
                         <span>{resources[activeResourceIndex]?.format}</span>
@@ -329,6 +336,8 @@ const TopicResourcesModal = ({
             totalResources={resources.length}
             onOpenImmersiveView={handleOpenImmersivePdf}
             onOpenOVA={handleOpenOVA}
+            youtubeDuration={youtubeDuration}
+            durationLoading={durationLoading}
           />
 
           {ovaModalOpen && selectedResource && (
