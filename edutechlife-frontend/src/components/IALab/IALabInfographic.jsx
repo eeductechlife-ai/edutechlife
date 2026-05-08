@@ -2,7 +2,7 @@ import React from 'react';
 
 const IALabInfographic = ({ module, type = 'module' }) => {
     const corporateColors = {
-        petroleum: '#2D7A94',
+        petroleum: '#004B63',
         corporateBlue: '#4DA8C4',
         mint: '#66CCCC',
         softBlue: '#B2D8E5',

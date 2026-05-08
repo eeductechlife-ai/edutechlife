@@ -364,6 +364,15 @@ const iniciarReconocimiento = (setQ, onFinalResult, setIsListening) => {
   }
 };
 
+const stopRecognition = () => {
+  if (recognitionInstance) {
+    try {
+      recognitionInstance.stop();
+    } catch (e) {}
+    recognitionInstance = null;
+  }
+};
+
 /**
  * Función específica para hablar como Valentina
  * @param {string} text - Texto a hablar
@@ -422,4 +431,4 @@ export const getValentinaVoiceConfig = (age = 12) => {
   };
 };
 
-export { speakTextConversational, stopSpeech, iniciarReconocimiento };
+export { speakTextConversational, stopSpeech, iniciarReconocimiento, stopRecognition };

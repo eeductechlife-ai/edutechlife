@@ -168,7 +168,7 @@ export const MicroSpacing = {
 export const EvolvedButtons = {
   // Botón cyan premium (evolución del botón actual)
   CYAN_PRIMARY: cn(
-    "bg-gradient-to-r from-cyan-600 to-cyan-500",
+    "bg-gradient-to-r from-[#004B63] to-[#00BCD4]",
     "text-white font-medium",
     "px-4 py-2.5 rounded-xl",
     "shadow-sm",
@@ -261,13 +261,9 @@ export const LEDIndicators = {
 
 /**
  * WhiteCard - Sistema de tarjetas blancas independientes con acabados SaaS Premium
- * ADN Visual: bg-white sólido, rounded-[2.5rem], sombra ambiental con azul petróleo
- */
-export const WhiteCard = {
-  // Base: Tarjeta blanca independiente con curvatura amplia y moderna
-  BASE: cn(
-    "bg-white",                          // Sólido, limpieza absoluta
-    "rounded-[2.5rem]",                  // Curvatura amplia y moderna (40px)
+ * ADN Visual: bg-white sólido, rounded-2xl, sombra ambiental con azul petróleo
+
+    "rounded-2xl",                  // Curvatura estándar IALab (16px)
     "shadow-sm",                         // Sombra sutil
     "border border-slate-200/60",        // Contorno definido
     "transition-all duration-200"        // Transiciones suaves
@@ -296,7 +292,7 @@ export const WhiteCard = {
   COMPACT_CONTENT: "space-y-4",          // Espaciado compacto
   
   // Responsive
-  RESPONSIVE: "rounded-3xl md:rounded-[2.5rem]", // Mobile: 24px, Desktop: 40px
+  RESPONSIVE: "rounded-2xl", // Curvatura estándar IALab
 };
 
 /**

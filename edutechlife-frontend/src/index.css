@@ -564,7 +564,7 @@ body.is-scrolling .glass-card-dark {
 :root {
   /* Paleta de Colores Premium - Manteniendo identidad */
   --color-petroleum: #004B63;
-  --color-corporate: #4DA8C4;
+  --color-corporate: #00BCD4;
   --color-mint: #66CCCC;
   --color-soft-blue: #B2D8E5;
   --color-navy: #0A1628;
@@ -2131,13 +2131,13 @@ body.is-scrolling .glass-card-dark {
      PETROLEUM ELITE PALETTE
      ========================= */
   /* Petroleum #004B63 - Navegación, títulos H1, Footer - Autoridad y profundidad */
-  /* Corporate #4DA8C4 - Botones CTAs, iconos, acentos - Confianza tecnológica */
+  /* Corporate #00BCD4 - Botones CTAs, iconos, acentos - Confianza tecnológica */
   /* Soft Blue #B2D8E5 - Fondos de iconos, hover - Claridad y calma */
   /* Mint #66CCCC - Badges IA, barras - Innovación y vitalidad */
   /* Navy Deep #0B0F19 - Paneles IA, modales - Premium y contraste */
 
   --color-petroleum: #004B63;
-  --color-corporate: #4DA8C4;
+  --color-corporate: #00BCD4;
   --color-soft-blue: #B2D8E5;
   --color-navy: #0A1628;
   --color-text-gray: #4A4A4A;

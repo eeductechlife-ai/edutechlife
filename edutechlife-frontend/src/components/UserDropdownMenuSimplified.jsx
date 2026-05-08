@@ -185,7 +185,7 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
         {isOpen && (
           <div className="absolute right-0 top-full mt-2 w-60 border border-slate-200/60 shadow-lg rounded-xl bg-white z-[999] animate-in fade-in-0 zoom-in-95 overflow-hidden">
             {/* Header con información del usuario - Gradiente corporativo */}
-            <div className="p-3 bg-gradient-to-r from-[#004B63] to-[#0A3550]">
+            <div className="p-3 bg-gradient-to-r from-[#004B63] to-[#00BCD4]">
               <div className="flex items-center gap-2.5">
                 {/* Avatar clickeable en el dropdown */}
                 <button

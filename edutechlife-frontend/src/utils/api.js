@@ -35,11 +35,10 @@ async function fetchWithRetry(url, options, retries = 2) {
     }
 }
 
-export async function callDeepseek(p, systemPrompt, isJson = false) {
+export async function callDeepseek(p, systemPrompt = null, isJson = false) {
     const url = `${API_BASE_URL}/api/chat`;
     
-    // Prompt optimizado para velocidad y claridad
-    const safeSystemPrompt = `Eres NICO, asistente de EdutechLife. Responde de forma clara y concisa.
+    const defaultPrompt = `Eres NICO, asistente de EdutechLife. Responde de forma clara y concisa.
     - Saluda brevemente si es primera vez
     - Explica servicios educativos de forma simple: VAK (estilos de aprendizaje), STEM, tutorías, bienestar
     - Pregunta nombre si no lo sabes
@@ -47,9 +46,11 @@ export async function callDeepseek(p, systemPrompt, isJson = false) {
     - Ofrece clase gratuita si hay interés
     - Sé natural en español, respuestas cortas pero completas`;
     
+    const prompt = systemPrompt || defaultPrompt;
+    
     const payload = { 
         prompt: p, 
-        systemPrompt: safeSystemPrompt, 
+        systemPrompt: prompt, 
         isJson 
     };
 
@@ -58,7 +59,7 @@ export async function callDeepseek(p, systemPrompt, isJson = false) {
 
     try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 segundos timeout
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
         
         const response = await fetch(url, { 
             method: 'POST', 
@@ -75,30 +76,26 @@ export async function callDeepseek(p, systemPrompt, isJson = false) {
         clearTimeout(timeoutId);
         
         if (!response.ok) {
-            // Respuesta rápida de error
-            console.warn('⚠️ API error:', response.status);
-            return `Lo siento, hubo un problema técnico. ¿Podrías repetir tu pregunta o contactarnos por WhatsApp?`;
+            throw new Error(`API responded with status ${response.status}`);
         }
         
         const data = await response.json();
         
         if (data.error) {
-            console.warn('⚠️ API data error:', data.error);
-            return `Entiendo tu pregunta. Como asistente de EdutechLife, puedo ayudarte con información sobre nuestros servicios educativos. ¿En qué te puedo asistir?`;
+            throw new Error(data.error.message || 'API returned an error');
         }
         
         const result = isJson ? JSON.parse(data.result.replace(/```json|```/g, '').trim()) : data.result;
         
         // Simplificar respuesta si es muy larga
         if (!isJson && result.length > 500) {
-            return result.substring(0, 500) + '... ¿Te gustaría más detalles sobre algún servicio específico?';
+            return result.substring(0, 500) + '... ¿Te gustaría que profundice en algo?';
         }
         
         return result;
     } catch (e) { 
         console.warn('⚠️ API connection error:', e.message);
-        // Respuesta de respaldo rápida
-        return `¡Hola! Soy Nico de EdutechLife. Ofrecemos servicios educativos como VAK, STEM, tutorías y bienestar. ¿En qué puedo ayudarte hoy?`; 
+        throw e;
     }
 }
 

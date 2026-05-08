@@ -3,6 +3,8 @@ import { Icon } from '../../utils/iconMapping.jsx';
 import ValerioAvatar from '../ValerioAvatar';
 import { useIALabContext } from '../../context/IALabContext';
 import { speakTextConversational, stopSpeech } from '../../utils/speech';
+import { callDeepseek } from '../../utils/api';
+import COURSE_KNOWLEDGE from './constants/courseKnowledge';
 
 /**
  * Componente premium para panel de coach IA Valerio
@@ -17,7 +19,8 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
         activeMod, 
         modules,
         userProgress,
-        completedModules
+        completedModules,
+        user
     } = useIALabContext();
 
     const [valerioState, setValerioState] = useState('idle');
@@ -25,8 +28,15 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
     const [conversation, setConversation] = useState([]);
     const [userInput, setUserInput] = useState('');
     const [isProcessing, setIsProcessing] = useState(false);
+    const [isListening, setIsListening] = useState(false);
+    const [speechSupported, setSpeechSupported] = useState(true);
+    const [speechError, setSpeechError] = useState('');
     const [quickActions, setQuickActions] = useState([]);
     const welcomeSpokenRef = useRef(false);
+    const userCancelRef = useRef(false);
+    const recognitionRef = useRef(null);
+    const accumulatedRef = useRef('');
+    const studentName = user?.firstName || user?.full_name || '';
 
     // Módulo actual
     const currentModule = modules.find(m => m.id === activeMod);
@@ -37,12 +47,21 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
         if (!isOpen) {
             stopSpeech();
             setValerioState('idle');
-            welcomeSpokenRef.current = false;
         }
         return () => {
             stopSpeech();
         };
     }, [isOpen]);
+
+    // Detectar soporte de reconocimiento de voz al montar
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        const hasAPI = !!window.SpeechRecognition || !!window.webkitSpeechRecognition;
+        setSpeechSupported(hasAPI);
+        if (!hasAPI) {
+            setSpeechError('Tu navegador no soporta reconocimiento de voz');
+        }
+    }, []);
 
     // Inicializar acciones rápidas basadas en contexto
     useEffect(() => {
@@ -75,30 +94,118 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
         setQuickActions(actions);
     }, [currentModule, userLevel]);
 
-    // Inicializar mensaje de bienvenida (solo una vez por apertura)
+    // Prompt base de Valerio (identidad y personalidad)
+    const PROMPT_VALERIO_DOCENTE = `Eres Valerio, el coach de IA de Edutechlife. 
+
+IDENTIDAD:
+- Eres un Psicólogo Experto en Metodología VAK del programa Edutechlife
+- Tienes más de 10 años de experiencia con estudiantes 
+- Eres un experto en coaching educativo con IA
+- Voz: Español colombiano, cálido y cercano
+
+PERSONALIDAD:
+- Cálido, cercano y motivador como un entrenador personal
+- Explica conceptos complejos de manera simple y con ejemplos prácticos
+- Detecta el estado emocional del estudiante y adapta tu respuesta
+- Usa un lenguaje claro, positivo y constructivo
+- Siempre relaciona tus respuestas con el contenido del curso IALab
+
+INSTRUCCIONES:
+1. Responde usando el contenido del módulo que te proporciono abajo como contexto
+2. Sé específico: menciona nombres de temas, videos y recursos disponibles
+3. Si preguntan sobre un tema, explícalo usando los conceptos del módulo
+4. Recomienda videos, PDFs u OVAs específicos del módulo según la duda
+5. Si no sabes algo, dilo honestamente y sugiere revisar el material
+6. Responde en español, máximo 3 párrafos
+7. Sé cálido y motivador, como un coach personal
+8. Usa el nombre del estudiante de forma natural y esporádica. No lo repitas en cada respuesta ni de forma forzada. Úsalo como lo haría un coach real: para dar apertura, reconocer un logro, o generar cercanía cuando sea pertinente.`;
+
+    const buildValerioSystemPrompt = () => {
+        // Solo incluir el contenido del módulo actual (no los 5 módulos)
+        const currentModuleId = currentModule?.id || 1;
+        const currentModuleData = COURSE_KNOWLEDGE.find(m => m.id === currentModuleId);
+        
+        const moduleContent = currentModuleData 
+            ? JSON.stringify(currentModuleData, null, 2)
+            : 'No hay información del módulo disponible.';
+        
+        return `${PROMPT_VALERIO_DOCENTE}
+
+## MÓDULO ACTUAL DEL ESTUDIANTE:
+${moduleContent}
+
+## CONTEXTO DEL ESTUDIANTE:
+Nombre: ${studentName || 'Estudiante'}
+Nivel: ${userLevel < 3 ? 'Principiante' : userLevel < 6 ? 'Intermedio' : 'Avanzado'}
+Módulos completados: ${completedModules.length}`;
+    };
+
+    // Generar respuesta mock de respaldo (cuando la API no está disponible)
+    const generateFallbackResponse = (inputText) => {
+        const text = inputText.toLowerCase();
+        
+        if (text.includes('explic') || text.includes('qué es')) {
+            const topicList = currentModule?.topics?.join(', ') || 'conceptos clave de IA';
+            return `¡Claro que sí! Vamos a verlo con calma.
+
+Estamos en el módulo de ${currentModule?.title || 'este tema'}, donde exploramos ${topicList}. La idea es que entiendas cómo funciona cada concepto y por qué es importante, no solo que lo memorices.
+
+Como vas en nivel ${userLevel < 3 ? 'principiante' : userLevel < 6 ? 'intermedio' : 'avanzado'}, te sugiero ${userLevel < 3 ? 'empezar por lo básico: familiarízate con los fundamentos y practica con ejemplos sencillos' : userLevel < 6 ? 'profundizar en las técnicas intermedias y aplicarlas a casos reales' : 'explorar las aplicaciones avanzadas. Estás en un nivel donde puedes innovar y optimizar'}.
+
+Dime, ¿hay algo en particular de este tema que te gustaría que te explique con más detalle?`;
+        }
+        
+        if (text.includes('ejemplo') || text.includes('cómo hacer')) {
+            return `Buena pregunta, me encanta que quieras ver esto en acción.
+
+Pensemos en el desafío de este módulo: ${currentModule?.challenge || 'crear algo práctico con lo aprendido'}. Una forma de abordarlo es así:
+
+Primero, pregúntate: ¿qué quiero lograr exactamente? Tener claro el objetivo es clave. Luego, piensa en el rol que necesitas que la IA asuma y dale contexto suficiente para que entienda tu situación.
+
+¿Vas viendo por dónde va la cosa? Si quieres, podemos construir un ejemplo juntos paso a paso.`;
+        }
+
+        return `Entiendo tu pregunta sobre "${inputText}". Déjame pensar cómo puedo ayudarte mejor con eso.
+
+Considerando que estás en ${currentModule?.title || 'este módulo'}, te sugiero que revises el material que ya tienes disponible, porque allí encuentras las bases para responder tu duda. Luego, practica con ejemplos relacionados — la práctica es la que realmente fija los conceptos.
+
+¿Te gustaría que te explique algún concepto en particular o prefieres un ejemplo práctico relacionado con tu pregunta? Lo que más te sirva, aquí estoy para eso.`;
+    };
+
+    // Inicializar mensaje de bienvenida (solo primera vez en la cuenta)
     useEffect(() => {
         if (isOpen && !welcomeSpokenRef.current) {
             welcomeSpokenRef.current = true;
 
-            const welcomeMessage = `¡Hola! Qué gusto tenerte por acá. Soy Valerio, tu coach, y veo que estás en el módulo "${currentModule?.title}" — ¡qué tema tan interesante!
+            const WELCOME_KEY = 'ialab_valerio_welcomed';
+            const alreadyWelcomed = localStorage.getItem(WELCOME_KEY);
+
+            if (!alreadyWelcomed) {
+                localStorage.setItem(WELCOME_KEY, 'true');
+
+                const welcomeMessage = `¡Hola${studentName ? ', ' + studentName : ''}! Qué gusto tenerte por acá. Soy Valerio, tu coach, y veo que estás en el módulo "${currentModule?.title}" — ¡qué tema tan interesante!
 
 No importa si esto es nuevo para ti, estamos en nivel ${userLevel < 3 ? 'principiante' : userLevel < 6 ? 'intermedio' : 'avanzado'}, y lo iremos descubriendo juntos.
 
 Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, ayudarte con el desafío, o simplemente conversar sobre lo que estás aprendiendo. ¿Por dónde te gustaría empezar?`;
             
-            setMessage(welcomeMessage);
-            setConversation([{
-                id: 'welcome',
-                type: 'valerio',
-                content: welcomeMessage,
-                timestamp: new Date().toISOString()
-            }]);
-            
-            // Hablar el mensaje de bienvenida
-            setValerioState('speaking');
-            speakTextConversational(welcomeMessage, 'valerio', () => {
-                setValerioState('idle');
-            });
+                setMessage(welcomeMessage);
+                setConversation([{
+                    id: 'welcome',
+                    type: 'valerio',
+                    content: welcomeMessage,
+                    timestamp: new Date().toISOString()
+                }]);
+                
+                setValerioState('speaking');
+                speakTextConversational(welcomeMessage, 'valerio', () => {
+                    setValerioState('idle');
+                });
+            } else {
+                const shortGreeting = userLevel < 3 ? 'Listo, ¿en qué te ayudo?' : 'Aquí estoy, ¿qué necesitas?';
+                setValerioState('speaking');
+                speakTextConversational(shortGreeting, 'valerio', () => setValerioState('idle'));
+            }
         }
     }, [isOpen]);
 
@@ -121,49 +228,20 @@ Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, ayudarte con e
         setUserInput('');
 
         try {
-            // Simulación de respuesta de IA (en producción se conectaría a un modelo real)
-            await new Promise(resolve => setTimeout(resolve, 800));
+            // Construir prompt del sistema con contexto del curso
+            const systemPrompt = buildValerioSystemPrompt();
 
-            // Generar respuesta basada en el contexto
-            let response = '';
-            
-            if (inputText.toLowerCase().includes('explic') || inputText.toLowerCase().includes('qué es')) {
-                const topicList = currentModule?.topics?.join(', ') || 'conceptos clave de IA';
-                response = `¡Claro que sí! Vamos a verlo con calma.
+            // Llamar a DeepSeek con timeout de 10 segundos
+            const response = await Promise.race([
+                callDeepseek(inputText, systemPrompt, false),
+                new Promise((_, reject) => 
+                    setTimeout(() => reject(new Error('timeout')), 10000)
+                )
+            ]);
 
-Estamos en el módulo de ${currentModule?.title || 'este tema'}, donde exploramos ${topicList}. La idea es que entiendas cómo funciona cada concepto y por qué es importante, no solo que lo memorices.
-
-Como vas en nivel ${userLevel < 3 ? 'principiante' : userLevel < 6 ? 'intermedio' : 'avanzado'}, te sugiero ${userLevel < 3 ? 'empezar por lo básico: familiarízate con los fundamentos y practica con ejemplos sencillos. No te preocupes si al principio no sale perfecto, cada intento cuenta' : userLevel < 6 ? 'profundizar en las técnicas intermedias y aplicarlas a casos reales. Ya tienes una base sólida, ahora es momento de retarte un poco más' : 'explorar las aplicaciones avanzadas. Estás en un nivel donde puedes innovar y optimizar para obtener resultados profesionales'}.
-
-Dime, ¿hay algo en particular de este tema que te gustaría que te explique con más detalle?`;
-            } else if (inputText.toLowerCase().includes('ejemplo') || inputText.toLowerCase().includes('cómo hacer')) {
-                response = `Buena pregunta, me encanta que quieras ver esto en acción.
-
-Pensemos en el desafío de este módulo: ${currentModule?.challenge || 'crear algo práctico con lo aprendido'}. Una forma de abordarlo es así:
-
-Primero, pregúntate: ¿qué quiero lograr exactamente? Tener claro el objetivo es clave. Luego, piensa en el rol que necesitas que la IA asuma y dale contexto suficiente para que entienda tu situación.
-
-Un ejemplo concreto sería algo como: "Actúa como experto en ${currentModule?.topics?.[0] || 'ingeniería de prompts'} y ayúdame a resolver esto. Necesito una solución paso a paso que incluya análisis, implementación y consideraciones importantes."
-
-¿Vas viendo por dónde va la cosa? Si quieres, podemos construir un ejemplo juntos paso a paso.`;
-            } else if (inputText.toLowerCase().includes('desafío') || inputText.toLowerCase().includes('retro')) {
-                response = `Entiendo, los desafíos a veces pueden parecer complicados al principio, pero tranquilo, vamos por partes.
-
-Para el desafío de ${currentModule?.challenge || 'este módulo'}, te recomiendo esta estrategia:
-
-Primero, tómate un momento para leer bien el enunciado y entender qué se pide exactamente. Luego, divide el problema en partes más pequeñas — es más fácil resolver varios pasos pequeños que uno gigante.
-
-${userLevel < 3 ? 'Enfócate en comprender los conceptos básicos antes de intentar resolverlo todo. No hay prisa' : userLevel < 6 ? 'Prueba diferentes enfoques y compara resultados. La experimentación es tu mejor herramienta' : 'Busca optimizar no solo la solución sino también tu proceso. Piensa en escalabilidad y eficiencia'}.
-
-Y recuerda: el objetivo real es aprender en el camino, no solo llegar al final. Cada intento, incluso si no sale perfecto, te está enseñando algo valioso. Cuéntame cómo te va y si te atascas en algún punto, aquí estoy.`;
-            } else {
-                response = `Entiendo tu pregunta sobre "${inputText}". Déjame pensar cómo puedo ayudarte mejor con eso.
-
-Considerando que estás en ${currentModule?.title || 'este módulo'}, te sugiero que revises el material que ya tienes disponible, porque allí encuentras las bases para responder tu duda. Luego, practica con ejemplos relacionados — la práctica es la que realmente fija los conceptos.
-
-Y si quieres, también puedes consultar con la comunidad del foro, a veces una perspectiva diferente es justo lo que necesitas.
-
-¿Te gustaría que te explique algún concepto en particular o prefieres un ejemplo práctico relacionado con tu pregunta? Lo que más te sirva, aquí estoy para eso.`;
+            // Validar respuesta
+            if (!response || response.length < 10) {
+                throw new Error('Respuesta vacía o muy corta');
             }
 
             // Agregar respuesta a la conversación
@@ -182,17 +260,23 @@ Y si quieres, también puedes consultar con la comunidad del foro, a veces una p
             speakTextConversational(response, 'valerio', () => setValerioState('idle'));
 
         } catch (error) {
-            console.error('Error processing user input:', error);
+            console.warn('⚠️ API DeepSeek no disponible, usando respuesta local:', error.message);
             
-            const errorMessage = {
-                id: `error_${Date.now()}`,
+            // Fallback: generar respuesta local
+            const fallbackResponse = generateFallbackResponse(inputText);
+            
+            const valerioMessage = {
+                id: `valerio_${Date.now()}`,
                 type: 'valerio',
-                content: 'Lo siento, hubo un error procesando tu pregunta. Por favor, intenta nuevamente.',
+                content: fallbackResponse,
                 timestamp: new Date().toISOString()
             };
             
-            setConversation(prev => [...prev, errorMessage]);
-            setMessage('Lo siento, hubo un error procesando tu pregunta. Por favor, intenta nuevamente.');
+            setConversation(prev => [...prev, valerioMessage]);
+            setMessage(fallbackResponse);
+            
+            setValerioState('speaking');
+            speakTextConversational(fallbackResponse, 'valerio', () => setValerioState('idle'));
         } finally {
             setIsProcessing(false);
         }
@@ -217,6 +301,116 @@ Y si quieres, también puedes consultar con la comunidad del foro, a veces una p
             handleSendMessage();
         }
     };
+
+    // Handler para entrada por voz (implementación directa, sin depender de speech.js)
+    const handleVoiceInput = () => {
+        if (isListening) {
+            userCancelRef.current = true;
+            if (recognitionRef.current) {
+                try { recognitionRef.current.abort(); } catch (e) {}
+                try { recognitionRef.current.stop(); } catch (e) {}
+                recognitionRef.current = null;
+            }
+            setIsListening(false);
+            setSpeechError('');
+            return;
+        }
+
+        setSpeechError('');
+        userCancelRef.current = false;
+        accumulatedRef.current = userInput;
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            setSpeechError('Tu navegador no soporta reconocimiento de voz');
+            setSpeechSupported(false);
+            return;
+        }
+
+        try {
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'es-CO';
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.maxAlternatives = 1;
+
+            recognition.onstart = () => {
+                setIsListening(true);
+                setSpeechError('');
+            };
+
+            recognition.onresult = (event) => {
+                let newText = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    newText += event.results[i][0].transcript;
+                }
+                const combined = (accumulatedRef.current + ' ' + newText).trim();
+                setUserInput(combined);
+            };
+
+            recognition.onend = () => {
+                setIsListening(false);
+                recognitionRef.current = null;
+            };
+
+            recognition.onerror = (event) => {
+                if (event.error === 'not-allowed') {
+                    const isHTTP = window.location.protocol !== 'https:';
+                    if (isHTTP) {
+                        setSpeechError('Se requiere una conexión segura (HTTPS) para usar el micrófono. Activa SSL en edutechlife.co');
+                    } else {
+                        setSpeechError('Permiso de micrófono denegado. Permite el acceso en la configuración del navegador.');
+                    }
+                    setIsListening(false);
+                    recognitionRef.current = null;
+                } else if (event.error === 'no-speech') {
+                    if (!userCancelRef.current) {
+                        setTimeout(() => {
+                            if (!userCancelRef.current) {
+                                try {
+                                    const r = new SpeechRecognition();
+                                    r.lang = 'es-CO';
+                                    r.continuous = true;
+                                    r.interimResults = true;
+                                    r.maxAlternatives = 1;
+                                    r.onstart = recognition.onstart;
+                                    r.onresult = recognition.onresult;
+                                    r.onend = recognition.onend;
+                                    r.onerror = recognition.onerror;
+                                    r.start();
+                                    recognitionRef.current = r;
+                                } catch (e) {
+                                    setIsListening(false);
+                                    recognitionRef.current = null;
+                                }
+                            }
+                        }, 100);
+                    }
+                } else if (event.error === 'aborted') {
+                } else {
+                    setSpeechError('Error: ' + event.error);
+                    setIsListening(false);
+                    recognitionRef.current = null;
+                }
+            };
+
+            recognition.start();
+            recognitionRef.current = recognition;
+        } catch (e) {
+            setSpeechError('Error al iniciar reconocimiento: ' + e.message);
+            setIsListening(false);
+        }
+    };
+
+    // Limpiar reconocimiento al cerrar
+    useEffect(() => {
+        if (!isOpen && recognitionRef.current) {
+            try { recognitionRef.current.abort(); } catch (e) {}
+            try { recognitionRef.current.stop(); } catch (e) {}
+            recognitionRef.current = null;
+            setIsListening(false);
+        }
+    }, [isOpen]);
 
     // Limpiar conversación
     const handleClearConversation = () => {
@@ -430,8 +624,31 @@ Y si quieres, también puedes consultar con la comunidad del foro, a veces una p
                                     >
                                         <Icon name="fa-trash" className="mr-1" /> Limpiar
                                     </button>
-                                </div>
-                            </div>
+                                 </div>
+                             </div>
+                             
+                             {speechError && (
+                                 <div className="text-xs text-amber-600 mt-1 flex items-center gap-1">
+                                     <Icon name="fa-triangle-exclamation" className="text-xs" />
+                                     {speechError}
+                                 </div>
+                             )}
+                             
+                             {speechSupported && (
+                             <button
+                                 onClick={handleVoiceInput}
+                                 disabled={isProcessing}
+                                 className={`w-10 h-10 rounded-xl transition-all duration-200 flex items-center justify-center flex-shrink-0 ${
+                                     isListening
+                                         ? 'bg-red-500 text-white shadow-[0_0_15px_rgba(239,68,68,0.4)] animate-pulse'
+                                         : 'bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-[#004B63]'
+                                 }`}
+                                 aria-label={isListening ? 'Detener grabación' : 'Preguntar por voz'}
+                                 title={isListening ? 'Detener grabación' : 'Preguntar por voz'}
+                             >
+                                 <Icon name={isListening ? "fa-microphone-slash" : "fa-microphone"} className="text-sm" />
+                             </button>
+                             )}
                             
                             <button
                                 onClick={handleSendMessage}

@@ -22,31 +22,107 @@ import { useIALabContext } from '../../context/IALabContext';
 import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
 import QueEsPrompt_OVA_Original from './QueEsPrompt_OVA_Original';
 import useFullscreen from './hooks/useFullscreen';
+import { stopSpeech } from '../../utils/speech';
 
 const OVAChatGPTTools = lazy(() => import('./OVAChatGPTTools.jsx'));
 const OVAEcosystemGuide = lazy(() => import('./OVAEcosystemGuide.jsx'));
+const OVABuildGPT = lazy(() => import('./OVABuildGPT.jsx'));
+const OVAEtica = lazy(() => import('./OVAEtica.jsx'));
+const OVAIntroPrompt = lazy(() => import('./OVAIntroPrompt.jsx'));
 
 /**
- * Componente para visualizar videos (YouTube/Vimeo)
+ * Hook para crear reproductor YT.Player con detección de fin de video
+ * Usa ref para el callback para evitar recrear el player cuando cambia
  */
-const VideoViewer = ({ resource, youtubeDuration, durationLoading }) => {
+const useYouTubePlayer = (containerRef, videoUrl, onVideoEnded) => {
+  const playerRef = useRef(null);
+  const onVideoEndedRef = useRef(onVideoEnded);
+  onVideoEndedRef.current = onVideoEnded;
+
+  useEffect(() => {
+    const videoId = videoUrl?.match(/(?:embed\/|watch\?v=)([a-zA-Z0-9_-]+)/)?.[1];
+    if (!videoId || !containerRef?.current) return;
+
+    const initPlayer = () => {
+      if (playerRef.current) {
+        try { playerRef.current.destroy(); } catch {}
+      }
+      playerRef.current = new window.YT.Player(containerRef.current, {
+        height: '100%',
+        width: '100%',
+        videoId,
+        playerVars: {
+          autoplay: 1,
+          controls: 1,
+          rel: 0,
+          modestbranding: 1,
+          enablejsapi: 1
+        },
+        events: {
+          onReady: (event) => {
+            try { event.target.playVideo(); } catch {}
+          },
+          onStateChange: (event) => {
+            if (event.data === window.YT.PlayerState.ENDED) {
+              onVideoEndedRef.current?.();
+            }
+          }
+        }
+      });
+    };
+
+    if (window.YT && window.YT.Player && window.YT.loaded) {
+      initPlayer();
+    } else {
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      document.head.appendChild(tag);
+
+      const checkInterval = setInterval(() => {
+        if (window.YT && window.YT.Player && window.YT.loaded) {
+          clearInterval(checkInterval);
+          initPlayer();
+        }
+      }, 200);
+
+      return () => {
+        clearInterval(checkInterval);
+        if (playerRef.current) {
+          try { playerRef.current.destroy(); } catch {}
+        }
+      };
+    }
+
+    return () => {
+      if (playerRef.current) {
+        try { playerRef.current.destroy(); } catch {}
+      }
+    };
+  }, [videoUrl, containerRef]);
+
+  return playerRef;
+};
+
+/**
+ * Componente para visualizar videos (YouTube) con auto-mark al terminar
+ */
+const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded }) => {
   const videoRef = useRef(null);
+  const playerContainerRef = useRef(null);
   const { isFullscreen, toggleFullscreen } = useFullscreen(videoRef);
+
+  useYouTubePlayer(playerContainerRef, resource?.url, onVideoEnded);
 
   return (
     <div className="relative w-full h-full bg-black rounded-2xl overflow-hidden">
-      {/* Contenedor del video */}
+      {/* Contenedor del video con YT.Player */}
       <div 
         ref={videoRef}
         className="relative w-full h-full flex items-center justify-center"
       >
-        <iframe
-          src={resource.url}
-          title={resource.title}
-          className="w-full h-full border-0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          loading="lazy"
+        <div 
+          ref={playerContainerRef}
+          className="w-full h-full"
         />
       </div>
 
@@ -57,12 +133,12 @@ const VideoViewer = ({ resource, youtubeDuration, durationLoading }) => {
           onClick={toggleFullscreen}
           className={cn(
             "px-4 py-2 rounded-xl flex items-center gap-2",
-            "bg-white border border-slate-200/60",
-            "text-slate-800 font-medium text-sm",
-            "hover:bg-slate-50 hover:scale-105",
-            "transition-all duration-200",
-            "shadow-sm"
+            "bg-white border border-[#004B63]/25",
+            "text-[#004B63] font-medium text-sm",
+            "hover:bg-[#004B63]/5 hover:scale-105",
+            "transition-all duration-200"
           )}
+          style={{ boxShadow: '0 1px 2px 0 rgba(0,75,99,0.1)' }}
           aria-label={isFullscreen ? "Salir de pantalla completa" : "Pantalla completa"}
         >
           <Icon 
@@ -91,23 +167,33 @@ const VideoViewer = ({ resource, youtubeDuration, durationLoading }) => {
 /**
  * Componente para visualizar documentos PDF
  */
-const DocumentViewer = ({ resource }) => {
+const DocumentViewer = ({ resource, onAutoComplete }) => {
   const [page, setPage] = useState(1);
   const totalPages = resource.pages || 1;
   const iframeRef = useRef(null);
   const { isFullscreen, toggleFullscreen } = useFullscreen(iframeRef);
+  const autoMarkedRef = useRef(false);
+  const onAutoCompleteRef = useRef(onAutoComplete);
+  onAutoCompleteRef.current = onAutoComplete;
+
+  useEffect(() => {
+    if (!autoMarkedRef.current) {
+      autoMarkedRef.current = true;
+      setTimeout(() => onAutoCompleteRef.current?.(), 100);
+    }
+  }, []);
 
   return (
-    <div className="w-full h-full flex flex-col bg-white rounded-2xl overflow-hidden border border-slate-200/60">
+    <div className="w-full h-full flex flex-col bg-white rounded-2xl overflow-hidden">
       {/* Header del documento */}
-      <div className="flex items-center justify-between p-4 border-b border-slate-200/60 bg-white">
+      <div className="flex items-center justify-between p-4 bg-white">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center">
             <Icon name="fa-file-pdf" className="text-[#004B63] w-5 h-5" />
           </div>
           <div>
-            <h4 className="font-semibold text-slate-800">{resource.title}</h4>
-            <div className="flex items-center gap-3 text-sm text-slate-500">
+            <h4 className="font-semibold text-[#004B63]">{resource.title}</h4>
+            <div className="flex items-center gap-3 text-sm text-[#004B63]/60">
               <span>{resource.format}</span>
               {resource.size && <span>• {resource.size}</span>}
               {resource.pages && <span>• {resource.pages} páginas</span>}
@@ -121,8 +207,8 @@ const DocumentViewer = ({ resource }) => {
             onClick={toggleFullscreen}
             className={cn(
               "px-4 py-2 rounded-lg flex items-center gap-2",
-              "bg-white border border-slate-200/60 text-slate-700 font-medium",
-              "hover:bg-slate-50 hover:scale-105",
+              "bg-white border border-[#004B63]/25 text-[#004B63]/80 font-medium",
+              "hover:bg-[#004B63]/5 hover:scale-105",
               "transition-all duration-200"
             )}
           >
@@ -157,22 +243,22 @@ const DocumentViewer = ({ resource }) => {
         {/* Overlay de navegación para PDFs */}
         {resource.pages && resource.pages > 1 && (
           <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
-            <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-xl border border-slate-200 shadow-sm">
+            <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-xl border border-[#004B63]/25" style={{ boxShadow: '0 1px 2px 0 rgba(0,75,99,0.1)' }}>
               <button
                 onClick={() => setPage(prev => Math.max(1, prev - 1))}
                 disabled={page <= 1}
                 className={cn(
                   "px-3 py-1 rounded-lg flex items-center gap-2",
                   page <= 1 
-                    ? "text-slate-400 cursor-not-allowed" 
-                    : "text-slate-700 hover:bg-slate-100"
+                    ? "text-[#004B63]/50 cursor-not-allowed" 
+                    : "text-[#004B63]/80 hover:bg-[#004B63]/10"
                 )}
               >
                 <Icon name="fa-chevron-left" className="w-4 h-4" />
                 Anterior
               </button>
               
-              <div className="px-3 py-1 bg-slate-100 rounded-lg text-slate-700 font-medium">
+              <div className="px-3 py-1 bg-[#004B63]/10 rounded-lg text-[#004B63]/80 font-medium">
                 Página {page} de {totalPages}
               </div>
               
@@ -182,8 +268,8 @@ const DocumentViewer = ({ resource }) => {
                 className={cn(
                   "px-3 py-1 rounded-lg flex items-center gap-2",
                   page >= totalPages
-                    ? "text-slate-400 cursor-not-allowed"
-                    : "text-slate-700 hover:bg-slate-100"
+                    ? "text-[#004B63]/50 cursor-not-allowed"
+                    : "text-[#004B63]/80 hover:bg-[#004B63]/10"
                 )}
               >
                 Siguiente
@@ -200,35 +286,45 @@ const DocumentViewer = ({ resource }) => {
 /**
  * Componente para visualizar imágenes e infografías
  */
-const ImageViewer = ({ resource }) => {
+const ImageViewer = ({ resource, onAutoComplete }) => {
   const imageRef = useRef(null);
   const { isFullscreen, toggleFullscreen } = useFullscreen(imageRef);
   const [isLoading, setIsLoading] = useState(true);
+  const autoMarkedRef = useRef(false);
+  const onAutoCompleteRef = useRef(onAutoComplete);
+  onAutoCompleteRef.current = onAutoComplete;
+
+  useEffect(() => {
+    if (!autoMarkedRef.current) {
+      autoMarkedRef.current = true;
+      setTimeout(() => onAutoCompleteRef.current?.(), 100);
+    }
+  }, []);
 
   return (
-    <div className="w-full h-full flex flex-col bg-white rounded-2xl overflow-hidden border border-slate-200/60">
+    <div className="w-full h-full flex flex-col bg-white rounded-2xl overflow-auto">
       {/* Header de la imagen */}
-      <div className="flex items-center justify-between p-4 border-b border-slate-200/60">
+      <div className="flex items-center justify-between p-4 bg-white flex-shrink-0">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center">
             <Icon name="fa-image" className="text-[#004B63] w-5 h-5" />
           </div>
           <div>
-            <h4 className="font-semibold text-slate-800">{resource.title}</h4>
+            <h4 className="font-semibold text-[#004B63]">{resource.title}</h4>
             {resource.interactive && (
               <span className="text-sm text-[#004B63] font-medium">Interactiva</span>
             )}
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-shrink-0">
           {/* Botón de pantalla completa */}
           <button
             onClick={toggleFullscreen}
             className={cn(
               "px-4 py-2 rounded-lg flex items-center gap-2",
-              "bg-white border border-slate-200/60 text-slate-700 font-medium",
-              "hover:bg-slate-50 hover:scale-105",
+              "bg-white border border-[#004B63]/25 text-[#004B63]/80 font-medium",
+              "hover:bg-[#004B63]/5 hover:scale-105",
               "transition-all duration-200"
             )}
           >
@@ -254,12 +350,12 @@ const ImageViewer = ({ resource }) => {
       {/* Contenedor de la imagen */}
       <div 
         ref={imageRef}
-        className="flex-1 relative bg-slate-50 flex items-center justify-center p-4"
+        className="flex-1 relative bg-transparent"
       >
         {/* Estado de carga */}
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-12 h-12 border-4 border-[#004B63]/20 border-t-[#004B63] rounded-full animate-spin"></div>
+            <div className="w-12 h-12 border-4 border-[#004B63]/25 border-t-[#004B63] rounded-full animate-spin"></div>
           </div>
         )}
 
@@ -268,7 +364,7 @@ const ImageViewer = ({ resource }) => {
           src={resource.url}
           alt={resource.title}
           className={cn(
-            "max-w-full max-h-full object-contain rounded-lg",
+            "w-full object-contain",
             "transition-opacity duration-300",
             isLoading ? "opacity-0" : "opacity-100"
           )}
@@ -286,8 +382,8 @@ const ImageViewer = ({ resource }) => {
 
       {/* Descripción (si existe) */}
       {resource.description && (
-        <div className="p-4 border-t border-slate-100 bg-slate-50/50">
-          <p className="text-sm text-slate-600">{resource.description}</p>
+        <div className="p-4 bg-[#004B63]/5">
+          <p className="text-sm text-[#004B63]/70">{resource.description}</p>
         </div>
       )}
     </div>
@@ -297,17 +393,28 @@ const ImageViewer = ({ resource }) => {
 /**
  * Componente para recursos interactivos
  */
-const InteractiveViewer = ({ resource }) => {
+const InteractiveViewer = ({ resource, onAutoComplete }) => {
+  const autoMarkedRef = useRef(false);
+  const onAutoCompleteRef = useRef(onAutoComplete);
+  onAutoCompleteRef.current = onAutoComplete;
+
+  useEffect(() => {
+    if (!autoMarkedRef.current) {
+      autoMarkedRef.current = true;
+      setTimeout(() => onAutoCompleteRef.current?.(), 100);
+    }
+  }, []);
+
   return (
-    <div className="w-full h-full flex flex-col bg-white rounded-2xl overflow-hidden border border-slate-200/60">
-      <div className="flex items-center justify-between p-4 border-b border-slate-200/60">
+    <div className="w-full h-full flex flex-col bg-white rounded-2xl overflow-hidden">
+      <div className="flex items-center justify-between p-4 bg-white">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center">
             <Icon name="fa-puzzle-piece" className="text-[#004B63] w-5 h-5" />
           </div>
           <div>
-            <h4 className="font-semibold text-slate-800">{resource.title}</h4>
-            <div className="flex items-center gap-3 text-sm text-slate-500">
+            <h4 className="font-semibold text-[#004B63]">{resource.title}</h4>
+            <div className="flex items-center gap-3 text-sm text-[#004B63]/60">
               <span>Recurso interactivo</span>
               {resource.estimatedTime && <span>• {resource.estimatedTime}</span>}
             </div>
@@ -326,29 +433,29 @@ const InteractiveViewer = ({ resource }) => {
             <Icon name="fa-bolt" className="text-white text-2xl" />
           </div>
           
-          <h3 className="text-xl font-bold text-slate-800 mb-3">
+          <h3 className="text-xl font-bold text-[#004B63] mb-3">
             {resource.title}
           </h3>
           
-          <p className="text-slate-600 mb-6">
+          <p className="text-[#004B63]/70 mb-6">
             {resource.description || "Este recurso interactivo está diseñado para aprendizaje práctico."}
           </p>
 
-          <div className="bg-white rounded-xl p-6 border border-slate-200/60 shadow-sm mb-6">
+            <div className="bg-white rounded-xl p-6 border border-[#004B63]/25 mb-6" style={{ boxShadow: '0 1px 2px 0 rgba(0,75,99,0.1)' }}>
             <div className="flex items-center justify-between mb-4">
-              <span className="text-sm font-medium text-slate-700">Simulación activa</span>
+              <span className="text-sm font-medium text-[#004B63]/80">Simulación activa</span>
               <span className="text-xs px-2 py-1 bg-emerald-100 text-emerald-700 rounded">En tiempo real</span>
             </div>
             
-            <div className="h-32 bg-gradient-to-r from-[#004B63]/5 to-[#00BCD4]/5 rounded-lg border border-slate-200/60 flex items-center justify-center">
+            <div className="h-32 bg-gradient-to-r from-[#004B63]/5 to-[#00BCD4]/5 rounded-lg border border-[#004B63]/25 flex items-center justify-center">
               <div className="text-center">
                 <Icon name="fa-spinner" className="text-[#06B6D4] text-2xl mb-2 animate-spin" />
-                <p className="text-sm text-slate-600">Cargando experiencia interactiva...</p>
+                <p className="text-sm text-[#004B63]/70">Cargando experiencia interactiva...</p>
               </div>
             </div>
           </div>
 
-          <div className="text-sm text-slate-500">
+          <div className="text-sm text-[#004B63]/60">
             <p>Este es un recurso interactivo que requiere interacción del usuario.</p>
             <p>En producción, aquí se cargaría la herramienta interactiva real.</p>
           </div>
@@ -361,26 +468,36 @@ const InteractiveViewer = ({ resource }) => {
 /**
  * Componente para PDF Thumbnail (con doble clic para vista inmersiva)
  */
-const PDFThumbnailViewer = ({ resource }) => {
+const PDFThumbnailViewer = ({ resource, onAutoComplete }) => {
   const openFullScreen = () => window.open(resource.url, '_blank');
+  const autoMarkedRef = useRef(false);
+  const onAutoCompleteRef = useRef(onAutoComplete);
+  onAutoCompleteRef.current = onAutoComplete;
+
+  useEffect(() => {
+    if (!autoMarkedRef.current) {
+      autoMarkedRef.current = true;
+      setTimeout(() => onAutoCompleteRef.current?.(), 100);
+    }
+  }, []);
 
   return (
     <div className="w-full h-full flex flex-col">
       <div className="flex justify-end items-center mb-2 px-1">
         <button
           onClick={openFullScreen}
-          className="text-sm font-medium text-[#004B63] bg-slate-100 hover:bg-slate-200 py-1.5 px-3 rounded-md transition-colors flex items-center gap-2"
+          className="text-sm font-medium text-[#004B63] bg-[#004B63]/10 hover:bg-[#004B63]/12 py-1.5 px-3 rounded-md transition-colors flex items-center gap-2"
         >
           <Icon name="fa-expand" className="w-3.5 h-3.5" />
           Abrir en pantalla completa
           <Icon name="fa-arrow-up-right-from-square" className="w-3 h-3" />
         </button>
       </div>
-      <div className="flex-1 bg-slate-50 rounded-2xl overflow-hidden">
+      <div className="flex-1 bg-transparent rounded-2xl overflow-hidden">
         <iframe
           src={resource.url}
           title={resource.title}
-          className="w-full h-full min-h-[60vh] rounded-lg border-0"
+          className="w-full h-full rounded-lg border-0"
           allowFullScreen
           loading="lazy"
         />
@@ -389,21 +506,32 @@ const PDFThumbnailViewer = ({ resource }) => {
   );
 };
 
-const OVAViewer = ({ resource, onClose }) => {
+const OVAViewer = ({ resource, onClose, onAutoComplete }) => {
+  const autoMarkedRef = useRef(false);
+  const onAutoCompleteRef = useRef(onAutoComplete);
+  onAutoCompleteRef.current = onAutoComplete;
+
+  useEffect(() => {
+    if (!autoMarkedRef.current) {
+      autoMarkedRef.current = true;
+      setTimeout(() => onAutoCompleteRef.current?.(), 100);
+    }
+  }, []);
+
   if (resource.url) {
     return (
-      <div className="w-full h-full min-h-[70vh] flex flex-col bg-white rounded-2xl border border-slate-200 overflow-hidden">
+      <div className="w-full h-full flex flex-col bg-white rounded-2xl overflow-auto">
         <iframe
           src={resource.url}
           title={resource.title}
-          className="w-full h-full min-h-[70vh] rounded-2xl border-0"
+          className="w-full h-full rounded-2xl border-0"
           allowFullScreen
         />
       </div>
     );
   }
   return (
-    <div className="w-full h-full min-h-[70vh] flex flex-col bg-white rounded-2xl border border-slate-200">
+    <div className="w-full h-full flex flex-col bg-white rounded-2xl overflow-auto">
       <div className="flex-1 relative">
         <QueEsPrompt_OVA_Original onClose={onClose} />
       </div>
@@ -435,11 +563,17 @@ const ResourceViewerModal = ({
   // Estado para controlar si se marcó como visto
   const [isMarkedAsViewed, setIsMarkedAsViewed] = useState(false);
 
+  // Detener audio y cerrar modal
+  const handleClose = () => {
+    stopSpeech();
+    onClose();
+  };
+
   // Manejar tecla ESC para cerrar
   useEffect(() => {
     const handleEscape = (e) => {
       if (e.key === 'Escape' && isOpen) {
-        onClose();
+        handleClose();
       }
     };
 
@@ -453,10 +587,12 @@ const ResourceViewerModal = ({
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
+      stopSpeech();
     }
     
     return () => {
       document.body.style.overflow = 'unset';
+      stopSpeech();
     };
   }, [isOpen]);
 
@@ -464,6 +600,15 @@ const ResourceViewerModal = ({
   useEffect(() => {
     setIsMarkedAsViewed(false);
   }, [resource?.id]);
+
+  // Auto-mark para ova_interactive (no tiene viewer propio con auto-mark)
+  useEffect(() => {
+    const type = resourceType || resource?.type;
+    if (type === 'ova_interactive' && isOpen && !isMarkedAsViewed) {
+      const timer = setTimeout(() => handleMarkAsViewed(), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [resource?.id, resourceType, isOpen, isMarkedAsViewed]);
 
   // Si no está abierto, no renderizar nada
   if (!isOpen || !resource) {
@@ -474,10 +619,10 @@ const ResourceViewerModal = ({
   const renderViewer = () => {
     if (!resource) {
       return (
-        <div className="w-full h-full flex items-center justify-center bg-slate-50 rounded-2xl">
+        <div className="w-full h-full flex items-center justify-center bg-[#004B63]/5 rounded-2xl">
           <div className="text-center">
-            <Icon name="fa-file-circle-question" className="text-slate-400 text-4xl mb-4" />
-            <p className="text-slate-500 font-medium">No hay recurso seleccionado</p>
+            <Icon name="fa-file-circle-question" className="text-[#004B63]/50 text-4xl mb-4" />
+            <p className="text-[#004B63]/60 font-medium">No hay recurso seleccionado</p>
           </div>
         </div>
       );
@@ -486,42 +631,43 @@ const ResourceViewerModal = ({
     try {
       switch (resourceType || resource.type) {
         case 'video':
-          return <VideoViewer resource={resource} youtubeDuration={youtubeDuration} durationLoading={durationLoading} />;
+          return <VideoViewer resource={resource} youtubeDuration={youtubeDuration} durationLoading={durationLoading} onVideoEnded={handleAutoComplete} />;
         
         case 'documento':
         case 'document':
-          return <DocumentViewer resource={resource} />;
+          return <DocumentViewer resource={resource} onAutoComplete={handleAutoComplete} />;
         
         case 'imagen':
         case 'image':
-          return <ImageViewer resource={resource} />;
+          return <ImageViewer resource={resource} onAutoComplete={handleAutoComplete} />;
         
         case 'interactivo':
         case 'interactive':
-          return <InteractiveViewer resource={resource} />;
+          return <InteractiveViewer resource={resource} onAutoComplete={handleAutoComplete} />;
         
         case 'pdf':
         case 'pdf-thumbnail':
-          return <PDFThumbnailViewer resource={resource} />;
+          return <PDFThumbnailViewer resource={resource} onAutoComplete={handleAutoComplete} />;
         
         case 'ova':
         case 'ova-thumbnail':
           return <OVAViewer 
             resource={resource} 
             onClose={onClose}
+            onAutoComplete={handleAutoComplete}
           />;
         
         case 'ova_interactive':
           return (
             <Suspense fallback={
-              <div className="w-full h-full flex items-center justify-center bg-slate-50">
+              <div className="w-full h-full flex items-center justify-center bg-[#004B63]/5">
                 <div className="text-center">
                   <div className="animate-spin w-10 h-10 border-4 border-[#004B63] border-t-transparent rounded-full mx-auto mb-4"></div>
-                  <p className="text-slate-500 font-bold">Cargando simulador interactivo...</p>
+                  <p className="text-[#004B63]/60 font-bold">Cargando simulador interactivo...</p>
                 </div>
               </div>
             }>
-              {resource.id === 'chatgpt-ova-ecosystem' ? <OVAEcosystemGuide /> : <OVAChatGPTTools />}
+              {resource.id === 'gpts-ova-1' ? <OVABuildGPT /> : resource.id === 'chatgpt-ova-ecosystem' ? <OVAEcosystemGuide /> : resource.id === 'intro-ova-1' ? <OVAEtica /> : resource.id === 'prompt-ova-html-1' ? <OVAIntroPrompt /> : <OVAChatGPTTools />}
             </Suspense>
           );
         
@@ -612,6 +758,13 @@ const ResourceViewerModal = ({
     }
   };
 
+  // Auto-marcar como visto (para video al terminar, para otros al abrir)
+  const handleAutoComplete = () => {
+    if (!isMarkedAsViewed) {
+      handleMarkAsViewed();
+    }
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -623,7 +776,7 @@ const ResourceViewerModal = ({
             animate="visible"
             exit="hidden"
             className="fixed inset-0 z-[200] backdrop-blur-md bg-black/40"
-            onClick={onClose}
+            onClick={handleClose}
           />
 
               {/* Modal principal - 90% de pantalla */}
@@ -634,16 +787,19 @@ const ResourceViewerModal = ({
                   animate="visible"
                   exit="exit"
                   className={cn(
-                    "w-full max-w-6xl bg-white rounded-2xl sm:rounded-3xl shadow-xl",
+                    "w-full max-w-6xl bg-white rounded-2xl sm:rounded-3xl",
                     "pointer-events-auto overflow-hidden",
                     "flex flex-col",
                     "h-[90vh] max-h-[900px]",
                     "mx-2 sm:mx-4" // Margenes responsive
                   )}
+                  style={{
+                    boxShadow: '0 20px 25px -5px rgba(0,75,99,0.18), 0 8px 10px -6px rgba(0,75,99,0.12)'
+                  }}
                   onClick={(e) => e.stopPropagation()}
                 >
               {/* Header del modal */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 border-b border-slate-200/10 bg-[#004B63]">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 border-b border-[#004B63]/15 bg-gradient-to-r from-[#004B63] to-[#00BCD4]">
                 <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0 w-full sm:w-auto">
                   <div className="bg-white/10 p-2 rounded-lg flex-shrink-0">
                     {(resource.type === 'video') ? <Icon name="fa-video" className="text-white w-5 h-5 sm:w-6 sm:h-6" /> :
@@ -686,7 +842,7 @@ const ResourceViewerModal = ({
 
                 {/* Botón de cerrar */}
                 <button
-                  onClick={onClose}
+            onClick={handleClose}
                   className="mt-3 sm:mt-0 ml-0 sm:ml-4 px-4 py-2 sm:px-5 sm:py-2.5 bg-white/10 hover:bg-white/20 text-white border-none rounded-lg sm:rounded-xl transition-colors duration-200 flex items-center gap-2 font-medium flex-shrink-0 w-full sm:w-auto justify-center sm:justify-start"
                   aria-label="Cerrar visor y volver al tema"
                 >
@@ -696,14 +852,12 @@ const ResourceViewerModal = ({
               </div>
 
               {/* Contenido principal del recurso */}
-              <div className="flex-1 p-3 sm:p-4 md:p-6 overflow-auto">
-                <div className="w-full h-full min-h-[70vh]">
-                  {renderViewer()}
-                </div>
+              <div className="flex-1 overflow-auto">
+                {renderViewer()}
               </div>
 
               {/* Footer con navegación y acciones */}
-              <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-slate-200/60 bg-white">
+              <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-[#004B63]/25 bg-white">
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
                   {/* Navegación entre recursos */}
                   {totalResources > 1 && (
@@ -714,8 +868,8 @@ const ResourceViewerModal = ({
                         className={cn(
                           "px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg flex items-center gap-1 sm:gap-2 transition-colors duration-200 text-sm sm:text-base font-medium",
                           currentIndex <= 0
-                            ? "text-slate-400 cursor-not-allowed"
-                            : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-[#004B63]"
+                            ? "text-[#004B63]/50 cursor-not-allowed"
+                            : "bg-white border border-[#004B63]/25 text-[#004B63]/80 hover:bg-[#004B63]/5 hover:text-[#004B63]"
                         )}
                         aria-label="Recurso anterior"
                       >
@@ -723,7 +877,7 @@ const ResourceViewerModal = ({
                         <span className="hidden sm:inline">Anterior</span>
                       </button>
                       
-                      <div className="px-3 py-1.5 sm:px-4 sm:py-2 bg-slate-100 rounded-lg text-slate-700 font-medium text-sm sm:text-base">
+                      <div className="px-3 py-1.5 sm:px-4 sm:py-2 bg-[#004B63]/10 rounded-lg text-[#004B63]/80 font-medium text-sm sm:text-base">
                         {currentIndex + 1} / {totalResources}
                       </div>
                       
@@ -733,8 +887,8 @@ const ResourceViewerModal = ({
                         className={cn(
                           "px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg flex items-center gap-1 sm:gap-2 transition-colors duration-200 text-sm sm:text-base font-medium",
                           currentIndex >= totalResources - 1
-                            ? "text-slate-400 cursor-not-allowed"
-                            : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-[#004B63]"
+                            ? "text-[#004B63]/50 cursor-not-allowed"
+                            : "bg-white border border-[#004B63]/25 text-[#004B63]/80 hover:bg-[#004B63]/5 hover:text-[#004B63]"
                         )}
                         aria-label="Siguiente recurso"
                       >

@@ -107,7 +107,7 @@ const IALabForumOptimized = ({
             'from-[#004B63] to-[#0A3550]',
             'from-[#0A3550] to-[#00BCD4]',
             'from-[#004B63] to-[#00BCD4]',
-            'from-[#0A3550] to-[#06B6D4]',
+            'from-[#0A3550] to-[#00BCD4]',
             'from-[#004B63] to-[#0A3550]'
         ];
 
@@ -453,7 +453,7 @@ const IALabForumOptimized = ({
                             disabled={!newMessage.trim() || isSubmitting || !user}
                             className={cn(
                                 "px-4 py-3 rounded-xl",
-                                "bg-gradient-to-r from-[#004B63] via-[#003A4D] to-[#06B6D4]",
+                                "bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#00BCD4]",
                                 "text-white text-sm font-medium",
                                 "hover:shadow-[0_0_15px_rgba(0,188,212,0.3)]",
                                 "disabled:opacity-50 disabled:cursor-not-allowed",

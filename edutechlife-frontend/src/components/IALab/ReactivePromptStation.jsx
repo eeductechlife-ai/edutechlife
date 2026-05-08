@@ -155,11 +155,11 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                     )}
                 </div>
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ml-4 transition-all duration-300 ${
-                    isOpen ? 'bg-[#004B63]/10 rotate-180' : 'bg-[#06B6D4]/15 group-hover:scale-110'
+                    isOpen ? 'bg-[#004B63]/10 rotate-180' : 'bg-[#00BCD4]/15 group-hover:scale-110'
                 }`}>
                     <Icon
                         name={isOpen ? "fa-chevron-up" : "fa-chevron-down"}
-                        className={`w-3.5 h-3.5 transition-all duration-300 ${isOpen ? 'text-[#004B63]' : 'text-[#06B6D4] group-hover:text-[#004B63]'}`}
+                        className={`w-3.5 h-3.5 transition-all duration-300 ${isOpen ? 'text-[#004B63]' : 'text-[#00BCD4] group-hover:text-[#004B63]'}`}
                     />
                 </div>
             </div>
@@ -215,7 +215,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                             transition={{ type: "spring", stiffness: 400, damping: 17 }}
                             className={cn(
                                 "w-full px-6 py-3 rounded-xl",
-                                "bg-gradient-to-r from-[#004B63] via-[#003A4D] to-[#06B6D4]",
+                                "bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#00BCD4]",
                                 "text-white font-semibold",
                                 "hover:bg-white hover:text-[#004B63]",
                                 "shadow-md shadow-[#004B63]/20 hover:shadow-lg hover:shadow-[#004B63]/30",
@@ -351,11 +351,11 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                                 Resultado
                             </span>
                             <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 ${
-                                isResultOpen ? 'bg-[#004B63]/10' : 'bg-[#06B6D4]/15'
+                                isResultOpen ? 'bg-[#004B63]/10' : 'bg-[#00BCD4]/15'
                             }`}>
                                 <Icon
                                     name={isResultOpen ? "fa-chevron-up" : "fa-chevron-down"}
-                                    className={`w-3 h-3 ${isResultOpen ? 'text-[#004B63]' : 'text-[#06B6D4]'}`}
+                                    className={`w-3 h-3 ${isResultOpen ? 'text-[#004B63]' : 'text-[#00BCD4]'}`}
                                 />
                             </div>
                         </div>

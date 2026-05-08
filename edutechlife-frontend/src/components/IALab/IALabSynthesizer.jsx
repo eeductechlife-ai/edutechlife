@@ -145,7 +145,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                     📚 {context.userLevel}
                 </div>
                 {techniques.slice(0, 2).map((tech, index) => (
-                    <div key={index} className="px-3 py-1 bg-[#8B5CF6]/10 text-[#8B5CF6] text-xs font-medium rounded-full">
+                    <div key={index} className="px-3 py-1 bg-[#00BCD4]/10 text-[#00BCD4] text-xs font-medium rounded-full">
                         {tech.icon} {tech.name}
                     </div>
                 ))}
@@ -400,11 +400,11 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                     {/* Tarjeta FORMATO */}
                     <div className="bg-white border border-slate-200/60 shadow-sm rounded-3xl p-6 hover:-translate-y-1 hover:shadow transition-all duration-300 relative overflow-hidden">
                         <div className="flex items-center gap-2 mb-3">
-                            <Icon name="fa-file-alt" className="text-[#4F46E5]" />
-                            <span className="text-xs font-black text-[#4F46E5] tracking-widest uppercase font-sans">FORMATO</span>
+                            <Icon name="fa-file-alt" className="text-[#004B63]" />
+                            <span className="text-xs font-black text-[#004B63] tracking-widest uppercase font-sans">FORMATO</span>
                         </div>
                         <p className="text-slate-800 font-medium leading-relaxed font-sans">{deepSeekData.formato}</p>
-                        <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-[#4F46E5]/5 rounded-full blur-sm"></div>
+                        <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-[#004B63]/5 rounded-full blur-sm"></div>
                     </div>
                 </div>
                 
@@ -490,7 +490,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                             <span className="bg-white border border-[#00BCD4]/20 text-[#00BCD4] px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
                                 Especificidad
                             </span>
-                            <span className="bg-white border border-[#4F46E5]/20 text-[#4F46E5] px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
+                            <span className="bg-white border border-[#004B63]/20 text-[#004B63] px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
                                 Claridad
                             </span>
                             <span className="bg-white border border-slate-200 text-slate-600 px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
@@ -530,7 +530,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
             <div className="mt-8 space-y-6">
                 {/* Resumen ejecutivo */}
                 <div className={cn(
-                    "p-6 rounded-xl bg-gradient-to-r from-[#004B63] to-[#006B8F]",
+                    "p-6 rounded-xl bg-gradient-to-r from-[#004B63] to-[#004B63]",
                     FORUM_EFFECTS.ANIMATION_FADE_IN,
                     "text-white"
                 )} style={{ animationDelay: '0.1s' }}>
@@ -667,7 +667,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                             <div className="text-xs text-slate-600">Puntuación promedio</div>
                         </div>
                         <div className="text-center">
-                            <div className="text-2xl font-bold text-[#8B5CF6]">{usageStats.favoriteTechnique || 'N/A'}</div>
+                            <div className="text-2xl font-bold text-[#00BCD4]">{usageStats.favoriteTechnique || 'N/A'}</div>
                             <div className="text-xs text-slate-600">Técnica favorita</div>
                         </div>
                         <div className="text-center">

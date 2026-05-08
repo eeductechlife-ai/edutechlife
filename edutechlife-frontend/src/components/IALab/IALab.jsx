@@ -8,6 +8,7 @@ import ModuleOverviewCard from './ModuleOverviewCard';
 import ModuleInfoSection from './ModuleInfoSection';
 import IALabContentAccordion from './IALabContentAccordion';
 import ReactivePromptStation from './ReactivePromptStation';
+import IALabInteractionAdvisor from './IALabInteractionAdvisor';
 import IALabTutoriasVirtuales from './IALabTutoriasVirtuales';
 import IALabEvaluationModal from './IALabEvaluationModal';
 import IALabEvaluationModalPremium from './IALabEvaluationModalPremium';
@@ -186,9 +187,9 @@ const IALabContent = () => {
                               <IALabContentAccordion />
                             </div>
                             
-                            {/* Estación Reactiva de Prompts - Fusión Sintetizador + Dashboard */}
+                            {/* Estación Reactiva de Prompts / Asesor de Interacción según módulo */}
                             <div className="mt-10">
-                              <ReactivePromptStation />
+                              {activeMod === 2 ? <IALabInteractionAdvisor /> : <ReactivePromptStation />}
                             </div>
                             
                             {/* Tutorías Virtuales */}

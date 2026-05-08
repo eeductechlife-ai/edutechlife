@@ -246,7 +246,7 @@ const ModuleOverviewCard = ({ onAction }) => {
                         onClick={() => setIsForumOpen(!isForumOpen)}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border-0 relative"
+                        className="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border-0 relative"
                         title="Ver comunidad"
                       >
                         <Icon name="fa-comments" className="text-white w-9 h-9 md:w-10 md:h-10" />
@@ -263,7 +263,7 @@ const ModuleOverviewCard = ({ onAction }) => {
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                         transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                        className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-lg hover:bg-[#00BCD4]/90 hover:shadow-xl transition-all duration-300 cursor-pointer border-0"
+                        className="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-lg hover:bg-[#00BCD4]/90 hover:shadow-xl transition-all duration-300 cursor-pointer border-0"
                         title="Comunidad IALab"
                       >
                         <Icon name="fa-comments" className="text-white w-9 h-9 md:w-10 md:h-10" />
@@ -280,7 +280,7 @@ const ModuleOverviewCard = ({ onAction }) => {
                         onClick={() => onAction('SHOW_CHALLENGE_RESULT')}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border-0 relative"
+                        className="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border-0 relative"
                         title="Ver resultado del desafío"
                       >
                         <Icon name="fa-rocket" className="text-white w-9 h-9 md:w-10 md:h-10" />
@@ -297,7 +297,7 @@ const ModuleOverviewCard = ({ onAction }) => {
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                         transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                        className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-lg hover:bg-[#00BCD4]/90 hover:shadow-xl transition-all duration-300 cursor-pointer border-0"
+                        className="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-lg hover:bg-[#00BCD4]/90 hover:shadow-xl transition-all duration-300 cursor-pointer border-0"
                         title="Desafío del Módulo"
                       >
                         <Icon name="fa-rocket" className="text-white w-9 h-9 md:w-10 md:h-10" />
@@ -314,7 +314,7 @@ const ModuleOverviewCard = ({ onAction }) => {
                         onClick={() => onAction('SHOW_EXAM_RESULT')}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border-0 relative"
+                        className="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border-0 relative"
                         title="Ver resultado del examen"
                       >
                         <Icon name="fa-clipboard-check" className="text-white w-9 h-9 md:w-10 md:h-10" />
@@ -331,7 +331,7 @@ const ModuleOverviewCard = ({ onAction }) => {
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                         transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                        className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-lg hover:bg-[#00BCD4]/90 hover:shadow-xl transition-all duration-300 cursor-pointer border-0"
+                        className="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-lg hover:bg-[#00BCD4]/90 hover:shadow-xl transition-all duration-300 cursor-pointer border-0"
                         title="Examen del Módulo"
                       >
                         <Icon name="fa-clipboard-check" className="text-white w-9 h-9 md:w-10 md:h-10" />

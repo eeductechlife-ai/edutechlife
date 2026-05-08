@@ -1,571 +1,335 @@
 import React, { useState, useEffect } from 'react';
-import { BrainCircuit, PlayCircle, PauseCircle, Volume2, VolumeX, ChevronRight, ChevronLeft, CheckCircle, XCircle, HelpCircle, BookOpen, Target, Zap, Award, X } from 'lucide-react';
+import {
+  GraduationCap, Bot, BrainCircuit, BookOpen, Target, Zap, Award,
+  CheckCircle, Volume2, Square, ChevronRight, Play, Star,
+  Settings, ArrowRight, Check, Lightbulb, Shield, Users, Eye
+} from 'lucide-react';
+import { speakTextConversational, stopSpeech } from '../../utils/speech';
 
-const OVAReflexion = ({ onClose }) => {
-  const [currentSection, setCurrentSection] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(0.8);
-  const [isMuted, setIsMuted] = useState(false);
-  const [matchingPairs, setMatchingPairs] = useState([]);
-  const [selectedCard, setSelectedCard] = useState(null);
-  const [matchedPairs, setMatchedPairs] = useState([]);
-  const [quizAnswers, setQuizAnswers] = useState({});
-  const [quizScore, setQuizScore] = useState(0);
-  const [showGlossary, setShowGlossary] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [showCertificate, setShowCertificate] = useState(false);
-  const [ttsText, setTtsText] = useState('');
-  const [isTtsPlaying, setIsTtsPlaying] = useState(false);
-  
-  const sections = [
-    { id: 0, title: 'Historia de la IA', icon: <BookOpen size={24} /> },
-    { id: 1, title: 'Tecnología Actual', icon: <Zap size={24} /> },
-    { id: 2, title: 'Ética y Sociedad', icon: <Target size={24} /> },
-    { id: 3, title: 'Juego de Emparejamiento', icon: <BrainCircuit size={24} /> },
-    { id: 4, title: 'Cuestionario Final', icon: <HelpCircle size={24} /> },
-    { id: 5, title: 'Glosario', icon: <BookOpen size={24} /> }
-  ];
+const Logo = () => (
+  <div className="flex items-center gap-2">
+    <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#00BCD4] to-[#004B63] flex items-center justify-center shadow-sm text-white">
+      <GraduationCap size={22} strokeWidth={2.5} />
+    </div>
+    <span className="text-2xl font-bold tracking-tight" style={{ letterSpacing: '-0.02em' }}>
+      <span className="text-[#00BCD4]">Edu</span><span className="text-[#004B63]">techlife</span>
+    </span>
+  </div>
+);
 
-  const glossaryTerms = [
-    { term: 'Algoritmo', definition: 'Conjunto de instrucciones paso a paso para resolver un problema' },
-    { term: 'Machine Learning', definition: 'Rama de la IA que permite a las máquinas aprender de datos' },
-    { term: 'Deep Learning', definition: 'Subcampo del ML que utiliza redes neuronales profundas' },
-    { term: 'Sesgo Algorítmico', definition: 'Prejuicios en sistemas de IA que reflejan sesgos humanos' },
-    { term: 'Transparencia', definition: 'Capacidad de entender cómo un sistema de IA toma decisiones' }
-  ];
-
-  const quizQuestions = [
-    {
-      id: 1,
-      question: '¿Cuál es el principal desafío ético de la IA actual?',
-      options: [
-        'Velocidad de procesamiento',
-        'Sesgo algorítmico',
-        'Costo de implementación',
-        'Compatibilidad con hardware antiguo'
-      ],
-      correct: 1
-    },
-    {
-      id: 2,
-      question: '¿Qué tecnología permite a las máquinas aprender de datos?',
-      options: [
-        'Blockchain',
-        'Machine Learning',
-        'Realidad Virtual',
-        'Computación Cuántica'
-      ],
-      correct: 1
-    },
-    {
-      id: 3,
-      question: '¿Por qué es importante la transparencia en sistemas de IA?',
-      options: [
-        'Para reducir costos',
-        'Para aumentar la velocidad',
-        'Para entender cómo se toman decisiones',
-        'Para mejorar la compatibilidad'
-      ],
-      correct: 2
-    }
-  ];
-
-  const matchingGameItems = [
-    { id: 1, type: 'concept', text: 'Machine Learning', matchId: 4 },
-    { id: 2, type: 'concept', text: 'Deep Learning', matchId: 5 },
-    { id: 3, type: 'concept', text: 'Sesgo Algorítmico', matchId: 6 },
-    { id: 4, type: 'definition', text: 'Aprendizaje automático a partir de datos', matchId: 1 },
-    { id: 5, type: 'definition', text: 'Redes neuronales profundas', matchId: 2 },
-    { id: 6, type: 'definition', text: 'Prejuicios en sistemas de IA', matchId: 3 }
-  ];
-
-  useEffect(() => {
-    const shuffled = [...matchingGameItems].sort(() => Math.random() - 0.5);
-    setMatchingPairs(shuffled);
-  }, []);
-
-  useEffect(() => {
-    const newProgress = ((currentSection + 1) / sections.length) * 100;
-    setProgress(newProgress);
-    
-    if (currentSection === sections.length - 1 && newProgress === 100) {
-      setTimeout(() => setShowCertificate(true), 1000);
-    }
-  }, [currentSection]);
-
-  const handleCardClick = (cardId) => {
-    if (matchedPairs.includes(cardId) || selectedCard === cardId) return;
-
-    if (selectedCard === null) {
-      setSelectedCard(cardId);
-      return;
-    }
-
-    const firstCard = matchingPairs.find(card => card.id === selectedCard);
-    const secondCard = matchingPairs.find(card => card.id === cardId);
-
-    if (firstCard.matchId === secondCard.id || secondCard.matchId === firstCard.id) {
-      setMatchedPairs([...matchedPairs, selectedCard, cardId]);
-    }
-
-    setTimeout(() => setSelectedCard(null), 1000);
+const Button = ({ children, onClick, variant = 'primary', className = '', icon: Icon = null, disabled = false }) => {
+  const baseStyle = "flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100";
+  const variants = {
+    primary: "bg-gradient-to-r from-[#00BCD4] to-[#0097A7] text-white shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 hover:-translate-y-0.5",
+    secondary: "bg-white text-[#004B63] border-2 border-[#E0F7FA] hover:border-[#00BCD4] hover:bg-[#F0FDFF]",
+    outline: "bg-transparent text-[#00BCD4] border-2 border-[#00BCD4] hover:bg-[#00BCD4] hover:text-white",
   };
-
-  const handleQuizAnswer = (questionId, answerIndex) => {
-    setQuizAnswers({ ...quizAnswers, [questionId]: answerIndex });
-    
-    const question = quizQuestions.find(q => q.id === questionId);
-    if (question.correct === answerIndex) {
-      setQuizScore(prev => prev + 1);
-    }
-  };
-
-  const handleTtsPlay = () => {
-    if (!ttsText.trim()) return;
-    
-    setIsTtsPlaying(true);
-    const utterance = new SpeechSynthesisUtterance(ttsText);
-    utterance.volume = isMuted ? 0 : volume;
-    utterance.onend = () => setIsTtsPlaying(false);
-    speechSynthesis.speak(utterance);
-  };
-
-  const handleTtsPause = () => {
-    speechSynthesis.cancel();
-    setIsTtsPlaying(false);
-  };
-
-  const renderSectionContent = () => {
-    switch(currentSection) {
-      case 0:
-        return (
-          <div className="space-y-6">
-            <h3 className="text-2xl font-bold text-indigo-800">Historia de la Inteligencia Artificial</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gradient-to-br from-indigo-100 to-white p-6 rounded-2xl shadow-lg">
-                <h4 className="text-lg font-semibold text-indigo-700 mb-3">Orígenes (1950s)</h4>
-                <p className="text-gray-700">El término "Inteligencia Artificial" fue acuñado por John McCarthy en 1956 durante la Conferencia de Dartmouth.</p>
-              </div>
-              <div className="bg-gradient-to-br from-blue-100 to-white p-6 rounded-2xl shadow-lg">
-                <h4 className="text-lg font-semibold text-blue-700 mb-3">Inviernos de la IA</h4>
-                <p className="text-gray-700">Períodos de reducción de financiamiento y expectativas debido a limitaciones tecnológicas.</p>
-              </div>
-              <div className="bg-gradient-to-br from-cyan-100 to-white p-6 rounded-2xl shadow-lg">
-                <h4 className="text-lg font-semibold text-cyan-700 mb-3">Resurgimiento (2010s)</h4>
-                <p className="text-gray-700">Avances en deep learning y disponibilidad de grandes conjuntos de datos revitalizaron el campo.</p>
-              </div>
-              <div className="bg-gradient-to-br from-indigo-600 to-blue-500 p-6 rounded-2xl shadow-lg">
-                <h4 className="text-lg font-semibold text-white mb-3">IA Actual</h4>
-                <p className="text-white">Integración en vida cotidiana: asistentes virtuales, recomendaciones, diagnóstico médico.</p>
-              </div>
-            </div>
-          </div>
-        );
-      
-      case 1:
-        return (
-          <div className="space-y-6">
-            <h3 className="text-2xl font-bold text-indigo-800">Tecnologías Actuales de IA</h3>
-            <div className="space-y-4">
-              <div className="flex items-center space-x-4 p-4 bg-white rounded-xl shadow-md">
-                <Zap className="text-blue-500" size={32} />
-                <div>
-                  <h4 className="font-semibold text-indigo-700">Procesamiento del Lenguaje Natural</h4>
-                  <p className="text-gray-600">Chatbots, traducción automática, análisis de sentimientos</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-4 p-4 bg-white rounded-xl shadow-md">
-                <BrainCircuit className="text-cyan-500" size={32} />
-                <div>
-                  <h4 className="font-semibold text-indigo-700">Visión por Computadora</h4>
-                  <p className="text-gray-600">Reconocimiento facial, detección de objetos, diagnóstico médico</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-4 p-4 bg-white rounded-xl shadow-md">
-                <Target className="text-indigo-600" size={32} />
-                <div>
-                  <h4 className="font-semibold text-indigo-700">Sistemas de Recomendación</h4>
-                  <p className="text-gray-600">Personalización de contenido, comercio electrónico, streaming</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      
-      case 2:
-        return (
-          <div className="space-y-6">
-            <h3 className="text-2xl font-bold text-indigo-800">Ética y Impacto Social</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-red-50 p-4 rounded-xl border border-red-200">
-                <h4 className="font-semibold text-red-700 mb-2">Desafíos Éticos</h4>
-                <ul className="space-y-1 text-sm text-red-600">
-                  <li>• Sesgo algorítmico</li>
-                  <li>• Privacidad de datos</li>
-                  <li>• Transparencia</li>
-                  <li>• Responsabilidad</li>
-                </ul>
-              </div>
-              <div className="bg-yellow-50 p-4 rounded-xl border border-yellow-200">
-                <h4 className="font-semibold text-yellow-700 mb-2">Impacto Laboral</h4>
-                <ul className="space-y-1 text-sm text-yellow-600">
-                  <li>• Automatización de tareas</li>
-                  <li>• Nuevas oportunidades</li>
-                  <li>• Requerimiento de habilidades</li>
-                  <li>• Transformación digital</li>
-                </ul>
-              </div>
-              <div className="bg-green-50 p-4 rounded-xl border border-green-200">
-                <h4 className="font-semibold text-green-700 mb-2">Oportunidades</h4>
-                <ul className="space-y-1 text-sm text-green-600">
-                  <li>• Soluciones a problemas complejos</li>
-                  <li>• Personalización masiva</li>
-                  <li>• Innovación en salud</li>
-                  <li>• Sostenibilidad ambiental</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        );
-      
-      case 3:
-        return (
-          <div className="space-y-6">
-            <h3 className="text-2xl font-bold text-indigo-800">Juego de Emparejamiento</h3>
-            <p className="text-gray-600">Empareja cada concepto con su definición correcta</p>
-            
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {matchingPairs.map(card => (
-                <button
-                  key={card.id}
-                  onClick={() => handleCardClick(card.id)}
-                  className={`p-4 rounded-xl transition-all duration-300 transform hover:scale-105 ${
-                    selectedCard === card.id 
-                      ? 'bg-blue-500 text-white shadow-lg' 
-                      : matchedPairs.includes(card.id)
-                      ? 'bg-cyan-500 text-white shadow-md'
-                      : card.type === 'concept'
-                      ? 'bg-gradient-to-r from-indigo-100 to-white border-2 border-indigo-300'
-                      : 'bg-gradient-to-r from-white to-blue-100 border-2 border-blue-300'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium">{card.text}</span>
-                    {matchedPairs.includes(card.id) && (
-                      <CheckCircle size={20} className="text-white" />
-                    )}
-                  </div>
-                </button>
-              ))}
-            </div>
-            
-            <div className="mt-6 p-4 bg-indigo-700 rounded-xl text-white">
-              <div className="flex justify-between items-center">
-                <span>Progreso del juego:</span>
-                <span className="font-bold">{matchedPairs.length / 2} / {matchingGameItems.length / 2} pares</span>
-              </div>
-              <div className="mt-2 h-2 bg-white/30 rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-blue-400 transition-all duration-500"
-                  style={{ width: `${(matchedPairs.length / matchingGameItems.length) * 100}%` }}
-                />
-              </div>
-            </div>
-          </div>
-        );
-      
-      case 4:
-        return (
-          <div className="space-y-6">
-            <h3 className="text-2xl font-bold text-indigo-800">Cuestionario Final</h3>
-            
-            <div className="space-y-8">
-              {quizQuestions.map(question => (
-                <div key={question.id} className="bg-white p-6 rounded-xl shadow-md">
-                  <h4 className="text-lg font-semibold text-indigo-700 mb-4">{question.id}. {question.question}</h4>
-                  
-                  <div className="space-y-3">
-                    {question.options.map((option, index) => (
-                      <button
-                        key={index}
-                        onClick={() => handleQuizAnswer(question.id, index)}
-                        className={`w-full text-left p-3 rounded-lg transition-all ${
-                          quizAnswers[question.id] === index
-                            ? question.correct === index
-                              ? 'bg-green-100 border-2 border-green-500 text-green-800'
-                              : 'bg-red-100 border-2 border-red-500 text-red-800'
-                            : 'bg-gray-50 hover:bg-gray-100 border border-gray-200'
-                        }`}
-                      >
-                        <div className="flex items-center">
-                          <div className={`w-6 h-6 rounded-full mr-3 flex items-center justify-center ${
-                            quizAnswers[question.id] === index
-                              ? question.correct === index
-                                ? 'bg-green-500 text-white'
-                                : 'bg-red-500 text-white'
-                              : 'bg-gray-300'
-                          }`}>
-                            {String.fromCharCode(65 + index)}
-                          </div>
-                          <span>{option}</span>
-                          {quizAnswers[question.id] === index && question.correct === index && (
-                            <CheckCircle size={20} className="ml-auto text-green-500" />
-                          )}
-                          {quizAnswers[question.id] === index && question.correct !== index && (
-                            <XCircle size={20} className="ml-auto text-red-500" />
-                          )}
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-            
-            <div className="mt-6 p-4 bg-gradient-to-r from-indigo-600 to-blue-500 rounded-xl text-white">
-              <div className="flex justify-between items-center">
-                <span>Puntuación:</span>
-                <span className="text-2xl font-bold">{quizScore} / {quizQuestions.length}</span>
-              </div>
-              <div className="mt-2 h-2 bg-white/30 rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-white transition-all duration-500"
-                  style={{ width: `${(quizScore / quizQuestions.length) * 100}%` }}
-                />
-              </div>
-            </div>
-          </div>
-        );
-      
-      case 5:
-        return (
-          <div className="space-y-6">
-            <h3 className="text-2xl font-bold text-indigo-800">Glosario de Términos</h3>
-            
-            <div className="space-y-4">
-              {glossaryTerms.map((term, index) => (
-                <div key={index} className="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
-                  <div className="flex items-start">
-                    <div className="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center mr-3 flex-shrink-0">
-                      {index + 1}
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-indigo-700">{term.term}</h4>
-                      <p className="text-gray-600 mt-1">{term.definition}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            
-            <div className="mt-6 p-4 bg-blue-50 rounded-xl">
-              <h4 className="font-semibold text-indigo-700 mb-2">Texto a Voz</h4>
-              <div className="flex space-x-2">
-                <input
-                  type="text"
-                  value={ttsText}
-                  onChange={(e) => setTtsText(e.target.value)}
-                  placeholder="Escribe texto para convertir a voz..."
-                  className="flex-1 p-2 border border-gray-300 rounded-lg"
-                />
-                <button
-                  onClick={isTtsPlaying ? handleTtsPause : handleTtsPlay}
-                  className="p-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
-                >
-                  {isTtsPlaying ? <PauseCircle size={24} /> : <PlayCircle size={24} />}
-                </button>
-                <button
-                  onClick={() => setIsMuted(!isMuted)}
-                  className="p-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
-                >
-                  {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
-                </button>
-              </div>
-              <div className="mt-2 flex items-center space-x-2">
-                <span className="text-sm text-gray-600">Volumen:</span>
-                <input
-                  type="range"
-                  min="0"
-                  max="1"
-                  step="0.1"
-                  value={volume}
-                  onChange={(e) => setVolume(parseFloat(e.target.value))}
-                  className="flex-1"
-                />
-                <span className="text-sm text-gray-600">{Math.round(volume * 100)}%</span>
-              </div>
-            </div>
-          </div>
-        );
-      
-      default:
-        return null;
-    }
-  };
-
   return (
-    <div className="fixed inset-0 z-[100] bg-white overflow-y-auto">
-      <button onClick={onClose} className="fixed top-6 right-6 z-[100] bg-slate-900 text-white px-6 py-3 rounded-full font-black text-sm hover:bg-rose-500 transition-all shadow-lg flex items-center gap-2">
-        <X size={20} /> Cerrar OVA
-      </button>
-      
-      <div className="min-h-screen bg-gradient-to-b from-blue-50/20 to-white">
-        <div className="sticky top-0 z-10 bg-white border-b border-gray-200">
-          <div className="container mx-auto px-4 py-4">
-            <div className="flex justify-between items-center">
-              <div className="flex items-center space-x-4">
-                <BrainCircuit size={32} className="text-indigo-600" />
-                <div>
-                  <h1 className="text-2xl font-bold text-indigo-800">OVA Interactivo: Más Allá de Usar la IA</h1>
-                  <p className="text-gray-600">Explora los fundamentos, ética y futuro de la Inteligencia Artificial</p>
-                </div>
-              </div>
+    <button onClick={onClick} className={`${baseStyle} ${variants[variant]} ${className}`} disabled={disabled}>
+      {Icon && <Icon size={20} />}
+      {children}
+    </button>
+  );
+};
+
+const VoiceReader = ({ text }) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const speak = () => {
+    if (isPlaying) { stopSpeech(); setIsPlaying(false); return; }
+    speakTextConversational(text, 'valerio', () => setIsPlaying(false));
+    setIsPlaying(true);
+  };
+  return (
+    <button onClick={speak} className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${isPlaying ? 'bg-red-100 text-red-600 hover:bg-red-200' : 'bg-[#E0F7FA] text-[#004B63] hover:bg-[#B2EBF2]'}`} title="Escuchar con voz de Valerio">
+      {isPlaying ? <Square size={16} /> : <Volume2 size={16} />}
+      {isPlaying ? 'Detener' : 'Escuchar con Valerio'}
+    </button>
+  );
+};
+
+const Card = ({ children, className = '' }) => (
+  <div className={`bg-white/80 backdrop-blur-md border border-white/40 shadow-xl shadow-slate-200/50 rounded-2xl p-6 md:p-8 ${className}`}>{children}</div>
+);
+
+const WelcomeScreen = ({ onNext }) => (
+  <div className="flex flex-col items-center justify-center min-h-[80vh] text-center animate-fade-in px-4">
+    <div className="mb-8 transform hover:scale-105 transition-transform duration-500"><Logo /></div>
+    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 text-[#004B63] font-semibold text-sm mb-6">
+      <Bot size={16} className="text-[#00BCD4]" /><span>Laboratorio Guiado por Valerio</span>
+    </div>
+    <h1 className="text-4xl md:text-6xl font-extrabold text-[#004B63] mb-6 leading-tight">
+      Más Allá de <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00BCD4] to-[#0097A7]">Usar la IA</span>
+    </h1>
+    <p className="text-lg md:text-xl text-gray-600 mb-6 max-w-2xl">
+      Hola, soy Valerio, tu coach de IA. En este laboratorio reflexionaremos sobre la historia, la tecnología actual, la ética y el impacto social de la inteligencia artificial. ¡Comencemos!
+    </p>
+    <VoiceReader text="Hola, soy Valerio, tu coach de IA de Edutechlife. En este laboratorio exploraremos juntos el fascinante mundo de la IA: desde sus orígenes históricos hasta los desafíos éticos que enfrentamos hoy. Vamos a reflexionar y aprender." />
+    <div className="mt-6"><Button onClick={onNext} icon={Play} className="text-lg px-8 py-4">Comenzar Laboratorio</Button></div>
+  </div>
+);
+
+const HistoryScreen = ({ onNext, addXp }) => {
+  useEffect(() => { addXp(50); }, []);
+  const text = "La inteligencia artificial tiene una historia fascinante. Desde el término acuñado por John McCarthy en 1956, pasando por los inviernos de la IA, hasta el resurgimiento con deep learning en los años 2010.";
+  const cards = [
+    { title: 'Orígenes (1950s)', desc: 'El término "Inteligencia Artificial" fue acuñado por John McCarthy en 1956 durante la Conferencia de Dartmouth.', color: 'from-indigo-100 to-white' },
+    { title: 'Inviernos de la IA', desc: 'Períodos de reducción de financiamiento y expectativas debido a limitaciones tecnológicas de la época.', color: 'from-blue-100 to-white' },
+    { title: 'Resurgimiento (2010s)', desc: 'Avances en deep learning y disponibilidad de grandes conjuntos de datos revitalizaron el campo.', color: 'from-cyan-100 to-white' },
+    { title: 'IA Actual', desc: 'Integración en la vida cotidiana: asistentes virtuales, recomendaciones, diagnóstico médico y más.', color: 'from-indigo-600 to-blue-500 text-white' }
+  ];
+  return (
+    <div className="max-w-4xl mx-auto animate-fade-in">
+      <Card>
+        <h2 className="text-3xl font-bold text-[#004B63] mb-4">Historia de la Inteligencia Artificial</h2>
+        <VoiceReader text={text} />
+        <p className="text-gray-700 text-lg leading-relaxed mt-4 mb-6">{text}</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          {cards.map((c, i) => (
+            <div key={i} className={`bg-gradient-to-br ${c.color} p-5 rounded-2xl shadow-md ${c.title === 'IA Actual' ? 'text-white' : ''}`}>
+              <h4 className={`font-semibold text-lg mb-2 ${c.title === 'IA Actual' ? 'text-white' : 'text-indigo-700'}`}>{c.title}</h4>
+              <p className={c.title === 'IA Actual' ? 'text-white/80' : 'text-gray-700'}>{c.desc}</p>
             </div>
-            
-            <div className="mt-4">
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex space-x-2">
-                  {sections.map(section => (
-                    <button
-                      key={section.id}
-                      onClick={() => setCurrentSection(section.id)}
-                      className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
-                        currentSection === section.id
-                          ? 'bg-indigo-600 text-white'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}
-                    >
-                      {section.icon}
-                      <span className="hidden md:inline">{section.title}</span>
-                    </button>
-                  ))}
-                </div>
-                
-                <div className="flex items-center space-x-4">
-                  <button
-                    onClick={() => setCurrentSection(prev => Math.max(0, prev - 1))}
-                    disabled={currentSection === 0}
-                    className="p-2 rounded-full bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-200 transition-colors"
-                  >
-                    <ChevronLeft size={24} />
-                  </button>
-                  <button
-                    onClick={() => setCurrentSection(prev => Math.min(sections.length - 1, prev + 1))}
-                    disabled={currentSection === sections.length - 1}
-                    className="p-2 rounded-full bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-200 transition-colors"
-                  >
-                    <ChevronRight size={24} />
-                  </button>
-                </div>
-              </div>
-              
-              <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-gradient-to-r from-indigo-600 via-blue-500 to-cyan-400 transition-all duration-500"
-                  style={{ width: `${progress}%` }}
-                />
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
-        
-        <div className="container mx-auto px-4 py-8">
-          <div className="max-w-6xl mx-auto">
-            {renderSectionContent()}
-            
-            <div className="mt-8 flex justify-between">
-              <button
-                onClick={() => setCurrentSection(prev => Math.max(0, prev - 1))}
-                disabled={currentSection === 0}
-                className="px-6 py-3 rounded-lg bg-gray-100 text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-200 transition-colors flex items-center space-x-2"
-              >
-                <ChevronLeft size={20} />
-                <span>Anterior</span>
-              </button>
-              
-              <div className="flex space-x-4">
-                <button
-                  onClick={() => setShowGlossary(!showGlossary)}
-                  className="px-6 py-3 rounded-lg bg-blue-100 text-indigo-700 hover:bg-blue-200 transition-colors flex items-center space-x-2"
-                >
-                  <BookOpen size={20} />
-                  <span>Glosario</span>
-                </button>
-                
-                <button
-                  onClick={() => setCurrentSection(prev => Math.min(sections.length - 1, prev + 1))}
-                  disabled={currentSection === sections.length - 1}
-                  className="px-6 py-3 rounded-lg bg-indigo-600 text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-indigo-700 transition-colors flex items-center space-x-2"
-                >
-                  <span>Siguiente</span>
-                  <ChevronRight size={20} />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        {showGlossary && (
-          <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
-              <div className="sticky top-0 bg-white border-b p-4 flex justify-between items-center">
-                <h3 className="text-xl font-bold text-indigo-700">Glosario Completo</h3>
-                <button
-                  onClick={() => setShowGlossary(false)}
-                  className="p-2 hover:bg-gray-100 rounded-full"
-                >
-                  <X size={24} />
-                </button>
-              </div>
-              <div className="p-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {glossaryTerms.map((term, index) => (
-                    <div key={index} className="p-4 bg-gray-50 rounded-lg">
-                      <h4 className="font-bold text-indigo-700">{term.term}</h4>
-                      <p className="text-gray-600 mt-1">{term.definition}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-        
-        {showCertificate && (
-          <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-            <div className="bg-gradient-to-br from-indigo-600 via-blue-500 to-cyan-400 rounded-2xl max-w-md w-full p-8 text-white text-center">
-              <Award size={64} className="mx-auto mb-4" />
-              <h3 className="text-2xl font-bold mb-2">¡Felicidades!</h3>
-              <p className="mb-6">Has completado el OVA Interactivo sobre Inteligencia Artificial</p>
-              
-              <div className="bg-white/20 rounded-xl p-6 mb-6">
-                <div className="text-4xl font-bold mb-2">{quizScore}/{quizQuestions.length}</div>
-                <div className="text-sm opacity-90">Puntuación en cuestionario</div>
-              </div>
-              
-              <div className="space-y-4">
-                <button
-                  onClick={() => {
-                    setShowCertificate(false);
-                    onClose();
-                  }}
-                  className="w-full py-3 bg-white text-indigo-700 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-                >
-                  Finalizar Actividad
-                </button>
-                <button
-                  onClick={() => setShowCertificate(false)}
-                  className="w-full py-3 bg-transparent border-2 border-white rounded-lg hover:bg-white/10 transition-colors"
-                >
-                  Continuar Explorando
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
+        <div className="flex justify-end"><Button onClick={onNext} icon={ChevronRight}>Siguiente</Button></div>
+      </Card>
     </div>
   );
 };
 
-export default OVAReflexion;
+const TechScreen = ({ onNext, addXp }) => {
+  useEffect(() => { addXp(50); }, []);
+  const text = "Las tecnologías actuales de IA incluyen procesamiento del lenguaje natural, visión por computadora y sistemas de recomendación que transforman industrias enteras.";
+  return (
+    <div className="max-w-4xl mx-auto animate-fade-in">
+      <Card>
+        <h2 className="text-3xl font-bold text-[#004B63] mb-4">Tecnologías Actuales de IA</h2>
+        <VoiceReader text={text} />
+        <p className="text-gray-700 text-lg leading-relaxed mt-4 mb-6">{text}</p>
+        <div className="space-y-4 mb-6">
+          <div className="flex items-center gap-4 p-5 bg-white rounded-xl shadow-md border border-slate-100">
+            <Zap className="text-blue-500" size={32} />
+            <div><h4 className="font-semibold text-indigo-700">Procesamiento del Lenguaje Natural</h4><p className="text-gray-600">Chatbots, traducción automática, análisis de sentimientos</p></div>
+          </div>
+          <div className="flex items-center gap-4 p-5 bg-white rounded-xl shadow-md border border-slate-100">
+            <Eye className="text-cyan-500" size={32} />
+            <div><h4 className="font-semibold text-indigo-700">Visión por Computadora</h4><p className="text-gray-600">Reconocimiento facial, detección de objetos, diagnóstico médico</p></div>
+          </div>
+          <div className="flex items-center gap-4 p-5 bg-white rounded-xl shadow-md border border-slate-100">
+            <Target className="text-indigo-600" size={32} />
+            <div><h4 className="font-semibold text-indigo-700">Sistemas de Recomendación</h4><p className="text-gray-600">Personalización de contenido, comercio electrónico, streaming</p></div>
+          </div>
+        </div>
+        <div className="flex justify-end"><Button onClick={onNext} icon={ChevronRight}>Siguiente</Button></div>
+      </Card>
+    </div>
+  );
+};
+
+const EthicsScreen = ({ onNext, addXp }) => {
+  useEffect(() => { addXp(50); }, []);
+  const [selected, setSelected] = useState(null);
+  const text = "La ética en IA es fundamental. Debemos considerar el sesgo algorítmico, la privacidad de datos, la transparencia y el impacto laboral de estas tecnologías.";
+  const areas = [
+    { id: 'bias', title: 'Sesgo Algorítmico', icon: Users, desc: 'Sistemas de IA que perpetúan discriminación por datos históricos sesgados.', detail: 'Ejemplo: Un algoritmo de contratación que penaliza ciertos perfiles porque los datos históricos reflejan sesgos del pasado.' },
+    { id: 'privacy', title: 'Privacidad de Datos', icon: Shield, desc: 'Protección de información personal en sistemas de IA.', detail: 'Ejemplo: Una app educativa que pide acceso a fotos y contactos sin justificación. Siempre revisa los permisos.' },
+    { id: 'labor', title: 'Impacto Laboral', icon: Bot, desc: 'Automatización de tareas y transformación del mercado laboral.', detail: 'Ejemplo: La IA automatiza tareas repetitivas pero crea nuevas oportunidades en áreas como supervisión de sistemas y ética.' }
+  ];
+  return (
+    <div className="max-w-4xl mx-auto animate-fade-in">
+      <Card>
+        <h2 className="text-3xl font-bold text-[#004B63] mb-4">Ética y Sociedad</h2>
+        <VoiceReader text={text} />
+        <p className="text-gray-700 text-lg leading-relaxed mt-4 mb-6">{text}</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          {areas.map(a => (
+            <button key={a.id} onClick={() => setSelected(a.id)} className={`p-5 rounded-xl text-left transition-all ${selected === a.id ? 'bg-[#004B63] text-white shadow-lg scale-105' : 'bg-[#F0FDFF] border border-[#E0F7FA] hover:border-[#00BCD4]'}`}>
+              <a.icon size={28} className={selected === a.id ? 'text-[#00BCD4]' : 'text-[#00BCD4]'} />
+              <h3 className={`font-bold mt-2 ${selected === a.id ? 'text-white' : 'text-[#004B63]'}`}>{a.title}</h3>
+              <p className={`text-sm mt-1 ${selected === a.id ? 'text-white/80' : 'text-gray-600'}`}>{a.desc}</p>
+              {selected === a.id && <p className="text-sm mt-2 text-white/70 italic">{a.detail}</p>}
+            </button>
+          ))}
+        </div>
+        <div className="flex justify-end"><Button onClick={onNext} icon={ChevronRight}>Siguiente</Button></div>
+      </Card>
+    </div>
+  );
+};
+
+const MatchingGame = ({ onNext, addXp }) => {
+  useEffect(() => { addXp(100); }, []);
+  const [matched, setMatched] = useState([]);
+  const [selected, setSelected] = useState(null);
+  const pairs = [
+    { id: 1, term: 'Algoritmo', def: 'Conjunto de instrucciones paso a paso', matchId: 6 },
+    { id: 2, term: 'Machine Learning', def: 'Rama de la IA que aprende de datos', matchId: 7 },
+    { id: 3, term: 'Deep Learning', def: 'Redes neuronales profundas', matchId: 8 },
+    { id: 6, term: 'Instrucciones paso a paso', def: 'Algoritmo', matchId: 1 },
+    { id: 7, term: 'Aprende de datos', def: 'Machine Learning', matchId: 2 },
+    { id: 8, term: 'Redes neuronales', def: 'Deep Learning', matchId: 3 }
+  ];
+  const handleClick = (id) => {
+    if (matched.includes(id)) return;
+    if (!selected) { setSelected(id); return; }
+    const first = pairs.find(p => p.id === selected);
+    const second = pairs.find(p => p.id === id);
+    if (first.matchId === id || second.matchId === selected) setMatched([...matched, selected, id]);
+    setSelected(null);
+  };
+  const allMatched = matched.length === pairs.length;
+  return (
+    <div className="max-w-4xl mx-auto animate-fade-in">
+      <Card>
+        <h2 className="text-3xl font-bold text-[#004B63] mb-4">Juego de Conceptos</h2>
+        <p className="text-gray-600 mb-6">Empareja cada término con su definición correcta.</p>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
+          {pairs.map(p => (
+            <button key={p.id} onClick={() => handleClick(p.id)} className={`p-4 rounded-xl transition-all ${matched.includes(p.id) ? 'bg-emerald-500 text-white' : selected === p.id ? 'bg-blue-500 text-white shadow-lg' : 'bg-[#F0FDFF] border border-[#E0F7FA] hover:border-[#00BCD4]'}`}>
+              <span className="font-medium text-sm">{p.term}</span>
+            </button>
+          ))}
+        </div>
+        {allMatched ? (
+          <div className="bg-emerald-50 p-4 rounded-xl border border-emerald-200 text-center">
+            <CheckCircle size={32} className="text-emerald-500 mx-auto mb-2" />
+            <p className="font-bold text-emerald-700">¡Todos los conceptos emparejados!</p>
+            <Button onClick={onNext} icon={ChevronRight} className="mt-4 mx-auto">Siguiente</Button>
+          </div>
+        ) : (
+          <p className="text-sm text-gray-500 text-center">{matched.length / 2} de {pairs.length / 2} pares</p>
+        )}
+      </Card>
+    </div>
+  );
+};
+
+const QuizScreen = ({ onNext, addXp }) => {
+  const questions = [
+    { q: "¿Quién acuñó el término 'Inteligencia Artificial'?", opts: ["Alan Turing", "John McCarthy", "Elon Musk", "Bill Gates"], correct: 1 },
+    { q: "¿Qué tecnología permite a las máquinas aprender de datos?", opts: ["Blockchain", "Machine Learning", "Realidad Virtual", "Computación Cuántica"], correct: 1 },
+    { q: "¿Cuál es un desafío ético importante en IA?", opts: ["Velocidad de procesamiento", "Sesgo algorítmico", "Costo de implementación", "Compatibilidad"], correct: 1 },
+    { q: "¿Qué período se conoce como 'Invierno de la IA'?", opts: ["Gran crecimiento", "Reducción de financiamiento", "Invención de Internet", "Creación de ChatGPT"], correct: 1 }
+  ];
+  const [currentQ, setCurrentQ] = useState(0);
+  const [score, setScore] = useState(0);
+  const [showResult, setShowResult] = useState(false);
+  const [selected, setSelected] = useState(null);
+  const handleAnswer = (index) => {
+    setSelected(index);
+    if (index === questions[currentQ].correct) { setScore(s => s + 1); addXp(125); }
+    setTimeout(() => {
+      if (currentQ < questions.length - 1) { setCurrentQ(c => c + 1); setSelected(null); }
+      else setShowResult(true);
+    }, 1500);
+  };
+  return (
+    <div className="max-w-3xl mx-auto animate-fade-in pb-12">
+      <h2 className="text-3xl font-bold text-[#004B63] mb-6 flex items-center gap-3"><CheckCircle className="text-[#00BCD4]" size={32}/> Evaluación Final</h2>
+      {!showResult ? (
+        <Card>
+          <div className="flex justify-between items-center mb-6"><span className="text-sm font-semibold text-gray-500">Pregunta {currentQ + 1} de {questions.length}</span></div>
+          <h3 className="text-xl font-medium text-gray-800 mb-6">{questions[currentQ].q}</h3>
+          <div className="space-y-3">
+            {questions[currentQ].opts.map((opt, i) => {
+              let btnClass = "w-full text-left p-4 rounded-xl border transition-all duration-300 ";
+              if (selected === null) btnClass += "border-gray-200 hover:border-[#00BCD4] hover:bg-[#F0FDFF]";
+              else if (i === questions[currentQ].correct) btnClass += "bg-green-100 border-green-500 text-green-800 font-medium";
+              else if (i === selected) btnClass += "bg-red-100 border-red-500 text-red-800";
+              else btnClass += "opacity-50 border-gray-200";
+              return <button key={i} onClick={() => selected === null && handleAnswer(i)} className={btnClass} disabled={selected !== null}><span className="font-bold text-[#004B63]">{String.fromCharCode(65 + i)}.</span> {opt}</button>;
+            })}
+          </div>
+        </Card>
+      ) : (
+        <Card className="text-center animate-scale-in">
+          <div className="w-24 h-24 mx-auto bg-gradient-to-tr from-[#00BCD4] to-[#004B63] rounded-full flex items-center justify-center text-white text-4xl mb-6 shadow-lg shadow-cyan-200"><Award size={48} /></div>
+          <h3 className="text-3xl font-bold text-[#004B63] mb-2">¡Evaluación Completada!</h3>
+          <p className="text-xl text-gray-600 mb-6">Obtuviste <span className="font-bold text-[#00BCD4]">{score}</span> de <span className="font-bold">{questions.length}</span> aciertos.</p>
+          {score === questions.length ? <div className="bg-green-50 text-green-800 p-4 rounded-xl mb-8 border border-green-200"><p className="font-medium flex items-center justify-center gap-2"><Star className="text-yellow-500 fill-current" size={20}/> ¡Puntuación perfecta! Valerio está orgulloso de ti.</p></div>
+            : score >= 2 ? <div className="bg-blue-50 text-blue-800 p-4 rounded-xl mb-8 border border-blue-200"><p className="font-medium">¡Buen trabajo! Repasa los conceptos que te hayan quedado dudosos.</p></div>
+            : <div className="bg-orange-50 text-orange-800 p-4 rounded-xl mb-8 border border-orange-200"><p className="font-medium">No te preocupes, repasa el laboratorio y vuelve a intentarlo. Valerio confía en ti.</p></div>}
+          <Button onClick={onNext} icon={Award} className="w-full sm:w-auto text-lg py-3 px-8 mx-auto">Recibir Certificado</Button>
+        </Card>
+      )}
+    </div>
+  );
+};
+
+const CertificateScreen = ({ xp }) => (
+  <div className="max-w-4xl mx-auto animate-fade-in text-center">
+    <h2 className="text-4xl font-extrabold text-[#004B63] mb-4">¡Felicidades, Pensador Crítico!</h2>
+    <p className="text-lg text-gray-600 mb-8">Has completado el laboratorio guiado por Valerio. Ahora comprendes la historia, tecnología y ética de la inteligencia artificial.</p>
+    <div className="bg-gradient-to-br from-[#004B63] to-[#002635] p-1 rounded-3xl shadow-2xl mb-10 max-w-2xl mx-auto transform hover:scale-105 transition-transform duration-500">
+      <div className="bg-white rounded-[22px] p-8 md:p-12 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-100 rounded-bl-full opacity-50"></div>
+        <div className="absolute bottom-0 left-0 w-32 h-32 bg-slate-100 rounded-tr-full opacity-50"></div>
+        <div className="flex justify-center mb-6"><Logo /></div>
+        <div className="text-sm font-bold tracking-widest text-[#00BCD4] uppercase mb-2">Certificado de Finalización</div>
+        <h3 className="text-2xl md:text-3xl font-bold text-slate-800 mb-6">Laboratorio: Más Allá de Usar la IA</h3>
+        <div className="flex justify-center gap-8 text-slate-600 border-t border-b border-slate-100 py-4 mb-6">
+          <div><div className="text-xs uppercase tracking-wider">Puntaje XP</div><div className="text-xl font-bold text-[#004B63]">{xp} / 500</div></div>
+          <div><div className="text-xs uppercase tracking-wider">Coach</div><div className="text-xl font-bold text-[#004B63]">Valerio</div></div>
+          <div><div className="text-xs uppercase tracking-wider">Fecha</div><div className="text-xl font-bold text-[#004B63]">{new Date().toLocaleDateString()}</div></div>
+        </div>
+        <div className="w-20 h-20 bg-gradient-to-tr from-yellow-400 to-yellow-600 rounded-full mx-auto flex items-center justify-center text-white shadow-lg border-4 border-white"><Award size={40} /></div>
+      </div>
+    </div>
+    <div className="flex flex-col sm:flex-row justify-center gap-4">
+      <Button onClick={() => window.location.reload()} variant="outline" icon={Settings}>Reiniciar Laboratorio</Button>
+      <Button onClick={() => alert('¡Sigue aprendiendo con Edutechlife y Valerio!')} icon={GraduationCap}>Explorar más cursos</Button>
+    </div>
+  </div>
+);
+
+export default function OVAReflexion() {
+  const [currentScreen, setCurrentScreen] = useState(0);
+  const [xp, setXp] = useState(0);
+  const totalXp = 500;
+  const addXp = (amount) => setXp(prev => Math.min(prev + amount, totalXp));
+  const nextScreen = () => { window.scrollTo({ top: 0, behavior: 'smooth' }); setCurrentScreen(prev => prev + 1); };
+  const screens = [
+    <WelcomeScreen onNext={nextScreen} />,
+    <HistoryScreen onNext={nextScreen} addXp={addXp} />,
+    <TechScreen onNext={nextScreen} addXp={addXp} />,
+    <EthicsScreen onNext={nextScreen} addXp={addXp} />,
+    <MatchingGame onNext={nextScreen} addXp={addXp} />,
+    <QuizScreen onNext={nextScreen} addXp={addXp} />,
+    <CertificateScreen xp={xp} />
+  ];
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-[#F0FDFF] to-[#E0F7FA] font-sans selection:bg-[#00BCD4] selection:text-white">
+      <style>{`
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        .animate-fade-in { animation: fadeIn 0.6s ease-out forwards; }
+        .animate-scale-in { animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+      `}</style>
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+          <div className="transform scale-75 origin-left sm:scale-100 transition-transform"><Logo /></div>
+          {currentScreen > 0 && currentScreen < screens.length - 1 && (
+            <div className="flex items-center gap-4">
+              <div className="hidden sm:block text-sm font-semibold text-slate-500">Paso {currentScreen} de {screens.length - 2}</div>
+              <div className="flex items-center gap-2 bg-[#F0FDFF] px-4 py-1.5 rounded-full border border-[#00BCD4]/20">
+                <Star className="text-yellow-500 fill-current" size={16} />
+                <span className="font-bold text-[#004B63]">{xp} XP</span>
+              </div>
+            </div>
+          )}
+        </div>
+        {currentScreen > 0 && (
+          <div className="h-1.5 w-full bg-slate-100">
+            <div className="h-full bg-gradient-to-r from-[#00BCD4] to-[#0097A7] transition-all duration-1000 ease-out" style={{ width: `${(xp / totalXp) * 100}%` }} />
+          </div>
+        )}
+      </header>
+      <main className="max-w-6xl mx-auto px-4 py-10 md:py-16">{screens[currentScreen]}</main>
+      {currentScreen > 0 && (
+        <footer className="border-t border-slate-200 mt-12 py-8 text-center text-slate-500 text-sm">
+          <p>Laboratorio guiado por <strong className="text-[#00BCD4]">Valerio</strong> — Coach de IA de Edutechlife.</p>
+        </footer>
+      )}
+    </div>
+  );
+}

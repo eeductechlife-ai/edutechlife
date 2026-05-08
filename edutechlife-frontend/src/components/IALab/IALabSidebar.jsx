@@ -63,9 +63,10 @@ const IALabSidebar = () => {
                 <div className="text-center">
                     <div className="text-lg font-bold text-[#004B63]">{Math.round(courseProgress)}%</div>
                     <div className="text-[10px] text-slate-400 mt-0.5">Completado</div>
+                  </div>
                 </div>
+                
               </div>
-            </div>
             <div className="text-center">
               <h3 className="text-xs font-bold text-[#004B63] mb-0.5">Progreso del Curso</h3>
               <p className="text-[10px] text-slate-500">Avanza completando módulos</p>
@@ -236,6 +237,31 @@ const IALabSidebar = () => {
                         <span className="text-xs font-medium px-2 py-0.5 bg-slate-100 text-slate-500 rounded-md">Pendiente</span>
                       )}
                       <span className="text-xs text-slate-400">15:30</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Video 5: Cómo usar IA para Study */}
+                <div
+                  className="flex items-center gap-2.5 p-2.5 hover:bg-[#004B63]/5 rounded-lg transition-all duration-200 cursor-pointer group"
+                  onClick={() => window.open('https://youtu.be/8fHiVPuQHnM', '_blank')}
+                >
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ${
+                    isVideoCompleted(5) ? 'bg-emerald-50' : 'bg-[#004B63]/8 group-hover:bg-[#004B63]/15'
+                  }`}>
+                    <Icon name={isVideoCompleted(5) ? 'fa-check-circle' : 'fa-play'} className={`text-xs ${isVideoCompleted(5) ? 'text-emerald-500' : 'text-[#004B63]'}`} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-slate-700 truncate">Cómo usar IA para Study</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      {isVideoCompleted(5) ? (
+                        <span className="text-xs font-medium px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-md flex items-center gap-1">
+                          <Icon name="fa-check" className="text-[9px]" /> Completado
+                        </span>
+                      ) : (
+                        <span className="text-xs font-medium px-2 py-0.5 bg-slate-100 text-slate-500 rounded-md">Pendiente</span>
+                      )}
+                      <span className="text-xs text-slate-400">15:00</span>
                     </div>
                   </div>
                 </div>
