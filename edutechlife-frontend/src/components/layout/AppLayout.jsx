@@ -23,7 +23,6 @@ const AppLayout = () => {
   const [showContactModal, setShowContactModal] = useState(false);
   const [showLeadCaptureModal, setShowLeadCaptureModal] = useState(false);
   const [adminLoginModalOpen, setAdminLoginModalOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
   
   // Función para navegación con scroll a secciones
   const navigateToSection = (route, sectionId = null) => {
@@ -59,7 +58,7 @@ const AppLayout = () => {
   
   return (
     <ProgressProvider>
-      <div className="flex flex-col min-h-screen overflow-x-hidden bg-white text-[#004B63]" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+      <div className="flex flex-col min-h-screen overflow-hidden bg-white text-[#004B63]" style={{ fontFamily: "'Montserrat', sans-serif" }}>
         <Suspense fallback={null}>
           <GlobalCanvas />
         </Suspense>
@@ -86,8 +85,8 @@ const AppLayout = () => {
                     alt="Edutechlife" 
                     className="w-24 object-contain"
                     style={{ 
-                      height: 'clamp(48px, 7vw, 80px)',
-                      transform: 'scale(clamp(1.2, 1.4, 1.8))',
+                      height: '80px',
+                      transform: 'scale(1.8)',
                       transformOrigin: 'left center',
                       background: 'transparent',
                       border: 'none',
@@ -102,26 +101,15 @@ const AppLayout = () => {
               {/* Navigation Links - Desktop */}
               <nav className="hidden md:flex items-center gap-3">
                 {/* Dropdown Iniciar Sesión */}
-                <div className="relative">
-                  <button
-                    onClick={() => setDropdownOpen(!dropdownOpen)}
-                    onMouseEnter={() => setDropdownOpen(true)}
-                    onMouseLeave={() => setDropdownOpen(false)}
-                    className="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] hover:from-[#66CCCC] hover:to-[#4DA8C4] rounded-full transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2"
-                  >
+                <div className="relative group">
+                  <button className="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] hover:from-[#66CCCC] hover:to-[#4DA8C4] rounded-full transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2">
                     <i className="fa-solid fa-right-to-bracket text-xs text-white"></i>
                     Iniciar Sesión
                     <i className="fa-solid fa-chevron-down text-[10px] text-white ml-1"></i>
                   </button>
                   
                   {/* Dropdown menu */}
-                  <div
-                    onMouseEnter={() => setDropdownOpen(true)}
-                    onMouseLeave={() => setDropdownOpen(false)}
-                    className={`absolute top-full right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-[#4DA8C4]/10 p-2 transition-all duration-300 z-50 ${
-                      dropdownOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
-                    }`}
-                  >
+                  <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-[#4DA8C4]/10 p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
                     <button onClick={() => navigate('/ialab')} className="w-full text-left px-3 py-2 text-sm font-semibold text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors flex items-center gap-2">
                       <i className="fa-solid fa-robot text-[#4DA8C4]"></i>
                       IA Lab Pro
@@ -174,20 +162,20 @@ const AppLayout = () => {
                 onClick={() => setMobileMenuOpen(false)}
               />
               {/* Drawer - Expanded with scroll */}
-              <div className="fixed top-0 right-0 z-[1002] h-full w-80 max-w-[85vw] bg-white shadow-2xl md:hidden animate-slide-in flex flex-col">
+              <div className="fixed top-0 right-0 z-[1002] h-full w-80 bg-white shadow-2xl md:hidden animate-slide-in flex flex-col">
                 {/* Header */}
                 <div className="p-4 border-b border-[#4DA8C4]/20 flex items-center justify-between flex-shrink-0">
                   <div className="flex items-center">
-                  <img 
-                    src="/images/logo-edutechlife.webp" 
-                    alt="Edutechlife" 
-                    className="w-24 object-contain"
-                    style={{ 
-                      height: '60px',
-                      transform: 'scale(1.4)',
-                      transformOrigin: 'left center',
-                    }}
-                  />
+                    <img 
+                      src="/images/logo-edutechlife.webp" 
+                      alt="Edutechlife" 
+                      className="w-24 object-contain"
+                      style={{ 
+                        height: '80px',
+                        transform: 'scale(1.8)',
+                        transformOrigin: 'left center',
+                      }}
+                    />
                   </div>
                   <button 
                     onClick={() => setMobileMenuOpen(false)}
@@ -218,7 +206,7 @@ const AppLayout = () => {
                       <h3 className="text-xs font-semibold text-[#4DA8C4] uppercase tracking-wider mb-2">INICIO</h3>
                       <div className="space-y-1">
                         <button 
-                          onClick={() => { setMobileMenuOpen(false); navigate('/'); }}
+                          onClick={() => navigate('/')}
                           className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
                         >
                           Herramientas IA
@@ -242,25 +230,25 @@ const AppLayout = () => {
                       <h3 className="text-xs font-semibold text-[#4DA8C4] uppercase tracking-wider mb-2">HERRAMIENTAS</h3>
                       <div className="space-y-1">
                         <button 
-                          onClick={() => { setMobileMenuOpen(false); navigate('/ialab'); }}
+                          onClick={() => navigate('/ialab')}
                           className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
                         >
                           IA Lab Pro
                         </button>
                         <button 
-                          onClick={() => { setMobileMenuOpen(false); navigate('/smartboard'); }}
+                          onClick={() => navigate('/smartboard')}
                           className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
                         >
                           SmartBoard
                         </button>
                         <button 
-                          onClick={() => { setMobileMenuOpen(false); navigate('/vak'); }}
+                          onClick={() => navigate('/vak')}
                           className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
                         >
                           Diagnóstico VAK
                         </button>
                         <button 
-                          onClick={() => { setMobileMenuOpen(false); navigate('/automation'); }}
+                          onClick={() => navigate('/automation')}
                           className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
                         >
                           Automatización
@@ -278,7 +266,7 @@ const AppLayout = () => {
                           Contáctanos
                         </button>
                         <button 
-                          onClick={() => { setMobileMenuOpen(false); setShowLeadCaptureModal(true); }}
+                          onClick={() => setShowLeadCaptureModal(true)}
                           className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
                         >
                           Solicitar Demo

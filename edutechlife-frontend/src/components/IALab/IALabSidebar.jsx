@@ -44,41 +44,33 @@ const IALabSidebar = () => {
   
    return (
        <aside className="w-56 xl:w-64 flex-shrink-0 border-r border-slate-200/60 bg-white shadow-sm overflow-y-auto">
-       <div className="px-4 py-5 space-y-5">
+        <div className="px-4 py-4 space-y-4">
           {/* Progress Circle */}
-            <div className="relative overflow-hidden flex flex-col items-center p-4 bg-white rounded-2xl shadow-sm border border-slate-200/60 w-full">
-             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#00BCD4]" />
-             <div className="relative w-24 h-24 mb-2">
-              <svg className="w-full h-full transform -rotate-90">
-                <circle cx="48" cy="48" r="40" stroke="#E2E8F0" strokeWidth="6" fill="none" />
-                 <circle cx="48" cy="48" r="40" stroke="url(#sidebar-progress-grad)" strokeWidth="6" fill="none" strokeLinecap="round" strokeDasharray="251.327" strokeDashoffset={251.327 - (251.327 * Math.min(courseProgress, 100)) / 100} className="transition-all duration-700 ease-out" />
-                <defs>
-                  <linearGradient id="sidebar-progress-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#004B63" />
-                    <stop offset="100%" stopColor="#00BCD4" />
-                  </linearGradient>
-                </defs>
-              </svg>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center">
-                    <div className="text-lg font-bold text-[#004B63]">{Math.round(courseProgress)}%</div>
+            <div className="flex flex-col items-center">
+              <h3 className="text-xs font-bold text-[#004B63] mb-2">Progreso del Curso</h3>
+              <div className="relative w-24 h-24 md:w-28 md:h-28 rounded-full bg-white shadow-sm border border-slate-200/60 flex items-center justify-center">
+                <svg className="w-full h-full transform -rotate-90 p-1" viewBox="0 0 96 96">
+                  <circle cx="48" cy="48" r="40" stroke="#E2E8F0" strokeWidth="6" fill="none" />
+                  <circle cx="48" cy="48" r="40" stroke="url(#sidebar-progress-grad)" strokeWidth="6" fill="none" strokeLinecap="round" strokeDasharray="251.327" strokeDashoffset={251.327 - (251.327 * Math.min(courseProgress, 100)) / 100} className="transition-all duration-700 ease-out" />
+                  <defs>
+                    <linearGradient id="sidebar-progress-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#004B63" />
+                      <stop offset="100%" stopColor="#00BCD4" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="text-base font-bold text-[#004B63]">{Math.round(courseProgress)}%</div>
                     <div className="text-[10px] text-slate-400 mt-0.5">Completado</div>
                   </div>
                 </div>
-                
               </div>
-            <div className="text-center">
-              <h3 className="text-xs font-bold text-[#004B63] mb-0.5">Progreso del Curso</h3>
-              <p className="text-[10px] text-slate-500">Avanza completando módulos</p>
             </div>
-         </div>
-
-        {/* Espaciado entre secciones */}
-        <div className="mt-8"></div>
 
          {/* Sección: Módulos del Curso */}
-         <div className="px-1 w-full">
-           <div className="flex items-center gap-2 mb-3">
+          <div className="px-2 w-full">
+            <div className="flex items-center gap-2 mb-2">
              <div className="text-[#004B63]">
                <Icon name="fa-layer-group" className="text-sm" />
              </div>
@@ -87,7 +79,7 @@ const IALabSidebar = () => {
               </h3>
               <div className="flex-1 h-px bg-gradient-to-r from-[#004B63]/20 via-[#00BCD4]/20 to-transparent"></div>
             </div>
-            <div className="space-y-1.5">
+            <div className="space-y-1">
               {modules.map((mod) => {
                 const modScore = calculateModuleScore(mod.id);
                 const isLocked = isModuleLocked(mod.id);
@@ -97,16 +89,16 @@ const IALabSidebar = () => {
                   <button
                     key={mod.id}
                     onClick={() => !isLocked && setActiveMod(mod.id)}
-                    className={`w-full flex items-center gap-2.5 p-3 rounded-xl transition-all duration-300 ${isActive ? 'bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white shadow-md shadow-[#004B63]/15' : 'hover:bg-[#004B63]/5 text-slate-700'} focus:outline-none focus:ring-2 focus:ring-[#004B63]/30 focus:ring-offset-1`}
+                    className={`w-full group flex items-center gap-2 p-2.5 rounded-xl transition-all duration-300 ${isActive ? 'bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white shadow-md shadow-[#004B63]/15' : 'hover:bg-[#004B63]/10 text-slate-700'} focus:outline-none focus:ring-2 focus:ring-[#004B63]/30 focus:ring-offset-1`}
                     disabled={isLocked}
                     aria-label={`${isLocked ? 'Módulo bloqueado: ' : ''}${mod.title}`}
                   >
-                    <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors duration-300 ${isActive ? 'bg-white/20' : 'bg-[#004B63]/8'}`}>
-                      <Icon name={mod.icon} className={`${isActive ? 'text-white' : 'text-[#004B63]'} text-sm`} />
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors duration-300 ${isActive ? 'bg-white/20' : 'bg-[#004B63]/8 group-hover:bg-[#004B63]/15'}`}>
+                      <span className={`${isActive ? 'text-white' : 'text-[#004B63]'} text-sm font-bold`}>{mod.id}</span>
                     </div>
                     <div className="flex-1 min-w-0 text-left">
-                      <p className="font-semibold text-sm truncate">{mod.title}</p>
-                      <div className="flex items-center gap-1.5 mt-1">
+                      <p className="font-semibold text-sm truncate group-hover:text-[#004B63] transition-colors">{mod.title}</p>
+                      <div className="flex items-center gap-1.5">
                         {modScore > 0 && (
                           <div className="flex-1 h-1 bg-slate-200 rounded-full overflow-hidden">
                             <div 
@@ -115,7 +107,7 @@ const IALabSidebar = () => {
                             />
                           </div>
                         )}
-                        <span className={`text-[10px] font-medium ${isActive ? 'text-white/80' : 'text-slate-500'}`}>
+                        <span className={`text-[10px] font-medium transition-colors ${isActive ? 'text-white/80' : 'text-slate-500 group-hover:text-[#004B63]'}`}>
                           {Math.round(modScore)}%
                         </span>
                       </div>
@@ -134,12 +126,12 @@ const IALabSidebar = () => {
 
           {/* Sección: Videos del Módulo - Integrada al Sidebar */}
           <div className="px-1 w-full">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-1.5">
                 <div className="text-[#004B63]">
-                  <Icon name="fa-video-camera" className="text-sm" />
+                  <Icon name="fa-video-camera" className="text-xs" />
                 </div>
-                <h3 className="text-xs font-bold tracking-[0.12em] uppercase text-[#004B63]">
+                <h3 className="text-[10px] font-bold tracking-[0.08em] uppercase text-[#004B63]">
                   VIDEOS EXTRAS
                 </h3>
                 <div className="flex-1 h-px bg-gradient-to-r from-[#004B63]/20 via-[#00BCD4]/20 to-transparent"></div>
@@ -271,12 +263,12 @@ const IALabSidebar = () => {
 
           {/* Sección: Recursos Adicionales */}
           <div className="px-1 w-full">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-1.5">
                 <div className="text-[#004B63]">
-                  <Icon name="fa-book" className="text-sm" />
+                  <Icon name="fa-book" className="text-xs" />
                 </div>
-                <h3 className="text-xs font-bold tracking-[0.12em] uppercase text-[#004B63]">
+                <h3 className="text-[10px] font-bold tracking-[0.08em] uppercase text-[#004B63]">
                   RECURSOS ADICIONALES
                 </h3>
                 <div className="flex-1 h-px bg-gradient-to-r from-[#004B63]/20 via-[#00BCD4]/20 to-transparent"></div>
@@ -360,47 +352,47 @@ const IALabSidebar = () => {
           </div>
 
           {/* Sección: Detalles del Curso */}
-          <div className="px-1 w-full">
-            <div className="flex items-center gap-2 mb-3">
+          <div className="px-2 w-full">
+            <div className="flex items-center gap-1.5 mb-2">
               <div className="text-[#004B63]">
-                <Icon name="fa-info-circle" className="text-sm" />
+                <Icon name="fa-info-circle" className="text-xs" />
               </div>
-              <h3 className="text-xs font-bold tracking-[0.12em] uppercase text-[#004B63]">
+              <h3 className="text-[10px] font-bold tracking-[0.08em] uppercase text-[#004B63]">
                 DETALLES DEL CURSO
               </h3>
               <div className="flex-1 h-px bg-gradient-to-r from-[#004B63]/20 via-[#00BCD4]/20 to-transparent"></div>
             </div>
-            <div className="space-y-1.5">
-              <div className="flex justify-between items-center p-2.5 hover:bg-slate-50 rounded-lg transition-colors duration-200">
-                <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 bg-[#004B63]/8 rounded-lg flex items-center justify-center">
+            <div className="space-y-0.5">
+              <div className="flex justify-between items-center p-1 hover:bg-slate-50 rounded-lg transition-colors duration-200">
+                <div className="flex items-center gap-1.5">
+                  <div className="w-6 h-6 bg-[#004B63]/8 rounded-lg flex items-center justify-center">
                     <Icon name="fa-clock" className="text-[#004B63] text-xs" />
                   </div>
                   <span className="text-xs font-medium text-slate-600">Duración</span>
                 </div>
                 <span className="text-xs font-bold text-[#004B63]">{curr?.duration}</span>
               </div>
-              <div className="flex justify-between items-center p-2.5 hover:bg-slate-50 rounded-lg transition-colors duration-200">
-                <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 bg-[#004B63]/8 rounded-lg flex items-center justify-center">
+              <div className="flex justify-between items-center p-1 hover:bg-slate-50 rounded-lg transition-colors duration-200">
+                <div className="flex items-center gap-1.5">
+                  <div className="w-6 h-6 bg-[#004B63]/8 rounded-lg flex items-center justify-center">
                     <Icon name="fa-signal" className="text-[#004B63] text-xs" />
                   </div>
                   <span className="text-xs font-medium text-slate-600">Nivel</span>
                 </div>
                 <span className="text-xs font-bold text-[#004B63]">{curr?.level}</span>
               </div>
-              <div className="flex justify-between items-center p-2.5 hover:bg-slate-50 rounded-lg transition-colors duration-200">
-                <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 bg-[#004B63]/8 rounded-lg flex items-center justify-center">
+              <div className="flex justify-between items-center p-1 hover:bg-slate-50 rounded-lg transition-colors duration-200">
+                <div className="flex items-center gap-1.5">
+                  <div className="w-6 h-6 bg-[#004B63]/8 rounded-lg flex items-center justify-center">
                     <Icon name="fa-play" className="text-[#004B63] text-xs" />
                   </div>
                   <span className="text-xs font-medium text-slate-600">Videos</span>
                 </div>
                 <span className="text-xs font-bold text-[#004B63]">{curr?.videos}</span>
               </div>
-              <div className="flex justify-between items-center p-2.5 hover:bg-slate-50 rounded-lg transition-colors duration-200">
-                <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 bg-[#004B63]/8 rounded-lg flex items-center justify-center">
+              <div className="flex justify-between items-center p-1 hover:bg-slate-50 rounded-lg transition-colors duration-200">
+                <div className="flex items-center gap-1.5">
+                  <div className="w-6 h-6 bg-[#004B63]/8 rounded-lg flex items-center justify-center">
                     <Icon name="fa-briefcase" className="text-[#004B63] text-xs" />
                   </div>
                   <span className="text-xs font-medium text-slate-600">Proyectos</span>

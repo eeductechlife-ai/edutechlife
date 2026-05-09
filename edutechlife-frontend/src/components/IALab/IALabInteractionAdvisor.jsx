@@ -83,7 +83,7 @@ const IALabInteractionAdvisor = ({ className = '', ...rest }) => {
 
   return (
     <motion.div whileHover={{ scale: 1.01, y: -2, boxShadow: "0px 8px 25px rgba(17,17,26,0.1)" }} transition={{ duration: 0.2 }}
-      className={cn("relative z-10 bg-white rounded-2xl p-4 md:p-6 shadow-sm border border-slate-200/60 overflow-hidden space-y-4", className)} {...rest}>
+      className={cn("relative z-10 bg-white rounded-2xl p-5 md:p-8 shadow-sm border border-slate-200/60 overflow-hidden space-y-6", className)} {...rest}>
       <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#00BCD4] rounded-t-2xl" />
 
       <div onClick={() => setIsOpen(!isOpen)} className="flex items-center justify-between cursor-pointer group">
@@ -102,7 +102,7 @@ const IALabInteractionAdvisor = ({ className = '', ...rest }) => {
             </div>
           )}
         </div>
-        <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 ml-4 transition-all duration-300 ${isOpen ? 'bg-[#004B63]/10 rotate-180' : 'bg-[#00BCD4]/15 group-hover:scale-110'}`}>
+        <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ml-4 transition-all duration-300 ${isOpen ? 'bg-[#004B63]/10 rotate-180' : 'bg-[#00BCD4]/15 group-hover:scale-110'}`}>
           <Icon name="fa-chevron-down" className={`w-4 h-4 ${isOpen ? 'text-[#004B63]' : 'text-[#00BCD4]'} transition-colors`} />
         </div>
       </div>
@@ -118,7 +118,7 @@ const IALabInteractionAdvisor = ({ className = '', ...rest }) => {
               {input.length >= 3 && <VoiceReader text={`Describe tu tarea y te recomendaré la mejor herramienta de ChatGPT. Escribe: ${input || 'tu tarea'}`} />}
             </div>
             <div className="relative">
-              <textarea value={input} onChange={handleInputChange} onKeyDown={handleKeyDown} placeholder="Ej: Quiero crear una infografía educativa sobre el ciclo del agua para niños de 10 años..." className="w-full min-h-[80px] p-4 pb-8 bg-white border border-slate-200 rounded-xl text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#00BCD4]/30 focus:border-[#00BCD4] resize-none transition-all" maxLength={500} />
+              <textarea value={input} onChange={handleInputChange} onKeyDown={handleKeyDown} placeholder="Ej: Quiero crear una infografía educativa sobre el ciclo del agua para niños de 10 años..." className="w-full min-h-[80px] p-4 bg-white border border-slate-200 rounded-xl text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#00BCD4]/30 focus:border-[#00BCD4] resize-none transition-all" maxLength={500} />
               <div className="absolute bottom-3 right-3 text-[10px] text-slate-400 font-medium">{input.length}/500</div>
             </div>
             <div className="flex justify-end mt-3">

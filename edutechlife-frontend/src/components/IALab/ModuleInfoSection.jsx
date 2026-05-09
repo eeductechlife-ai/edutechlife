@@ -63,8 +63,8 @@ const ModuleInfoSection = ({ className = '', ...rest }) => {
             {...rest}
         >
             {/* Elementos decorativos de fondo */}
-            <div className="absolute -top-6 -right-6 w-16 md:w-24 h-16 md:h-24 bg-gradient-to-br from-[#004B63]/6 to-[#00BCD4]/4 rounded-full blur-2xl pointer-events-none"></div>
-            <div className="absolute -bottom-4 -left-4 w-16 md:w-24 h-16 md:h-24 bg-gradient-to-tr from-[#004B63]/4 to-[#00BCD4]/4 rounded-full blur-2xl pointer-events-none"></div>
+            <div className="absolute -top-6 -right-6 w-24 h-24 bg-gradient-to-br from-[#004B63]/6 to-[#00BCD4]/4 rounded-full blur-2xl pointer-events-none"></div>
+            <div className="absolute -bottom-4 -left-4 w-24 h-24 bg-gradient-to-tr from-[#004B63]/4 to-[#00BCD4]/4 rounded-full blur-2xl pointer-events-none"></div>
 
             {/* Elemento decorativo de borde superior */}
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#00BCD4] rounded-t-2xl" />

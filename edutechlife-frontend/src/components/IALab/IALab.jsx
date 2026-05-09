@@ -7,9 +7,7 @@ import IALabModuleHeader from './IALabModuleHeader';
 import ModuleOverviewCard from './ModuleOverviewCard';
 import ModuleInfoSection from './ModuleInfoSection';
 import IALabContentAccordion from './IALabContentAccordion';
-import ReactivePromptStation from './ReactivePromptStation';
-import IALabInteractionAdvisor from './IALabInteractionAdvisor';
-import IALabTutoriasVirtuales from './IALabTutoriasVirtuales';
+import ToolTutorAccordion from './ToolTutorAccordion';
 import IALabEvaluationModal from './IALabEvaluationModal';
 import IALabEvaluationModalPremium from './IALabEvaluationModalPremium';
 import IALabQuizModal from './IALabQuizModal';
@@ -126,7 +124,7 @@ const IALabContent = () => {
                     {showMobileMenu && (
                       <div className="fixed inset-0 z-50 lg:hidden">
                         <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowMobileMenu(false)} />
-                        <div className="absolute left-0 top-0 bottom-0 w-72 max-w-[85vw] bg-white shadow-xl overflow-y-auto">
+                        <div className="absolute left-0 top-0 bottom-0 w-72 bg-white shadow-xl overflow-y-auto">
                           {/* Perfil del usuario en el drawer */}
                           <div className="flex items-center justify-between p-4 border-b border-slate-100">
                             <div className="flex items-center gap-3">
@@ -151,8 +149,8 @@ const IALabContent = () => {
                     )}
                     
                      {/* Área de Contenido Principal - scroll propio */}
-                      <main className="flex-1 overflow-y-auto h-full px-4 pt-16 pb-2 md:px-8 md:py-4 lg:px-10 lg:py-5">
-                           <div className="space-y-6 w-full max-w-5xl pb-8">
+                      <main className="flex-1 overflow-y-auto h-full px-4 pt-12 pb-2 md:px-8 md:py-4 lg:px-10 lg:py-5">
+                           <div className="space-y-5 w-full max-w-5xl pb-8">
                             {/* Info bar móvil - solo visible en móvil */}
                             <div className="md:hidden flex items-center justify-between px-4 py-3 bg-white rounded-xl border border-[#004B63]/8 shadow-sm">
                               <div className="flex items-center gap-2">
@@ -187,14 +185,9 @@ const IALabContent = () => {
                               <IALabContentAccordion />
                             </div>
                             
-                            {/* Estación Reactiva de Prompts / Asesor de Interacción según módulo */}
+                            {/* Herramientas + Tutorías en doble columna accordion */}
                             <div className="mt-5">
-                              {activeMod === 2 ? <IALabInteractionAdvisor /> : <ReactivePromptStation />}
-                            </div>
-                            
-                            {/* Tutorías Virtuales */}
-                            <div className="mt-4">
-                              <IALabTutoriasVirtuales />
+                              <ToolTutorAccordion activeMod={activeMod} onAction={handleGlobalAction} />
                             </div>
                         </div>
                     </main>
