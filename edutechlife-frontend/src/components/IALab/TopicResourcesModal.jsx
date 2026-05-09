@@ -235,7 +235,7 @@ const TopicResourcesModal = ({
                       </div>
                       Objetivo de aprendizaje
                     </h4>
-                    <p className="text-sm sm:text-base text-[#004B63]/70 leading-relaxed ml-7">
+                    <p className="text-sm sm:text-base text-[#004B63]/70 leading-relaxed ml-5 sm:ml-7">
                       {topicResources.learningObjectives[0]}
                     </p>
                   </div>
@@ -246,7 +246,7 @@ const TopicResourcesModal = ({
               </div>
 
               <div className="overflow-hidden">
-                <div className="px-6 pt-4 pb-4 border-b border-[#004B63]/25">
+                <div className="px-3 sm:px-6 pt-3 sm:pt-4 pb-3 sm:pb-4 border-b border-[#004B63]/25">
                   <ResourceSelector
                     resources={resources}
                     activeResourceIndex={activeResourceIndex}
@@ -299,7 +299,7 @@ const TopicResourcesModal = ({
                     }}
                     disabled={activeResourceIndex <= 0}
                     className={cn(
-                      "w-8 h-8 sm:w-10 sm:h-10 rounded-xl border border-[#004B63]/25 border-l-4 border-l-[#004B63] transition-all duration-200 flex items-center justify-center bg-white",
+                      "w-9 h-9 sm:w-10 sm:h-10 rounded-xl border border-[#004B63]/25 border-l-4 border-l-[#004B63] transition-all duration-200 flex items-center justify-center bg-white",
                       activeResourceIndex <= 0 ? "text-[#004B63]/50 cursor-not-allowed opacity-40" : "text-[#004B63] hover:bg-[#004B63]/5 hover:border-l-[#00BCD4] hover:shadow"
                     )}
                     style={{ boxShadow: '0 1px 3px 0 rgba(0,75,99,0.15), 0 1px 2px -1px rgba(0,75,99,0.12)' }}
@@ -320,7 +320,7 @@ const TopicResourcesModal = ({
                     }}
                     disabled={activeResourceIndex >= resources.length - 1}
                     className={cn(
-                      "w-8 h-8 sm:w-10 sm:h-10 rounded-xl border border-[#004B63]/25 border-l-4 border-l-[#004B63] transition-all duration-200 flex items-center justify-center bg-white",
+                      "w-9 h-9 sm:w-10 sm:h-10 rounded-xl border border-[#004B63]/25 border-l-4 border-l-[#004B63] transition-all duration-200 flex items-center justify-center bg-white",
                       activeResourceIndex >= resources.length - 1 ? "text-[#004B63]/50 cursor-not-allowed opacity-40" : "text-[#004B63] hover:bg-[#004B63]/5 hover:border-l-[#00BCD4] hover:shadow"
                     )}
                     style={{ boxShadow: '0 1px 3px 0 rgba(0,75,99,0.15), 0 1px 2px -1px rgba(0,75,99,0.12)' }}
@@ -354,16 +354,16 @@ const TopicResourcesModal = ({
           )}
 
           {immersivePdfModalOpen && immersivePdfResource && (
-            <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
-              <div className="relative w-full h-full max-w-6xl bg-white rounded-3xl overflow-hidden flex flex-col" style={{ boxShadow: '0 25px 50px -12px rgba(0,75,99,0.25)' }}>
-                <div className="flex items-center justify-between p-6 border-b border-[#004B63]/15 bg-gradient-to-r from-[#004B63] to-[#00BCD4]">
-                  <div className="flex items-center gap-4">
-                    <div className="bg-white/10 p-3 rounded-xl">
-                      <Icon name="fa-file-pdf" className="text-[#06B6D4] text-xl" />
+            <div className="fixed inset-0 z-[300] flex items-center justify-center p-3 sm:p-4 bg-black/90 backdrop-blur-md">
+              <div className="relative w-full h-full max-w-6xl bg-white rounded-xl sm:rounded-3xl overflow-hidden flex flex-col" style={{ boxShadow: '0 25px 50px -12px rgba(0,75,99,0.25)' }}>
+                <div className="flex items-center justify-between p-4 sm:p-6 border-b border-[#004B63]/15 bg-gradient-to-r from-[#004B63] to-[#00BCD4]">
+                  <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
+                    <div className="bg-white/10 p-2 sm:p-3 rounded-lg sm:rounded-xl flex-shrink-0">
+                      <Icon name="fa-file-pdf" className="text-[#06B6D4] text-base sm:text-xl" />
                     </div>
-                    <div>
-                      <h2 className="text-xl font-bold text-white">{immersivePdfResource.title}</h2>
-                      <div className="flex items-center gap-3 text-white/80 text-sm mt-1">
+                    <div className="min-w-0">
+                      <h2 className="text-sm sm:text-xl font-bold text-white truncate">{immersivePdfResource.title}</h2>
+                      <div className="flex items-center gap-2 text-white/80 text-[10px] sm:text-sm mt-0.5 sm:mt-1">
                         <span>Vista inmersiva</span>
                         <span>•</span>
                         <span>Pantalla completa</span>
@@ -372,10 +372,10 @@ const TopicResourcesModal = ({
                   </div>
                   <button
                     onClick={handleCloseViewerModals}
-                    className="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-colors duration-200 flex items-center gap-2 font-medium border-none"
+                    className="px-3 py-2 sm:px-5 sm:py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-lg sm:rounded-xl transition-colors duration-200 flex items-center gap-1.5 sm:gap-2 font-medium border-none flex-shrink-0"
                   >
-                    <Icon name="fa-times" className="w-5 h-5 text-white" />
-                    Cerrar
+                    <Icon name="fa-times" className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                    <span className="hidden sm:inline">Cerrar</span>
                   </button>
                 </div>
                 <div className="flex-1 relative">

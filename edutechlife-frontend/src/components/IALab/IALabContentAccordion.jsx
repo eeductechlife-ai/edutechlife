@@ -323,7 +323,7 @@ const IALabContentAccordion = () => {
   };
   
    return (
-     <div className="space-y-6 md:space-y-8">
+      <div className="space-y-4 md:space-y-5">
        {moduleLessons.map((lesson, index) => (
          renderDetailedLessonCard(index + 1, lesson)
        ))}

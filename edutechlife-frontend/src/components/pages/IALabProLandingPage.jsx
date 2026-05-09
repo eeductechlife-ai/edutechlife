@@ -269,7 +269,7 @@ const IALabProLandingPage = () => {
 
         {/* Parallax Blobs with mouse tracking */}
         <motion.div
-          className="absolute top-20 left-10 w-72 h-72 rounded-full blur-3xl"
+          className="absolute top-20 left-10 w-56 h-56 md:w-72 md:h-72 rounded-full blur-3xl"
           style={{
             background: 'radial-gradient(circle, rgba(0,75,99,0.25) 0%, transparent 70%)',
             x: useTransform(scrollY, [0, 500], [0, -50]),
@@ -277,7 +277,7 @@ const IALabProLandingPage = () => {
           }}
         />
         <motion.div
-          className="absolute bottom-20 right-10 w-96 h-96 rounded-full blur-3xl"
+          className="absolute bottom-20 right-10 w-72 h-72 md:w-96 md:h-96 rounded-full blur-3xl"
           style={{
             background: 'radial-gradient(circle, rgba(0,51,74,0.2) 0%, transparent 70%)',
             x: useTransform(scrollY, [0, 500], [0, 50]),
@@ -296,12 +296,12 @@ const IALabProLandingPage = () => {
           />
         ))}
 
-        <div           className="relative w-full max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-8 md:py-12">
+        <div           className="relative w-full max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-8 lg:py-12">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={heroInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8 }}
-            className="flex flex-col items-center gap-3 md:gap-4"
+            className="flex flex-col items-center gap-2 md:gap-3 lg:gap-4"
           >
             {/* TITLE */}
             <motion.h1
@@ -329,10 +329,10 @@ const IALabProLandingPage = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.3 }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full"
+              className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full"
             >
               <Icon name="fa-flask" className="w-4 h-4 text-[#00334A]" />
-              <span className="text-sm font-semibold text-white tracking-wide">Laboratorio de Innovación Educativa</span>
+              <span className="text-[11px] sm:text-sm font-semibold text-white tracking-wide">Laboratorio de Innovación Educativa</span>
             </motion.div>
 
             {/* TABLET — Hiperrealista con tracking 3D */}
@@ -340,7 +340,7 @@ const IALabProLandingPage = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={heroInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.4, duration: 0.8 }}
-              className="w-full max-w-xl md:max-w-2xl lg:max-w-3xl relative"
+              className="w-full max-w-xl md:max-w-2xl lg:max-w-3xl relative overflow-hidden"
             >
               {/* Contenedor con tracking de mouse para efecto parallax 3D */}
               <div
@@ -567,21 +567,21 @@ const IALabProLandingPage = () => {
                 <div className="flex items-center gap-2 md:gap-3">
                   <div className="flex -space-x-1.5">
                     {[1,2,3,4].map((i) => (
-                      <div key={i} className="w-7 h-7 rounded-full bg-[#00334A] border-2 border-[#00334A]/50 flex items-center justify-center text-[9px] font-bold text-white">
+                      <div key={i} className="w-7 h-7 rounded-full bg-[#00334A] border-2 border-[#00334A]/50 flex items-center justify-center text-[11px] md:text-[9px] font-bold text-white">
                         {String.fromCharCode(64 + i)}
                       </div>
                     ))}
                   </div>
                   <span><strong className="text-white">4.200+</strong> <span className="text-white font-semibold">estudiantes</span></span>
                 </div>
-                <div className="h-7 w-px bg-white/10" />
+                <div className="h-7 w-px bg-white/10 hidden sm:block" />
                 <div className="flex items-center gap-1 text-amber-400">
                   {[1,2,3,4,5].map((s) => (
                     <Icon key={s} name="fa-star" className="w-4 h-4" />
                   ))}
                   <span className="text-white ml-1.5"><strong className="text-white">4.8</strong></span>
                 </div>
-                <div className="h-7 w-px bg-white/10" />
+                <div className="h-7 w-px bg-white/10 hidden sm:block" />
                 <div className="flex items-center gap-1.5 text-emerald-400">
                   <Icon name="fa-shield-check" className="w-4 h-4" />
                   <span className="text-white">Certificado profesional</span>
@@ -594,7 +594,7 @@ const IALabProLandingPage = () => {
       </section>
 
       {/* Smooth transition from hero to benefits */}
-      <div className="h-6 bg-gradient-to-b from-[#004064] to-white" />
+      <div className="h-4 md:h-6 bg-gradient-to-b from-[#004064] to-white" />
 
       {/* BENEFITS SECTION */}
       <section className="py-16 md:py-20 lg:py-24 bg-gradient-to-b from-white to-[#F0F7FA] relative overflow-hidden">
@@ -625,7 +625,7 @@ const IALabProLandingPage = () => {
             initial="initial"
             whileInView="animate"
             viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"
           >
             {benefits.map((benefit, index) => (
               <motion.div
@@ -678,7 +678,7 @@ const IALabProLandingPage = () => {
                 onClick={() => setActiveCategory(category.id)}
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.98 }}
-                className={`relative px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors duration-200 flex items-center gap-2 ${
+                className={`relative px-4 py-3 sm:px-5 sm:py-2.5 rounded-xl text-sm font-semibold transition-colors duration-200 flex items-center gap-2 ${
                   activeCategory === category.id
                     ? 'text-white'
                     : 'bg-[#F1F5F9] text-[#475569] hover:bg-[#004B63]/10 hover:text-[#004B63]'
@@ -704,7 +704,7 @@ const IALabProLandingPage = () => {
               variants={staggerContainer}
               initial="initial"
               animate="animate"
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-stretch"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 items-stretch"
             >
               {filteredCourses.map((course, index) => {
                 const config = statusConfig[course.status];
@@ -731,7 +731,7 @@ const IALabProLandingPage = () => {
                     />
 
                     {/* Thumbnail Section */}
-                    <div className={`relative h-44 bg-gradient-to-br ${config.bg} p-5 flex flex-col justify-between`}>
+                    <div className={`relative h-36 md:h-40 lg:h-44 bg-gradient-to-br ${config.bg} p-5 flex flex-col justify-between`}>
                       <div className="absolute inset-0 opacity-15">
                         <motion.div
                           className="absolute top-4 right-10 w-24 h-24 rounded-full blur-3xl"
@@ -743,7 +743,7 @@ const IALabProLandingPage = () => {
 
                       {/* Top Row: Badge + Duration */}
                       <div className="flex items-start justify-between relative z-10">
-                        <div className={`px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${config.badge}`}>
+                        <div className={`px-2.5 py-1 rounded-md text-[11px] sm:text-[10px] font-bold uppercase tracking-wider ${config.badge}`}>
                           {config.badgeText}
                         </div>
                         <div className="flex items-center gap-1 px-2 py-1 bg-white/10 backdrop-blur-sm rounded-md border border-white/20">
@@ -788,7 +788,7 @@ const IALabProLandingPage = () => {
                       {/* Features */}
                       <div className="flex flex-wrap gap-1.5 mb-3">
                         {course.features.map((f, i) => (
-                          <span key={i} className="px-2 py-0.5 bg-[#004B63]/5 text-[#004B63] text-[10px] font-semibold rounded-md border border-[#004B63]/10">
+                          <span key={i} className="px-2 py-0.5 bg-[#004B63]/5 text-[#004B63] text-xs sm:text-[10px] font-semibold rounded-md border border-[#004B63]/10">
                             {f}
                           </span>
                         ))}
@@ -810,7 +810,7 @@ const IALabProLandingPage = () => {
                             Certificado
                           </span>
                         )}
-                        <span className="ml-auto px-2 py-0.5 bg-[#4DA8C4]/10 rounded text-[10px] font-bold text-[#004B63] uppercase tracking-wider">
+                        <span className="ml-auto px-2 py-0.5 bg-[#4DA8C4]/10 rounded text-xs sm:text-[10px] font-bold text-[#004B63] uppercase tracking-wider">
                           {course.level}
                         </span>
                       </div>
@@ -840,7 +840,7 @@ const IALabProLandingPage = () => {
                         whileTap={config.disabled ? {} : { scale: 0.98 }}
                         disabled={config.disabled}
                         onClick={() => !config.disabled && (isSignedIn ? navigate(course.route) : navigate('/login?returnTo=/ialab'))}
-                        className={`w-full py-2.5 text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 relative overflow-hidden mt-auto ${config.buttonClass}`}
+                        className={`w-full py-3 sm:py-2.5 text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 relative overflow-hidden mt-auto ${config.buttonClass}`}
                       >
                         {config.disabled ? (
                           <>

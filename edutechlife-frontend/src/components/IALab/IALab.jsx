@@ -126,7 +126,7 @@ const IALabContent = () => {
                     {showMobileMenu && (
                       <div className="fixed inset-0 z-50 lg:hidden">
                         <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowMobileMenu(false)} />
-                        <div className="absolute left-0 top-0 bottom-0 w-72 bg-white shadow-xl overflow-y-auto">
+                        <div className="absolute left-0 top-0 bottom-0 w-72 max-w-[85vw] bg-white shadow-xl overflow-y-auto">
                           {/* Perfil del usuario en el drawer */}
                           <div className="flex items-center justify-between p-4 border-b border-slate-100">
                             <div className="flex items-center gap-3">
@@ -151,8 +151,8 @@ const IALabContent = () => {
                     )}
                     
                      {/* Área de Contenido Principal - scroll propio */}
-                     <main className="flex-1 overflow-y-auto h-full px-4 pt-20 pb-4 md:px-8 md:py-6 lg:px-10 lg:py-8">
-                          <div className="space-y-6 w-full max-w-5xl pb-20">
+                      <main className="flex-1 overflow-y-auto h-full px-4 pt-16 pb-2 md:px-8 md:py-4 lg:px-10 lg:py-5">
+                           <div className="space-y-6 w-full max-w-5xl pb-8">
                             {/* Info bar móvil - solo visible en móvil */}
                             <div className="md:hidden flex items-center justify-between px-4 py-3 bg-white rounded-xl border border-[#004B63]/8 shadow-sm">
                               <div className="flex items-center gap-2">
@@ -175,7 +175,7 @@ const IALabContent = () => {
                             </div>
 
                             {/* 2. SEGUNDO: SECCIÓN INFORMATIVA DEL MÓDULO */}
-                            <div className="mt-8">
+                            <div className="mt-4">
                               <ModuleInfoSection />
                             </div>
 
@@ -183,17 +183,17 @@ const IALabContent = () => {
                             <ModuleOverviewCard onAction={handleGlobalAction} />
 
                             {/* 3. TERCERO: ACORDEONES/LECCIONES ABAJO */}
-                            <div className="mt-6">
+                            <div className="mt-4">
                               <IALabContentAccordion />
                             </div>
                             
                             {/* Estación Reactiva de Prompts / Asesor de Interacción según módulo */}
-                            <div className="mt-10">
+                            <div className="mt-5">
                               {activeMod === 2 ? <IALabInteractionAdvisor /> : <ReactivePromptStation />}
                             </div>
                             
                             {/* Tutorías Virtuales */}
-                            <div className="mt-6">
+                            <div className="mt-4">
                               <IALabTutoriasVirtuales />
                             </div>
                         </div>

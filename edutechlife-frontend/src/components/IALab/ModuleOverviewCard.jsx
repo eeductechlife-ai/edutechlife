@@ -87,11 +87,11 @@ const ModuleOverviewCard = ({ onAction }) => {
         <motion.div
         whileHover={{ scale: 1.02, y: -4, boxShadow: "0px 8px 25px rgba(17,17,26,0.1)" }}
         transition={{ duration: 0.2 }}
-        className="relative z-10 bg-white rounded-2xl border border-slate-200/60 shadow-sm p-5 md:p-8 overflow-hidden mb-8"
+        className="relative z-10 bg-white rounded-2xl border border-slate-200/60 shadow-sm p-5 md:p-8 overflow-hidden mb-4"
       >
-          
+        
 {/* Badge superior */}
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-4">
               <div className="px-4 py-2 bg-white border border-slate-200/60 text-[#004B63] text-sm font-semibold rounded-full shadow-sm">
                 {moduleData.badge.module}
               </div>
@@ -114,7 +114,7 @@ const ModuleOverviewCard = ({ onAction }) => {
                </h3>
                
                {/* Introducción */}
-               <p className="text-slate-600 text-[15px] md:text-base leading-relaxed mb-4 text-justify">
+                <p className="text-slate-600 text-[15px] md:text-base leading-relaxed mb-3 text-justify">
                  En este módulo, hemos diseñado una ruta estratégica que te llevará desde los fundamentos de la Inteligencia Artificial Generativa hasta la creación de instrucciones de alto impacto.
                </p>
                
@@ -237,7 +237,7 @@ const ModuleOverviewCard = ({ onAction }) => {
           </div>
           
           {/* Grid inferior: 3 iconos */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5">
                 {/* Icono: Comunidad */}
                 <div className="flex flex-col items-center gap-3">
                   {moduleProgress?.[activeMod]?.community ? (
@@ -250,7 +250,7 @@ const ModuleOverviewCard = ({ onAction }) => {
                         title="Ver comunidad"
                       >
                         <Icon name="fa-comments" className="text-white w-9 h-9 md:w-10 md:h-10" />
-                        <div className="absolute -top-1 -right-1 w-8 h-8 rounded-full bg-white border-2 border-emerald-500 flex items-center justify-center shadow-sm">
+                        <div className="absolute -top-0.5 -right-0.5 w-7 h-7 rounded-full bg-white border-2 border-emerald-500 flex items-center justify-center shadow-sm">
                           <Icon name="fa-check" className="text-emerald-500 text-[10px]" />
                         </div>
                       </motion.button>
@@ -284,41 +284,25 @@ const ModuleOverviewCard = ({ onAction }) => {
                         title="Ver resultado del desafío"
                       >
                         <Icon name="fa-rocket" className="text-white w-9 h-9 md:w-10 md:h-10" />
-                        <div className="absolute -top-0.5 -right-0.5 w-8 h-8 rounded-full bg-white border-[3px] border-emerald-500 flex items-center justify-center shadow-sm">
-                          <span className="text-[10px] font-bold text-emerald-600">{challengeScores[activeMod]}%</span>
+                        <div className="absolute -top-0.5 -right-0.5 w-7 h-7 rounded-full bg-white border-2 border-emerald-500 flex items-center justify-center shadow-sm">
+                          <span className="text-emerald-500 font-black text-[9px]">{score}</span>
                         </div>
-                      </motion.button>
-                      <span className="text-base font-semibold text-emerald-600 tracking-wide text-center">Desafío: {challengeScores[activeMod]}%</span>
-                    </div>
-                  ) : (
-                    <>
-                      <motion.button
-                        onClick={() => onAction('OPEN_CHALLENGE')}
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                        className="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-lg hover:bg-[#00BCD4]/90 hover:shadow-xl transition-all duration-300 cursor-pointer border-0"
-                        title="Desafío del Módulo"
-                      >
-                        <Icon name="fa-rocket" className="text-white w-9 h-9 md:w-10 md:h-10" />
-                      </motion.button>
-                      <span className="text-base font-semibold text-[#004B63] tracking-wide text-center">Desafío</span>
-                    </>
-                  )}
-                </div>
-                {/* Icono: Examen */}
-                <div className="flex flex-col items-center gap-3">
-                  {completedExams?.[activeMod] ? (
-                    <div className="flex flex-col items-center gap-2">
-                      <motion.button
-                        onClick={() => onAction('SHOW_EXAM_RESULT')}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border-0 relative"
-                        title="Ver resultado del examen"
-                      >
-                        <Icon name="fa-clipboard-check" className="text-white w-9 h-9 md:w-10 md:h-10" />
-                        <div className="absolute -top-0.5 -right-0.5 w-8 h-8 rounded-full bg-white border-[3px] border-emerald-500 flex items-center justify-center shadow-sm">
+                      </div>
+                    </motion.button>
+                    <span className="text-sm md:text-base font-semibold text-slate-700 tracking-wide text-center">Evaluaciones</span>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center gap-3">
+                    <motion.button
+                      onClick={() => handleGlobalAction('start_exam')}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border-0 relative"
+                      title={examLabel}
+                    >
+                      <Icon name="fa-pen-clip" className="text-white w-9 h-9 md:w-10 md:h-10" />
+                      {score !== undefined && score >= 0 && (
+                        <div className="absolute -top-0.5 -right-0.5 w-7 h-7 rounded-full bg-white border-2 border-emerald-500 flex items-center justify-center shadow-sm">
                           <span className="text-[10px] font-bold text-emerald-600">{completedExams[activeMod]}%</span>
                         </div>
                       </motion.button>

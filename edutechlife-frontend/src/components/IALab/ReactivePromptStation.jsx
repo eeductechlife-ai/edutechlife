@@ -125,8 +125,8 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                 ]
             } : {}}
             className={cn(
-                "relative z-10 bg-white rounded-2xl p-5 md:p-8 shadow-sm border border-slate-200/60 overflow-hidden",
-                "space-y-6",
+                "relative z-10 bg-white rounded-2xl p-4 md:p-6 shadow-sm border border-slate-200/60 overflow-hidden",
+                "space-y-4",
                 className
             )}
             {...rest}
@@ -154,7 +154,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                         </div>
                     )}
                 </div>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ml-4 transition-all duration-300 ${
+                <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 ml-4 transition-all duration-300 ${
                     isOpen ? 'bg-[#004B63]/10 rotate-180' : 'bg-[#00BCD4]/15 group-hover:scale-110'
                 }`}>
                     <Icon
