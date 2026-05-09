@@ -59,7 +59,7 @@ const AppLayout = () => {
   
   return (
     <ProgressProvider>
-      <div className="flex flex-col min-h-screen overflow-hidden bg-white text-[#004B63]" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+      <div className="flex flex-col min-h-screen overflow-x-hidden bg-white text-[#004B63]" style={{ fontFamily: "'Montserrat', sans-serif" }}>
         <Suspense fallback={null}>
           <GlobalCanvas />
         </Suspense>
@@ -218,7 +218,7 @@ const AppLayout = () => {
                       <h3 className="text-xs font-semibold text-[#4DA8C4] uppercase tracking-wider mb-2">INICIO</h3>
                       <div className="space-y-1">
                         <button 
-                          onClick={() => navigate('/')}
+                          onClick={() => { setMobileMenuOpen(false); navigate('/'); }}
                           className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
                         >
                           Herramientas IA
@@ -242,25 +242,25 @@ const AppLayout = () => {
                       <h3 className="text-xs font-semibold text-[#4DA8C4] uppercase tracking-wider mb-2">HERRAMIENTAS</h3>
                       <div className="space-y-1">
                         <button 
-                          onClick={() => navigate('/ialab')}
+                          onClick={() => { setMobileMenuOpen(false); navigate('/ialab'); }}
                           className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
                         >
                           IA Lab Pro
                         </button>
                         <button 
-                          onClick={() => navigate('/smartboard')}
+                          onClick={() => { setMobileMenuOpen(false); navigate('/smartboard'); }}
                           className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
                         >
                           SmartBoard
                         </button>
                         <button 
-                          onClick={() => navigate('/vak')}
+                          onClick={() => { setMobileMenuOpen(false); navigate('/vak'); }}
                           className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
                         >
                           Diagnóstico VAK
                         </button>
                         <button 
-                          onClick={() => navigate('/automation')}
+                          onClick={() => { setMobileMenuOpen(false); navigate('/automation'); }}
                           className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
                         >
                           Automatización
@@ -278,7 +278,7 @@ const AppLayout = () => {
                           Contáctanos
                         </button>
                         <button 
-                          onClick={() => setShowLeadCaptureModal(true)}
+                          onClick={() => { setMobileMenuOpen(false); setShowLeadCaptureModal(true); }}
                           className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
                         >
                           Solicitar Demo
