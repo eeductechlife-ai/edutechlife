@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabContext } from '../../context/IALabContext';
+import { useIALabStore } from '../../store/ialabStore';
 import { useActivityTracker } from '../../hooks/useActivityTracker';
 
 const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge', onRetry }) => {
@@ -14,8 +15,7 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
         if (activityType !== 'challenge') return;
         const today = new Date().toISOString().split('T')[0];
         const key = `challenge_attempts_m${activeMod}_${today}`;
-        const stored = localStorage.getItem(key);
-        const current = stored !== null ? parseInt(stored, 10) : 3;
+        const current = useIALabStore.getState().storageGetInt(key, 3);
         setRemainingAttempts(current);
     }, [activityType, activeMod]);
 
@@ -23,10 +23,9 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
         if (activityType !== 'challenge' || remainingAttempts <= 0) return;
         const today = new Date().toISOString().split('T')[0];
         const key = `challenge_attempts_m${activeMod}_${today}`;
-        const stored = localStorage.getItem(key);
-        const current = stored !== null ? parseInt(stored, 10) : 3;
+        const current = useIALabStore.getState().storageGetInt(key, 3);
         const newVal = Math.max(0, current - 1);
-        localStorage.setItem(key, String(newVal));
+        useIALabStore.getState().storageSetString(key, newVal);
         setRemainingAttempts(newVal);
         if (onRetry) onRetry();
     };
@@ -67,7 +66,7 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
                 </p>
                 <button
                     onClick={onClose}
-                    className="px-6 py-3 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300"
+                    className="px-6 py-3 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300"
                 >
                     <Icon name="fa-arrow-left" className="mr-2" />
                     Volver al inicio
@@ -77,35 +76,35 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
     }
 
     const isApproved = evaluation.notaGlobal >= 80;
-    const scoreColor = isApproved ? 'text-emerald-600' : 'text-[#004B63]';
-    const scoreBgColor = isApproved ? 'bg-emerald-50 border-emerald-200' : 'bg-[#004B63]/5 border-[#004B63]/10';
-    const scoreBarColor = isApproved ? 'from-emerald-500 to-emerald-400' : 'from-[#004B63] to-[#00BCD4]';
+    const scoreColor = isApproved ? 'text-emerald-600' : 'text-petroleum';
+    const scoreBgColor = isApproved ? 'bg-emerald-50 border-emerald-200' : 'bg-petroleum/5 border-petroleum/10';
+    const scoreBarColor = isApproved ? 'from-emerald-500 to-emerald-400' : 'from-petroleum to-corporate';
 
     const percentage = evaluation.notaGlobal;
     const circumference = 2 * Math.PI * 45;
     const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
     return (
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto dark:bg-slate-900">
             <div className="max-w-6xl mx-auto p-6">
                 {/* Header */}
                 <div className="mb-8">
                     <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-6">
                         <div className="flex items-center gap-4">
-                            <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-[#004B63] to-[#00BCD4] flex items-center justify-center">
+                            <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center">
                                 <Icon name="fa-trophy" className="text-white text-2xl" />
                             </div>
                             <div>
-                                <h2 className="text-2xl font-bold text-slate-800">
+                                <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">
                                     {isApproved ? `Resultado del Desafío del Módulo ${activeMod}` : `Resultado del Desafío del Módulo ${activeMod}`}
                                 </h2>
-                                <p className="text-slate-500">
+                                <p className="text-slate-500 dark:text-slate-400">
                                     Edutechlife ha analizado tus respuestas y proporcionado feedback detallado
                                 </p>
                             </div>
                         </div>
 
-                        <div className={`px-4 py-2 rounded-lg flex items-center gap-2 border ${gradeSaved ? 'bg-emerald-50 border-emerald-200' : 'bg-[#004B63]/5 border-[#004B63]/10'}`}>
+                        <div className={`px-4 py-2 rounded-lg flex items-center gap-2 border ${gradeSaved ? 'bg-emerald-50 border-emerald-200' : 'bg-petroleum/5 border-petroleum/10'}`}>
                             {gradeSaved ? (
                                 <>
                                     <Icon name="fa-check-circle" className="text-emerald-500" />
@@ -115,8 +114,8 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
                                 </>
                             ) : (
                                 <>
-                                    <div className="w-4 h-4 border-2 border-[#004B63] border-t-transparent rounded-full animate-spin"></div>
-                                    <span className="text-sm text-[#004B63] font-medium">
+                                    <div className="w-4 h-4 border-2 border-petroleum border-t-transparent rounded-full animate-spin"></div>
+                                    <span className="text-sm text-petroleum font-medium">
                                         Registrando tu nota oficial...
                                     </span>
                                 </>
@@ -124,14 +123,14 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
                         </div>
                     </div>
 
-                    <div className="bg-gradient-to-r from-[#004B63]/10 to-[#00BCD4]/10 rounded-xl p-5 border border-[#00BCD4]/20">
+                    <div className="bg-gradient-to-r from-petroleum/10 to-corporate/10 rounded-xl p-5 border border-corporate/20 dark:from-petroleum/20 dark:to-corporate/20 dark:border-corporate/40">
                         <div className="flex items-center gap-3">
-                            <Icon name="fa-chart-line" className="text-[#004B63] text-xl" />
+                            <Icon name="fa-chart-line" className="text-petroleum text-xl" />
                             <div>
-                                <h3 className="text-lg font-bold text-[#004B63] mb-1">
+                                <h3 className="text-lg font-bold text-petroleum dark:text-[#4DA8C4] mb-1">
                                     Este desafío equivale al 30% de tu nota del Módulo {activeMod}
                                 </h3>
-                                <p className="text-slate-600 text-sm">
+                                <p className="text-slate-600 dark:text-slate-300 text-sm">
                                     Tu desempeño en esta evaluación impacta directamente en tu progreso general del curso.
                                 </p>
                             </div>
@@ -152,8 +151,8 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
                                         onClick={() => setActiveTab(tab)}
                                         className={`px-4 py-3 text-sm font-medium rounded-t-lg transition-colors ${
                                             activeTab === tab
-                                                ? 'bg-white text-[#004B63] border-b-2 border-[#00BCD4]'
-                                                : 'text-slate-600 hover:text-[#004B63] hover:bg-slate-50'
+                                                ? 'bg-white text-petroleum border-b-2 border-corporate dark:bg-slate-800 dark:text-[#4DA8C4]'
+                                                : 'text-slate-600 hover:text-petroleum hover:bg-slate-50 dark:text-slate-400 dark:hover:text-[#4DA8C4] dark:hover:bg-slate-800'
                                         }`}
                                     >
                                         <Icon 
@@ -169,14 +168,14 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
                         {activeTab === 'overview' && (
                             <div className="space-y-6">
                                 {/* Score circular */}
-                                <div className="bg-white border border-slate-200 rounded-2xl p-6">
+                                <div className="bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700 rounded-2xl p-6">
                                     <div className="flex flex-col md:flex-row items-center gap-8">
                                         <div className="relative w-48 h-48">
                                             <svg className="w-full h-full" viewBox="0 0 100 100">
                                                 <circle cx="50" cy="50" r="45" fill="none" stroke="#e2e8f0" strokeWidth="8" />
                                                 <circle
                                                     cx="50" cy="50" r="45" fill="none"
-                                                    stroke={isApproved ? "#10b981" : "#004B63"}
+                                                    stroke={isApproved ? "var(--color-success)" : "var(--color-petroleum)"}
                                                     strokeWidth="8"
                                                     strokeDasharray={circumference}
                                                     strokeDashoffset={strokeDashoffset}
@@ -199,7 +198,7 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
                                                     <div className="flex items-center justify-between mb-1">
                                                         <span className="text-slate-500">Estado (mínimo 80%)</span>
                                                         <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                                                            isApproved ? 'bg-emerald-50 text-emerald-600' : 'bg-[#004B63]/10 text-[#004B63]'
+                                                            isApproved ? 'bg-emerald-50 text-emerald-600' : 'bg-petroleum/10 text-petroleum'
                                                         }`}>
                                                             <Icon name={isApproved ? "fa-check-circle" : "fa-clock"} className="mr-1" />
                                                             {isApproved ? 'Aprobado' : 'En progreso'}
@@ -214,17 +213,17 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
                                                 </div>
 
                                                  <div className="grid grid-cols-2 gap-4">
-                                                    <div className="bg-slate-50 rounded-lg p-4">
-                                                        <div className="text-2xl font-bold text-slate-800 mb-1">
+                                                    <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-4">
+                                                        <div className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-1">
                                                             {isApproved ? 'Alto' : 'Medio'}
                                                         </div>
-                                                        <div className="text-sm text-slate-500">Nivel de dominio</div>
+                                                        <div className="text-sm text-slate-500 dark:text-slate-400">Nivel de dominio</div>
                                                     </div>
-                                                    <div className="bg-slate-50 rounded-lg p-4">
-                                                        <div className="text-2xl font-bold text-slate-800 mb-1">
+                                                    <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-4">
+                                                        <div className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-1">
                                                             3/3
                                                         </div>
-                                                        <div className="text-sm text-slate-500">Ejercicios completados</div>
+                                                        <div className="text-sm text-slate-500 dark:text-slate-400">Ejercicios completados</div>
                                                     </div>
                                                 </div>
 
@@ -260,8 +259,8 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
                                 </div>
 
                                 {/* Recomendaciones personalizadas */}
-                                <div className="bg-white border border-slate-200 rounded-2xl p-6">
-                                    <h3 className="text-xl font-bold text-slate-800 mb-4">Recomendaciones Personalizadas</h3>
+                                <div className="bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700 rounded-2xl p-6">
+                                    <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100 mb-4">Recomendaciones Personalizadas</h3>
                                     <div className="space-y-4">
                                         {isApproved ? (
                                             <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
@@ -279,9 +278,9 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
                                                 </p>
                                             </div>
                                         ) : (
-                                            <div className="bg-[#004B63]/5 border border-[#004B63]/10 rounded-xl p-4">
+                                            <div className="bg-petroleum/5 border border-petroleum/10 rounded-xl p-4">
                                                 <div className="flex items-center gap-3 mb-2">
-                                                    <Icon name="fa-lightbulb" className="text-[#004B63]" />
+                                                    <Icon name="fa-lightbulb" className="text-petroleum" />
                                                     <h4 className="font-semibold text-slate-800">No te desanimes, puedes mejorar</h4>
                                                 </div>
                                                 <p className="text-slate-600 mb-3">
@@ -290,7 +289,7 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
                                                 <div className="space-y-2">
                                                     {(evaluation.nota_ej1 || 0) < 80 && (
                                                         <div className="flex items-start gap-2 text-sm text-slate-600">
-                                                            <Icon name="fa-search" className="text-[#00BCD4] mt-0.5" />
+                                                            <Icon name="fa-search" className="text-corporate mt-0.5" />
                                                             <span><strong>Ejercicio 1:</strong> Practica identificando Rol, Contexto y Tarea en cualquier texto. Busca "Eres un..." para el Rol, "trabajando para..." para Contexto, y "debes/crear..." para Tarea.</span>
                                                         </div>
                                                     )}
@@ -302,7 +301,7 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
                                                     )}
                                                     {(evaluation.nota_ej3 || 0) < 80 && (
                                                         <div className="flex items-start gap-2 text-sm text-slate-600">
-                                                            <Icon name="fa-plus-circle" className="text-[#004B63] mt-0.5" />
+                                                            <Icon name="fa-plus-circle" className="text-petroleum mt-0.5" />
                                                             <span><strong>Ejercicio 3:</strong> Construye prompts completos desde cero. Incluye restricciones claras, ejemplos de lo que esperas, y el formato exacto de respuesta.</span>
                                                         </div>
                                                     )}
@@ -311,12 +310,12 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
                                         )}
 
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div className="bg-slate-50 rounded-lg p-4">
+                                            <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-4">
                                                 <div className="flex items-center gap-2 mb-2">
-                                                    <Icon name="fa-book" className="text-[#00BCD4]" />
-                                                    <h4 className="font-medium text-slate-800">Próximos pasos</h4>
+                                                    <Icon name="fa-book" className="text-corporate" />
+                                                    <h4 className="font-medium text-slate-800 dark:text-slate-100">Próximos pasos</h4>
                                                 </div>
-                                                <ul className="space-y-2 text-sm text-slate-600">
+                                                <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
                                                     <li className="flex items-start gap-2">
                                                         <Icon name="fa-check" className="text-emerald-500 mt-0.5" />
                                                         <span>Completa el siguiente módulo del curso</span>
@@ -331,16 +330,16 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
                                                     </li>
                                                 </ul>
                                             </div>
-                                            <div className="bg-slate-50 rounded-lg p-4">
+                                            <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-4">
                                                 <div className="flex items-center gap-2 mb-2">
-                                                    <Icon name="fa-calendar" className="text-[#004B63]" />
-                                                    <h4 className="font-medium text-slate-800">Siguiente evaluación</h4>
+                                                    <Icon name="fa-calendar" className="text-petroleum" />
+                                                    <h4 className="font-medium text-slate-800 dark:text-slate-100">Siguiente evaluación</h4>
                                                 </div>
                                                 <p className="text-sm text-slate-500 mb-2">
                                                     Puedes intentar este desafío nuevamente en:
                                                 </p>
-                                                <div className="px-3 py-2 bg-[#004B63]/10 border border-[#004B63]/20 rounded-lg">
-                                                    <div className="text-[#004B63] font-medium">24 horas</div>
+                                                <div className="px-3 py-2 bg-petroleum/10 border border-petroleum/20 rounded-lg">
+                                                    <div className="text-petroleum font-medium">24 horas</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -357,8 +356,8 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
                                         feedback: evaluation.feedback_ej1,
                                         nota: evaluation.nota_ej1,
                                         icon: 'fa-search',
-                                        color: 'text-[#00BCD4]',
-                                        bgColor: 'bg-[#00BCD4]/10'
+                                        color: 'text-corporate',
+                                        bgColor: 'bg-corporate/10'
                                     },
                                     { 
                                         title: 'Ejercicio 2: Optimizar', 
@@ -373,18 +372,18 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
                                         feedback: evaluation.feedback_ej3,
                                         nota: evaluation.nota_ej3,
                                         icon: 'fa-plus-circle',
-                                        color: 'text-[#004B63]',
-                                        bgColor: 'bg-[#004B63]/10'
+                                        color: 'text-petroleum',
+                                        bgColor: 'bg-petroleum/10'
                                     }
                                 ].map((exercise, index) => (
-                                    <div key={index} className="bg-white border border-slate-200 rounded-2xl p-6">
+                                    <div key={index} className="bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700 rounded-2xl p-6">
                                         <div className="flex items-center gap-4 mb-4">
                                             <div className={`w-12 h-12 rounded-xl ${exercise.bgColor} flex items-center justify-center`}>
                                                 <Icon name={exercise.icon} className={`${exercise.color} text-lg`} />
                                             </div>
                                             <div className="flex-1">
-                                                <h3 className="text-lg font-bold text-slate-800">{exercise.title}</h3>
-                                                <p className="text-slate-500 text-sm">Análisis detallado de Edutechlife</p>
+                                                <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">{exercise.title}</h3>
+                                                <p className="text-slate-500 dark:text-slate-400 text-sm">Análisis detallado de Edutechlife</p>
                                             </div>
                                             <div className={`px-4 py-2 rounded-lg text-lg font-bold ${
                                                 exercise.nota >= 80 ? 'bg-emerald-50 text-emerald-600' :
@@ -408,10 +407,10 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
                                             </div>
                                         </div>
                                         
-                                        <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
+                                        <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-600">
                                             <div className="flex items-start gap-3">
                                                 <Icon name="fa-comment" className="text-slate-400 mt-1" />
-                                                <p className="text-slate-700 leading-relaxed whitespace-pre-wrap">
+                                                <p className="text-slate-700 dark:text-slate-200 leading-relaxed whitespace-pre-wrap">
                                                     {exercise.feedback}
                                                 </p>
                                             </div>
@@ -424,8 +423,8 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
 
                     {/* Columna derecha */}
                     <div className="space-y-8">
-                        <div className="bg-white border border-slate-200 rounded-2xl p-6">
-                            <h3 className="text-lg font-bold text-slate-800 mb-4">Estadísticas</h3>
+                        <div className="bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700 rounded-2xl p-6">
+                            <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-4">Estadísticas</h3>
                             <div className="space-y-4">
                                 <div>
                                     <div className="flex items-center justify-between mb-1">
@@ -506,9 +505,9 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
                                     <div className="flex items-center gap-3 mb-2">
                                         <Icon 
                                             name={isApproved ? "fa-trophy" : "fa-certificate"} 
-                                            className={isApproved ? 'text-emerald-500' : 'text-[#004B63]'}
+                                            className={isApproved ? 'text-emerald-500' : 'text-petroleum'}
                                         />
-                                        <h4 className={`font-semibold ${isApproved ? 'text-emerald-700' : 'text-[#004B63]'}`}>
+                                        <h4 className={`font-semibold ${isApproved ? 'text-emerald-700' : 'text-petroleum'}`}>
                                             {isApproved ? '¡Desafío Aprobado!' : 'No alcanzaste el 80% mínimo'}
                                         </h4>
                                     </div>
@@ -546,12 +545,12 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
                         </div>
 
                         {/* Acciones */}
-                        <div className="bg-white border border-slate-200 rounded-2xl p-6">
-                            <h3 className="text-lg font-bold text-slate-800 mb-4">Acciones</h3>
+                        <div className="bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700 rounded-2xl p-6">
+                            <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-4">Acciones</h3>
                             <div className="space-y-3">
                                 <button
                                     onClick={onClose}
-                                    className="w-full px-4 py-3 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 flex items-center justify-center gap-2"
+                                    className="w-full px-4 py-3 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 flex items-center justify-center gap-2"
                                 >
                                     <Icon name="fa-check" />
                                     Cerrar y Volver al Módulo

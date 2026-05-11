@@ -18,7 +18,7 @@ const CourseCompletionSection = ({ hasCertificate, courseProgress, onViewCertifi
 
   return (
     <div className="px-1 w-full">
-      <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#004B63] via-[#0A3550] to-[#00BCD4] p-5 shadow-lg">
+      <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-petroleum via-petroleum-dark to-corporate p-5 shadow-lg">
         {/* Decoración */}
         <div className="absolute top-0 right-0 w-20 h-20 bg-white/5 rounded-full -translate-y-6 translate-x-6" />
         <div className="absolute bottom-0 left-0 w-16 h-16 bg-white/5 rounded-full translate-y-4 -translate-x-4" />
@@ -57,10 +57,10 @@ const CourseCompletionSection = ({ hasCertificate, courseProgress, onViewCertifi
 
           {/* Botón Ver Certificado */}
           <motion.button
-            whileHover={{ scale: 1.03, boxShadow: '0 0 20px rgba(255,209,102,0.3)' }}
+            whileHover={{ boxShadow: '0 0 20px rgba(255,209,102,0.3)' }}
             whileTap={{ scale: 0.97 }}
             onClick={onViewCertificate}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-white rounded-xl text-[#004B63] font-bold text-xs shadow-md hover:shadow-lg transition-all duration-300"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-white rounded-xl text-petroleum font-bold text-xs shadow-md hover:shadow-lg transition-all duration-300"
           >
             <Icon name="fa-award" className="text-sm" />
             Ver mi Certificado

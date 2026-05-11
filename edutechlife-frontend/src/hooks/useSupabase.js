@@ -30,10 +30,6 @@ export const useSupabase = () => {
           currentUserId = tokenPayload.sub;
           setUserId(currentUserId);
           
-          console.log('🔑 Token JWT obtenido de Clerk:');
-          console.log('   - User ID (sub):', currentUserId);
-          console.log('   - Algoritmo: HS256 (simétrico, no compatible con Supabase JWKS)');
-          console.log('🔄 Usando cliente anon key (JWT HS256 no compatible con Supabase Discovery URL)');
         }
         
         // Siempre usar cliente anon key porque HS256 no es compatible con Supabase JWKS

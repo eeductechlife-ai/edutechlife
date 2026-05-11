@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { cn } from '../forum/forumDesignSystem';
 import { useIALabContext } from '../../context/IALabContext';
+import { useIALabStore } from '../../store/ialabStore';
 import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
 import { useYouTubeDuration } from '../../hooks/useYouTubeDuration';
 import ResourceSelector from './ResourceSelector';
@@ -31,10 +32,7 @@ const TopicResourcesModal = ({
 
   useEffect(() => {
     if (!isOpen) return;
-    const stored = localStorage.getItem('ialab_viewed_resources');
-    if (stored) {
-      try { setViewedIds(JSON.parse(stored)); } catch {}
-    }
+    setViewedIds(useIALabStore.getState().getViewedResources());
   }, [isOpen]);
 
   const topicResources = topicData ? getResourcesForTopic(topicData.title) : null;
@@ -96,16 +94,14 @@ const TopicResourcesModal = ({
   };
 
   const handleMarkAsViewed = async (resourceId) => {
-    console.log(`Recurso ${resourceId} marcado como visto`);
     if (resourceId && activeMod) {
       markResourceInContext(activeMod, resourceId);
       const resource = resources.find(r => r.id === resourceId);
       const resourceType = resource?.type || 'document';
       await trackResourceViewed(activeMod, resourceId, resourceType);
       if (!viewedIds.includes(resourceId)) {
-        const newViewed = [...viewedIds, resourceId];
-        setViewedIds(newViewed);
-        localStorage.setItem('ialab_viewed_resources', JSON.stringify(newViewed));
+        useIALabStore.getState().addViewedResource(resourceId);
+        setViewedIds([...viewedIds, resourceId]);
       }
     }
   };
@@ -178,7 +174,7 @@ const TopicResourcesModal = ({
               }}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 border-b border-[#004B63]/25 bg-gradient-to-r from-[#004B63] to-[#00BCD4]">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 border-b border-petroleum/25 bg-gradient-to-r from-petroleum to-corporate">
                 <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0 w-full sm:w-auto">
                   <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0">
                     <Icon name="fa-book-open" className="text-white text-lg sm:text-xl" />
@@ -193,7 +189,7 @@ const TopicResourcesModal = ({
                   onClick={() => { stopSpeech(); onClose(); }}
                   className={cn(
                     "mt-3 sm:mt-0 ml-0 sm:ml-4 p-2 sm:p-2.5 rounded-lg sm:rounded-xl",
-                    "bg-white text-[#004B63] hover:bg-[#004B63]/10 transition-colors duration-200",
+                    "bg-white text-petroleum hover:bg-petroleum/10 transition-colors duration-200",
                     "flex-shrink-0 w-full sm:w-auto justify-center sm:justify-start flex items-center gap-2"
                   )}
                   aria-label="Cerrar modal"
@@ -203,50 +199,50 @@ const TopicResourcesModal = ({
                 </button>
               </div>
 
-              <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-[#004B63]/70 px-4 sm:px-6 py-3 bg-white border-b border-[#004B63]/25">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-petroleum/70 px-4 sm:px-6 py-3 bg-white border-b border-petroleum/25">
                 <div className="flex items-center gap-1 sm:gap-2">
-                  <div className="w-6 h-6 rounded-md bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center">
-                    <Icon name="fa-clock" className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#004B63]" />
+                  <div className="w-6 h-6 rounded-md bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
+                    <Icon name="fa-clock" className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-petroleum" />
                   </div>
                   <span>{topicResources.estimatedTime}</span>
                 </div>
                 <div className="flex items-center gap-1 sm:gap-2">
-                  <div className="w-6 h-6 rounded-md bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center">
-                    <Icon name="fa-chart-line" className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#004B63]" />
+                  <div className="w-6 h-6 rounded-md bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
+                    <Icon name="fa-chart-line" className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-petroleum" />
                   </div>
-                  <span className="px-1.5 sm:px-2 py-0.5 bg-[#004B63]/10 rounded-full text-[#004B63]/80 font-medium text-xs sm:text-sm">
+                  <span className="px-1.5 sm:px-2 py-0.5 bg-petroleum/10 rounded-full text-petroleum/80 font-medium text-xs sm:text-sm">
                     {topicResources.difficulty}
                   </span>
                 </div>
                 <div className="flex items-center gap-1 sm:gap-2">
-                  <div className="w-6 h-6 rounded-md bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center">
-                    <Icon name="fa-layer-group" className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#004B63]" />
+                  <div className="w-6 h-6 rounded-md bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
+                    <Icon name="fa-layer-group" className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-petroleum" />
                   </div>
                   <span>{resources.length} recurso{resources.length !== 1 ? 's' : ''}</span>
                 </div>
               </div>
 
-              <div className="px-4 sm:px-6 py-3 sm:py-4 bg-white border-b border-[#004B63]/25">
+              <div className="px-4 sm:px-6 py-3 sm:py-4 bg-white border-b border-petroleum/25">
                 {topicResources.learningObjectives && topicResources.learningObjectives.length > 0 && (
                   <div className="mb-4">
-                    <h4 className="font-semibold text-[#004B63] mb-2 flex items-center gap-2 text-sm sm:text-base">
-                      <div className="w-6 h-6 rounded-md bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center">
-                        <Icon name="fa-bullseye" className="text-[#004B63] w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    <h4 className="font-semibold text-petroleum mb-2 flex items-center gap-2 text-sm sm:text-base">
+                      <div className="w-6 h-6 rounded-md bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
+                        <Icon name="fa-bullseye" className="text-petroleum w-3.5 h-3.5 sm:w-4 sm:h-4" />
                       </div>
                       Objetivo de aprendizaje
                     </h4>
-                    <p className="text-sm sm:text-base text-[#004B63]/70 leading-relaxed ml-7">
+                    <p className="text-sm sm:text-base text-petroleum/70 leading-relaxed ml-7">
                       {topicResources.learningObjectives[0]}
                     </p>
                   </div>
                 )}
-                <p className="text-sm sm:text-base text-[#004B63]/70 leading-relaxed">
+                <p className="text-sm sm:text-base text-petroleum/70 leading-relaxed">
                   {topicResources.description}
                 </p>
               </div>
 
               <div className="overflow-hidden">
-                <div className="px-6 pt-4 pb-4 border-b border-[#004B63]/25">
+                <div className="px-6 pt-4 pb-4 border-b border-petroleum/25">
                   <ResourceSelector
                     resources={resources}
                     activeResourceIndex={activeResourceIndex}
@@ -259,23 +255,23 @@ const TopicResourcesModal = ({
                 </div>
               </div>
 
-              <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-[#004B63]/25 bg-white flex items-center justify-between gap-3">
+              <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-petroleum/25 bg-white flex items-center justify-between gap-3">
                 <div className="flex items-center gap-3 min-w-0">
                   <div className={cn(
                     "w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center flex-shrink-0",
-                    "bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 text-[#004B63] text-sm sm:text-lg"
+                    "bg-gradient-to-br from-petroleum/10 to-corporate/10 text-petroleum text-sm sm:text-lg"
                   )}>
-                    {resources[activeResourceIndex]?.type === 'video' ? <Icon name="fa-video" className="text-[#004B63] w-4 h-4 sm:w-5 sm:h-5" /> :
-                     (resources[activeResourceIndex]?.type === 'document' || resources[activeResourceIndex]?.type === 'documento' || resources[activeResourceIndex]?.type === 'pdf' || resources[activeResourceIndex]?.type === 'pdf-thumbnail') ? <Icon name="fa-file-lines" className="text-[#004B63] w-4 h-4 sm:w-5 sm:h-5" /> :
-                     (resources[activeResourceIndex]?.type === 'image' || resources[activeResourceIndex]?.type === 'imagen') ? <Icon name="fa-image" className="text-[#004B63] w-4 h-4 sm:w-5 sm:h-5" /> :
-                      (resources[activeResourceIndex]?.type === 'ova' || resources[activeResourceIndex]?.type === 'ova-thumbnail' || resources[activeResourceIndex]?.type === 'ova_interactive') ? <Icon name="fa-brain" className="text-[#004B63] w-4 h-4 sm:w-5 sm:h-5" /> :
-                     (resources[activeResourceIndex]?.type === 'interactive' || resources[activeResourceIndex]?.type === 'interactivo') ? <Icon name="fa-puzzle-piece" className="text-[#004B63] w-4 h-4 sm:w-5 sm:h-5" /> : <Icon name="fa-file" className="text-[#004B63] w-4 h-4 sm:w-5 sm:h-5" />}
+                    {resources[activeResourceIndex]?.type === 'video' ? <Icon name="fa-video" className="text-petroleum w-4 h-4 sm:w-5 sm:h-5" /> :
+                     (resources[activeResourceIndex]?.type === 'document' || resources[activeResourceIndex]?.type === 'documento' || resources[activeResourceIndex]?.type === 'pdf' || resources[activeResourceIndex]?.type === 'pdf-thumbnail') ? <Icon name="fa-file-lines" className="text-petroleum w-4 h-4 sm:w-5 sm:h-5" /> :
+                     (resources[activeResourceIndex]?.type === 'image' || resources[activeResourceIndex]?.type === 'imagen') ? <Icon name="fa-image" className="text-petroleum w-4 h-4 sm:w-5 sm:h-5" /> :
+                      (resources[activeResourceIndex]?.type === 'ova' || resources[activeResourceIndex]?.type === 'ova-thumbnail' || resources[activeResourceIndex]?.type === 'ova_interactive') ? <Icon name="fa-brain" className="text-petroleum w-4 h-4 sm:w-5 sm:h-5" /> :
+                     (resources[activeResourceIndex]?.type === 'interactive' || resources[activeResourceIndex]?.type === 'interactivo') ? <Icon name="fa-puzzle-piece" className="text-petroleum w-4 h-4 sm:w-5 sm:h-5" /> : <Icon name="fa-file" className="text-petroleum w-4 h-4 sm:w-5 sm:h-5" />}
                   </div>
                   <div className="min-w-0">
-                    <h4 className="font-semibold text-[#004B63] text-xs sm:text-sm truncate">
+                    <h4 className="font-semibold text-petroleum text-xs sm:text-sm truncate">
                       {resources[activeResourceIndex]?.title || "Selecciona un recurso"}
                     </h4>
-                    <div className="flex items-center gap-1 sm:gap-2 text-xs text-[#004B63]/60">
+                    <div className="flex items-center gap-1 sm:gap-2 text-xs text-petroleum/60">
                       {resources[activeResourceIndex]?.type === 'video' && (
                         <span>
                           {durationLoading ? 'Cargando...' : (youtubeDuration || resources[activeResourceIndex]?.duration)}
@@ -299,15 +295,15 @@ const TopicResourcesModal = ({
                     }}
                     disabled={activeResourceIndex <= 0}
                     className={cn(
-                      "w-8 h-8 sm:w-10 sm:h-10 rounded-xl border border-[#004B63]/25 border-l-4 border-l-[#004B63] transition-all duration-200 flex items-center justify-center bg-white",
-                      activeResourceIndex <= 0 ? "text-[#004B63]/50 cursor-not-allowed opacity-40" : "text-[#004B63] hover:bg-[#004B63]/5 hover:border-l-[#00BCD4] hover:shadow"
+                      "w-8 h-8 sm:w-10 sm:h-10 rounded-xl border border-petroleum/25 border-l-4 border-l-petroleum transition-all duration-200 flex items-center justify-center bg-white",
+                      activeResourceIndex <= 0 ? "text-petroleum/50 cursor-not-allowed opacity-40" : "text-petroleum hover:bg-petroleum/5 hover:border-l-corporate hover:shadow"
                     )}
                     style={{ boxShadow: '0 1px 3px 0 rgba(0,75,99,0.15), 0 1px 2px -1px rgba(0,75,99,0.12)' }}
                     aria-label="Recurso anterior"
                   >
                     <Icon name="fa-chevron-left" className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
-                  <div className="px-3 py-1 bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 text-[#004B63] rounded-full text-sm font-medium">
+                  <div className="px-3 py-1 bg-gradient-to-br from-petroleum/10 to-corporate/10 text-petroleum rounded-full text-sm font-medium">
                     {activeResourceIndex + 1} / {resources.length}
                   </div>
                   <button
@@ -320,8 +316,8 @@ const TopicResourcesModal = ({
                     }}
                     disabled={activeResourceIndex >= resources.length - 1}
                     className={cn(
-                      "w-8 h-8 sm:w-10 sm:h-10 rounded-xl border border-[#004B63]/25 border-l-4 border-l-[#004B63] transition-all duration-200 flex items-center justify-center bg-white",
-                      activeResourceIndex >= resources.length - 1 ? "text-[#004B63]/50 cursor-not-allowed opacity-40" : "text-[#004B63] hover:bg-[#004B63]/5 hover:border-l-[#00BCD4] hover:shadow"
+                      "w-8 h-8 sm:w-10 sm:h-10 rounded-xl border border-petroleum/25 border-l-4 border-l-petroleum transition-all duration-200 flex items-center justify-center bg-white",
+                      activeResourceIndex >= resources.length - 1 ? "text-petroleum/50 cursor-not-allowed opacity-40" : "text-petroleum hover:bg-petroleum/5 hover:border-l-corporate hover:shadow"
                     )}
                     style={{ boxShadow: '0 1px 3px 0 rgba(0,75,99,0.15), 0 1px 2px -1px rgba(0,75,99,0.12)' }}
                     aria-label="Siguiente recurso"
@@ -356,7 +352,7 @@ const TopicResourcesModal = ({
           {immersivePdfModalOpen && immersivePdfResource && (
             <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
               <div className="relative w-full h-full max-w-6xl bg-white rounded-3xl overflow-hidden flex flex-col" style={{ boxShadow: '0 25px 50px -12px rgba(0,75,99,0.25)' }}>
-                <div className="flex items-center justify-between p-6 border-b border-[#004B63]/15 bg-gradient-to-r from-[#004B63] to-[#00BCD4]">
+                <div className="flex items-center justify-between p-6 border-b border-petroleum/15 bg-gradient-to-r from-petroleum to-corporate">
                   <div className="flex items-center gap-4">
                     <div className="bg-white/10 p-3 rounded-xl">
                       <Icon name="fa-file-pdf" className="text-[#06B6D4] text-xl" />

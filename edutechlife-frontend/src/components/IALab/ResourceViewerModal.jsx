@@ -133,13 +133,12 @@ const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded 
           onClick={toggleFullscreen}
           className={cn(
             "px-4 py-2 rounded-xl flex items-center gap-2",
-            "bg-white border border-[#004B63]/25",
-            "text-[#004B63] font-medium text-sm",
-            "hover:bg-[#004B63]/5 hover:scale-105",
-            "transition-all duration-200"
-          )}
-          style={{ boxShadow: '0 1px 2px 0 rgba(0,75,99,0.1)' }}
-          aria-label={isFullscreen ? "Salir de pantalla completa" : "Pantalla completa"}
+            "bg-white dark:bg-slate-800 border border-petroleum/25 dark:border-petroleum/40",
+            "text-petroleum dark:text-[#4DA8C4] font-medium text-sm",
+            "hover:bg-petroleum/5 hover:shadow-lg",
+                    "transition-all duration-200"
+                  )}
+                  aria-label={isFullscreen ? "Salir de pantalla completa" : "Pantalla completa"}
         >
           <Icon 
             name={isFullscreen ? "fa-compress" : "fa-expand"} 
@@ -176,24 +175,22 @@ const DocumentViewer = ({ resource, onAutoComplete }) => {
   const onAutoCompleteRef = useRef(onAutoComplete);
   onAutoCompleteRef.current = onAutoComplete;
 
+  // Documentos requieren clic manual en "Marcar como visto" - sin auto-mark
   useEffect(() => {
-    if (!autoMarkedRef.current) {
-      autoMarkedRef.current = true;
-      setTimeout(() => onAutoCompleteRef.current?.(), 100);
-    }
+    // No auto-mark para documentos
   }, []);
 
   return (
-    <div className="w-full h-full flex flex-col bg-white rounded-2xl overflow-hidden">
+    <div className="w-full h-full flex flex-col bg-white dark:bg-slate-800 rounded-2xl overflow-hidden">
       {/* Header del documento */}
-      <div className="flex items-center justify-between p-4 bg-white">
+      <div className="flex items-center justify-between p-4 bg-white dark:bg-slate-800">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center">
-            <Icon name="fa-file-pdf" className="text-[#004B63] w-5 h-5" />
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
+            <Icon name="fa-file-pdf" className="text-petroleum w-5 h-5" />
           </div>
           <div>
-            <h4 className="font-semibold text-[#004B63]">{resource.title}</h4>
-            <div className="flex items-center gap-3 text-sm text-[#004B63]/60">
+            <h4 className="font-semibold text-petroleum">{resource.title}</h4>
+            <div className="flex items-center gap-3 text-sm text-petroleum/60">
               <span>{resource.format}</span>
               {resource.size && <span>• {resource.size}</span>}
               {resource.pages && <span>• {resource.pages} páginas</span>}
@@ -207,8 +204,8 @@ const DocumentViewer = ({ resource, onAutoComplete }) => {
             onClick={toggleFullscreen}
             className={cn(
               "px-4 py-2 rounded-lg flex items-center gap-2",
-              "bg-white border border-[#004B63]/25 text-[#004B63]/80 font-medium",
-              "hover:bg-[#004B63]/5 hover:scale-105",
+              "bg-white dark:bg-slate-800 border border-petroleum/25 dark:border-petroleum/40 text-petroleum/80 dark:text-[#4DA8C4] font-medium",
+              "hover:bg-petroleum/5 hover:shadow-lg",
               "transition-all duration-200"
             )}
           >
@@ -223,7 +220,7 @@ const DocumentViewer = ({ resource, onAutoComplete }) => {
           <a
             href={resource.url}
             download
-            className="px-4 py-2 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white rounded-lg hover:from-[#003A4D] hover:to-[#00A5B8] transition-colors duration-200 flex items-center gap-2 font-medium"
+            className="px-4 py-2 bg-gradient-to-r from-petroleum to-corporate text-white rounded-lg hover:from-corporate-deep hover:to-corporate-darker transition-colors duration-200 flex items-center gap-2 font-medium"
           >
             <Icon name="fa-download" className="w-4 h-4" />
             Descargar
@@ -243,22 +240,22 @@ const DocumentViewer = ({ resource, onAutoComplete }) => {
         {/* Overlay de navegación para PDFs */}
         {resource.pages && resource.pages > 1 && (
           <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
-            <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-xl border border-[#004B63]/25" style={{ boxShadow: '0 1px 2px 0 rgba(0,75,99,0.1)' }}>
+            <div className="flex items-center gap-3 bg-white dark:bg-slate-800 px-4 py-2 rounded-xl border border-petroleum/25 dark:border-petroleum/40 shadow-sm">
               <button
                 onClick={() => setPage(prev => Math.max(1, prev - 1))}
                 disabled={page <= 1}
                 className={cn(
                   "px-3 py-1 rounded-lg flex items-center gap-2",
                   page <= 1 
-                    ? "text-[#004B63]/50 cursor-not-allowed" 
-                    : "text-[#004B63]/80 hover:bg-[#004B63]/10"
+                    ? "text-petroleum/50 cursor-not-allowed" 
+                    : "text-petroleum/80 hover:bg-petroleum/10"
                 )}
               >
                 <Icon name="fa-chevron-left" className="w-4 h-4" />
                 Anterior
               </button>
               
-              <div className="px-3 py-1 bg-[#004B63]/10 rounded-lg text-[#004B63]/80 font-medium">
+              <div className="px-3 py-1 bg-petroleum/10 rounded-lg text-petroleum/80 font-medium">
                 Página {page} de {totalPages}
               </div>
               
@@ -268,8 +265,8 @@ const DocumentViewer = ({ resource, onAutoComplete }) => {
                 className={cn(
                   "px-3 py-1 rounded-lg flex items-center gap-2",
                   page >= totalPages
-                    ? "text-[#004B63]/50 cursor-not-allowed"
-                    : "text-[#004B63]/80 hover:bg-[#004B63]/10"
+                    ? "text-petroleum/50 cursor-not-allowed"
+                    : "text-petroleum/80 hover:bg-petroleum/10"
                 )}
               >
                 Siguiente
@@ -294,25 +291,23 @@ const ImageViewer = ({ resource, onAutoComplete }) => {
   const onAutoCompleteRef = useRef(onAutoComplete);
   onAutoCompleteRef.current = onAutoComplete;
 
+  // Documentos requieren clic manual en "Marcar como visto" - sin auto-mark
   useEffect(() => {
-    if (!autoMarkedRef.current) {
-      autoMarkedRef.current = true;
-      setTimeout(() => onAutoCompleteRef.current?.(), 100);
-    }
+    // No auto-mark para documentos
   }, []);
 
   return (
-    <div className="w-full h-full flex flex-col bg-white rounded-2xl overflow-auto">
+    <div className="w-full h-full flex flex-col bg-white dark:bg-slate-800 rounded-2xl overflow-auto">
       {/* Header de la imagen */}
-      <div className="flex items-center justify-between p-4 bg-white flex-shrink-0">
+      <div className="flex items-center justify-between p-4 bg-white dark:bg-slate-800 flex-shrink-0">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center">
-            <Icon name="fa-image" className="text-[#004B63] w-5 h-5" />
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
+            <Icon name="fa-image" className="text-petroleum w-5 h-5" />
           </div>
           <div>
-            <h4 className="font-semibold text-[#004B63]">{resource.title}</h4>
+            <h4 className="font-semibold text-petroleum">{resource.title}</h4>
             {resource.interactive && (
-              <span className="text-sm text-[#004B63] font-medium">Interactiva</span>
+              <span className="text-sm text-petroleum font-medium">Interactiva</span>
             )}
           </div>
         </div>
@@ -323,8 +318,8 @@ const ImageViewer = ({ resource, onAutoComplete }) => {
             onClick={toggleFullscreen}
             className={cn(
               "px-4 py-2 rounded-lg flex items-center gap-2",
-              "bg-white border border-[#004B63]/25 text-[#004B63]/80 font-medium",
-              "hover:bg-[#004B63]/5 hover:scale-105",
+              "bg-white dark:bg-slate-800 border border-petroleum/25 dark:border-petroleum/40 text-petroleum/80 dark:text-[#4DA8C4] font-medium",
+              "hover:bg-petroleum/5 hover:shadow-lg",
               "transition-all duration-200"
             )}
           >
@@ -339,7 +334,7 @@ const ImageViewer = ({ resource, onAutoComplete }) => {
           <a
             href={resource.url}
             download
-            className="px-4 py-2 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white rounded-lg hover:from-[#003A4D] hover:to-[#00A5B8] transition-colors duration-200 flex items-center gap-2 font-medium"
+            className="px-4 py-2 bg-gradient-to-r from-petroleum to-corporate text-white rounded-lg hover:from-corporate-deep hover:to-corporate-darker transition-colors duration-200 flex items-center gap-2 font-medium"
           >
             <Icon name="fa-download" className="w-4 h-4" />
             Descargar
@@ -355,7 +350,7 @@ const ImageViewer = ({ resource, onAutoComplete }) => {
         {/* Estado de carga */}
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-12 h-12 border-4 border-[#004B63]/25 border-t-[#004B63] rounded-full animate-spin"></div>
+            <div className="w-12 h-12 border-4 border-petroleum/25 border-t-[#004B63] rounded-full animate-spin"></div>
           </div>
         )}
 
@@ -382,8 +377,8 @@ const ImageViewer = ({ resource, onAutoComplete }) => {
 
       {/* Descripción (si existe) */}
       {resource.description && (
-        <div className="p-4 bg-[#004B63]/5">
-          <p className="text-sm text-[#004B63]/70">{resource.description}</p>
+        <div className="p-4 bg-petroleum/5">
+          <p className="text-sm text-petroleum/70">{resource.description}</p>
         </div>
       )}
     </div>
@@ -398,30 +393,28 @@ const InteractiveViewer = ({ resource, onAutoComplete }) => {
   const onAutoCompleteRef = useRef(onAutoComplete);
   onAutoCompleteRef.current = onAutoComplete;
 
+  // Documentos requieren clic manual en "Marcar como visto" - sin auto-mark
   useEffect(() => {
-    if (!autoMarkedRef.current) {
-      autoMarkedRef.current = true;
-      setTimeout(() => onAutoCompleteRef.current?.(), 100);
-    }
+    // No auto-mark para documentos
   }, []);
 
   return (
-    <div className="w-full h-full flex flex-col bg-white rounded-2xl overflow-hidden">
-      <div className="flex items-center justify-between p-4 bg-white">
+    <div className="w-full h-full flex flex-col bg-white dark:bg-slate-800 rounded-2xl overflow-hidden">
+      <div className="flex items-center justify-between p-4 bg-white dark:bg-slate-800">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center">
-            <Icon name="fa-puzzle-piece" className="text-[#004B63] w-5 h-5" />
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
+            <Icon name="fa-puzzle-piece" className="text-petroleum w-5 h-5" />
           </div>
           <div>
-            <h4 className="font-semibold text-[#004B63]">{resource.title}</h4>
-            <div className="flex items-center gap-3 text-sm text-[#004B63]/60">
+            <h4 className="font-semibold text-petroleum">{resource.title}</h4>
+            <div className="flex items-center gap-3 text-sm text-petroleum/60">
               <span>Recurso interactivo</span>
               {resource.estimatedTime && <span>• {resource.estimatedTime}</span>}
             </div>
           </div>
         </div>
 
-        <div className="px-4 py-2 bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 text-[#004B63] rounded-lg font-medium text-sm">
+        <div className="px-4 py-2 bg-gradient-to-br from-petroleum/10 to-corporate/10 text-petroleum rounded-lg font-medium text-sm">
           <Icon name="fa-bolt" className="w-4 h-4 inline mr-1" />
           Interactivo
         </div>
@@ -429,33 +422,33 @@ const InteractiveViewer = ({ resource, onAutoComplete }) => {
 
       <div className="flex-1 flex flex-col items-center justify-center p-8">
         <div className="text-center max-w-md">
-          <div className="w-20 h-20 bg-gradient-to-br from-[#004B63] to-[#00BCD4] rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+          <div className="w-20 h-20 bg-gradient-to-br from-petroleum to-corporate rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
             <Icon name="fa-bolt" className="text-white text-2xl" />
           </div>
           
-          <h3 className="text-xl font-bold text-[#004B63] mb-3">
+          <h3 className="text-xl font-bold text-petroleum mb-3">
             {resource.title}
           </h3>
           
-          <p className="text-[#004B63]/70 mb-6">
+          <p className="text-petroleum/70 mb-6">
             {resource.description || "Este recurso interactivo está diseñado para aprendizaje práctico."}
           </p>
 
-            <div className="bg-white rounded-xl p-6 border border-[#004B63]/25 mb-6" style={{ boxShadow: '0 1px 2px 0 rgba(0,75,99,0.1)' }}>
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-petroleum/25 dark:border-petroleum/40 shadow-sm mb-6">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-sm font-medium text-[#004B63]/80">Simulación activa</span>
+              <span className="text-sm font-medium text-petroleum/80">Simulación activa</span>
               <span className="text-xs px-2 py-1 bg-emerald-100 text-emerald-700 rounded">En tiempo real</span>
             </div>
             
-            <div className="h-32 bg-gradient-to-r from-[#004B63]/5 to-[#00BCD4]/5 rounded-lg border border-[#004B63]/25 flex items-center justify-center">
+            <div className="h-32 bg-gradient-to-r from-petroleum/5 to-corporate/5 rounded-lg border border-petroleum/25 flex items-center justify-center">
               <div className="text-center">
                 <Icon name="fa-spinner" className="text-[#06B6D4] text-2xl mb-2 animate-spin" />
-                <p className="text-sm text-[#004B63]/70">Cargando experiencia interactiva...</p>
+                <p className="text-sm text-petroleum/70">Cargando experiencia interactiva...</p>
               </div>
             </div>
           </div>
 
-          <div className="text-sm text-[#004B63]/60">
+          <div className="text-sm text-petroleum/60">
             <p>Este es un recurso interactivo que requiere interacción del usuario.</p>
             <p>En producción, aquí se cargaría la herramienta interactiva real.</p>
           </div>
@@ -474,11 +467,9 @@ const PDFThumbnailViewer = ({ resource, onAutoComplete }) => {
   const onAutoCompleteRef = useRef(onAutoComplete);
   onAutoCompleteRef.current = onAutoComplete;
 
+  // Documentos requieren clic manual en "Marcar como visto" - sin auto-mark
   useEffect(() => {
-    if (!autoMarkedRef.current) {
-      autoMarkedRef.current = true;
-      setTimeout(() => onAutoCompleteRef.current?.(), 100);
-    }
+    // No auto-mark para documentos
   }, []);
 
   return (
@@ -486,7 +477,7 @@ const PDFThumbnailViewer = ({ resource, onAutoComplete }) => {
       <div className="flex justify-end items-center mb-2 px-1">
         <button
           onClick={openFullScreen}
-          className="text-sm font-medium text-[#004B63] bg-[#004B63]/10 hover:bg-[#004B63]/12 py-1.5 px-3 rounded-md transition-colors flex items-center gap-2"
+          className="text-sm font-medium text-petroleum bg-petroleum/10 hover:bg-petroleum/12 py-1.5 px-3 rounded-md transition-colors flex items-center gap-2"
         >
           <Icon name="fa-expand" className="w-3.5 h-3.5" />
           Abrir en pantalla completa
@@ -511,16 +502,14 @@ const OVAViewer = ({ resource, onClose, onAutoComplete }) => {
   const onAutoCompleteRef = useRef(onAutoComplete);
   onAutoCompleteRef.current = onAutoComplete;
 
+  // Documentos requieren clic manual en "Marcar como visto" - sin auto-mark
   useEffect(() => {
-    if (!autoMarkedRef.current) {
-      autoMarkedRef.current = true;
-      setTimeout(() => onAutoCompleteRef.current?.(), 100);
-    }
+    // No auto-mark para documentos
   }, []);
 
   if (resource.url) {
     return (
-      <div className="w-full h-full flex flex-col bg-white rounded-2xl overflow-auto">
+      <div className="w-full h-full flex flex-col bg-white dark:bg-slate-800 rounded-2xl overflow-auto">
         <iframe
           src={resource.url}
           title={resource.title}
@@ -530,8 +519,9 @@ const OVAViewer = ({ resource, onClose, onAutoComplete }) => {
       </div>
     );
   }
+
   return (
-    <div className="w-full h-full flex flex-col bg-white rounded-2xl overflow-auto">
+    <div className="w-full h-full flex flex-col bg-white dark:bg-slate-800 rounded-2xl overflow-auto">
       <div className="flex-1 relative">
         <QueEsPrompt_OVA_Original onClose={onClose} />
       </div>
@@ -601,13 +591,9 @@ const ResourceViewerModal = ({
     setIsMarkedAsViewed(false);
   }, [resource?.id]);
 
-  // Auto-mark para ova_interactive (no tiene viewer propio con auto-mark)
+  // OVA interactivos requieren clic manual en "Marcar como visto" - sin auto-mark
   useEffect(() => {
-    const type = resourceType || resource?.type;
-    if (type === 'ova_interactive' && isOpen && !isMarkedAsViewed) {
-      const timer = setTimeout(() => handleMarkAsViewed(), 100);
-      return () => clearTimeout(timer);
-    }
+    // No auto-mark para ova_interactive
   }, [resource?.id, resourceType, isOpen, isMarkedAsViewed]);
 
   // Si no está abierto, no renderizar nada
@@ -619,10 +605,10 @@ const ResourceViewerModal = ({
   const renderViewer = () => {
     if (!resource) {
       return (
-        <div className="w-full h-full flex items-center justify-center bg-[#004B63]/5 rounded-2xl">
+        <div className="w-full h-full flex items-center justify-center bg-petroleum/5 rounded-2xl">
           <div className="text-center">
-            <Icon name="fa-file-circle-question" className="text-[#004B63]/50 text-4xl mb-4" />
-            <p className="text-[#004B63]/60 font-medium">No hay recurso seleccionado</p>
+            <Icon name="fa-file-circle-question" className="text-petroleum/50 text-4xl mb-4" />
+            <p className="text-petroleum/60 font-medium">No hay recurso seleccionado</p>
           </div>
         </div>
       );
@@ -660,10 +646,10 @@ const ResourceViewerModal = ({
         case 'ova_interactive':
           return (
             <Suspense fallback={
-              <div className="w-full h-full flex items-center justify-center bg-[#004B63]/5">
+              <div className="w-full h-full flex items-center justify-center bg-petroleum/5">
                 <div className="text-center">
-                  <div className="animate-spin w-10 h-10 border-4 border-[#004B63] border-t-transparent rounded-full mx-auto mb-4"></div>
-                  <p className="text-[#004B63]/60 font-bold">Cargando simulador interactivo...</p>
+                  <div className="animate-spin w-10 h-10 border-4 border-petroleum border-t-transparent rounded-full mx-auto mb-4"></div>
+                  <p className="text-petroleum/60 font-bold">Cargando simulador interactivo...</p>
                 </div>
               </div>
             }>
@@ -787,19 +773,17 @@ const ResourceViewerModal = ({
                   animate="visible"
                   exit="exit"
                   className={cn(
-                    "w-full max-w-6xl bg-white rounded-2xl sm:rounded-3xl",
+                    "w-full max-w-6xl bg-white dark:bg-slate-800 rounded-2xl sm:rounded-3xl",
                     "pointer-events-auto overflow-hidden",
                     "flex flex-col",
                     "h-[90vh] max-h-[900px]",
-                    "mx-2 sm:mx-4" // Margenes responsive
+                    "mx-2 sm:mx-4", // Margenes responsive
+                    "shadow-xl shadow-petroleum/20"
                   )}
-                  style={{
-                    boxShadow: '0 20px 25px -5px rgba(0,75,99,0.18), 0 8px 10px -6px rgba(0,75,99,0.12)'
-                  }}
                   onClick={(e) => e.stopPropagation()}
                 >
               {/* Header del modal */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 border-b border-[#004B63]/15 bg-gradient-to-r from-[#004B63] to-[#00BCD4]">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 border-b border-petroleum/15 bg-gradient-to-r from-petroleum to-corporate">
                 <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0 w-full sm:w-auto">
                   <div className="bg-white/10 p-2 rounded-lg flex-shrink-0">
                     {(resource.type === 'video') ? <Icon name="fa-video" className="text-white w-5 h-5 sm:w-6 sm:h-6" /> :
@@ -857,7 +841,7 @@ const ResourceViewerModal = ({
               </div>
 
               {/* Footer con navegación y acciones */}
-              <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-[#004B63]/25 bg-white">
+              <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-petroleum/25 dark:border-petroleum/40 bg-white dark:bg-slate-800">
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
                   {/* Navegación entre recursos */}
                   {totalResources > 1 && (
@@ -868,8 +852,8 @@ const ResourceViewerModal = ({
                         className={cn(
                           "px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg flex items-center gap-1 sm:gap-2 transition-colors duration-200 text-sm sm:text-base font-medium",
                           currentIndex <= 0
-                            ? "text-[#004B63]/50 cursor-not-allowed"
-                            : "bg-white border border-[#004B63]/25 text-[#004B63]/80 hover:bg-[#004B63]/5 hover:text-[#004B63]"
+                            ? "text-petroleum/50 cursor-not-allowed"
+                            : "bg-white dark:bg-slate-800 border border-petroleum/25 dark:border-petroleum/40 text-petroleum/80 dark:text-[#4DA8C4] hover:bg-petroleum/5 hover:text-petroleum"
                         )}
                         aria-label="Recurso anterior"
                       >
@@ -877,7 +861,7 @@ const ResourceViewerModal = ({
                         <span className="hidden sm:inline">Anterior</span>
                       </button>
                       
-                      <div className="px-3 py-1.5 sm:px-4 sm:py-2 bg-[#004B63]/10 rounded-lg text-[#004B63]/80 font-medium text-sm sm:text-base">
+                      <div className="px-3 py-1.5 sm:px-4 sm:py-2 bg-petroleum/10 rounded-lg text-petroleum/80 font-medium text-sm sm:text-base">
                         {currentIndex + 1} / {totalResources}
                       </div>
                       
@@ -887,8 +871,8 @@ const ResourceViewerModal = ({
                         className={cn(
                           "px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg flex items-center gap-1 sm:gap-2 transition-colors duration-200 text-sm sm:text-base font-medium",
                           currentIndex >= totalResources - 1
-                            ? "text-[#004B63]/50 cursor-not-allowed"
-                            : "bg-white border border-[#004B63]/25 text-[#004B63]/80 hover:bg-[#004B63]/5 hover:text-[#004B63]"
+                            ? "text-petroleum/50 cursor-not-allowed"
+                            : "bg-white dark:bg-slate-800 border border-petroleum/25 dark:border-petroleum/40 text-petroleum/80 dark:text-[#4DA8C4] hover:bg-petroleum/5 hover:text-petroleum"
                         )}
                         aria-label="Siguiente recurso"
                       >
@@ -905,7 +889,7 @@ const ResourceViewerModal = ({
                       "px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-200 flex items-center gap-2 sm:gap-3 text-sm sm:text-base w-full sm:w-auto justify-center border-none",
                       isMarkedAsViewed
                         ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
-                        : "bg-gradient-to-r from-[#004B63] to-[#00BCD4] hover:from-[#003A4D] hover:to-[#00A5B8] text-white shadow-md hover:shadow-lg"
+                        : "bg-gradient-to-r from-petroleum to-corporate hover:from-corporate-deep hover:to-corporate-darker text-white shadow-md hover:shadow-lg"
                     )}
                   >
                     {isMarkedAsViewed ? (

@@ -138,14 +138,14 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
             
             {/* Context badge */}
             <div className="flex flex-wrap gap-2 mb-4">
-                <div className="px-3 py-1 bg-[#004B63]/10 text-[#004B63] text-xs font-medium rounded-full">
+                <div className="px-3 py-1 bg-petroleum/10 text-petroleum text-xs font-medium rounded-full">
                     🎯 {context.challenge}
                 </div>
-                <div className="px-3 py-1 bg-[#00BCD4]/10 text-[#00BCD4] text-xs font-medium rounded-full">
+                <div className="px-3 py-1 bg-corporate/10 text-corporate text-xs font-medium rounded-full">
                     📚 {context.userLevel}
                 </div>
                 {techniques.slice(0, 2).map((tech, index) => (
-                    <div key={index} className="px-3 py-1 bg-[#00BCD4]/10 text-[#00BCD4] text-xs font-medium rounded-full">
+                    <div key={index} className="px-3 py-1 bg-corporate/10 text-corporate text-xs font-medium rounded-full">
                         {tech.icon} {tech.name}
                     </div>
                 ))}
@@ -260,7 +260,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                         FORUM_EFFECTS.TRANSITION_ALL,
                         FORUM_EFFECTS.HOVER_SCALE,
                         "flex items-center justify-center gap-2",
-                        "focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:ring-offset-2",
+                        "focus:outline-none focus:ring-2 focus:ring-corporate focus:ring-offset-2",
                         "disabled:opacity-70 disabled:cursor-not-allowed",
                         loading && "opacity-70 cursor-not-allowed"
                     )}
@@ -306,19 +306,19 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                             "text-left p-4 rounded-xl border border-slate-200/60",
                             "bg-white",
                             "hover:bg-slate-50",
-                            "hover:border-[#00BCD4]/40 hover:shadow-sm",
+                            "hover:border-corporate/40 hover:shadow-sm",
                             FORUM_EFFECTS.TRANSITION_ALL,
-                            "focus:outline-none focus:ring-2 focus:ring-[#00BCD4]/50"
+                            "focus:outline-none focus:ring-2 focus:ring-corporate/50"
                         )}
                         disabled={loading}
                     >
                         <div className="flex items-start gap-3">
-                            <div className="w-6 h-6 rounded-full bg-[#00BCD4]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                <Icon name="fa-lightbulb" className="text-[#00BCD4] text-xs" />
+                            <div className="w-6 h-6 rounded-full bg-corporate/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <Icon name="fa-lightbulb" className="text-corporate text-xs" />
                             </div>
                             <p className={cn(
                                 FORUM_TYPOGRAPHY.BODY.SM,
-                                "text-[#00374A] leading-relaxed"
+                                "text-petroleum-darker leading-relaxed"
                             )}>
                                 {suggestion}
                             </p>
@@ -341,7 +341,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                 <div className="mb-8">
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-lg">
+                            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center shadow-lg">
                                 <Icon name="fa-brain" className="text-white text-xl" />
                             </div>
                             <div>
@@ -349,8 +349,8 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                                 <p className="text-slate-600 font-sans">Tu idea transformada en prompt profesional por DeepSeek AI</p>
                             </div>
                         </div>
-                        <div className="px-4 py-2 bg-gradient-to-r from-[#004B63]/10 to-[#00BCD4]/10 rounded-full border border-[#004B63]/20">
-                            <span className="text-sm font-bold text-[#004B63] font-sans">🚀 LIVE</span>
+                        <div className="px-4 py-2 bg-gradient-to-r from-petroleum/10 to-corporate/10 rounded-full border border-petroleum/20">
+                            <span className="text-sm font-bold text-petroleum font-sans">🚀 LIVE</span>
                         </div>
                     </div>
                     
@@ -380,31 +380,31 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                     {/* Tarjeta ROL */}
                     <div className="bg-white border border-slate-200/60 shadow-sm rounded-3xl p-6 hover:-translate-y-1 hover:shadow transition-all duration-300 relative overflow-hidden">
                         <div className="flex items-center gap-2 mb-3">
-                            <Icon name="fa-user-tie" className="text-[#004B63]" />
-                            <span className="text-xs font-black text-[#004B63] tracking-widest uppercase font-sans">ROL</span>
+                            <Icon name="fa-user-tie" className="text-petroleum" />
+                            <span className="text-xs font-black text-petroleum tracking-widest uppercase font-sans">ROL</span>
                         </div>
                         <p className="text-slate-800 font-medium leading-relaxed font-sans">{deepSeekData.rol}</p>
-                        <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-[#004B63]/5 rounded-full blur-sm"></div>
+                        <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-petroleum/5 rounded-full blur-sm"></div>
                     </div>
                     
                     {/* Tarjeta TAREA */}
                     <div className="bg-white border border-slate-200/60 shadow-sm rounded-3xl p-6 hover:-translate-y-1 hover:shadow transition-all duration-300 relative overflow-hidden">
                         <div className="flex items-center gap-2 mb-3">
-                            <Icon name="fa-target" className="text-[#00BCD4]" />
-                            <span className="text-xs font-black text-[#00BCD4] tracking-widest uppercase font-sans">TAREA</span>
+                            <Icon name="fa-target" className="text-corporate" />
+                            <span className="text-xs font-black text-corporate tracking-widest uppercase font-sans">TAREA</span>
                         </div>
                         <p className="text-slate-800 font-medium leading-relaxed font-sans">{deepSeekData.tarea}</p>
-                        <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-[#00BCD4]/5 rounded-full blur-sm"></div>
+                        <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-corporate/5 rounded-full blur-sm"></div>
                     </div>
                     
                     {/* Tarjeta FORMATO */}
                     <div className="bg-white border border-slate-200/60 shadow-sm rounded-3xl p-6 hover:-translate-y-1 hover:shadow transition-all duration-300 relative overflow-hidden">
                         <div className="flex items-center gap-2 mb-3">
-                            <Icon name="fa-file-alt" className="text-[#004B63]" />
-                            <span className="text-xs font-black text-[#004B63] tracking-widest uppercase font-sans">FORMATO</span>
+                            <Icon name="fa-file-alt" className="text-petroleum" />
+                            <span className="text-xs font-black text-petroleum tracking-widest uppercase font-sans">FORMATO</span>
                         </div>
                         <p className="text-slate-800 font-medium leading-relaxed font-sans">{deepSeekData.formato}</p>
-                        <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-[#004B63]/5 rounded-full blur-sm"></div>
+                        <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-petroleum/5 rounded-full blur-sm"></div>
                     </div>
                 </div>
                 
@@ -458,21 +458,21 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                 </div>
                 
                 {/* ==================== BLOQUE DE ANÁLISIS TÉCNICO - NOTA DEL PROFESOR ==================== */}
-                <div className="bg-gradient-to-r from-indigo-50 to-blue-50 border-l-4 border-[#004B63] rounded-r-3xl rounded-l-md p-8 shadow-sm relative mb-8 overflow-hidden animate-in slide-in-from-right-4 duration-300">
+                <div className="bg-gradient-to-r from-indigo-50 to-blue-50 border-l-4 border-petroleum rounded-r-3xl rounded-l-md p-8 shadow-sm relative mb-8 overflow-hidden animate-in slide-in-from-right-4 duration-300">
                     {/* Icono de bombillo en el fondo */}
                     <Icon 
                         name="fa-lightbulb" 
-                        className="absolute right-4 bottom-4 text-[#004B63]/10 opacity-20 w-32 h-32" 
+                        className="absolute right-4 bottom-4 text-petroleum/10 opacity-20 w-32 h-32" 
                     />
                     
                     {/* Header del análisis */}
                     <div className="flex items-center gap-3 mb-4">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center">
                             <Icon name="fa-lightbulb" className="text-white" />
                         </div>
                         <div>
-                            <h4 className="text-lg font-bold text-[#004B63] font-sans">💡 Análisis Técnico</h4>
-                            <p className="text-sm text-[#004B63] font-sans">Feedback educativo sobre tu idea</p>
+                            <h4 className="text-lg font-bold text-petroleum font-sans">💡 Análisis Técnico</h4>
+                            <p className="text-sm text-petroleum font-sans">Feedback educativo sobre tu idea</p>
                         </div>
                     </div>
                     
@@ -484,13 +484,13 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                         
                         {/* Píldoras de técnicas aplicadas */}
                         <div className="flex flex-wrap gap-2">
-                            <span className="bg-white border border-[#004B63]/20 text-[#004B63] px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
+                            <span className="bg-white border border-petroleum/20 text-petroleum px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
                                 Estructura RTF
                             </span>
-                            <span className="bg-white border border-[#00BCD4]/20 text-[#00BCD4] px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
+                            <span className="bg-white border border-corporate/20 text-corporate px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
                                 Especificidad
                             </span>
-                            <span className="bg-white border border-[#004B63]/20 text-[#004B63] px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
+                            <span className="bg-white border border-petroleum/20 text-petroleum px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
                                 Claridad
                             </span>
                             <span className="bg-white border border-slate-200 text-slate-600 px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
@@ -512,7 +512,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                         </div>
                         <button 
                             onClick={() => window.location.reload()}
-                            className="px-4 py-2 text-sm font-medium text-[#004B63] bg-[#004B63]/10 hover:bg-[#004B63]/20 rounded-lg transition-colors font-sans"
+                            className="px-4 py-2 text-sm font-medium text-petroleum bg-petroleum/10 hover:bg-petroleum/20 rounded-lg transition-colors font-sans"
                         >
                             <Icon name="fa-rotate-right" className="mr-2" /> Generar Nuevo
                         </button>
@@ -530,7 +530,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
             <div className="mt-8 space-y-6">
                 {/* Resumen ejecutivo */}
                 <div className={cn(
-                    "p-6 rounded-xl bg-gradient-to-r from-[#004B63] to-[#004B63]",
+                    "p-6 rounded-xl bg-gradient-to-r from-petroleum to-petroleum",
                     FORUM_EFFECTS.ANIMATION_FADE_IN,
                     "text-white"
                 )} style={{ animationDelay: '0.1s' }}>
@@ -621,8 +621,8 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                         </div>
                         <div className={cn(
                             "text-sm leading-relaxed whitespace-pre-wrap",
-                            "text-[#004B63] p-4 bg-white/50 rounded-lg",
-                            "border border-[#00BCD4]/30"
+                            "text-petroleum p-4 bg-white/50 rounded-lg",
+                            "border border-corporate/30"
                         )}>
                             {genData.optimizedPrompt}
                         </div>
@@ -630,11 +630,11 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                             onClick={() => copyToClipboard(genData.optimizedPrompt)}
                             className={cn(
                                 "absolute top-4 right-4 text-xs",
-                                "border border-[#00BCD4] text-[#00BCD4]",
-                                "hover:bg-[#00BCD4] hover:text-white",
+                                "border border-corporate text-corporate",
+                                "hover:bg-corporate hover:text-white",
                                 "flex items-center gap-1 px-2 py-1 rounded",
                                 FORUM_EFFECTS.TRANSITION_ALL,
-                                "focus:outline-none focus:ring-1 focus:ring-[#00BCD4]"
+                                "focus:outline-none focus:ring-1 focus:ring-corporate"
                             )}
                             aria-label="Copiar prompt optimizado al portapapeles"
                         >
@@ -653,21 +653,21 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
 
                 {/* Estadísticas de contexto */}
                 <div className={cn(
-                    "bg-gradient-to-r from-[#004B63]/5 to-[#00BCD4]/5",
+                    "bg-gradient-to-r from-petroleum/5 to-corporate/5",
                     "p-6 rounded-xl",
                     FORUM_EFFECTS.ANIMATION_FADE_IN
                 )} style={{ animationDelay: '0.7s' }}>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div className="text-center">
-                            <div className="text-2xl font-bold text-[#004B63]">{usageStats.totalOptimizations}</div>
+                            <div className="text-2xl font-bold text-petroleum">{usageStats.totalOptimizations}</div>
                             <div className="text-xs text-slate-600">Optimizaciones totales</div>
                         </div>
                         <div className="text-center">
-                            <div className="text-2xl font-bold text-[#00BCD4]">{usageStats.averageScore || 0}</div>
+                            <div className="text-2xl font-bold text-corporate">{usageStats.averageScore || 0}</div>
                             <div className="text-xs text-slate-600">Puntuación promedio</div>
                         </div>
                         <div className="text-center">
-                            <div className="text-2xl font-bold text-[#00BCD4]">{usageStats.favoriteTechnique || 'N/A'}</div>
+                            <div className="text-2xl font-bold text-corporate">{usageStats.favoriteTechnique || 'N/A'}</div>
                             <div className="text-xs text-slate-600">Técnica favorita</div>
                         </div>
                         <div className="text-center">
@@ -721,16 +721,16 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                                  className={cn(
                                      "w-full text-left p-4 rounded-xl",
                                      "bg-white border border-slate-100",
-                                     "hover:bg-[#00BCD4]/5 hover:border-[#00BCD4]/30",
+                                     "hover:bg-corporate/5 hover:border-corporate/30",
                                      FORUM_EFFECTS.TRANSITION_ALL,
-                                     "focus:outline-none focus:ring-2 focus:ring-[#00BCD4]/50"
+                                     "focus:outline-none focus:ring-2 focus:ring-corporate/50"
                                  )}
                              >
                                  <div className="flex items-start justify-between">
                                      <div className="flex-1 min-w-0">
                                          <p className={cn(
                                              FORUM_TYPOGRAPHY.BODY.SM,
-                                             "text-[#00374A] truncate"
+                                             "text-petroleum-darker truncate"
                                          )}>
                                              {item.originalPrompt}
                                          </p>
@@ -738,7 +738,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                                              <span className="text-xs text-slate-500">
                                                  {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                              </span>
-                                             <span className="text-xs px-2 py-0.5 bg-[#004B63]/10 text-[#004B63] rounded-full">
+                                             <span className="text-xs px-2 py-0.5 bg-petroleum/10 text-petroleum rounded-full">
                                                  {item.techniqueApplied.name}
                                              </span>
                                              <span className={cn(

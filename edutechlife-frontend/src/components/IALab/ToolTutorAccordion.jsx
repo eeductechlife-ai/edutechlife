@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
+import { useIALabContext } from '../../context/IALabContext';
 import ReactivePromptStation from './ReactivePromptStation';
 import IALabInteractionAdvisor from './IALabInteractionAdvisor';
 import IALabTutoriasVirtuales from './IALabTutoriasVirtuales';
 
 const previewVariants = {
-  idle: { scale: 1, y: 0 },
-  hover: { scale: 1.02, y: -2 }
+  idle: { boxShadow: "0px 4px 16px rgba(17,17,26,0.05)" },
+  hover: { boxShadow: "0px 8px 25px rgba(0,75,99,0.12)" }
 };
 
-const ToolTutorAccordion = ({ activeMod, onAction }) => {
+const ToolTutorAccordion = ({ onAction }) => {
+  const { activeMod } = useIALabContext();
   const [expanded, setExpanded] = useState(null);
 
   const toggle = (section) => {
@@ -26,46 +28,47 @@ const ToolTutorAccordion = ({ activeMod, onAction }) => {
 
   const PreviewCard = ({ config, section }) => {
     const isActive = expanded === section;
+    const shouldReduceMotion = useReducedMotion();
     return (
       <motion.div
-        whileHover="hover"
+        whileHover={shouldReduceMotion ? {} : "hover"}
         variants={previewVariants}
         transition={{ duration: 0.2 }}
         onClick={() => toggle(section)}
         className={`relative z-10 bg-white rounded-2xl border cursor-pointer transition-all duration-300 overflow-hidden ${
           isActive
-            ? 'border-[#00BCD4] shadow-md shadow-[#00BCD4]/10 ring-1 ring-[#00BCD4]/20'
-            : 'border-slate-200/60 shadow-sm hover:shadow-lg hover:border-[#004B63]/40'
+            ? 'border-corporate dark:border-[#66CCCC] shadow-md shadow-[#00BCD4]/10 dark:shadow-[#66CCCC]/10 ring-1 ring-corporate/20 dark:ring-[#66CCCC]/20'
+            : 'border-slate-200/60 dark:border-slate-700/60 shadow-sm hover:shadow-lg hover:border-petroleum/40 dark:hover:border-petroleum/60'
         }`}
       >
-        <div className="absolute -top-6 -right-6 w-24 h-24 bg-gradient-to-br from-[#004B63]/6 to-[#00BCD4]/4 rounded-full blur-2xl pointer-events-none" />
-        <div className="absolute -bottom-6 -left-6 w-24 h-24 bg-gradient-to-tr from-[#004B63]/4 to-[#00BCD4]/4 rounded-full blur-2xl pointer-events-none" />
+        <div className="absolute -top-6 -right-6 w-24 h-24 bg-gradient-to-br from-petroleum/6 to-corporate/4 rounded-full blur-2xl pointer-events-none" />
+        <div className="absolute -bottom-6 -left-6 w-24 h-24 bg-gradient-to-tr from-petroleum/4 to-corporate/4 rounded-full blur-2xl pointer-events-none" />
 
         <div className={`absolute top-0 left-0 right-0 h-1.5 rounded-t-2xl transition-all duration-300 ${
           isActive
-            ? 'bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#00BCD4]'
-            : 'bg-gradient-to-r from-[#004B63]/40 via-[#0A3550]/40 to-[#00BCD4]/40'
+            ? 'bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate'
+            : 'bg-gradient-to-r from-petroleum/40 via-petroleum-dark/40 to-corporate/40'
         }`} />
 
-        <div className={`p-5 transition-all duration-300 ${isActive ? 'bg-gradient-to-b from-[#00BCD4]/5 to-transparent' : ''}`}>
+        <div className={`p-5 transition-all duration-300 ${isActive ? 'bg-gradient-to-b from-corporate/5 to-transparent' : ''}`}>
           <div className="flex items-center gap-4">
             <div className={`w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
               isActive
-                ? 'bg-gradient-to-br from-[#004B63] to-[#00BCD4] shadow-md'
-                : 'bg-gradient-to-br from-[#004B63]/15 to-[#00BCD4]/15 border border-[#004B63]/10'
+                ? 'bg-gradient-to-br from-petroleum to-corporate shadow-md'
+                : 'bg-gradient-to-br from-petroleum/15 to-corporate/15 border border-petroleum/10'
             }`}>
-              <Icon name={config.icon} className={`w-6 h-6 ${isActive ? 'text-white' : 'text-[#004B63]'}`} />
+              <Icon name={config.icon} className={`w-6 h-6 ${isActive ? 'text-white' : 'text-petroleum'}`} />
             </div>
             <div className="flex-1 min-w-0">
               <h3 className={`text-base md:text-lg font-bold transition-colors duration-300 ${
-                isActive ? 'text-[#004B63]' : 'text-slate-800 group-hover:text-[#004B63]'
+                isActive ? 'text-petroleum dark:text-slate-100' : 'text-slate-800 dark:text-slate-100 group-hover:text-petroleum'
               }`}>
                 {config.title}
               </h3>
-              <p className="text-xs md:text-sm text-slate-500 mt-1.5 leading-relaxed">{config.subtitle}</p>
+              <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">{config.subtitle}</p>
               {!isActive && (
                 <div className="mt-3">
-                  <div className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-[#004B63] to-[#00BCD4] rounded-xl shadow-sm hover:from-[#0A3550] hover:to-[#0097A7] hover:shadow group-hover:scale-105 transition-all duration-300">
+                  <div className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-petroleum to-corporate rounded-xl shadow-sm hover:from-petroleum-dark hover:to-corporate-dark hover:shadow group-hover:scale-105 transition-all duration-300">
                     <Icon name={config.ctaIcon} className="w-3.5 h-3.5 text-white" />
                     <span className="text-xs font-bold text-white tracking-wide">{config.ctaText}</span>
                     <Icon name="fa-chevron-right" className="w-3 h-3 text-white group-hover:translate-x-0.5 transition-transform duration-300" />
@@ -74,10 +77,10 @@ const ToolTutorAccordion = ({ activeMod, onAction }) => {
               )}
             </div>
             <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
-              isActive ? 'bg-[#004B63]/10 rotate-180 shadow-sm' : 'bg-[#00BCD4]/15 group-hover:scale-110'
+              isActive ? 'bg-petroleum/10 rotate-180 shadow-sm' : 'bg-corporate/15 group-hover:scale-110'
             }`}>
               <Icon name="fa-chevron-down" className={`w-4 h-4 transition-colors ${
-                isActive ? 'text-[#004B63]' : 'text-[#00BCD4]'
+                isActive ? 'text-petroleum' : 'text-corporate'
               }`} />
             </div>
           </div>

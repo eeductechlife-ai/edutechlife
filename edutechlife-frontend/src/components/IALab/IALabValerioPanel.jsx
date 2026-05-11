@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import ValerioAvatar from '../ValerioAvatar';
 import { useIALabContext } from '../../context/IALabContext';
+import { useIALabStore } from '../../store/ialabStore';
 import { speakTextConversational, stopSpeech } from '../../utils/speech';
 import { callDeepseek } from '../../utils/api';
 import COURSE_KNOWLEDGE from './constants/courseKnowledge';
@@ -32,10 +33,13 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
     const [speechSupported, setSpeechSupported] = useState(true);
     const [speechError, setSpeechError] = useState('');
     const [quickActions, setQuickActions] = useState([]);
+    const [showClearConfirm, setShowClearConfirm] = useState(false);
     const welcomeSpokenRef = useRef(false);
     const userCancelRef = useRef(false);
     const recognitionRef = useRef(null);
     const accumulatedRef = useRef('');
+    const noSpeechRetryRef = useRef(0);
+    const MAX_NO_SPEECH_RETRIES = 3;
     const studentName = user?.firstName || user?.full_name || '';
 
     // Módulo actual
@@ -177,11 +181,10 @@ Considerando que estás en ${currentModule?.title || 'este módulo'}, te sugiero
         if (isOpen && !welcomeSpokenRef.current) {
             welcomeSpokenRef.current = true;
 
-            const WELCOME_KEY = 'ialab_valerio_welcomed';
-            const alreadyWelcomed = localStorage.getItem(WELCOME_KEY);
+            const alreadyWelcomed = useIALabStore.getState().getValerioWelcomed();
 
             if (!alreadyWelcomed) {
-                localStorage.setItem(WELCOME_KEY, 'true');
+                useIALabStore.getState().setValerioWelcomed();
 
                 const welcomeMessage = `¡Hola${studentName ? ', ' + studentName : ''}! Qué gusto tenerte por acá. Soy Valerio, tu coach, y veo que estás en el módulo "${currentModule?.title}" — ¡qué tema tan interesante!
 
@@ -319,6 +322,7 @@ Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, ayudarte con e
         setSpeechError('');
         userCancelRef.current = false;
         accumulatedRef.current = userInput;
+        noSpeechRetryRef.current = 0;
 
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SpeechRecognition) {
@@ -364,7 +368,8 @@ Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, ayudarte con e
                     setIsListening(false);
                     recognitionRef.current = null;
                 } else if (event.error === 'no-speech') {
-                    if (!userCancelRef.current) {
+                    if (!userCancelRef.current && noSpeechRetryRef.current < MAX_NO_SPEECH_RETRIES) {
+                        noSpeechRetryRef.current += 1;
                         setTimeout(() => {
                             if (!userCancelRef.current) {
                                 try {
@@ -385,6 +390,11 @@ Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, ayudarte con e
                                 }
                             }
                         }, 100);
+                    } else {
+                        setSpeechError('No se detectó audio. Verifica tu micrófono e intenta de nuevo.');
+                        setIsListening(false);
+                        recognitionRef.current = null;
+                        noSpeechRetryRef.current = 0;
                     }
                 } else if (event.error === 'aborted') {
                 } else {
@@ -414,10 +424,17 @@ Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, ayudarte con e
 
     // Limpiar conversación
     const handleClearConversation = () => {
-        if (confirm('¿Estás seguro de que quieres limpiar la conversación?')) {
-            setConversation([]);
-            setMessage('');
-        }
+        setShowClearConfirm(true);
+    };
+
+    const confirmClearConversation = () => {
+        setConversation([]);
+        setMessage('');
+        setShowClearConfirm(false);
+    };
+
+    const cancelClearConversation = () => {
+        setShowClearConfirm(false);
     };
 
     // Render mensaje de conversación
@@ -431,16 +448,16 @@ Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, ayudarte con e
                 className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-4`}
             >
                 <div
-                    className={`max-w-[80%] rounded-2xl p-4 ${
+                    className={`max-w-[80%] rounded-2xl p-4 break-words overflow-wrap-anywhere ${
                         isUser
-                            ? 'bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white'
+                            ? 'bg-gradient-to-r from-petroleum to-corporate text-white'
                             : 'bg-white border border-slate-200 shadow-sm'
                     }`}
                 >
                     <div className="flex items-start gap-3">
                         {!isUser && (
                             <div className="flex-shrink-0">
-                                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#004B63] to-[#00BCD4] flex items-center justify-center text-white text-xs font-bold">
+                                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center text-white text-xs font-bold">
                                     V
                                 </div>
                             </div>
@@ -455,7 +472,7 @@ Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, ayudarte con e
                             </div>
                             
                             <div className={`prose prose-sm max-w-none ${
-                                isUser ? 'text-white' : 'text-[#00374A]'
+                                isUser ? 'text-white' : 'text-petroleum-darker'
                             }`}>
                                 {msg.content.split('\n').map((line, i) => (
                                     <p key={i} className="mb-2 last:mb-0">
@@ -481,17 +498,18 @@ Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, ayudarte con e
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-[90] flex items-end justify-end">
+        <div className="fixed inset-0 z-[90] flex items-end justify-end" role="dialog" aria-modal="true" aria-label="Panel de coach IA Valerio">
             {/* Overlay */}
             <div 
                 className="absolute inset-0 bg-black/20 backdrop-blur-sm"
                 onClick={onClose}
+                aria-label="Cerrar panel"
             />
             
             {/* Panel principal */}
-            <div className="relative w-full max-w-md h-[90vh] bg-white rounded-t-2xl shadow-2xl flex flex-col z-10">
+            <div className="relative w-full max-w-md h-[90vh] bg-white rounded-t-2xl shadow-2xl flex flex-col z-10" role="document">
                 {/* Header */}
-                <div className="sticky top-0 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white p-6 rounded-t-2xl">
+                <div className="sticky top-0 bg-gradient-to-r from-petroleum to-corporate text-white p-6 rounded-t-2xl">
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-4">
                             <ValerioAvatar 
@@ -509,7 +527,7 @@ Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, ayudarte con e
                         
                         <button
                             onClick={() => { stopSpeech(); onClose(); }}
-                            className="text-white hover:text-slate-200 transition-colors p-2 rounded-lg hover:bg-white/10"
+                            className="text-white hover:text-slate-200 transition-colors p-2 rounded-lg hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
                             aria-label="Cerrar panel"
                         >
                             <Icon name="fa-xmark" className="text-xl" />
@@ -551,9 +569,9 @@ Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, ayudarte con e
                                     key={action.id}
                                     onClick={() => handleQuickAction(action)}
                                     disabled={isProcessing}
-                                    className="flex items-center gap-2 p-3 bg-slate-50 hover:bg-slate-100 rounded-xl text-sm text-slate-700 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="flex items-center gap-2 p-3 bg-slate-50 hover:bg-slate-100 rounded-xl text-sm text-slate-700 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-corporate"
                                 >
-                                    <Icon name={action.icon} className="text-[#00BCD4]" />
+                                    <Icon name={action.icon} className="text-corporate" />
                                     <span className="text-left">{action.label}</span>
                                 </button>
                             ))}
@@ -561,14 +579,14 @@ Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, ayudarte con e
                     </div>
 
                     {/* Área de conversación */}
-                    <div className="flex-1 overflow-y-auto p-4">
+                    <div className="flex-1 overflow-y-auto p-4" aria-live="polite" aria-label="Mensajes de la conversación">
                         {conversation.length === 0 ? (
                             <div className="h-full flex items-center justify-center text-center p-8">
                                 <div>
-                                    <div className="w-16 h-16 bg-gradient-to-r from-[#004B63]/10 to-[#00BCD4]/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                                        <Icon name="fa-comments" className="text-[#00BCD4] text-2xl" />
+                                    <div className="w-16 h-16 bg-gradient-to-r from-petroleum/10 to-corporate/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                        <Icon name="fa-comments" className="text-corporate text-2xl" />
                                     </div>
-                                    <h3 className="text-lg font-bold text-[#00374A] mb-2">
+                                    <h3 className="text-lg font-bold text-petroleum-darker mb-2">
                                         ¡Hablemos sobre {currentModule?.title}!
                                     </h3>
                                     <p className="text-slate-600">
@@ -584,7 +602,7 @@ Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, ayudarte con e
                                     <div className="flex justify-start">
                                         <div className="bg-white border border-slate-200 rounded-2xl p-4 max-w-[80%]">
                                             <div className="flex items-center gap-3">
-                                                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#004B63] to-[#00BCD4] flex items-center justify-center text-white text-xs font-bold">
+                                                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center text-white text-xs font-bold">
                                                     V
                                                 </div>
                                                 <div className="flex items-center gap-2">
@@ -609,21 +627,42 @@ Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, ayudarte con e
                                     onChange={(e) => setUserInput(e.target.value)}
                                     onKeyDown={handleKeyDown}
                                     placeholder={`Pregunta a Valerio sobre ${currentModule?.title}...`}
-                                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:border-transparent text-[#00374A] placeholder-slate-400 resize-none min-h-[60px] max-h-[120px]"
+                                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-corporate focus:border-transparent text-petroleum-darker placeholder-slate-400 resize-none min-h-[60px] max-h-[120px]"
                                     disabled={isProcessing}
                                     rows={2}
+                                    aria-describedby="input-hint"
                                 />
                                 <div className="flex items-center justify-between mt-2">
-                                    <div className="text-xs text-slate-500">
+                                    <div id="input-hint" className="text-xs text-slate-500">
                                         Presiona Enter para enviar, Shift+Enter para nueva línea
                                     </div>
-                                    <button
-                                        onClick={handleClearConversation}
-                                        className="text-xs text-slate-500 hover:text-red-500 transition-colors"
-                                        disabled={conversation.length === 0}
-                                    >
-                                        <Icon name="fa-trash" className="mr-1" /> Limpiar
-                                    </button>
+                                    {showClearConfirm ? (
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-xs text-slate-500">¿Limpiar conversación?</span>
+                                            <button
+                                                onClick={confirmClearConversation}
+                                                className="text-xs font-semibold text-red-500 hover:text-red-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300 rounded px-1"
+                                                aria-label="Confirmar limpiar conversación"
+                                            >
+                                                Sí, limpiar
+                                            </button>
+                                            <button
+                                                onClick={cancelClearConversation}
+                                                className="text-xs font-semibold text-slate-500 hover:text-slate-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 rounded px-1"
+                                                aria-label="Cancelar limpiar conversación"
+                                            >
+                                                Cancelar
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <button
+                                            onClick={handleClearConversation}
+                                            className="text-xs text-slate-500 hover:text-red-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300 rounded px-1"
+                                            disabled={conversation.length === 0}
+                                        >
+                                            <Icon name="fa-trash" className="mr-1" /> Limpiar
+                                        </button>
+                                    )}
                                  </div>
                              </div>
                              
@@ -638,10 +677,10 @@ Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, ayudarte con e
                              <button
                                  onClick={handleVoiceInput}
                                  disabled={isProcessing}
-                                 className={`w-10 h-10 rounded-xl transition-all duration-200 flex items-center justify-center flex-shrink-0 ${
+                                 className={`w-10 h-10 rounded-xl transition-all duration-200 flex items-center justify-center flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-corporate ${
                                      isListening
                                          ? 'bg-red-500 text-white shadow-[0_0_15px_rgba(239,68,68,0.4)] animate-pulse'
-                                         : 'bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-[#004B63]'
+                                         : 'bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-petroleum'
                                  }`}
                                  aria-label={isListening ? 'Detener grabación' : 'Preguntar por voz'}
                                  title={isListening ? 'Detener grabación' : 'Preguntar por voz'}
@@ -653,7 +692,7 @@ Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, ayudarte con e
                             <button
                                 onClick={handleSendMessage}
                                 disabled={isProcessing || !userInput.trim()}
-                                className="w-12 h-12 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white rounded-xl hover:shadow-[0_0_15px_rgba(0,188,212,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                                className="w-12 h-12 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-[0_0_15px_rgba(0,188,212,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-corporate focus-visible:ring-offset-2"
                                 aria-label="Enviar mensaje"
                             >
                                 {isProcessing ? (

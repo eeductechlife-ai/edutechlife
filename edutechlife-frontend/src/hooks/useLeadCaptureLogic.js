@@ -182,7 +182,6 @@ const useLeadCaptureLogic = (options = {}) => {
   }, []);
 
   const handleLeadSaved = useCallback((leadData) => {
-    console.log('✅ Lead guardado:', leadData);
     // Resetear scores después de guardar lead exitosamente
     interestScoreRef.current = 0;
     // No resetear messageCount para mantener contexto

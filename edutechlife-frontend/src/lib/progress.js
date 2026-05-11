@@ -515,7 +515,7 @@ export const createProgressService = (db) => {
           throw new Error('User not authenticated');
         }
 
-        const passed = score >= maxScore * 0.7;
+        const passed = score >= maxScore * 0.8;
 
         const { data, error } = await db
           .from('user_exams')
@@ -790,7 +790,7 @@ export const createProgressService = (db) => {
 
         const examEarned = Math.round((examScore / 100) * 35 * 10) / 10;
         const challengeEarned = Math.round((challengeScore / 100) * 30 * 10) / 10;
-        const resourcesPct = totalResources > 0 ? Math.round((resourcesViewed / totalResources) * 30 * 10) / 10 : 0;
+        const resourcesPct = totalResources > 0 && (resourcesViewed / totalResources) >= 0.8 ? 30 : 0;
         const communityEarned = communityProgress?.community_comment ? 5 : 0;
         
         const earned = examEarned + challengeEarned + resourcesPct + communityEarned;
@@ -905,7 +905,7 @@ export const getViewedResources = (...args) => getService().getViewedResources(.
 
 // countModuleResources no necesita db, se puede llamar directamente
 const _countModuleResources = (moduleId) => {
-  const resourceCounts = { 1: 8, 2: 12, 3: 10, 4: 8, 5: 14 };
+  const resourceCounts = { 1: 8, 2: 8, 3: 8, 4: 8, 5: 8 };
   return resourceCounts[moduleId] || 8;
 };
 export { _countModuleResources as countModuleResources };

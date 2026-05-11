@@ -16,7 +16,8 @@ const STORAGE_KEYS = {
   infographics: 'ialab_completed_infographics',
   activities: 'ialab_completed_activities',
   challenges: 'ialab_challenge_scores',
-  progress: 'ialab_overall_progress'
+  progress: 'ialab_overall_progress',
+  community: 'ialab_completed_community'
 };
 
 const MODULE_CONFIG = [
@@ -32,7 +33,7 @@ const MODULE_PERCENTAGE = 20;
 
 const MODULE_THRESHOLD = 80;
 
-const calculateModuleProgressInternal = (moduleId, completedVideos, completedExams, completedInfographics, completedActivities, challengeScores) => {
+const calculateModuleProgressInternal = (moduleId, completedVideos, completedExams, completedInfographics, completedActivities, challengeScores, completedCommunity = []) => {
   const config = MODULE_CONFIG.find(m => m.id === moduleId);
   if (!config) return 0;
 
@@ -44,7 +45,7 @@ const calculateModuleProgressInternal = (moduleId, completedVideos, completedExa
 
   let moduleScore = 0;
 
-  const totalResources = config.videos + config.infographics;
+  const totalResources = 8;
   if (totalResources > 0) {
     const resourcesCompleted = moduleVideos.length + moduleInfographics.length;
     const resourcesPct = resourcesCompleted / totalResources;
@@ -55,15 +56,18 @@ const calculateModuleProgressInternal = (moduleId, completedVideos, completedExa
 
   moduleScore += (examScore / 100) * MODULE_WEIGHTS.exam;
   moduleScore += (challengeScore / 100) * MODULE_WEIGHTS.challenge;
+  if (completedCommunity.includes(moduleId)) {
+    moduleScore += MODULE_WEIGHTS.community;
+  }
 
   return Math.min(100, Math.round(moduleScore * 10) / 10);
 };
 
-const calculateGlobalProgressInternal = (completedModules, completedVideos, completedExams, completedInfographics, completedActivities, challengeScores) => {
+const calculateGlobalProgressInternal = (completedModules, completedVideos, completedExams, completedInfographics, completedActivities, challengeScores, completedCommunity = []) => {
   let totalProgress = 0;
 
   for (let i = 1; i <= 5; i++) {
-    const moduleScore = calculateModuleProgressInternal(i, completedVideos, completedExams, completedInfographics, completedActivities, challengeScores);
+    const moduleScore = calculateModuleProgressInternal(i, completedVideos, completedExams, completedInfographics, completedActivities, challengeScores, completedCommunity);
     const moduleCompleted = completedModules.includes(i);
     const effectiveScore = Math.max(moduleScore, moduleCompleted ? 100 : 0);
     totalProgress += (effectiveScore / 100) * MODULE_PERCENTAGE;
@@ -99,6 +103,7 @@ export const usePersistentProgress = () => {
   const [completedInfographics, setCompletedInfographics] = useState([]);
   const [completedActivities, setCompletedActivities] = useState([]);
   const [challengeScores, setChallengeScores] = useState({});
+  const [completedCommunity, setCompletedCommunity] = useState([]);
   const [courseProgress, setCourseProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [syncStatus, setSyncStatus] = useState('idle'); // idle | syncing | synced | error | offline
@@ -107,8 +112,8 @@ export const usePersistentProgress = () => {
   const connectionCleanupRef = useRef(null);
 
   // Calcular progreso general
-  const calculateProgress = useCallback((videos, modules, exams, infographics, activities, challenges) => {
-    return calculateGlobalProgressInternal(modules, videos, exams, infographics, activities, challenges);
+  const calculateProgress = useCallback((videos, modules, exams, infographics, activities, challenges, community = []) => {
+    return calculateGlobalProgressInternal(modules, videos, exams, infographics, activities, challenges, community);
   }, []);
 
   // Guardar en localStorage
@@ -120,6 +125,7 @@ export const usePersistentProgress = () => {
       localStorage.setItem(STORAGE_KEYS.infographics, JSON.stringify(data.completedInfographics));
       localStorage.setItem(STORAGE_KEYS.activities, JSON.stringify(data.completedActivities));
       localStorage.setItem(STORAGE_KEYS.challenges, JSON.stringify(data.challengeScores || {}));
+      localStorage.setItem(STORAGE_KEYS.community, JSON.stringify(data.completedCommunity || []));
       
       localStorage.setItem(STORAGE_KEYS.progress, JSON.stringify({
         percent: calculateProgress(data.completedVideos, data.completedModules, data.completedExams, 
@@ -146,6 +152,7 @@ export const usePersistentProgress = () => {
       const savedInfographics = localStorage.getItem(STORAGE_KEYS.infographics);
       const savedActivities = localStorage.getItem(STORAGE_KEYS.activities);
       const savedChallenges = localStorage.getItem(STORAGE_KEYS.challenges);
+      const savedCommunity = localStorage.getItem(STORAGE_KEYS.community);
       
       return {
         completedVideos: savedVideos ? JSON.parse(savedVideos) : [],
@@ -153,7 +160,8 @@ export const usePersistentProgress = () => {
         completedExams: savedExams ? JSON.parse(savedExams) : {},
         completedInfographics: savedInfographics ? JSON.parse(savedInfographics) : [],
         completedActivities: savedActivities ? JSON.parse(savedActivities) : [],
-        challengeScores: savedChallenges ? JSON.parse(savedChallenges) : {}
+        challengeScores: savedChallenges ? JSON.parse(savedChallenges) : {},
+        completedCommunity: savedCommunity ? JSON.parse(savedCommunity) : []
       };
     } catch (error) {
       console.error('❌ Error cargando desde localStorage:', error);
@@ -222,6 +230,7 @@ export const usePersistentProgress = () => {
         setCompletedInfographics(mergedData.completedInfographics);
         setCompletedActivities(mergedData.completedActivities);
         setChallengeScores(mergedData.challengeScores || {});
+        setCompletedCommunity(mergedData.completedCommunity || []);
         
         const progress = calculateProgress(
           mergedData.completedVideos,
@@ -229,7 +238,8 @@ export const usePersistentProgress = () => {
           mergedData.completedExams,
           mergedData.completedInfographics,
           mergedData.completedActivities,
-          mergedData.challengeScores
+          mergedData.challengeScores,
+          mergedData.completedCommunity
         );
         setCourseProgress(progress);
 
@@ -237,8 +247,6 @@ export const usePersistentProgress = () => {
         saveToLocalStorage(mergedData);
 
         setSyncStatus(remoteData ? 'synced' : (isUsingJWT ? 'syncing' : 'synced'));
-        console.log(`✅ Progreso inicializado: ${progress}% (${mergedData.completedVideos.length} videos, ${mergedData.completedModules.length} módulos)`);
-        console.log(`🔐 Modo: ${isUsingJWT ? 'JWT verificado' : 'Anon key (fallback)'}`);
       } catch (error) {
         console.error('❌ Error inicializando progreso:', error);
         setSyncStatus('error');
@@ -252,9 +260,10 @@ export const usePersistentProgress = () => {
           setCompletedInfographics(localData.completedInfographics);
           setCompletedActivities(localData.completedActivities);
           setChallengeScores(localData.challengeScores || {});
+          setCompletedCommunity(localData.completedCommunity || []);
           setCourseProgress(calculateProgress(
             localData.completedVideos, localData.completedModules, localData.completedExams,
-            localData.completedInfographics, localData.completedActivities, localData.challengeScores
+            localData.completedInfographics, localData.completedActivities, localData.challengeScores, localData.completedCommunity
           ));
         }
       } finally {
@@ -319,7 +328,8 @@ export const usePersistentProgress = () => {
       completedExams: updates.completedExams ?? completedExams,
       completedInfographics: updates.completedInfographics ?? completedInfographics,
       completedActivities: updates.completedActivities ?? completedActivities,
-      challengeScores: updates.challengeScores ?? challengeScores
+      challengeScores: updates.challengeScores ?? challengeScores,
+      completedCommunity: updates.completedCommunity ?? completedCommunity
     };
 
     // Actualizar estado local
@@ -329,6 +339,7 @@ export const usePersistentProgress = () => {
     if (updates.completedInfographics) setCompletedInfographics(updates.completedInfographics);
     if (updates.completedActivities) setCompletedActivities(updates.completedActivities);
     if (updates.challengeScores) setChallengeScores(updates.challengeScores);
+    if (updates.completedCommunity) setCompletedCommunity(updates.completedCommunity);
 
     // Calcular nuevo progreso
     const progress = calculateProgress(
@@ -337,7 +348,8 @@ export const usePersistentProgress = () => {
       newData.completedExams,
       newData.completedInfographics,
       newData.completedActivities,
-      newData.challengeScores
+      newData.challengeScores,
+      newData.completedCommunity
     );
     setCourseProgress(progress);
 
@@ -348,7 +360,7 @@ export const usePersistentProgress = () => {
     syncToSupabase(newData, immediate);
 
     return progress;
-  }, [completedVideos, completedModules, completedExams, completedInfographics, completedActivities, challengeScores, calculateProgress, saveToLocalStorage, syncToSupabase]);
+  }, [completedVideos, completedModules, completedExams, completedInfographics, completedActivities, challengeScores, completedCommunity, calculateProgress, saveToLocalStorage, syncToSupabase]);
 
   // Marcar video como completado
   const markVideoComplete = useCallback(async (videoId) => {
@@ -415,7 +427,6 @@ export const usePersistentProgress = () => {
       
       return progress;
     } else if (!examScore) {
-      console.log(`[PROGRESS] Examen módulo ${moduleId} no aprobado (score: ${score}). No se actualiza progreso.`);
     }
     return courseProgress;
   }, [completedExams, updateProgress, userId, supabase, courseProgress, recordActivity]);
@@ -467,7 +478,6 @@ export const usePersistentProgress = () => {
   // Marcar desafio como completado (solo si score >= 80%)
   const markChallengeComplete = useCallback(async (moduleId, score) => {
     if (!score || score < MODULE_THRESHOLD) {
-      console.log(`[PROGRESS] Desafío módulo ${moduleId} no aprobado (score: ${score}). No se actualiza progreso.`);
       return { progress: courseProgress, passed: false };
     }
 
@@ -488,10 +498,31 @@ export const usePersistentProgress = () => {
     return { progress, passed: true };
   }, [challengeScores, updateProgress, userId, supabase, courseProgress, recordActivity]);
 
+  // Marcar comunidad como completada
+  const markCommunityComplete = useCallback(async (moduleId) => {
+    if (!completedCommunity.includes(moduleId)) {
+      const newCommunity = [...completedCommunity, moduleId];
+      recordActivity();
+      const progress = await updateProgress({ completedCommunity: newCommunity });
+
+      if (userId && supabase) {
+        syncActivityToSupabase(supabase, userId, {
+          activityType: 'community_comment',
+          resourceId: null,
+          moduleId: moduleId,
+          isCompleted: true
+        });
+      }
+
+      return progress;
+    }
+    return courseProgress;
+  }, [completedCommunity, updateProgress, userId, supabase, courseProgress, recordActivity]);
+
   // Obtener progreso de un módulo
   const getModuleProgress = useCallback((moduleId) => {
-    return calculateModuleProgressInternal(moduleId, completedVideos, completedExams, completedInfographics, completedActivities, challengeScores);
-  }, [completedVideos, completedExams, completedInfographics, completedActivities, challengeScores]);
+    return calculateModuleProgressInternal(moduleId, completedVideos, completedExams, completedInfographics, completedActivities, challengeScores, completedCommunity);
+  }, [completedVideos, completedExams, completedInfographics, completedActivities, challengeScores, completedCommunity]);
 
   const getModuleStats = useCallback((moduleId) => {
     const config = MODULE_CONFIG.find(m => m.id === moduleId);
@@ -503,7 +534,7 @@ export const usePersistentProgress = () => {
     const examScore = completedExams[moduleId] || 0;
     const challengeScore = challengeScores[moduleId] || 0;
 
-    const totalResources = config.videos + config.infographics;
+    const totalResources = 8;
     const resourcesCompleted = moduleVideos.length + moduleInfographics.length;
 
     return {
@@ -516,10 +547,11 @@ export const usePersistentProgress = () => {
       examScore,
       challengePassed: challengeScore >= MODULE_THRESHOLD,
       challengeScore,
+      communityDone: completedCommunity.includes(moduleId),
       resourcesPct: totalResources > 0 ? Math.round((resourcesCompleted / totalResources) * 100) : 0,
-      score: calculateModuleProgressInternal(moduleId, completedVideos, completedExams, completedInfographics, completedActivities, challengeScores)
+      score: calculateModuleProgressInternal(moduleId, completedVideos, completedExams, completedInfographics, completedActivities, challengeScores, completedCommunity)
     };
-  }, [completedVideos, completedExams, completedInfographics, completedActivities, challengeScores]);
+  }, [completedVideos, completedExams, completedInfographics, completedActivities, challengeScores, completedCommunity]);
 
   // Resetear progreso (solo localStorage, Supabase mantiene datos)
   const resetProgress = useCallback(() => {
@@ -531,6 +563,7 @@ export const usePersistentProgress = () => {
     setCompletedInfographics([]);
     setCompletedActivities([]);
     setChallengeScores({});
+    setCompletedCommunity([]);
     setCourseProgress(0);
   }, []);
 
@@ -550,10 +583,11 @@ export const usePersistentProgress = () => {
       setCompletedInfographics(mergedData.completedInfographics);
       setCompletedActivities(mergedData.completedActivities);
       setChallengeScores(mergedData.challengeScores || {});
+      setCompletedCommunity(mergedData.completedCommunity || []);
       
       const progress = calculateProgress(
         mergedData.completedVideos, mergedData.completedModules, mergedData.completedExams,
-        mergedData.completedInfographics, mergedData.completedActivities, mergedData.challengeScores
+        mergedData.completedInfographics, mergedData.completedActivities, mergedData.challengeScores, mergedData.completedCommunity
       );
       setCourseProgress(progress);
       saveToLocalStorage(mergedData);
@@ -570,6 +604,7 @@ export const usePersistentProgress = () => {
     completedInfographics,
     completedActivities,
     challengeScores,
+    completedCommunity,
     isLoading,
     syncStatus,
     isUsingJWT,
@@ -583,6 +618,7 @@ export const usePersistentProgress = () => {
     markInfographicComplete,
     markActivityComplete,
     markChallengeComplete,
+    markCommunityComplete,
     resetProgress,
     refreshProgress,
     setCompletedModules,

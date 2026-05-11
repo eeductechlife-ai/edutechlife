@@ -1,5 +1,6 @@
 import React from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
+import { useIALabStore } from '../../store/ialabStore';
 
 const PASSING_SCORE = 80;
 const TOTAL_QUESTIONS = 8;
@@ -8,10 +9,9 @@ const DAILY_ATTEMPTS_LIMIT = 3;
 const ExamResultViewer = ({ moduleId, score, onClose }) => {
   const passed = score >= PASSING_SCORE;
 
-  // Intentar cargar datos de localStorage
   let storedAttempt = null;
   try {
-    const attempts = JSON.parse(localStorage.getItem(`quizAttempts_${moduleId}`) || '[]');
+    const attempts = useIALabStore.getState().storageGet(`quizAttempts_${moduleId}`, []);
     storedAttempt = attempts.length > 0 ? attempts[attempts.length - 1] : null;
   } catch {}
 
@@ -74,7 +74,7 @@ const ExamResultViewer = ({ moduleId, score, onClose }) => {
           )}
 
           <button onClick={onClose}
-            className="w-full py-3 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white rounded-xl hover:shadow-lg transition-all duration-200 font-bold text-sm active:scale-95">
+            className="w-full py-3 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-lg transition-all duration-200 font-bold text-sm active:scale-95">
             Volver al módulo
           </button>
         </div>

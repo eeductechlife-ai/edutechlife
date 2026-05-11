@@ -61,7 +61,7 @@ const ResourceViewer = ({
               <div className="flex-1 p-6 flex flex-col items-center justify-center">
                 <div className={cn(
                   "w-24 h-24 rounded-2xl flex items-center justify-center mb-6",
-                  "bg-gradient-to-br from-[#004B63] to-[#00BCD4]"
+                  "bg-gradient-to-br from-petroleum to-corporate"
                 )}>
                   <Icon name="fa-video" className="text-white text-3xl" />
                 </div>
@@ -71,7 +71,7 @@ const ResourceViewer = ({
                 <p className="text-slate-600 text-center mb-6">
                   {resource.description || "Haz clic para ver este recurso"}
                 </p>
-                <div className="flex items-center gap-2 text-sm text-[#00BCD4] font-medium">
+                <div className="flex items-center gap-2 text-sm text-corporate font-medium">
                   <Icon name="fa-expand" className="w-4 h-4" />
                   <span>Haz clic para abrir</span>
                 </div>
@@ -89,7 +89,7 @@ const ResourceViewer = ({
               <div className="flex-1 p-6 flex flex-col items-center justify-center">
                 <div className={cn(
                   "w-24 h-24 rounded-2xl flex items-center justify-center mb-6",
-                  "bg-gradient-to-br from-[#004B63] to-[#00BCD4]"
+                  "bg-gradient-to-br from-petroleum to-corporate"
                 )}>
                   <Icon name="fa-file-lines" className="text-white text-3xl" />
                 </div>
@@ -99,7 +99,7 @@ const ResourceViewer = ({
                 <p className="text-slate-600 text-center mb-6">
                   {resource.description || "Haz clic para ver este recurso"}
                 </p>
-                <div className="flex items-center gap-2 text-sm text-[#00BCD4] font-medium">
+                <div className="flex items-center gap-2 text-sm text-corporate font-medium">
                   <Icon name="fa-expand" className="w-4 h-4" />
                   <span>Haz clic para abrir</span>
                 </div>
@@ -117,7 +117,7 @@ const ResourceViewer = ({
               <div className="flex-1 p-6 flex flex-col items-center justify-center">
                 <div className={cn(
                   "w-24 h-24 rounded-2xl flex items-center justify-center mb-6",
-                  "bg-gradient-to-br from-[#004B63] to-[#00BCD4]"
+                  "bg-gradient-to-br from-petroleum to-corporate"
                 )}>
                   <Icon name="fa-image" className="text-white text-3xl" />
                 </div>
@@ -127,7 +127,7 @@ const ResourceViewer = ({
                 <p className="text-slate-600 text-center mb-6">
                   {resource.description || "Haz clic para ver este recurso"}
                 </p>
-                <div className="flex items-center gap-2 text-sm text-[#00BCD4] font-medium">
+                <div className="flex items-center gap-2 text-sm text-corporate font-medium">
                   <Icon name="fa-expand" className="w-4 h-4" />
                   <span>Haz clic para abrir</span>
                 </div>
@@ -145,7 +145,7 @@ const ResourceViewer = ({
               <div className="flex-1 p-6 flex flex-col items-center justify-center">
                 <div className={cn(
                   "w-24 h-24 rounded-2xl flex items-center justify-center mb-6",
-                  "bg-gradient-to-br from-[#004B63] to-[#00BCD4]"
+                  "bg-gradient-to-br from-petroleum to-corporate"
                 )}>
                   <Icon name="fa-puzzle-piece" className="text-white text-3xl" />
                 </div>
@@ -155,7 +155,7 @@ const ResourceViewer = ({
                 <p className="text-slate-600 text-center mb-6">
                   {resource.description || "Haz clic para ver este recurso"}
                 </p>
-                <div className="flex items-center gap-2 text-sm text-[#00BCD4] font-medium">
+                <div className="flex items-center gap-2 text-sm text-corporate font-medium">
                   <Icon name="fa-expand" className="w-4 h-4" />
                   <span>Haz clic para abrir</span>
                 </div>
@@ -190,7 +190,7 @@ const ResourceViewer = ({
             <Suspense fallback={
               <div className="w-full h-64 flex items-center justify-center bg-slate-50 rounded-2xl">
                 <div className="text-center">
-                  <div className="animate-spin w-8 h-8 border-4 border-[#004B63] border-t-transparent rounded-full mx-auto mb-3"></div>
+                  <div className="animate-spin w-8 h-8 border-4 border-petroleum border-t-transparent rounded-full mx-auto mb-3"></div>
                   <p className="text-slate-500 font-medium">Cargando simulador interactivo...</p>
                 </div>
               </div>

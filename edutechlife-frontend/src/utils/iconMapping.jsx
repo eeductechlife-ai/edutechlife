@@ -169,7 +169,11 @@ import {
     Youtube,
     Puzzle,
     FileImage,
-    Image
+    Image,
+    Layers,
+    Clipboard,
+    Info,
+    Menu
 } from 'lucide-react';
 
 // Mapping of Font Awesome class names to Lucide components
@@ -317,19 +321,31 @@ export const faToLucideMap = {
   'fa-puzzle-piece': Puzzle,
   'fa-comments': MessageSquare,
   'fa-exclamation-triangle': TriangleAlert,
+  // Phase 1: Critical missing mappings
+  'fa-layer-group': Layers,
+  'fa-bars': Menu,
+  'fa-video-camera': Video,
+  'fa-clipboard': Clipboard,
+  'fa-info-circle': Info,
   };
 
 // Helper function to get Lucide component from Font Awesome class name
 export function getLucideIcon(faClassName) {
-  // Remove 'fa-solid ', 'fa-brands ' or 'fa-' prefix if present
-  const cleanName = faClassName.replace('fa-solid ', '').replace('fa-brands ', '').replace('fa-', '');
+  if (!faClassName) return null;
+  // Normalize: remove common prefixes (fa-solid, fa-brands, fas, far, fal) and strip whitespace
+  let cleanName = faClassName
+    .replace(/^(fa-solid|fa-brands|fas|far|fal)\s+/i, '')
+    .replace(/^fa-/, '');
   const key = `fa-${cleanName}`;
   
   if (faToLucideMap[key]) {
     return faToLucideMap[key];
   }
   
-  // Fallback to null (silent)
+  // Fallback with console warning
+  if (process.env.NODE_ENV !== 'production') {
+    console.warn(`[iconMapping] Icon not found: "${faClassName}" — add mapping for "${key}" in iconMapping.jsx`);
+  }
   return null;
 }
 
@@ -337,7 +353,7 @@ export function getLucideIcon(faClassName) {
 export function Icon({ name, className = "w-5 h-5", ...props }) {
   const LucideIcon = getLucideIcon(name);
   if (!LucideIcon) return null;
-  return <LucideIcon className={className} {...props} />;
+  return <LucideIcon className={className} aria-hidden="true" {...props} />;
 }
 
 // Export all Lucide icons for convenience

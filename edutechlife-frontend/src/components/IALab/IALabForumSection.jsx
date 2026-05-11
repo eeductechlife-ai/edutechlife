@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import PlatformOptimizedCard from '../PlatformOptimizedCard';
 import { useIALabContext } from '../../context/IALabContext';
+import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
 import useIALabForum from '../../hooks/IALab/useIALabForum';
 import { useAuth } from '../../context/AuthContext';
 
@@ -37,7 +38,8 @@ const IALabForumSection = ({
     ...rest
 }) => {
     const { user } = useAuth();
-    const { insightsExpanded, setInsightsExpanded } = useIALabContext();
+    const { activeMod, insightsExpanded, setInsightsExpanded } = useIALabContext();
+    const { trackCommunityComment } = useIALabProgress();
     const {
         forumPosts,
         isLoading,
@@ -83,6 +85,10 @@ const IALabForumSection = ({
         if (result.success) {
             setNewPostTitle('');
             setNewPostContent('');
+            // Rastrear participacion comunitaria
+            if (activeMod) {
+                try { await trackCommunityComment(activeMod); } catch (e) {}
+            }
             alert('🎉 ¡Post creado exitosamente!');
         } else {
             alert(`❌ Error al crear post: ${result.error}`);
@@ -145,7 +151,7 @@ const IALabForumSection = ({
             {/* Primera fila: Título y botón de acción */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-2xl font-bold text-[#00374A] font-montserrat">
+                    <h2 className="text-2xl font-bold text-petroleum-darker font-montserrat">
                         Foro de Discusión IALab
                     </h2>
                     <p className="text-sm text-slate-600 mt-1">
@@ -156,7 +162,7 @@ const IALabForumSection = ({
                 {/* Botón Crear Nuevo Debate en esquina superior derecha */}
                 <button
                     onClick={() => document.querySelector('textarea')?.focus()}
-                    className="px-5 py-3 bg-gradient-to-r from-[#00BCD4] to-[#0097A7] text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 flex items-center gap-2 font-medium whitespace-nowrap"
+                    className="px-5 py-3 bg-gradient-to-r from-corporate to-corporate-dark text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 flex items-center gap-2 font-medium whitespace-nowrap"
                 >
                     <Icon name="fa-plus" className="w-4 h-4" />
                     + Crear Nuevo Debate
@@ -171,7 +177,7 @@ const IALabForumSection = ({
                 <input
                     type="text"
                     placeholder="Buscar debates o preguntas..."
-                    className="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:border-transparent text-[#00374A] placeholder-slate-400 shadow-sm"
+                    className="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-corporate focus:border-transparent text-petroleum-darker placeholder-slate-400 shadow-sm"
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
                     <span className="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded-md">
@@ -183,16 +189,16 @@ const IALabForumSection = ({
             {/* Tercera fila: Stats (si están disponibles) */}
             {showStats && forumStats && (
                 <div className="flex items-center gap-4 pt-2">
-                    <div className="text-center px-4 py-2 bg-[#004B63]/5 rounded-xl">
-                        <div className="text-lg font-bold text-[#004B63]">{forumStats.total_posts || 0}</div>
+                    <div className="text-center px-4 py-2 bg-petroleum/5 rounded-xl">
+                        <div className="text-lg font-bold text-petroleum">{forumStats.total_posts || 0}</div>
                         <div className="text-xs text-slate-600">Debates</div>
                     </div>
-                    <div className="text-center px-4 py-2 bg-[#00BCD4]/5 rounded-xl">
-                        <div className="text-lg font-bold text-[#00BCD4]">{forumStats.total_likes || 0}</div>
+                    <div className="text-center px-4 py-2 bg-corporate/5 rounded-xl">
+                        <div className="text-lg font-bold text-corporate">{forumStats.total_likes || 0}</div>
                         <div className="text-xs text-slate-600">Interacciones</div>
                     </div>
-                    <div className="text-center px-4 py-2 bg-[#004B63]/5 rounded-xl">
-                        <div className="text-lg font-bold text-[#004B63]">{forumStats.active_users || 42}</div>
+                    <div className="text-center px-4 py-2 bg-petroleum/5 rounded-xl">
+                        <div className="text-lg font-bold text-petroleum">{forumStats.active_users || 42}</div>
                         <div className="text-xs text-slate-600">Miembros</div>
                     </div>
                 </div>
@@ -207,8 +213,8 @@ const IALabForumSection = ({
                 onClick={() => setActiveFilter('all')}
                 className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap ${
                     activeFilter === 'all'
-                        ? 'bg-[#004B63] text-white shadow-sm'
-                        : 'bg-white text-[#004B63] border border-slate-200 hover:bg-slate-50'
+                        ? 'bg-petroleum text-white shadow-sm'
+                        : 'bg-white text-petroleum border border-slate-200 hover:bg-slate-50'
                 }`}
             >
                 <Icon name="fa-layer-group" className="mr-2" />
@@ -218,8 +224,8 @@ const IALabForumSection = ({
                 onClick={() => setActiveFilter('mine')}
                 className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap ${
                     activeFilter === 'mine'
-                        ? 'bg-[#004B63] text-white shadow-sm'
-                        : 'bg-white text-[#004B63] border border-slate-200 hover:bg-slate-50'
+                        ? 'bg-petroleum text-white shadow-sm'
+                        : 'bg-white text-petroleum border border-slate-200 hover:bg-slate-50'
                 }`}
             >
                 <Icon name="fa-user" className="mr-2" />
@@ -229,8 +235,8 @@ const IALabForumSection = ({
                 onClick={() => setActiveFilter('unanswered')}
                 className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap ${
                     activeFilter === 'unanswered'
-                        ? 'bg-[#00BCD4] text-white shadow-sm'
-                        : 'bg-white text-[#00BCD4] border border-slate-200 hover:bg-slate-50'
+                        ? 'bg-corporate text-white shadow-sm'
+                        : 'bg-white text-corporate border border-slate-200 hover:bg-slate-50'
                 }`}
             >
                 <Icon name="fa-question-circle" className="mr-2" />
@@ -240,8 +246,8 @@ const IALabForumSection = ({
                 onClick={() => setActiveFilter('popular')}
                 className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap ${
                     activeFilter === 'popular'
-                        ? 'bg-[#004B63] text-white shadow-sm'
-                        : 'bg-white text-[#004B63] border border-slate-200 hover:bg-slate-50'
+                        ? 'bg-petroleum text-white shadow-sm'
+                        : 'bg-white text-petroleum border border-slate-200 hover:bg-slate-50'
                 }`}
             >
                 <Icon name="fa-fire" className="mr-2" />
@@ -252,8 +258,8 @@ const IALabForumSection = ({
 
     // Render input para crear post
     const renderPostInput = () => (
-        <div className="mb-8 bg-white rounded-2xl p-6 border border-[#00BCD4]/20 shadow-[0_8px_32px_rgba(0,188,212,0.1)]">
-            <h3 className="text-lg font-bold text-[#00374A] mb-4">Comparte tu insight</h3>
+        <div className="mb-8 bg-white rounded-2xl p-6 border border-corporate/20 shadow-[0_8px_32px_rgba(0,188,212,0.1)]">
+            <h3 className="text-lg font-bold text-petroleum-darker mb-4">Comparte tu insight</h3>
             
             <div className="space-y-4">
                 <input
@@ -261,7 +267,7 @@ const IALabForumSection = ({
                     value={newPostTitle}
                     onChange={(e) => setNewPostTitle(e.target.value)}
                     placeholder="Título de tu post..."
-                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:border-transparent text-[#00374A] placeholder-slate-400"
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-corporate focus:border-transparent text-petroleum-darker placeholder-slate-400"
                     disabled={isCreatingPost}
                 />
                 
@@ -269,7 +275,7 @@ const IALabForumSection = ({
                     value={newPostContent}
                     onChange={(e) => setNewPostContent(e.target.value.slice(0, 500))}
                     placeholder="¿Qué quieres compartir con la comunidad?..."
-                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:border-transparent text-[#00374A] placeholder-slate-400 min-h-[120px] resize-none"
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-corporate focus:border-transparent text-petroleum-darker placeholder-slate-400 min-h-[120px] resize-none"
                     disabled={isCreatingPost}
                     maxLength={500}
                 />
@@ -282,7 +288,7 @@ const IALabForumSection = ({
                     <button
                         onClick={handleCreatePost}
                         disabled={isCreatingPost || !newPostTitle.trim() || !newPostContent.trim()}
-                        className="px-6 py-3 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                        className="px-6 py-3 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                     >
                         {isCreatingPost ? (
                             <>
@@ -326,19 +332,19 @@ const IALabForumSection = ({
         return (
             <div 
                 key={post.id}
-                className="bg-white rounded-2xl p-6 border border-slate-100 hover:border-[#00BCD4]/20 hover:bg-slate-50 hover:shadow-[0_8px_32px_rgba(0,188,212,0.08)] transition-all duration-300 cursor-pointer"
+                className="bg-white rounded-2xl p-6 border border-slate-100 hover:border-corporate/20 hover:bg-slate-50 hover:shadow-[0_8px_32px_rgba(0,188,212,0.08)] transition-all duration-300 cursor-pointer"
             >
                 {/* Header del post - Estructura de 3 columnas visual */}
                 <div className="flex items-start gap-4 mb-6">
                     {/* Columna Izquierda: Autor y Rol */}
                     <div className="flex-shrink-0">
-                        <div className="w-14 h-14 rounded-full bg-gradient-to-r from-[#004B63] to-[#00BCD4] flex items-center justify-center text-white font-bold text-lg mb-2">
+                        <div className="w-14 h-14 rounded-full bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center text-white font-bold text-lg mb-2">
                             {post.profiles?.full_name?.charAt(0) || 'U'}
                         </div>
                         <div className={`text-xs font-medium px-2 py-1 rounded-full text-center ${
                             simulatedData.role === 'Mentor' 
-                                ? 'bg-[#00BCD4]/10 text-[#00BCD4] border border-[#00BCD4]/20' 
-                                : 'bg-[#004B63]/10 text-[#004B63] border border-[#004B63]/20'
+                                ? 'bg-corporate/10 text-corporate border border-corporate/20' 
+                                : 'bg-petroleum/10 text-petroleum border border-petroleum/20'
                         }`}>
                             {simulatedData.role}
                         </div>
@@ -347,7 +353,7 @@ const IALabForumSection = ({
                     {/* Columna Centro: Contenido y Etiquetas */}
                     <div className="flex-1 min-w-0">
                         <div className="mb-3">
-                            <h4 className="font-bold text-[#00374A] text-lg mb-1">
+                            <h4 className="font-bold text-petroleum-darker text-lg mb-1">
                                 {post.title || 'Duda sobre el Framework RTF en el Módulo 5'}
                             </h4>
                             <p className="text-sm text-slate-600 line-clamp-2 leading-relaxed">
@@ -369,7 +375,7 @@ const IALabForumSection = ({
                         
                         {/* Metadata del autor */}
                         <div className="flex items-center gap-3 text-sm text-slate-500">
-                            <span className="font-medium text-[#004B63]">
+                            <span className="font-medium text-petroleum">
                                 {post.profiles?.full_name || 'Carlos López'}
                             </span>
                             <span>•</span>
@@ -405,7 +411,7 @@ const IALabForumSection = ({
                             {/* Última respuesta */}
                             <div className="pt-3 border-t border-slate-100">
                                 <div className="flex items-center gap-2">
-                                    <div className="w-6 h-6 rounded-full bg-gradient-to-r from-[#00BCD4]/20 to-[#004B63]/20 flex items-center justify-center text-xs font-medium text-[#004B63]">
+                                    <div className="w-6 h-6 rounded-full bg-gradient-to-r from-corporate/20 to-petroleum/20 flex items-center justify-center text-xs font-medium text-petroleum">
                                         {simulatedData.lastResponder.name.charAt(0)}
                                     </div>
                                     <div className="flex-1 min-w-0">
@@ -442,7 +448,7 @@ const IALabForumSection = ({
                                 transition-all duration-200 hover:scale-105 active:scale-95
                                 ${likeProps.buttonClass}
                                 disabled:opacity-50 disabled:cursor-not-allowed
-                                focus:outline-none focus:ring-1 focus:ring-[#00BCD4]/30
+                                focus:outline-none focus:ring-1 focus:ring-corporate/30
                                 ${likeProps.userLiked ? 'shadow-[0_0_8px_rgba(0,188,212,0.2)]' : ''}
                             `}
                             tabIndex={user ? 0 : -1}
@@ -470,13 +476,13 @@ const IALabForumSection = ({
                     {/* Acciones secundarias */}
                     <div className="flex items-center gap-1">
                         <button
-                            className="p-1.5 text-slate-400 hover:text-[#00BCD4] transition-colors duration-200 rounded-md hover:bg-slate-50"
+                            className="p-1.5 text-slate-400 hover:text-corporate transition-colors duration-200 rounded-md hover:bg-slate-50"
                             aria-label="Guardar debate"
                         >
                             <Icon name="fa-bookmark" className="w-4 h-4" />
                         </button>
                         <button
-                            className="p-1.5 text-slate-400 hover:text-[#00BCD4] transition-colors duration-200 rounded-md hover:bg-slate-50"
+                            className="p-1.5 text-slate-400 hover:text-corporate transition-colors duration-200 rounded-md hover:bg-slate-50"
                             aria-label="Compartir debate"
                         >
                             <Icon name="fa-share" className="w-4 h-4" />
@@ -529,10 +535,10 @@ const IALabForumSection = ({
                     <>
                         {/* Empty State Premium - Invita a participar */}
                         <div className="bg-gradient-to-br from-white to-slate-50 rounded-2xl p-10 text-center border border-slate-100 shadow-sm">
-                        <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center">
-                            <Icon name="fa-comments" className="text-[#00BCD4] text-3xl" />
+                        <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
+                            <Icon name="fa-comments" className="text-corporate text-3xl" />
                         </div>
-                        <h3 className="text-2xl font-bold text-[#00374A] font-montserrat mb-3">
+                        <h3 className="text-2xl font-bold text-petroleum-darker font-montserrat mb-3">
                             ¡Inicia el primer debate!
                         </h3>
                         <p className="text-slate-600 text-lg mb-2 max-w-2xl mx-auto">
@@ -544,24 +550,24 @@ const IALabForumSection = ({
                         
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 max-w-3xl mx-auto">
                             <div className="bg-white p-4 rounded-xl border border-slate-200 text-left">
-                                <div className="w-10 h-10 rounded-full bg-[#004B63]/10 flex items-center justify-center mb-3">
-                                    <Icon name="fa-lightbulb" className="text-[#004B63] w-5 h-5" />
+                                <div className="w-10 h-10 rounded-full bg-petroleum/10 flex items-center justify-center mb-3">
+                                    <Icon name="fa-lightbulb" className="text-petroleum w-5 h-5" />
                                 </div>
-                                <h4 className="font-bold text-[#004B63] mb-1">Comparte insights</h4>
+                                <h4 className="font-bold text-petroleum mb-1">Comparte insights</h4>
                                 <p className="text-slate-600 text-sm">Lo que aprendiste en los módulos</p>
                             </div>
                             <div className="bg-white p-4 rounded-xl border border-slate-200 text-left">
-                                <div className="w-10 h-10 rounded-full bg-[#00BCD4]/10 flex items-center justify-center mb-3">
-                                    <Icon name="fa-question-circle" className="text-[#00BCD4] w-5 h-5" />
+                                <div className="w-10 h-10 rounded-full bg-corporate/10 flex items-center justify-center mb-3">
+                                    <Icon name="fa-question-circle" className="text-corporate w-5 h-5" />
                                 </div>
-                                <h4 className="font-bold text-[#00BCD4] mb-1">Haz preguntas</h4>
+                                <h4 className="font-bold text-corporate mb-1">Haz preguntas</h4>
                                 <p className="text-slate-600 text-sm">Resuelve dudas con la comunidad</p>
                             </div>
                             <div className="bg-white p-4 rounded-xl border border-slate-200 text-left">
-                                <div className="w-10 h-10 rounded-full bg-[#004B63]/10 flex items-center justify-center mb-3">
-                                    <Icon name="fa-users" className="text-[#004B63] w-5 h-5" />
+                                <div className="w-10 h-10 rounded-full bg-petroleum/10 flex items-center justify-center mb-3">
+                                    <Icon name="fa-users" className="text-petroleum w-5 h-5" />
                                 </div>
-                                <h4 className="font-bold text-[#004B63] mb-1">Colabora</h4>
+                                <h4 className="font-bold text-petroleum mb-1">Colabora</h4>
                                 <p className="text-slate-600 text-sm">Trabaja en proyectos con otros</p>
                             </div>
                         </div>
@@ -569,7 +575,7 @@ const IALabForumSection = ({
                         {user && showInput && (
                             <button
                                 onClick={() => document.querySelector('textarea')?.focus()}
-                                className="px-8 py-4 bg-gradient-to-r from-[#00BCD4] to-[#0097A7] text-white rounded-xl hover:shadow-[0_0_25px_rgba(0,188,212,0.4)] transition-all duration-300 flex items-center gap-3 font-medium text-lg mx-auto"
+                                className="px-8 py-4 bg-gradient-to-r from-corporate to-corporate-dark text-white rounded-xl hover:shadow-[0_0_25px_rgba(0,188,212,0.4)] transition-all duration-300 flex items-center gap-3 font-medium text-lg mx-auto"
                             >
                                 <Icon name="fa-plus" className="w-5 h-5" />
                                 Crear Primer Debate
@@ -587,7 +593,7 @@ const IALabForumSection = ({
                 <div className="text-center mt-8">
                     <button
                         onClick={() => loadForumPosts(limit + 10)}
-                        className="px-6 py-3 border-2 border-[#00BCD4] text-[#00BCD4] rounded-xl hover:bg-[#00BCD4]/5 transition-all duration-300 font-medium"
+                        className="px-6 py-3 border-2 border-corporate text-corporate rounded-xl hover:bg-corporate/5 transition-all duration-300 font-medium"
                     >
                         <Icon name="fa-sync" className="mr-2" />
                         Cargar más posts
@@ -600,7 +606,7 @@ const IALabForumSection = ({
                 <div className="text-center mt-8 pt-6 border-t border-slate-100">
                     <button 
                         onClick={() => setInsightsExpanded(!insightsExpanded)}
-                        className="text-[#00BCD4] hover:text-[#00374A] font-bold text-xs uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2 mx-auto group focus:outline-none focus:ring-1 focus:ring-[#00BCD4] rounded px-2 py-1"
+                        className="text-corporate hover:text-petroleum-darker font-bold text-xs uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2 mx-auto group focus:outline-none focus:ring-1 focus:ring-corporate rounded px-2 py-1"
                         aria-label={insightsExpanded ? "Contraer muro de insights" : "Expandir para ver toda la conversación"}
                     >
                         {insightsExpanded ? (

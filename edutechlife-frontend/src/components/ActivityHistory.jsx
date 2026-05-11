@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { useProgressContext } from '../context/ProgressContext';
 import { useActivityTracker } from '../hooks/useActivityTracker';
+import { useIALabStore } from '../store/ialabStore';
 import { Icon } from '../utils/iconMapping.jsx';
 
 const ACTIVITY_CONFIG = {
@@ -10,6 +11,7 @@ const ACTIVITY_CONFIG = {
   challenge: { icon: 'fa-trophy', label: 'Desafío', bg: 'from-emerald-500/10 to-emerald-600/10', color: '#10B981' },
   resource: { icon: 'fa-book', label: 'Recurso', bg: 'from-amber-500/10 to-amber-600/10', color: '#F59E0B' },
   community: { icon: 'fa-comments', label: 'Comunidad', bg: 'from-[#004B63]/10 to-[#00BCD4]/10', color: '#004B63' },
+  lesson: { icon: 'fa-check-circle', label: 'Lección', bg: 'from-emerald-500/10 to-emerald-600/10', color: '#10B981' },
 };
 
 const MODULE_NAMES = {
@@ -70,10 +72,15 @@ const ResourceBadge = ({ completed, total, icon }) => (
 );
 
 const ModuleProgressCard = ({ moduleId, title, icon, score, config, completedVideos, completedInfographics, completedExams, challengeScores, completedModules }) => {
+  const { lessonProgress, ALL_LESSONS } = useIALabStore();
   const moduleVideos = completedVideos.filter(v => v.startsWith(`m${moduleId}`)).length;
   const moduleInfographics = completedInfographics.filter(i => i.startsWith(`i${moduleId}`)).length;
   const examScore = completedExams[moduleId] || 0;
   const challengeScore = challengeScores[moduleId] || 0;
+  const moduleLessonProgress = lessonProgress?.[moduleId] || {};
+  const moduleLessons = ALL_LESSONS?.[moduleId] || [];
+  const completedModuleLessons = Object.values(moduleLessonProgress).filter(s => s === 'completed').length;
+  const totalModuleLessons = moduleLessons.length;
   const isPassed = score >= 80;
   const barColor = isPassed ? 'from-emerald-500 to-emerald-400' : score >= 60 ? 'from-amber-500 to-amber-400' : 'from-slate-300 to-slate-400';
 
@@ -104,6 +111,11 @@ const ModuleProgressCard = ({ moduleId, title, icon, score, config, completedVid
               challengeScore >= 80 ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : 'bg-amber-50 text-amber-600 border-amber-200'
             }`}>
               <Icon name="fa-trophy" className="text-[7px]" /> D:{challengeScore}%
+            </span>
+          )}
+          {completedModuleLessons > 0 && (
+            <span className="inline-flex items-center gap-[3px] text-[9px] font-bold px-1.5 py-0.5 rounded-md border bg-emerald-50 text-emerald-600 border-emerald-200">
+              <Icon name="fa-check-circle" className="text-[7px]" /> L:{completedModuleLessons}/{totalModuleLessons}
             </span>
           )}
           {completedModules.includes(moduleId) && (examScore > 0 || challengeScore > 0) && (
@@ -138,11 +150,13 @@ const FILTER_OPTIONS = [
   { key: 'exam', label: 'Exámenes', icon: 'fa-file-alt' },
   { key: 'challenge', label: 'Desafíos', icon: 'fa-trophy' },
   { key: 'video', label: 'Videos', icon: 'fa-play-circle' },
+  { key: 'lesson', label: 'Lecciones', icon: 'fa-check-circle' },
 ];
 
 const ActivityHistory = ({ isOpen, onClose }) => {
   const { activities, getStudentStats } = useActivityTracker();
   const { completedModules, completedVideos, completedExams, completedInfographics, completedActivities, challengeScores, courseProgress, syncStatus } = useProgressContext();
+  const { lessonProgress, ALL_LESSONS, xp, streak, badges, getLevel, getXpForNextLevel, getLevelProgress, BADGE_INFO, getCompletedLessonCount, moduleProgress, getDaysSinceStart } = useIALabStore();
   const [activeTab, setActiveTab] = useState('modules');
   const [filter, setFilter] = useState('all');
   const panelRef = useRef(null);
@@ -170,11 +184,31 @@ const ActivityHistory = ({ isOpen, onClose }) => {
       score: Math.round(calculateModuleScore(mid, MODULE_RESOURCES.find(r => r.id === mid) || MODULE_RESOURCES[0], completedVideos, completedInfographics, completedExams, challengeScores, completedModules) || 80),
       completed_at: new Date().toISOString(),
     }));
-    const all = [...trackedActivities, ...examActs, ...challengeActs, ...moduleActs];
+    const lessonActs = [];
+    if (lessonProgress) {
+      Object.entries(lessonProgress).forEach(([mid, lessons]) => {
+        const moduleId = parseInt(mid);
+        const moduleLessons = ALL_LESSONS?.[moduleId] || [];
+        Object.entries(lessons).forEach(([lid, status]) => {
+          if (status !== 'completed') return;
+          const lesson = moduleLessons.find(l => l.id === parseInt(lid));
+          if (!lesson) return;
+          lessonActs.push({
+            id: `lesson_${mid}_${lid}`,
+            module_id: moduleId,
+            activity_type: 'lesson',
+            title: lesson.title,
+            score: 100,
+            completed_at: new Date().toISOString(),
+          });
+        });
+      });
+    }
+    const all = [...trackedActivities, ...examActs, ...challengeActs, ...moduleActs, ...lessonActs];
     const seen = new Set();
     return all.filter(a => { const k = `${a.activity_type}_${a.module_id}`; if (seen.has(k)) return false; seen.add(k); return true; })
       .sort((a, b) => new Date(b.completed_at) - new Date(a.completed_at));
-  }, [activities, completedExams, challengeScores, completedModules, completedVideos, completedInfographics]);
+  }, [activities, completedExams, challengeScores, completedModules, completedVideos, completedInfographics, lessonProgress, ALL_LESSONS]);
 
   if (!isOpen) return null;
 
@@ -194,7 +228,25 @@ const ActivityHistory = ({ isOpen, onClose }) => {
   const totalInfographics = completedInfographics?.length || 0;
   const totalVideosTarget = MODULE_RESOURCES.reduce((s, m) => s + m.videos, 0);
   const totalInfographicsTarget = MODULE_RESOURCES.reduce((s, m) => s + m.infographics, 0);
-  const totalItems = totalVideosTarget + totalInfographicsTarget + 5 + 5 + 5;
+  const totalLessonsCompleted = lessonProgress
+    ? Object.values(lessonProgress).reduce((sum, mod) => sum + Object.values(mod).filter(s => s === 'completed').length, 0)
+    : 0;
+  const totalLessonsCount = ALL_LESSONS ? Object.values(ALL_LESSONS).reduce((sum, arr) => sum + arr.length, 0) : 0;
+  const level = getLevel();
+  const levelProgress = getLevelProgress();
+  const xpForNext = getXpForNextLevel();
+  const daysSinceStart = getDaysSinceStart();
+  const lessonsPerDay = daysSinceStart > 0 ? (totalLessonsCompleted / daysSinceStart) : 0;
+  const daysActive = streak || 1;
+  const remainingLessons = totalLessonsCount - totalLessonsCompleted;
+  const estimatedDaysRemaining = lessonsPerDay > 0 ? Math.ceil(remainingLessons / lessonsPerDay) : remainingLessons;
+  const moduleScores = [1, 2, 3, 4, 5].map(id => ({
+    id,
+    title: MODULE_NAMES[id],
+    score: moduleProgress?.[id]?.currentScore || 0,
+    icon: MODULE_ICONS[id],
+  }));
+  const totalItems = totalVideosTarget + totalInfographicsTarget + 5 + 5 + 5 + totalLessonsCount;
 
   return (
     <div className="fixed inset-0 z-[1000] flex items-start justify-center pt-20 px-4 bg-black/50 backdrop-blur-sm" ref={panelRef}>
@@ -208,7 +260,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
             </div>
             <div>
               <h2 className="text-white font-bold text-lg font-montserrat tracking-tight">Mi Historial de Aprendizaje</h2>
-              <p className="text-white/60 text-xs">Progreso sincronizado con {totalItems} recursos del curso</p>
+              <p className="text-white/60 text-xs">Progreso sincronizado · {totalLessonsCompleted}/{totalLessonsCount} lecciones · {xp} XP</p>
             </div>
           </div>
           <button onClick={onClose} className="relative z-10 w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center transition-all duration-200 active:scale-90 ring-1 ring-white/10">
@@ -220,9 +272,9 @@ const ActivityHistory = ({ isOpen, onClose }) => {
         <div className="grid grid-cols-4 gap-3 px-6 py-5 bg-gradient-to-b from-[#004B63]/[0.02] to-white border-b border-slate-200/40">
           {[
             { icon: 'fa-chart-line', value: `${Math.round(courseProgress || 0)}%`, label: 'Progreso', gradient: 'from-[#004B63]/10 to-[#00BCD4]/10', color: '#004B63' },
-            { icon: 'fa-cubes', value: `${completedCount}/5`, label: 'Módulos', gradient: 'from-emerald-500/10 to-emerald-600/10', color: '#10B981' },
-            { icon: 'fa-clipboard-check', value: `${totalExams}/5`, label: 'Exámenes', gradient: 'from-[#00BCD4]/10 to-[#00BCD4]/20', color: '#00BCD4' },
-            { icon: 'fa-rocket', value: `${totalChallenges}/5`, label: 'Desafíos', gradient: 'from-amber-500/10 to-amber-600/10', color: '#F59E0B' },
+            { icon: 'fa-trophy', value: `Nv.${level}`, label: `${xp} XP`, gradient: 'from-[#FFD166]/10 to-[#F59E0B]/10', color: '#F59E0B' },
+            { icon: 'fa-check-circle', value: `${totalLessonsCompleted}/${totalLessonsCount}`, label: 'Lecciones', gradient: 'from-emerald-500/10 to-emerald-600/10', color: '#10B981' },
+            { icon: 'fa-fire', value: `${streak}`, label: streak >= 3 ? 'Racha activa' : 'Días seguidos', gradient: 'from-orange-500/10 to-red-500/10', color: streak >= 3 ? '#EF4444' : '#94A3B8' },
           ].map((item, i) => (
             <div key={i} className="group bg-white rounded-xl border border-slate-200/60 shadow-sm p-3 text-center hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
               <Icon name={item.icon} className="text-xl mx-auto mb-1.5 group-hover:scale-110 transition-transform duration-200" style={{ color: item.color }} />
@@ -357,6 +409,113 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                     <p className="text-[10px] font-medium text-slate-400 mt-1.5">{item.sub}</p>
                   </div>
                 ))}
+              </div>
+
+              {/* XP & Level card */}
+              <div className="mb-5 bg-white rounded-xl border border-slate-200/40 shadow-sm p-5 hover:shadow-md transition-all duration-200">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#FFD166]/10 to-[#F59E0B]/10 flex items-center justify-center">
+                      <Icon name="fa-trophy" className="text-[#F59E0B] text-sm" />
+                    </div>
+                    <div>
+                      <h3 className="text-xs font-bold text-[#004B63] uppercase tracking-wider">Nivel {level}</h3>
+                      <p className="text-[10px] text-slate-400">{xp} XP acumulados</p>
+                    </div>
+                  </div>
+                  <span className="text-2xl font-bold text-[#F59E0B] font-montserrat tracking-tight">{Math.round(levelProgress)}%</span>
+                </div>
+                <div className="h-2 bg-slate-100 rounded-full overflow-hidden shadow-inner">
+                  <div className="h-full rounded-full bg-gradient-to-r from-[#FFD166] to-[#F59E0B] transition-all duration-700 ease-out" style={{ width: `${Math.min(levelProgress, 100)}%` }} />
+                </div>
+                <div className="flex justify-between mt-2 text-[10px] font-medium text-slate-400">
+                  <span>{xp} XP</span>
+                  <span>Siguiente nivel: {xpForNext} XP</span>
+                </div>
+              </div>
+
+              {/* Ritmo de Aprendizaje */}
+              <div className="mb-5 bg-white rounded-xl border border-slate-200/40 shadow-sm p-5 hover:shadow-md transition-all duration-200">
+                <div className="flex items-center gap-2 mb-4 px-0.5">
+                  <div className="w-1 h-5 rounded-full bg-gradient-to-b from-[#00BCD4] to-[#004B63]" />
+                  <p className="text-[10px] font-bold text-[#004B63] uppercase tracking-[0.15em]">Ritmo de Aprendizaje</p>
+                  <div className="flex-1 h-px bg-gradient-to-r from-[#00BCD4]/20 to-transparent" />
+                </div>
+                <div className="grid grid-cols-4 gap-4 mb-4">
+                  <div className="text-center p-3 rounded-xl bg-gradient-to-b from-[#00BCD4]/5 to-transparent border border-[#00BCD4]/10">
+                    <div className="text-xl font-bold text-[#00BCD4]">{lessonsPerDay > 0 ? lessonsPerDay.toFixed(1) : '—'}</div>
+                    <p className="text-[9px] text-slate-400 mt-0.5 uppercase tracking-wider">Lecciones/día</p>
+                  </div>
+                  <div className="text-center p-3 rounded-xl bg-gradient-to-b from-[#004B63]/5 to-transparent border border-[#004B63]/10">
+                    <div className="text-xl font-bold text-[#004B63]">{daysSinceStart}</div>
+                    <p className="text-[9px] text-slate-400 mt-0.5 uppercase tracking-wider">Días activo</p>
+                  </div>
+                  <div className="text-center p-3 rounded-xl bg-gradient-to-b from-emerald-500/5 to-transparent border border-emerald-500/10">
+                    <div className="text-xl font-bold text-emerald-600">{estimatedDaysRemaining > 0 && estimatedDaysRemaining < 999 ? estimatedDaysRemaining : '—'}</div>
+                    <p className="text-[9px] text-slate-400 mt-0.5 uppercase tracking-wider">Días restantes</p>
+                  </div>
+                  <div className="text-center p-3 rounded-xl bg-gradient-to-b from-[#FFD166]/5 to-transparent border border-[#FFD166]/10">
+                    <div className="text-xl font-bold text-[#F59E0B]">{Math.round((totalLessonsCompleted / Math.max(totalLessonsCount, 1)) * 100)}%</div>
+                    <p className="text-[9px] text-slate-400 mt-0.5 uppercase tracking-wider">Completado</p>
+                  </div>
+                </div>
+                <div className="h-2 bg-slate-100 rounded-full overflow-hidden shadow-inner">
+                  <div className="h-full rounded-full bg-gradient-to-r from-[#004B63] via-[#00BCD4] to-emerald-400 transition-all duration-700 ease-out" style={{ width: `${Math.min((totalLessonsCompleted / Math.max(totalLessonsCount, 1)) * 100, 100)}%` }} />
+                </div>
+              </div>
+
+              {/* Badges section */}
+              {badges && badges.length > 0 && (
+                <div className="mb-5 bg-white rounded-xl border border-slate-200/40 shadow-sm p-5 hover:shadow-md transition-all duration-200">
+                  <div className="flex items-center gap-2 mb-4 px-0.5">
+                    <div className="w-1 h-5 rounded-full bg-gradient-to-b from-[#FFD166] to-[#F59E0B]" />
+                    <p className="text-[10px] font-bold text-[#004B63] uppercase tracking-[0.15em]">Logros y Medallas</p>
+                    <div className="flex-1 h-px bg-gradient-to-r from-[#FFD166]/20 to-transparent" />
+                  </div>
+                  <div className="grid grid-cols-4 gap-3">
+                    {badges.map(badgeId => {
+                      const info = BADGE_INFO?.[badgeId] || { icon: 'fa-star', label: badgeId, desc: '', color: '#94A3B8' };
+                      return (
+                        <div key={badgeId} className="group bg-gradient-to-br from-white to-slate-50 rounded-xl border border-slate-200/40 shadow-sm p-3 text-center hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+                          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#FFD166]/10 to-[#F59E0B]/10 flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform duration-200">
+                            <Icon name={info.icon} className="text-sm" style={{ color: info.color }} />
+                          </div>
+                          <p className="text-[10px] font-bold text-slate-700 leading-tight">{info.label}</p>
+                          <p className="text-[8px] text-slate-400 mt-0.5">{info.desc}</p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              <div className="mb-5 bg-white rounded-xl border border-slate-200/40 shadow-sm p-5 hover:shadow-md transition-all duration-200">
+                <div className="flex items-center gap-2 mb-4 px-0.5">
+                  <div className="w-1 h-5 rounded-full bg-gradient-to-b from-[#004B63] to-[#00BCD4]" />
+                  <p className="text-[10px] font-bold text-[#004B63] uppercase tracking-[0.15em]">Puntaje por Módulo</p>
+                  <div className="flex-1 h-px bg-gradient-to-r from-[#004B63]/20 to-transparent" />
+                </div>
+                <div className="space-y-2.5">
+                  {moduleScores.map(mod => {
+                    const barColor = mod.score >= 80 ? 'from-emerald-500 to-emerald-400' : mod.score >= 60 ? 'from-amber-500 to-amber-400' : 'from-slate-400 to-slate-300';
+                    return (
+                      <div key={mod.id} className="flex items-center gap-3">
+                        <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center flex-shrink-0">
+                          <Icon name={mod.icon} className="text-[10px] text-[#004B63]" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between mb-0.5">
+                            <span className="text-[11px] font-semibold text-slate-700 truncate">{mod.title}</span>
+                            <span className={`text-[10px] font-bold flex-shrink-0 ml-2 ${mod.score >= 80 ? 'text-emerald-600' : mod.score >= 60 ? 'text-amber-600' : 'text-slate-500'}`}>{Math.round(mod.score)}%</span>
+                          </div>
+                          <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                            <div className={`h-full rounded-full bg-gradient-to-r ${barColor} transition-all duration-500`} style={{ width: `${Math.round(mod.score)}%` }} />
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
 
               <div className="mt-5 bg-white rounded-xl border border-slate-200/40 shadow-sm p-5 hover:shadow-md transition-all duration-200">

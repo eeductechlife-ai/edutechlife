@@ -244,7 +244,6 @@ if (typeof window !== 'undefined' && import.meta.env.DEV) {
       supabaseClientsCache.clear();
       globalSupabaseClient = null;
       clientCreationCount = 0;
-      console.log('🧹 [Supabase-Debug] Cache limpiado');
     }
   };
 }

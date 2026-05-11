@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabQuiz } from '../../hooks/IALab/useIALabQuiz';
 import { useIALabContext } from '../../context/IALabContext';
-import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const IALabQuizModal = ({ isOpen, onClose }) => {
@@ -37,7 +36,6 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
   } = useIALabQuiz();
 
   const { activeMod } = useIALabContext();
-  const { trackExamResult } = useIALabProgress();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -135,8 +133,9 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
     const submitResult = await submitQuiz();
     setIsSubmitting(false);
     
-    if (submitResult?.success && submitResult?.result && activeMod) {
-      await trackExamResult(activeMod, submitResult.result.score, submitResult.result.passed);
+    // Resultado ya guardado dentro de submitQuiz via updateModuleActivity + markExamComplete
+    if (submitResult?.success && submitResult?.result) {
+      // No se necesita llamada adicional - submitQuiz ya persiste los resultados
     }
   };
 
@@ -164,7 +163,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
   };
 
   const renderHeader = () => (
-    <div className="bg-gradient-to-r from-[#004B63] to-[#00BCD4] px-6 py-4 flex items-center justify-between z-50">
+    <div className="bg-gradient-to-r from-petroleum to-corporate px-6 py-4 flex items-center justify-between z-50">
       <button
         onClick={handleClose}
         className="flex items-center gap-2 text-white/80 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition-colors"
@@ -191,7 +190,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
           </span>
           <div className="w-32 h-2 bg-white/20 rounded-full overflow-hidden">
             <div
-              className="h-full bg-[#004B63] transition-all duration-500"
+              className="h-full bg-petroleum transition-all duration-500"
               style={{ width: `${((currentQuestion + 1) / TOTAL_QUESTIONS) * 100}%` }}
             ></div>
           </div>
@@ -214,11 +213,11 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
       <div className="p-6">
         <div className="mb-6">
           <div className="flex items-start gap-3 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-[#004B63] to-[#00BCD4] flex items-center justify-center shadow-lg shadow-[#004B63]/20 mt-0.5 flex-shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center shadow-lg shadow-petroleum/20 mt-0.5 flex-shrink-0">
               <span className="text-white font-bold text-sm">{currentQuestion + 1}</span>
             </div>
             <div className="min-w-0 flex-1">
-              <h2 className="text-lg md:text-xl font-bold text-slate-800 leading-relaxed">
+              <h2 className="text-lg md:text-xl font-bold text-slate-800 dark:text-slate-100 leading-relaxed">
                 {question.question}
               </h2>
               <div className="flex items-center gap-2 mt-2">
@@ -240,13 +239,13 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
                 onClick={() => handleSelectAnswer(option.id)}
                 className={`w-full text-left p-3.5 rounded-xl border-2 transition-all duration-300 flex items-start gap-3 ${
                   isSelected
-                    ? 'border-[#00BCD4] bg-[#00BCD4]/5 shadow-[0_0_15px_rgba(0,188,212,0.15)]'
-                    : 'border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300'
+                    ? 'border-corporate bg-corporate/5 shadow-[0_0_15px_rgba(0,188,212,0.15)] dark:border-[#66CCCC] dark:bg-[#66CCCC]/10 dark:shadow-[#66CCCC]/20'
+                    : 'border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:hover:bg-slate-700 dark:hover:border-slate-500'
                 }`}
               >
                 <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all duration-300 ${
                   isSelected
-                    ? 'border-[#00BCD4] bg-[#00BCD4]'
+                    ? 'border-corporate bg-corporate'
                     : 'border-slate-300'
                 }`}>
                   {isSelected && (
@@ -254,7 +253,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
                   )}
                 </div>
                 <span className={`text-sm md:text-base leading-relaxed ${
-                  isSelected ? 'text-[#004B63] font-medium' : 'text-slate-700'
+                  isSelected ? 'text-petroleum dark:text-[#4DA8C4] font-medium' : 'text-slate-700 dark:text-slate-200'
                 }`}>
                   {option.label}
                 </span>
@@ -267,11 +266,11 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
   };
 
   const renderNavigation = () => (
-    <div className="bg-white border-t border-slate-200 px-6 py-4 flex items-center justify-between">
+    <div className="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 px-6 py-4 flex items-center justify-between">
       <button
         onClick={handlePrev}
         disabled={currentQuestion === 0}
-        className="px-5 py-2.5 border-2 border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:border-slate-300 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+        className="px-5 py-2.5 border-2 border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-500 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
       >
                         <Icon name="fa-arrow-left" className="text-sm" />
                         <span className="hidden sm:inline text-sm font-medium">Anterior</span>
@@ -287,7 +286,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
         <button
           onClick={handleNext}
           disabled={!selectedAnswer}
-          className="px-5 py-2.5 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          className="px-5 py-2.5 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
         >
                           <span className="text-sm font-medium">Siguiente</span>
                           <Icon name="fa-arrow-right" className="text-sm hidden sm:inline" />
@@ -351,10 +350,10 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
             </p>
           </div>
 
-          <div className="bg-white border border-slate-200 shadow-sm rounded-2xl p-6 mb-6">
+          <div className="bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700 shadow-sm rounded-2xl p-6 mb-6">
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div className="text-center">
-                <div className="text-3xl font-bold text-slate-800 mb-1">{quizResult.correctCount}</div>
+                <div className="text-3xl font-bold text-slate-800 dark:text-slate-100 mb-1">{quizResult.correctCount}</div>
                 <div className="text-xs text-slate-500">Correctas</div>
               </div>
               <div className="text-center">
@@ -382,7 +381,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
           <div className="flex flex-col gap-3">
             <button
               onClick={handleClose}
-              className="w-full py-3 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 font-medium"
+              className="w-full py-3 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 font-medium"
             >
               Volver al módulo
             </button>
@@ -404,7 +403,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          className="fixed inset-0 z-[100] bg-slate-50 flex flex-col min-h-0"
+          className="fixed inset-0 z-[100] bg-slate-50 dark:bg-slate-900 flex flex-col min-h-0"
           onCopy={preventDefaultEvent}
           onPaste={preventDefaultEvent}
           onCut={preventDefaultEvent}
@@ -420,10 +419,10 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
             {/* Watermark de seguridad - anti-screenshot */}
             {!showScoreResult && (
               <div className="fixed inset-0 pointer-events-none z-[101] opacity-[0.03] select-none" style={{
-                background: `repeating-linear-gradient(45deg, #004B63, #004B63 2px, transparent 2px, transparent 60px)`,
+                background: `repeating-linear-gradient(45deg, var(--color-petroleum), var(--color-petroleum) 2px, transparent 2px, transparent 60px)`,
               }}>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-[#004B63] text-8xl font-bold transform -rotate-12 select-none" style={{ whiteSpace: 'nowrap' }}>
+                  <span className="text-petroleum dark:text-[#4DA8C4] text-8xl font-bold transform -rotate-12 select-none" style={{ whiteSpace: 'nowrap' }}>
                     EXAMEN EDUTECHLIFE
                   </span>
                 </div>

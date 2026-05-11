@@ -87,14 +87,14 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
     };
 
     const getMetricColor = (score) => {
-        if (score >= 70) return 'text-[#004B63]';
-        if (score >= 40) return 'text-[#00BCD4]';
+        if (score >= 70) return 'text-petroleum';
+        if (score >= 40) return 'text-corporate';
         return 'text-slate-400';
     };
 
     const getMetricBarColor = (score) => {
-        if (score >= 70) return 'bg-[#004B63]';
-        if (score >= 40) return 'bg-[#00BCD4]';
+        if (score >= 70) return 'bg-petroleum';
+        if (score >= 40) return 'bg-corporate';
         return 'bg-slate-300';
     };
 
@@ -131,14 +131,14 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
             )}
             {...rest}
         >
-            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#00BCD4] rounded-t-2xl" />
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate rounded-t-2xl" />
 
             <div
                 onClick={() => setIsOpen(!isOpen)}
                 className="flex items-center justify-between cursor-pointer group"
             >
                 <div className="flex-1">
-                    <h2 className="text-lg md:text-xl font-bold text-[#004B63] group-hover:text-[#00BCD4] transition-colors duration-300">
+                    <h2 className="text-lg md:text-xl font-bold text-petroleum group-hover:text-corporate transition-colors duration-300">
                         Herramientas para la Creación de Prompts
                     </h2>
                     <p className="text-slate-600 text-sm md:text-base leading-relaxed mt-1">
@@ -146,7 +146,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                     </p>
                     {!isOpen && (
                         <div className="mt-4">
-                            <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-[#004B63] to-[#00BCD4] rounded-xl shadow-sm hover:from-[#0A3550] hover:to-[#0097A7] hover:shadow group-hover:scale-105 transition-all duration-300 cursor-pointer">
+                            <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-petroleum to-corporate rounded-xl shadow-sm hover:from-petroleum-dark hover:to-corporate-dark hover:shadow group-hover:scale-105 transition-all duration-300 cursor-pointer">
                                 <Icon name="fa-hand-pointer" className="w-4 h-4 text-white" />
                                 <span className="text-sm font-bold text-white tracking-wide">Abrir Herramientas para la Creación de Prompts</span>
                                 <Icon name="fa-chevron-right" className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform duration-300" />
@@ -155,11 +155,11 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                     )}
                 </div>
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ml-4 transition-all duration-300 ${
-                    isOpen ? 'bg-[#004B63]/10 rotate-180' : 'bg-[#00BCD4]/15 group-hover:scale-110'
+                    isOpen ? 'bg-petroleum/10 rotate-180' : 'bg-corporate/15 group-hover:scale-110'
                 }`}>
                     <Icon
                         name={isOpen ? "fa-chevron-up" : "fa-chevron-down"}
-                        className={`w-3.5 h-3.5 transition-all duration-300 ${isOpen ? 'text-[#004B63]' : 'text-[#00BCD4] group-hover:text-[#004B63]'}`}
+                        className={`w-3.5 h-3.5 transition-all duration-300 ${isOpen ? 'text-petroleum' : 'text-corporate group-hover:text-petroleum'}`}
                     />
                 </div>
             </div>
@@ -170,7 +170,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                 <div className="flex-1 flex flex-col">
                     <div className="flex-1">
                         <div className="relative">
-                            <div className="absolute top-3 left-3 text-[#004B63]/30 pointer-events-none z-10">
+                            <div className="absolute top-3 left-3 text-petroleum/30 pointer-events-none z-10">
                                 <Icon name="fa-pen" className="w-4 h-4" />
                             </div>
                             <textarea
@@ -184,7 +184,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                                     "pl-10 pr-4 py-3",
                                     "text-slate-700 placeholder:text-slate-400/50 text-sm",
                                     "resize-none",
-                                    "focus:outline-none focus:ring-2 focus:ring-[#004B63]/20 focus:border-[#004B63]/30 focus:bg-white",
+                                    "focus:outline-none focus:ring-2 focus:ring-petroleum/20 focus:border-petroleum/30 focus:bg-white",
                                     "transition-all duration-300",
                                     "shadow-sm"
                                 )}
@@ -215,13 +215,13 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                             transition={{ type: "spring", stiffness: 400, damping: 17 }}
                             className={cn(
                                 "w-full px-6 py-3 rounded-xl",
-                                "bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#00BCD4]",
+                                "bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate",
                                 "text-white font-semibold",
-                                "hover:bg-white hover:text-[#004B63]",
-                                "shadow-md shadow-[#004B63]/20 hover:shadow-lg hover:shadow-[#004B63]/30",
+                                "hover:bg-white hover:text-petroleum",
+                                "shadow-md shadow-petroleum/20 hover:shadow-lg hover:shadow-petroleum/30",
                                 "transition-all duration-300",
                                 "flex items-center justify-center gap-2",
-                                "focus:outline-none focus:ring-2 focus:ring-[#00BCD4]/30 focus:ring-offset-2",
+                                "focus:outline-none focus:ring-2 focus:ring-corporate/30 focus:ring-offset-2",
                                 "disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:bg-transparent disabled:hover:text-white"
                             )}
                             aria-label={loading ? "Analizando y mejorando..." : "Generar prompt profesional"}
@@ -233,8 +233,8 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                                 </>
                             ) : (
                                 <>
-                                    <Icon name="fa-wand-magic-sparkles" className="text-sm text-white hover:text-[#004B63]" />
-                                    <span className="text-sm text-white hover:text-[#004B63]">Generar Prompt Profesional</span>
+                                    <Icon name="fa-wand-magic-sparkles" className="text-sm text-white hover:text-petroleum" />
+                                    <span className="text-sm text-white hover:text-petroleum">Generar Prompt Profesional</span>
                                 </>
                             )}
                         </motion.button>
@@ -270,7 +270,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                                 return (
                                     <div 
                                         key={metric.name}
-                                        className="flex items-center justify-between p-3 rounded-lg bg-[#004B63]/5 border border-[#004B63]/10 hover:bg-[#004B63]/8 transition-all duration-300"
+                                        className="flex items-center justify-between p-3 rounded-lg bg-petroleum/5 border border-petroleum/10 hover:bg-petroleum/8 transition-all duration-300"
                                     >
                                         <div className="flex items-center gap-2">
                                             <Icon 
@@ -298,7 +298,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                             })}
                         </div>
 
-                        <div className="mt-4 pt-3 border-t border-[#004B63]/10">
+                        <div className="mt-4 pt-3 border-t border-petroleum/10">
                             {!input.trim() ? (
                                 <p className="text-xs text-slate-400 text-center">
                                     Escribe para analizar
@@ -313,8 +313,8 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                                         <span className={cn(
                                             "text-xs font-semibold px-2.5 py-1 rounded-md",
                                             quickAnalysis.level === 'Excelente' ? "bg-emerald-50 text-emerald-700" :
-                                            quickAnalysis.level === 'Bueno' ? "bg-[#004B63]/10 text-[#004B63]" :
-                                            quickAnalysis.level === 'Aceptable' ? "bg-[#00BCD4]/10 text-[#00BCD4]" :
+                                            quickAnalysis.level === 'Bueno' ? "bg-petroleum/10 text-petroleum" :
+                                            quickAnalysis.level === 'Aceptable' ? "bg-corporate/10 text-corporate" :
                                             "bg-slate-100 text-slate-500"
                                         )}>
                                             {quickAnalysis.level}
@@ -340,28 +340,28 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
             </div>
 
             {genData && genData.optimizedPrompt && (
-                <div className="space-y-4 pt-4 border-t border-[#004B63]/10">
+                <div className="space-y-4 pt-4 border-t border-petroleum/10">
                     <div
                         onClick={() => setIsResultOpen(!isResultOpen)}
-                        className="flex items-center justify-between px-4 py-3 rounded-xl bg-[#004B63]/5 hover:bg-[#004B63]/10 border border-[#00BCD4]/20 cursor-pointer transition-colors duration-200"
+                        className="flex items-center justify-between px-4 py-3 rounded-xl bg-petroleum/5 hover:bg-petroleum/10 border border-corporate/20 cursor-pointer transition-colors duration-200"
                     >
                         <div className="flex items-center gap-2">
-                            <Icon name="fa-terminal" className="text-[#004B63] w-4 h-4" />
-                            <span className="text-xs font-bold tracking-[0.12em] uppercase text-[#004B63]">
+                            <Icon name="fa-terminal" className="text-petroleum w-4 h-4" />
+                            <span className="text-xs font-bold tracking-[0.12em] uppercase text-petroleum">
                                 Resultado
                             </span>
                             <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 ${
-                                isResultOpen ? 'bg-[#004B63]/10' : 'bg-[#00BCD4]/15'
+                                isResultOpen ? 'bg-petroleum/10' : 'bg-corporate/15'
                             }`}>
                                 <Icon
                                     name={isResultOpen ? "fa-chevron-up" : "fa-chevron-down"}
-                                    className={`w-3 h-3 ${isResultOpen ? 'text-[#004B63]' : 'text-[#00BCD4]'}`}
+                                    className={`w-3 h-3 ${isResultOpen ? 'text-petroleum' : 'text-corporate'}`}
                                 />
                             </div>
                         </div>
                         <button
                             onClick={(e) => { e.stopPropagation(); handleCopy(); }}
-                            className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-[#004B63] text-xs font-semibold rounded-lg transition-all duration-200"
+                            className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-petroleum text-xs font-semibold rounded-lg transition-all duration-200"
                         >
                             <Icon name={copied ? "fa-check" : "fa-copy"} className="w-3 h-3" />
                             <span>{copied ? "Copiado" : "Copiar"}</span>
@@ -372,10 +372,10 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                         <>
                             <div className="relative bg-white rounded-xl p-5 md:p-6 border border-slate-200/60 shadow-sm">
                                 <div className="flex items-center gap-2 mb-4">
-                                    <div className="w-6 h-6 rounded-md bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center">
+                                    <div className="w-6 h-6 rounded-md bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center">
                                         <Icon name="fa-terminal" className="text-white w-3.5 h-3.5" />
                                     </div>
-                                    <span className="text-xs font-bold tracking-[0.12em] uppercase text-[#004B63]">
+                                    <span className="text-xs font-bold tracking-[0.12em] uppercase text-petroleum">
                                         Prompt Generado
                                     </span>
                                 </div>
@@ -386,30 +386,30 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                                 </div>
                             </div>
 
-                            <div className="bg-[#004B63]/5 border-l-4 border-[#004B63] rounded-r-xl p-4 md:p-5">
+                            <div className="bg-petroleum/5 border-l-4 border-petroleum rounded-r-xl p-4 md:p-5">
                                 <div className="flex items-center gap-2 mb-3">
-                                    <div className="w-7 h-7 rounded-md bg-[#004B63]/10 flex items-center justify-center flex-shrink-0">
-                                        <Icon name="fa-lightbulb" className="text-[#004B63] w-3.5 h-3.5" />
+                                    <div className="w-7 h-7 rounded-md bg-petroleum/10 flex items-center justify-center flex-shrink-0">
+                                        <Icon name="fa-lightbulb" className="text-petroleum w-3.5 h-3.5" />
                                     </div>
-                                    <span className="font-semibold text-[#004B63] text-sm">Feedback Educativo</span>
+                                    <span className="font-semibold text-petroleum text-sm">Feedback Educativo</span>
                                 </div>
                                 <p className="text-slate-600 text-sm md:text-base leading-relaxed">
                                     {genData.feedback?.educationalInsights || genData.feedback?.summary || ''}
                                 </p>
                                 {improvements.length > 0 && (
                                     <>
-                                        <div className="my-3 border-t border-[#004B63]/10" />
+                                        <div className="my-3 border-t border-petroleum/10" />
                                         <div className="flex items-center gap-2 mb-2">
-                                            <div className="w-5 h-5 rounded-md bg-[#004B63]/10 flex items-center justify-center flex-shrink-0">
-                                                <Icon name="fa-list-check" className="text-[#004B63] w-2.5 h-2.5" />
+                                            <div className="w-5 h-5 rounded-md bg-petroleum/10 flex items-center justify-center flex-shrink-0">
+                                                <Icon name="fa-list-check" className="text-petroleum w-2.5 h-2.5" />
                                             </div>
-                                            <span className="text-xs font-semibold text-[#004B63] uppercase tracking-wider">Mejoras aplicadas</span>
+                                            <span className="text-xs font-semibold text-petroleum uppercase tracking-wider">Mejoras aplicadas</span>
                                         </div>
                                         <ul className="space-y-2">
                                             {improvements.map((imp, i) => (
                                                 <li key={i} className="flex items-start gap-2.5 text-sm text-slate-600">
-                                                    <div className="w-5 h-5 rounded-full bg-[#004B63]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                                        <Icon name="fa-check" className="text-[#004B63] w-2.5 h-2.5" />
+                                                    <div className="w-5 h-5 rounded-full bg-petroleum/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                                        <Icon name="fa-check" className="text-petroleum w-2.5 h-2.5" />
                                                     </div>
                                                     <span className="leading-snug">{imp}</span>
                                                 </li>

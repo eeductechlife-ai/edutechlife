@@ -1,21 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { IALabProvider, useIALabContext } from '../../context/IALabContext';
+import { useIALabStore } from '../../store/ialabStore';
+import confetti from 'canvas-confetti';
 import IALabHeader from './IALabHeader';
 import IALabSidebar from './IALabSidebar';
 import IALabModuleHeader from './IALabModuleHeader';
 import ModuleOverviewCard from './ModuleOverviewCard';
 import ModuleInfoSection from './ModuleInfoSection';
-import IALabContentAccordion from './IALabContentAccordion';
 import ToolTutorAccordion from './ToolTutorAccordion';
-import IALabEvaluationModal from './IALabEvaluationModal';
-import IALabEvaluationModalPremium from './IALabEvaluationModalPremium';
-import IALabQuizModal from './IALabQuizModal';
-import IALabValerioPanel from './IALabValerioPanel';
-import ExamResultViewer from './ExamResultViewer';
-import ChallengeResultViewer from './ChallengeResultViewer';
+import TuRutaDeHoy from './TuRutaDeHoy';
+import ModuleActions from './ModuleActions';
+import IALabForumOptimized from './IALabForumOptimized';
+import IALabTour from './IALabTour';
+import useIALabKeyboardShortcuts from '../../hooks/IALab/useIALabKeyboardShortcuts';
 import ErrorBoundary from '../forum/ErrorBoundary';
-import CertificatesModal from '../modals/CertificatesModal';
+
+// Lazy-loaded modals (only loaded when opened)
+const IALabEvaluationModal = lazy(() => import('./IALabEvaluationModal'));
+const IALabEvaluationModalPremium = lazy(() => import('./IALabEvaluationModalPremium'));
+const IALabQuizModal = lazy(() => import('./IALabQuizModal'));
+const IALabValerioPanel = lazy(() => import('./IALabValerioPanel'));
+const ExamResultViewer = lazy(() => import('./ExamResultViewer'));
+const ChallengeResultViewer = lazy(() => import('./ChallengeResultViewer'));
+const CertificatesModal = lazy(() => import('../modals/CertificatesModal'));
+
+const LoadingSpinner = () => (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm">
+    <div className="flex flex-col items-center gap-3 bg-white dark:bg-slate-800 rounded-2xl px-8 py-6 shadow-xl">
+      <div className="w-8 h-8 border-2 border-petroleum/30 border-t-petroleum rounded-full animate-spin" />
+      <p className="text-sm text-slate-500 font-medium">Cargando...</p>
+    </div>
+  </div>
+);
+
+const SuspenseWrapper = ({ children }) => (
+  <Suspense fallback={<LoadingSpinner />}>{children}</Suspense>
+);
 
 /**
  * Componente principal wrapper para IALab - Arquitectura modular premium
@@ -25,23 +47,34 @@ import CertificatesModal from '../modals/CertificatesModal';
  * @returns {JSX.Element} Componente IALab completo
  */
 const IALabContent = () => {
-    const { showPremiumEvaluationModal, setShowPremiumEvaluationModal, user, completedModules, courseProgress, activeMod, showCertificateModal, setShowCertificateModal, completedExams, challengeScores } = useIALabContext();
+    const { showPremiumEvaluationModal, setShowPremiumEvaluationModal, user, completedModules, courseProgress, activeMod, showCertificateModal, setShowCertificateModal, completedExams, challengeScores, moduleProgress } = useIALabContext();
     const [showExamModal, setShowExamModal] = useState(false);
     const [showQuizModal, setShowQuizModal] = useState(false);
     const [showValerioPanel, setShowValerioPanel] = useState(false);
     const [showMobileMenu, setShowMobileMenu] = useState(false);
     const [showExamResult, setShowExamResult] = useState(false);
     const [showChallengeResult, setShowChallengeResult] = useState(false);
+    const [isForumOpen, setIsForumOpen] = useState(false);
+    const [toast, setToast] = useState(null);
+    const [showModuleCelebration, setShowModuleCelebration] = useState(false);
+    const [viewSection, setViewSection] = useState(null);
 
-    // Debug logging
-    React.useEffect(() => {
-        console.log('🎯 [DEBUG] IALabContent montado');
-        console.log('🎯 [DEBUG] Estado showPremiumEvaluationModal:', showPremiumEvaluationModal);
-    }, []);
+    const TABS = [
+      { id: null, label: 'Todo' },
+      { id: 'objetivos', label: 'Objetivos' },
+      { id: 'contenido', label: 'Contenido' },
+      { id: 'actividades', label: 'Actividades' },
+      { id: 'herramientas', label: 'Herramientas' },
+    ];
+
+    const moduleScore = useIALabStore((s) => s.calculateModuleScore(activeMod));
 
     React.useEffect(() => {
-        console.log('🎯 [DEBUG] showPremiumEvaluationModal actualizado:', showPremiumEvaluationModal);
-    }, [showPremiumEvaluationModal]);
+        if (toast) {
+            const t = setTimeout(() => setToast(null), 4000);
+            return () => clearTimeout(t);
+        }
+    }, [toast]);
 
     // Reset scroll al inicio al cargar el dashboard
     React.useEffect(() => {
@@ -59,6 +92,37 @@ const IALabContent = () => {
         return () => window.removeEventListener('popstate', forceScrollToTop);
     }, []);
 
+    // Escucha evento para abrir la comunidad desde TuRutaDeHoy
+    React.useEffect(() => {
+        const handleSwitchTab = (e) => {
+            if (e.detail === 'comunidad') {
+                setIsForumOpen(true);
+                setTimeout(() => {
+                    document.getElementById('forum-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 350);
+            }
+        };
+        window.addEventListener('ialab:switchTab', handleSwitchTab);
+        return () => window.removeEventListener('ialab:switchTab', handleSwitchTab);
+    }, []);
+
+    // Celebración al completar módulo (score >= 80)
+    const prevModuleScore = React.useRef(moduleScore);
+    React.useEffect(() => {
+        if (moduleScore >= 80 && prevModuleScore.current < 80) {
+            confetti({
+                particleCount: 120,
+                spread: 80,
+                origin: { y: 0.6 },
+                colors: ['#004B63', '#00BCD4', '#FFD166', '#10B981']
+            });
+            setShowModuleCelebration(true);
+            const t = setTimeout(() => setShowModuleCelebration(false), 6000);
+            return () => clearTimeout(t);
+        }
+        prevModuleScore.current = moduleScore;
+    }, [moduleScore]);
+
     // Handler para acciones globales
     const handleGlobalAction = (action, data) => {
         switch (action) {
@@ -69,7 +133,12 @@ const IALabContent = () => {
                 setShowQuizModal(true);
                 break;
             case 'OPEN_CHALLENGE':
-                setShowPremiumEvaluationModal(true);
+                if (useIALabStore.getState().canAttemptChallenge(data?.moduleId || activeMod)) {
+                    useIALabStore.getState().decrementChallengeAttempt(data?.moduleId || activeMod);
+                    setShowPremiumEvaluationModal(true);
+                } else {
+                    setToast({ type: 'warning', message: 'Has alcanzado el límite de intentos diarios (3 por día) para este desafío. Vuelve mañana.' });
+                }
                 break;
             case 'SHOW_EXAM_RESULT':
                 setShowExamResult(true);
@@ -89,19 +158,28 @@ const IALabContent = () => {
             case 'CLOSE_VALERIO':
                 setShowValerioPanel(false);
                 break;
+            case 'OPEN_CERTIFICATE':
+            case 'SHOW_CERTIFICATE':
+                setShowCertificateModal(true);
+                break;
+            case 'OPEN_COMMUNITY':
+                window.dispatchEvent(new CustomEvent('ialab:switchTab', { detail: 'comunidad' }));
+                break;
             default:
-                console.log('Acción global no manejada:', action, data);
+                console.warn('Acción global no manejada:', action, data);
         }
     };
 
+    useIALabKeyboardShortcuts(handleGlobalAction);
+
     return (
-        <div className="flex flex-col h-screen overflow-hidden bg-[#F8FAFC]">
+        <div className="flex flex-col h-screen overflow-hidden bg-bg-light dark:bg-slate-900">
                 {/* Mobile Header - solo en móviles */}
-                <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white z-50 flex items-center justify-between px-4 border-b border-slate-200">
-                  <h1 className="text-2xl font-bold text-[#004B63] tracking-tight">IA Lab</h1>
+                <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white dark:bg-slate-800 z-50 flex items-center justify-between px-4 border-b border-slate-200 dark:border-slate-700">
+                  <h1 className="text-2xl font-bold text-petroleum dark:text-[#4DA8C4] tracking-tight">IA Lab</h1>
                   <button
                     onClick={() => setShowMobileMenu(true)}
-                    className="h-10 w-10 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-colors shadow-sm"
+                    className="h-10 w-10 rounded-full border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/50"
                     aria-label="Abrir menú"
                   >
                     <Icon name="fa-bars" className="w-5 h-5" />
@@ -122,23 +200,23 @@ const IALabContent = () => {
 
                     {/* Drawer móvil con overlay */}
                     {showMobileMenu && (
-                      <div className="fixed inset-0 z-50 lg:hidden">
-                        <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowMobileMenu(false)} />
-                        <div className="absolute left-0 top-0 bottom-0 w-72 bg-white shadow-xl overflow-y-auto">
+                      <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Menú de navegación">
+                        <div className="absolute inset-0 bg-black/40 backdrop-blur-sm dark:bg-black/60" onClick={() => setShowMobileMenu(false)} />
+                        <div className="absolute left-0 top-0 bottom-0 w-72 bg-white dark:bg-slate-800 shadow-xl overflow-y-auto">
                           {/* Perfil del usuario en el drawer */}
-                          <div className="flex items-center justify-between p-4 border-b border-slate-100">
+                          <div className="flex items-center justify-between p-4 border-b border-slate-100 dark:border-slate-700">
                             <div className="flex items-center gap-3">
-                              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#004B63] to-[#0A3550] flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-petroleum to-petroleum-dark flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
                                 {user?.full_name ? user.full_name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'U'}
                               </div>
                               <div>
-                                <p className="text-sm font-semibold text-slate-800 leading-tight">{user?.full_name || 'Usuario'}</p>
-                                <p className="text-xs text-slate-500">{Math.round(courseProgress)}% Completado</p>
+                                <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 leading-tight">{user?.full_name || 'Usuario'}</p>
+                                <p className="text-xs text-slate-500 dark:text-slate-400">{Math.round(courseProgress)}% Completado</p>
                               </div>
                             </div>
                             <button
                               onClick={() => setShowMobileMenu(false)}
-                              className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200 transition-colors"
+                              className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
                             >
                               <Icon name="fa-xmark" className="text-sm" />
                             </button>
@@ -148,47 +226,137 @@ const IALabContent = () => {
                       </div>
                     )}
                     
-                     {/* Área de Contenido Principal - scroll propio */}
-                      <main className="flex-1 overflow-y-auto h-full px-4 pt-12 pb-2 md:px-8 md:py-4 lg:px-10 lg:py-5">
+                      {/* Skip link para accesibilidad */}
+                      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[70] focus:px-4 focus:py-2 focus:bg-petroleum focus:text-white focus:rounded-lg focus:text-sm focus:font-bold">
+                        Saltar al contenido
+                      </a>
+
+                      {/* Área de Contenido Principal - scroll propio */}
+                      <main id="main-content" className="flex-1 overflow-y-auto h-full px-4 pt-12 pb-2 md:px-8 md:py-4 lg:px-10 lg:py-5">
                            <div className="space-y-5 w-full max-w-5xl pb-8">
                             {/* Info bar móvil - solo visible en móvil */}
-                            <div className="md:hidden flex items-center justify-between px-4 py-3 bg-white rounded-xl border border-[#004B63]/8 shadow-sm">
+                            <div className="md:hidden flex items-center justify-between px-4 py-3 bg-white dark:bg-slate-800 rounded-xl border border-petroleum/8 dark:border-petroleum/20 shadow-sm">
                               <div className="flex items-center gap-2">
-                                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#004B63] to-[#0A3550] flex items-center justify-center text-white text-xs font-bold">
+                                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-petroleum to-petroleum-dark flex items-center justify-center text-white text-xs font-bold">
                                   {user?.full_name ? user.full_name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'U'}
                                 </div>
                                 <div>
-                                  <p className="text-xs font-semibold text-slate-800 leading-tight">{user?.full_name || 'Usuario'}</p>
-                                  <p className="text-[10px] text-slate-500">Módulo {activeMod} de 5</p>
+                                  <p className="text-xs font-semibold text-slate-800 dark:text-slate-100 leading-tight">{user?.full_name || 'Usuario'}</p>
+                                  <p className="text-[10px] text-slate-500 dark:text-slate-400">Módulo {activeMod} de 5</p>
                                 </div>
                               </div>
-                              <div className="px-3 py-1.5 bg-[#004B63]/8 border border-[#004B63]/15 text-[#004B63] rounded-lg font-semibold text-xs">
+                              <div className="px-3 py-1.5 bg-petroleum/8 dark:bg-petroleum/20 border border-petroleum/15 text-petroleum dark:text-[#4DA8C4] rounded-lg font-semibold text-xs">
                                 {Math.round(courseProgress)}% Completado
                               </div>
                             </div>
 
-                            {/* 1. PRIMERO: TÍTULO PRINCIPAL ARRIBA DEL TODO */}
-                            <div className="relative z-30">
-                              <IALabModuleHeader onAction={handleGlobalAction} />
+                            <div data-tour="tour-ruta">
+                              <TuRutaDeHoy onAction={handleGlobalAction} />
                             </div>
 
-                            {/* 2. SEGUNDO: SECCIÓN INFORMATIVA DEL MÓDULO */}
-                            <div className="mt-4">
-                              <ModuleInfoSection />
+                            {/* TAB PILLS - Navegación entre secciones */}
+                            <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-hide">
+                              {TABS.map((tab) => (
+                                <button
+                                  key={tab.id ?? 'all'}
+                                  onClick={() => setViewSection(tab.id)}
+                                  className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-300 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 border ${
+                                    viewSection === tab.id
+                                      ? 'bg-gradient-to-r from-petroleum to-corporate text-white border-petroleum/30 shadow-md shadow-petroleum/10 ring-1 ring-white/20'
+                                      : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200/60 dark:border-slate-700/60 hover:border-petroleum/30 hover:text-petroleum dark:hover:text-[#4DA8C4] hover:shadow-sm'
+                                  }`}
+                                >
+                                  {tab.label}
+                                </button>
+                              ))}
                             </div>
 
-                            {/* 3. TERCERO: TARJETA DE RESUMEN EN EL MEDIO */}
-                            <ModuleOverviewCard onAction={handleGlobalAction} />
+<AnimatePresence mode="wait">
+                          <motion.div
+                            key={activeMod}
+                            initial={{ opacity: 0, y: 12 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -12 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                          >
+                            {/* 1. TÍTULO PRINCIPAL */}
+                            {(viewSection === null) && (
+                              <div className="relative z-30">
+                                <IALabModuleHeader onAction={handleGlobalAction} />
+                              </div>
+                            )}
 
-                            {/* 3. TERCERO: ACORDEONES/LECCIONES ABAJO */}
-                            <div className="mt-4">
-                              <IALabContentAccordion />
-                            </div>
-                            
-                            {/* Herramientas + Tutorías en doble columna accordion */}
-                            <div className="mt-5">
-                              <ToolTutorAccordion activeMod={activeMod} onAction={handleGlobalAction} />
-                            </div>
+                            {/* 2. SECCIÓN INFORMATIVA DEL MÓDULO */}
+                            {(viewSection === null || viewSection === 'objetivos') && (
+                              <div className="mt-4">
+                                <ModuleInfoSection />
+                              </div>
+                            )}
+
+                            {/* 3. TEMAS DEL MÓDULO - ACORDEÓN */}
+                            {(viewSection === null || viewSection === 'contenido') && (
+                              <div data-tour="tour-temas">
+                              <ErrorBoundary>
+                                  <ModuleOverviewCard onAction={handleGlobalAction} onToggleForum={setIsForumOpen} />
+                              </ErrorBoundary>
+                              </div>
+                            )}
+
+                            {/* 4. ACTIVIDADES DEL MÓDULO */}
+                            {(viewSection === null || viewSection === 'actividades') && (
+                              <div data-tour="tour-actividades">
+                              <ErrorBoundary>
+                              <ModuleActions
+                                onAction={handleGlobalAction}
+                                activeMod={activeMod}
+                                challengeScores={challengeScores}
+                                completedExams={completedExams}
+                                moduleProgress={moduleProgress}
+                                isForumOpen={isForumOpen}
+                                onToggleForum={() => setIsForumOpen(prev => !prev)}
+                              />
+                              </ErrorBoundary>
+                              </div>
+                            )}
+
+                            {/* BANNER CELEBRATORIO - siempre visible si activo */}
+                            {showModuleCelebration && (
+                              <motion.div
+                                initial={{ opacity: 0, scale: 0.96 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                                className="relative bg-gradient-to-r from-emerald-50 to-emerald-50/50 dark:from-emerald-900/20 dark:to-emerald-800/10 rounded-2xl border border-emerald-200/60 dark:border-emerald-700/30 shadow-sm p-4 md:p-5 overflow-hidden"
+                              >
+                                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-t-2xl" />
+                                <div className="flex items-center gap-3">
+                                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-sm flex-shrink-0">
+                                    <Icon name="fa-trophy" className="text-white text-lg" />
+                                  </div>
+                                  <div className="flex-1">
+                                    <h4 className="text-sm font-bold text-emerald-700 dark:text-emerald-400">¡Módulo completado!</h4>
+                                    <p className="text-xs text-emerald-600 dark:text-emerald-300/80">Has alcanzado el 80% o más. Sigue así hacia tu certificación.</p>
+                                  </div>
+                                </div>
+                              </motion.div>
+                            )}
+                          </motion.div>
+                        </AnimatePresence>
+
+                            {/* 5. FORO DEL MÓDULO */}
+                            {(viewSection === null || viewSection === 'actividades') && isForumOpen && (
+                              <div id="forum-section">
+                                <ErrorBoundary>
+                                  <IALabForumOptimized compact={false} initialLimit={3} />
+                                </ErrorBoundary>
+                              </div>
+                            )}
+
+                            {/* Herramientas + Tutorías */}
+                            {(viewSection === null || viewSection === 'herramientas') && (
+                              <div className="mt-5">
+                                <ToolTutorAccordion onAction={handleGlobalAction} />
+                              </div>
+                            )}
                         </div>
                     </main>
                 </div>
@@ -196,84 +364,106 @@ const IALabContent = () => {
                 {/* Modal de Evaluación */}
                 {showExamModal && (
                     <ErrorBoundary>
-                        <IALabEvaluationModal 
-                            isOpen={showExamModal}
-                            onClose={() => handleGlobalAction('CLOSE_EVALUATION')}
-                        />
+                        <SuspenseWrapper>
+                            <IALabEvaluationModal 
+                                isOpen={showExamModal}
+                                onClose={() => handleGlobalAction('CLOSE_EVALUATION')}
+                            />
+                        </SuspenseWrapper>
                     </ErrorBoundary>
                 )}
                 
                 {/* Modal de Examen (8 preguntas) */}
                 {showQuizModal && (
                     <ErrorBoundary>
-                        <IALabQuizModal
-                            isOpen={showQuizModal}
-                            onClose={() => handleGlobalAction('CLOSE_QUIZ')}
-                        />
+                        <SuspenseWrapper>
+                            <IALabQuizModal
+                                isOpen={showQuizModal}
+                                onClose={() => handleGlobalAction('CLOSE_QUIZ')}
+                            />
+                        </SuspenseWrapper>
                     </ErrorBoundary>
                 )}
                 
                 {/* Panel de Coach IA Valerio */}
                 {showValerioPanel && (
                     <ErrorBoundary>
-                        <IALabValerioPanel 
-                            isOpen={showValerioPanel}
-                            onClose={() => handleGlobalAction('CLOSE_VALERIO')}
-                        />
+                        <SuspenseWrapper>
+                            <IALabValerioPanel 
+                                isOpen={showValerioPanel}
+                                onClose={() => handleGlobalAction('CLOSE_VALERIO')}
+                            />
+                        </SuspenseWrapper>
                     </ErrorBoundary>
                 )}
                 
                 {/* Modal de Evaluación Premium (Nuevo Desafío) */}
                 {showPremiumEvaluationModal && (
-                    <>
-                        {console.log('🎯 [DEBUG] Condición showPremiumEvaluationModal es TRUE, renderizando modal...')}
-                        <ErrorBoundary>
+                    <ErrorBoundary>
+                        <SuspenseWrapper>
                             <IALabEvaluationModalPremium 
                                 isOpen={showPremiumEvaluationModal}
                                 onClose={() => setShowPremiumEvaluationModal(false)}
                             />
-                        </ErrorBoundary>
-                    </>
+                        </SuspenseWrapper>
+                    </ErrorBoundary>
                 )}
                 
                 {/* Modal de Certificado del Curso */}
-                <CertificatesModal
-                    isOpen={showCertificateModal}
-                    onClose={() => setShowCertificateModal(false)}
-                    initialTab="certificate"
-                />
+                <ErrorBoundary>
+                <SuspenseWrapper>
+                    <CertificatesModal
+                        isOpen={showCertificateModal}
+                        onClose={() => setShowCertificateModal(false)}
+                        initialTab="certificate"
+                    />
+                </SuspenseWrapper>
+                </ErrorBoundary>
 
                 {/* Modal de Resultado de Examen */}
                 {showExamResult && (
-                    <ExamResultViewer
-                        moduleId={activeMod}
-                        score={completedExams?.[activeMod] || 80}
-                        onClose={() => setShowExamResult(false)}
-                    />
+                    <ErrorBoundary>
+                    <SuspenseWrapper>
+                        <ExamResultViewer
+                            moduleId={activeMod}
+                            score={completedExams?.[activeMod] || 80}
+                            onClose={() => setShowExamResult(false)}
+                        />
+                    </SuspenseWrapper>
+                    </ErrorBoundary>
                 )}
 
                 {/* Modal de Resultado de Desafío */}
                 {showChallengeResult && (
-                    <ChallengeResultViewer
-                        moduleId={activeMod}
-                        onClose={() => setShowChallengeResult(false)}
-                        onRetry={() => {
-                            setShowChallengeResult(false);
-                            setShowPremiumEvaluationModal(true);
-                        }}
-                    />
+                    <ErrorBoundary>
+                    <SuspenseWrapper>
+                        <ChallengeResultViewer
+                            moduleId={activeMod}
+                            onClose={() => setShowChallengeResult(false)}
+                            onRetry={() => {
+                                setShowChallengeResult(false);
+                                if (useIALabStore.getState().canAttemptChallenge(activeMod)) {
+                                    useIALabStore.getState().decrementChallengeAttempt(activeMod);
+                                    setShowPremiumEvaluationModal(true);
+                                } else {
+                                    setToast({ type: 'warning', message: 'Has alcanzado el límite de intentos diarios (3 por día) para este desafío. Vuelve mañana.' });
+                                }
+                            }}
+                        />
+                    </SuspenseWrapper>
+                    </ErrorBoundary>
                 )}
                 
                  {/* FAB de Valerio - posicionado relativo al viewport */}
                  <button 
-                     className="fixed bottom-4 right-4 lg:bottom-8 lg:right-8 w-12 h-12 lg:w-16 lg:h-16 bg-gradient-to-br from-[#004B63] to-[#00BCD4] rounded-xl lg:rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 z-50 flex items-center justify-center group"
-                     onClick={() => handleGlobalAction('OPEN_VALERIO')}
-                     aria-label="Abrir panel de coach IA Valerio"
-                 >
+                      className="fixed bottom-4 right-4 lg:bottom-8 lg:right-8 w-12 h-12 lg:w-16 lg:h-16 bg-gradient-to-br from-petroleum to-corporate rounded-xl lg:rounded-2xl shadow-lg dark:shadow-premium-lg hover:shadow-xl dark:hover:shadow-premium hover:scale-105 active:scale-95 transition-all duration-300 z-50 flex items-center justify-center group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-corporate focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900"
+                      onClick={() => handleGlobalAction('OPEN_VALERIO')}
+                      aria-label="Abrir panel de coach IA Valerio"
+                  >
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:scale-110 transition-transform duration-300">
                         <path d="M12 3C8.5 3 6 5.5 6 9C6 10.5 6.5 12 7.5 13C8.5 14 9.5 15 10 16C10.5 17 11 18 12 18C13 18 13.5 17 14 16C14.5 15 15.5 14 16.5 13C17.5 12 18 10.5 18 9C18 5.5 15.5 3 12 3Z" fill="white" />
-                        <path d="M9 7C8.5 7 8 7.5 8 8C8 8.5 8.5 9 9 9C9.5 9 10 8.5 10 8C10 7.5 9.5 7 9 7Z" fill="#0A3550" />
-                        <path d="M15 7C14.5 7 14 7.5 14 8C14 8.5 14.5 9 15 9C15.5 9 16 8.5 16 8C16 7.5 15.5 7 15 7Z" fill="#0A3550" />
+                        <path d="M9 7C8.5 7 8 7.5 8 8C8 8.5 8.5 9 9 9C9.5 9 10 8.5 10 8C10 7.5 9.5 7 9 7Z" fill="var(--color-petroleum-dark)" />
+                        <path d="M15 7C14.5 7 14 7.5 14 8C14 8.5 14.5 9 15 9C15.5 9 16 8.5 16 8C16 7.5 15.5 7 15 7Z" fill="var(--color-petroleum-dark)" />
                         <path d="M12 5C11.5 5 11 5.5 11 6C11 6.5 11.5 7 12 7C12.5 7 13 6.5 13 6C13 5.5 12.5 5 12 5Z" fill="white" className="animate-pulse" />
                     </svg>
                 </button>
@@ -290,7 +480,7 @@ const IALabContent = () => {
                             }
                             
                             body::before {
-                                content: "⚠️ IMPRESIÓN BLOQUEADA - Este examen está protegido por el protocolo de seguridad Edutechlife";
+                                content: "IMPRESIÓN BLOQUEADA - Este examen está protegido por el protocolo de seguridad Edutechlife";
                                 display: block !important;
                                 font-size: 24px;
                                 font-weight: bold;
@@ -333,15 +523,34 @@ const IALabContent = () => {
                         }
                         
                         ::-webkit-scrollbar-thumb {
-                            background: linear-gradient(to bottom, #004B63, #00BCD4);
+                            background: linear-gradient(to bottom, var(--color-petroleum), var(--color-corporate));
                             border-radius: 4px;
                         }
                         
                         ::-webkit-scrollbar-thumb:hover {
-                            background: linear-gradient(to bottom, #00374A, #0097A7);
+                            background: linear-gradient(to bottom, var(--color-petroleum-darker), var(--color-corporate));
                         }
                     `}
                 </style>
+
+                {/* Tour interactivo contextual */}
+                <IALabTour />
+
+                {/* Toast notification */}
+                {toast && (
+                    <div
+                        className={`fixed top-4 left-1/2 -translate-x-1/2 z-[100] px-5 py-3 rounded-xl shadow-lg border text-sm font-medium animate-fade-in max-w-md ${
+                            toast.type === 'success' ? 'bg-emerald-50 border-emerald-200 text-emerald-700' :
+                            toast.type === 'warning' ? 'bg-amber-50 border-amber-200 text-amber-700' :
+                            toast.type === 'error' ? 'bg-red-50 border-red-200 text-red-700' :
+                            'bg-blue-50 border-blue-200 text-blue-700'
+                        }`}
+                        role="alert"
+                        aria-live="polite"
+                    >
+                        {toast.message}
+                    </div>
+                )}
             </div>
     );
 };

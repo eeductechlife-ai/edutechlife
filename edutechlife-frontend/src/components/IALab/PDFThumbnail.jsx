@@ -71,18 +71,18 @@ const PDFThumbnail = ({
         transition={{ duration: 0.3 }}
         onClick={handleClick}
         onDoubleClick={handleDoubleClick}
-        className="group relative w-full bg-white rounded-2xl border border-slate-200/60 border-l-4 border-l-[#004B63] shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer overflow-hidden hover:scale-[1.02] active:scale-[0.98]"
+        className="group relative w-full bg-white rounded-2xl border border-slate-200/60 border-l-4 border-l-petroleum shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer overflow-hidden hover:scale-[1.02] active:scale-[0.98]"
         aria-label={`Abrir ${title} (clic para nueva pestaña, doble clic para vista inmersiva)`}
         title="Clic para abrir en nueva pestaña | Doble clic para vista inmersiva"
       >
         {/* Indicador de interactividad */}
         <div className="absolute top-3 right-3 z-10">
-          <div className="flex items-center gap-1 bg-[#004B63]/10 px-2 py-1 rounded-full">
+          <div className="flex items-center gap-1 bg-petroleum/10 px-2 py-1 rounded-full">
             <Icon 
               name="fa-expand" 
-              className="w-3 h-3 text-[#004B63] opacity-0 group-hover:opacity-100 transition-opacity duration-200" 
+              className="w-3 h-3 text-petroleum opacity-0 group-hover:opacity-100 transition-opacity duration-200" 
             />
-            <span className="text-xs font-medium text-[#004B63] opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <span className="text-xs font-medium text-petroleum opacity-0 group-hover:opacity-100 transition-opacity duration-200">
               Doble clic
             </span>
           </div>
@@ -92,11 +92,11 @@ const PDFThumbnail = ({
         <div className="p-5">
         {/* Imagen de previsualización premium */}
         <div className="mb-4 relative">
-          <div className="w-full h-40 rounded-xl overflow-hidden bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 border border-slate-200/60 flex items-center justify-center">
+          <div className="w-full h-40 rounded-xl overflow-hidden bg-gradient-to-br from-petroleum/10 to-corporate/10 border border-slate-200/60 flex items-center justify-center">
             {/* Imagen SVG de previsualización */}
             <div className="w-full h-full flex items-center justify-center">
               <div className="relative">
-                <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-[#004B63] to-[#00BCD4] shadow-lg flex items-center justify-center">
+                <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-petroleum to-corporate shadow-lg flex items-center justify-center">
                   <Icon name="fa-file-pdf" className="text-white text-3xl" />
                 </div>
                 
@@ -112,8 +112,8 @@ const PDFThumbnail = ({
             
             {/* Indicador de páginas */}
             <div className="absolute bottom-3 right-3 bg-white px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
-              <Icon name="fa-file" className="w-3 h-3 text-[#004B63]" />
-              <span className="text-xs font-bold text-[#004B63]">{pages} páginas</span>
+              <Icon name="fa-file" className="w-3 h-3 text-petroleum" />
+              <span className="text-xs font-bold text-petroleum">{pages} páginas</span>
             </div>
           </div>
         </div>
@@ -139,7 +139,7 @@ const PDFThumbnail = ({
                 <span>{size}</span>
               </div>
               <div className="flex items-center gap-1">
-                <Icon name="fa-pdf" className="w-3 h-3 text-[#004B63]" />
+                <Icon name="fa-pdf" className="w-3 h-3 text-petroleum" />
                 <span>PDF</span>
               </div>
             </div>
@@ -150,24 +150,24 @@ const PDFThumbnail = ({
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-1">
-                  <Icon name="fa-mouse-pointer" className="w-3 h-3 text-[#004B63]" />
+                  <Icon name="fa-mouse-pointer" className="w-3 h-3 text-petroleum" />
                   <span className="text-xs text-slate-600 font-medium">Clic: Abrir PDF</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Icon name="fa-expand" className="w-3 h-3 text-[#00BCD4]" />
+                  <Icon name="fa-expand" className="w-3 h-3 text-corporate" />
                   <span className="text-xs text-slate-600 font-medium">Doble clic: Vista inmersiva</span>
                 </div>
               </div>
               <Icon 
                 name="fa-arrow-up-right-from-square" 
-                className="w-4 h-4 text-[#00BCD4] opacity-0 group-hover:opacity-100 transition-opacity duration-200" 
+                className="w-4 h-4 text-corporate opacity-0 group-hover:opacity-100 transition-opacity duration-200" 
               />
             </div>
           </div>
         </div>
 
         {/* Efecto hover */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#004B63]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-petroleum/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
       </motion.div>
 
       {/* VISUALIZACIÓN INMERSIVA - Modal a pantalla completa */}
@@ -191,7 +191,7 @@ const PDFThumbnail = ({
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header del visor inmersivo */}
-              <div className="flex items-center justify-between p-6 border-b border-slate-200 bg-gradient-to-r from-[#004B63] to-[#00BCD4]">
+              <div className="flex items-center justify-between p-6 border-b border-slate-200 bg-gradient-to-r from-petroleum to-corporate">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
                     <Icon name="fa-file-pdf" className="text-white text-xl" />
@@ -223,7 +223,7 @@ const PDFThumbnail = ({
                   {/* Botón de cerrar */}
                   <button
                     onClick={handleCloseImmersiveView}
-                    className="px-4 py-2 bg-white text-[#004B63] hover:bg-slate-100 rounded-xl transition-colors duration-200 flex items-center gap-2 font-medium shadow-sm"
+                    className="px-4 py-2 bg-white text-petroleum hover:bg-slate-100 rounded-xl transition-colors duration-200 flex items-center gap-2 font-medium shadow-sm"
                     aria-label="Cerrar visor y volver al dashboard"
                   >
                     <Icon name="fa-times" className="w-4 h-4" />
@@ -245,13 +245,13 @@ const PDFThumbnail = ({
                 {/* Overlay de instrucciones */}
                 <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2">
                   <div className="bg-white px-4 py-3 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
-                    <Icon name="fa-mouse-pointer" className="w-4 h-4 text-[#004B63]" />
+                    <Icon name="fa-mouse-pointer" className="w-4 h-4 text-petroleum" />
                     <span className="text-sm text-slate-700 font-medium">
                       Usa la rueda del mouse para hacer zoom • Arrastra para desplazarte
                     </span>
                     <button
                       onClick={() => iframeRef.current?.requestFullscreen?.()}
-                      className="px-3 py-1.5 bg-[#00BCD4] text-white rounded-lg hover:bg-[#00BCD4]/90 transition-colors duration-200 flex items-center gap-2 text-sm font-medium"
+                      className="px-3 py-1.5 bg-corporate text-white rounded-lg hover:bg-corporate/90 transition-colors duration-200 flex items-center gap-2 text-sm font-medium"
                     >
                       <Icon name="fa-expand" className="w-3 h-3" />
                       Pantalla completa

@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card-simple';
 import { Button } from '../ui/button-simple';
 import { Icon } from '../../utils/iconMapping.jsx';
+import { useIALabStore } from '../../store/ialabStore';
 
 const SettingsModal = ({ isOpen, onClose }) => {
   const [notifications, setNotifications] = useState({
@@ -31,14 +32,13 @@ const SettingsModal = ({ isOpen, onClose }) => {
       // Simular guardado de configuración
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Guardar en localStorage
-      localStorage.setItem('edutechlife_settings', JSON.stringify({
+      useIALabStore.getState().setSettings({
         notifications,
         language,
         theme,
         autoSave,
         savedAt: new Date().toISOString()
-      }));
+      });
       
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 3000);

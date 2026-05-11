@@ -84,19 +84,19 @@ const IALabTutoriasVirtuales = () => {
       transition={{ duration: 0.2 }}
       className="relative z-10 bg-white rounded-2xl border border-slate-200/60 shadow-sm p-5 md:p-8 overflow-hidden"
     >
-      <div className="absolute -top-6 -right-6 w-32 h-32 bg-gradient-to-br from-[#004B63]/6 to-[#00BCD4]/4 rounded-full blur-2xl pointer-events-none" />
-      <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-tr from-[#004B63]/4 to-[#00BCD4]/4 rounded-full blur-2xl pointer-events-none" />
+      <div className="absolute -top-6 -right-6 w-32 h-32 bg-gradient-to-br from-petroleum/6 to-corporate/4 rounded-full blur-2xl pointer-events-none" />
+      <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-tr from-petroleum/4 to-corporate/4 rounded-full blur-2xl pointer-events-none" />
 
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#00BCD4] rounded-t-2xl" />
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate rounded-t-2xl" />
 
       <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex items-start gap-4">
-          <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#004B63] to-[#0A3550] flex items-center justify-center flex-shrink-0">
+          <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-petroleum to-petroleum-dark flex items-center justify-center flex-shrink-0">
             <Video className="text-white text-xl" />
           </div>
           <div>
             <div className="flex items-center gap-3 mb-1">
-              <h3 className="text-lg md:text-xl font-bold text-[#004B63]">
+              <h3 className="text-lg md:text-xl font-bold text-petroleum">
                 Tutorías Virtuales en Vivo
               </h3>
               {active && (
@@ -118,7 +118,7 @@ const IALabTutoriasVirtuales = () => {
               <div className="flex items-center gap-2 mt-3 text-sm text-slate-500">
                 <Clock className="w-4 h-4" />
                 <span>
-                  Próxima tutoría en <span className="font-semibold text-[#004B63] font-mono">{formatCountdown()}</span>
+                  Próxima tutoría en <span className="font-semibold text-petroleum font-mono">{formatCountdown()}</span>
                 </span>
               </div>
             )}

@@ -189,7 +189,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
         <button
           onClick={handleDownloadPDF}
           disabled={isDownloading}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-[#004B63] rounded-lg shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50 transition-all duration-300 text-xs font-semibold text-slate-800 disabled:opacity-50"
+          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-petroleum rounded-lg shadow-sm hover:shadow hover:border-l-corporate hover:bg-slate-50 transition-all duration-300 text-xs font-semibold text-slate-800 disabled:opacity-50"
         >
           {isDownloading ? (
             <>
@@ -244,7 +244,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
         </div>
 
         {/* Header gradient */}
-        <div className="relative z-10 bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#00BCD4] px-6 py-3.5">
+        <div className="relative z-10 bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate px-6 py-3.5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
@@ -376,7 +376,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
                   <span className="text-[8px] font-bold leading-tight" style={{ color: '#004B63' }}>
                     VERIFICADO
                   </span>
-                  <span className="text-[7px] font-semibold leading-tight" style={{ color: '#0A3550' }}>
+                  <span className="text-[7px] font-semibold leading-tight" style={{ color: 'var(--color-petroleum-dark)' }}>
                     EDUTECHLIFE
                   </span>
                 </div>
@@ -396,7 +396,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
         </div>
 
         {/* Bottom bar */}
-        <div className="relative z-10 bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#00BCD4] px-6 py-2.5 text-center">
+        <div className="relative z-10 bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate px-6 py-2.5 text-center">
           <p className="text-[10px] text-white/70 tracking-wide">
             www.edutechlife.com  •  Certificado digital verificable
           </p>
@@ -414,7 +414,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
           whileTap={{ scale: 0.98 }}
           onClick={handleDownloadPDF}
           disabled={isDownloading}
-          className="w-full flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white rounded-xl font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-300 disabled:opacity-50"
+          className="w-full flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-300 disabled:opacity-50"
         >
           {isDownloading ? (
             <>

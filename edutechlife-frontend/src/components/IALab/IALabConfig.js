@@ -10,25 +10,6 @@
 // ------------------------------------------------------------------
 
 export const IALabConfig = {
-  // Control Center - Fusión sintetizador + dashboard
-  CONTROL_CENTER: {
-    // true: Usa ControlCenterUnified (nuevo, compacto, premium)
-    // false: Usa ReactivePromptStation (existente, compatible)
-    USE_UNIFIED: true,
-    
-    // Mostrar selector de versión en desarrollo
-    SHOW_VERSION_SELECTOR: process.env.NODE_ENV === 'development',
-    
-    // Características del Control Center Unificado
-    FEATURES: {
-      ANALYTICS_REALTIME: true,
-      LED_INDICATORS: true,
-      GLASSMORPHISM: true,
-      MICRO_UI: true,
-      TABS: true, // Pestañas sintetizador/analytics/config
-    }
-  },
-  
   // Sistema de diseño evolutivo
   DESIGN_SYSTEM: {
     // true: Usa GlassDesignSystem (glassmorphism, tipografía 14px)
@@ -132,12 +113,11 @@ export function applyEvolvedStyles(baseClass, componentType = 'panel') {
 export function getDevConfig() {
   return {
     isDevelopment: process.env.NODE_ENV === 'development',
-    showVersionSelectors: IALabConfig.CONTROL_CENTER.SHOW_VERSION_SELECTOR,
     activeFeatures: Object.entries(IALabConfig)
-      .filter(([_, config]) => typeof config === 'object' && 'USE_UNIFIED' in config)
+      .filter(([_, config]) => typeof config === 'object')
       .map(([feature, config]) => ({
         feature,
-        active: config.USE_UNIFIED || config.USE_OPTIMIZED || config.USE_GLASSMORPHISM
+        active: config.USE_OPTIMIZED || config.USE_GLASSMORPHISM || false
       }))
   };
 }

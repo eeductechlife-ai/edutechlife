@@ -26,7 +26,6 @@ const IALabEvaluationModalPremium = ({ isOpen, onClose }) => {
                             challenge_type: 'premium_evaluation'
                         }
                     );
-                    console.log('📝 Progreso de desafío premium guardado');
                 } catch (error) {
                     console.warn('⚠️ Error no crítico al guardar progreso:', error);
                 }
@@ -41,14 +40,13 @@ const IALabEvaluationModalPremium = ({ isOpen, onClose }) => {
         setIsProcessing(true);
         
         try {
-            // Guardar desafío en user_progress (ruta IALab)
+            // Guardar desafío en user_progress (ruta IALab) - esto ya actualiza updateModuleActivity internamente
             const challengeResult = await trackChallengeResult(activeMod, score);
             
-            // Marcar desafio en sistema gamificado (solo suma progreso si score >= 80%)
-            await updateModuleActivity(activeMod, 'challenge', score >= 80, score);
+            // trackChallengeResult ya llama a updateModuleActivity, no es necesario llamarla de nuevo
             
             // Marcar como actividad completada en ProgressContext (ruta global)
-            await markActivityComplete(activeMod);
+            await markActivityComplete(`challenge-${activeMod}`);
             
             // Sincronizar con localStorage si el desafio fue aprobado
             if (markChallengeComplete && score >= 80) {
@@ -66,12 +64,13 @@ const IALabEvaluationModalPremium = ({ isOpen, onClose }) => {
             setChallengeScore(score);
             
             // Recargar progreso global desde la DB para asegurar consistencia
-            setTimeout(() => {
-                refreshProgress?.();
-            }, 1000);
+            try {
+                if (refreshProgress) await refreshProgress();
+            } catch (e) {
+                console.warn('⚠️ Error al refrescar progreso:', e);
+            }
             
             const passed = score >= 80;
-            console.log(`✅ Desafío completado: módulo ${activeMod}, nota ${score}% ${passed ? '(APROBADO)' : '(REPROBADO - no suma progreso)'}`);
         } catch (error) {
             console.error('❌ Error procesando resultado del desafío:', error);
         } finally {

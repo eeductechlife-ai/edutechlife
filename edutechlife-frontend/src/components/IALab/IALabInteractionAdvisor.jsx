@@ -32,7 +32,7 @@ const VoiceReader = ({ text }) => {
     setIsPlaying(true);
   };
   return (
-    <button onClick={speak} className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${isPlaying ? 'bg-red-100 text-red-600 hover:bg-red-200' : 'bg-[#E0F7FA] text-[#004B63] hover:bg-[#B2EBF2]'}`} title="Escuchar con voz de Valerio">
+    <button onClick={speak} className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${isPlaying ? 'bg-red-100 text-red-600 hover:bg-red-200' : 'bg-[#E0F7FA] text-petroleum hover:bg-[#B2EBF2]'}`} title="Escuchar con voz de Valerio">
       <Icon name={isPlaying ? 'fa-stop' : 'fa-volume-up'} className="w-3 h-3" />
       {isPlaying ? 'Detener' : 'Escuchar'}
     </button>
@@ -84,17 +84,17 @@ const IALabInteractionAdvisor = ({ className = '', ...rest }) => {
   return (
     <motion.div whileHover={{ scale: 1.01, y: -2, boxShadow: "0px 8px 25px rgba(17,17,26,0.1)" }} transition={{ duration: 0.2 }}
       className={cn("relative z-10 bg-white rounded-2xl p-5 md:p-8 shadow-sm border border-slate-200/60 overflow-hidden space-y-6", className)} {...rest}>
-      <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#00BCD4] rounded-t-2xl" />
+      <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate rounded-t-2xl" />
 
       <div onClick={() => setIsOpen(!isOpen)} className="flex items-center justify-between cursor-pointer group">
         <div className="flex-1">
           <div className="flex items-center gap-3">
-            <h2 className="text-lg md:text-xl font-bold text-[#004B63] group-hover:text-[#00BCD4] transition-colors duration-300">Asesor de Interacción ChatGPT</h2>
+            <h2 className="text-lg md:text-xl font-bold text-petroleum group-hover:text-corporate transition-colors duration-300">Asesor de Interacción ChatGPT</h2>
           </div>
           <p className="text-slate-600 text-sm md:text-base leading-relaxed mt-1">Describe tu tarea y descubre qué herramienta de ChatGPT usar</p>
           {!isOpen && (
             <div className="mt-4">
-              <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-[#004B63] to-[#00BCD4] rounded-xl shadow-sm hover:from-[#0A3550] hover:to-[#0097A7] hover:shadow group-hover:scale-105 transition-all duration-300 cursor-pointer">
+              <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-petroleum to-corporate rounded-xl shadow-sm hover:from-petroleum-dark hover:to-corporate-dark hover:shadow group-hover:scale-105 transition-all duration-300 cursor-pointer">
                 <Icon name="fa-wand-magic-sparkles" className="w-4 h-4 text-white" />
                 <span className="text-sm font-bold text-white tracking-wide">Abrir Asesor de Herramientas</span>
                 <Icon name="fa-chevron-right" className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform duration-300" />
@@ -102,27 +102,27 @@ const IALabInteractionAdvisor = ({ className = '', ...rest }) => {
             </div>
           )}
         </div>
-        <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ml-4 transition-all duration-300 ${isOpen ? 'bg-[#004B63]/10 rotate-180' : 'bg-[#00BCD4]/15 group-hover:scale-110'}`}>
-          <Icon name="fa-chevron-down" className={`w-4 h-4 ${isOpen ? 'text-[#004B63]' : 'text-[#00BCD4]'} transition-colors`} />
+        <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ml-4 transition-all duration-300 ${isOpen ? 'bg-petroleum/10 rotate-180' : 'bg-corporate/15 group-hover:scale-110'}`}>
+          <Icon name="fa-chevron-down" className={`w-4 h-4 ${isOpen ? 'text-petroleum' : 'text-corporate'} transition-colors`} />
         </div>
       </div>
 
       {isOpen && (
         <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="space-y-5">
-          <div className="bg-gradient-to-br from-[#F0F9FF] to-[#E0F7FA] p-5 rounded-xl border border-[#00BCD4]/10">
+          <div className="bg-gradient-to-br from-[#F0F9FF] to-[#E0F7FA] p-5 rounded-xl border border-corporate/10">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <Icon name="fa-wand-magic-sparkles" className="w-5 h-5 text-[#00BCD4]" />
-                <h3 className="font-bold text-[#004B63] text-sm">¿Qué necesitas hacer con ChatGPT?</h3>
+                <Icon name="fa-wand-magic-sparkles" className="w-5 h-5 text-corporate" />
+                <h3 className="font-bold text-petroleum text-sm">¿Qué necesitas hacer con ChatGPT?</h3>
               </div>
               {input.length >= 3 && <VoiceReader text={`Describe tu tarea y te recomendaré la mejor herramienta de ChatGPT. Escribe: ${input || 'tu tarea'}`} />}
             </div>
             <div className="relative">
-              <textarea value={input} onChange={handleInputChange} onKeyDown={handleKeyDown} placeholder="Ej: Quiero crear una infografía educativa sobre el ciclo del agua para niños de 10 años..." className="w-full min-h-[80px] p-4 bg-white border border-slate-200 rounded-xl text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#00BCD4]/30 focus:border-[#00BCD4] resize-none transition-all" maxLength={500} />
+              <textarea value={input} onChange={handleInputChange} onKeyDown={handleKeyDown} placeholder="Ej: Quiero crear una infografía educativa sobre el ciclo del agua para niños de 10 años..." className="w-full min-h-[80px] p-4 bg-white border border-slate-200 rounded-xl text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-corporate/30 focus:border-corporate resize-none transition-all" maxLength={500} />
               <div className="absolute bottom-3 right-3 text-[10px] text-slate-400 font-medium">{input.length}/500</div>
             </div>
             <div className="flex justify-end mt-3">
-              <button onClick={handleRecommend} disabled={input.trim().length < 3} className="px-6 py-2.5 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white text-sm font-bold rounded-xl hover:from-[#0A3550] hover:to-[#0097A7] transition-all duration-200 shadow-sm hover:shadow flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+              <button onClick={handleRecommend} disabled={input.trim().length < 3} className="px-6 py-2.5 bg-gradient-to-r from-petroleum to-corporate text-white text-sm font-bold rounded-xl hover:from-petroleum-dark hover:to-corporate-dark transition-all duration-200 shadow-sm hover:shadow flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
                 <Icon name="fa-wand-magic-sparkles" className="w-4 h-4" /> Recomendar Herramienta
               </button>
             </div>
@@ -132,8 +132,8 @@ const IALabInteractionAdvisor = ({ className = '', ...rest }) => {
             <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Categorías rápidas</p>
             <div className="flex flex-wrap gap-2">
               {suggestions.map((s, i) => (
-                <button key={i} onClick={() => handleSuggestion(s.text)} className="inline-flex items-center gap-1.5 px-3 py-2 bg-slate-50 hover:bg-[#E0F7FA] border border-slate-200 hover:border-[#00BCD4]/30 rounded-lg text-xs font-medium text-slate-600 hover:text-[#004B63] transition-all">
-                  <Icon name={s.icon} className="w-3.5 h-3.5 text-[#00BCD4]" /> {s.label}
+                <button key={i} onClick={() => handleSuggestion(s.text)} className="inline-flex items-center gap-1.5 px-3 py-2 bg-slate-50 hover:bg-[#E0F7FA] border border-slate-200 hover:border-corporate/30 rounded-lg text-xs font-medium text-slate-600 hover:text-petroleum transition-all">
+                  <Icon name={s.icon} className="w-3.5 h-3.5 text-corporate" /> {s.label}
                 </button>
               ))}
             </div>
@@ -142,14 +142,14 @@ const IALabInteractionAdvisor = ({ className = '', ...rest }) => {
           {showResult && recommendation && (
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="border-t border-slate-100 pt-5 space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="font-bold text-[#004B63] text-sm flex items-center gap-2"><Icon name="fa-circle-check" className="w-4 h-4 text-emerald-500" /> Herramienta Recomendada</h3>
+                <h3 className="font-bold text-petroleum text-sm flex items-center gap-2"><Icon name="fa-circle-check" className="w-4 h-4 text-emerald-500" /> Herramienta Recomendada</h3>
                 <VoiceReader text={`Te recomiendo usar ${recommendation.tool.title}. ${recommendation.reason}. El modelo recomendado es ${recommendation.model} en modo ${recommendation.mode}.`} />
               </div>
 
-              <div className="bg-gradient-to-br from-[#004B63] to-[#0A3550] p-5 rounded-xl text-white">
+              <div className="bg-gradient-to-br from-petroleum to-petroleum-dark p-5 rounded-xl text-white">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-10 h-10 bg-white/15 rounded-lg flex items-center justify-center backdrop-blur-sm">
-                    <Icon name={recommendation.tool.icon} className="w-5 h-5 text-[#00BCD4]" />
+                    <Icon name={recommendation.tool.icon} className="w-5 h-5 text-corporate" />
                   </div>
                   <div>
                     <h4 className="font-bold text-lg">{recommendation.tool.title}</h4>
@@ -159,8 +159,8 @@ const IALabInteractionAdvisor = ({ className = '', ...rest }) => {
                 <p className="text-sm text-white/80 leading-relaxed mb-3">{recommendation.reason}</p>
               </div>
 
-              <div className="bg-[#F0FDFF] p-4 rounded-xl border border-[#00BCD4]/10">
-                <h4 className="font-bold text-[#004B63] text-xs mb-2 flex items-center gap-1.5"><Icon name="fa-lightbulb" className="w-3.5 h-3.5" /> Prompt sugerido</h4>
+              <div className="bg-[#F0FDFF] p-4 rounded-xl border border-corporate/10">
+                <h4 className="font-bold text-petroleum text-xs mb-2 flex items-center gap-1.5"><Icon name="fa-lightbulb" className="w-3.5 h-3.5" /> Prompt sugerido</h4>
                 <div className="bg-white p-3 rounded-lg border border-slate-200">
                   <code className="text-xs text-slate-700 leading-relaxed font-mono whitespace-pre-wrap">{recommendation.prompt}</code>
                 </div>

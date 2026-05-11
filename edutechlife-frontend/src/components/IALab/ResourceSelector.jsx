@@ -81,8 +81,8 @@ const ResourceSelector = ({
       <div className="px-4 py-3 border-b border-slate-200/60 bg-white">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center">
-              <Icon name="fa-layer-group" className="text-[#004B63] w-4 h-4" />
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
+              <Icon name="fa-layer-group" className="text-petroleum w-4 h-4" />
             </div>
             <h3 className="font-semibold text-slate-800 text-sm">Recursos del Tema</h3>
           </div>
@@ -108,10 +108,10 @@ const ResourceSelector = ({
                 "transition-all duration-300",
                 "text-left",
                 isActive
-                  ? "bg-white border border-slate-200/60 border-l-4 border-l-[#004B63] shadow-sm"
+                  ? "bg-white border border-slate-200/60 border-l-4 border-l-petroleum shadow-sm"
                   : isCompleted
                     ? "bg-emerald-50/40 border border-emerald-200/60 border-l-4 border-l-emerald-400 shadow-sm"
-                    : "bg-white border border-slate-200/60 shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50"
+                    : "bg-white border border-slate-200/60 shadow-sm hover:shadow hover:border-l-corporate hover:bg-slate-50"
               )}
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.99 }}
@@ -124,11 +124,11 @@ const ResourceSelector = ({
                 "transition-all duration-300",
                 isCompleted
                   ? "bg-gradient-to-br from-emerald-500/10 to-emerald-600/10"
-                  : "bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10"
+                  : "bg-gradient-to-br from-petroleum/10 to-corporate/10"
               )}>
                 <Icon
                   name={isCompleted ? 'fa-check-circle' : getResourceIcon(resource.type)}
-                  className={isCompleted ? "text-emerald-600 w-4 h-4" : "text-[#004B63] w-4 h-4"}
+                  className={isCompleted ? "text-emerald-600 w-4 h-4" : "text-petroleum w-4 h-4"}
                 />
               </div>
 
@@ -136,7 +136,7 @@ const ResourceSelector = ({
               <div className="flex-1 min-w-0">
                 <div className={cn(
                   "text-sm font-semibold truncate transition-colors duration-300 flex items-center gap-2",
-                  isActive ? "text-[#004B63]" : isCompleted ? "text-emerald-700" : "text-slate-800"
+                  isActive ? "text-petroleum" : isCompleted ? "text-emerald-700" : "text-slate-800"
                 )}>
                   {resource.title}
                   {isCompleted && (
@@ -151,7 +151,7 @@ const ResourceSelector = ({
               {/* Indicador de activo */}
               {isActive && (
                 <div className="flex-shrink-0">
-                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center">
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center">
                     <Icon name="fa-check" className="text-white w-3 h-3" />
                   </div>
                 </div>
@@ -165,9 +165,9 @@ const ResourceSelector = ({
       <div className="px-4 py-2 border-t border-slate-200/60 bg-white">
         <div className="flex items-center justify-between text-xs">
           <div className="flex items-center gap-2">
-            <div className={`w-2 h-2 rounded-full ${completedIds.includes(resources[activeResourceIndex]?.id) ? 'bg-emerald-500' : 'bg-[#00BCD4] animate-pulse'}`}></div>
+            <div className={`w-2 h-2 rounded-full ${completedIds.includes(resources[activeResourceIndex]?.id) ? 'bg-emerald-500' : 'bg-corporate animate-pulse'}`}></div>
             <span className="text-slate-600">{completedIds.includes(resources[activeResourceIndex]?.id) ? 'Completado:' : 'Activo:'}</span>
-            <span className={`font-medium truncate max-w-[200px] ${completedIds.includes(resources[activeResourceIndex]?.id) ? 'text-emerald-600' : 'text-[#004B63]'}`}>
+            <span className={`font-medium truncate max-w-[200px] ${completedIds.includes(resources[activeResourceIndex]?.id) ? 'text-emerald-600' : 'text-petroleum'}`}>
               {resources[activeResourceIndex]?.title || 'Ninguno'}
             </span>
           </div>

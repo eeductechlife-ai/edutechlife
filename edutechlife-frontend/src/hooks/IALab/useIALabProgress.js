@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useIALabContext } from '../../context/IALabContext';
+import { useIALabStore } from '../../store/ialabStore';
 import { useSupabase } from '../useSupabase';
 import { 
   setSupabaseClient,
@@ -58,7 +59,6 @@ export const useIALabProgress = () => {
   
   // ==================== PERSISTENCIA LOCAL ====================
   
-  const CACHE_KEY = 'ialab_progress_cache';
   const CACHE_DURATION = 3600000; // 1 hora
   
   const saveToCache = useCallback((data) => {
@@ -68,8 +68,7 @@ export const useIALabProgress = () => {
         timestamp: Date.now(),
         userId: user?.id
       };
-      localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
-      console.log('[PROGRESS] Estado guardado en caché local');
+      useIALabStore.getState().setProgressCache(cacheData);
     } catch (e) {
       console.warn('[PROGRESS] Error guardando caché:', e);
     }
@@ -77,19 +76,17 @@ export const useIALabProgress = () => {
   
   const loadFromCache = useCallback(() => {
     try {
-      const cached = localStorage.getItem(CACHE_KEY);
+      const cached = useIALabStore.getState().getProgressCache();
       if (!cached) return null;
       
-      const data = JSON.parse(cached);
+      const data = cached;
       
-      // Verificar que es del mismo usuario y no expiró
       if (data.userId !== user?.id) return null;
       if (Date.now() - data.timestamp > CACHE_DURATION) {
-        localStorage.removeItem(CACHE_KEY);
+        useIALabStore.getState().removeProgressCache();
         return null;
       }
       
-      console.log('[PROGRESS] Cargado desde caché local');
       return data;
     } catch (e) {
       console.warn('[PROGRESS] Error cargando caché:', e);
@@ -118,13 +115,11 @@ export const useIALabProgress = () => {
   
   const loadUserProgress = useCallback(async () => {
     if (!user || !user.id) {
-      console.log('[PROGRESS] Usuario no autenticado, saltando carga de progreso');
       setIsLoadingProgress(false);
       return;
     }
     
     if (!progressService) {
-      console.log('[PROGRESS] Servicio de progreso no disponible, esperando cliente Supabase...');
       return;
     }
     
@@ -134,11 +129,8 @@ export const useIALabProgress = () => {
       
       // Paso 1: Restaurar caché inmediatamente para UX instantánea
       const hasCache = restoreFromCache();
-      if (hasCache) {
-        console.log('[PROGRESS] Caché restaurado, cargando DB en segundo plano...');
-      }
       
-      console.log(`[PROGRESS] Cargando progreso para usuario: ${user.id.substring(0, 12)}...`);
+      
       
       // 2. Obtener todo el progreso del usuario
       const allProgress = await progressService.getAllProgress(user.id);
@@ -166,7 +158,6 @@ export const useIALabProgress = () => {
         const globalProgress = await progressService.calculateGlobalProgressFromDB(user.id);
         setCourseProgress(globalProgress || 0);
         
-        console.log(`[PROGRESS] Progreso cargado: ${completed.length}/5 módulos completados, progreso global: ${globalProgress}%`);
         
         // 8. Cargar moduleProgress desde la DB para cada módulo
         for (let modId = 1; modId <= 5; modId++) {
@@ -199,7 +190,6 @@ export const useIALabProgress = () => {
           }
         }
       } else {
-        console.log('[PROGRESS] Usuario sin progreso previo, iniciando desde cero');
         setCompletedModules([]);
         setVisitedModules([1]);
         setCourseProgress(0);
@@ -224,7 +214,6 @@ export const useIALabProgress = () => {
   
   const saveModuleProgress = useCallback(async (moduleId, status, additionalData = {}) => {
     if (!user || !user.id) {
-      console.log('Usuario no autenticado, no se puede guardar progreso');
       return { success: false, error: 'Usuario no autenticado' };
     }
     
@@ -233,8 +222,6 @@ export const useIALabProgress = () => {
     }
     
     try {
-      console.log(`Guardando progreso: módulo ${moduleId}, estado: ${status}`);
-      
       const result = await progressService.saveProgress(
         moduleId,
         status,
@@ -243,7 +230,6 @@ export const useIALabProgress = () => {
       );
       
       if (result.success) {
-        console.log(`Progreso guardado exitosamente para módulo ${moduleId}`);
         
         if (status === PROGRESS_STATUS.COMPLETED) {
           setCompletedModules(prev => {
@@ -256,8 +242,6 @@ export const useIALabProgress = () => {
           const newCompleted = [...completedModules, moduleId].filter((v, i, a) => a.indexOf(v) === i);
           const progressPercentage = Math.min((newCompleted.length / 5) * 100, 100);
           setCourseProgress(progressPercentage);
-          
-          console.log(`Módulo ${moduleId} marcado como completado. Progreso total: ${progressPercentage}%`);
         }
         
         setVisitedModules(prev => {
@@ -283,7 +267,6 @@ export const useIALabProgress = () => {
   
   const saveCurrentLesson = useCallback(async () => {
     if (!user || !user.id) {
-      console.log('Usuario no autenticado, no se puede guardar lección actual');
       return { success: false, error: 'Usuario no autenticado' };
     }
     
@@ -299,7 +282,6 @@ export const useIALabProgress = () => {
       );
       
       if (result.success) {
-        console.log(`Lección actual guardada: módulo ${activeMod}, lección ${currentLessonIndex}`);
         return { success: true };
       } else {
         console.error('Error guardando lección actual:', result.error);
@@ -316,12 +298,10 @@ export const useIALabProgress = () => {
   
   const completeCurrentModule = useCallback(async () => {
     if (!user || !user.id) {
-      console.log('Usuario no autenticado, no se puede completar módulo');
       return { success: false, error: 'Usuario no autenticado' };
     }
     
     try {
-      console.log(`Completando módulo ${activeMod} para usuario ${user.id}`);
       
       // Datos adicionales para el progreso
       const additionalData = {
@@ -340,7 +320,6 @@ export const useIALabProgress = () => {
       );
       
       if (result.success) {
-        console.log(`Módulo ${activeMod} completado exitosamente`);
         
         // Mostrar notificación de éxito
         // (esto se manejará en el componente que llama a esta función)
@@ -448,18 +427,15 @@ export const useIALabProgress = () => {
   // Cargar progreso al montar o cuando cambia el usuario o el cliente Supabase
   useEffect(() => {
     if (!isLoaded) {
-      console.log('[PROGRESS] Clerk no cargado, esperando');
       return;
     }
     
     if (!user?.id) {
-      console.log('[PROGRESS] Usuario no autenticado, saltando carga de progreso');
       setIsLoadingProgress(false);
       return;
     }
     
     if (!progressService) {
-      console.log('[PROGRESS] Cliente Supabase no disponible, esperando...');
       return;
     }
     
@@ -481,14 +457,13 @@ export const useIALabProgress = () => {
   useEffect(() => {
     const handleBeforeUnload = () => {
       try {
-        const cacheData = {
+        useIALabStore.getState().setProgressCache({
           courseProgress,
           completedModules,
           visitedModules,
           timestamp: Date.now(),
           userId: user?.id
-        };
-        localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
+        });
       } catch (e) {
         // Silenciar errores en beforeunload
       }

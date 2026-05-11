@@ -1,56 +1,56 @@
 /**
  * SISTEMA DE DISEÑO GLASSMORPHISM EVOLUTIVO - EDUTECHLIFE
- * Evolución de la paleta corporativa hacia interfaz compacta tipo SaaS Premium
- * Mantiene 100% compatibilidad con estilos existentes mientras añade refinamiento
+ * Basado en CSS Custom Properties de tokens.css
+ * Referencia: var(--ialab-*) para todos los tokens IALab
  */
 
 import { cn } from '../forum/forumDesignSystem';
 
 // ------------------------------------------------------------------
-// 1. PALETA DE COLORES EVOLUTIVA (Mantiene colores corporativos)
+// 1. CSS VARIABLE HELPERS
+// ------------------------------------------------------------------
+
+const cv = (name) => `var(${name})`;
+
+// ------------------------------------------------------------------
+// 2. PALETA DE COLORES (mapped from CSS variables)
 // ------------------------------------------------------------------
 
 export const GLASS_COLORS = {
-  // Colores corporativos base (INALTERADOS)
-  PRIMARY_PETROLEUM: '#004B63',
-  PRIMARY_CYAN: '#00BCD4',
-  
-  // Evolución: Transparencias para glassmorphism
+  PRIMARY_PETROLEUM: cv('--ialab-petroleum'),
+  PRIMARY_CYAN: cv('--ialab-cyan'),
+  PRIMARY_NAVY: cv('--ialab-navy'),
+  PRIMARY_TEAL: cv('--ialab-teal'),
+
   GLASS_WHITE: {
     90: 'rgba(255, 255, 255, 0.90)',
     85: 'rgba(255, 255, 255, 0.85)',
     80: 'rgba(255, 255, 255, 0.80)',
     70: 'rgba(255, 255, 255, 0.70)',
   },
-  
+
   GLASS_CYAN: {
     20: 'rgba(0, 188, 212, 0.20)',
     15: 'rgba(0, 188, 212, 0.15)',
     10: 'rgba(0, 188, 212, 0.10)',
     5: 'rgba(0, 188, 212, 0.05)',
   },
-  
+
   GLASS_PETROLEUM: {
     10: 'rgba(0, 75, 99, 0.10)',
     5: 'rgba(0, 75, 99, 0.05)',
   },
-  
-  // Bordes evolucionados (más sutiles)
+
   BORDER_GLASS: 'rgba(255, 255, 255, 0.25)',
   BORDER_CYAN_SUBTLE: 'rgba(0, 188, 212, 0.15)',
   BORDER_PETROLEUM_SUBTLE: 'rgba(0, 75, 99, 0.08)',
 };
 
 // ------------------------------------------------------------------
-// 2. COMPONENTES GLASSMORPHISM EVOLUTIVOS
+// 3. COMPONENTES GLASSMORPHISM
 // ------------------------------------------------------------------
 
-/**
- * GlassPanel - Evolución de tarjetas existentes hacia diseño compacto premium
- * Mantiene bordes cyan pero los hace más sutiles, añade glassmorphism
- */
 export const GlassPanel = {
-  // Nivel 1: Panel estandar (fondo solido blanco)
   STANDARD: cn(
     "bg-white",
     "border border-slate-200/60",
@@ -59,8 +59,7 @@ export const GlassPanel = {
     "transition-all duration-200",
     "hover:shadow hover:border-slate-200"
   ),
-  
-  // Nivel 2: Panel elevado (para elementos interactivos)
+
   ELEVATED: cn(
     "bg-white",
     "border border-slate-200/60",
@@ -69,8 +68,7 @@ export const GlassPanel = {
     "transition-all duration-200",
     "hover:shadow-md"
   ),
-  
-  // Nivel 3: Panel compacto (para micro-UI)
+
   COMPACT: cn(
     "bg-white",
     "border border-slate-200/60",
@@ -80,52 +78,38 @@ export const GlassPanel = {
   ),
 };
 
-/**
- * MicroBorder - Bordes ultra sutiles para componentes compactos
- */
 export const MicroBorder = {
   CYAN: "border border-cyan-100/30",
   SLATE: "border border-slate-100",
   GLASS: "border border-white/15",
 };
 
-/**
- * ShadowSystem - Sombras ambientales evolucionadas
- */
 export const ShadowSystem = {
-  // Sombras cyan sutiles (reemplazan sombras negras genéricas)
   CYAN_SM: "shadow-sm",
   CYAN_MD: "shadow",
   CYAN_LG: "shadow-lg",
-  
-  // Sombras petroleum para estructura
   PETROLEUM_SM: "shadow-sm",
   PETROLEUM_MD: "shadow",
-  
-  // Sombras interiores para profundidad
   INNER_CYAN: "shadow-inset-[0_2px_8px_rgba(0,188,212,0.05)]",
 };
 
 // ------------------------------------------------------------------
-// 3. TIPOGRAFÍA COMPACTA (14px base - Evolución sutil)
+// 4. TIPOGRAFÍA COMPACTA
 // ------------------------------------------------------------------
 
 export const CompactTypography = {
-  // Jerarquía compacta (evolución manteniendo legibilidad)
   MICRO: "text-[11px] font-normal text-slate-500 leading-tight",
   TINY: "text-[12px] font-normal text-slate-600 leading-snug",
-  BODY: "text-[14px] font-normal text-slate-700 leading-relaxed", // BASE
+  BODY: "text-[14px] font-normal text-slate-700 leading-relaxed",
   SUBHEADING: "text-[15px] font-semibold text-slate-800 leading-tight",
   HEADING: "text-[17px] font-bold text-slate-900 leading-tight",
-  
-  // Pesos estratégicos (evolución sutil)
-  LIGHT: "font-light text-slate-500",      // Datos secundarios
-  NORMAL: "font-normal text-slate-700",    // Contenido principal
-  MEDIUM: "font-medium text-slate-800",    // Subtítulos
-  SEMIBOLD: "font-semibold text-slate-900", // Encabezados sección
-  BOLD: "font-bold text-slate-900",        // Solo puntos de enfoque
-  
-  // Colores corporativos evolucionados
+
+  LIGHT: "font-light text-slate-500",
+  NORMAL: "font-normal text-slate-700",
+  MEDIUM: "font-medium text-slate-800",
+  SEMIBOLD: "font-semibold text-slate-900",
+  BOLD: "font-bold text-slate-900",
+
   CYAN: "text-cyan-600",
   CYAN_LIGHT: "text-cyan-500",
   PETROLEUM: "text-slate-800",
@@ -133,40 +117,32 @@ export const CompactTypography = {
 };
 
 // ------------------------------------------------------------------
-// 4. ESPACIADO MICRO-UI (Evolución: reducción sutil)
+// 5. ESPACIADO MICRO-UI
 // ------------------------------------------------------------------
 
 export const MicroSpacing = {
-  // Padding evolucionado (ligera reducción)
   P_MICRO: "p-2.5",
   P_COMPACT: "p-3.5",
   P_NORMAL: "p-4",
-  
-  // Margin evolucionado
+
   M_MICRO: "m-1.5",
   M_COMPACT: "m-2.5",
   M_NORMAL: "m-3",
-  
-  // Gap evolucionado
+
   GAP_MICRO: "gap-1.5",
   GAP_COMPACT: "gap-2.5",
   GAP_NORMAL: "gap-3.5",
-  
-  // Espaciado vertical evolucionado
+
   SPACE_MICRO: "space-y-1.5",
   SPACE_COMPACT: "space-y-2.5",
   SPACE_NORMAL: "space-y-3.5",
 };
 
 // ------------------------------------------------------------------
-// 5. COMPONENTES ESPECÍFICOS EVOLUTIVOS
+// 6. BOTONES EVOLUCIONADOS
 // ------------------------------------------------------------------
 
-/**
- * Botones evolucionados - Mantienen gradientes pero más sutiles
- */
 export const EvolvedButtons = {
-  // Botón cyan premium (evolución del botón actual)
   CYAN_PRIMARY: cn(
     "bg-gradient-to-r from-[#004B63] to-[#00BCD4]",
     "text-white font-medium",
@@ -178,8 +154,7 @@ export const EvolvedButtons = {
     "transition-all duration-200",
     "disabled:from-slate-300 disabled:to-slate-400 disabled:shadow-none"
   ),
-  
-  // Botón glass sutil
+
   GLASS_SECONDARY: cn(
     "bg-white",
     "border border-slate-200",
@@ -191,8 +166,7 @@ export const EvolvedButtons = {
     "active:scale-[0.98]",
     "transition-all duration-150"
   ),
-  
-  // Botón micro para acciones compactas
+
   MICRO_ACTION: cn(
     "bg-white",
     "border border-slate-200",
@@ -204,11 +178,7 @@ export const EvolvedButtons = {
   ),
 };
 
-/**
- * Inputs evolucionados - Más compactos y refinados
- */
 export const EvolvedInputs = {
-  // Textarea premium compacta
   TEXTAREA_COMPACT: cn(
     "bg-white",
     "border border-cyan-100/40",
@@ -219,8 +189,7 @@ export const EvolvedInputs = {
     "transition-all duration-150",
     "resize-none"
   ),
-  
-  // Input micro para formularios compactos
+
   INPUT_MICRO: cn(
     "bg-white",
     "border border-slate-100",
@@ -233,11 +202,7 @@ export const EvolvedInputs = {
   ),
 };
 
-/**
- * LED Indicators - Sistema de micro-indicadores de estado
- */
 export const LEDIndicators = {
-  // Configuración por tipo
   CONFIG: {
     idle: { bg: 'bg-slate-400', pulse: false },
     live: { bg: 'bg-emerald-500', pulse: true },
@@ -246,99 +211,81 @@ export const LEDIndicators = {
     warning: { bg: 'bg-amber-500', pulse: true },
     error: { bg: 'bg-rose-500', pulse: false },
   },
-  
-  // Clase base para LED
+
   BASE: "w-2 h-2 rounded-full",
-  
-  // Animaciones
+
   PULSE: "animate-pulse",
   PING: "animate-ping",
 };
 
 // ------------------------------------------------------------------
-// 6. SISTEMA DE TARJETAS BLANCAS INDEPENDIENTES - SaaS Premium
+// 7. SISTEMA DE TARJETAS BLANCAS
 // ------------------------------------------------------------------
 
-/**
- * WhiteCard - Sistema de tarjetas blancas independientes con acabados SaaS Premium
- * ADN Visual: bg-white sólido, rounded-2xl, sombra ambiental con azul petróleo
-
-    "rounded-2xl",                  // Curvatura estándar IALab (16px)
-    "shadow-sm",                         // Sombra sutil
-    "border border-slate-200/60",        // Contorno definido
-    "transition-all duration-200"        // Transiciones suaves
+export const WhiteCard = {
+  BASE: cn(
+    "rounded-2xl",
+    "shadow-sm",
+    "border border-slate-200/60",
+    "transition-all duration-200"
   ),
-  
-  // Variantes de padding para contenido que respira
-  PADDING_XL: "p-12",                    // Espaciado máximo premium
-  PADDING_LG: "p-10",                    // Espaciado generoso (recomendado)
-  PADDING_MD: "p-8",                     // Espaciado estándar
-  PADDING_SM: "p-6",                     // Espaciado compacto
-  
-  // Estados interactivos
+
+  PADDING_XL: "p-12",
+  PADDING_LG: "p-10",
+  PADDING_MD: "p-8",
+  PADDING_SM: "p-6",
+
   HOVER: cn(
     "hover:shadow",
     "hover:border-slate-200"
   ),
-  
+
   FOCUS: "focus:outline-none focus:ring-2 focus:ring-cyan-300/30 focus:ring-offset-2",
-  
-  // Variantes especiales
-  WITH_ACCENT_BORDER: "border-l-4 border-l-cyan-500", // Borde lateral cyan para destacar
-  WITH_TOP_GRADIENT: "border-t-4 border-t-cyan-500",  // Gradiente superior
-  
-  // Para contenido interno
-  CONTENT_SPACING: "space-y-6",          // Espaciado vertical generoso
-  COMPACT_CONTENT: "space-y-4",          // Espaciado compacto
-  
-  // Responsive
-  RESPONSIVE: "rounded-2xl", // Curvatura estándar IALab
+
+  WITH_ACCENT_BORDER: "border-l-4 border-l-cyan-500",
+  WITH_TOP_GRADIENT: "border-t-4 border-t-cyan-500",
+
+  CONTENT_SPACING: "space-y-6",
+  COMPACT_CONTENT: "space-y-4",
+
+  RESPONSIVE: "rounded-2xl",
 };
 
-/**
- * WhiteCardPanel - Paneles específicos para diferentes tipos de contenido
- */
 export const WhiteCardPanel = {
-  // Panel principal para contenido destacado
   PRIMARY: cn(
     WhiteCard.BASE,
     WhiteCard.PADDING_LG,
     WhiteCard.HOVER,
     "min-h-[200px]"
   ),
-  
-  // Panel para estadísticas y métricas
+
   STATS: cn(
     WhiteCard.BASE,
     WhiteCard.PADDING_MD,
     "text-center",
     "hover:shadow"
   ),
-  
-  // Panel para formularios y entrada de datos
+
   FORM: cn(
     WhiteCard.BASE,
     WhiteCard.PADDING_LG,
     WhiteCard.CONTENT_SPACING
   ),
-  
-  // Panel para foros y conversaciones
+
   FORUM: cn(
     WhiteCard.BASE,
     WhiteCard.PADDING_LG,
     WhiteCard.COMPACT_CONTENT,
     "min-h-[400px]"
   ),
-  
-  // Panel para sintetizadores y herramientas
+
   TOOL: cn(
     WhiteCard.BASE,
     WhiteCard.PADDING_LG,
     WhiteCard.WITH_ACCENT_BORDER,
     "min-h-[300px]"
   ),
-  
-  // Panel para banners y anuncios
+
   BANNER: cn(
     WhiteCard.BASE,
     WhiteCard.PADDING_MD,
@@ -348,40 +295,23 @@ export const WhiteCardPanel = {
 };
 
 // ------------------------------------------------------------------
-// 7. UTILIDADES DE DISEÑO
+// 8. UTILIDADES
 // ------------------------------------------------------------------
 
-/**
- * Aplica glassmorphism evolutivo a componentes existentes
- * @param {string} baseClass - Clase base del componente existente
- * @param {string} level - Nivel de glassmorphism ('standard' | 'elevated' | 'compact')
- */
 export function evolveWithGlassmorphism(baseClass, level = 'standard') {
   const glassClass = GlassPanel[level.toUpperCase()];
   return cn(baseClass, glassClass);
 }
 
-/**
- * Aplica sistema de tarjetas blancas independientes
- * @param {string} baseClass - Clase base del componente existente
- * @param {string} variant - Variante de tarjeta blanca ('primary' | 'stats' | 'form' | 'forum' | 'tool' | 'banner')
- */
 export function applyWhiteCard(baseClass, variant = 'primary') {
   const whiteCardClass = WhiteCardPanel[variant.toUpperCase()];
   return cn(baseClass, whiteCardClass);
 }
 
-/**
- * Crea un gradiente cyan sutil para fondos
- */
 export function cyanGradientBg(opacity = 0.05) {
   return `bg-gradient-to-br from-cyan-500/${opacity * 100} to-cyan-400/${opacity * 70}`;
 }
 
-/**
- * Aplica tipografía compacta manteniendo jerarquía
- * @param {string} type - Tipo de tipografía ('micro' | 'tiny' | 'body' | 'subheading' | 'heading')
- */
 export function applyCompactTypography(type) {
   return CompactTypography[type.toUpperCase()];
 }

@@ -259,12 +259,104 @@
   --z-index-skipLink: 1600;
   --z-index-toast: 1700;
   --z-index-tooltip: 1800;
+
+  /* ==================== TAILWIND CONFIG VARIABLES ==================== */
+  /* These backfill the var(--color-*) references in tailwind.config.js */
+
+  --color-petroleum: #004B63;
+  --color-petroleum-dark: #0A3550;
+  --color-petroleum-darker: #00374A;
+  --color-corporate: #00BCD4;
+  --color-corporate-dark: #0097A7;
+  --color-corporate-darker: #00A5B8;
+  --color-corporate-deep: #003A4D;
+  --color-soft-blue: #B2D8E5;
+  --color-mint: #66CCCC;
+  --color-navy: #0A1628;
+  --color-success: #10B981;
+
+  --color-bg-dark: #E8F4F8;
+  --color-bg-light: #F8FAFC;
+  --color-bg-card: #FFFFFF;
+  --color-bg-card-dark: #0A1628;
+  --color-bg-glass: rgba(77, 168, 196, 0.12);
+  --color-bg-glass-dark: rgba(77, 168, 196, 0.2);
+
+  --color-border-light: #E2E8F0;
+  --color-border-dark: #CBD5E1;
+  --color-border-glass: rgba(255, 255, 255, 0.2);
+
+  --color-text-main: #334155;
+  --color-text-sub: #64748B;
+  --color-text-light: #94A3B8;
+  --color-text-dark: #1E293B;
+  --color-text-inverse: #FFFFFF;
+
+  --shadow-glass: 0 8px 32px rgba(77, 168, 196, 0.3);
+  --shadow-glass-lg: 0 12px 48px rgba(77, 168, 196, 0.4);
+  --shadow-glass-accent: 0 8px 32px rgba(0, 188, 212, 0.25);
+  --shadow-glass-border: 0 4px 16px rgba(77, 168, 196, 0.15);
+  --shadow-premium: 0 4px 24px rgba(0, 75, 99, 0.12);
+  --shadow-premium-lg: 0 8px 40px rgba(0, 75, 99, 0.18);
+  --shadow-inner-glow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  --shadow-outer-glow: 0 0 20px rgba(0, 188, 212, 0.2);
+
+  --backdrop-blur-glass: 10px;
+  --backdrop-blur-glass-lg: 20px;
+  --backdrop-blur-premium: 16px;
+
+  /* ==================== IALab PRO - DESIGN TOKENS ==================== */
+
+  /* Brand colors (source of truth for IALab components) */
+  --ialab-petroleum: #004B63;
+  --ialab-petroleum-dark: #00334A;
+  --ialab-cyan: #00BCD4;
+  --ialab-cyan-dark: #0097A7;
+  --ialab-navy: #0D2B5B;
+  --ialab-teal: #2596be;
+
+  /* Surfaces */
+  --ialab-bg: #F8FAFC;
+  --ialab-surface: #FFFFFF;
+  --ialab-border: rgba(0, 75, 99, 0.08);
+  --ialab-border-medium: rgba(0, 75, 99, 0.15);
+  --ialab-border-strong: rgba(0, 75, 99, 0.25);
+
+  /* Glass surfaces */
+  --ialab-glass-bg: rgba(255, 255, 255, 0.85);
+  --ialab-glass-border: rgba(0, 188, 212, 0.15);
+  --ialab-glass-shadow: 0 8px 32px rgba(0, 75, 99, 0.10);
+
+  /* Gradients */
+  --ialab-gradient-primary: linear-gradient(135deg, #004B63 0%, #00BCD4 100%);
+  --ialab-gradient-cyan: linear-gradient(135deg, #00BCD4 0%, #0097A7 100%);
+  --ialab-gradient-dark: linear-gradient(135deg, #004B63 0%, #00334A 100%);
+
+  /* Shadows */
+  --ialab-shadow-sm: 0 1px 3px rgba(0, 75, 99, 0.06);
+  --ialab-shadow-md: 0 4px 12px rgba(0, 75, 99, 0.08);
+  --ialab-shadow-lg: 0 8px 24px rgba(0, 75, 99, 0.12);
+
+  /* Typography */
+  --ialab-font-display: 'Montserrat', system-ui, sans-serif;
+  --ialab-font-body: 'Open Sans', system-ui, sans-serif;
+  --ialab-font-mono: 'JetBrains Mono', monospace;
+
+  /* Border radius */
+  --ialab-radius-sm: 0.5rem;
+  --ialab-radius-md: 0.75rem;
+  --ialab-radius-lg: 1rem;
+  --ialab-radius-xl: 1.5rem;
+
+  /* Transitions */
+  --ialab-transition-fast: 150ms ease;
+  --ialab-transition-base: 200ms ease;
+  --ialab-transition-slow: 300ms ease;
 }
 
 /* ==================== MODO OSCURO ==================== */
 @media (prefers-color-scheme: dark) {
   :root {
-    /* Ajustes específicos para modo oscuro */
     --color-background-light: #0A1628;
     --color-background-dark: #FFFFFF;
     --color-gray-50: #0F172A;
@@ -278,6 +370,59 @@
     --color-gray-800: #F1F5F9;
     --color-gray-900: #F8FAFC;
   }
+}
+
+html.dark,
+:root.dark {
+  --color-petroleum: #4DA8C4;
+  --color-petroleum-dark: #7CC4D9;
+  --color-petroleum-darker: #B2D8E5;
+  --color-corporate: #66CCCC;
+  --color-corporate-dark: #8EDEDE;
+  --color-corporate-darker: #B2E8E8;
+  --color-corporate-deep: #003A4D;
+  --color-soft-blue: #4DA8C4;
+  --color-mint: #7CC4D9;
+  --color-navy: #B2D8E5;
+  --color-success: #34D399;
+
+  --color-bg-dark: #0A1628;
+  --color-bg-light: #0F172A;
+  --color-bg-card: #1E293B;
+  --color-bg-card-dark: #0F172A;
+  --color-bg-glass: rgba(77, 168, 196, 0.08);
+  --color-bg-glass-dark: rgba(77, 168, 196, 0.15);
+
+  --color-border-light: #334155;
+  --color-border-dark: #475569;
+  --color-border-glass: rgba(77, 168, 196, 0.15);
+
+  --color-text-main: #E2E8F0;
+  --color-text-sub: #94A3B8;
+  --color-text-light: #64748B;
+  --color-text-dark: #F1F5F9;
+  --color-text-inverse: #0F172A;
+
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --shadow-glass-lg: 0 12px 48px rgba(0, 0, 0, 0.5);
+  --shadow-glass-accent: 0 8px 32px rgba(102, 204, 204, 0.2);
+  --shadow-glass-border: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --shadow-premium: 0 4px 24px rgba(0, 0, 0, 0.3);
+  --shadow-premium-lg: 0 8px 40px rgba(0, 0, 0, 0.4);
+  --shadow-inner-glow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  --shadow-outer-glow: 0 0 20px rgba(102, 204, 204, 0.15);
+
+  --ialab-bg: #0A1628;
+  --ialab-surface: #1E293B;
+  --ialab-border: rgba(77, 168, 196, 0.1);
+  --ialab-border-medium: rgba(77, 168, 196, 0.2);
+  --ialab-border-strong: rgba(77, 168, 196, 0.3);
+  --ialab-glass-bg: rgba(15, 23, 42, 0.85);
+  --ialab-glass-border: rgba(102, 204, 204, 0.15);
+  --ialab-glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --ialab-gradient-primary: linear-gradient(135deg, #4DA8C4 0%, #66CCCC 100%);
+  --ialab-gradient-cyan: linear-gradient(135deg, #66CCCC 0%, #8EDEDE 100%);
+  --ialab-gradient-dark: linear-gradient(135deg, #0A1628 0%, #1E293B 100%);
 }
 
 /* ==================== UTILIDADES CSS ==================== */

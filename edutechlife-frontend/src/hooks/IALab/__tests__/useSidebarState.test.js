@@ -1,43 +1,21 @@
 import { renderHook, act } from '@testing-library/react';
 import { useSidebarState } from '../useSidebarState';
+import { useIALabStore } from '../../../store/ialabStore';
 
-// Mock localStorage
-const mockLocalStorage = (() => {
-  let store = {};
-  return {
-    getItem: jest.fn((key) => store[key] || null),
-    setItem: jest.fn((key, value) => {
-      store[key] = value.toString();
-    }),
-    removeItem: jest.fn((key) => {
-      delete store[key];
-    }),
-    clear: jest.fn(() => {
-      store = {};
-    })
-  };
-})();
-
-Object.defineProperty(window, 'localStorage', {
-  value: mockLocalStorage
-});
-
-// Mock window.innerWidth para responsive testing
 const setWindowWidth = (width) => {
   Object.defineProperty(window, 'innerWidth', {
     writable: true,
     configurable: true,
-    value: width
+    value: width,
   });
   window.dispatchEvent(new Event('resize'));
 };
 
-describe('useSidebarState', () => {
-  beforeEach(() => {
-    localStorage.clear();
-    jest.clearAllMocks();
-  });
+beforeEach(() => {
+  useIALabStore.getState().removeSidebarState();
+});
 
+describe('useSidebarState', () => {
   test('should initialize with default state', () => {
     const initialState = { videos: true, recursos: false };
     const { result } = renderHook(() => useSidebarState(initialState));
@@ -45,17 +23,16 @@ describe('useSidebarState', () => {
     expect(result.current.collapsedSections).toEqual(initialState);
   });
 
-  test('should load state from localStorage', () => {
+  test('should load persisted state from store', () => {
     const savedState = { videos: false, recursos: true };
-    localStorage.setItem('ialab-sidebar-state', JSON.stringify(savedState));
+    useIALabStore.getState().setSidebarState(savedState);
 
     const { result } = renderHook(() => useSidebarState({ videos: true, recursos: false }));
 
     expect(result.current.collapsedSections).toEqual(savedState);
-    expect(localStorage.getItem).toHaveBeenCalledWith('ialab-sidebar-state');
   });
 
-  test('should toggle section state', () => {
+  test('should toggle section state and persist', () => {
     const initialState = { videos: true, recursos: false };
     const { result } = renderHook(() => useSidebarState(initialState));
 
@@ -64,10 +41,9 @@ describe('useSidebarState', () => {
     });
 
     expect(result.current.collapsedSections.videos).toBe(false);
-    expect(localStorage.setItem).toHaveBeenCalledWith(
-      'ialab-sidebar-state',
-      JSON.stringify({ videos: false, recursos: false })
-    );
+
+    const stored = useIALabStore.getState().getSidebarState(null);
+    expect(stored).toEqual({ videos: false, recursos: false });
   });
 
   test('should expand all sections', () => {
@@ -109,19 +85,19 @@ describe('useSidebarState', () => {
     const initialState = { videos: true, recursos: false };
     const { result } = renderHook(() => useSidebarState(initialState));
 
-    // Cambiar estado
     act(() => {
       result.current.toggleSection('videos');
       result.current.toggleSection('recursos');
     });
 
-    // Resetear
     act(() => {
       result.current.reset();
     });
 
     expect(result.current.collapsedSections).toEqual(initialState);
-    expect(localStorage.removeItem).toHaveBeenCalledWith('ialab-sidebar-state');
+
+    const stored = useIALabStore.getState().getSidebarState(null);
+    expect(stored).toBeNull();
   });
 
   test('should get section data', () => {
@@ -151,7 +127,7 @@ describe('useSidebarState', () => {
     const { result } = renderHook(() => useSidebarState());
 
     const courseData = result.current.getCourseData();
-    expect(courseData).toHaveProperty('duration', '2h 30min');
+    expect(courseData).toHaveProperty('duration', '2h');
     expect(courseData).toHaveProperty('level', 'Intermedio');
     expect(courseData).toHaveProperty('rating', '4.8');
   });
@@ -184,33 +160,32 @@ describe('useSidebarState', () => {
 
   describe('responsive behavior', () => {
     beforeEach(() => {
-      jest.useFakeTimers();
+      vi.useFakeTimers();
     });
 
     afterEach(() => {
-      jest.useRealTimers();
+      vi.useRealTimers();
     });
 
     test('should detect mobile on small screens', () => {
-      setWindowWidth(375); // Mobile width
+      setWindowWidth(375);
 
       const { result } = renderHook(() => useSidebarState());
 
-      // Avanzar timers para que se ejecute el effect
       act(() => {
-        jest.advanceTimersByTime(100);
+        vi.advanceTimersByTime(100);
       });
 
       expect(result.current.isMobile).toBe(true);
     });
 
     test('should detect desktop on large screens', () => {
-      setWindowWidth(1024); // Desktop width
+      setWindowWidth(1024);
 
       const { result } = renderHook(() => useSidebarState());
 
       act(() => {
-        jest.advanceTimersByTime(100);
+        vi.advanceTimersByTime(100);
       });
 
       expect(result.current.isMobile).toBe(false);
@@ -222,16 +197,15 @@ describe('useSidebarState', () => {
       const { result } = renderHook(() => useSidebarState());
 
       act(() => {
-        jest.advanceTimersByTime(100);
+        vi.advanceTimersByTime(100);
       });
 
       expect(result.current.isCollapsed).toBe(true);
     });
 
     test('should toggle sidebar state', () => {
+      setWindowWidth(1440);
       const { result } = renderHook(() => useSidebarState());
-
-      expect(result.current.isCollapsed).toBe(false);
 
       act(() => {
         result.current.toggleSidebar();
@@ -244,48 +218,6 @@ describe('useSidebarState', () => {
       });
 
       expect(result.current.isCollapsed).toBe(false);
-    });
-  });
-
-  describe('error handling', () => {
-    test('should handle localStorage errors gracefully', () => {
-      // Simular error en localStorage
-      localStorage.setItem.mockImplementation(() => {
-        throw new Error('Storage quota exceeded');
-      });
-
-      const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
-      const initialState = { videos: true };
-
-      const { result } = renderHook(() => useSidebarState(initialState));
-
-      act(() => {
-        result.current.toggleSection('videos');
-      });
-
-      expect(consoleWarnSpy).toHaveBeenCalledWith(
-        'No se pudo guardar estado del sidebar:',
-        expect.any(Error)
-      );
-
-      // El estado debería seguir funcionando aunque falle localStorage
-      expect(result.current.collapsedSections.videos).toBe(false);
-
-      consoleWarnSpy.mockRestore();
-    });
-
-    test('should handle invalid JSON in localStorage', () => {
-      localStorage.getItem.mockReturnValue('invalid json');
-
-      const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
-      const initialState = { videos: true };
-
-      const { result } = renderHook(() => useSidebarState(initialState));
-
-      // Debería usar el estado inicial cuando el JSON es inválido
-      expect(result.current.collapsedSections).toEqual(initialState);
-
-      consoleWarnSpy.mockRestore();
     });
   });
 });

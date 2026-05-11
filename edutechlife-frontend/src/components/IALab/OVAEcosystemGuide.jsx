@@ -125,8 +125,8 @@ const generateSectionTextToSpeech = (section) => {
 
 const WelcomeScreen = ({ onNext }) => (
   <div className="flex flex-col items-center justify-center min-h-[60vh] text-center animate-fade-in px-4 py-8">
-    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 text-[#004B63] font-semibold text-sm mb-4">
-      <Bot size={16} className="text-[#00BCD4]" /><span>Laboratorio Guiado por Valerio</span>
+    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 text-petroleum font-semibold text-sm mb-4">
+      <Bot size={16} className="text-corporate" /><span>Laboratorio Guiado por Valerio</span>
     </div>
     <EdutechLogo />
     <h1 className="text-3xl md:text-5xl font-black mt-6 mb-3 leading-tight tracking-tight text-[#133c55]">{infographicData.header.title}</h1>

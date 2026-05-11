@@ -49,10 +49,6 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
     const saveDraftTimerRef = useRef(null);
     const hasRestoredDraftRef = useRef(false);
 
-    // Debug logging
-    console.log('🎯 [DEBUG] IALabEvaluationModal renderizando');
-    console.log('🎯 [DEBUG] Props:', { isOpen, isPremium, moduleId });
-
     // Inicializar evaluación cuando se abre el modal
     useEffect(() => {
         if (isOpen && !state.exercises && !state.loading) {
@@ -81,7 +77,6 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
                         if (draft.ej1) setResponse('ej1', draft.ej1);
                         if (draft.ej2) setResponse('ej2', draft.ej2);
                         if (draft.ej3) setResponse('ej3', draft.ej3);
-                        console.log('📝 Borrador de desafío restaurado');
                     }
                 } catch (err) {
                     console.warn('⚠️ Error restaurando borrador:', err);
@@ -115,7 +110,6 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
                     }, {
                         onConflict: 'user_id,module_id,activity_type,resource_id',
                     });
-                console.log('💾 Borrador auto-guardado');
             } catch (err) {
                 console.warn('⚠️ Error auto-guardando borrador:', err);
             }
@@ -140,7 +134,6 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
                         .eq('module_id', moduleId)
                         .eq('activity_type', 'challenge_draft')
                         .is('resource_id', null);
-                    console.log('🗑️ Borrador limpiado tras completar desafío');
                 } catch (err) {
                     console.warn('⚠️ Error limpiando borrador:', err);
                 }
@@ -282,7 +275,7 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
 
     // Render header con progreso
     const renderHeader = () => (
-        <div className="bg-gradient-to-r from-[#004B63] to-[#00BCD4] border-b border-white/10 px-6 py-4 flex items-center justify-between z-50">
+        <div className="bg-gradient-to-r from-petroleum to-corporate border-b border-white/10 px-6 py-4 flex items-center justify-between z-50">
             <button 
                 onClick={handleCloseModal}
                 className="flex items-center gap-2 text-white/80 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition-colors"
@@ -298,7 +291,7 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
                     <div className="text-sm text-white/80">Paso {state.step} de 3</div>
                     <div className="w-32 h-2 bg-white/20 rounded-full overflow-hidden">
                         <div 
-                            className="h-full bg-[#004B63] transition-all duration-500"
+                            className="h-full bg-petroleum transition-all duration-500"
                             style={{ width: `${(state.step / 3) * 100}%` }}
                         ></div>
                     </div>
@@ -317,8 +310,8 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
     // Render loading state
     const renderLoading = () => (
         <div className="flex-1 flex flex-col items-center justify-center p-8">
-            <div className="w-20 h-20 rounded-full bg-gradient-to-r from-[#004B63]/20 to-[#00BCD4]/20 flex items-center justify-center mb-6">
-                <div className="w-10 h-10 border-3 border-[#00BCD4] border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-20 h-20 rounded-full bg-gradient-to-r from-petroleum/20 to-corporate/20 flex items-center justify-center mb-6">
+                <div className="w-10 h-10 border-3 border-corporate border-t-transparent rounded-full animate-spin"></div>
             </div>
             <h3 className="text-xl font-bold text-slate-700 mb-2">
                 {state.step === 'loading' ? 'La IA está diseñando tu desafío...' : 'Edutechlife está evaluando tus respuestas...'}
@@ -339,7 +332,7 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
             <p className="text-slate-500 text-center max-w-md mb-6">{state.error}</p>
             <button
                 onClick={generateExercises}
-                className="px-6 py-3 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300"
+                className="px-6 py-3 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300"
             >
                 <Icon name="fa-redo" className="mr-2" />
                 Reintentar
@@ -356,16 +349,16 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
                     {/* Título del paso actual */}
                     <div className="mb-8">
                         <div className="flex items-center gap-3 mb-4">
-                            <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-[#004B63] to-[#00BCD4] flex items-center justify-center">
+                            <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center">
                                 <Icon name="fa-clipboard-check" className="text-white text-xl" />
                             </div>
                             <div>
-                                <h2 className="text-2xl font-bold text-slate-800">
+                                <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">
                                     {state.step === 1 && 'Paso 1: Identificar'}
                                     {state.step === 2 && 'Paso 2: Optimizar'}
                                     {state.step === 3 && 'Paso 3: Crear'}
                                 </h2>
-                                <p className="text-slate-500">
+                                <p className="text-slate-500 dark:text-slate-400">
                                     {state.step === 1 && 'Analiza el escenario y clasifica los elementos clave'}
                                     {state.step === 2 && 'Mejora el prompt mal redactado'}
                                     {state.step === 3 && 'Crea un prompt desde cero para el caso de uso'}
@@ -376,7 +369,7 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
 
                     {/* Contenido del paso actual */}
                     <div 
-                        className="bg-white border border-slate-200 rounded-2xl p-6 mb-8"
+                        className="bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700 rounded-2xl p-6 mb-8"
                         onCopy={handleSecurityEvent}
                         onPaste={handleSecurityEvent}
                         onCut={handleSecurityEvent}
@@ -410,7 +403,7 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
                         <button
                             onClick={handlePrevStep}
                             disabled={state.step === 1 || state.loading}
-                            className="px-6 py-3 border-2 border-slate-200 text-slate-700 rounded-xl hover:bg-slate-100 hover:border-slate-300 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="px-6 py-3 border-2 border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-500 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <Icon name="fa-arrow-left" className="mr-2" />
                             Anterior
@@ -425,7 +418,7 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
                                 <button
                                     onClick={handleNextStep}
                                     disabled={!state.responses[`ej${state.step}`] || state.loading}
-                                    className="px-6 py-3 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="px-6 py-3 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     Siguiente
                                     <Icon name="fa-arrow-right" className="ml-2" />
@@ -466,7 +459,7 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
             <AnimatePresence>
                 {isVisible && (
                     <motion.div 
-                        className="fixed inset-0 z-[100] bg-slate-50 flex flex-col"
+                        className="fixed inset-0 z-[100] bg-slate-50 dark:bg-slate-900 flex flex-col"
                         onCopy={handleSecurityEvent}
                         onPaste={handleSecurityEvent}
                         onCut={handleSecurityEvent}
@@ -487,10 +480,10 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
                         {/* Watermark de seguridad anti-screenshot */}
                         {state.step !== 'results' && (
                             <div className="fixed inset-0 pointer-events-none z-[101] opacity-[0.03] select-none" style={{
-                                background: `repeating-linear-gradient(45deg, #004B63, #004B63 2px, transparent 2px, transparent 60px)`,
+                                background: `repeating-linear-gradient(45deg, var(--color-petroleum), var(--color-petroleum) 2px, transparent 2px, transparent 60px)`,
                             }}>
                                 <div className="absolute inset-0 flex items-center justify-center">
-                                    <span className="text-[#004B63] text-8xl font-bold transform -rotate-12 select-none" style={{ whiteSpace: 'nowrap' }}>
+                                    <span className="text-petroleum dark:text-[#4DA8C4] text-8xl font-bold transform -rotate-12 select-none" style={{ whiteSpace: 'nowrap' }}>
                                         EDUTECHLIFE
                                     </span>
                                 </div>

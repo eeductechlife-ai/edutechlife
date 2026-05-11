@@ -47,8 +47,6 @@ export const useIALabSynthesizer = () => {
 
     // Optimizar prompt con DeepSeek API o análisis local
     const optimizePrompt = useCallback(async (userPrompt) => {
-        console.log('🚀 [DEBUG] optimizePrompt llamado con:', userPrompt.substring(0, 50) + '...');
-        
         if (!userPrompt.trim()) {
             setError('Por favor, ingresa una idea para convertir en prompt');
             return null;
@@ -74,11 +72,9 @@ export const useIALabSynthesizer = () => {
             const deepSeekResult = await (async () => {
                 setIsGenerating(true);
                 setLoadMsg('Conectando con DeepSeek API...');
-                console.log('🔗 [DEBUG] Intentando conectar con DeepSeek API...');
                 
                 try {
                     const apiKey = import.meta.env.VITE_DEEPSEEK_API_KEY || '';
-                    console.log('🔑 [DEBUG] API Key presente:', apiKey ? 'Sí (longitud: ' + apiKey.length + ')' : 'No');
                     
                     const response = await fetch('https://api.deepseek.com/chat/completions', {
                         method: 'POST',
@@ -106,29 +102,26 @@ export const useIALabSynthesizer = () => {
                         })
                     });
                     
-                    console.log('📡 [DEBUG] Respuesta de API recibida. Status:', response.status);
                     
                     if (!response.ok) {
                         const errorText = await response.text();
-                        console.error('❌ [DEBUG] Error de API:', response.status, errorText);
+                        console.error('❌ Error de API:', response.status, errorText);
                         throw new Error(`API Error ${response.status}: ${errorText}`);
                     }
                     
                     const data = await response.json();
-                    console.log('✅ [DEBUG] Datos de API recibidos:', data);
                     
                     if (!data.choices || !data.choices[0] || !data.choices[0].message) {
-                        console.error('❌ [DEBUG] Estructura de respuesta inválida:', data);
+                        console.error('❌ Estructura de respuesta inválida:', data);
                         throw new Error('Respuesta de API inválida');
                     }
                     
                     const result = JSON.parse(data.choices[0].message.content);
-                    console.log('🎯 [DEBUG] Resultado parseado:', result);
                     setDeepSeekResult(result);
                     return result;
                     
                 } catch (error) {
-                    console.error('❌ [DEBUG] DeepSeek API Error completo:', error);
+                    console.error('❌ DeepSeek API Error completo:', error);
                     setApiError(`Error con DeepSeek API: ${error.message}. Usando sistema local...`);
                     return null;
                 } finally {

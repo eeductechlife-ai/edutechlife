@@ -9,11 +9,11 @@ import { speakTextConversational, stopSpeech } from '../../utils/speech';
 
 const Logo = () => (
     <div className="flex items-center gap-2">
-        <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#00BCD4] to-[#004B63] flex items-center justify-center shadow-sm text-white">
+        <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-corporate to-petroleum flex items-center justify-center shadow-sm text-white">
             <GraduationCap size={22} strokeWidth={2.5} />
         </div>
         <span className="text-2xl font-bold tracking-tight" style={{ letterSpacing: '-0.02em' }}>
-            <span className="text-[#00BCD4]">Edu</span><span className="text-[#004B63]">techlife</span>
+            <span className="text-corporate">Edu</span><span className="text-petroleum">techlife</span>
         </span>
     </div>
 );
@@ -21,9 +21,9 @@ const Logo = () => (
 const Button = ({ children, onClick, variant = 'primary', className = '', icon: Icon = null, disabled = false }) => {
     const baseStyle = "flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100";
     const variants = {
-        primary: "bg-gradient-to-r from-[#00BCD4] to-[#0097A7] text-white shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 hover:-translate-y-0.5",
-        secondary: "bg-white text-[#004B63] border-2 border-[#E0F7FA] hover:border-[#00BCD4] hover:bg-[#F0FDFF]",
-        outline: "bg-transparent text-[#00BCD4] border-2 border-[#00BCD4] hover:bg-[#00BCD4] hover:text-white",
+        primary: "bg-gradient-to-r from-corporate to-corporate-dark text-white shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 hover:-translate-y-0.5",
+        secondary: "bg-white text-petroleum border-2 border-[#E0F7FA] hover:border-corporate hover:bg-[#F0FDFF]",
+        outline: "bg-transparent text-corporate border-2 border-corporate hover:bg-corporate hover:text-white",
     };
 
     return (
@@ -50,7 +50,7 @@ const VoiceReader = ({ text }) => {
     return (
         <button
             onClick={speak}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${isPlaying ? 'bg-red-100 text-red-600 hover:bg-red-200' : 'bg-[#E0F7FA] text-[#004B63] hover:bg-[#B2EBF2]'}`}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${isPlaying ? 'bg-red-100 text-red-600 hover:bg-red-200' : 'bg-[#E0F7FA] text-petroleum hover:bg-[#B2EBF2]'}`}
             title="Escuchar con voz de Valerio"
         >
             {isPlaying ? <Square size={16} /> : <Volume2 size={16} />}
@@ -70,12 +70,12 @@ const WelcomeScreen = ({ onNext }) => (
         <div className="mb-8 transform hover:scale-105 transition-transform duration-500">
             <Logo />
         </div>
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 text-[#004B63] font-semibold text-sm mb-6">
-            <Bot size={16} className="text-[#00BCD4]" />
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 text-petroleum font-semibold text-sm mb-6">
+            <Bot size={16} className="text-corporate" />
             <span>Laboratorio Guiado por Valerio</span>
         </div>
-        <h1 className="text-4xl md:text-6xl font-extrabold text-[#004B63] mb-6 leading-tight">
-            Construye tu <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00BCD4] to-[#0097A7]">GPT Personalizado</span>
+        <h1 className="text-4xl md:text-6xl font-extrabold text-petroleum mb-6 leading-tight">
+            Construye tu <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-corporate to-corporate-dark">GPT Personalizado</span>
         </h1>
         <p className="text-lg md:text-xl text-gray-600 mb-6 max-w-2xl">
             Hola, soy Valerio, tu coach de IA. En este laboratorio te guiaré paso a paso para que crees tu propio GPT con acciones y conexiones a APIs externas. ¡Vamos allá!
@@ -99,7 +99,7 @@ const IntroScreen = ({ onNext, addXp }) => {
                 <div className="flex flex-col md:flex-row gap-8 items-center">
                     <div className="flex-1 space-y-6">
                         <div className="flex items-center justify-between">
-                            <h2 className="text-3xl font-bold text-[#004B63]">¿Qué es un GPT Personalizado?</h2>
+                            <h2 className="text-3xl font-bold text-petroleum">¿Qué es un GPT Personalizado?</h2>
                         </div>
                         <VoiceReader text={introText} />
                         <p className="text-gray-700 text-lg leading-relaxed">
@@ -108,21 +108,21 @@ const IntroScreen = ({ onNext, addXp }) => {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                             <div className="bg-[#F0FDFF] p-5 rounded-xl border border-[#E0F7FA]">
-                                <Bot className="text-[#00BCD4] mb-3" size={28} />
-                                <h3 className="font-bold text-[#004B63] mb-2">GPT Personalizado</h3>
+                                <Bot className="text-corporate mb-3" size={28} />
+                                <h3 className="font-bold text-petroleum mb-2">GPT Personalizado</h3>
                                 <p className="text-sm text-gray-600">Sigue instrucciones específicas, usa tu base de conocimiento y se conecta con APIs externas.</p>
                             </div>
-                            <div className="bg-gradient-to-br from-[#00BCD4]/10 to-[#004B63]/10 p-5 rounded-xl border border-[#00BCD4]/30 shadow-sm relative overflow-hidden">
-                                <div className="absolute top-0 right-0 p-2"><CheckCircle className="text-[#00BCD4]" size={20}/></div>
-                                <Workflow className="text-[#004B63] mb-3" size={28} />
-                                <h3 className="font-bold text-[#004B63] mb-2">Acciones (APIs)</h3>
+                            <div className="bg-gradient-to-br from-corporate/10 to-petroleum/10 p-5 rounded-xl border border-corporate/30 shadow-sm relative overflow-hidden">
+                                <div className="absolute top-0 right-0 p-2"><CheckCircle className="text-corporate" size={20}/></div>
+                                <Workflow className="text-petroleum mb-3" size={28} />
+                                <h3 className="font-bold text-petroleum mb-2">Acciones (APIs)</h3>
                                 <p className="text-sm text-gray-600">Conecta tu GPT con servicios externos como Google Sheets, Slack o tu propia API.</p>
                             </div>
                         </div>
                         <Button onClick={onNext} icon={ChevronRight} className="mt-4">Crear mi Primer GPT</Button>
                     </div>
                     <div className="flex-1 w-full relative">
-                        <div className="absolute inset-0 bg-gradient-to-tr from-[#00BCD4] to-[#004B63] rounded-full blur-3xl opacity-20 animate-pulse"></div>
+                        <div className="absolute inset-0 bg-gradient-to-tr from-corporate to-petroleum rounded-full blur-3xl opacity-20 animate-pulse"></div>
                         <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="IA Educativa" className="rounded-2xl shadow-2xl relative z-10 object-cover h-80 w-full" />
                     </div>
                 </div>
@@ -151,14 +151,14 @@ const ModuleSlack = ({ onNext, addXp }) => {
 
     return (
         <div className="max-w-4xl mx-auto animate-fade-in">
-            <h2 className="text-3xl font-bold text-[#004B63] mb-2">Paso 1: Configurar un GPT para Slack</h2>
+            <h2 className="text-3xl font-bold text-petroleum mb-2">Paso 1: Configurar un GPT para Slack</h2>
             <p className="text-gray-600 mb-6">Transforma la comunicación educativa con un GPT conectado a tu equipo.</p>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <Card className="col-span-1 flex flex-col justify-between">
                     <div>
-                        <MessageSquare className="text-[#00BCD4] w-12 h-12 mb-4" />
-                        <h3 className="text-xl font-bold text-[#004B63] mb-3">¿Qué puede hacer?</h3>
+                        <MessageSquare className="text-corporate w-12 h-12 mb-4" />
+                        <h3 className="text-xl font-bold text-petroleum mb-3">¿Qué puede hacer?</h3>
                         <ul className="space-y-3">
                             {['Resumir reuniones automáticamente', 'Responder dudas frecuentes de alumnos', 'Generar ideas para clase'].map((item, i) => (
                                 <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
@@ -178,7 +178,7 @@ const ModuleSlack = ({ onNext, addXp }) => {
                     <div className="space-y-4 mb-6 min-h-[200px]">
                         {messages.map((msg, i) => (
                             <div key={i} className={`flex gap-3 animate-fade-in ${msg.isBot ? 'bg-white p-3 rounded-lg border border-cyan-100 shadow-sm' : ''}`}>
-                                <div className={`w-8 h-8 rounded-md flex items-center justify-center text-white font-bold flex-shrink-0 ${msg.isBot ? 'bg-[#00BCD4]' : 'bg-purple-600'}`}>
+                                <div className={`w-8 h-8 rounded-md flex items-center justify-center text-white font-bold flex-shrink-0 ${msg.isBot ? 'bg-corporate' : 'bg-purple-600'}`}>
                                     {msg.isBot ? <Bot size={18}/> : 'A'}
                                 </div>
                                 <div>
@@ -214,7 +214,7 @@ const ModuleGoogle = ({ onNext, addXp }) => {
 
     return (
         <div className="max-w-4xl mx-auto animate-fade-in">
-            <h2 className="text-3xl font-bold text-[#004B63] mb-2">Paso 2: GPT + Google Workspace</h2>
+            <h2 className="text-3xl font-bold text-petroleum mb-2">Paso 2: GPT + Google Workspace</h2>
             <p className="text-gray-600 mb-6">Conecta tu GPT con Gmail, Google Docs y Sheets.</p>
 
             <Card className="mb-6">
@@ -266,14 +266,14 @@ const ModuleMakeZapier = ({ onNext, addXp }) => {
 
     return (
         <div className="max-w-4xl mx-auto animate-fade-in">
-            <h2 className="text-3xl font-bold text-[#004B63] mb-2">Paso 3: Acciones con APIs Externas</h2>
+            <h2 className="text-3xl font-bold text-petroleum mb-2">Paso 3: Acciones con APIs Externas</h2>
             <p className="text-gray-600 mb-6">Conecta tu GPT con el mundo exterior mediante Acciones personalizadas.</p>
 
             <div className="flex gap-4 mb-6">
-                <button onClick={() => setTab('make')} className={`flex-1 py-3 font-bold rounded-xl transition-all ${tab === 'make' ? 'bg-[#004B63] text-white shadow-lg' : 'bg-white text-slate-500 border hover:border-[#004B63]'}`}>
+                <button onClick={() => setTab('make')} className={`flex-1 py-3 font-bold rounded-xl transition-all ${tab === 'make' ? 'bg-petroleum text-white shadow-lg' : 'bg-white text-slate-500 border hover:border-petroleum'}`}>
                     <Workflow className="inline mr-2" size={20}/> API REST
                 </button>
-                <button onClick={() => setTab('zapier')} className={`flex-1 py-3 font-bold rounded-xl transition-all ${tab === 'zapier' ? 'bg-[#00BCD4] text-white shadow-lg' : 'bg-white text-slate-500 border hover:border-[#00BCD4]'}`}>
+                <button onClick={() => setTab('zapier')} className={`flex-1 py-3 font-bold rounded-xl transition-all ${tab === 'zapier' ? 'bg-corporate text-white shadow-lg' : 'bg-white text-slate-500 border hover:border-corporate'}`}>
                     <Zap className="inline mr-2" size={20}/> Webhooks
                 </button>
             </div>
@@ -283,7 +283,7 @@ const ModuleMakeZapier = ({ onNext, addXp }) => {
                     <div className="animate-fade-in">
                         <div className="flex justify-between items-start mb-6">
                             <div>
-                                <h3 className="text-2xl font-bold text-[#004B63] mb-2">Conectar con APIs REST</h3>
+                                <h3 className="text-2xl font-bold text-petroleum mb-2">Conectar con APIs REST</h3>
                                 <p className="text-gray-600">Tu GPT puede llamar a cualquier API externa usando las Acciones de OpenAI.</p>
                             </div>
                             <VoiceReader text="Las Acciones de GPT funcionan como un puente: defines una especificación OpenAPI y tu GPT puede llamar a servicios externos. Por ejemplo, consultar el clima, buscar en una base de datos, o enviar notificaciones." />
@@ -296,7 +296,7 @@ const ModuleMakeZapier = ({ onNext, addXp }) => {
                             </div>
                             <div className="w-12 h-1 bg-slate-300"></div>
                             <div className="flex flex-col items-center">
-                                <div className="w-16 h-16 bg-[#00BCD4] rounded-full flex items-center justify-center text-white shadow-lg z-10"><Bot/></div>
+                                <div className="w-16 h-16 bg-corporate rounded-full flex items-center justify-center text-white shadow-lg z-10"><Bot/></div>
                                 <span className="text-xs font-bold mt-2 text-slate-600">GPT Procesa</span>
                             </div>
                             <div className="w-12 h-1 bg-slate-300"></div>
@@ -306,7 +306,7 @@ const ModuleMakeZapier = ({ onNext, addXp }) => {
                             </div>
                             <div className="w-12 h-1 bg-slate-300"></div>
                             <div className="flex flex-col items-center">
-                                <div className="w-14 h-14 bg-[#004B63] rounded-full flex items-center justify-center text-white shadow-lg z-10"><CheckCircle/></div>
+                                <div className="w-14 h-14 bg-petroleum rounded-full flex items-center justify-center text-white shadow-lg z-10"><CheckCircle/></div>
                                 <span className="text-xs font-bold mt-2 text-slate-600">Respuesta</span>
                             </div>
                         </div>
@@ -315,7 +315,7 @@ const ModuleMakeZapier = ({ onNext, addXp }) => {
                     <div className="animate-fade-in">
                         <div className="flex justify-between items-start mb-6">
                             <div>
-                                <h3 className="text-2xl font-bold text-[#00BCD4] mb-2">Webhooks y Eventos</h3>
+                                <h3 className="text-2xl font-bold text-corporate mb-2">Webhooks y Eventos</h3>
                                 <p className="text-gray-600">Tu GPT puede reaccionar a eventos externos en tiempo real.</p>
                             </div>
                             <VoiceReader text="Los webhooks permiten que tu GPT reciba notificaciones cuando ocurre algo. Por ejemplo, cuando un estudiante entrega una tarea, el GPT puede automáticamente revisarla y dar retroalimentación." />
@@ -327,7 +327,7 @@ const ModuleMakeZapier = ({ onNext, addXp }) => {
                                     <tr>
                                         <th className="p-4 border-b">Característica</th>
                                         <th className="p-4 border-b font-bold text-[#004B63">API REST</th>
-                                        <th className="p-4 border-b font-bold text-[#00BCD4]">Webhooks</th>
+                                        <th className="p-4 border-b font-bold text-corporate">Webhooks</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -389,7 +389,7 @@ const ActivityBuilder = ({ onNext, addXp }) => {
         <div className="max-w-4xl mx-auto animate-fade-in">
             <div className="text-center mb-8">
                 <span className="inline-block px-4 py-1 rounded-full bg-orange-100 text-orange-600 font-bold text-sm mb-3">Actividad Práctica</span>
-                <h2 className="text-3xl font-bold text-[#004B63]">Diseña tu Propio GPT</h2>
+                <h2 className="text-3xl font-bold text-petroleum">Diseña tu Propio GPT</h2>
                 <p className="text-gray-600 mt-2">Selecciona las piezas para configurar tu GPT con acciones.</p>
             </div>
 
@@ -397,7 +397,7 @@ const ActivityBuilder = ({ onNext, addXp }) => {
                 <div className="flex justify-between items-center mb-8 relative">
                     <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-100 -z-10 -translate-y-1/2"></div>
                     {[1, 2, 3].map(i => (
-                        <div key={i} className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg transition-colors ${step >= i ? 'bg-[#00BCD4] text-white' : 'bg-slate-200 text-slate-400'}`}>
+                        <div key={i} className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg transition-colors ${step >= i ? 'bg-corporate text-white' : 'bg-slate-200 text-slate-400'}`}>
                             {i}
                         </div>
                     ))}
@@ -408,8 +408,8 @@ const ActivityBuilder = ({ onNext, addXp }) => {
                         <h3 className="text-xl font-bold text-center mb-6 text-slate-700">1. ¿Qué evento activará tu GPT?</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {triggers.map(t => (
-                                <button key={t.id} onClick={() => handleSelect('trigger', t.text)} className="p-6 border-2 border-slate-100 rounded-xl hover:border-[#00BCD4] hover:bg-cyan-50 flex flex-col items-center gap-3 transition-all">
-                                    <t.icon size={32} className="text-[#004B63]" />
+                                <button key={t.id} onClick={() => handleSelect('trigger', t.text)} className="p-6 border-2 border-slate-100 rounded-xl hover:border-corporate hover:bg-cyan-50 flex flex-col items-center gap-3 transition-all">
+                                    <t.icon size={32} className="text-petroleum" />
                                     <span className="font-semibold text-slate-700">{t.text}</span>
                                 </button>
                             ))}
@@ -421,8 +421,8 @@ const ActivityBuilder = ({ onNext, addXp }) => {
                         <h3 className="text-xl font-bold text-center mb-6 text-slate-700">2. ¿Qué debe hacer tu GPT con la información?</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {actions.map(a => (
-                                <button key={a.id} onClick={() => handleSelect('ai', a.text)} className="p-6 border-2 border-slate-100 rounded-xl hover:border-[#00BCD4] hover:bg-green-50 flex flex-col items-center gap-3 transition-all">
-                                    <a.icon size={32} className="text-[#00BCD4]" />
+                                <button key={a.id} onClick={() => handleSelect('ai', a.text)} className="p-6 border-2 border-slate-100 rounded-xl hover:border-corporate hover:bg-green-50 flex flex-col items-center gap-3 transition-all">
+                                    <a.icon size={32} className="text-corporate" />
                                     <span className="font-semibold text-slate-700">{a.text}</span>
                                 </button>
                             ))}
@@ -447,11 +447,11 @@ const ActivityBuilder = ({ onNext, addXp }) => {
                         <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 text-green-500">
                             <CheckCircle size={40} />
                         </div>
-                        <h3 className="text-2xl font-bold text-[#004B63] mb-4">¡GPT Configurado!</h3>
+                        <h3 className="text-2xl font-bold text-petroleum mb-4">¡GPT Configurado!</h3>
                         <div className="bg-slate-50 p-6 rounded-xl border inline-flex flex-col md:flex-row items-center gap-4 text-sm font-medium text-slate-700">
                             <span>{selections.trigger}</span>
                             <ArrowRight className="hidden md:block text-slate-300"/>
-                            <span className="text-[#00BCD4]">{selections.ai}</span>
+                            <span className="text-corporate">{selections.ai}</span>
                             <ArrowRight className="hidden md:block text-slate-300"/>
                             <span>{selections.dest}</span>
                         </div>
@@ -533,8 +533,8 @@ const QuizScreen = ({ onNext, addXp }) => {
 
     return (
         <div className="max-w-3xl mx-auto animate-fade-in pb-12">
-            <h2 className="text-3xl font-bold text-[#004B63] mb-6 flex items-center gap-3">
-                <CheckCircle className="text-[#00BCD4]" size={32}/> Evaluación Final
+            <h2 className="text-3xl font-bold text-petroleum mb-6 flex items-center gap-3">
+                <CheckCircle className="text-corporate" size={32}/> Evaluación Final
             </h2>
 
             {!showResult ? (
@@ -547,7 +547,7 @@ const QuizScreen = ({ onNext, addXp }) => {
                         {questions[currentQ].options.map((opt, i) => {
                             let btnClass = "w-full text-left p-4 rounded-xl border transition-all duration-300 ";
                             if (selected === null) {
-                                btnClass += "border-gray-200 hover:border-[#00BCD4] hover:bg-[#F0FDFF]";
+                                btnClass += "border-gray-200 hover:border-corporate hover:bg-[#F0FDFF]";
                             } else {
                                 if (i === questions[currentQ].answer) {
                                     btnClass += "bg-green-100 border-green-500 text-green-800 font-medium";
@@ -577,11 +577,11 @@ const QuizScreen = ({ onNext, addXp }) => {
                 </Card>
             ) : (
                 <Card className="text-center animate-scale-in">
-                    <div className="w-24 h-24 mx-auto bg-gradient-to-tr from-[#00BCD4] to-[#004B63] rounded-full flex items-center justify-center text-white text-4xl mb-6 shadow-lg shadow-cyan-200">
+                    <div className="w-24 h-24 mx-auto bg-gradient-to-tr from-corporate to-petroleum rounded-full flex items-center justify-center text-white text-4xl mb-6 shadow-lg shadow-cyan-200">
                         <Award size={48} />
                     </div>
-                    <h3 className="text-3xl font-bold text-[#004B63] mb-2">¡Evaluación Completada!</h3>
-                    <p className="text-xl text-gray-600 mb-6">Obtuviste <span className="font-bold text-[#00BCD4]">{score}</span> de <span className="font-bold">{questions.length}</span> aciertos.</p>
+                    <h3 className="text-3xl font-bold text-petroleum mb-2">¡Evaluación Completada!</h3>
+                    <p className="text-xl text-gray-600 mb-6">Obtuviste <span className="font-bold text-corporate">{score}</span> de <span className="font-bold">{questions.length}</span> aciertos.</p>
 
                     {score === questions.length ? (
                         <div className="bg-green-50 text-green-800 p-4 rounded-xl mb-8 border border-green-200">
@@ -609,10 +609,10 @@ const QuizScreen = ({ onNext, addXp }) => {
 const CertificateScreen = ({ xp }) => {
     return (
         <div className="max-w-4xl mx-auto animate-fade-in text-center">
-            <h2 className="text-4xl font-extrabold text-[#004B63] mb-4">¡Felicidades, Constructor de GPTs!</h2>
+            <h2 className="text-4xl font-extrabold text-petroleum mb-4">¡Felicidades, Constructor de GPTs!</h2>
             <p className="text-lg text-gray-600 mb-8">Has completado el laboratorio guiado por Valerio. Ahora sabes crear GPTs personalizados con acciones.</p>
 
-            <div className="bg-gradient-to-br from-[#004B63] to-[#002635] p-1 rounded-3xl shadow-2xl mb-10 max-w-2xl mx-auto transform hover:scale-105 transition-transform duration-500">
+            <div className="bg-gradient-to-br from-petroleum to-[#002635] p-1 rounded-3xl shadow-2xl mb-10 max-w-2xl mx-auto transform hover:scale-105 transition-transform duration-500">
                 <div className="bg-white rounded-[22px] p-8 md:p-12 border-4 border-transparent bg-clip-padding relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-100 rounded-bl-full -z-10 opacity-50"></div>
                     <div className="absolute bottom-0 left-0 w-32 h-32 bg-slate-100 rounded-tr-full -z-10 opacity-50"></div>
@@ -620,21 +620,21 @@ const CertificateScreen = ({ xp }) => {
                     <div className="flex justify-center mb-6">
                         <Logo />
                     </div>
-                    <div className="text-sm font-bold tracking-widest text-[#00BCD4] uppercase mb-2">Certificado de Finalización</div>
+                    <div className="text-sm font-bold tracking-widest text-corporate uppercase mb-2">Certificado de Finalización</div>
                     <h3 className="text-2xl md:text-3xl font-bold text-slate-800 mb-6">Laboratorio: Construye un GPT Personalizado</h3>
 
                     <div className="flex justify-center gap-8 text-slate-600 border-t border-b border-slate-100 py-4 mb-6">
                         <div>
                             <div className="text-xs uppercase tracking-wider">Puntaje XP</div>
-                            <div className="text-xl font-bold text-[#004B63]">{xp} / 1000</div>
+                            <div className="text-xl font-bold text-petroleum">{xp} / 1000</div>
                         </div>
                         <div>
                             <div className="text-xs uppercase tracking-wider">Coach</div>
-                            <div className="text-xl font-bold text-[#004B63]">Valerio</div>
+                            <div className="text-xl font-bold text-petroleum">Valerio</div>
                         </div>
                         <div>
                             <div className="text-xs uppercase tracking-wider">Fecha</div>
-                            <div className="text-xl font-bold text-[#004B63]">{new Date().toLocaleDateString()}</div>
+                            <div className="text-xl font-bold text-petroleum">{new Date().toLocaleDateString()}</div>
                         </div>
                     </div>
 
@@ -678,7 +678,7 @@ export default function OVABuildGPT() {
     ];
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-[#F0FDFF] to-[#E0F7FA] font-sans selection:bg-[#00BCD4] selection:text-white">
+        <div className="min-h-screen bg-gradient-to-br from-[#F0FDFF] to-[#E0F7FA] font-sans selection:bg-corporate selection:text-white">
             <style>{`
                 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
                 @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
@@ -696,9 +696,9 @@ export default function OVABuildGPT() {
                             <div className="hidden sm:block text-sm font-semibold text-slate-500">
                                 Paso {currentScreen} de {screens.length - 2}
                             </div>
-                            <div className="flex items-center gap-2 bg-[#F0FDFF] px-4 py-1.5 rounded-full border border-[#00BCD4]/20">
+                            <div className="flex items-center gap-2 bg-[#F0FDFF] px-4 py-1.5 rounded-full border border-corporate/20">
                                 <Star className="text-yellow-500 fill-current" size={16} />
-                                <span className="font-bold text-[#004B63]">{xp} XP</span>
+                                <span className="font-bold text-petroleum">{xp} XP</span>
                             </div>
                         </div>
                     )}
@@ -706,7 +706,7 @@ export default function OVABuildGPT() {
                 {currentScreen > 0 && (
                     <div className="h-1.5 w-full bg-slate-100">
                         <div
-                            className="h-full bg-gradient-to-r from-[#00BCD4] to-[#0097A7] transition-all duration-1000 ease-out"
+                            className="h-full bg-gradient-to-r from-corporate to-corporate-dark transition-all duration-1000 ease-out"
                             style={{ width: `${(xp / totalXp) * 100}%` }}
                         />
                     </div>
@@ -719,7 +719,7 @@ export default function OVABuildGPT() {
 
             {currentScreen > 0 && (
                 <footer className="border-t border-slate-200 mt-12 py-8 text-center text-slate-500 text-sm">
-                    <p>Laboratorio guiado por <strong className="text-[#00BCD4]">Valerio</strong> — Coach de IA de Edutechlife.</p>
+                    <p>Laboratorio guiado por <strong className="text-corporate">Valerio</strong> — Coach de IA de Edutechlife.</p>
                 </footer>
             )}
         </div>

@@ -152,7 +152,7 @@ Eres un [especificar rol experto]
             {/* Instrucciones */}
             <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
                 <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[#004B63] to-[#00BCD4] flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center">
                         <Icon name="fa-magic" className="text-white text-lg" />
                     </div>
                     <div>
@@ -210,7 +210,7 @@ Eres un [especificar rol experto]
                         value={optimizedPrompt}
                         onChange={(e) => handleChange(e.target.value)}
                         placeholder="Escribe aquí tu prompt optimizado. Sé específico, claro y estructurado..."
-                        className="w-full h-64 bg-white border-2 border-slate-200 rounded-xl p-5 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-[#00BCD4] focus:ring-2 focus:ring-[#00BCD4]/20 resize-none font-mono text-sm leading-relaxed"
+                        className="w-full h-64 bg-white border-2 border-slate-200 rounded-xl p-5 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-corporate focus:ring-2 focus:ring-corporate/20 resize-none font-mono text-sm leading-relaxed"
                         spellCheck="false"
                         autoFocus
                     />
@@ -230,7 +230,7 @@ Eres un [especificar rol experto]
             {showSuggestions && (
                 <div className="space-y-6">
                     <div className="flex items-center gap-2">
-                        <Icon name="fa-lightbulb" className="text-[#00BCD4]" />
+                        <Icon name="fa-lightbulb" className="text-corporate" />
                         <h4 className="text-lg font-semibold text-slate-800">Sugerencias para mejorar</h4>
                     </div>
                     
@@ -239,11 +239,11 @@ Eres un [especificar rol experto]
                             <button
                                 key={index}
                                 onClick={() => handleImprovementClick(suggestion)}
-                                className="bg-white hover:bg-slate-50 border border-slate-200 rounded-xl p-4 text-left transition-all duration-200 hover:border-[#00BCD4]/30 group"
+                                className="bg-white hover:bg-slate-50 border border-slate-200 rounded-xl p-4 text-left transition-all duration-200 hover:border-corporate/30 group"
                             >
                                 <div className="flex items-start gap-3 mb-3">
-                                    <div className="w-10 h-10 rounded-lg bg-[#00BCD4]/10 flex items-center justify-center flex-shrink-0 group-hover:bg-[#00BCD4]/20">
-                                        <span className="text-[#00BCD4] font-bold">{index + 1}</span>
+                                    <div className="w-10 h-10 rounded-lg bg-corporate/10 flex items-center justify-center flex-shrink-0 group-hover:bg-corporate/20">
+                                        <span className="text-corporate font-bold">{index + 1}</span>
                                     </div>
                                     <div>
                                         <h5 className="font-semibold text-slate-800 mb-1">{suggestion.title}</h5>
@@ -260,7 +260,7 @@ Eres un [especificar rol experto]
                     {/* Plantillas de prompts */}
                     <div className="space-y-4">
                         <div className="flex items-center gap-2">
-                            <Icon name="fa-copy" className="text-[#004B63]" />
+                            <Icon name="fa-copy" className="text-petroleum" />
                             <h4 className="text-lg font-semibold text-slate-800">Plantillas de estructura</h4>
                         </div>
                         
@@ -269,11 +269,11 @@ Eres un [especificar rol experto]
                                 <button
                                     key={index}
                                     onClick={() => applyTemplate(template.template)}
-                                    className="bg-white hover:bg-slate-50 border border-slate-200 rounded-xl p-4 text-left transition-all duration-200 hover:border-[#004B63]/30 group"
+                                    className="bg-white hover:bg-slate-50 border border-slate-200 rounded-xl p-4 text-left transition-all duration-200 hover:border-petroleum/30 group"
                                 >
                                     <div className="flex items-center gap-3 mb-3">
-                                        <div className="w-10 h-10 rounded-lg bg-[#004B63]/10 flex items-center justify-center group-hover:bg-[#004B63]/20">
-                                            <Icon name="fa-file-alt" className="text-[#004B63]" />
+                                        <div className="w-10 h-10 rounded-lg bg-petroleum/10 flex items-center justify-center group-hover:bg-petroleum/20">
+                                            <Icon name="fa-file-alt" className="text-petroleum" />
                                         </div>
                                         <h5 className="font-semibold text-slate-800">{template.name}</h5>
                                     </div>

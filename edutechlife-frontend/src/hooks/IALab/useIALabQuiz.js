@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useIALabContext } from '../../context/IALabContext';
+import { useIALabStore } from '../../store/ialabStore';
 
 /**
  * HOOK: useIALabQuiz
@@ -64,9 +65,9 @@ export const useIALabQuiz = () => {
   // ==================== CONSTANTES ====================
   
   const TOTAL_QUESTIONS = 8;
-  const PASSING_SCORE = 75; // 75% mínimo para aprobar
+  const PASSING_SCORE = 80; // 80% mínimo para aprobar (unificado con ExamResultViewer e ialabStore)
   const DAILY_ATTEMPTS_LIMIT = 3; // Cambiado de 2 a 3 intentos diarios
-  const SUGGESTED_TIME_MINUTES = 25;
+  const SUGGESTED_TIME_MINUTES = 20; // Unificado con useIALabTimer (20 min)
   const SUGGESTED_TIME_SECONDS = SUGGESTED_TIME_MINUTES * 60;
   
   // Constantes de seguridad
@@ -353,7 +354,7 @@ export const useIALabQuiz = () => {
       setQuizAttempts(updatedAttempts);
       
       // Guardar en localStorage
-      localStorage.setItem(`quizAttempts_${activeMod}`, JSON.stringify(updatedAttempts));
+      useIALabStore.getState().storageSet(`quizAttempts_${activeMod}`, updatedAttempts);
       
       // Actualizar contador de intentos diarios
       const today = new Date().toDateString();
@@ -452,8 +453,8 @@ export const useIALabQuiz = () => {
       
       // Obtener logs existentes
       const logKey = `${SECURITY_LOG_PREFIX}_${user?.id || 'anonymous'}_${new Date().toDateString()}`;
-      const existingLogs = localStorage.getItem(logKey) || '[]';
-      const logs = JSON.parse(existingLogs);
+      const existingLogs = useIALabStore.getState().storageGet(logKey) || [];
+      const logs = existingLogs;
       
       // Agregar nuevo log
       logs.push(logEntry);
@@ -463,7 +464,7 @@ export const useIALabQuiz = () => {
         logs.splice(0, logs.length - 100);
       }
       
-      localStorage.setItem(logKey, JSON.stringify(logs));
+      useIALabStore.getState().storageSet(logKey, logs);
       
       // Incrementar contador de violaciones
       setSecurityViolations(prev => prev + 1);
@@ -471,14 +472,13 @@ export const useIALabQuiz = () => {
       // Mostrar mensaje temporal
       showSecurityMessageTemporary(`Violación de seguridad: ${type}`);
       
-      console.log(`[SECURITY] Violación registrada: ${type}`, logEntry);
       return logEntry;
     },
     
     getViolationsToday: () => {
       const logKey = `${SECURITY_LOG_PREFIX}_${user?.id || 'anonymous'}_${new Date().toDateString()}`;
-      const existingLogs = localStorage.getItem(logKey) || '[]';
-      return JSON.parse(existingLogs);
+      const existingLogs = useIALabStore.getState().storageGet(logKey) || [];
+      return existingLogs;
     },
     
     getViolationCountToday: () => {
@@ -489,15 +489,15 @@ export const useIALabQuiz = () => {
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
       
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
+      const keys = Object.keys(localStorage);
+      for (const key of keys) {
         if (key.startsWith(SECURITY_LOG_PREFIX)) {
           try {
-            const logs = JSON.parse(localStorage.getItem(key) || '[]');
+            const logs = useIALabStore.getState().storageGet(key) || [];
             if (logs.length > 0) {
               const firstLogDate = new Date(logs[0].timestamp);
               if (firstLogDate < thirtyDaysAgo) {
-                localStorage.removeItem(key);
+                useIALabStore.getState().storageRemove(key);
               }
             }
           } catch (error) {
@@ -531,7 +531,7 @@ export const useIALabQuiz = () => {
       
       // Guardar en localStorage
       const today = new Date().toDateString();
-      localStorage.setItem(`dailyAttempts_${activeMod}_${today}`, newCount.toString());
+      useIALabStore.getState().storageSetString(`dailyAttempts_${activeMod}_${today}`, newCount.toString());
       
       return newCount;
     });
