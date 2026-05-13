@@ -44,9 +44,9 @@ const Aliados = memo(() => {
                         </span>
                         <div className="w-10 h-[2px] bg-gradient-to-l from-transparent to-[#4DA8C4]" />
                     </div>
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#004B63] tracking-tight mb-6">
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-[#004B63] tracking-tighter mb-6">
                         Nuestros{' '}
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC]">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4DA8C4] to-[#004B63]">
                             Aliados Estratégicos
                         </span>
                     </h2>

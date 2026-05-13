@@ -430,13 +430,13 @@ const Ecosystem = memo(() => {
                     transition={{ duration: 0.8, ease: "easeOut" }}
                     className="text-center mb-8 max-w-3xl mx-auto"
                 >
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#004B63] tracking-tight mb-4">
-                        Ecosistema
-                        <span className="block gradient-text-animated">
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-[#004B63] tracking-tighter mb-4">
+                        Ecosistema{' '}
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4DA8C4] to-[#004B63]">
                             Interconectado.
                         </span>
                     </h2>
-                    <p className="text-base text-slate-600 leading-relaxed font-normal">
+                    <p className="text-base text-slate-600 leading-relaxed">
                         Accede a herramientas estructuradas para potenciar la educación mediante la sinergia de neuro-ciencia e inteligencia artificial.
                     </p>
                 </motion.div>

@@ -174,7 +174,7 @@ const WelcomeScreen = ({ onNavigate }) => {
             {/* Back to IA Lab Pro Button */}
             <div className="mt-6 flex justify-center">
               <motion.button
-                onClick={() => navigate('/ialab-pro')}
+                onClick={() => navigate('/ialab-academic')}
                 whileHover={{ scale: 1.03, x: -2 }}
                 whileTap={{ scale: 0.97 }}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-transparent border-2 border-[#004B63]/25 text-[#004B63] font-semibold text-sm rounded-xl hover:bg-[#004B63]/5 hover:border-[#004B63]/40 transition-all duration-300"
@@ -182,7 +182,7 @@ const WelcomeScreen = ({ onNavigate }) => {
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m0 0l11 11" />
                 </svg>
-                Volver a IA Lab Pro
+                Volver a AI Lab Academic
               </motion.button>
             </div>
           </div>

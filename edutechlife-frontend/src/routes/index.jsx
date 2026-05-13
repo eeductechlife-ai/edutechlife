@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import AppLayout from '../components/layout/AppLayout';
 import AuthRouter from './auth-router';
 import LandingPage from '../components/pages/LandingPage';
@@ -154,12 +154,13 @@ const AppRoutes = () => {
           </Suspense>
         } />
         
-        {/* IA Lab Pro - Public landing page */}
-        <Route path="ialab-pro" element={
-          <Suspense fallback={<PageLoader message="Cargando IA Lab Pro..." />}>
+        {/* IA Lab Academic - Public landing page */}
+        <Route path="ialab-academic" element={
+          <Suspense fallback={<PageLoader message="Cargando AI Lab Academic..." />}>
             <IALabProLandingPage />
           </Suspense>
         } />
+        <Route path="ialab-pro" element={<Navigate to="/ialab-academic" replace />} />
         
         {/* SmartBoard Kids Dashboard - Dashboard para niños 8-16 años */}
         <Route path="smartboard" element={

@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform, useInView, AnimatePresence } from 'fra
 import { useAuth } from '@clerk/react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import NicoModern from '../Nico/NicoModern';
+import Footer from '../Footer';
 
 const IALabProLandingPage = () => {
   const navigate = useNavigate();
@@ -259,6 +260,21 @@ const IALabProLandingPage = () => {
         ref={heroRef}
         className="relative overflow-hidden bg-gradient-to-br from-[#004B63] via-[#007A94] to-[#004064] min-h-screen flex items-center"
       >
+        {/* Back Button */}
+        <motion.button
+          onClick={() => navigate('/')}
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.2, duration: 0.4 }}
+          className="absolute top-6 left-4 md:top-8 md:left-8 z-30 flex items-center gap-2.5 px-4 py-2.5 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-white text-sm font-bold hover:bg-white/20 hover:border-white/30 transition-all duration-300 shadow-lg"
+          aria-label="Volver al inicio"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m0 0l11 11" />
+          </svg>
+          Volver
+        </motion.button>
+
         {/* Grid Background */}
         <div
           className="absolute inset-0 opacity-[0.04]"
@@ -310,7 +326,7 @@ const IALabProLandingPage = () => {
               transition={{ delay: 0.2, duration: 0.6 }}
               className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-none text-center"
             >
-              <span className="text-white">I.A Lab </span>
+              <span className="text-white">AI Lab </span>
               <motion.span
                 className="bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] bg-clip-text text-transparent"
                 animate={{ textShadow: [
@@ -320,7 +336,7 @@ const IALabProLandingPage = () => {
                 ]}}
                 transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
               >
-                Pro
+                Academic
               </motion.span>
             </motion.h1>
 
@@ -329,7 +345,7 @@ const IALabProLandingPage = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.3 }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full mb-6 md:mb-8"
             >
               <Icon name="fa-flask" className="w-4 h-4 text-[#00334A]" />
               <span className="text-sm font-semibold text-white tracking-wide">Laboratorio de Innovación Educativa</span>
@@ -613,7 +629,7 @@ const IALabProLandingPage = () => {
             className="text-center mb-12"
           >
             <h2 className="font-display text-3xl md:text-4xl font-bold text-[#004B63] mb-4">
-              ¿Por qué IA Lab Pro?
+              ¿Por qué AI Lab Academic?
             </h2>
             <p className="font-body text-lg text-[#475569] max-w-2xl mx-auto">
               Una plataforma diseñada para tu éxito en la era de la inteligencia artificial
@@ -874,6 +890,7 @@ const IALabProLandingPage = () => {
         </div>
       </section>
 
+      <Footer />
       <NicoModern />
     </div>
   );

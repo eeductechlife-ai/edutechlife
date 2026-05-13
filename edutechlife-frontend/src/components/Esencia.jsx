@@ -53,13 +53,13 @@ const Esencia = memo(() => {
             <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 py-12">
                 {/* Header */}
                 <div className={`text-center mb-8 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-normal text-[#004B63] tracking-tight mb-4">
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-[#004B63] tracking-tighter mb-4">
                         Nuestra{' '}
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4DA8C4] to-[#004B63]">
                             Esencia
                         </span>
                     </h2>
-                    <p className="text-base text-slate-600 leading-relaxed font-normal max-w-2xl mx-auto">
+                    <p className="text-base text-slate-600 leading-relaxed max-w-2xl mx-auto">
                         Somos un equipo de magísteres, pedagogos y desarrolladores apasionados por transformar la educación mediante la inteligencia artificial.
                     </p>
                 </div>

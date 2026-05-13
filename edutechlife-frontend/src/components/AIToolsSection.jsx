@@ -8,7 +8,7 @@ const tools = [
     id: 'ai-lab-academic',
     name: 'AI Lab Academic',
     subtitle: 'ACADEMIC',
-    path: '/ialab-pro',
+    path: '/ialab-academic',
     icon: 'fa-rocket',
     description: 'Entrenamiento de élite con agentes de IA para potenciar tu productividad y aprendizaje cognitivo.',
     badges: ['ACADEMIC', 'CERTIFIED'],
@@ -82,21 +82,23 @@ function AIToolsSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0 }}
-            onClick={() => navigate(tools[0].path)}
-            className="col-span-1 md:col-span-2 bg-[#004B63] text-white rounded-[2rem] p-8 flex flex-col justify-between cursor-pointer group hover:shadow-2xl hover:shadow-[#004B63]/20 transition-all duration-500"
+            whileHover={{ y: -6 }}
+            className="col-span-1 md:col-span-2 bg-[#004B63] text-white rounded-[2rem] p-8 flex flex-col justify-between group hover:shadow-2xl hover:shadow-[#004B63]/20 transition-all duration-500"
           >
             <div>
-              <div className="w-12 h-12 rounded-xl bg-white/15 flex items-center justify-center mb-6">
-                <Icon name={tools[0].icon} className="text-xl text-white" />
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 rounded-xl bg-[#4DA8C4]/20 flex items-center justify-center flex-shrink-0">
+                  <Icon name={tools[0].icon} className="text-xl text-[#4DA8C4]" />
+                </div>
+                <h3 className="text-2xl md:text-3xl font-black text-[#4DA8C4]">{tools[0].name}</h3>
               </div>
-              <h3 className="text-2xl md:text-3xl font-black mb-3">{tools[0].name}</h3>
               <p className="text-white/70 max-w-lg text-sm leading-relaxed">{tools[0].description}</p>
             </div>
             <div className="flex flex-wrap items-center gap-3 mt-6">
               <a
                 href={tools[0].path}
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(tools[0].path); }}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/20 text-white text-sm font-semibold hover:bg-white/30 transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#4DA8C4] text-white text-sm font-semibold hover:bg-[#66CCCC] transition-colors"
               >
                 {tools[0].buttonText}
                 <Icon name="fa-arrow-right" className="text-xs" />
@@ -113,8 +115,8 @@ function AIToolsSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            onClick={() => navigate(tools[1].path)}
-            className="col-span-1 bg-white shadow-sm border border-slate-100 rounded-[2rem] p-8 flex flex-col justify-between cursor-pointer group hover:shadow-lg hover:border-slate-200 transition-all duration-500"
+            whileHover={{ y: -6 }}
+            className="col-span-1 bg-white shadow-sm border border-slate-100 rounded-[2rem] p-8 flex flex-col justify-between group hover:shadow-lg hover:border-slate-200 transition-all duration-500"
           >
             <div>
               <div className="w-12 h-12 rounded-xl bg-[#4DA8C4]/10 flex items-center justify-center mb-5">
@@ -149,8 +151,8 @@ function AIToolsSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            onClick={() => navigate(tools[2].path)}
-            className="col-span-1 bg-white shadow-sm border border-slate-100 rounded-[2rem] p-8 flex flex-col justify-between cursor-pointer group hover:shadow-lg hover:border-slate-200 transition-all duration-500"
+            whileHover={{ y: -6 }}
+            className="col-span-1 bg-white shadow-sm border border-slate-100 rounded-[2rem] p-8 flex flex-col justify-between group hover:shadow-lg hover:border-slate-200 transition-all duration-500"
           >
             <div>
               <div className="w-12 h-12 rounded-xl bg-[#4DA8C4]/10 flex items-center justify-center mb-5">
@@ -178,23 +180,23 @@ function AIToolsSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            onClick={() => navigate(tools[3].path)}
-            className="col-span-1 md:col-span-2 bg-white shadow-sm border border-slate-100 rounded-[2rem] p-8 flex flex-col md:flex-row items-center justify-between gap-6 cursor-pointer group hover:shadow-lg hover:border-slate-200 transition-all duration-500"
+            whileHover={{ y: -6 }}
+            className="col-span-1 md:col-span-2 bg-[#4DA8C4] text-white rounded-[2rem] p-8 flex flex-col md:flex-row items-center justify-between gap-6 group hover:shadow-2xl hover:shadow-[#4DA8C4]/30 transition-all duration-500"
           >
             <div className="flex items-center gap-4 max-w-xl">
-              <div className="w-14 h-14 rounded-xl bg-[#004B63] flex items-center justify-center flex-shrink-0">
+              <div className="w-14 h-14 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0">
                 <Icon name={tools[3].icon} className="text-2xl text-white" />
               </div>
               <div>
-                <h3 className="text-xl font-black text-[#004B63]">{tools[3].name}</h3>
-                <p className="text-xs text-[#4DA8C4] font-semibold uppercase tracking-wider">{tools[3].subtitle}</p>
-                <p className="text-slate-500 text-sm mt-1">{tools[3].description}</p>
+                <h3 className="text-xl font-black text-white">{tools[3].name}</h3>
+                <p className="text-xs text-white/70 font-semibold uppercase tracking-wider">{tools[3].subtitle}</p>
+                <p className="text-white/80 text-sm mt-1">{tools[3].description}</p>
               </div>
             </div>
             <a
               href={tools[3].path}
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(tools[3].path); }}
-              className="flex-shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#004B63] text-white text-sm font-semibold hover:bg-[#4DA8C4] transition-colors"
+              className="flex-shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/25 text-white text-sm font-semibold hover:bg-white/35 transition-colors border border-white/20"
             >
               {tools[3].buttonText}
               <Icon name="fa-arrow-right" className="text-xs" />

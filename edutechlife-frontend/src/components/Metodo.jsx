@@ -50,10 +50,13 @@ const Metodo = memo(() => {
             <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 py-20 relative z-10">
                 {/* Section Header */}
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-normal text-[#004B63] tracking-tight mb-4">
-                        Nuestro Método
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-[#004B63] tracking-tighter mb-4">
+                        Nuestro{' '}
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4DA8C4] to-[#004B63]">
+                            Método
+                        </span>
                     </h2>
-                    <p className="text-base text-slate-600 leading-relaxed font-normal max-w-3xl mx-auto">
+                    <p className="text-base text-slate-600 leading-relaxed max-w-3xl mx-auto">
                         Un proceso claro, diseñado por magísteres, guiado por Inteligencia Artificial y enfocado en resultados medibles.
                     </p>
                 </div>
