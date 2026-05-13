@@ -26,7 +26,6 @@ const IALabSidebar = () => {
     toggleSidebarDropdown,
     modules,
     isModuleLocked,
-    getCurrentModule,
     calculateModuleScore,
     courseCompleted,
     setShowCertificateModal,
@@ -41,8 +40,6 @@ const IALabSidebar = () => {
   const { completedInfographics } = useProgressContext();
   const { xp, streak, badges, getLevel, getXpForNextLevel, getLevelProgress, calculateModulePoints, getTotalPoints } = useIALabStore();
   
-  const curr = getCurrentModule();
-
   const isInfographicCompleted = (infographicId) => completedInfographics.includes(`${infographicId}`);
   
    return (
@@ -50,11 +47,10 @@ const IALabSidebar = () => {
         <div className="px-4 py-4 space-y-4">
           {/* Progress Circle */}
             <div className="flex flex-col items-center">
-              <h3 className="text-xs font-bold text-petroleum dark:text-[#4DA8C4] mb-2">Progreso del Curso</h3>
-              <div className="relative w-24 h-24 md:w-28 md:h-28 rounded-full bg-white dark:bg-slate-800 shadow-sm border border-slate-200/60 dark:border-slate-700/60 flex items-center justify-center" role="progressbar" aria-valuenow={Math.round(courseProgress)} aria-valuemin="0" aria-valuemax="100" aria-label="Progreso del curso">
-                <svg className="w-full h-full transform -rotate-90 p-1" viewBox="0 0 96 96">
-                  <circle cx="48" cy="48" r="40" className="stroke-slate-200 dark:stroke-slate-700" strokeWidth="6" fill="none" />
-                  <circle cx="48" cy="48" r="40" stroke="url(#sidebar-progress-grad)" strokeWidth="6" fill="none" strokeLinecap="round" strokeDasharray="251.327" strokeDashoffset={251.327 - (251.327 * Math.min(courseProgress, 100)) / 100} className="transition-all duration-700 ease-out" />
+              <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-full bg-white dark:bg-slate-800 shadow-md border border-slate-200/60 dark:border-slate-700/60 flex items-center justify-center" role="progressbar" aria-valuenow={Math.round(courseProgress)} aria-valuemin="0" aria-valuemax="100" aria-label="Progreso del curso">
+                <svg className="w-full h-full transform -rotate-90 p-1" viewBox="0 0 120 120">
+                  <circle cx="60" cy="60" r="50" className="stroke-slate-200 dark:stroke-slate-700" strokeWidth="7" fill="none" />
+                  <circle cx="60" cy="60" r="50" stroke="url(#sidebar-progress-grad)" strokeWidth="7" fill="none" strokeLinecap="round" strokeDasharray="314.159" strokeDashoffset={314.159 - (314.159 * Math.min(courseProgress, 100)) / 100} className="transition-all duration-700 ease-out" />
                   <defs>
                     <linearGradient id="sidebar-progress-grad" x1="0%" y1="0%" x2="100%" y2="100%">
                       <stop offset="0%" stopColor="var(--color-petroleum)" />
@@ -64,23 +60,24 @@ const IALabSidebar = () => {
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center">
-                    <div className="text-base font-bold text-petroleum dark:text-[#4DA8C4]">{Math.round(courseProgress)}%</div>
+                    <div className="text-lg font-bold text-petroleum dark:text-[#4DA8C4]">{Math.round(courseProgress)}%</div>
                     <div className="text-[10px] text-slate-400 dark:text-slate-400 mt-0.5">Completado</div>
                   </div>
                 </div>
               </div>
+              <h3 className="text-lg font-bold text-petroleum dark:text-[#4DA8C4] mt-3">Progreso del Curso</h3>
             </div>
 
             {/* Nivel - Puntos acumulados */}
-            <div className="w-full px-1 font-sans space-y-2">
+            <div className="w-full p-3 bg-gradient-to-br from-petroleum/5 to-corporate/5 rounded-xl border border-petroleum/10 space-y-2.5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Icon name="fa-graduation-cap" className="text-corporate text-sm" />
-                  <span className="text-xs font-bold text-petroleum">Nv.{getLevel()}</span>
+                  <Icon name="fa-graduation-cap" className="text-corporate text-base" />
+                  <span className="text-sm font-bold text-petroleum dark:text-[#4DA8C4]">Nv.{getLevel()}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <Icon name="fa-fire" className={`text-xs ${streak >= 3 ? 'text-corporate' : 'text-slate-300'}`} />
-                  <span className={`text-xs font-semibold ${streak >= 3 ? 'text-corporate' : 'text-slate-400'}`}>{streak} días</span>
+                  <Icon name="fa-fire" className={`text-sm ${streak >= 3 ? 'text-corporate' : 'text-slate-300'}`} />
+                  <span className={`text-sm font-semibold ${streak >= 3 ? 'text-corporate' : 'text-slate-400'}`}>{streak} días</span>
                 </div>
               </div>
 
@@ -88,15 +85,15 @@ const IALabSidebar = () => {
 
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
-                  <Icon name="fa-award" className="text-corporate text-[10px]" />
-                  <span className="text-[9px] font-semibold text-petroleum dark:text-[#4DA8C4]">Puntos acumulados</span>
+                  <Icon name="fa-award" className="text-corporate text-xs" />
+                  <span className="text-sm font-semibold text-petroleum dark:text-[#4DA8C4]">Puntos acumulados</span>
                 </div>
                 <div className="flex items-baseline gap-0.5">
-                  <span className="text-[11px] font-bold text-corporate dark:text-[#66CCCC]">{getTotalPoints()}</span>
-                  <span className="text-[7px] text-slate-400">/ 1000</span>
+                  <span className="text-sm font-bold text-corporate dark:text-[#66CCCC]">{getTotalPoints()}</span>
+                  <span className="text-[9px] text-slate-400">/ 1000</span>
                 </div>
               </div>
-              <div className="h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden" role="progressbar" aria-valuenow={getTotalPoints()} aria-valuemin="0" aria-valuemax="1000" aria-label="Puntos acumulados">
+              <div className="h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden" role="progressbar" aria-valuenow={getTotalPoints()} aria-valuemin="0" aria-valuemax="1000" aria-label="Puntos acumulados">
                 <div className="h-full rounded-full bg-petroleum transition-all duration-700"
                      style={{ width: `${(getTotalPoints() / 1000) * 100}%` }} />
               </div>
@@ -113,7 +110,7 @@ const IALabSidebar = () => {
               </h3>
               <div className="flex-1 h-px bg-gradient-to-r from-petroleum/20 via-corporate/20 to-transparent"></div>
             </div>
-            <div className="space-y-1">
+            <div className="space-y-2">
               {modules.map((mod) => {
                 const modScore = calculateModuleScore(mod.id);
                 const isLocked = isModuleLocked(mod.id);
@@ -160,7 +157,7 @@ const IALabSidebar = () => {
                 <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center shadow-sm flex-shrink-0">
                   <Icon name="fa-cubes" className="text-white text-[10px]" />
                 </div>
-                <h3 className="text-[10px] font-bold tracking-[0.08em] uppercase text-petroleum">
+                <h3 className="text-xs font-bold tracking-[0.08em] uppercase text-petroleum">
                   RECURSOS ADICIONALES
                 </h3>
                 <div className="flex-1 h-px bg-gradient-to-r from-petroleum/20 via-corporate/20 to-transparent"></div>
@@ -293,89 +290,25 @@ const IALabSidebar = () => {
             )}
           </div>
 
-          {/* Sección: Detalles del Curso */}
-          <div className="px-1 w-full">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-1.5">
-                <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center shadow-sm flex-shrink-0">
-                  <Icon name="fa-info-circle" className="text-white text-[10px]" />
-                </div>
-                <h3 className="text-[10px] font-bold tracking-[0.08em] uppercase text-petroleum">
-                  DETALLES DEL CURSO
-                </h3>
-                <div className="flex-1 h-px bg-gradient-to-r from-petroleum/20 via-corporate/20 to-transparent"></div>
-              </div>
-              <Icon 
-                name={sidebarDropdowns.detalles ? "fa-chevron-up" : "fa-chevron-down"} 
-                className="text-petroleum text-xs transition-transform duration-300 cursor-pointer hover:text-petroleum-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/30 rounded"
-                onClick={() => toggleSidebarDropdown('detalles')}
-                tabIndex={0}
-                role="button"
-                aria-label={sidebarDropdowns.detalles ? "Colapsar detalles" : "Expandir detalles"}
-                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleSidebarDropdown('detalles'); } }}
-              />
-            </div>
 
-            {sidebarDropdowns.detalles && (
-              <div className="space-y-0.5 animate-fadeIn">
-                <div className="flex justify-between items-center p-1 hover:bg-petroleum/5 dark:hover:bg-petroleum/10 rounded-lg transition-colors duration-200">
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-6 h-6 bg-petroleum/8 rounded-lg flex items-center justify-center">
-                      <Icon name="fa-clock" className="text-petroleum text-xs" />
-                    </div>
-                    <span className="text-xs font-medium text-slate-600 dark:text-slate-300">Duración</span>
-                  </div>
-                  <span className="text-xs font-bold text-petroleum">{curr?.duration}</span>
-                </div>
-                <div className="flex justify-between items-center p-1 hover:bg-petroleum/5 dark:hover:bg-petroleum/10 rounded-lg transition-colors duration-200">
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-6 h-6 bg-petroleum/8 rounded-lg flex items-center justify-center">
-                      <Icon name="fa-signal" className="text-petroleum text-xs" />
-                    </div>
-                    <span className="text-xs font-medium text-slate-600 dark:text-slate-300">Nivel</span>
-                  </div>
-                  <span className="text-xs font-bold text-petroleum">{curr?.level}</span>
-                </div>
-                <div className="flex justify-between items-center p-1 hover:bg-petroleum/5 dark:hover:bg-petroleum/10 rounded-lg transition-colors duration-200">
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-6 h-6 bg-petroleum/8 rounded-lg flex items-center justify-center">
-                      <Icon name="fa-play" className="text-petroleum text-xs" />
-                    </div>
-                    <span className="text-xs font-medium text-slate-600 dark:text-slate-300">Videos</span>
-                  </div>
-                  <span className="text-xs font-bold text-petroleum">{curr?.videos}</span>
-                </div>
-                <div className="flex justify-between items-center p-1 hover:bg-petroleum/5 dark:hover:bg-petroleum/10 rounded-lg transition-colors duration-200">
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-6 h-6 bg-petroleum/8 rounded-lg flex items-center justify-center">
-                      <Icon name="fa-briefcase" className="text-petroleum text-xs" />
-                    </div>
-                    <span className="text-xs font-medium text-slate-600 dark:text-slate-300">Proyectos</span>
-                  </div>
-                  <span className="text-xs font-bold text-petroleum">{curr?.projects}</span>
-                </div>
-              </div>
-            )}
-          </div>
 
-          {/* Sección: Insignias */}
-          <div className="px-1 w-full mt-2">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-1.5">
-                <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center shadow-sm flex-shrink-0">
-                  <Icon name="fa-award" className="text-white text-[10px]" />
+          {/* Sección: Insignias - Solo visible para usuarios certificados */}
+          {storedCertificate && (() => {
+            const badgesSummary = getBadgesSummary();
+            if (badgesSummary.earned === 0) return null;
+            return (
+              <div className="px-1 w-full">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center shadow-sm flex-shrink-0">
+                      <Icon name="fa-award" className="text-white text-[10px]" />
+                    </div>
+                    <h3 className="text-[10px] font-bold tracking-[0.08em] uppercase text-petroleum">
+                      INSIGNIAS
+                    </h3>
+                    <div className="flex-1 h-px bg-gradient-to-r from-petroleum/20 via-corporate/20 to-transparent"></div>
+                  </div>
                 </div>
-                <h3 className="text-[10px] font-bold tracking-[0.08em] uppercase text-petroleum">
-                  INSIGNIAS
-                </h3>
-                <div className="flex-1 h-px bg-gradient-to-r from-petroleum/20 via-corporate/20 to-transparent"></div>
-              </div>
-            </div>
-
-            {(() => {
-              const badgesSummary = getBadgesSummary();
-              if (badgesSummary.earned === 0) return null;
-              return (
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between px-1">
                     <span className="text-[10px] text-slate-500">
@@ -406,9 +339,9 @@ const IALabSidebar = () => {
                     ))}
                   </div>
                 </div>
-              );
-            })()}
-          </div>
+              </div>
+            );
+          })()}
 
         {/* Sección: Certificación del Curso - Solo visible cuando tiene certificado */}
         {storedCertificate && (

@@ -2,7 +2,6 @@ import { memo, useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import MagneticButton from './MagneticButton';
-import SplitTextReveal from './SplitTextReveal';
 import FloatingParticles from './FloatingParticles';
 import { Icon } from '../utils/iconMapping.jsx';
 
@@ -84,14 +83,17 @@ const Hero = memo(() => {
                 {/* Hero Content - Centered Layout */}
                 <div className="flex flex-col items-center justify-center text-center">
                     
-                    {/* Title - Floating Clean */}
+                    {/* Title - Corporate Style */}
                     <motion.h1 
-                        initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
-                        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                        transition={{ duration: 0.8, delay: 0.1 }}
-                        className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-[#004B63] tracking-tight leading-tight mb-6 font-montserrat"
+                        initial={{ opacity: 0, y: 40 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                        className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#004B63] tracking-tighter leading-[0.9] mb-6 font-montserrat"
                     >
-                        <SplitTextReveal text="Liderando la Educación del Futuro" />
+                        Liderando la<br />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4DA8C4] to-[#004B63]">
+                            Educación del Futuro
+                        </span>
                     </motion.h1>
 
                     {/* Subtitle - Floating Clean */}

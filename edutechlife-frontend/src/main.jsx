@@ -5,6 +5,7 @@ import App from './App.jsx'
 import ClerkProviderWrapper from './providers/ClerkProviderWrapper'
 import { AuthProvider } from './context/AuthContext'
 import { NotificationProvider } from './context/NotificationContext'
+import { ThemeProvider } from './context/ThemeContext'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -13,7 +14,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <ClerkProviderWrapper>
         <AuthProvider>
           <NotificationProvider>
-            <App />
+            <ThemeProvider>
+              <App />
+            </ThemeProvider>
           </NotificationProvider>
         </AuthProvider>
       </ClerkProviderWrapper>

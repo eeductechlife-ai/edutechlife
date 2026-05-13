@@ -123,6 +123,14 @@ const ModuleInfoSection = ({ className = '', ...rest }) => {
                         ))}
                     </div>
                 </div>
+
+                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mt-5 font-montserrat">
+                    Composición de la nota: Comunidad <span className="font-semibold text-slate-600 dark:text-slate-300">(5%)</span>
+                    {' · '}Desafío <span className="font-semibold text-slate-600 dark:text-slate-300">(30%)</span>
+                    {' · '}Examen <span className="font-semibold text-slate-600 dark:text-slate-300">(35%)</span>
+                    {' · '}Recursos <span className="font-semibold text-slate-600 dark:text-slate-300">(30%)</span>
+                </p>
+
             </div>
         </motion.div>
     );

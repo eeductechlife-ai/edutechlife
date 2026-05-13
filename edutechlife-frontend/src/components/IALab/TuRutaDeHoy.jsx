@@ -1,6 +1,6 @@
-import React, { useRef, useCallback, useMemo, useState } from 'react';
+import React, { useRef, useCallback, useMemo } from 'react';
 import { useIALabStore } from '../../store/ialabStore';
-import { motion, useReducedMotion, AnimatePresence } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { getResourcesForTopic } from './constants/moduleResources';
 
@@ -35,89 +35,7 @@ const calculateUnviewedMinutes = (moduleId, viewedIds) => {
   return total;
 };
 
-const ModuleRoadmap = ({ store, onModuleClick }) => {
-  const modules = store.modules || [];
-
-  return (
-    <div className="px-4 pb-4 space-y-0">
-      {modules.map((modItem, idx) => {
-        const locked = store.isModuleLocked(modItem.id);
-        const score = store.calculateModuleScore(modItem.id);
-        const completed = score >= 80;
-        const isActive = store.activeMod === modItem.id;
-        const isLast = idx === modules.length - 1;
-
-        return (
-          <React.Fragment key={modItem.id}>
-            <button
-              onClick={() => !locked && onModuleClick(modItem.id)}
-              disabled={locked}
-              className={`w-full flex items-center gap-3 p-2.5 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 ${
-                isActive
-                  ? 'bg-gradient-to-r from-petroleum/10 to-corporate/5 border border-petroleum/20 dark:border-petroleum/30'
-                  : completed
-                  ? 'bg-emerald-50/50 dark:bg-emerald-900/20 border border-emerald-200/60 dark:border-emerald-700/30'
-                  : locked
-                  ? 'opacity-50 cursor-not-allowed'
-                  : 'hover:bg-slate-50 dark:hover:bg-slate-700/50 border border-transparent'
-              }`}
-              aria-label={`${locked ? 'Bloqueado: ' : ''}Módulo ${modItem.id}: ${modItem.title}${completed ? ' - Completado' : score > 0 ? ` - ${Math.round(score)}%` : ''}`}
-            >
-              <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 text-xs font-bold transition-colors duration-200 ${
-                isActive
-                  ? 'bg-gradient-to-br from-petroleum to-corporate text-white shadow-sm'
-                  : completed
-                  ? 'bg-emerald-500 text-white'
-                  : locked
-                  ? 'bg-slate-200 dark:bg-slate-600 text-slate-400'
-                  : 'bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-petroleum dark:text-[#4DA8C4]'
-              }`}>
-                {completed ? (
-                  <Icon name="fa-check" className="text-xs" />
-                ) : locked ? (
-                  <Icon name="fa-lock" className="text-xs" />
-                ) : (
-                  <span className="text-xs font-bold">{modItem.id}</span>
-                )}
-              </div>
-              <div className="flex-1 min-w-0 text-left">
-                <p className={`text-sm font-medium truncate leading-tight ${
-                  isActive
-                    ? 'text-petroleum dark:text-[#4DA8C4]'
-                    : completed
-                    ? 'text-emerald-700 dark:text-emerald-400'
-                    : locked
-                    ? 'text-slate-400 dark:text-slate-500'
-                    : 'text-slate-700 dark:text-slate-300'
-                }`}>
-                  {modItem.title}
-                </p>
-                {score > 0 && !completed && (
-                  <div className="w-full h-1 bg-slate-200 dark:bg-slate-600 rounded-full overflow-hidden mt-1">
-                    <div className="h-full bg-gradient-to-r from-petroleum to-corporate rounded-full transition-all duration-500" style={{ width: `${score}%` }} />
-                  </div>
-                )}
-              </div>
-              {completed && (
-                <Icon name="fa-check-circle" className="text-emerald-500 text-sm flex-shrink-0" />
-              )}
-              {locked && (
-                <Icon name="fa-lock" className="text-slate-300 dark:text-slate-600 text-sm flex-shrink-0" />
-              )}
-            </button>
-            {!isLast && (
-              <div className="flex justify-center py-1">
-                <div className="w-px h-3 bg-slate-200 dark:bg-slate-600/60" />
-              </div>
-            )}
-          </React.Fragment>
-        );
-      })}
-    </div>
-  );
-};
-
-const PrimaryActionCard = ({ route, onContinue, mod, mostrandoRuta, onToggleRuta }) => {
+const PrimaryActionCard = ({ route, onContinue, mod }) => {
   const action = route.primaryAction;
   const prefersReducedMotion = useReducedMotion();
   const store = useIALabStore();
@@ -160,20 +78,8 @@ const PrimaryActionCard = ({ route, onContinue, mod, mostrandoRuta, onToggleRuta
               </>
             ) : (
               <>
-                <h4 className="text-white font-bold text-base mb-1 flex items-center gap-2">
+                <h4 className="text-white font-bold text-base mb-1">
                   Continúa tu aprendizaje
-                  <button
-                    onClick={(e) => { e.stopPropagation(); onToggleRuta(); }}
-                    className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 ${
-                      mostrandoRuta
-                        ? 'bg-white/20 text-white border-white/30 hover:bg-white/30'
-                        : 'bg-emerald-400/20 text-emerald-300 border-emerald-400/20 hover:bg-emerald-400/30'
-                    }`}
-                    aria-label={mostrandoRuta ? 'Ocultar ruta de aprendizaje' : 'Mostrar ruta de aprendizaje'}
-                  >
-                    <Icon name={mostrandoRuta ? 'fa-arrow-left' : 'fa-route'} className="mr-1 text-[9px]" />
-                    {mostrandoRuta ? 'Volver' : 'Siguiente lección'}
-                  </button>
                 </h4>
                 <p className="text-xs text-white/60 mb-1">Módulo {mod.id} · {mod.title}</p>
                 <p className="text-white/80 text-sm font-medium truncate">{action.title}</p>
@@ -244,7 +150,6 @@ const TuRutaDeHoy = ({ onAction }) => {
   const store = useIALabStore();
   const route = useMemo(() => store.getDailyRoute(), [store]);
   const topRef = useRef(null);
-  const [mostrandoRuta, setMostrandoRuta] = useState(false);
 
   const handleContinue = useCallback(() => {
     const action = route.primaryAction;
@@ -268,10 +173,7 @@ const TuRutaDeHoy = ({ onAction }) => {
     }
   }, [route, store, onAction]);
 
-  const handleModuleClick = useCallback((moduleId) => {
-    store.setActiveMod(moduleId);
-    setMostrandoRuta(false);
-  }, [store]);
+
 
   if (!route || !route.primaryAction) return <LoadingSkeleton />;
 
@@ -283,32 +185,9 @@ const TuRutaDeHoy = ({ onAction }) => {
         route={route}
         mod={mod}
         onContinue={handleContinue}
-        mostrandoRuta={mostrandoRuta}
-        onToggleRuta={() => setMostrandoRuta(prev => !prev)}
       />
 
-      <AnimatePresence>
-        {mostrandoRuta && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: 'easeInOut' }}
-            className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-sm overflow-hidden"
-          >
-            <div className="flex items-center gap-2 px-4 pt-4 pb-1">
-              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center shadow-sm flex-shrink-0">
-                <Icon name="fa-map-signs" className="text-white text-[10px]" />
-              </div>
-              <div>
-                <h4 className="text-xs font-bold text-petroleum dark:text-[#4DA8C4] leading-tight">Tu ruta de aprendizaje</h4>
-                <p className="text-[10px] text-slate-400 dark:text-slate-500">5 módulos hacia tu certificación</p>
-              </div>
-            </div>
-            <ModuleRoadmap store={store} onModuleClick={handleModuleClick} />
-          </motion.div>
-        )}
-      </AnimatePresence>
+
     </div>
   );
 };

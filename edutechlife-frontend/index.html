@@ -13,6 +13,7 @@
       async
       crossorigin="anonymous"
     ></script>
+    <script>if(localStorage.getItem('edutechlife-theme')==='dark'||(!localStorage.getItem('edutechlife-theme')&&window.matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark')</script>
   </head>
   <body class="font-open-sans text-base text-slate-600 scroll-smooth">
     <div id="root"></div>

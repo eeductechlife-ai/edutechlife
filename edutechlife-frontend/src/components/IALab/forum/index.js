@@ -1,0 +1,11 @@
+export { default as IALabCommunityHub } from './IALabCommunityHub';
+export { default as IALabForumPostList } from './IALabForumPostList';
+export { default as IALabForumPostCard } from './IALabForumPostCard';
+export { default as IALabForumPostDetail } from './IALabForumPostDetail';
+export { default as IALabForumComment } from './IALabForumComment';
+export { default as IALabForumCommentThread } from './IALabForumCommentThread';
+export { default as IALabForumCreatePost } from './IALabForumCreatePost';
+export { default as IALabForumSearchBar } from './IALabForumSearchBar';
+export { default as IALabForumFilterBar } from './IALabForumFilterBar';
+export { default as IALabForumNotifications } from './IALabForumNotifications';
+export { default as IALabForumRichEditor } from './IALabForumRichEditor';

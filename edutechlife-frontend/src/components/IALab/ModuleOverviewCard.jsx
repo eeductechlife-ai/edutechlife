@@ -49,7 +49,6 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
 
   const module1Data = {
     badge: {
-      module: "Módulo 1: Ingeniería de Prompts",
       duration: "2h",
     },
     icon: "fa-terminal",
@@ -71,7 +70,6 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
     if (isModule1) return module1Data;
     return {
       badge: {
-        module: `Módulo ${activeMod}: ${modules[activeMod - 1]?.title || ''}`,
         duration: modules[activeMod - 1]?.duration || '2h',
       },
       icon: modules[activeMod - 1]?.icon || 'fa-book',
@@ -172,28 +170,21 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
           }
         `}</style>
           
-{/* Badge superior */}
-            <div className="flex items-center justify-between mb-4">
-<div className="px-4 py-2 bg-white border border-slate-200/60 text-petroleum text-sm font-semibold rounded-xl shadow-sm dark:bg-slate-800 dark:border-slate-600 dark:text-[#4DA8C4]">
-                 {moduleData.badge.module}
-               </div>
-               <div className="px-4 py-2 bg-white border border-slate-200/60 text-petroleum text-sm font-semibold rounded-xl shadow-sm dark:bg-slate-800 dark:border-slate-600 dark:text-[#4DA8C4]">
-                 {moduleData.badge.duration}
-              </div>
-            </div>
-           
-           {/* Contenido principal con icono destacado */}
-           <div className="flex flex-col md:flex-row gap-6 items-start">
+{/* Contenido principal con icono destacado */}
+           <div className="flex flex-col md:flex-row gap-3 items-start">
               {/* Icono destacado - Izquierda */}
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-petroleum to-petroleum-dark shadow-sm flex items-center justify-center text-white flex-shrink-0">
-                <Icon name={moduleData.icon} className="text-2xl" />
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-petroleum to-petroleum-dark shadow-sm flex items-center justify-center text-white flex-shrink-0">
+                <Icon name={moduleData.icon} className="text-xl" />
               </div>
-             
+              
               {/* Texto principal */}
-             <div className="flex-1 max-w-3xl">
-               <h3 className="text-xl md:text-2xl font-bold text-petroleum mb-3 leading-tight dark:text-[#4DA8C4]">
-                 {moduleData.title}
-               </h3>
+              <div className="flex-1 max-w-3xl">
+                <div className="flex items-center gap-3 mb-2">
+                  <h3 className="text-xl md:text-2xl font-bold text-petroleum leading-tight dark:text-[#4DA8C4]">
+                    {moduleData.title}
+                  </h3>
+                  <span className="px-2.5 py-1 bg-slate-100 dark:bg-slate-700 text-petroleum dark:text-[#4DA8C4] text-[10px] font-bold rounded-lg border border-slate-200/60 dark:border-slate-600">{moduleData.badge.duration}</span>
+                </div>
                
                   {/* Introducción */}
 <p className="text-slate-600 text-sm md:text-base leading-relaxed mb-3 dark:text-slate-300">

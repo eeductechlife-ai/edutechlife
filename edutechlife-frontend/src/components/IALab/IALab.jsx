@@ -16,6 +16,7 @@ import IALabForumOptimized from './IALabForumOptimized';
 import IALabTour from './IALabTour';
 import useIALabKeyboardShortcuts from '../../hooks/IALab/useIALabKeyboardShortcuts';
 import ErrorBoundary from '../forum/ErrorBoundary';
+import { useTheme } from '../../context/ThemeContext';
 
 // Lazy-loaded modals (only loaded when opened)
 const IALabEvaluationModal = lazy(() => import('./IALabEvaluationModal'));
@@ -48,6 +49,7 @@ const SuspenseWrapper = ({ children }) => (
  */
 const IALabContent = () => {
     const { showPremiumEvaluationModal, setShowPremiumEvaluationModal, user, completedModules, courseProgress, activeMod, showCertificateModal, setShowCertificateModal, completedExams, challengeScores, moduleProgress } = useIALabContext();
+    const { isDarkMode, toggleDarkMode } = useTheme();
     const [showExamModal, setShowExamModal] = useState(false);
     const [showQuizModal, setShowQuizModal] = useState(false);
     const [showValerioPanel, setShowValerioPanel] = useState(false);
@@ -269,6 +271,13 @@ const IALabContent = () => {
                                   {tab.label}
                                 </button>
                               ))}
+                              <button
+                                onClick={toggleDarkMode}
+                                className="w-9 h-9 rounded-xl bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center transition-all duration-300 hover:shadow-md hover:shadow-petroleum/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/30 ml-2 flex-shrink-0"
+                                aria-label={isDarkMode ? 'Activar modo claro' : 'Activar modo oscuro'}
+                              >
+                                <Icon name={isDarkMode ? 'fa-sun' : 'fa-moon'} className={`text-sm transition-all duration-300 ${isDarkMode ? 'text-amber-300' : 'text-white'}`} />
+                              </button>
                             </div>
 
 <AnimatePresence mode="wait">

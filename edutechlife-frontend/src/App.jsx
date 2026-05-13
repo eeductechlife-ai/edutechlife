@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
-import { Sun, Moon, Bot, X, Send, MessageCircle, Minus, Square } from 'lucide-react';
+import { Bot, X, Send, MessageCircle, Minus, Square } from 'lucide-react';
 import AppRoutes from './routes/index.jsx';
 import NicoModern from './components/Nico/NicoModern';
 import AdminLoginModal from './components/AdminLoginModal';
@@ -201,8 +201,6 @@ const App = () => {
     const [isListening, setIsListening] = useState(false);
     const [isSpeaking, setIsSpeaking] = useState(false);
     const [audioMode, setAudioMode] = useState(false); // Modo conversación en audio
-    const [isDarkMode, setIsDarkMode] = useState(false);
-    
     // Lead capture states - Conversational
     const [showLeadModal, setShowLeadModal] = useState(false);
     const [leadContext, setLeadContext] = useState(null);
@@ -256,32 +254,6 @@ const App = () => {
             }
         }
     }, [botMsgs]);
-
-    // Dark mode effect
-    useEffect(() => {
-        const storedTheme = localStorage.getItem('edutechlife-theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        
-        if (storedTheme === 'dark' || (!storedTheme && prefersDark)) {
-            setIsDarkMode(true);
-            document.documentElement.classList.add('dark');
-        } else {
-            setIsDarkMode(false);
-            document.documentElement.classList.remove('dark');
-        }
-    }, []);
-
-    const toggleDarkMode = () => {
-        const newDarkMode = !isDarkMode;
-        setIsDarkMode(newDarkMode);
-        if (newDarkMode) {
-            document.documentElement.classList.add('dark');
-            localStorage.setItem('edutechlife-theme', 'dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-            localStorage.setItem('edutechlife-theme', 'light');
-        }
-    };
 
     const handleBotSend = async () => {
         if (!botInput.trim()) return;
