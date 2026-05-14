@@ -428,7 +428,11 @@ export const useIALabStore = create((set, get) => ({
       if (moduleId < 5 && updated.currentScore >= 80) {
         newProgress[moduleId + 1] = { ...newProgress[moduleId + 1], isUnlocked: true };
       }
-      return { moduleProgress: newProgress };
+      const newCompletedExams = { ...s.completedExams };
+      if (activity === 'exam' && typeof score === 'number') {
+        newCompletedExams[moduleId] = score;
+      }
+      return { moduleProgress: newProgress, completedExams: newCompletedExams };
     });
 
     state.setLastStoreUpdateTimestamp(updateTimestamp);

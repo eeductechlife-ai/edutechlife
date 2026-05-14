@@ -191,7 +191,7 @@ const IALabContent = () => {
                 {/* Layout principal - Flexbox estricto para evitar overlap */}
                 <div className="flex flex-1 overflow-hidden">
                     {/* Sidebar - oculto en móviles, visible desde lg */}
-                    <div className="hidden lg:flex">
+                    <div className="hidden lg:flex" data-tour="tour-sidebar">
                       <IALabSidebar />
                     </div>
 
@@ -252,7 +252,7 @@ const IALabContent = () => {
                             </div>
 
                             {/* TAB PILLS - Navegación entre secciones */}
-                            <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-hide">
+                            <div data-tour="tour-tabs" className="flex items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-hide">
                               {TABS.map((tab) => (
                                 <button
                                   key={tab.id ?? 'all'}
@@ -292,7 +292,7 @@ const IALabContent = () => {
 
                             {/* 2. SECCIÓN INFORMATIVA DEL MÓDULO */}
                             {(viewSection === null || viewSection === 'objetivos') && (
-                              <div className="mt-4">
+                              <div className="mt-4" data-tour="tour-objetivos">
                                 <ModuleInfoSection />
                               </div>
                             )}
@@ -357,7 +357,7 @@ const IALabContent = () => {
 
                             {/* Herramientas + Tutorías */}
                             {(viewSection === null || viewSection === 'herramientas') && (
-                              <div className="mt-5">
+                              <div className="mt-5" data-tour="tour-herramientas">
                                 <ToolTutorAccordion onAction={handleGlobalAction} />
                               </div>
                             )}

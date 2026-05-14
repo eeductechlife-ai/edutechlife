@@ -13,6 +13,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
     quizPassed,
     quizResult,
     showScoreResult,
+    generateTopicFeedback,
     TOTAL_QUESTIONS,
     PASSING_SCORE,
     SUGGESTED_TIME_SECONDS,
@@ -392,6 +393,32 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
             </div>
           </div>
 
+          {!passed && quizResult?.failedQuestions?.length > 0 && (
+            <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
+              <h4 className="text-xs font-bold text-red-700 mb-2 flex items-center gap-1.5">
+                <Icon name="fa-lightbulb" className="text-sm" />
+                Áreas de mejora
+              </h4>
+              <p className="text-xs text-red-600 leading-relaxed">
+                {generateTopicFeedback(quizResult.failedQuestions).map((msg, i) => (
+                  <span key={i} className="block mb-1">{msg}</span>
+                ))}
+              </p>
+            </div>
+          )}
+
+          {passed && (
+            <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-6">
+              <h4 className="text-xs font-bold text-emerald-700 mb-1 flex items-center gap-1.5">
+                <Icon name="fa-check-circle" className="text-sm" />
+                  Buen trabajo
+                </h4>
+                <p className="text-xs text-emerald-600 leading-relaxed">
+                  Has demostrado comprensión sólida de los temas. Revisa el feedback de cada pregunta para seguir perfeccionando tus conocimientos.
+                </p>
+            </div>
+          )}
+
           <div className="flex flex-col gap-3">
             <button
               onClick={handleClose}
@@ -399,14 +426,24 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
             >
               Volver al módulo
             </button>
-            {!passed && useIALabStore.getState().storageGetInt(`exam_attempts_remaining_m${activeMod}`, 3) > 0 && (
-              <button
-                onClick={handleRetry}
-                className="w-full py-3 border-2 border-red-200 text-red-600 rounded-xl hover:bg-red-50 hover:border-red-300 transition-all duration-300 font-medium"
-              >
-                Reintentar examen
-              </button>
-            )}
+            {!passed && (() => {
+              const remaining = useIALabStore.getState().storageGetInt(`exam_attempts_remaining_m${activeMod}`, 3);
+              const nextTime = useIALabStore.getState().storageGet(`exam_next_attempt_m${activeMod}`, null);
+              const inCooldown = nextTime && Date.now() < nextTime;
+              const hoursLeft = nextTime ? Math.ceil((nextTime - Date.now()) / 3600000) : 12;
+              if (remaining > 0 && !inCooldown) {
+                return (
+                  <>
+                    <button onClick={handleRetry} className="w-full py-3 border-2 border-red-200 text-red-600 rounded-xl hover:bg-red-50 hover:border-red-300 transition-all duration-300 font-medium">Reintentar examen</button>
+                    <p className="text-xs text-center text-slate-400">Te quedan {remaining - 1} de 3 intentos. Cada intento tiene un cooldown de 12h.</p>
+                  </>
+                );
+              }
+              if (remaining > 0 && inCooldown) {
+                return <p className="text-xs text-center text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">Espera {hoursLeft}h para tu siguiente intento. (12h entre cada uno, 3 intentos máximo).</p>;
+              }
+              return <p className="text-xs text-center text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">Has agotado tus 3 intentos para este examen. No puedes volver a intentarlo.</p>;
+            })()}
           </div>
         </div>
       </div>

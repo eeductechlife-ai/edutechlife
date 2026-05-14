@@ -524,39 +524,26 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
                                         <div className="text-2xl font-bold text-slate-800">{remainingAttempts}</div>
                                         <div className="text-xs text-slate-500">Ejercicios</div>
                                     </div>
-                                    {isApproved ? (
+                                    {isApproved && (
                                         <div className="text-center bg-slate-50 rounded-lg p-3">
                                             <div className="text-2xl font-bold text-slate-800">80%+</div>
                                             <div className="text-xs text-slate-500">Aprobado</div>
                                         </div>
-                                    ) : remainingAttempts <= 0 ? (
-                                        <div className="text-center bg-slate-100 rounded-lg px-2.5 py-2.5 opacity-60">
-                                            <div className="font-bold text-slate-400 text-[13px] leading-tight">Reintentar</div>
-                                            <div className="text-[10px] text-slate-400">Máximo diario alcanzado</div>
-                                        </div>
-                                    ) : (
-                                        <button onClick={handleRetry} className="text-center bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg px-2.5 py-2.5 w-full transition-all duration-200 cursor-pointer">
-                                            <div className="font-bold text-amber-700 text-[13px] leading-tight">Reintentar</div>
-                                            <div className="text-[10px] text-amber-600">Mínimo</div>
-                                        </button>
                                     )}
                                 </div>
+                                {!isApproved && remainingAttempts > 0 && (
+                                    <button onClick={handleRetry} className="w-full mt-3 py-3.5 rounded-xl bg-gradient-to-r from-petroleum to-corporate text-white font-bold text-sm hover:shadow-lg hover:shadow-petroleum/20 transition-all duration-300 flex items-center justify-center gap-2">
+                                        <Icon name="fa-rocket" className="text-base" />
+                                        Reintentar desafío
+                                    </button>
+                                )}
+                                {!isApproved && remainingAttempts <= 0 && (
+                                    <p className="text-xs text-center text-slate-400 mt-3 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">Has agotado tus intentos para este desafío.</p>
+                                )}
                             </div>
                         </div>
 
-                        {/* Acciones */}
-                        <div className="bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700 rounded-2xl p-6">
-                            <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-4">Acciones</h3>
-                            <div className="space-y-3">
-                                <button
-                                    onClick={onClose}
-                                    className="w-full px-4 py-3 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 flex items-center justify-center gap-2"
-                                >
-                                    <Icon name="fa-check" />
-                                    Cerrar y Volver al Módulo
-                                </button>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>

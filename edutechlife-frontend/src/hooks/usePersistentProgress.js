@@ -410,7 +410,7 @@ export const usePersistentProgress = () => {
   const markExamComplete = useCallback(async (moduleId, score) => {
     const examScore = score || completedExams[moduleId];
     
-    if (examScore && examScore >= MODULE_THRESHOLD) {
+    if (examScore) {
       const newExams = { ...completedExams, [moduleId]: examScore };
       recordActivity();
       const progress = await updateProgress({ completedExams: newExams });

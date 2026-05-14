@@ -3,19 +3,39 @@ import { Icon } from '../../utils/iconMapping.jsx';
 
 const STEPS = [
   {
+    target: 'tour-sidebar',
+    title: 'Panel de navegación',
+    description: 'Tu centro de control. Monitorea tu progreso, navega entre módulos, accede a recursos y personaliza tu experiencia con el modo oscuro.',
+  },
+  {
+    target: 'tour-tabs',
+    title: 'Menú de secciones',
+    description: 'Filtra el contenido del módulo activo: Objetivos, Contenido, Actividades y Herramientas. Cada pestaña muestra información específica.',
+  },
+  {
     target: 'tour-ruta',
     title: 'Tu ruta de hoy',
     description: 'Aquí encontrarás la próxima acción recomendada para avanzar en tu módulo. Sigue la ruta y no te detengas.',
   },
   {
+    target: 'tour-objetivos',
+    title: 'Objetivos del módulo',
+    description: 'Cada módulo tiene un objetivo claro de aprendizaje. La nota se compone de: Comunidad (5%), Desafío (30%), Examen (35%) y Recursos (30%).',
+  },
+  {
     target: 'tour-temas',
     title: 'Temas del módulo',
-    description: 'Cada tema contiene recursos multimedia. Expande un tema y completa todos los recursos para avanzar.',
+    description: 'Cada tema contiene recursos multimedia (videos, PDFs, OVAs). Expande un tema y completa todos los recursos para avanzar.',
   },
   {
     target: 'tour-actividades',
     title: 'Actividades del módulo',
     description: 'Completa las 3 actividades (Comunidad, Desafío, Examen) para aprobar el módulo con 80% o más.',
+  },
+  {
+    target: 'tour-herramientas',
+    title: 'Herramientas + Tutorías',
+    description: 'Sintetizador de Prompts, Advisor IA y Tutorías Virtuales. Potencia tu aprendizaje con estas herramientas interactivas.',
   },
 ];
 
