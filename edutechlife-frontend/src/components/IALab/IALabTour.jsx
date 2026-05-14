@@ -53,6 +53,13 @@ const IALabTour = () => {
   const resizeObserverRef = useRef(null);
   const scrollContainerRef = useRef(null);
 
+  const scrollToTarget = useCallback((stepIndex) => {
+    if (stepIndex < 0 || stepIndex >= STEPS.length) return;
+    const el = document.querySelector(`[data-tour="${STEPS[stepIndex].target}"]`);
+    if (!el) return;
+    el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+  }, []);
+
   const measureTarget = useCallback(() => {
     if (step < 0 || step >= STEPS.length) return;
     const el = document.querySelector(`[data-tour="${STEPS[step].target}"]`);
@@ -99,6 +106,7 @@ const IALabTour = () => {
           setTimeout(attempt, RETRY_INTERVAL);
         }
       };
+      scrollToTarget(0);
       setStep(0);
       attempt();
     }, INITIAL_DELAY);
@@ -118,13 +126,16 @@ const IALabTour = () => {
     setTargetRect(null);
     setTooltipPos(null);
 
+    // Hacer scroll al elemento objetivo antes de mostrar el tooltip
+    scrollToTarget(step);
+
     const timer = setTimeout(() => {
       updatePosition();
       setReady(true);
-    }, 300);
+    }, 500); // Aumentado a 500ms para dar tiempo al scroll
 
     return () => clearTimeout(timer);
-  }, [step, updatePosition]);
+  }, [step, updatePosition, scrollToTarget]);
 
   useEffect(() => {
     if (!ready || step < 0) return;

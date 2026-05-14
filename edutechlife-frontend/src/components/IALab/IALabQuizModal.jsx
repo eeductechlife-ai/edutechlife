@@ -3,6 +3,7 @@ import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabQuiz } from '../../hooks/IALab/useIALabQuiz';
 import { useIALabContext } from '../../context/IALabContext';
 import { useIALabStore } from '../../store/ialabStore';
+import { useNotification } from '../../context/NotificationContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const IALabQuizModal = ({ isOpen, onClose }) => {
@@ -36,6 +37,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
   } = useIALabQuiz();
 
   const { activeMod } = useIALabContext();
+  const { createNotification } = useNotification();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -135,7 +137,12 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
     
     // Resultado ya guardado dentro de submitQuiz via updateModuleActivity + markExamComplete
     if (submitResult?.success && submitResult?.result) {
-      // No se necesita llamada adicional - submitQuiz ya persiste los resultados
+      createNotification({
+        type: submitResult.result.passed ? 'success' : 'warning',
+        title: submitResult.result.passed ? '📝 Examen Aprobado' : '📝 Examen No Aprobado',
+        message: `Tu nota en el examen del Módulo ${activeMod} fue ${submitResult.result.score}%. ${submitResult.result.passed ? '¡Buen trabajo!' : 'Necesitas 80% para aprobar. Revisa los temas y vuelve a intentarlo.'}`,
+        metadata: { moduleId: activeMod, score: submitResult.result.score, type: 'exam' }
+      });
     }
   };
 

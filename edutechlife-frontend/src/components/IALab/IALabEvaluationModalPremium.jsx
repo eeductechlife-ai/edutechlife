@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import IALabEvaluationModal from './IALabEvaluationModal';
 import { useIALabContext } from '../../context/IALabContext';
 import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
+import { useNotification } from '../../context/NotificationContext';
 
 /**
  * Wrapper para el modal de evaluación premium
@@ -11,6 +12,7 @@ import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
 const IALabEvaluationModalPremium = ({ isOpen, onClose }) => {
     const { user, activeMod, setIsChallengeCompleted, setChallengeScore, markActivityComplete, markExamComplete, markChallengeComplete, updateModuleActivity, refreshProgress, recordLastTopic, modules } = useIALabContext();
     const { saveProgress, PROGRESS_STATUS, trackChallengeResult } = useIALabProgress();
+    const { createNotification } = useNotification();
     const [isProcessing, setIsProcessing] = useState(false);
     
     // Efecto para guardar progreso cuando el modal se monta
@@ -71,6 +73,13 @@ const IALabEvaluationModalPremium = ({ isOpen, onClose }) => {
             }
             
             const passed = score >= 80;
+
+            createNotification({
+                type: passed ? 'success' : 'warning',
+                title: passed ? '🏆 Desafío Aprobado' : '🏆 Desafío No Aprobado',
+                message: `Tu nota en el desafío del Módulo ${activeMod} fue ${score}%. ${passed ? '¡Excelente trabajo!' : 'Necesitas 80% para aprobar. Revisa el feedback y vuelve a intentarlo.'}`,
+                metadata: { moduleId: activeMod, score, type: 'challenge' }
+            });
         } catch (error) {
             console.error('❌ Error procesando resultado del desafío:', error);
         } finally {

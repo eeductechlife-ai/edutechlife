@@ -14,8 +14,9 @@ import { useIALabContext } from '../../context/IALabContext';
  * @param {string} props.className - Clases CSS adicionales
  */
 const ModuleInfoSection = ({ className = '', ...rest }) => {
-    const { activeMod, moduleContent, completedExams, moduleProgress } = useIALabContext();
-    const isModuleCompleted = completedExams?.[activeMod] || moduleProgress?.[activeMod]?.progressPct === 100;
+    const { activeMod, moduleContent, completedExams, moduleProgress, calculateModuleScore } = useIALabContext();
+    const moduleScore = calculateModuleScore(activeMod);
+    const isModuleCompleted = moduleScore >= 80;
     
     // Módulo 1: Datos originales (INTACTOS)
     const module1Data = {

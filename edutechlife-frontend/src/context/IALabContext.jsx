@@ -122,7 +122,7 @@ export const IALabProvider = ({ children, onBack }) => {
       await createNotification({
         type: 'module_complete',
         title: `✅ ${moduleName} Completado`,
-        message: `¡Felicitaciones! Aprobaste con ${result.newScore}% de calificacion. ${moduleId < 5 ? 'El siguiente modulo ya esta desbloqueado.' : '¡Has completado todos los modulos!'}`,
+        message: `¡Felicitaciones! Completaste el módulo con ${result.newScore}% de nota general. ${moduleId < 5 ? 'El siguiente modulo ya esta desbloqueado.' : '¡Has completado todos los modulos!'}`,
         metadata: { moduleId, score: result.newScore },
       });
 
