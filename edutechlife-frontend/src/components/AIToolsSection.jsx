@@ -92,7 +92,7 @@ function AIToolsSection() {
                 </div>
                 <h3 className="text-2xl md:text-3xl font-black text-[#4DA8C4]">{tools[0].name}</h3>
               </div>
-              <p className="text-white/70 max-w-lg text-sm leading-relaxed">{tools[0].description}</p>
+              <p className="text-white/80 max-w-xl text-base md:text-lg leading-relaxed">{tools[0].description}</p>
             </div>
             <div className="flex flex-wrap items-center gap-3 mt-6">
               <a
@@ -104,7 +104,7 @@ function AIToolsSection() {
                 <Icon name="fa-arrow-right" className="text-xs" />
               </a>
               {tools[0].badges.map((badge) => (
-                <span key={badge} className="px-3 py-1 rounded-full bg-white/10 text-[10px] font-bold uppercase tracking-wider border border-white/15">{badge}</span>
+                <span key={badge} className="px-3 py-1 rounded-full bg-white/10 text-[10px] text-white font-bold uppercase tracking-wider border border-white/15">{badge}</span>
               ))}
             </div>
           </motion.div>
@@ -184,13 +184,13 @@ function AIToolsSection() {
             className="col-span-1 md:col-span-2 bg-[#4DA8C4] text-white rounded-[2rem] p-8 flex flex-col md:flex-row items-center justify-between gap-6 group hover:shadow-2xl hover:shadow-[#4DA8C4]/30 transition-all duration-500"
           >
             <div className="flex items-center gap-4 max-w-xl">
-              <div className="w-14 h-14 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0">
-                <Icon name={tools[3].icon} className="text-2xl text-white" />
+              <div className="w-16 h-16 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0">
+                <Icon name={tools[3].icon} className="text-3xl text-white" />
               </div>
               <div>
-                <h3 className="text-xl font-black text-white">{tools[3].name}</h3>
-                <p className="text-xs text-white/70 font-semibold uppercase tracking-wider">{tools[3].subtitle}</p>
-                <p className="text-white/80 text-sm mt-1">{tools[3].description}</p>
+                <h3 className="text-2xl md:text-3xl font-black text-white">{tools[3].name}</h3>
+                <p className="text-sm text-white/70 font-semibold uppercase tracking-wider">{tools[3].subtitle}</p>
+                <p className="text-white/80 text-base mt-1">{tools[3].description}</p>
               </div>
             </div>
             <a

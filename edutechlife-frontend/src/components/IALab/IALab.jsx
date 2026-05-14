@@ -135,12 +135,7 @@ const IALabContent = () => {
                 setShowQuizModal(true);
                 break;
             case 'OPEN_CHALLENGE':
-                if (useIALabStore.getState().canAttemptChallenge(data?.moduleId || activeMod)) {
-                    useIALabStore.getState().decrementChallengeAttempt(data?.moduleId || activeMod);
-                    setShowPremiumEvaluationModal(true);
-                } else {
-                    setToast({ type: 'warning', message: 'Has alcanzado el límite de intentos diarios (3 por día) para este desafío. Vuelve mañana.' });
-                }
+                setShowPremiumEvaluationModal(true);
                 break;
             case 'SHOW_EXAM_RESULT':
                 setShowExamResult(true);
@@ -451,11 +446,14 @@ const IALabContent = () => {
                             onClose={() => setShowChallengeResult(false)}
                             onRetry={() => {
                                 setShowChallengeResult(false);
-                                if (useIALabStore.getState().canAttemptChallenge(activeMod)) {
-                                    useIALabStore.getState().decrementChallengeAttempt(activeMod);
+                                const store = useIALabStore.getState();
+                                if (store.canAttemptChallengeRetry(activeMod)) {
+                                    store.decrementChallengeAttempt(activeMod);
                                     setShowPremiumEvaluationModal(true);
                                 } else {
-                                    setToast({ type: 'warning', message: 'Has alcanzado el límite de intentos diarios (3 por día) para este desafío. Vuelve mañana.' });
+                                    const nextTime = store.getNextAttemptTime(activeMod);
+                                    const hoursLeft = nextTime ? Math.ceil((nextTime - Date.now()) / 3600000) : 12;
+                                    setToast({ type: 'warning', message: `Debes esperar ${hoursLeft}h para intentar de nuevo. (3 intentos máximo, 12h entre cada uno).` });
                                 }
                             }}
                         />

@@ -200,132 +200,6 @@ const CardWithLottie = ({ children, animationData, onMouseEnter, onMouseLeave })
 };
 
 // ==========================================
-// Ecosystem Light Glassmorphism Modal
-// ==========================================
-const PilarModal = ({ pilar, isOpen, onClose }) => {
-    const modalContent = {
-        neuroentorno: {
-            fullDesc: 'Nuestro método NeuroEntornos Escolares integra diagnóstico VAK personalizado, inteligencia artificial con Valerio, y herramientas SmartBoard para crear espacios de aprendizaje únicos que se adaptan al cerebro de cada estudiante.',
-            features: [
-                { icon: 'fa-brain', title: 'Diagnóstico VAK', desc: 'Identificamos tu estilo de aprendizaje: Visual, Auditivo o Kinestésico' },
-                { icon: 'fa-chart-line', title: 'Seguimiento', desc: 'Métricas en tiempo real del progreso de cada estudiante' },
-                { icon: 'fa-users', title: 'Comunidad', desc: 'Red de apoyo entre estudiantes y docentes' },
-                { icon: 'fa-award', title: 'Certificación', desc: 'Credenciales reconocidas internacionalmente' }
-            ],
-            cta: 'Explorar NeuroEntornos'
-        },
-        ialab: {
-            fullDesc: 'Laboratorio de Inteligencia Artificial con certificación internacional. Aprende a crear prompts efectivos, desarrolla agentes IA y obtén tu certificación profesional.',
-            features: [
-                { icon: 'fa-wand-magic-sparkles', title: 'Prompt Engineering', desc: 'Domina el arte de comunicarte con IA' },
-                { icon: 'fa-code', title: 'Desarrollo IA', desc: 'Crea tus propios agentes inteligentes' },
-                { icon: 'fa-certificate', title: 'Certificación', desc: 'Obtén tu certificado profesional reconocido' },
-                { icon: 'fa-users', title: 'Proyectos Reales', desc: 'Aplica tus conocimientos en proyectos prácticos' }
-            ],
-            cta: 'Ir al Laboratorio IA'
-        },
-        consultoria: {
-            fullDesc: 'Transformación digital para instituciones educativas y empresas. Desarrollamos agentes de IA personalizados que automatizan procesos, mejoran la eficiencia y garantizan un ROI measurable.',
-            features: [
-                { icon: 'fa-building', title: 'Diagnóstico', desc: 'Análisis profundo de procesos y oportunidades de automatización' },
-                { icon: 'fa-chart-pie', title: 'ROI Garantizado', desc: '3x retorno de inversión promedio en el primer año' },
-                { icon: 'fa-cogs', title: 'Automatización', desc: 'Sistemas optimizados para cada proceso' },
-                { icon: 'fa-headset', title: 'Soporte 24/7', desc: 'Asistencia continua para maximizar el rendimiento' }
-            ],
-            cta: 'Solicitar Consultoría'
-        }
-    };
-
-    useEffect(() => {
-        const handleEscape = (e) => { if (e.key === 'Escape') onClose(); };
-        if (isOpen) {
-            document.addEventListener('keydown', handleEscape);
-            document.body.style.overflow = 'hidden';
-        }
-        return () => {
-            document.removeEventListener('keydown', handleEscape);
-            document.body.style.overflow = 'unset';
-        };
-    }, [isOpen, onClose]);
-
-    if (!isOpen || !pilar || !modalContent[pilar.id]) return null;
-    const content = modalContent[pilar.id];
-
-    return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8" onClick={onClose}>
-            {/* Solid overlay - ZERO LAG performance */}
-            <div className="absolute inset-0 bg-gray-100/95" />
-            
-            <div 
-                className="relative w-full max-w-5xl max-h-[90vh] overflow-auto bg-white rounded-3xl shadow-[0_30px_60px_rgba(0,75,99,0.15)] border border-[rgba(77,168,196,0.2)]"
-                onClick={(e) => e.stopPropagation()}
-            >
-                <div className="relative overflow-hidden rounded-t-3xl bg-[#F8FAFC] border-b border-[#E2E8F0] p-8 md:p-12">
-                    <button 
-                        onClick={onClose}
-                        className="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 rounded-full bg-white border border-[#E2E8F0] shadow-sm flex items-center justify-center text-[#004B63] hover:bg-[#F8FAFC] transition-transform hover:scale-105"
-                    >
-                        <Icon name="fa-xmark" className="text-lg" />
-                    </button>
-
-                    <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center gap-6">
-                        <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-white border border-[#E2E8F0] shadow-sm flex items-center justify-center">
-                            <Icon name={pilar.icon} className="text-4xl md:text-5xl text-[#4DA8C4]" />
-                        </div>
-                        <div>
-                            <span className="inline-block px-4 py-1 bg-[#4DA8C4]/10 rounded-full text-xs font-normal uppercase tracking-widest text-[#4DA8C4] mb-4">
-                                {pilar.subtitle}
-                            </span>
-                            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#004B63] mb-2 tracking-tight">
-                                {pilar.title}
-                            </h2>
-                            <p className="text-base text-slate-600 leading-relaxed font-normal max-w-xl">
-                                {content.fullDesc}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="p-8 md:p-12 bg-white">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {content.features.map((feature, index) => (
-                            <div key={index} className="group flex items-start gap-4 p-5 bg-[#F8FAFC] rounded-2xl border border-[#E2E8F0] transition-colors hover:bg-white hover:border-[#4DA8C4]/30 hover:shadow-neuro">
-                                <div className="w-12 h-12 rounded-xl bg-white border border-[#E2E8F0] shadow-sm flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
-                                    <Icon name={feature.icon} className="text-lg text-[#66CCCC]" />
-                                </div>
-                                <div>
-                                    <h4 className="font-normal text-[#004B63] mb-1">{feature.title}</h4>
-                                    <p className="text-base text-slate-600 leading-relaxed font-normal">{feature.desc}</p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-
-                    <div className="text-center mt-12 pt-8 border-t border-[#E2E8F0]">
-                        <button 
-                            onClick={() => { onClose(); window.location.href = `/${pilar.id}`; }}
-                            className="btn-glow inline-flex items-center gap-3 px-10 py-4 font-normal rounded-full font-montserrat bg-white"
-                        >
-                            <Icon name="fa-rocket" className="text-[#4DA8C4]" />
-                            <span className="text-[#004B63] group-hover:text-corporate">{content.cta}</span>
-                            <Icon name="fa-arrow-right" className="text-[#66CCCC]" />
-                        </button>
-                    </div>
-                </div>
-
-                <style>{`
-                    @keyframes modal-slide-in {
-                        0% { opacity: 0; transform: scale(0.98) translateY(10px); }
-                        100% { opacity: 1; transform: scale(1) translateY(0); }
-                    }
-                    .animate-modal-in { animation: modal-slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-                `}</style>
-            </div>
-        </div>
-    );
-};
-
-// ==========================================
 // 3D Tilt Card using Framer Motion
 // ==========================================
 const TiltCard = ({ children, pilar, onClick }) => {
@@ -386,7 +260,6 @@ const TiltCard = ({ children, pilar, onClick }) => {
 // Ecosystem Component (Light Theme)
 // ==========================================
 const Ecosystem = memo(() => {
-    const [selectedPilar, setSelectedPilar] = useState(null);
     const sectionRef = useRef(null);
 
     const pilares = [
@@ -446,7 +319,7 @@ const Ecosystem = memo(() => {
                     {/* TARJETA 01 */}
                     <motion.div 
                         className="group bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden hover:shadow-[0_20px_60px_rgba(77,168,196,0.35)] transition-all duration-300 cursor-pointer relative"
-                        onClick={() => setSelectedPilar(pilares[0])}
+                        onClick={() => {}}
                         initial={{ opacity: 0, y: 30, filter: 'blur(10px)' }}
                         whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                         viewport={{ once: true }}
@@ -472,7 +345,7 @@ const Ecosystem = memo(() => {
                     {/* TARJETA 02 */}
                     <motion.div 
                         className="group bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden hover:shadow-[0_20px_60px_rgba(77,168,196,0.35)] transition-all duration-300 cursor-pointer relative"
-                        onClick={() => setSelectedPilar(pilares[1])}
+                        onClick={() => {}}
                         initial={{ opacity: 0, y: 30, filter: 'blur(10px)' }}
                         whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                         viewport={{ once: true }}
@@ -498,7 +371,7 @@ const Ecosystem = memo(() => {
                     {/* TARJETA 03 */}
                     <motion.div 
                         className="group bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden hover:shadow-[0_20px_60px_rgba(77,168,196,0.35)] transition-all duration-300 cursor-pointer relative"
-                        onClick={() => setSelectedPilar(pilares[2])}
+                        onClick={() => {}}
                         initial={{ opacity: 0, y: 30, filter: 'blur(10px)' }}
                         whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                         viewport={{ once: true }}
@@ -523,7 +396,7 @@ const Ecosystem = memo(() => {
                 </div>
             </div>
 
-            <PilarModal pilar={selectedPilar} isOpen={!!selectedPilar} onClose={() => setSelectedPilar(null)} />
+
         </section>
     );
 });

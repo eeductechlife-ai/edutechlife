@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabQuiz } from '../../hooks/IALab/useIALabQuiz';
 import { useIALabContext } from '../../context/IALabContext';
+import { useIALabStore } from '../../store/ialabStore';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const IALabQuizModal = ({ isOpen, onClose }) => {
@@ -12,8 +13,6 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
     quizPassed,
     quizResult,
     showScoreResult,
-    dailyAttemptsCount,
-    DAILY_ATTEMPTS_LIMIT,
     TOTAL_QUESTIONS,
     PASSING_SCORE,
     SUGGESTED_TIME_SECONDS,
@@ -145,11 +144,26 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
   };
 
   const handleRetry = () => {
+    const store = useIALabStore.getState();
+    if (!store.canAttemptChallengeRetry) {
+      const remaining = store.storageGetInt(`exam_attempts_remaining_m${activeMod}`, 3);
+      if (remaining <= 0) {
+        alert('Has agotado tus 3 intentos para este examen.');
+        return;
+      }
+      const nextTime = store.storageGet(`exam_next_attempt_m${activeMod}`, null);
+      if (nextTime && Date.now() < nextTime) {
+        const hoursLeft = Math.ceil((nextTime - Date.now()) / 3600000);
+        alert(`Debes esperar ${hoursLeft}h para intentar de nuevo. (3 intentos máximo, 12h entre cada uno).`);
+        return;
+      }
+    }
+    const current = store.storageGetInt(`exam_attempts_remaining_m${activeMod}`, 3);
+    store.storageSet(`exam_attempts_remaining_m${activeMod}`, Math.max(0, current - 1));
+    store.storageSet(`exam_next_attempt_m${activeMod}`, Date.now() + 12 * 60 * 60 * 1000);
     handleClose();
     setTimeout(() => {
-      if (canAttemptQuiz()) {
-        openEvaluation();
-      }
+      openEvaluation();
     }, 300);
   };
 
@@ -285,7 +299,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
       {currentQuestion < TOTAL_QUESTIONS - 1 ? (
         <button
           onClick={handleNext}
-          disabled={!selectedAnswer}
+          disabled={!quizAnswers[quizQuestions[currentQuestion]?.id]}
           className="px-5 py-2.5 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
         >
                           <span className="text-sm font-medium">Siguiente</span>
@@ -385,10 +399,10 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
             >
               Volver al módulo
             </button>
-            {!passed && dailyAttemptsCount < DAILY_ATTEMPTS_LIMIT && (
+            {!passed && useIALabStore.getState().storageGetInt(`exam_attempts_remaining_m${activeMod}`, 3) > 0 && (
               <button
                 onClick={handleRetry}
-                className="w-full py-3 border-2 border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:border-slate-300 transition-all duration-300 font-medium"
+                className="w-full py-3 border-2 border-red-200 text-red-600 rounded-xl hover:bg-red-50 hover:border-red-300 transition-all duration-300 font-medium"
               >
                 Reintentar examen
               </button>

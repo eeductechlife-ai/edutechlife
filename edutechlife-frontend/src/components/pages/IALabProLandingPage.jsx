@@ -613,7 +613,7 @@ const IALabProLandingPage = () => {
       <div className="h-6 bg-gradient-to-b from-[#004064] to-white" />
 
       {/* BENEFITS SECTION */}
-      <section className="py-16 md:py-20 lg:py-24 bg-gradient-to-b from-white to-[#F0F7FA] relative overflow-hidden">
+      <section className="pt-8 md:pt-12 lg:pt-16 pb-8 md:pb-12 bg-gradient-to-b from-white to-[#F0F7FA] relative overflow-hidden">
         <div className="absolute inset-0 opacity-[0.02]"
           style={{
             backgroundImage: `radial-gradient(circle at 25% 25%, #004B63 1px, transparent 1px), radial-gradient(circle at 75% 75%, #00BCD4 1px, transparent 1px)`,
@@ -626,12 +626,12 @@ const IALabProLandingPage = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-12"
+            className="text-center mb-8"
           >
-            <h2 className="font-display text-3xl md:text-4xl font-bold text-[#004B63] mb-4">
+            <h2 className="font-display text-3xl md:text-4xl font-bold text-[#004B63] mb-3">
               ¿Por qué AI Lab Academic?
             </h2>
-            <p className="font-body text-lg text-[#475569] max-w-2xl mx-auto">
+            <p className="font-body text-base text-[#475569] max-w-2xl mx-auto">
               Una plataforma diseñada para tu éxito en la era de la inteligencia artificial
             </p>
           </motion.div>
@@ -669,7 +669,7 @@ const IALabProLandingPage = () => {
       </section>
 
       {/* COURSES CATALOG */}
-      <section id="cursos" className="py-16 md:py-24 bg-white">
+      <section id="cursos" className="pt-8 md:pt-12 pb-16 md:pb-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

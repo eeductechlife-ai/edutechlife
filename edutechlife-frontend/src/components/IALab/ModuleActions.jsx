@@ -10,6 +10,8 @@ const WEIGHT_LABELS = {
 
 const ActionCard = ({ icon, label, onClick, completed, score, color = 'from-petroleum to-corporate' }) => {
   const prefersReducedMotion = useReducedMotion();
+  const isApproved = completed && score !== undefined && score >= 80;
+  const isFailed = completed && score !== undefined && score < 80;
   return (
     <motion.button
       onClick={onClick}
@@ -17,19 +19,28 @@ const ActionCard = ({ icon, label, onClick, completed, score, color = 'from-petr
       whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
       title={WEIGHT_LABELS[label] || ''}
       className={`relative w-full flex items-center gap-4 p-4 rounded-xl border transition-all duration-200 text-left cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 ${
-        completed
+        isApproved
           ? 'bg-gradient-to-br from-emerald-50 to-emerald-50/50 border-emerald-200/60 hover:shadow-md hover:border-emerald-300'
+          : isFailed
+          ? 'bg-gradient-to-br from-red-50 to-red-50/50 border-red-200/60 hover:shadow-md hover:border-red-300'
           : 'bg-white dark:bg-slate-800 border-slate-200/60 dark:border-slate-700/60 hover:shadow-md hover:border-petroleum/30 dark:hover:border-petroleum/40'
       }`}
     >
-      {completed && (
+      {isApproved && (
         <div className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-800 flex items-center justify-center shadow-sm">
           <Icon name="fa-check" className="text-white text-[10px]" />
         </div>
       )}
+      {isFailed && (
+        <div className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-red-500 border-2 border-white dark:border-slate-800 flex items-center justify-center shadow-sm">
+          <Icon name="fa-xmark" className="text-white text-[10px]" />
+        </div>
+      )}
       <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm transition-all duration-200 ${
-        completed
+        isApproved
           ? 'bg-gradient-to-br from-emerald-500 to-emerald-600'
+          : isFailed
+          ? 'bg-gradient-to-br from-red-500 to-red-600'
           : 'bg-gradient-to-br from-petroleum to-corporate group-hover:shadow-md'
       }`}>
         <Icon name={icon} className="text-white text-xl" />
@@ -37,20 +48,22 @@ const ActionCard = ({ icon, label, onClick, completed, score, color = 'from-petr
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <span className={`font-bold text-sm truncate ${
-            completed ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-800 dark:text-slate-100 group-hover:text-petroleum dark:group-hover:text-[#4DA8C4]'
+            isApproved ? 'text-emerald-700 dark:text-emerald-400' : isFailed ? 'text-red-700 dark:text-red-400' : 'text-slate-800 dark:text-slate-100 group-hover:text-petroleum dark:group-hover:text-[#4DA8C4]'
           }`}>
             {label}
           </span>
         </div>
         <span className={`text-xs ${
-          completed ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-500 dark:text-slate-400'
+          isApproved ? 'text-emerald-600 dark:text-emerald-400' : isFailed ? 'text-red-600 dark:text-red-400' : 'text-slate-500 dark:text-slate-400'
         }`}>
-          {completed ? `${score}% - Completado` : 'Pendiente'}
+          {isApproved ? `${score}% - Aprobado` : isFailed ? `${score}% - Reprobado` : 'Pendiente'}
         </span>
       </div>
-      {completed && score !== undefined && (
-        <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/30 flex items-center justify-center">
-          <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400">{score}%</span>
+      {(isApproved || isFailed) && (
+        <div className={`flex-shrink-0 w-10 h-10 rounded-xl border flex items-center justify-center ${
+          isApproved ? 'bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/30' : 'bg-red-500/10 border-red-200 dark:border-red-500/30'
+        }`}>
+          <span className={`text-sm font-bold ${isApproved ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}`}>{score}%</span>
         </div>
       )}
     </motion.button>

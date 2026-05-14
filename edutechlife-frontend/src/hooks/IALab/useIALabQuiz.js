@@ -65,9 +65,10 @@ export const useIALabQuiz = () => {
   // ==================== CONSTANTES ====================
   
   const TOTAL_QUESTIONS = 8;
-  const PASSING_SCORE = 80; // 80% mínimo para aprobar (unificado con ExamResultViewer e ialabStore)
-  const DAILY_ATTEMPTS_LIMIT = 3; // Cambiado de 2 a 3 intentos diarios
-  const SUGGESTED_TIME_MINUTES = 20; // Unificado con useIALabTimer (20 min)
+  const PASSING_SCORE = 80;
+  const MAX_ATTEMPTS = 3;
+  const ATTEMPT_COOLDOWN_MS = 12 * 60 * 60 * 1000; // 12 horas
+  const SUGGESTED_TIME_MINUTES = 20;
   const SUGGESTED_TIME_SECONDS = SUGGESTED_TIME_MINUTES * 60;
   
   // Constantes de seguridad
@@ -226,21 +227,14 @@ export const useIALabQuiz = () => {
     };
   }, []);
   
-  // Verificar si puede intentar el quiz (límite diario)
+  // Verificar si puede intentar el quiz (3 intentos totales, 12h entre cada uno)
   const canAttemptQuiz = useCallback(() => {
-    const today = new Date().toDateString();
-    const lastAttempt = lastAttemptDate ? new Date(lastAttemptDate).toDateString() : null;
-    
-    // Si es un nuevo día, resetear contador
-    if (lastAttempt !== today) {
-      setDailyAttemptsCount(0);
-      setLastAttemptDate(new Date().toISOString());
-      return true;
-    }
-    
-    // Verificar límite diario
-    return dailyAttemptsCount < DAILY_ATTEMPTS_LIMIT;
-  }, [lastAttemptDate, dailyAttemptsCount, setDailyAttemptsCount, setLastAttemptDate]);
+    const remaining = useIALabStore.getState().storageGetInt(`exam_attempts_remaining_m${activeMod}`, MAX_ATTEMPTS);
+    if (remaining <= 0) return false;
+    const nextTime = useIALabStore.getState().storageGet(`exam_next_attempt_m${activeMod}`, null);
+    if (nextTime && Date.now() < nextTime) return false;
+    return true;
+  }, [activeMod]);
   
   // Generar feedback personalizado por temas
   const generateTopicFeedback = useCallback((failedQuestions) => {
@@ -349,22 +343,10 @@ export const useIALabQuiz = () => {
         failedQuestions: result.failedQuestions
       };
       
-      // Actualizar intentos
+      // Guardar intento en localStorage
       const updatedAttempts = [...quizAttempts, attempt];
       setQuizAttempts(updatedAttempts);
-      
-      // Guardar en localStorage
       useIALabStore.getState().storageSet(`quizAttempts_${activeMod}`, updatedAttempts);
-      
-      // Actualizar contador de intentos diarios
-      const today = new Date().toDateString();
-      const todayAttempts = updatedAttempts.filter(attempt => {
-        const attemptDate = new Date(attempt.date).toDateString();
-        return attemptDate === today;
-      });
-      
-      setDailyAttemptsCount(todayAttempts.length);
-      setLastAttemptDate(new Date().toISOString());
       
       // Detener timer
       setIsTimerRunning(false);
@@ -393,10 +375,11 @@ export const useIALabQuiz = () => {
   const openEvaluation = useCallback(() => {
     // Verificar si puede intentar
     if (!canAttemptQuiz()) {
-      // Mostrar mensaje de límite alcanzado
-      setSecurityMessage('Has alcanzado el límite de intentos diarios (2 por día)');
+      const nextTime = useIALabStore.getState().storageGet(`exam_next_attempt_m${activeMod}`, null);
+      const hoursLeft = nextTime ? Math.ceil((nextTime - Date.now()) / 3600000) : 12;
+      setSecurityMessage(`Debes esperar ${hoursLeft}h para intentar de nuevo. (${MAX_ATTEMPTS} intentos máximo, 12h entre cada uno).`);
       setShowSecurityMessage(true);
-      setTimeout(() => setShowSecurityMessage(false), 3000);
+      setTimeout(() => setShowSecurityMessage(false), 4000);
       return false;
     }
     
@@ -409,11 +392,8 @@ export const useIALabQuiz = () => {
     // Resetear contador de advertencias de seguridad
     setSecurityWarningCount(0);
     
-    // Si es un nuevo intento (no hay intentos previos o tiene intentos disponibles)
-    const latestAttempt = getLatestQuizAttempt();
-    if (!latestAttempt || dailyAttemptsCount < DAILY_ATTEMPTS_LIMIT) {
-      resetQuizForRetry();
-    }
+    // Resetear respuestas para nuevo intento
+    resetQuizForRetry();
 
     // Barajar preguntas y opciones cada intento
     const shuffled = [...quizQuestions].sort(() => Math.random() - 0.5);
@@ -423,9 +403,8 @@ export const useIALabQuiz = () => {
 
     return true;
   }, [
-    canAttemptQuiz, setShowExamModal, setIsTimerRunning, setSecurityWarningCount,
-    setSecurityMessage, setShowSecurityMessage, getLatestQuizAttempt, dailyAttemptsCount,
-    resetQuizForRetry
+    canAttemptQuiz, activeMod, setShowExamModal, setIsTimerRunning, setSecurityWarningCount,
+    setSecurityMessage, setShowSecurityMessage, resetQuizForRetry
   ]);
   
   // Cerrar modal de evaluación
@@ -520,21 +499,14 @@ export const useIALabQuiz = () => {
   
   // Penalizar intento por violaciones de seguridad
   const penalizeAttempt = useCallback(() => {
-    if (dailyAttemptsCount >= DAILY_ATTEMPTS_LIMIT) {
-      showSecurityMessageTemporary('Ya has alcanzado el límite de intentos diarios');
+    const remaining = useIALabStore.getState().storageGetInt(`exam_attempts_remaining_m${activeMod}`, MAX_ATTEMPTS);
+    if (remaining <= 0) {
+      showSecurityMessageTemporary('Ya no te quedan intentos disponibles');
       return;
     }
     
-    // Incrementar contador de intentos (penalización)
-    setDailyAttemptsCount(prev => {
-      const newCount = prev + SECURITY_VIOLATION_PENALTY;
-      
-      // Guardar en localStorage
-      const today = new Date().toDateString();
-      useIALabStore.getState().storageSetString(`dailyAttempts_${activeMod}_${today}`, newCount.toString());
-      
-      return newCount;
-    });
+    const newRemaining = Math.max(0, remaining - SECURITY_VIOLATION_PENALTY);
+    useIALabStore.getState().storageSet(`exam_attempts_remaining_m${activeMod}`, newRemaining);
     
     setAttemptsPenalized(prev => prev + SECURITY_VIOLATION_PENALTY);
     
@@ -542,14 +514,11 @@ export const useIALabQuiz = () => {
     SECURITY_LOGGER.logViolation('PENALTY_APPLIED', {
       violations: securityViolations,
       attemptsPenalized: SECURITY_VIOLATION_PENALTY,
-      dailyAttemptsCount: dailyAttemptsCount + SECURITY_VIOLATION_PENALTY
+      remainingAttempts: newRemaining
     });
     
     showSecurityMessageTemporary(`¡Penalización! Has perdido ${SECURITY_VIOLATION_PENALTY} intento por infracciones de seguridad`);
-  }, [
-    dailyAttemptsCount, activeMod, securityViolations,
-    setDailyAttemptsCount, setAttemptsPenalized, showSecurityMessageTemporary
-  ]);
+  }, [activeMod, securityViolations, setAttemptsPenalized, showSecurityMessageTemporary]);
   
   // ==================== FUNCIONES DE UTILIDAD ====================
   
@@ -585,7 +554,7 @@ export const useIALabQuiz = () => {
     // Constantes
     TOTAL_QUESTIONS,
     PASSING_SCORE,
-    DAILY_ATTEMPTS_LIMIT,
+    MAX_ATTEMPTS,
     SUGGESTED_TIME_MINUTES,
     SUGGESTED_TIME_SECONDS,
     MAX_SECURITY_WARNINGS,

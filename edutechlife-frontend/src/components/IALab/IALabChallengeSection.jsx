@@ -38,8 +38,8 @@ const IALabChallengeSection = ({
     const { saveProgress, PROGRESS_STATUS, isLoadingProgress } = useIALabProgress();
 
     const isApproved = challengeScore >= 80;
-    const scoreColor = isApproved ? 'text-emerald-600' : 'text-amber-600';
-    const scoreBgColor = isApproved ? 'bg-emerald-100' : 'bg-amber-100';
+    const scoreColor = isApproved ? 'text-emerald-600' : 'text-red-600';
+    const scoreBgColor = isApproved ? 'bg-emerald-100' : 'bg-red-100';
     const scoreText = isApproved ? 'Aprobado' : 'Reprobado';
 
     const currentModule = modules.find(m => m.id === activeMod);
@@ -47,13 +47,6 @@ const IALabChallengeSection = ({
     const estimatedTime = "25 min";
 
     const handleStartChallenge = () => {
-        const store = useIALabStore.getState();
-        if (!store.canAttemptChallenge(activeMod)) {
-            setNotification({ type: 'warning', message: 'Has alcanzado el límite de intentos diarios (3 por día) para este desafío. Vuelve mañana.' });
-            return;
-        }
-        // Decrementar intento disponible al comenzar el desafío
-        store.decrementChallengeAttempt(activeMod);
         setShowPremiumEvaluationModal(true);
     };
 
@@ -69,7 +62,7 @@ const IALabChallengeSection = ({
                        `Módulo: ${currentModule?.title || 'Desafío del Curso'}\n` +
                        `Fecha: ${new Date().toLocaleDateString()}\n\n` +
                        `La funcionalidad de "Mis Proyectos" estará disponible próximamente.`;
-        setNotification({ type: approved ? 'success' : 'warning', message });
+        setNotification({ type: approved ? 'success' : 'error', message });
     };
 
     const handleRetryChallenge = async () => {
@@ -78,6 +71,14 @@ const IALabChallengeSection = ({
 
     const confirmRetryChallenge = async () => {
         setShowRetryConfirm(false);
+        const store = useIALabStore.getState();
+        if (!store.canAttemptChallengeRetry(activeMod)) {
+            const nextAttemptTime = store.getNextAttemptTime(activeMod);
+            const hoursLeft = nextAttemptTime ? Math.ceil((nextAttemptTime - Date.now()) / 3600000) : 12;
+            setNotification({ type: 'warning', message: `Debes esperar ${hoursLeft}h para intentar de nuevo. (3 intentos máximo, 12h entre cada uno).` });
+            return;
+        }
+        store.decrementChallengeAttempt(activeMod);
         try {
             if (user?.id && challengeScore > 0) {
                 const historyData = {
@@ -123,19 +124,21 @@ const IALabChallengeSection = ({
         <>
             <div className="flex items-center gap-4 mb-6">
                 <div className={`w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 ${
-                    isChallengeCompleted
+                    !isChallengeCompleted
+                        ? 'bg-gradient-to-br from-petroleum to-petroleum-dark'
+                        : isApproved
                         ? 'bg-gradient-to-br from-emerald-500 to-emerald-400'
-                        : 'bg-gradient-to-br from-petroleum to-petroleum-dark'
+                        : 'bg-gradient-to-br from-red-500 to-red-400'
                 }`}>
                     <Icon
-                        name={isChallengeCompleted ? "fa-trophy" : "fa-bolt"}
+                        name={!isChallengeCompleted ? "fa-bolt" : isApproved ? "fa-trophy" : "fa-xmark"}
                         className="text-white text-xl"
                     />
                 </div>
                 <div className="flex-1">
                     <div className="flex items-center gap-3 mb-1">
                         <h3 className="text-lg md:text-xl font-bold text-petroleum">
-                            {isChallengeCompleted ? 'Desafío Completado' : 'Desafío del Curso'}
+                            {!isChallengeCompleted ? 'Desafío del Curso' : isApproved ? 'Desafío Completado' : 'Desafío Reprobado'}
                         </h3>
                         {isChallengeCompleted && (
                             <span className={`px-3 py-0.5 text-xs font-semibold rounded-full ${scoreBgColor} ${scoreColor}`}>
@@ -144,30 +147,46 @@ const IALabChallengeSection = ({
                         )}
                     </div>
                     <p className="text-sm text-slate-600">
-                        {isChallengeCompleted
-                            ? `Has completado el desafío con ${challengeScore}%${!isApproved ? ' (mínimo 80% para aprobar)' : ''}.`
-                            : 'Aplica lo aprendido en un reto práctico'
+                        {!isChallengeCompleted
+                            ? 'Aplica lo aprendido en un reto práctico'
+                            : isApproved
+                            ? `¡Felicidades! Completaste el desafío con ${challengeScore}%.`
+                            : `Completaste el desafío con ${challengeScore}% (mínimo 80% para aprobar).`
                         }
                     </p>
                 </div>
             </div>
 
-            <div className="bg-petroleum/5 border border-petroleum/10 rounded-xl p-5 mb-6">
+            <div className={`rounded-xl p-5 mb-6 ${
+                !isChallengeCompleted
+                    ? 'bg-petroleum/5 border border-petroleum/10'
+                    : isApproved
+                    ? 'bg-emerald-50 border border-emerald-200'
+                    : 'bg-red-50 border border-red-200'
+            }`}>
                 <div className="flex items-center gap-3 mb-4">
-                    <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-petroleum/10 rounded-full">
-                        <Icon name={isChallengeCompleted ? "fa-check-circle" : "fa-hourglass-half"} className="text-petroleum text-sm" />
-                        <span className="text-xs font-semibold text-petroleum">
-                            {isChallengeCompleted ? 'Completado' : `${estimatedTime}`}
+                    <div className={`flex items-center gap-2 px-3 py-1.5 bg-white rounded-full ${
+                        !isChallengeCompleted ? 'border border-petroleum/10' : isApproved ? 'border border-emerald-200' : 'border border-red-200'
+                    }`}>
+                        <Icon name={!isChallengeCompleted ? "fa-hourglass-half" : isApproved ? "fa-check-circle" : "fa-xmark-circle"} className={`text-sm ${
+                            !isChallengeCompleted ? 'text-petroleum' : isApproved ? 'text-emerald-500' : 'text-red-500'
+                        }`} />
+                        <span className={`text-xs font-semibold ${
+                            !isChallengeCompleted ? 'text-petroleum' : isApproved ? 'text-emerald-600' : 'text-red-600'
+                        }`}>
+                            {!isChallengeCompleted ? estimatedTime : isApproved ? 'Completado' : 'Reprobado'}
                         </span>
                     </div>
-                    <span className="text-xs text-slate-500">
-                        {isChallengeCompleted ? 'Verificado' : 'Pendiente'}
+                    <span className={`text-xs ${
+                        !isChallengeCompleted ? 'text-slate-500' : isApproved ? 'text-emerald-500' : 'text-red-500'
+                    }`}>
+                        {!isChallengeCompleted ? 'Pendiente' : isApproved ? 'Aprobado' : 'No aprobado'}
                     </span>
                 </div>
 
                 <div className="mb-3">
                     <h4 className="text-sm font-bold text-petroleum mb-2">
-                        {isChallengeCompleted ? 'Reto Superado' : 'Desafío del Módulo'}
+                        {!isChallengeCompleted ? 'Desafío del Módulo' : isApproved ? 'Reto Superado' : 'Intenta de nuevo'}
                     </h4>
                     <p className="text-sm text-slate-700 leading-relaxed border-l-2 border-petroleum pl-4 py-1">
                         &ldquo;{challengeText}&rdquo;
@@ -175,7 +194,7 @@ const IALabChallengeSection = ({
                 </div>
 
                 {isChallengeCompleted && challengeScore > 0 && (
-                    <div className="mt-4 pt-4 border-t border-petroleum/10">
+                    <div className={`mt-4 pt-4 border-t ${isApproved ? 'border-emerald-200' : 'border-red-200'}`}>
                         <div className="flex items-center justify-between mb-2">
                             <span className="text-xs font-medium text-slate-500">Puntuación</span>
                             <span className={`text-xs font-semibold ${scoreColor}`}>{challengeScore}%</span>
@@ -185,7 +204,7 @@ const IALabChallengeSection = ({
                                 className={`h-full rounded-full transition-all duration-700 ${
                                     isApproved
                                         ? 'bg-gradient-to-r from-emerald-500 to-emerald-400'
-                                        : 'bg-gradient-to-r from-amber-500 to-orange-400'
+                                        : 'bg-gradient-to-r from-red-500 to-red-400'
                                 }`}
                                 style={{ width: `${challengeScore}%` }}
                             ></div>
@@ -198,7 +217,7 @@ const IALabChallengeSection = ({
                     </div>
                 )}
 
-                <div className="flex items-center gap-4 mt-4 pt-4 border-t border-petroleum/10">
+                <div className="flex items-center gap-4 mt-4 pt-4 border-t border-slate-100">
                     <div className="flex items-center gap-1.5">
                         <Icon name="fa-brain" className="text-petroleum text-sm" />
                         <span className="text-xs text-slate-500">Práctica</span>
@@ -219,27 +238,35 @@ const IALabChallengeSection = ({
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                            className={`flex-1 px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-400 text-white rounded-xl hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all duration-300 font-semibold flex items-center justify-center gap-2 text-sm ${
+                            className={`flex-1 px-6 py-3 rounded-xl transition-all duration-300 font-semibold flex items-center justify-center gap-2 text-sm ${
                                 isButtonDisabled ? 'opacity-70 cursor-not-allowed' : ''
+                            } ${
+                                isApproved
+                                    ? 'bg-gradient-to-r from-emerald-500 to-emerald-400 text-white hover:shadow-[0_0_20px_rgba(16,185,129,0.3)]'
+                                    : 'bg-gradient-to-r from-red-500 to-red-400 text-white hover:shadow-[0_0_20px_rgba(239,68,68,0.3)]'
                             }`}
                             onClick={handleReviewCompleted}
                             disabled={isButtonDisabled}
                         >
-                            <Icon name="fa-trophy" className="text-sm" />
+                            <Icon name={isApproved ? "fa-trophy" : "fa-chart-line"} className="text-sm" />
                             <span>Ver Resultado</span>
                         </motion.button>
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                            className={`flex-1 px-6 py-3 border-2 border-petroleum/15 text-petroleum rounded-xl hover:bg-petroleum/5 hover:border-petroleum/30 transition-all duration-300 font-semibold flex items-center justify-center gap-2 text-sm ${
+                            className={`flex-1 px-6 py-3 border-2 rounded-xl transition-all duration-300 font-semibold flex items-center justify-center gap-2 text-sm ${
                                 isButtonDisabled ? 'opacity-70 cursor-not-allowed' : ''
+                            } ${
+                                isApproved
+                                    ? 'border-petroleum/15 text-petroleum hover:bg-petroleum/5 hover:border-petroleum/30'
+                                    : 'border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300'
                             }`}
                             onClick={handleRetryChallenge}
                             disabled={isButtonDisabled}
                         >
                             <Icon name="fa-rocket" className="text-sm" />
-                            <span>Versión Avanzada</span>
+                            <span>{isApproved ? 'Versión Avanzada' : 'Reintentar'}</span>
                         </motion.button>
                     </>
                 ) : (

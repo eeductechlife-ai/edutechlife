@@ -496,7 +496,7 @@ export const useIALabStore = create((set, get) => ({
   showExamModal: false,
   setShowExamModal: (v) => set({ showExamModal: v }),
   quizAnswers: {},
-  setQuizAnswers: (v) => set({ quizAnswers: v }),
+  setQuizAnswers: (v) => set((state) => ({ quizAnswers: typeof v === 'function' ? v(state.quizAnswers) : v })),
   quizScore: null,
   setQuizScore: (v) => set({ quizScore: v }),
   quizPassed: false,
@@ -800,29 +800,40 @@ export const useIALabStore = create((set, get) => ({
   },
 
   // ==================== LÍMITE DE INTENTOS PARA DESAFÍOS ====================
-  CHALLENGE_DAILY_LIMIT: 3,
+  CHALLENGE_MAX_ATTEMPTS: 3,
+  CHALLENGE_COOLDOWN_MS: 12 * 60 * 60 * 1000, // 12 horas
 
   getChallengeRemainingAttempts: (moduleId) => {
-    const today = new Date().toISOString().split('T')[0];
-    const key = `challenge_attempts_m${moduleId}_${today}`;
-    return ls.get(key, 3); // Default to max attempts
+    const key = `challenge_attempts_remaining_m${moduleId}`;
+    return ls.get(key, 3);
+  },
+
+  getNextAttemptTime: (moduleId) => {
+    const key = `challenge_next_attempt_m${moduleId}`;
+    return ls.get(key, null);
+  },
+
+  canAttemptChallengeRetry: (moduleId) => {
+    const key = `challenge_attempts_remaining_m${moduleId}`;
+    const remaining = ls.get(key, 3);
+    if (remaining <= 0) return false;
+    const nextKey = `challenge_next_attempt_m${moduleId}`;
+    const nextTime = ls.get(nextKey, null);
+    if (nextTime && Date.now() < nextTime) return false;
+    return true;
   },
 
   decrementChallengeAttempt: (moduleId) => {
-    const today = new Date().toISOString().split('T')[0];
-    const key = `challenge_attempts_m${moduleId}_${today}`;
+    const key = `challenge_attempts_remaining_m${moduleId}`;
     const current = ls.get(key, 3);
     const newVal = Math.max(0, current - 1);
     ls.set(key, newVal);
+    const nextKey = `challenge_next_attempt_m${moduleId}`;
+    ls.set(nextKey, Date.now() + 12 * 60 * 60 * 1000);
     return newVal;
   },
 
-  canAttemptChallenge: (moduleId) => {
-    const today = new Date().toISOString().split('T')[0];
-    const key = `challenge_attempts_m${moduleId}_${today}`;
-    const remaining = ls.get(key, 3);
-    return remaining > 0;
-  },
+  canAttemptChallenge: () => { return true; },
 
   // ==================== FUNCIONES COMPUESTAS ====================
   getCurrentModule: () => {

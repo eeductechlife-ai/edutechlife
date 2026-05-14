@@ -76,9 +76,9 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
     }
 
     const isApproved = evaluation.notaGlobal >= 80;
-    const scoreColor = isApproved ? 'text-emerald-600' : 'text-petroleum';
-    const scoreBgColor = isApproved ? 'bg-emerald-50 border-emerald-200' : 'bg-petroleum/5 border-petroleum/10';
-    const scoreBarColor = isApproved ? 'from-emerald-500 to-emerald-400' : 'from-petroleum to-corporate';
+    const scoreColor = isApproved ? 'text-emerald-600' : 'text-red-600';
+    const scoreBgColor = isApproved ? 'bg-emerald-50 border-emerald-200' : 'bg-red-50 border-red-200';
+    const scoreBarColor = isApproved ? 'from-emerald-500 to-emerald-400' : 'from-red-500 to-red-400';
 
     const percentage = evaluation.notaGlobal;
     const circumference = 2 * Math.PI * 45;
@@ -175,7 +175,7 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
                                                 <circle cx="50" cy="50" r="45" fill="none" stroke="#e2e8f0" strokeWidth="8" />
                                                 <circle
                                                     cx="50" cy="50" r="45" fill="none"
-                                                    stroke={isApproved ? "var(--color-success)" : "var(--color-petroleum)"}
+                                                    stroke={isApproved ? "var(--color-success)" : "#ef4444"}
                                                     strokeWidth="8"
                                                     strokeDasharray={circumference}
                                                     strokeDashoffset={strokeDashoffset}
@@ -198,9 +198,9 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
                                                     <div className="flex items-center justify-between mb-1">
                                                         <span className="text-slate-500">Estado (mínimo 80%)</span>
                                                         <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                                                            isApproved ? 'bg-emerald-50 text-emerald-600' : 'bg-petroleum/10 text-petroleum'
+                                                            isApproved ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'
                                                         }`}>
-                                                            <Icon name={isApproved ? "fa-check-circle" : "fa-clock"} className="mr-1" />
+                                                            <Icon name={isApproved ? "fa-check-circle" : "fa-xmark-circle"} className="mr-1" />
                                                             {isApproved ? 'Aprobado' : 'En progreso'}
                                                         </span>
                                                     </div>
@@ -278,9 +278,9 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
                                                 </p>
                                             </div>
                                         ) : (
-                                            <div className="bg-petroleum/5 border border-petroleum/10 rounded-xl p-4">
+                                            <div className="bg-red-50 border border-red-200 rounded-xl p-4">
                                                 <div className="flex items-center gap-3 mb-2">
-                                                    <Icon name="fa-lightbulb" className="text-petroleum" />
+                                                    <Icon name="fa-lightbulb" className="text-red-600" />
                                                     <h4 className="font-semibold text-slate-800">No te desanimes, puedes mejorar</h4>
                                                 </div>
                                                 <p className="text-slate-600 mb-3">
