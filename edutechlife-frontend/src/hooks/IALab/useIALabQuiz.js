@@ -313,22 +313,17 @@ export const useIALabQuiz = () => {
   
   // Enviar quiz y calcular resultados
   const submitQuiz = useCallback(async () => {
+    let result;
     try {
       // Calcular puntaje
-      const result = calculateQuizScore(quizAnswers);
+      result = calculateQuizScore(quizAnswers);
       
       setQuizScore(result.score);
       setQuizPassed(result.passed);
       setQuizResult(result);
       setShowScoreResult(true);
 
-      // Registrar en el sistema de progreso gamificado (solo suma progreso si score >= 80%)
-      updateModuleActivity(activeMod, 'exam', result.passed, result.score);
-      
-      // Registrar en ProgressContext (solo suma progreso si score >= 80%)
-      if (markExamComplete) {
-        await markExamComplete(activeMod, result.score);
-      }
+      // La persistencia ahora se maneja en IALabQuizModal.handleSubmit
       
       // Guardar intento en localStorage
       const attempt = {
@@ -355,7 +350,7 @@ export const useIALabQuiz = () => {
       
     } catch (error) {
       console.error('Error al enviar quiz:', error);
-      return { success: false, error: error.message };
+      return { success: false, error: error.message, result }; // result puede ser undefined si calculateQuizScore falló
     }
   }, [
     quizAnswers, activeMod, quizAttempts, timeElapsed,

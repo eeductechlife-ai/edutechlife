@@ -1,6 +1,12 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
+
+const readLocalExamScores = () => {
+  try {
+    return JSON.parse(localStorage.getItem('ialab_completed_exams') || '{}');
+  } catch { return {}; }
+};
 
 const WEIGHT_LABELS = {
   Comunidad: '5% del puntaje del módulo',
@@ -71,6 +77,15 @@ const ActionCard = ({ icon, label, onClick, completed, score, color = 'from-petr
 };
 
 const ModuleActions = ({ onAction, activeMod, challengeScores, completedExams, moduleProgress, isForumOpen, onToggleForum }) => {
+  const [localExamScores, setLocalExamScores] = useState(readLocalExamScores);
+  const effectiveExamScore = completedExams?.[activeMod] ?? localExamScores[activeMod];
+
+  useEffect(() => {
+    const handler = () => setLocalExamScores(readLocalExamScores());
+    window.addEventListener('ialab:examCompleted', handler);
+    return () => window.removeEventListener('ialab:examCompleted', handler);
+  }, []);
+
   const handleCommunity = () => {
     onToggleForum?.();
     // Scroll to forum after it renders
@@ -88,7 +103,7 @@ const ModuleActions = ({ onAction, activeMod, challengeScores, completedExams, m
   };
 
   const handleExam = () => {
-    if (completedExams?.[activeMod]) {
+    if (effectiveExamScore !== undefined) {
       onAction?.('SHOW_EXAM_RESULT');
     } else {
       onAction?.('OPEN_QUIZ');
@@ -128,8 +143,8 @@ const ModuleActions = ({ onAction, activeMod, challengeScores, completedExams, m
           icon="fa-clipboard-check"
           label="Examen"
           onClick={handleExam}
-          completed={!!completedExams?.[activeMod]}
-          score={completedExams?.[activeMod]}
+          completed={effectiveExamScore !== undefined}
+          score={effectiveExamScore}
         />
       </div>
     </div>

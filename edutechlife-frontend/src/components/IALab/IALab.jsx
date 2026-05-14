@@ -60,6 +60,14 @@ const IALabContent = () => {
     const [toast, setToast] = useState(null);
     const [showModuleCelebration, setShowModuleCelebration] = useState(false);
     const [viewSection, setViewSection] = useState(null);
+    const [examRefreshKey, setExamRefreshKey] = useState(0);
+
+    // Escuchar eventos de examen completado para forzar refresco UI
+    useEffect(() => {
+        const handler = () => setExamRefreshKey(k => k + 1);
+        window.addEventListener('ialab:examCompleted', handler);
+        return () => window.removeEventListener('ialab:examCompleted', handler);
+    }, []);
 
     const TABS = [
       { id: null, label: 'Todo' },
@@ -323,26 +331,6 @@ const IALabContent = () => {
                               </div>
                             )}
 
-                            {/* BANNER CELEBRATORIO - siempre visible si activo */}
-                            {showModuleCelebration && (
-                              <motion.div
-                                initial={{ opacity: 0, scale: 0.96 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                                className="relative bg-gradient-to-r from-emerald-50 to-emerald-50/50 dark:from-emerald-900/20 dark:to-emerald-800/10 rounded-2xl border border-emerald-200/60 dark:border-emerald-700/30 shadow-sm p-4 md:p-5 overflow-hidden"
-                              >
-                                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-t-2xl" />
-                                <div className="flex items-center gap-3">
-                                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-sm flex-shrink-0">
-                                    <Icon name="fa-trophy" className="text-white text-lg" />
-                                  </div>
-                                  <div className="flex-1">
-                                    <h4 className="text-sm font-bold text-emerald-700 dark:text-emerald-400">¡Módulo completado!</h4>
-                                    <p className="text-xs text-emerald-600 dark:text-emerald-300/80">Has alcanzado el 80% o más. Sigue así hacia tu certificación.</p>
-                                  </div>
-                                </div>
-                              </motion.div>
-                            )}
                           </motion.div>
                         </AnimatePresence>
 
@@ -430,8 +418,12 @@ const IALabContent = () => {
                     <SuspenseWrapper>
                         <ExamResultViewer
                             moduleId={activeMod}
-                            score={completedExams?.[activeMod] || 80}
+                            score={useIALabStore.getState().completedExams[activeMod]}
                             onClose={() => setShowExamResult(false)}
+                            onRetry={() => {
+                                setShowExamResult(false);
+                                handleGlobalAction('OPEN_QUIZ');
+                            }}
                         />
                     </SuspenseWrapper>
                     </ErrorBoundary>

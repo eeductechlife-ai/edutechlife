@@ -36,7 +36,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
     formatTime,
   } = useIALabQuiz();
 
-  const { activeMod } = useIALabContext();
+  const { activeMod, markExamComplete } = useIALabContext();
   const { createNotification } = useNotification();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -136,6 +136,27 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
     setIsSubmitting(false);
     
     // Resultado ya guardado dentro de submitQuiz via updateModuleActivity + markExamComplete
+    if (submitResult?.result) {
+      const { score, passed } = submitResult.result;
+      // Guardado DIRECTO al store + localStorage (no depende de cadenas de contexto)
+      const st = useIALabStore.getState();
+      st.updateModuleActivity(activeMod, 'exam', passed, score);
+      try {
+        const key = 'ialab_completed_exams';
+        const current = JSON.parse(localStorage.getItem(key) || '{}');
+        current[activeMod] = score;
+        localStorage.setItem(key, JSON.stringify(current));
+      } catch(e) {}
+
+      // Sincronizar con Supabase via ProgressContext
+      if (markExamComplete) {
+        markExamComplete(activeMod, score).catch(() => {});
+      }
+
+      // Disparar evento global para forzar refresco de la UI
+      window.dispatchEvent(new CustomEvent('ialab:examCompleted', { detail: { moduleId: activeMod, score, passed } }));
+    }
+    
     if (submitResult?.success && submitResult?.result) {
       createNotification({
         type: submitResult.result.passed ? 'success' : 'warning',

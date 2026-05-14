@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { createContext, useContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useUser, useClerk, useAuth as useClerkAuth } from '@clerk/react';
 import { useProgressContext } from './ProgressContext';
 import { useNotification } from './NotificationContext';
@@ -24,6 +24,17 @@ export const IALabProvider = ({ children, onBack }) => {
 
   // Store selectors (single source of truth)
   const store = useIALabStore();
+  // Suscripción reactiva para valores que cambian en caliente
+  const storeCompletedExams = useIALabStore((s) => s.completedExams);
+  // Forzar re-render del contexto cuando completedExams cambia en el store
+  const [, forceRender] = useState(0);
+  useEffect(() => {
+    const unsub = useIALabStore.subscribe(
+      (state) => state.completedExams,
+      () => forceRender(n => n + 1)
+    );
+    return unsub;
+  }, []);
 
   const user = clerkUser ? {
     id: clerkUser.id,
@@ -523,7 +534,7 @@ export const IALabProvider = ({ children, onBack }) => {
     isUsingJWT: store.isUsingJWT,
     userId: store.userId,
     completedVideos: store.completedVideos,
-    completedExams: store.completedExams,
+    completedExams: storeCompletedExams,
     completedInfographics: store.completedInfographics,
     completedActivities: store.completedActivities,
     challengeScores: store.challengeScores,

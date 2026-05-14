@@ -323,7 +323,7 @@ export const useIALabStore = create((set, get) => ({
   courseProgress: 0,
   setCourseProgress: (v) => set({ courseProgress: v }),
   completedVideos: [],
-  completedExams: {},
+  completedExams: (() => { try { const v = localStorage.getItem('ialab_completed_exams'); return v ? JSON.parse(v) : {}; } catch { return {}; } })(),
   completedInfographics: [],
   completedActivities: [],
   challengeScores: {},
@@ -434,6 +434,15 @@ export const useIALabStore = create((set, get) => ({
       }
       return { moduleProgress: newProgress, completedExams: newCompletedExams };
     });
+
+    // Persistir completedExams inmediatamente a localStorage
+    if (activity === 'exam' && typeof score === 'number') {
+      try {
+        const current = JSON.parse(localStorage.getItem(LS_KEYS.COMPLETED_EXAMS) || '{}');
+        current[moduleId] = score;
+        localStorage.setItem(LS_KEYS.COMPLETED_EXAMS, JSON.stringify(current));
+      } catch (e) {}
+    }
 
     state.setLastStoreUpdateTimestamp(updateTimestamp);
     clearMemoCache();
@@ -699,12 +708,23 @@ export const useIALabStore = create((set, get) => ({
       return; // La actualización local es más reciente, ignorar sync
     }
 
+    // Cargar completedExams: EL STORE SIEMPRE GANA (fuente más reciente)
+    // Merge: store value tiene prioridad sobre ProgressContext
+    // Si store está vacío, usar ProgressContext. Si ambos vacíos, localStorage.
+    let persistedExams = { ...(data.completedExams || {}), ...state.completedExams };
+    if (Object.keys(persistedExams).length === 0) {
+      try {
+        const saved = localStorage.getItem(LS_KEYS.COMPLETED_EXAMS);
+        persistedExams = saved ? JSON.parse(saved) : {};
+      } catch (e) { persistedExams = {}; }
+    }
+
     // Cargar estado de gamificación desde localStorage (persistencia entre sesiones)
     const gamification = state.loadGamificationState();
     set({
       completedModules: data.completedModules ?? state.completedModules,
       completedVideos: data.completedVideos ?? state.completedVideos,
-      completedExams: data.completedExams ?? state.completedExams,
+      completedExams: persistedExams,
       completedInfographics: data.completedInfographics ?? state.completedInfographics,
       completedActivities: data.completedActivities ?? state.completedActivities,
       challengeScores: data.challengeScores ?? state.challengeScores,
