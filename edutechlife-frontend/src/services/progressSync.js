@@ -314,7 +314,13 @@ export const mergeProgress = (localData, remoteData) => {
   };
 
   const mergeExams = (local, remote) => {
-    return { ...local, ...remote };
+    const merged = { ...remote };
+    for (const [modId, score] of Object.entries(local || {})) {
+      if (score > (merged[modId] || 0)) {
+        merged[modId] = score;
+      }
+    }
+    return merged;
   };
 
   const mergeChallengeScores = (local, remote) => {

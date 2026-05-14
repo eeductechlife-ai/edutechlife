@@ -438,15 +438,9 @@ const IALabContent = () => {
                             onClose={() => setShowChallengeResult(false)}
                             onRetry={() => {
                                 setShowChallengeResult(false);
-                                const store = useIALabStore.getState();
-                                if (store.canAttemptChallengeRetry(activeMod)) {
-                                    store.decrementChallengeAttempt(activeMod);
-                                    setShowPremiumEvaluationModal(true);
-                                } else {
-                                    const nextTime = store.getNextAttemptTime(activeMod);
-                                    const hoursLeft = nextTime ? Math.ceil((nextTime - Date.now()) / 3600000) : 12;
-                                    setToast({ type: 'warning', message: `Debes esperar ${hoursLeft}h para intentar de nuevo. (3 intentos máximo, 12h entre cada uno).` });
-                                }
+                                useIALabStore.getState().setChallengeScore(0);
+                                useIALabStore.getState().setIsChallengeCompleted(false);
+                                setShowPremiumEvaluationModal(true);
                             }}
                         />
                     </SuspenseWrapper>
