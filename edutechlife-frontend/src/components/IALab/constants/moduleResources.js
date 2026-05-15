@@ -13,8 +13,8 @@
 export const moduleResources = {
   // MÓDULO 1: INGENIERÍA DE PROMPTS
   "Introducción a la Inteligencia Artificial Generativa": {
-    title: "Fundamentos de IA Generativa",
-    description: "Conceptos básicos, historia y aplicaciones prácticas de la inteligencia artificial generativa en el mundo moderno.",
+    title: "De Cero a Experto en IA",
+    description: "Descubre cómo la IA generativa está transformando la educación, los negocios y la vida diaria. Aprende desde cero qué es, cómo funciona y por qué es la habilidad más demandada del momento.",
     learningObjectives: [
       "Comprender qué es la IA Generativa y cómo funciona",
       "Diferenciar entre IA débil (narrow) y IA fuerte (general)",
@@ -27,18 +27,18 @@ export const moduleResources = {
       {
         id: "intro-video-1",
         type: "video",
-        title: "Explicación Visual: Anatomía de un Prompt",
+        title: "Anatomía de un Prompt en 6 Minutos",
         url: "https://www.youtube.com/embed/6f-FwOE5wIY",
         duration: "6:06",
         thumbnail: "https://img.youtube.com/vi/6f-FwOE5wIY/maxresdefault.jpg",
         provider: "youtube",
-        description: "Desglose visual de las partes que componen un prompt efectivo."
+        description: "Aprende en solo 6 minutos cómo construir prompts que la IA entiende a la primera. Con ejemplos visuales claros."
       },
       {
         id: "intro-ova-1",
         type: "ova_interactive",
         title: "Laboratorio: Comienzos de la IA",
-        description: "OVA completo con 5 secciones interactivas y simulador integrado.",
+        description: "Explora los orígenes de la inteligencia artificial con 5 actividades interactivas que te llevarán desde Alan Turing hasta ChatGPT.",
         estimatedTime: "10 minutos",
         difficulty: "Intermedio",
         interactiveElements: 5,
@@ -49,8 +49,8 @@ export const moduleResources = {
   },
 
   "¿Qué es un Prompt?": {
-    title: "Dominando los Prompts",
-    description: "Un prompt es la instrucción o mensaje que le damos a la IA para que realice una tarea específica. Es la clave para comunicarnos efectivamente con modelos como ChatGPT y obtener resultados precisos. Explora los recursos disponibles para aprender a dominarlos.",
+    title: "El Arte de Dar Instrucciones a la IA",
+    description: "Domina el arte de comunicarte con la IA: aprende a escribir instrucciones claras que te den respuestas precisas y útiles en segundos.",
     learningObjectives: [
       "Comprender qué es un prompt y cómo usarlo para comunicarte efectivamente con la IA"
     ],
@@ -60,12 +60,12 @@ export const moduleResources = {
       {
         id: "prompt-video-1",
         type: "video",
-        title: "Video Introductorio: ¿Qué es la IA Generativa?",
+        title: "IA Generativa en 4 Minutos",
         url: "https://www.youtube.com/embed/jnePzCTKEqs?start=3",
         duration: "4:30",
         thumbnail: "https://img.youtube.com/vi/jnePzCTKEqs/maxresdefault.jpg",
         provider: "youtube",
-        description: "Explicación visual de los conceptos fundamentales con ejemplos prácticos."
+        description: "Entiende la IA generativa con ejemplos visuales y prácticos que puedes aplicar desde hoy."
       },
       {
         id: "prompt-guide-1",
@@ -75,15 +75,15 @@ export const moduleResources = {
         pages: 12,
         format: "PDF",
         size: "249 KB",
-        description: "Documento completo con estructura detallada de prompts efectivos, técnicas avanzadas y ejemplos prácticos.",
+        description: "Tu manual de referencia con técnicas comprobadas y ejemplos listos para copiar y pegar.",
         thumbnailType: "premium",
         immersiveView: true
       },
       {
         id: "prompt-ova-html-1",
         type: "ova_interactive",
-        title: "Aprendamos qué es un Prompt",
-        description: "Infografía interactiva sobre cómo comunicarte con la IA mediante prompts efectivos.",
+        title: "Tu Primer Prompt: Laboratorio Interactivo",
+        description: "Pon en práctica lo aprendido: escribe tus propios prompts y recibe feedback inmediato. Laboratorio guiado por Valerio.",
         estimatedTime: "10 minutos",
         difficulty: "Principiante",
         fullscreen: true
@@ -92,8 +92,8 @@ export const moduleResources = {
   },
 
   "Estructura Básica de un Prompt Efectivo": {
-    title: "Arquitectura de Prompts",
-    description: "Patrones y estructuras probadas para crear prompts que generen respuestas precisas y útiles.",
+    title: "La Fórmula del Prompt Perfecto",
+    description: "Descubre los patrones secretos que usan los expertos para obtener respuestas de IA de nivel profesional.",
     learningObjectives: [
       "Aplicar la estructura ROL-TAREA-FORMATO-CONTEXTO",
       "Utilizar delimitadores y marcadores de sección",
@@ -106,12 +106,12 @@ export const moduleResources = {
       {
         id: "structure-video-1",
         type: "video",
-        title: "Tutorial: Construyendo Prompts Paso a Paso",
+        title: "Construye Prompts como un Profesional",
         url: "https://www.youtube.com/embed/8XxSC2L6QoE",
         duration: "9:45",
         thumbnail: "https://img.youtube.com/vi/8XxSC2L6QoE/maxresdefault.jpg",
         provider: "youtube",
-        description: "Demostración práctica de construcción de prompts complejos."
+        description: "Aprende a construir prompts profesionales paso a paso con ejemplos reales que puedes adaptar a tus necesidades."
       },
       {
         id: "structure-template-1",
@@ -120,7 +120,7 @@ export const moduleResources = {
         url: "/templates/advanced-prompt-templates.json",
         format: "JSON",
         size: "3.2 MB",
-        description: "15 plantillas JSON listas para usar en diferentes escenarios."
+        description: "15 plantillas profesionales listas para usar: solo copia, personaliza y obtén resultados increíbles."
       },
       {
         id: "structure-case-1",
@@ -130,7 +130,7 @@ export const moduleResources = {
         pages: 8,
         format: "PDF",
         size: "2.1 MB",
-        description: "Análisis detallado de un prompt real para análisis de datasets."
+        description: "Estudio de caso real: aprende cómo un prompt bien diseñado transformó un análisis de datos complejo."
       }
     ]
   },
@@ -139,8 +139,8 @@ export const moduleResources = {
   // MÓDULO 2: POTENCIA CHATGPT
   // ============================================================================
   "Guía Completa de ChatGPT": {
-    title: "Guía Completa de ChatGPT",
-    description: "Recurso integral de Edutechlife que cubre todos los aspectos de ChatGPT: desde la interfaz básica hasta técnicas avanzadas de prompt engineering y automatización.",
+    title: "ChatGPT de la A a la Z",
+    description: "Todo lo que necesitas para dominar ChatGPT en un solo lugar: desde lo básico hasta técnicas que te harán destacar.",
     learningObjectives: [
       "Navegar eficientemente por la interfaz de ChatGPT",
       "Configurar conversaciones para diferentes propósitos",
@@ -153,12 +153,12 @@ export const moduleResources = {
       {
         id: "chatgpt-video-1",
         type: "video",
-        title: "Tutorial: Primeros Pasos con ChatGPT",
+        title: "ChatGPT desde Cero en 6 Minutos",
         url: "https://www.youtube.com/embed/iOlo-K7yj2M",
         duration: "5:43",
         thumbnail: "https://img.youtube.com/vi/iOlo-K7yj2M/maxresdefault.jpg",
         provider: "youtube",
-        description: "Guía completa para comenzar a usar ChatGPT de manera efectiva."
+        description: "Aprende a usar ChatGPT como un profesional desde el primer minuto, incluso si nunca lo has abierto."
       },
       {
         id: "chatgpt-guide-modulo2",
@@ -168,15 +168,15 @@ export const moduleResources = {
         pages: 25,
         format: "PDF",
         size: "4.2 MB",
-        description: "Guía oficial de Edutechlife - Módulo 2: Las Herramientas Integradas de ChatGPT. Manual completo con tips, trucos y mejores prácticas.",
+        description: "Tu guía definitiva de ChatGPT: tips, trucos y ejemplos prácticos organizados para consulta rápida.",
         thumbnailType: "premium",
         immersiveView: true
       },
       {
         id: "chatgpt-ova-ecosystem",
         type: "ova_interactive",
-        title: "Dominando el Ecosistema ChatGPT",
-        description: "Guía interactiva completa: evolución de modelos GPT, modos de operación, herramientas integradas, automatización y el arte del prompt estratégico.",
+        title: "Explora el Ecosistema ChatGPT",
+        description: "Viaje interactivo por el universo ChatGPT: descubre cada herramienta, aprende a combinarlas y conviértete en un usuario avanzado.",
         estimatedTime: "20 minutos",
         difficulty: "Principiante",
         interactiveElements: 5,
@@ -187,8 +187,8 @@ export const moduleResources = {
   },
 
   "Plantillas de Flujos de Trabajo": {
-    title: "Plantillas de Flujos de Trabajo",
-    description: "Descubre las herramientas integradas de ChatGPT y aprende a crear flujos de trabajo automatizados que potencien tu productividad profesional y académica.",
+    title: "Automatiza tu Trabajo con IA",
+    description: "Aprende a usar las 5 herramientas ocultas de ChatGPT que multiplicarán tu productividad. Automatiza tareas en minutos.",
     learningObjectives: [
       "Identificar las 5 herramientas clave del ecosistema ChatGPT",
       "Seleccionar la herramienta correcta según el tipo de tarea",
@@ -206,15 +206,15 @@ export const moduleResources = {
         pages: 20,
         format: "PDF",
         size: "4.8 MB",
-        description: "Guía completa de las herramientas integradas de ChatGPT: Búsqueda Web, Intérprete de Código, DALL-E 3, Canvas y Proyectos.",
+        description: "Descubre cómo Búsqueda Web, Análisis de Datos, DALL-E 3 y Canvas trabajan juntos para resolver problemas complejos.",
         thumbnailType: "premium",
         immersiveView: true
       },
       {
         id: "workflow-ova-herramientas",
         type: "ova_interactive",
-        title: "Domina las Herramientas ChatGPT",
-        description: "Explora interactivamente cada herramienta de ChatGPT, escucha explicaciones en audio y completa un desafío práctico con escenarios reales.",
+        title: "Laboratorio: Herramientas ChatGPT",
+        description: "Explora cada herramienta de ChatGPT con ejercicios prácticos y audio guiado. Completa el desafío para demostrar tu dominio.",
         estimatedTime: "25 minutos",
         difficulty: "Intermedio",
         interactiveElements: 5,
@@ -225,8 +225,8 @@ export const moduleResources = {
   },
 
   "Function Calling y APIs de OpenAI": {
-    title: "Function Calling y APIs de OpenAI",
-    description: "Descubre cómo crear y usar GPTs personalizados y acciones para automatizar tareas complejas.",
+    title: "Conecta ChatGPT con el Mundo Real",
+    description: "Crea tu propio asistente IA a medida. Aprende a construir GPTs que trabajan para ti mientras tú te enfocas en lo importante.",
     learningObjectives: [
       "Crear GPTs personalizados para necesidades específicas",
       "Configurar acciones para conectar con APIs externas",
@@ -239,12 +239,12 @@ export const moduleResources = {
       {
         id: "gpts-video-1",
         type: "video",
-        title: "Tutorial: Creando tu Primer GPT",
+        title: "Crea tu Primer GPT en 18 Minutos",
         url: "https://www.youtube.com/embed/VkZ0VKR3Oe8",
         duration: "18:45",
         thumbnail: "https://img.youtube.com/vi/VkZ0VKR3Oe8/maxresdefault.jpg",
         provider: "youtube",
-        description: "Paso a paso para crear un GPT personalizado funcional."
+        description: "Sigue este tutorial paso a paso y al final tendrás tu propio asistente IA entrenado para tus necesidades específicas."
       },
       {
         id: "gpts-guide-1",
@@ -253,7 +253,7 @@ export const moduleResources = {
         url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/guia%20de%20aplicaciones/WhatsApp%20Image%202026-05-07%20at%2020.35.40.jpeg",
         format: "JPEG",
         size: "2.1 MB",
-        description: "Guía visual sobre GPTs, acciones y automatizaciones.",
+        description: "Guía visual rápida para crear, configurar y publicar tu primer GPT personalizado.",
         thumbnailType: "premium",
         immersiveView: true
       },
@@ -261,7 +261,7 @@ export const moduleResources = {
         id: "gpts-ova-1",
         type: "ova_interactive",
         title: "Laboratorio: Construye un GPT",
-        description: "Práctica guiada para crear un GPT especializado en tu área.",
+        description: "Manos a la obra: crea un GPT desde cero con ejercicios guiados y retroalimentación en cada paso.",
         estimatedTime: "25 minutos",
         difficulty: "Avanzado",
         interactiveElements: 8,
@@ -275,8 +275,8 @@ export const moduleResources = {
   // MÓDULO 3: DOMINA GEMINI
   // ============================================================================
   "Introducción a Google Gemini": {
-    title: "Introducción a Google Gemini",
-    description: "Conoce Gemini, la IA multimodal de Google capaz de procesar texto, imágenes, audio y video simultáneamente.",
+    title: "Gemini: La IA que Ve, Lee y Escucha",
+    description: "Conoce Gemini, la IA de Google que entiende texto, imágenes, audio y video al mismo tiempo. Un solo asistente para todo.",
     learningObjectives: [
       "Comprender las capacidades multimodales de Gemini",
       "Utilizar Gemini con diferentes tipos de entrada",
@@ -289,12 +289,12 @@ export const moduleResources = {
       {
         id: "gemini-video-1",
         type: "video",
-        title: "Introducción a Gemini",
+        title: "Gemini en 14 Minutos",
         url: "https://www.youtube.com/embed/XV-2xnFMJqI",
         duration: "14:10",
         thumbnail: "https://img.youtube.com/vi/XV-2xnFMJqI/maxresdefault.jpg",
         provider: "youtube",
-        description: "Visión general de las capacidades multimodales de Gemini."
+        description: "Descubre todo lo que Gemini puede hacer: desde analizar imágenes hasta escribir código. La demo completa en 14 minutos."
       },
       {
         id: "gemini-guide-1",
@@ -304,7 +304,7 @@ export const moduleResources = {
         pages: 16,
         format: "PDF",
         size: "2.8 MB",
-        description: "Guía completa para aprovechar Gemini en diferentes contextos.",
+        description: "Tu guía esencial de Gemini: aprende a usarlo para estudiar, trabajar y crear contenido de forma más inteligente.",
         thumbnailType: "premium",
         immersiveView: true
       },
@@ -312,7 +312,7 @@ export const moduleResources = {
         id: "gemini-ova-1",
         type: "ova",
         title: "Laboratorio: Experimenta con Multimodalidad",
-        description: "Práctica con entradas de texto, imagen y audio en Gemini.",
+        description: "Pon a prueba Gemini: súbele imágenes, textos y audios para ver cómo responde en tiempo real.",
         estimatedTime: "15 minutos",
         difficulty: "Intermedio",
         interactiveElements: 5,
@@ -323,8 +323,8 @@ export const moduleResources = {
   },
 
   "Razonamiento Multimodal y Grounding": {
-    title: "Razonamiento Multimodal y Grounding",
-    description: "Aprende a integrar Gemini en Google Docs, Sheets, Gmail y otras herramientas de Workspace.",
+    title: "Imágenes + Texto + Datos en Vivo",
+    description: "Lleva Gemini a donde trabajas: aprende a usarlo dentro de Google Docs, Sheets y Gmail para multiplicar tu velocidad.",
     learningObjectives: [
       "Usar Gemini dentro de Google Docs para redacción",
       "Analizar datos con Gemini en Google Sheets",
@@ -337,12 +337,12 @@ export const moduleResources = {
       {
         id: "workspace-video-1",
         type: "video",
-        title: "Gemini + Google Workspace: Tutorial Completo",
+        title: "Gemini en Google Drive: Guía Completa",
         url: "https://www.youtube.com/embed/0pQKzGzZjZ0",
         duration: "20:15",
         thumbnail: "https://img.youtube.com/vi/0pQKzGzZjZ0/maxresdefault.jpg",
         provider: "youtube",
-        description: "Integración completa de Gemini en el ecosistema Google."
+        description: "Aprende a integrar Gemini en todas tus herramientas de Google y automatiza tu trabajo diario en minutos."
       },
       {
         id: "workspace-template-1",
@@ -351,13 +351,13 @@ export const moduleResources = {
         url: "/templates/gemini-workspace-templates.json",
         format: "JSON",
         size: "2.1 MB",
-        description: "Prompts optimizados para cada herramienta de Workspace."
+        description: "Plantillas listas para usar en cada app de Google Workspace. Solo copia, pega y adapta."
       },
       {
         id: "workspace-ova-1",
         type: "ova",
         title: "Simulador: Workspace con Gemini",
-        description: "Práctica interactiva con las integraciones de Gemini.",
+        description: "Simula escenarios reales de trabajo con Gemini integrado en tu Google Workspace.",
         estimatedTime: "20 minutos",
         difficulty: "Intermedio",
         interactiveElements: 7,
@@ -368,8 +368,8 @@ export const moduleResources = {
   },
 
   "Deep Research y Fact-Checking con IA": {
-    title: "Deep Research y Fact-Checking con IA",
-    description: "Casos reales de uso profesional de Gemini en marketing, programación, educación e investigación.",
+    title: "Investiga como un Detective Digital",
+    description: "Descubre cómo profesionales de diferentes industrias están usando Gemini para destacar. Casos reales y resultados comprobados.",
     learningObjectives: [
       "Aplicar Gemini en estrategias de marketing",
       "Usar Gemini para asistencia en programación",
@@ -382,12 +382,12 @@ export const moduleResources = {
       {
         id: "gemini-cases-video-1",
         type: "video",
-        title: "Casos de Éxito con Gemini",
+        title: "Gemini en Acción: Casos Reales",
         url: "https://www.youtube.com/embed/1pG8VvJGQgE",
         duration: "16:30",
         thumbnail: "https://img.youtube.com/vi/1pG8VvJGQgE/maxresdefault.jpg",
         provider: "youtube",
-        description: "Testimonios y demostraciones de uso profesional."
+        description: "Empresas y profesionales comparten cómo Gemini transformó su forma de trabajar. Resultados que inspiran."
       },
       {
         id: "gemini-cases-guide-1",
@@ -397,7 +397,7 @@ export const moduleResources = {
         pages: 24,
         format: "PDF",
         size: "5.1 MB",
-        description: "20 casos de uso detallados con prompts incluidos.",
+        description: "20 casos de uso reales con los prompts exactos que usaron. Aprende de los mejores.",
         thumbnailType: "premium",
         immersiveView: true
       },
@@ -405,7 +405,7 @@ export const moduleResources = {
         id: "gemini-cases-ova-1",
         type: "ova",
         title: "Laboratorio: Casos Prácticos",
-        description: "Resuelve problemas reales usando Gemini como asistente.",
+        description: "Enfréntate a 6 desafíos del mundo real y resuélvelos usando Gemini como tu asistente experto.",
         estimatedTime: "25 minutos",
         difficulty: "Avanzado",
         interactiveElements: 6,
@@ -419,8 +419,8 @@ export const moduleResources = {
   // MÓDULO 4: NOTEBOOKLM
   // ============================================================================
   "¿Qué es NotebookLM y para qué sirve?": {
-    title: "¿Qué es NotebookLM y para qué sirve?",
-    description: "Descubre NotebookLM, la herramienta de Google para investigación asistida por IA con fuentes personalizadas.",
+    title: "¿Qué es NotebookLM?",
+    description: "La herramienta secreta de Google para investigadores: sube tus PDFs y obtén respuestas precisas con citas textuales. Sin inventos.",
     learningObjectives: [
       "Crear notebooks con fuentes personalizadas",
       "Hacer preguntas específicas sobre tus documentos",
@@ -434,32 +434,32 @@ export const moduleResources = {
         id: "notebooklm-video-1",
         type: "video",
         title: "Primeros Pasos con NotebookLM",
-        url: "https://www.youtube.com/embed/3eGqDMhqjEY",
-        duration: "11:45",
-        thumbnail: "https://img.youtube.com/vi/3eGqDMhqjEY/maxresdefault.jpg",
+        url: "https://www.youtube.com/embed/PV0oNcmIYII",
+        duration: "12:30",
+        thumbnail: "https://img.youtube.com/vi/PV0oNcmIYII/maxresdefault.jpg",
         provider: "youtube",
-        description: "Introducción práctica a NotebookLM."
+        description: "Descubre en 12 minutos cómo tus documentos cobran vida: haz preguntas, obtén resúmenes y verifica cada dato con citas exactas."
       },
       {
         id: "notebooklm-guide-1",
         type: "pdf",
         title: "Guía de NotebookLM",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/recursos-edutechlife/guia_edutechlife_modulo1.pdf",
+        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/guia%204%20nootbook%20lm/guia_edutechlife_modulo3%20.pdf",
         pages: 14,
         format: "PDF",
         size: "2.3 MB",
-        description: "Manual completo para investigadores y estudiantes.",
+        description: "La guía definitiva para dominar NotebookLM: desde tu primer cuaderno hasta técnicas avanzadas de investigación.",
         thumbnailType: "premium",
         immersiveView: true
       },
       {
         id: "notebooklm-ova-1",
-        type: "ova",
+        type: "ova_interactive",
         title: "Laboratorio: Crea tu Notebook",
-        description: "Práctica guiada creando un notebook con tus propias fuentes.",
+        description: "7 preguntas que te convertirán en experto en NotebookLM. Completa el desafío con Valerio como tu guía personal.",
         estimatedTime: "15 minutos",
         difficulty: "Intermedio",
-        interactiveElements: 4,
+        interactiveElements: 7,
         thumbnailType: "premium",
         fullscreen: true
       }
@@ -467,8 +467,8 @@ export const moduleResources = {
   },
 
   "Curaduría de Fuentes y Síntesis de Documentos": {
-    title: "Curaduría de Fuentes y Síntesis de Documentos",
-    description: "Aprende a generar resúmenes, FAQ y briefings conectados a tus fuentes originales.",
+    title: "Organiza tu Investigación como un Pro",
+    description: "Convierte montañas de documentos en resúmenes, preguntas frecuentes y reportes ejecutivos con un solo clic.",
     learningObjectives: [
       "Generar resúmenes ejecutivos automáticos",
       "Crear FAQs basadas en tus documentos",
@@ -480,28 +480,30 @@ export const moduleResources = {
     resources: [
       {
         id: "notebook-summary-video-1",
-        type: "video",
+        type: "image",
         title: "Resúmenes Inteligentes con NotebookLM",
-        url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-        duration: "3:33",
-        thumbnail: "https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
-        provider: "youtube",
-        description: "Técnicas avanzadas de resumen y análisis."
+        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/guia%204%20nootbook%20lm/3-INFOGRAFIA.jpeg",
+        format: "JPEG",
+        size: "2.5 MB",
+        description: "Infografía sobre técnicas avanzadas de resumen y análisis con NotebookLM.",
+        thumbnailType: "premium",
+        immersiveView: true
       },
       {
         id: "notebook-summary-template-1",
-        type: "document",
+        type: "pdf",
         title: "Plantillas de Resumen",
-        url: "/templates/notebooklm-summary-templates.json",
-        format: "JSON",
-        size: "1.5 MB",
-        description: "Estructuras de resumen predefinidas para diferentes contextos."
+        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/guia%204%20nootbook%20lm/6-%20NotebookLM_El_Cuaderno_del_Futuro.pdf",
+        pages: 20,
+        format: "PDF",
+        size: "2.5 MB",
+        description: "Plantillas profesionales de resumen para cada tipo de documento: académico, empresarial, técnico y más."
       },
       {
         id: "notebook-summary-ova-1",
-        type: "ova",
+        type: "ova_interactive",
         title: "Simulador: Análisis de Documentos",
-        description: "Practica generando resúmenes de documentos complejos.",
+        description: "Simulador práctico: toma documentos reales y genera resúmenes de nivel profesional en minutos.",
         estimatedTime: "20 minutos",
         difficulty: "Intermedio",
         interactiveElements: 5,
@@ -512,8 +514,8 @@ export const moduleResources = {
   },
 
   "Audio Overviews y Gestión Documental con IA": {
-    title: "Audio Overviews y Gestión Documental con IA",
-    description: "Explora la función de Audio Overview que convierte tus notas en conversaciones de podcast generadas por IA.",
+    title: "De PDF a Podcast en un Clic",
+    description: "Convierte tus apuntes en podcasts profesionales: dos voces IA conversan sobre tus documentos mientras tú escuchas.",
     learningObjectives: [
       "Generar Audio Overviews de tus notebooks",
       "Personalizar el estilo y tono del audio",
@@ -527,29 +529,28 @@ export const moduleResources = {
         id: "notebook-audio-video-1",
         type: "video",
         title: "Audio Overview: Tu Contenido en Podcast",
-        url: "https://www.youtube.com/embed/gFjVXUJnGfE",
+        url: "https://www.youtube.com/embed/Z3Wq8oum108",
         duration: "10:50",
-        thumbnail: "https://img.youtube.com/vi/gFjVXUJnGfE/maxresdefault.jpg",
+        thumbnail: "https://img.youtube.com/vi/Z3Wq8oum108/maxresdefault.jpg",
         provider: "youtube",
-        description: "Cómo transformar documentos en conversaciones de audio."
+        description: "Descubre cómo crear podcasts a partir de tus PDFs. Ideal para aprender mientras viajas, haces ejercicio o descansas."
       },
       {
         id: "notebook-audio-guide-1",
-        type: "pdf",
+        type: "ova_interactive",
         title: "Guía de Audio Overview",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/recursos-edutechlife/guia_edutechlife_modulo1.pdf",
-        pages: 10,
-        format: "PDF",
-        size: "1.8 MB",
-        description: "Mejores prácticas para Audio Overviews efectivos.",
+        description: "Curso completo de NotebookLM: 6 módulos interactivos con ejercicios prácticos y un desafío final. Conviértete en un experto.",
+        estimatedTime: "30 minutos",
+        difficulty: "Intermedio",
+        interactiveElements: 6,
         thumbnailType: "premium",
-        immersiveView: true
+        fullscreen: true
       },
       {
         id: "notebook-audio-ova-1",
         type: "ova",
         title: "Laboratorio: Crea tu Podcast IA",
-        description: "Genera y personaliza tu primer Audio Overview.",
+        description: "Crea tu primer podcast IA: elige el tema, personaliza el tono y escucha el resultado en minutos.",
         estimatedTime: "15 minutos",
         difficulty: "Avanzado",
         interactiveElements: 3,
@@ -563,7 +564,7 @@ export const moduleResources = {
   // MÓDULO 5: ÉTICA Y PRIVACIDAD
   // ============================================================================
   "Ética en la Inteligencia Artificial": {
-    title: "Ética en la Inteligencia Artificial",
+    title: "Ética en IA: Lo Esencial",
     description: "Aprende a reconocer y mitigar los sesgos inherentes en los modelos de IA generativa.",
     learningObjectives: [
       "Identificar tipos comunes de sesgos en IA",
@@ -578,29 +579,29 @@ export const moduleResources = {
         id: "bias-video-1",
         type: "video",
         title: "Sesgos en IA: Explicación y Ejemplos",
-        url: "https://www.youtube.com/embed/59bV1ZcgB0Q",
+        url: "https://www.youtube.com/embed/RDkOIf82v6A",
         duration: "12:15",
-        thumbnail: "https://img.youtube.com/vi/59bV1ZcgB0Q/maxresdefault.jpg",
+        thumbnail: "https://img.youtube.com/vi/RDkOIf82v6A/maxresdefault.jpg",
         provider: "youtube",
-        description: "Análisis detallado de cómo los sesgos afectan las respuestas de IA."
+        description: "Descubre cómo los sesgos invisibles afectan cada respuesta de IA y aprende a detectarlos antes de que afecten tu trabajo."
       },
       {
         id: "bias-guide-1",
         type: "pdf",
         title: "Guía de Detección de Sesgos",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/recursos-edutechlife/guia_edutechlife_modulo1.pdf",
+        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/modulo%205/2-guia_edutechlife_modulo5.pdf",
         pages: 15,
         format: "PDF",
         size: "2.6 MB",
-        description: "Framework para identificar y corregir sesgos en IA.",
+        description: "Aprende el método paso a paso para identificar, analizar y corregir sesgos en cualquier sistema de IA.",
         thumbnailType: "premium",
         immersiveView: true
       },
       {
         id: "bias-ova-1",
-        type: "ova",
+        type: "ova_interactive",
         title: "Laboratorio: Detecta el Sesgo",
-        description: "Ejercicios interactivos para identificar sesgos en respuestas de IA.",
+        description: "Pon a prueba tu ojo crítico: analiza respuestas de IA reales e identifica los sesgos ocultos. Laboratorio guiado por Valerio.",
         estimatedTime: "15 minutos",
         difficulty: "Intermedio",
         interactiveElements: 6,
@@ -611,7 +612,7 @@ export const moduleResources = {
   },
 
   "Sesgos Algorítmicos y Equidad": {
-    title: "Sesgos Algorítmicos y Equidad",
+    title: "¿Es Justa tu IA? Descúbrelo",
     description: "Estrategias prácticas para proteger tus datos personales y corporativos al usar herramientas de IA.",
     learningObjectives: [
       "Comprender cómo las IA procesan tus datos",
@@ -626,29 +627,29 @@ export const moduleResources = {
         id: "privacy-video-1",
         type: "video",
         title: "Privacidad y IA: Lo que Debes Saber",
-        url: "https://www.youtube.com/embed/8XxSC2L6QoE",
+        url: "https://www.youtube.com/embed/ADvjzvJjx5c",
         duration: "14:40",
-        thumbnail: "https://img.youtube.com/vi/8XxSC2L6QoE/maxresdefault.jpg",
+        thumbnail: "https://img.youtube.com/vi/ADvjzvJjx5c/maxresdefault.jpg",
         provider: "youtube",
-        description: "Guía completa sobre privacidad en el uso de IA."
+        description: "Todo lo que necesitas saber para usar la IA sin poner en riesgo tus datos personales. Guía práctica y directa."
       },
       {
         id: "privacy-guide-1",
         type: "pdf",
         title: "Manual de Privacidad en IA",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/recursos-edutechlife/guia_edutechlife_modulo1.pdf",
+        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/modulo%205/7-Ethical_AI_Mastery.pdf",
         pages: 20,
         format: "PDF",
         size: "3.8 MB",
-        description: "Protocolos y checklists de seguridad para uso de IA.",
+        description: "Checklist práctico de 7 pasos para blindar tu privacidad mientras aprovechas al máximo la inteligencia artificial.",
         thumbnailType: "premium",
         immersiveView: true
       },
       {
         id: "privacy-ova-1",
-        type: "ova",
+        type: "ova_interactive",
         title: "Simulador: Evaluación de Riesgos",
-        description: "Evalúa escenarios reales de riesgo de privacidad con IA.",
+        description: "Simulador interactivo: enfréntate a escenarios reales de riesgo y aprende a proteger tus datos. Incluye juego de estrellas éticas.",
         estimatedTime: "20 minutos",
         difficulty: "Intermedio",
         interactiveElements: 5,
@@ -659,7 +660,7 @@ export const moduleResources = {
   },
 
   "Privacidad, Regulación y IA Responsable": {
-    title: "Privacidad, Regulación y IA Responsable",
+    title: "Protege tus Datos en la Era de la IA",
     description: "Marco ético para el uso responsable de IA en educación, trabajo y vida personal.",
     learningObjectives: [
       "Aplicar principios éticos al usar IA",
@@ -674,11 +675,11 @@ export const moduleResources = {
         id: "ethics-video-1",
         type: "video",
         title: "IA Ética: Principios y Práctica",
-        url: "https://www.youtube.com/embed/jnePzVXUJnG",
+        url: "https://www.youtube.com/embed/idplIgnLStI",
         duration: "16:25",
-        thumbnail: "https://img.youtube.com/vi/jnePzVXUJnG/maxresdefault.jpg",
+        thumbnail: "https://img.youtube.com/vi/idplIgnLStI/maxresdefault.jpg",
         provider: "youtube",
-        description: "Fundamentos de ética aplicada a la IA generativa."
+        description: "Aprende los principios éticos esenciales para usar la IA con responsabilidad. La guía que todo profesional debe conocer."
       },
       {
         id: "ethics-guide-1",

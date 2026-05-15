@@ -1,6 +1,7 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
+import { useIALabStore } from '../../store/ialabStore';
 
 const readLocalExamScores = () => {
   try {
@@ -14,7 +15,7 @@ const WEIGHT_LABELS = {
   Examen: '35% del puntaje del módulo',
 };
 
-const ActionCard = ({ icon, label, onClick, completed, score, color = 'from-petroleum to-corporate' }) => {
+const ActionCard = ({ icon, label, onClick, completed, score, remainingAttempts, color = 'from-petroleum to-corporate' }) => {
   const prefersReducedMotion = useReducedMotion();
   const isApproved = completed && score !== undefined && score >= 80;
   const isFailed = completed && score !== undefined && score < 80;
@@ -64,6 +65,11 @@ const ActionCard = ({ icon, label, onClick, completed, score, color = 'from-petr
         }`}>
           {isApproved ? `${score}% - Aprobado` : isFailed ? `${score}% - Reprobado` : 'Pendiente'}
         </span>
+        {!completed && remainingAttempts !== undefined && (
+          <span className="text-[10px] text-amber-600 dark:text-amber-400 mt-0.5 block">
+            {remainingAttempts} de 3 intentos restantes
+          </span>
+        )}
       </div>
       {(isApproved || isFailed) && (
         <div className={`flex-shrink-0 w-10 h-10 rounded-xl border flex items-center justify-center ${
@@ -78,13 +84,29 @@ const ActionCard = ({ icon, label, onClick, completed, score, color = 'from-petr
 
 const ModuleActions = ({ onAction, activeMod, challengeScores, completedExams, moduleProgress, isForumOpen, onToggleForum }) => {
   const [localExamScores, setLocalExamScores] = useState(readLocalExamScores);
+  const [examAttempts, setExamAttempts] = useState(3);
+  const [challengeAttempts, setChallengeAttempts] = useState(3);
   const effectiveExamScore = completedExams?.[activeMod] ?? localExamScores[activeMod];
+
+  const refreshAttempts = useCallback(() => {
+    const store = useIALabStore.getState();
+    setExamAttempts(store.getExamRemainingAttempts(activeMod));
+    setChallengeAttempts(store.getChallengeRemainingAttempts(activeMod));
+  }, [activeMod]);
+
+  useEffect(() => {
+    refreshAttempts();
+  }, [activeMod, refreshAttempts]);
 
   useEffect(() => {
     const handler = () => setLocalExamScores(readLocalExamScores());
     window.addEventListener('ialab:examCompleted', handler);
-    return () => window.removeEventListener('ialab:examCompleted', handler);
-  }, []);
+    const interval = setInterval(refreshAttempts, 5000);
+    return () => {
+      window.removeEventListener('ialab:examCompleted', handler);
+      clearInterval(interval);
+    };
+  }, [refreshAttempts]);
 
   const handleCommunity = () => {
     onToggleForum?.();
@@ -138,6 +160,7 @@ const ModuleActions = ({ onAction, activeMod, challengeScores, completedExams, m
           onClick={handleChallenge}
           completed={!!challengeScores?.[activeMod]}
           score={challengeScores?.[activeMod]}
+          remainingAttempts={!challengeScores?.[activeMod] ? challengeAttempts : undefined}
         />
         <ActionCard
           icon="fa-clipboard-check"
@@ -145,6 +168,7 @@ const ModuleActions = ({ onAction, activeMod, challengeScores, completedExams, m
           onClick={handleExam}
           completed={effectiveExamScore !== undefined}
           score={effectiveExamScore}
+          remainingAttempts={effectiveExamScore === undefined ? examAttempts : undefined}
         />
       </div>
     </div>

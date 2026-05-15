@@ -7,6 +7,9 @@ import IALabEvaluationStep1 from './IALabEvaluationStep1';
 import IALabEvaluationStep2 from './IALabEvaluationStep2';
 import IALabEvaluationStep3 from './IALabEvaluationStep3';
 import IALabEvaluationResults from './IALabEvaluationResults';
+import SecurityWarningModal from './SecurityWarningModal';
+import ScreenshotProtectionOverlay from './ScreenshotProtectionOverlay';
+import useScreenshotProtection from '../../hooks/IALab/useScreenshotProtection';
 import { motion, AnimatePresence } from 'framer-motion';
 
 /**
@@ -42,11 +45,25 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
     } = useIALabEvaluation();
 
     const [securityWarning, setSecurityWarning] = useState('');
+    const [securityAlert, setSecurityAlert] = useState(null);
+    const [printWarning, setPrintWarning] = useState(null);
     const [isSavingGrade, setIsSavingGrade] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
     const [securityViolations, setSecurityViolations] = useState(0);
     const MAX_SECURITY_VIOLATIONS = 3;
     const saveDraftTimerRef = useRef(null);
+
+    const isChallengeActive = isVisible && state.step !== 'results';
+    const { showOverlay } = useScreenshotProtection(isChallengeActive, {
+      onMaxViolations: () => {
+        setSecurityAlert({ message: 'Has excedido el máximo de infracciones de seguridad. El desafío se cerrará.', level: 3, onClose: () => {
+          setSecurityAlert(null);
+          resetEvaluation();
+          onClose();
+        }});
+      },
+      maxViolations: 3,
+    });
     const hasRestoredDraftRef = useRef(false);
 
     // Inicializar evaluación cuando se abre el modal
@@ -197,8 +214,9 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
     useEffect(() => {
         if (!isVisible || state.step === 'results') return;
         const handleBeforePrint = () => {
-            alert('⚠️ Capturas de pantalla e impresión bloqueadas por seguridad.');
+            setPrintWarning('Capturas de pantalla e impresión bloqueadas por seguridad.');
             setSecurityViolations(prev => prev + 1);
+            setTimeout(() => setPrintWarning(null), 4000);
         };
         window.addEventListener('beforeprint', handleBeforePrint);
         return () => window.removeEventListener('beforeprint', handleBeforePrint);
@@ -459,7 +477,8 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
             <AnimatePresence>
                 {isVisible && (
                     <motion.div 
-                        className="fixed inset-0 z-[100] bg-slate-50 dark:bg-slate-900 flex flex-col"
+                        className="fixed inset-0 z-[100] bg-slate-50 dark:bg-slate-900 flex flex-col select-none"
+                        style={{ WebkitUserSelect: 'none', userSelect: 'none' }}
                         onCopy={handleSecurityEvent}
                         onPaste={handleSecurityEvent}
                         onCut={handleSecurityEvent}
@@ -557,6 +576,22 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
                         )}
                     </motion.div>
                 )}
+
+                <SecurityWarningModal
+                    isOpen={!!securityAlert}
+                    message={securityAlert?.message || ''}
+                    level={securityAlert?.level || 1}
+                    onClose={securityAlert?.onClose || (() => setSecurityAlert(null))}
+                />
+
+                <SecurityWarningModal
+                    isOpen={!!printWarning}
+                    message={printWarning || ''}
+                    level={1}
+                    onClose={() => setPrintWarning(null)}
+                />
+
+                <ScreenshotProtectionOverlay isOpen={showOverlay && state.step !== 'results'} />
             </AnimatePresence>
         );
     };

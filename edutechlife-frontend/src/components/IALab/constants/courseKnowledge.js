@@ -65,8 +65,8 @@ const COURSE_KNOWLEDGE = [
   {
     id: 2,
     title: "Potencia ChatGPT",
-    objective: "Conviértete en un experto en ChatGPT y crea asistentes inteligentes que automaticen tu trabajo diario.",
-    description: "En este módulo, desbloquearás el verdadero potencial de ChatGPT. Desde configurar prompts de sistema profesionales hasta crear GPTs personalizados que trabajan por ti.",
+    objective: "Domina ChatGPT a nivel profesional: crea asistentes inteligentes, automatiza tareas y multiplica tu productividad.",
+    description: "Conviértete en un experto en ChatGPT: configura prompts profesionales, crea GPTs personalizados y automatiza tu trabajo diario.",
     challenge: "Estructura un GPT para análisis de mercados cuánticos.",
     topics: [
       {
@@ -118,8 +118,8 @@ const COURSE_KNOWLEDGE = [
   {
     id: 3,
     title: "Rastreo Profundo con Gemini",
-    objective: "Usa Google Gemini para investigar a fondo, verificar datos y analizar información como un profesional.",
-    description: "En este módulo, dominarás Google Gemini para investigación avanzada. Aprenderás a cruzar datos en tiempo real, analizar múltiples formatos y verificar información con precisión.",
+    objective: "Domina Google Gemini para investigar, verificar datos y analizar información como un profesional de élite.",
+    description: "Domina Google Gemini: investiga a fondo, cruza datos en tiempo real, analiza múltiples formatos y verifica información como un profesional.",
     challenge: "Genera una comparativa técnica de latencia entre arquitecturas IA.",
     topics: [
       {
@@ -172,8 +172,8 @@ const COURSE_KNOWLEDGE = [
   {
     id: 4,
     title: "Inmersión NotebookLM",
-    objective: "Transforma documentos y fuentes en podcasts, resúmenes y conocimiento accionable en minutos.",
-    description: "En este módulo, transformarás cualquier documento en conocimiento útil. Desde resúmenes inteligentes hasta podcasts generados por IA, todo desde una sola herramienta.",
+    objective: "Transforma PDFs y documentos en resúmenes inteligentes, podcasts y asistentes de investigación personalizados.",
+    description: "Descubre cómo convertir tus PDFs y apuntes en conocimiento interactivo. Crea resúmenes automáticos, podcasts generados por IA y asistentes de investigación personalizados.",
     challenge: "Genera un podcast analizando 5 papers sobre neuro-plasticidad.",
     topics: [
       {
@@ -186,7 +186,7 @@ const COURSE_KNOWLEDGE = [
           "Generar resúmenes inteligentes de contenido"
         ],
         resources: [
-          { type: "video", title: "Primeros Pasos con NotebookLM", duration: "11:45" },
+          { type: "video", title: "Primeros Pasos con NotebookLM", duration: "12:30" },
           { type: "pdf", title: "Guía de NotebookLM", pages: 14 },
           { type: "ova", title: "Laboratorio: Crea tu Notebook" }
         ]

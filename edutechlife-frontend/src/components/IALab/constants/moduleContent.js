@@ -27,12 +27,12 @@ export const moduleContent = {
     ],
     overviewData: {
       title: "Domina las Instrucciones",
-      description: "En este módulo, hemos diseñado una ruta estratégica que te llevará desde los fundamentos de la Inteligencia Artificial Generativa hasta la creación de instrucciones de alto impacto.",
-      mission: "Explorar cada tema y sus recursos multimedia (videos, guías y laboratorios). Notarás que tu barra de progreso cobrará vida con cada paso que des. No te detengas: cada recurso completado te acerca un 20% más a tu certificación global. ¡El poder de las instrucciones claras está en tus manos!",
+      description: "Aprende a comunicarte con la IA como un profesional. Desde los fundamentos hasta técnicas avanzadas que transformarán tu forma de trabajar.",
+      mission: "Completa cada lección y recurso multimedia (videos, guías y laboratorios). Cada paso que des te acerca un 20% más a tu certificación. ¡Las instrucciones claras son tu superpoder!",
       topics: [
-        { title: "Introducción a la Inteligencia Artificial Generativa", icon: "fa-brain", resources: 2, duration: "20 min" },
-        { title: "¿Qué es un Prompt?", icon: "fa-comments", resources: 3, duration: "20 min" },
-        { title: "Estructura Básica de un Prompt Efectivo", icon: "fa-sitemap", resources: 3, duration: "20 min" }
+        { title: "IA Generativa: Tu Primer Paso", icon: "fa-brain", resources: 2, duration: "20 min" },
+        { title: "¿Qué es un Prompt y Cómo Dominarlo?", icon: "fa-comments", resources: 3, duration: "20 min" },
+        { title: "La Estructura Secreta de un Buen Prompt", icon: "fa-sitemap", resources: 3, duration: "20 min" }
       ]
     },
     lessons: [],
@@ -51,20 +51,20 @@ export const moduleContent = {
       { text: "Automatizar flujos de trabajo", icon: "fa-cog" }
     ],
     overviewData: {
-      title: "Desbloquea ChatGPT al Máximo",
+      title: "ChatGPT sin Límites",
       description: "En este módulo, desbloquearás el verdadero potencial de ChatGPT. Desde configurar prompts de sistema profesionales hasta crear GPTs personalizados que trabajan por ti.",
-      mission: "Explorar cada lección y sus recursos multimedia. Cada paso te acerca a dominar la IA más usada del mundo. ¡Prepárate para llevar tus habilidades al siguiente nivel!",
+      mission: "Completa cada lección y domina la IA más usada del mundo. Cada recurso completado te acerca a un nivel profesional. ¡Lleva tus habilidades al siguiente nivel!",
       topics: [
-        { title: "Guía Completa de ChatGPT", icon: "fa-book-open", resources: 3, duration: "20 min" },
-        { title: "Plantillas de Flujos de Trabajo", icon: "fa-layer-group", resources: 3, duration: "20 min" },
-        { title: "Function Calling y APIs de OpenAI", icon: "fa-code", resources: 3, duration: "20 min" }
+        { title: "ChatGPT de la A a la Z", icon: "fa-book-open", resources: 3, duration: "20 min" },
+        { title: "Automatiza tu Trabajo con IA", icon: "fa-layer-group", resources: 3, duration: "20 min" },
+        { title: "Conecta ChatGPT con el Mundo Real", icon: "fa-code", resources: 3, duration: "20 min" }
       ]
     },
     lessons: [
       {
         id: 1,
-        title: "Guía Completa de ChatGPT",
-        description: "Domina ChatGPT con la guía completa de Edutechlife",
+        title: "ChatGPT de la A a la Z",
+        description: "La guía definitiva para dominar ChatGPT",
         detailedDescription: "Accede a la Guía Completa de ChatGPT de Edutechlife: un recurso integral que cubre desde los fundamentos hasta técnicas avanzadas. Aprende a aprovechar cada modelo, configura conversaciones efectivas y domina las mejores prácticas para obtener resultados profesionales.",
         duration: "20 min",
         format: "Reading",
@@ -74,9 +74,9 @@ export const moduleContent = {
       },
       {
         id: 2,
-        title: "Plantillas de Flujos de Trabajo",
-        description: "Automatiza tareas repetitivas con flujos de trabajo inteligentes",
-        detailedDescription: "Descubre las herramientas integradas de ChatGPT y crea flujos de trabajo automatizados. Desde búsqueda web en tiempo real hasta generación de imágenes y análisis de datos con Python. Aprende cuándo usar cada herramienta para maximizar tu productividad.",
+        title: "Automatiza tu Trabajo con IA",
+        description: "Crea automatizaciones que trabajan por ti",
+        detailedDescription: "Descubre el arsenal de herramientas de ChatGPT: búsqueda web, análisis de datos con Python, generación de imágenes y más. Aprende a combinarlas para crear automatizaciones poderosas.",
         duration: "20 min",
         format: "Lab",
         icon: "fa-layer-group",
@@ -85,9 +85,9 @@ export const moduleContent = {
       },
       {
         id: 3,
-        title: "Function Calling y APIs de OpenAI",
-        description: "Conecta ChatGPT con herramientas externas",
-        detailedDescription: "Conecta ChatGPT con herramientas externas mediante Function Calling. Integra APIs, bases de datos y servicios para crear flujos de trabajo automatizados y potentes.",
+        title: "Conecta ChatGPT con APIs Externas",
+        description: "Conecta ChatGPT con el mundo real",
+        detailedDescription: "Lleva ChatGPT al siguiente nivel: conéctalo con APIs, bases de datos y servicios externos. Crea flujos de trabajo automatizados que resuelven problemas reales.",
         duration: "20 min",
         format: "Video",
         icon: "fa-code",
@@ -168,21 +168,21 @@ export const moduleContent = {
       { text: "Verificar información con IA", icon: "fa-shield-alt" }
     ],
     overviewData: {
-      title: "Investigación de Élite con IA",
+      title: "Investigación de Élite con Gemini",
       description: "En este módulo, dominarás Google Gemini para investigación avanzada. Aprenderás a cruzar datos en tiempo real, analizar múltiples formatos y verificar información con precisión.",
-      mission: "Convertirte en un investigador de élite con IA. Cada recurso completado te acerca a dominar la herramienta de investigación más potente del mercado.",
+      mission: "Conviértete en un investigador de élite. Domina Google Gemini y descubre cómo cruzar datos, verificar fuentes y crear informes profesionales con IA.",
       topics: [
-        { title: "Introducción a Google Gemini", icon: "fa-google", resources: 3, duration: "20 min" },
-        { title: "Razonamiento Multimodal y Grounding", icon: "fa-layer-group", resources: 3, duration: "20 min" },
-        { title: "Deep Research y Fact-Checking con IA", icon: "fa-search", resources: 3, duration: "20 min" }
+        { title: "Gemini: La IA que Ve, Lee y Escucha", icon: "fa-google", resources: 3, duration: "20 min" },
+        { title: "Imágenes + Texto + Datos en Vivo", icon: "fa-layer-group", resources: 3, duration: "20 min" },
+        { title: "Investiga como un Detective Digital", icon: "fa-search", resources: 3, duration: "20 min" }
       ]
     },
     lessons: [
       {
         id: 1,
-        title: "Introducción a Google Gemini",
-        description: "Descubre el poder de la IA multimodal de Google",
-        detailedDescription: "Descubre el poder de la IA multimodal de Google. Gemini entiende texto, imágenes, audio y código simultáneamente. Aprende a configurar tu entorno y aprovechar sus capacidades únicas.",
+        title: "Gemini: La IA que Ve, Lee y Escucha",
+        description: "Gemini: la IA que ve, lee y escucha",
+        detailedDescription: "Gemini es la IA multimodal de Google que procesa texto, imágenes, audio y video a la vez. Aprende a usarla para analizar, crear y resolver problemas complejos.",
         duration: "20 min",
         format: "Reading",
         icon: "fa-google",
@@ -191,9 +191,9 @@ export const moduleContent = {
       },
       {
         id: 2,
-        title: "Razonamiento Multimodal y Grounding",
-        description: "Analiza múltiples formatos con datos en tiempo real",
-        detailedDescription: "Analiza múltiples formatos con datos en tiempo real. Gemini puede ver imágenes, leer documentos y buscar en internet simultáneamente para darte respuestas fundamentadas y actuales.",
+        title: "Imágenes + Texto + Datos en Vivo",
+        description: "Analiza imágenes, texto y datos juntos",
+        detailedDescription: "Aprende a combinar imágenes, documentos y datos en vivo. Gemini analiza todo simultáneamente para darte respuestas con fuentes verificables del mundo real.",
         duration: "20 min",
         format: "Lab",
         icon: "fa-layer-group",
@@ -202,9 +202,9 @@ export const moduleContent = {
       },
       {
         id: 3,
-        title: "Deep Research y Fact-Checking con IA",
-        description: "Investiga y verifica información a nivel experto",
-        detailedDescription: "Investiga y verifica información a nivel experto. Aprende a usar Gemini para Deep Research, fact-checking automático y generación de informes técnicos con fuentes verificables.",
+        title: "Investiga como un Detective Digital",
+        description: "Investiga como un profesional",
+        detailedDescription: "Domina la investigación con IA: deep research, verificación automática de datos y generación de informes técnicos con fuentes citadas y verificables.",
         duration: "20 min",
         format: "Video",
         icon: "fa-search",
@@ -285,21 +285,21 @@ export const moduleContent = {
       { text: "Gestionar documentación inteligente", icon: "fa-folder-open" }
     ],
     overviewData: {
-      title: "Tu Laboratorio de Conocimiento IA",
+      title: "Tu Primer Notebook con IA",
       description: "En este módulo, transformarás cualquier documento en conocimiento útil. Desde resúmenes inteligentes hasta podcasts generados por IA, todo desde una sola herramienta.",
-      mission: "Dominar la curaduría y síntesis de información a escala. Cada recurso completado te convierte en un experto en gestión del conocimiento con IA.",
+      mission: "Domina el arte de transformar documentos en conocimiento. Convierte PDFs en resúmenes inteligentes, podcasts y asistentes de investigación personalizados.",
       topics: [
-        { title: "¿Qué es NotebookLM y para qué sirve?", icon: "fa-microphone", resources: 3, duration: "20 min" },
-        { title: "Curaduría de Fuentes y Síntesis de Documentos", icon: "fa-book-open", resources: 3, duration: "20 min" },
-        { title: "Audio Overviews y Gestión Documental con IA", icon: "fa-podcast", resources: 3, duration: "20 min" }
+        { title: "¿Qué es NotebookLM?", icon: "fa-microphone", resources: 3, duration: "20 min" },
+        { title: "Organiza tu Investigación como un Pro", icon: "fa-book-open", resources: 3, duration: "20 min" },
+        { title: "De PDF a Podcast en un Clic", icon: "fa-podcast", resources: 3, duration: "20 min" }
       ]
     },
     lessons: [
       {
         id: 1,
-        title: "¿Qué es NotebookLM y para qué sirve?",
-        description: "Descubre tu asistente de investigación personal",
-        detailedDescription: "Descubre tu asistente de investigación personal basado en tus propios documentos. NotebookLM transforma PDFs, artículos y notas en conocimiento interactivo con respuestas fundamentadas en tus fuentes.",
+        title: "¿Qué es NotebookLM?",
+        description: "Tu asistente de investigación con IA",
+        detailedDescription: "Conoce NotebookLM, la herramienta de Google que convierte tus PDFs, artículos y apuntes en un asistente personal que responde con citas exactas de tus documentos.",
         duration: "20 min",
         format: "Reading",
         icon: "fa-microphone",
@@ -308,9 +308,9 @@ export const moduleContent = {
       },
       {
         id: 2,
-        title: "Curaduría de Fuentes y Síntesis de Documentos",
-        description: "Selecciona, organiza y sintetiza tu conocimiento",
-        detailedDescription: "Selecciona, organiza y sintetiza tu conocimiento de forma inteligente. Aprende a elegir las mejores fuentes, conectar ideas entre documentos y generar resúmenes accionables.",
+        title: "Organiza tu Investigación como un Pro",
+        description: "Organiza tu investigación como un pro",
+        detailedDescription: "Aprende a seleccionar las mejores fuentes, organizarlas por temas y conectar ideas entre documentos para crear resúmenes y análisis de nivel profesional.",
         duration: "20 min",
         format: "Lab",
         icon: "fa-book-open",
@@ -319,9 +319,9 @@ export const moduleContent = {
       },
       {
         id: 3,
-        title: "Audio Overviews y Gestión Documental con IA",
-        description: "Convierte documentos en podcasts y audio",
-        detailedDescription: "Convierte documentos en podcasts y audio interactivo. Genera conversaciones entre dos presentadores IA, crea resúmenes sonoros y gestiona tu biblioteca de conocimiento de forma inteligente.",
+        title: "De PDF a Podcast en un Clic",
+        description: "Convierte PDFs en podcasts",
+        detailedDescription: "Transforma tus documentos en conversaciones de podcast con dos voces IA. Ideal para aprender mientras viajas. Gestiona tu biblioteca de conocimiento de forma inteligente.",
         duration: "20 min",
         format: "Video",
         icon: "fa-podcast",
@@ -402,19 +402,19 @@ export const moduleContent = {
       { text: "Crear protocolos éticos de IA", icon: "fa-clipboard-check" }
     ],
     overviewData: {
-      title: "IA Responsable: Tu Diferenciador Profesional",
+      title: "IA Responsable y Ética",
       description: "En este módulo final, desarrollarás pensamiento crítico sobre los impactos éticos de la IA. Aprenderás a identificar sesgos, cumplir regulaciones y crear frameworks de IA responsable.",
       mission: "Convertirte en un profesional de IA ético y responsable. Este módulo cierra tu certificación global con las competencias que las empresas buscan hoy.",
       topics: [
-        { title: "Ética en la Inteligencia Artificial", icon: "fa-balance-scale", resources: 3, duration: "20 min" },
-        { title: "Sesgos Algorítmicos y Equidad", icon: "fa-exclamation-triangle", resources: 3, duration: "20 min" },
-        { title: "Privacidad, Regulación y IA Responsable", icon: "fa-shield-alt", resources: 3, duration: "20 min" }
+        { title: "Ética en IA: Lo Esencial", icon: "fa-balance-scale", resources: 3, duration: "20 min" },
+        { title: "¿Es Justa tu IA? Descúbrelo", icon: "fa-exclamation-triangle", resources: 3, duration: "20 min" },
+        { title: "Protege tus Datos en la Era de la IA", icon: "fa-shield-alt", resources: 3, duration: "20 min" }
       ]
     },
     lessons: [
       {
         id: 1,
-        title: "Ética en la Inteligencia Artificial",
+        title: "Ética en IA: Lo Esencial",
         description: "Fundamentos éticos para el uso de IA generativa",
         detailedDescription: "Fundamentos éticos para el uso de IA generativa. Comprende los principios de transparencia, equidad, responsabilidad y privacidad que todo profesional debe aplicar al trabajar con IA.",
         duration: "20 min",
@@ -425,7 +425,7 @@ export const moduleContent = {
       },
       {
         id: 2,
-        title: "Sesgos Algorítmicos y Equidad",
+        title: "¿Es Justa tu IA? Descúbrelo",
         description: "Identifica y mitiga sesgos en sistemas de IA",
         detailedDescription: "Identifica y mitiga sesgos en sistemas de IA. Aprende a detectar discriminación algorítmica, entender sus causas y aplicar estrategias para crear sistemas más justos e inclusivos.",
         duration: "20 min",
@@ -436,7 +436,7 @@ export const moduleContent = {
       },
       {
         id: 3,
-        title: "Privacidad, Regulación y IA Responsable",
+        title: "Protege tus Datos en la Era de la IA",
         description: "Marco legal y mejores prácticas de IA ética",
         detailedDescription: "Marco legal y mejores prácticas de IA ética. Conoce la regulación vigente (AI Act de la UE, leyes locales), protección de datos y cómo diseñar frameworks de gobernanza de IA en tu organización.",
         duration: "20 min",

@@ -21,8 +21,11 @@ import OVAThumbnail from './OVAThumbnail';
 
 const OVAChatGPTTools = lazy(() => import('./OVAChatGPTTools.jsx'));
 const OVAEcosystemGuide = lazy(() => import('./OVAEcosystemGuide.jsx'));
-
-
+const OVANotebookLab = lazy(() => import('./OVANotebookLab.jsx'));
+const OVANotebookSimulator = lazy(() => import('./OVANotebookSimulator.jsx'));
+const OVANotebookPodcastGuide = lazy(() => import('./OVANotebookPodcastGuide.jsx'));
+const OVABiasLab = lazy(() => import('./OVABiasLab.jsx'));
+const OVARiskSimulator = lazy(() => import('./OVARiskSimulator.jsx'));
 
 /**
  * Componente principal ResourceViewer
@@ -196,7 +199,7 @@ const ResourceViewer = ({
               </div>
             }>
               <div className="w-full rounded-2xl overflow-hidden border border-slate-200 shadow-lg">
-                {resource.id === 'chatgpt-ova-ecosystem' ? <OVAEcosystemGuide /> : <OVAChatGPTTools />}
+                {resource.id === 'chatgpt-ova-ecosystem' ? <OVAEcosystemGuide /> : resource.id === 'notebooklm-ova-1' ? <OVANotebookLab /> : resource.id === 'notebook-summary-ova-1' ? <OVANotebookSimulator /> : resource.id === 'notebook-audio-guide-1' ? <OVANotebookPodcastGuide /> : resource.id === 'bias-ova-1' ? <OVABiasLab /> : resource.id === 'privacy-ova-1' ? <OVARiskSimulator /> : <OVAChatGPTTools />}
               </div>
             </Suspense>
           );

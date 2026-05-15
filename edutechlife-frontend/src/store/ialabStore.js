@@ -72,9 +72,9 @@ const INITIAL_OPEN_ACCORDIONS = {};
 
 const modules = [
   { id: 1, title: 'Ingeniería de Prompts', icon: 'fa-terminal', color: '#4DA8C4', topics: ['Dar instrucciones claras a la IA', 'Mejorar cualquier pregunta para obtener mejores respuestas', 'Entender por qué la IA falla y cómo corregirlo', 'Obtener resultados útiles en menos tiempo', 'Aplicar la IA en estudio, trabajo y vida diaria', 'Pedir exactamente lo que necesita, sin rodeos'], challenge: '¡Llegó el momento de la práctica! Aplica todo lo aprendido en este módulo resolviendo un caso real. Atrévete a consolidar tu aprendizaje, supera el reto y lleva tus conocimientos al siguiente nivel.', desc: 'En este módulo, hemos diseñado una ruta estratégica que te llevará desde los fundamentos de la Inteligencia Artificial Generativa hasta la creación de instrucciones de alto impacto. Tu misión: Explorar cada tema y sus recursos multimedia (videos, guías y laboratorios). Notarás que tu barra de progreso cobrará vida con cada paso que des. No te detengas: cada recurso completado te acerca un 20% más a tu certificación global. ¡El poder de las instrucciones claras está en tus manos!', duration: '2h', level: 'Avanzado', videos: 12, projects: 3 },
-  { id: 2, title: 'Potencia ChatGPT', icon: 'fa-robot', color: '#66CCCC', topics: ['Análisis Predictivo', 'GPTs Personalizados', 'Function Calling', 'System Prompts'], challenge: 'Estructura un GPT para análisis de mercados cuánticos.', desc: 'Desbloquea todo el potencial de los modelos GPT con técnicas avanzadas.', duration: '2h', level: 'Avanzado', videos: 15, projects: 4 },
-  { id: 3, title: 'Rastreo Profundo', icon: 'fa-search', color: '#B2D8E5', topics: ['Razonamiento Multimodal', 'Grounding Real-Time', 'Deep Research', 'Fact-Checking IA'], challenge: 'Genera una comparativa técnica de latencia entre arquitecturas IA.', desc: 'Técnicas de investigación profunda con IA para resultados de élite.', duration: '2h', level: 'Intermedio', videos: 10, projects: 2 },
-  { id: 4, title: 'Inmersión NotebookLM', icon: 'fa-microphone', color: '#004B63', topics: ['Curaduría de Fuentes', 'Síntesis de Conocimiento', 'Audio Overviews', 'Gestión Documental'], challenge: 'Genera un podcast analizando 5 papers sobre neuro-plasticidad.', desc: 'Convierte cualquier documento en conocimiento accionable con IA.', duration: '2h', level: 'Intermedio', videos: 8, projects: 3 },
+  { id: 2, title: 'Potencia ChatGPT', icon: 'fa-robot', color: '#66CCCC', topics: ['Análisis Predictivo', 'GPTs Personalizados', 'Function Calling', 'System Prompts'], challenge: 'Estructura un GPT para análisis de mercados cuánticos.', desc: 'Conviértete en un experto en ChatGPT: domina system prompts, crea GPTs personalizados y automatiza tu trabajo.', duration: '2h', level: 'Avanzado', videos: 15, projects: 4 },
+  { id: 3, title: 'Rastreo Profundo', icon: 'fa-search', color: '#B2D8E5', topics: ['Razonamiento Multimodal', 'Grounding Real-Time', 'Deep Research', 'Fact-Checking IA'], challenge: 'Genera una comparativa técnica de latencia entre arquitecturas IA.', desc: 'Domina Google Gemini para investigar, verificar datos y analizar información como un profesional.', duration: '2h', level: 'Intermedio', videos: 10, projects: 2 },
+  { id: 4, title: 'Inmersión NotebookLM', icon: 'fa-microphone', color: '#004B63', topics: ['Curaduría de Fuentes', 'Síntesis de Conocimiento', 'Audio Overviews', 'Gestión Documental'], challenge: 'Genera un podcast analizando 5 papers sobre neuro-plasticidad.', desc: 'Transforma PDFs y documentos en resúmenes inteligentes, podcasts y asistentes de investigación personalizados.', duration: '2h', level: 'Intermedio', videos: 8, projects: 3 },
   { id: 5, title: 'Proyecto Disruptivo', icon: 'fa-trophy', color: '#FFD166', topics: ['Integración Total', 'MVP Inteligente', 'Pitch Deck IA', 'Roadmap Estratégico'], challenge: 'Propón una automatización integral para una industria local de alto nivel.', desc: 'Aplica todo lo aprendido en un proyecto de impacto real.', duration: '2h', level: 'Experto', videos: 6, projects: 5 },
 ];
 
@@ -84,29 +84,29 @@ const MODULE_RESOURCE_COUNTS = { 1: 8, 2: 8, 3: 8, 4: 8, 5: 8 };
 
 const ALL_LESSONS = {
   1: [
-    { id: 1, title: 'Introducción a la Inteligencia Artificial Generativa', description: 'Descubre cómo la IA generativa está transformando la educación y domina los conceptos clave para aplicarla desde hoy.', duration: '20 min', type: 'teoría', hasMedia: true, icon: 'fa-brain', objectives: ['Comprender qué es la IA generativa y cómo funciona', 'Identificar aplicaciones prácticas en el ámbito educativo', 'Reconocer las limitaciones y consideraciones éticas'] },
-    { id: 2, title: '¿Qué es un Prompt?', description: 'Aprende a comunicarte con la IA como un experto: el prompt correcto marca la diferencia entre un resultado genérico y una solución a tu medida.', duration: '20 min', type: 'práctica', hasMedia: true, icon: 'fa-comments', objectives: ['Definir qué es un prompt y su rol en la comunicación con IA', 'Diferenciar entre prompts efectivos y genéricos', 'Aplicar ejemplos prácticos de prompts en contexto educativo'] },
-    { id: 3, title: 'Estructura Básica de un Prompt Efectivo', description: 'Aprende la fórmula mágica: Contexto + Instrucción + Formato = Resultado preciso.', duration: '20 min', type: 'teoría', hasMedia: true, icon: 'fa-sitemap', objectives: ['Dominar la fórmula Contexto + Instrucción + Formato', 'Construir prompts estructurados con resultados precisos', 'Evaluar y refinar la calidad de las respuestas de IA'] },
+    { id: 1, title: 'IA Generativa: Tu Primer Paso', description: 'Descubre cómo la IA generativa está transformando la educación y domina los conceptos clave para aplicarla desde hoy.', duration: '20 min', type: 'teoría', hasMedia: true, icon: 'fa-brain', objectives: ['Comprender qué es la IA generativa y cómo funciona', 'Identificar aplicaciones prácticas en el ámbito educativo', 'Reconocer las limitaciones y consideraciones éticas'] },
+    { id: 2, title: 'El Poder de un Buen Prompt', description: 'Aprende a comunicarte con la IA como un experto: el prompt correcto marca la diferencia entre un resultado genérico y una solución a tu medida.', duration: '20 min', type: 'práctica', hasMedia: true, icon: 'fa-comments', objectives: ['Definir qué es un prompt y su rol en la comunicación con IA', 'Diferenciar entre prompts efectivos y genéricos', 'Aplicar ejemplos prácticos de prompts en contexto educativo'] },
+    { id: 3, title: 'Construye Prompts Impecables', description: 'Aprende la fórmula mágica: Contexto + Instrucción + Formato = Resultado preciso.', duration: '20 min', type: 'teoría', hasMedia: true, icon: 'fa-sitemap', objectives: ['Dominar la fórmula Contexto + Instrucción + Formato', 'Construir prompts estructurados con resultados precisos', 'Evaluar y refinar la calidad de las respuestas de IA'] },
   ],
   2: [
-    { id: 1, title: 'Análisis Predictivo con GPT', description: 'Usa GPT para anticipar tendencias y tomar decisiones estratégicas basadas en datos reales.', duration: '25 min', type: 'teoría', hasMedia: true, icon: 'fa-chart-line', objectives: ['Comprender cómo GPT puede analizar datos estructurados', 'Aplicar técnicas de forecasting con IA', 'Identificar patrones y tendencias en datos históricos'] },
-    { id: 2, title: 'GPTs Personalizados', description: 'Diseña asistentes IA a tu medida, entrenados para tus tareas y necesidades específicas.', duration: '30 min', type: 'laboratorio', hasMedia: true, icon: 'fa-robot', objectives: ['Configurar un GPT especializado para tareas específicas', 'Personalizar instrucciones y base de conocimiento', 'Publicar y compartir GPTs con tu equipo'] },
-    { id: 3, title: 'Function Calling Avanzado', description: 'Conecta GPT con tus herramientas y automatiza flujos de trabajo complejos sin esfuerzo.', duration: '25 min', type: 'práctica', hasMedia: false, icon: 'fa-code', objectives: ['Integrar funciones externas con modelos GPT', 'Automatizar flujos de trabajo complejos', 'Gestionar respuestas estructuradas desde la API'] },
+    { id: 1, title: 'Predice Tendencias con ChatGPT', description: 'Usa GPT para anticipar tendencias y tomar decisiones estratégicas basadas en datos reales.', duration: '25 min', type: 'teoría', hasMedia: true, icon: 'fa-chart-line', objectives: ['Comprender cómo GPT puede analizar datos estructurados', 'Aplicar técnicas de forecasting con IA', 'Identificar patrones y tendencias en datos históricos'] },
+    { id: 2, title: 'Crea tu Propio Asistente IA', description: 'Diseña asistentes IA a tu medida, entrenados para tus tareas y necesidades específicas.', duration: '30 min', type: 'laboratorio', hasMedia: true, icon: 'fa-robot', objectives: ['Configurar un GPT especializado para tareas específicas', 'Personalizar instrucciones y base de conocimiento', 'Publicar y compartir GPTs con tu equipo'] },
+    { id: 3, title: 'Automatiza con APIs y ChatGPT', description: 'Conecta GPT con tus herramientas y automatiza flujos de trabajo complejos sin esfuerzo.', duration: '25 min', type: 'práctica', hasMedia: false, icon: 'fa-code', objectives: ['Integrar funciones externas con modelos GPT', 'Automatizar flujos de trabajo complejos', 'Gestionar respuestas estructuradas desde la API'] },
   ],
   3: [
-    { id: 1, title: 'Razonamiento Multimodal', description: 'Analiza texto, imágenes y datos en un solo lugar con el poder multimodal de la IA.', duration: '20 min', type: 'teoría', hasMedia: true, icon: 'fa-brain', objectives: ['Combinar texto, imágenes y datos en un solo análisis', 'Comprender las capacidades multimodales de la IA actual', 'Aplicar razonamiento multimodal a casos de investigación'] },
-    { id: 2, title: 'Grounding en Tiempo Real', description: 'Obtén respuestas siempre actualizadas conectando la IA a fuentes de información en tiempo real.', duration: '25 min', type: 'práctica', hasMedia: true, icon: 'fa-search', objectives: ['Conectar la IA con fuentes de datos en vivo', 'Verificar respuestas con información actualizada', 'Implementar grounding en aplicaciones prácticas'] },
-    { id: 3, title: 'Deep Research y Fact-Checking', description: 'Investiga a fondo y verifica cualquier hecho con técnicas avanzadas de investigación asistida por IA.', duration: '30 min', type: 'laboratorio', hasMedia: false, icon: 'fa-microscope', objectives: ['Realizar investigaciones profundas asistidas por IA', 'Verificar hechos y fuentes automáticamente', 'Estructurar informes de investigación con IA'] },
+    { id: 1, title: 'Ve, Lee y Analiza con Gemini', description: 'Analiza texto, imágenes y datos en un solo lugar con el poder multimodal de la IA.', duration: '20 min', type: 'teoría', hasMedia: true, icon: 'fa-brain', objectives: ['Combinar texto, imágenes y datos en un solo análisis', 'Comprender las capacidades multimodales de la IA actual', 'Aplicar razonamiento multimodal a casos de investigación'] },
+    { id: 2, title: 'Respuestas Siempre Actualizadas', description: 'Obtén respuestas siempre actualizadas conectando la IA a fuentes de información en tiempo real.', duration: '25 min', type: 'práctica', hasMedia: true, icon: 'fa-search', objectives: ['Conectar la IA con fuentes de datos en vivo', 'Verificar respuestas con información actualizada', 'Implementar grounding en aplicaciones prácticas'] },
+    { id: 3, title: 'El Arte de Investigar con IA', description: 'Investiga a fondo y verifica cualquier hecho con técnicas avanzadas de investigación asistida por IA.', duration: '30 min', type: 'laboratorio', hasMedia: false, icon: 'fa-microscope', objectives: ['Realizar investigaciones profundas asistidas por IA', 'Verificar hechos y fuentes automáticamente', 'Estructurar informes de investigación con IA'] },
   ],
   4: [
-    { id: 1, title: 'Curaduría de Fuentes', description: 'Construye tu biblioteca de fuentes confiables con la ayuda de la IA para investigaciones sólidas.', duration: '20 min', type: 'teoría', hasMedia: true, icon: 'fa-bookmark', objectives: ['Seleccionar fuentes relevantes para investigación académica', 'Organizar y categorizar documentos con IA', 'Evaluar la calidad y credibilidad de las fuentes'] },
-    { id: 2, title: 'Síntesis de Conocimiento', description: 'Convierte documentos densos en resúmenes claros y listos para usar en tus proyectos.', duration: '25 min', type: 'práctica', hasMedia: true, icon: 'fa-compress', objectives: ['Transformar documentos complejos en resúmenes ejecutivos', 'Extraer ideas clave de múltiples fuentes', 'Estructurar conocimiento de forma accionable'] },
-    { id: 3, title: 'Audio Overviews y Gestión Documental', description: 'Escucha tus documentos y organiza tu biblioteca de conocimiento digital con IA.', duration: '25 min', type: 'laboratorio', hasMedia: true, icon: 'fa-microphone', objectives: ['Convertir documentos escritos en contenido de audio', 'Gestionar una biblioteca de conocimiento digital', 'Optimizar flujos de documentación con IA'] },
+    { id: 1, title: 'Selecciona Fuentes como Experto', description: 'Construye tu biblioteca de fuentes confiables con la ayuda de la IA para investigaciones sólidas.', duration: '20 min', type: 'teoría', hasMedia: true, icon: 'fa-bookmark', objectives: ['Seleccionar fuentes relevantes para investigación académica', 'Organizar y categorizar documentos con IA', 'Evaluar la calidad y credibilidad de las fuentes'] },
+    { id: 2, title: 'Convierte Datos en Sabiduría', description: 'Convierte documentos densos en resúmenes claros y listos para usar en tus proyectos.', duration: '25 min', type: 'práctica', hasMedia: true, icon: 'fa-compress', objectives: ['Transformar documentos complejos en resúmenes ejecutivos', 'Extraer ideas clave de múltiples fuentes', 'Estructurar conocimiento de forma accionable'] },
+    { id: 3, title: 'Tus Apuntes se Vuelven Podcast', description: 'Escucha tus documentos y organiza tu biblioteca de conocimiento digital con IA.', duration: '25 min', type: 'laboratorio', hasMedia: true, icon: 'fa-microphone', objectives: ['Convertir documentos escritos en contenido de audio', 'Gestionar una biblioteca de conocimiento digital', 'Optimizar flujos de documentación con IA'] },
   ],
   5: [
-    { id: 1, title: 'Integración Total de Herramientas IA', description: 'Integra todo tu stack de IA en un flujo de trabajo unificado y potente.', duration: '30 min', type: 'proyecto', hasMedia: true, icon: 'fa-puzzle-piece', objectives: ['Combinar múltiples herramientas IA en un flujo unificado', 'Diseñar arquitecturas de integración eficientes', 'Resolver problemas complejos con stack IA completo'] },
-    { id: 2, title: 'MVP Inteligente con IA', description: 'Crea un MVP con IA integrada para validar tus ideas en tiempo récord.', duration: '35 min', type: 'proyecto', hasMedia: true, icon: 'fa-rocket', objectives: ['Construir un producto mínimo viable con IA integrada', 'Priorizar funcionalidades core para validación rápida', 'Iterar basándose en feedback de usuarios'] },
-    { id: 3, title: 'Pitch Deck y Roadmap Estratégico', description: 'Diseña una presentación profesional y una hoja de ruta que vendan tu proyecto disruptivo.', duration: '25 min', type: 'proyecto', hasMedia: false, icon: 'fa-presentation', objectives: ['Preparar una presentación profesional de proyecto IA', 'Diseñar una hoja de ruta estratégica', 'Comunicar el valor del proyecto a stakeholders'] },
+    { id: 1, title: 'Une Todas las IAs en un Solo Flujo', description: 'Integra todo tu stack de IA en un flujo de trabajo unificado y potente.', duration: '30 min', type: 'proyecto', hasMedia: true, icon: 'fa-puzzle-piece', objectives: ['Combinar múltiples herramientas IA en un flujo unificado', 'Diseñar arquitecturas de integración eficientes', 'Resolver problemas complejos con stack IA completo'] },
+    { id: 2, title: 'Crea tu Primer Producto con IA', description: 'Crea un MVP con IA integrada para validar tus ideas en tiempo récord.', duration: '35 min', type: 'proyecto', hasMedia: true, icon: 'fa-rocket', objectives: ['Construir un producto mínimo viable con IA integrada', 'Priorizar funcionalidades core para validación rápida', 'Iterar basándose en feedback de usuarios'] },
+    { id: 3, title: 'Presenta tu Idea como un Profesional', description: 'Diseña una presentación profesional y una hoja de ruta que vendan tu proyecto disruptivo.', duration: '25 min', type: 'proyecto', hasMedia: false, icon: 'fa-presentation', objectives: ['Preparar una presentación profesional de proyecto IA', 'Diseñar una hoja de ruta estratégica', 'Comunicar el valor del proyecto a stakeholders'] },
   ],
 };
 
@@ -853,6 +853,40 @@ export const useIALabStore = create((set, get) => ({
     const newVal = Math.max(0, current - 1);
     ls.set(key, newVal);
     const nextKey = `challenge_next_attempt_m${moduleId}`;
+    ls.set(nextKey, Date.now() + 12 * 60 * 60 * 1000);
+    return newVal;
+  },
+
+  // ==================== LÍMITE DE INTENTOS PARA EXÁMENES ====================
+  EXAM_MAX_ATTEMPTS: 3,
+  EXAM_COOLDOWN_MS: 12 * 60 * 60 * 1000, // 12 horas
+
+  getExamRemainingAttempts: (moduleId) => {
+    const key = `exam_attempts_remaining_m${moduleId}`;
+    return ls.get(key, 3);
+  },
+
+  getExamNextAttemptTime: (moduleId) => {
+    const key = `exam_next_attempt_m${moduleId}`;
+    return ls.get(key, null);
+  },
+
+  canAttemptExamRetry: (moduleId) => {
+    const key = `exam_attempts_remaining_m${moduleId}`;
+    const remaining = ls.get(key, 3);
+    if (remaining <= 0) return false;
+    const nextKey = `exam_next_attempt_m${moduleId}`;
+    const nextTime = ls.get(nextKey, null);
+    if (nextTime && Date.now() < nextTime) return false;
+    return true;
+  },
+
+  decrementExamAttempt: (moduleId) => {
+    const key = `exam_attempts_remaining_m${moduleId}`;
+    const current = ls.get(key, 3);
+    const newVal = Math.max(0, current - 1);
+    ls.set(key, newVal);
+    const nextKey = `exam_next_attempt_m${moduleId}`;
     ls.set(nextKey, Date.now() + 12 * 60 * 60 * 1000);
     return newVal;
   },

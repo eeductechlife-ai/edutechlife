@@ -29,6 +29,11 @@ const OVAEcosystemGuide = lazy(() => import('./OVAEcosystemGuide.jsx'));
 const OVABuildGPT = lazy(() => import('./OVABuildGPT.jsx'));
 const OVAEtica = lazy(() => import('./OVAEtica.jsx'));
 const OVAIntroPrompt = lazy(() => import('./OVAIntroPrompt.jsx'));
+const OVANotebookLab = lazy(() => import('./OVANotebookLab.jsx'));
+const OVANotebookSimulator = lazy(() => import('./OVANotebookSimulator.jsx'));
+const OVANotebookPodcastGuide = lazy(() => import('./OVANotebookPodcastGuide.jsx'));
+const OVABiasLab = lazy(() => import('./OVABiasLab.jsx'));
+const OVARiskSimulator = lazy(() => import('./OVARiskSimulator.jsx'));
 
 /**
  * Hook para crear reproductor YT.Player con detección de fin de video
@@ -653,7 +658,7 @@ const ResourceViewerModal = ({
                 </div>
               </div>
             }>
-              {resource.id === 'gpts-ova-1' ? <OVABuildGPT /> : resource.id === 'chatgpt-ova-ecosystem' ? <OVAEcosystemGuide /> : resource.id === 'intro-ova-1' ? <OVAEtica /> : resource.id === 'prompt-ova-html-1' ? <OVAIntroPrompt /> : <OVAChatGPTTools />}
+              {resource.id === 'gpts-ova-1' ? <OVABuildGPT /> : resource.id === 'chatgpt-ova-ecosystem' ? <OVAEcosystemGuide /> : resource.id === 'intro-ova-1' ? <OVAEtica /> : resource.id === 'prompt-ova-html-1' ? <OVAIntroPrompt /> : resource.id === 'notebooklm-ova-1' ? <OVANotebookLab /> : resource.id === 'notebook-summary-ova-1' ? <OVANotebookSimulator /> : resource.id === 'notebook-audio-guide-1' ? <OVANotebookPodcastGuide /> : resource.id === 'bias-ova-1' ? <OVABiasLab /> : resource.id === 'privacy-ova-1' ? <OVARiskSimulator /> : <OVAChatGPTTools />}
             </Suspense>
           );
         

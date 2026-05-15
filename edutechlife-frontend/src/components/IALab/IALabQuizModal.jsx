@@ -5,6 +5,9 @@ import { useIALabContext } from '../../context/IALabContext';
 import { useIALabStore } from '../../store/ialabStore';
 import { useNotification } from '../../context/NotificationContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import SecurityWarningModal from './SecurityWarningModal';
+import ScreenshotProtectionOverlay from './ScreenshotProtectionOverlay';
+import useScreenshotProtection from '../../hooks/IALab/useScreenshotProtection';
 
 const IALabQuizModal = ({ isOpen, onClose }) => {
   const {
@@ -23,6 +26,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
     isTimerRunning,
     showTimeWarning,
     securityWarningCount,
+    setSecurityWarningCount,
     MAX_SECURITY_WARNINGS,
     SECURITY_WARNING_MESSAGES,
     showSecurityMessage,
@@ -42,6 +46,19 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [securityAlert, setSecurityAlert] = useState(null);
+  const [printWarning, setPrintWarning] = useState(null);
+
+  const { showOverlay, setShowOverlay } = useScreenshotProtection(isVisible && !showScoreResult, {
+    onMaxViolations: () => {
+      setSecurityAlert({ message: 'Has excedido el máximo de infracciones de seguridad. El examen se cerrará.', level: 3, onClose: () => {
+        setSecurityAlert(null);
+        closeEvaluationModal();
+        onClose();
+      }});
+    },
+    maxViolations: 3,
+  });
 
   // Security handlers
   const preventDefaultEvent = (e) => e.preventDefault();
@@ -52,12 +69,15 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
     const handleVisibilityChange = () => {
       if (document.hidden) {
         const newCount = (securityWarningCount || 0) + 1;
+        setSecurityWarningCount(newCount);
         if (newCount >= MAX_SECURITY_WARNINGS) {
-          alert(SECURITY_WARNING_MESSAGES[2]);
-          closeEvaluationModal();
-          onClose();
+          setSecurityAlert({ message: SECURITY_WARNING_MESSAGES[2], level: 3, onClose: () => {
+            setSecurityAlert(null);
+            closeEvaluationModal();
+            onClose();
+          }});
         } else {
-          alert(SECURITY_WARNING_MESSAGES[newCount - 1]);
+          setSecurityAlert({ message: SECURITY_WARNING_MESSAGES[newCount - 1], level: newCount, onClose: () => setSecurityAlert(null) });
         }
       }
     };
@@ -85,7 +105,8 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
   useEffect(() => {
     if (!isVisible || showScoreResult) return;
     const handleBeforePrint = () => {
-      alert('⚠️ Capturas de pantalla e impresión bloqueadas por seguridad del examen.');
+      setPrintWarning('Capturas de pantalla e impresión bloqueadas por seguridad del examen.');
+      setTimeout(() => setPrintWarning(null), 4000);
     };
     window.addEventListener('beforeprint', handleBeforePrint);
     return () => window.removeEventListener('beforeprint', handleBeforePrint);
@@ -174,22 +195,20 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
 
   const handleRetry = () => {
     const store = useIALabStore.getState();
-    if (!store.canAttemptChallengeRetry) {
-      const remaining = store.storageGetInt(`exam_attempts_remaining_m${activeMod}`, 3);
+    if (!store.canAttemptExamRetry(activeMod)) {
+      const remaining = store.getExamRemainingAttempts(activeMod);
       if (remaining <= 0) {
         alert('Has agotado tus 3 intentos para este examen.');
         return;
       }
-      const nextTime = store.storageGet(`exam_next_attempt_m${activeMod}`, null);
+      const nextTime = store.getExamNextAttemptTime(activeMod);
       if (nextTime && Date.now() < nextTime) {
         const hoursLeft = Math.ceil((nextTime - Date.now()) / 3600000);
         alert(`Debes esperar ${hoursLeft}h para intentar de nuevo. (3 intentos máximo, 12h entre cada uno).`);
         return;
       }
     }
-    const current = store.storageGetInt(`exam_attempts_remaining_m${activeMod}`, 3);
-    store.storageSet(`exam_attempts_remaining_m${activeMod}`, Math.max(0, current - 1));
-    store.storageSet(`exam_next_attempt_m${activeMod}`, Date.now() + 12 * 60 * 60 * 1000);
+    store.decrementExamAttempt(activeMod);
     handleClose();
     setTimeout(() => {
       openEvaluation();
@@ -240,9 +259,19 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
         </div>
 
         {showSecurityMessage && (
-          <div className="px-3 py-1.5 bg-amber-50 border border-amber-200 rounded-lg">
-            <span className="text-xs text-amber-700">{securityMessage}</span>
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="px-4 py-2.5 bg-gradient-to-r from-amber-50 to-amber-100/80 dark:from-amber-900/30 dark:to-amber-800/20 border border-amber-200 dark:border-amber-700/50 rounded-xl shadow-sm"
+          >
+            <div className="flex items-center gap-2.5">
+              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-amber-500 to-amber-400 flex items-center justify-center shadow-sm flex-shrink-0">
+                <Icon name="fa-shield-halved" className="text-white text-xs" />
+              </div>
+              <span className="text-xs font-medium text-amber-800 dark:text-amber-300">{securityMessage}</span>
+            </div>
+          </motion.div>
         )}
       </div>
     </div>
@@ -482,7 +511,8 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          className="fixed inset-0 z-[100] bg-slate-50 dark:bg-slate-900 flex flex-col min-h-0"
+          className="fixed inset-0 z-[100] bg-slate-50 dark:bg-slate-900 flex flex-col min-h-0 select-none"
+          style={{ WebkitUserSelect: 'none', userSelect: 'none' }}
           onCopy={preventDefaultEvent}
           onPaste={preventDefaultEvent}
           onCut={preventDefaultEvent}
@@ -538,6 +568,22 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
           {!showScoreResult && renderNavigation()}
         </motion.div>
       )}
+
+      <SecurityWarningModal
+        isOpen={!!securityAlert}
+        message={securityAlert?.message || ''}
+        level={securityAlert?.level || 1}
+        onClose={securityAlert?.onClose || (() => setSecurityAlert(null))}
+      />
+
+      <SecurityWarningModal
+        isOpen={!!printWarning}
+        message={printWarning || ''}
+        level={1}
+        onClose={() => setPrintWarning(null)}
+      />
+
+      <ScreenshotProtectionOverlay isOpen={showOverlay && !showScoreResult} />
     </AnimatePresence>
   );
 };

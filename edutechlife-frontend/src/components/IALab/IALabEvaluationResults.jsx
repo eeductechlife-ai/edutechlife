@@ -13,19 +13,23 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
 
     useEffect(() => {
         if (activityType !== 'challenge') return;
-        const today = new Date().toISOString().split('T')[0];
-        const key = `challenge_attempts_m${activeMod}_${today}`;
-        const current = useIALabStore.getState().storageGetInt(key, 3);
+        const state = useIALabStore.getState();
+        const current = state.getChallengeRemainingAttempts(activeMod);
         setRemainingAttempts(current);
     }, [activityType, activeMod]);
 
     const handleRetry = () => {
-        if (activityType !== 'challenge' || remainingAttempts <= 0) return;
-        const today = new Date().toISOString().split('T')[0];
-        const key = `challenge_attempts_m${activeMod}_${today}`;
-        const current = useIALabStore.getState().storageGetInt(key, 3);
-        const newVal = Math.max(0, current - 1);
-        useIALabStore.getState().storageSetString(key, newVal);
+        if (activityType !== 'challenge') return;
+        const state = useIALabStore.getState();
+        if (!state.canAttemptChallengeRetry(activeMod)) {
+            const nextTime = state.getNextAttemptTime(activeMod);
+            if (nextTime && Date.now() < nextTime) {
+                const hoursLeft = Math.ceil((nextTime - Date.now()) / 3600000);
+                alert(`Debes esperar ${hoursLeft}h para intentar de nuevo. (3 intentos máximo, 12h entre cada uno).`);
+            }
+            return;
+        }
+        const newVal = state.decrementChallengeAttempt(activeMod);
         setRemainingAttempts(newVal);
         if (onRetry) onRetry();
     };
@@ -522,7 +526,7 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
                                 <div className="grid grid-cols-2 gap-3">
                                     <div className="text-center bg-slate-50 rounded-lg p-3">
                                         <div className="text-2xl font-bold text-slate-800">{remainingAttempts}</div>
-                                        <div className="text-xs text-slate-500">Ejercicios</div>
+                                        <div className="text-xs text-slate-500">Intentos restantes</div>
                                     </div>
                                     {isApproved && (
                                         <div className="text-center bg-slate-50 rounded-lg p-3">

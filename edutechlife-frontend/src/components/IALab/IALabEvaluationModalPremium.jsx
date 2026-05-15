@@ -55,10 +55,10 @@ const IALabEvaluationModalPremium = ({ isOpen, onClose }) => {
                 await markChallengeComplete(activeMod, score);
             }
             
-            // Registrar ultimo tema visto (desafio/examen del modulo)
+            // Registrar ultimo tema visto (desafio del modulo)
             const moduleName = modules?.find(m => m.id === activeMod)?.title || `Modulo ${activeMod}`;
             if (recordLastTopic) {
-              recordLastTopic(activeMod, moduleName, 'exam', `Desafio - ${moduleName}`, `exam_${activeMod}`);
+              recordLastTopic(activeMod, moduleName, 'challenge', `Desafio - ${moduleName}`, `challenge_${activeMod}`);
             }
             
             // Actualizar estado UI
