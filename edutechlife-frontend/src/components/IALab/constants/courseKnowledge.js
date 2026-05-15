@@ -67,7 +67,7 @@ const COURSE_KNOWLEDGE = [
     title: "Potencia ChatGPT",
     objective: "Domina ChatGPT a nivel profesional: crea asistentes inteligentes, automatiza tareas y multiplica tu productividad.",
     description: "Conviértete en un experto en ChatGPT: configura prompts profesionales, crea GPTs personalizados y automatiza tu trabajo diario.",
-    challenge: "Estructura un GPT para análisis de mercados cuánticos.",
+    challenge: "Crea un GPT personalizado para automatizar una tarea de tu área profesional y conéctalo con una API externa usando Function Calling.",
     topics: [
       {
         title: "Guía Completa de ChatGPT",
@@ -120,7 +120,7 @@ const COURSE_KNOWLEDGE = [
     title: "Rastreo Profundo con Gemini",
     objective: "Domina Google Gemini para investigar, verificar datos y analizar información como un profesional de élite.",
     description: "Domina Google Gemini: investiga a fondo, cruza datos en tiempo real, analiza múltiples formatos y verifica información como un profesional.",
-    challenge: "Genera una comparativa técnica de latencia entre arquitecturas IA.",
+    challenge: "Usa Gemini Deep Research para investigar un tema de actualidad, verifica cada fuente citada y presenta un informe profesional con conclusiones propias.",
     topics: [
       {
         title: "Introducción a Google Gemini",
@@ -228,7 +228,7 @@ const COURSE_KNOWLEDGE = [
     title: "Ética Aplicada a IA Generativa",
     objective: "Aprende a usar la IA de forma responsable, ética y legal con frameworks que las empresas exigen hoy.",
     description: "En este módulo final, desarrollarás pensamiento crítico sobre los impactos éticos de la IA. Aprenderás a identificar sesgos, cumplir regulaciones y crear frameworks de IA responsable.",
-    challenge: "Propón una automatización integral para una industria local de alto nivel.",
+    challenge: "Analiza un caso real de sesgo algorítmico en IA y propón un protocolo ético para prevenir y mitigar este tipo de discriminación.",
     topics: [
       {
         title: "Ética en la Inteligencia Artificial",

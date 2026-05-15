@@ -31,7 +31,7 @@ export const VALENTINA_MESSAGES = {
   all: {
     readQuestion: (current, total, questionText, options) => {
       const optionsText = options.map((opt, i) => 
-        `Opción ${i + 1}: ${opt.text}`
+        `${opt.text}`
       ).join('. ');
       return `Pregunta ${current} de ${total}. ${questionText}. ${optionsText}`;
     },

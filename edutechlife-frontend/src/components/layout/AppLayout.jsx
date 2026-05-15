@@ -9,6 +9,7 @@ import UserDropdownMenuPremium from '../UserDropdownMenuPremium';
 import UserDropdownMenuSimplified from '../UserDropdownMenuSimplified';
 import { ProgressProvider } from '../../context/ProgressContext';
 import ScrollToTop from './ScrollToTop';
+import FloatingParticles from '../FloatingParticles';
 
 // Lazy load components
 const GlobalCanvas = lazy(() => import('../GlobalCanvas'));
@@ -50,7 +51,7 @@ const AppLayout = () => {
   
   // Renderizar header condicionalmente basado en la ruta actual
   const shouldShowHeader = () => {
-    if (location.pathname.includes('/ialab') || location.pathname === '/login') {
+    if (location.pathname.includes('/ialab') || location.pathname === '/login' || location.pathname.includes('/vak')) {
       return false;
     }
     return true;
@@ -66,8 +67,61 @@ const AppLayout = () => {
       {/* Header - Navigation Premium */}
       {shouldShowHeader() && (
         <>
-          <header className="sticky top-0 left-0 right-0 z-[1000] bg-white backdrop-blur-md border-b border-[#004B63]/10">
-            <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 flex items-center justify-between">
+          <header className="sticky top-0 left-0 right-0 z-[1000] bg-white/95 backdrop-blur-md relative overflow-hidden">
+            
+            {/* 3D Ambient Orbs - Background depth effect */}
+            <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+              {/* Large atmospheric bg-orbs with blur */}
+              <div className="absolute w-[400px] h-[400px] rounded-full opacity-20 -top-[280px] -right-[100px]" 
+                   style={{ background: 'radial-gradient(circle, rgba(77,168,196,0.25), transparent 70%)', filter: 'blur(60px)', animation: 'orb-float-1 8s ease-in-out infinite' }} />
+              <div className="absolute w-[300px] h-[300px] rounded-full opacity-15 -bottom-[200px] -left-[80px]"
+                   style={{ background: 'radial-gradient(circle, rgba(0,75,99,0.2), transparent 70%)', filter: 'blur(50px)', animation: 'orb-float-2 10s ease-in-out infinite' }} />
+              <div className="absolute w-[200px] h-[200px] rounded-full opacity-10 top-1/2 left-[40%] -translate-x-1/2 -translate-y-1/2"
+                   style={{ background: 'radial-gradient(circle, rgba(102,204,204,0.18), transparent 70%)', filter: 'blur(40px)', animation: 'orb-float-3 6s ease-in-out infinite' }} />
+
+              {/* Small floating ambient orbs */}
+              <div className="absolute top-[10%] left-[5%] w-2 h-2 bg-[#4DA8C4]/20 rounded-full animate-[float-3d_6s_ease-in-out_infinite]" style={{ animationDelay: '-2s' }} />
+              <div className="absolute top-[60%] left-[2%] w-1.5 h-1.5 bg-[#66CCCC]/18 rounded-full animate-[float-3d_8s_ease-in-out_infinite]" style={{ animationDelay: '-1s' }} />
+              <div className="absolute top-[20%] left-[15%] w-1.5 h-1.5 bg-[#B2D8E5]/15 rounded-full animate-[float-3d_7s_ease-in-out_infinite]" style={{ animationDelay: '-3s' }} />
+              <div className="absolute top-[15%] right-[15%] w-2 h-2 bg-[#4DA8C4]/18 rounded-full animate-[float-3d_7s_ease-in-out_infinite]" />
+              <div className="absolute top-[65%] right-[8%] w-1.5 h-1.5 bg-[#66CCCC]/20 rounded-full animate-[float-3d_9s_ease-in-out_infinite]" />
+              <div className="absolute top-[30%] right-[25%] w-2.5 h-2.5 bg-[#B2D8E5]/12 rounded-full animate-[float-3d_8s_ease-in-out_infinite]" style={{ animationDelay: '-4s' }} />
+              <div className="absolute top-[80%] right-[20%] w-1.5 h-1.5 bg-[#4DA8C4]/15 rounded-full animate-[float-3d_10s_ease-in-out_infinite]" style={{ animationDelay: '-2s' }} />
+              <div className="absolute top-[50%] left-[35%] w-1 h-1 bg-[#66CCCC]/15 rounded-full animate-[float-3d_6s_ease-in-out_infinite]" style={{ animationDelay: '-5s' }} />
+            </div>
+
+            {/* Subtle Floating Particles */}
+            <FloatingParticles count={12} className="z-0" colors={['#4DA8C4', '#66CCCC', '#004B63', '#B2D8E5']} />
+
+            {/* Orbf keyframes injected for header scope */}
+            <style>{`
+              @keyframes orb-float-1 {
+                0%, 100% { transform: translate(0, 0) scale(1); }
+                33% { transform: translate(20px, -15px) scale(1.05); }
+                66% { transform: translate(-15px, 15px) scale(0.95); }
+              }
+              @keyframes orb-float-2 {
+                0%, 100% { transform: translate(0, 0) scale(1); }
+                33% { transform: translate(-20px, 10px) scale(1.05); }
+                66% { transform: translate(15px, -15px) scale(0.95); }
+              }
+              @keyframes orb-float-3 {
+                0%, 100% { transform: translate(0, 0) scale(1); }
+                50% { transform: translate(0, 0) scale(1.1); }
+              }
+              @keyframes float-3d {
+                0%, 100% { transform: translateY(0px); opacity: 0.6; }
+                50% { transform: translateY(-10px); opacity: 1; }
+              }
+              @keyframes particle-float-3d {
+                0%, 100% { transform: translate(0, 0) scale(1) translateZ(0); opacity: 0.2; }
+                25% { transform: translate(15px, -20px) scale(1.2) translateZ(10px); opacity: 0.5; }
+                50% { transform: translate(-10px, -40px) scale(0.7) translateZ(-10px); opacity: 0.15; }
+                75% { transform: translate(20px, -15px) scale(1.1) translateZ(5px); opacity: 0.4; }
+              }
+            `}</style>
+
+            <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 flex items-center justify-between relative z-10">
               {/* Logo - Premium Clean */}
               <div className="flex items-center">
                 <button 
