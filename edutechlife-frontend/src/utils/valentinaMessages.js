@@ -47,7 +47,21 @@ export const VALENTINA_MESSAGES = {
       return messages[Math.floor(Math.random() * messages.length)];
     },
     
-    finalFarewell: (name) => `Fue un placer acompañarte, ${name}. Recuerda practicar las estrategias de tu reporte. ¡Mucho éxito!`
+    finalFarewell: (name) => `Fue un placer acompañarte, ${name}. Recuerda practicar las estrategias de tu reporte. ¡Mucho éxito!`,
+
+    resultsShort: (name, style, percentage, age) => {
+      const styleNames = {
+        visual: 'VISUAL',
+        auditivo: 'AUDITIVO',
+        kinestesico: 'KINESTÉSICO'
+      };
+      const styleName = styleNames[style] || style;
+      const isChild = age >= 6 && age <= 10;
+      const downloadHint = isChild
+        ? 'Pídele a tu acudiente que descargue el PDF completo con el botón "Descargar PDF".'
+        : 'Puedes descargar tu diagnóstico completo en PDF con el botón "Descargar PDF" que verás en pantalla.';
+      return `¡Felicidades, ${name}! Tu estilo de aprendizaje predominante es ${styleName} con un ${percentage} por ciento de correspondencia. En pantalla puedes ver tu informe completo con estrategias, fortalezas y carreras recomendadas especialmente para ti. ${downloadHint} ¡Fue un placer acompañarte en este proceso!`;
+    }
   },
 
   // 6-10 años (Niños) - Tono: Cálido, lúdico, motivacional

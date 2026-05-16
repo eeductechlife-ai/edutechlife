@@ -157,6 +157,12 @@ const HeroIpad = ({ mousePos }) => {
                 playsInline
                 preload="metadata"
                 className="w-full h-auto block"
+                poster="/images/ialab-demo-poster.png"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  const fallback = e.target.nextElementSibling;
+                  if (fallback) fallback.style.display = 'flex';
+                }}
                 style={{
                   backfaceVisibility: 'hidden',
                   WebkitBackfaceVisibility: 'hidden',
@@ -168,6 +174,15 @@ const HeroIpad = ({ mousePos }) => {
                 <source src="/dashboard.mp4" type="video/mp4" />
                 <source src="/dashboard.mov" type="video/quicktime" />
               </video>
+              <div className="hidden absolute inset-0 z-30 items-center justify-center bg-slate-900 rounded-[26px]" style={{ display: 'none' }}>
+                <div className="text-center p-6">
+                  <div className="w-16 h-16 mx-auto mb-3 rounded-2xl bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center">
+                    <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                  </div>
+                  <p className="text-sm text-white/80 font-medium">Demo IALab</p>
+                  <p className="text-xs text-white/50 mt-1">Video disponible en desktop</p>
+                </div>
+              </div>
 
               <div className="absolute inset-0 z-25 pointer-events-none"
                 style={{ background: 'linear-gradient(160deg, rgba(255,255,255,0.04) 0%, transparent 20%, transparent 65%, rgba(100,170,240,0.025) 100%)' }}

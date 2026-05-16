@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { speakTextConversational } from '../utils/speech';
+import { speakTextConversational, speakAsValentina as valSpeak } from '../utils/speech';
 import { 
   getAgeGroup,
   VALENTINA_MESSAGES,
@@ -76,8 +76,6 @@ export default function useValentinaAgent(options = {}) {
       try {
         speakingRef.current = true;
         setIsValentinaSpeaking(true);
-        
-        const { speakAsValentina: valSpeak } = await import('../utils/speech');
         
         await new Promise((resolveSpeech) => {
           valSpeak(text, parseInt(studentAge) || 12, () => {

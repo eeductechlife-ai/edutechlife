@@ -83,18 +83,23 @@ function AIToolsSection() {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0 }}
             whileHover={{ y: -6 }}
-            className="col-span-1 md:col-span-2 bg-[#004B63] text-white rounded-[2rem] p-8 flex flex-col justify-between group hover:shadow-2xl hover:shadow-[#004B63]/20 transition-all duration-500"
+            className="col-span-1 md:col-span-2 bg-[#004B63] text-white rounded-[2rem] p-8 flex flex-col group hover:shadow-2xl hover:shadow-[#004B63]/20 transition-all duration-500"
           >
-            <div>
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-[#4DA8C4]/20 flex items-center justify-center flex-shrink-0">
-                  <Icon name={tools[0].icon} className="text-xl text-[#4DA8C4]" />
-                </div>
-                <h3 className="text-2xl md:text-3xl font-black text-[#4DA8C4]">{tools[0].name}</h3>
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-12 h-12 rounded-xl bg-[#4DA8C4]/20 flex items-center justify-center flex-shrink-0">
+                <Icon name={tools[0].icon} className="text-xl text-[#4DA8C4]" />
               </div>
-              <p className="text-white/80 max-w-xl text-base md:text-lg leading-relaxed">{tools[0].description}</p>
+              <div>
+                <h3 className="text-2xl md:text-3xl font-black text-[#4DA8C4]">{tools[0].name}</h3>
+                <div className="flex flex-wrap gap-2 mt-1">
+                  {tools[0].badges.map((badge) => (
+                    <span key={badge} className="px-2.5 py-0.5 rounded-full bg-white/10 text-[10px] text-white font-bold uppercase tracking-wider border border-white/15">{badge}</span>
+                  ))}
+                </div>
+              </div>
             </div>
-            <div className="flex flex-wrap items-center gap-3 mt-6">
+            <p className="text-white/80 max-w-xl text-base md:text-lg leading-relaxed">{tools[0].description}</p>
+            <div className="mt-auto pt-6">
               <a
                 href={tools[0].path}
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(tools[0].path); }}
@@ -103,9 +108,6 @@ function AIToolsSection() {
                 {tools[0].buttonText}
                 <Icon name="fa-arrow-right" className="text-xs" />
               </a>
-              {tools[0].badges.map((badge) => (
-                <span key={badge} className="px-3 py-1 rounded-full bg-white/10 text-[10px] text-white font-bold uppercase tracking-wider border border-white/15">{badge}</span>
-              ))}
             </div>
           </motion.div>
 
@@ -181,16 +183,16 @@ function AIToolsSection() {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.3 }}
             whileHover={{ y: -6 }}
-            className="col-span-1 md:col-span-2 bg-[#4DA8C4] text-white rounded-[2rem] p-8 flex flex-col md:flex-row items-center justify-between gap-6 group hover:shadow-2xl hover:shadow-[#4DA8C4]/30 transition-all duration-500"
+            className="col-span-1 md:col-span-2 bg-[#4DA8C4] text-white rounded-[2rem] p-8 flex flex-col md:flex-row items-center gap-6 group hover:shadow-2xl hover:shadow-[#4DA8C4]/30 transition-all duration-500"
           >
-            <div className="flex items-center gap-4 max-w-xl">
+            <div className="flex items-center gap-5 flex-1 min-w-0">
               <div className="w-16 h-16 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0">
                 <Icon name={tools[3].icon} className="text-3xl text-white" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <h3 className="text-2xl md:text-3xl font-black text-white">{tools[3].name}</h3>
                 <p className="text-sm text-white/70 font-semibold uppercase tracking-wider">{tools[3].subtitle}</p>
-                <p className="text-white/80 text-base mt-1">{tools[3].description}</p>
+                <p className="text-white/80 text-base mt-1.5">{tools[3].description}</p>
               </div>
             </div>
             <a

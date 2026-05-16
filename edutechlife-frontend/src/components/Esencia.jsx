@@ -23,10 +23,11 @@ const Esencia = memo(() => {
         { image: '/images/edutech-carrusel-1.webp', title: 'Innovación Educativa' },
         { image: '/images/edutech-carrusel-2.webp', title: 'Aprendizaje Personalizado' },
         { image: '/images/edutech-carrusel-3.webp', title: 'Comunidad STEAM' },
-        { image: '/images/edutech-carrusel-4.webp', title: 'Tecnología de Vanguardia' },
         { image: '/images/edutech-carrusel-5.webp', title: 'Metodología VAK' },
         { image: '/images/edutech-carrusel-6.webp', title: 'Proyectos Prácticos' },
-        { image: '/images/edutech-carrusel-7.webp', title: 'Certificaciones Globales' }
+        { image: '/images/eco-neuro.webp', title: 'Neuro-Entorno' },
+        { image: '/images/eco-b2b.webp', title: 'Consultoría B2B' },
+        { image: '/images/eco-nacional.webp', title: 'Proyectos Nacionales' }
     ];
 
     useEffect(() => {
@@ -153,6 +154,8 @@ const Esencia = memo(() => {
                                             src={slide.image} 
                                             alt={slide.title}
                                             className="w-full h-full object-cover"
+                                            loading="lazy"
+                                            onError={(e) => { e.target.style.display = 'none'; }}
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-[#004B63] via-[#004B63]/30 to-transparent" />
                                     </div>

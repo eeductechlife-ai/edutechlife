@@ -225,9 +225,9 @@ const IALabProLandingPage = () => {
       bg: 'from-[#2A5F73] via-[#1E6B7A] to-[#154F5E]',
       badge: 'bg-white/20 backdrop-blur-sm text-white',
       badgeText: 'Próximamente',
-      buttonText: 'Notificarme',
-      buttonClass: 'bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20',
-      disabled: true
+      buttonText: 'Explorar',
+      buttonClass: 'bg-white/20 text-white hover:bg-white/30 border border-white/20 cursor-pointer',
+      disabled: false
     },
     new: {
       bg: 'from-[#004B63] via-[#4DA8C4] to-[#66CCCC]',
@@ -852,34 +852,24 @@ const IALabProLandingPage = () => {
 
                       {/* CTA Button */}
                       <motion.button
-                        whileHover={config.disabled ? {} : { scale: 1.02 }}
-                        whileTap={config.disabled ? {} : { scale: 0.98 }}
-                        disabled={config.disabled}
-                        onClick={() => !config.disabled && (isSignedIn ? navigate(course.route) : navigate('/login?returnTo=/ialab'))}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => isSignedIn ? navigate(course.route) : navigate('/login?returnTo=/ialab')}
                         className={`w-full py-2.5 text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 relative overflow-hidden mt-auto ${config.buttonClass}`}
                       >
-                        {config.disabled ? (
-                          <>
-                            <Icon name="fa-bell" className="w-4 h-4 relative" />
-                            <span className="relative">{config.buttonText}</span>
-                          </>
-                        ) : (
-                          <>
-                            <motion.div
-                              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent"
-                              animate={{ x: ['-100%', '200%'] }}
-                              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                            />
-                            <span className="relative">{config.buttonText}</span>
-                            <motion.span
-                              className="relative"
-                              animate={{ x: [0, 3, 0] }}
-                              transition={{ duration: 1.5, repeat: Infinity }}
-                            >
-                              <Icon name="fa-arrow-right" className="w-4 h-4" />
-                            </motion.span>
-                          </>
-                        )}
+                        <motion.div
+                          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent"
+                          animate={{ x: ['-100%', '200%'] }}
+                          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                        />
+                        <span className="relative">{config.buttonText}</span>
+                        <motion.span
+                          className="relative"
+                          animate={{ x: [0, 3, 0] }}
+                          transition={{ duration: 1.5, repeat: Infinity }}
+                        >
+                          <Icon name="fa-arrow-right" className="w-4 h-4" />
+                        </motion.span>
                       </motion.button>
                     </div>
                   </motion.div>

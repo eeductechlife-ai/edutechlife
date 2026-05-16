@@ -14,6 +14,7 @@ const CourseCard = ({ course, isSignedIn }) => {
       variants={fadeInUp}
       className="group relative bg-white border border-petroleum/10 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-full flex flex-col"
       whileHover={{ y: -6, scale: 1.015 }}
+      whileTap={{ scale: 0.98 }}
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
     >
       <motion.div
@@ -39,12 +40,12 @@ const CourseCard = ({ course, isSignedIn }) => {
         </div>
 
         <div className="flex items-start justify-between relative z-10">
-          <div className={`px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${config.badge}`}>
+          <div className={`px-2.5 py-1 rounded-md text-[10px] md:text-[11px] font-bold uppercase tracking-wider ${config.badge}`}>
             {config.badgeText}
           </div>
           <div className="flex items-center gap-1 px-2 py-1 bg-white/10 backdrop-blur-sm rounded-md border border-white/20">
             <Icon name="fa-clock" className="w-3 h-3 text-primary-light" />
-            <span className="text-[11px] font-semibold text-white">{course.duration}</span>
+            <span className="text-[11px] md:text-xs font-semibold text-white">{course.duration}</span>
           </div>
         </div>
 
@@ -61,7 +62,7 @@ const CourseCard = ({ course, isSignedIn }) => {
           </h3>
         </div>
 
-        <div className="relative z-10 flex items-center gap-2 text-white/70 text-[11px]">
+        <div className="relative z-10 flex items-center gap-2 text-white/70 text-[11px] md:text-xs">
           <div className="flex items-center gap-0.5">
             {[1,2,3,4,5].map((s) => (
               <Icon
@@ -80,7 +81,7 @@ const CourseCard = ({ course, isSignedIn }) => {
       <div className="p-4 flex-1 flex flex-col">
         <div className="flex flex-wrap gap-1.5 mb-3">
           {course.features.map((f, i) => (
-            <span key={i} className="px-2 py-0.5 bg-petroleum/5 text-petroleum text-[10px] font-semibold rounded-md border border-petroleum/10">
+            <span key={i} className="px-2 py-0.5 bg-petroleum/5 text-petroleum text-[10px] md:text-xs font-semibold rounded-md border border-petroleum/10">
               {f}
             </span>
           ))}
@@ -101,14 +102,14 @@ const CourseCard = ({ course, isSignedIn }) => {
               Certificado
             </span>
           )}
-          <span className="ml-auto px-2 py-0.5 bg-primary-light/10 rounded text-[10px] font-bold text-petroleum uppercase tracking-wider">
+          <span className="ml-auto px-2 py-0.5 bg-primary-light/10 rounded text-[10px] md:text-xs font-bold text-petroleum uppercase tracking-wider">
             {course.level}
           </span>
         </div>
 
         {course.status === 'active' && course.progress > 0 && (
           <div className="mb-3">
-            <div className="flex items-center justify-between text-[10px] text-slate-500 mb-1">
+            <div className="flex items-center justify-between text-[10px] md:text-xs text-slate-500 mb-1">
               <span>Progreso</span>
               <span className="font-semibold text-petroleum">{course.progress}%</span>
             </div>
@@ -125,34 +126,24 @@ const CourseCard = ({ course, isSignedIn }) => {
         )}
 
         <motion.button
-          whileHover={config.disabled ? {} : { scale: 1.03 }}
-          whileTap={config.disabled ? {} : { scale: 0.97 }}
-          disabled={config.disabled}
-          onClick={() => !config.disabled && (isSignedIn ? navigate(course.route) : navigate('/login?returnTo=/ialab'))}
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
+          onClick={() => isSignedIn ? navigate(course.route) : navigate('/login?returnTo=/ialab')}
           className={`w-full py-3 text-sm font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2.5 relative overflow-hidden mt-auto ${config.buttonClass}`}
         >
-          {config.disabled ? (
-            <>
-              <Icon name="fa-bell" className="w-4 h-4 relative" />
-              <span className="relative">{config.buttonText(isSignedIn)}</span>
-            </>
-          ) : (
-            <>
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent"
-                animate={{ x: ['-100%', '200%'] }}
-                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-              />
-              <span className="relative">{config.buttonText(isSignedIn)}</span>
-              <motion.span
-                className="relative"
-                animate={{ x: [0, 3, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              >
-                <Icon name="fa-arrow-right" className="w-4 h-4" />
-              </motion.span>
-            </>
-          )}
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent"
+            animate={{ x: ['-100%', '200%'] }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <span className="relative">{config.buttonText(isSignedIn)}</span>
+          <motion.span
+            className="relative"
+            animate={{ x: [0, 3, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+          >
+            <Icon name="fa-arrow-right" className="w-4 h-4" />
+          </motion.span>
         </motion.button>
       </div>
     </motion.div>

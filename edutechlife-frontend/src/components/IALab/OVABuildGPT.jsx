@@ -123,7 +123,7 @@ const IntroScreen = ({ onNext, addXp }) => {
                     </div>
                     <div className="flex-1 w-full relative">
                         <div className="absolute inset-0 bg-gradient-to-tr from-corporate to-petroleum rounded-full blur-3xl opacity-20 animate-pulse"></div>
-                        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="IA Educativa" className="rounded-2xl shadow-2xl relative z-10 object-cover h-80 w-full" />
+                        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="IA Educativa" className="rounded-2xl shadow-2xl relative z-10 object-cover w-full max-h-80 h-auto" />
                     </div>
                 </div>
             </Card>

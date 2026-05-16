@@ -7,6 +7,7 @@ import { useInView, motion, AnimatePresence } from 'framer-motion';
 import { useStudent } from '../../contexts/StudentContext';
 import useValentinaAgent from '../../hooks/useValentinaAgent';
 import { getQuestionsByAge, getAgeGroupKey } from '../../data/vakQuestions';
+import { VALENTINA_MESSAGES, getAgeGroup } from '../../utils/valentinaMessages';
 import './DiagnosticoVAK.css';
 
 // Componente de Confetti
@@ -300,7 +301,8 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     giveProgressUpdate,
     announceResults,
     announceTestEnd,
-    farewell
+    farewell,
+    speakAsValentina
   } = useValentinaAgent({
     studentName: studentName,
     studentAge: parseInt(studentAge) || 12,
@@ -354,6 +356,23 @@ const DiagnosticoVAK = ({ onNavigate }) => {
       questionJustReadRef.current = false;
     }
   }, [valeriaEnabled]);
+
+  // Efecto: Hablar resultados cortos al entrar a la pantalla de resultados
+  useEffect(() => {
+    if (phase === 'result' && valeriaEnabled && diagnosis) {
+      const timer = setTimeout(async () => {
+        const age = parseInt(studentAge) || parseInt(diagnosis.studentAge) || 12;
+        const message = VALENTINA_MESSAGES.all.resultsShort(
+          diagnosis.studentName || studentName || 'Estudiante',
+          diagnosis.predominantStyle || 'visual',
+          diagnosis.percentage || 0,
+          age
+        );
+        await speakAsValentina(message);
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [phase, valeriaEnabled, diagnosis]);
 
   useEffect(() => {
     if (phase === 'intro') {
@@ -608,12 +627,6 @@ const DiagnosticoVAK = ({ onNavigate }) => {
           setShowConfetti(false);
           setShowCelebration(false);
           setPhase('parentdata');
-          // Anunciar resultados después de un momento
-          if (valeriaEnabled) {
-            setTimeout(() => {
-              announceResults();
-            }, 1000);
-          }
         }, 2000); // Mostrar celebración por 2 segundos
       }
     } catch (err) {

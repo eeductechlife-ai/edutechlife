@@ -149,7 +149,7 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback)
   safetyTimeout = setTimeout(() => {
     cleanup();
     if (onEndCallback) onEndCallback();
-  }, 10000);
+  }, 30000);
 
   // Función para usar voz nativa del sistema (fallback)
   const useNativeSpeech = () => {
@@ -232,8 +232,7 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback)
         const data = await response.json();
         
         if (data.error) {
-          window.alert('🚨 ERROR GOOGLE TTS: ' + data.error.message);
-          console.warn('Voice failed...', data.error.message);
+          console.warn('🚨 ERROR GOOGLE TTS: ' + data.error.message);
           lastError = data.error;
           continue;
         }
@@ -251,13 +250,23 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback)
             if (onEndCallback) onEndCallback();
           };
           
-          await currentAudio.play();
+          try {
+            await currentAudio.play();
+          } catch (playError) {
+            if (playError.name === 'NotAllowedError') {
+              console.warn('⚠️ Autoplay bloqueado por el navegador. Usando voz nativa...');
+              cleanup();
+              useNativeSpeech();
+              return;
+            }
+            throw playError;
+          }
           console.log("¡Audio reproduciéndose!");
           return;
         }
       } catch (voiceError) {
-        window.alert('🚨 ERROR DE CONEXIÓN: ' + voiceError.message);
-        console.warn('Error with voice...', voiceError);
+        console.warn('🚨 ERROR DE CONEXIÓN: ' + voiceError.message);
+        console.warn('Voice option failed:', voiceError);
         lastError = voiceError;
         continue;
       }

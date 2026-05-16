@@ -27,17 +27,30 @@ const ExamResultViewer = lazy(() => import('./ExamResultViewer'));
 const ChallengeResultViewer = lazy(() => import('./ChallengeResultViewer'));
 const CertificatesModal = lazy(() => import('../modals/CertificatesModal'));
 
-const LoadingSpinner = () => (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm">
-    <div className="flex flex-col items-center gap-3 bg-white dark:bg-slate-800 rounded-2xl px-8 py-6 shadow-xl">
-      <div className="w-8 h-8 border-2 border-petroleum/30 border-t-petroleum rounded-full animate-spin" />
+const LoadingSpinner = ({ onRetry }) => {
+  const [showTimeout, setShowTimeout] = useState(false);
+  React.useEffect(() => {
+    const t = setTimeout(() => setShowTimeout(true), 5000);
+    return () => clearTimeout(t);
+  }, []);
+  return (
+    <div className="flex flex-col items-center justify-center py-12 px-6">
+      <div className="w-8 h-8 border-2 border-petroleum/30 border-t-petroleum rounded-full animate-spin mb-4" />
       <p className="text-sm text-slate-500 font-medium">Cargando...</p>
+      {showTimeout && onRetry && (
+        <button
+          onClick={onRetry}
+          className="mt-4 px-4 py-2 text-xs font-semibold text-petroleum border border-petroleum/30 rounded-xl hover:bg-petroleum/5 transition-colors"
+        >
+          Reintentar
+        </button>
+      )}
     </div>
-  </div>
-);
+  );
+};
 
-const SuspenseWrapper = ({ children }) => (
-  <Suspense fallback={<LoadingSpinner />}>{children}</Suspense>
+const SuspenseWrapper = ({ children, onRetry }) => (
+  <Suspense fallback={<LoadingSpinner onRetry={onRetry} />}>{children}</Suspense>
 );
 
 /**
@@ -260,12 +273,12 @@ const IALabContent = () => {
                             </div>
 
                             {/* TAB PILLS - Navegación entre secciones */}
-                            <div data-tour="tour-tabs" className="flex items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-hide">
+                            <div data-tour="tour-tabs" className="flex items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-thin-ialab">
                               {TABS.map((tab) => (
                                 <button
                                   key={tab.id ?? 'all'}
                                   onClick={() => setViewSection(tab.id)}
-                                  className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-300 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 border ${
+                                  className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-300 whitespace-nowrap sm:whitespace-nowrap whitespace-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 border ${
                                     viewSection === tab.id
                                       ? 'bg-gradient-to-r from-petroleum to-corporate text-white border-petroleum/30 shadow-md shadow-petroleum/10 ring-1 ring-white/20'
                                       : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200/60 dark:border-slate-700/60 hover:border-petroleum/30 hover:text-petroleum dark:hover:text-[#4DA8C4] hover:shadow-sm'
@@ -461,6 +474,28 @@ const IALabContent = () => {
                     </svg>
                 </button>
                 
+                {/* Scrollbar delgada visible en iOS */}
+                <style>{`
+                  .scrollbar-thin-ialab {
+                    scrollbar-width: thin;
+                    -webkit-overflow-scrolling: touch;
+                  }
+                  .scrollbar-thin-ialab::-webkit-scrollbar {
+                    height: 4px;
+                    width: 4px;
+                  }
+                  .scrollbar-thin-ialab::-webkit-scrollbar-track {
+                    background: transparent;
+                  }
+                  .scrollbar-thin-ialab::-webkit-scrollbar-thumb {
+                    background: rgba(0, 75, 99, 0.25);
+                    border-radius: 20px;
+                  }
+                  .scrollbar-thin-ialab::-webkit-scrollbar-thumb:hover {
+                    background: rgba(0, 75, 99, 0.4);
+                  }
+                `}</style>
+
                 {/* Estilos de protección anti-impresión (para modal de evaluación) */}
                 <style>
                     {`

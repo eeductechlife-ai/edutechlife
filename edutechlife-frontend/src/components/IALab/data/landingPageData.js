@@ -165,9 +165,9 @@ export const statusConfig = {
     bg: 'from-[#2A5F73] via-[#1E6B7A] to-[#154F5E]',
     badge: 'bg-white/20 backdrop-blur-sm text-white',
     badgeText: 'Próximamente',
-    buttonText: () => 'Notificarme',
-    buttonClass: 'border-2 border-dashed border-petroleum/25 text-petroleum/60 bg-petroleum/[0.03] hover:bg-petroleum/5 hover:border-petroleum/40 cursor-not-allowed',
-    disabled: true
+    buttonText: (isSignedIn) => isSignedIn ? 'Explorar' : 'Explorar',
+    buttonClass: 'bg-white/20 text-white hover:bg-white/30 border border-white/20 cursor-pointer',
+    disabled: false
   },
   new: {
     bg: 'from-petroleum via-primary-light to-mint',

@@ -311,10 +311,10 @@ const IALabSidebar = () => {
                 </div>
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between px-1">
-                    <span className="text-[10px] text-slate-500">
+                    <span className="text-[10px] md:text-xs text-slate-500">
                       {badgesSummary.earned}/{badgesSummary.total} ganadas
                     </span>
-                    <span className="text-[10px] font-semibold text-corporate">
+                    <span className="text-[10px] md:text-xs font-semibold text-corporate">
                       {Math.round((badgesSummary.earned / badgesSummary.total) * 100)}%
                     </span>
                   </div>
@@ -324,15 +324,15 @@ const IALabSidebar = () => {
                       style={{ width: `${(badgesSummary.earned / badgesSummary.total) * 100}%` }}
                     />
                   </div>
-                  <div className="grid grid-cols-4 gap-1 mt-2">
+                  <div className="grid grid-cols-4 gap-1.5 mt-2">
                     {badgesSummary.recent.map((badge) => (
                       <div
                         key={badge.id}
-                        className="flex flex-col items-center p-1.5 rounded-lg bg-petroleum/5 hover:bg-petroleum/10 transition-colors group relative"
+                        className="flex flex-col items-center p-2 rounded-lg bg-petroleum/5 hover:bg-petroleum/10 transition-colors group relative min-h-[52px]"
                         aria-label={`${badge.label}: ${badge.desc}`}
                       >
                         <Icon name={badge.icon} className="text-sm text-corporate" />
-                        <span className="text-[7px] text-slate-500 mt-0.5 text-center leading-tight group-hover:text-petroleum transition-colors">
+                        <span className="text-[9px] md:text-[10px] text-slate-500 mt-0.5 text-center leading-tight group-hover:text-petroleum transition-colors">
                           {badge.label}
                         </span>
                       </div>

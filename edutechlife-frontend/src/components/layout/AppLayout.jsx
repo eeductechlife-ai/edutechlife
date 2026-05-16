@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense } from 'react';
+import { useState, useRef, useEffect, lazy, Suspense } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth, useUser } from '@clerk/react';
 import { PageLoader } from '../LoadingScreen';
@@ -24,6 +24,25 @@ const AppLayout = () => {
   const [showContactModal, setShowContactModal] = useState(false);
   const [showLeadCaptureModal, setShowLeadCaptureModal] = useState(false);
   const [adminLoginModalOpen, setAdminLoginModalOpen] = useState(false);
+  const [showLoginDropdown, setShowLoginDropdown] = useState(false);
+  const [showContactInfo, setShowContactInfo] = useState(false);
+  
+  const loginDropdownRef = useRef(null);
+  const contactInfoRef = useRef(null);
+
+  // Cerrar dropdowns al hacer clic fuera
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (loginDropdownRef.current && !loginDropdownRef.current.contains(e.target)) {
+        setShowLoginDropdown(false);
+      }
+      if (contactInfoRef.current && !contactInfoRef.current.contains(e.target)) {
+        setShowContactInfo(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
   
   // Función para navegación con scroll a secciones
   const navigateToSection = (route, sectionId = null) => {
@@ -67,10 +86,10 @@ const AppLayout = () => {
       {/* Header - Navigation Premium */}
       {shouldShowHeader() && (
         <>
-          <header className="sticky top-0 left-0 right-0 z-[1000] bg-white/95 backdrop-blur-md relative overflow-hidden">
+          <header className="sticky top-0 left-0 right-0 z-[1000] bg-white relative">
             
             {/* 3D Ambient Orbs - Background depth effect */}
-            <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+            <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
               {/* Large atmospheric bg-orbs with blur */}
               <div className="absolute w-[400px] h-[400px] rounded-full opacity-20 -top-[280px] -right-[100px]" 
                    style={{ background: 'radial-gradient(circle, rgba(77,168,196,0.25), transparent 70%)', filter: 'blur(60px)', animation: 'orb-float-1 8s ease-in-out infinite' }} />
@@ -155,33 +174,70 @@ const AppLayout = () => {
               {/* Navigation Links - Desktop */}
               <nav className="hidden md:flex items-center gap-3">
                 {/* Dropdown Iniciar Sesión */}
-                <div className="relative group">
-                  <button className="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] hover:from-[#66CCCC] hover:to-[#4DA8C4] rounded-full transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2">
+                <div className="relative" ref={loginDropdownRef}>
+                  <button
+                    onClick={() => setShowLoginDropdown(!showLoginDropdown)}
+                    className="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] hover:from-[#66CCCC] hover:to-[#4DA8C4] rounded-full transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2"
+                  >
                     <i className="fa-solid fa-right-to-bracket text-xs text-white"></i>
                     Iniciar Sesión
-                    <i className="fa-solid fa-chevron-down text-[10px] text-white ml-1"></i>
+                    <i className={`fa-solid fa-chevron-down text-[10px] text-white ml-1 transition-transform duration-200 ${showLoginDropdown ? 'rotate-180' : ''}`}></i>
                   </button>
                   
                   {/* Dropdown menu */}
-                  <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-[#4DA8C4]/10 p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-                    <button onClick={() => navigate('/ialab')} className="w-full text-left px-3 py-2 text-sm font-semibold text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors flex items-center gap-2">
+                  <div className={`absolute top-full right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-[#4DA8C4]/10 p-2 transition-all duration-200 z-50 ${
+                    showLoginDropdown ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
+                  }`}>
+                    <button onClick={() => { navigate('/ialab'); setShowLoginDropdown(false); }} className="w-full text-left px-3 py-2 text-sm font-semibold text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors flex items-center gap-2">
                       <i className="fa-solid fa-robot text-[#4DA8C4]"></i>
                       IA Lab Pro
                     </button>
-                    <button onClick={() => navigate('/smartboard')} className="w-full text-left px-3 py-2 text-sm font-semibold text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors flex items-center gap-2">
+                    <button onClick={() => { navigate('/smartboard'); setShowLoginDropdown(false); }} className="w-full text-left px-3 py-2 text-sm font-semibold text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors flex items-center gap-2">
                       <i className="fa-solid fa-chalkboard text-[#4DA8C4]"></i>
                       SmartBoard
                     </button>
                   </div>
                 </div>
                 
-                <button 
-                  onClick={openContactModal}
-                  className="px-4 py-2 text-sm font-semibold text-white bg-[#4DA8C4] hover:bg-[#004B63] rounded-full transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2"
-                >
-                  <i className="fa-solid fa-envelope text-xs text-white"></i>
-                  Contacto
-                </button>
+                {/* Contacto - Inline Info */}
+                <div className="relative" ref={contactInfoRef}>
+                  <button
+                    onClick={() => setShowContactInfo(!showContactInfo)}
+                    className="px-4 py-2 text-sm font-semibold text-white bg-[#4DA8C4] hover:bg-[#004B63] rounded-full transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2"
+                  >
+                    <i className="fa-solid fa-envelope text-xs text-white"></i>
+                    Contacto
+                  </button>
+                  
+                  <div className={`absolute top-full right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-[#4DA8C4]/10 p-4 transition-all duration-200 z-50 ${
+                    showContactInfo ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
+                  }`}>
+                    <div className="flex items-center gap-3 mb-3 pb-3 border-b border-gray-100">
+                      <div className="w-9 h-9 rounded-full bg-[#4DA8C4]/10 flex items-center justify-center">
+                        <i className="fa-solid fa-headset text-[#4DA8C4]"></i>
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold text-[#004B63]">Contáctanos</p>
+                        <p className="text-xs text-gray-500">Estamos aquí para ayudarte</p>
+                      </div>
+                    </div>
+                    <a href="mailto:info@edutechlife.co" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#4DA8C4]/5 transition-colors text-sm text-[#004B63]">
+                      <i className="fa-solid fa-envelope text-[#4DA8C4] w-4 text-center"></i>
+                      info@edutechlife.co
+                    </a>
+                    <a href="https://wa.me/573001234567" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#4DA8C4]/5 transition-colors text-sm text-[#004B63]">
+                      <i className="fa-brands fa-whatsapp text-[#4DA8C4] w-4 text-center"></i>
+                      WhatsApp
+                    </a>
+                    <button
+                      onClick={() => { setShowContactInfo(false); openContactModal(); }}
+                      className="w-full mt-2 px-3 py-2 text-sm font-semibold text-white bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] rounded-lg hover:from-[#66CCCC] hover:to-[#4DA8C4] transition-all flex items-center justify-center gap-2"
+                    >
+                      <i className="fa-solid fa-paper-plane text-xs"></i>
+                      Enviar mensaje
+                    </button>
+                  </div>
+                </div>
                 
                 {/* User Dropdown para usuarios autenticados */}
                 {isSignedIn && clerkUser && (

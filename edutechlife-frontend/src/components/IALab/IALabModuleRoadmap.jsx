@@ -21,7 +21,7 @@ const IALabModuleRoadmap = () => {
         </div>
       </div>
 
-      <div className="flex items-center gap-1 md:gap-2 overflow-x-auto pb-1">
+      <div className="flex items-center gap-1 md:gap-2 overflow-x-auto pb-1 scrollbar-thin-ialab">
         {modules.map((mod, idx) => {
           const locked = isModuleLocked(mod.id);
           const score = calculateModuleScore(mod.id);
@@ -66,7 +66,7 @@ const IALabModuleRoadmap = () => {
                     <span className="text-xs font-bold">{mod.id}</span>
                   )}
                 </div>
-                <span className={`text-[10px] font-semibold text-center leading-tight max-w-[64px] truncate ${
+                <span className={`text-[10px] md:text-xs font-semibold text-center leading-tight max-w-[64px] truncate ${
                   isActive
                     ? 'text-petroleum dark:text-[#4DA8C4]'
                     : completed
