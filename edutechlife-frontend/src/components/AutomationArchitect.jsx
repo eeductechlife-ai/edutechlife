@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { callDeepseek } from '../utils/api';
+import AutomationArchitectureViewer from './AutomationArchitectureViewer';
 
 const AutomationArchitect = ({ onBack, embedded = false }) => {
     const [activeStep, setActiveStep] = useState(1);
@@ -10,7 +11,8 @@ const AutomationArchitect = ({ onBack, embedded = false }) => {
         procesos: [],
         objetivos: '',
         presupuesto: 'medio',
-        tiempo: '3-6 meses'
+        tiempo: '3-6 meses',
+        industria: 'educacion'
     });
     const [generatedPlan, setGeneratedPlan] = useState(null);
     const [isGenerating, setIsGenerating] = useState(false);
@@ -18,24 +20,35 @@ const AutomationArchitect = ({ onBack, embedded = false }) => {
     const [selectedArchitecture, setSelectedArchitecture] = useState(null);
 
     const procesosOptions = [
-        'Gestión de estudiantes',
-        'Calificaciones y reportes',
-        'Comunicación con padres',
-        'Administración académica',
-        'Gestión de recursos',
-        'Planificación de clases',
-        'Evaluación docente',
-        'Seguimiento de proyectos',
-        'Automatización de tareas repetitivas',
-        'Análisis de datos educativos'
+        'Atención al cliente',
+        'Facturación y cobros',
+        'Gestión de inventario',
+        'Procesos contables',
+        'Recursos humanos',
+        'Marketing y ventas',
+        'Logística y envíos',
+        'Análisis de datos',
+        'Comunicación interna',
+        'Documentación y reportes'
+    ];
+
+    const industrias = [
+        { id: 'educacion', label: 'Educación' },
+        { id: 'retail', label: 'Retail / Comercio' },
+        { id: 'logistica', label: 'Logística / Transporte' },
+        { id: 'salud', label: 'Salud / Clínicas' },
+        { id: 'fintech', label: 'Fintech / Bancario' },
+        { id: 'manufactura', label: 'Manufactura / Industria' },
+        { id: 'servicios', label: 'Servicios Profesionales' },
+        { id: 'turismo', label: 'Hotelería / Turismo' },
     ];
 
     const arquitecturasPredefinidas = [
         {
             id: 'basica',
             nombre: 'Arquitectura Básica',
-            descripcion: 'Automatización de procesos simples con chatbots y reportes automáticos',
-            componentes: ['Chatbot educativo', 'Generador de reportes', 'Sistema de notificaciones'],
+            descripcion: 'Automatización de procesos clave con chatbots, reportes automáticos y notificaciones inteligentes.',
+            componentes: ['Chatbot IA', 'Generador de reportes', 'Sistema de notificaciones', 'Integración básica CRM'],
             tiempo: '1-3 meses',
             costo: '$5-10M',
             complejidad: 'Baja',
@@ -45,8 +58,8 @@ const AutomationArchitect = ({ onBack, embedded = false }) => {
         {
             id: 'intermedia',
             nombre: 'Arquitectura Intermedia',
-            descripcion: 'Sistema integrado con IA para análisis predictivo y personalización',
-            componentes: ['IA predictiva', 'Dashboard analítico', 'Sistema de recomendaciones', 'API de integración'],
+            descripcion: 'Sistema integrado con IA predictiva, dashboards analíticos y automatización de flujos multi-paso.',
+            componentes: ['IA predictiva', 'Dashboard analítico', 'Sistema de recomendaciones', 'API de integración', 'Automatización de flujos'],
             tiempo: '3-6 meses',
             costo: '$15-25M',
             complejidad: 'Media',
@@ -56,8 +69,8 @@ const AutomationArchitect = ({ onBack, embedded = false }) => {
         {
             id: 'avanzada',
             nombre: 'Arquitectura Avanzada',
-            descripcion: 'Ecosistema completo con múltiples agentes de IA y automatización total',
-            componentes: ['Multi-agentes IA', 'Automatización end-to-end', 'Analítica en tiempo real', 'Integración ERP', 'Sistema de aprendizaje'],
+            descripcion: 'Ecosistema completo con multi-agentes IA, automatización end-to-end y analítica en tiempo real.',
+            componentes: ['Multi-agentes IA', 'Automatización end-to-end', 'Analítica en tiempo real', 'Integración ERP', 'Sistema de aprendizaje automático'],
             tiempo: '6-12 meses',
             costo: '$30-50M',
             complejidad: 'Alta',
@@ -92,28 +105,29 @@ const AutomationArchitect = ({ onBack, embedded = false }) => {
     const generateAutomationPlan = async () => {
         setIsGenerating(true);
         
-        const prompt = `Como arquitecto de automatización educativo, genera un plan detallado para:
+        const prompt = `Como arquitecto de automatización empresarial experto, genera un plan detallado para:
         
 Empresa: ${formData.empresa}
-Sector: ${formData.sector}
+Industria: ${formData.industria}
 Número de empleados: ${formData.empleados}
 Procesos a automatizar: ${formData.procesos.join(', ')}
 Objetivos: ${formData.objetivos}
 Presupuesto: ${formData.presupuesto}
 Tiempo estimado: ${formData.tiempo}
+Arquitectura seleccionada: ${selectedArchitecture?.nombre || 'Por definir'}
 
 Genera un plan de automatización que incluya:
-1. Arquitectura recomendada
-2. Fases de implementación
-3. Tecnologías específicas
-4. KPIs de éxito
-5. ROI estimado
-6. Riesgos y mitigaciones
+1. Arquitectura recomendada (basada en la seleccionada)
+2. Fases de implementación con cronograma
+3. Tecnologías y herramientas específicas
+4. KPIs de éxito y métricas de ROI
+5. Análisis de riesgos y mitigaciones
+6. Estándares aplicables (ISO/IEC 42001, NIST AI RMF)
 
-Formato: Título, descripción, y secciones claras.`;
+Formato: Título, descripción, y secciones claras con viñetas.`;
 
         try {
-            const result = await callDeepseek(prompt, "Eres un arquitecto de automatización educativo experto en IA y pedagogía. Genera planes detallados, prácticos y realistas.", false);
+            const result = await callDeepseek(prompt, "Eres un arquitecto de automatización empresarial experto en IA, estándares internacionales y transformación digital. Genera planes detallados, prácticos y realistas.", false);
             setGeneratedPlan(result);
             setActiveStep(4);
         } catch (error) {
@@ -142,7 +156,8 @@ Formato: Título, descripción, y secciones claras.`;
             procesos: [],
             objetivos: '',
             presupuesto: 'medio',
-            tiempo: '3-6 meses'
+            tiempo: '3-6 meses',
+            industria: 'educacion'
         });
         setGeneratedPlan(null);
         setSelectedArchitecture(null);
@@ -157,11 +172,25 @@ Formato: Título, descripción, y secciones claras.`;
                     <i className="fa-solid fa-robot" />
                     <span>ARQUITECTO DE AUTOMATIZACIÓN</span>
                 </div>
-                <h1>Diseña tu Ecosistema de IA Educativa</h1>
+                <h1>Diseña tu Ecosistema de IA Empresarial</h1>
                 <p>
-                    Crea un plan personalizado de automatización con arquitectura, fases de implementación 
-                    y ROI estimado para tu institución educativa.
+                    Crea un plan personalizado de automatización con arquitectura, fases de implementación,
+                    ROI estimado y estándares internacionales para tu empresa.
                 </p>
+                <div className="flex flex-wrap items-center justify-center gap-3 mt-4">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#004B63]/5 border border-[#004B63]/10 rounded-full text-[10px] font-semibold text-[#004B63]">
+                        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                        ISO/IEC 42001
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#4DA8C4]/5 border border-[#4DA8C4]/10 rounded-full text-[10px] font-semibold text-[#4DA8C4]">
+                        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                        NIST AI RMF
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#66CCCC]/5 border border-[#66CCCC]/10 rounded-full text-[10px] font-semibold text-[#66CCCC]">
+                        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                        ISO/IEC 23053
+                    </span>
+                </div>
             </div>
 
             {/* Progress Steps */}
@@ -186,32 +215,30 @@ Formato: Título, descripción, y secciones claras.`;
                 {activeStep === 1 && (
                     <div className="aa-step-content">
                         <h2><i className="fa-solid fa-clipboard-question" /> Diagnóstico Inicial</h2>
+                        <p className="aa-subtitle">Cuéntanos sobre tu empresa para diseñar la arquitectura ideal.</p>
                         <div className="aa-form-grid">
                             <div className="aa-form-group">
-                                <label>Nombre de la Institución</label>
+                                <label>Nombre de la Empresa</label>
                                 <input
                                     type="text"
                                     value={formData.empresa}
                                     onChange={(e) => handleInputChange('empresa', e.target.value)}
-                                    placeholder="Ej: Colegio San Ignacio"
+                                    placeholder="Ej: TechCorp S.A.S"
                                 />
                             </div>
                             <div className="aa-form-group">
-                                <label>Sector Educativo</label>
+                                <label>Industria</label>
                                 <select
-                                    value={formData.sector}
-                                    onChange={(e) => handleInputChange('sector', e.target.value)}
+                                    value={formData.industria}
+                                    onChange={(e) => handleInputChange('industria', e.target.value)}
                                 >
-                                    <option value="">Seleccionar...</option>
-                                    <option value="k12">Educación K-12</option>
-                                    <option value="tecnica">Educación Técnica</option>
-                                    <option value="superior">Educación Superior</option>
-                                    <option value="corporativa">Capacitación Corporativa</option>
-                                    <option value="ong">ONG Educativa</option>
+                                    {industrias.map((ind) => (
+                                        <option key={ind.id} value={ind.id}>{ind.label}</option>
+                                    ))}
                                 </select>
                             </div>
                             <div className="aa-form-group">
-                                <label>Número de Empleados/Docentes</label>
+                                <label>Número de Empleados</label>
                                 <div className="aa-slider-container">
                                     <input
                                         type="range"
@@ -249,7 +276,7 @@ Formato: Título, descripción, y secciones claras.`;
                             <textarea
                                 value={formData.objetivos}
                                 onChange={(e) => handleInputChange('objetivos', e.target.value)}
-                                placeholder="Describe tus objetivos principales (reducir costos, mejorar eficiencia, personalizar aprendizaje, etc.)"
+                                placeholder="Describe tus objetivos (reducir costos, mejorar eficiencia, escalar operaciones, etc.)"
                                 rows="4"
                             />
                         </div>
@@ -447,9 +474,20 @@ Formato: Título, descripción, y secciones claras.`;
                                 <span>PLAN COMPLETADO</span>
                             </div>
                             <h3>Plan de Automatización para {formData.empresa}</h3>
+                            <p className="text-slate-500 text-sm mt-1">
+                                Industria: {industrias.find(i => i.id === formData.industria)?.label || formData.industria} — Arquitectura: {selectedArchitecture?.nombre || 'Personalizada'}
+                            </p>
                         </div>
 
                         <div className="aa-plan-content">
+                            <div className="mb-6">
+                                <h4 className="text-sm font-bold text-[#004B63] mb-3"><i className="fa-solid fa-diagram-project" /> Arquitectura Visual</h4>
+                                <AutomationArchitectureViewer
+                                    architectures={arquitecturasPredefinidas}
+                                    selectedArchitecture={selectedArchitecture}
+                                />
+                            </div>
+
                             <div className="aa-plan-card">
                                 <h4><i className="fa-solid fa-robot" /> Resumen Ejecutivo</h4>
                                 <div className="aa-plan-text">

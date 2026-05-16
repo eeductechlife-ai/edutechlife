@@ -209,7 +209,7 @@ export const requestMicrophonePermission = async () => {
   }
 };
 
-const getPermissionErrorMessage = (errorName) => {
+export const getPermissionErrorMessage = (errorName) => {
   switch (errorName) {
     case 'NotAllowedError':
     case 'PermissionDeniedError':

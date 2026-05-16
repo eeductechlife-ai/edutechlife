@@ -13,7 +13,7 @@ const toolLinks = [
   { label: 'SmartBoard', view: 'neuroentorno' },
   { label: 'Diagnóstico VAK', view: 'vak' },
   { label: 'ROI Calculator', view: 'consultoria' },
-  { label: 'Automation Architect', view: 'automation' },
+  { label: 'Automatización Empresarial', view: 'automation' },
 ];
 
 const resourceLinks = [

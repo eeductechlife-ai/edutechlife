@@ -171,7 +171,10 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
 
       // Sincronizar con Supabase via ProgressContext
       if (markExamComplete) {
-        markExamComplete(activeMod, score).catch(() => {});
+        markExamComplete(activeMod, score).catch((err) => {
+          console.error('Error al sincronizar examen completado:', err);
+          createNotification({ type: 'error', title: 'Error de sincronización', message: 'No se pudo guardar el progreso del examen en el servidor.', metadata: { moduleId: activeMod, score } });
+        });
       }
 
       // Disparar evento global para forzar refresco de la UI

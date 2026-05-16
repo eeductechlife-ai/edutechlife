@@ -49,7 +49,7 @@ const Hero = memo(() => {
     }, []);
 
     const countEstudiantes = useAnimatedCounter(6000, 1800, statsVisible);
-    const countExito = useAnimatedCounter(98, 2000, statsVisible);
+    const countExito = useAnimatedCounter(90, 2000, statsVisible);
     const countAños = useAnimatedCounter(10, 2200, statsVisible);
 
     return (
@@ -127,7 +127,7 @@ const Hero = memo(() => {
                                 {countExito}%
                             </div>
                             <div className="text-xs font-normal text-[#64748B] uppercase tracking-widest">
-                                Tasa Éxito
+                                Éxito
                             </div>
                         </div>
                         <div className="text-center">
@@ -135,7 +135,7 @@ const Hero = memo(() => {
                                 {countAños}+
                             </div>
                             <div className="text-xs font-normal text-[#64748B] uppercase tracking-widest">
-                                Años Refinando
+                                Años de experiencia
                             </div>
                         </div>
                     </motion.div>

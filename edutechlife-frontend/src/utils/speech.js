@@ -113,7 +113,7 @@ let currentAudio = null;
 let safetyTimeout = null;
 let isSpeaking = false;
 
-const speakTextConversational = async (text, profile = 'valeria', onEndCallback) => {
+const speakTextConversational = async (text, profile = 'valeria', onEndCallback, onPermissionError) => {
   if (isSpeaking) {
     stopSpeech();
   }
@@ -265,6 +265,12 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback)
           return;
         }
       } catch (voiceError) {
+        if (voiceError.name === 'NotAllowedError') {
+          console.warn('⚠️ Audio bloqueado por el navegador (requiere gesto del usuario)');
+          if (onPermissionError) onPermissionError(voiceError.message);
+          lastError = voiceError;
+          break;
+        }
         console.warn('🚨 ERROR DE CONEXIÓN: ' + voiceError.message);
         console.warn('Voice option failed:', voiceError);
         lastError = voiceError;
@@ -389,7 +395,7 @@ const stopRecognition = () => {
  * @param {function} onEndCallback - Callback al terminar
  * @returns {Promise} - Promesa del speech
  */
-export const speakAsValentina = async (text, age = 12, onEndCallback) => {
+export const speakAsValentina = async (text, age = 12, onEndCallback, onPermissionError) => {
   // Determinar perfil de voz según edad
   let profile = 'valentina'; // Default (11-14 años)
   
@@ -399,7 +405,7 @@ export const speakAsValentina = async (text, age = 12, onEndCallback) => {
     profile = 'valentina_teen'; // Adolescentes
   }
   
-  return await speakTextConversational(text, profile, onEndCallback);
+  return await speakTextConversational(text, profile, onEndCallback, onPermissionError);
 };
 
 /**

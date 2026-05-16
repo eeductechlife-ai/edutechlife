@@ -47,6 +47,7 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
     const [securityWarning, setSecurityWarning] = useState('');
     const [securityAlert, setSecurityAlert] = useState(null);
     const [printWarning, setPrintWarning] = useState(null);
+    const [formError, setFormError] = useState(null);
     const [isSavingGrade, setIsSavingGrade] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
     const [securityViolations, setSecurityViolations] = useState(0);
@@ -169,9 +170,12 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
         }
     }, [isOpen]);
 
-    // Reset violaciones al abrir el modal
+    // Reset violaciones y error al abrir el modal
     useEffect(() => {
-        if (isOpen) setSecurityViolations(0);
+        if (isOpen) {
+            setSecurityViolations(0);
+            setFormError(null);
+        }
     }, [isOpen]);
 
     // Seguridad: detección de cambio de ventana
@@ -179,21 +183,25 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
         if (!isVisible || state.step === 'results' || state.loading) return;
         const handleVisibilityChange = () => {
             if (document.hidden) {
-                const newCount = securityViolations + 1;
-                setSecurityViolations(newCount);
-                if (newCount >= MAX_SECURITY_VIOLATIONS) {
-                    alert('Has excedido el máximo de infracciones por cambio de ventana. El desafío se cerrará.');
-                    resetEvaluation();
-                    onClose();
-                } else {
-                    setSecurityWarning(`⚠️ Alerta ${newCount}/${MAX_SECURITY_VIOLATIONS}: No cambies de ventana durante el desafío`);
-                    setTimeout(() => setSecurityWarning(''), 3000);
-                }
+                setSecurityViolations(prev => {
+                    const newCount = prev + 1;
+                    if (newCount >= MAX_SECURITY_VIOLATIONS) {
+                        setSecurityAlert({ message: 'Has excedido el máximo de infracciones por cambio de ventana. El desafío se cerrará.', level: 3, onClose: () => {
+                            setSecurityAlert(null);
+                            resetEvaluation();
+                            onClose();
+                        }});
+                    } else {
+                        setSecurityWarning(`⚠️ Alerta ${newCount}/${MAX_SECURITY_VIOLATIONS}: No cambies de ventana durante el desafío`);
+                        setTimeout(() => setSecurityWarning(''), 3000);
+                    }
+                    return newCount;
+                });
             }
         };
         document.addEventListener('visibilitychange', handleVisibilityChange);
         return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-    }, [isVisible, state.step, state.loading, securityViolations, resetEvaluation, onClose]);
+    }, [isVisible, state.step, state.loading, resetEvaluation, onClose]);
 
     // Seguridad: bloquear atajos de teclado
     useEffect(() => {
@@ -225,17 +233,21 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
     // Medidas de seguridad: prevenir copy/paste/context menu
     const handleSecurityEvent = useCallback((e) => {
         e.preventDefault();
-        const newCount = securityViolations + 1;
-        setSecurityViolations(newCount);
-        if (newCount >= MAX_SECURITY_VIOLATIONS) {
-            alert('Has excedido el máximo de infracciones de seguridad. El desafío se cerrará.');
-            resetEvaluation();
-            onClose();
-        } else {
-            setSecurityWarning(`⚠️ Advertencia ${newCount}/${MAX_SECURITY_VIOLATIONS}: Escribe tus propias respuestas`);
-        }
-        setTimeout(() => setSecurityWarning(''), 3000);
-    }, [securityViolations, resetEvaluation, onClose]);
+        setSecurityViolations(prev => {
+            const newCount = prev + 1;
+            if (newCount >= MAX_SECURITY_VIOLATIONS) {
+                setSecurityAlert({ message: 'Has excedido el máximo de infracciones de seguridad. El desafío se cerrará.', level: 3, onClose: () => {
+                    setSecurityAlert(null);
+                    resetEvaluation();
+                    onClose();
+                }});
+            } else {
+                setSecurityWarning(`⚠️ Advertencia ${newCount}/${MAX_SECURITY_VIOLATIONS}: Escribe tus propias respuestas`);
+                setTimeout(() => setSecurityWarning(''), 3000);
+            }
+            return newCount;
+        });
+    }, [resetEvaluation, onClose]);
 
     // Handler para cerrar modal
     const handleCloseModal = useCallback(() => {
@@ -261,7 +273,8 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
     // Handler para enviar evaluación final
     const handleSubmitEvaluation = useCallback(async () => {
         if (!state.responses.ej1 || !state.responses.ej2 || !state.responses.ej3) {
-            alert('⚠️ Debes completar todos los ejercicios antes de enviar.');
+            setFormError('Debes completar todos los ejercicios antes de enviar.');
+            setTimeout(() => setFormError(null), 4000);
             return;
         }
 
@@ -280,12 +293,14 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
                     }
                     setStep('results');
                 } else {
-                    alert(`❌ Error al guardar tu nota: ${saveResult.error}`);
+                    setFormError(`Error al guardar tu nota: ${saveResult.error}`);
+                    setTimeout(() => setFormError(null), 6000);
                 }
             }
         } catch (error) {
             console.error('Error en evaluación:', error);
-            alert('❌ Error al evaluar tus respuestas. Intenta nuevamente.');
+            setFormError('Error al evaluar tus respuestas. Intenta nuevamente.');
+            setTimeout(() => setFormError(null), 6000);
         } finally {
             setIsSavingGrade(false);
         }
@@ -415,6 +430,14 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
                             />
                         )}
                     </div>
+
+                    {/* Mensaje de error del formulario */}
+                    {formError && (
+                        <div className="mb-4 px-4 py-3 bg-red-500/90 text-white rounded-xl text-sm font-medium flex items-center gap-2">
+                            <Icon name="fa-exclamation-circle" />
+                            {formError}
+                        </div>
+                    )}
 
                     {/* Navegación entre pasos */}
                     <div className="flex items-center justify-between">

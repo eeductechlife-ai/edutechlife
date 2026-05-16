@@ -49,9 +49,15 @@ const LoadingSpinner = ({ onRetry }) => {
   );
 };
 
-const SuspenseWrapper = ({ children, onRetry }) => (
-  <Suspense fallback={<LoadingSpinner onRetry={onRetry} />}>{children}</Suspense>
-);
+const SuspenseWrapper = ({ children, onRetry }) => {
+  const [retryKey, setRetryKey] = useState(0);
+  const handleRetry = onRetry ? onRetry : () => setRetryKey(k => k + 1);
+  return (
+    <Suspense fallback={<LoadingSpinner onRetry={handleRetry} />}>
+      <div key={retryKey}>{children}</div>
+    </Suspense>
+  );
+};
 
 /**
  * Componente principal wrapper para IALab - Arquitectura modular premium

@@ -6,7 +6,7 @@ import useLeadCaptureLogic from '../../hooks/useLeadCaptureLogic';
 import useAppointmentScheduling from '../../hooks/useAppointmentScheduling';
 import { callDeepseek } from '../../utils/api';
 import { speakTextConversational, stopSpeech } from '../../utils/speech';
-import { createSpeechRecognition } from '../../utils/speechRecognition';
+import { createSpeechRecognition, requestMicrophonePermission, getPermissionErrorMessage } from '../../utils/speechRecognition';
 
 // Carga diferida para componentes que no se usan inmediatamente
 const LeadCaptureForm = lazy(() => import('./LeadCaptureForm'));
@@ -619,6 +619,8 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
   const [interimTranscript, setInterimTranscript] = useState('');
   const [typingDots, setTypingDots] = useState(0);
   const [audioEnabled, setAudioEnabled] = useState(true);
+  const [audioActivated, setAudioActivated] = useState(false);
+  const [audioPermissionError, setAudioPermissionError] = useState(null);
   const [messages, setMessages] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(true);
   const [showedConversationOptions, setShowedConversationOptions] = useState(false);
@@ -712,9 +714,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       setMessages(prev => [...(prev || []), greetingMessageObj]);
       
       if (audioEnabled) {
-        setTimeout(() => {
-          speakTextConversational(greeting, 'nico_premium');
-        }, 300);
+        speakTextConversational(greeting, 'nico_premium', null, setAudioPermissionError);
       }
     }
   }, [isOpen, greetingSent, messages, audioEnabled]);
@@ -906,11 +906,9 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       
       // Voz inmediata
       if (audioEnabled) {
-        setTimeout(() => {
-          const noMulletillaVoice = removeGreetingMulletilla(quickResponse);
-          const textToSpeak = removeEmojis(noMulletillaVoice);
-          speakTextConversational(textToSpeak, 'nico_premium');
-        }, 50);
+        const noMulletillaVoice = removeGreetingMulletilla(quickResponse);
+        const textToSpeak = removeEmojis(noMulletillaVoice);
+        speakTextConversational(textToSpeak, 'nico_premium', null, setAudioPermissionError);
       }
       
       setIsLoading(false);
@@ -1078,12 +1076,10 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
         });
       }
 
-      // Voz en paralelo para no bloquear interfaz
+      // Voz inmediata - sin setTimeout para preservar gesto del usuario
       if (audioEnabled) {
-        setTimeout(() => {
-          const textToSpeak = removeEmojis(cleanResponse);
-          speakTextConversational(textToSpeak, 'nico_premium');
-        }, 100); // Reducido a 100ms para respuesta más rápida
+        const textToSpeak = removeEmojis(cleanResponse);
+        speakTextConversational(textToSpeak, 'nico_premium', null, setAudioPermissionError);
       }
       
     } catch (error) {
@@ -1105,9 +1101,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       setMessages(prev => [...prev, errorMessageObj]);
       
        if (audioEnabled) {
-        setTimeout(() => {
-          speakTextConversational(cleanErrorMessage, 'nico_premium');
-        }, 100);
+        speakTextConversational(cleanErrorMessage, 'nico_premium', null, setAudioPermissionError);
       }
     } finally {
       setIsLoading(false);
@@ -1186,13 +1180,12 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       
       // Hablar confirmación inicial si audio está activado
       if (audioEnabled) {
-        setTimeout(() => {
-          speakTextConversational(
-            removeEmojis(successMessage.content),
-            'nico_premium',
-            () => console.log('✅ Confirmación de lead hablada')
-          );
-        }, 500);
+        speakTextConversational(
+          removeEmojis(successMessage.content),
+          'nico_premium',
+          null,
+          setAudioPermissionError
+        );
       }
 
       console.log('✅ Lead guardado exitosamente con ID:', leadId);
@@ -1265,13 +1258,12 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       
       // Hablar confirmación si audio está activado
       if (audioEnabled) {
-        setTimeout(() => {
-          speakTextConversational(
-            removeEmojis(successMessage.content),
-            'nico_premium',
-            () => console.log('Confirmacion de cita hablada')
-          );
-        }, 500);
+        speakTextConversational(
+          removeEmojis(successMessage.content),
+          'nico_premium',
+          null,
+          setAudioPermissionError
+        );
       }
       
       console.log('✅ Cita agendada exitosamente:', appointment.id);
@@ -1367,22 +1359,33 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       return;
     }
 
+    const permission = await requestMicrophonePermission();
+    if (!permission.success) {
+      console.error('Microphone permission error:', permission.error);
+      const errorContent = permission.error === 'NotAllowedError'
+        ? '🔇 Permiso de micrófono denegado. Para usar voz, habilita el micrófono en la configuración de tu navegador y recarga la página.'
+        : `🔇 ${permission.message}`;
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: errorContent,
+        timestamp: new Date().toISOString(),
+        isError: true
+      }]);
+      return;
+    }
+
     try {
-      // Check microphone permission
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      stream.getTracks().forEach(track => track.stop());
-      
       recognition.start();
       setIsListening(true);
       setInterimTranscript('Escuchando...');
     } catch (error) {
-      console.error('Microphone permission error:', error);
-      addMessage({
+      console.error('Error starting recognition:', error);
+      setMessages(prev => [...prev, {
         role: 'assistant',
-        content: '🔇 Permiso de micrófono requerido. Por favor, habilita el micrófono en tu navegador.',
+        content: '🔇 Error al iniciar el reconocimiento de voz. Por favor, intenta de nuevo.',
         timestamp: new Date().toISOString(),
         isError: true
-      });
+      }]);
     }
   };
 
@@ -1401,6 +1404,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
     }
 
     setIsSpeaking(true);
+    setAudioPermissionError(null);
     
     const textToSpeak = removeEmojis(lastAssistantMessage.content);
     
@@ -1412,11 +1416,12 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
     
     try {
       console.log('🔊 Reproduciendo respuesta...');
-      await speakTextConversational(textToSpeak, 'nico_premium', () => {
+      speakTextConversational(textToSpeak, 'nico_premium', () => {
         setIsSpeaking(false);
-      });
+      }, setAudioPermissionError);
     } catch (error) {
       console.error('❌ Error de voz:', error.message);
+      setAudioPermissionError(error.message);
       setIsSpeaking(false);
     }
   };
@@ -1495,22 +1500,18 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
         
         setMessages(prev => [...prev, welcomeMessageObj]);
         
-        // Voz automática inmediata (50ms en lugar de 300ms)
+        // Voz automática inmediata - sin setTimeout para preservar gesto del usuario
         if (audioEnabled) {
-          setTimeout(() => {
-            const textToSpeak = removeEmojis(welcomeMessage);
-            speakTextConversational(textToSpeak, 'nico_premium');
-          }, 50);
+          const textToSpeak = removeEmojis(welcomeMessage);
+          speakTextConversational(textToSpeak, 'nico_premium', null, setAudioPermissionError);
         }
       } else if (audioEnabled) {
         // Reconexión: saludo rápido en voz
-        setTimeout(() => {
-          const userName = memory?.userName || initialName;
-          const nameGreeting = userName !== 'amigo' ? ` ${userName}` : '';
-          const reconnectMessage = `Hola soy Nico, asistente de EdutechLife. ¿En que puedo ayudarte?${nameGreeting}`;
-          const textToSpeak = removeEmojis(reconnectMessage);
-          speakTextConversational(textToSpeak, 'nico_premium');
-        }, 50);
+        const userName = memory?.userName || initialName;
+        const nameGreeting = userName !== 'amigo' ? ` ${userName}` : '';
+        const reconnectMessage = `Hola soy Nico, asistente de EdutechLife. ¿En que puedo ayudarte?${nameGreeting}`;
+        const textToSpeak = removeEmojis(reconnectMessage);
+        speakTextConversational(textToSpeak, 'nico_premium', null, setAudioPermissionError);
       }
     }
   };
@@ -1593,14 +1594,13 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
               onClick={() => {
                 const newAudioEnabled = !audioEnabled;
                 setAudioEnabled(newAudioEnabled);
+                setAudioPermissionError(null);
                 
                 // Feedback inmediato
                 if (newAudioEnabled) {
                   // Si se activa el audio, Nico confirma
                   const confirmation = "Audio activado. Puedes hablar conmigo.";
-                  speakTextConversational(confirmation, 'nico_premium', () => {
-                    console.log('✅ Audio activado confirmado');
-                  });
+                  speakTextConversational(confirmation, 'nico_premium', null, setAudioPermissionError);
                 } else {
                   // Si se desactiva, detener cualquier audio en curso
                   stopSpeech();
@@ -1953,6 +1953,28 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
                 <span className="text-sm font-medium" style={{ color: COLORS.NAVY }}>
                   {interimTranscript}
                 </span>
+              </div>
+            </div>
+          )}
+
+          {audioPermissionError && (
+            <div className="mb-3 p-3 rounded-xl" style={{ 
+              backgroundColor: '#FFEBEE',
+              border: '1px solid #EF9A9A'
+            }}>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <span className="text-sm font-medium" style={{ color: '#C62828' }}>
+                    🔇 Audio bloqueado. Presiona el botón de volumen y concede permisos.
+                  </span>
+                </div>
+                <button
+                  onClick={() => setAudioPermissionError(null)}
+                  className="ml-2 p-1 rounded hover:bg-red-100"
+                  aria-label="Descartar"
+                >
+                  <X className="w-4 h-4" style={{ color: '#C62828' }} />
+                </button>
               </div>
             </div>
           )}

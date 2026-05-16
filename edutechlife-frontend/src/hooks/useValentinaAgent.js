@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { speakTextConversational, speakAsValentina as valSpeak } from '../utils/speech';
+import { speakTextConversational, speakAsValentina as valSpeak, stopSpeech } from '../utils/speech';
 import { 
   getAgeGroup,
   VALENTINA_MESSAGES,
@@ -101,10 +101,7 @@ export default function useValentinaAgent(options = {}) {
    * Detener el habla actual
    */
   const stopSpeaking = useCallback(() => {
-    if (currentAudioRef.current) {
-      currentAudioRef.current.pause();
-      currentAudioRef.current = null;
-    }
+    stopSpeech();
     setIsValentinaSpeaking(false);
     speakingPromiseRef.current = null;
   }, []);

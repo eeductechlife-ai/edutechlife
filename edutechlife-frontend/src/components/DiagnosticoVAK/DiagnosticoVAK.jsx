@@ -282,6 +282,15 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   const isChartInView = useInView(chartRef);
   const timerRef = useRef(null);
   const questionJustReadRef = useRef(false);
+  const timeoutRefs = useRef([]);
+  const setTimeoutSafe = (fn, delay) => {
+    const id = setTimeout(() => {
+      timeoutRefs.current = timeoutRefs.current.filter(t => t !== id);
+      fn();
+    }, delay);
+    timeoutRefs.current.push(id);
+    return id;
+  };
   
   // Hook de Valeria actualizado con nuevos métodos conversacionales
   const {
@@ -419,6 +428,14 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     };
   }, [phase, startTime]);
 
+  // Limpiar todos los timeouts pendientes al desmontar
+  useEffect(() => {
+    return () => {
+      timeoutRefs.current.forEach(id => clearTimeout(id));
+      timeoutRefs.current = [];
+    };
+  }, []);
+
   // Persistencia de datos en localStorage
   useEffect(() => {
     // Cargar datos guardados al iniciar
@@ -463,7 +480,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     // Mostrar indicador de guardado
     if (phase === 'test' || phase === 'calibration') {
       setShowSaveIndicator(true);
-      setTimeout(() => setShowSaveIndicator(false), 1500);
+      setTimeoutSafe(() => setShowSaveIndicator(false), 1500);
     }
   }, [phase, studentName, studentAge, studentEmail, studentPhone, studentMood, currentQuestion, answers, startTime]);
 
@@ -623,11 +640,11 @@ const DiagnosticoVAK = ({ onNavigate }) => {
         // Limpiar progreso guardado
         clearProgress();
         
-        setTimeout(() => {
+        setTimeoutSafe(() => {
           setShowConfetti(false);
           setShowCelebration(false);
           setPhase('parentdata');
-        }, 2000); // Mostrar celebración por 2 segundos
+        }, 2000);
       }
     } catch (err) {
       setError(err.message);
@@ -1189,7 +1206,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     };
     setMoodFeedbackText(mensajes[moodValue] || mensajes.neutral);
     setShowMoodFeedback(true);
-    setTimeout(() => setShowMoodFeedback(false), 4000);
+    setTimeoutSafe(() => setShowMoodFeedback(false), 4000);
   };
 
   const renderHabeasDataModal = () => (

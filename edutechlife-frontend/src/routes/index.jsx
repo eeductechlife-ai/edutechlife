@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import AppLayout from '../components/layout/AppLayout';
 import AuthRouter from './auth-router';
@@ -10,7 +10,7 @@ import { PageLoader } from '../components/LoadingScreen';
 // Lazy load para componentes pesados
 const WelcomeScreen = lazy(() => import('../components/WelcomeScreen'));
 const IALabSignUpPage = lazy(() => import('../components/IALabSignUpPage'));
-const SmartBoardSignUpPage = lazy(() => import('../components/IALabSignUpPage'));
+const SmartBoardSignUpPage = lazy(() => import('../components/SmartBoardSignUpPage'));
 const AILabPage = lazy(() => import('../components/pages/AILabPage'));
 const SmartBoardPage = lazy(() => import('../components/pages/SmartBoardPage'));
 const SmartBoardLandingPage = lazy(() => import('../components/pages/SmartBoardLandingPage'));

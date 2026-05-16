@@ -18,12 +18,12 @@ const tools = [
   {
     id: 'automation',
     name: 'Automatización',
-    subtitle: 'B2B ANALYTICS',
+    subtitle: 'IA EMPRESARIAL',
     path: '/automation',
-    icon: 'fa-chart-bar',
-    description: 'Automatización B2B con agentes IA para instituciones que buscan ROI real.',
-    features: ['Arquitectura de automatización', 'Análisis de datos y dashboards'],
-    buttonText: 'Ver Demo',
+    icon: 'fa-robot',
+    description: 'Centro de Automatización Empresarial con IA. Diagnóstico, ROI y arquitectura alineados con estándares internacionales.',
+    features: ['Arquitectura de IA empresarial', 'Calculadora ROI interactiva', 'Estándares ISO/IEC 42001 y NIST AI RMF'],
+    buttonText: 'Comenzar',
     variant: 'white-card',
   },
   {

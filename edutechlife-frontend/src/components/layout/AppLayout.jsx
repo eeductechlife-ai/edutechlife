@@ -43,6 +43,17 @@ const AppLayout = () => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // Cerrar menú móvil con Escape
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
+    };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [mobileMenuOpen]);
   
   // Función para navegación con scroll a secciones
   const navigateToSection = (route, sectionId = null) => {
@@ -269,10 +280,16 @@ const AppLayout = () => {
               {/* Backdrop */}
               <div 
                 className="fixed inset-0 z-[1001] bg-black/50 backdrop-blur-sm md:hidden"
+                role="presentation"
                 onClick={() => setMobileMenuOpen(false)}
               />
               {/* Drawer - Expanded with scroll */}
-              <div className="fixed top-0 right-0 z-[1002] h-full w-80 bg-white shadow-2xl md:hidden animate-slide-in flex flex-col">
+              <div 
+                role="dialog"
+                aria-modal="true"
+                aria-label="Menú de navegación"
+                className="fixed top-0 right-0 z-[1002] h-dvh w-80 bg-white shadow-2xl md:hidden animate-slide-in flex flex-col"
+              >
                 {/* Header */}
                 <div className="p-4 border-b border-[#4DA8C4]/20 flex items-center justify-between flex-shrink-0">
                   <div className="flex items-center">
@@ -384,6 +401,24 @@ const AppLayout = () => {
                       </div>
                     </div>
                   </div>
+
+                  {!isSignedIn && (
+                    <div className="mt-6 pt-4 border-t border-[#4DA8C4]/20 space-y-2">
+                      <button
+                        onClick={() => { setMobileMenuOpen(false); navigate('/login'); }}
+                        className="w-full py-3 text-sm font-semibold text-white bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] rounded-full shadow-md hover:shadow-lg transition-all"
+                      >
+                        <i className="fa-solid fa-right-to-bracket mr-2"></i>
+                        Iniciar Sesión
+                      </button>
+                      <button
+                        onClick={() => { setMobileMenuOpen(false); setShowLeadCaptureModal(true); }}
+                        className="w-full py-3 text-sm font-semibold text-[#004B63] border-2 border-[#4DA8C4]/30 rounded-full hover:border-[#4DA8C4] transition-colors"
+                      >
+                        Solicitar Demo Gratuita
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </>
