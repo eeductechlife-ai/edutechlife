@@ -38,12 +38,21 @@ const IALabForumOptimized = ({
     const [isMobile, setIsMobile] = useState(() =>
       typeof window !== 'undefined' ? window.matchMedia('(max-width: 767px)').matches : false
     );
+    const [forumStats, setForumStats] = useState({ totalPosts: 0, totalComments: 0, totalLikes: 0, activeUsers: 0 });
     const messagesEndRef = useRef(null);
     const messagesContainerRef = useRef(null);
 
     useEffect(() => {
         loadForumPosts(showAll ? 20 : initialLimit);
     }, [loadForumPosts, showAll, initialLimit]);
+
+    useEffect(() => {
+        let mounted = true;
+        getForumStats().then((stats) => {
+            if (mounted) setForumStats(stats || { totalPosts: 0, totalComments: 0, totalLikes: 0, activeUsers: 0 });
+        }).catch(() => {});
+        return () => { mounted = false; };
+    }, [getForumStats]);
 
     useEffect(() => {
         if (forumPosts.length > 0) {
@@ -61,7 +70,9 @@ const IALabForumOptimized = ({
 
     useEffect(() => {
         if (messagesEndRef.current && !isLoading) {
-            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+            try {
+                messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+            } catch {}
         }
     }, [visiblePosts, isLoading]);
 
@@ -140,8 +151,6 @@ const IALabForumOptimized = ({
         if (diffDays < 7) return `Hace ${diffDays} d`;
         return date.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
     };
-
-    const forumStats = getForumStats();
 
     return (
         <motion.div

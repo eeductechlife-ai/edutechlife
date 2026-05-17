@@ -8100,9 +8100,6 @@ h5 {
   height: 12px;
   background: linear-gradient(135deg, rgba(0, 75, 99, 0.1) 0%, rgba(77, 168, 196, 0.08) 100%);
   border: 1px solid rgba(77, 168, 196, 0.2);
-  border-radius: 8px;
-  overflow: visible;
-  margin-bottom: 0.75rem;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
@@ -8372,15 +8369,6 @@ h5 {
   transform: translate(-50%, -50%);
   animation: orb-float-3 6s ease-in-out infinite;
   box-shadow: 0 0 40px rgba(102, 204, 204, 0.1);
-}
-
-.bg-grid {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(77, 168, 196, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(77, 168, 196, 0.03) 1px, transparent 1px);
-  background-size: 50px 50px;
 }
 
 /* =========================

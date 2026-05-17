@@ -327,13 +327,10 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   // Efecto: Hablar al entrar en intro
   useEffect(() => {
     if (phase === 'intro' && valeriaEnabled) {
-      const timer = setTimeout(() => {
-        startWelcomeSequence(() => {
-          // Cuando Valeria termina de hablar, habilitar el botón
-          setValentinaIntroComplete(true);
-        });
-      }, 1500);
-      return () => clearTimeout(timer);
+      startWelcomeSequence(() => {
+        // Cuando Valeria termina de hablar, habilitar el botón
+        setValentinaIntroComplete(true);
+      });
     }
   }, [phase, valeriaEnabled]);
 
