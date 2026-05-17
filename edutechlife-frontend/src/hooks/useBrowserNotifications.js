@@ -54,6 +54,7 @@ export const useBrowserNotifications = () => {
   }, []);
 
   const sendBrowserNotification = useCallback((title, body, options = {}) => {
+    if (!('Notification' in window)) return;
     if (Notification.permission !== 'granted') return;
 
     try {
