@@ -1,9 +1,37 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Icon } from '../utils/iconMapping.jsx';
 import FloatingParticles from './FloatingParticles';
 
 const Metodo = memo(() => {
+    const [showForm, setShowForm] = useState(false);
+    const [formData, setFormData] = useState({ nombre: '', email: '', telefono: '', interes: '' });
+    const [submitted, setSubmitted] = useState(false);
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const leadData = {
+            nombre: formData.nombre,
+            email: formData.email,
+            telefono: formData.telefono,
+            interes: formData.interes || 'Transformación Educativa',
+            tema: 'Comenzar Mi Transformación - Método'
+        };
+        const existing = JSON.parse(localStorage.getItem('edutechlife_leads') || '[]');
+        existing.push({ ...leadData, timestamp: new Date().toISOString() });
+        localStorage.setItem('edutechlife_leads', JSON.stringify(existing));
+        setSubmitted(true);
+    };
+
+    const closeForm = () => {
+        setShowForm(false);
+        setSubmitted(false);
+        setFormData({ nombre: '', email: '', telefono: '', interes: '' });
+    };
     const steps = [
         {
             title: 'Diagnóstico VAK',
@@ -116,13 +144,137 @@ const Metodo = memo(() => {
 
                 {/* Bottom CTA */}
                 <div className="text-center mt-16">
-                    <button className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#4DA8C4] text-white font-normal rounded-full transition-all duration-300 hover:bg-[#004B63] hover:shadow-xl">
+                    <button
+                        onClick={() => setShowForm(true)}
+                        className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#4DA8C4] text-white font-normal rounded-full transition-all duration-300 hover:bg-[#004B63] hover:shadow-xl"
+                    >
                         <Icon name="fa-rocket" className="text-lg" />
                         <span className="text-lg">Comenzar Mi Transformación</span>
                         <Icon name="fa-arrow-right" className="text-lg" />
                     </button>
                 </div>
             </div>
+
+            {/* Form Modal */}
+            {showForm && (
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-2 md:p-4" onClick={closeForm}>
+                    <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+
+                    <div
+                        className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {/* Header */}
+                        <div className="sticky top-0 z-10 bg-white px-6 py-4 border-b border-gray-100">
+                            <button
+                                onClick={closeForm}
+                                className="absolute top-4 right-4 w-9 h-9 rounded-full flex items-center justify-center text-gray-400 hover:text-[#004B63] hover:bg-gray-100 transition-all"
+                            >
+                                <Icon name="fa-xmark" className="text-lg" />
+                            </button>
+                            <div className="flex items-center gap-3">
+                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#4DA8C4] to-[#004B63] flex items-center justify-center">
+                                    <Icon name="fa-rocket" className="text-white text-lg" />
+                                </div>
+                                <div>
+                                    <h3 className="text-xl font-bold text-[#004B63]">Comenzar Mi Transformación</h3>
+                                    <p className="text-sm text-[#4DA8C4]">Un asesor se comunicará contigo</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Body */}
+                        <div className="p-6">
+                            {submitted ? (
+                                <div className="text-center py-12">
+                                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#4DA8C4] to-[#004B63] flex items-center justify-center mx-auto mb-6">
+                                        <Icon name="fa-check" className="text-white text-3xl" />
+                                    </div>
+                                    <h4 className="text-xl font-bold text-[#004B63] mb-2">¡Gracias por confiar en nosotros!</h4>
+                                    <p className="text-gray-600 mb-8">Un asesor especializado se pondrá en contacto contigo en las próximas 24 horas para guiarte en tu transformación educativa.</p>
+                                    <button
+                                        onClick={closeForm}
+                                        className="px-8 py-3 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white font-semibold rounded-full hover:shadow-lg hover:shadow-[#4DA8C4]/30 transition-all duration-300"
+                                    >
+                                        Cerrar
+                                    </button>
+                                </div>
+                            ) : (
+                                <form onSubmit={handleSubmit} className="space-y-4">
+                                    <div>
+                                        <label className="block text-sm font-semibold text-[#004B63] mb-1.5">Nombre completo <span className="text-red-400">*</span></label>
+                                        <input
+                                            type="text"
+                                            name="nombre"
+                                            value={formData.nombre}
+                                            onChange={handleChange}
+                                            required
+                                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#4DA8C4] focus:border-[#4DA8C4] outline-none transition-all text-[#004B63] text-sm"
+                                            placeholder="Tu nombre"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-semibold text-[#004B63] mb-1.5">Correo electrónico <span className="text-red-400">*</span></label>
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            value={formData.email}
+                                            onChange={handleChange}
+                                            required
+                                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#4DA8C4] focus:border-[#4DA8C4] outline-none transition-all text-[#004B63] text-sm"
+                                            placeholder="tu@email.com"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-semibold text-[#004B63] mb-1.5">Teléfono <span className="text-red-400">*</span></label>
+                                        <input
+                                            type="tel"
+                                            name="telefono"
+                                            value={formData.telefono}
+                                            onChange={handleChange}
+                                            required
+                                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#4DA8C4] focus:border-[#4DA8C4] outline-none transition-all text-[#004B63] text-sm"
+                                            placeholder="300 123 4567"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-semibold text-[#004B63] mb-1.5">¿Qué te gustaría transformar?</label>
+                                        <select
+                                            name="interes"
+                                            value={formData.interes}
+                                            onChange={handleChange}
+                                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#4DA8C4] focus:border-[#4DA8C4] outline-none transition-all bg-white text-[#004B63] text-sm"
+                                        >
+                                            <option value="">Selecciona una opción</option>
+                                            <option value="Diagnóstico VAK">Diagnóstico VAK</option>
+                                            <option value="Cursos STEAM">Cursos STEAM</option>
+                                            <option value="Tutorías Personalizadas">Tutorías Personalizadas</option>
+                                            <option value="SmartBoard">SmartBoard Interactivo</option>
+                                            <option value="Consultoría B2B">Consultoría B2B</option>
+                                            <option value="Otro">Otro</option>
+                                        </select>
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        className="w-full py-3.5 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white font-bold rounded-xl hover:shadow-lg hover:shadow-[#4DA8C4]/30 transition-all duration-300 flex items-center justify-center gap-2"
+                                    >
+                                        <Icon name="fa-paper-plane" className="text-sm" />
+                                        Enviar
+                                    </button>
+
+                                    <p className="text-xs text-gray-400 text-center">
+                                        Al enviar, aceptas que te contactemos para brindarte información sobre nuestros servicios educativos.
+                                    </p>
+                                </form>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
         </section>
     );
 });

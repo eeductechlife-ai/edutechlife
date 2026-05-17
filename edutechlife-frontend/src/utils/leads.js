@@ -96,8 +96,7 @@ export const saveLead = (leadData) => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(leads));
     
     downloadLeadExcel(lead);
-    
-    console.log('[LEAD] Lead guardado:', lead);
+
     return { success: true, lead };
   } catch (error) {
     console.error('[LEAD] Error al guardar:', error);
@@ -124,8 +123,7 @@ export const downloadLeadExcel = (lead) => {
     
     const filename = `Lead-${lead.nombre.replace(/\s+/g, '_')}-${lead.fecha.replace(/\//g, '-')}.xlsx`;
     XLSX.writeFile(wb, filename);
-    
-    console.log('[LEAD] Excel descargado:', filename);
+
     return true;
   } catch (error) {
     console.error('[LEAD] Error al descargar Excel:', error);
@@ -160,8 +158,7 @@ export const downloadAllLeadsExcel = () => {
     
     const filename = `Leads-Edutechlife-${new Date().toISOString().split('T')[0]}.xlsx`;
     XLSX.writeFile(wb, filename);
-    
-    console.log('[LEAD] Excel completo descargado');
+
     return true;
   } catch (error) {
     console.error('[LEAD] Error al descargar Excel completo:', error);

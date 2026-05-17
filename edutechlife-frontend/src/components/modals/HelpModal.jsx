@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
+import useBodyScrollLock from '../../hooks/useBodyScrollLock';
+import useFocusTrap from '../../hooks/useFocusTrap';
 
 const faqItems = [
   {
@@ -26,13 +28,15 @@ const faqItems = [
 
 const HelpModal = ({ isOpen, onClose }) => {
   const [expandedFaq, setExpandedFaq] = useState(null);
+  useBodyScrollLock(isOpen);
+  const focusTrapRef = useFocusTrap(isOpen);
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[1002] flex items-center justify-center p-4" ref={focusTrapRef}>
       <div className="fixed inset-0 bg-black/20" onClick={onClose} />
-      <div className="w-full max-w-md bg-white rounded-xl border border-slate-200/60 shadow-lg max-h-[85vh] overflow-hidden relative z-10 animate-in fade-in-0 zoom-in-95 duration-300">
+      <div className="w-full max-w-md bg-white rounded-xl border border-slate-200/60 shadow-lg max-h-[85vh] overflow-hidden relative z-10 animate-in fade-in-0 zoom-in-95 duration-300 modal-scrollable">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 z-50 p-2 text-slate-400 bg-white hover:bg-slate-100 hover:text-slate-800 rounded-full transition-all duration-200"

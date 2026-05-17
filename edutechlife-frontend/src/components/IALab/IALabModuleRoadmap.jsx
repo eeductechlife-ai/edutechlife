@@ -36,7 +36,7 @@ const IALabModuleRoadmap = () => {
                 whileHover={prefersReducedMotion || locked ? {} : { scale: 1.05, y: -2 }}
                 whileTap={prefersReducedMotion || locked ? {} : { scale: 0.97 }}
                 disabled={locked}
-                className={`relative flex flex-col items-center gap-1.5 min-w-[72px] p-2.5 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 ${
+                className={`relative flex flex-col items-center gap-1.5 min-w-[56px] md:min-w-[72px] p-2.5 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 ${
                   locked
                     ? 'opacity-50 cursor-not-allowed'
                     : 'cursor-pointer hover:shadow-md'
@@ -66,7 +66,7 @@ const IALabModuleRoadmap = () => {
                     <span className="text-xs font-bold">{mod.id}</span>
                   )}
                 </div>
-                <span className={`text-[10px] md:text-xs font-semibold text-center leading-tight max-w-[64px] truncate ${
+                <span className={`text-[9px] md:text-xs font-semibold text-center leading-tight max-w-[48px] md:max-w-[64px] truncate ${
                   isActive
                     ? 'text-petroleum dark:text-[#4DA8C4]'
                     : completed

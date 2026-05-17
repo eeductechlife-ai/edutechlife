@@ -24,7 +24,7 @@ export const syncProgressToSupabase = async (supabase, userId, progressData) => 
   }
 
   if (!navigator.onLine) {
-    console.log('📴 Sin conexión, encolando sincronización');
+
     queueSyncOperation({
       type: 'full_sync',
       data: progressData
@@ -107,7 +107,7 @@ export const syncProgressToSupabase = async (supabase, userId, progressData) => 
       console.error('❌ Error upsert en Supabase:', error.message, error.details);
       
       if (error.status === 401 || error.message.includes('JWT') || error.message.includes('key')) {
-        console.log('🔄 Error de autenticación, encolando para retry');
+
         queueSyncOperation({
           type: 'full_sync',
           data: progressData
@@ -118,7 +118,6 @@ export const syncProgressToSupabase = async (supabase, userId, progressData) => 
       throw error;
     }
 
-    console.log(`✅ Progreso sincronizado: ${recordsToUpsert.length} registros guardados`);
     return { success: true, data, error: null };
   } catch (error) {
     console.error('❌ Error sincronizando progreso:', error.message);
@@ -172,7 +171,6 @@ export const syncActivityToSupabase = async (supabase, userId, activityData) => 
       throw error;
     }
 
-    console.log(`✅ Actividad sincronizada: ${activityType} - ${resourceId}`);
     return { success: true, data, error: null };
   } catch (error) {
     console.error('❌ Error sincronizando actividad:', error.message);
@@ -229,7 +227,6 @@ export const loadProgressFromSupabase = async (supabase, userId) => {
       return { success: false, error: error.message, data: null };
     }
 
-    console.log(`📥 Progreso cargado desde Supabase: ${data?.length || 0} registros`);
     return transformProgressData(data);
   } catch (error) {
     console.error('❌ Error cargando progreso desde Supabase:', error.message);
@@ -345,7 +342,7 @@ export const queueSyncOperation = (operation) => {
     const queue = JSON.parse(localStorage.getItem(SYNC_QUEUE_KEY) || '[]');
     queue.push({ ...operation, queuedAt: new Date().toISOString() });
     localStorage.setItem(SYNC_QUEUE_KEY, JSON.stringify(queue));
-    console.log(`📤 Operación encolada: ${operation.type}`);
+
   } catch (error) {
     console.error('❌ Error encolando operación:', error);
   }
@@ -353,15 +350,13 @@ export const queueSyncOperation = (operation) => {
 
 export const processSyncQueue = async (supabase, userId) => {
   if (!navigator.onLine) {
-    console.log('📴 Sin conexión, sincronización en pausa');
+
     return { success: false, error: 'Sin conexión' };
   }
 
   try {
     const queue = JSON.parse(localStorage.getItem(SYNC_QUEUE_KEY) || '[]');
     if (queue.length === 0) return { success: true, processed: 0 };
-
-    console.log(`🔄 Procesando cola de sincronización: ${queue.length} operaciones`);
 
     let processed = 0;
     for (const operation of queue) {
@@ -377,7 +372,7 @@ export const processSyncQueue = async (supabase, userId) => {
     // Limpiar solo las operaciones procesadas
     if (processed > 0) {
       localStorage.removeItem(SYNC_QUEUE_KEY);
-      console.log('✅ Cola de sincronización procesada');
+
     }
     
     return { success: true, processed };
@@ -392,12 +387,12 @@ export const processSyncQueue = async (supabase, userId) => {
  */
 export const setupConnectionListener = (supabase, userId) => {
   const handleOnline = async () => {
-    console.log('🌐 Conexión restaurada, procesando cola...');
+
     await processSyncQueue(supabase, userId);
   };
 
   const handleOffline = () => {
-    console.log('📴 Conexión perdida, activando modo offline');
+
   };
 
   window.addEventListener('online', handleOnline);

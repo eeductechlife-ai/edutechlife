@@ -183,7 +183,7 @@ class AnalyticsService {
       this.recordSessionStart();
       
       this.initialized = true;
-      console.log('📊 Analytics service initialized');
+
       return true;
 
     } catch (error) {
@@ -1121,7 +1121,7 @@ class AnalyticsService {
     this.abTests = this.loadABTests();
     this.saveMetrics();
     this.saveABTests();
-    console.log('📊 Analytics data cleared');
+
   }
 
   // Obtener estado del servicio

@@ -3,11 +3,14 @@
  * Diseño premium con estilos corporativos Edutechlife
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card-simple';
 import { Button } from '../ui/button-simple';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabStore } from '../../store/ialabStore';
+import useBodyScrollLock from '../../hooks/useBodyScrollLock';
+import useFocusTrap from '../../hooks/useFocusTrap';
 
 const SettingsModal = ({ isOpen, onClose }) => {
   const [notifications, setNotifications] = useState({
@@ -23,15 +26,20 @@ const SettingsModal = ({ isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
 
-  if (!isOpen) return null;
+  useBodyScrollLock(isOpen);
+  const focusTrapRef = useFocusTrap(isOpen);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   const handleSaveSettings = async () => {
     setLoading(true);
-    
     try {
-      // Simular guardado de configuración
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
       useIALabStore.getState().setSettings({
         notifications,
         language,
@@ -39,13 +47,10 @@ const SettingsModal = ({ isOpen, onClose }) => {
         autoSave,
         savedAt: new Date().toISOString()
       });
-      
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 3000);
-      
-      console.log('✅ Configuración guardada:', { notifications, language, theme, autoSave });
     } catch (error) {
-      console.error('❌ Error al guardar configuración:', error);
+      console.error('Error al guardar configuración:', error);
     } finally {
       setLoading(false);
     }
@@ -64,15 +69,27 @@ const SettingsModal = ({ isOpen, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <Card className="w-full max-w-2xl mx-4 border border-cyan-500/20 shadow-2xl relative">
-        {/* Botón de cerrar flotante */}
-        <button 
-          onClick={onClose}
-          className="absolute top-4 right-4 z-50 p-2 text-slate-400 bg-white/50 hover:bg-slate-100 hover:text-slate-800 rounded-full backdrop-blur-sm transition-all duration-200"
-          aria-label="Cerrar modal"
+    <AnimatePresence>
+    {isOpen && (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/20 backdrop-blur-sm p-4 modal-scrollable"
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      <motion.div
+        ref={focusTrapRef}
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+        transition={{ duration: 0.2 }}
+        className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 relative"
+      >
+        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors rounded-full p-2 hover:bg-gray-100"
         >
-          <Icon name="fa-times" className="text-lg" />
+          <Icon name="fa-xmark" className="w-5 h-5" />
         </button>
         
         <CardHeader className="border-b border-cyan-100/50 bg-gradient-to-r from-[#004B63]/10 to-[#00BCD4]/10 pt-12">
@@ -84,7 +101,7 @@ const SettingsModal = ({ isOpen, onClose }) => {
           </div>
         </CardHeader>
         
-        <CardContent className="p-6 space-y-8 max-h-[70vh] overflow-y-auto">
+        <CardContent className="p-6 space-y-8 max-h-[70vh] overflow-y-auto modal-scrollable">
           {/* Notificaciones */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-[#004B63] flex items-center gap-2">
@@ -129,10 +146,10 @@ const SettingsModal = ({ isOpen, onClose }) => {
             
             <div className="grid grid-cols-2 gap-3">
               {[
-                { code: 'es', name: 'Español', flag: '🇪🇸' },
-                { code: 'en', name: 'English', flag: '🇺🇸' },
-                { code: 'pt', name: 'Português', flag: '🇧🇷' },
-                { code: 'fr', name: 'Français', flag: '🇫🇷' },
+                { code: 'es', name: 'Español' },
+                { code: 'en', name: 'English' },
+                { code: 'pt', name: 'Português' },
+                { code: 'fr', name: 'Français' },
               ].map((lang) => (
                 <button
                   key={lang.code}
@@ -140,7 +157,7 @@ const SettingsModal = ({ isOpen, onClose }) => {
                   className={`p-4 border rounded-lg text-left transition-all ${language === lang.code ? 'border-[#00BCD4] bg-cyan-50' : 'border-slate-200 hover:border-cyan-200'}`}
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-2xl">{lang.flag}</span>
+                    <span className="text-2xl"><Icon name="fa-globe" className="text-[#004B63]" /></span>
                     <div>
                       <p className="font-medium text-[#004B63]">{lang.name}</p>
                       <p className="text-sm text-slate-500">{lang.code.toUpperCase()}</p>
@@ -271,8 +288,10 @@ const SettingsModal = ({ isOpen, onClose }) => {
             </Button>
           </div>
         </CardContent>
-      </Card>
-    </div>
+      </motion.div>
+    </motion.div>
+    )}
+    </AnimatePresence>
   );
 };
 

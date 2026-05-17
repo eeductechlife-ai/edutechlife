@@ -1,4 +1,5 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
+import { useClerk } from '@clerk/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { IALabProvider, useIALabContext } from '../../context/IALabContext';
@@ -6,6 +7,7 @@ import { useIALabStore } from '../../store/ialabStore';
 import confetti from 'canvas-confetti';
 import IALabHeader from './IALabHeader';
 import IALabSidebar from './IALabSidebar';
+import IALabMobileMenu from './IALabMobileMenu';
 import IALabModuleHeader from './IALabModuleHeader';
 import ModuleOverviewCard from './ModuleOverviewCard';
 import ModuleInfoSection from './ModuleInfoSection';
@@ -17,6 +19,8 @@ import IALabTour from './IALabTour';
 import useIALabKeyboardShortcuts from '../../hooks/IALab/useIALabKeyboardShortcuts';
 import ErrorBoundary from '../forum/ErrorBoundary';
 import { useTheme } from '../../context/ThemeContext';
+import ActivityHistory from '../ActivityHistory';
+import HelpModal from '../modals/HelpModal';
 
 // Lazy-loaded modals (only loaded when opened)
 const IALabEvaluationModal = lazy(() => import('./IALabEvaluationModal'));
@@ -73,13 +77,38 @@ const IALabContent = () => {
     const [showQuizModal, setShowQuizModal] = useState(false);
     const [showValerioPanel, setShowValerioPanel] = useState(false);
     const [showMobileMenu, setShowMobileMenu] = useState(false);
+    const [mobileMenuClosing, setMobileMenuClosing] = useState(false);
+    const closeMobileMenu = () => {
+      if (mobileMenuClosing) return;
+      setMobileMenuClosing(true);
+      setTimeout(() => {
+        setShowMobileMenu(false);
+        setMobileMenuClosing(false);
+      }, 250);
+    };
     const [showExamResult, setShowExamResult] = useState(false);
     const [showChallengeResult, setShowChallengeResult] = useState(false);
     const [isForumOpen, setIsForumOpen] = useState(false);
     const [toast, setToast] = useState(null);
     const [showModuleCelebration, setShowModuleCelebration] = useState(false);
     const [viewSection, setViewSection] = useState(null);
+    const [showHistoryModal, setShowHistoryModal] = useState(false);
+    const [showHelpModal, setShowHelpModal] = useState(false);
     const [examRefreshKey, setExamRefreshKey] = useState(0);
+    const { openUserProfile } = useClerk();
+
+    const handleOpenProfile = () => {
+      closeMobileMenu();
+      openUserProfile();
+    };
+    const handleOpenHistory = () => {
+      closeMobileMenu();
+      setTimeout(() => setShowHistoryModal(true), 350);
+    };
+    const handleOpenHelp = () => {
+      closeMobileMenu();
+      setTimeout(() => setShowHelpModal(true), 350);
+    };
 
     // Escuchar eventos de examen completado para forzar refresco UI
     useEffect(() => {
@@ -197,9 +226,9 @@ const IALabContent = () => {
     useIALabKeyboardShortcuts(handleGlobalAction);
 
     return (
-        <div className="flex flex-col h-screen overflow-hidden bg-bg-light dark:bg-slate-900">
+        <div className="flex flex-col h-dvh bg-bg-light dark:bg-slate-900">
                 {/* Mobile Header - solo en móviles */}
-                <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white dark:bg-slate-800 z-50 flex items-center justify-between px-4 border-b border-slate-200 dark:border-slate-700">
+                <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white dark:bg-slate-800 z-50 flex items-center justify-between px-4 border-b border-slate-200 dark:border-slate-700 safe-area-top">
                   <h1 className="text-2xl font-bold text-petroleum dark:text-[#4DA8C4] tracking-tight">IA Lab</h1>
                   <button
                     onClick={() => setShowMobileMenu(true)}
@@ -218,34 +247,24 @@ const IALabContent = () => {
                 {/* Layout principal - Flexbox estricto para evitar overlap */}
                 <div className="flex flex-1 overflow-hidden">
                     {/* Sidebar - oculto en móviles, visible desde lg */}
-                    <div className="hidden lg:flex" data-tour="tour-sidebar">
+                    <div className="hidden xl:flex" data-tour="tour-sidebar">
                       <IALabSidebar />
                     </div>
 
                     {/* Drawer móvil con overlay */}
-                    {showMobileMenu && (
-                      <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Menú de navegación">
-                        <div className="absolute inset-0 bg-black/40 backdrop-blur-sm dark:bg-black/60" onClick={() => setShowMobileMenu(false)} />
-                        <div className="absolute left-0 top-0 bottom-0 w-72 bg-white dark:bg-slate-800 shadow-xl overflow-y-auto">
-                          {/* Perfil del usuario en el drawer */}
-                          <div className="flex items-center justify-between p-4 border-b border-slate-100 dark:border-slate-700">
-                            <div className="flex items-center gap-3">
-                              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-petroleum to-petroleum-dark flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
-                                {user?.full_name ? user.full_name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'U'}
-                              </div>
-                              <div>
-                                <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 leading-tight">{user?.full_name || 'Usuario'}</p>
-                                <p className="text-xs text-slate-500 dark:text-slate-400">{Math.round(courseProgress)}% Completado</p>
-                              </div>
-                            </div>
-                            <button
-                              onClick={() => setShowMobileMenu(false)}
-                              className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
-                            >
-                              <Icon name="fa-xmark" className="text-sm" />
-                            </button>
-                          </div>
-                          <IALabSidebar />
+                    {(showMobileMenu || mobileMenuClosing) && (
+                      <div className="fixed inset-0 z-[1001] xl:hidden" role="dialog" aria-modal="true" aria-label="Menú de navegación">
+                        <div className={`absolute inset-0 bg-black/40 dark:bg-black/60 transition-opacity duration-250 ${mobileMenuClosing ? 'opacity-0' : 'opacity-100'}`} onClick={closeMobileMenu} />
+                        <div className={`absolute left-0 top-0 bottom-0 w-72 bg-white dark:bg-slate-800 shadow-xl overflow-y-auto transition-transform duration-250 ease-out ${mobileMenuClosing ? '-translate-x-full' : 'translate-x-0'}`}
+                             style={{ willChange: 'transform' }}>
+                          <IALabMobileMenu
+                            closeMobileMenu={closeMobileMenu}
+                            toggleDarkMode={toggleDarkMode}
+                            isDarkMode={isDarkMode}
+                            onOpenProfile={handleOpenProfile}
+                            onOpenHistory={handleOpenHistory}
+                            onOpenHelp={handleOpenHelp}
+                          />
                         </div>
                       </div>
                     )}
@@ -278,13 +297,14 @@ const IALabContent = () => {
                               <TuRutaDeHoy onAction={handleGlobalAction} />
                             </div>
 
+
                             {/* TAB PILLS - Navegación entre secciones */}
                             <div data-tour="tour-tabs" className="flex items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-thin-ialab">
                               {TABS.map((tab) => (
                                 <button
                                   key={tab.id ?? 'all'}
                                   onClick={() => setViewSection(tab.id)}
-                                  className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-300 whitespace-nowrap sm:whitespace-nowrap whitespace-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 border ${
+                                  className={`flex items-center gap-1 px-2.5 py-1.5 text-[11px] md:px-3.5 md:py-2 md:text-xs font-semibold transition-all duration-300 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 border rounded-lg md:rounded-xl ${
                                     viewSection === tab.id
                                       ? 'bg-gradient-to-r from-petroleum to-corporate text-white border-petroleum/30 shadow-md shadow-petroleum/10 ring-1 ring-white/20'
                                       : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200/60 dark:border-slate-700/60 hover:border-petroleum/30 hover:text-petroleum dark:hover:text-[#4DA8C4] hover:shadow-sm'
@@ -448,6 +468,30 @@ const IALabContent = () => {
                     </ErrorBoundary>
                 )}
 
+                {/* Modal de Historial de Aprendizaje */}
+                <AnimatePresence>
+                {showHistoryModal && (
+                    <ErrorBoundary>
+                        <ActivityHistory
+                            isOpen={showHistoryModal}
+                            onClose={() => setShowHistoryModal(false)}
+                        />
+                    </ErrorBoundary>
+                )}
+                </AnimatePresence>
+
+                {/* Modal de Ayuda */}
+                <AnimatePresence>
+                {showHelpModal && (
+                    <ErrorBoundary>
+                        <HelpModal
+                            isOpen={showHelpModal}
+                            onClose={() => setShowHelpModal(false)}
+                        />
+                    </ErrorBoundary>
+                )}
+                </AnimatePresence>
+
                 {/* Modal de Resultado de Desafío */}
                 {showChallengeResult && (
                     <ErrorBoundary>
@@ -468,7 +512,7 @@ const IALabContent = () => {
                 
                  {/* FAB de Valerio - posicionado relativo al viewport */}
                  <button 
-                      className="fixed bottom-4 right-4 lg:bottom-8 lg:right-8 w-12 h-12 lg:w-16 lg:h-16 bg-gradient-to-br from-petroleum to-corporate rounded-xl lg:rounded-2xl shadow-lg dark:shadow-premium-lg hover:shadow-xl dark:hover:shadow-premium hover:scale-105 active:scale-95 transition-all duration-300 z-50 flex items-center justify-center group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-corporate focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900"
+                      className="fixed bottom-4 right-4 lg:bottom-8 lg:right-8 w-12 h-12 lg:w-16 lg:h-16 bg-gradient-to-br from-petroleum to-corporate rounded-xl lg:rounded-2xl shadow-lg dark:shadow-premium-lg hover:shadow-xl dark:hover:shadow-premium hover:scale-105 active:scale-95 transition-all duration-300 z-50 flex items-center justify-center group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-corporate focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 safe-area-bottom"
                       onClick={() => handleGlobalAction('OPEN_VALERIO')}
                       aria-label="Abrir panel de coach IA Valerio"
                   >
@@ -595,7 +639,9 @@ const IALabContent = () => {
 const IALab = () => {
     return (
         <IALabProvider>
-            <IALabContent />
+            <ErrorBoundary>
+                <IALabContent />
+            </ErrorBoundary>
         </IALabProvider>
     );
 };

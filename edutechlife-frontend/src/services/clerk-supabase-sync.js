@@ -14,12 +14,11 @@ import { supabase } from '../lib/supabase';
  */
 export const syncUserWithSupabase = async (clerkUser) => {
   try {
-    console.log('🔇 Sincronización Clerk-Supabase desactivada temporalmente (evitar error 401)');
-    console.log('   Razón: RLS bloqueando acceso a profiles para usuarios autenticados');
-    console.log('   Solución: Ejecutar simple_rls_config.sql en Supabase SQL Editor');
-    
+
+
+
     // Simular sincronización exitosa para desarrollo
-    console.log('✅ Sincronización simulada para usuario:', clerkUser.id);
+
     return {
       id: clerkUser.id,
       full_name: clerkUser.fullName || 'Usuario Demo',
@@ -32,7 +31,6 @@ export const syncUserWithSupabase = async (clerkUser) => {
     
     /*
     // CÓDIGO ORIGINAL (descomentar cuando RLS esté configurado):
-    console.log('Sincronizando usuario Clerk con Supabase:', clerkUser.id);
 
     // Extraer datos del usuario Clerk
     const userData = extractClerkUserData(clerkUser);
@@ -52,7 +50,7 @@ export const syncUserWithSupabase = async (clerkUser) => {
 
     if (existingUser) {
       // Actualizar usuario existente
-      console.log('Actualizando usuario existente en Supabase');
+
       const { data, error } = await supabase
         .from('profiles')
         .update({
@@ -64,11 +62,11 @@ export const syncUserWithSupabase = async (clerkUser) => {
         .single();
 
       if (error) throw error;
-      console.log('Usuario actualizado en Supabase:', data);
+
       return data;
     } else {
       // Crear nuevo usuario
-      console.log('Creando nuevo usuario en Supabase');
+
       const { data, error } = await supabase
         .from('profiles')
         .insert([{
@@ -82,7 +80,7 @@ export const syncUserWithSupabase = async (clerkUser) => {
         .single();
 
       if (error) throw error;
-      console.log('Usuario creado en Supabase:', data);
+
       return data;
     }
     */
@@ -123,16 +121,13 @@ const extractClerkUserData = (clerkUser) => {
  */
 export const migrateUsersToClerk = async () => {
   try {
-    console.log('Iniciando migración de usuarios a Clerk...');
-    
+
     // Obtener todos los usuarios de Supabase
     const { data: supabaseUsers, error } = await supabase
       .from('profiles')
       .select('*');
 
     if (error) throw error;
-
-    console.log(`Encontrados ${supabaseUsers.length} usuarios en Supabase`);
 
     // Aquí iría la lógica para crear usuarios en Clerk
     // Nota: Esto requiere permisos de administrador en Clerk
@@ -145,8 +140,7 @@ export const migrateUsersToClerk = async () => {
 
     for (const user of supabaseUsers) {
       try {
-        console.log(`Migrando usuario: ${user.email}`);
-        
+
         // TODO: Implementar creación de usuario en Clerk via API
         // const clerkUser = await createClerkUser(user);
         
@@ -161,7 +155,6 @@ export const migrateUsersToClerk = async () => {
       }
     }
 
-    console.log('Migración completada:', migrationResults);
     return migrationResults;
   } catch (error) {
     console.error('Error en migración de usuarios:', error);
@@ -174,9 +167,8 @@ export const migrateUsersToClerk = async () => {
  */
 export const verifyConsistency = async (clerkUserId) => {
   try {
-    console.log('🔇 Verificación de consistencia desactivada temporalmente (evitar error 401)');
-    console.log('   Razón: RLS bloqueando acceso a profiles para usuarios autenticados');
-    
+
+
     // Simular verificación exitosa para desarrollo
     const consistencyReport = {
       clerkUserId,
@@ -195,8 +187,7 @@ export const verifyConsistency = async (clerkUserId) => {
     
     /*
     // CÓDIGO ORIGINAL (descomentar cuando RLS esté configurado):
-    console.log('Verificando consistencia para usuario:', clerkUserId);
-    
+
     // Obtener usuario de Clerk (simulado por ahora)
     const clerkUser = { id: clerkUserId }; // Esto sería real con Clerk SDK
     
@@ -221,8 +212,7 @@ export const verifyConsistency = async (clerkUserId) => {
     */
 
     // Verificar inconsistencias (simuladas)
-    console.log('✅ Verificación de consistencia simulada para desarrollo');
-    
+
     /*
     // CÓDIGO ORIGINAL (descomentar cuando RLS esté configurado):
     // Verificar inconsistencias
@@ -257,11 +247,9 @@ export const verifyConsistency = async (clerkUserId) => {
       });
     }
 
-    console.log('Reporte de consistencia:', consistencyReport);
     return consistencyReport;
     */
-    
-    console.log('✅ Reporte de consistencia simulado:', consistencyReport);
+
     return consistencyReport;
   } catch (error) {
     console.error('Error verificando consistencia:', error);
@@ -287,8 +275,7 @@ export const setupAutoSync = (clerkInstance) => {
   try {
     // Escuchar cambios en el usuario de Clerk
     clerkInstance.addListener((event) => {
-      console.log('Clerk event detected:', event.type);
-      
+
       if (event.type === 'userUpdated' && event.user) {
         // Sincronizar cuando se actualiza el usuario
         syncUserWithSupabase(event.user).catch(console.error);
@@ -300,9 +287,8 @@ export const setupAutoSync = (clerkInstance) => {
       }
     });
 
-    console.log('Auto-sync configurado para Clerk');
   } catch (error) {
     console.error('Error configurando auto-sync:', error);
-    console.log('Continuando sin auto-sync (modo simulación)');
+
   }
 };

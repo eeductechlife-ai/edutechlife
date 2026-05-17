@@ -287,7 +287,7 @@ export const SUGGESTED_QUESTIONS = [
 // Pre-cargar cache con respuestas comunes
 export function initializeCache() {
   // Pre-cargar respuestas comunes
-  console.log('✅ Cache de Nico inicializado con', INSTANT_RESPONSES.size, 'respuestas instantáneas');
+
 }
 
 // Función principal para obtener respuestas de Nico

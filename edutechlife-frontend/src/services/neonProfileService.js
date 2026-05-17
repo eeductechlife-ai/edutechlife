@@ -17,8 +17,7 @@ class NeonProfileService {
     }
 
     try {
-      console.log(`🔍 [Neon] Obteniendo perfil para usuario: ${userId.substring(0, 8)}...`);
-      
+
       // Timeout para prevenir carga infinita (5 segundos)
       const timeoutPromise = new Promise((_, reject) => {
         setTimeout(() => reject(new Error('Timeout: La consulta tardó demasiado')), 5000);
@@ -37,8 +36,7 @@ class NeonProfileService {
           if (error) {
             // Si hay error de columna faltante, intentar con columnas alternativas
             if (error.message && error.message.includes('full_name')) {
-              console.log(`ℹ️ [Neon] Columna full_name no encontrada, usando display_name...`);
-              
+
               // Intentar con display_name como alternativa
               const { data: altData, error: altError } = await supabase
                 .from('profiles')
@@ -49,7 +47,7 @@ class NeonProfileService {
               if (altError) {
                 // Si también falla con display_name, verificar si es error de "no rows"
                 if (altError.code === 'PGRST116') {
-                  console.log(`ℹ️ [Neon] No se encontró perfil para usuario ${userId.substring(0, 8)}`);
+
                   return null;
                 }
                 throw new Error(`Error al obtener perfil (fallback): ${altError.message}`);
@@ -68,14 +66,13 @@ class NeonProfileService {
             
             // Manejo específico de errores según tipo
             if (error.code === 'PGRST116') {
-              console.log(`ℹ️ [Neon] No se encontró perfil para usuario ${userId.substring(0, 8)}`);
+
               return null;
             }
             
             throw new Error(`Error al obtener perfil: ${error.message}`);
           }
-          
-          console.log(`✅ [Neon] Perfil obtenido (status: ${status})`);
+
           return data;
           
         } catch (queryError) {
@@ -92,7 +89,7 @@ class NeonProfileService {
       console.error(`❌ [Neon] Error inesperado en getUserProfile:`, error);
       
       // No lanzar error para evitar romper la UI, devolver null con logging
-      console.log(`⚠️ [Neon] Fallback: devolviendo null por error: ${error.message}`);
+
       return null;
     }
   }
@@ -111,9 +108,8 @@ class NeonProfileService {
     }
     
     try {
-      console.log(`🔄 [Neon] Actualizando perfil para usuario: ${userId.substring(0, 8)}...`);
-      console.log(`📝 [Neon] Campos a actualizar:`, updates);
-      
+
+
       // Timeout para prevenir bloqueo (8 segundos)
       const timeoutPromise = new Promise((_, reject) => {
         setTimeout(() => reject(new Error('Timeout: La actualización tardó demasiado')), 8000);
@@ -138,8 +134,7 @@ class NeonProfileService {
           if (error) {
             // Si hay error de columna, intentar mapear a columnas alternativas
             if (error.message && error.message.includes('full_name')) {
-              console.log(`ℹ️ [Neon] Columna full_name no encontrada, usando display_name...`);
-              
+
               // Mapear full_name a display_name si existe
               const altUpdateData = { ...updateData };
               if (altUpdateData.full_name) {
@@ -165,9 +160,8 @@ class NeonProfileService {
             }
             throw error;
           }
-          
-          console.log(`✅ [Neon] Perfil actualizado exitosamente (status: ${status})`);
-          console.log(`📊 [Neon] Datos actualizados:`, data);
+
+
           return data;
           
         } catch (queryError) {
@@ -207,8 +201,7 @@ class NeonProfileService {
     }
     
     try {
-      console.log(`🔄 [Neon] Upsert perfil para usuario: ${profileData.id.substring(0, 8)}...`);
-      
+
       // Asegurar campos requeridos
       const completeProfile = {
         ...profileData,
@@ -230,8 +223,7 @@ class NeonProfileService {
         console.error(`❌ [Neon] Error en upsert:`, error);
         throw new Error(`Error en upsert: ${error.message}`);
       }
-      
-      console.log(`✅ [Neon] Upsert completado`);
+
       return data;
       
     } catch (error) {
@@ -300,14 +292,12 @@ class NeonProfileService {
    */
   async getProfileStats() {
     try {
-      console.log('📊 [Neon] Obteniendo estadísticas de perfiles...');
-      
+
   // SOLUCIÓN TEMPORAL: Desactivar consultas que causan error 401 por RLS
   // Hasta que se configuren políticas RLS en Supabase Dashboard
-  console.log('🔇 [Neon] Consultas a profiles desactivadas temporalmente (evitar error 401)');
-  console.log('   Razón: RLS está bloqueando acceso anónimo a la tabla profiles');
-  console.log('   Solución: Ejecutar simple_rls_config.sql en Supabase SQL Editor');
-  
+
+
+
   // Usar valores simulados para desarrollo
   const totalProfiles = 150;
   const recentUpdates = [

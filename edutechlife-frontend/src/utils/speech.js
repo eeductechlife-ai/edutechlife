@@ -161,8 +161,7 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
     }
 
     try {
-      console.log('📢 Usando voz nativa del sistema (Fallback)');
-      
+
       // Cancelar cualquier síntesis en curso
       window.speechSynthesis.cancel();
       
@@ -173,7 +172,7 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
       utterance.volume = 1.0;
       
       utterance.onend = () => {
-        console.log('✅ Voz nativa completada');
+
         handleEnd();
       };
       
@@ -202,8 +201,7 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
   }
 
   try {
-    console.log("Perfil de voz:", profile);
-    console.log("Voice config:", voice);
+
 
     const voiceFallacks = VOICE_FALLBACKS[profile] || [];
     let lastError = null;
@@ -238,8 +236,8 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
         }
 
         if (data.audioContent) {
-          console.log(`Audio received with voice: ${voiceOption.name}`);
-          console.log('✅ Audio de Google recibido');
+
+
           currentAudio = new Audio(`data:audio/mp3;base64,${data.audioContent}`);
           currentAudio.volume = 1.0;
           
@@ -261,7 +259,7 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
             }
             throw playError;
           }
-          console.log("¡Audio reproduciéndose!");
+
           return;
         }
       } catch (voiceError) {
@@ -281,7 +279,7 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
     console.error("All voice options failed:", lastError);
     
     // Intentar con voz nativa como último recurso
-    console.log('🔄 Todas las voces de Google fallaron, intentando con voz nativa...');
+
     const nativeSuccess = useNativeSpeech();
     
     if (!nativeSuccess && onEndCallback) {
@@ -291,7 +289,7 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
     console.error("Error en speakTextConversational:", error);
     
     // Intentar con voz nativa como último recurso
-    console.log('🔄 Error en Google TTS, intentando con voz nativa...');
+
     const nativeSuccess = useNativeSpeech();
     
     if (!nativeSuccess) {

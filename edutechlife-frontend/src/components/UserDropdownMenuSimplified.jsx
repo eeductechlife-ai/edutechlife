@@ -5,6 +5,7 @@ import HelpModal from './modals/HelpModal';
 import CertificatesModal from './modals/CertificatesModal';
 import ChangeAvatarModal from './modals/ChangeAvatarModal';
 import ActivityHistory from './ActivityHistory';
+import ErrorBoundary from './forum/ErrorBoundary';
 import { useClerkAuth, getClerkUserInfo } from '../utils/clerk-utils';
 import { Icon } from '../utils/iconMapping.jsx';
 
@@ -28,7 +29,8 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
   const [profileName, setProfileName] = useState(null);
 
   const activeUser = clerkUser || clerkUserOfficial;
-  const displayName = profileName || activeUser?.fullName || activeUser?.firstName || userInfo.displayName || 'John Edison';
+  const userInfo = getClerkUserInfo(activeUser);
+  const displayName = profileName || activeUser?.fullName || activeUser?.firstName || userInfo?.displayName || 'Usuario';
 
   useEffect(() => {
     const handleProfileUpdate = (event) => {
@@ -40,8 +42,6 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
     return () => window.removeEventListener('profile-updated', handleProfileUpdate);
   }, []);
   
-  // Obtener información del usuario exclusivamente de Clerk
-  const userInfo = getClerkUserInfo(activeUser);
   
   // Cerrar dropdown al hacer clic fuera
   useEffect(() => {
@@ -282,7 +282,9 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
 
       <ChangeAvatarModal isOpen={isAvatarOpen} onClose={() => setIsAvatarOpen(false)} />
 
-      <ActivityHistory isOpen={isHistoryOpen} onClose={() => setIsHistoryOpen(false)} />
+      <ErrorBoundary>
+        <ActivityHistory isOpen={isHistoryOpen} onClose={() => setIsHistoryOpen(false)} />
+      </ErrorBoundary>
 
 
     </>

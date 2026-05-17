@@ -150,8 +150,7 @@ const AppointmentReminders = ({
     setIsChecking(true);
     try {
       const sent = await notificationService.checkAndSendReminders(appointments);
-      console.log('📨 Recordatorios enviados:', sent.length);
-      
+
       if (sent.length > 0 && onRefresh) {
         onRefresh();
       }

@@ -228,10 +228,9 @@ export const getEvaluationHistory = async (moduleId) => {
   
   try {
     // SOLUCIÓN TEMPORAL: Desactivar consultas que causan error 406
-    console.log('🔇 Consulta getEvaluationHistory desactivada temporalmente (evitar error 406)');
-    console.log('   Razón: Error 406 (Not Acceptable) en consulta a user_progress');
-    console.log('   Solución: Configurar políticas RLS y verificar headers en Supabase Dashboard');
-    
+
+
+
     // Usar datos simulados para desarrollo
     const simulatedHistory = [
       {
@@ -253,8 +252,7 @@ export const getEvaluationHistory = async (moduleId) => {
         simulated: true
       }
     ];
-    
-    console.log('✅ Historial de evaluaciones simulado para desarrollo');
+
     return simulatedHistory;
     
     /*

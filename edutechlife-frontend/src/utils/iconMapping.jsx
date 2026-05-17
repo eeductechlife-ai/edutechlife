@@ -173,7 +173,13 @@ import {
     Layers,
     Clipboard,
     Info,
-    Menu
+    Menu,
+    Book,
+    MousePointerClick,
+    List,
+    Gauge,
+    Pencil,
+    Camera
 } from 'lucide-react';
 
 // Mapping of Font Awesome class names to Lucide components
@@ -327,6 +333,14 @@ export const faToLucideMap = {
   'fa-video-camera': Video,
   'fa-clipboard': Clipboard,
   'fa-info-circle': Info,
+  'fa-pencil': Pencil,
+  'fa-camera': Camera,
+  // Phase 2: ActivityHistory missing icons
+  'fa-book': Book,
+  'fa-file-image': FileImage,
+  'fa-hand-pointer': MousePointerClick,
+  'fa-list': List,
+  'fa-tachometer-alt': Gauge,
   };
 
 // Helper function to get Lucide component from Font Awesome class name

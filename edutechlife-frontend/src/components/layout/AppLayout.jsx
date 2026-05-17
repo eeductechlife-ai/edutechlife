@@ -21,6 +21,7 @@ const AppLayout = () => {
   
   // Estados para modales y menú móvil
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [drawerClosing, setDrawerClosing] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
   const [showLeadCaptureModal, setShowLeadCaptureModal] = useState(false);
   const [adminLoginModalOpen, setAdminLoginModalOpen] = useState(false);
@@ -55,6 +56,16 @@ const AppLayout = () => {
     return () => document.removeEventListener('keydown', handleEscape);
   }, [mobileMenuOpen]);
   
+  // Cerrar drawer con animación
+  const closeDrawer = () => {
+    if (drawerClosing) return;
+    setDrawerClosing(true);
+    setTimeout(() => {
+      setMobileMenuOpen(false);
+      setDrawerClosing(false);
+    }, 250);
+  };
+  
   // Función para navegación con scroll a secciones
   const navigateToSection = (route, sectionId = null) => {
     navigate(route);
@@ -68,13 +79,13 @@ const AppLayout = () => {
       }, 100);
     }
     
-    setMobileMenuOpen(false);
+    closeDrawer();
   };
   
   // Función para abrir modal de contacto
   const openContactModal = () => {
     setShowContactModal(true);
-    setMobileMenuOpen(false);
+    closeDrawer();
   };
   
   const location = useLocation();
@@ -89,15 +100,14 @@ const AppLayout = () => {
   
   return (
     <ProgressProvider>
-      <div className="flex flex-col min-h-screen overflow-hidden bg-white text-[#004B63]" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+      <div className="flex flex-col min-h-screen bg-white text-[#004B63]" style={{ fontFamily: "'Montserrat', sans-serif" }}>
         <Suspense fallback={null}>
           <GlobalCanvas />
         </Suspense>
       
       {/* Header - Navigation Premium */}
       {shouldShowHeader() && (
-        <>
-          <header className="sticky top-0 left-0 right-0 z-[1000] bg-white relative">
+        <header className="sticky top-0 left-0 right-0 z-[1000] bg-white relative">
             
             {/* 3D Ambient Orbs - Background depth effect */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
@@ -264,7 +274,7 @@ const AppLayout = () => {
               {/* Mobile Menu Button */}
               <button 
                 onClick={() => setMobileMenuOpen(true)}
-                className="md:hidden p-2 text-[#004B63] hover:text-[#4DA8C4] hover:bg-[#4DA8C4]/10 rounded-full transition-all duration-300"
+                className="md:hidden p-2 text-[#004B63] hover:text-[#4DA8C4] hover:bg-[#4DA8C4]/10 rounded-full transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#004B63]/50"
                 aria-label="Abrir menú"
               >
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -273,22 +283,37 @@ const AppLayout = () => {
               </button>
             </div>
           </header>
-          
-          {/* Mobile Menu Drawer */}
-          {mobileMenuOpen && (
+        )}
+
+      {/* Floating hamburger for routes without header (except /ialab which has its own) */}
+      {!shouldShowHeader() && !location.pathname.includes('/ialab') && (
+        <button 
+          onClick={() => setMobileMenuOpen(true)}
+          className="fixed bottom-6 right-6 z-[999] md:hidden p-3 text-white bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] rounded-full shadow-lg hover:shadow-xl transition-all safe-area-bottom focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#004B63]/50"
+          aria-label="Abrir menú"
+        >
+          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      )}
+
+      {/* Mobile Menu Drawer */}
+      {(mobileMenuOpen || drawerClosing) && (
             <>
               {/* Backdrop */}
               <div 
-                className="fixed inset-0 z-[1001] bg-black/50 backdrop-blur-sm md:hidden"
+                className={`fixed inset-0 z-[1001] bg-black/50 backdrop-blur-sm md:hidden ${drawerClosing ? 'animate-fade-out' : ''}`}
                 role="presentation"
-                onClick={() => setMobileMenuOpen(false)}
+                onClick={closeDrawer}
               />
               {/* Drawer - Expanded with scroll */}
               <div 
                 role="dialog"
                 aria-modal="true"
                 aria-label="Menú de navegación"
-                className="fixed top-0 right-0 z-[1002] h-dvh w-80 bg-white shadow-2xl md:hidden animate-slide-in flex flex-col"
+                className={`fixed top-0 right-0 z-[1002] h-dvh w-80 bg-white shadow-2xl md:hidden flex flex-col ${drawerClosing ? 'animate-slide-out' : 'animate-slide-in'}`}
+                style={{ willChange: 'transform' }}
               >
                 {/* Header */}
                 <div className="p-4 border-b border-[#4DA8C4]/20 flex items-center justify-between flex-shrink-0">
@@ -305,7 +330,7 @@ const AppLayout = () => {
                     />
                   </div>
                   <button 
-                    onClick={() => setMobileMenuOpen(false)}
+                    onClick={closeDrawer}
                     className="p-2 text-[#004B63] hover:text-[#4DA8C4] hover:bg-[#4DA8C4]/10 rounded-full transition-all duration-300"
                     aria-label="Cerrar menú"
                   >
@@ -316,7 +341,7 @@ const AppLayout = () => {
                 </div>
                 
                 {/* Mobile Menu Content */}
-                <div className="flex-1 overflow-y-auto p-4">
+                <div className="flex-1 overflow-y-auto p-4 pb-20">
                   {/* User Info Section */}
                   {isSignedIn && clerkUser && (
                     <div className="mb-6 pb-4 border-b border-[#4DA8C4]/10">
@@ -405,14 +430,14 @@ const AppLayout = () => {
                   {!isSignedIn && (
                     <div className="mt-6 pt-4 border-t border-[#4DA8C4]/20 space-y-2">
                       <button
-                        onClick={() => { setMobileMenuOpen(false); navigate('/login'); }}
+                        onClick={() => { closeDrawer(); navigate('/login'); }}
                         className="w-full py-3 text-sm font-semibold text-white bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] rounded-full shadow-md hover:shadow-lg transition-all"
                       >
                         <i className="fa-solid fa-right-to-bracket mr-2"></i>
                         Iniciar Sesión
                       </button>
                       <button
-                        onClick={() => { setMobileMenuOpen(false); setShowLeadCaptureModal(true); }}
+                        onClick={() => { closeDrawer(); setShowLeadCaptureModal(true); }}
                         className="w-full py-3 text-sm font-semibold text-[#004B63] border-2 border-[#4DA8C4]/30 rounded-full hover:border-[#4DA8C4] transition-colors"
                       >
                         Solicitar Demo Gratuita
@@ -423,8 +448,6 @@ const AppLayout = () => {
               </div>
             </>
           )}
-        </>
-      )}
       
         {/* Main Content Area */}
         <main className="flex-1">

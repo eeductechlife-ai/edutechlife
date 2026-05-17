@@ -7,6 +7,7 @@ import AutomationROICalculator from '../AutomationROICalculator';
 import AutomationProcessDiscovery from '../AutomationProcessDiscovery';
 import AutomationCaseStudies from '../AutomationCaseStudies';
 import AutomationLeadCapture from '../AutomationLeadCapture';
+import Footer from '../Footer';
 
 // Lazy load del componente AutomationArchitect
 const AutomationArchitect = lazy(() => import('../AutomationArchitect'));
@@ -148,6 +149,8 @@ const AutomationArchitectPage = () => {
         </div>
         <AutomationLeadCapture />
       </div>
+
+      <Footer />
     </div>
   );
 };

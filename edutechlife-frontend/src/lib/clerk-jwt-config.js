@@ -79,8 +79,7 @@ export const getClerkJWTForSupabase = async (session) => {
       console.warn('No se pudo obtener token JWT de Clerk');
       return null;
     }
-    
-    console.log('✅ Token JWT de Clerk obtenido para Supabase');
+
     return token;
   } catch (error) {
     console.error('Error obteniendo token JWT de Clerk:', error);
@@ -184,7 +183,7 @@ export const isClerkJWTConfigured = () => {
  */
 export const debugClerkJWT = async (session) => {
   if (!session || !session.getToken) {
-    console.log('❌ Sesión de Clerk no disponible');
+
     return;
   }
   
@@ -192,25 +191,23 @@ export const debugClerkJWT = async (session) => {
     const token = await session.getToken({ template: 'supabase' });
     
     if (!token) {
-      console.log('❌ No se pudo obtener token');
+
       return;
     }
     
     // Decodificar el token (sin verificar firma)
     const parts = token.split('.');
     if (parts.length !== 3) {
-      console.log('❌ Token JWT inválido');
+
       return;
     }
     
     const payload = JSON.parse(atob(parts[1]));
-    
-    console.log('🔍 Debug JWT de Clerk:');
-    console.log('  - Template name:', 'supabase');
-    console.log('  - User ID:', payload.sub);
-    console.log('  - Expira:', new Date(payload.exp * 1000).toISOString());
-    console.log('  - Claims Supabase:', payload['https://supabase.com/jwt/claims']);
-    
+
+
+
+
+
     return payload;
   } catch (error) {
     console.error('Error debuggeando JWT:', error);

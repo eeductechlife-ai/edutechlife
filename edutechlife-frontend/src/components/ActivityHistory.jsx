@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { useProgressContext } from '../context/ProgressContext';
 import { useActivityTracker } from '../hooks/useActivityTracker';
 import { useIALabStore } from '../store/ialabStore';
 import { Icon } from '../utils/iconMapping.jsx';
+import useBodyScrollLock from '../hooks/useBodyScrollLock';
+import useFocusTrap from '../hooks/useFocusTrap';
 
 const ACTIVITY_CONFIG = {
   video: { icon: 'fa-play-circle', label: 'Video', bg: 'from-[#004B63]/10 to-[#00BCD4]/10', color: '#004B63' },
@@ -155,11 +156,13 @@ const FILTER_OPTIONS = [
 
 const ActivityHistory = ({ isOpen, onClose }) => {
   const { activities, getStudentStats } = useActivityTracker();
-  const { completedModules, completedVideos, completedExams, completedInfographics, completedActivities, challengeScores, courseProgress, syncStatus } = useProgressContext();
-  const { lessonProgress, ALL_LESSONS, xp, streak, badges, getLevel, getXpForNextLevel, getLevelProgress, BADGE_INFO, getCompletedLessonCount, moduleProgress, getDaysSinceStart } = useIALabStore();
+  const { lessonProgress, ALL_LESSONS, xp, streak, badges, getLevel, getXpForNextLevel, getLevelProgress, BADGE_INFO, getCompletedLessonCount, moduleProgress, getDaysSinceStart, completedModules, completedVideos, completedExams, completedInfographics, completedActivities, challengeScores, courseProgress, syncStatus } = useIALabStore();
   const [activeTab, setActiveTab] = useState('modules');
   const [filter, setFilter] = useState('all');
   const panelRef = useRef(null);
+  const focusTrapRef = useFocusTrap(isOpen);
+
+  useBodyScrollLock(isOpen);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -249,10 +252,13 @@ const ActivityHistory = ({ isOpen, onClose }) => {
   const totalItems = totalVideosTarget + totalInfographicsTarget + 5 + 5 + 5 + totalLessonsCount;
 
   return (
-    <div className="fixed inset-0 z-[1000] flex items-start justify-center pt-20 px-4 bg-black/50 backdrop-blur-sm" ref={panelRef}>
-      <div className="bg-white rounded-2xl shadow-[0_8px_32px_rgba(0,75,99,0.12)] w-full max-w-3xl max-h-[80vh] overflow-hidden animate-in fade-in-0 zoom-in-95 duration-200">
+    <div
+      className="fixed inset-0 z-[1050] flex items-start justify-center pt-16 sm:pt-20 px-2 sm:px-4 bg-black/50"
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      <div ref={(el) => { panelRef.current = el; focusTrapRef.current = el; }} className="bg-white rounded-2xl shadow-[0_8px_32px_rgba(0,75,99,0.12)] w-full max-w-3xl max-h-[85vh] sm:max-h-[80vh] overflow-hidden">
         {/* Header */}
-        <div className="relative bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#00BCD4] px-6 py-5 flex items-center justify-between overflow-hidden">
+        <div className="relative bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#00BCD4] px-4 sm:px-6 py-4 sm:py-5 flex items-center justify-between overflow-hidden">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNCI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIvPjwvZz48L2c+PC9zdmc+')] opacity-50" />
           <div className="flex items-center gap-3 relative z-10">
             <div className="w-10 h-10 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center shadow-sm ring-1 ring-white/10">
@@ -263,33 +269,33 @@ const ActivityHistory = ({ isOpen, onClose }) => {
               <p className="text-white/60 text-xs">Progreso sincronizado · {totalLessonsCompleted}/{totalLessonsCount} lecciones · {xp} XP</p>
             </div>
           </div>
-          <button onClick={onClose} className="relative z-10 w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center transition-all duration-200 active:scale-90 ring-1 ring-white/10">
+          <button onClick={onClose} className="relative z-10 min-w-[44px] min-h-[44px] w-11 h-11 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center transition-all duration-200 active:scale-90 ring-1 ring-white/10">
             <Icon name="fa-times" className="text-white text-sm" />
           </button>
         </div>
 
         {/* Stats cards */}
-        <div className="grid grid-cols-4 gap-3 px-6 py-5 bg-gradient-to-b from-[#004B63]/[0.02] to-white border-b border-slate-200/40">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 px-4 sm:px-6 py-4 sm:py-5 bg-gradient-to-b from-[#004B63]/[0.02] to-white border-b border-slate-200/40">
           {[
             { icon: 'fa-chart-line', value: `${Math.round(courseProgress || 0)}%`, label: 'Progreso', gradient: 'from-[#004B63]/10 to-[#00BCD4]/10', color: '#004B63' },
             { icon: 'fa-trophy', value: `Nv.${level}`, label: `${xp} XP`, gradient: 'from-[#FFD166]/10 to-[#F59E0B]/10', color: '#F59E0B' },
             { icon: 'fa-check-circle', value: `${totalLessonsCompleted}/${totalLessonsCount}`, label: 'Lecciones', gradient: 'from-emerald-500/10 to-emerald-600/10', color: '#10B981' },
             { icon: 'fa-fire', value: `${streak}`, label: streak >= 3 ? 'Racha activa' : 'Días seguidos', gradient: 'from-orange-500/10 to-red-500/10', color: streak >= 3 ? '#EF4444' : '#94A3B8' },
           ].map((item, i) => (
-            <div key={i} className="group bg-white rounded-xl border border-slate-200/60 shadow-sm p-3 text-center hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-              <Icon name={item.icon} className="text-xl mx-auto mb-1.5 group-hover:scale-110 transition-transform duration-200" style={{ color: item.color }} />
-              <p className="text-lg font-bold font-montserrat tracking-tight" style={{ color: item.color }}>{item.value}</p>
-              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">{item.label}</p>
+            <div key={i} className="group bg-white rounded-xl border border-slate-200/60 shadow-sm p-2 sm:p-3 text-center hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+              <Icon name={item.icon} className="text-lg sm:text-xl mx-auto mb-1 group-hover:scale-110 transition-transform duration-200" style={{ color: item.color }} />
+              <p className="text-base sm:text-lg font-bold font-montserrat tracking-tight" style={{ color: item.color }}>{item.value}</p>
+              <p className="text-[9px] sm:text-[10px] font-semibold text-slate-400 uppercase tracking-wider">{item.label}</p>
             </div>
           ))}
         </div>
 
         {/* Tabs */}
-        <div className="px-6 pt-3 border-b border-slate-200/40 bg-white">
-          <div className="flex gap-1">
+        <div className="px-4 sm:px-6 pt-3 border-b border-slate-200/40 bg-white">
+          <div className="flex gap-1 overflow-x-auto">
             {TABS.map(tab => (
               <button key={tab.key} onClick={() => setActiveTab(tab.key)}
-                className={`px-4 py-2.5 text-xs font-bold rounded-t-lg transition-all duration-200 flex items-center gap-2 active:scale-95 ${
+                className={`px-3 sm:px-4 min-h-[44px] text-xs font-bold rounded-t-lg transition-all duration-200 flex items-center gap-2 active:scale-95 flex-shrink-0 ${
                   activeTab === tab.key ? 'bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white shadow-sm' : 'text-slate-500 hover:text-[#004B63] hover:bg-slate-50 border border-transparent'
                 }`}>
                 <Icon name={tab.icon} className={`text-[10px] ${activeTab === tab.key ? 'text-white' : 'text-[#004B63]'}`} />{tab.label}
@@ -299,9 +305,9 @@ const ActivityHistory = ({ isOpen, onClose }) => {
         </div>
 
         {/* Content */}
-        <div className="max-h-[45vh] overflow-y-auto custom-scrollbar">
+        <div className="max-h-[55vh] md:max-h-[45vh] overflow-y-auto modal-scrollable">
           {activeTab === 'modules' && (
-            <div className="p-5 space-y-2.5">
+            <div className="p-3 sm:p-5 space-y-2.5">
               <div className="flex items-center gap-2 mb-1 px-0.5">
                 <div className="w-1 h-5 rounded-full bg-gradient-to-b from-[#004B63] to-[#00BCD4]" />
                 <p className="text-[10px] font-bold text-[#004B63] uppercase tracking-[0.15em]">Progreso por Módulo</p>
@@ -318,12 +324,12 @@ const ActivityHistory = ({ isOpen, onClose }) => {
 
           {activeTab === 'activities' && (
             <div>
-              <div className="px-6 py-3 border-b border-slate-200/40 bg-white/80 backdrop-blur-sm sticky top-0 z-10">
+              <div className="px-4 sm:px-6 py-3 border-b border-slate-200/40 bg-white/80 backdrop-blur-sm sticky top-0 z-10">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="text-[10px] font-bold text-[#004B63] uppercase tracking-wider mr-0.5">Filtrar:</span>
                   {FILTER_OPTIONS.map(({ key, label, icon }) => (
                     <button key={key} onClick={() => setFilter(key)}
-                      className={`px-3 py-1.5 text-[10px] font-bold rounded-lg transition-all duration-200 flex items-center gap-1.5 active:scale-95 ${
+                      className={`px-3 min-h-[44px] text-[10px] font-bold rounded-lg transition-all duration-200 flex items-center gap-1.5 active:scale-95 ${
                         filter === key ? 'bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white shadow-sm' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
                       }`}><Icon name={icon} className="text-[9px]" />{label}</button>
                   ))}
@@ -340,7 +346,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
               ) : (
                 <div className="divide-y divide-slate-100">
                   {sortedDates.map(date => (
-                    <div key={date} className="px-6 py-4 hover:bg-[#004B63]/[0.02] transition-colors">
+                    <div key={date} className="px-4 sm:px-6 py-3 sm:py-4 hover:bg-[#004B63]/[0.02] transition-colors">
                       <div className="flex items-center gap-2.5 mb-3">
                         <div className="w-1 h-5 rounded-full bg-gradient-to-b from-[#004B63] to-[#00BCD4]" />
                         <p className="text-[11px] font-bold text-[#004B63] uppercase tracking-wider">{formatDate(date)}</p>
@@ -382,7 +388,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
           )}
 
           {activeTab === 'stats' && (
-            <div className="p-5">
+            <div className="p-3 sm:p-5">
               <div className="flex items-center gap-2 mb-4 px-0.5">
                 <div className="w-1 h-5 rounded-full bg-gradient-to-b from-[#004B63] to-[#00BCD4]" />
                 <p className="text-[10px] font-bold text-[#004B63] uppercase tracking-[0.15em]">Resumen de Recursos</p>
@@ -441,7 +447,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                   <p className="text-[10px] font-bold text-[#004B63] uppercase tracking-[0.15em]">Ritmo de Aprendizaje</p>
                   <div className="flex-1 h-px bg-gradient-to-r from-[#00BCD4]/20 to-transparent" />
                 </div>
-                <div className="grid grid-cols-4 gap-4 mb-4">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-4">
                   <div className="text-center p-3 rounded-xl bg-gradient-to-b from-[#00BCD4]/5 to-transparent border border-[#00BCD4]/10">
                     <div className="text-xl font-bold text-[#00BCD4]">{lessonsPerDay > 0 ? lessonsPerDay.toFixed(1) : '—'}</div>
                     <p className="text-[9px] text-slate-400 mt-0.5 uppercase tracking-wider">Lecciones/día</p>
@@ -472,7 +478,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                     <p className="text-[10px] font-bold text-[#004B63] uppercase tracking-[0.15em]">Logros y Medallas</p>
                     <div className="flex-1 h-px bg-gradient-to-r from-[#FFD166]/20 to-transparent" />
                   </div>
-                  <div className="grid grid-cols-4 gap-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
                     {badges.map(badgeId => {
                       const info = BADGE_INFO?.[badgeId] || { icon: 'fa-star', label: badgeId, desc: '', color: '#94A3B8' };
                       return (
@@ -549,7 +555,6 @@ const ActivityHistory = ({ isOpen, onClose }) => {
           )}
         </div>
       </div>
-      <style>{`.custom-scrollbar::-webkit-scrollbar{width:4px}.custom-scrollbar::-webkit-scrollbar-track{background:transparent}.custom-scrollbar::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:8px}.custom-scrollbar::-webkit-scrollbar-thumb:hover{background:#94A3B8}`}</style>
     </div>
   );
 };

@@ -24,7 +24,7 @@ const Aliados = memo(() => {
     const duplicatedAliados = [...aliados, ...aliados, ...aliados];
 
     return (
-        <section id="aliados" ref={sectionRef} className="relative w-full py-20 lg:py-32 overflow-hidden bg-[#F8FAFC]">
+        <section id="aliados" ref={sectionRef} className="relative w-full py-12 lg:py-16 overflow-hidden bg-[#F8FAFC]">
             {/* Radial Gradient Background */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(77,168,196,0.08)_0%,transparent_50%),radial-gradient(circle_at_70%_50%,rgba(0,75,99,0.05)_0%,transparent_50%)]" />
             
@@ -36,7 +36,7 @@ const Aliados = memo(() => {
 
             <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
                 {/* Header */}
-                <div className="text-center mb-16">
+                <div className="text-center mb-10">
                     <div className="inline-flex items-center gap-3 mb-4">
                         <div className="w-10 h-[2px] bg-gradient-to-r from-transparent to-[#4DA8C4]" />
                         <span className="text-sm font-bold text-[#4DA8C4] uppercase tracking-widest block mb-2">
@@ -44,7 +44,7 @@ const Aliados = memo(() => {
                         </span>
                         <div className="w-10 h-[2px] bg-gradient-to-l from-transparent to-[#4DA8C4]" />
                     </div>
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-[#004B63] tracking-tighter mb-6">
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-[#004B63] tracking-tighter mb-3">
                         Nuestros{' '}
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4DA8C4] to-[#004B63]">
                             Aliados Estratégicos
@@ -68,7 +68,7 @@ const Aliados = memo(() => {
                         onMouseLeave={() => setIsPaused(false)}
                     >
                         <div 
-                            className="flex gap-6 py-4"
+                            className="flex gap-4 py-2"
                             style={{
                                 animation: isPaused ? 'none' : 'marquee 40s linear infinite',
                             }}
@@ -76,21 +76,21 @@ const Aliados = memo(() => {
                             {duplicatedAliados.map((aliado, index) => (
                                 <div 
                                     key={`${aliado.id}-${index}`}
-                                    className="group flex-shrink-0 bg-white/60 backdrop-blur-md border border-gray-200 rounded-xl p-3 flex items-center gap-3 transition-all duration-300 cursor-pointer hover:[animation-play-state:paused]"
+                                    className="group flex-shrink-0 bg-white/60 backdrop-blur-md border border-gray-200 rounded-xl p-2.5 flex items-center gap-2.5 transition-all duration-300 cursor-pointer hover:[animation-play-state:paused]"
                                     style={{
-                                        minWidth: '220px',
+                                        minWidth: '190px',
                                     }}
                                 >
                                     {/* Icon Circle */}
                                     <div 
-                                        className="w-10 h-10 rounded-lg flex items-center justify-center transition-transform duration-300 group-hover:scale-105"
+                                        className="w-9 h-9 rounded-lg flex items-center justify-center transition-transform duration-300 group-hover:scale-105"
                                         style={{
                                             background: `linear-gradient(135deg, ${aliado.color}20, ${aliado.color}10)`,
                                             border: `1px solid ${aliado.color}30`
                                         }}
                                     >
                                         <aliado.icon 
-                                            className="text-lg transition-colors duration-300" 
+                                            className="text-base transition-colors duration-300" 
                                             style={{ color: aliado.color }}
                                         />
                                     </div>

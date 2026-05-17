@@ -53,5 +53,15 @@
     "vite-plugin-imagemin": "^0.6.1",
     "vite-plugin-pwa": "^1.2.0",
     "vitest": "^4.1.5"
-  }
+  },
+  "browserslist": [
+    "> 0.5%",
+    "last 2 versions",
+    "not dead",
+    "iOS >= 12",
+    "Safari >= 12",
+    "Chrome >= 80",
+    "Firefox >= 80",
+    "not ie 11"
+  ]
 }

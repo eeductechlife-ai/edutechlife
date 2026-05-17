@@ -43,20 +43,6 @@ const AboutCarousel = () => {
         setTimeout(() => setIsTransitioning(false), 800);
     }, [isTransitioning]);
 
-    const goToPrev = useCallback(() => {
-        if (isTransitioning) return;
-        setIsTransitioning(true);
-        setActive(prev => (prev - 1 + carouselImages.length) % carouselImages.length);
-        setTimeout(() => setIsTransitioning(false), 800);
-    }, [isTransitioning]);
-
-    const handleDotClick = (index) => {
-        if (isTransitioning || index === active) return;
-        setIsTransitioning(true);
-        setActive(index);
-        setTimeout(() => setIsTransitioning(false), 800);
-    };
-
     return (
         <div 
             className="premium-carousel"
@@ -113,43 +99,12 @@ const AboutCarousel = () => {
                 </div>
             </div>
 
-            {/* Navigation Arrows */}
-            <button 
-                className="carousel-arrow carousel-arrow-prev" 
-                onClick={goToPrev}
-                aria-label="Imagen anterior"
-            >
-                <Icon name="fa-chevron-left" />
-            </button>
-            <button 
-                className="carousel-arrow carousel-arrow-next" 
-                onClick={goToNext}
-                aria-label="Siguiente imagen"
-            >
-                <Icon name="fa-chevron-right" />
-            </button>
-
             {/* Progress Bar */}
             <div className="carousel-progress-track">
                 <div 
                     className="carousel-progress-bar"
                     style={{ animationPlayState: paused ? 'paused' : 'running' }}
                 />
-            </div>
-
-            {/* Navigation Dots */}
-            <div className="carousel-dots">
-                {carouselImages.map((_, i) => (
-                    <button
-                        key={i}
-                        className={`carousel-dot ${i === active ? 'active' : ''}`}
-                        onClick={() => handleDotClick(i)}
-                        aria-label={`Ir a imagen ${i + 1}`}
-                    >
-                        <span className="dot-inner" />
-                        {i === active && <span className="dot-pulse" />}
-                    </button>
-                ))}
             </div>
 
             {/* Caption */}

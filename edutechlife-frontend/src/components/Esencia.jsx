@@ -162,25 +162,12 @@ const Esencia = memo(() => {
                                 ))}
                             </div>
 
-                            {/* Content */}
+                                {/* Content */}
                             <div className="absolute inset-0 flex flex-col justify-end p-8">
                                 <div className="max-w-lg">
-                                    <h3 className="text-xl md:text-2xl font-normal text-white mb-3">
+                                    <h3 className="text-xl md:text-2xl font-normal text-white">
                                         {slides[currentSlide].title}
                                     </h3>
-                                </div>
-
-                                {/* Indicators */}
-                                <div className="flex items-center gap-2 mt-6">
-                                    {slides.map((_, index) => (
-                                        <button
-                                            key={index}
-                                            onClick={() => setCurrentSlide(index)}
-                                            className={`h-1 rounded-full transition-all duration-500 ${
-                                                index === currentSlide ? 'w-8 bg-[#4DA8C4]' : 'w-4 bg-white/40 hover:bg-white/60'
-                                            }`}
-                                        />
-                                    ))}
                                 </div>
                             </div>
 

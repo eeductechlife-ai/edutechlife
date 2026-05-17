@@ -13,10 +13,12 @@ const handleResponse = async (response) => {
   return response.json();
 };
 
+// Helper para detectar errores de aborto y manejarlos silenciosamente
+const isAbortError = (error) => error?.name === 'AbortError';
+
 // Servicio de Templates
 export const ialabTemplatesService = {
-  // Guardar un nuevo template
-  saveTemplate: async (templateData) => {
+  saveTemplate: async (templateData, signal) => {
     try {
       const response = await fetch(`${API_BASE_URL}/ialab/templates`, {
         method: 'POST',
@@ -24,35 +26,33 @@ export const ialabTemplatesService = {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(templateData),
+        signal,
       });
-      
       return handleResponse(response);
     } catch (error) {
+      if (isAbortError(error)) return;
       console.error('Error saving template:', error);
       throw error;
     }
   },
 
-  // Obtener templates de un usuario
-  getUserTemplates: async (userId, filters = {}) => {
+  getUserTemplates: async (userId, filters = {}, signal) => {
     try {
       const queryParams = new URLSearchParams();
       if (filters.category) queryParams.append('category', filters.category);
       if (filters.difficulty) queryParams.append('difficulty', filters.difficulty);
-      
       const queryString = queryParams.toString();
       const url = `${API_BASE_URL}/ialab/templates/${userId}${queryString ? `?${queryString}` : ''}`;
-      
-      const response = await fetch(url);
+      const response = await fetch(url, { signal });
       return handleResponse(response);
     } catch (error) {
+      if (isAbortError(error)) return;
       console.error('Error fetching user templates:', error);
       throw error;
     }
   },
 
-  // Actualizar un template existente
-  updateTemplate: async (templateId, templateData) => {
+  updateTemplate: async (templateId, templateData, signal) => {
     try {
       const response = await fetch(`${API_BASE_URL}/ialab/templates/${templateId}`, {
         method: 'PUT',
@@ -60,24 +60,25 @@ export const ialabTemplatesService = {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(templateData),
+        signal,
       });
-      
       return handleResponse(response);
     } catch (error) {
+      if (isAbortError(error)) return;
       console.error('Error updating template:', error);
       throw error;
     }
   },
 
-  // Eliminar un template
-  deleteTemplate: async (templateId) => {
+  deleteTemplate: async (templateId, signal) => {
     try {
       const response = await fetch(`${API_BASE_URL}/ialab/templates/${templateId}`, {
         method: 'DELETE',
+        signal,
       });
-      
       return handleResponse(response);
     } catch (error) {
+      if (isAbortError(error)) return;
       console.error('Error deleting template:', error);
       throw error;
     }
@@ -86,8 +87,7 @@ export const ialabTemplatesService = {
 
 // Servicio de Evaluación de Prompts
 export const ialabEvaluationService = {
-  // Evaluar un prompt automáticamente
-  evaluatePrompt: async (prompt, criteria) => {
+  evaluatePrompt: async (prompt, criteria, signal) => {
     try {
       const response = await fetch(`${API_BASE_URL}/ialab/evaluate-prompt`, {
         method: 'POST',
@@ -95,17 +95,17 @@ export const ialabEvaluationService = {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ prompt, criteria }),
+        signal,
       });
-      
       return handleResponse(response);
     } catch (error) {
+      if (isAbortError(error)) return;
       console.error('Error evaluating prompt:', error);
       throw error;
     }
   },
 
-  // Evaluar prompt con criterios específicos de IALab
-  evaluatePromptWithIALabCriteria: async (prompt) => {
+  evaluatePromptWithIALabCriteria: async (prompt, signal) => {
     const ialabCriteria = {
       clarity: 'Clarity and specificity for AI understanding',
       structure: 'Logical structure and flow',
@@ -115,49 +115,42 @@ export const ialabEvaluationService = {
       creativity: 'Innovative approach to prompt design',
       reusability: 'Potential for reuse in different contexts'
     };
-
-    return ialabEvaluationService.evaluatePrompt(prompt, ialabCriteria);
+    return ialabEvaluationService.evaluatePrompt(prompt, ialabCriteria, signal);
   }
 };
 
 // Servicio de Recursos del Curso
 export const ialabResourcesService = {
-  // Obtener recursos del curso
-  getResources: async (filters = {}) => {
+  getResources: async (filters = {}, signal) => {
     try {
       const queryParams = new URLSearchParams();
       if (filters.moduleId) queryParams.append('moduleId', filters.moduleId);
       if (filters.resourceType) queryParams.append('resourceType', filters.resourceType);
-      
       const queryString = queryParams.toString();
       const url = `${API_BASE_URL}/ialab/resources${queryString ? `?${queryString}` : ''}`;
-      
-      const response = await fetch(url);
+      const response = await fetch(url, { signal });
       return handleResponse(response);
     } catch (error) {
+      if (isAbortError(error)) return;
       console.error('Error fetching resources:', error);
       throw error;
     }
   },
 
-  // Obtener recursos por módulo
-  getResourcesByModule: async (moduleId) => {
-    return ialabResourcesService.getResources({ moduleId });
+  getResourcesByModule: async (moduleId, signal) => {
+    return ialabResourcesService.getResources({ moduleId }, signal);
   },
 
-  // Obtener recursos por tipo
-  getResourcesByType: async (resourceType) => {
-    return ialabResourcesService.getResources({ resourceType });
+  getResourcesByType: async (resourceType, signal) => {
+    return ialabResourcesService.getResources({ resourceType }, signal);
   },
 
-  // Descargar un recurso
-  downloadResource: async (resourceUrl) => {
+  downloadResource: async (resourceUrl, signal) => {
     try {
-      const response = await fetch(resourceUrl);
+      const response = await fetch(resourceUrl, { signal });
       if (!response.ok) {
         throw new Error(`Failed to download resource: ${response.status}`);
       }
-      
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -167,9 +160,9 @@ export const ialabResourcesService = {
       a.click();
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
-      
       return { success: true, message: 'Resource downloaded successfully' };
     } catch (error) {
+      if (isAbortError(error)) return;
       console.error('Error downloading resource:', error);
       throw error;
     }
@@ -178,8 +171,7 @@ export const ialabResourcesService = {
 
 // Servicio de Progreso del Curso
 export const ialabProgressService = {
-  // Guardar progreso del usuario
-  saveProgress: async (progressData) => {
+  saveProgress: async (progressData, signal) => {
     try {
       const response = await fetch(`${API_BASE_URL}/ialab/progress`, {
         method: 'POST',
@@ -187,28 +179,28 @@ export const ialabProgressService = {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(progressData),
+        signal,
       });
-      
       return handleResponse(response);
     } catch (error) {
+      if (isAbortError(error)) return;
       console.error('Error saving progress:', error);
       throw error;
     }
   },
 
-  // Obtener progreso del usuario
-  getProgress: async (userId) => {
+  getProgress: async (userId, signal) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/ialab/progress/${userId}`);
+      const response = await fetch(`${API_BASE_URL}/ialab/progress/${userId}`, { signal });
       return handleResponse(response);
     } catch (error) {
+      if (isAbortError(error)) return;
       console.error('Error fetching progress:', error);
       throw error;
     }
   },
 
-  // Actualizar progreso de un módulo
-  updateModuleProgress: async (userId, moduleId, completed, score) => {
+  updateModuleProgress: async (userId, moduleId, completed, score, signal) => {
     const progressData = {
       userId,
       moduleId,
@@ -216,15 +208,13 @@ export const ialabProgressService = {
       score: score || 0,
       timestamp: new Date().toISOString()
     };
-
-    return ialabProgressService.saveProgress(progressData);
+    return ialabProgressService.saveProgress(progressData, signal);
   }
 };
 
 // Servicio de Generación de Prompts
 export const ialabPromptService = {
-  // Generar prompt especializado
-  generatePrompt: async (templateType, parameters) => {
+  generatePrompt: async (templateType, parameters, signal) => {
     try {
       const response = await fetch(`${API_BASE_URL}/ialab/prompts`, {
         method: 'POST',
@@ -232,33 +222,32 @@ export const ialabPromptService = {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ templateType, parameters }),
+        signal,
       });
-      
       return handleResponse(response);
     } catch (error) {
+      if (isAbortError(error)) return;
       console.error('Error generating prompt:', error);
       throw error;
     }
   },
 
-  // Generar prompt para análisis de mercado
-  generateMarketAnalysisPrompt: async (industry, targetAudience) => {
+  generateMarketAnalysisPrompt: async (industry, targetAudience, signal) => {
     return ialabPromptService.generatePrompt('market_analysis', {
       industry,
       targetAudience,
       depth: 'comprehensive',
       format: 'executive_report'
-    });
+    }, signal);
   },
 
-  // Generar prompt para contenido educativo
-  generateEducationalContentPrompt: async (topic, audience, length) => {
+  generateEducationalContentPrompt: async (topic, audience, length, signal) => {
     return ialabPromptService.generatePrompt('educational_content', {
       topic,
       audience,
       length: length || 'medium',
       tone: 'professional_accessible'
-    });
+    }, signal);
   }
 };
 
@@ -285,7 +274,7 @@ const ialabService = {
 
   // Inicializar servicios
   initialize: () => {
-    console.log('IALab Service initialized');
+
     return {
       userId: ialabService.getCurrentUserId(),
       timestamp: new Date().toISOString()

@@ -96,7 +96,7 @@ export const AuthProvider = ({ children }) => {
             if (error) {
               console.warn('Profile sync warning:', error.message);
             } else {
-              console.log('Profile synced to Supabase:', clerkUser.id);
+
             }
           }
         } catch (err) {
@@ -173,7 +173,7 @@ export const AuthProvider = ({ children }) => {
         'ialab_sync_queue'
       ];
       progressKeys.forEach(key => localStorage.removeItem(key));
-      console.log('🧹 Progreso local limpiado al cerrar sesión');
+
     } catch (err) {
       console.error('Error signing out:', err);
       setError(err.message);

@@ -633,7 +633,6 @@ export const createProgressService = (db) => {
           .is('resource_id', null)
           .is('activity_type', null);
 
-        console.log(`[Progreso] Recurso visto: ${resourceId} en módulo ${moduleId} (${count}/${totalRes})`);
         return { success: true, data, viewedCount: count, totalResources: totalRes };
       } catch (err) {
         console.error('Error saving resource viewed:', err);
@@ -672,7 +671,6 @@ export const createProgressService = (db) => {
 
         if (error) throw error;
 
-        console.log(`[Progreso] Examen módulo ${moduleId}: ${score}% ${passed ? '(Aprobado)' : '(Reprobado)'}`);
         return { success: true, data, passed };
       } catch (err) {
         console.error('Error saving exam progress:', err);
@@ -710,7 +708,7 @@ export const createProgressService = (db) => {
           .maybeSingle();
 
         if (error) throw error;
-        console.log(`[Progreso] Desafío módulo ${moduleId}: ${score}%`);
+
         return { success: true, data };
       } catch (err) {
         console.error('Error saving challenge progress:', err);
@@ -748,7 +746,7 @@ export const createProgressService = (db) => {
           .maybeSingle();
 
         if (error) throw error;
-        console.log(`[Progreso] Comunidad módulo ${moduleId}: comentario registrado`);
+
         return { success: true, data };
       } catch (err) {
         console.error('Error saving community progress:', err);
@@ -795,8 +793,6 @@ export const createProgressService = (db) => {
         
         const earned = examEarned + challengeEarned + resourcesPct + communityEarned;
 
-        console.log(`[PROGRESS] Módulo ${moduleId}: exam=${examEarned}(score:${examScore}), challenge=${challengeEarned}(score:${challengeScore}), resources=${resourcesViewed}/${totalResources}=${resourcesPct}, community=${communityEarned}, total=${Math.min(100, Math.round(earned))}`);
-
         return {
           moduleId: numericModuleId,
           exam: { passed: examPassed, score: examScore, weight: 35, earned: examEarned },
@@ -828,7 +824,7 @@ export const createProgressService = (db) => {
         }
 
         const result = Math.min(100, Math.round(totalProgress));
-        console.log(`[PROGRESS] Global: ${result}% (${moduleResults.join(', ')})`);
+
         return result;
       } catch (err) {
         const msg = err?.message || err?.toString() || 'Unknown error';

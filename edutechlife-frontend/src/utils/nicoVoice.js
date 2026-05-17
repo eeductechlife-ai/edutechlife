@@ -148,7 +148,7 @@ export class NicoVoiceSystem {
     ];
     
     await this.audioCache.preloadTexts(commonPhrases, 'nico_premium');
-    console.log('✅ Frases comunes pre-cargadas en cache de audio');
+
   }
 
   async speak(text, options = {}) {
@@ -268,7 +268,7 @@ let globalVoiceSystem = null;
 export function getVoiceSystem() {
   if (!globalVoiceSystem) {
     globalVoiceSystem = new NicoVoiceSystem();
-    console.log('🎵 Sistema de voz Nico inicializado');
+
   }
   return globalVoiceSystem;
 }

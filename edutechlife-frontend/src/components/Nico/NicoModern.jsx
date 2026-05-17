@@ -730,7 +730,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
     const initializeServices = async () => {
       try {
         // Servicios inicializados correctamente
-        console.log('Servicios de Nico inicializados');
+
       } catch (error) {
         console.error('Error inicializando servicios:', error);
       }
@@ -788,7 +788,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
   const sendNewLeadNotification = (leadData) => {
     // Solo enviar email si hay dirección de correo
     if (leadData.email) {
-      console.log('📧 Simulando email de bienvenida para:', leadData.email);
+
       // En un sistema real, aquí se llamaría al servicio de email
     }
   };
@@ -796,14 +796,8 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
   // Función para enviar confirmación de cita por email (simulada)
   const sendAppointmentEmailConfirmation = async (appointmentData) => {
     try {
-      console.log('📧 Email de confirmación simulado para:', appointmentData.leadName);
-      console.log('Detalles de la cita:', {
-        fecha: appointmentData.date,
-        hora: appointmentData.time,
-        modalidad: appointmentData.modality,
-        duracion: appointmentData.duration,
-        tema: appointmentData.topic || 'Consulta general'
-      });
+
+
     } catch (error) {
       console.error('❌ Error en simulación de email:', error);
     }
@@ -955,8 +949,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       
       if (isPositive) {
         // Mostrar scheduler de citas
-        console.log('📅 Usuario quiere agendar cita');
-        
+
         // Buscar datos del lead más reciente
         const recentLead = messages.find(msg => msg.isLeadSuccess);
         let leadData = {};
@@ -979,7 +972,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
         
       } else if (isNegative) {
         // Respuesta negativa - continuar conversación normalmente
-        console.log('📅 Usuario no quiere agendar cita ahora');
+
         // Continuar con flujo normal
       }
     }
@@ -1111,8 +1104,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
   // Función para guardar lead desde el formulario
   const handleSaveLead = async (leadData) => {
     try {
-      console.log('💾 Guardando lead:', leadData);
-      
+
       // Crear lead en el sistema de gestión
       const leadId = saveLead({
         nombre: leadData.nombreCompleto,
@@ -1138,12 +1130,6 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       sendNewLeadNotification(leadData);
 
       // Track lead capture (simplified)
-      console.log('Lead captured:', {
-        nombreCompleto: leadData.nombreCompleto,
-        telefono: leadData.telefono,
-        email: leadData.email,
-        interesPrincipal: leadData.interesPrincipal || 'Interés general'
-      });
 
       // Agregar mensaje de confirmación al chat
       const successMessage = {
@@ -1188,8 +1174,6 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
         );
       }
 
-      console.log('✅ Lead guardado exitosamente con ID:', leadId);
-      
       // Guardar datos del lead para posible agendamiento
       const leadForScheduling = {
         id: leadId,
@@ -1217,8 +1201,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
   // Función para manejar agendamiento de citas
   const handleScheduleAppointment = async (appointmentData) => {
     try {
-      console.log('📅 Agendando cita:', appointmentData);
-      
+
       // Agendar la cita
       const appointment = scheduleAppointment(appointmentData);
       
@@ -1234,17 +1217,8 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       }, 5000);
       
       // Track appointment scheduling (simplified)
-      console.log('Appointment scheduled:', {
-        id: appointment.id,
-        leadName: appointmentData.leadName,
-        date: appointmentData.date,
-        time: appointmentData.time,
-        modality: appointmentData.modality,
-        duration: appointmentData.duration,
-        topic: appointmentData.topic || 'Consulta general'
-      });
+
         // Appointment scheduled successfully
-        console.log('Appointment metrics updated');
 
       // Agregar mensaje de confirmación al chat
       const successMessage = {
@@ -1265,8 +1239,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
           setAudioPermissionError
         );
       }
-      
-      console.log('✅ Cita agendada exitosamente:', appointment.id);
+
       return appointment;
       
     } catch (error) {
@@ -1292,8 +1265,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       onResult: (fullText, finalText, hasFinal) => {
         // Escribir cada palabra detectada directamente en el textarea
         setMessage(fullText);
-        console.log('🎤 STT: Texto detectado:', fullText);
-        
+
         // Mostrar texto interino si no es final
         if (!hasFinal) {
           // Extraer solo la parte interina (lo nuevo desde el último texto final)
@@ -1355,7 +1327,12 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
     }
 
     if (!recognition) {
-      console.error('Speech recognition not available');
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: '🔇 El reconocimiento de voz no está disponible en este navegador. Prueba con Chrome o Safari.',
+        timestamp: new Date().toISOString(),
+        isError: true
+      }]);
       return;
     }
 
@@ -1409,13 +1386,13 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
     const textToSpeak = removeEmojis(lastAssistantMessage.content);
     
     if (!textToSpeak || textToSpeak.trim() === '') {
-      console.log('🔇 Texto vacío, omitiendo voz');
+
       setIsSpeaking(false);
       return;
     }
     
     try {
-      console.log('🔊 Reproduciendo respuesta...');
+
       speakTextConversational(textToSpeak, 'nico_premium', () => {
         setIsSpeaking(false);
       }, setAudioPermissionError);
@@ -1543,7 +1520,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
     return (
       <button
         onClick={toggleChat}
-        className="fixed bottom-6 right-6 z-50 p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 animate-gentle-pulse"
+        className="fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 animate-gentle-pulse safe-area-bottom flex items-center justify-center"
         style={{ 
           backgroundColor: COLORS.PETROLEUM,
           background: `linear-gradient(135deg, ${COLORS.PETROLEUM} 0%, ${COLORS.CORPORATE} 100%)`
@@ -1657,7 +1634,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
                 className="w-20 h-20 rounded-full flex items-center justify-center mb-4"
                 style={{ backgroundColor: COLORS.CORPORATE }}
               >
-                <Bot className="w-10 h-10 text-white" />
+        <Bot className="w-10 h-10 text-white -mt-1" />
               </div>
                 <h3 className="text-xl font-bold mb-2" style={{ color: COLORS.SOFT_BLUE }}>
                   Nico
@@ -2055,7 +2032,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
                ref={inputRef}
                value={message}
                onChange={(e) => setMessage(e.target.value)}
-               onKeyPress={handleKeyPress}
+                onKeyDown={handleKeyPress}
                placeholder="Escribe tu mensaje aquí..."
                className="flex-1 p-3 rounded-xl resize-none focus:outline-none focus:ring-2 text-sm md:text-base"
                style={{

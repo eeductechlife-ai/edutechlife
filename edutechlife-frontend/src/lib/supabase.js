@@ -6,9 +6,8 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishabl
 
 // Solo mostrar logs en desarrollo
 if (import.meta.env.DEV) {
-  console.log('🔌 Supabase URL:', supabaseUrl);
-  console.log('🔑 Supabase ANON Key:', supabaseAnonKey ? supabaseAnonKey.substring(0, 20) + '...' : 'NO CONFIGURADA');
-  
+
+
   if (!supabaseUrl || !supabaseAnonKey) {
     console.warn(
       '⚠️ Supabase credentials not configured. ' +
@@ -43,18 +42,18 @@ export const createClerkSupabaseClient = (clerkToken = null) => {
   
   if (supabaseClientsCache.has(cacheKey)) {
     if (import.meta.env.DEV) {
-      console.log(`♻️ [Supabase-Cache] Reutilizando cliente: ${cacheKey}`);
-      console.log(`   Cliente #${Array.from(supabaseClientsCache.keys()).indexOf(cacheKey) + 1} de ${supabaseClientsCache.size}`);
+
+
     }
     return supabaseClientsCache.get(cacheKey);
   }
   
   clientCreationCount++;
   if (import.meta.env.DEV) {
-    console.log(`🆕 [Supabase-Cache] Creando cliente #${clientCreationCount}: ${cacheKey}`);
-    console.log(`   Token presente: ${!!clerkToken}`);
+
+
     if (clerkToken) {
-      console.log(`   Token inicio: ${clerkToken.substring(0, 10)}...`);
+
     }
   }
   
@@ -74,8 +73,7 @@ export const createClerkSupabaseClient = (clerkToken = null) => {
     
     // Log para desarrollo
     if (import.meta.env.DEV) {
-      console.log(`🌐 [Supabase] ${method} ${url.replace(supabaseUrl, '')}`);
-      
+
       // Mostrar headers (sin tokens por seguridad)
       const headersObj = {};
       headers.forEach((value, key) => {
@@ -87,7 +85,7 @@ export const createClerkSupabaseClient = (clerkToken = null) => {
         }
       });
       if (Object.keys(headersObj).length > 0) {
-        console.log('   Headers:', headersObj);
+
       }
     }
     
@@ -106,7 +104,7 @@ export const createClerkSupabaseClient = (clerkToken = null) => {
       } else if (status >= 400) {
         console.warn(`⚠️ [Supabase] ${status} ${statusText}: ${method} ${url.replace(supabaseUrl, '')}`);
       } else if (status === 200 || status === 201) {
-        console.log(`✅ [Supabase] ${status} OK: ${method} ${url.replace(supabaseUrl, '')}`);
+
       }
     }
     
@@ -138,9 +136,9 @@ export const createClerkSupabaseClient = (clerkToken = null) => {
   supabaseClientsCache.set(cacheKey, client);
   
   if (import.meta.env.DEV) {
-    console.log(`✅ [Supabase-Cache] Cliente creado: ${cacheKey}`);
-    console.log(`   Total clientes en cache: ${supabaseClientsCache.size}`);
-    console.log(`   Claves en cache: ${Array.from(supabaseClientsCache.keys()).join(', ')}`);
+
+
+
   }
   
   return client;
@@ -155,7 +153,7 @@ const getSupabaseSingleton = () => {
   if (!globalSupabaseClient) {
     globalSupabaseClient = createClerkSupabaseClient();
     if (import.meta.env.DEV) {
-      console.log('🌍 [Supabase-Singleton] Cliente global creado');
+
     }
   }
   return globalSupabaseClient;
@@ -174,7 +172,7 @@ export const getSupabaseWithClerkSession = async (session) => {
   
   if (!session || !session.getToken) {
     if (import.meta.env.DEV) {
-      console.log('🔓 Usando cliente Supabase base (sin sesión Clerk)');
+
     }
     return supabase;
   }
@@ -189,7 +187,7 @@ export const getSupabaseWithClerkSession = async (session) => {
     }
     
     if (import.meta.env.DEV) {
-      console.log('✅ Creando cliente Supabase con JWT de Clerk');
+
     }
     
     // Crear cliente con token JWT de Clerk
@@ -197,7 +195,7 @@ export const getSupabaseWithClerkSession = async (session) => {
     
   } catch (error) {
     console.error('❌ Error creando cliente Supabase con JWT de Clerk:', error);
-    console.log('🔓 Fallback a cliente base');
+
     return supabase;
   }
 };

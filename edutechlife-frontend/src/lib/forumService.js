@@ -275,10 +275,9 @@ export const getPosts = async ({
 
     // SOLUCIÓN TEMPORAL: Desactivar consulta que causa error 401
     // Esta consulta a forum_posts con count causa error 401 por RLS no configurado
-    console.log('🔇 Consulta count a forum_posts desactivada temporalmente (evitar error 401)');
-    console.log('   Razón: RLS bloqueando acceso anónimo a forum_posts');
-    console.log('   Solución: Ejecutar simple_rls_config.sql en Supabase SQL Editor');
-    
+
+
+
     // Usar valor simulado para desarrollo
     const count = enrichedPosts.length;
     
@@ -948,10 +947,9 @@ export const getForumStats = async () => {
   try {
     // SOLUCIÓN TEMPORAL: Desactivar consultas que causan error 401
     // Estas consultas con count causan error 401 por RLS no configurado
-    console.log('🔇 Consultas de estadísticas desactivadas temporalmente (evitar error 401)');
-    console.log('   Razón: RLS bloqueando acceso anónimo a tablas del foro');
-    console.log('   Solución: Ejecutar simple_rls_config.sql en Supabase SQL Editor');
-    
+
+
+
     // Usar valores simulados para desarrollo
     const postsResult = { status: 'fulfilled', value: { count: 125 } };
     const commentsResult = { status: 'fulfilled', value: { count: 543 } };
@@ -1271,7 +1269,7 @@ export const subscribeToForumUpdates = (onUpdate, onError) => {
     // Suscribirse al canal
     const subscription = channel.subscribe((status) => {
       if (status === 'SUBSCRIBED') {
-        console.log('✅ Suscrito a updates del foro');
+
       } else if (status === 'CHANNEL_ERROR') {
         console.error('❌ Error en canal del foro');
         if (onError) onError(new Error('Channel error'));

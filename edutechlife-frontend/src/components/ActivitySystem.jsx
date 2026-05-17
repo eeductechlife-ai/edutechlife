@@ -62,7 +62,7 @@ const ActivitySystem = ({ moduleId, moduleTitle, challenge, onActivityComplete }
       
       if (submissionFile) {
         // En un sistema real, aquí se subiría el archivo a un servidor
-        console.log('Archivo subido:', submissionFile.name);
+
       }
 
       // Marcar como completada

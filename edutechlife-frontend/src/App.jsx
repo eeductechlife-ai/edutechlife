@@ -50,6 +50,7 @@ import { addToHistory, getHistory, buildContextPrompt, getLeadData, clearSession
 /* Núcleo decursor maneja por CSS nativo - 0ms latencia */
 /* Aura visual con GPU acceleration - siempre visible */
 const CustomCursor = () => {
+    const [isTouchDevice] = useState(() => typeof window !== 'undefined' ? window.matchMedia('(hover: none) and (pointer: coarse)').matches : false);
     const cursorX = useMotionValue(-100);
     const cursorY = useMotionValue(-100);
     
@@ -125,9 +126,11 @@ const CustomCursor = () => {
         };
     }, [scaleTransform]);
 
+    if (isTouchDevice) return null;
+
     return (
         <motion.div
-            className="hidden lg:block fixed inset-0 pointer-events-none z-[9999]"
+            className="fixed inset-0 pointer-events-none z-[9999]"
             style={{ x: cursorXSpring, y: cursorYSpring }}
         >
             <motion.div

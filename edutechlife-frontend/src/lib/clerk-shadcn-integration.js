@@ -80,7 +80,7 @@ export const ClerkUserButtonWithShadcn = ({ showName = false }) => {
   // Este componente sería reemplazado por el real cuando Clerk esté instalado
   return {
     render: () => {
-      console.log('ClerkUserButtonWithShadcn: Componente de placeholder (Clerk no instalado)');
+
       return null;
     }
   };
@@ -92,7 +92,7 @@ export const ClerkUserButtonWithShadcn = ({ showName = false }) => {
 export const ClerkSignInWithShadcn = ({ redirectUrl = '/ialab' }) => {
   return {
     render: () => {
-      console.log('ClerkSignInWithShadcn: Componente de placeholder');
+
       return null;
     }
   };
@@ -104,7 +104,7 @@ export const ClerkSignInWithShadcn = ({ redirectUrl = '/ialab' }) => {
 export const ClerkSignUpWithShadcn = ({ redirectUrl = '/ialab' }) => {
   return {
     render: () => {
-      console.log('ClerkSignUpWithShadcn: Componente de placeholder');
+
       return null;
     }
   };
@@ -116,7 +116,7 @@ export const ClerkSignUpWithShadcn = ({ redirectUrl = '/ialab' }) => {
 export const ClerkUserProfileWithShadcn = () => {
   return {
     render: () => {
-      console.log('ClerkUserProfileWithShadcn: Componente de placeholder');
+
       return null;
     }
   };
@@ -178,8 +178,7 @@ export const applyShadcnThemeToClerk = (clerkInstance) => {
     
     // Aplicar configuración de apariencia
     clerkInstance.__unstable__updateAppearance(appearance);
-    
-    console.log('✅ Tema shadcn aplicado a componentes Clerk');
+
   } catch (error) {
     console.error('Error aplicando tema shadcn a Clerk:', error);
   }
@@ -192,7 +191,7 @@ export const createAuthBridge = () => {
   return {
     // Métodos para migración suave
     syncUser: async (sourceUser, targetSystem) => {
-      console.log(`Sincronizando usuario de ${sourceUser} a ${targetSystem}`);
+
       // Implementación real dependería de las APIs específicas
     },
     

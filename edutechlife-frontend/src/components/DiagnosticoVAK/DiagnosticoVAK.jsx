@@ -8,6 +8,7 @@ import { useStudent } from '../../contexts/StudentContext';
 import useValentinaAgent from '../../hooks/useValentinaAgent';
 import { getQuestionsByAge, getAgeGroupKey } from '../../data/vakQuestions';
 import { VALENTINA_MESSAGES, getAgeGroup } from '../../utils/valentinaMessages';
+import { safeStorage } from '../../utils/storage';
 import './DiagnosticoVAK.css';
 
 // Componente de Confetti
@@ -439,7 +440,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   // Persistencia de datos en localStorage
   useEffect(() => {
     // Cargar datos guardados al iniciar
-    const savedData = localStorage.getItem('edutechlife_vak_progress');
+    const savedData = safeStorage.getItem('edutechlife_vak_progress');
     if (savedData) {
       try {
         const parsed = JSON.parse(savedData);
@@ -456,7 +457,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
           setStartTime(parsed.startTime || null);
         }
       } catch (e) {
-        console.log('No se pudo restaurar el progreso');
+
       }
     }
   }, []);
@@ -475,7 +476,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
       startTime,
       lastUpdate: Date.now()
     };
-    localStorage.setItem('edutechlife_vak_progress', JSON.stringify(progressData));
+    safeStorage.setItem('edutechlife_vak_progress', JSON.stringify(progressData));
     
     // Mostrar indicador de guardado
     if (phase === 'test' || phase === 'calibration') {
@@ -486,7 +487,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
 
   // Limpiar localStorage al completar el test
   const clearProgress = () => {
-    localStorage.removeItem('edutechlife_vak_progress');
+    safeStorage.removeItem('edutechlife_vak_progress');
   };
 
   // Alternar modo de alto contraste
@@ -667,8 +668,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     
     // Verificar que el elemento tenga contenido
     const contentLength = el.innerHTML.length;
-    console.log('Contenido del documento preview - longitud:', contentLength, 'caracteres');
-    
+
     if (!contentLength || contentLength < 100) {
       console.error('El documento preview está vacío o es muy corto');
       setError('El contenido del PDF está vacío. Por favor, recarga la página e intenta de nuevo.');
@@ -676,12 +676,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     }
     
     // Verificar que el diagnóstico tenga los datos necesarios
-    console.log('Diagnóstico para PDF:', { 
-      studentName: diagnosis.studentName, 
-      predominantStyle: diagnosis.predominantStyle,
-      hasStyleDetails: !!diagnosis.styleDetails 
-    });
-    
+
     if (!diagnosis.styleDetails) {
       console.warn('styleDetails falta, recuperando desde STYLE_MAP...');
       const recoveredStyle = STYLE_MAP[diagnosis.predominantStyle];
@@ -711,9 +706,9 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     };
     
     try {
-      console.log('Iniciando generación de PDF...');
+
       await html2pdf().set(opt).from(el).save();
-      console.log('PDF generado exitosamente');
+
     } catch (e) {
       console.error('Error al generar PDF:', e);
       setError(`Error al generar PDF: ${e.message || 'Error desconocido'}`);

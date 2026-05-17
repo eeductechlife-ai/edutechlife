@@ -20,11 +20,25 @@ export default defineConfig({
     }),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
-      manifest: false, // Desactivar manifest automático para evitar errores de iconos
+      includeAssets: ['favicon.svg', 'manifest.json', 'offline.html'],
+      manifest: {
+        name: 'Edutechlife',
+        short_name: 'Edutechlife',
+        description: 'Liderando la Educación del Futuro con Pedagogía e Inteligencia Artificial',
+        start_url: '/',
+        display: 'standalone',
+        background_color: '#ffffff',
+        theme_color: '#004B63',
+        orientation: 'portrait-primary',
+        lang: 'es',
+        icons: [
+          { src: '/favicon.svg', type: 'image/svg+xml', sizes: 'any' }
+        ]
+      },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,webp}'],
         maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
+        navigateFallback: '/offline.html',
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -69,7 +83,6 @@ export default defineConfig({
     minify: 'terser',
     terserOptions: {
       compress: {
-        drop_console: true,
         drop_debugger: true,
         pure_funcs: ['console.log', 'console.info', 'console.debug']
       },

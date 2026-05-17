@@ -42,7 +42,7 @@ const AutomationLeadCapture = () => {
                 <span className="w-1.5 h-1.5 rounded-full bg-[#66CCCC] animate-pulse" />
                 CONSULTORÍA GRATUITA
               </div>
-              <h3 className="text-2xl font-black mb-3">
+              <h3 className="text-2xl font-black mb-3 text-[#4DA8C4]">
                 ¿Listo para Automatizar tu Empresa?
               </h3>
               <p className="text-white/70 text-sm leading-relaxed mb-6">

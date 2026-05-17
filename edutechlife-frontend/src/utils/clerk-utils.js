@@ -33,7 +33,7 @@ export const useClerkAuth = () => {
           if (clerk && clerk.signOut) {
             return await clerk.signOut();
           }
-          console.log('Clerk signOut no disponible');
+
           return { success: true };
         },
         openUserProfile: () => {
@@ -44,25 +44,25 @@ export const useClerkAuth = () => {
           }
           // Fallback: usar mountUserProfile si está disponible
           if (clerk && typeof clerk.mountUserProfile === 'function') {
-            console.log('Usando mountUserProfile');
+
             return;
           }
           // Último recurso: redirigir a configuración de cuenta
-          console.log('Redirigiendo a configuración de cuenta Clerk');
+
           window.open('https://accounts.clerk.com', '_blank');
         },
         redirectToSignIn: () => {
           if (clerk && clerk.redirectToSignIn) {
             return clerk.redirectToSignIn();
           }
-          console.log('Clerk redirectToSignIn no disponible');
+
           window.location.href = '/sign-in';
         },
         redirectToSignUp: () => {
           if (clerk && clerk.redirectToSignUp) {
             return clerk.redirectToSignUp();
           }
-          console.log('Clerk redirectToSignUp no disponible');
+
           window.location.href = '/sign-up';
         },
         // Nuevo método para obtener JWT para Supabase
@@ -87,8 +87,9 @@ export const useClerkAuth = () => {
     console.warn('Error al usar Clerk hooks:', error.message);
   }
   
-  // Si Clerk no está disponible, lanzar error
-  throw new Error('Clerk no está disponible. Asegúrate de que ClerkProvider esté configurado correctamente.');
+  // Si Clerk no está disponible, retornar valores por defecto
+  console.warn('Clerk no está disponible, usando valores por defecto');
+  return { user: null, isSignedIn: false, signOut: () => {}, openUserProfile: () => {} };
 };
 
 /**

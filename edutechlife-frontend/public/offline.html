@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#004B63" />
+  <title>Edutechlife — Sin Conexión</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100dvh;
+      padding: 2rem;
+    }
+    .container { text-align: center; max-width: 400px; }
+    .logo {
+      width: 80px; height: 80px;
+      background: linear-gradient(135deg, #004B63, #00BCD4);
+      border-radius: 20px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 2rem; font-weight: 800; color: white;
+    }
+    h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    p { color: #64748b; line-height: 1.5; margin-bottom: 2rem; }
+    .retry-btn {
+      padding: 0.75rem 2rem;
+      background: linear-gradient(135deg, #004B63, #00BCD4);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .retry-btn:active { transform: scale(0.97); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">E</div>
+    <h1>Sin Conexión</h1>
+    <p>Parece que no tienes conexión a internet en este momento. Vuelve a intentarlo cuando estés conectado.</p>
+    <button class="retry-btn" onclick="window.location.reload()">Reintentar</button>
+  </div>
+</body>
+</html>

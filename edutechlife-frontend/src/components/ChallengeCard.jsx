@@ -281,7 +281,7 @@ const ChallengeCard = ({
                             `}
                             onClick={onRetryChallenge || (() => {
                                 if (confirm('¿Deseas realizar una versión avanzada de este desafío? Tu progreso anterior se conservará como referencia.')) {
-                                    console.log('Desafío avanzado iniciado');
+
                                 }
                             })}
                             onTouchStart={handleTouchOptimization}

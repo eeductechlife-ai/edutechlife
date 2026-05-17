@@ -50,12 +50,6 @@ const AutomationHero = ({ onStartDiagnosis, onViewCases }) => {
           transition={{ duration: 0.6 }}
           className="text-center"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#004B63]/5 border border-[#004B63]/10 rounded-full mb-6">
-            <span className="w-2 h-2 rounded-full bg-[#4DA8C4] animate-pulse" />
-            <span className="text-xs font-semibold text-[#004B63] tracking-widest uppercase">
-              Automatización Empresarial con IA
-            </span>
-          </div>
 
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#004B63] leading-tight mb-4">
             Transforma tu Empresa con{' '}

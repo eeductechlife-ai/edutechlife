@@ -10,9 +10,7 @@ const SignUpPage = ({ onBack }) => {
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
   const returnTo = searchParams.get('returnTo') || '/auth-router';
-  
-  console.log('🔀 SignUpPage: returnTo:', returnTo);
-  
+
   const handleBackToLogin = () => {
     // Navegar a /login con el parámetro returnTo
     navigate(`/login?returnTo=${encodeURIComponent(returnTo)}`);

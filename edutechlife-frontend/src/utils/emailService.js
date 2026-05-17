@@ -329,12 +329,6 @@ class EmailService {
       };
 
       this.sentEmails.push(emailRecord);
-      
-      console.log(`📧 Email simulado enviado a ${to}:`, {
-        subject,
-        template: templateName,
-        emailId: emailRecord.id
-      });
 
       // Simular delay de envío
       await new Promise(resolve => setTimeout(resolve, 500));
@@ -525,7 +519,7 @@ class EmailService {
   // Limpiar emails simulados (para testing)
   clearSentEmails() {
     this.sentEmails = [];
-    console.log('📧 Emails simulados limpiados');
+
   }
 }
 

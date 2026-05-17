@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useAuth } from '../../context/AuthContext';
 import { useIALabContext } from '../../context/IALabContext';
@@ -16,6 +16,7 @@ const IALabForumOptimized = ({
     const { user } = useAuth();
     const { activeMod } = useIALabContext();
     const { trackCommunityComment } = useIALabProgress();
+    const prefersReducedMotion = useReducedMotion();
     const {
         forumPosts,
         isLoading,
@@ -34,6 +35,9 @@ const IALabForumOptimized = ({
     const [newMessage, setNewMessage] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showLiveIndicator, setShowLiveIndicator] = useState(true);
+    const [isMobile, setIsMobile] = useState(() =>
+      typeof window !== 'undefined' ? window.matchMedia('(max-width: 767px)').matches : false
+    );
     const messagesEndRef = useRef(null);
     const messagesContainerRef = useRef(null);
 
@@ -47,6 +51,13 @@ const IALabForumOptimized = ({
             setVisiblePosts(postsToShow);
         }
     }, [forumPosts, showAll, initialLimit]);
+
+    useEffect(() => {
+      const mq = window.matchMedia('(max-width: 767px)');
+      const handler = (e) => setIsMobile(e.matches);
+      mq.addEventListener('change', handler);
+      return () => mq.removeEventListener('change', handler);
+    }, []);
 
     useEffect(() => {
         if (messagesEndRef.current && !isLoading) {
@@ -134,11 +145,11 @@ const IALabForumOptimized = ({
 
     return (
         <motion.div
-            whileHover={{ scale: 1.02, y: -4, boxShadow: "0px 8px 25px rgba(17,17,26,0.1)" }}
+            whileHover={prefersReducedMotion ? {} : { scale: 1.02, y: -4, boxShadow: "0px 8px 25px rgba(17,17,26,0.1)" }}
             transition={{ duration: 0.2 }}
             className={cn(
                 "relative z-10 bg-white rounded-2xl shadow-[0px_4px_16px_rgba(17,17,26,0.05)] border border-slate-100",
-                "flex flex-col overflow-hidden",
+                "flex flex-col",
                 compact ? "h-96" : "h-fit",
                 className
             )}
@@ -237,7 +248,7 @@ const IALabForumOptimized = ({
                     "px-4 md:px-6 py-4",
                     "scrollbar-thin"
                 )}
-                style={{ maxHeight: typeof window !== 'undefined' && window.innerWidth < 768 ? '50vh' : '400px' }}
+                style={{ maxHeight: isMobile ? '50dvh' : '400px' }}
             >
                 {isLoading ? (
                     <div className="flex items-center justify-center h-full">

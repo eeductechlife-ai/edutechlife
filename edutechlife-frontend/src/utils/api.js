@@ -55,7 +55,6 @@ export async function callDeepseek(p, systemPrompt = null, isJson = false) {
     };
 
     // Log mínimo para velocidad
-    console.log('📤 API request:', p.substring(0, 50) + '...');
 
     try {
         const controller = new AbortController();

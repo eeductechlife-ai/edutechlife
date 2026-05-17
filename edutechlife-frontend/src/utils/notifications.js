@@ -29,7 +29,7 @@ class NotificationService {
       this.notificationSound = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==');
       
       this.initialized = true;
-      console.log('✅ Servicio de notificaciones inicializado');
+
       return true;
 
     } catch (error) {
@@ -119,7 +119,7 @@ class NotificationService {
       onClick: () => {
         // Enfocar la ventana y mostrar detalles de la cita
         window.focus();
-        console.log('📅 Notificación de cita clickeada:', appointment.id);
+
       }
     });
   }
@@ -163,7 +163,7 @@ class NotificationService {
       },
       onClick: () => {
         window.focus();
-        console.log('👤 Notificación de lead clickeada:', lead.id);
+
       }
     });
   }
@@ -185,7 +185,7 @@ class NotificationService {
       },
       onClick: () => {
         window.focus();
-        console.log('💬 Notificación de mensaje clickeada');
+
       }
     });
   }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Icon } from '../utils/iconMapping.jsx';
 
 const socialLinks = [
@@ -74,18 +74,18 @@ export default function Footer() {
 
   return (
     <>
-      <footer className="relative w-full z-50 mt-auto" style={{ backgroundColor: '#004B63' }}>
+      <footer className="relative w-full z-50 mt-auto bg-gradient-to-b from-[#004B63] to-[#003d52]">
       
       {/* Contenido Principal */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:pt-6 lg:pb-3">
         
         {/* Grid Principal */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 lg:mb-2">
           
           {/* Columna 1 - Brand & Social */}
           <div className="lg:col-span-1">
             {/* Logo */}
-            <div className="mb-3">
+            <div className="mb-3 lg:mb-3">
               <img 
                 src="/images/logo-edutechlife.webp" 
                 alt="Edutechlife" 
@@ -96,12 +96,12 @@ export default function Footer() {
             </div>
             
             {/* Descripción */}
-            <p className="text-sm leading-relaxed mb-5" style={{ color: 'rgba(255, 255, 255, 0.85)' }}>
+            <p className="text-sm leading-relaxed mb-5 lg:mb-2" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
               Transformando la educación con inteligencia artificial y metodologías pedagógicas de vanguardia para el futuro digital.
             </p>
             
             {/* Social Icons */}
-            <div className="flex gap-3">
+            <div className="flex gap-3 lg:gap-2">
               {socialLinks.map((social, index) => (
                 <a
                   key={index}
@@ -109,21 +109,13 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label}
-                  className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110"
+                  className="w-10 h-10 lg:w-8 lg:h-8 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-[#4DA8C4] hover:scale-110 hover:shadow-lg hover:shadow-[#4DA8C4]/30"
                   style={{
                     backgroundColor: 'rgba(255, 255, 255, 0.15)',
                     color: '#FFFFFF',
                   }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#4DA8C4';
-                    e.currentTarget.style.transform = 'scale(1.1)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.15)';
-                    e.currentTarget.style.transform = 'scale(1)';
-                  }}
                 >
-                  <Icon name={social.icon} className="text-base" style={{ color: '#FFFFFF' }} />
+                  <Icon name={social.icon} className="text-base lg:text-sm" style={{ color: '#FFFFFF' }} />
                 </a>
               ))}
             </div>
@@ -131,18 +123,15 @@ export default function Footer() {
 
           {/* Columna 2 - Herramientas */}
           <div>
-            <h4 
-              className="text-sm font-semibold uppercase tracking-wider mb-4 pb-2"
-              style={{ color: '#4DA8C4', borderBottom: '2px solid #4DA8C4' }}
-            >
+            <h4 className="text-sm font-semibold uppercase tracking-wider text-white mb-4">
               Herramientas
             </h4>
-            <ul className="space-y-2.5">
+            <ul className="space-y-2.5 lg:space-y-0">
               {toolLinks.map((item, index) => (
                 <li key={index}>
                   <button 
                     onClick={() => navigateTo(item.view)}
-                    className="flex items-center gap-2 group w-full text-left text-sm transition-all duration-200"
+                    className="flex items-center gap-2 group w-full text-left text-sm transition-all duration-200 lg:hover:text-[#4DA8C4] lg:hover:translate-x-0.5 lg:py-0.5"
                     style={{ 
                       color: 'rgba(255, 255, 255, 0.9)',
                       background: 'transparent',
@@ -151,14 +140,6 @@ export default function Footer() {
                       padding: '0',
                       boxShadow: 'none',
                       fontFamily: 'inherit',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.color = '#4DA8C4';
-                      e.currentTarget.style.paddingLeft = '4px';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.color = 'rgba(255, 255, 255, 0.9)';
-                      e.currentTarget.style.paddingLeft = '0';
                     }}
                   >
                     <Icon name="fa-chevron-right" className="text-xs" style={{ color: '#4DA8C4' }} />
@@ -171,18 +152,15 @@ export default function Footer() {
 
           {/* Columna 3 - Recursos */}
           <div>
-            <h4 
-              className="text-sm font-semibold uppercase tracking-wider mb-4 pb-2"
-              style={{ color: '#4DA8C4', borderBottom: '2px solid #4DA8C4' }}
-            >
+            <h4 className="text-sm font-semibold uppercase tracking-wider text-white mb-4">
               Recursos
             </h4>
-            <ul className="space-y-2.5">
+            <ul className="space-y-2.5 lg:space-y-0">
               {resourceLinks.map((item, index) => (
                 <li key={index}>
                   <button 
                     onClick={() => handleResourceClick(item)}
-                    className="flex items-center gap-2 group w-full text-left text-sm transition-all duration-200"
+                    className="flex items-center gap-2 group w-full text-left text-sm transition-all duration-200 lg:hover:text-[#4DA8C4] lg:hover:translate-x-0.5 lg:py-0.5"
                     style={{ 
                       color: 'rgba(255, 255, 255, 0.9)',
                       background: 'transparent',
@@ -191,14 +169,6 @@ export default function Footer() {
                       padding: '0',
                       boxShadow: 'none',
                       fontFamily: 'inherit',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.color = '#4DA8C4';
-                      e.currentTarget.style.paddingLeft = '4px';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.color = 'rgba(255, 255, 255, 0.9)';
-                      e.currentTarget.style.paddingLeft = '0';
                     }}
                   >
                     <Icon name="fa-chevron-right" className="text-xs" style={{ color: '#4DA8C4' }} />
@@ -212,12 +182,12 @@ export default function Footer() {
           {/* Columna 4 - Newsletter */}
           <div>
             <h4 
-              className="text-base font-bold mb-3"
+              className="text-base font-bold mb-3 lg:mb-2"
               style={{ color: '#FFFFFF' }}
             >
               Newsletter
             </h4>
-            <p className="text-sm mb-4" style={{ color: 'rgba(255, 255, 255, 0.85)' }}>
+            <p className="text-sm mb-4 lg:mb-2" style={{ color: 'rgba(255, 255, 255, 0.85)' }}>
               Recibe novedades educativas y actualizaciones de la plataforma.
             </p>
             
@@ -242,24 +212,18 @@ export default function Footer() {
               </div>
             ) : (
               /* Formulario de suscripción */
-              <form onSubmit={handleSubscribe} className="space-y-3">
-                <div className="relative">
+              <form onSubmit={handleSubscribe} className="flex items-center gap-2">
+                <div className="relative flex-1">
                   <input
                     type="email"
                     value={email}
                     onChange={handleEmailChange}
                     placeholder="tu@email.com"
-                    className="w-full px-4 py-3 rounded-xl text-sm transition-all duration-200 focus:outline-none"
+                    className="w-full px-4 h-11 rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent"
                     style={{
                       backgroundColor: '#FFFFFF',
                       color: '#374151',
                       border: '2px solid transparent',
-                    }}
-                    onFocus={(e) => {
-                      e.target.style.borderColor = '#4DA8C4';
-                    }}
-                    onBlur={(e) => {
-                      e.target.style.borderColor = 'transparent';
                     }}
                   />
                   {emailError && (
@@ -271,19 +235,11 @@ export default function Footer() {
                 
                 <button
                   type="submit"
-                  className="w-full py-3 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2"
+                  className="w-full lg:w-auto lg:px-4 lg:shrink-0 h-11 rounded-lg font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-[#4DA8C4]/50 hover:-translate-y-0.5"
                   style={{
                     background: 'linear-gradient(to right, #004B63, #4DA8C4)',
                     color: '#FFFFFF',
                     boxShadow: '0 4px 15px rgba(77, 168, 196, 0.3)',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.boxShadow = '0 6px 20px rgba(77, 168, 196, 0.5)';
-                    e.currentTarget.style.transform = 'translateY(-2px)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.boxShadow = '0 4px 15px rgba(77, 168, 196, 0.3)';
-                    e.currentTarget.style.transform = 'translateY(0)';
                   }}
                 >
                   <span style={{ color: '#FFFFFF' }}>Suscribirme</span>
@@ -296,40 +252,32 @@ export default function Footer() {
 
         {/* Divisor */}
         <div 
-          className="h-px w-full mb-4"
+          className="h-px w-full mb-4 lg:mb-1.5"
           style={{
             backgroundColor: 'rgba(255, 255, 255, 0.2)',
           }}
         />
 
         {/* Bottom Bar */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-3">
-            <div 
-              className="w-2.5 h-2.5 rounded-full"
-              style={{ backgroundColor: '#4DA8C4' }}
-            />
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 lg:gap-2">
+          <div className="flex items-center gap-3 lg:gap-2">
             <p className="text-sm" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
               © 2026 Edutechlife Premium. Todos los derechos reservados.
             </p>
           </div>
           
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-1.5 lg:gap-2">
               {legalLinks.map((item, index) => (
-                <button
-                  key={index}
-                  onClick={() => openModal(item.action)}
-                  className="text-sm transition-all duration-200 hover:underline"
-                  style={{ color: 'rgba(255, 255, 255, 0.8)', background: 'none', border: 'none', padding: 0 }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.color = '#4DA8C4';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)';
-                  }}
-                >
-                  {item.label}
-                </button>
+                <React.Fragment key={index}>
+                  {index > 0 && <span className="text-xs" style={{ color: 'rgba(255, 255, 255, 0.3)' }}>•</span>}
+                  <button
+                    onClick={() => openModal(item.action)}
+                    className="text-sm transition-all duration-200 lg:hover:text-[#4DA8C4]"
+                    style={{ color: 'rgba(255, 255, 255, 0.8)', background: 'none', border: 'none', padding: 0 }}
+                  >
+                    {item.label}
+                  </button>
+                </React.Fragment>
               ))}
           </div>
         </div>
