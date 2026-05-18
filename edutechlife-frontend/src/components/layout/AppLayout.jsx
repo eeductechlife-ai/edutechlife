@@ -92,7 +92,7 @@ const AppLayout = () => {
   
   // Renderizar header condicionalmente basado en la ruta actual
   const shouldShowHeader = () => {
-    if (location.pathname.includes('/ialab') || location.pathname === '/login' || location.pathname.includes('/vak')) {
+    if (location.pathname.includes('/ialab') || location.pathname === '/login' || location.pathname.includes('/vak') || location.pathname.includes('/smartboard')) {
       return false;
     }
     return true;
@@ -285,8 +285,8 @@ const AppLayout = () => {
           </header>
         )}
 
-      {/* Floating hamburger for routes without header (except /ialab which has its own) */}
-      {!shouldShowHeader() && !location.pathname.includes('/ialab') && (
+      {/* Floating hamburger for routes without header (except /ialab and /smartboard which have their own) */}
+      {!shouldShowHeader() && !location.pathname.includes('/ialab') && !location.pathname.includes('/smartboard') && (
         <button 
           onClick={() => setMobileMenuOpen(true)}
           className="fixed bottom-6 right-6 z-[999] md:hidden p-3 text-white bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] rounded-full shadow-lg hover:shadow-xl transition-all safe-area-bottom focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#004B63]/50"

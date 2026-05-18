@@ -64,6 +64,14 @@ const VOICE_PROFILES = {
     speakingRate: 1.0,
     volumeGainDb: 2.0,
     effectsProfileId: ['telephony-class-application']
+  },
+  dani: {
+    languageCode: 'es-US',
+    name: 'es-US-Journey-F',
+    pitch: 0,
+    speakingRate: 0.9,
+    volumeGainDb: 2.5,
+    effectsProfileId: ['telephony-class-application']
   }
 };
 
@@ -103,6 +111,12 @@ const VOICE_FALLBACKS = {
     { languageCode: 'es-US', name: 'es-US-Journey-F', pitch: 0, speakingRate: 1.0 },
     { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: 0, speakingRate: 1.1 },
     { languageCode: 'es-ES', name: 'es-ES-Neural2-A', pitch: 0, speakingRate: 1.0 }
+  ],
+  dani: [
+    { languageCode: 'es-US', name: 'es-US-Journey-F', pitch: 0, speakingRate: 0.9 },
+    { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: 0, speakingRate: 0.95 },
+    { languageCode: 'es-CO', name: 'es-CO-Standard-A', pitch: 0, speakingRate: 0.9 },
+    { languageCode: 'es-ES', name: 'es-ES-Neural2-A', pitch: 0, speakingRate: 0.9 }
   ]
 };
 

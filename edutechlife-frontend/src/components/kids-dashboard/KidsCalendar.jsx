@@ -123,7 +123,7 @@ EventModal.displayName = 'EventModal';
 // ==========================================
 // Calendar Day Component
 // ==========================================
-const CalendarDay = memo(({ day, events, isToday, isSelected, isCurrentMonth, onClick }) => {
+const CalendarDay = memo(({ day, events, isToday, isSelected, isCurrentMonth, onClick, selectedDate }) => {
   const dayEvents = events.filter(e => {
     const eventDate = new Date(e.date);
     return eventDate.getDate() === day && 

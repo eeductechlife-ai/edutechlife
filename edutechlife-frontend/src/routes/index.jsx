@@ -26,6 +26,8 @@ const VAKDiagnosisPage = lazy(() => import('../components/pages/VAKDiagnosisPage
 const IALabDashboardPage = lazy(() => import('../components/pages/IALabDashboardPage'));
 const SmartBoardStatsPage = lazy(() => import('../components/pages/SmartBoardStatsPage'));
 const IALabProLandingPage = lazy(() => import('../components/pages/IALabProLandingPage'));
+const SmartBoardInfoPage = lazy(() => import('../components/pages/SmartBoardInfoPage'));
+const SmartBoardParentDashboard = lazy(() => import('../components/pages/SmartBoardParentDashboard'));
 
 // Componente wrapper para IALabSignUpPage que maneja navegación
 const IALabSignUpPageWrapper = () => {
@@ -162,10 +164,24 @@ const AppRoutes = () => {
         } />
         <Route path="ialab-pro" element={<Navigate to="/ialab-academic" replace />} />
         
+        {/* SmartBoard Landing Informativa - Página para padres */}
+        <Route path="conoce-smartboard" element={
+          <Suspense fallback={<PageLoader message="Cargando SmartBoard..." />}>
+            <SmartBoardInfoPage />
+          </Suspense>
+        } />
+
         {/* SmartBoard Kids Dashboard - Dashboard para niños 8-16 años */}
         <Route path="smartboard" element={
           <Suspense fallback={<PageLoader message="Cargando SmartBoard Kids..." />}>
             <SmartBoardLandingPage />
+          </Suspense>
+        } />
+        
+        {/* SmartBoard Parent Dashboard - Panel para padres */}
+        <Route path="smartboard/padres" element={
+          <Suspense fallback={<PageLoader message="Cargando Panel de Padres..." />}>
+            <SmartBoardParentDashboard />
           </Suspense>
         } />
         

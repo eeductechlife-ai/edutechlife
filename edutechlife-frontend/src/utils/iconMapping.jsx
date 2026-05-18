@@ -177,9 +177,11 @@ import {
     Book,
     MousePointerClick,
     List,
-    Gauge,
-    Pencil,
-    Camera
+     Gauge,
+     Pencil,
+     Camera,
+     UserPlus,
+     Smile
 } from 'lucide-react';
 
 // Mapping of Font Awesome class names to Lucide components
@@ -338,10 +340,13 @@ export const faToLucideMap = {
   // Phase 2: ActivityHistory missing icons
   'fa-book': Book,
   'fa-file-image': FileImage,
-  'fa-hand-pointer': MousePointerClick,
-  'fa-list': List,
-  'fa-tachometer-alt': Gauge,
-  };
+   'fa-hand-pointer': MousePointerClick,
+   'fa-list': List,
+   'fa-tachometer-alt': Gauge,
+   'fa-user-plus': UserPlus,
+   'fa-quote-left': Quote,
+   'fa-face-smile': Smile,
+   };
 
 // Helper function to get Lucide component from Font Awesome class name
 export function getLucideIcon(faClassName) {

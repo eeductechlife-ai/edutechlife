@@ -34,7 +34,8 @@ const RoleProtectedRoute = ({ children, requiredRole }) => {
   }
   
   // 3. Verificación de rol (con salvoconducto para ialab)
-  const userRole = user.publicMetadata?.role || 'ialab';
+  // Prioridad: publicMetadata.role > unsafeMetadata.user_type (set by Clerk SignUp metadata prop) > default
+  const userRole = user.publicMetadata?.role || user.unsafeMetadata?.user_type || 'ialab';
   
   // Salvoconducto IA Lab - cualquier usuario autenticado puede acceder
   if (requiredRole === 'ialab') {

@@ -188,6 +188,7 @@ const CustomCursor = () => {
 const App = () => {
     const location = useLocation();
     const isIALabRoute = location.pathname.includes('/ialab');
+    const isSmartBoardRoute = location.pathname.includes('/smartboard');
     const { user, isLoaded } = useAuth();
     const [isLoading, setIsLoading] = useState(true);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -735,8 +736,8 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                     onClose={() => setShowContactModal(false)}
                 />
                 
-                {/* Nico Premium Widget - oculto en IALab */}
-                {!isIALabRoute && <NicoModern />}
+                {/* Nico Premium Widget - oculto en IALab y SmartBoard */}
+                {!isIALabRoute && !isSmartBoardRoute && <NicoModern />}
             </div>
         </StudentProvider>
     );

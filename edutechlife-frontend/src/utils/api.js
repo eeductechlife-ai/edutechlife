@@ -1,3 +1,5 @@
+import { PROMPT_ANALIZAR_DOCUMENTO } from '../constants/prompts';
+
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://edutechlife-backend.onrender.com';
 
 const TIMEOUT_MS = 10000; // 10 segundos timeout
@@ -35,26 +37,44 @@ async function fetchWithRetry(url, options, retries = 2) {
     }
 }
 
-export async function callDeepseek(p, systemPrompt = null, isJson = false) {
+export async function callDeepseek(messagesOrPrompt, systemPromptOrOpts = null, legacyIsJson = false) {
     const url = `${API_BASE_URL}/api/chat`;
     
-    const defaultPrompt = `Eres NICO, asistente de EdutechLife. Responde de forma clara y concisa.
+    let payload;
+    
+    // New format: callDeepseek([{role, content}], { isJson, temperature, maxTokens })
+    if (Array.isArray(messagesOrPrompt)) {
+        const messages = messagesOrPrompt;
+        const opts = (typeof systemPromptOrOpts === 'object' && systemPromptOrOpts !== null)
+            ? systemPromptOrOpts : {};
+        payload = { 
+            messages,
+            isJson: opts.isJson ?? legacyIsJson,
+            temperature: opts.temperature ?? 0.7,
+            maxTokens: opts.maxTokens ?? 800,
+            model: opts.model,
+        };
+    } else {
+        // Legacy format: callDeepseek(prompt, systemPrompt, isJson)
+        const promptText = messagesOrPrompt;
+        const systemPrompt = systemPromptOrOpts || `Eres NICO, asistente de EdutechLife. Responde de forma clara y concisa.
     - Saluda brevemente si es primera vez
     - Explica servicios educativos de forma simple: VAK (estilos de aprendizaje), STEM, tutorías, bienestar
     - Pregunta nombre si no lo sabes
     - Si hay interés, captura: nombre, teléfono, interés principal
     - Ofrece clase gratuita si hay interés
     - Sé natural en español, respuestas cortas pero completas`;
-    
-    const prompt = systemPrompt || defaultPrompt;
-    
-    const payload = { 
-        prompt: p, 
-        systemPrompt: prompt, 
-        isJson 
-    };
-
-    // Log mínimo para velocidad
+        
+        payload = { 
+            messages: [
+                { role: 'system', content: systemPrompt },
+                { role: 'user', content: promptText },
+            ],
+            isJson: legacyIsJson,
+            temperature: 0.5,
+            maxTokens: 500,
+        };
+    }
 
     try {
         const controller = new AbortController();
@@ -84,10 +104,10 @@ export async function callDeepseek(p, systemPrompt = null, isJson = false) {
             throw new Error(data.error.message || 'API returned an error');
         }
         
-        const result = isJson ? JSON.parse(data.result.replace(/```json|```/g, '').trim()) : data.result;
+        const result = payload.isJson ? JSON.parse(data.result.replace(/```json|```/g, '').trim()) : data.result;
         
-        // Simplificar respuesta si es muy larga
-        if (!isJson && result.length > 500) {
+        // Simplificar respuesta si es muy larga (only legacy format)
+        if (!Array.isArray(messagesOrPrompt) && !payload.isJson && result.length > 500) {
             return result.substring(0, 500) + '... ¿Te gustaría que profundice en algo?';
         }
         
@@ -98,14 +118,44 @@ export async function callDeepseek(p, systemPrompt = null, isJson = false) {
     }
 }
 
-export async function callDeepseekStream(p, systemPrompt, isJson = false, onChunk) {
+export async function callDeepseekStream(messagesOrPrompt, systemPromptOrOpts = null, legacyIsJson = false, onChunk) {
     const url = `${API_BASE_URL}/api/chat/stream`;
-    const payload = { 
-        prompt: p, 
-        systemPrompt, 
-        isJson 
-    };
+    
+    let payload;
+    
+    // New format: callDeepseekStream([{role, content}], opts, onChunk)
+    if (Array.isArray(messagesOrPrompt)) {
+        const messages = messagesOrPrompt;
+        const opts = (typeof systemPromptOrOpts === 'object' && systemPromptOrOpts !== null)
+            ? systemPromptOrOpts : {};
+        payload = { 
+            messages,
+            isJson: opts.isJson ?? legacyIsJson,
+            temperature: opts.temperature ?? 0.7,
+            maxTokens: opts.maxTokens ?? 800,
+            model: opts.model,
+        };
+        // onChunk might be the third arg if opts was null
+        const chunkCb = (typeof systemPromptOrOpts === 'function') ? systemPromptOrOpts : onChunk;
+        return streamFetch(url, payload, chunkCb, opts.isJson ?? legacyIsJson);
+    } else {
+        // Legacy format: callDeepseekStream(prompt, systemPrompt, isJson, onChunk)
+        const promptText = messagesOrPrompt;
+        const systemPrompt = systemPromptOrOpts || null;
+        payload = { 
+            messages: [
+                { role: 'system', content: systemPrompt || 'Eres un asistente útil.' },
+                { role: 'user', content: promptText },
+            ],
+            isJson: legacyIsJson,
+            temperature: 0.75,
+            maxTokens: 1200,
+        };
+        return streamFetch(url, payload, onChunk, legacyIsJson);
+    }
+}
 
+async function streamFetch(url, payload, onChunk, isJson) {
     return new Promise((resolve, reject) => {
         fetch(url, { 
             method: 'POST', 
@@ -167,6 +217,21 @@ export async function callDeepseekStream(p, systemPrompt, isJson = false, onChun
             reject(err);
         });
     });
+}
+
+export async function analyzeDocumentText(text, fileName, subject) {
+  const messages = [
+    { role: 'system', content: PROMPT_ANALIZAR_DOCUMENTO },
+    { role: 'user', content: `Analiza el siguiente documento académico.\n\nNombre del archivo: ${fileName}\nMateria: ${subject || 'No especificada'}\n\nContenido extraído:\n${text.substring(0, 4000)}` },
+  ];
+
+  const result = await callDeepseek(messages, {
+    temperature: 0.3,
+    maxTokens: 1000,
+    isJson: true,
+  });
+
+  return result;
 }
 
 

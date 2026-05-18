@@ -149,7 +149,7 @@ const Hero = memo(() => {
                     >
                         {/* Primary CTA */}
                         <MagneticButton 
-                            onClick={() => navigate('/ialab')}
+                            onClick={() => navigate('/conoce-smartboard')}
                             className="group relative overflow-hidden flex items-center justify-center gap-3 px-8 sm:px-12 py-4 rounded-full text-base sm:text-lg font-bold bg-[#4DA8C4] text-white shadow-lg hover:bg-[#004B63] hover:-translate-y-1 transition-all duration-300"
                         >
                             <span className="absolute inset-0 w-[150%] h-full -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-[sweep_1.5s_ease-in-out_infinite] skew-x-[-20deg]" />

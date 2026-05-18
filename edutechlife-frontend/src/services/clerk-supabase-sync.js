@@ -17,13 +17,13 @@ export const syncUserWithSupabase = async (clerkUser) => {
 
 
 
-    // Simular sincronización exitosa para desarrollo
+    const role = clerkUser.publicMetadata?.role || 'student';
 
     return {
       id: clerkUser.id,
       full_name: clerkUser.fullName || 'Usuario Demo',
       email: clerkUser.emailAddresses?.[0]?.emailAddress || 'demo@edutechlife.com',
-      role: 'student',
+      role,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       simulated: true
@@ -102,13 +102,15 @@ const extractClerkUserData = (clerkUser) => {
   // Si no hay fullName pero hay firstName y lastName, construirlo
   const resolvedFullName = fullName || (firstName && lastName ? `${firstName} ${lastName}` : firstName || lastName || '');
 
+  const role = clerkUser.publicMetadata?.role || 'student';
+
   return {
     email,
     full_name: resolvedFullName,
     first_name: firstName,
     last_name: lastName,
     avatar_url: clerkUser.imageUrl || null,
-    role: 'student', // Rol por defecto
+    role,
     phone: '', // Phone no disponible en Clerk por defecto
     plain_password: null, // No almacenar contraseñas en texto plano
     user_count: null, // Contador específico de Supabase

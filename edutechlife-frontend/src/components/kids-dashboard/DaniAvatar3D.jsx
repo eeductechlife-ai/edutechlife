@@ -47,7 +47,7 @@ const moodConfig = {
   },
 };
 
-const DaniAvatar3D = memo(({ mood = 'happy', isTyping = false, size = 'lg' }) => {
+const DaniAvatar3D = memo(({ mood = 'happy', isTyping = false, isSpeaking = false, size = 'lg' }) => {
   const [isHovered, setIsHovered] = useState(false);
   const config = moodConfig[mood] || moodConfig.happy;
 
@@ -133,6 +133,33 @@ const DaniAvatar3D = memo(({ mood = 'happy', isTyping = false, size = 'lg' }) =>
               ✨
             </motion.span>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Speaking Indicator — Audio Waves */}
+      <AnimatePresence>
+        {isSpeaking && (
+          <>
+            {[0, 1, 2].map((i) => (
+              <motion.div
+                key={`wave-${i}`}
+                initial={{ scale: 0.8, opacity: 0.6 }}
+                animate={{
+                  scale: [1, 1.6 + i * 0.3, 1],
+                  opacity: [0.5, 0, 0.5],
+                }}
+                exit={{ scale: 0, opacity: 0 }}
+                transition={{
+                  duration: 1.2,
+                  repeat: Infinity,
+                  delay: i * 0.25,
+                  ease: 'easeInOut',
+                }}
+                className="absolute inset-0 rounded-full border-2 border-[#66CCCC] z-0"
+                style={{ boxShadow: '0 0 15px rgba(102, 204, 204, 0.4)' }}
+              />
+            ))}
+          </>
         )}
       </AnimatePresence>
 
