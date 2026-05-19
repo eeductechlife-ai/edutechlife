@@ -432,7 +432,20 @@ export const useIALabStore = create((set, get) => ({
       if (activity === 'exam' && typeof score === 'number') {
         newCompletedExams[moduleId] = score;
       }
-      return { moduleProgress: newProgress, completedExams: newCompletedExams };
+      // Recalcular courseProgress desde moduleProgress
+      let total = 0;
+      for (let i = 1; i <= 5; i++) {
+        const m = newProgress[i];
+        if (m) {
+          let ms = 0;
+          ms += m.examEarned || (m.exam ? WEIGHTS.exam : 0);
+          ms += m.challengeEarned || (m.challenge ? WEIGHTS.challenge : 0);
+          if (m.resourcesCompleted) ms += WEIGHTS.resources;
+          if (m.community) ms += WEIGHTS.community;
+          total += (Math.min(100, Math.round(ms * 10) / 10) / 100) * 20;
+        }
+      }
+      return { moduleProgress: newProgress, completedExams: newCompletedExams, courseProgress: Math.min(100, Math.round(total)) };
     });
 
     // Persistir completedExams inmediatamente a localStorage
@@ -471,7 +484,20 @@ export const useIALabStore = create((set, get) => ({
       if (moduleId < 5 && updated.currentScore >= 80) {
         newProgress[moduleId + 1] = { ...newProgress[moduleId + 1], isUnlocked: true };
       }
-      return { moduleProgress: newProgress };
+      // Recalcular courseProgress
+      let total = 0;
+      for (let i = 1; i <= 5; i++) {
+        const m = newProgress[i];
+        if (m) {
+          let ms = 0;
+          ms += m.examEarned || (m.exam ? WEIGHTS.exam : 0);
+          ms += m.challengeEarned || (m.challenge ? WEIGHTS.challenge : 0);
+          if (m.resourcesCompleted) ms += WEIGHTS.resources;
+          if (m.community) ms += WEIGHTS.community;
+          total += (Math.min(100, Math.round(ms * 10) / 10) / 100) * 20;
+        }
+      }
+      return { moduleProgress: newProgress, courseProgress: Math.min(100, Math.round(total)) };
     });
   },
 
@@ -491,7 +517,20 @@ export const useIALabStore = create((set, get) => ({
       if (moduleId < 5 && updated.currentScore >= 80) {
         newProgress[moduleId + 1] = { ...newProgress[moduleId + 1], isUnlocked: true };
       }
-      return { moduleProgress: newProgress };
+      // Recalcular courseProgress
+      let total = 0;
+      for (let i = 1; i <= 5; i++) {
+        const m = newProgress[i];
+        if (m) {
+          let ms = 0;
+          ms += m.examEarned || (m.exam ? WEIGHTS.exam : 0);
+          ms += m.challengeEarned || (m.challenge ? WEIGHTS.challenge : 0);
+          if (m.resourcesCompleted) ms += WEIGHTS.resources;
+          if (m.community) ms += WEIGHTS.community;
+          total += (Math.min(100, Math.round(ms * 10) / 10) / 100) * 20;
+        }
+      }
+      return { moduleProgress: newProgress, courseProgress: Math.min(100, Math.round(total)) };
     });
   },
 

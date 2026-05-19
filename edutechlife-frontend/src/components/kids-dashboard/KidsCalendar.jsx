@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback, memo } from 'react';
 import { motion } from 'framer-motion';
+import useFocusTrap from '../../hooks/useFocusTrap';
 import { useSmartBoardKids } from '../../context/SmartBoardKidsContext';
 
 // ==========================================
@@ -39,6 +40,8 @@ const EventModal = memo(({ isOpen, onClose, onSave, selectedDate }) => {
     onClose();
   };
 
+  const focusTrapRef = useFocusTrap(isOpen);
+
   if (!isOpen) return null;
 
   return (
@@ -46,7 +49,13 @@ const EventModal = memo(({ isOpen, onClose, onSave, selectedDate }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+      style={{ overscrollBehavior: 'contain' }}
+      ref={focusTrapRef}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Nueva actividad"
       onClick={onClose}
+      onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }}
     >
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
@@ -134,7 +143,7 @@ const CalendarDay = memo(({ day, events, isToday, isSelected, isCurrentMonth, on
   return (
     <motion.button
       onClick={() => onClick(day)}
-      className={`relative w-full aspect-square rounded-xl flex flex-col items-center justify-center text-sm transition-all ${
+      className={`relative w-full min-h-[44px] rounded-xl flex flex-col items-center justify-center text-sm transition-all ${
         !isCurrentMonth ? 'opacity-30' : ''
       } ${
         isSelected ? 'bg-[#4DA8C4] text-white font-bold shadow-lg' : 
@@ -143,6 +152,7 @@ const CalendarDay = memo(({ day, events, isToday, isSelected, isCurrentMonth, on
       }`}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
+      aria-label={`${day} de ${MONTHS[selectedDate?.getMonth() || 0]}`}
     >
       <span className="text-xs font-medium">{day}</span>
       {dayEvents.length > 0 && (
@@ -242,7 +252,8 @@ const KidsCalendar = memo(() => {
       <div className="flex items-center justify-between mb-6">
         <button
           onClick={handlePrevMonth}
-          className="w-10 h-10 rounded-full bg-[#F8FAFC] flex items-center justify-center hover:bg-[#4DA8C4]/10 transition-colors"
+          aria-label="Mes anterior"
+          className="w-11 h-11 rounded-full bg-[#F8FAFC] flex items-center justify-center hover:bg-[#4DA8C4]/10 transition-colors"
         >
           ←
         </button>
@@ -251,7 +262,8 @@ const KidsCalendar = memo(() => {
         </h3>
         <button
           onClick={handleNextMonth}
-          className="w-10 h-10 rounded-full bg-[#F8FAFC] flex items-center justify-center hover:bg-[#4DA8C4]/10 transition-colors"
+          aria-label="Mes siguiente"
+          className="w-11 h-11 rounded-full bg-[#F8FAFC] flex items-center justify-center hover:bg-[#4DA8C4]/10 transition-colors"
         >
           →
         </button>
@@ -270,7 +282,7 @@ const KidsCalendar = memo(() => {
       <div className="grid grid-cols-7 gap-2">
         {calendarDays.map((dayObj, index) => (
           <CalendarDay
-            key={index}
+            key={`${year}-${month}-${dayObj.day}-${dayObj.isCurrentMonth}`}
             day={dayObj.day}
             events={calendarEvents}
             isToday={isToday(dayObj.day)}

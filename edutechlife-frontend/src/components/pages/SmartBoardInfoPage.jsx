@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PageLoader } from '../LoadingScreen';
+import Footer from '../Footer';
 
 // Lazy load del componente SmartBoard Landing Info
 const SmartBoardLandingInfo = lazy(() => import('../SmartBoardLandingInfo'));
@@ -23,9 +24,12 @@ const SmartBoardInfoPage = () => {
   };
 
   return (
-    <Suspense fallback={<PageLoader message="Cargando SmartBoard..." />}>
-      <SmartBoardLandingInfo onBack={handleBack} onNavigate={handleNavigate} />
-    </Suspense>
+    <>
+      <Suspense fallback={<PageLoader message="Cargando SmartBoard..." />}>
+        <SmartBoardLandingInfo onBack={handleBack} onNavigate={handleNavigate} />
+      </Suspense>
+      <Footer />
+    </>
   );
 };
 

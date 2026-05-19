@@ -14,43 +14,25 @@ import { supabase } from '../lib/supabase';
  */
 export const syncUserWithSupabase = async (clerkUser) => {
   try {
+    if (!clerkUser?.id) {
+      console.warn('syncUserWithSupabase: clerkUser inválido');
+      return null;
+    }
 
-
-
-    const role = clerkUser.publicMetadata?.role || 'student';
-
-    return {
-      id: clerkUser.id,
-      full_name: clerkUser.fullName || 'Usuario Demo',
-      email: clerkUser.emailAddresses?.[0]?.emailAddress || 'demo@edutechlife.com',
-      role,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      simulated: true
-    };
-    
-    /*
-    // CÓDIGO ORIGINAL (descomentar cuando RLS esté configurado):
-
-    // Extraer datos del usuario Clerk
     const userData = extractClerkUserData(clerkUser);
-    
-    // Verificar si el usuario ya existe en Supabase
+
     const { data: existingUser, error: fetchError } = await supabase
       .from('profiles')
       .select('*')
       .eq('id', clerkUser.id)
-      .single();
+      .maybeSingle();
 
     if (fetchError && fetchError.code !== 'PGRST116') {
-      // Error diferente a "no encontrado"
       console.error('Error buscando usuario en Supabase:', fetchError);
       throw fetchError;
     }
 
     if (existingUser) {
-      // Actualizar usuario existente
-
       const { data, error } = await supabase
         .from('profiles')
         .update({
@@ -62,28 +44,22 @@ export const syncUserWithSupabase = async (clerkUser) => {
         .single();
 
       if (error) throw error;
-
       return data;
     } else {
-      // Crear nuevo usuario
-
       const { data, error } = await supabase
         .from('profiles')
         .insert([{
           id: clerkUser.id,
           ...userData,
           created_at: new Date().toISOString(),
-    */
           updated_at: new Date().toISOString(),
         }])
         .select()
         .single();
 
       if (error) throw error;
-
       return data;
     }
-    */
   } catch (error) {
     console.error('Error sincronizando usuario con Supabase:', error);
     throw error;
@@ -169,23 +145,47 @@ export const migrateUsersToClerk = async () => {
  */
 export const verifyConsistency = async (clerkUserId) => {
   try {
+    if (!clerkUserId) {
+      return {
+        clerkUserId: null,
+        existsInClerk: false,
+        existsInSupabase: false,
+        supabaseUser: null,
+        inconsistencies: ['No se proporcionó Clerk user ID'],
+      };
+    }
 
+    const { data: supabaseUser, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', clerkUserId)
+      .maybeSingle();
 
-    // Simular verificación exitosa para desarrollo
+    if (error && error.code !== 'PGRST116') {
+      throw error;
+    }
+
     const consistencyReport = {
       clerkUserId,
       existsInClerk: true,
-      existsInSupabase: true,
-      supabaseUser: {
-        id: clerkUserId,
-        full_name: 'Usuario Demo',
-        email: 'demo@edutechlife.com',
-        role: 'student',
-        simulated: true
-      },
+      existsInSupabase: !!supabaseUser,
+      supabaseUser: supabaseUser || null,
       inconsistencies: [],
-      simulated: true
     };
+
+    if (!supabaseUser) {
+      consistencyReport.inconsistencies.push({
+        type: 'missing_in_supabase',
+        message: 'Usuario existe en Clerk pero no en Supabase',
+      });
+    }
+
+    return consistencyReport;
+  } catch (error) {
+    console.error('Error verificando consistencia:', error);
+    throw error;
+  }
+};
     
     /*
     // CÓDIGO ORIGINAL (descomentar cuando RLS esté configurado):

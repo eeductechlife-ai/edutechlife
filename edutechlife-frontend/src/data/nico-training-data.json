@@ -1,0 +1,215 @@
+{
+  "version": "1.0",
+  "source": "Consolidado de knowledgeBase.js, edutechlifeKnowledge.js, Pricing.jsx, Hero.jsx, AIToolsSection.jsx, EcoSystem.jsx, nicoPrompt.js, nicoCache.js, prompts.js, NicoModern.jsx",
+  "identity": {
+    "name": "Nico",
+    "role": "Asistente virtual oficial de EdutechLife",
+    "tone": "Español latino natural, directo, sin emojis, sin markdown, como llamada telefónica",
+    "company": "EdutechLife"
+  },
+  "company": {
+    "name": "EdutechLife",
+    "tagline": "Liderando la Educación del Futuro",
+    "description": "Plataforma educativa integral que combina STEM (Ciencia, Tecnología, Ingeniería, Matemáticas) con apoyo emocional. Infraestructura cognitiva asistida por inteligencia artificial que se ajusta en tiempo real a la neuro-ergonomía de cada estudiante.",
+    "problem": "Desconexión entre el éxito académico y el bienestar emocional. Muchos niños y adolescentes enfrentan desafíos en aprendizaje y salud mental. EdutechLife proporciona herramientas para mejorar rendimiento académico y fortalecer salud emocional.",
+    "metrics": {
+      "students": "+6,000 estudiantes",
+      "successRate": "90% de éxito",
+      "yearsExperience": "+15 años",
+      "activeUsersGrowth": "50% aumento en últimos 6 meses",
+      "totalStudents": "10,000 estudiantes",
+      "retention": "80% retención",
+      "annualRenewal": "90% renovación anual",
+      "gradeImprovement": "20% aumento en calificaciones matemáticas y ciencias",
+      "parentSatisfaction": "95% padres reportan mejoras en confianza y motivación"
+    },
+    "awards": [
+      "Premio a la Innovación Educativa",
+      "Alianza con Secretaría de Educación local",
+      "CEO invitado como ponente en Conferencia Nacional de Educación"
+    ],
+    "partners": [
+      "Microsoft Education",
+      "Khan Academy",
+      "IBM",
+      "Coursera",
+      "Operadores oficiales SenaTIC"
+    ]
+  },
+  "team": {
+    "ceo": "Juan Pérez - CEO y Fundador, visionario con +15 años en soluciones educativas",
+    "coo": "María Rodríguez - Directiva de Operaciones",
+    "academic": "Luis García - Director de Desarrollo Académico",
+    "cto": "Ana Martínez - Directiva de Innovación Tecnológica",
+    "cx": "Carlos López - Director de Experiencia del Cliente"
+  },
+  "products": [
+    {
+      "id": "ai-lab-academic",
+      "name": "AI Lab Academic",
+      "description": "Entrenamiento de élite con agentes de IA para potenciar productividad y aprendizaje cognitivo. Curso certificado de IA.",
+      "path": "/ialab-academic",
+      "modules": [
+        {"name": "Ingeniería de Prompts", "lessons": 5},
+        {"name": "Potencia ChatGPT", "lessons": 3},
+        {"name": "Rastreo Profundo", "lessons": 0},
+        {"name": "Inmersión NotebookLM", "lessons": 0},
+        {"name": "Proyecto Disruptivo", "lessons": 0}
+      ]
+    },
+    {
+      "id": "vak",
+      "name": "Diagnóstico VAK",
+      "description": "Identificación del estilo de aprendizaje único (Visual, Auditivo, Kinestésico) mediante algoritmos de visión cognitiva y procesamiento de lenguaje natural. Diagnóstico gratuito que toma 10-30 minutos.",
+      "path": "/vak",
+      "styles": {
+        "visual": "Aprende viendo imágenes, gráficos, diagramas. Recomendación: usar colores y mapas mentales.",
+        "auditivo": "Aprende escuchando. Recomendación: grabar notas y escucharlas mientras estudia.",
+        "kinestesico": "Aprende haciendo. Recomendación: pausas activas cada 30 minutos."
+      }
+    },
+    {
+      "id": "smartboard",
+      "name": "SmartBoard",
+      "description": "Dashboard de acompañamiento académico y emocional para estudiantes de 8-16 años. Incluye misiones educativas, seguimiento de progreso, diagnóstico VAK y chat con Valerio AI.",
+      "path": "/smartboard"
+    },
+    {
+      "id": "neuroentorno",
+      "name": "Neuro Entorno",
+      "description": "Entorno de aprendizaje neuro-cognitivo.",
+      "path": "/neuroentorno"
+    },
+    {
+      "id": "automation",
+      "name": "Automatización IA Empresarial",
+      "description": "Centro de Automatización Empresarial con IA. Diagnóstico, ROI y arquitectura alineados con estándares ISO/IEC 42001 y NIST AI RMF.",
+      "path": "/automation"
+    },
+    {
+      "id": "consultoria-b2b",
+      "name": "Consultoría B2B",
+      "description": "Consultoría para instituciones educativas y empresas.",
+      "path": "/consultoria-b2b"
+    },
+    {
+      "id": "proyectos-nacionales",
+      "name": "Proyectos Nacionales",
+      "description": "Proyectos educativos de impacto nacional.",
+      "path": "/proyectos"
+    }
+  ],
+  "services": {
+    "diagnostico_vak": {
+      "name": "Diagnóstico VAK",
+      "description": "Evaluación de estilo de aprendizaje (Visual, Auditivo, Kinestésico). Gratuito. Toma 10-30 minutos. Incluye perfil detallado con recomendaciones personalizadas.",
+      "ages": "5-17 años y adultos"
+    },
+    "stem_steam": {
+      "name": "Programas STEM/STEAM",
+      "description": "Ciencia, Tecnología, Ingeniería, Arte y Matemáticas. Robótica con LEGO y Arduino, programación (Scratch, Python, JavaScript), pensamiento computacional.",
+      "ages": "Niños desde 5 años hasta adolescentes"
+    },
+    "tutoring": {
+      "name": "Tutoría Académica Personalizada",
+      "description": "Matemáticas (todos los niveles), Ciencias (física, química, biología), Inglés (conversacional, gramática, exámenes), técnicas de estudio.",
+      "ages": "Todas las edades"
+    },
+    "bienestar_emocional": {
+      "name": "Bienestar Educativo",
+      "description": "Acompañamiento psicológico escolar, desarrollo de inteligencia emocional, manejo de ansiedad académica, coaching motivacional."
+    },
+    "certificaciones": {
+      "name": "Certificaciones",
+      "description": "Certificaciones en colaboración con IBM y Coursera, reconocidas internacionalmente. Como operadores SenaTIC, certificaciones con validez oficial en Colombia."
+    }
+  },
+  "modalities": {
+    "presencial": "Clases presenciales en Bogotá y otras ciudades con aulas equipadas con tecnología de punta.",
+    "online": "Clases por videollamada desde cualquier lugar. Plataformas interactivas y seguimiento personalizado.",
+    "hibrido": "Combinación de presencial y online. Flexibilidad total manteniendo el contacto humano."
+  },
+  "age_groups": {
+    "kids": {"label": "Niños", "range": "5-11 años"},
+    "teens": {"label": "Adolescentes", "range": "12-17 años"},
+    "adults": {"label": "Adultos", "range": "18+ años"}
+  },
+  "pricing": {
+    "first_class_free": true,
+    "plans": [
+      {
+        "name": "Estudiante",
+        "price": "$99.000/mes COP",
+        "features": [
+          "Diagnóstico VAK incluido",
+          "Plan de estudio personalizado",
+          "Contenido STEAM",
+          "Chat con Valerio (50 mensajes/mes)",
+          "Certificado por módulo completado"
+        ]
+      },
+      {
+        "name": "Educador",
+        "price": "$199.000/mes COP",
+        "features": [
+          "Todo lo de Estudiante",
+          "SmartBoard con IA",
+          "Creación de contenido VAK",
+          "Hasta 100 estudiantes",
+          "Valerio ilimitado",
+          "Reportes de progreso",
+          "Certificaciones IBM y Coursera",
+          "Soporte prioritario"
+        ]
+      },
+      {
+        "name": "Institución",
+        "price": "$499.000/mes COP",
+        "features": [
+          "Todo lo de Educador",
+          "Usuarios ilimitados",
+          "API de agentes personalizados",
+          "Proyectos de impacto nacional",
+          "Consultoría B2B incluida",
+          "Dashboard administrativo",
+          "Integración con sistemas existentes",
+          "Gerente de cuenta dedicado",
+          "SLA de respuesta 24/7"
+        ]
+      }
+    ],
+    "discounts": [
+      "Descuentos para hermanos",
+      "Planes especiales grupos 10+ personas",
+      "Becas para casos especiales",
+      "Descuentos institucionales para colegios y universidades"
+    ],
+    "cancellation": "Cancelación en cualquier momento sin permanencia mínima ni costos. Acceso hasta fin del período pagado."
+  },
+  "schedule": {
+    "weekdays": "Lunes a sábado",
+    "morning": "8:00 am - 12:00 pm",
+    "afternoon": "2:00 pm - 6:00 pm",
+    "evening": "6:00 pm - 8:00 pm"
+  },
+  "contact": {
+    "whatsapp": "+57 300 123 4567",
+    "email": "info@edutechlife.com",
+    "website": "www.edutechlife.com",
+    "socialMedia": "Redes sociales oficiales"
+  },
+  "faq": [
+    {"q": "¿Cómo funciona el Diagnóstico VAK?", "a": "Evalúa tus preferencias de aprendizaje en tres canales: Visual (imágenes y gráficos), Auditivo (sonidos y verbalizaciones) y Kinestésico (experiencias prácticas). Toma 10-30 minutos y proporciona un perfil detallado con recomendaciones personalizadas. Es gratuito."},
+    {"q": "¿Qué es el método STEAM?", "a": "STEAM integra Ciencia, Tecnología, Ingeniería, Artes y Matemáticas. En EdutechLife lo aplicamos con metodologías VAK para crear experiencias de aprendizaje adaptadas a cada estudiante."},
+    {"q": "¿Puedo cancelar en cualquier momento?", "a": "Sí, puedes cancelar tu suscripción en cualquier momento desde tu panel de usuario. No hay permanencia mínima ni costos de cancelación. Mantienes acceso hasta el final del período pagado."},
+    {"q": "¿Las certificaciones son reconocidas internacionalmente?", "a": "Sí, emitimos certificaciones en colaboración con IBM y Coursera reconocidas internacionalmente. Además, como operadores oficiales SenaTIC, nuestras certificaciones tienen validez oficial en Colombia."},
+    {"q": "¿Cómo funciona el coaching con Valerio?", "a": "Valerio es tu coach virtual basado en IA, entrenado con metodologías socráticas y pedagógicas. Puede responder preguntas sobre aprendizaje, analizar documentos, crear planes de estudio y guiarte en tu proceso de aprendizaje."},
+    {"q": "¿Ofrecen descuentos para grupos?", "a": "Sí, tenemos planes especiales para grupos de 10+ personas y descuentos institucionales para colegios y universidades. Contáctanos para una cotización personalizada."},
+    {"q": "¿Qué edades tienen los programas?", "a": "Tenemos programas para Niños (5-11 años), Adolescentes (12-17 años) y Adultos (18+ años). También ofrecemos programas para padres y docentes."},
+    {"q": "¿Qué modalidades tienen?", "a": "Presencial (Bogotá y otras ciudades), Online (videollamada desde cualquier lugar) e Híbrido (combinación de ambas)."},
+    {"q": "¿La primera clase es gratis?", "a": "Sí, la primera clase es completamente gratuita y sin compromiso. Dura 30-45 minutos para que conozcas nuestra metodología."},
+    {"q": "¿Qué es SmartBoard?", "a": "SmartBoard es un dashboard de acompañamiento académico y emocional para estudiantes de 8-16 años con misiones educativas, seguimiento de progreso, diagnóstico VAK y chat con Valerio AI."},
+    {"q": "¿Qué es AI Lab Academic?", "a": "Entrenamiento de élite con agentes de IA para potenciar tu productividad y aprendizaje. Incluye 5 módulos: Ingeniería de Prompts, ChatGPT, Rastreo Profundo, NotebookLM y Proyecto Final."},
+    {"q": "¿Qué es el Neuro Entorno?", "a": "Es un entorno de aprendizaje neuro-cognitivo diseñado para potenciar las capacidades de aprendizaje mediante tecnología adaptativa."}
+  ]
+}

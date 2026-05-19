@@ -5,9 +5,6 @@ import MagneticButton from './MagneticButton';
 import FloatingParticles from './FloatingParticles';
 import { Icon } from '../utils/iconMapping.jsx';
 
-// ==========================================
-// Animated Counter for Stats
-// ==========================================
 const useAnimatedCounter = (target, duration = 2000, start = false) => {
     const [count, setCount] = useState(0);
     const frameRef = useRef(null);
@@ -31,9 +28,6 @@ const useAnimatedCounter = (target, duration = 2000, start = false) => {
     return count;
 };
 
-// ==========================================
-// Hero Component
-// ==========================================
 const Hero = memo(() => {
     const heroRef = useRef(null);
     const statsRef = useRef(null);
@@ -57,56 +51,45 @@ const Hero = memo(() => {
             ref={heroRef} 
             className="relative w-full min-h-[90vh] flex flex-col items-center justify-center overflow-hidden"
         >
-            {/* Floating Particles Background */}
             <FloatingParticles count={45} className="z-0" />
             
-            {/* Ambient Elements - Left */}
-            <div className="absolute top-[15%] left-[10%] w-3 h-3 bg-[#4DA8C4]/15 rounded-full animate-[float-3d_6s_ease-in-out_infinite]" style={{ animationDelay: '-2s' }} />
-            <div className="absolute bottom-[30%] left-[20%] w-2 h-2 bg-[#66CCCC]/12 rounded-full animate-[float-3d_7s_ease-in-out_infinite]" style={{ animationDelay: '-1s' }} />
-            <div className="absolute top-[50%] left-[5%] w-2 h-2 bg-[#B2D8E5]/10 rounded-full animate-[float-3d_8s_ease-in-out_infinite]" style={{ animationDelay: '-3s' }} />
+            <div className="absolute top-[15%] left-[10%] w-3 h-3 bg-primary-light/15 rounded-full animate-[float-3d_6s_ease-in-out_infinite]" style={{ animationDelay: '-2s' }} />
+            <div className="absolute bottom-[30%] left-[20%] w-2 h-2 bg-mint/12 rounded-full animate-[float-3d_7s_ease-in-out_infinite]" style={{ animationDelay: '-1s' }} />
+            <div className="absolute top-[50%] left-[5%] w-2 h-2 bg-soft-blue/10 rounded-full animate-[float-3d_8s_ease-in-out_infinite]" style={{ animationDelay: '-3s' }} />
+            <div className="absolute top-[8%] right-[8%] w-3 h-3 bg-primary-light/15 rounded-full animate-[float-3d_8s_ease-in-out_infinite]" />
+            <div className="absolute top-[20%] right-[5%] w-2 h-2 bg-mint/12 rounded-full animate-[float-3d_10s_ease-in-out_infinite]" />
+            <div className="absolute top-[40%] right-[12%] w-4 h-4 bg-soft-blue/10 rounded-full animate-[float-3d_9s_ease-in-out_infinite]" />
+            <div className="absolute top-[60%] right-[8%] w-3 h-3 bg-primary-light/12 rounded-full animate-[float-3d_7s_ease-in-out_infinite]" />
+            <div className="absolute top-[75%] right-[15%] w-2 h-2 bg-mint/10 rounded-full animate-[float-3d_11s_ease-in-out_infinite]" />
+            <div className="absolute bottom-[20%] right-[10%] w-3 h-3 bg-soft-blue/8 rounded-full animate-[float-3d_8s_ease-in-out_infinite]" />
+            <div className="absolute bottom-[40%] right-[20%] w-2 h-2 bg-primary-light/10 rounded-full animate-[float-3d_9s_ease-in-out_infinite]" />
             
-            {/* Ambient Elements - Right */}
-            <div className="absolute top-[8%] right-[8%] w-3 h-3 bg-[#4DA8C4]/15 rounded-full animate-[float-3d_8s_ease-in-out_infinite]" />
-            <div className="absolute top-[20%] right-[5%] w-2 h-2 bg-[#66CCCC]/12 rounded-full animate-[float-3d_10s_ease-in-out_infinite]" />
-            <div className="absolute top-[40%] right-[12%] w-4 h-4 bg-[#B2D8E5]/10 rounded-full animate-[float-3d_9s_ease-in-out_infinite]" />
-            <div className="absolute top-[60%] right-[8%] w-3 h-3 bg-[#4DA8C4]/12 rounded-full animate-[float-3d_7s_ease-in-out_infinite]" />
-            <div className="absolute top-[75%] right-[15%] w-2 h-2 bg-[#66CCCC]/10 rounded-full animate-[float-3d_11s_ease-in-out_infinite]" />
-            <div className="absolute bottom-[20%] right-[10%] w-3 h-3 bg-[#B2D8E5]/8 rounded-full animate-[float-3d_8s_ease-in-out_infinite]" />
-            <div className="absolute bottom-[40%] right-[20%] w-2 h-2 bg-[#4DA8C4]/10 rounded-full animate-[float-3d_9s_ease-in-out_infinite]" />
+            <div className="absolute top-1/2 right-1/4 w-40 h-40 bg-primary-light/5 rounded-full blur-3xl pointer-events-none" />
             
-            {/* Center Glow */}
-            <div className="absolute top-1/2 right-1/4 w-40 h-40 bg-[#4DA8C4]/5 rounded-full blur-3xl pointer-events-none" />
-            
-            {/* Main Content Container */}
             <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                
-                {/* Hero Content - Centered Layout */}
                 <div className="flex flex-col items-center justify-center text-center">
                     
-                    {/* Title - Corporate Style */}
                     <motion.h1 
                         initial={{ opacity: 0, y: 40 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                        className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#004B63] tracking-tighter leading-[0.9] mb-6 font-montserrat"
+                        className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-petroleum tracking-tighter leading-[0.9] mb-6"
                     >
                         Liderando la<br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4DA8C4] to-[#004B63]">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-petroleum pr-1">
                             Educación del Futuro
                         </span>
                     </motion.h1>
 
-                    {/* Subtitle - Floating Clean */}
                     <motion.p 
                         initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
                         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                         transition={{ duration: 0.8, delay: 0.2 }}
-                        className="text-base sm:text-lg text-[#64748B] leading-relaxed font-normal mb-10 max-w-2xl"
+                        className="text-base sm:text-lg text-slate-500 leading-relaxed font-normal mb-10 max-w-2xl"
                     >
-                        Infraestructura cognitiva asistida por inteligencia artificial. Tu entorno de aprendizaje evoluciona y se ajusta <span className="text-[#004B63] font-semibold">en tiempo real</span> a tu neuro-ergonomía.
+                        Infraestructura cognitiva asistida por inteligencia artificial. Tu entorno de aprendizaje evoluciona y se ajusta <span className="text-petroleum font-semibold">en tiempo real</span> a tu neuro-ergonomía.
                     </motion.p>
 
-                    {/* Stats Row - Clean Floating */}
                     <motion.div 
                         initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
                         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
@@ -115,54 +98,51 @@ const Hero = memo(() => {
                         className="flex flex-wrap justify-center gap-8 sm:gap-12 mb-10"
                     >
                         <div className="text-center">
-                            <div className="text-4xl sm:text-5xl font-black text-[#004B63] font-montserrat tracking-tight mb-1">
+                            <div className="text-4xl sm:text-5xl font-black text-petroleum tracking-tight mb-1">
                                 {countEstudiantes.toLocaleString()}+
                             </div>
-                            <div className="text-xs font-normal text-[#64748B] uppercase tracking-widest">
+                            <div className="text-xs font-normal text-slate-500 uppercase tracking-widest">
                                 Estudiantes
                             </div>
                         </div>
                         <div className="text-center">
-                            <div className="text-4xl sm:text-5xl font-black text-[#4DA8C4] font-montserrat tracking-tight mb-1">
+                            <div className="text-4xl sm:text-5xl font-black text-primary-light tracking-tight mb-1">
                                 {countExito}%
                             </div>
-                            <div className="text-xs font-normal text-[#64748B] uppercase tracking-widest">
+                            <div className="text-xs font-normal text-slate-500 uppercase tracking-widest">
                                 Éxito
                             </div>
                         </div>
                         <div className="text-center">
-                            <div className="text-4xl sm:text-5xl font-black text-[#66CCCC] font-montserrat tracking-tight mb-1">
+                            <div className="text-4xl sm:text-5xl font-black text-mint tracking-tight mb-1">
                                 {countAños}+
                             </div>
-                            <div className="text-xs font-normal text-[#64748B] uppercase tracking-widest">
+                            <div className="text-xs font-normal text-slate-500 uppercase tracking-widest">
                                 Años de experiencia
                             </div>
                         </div>
                     </motion.div>
 
-                    {/* CTA Buttons - Clean Container */}
                     <motion.div 
                         initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
                         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                         transition={{ duration: 0.8, delay: 0.4 }}
                         className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-4"
                     >
-                        {/* Primary CTA */}
                         <MagneticButton 
                             onClick={() => navigate('/conoce-smartboard')}
-                            className="group relative overflow-hidden flex items-center justify-center gap-3 px-8 sm:px-12 py-4 rounded-full text-base sm:text-lg font-bold bg-[#4DA8C4] text-white shadow-lg hover:bg-[#004B63] hover:-translate-y-1 transition-all duration-300"
+                            className="group relative overflow-hidden flex items-center justify-center gap-3 px-8 sm:px-12 py-4 rounded-full text-base sm:text-lg font-bold bg-primary-light text-white shadow-premium-lg hover:bg-petroleum hover:-translate-y-1 transition-all duration-300"
                         >
                             <span className="absolute inset-0 w-[150%] h-full -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-[sweep_1.5s_ease-in-out_infinite] skew-x-[-20deg]" />
                             <span className="text-white relative z-10 font-semibold">Conoce el SmartBoard</span>
                             <Icon name="fa-arrow-right" className="text-white/90 relative z-10" />
                         </MagneticButton>
                         
-                        {/* Secondary CTA - Ghost Style */}
                         <MagneticButton 
                             onClick={() => navigate('/smartboard')}
-                            className="group flex items-center justify-center gap-3 px-8 sm:px-12 py-4 rounded-full text-base sm:text-lg font-bold bg-transparent border-2 border-[#004B63] text-[#004B63] hover:bg-[#004B63] hover:text-white transition-all duration-300"
+                            className="group flex items-center justify-center gap-3 px-8 sm:px-12 py-4 rounded-full text-base sm:text-lg font-bold bg-transparent border-2 border-petroleum text-petroleum hover:bg-petroleum hover:text-white transition-all duration-300"
                         >
-                            <Icon name="fa-chalkboard" className="text-[#004B63] group-hover:text-white transition-colors duration-300" />
+                            <Icon name="fa-chalkboard" className="text-petroleum group-hover:text-white transition-colors duration-300" />
                             <span className="font-semibold">SmartBoard</span>
                         </MagneticButton>
                     </motion.div>

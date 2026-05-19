@@ -40,16 +40,26 @@ const tools = [
     id: 'smartboard',
     name: 'SmartBoard',
     subtitle: 'Dashboard 8-16 Años',
-    path: '/smartboard',
+    path: '/conoce-smartboard',
     icon: 'fa-chalkboard',
     description: 'Plataforma de acompañamiento académico y emocional con Valerio AI.',
-    buttonText: 'Prueba el Dashboard',
+    buttonText: 'Prueba la SmartBoard',
     variant: 'horizontal',
   },
 ];
 
 function AIToolsSection() {
   const navigate = useNavigate();
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 24 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }
+  };
 
   return (
     <section id="herramientas" className="py-20 px-4 md:px-6 bg-white relative overflow-hidden">
@@ -62,10 +72,10 @@ function AIToolsSection() {
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-[#004B63] font-montserrat tracking-tighter mb-3">
-              Herramientas de <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4DA8C4] to-[#004B63]">Élite.</span>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-petroleum tracking-tighter mb-3">
+              Herramientas de <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-petroleum pr-1">Élite</span>
             </h2>
             <p className="text-base text-slate-500 max-w-2xl font-medium">
               Ecosistema de soluciones cognitivas diseñadas para potenciar el aprendizaje mediante IA y Neuro-ciencia.
@@ -74,23 +84,21 @@ function AIToolsSection() {
         </div>
 
         {/* Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-3 gap-6"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
           {/* Card 1: AI Lab Academic (Main Dark) */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0 }}
-            whileHover={{ y: -6 }}
-            className="col-span-1 md:col-span-2 bg-[#004B63] text-white rounded-[2rem] p-8 flex flex-col group hover:shadow-2xl hover:shadow-[#004B63]/20 transition-all duration-500"
-          >
+          <motion.div variants={itemVariants} className="col-span-1 md:col-span-2 card-clay-dark text-white p-8 flex flex-col">
             <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 rounded-xl bg-[#4DA8C4]/20 flex items-center justify-center flex-shrink-0">
-                <Icon name={tools[0].icon} className="text-xl text-[#4DA8C4]" />
+              <div className="w-14 h-14 rounded-xl bg-primary-light/15 flex items-center justify-center flex-shrink-0">
+                <Icon name={tools[0].icon} className="text-2xl text-primary-light" />
               </div>
               <div>
-                <h3 className="text-2xl md:text-3xl font-black text-[#4DA8C4]">{tools[0].name}</h3>
+                <h3 className="text-2xl md:text-3xl font-black text-primary-light">{tools[0].name}</h3>
                 <div className="flex flex-wrap gap-2 mt-1">
                   {tools[0].badges.map((badge) => (
                     <span key={badge} className="px-2.5 py-0.5 rounded-full bg-white/10 text-[10px] text-white font-bold uppercase tracking-wider border border-white/15">{badge}</span>
@@ -103,7 +111,7 @@ function AIToolsSection() {
               <a
                 href={tools[0].path}
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(tools[0].path); }}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#4DA8C4] text-white text-sm font-semibold hover:bg-[#66CCCC] transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary-light text-white text-sm font-semibold hover:bg-mint transition-colors"
               >
                 {tools[0].buttonText}
                 <Icon name="fa-arrow-right" className="text-xs" />
@@ -112,24 +120,17 @@ function AIToolsSection() {
           </motion.div>
 
           {/* Card 2: Automatización */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            whileHover={{ y: -6 }}
-            className="col-span-1 bg-white shadow-sm border border-slate-100 rounded-[2rem] p-8 flex flex-col justify-between group hover:shadow-lg hover:border-slate-200 transition-all duration-500"
-          >
+          <motion.div variants={itemVariants} className="col-span-1 card-clay-white p-8 flex flex-col justify-between">
             <div>
-              <div className="w-12 h-12 rounded-xl bg-[#4DA8C4]/10 flex items-center justify-center mb-5">
-                <Icon name={tools[1].icon} className="text-xl text-[#4DA8C4]" />
+              <div className="w-14 h-14 rounded-xl bg-primary-light/10 flex items-center justify-center mb-5">
+                <Icon name={tools[1].icon} className="text-2xl text-primary-light" />
               </div>
-              <h3 className="text-xl font-black text-[#004B63] mb-2">{tools[1].name}</h3>
+              <h3 className="text-xl font-black text-petroleum mb-2">{tools[1].name}</h3>
               <p className="text-slate-500 text-sm mb-4">{tools[1].description}</p>
               <div className="space-y-2">
                 {tools[1].features.map((feat) => (
                   <div key={feat} className="flex items-center gap-2 text-sm text-slate-600">
-                    <Icon name="fa-check-circle" className="text-[#4DA8C4] text-xs flex-shrink-0" />
+                    <Icon name="fa-check-circle" className="text-primary-light text-xs flex-shrink-0" />
                     <span>{feat}</span>
                   </div>
                 ))}
@@ -139,7 +140,7 @@ function AIToolsSection() {
               <a
                 href={tools[1].path}
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(tools[1].path); }}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200 text-slate-600 text-sm font-semibold hover:border-slate-300 hover:text-slate-800 transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200 text-slate-600 text-sm font-semibold hover:border-primary-light hover:text-primary-light hover:bg-primary-light/5 transition-all"
               >
                 {tools[1].buttonText}
                 <Icon name="fa-arrow-right" className="text-xs" />
@@ -148,27 +149,20 @@ function AIToolsSection() {
           </motion.div>
 
           {/* Card 3: Diagnóstico VAK */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            whileHover={{ y: -6 }}
-            className="col-span-1 bg-white shadow-sm border border-slate-100 rounded-[2rem] p-8 flex flex-col justify-between group hover:shadow-lg hover:border-slate-200 transition-all duration-500"
-          >
+          <motion.div variants={itemVariants} className="col-span-1 card-clay-white p-8 flex flex-col justify-between">
             <div>
-              <div className="w-12 h-12 rounded-xl bg-[#4DA8C4]/10 flex items-center justify-center mb-5">
-                <Icon name={tools[2].icon} className="text-xl text-[#4DA8C4]" />
+              <div className="w-14 h-14 rounded-xl bg-primary-light/10 flex items-center justify-center mb-5">
+                <Icon name={tools[2].icon} className="text-2xl text-primary-light" />
               </div>
-              <h3 className="text-xl font-black text-[#004B63] mb-1">{tools[2].name}</h3>
-              <p className="text-xs text-[#4DA8C4] font-semibold uppercase tracking-wider mb-3">{tools[2].subtitle}</p>
+              <h3 className="text-xl font-black text-petroleum mb-1">{tools[2].name}</h3>
+              <p className="text-xs text-primary-light font-semibold uppercase tracking-wider mb-3">{tools[2].subtitle}</p>
               <p className="text-slate-500 text-sm">{tools[2].description}</p>
             </div>
             <div className="mt-6">
               <a
                 href={tools[2].path}
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(tools[2].path); }}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#004B63] text-white text-sm font-semibold hover:bg-[#4DA8C4] transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-petroleum text-white text-sm font-semibold hover:bg-primary-light transition-all"
               >
                 {tools[2].buttonText}
                 <Icon name="fa-arrow-right" className="text-xs" />
@@ -177,35 +171,28 @@ function AIToolsSection() {
           </motion.div>
 
           {/* Card 4: SmartBoard (Horizontal) */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            whileHover={{ y: -6 }}
-            className="col-span-1 md:col-span-2 bg-[#4DA8C4] text-white rounded-[2rem] p-8 flex flex-col md:flex-row items-center gap-6 group hover:shadow-2xl hover:shadow-[#4DA8C4]/30 transition-all duration-500"
-          >
+          <motion.div variants={itemVariants} className="col-span-1 md:col-span-2 card-clay bg-primary-light/5 p-8 flex flex-col md:flex-row items-center gap-6">
             <div className="flex items-center gap-5 flex-1 min-w-0">
-              <div className="w-16 h-16 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0">
-                <Icon name={tools[3].icon} className="text-3xl text-white" />
+              <div className="w-16 h-16 rounded-xl bg-primary-light/15 flex items-center justify-center flex-shrink-0">
+                <Icon name={tools[3].icon} className="text-3xl text-primary-light" />
               </div>
               <div className="min-w-0">
-                <h3 className="text-2xl md:text-3xl font-black text-white">{tools[3].name}</h3>
-                <p className="text-sm text-white/70 font-semibold uppercase tracking-wider">{tools[3].subtitle}</p>
-                <p className="text-white/80 text-base mt-1.5">{tools[3].description}</p>
+                <h3 className="text-2xl md:text-3xl font-black text-petroleum">{tools[3].name}</h3>
+                <p className="text-xs text-primary-light font-semibold uppercase tracking-wider">{tools[3].subtitle}</p>
+                <p className="text-petroleum/70 text-base mt-1.5">{tools[3].description}</p>
               </div>
             </div>
             <a
               href={tools[3].path}
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(tools[3].path); }}
-              className="flex-shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/25 text-white text-sm font-semibold hover:bg-white/35 transition-colors border border-white/20"
+              className="flex-shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary-light text-white text-sm font-semibold hover:bg-petroleum transition-all border border-primary-light/20"
             >
               {tools[3].buttonText}
               <Icon name="fa-arrow-right" className="text-xs" />
             </a>
           </motion.div>
 
-        </div>
+        </motion.div>
       </div>
     </section>
   );

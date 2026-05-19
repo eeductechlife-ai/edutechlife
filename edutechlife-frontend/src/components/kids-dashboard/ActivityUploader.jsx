@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSmartBoardKids } from '../../context/SmartBoardKidsContext';
+import useFocusTrap from '../../hooks/useFocusTrap';
 import { extractDocumentText, getFileIcon } from '../../utils/documentParser';
 import { analyzeDocumentText } from '../../utils/api';
 
@@ -314,6 +315,7 @@ const ActivityUploader = memo(() => {
   const [subject, setSubject] = useState('');
   const [currentAnalysis, setCurrentAnalysis] = useState(null);
   const [viewingAnalysis, setViewingAnalysis] = useState(null);
+  const focusTrapRef = useFocusTrap(viewingAnalysis !== null);
 
   const handleUpload = useCallback(async (file) => {
     if (!file) return;
@@ -491,7 +493,13 @@ const ActivityUploader = memo(() => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+            style={{ overscrollBehavior: 'contain' }}
+            ref={focusTrapRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Análisis de actividad"
             onClick={() => setViewingAnalysis(null)}
+            onKeyDown={(e) => { if (e.key === 'Escape') setViewingAnalysis(null); }}
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}

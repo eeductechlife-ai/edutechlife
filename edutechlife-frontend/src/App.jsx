@@ -42,7 +42,6 @@ const getCachedResponse = (message) => {
   }
   return null;
 };
-import { NICO_KNOWLEDGE_BASE } from './utils/knowledgeBase';
 import { detectInterest, shouldPromptForLead, saveLead } from './utils/leads';
 import { addToHistory, getHistory, buildContextPrompt, getLeadData, clearSession } from './utils/chatMemory';
 

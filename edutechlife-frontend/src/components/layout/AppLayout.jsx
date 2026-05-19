@@ -92,7 +92,7 @@ const AppLayout = () => {
   
   // Renderizar header condicionalmente basado en la ruta actual
   const shouldShowHeader = () => {
-    if (location.pathname.includes('/ialab') || location.pathname === '/login' || location.pathname.includes('/vak') || location.pathname.includes('/smartboard')) {
+    if (location.pathname.includes('/ialab') || location.pathname === '/login' || location.pathname.includes('/vak') || location.pathname.includes('/smartboard') || location.pathname.includes('/conoce-smartboard')) {
       return false;
     }
     return true;
@@ -104,10 +104,15 @@ const AppLayout = () => {
         <Suspense fallback={null}>
           <GlobalCanvas />
         </Suspense>
+
+      {/* Global Particle Background - Full viewport behind everything */}
+      <div className="fixed inset-0 z-[-1] pointer-events-none overflow-hidden" aria-hidden="true">
+        <FloatingParticles count={45} colors={['#4DA8C4', '#66CCCC', '#004B63', '#B2D8E5']} />
+      </div>
       
-      {/* Header - Navigation Premium */}
+      {/* Header - Navigation Premium (floats over content) */}
       {shouldShowHeader() && (
-        <header className="sticky top-0 left-0 right-0 z-[1000] bg-white relative">
+        <header className="absolute top-0 left-0 w-full z-50 bg-transparent">
             
             {/* 3D Ambient Orbs - Background depth effect */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
@@ -213,7 +218,7 @@ const AppLayout = () => {
                       <i className="fa-solid fa-robot text-[#4DA8C4]"></i>
                       IA Lab Pro
                     </button>
-                    <button onClick={() => { navigate('/smartboard'); setShowLoginDropdown(false); }} className="w-full text-left px-3 py-2 text-sm font-semibold text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors flex items-center gap-2">
+                    <button onClick={() => { navigate('/sign-up/smartboard'); setShowLoginDropdown(false); }} className="w-full text-left px-3 py-2 text-sm font-semibold text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors flex items-center gap-2">
                       <i className="fa-solid fa-chalkboard text-[#4DA8C4]"></i>
                       SmartBoard
                     </button>
@@ -388,7 +393,7 @@ const AppLayout = () => {
                           IA Lab Pro
                         </button>
                         <button 
-                          onClick={() => navigate('/smartboard')}
+                          onClick={() => navigate('/sign-up/smartboard')}
                           className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
                         >
                           SmartBoard

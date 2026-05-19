@@ -128,6 +128,25 @@ export const IALabProvider = ({ children, onBack }) => {
   const updateModuleActivity = useCallback(async (moduleId, activity, value, score) => {
     const result = store.updateModuleActivity(moduleId, activity, value, score);
 
+    // Sincronizar con ProgressContext para persistencia local + Supabase (cross-device)
+    switch (activity) {
+      case 'exam':
+        if (typeof score === 'number') {
+          try { syncMarkExamComplete(moduleId, score); } catch (e) {}
+        }
+        break;
+      case 'challenge':
+        if (typeof score === 'number' && score >= 80) {
+          try { syncMarkChallengeComplete(moduleId, score); } catch (e) {}
+        }
+        break;
+      case 'community':
+        if (value) {
+          try { syncMarkCommunityComplete(moduleId); } catch (e) {}
+        }
+        break;
+    }
+
     if (result?.justCompleted) {
       const moduleName = store.modules.find(m => m.id === moduleId)?.title || `Modulo ${moduleId}`;
       await createNotification({
@@ -146,7 +165,7 @@ export const IALabProvider = ({ children, onBack }) => {
         metadata: { action: 'module_approved', score: result.newScore }
       });
     }
-  }, [createNotification, trackActivity]);
+  }, [createNotification, trackActivity, syncMarkExamComplete, syncMarkChallengeComplete, syncMarkCommunityComplete]);
 
   const markResourceAsViewed = useCallback((moduleId, resourceId) => {
     store.markResourceAsViewed(moduleId, resourceId);

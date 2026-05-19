@@ -350,6 +350,8 @@ export const useIALabProgress = () => {
         }
         const newProgress = await progressService.calculateGlobalProgressFromDB(user.id);
         setCourseProgress(newProgress);
+      } else {
+        updateModuleActivity(moduleId, 'resourcesCompleted', true);
       }
       return result;
     } catch (error) {
@@ -361,53 +363,54 @@ export const useIALabProgress = () => {
   const trackExamResult = useCallback(async (moduleId, score, passed) => {
     if (!user?.id) return { success: false, error: 'Usuario no autenticado' };
     if (!progressService) return { success: false, error: 'Servicio no disponible' };
+    // Actualizar estado local siempre primero
+    updateModuleActivity(moduleId, 'exam', score >= 80, score);
     try {
       const result = await progressService.saveExamProgress(moduleId, score, passed, user.id);
       if (result.success) {
-        // Actualizar progreso con score proporcional (siempre actualiza, pero suma proporcional)
-        updateModuleActivity(moduleId, 'exam', score >= 80, score);
         const newProgress = await progressService.calculateGlobalProgressFromDB(user.id);
         setCourseProgress(newProgress);
       }
       return result;
     } catch (error) {
       console.error('Error tracking exam:', error);
-      return { success: false, error: error.message };
+      return { success: true, local: true };
     }
   }, [user, setCourseProgress, updateModuleActivity, progressService]);
   
   const trackChallengeResult = useCallback(async (moduleId, score) => {
     if (!user?.id) return { success: false, error: 'Usuario no autenticado' };
     if (!progressService) return { success: false, error: 'Servicio no disponible' };
+    // Actualizar estado local siempre primero
+    updateModuleActivity(moduleId, 'challenge', score >= 80, score);
     try {
       const result = await progressService.saveChallengeProgress(moduleId, score, user.id);
       if (result.success) {
-        // Actualizar progreso con score proporcional (siempre actualiza, pero suma proporcional)
-        updateModuleActivity(moduleId, 'challenge', score >= 80, score);
         const newProgress = await progressService.calculateGlobalProgressFromDB(user.id);
         setCourseProgress(newProgress);
       }
       return result;
     } catch (error) {
       console.error('Error tracking challenge:', error);
-      return { success: false, error: error.message };
+      return { success: true, local: true };
     }
   }, [user, setCourseProgress, updateModuleActivity, progressService]);
   
   const trackCommunityComment = useCallback(async (moduleId) => {
     if (!user?.id) return { success: false, error: 'Usuario no autenticado' };
     if (!progressService) return { success: false, error: 'Servicio no disponible' };
+    // Actualizar estado local siempre primero
+    updateModuleActivity(moduleId, 'community', true);
     try {
       const result = await progressService.saveCommunityProgress(moduleId, user.id);
       if (result.success) {
-        updateModuleActivity(moduleId, 'community', true);
         const newProgress = await progressService.calculateGlobalProgressFromDB(user.id);
         setCourseProgress(newProgress);
       }
       return result;
     } catch (error) {
       console.error('Error tracking community:', error);
-      return { success: false, error: error.message };
+      return { success: true, local: true };
     }
   }, [user, setCourseProgress, updateModuleActivity, progressService]);
   

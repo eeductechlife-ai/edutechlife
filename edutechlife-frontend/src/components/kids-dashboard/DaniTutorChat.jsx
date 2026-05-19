@@ -4,6 +4,7 @@ import { callDeepseek } from '../../utils/api';
 import { PROMPT_DANI_EXPERTO, PROMPT_TUTOR_TAREAS } from '../../constants/prompts';
 import { useSmartBoardKids } from '../../context/SmartBoardKidsContext';
 import { speakTextConversational, stopSpeech } from '../../utils/speech';
+import useFocusTrap from '../../hooks/useFocusTrap';
 import DaniAvatar3D from './DaniAvatar3D';
 
 // ==========================================
@@ -214,6 +215,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
   const hasSentWelcome = useRef(false);
   const isSpeakingRef = useRef(false);
   const speechPrimed = useRef(false);
+  const focusTrapRef = useFocusTrap(isOpen);
 
   // ==========================================
   // Rich contextual welcome builder
@@ -542,7 +544,13 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         className="fixed inset-0 bg-black/50 z-50 flex items-end justify-end p-4 md:p-8"
+        style={{ overscrollBehavior: 'contain' }}
+        ref={focusTrapRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Chat con Dani"
         onClick={onClose}
+        onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }}
       >
         <motion.div
           initial={{ opacity: 0, y: 100, scale: 0.9 }}
@@ -646,6 +654,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
                 <button
                   onClick={() => setDocumentForDani(null)}
                   className="text-[#64748B] hover:text-[#004B63] text-xs"
+                  aria-label="Cerrar documento"
                 >
                   ✕
                 </button>
@@ -656,7 +665,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
           {/* Messages Container */}
           <div className={`flex-1 overflow-y-auto p-4 space-y-2 ${
             darkMode ? 'scrollbar-thin scrollbar-thumb-[#334155]' : ''
-          }`}>
+          }`} role="log" aria-live="polite" aria-label="Mensajes del chat">
             {daniChatHistory.map((msg, index) => (
               <MessageBubble
                 key={index}
@@ -711,6 +720,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
                 onChange={(e) => setInputText(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSendMessage(inputText)}
                 placeholder="Pregúntale a Dani..."
+                autoFocus
                 className={`flex-1 px-4 py-3 rounded-full text-sm focus:outline-none focus:border-[#4DA8C4] placeholder-[#64748B] ${
                   darkMode
                     ? 'bg-[#1E293B] border border-[#334155] text-[#E2F0FF] focus:border-[#4DA8C4]'

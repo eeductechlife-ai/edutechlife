@@ -7,6 +7,7 @@ import useAppointmentScheduling from '../../hooks/useAppointmentScheduling';
 import { callDeepseek } from '../../utils/api';
 import { speakTextConversational, stopSpeech } from '../../utils/speech';
 import { createSpeechRecognition, requestMicrophonePermission, getPermissionErrorMessage } from '../../utils/speechRecognition';
+import trainingData from '../../data/nico-training-data.json';
 
 // Carga diferida para componentes que no se usan inmediatamente
 const LeadCaptureForm = lazy(() => import('./LeadCaptureForm'));
@@ -459,7 +460,7 @@ const getQuestionSuggestions = (messages, userContext = {}) => {
     );
   } else if (mentionedTopics.includes('STEM')) {
     suggestions.push(
-      '¿Para qué edad es適合?',
+      '¿Para qué edad son los programas?',
       '¿Qué proyectos prácticos hacen?',
       '¿Necesito conocimientos previos?',
       '¿Tienen robots LEGO o Arduino?'
@@ -584,29 +585,48 @@ const getGreeting = () => {
   }
 };
 
-// Prompt simplificado para conversación natural
-const PROMPT_NICO_SOPORTE = `Eres NICO, asistente de EdutechLife. Hablas español natural, como una persona real, NO como un robot.
+// Prompt con knowledge consolidado desde training data
+const TRAINING = (() => {
+  const d = trainingData;
+  const services = Object.values(d.services).map(s => `- ${s.name}: ${s.description}`).join('\n');
+  const plans = d.pricing.plans.map(p => `- ${p.name}: ${p.price} - ${p.features.slice(0,3).join(', ')}`).join('\n');
+  const contact = `WhatsApp: ${d.contact.whatsapp}, Email: ${d.contact.email}, Web: ${d.contact.website}`;
+  return { services, plans, contact, d };
+})();
 
-## REGLAS BÁSICAS (máximo 10):
-1. Responde DIRECTAMENTE a lo que el usuario pregunta, sin preámbulos
+const PROMPT_NICO_SOPORTE = `Eres NICO, asistente de EdutechLife. Hablas espanol natural, como una persona real, NO como un robot.
+
+## REGLAS (maximo 10):
+1. Responde DIRECTAMENTE a lo que el usuario pregunta, sin preambulos
 2. NO digas "Claro", "Con gusto", "Por supuesto" - ve directo al tema
-3. NUNCA digas "Hola" al inicio de tus respuestas - solo responde lo que preguntan
-4. NUNCA te presents como "Soy Nico" o "Hola soy Nico" - el usuario ya sabe quién eres
-5. NO uses emojis, asteriscos, ni formato markdown
-6. Español coloquial, como hablando con un amigo
-7. Si no sabes algo, di que no lo sabes
-8. Responde de 1-3 oraciones máximo
-9. Usa el contexto de la conversación previa
-10. La primera clase siempre es gratuita
+3. NUNCA te presentes - el usuario ya sabe quien eres
+4. NO uses emojis, asteriscos, formato markdown ni nada especial
+5. Espanol coloquial, como hablando con un amigo
+6. Si no sabes algo, di que no lo sabes
+7. Responde de 1-3 oraciones maximo
+8. Usa el contexto de la conversacion previa
+9. Primera clase siempre gratuita
+10. Cancelacion en cualquier momento sin permanencia
 
-## SERVICIOS CLAVE:
-- VAK: Diagnóstico gratuito de estilo de aprendizaje
-- STEM: Robótica y programación (niños desde 5 años)
-- Tutorías: Matemáticas, Ciencias, Inglés
-- Modalidades: Presencial, Online, Híbrido
-- Contacto: WhatsApp +57 300 123 4567
+## INFORMACION COMPLETA DE EDUTECHLIFE:
 
-Responde de forma natural y útil.`;
+Quienes somos: ${trainingData.company.description}
+
+Servicios:
+${TRAINING.services}
+
+Modalidades: ${Object.values(trainingData.modalities).join(', ')}
+Edades: ${Object.values(trainingData.age_groups).map(g => `${g.label} (${g.range})`).join(', ')}
+Horarios: ${trainingData.schedule.weekdays}: ${trainingData.schedule.morning}, ${trainingData.schedule.afternoon}, ${trainingData.schedule.evening}
+
+Planes:
+${TRAINING.plans}
+
+Metricas: ${trainingData.company.metrics.students}, ${trainingData.company.metrics.successRate}, ${trainingData.company.metrics.yearsExperience}
+
+Contacto: ${TRAINING.contact}
+
+Responde de forma natural y util.`;
 
 const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteraction }) => {
   const [isOpen, setIsOpen] = useState(false);

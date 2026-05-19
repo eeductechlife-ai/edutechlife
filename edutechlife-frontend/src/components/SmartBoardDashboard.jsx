@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SidebarNavigation from './SidebarNavigation';
+import useFocusTrap from '../hooks/useFocusTrap';
 
 import XPProgressBar from './XPProgressBar';
 import MissionCard from './MissionCard';
 import SubjectGrid from './SubjectGrid';
 import GlassCard from './GlassCard';
-import { GraduationCap, Play, BookOpen, Trophy, TrendingUp, Mic, MessageCircle, Brain, LogOut, Download, FileText, Users, Clock, Target, Award } from 'lucide-react';
+import { GraduationCap, Play, BookOpen, Trophy, TrendingUp, Mic, MessageCircle, Brain, LogOut, Download, FileText, Users, Clock, Target, Award, Sparkles } from 'lucide-react';
 import { callDeepseek } from '../utils/api';
 
 const HomeView = memo(({
@@ -58,22 +59,24 @@ const HomeView = memo(({
           <span className="text-sm text-[#64748B] font-open-sans">Valeria está lista para ayudarte</span>
         </div>
         <div className="flex gap-2">
-          <motion.button
-            onClick={() => onNavigate('lab-ia')}
-            className="px-4 py-2 bg-[#4DA8C4]/10 text-[#4DA8C4] rounded-lg text-sm font-semibold hover:bg-[#4DA8C4]/20 transition-all"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <MessageCircle className="w-4 h-4 inline mr-1" />Chat con Valeria
-          </motion.button>
-          <motion.button
-            onClick={() => onNavigate('vak')}
-            className="px-4 py-2 bg-[#66CCCC]/10 text-[#004B63] rounded-lg text-sm font-semibold hover:bg-[#66CCCC]/20 transition-all"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <Brain className="w-4 h-4 inline mr-1" />Diagnóstico VAK
-          </motion.button>
+    <motion.button
+      onClick={() => onNavigate('lab-ia')}
+      className="px-4 py-2 bg-[#4DA8C4]/10 text-[#4DA8C4] rounded-lg text-sm font-semibold hover:bg-[#4DA8C4]/20 transition-all"
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      aria-label="Chat con Valeria"
+    >
+      <MessageCircle className="w-4 h-4 inline mr-1" />Chat con Valeria
+    </motion.button>
+    <motion.button
+      onClick={() => onNavigate('vak')}
+      className="px-4 py-2 bg-[#66CCCC]/10 text-[#004B63] rounded-lg text-sm font-semibold hover:bg-[#66CCCC]/20 transition-all"
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      aria-label="Diagnóstico VAK"
+    >
+      <Brain className="w-4 h-4 inline mr-1" />Diagnóstico VAK
+    </motion.button>
         </div>
       </div>
     </GlassCard>
@@ -93,6 +96,7 @@ const HomeView = memo(({
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 + index * 0.05 }}
           whileHover={{ y: -4, scale: 1.02 }}
+          aria-label={`${action.label}${typeof action.count === 'number' ? `: ${action.count} pendientes` : ''}`}
         >
           <div className={`w-14 h-14 mx-auto bg-gradient-to-br ${action.gradient} rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-lg`}>
             <action.icon className="w-6 h-6 text-white" />
@@ -109,6 +113,7 @@ const HomeView = memo(({
         <button 
           onClick={() => onNavigate('misiones')}
           className="text-sm text-[#4DA8C4] font-semibold hover:underline"
+          aria-label="Ver todas las misiones"
         >
           Ver todas →
         </button>
@@ -279,7 +284,10 @@ const ReportModal = memo(({
   studentName,
   onClose,
   onDownload
-}) => (
+}) => {
+  const focusTrapRef = useFocusTrap(show && !!reportData);
+
+  return (
   <AnimatePresence>
     {show && reportData && (
       <motion.div
@@ -287,7 +295,12 @@ const ReportModal = memo(({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm"
+        ref={focusTrapRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Reporte de aprendizaje"
         onClick={onClose}
+        onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }}
       >
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
@@ -301,6 +314,7 @@ const ReportModal = memo(({
             <button 
               onClick={onClose}
               className="text-[#64748B] hover:text-[#004B63] text-xl"
+              aria-label="Cerrar reporte"
             >
               ✕
             </button>
@@ -354,7 +368,8 @@ const ReportModal = memo(({
       </motion.div>
     )}
   </AnimatePresence>
-));
+  );
+});
 
 ReportModal.displayName = 'ReportModal';
 

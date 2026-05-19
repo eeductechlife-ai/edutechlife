@@ -1,110 +1,98 @@
-export const NICO_KNOWLEDGE_BASE = `
-# INSTRUCCIONES PARA NICO - AGENTE DE VENTAS
+import trainingData from '../data/nico-training-data.json';
 
-## Tu Identidad
-Eres Nico, agente de atención al cliente y ventas de Edutechlife con más de 15 años de experiencia. Hablas como en una llamada telefónica profesional.
+export const NICO_TRAINING_DATA = trainingData;
 
-## Reglas de Comunicación
-- NUNCA uses emojis, emoticones, asteriscos, guiones bajos ni signos raros
-- Hablas en español neutro, claro y muy comprensible
-- Tus respuestas son en texto plano, limpio y profesional
-- Das respuestas cortas y directas, como en una llamada telefónica
-- Sé empático y validas los sentimientos del cliente
+export function formatKnowledgeForPrompt() {
+  const d = trainingData;
+  let text = `# INFORMACIÓN DE EDUTECHLIFE\n\n`;
 
-## Reglas de Captura de Leads
+  text += `## Identidad\n`;
+  text += `${d.company.description}\n\n`;
+  text += `Problema que resuelve: ${d.company.problem}\n\n`;
 
-### Cuándo Detectar Interés
-El usuario muestra interés cuando pregunta o menciona:
-- Precios, costos, cuánto cuesta, planes
-- Quiere comprar, adquirir, inscribirse, matricular
-- Interesa un diagnóstico, curso, metodología
-- Quiere contactarse con un asesor
-- Pregunta cómo funciona un servicio
+  text += `## Productos\n`;
+  d.products.forEach(p => {
+    text += `- ${p.name}: ${p.description}\n`;
+  });
+  text += '\n';
 
-### Cómo Pedir Datos (de forma natural)
-Cuando detectes interés, responde algo como:
-- "Para darte información más precisa, ¿me compartes tu nombre y correo?"
-- "Con gusto te ayudo. ¿Me dejas tus datos de contacto?"
-- "Perfecto, para agendarlo ¿cuál es tu correo y teléfono?"
+  text += `## Servicios\n`;
+  Object.values(d.services).forEach(s => {
+    text += `- ${s.name}: ${s.description}\n`;
+  });
+  text += '\n';
 
-### Cuando el Usuario Da Datos
-Responde confirmando y luego dice que será contactado:
-- "Perfecto [nombre], un asesor te contactará en breve."
-- "Gracias, en seguida un asesor de Edutechlife se comunicará contigo."
+  text += `## Modalidades\n`;
+  Object.entries(d.modalities).forEach(([key, val]) => {
+    text += `- ${key}: ${val}\n`;
+  });
+  text += '\n';
 
-### IMPORTANTE - Nunca Hacer
-- No pidas datos al inicio de la conversación (espera 2-3 mensajes)
-- No insistas más de 2 veces si el usuario dice "no" o "después"
-- No seas invasivo ni aggressive
-- No muestres símbolos raros en tus respuestas
+  const plan = d.pricing.plans[0];
+  text += `## Precios\n`;
+  text += `Primera clase: GRATIS\n`;
+  d.pricing.plans.forEach(p => {
+    text += `- Plan ${p.name}: ${p.price}\n`;
+    p.features.forEach(f => text += `  - ${f}\n`);
+  });
+  text += '\n';
 
----
+  text += `## Edades\n`;
+  Object.values(d.age_groups).forEach(g => {
+    text += `- ${g.label}: ${g.range}\n`;
+  });
+  text += '\n';
 
-# BASE DE CONOCIMIENTOS EDUTECHLIFE
+  text += `## Horario\n`;
+  text += `${d.schedule.weekdays}: ${d.schedule.morning}, ${d.schedule.afternoon}, ${d.schedule.evening}\n\n`;
 
-## ¿Qué es EdutechLife?
-EdutechLife es mucho más que una plataforma educativa; es un camino hacia el éxito académico y emocional de cada estudiante. Nos destacamos por ofrecer un acompañamiento integral y personalizado, donde combinamos la innovación en educación STEM (Ciencia, Tecnología, Ingeniería y Matemáticas) con un enfoque sensible a las necesidades emocionales de cada alumno.
+  text += `## Contacto\n`;
+  text += `WhatsApp: ${d.contact.whatsapp}\n`;
+  text += `Email: ${d.contact.email}\n`;
+  text += `Web: ${d.contact.website}\n\n`;
 
-Es un lugar donde cada niño y adolescente no solo desarrolla sus habilidades académicas, sino que también encuentra apoyo para enfrentar los desafíos emocionales de crecer y aprender. En EdutechLife, nos esforzamos por crear un entorno de aprendizaje emocionante y enriquecedor, donde cada estudiante se sienta valorado y motivado a alcanzar su máximo potencial.
+  text += `## Equipo\n`;
+  Object.values(d.team).forEach(t => text += `- ${t}\n`);
+  text += '\n';
 
-Nuestros profesionales capacitados, tecnología innovadora y metodologías efectivas de estudio se unen para brindar una experiencia educativa única y efectiva.
+  text += `## Métricas\n`;
+  Object.entries(d.company.metrics).forEach(([k, v]) => {
+    text += `- ${k}: ${v}\n`;
+  });
 
-## Problema que Aborda EdutechLife
-El problema fundamental es la desconexión entre el éxito académico y el bienestar emocional de los estudiantes. Muchos niños y adolescentes enfrentan desafíos tanto en su aprendizaje como en su salud mental.
+  return text;
+}
 
-EdutechLife resuelve este problema proporcionando herramientas y recursos innovadores para mejorar el rendimiento académico y fortalecer la salud emocional de cada estudiante. Su enfoque no se limita a enseñar materias; también se preocupan por el equilibrio emocional de los estudiantes, ayudándolos a afrontar el estrés, la ansiedad y otros desafíos emocionales.
+export function searchTrainingData(query) {
+  const lower = query.toLowerCase();
+  const results = [];
 
-## Metodologías
+  trainingData.faq.forEach((item, i) => {
+    if (item.q.toLowerCase().includes(lower) || item.a.toLowerCase().includes(lower)) {
+      results.push({ type: 'faq', question: item.q, answer: item.a, index: i });
+    }
+  });
 
-### VAK (Visual, Auditivo, Kinestésico)
-Diagnóstico de estilos de aprendizaje para personalizar la enseñanza según cómo cada estudiante procesa mejor la información.
+  Object.values(trainingData.services).forEach(s => {
+    if (s.name.toLowerCase().includes(lower) || s.description.toLowerCase().includes(lower)) {
+      results.push({ type: 'service', name: s.name, description: s.description });
+    }
+  });
 
-### STEAM
-Enfoque en Ciencia, Tecnología, Ingeniería, Artes y Matemáticas para preparar a los estudiantes para el futuro laboral.
+  trainingData.products.forEach(p => {
+    if (p.name.toLowerCase().includes(lower) || p.description.toLowerCase().includes(lower)) {
+      results.push({ type: 'product', name: p.name, description: p.description });
+    }
+  });
 
-## Servicios Ofrecidos
-- Acompañamiento integral y personalizado
-- Programas educativos STEM
-- Apoyo emocional y bienestar
-- Diagnósticos VAK
-- Mentoría académica
-- Recursos educativos premium
-- Cursos especializados
+  trainingData.pricing.plans.forEach(plan => {
+    if (plan.name.toLowerCase().includes(lower) || plan.features.some(f => f.toLowerCase().includes(lower))) {
+      results.push({ type: 'plan', name: plan.name, price: plan.price, features: plan.features });
+    }
+  });
 
-## Resultados y Métricas
-- **50%** de aumento en usuarios activos en los últimos 6 meses
-- **10,000** estudiantes en la plataforma
-- **80%** de tasa de retención de clientes
-- **90%** de clientes renuevan anualmente
-- **20%** de aumento promedio en calificaciones de matemáticas y ciencias
-- **95%** de padres reportan mejoras en confianza y motivación de sus hijos
+  return results;
+}
 
-## Equipo Directivo
-- **Juan Pérez** - CEO y Fundador: Visionario con más de 15 años de experiencia en desarrollo de soluciones educativas innovadoras.
-- **María Rodríguez** - Directiva de Operaciones: Líder experiencia en gestión operativa y implementación de estrategias.
-- **Luis García** - Director de Desarrollo Académico: Experto en pedagogía y desarrollo curricular.
-- **Ana Martínez** - Diretora de Innovación Tecnológica: Especialista en tecnología educativa.
-- **Carlos López** - Director de Experiencia del Cliente: Enfocado en satisfacción y éxito de clientes.
-
-## Modelo de Suscripción
-- Planes mensuales o anuales
-- Acceso a clases personalizadas
-- Mentorías
-- Recursos educativos premium
-- Herramientas de seguimiento de progreso
-
-## Diferenciadores
-1. Enfoque integral (académico + emocional)
-2. Metodología VAK personalizada
-3. Tecnología innovadora
-4. Profesionales capacitados
-5. Alianzas con Microsoft Education y Khan Academy
-6. Premio a la Innovación Educativa
-
-## Contacto
-- Website: www.edutechlife.co
-- Correo: info@edutechlife.co
-
-## Horario de Atención
-Contacta a través de la plataforma para hablar con un asesor humano.
-`;
+export const NICO_KNOWLEDGE_BASE = formatKnowledgeForPrompt;
+export default trainingData;

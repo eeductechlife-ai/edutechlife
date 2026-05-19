@@ -59,6 +59,11 @@ const ResearchCard = memo(({
       ${isSelected ? 'border-[#4DA8C4]/50 shadow-xl ring-2 ring-[#4DA8C4]/20' : 'border-[#E2E8F0]'}
     `}
     onClick={onSelect}
+    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect(); } }}
+    role="button"
+    tabIndex={0}
+    aria-pressed={isSelected}
+    aria-label={`${line.title}: ${line.subtitle}. Progreso ${line.progress}%`}
     whileHover={{ y: -4 }}
     whileTap={{ scale: 0.98 }}
     layout
@@ -149,6 +154,10 @@ const DropZone = memo(({
     onDragOver={onDragOver}
     onDrop={onDrop}
     onClick={() => fileInputRef.current?.click()}
+    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInputRef.current?.click(); } }}
+    role="button"
+    tabIndex={0}
+    aria-label="Arrastra archivos aquí o haz clic para seleccionar. Formatos aceptados: PDF, DOC, TXT"
     animate={{ 
       scale: isDragging ? 1.02 : 1,
       borderColor: isDragging ? '#4DA8C4' : '#E2E8F0'
@@ -524,6 +533,9 @@ const SmartBoard = ({ onAnalysisComplete, embedded = false }) => {
             `}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
+            role="tab"
+            aria-selected={activeTab === tab.id}
+            aria-label={tab.label}
           >
             <i className={`fa-solid ${tab.icon}`} />
             {tab.label}

@@ -44,20 +44,7 @@ const IALabSignUpPageWrapper = () => {
   return <IALabSignUpPage onBack={handleBack} />;
 };
 
-// Componente wrapper para SmartBoardSignUpPage que maneja navegación
-const SmartBoardSignUpPageWrapper = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const returnTo = searchParams.get('returnTo') || '/smartboard';
-  
-  const handleBack = (customReturnTo) => {
-    const targetReturnTo = customReturnTo || returnTo;
-    navigate(`/?returnTo=${encodeURIComponent(targetReturnTo)}`);
-  };
-  
-  return <SmartBoardSignUpPage onBack={handleBack} />;
-};
+const SmartBoardSignUpPageWrapper = () => <SmartBoardSignUpPage />;
 
 // Componente para redirección inteligente de registro
 const GenericSignUpRedirect = () => {
@@ -81,12 +68,6 @@ const GenericSignUpRedirect = () => {
   
   return <PageLoader message="Redirigiendo al formulario de registro..." />;
 };
-// Test components - comment out for production
-// const JWTIntegrationTestPage = lazy(() => import('../components/test/JWTIntegrationTestPage'));
-// const RouteProtectionTest = lazy(() => import('../components/test/RouteProtectionTest'));
-// const JWTIntegrationTest = lazy(() => import('../components/test/JWTIntegrationTest'));
-// const AuthMigrationDashboard = lazy(() => import('../components/test/AuthMigrationDashboard'));
-
 /**
  * Configuración de rutas principales de la aplicación
  * 
@@ -227,30 +208,7 @@ const AppRoutes = () => {
           </RoleProtectedRoute>
         } />
         
-        {/* Rutas de desarrollo/testing - comentadas para producción */}
-        {/* <Route path="jwt-test" element={
-          <Suspense fallback={<PageLoader message="Cargando JWT Test..." />}>
-            <JWTIntegrationTestPage />
-          </Suspense>
-        } />
-        
-        <Route path="route-test" element={
-          <Suspense fallback={<PageLoader message="Cargando Route Test..." />}>
-            <RouteProtectionTest />
-          </Suspense>
-        } />
-        
-        <Route path="jwt-integration-test" element={
-          <Suspense fallback={<PageLoader message="Cargando JWT Integration Test..." />}>
-            <JWTIntegrationTest />
-          </Suspense>
-        } /> */}
-        
-        {/* <Route path="auth-migration-dashboard" element={
-          <Suspense fallback={<PageLoader message="Cargando Auth Migration Dashboard..." />}>
-            <AuthMigrationDashboard />
-          </Suspense>
-        } /> */}
+
         
         {/* Ruta de registro para IALAB (adultos 18+ años) */}
         <Route path="sign-up/ialab" element={

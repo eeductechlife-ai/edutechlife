@@ -30,12 +30,21 @@ export const useSupabase = () => {
           currentUserId = tokenPayload.sub;
           setUserId(currentUserId);
           
+          // Crear cliente con JWT de Clerk para autenticación real
+          // IMPORTANTE: En Clerk Dashboard → JWT Templates, el template 'supabase'
+          // debe usar algoritmo RS256 (no HS256) para compatibilidad con Supabase JWKS
+          try {
+            client = createClerkSupabaseClient(token);
+            usingJWT = true;
+          } catch (jwtErr) {
+            console.warn('⚠️ Fallback a anon key (JWT no disponible):', jwtErr.message);
+            client = createClerkSupabaseClient();
+            usingJWT = false;
+          }
+        } else {
+          client = createClerkSupabaseClient();
+          usingJWT = false;
         }
-        
-        // Siempre usar cliente anon key porque HS256 no es compatible con Supabase JWKS
-        // RLS permissivo permite acceso con anon key, y filtramos por user_id en la app
-        client = createClerkSupabaseClient();
-        usingJWT = false;
       } else {
         client = createClerkSupabaseClient();
         usingJWT = false;

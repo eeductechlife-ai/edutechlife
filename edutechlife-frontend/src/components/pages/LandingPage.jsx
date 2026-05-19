@@ -17,7 +17,7 @@ const Aliados = lazy(() => import('../Aliados'));
  */
 const LandingPage = () => {
   return (
-    <>
+    <div className="pt-24">
       <Suspense fallback={<PageLoader message="Cargando contenido..." />}>
         <Hero />
         <AIToolsSection />
@@ -29,7 +29,7 @@ const LandingPage = () => {
       
       {/* Footer se renderiza en Landing Page */}
       <Footer />
-    </>
+    </div>
   );
 };
 

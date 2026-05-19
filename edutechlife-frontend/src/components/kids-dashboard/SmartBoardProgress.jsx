@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from 'react';
+import { useMemo, memo } from 'react';
 import { motion } from 'framer-motion';
 import { useSmartBoardKids } from '../../context/SmartBoardKidsContext';
 
@@ -280,23 +280,25 @@ const RewardsGrid = ({ unlockedRewards, totalPoints, darkMode }) => {
   );
 };
 
-const SummaryCard = ({ icon, label, value, sub, color, delay, darkMode }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ delay, type: 'spring', damping: 20, stiffness: 300 }}
-    className={`flex-1 min-w-[140px] rounded-2xl p-5 border transition-colors duration-500 ${
-      darkMode ? 'bg-[#1E293B]/80 border-[#334155]/50' : 'bg-white/80 border-[#E2E8F0]/50'
-    } backdrop-blur-xl shadow-sm`}
-  >
-    <div className="flex items-center gap-3 mb-2">
-      <div className="text-2xl">{icon}</div>
-      <span className={`text-[11px] font-medium ${darkMode ? 'text-[#94A3B8]' : 'text-[#64748B]'}`}>{label}</span>
-    </div>
-    <div className={`text-2xl font-black ${color}`}>{value}</div>
-    {sub && <div className={`text-[10px] mt-0.5 ${darkMode ? 'text-[#64748B]' : 'text-[#94A3B8]'}`}>{sub}</div>}
-  </motion.div>
-);
+const SummaryCard = memo(function SummaryCard({ icon, label, value, sub, color, delay, darkMode }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay, type: 'spring', damping: 20, stiffness: 300 }}
+      className={`flex-1 min-w-[140px] rounded-2xl p-5 border transition-colors duration-500 ${
+        darkMode ? 'bg-[#1E293B]/80 border-[#334155]/50' : 'bg-white/80 border-[#E2E8F0]/50'
+      } backdrop-blur-xl shadow-sm`}
+    >
+      <div className="flex items-center gap-3 mb-2">
+        <div className="text-2xl">{icon}</div>
+        <span className={`text-[11px] font-medium ${darkMode ? 'text-[#94A3B8]' : 'text-[#64748B]'}`}>{label}</span>
+      </div>
+      <div className={`text-2xl font-black ${color}`}>{value}</div>
+      {sub && <div className={`text-[10px] mt-0.5 ${darkMode ? 'text-[#64748B]' : 'text-[#94A3B8]'}`}>{sub}</div>}
+    </motion.div>
+  );
+});
 
 const SmartBoardProgress = () => {
   const {

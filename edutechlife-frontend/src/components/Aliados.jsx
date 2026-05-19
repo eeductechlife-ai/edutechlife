@@ -1,5 +1,5 @@
-import { memo, useEffect, useState, useRef } from 'react';
-import { GraduationCap, Globe, Building2, Search, Cloud, Award, FlaskConical, Laptop, Cpu, Sparkles, Users, Shield, Heart } from 'lucide-react';
+import { memo, useState, useRef } from 'react';
+import { GraduationCap, Globe, Building2, Search, Cloud, Award, FlaskConical, Laptop, Cpu, Sparkles } from 'lucide-react';
 
 const Aliados = memo(() => {
     const sectionRef = useRef(null);
@@ -24,43 +24,35 @@ const Aliados = memo(() => {
     const duplicatedAliados = [...aliados, ...aliados, ...aliados];
 
     return (
-        <section id="aliados" ref={sectionRef} className="relative w-full py-12 lg:py-16 overflow-hidden bg-[#F8FAFC]">
-            {/* Radial Gradient Background */}
+        <section id="aliados" ref={sectionRef} className="relative w-full py-12 lg:py-16 overflow-hidden bg-bg-light">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(77,168,196,0.08)_0%,transparent_50%),radial-gradient(circle_at_70%_50%,rgba(0,75,99,0.05)_0%,transparent_50%)]" />
             
-            {/* Subtle Grid Pattern */}
             <div className="absolute inset-0 opacity-[0.03]" style={{
                 backgroundImage: `radial-gradient(circle at 1px 1px, #004B63 1px, transparent 0)`,
                 backgroundSize: '40px 40px'
             }} />
 
             <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
-                {/* Header */}
                 <div className="text-center mb-10">
                     <div className="inline-flex items-center gap-3 mb-4">
-                        <div className="w-10 h-[2px] bg-gradient-to-r from-transparent to-[#4DA8C4]" />
-                        <span className="text-sm font-bold text-[#4DA8C4] uppercase tracking-widest block mb-2">
+                        <div className="w-10 h-[2px] bg-gradient-to-r from-transparent to-primary-light" />
+                        <span className="text-sm font-bold text-primary-light uppercase tracking-widest block mb-2">
                             Confían en nosotros
                         </span>
-                        <div className="w-10 h-[2px] bg-gradient-to-l from-transparent to-[#4DA8C4]" />
+                        <div className="w-10 h-[2px] bg-gradient-to-l from-transparent to-primary-light" />
                     </div>
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-[#004B63] tracking-tighter mb-3">
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-petroleum tracking-tighter mb-3">
                         Nuestros{' '}
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4DA8C4] to-[#004B63]">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-petroleum">
                             Aliados Estratégicos
                         </span>
                     </h2>
                 </div>
 
-                {/* Infinite Marquee Container */}
                 <div className="relative">
-                    {/* Left Fade Mask */}
-                    <div className="absolute left-0 top-0 bottom-0 w-32 z-10 bg-gradient-to-r from-[#F8FAFC] to-transparent pointer-events-none" />
-                    
-                    {/* Right Fade Mask */}
-                    <div className="absolute right-0 top-0 bottom-0 w-32 z-10 bg-gradient-to-l from-[#F8FAFC] to-transparent pointer-events-none" />
+                    <div className="absolute left-0 top-0 bottom-0 w-32 z-10 bg-gradient-to-r from-bg-light to-transparent pointer-events-none" />
+                    <div className="absolute right-0 top-0 bottom-0 w-32 z-10 bg-gradient-to-l from-bg-light to-transparent pointer-events-none" />
 
-                    {/* Marquee */}
                     <div 
                         ref={marqueeRef}
                         className="overflow-hidden"
@@ -76,28 +68,24 @@ const Aliados = memo(() => {
                             {duplicatedAliados.map((aliado, index) => (
                                 <div 
                                     key={`${aliado.id}-${index}`}
-                                    className="group flex-shrink-0 bg-white/60 backdrop-blur-md border border-gray-200 rounded-xl p-2.5 flex items-center gap-2.5 transition-all duration-300 cursor-pointer hover:[animation-play-state:paused]"
-                                    style={{
-                                        minWidth: '190px',
-                                    }}
+                                    className="group flex-shrink-0 badge-clay bg-white/60 backdrop-blur-md p-2.5 flex items-center gap-2.5"
+                                    style={{ minWidth: '190px' }}
                                 >
-                                    {/* Icon Circle */}
                                     <div 
-                                        className="w-9 h-9 rounded-lg flex items-center justify-center transition-transform duration-300 group-hover:scale-105"
+                                        className="w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-sm"
                                         style={{
                                             background: `linear-gradient(135deg, ${aliado.color}20, ${aliado.color}10)`,
                                             border: `1px solid ${aliado.color}30`
                                         }}
                                     >
                                         <aliado.icon 
-                                            className="text-base transition-colors duration-300" 
+                                            className="text-base transition-all duration-300 group-hover:scale-110" 
                                             style={{ color: aliado.color }}
                                         />
                                     </div>
                                     
-                                    {/* Text Content */}
                                     <div className="flex flex-col">
-                                        <span className="font-bold text-[#004B63]">{aliado.name}</span>
+                                        <span className="font-bold text-petroleum group-hover:text-primary-light transition-colors duration-300">{aliado.name}</span>
                                         <span className="font-mono text-xs tracking-widest text-gray-600 uppercase">
                                             {aliado.category}
                                         </span>
@@ -109,15 +97,10 @@ const Aliados = memo(() => {
                 </div>
             </div>
 
-            {/* Animation Keyframes */}
             <style>{`
                 @keyframes marquee {
-                    0% {
-                        transform: translateX(0);
-                    }
-                    100% {
-                        transform: translateX(-33.333%);
-                    }
+                    0% { transform: translateX(0); }
+                    100% { transform: translateX(-33.333%); }
                 }
             `}</style>
         </section>
