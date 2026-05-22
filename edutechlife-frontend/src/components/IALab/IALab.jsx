@@ -18,6 +18,7 @@ import ToolTutorAccordion from './ToolTutorAccordion';
 import TuRutaDeHoy from './TuRutaDeHoy';
 import ModuleActions from './ModuleActions';
 import IALabTour from './IALabTour';
+import Breadcrumbs from './Breadcrumbs';
 
 const preloadForum = () => import('./IALabForumOptimized');
 const IALabForumOptimized = lazy(preloadForum);
@@ -468,28 +469,15 @@ const IALabContent = () => {
                             </div>
 
                           <div>
-                            {/* Breadcrumbs */}
-                            <nav aria-label="Breadcrumb" className="mb-2">
-                              <ol className="flex items-center gap-1.5 text-[10px] md:text-xs text-slate-600">
-                                <li><button onClick={() => setViewSection(null)} className="font-medium text-slate-500 hover:text-petroleum transition-colors cursor-pointer">Inicio</button></li>
-                                <li className="text-slate-300" aria-hidden="true">/</li>
-                                <li><button onClick={() => setViewSection(null)} className="font-semibold text-petroleum hover:text-corporate transition-colors cursor-pointer truncate max-w-[120px] inline-block align-bottom">
-                                  {modules?.find(m => m.id === activeMod)?.title || `Módulo ${activeMod}`}
-                                </button></li>
-                                {viewSection && (
-                                  <>
-                                    <li className="text-slate-300" aria-hidden="true">/</li>
-                                    <li><span className="text-slate-500 capitalize">{TABS.find(t => t.id === viewSection)?.label || viewSection}</span></li>
-                                  </>
-                                )}
-                                {viewSection === null && currentLessonTitle && (
-                                  <>
-                                    <li className="text-slate-300" aria-hidden="true">/</li>
-                                    <li><span className="text-slate-500 truncate max-w-[120px] inline-block align-bottom">{currentLessonTitle}</span></li>
-                                  </>
-                                )}
-                              </ol>
-                            </nav>
+                            <Breadcrumbs
+                              segments={[
+                                { label: 'Inicio', icon: 'fa-house', onClick: () => setViewSection(null) },
+                                { label: modules?.find(m => m.id === activeMod)?.title || `Módulo ${activeMod}`, onClick: () => setViewSection(null) },
+                                ...(viewSection ? [{ label: TABS.find(t => t.id === viewSection)?.label || viewSection }] : []),
+                                ...(viewSection === null && currentLessonTitle ? [{ label: currentLessonTitle }] : []),
+                              ]}
+                              size="text-[10px] md:text-xs"
+                            />
 
                             {/* 1. TÍTULO PRINCIPAL */}
                             <AnimatePresence mode="wait">

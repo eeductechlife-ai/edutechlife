@@ -43,7 +43,7 @@ const IALabSidebar = () => {
   } = useIALabContext();
 
   const { completedInfographics } = useProgressContext();
-  const { xp, streak, badges, getLevel, getXpForNextLevel, getLevelProgress, calculateModulePoints, getTotalPoints } = useIALabStore();
+  const { xp, streak, badges, getLevel, getXpForNextLevel, getLevelProgress, calculateModulePoints, getTotalPoints, isStreakAtRisk } = useIALabStore();
   const { isCollapsed, toggleSidebar } = useSidebarState();
 
   const isInfographicCompleted = (infographicId) => completedInfographics.includes(`${infographicId}`);
@@ -122,6 +122,9 @@ const IALabSidebar = () => {
               <div className="flex items-center gap-1.5">
                 <Icon name="fa-fire" className={`text-sm ${streak >= 3 ? 'text-corporate' : 'text-slate-300'}`} />
                 <span className={`text-sm font-semibold ${streak >= 3 ? 'text-corporate' : 'text-slate-400'}`}>{streak} días</span>
+                {isStreakAtRisk() && streak > 0 && (
+                  <span className="text-[9px] text-amber-500 font-medium ml-1 animate-pulse">⚠️</span>
+                )}
               </div>
             </div>
 
@@ -436,10 +439,13 @@ const IALabSidebar = () => {
           </TooltipIcon>
 
           {/* Racha — stacked vertical */}
-          <TooltipIcon label={`${streak} días racha`}>
-            <div className="w-full h-12 rounded-xl bg-gradient-to-br from-petroleum/8 to-corporate/8 border border-petroleum/10 flex flex-col items-center justify-center gap-0 flex-shrink-0 shadow-sm">
+          <TooltipIcon label={`${streak} días racha${isStreakAtRisk() && streak > 0 ? ' — ¡Estudia hoy para mantenerla!' : ''}`}>
+            <div className="w-full h-12 rounded-xl bg-gradient-to-br from-petroleum/8 to-corporate/8 border border-petroleum/10 flex flex-col items-center justify-center gap-0 flex-shrink-0 shadow-sm relative">
               <Icon name="fa-fire" className={`text-xl ${streak >= 3 ? 'text-corporate' : 'text-slate-300'}`} />
               <span className={`text-sm font-semibold ${streak >= 3 ? 'text-corporate' : 'text-slate-400'}`}>{streak} días</span>
+              {isStreakAtRisk() && streak > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+              )}
             </div>
           </TooltipIcon>
 

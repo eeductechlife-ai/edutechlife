@@ -19,6 +19,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { cn } from '../forum/forumDesignSystem';
 import { useIALabContext } from '../../context/IALabContext';
+import Breadcrumbs from './Breadcrumbs';
 import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
 import QueEsPrompt_OVA_Original from './QueEsPrompt_OVA_Original';
 import useFullscreen from './hooks/useFullscreen';
@@ -865,19 +866,15 @@ const renderOVAById = (resourceId) => {
                   
                   {/* Título y metadatos */}
                   <div className="flex-1 min-w-0">
-                    <nav aria-label="Breadcrumb" className="mb-1">
-                      <ol className="flex items-center gap-1.5 text-white/60 text-xs">
-                        <li className="hidden sm:inline text-white/40">Inicio</li>
-                        <li aria-hidden="true" className="hidden sm:inline text-white/30">/</li>
-                        <li className="truncate max-w-[120px] sm:max-w-[200px]">
-                          {modules?.find(m => m.id === activeMod)?.title || `Módulo ${activeMod}`}
-                        </li>
-                        <li aria-hidden="true">/</li>
-                        <li className="truncate max-w-[100px] sm:max-w-[150px] capitalize">
-                          {resource.type?.replace(/_/g, ' ')}
-                        </li>
-                      </ol>
-                    </nav>
+                    <Breadcrumbs
+                      segments={[
+                        { label: 'Inicio' },
+                        { label: modules?.find(m => m.id === activeMod)?.title || `Módulo ${activeMod}` },
+                        { label: resource.type?.replace(/_/g, ' ')?.toUpperCase() },
+                      ]}
+                      size="text-xs"
+                      className="mb-1 text-white/60"
+                    />
                     <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight truncate">
                       {resource.title}
                     </h2>

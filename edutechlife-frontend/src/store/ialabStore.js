@@ -278,6 +278,13 @@ export const useIALabStore = create((set, get) => ({
     return true;
   },
 
+  isStreakAtRisk: () => {
+    const { lastActivityDate } = get();
+    if (!lastActivityDate) return true;
+    const todayStr = new Date().toDateString();
+    return new Date(lastActivityDate).toDateString() !== todayStr;
+  },
+
   getDaysSinceStart: () => {
     const start = get().startDate;
     if (!start) return 1;

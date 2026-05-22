@@ -14,7 +14,7 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
   } = useIALabContext();
 
   const { completedInfographics } = useProgressContext();
-  const { streak, getLevel } = useIALabStore();
+  const { streak, getLevel, isStreakAtRisk } = useIALabStore();
   const [showStudyPlanner, setShowStudyPlanner] = useState(false);
   const containerRef = useRef(null);
 
@@ -56,6 +56,7 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
             <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
               <span>Nv.{getLevel()}</span>
               <span>🔥 {streak}</span>
+              {isStreakAtRisk() && streak > 0 && <span className="text-[9px] text-amber-500">⚠️</span>}
             </div>
           </div>
         </div>
