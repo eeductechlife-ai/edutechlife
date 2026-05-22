@@ -1,9 +1,71 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabContext } from '../../context/IALabContext';
 import { useIALabStore } from '../../store/ialabStore';
 import useBodyScrollLock from '../../hooks/useBodyScrollLock';
 import useFocusTrap from '../../hooks/useFocusTrap';
+
+// PDF helpers (jsPDF A4 portrait)
+const PW = 210, PH = 297, ML = 14, MR = 14, MT = 22, MB = 14;
+const CW = PW - ML - MR;
+const CP = [0, 75, 99];
+const CC = [0, 188, 212];
+const CS = [100, 116, 139];
+const CD = [30, 41, 59];
+
+let cy = MT;
+
+const pdfResetY = () => { cy = MT; };
+const pdfCheckPage = (doc, need) => {
+  if (cy + need > PH - MB - 12) {
+    addFooter(doc);
+    doc.addPage();
+    pdfDrawHeader(doc);
+  }
+};
+const addFooter = (doc) => {
+  const n = doc.internal.getNumberOfPages();
+  doc.setFontSize(7);
+  doc.setTextColor(...CS);
+  doc.text(`Página ${n}`, PW - MR, PH - MB + 5, { align: 'right' });
+  doc.setDrawColor(200, 200, 200);
+  doc.line(ML, PH - MB + 2, PW - MR, PH - MB + 2);
+};
+const pdfDrawHeader = (doc) => {
+  doc.setFillColor(...CP);
+  doc.rect(0, 0, PW, 17, 'F');
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(14);
+  doc.setTextColor(255, 255, 255);
+  doc.text('Plan de Estudio', ML, 11);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(7);
+  doc.text(`Generado el ${new Date().toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' })}`, ML, 15);
+  cy = MT;
+};
+const pdfSectionTitle = (doc, text) => {
+  pdfCheckPage(doc, 12);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(10);
+  doc.setTextColor(...CP);
+  doc.text(text, ML, cy);
+  doc.setFillColor(...CC);
+  doc.rect(ML, cy + 1.5, 30, 1.2, 'F');
+  cy += 7;
+};
+const pdfPara = (doc, lines, size = 8.5) => {
+  if (!lines || lines.length === 0) return;
+  const lineH = size * 0.3528 * 1.35;
+  pdfCheckPage(doc, lines.length * lineH + 3);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(size);
+  doc.setTextColor(...CD);
+  lines.forEach(l => {
+    doc.text(l, ML, cy);
+    cy += lineH;
+  });
+  cy += 2;
+};
 
 const NOTES_KEY = 'ialab_notes';
 const DAY_NOTES_KEY = 'ialab_day_notes';
@@ -112,6 +174,59 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
     saveDayNotes(updated);
   };
 
+  const exportNotesPDF = useCallback(async () => {
+    const { default: jsPDF } = await import('jspdf');
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    pdfResetY();
+
+    pdfDrawHeader(doc);
+
+    // Sección 1: Notas por módulo
+    pdfSectionTitle(doc, 'Notas por Módulo');
+    const allNotes = loadNotes();
+    const allDayNotes = loadDayNotes();
+    const moduleIds = Object.keys(allNotes).filter(k => allNotes[k]?.trim());
+    if (moduleIds.length > 0) {
+      moduleIds.forEach(modId => {
+        const mod = modules?.find(m => m.id === Number(modId));
+        const title = mod?.title || `Módulo ${modId}`;
+        pdfCheckPage(doc, 10);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8.5);
+        doc.setTextColor(...CC);
+        doc.text(`M${modId}: ${title}`, ML, cy);
+        cy += 4;
+        const content = allNotes[modId];
+        const lines = doc.splitTextToSize ? doc.splitTextToSize(content, CW) : [content];
+        pdfPara(doc, lines, 8);
+      });
+    } else {
+      pdfPara(doc, ['No hay notas guardadas en ningún módulo.'], 8);
+    }
+
+    // Sección 2: Notas del calendario
+    if (Object.keys(allDayNotes).length > 0) {
+      pdfSectionTitle(doc, 'Notas del Calendario');
+      const sortedDates = Object.keys(allDayNotes).sort();
+      sortedDates.forEach(dateKey => {
+        const [y, m, d] = dateKey.split('-');
+        const label = `${d}/${m}/${y}`;
+        pdfCheckPage(doc, 10);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8.5);
+        doc.setTextColor(...CC);
+        doc.text(`Día ${label}`, ML, cy);
+        cy += 4;
+        const content = allDayNotes[dateKey];
+        const lines = doc.splitTextToSize ? doc.splitTextToSize(content, CW) : [content];
+        pdfPara(doc, lines, 8);
+      });
+    }
+
+    addFooter(doc);
+    doc.save(`plan_estudio_${new Date().toISOString().slice(0, 10)}.pdf`);
+  }, [modules]);
+
   if (!isOpen) return null;
 
   const currentMod = modules?.find(m => m.id === selectedMod);
@@ -133,9 +248,14 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
             </div>
             <h2 className="text-sm font-bold text-petroleum">Plan de Estudio</h2>
           </div>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" aria-label="Cerrar">
-            <Icon name="fa-times" className="text-slate-600 dark:text-slate-400 text-sm" />
-          </button>
+          <div className="flex items-center gap-1">
+            <button onClick={exportNotesPDF} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" aria-label="Exportar PDF" title="Exportar a PDF">
+              <Icon name="fa-file-pdf" className="text-slate-600 dark:text-slate-400 text-sm" />
+            </button>
+            <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" aria-label="Cerrar">
+              <Icon name="fa-times" className="text-slate-600 dark:text-slate-400 text-sm" />
+            </button>
+          </div>
         </div>
 
         {/* Content */}
