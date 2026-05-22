@@ -4,6 +4,7 @@ import { useIALabContext } from '../../context/IALabContext';
 import { useIALabStore } from '../../store/ialabStore';
 import useBodyScrollLock from '../../hooks/useBodyScrollLock';
 import useFocusTrap from '../../hooks/useFocusTrap';
+import { useStudyNotesSync } from '../../hooks/IALab/useStudyNotesSync';
 
 // PDF helpers (jsPDF A4 portrait)
 const PW = 210, PH = 297, ML = 14, MR = 14, MT = 22, MB = 14;
@@ -114,6 +115,7 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
   const dayTextareaRef = useRef(null);
   const calendar = buildCalendar();
   const focusTrapRef = useFocusTrap(isOpen);
+  const { syncModuleNote, syncDayNote, isConnected } = useStudyNotesSync();
 
   useBodyScrollLock(isOpen);
 
@@ -133,6 +135,7 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
     const updated = { ...notes, [selectedMod]: val };
     setNotes(updated);
     saveNotes(updated);
+    syncModuleNote(selectedMod, val);
   };
 
   const handleModChange = (modId) => {
@@ -163,6 +166,7 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
     }
     setDayNotes(updated);
     saveDayNotes(updated);
+    syncDayNote(selectedDay, val);
   };
 
   const handleClearDayNote = () => {
@@ -172,6 +176,7 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
     setDayNotes(updated);
     setDayText('');
     saveDayNotes(updated);
+    syncDayNote(selectedDay, '');
   };
 
   const exportNotesPDF = useCallback(async () => {
@@ -382,11 +387,17 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
         </div>
 
         {/* Footer */}
-        <div className="px-5 py-3 border-t border-slate-100 dark:border-slate-700 text-center">
+        <div className="px-5 py-3 border-t border-slate-100 dark:border-slate-700 flex items-center justify-center gap-3">
           <p className="text-[10px] text-slate-500 dark:text-slate-400">
             <Icon name="fa-check" className="text-[9px] mr-1 text-emerald-500" />
             Las notas se guardan automáticamente
           </p>
+          {isConnected && (
+            <span className="text-[9px] text-emerald-500 flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
+              Cloud
+            </span>
+          )}
         </div>
       </div>
     </div>
