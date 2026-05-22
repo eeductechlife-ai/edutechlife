@@ -65,12 +65,43 @@ serve(async (req) => {
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
+    const clerkSecretKey = Deno.env.get('CLERK_SECRET_KEY')
 
     if (!supabaseUrl || !supabaseServiceKey) {
       throw new Error('Missing Supabase credentials')
     }
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
+
+    // Determinar rol desde unsafe_metadata (set by Clerk SignUp metadata prop)
+    const unsafeMetadata = userData.unsafe_metadata || {}
+    const platform = unsafeMetadata.platform || ''
+    const userType = unsafeMetadata.user_type || 'student'
+    const role = platform === 'smartboard' ? 'smartboard' : userType
+
+    // Sincronizar publicMetadata con Clerk via API (si hay secret key configurada)
+    if (clerkSecretKey && eventType === 'user.created') {
+      try {
+        const clerkApiUrl = `https://api.clerk.com/v1/users/${clerkId}/metadata`
+        const response = await fetch(clerkApiUrl, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${clerkSecretKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            public_metadata: { role },
+          }),
+        })
+        if (!response.ok) {
+          console.error(`Clerk API error: ${response.status} ${await response.text()}`)
+        } else {
+          console.log(`publicMetadata.role set to "${role}" for ${clerkId}`)
+        }
+      } catch (apiError) {
+        console.error('Error calling Clerk API:', apiError.message)
+      }
+    }
 
     const { data: existingProfile } = await supabase
       .from('profiles')
@@ -162,7 +193,7 @@ serve(async (req) => {
             id: clerkId,
             full_name: fullName,
             email: email,
-            role: 'student',
+        role,
           })
           .select()
           .single()

@@ -23,25 +23,26 @@ DROP POLICY IF EXISTS "user_progress_delete_policy" ON user_progress;
 DROP POLICY IF EXISTS "Allow anon to read user_progress" ON user_progress;
 
 -- 3. Crear políticas seguras basadas en auth.uid()
+-- NOTA: user_progress.user_id es TEXT, auth.uid() es UUID → castear con ::text
 -- SELECT: usuarios solo pueden ver su propio progreso
 CREATE POLICY "user_progress_select_policy" ON user_progress
   FOR SELECT
-  USING (auth.uid() = user_id);
+  USING (auth.uid()::text = user_id);
 
 -- INSERT: usuarios solo pueden crear progreso para sí mismos
 CREATE POLICY "user_progress_insert_policy" ON user_progress
   FOR INSERT
-  WITH CHECK (auth.uid() = user_id);
+  WITH CHECK (auth.uid()::text = user_id);
 
 -- UPDATE: usuarios solo pueden actualizar su propio progreso
 CREATE POLICY "user_progress_update_policy" ON user_progress
   FOR UPDATE
-  USING (auth.uid() = user_id);
+  USING (auth.uid()::text = user_id);
 
 -- DELETE: usuarios solo pueden eliminar su propio progreso
 CREATE POLICY "user_progress_delete_policy" ON user_progress
   FOR DELETE
-  USING (auth.uid() = user_id);
+  USING (auth.uid()::text = user_id);
 
 -- 4. Verificar políticas
 SELECT 
@@ -62,10 +63,10 @@ BEGIN
   RAISE NOTICE '========================================';
   RAISE NOTICE ' OPCION B: RLS Seguro configurado';
   RAISE NOTICE '========================================';
-  RAISE NOTICE '  user_progress - SELECT (auth.uid() = user_id) ✓';
-  RAISE NOTICE '  user_progress - INSERT (auth.uid() = user_id) ✓';
-  RAISE NOTICE '  user_progress - UPDATE (auth.uid() = user_id) ✓';
-  RAISE NOTICE '  user_progress - DELETE (auth.uid() = user_id) ✓';
+  RAISE NOTICE '  user_progress - SELECT (auth.uid()::text = user_id) ✓';
+  RAISE NOTICE '  user_progress - INSERT (auth.uid()::text = user_id) ✓';
+  RAISE NOTICE '  user_progress - UPDATE (auth.uid()::text = user_id) ✓';
+  RAISE NOTICE '  user_progress - DELETE (auth.uid()::text = user_id) ✓';
   RAISE NOTICE '========================================';
   RAISE NOTICE ' 🔒 REQUIERE JWT DE CLERK CONFIGURADO';
   RAISE NOTICE ' ========================================';

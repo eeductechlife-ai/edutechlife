@@ -67,17 +67,26 @@ async function fetchWithRetry(url, options, retries = 3) {
 }
 
 app.post('/api/chat', async (req, res) => {
-    const { prompt, systemPrompt, isJson } = req.body;
+    let { messages, prompt, systemPrompt, isJson, temperature, maxTokens, model } = req.body;
+
+    // Backward compatibility: accept old {prompt, systemPrompt} format
+    if (!messages && prompt) {
+        messages = [
+            { role: 'system', content: systemPrompt || '' },
+            { role: 'user', content: prompt }
+        ];
+        temperature = temperature ?? 0.5;
+        maxTokens = maxTokens || 500;
+    }
 
     // Input validation
-    if (!prompt || typeof prompt !== 'string' || prompt.trim().length === 0) {
-        return res.status(400).json({ error: 'Prompt is required and must be a non-empty string' });
+    if (!messages || !Array.isArray(messages) || messages.length === 0) {
+        return res.status(400).json({ error: 'Messages array is required and must be non-empty' });
     }
-    if (prompt.length > 5000) {
-        return res.status(400).json({ error: 'Prompt too long (max 5000 characters)' });
-    }
-    if (systemPrompt && (typeof systemPrompt !== 'string' || systemPrompt.length > 2000)) {
-        return res.status(400).json({ error: 'System prompt must be a string with max 2000 characters' });
+    for (const msg of messages) {
+        if (!msg.role || typeof msg.content !== 'string') {
+            return res.status(400).json({ error: 'Each message must have role and content (string)' });
+        }
     }
 
     if (!DEEPSEEK_API_KEY) {
@@ -87,13 +96,10 @@ app.post('/api/chat', async (req, res) => {
     const startTime = Date.now();
 
     const payload = { 
-        model: 'deepseek-chat', 
-        messages: [
-            { role: 'system', content: systemPrompt }, 
-            { role: 'user', content: prompt }
-        ], 
-        temperature: 0.5, 
-        max_tokens: 500,
+        model: model || 'deepseek-chat', 
+        messages: messages,
+        temperature: temperature ?? 0.7,
+        max_tokens: maxTokens || 800,
         stream: false
     };
     
@@ -129,17 +135,26 @@ app.post('/api/chat', async (req, res) => {
 });
 
 app.post('/api/chat/stream', async (req, res) => {
-    const { prompt, systemPrompt, isJson } = req.body;
+    let { messages, prompt, systemPrompt, isJson, temperature, maxTokens, model } = req.body;
+
+    // Backward compatibility: accept old {prompt, systemPrompt} format
+    if (!messages && prompt) {
+        messages = [
+            { role: 'system', content: systemPrompt || '' },
+            { role: 'user', content: prompt }
+        ];
+        temperature = temperature ?? 0.5;
+        maxTokens = maxTokens || 500;
+    }
 
     // Input validation
-    if (!prompt || typeof prompt !== 'string' || prompt.trim().length === 0) {
-        return res.status(400).json({ error: 'Prompt is required and must be a non-empty string' });
+    if (!messages || !Array.isArray(messages) || messages.length === 0) {
+        return res.status(400).json({ error: 'Messages array is required and must be non-empty' });
     }
-    if (prompt.length > 5000) {
-        return res.status(400).json({ error: 'Prompt too long (max 5000 characters)' });
-    }
-    if (systemPrompt && (typeof systemPrompt !== 'string' || systemPrompt.length > 2000)) {
-        return res.status(400).json({ error: 'System prompt must be a string with max 2000 characters' });
+    for (const msg of messages) {
+        if (!msg.role || typeof msg.content !== 'string') {
+            return res.status(400).json({ error: 'Each message must have role and content (string)' });
+        }
     }
 
     if (!DEEPSEEK_API_KEY) {
@@ -147,13 +162,10 @@ app.post('/api/chat/stream', async (req, res) => {
     }
 
     const payload = { 
-        model: 'deepseek-chat', 
-        messages: [
-            { role: 'system', content: systemPrompt }, 
-            { role: 'user', content: prompt }
-        ], 
-        temperature: 0.75, 
-        max_tokens: 1200,
+        model: model || 'deepseek-chat', 
+        messages: messages,
+        temperature: temperature ?? 0.7,
+        max_tokens: maxTokens || 800,
         stream: true
     };
     
