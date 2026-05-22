@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabQuiz } from '../../hooks/IALab/useIALabQuiz';
 import { useIALabContext } from '../../context/IALabContext';
@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import SecurityWarningModal from './SecurityWarningModal';
 import ScreenshotProtectionOverlay from './ScreenshotProtectionOverlay';
 import useScreenshotProtection from '../../hooks/IALab/useScreenshotProtection';
+import useFocusTrap from '../../hooks/useFocusTrap';
 
 const IALabQuizModal = ({ isOpen, onClose }) => {
   const {
@@ -37,6 +38,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
     openEvaluation,
     closeEvaluationModal,
     setCurrentQuestion,
+    setTimeElapsed,
     formatTime,
   } = useIALabQuiz();
 
@@ -48,6 +50,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [securityAlert, setSecurityAlert] = useState(null);
   const [printWarning, setPrintWarning] = useState(null);
+  const [practiceMode, setPracticeMode] = useState(false);
 
   const { showOverlay, setShowOverlay } = useScreenshotProtection(isVisible && !showScoreResult, {
     onMaxViolations: () => {
@@ -156,10 +159,8 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
     const submitResult = await submitQuiz();
     setIsSubmitting(false);
     
-    // Resultado ya guardado dentro de submitQuiz via updateModuleActivity + markExamComplete
-    if (submitResult?.result) {
+    if (!practiceMode && submitResult?.result) {
       const { score, passed } = submitResult.result;
-      // Guardado DIRECTO al store + localStorage (no depende de cadenas de contexto)
       const st = useIALabStore.getState();
       st.updateModuleActivity(activeMod, 'exam', passed, score);
       try {
@@ -169,7 +170,6 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
         localStorage.setItem(key, JSON.stringify(current));
       } catch(e) {}
 
-      // Sincronizar con Supabase via ProgressContext
       if (markExamComplete) {
         markExamComplete(activeMod, score).catch((err) => {
           console.error('Error al sincronizar examen completado:', err);
@@ -177,11 +177,10 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
         });
       }
 
-      // Disparar evento global para forzar refresco de la UI
       window.dispatchEvent(new CustomEvent('ialab:examCompleted', { detail: { moduleId: activeMod, score, passed } }));
     }
     
-    if (submitResult?.success && submitResult?.result) {
+    if (!practiceMode && submitResult?.success && submitResult?.result) {
       createNotification({
         type: submitResult.result.passed ? 'success' : 'warning',
         title: submitResult.result.passed ? '📝 Examen Aprobado' : '📝 Examen No Aprobado',
@@ -190,6 +189,25 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
       });
     }
   };
+
+  const handleSubmitRef = useRef(handleSubmit);
+  useEffect(() => { handleSubmitRef.current = handleSubmit; }, [handleSubmit]);
+
+  // Timer real - cuenta regresiva
+  useEffect(() => {
+    if (!isTimerRunning || showScoreResult) return;
+    const interval = setInterval(() => {
+      setTimeElapsed(prev => prev + 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [isTimerRunning, showScoreResult, setTimeElapsed]);
+
+  // Auto-submit al agotarse el tiempo
+  useEffect(() => {
+    if (isTimerRunning && !showScoreResult && !isSubmitting && timeElapsed >= SUGGESTED_TIME_SECONDS) {
+      handleSubmitRef.current();
+    }
+  }, [timeElapsed, isTimerRunning, showScoreResult, isSubmitting, SUGGESTED_TIME_SECONDS]);
 
   const handleClose = () => {
     closeEvaluationModal();
@@ -245,8 +263,19 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
               : 'bg-white/10 border border-white/20 text-white/90'
           }`}>
             <Icon name="fa-clock" className="text-sm" />
-            <span className="text-sm font-mono font-bold">{formatTime(timeElapsed)}</span>
+            <span className="text-sm font-mono font-bold">{formatTime(Math.max(0, SUGGESTED_TIME_SECONDS - timeElapsed))}</span>
           </div>
+        )}
+        {!showScoreResult && (
+          <label className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/10 border border-white/20 cursor-pointer hover:bg-white/20 transition-colors select-none">
+            <input
+              type="checkbox"
+              checked={practiceMode}
+              onChange={e => setPracticeMode(e.target.checked)}
+              className="w-3.5 h-3.5 rounded border-white/30 bg-white/10 text-petroleum focus:ring-petroleum focus:ring-offset-0"
+            />
+            <span className="text-[11px] font-medium text-white/80">Práctica</span>
+          </label>
         )}
 
         <div className="flex items-center gap-3">
@@ -314,7 +343,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
                 onClick={() => handleSelectAnswer(option.id)}
                 className={`w-full text-left p-3.5 rounded-xl border-2 transition-all duration-300 flex items-start gap-3 ${
                   isSelected
-                    ? 'border-corporate bg-corporate/5 shadow-[0_0_15px_rgba(0,188,212,0.15)] dark:border-[#66CCCC] dark:bg-[#66CCCC]/10 dark:shadow-[#66CCCC]/20'
+                    ? 'border-corporate bg-corporate/5 shadow-[0_0_15px_rgba(0,188,212,0.15)] dark:border-mint dark:bg-mint/10 dark:shadow-mint/20'
                     : 'border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:hover:bg-slate-700 dark:hover:border-slate-500'
                 }`}
               >
@@ -328,7 +357,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
                   )}
                 </div>
                 <span className={`text-sm md:text-base leading-relaxed ${
-                  isSelected ? 'text-petroleum dark:text-[#4DA8C4] font-medium' : 'text-slate-700 dark:text-slate-200'
+                  isSelected ? 'text-petroleum font-medium' : 'text-slate-700 dark:text-slate-200'
                 }`}>
                   {option.label}
                 </span>
@@ -387,6 +416,75 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
       )}
     </div>
   );
+
+  const [showReview, setShowReview] = useState(false);
+
+  const renderAnswerReview = () => {
+    if (!quizQuestions || quizQuestions.length === 0) return null;
+    return (
+      <div className="mb-6">
+        <button
+          onClick={() => setShowReview(prev => !prev)}
+          className="w-full flex items-center justify-between px-4 py-3 bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition-all"
+        >
+          <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+            <Icon name="fa-list-check" className="text-sm mr-2" />
+            Revisar respuestas
+          </span>
+          <Icon
+            name={showReview ? 'fa-chevron-up' : 'fa-chevron-down'}
+            className="text-sm text-slate-400"
+          />
+        </button>
+        {showReview && (
+          <div className="mt-3 space-y-3">
+            {quizQuestions.map((q, idx) => {
+              const userAnswer = quizAnswers[q.id];
+              const isCorrect = userAnswer === q.correctAnswer;
+              const userOption = q.options.find(o => o.id === userAnswer);
+              const correctOption = q.options.find(o => o.id === q.correctAnswer);
+              return (
+                <div
+                  key={q.id}
+                  className={`p-4 rounded-xl border-2 ${
+                    isCorrect
+                      ? 'bg-emerald-50 border-emerald-200 dark:bg-emerald-900/20 dark:border-emerald-700'
+                      : 'bg-red-50 border-red-200 dark:bg-red-900/20 dark:border-red-700'
+                  }`}
+                >
+                  <div className="flex items-start gap-3">
+                    <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 text-white text-xs font-bold ${
+                      isCorrect ? 'bg-emerald-500' : 'bg-red-500'
+                    }`}>
+                      <Icon name={isCorrect ? 'fa-check' : 'fa-xmark'} className="text-xs" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-slate-800 dark:text-slate-100 mb-2">
+                        {idx + 1}. {q.question}
+                      </p>
+                      <div className="text-xs space-y-1">
+                        <p className={isCorrect ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}>
+                          <span className="font-medium">Tu respuesta:</span> {userOption?.label || 'Sin responder'}
+                        </p>
+                        {!isCorrect && (
+                          <p className="text-emerald-600 dark:text-emerald-400">
+                            <span className="font-medium">Respuesta correcta:</span> {correctOption?.label}
+                          </p>
+                        )}
+                        <p className="text-slate-500 mt-1">
+                          <span className="font-medium">Tema:</span> {q.topic} · <span className="font-medium">Dificultad:</span> {q.difficulty}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    );
+  };
 
   const renderResults = () => {
     if (!quizResult) return null;
@@ -447,11 +545,13 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
               ></div>
             </div>
             <div className="flex justify-between mt-2">
-              <span className="text-xs text-slate-400">0%</span>
-              <span className="text-xs text-slate-400">{PASSING_SCORE}% mínimo</span>
-              <span className="text-xs text-slate-400">100%</span>
+              <span className="text-xs text-slate-600">0%</span>
+              <span className="text-xs text-slate-600">{PASSING_SCORE}% mínimo</span>
+              <span className="text-xs text-slate-600">100%</span>
             </div>
           </div>
+
+          {renderAnswerReview()}
 
           {!passed && quizResult?.failedQuestions?.length > 0 && (
             <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
@@ -495,7 +595,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
                 return (
                   <>
                     <button onClick={handleRetry} className="w-full py-3 border-2 border-red-200 text-red-600 rounded-xl hover:bg-red-50 hover:border-red-300 transition-all duration-300 font-medium">Reintentar examen</button>
-                    <p className="text-xs text-center text-slate-400">Te quedan {remaining - 1} de 3 intentos. Cada intento tiene un cooldown de 12h.</p>
+                    <p className="text-xs text-center text-slate-600">Te quedan {remaining - 1} de 3 intentos. Cada intento tiene un cooldown de 12h.</p>
                   </>
                 );
               }
@@ -510,10 +610,13 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
     );
   };
 
+  const focusTrapRef = useFocusTrap(isVisible);
+
   return (
     <AnimatePresence>
       {isVisible && (
         <motion.div
+          ref={focusTrapRef}
           className="fixed inset-0 z-[100] bg-slate-50 dark:bg-slate-900 flex flex-col min-h-0 select-none"
           style={{ WebkitUserSelect: 'none', userSelect: 'none' }}
           onCopy={preventDefaultEvent}
@@ -534,7 +637,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
                 background: `repeating-linear-gradient(45deg, var(--color-petroleum), var(--color-petroleum) 2px, transparent 2px, transparent 60px)`,
               }}>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-petroleum dark:text-[#4DA8C4] text-8xl font-bold transform -rotate-12 select-none" style={{ whiteSpace: 'nowrap' }}>
+                  <span className="text-petroleum text-8xl font-bold transform -rotate-12 select-none" style={{ whiteSpace: 'nowrap' }}>
                     EXAMEN EDUTECHLIFE
                   </span>
                 </div>

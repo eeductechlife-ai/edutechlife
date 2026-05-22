@@ -172,12 +172,12 @@ const IALabForumSection = ({
             {/* Segunda fila: Barra de búsqueda moderna */}
             <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Icon name="fa-search" className="text-slate-400 w-4 h-4" />
+                    <Icon name="fa-search" className="text-slate-600 w-4 h-4" />
                 </div>
                 <input
                     type="text"
                     placeholder="Buscar debates o preguntas..."
-                    className="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-corporate focus:border-transparent text-petroleum-darker placeholder-slate-400 shadow-sm"
+                    className="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-corporate focus:border-transparent text-petroleum-darker placeholder-slate-500 shadow-sm"
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
                     <span className="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded-md">
@@ -267,7 +267,7 @@ const IALabForumSection = ({
                     value={newPostTitle}
                     onChange={(e) => setNewPostTitle(e.target.value)}
                     placeholder="Título de tu post..."
-                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-corporate focus:border-transparent text-petroleum-darker placeholder-slate-400"
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-corporate focus:border-transparent text-petroleum-darker placeholder-slate-500"
                     disabled={isCreatingPost}
                 />
                 
@@ -275,7 +275,7 @@ const IALabForumSection = ({
                     value={newPostContent}
                     onChange={(e) => setNewPostContent(e.target.value.slice(0, 500))}
                     placeholder="¿Qué quieres compartir con la comunidad?..."
-                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-corporate focus:border-transparent text-petroleum-darker placeholder-slate-400 min-h-[120px] resize-none"
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-corporate focus:border-transparent text-petroleum-darker placeholder-slate-500 min-h-[120px] resize-none"
                     disabled={isCreatingPost}
                     maxLength={500}
                 />
@@ -418,7 +418,7 @@ const IALabForumSection = ({
                                         <p className="text-xs text-slate-600 truncate">
                                             {simulatedData.lastResponder.name}
                                         </p>
-                                        <p className="text-xs text-slate-400">
+                                        <p className="text-xs text-slate-600">
                                             {simulatedData.lastResponder.time}
                                         </p>
                                     </div>
@@ -476,13 +476,13 @@ const IALabForumSection = ({
                     {/* Acciones secundarias */}
                     <div className="flex items-center gap-1">
                         <button
-                            className="p-1.5 text-slate-400 hover:text-corporate transition-colors duration-200 rounded-md hover:bg-slate-50"
+                            className="p-1.5 text-slate-600 hover:text-corporate transition-colors duration-200 rounded-md hover:bg-slate-50"
                             aria-label="Guardar debate"
                         >
                             <Icon name="fa-bookmark" className="w-4 h-4" />
                         </button>
                         <button
-                            className="p-1.5 text-slate-400 hover:text-corporate transition-colors duration-200 rounded-md hover:bg-slate-50"
+                            className="p-1.5 text-slate-600 hover:text-corporate transition-colors duration-200 rounded-md hover:bg-slate-50"
                             aria-label="Compartir debate"
                         >
                             <Icon name="fa-share" className="w-4 h-4" />

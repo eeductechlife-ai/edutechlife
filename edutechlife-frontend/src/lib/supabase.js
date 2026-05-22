@@ -27,8 +27,8 @@ const supabaseClientsCache = new Map();
 // Contador para debugging
 let clientCreationCount = 0;
 
-// Singleton global para cliente base
-let globalSupabaseClient = null;
+// Almacén mutable — el proxy delega en esta variable (inicializado después de createClerkSupabaseClient)
+let _currentClient = null;
 
 /**
  * Crea un cliente Supabase con fetch personalizado para inyectar JWT de Clerk
@@ -144,66 +144,45 @@ export const createClerkSupabaseClient = (clerkToken = null) => {
   return client;
 };
 
-/**
- * Cliente Supabase base (anónimo) - sin token Clerk
- * Para uso cuando no hay sesión Clerk disponible
- * SINGLETON: Solo una instancia global para toda la app
- */
-const getSupabaseSingleton = () => {
-  if (!globalSupabaseClient) {
-    globalSupabaseClient = createClerkSupabaseClient();
-    if (import.meta.env.DEV) {
-
-    }
-  }
-  return globalSupabaseClient;
-};
-
-const supabase = getSupabaseSingleton();
+// Inicializar cliente anónimo por defecto
+_currentClient = createClerkSupabaseClient();
 
 /**
- * Crea un cliente Supabase con JWT de Clerk obtenido de una sesión
- * @param {Object} session - Sesión de Clerk (de useSession)
- * @returns {Object} Cliente Supabase configurado con JWT de Clerk
- * @deprecated Usar createClerkSupabaseClient() directamente con token
+ * Upgrade del cliente base con JWT de Clerk.
+ * @param {string|null} clerkToken - Token JWT de Clerk o null para mantener anónimo
  */
-export const getSupabaseWithClerkSession = async (session) => {
-  console.warn('⚠️ getSupabaseWithClerkSession está deprecado, usar createClerkSupabaseClient()');
-  
-  if (!session || !session.getToken) {
-    if (import.meta.env.DEV) {
-
-    }
-    return supabase;
-  }
-  
-  try {
-    // Obtener token JWT de Clerk usando template 'supabase'
-    const token = await session.getToken({ template: 'supabase' });
-    
-    if (!token) {
-      console.warn('⚠️ No se pudo obtener token JWT de Clerk, usando cliente base');
-      return supabase;
-    }
-    
-    if (import.meta.env.DEV) {
-
-    }
-    
-    // Crear cliente con token JWT de Clerk
-    return createClerkSupabaseClient(token);
-    
-  } catch (error) {
-    console.error('❌ Error creando cliente Supabase con JWT de Clerk:', error);
-
-    return supabase;
+export const initSupabaseClient = (clerkToken) => {
+  if (clerkToken) {
+    _currentClient = createClerkSupabaseClient(clerkToken);
   }
 };
 
 /**
- * Helper para obtener sesión Clerk si está disponible
- * Compatible con código existente que usa supabase.auth.getSession()
+ * Proxy transparente: siempre delega en _currentClient.
+ * Los consumidores (useActivityTracker, etc.) importan { supabase }
+ * y obtienen automáticamente el cliente más actualizado.
  */
+const staticMethods = {};
+
+export const supabase = new Proxy(staticMethods, {
+  get(target, prop) {
+    // Static helpers attachados al target
+    if (prop in target) {
+      const value = target[prop];
+      return typeof value === 'function' ? value.bind(target) : value;
+    }
+    // Delegar al cliente actual
+    const client = _currentClient;
+    const value = client[prop];
+    return typeof value === 'function' ? value.bind(client) : value;
+  },
+  set(target, prop, value) {
+    target[prop] = value;
+    return true;
+  }
+});
+
+// Helper: obtener sesión Clerk si está disponible
 supabase.auth.getSessionWithClerk = async () => {
   try {
     if (typeof window !== 'undefined' && window.Clerk?.session) {
@@ -218,14 +197,10 @@ supabase.auth.getSessionWithClerk = async () => {
   } catch (error) {
     console.warn('No se pudo obtener sesión de Clerk:', error);
   }
-  
-  // Fallback a sesión nativa de Supabase
-  return supabase.auth.getSession();
+  return _currentClient.auth.getSession();
 };
 
-/**
- * Helper para verificar si Clerk está disponible
- */
+// Helper: verificar si Clerk está disponible
 supabase.hasClerkSession = () => {
   return typeof window !== 'undefined' && !!window.Clerk?.session;
 };
@@ -237,14 +212,9 @@ if (typeof window !== 'undefined' && import.meta.env.DEV) {
     clientCount: clientCreationCount,
     cacheSize: supabaseClientsCache.size,
     cacheKeys: Array.from(supabaseClientsCache.keys()),
-    getSingleton: getSupabaseSingleton,
-    clearCache: () => {
-      supabaseClientsCache.clear();
-      globalSupabaseClient = null;
-      clientCreationCount = 0;
-    }
+    getCurrentClient: () => _currentClient,
+    initSupabaseClient,
   };
 }
 
 export default supabase;
-export { supabase };

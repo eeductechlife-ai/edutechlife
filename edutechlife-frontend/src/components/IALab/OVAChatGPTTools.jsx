@@ -1,26 +1,12 @@
 import React, { useState } from 'react';
+import VoiceReader from './VoiceReader';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Globe, Code, Image as ImageIcon, Layout, Cpu, Lightbulb, Play,
-  Volume2, Square, CheckCircle2, AlertCircle, ChevronRight, ChevronLeft,
+  CheckCircle2, AlertCircle, ChevronRight, ChevronLeft,
   X, Trophy, Award, RefreshCcw, BookOpen, Target, Zap, Bot, GraduationCap
 } from 'lucide-react';
-import { speakTextConversational, stopSpeech } from '../../utils/speech';
-
-const VoiceReader = ({ text }) => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const speak = () => {
-    if (isPlaying) { stopSpeech(); setIsPlaying(false); return; }
-    speakTextConversational(text, 'valerio', () => setIsPlaying(false));
-    setIsPlaying(true);
-  };
-  return (
-    <button onClick={speak} className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors shrink-0 ${isPlaying ? 'bg-red-100 text-red-600 hover:bg-red-200' : 'bg-[#259eb5] text-white hover:bg-[#13374b] shadow-md'}`} title="Escuchar con voz de Valerio">
-      {isPlaying ? <Square size={16} /> : <Volume2 size={16} />}
-      <span className="font-bold">{isPlaying ? 'Detener' : 'Escuchar con Valerio'}</span>
-    </button>
-  );
-};
+import { stopSpeech } from '../../utils/speech';
 
 const tools = [
   { id: "browse", title: "Búsqueda Web (Browse)", icon: <Globe className="w-10 h-10 text-blue-500" />, desc: "Conecta a ChatGPT con el mundo real en tiempo real. Es tu ventana a la actualidad académica y profesional.", pros: ["Noticias 2025/2026", "Estadísticas actuales", "Verificación de hechos"], cons: ["Conceptos teóricos básicos", "Redacción creativa simple"], prompt: "Busca las últimas regulaciones de IA en Colombia para 2025 y resume los puntos clave.", audio: "La búsqueda web permite a ChatGPT acceder a internet en tiempo real. Úsala para datos actualizados, noticias recientes o verificar información que cambia rápidamente.", useCases: ["Revisión de literatura reciente", "Actualización de marcos legales", "Búsqueda de cotizaciones en vivo"] },
@@ -92,7 +78,7 @@ export default function OVAChatGPTTools() {
           <span className="text-3xl font-black tracking-tight"><span className="text-[#259eb5]">Edu</span><span className="text-[#13374b]">techlife</span></span>
         </div>
         <div className="flex items-center gap-3 bg-slate-50 px-6 py-2.5 rounded-2xl border border-slate-100 shadow-sm">
-          <span className="text-xs font-black text-slate-400 uppercase tracking-widest">Ecosistema ChatGPT</span>
+          <span className="text-xs font-black text-slate-600 uppercase tracking-widest">Ecosistema ChatGPT</span>
           <div className="h-4 w-[2px] bg-slate-200"></div>
           <span className="text-sm font-bold text-[#259eb5]">Módulo de Competencias</span>
         </div>
@@ -152,7 +138,7 @@ export default function OVAChatGPTTools() {
               {!quizFinished ? (
                 <div className="bg-white rounded-[2rem] p-6 md:p-8 shadow-xl border border-slate-100">
                   <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-50">
-                    <button onClick={() => { setShowQuiz(false); stopSpeech(); }} className="text-slate-400 hover:text-[#13374b] flex items-center gap-1 font-bold transition-colors text-xs"><ChevronLeft size={16} /> Salir</button>
+                    <button onClick={() => { setShowQuiz(false); stopSpeech(); }} className="text-slate-600 hover:text-[#13374b] flex items-center gap-1 font-bold transition-colors text-xs"><ChevronLeft size={16} /> Salir</button>
                     <div className="flex gap-1.5">{quizScenarios.map((_, i) => <div key={i} className={`h-1.5 rounded-full transition-all duration-500 ${i === quizStep ? 'w-10 bg-[#259eb5]' : i < quizStep ? 'w-6 bg-emerald-400' : 'w-4 bg-slate-100'}`} />)}</div>
                   </div>
                   <h2 className="text-[10px] font-black text-[#259eb5] uppercase tracking-widest mb-3">Caso {quizStep + 1}</h2>
@@ -210,7 +196,7 @@ export default function OVAChatGPTTools() {
       <AnimatePresence>
         {activeModal !== null && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#13374b]/80 backdrop-blur-sm">
-            <motion.div initial={{ scale: 0.9, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.9, opacity: 0, y: 20 }} className="bg-white w-full max-w-3xl max-h-[85vh] overflow-y-auto rounded-[2rem] shadow-2xl relative">
+            <motion.div initial={{ scale: 0.9, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.9, opacity: 0, y: 20 }} className="bg-white w-full max-w-3xl max-h-[85dvh] overflow-y-auto rounded-[2rem] shadow-2xl relative">
               <button onClick={() => { setActiveModal(null); stopSpeech(); }} className="sticky top-4 right-4 float-right z-10 p-2.5 bg-slate-100 hover:bg-rose-50 text-slate-500 hover:text-rose-500 rounded-full transition-all shadow-sm"><X size={20} /></button>
               <div className="p-6 md:p-8">
                 <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-6">
@@ -242,11 +228,11 @@ export default function OVAChatGPTTools() {
                 </div>
                 <div className="bg-[#13374b] rounded-2xl p-6 text-white">
                   <div className="flex items-center justify-between mb-4">
-                    <h4 className="text-[9px] font-black uppercase tracking-[0.15em] text-slate-400">Prompt Estratégico</h4>
+                    <h4 className="text-[9px] font-black uppercase tracking-[0.15em] text-slate-600">Prompt Estratégico</h4>
                     <div className="flex gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-rose-500" /><div className="w-2.5 h-2.5 rounded-full bg-amber-500" /><div className="w-2.5 h-2.5 rounded-full bg-emerald-500" /></div>
                   </div>
                   <code className="text-cyan-300 block text-sm font-mono leading-relaxed bg-black/20 p-4 rounded-xl italic">"{tools[activeModal].prompt}"</code>
-                  <p className="text-slate-400 text-[9px] font-medium tracking-wide mt-3">Tip: Copia y adapta esta instrucción para tus flujos en Edutechlife.</p>
+                  <p className="text-slate-600 text-[9px] font-medium tracking-wide mt-3">Tip: Copia y adapta esta instrucción para tus flujos en Edutechlife.</p>
                 </div>
               </div>
             </motion.div>
@@ -254,7 +240,7 @@ export default function OVAChatGPTTools() {
         )}
       </AnimatePresence>
 
-      <footer className="max-w-6xl mx-auto mt-12 pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-400 text-[10px] font-bold pb-8 uppercase tracking-widest">
+      <footer className="max-w-6xl mx-auto mt-12 pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-600 text-[10px] font-bold pb-8 uppercase tracking-widest">
         <p>Laboratorio guiado por <span className="text-[#259eb5]">Valerio</span> — Coach de IA de Edutechlife.</p>
       </footer>
 

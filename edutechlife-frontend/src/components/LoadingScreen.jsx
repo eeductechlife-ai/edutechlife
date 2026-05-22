@@ -47,14 +47,14 @@ const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
     return (
         <div className={`loading-screen ${isExiting ? 'exiting' : ''}`}>
             {/* Floating Particles - Enhanced 3D */}
-            <FloatingParticles count={55} className="z-1" />
+            <FloatingParticles count={24} className="z-1" />
 
             {/* Additional 3D Floating Elements - Corporate colors only */}
-            <div className="absolute top-[20%] left-[10%] w-4 h-4 bg-[#4DA8C4]/20 rounded-full animate-[float-3d_6s_ease-in-out_infinite]" style={{ animationDelay: '-2s' }} />
-            <div className="absolute top-[60%] right-[15%] w-3 h-3 bg-[#66CCCC]/25 rounded-full animate-[float-3d_8s_ease-in-out_infinite]" style={{ animationDelay: '-4s' }} />
-            <div className="absolute bottom-[30%] left-[20%] w-2 h-2 bg-[#B2D8E5]/20 rounded-full animate-[float-3d_7s_ease-in-out_infinite]" style={{ animationDelay: '-1s' }} />
-            <div className="absolute top-[40%] left-[25%] w-3 h-3 bg-[#4DA8C4]/15 rounded-full animate-[float-3d_9s_ease-in-out_infinite]" style={{ animationDelay: '-3s' }} />
-            <div className="absolute top-[25%] right-[30%] w-2 h-2 bg-[#66CCCC]/20 rounded-full animate-[float-3d_6s_ease-in-out_infinite]" style={{ animationDelay: '-5s' }} />
+            <div className="absolute top-[20%] left-[10%] w-4 h-4 bg-[#4DA8C4]/20 rounded-full animate-[float-3d_22s_ease-in-out_infinite]" style={{ animationDelay: '-2s' }} />
+            <div className="absolute top-[60%] right-[15%] w-3 h-3 bg-[#66CCCC]/25 rounded-full animate-[float-3d_28s_ease-in-out_infinite]" style={{ animationDelay: '-4s' }} />
+            <div className="absolute bottom-[30%] left-[20%] w-2 h-2 bg-[#B2D8E5]/20 rounded-full animate-[float-3d_25s_ease-in-out_infinite]" style={{ animationDelay: '-1s' }} />
+            <div className="absolute top-[40%] left-[25%] w-3 h-3 bg-[#4DA8C4]/15 rounded-full animate-[float-3d_30s_ease-in-out_infinite]" style={{ animationDelay: '-3s' }} />
+            <div className="absolute top-[25%] right-[30%] w-2 h-2 bg-[#66CCCC]/20 rounded-full animate-[float-3d_20s_ease-in-out_infinite]" style={{ animationDelay: '-5s' }} />
 
             <div className="loading-content">
                 <div className="loading-brand">

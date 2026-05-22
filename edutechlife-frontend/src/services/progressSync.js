@@ -34,7 +34,8 @@ export const syncProgressToSupabase = async (supabase, userId, progressData) => 
 
   try {
     const { completedVideos = [], completedModules = [], completedExams = {}, 
-            completedInfographics = [], completedActivities = [] } = progressData;
+            completedInfographics = [], completedActivities = [],
+            gamification } = progressData;
 
     // Preparar registros para upsert
     const recordsToUpsert = [];
@@ -93,14 +94,34 @@ export const syncProgressToSupabase = async (supabase, userId, progressData) => 
       });
     });
 
+    if (gamification) {
+      recordsToUpsert.push({
+        user_id: userId,
+        module_id: 0,
+        activity_type: 'gamification',
+        resource_id: 'state',
+        is_completed: true,
+        gamification_data: gamification,
+        updated_at: new Date().toISOString()
+      });
+    }
+
     if (recordsToUpsert.length === 0) {
       return { success: true, data: [], error: null };
     }
 
+    // Deduplicar: evitar "ON CONFLICT DO UPDATE command cannot affect row a second time"
+    const seen = new Map();
+    for (const record of recordsToUpsert) {
+      const key = `${record.user_id}|${record.module_id ?? ''}|${record.activity_type}|${record.resource_id ?? ''}`;
+      seen.set(key, record);
+    }
+    const uniqueRecords = Array.from(seen.values());
+
     // Upsert en batch - NULLS NOT DISTINCT maneja todos los casos
     const { data, error } = await supabase
       .from(PROGRESS_TABLE)
-      .upsert(recordsToUpsert, { onConflict: 'user_id,module_id,activity_type,resource_id' })
+      .upsert(uniqueRecords, { onConflict: 'user_id,module_id,activity_type,resource_id' })
       .select();
 
     if (error) {
@@ -121,6 +142,59 @@ export const syncProgressToSupabase = async (supabase, userId, progressData) => 
     return { success: true, data, error: null };
   } catch (error) {
     console.error('❌ Error sincronizando progreso:', error.message);
+    return { success: false, error: error.message, data: null };
+  }
+};
+
+/**
+ * Sincroniza datos de gamificación (XP, streak, badges) a Supabase
+ */
+export const syncGamificationToSupabase = async (supabase, userId, gamificationData) => {
+  if (!supabase || !userId) {
+    return { success: false, error: 'Cliente Supabase o userId no disponible' };
+  }
+
+  if (!navigator.onLine) {
+    queueSyncOperation({
+      type: 'gamification_sync',
+      data: gamificationData
+    });
+    return { success: false, error: 'offline', offline: true };
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from(PROGRESS_TABLE)
+      .upsert({
+        user_id: userId,
+        module_id: 0,
+        activity_type: 'gamification',
+        resource_id: 'state',
+        is_completed: true,
+        gamification_data: gamificationData,
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'user_id,module_id,activity_type,resource_id' })
+      .select();
+
+    if (error) {
+      console.error('❌ Error sync gamification:', error.message);
+      if (error.status === 401 || error.message.includes('JWT') || error.message.includes('key')) {
+        queueSyncOperation({
+          type: 'gamification_sync',
+          data: gamificationData
+        });
+        return { success: false, error: error.message, data: null };
+      }
+      throw error;
+    }
+
+    return { success: true, data, error: null };
+  } catch (error) {
+    console.error('❌ Error sincronizando gamificación:', error.message);
+    queueSyncOperation({
+      type: 'gamification_sync',
+      data: gamificationData
+    });
     return { success: false, error: error.message, data: null };
   }
 };
@@ -244,6 +318,7 @@ const transformProgressData = (data) => {
   const completedInfographics = [];
   const completedActivities = [];
   const challengeScores = {};
+  let gamification = null;
 
   data?.forEach(record => {
     if (!record.is_completed) return;
@@ -277,6 +352,11 @@ const transformProgressData = (data) => {
           challengeScores[record.module_id] = record.score;
         }
         break;
+      case 'gamification':
+        if (record.gamification_data) {
+          gamification = record.gamification_data;
+        }
+        break;
     }
   });
 
@@ -290,6 +370,7 @@ const transformProgressData = (data) => {
       completedInfographics,
       completedActivities,
       challengeScores,
+      gamification,
       recordCount: data?.length || 0
     }
   };
@@ -324,13 +405,30 @@ export const mergeProgress = (localData, remoteData) => {
     return { ...local, ...remote };
   };
 
+  const mergeGamification = (local, remote) => {
+    if (!remote) return local || null;
+    if (!local) return remote;
+    return {
+      xp: Math.max(local.xp || 0, remote.xp || 0),
+      streak: Math.max(local.streak || 0, remote.streak || 0),
+      lastActivityDate: [local.lastActivityDate, remote.lastActivityDate].filter(Boolean).sort().pop() || null,
+      badges: [...new Set([...(local.badges || []), ...(remote.badges || [])])],
+      lessonProgress: { ...(remote.lessonProgress || {}), ...(local.lessonProgress || {}) },
+      checkpointAnswers: { ...(remote.checkpointAnswers || {}), ...(local.checkpointAnswers || {}) },
+      forumPostCount: Math.max(local.forumPostCount || 0, remote.forumPostCount || 0),
+      forumCommentCount: Math.max(local.forumCommentCount || 0, remote.forumCommentCount || 0),
+      startDate: remote.startDate || local.startDate || null,
+    };
+  };
+
   return {
     completedVideos: mergeArrays(localData.completedVideos || [], remoteData.completedVideos || []),
     completedModules: mergeArrays(localData.completedModules || [], remoteData.completedModules || []),
     completedExams: mergeExams(localData.completedExams || {}, remoteData.completedExams || {}),
     completedInfographics: mergeArrays(localData.completedInfographics || [], remoteData.completedInfographics || []),
     completedActivities: mergeArrays(localData.completedActivities || [], remoteData.completedActivities || []),
-    challengeScores: mergeChallengeScores(localData.challengeScores || {}, remoteData.challengeScores || {})
+    challengeScores: mergeChallengeScores(localData.challengeScores || {}, remoteData.challengeScores || {}),
+    gamification: mergeGamification(localData.gamification, remoteData.gamification)
   };
 };
 
@@ -365,6 +463,9 @@ export const processSyncQueue = async (supabase, userId) => {
         if (result.success) processed++;
       } else if (operation.type === 'full_sync') {
         const result = await syncProgressToSupabase(supabase, userId, operation.data);
+        if (result.success) processed++;
+      } else if (operation.type === 'gamification_sync') {
+        const result = await syncGamificationToSupabase(supabase, userId, operation.data);
         if (result.success) processed++;
       }
     }

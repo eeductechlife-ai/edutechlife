@@ -83,7 +83,7 @@ const DetailCard = ({ detail }) => {
   const DetailIcon = detail.icon || PlaySquare;
   return (
     <div className={`bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border overflow-hidden group ${isExpanded ? 'border-[#2596be]' : 'border-slate-200'}`}>
-      <button onClick={() => setIsExpanded(!isExpanded)} className="w-full flex items-start gap-4 p-4 md:p-5 text-left relative focus:outline-none">
+      <button onClick={() => setIsExpanded(!isExpanded)} className="w-full flex items-start gap-4 p-4 md:p-5 text-left relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2596be] focus-visible:ring-offset-2 rounded-lg">
         <div className={`absolute top-0 left-0 w-1 h-full transition-all duration-300 ${isExpanded ? 'bg-[#2596be]' : 'bg-slate-200 group-hover:bg-[#2596be]'}`}></div>
         <div className={`mt-1 transition-colors duration-300 ${isExpanded ? 'text-[#133c55]' : 'text-[#2596be]'}`}><DetailIcon size={22} /></div>
         <div className="flex-grow">
@@ -93,7 +93,7 @@ const DetailCard = ({ detail }) => {
           </div>
           <p className="text-sm text-slate-600 leading-relaxed pr-2 md:pr-6">{detail.text}</p>
         </div>
-        <div className={`text-slate-400 mt-2 transition-transform duration-300 ${isExpanded ? 'rotate-180 text-[#2596be]' : ''}`}><ChevronDown size={20} /></div>
+        <div className={`text-slate-600 mt-2 transition-transform duration-300 ${isExpanded ? 'rotate-180 text-[#2596be]' : ''}`}><ChevronDown size={20} /></div>
       </button>
       <div className={`grid transition-all duration-500 ease-in-out ${isExpanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
         <div className="overflow-hidden">
@@ -152,7 +152,7 @@ export default function OVAEcosystemGuide() {
       <header className="bg-white shadow-sm border-b sticky top-0 z-50" style={{ borderColor: '#2596be' }}>
         <div className="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
           <EdutechLogo />
-          <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] hidden md:block">Módulo de Entrenamiento Interactivo</div>
+          <div className="text-[10px] font-black text-slate-600 uppercase tracking-[0.2em] hidden md:block">Módulo de Entrenamiento Interactivo</div>
         </div>
       </header>
 
@@ -169,9 +169,9 @@ export default function OVAEcosystemGuide() {
             const Icon = section.icon;
             return (
               <div key={section.id} className={`bg-white rounded-3xl shadow-sm border transition-all duration-500 overflow-hidden ${isActive ? 'border-[#2596be] ring-1 ring-[#2596be]/10' : 'border-slate-100 hover:border-slate-300'}`}>
-                <button onClick={() => handleSectionClick(section.id)} className="w-full flex items-center justify-between p-6 md:p-8 text-left focus:outline-none bg-white transition-colors">
+                <button onClick={() => handleSectionClick(section.id)} className="w-full flex items-center justify-between p-6 md:p-8 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2596be] focus-visible:ring-offset-2 rounded-3xl bg-white transition-colors">
                   <div className="flex items-center gap-5 md:gap-6">
-                    <div className={`p-4 rounded-2xl transition-all duration-500 ${isActive ? 'bg-[#2596be] text-white shadow-lg rotate-3' : 'bg-slate-50 text-slate-400'}`}><Icon size={32} /></div>
+                    <div className={`p-4 rounded-2xl transition-all duration-500 ${isActive ? 'bg-[#2596be] text-white shadow-lg rotate-3' : 'bg-slate-50 text-slate-600'}`}><Icon size={32} /></div>
                     <div>
                       <h2 className={`text-2xl md:text-3xl font-black tracking-tight transition-colors duration-300 ${isActive ? 'text-[#133c55]' : 'text-slate-700'}`}>{section.title}</h2>
                       <div className={`h-0.5 bg-[#2596be] transition-all duration-500 ${isActive ? 'w-full opacity-50' : 'w-0 opacity-0'}`}></div>
@@ -191,7 +191,7 @@ export default function OVAEcosystemGuide() {
                       </div>
                       <div className="flex items-center gap-2 mb-6 ml-1">
                         <div className="w-1.5 h-1.5 rounded-full bg-[#2596be]"></div>
-                        <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Desglose Técnico y Práctico</h4>
+                        <h4 className="text-[10px] font-black text-slate-600 uppercase tracking-[0.2em]">Desglose Técnico y Práctico</h4>
                       </div>
                       <div className="grid grid-cols-1 gap-4">
                         {section.details.map((detail, idx) => <DetailCard key={idx} detail={detail} />)}
@@ -218,7 +218,7 @@ export default function OVAEcosystemGuide() {
 
       <footer className="text-center pb-16 pt-8 border-t border-slate-100 mt-12 px-6">
         <EdutechLogo />
-        <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mt-4">Laboratorio guiado por <span className="text-[#2596be]">Valerio</span> — Coach de IA de Edutechlife.</p>
+        <p className="text-slate-600 text-xs font-bold uppercase tracking-widest mt-4">Laboratorio guiado por <span className="text-[#2596be]">Valerio</span> — Coach de IA de Edutechlife.</p>
       </footer>
 
       <style>{`

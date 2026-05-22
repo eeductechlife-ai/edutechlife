@@ -237,7 +237,7 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                             value={createdPrompt}
                             onChange={(e) => handleChange(e.target.value)}
                             placeholder={`## Rol\nEres un experto en...\n\n## Contexto\nTrabajando para...\n\n## Objetivo\nCrear un...\n\n## Audiencia\nDirigido a...\n\n## Requisitos\n- Requisito 1\n- Requisito 2\n\n## Formato de respuesta\nEn formato de...`}
-                            className="w-full h-80 bg-white border-2 border-slate-200 rounded-xl p-5 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-corporate focus:ring-2 focus:ring-corporate/20 resize-none font-mono text-sm leading-relaxed"
+                            className="w-full h-80 bg-white border-2 border-slate-200 rounded-xl p-5 text-slate-700 placeholder-slate-500 focus:outline-none focus:border-corporate focus:ring-2 focus:ring-corporate/20 resize-none font-mono text-sm leading-relaxed"
                             spellCheck="false"
                             autoFocus
                         />
@@ -324,7 +324,7 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                             ) : (
                                 <div className="text-center py-8">
                                     <Icon name="fa-cube" className="text-slate-300 text-3xl mb-3" />
-                                    <p className="text-slate-400">
+                                    <p className="text-slate-600">
                                         Añade componentes para construir tu prompt
                                     </p>
                                 </div>

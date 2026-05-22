@@ -36,7 +36,7 @@ const formatTimeAgo = (date) => {
   return then.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
 };
 
-const NotificationPanel = ({ isOpen, onClose, triggerRef }) => {
+const NotificationPanel = ({ isOpen, onClose, triggerRef, forumUnreadCount = 0 }) => {
   const { notifications, unreadCount, loading, markAsRead, markAllAsRead, dismissNotification, clearAllNotifications } = useNotification();
   const panelRef = useRef(null);
   const [confirmClear, setConfirmClear] = useState(false);
@@ -193,6 +193,22 @@ const NotificationPanel = ({ isOpen, onClose, triggerRef }) => {
                 );
               })}
             </div>
+          )}
+
+          {/* Enlace a notificaciones del foro */}
+          {forumUnreadCount > 0 && (
+            <button
+              onClick={() => {
+                window.dispatchEvent(new CustomEvent('ialab:switchTab', { detail: 'comunidad' }));
+              }}
+              className="w-full flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-petroleum/[0.03] to-corporate/[0.03] border-t border-slate-200/60 text-xs font-medium text-petroleum hover:from-petroleum/[0.06] hover:to-corporate/[0.06] transition-colors"
+            >
+              <Icon name="fa-comments" className="text-corporate text-xs" />
+              <span>
+                {forumUnreadCount} notificación{forumUnreadCount > 1 ? 'es' : ''} en el foro
+              </span>
+              <Icon name="fa-arrow-right" className="text-corporate text-[10px] ml-auto" />
+            </button>
           )}
         </div>
       </div>

@@ -46,6 +46,7 @@ const ExamResultViewer = ({ moduleId, score, onClose, onRetry }) => {
     const newRemaining = remaining - 1;
     localStorage.setItem(`exam_attempts_remaining_m${moduleId}`, newRemaining);
     localStorage.setItem(`exam_next_attempt_m${moduleId}`, Date.now() + COOLDOWN_MS);
+    window.dispatchEvent(new Event('ialab:attemptsUpdated'));
 
     if (onRetry) onRetry();
   };
@@ -122,7 +123,7 @@ const ExamResultViewer = ({ moduleId, score, onClose, onRetry }) => {
                     <Icon name="fa-rocket" />
                     Reintentar examen
                   </button>
-                  <p className="text-xs text-center text-slate-400">
+                  <p className="text-xs text-center text-slate-600">
                     Te quedan {remaining - 1} de {MAX_ATTEMPTS} intentos. Cooldown de 12h entre cada uno.
                   </p>
                 </>

@@ -32,138 +32,303 @@ const OVAIntroPrompt = lazy(() => import('./OVAIntroPrompt.jsx'));
 const OVANotebookLab = lazy(() => import('./OVANotebookLab.jsx'));
 const OVANotebookSimulator = lazy(() => import('./OVANotebookSimulator.jsx'));
 const OVANotebookPodcastGuide = lazy(() => import('./OVANotebookPodcastGuide.jsx'));
+const OVAPodcastStudio = lazy(() => import('./OVAPodcastStudio.jsx'));
 const OVABiasLab = lazy(() => import('./OVABiasLab.jsx'));
 const OVARiskSimulator = lazy(() => import('./OVARiskSimulator.jsx'));
 
 /**
- * Hook para crear reproductor YT.Player con detección de fin de video
- * Usa ref para el callback para evitar recrear el player cuando cambia
+ * Reproductor YouTube premium con controles reales vía YT.Player API
  */
-const useYouTubePlayer = (containerRef, videoUrl, onVideoEnded) => {
-  const playerRef = useRef(null);
-  const onVideoEndedRef = useRef(onVideoEnded);
-  onVideoEndedRef.current = onVideoEnded;
-
-  useEffect(() => {
-    const videoId = videoUrl?.match(/(?:embed\/|watch\?v=)([a-zA-Z0-9_-]+)/)?.[1];
-    if (!videoId || !containerRef?.current) return;
-
-    const initPlayer = () => {
-      if (playerRef.current) {
-        try { playerRef.current.destroy(); } catch {}
-      }
-      playerRef.current = new window.YT.Player(containerRef.current, {
-        height: '100%',
-        width: '100%',
-        videoId,
-        playerVars: {
-          autoplay: 1,
-          controls: 1,
-          rel: 0,
-          modestbranding: 1,
-          enablejsapi: 1
-        },
-        events: {
-          onReady: (event) => {
-            try { event.target.playVideo(); } catch {}
-          },
-          onStateChange: (event) => {
-            if (event.data === window.YT.PlayerState.ENDED) {
-              onVideoEndedRef.current?.();
-            }
-          }
-        }
-      });
-    };
-
-    if (window.YT && window.YT.Player && window.YT.loaded) {
-      initPlayer();
-    } else {
-      const tag = document.createElement('script');
-      tag.src = 'https://www.youtube.com/iframe_api';
-      document.head.appendChild(tag);
-
-      const checkInterval = setInterval(() => {
-        if (window.YT && window.YT.Player && window.YT.loaded) {
-          clearInterval(checkInterval);
-          initPlayer();
-        }
-      }, 200);
-
-      return () => {
-        clearInterval(checkInterval);
-        if (playerRef.current) {
-          try { playerRef.current.destroy(); } catch {}
-        }
-      };
-    }
-
-    return () => {
-      if (playerRef.current) {
-        try { playerRef.current.destroy(); } catch {}
-      }
-    };
-  }, [videoUrl, containerRef]);
-
-  return playerRef;
+const formatTime = (s) => {
+  if (!s || isNaN(s)) return '0:00';
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60);
+  return `${m}:${sec.toString().padStart(2, '0')}`;
 };
 
-/**
- * Componente para visualizar videos (YouTube) con auto-mark al terminar
- */
-const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded }) => {
-  const videoRef = useRef(null);
-  const playerContainerRef = useRef(null);
-  const { isFullscreen, toggleFullscreen } = useFullscreen(videoRef);
+const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
-  useYouTubePlayer(playerContainerRef, resource?.url, onVideoEnded);
+const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded }) => {
+  const containerRef = useRef(null);
+  const playerRef = useRef(null);
+  const endedRef = useRef(onVideoEnded);
+  endedRef.current = onVideoEnded;
+
+  const [playing, setPlaying] = useState(true);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [rate, setRate] = useState(1);
+  const [muted, setMuted] = useState(false);
+  const [volume, setVolume] = useState(100);
+  const [showSpeed, setShowSpeed] = useState(false);
+  const [buffering, setBuffering] = useState(false);
+  const [showControls, setShowControls] = useState(true);
+  const [ccActive, setCcActive] = useState(false);
+  const hideTimer = useRef(null);
+  const progressTimer = useRef(null);
+
+  const videoId = resource?.url?.match(/(?:embed\/|watch\?v=)([a-zA-Z0-9_-]+)/)?.[1];
+
+  useEffect(() => {
+    if (!videoId || !containerRef.current) return;
+    const init = () => {
+      if (playerRef.current) try { playerRef.current.destroy(); } catch {}
+      playerRef.current = new window.YT.Player(containerRef.current, {
+        height: '100%', width: '100%',
+        videoId,
+        playerVars: {
+          autoplay: 1, controls: 0, rel: 0, modestbranding: 1,
+          enablejsapi: 1, origin: window.location.origin, cc_load_policy: 0,
+        },
+        events: {
+          onReady: (e) => {
+            e.target.playVideo();
+            setDuration(e.target.getDuration());
+            setVolume(e.target.getVolume());
+          },
+          onStateChange: (e) => {
+            setPlaying(e.data === window.YT.PlayerState.PLAYING);
+            setBuffering(e.data === window.YT.PlayerState.BUFFERING);
+            if (e.data === window.YT.PlayerState.ENDED) endedRef.current?.();
+            if (e.data === window.YT.PlayerState.PLAYING) {
+              try { setDuration(playerRef.current.getDuration()); } catch {}
+              // Poll currentTime solo durante reproducción (cada 1s en vez de 500ms)
+              clearInterval(progressTimer.current);
+              progressTimer.current = setInterval(() => {
+                try {
+                  if (playerRef.current && playerRef.current.getCurrentTime) {
+                    setCurrentTime(playerRef.current.getCurrentTime());
+                  }
+                } catch {}
+              }, 1000);
+            } else {
+              clearInterval(progressTimer.current);
+            }
+          },
+        },
+      });
+    };
+    if (window.YT && window.YT.Player && window.YT.loaded) { init(); return; }
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(tag);
+    const ci = setInterval(() => {
+      if (window.YT && window.YT.Player && window.YT.loaded) { clearInterval(ci); init(); }
+    }, 200);
+    return () => { clearInterval(ci); if (progressTimer.current) clearInterval(progressTimer.current); if (playerRef.current) try { playerRef.current.destroy(); } catch {} };
+  }, [videoId]);
+
+  useEffect(() => {
+    return () => { if (progressTimer.current) clearInterval(progressTimer.current); };
+  }, [progressTimer]);
+
+  const togglePlay = () => {
+    if (!playerRef.current) return;
+    try {
+      if (playing) playerRef.current.pauseVideo();
+      else playerRef.current.playVideo();
+    } catch {}
+  };
+
+  const changeRate = (r) => {
+    if (!playerRef.current) return;
+    try { playerRef.current.setPlaybackRate(r); setRate(r); } catch {}
+    setShowSpeed(false);
+  };
+
+  const toggleMute = () => {
+    if (!playerRef.current) return;
+    try {
+      if (muted) { playerRef.current.unMute(); setMuted(false); }
+      else { playerRef.current.mute(); setMuted(true); }
+    } catch {}
+  };
+
+  const changeVolume = (v) => {
+    if (!playerRef.current) return;
+    try { playerRef.current.setVolume(v); setVolume(v); if (v > 0) setMuted(false); } catch {}
+  };
+
+  const seek = (pct) => {
+    if (!playerRef.current || !duration) return;
+    try { playerRef.current.seekTo(pct * duration, true); } catch {}
+  };
+
+  const goFullscreen = () => {
+    try {
+      const iframe = playerRef.current?.getIframe?.();
+      if (iframe) {
+        if (document.fullscreenElement) document.exitFullscreen();
+        else iframe.requestFullscreen?.();
+        return;
+      }
+    } catch {}
+    try {
+      const el = containerRef.current?.querySelector('iframe') || containerRef.current;
+      if (el && document.fullscreenElement) document.exitFullscreen();
+      else if (el) el.requestFullscreen?.();
+    } catch {}
+  };
+
+  const toggleCaptions = () => {
+    if (!playerRef.current) return;
+    try {
+      if (ccActive) {
+        playerRef.current.unloadModule('captions');
+        setCcActive(false);
+      } else {
+        playerRef.current.loadModule('captions');
+        setTimeout(() => {
+          try {
+            const tracks = playerRef.current?.getOption('captions', 'tracklist') || [];
+            const es = tracks.find(t => t.languageCode === 'es');
+            if (es) playerRef.current?.setOption('captions', 'track', es);
+            else if (tracks.length > 0) playerRef.current?.setOption('captions', 'track', tracks[0]);
+          } catch {}
+        }, 300);
+        setCcActive(true);
+      }
+    } catch {}
+  };
+
+  const handleMouseMove = () => {
+    setShowControls(true);
+    if (hideTimer.current) clearTimeout(hideTimer.current);
+    hideTimer.current = setTimeout(() => setShowControls(false), 3000);
+  };
+
+  const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
+
+  useEffect(() => {
+    const h = (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      switch (e.key) {
+        case ' ': case 'k': e.preventDefault(); togglePlay(); break;
+        case 'm': e.preventDefault(); toggleMute(); break;
+        case 'f': e.preventDefault(); goFullscreen(); break;
+        case 'ArrowRight': e.preventDefault(); seek(Math.min(1, (currentTime + 10) / Math.max(duration, 1))); break;
+        case 'ArrowLeft': e.preventDefault(); seek(Math.max(0, (currentTime - 10) / Math.max(duration, 1))); break;
+        case 'j': e.preventDefault(); seek(Math.max(0, (currentTime - 10) / Math.max(duration, 1))); break;
+        case 'l': e.preventDefault(); seek(Math.min(1, (currentTime + 10) / Math.max(duration, 1))); break;
+        case 'c': e.preventDefault(); setCcActive(!ccActive); break;
+      }
+    };
+    window.addEventListener('keydown', h);
+    return () => window.removeEventListener('keydown', h);
+  }, [playing, muted, duration, currentTime, ccActive]);
+
+  if (!videoId) {
+    return (
+      <div className="relative w-full h-full bg-gradient-to-br from-[#0A1729] to-[#004B63] rounded-2xl overflow-hidden flex items-center justify-center">
+        <div className="text-center p-8">
+          <div className="w-20 h-20 mx-auto mb-4 bg-white/10 rounded-full flex items-center justify-center">
+            <Icon name="fa-video-slash" className="text-3xl text-white/50" />
+          </div>
+          <p className="text-white/70 text-sm">Video no disponible</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="relative w-full h-full bg-black rounded-2xl overflow-hidden">
-      {/* Contenedor del video con YT.Player */}
-      <div 
-        ref={videoRef}
-        className="relative w-full h-full flex items-center justify-center"
-      >
-        <div 
-          ref={playerContainerRef}
-          className="w-full h-full"
-        />
-      </div>
+    <div
+      className="relative w-full h-full bg-black rounded-2xl overflow-hidden group select-none"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={() => setShowControls(false)}
+    >
+      <div ref={containerRef} className="w-full h-full" />
 
-      {/* Overlay de controles */}
-      <div className="absolute bottom-4 right-4 flex items-center gap-3">
-        {/* Botón de pantalla completa */}
-        <button
-          onClick={toggleFullscreen}
-          className={cn(
-            "px-4 py-2 rounded-xl flex items-center gap-2",
-            "bg-white dark:bg-slate-800 border border-petroleum/25 dark:border-petroleum/40",
-            "text-petroleum dark:text-[#4DA8C4] font-medium text-sm",
-            "hover:bg-petroleum/5 hover:shadow-lg",
-                    "transition-all duration-200"
-                  )}
-                  aria-label={isFullscreen ? "Salir de pantalla completa" : "Pantalla completa"}
-        >
-          <Icon 
-            name={isFullscreen ? "fa-compress" : "fa-expand"} 
-            className="w-4 h-4" 
-          />
-          {isFullscreen ? "Salir" : "Pantalla completa"}
-        </button>
-
-        {/* Indicador de duración sincronizado con YouTube */}
-        <div className="px-3 py-1.5 bg-black/70 text-white text-sm font-medium rounded-lg">
-          {durationLoading ? '...' : (youtubeDuration || resource.duration)}
-        </div>
-      </div>
-
-      {/* Indicador de pantalla completa */}
-      {isFullscreen && (
-        <div className="absolute top-4 right-4 px-3 py-1 bg-emerald-500/20 text-emerald-300 text-xs font-medium rounded-full">
-          Pantalla completa activa
+      {/* Buffering spinner */}
+      {buffering && playing && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="w-10 h-10 border-2 border-white/30 border-t-white rounded-full animate-spin" />
         </div>
       )}
+
+      {/* Click-to-pause overlay */}
+      <div className="absolute inset-0 cursor-pointer" onClick={togglePlay} />
+
+      {/* Pause overlay */}
+      {!playing && !buffering && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+            <Icon name="fa-play" className="text-white text-2xl ml-1" />
+          </div>
+        </div>
+      )}
+
+      {/* Controls bar */}
+      <div className={`absolute bottom-0 left-0 right-0 transition-opacity duration-300 ${showControls ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+        <div className="bg-gradient-to-t from-black/90 via-black/60 to-transparent pt-8 pb-3 px-4">
+          {/* Progress bar */}
+          <div className="group/progress relative mb-2 cursor-pointer" onClick={(e) => {
+            const rect = e.currentTarget.getBoundingClientRect();
+            seek((e.clientX - rect.left) / rect.width);
+          }}>
+            <div className="h-1 bg-white/20 rounded-full overflow-hidden">
+              <div className="h-full bg-gradient-to-r from-[#00BCD4] to-[#4DA8C4] rounded-full transition-all duration-100" style={{ width: `${progress}%` }} />
+            </div>
+            <div className="absolute -top-1.5 left-0 w-3 h-3 bg-[#00BCD4] rounded-full shadow-lg opacity-0 group-hover/progress:opacity-100 transition-opacity" style={{ left: `calc(${progress}% - 6px)` }} />
+          </div>
+
+          <div className="flex items-center gap-3">
+            {/* Play/Pause */}
+            <button onClick={togglePlay} className="w-8 h-8 flex items-center justify-center text-white hover:text-[#00BCD4] transition-colors" aria-label={playing ? 'Pausar' : 'Reproducir'}>
+              {playing ? (
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1" /><rect x="14" y="4" width="4" height="16" rx="1" /></svg>
+              ) : (
+                <Icon name="fa-play" className="text-sm" />
+              )}
+            </button>
+
+            {/* Volume */}
+            <div className="flex items-center gap-1.5 group/vol">
+              <button onClick={toggleMute} className="w-7 h-7 flex items-center justify-center text-white/70 hover:text-white transition-colors" aria-label={muted ? 'Activar sonido' : 'Silenciar'}>
+                <Icon name={muted || volume === 0 ? 'fa-volume-mute' : 'fa-volume-up'} className="text-[10px]" />
+              </button>
+              <div className="w-0 group-hover/vol:w-16 overflow-hidden transition-all duration-200">
+                <input type="range" min={0} max={100} value={muted ? 0 : volume} onChange={(e) => changeVolume(Number(e.target.value))}
+                  className="w-16 h-1 accent-[#00BCD4] cursor-pointer" aria-label="Volumen" />
+              </div>
+            </div>
+
+            {/* Time */}
+            <span className="text-xs text-white/70 font-mono whitespace-nowrap">
+              {formatTime(currentTime)} / {durationLoading ? '...' : formatTime(duration) || (youtubeDuration || resource.duration || '0:00')}
+            </span>
+
+            <div className="flex-1" />
+
+            {/* Speed */}
+            <div className="relative">
+              <button onClick={() => setShowSpeed(!showSpeed)} className="px-2 h-7 text-[11px] font-bold text-white/70 hover:text-white rounded-md hover:bg-white/10 transition-colors" aria-label="Velocidad">
+                {rate}x
+              </button>
+              {showSpeed && (
+                <div className="absolute bottom-full right-0 mb-2 bg-[#0A1729] border border-white/10 rounded-xl p-1.5 shadow-2xl min-w-[100px]">
+                  <p className="text-[9px] text-white/40 uppercase tracking-wider px-2 pb-1">Velocidad</p>
+                  {SPEEDS.map(s => (
+                    <button key={s} onClick={() => changeRate(s)}
+                      className={`block w-full text-left px-3 py-1.5 text-xs rounded-lg transition-colors ${rate === s ? 'bg-[#00BCD4]/20 text-[#00BCD4] font-bold' : 'text-white/70 hover:bg-white/10'}`}>
+                      {s}x
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Captions */}
+            <button onClick={toggleCaptions} className="w-7 h-7 flex items-center justify-center transition-colors" aria-label="Subtítulos" title="Subtítulos">
+              <Icon name="fa-closed-captioning" className={`text-[10px] ${ccActive ? 'text-[#00BCD4]' : 'text-white/70 hover:text-white'}`} />
+            </button>
+
+            {/* Fullscreen */}
+            <button onClick={goFullscreen} className="w-7 h-7 flex items-center justify-center text-white/70 hover:text-white transition-colors" aria-label="Pantalla completa">
+              <Icon name="fa-expand" className="text-[10px]" />
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
@@ -171,19 +336,8 @@ const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded 
 /**
  * Componente para visualizar documentos PDF
  */
-const DocumentViewer = ({ resource, onAutoComplete }) => {
-  const [page, setPage] = useState(1);
-  const totalPages = resource.pages || 1;
+const DocumentViewer = ({ resource }) => {
   const iframeRef = useRef(null);
-  const { isFullscreen, toggleFullscreen } = useFullscreen(iframeRef);
-  const autoMarkedRef = useRef(false);
-  const onAutoCompleteRef = useRef(onAutoComplete);
-  onAutoCompleteRef.current = onAutoComplete;
-
-  // Documentos requieren clic manual en "Marcar como visto" - sin auto-mark
-  useEffect(() => {
-    // No auto-mark para documentos
-  }, []);
 
   return (
     <div className="w-full h-full flex flex-col bg-white dark:bg-slate-800 rounded-2xl overflow-hidden">
@@ -195,7 +349,7 @@ const DocumentViewer = ({ resource, onAutoComplete }) => {
           </div>
           <div>
             <h4 className="font-semibold text-petroleum">{resource.title}</h4>
-            <div className="flex items-center gap-3 text-sm text-petroleum/60">
+            <div className="flex items-center gap-3 text-sm text-petroleum/70">
               <span>{resource.format}</span>
               {resource.size && <span>• {resource.size}</span>}
               {resource.pages && <span>• {resource.pages} páginas</span>}
@@ -204,24 +358,6 @@ const DocumentViewer = ({ resource, onAutoComplete }) => {
         </div>
 
         <div className="flex items-center gap-3">
-          {/* Botón de pantalla completa */}
-          <button
-            onClick={toggleFullscreen}
-            className={cn(
-              "px-4 py-2 rounded-lg flex items-center gap-2",
-              "bg-white dark:bg-slate-800 border border-petroleum/25 dark:border-petroleum/40 text-petroleum/80 dark:text-[#4DA8C4] font-medium",
-              "hover:bg-petroleum/5 hover:shadow-lg",
-              "transition-all duration-200"
-            )}
-          >
-            <Icon 
-              name={isFullscreen ? "fa-compress" : "fa-expand"} 
-              className="w-4 h-4" 
-            />
-            {isFullscreen ? "Salir" : "Pantalla completa"}
-          </button>
-
-          {/* Botón de descarga */}
           <a
             href={resource.url}
             download
@@ -241,45 +377,6 @@ const DocumentViewer = ({ resource, onAutoComplete }) => {
           className="w-full h-full border-0"
           loading="lazy"
         />
-        
-        {/* Overlay de navegación para PDFs */}
-        {resource.pages && resource.pages > 1 && (
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
-            <div className="flex items-center gap-3 bg-white dark:bg-slate-800 px-4 py-2 rounded-xl border border-petroleum/25 dark:border-petroleum/40 shadow-sm">
-              <button
-                onClick={() => setPage(prev => Math.max(1, prev - 1))}
-                disabled={page <= 1}
-                className={cn(
-                  "px-3 py-1 rounded-lg flex items-center gap-2",
-                  page <= 1 
-                    ? "text-petroleum/50 cursor-not-allowed" 
-                    : "text-petroleum/80 hover:bg-petroleum/10"
-                )}
-              >
-                <Icon name="fa-chevron-left" className="w-4 h-4" />
-                Anterior
-              </button>
-              
-              <div className="px-3 py-1 bg-petroleum/10 rounded-lg text-petroleum/80 font-medium">
-                Página {page} de {totalPages}
-              </div>
-              
-              <button
-                onClick={() => setPage(prev => Math.min(totalPages, prev + 1))}
-                disabled={page >= totalPages}
-                className={cn(
-                  "px-3 py-1 rounded-lg flex items-center gap-2",
-                  page >= totalPages
-                    ? "text-petroleum/50 cursor-not-allowed"
-                    : "text-petroleum/80 hover:bg-petroleum/10"
-                )}
-              >
-                Siguiente
-                <Icon name="fa-chevron-right" className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
@@ -288,18 +385,8 @@ const DocumentViewer = ({ resource, onAutoComplete }) => {
 /**
  * Componente para visualizar imágenes e infografías
  */
-const ImageViewer = ({ resource, onAutoComplete }) => {
-  const imageRef = useRef(null);
-  const { isFullscreen, toggleFullscreen } = useFullscreen(imageRef);
+const ImageViewer = ({ resource }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const autoMarkedRef = useRef(false);
-  const onAutoCompleteRef = useRef(onAutoComplete);
-  onAutoCompleteRef.current = onAutoComplete;
-
-  // Documentos requieren clic manual en "Marcar como visto" - sin auto-mark
-  useEffect(() => {
-    // No auto-mark para documentos
-  }, []);
 
   return (
     <div className="w-full h-full flex flex-col bg-white dark:bg-slate-800 rounded-2xl overflow-auto">
@@ -318,24 +405,6 @@ const ImageViewer = ({ resource, onAutoComplete }) => {
         </div>
 
         <div className="flex items-center gap-3 flex-shrink-0">
-          {/* Botón de pantalla completa */}
-          <button
-            onClick={toggleFullscreen}
-            className={cn(
-              "px-4 py-2 rounded-lg flex items-center gap-2",
-              "bg-white dark:bg-slate-800 border border-petroleum/25 dark:border-petroleum/40 text-petroleum/80 dark:text-[#4DA8C4] font-medium",
-              "hover:bg-petroleum/5 hover:shadow-lg",
-              "transition-all duration-200"
-            )}
-          >
-            <Icon 
-              name={isFullscreen ? "fa-compress" : "fa-expand"} 
-              className="w-4 h-4" 
-            />
-            {isFullscreen ? "Salir" : "Pantalla completa"}
-          </button>
-
-          {/* Botón de descarga */}
           <a
             href={resource.url}
             download
@@ -348,18 +417,13 @@ const ImageViewer = ({ resource, onAutoComplete }) => {
       </div>
 
       {/* Contenedor de la imagen */}
-      <div 
-        ref={imageRef}
-        className="flex-1 relative bg-transparent"
-      >
-        {/* Estado de carga */}
+      <div className="flex-1 relative bg-transparent">
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="w-12 h-12 border-4 border-petroleum/25 border-t-[#004B63] rounded-full animate-spin"></div>
           </div>
         )}
 
-        {/* Imagen principal */}
         <img
           src={resource.url}
           alt={resource.title}
@@ -371,19 +435,11 @@ const ImageViewer = ({ resource, onAutoComplete }) => {
           onLoad={() => setIsLoading(false)}
           onError={() => setIsLoading(false)}
         />
-
-        {/* Indicador de pantalla completa */}
-        {isFullscreen && (
-          <div className="absolute top-4 right-4 px-3 py-1 bg-emerald-500/20 text-emerald-300 text-xs font-medium rounded-full">
-            Pantalla completa activa
-          </div>
-        )}
       </div>
 
-      {/* Descripción (si existe) */}
       {resource.description && (
         <div className="p-4 bg-petroleum/5">
-          <p className="text-sm text-petroleum/70">{resource.description}</p>
+          <p className="text-sm text-petroleum/80">{resource.description}</p>
         </div>
       )}
     </div>
@@ -393,16 +449,7 @@ const ImageViewer = ({ resource, onAutoComplete }) => {
 /**
  * Componente para recursos interactivos
  */
-const InteractiveViewer = ({ resource, onAutoComplete }) => {
-  const autoMarkedRef = useRef(false);
-  const onAutoCompleteRef = useRef(onAutoComplete);
-  onAutoCompleteRef.current = onAutoComplete;
-
-  // Documentos requieren clic manual en "Marcar como visto" - sin auto-mark
-  useEffect(() => {
-    // No auto-mark para documentos
-  }, []);
-
+const InteractiveViewer = ({ resource }) => {
   return (
     <div className="w-full h-full flex flex-col bg-white dark:bg-slate-800 rounded-2xl overflow-hidden">
       <div className="flex items-center justify-between p-4 bg-white dark:bg-slate-800">
@@ -412,7 +459,7 @@ const InteractiveViewer = ({ resource, onAutoComplete }) => {
           </div>
           <div>
             <h4 className="font-semibold text-petroleum">{resource.title}</h4>
-            <div className="flex items-center gap-3 text-sm text-petroleum/60">
+            <div className="flex items-center gap-3 text-sm text-petroleum/70">
               <span>Recurso interactivo</span>
               {resource.estimatedTime && <span>• {resource.estimatedTime}</span>}
             </div>
@@ -466,16 +513,8 @@ const InteractiveViewer = ({ resource, onAutoComplete }) => {
 /**
  * Componente para PDF Thumbnail (con doble clic para vista inmersiva)
  */
-const PDFThumbnailViewer = ({ resource, onAutoComplete }) => {
+const PDFThumbnailViewer = ({ resource }) => {
   const openFullScreen = () => window.open(resource.url, '_blank');
-  const autoMarkedRef = useRef(false);
-  const onAutoCompleteRef = useRef(onAutoComplete);
-  onAutoCompleteRef.current = onAutoComplete;
-
-  // Documentos requieren clic manual en "Marcar como visto" - sin auto-mark
-  useEffect(() => {
-    // No auto-mark para documentos
-  }, []);
 
   return (
     <div className="w-full h-full flex flex-col">
@@ -552,11 +591,16 @@ const ResourceViewerModal = ({
   youtubeDuration = null,
   durationLoading = false
 }) => {
-  const { activeMod, markResourceAsViewed: markResourceInContext, recordLastTopic } = useIALabContext();
+  const { activeMod, modules, markResourceAsViewed: markResourceInContext, recordLastTopic } = useIALabContext();
   const { trackResourceViewed } = useIALabProgress();
   
   // Estado para controlar si se marcó como visto
   const [isMarkedAsViewed, setIsMarkedAsViewed] = useState(false);
+
+  const [isOvaFullscreen, setIsOvaFullscreen] = useState(false);
+  
+  const modalRef = useRef(null);
+  const { isFullscreen: isModalFullscreen, toggleFullscreen: toggleModalFullscreen } = useFullscreen(modalRef);
 
   // Detener audio y cerrar modal
   const handleClose = () => {
@@ -564,17 +608,21 @@ const ResourceViewerModal = ({
     onClose();
   };
 
-  // Manejar tecla ESC para cerrar
+  // Manejar tecla ESC para cerrar o salir de fullscreen OVA
   useEffect(() => {
     const handleEscape = (e) => {
       if (e.key === 'Escape' && isOpen) {
-        handleClose();
+        if (isOvaFullscreen) {
+          setIsOvaFullscreen(false);
+        } else {
+          handleClose();
+        }
       }
     };
 
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, isOvaFullscreen]);
 
   // Prevenir scroll del body cuando el modal está abierto
   useEffect(() => {
@@ -596,15 +644,29 @@ const ResourceViewerModal = ({
     setIsMarkedAsViewed(false);
   }, [resource?.id]);
 
-  // OVA interactivos requieren clic manual en "Marcar como visto" - sin auto-mark
-  useEffect(() => {
-    // No auto-mark para ova_interactive
-  }, [resource?.id, resourceType, isOpen, isMarkedAsViewed]);
-
   // Si no está abierto, no renderizar nada
   if (!isOpen || !resource) {
     return null;
   }
+
+const OVA_COMPONENTS = {
+  'gpts-ova-1': OVABuildGPT,
+  'chatgpt-ova-ecosystem': OVAEcosystemGuide,
+  'intro-ova-1': OVAEtica,
+  'prompt-ova-html-1': OVAIntroPrompt,
+  'notebooklm-ova-1': OVANotebookLab,
+  'notebook-summary-ova-1': OVANotebookSimulator,
+  'notebook-audio-guide-1': OVANotebookPodcastGuide,
+  'notebook-audio-ova-1': OVAPodcastStudio,
+  'bias-ova-1': OVABiasLab,
+  'privacy-ova-1': OVARiskSimulator,
+};
+
+// Replace the ternary monster line 671
+const renderOVAById = (resourceId) => {
+  const OVAComponent = OVA_COMPONENTS[resourceId];
+  return OVAComponent ? <OVAComponent /> : <OVAChatGPTTools />;
+};
 
   // Renderizar el visualizador apropiado según el tipo de recurso
   const renderViewer = () => {
@@ -613,7 +675,7 @@ const ResourceViewerModal = ({
         <div className="w-full h-full flex items-center justify-center bg-petroleum/5 rounded-2xl">
           <div className="text-center">
             <Icon name="fa-file-circle-question" className="text-petroleum/50 text-4xl mb-4" />
-            <p className="text-petroleum/60 font-medium">No hay recurso seleccionado</p>
+            <p className="text-petroleum/80 font-medium">No hay recurso seleccionado</p>
           </div>
         </div>
       );
@@ -634,18 +696,17 @@ const ResourceViewerModal = ({
         
         case 'interactivo':
         case 'interactive':
-          return <InteractiveViewer resource={resource} onAutoComplete={handleAutoComplete} />;
+          return <InteractiveViewer resource={resource} />;
         
         case 'pdf':
         case 'pdf-thumbnail':
-          return <PDFThumbnailViewer resource={resource} onAutoComplete={handleAutoComplete} />;
+          return <PDFThumbnailViewer resource={resource} />;
         
         case 'ova':
         case 'ova-thumbnail':
           return <OVAViewer 
             resource={resource} 
             onClose={onClose}
-            onAutoComplete={handleAutoComplete}
           />;
         
         case 'ova_interactive':
@@ -654,11 +715,11 @@ const ResourceViewerModal = ({
               <div className="w-full h-full flex items-center justify-center bg-petroleum/5">
                 <div className="text-center">
                   <div className="animate-spin w-10 h-10 border-4 border-petroleum border-t-transparent rounded-full mx-auto mb-4"></div>
-                  <p className="text-petroleum/60 font-bold">Cargando simulador interactivo...</p>
+                  <p className="text-petroleum/80 font-bold">Cargando simulador interactivo...</p>
                 </div>
               </div>
             }>
-              {resource.id === 'gpts-ova-1' ? <OVABuildGPT /> : resource.id === 'chatgpt-ova-ecosystem' ? <OVAEcosystemGuide /> : resource.id === 'intro-ova-1' ? <OVAEtica /> : resource.id === 'prompt-ova-html-1' ? <OVAIntroPrompt /> : resource.id === 'notebooklm-ova-1' ? <OVANotebookLab /> : resource.id === 'notebook-summary-ova-1' ? <OVANotebookSimulator /> : resource.id === 'notebook-audio-guide-1' ? <OVANotebookPodcastGuide /> : resource.id === 'bias-ova-1' ? <OVABiasLab /> : resource.id === 'privacy-ova-1' ? <OVARiskSimulator /> : <OVAChatGPTTools />}
+              {renderOVAById(resource.id)}
             </Suspense>
           );
         
@@ -725,8 +786,8 @@ const ResourceViewerModal = ({
     }
     if (resource?.id && activeMod) {
       markResourceInContext(activeMod, resource.id);
-      const resourceType = resource.type || 'document';
-      await trackResourceViewed(activeMod, resource.id, resourceType);
+      const rt = resource.type || 'document';
+      await trackResourceViewed(activeMod, resource.id, rt);
 
       // Registrar ultimo tema visto para notificaciones de inactividad
       if (recordLastTopic) {
@@ -742,7 +803,7 @@ const ResourceViewerModal = ({
           activeMod,
           '',
           resourceType,
-          resource.title || `${typeLabels[resourceType] || 'Recurso'}`,
+          resource.title || `${typeLabels[rt] || 'Recurso'}`,
           resource.id
         );
       }
@@ -766,29 +827,31 @@ const ResourceViewerModal = ({
             initial="hidden"
             animate="visible"
             exit="hidden"
-            className="fixed inset-0 z-[200] backdrop-blur-md bg-black/40"
+            aria-hidden="true" className="fixed inset-0 z-[200] backdrop-blur-md bg-black/40"
             onClick={handleClose}
           />
 
               {/* Modal principal - 90% de pantalla */}
               <div className="fixed inset-0 z-[201] flex items-center justify-center p-2 sm:p-4 pointer-events-none">
                 <motion.div
+                  ref={modalRef}
                   variants={modalVariants}
                   initial="hidden"
                   animate="visible"
                   exit="exit"
+                  role="dialog" aria-modal="true"
                   className={cn(
                     "w-full max-w-6xl bg-white dark:bg-slate-800 rounded-2xl sm:rounded-3xl",
                     "pointer-events-auto overflow-hidden",
                     "flex flex-col",
-                    "h-[90vh] max-h-[900px]",
+                    "h-[90dvh] max-h-[900px]",
                     "mx-2 sm:mx-4", // Margenes responsive
                     "shadow-xl shadow-petroleum/20"
                   )}
                   onClick={(e) => e.stopPropagation()}
                 >
               {/* Header del modal */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 border-b border-petroleum/15 bg-gradient-to-r from-petroleum to-corporate">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 border-b border-white/10 bg-gradient-to-r from-petroleum to-corporate backdrop-blur-sm">
                 <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0 w-full sm:w-auto">
                   <div className="bg-white/10 p-2 rounded-lg flex-shrink-0">
                     {(resource.type === 'video') ? <Icon name="fa-video" className="text-white w-5 h-5 sm:w-6 sm:h-6" /> :
@@ -802,6 +865,19 @@ const ResourceViewerModal = ({
                   
                   {/* Título y metadatos */}
                   <div className="flex-1 min-w-0">
+                    <nav aria-label="Breadcrumb" className="mb-1">
+                      <ol className="flex items-center gap-1.5 text-white/60 text-xs">
+                        <li className="hidden sm:inline text-white/40">Inicio</li>
+                        <li aria-hidden="true" className="hidden sm:inline text-white/30">/</li>
+                        <li className="truncate max-w-[120px] sm:max-w-[200px]">
+                          {modules?.find(m => m.id === activeMod)?.title || `Módulo ${activeMod}`}
+                        </li>
+                        <li aria-hidden="true">/</li>
+                        <li className="truncate max-w-[100px] sm:max-w-[150px] capitalize">
+                          {resource.type?.replace(/_/g, ' ')}
+                        </li>
+                      </ol>
+                    </nav>
                     <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight truncate">
                       {resource.title}
                     </h2>
@@ -829,10 +905,22 @@ const ResourceViewerModal = ({
                   </div>
                 </div>
 
+                {/* Botón de pantalla completa — solo para recursos NO video */}
+                {resource.type !== 'video' && (
+                  <button
+                    onClick={toggleModalFullscreen}
+                    className="mt-3 sm:mt-0 ml-0 sm:ml-2 px-4 py-2 sm:px-5 sm:py-2.5 bg-white/10 hover:bg-white/20 text-white border-none rounded-lg sm:rounded-xl transition-colors duration-200 flex items-center gap-2 font-medium flex-shrink-0 w-full sm:w-auto justify-center sm:justify-start"
+                    aria-label={isModalFullscreen ? "Salir de pantalla completa" : "Pantalla completa"}
+                  >
+                    <Icon name={isModalFullscreen ? "fa-compress" : "fa-expand"} className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                    <span className="text-sm sm:text-base text-white">{isModalFullscreen ? "Salir" : "Pantalla completa"}</span>
+                  </button>
+                )}
+
                 {/* Botón de cerrar */}
                 <button
-            onClick={handleClose}
-                  className="mt-3 sm:mt-0 ml-0 sm:ml-4 px-4 py-2 sm:px-5 sm:py-2.5 bg-white/10 hover:bg-white/20 text-white border-none rounded-lg sm:rounded-xl transition-colors duration-200 flex items-center gap-2 font-medium flex-shrink-0 w-full sm:w-auto justify-center sm:justify-start"
+                  onClick={handleClose}
+                  className="mt-3 sm:mt-0 ml-0 sm:ml-2 px-4 py-2 sm:px-5 sm:py-2.5 bg-white/10 hover:bg-white/20 text-white border-none rounded-lg sm:rounded-xl transition-colors duration-200 flex items-center gap-2 font-medium flex-shrink-0 w-full sm:w-auto justify-center sm:justify-start"
                   aria-label="Cerrar visor y volver al tema"
                 >
                   <Icon name="fa-times" className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
@@ -841,7 +929,7 @@ const ResourceViewerModal = ({
               </div>
 
               {/* Contenido principal del recurso */}
-              <div className="flex-1 overflow-auto">
+              <div className="flex-1 overflow-auto bg-white dark:bg-slate-800">
                 {renderViewer()}
               </div>
 
@@ -858,7 +946,7 @@ const ResourceViewerModal = ({
                           "px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg flex items-center gap-1 sm:gap-2 transition-colors duration-200 text-sm sm:text-base font-medium",
                           currentIndex <= 0
                             ? "text-petroleum/50 cursor-not-allowed"
-                            : "bg-white dark:bg-slate-800 border border-petroleum/25 dark:border-petroleum/40 text-petroleum/80 dark:text-[#4DA8C4] hover:bg-petroleum/5 hover:text-petroleum"
+                            : "bg-white dark:bg-slate-800 border border-petroleum/25 dark:border-petroleum/40 text-petroleum/80 dark:text-petroleum hover:bg-petroleum/5 hover:text-petroleum"
                         )}
                         aria-label="Recurso anterior"
                       >
@@ -877,7 +965,7 @@ const ResourceViewerModal = ({
                           "px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg flex items-center gap-1 sm:gap-2 transition-colors duration-200 text-sm sm:text-base font-medium",
                           currentIndex >= totalResources - 1
                             ? "text-petroleum/50 cursor-not-allowed"
-                            : "bg-white dark:bg-slate-800 border border-petroleum/25 dark:border-petroleum/40 text-petroleum/80 dark:text-[#4DA8C4] hover:bg-petroleum/5 hover:text-petroleum"
+                            : "bg-white dark:bg-slate-800 border border-petroleum/25 dark:border-petroleum/40 text-petroleum/80 dark:text-petroleum hover:bg-petroleum/5 hover:text-petroleum"
                         )}
                         aria-label="Siguiente recurso"
                       >
@@ -890,6 +978,7 @@ const ResourceViewerModal = ({
                   {/* Botón "Marcar como visto" */}
                   <button
                     onClick={handleMarkAsViewed}
+                    aria-label={isMarkedAsViewed ? "Marcado como visto" : "Marcar como visto"}
                     className={cn(
                       "px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-200 flex items-center gap-2 sm:gap-3 text-sm sm:text-base w-full sm:w-auto justify-center border-none",
                       isMarkedAsViewed
@@ -913,6 +1002,28 @@ const ResourceViewerModal = ({
               </div>
             </motion.div>
           </div>
+
+          {/* Pantalla completa OVA — overlay fixed sin API nativa, con botón Salir visible */}
+          {isOvaFullscreen && (
+            <div className="fixed inset-0 z-[400] bg-white dark:bg-slate-900 flex flex-col">
+              <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+                <span className="text-sm font-medium text-slate-500 dark:text-slate-400 truncate mr-4">
+                  {resource?.title}
+                </span>
+                <button
+                  onClick={() => setIsOvaFullscreen(false)}
+                  className="px-5 py-2.5 bg-petroleum hover:bg-petroleum-dark text-white rounded-xl flex items-center gap-2 font-medium transition-colors shadow-md border-none flex-shrink-0"
+                  aria-label="Salir de pantalla completa"
+                >
+                  <Icon name="fa-compress" className="w-4 h-4" />
+                  <span>Salir</span>
+                </button>
+              </div>
+              <div className="flex-1 overflow-auto bg-white dark:bg-slate-800">
+                {renderViewer()}
+              </div>
+            </div>
+          )}
         </>
       )}
     </AnimatePresence>

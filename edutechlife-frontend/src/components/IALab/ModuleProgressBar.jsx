@@ -15,13 +15,13 @@ const ModuleProgressBar = ({ moduleScore, activeMod, totalModules = 5, challenge
             <Icon name="fa-chart-line" className="text-white text-lg" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-petroleum dark:text-[#4DA8C4] leading-tight">Progreso del Módulo</h3>
+            <h3 className="text-sm font-bold text-petroleum leading-tight">Progreso del Módulo</h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">Módulo {activeMod} de {totalModules}</p>
           </div>
         </div>
         <div className="text-right flex-shrink-0 ml-4">
           <div className="text-2xl md:text-3xl font-bold text-petroleum dark:text-white">{moduleScore}%</div>
-          <div className="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-wider font-medium">Completado</div>
+          <div className="text-[10px] text-slate-600 dark:text-slate-500 uppercase tracking-wider font-medium">Completado</div>
         </div>
       </div>
 
@@ -34,7 +34,7 @@ const ModuleProgressBar = ({ moduleScore, activeMod, totalModules = 5, challenge
         </div>
       </div>
 
-      <div className="flex items-center gap-4 mt-2.5 text-[11px] text-slate-400 dark:text-slate-500">
+      <div className="flex items-center gap-4 mt-2.5 text-[11px] text-slate-600 dark:text-slate-500">
         <span className="flex items-center gap-1">
           <Icon name="fa-file" className="text-xs" />
           Recursos

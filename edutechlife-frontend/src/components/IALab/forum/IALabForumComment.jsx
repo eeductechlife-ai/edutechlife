@@ -59,9 +59,9 @@ const IALabForumComment = ({ comment, onReply, depth, children }) => {
               {profile.full_name || 'Usuario'}
             </span>
             {comment.is_edited && (
-              <span className="text-[9px] text-slate-400">· editado</span>
+              <span className="text-[9px] text-slate-600">· editado</span>
             )}
-            <span className="text-[9px] text-slate-400 ml-auto">
+            <span className="text-[9px] text-slate-600 ml-auto">
               {formatRelativeTime(comment.created_at)}
             </span>
           </div>
@@ -73,7 +73,7 @@ const IALabForumComment = ({ comment, onReply, depth, children }) => {
           <div className="flex items-center gap-2 mt-1.5">
             <button
               onClick={() => setShowReplyEditor(!showReplyEditor)}
-              className="flex items-center gap-1 text-[10px] text-slate-400 hover:text-petroleum dark:hover:text-[#4DA8C4] transition-colors"
+              className="flex items-center gap-1 text-[10px] text-slate-600 hover:text-petroleum transition-colors"
             >
               <Icon name="fa-reply" className="text-[9px]" />
               Responder

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabContext } from '../../context/IALabContext';
 import { useProgressContext } from '../../context/ProgressContext';
 import { useIALabStore } from '../../store/ialabStore';
+import StudyPlannerModal from './StudyPlannerModal';
 
 const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenProfile, onOpenHistory, onOpenHelp }) => {
   const {
@@ -14,6 +15,26 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
 
   const { completedInfographics } = useProgressContext();
   const { streak, getLevel } = useIALabStore();
+  const [showStudyPlanner, setShowStudyPlanner] = useState(false);
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const focusable = el.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if (focusable.length) focusable[0].focus();
+    const handleKeyDown = (e) => {
+      if (e.key !== 'Tab') return;
+      const focusableEls = [...el.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')];
+      if (!focusableEls.length) return;
+      const first = focusableEls[0];
+      const last = focusableEls[focusableEls.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const isInfographicCompleted = (infographicId) => completedInfographics.includes(`${infographicId}`);
 
@@ -23,7 +44,7 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
   };
 
   return (
-    <div className="flex-1 overflow-y-auto">
+    <div className="flex-1 overflow-y-auto" ref={containerRef}>
       {/* Perfil compacto */}
       <div className="px-3 py-3 border-b border-slate-100 dark:border-slate-700">
         <div className="flex items-center gap-3">
@@ -52,33 +73,41 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
         </h3>
         <div className="space-y-0.5">
           <button onClick={onOpenProfile}
-            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-petroleum/5 dark:hover:bg-petroleum/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40">
+            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-petroleum/5 dark:hover:bg-petroleum/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 min-h-[44px]">
             <div className="w-7 h-7 rounded-lg bg-petroleum/8 dark:bg-petroleum/20 flex items-center justify-center flex-shrink-0">
-              <Icon name="fa-user" className="text-xs text-petroleum dark:text-[#4DA8C4]" />
+              <Icon name="fa-user" className="text-xs text-petroleum dark:text-petroleum" />
             </div>
             Mi Perfil
           </button>
 
           <button onClick={onOpenHistory}
-            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-petroleum/5 dark:hover:bg-petroleum/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40">
+            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-petroleum/5 dark:hover:bg-petroleum/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 min-h-[44px]">
             <div className="w-7 h-7 rounded-lg bg-petroleum/8 dark:bg-petroleum/20 flex items-center justify-center flex-shrink-0">
-              <Icon name="fa-chart-line" className="text-xs text-petroleum dark:text-[#4DA8C4]" />
+              <Icon name="fa-chart-line" className="text-xs text-petroleum dark:text-petroleum" />
             </div>
             Mi Historial de Aprendizaje
           </button>
 
-          <button onClick={() => { closeMobileMenu(); setShowCertificateModal(true); }}
-            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-petroleum/5 dark:hover:bg-petroleum/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40">
+          <button onClick={() => setShowStudyPlanner(true)}
+            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-petroleum/5 dark:hover:bg-petroleum/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 min-h-[44px]">
             <div className="w-7 h-7 rounded-lg bg-petroleum/8 dark:bg-petroleum/20 flex items-center justify-center flex-shrink-0">
-              <Icon name="fa-certificate" className="text-xs text-petroleum dark:text-[#4DA8C4]" />
+              <Icon name="fa-calendar" className="text-xs text-petroleum dark:text-petroleum" />
+            </div>
+            Plan de Estudio
+          </button>
+
+          <button onClick={() => { closeMobileMenu(); setShowCertificateModal(true); }}
+            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-petroleum/5 dark:hover:bg-petroleum/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 min-h-[44px]">
+            <div className="w-7 h-7 rounded-lg bg-petroleum/8 dark:bg-petroleum/20 flex items-center justify-center flex-shrink-0">
+              <Icon name="fa-certificate" className="text-xs text-petroleum dark:text-petroleum" />
             </div>
             Certificados
           </button>
 
           <button onClick={onOpenHelp}
-            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-petroleum/5 dark:hover:bg-petroleum/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40">
+            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-petroleum/5 dark:hover:bg-petroleum/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 min-h-[44px]">
             <div className="w-7 h-7 rounded-lg bg-petroleum/8 dark:bg-petroleum/20 flex items-center justify-center flex-shrink-0">
-              <Icon name="fa-question-circle" className="text-xs text-petroleum dark:text-[#4DA8C4]" />
+              <Icon name="fa-question-circle" className="text-xs text-petroleum dark:text-petroleum" />
             </div>
             Ayuda
           </button>
@@ -103,15 +132,15 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
               <button key={mod.id}
                 onClick={() => { if (!isLocked) { setActiveMod(mod.id); closeMobileMenu(); } }}
                 disabled={isLocked}
-                className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 ${
+                className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 min-h-[44px] ${
                   isActive ? 'bg-gradient-to-r from-petroleum to-corporate text-white shadow-sm'
                   : 'text-slate-600 dark:text-slate-300 hover:bg-petroleum/5 dark:hover:bg-petroleum/10'
                 }`}>
                 <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 text-xs font-bold ${
                   isActive ? 'bg-white/20 text-white'
-                  : isLocked ? 'bg-slate-100 dark:bg-slate-700 text-slate-400'
+                  : isLocked ? 'bg-slate-100 dark:bg-slate-700 text-slate-600'
                   : modScore >= 80 ? 'bg-emerald-100 text-emerald-600'
-                  : 'bg-petroleum/8 dark:bg-petroleum/20 text-petroleum dark:text-[#4DA8C4]'
+                  : 'bg-petroleum/8 dark:bg-petroleum/20 text-petroleum dark:text-petroleum'
                 }`}>{mod.id}</div>
                 <div className="flex-1 min-w-0 text-left">
                   <p className={`truncate ${isActive ? 'text-white' : ''}`}>{mod.title}</p>
@@ -122,7 +151,7 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
                     </div>
                   )}
                 </div>
-                {isLocked && <Icon name="fa-lock" className="text-xs text-slate-400" />}
+                {isLocked && <Icon name="fa-lock" className="text-xs text-slate-600" />}
                 {!isLocked && modScore >= 80 && <Icon name="fa-check" className="text-xs text-emerald-500" />}
               </button>
             );
@@ -139,7 +168,8 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
             <Icon name="fa-cubes" className="text-corporate text-xs" /> RECURSOS ADICIONALES
           </h3>
           <button onClick={() => toggleSidebarDropdown('recursos')}
-            className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/30">
+            className="w-11 h-11 rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/30"
+            aria-label={sidebarDropdowns.recursos ? 'Colapsar recursos' : 'Expandir recursos'}>
             <Icon name={sidebarDropdowns.recursos ? 'fa-chevron-up' : 'fa-chevron-down'} className="text-xs" />
           </button>
         </div>
@@ -154,15 +184,15 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
               const completed = isInfographicCompleted(r.id);
               return (
                 <button key={r.id} onClick={() => window.dispatchEvent(new CustomEvent('ialab:openTopic'))}
-                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-petroleum/5 dark:hover:bg-petroleum/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/30">
+                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-petroleum/5 dark:hover:bg-petroleum/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/30 min-h-[44px]">
                   <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                    completed ? 'bg-emerald-50 text-emerald-500' : 'bg-petroleum/8 dark:bg-petroleum/20 text-petroleum dark:text-[#4DA8C4]'
+                    completed ? 'bg-emerald-50 text-emerald-500' : 'bg-petroleum/8 dark:bg-petroleum/20 text-petroleum dark:text-petroleum'
                   }`}>
                     <Icon name={completed ? 'fa-check-circle' : r.icon} className="text-xs" />
                   </div>
                   <div className="flex-1 min-w-0 text-left">
                     <p className="text-sm truncate">{r.label}</p>
-                    <p className="text-[10px] text-slate-400">{completed ? 'Completado' : r.meta}</p>
+                    <p className="text-[10px] text-slate-600">{completed ? 'Completado' : r.meta}</p>
                   </div>
                 </button>
               );
@@ -196,7 +226,7 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
               )}
               {courseCompleted && (
                 <button onClick={() => { setShowCertificateModal(true); closeMobileMenu(); }}
-                  className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-petroleum dark:text-[#4DA8C4] bg-petroleum/5 hover:bg-petroleum/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/30">
+                  className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-petroleum dark:text-petroleum bg-petroleum/5 hover:bg-petroleum/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/30 min-h-[44px]">
                   <Icon name="fa-certificate" className="text-corporate text-sm" /> Ver Certificado
                 </button>
               )}
@@ -209,7 +239,7 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
       <div className="mx-3 border-t border-slate-100 dark:border-slate-700" />
       <div className="px-3 py-3">
         <button onClick={toggleDarkMode}
-          className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-petroleum/5 dark:hover:bg-petroleum/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/30">
+          className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-petroleum/5 dark:hover:bg-petroleum/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/30 min-h-[44px]">
           <span className="flex items-center gap-2.5">
             <Icon name={isDarkMode ? 'fa-sun' : 'fa-moon'} className={`text-sm ${isDarkMode ? 'text-amber-400' : 'text-slate-500'}`} />
             Modo {isDarkMode ? 'Claro' : 'Oscuro'}
@@ -224,13 +254,15 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
       <div className="mx-3 border-t border-slate-100 dark:border-slate-700" />
       <div className="px-3 py-3">
         <button onClick={handleLogout}
-          className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400/40">
+          className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400/40 min-h-[44px]">
           <div className="w-7 h-7 rounded-lg bg-red-50 dark:bg-red-900/20 flex items-center justify-center flex-shrink-0">
             <Icon name="fa-sign-out-alt" className="text-xs text-red-500" />
           </div>
           Cerrar Sesion
         </button>
       </div>
+
+      <StudyPlannerModal isOpen={showStudyPlanner} onClose={() => setShowStudyPlanner(false)} />
 
     </div>
   );

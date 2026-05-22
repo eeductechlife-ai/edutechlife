@@ -11,6 +11,7 @@ import SecurityWarningModal from './SecurityWarningModal';
 import ScreenshotProtectionOverlay from './ScreenshotProtectionOverlay';
 import useScreenshotProtection from '../../hooks/IALab/useScreenshotProtection';
 import { motion, AnimatePresence } from 'framer-motion';
+import useFocusTrap from '../../hooks/useFocusTrap';
 
 /**
  * Componente premium para evaluación inmersiva de IALab con DeepSeek API
@@ -496,10 +497,13 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
         prevStepRef.current = state.step;
     }, [state.step]);
 
+    const focusTrapRef = useFocusTrap(isVisible);
+
     return (
             <AnimatePresence>
                 {isVisible && (
                     <motion.div 
+                        ref={focusTrapRef}
                         className="fixed inset-0 z-[100] bg-slate-50 dark:bg-slate-900 flex flex-col select-none"
                         style={{ WebkitUserSelect: 'none', userSelect: 'none' }}
                         onCopy={handleSecurityEvent}
@@ -525,7 +529,7 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
                                 background: `repeating-linear-gradient(45deg, var(--color-petroleum), var(--color-petroleum) 2px, transparent 2px, transparent 60px)`,
                             }}>
                                 <div className="absolute inset-0 flex items-center justify-center">
-                                    <span className="text-petroleum dark:text-[#4DA8C4] text-8xl font-bold transform -rotate-12 select-none" style={{ whiteSpace: 'nowrap' }}>
+                                    <span className="text-petroleum text-8xl font-bold transform -rotate-12 select-none" style={{ whiteSpace: 'nowrap' }}>
                                         EDUTECHLIFE
                                     </span>
                                 </div>

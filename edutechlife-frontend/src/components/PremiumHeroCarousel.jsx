@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react'
 
 // Simple premium carousel for the hero left side
 const slides = [
-  { src: '/images/edutech-carrusel-1.png', alt: 'Nuestra Esencia 1', caption: 'Nuestra Esencia' },
-  { src: '/images/edutech-carrusel-2.png', alt: 'Nuestra Esencia 2', caption: 'Nuestra esencia' },
-  { src: '/images/edutech-carrusel-3.png', alt: 'Nuestra Esencia 3', caption: 'El Factor' },
-  { src: '/images/edutech-carrusel-4.png', alt: 'Nuestra Esencia 4', caption: 'Humano.' },
+  { src: '/images/edutech-carrusel-1.webp', alt: 'Nuestra Esencia 1', caption: 'Nuestra Esencia' },
+  { src: '/images/edutech-carrusel-2.webp', alt: 'Nuestra Esencia 2', caption: 'Nuestra esencia' },
+  { src: '/images/edutech-carrusel-3.webp', alt: 'Nuestra Esencia 3', caption: 'El Factor' },
+  { src: '/images/edutech-carrusel-5.webp', alt: 'Nuestra Esencia 4', caption: 'Humano.' },
 ]
 
 export default function PremiumHeroCarousel(){
@@ -21,7 +21,7 @@ export default function PremiumHeroCarousel(){
   return (
     <div className="premium-hero-carousel" aria-label="Carrusel de la Esencia">
       <div className="premium-hero-slide glass-card glass-petro" style={{ overflow:'hidden', borderRadius:'16px', height:'320px' }}>
-        <img src={slides[idx].src} alt={slides[idx].alt} style={{ width:'100%', height:'100%', objectFit:'cover' }} />
+        <img src={slides[idx].src} alt={slides[idx].alt} loading="lazy" style={{ width:'100%', height:'100%', objectFit:'cover' }} />
         <div className="premium-caption" aria-hidden="true">{slides[idx].caption}</div>
       </div>
       <div className="premium-carousel-controls" aria-label="Controles de carrusel" style={{ position:'absolute', left:0, bottom:0, padding:16, display:'flex', gap:8 }}>

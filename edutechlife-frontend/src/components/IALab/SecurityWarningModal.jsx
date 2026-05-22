@@ -82,8 +82,8 @@ const SecurityWarningModal = ({ isOpen, message, level = 1, onClose }) => {
 
                 <div className="w-full flex flex-col gap-3">
                   {level < 3 && (
-                    <div className="flex items-center gap-2 justify-center text-xs text-slate-400 dark:text-slate-500">
-                      <Icon name="fa-info-circle" className="text-slate-400" />
+                    <div className="flex items-center gap-2 justify-center text-xs text-slate-600 dark:text-slate-500">
+                      <Icon name="fa-info-circle" className="text-slate-600" />
                       <span>
                         {level === 1
                           ? 'Si cambias de ventana 2 veces más, el examen se cerrará automáticamente.'

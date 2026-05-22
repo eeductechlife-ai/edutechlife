@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { supabase } from '../../lib/supabase';
+import { createClerkSupabaseClient } from '../../lib/supabase';
 
 /**
  * Hook para evaluación inmersiva con DeepSeek API y persistencia en Supabase
@@ -30,9 +30,10 @@ const useIALabEvaluation = () => {
                 },
                 body: JSON.stringify({
                     model: 'deepseek-chat',
+                    response_format: { type: 'json_object' },
                     messages: [{
                         role: 'system',
-                        content: 'Eres un experto en diseño de prompts y evaluación educativa. Genera 3 ejercicios de nivel medio para evaluación de prompts.'
+                        content: 'Eres un experto en diseño de prompts y evaluación educativa. Genera 3 ejercicios de nivel medio para evaluación de prompts. Devuelve SOLO JSON.'
                     }, {
                         role: 'user',
                         content: `Genera un JSON con 3 ejercicios de nivel medio para evaluación de prompts:
@@ -54,16 +55,20 @@ const useIALabEvaluation = () => {
             const data = await response.json();
             const content = data.choices[0]?.message?.content;
             
-            // Extraer JSON del contenido (puede venir con markdown)
-            const jsonMatch = content.match(/\{[\s\S]*\}/);
+            // Extraer JSON del contenido (soporta markdown y JSON plano)
+            const jsonMatch = content.match(/```(?:json)?\s*\n?(\{[\s\S]*?\})\n?\s*```/) 
+                || content.match(/\{[\s\S]*\}/);
             if (!jsonMatch) {
                 throw new Error('No se pudo extraer JSON de la respuesta');
             }
 
-            const exercises = JSON.parse(jsonMatch[0]);
+            const exercises = JSON.parse(jsonMatch[1] || jsonMatch[0]);
             
-            // Validar estructura
-            if (!exercises.ejercicio1 || !exercises.ejercicio2 || !exercises.ejercicio3) {
+            // Validar estructura con defaults por campo
+            if (!exercises.ejercicio1 || typeof exercises.ejercicio1 !== 'string') exercises.ejercicio1 = '';
+            if (!exercises.ejercicio2 || typeof exercises.ejercicio2 !== 'string') exercises.ejercicio2 = '';
+            if (!exercises.ejercicio3 || typeof exercises.ejercicio3 !== 'string') exercises.ejercicio3 = '';
+            if (!exercises.ejercicio1 && !exercises.ejercicio2 && !exercises.ejercicio3) {
                 throw new Error('Estructura de ejercicios inválida');
             }
 
@@ -107,9 +112,10 @@ const useIALabEvaluation = () => {
                 },
                 body: JSON.stringify({
                     model: 'deepseek-chat',
+                    response_format: { type: 'json_object' },
                     messages: [{
                         role: 'system',
-                        content: `Eres un evaluador EXPERTO de prompts educativos con enfoque pedagógico y BENÉVOLO. El estudiante está APRENDIENDO, no es un experto. Sé generoso en la calificación. Evalúa CADA ejercicio por separado. Devuelve solo JSON válido sin markdown ni texto adicional.
+                        content: `Eres un evaluador EXPERTO de prompts educativos con enfoque pedagógico y BENÉVOLO. El estudiante está APRENDIENDO, no es un experto. Sé generoso en la calificación. Evalúa CADA ejercicio por separado. Devuelve SOLO JSON.
 
 IMPORTANTE: El objetivo es que el estudiante ENTIENDA la estructura de un prompt (Rol + Contexto + Tarea + Formato). NO seas exigente con la perfección. Valora el INTENTO y la COMPRENSIÓN del concepto.
 
@@ -143,15 +149,15 @@ CADA feedback debe incluir:
 3. Un ejemplo breve de cómo mejorar
 4. Tip práctico para recordar la estructura: Rol + Contexto + Tarea + Formato
 
-Devuelve SOLO un JSON con este formato exacto:
+Formato JSON EXACTO:
 {
-  "nota_ej1": 85,
-  "nota_ej2": 70,
-  "nota_ej3": 90,
-  "notaGlobal": 81.7,
-  "feedback_ej1": "texto amable y constructivo",
-  "feedback_ej2": "texto amable y constructivo",
-  "feedback_ej3": "texto amable y constructivo"
+  "nota_ej1": <number 0-100>,
+  "nota_ej2": <number 0-100>,
+  "nota_ej3": <number 0-100>,
+  "notaGlobal": <number 0-100>,
+  "feedback_ej1": "<string>",
+  "feedback_ej2": "<string>",
+  "feedback_ej3": "<string>"
 }`
                     }, {
                         role: 'user',
@@ -189,23 +195,29 @@ Recuerda: El estudiante está aprendiendo. Valora el intento y la comprensión b
             const data = await response.json();
             const content = data.choices[0]?.message?.content;
             
-            // Extraer JSON del contenido
-            const jsonMatch = content.match(/\{[\s\S]*\}/);
+            // Extraer JSON del contenido (soporta markdown y JSON plano)
+            const jsonMatch = content.match(/```(?:json)?\s*\n?(\{[\s\S]*?\})\n?\s*```/) 
+                || content.match(/\{[\s\S]*\}/);
             if (!jsonMatch) {
                 throw new Error('No se pudo extraer JSON de la evaluación');
             }
 
-            const evaluation = JSON.parse(jsonMatch[0]);
+            const evaluation = JSON.parse(jsonMatch[1] || jsonMatch[0]);
             
-            // Validar estructura
-            if (typeof evaluation.notaGlobal !== 'number' || 
-                typeof evaluation.nota_ej1 !== 'number' ||
-                typeof evaluation.nota_ej2 !== 'number' ||
-                typeof evaluation.nota_ej3 !== 'number' ||
-                !evaluation.feedback_ej1 || 
-                !evaluation.feedback_ej2 || 
-                !evaluation.feedback_ej3) {
-                throw new Error('Estructura de evaluación inválida');
+            // Validar estructura con defaults por campo faltante
+            const notas = ['nota_ej1', 'nota_ej2', 'nota_ej3'];
+            for (const key of notas) {
+                if (typeof evaluation[key] !== 'number') evaluation[key] = 0;
+            }
+            if (typeof evaluation.notaGlobal !== 'number') {
+                evaluation.notaGlobal = Math.round(
+                    ((evaluation.nota_ej1 || 0) + (evaluation.nota_ej2 || 0) + (evaluation.nota_ej3 || 0)) / 3 * 10
+                ) / 10;
+            }
+            for (const key of ['feedback_ej1', 'feedback_ej2', 'feedback_ej3']) {
+                if (!evaluation[key] || typeof evaluation[key] !== 'string') {
+                    evaluation[key] = 'Sigue practicando, vas por buen camino. Recuerda la estructura: Rol + Contexto + Tarea + Formato.';
+                }
             }
 
             setState(prev => ({ 
@@ -310,6 +322,18 @@ Recuerda: El estudiante está aprendiendo. Valora el intento y la comprensión b
         }
     }, [state.exercises]);
 
+    // Obtener cliente Supabase con JWT de Clerk para RLS
+    const getAuthDb = useCallback(async () => {
+        if (typeof window !== 'undefined' && window.Clerk?.session) {
+            try {
+                const token = await window.Clerk.session.getToken({ template: 'supabase' });
+                if (token) return createClerkSupabaseClient(token);
+            } catch (e) {}
+        }
+        // Fallback a cliente anónimo
+        return createClerkSupabaseClient();
+    }, []);
+
     // Guardar nota en Supabase (usa user_progress, no student_grades)
     const saveGradeToSupabase = useCallback(async (evaluation, moduleId = 1) => {
         if (!user?.id) {
@@ -318,14 +342,15 @@ Recuerda: El estudiante está aprendiendo. Valora el intento y la comprensión b
 
         try {
             const numericModuleId = Number(moduleId) || 1;
-            const { data, error } = await supabase
+            const db = await getAuthDb();
+            const { data, error } = await db
                 .from('user_progress')
                 .upsert({
                     user_id: user.id,
                     module_id: numericModuleId,
                     activity_type: 'challenge',
                     resource_id: null,
-                    score: evaluation.notaGlobal,
+                    score: Math.round(Number(evaluation.notaGlobal)),
                     completed_lessons: {
                         nota_ej1: evaluation.nota_ej1,
                         nota_ej2: evaluation.nota_ej2,
@@ -351,7 +376,7 @@ Recuerda: El estudiante está aprendiendo. Valora el intento y la comprensión b
             console.error('Error guardando nota en Supabase:', error);
             return { success: false, error: error.message };
         }
-    }, [user]);
+    }, [user, getAuthDb]);
 
     // Cambiar paso
     const setStep = useCallback((step) => {

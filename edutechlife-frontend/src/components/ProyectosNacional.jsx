@@ -234,7 +234,7 @@ const ProyectosNacional = ({ onBack }) => {
                         {testimonios.map((t, i) => (
                             <div key={i} className="testimonio-card">
                                 <div className="testimonio-header">
-                                    <img src={t.img} alt={t.nombre} />
+                                    <img src={t.img} alt={t.nombre} loading="lazy" />
                                     <div>
                                         <h4>{t.nombre}</h4>
                                         <span>{t.rol}</span>

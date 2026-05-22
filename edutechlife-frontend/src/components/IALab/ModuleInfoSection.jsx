@@ -80,7 +80,7 @@ const ModuleInfoSection = ({ className = '', ...rest }) => {
                         <Icon name="fa-bullseye" className="text-base text-white" />
                     </div>
                     <div className="flex-1 min-w-0">
-<h3 className="text-sm font-bold text-petroleum uppercase tracking-wider dark:text-[#4DA8C4]">
+<h3 className="text-sm font-bold text-petroleum uppercase tracking-wider">
                              Objetivo del Módulo
                          </h3>
                          <p className="text-sm text-slate-600 leading-snug mt-1 dark:text-slate-300">

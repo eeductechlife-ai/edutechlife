@@ -118,8 +118,8 @@ const IALabInteractionAdvisor = ({ className = '', ...rest }) => {
               {input.length >= 3 && <VoiceReader text={`Describe tu tarea y te recomendaré la mejor herramienta de ChatGPT. Escribe: ${input || 'tu tarea'}`} />}
             </div>
             <div className="relative">
-              <textarea value={input} onChange={handleInputChange} onKeyDown={handleKeyDown} placeholder="Ej: Quiero crear una infografía educativa sobre el ciclo del agua para niños de 10 años..." className="w-full min-h-[80px] p-4 bg-white border border-slate-200 rounded-xl text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-corporate/30 focus:border-corporate resize-none transition-all" maxLength={500} />
-              <div className="absolute bottom-3 right-3 text-[10px] text-slate-400 font-medium">{input.length}/500</div>
+              <textarea value={input} onChange={handleInputChange} onKeyDown={handleKeyDown} placeholder="Ej: Quiero crear una infografía educativa sobre el ciclo del agua para niños de 10 años..." className="w-full min-h-[80px] p-4 bg-white border border-slate-200 rounded-xl text-sm text-slate-700 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-corporate/30 focus:border-corporate resize-none transition-all" maxLength={500} />
+              <div className="absolute bottom-3 right-3 text-[10px] text-slate-600 font-medium">{input.length}/500</div>
             </div>
             <div className="flex justify-end mt-3">
               <button onClick={handleRecommend} disabled={input.trim().length < 3} className="px-6 py-2.5 bg-gradient-to-r from-petroleum to-corporate text-white text-sm font-bold rounded-xl hover:from-petroleum-dark hover:to-corporate-dark transition-all duration-200 shadow-sm hover:shadow flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
@@ -164,7 +164,7 @@ const IALabInteractionAdvisor = ({ className = '', ...rest }) => {
                 <div className="bg-white p-3 rounded-lg border border-slate-200">
                   <code className="text-xs text-slate-700 leading-relaxed font-mono whitespace-pre-wrap">{recommendation.prompt}</code>
                 </div>
-                <p className="text-[10px] text-slate-400 mt-1 italic">Personaliza el prompt según tus necesidades específicas</p>
+                <p className="text-[10px] text-slate-600 mt-1 italic">Personaliza el prompt según tus necesidades específicas</p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">

@@ -28,17 +28,35 @@ const LS_KEYS = {
   FORUM_POST_COUNT: 'ialab_forum_post_count',
   FORUM_COMMENT_COUNT: 'ialab_forum_comment_count',
   BOOKMARKED_RESOURCES: 'ialab_bookmarked_resources',
+  START_DATE: 'ialab_start_date',
 };
 
 const ls = {
+  _pending: null,
+  _flush: () => {
+    if (!ls._pending) return;
+    const batch = ls._pending;
+    ls._pending = null;
+    try {
+      for (const [key, value] of batch) {
+        localStorage.setItem(key, JSON.stringify(value));
+      }
+    } catch {}
+  },
   get: (key, fallback = null) => {
+    // Check pending batch first (write-then-read in same tick)
+    if (ls._pending?.has(key)) return ls._pending.get(key);
     try {
       const val = localStorage.getItem(key);
       return val ? JSON.parse(val) : fallback;
     } catch { return fallback; }
   },
   set: (key, value) => {
-    try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
+    if (!ls._pending) {
+      ls._pending = new Map();
+      queueMicrotask(ls._flush);
+    }
+    ls._pending.set(key, value);
   },
   remove: (key) => {
     try { localStorage.removeItem(key); } catch {}
@@ -58,6 +76,27 @@ const clearMemoCache = () => memoCache.clear();
 
 // Pesos: Examen 35% + Desafío 30% + Recursos 30% + Comunidad 5% = 100%
 const WEIGHTS = { exam: 35, challenge: 30, resources: 30, community: 5 };
+
+// Helper: calcular score de un módulo a partir de su progreso
+const calcModuleScore = (mod) => {
+  if (!mod) return 0;
+  let score = 0;
+  score += mod.examEarned || (mod.exam ? WEIGHTS.exam : 0);
+  score += mod.challengeEarned || (mod.challenge ? WEIGHTS.challenge : 0);
+  if (mod.resourcesCompleted) score += WEIGHTS.resources;
+  if (mod.community) score += WEIGHTS.community;
+  return Math.min(100, Math.round(score * 10) / 10);
+};
+
+// Helper: recalcular courseProgress desde todos los módulos
+const calcGlobalProgress = (moduleProgress) => {
+  let total = 0;
+  for (let i = 1; i <= 5; i++) {
+    const mp = moduleProgress[i];
+    if (mp) total += (calcModuleScore(mp) / 100) * 20;
+  }
+  return Math.min(100, Math.round(total));
+};
 
 const INITIAL_MODULE_PROGRESS = {
   1: { exam: false, challenge: false, resourcesCompleted: false, community: false, currentScore: 0, isUnlocked: true },
@@ -138,6 +177,8 @@ export const useIALabStore = create((set, get) => ({
   // ==================== NAVEGACIÓN ====================
   activeMod: 1,
   setActiveMod: (mod) => set({ activeMod: mod }),
+  activeTopic: null,
+  setActiveTopic: (topic) => set({ activeTopic: topic }),
   activeTab: 'lab',
   setActiveTab: (tab) => set({ activeTab: tab }),
   visitedModules: [1],
@@ -206,7 +247,7 @@ export const useIALabStore = create((set, get) => ({
   xp: 0,
   streak: 0,
   lastActivityDate: null,
-  startDate: new Date().toISOString(),
+  startDate: ls.get(LS_KEYS.START_DATE, new Date().toISOString()),
   badges: [],
   forumPostCount: 0,
   forumCommentCount: 0,
@@ -218,11 +259,18 @@ export const useIALabStore = create((set, get) => ({
 
   recordActivity: () => {
     const { lastActivityDate, streak } = get();
-    const today = new Date().toDateString();
-    if (lastActivityDate === today) return false;
+    const now = new Date();
+    const todayDateStr = now.toDateString();
+    const lastDateStr = lastActivityDate ? new Date(lastActivityDate).toDateString() : null;
+    if (lastDateStr === todayDateStr) {
+      // Mismo día: refrescar timestamp sin modificar streak
+      set({ lastActivityDate: now.toISOString() });
+      get().persistGamificationState();
+      return true;
+    }
     const yesterday = new Date(Date.now() - 86400000).toDateString();
-    const newStreak = lastActivityDate === yesterday ? streak + 1 : 1;
-    set({ streak: newStreak, lastActivityDate: today });
+    const newStreak = lastDateStr === yesterday ? streak + 1 : 1;
+    set({ streak: newStreak, lastActivityDate: now.toISOString() });
     get().persistGamificationState();
     if (newStreak === 3) get().addXp(50);
     if (newStreak === 7) get().addXp(100);
@@ -323,7 +371,7 @@ export const useIALabStore = create((set, get) => ({
   courseProgress: 0,
   setCourseProgress: (v) => set({ courseProgress: v }),
   completedVideos: [],
-  completedExams: (() => { try { const v = localStorage.getItem('ialab_completed_exams'); return v ? JSON.parse(v) : {}; } catch { return {}; } })(),
+  completedExams: ls.get(LS_KEYS.COMPLETED_EXAMS, {}),
   completedInfographics: [],
   completedActivities: [],
   challengeScores: {},
@@ -332,6 +380,8 @@ export const useIALabStore = create((set, get) => ({
   syncStatus: null,
   isUsingJWT: false,
   userId: null,
+  userRole: 'student',
+  setUserRole: (v) => set({ userRole: v }),
 
   // ==================== MÓDULO PROGRESS (GAMIFICADO) ====================
   moduleProgress: INITIAL_MODULE_PROGRESS,
@@ -340,14 +390,7 @@ export const useIALabStore = create((set, get) => ({
   })),
 
   calculateModuleScore: (moduleId) => {
-    const mod = get().moduleProgress[moduleId];
-    if (!mod) return 0;
-    let score = 0;
-    score += mod.examEarned || (mod.exam ? WEIGHTS.exam : 0);
-    score += mod.challengeEarned || (mod.challenge ? WEIGHTS.challenge : 0);
-    if (mod.resourcesCompleted) score += WEIGHTS.resources;
-    if (mod.community) score += WEIGHTS.community;
-    return Math.min(100, Math.round(score * 10) / 10);
+    return calcModuleScore(get().moduleProgress[moduleId]);
   },
 
   getMemoizedModuleScore: (moduleId) => {
@@ -367,12 +410,7 @@ export const useIALabStore = create((set, get) => ({
   },
 
   calculateGlobalProgress: () => {
-    const { calculateModuleScore: cms } = get();
-    let total = 0;
-    for (let i = 1; i <= 5; i++) {
-      total += (cms(i) / 100) * 20;
-    }
-    return Math.min(100, Math.round(total));
+    return calcGlobalProgress(get().moduleProgress);
   },
 
   getMemoizedGlobalProgress: () => {
@@ -380,9 +418,27 @@ export const useIALabStore = create((set, get) => ({
     return memoize('globalProgress', () => state.calculateGlobalProgress());
   },
 
+  isModuleFullyApproved: (moduleId) => {
+    const mod = get().moduleProgress[moduleId];
+    if (!mod) return false;
+    return mod.exam === true
+        && mod.challenge === true
+        && mod.resourcesCompleted === true
+        && mod.currentScore >= 80;
+  },
+
+  isCourseCompleted: () => {
+    return [1, 2, 3, 4, 5].every(id => {
+      const mod = get().moduleProgress[id];
+      return mod?.exam === true
+          && mod?.challenge === true
+          && mod?.resourcesCompleted === true
+          && mod?.currentScore >= 80;
+    });
+  },
+
   updateModuleActivity: (moduleId, activity, value, score) => {
     const state = get();
-    const updateTimestamp = Date.now();
     const prevMod = state.moduleProgress[moduleId];
     let newScore = 0;
     let justCompleted = false;
@@ -411,12 +467,7 @@ export const useIALabStore = create((set, get) => ({
       updated.community = !!value;
     }
 
-    let scoreCalc = 0;
-    scoreCalc += updated.examEarned || (updated.exam ? WEIGHTS.exam : 0);
-    scoreCalc += updated.challengeEarned || (updated.challenge ? WEIGHTS.challenge : 0);
-    if (updated.resourcesCompleted) scoreCalc += WEIGHTS.resources;
-    if (updated.community) scoreCalc += WEIGHTS.community;
-    updated.currentScore = Math.min(100, Math.round(scoreCalc * 10) / 10);
+    updated.currentScore = calcModuleScore(updated);
     newScore = updated.currentScore;
 
     if ((prevMod?.currentScore || 0) < 80 && updated.currentScore >= 80) {
@@ -425,45 +476,30 @@ export const useIALabStore = create((set, get) => ({
 
     set((s) => {
       const newProgress = { ...s.moduleProgress, [moduleId]: updated };
-      if (moduleId < 5 && updated.currentScore >= 80) {
+      const canUnlock = moduleId < 5 && updated.resourcesCompleted && (updated.examScore || 0) >= 80 && (updated.challengeScore || 0) >= 80;
+      if (canUnlock) {
         newProgress[moduleId + 1] = { ...newProgress[moduleId + 1], isUnlocked: true };
       }
       const newCompletedExams = { ...s.completedExams };
       if (activity === 'exam' && typeof score === 'number') {
         newCompletedExams[moduleId] = score;
       }
-      // Recalcular courseProgress desde moduleProgress
-      let total = 0;
-      for (let i = 1; i <= 5; i++) {
-        const m = newProgress[i];
-        if (m) {
-          let ms = 0;
-          ms += m.examEarned || (m.exam ? WEIGHTS.exam : 0);
-          ms += m.challengeEarned || (m.challenge ? WEIGHTS.challenge : 0);
-          if (m.resourcesCompleted) ms += WEIGHTS.resources;
-          if (m.community) ms += WEIGHTS.community;
-          total += (Math.min(100, Math.round(ms * 10) / 10) / 100) * 20;
-        }
-      }
-      return { moduleProgress: newProgress, completedExams: newCompletedExams, courseProgress: Math.min(100, Math.round(total)) };
+      // Recalcular courseProgress desde todos los módulos
+      return { moduleProgress: newProgress, completedExams: newCompletedExams, courseProgress: calcGlobalProgress(newProgress) };
     });
 
     // Persistir completedExams inmediatamente a localStorage
     if (activity === 'exam' && typeof score === 'number') {
-      try {
-        const current = JSON.parse(localStorage.getItem(LS_KEYS.COMPLETED_EXAMS) || '{}');
-        current[moduleId] = score;
-        localStorage.setItem(LS_KEYS.COMPLETED_EXAMS, JSON.stringify(current));
-      } catch (e) {}
+      const current = ls.get(LS_KEYS.COMPLETED_EXAMS, {});
+      current[moduleId] = score;
+      ls.set(LS_KEYS.COMPLETED_EXAMS, current);
     }
 
-    state.setLastStoreUpdateTimestamp(updateTimestamp);
     clearMemoCache();
     return { newScore, justCompleted };
   },
 
   markResourceAsViewed: (moduleId, resourceId) => {
-    get().setLastStoreUpdateTimestamp(Date.now());
     set((state) => {
       const mod = state.moduleProgress[moduleId];
       if (!mod) return state;
@@ -471,75 +507,44 @@ export const useIALabStore = create((set, get) => ({
       if (viewedResources.includes(resourceId)) return state;
       const newViewed = [...viewedResources, resourceId];
       const totalResources = MODULE_RESOURCE_COUNTS[moduleId] || 8;
+      const resourcesCompleted = newViewed.length >= totalResources;
       const resourcesPct = Math.round((newViewed.length / totalResources) * 100);
-      const resourcesCompleted = resourcesPct >= 80;
       const updated = { ...mod, viewedResources: newViewed, resourcesCompleted, resourcesPct };
-      let score = 0;
-      score += updated.examEarned || (updated.exam ? WEIGHTS.exam : 0);
-      score += updated.challengeEarned || (updated.challenge ? WEIGHTS.challenge : 0);
-      if (updated.resourcesCompleted) score += WEIGHTS.resources;
-      if (updated.community) score += WEIGHTS.community;
-      updated.currentScore = Math.min(100, Math.round(score * 10) / 10);
+      updated.currentScore = calcModuleScore(updated);
       const newProgress = { ...state.moduleProgress, [moduleId]: updated };
-      if (moduleId < 5 && updated.currentScore >= 80) {
+      const canUnlock = moduleId < 5 && updated.resourcesCompleted && (updated.examScore || 0) >= 80 && (updated.challengeScore || 0) >= 80;
+      if (canUnlock) {
         newProgress[moduleId + 1] = { ...newProgress[moduleId + 1], isUnlocked: true };
       }
-      // Recalcular courseProgress
-      let total = 0;
-      for (let i = 1; i <= 5; i++) {
-        const m = newProgress[i];
-        if (m) {
-          let ms = 0;
-          ms += m.examEarned || (m.exam ? WEIGHTS.exam : 0);
-          ms += m.challengeEarned || (m.challenge ? WEIGHTS.challenge : 0);
-          if (m.resourcesCompleted) ms += WEIGHTS.resources;
-          if (m.community) ms += WEIGHTS.community;
-          total += (Math.min(100, Math.round(ms * 10) / 10) / 100) * 20;
-        }
-      }
-      return { moduleProgress: newProgress, courseProgress: Math.min(100, Math.round(total)) };
+      // Recalcular courseProgress desde todos los módulos (solo local, sin DB)
+      return { moduleProgress: newProgress, courseProgress: calcGlobalProgress(newProgress) };
     });
   },
 
   markCommunityComment: (moduleId) => {
-    get().setLastStoreUpdateTimestamp(Date.now());
     set((state) => {
       const mod = state.moduleProgress[moduleId];
       if (!mod || mod.community) return state;
       const updated = { ...mod, community: true };
-      let score = 0;
-      score += updated.examEarned || (updated.exam ? WEIGHTS.exam : 0);
-      score += updated.challengeEarned || (updated.challenge ? WEIGHTS.challenge : 0);
-      if (updated.resourcesCompleted) score += WEIGHTS.resources;
-      if (updated.community) score += WEIGHTS.community;
-      updated.currentScore = Math.min(100, Math.round(score * 10) / 10);
+      updated.currentScore = calcModuleScore(updated);
       const newProgress = { ...state.moduleProgress, [moduleId]: updated };
-      if (moduleId < 5 && updated.currentScore >= 80) {
+      const canUnlock = moduleId < 5 && updated.resourcesCompleted && (updated.examScore || 0) >= 80 && (updated.challengeScore || 0) >= 80;
+      if (canUnlock) {
         newProgress[moduleId + 1] = { ...newProgress[moduleId + 1], isUnlocked: true };
       }
-      // Recalcular courseProgress
-      let total = 0;
-      for (let i = 1; i <= 5; i++) {
-        const m = newProgress[i];
-        if (m) {
-          let ms = 0;
-          ms += m.examEarned || (m.exam ? WEIGHTS.exam : 0);
-          ms += m.challengeEarned || (m.challenge ? WEIGHTS.challenge : 0);
-          if (m.resourcesCompleted) ms += WEIGHTS.resources;
-          if (m.community) ms += WEIGHTS.community;
-          total += (Math.min(100, Math.round(ms * 10) / 10) / 100) * 20;
-        }
-      }
-      return { moduleProgress: newProgress, courseProgress: Math.min(100, Math.round(total)) };
+      // Recalcular courseProgress desde todos los módulos
+      return { moduleProgress: newProgress, courseProgress: calcGlobalProgress(newProgress) };
     });
   },
 
   isModuleLocked: (moduleId) => {
+    if (get().userRole === 'admin') return false;
     if (moduleId === 1) return false;
     return !get().moduleProgress[moduleId]?.isUnlocked;
   },
 
   isEvaluationLocked: (moduleId) => {
+    if (get().userRole === 'admin') return false;
     if (moduleId === 1) return false;
     return !get().completedModules.includes(moduleId - 1);
   },
@@ -561,8 +566,6 @@ export const useIALabStore = create((set, get) => ({
   setDailyAttemptsCount: (v) => set({ dailyAttemptsCount: v }),
   lastAttemptDate: null,
   setLastAttemptDate: (v) => set({ lastAttemptDate: v }),
-  lastStoreUpdateTimestamp: 0,
-  setLastStoreUpdateTimestamp: (v) => set({ lastStoreUpdateTimestamp: v }),
   quizAttempts: [],
   setQuizAttempts: (v) => set({ quizAttempts: v }),
   showPremiumEvaluationModal: false,
@@ -729,6 +732,13 @@ export const useIALabStore = create((set, get) => ({
   getCompletedVideos: () => ls.get(LS_KEYS.COMPLETED_VIDEOS, []),
   setCompletedVideos: (ids) => ls.set(LS_KEYS.COMPLETED_VIDEOS, ids),
 
+  hasStartedCourse: () => {
+    const state = get();
+    const videos = state.getCompletedVideos();
+    if (videos.length > 0) return true;
+    return Object.values(state.moduleProgress).some(m => m.exam || m.challenge || m.resourcesCompleted);
+  },
+
   markVideoComplete: (id) => {
     const completed = get().getCompletedVideos();
     if (!completed.includes(id)) {
@@ -740,26 +750,37 @@ export const useIALabStore = create((set, get) => ({
 
   syncFromPersistence: (data) => {
     const state = get();
-    // Prevenir race conditions: si el store fue actualizado localmente hace menos de 2s,
-    // no sobrescribir con datos potencialmente obsoletos de la DB
-    const now = Date.now();
-    if (now - state.lastStoreUpdateTimestamp < 2000) {
-      return; // La actualización local es más reciente, ignorar sync
-    }
 
     // Cargar completedExams: EL STORE SIEMPRE GANA (fuente más reciente)
-    // Merge: store value tiene prioridad sobre ProgressContext
-    // Si store está vacío, usar ProgressContext. Si ambos vacíos, localStorage.
     let persistedExams = { ...(data.completedExams || {}), ...state.completedExams };
     if (Object.keys(persistedExams).length === 0) {
-      try {
-        const saved = localStorage.getItem(LS_KEYS.COMPLETED_EXAMS);
-        persistedExams = saved ? JSON.parse(saved) : {};
-      } catch (e) { persistedExams = {}; }
+      persistedExams = ls.get(LS_KEYS.COMPLETED_EXAMS, {});
     }
 
-    // Cargar estado de gamificación desde localStorage (persistencia entre sesiones)
-    const gamification = state.loadGamificationState();
+    // courseProgress: NUNCA sobrescribir con 0 si el store tiene un valor calculado.
+    // El store recalcula courseProgress desde moduleProgress en cada mutación,
+    // así que su valor es siempre correcto. Solo aceptar el de ProgressContext
+    // si el store está en 0 (inicial) y ProgressContext trae un valor positivo.
+    const storeProgress = state.courseProgress;
+    const incomingProgress = data.courseProgress;
+    const effectiveProgress = (storeProgress > 0 && incomingProgress > 0)
+      ? Math.max(storeProgress, incomingProgress)
+      : (storeProgress > 0 ? storeProgress : (incomingProgress > 0 ? incomingProgress : 0));
+
+    // Cargar estado de gamificación: merge localStorage + Supabase (server wins for cumulative values)
+    const localGamification = state.loadGamificationState();
+    const remoteGamification = data.gamification;
+    const mergedGamification = remoteGamification ? {
+      xp: Math.max(localGamification.xp, remoteGamification.xp || 0),
+      streak: Math.max(localGamification.streak, remoteGamification.streak || 0),
+      lastActivityDate: [localGamification.lastActivityDate, remoteGamification.lastActivityDate].filter(Boolean).sort().pop() || null,
+      badges: [...new Set([...(localGamification.badges || []), ...(remoteGamification.badges || [])])],
+      lessonProgress: { ...(remoteGamification.lessonProgress || {}), ...(localGamification.lessonProgress || {}) },
+      checkpointAnswers: { ...(remoteGamification.checkpointAnswers || {}), ...(localGamification.checkpointAnswers || {}) },
+      forumPostCount: Math.max(localGamification.forumPostCount || 0, remoteGamification.forumPostCount || 0),
+      forumCommentCount: Math.max(localGamification.forumCommentCount || 0, remoteGamification.forumCommentCount || 0),
+      startDate: remoteGamification.startDate || localGamification.startDate,
+    } : localGamification;
     set({
       completedModules: data.completedModules ?? state.completedModules,
       completedVideos: data.completedVideos ?? state.completedVideos,
@@ -767,19 +788,21 @@ export const useIALabStore = create((set, get) => ({
       completedInfographics: data.completedInfographics ?? state.completedInfographics,
       completedActivities: data.completedActivities ?? state.completedActivities,
       challengeScores: data.challengeScores ?? state.challengeScores,
-      courseProgress: data.courseProgress ?? state.courseProgress,
+      courseProgress: effectiveProgress,
       syncStatus: data.syncStatus ?? state.syncStatus,
       isUsingJWT: data.isUsingJWT ?? state.isUsingJWT,
       userId: data.userId ?? state.userId,
+      userRole: data.userRole ?? state.userRole,
       isLoadingProgress: data.isLoading ?? state.isLoadingProgress,
-      lessonProgress: gamification.lessonProgress,
-      xp: gamification.xp,
-      streak: gamification.streak,
-      lastActivityDate: gamification.lastActivityDate,
-      badges: gamification.badges,
-      checkpointAnswers: gamification.checkpointAnswers,
-      forumPostCount: gamification.forumPostCount,
-      forumCommentCount: gamification.forumCommentCount,
+      lessonProgress: mergedGamification.lessonProgress,
+      xp: mergedGamification.xp,
+      streak: mergedGamification.streak,
+      lastActivityDate: mergedGamification.lastActivityDate,
+      badges: mergedGamification.badges,
+      checkpointAnswers: mergedGamification.checkpointAnswers,
+      forumPostCount: mergedGamification.forumPostCount,
+      forumCommentCount: mergedGamification.forumCommentCount,
+      startDate: mergedGamification.startDate || state.loadGamificationState().startDate || new Date().toISOString(),
     });
   },
 
@@ -834,7 +857,7 @@ export const useIALabStore = create((set, get) => ({
     return val !== null ? parseInt(val, 10) : fallback;
   },
   storageSetString: (key, value) => {
-    try { localStorage.setItem(key, String(value)); } catch {}
+    ls.set(key, value);
   },
 
   // ==================== PERSISTENCIA DE GAMIFICACIÓN ====================
@@ -848,6 +871,7 @@ export const useIALabStore = create((set, get) => ({
     ls.set(LS_KEYS.CHECKPOINT_ANSWERS, state.checkpointAnswers);
     ls.set(LS_KEYS.FORUM_POST_COUNT, state.forumPostCount);
     ls.set(LS_KEYS.FORUM_COMMENT_COUNT, state.forumCommentCount);
+    ls.set(LS_KEYS.START_DATE, state.startDate);
   },
 
   loadGamificationState: () => {
@@ -859,7 +883,8 @@ export const useIALabStore = create((set, get) => ({
     const checkpointAnswers = ls.get(LS_KEYS.CHECKPOINT_ANSWERS, {});
     const forumPostCount = ls.get(LS_KEYS.FORUM_POST_COUNT, 0);
     const forumCommentCount = ls.get(LS_KEYS.FORUM_COMMENT_COUNT, 0);
-    return { lessonProgress, xp, streak, lastActivityDate, badges, checkpointAnswers, forumPostCount, forumCommentCount };
+    const startDate = ls.get(LS_KEYS.START_DATE, null);
+    return { lessonProgress, xp, streak, lastActivityDate, badges, checkpointAnswers, forumPostCount, forumCommentCount, startDate };
   },
 
   // ==================== LÍMITE DE INTENTOS PARA DESAFÍOS ====================
@@ -927,6 +952,7 @@ export const useIALabStore = create((set, get) => ({
     ls.set(key, newVal);
     const nextKey = `exam_next_attempt_m${moduleId}`;
     ls.set(nextKey, Date.now() + 12 * 60 * 60 * 1000);
+    if (typeof window !== 'undefined') window.dispatchEvent(new Event('ialab:attemptsUpdated'));
     return newVal;
   },
 
@@ -1132,5 +1158,65 @@ export const useIALabStore = create((set, get) => ({
   getLatestQuizAttempt: () => {
     const attempts = get().quizAttempts;
     return attempts.length > 0 ? attempts[attempts.length - 1] : null;
+  },
+
+  // ==================== FASE A: ANALÍTICA AVANZADA ====================
+
+  getWeeklyXP: () => {
+    const state = get();
+    const xp = state.xp;
+    const startDate = state.startDate;
+    if (!startDate) return { weekly: xp, weeklyTarget: 500, weeklyPct: Math.min(100, (xp / 500) * 100) };
+    const now = new Date();
+    const dayOfWeek = now.getDay();
+    const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+    const monday = new Date(now);
+    monday.setDate(now.getDate() + mondayOffset);
+    monday.setHours(0, 0, 0, 0);
+    const start = new Date(startDate);
+    const weekStart = start > monday ? start : monday;
+    const daysSinceWeekStart = Math.max(0, Math.floor((now - weekStart) / 86400000));
+    const dailyAvg = daysSinceWeekStart > 0 ? xp / daysSinceWeekStart : xp;
+    const weeklyTarget = 500;
+    const weeklyXp = Math.round(Math.min(xp, weeklyTarget));
+    const weeklyPct = Math.min(100, (weeklyXp / weeklyTarget) * 100);
+    return { weekly: weeklyXp, weeklyTarget, weeklyPct, dailyAvg: Math.round(dailyAvg) };
+  },
+
+  getModuleDominanceLevel: (moduleId) => {
+    const score = get().calculateModuleScore(moduleId);
+    if (score >= 80) return { label: 'Experto', color: 'text-emerald-600', bg: 'bg-emerald-50 border-emerald-200' };
+    if (score >= 50) return { label: 'Avanzado', color: 'text-blue-600', bg: 'bg-blue-50 border-blue-200' };
+    if (score >= 25) return { label: 'Intermedio', color: 'text-amber-600', bg: 'bg-amber-50 border-amber-200' };
+    return { label: 'Básico', color: 'text-slate-500', bg: 'bg-slate-50 border-slate-200' };
+  },
+
+  getDetailedRecommendations: () => {
+    const state = get();
+    const recs = [];
+    for (let id = 1; id <= 5; id++) {
+      const score = state.calculateModuleScore(id);
+      const mod = state.moduleProgress[id];
+      if (!mod) continue;
+      if (score >= 80) continue;
+      const modName = state.modules.find(m => m.id === id)?.title || `Módulo ${id}`;
+      const resourcesLeft = mod.viewedResources ? (8 - mod.viewedResources.length) : 8;
+      const examScore = mod.examScore || state.completedExams[id] || 0;
+      const challengeScore = mod.challengeScore || state.challengeScores[id] || 0;
+      if (resourcesLeft > 0) {
+        recs.push({ moduleId: id, moduleName: modName, type: 'resources', text: `Te faltan ${resourcesLeft} recursos por ver en ${modName}`, urgency: resourcesLeft > 4 ? 'high' : 'medium' });
+      }
+      if (examScore > 0 && examScore < 80) {
+        recs.push({ moduleId: id, moduleName: modName, type: 'exam', text: `Puedes mejorar tu examen de ${modName} (${examScore}%)`, urgency: 'high' });
+      } else if (examScore === 0 && resourcesLeft <= 2) {
+        recs.push({ moduleId: id, moduleName: modName, type: 'exam', text: `Rinde el examen de ${modName}`, urgency: 'high' });
+      }
+      if (challengeScore > 0 && challengeScore < 80) {
+        recs.push({ moduleId: id, moduleName: modName, type: 'challenge', text: `Mejora tu desafío de ${modName} (${challengeScore}%)`, urgency: 'medium' });
+      } else if (challengeScore === 0 && score >= 60) {
+        recs.push({ moduleId: id, moduleName: modName, type: 'challenge', text: `Completa el desafío de ${modName}`, urgency: 'medium' });
+      }
+    }
+    return recs;
   },
 }));

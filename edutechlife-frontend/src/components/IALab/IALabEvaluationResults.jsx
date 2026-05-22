@@ -131,7 +131,7 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
                         <div className="flex items-center gap-3">
                             <Icon name="fa-chart-line" className="text-petroleum text-xl" />
                             <div>
-                                <h3 className="text-lg font-bold text-petroleum dark:text-[#4DA8C4] mb-1">
+                                <h3 className="text-lg font-bold text-petroleum mb-1">
                                     Este desafío equivale al 30% de tu nota del Módulo {activeMod}
                                 </h3>
                                 <p className="text-slate-600 dark:text-slate-300 text-sm">
@@ -155,8 +155,8 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
                                         onClick={() => setActiveTab(tab)}
                                         className={`px-4 py-3 text-sm font-medium rounded-t-lg transition-colors ${
                                             activeTab === tab
-                                                ? 'bg-white text-petroleum border-b-2 border-corporate dark:bg-slate-800 dark:text-[#4DA8C4]'
-                                                : 'text-slate-600 hover:text-petroleum hover:bg-slate-50 dark:text-slate-400 dark:hover:text-[#4DA8C4] dark:hover:bg-slate-800'
+                                                ? 'bg-white text-petroleum border-b-2 border-corporate dark:bg-slate-800 dark:text-petroleum'
+                                                : 'text-slate-600 hover:text-petroleum hover:bg-slate-50 dark:text-slate-400 dark:hover:text-petroleum dark:hover:bg-slate-800'
                                         }`}
                                     >
                                         <Icon 
@@ -413,7 +413,7 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
                                         
                                         <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-600">
                                             <div className="flex items-start gap-3">
-                                                <Icon name="fa-comment" className="text-slate-400 mt-1" />
+                                                <Icon name="fa-comment" className="text-slate-600 mt-1" />
                                                 <p className="text-slate-700 dark:text-slate-200 leading-relaxed whitespace-pre-wrap">
                                                     {exercise.feedback}
                                                 </p>
@@ -542,7 +542,7 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
                                     </button>
                                 )}
                                 {!isApproved && remainingAttempts <= 0 && (
-                                    <p className="text-xs text-center text-slate-400 mt-3 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">Has agotado tus intentos para este desafío.</p>
+                                    <p className="text-xs text-center text-slate-600 mt-3 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">Has agotado tus intentos para este desafío.</p>
                                 )}
                             </div>
                         </div>

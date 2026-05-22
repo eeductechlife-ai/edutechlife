@@ -222,7 +222,7 @@ const Ecosystem = memo(() => {
               <div className={`absolute inset-0 rounded-[20px] border-2 border-transparent group-hover:${card.border} transition-all duration-500 card-glow`} />
               <div className="h-56 w-full overflow-hidden relative rounded-t-[20px]">
                 <div className={`absolute inset-0 bg-gradient-to-t ${card.bg} to-transparent z-10`} />
-                <img src={card.img} alt="" className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700" />
+                <img src={card.img} alt="" loading="lazy" className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700" />
               </div>
               <div className="p-6 relative z-10">
                 <CardWithLottie animationData={card.anim}>

@@ -141,7 +141,7 @@ const IALabTutoriasVirtuales = () => {
         ) : (
           <motion.div
             whileHover={{ scale: 1.02 }}
-            className="flex-shrink-0 px-6 py-3 bg-slate-100 text-slate-400 rounded-xl font-semibold text-sm flex items-center gap-2 cursor-not-allowed select-none"
+            className="flex-shrink-0 px-6 py-3 bg-slate-100 text-slate-600 rounded-xl font-semibold text-sm flex items-center gap-2 cursor-not-allowed select-none"
           >
             <Video className="w-4 h-4" />
             Disponible en vivo

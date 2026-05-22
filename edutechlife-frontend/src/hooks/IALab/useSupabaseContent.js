@@ -32,8 +32,7 @@ export function useSupabaseContent() {
   const [fromCache, setFromCache] = useState(false);
   const [error, setError] = useState(null);
 
-  const loadContent = useCallback(async () => {
-    setLoading(true);
+  const loadContent = useCallback(async (cancelledRef) => {
     setError(null);
 
     const cached = getCache('moduleContent');
@@ -41,9 +40,10 @@ export function useSupabaseContent() {
       setModuleContent(cached);
       setModuleResources(getCache('moduleResources') || hardcodedResources);
       setFromCache(true);
-      setLoading(false);
       return;
     }
+
+    setLoading(true);
 
     try {
       const { data: modules, error: modErr } = await supabase
@@ -120,11 +120,18 @@ export function useSupabaseContent() {
       setModuleContent(hardcodedContent);
       setModuleResources(hardcodedResources);
     } finally {
-      setLoading(false);
+      if (!cancelledRef?.current) {
+        setLoading(false);
+      }
     }
   }, []);
 
-  useEffect(() => { loadContent(); }, [loadContent]);
+  useEffect(() => {
+    let cancelled = false;
+    const ref = { current: false };
+    loadContent(ref);
+    return () => { cancelled = true; ref.current = true; };
+  }, [loadContent]);
 
   return { moduleContent, moduleResources, loading, fromCache, error, reload: loadContent };
 }

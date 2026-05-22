@@ -2253,7 +2253,7 @@ function ModalContacto({ onClose }) {
         {/* Footer */}
         <div className="px-6 py-3 border-t flex items-center justify-between" style={{ borderColor: '#E5E7EB', backgroundColor: '#F9FAFB' }}>
           <div className="flex items-center gap-2">
-            <img src="/images/logo-edutechlife.webp" alt="Edutechlife" className="h-5 w-auto" style={{ filter: 'brightness(0) invert(1)' }} />
+            <img src="/images/logo-edutechlife.webp" alt="Edutechlife" loading="lazy" className="h-5 w-auto" style={{ filter: 'brightness(0) invert(1)' }} />
             <span className="text-xs" style={{ color: '#9CA3AF' }}>Contacto</span>
           </div>
           <button onClick={handleClose} className="text-sm" style={{ color: '#6B7280' }} onMouseEnter={(e) => e.currentTarget.style.color = '#004B63'} onMouseLeave={(e) => e.currentTarget.style.color = '#6B7280'}>

@@ -23,12 +23,12 @@ const CertificateProgressBar = () => {
           <Icon name="fa-award" className="text-white text-sm" />
         </div>
         <div className="flex-1">
-          <h3 className="text-sm font-bold text-petroleum dark:text-[#4DA8C4] leading-tight">Progreso hacia tu certificado</h3>
+          <h3 className="text-sm font-bold text-petroleum leading-tight">Progreso hacia tu certificado</h3>
           <p className="text-xs text-slate-500 dark:text-slate-400">{completedCount} de 5 módulos aprobados</p>
         </div>
         <div className="text-right flex-shrink-0">
           <div className="text-lg font-bold text-petroleum dark:text-white">{Math.round(courseProgress)}%</div>
-          <div className="text-[9px] text-slate-400 uppercase tracking-wider font-medium">Global</div>
+          <div className="text-[9px] text-slate-600 uppercase tracking-wider font-medium">Global</div>
         </div>
       </div>
 
@@ -50,7 +50,7 @@ const CertificateProgressBar = () => {
                 className={`text-[9px] font-medium ${
                   mod.completed
                     ? 'text-emerald-600 dark:text-emerald-400'
-                    : 'text-slate-400 dark:text-slate-500'
+                    : 'text-slate-600 dark:text-slate-500'
                 }`}
               >
                 {mod.completed ? (

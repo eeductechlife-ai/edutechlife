@@ -1,8 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { useAuth } from '../../../context/AuthContext';
 import useForumProfile from '../../../hooks/IALab/forum/useForumProfile';
+
+const BOOKMARKS_KEY = 'ialab_forum_bookmarks';
+
+const getBookmarks = () => {
+  try { return JSON.parse(localStorage.getItem(BOOKMARKS_KEY) || '[]'); } catch { return []; }
+};
+const toggleBookmark = (postId) => {
+  const bookmarks = getBookmarks();
+  const idx = bookmarks.indexOf(postId);
+  if (idx >= 0) bookmarks.splice(idx, 1); else bookmarks.push(postId);
+  localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(bookmarks));
+  return idx < 0;
+};
 
 const CATEGORY_STYLES = {
   question: { bg: 'bg-amber-50 dark:bg-amber-900/20', text: 'text-amber-700 dark:text-amber-400', icon: 'fa-question-circle' },
@@ -57,7 +70,33 @@ const IALabForumPostCard = ({
 }) => {
   const { user } = useAuth();
   const [showProfileCard, setShowProfileCard] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [shareFeedback, setShareFeedback] = useState(false);
   const categoryStyle = CATEGORY_STYLES[post.category] || CATEGORY_STYLES.discussion;
+
+  useEffect(() => {
+    setIsBookmarked(getBookmarks().includes(post.id));
+  }, [post.id]);
+
+  const handleShare = async (e) => {
+    e.stopPropagation();
+    const url = `${window.location.origin}/ialab/forum/${post.id}`;
+    if (navigator.share) {
+      try { await navigator.share({ title: post.title, text: post.content?.slice(0, 100), url }); } catch {}
+    } else {
+      try {
+        await navigator.clipboard.writeText(url);
+        setShareFeedback(true);
+        setTimeout(() => setShareFeedback(false), 2000);
+      } catch {}
+    }
+  };
+
+  const handleBookmark = (e) => {
+    e.stopPropagation();
+    const now = toggleBookmark(post.id);
+    setIsBookmarked(now);
+  };
 
   const profile = post.profiles || post.forum_profiles || {};
 
@@ -95,11 +134,11 @@ const IALabForumPostCard = ({
                 {profile.full_name || post.user_name || 'Usuario'}
               </span>
               {profile.title && profile.title !== 'Estudiante' && (
-                <span className="px-1.5 py-0.5 bg-petroleum/5 text-petroleum dark:text-[#4DA8C4] text-[9px] font-medium rounded-full flex-shrink-0">
+                <span className="px-1.5 py-0.5 bg-petroleum/5 text-petroleum text-[9px] font-medium rounded-full flex-shrink-0">
                   {profile.title}
                 </span>
               )}
-              <span className="text-[10px] text-slate-400 dark:text-slate-500 flex-shrink-0">
+              <span className="text-[10px] text-slate-600 dark:text-slate-500 flex-shrink-0">
                 {formatRelativeTime(post.created_at)}
               </span>
             </div>
@@ -110,16 +149,16 @@ const IALabForumPostCard = ({
                 {POST_CATEGORY_LABELS[post.category] || 'Discusión'}
               </span>
               {post.tags?.slice(0, 2).map((tag, i) => (
-                <span key={i} className="text-[9px] text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-700 px-1.5 py-0.5 rounded-full">
+                <span key={i} className="text-[9px] text-slate-600 dark:text-slate-500 bg-slate-100 dark:bg-slate-700 px-1.5 py-0.5 rounded-full">
                   {tag}
                 </span>
               ))}
               {post.tags?.length > 2 && (
-                <span className="text-[9px] text-slate-400">+{post.tags.length - 2}</span>
+                <span className="text-[9px] text-slate-600">+{post.tags.length - 2}</span>
               )}
             </div>
 
-            <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100 mb-1 leading-snug group-hover:text-petroleum dark:group-hover:text-[#4DA8C4] transition-colors">
+            <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100 mb-1 leading-snug group-hover:text-petroleum transition-colors">
               {post.title}
             </h4>
             <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-2 leading-snug">
@@ -136,7 +175,7 @@ const IALabForumPostCard = ({
               className={`flex items-center gap-1 text-xs font-medium transition-all ${
                 voteState?.userVoted
                   ? 'text-red-500'
-                  : 'text-slate-400 hover:text-red-400'
+                  : 'text-slate-600 hover:text-red-400'
               } disabled:opacity-50`}
             >
               {voteState?.isLoading ? (
@@ -147,22 +186,25 @@ const IALabForumPostCard = ({
               <span>{formatCount(voteState?.userVoted ? (post.upvotes || 0) : (post.upvotes || 0))}</span>
             </button>
 
-            <div className="flex items-center gap-1 text-xs text-slate-400">
+            <div className="flex items-center gap-1 text-xs text-slate-600">
               <Icon name="fa-comment" />
               <span>{post.comment_count || 0}</span>
             </div>
 
             {post.updated_at && new Date(post.updated_at) > new Date(post.created_at) && (
-              <span className="text-[9px] text-slate-400">Editado</span>
+              <span className="text-[9px] text-slate-600">Editado</span>
             )}
           </div>
 
           <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-            <button className="text-xs text-slate-400 hover:text-petroleum transition-colors">
-              <Icon name="fa-share" />
+            <button onClick={handleShare} className="text-xs text-slate-600 hover:text-petroleum transition-colors relative">
+              <Icon name={shareFeedback ? 'fa-check' : 'fa-share'} />
+              {shareFeedback && (
+                <span className="absolute -top-1 left-1/2 -translate-x-1/2 text-[8px] font-medium text-emerald-600 whitespace-nowrap">Copiado</span>
+              )}
             </button>
-            <button className="text-xs text-slate-400 hover:text-amber-500 transition-colors">
-              <Icon name="fa-bookmark" />
+            <button onClick={handleBookmark} className={`text-xs transition-colors ${isBookmarked ? 'text-amber-500' : 'text-slate-600 hover:text-amber-500'}`}>
+              <Icon name={isBookmarked ? 'fa-bookmark' : 'fa-bookmark'} />
             </button>
           </div>
         </div>

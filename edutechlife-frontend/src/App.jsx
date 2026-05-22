@@ -12,6 +12,8 @@ import { callDeepseekStream } from './utils/api';
 import { speakTextConversational, stopSpeech } from './utils/speech';
 import { StudentProvider } from './contexts/StudentContext';
 import { useAuth } from './context/AuthContext';
+import { useAuth as useClerkAuth } from '@clerk/react';
+import { initSupabaseClient } from './lib/supabase';
 
 // Cache de preguntas frecuentes para respuestas instantáneas
 const responseCache = new Map();
@@ -113,10 +115,10 @@ const CustomCursor = () => {
     }, []);
 
     useEffect(() => {
-        const unsubscribeHover = isHovering.onChange((val) => {
+        const unsubscribeHover = isHovering.on("change", (val) => {
             scaleTransform.set(isClicking.get() ? 0.8 : (val ? 1.3 : 1));
         });
-        const unsubscribeClick = isClicking.onChange((val) => {
+        const unsubscribeClick = isClicking.on("change", (val) => {
             scaleTransform.set(val ? 0.8 : (isHovering.get() ? 1.3 : 1));
         });
         return () => {
@@ -190,6 +192,16 @@ const App = () => {
     const isSmartBoardRoute = location.pathname.includes('/smartboard');
     const { user, isLoaded } = useAuth();
     const [isLoading, setIsLoading] = useState(true);
+    // Auto-upgrade supabase client cuando Clerk esté listo
+    const { isLoaded: clerkLoaded, getToken } = useClerkAuth();
+
+    useEffect(() => {
+        if (!clerkLoaded) return;
+        getToken({ template: 'supabase' }).then(token => {
+            if (token) initSupabaseClient(token);
+        });
+    }, [clerkLoaded, getToken]);
+
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [botOpen, setBotOpen] = useState(false);
     const [isBotMinimized, setIsBotMinimized] = useState(false);

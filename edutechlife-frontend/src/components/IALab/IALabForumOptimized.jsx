@@ -337,7 +337,7 @@ const IALabForumOptimized = ({
                                                         </span>
                                                     )}
                                                 </div>
-                                                <span className="text-[10px] text-slate-400">
+                                                <span className="text-[10px] text-slate-600">
                                                     {formatRelativeTime(post.created_at)}
                                                 </span>
                                             </div>
@@ -384,14 +384,14 @@ const IALabForumOptimized = ({
                                                 </span>
                                             ))}
                                             {post.tags && post.tags.length > 2 && (
-                                                <span className="text-[10px] text-slate-400">
+                                                <span className="text-[10px] text-slate-600">
                                                     +{post.tags.length - 2}
                                                 </span>
                                             )}
                                         </div>
 
                                         {post.comment_count > 0 && (
-                                            <div className="flex items-center gap-1 text-[10px] text-slate-400">
+                                            <div className="flex items-center gap-1 text-[10px] text-slate-600">
                                                 <Icon name="fa-comment" />
                                                 <span>{post.comment_count}</span>
                                             </div>
@@ -444,7 +444,7 @@ const IALabForumOptimized = ({
                                 className={cn(
                                     "w-full px-4 py-3 pr-12",
                                     "bg-white border border-slate-200 rounded-xl",
-                                    "text-sm text-slate-700 placeholder:text-slate-400/70",
+                                    "text-sm text-slate-700 placeholder:text-slate-600/70",
                                     "focus:outline-none focus:ring-2 focus:ring-corporate/20 focus:border-corporate/30",
                                     "disabled:opacity-50 disabled:cursor-not-allowed",
                                     "transition-all duration-200",
@@ -457,7 +457,7 @@ const IALabForumOptimized = ({
                                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                                     <span className={cn(
                                         "text-[10px] font-medium",
-                                        newMessage.length > 450 ? "text-amber-500" : "text-slate-400"
+                                        newMessage.length > 450 ? "text-amber-500" : "text-slate-600"
                                     )}>
                                         {newMessage.length}/500
                                     </span>

@@ -103,12 +103,12 @@ export const useActivityTracker = () => {
 
     const activity = {
       user_id: user.id,
-      module_id: moduleId,
+      module_id: moduleId != null ? Number(moduleId) : 0,
       activity_type: type,
-      resource_id: resourceId,
-      title,
-      score: score || null,
-      metadata,
+      resource_id: resourceId || null,
+      title: title || 'Actividad',
+      score: score != null ? Math.round(Number(score)) : null,
+      metadata: typeof metadata === 'object' && metadata !== null ? metadata : {},
       completed_at: new Date().toISOString(),
     };
 
@@ -120,7 +120,7 @@ export const useActivityTracker = () => {
         .single();
 
       if (error) {
-        console.warn('[ACTIVITY] Supabase insert error, using localStorage:', error.code);
+        console.warn('[ACTIVITY] Supabase insert error, using localStorage:', error.code, error.message);
         const localActivity = { ...activity, id: `local_${Date.now()}` };
         const local = JSON.parse(localStorage.getItem(ACTIVITY_LOG_KEY) || '[]');
         local.unshift(localActivity);

@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabContext } from '../../context/IALabContext';
-import ReactivePromptStation from './ReactivePromptStation';
-import IALabInteractionAdvisor from './IALabInteractionAdvisor';
-import IALabTutoriasVirtuales from './IALabTutoriasVirtuales';
+const ReactivePromptStation = lazy(() => import('./ReactivePromptStation'));
+const OVAPodcastStudio = lazy(() => import('./OVAPodcastStudio'));
+const IALabInteractionAdvisor = lazy(() => import('./IALabInteractionAdvisor'));
+const EthicsExplorer = lazy(() => import('./EthicsExplorer'));
+const IALabTutoriasVirtuales = lazy(() => import('./IALabTutoriasVirtuales'));
 
 const previewVariants = {
   idle: { boxShadow: "0px 4px 16px rgba(17,17,26,0.05)" },
@@ -20,8 +22,14 @@ const ToolTutorAccordion = ({ onAction }) => {
   };
 
   const isToolMod2 = activeMod === 2;
+  const isToolMod4 = activeMod === 4;
+  const isToolMod5 = activeMod === 5;
   const toolConfig = isToolMod2
     ? { title: 'Asesor de Interacción ChatGPT', subtitle: 'Describe tu tarea y descubre qué herramienta de ChatGPT usar', icon: 'fa-wand-magic-sparkles', ctaIcon: 'fa-wand-magic-sparkles', ctaText: 'Abrir asesor' }
+    : isToolMod4
+    ? { title: 'Estudio de Podcast IA', subtitle: 'Crea podcasts IA desde tus documentos como en NotebookLM', icon: 'fa-microphone', ctaIcon: 'fa-microphone', ctaText: 'Abrir estudio' }
+    : isToolMod5
+    ? { title: 'Laboratorio de Ética IA', subtitle: 'Explora los 3 pilares de la IA responsable: sesgos, privacidad y regulación', icon: 'fa-balance-scale', ctaIcon: 'fa-balance-scale', ctaText: 'Abrir laboratorio' }
     : { title: 'Herramientas para Crear Prompts', subtitle: 'Mejora tus prompts con análisis y optimización IA', icon: 'fa-wand-magic-sparkles', ctaIcon: 'fa-hand-pointer', ctaText: 'Abrir herramienta' };
 
   const tutoringConfig = { title: 'Tutorías Virtuales', subtitle: 'Conecta en vivo todos los domingos 4PM Bogotá', icon: 'fa-video', ctaIcon: 'fa-video', ctaText: 'Ver disponibilidad' };
@@ -37,7 +45,7 @@ const ToolTutorAccordion = ({ onAction }) => {
         onClick={() => toggle(section)}
         className={`relative z-10 bg-white rounded-2xl border cursor-pointer transition-all duration-300 overflow-hidden ${
           isActive
-            ? 'border-corporate dark:border-[#66CCCC] shadow-md shadow-[#00BCD4]/10 dark:shadow-[#66CCCC]/10 ring-1 ring-corporate/20 dark:ring-[#66CCCC]/20'
+            ? 'border-corporate dark:border-mint shadow-md shadow-corporate/10 dark:shadow-mint/10 ring-1 ring-corporate/20 dark:ring-mint/20'
             : 'border-slate-200/60 dark:border-slate-700/60 shadow-sm hover:shadow-lg hover:border-petroleum/40 dark:hover:border-petroleum/60'
         }`}
       >
@@ -107,11 +115,13 @@ const ToolTutorAccordion = ({ onAction }) => {
             className="overflow-hidden"
           >
             <div className="pb-1">
-              {expanded === 'tool' ? (
-                isToolMod2 ? <IALabInteractionAdvisor /> : <ReactivePromptStation />
-              ) : (
-                <IALabTutoriasVirtuales />
-              )}
+              <Suspense fallback={<div className="h-32 animate-pulse bg-slate-100 dark:bg-slate-800 rounded-2xl" />}>
+                {expanded === 'tool' ? (
+                  isToolMod2 ? <IALabInteractionAdvisor /> : isToolMod4 ? <OVAPodcastStudio /> : isToolMod5 ? <EthicsExplorer /> : <ReactivePromptStation />
+                ) : (
+                  <IALabTutoriasVirtuales />
+                )}
+              </Suspense>
             </div>
           </motion.div>
         )}

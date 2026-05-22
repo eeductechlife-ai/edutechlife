@@ -6,6 +6,8 @@ import { useIALabStore } from '../../store/ialabStore';
 import { speakTextConversational, stopSpeech } from '../../utils/speech';
 import { callDeepseek } from '../../utils/api';
 import COURSE_KNOWLEDGE from './constants/courseKnowledge';
+import { motion } from 'framer-motion';
+import useFocusTrap from '../../hooks/useFocusTrap';
 
 /**
  * Componente premium para panel de coach IA Valerio
@@ -495,10 +497,12 @@ Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, ayudarte con e
         );
     };
 
+    const focusTrapRef = useFocusTrap(isOpen);
+
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-[90] flex items-end justify-end" role="dialog" aria-modal="true" aria-label="Panel de coach IA Valerio">
+        <div ref={focusTrapRef} className="fixed inset-0 z-[90] flex items-end justify-end" role="dialog" aria-modal="true" aria-label="Panel de coach IA Valerio">
             {/* Overlay */}
             <div 
                 className="absolute inset-0 bg-black/20 backdrop-blur-sm"
@@ -506,8 +510,16 @@ Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, ayudarte con e
                 aria-label="Cerrar panel"
             />
             
-            {/* Panel principal */}
-            <div className="relative w-full max-w-md h-[90vh] bg-white rounded-t-2xl shadow-2xl flex flex-col z-10" role="document">
+            {/* Panel principal con swipe-down para cerrar */}
+            <motion.div
+              drag="y"
+              dragConstraints={{ top: 0, bottom: 0 }}
+              dragElastic={{ top: 0, bottom: 0.4 }}
+              onDragEnd={(_, info) => { if (info.offset.y > 80) onClose(); }}
+              className="relative w-full max-w-md h-[90vh] landscape:md:h-dvh bg-white rounded-t-2xl shadow-2xl flex flex-col z-10"
+              role="document"
+              style={{ willChange: 'transform' }}
+            >
                 {/* Header */}
                 <div className="sticky top-0 bg-gradient-to-r from-petroleum to-corporate text-white p-6 rounded-t-2xl">
                     <div className="flex items-center justify-between mb-4">
@@ -627,7 +639,7 @@ Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, ayudarte con e
                                     onChange={(e) => setUserInput(e.target.value)}
                                     onKeyDown={handleKeyDown}
                                     placeholder={`Pregunta a Valerio sobre ${currentModule?.title}...`}
-                                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-corporate focus:border-transparent text-petroleum-darker placeholder-slate-400 resize-none min-h-[60px] max-h-[120px]"
+                                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-corporate focus:border-transparent text-petroleum-darker placeholder-slate-500 resize-none min-h-[60px] max-h-[120px]"
                                     disabled={isProcessing}
                                     rows={2}
                                     aria-describedby="input-hint"
@@ -704,7 +716,7 @@ Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, ayudarte con e
                         </div>
                     </div>
                 </div>
-            </div>
+            </motion.div>
         </div>
     );
 };

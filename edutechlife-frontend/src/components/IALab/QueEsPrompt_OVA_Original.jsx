@@ -86,7 +86,7 @@ const ModuleHistory = () => {
          <button
            key={i}
            onClick={() => setActive(i)}
-           className={`px-4 py-2 rounded-2xl text-[10px] font-[800] uppercase tracking-widest transition-all ${active === i ? 'bg-[#0D2B5B] text-white shadow-lg' : 'bg-white border border-slate-200 text-slate-400 hover:border-[#00B4D8]'}`}
+           className={`px-4 py-2 rounded-2xl text-[10px] font-[800] uppercase tracking-widest transition-all ${active === i ? 'bg-[#0D2B5B] text-white shadow-lg' : 'bg-white border border-slate-200 text-slate-600 hover:border-[#00B4D8]'}`}
          >
            {s.t.split('·')[0]}
          </button>
@@ -203,7 +203,7 @@ const Quiz = ({ onComplete }) => {
 
  return (
    <div className="space-y-6 animate-in fade-in">
-     <div className="flex justify-between items-center text-[9px] font-black uppercase tracking-widest text-slate-400">
+     <div className="flex justify-between items-center text-[9px] font-black uppercase tracking-widest text-slate-600">
        <span>Análisis de Lectura {currentQ + 1} de 5</span>
        <span className="text-[#00B4D8]">Aciertos: {score}</span>
      </div>
@@ -410,7 +410,7 @@ const QueEsPrompt_OVA_Original = ({ onClose }) => {
        <Logo />
        <div className="flex items-center gap-8">
          <div className="hidden lg:flex flex-col items-end">
-           <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">PROGRESO</span>
+           <span className="text-[9px] font-black text-slate-600 uppercase tracking-widest mb-1">PROGRESO</span>
            <div className="w-32 h-2 bg-slate-100 rounded-full overflow-hidden border border-slate-50 shadow-inner">
              <div className="h-full bg-gradient-to-r from-[#0D2B5B] to-[#00B4D8] transition-all duration-1000 ease-out shadow-lg" style={{ width: `${(completed.length/6)*100}%` }}></div>
            </div>
@@ -466,7 +466,7 @@ const QueEsPrompt_OVA_Original = ({ onClose }) => {
                stopSpeech();
                setPlaying(false);
              }}
-             className="p-4 bg-[#F1F5F9] text-slate-400 hover:text-[#0D2B5B] rounded-[1.5rem] disabled:opacity-10 transition-all shadow-inner border border-slate-50"
+             className="p-4 bg-[#F1F5F9] text-slate-600 hover:text-[#0D2B5B] rounded-[1.5rem] disabled:opacity-10 transition-all shadow-inner border border-slate-50"
              disabled={curIdx === 0}
            >
              <ChevronLeft className="w-6 h-6" />
@@ -504,7 +504,7 @@ const QueEsPrompt_OVA_Original = ({ onClose }) => {
      {isMenuOpen && (
        <div className="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-md transition-opacity duration-500" onClick={() => setIsMenuOpen(false)}>
          <div className="absolute right-0 h-full w-[400px] bg-white shadow-2xl p-12 flex flex-col gap-6 animate-in slide-in-from-right duration-300" onClick={e => e.stopPropagation()}>
-            <button onClick={() => setIsMenuOpen(false)} className="self-end p-3 hover:bg-slate-100 rounded-full transition-colors"><X className="w-8 h-8 text-slate-400" /></button>
+            <button onClick={() => setIsMenuOpen(false)} className="self-end p-3 hover:bg-slate-100 rounded-full transition-colors"><X className="w-8 h-8 text-slate-600" /></button>
             <h3 className="font-[900] text-slate-300 text-xs tracking-[0.4em] mt-12 mb-8 uppercase border-b-2 border-slate-50 pb-6">Mapa del Módulo</h3>
             {nav.map(id => (
               <button key={id} onClick={() => { setScreen(id); setIsMenuOpen(false); }} className={`p-6 rounded-[2.5rem] text-left text-xs font-[900] transition-all flex items-center justify-between group ${screen === id ? 'bg-[#0D2B5B] text-white shadow-xl' : 'hover:bg-slate-50 text-slate-500'}`}>

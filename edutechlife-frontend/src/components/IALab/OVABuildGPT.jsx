@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import VoiceReader from './VoiceReader';
 import {
     GraduationCap, Bot, MessageSquare, Mail, Settings, Zap,
-    CheckCircle, Award, Volume2, Square, ChevronRight, Play,
+    CheckCircle, Award, ChevronRight, Play,
     FileText, Database, ArrowRight, ShieldCheck, Check, Star,
     Lightbulb, Workflow
 } from 'lucide-react';
-import { speakTextConversational, stopSpeech } from '../../utils/speech';
 
 const Logo = () => (
     <div className="flex items-center gap-2">
@@ -23,38 +23,12 @@ const Button = ({ children, onClick, variant = 'primary', className = '', icon: 
     const variants = {
         primary: "bg-gradient-to-r from-corporate to-corporate-dark text-white shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 hover:-translate-y-0.5",
         secondary: "bg-white text-petroleum border-2 border-[#E0F7FA] hover:border-corporate hover:bg-[#F0FDFF]",
-        outline: "bg-transparent text-corporate border-2 border-corporate hover:bg-corporate hover:text-white",
-    };
+        outline: "bg-transparent text-corporate border-2 border-corporate hover:bg-corporate hover:text-white"};
 
     return (
         <button onClick={onClick} className={`${baseStyle} ${variants[variant]} ${className}`} disabled={disabled}>
             {Icon && <Icon size={20} />}
             {children}
-        </button>
-    );
-};
-
-const VoiceReader = ({ text }) => {
-    const [isPlaying, setIsPlaying] = useState(false);
-
-    const speak = () => {
-        if (isPlaying) {
-            stopSpeech();
-            setIsPlaying(false);
-            return;
-        }
-        speakTextConversational(text, 'valerio', () => setIsPlaying(false));
-        setIsPlaying(true);
-    };
-
-    return (
-        <button
-            onClick={speak}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${isPlaying ? 'bg-red-100 text-red-600 hover:bg-red-200' : 'bg-[#E0F7FA] text-petroleum hover:bg-[#B2EBF2]'}`}
-            title="Escuchar con voz de Valerio"
-        >
-            {isPlaying ? <Square size={16} /> : <Volume2 size={16} />}
-            {isPlaying ? 'Detener' : 'Escuchar con Valerio'}
         </button>
     );
 };
@@ -123,7 +97,7 @@ const IntroScreen = ({ onNext, addXp }) => {
                     </div>
                     <div className="flex-1 w-full relative">
                         <div className="absolute inset-0 bg-gradient-to-tr from-corporate to-petroleum rounded-full blur-3xl opacity-20 animate-pulse"></div>
-                        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="IA Educativa" className="rounded-2xl shadow-2xl relative z-10 object-cover w-full max-h-80 h-auto" />
+                        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="IA Educativa" loading="lazy" className="rounded-2xl shadow-2xl relative z-10 object-cover w-full max-h-80 h-auto" />
                     </div>
                 </div>
             </Card>
@@ -239,7 +213,7 @@ const ModuleGoogle = ({ onNext, addXp }) => {
                         />
                     </div>
                     <div className="bg-slate-50 p-3 border-t flex justify-between items-center">
-                        <span className="text-xs text-slate-400">Borrador original</span>
+                        <span className="text-xs text-slate-600">Borrador original</span>
                         {!improved ? (
                             <Button onClick={improveText} variant="secondary" className="!py-1.5 !px-4 text-sm" icon={Lightbulb}>
                                 Mejorar con GPT
@@ -397,7 +371,7 @@ const ActivityBuilder = ({ onNext, addXp }) => {
                 <div className="flex justify-between items-center mb-8 relative">
                     <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-100 -z-10 -translate-y-1/2"></div>
                     {[1, 2, 3].map(i => (
-                        <div key={i} className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg transition-colors ${step >= i ? 'bg-corporate text-white' : 'bg-slate-200 text-slate-400'}`}>
+                        <div key={i} className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg transition-colors ${step >= i ? 'bg-corporate text-white' : 'bg-slate-200 text-slate-600'}`}>
                             {i}
                         </div>
                     ))}

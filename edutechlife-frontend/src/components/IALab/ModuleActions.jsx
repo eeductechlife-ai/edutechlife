@@ -55,7 +55,7 @@ const ActionCard = ({ icon, label, onClick, completed, score, remainingAttempts,
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <span className={`font-bold text-sm truncate ${
-            isApproved ? 'text-emerald-700 dark:text-emerald-400' : isFailed ? 'text-red-700 dark:text-red-400' : 'text-slate-800 dark:text-slate-100 group-hover:text-petroleum dark:group-hover:text-[#4DA8C4]'
+            isApproved ? 'text-emerald-700 dark:text-emerald-400' : isFailed ? 'text-red-700 dark:text-red-400' : 'text-slate-800 dark:text-slate-100 group-hover:text-petroleum'
           }`}>
             {label}
           </span>
@@ -96,15 +96,12 @@ const ModuleActions = ({ onAction, activeMod, challengeScores, completedExams, m
 
   useEffect(() => {
     refreshAttempts();
-  }, [activeMod, refreshAttempts]);
-
-  useEffect(() => {
     const handler = () => setLocalExamScores(readLocalExamScores());
     window.addEventListener('ialab:examCompleted', handler);
-    const interval = setInterval(refreshAttempts, 5000);
+    window.addEventListener('ialab:attemptsUpdated', refreshAttempts);
     return () => {
       window.removeEventListener('ialab:examCompleted', handler);
-      clearInterval(interval);
+      window.removeEventListener('ialab:attemptsUpdated', refreshAttempts);
     };
   }, [refreshAttempts]);
 
@@ -141,7 +138,7 @@ const ModuleActions = ({ onAction, activeMod, challengeScores, completedExams, m
           <Icon name="fa-bolt" className="text-white text-sm" />
         </div>
         <div>
-          <h3 className="text-sm font-bold text-petroleum dark:text-[#4DA8C4] leading-tight">Actividades del Módulo</h3>
+          <h3 className="text-sm font-bold text-petroleum leading-tight">Actividades del Módulo</h3>
           <p className="text-xs text-slate-500 dark:text-slate-400">Completa cada actividad para aprobar el módulo</p>
         </div>
       </div>

@@ -75,7 +75,7 @@ const ChallengeResultViewer = ({ moduleId, onClose, onRetry }) => {
   if (evaluation) {
     return (
       <div className="fixed inset-0 z-[1000] flex items-start justify-center pt-10 pb-10 bg-black/40 backdrop-blur-sm overflow-y-auto">
-        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto animate-in fade-in-0 zoom-in-95 duration-200 mx-4">
+        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90dvh] overflow-y-auto animate-in fade-in-0 zoom-in-95 duration-200 mx-4">
           <div className="sticky top-0 z-10 bg-white border-b border-slate-200/60 px-6 py-3 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Icon name="fa-trophy" className="text-emerald-500 text-lg" />

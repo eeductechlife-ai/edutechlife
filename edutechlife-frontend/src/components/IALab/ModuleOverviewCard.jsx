@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo, lazy, Suspense } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback, lazy, Suspense } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabContext } from '../../context/IALabContext';
@@ -41,6 +41,8 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
   const [viewerModalOpen, setViewerModalOpen] = useState(false);
   const [selectedResource, setSelectedResource] = useState(null);
   const [selectedResourceType, setSelectedResourceType] = useState(null);
+  const [currentTopicResources, setCurrentTopicResources] = useState([]);
+  const [activeResourceIndex, setActiveResourceIndex] = useState(0);
 
   const onActionRef = useRef(onAction);
   useEffect(() => { onActionRef.current = onAction; }, [onAction]);
@@ -93,6 +95,30 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
     return result;
   }, [bookmarkedIds, moduleData.topics]);
 
+  const resourcesByTopic = useMemo(() => {
+    const map = {};
+    moduleData.topics.forEach(t => { map[t.title] = getResourcesForTopic(t.title); });
+    return map;
+  }, [moduleData.topics]);
+
+  const calculateTopicDuration = useCallback((topicTitle) => {
+    const topicData = resourcesByTopic[topicTitle];
+    if (!topicData?.resources) return "20 min";
+    let totalSeconds = 0;
+    topicData.resources.forEach(resource => {
+      if (resource.type === 'video' && resource.duration) {
+        const parts = resource.duration.split(':').map(Number);
+        if (parts.length === 3) totalSeconds += parts[0] * 3600 + parts[1] * 60 + parts[2];
+        else if (parts.length === 2) totalSeconds += parts[0] * 60 + parts[1];
+      }
+    });
+    if (totalSeconds === 0) return "20 min";
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    if (hours > 0) return `${hours}h ${minutes}min`;
+    return `${Math.max(minutes, 1)} min`;
+  }, [resourcesByTopic]);
+
   const handleMarkAsViewed = async (resourceId) => {
     if (resourceId && activeMod) {
       markResourceInContext(activeMod, resourceId);
@@ -107,6 +133,26 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
         }
         return prev;
       });
+    }
+  };
+
+  const handlePreviousResource = () => {
+    if (activeResourceIndex > 0) {
+      const newIndex = activeResourceIndex - 1;
+      setActiveResourceIndex(newIndex);
+      const prev = currentTopicResources[newIndex];
+      setSelectedResource(prev);
+      setSelectedResourceType(prev.type);
+    }
+  };
+
+  const handleNextResource = () => {
+    if (activeResourceIndex < currentTopicResources.length - 1) {
+      const newIndex = activeResourceIndex + 1;
+      setActiveResourceIndex(newIndex);
+      const next = currentTopicResources[newIndex];
+      setSelectedResource(next);
+      setSelectedResourceType(next.type);
     }
   };
 
@@ -178,12 +224,23 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
               </div>
               
               {/* Texto principal */}
-              <div className="flex-1 max-w-3xl">
+              <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
-                  <h3 className="text-xl md:text-2xl font-bold text-petroleum leading-tight dark:text-[#4DA8C4]">
+                  <h3 className="text-xl md:text-2xl font-bold text-petroleum leading-tight dark:text-petroleum">
                     {moduleData.title}
                   </h3>
-                  <span className="px-2.5 py-1 bg-slate-100 dark:bg-slate-700 text-petroleum dark:text-[#4DA8C4] text-[10px] font-bold rounded-lg border border-slate-200/60 dark:border-slate-600">{moduleData.badge.duration}</span>
+                  <span className="px-2.5 py-1 bg-slate-100 dark:bg-slate-700 text-petroleum dark:text-petroleum text-[10px] font-bold rounded-lg border border-slate-200/60 dark:border-slate-600">{moduleData.badge.duration}</span>
+                  {(() => {
+                    const prog = useIALabStore.getState().lessonProgress[activeMod] || {};
+                    const total = (useIALabStore.getState().ALL_LESSONS[activeMod] || []).length;
+                    const done = Object.values(prog).filter(s => s === 'completed').length;
+                    if (!total) return null;
+                    return (
+                      <span className={`px-2.5 py-1 text-[10px] font-bold rounded-lg border ${done === total ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-blue-50 text-blue-700 border-blue-200'}`}>
+                        {done}/{total} lecciones
+                      </span>
+                    );
+                  })()}
                 </div>
                
                   {/* Introducción */}
@@ -250,38 +307,13 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
                     </>
                   )}
                   {moduleData.topics.map((tema, index) => {
-                    const topicResources = getResourcesForTopic(tema.title);
+                    const topicResources = resourcesByTopic[tema.title];
                     const topicResourceIds = topicResources?.resources?.map(r => r.id) || [];
                     const isTopicCompleted = topicResourceIds.length > 0 && topicResourceIds.every(id => viewedIds.includes(id));
                     const totalResources = topicResources?.resources?.length || 0;
                     const topicCompletedCount = topicResourceIds.filter(id => viewedIds.includes(id)).length;
 
-                    const calculateTopicDuration = (topicTitle) => {
-                      const topicData = getResourcesForTopic(topicTitle);
-                      if (!topicData?.resources) return "20 min";
-                      
-                      let totalSeconds = 0;
-                      topicData.resources.forEach(resource => {
-                        if (resource.type === 'video' && resource.duration) {
-                          const parts = resource.duration.split(':').map(Number);
-                          if (parts.length === 2) {
-                            totalSeconds += parts[0] * 60 + parts[1];
-                          } else if (parts.length === 3) {
-                            totalSeconds += parts[0] * 3600 + parts[1] * 60 + parts[2];
-                          }
-                        } else if (resource.estimatedTime) {
-                          const match = resource.estimatedTime.match(/(\d+)/);
-                          if (match) totalSeconds += parseInt(match[1]) * 60;
-                        } else if (resource.pages) {
-                          totalSeconds += Math.max(5, Math.ceil(resource.pages / 2)) * 60;
-                        }
-                      });
-                      
-                      const hours = Math.floor(totalSeconds / 3600);
-                      const minutes = Math.floor((totalSeconds % 3600) / 60);
-                      if (hours > 0) return `${hours}h ${minutes}min`;
-                      return `${minutes} min`;
-                    };
+                    const topicDuration = calculateTopicDuration(tema.title);
                     return (
                     <React.Fragment key={index}>
                     <motion.button
@@ -314,13 +346,13 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
                           )}
                         </h4>
                         <div className="flex items-center gap-2 mt-1">
-                           <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium text-petroleum dark:text-[#4DA8C4]">
+                           <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium text-petroleum dark:text-petroleum">
                              <Icon name="fa-file" className="w-3 h-3" />
                              {tema.resources} recursos
                            </span>
                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium text-corporate bg-corporate/10">
                              <Icon name="fa-clock" className="w-3 h-3" />
-                              {calculateTopicDuration(tema.title)}
+                               {topicDuration}
                            </span>
                          </div>
                       </div>
@@ -354,7 +386,7 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
                             <div className="flex gap-1.5 pl-14 pr-4 pb-2 flex-wrap" onClick={(e) => e.stopPropagation()}>
                               <button
                                 onClick={() => setFilterType('all')}
-                                className={`text-[10px] font-medium px-2 py-1 rounded-full transition-all ${filterType === 'all' ? 'bg-petroleum dark:bg-petroleum text-white dark:text-white shadow-sm' : 'bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-300'}`}
+                                className={`text-xs font-medium px-3 py-2 min-h-[36px] rounded-full transition-all ${filterType === 'all' ? 'bg-petroleum dark:bg-petroleum text-white dark:text-white shadow-sm' : 'bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-300'}`}
                               >
                                 Todo {topicResources?.resources?.length || 0}
                               </button>
@@ -362,7 +394,7 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
                                 <button
                                   key={type}
                                   onClick={() => setFilterType(type)}
-                                  className={`text-[10px] font-medium px-2 py-1 rounded-full transition-all ${filterType === type ? 'bg-petroleum dark:bg-petroleum text-white dark:text-white shadow-sm' : 'bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-300'}`}
+                                  className={`text-xs font-medium px-3 py-2 min-h-[36px] rounded-full transition-all ${filterType === type ? 'bg-petroleum dark:bg-petroleum text-white dark:text-white shadow-sm' : 'bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-300'}`}
                                 >
                                   {typeLabels[type] || type} {counts[type] || 0}
                                 </button>
@@ -394,13 +426,17 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
                                 whileHover={prefersReducedMotion ? {} : { x: 4 }}
                                 onClick={(e) => {
                                   e.stopPropagation();
+                                  const allResources = topicResources?.resources || [];
+                                  const idx = allResources.findIndex(r => r.id === resource.id);
                                   setSelectedResource(resource);
                                   setSelectedResourceType(resource.type);
+                                  setCurrentTopicResources(allResources);
+                                  setActiveResourceIndex(idx >= 0 ? idx : 0);
                                   setViewerModalOpen(true);
                                 }}
- className={`w-full flex items-center gap-3 p-3 rounded-xl border transition-all duration-200 cursor-pointer text-left group/res ${
-                                    isResourceCompleted
-                                      ? 'bg-emerald-50/50 border-emerald-200/60'
+  className={`w-full flex items-center gap-3 p-3 rounded-xl border transition-all duration-200 cursor-pointer text-left group/res ${
+                                     isResourceCompleted
+                                       ? 'bg-emerald-50/50 border-emerald-200/60'
                                       : 'bg-white border-slate-200/60 hover:border-petroleum/30 hover:bg-petroleum/3 dark:bg-slate-800 dark:border-slate-700/60 dark:hover:border-petroleum/40'
                                    } ${justCompletedId === resource.id ? 'animate-shimmer-pulse' : ''}`}>
                                  <div className="flex items-center justify-center w-8 h-8 flex-shrink-0">
@@ -408,12 +444,12 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
                                  </div>
                                  <div className="flex-1 min-w-0 text-left">
 <p className={`text-sm font-medium truncate transition-colors ${
-                                     isResourceCompleted ? 'text-emerald-700' : 'text-slate-700 group-hover/res:text-petroleum dark:text-slate-200 dark:group-hover/res:text-[#4DA8C4]'
+                                     isResourceCompleted ? 'text-emerald-700' : 'text-slate-700 group-hover/res:text-petroleum dark:text-slate-200 dark:group-hover/res:text-petroleum'
                                    }`}>
                                     {resource.title}
                                   </p>
                                   {getResourceMeta(resource) && (
-                                    <p className="text-xs text-slate-400 mt-0.5">{getResourceMeta(resource)}</p>
+                                    <p className="text-xs text-slate-600 mt-0.5">{getResourceMeta(resource)}</p>
                                   )}
                                 </div>
                                 <div className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${
@@ -423,16 +459,19 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
                                 }`}>
                                   {isResourceCompleted ? 'Visto' : 'Ver'}
                                 </div>
-                                <button
+                                <div
                                   onClick={(e) => toggleBookmark(resource.id, e)}
-                                  className="flex-shrink-0 p-1 rounded-md hover:bg-amber-100/50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40"
+                                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleBookmark(resource.id, e); } }}
+                                  role="button"
+                                  tabIndex={0}
+                                  className="flex-shrink-0 min-w-[44px] min-h-[44px] flex items-center justify-center p-2 rounded-md hover:bg-amber-100/50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 cursor-pointer"
                                   aria-label={bookmarkedIds.includes(resource.id) ? 'Quitar de guardados' : 'Guardar para después'}
                                 >
                                   <Icon
                                     name="fa-bookmark"
                                     className={`text-xs transition-all duration-200 ${bookmarkedIds.includes(resource.id) ? 'text-amber-500 drop-shadow-sm' : 'text-slate-200 group-hover/res:text-amber-400'}`}
                                   />
-                                </button>
+                                </div>
                               </motion.button>
                             );
                           })}
@@ -524,10 +563,16 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
                 setViewerModalOpen(false);
                 setSelectedResource(null);
                 setSelectedResourceType(null);
+                setCurrentTopicResources([]);
+                setActiveResourceIndex(0);
               }}
               resource={selectedResource}
               resourceType={selectedResourceType}
               onMarkAsViewed={handleMarkAsViewed}
+              onPreviousResource={handlePreviousResource}
+              onNextResource={handleNextResource}
+              currentIndex={activeResourceIndex}
+              totalResources={currentTopicResources.length}
             />
           </Suspense>
       </React.Fragment>

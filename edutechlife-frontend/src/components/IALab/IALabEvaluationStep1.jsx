@@ -180,8 +180,8 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                         </div>
                     ) : (
                         <div className="text-center py-8 border-2 border-dashed border-slate-300 rounded-lg">
-                            <Icon name="fa-arrow-down" className="text-slate-400 text-xl mb-2" />
-                            <p className="text-slate-400 text-sm">Arrastra un elemento aquí</p>
+                            <Icon name="fa-arrow-down" className="text-slate-600 text-xl mb-2" />
+                            <p className="text-slate-600 text-sm">Arrastra un elemento aquí</p>
                         </div>
                     )}
                 </div>
@@ -216,8 +216,8 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                         </div>
                     ) : (
                         <div className="text-center py-8 border-2 border-dashed border-slate-300 rounded-lg">
-                            <Icon name="fa-arrow-down" className="text-slate-400 text-xl mb-2" />
-                            <p className="text-slate-400 text-sm">Arrastra un elemento aquí</p>
+                            <Icon name="fa-arrow-down" className="text-slate-600 text-xl mb-2" />
+                            <p className="text-slate-600 text-sm">Arrastra un elemento aquí</p>
                         </div>
                     )}
                 </div>
@@ -252,8 +252,8 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                         </div>
                     ) : (
                         <div className="text-center py-8 border-2 border-dashed border-slate-300 rounded-lg">
-                            <Icon name="fa-arrow-down" className="text-slate-400 text-xl mb-2" />
-                            <p className="text-slate-400 text-sm">Arrastra un elemento aquí</p>
+                            <Icon name="fa-arrow-down" className="text-slate-600 text-xl mb-2" />
+                            <p className="text-slate-600 text-sm">Arrastra un elemento aquí</p>
                         </div>
                     )}
                 </div>
@@ -262,7 +262,7 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
             {/* Elementos extraíbles */}
             <div className="space-y-3">
                 <div className="flex items-center gap-2">
-                    <Icon name="fa-puzzle-piece" className="text-slate-400" />
+                    <Icon name="fa-puzzle-piece" className="text-slate-600" />
                     <h4 className="text-lg font-semibold text-slate-800">Elementos para clasificar</h4>
                 </div>
                 

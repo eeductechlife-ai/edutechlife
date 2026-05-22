@@ -23,11 +23,10 @@ const ConsultoriaPage = lazy(() => import('../components/pages/ConsultoriaPage')
 const ConsultoriaB2BPage = lazy(() => import('../components/pages/ConsultoriaB2BPage'));
 const AutomationArchitectPage = lazy(() => import('../components/pages/AutomationArchitectPage'));
 const VAKDiagnosisPage = lazy(() => import('../components/pages/VAKDiagnosisPage'));
-const IALabDashboardPage = lazy(() => import('../components/pages/IALabDashboardPage'));
-const SmartBoardStatsPage = lazy(() => import('../components/pages/SmartBoardStatsPage'));
 const IALabProLandingPage = lazy(() => import('../components/pages/IALabProLandingPage'));
 const SmartBoardInfoPage = lazy(() => import('../components/pages/SmartBoardInfoPage'));
 const SmartBoardParentDashboard = lazy(() => import('../components/pages/SmartBoardParentDashboard'));
+const SmartBoardStatsPage = lazy(() => import('../components/pages/SmartBoardStatsPage'));
 
 // Componente wrapper para IALabSignUpPage que maneja navegación
 const IALabSignUpPageWrapper = () => {
@@ -167,7 +166,7 @@ const AppRoutes = () => {
         } />
         
         {/* Rutas protegidas por autenticación */}
-        <Route path="ialab" element={
+        <Route path="ialab/:moduleId?" element={
           <RoleProtectedRoute requiredRole="ialab">
             <Suspense fallback={<PageLoader message="Preparando AILab..." />}>
               <AILabPage />
@@ -192,14 +191,6 @@ const AppRoutes = () => {
         } />
         
         {/* Rutas adicionales para datos y estadísticas */}
-        <Route path="ialab/dashboard" element={
-          <RoleProtectedRoute requiredRole="ialab">
-            <Suspense fallback={<PageLoader message="Cargando Dashboard IA Lab..." />}>
-              <IALabDashboardPage />
-            </Suspense>
-          </RoleProtectedRoute>
-        } />
-        
         <Route path="smartboard/estadisticas" element={
           <RoleProtectedRoute requiredRole="smartboard">
             <Suspense fallback={<PageLoader message="Cargando Estadísticas SmartBoard..." />}>

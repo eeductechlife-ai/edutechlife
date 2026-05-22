@@ -210,7 +210,7 @@ Eres un [especificar rol experto]
                         value={optimizedPrompt}
                         onChange={(e) => handleChange(e.target.value)}
                         placeholder="Escribe aquí tu prompt optimizado. Sé específico, claro y estructurado..."
-                        className="w-full h-64 bg-white border-2 border-slate-200 rounded-xl p-5 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-corporate focus:ring-2 focus:ring-corporate/20 resize-none font-mono text-sm leading-relaxed"
+                        className="w-full h-64 bg-white border-2 border-slate-200 rounded-xl p-5 text-slate-700 placeholder-slate-500 focus:outline-none focus:border-corporate focus:ring-2 focus:ring-corporate/20 resize-none font-mono text-sm leading-relaxed"
                         spellCheck="false"
                         autoFocus
                     />

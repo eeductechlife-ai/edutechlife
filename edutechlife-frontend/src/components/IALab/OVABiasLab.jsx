@@ -1,21 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Volume2, VolumeX, CheckCircle, XCircle, Award, Brain, Shield, AlertTriangle, Scale, Eye, Lock, Users, Zap, BookOpen, Gamepad2 } from 'lucide-react';
-import { speakTextConversational, stopSpeech } from '../../utils/speech';
-
-const VoiceReader = ({ text }) => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const speak = () => {
-    if (isPlaying) { stopSpeech(); setIsPlaying(false); return; }
-    speakTextConversational(text, 'valerio', () => setIsPlaying(false));
-    setIsPlaying(true);
-  };
-  return (
-    <button onClick={speak} className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${isPlaying ? 'bg-red-100 text-red-600 hover:bg-red-200 shadow-sm' : 'bg-[#E0F7FA] text-[#004B63] hover:bg-[#B2EBF2] hover:shadow-md'}`} title="Escuchar con voz de Valerio">
-      {isPlaying ? <VolumeX size={16} /> : <Volume2 size={16} />}
-      {isPlaying ? 'Detener' : 'Escuchar con Valerio'}
-    </button>
-  );
-};
+import VoiceReader from './VoiceReader';
+import { CheckCircle, XCircle, Award, Brain, Shield, AlertTriangle, Scale, Eye, Lock, Users, Zap, BookOpen, Gamepad2 } from 'lucide-react';
 
 const BrainIcon = ({ className = "" }) => (
   <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -131,7 +116,7 @@ export default function OVABiasLab() {
       <aside className="w-full md:w-64 bg-white/90 flex flex-col shadow-xl z-10 md:min-h-screen border-r border-blue-100">
         <div className="p-6 text-center border-b border-blue-50">
           <EdutechLogo />
-          <p className="text-[10px] uppercase mt-2 text-slate-400 font-bold tracking-[0.2em]">Ética e Inteligencia Artificial</p>
+          <p className="text-[10px] uppercase mt-2 text-slate-600 font-bold tracking-[0.2em]">Ética e Inteligencia Artificial</p>
         </div>
         <nav className="flex-1 p-4 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-visible">
           {navItems.map((item) => (
@@ -152,7 +137,7 @@ export default function OVABiasLab() {
             <div className="animate-fade-in">
               <h2 className="text-3xl md:text-4xl font-black text-[#1E3A5F] mb-6 font-montserrat">{contentData.intro.title}</h2>
               <div className="w-full h-64 md:h-80 rounded-2xl mb-8 overflow-hidden shadow-xl border border-[#EAEAEA]">
-                <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=1000" alt="Ética IA" className="w-full h-full object-cover" />
+                <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=1000" alt="Ética IA" loading="lazy" className="w-full h-full object-cover" />
               </div>
               <p className="text-lg text-slate-700 leading-relaxed">{contentData.intro.text}</p>
               <div className="mt-6 p-6 bg-[#E0F7FA] border-l-8 border-[#2FA8C6] rounded-r-2xl italic text-[#1E3A5F] font-medium">"{contentData.intro.extended}"</div>
@@ -246,7 +231,7 @@ export default function OVABiasLab() {
             </div>
           )}
         </div>
-        <footer className="mt-4 text-center text-slate-400 text-xs py-4">
+        <footer className="mt-4 text-center text-slate-600 text-xs py-4">
           Laboratorio guiado por <strong className="text-[#2FA8C6]">Valerio</strong> &mdash; Coach de IA de Edutechlife.
         </footer>
       </main>

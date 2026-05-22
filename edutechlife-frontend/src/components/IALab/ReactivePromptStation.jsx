@@ -89,7 +89,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
     const getMetricColor = (score) => {
         if (score >= 70) return 'text-petroleum';
         if (score >= 40) return 'text-corporate';
-        return 'text-slate-400';
+        return 'text-slate-600';
     };
 
     const getMetricBarColor = (score) => {
@@ -182,7 +182,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                                     "w-full h-32 md:h-40",
                                     "bg-slate-50/50 border border-slate-200 rounded-xl",
                                     "pl-10 pr-4 py-3",
-                                    "text-slate-700 placeholder:text-slate-400/50 text-sm",
+                                    "text-slate-700 placeholder:text-slate-600/50 text-sm",
                                     "resize-none",
                                     "focus:outline-none focus:ring-2 focus:ring-petroleum/20 focus:border-petroleum/30 focus:bg-white",
                                     "transition-all duration-300",
@@ -300,7 +300,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
 
                         <div className="mt-4 pt-3 border-t border-petroleum/10">
                             {!input.trim() ? (
-                                <p className="text-xs text-slate-400 text-center">
+                                <p className="text-xs text-slate-600 text-center">
                                     Escribe para analizar
                                 </p>
                             ) : input.trim().length < 3 ? (
@@ -330,7 +330,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                                     )}
                                 </div>
                             ) : (
-                                <p className="text-xs text-slate-400 text-center">
+                                <p className="text-xs text-slate-600 text-center">
                                     Analizando calidad...
                                 </p>
                             )}

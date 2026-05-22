@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import VoiceReader from './VoiceReader';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Volume2, VolumeX, CheckCircle, XCircle, ChevronRight, 
@@ -7,28 +8,6 @@ import {
 } from 'lucide-react';
 import { speakTextConversational, stopSpeech } from '../../utils/speech';
 
-const VoiceReader = ({ text }) => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const speak = () => {
-    if (isPlaying) { stopSpeech(); setIsPlaying(false); return; }
-    speakTextConversational(text, 'valerio', () => setIsPlaying(false));
-    setIsPlaying(true);
-  };
-  return (
-    <button onClick={speak}
-      className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-        isPlaying ? 'bg-red-100 text-red-600 hover:bg-red-200 shadow-sm' : 'bg-[#E0F7FA] text-[#004B63] hover:bg-[#B2EBF2] hover:shadow-md'
-      }`}
-      title="Escuchar con voz de Valerio">
-      {isPlaying ? (
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-      ) : (
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-      )}
-      {isPlaying ? 'Detener' : 'Escuchar con Valerio'}
-    </button>
-  );
-};
 
 const MODULE_DATA = [
   {
@@ -157,20 +136,13 @@ export default function OVANotebookPodcastGuide() {
   const currentTotalProgress = Math.min(100, (MODULE_DATA.slice(0, currentModuleIndex).reduce((acc, mod) => acc + mod.content.length, 0) + currentSlide) / totalSlides * 100);
 
   const handleNarrate = (textToRead) => {
-    if (!('speechSynthesis' in window)) return;
-    if (isNarrating) { window.speechSynthesis.cancel(); setIsNarrating(false); return; }
-    const utterance = new SpeechSynthesisUtterance(textToRead);
-    utterance.lang = 'es-MX'; utterance.pitch = 1.2; utterance.rate = 1.1;
-    const voices = window.speechSynthesis.getVoices();
-    const latamVoice = voices.find(v => v.lang.includes('es-MX') || v.lang.includes('es-US') || (v.lang.includes('es') && !v.lang.includes('ES')));
-    if (latamVoice) utterance.voice = latamVoice;
-    utterance.onend = () => setIsNarrating(false);
-    window.speechSynthesis.speak(utterance);
+    if (isNarrating) { stopSpeech(); setIsNarrating(false); return; }
+    speakTextConversational(textToRead, 'valerio', () => setIsNarrating(false));
     setIsNarrating(true);
   };
 
   useEffect(() => {
-    window.speechSynthesis.cancel();
+    stopSpeech();
     setIsNarrating(false);
   }, [currentSlide, currentModuleIndex, currentScreen]);
 

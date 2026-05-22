@@ -1,26 +1,12 @@
 import React, { useState } from 'react';
+import VoiceReader from './VoiceReader';
 import {
-  BrainCircuit, Bot, Volume2, Square, Play, ChevronRight, ChevronLeft,
+  BrainCircuit, Bot, Play, ChevronRight, ChevronLeft,
   ArrowRightCircle, Star, Award, Trophy, Sparkles, BookOpen, CheckCircle2,
   Menu, X, MousePointer2, AlertTriangle, Zap, Info, Search, Clock,
   Lightbulb, Target, Globe, Layers, FileText, GraduationCap, Settings
 } from 'lucide-react';
-import { speakTextConversational, stopSpeech } from '../../utils/speech';
-
-const VoiceReader = ({ text }) => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const speak = () => {
-    if (isPlaying) { stopSpeech(); setIsPlaying(false); return; }
-    speakTextConversational(text, 'valerio', () => setIsPlaying(false));
-    setIsPlaying(true);
-  };
-  return (
-    <button onClick={speak} className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${isPlaying ? 'bg-red-100 text-red-600 hover:bg-red-200' : 'bg-[#E0F7FA] text-[#004B63] hover:bg-[#B2EBF2]'}`} title="Escuchar con voz de Valerio">
-      {isPlaying ? <Square size={16} /> : <Volume2 size={16} />}
-      {isPlaying ? 'Detener' : 'Escuchar con Valerio'}
-    </button>
-  );
-};
+import { stopSpeech } from '../../utils/speech';
 
 const Logo = () => (
   <div className="flex items-center gap-2 select-none group cursor-pointer">
@@ -223,7 +209,7 @@ const QuizScreen = ({ onNext, addXp }) => {
   );
   return (
     <div className="space-y-4 animate-in fade-in">
-      <div className="flex justify-between text-[9px] font-black uppercase tracking-widest text-slate-400"><span>Pregunta {currentQ + 1} de 5</span><span className="text-[#00B4D8]">{score}</span></div>
+      <div className="flex justify-between text-[9px] font-black uppercase tracking-widest text-slate-600"><span>Pregunta {currentQ + 1} de 5</span><span className="text-[#00B4D8]">{score}</span></div>
       <h3 className="text-lg font-[900] text-[#0D2B5B] leading-tight">{questions[currentQ].q}</h3>
       <div className="grid gap-2">
         {questions[currentQ].o.map((opt, i) => (
@@ -276,7 +262,7 @@ export default function OVAIntroPrompt() {
         <Logo />
         <div className="flex items-center gap-4">
           <div className="hidden md:flex flex-col items-end">
-            <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">PROGRESO</span>
+            <span className="text-[8px] font-black text-slate-600 uppercase tracking-widest">PROGRESO</span>
             <div className="w-24 h-1.5 bg-slate-100 rounded-full overflow-hidden border border-slate-50 shadow-inner">
               <div className="h-full bg-gradient-to-r from-[#0D2B5B] to-[#00B4D8] transition-all duration-1000 ease-out" style={{ width: `${(xp / totalXp) * 100}%` }}></div>
             </div>
@@ -306,7 +292,7 @@ export default function OVAIntroPrompt() {
       {screen !== 'welcome' && (
         <div className="flex justify-center border-t border-slate-100 bg-white/90">
           <div className="w-full max-w-4xl flex justify-between items-center gap-3 px-4 py-3">
-            <button onClick={() => { if (curIdx > 0) setScreen(nav[curIdx - 1]); stopSpeech(); }} className="p-3 bg-[#F1F5F9] text-slate-400 hover:text-[#0D2B5B] rounded-xl disabled:opacity-10 transition-all border border-slate-50" disabled={curIdx <= 1}><ChevronLeft className="w-5 h-5" /></button>
+            <button onClick={() => { if (curIdx > 0) setScreen(nav[curIdx - 1]); stopSpeech(); }} className="p-3 bg-[#F1F5F9] text-slate-600 hover:text-[#0D2B5B] rounded-xl disabled:opacity-10 transition-all border border-slate-50" disabled={curIdx <= 1}><ChevronLeft className="w-5 h-5" /></button>
             <div className="flex gap-2">{nav.map((_, i) => <div key={i} className={`h-1.5 rounded-full transition-all duration-700 ${i === curIdx ? 'w-10 bg-[#0D2B5B]' : 'w-2 bg-slate-200'}`} />)}</div>
             <button onClick={() => { if (curIdx < nav.length - 1) { if (screen.startsWith('m')) { const c = [...completed]; if (!c.includes(screen)) c.push(screen); setCompleted(c); } setScreen(nav[curIdx + 1]); stopSpeech(); } }} className="px-6 py-3 bg-gradient-to-r from-[#0D2B5B] to-[#1A4D8C] text-white rounded-xl font-[900] text-[11px] shadow-md active:scale-95 transition-all flex items-center gap-2 uppercase tracking-[0.15em]">Siguiente <ArrowRightCircle className="w-4 h-4" /></button>
           </div>
@@ -322,7 +308,7 @@ export default function OVAIntroPrompt() {
       {isMenuOpen && (
         <div className="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-md" onClick={() => setIsMenuOpen(false)}>
           <div className="absolute right-0 h-full w-[260px] bg-white shadow-2xl p-5 flex flex-col gap-3 animate-in slide-in-from-right" onClick={e => e.stopPropagation()}>
-            <button onClick={() => setIsMenuOpen(false)} className="self-end p-1.5 hover:bg-slate-100 rounded-full"><X className="w-5 h-5 text-slate-400" /></button>
+            <button onClick={() => setIsMenuOpen(false)} className="self-end p-1.5 hover:bg-slate-100 rounded-full"><X className="w-5 h-5 text-slate-600" /></button>
             <h3 className="font-[900] text-slate-300 text-[9px] tracking-[0.3em] uppercase border-b-2 border-slate-50 pb-3">Mapa</h3>
             {nav.map(id => (
               <button key={id} onClick={() => { setScreen(id); setIsMenuOpen(false); }} className={`p-3 rounded-lg text-left text-[10px] font-[900] transition-all flex items-center justify-between ${screen === id ? 'bg-[#0D2B5B] text-white shadow-lg' : 'hover:bg-slate-50 text-slate-500'}`}>

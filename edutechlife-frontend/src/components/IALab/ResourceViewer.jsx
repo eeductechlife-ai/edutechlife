@@ -46,7 +46,7 @@ const ResourceViewer = ({
       return (
         <div className="w-full h-full flex items-center justify-center bg-slate-50 rounded-2xl">
           <div className="text-center">
-            <Icon name="fa-file-circle-question" className="text-slate-400 text-4xl mb-4" />
+            <Icon name="fa-file-circle-question" className="text-slate-600 text-4xl mb-4" />
             <p className="text-slate-500 font-medium">No hay recurso seleccionado</p>
           </div>
         </div>

@@ -618,7 +618,7 @@ Elementos clave del pitch:
                 <div className="relative aspect-video bg-black rounded-xl overflow-hidden mb-6">
                   <iframe
                     ref={videoRef}
-                    src={`https://www.youtube.com/embed/${currentVideo?.youtubeId}?autoplay=0&rel=0&modestbranding=1`}
+                    src={`https://www.youtube.com/embed/${currentVideo?.youtubeId}?autoplay=0&rel=0&modestbranding=1&origin=${encodeURIComponent(window.location.origin)}`}
                     title={currentVideo?.title}
                     className="w-full h-full"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

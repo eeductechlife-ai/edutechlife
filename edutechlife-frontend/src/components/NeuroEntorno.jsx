@@ -717,7 +717,7 @@ Eres Valerio, mentor educativo experto en neuroeducación y metodologías VAK de
                             {testimoniosVAK.map((t, i) => (
                                 <div key={i} className="testimonio-vak-card">
                                     <div className="testimonio-vak-header">
-                                        <img src={t.img} alt={t.nombre} />
+                                        <img src={t.img} alt={t.nombre} loading="lazy" />
                                         <div className="testimonio-vak-info">
                                             <h4>{t.nombre}</h4>
                                             <span>{t.rol}</span>

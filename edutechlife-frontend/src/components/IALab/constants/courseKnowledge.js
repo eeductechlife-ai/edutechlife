@@ -70,7 +70,7 @@ const COURSE_KNOWLEDGE = [
     challenge: "Crea un GPT personalizado para automatizar una tarea de tu área profesional y conéctalo con una API externa usando Function Calling.",
     topics: [
       {
-        title: "Guía Completa de ChatGPT",
+        title: "ChatGPT de la A a la Z",
         description: "Recurso integral de Edutechlife que cubre todos los aspectos de ChatGPT: desde la interfaz básica hasta técnicas avanzadas de prompt engineering y automatización.",
         difficulty: "Principiante",
         learningObjectives: [
@@ -85,7 +85,7 @@ const COURSE_KNOWLEDGE = [
         ]
       },
       {
-        title: "Plantillas de Flujos de Trabajo",
+        title: "Automatiza tu Trabajo con IA",
         description: "Descubre las herramientas integradas de ChatGPT y aprende a crear flujos de trabajo automatizados que potencien tu productividad.",
         difficulty: "Intermedio",
         learningObjectives: [
@@ -99,7 +99,7 @@ const COURSE_KNOWLEDGE = [
         ]
       },
       {
-        title: "Function Calling y APIs de OpenAI",
+        title: "Conecta ChatGPT con el Mundo Real",
         description: "Descubre cómo crear y usar GPTs personalizados y acciones para automatizar tareas complejas con APIs externas.",
         difficulty: "Avanzado",
         learningObjectives: [
@@ -123,7 +123,7 @@ const COURSE_KNOWLEDGE = [
     challenge: "Usa Gemini Deep Research para investigar un tema de actualidad, verifica cada fuente citada y presenta un informe profesional con conclusiones propias.",
     topics: [
       {
-        title: "Introducción a Google Gemini",
+        title: "Gemini: La IA que Ve, Lee y Escucha",
         description: "Conoce Gemini, la IA multimodal de Google capaz de procesar texto, imágenes, audio y video simultáneamente.",
         difficulty: "Principiante",
         learningObjectives: [
@@ -138,7 +138,7 @@ const COURSE_KNOWLEDGE = [
         ]
       },
       {
-        title: "Razonamiento Multimodal y Grounding",
+        title: "Imágenes + Texto + Datos en Vivo",
         description: "Aprende a integrar Gemini en Google Docs, Sheets, Gmail y otras herramientas de Workspace.",
         difficulty: "Intermedio",
         learningObjectives: [
@@ -153,7 +153,7 @@ const COURSE_KNOWLEDGE = [
         ]
       },
       {
-        title: "Deep Research y Fact-Checking con IA",
+        title: "Investiga como un Detective Digital",
         description: "Casos reales de uso profesional de Gemini en marketing, programación, educación e investigación.",
         difficulty: "Avanzado",
         learningObjectives: [
@@ -177,7 +177,7 @@ const COURSE_KNOWLEDGE = [
     challenge: "Genera un podcast analizando 5 papers sobre neuro-plasticidad.",
     topics: [
       {
-        title: "¿Qué es NotebookLM y para qué sirve?",
+        title: "¿Qué es NotebookLM?",
         description: "Descubre NotebookLM, la herramienta de Google para investigación asistida por IA con fuentes personalizadas.",
         difficulty: "Principiante",
         learningObjectives: [
@@ -192,7 +192,7 @@ const COURSE_KNOWLEDGE = [
         ]
       },
       {
-        title: "Curaduría de Fuentes y Síntesis de Documentos",
+        title: "Organiza tu Investigación como un Pro",
         description: "Aprende a generar resúmenes, FAQ y briefings conectados a tus fuentes originales.",
         difficulty: "Intermedio",
         learningObjectives: [
@@ -207,7 +207,7 @@ const COURSE_KNOWLEDGE = [
         ]
       },
       {
-        title: "Audio Overviews y Gestión Documental con IA",
+        title: "De PDF a Podcast en un Clic",
         description: "Explora la función de Audio Overview que convierte tus notas en conversaciones de podcast generadas por IA.",
         difficulty: "Avanzado",
         learningObjectives: [
@@ -231,7 +231,7 @@ const COURSE_KNOWLEDGE = [
     challenge: "Analiza un caso real de sesgo algorítmico en IA y propón un protocolo ético para prevenir y mitigar este tipo de discriminación.",
     topics: [
       {
-        title: "Ética en la Inteligencia Artificial",
+        title: "Ética en IA: Lo Esencial",
         description: "Fundamentos éticos para el uso de IA generativa: transparencia, equidad, responsabilidad y privacidad.",
         difficulty: "Intermedio",
         learningObjectives: [
@@ -246,7 +246,7 @@ const COURSE_KNOWLEDGE = [
         ]
       },
       {
-        title: "Sesgos Algorítmicos y Equidad",
+        title: "¿Es Justa tu IA? Descúbrelo",
         description: "Estrategias prácticas para proteger tus datos personales y corporativos al usar herramientas de IA.",
         difficulty: "Intermedio",
         learningObjectives: [
@@ -261,7 +261,7 @@ const COURSE_KNOWLEDGE = [
         ]
       },
       {
-        title: "Privacidad, Regulación y IA Responsable",
+        title: "Protege tus Datos en la Era de la IA",
         description: "Marco ético para el uso responsable de IA en educación, trabajo y vida personal.",
         difficulty: "Avanzado",
         learningObjectives: [

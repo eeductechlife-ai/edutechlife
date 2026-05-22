@@ -61,7 +61,7 @@ const IALabForumNotifications = () => {
         className="relative flex items-center justify-center w-9 h-9 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 hover:border-petroleum/30 transition-all"
         aria-label="Notificaciones"
       >
-        <Icon name="fa-bell" className={`text-sm transition-colors ${unreadCount > 0 ? 'text-petroleum dark:text-[#4DA8C4]' : 'text-slate-400'}`} />
+        <Icon name="fa-bell" className={`text-sm transition-colors ${unreadCount > 0 ? 'text-petroleum' : 'text-slate-600'}`} />
         {unreadCount > 0 && (
           <span className="absolute -top-1 -right-1 flex items-center justify-center min-w-[16px] h-[16px] text-[8px] font-bold text-white bg-gradient-to-r from-petroleum to-corporate rounded-full border-2 border-white dark:border-slate-800 px-1">
             {unreadCount > 99 ? '99+' : unreadCount}
@@ -80,7 +80,7 @@ const IALabForumNotifications = () => {
             className="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xl overflow-hidden z-50"
           >
             <div className="flex items-center justify-between p-3 border-b border-slate-100 dark:border-slate-700">
-              <h4 className="text-sm font-bold text-petroleum dark:text-[#4DA8C4]">Notificaciones</h4>
+              <h4 className="text-sm font-bold text-petroleum">Notificaciones</h4>
               {unreadCount > 0 && (
                 <button
                   onClick={markAllAsRead}
@@ -95,7 +95,7 @@ const IALabForumNotifications = () => {
               {notifications.length === 0 ? (
                 <div className="text-center py-8 px-4">
                   <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center mx-auto mb-2">
-                    <Icon name="fa-bell-slash" className="text-slate-400" />
+                    <Icon name="fa-bell-slash" className="text-slate-600" />
                   </div>
                   <p className="text-xs text-slate-500 dark:text-slate-400">Sin notificaciones</p>
                 </div>
@@ -121,7 +121,7 @@ const IALabForumNotifications = () => {
                             </span>
                             {notif.title && `: ${notif.title}`}
                           </p>
-                          <span className="text-[10px] text-slate-400">
+                          <span className="text-[10px] text-slate-600">
                             {formatRelativeTime(notif.created_at)}
                           </span>
                         </div>

@@ -138,7 +138,7 @@ export const moduleResources = {
   // ============================================================================
   // MÓDULO 2: POTENCIA CHATGPT
   // ============================================================================
-  "Guía Completa de ChatGPT": {
+  "ChatGPT de la A a la Z": {
     title: "ChatGPT de la A a la Z",
     description: "Todo lo que necesitas para dominar ChatGPT en un solo lugar: desde lo básico hasta técnicas que te harán destacar.",
     learningObjectives: [
@@ -186,7 +186,7 @@ export const moduleResources = {
     ]
   },
 
-  "Plantillas de Flujos de Trabajo": {
+  "Automatiza tu Trabajo con IA": {
     title: "Automatiza tu Trabajo con IA",
     description: "Aprende a usar las 5 herramientas ocultas de ChatGPT que multiplicarán tu productividad. Automatiza tareas en minutos.",
     learningObjectives: [
@@ -224,7 +224,7 @@ export const moduleResources = {
     ]
   },
 
-  "Function Calling y APIs de OpenAI": {
+  "Conecta ChatGPT con el Mundo Real": {
     title: "Conecta ChatGPT con el Mundo Real",
     description: "Crea tu propio asistente IA a medida. Aprende a construir GPTs que trabajan para ti mientras tú te enfocas en lo importante.",
     learningObjectives: [
@@ -274,7 +274,7 @@ export const moduleResources = {
   // ============================================================================
   // MÓDULO 3: DOMINA GEMINI
   // ============================================================================
-  "Introducción a Google Gemini": {
+  "Gemini: La IA que Ve, Lee y Escucha": {
     title: "Gemini: La IA que Ve, Lee y Escucha",
     description: "Conoce Gemini, la IA de Google que entiende texto, imágenes, audio y video al mismo tiempo. Un solo asistente para todo.",
     learningObjectives: [
@@ -322,7 +322,7 @@ export const moduleResources = {
     ]
   },
 
-  "Razonamiento Multimodal y Grounding": {
+  "Imágenes + Texto + Datos en Vivo": {
     title: "Imágenes + Texto + Datos en Vivo",
     description: "Lleva Gemini a donde trabajas: aprende a usarlo dentro de Google Docs, Sheets y Gmail para multiplicar tu velocidad.",
     learningObjectives: [
@@ -367,7 +367,7 @@ export const moduleResources = {
     ]
   },
 
-  "Deep Research y Fact-Checking con IA": {
+  "Investiga como un Detective Digital": {
     title: "Investiga como un Detective Digital",
     description: "Descubre cómo profesionales de diferentes industrias están usando Gemini para destacar. Casos reales y resultados comprobados.",
     learningObjectives: [
@@ -418,7 +418,7 @@ export const moduleResources = {
   // ============================================================================
   // MÓDULO 4: NOTEBOOKLM
   // ============================================================================
-  "¿Qué es NotebookLM y para qué sirve?": {
+  "¿Qué es NotebookLM?": {
     title: "¿Qué es NotebookLM?",
     description: "La herramienta secreta de Google para investigadores: sube tus PDFs y obtén respuestas precisas con citas textuales. Sin inventos.",
     learningObjectives: [
@@ -466,7 +466,7 @@ export const moduleResources = {
     ]
   },
 
-  "Curaduría de Fuentes y Síntesis de Documentos": {
+  "Organiza tu Investigación como un Pro": {
     title: "Organiza tu Investigación como un Pro",
     description: "Convierte montañas de documentos en resúmenes, preguntas frecuentes y reportes ejecutivos con un solo clic.",
     learningObjectives: [
@@ -513,7 +513,7 @@ export const moduleResources = {
     ]
   },
 
-  "Audio Overviews y Gestión Documental con IA": {
+  "De PDF a Podcast en un Clic": {
     title: "De PDF a Podcast en un Clic",
     description: "Convierte tus apuntes en podcasts profesionales: dos voces IA conversan sobre tus documentos mientras tú escuchas.",
     learningObjectives: [
@@ -548,7 +548,7 @@ export const moduleResources = {
       },
       {
         id: "notebook-audio-ova-1",
-        type: "ova",
+        type: "ova_interactive",
         title: "Laboratorio: Crea tu Podcast IA",
         description: "Crea tu primer podcast IA: elige el tema, personaliza el tono y escucha el resultado en minutos.",
         estimatedTime: "15 minutos",
@@ -563,7 +563,7 @@ export const moduleResources = {
   // ============================================================================
   // MÓDULO 5: ÉTICA Y PRIVACIDAD
   // ============================================================================
-  "Ética en la Inteligencia Artificial": {
+  "Ética en IA: Lo Esencial": {
     title: "Ética en IA: Lo Esencial",
     description: "Aprende a reconocer y mitigar los sesgos inherentes en los modelos de IA generativa.",
     learningObjectives: [
@@ -611,7 +611,7 @@ export const moduleResources = {
     ]
   },
 
-  "Sesgos Algorítmicos y Equidad": {
+  "¿Es Justa tu IA? Descúbrelo": {
     title: "¿Es Justa tu IA? Descúbrelo",
     description: "Estrategias prácticas para proteger tus datos personales y corporativos al usar herramientas de IA.",
     learningObjectives: [
@@ -659,7 +659,7 @@ export const moduleResources = {
     ]
   },
 
-  "Privacidad, Regulación y IA Responsable": {
+  "Protege tus Datos en la Era de la IA": {
     title: "Protege tus Datos en la Era de la IA",
     description: "Marco ético para el uso responsable de IA en educación, trabajo y vida personal.",
     learningObjectives: [
@@ -739,16 +739,20 @@ export const countResourcesByType = (topicTitle) => {
   return counts;
 };
 
-// Formatear duración para display
-export const formatDuration = (duration) => {
-  if (!duration) return "Duración no especificada";
-  return `⏱️ ${duration}`;
+export const getResourceDuration = (resource) => {
+  if (resource.duration) return resource.duration;
+  if (resource.estimatedTime) return resource.estimatedTime;
+  return null;
 };
 
-// Formatear tamaño para display
+export const formatDuration = (duration) => {
+  if (!duration) return null;
+  return duration;
+};
+
 export const formatFileSize = (size) => {
-  if (!size) return "Tamaño no especificado";
-  return `📦 ${size}`;
+  if (!size) return null;
+  return size;
 };
 
 // Obtener icono por tipo de recurso
@@ -769,21 +773,24 @@ export const getResourceIcon = (type) => {
   return icons[type] || "fa-file";
 };
 
+export const RESOURCE_TYPE_CONFIG = {
+  video:        { icon: "fa-video",         label: "Video",         color: "#004B63",  bg: "bg-[#004B63]/10" },
+  document:     { icon: "fa-file-lines",    label: "Documento",    color: "#00BCD4",  bg: "bg-[#00BCD4]/10" },
+  documento:    { icon: "fa-file-lines",    label: "Documento",    color: "#00BCD4",  bg: "bg-[#00BCD4]/10" },
+  pdf:          { icon: "fa-file-pdf",      label: "PDF",          color: "#EF4444",  bg: "bg-red-50" },
+  "pdf-thumbnail": { icon: "fa-file-pdf",   label: "PDF",          color: "#EF4444",  bg: "bg-red-50" },
+  image:        { icon: "fa-image",         label: "Imagen",       color: "#10B981",  bg: "bg-emerald-50" },
+  imagen:       { icon: "fa-image",         label: "Imagen",       color: "#10B981",  bg: "bg-emerald-50" },
+  interactive:  { icon: "fa-puzzle-piece",  label: "Interactivo",  color: "#F59E0B",  bg: "bg-amber-50" },
+  interactivo:  { icon: "fa-puzzle-piece",  label: "Interactivo",  color: "#F59E0B",  bg: "bg-amber-50" },
+  ova:          { icon: "fa-brain",         label: "OVA",          color: "#8B5CF6",  bg: "bg-purple-50" },
+  "ova-thumbnail": { icon: "fa-brain",      label: "OVA",          color: "#8B5CF6",  bg: "bg-purple-50" },
+  ova_interactive: { icon: "fa-brain",      label: "OVA",          color: "#8B5CF6",  bg: "bg-purple-50" },
+};
+
 export const getResourceColor = (type) => {
-  const colors = {
-    video: "text-[#004B63]",
-    documento: "text-[#004B63]",
-    pdf: "text-[#004B63]",
-    ova: "text-[#004B63]",
-    imagen: "text-[#004B63]",
-    interactivo: "text-[#004B63]",
-    document: "text-[#004B63]",
-    "pdf-thumbnail": "text-[#004B63]",
-    "ova-thumbnail": "text-[#004B63]",
-    image: "text-[#004B63]",
-    interactive: "text-[#004B63]"
-  };
-  return colors[type] || "text-slate-500";
+  const cfg = RESOURCE_TYPE_CONFIG[type];
+  return cfg ? `text-[${cfg.color}]` : "text-slate-500";
 };
 
 export default moduleResources;

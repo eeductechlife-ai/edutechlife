@@ -1720,8 +1720,8 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     
     const qrUrl = buildResultsURL(diagnosis);
     const StyleIcon = getIconComponent(diagnosis.styleDetails?.icon || 'Eye');
-    const moodFeedback = getMoodFeedback();
-    
+
+
     const radarData = [
       { subject: 'Visual', A: diagnosis.counts?.visual || 0, fullMark: 10 },
       { subject: 'Auditivo', A: diagnosis.counts?.auditivo || 0, fullMark: 10 },
@@ -2398,8 +2398,22 @@ const DiagnosticoVAK = ({ onNavigate }) => {
             fontSize: '10px',
             color: '#999'
           }}>
-            <p style={{ margin: '0 0 3px 0' }}>Documento generado por EdutechLife • Inteligencia Cognitiva</p>
-            <p style={{ margin: 0 }}>Ley 1581 de 2012 | Habeas Data | edutechlife.co</p>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+              {qrUrl && (
+                <a href={qrUrl} target="_blank" rel="noopener noreferrer" title="Abrir resultados">
+                  <img
+                    src={qrUrl}
+                    alt="Código QR - Resultados del diagnóstico"
+                    style={{ width: 80, height: 80 }}
+                    crossOrigin="anonymous"
+                  />
+                </a>
+              )}
+              <div>
+                <p style={{ margin: '0 0 3px 0' }}>Documento generado por EdutechLife • Inteligencia Cognitiva</p>
+                <p style={{ margin: 0 }}>Ley 1581 de 2012 | Habeas Data | edutechlife.co</p>
+              </div>
+            </div>
           </div>
         </div>
 

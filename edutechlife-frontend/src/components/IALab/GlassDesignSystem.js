@@ -182,7 +182,7 @@ export const EvolvedInputs = {
   TEXTAREA_COMPACT: cn(
     "bg-white",
     "border border-cyan-100/40",
-    "text-slate-700 placeholder:text-slate-400/70",
+    "text-slate-700 placeholder:text-slate-600/70",
     "rounded-xl",
     "px-3.5 py-2.5",
     "focus:outline-none focus:ring-2 focus:ring-cyan-300/30 focus:border-cyan-300",
@@ -193,7 +193,7 @@ export const EvolvedInputs = {
   INPUT_MICRO: cn(
     "bg-white",
     "border border-slate-100",
-    "text-slate-700 placeholder:text-slate-400/60",
+    "text-slate-700 placeholder:text-slate-600/60",
     "rounded-lg",
     "px-3 py-2",
     "text-sm",

@@ -79,7 +79,7 @@ const ModuleHistory = () => {
       <div className="flex items-center justify-between gap-4">
         <div className="flex flex-wrap gap-2">
           {sections.map((s, i) => (
-            <button key={i} onClick={() => setActive(i)} className={`px-4 py-2 rounded-2xl text-[10px] font-[800] uppercase tracking-widest transition-all ${active === i ? 'bg-[#0D2B5B] text-white shadow-lg' : 'bg-white border border-slate-200 text-slate-400 hover:border-[#00B4D8]'}`}>{s.t.split('·')[0]}</button>
+            <button key={i} onClick={() => setActive(i)} className={`px-4 py-2 rounded-2xl text-[10px] font-[800] uppercase tracking-widest transition-all ${active === i ? 'bg-[#0D2B5B] text-white shadow-lg' : 'bg-white border border-slate-200 text-slate-600 hover:border-[#00B4D8]'}`}>{s.t.split('·')[0]}</button>
           ))}
         </div>
         <VoiceReader text={text} />
@@ -219,7 +219,7 @@ const QuizScreen = ({ onNext, addXp }) => {
   }
   return (
     <div className="space-y-6 animate-in fade-in">
-      <div className="flex justify-between items-center text-[9px] font-black uppercase tracking-widest text-slate-400">
+      <div className="flex justify-between items-center text-[9px] font-black uppercase tracking-widest text-slate-600">
         <span>Pregunta {currentQ + 1} de 5</span>
         <span className="text-[#00B4D8]">Aciertos: {score}</span>
       </div>
@@ -319,7 +319,7 @@ export default function OVAEtica() {
         <Logo />
         <div className="flex items-center gap-4">
           <div className="hidden md:flex flex-col items-end">
-            <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">PROGRESO</span>
+            <span className="text-[8px] font-black text-slate-600 uppercase tracking-widest">PROGRESO</span>
             <div className="w-24 h-1.5 bg-slate-100 rounded-full overflow-hidden border border-slate-50 shadow-inner">
               <div className="h-full bg-gradient-to-r from-[#0D2B5B] to-[#00B4D8] transition-all duration-1000 ease-out shadow-lg" style={{ width: `${(xp / totalXp) * 100}%` }}></div>
             </div>
@@ -353,7 +353,7 @@ export default function OVAEtica() {
       {screen !== 'welcome' && screen !== 'certificate' && (
         <div className="flex justify-center border-t border-slate-100 bg-white/90 backdrop-blur-3xl">
           <div className="w-full max-w-4xl flex justify-between items-center gap-3 px-4 py-3">
-            <button onClick={() => { if (curIdx > 0) setScreen(nav[curIdx - 1]); stopSpeech(); }} className="p-3 bg-[#F1F5F9] text-slate-400 hover:text-[#0D2B5B] rounded-xl disabled:opacity-10 transition-all shadow-inner border border-slate-50" disabled={curIdx === 0}><ChevronLeft className="w-5 h-5" /></button>
+            <button onClick={() => { if (curIdx > 0) setScreen(nav[curIdx - 1]); stopSpeech(); }} className="p-3 bg-[#F1F5F9] text-slate-600 hover:text-[#0D2B5B] rounded-xl disabled:opacity-10 transition-all shadow-inner border border-slate-50" disabled={curIdx === 0}><ChevronLeft className="w-5 h-5" /></button>
             <div className="flex gap-2">
               {nav.map((_, i) => <div key={i} className={`h-1.5 rounded-full transition-all duration-700 ${i === curIdx ? 'w-10 bg-[#0D2B5B]' : 'w-2 bg-slate-200'}`}></div>)}
             </div>
@@ -371,7 +371,7 @@ export default function OVAEtica() {
       {isMenuOpen && (
         <div className="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-md" onClick={() => setIsMenuOpen(false)}>
           <div className="absolute right-0 h-full w-[300px] bg-white shadow-2xl p-6 flex flex-col gap-4 animate-in slide-in-from-right" onClick={e => e.stopPropagation()}>
-            <button onClick={() => setIsMenuOpen(false)} className="self-end p-2 hover:bg-slate-100 rounded-full transition-colors"><X className="w-6 h-6 text-slate-400" /></button>
+            <button onClick={() => setIsMenuOpen(false)} className="self-end p-2 hover:bg-slate-100 rounded-full transition-colors"><X className="w-6 h-6 text-slate-600" /></button>
             <h3 className="font-[900] text-slate-300 text-[10px] tracking-[0.3em] uppercase border-b-2 border-slate-50 pb-4">Mapa del Módulo</h3>
             {nav.map(id => (
               <button key={id} onClick={() => { setScreen(id); setIsMenuOpen(false); }} className={`p-4 rounded-xl text-left text-[11px] font-[900] transition-all flex items-center justify-between group ${screen === id ? 'bg-[#0D2B5B] text-white shadow-lg' : 'hover:bg-slate-50 text-slate-500'}`}>

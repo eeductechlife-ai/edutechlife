@@ -56,6 +56,7 @@ export const useIALabProgress = () => {
   
   const [progressError, setProgressError] = useState(null);
   const hasLoadedRef = useRef(false);
+  const cancelledRef = useRef(false);
   
   // ==================== PERSISTENCIA LOCAL ====================
   
@@ -124,16 +125,22 @@ export const useIALabProgress = () => {
     }
     
     try {
-      setIsLoadingProgress(true);
       setProgressError(null);
       
       // Paso 1: Restaurar caché inmediatamente para UX instantánea
       const hasCache = restoreFromCache();
       
+      // Solo mostrar loading si no hay caché (evita flash loading→cache→DB)
+      if (!hasCache) {
+        setIsLoadingProgress(true);
+      }
       
+      if (cancelledRef.current) return;
       
       // 2. Obtener todo el progreso del usuario
       const allProgress = await progressService.getAllProgress(user.id);
+      
+      if (cancelledRef.current) return;
       
       if (allProgress && allProgress.length > 0) {
         // 3. Filtrar filas resumen
@@ -148,24 +155,30 @@ export const useIALabProgress = () => {
         const visited = [...new Set(allProgress.map(p => p.module_id))];
         
         // 6. Actualizar estados
-        setCompletedModules(completed);
-        setVisitedModules(prev => {
-          const uniqueVisited = [...new Set([...prev, ...visited])];
-          return uniqueVisited.sort((a, b) => a - b);
-        });
+        if (!cancelledRef.current) {
+          setCompletedModules(completed);
+          setVisitedModules(prev => {
+            const uniqueVisited = [...new Set([...prev, ...visited])];
+            return uniqueVisited.sort((a, b) => a - b);
+          });
+        }
         
         // 7. Calcular progreso global real
         const globalProgress = await progressService.calculateGlobalProgressFromDB(user.id);
-        setCourseProgress(globalProgress || 0);
+        if (!cancelledRef.current && globalProgress > 0) {
+          setCourseProgress(globalProgress);
+        }
         
+        if (cancelledRef.current) return;
         
         // 8. Cargar moduleProgress desde la DB para cada módulo
         for (let modId = 1; modId <= 5; modId++) {
+          if (cancelledRef.current) return;
           try {
             const breakdown = await progressService.getModuleBreakdown(modId, user.id);
             if (breakdown) {
-              if (breakdown.exam.passed) updateModuleActivity(modId, 'exam', true);
-              if (breakdown.challenge.score > 0) updateModuleActivity(modId, 'challenge', true);
+              if (breakdown.exam.passed) updateModuleActivity(modId, 'exam', true, breakdown.exam.score);
+              if (breakdown.challenge.score > 0) updateModuleActivity(modId, 'challenge', true, breakdown.challenge.score);
               if (breakdown.resources.earned > 0) updateModuleActivity(modId, 'resourcesCompleted', true);
               if (breakdown.community.commented) updateModuleActivity(modId, 'community', true);
             }
@@ -174,39 +187,48 @@ export const useIALabProgress = () => {
           }
         }
         
+        if (cancelledRef.current) return;
+        
         // 9. Guardar en caché local
+        const finalProgress = await progressService.calculateGlobalProgressFromDB(user.id);
         saveToCache({
-          courseProgress: globalProgress || 0,
+          courseProgress: finalProgress > 0 ? finalProgress : 0,
           completedModules: completed,
           visitedModules: visited
         });
         
         // 10. Obtener última lección vista
         const lastProgress = await progressService.getUserLastProgress(user.id);
-        if (lastProgress && lastProgress.module_id === activeMod) {
+        if (!cancelledRef.current && lastProgress && lastProgress.module_id === activeMod) {
           const lastLessonData = lastProgress.last_lesson_id || lastProgress.current_lesson;
           if (lastLessonData && lastLessonData >= 0) {
             setCurrentLessonIndex(Math.min(lastLessonData, 5));
           }
         }
       } else {
-        setCompletedModules([]);
-        setVisitedModules([1]);
-        setCourseProgress(0);
+        if (!cancelledRef.current) {
+          setCompletedModules([]);
+          setVisitedModules([1]);
+        }
+      }
+      
+      if (!cancelledRef.current) {
+        setIsLoadingProgress(false);
+        hasLoadedRef.current = true;
       }
       
     } catch (error) {
       console.error('[PROGRESS] Error cargando progreso:', error);
-      setProgressError(error.message || 'Error al cargar progreso');
-      
-      // Fallback: mantener valores del caché o valores por defecto
-      if (!loadFromCache()) {
-        setCompletedModules([]);
-        setVisitedModules([1]);
-        setCourseProgress(0);
+      if (!cancelledRef.current) {
+        setProgressError(error.message || 'Error al cargar progreso');
+        
+        // Fallback: mantener valores del caché
+        if (!loadFromCache()) {
+          setCompletedModules([]);
+          setVisitedModules([1]);
+        }
+        setIsLoadingProgress(false);
       }
-    } finally {
-      setIsLoadingProgress(false);
     }
   }, [user, activeMod, setCompletedModules, setVisitedModules, setCourseProgress, setCurrentLessonIndex, setIsLoadingProgress, updateModuleActivity, restoreFromCache, saveToCache, loadFromCache, progressService]);
   
@@ -232,6 +254,12 @@ export const useIALabProgress = () => {
       if (result.success) {
         
         if (status === PROGRESS_STATUS.COMPLETED) {
+          // Marcar todas las actividades del módulo como completadas en el store
+          updateModuleActivity(moduleId, 'exam', true, 100);
+          updateModuleActivity(moduleId, 'challenge', true, 100);
+          updateModuleActivity(moduleId, 'resourcesCompleted', true);
+          updateModuleActivity(moduleId, 'community', true);
+          
           setCompletedModules(prev => {
             if (!prev.includes(moduleId)) {
               return [...prev, moduleId].sort((a, b) => a - b);
@@ -239,9 +267,9 @@ export const useIALabProgress = () => {
             return prev;
           });
           
-          const newCompleted = [...completedModules, moduleId].filter((v, i, a) => a.indexOf(v) === i);
-          const progressPercentage = Math.min((newCompleted.length / 5) * 100, 100);
-          setCourseProgress(progressPercentage);
+          // Usar el cálculo ponderado real del store (ya recalculado por updateModuleActivity)
+          const storeGlobalProgress = useIALabStore.getState().courseProgress;
+          if (storeGlobalProgress > 0) setCourseProgress(storeGlobalProgress);
         }
         
         setVisitedModules(prev => {
@@ -261,7 +289,7 @@ export const useIALabProgress = () => {
       console.error('Excepción guardando progreso:', error);
       return { success: false, error: error.message || 'Error desconocido' };
     }
-  }, [user, completedModules, setCompletedModules, setVisitedModules, setCourseProgress, progressService]);
+  }, [user, setCompletedModules, setVisitedModules, setCourseProgress, updateModuleActivity, progressService]);
   
   // ==================== GUARDAR ÚLTIMA LECCIÓN ====================
   
@@ -345,12 +373,11 @@ export const useIALabProgress = () => {
       const total = countModuleResources(moduleId);
       const result = await progressService.saveResourceViewed(moduleId, resourceId, resourceType, total, user.id);
       if (result.success) {
-        if (result.viewedCount >= Math.ceil(total * 0.8)) {
+        if (result.viewedCount >= total) {
           updateModuleActivity(moduleId, 'resourcesCompleted', true);
         }
-        const newProgress = await progressService.calculateGlobalProgressFromDB(user.id);
-        setCourseProgress(newProgress);
       } else {
+        // fallback: marcar como completado si no se pudo verificar DB
         updateModuleActivity(moduleId, 'resourcesCompleted', true);
       }
       return result;
@@ -358,44 +385,38 @@ export const useIALabProgress = () => {
       console.error('Error tracking resource:', error);
       return { success: false, error: error.message };
     }
-  }, [user, setCourseProgress, updateModuleActivity, progressService]);
-  
+  }, [user, updateModuleActivity, progressService]);
+
   const trackExamResult = useCallback(async (moduleId, score, passed) => {
     if (!user?.id) return { success: false, error: 'Usuario no autenticado' };
     if (!progressService) return { success: false, error: 'Servicio no disponible' };
-    // Actualizar estado local siempre primero
+    // Actualizar estado local siempre primero (updateModuleActivity recalcula courseProgress en el store)
     updateModuleActivity(moduleId, 'exam', score >= 80, score);
+    if (score >= 80) useIALabStore.getState().addXp(100);
     try {
       const result = await progressService.saveExamProgress(moduleId, score, passed, user.id);
-      if (result.success) {
-        const newProgress = await progressService.calculateGlobalProgressFromDB(user.id);
-        setCourseProgress(newProgress);
-      }
       return result;
     } catch (error) {
       console.error('Error tracking exam:', error);
       return { success: true, local: true };
     }
-  }, [user, setCourseProgress, updateModuleActivity, progressService]);
-  
+  }, [user, updateModuleActivity, progressService]);
+
   const trackChallengeResult = useCallback(async (moduleId, score) => {
     if (!user?.id) return { success: false, error: 'Usuario no autenticado' };
     if (!progressService) return { success: false, error: 'Servicio no disponible' };
     // Actualizar estado local siempre primero
     updateModuleActivity(moduleId, 'challenge', score >= 80, score);
+    if (score >= 80) useIALabStore.getState().addXp(100);
     try {
       const result = await progressService.saveChallengeProgress(moduleId, score, user.id);
-      if (result.success) {
-        const newProgress = await progressService.calculateGlobalProgressFromDB(user.id);
-        setCourseProgress(newProgress);
-      }
       return result;
     } catch (error) {
       console.error('Error tracking challenge:', error);
       return { success: true, local: true };
     }
-  }, [user, setCourseProgress, updateModuleActivity, progressService]);
-  
+  }, [user, updateModuleActivity, progressService]);
+
   const trackCommunityComment = useCallback(async (moduleId) => {
     if (!user?.id) return { success: false, error: 'Usuario no autenticado' };
     if (!progressService) return { success: false, error: 'Servicio no disponible' };
@@ -403,16 +424,12 @@ export const useIALabProgress = () => {
     updateModuleActivity(moduleId, 'community', true);
     try {
       const result = await progressService.saveCommunityProgress(moduleId, user.id);
-      if (result.success) {
-        const newProgress = await progressService.calculateGlobalProgressFromDB(user.id);
-        setCourseProgress(newProgress);
-      }
       return result;
     } catch (error) {
       console.error('Error tracking community:', error);
       return { success: true, local: true };
     }
-  }, [user, setCourseProgress, updateModuleActivity, progressService]);
+  }, [user, updateModuleActivity, progressService]);
   
   const loadModuleBreakdown = useCallback(async (moduleId) => {
     if (!user?.id) return null;
@@ -442,7 +459,12 @@ export const useIALabProgress = () => {
       return;
     }
     
+    cancelledRef.current = false;
     loadUserProgress();
+    
+    return () => {
+      cancelledRef.current = true;
+    };
   }, [user?.id, isLoaded, progressService]);
   
   // Guardar en caché al salir del AI Lab (cleanup)

@@ -1,24 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Brain, Volume2, VolumeX, Award, Star } from 'lucide-react';
-import { speakTextConversational, stopSpeech } from '../../utils/speech';
-
-const VoiceReader = ({ text }) => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const speak = () => {
-    if (isPlaying) { stopSpeech(); setIsPlaying(false); return; }
-    speakTextConversational(text, 'valerio', () => setIsPlaying(false));
-    setIsPlaying(true);
-  };
-  return (
-    <button onClick={speak}
-      className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-        isPlaying ? 'bg-red-100 text-red-600 hover:bg-red-200 shadow-sm' : 'bg-[#E0F7FA] text-[#004B63] hover:bg-[#B2EBF2] hover:shadow-md'
-      }`} title="Escuchar con voz de Valerio">
-      {isPlaying ? <VolumeX size={16} /> : <Volume2 size={16} />}
-      {isPlaying ? 'Detener' : 'Escuchar con Valerio'}
-    </button>
-  );
-};
+import VoiceReader from './VoiceReader';
+import { Brain, Award, Star } from 'lucide-react';
 
 const EdutechLogo = () => (
   <div className="flex items-center gap-2 select-none">
@@ -253,7 +235,7 @@ export default function OVARiskSimulator() {
         )}
       </main>
 
-      <footer className="text-center text-slate-400 text-xs py-4 border-t border-gray-100">
+      <footer className="text-center text-slate-600 text-xs py-4 border-t border-gray-100">
         Simulador guiado por <strong className="text-[#2FA8C6]">Valerio</strong> &mdash; Coach de IA de Edutechlife.
       </footer>
 

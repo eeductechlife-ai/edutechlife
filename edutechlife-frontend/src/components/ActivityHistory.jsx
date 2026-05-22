@@ -1,18 +1,21 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import { useActivityTracker } from '../hooks/useActivityTracker';
 import { useIALabStore } from '../store/ialabStore';
 import { Icon } from '../utils/iconMapping.jsx';
 import useBodyScrollLock from '../hooks/useBodyScrollLock';
 import useFocusTrap from '../hooks/useFocusTrap';
+import { getUnifiedSessionStats } from '../hooks/useSessionTracker';
+import { supabase } from '../lib/supabase';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Legend, Cell, PieChart, Pie } from 'recharts';
 
 const ACTIVITY_CONFIG = {
-  video: { icon: 'fa-play-circle', label: 'Video', bg: 'from-[#004B63]/10 to-[#00BCD4]/10', color: '#004B63' },
-  infographic: { icon: 'fa-file-image', label: 'Infografía', bg: 'from-[#004B63]/10 to-[#00BCD4]/10', color: '#004B63' },
-  exam: { icon: 'fa-file-alt', label: 'Examen', bg: 'from-[#00BCD4]/10 to-[#00BCD4]/20', color: '#00BCD4' },
-  challenge: { icon: 'fa-trophy', label: 'Desafío', bg: 'from-emerald-500/10 to-emerald-600/10', color: '#10B981' },
-  resource: { icon: 'fa-book', label: 'Recurso', bg: 'from-amber-500/10 to-amber-600/10', color: '#F59E0B' },
-  community: { icon: 'fa-comments', label: 'Comunidad', bg: 'from-[#004B63]/10 to-[#00BCD4]/10', color: '#004B63' },
-  lesson: { icon: 'fa-check-circle', label: 'Lección', bg: 'from-emerald-500/10 to-emerald-600/10', color: '#10B981' },
+  video: { icon: 'fa-play-circle', label: 'Video', color: 'var(--color-petroleum)' },
+  infographic: { icon: 'fa-file-image', label: 'Infografía', color: 'var(--color-petroleum)' },
+  exam: { icon: 'fa-file-alt', label: 'Examen', color: 'var(--color-corporate)' },
+  challenge: { icon: 'fa-trophy', label: 'Desafío', color: '#10B981' },
+  resource: { icon: 'fa-book', label: 'Recurso', color: '#F59E0B' },
+  community: { icon: 'fa-comments', label: 'Comunidad', color: 'var(--color-petroleum)' },
+  lesson: { icon: 'fa-check-circle', label: 'Lección', color: '#10B981' },
 };
 
 const MODULE_NAMES = {
@@ -88,9 +91,9 @@ const ModuleProgressCard = ({ moduleId, title, icon, score, config, completedVid
   return (
     <div className="flex items-start gap-3 p-4 rounded-xl bg-white border border-slate-200/60 shadow-sm hover:shadow-md hover:border-slate-300/50 transition-all duration-200 active:scale-[0.99] group">
       <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5 transition-all duration-300 ${
-        isPassed ? 'bg-gradient-to-br from-emerald-500/10 to-emerald-600/10 shadow-sm shadow-emerald-500/10' : 'bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10'
+        isPassed ? 'bg-gradient-to-br from-emerald-500/10 to-emerald-600/10 shadow-sm shadow-emerald-500/10' : 'bg-gradient-to-br from-petroleum/10 to-corporate/10'
       }`}>
-        <Icon name={icon} className={`text-sm transition-colors duration-300 ${isPassed ? 'text-emerald-600' : 'text-[#004B63] group-hover:text-[#00BCD4]'}`} />
+        <Icon name={icon} className={`text-sm transition-colors duration-300 ${isPassed ? 'text-emerald-600' : 'text-petroleum group-hover:text-corporate'}`} />
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between gap-2 mb-2">
@@ -120,7 +123,7 @@ const ModuleProgressCard = ({ moduleId, title, icon, score, config, completedVid
             </span>
           )}
           {completedModules.includes(moduleId) && (examScore > 0 || challengeScore > 0) && (
-            <span className="inline-flex items-center gap-[3px] text-[9px] font-bold px-1.5 py-0.5 rounded-md border bg-[#004B63]/5 text-[#004B63] border-[#004B63]/10">
+            <span className="inline-flex items-center gap-[3px] text-[9px] font-bold px-1.5 py-0.5 rounded-md border bg-petroleum/5 text-petroleum border-petroleum/10">
               <Icon name="fa-comments" className="text-[7px]" /> Foro
             </span>
           )}
@@ -152,15 +155,23 @@ const FILTER_OPTIONS = [
   { key: 'challenge', label: 'Desafíos', icon: 'fa-trophy' },
   { key: 'video', label: 'Videos', icon: 'fa-play-circle' },
   { key: 'lesson', label: 'Lecciones', icon: 'fa-check-circle' },
+  { key: 'community', label: 'Comunidad', icon: 'fa-comments' },
 ];
 
 const ActivityHistory = ({ isOpen, onClose }) => {
-  const { activities, getStudentStats } = useActivityTracker();
-  const { lessonProgress, ALL_LESSONS, xp, streak, badges, getLevel, getXpForNextLevel, getLevelProgress, BADGE_INFO, getCompletedLessonCount, moduleProgress, getDaysSinceStart, completedModules, completedVideos, completedExams, completedInfographics, completedActivities, challengeScores, courseProgress, syncStatus } = useIALabStore();
+  const { activities } = useActivityTracker();
+  const { lessonProgress, ALL_LESSONS, xp, streak, lastActivityDate, badges, getLevel, getXpForNextLevel, getLevelProgress, getTotalPoints, calculateModuleScore, BADGE_INFO, moduleProgress, getDaysSinceStart, completedModules, completedVideos, completedExams, completedInfographics, challengeScores, courseProgress, syncStatus, userId, getWeeklyXP, getDetailedRecommendations, modules, forumPostCount, forumCommentCount } = useIALabStore();
   const [activeTab, setActiveTab] = useState('modules');
   const [filter, setFilter] = useState('all');
+  const [sessionStats, setSessionStats] = useState({ todayMinutes: 0, allMinutes: 0, sessionCount: 0, daysActive: 0 });
+  const [timeRange, setTimeRange] = useState('7d');
+  const [calendarYear, setCalendarYear] = useState(new Date().getFullYear());
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [pdfLoading, setPdfLoading] = useState(false);
   const panelRef = useRef(null);
   const focusTrapRef = useFocusTrap(isOpen);
+  const liveStartRef = useRef(null);
+  const intervalRef = useRef(null);
 
   useBodyScrollLock(isOpen);
 
@@ -171,21 +182,57 @@ const ActivityHistory = ({ isOpen, onClose }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen, onClose]);
 
+  const refreshStats = useCallback(async () => {
+    try {
+      const res = userId ? await getUnifiedSessionStats(supabase, userId) : null;
+      if (res) {
+        setSessionStats(res.stats);
+      } else {
+        const local = JSON.parse(localStorage.getItem('ialab_session_log') || '[]');
+        const today = new Date().toDateString();
+        const todaySessions = local.filter(s => new Date(s.completed_at).toDateString() === today);
+        setSessionStats({
+          todayMinutes: todaySessions.reduce((sum, s) => sum + Math.min(s.duration_seconds || 0, 21600), 0) / 60,
+          allMinutes: local.reduce((sum, s) => sum + Math.min(s.duration_seconds || 0, 21600), 0) / 60,
+          sessionCount: local.length,
+          daysActive: new Set(local.map(s => new Date(s.completed_at).toDateString())).size,
+        });
+      }
+    } catch {
+      // Silently fall back to existing stats
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    liveStartRef.current = Date.now();
+    refreshStats();
+    intervalRef.current = setInterval(refreshStats, 30000);
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      intervalRef.current = null;
+      liveStartRef.current = null;
+    };
+  }, [isOpen, refreshStats]);
+
   const activitiesData = useMemo(() => {
     const trackedActivities = activities || [];
-    const examActs = Object.entries(completedExams || {}).filter(([_, s]) => s > 0).map(([mid, score]) => ({
+    const trackedKey = new Set(trackedActivities.map(a => `${a.activity_type}_${a.module_id}`));
+    const examActs = Object.entries(completedExams || {}).filter(([_, s]) => s > 0).filter(([mid]) => !trackedKey.has(`exam_${mid}`)).map(([mid, score]) => ({
       id: `exam_${mid}`, module_id: parseInt(mid), activity_type: 'exam',
-      title: `Examen ${MODULE_NAMES[mid] || `Módulo ${mid}`}`, score, completed_at: new Date().toISOString(),
+      title: `Examen ${MODULE_NAMES[mid] || `Módulo ${mid}`}`, score,
+      completed_at: trackedActivities.find(a => a.activity_type === 'exam' && a.module_id === parseInt(mid))?.completed_at || new Date().toISOString(),
     }));
-    const challengeActs = Object.entries(challengeScores || {}).filter(([_, s]) => s > 0).map(([mid, score]) => ({
+    const challengeActs = Object.entries(challengeScores || {}).filter(([_, s]) => s > 0).filter(([mid]) => !trackedKey.has(`challenge_${mid}`)).map(([mid, score]) => ({
       id: `challenge_${mid}`, module_id: parseInt(mid), activity_type: 'challenge',
-      title: `Desafío ${MODULE_NAMES[mid] || `Módulo ${mid}`}`, score, completed_at: new Date().toISOString(),
+      title: `Desafío ${MODULE_NAMES[mid] || `Módulo ${mid}`}`, score,
+      completed_at: trackedActivities.find(a => a.activity_type === 'challenge' && a.module_id === parseInt(mid))?.completed_at || new Date().toISOString(),
     }));
-    const moduleActs = (completedModules || []).filter(m => !examActs.some(e => e.module_id === m) || !challengeActs.some(c => c.module_id === m)).map(mid => ({
+    const moduleActs = (completedModules || []).filter(m => !examActs.some(e => e.module_id === m) && !challengeActs.some(c => c.module_id === m) && !trackedKey.has(`resource_${m}`)).map(mid => ({
       id: `module_${mid}`, module_id: mid, activity_type: 'resource',
       title: `${MODULE_NAMES[mid] || `Módulo ${mid}`} Completado`,
       score: Math.round(calculateModuleScore(mid, MODULE_RESOURCES.find(r => r.id === mid) || MODULE_RESOURCES[0], completedVideos, completedInfographics, completedExams, challengeScores, completedModules) || 80),
-      completed_at: new Date().toISOString(),
+      completed_at: trackedActivities.find(a => a.module_id === mid)?.completed_at || new Date().toISOString(),
     }));
     const lessonActs = [];
     if (lessonProgress) {
@@ -202,27 +249,105 @@ const ActivityHistory = ({ isOpen, onClose }) => {
             activity_type: 'lesson',
             title: lesson.title,
             score: 100,
-            completed_at: new Date().toISOString(),
+            completed_at: trackedActivities.find(a => a.activity_type === 'lesson' && a.module_id === moduleId)?.completed_at || new Date().toISOString(),
           });
         });
       });
     }
-    const all = [...trackedActivities, ...examActs, ...challengeActs, ...moduleActs, ...lessonActs];
+    const communityActs = [];
+    const totalForum = (forumPostCount || 0) + (forumCommentCount || 0);
+    if (totalForum > 0 && !trackedKey.has('community_0')) {
+      communityActs.push({
+        id: `community_0`, module_id: 0, activity_type: 'community',
+        title: `${totalForum} aporte${totalForum > 1 ? 's' : ''} en la comunidad`,
+        score: 100,
+        completed_at: new Date().toISOString(),
+      });
+    }
+    const all = [...trackedActivities, ...examActs, ...challengeActs, ...moduleActs, ...lessonActs, ...communityActs];
     const seen = new Set();
-    return all.filter(a => { const k = `${a.activity_type}_${a.module_id}`; if (seen.has(k)) return false; seen.add(k); return true; })
+    return all.filter(a => { const k = `${a.activity_type}_${a.module_id}_${a.id}_${trackedKey.has(`${a.activity_type}_${a.module_id}`) ? 'real' : 'synth'}`; if (seen.has(k)) return false; seen.add(k); return true; })
       .sort((a, b) => new Date(b.completed_at) - new Date(a.completed_at));
-  }, [activities, completedExams, challengeScores, completedModules, completedVideos, completedInfographics, lessonProgress, ALL_LESSONS]);
+  }, [activities, completedExams, challengeScores, completedModules, completedVideos, completedInfographics, lessonProgress, ALL_LESSONS, forumPostCount, forumCommentCount]);
 
-  if (!isOpen) return null;
+  const weeklyData = useMemo(() => {
+    const days = [];
+    const now = new Date();
+    const sessions = JSON.parse(localStorage.getItem('ialab_session_log') || '[]');
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(now);
+      d.setDate(d.getDate() - i);
+      const dStr = d.toDateString();
+      const daySessions = sessions.filter(s => new Date(s.completed_at).toDateString() === dStr);
+      const mins = Math.round(daySessions.reduce((sum, s) => sum + (s.duration_seconds || 0), 0) / 60);
+      const maxMins = Math.max(...[7,14,21,28,35].map(j => {
+        const ref = new Date(now); ref.setDate(ref.getDate() - j);
+        const refStr = ref.toDateString();
+        return sessions.filter(s => new Date(s.completed_at).toDateString() === refStr).reduce((sum, s) => sum + (s.duration_seconds || 0), 0) / 60;
+      }), 1);
+      days.push({ label: d.toLocaleDateString('es-ES', { weekday: 'short' }), mins, pct: Math.min(100, (mins / Math.max(maxMins, 1)) * 100) });
+    }
+    return days;
+  }, [sessionStats]);
 
-  const filteredActivities = activitiesData.filter(a => filter === 'all' || a.activity_type === filter);
-  const groupedByDate = {};
-  filteredActivities.forEach(a => {
-    const date = new Date(a.completed_at).toDateString();
-    if (!groupedByDate[date]) groupedByDate[date] = [];
-    groupedByDate[date].push(a);
-  });
-  const sortedDates = Object.keys(groupedByDate).sort((a, b) => new Date(b) - new Date(a));
+  const monthlyData = useMemo(() => {
+    const days = [];
+    const now = new Date();
+    const sessions = JSON.parse(localStorage.getItem('ialab_session_log') || '[]');
+    const range = timeRange === '30d' ? 29 : timeRange === 'all' ? 89 : 6;
+    for (let i = range; i >= 0; i--) {
+      const d = new Date(now);
+      d.setDate(d.getDate() - i);
+      const dStr = d.toDateString();
+      const daySessions = sessions.filter(s => new Date(s.completed_at).toDateString() === dStr);
+      const mins = Math.round(daySessions.reduce((sum, s) => sum + (s.duration_seconds || 0), 0) / 60);
+      days.push({ label: d.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric' }), mins, fullDate: d });
+    }
+    return days;
+  }, [sessionStats, timeRange]);
+
+  const activityDistribution = useMemo(() => {
+    const counts = { video: 0, exam: 0, challenge: 0, lesson: 0, community: 0, resource: 0 };
+    (activities || []).forEach(a => { if (counts[a.activity_type] !== undefined) counts[a.activity_type]++; });
+    const colors = { video: '#004B63', exam: '#00BCD4', challenge: '#10B981', lesson: '#F59E0B', community: '#8B5CF6', resource: '#94A3B8' };
+    const labels = { video: 'Videos', exam: 'Exámenes', challenge: 'Desafíos', lesson: 'Lecciones', community: 'Comunidad', resource: 'Recursos' };
+    const total = Object.values(counts).reduce((s, v) => s + v, 0);
+    return Object.entries(counts).filter(([_, v]) => v > 0).map(([k, v]) => ({
+      name: labels[k], value: v, pct: total > 0 ? Math.round(v / total * 100) : 0, color: colors[k], key: k,
+    }));
+  }, [activities]);
+
+  const calendarData = useMemo(() => {
+    const sessions = JSON.parse(localStorage.getItem('ialab_session_log') || '[]');
+    const map = {};
+    sessions.forEach(s => {
+      const d = new Date(s.completed_at).toDateString();
+      map[d] = (map[d] || 0) + (s.duration_seconds || 0);
+    });
+    const weeks = [];
+    const startDate = new Date(calendarYear, 0, 1);
+    const endDate = new Date(calendarYear, 11, 31);
+    let cursor = new Date(startDate);
+    while (cursor <= endDate) {
+      const week = [];
+      for (let i = 0; i < 7; i++) {
+        const dStr = cursor.toDateString();
+        const secs = map[dStr] || 0;
+        week.push({ date: new Date(cursor), mins: Math.round(secs / 60), level: secs === 0 ? 0 : secs < 300 ? 1 : secs < 900 ? 2 : secs < 1800 ? 3 : 4 });
+        cursor.setDate(cursor.getDate() + 1);
+      }
+      weeks.push(week);
+    }
+    const today = new Date().toDateString();
+    const totalActive = Object.keys(map).filter(d => new Date(d) <= new Date()).length;
+    const currentStreak = (() => {
+      let streak = 0;
+      const d = new Date();
+      while (map[d.toDateString()]) { streak++; d.setDate(d.getDate() - 1); }
+      return streak;
+    })();
+    return { weeks, totalActive, currentStreak, totalSessions: sessions.length };
+  }, [calendarYear, sessionStats]);
 
   const completedCount = completedModules?.length || 0;
   const totalExams = Object.values(completedExams || {}).filter(s => s > 0).length;
@@ -239,26 +364,381 @@ const ActivityHistory = ({ isOpen, onClose }) => {
   const levelProgress = getLevelProgress();
   const xpForNext = getXpForNextLevel();
   const daysSinceStart = getDaysSinceStart();
+  const liveSeconds = liveStartRef.current ? Math.round((Date.now() - liveStartRef.current) / 1000) : 0;
+  const liveMinutes = Math.min(liveSeconds / 60, 360);
+  const effectiveAllMinutes = sessionStats.allMinutes + liveMinutes;
+  const effectiveTodayMinutes = sessionStats.todayMinutes + liveMinutes;
+  const daysActive = Math.max(streak || 1, sessionStats.daysActive || 1);
+  const totalStudyMinutes = effectiveAllMinutes;
+  const studyHours = Math.floor(totalStudyMinutes / 60);
+  const studyMins = Math.round(totalStudyMinutes % 60);
   const lessonsPerDay = daysSinceStart > 0 ? (totalLessonsCompleted / daysSinceStart) : 0;
-  const daysActive = streak || 1;
   const remainingLessons = totalLessonsCount - totalLessonsCompleted;
-  const estimatedDaysRemaining = lessonsPerDay > 0 ? Math.ceil(remainingLessons / lessonsPerDay) : remainingLessons;
+  const estimatedDaysRemaining = lessonsPerDay > 0 ? Math.ceil(remainingLessons / lessonsPerDay) : 0;
+  const estimatedEndDate = estimatedDaysRemaining > 0 && estimatedDaysRemaining < 999
+    ? new Date(Date.now() + estimatedDaysRemaining * 86400000).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })
+    : null;
+
+  const weeklyXP = getWeeklyXP();
+  const recommendations = getDetailedRecommendations();
+
+  const lastActivityTime = lastActivityDate ? (() => {
+    const d = new Date(lastActivityDate);
+    const now = new Date();
+    const isToday = d.toDateString() === now.toDateString();
+    if (isToday) return `Hoy a las ${d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}`;
+    const yesterday = new Date(now - 86400000);
+    if (d.toDateString() === yesterday.toDateString()) return `Ayer a las ${d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}`;
+    return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+  })() : null;
+
+  const getDominanceLabel = (modId) => {
+    try {
+      return useIALabStore.getState().getModuleDominanceLevel(modId);
+    } catch { return null; }
+  };
+
   const moduleScores = [1, 2, 3, 4, 5].map(id => ({
     id,
     title: MODULE_NAMES[id],
-    score: moduleProgress?.[id]?.currentScore || 0,
+    score: moduleProgress?.[id]?.currentScore ?? Math.round(calculateModuleScore(id, MODULE_RESOURCES.find(r => r.id === id) || MODULE_RESOURCES[0], completedVideos, completedInfographics, completedExams, challengeScores, completedModules)),
     icon: MODULE_ICONS[id],
+    examScore: completedExams?.[id] || 0,
+    challengeScore: challengeScores?.[id] || 0,
+    dominance: getDominanceLabel(id),
   }));
+  const weakestModule = [...moduleScores].sort((a, b) => a.score - b.score)[0];
   const totalItems = totalVideosTarget + totalInfographicsTarget + 5 + 5 + 5 + totalLessonsCount;
+  const totalPoints = getTotalPoints();
+  const getStreakMessage = () => {
+    if (streak >= 30) return 'Legendario';
+    if (streak >= 7) return 'Imparable';
+    if (streak >= 3) return 'Buena racha';
+    return 'Sigue practicando';
+  };
+
+  const nextBadge = useMemo(() => {
+    const earned = new Set(badges || []);
+    const allBadges = [
+      { id: 'first_lesson', check: () => totalLessonsCompleted >= 1, current: totalLessonsCompleted, target: 1 },
+      { id: 'five_lessons', check: () => totalLessonsCompleted >= 5, current: totalLessonsCompleted, target: 5 },
+      { id: 'all_lessons', check: () => totalLessonsCompleted >= 15, current: totalLessonsCompleted, target: 15 },
+      { id: 'streak_3', check: () => streak >= 3, current: streak, target: 3 },
+      { id: 'streak_7', check: () => streak >= 7, current: streak, target: 7 },
+      { id: 'first_module', check: () => completedCount >= 1, current: completedCount, target: 1 },
+      { id: 'three_modules', check: () => completedCount >= 3, current: completedCount, target: 3 },
+      { id: 'all_modules', check: () => completedCount >= 5, current: completedCount, target: 5 },
+    ];
+    const next = allBadges.find(b => !earned.has(b.id) && b.current > 0);
+    if (!next) return null;
+    const info = BADGE_INFO?.[next.id];
+    if (!info) return null;
+    return { ...info, badgeId: next.id, current: Math.min(next.current, next.target), target: next.target };
+  }, [badges, totalLessonsCompleted, streak, completedCount]);
+
+  if (!isOpen) return null;
+
+  const filteredActivities = activitiesData.filter(a => filter === 'all' || a.activity_type === filter);
+  const groupedByDate = {};
+  filteredActivities.forEach(a => {
+    const date = new Date(a.completed_at).toDateString();
+    if (!groupedByDate[date]) groupedByDate[date] = [];
+    groupedByDate[date].push(a);
+  });
+  const sortedDates = Object.keys(groupedByDate).sort((a, b) => new Date(b) - new Date(a));
+
+  const exportProgressPDF = async () => {
+    setPdfLoading(true);
+    try {
+      const jsPDF = (await import('jspdf')).default;
+      const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+      const PW = 210, PH = 297, ML = 14, MR = 14, MT = 22, MB = 14;
+      const CW = PW - ML - MR;
+      const CP = [0, 75, 99], CC = [0, 188, 212], CG = [100, 116, 139], CD = [30, 41, 59];
+      let cy = MT;
+      const pageCount = () => doc.internal.getNumberOfPages();
+      let currentPage = 1;
+
+      const addFooter = () => {
+        const pn = pageCount();
+        doc.setFontSize(7);
+        doc.setTextColor(...CG);
+        doc.text('Edutechlife · Mi Historial de Aprendizaje', ML, PH - MB);
+        doc.text(`Página ${pn}`, PW - MR, PH - MB, { align: 'right' });
+        doc.setDrawColor(...CP);
+        doc.setLineWidth(0.2);
+        doc.line(ML, PH - MB - 3, PW - MR, PH - MB - 3);
+      };
+
+      const drawHeader = () => {
+        currentPage = pageCount();
+        doc.setFillColor(...CP);
+        doc.rect(0, 0, PW, 17, 'F');
+        doc.setFillColor(...CC);
+        doc.rect(0, 17, PW, 0.4, 'F');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(10);
+        doc.setTextColor(255, 255, 255);
+        doc.text('EDUTECHLIFE', ML, 11);
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(6.5);
+        doc.text(new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }), PW - MR, 11, { align: 'right' });
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(7);
+        doc.setTextColor(220, 250, 255);
+        doc.text('Mi Historial de Aprendizaje', ML, 15.5);
+        cy = 22;
+      };
+
+      const checkPage = (mm) => {
+        if (cy + mm > PH - MB - 12) {
+          addFooter();
+          doc.addPage();
+          drawHeader();
+        }
+      };
+
+      const sectionTitle = (text) => {
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(11);
+        doc.setTextColor(...CP);
+        doc.text(text, ML, cy);
+        doc.setFillColor(...CC);
+        doc.rect(ML, cy + 1, 28, 0.3, 'F');
+        cy += 6.5;
+      };
+
+      const tableRow = (cols, y, header) => {
+        if (header) {
+          doc.setFillColor(...CP);
+          doc.rect(ML, y - 3.5, CW, 5, 'F');
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(6.5);
+          doc.setTextColor(255, 255, 255);
+        } else {
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(6.5);
+          doc.setTextColor(...CD);
+        }
+        let x = ML + 1.5;
+        cols.forEach(([text, w]) => {
+          doc.text(String(text).slice(0, Math.floor(w / 1.6)), x, y, { align: 'left' });
+          x += w;
+        });
+        if (header) doc.setDrawColor(...CC);
+        else doc.setDrawColor(241, 245, 249);
+        doc.setLineWidth(0.15);
+        doc.line(ML, y + 1.5, PW - MR, y + 1.5);
+        return y + 5;
+      };
+
+      const progressBar = (pct, y, color) => {
+        doc.setFillColor(226, 232, 240);
+        doc.roundedRect(ML, y, CW, 2, 0.5, 0.5, 'F');
+        doc.setFillColor(...color);
+        const w = Math.max(2, (CW * Math.min(pct, 100)) / 100);
+        doc.roundedRect(ML, y, w, 2, 0.5, 0.5, 'F');
+      };
+
+      // ===== PAGE 1 =====
+      drawHeader();
+
+      // -- Resumen General --
+      sectionTitle('Resumen General');
+      checkPage(25);
+
+      const cards = [
+        { label: 'PROGRESO', val: `${Math.round(courseProgress)}%` },
+        { label: 'NIVEL', val: String(level) },
+        { label: 'XP TOTAL', val: String(xp) },
+        { label: 'RACHA', val: `${streak}d` },
+        { label: 'LECCIONES', val: `${totalLessonsCompleted}/${totalLessonsCount}` },
+      ];
+      const cw = (CW - 8) / 5;
+      cards.forEach((c, i) => {
+        const cx = ML + i * (cw + 2);
+        doc.setFillColor(248, 250, 252);
+        doc.roundedRect(cx, cy - 1, cw, 11, 0.8, 0.8, 'F');
+        doc.setDrawColor(...CC);
+        doc.setLineWidth(0.15);
+        doc.roundedRect(cx, cy - 1, cw, 11, 0.8, 0.8, 'S');
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(5.5);
+        doc.setTextColor(...CG);
+        doc.text(c.label, cx + 1.5, cy + 2.5);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(9);
+        doc.setTextColor(...CP);
+        doc.text(c.val, cx + 1.5, cy + 8.5);
+      });
+      cy += 14;
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7);
+      doc.setTextColor(...CD);
+      doc.text(`Sesiones: ${sessionStats.sessionCount} · Días activo: ${daysActive} · Tiempo estudio: ${studyHours}h ${studyMins}m · Inicio: hace ${daysSinceStart || 0} días${estimatedEndDate ? ` · Final estimado: ${estimatedEndDate}` : ''}`, ML, cy);
+      cy += 8;
+
+      // -- Progreso por Módulo --
+      sectionTitle('Progreso por Módulo');
+      const mCols = [['Módulo', 42], ['Puntaje', 14], ['Examen', 14], ['Desafío', 14], ['Estado', 22], ['', CW - 42 - 14 - 14 - 14 - 22]];
+      cy = tableRow(mCols, cy, true);
+
+      moduleScores.forEach((mod, i) => {
+        checkPage(8);
+        const passed = mod.score >= 80;
+        const state = completedModules.includes(mod.id) ? '✓ Completado' : '○ En curso';
+        const stripe = i % 2 === 1;
+        if (stripe) {
+          doc.setFillColor(248, 250, 252);
+          doc.rect(ML, cy - 3.5, CW, 5.5, 'F');
+        }
+        cy = tableRow([
+          [mod.title, 42], [`${mod.score}%`, 14], [`${mod.examScore}%`, 14],
+          [`${mod.challengeScore}%`, 14], [state, 22],
+        ], cy, false);
+        const barC = passed ? [16, 185, 129] : mod.score >= 60 ? [245, 158, 11] : [148, 163, 184];
+        progressBar(mod.score, cy - 0.5, barC);
+        cy += 1.5;
+      });
+      cy += 4;
+
+      // -- Lecciones por Módulo --
+      checkPage(20);
+      sectionTitle('Progreso de Lecciones');
+      const lCols = [['Módulo', 42], ['Completadas', 22], ['Total', 14], ['Avance', CW - 42 - 22 - 14]];
+      cy = tableRow(lCols, cy, true);
+      MODULE_RESOURCES.forEach((cfg, i) => {
+        const modLess = lessonProgress?.[cfg.id] || {};
+        const done = Object.values(modLess).filter(s => s === 'completed').length;
+        const total = ALL_LESSONS?.[cfg.id]?.length || 0;
+        const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+        const stripe = i % 2 === 1;
+        if (stripe) {
+          doc.setFillColor(248, 250, 252);
+          doc.rect(ML, cy - 3.5, CW, 5.5, 'F');
+        }
+        cy = tableRow([[cfg.title, 42], [String(done), 22], [String(total), 14]], cy, false);
+        const lBarC = pct >= 80 ? [16, 185, 129] : pct >= 50 ? [245, 158, 11] : [148, 163, 184];
+        progressBar(pct, cy - 0.5, lBarC);
+        cy += 1.5;
+      });
+      cy += 4;
+      addFooter();
+
+      // ===== PAGE 2 =====
+      doc.addPage();
+      drawHeader();
+
+      // -- Actividades Recientes --
+      sectionTitle('Actividades Recientes');
+      const aCols = [['Actividad', 55], ['Módulo', 50], ['Puntaje', 13], ['Fecha', CW - 55 - 50 - 13]];
+      cy = tableRow(aCols, cy, true);
+
+      const topActs = activitiesData.slice(0, 30);
+      if (topActs.length === 0) {
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8);
+        doc.setTextColor(...CG);
+        doc.text('No hay actividades registradas aún.', ML, cy + 4);
+        cy += 8;
+      } else {
+        topActs.forEach((act, i) => {
+          checkPage(5);
+          const mn = MODULE_NAMES[act.module_id] || `Módulo ${act.module_id}`;
+          const ds = act.completed_at ? new Date(act.completed_at).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '';
+          const stripe = i % 2 === 1;
+          if (stripe) {
+            doc.setFillColor(248, 250, 252);
+            doc.rect(ML, cy - 3.5, CW, 5, 'F');
+          }
+          cy = tableRow([
+            [act.title.slice(0, 42), 55],
+            [mn.slice(0, 35), 50],
+            [act.score ? `${act.score}%` : '✓', 13],
+            [ds, CW - 55 - 50 - 13],
+          ], cy, false);
+        });
+      }
+      cy += 6;
+
+      // -- Estadísticas --
+      checkPage(35);
+      sectionTitle('Resumen de Recursos');
+      const sCols = [['Recurso', 40], ['Valor', 30], ['Avance', CW - 40 - 30]];
+      cy = tableRow(sCols, cy, true);
+      const statsR = [
+        ['Videos', `${totalVideos}/${totalVideosTarget}`, totalVideosTarget > 0 ? totalVideos / totalVideosTarget : 0],
+        ['Infografías', `${totalInfographics}/${totalInfographicsTarget}`, totalInfographicsTarget > 0 ? totalInfographics / totalInfographicsTarget : 0],
+        ['Exámenes', `${totalExams}/5`, totalExams / 5],
+        ['Desafíos', `${totalChallenges}/5`, totalChallenges / 5],
+        ['Foro (posts)', String(forumPostCount || 0), 0],
+        ['Foro (comentarios)', String(forumCommentCount || 0), 0],
+        ['Badges', String(badges?.length || 0), 0],
+      ];
+      statsR.forEach(([label, val, pct], i) => {
+        const stripe = i % 2 === 1;
+        if (stripe) {
+          doc.setFillColor(248, 250, 252);
+          doc.rect(ML, cy - 3.5, CW, 5, 'F');
+        }
+        cy = tableRow([[label, 40], [String(val), 30]], cy, false);
+        if (pct > 0) {
+          const sbC = pct >= 0.8 ? [16, 185, 129] : pct >= 0.5 ? [245, 158, 11] : [148, 163, 184];
+          progressBar(pct * 100, cy - 0.5, sbC);
+        }
+        cy += 1.5;
+      });
+      cy += 4;
+
+      // -- Recomendación --
+      if (weakestModule && weakestModule.score < 80) {
+        checkPage(12);
+        sectionTitle('Recomendación');
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7);
+        doc.setTextColor(...CD);
+        doc.text(`Tu módulo con menor rendimiento es "${weakestModule.title}" (${weakestModule.score}%).`, ML, cy);
+        cy += 4;
+        doc.text('Enfócate en repasar los videos, infografías y completar el examen y desafío pendientes para mejorar tu promedio general.', ML, cy, { maxWidth: CW });
+        cy += 6;
+      }
+
+      // -- XP & Nivel --
+      checkPage(12);
+      sectionTitle('XP y Nivel');
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7);
+      doc.setTextColor(...CD);
+      doc.text(`Nivel actual: ${level} · XP total: ${xp}`, ML, cy);
+      cy += 4;
+      const xpPct = getLevelProgress ? getLevelProgress() : 50;
+      const nextLvl = getXpForNextLevel ? getXpForNextLevel() : 0;
+      doc.text(`Progreso al siguiente nivel: ${Math.round(xpPct)}% (${xp}/${nextLvl > 0 ? nextLvl : '—'} XP)`, ML, cy);
+      cy += 4;
+      progressBar(xpPct, cy, CP);
+      cy += 6;
+
+      addFooter();
+      doc.save(`historial_ialab_${new Date().toISOString().slice(0, 10)}.pdf`);
+    } catch (err) {
+      console.error('Error generando PDF:', err);
+    } finally {
+      setPdfLoading(false);
+    }
+  };
 
   return (
     <div
-      className="fixed inset-0 z-[1050] flex items-start justify-center pt-16 sm:pt-20 px-2 sm:px-4 bg-black/50"
+      className={`fixed inset-0 z-[1050] flex items-start justify-center bg-black/50 transition-all duration-300 ${isExpanded ? 'p-0' : 'pt-16 sm:pt-20 px-2 sm:px-4'}`}
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <div ref={(el) => { panelRef.current = el; focusTrapRef.current = el; }} className="bg-white rounded-2xl shadow-[0_8px_32px_rgba(0,75,99,0.12)] w-full max-w-3xl max-h-[85vh] sm:max-h-[80vh] overflow-hidden">
+      <div ref={(el) => { panelRef.current = el; focusTrapRef.current = el; }} className={`bg-white shadow-[0_8px_32px_rgba(0,75,99,0.12)] w-full overflow-hidden transition-all duration-300 ${
+        isExpanded ? 'max-w-none max-h-screen rounded-none' : 'rounded-2xl max-w-3xl max-h-[85vh] sm:max-h-[80vh]'
+      }`}>
         {/* Header */}
-        <div className="relative bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#00BCD4] px-4 sm:px-6 py-4 sm:py-5 flex items-center justify-between overflow-hidden">
+        <div className="relative bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate px-4 sm:px-6 py-4 sm:py-5 flex items-center justify-between overflow-hidden">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNCI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIvPjwvZz48L2c+PC9zdmc+')] opacity-50" />
           <div className="flex items-center gap-3 relative z-10">
             <div className="w-10 h-10 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center shadow-sm ring-1 ring-white/10">
@@ -269,22 +749,31 @@ const ActivityHistory = ({ isOpen, onClose }) => {
               <p className="text-white/60 text-xs">Progreso sincronizado · {totalLessonsCompleted}/{totalLessonsCount} lecciones · {xp} XP</p>
             </div>
           </div>
-          <button onClick={onClose} className="relative z-10 min-w-[44px] min-h-[44px] w-11 h-11 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center transition-all duration-200 active:scale-90 ring-1 ring-white/10">
-            <Icon name="fa-times" className="text-white text-sm" />
-          </button>
+          <div className="flex items-center gap-2 relative z-10">
+            <button onClick={exportProgressPDF} disabled={pdfLoading} className="min-w-[36px] min-h-[36px] w-9 h-9 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center transition-all duration-200 active:scale-90 ring-1 ring-white/10 disabled:opacity-50" aria-label="Exportar PDF">
+              <Icon name={pdfLoading ? 'fa-spinner' : 'fa-file-pdf'} className={`text-white text-xs ${pdfLoading ? 'animate-spin' : ''}`} />
+            </button>
+            <button onClick={() => setIsExpanded(v => !v)} className="min-w-[44px] min-h-[44px] w-11 h-11 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center transition-all duration-200 active:scale-90 ring-1 ring-white/10" aria-label={isExpanded ? 'Contraer pantalla' : 'Expandir pantalla'}>
+              <Icon name={isExpanded ? 'fa-compress' : 'fa-expand'} className="text-white text-sm" />
+            </button>
+            <button onClick={onClose} className="min-w-[44px] min-h-[44px] w-11 h-11 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center transition-all duration-200 active:scale-90 ring-1 ring-white/10">
+              <Icon name="fa-times" className="text-white text-sm" />
+            </button>
+          </div>
         </div>
 
         {/* Stats cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 px-4 sm:px-6 py-4 sm:py-5 bg-gradient-to-b from-[#004B63]/[0.02] to-white border-b border-slate-200/40">
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-3 px-4 sm:px-6 py-4 sm:py-5 bg-gradient-to-b from-petroleum/[0.02] to-white border-b border-slate-200/40">
           {[
-            { icon: 'fa-chart-line', value: `${Math.round(courseProgress || 0)}%`, label: 'Progreso', gradient: 'from-[#004B63]/10 to-[#00BCD4]/10', color: '#004B63' },
-            { icon: 'fa-trophy', value: `Nv.${level}`, label: `${xp} XP`, gradient: 'from-[#FFD166]/10 to-[#F59E0B]/10', color: '#F59E0B' },
-            { icon: 'fa-check-circle', value: `${totalLessonsCompleted}/${totalLessonsCount}`, label: 'Lecciones', gradient: 'from-emerald-500/10 to-emerald-600/10', color: '#10B981' },
-            { icon: 'fa-fire', value: `${streak}`, label: streak >= 3 ? 'Racha activa' : 'Días seguidos', gradient: 'from-orange-500/10 to-red-500/10', color: streak >= 3 ? '#EF4444' : '#94A3B8' },
+            { icon: 'fa-chart-line', value: `${Math.round(courseProgress || 0)}%`, label: 'Progreso', color: 'text-petroleum' },
+            { icon: 'fa-trophy', value: `Nv.${level}`, label: `${xp} XP`, color: 'text-warning' },
+            { icon: 'fa-check-circle', value: `${totalLessonsCompleted}/${totalLessonsCount}`, label: 'Lecciones', color: 'text-success' },
+            { icon: 'fa-fire', value: `${streak}d`, label: getStreakMessage(), color: streak >= 3 ? 'text-orange-500' : 'text-slate-400' },
+            { icon: 'fa-clock', value: lastActivityTime || '—', label: 'Última conexión', color: 'text-petroleum', small: true },
           ].map((item, i) => (
-            <div key={i} className="group bg-white rounded-xl border border-slate-200/60 shadow-sm p-2 sm:p-3 text-center hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-              <Icon name={item.icon} className="text-lg sm:text-xl mx-auto mb-1 group-hover:scale-110 transition-transform duration-200" style={{ color: item.color }} />
-              <p className="text-base sm:text-lg font-bold font-montserrat tracking-tight" style={{ color: item.color }}>{item.value}</p>
+            <div key={i} className={`group bg-white rounded-xl border border-slate-200/60 shadow-sm p-2 sm:p-3 text-center hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 ${item.small ? 'col-span-2 sm:col-span-1' : ''}`}>
+              <Icon name={item.icon} className={`text-lg sm:text-xl mx-auto mb-1 group-hover:scale-110 transition-transform duration-200 ${item.color}`} />
+              <p className={`text-base sm:text-lg font-bold font-montserrat tracking-tight ${item.color} ${item.small ? 'text-xs sm:text-sm truncate' : ''}`}>{item.value}</p>
               <p className="text-[9px] sm:text-[10px] font-semibold text-slate-400 uppercase tracking-wider">{item.label}</p>
             </div>
           ))}
@@ -296,23 +785,19 @@ const ActivityHistory = ({ isOpen, onClose }) => {
             {TABS.map(tab => (
               <button key={tab.key} onClick={() => setActiveTab(tab.key)}
                 className={`px-3 sm:px-4 min-h-[44px] text-xs font-bold rounded-t-lg transition-all duration-200 flex items-center gap-2 active:scale-95 flex-shrink-0 ${
-                  activeTab === tab.key ? 'bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white shadow-sm' : 'text-slate-500 hover:text-[#004B63] hover:bg-slate-50 border border-transparent'
+                  activeTab === tab.key ? 'bg-gradient-to-r from-petroleum to-corporate text-white shadow-sm' : 'text-slate-500 hover:text-petroleum hover:bg-slate-50 border border-transparent'
                 }`}>
-                <Icon name={tab.icon} className={`text-[10px] ${activeTab === tab.key ? 'text-white' : 'text-[#004B63]'}`} />{tab.label}
+                <Icon name={tab.icon} className={`text-[10px] ${activeTab === tab.key ? 'text-white' : 'text-petroleum'}`} />{tab.label}
               </button>
             ))}
           </div>
         </div>
 
         {/* Content */}
-        <div className="max-h-[55vh] md:max-h-[45vh] overflow-y-auto modal-scrollable">
+        <div className={`overflow-y-auto modal-scrollable ${isExpanded ? 'max-h-[calc(100vh-280px)]' : 'max-h-[55vh] md:max-h-[45vh]'}`}>
           {activeTab === 'modules' && (
             <div className="p-3 sm:p-5 space-y-2.5">
-              <div className="flex items-center gap-2 mb-1 px-0.5">
-                <div className="w-1 h-5 rounded-full bg-gradient-to-b from-[#004B63] to-[#00BCD4]" />
-                <p className="text-[10px] font-bold text-[#004B63] uppercase tracking-[0.15em]">Progreso por Módulo</p>
-                <div className="flex-1 h-px bg-gradient-to-r from-[#004B63]/20 to-transparent" />
-              </div>
+              <SectionHeader title="Progreso por Módulo" />
               {MODULE_RESOURCES.map(cfg => (
                 <ModuleProgressCard key={cfg.id} moduleId={cfg.id} title={cfg.title} icon={cfg.icon}
                   score={calculateModuleScore(cfg.id, cfg, completedVideos, completedInfographics, completedExams, challengeScores, completedModules)}
@@ -326,11 +811,11 @@ const ActivityHistory = ({ isOpen, onClose }) => {
             <div>
               <div className="px-4 sm:px-6 py-3 border-b border-slate-200/40 bg-white/80 backdrop-blur-sm sticky top-0 z-10">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-[10px] font-bold text-[#004B63] uppercase tracking-wider mr-0.5">Filtrar:</span>
+                  <span className="text-[10px] font-bold text-petroleum uppercase tracking-wider mr-0.5">Filtrar:</span>
                   {FILTER_OPTIONS.map(({ key, label, icon }) => (
                     <button key={key} onClick={() => setFilter(key)}
                       className={`px-3 min-h-[44px] text-[10px] font-bold rounded-lg transition-all duration-200 flex items-center gap-1.5 active:scale-95 ${
-                        filter === key ? 'bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white shadow-sm' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
+                        filter === key ? 'bg-gradient-to-r from-petroleum to-corporate text-white shadow-sm' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
                       }`}><Icon name={icon} className="text-[9px]" />{label}</button>
                   ))}
                 </div>
@@ -346,11 +831,11 @@ const ActivityHistory = ({ isOpen, onClose }) => {
               ) : (
                 <div className="divide-y divide-slate-100">
                   {sortedDates.map(date => (
-                    <div key={date} className="px-4 sm:px-6 py-3 sm:py-4 hover:bg-[#004B63]/[0.02] transition-colors">
+                    <div key={date} className="px-4 sm:px-6 py-3 sm:py-4 hover:bg-petroleum/[0.02] transition-colors">
                       <div className="flex items-center gap-2.5 mb-3">
-                        <div className="w-1 h-5 rounded-full bg-gradient-to-b from-[#004B63] to-[#00BCD4]" />
-                        <p className="text-[11px] font-bold text-[#004B63] uppercase tracking-wider">{formatDate(date)}</p>
-                        <div className="flex-1 h-px bg-gradient-to-r from-[#004B63]/10 to-transparent" />
+                        <SectionLine />
+                        <p className="text-[11px] font-bold text-petroleum uppercase tracking-wider">{formatDate(date)}</p>
+                        <div className="flex-1 h-px bg-gradient-to-r from-petroleum/10 to-transparent" />
                       </div>
                       <div className="space-y-2">
                         {groupedByDate[date].map(activity => {
@@ -358,7 +843,8 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                           const moduleName = MODULE_NAMES[activity.module_id] || `Módulo ${activity.module_id}`;
                           return (
                             <div key={activity.id} className="flex items-center gap-3 p-3.5 rounded-xl bg-white border border-slate-200/40 shadow-sm hover:shadow-md hover:border-slate-300/50 hover:-translate-y-0.5 transition-all duration-200 group">
-                              <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${config.bg} flex items-center justify-center flex-shrink-0 shadow-sm`}>
+                              <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm`}
+                                style={{ background: `linear-gradient(135deg, ${config.color}15, ${config.color}08)` }}>
                                 <Icon name={config.icon} className="text-sm" style={{ color: config.color }} />
                               </div>
                               <div className="flex-1 min-w-0">
@@ -371,7 +857,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                               </div>
                               {activity.score ? (
                                 <div className={`px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all duration-200 ${
-                                  activity.score >= 80 ? 'bg-emerald-50 text-emerald-600 border border-emerald-200 shadow-sm shadow-emerald-500/5' : 'bg-[#004B63]/5 text-[#004B63] border border-[#004B63]/10'
+                                  activity.score >= 80 ? 'bg-emerald-50 text-emerald-600 border border-emerald-200 shadow-sm shadow-emerald-500/5' : 'bg-petroleum/5 text-petroleum border border-petroleum/10'
                                 }`}>{activity.score}%</div>
                               ) : (
                                 <div className="px-3 py-1.5 rounded-lg text-[10px] font-bold bg-slate-50 text-slate-400 border border-slate-100">{config.label}</div>
@@ -389,101 +875,289 @@ const ActivityHistory = ({ isOpen, onClose }) => {
 
           {activeTab === 'stats' && (
             <div className="p-3 sm:p-5">
-              <div className="flex items-center gap-2 mb-4 px-0.5">
-                <div className="w-1 h-5 rounded-full bg-gradient-to-b from-[#004B63] to-[#00BCD4]" />
-                <p className="text-[10px] font-bold text-[#004B63] uppercase tracking-[0.15em]">Resumen de Recursos</p>
-                <div className="flex-1 h-px bg-gradient-to-r from-[#004B63]/20 to-transparent" />
-              </div>
+              <SectionHeader title="Resumen de Recursos" />
               <div className="grid grid-cols-2 gap-3">
                 {[
-                  { icon: 'fa-play-circle', label: 'Videos', value: `${totalVideos}/${totalVideosTarget}`, sub: 'completados', gradient: 'from-[#004B63]/10 to-[#00BCD4]/10', color: '#004B63', pct: totalVideosTarget > 0 ? Math.round(totalVideos / totalVideosTarget * 100) : 0 },
-                  { icon: 'fa-file-image', label: 'Infografías', value: `${totalInfographics}/${totalInfographicsTarget}`, sub: 'completadas', gradient: 'from-[#00BCD4]/10 to-[#00BCD4]/20', color: '#00BCD4', pct: totalInfographicsTarget > 0 ? Math.round(totalInfographics / totalInfographicsTarget * 100) : 0 },
-                  { icon: 'fa-file-alt', label: 'Exámenes', value: `${totalExams}/5`, sub: 'aprobados', gradient: 'from-[#00BCD4]/10 to-[#00BCD4]/20', color: '#00BCD4', pct: Math.round(totalExams / 5 * 100) },
-                  { icon: 'fa-trophy', label: 'Desafíos', value: `${totalChallenges}/5`, sub: 'completados', gradient: 'from-amber-500/10 to-amber-600/10', color: '#F59E0B', pct: Math.round(totalChallenges / 5 * 100) },
+                  { icon: 'fa-play-circle', label: 'Videos', value: `${totalVideos}/${totalVideosTarget}`, sub: 'completados', color: 'text-petroleum', pct: totalVideosTarget > 0 ? Math.round(totalVideos / totalVideosTarget * 100) : 0 },
+                  { icon: 'fa-file-image', label: 'Infografías', value: `${totalInfographics}/${totalInfographicsTarget}`, sub: 'completadas', color: 'text-corporate', pct: totalInfographicsTarget > 0 ? Math.round(totalInfographics / totalInfographicsTarget * 100) : 0 },
+                  { icon: 'fa-file-alt', label: 'Exámenes', value: `${totalExams}/5`, sub: 'aprobados', color: 'text-corporate', pct: Math.round(totalExams / 5 * 100) },
+                  { icon: 'fa-trophy', label: 'Desafíos', value: `${totalChallenges}/5`, sub: 'completados', color: 'text-warning', pct: Math.round(totalChallenges / 5 * 100) },
+                  { icon: 'fa-comments', label: 'Comunidad', value: `${forumPostCount || 0} posts · ${forumCommentCount || 0} coment.`, sub: 'participación', color: 'text-purple-500', pct: Math.min(100, ((forumPostCount || 0) + (forumCommentCount || 0)) * 10) },
                 ].map((item, i) => (
                   <div key={i} className="group bg-white rounded-xl border border-slate-200/40 shadow-sm p-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
                     <div className="flex items-center justify-between mb-3">
-                      <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${item.gradient} flex items-center justify-center group-hover:scale-110 transition-transform duration-200`}>
-                        <Icon name={item.icon} className="text-sm" style={{ color: item.color }} />
+                      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                        <Icon name={item.icon} className={`text-sm ${item.color}`} />
                       </div>
                       <span className="text-xs font-bold text-slate-400">{item.pct}%</span>
                     </div>
-                    <p className="text-2xl font-bold font-montserrat tracking-tight" style={{ color: item.color }}>{item.value}</p>
+                    <p className={`text-2xl font-bold font-montserrat tracking-tight ${item.color}`}>{item.value}</p>
                     <div className="mt-2 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                      <div className="h-full rounded-full transition-all duration-700 ease-out" style={{ width: `${item.pct}%`, background: item.color }} />
+                      <div className="h-full rounded-full bg-gradient-to-r from-petroleum to-corporate transition-all duration-700 ease-out" style={{ width: `${item.pct}%` }} />
                     </div>
                     <p className="text-[10px] font-medium text-slate-400 mt-1.5">{item.sub}</p>
                   </div>
                 ))}
               </div>
 
+              {/* Tiempo Real de Estudio */}
+              <div className="mb-5 bg-white rounded-xl border border-slate-200/40 shadow-sm p-5 hover:shadow-md transition-all duration-200">
+                <SectionHeader title="Tiempo Real de Estudio" />
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-4">
+                  <div className="text-center p-3 rounded-xl bg-gradient-to-b from-petroleum/5 to-transparent border border-petroleum/10">
+                    <div className="text-xl font-bold text-petroleum">{sessionStats.sessionCount > 0 || liveSeconds >= 30 ? `${studyHours}h ${studyMins}m` : '—'}</div>
+                    <p className="text-[9px] text-slate-400 mt-0.5 uppercase tracking-wider">Tiempo total</p>
+                  </div>
+                  <div className="text-center p-3 rounded-xl bg-gradient-to-b from-corporate/5 to-transparent border border-corporate/10">
+                    <div className="text-xl font-bold text-corporate">{sessionStats.sessionCount}</div>
+                    <p className="text-[9px] text-slate-400 mt-0.5 uppercase tracking-wider">Sesiones</p>
+                  </div>
+                  <div className="text-center p-3 rounded-xl bg-gradient-to-b from-emerald-500/5 to-transparent border border-emerald-500/10">
+                    <div className="text-xl font-bold text-emerald-600">{daysActive}</div>
+                    <p className="text-[9px] text-slate-400 mt-0.5 uppercase tracking-wider">Días activo</p>
+                  </div>
+                  <div className="text-center p-3 rounded-xl bg-gradient-to-b from-amber-500/5 to-transparent border border-amber-500/10">
+                    <div className="text-xl font-bold text-amber-600">{sessionStats.sessionCount > 0 || liveSeconds >= 30 ? `${Math.round(effectiveTodayMinutes)} min` : '—'}</div>
+                    <p className="text-[9px] text-slate-400 mt-0.5 uppercase tracking-wider">Hoy</p>
+                  </div>
+                </div>
+                <div className="border-t border-slate-100 pt-4 mt-1">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex gap-1">
+                      {['7d', '30d', 'all'].map(r => (
+                        <button key={r} onClick={() => setTimeRange(r)}
+                          className={`px-3 py-1 text-[10px] font-bold rounded-lg transition-all duration-200 ${
+                            timeRange === r ? 'bg-petroleum text-white shadow-sm' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
+                          }`}>
+                          {r === '7d' ? '7 días' : r === '30d' ? '30 días' : 'Todo'}
+                        </button>
+                      ))}
+                    </div>
+                    <span className="text-[9px] text-slate-400">{studyHours}h {studyMins}m total</span>
+                  </div>
+                  <div className="h-32 sm:h-40">
+                    {monthlyData.length > 0 && monthlyData.some(d => d.mins > 0) ? (
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={monthlyData} margin={{ top: 4, right: 4, bottom: 0, left: -16 }}>
+                          <XAxis dataKey="label" tick={{ fontSize: 8, fill: '#94A3B8' }} interval="preserveStartEnd" />
+                          <YAxis hide domain={[0, 'dataMax']} />
+                          <Tooltip
+                            contentStyle={{ fontSize: 11, borderRadius: 8, border: '1px solid #E2E8F0', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}
+                            formatter={(value) => [`${value} min`, 'Tiempo']}
+                            labelFormatter={(label) => label}
+                          />
+                          <Bar dataKey="mins" radius={[3, 3, 0, 0]} maxBarSize={timeRange === '7d' ? 32 : 12}>
+                            {monthlyData.map((entry, idx) => (
+                              <Cell key={idx} fill={entry.mins > 0 ? '#004B63' : '#F1F5F9'} />
+                            ))}
+                          </Bar>
+                        </BarChart>
+                      </ResponsiveContainer>
+                    ) : (
+                      <div className="h-full flex items-center justify-center">
+                        <p className="text-xs text-slate-400">Aún no hay datos de tiempo. Comienza a estudiar para ver tu progreso.</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Actividad por Tipo */}
+              {activityDistribution.length > 1 && (
+                <div className="mb-5 bg-white rounded-xl border border-slate-200/40 shadow-sm p-5 hover:shadow-md transition-all duration-200">
+                  <SectionHeader title="Actividad por Tipo" />
+                  <div className="flex flex-col sm:flex-row items-center gap-4">
+                    <div className="w-40 h-40 flex-shrink-0">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie data={activityDistribution} cx="50%" cy="50%" innerRadius={32} outerRadius={56} paddingAngle={2} dataKey="value">
+                            {activityDistribution.map((entry, idx) => (
+                              <Cell key={idx} fill={entry.color} />
+                            ))}
+                          </Pie>
+                          <Tooltip
+                            contentStyle={{ fontSize: 11, borderRadius: 8, border: '1px solid #E2E8F0' }}
+                            formatter={(value, name, props) => [`${value} (${props.payload.pct}%)`, props.payload.name]}
+                          />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </div>
+                    <div className="flex-1 grid grid-cols-2 gap-2 w-full">
+                      {activityDistribution.map(item => (
+                        <div key={item.key} className="flex items-center gap-2 p-2 rounded-lg bg-slate-50">
+                          <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: item.color }} />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-[10px] font-semibold text-slate-700 truncate">{item.name}</p>
+                            <div className="flex items-center gap-1">
+                              <div className="flex-1 h-1 bg-slate-200 rounded-full overflow-hidden">
+                                <div className="h-full rounded-full transition-all duration-500" style={{ width: `${item.pct}%`, backgroundColor: item.color }} />
+                              </div>
+                              <span className="text-[9px] font-bold text-slate-500">{item.pct}%</span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Calendario de Estudio */}
+              <div className="mb-5 bg-white rounded-xl border border-slate-200/40 shadow-sm p-5 hover:shadow-md transition-all duration-200">
+                <div className="flex items-center justify-between mb-4">
+                  <SectionHeader title="Calendario de Estudio" />
+                  <div className="flex items-center gap-1">
+                    <button onClick={() => setCalendarYear(y => y - 1)} className="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-[10px] text-slate-600 transition-all">‹</button>
+                    <span className="text-[11px] font-bold text-slate-700 w-14 text-center">{calendarYear}</span>
+                    <button onClick={() => setCalendarYear(y => Math.min(y + 1, new Date().getFullYear()))} className="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-[10px] text-slate-600 transition-all">›</button>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 mb-3 text-[10px] text-slate-500">
+                  <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-sm bg-slate-100" /> Sin actividad</span>
+                  <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-sm" style={{ backgroundColor: '#004B63', opacity: 0.25 }} /> 1-5 min</span>
+                  <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-sm" style={{ backgroundColor: '#004B63', opacity: 0.5 }} /> 5-15 min</span>
+                  <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-sm" style={{ backgroundColor: '#004B63', opacity: 0.75 }} /> 15-30 min</span>
+                  <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-sm" style={{ backgroundColor: '#004B63' }} /> 30+ min</span>
+                </div>
+                <div className="overflow-x-auto pb-2">
+                  <div className="flex gap-[2px] min-w-[480px]">
+                    {calendarData.weeks.map((week, wi) => (
+                      <div key={wi} className="flex flex-col gap-[2px]">
+                        {week.map((day, di) => (
+                          <div key={di}
+                            className={`w-3 h-3 rounded-sm transition-all duration-200 ${day.date > new Date() ? 'bg-transparent' : day.mins === 0 ? 'bg-slate-100' : ''}`}
+                            style={day.date <= new Date() && day.mins > 0 ? {
+                              backgroundColor: '#004B63',
+                              opacity: day.level === 1 ? 0.25 : day.level === 2 ? 0.5 : day.level === 3 ? 0.75 : 1,
+                            } : {}}
+                            title={`${day.date.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}: ${day.mins} min`}
+                          />
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100 text-[10px] text-slate-500">
+                  <span>{calendarData.totalActive} días activos</span>
+                  <span>Racha actual: {calendarData.currentStreak > 0 ? `${calendarData.currentStreak} días consecutivos 🔥` : 'Sin racha activa'}</span>
+                  <span>{calendarData.totalSessions} sesiones</span>
+                </div>
+              </div>
+
+              {/* Puntos de Módulo */}
+              <div className="mb-5 bg-white rounded-xl border border-slate-200/40 shadow-sm p-5 hover:shadow-md transition-all duration-200"
+                   title="Cada módulo aporta hasta 200 pts. Rendimiento = Nota × 2. Máximo 1000 pts (5 módulos × 200 pts).">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
+                      <Icon name="fa-trophy" className="text-petroleum text-sm" />
+                    </div>
+                    <div>
+                      <h3 className="text-xs font-bold text-petroleum uppercase tracking-wider">Puntos de Módulo</h3>
+                      <p className="text-[10px] text-slate-400">Rendimiento acumulado</p>
+                    </div>
+                  </div>
+                  <span className="text-2xl font-bold text-petroleum font-montserrat tracking-tight">{totalPoints}/1000</span>
+                </div>
+                <div className="h-2 bg-slate-100 rounded-full overflow-hidden shadow-inner">
+                  <div className="h-full rounded-full bg-gradient-to-r from-petroleum to-corporate transition-all duration-700 ease-out" style={{ width: `${Math.min((totalPoints / 1000) * 100, 100)}%` }} />
+                </div>
+                <div className="flex justify-between mt-2 text-[10px] font-medium text-slate-400">
+                  <span>{totalPoints} pts</span>
+                  <span>{totalPoints >= 1000 ? '¡Puntuación máxima!' : `${1000 - totalPoints} pts para el máximo`}</span>
+                </div>
+              </div>
+
               {/* XP & Level card */}
               <div className="mb-5 bg-white rounded-xl border border-slate-200/40 shadow-sm p-5 hover:shadow-md transition-all duration-200">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#FFD166]/10 to-[#F59E0B]/10 flex items-center justify-center">
-                      <Icon name="fa-trophy" className="text-[#F59E0B] text-sm" />
+                    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400/10 to-amber-600/10 flex items-center justify-center">
+                      <Icon name="fa-trophy" className="text-amber-500 text-sm" />
                     </div>
                     <div>
-                      <h3 className="text-xs font-bold text-[#004B63] uppercase tracking-wider">Nivel {level}</h3>
-                      <p className="text-[10px] text-slate-400">{xp} XP acumulados</p>
+                      <h3 className="text-xs font-bold text-petroleum uppercase tracking-wider">Nivel {level}</h3>
+                      <p className="text-[10px] text-slate-400">{xp} XP acumulados de {xpForNext} XP</p>
                     </div>
                   </div>
-                  <span className="text-2xl font-bold text-[#F59E0B] font-montserrat tracking-tight">{Math.round(levelProgress)}%</span>
+                  <span className="text-2xl font-bold text-amber-500 font-montserrat tracking-tight">{Math.round(levelProgress)}%</span>
                 </div>
                 <div className="h-2 bg-slate-100 rounded-full overflow-hidden shadow-inner">
-                  <div className="h-full rounded-full bg-gradient-to-r from-[#FFD166] to-[#F59E0B] transition-all duration-700 ease-out" style={{ width: `${Math.min(levelProgress, 100)}%` }} />
+                  <div className="h-full rounded-full bg-gradient-to-r from-amber-400 to-amber-500 transition-all duration-700 ease-out" style={{ width: `${Math.min(levelProgress, 100)}%` }} />
                 </div>
                 <div className="flex justify-between mt-2 text-[10px] font-medium text-slate-400">
                   <span>{xp} XP</span>
                   <span>Siguiente nivel: {xpForNext} XP</span>
                 </div>
+                <div className="border-t border-slate-100 mt-3 pt-3">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-[9px] font-semibold text-slate-400 uppercase tracking-wider">Meta semanal</span>
+                    <span className="text-[10px] font-bold text-corporate">{weeklyXP.weekly}/{weeklyXP.weeklyTarget} XP</span>
+                  </div>
+                  <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div className="h-full rounded-full bg-gradient-to-r from-corporate to-emerald-400 transition-all duration-700" style={{ width: `${weeklyXP.weeklyPct}%` }} />
+                  </div>
+                </div>
               </div>
+
+              {/* Recomendación */}
+              {recommendations.length > 0 && (
+                <div className="mb-5 bg-gradient-to-br from-amber-50 to-amber-50/50 rounded-xl border border-amber-200/60 shadow-sm p-5 hover:shadow-md transition-all duration-200">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center">
+                      <Icon name="fa-lightbulb" className="text-amber-600 text-sm" />
+                    </div>
+                    <p className="text-xs font-bold text-amber-800 uppercase tracking-[0.15em]">Recomendaciones</p>
+                  </div>
+                  <div className="space-y-2">
+                    {recommendations.slice(0, 3).map((rec, i) => (
+                      <div key={i} className="flex items-start gap-2 text-sm text-amber-900 leading-relaxed">
+                        <div className={`w-5 h-5 rounded flex items-center justify-center flex-shrink-0 mt-0.5 ${rec.urgency === 'high' ? 'bg-amber-200' : 'bg-amber-100'}`}>
+                          <Icon name={rec.type === 'exam' ? 'fa-file-alt' : rec.type === 'challenge' ? 'fa-trophy' : 'fa-play-circle'} className={`text-[9px] ${rec.urgency === 'high' ? 'text-amber-700' : 'text-amber-600'}`} />
+                        </div>
+                        <span><span className="font-semibold">{rec.moduleName}:</span> {rec.text}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Ritmo de Aprendizaje */}
               <div className="mb-5 bg-white rounded-xl border border-slate-200/40 shadow-sm p-5 hover:shadow-md transition-all duration-200">
-                <div className="flex items-center gap-2 mb-4 px-0.5">
-                  <div className="w-1 h-5 rounded-full bg-gradient-to-b from-[#00BCD4] to-[#004B63]" />
-                  <p className="text-[10px] font-bold text-[#004B63] uppercase tracking-[0.15em]">Ritmo de Aprendizaje</p>
-                  <div className="flex-1 h-px bg-gradient-to-r from-[#00BCD4]/20 to-transparent" />
-                </div>
+                <SectionHeader title="Ritmo de Aprendizaje" iconColor="from-corporate to-petroleum" />
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-4">
-                  <div className="text-center p-3 rounded-xl bg-gradient-to-b from-[#00BCD4]/5 to-transparent border border-[#00BCD4]/10">
-                    <div className="text-xl font-bold text-[#00BCD4]">{lessonsPerDay > 0 ? lessonsPerDay.toFixed(1) : '—'}</div>
+                  <div className="text-center p-3 rounded-xl bg-gradient-to-b from-corporate/5 to-transparent border border-corporate/10">
+                    <div className="text-xl font-bold text-corporate">{lessonsPerDay > 0 ? lessonsPerDay.toFixed(1) : '—'}</div>
                     <p className="text-[9px] text-slate-400 mt-0.5 uppercase tracking-wider">Lecciones/día</p>
                   </div>
-                  <div className="text-center p-3 rounded-xl bg-gradient-to-b from-[#004B63]/5 to-transparent border border-[#004B63]/10">
-                    <div className="text-xl font-bold text-[#004B63]">{daysSinceStart}</div>
+                  <div className="text-center p-3 rounded-xl bg-gradient-to-b from-petroleum/5 to-transparent border border-petroleum/10">
+                    <div className="text-xl font-bold text-petroleum">{daysActive}</div>
                     <p className="text-[9px] text-slate-400 mt-0.5 uppercase tracking-wider">Días activo</p>
                   </div>
                   <div className="text-center p-3 rounded-xl bg-gradient-to-b from-emerald-500/5 to-transparent border border-emerald-500/10">
                     <div className="text-xl font-bold text-emerald-600">{estimatedDaysRemaining > 0 && estimatedDaysRemaining < 999 ? estimatedDaysRemaining : '—'}</div>
-                    <p className="text-[9px] text-slate-400 mt-0.5 uppercase tracking-wider">Días restantes</p>
+                    <p className="text-[9px] text-slate-400 mt-0.5 uppercase tracking-wider">{estimatedEndDate ? `≈ ${estimatedEndDate}` : 'Días restantes'}</p>
                   </div>
-                  <div className="text-center p-3 rounded-xl bg-gradient-to-b from-[#FFD166]/5 to-transparent border border-[#FFD166]/10">
-                    <div className="text-xl font-bold text-[#F59E0B]">{Math.round((totalLessonsCompleted / Math.max(totalLessonsCount, 1)) * 100)}%</div>
+                  <div className="text-center p-3 rounded-xl bg-gradient-to-b from-amber-500/5 to-transparent border border-amber-500/10">
+                    <div className="text-xl font-bold text-amber-500">{Math.round((totalLessonsCompleted / Math.max(totalLessonsCount, 1)) * 100)}%</div>
                     <p className="text-[9px] text-slate-400 mt-0.5 uppercase tracking-wider">Completado</p>
                   </div>
                 </div>
                 <div className="h-2 bg-slate-100 rounded-full overflow-hidden shadow-inner">
-                  <div className="h-full rounded-full bg-gradient-to-r from-[#004B63] via-[#00BCD4] to-emerald-400 transition-all duration-700 ease-out" style={{ width: `${Math.min((totalLessonsCompleted / Math.max(totalLessonsCount, 1)) * 100, 100)}%` }} />
+                  <div className="h-full rounded-full bg-gradient-to-r from-petroleum via-corporate to-emerald-400 transition-all duration-700 ease-out" style={{ width: `${Math.min((totalLessonsCompleted / Math.max(totalLessonsCount, 1)) * 100, 100)}%` }} />
                 </div>
               </div>
 
               {/* Badges section */}
               {badges && badges.length > 0 && (
                 <div className="mb-5 bg-white rounded-xl border border-slate-200/40 shadow-sm p-5 hover:shadow-md transition-all duration-200">
-                  <div className="flex items-center gap-2 mb-4 px-0.5">
-                    <div className="w-1 h-5 rounded-full bg-gradient-to-b from-[#FFD166] to-[#F59E0B]" />
-                    <p className="text-[10px] font-bold text-[#004B63] uppercase tracking-[0.15em]">Logros y Medallas</p>
-                    <div className="flex-1 h-px bg-gradient-to-r from-[#FFD166]/20 to-transparent" />
-                  </div>
+                  <SectionHeader title="Logros y Medallas" iconColor="from-amber-400 to-amber-500" />
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
                     {badges.map(badgeId => {
                       const info = BADGE_INFO?.[badgeId] || { icon: 'fa-star', label: badgeId, desc: '', color: '#94A3B8' };
                       return (
                         <div key={badgeId} className="group bg-gradient-to-br from-white to-slate-50 rounded-xl border border-slate-200/40 shadow-sm p-3 text-center hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-                          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#FFD166]/10 to-[#F59E0B]/10 flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform duration-200">
+                          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400/10 to-amber-500/10 flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform duration-200">
                             <Icon name={info.icon} className="text-sm" style={{ color: info.color }} />
                           </div>
                           <p className="text-[10px] font-bold text-slate-700 leading-tight">{info.label}</p>
@@ -492,27 +1166,72 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                       );
                     })}
                   </div>
+
+                  {/* Next badge preview */}
+                  {nextBadge && (
+                    <div className="mt-4 pt-3 border-t border-slate-100/80">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center opacity-60 flex-shrink-0">
+                            <Icon name={nextBadge.icon} className="text-[10px] text-slate-500" />
+                          </div>
+                          <div>
+                            <p className="text-[10px] font-bold text-slate-500 leading-tight">Siguiente: {nextBadge.label}</p>
+                            <p className="text-[8px] text-slate-400">{nextBadge.desc}</p>
+                          </div>
+                        </div>
+                        <span className="text-[10px] font-bold text-slate-400">{nextBadge.current}/{nextBadge.target}</span>
+                      </div>
+                      <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div className="h-full rounded-full bg-gradient-to-r from-slate-300 to-slate-400 transition-all duration-500" style={{ width: `${(nextBadge.current / nextBadge.target) * 100}%` }} />
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 
+              <SectionHeader title="Puntaje por Módulo" />
               <div className="mb-5 bg-white rounded-xl border border-slate-200/40 shadow-sm p-5 hover:shadow-md transition-all duration-200">
-                <div className="flex items-center gap-2 mb-4 px-0.5">
-                  <div className="w-1 h-5 rounded-full bg-gradient-to-b from-[#004B63] to-[#00BCD4]" />
-                  <p className="text-[10px] font-bold text-[#004B63] uppercase tracking-[0.15em]">Puntaje por Módulo</p>
-                  <div className="flex-1 h-px bg-gradient-to-r from-[#004B63]/20 to-transparent" />
+                <div className="mb-4 h-24 sm:h-32">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={moduleScores} margin={{ top: 8, right: 8, bottom: 4, left: -16 }}>
+                      <XAxis dataKey="title" tick={{ fontSize: 9, fill: '#94A3B8' }} interval={0} angle={-20} textAnchor="end" height={20} />
+                      <YAxis domain={[0, 100]} hide />
+                      <Tooltip
+                        contentStyle={{ fontSize: 11, borderRadius: 8, border: '1px solid #E2E8F0', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}
+                        formatter={(value) => [`${Math.round(value)}%`]}
+                      />
+                      <Line type="monotone" dataKey="score" stroke="#004B63" strokeWidth={2} dot={{ r: 4, fill: '#004B63', stroke: '#fff', strokeWidth: 2 }} activeDot={{ r: 6 }} />
+                    </LineChart>
+                  </ResponsiveContainer>
                 </div>
                 <div className="space-y-2.5">
                   {moduleScores.map(mod => {
                     const barColor = mod.score >= 80 ? 'from-emerald-500 to-emerald-400' : mod.score >= 60 ? 'from-amber-500 to-amber-400' : 'from-slate-400 to-slate-300';
                     return (
                       <div key={mod.id} className="flex items-center gap-3">
-                        <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center flex-shrink-0">
-                          <Icon name={mod.icon} className="text-[10px] text-[#004B63]" />
+                        <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center flex-shrink-0">
+                          <Icon name={mod.icon} className="text-[10px] text-petroleum" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between mb-0.5">
                             <span className="text-[11px] font-semibold text-slate-700 truncate">{mod.title}</span>
-                            <span className={`text-[10px] font-bold flex-shrink-0 ml-2 ${mod.score >= 80 ? 'text-emerald-600' : mod.score >= 60 ? 'text-amber-600' : 'text-slate-500'}`}>{Math.round(mod.score)}%</span>
+                            <div className="flex items-center gap-1.5 flex-shrink-0 ml-2">
+                              {mod.examScore > 0 && (
+                                <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-md border ${
+                                  mod.examScore >= 80 ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : 'bg-amber-50 text-amber-600 border-amber-200'
+                                }`}>E:{mod.examScore}%</span>
+                              )}
+                              {mod.challengeScore > 0 && (
+                                <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-md border ${
+                                  mod.challengeScore >= 80 ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : 'bg-amber-50 text-amber-600 border-amber-200'
+                                }`}>D:{mod.challengeScore}%</span>
+                              )}
+                              {mod.dominance && (
+                                <span className={`text-[8px] font-bold px-1.5 py-[1px] rounded-md border ${mod.dominance.bg} ${mod.dominance.color}`}>{mod.dominance.label}</span>
+                              )}
+                              <span className={`text-[10px] font-bold ${mod.score >= 80 ? 'text-emerald-600' : mod.score >= 60 ? 'text-amber-600' : 'text-slate-500'}`}>{Math.round(mod.score)}%</span>
+                            </div>
                           </div>
                           <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
                             <div className={`h-full rounded-full bg-gradient-to-r ${barColor} transition-all duration-500`} style={{ width: `${Math.round(mod.score)}%` }} />
@@ -524,25 +1243,64 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                 </div>
               </div>
 
+              {/* Radar Comparativo */}
+              <div className="mb-5 bg-white rounded-xl border border-slate-200/40 shadow-sm p-5 hover:shadow-md transition-all duration-200">
+                <SectionHeader title="Rendimiento por Dimensión" />
+                <div className="h-56 sm:h-64">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <RadarChart data={(() => {
+                      return moduleScores.map(mod => {
+                        const modProgress = moduleProgress?.[mod.id];
+                        const viewed = modProgress?.viewedResources?.length || 0;
+                        const total = 8;
+                        const modLessons = lessonProgress?.[mod.id] || {};
+                        const completedLessons = Object.values(modLessons).filter(s => s === 'completed').length;
+                        const totalModLessons = ALL_LESSONS?.[mod.id]?.length || 1;
+                        return {
+                          module: mod.title.split(' ').slice(0, 2).join(' '),
+                          Examen: mod.examScore || 0,
+                          Desafío: mod.challengeScore || 0,
+                          Recursos: Math.min(100, Math.round(viewed / total * 100)),
+                          Lecciones: Math.min(100, Math.round(completedLessons / totalModLessons * 100)),
+                          Comunidad: completedModules.includes(mod.id) ? 100 : 0,
+                        };
+                      });
+                    })()} margin={{ top: 8, right: 16, bottom: 8, left: 16 }}>
+                      <PolarGrid grid={{ stroke: '#E2E8F0' }} />
+                      <PolarAngleAxis dataKey="module" tick={{ fontSize: 9, fill: '#64748B' }} />
+                      <PolarRadiusAxis angle={90} domain={[0, 100]} tick={{ fontSize: 8, fill: '#94A3B8' }} />
+                      {['Examen', 'Desafío', 'Recursos', 'Lecciones', 'Comunidad'].map((dim, i) => {
+                        const colors = ['#004B63', '#00BCD4', '#10B981', '#F59E0B', '#8B5CF6'];
+                        return (
+                          <Radar key={dim} name={dim} dataKey={dim} stroke={colors[i]} fill={colors[i]} fillOpacity={0.08} strokeWidth={1.5} />
+                        );
+                      })}
+                      <Legend wrapperStyle={{ fontSize: 9, paddingTop: 8 }} />
+                      <Tooltip contentStyle={{ fontSize: 11, borderRadius: 8, border: '1px solid #E2E8F0' }} />
+                    </RadarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
               <div className="mt-5 bg-white rounded-xl border border-slate-200/40 shadow-sm p-5 hover:shadow-md transition-all duration-200">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center">
-                      <Icon name="fa-tachometer-alt" className="text-[#004B63] text-sm" />
+                    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
+                      <Icon name="fa-tachometer-alt" className="text-petroleum text-sm" />
                     </div>
                     <div>
-                      <h3 className="text-xs font-bold text-[#004B63] uppercase tracking-wider">Progreso Global</h3>
+                      <h3 className="text-xs font-bold text-petroleum uppercase tracking-wider">Progreso Global</h3>
                       <p className="text-[10px] text-slate-400">{totalVideos + totalInfographics + totalExams + totalChallenges + completedCount}/{totalItems} recursos completados</p>
                     </div>
                   </div>
-                  <span className="text-2xl font-bold text-[#004B63] font-montserrat tracking-tight">{Math.round(courseProgress || 0)}%</span>
+                  <span className="text-2xl font-bold text-petroleum font-montserrat tracking-tight">{Math.round(courseProgress || 0)}%</span>
                 </div>
                 <div className="h-3 bg-slate-100 rounded-full overflow-hidden shadow-inner">
-                  <div className="h-full rounded-full bg-gradient-to-r from-[#004B63] via-[#0A3550] to-[#00BCD4] transition-all duration-1000 ease-out shadow-sm" style={{ width: `${Math.min(courseProgress || 0, 100)}%` }} />
+                  <div className="h-full rounded-full bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate transition-all duration-1000 ease-out shadow-sm" style={{ width: `${Math.min(courseProgress || 0, 100)}%` }} />
                 </div>
                 <div className="flex justify-between mt-3 pt-3 border-t border-slate-100 text-[10px] font-medium text-slate-400">
-                  <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-[#004B63]" />{completedCount}/5 módulos</span>
-                  <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-[#00BCD4]" />{totalVideos}/{totalVideosTarget} videos</span>
+                  <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-petroleum" />{completedCount}/5 módulos</span>
+                  <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-corporate" />{totalVideos}/{totalVideosTarget} videos</span>
                   <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />{totalExams + totalChallenges}/10 eval.</span>
                 </div>
               </div>
@@ -558,5 +1316,17 @@ const ActivityHistory = ({ isOpen, onClose }) => {
     </div>
   );
 };
+
+const SectionHeader = ({ title, iconColor = 'from-petroleum to-corporate' }) => (
+  <div className="flex items-center gap-2 mb-4 px-0.5">
+    <div className={`w-1 h-5 rounded-full bg-gradient-to-b ${iconColor}`} />
+    <p className="text-[10px] font-bold text-petroleum uppercase tracking-[0.15em]">{title}</p>
+    <div className="flex-1 h-px bg-gradient-to-r from-petroleum/20 to-transparent" />
+  </div>
+);
+
+const SectionLine = () => (
+  <div className="w-1 h-5 rounded-full bg-gradient-to-b from-petroleum to-corporate" />
+);
 
 export default ActivityHistory;

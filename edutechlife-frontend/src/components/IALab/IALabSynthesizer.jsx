@@ -208,7 +208,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                         <ul className="space-y-1">
                             {quickAnalysis.suggestions.map((suggestion, index) => (
                                 <li key={index} className="flex items-start gap-2">
-                                    <Icon name="fa-bullet" className="text-slate-400 text-xs mt-0.5" />
+                                    <Icon name="fa-bullet" className="text-slate-600 text-xs mt-0.5" />
                                     <span className={cn(
                                         FORUM_TYPOGRAPHY.BODY.XS,
                                         "text-slate-600"
@@ -419,7 +419,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                                 <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                             </div>
                             <div className="flex items-center gap-2">
-                                <Icon name="fa-terminal" className="text-slate-400" />
+                                <Icon name="fa-terminal" className="text-slate-600" />
                                 <span className="text-sm font-bold text-slate-300 font-sans">PROMPT_MAESTRO.js</span>
                             </div>
                         </div>
@@ -440,7 +440,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                     </div>
                     
                     {/* Footer de la terminal */}
-                    <div className="mt-6 pt-4 border-t border-slate-700/50 flex items-center justify-between text-sm text-slate-400 font-sans">
+                    <div className="mt-6 pt-4 border-t border-slate-700/50 flex items-center justify-between text-sm text-slate-600 font-sans">
                         <div className="flex items-center gap-4">
                             <span className="flex items-center gap-1">
                                 <Icon name="fa-code" className="text-xs" />
@@ -504,7 +504,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                 <div className="bg-gradient-to-r from-slate-50 to-white p-6 rounded-2xl border border-slate-200">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <Icon name="fa-info-circle" className="text-slate-400" />
+                            <Icon name="fa-info-circle" className="text-slate-600" />
                             <div>
                                 <p className="text-sm font-medium text-slate-700 font-sans">Generado con DeepSeek API</p>
                                 <p className="text-xs text-slate-500 font-sans">Modelo: deepseek-chat • Temperatura: 0.7 • Response Format: JSON</p>
@@ -751,7 +751,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                                              </span>
                                          </div>
                                      </div>
-                                     <Icon name="fa-chevron-right" className="text-slate-400 ml-2 flex-shrink-0" />
+                                     <Icon name="fa-chevron-right" className="text-slate-600 ml-2 flex-shrink-0" />
                                  </div>
                              </button>
                          );

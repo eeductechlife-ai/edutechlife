@@ -15,11 +15,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { cn } from '../forum/forumDesignSystem';
-import { getResourceIcon, getResourceColor } from './constants/moduleResources';
+import { RESOURCE_TYPE_CONFIG, getResourceDuration } from './constants/moduleResources';
 
-/**
- * Componente principal ResourceSelector
- */
 const ResourceSelector = ({ 
   resources = [], 
   activeResourceIndex = 0, 
@@ -27,7 +24,7 @@ const ResourceSelector = ({
   onResourceSelect,
   className = ''
 }) => {
-  // Si no hay recursos, mostrar estado vacío
+  const [typeFilter, setTypeFilter] = React.useState(null);
   if (!resources.length) {
     return (
       <div className={cn(
@@ -35,41 +32,12 @@ const ResourceSelector = ({
         className
       )}>
         <div className="text-center">
-          <Icon name="fa-folder-open" className="text-slate-400 text-3xl mb-3" />
+          <Icon name="fa-folder-open" className="text-slate-600 text-3xl mb-3" />
           <p className="text-slate-500 font-medium">No hay recursos disponibles</p>
         </div>
       </div>
     );
   }
-
-  // Mapeo de etiquetas legibles para tipos
-  const getTypeLabel = (type) => {
-    const labels = {
-      video: "Video",
-      document: "Documento",
-      documento: "Documento",
-      pdf: "PDF",
-      "pdf-thumbnail": "PDF",
-      ova: "OVA",
-      "ova-thumbnail": "OVA",
-      image: "Imagen",
-      imagen: "Imagen",
-      interactive: "Interactivo",
-      interactivo: "Interactivo"
-    };
-    return labels[type] || type;
-  };
-
-  // Mapeo de metadata por tipo
-  const getResourceMetadata = (resource) => {
-    const parts = [];
-    if (resource.duration) parts.push(resource.duration);
-    if (resource.format) parts.push(resource.format);
-    if (resource.size) parts.push(resource.size);
-    if (resource.pages) parts.push(`${resource.pages} págs`);
-    if (resource.estimatedTime) parts.push(resource.estimatedTime);
-    return parts.join(' • ') || getTypeLabel(resource.type);
-  };
 
   return (
     <div className={cn(
@@ -77,7 +45,6 @@ const ResourceSelector = ({
       "overflow-hidden",
       className
     )}>
-      {/* Header del selector */}
       <div className="px-4 py-3 border-b border-slate-200/60 bg-white">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -87,26 +54,50 @@ const ResourceSelector = ({
             <h3 className="font-semibold text-slate-800 text-sm">Recursos del Tema</h3>
           </div>
           <div className="text-xs text-slate-500 flex items-center gap-2">
-            <span>{completedIds.filter(id => resources.some(r => r.id === id)).length}/{resources.length} visto{resources.length !== 1 ? 's' : ''}</span>
+            <span>{(typeFilter ? completedIds.filter(id => resources.some(r => r.id === id && r.type === typeFilter)).length : completedIds.filter(id => resources.some(r => r.id === id)).length)}/{(typeFilter ? resources.filter(r => r.type === typeFilter).length : resources.length)} visto{resources.length !== 1 ? 's' : ''}</span>
           </div>
         </div>
       </div>
 
-      {/* Lista vertical de recursos */}
+      {(() => {
+        const typeSet = new Set(resources.map(r => r.type));
+        const types = Array.from(typeSet);
+        if (types.length < 2) return null;
+        return (
+          <div className="px-3 py-2 border-b border-slate-200/60 bg-white flex flex-wrap gap-1.5">
+            <button onClick={() => setTypeFilter(null)} className={cn(
+              "px-2 py-1 rounded-md text-xs font-medium transition-colors",
+              typeFilter === null ? "bg-petroleum text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+            )}>Todos</button>
+            {types.map(type => {
+              const cfg = RESOURCE_TYPE_CONFIG[type] || { label: type, color: "#64748B", bg: "bg-slate-50" };
+              return (
+                <button key={type} onClick={() => setTypeFilter(typeFilter === type ? null : type)} className={cn(
+                  "px-2 py-1 rounded-md text-xs font-medium transition-colors",
+                  typeFilter === type ? "text-white" : cfg.bg + " hover:opacity-80"
+                )} style={typeFilter === type ? { backgroundColor: cfg.color } : { color: cfg.color }}>
+                  {cfg.label}
+                </button>
+              );
+            })}
+          </div>
+        );
+      })()}
+
       <div className="p-2 space-y-1.5 max-h-64 overflow-y-auto">
-        {resources.map((resource, index) => {
-          const isActive = index === activeResourceIndex;
+        {resources.filter(r => !typeFilter || r.type === typeFilter).map((resource) => {
+          const originalIndex = resources.indexOf(resource);
+          const isActive = originalIndex === activeResourceIndex;
           const isCompleted = completedIds.includes(resource.id);
-          
+          const typeCfg = RESOURCE_TYPE_CONFIG[resource.type] || { icon: "fa-file", label: "Recurso", color: "#64748B", bg: "bg-slate-50" };
+          const duration = getResourceDuration(resource);
+
           return (
             <motion.button
               key={resource.id}
-              onClick={() => onResourceSelect && onResourceSelect(index)}
+              onClick={() => onResourceSelect && onResourceSelect(originalIndex)}
               className={cn(
-                "w-full flex items-center gap-3",
-                "p-3 rounded-xl",
-                "transition-all duration-300",
-                "text-left",
+                "w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-300 text-left",
                 isActive
                   ? "bg-white border border-slate-200/60 border-l-4 border-l-petroleum shadow-sm"
                   : isCompleted
@@ -118,21 +109,17 @@ const ResourceSelector = ({
               aria-current={isActive ? 'page' : undefined}
               aria-label={`Abrir ${resource.title}`}
             >
-              {/* Icono con gradiente corporativo */}
               <div className={cn(
-                "w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0",
-                "transition-all duration-300",
-                isCompleted
-                  ? "bg-gradient-to-br from-emerald-500/10 to-emerald-600/10"
-                  : "bg-gradient-to-br from-petroleum/10 to-corporate/10"
+                "w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-300",
+                isCompleted ? "bg-gradient-to-br from-emerald-500/10 to-emerald-600/10" : typeCfg.bg
               )}>
                 <Icon
-                  name={isCompleted ? 'fa-check-circle' : getResourceIcon(resource.type)}
-                  className={isCompleted ? "text-emerald-600 w-4 h-4" : "text-petroleum w-4 h-4"}
+                  name={isCompleted ? 'fa-check-circle' : typeCfg.icon}
+                  className={cn("w-4 h-4", isCompleted ? "text-emerald-600" : "")}
+                  style={!isCompleted ? { color: typeCfg.color } : undefined}
                 />
               </div>
 
-              {/* Información del recurso */}
               <div className="flex-1 min-w-0">
                 <div className={cn(
                   "text-sm font-semibold truncate transition-colors duration-300 flex items-center gap-2",
@@ -143,12 +130,19 @@ const ResourceSelector = ({
                     <span className="text-[10px] font-bold text-emerald-600 bg-emerald-100 px-1.5 py-0.5 rounded-md flex-shrink-0">Completado</span>
                   )}
                 </div>
-                <div className="text-xs text-slate-500 mt-0.5">
-                  {getResourceMetadata(resource)}
+                <div className="flex items-center gap-2 mt-1">
+                  <span className={cn(
+                    "text-[10px] font-semibold px-1.5 py-0.5 rounded",
+                    typeCfg.bg
+                  )} style={{ color: typeCfg.color }}>
+                    {typeCfg.label}
+                  </span>
+                  {duration && (
+                    <span className="text-xs text-slate-600">{duration}</span>
+                  )}
                 </div>
               </div>
 
-              {/* Indicador de activo */}
               {isActive && (
                 <div className="flex-shrink-0">
                   <div className="w-6 h-6 rounded-full bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center">

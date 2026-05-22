@@ -51,7 +51,7 @@ const IALabCommunityHub = ({ onAction }) => {
                   <Icon name="fa-comments" className="text-white text-sm" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-petroleum dark:text-[#4DA8C4]">Comunidad IALab</h3>
+                  <h3 className="text-lg font-bold text-petroleum">Comunidad IALab</h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400">Comparte, aprende y conecta con otros estudiantes</p>
                 </div>
               </div>

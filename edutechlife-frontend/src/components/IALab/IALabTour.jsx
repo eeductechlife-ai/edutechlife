@@ -33,18 +33,33 @@ const STEPS = [
     description: 'Completa las 3 actividades (Comunidad, Desafío, Examen) para aprobar el módulo con 80% o más.',
   },
   {
+    target: 'tour-notificaciones',
+    title: 'Campana de notificaciones',
+    description: 'Recibirás alertas importantes: recordatorios de estudio, nuevos recursos y actualizaciones de tu progreso. ¡No te pierdas ninguna novedad!',
+  },
+  {
+    target: ['tour-undermenu-mobile', 'tour-undermenu-desktop'],
+    title: 'Menú de usuario',
+    description: 'En móvil: abre el menú con las tres líneas (☰). En computador: tu perfil con acceso a configuración, certificados y más. Personaliza tu experiencia.',
+  },
+  {
+    target: 'tour-valerio',
+    title: 'Coach IA Valerio',
+    description: 'Tu tutor inteligente. Pregunta sobre el módulo actual, recibe ejemplos prácticos y consejos de estudio. Usa voz o texto. ¡Valerio te guía paso a paso!',
+  },
+  {
     target: 'tour-herramientas',
     title: 'Herramientas + Tutorías',
-    description: 'Sintetizador de Prompts, Advisor IA y Tutorías Virtuales. Potencia tu aprendizaje con estas herramientas interactivas.',
+    description: 'Sintetizador de Prompts, Advisor IA, Ética IA y Tutorías Virtuales. Potencia tu aprendizaje con estas herramientas interactivas.',
   },
 ];
 
 const TOUR_KEY = 'ialab_tour_completed';
 const INITIAL_DELAY = 1500;
 const RETRY_INTERVAL = 300;
-const MAX_RETRIES = 5;
+const MAX_RETRIES = 10;
 
-const IALabTour = () => {
+const IALabTour = ({ hasStartedCourse }) => {
   const [step, setStep] = useState(-1);
   const [targetRect, setTargetRect] = useState(null);
   const [ready, setReady] = useState(false);
@@ -53,26 +68,45 @@ const IALabTour = () => {
   const resizeObserverRef = useRef(null);
   const scrollContainerRef = useRef(null);
 
-  const scrollToTarget = useCallback((stepIndex) => {
-    if (stepIndex < 0 || stepIndex >= STEPS.length) return;
-    const el = document.querySelector(`[data-tour="${STEPS[stepIndex].target}"]`);
-    if (!el) return;
-    el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+  const getTargetSelectors = useCallback((stepIndex) => {
+    if (stepIndex < 0 || stepIndex >= STEPS.length) return null;
+    const t = STEPS[stepIndex].target;
+    return Array.isArray(t) ? t : [t];
   }, []);
 
+  const findTarget = useCallback((stepIndex) => {
+    const selectors = getTargetSelectors(stepIndex);
+    if (!selectors) return null;
+    for (const sel of selectors) {
+      const el = document.querySelector(`[data-tour="${sel}"]`);
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        if (rect.width > 0 && rect.height > 0) {
+          return { el, rect };
+        }
+      }
+    }
+    return null;
+  }, [getTargetSelectors]);
+
+  const scrollToTarget = useCallback((stepIndex) => {
+    if (stepIndex < 0 || stepIndex >= STEPS.length) return;
+    const result = findTarget(stepIndex);
+    if (!result) return;
+    result.el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+  }, [findTarget]);
+
   const measureTarget = useCallback(() => {
-    if (step < 0 || step >= STEPS.length) return;
-    const el = document.querySelector(`[data-tour="${STEPS[step].target}"]`);
-    if (!el) return null;
-    const rect = el.getBoundingClientRect();
-    if (rect.width === 0 && rect.height === 0) return null;
-    return { rect, el };
-  }, [step]);
+    if (step < 0 || step >= STEPS.length) return null;
+    const result = findTarget(step);
+    if (!result) return null;
+    return { rect: result.rect, el: result.el };
+  }, [step, findTarget]);
 
   const updatePosition = useCallback(() => {
     const result = measureTarget();
     if (!result) return;
-    const { rect, el: _el } = result;
+    const { rect } = result;
 
     setTargetRect(rect);
 
@@ -91,12 +125,12 @@ const IALabTour = () => {
 
   useEffect(() => {
     const done = localStorage.getItem(TOUR_KEY);
-    if (done) return;
+    if (done || hasStartedCourse) return;
 
     const timer = setTimeout(() => {
       retryCount.current = 0;
       const attempt = () => {
-        const result = measureTarget();
+        const result = findTarget(0);
         if (result && result.rect.width > 0) {
           const scrollContainer = result.el.closest('.overflow-y-auto') || window;
           scrollContainerRef.current = scrollContainer;
@@ -126,13 +160,12 @@ const IALabTour = () => {
     setTargetRect(null);
     setTooltipPos(null);
 
-    // Hacer scroll al elemento objetivo antes de mostrar el tooltip
     scrollToTarget(step);
 
     const timer = setTimeout(() => {
       updatePosition();
       setReady(true);
-    }, 500); // Aumentado a 500ms para dar tiempo al scroll
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [step, updatePosition, scrollToTarget]);
@@ -150,10 +183,10 @@ const IALabTour = () => {
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onResize);
 
-    const el = document.querySelector(`[data-tour="${STEPS[step].target}"]`);
-    if (el) {
+    const result = findTarget(step);
+    if (result) {
       resizeObserverRef.current = new ResizeObserver(() => updatePosition());
-      resizeObserverRef.current.observe(el);
+      resizeObserverRef.current.observe(result.el);
     }
 
     return () => {
@@ -167,7 +200,7 @@ const IALabTour = () => {
         resizeObserverRef.current = null;
       }
     };
-  }, [ready, step, updatePosition]);
+  }, [ready, step, updatePosition, findTarget]);
 
   const handleNext = () => {
     if (step < STEPS.length - 1) {
@@ -220,12 +253,12 @@ const IALabTour = () => {
           </span>
           <button
             onClick={handleSkip}
-            className="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+            className="text-xs text-slate-600 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
           >
             Saltar
           </button>
         </div>
-        <h4 className="text-sm font-bold text-petroleum dark:text-[#4DA8C4] mb-1">{current.title}</h4>
+        <h4 className="text-sm font-bold text-petroleum mb-1">{current.title}</h4>
         <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-3">{current.description}</p>
         <button
           onClick={handleNext}

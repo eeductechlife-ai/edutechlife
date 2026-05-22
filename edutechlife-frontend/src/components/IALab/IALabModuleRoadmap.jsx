@@ -16,7 +16,7 @@ const IALabModuleRoadmap = () => {
           <Icon name="fa-map-signs" className="text-white text-sm" />
         </div>
         <div>
-          <h3 className="text-sm font-bold text-petroleum dark:text-[#4DA8C4] leading-tight">Tu ruta de aprendizaje</h3>
+          <h3 className="text-sm font-bold text-petroleum leading-tight">Tu ruta de aprendizaje</h3>
           <p className="text-xs text-slate-500 dark:text-slate-400">5 módulos hacia tu certificación</p>
         </div>
       </div>
@@ -55,8 +55,8 @@ const IALabModuleRoadmap = () => {
                     : completed
                     ? 'bg-emerald-500 text-white'
                     : locked
-                    ? 'bg-slate-200 dark:bg-slate-600 text-slate-400'
-                    : 'bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-petroleum dark:text-[#4DA8C4]'
+                    ? 'bg-slate-200 dark:bg-slate-600 text-slate-600'
+                    : 'bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-petroleum'
                 }`}>
                   {completed ? (
                     <Icon name="fa-check" className="text-xs" />
@@ -68,7 +68,7 @@ const IALabModuleRoadmap = () => {
                 </div>
                 <span className={`text-[9px] md:text-xs font-semibold text-center leading-tight max-w-[48px] md:max-w-[64px] truncate ${
                   isActive
-                    ? 'text-petroleum dark:text-[#4DA8C4]'
+                    ? 'text-petroleum'
                     : completed
                     ? 'text-emerald-700 dark:text-emerald-400'
                     : 'text-slate-500 dark:text-slate-400'

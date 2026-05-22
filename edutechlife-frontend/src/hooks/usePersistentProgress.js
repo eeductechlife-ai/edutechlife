@@ -4,6 +4,7 @@ import { useSupabase } from './useSupabase';
 import { 
   syncProgressToSupabase, 
   syncActivityToSupabase,
+  syncGamificationToSupabase,
   loadProgressFromSupabase, 
   mergeProgress,
   setupConnectionListener
@@ -48,8 +49,7 @@ const calculateModuleProgressInternal = (moduleId, completedVideos, completedExa
   const totalResources = 8;
   if (totalResources > 0) {
     const resourcesCompleted = moduleVideos.length + moduleInfographics.length;
-    const resourcesPct = resourcesCompleted / totalResources;
-    if (resourcesPct >= 0.8) {
+    if (resourcesCompleted >= totalResources) {
       moduleScore += MODULE_WEIGHTS.resources;
     }
   }
@@ -104,6 +104,7 @@ export const usePersistentProgress = () => {
   const [completedActivities, setCompletedActivities] = useState([]);
   const [challengeScores, setChallengeScores] = useState({});
   const [completedCommunity, setCompletedCommunity] = useState([]);
+  const [gamification, setGamification] = useState(null);
   const [courseProgress, setCourseProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [syncStatus, setSyncStatus] = useState('idle'); // idle | syncing | synced | error | offline
@@ -198,6 +199,15 @@ export const usePersistentProgress = () => {
     }
   }, [userId, supabase]);
 
+  // Sincronizar gamificación con Supabase
+  const syncGamification = useCallback(async (gamificationData) => {
+    if (!userId || !supabase) return;
+    const result = await syncGamificationToSupabase(supabase, userId, gamificationData);
+    if (result.success) {
+      setGamification(gamificationData);
+    }
+  }, [userId, supabase]);
+
   // Inicializar progreso al cargar
   useEffect(() => {
     if (!isUserReady) {
@@ -231,6 +241,7 @@ export const usePersistentProgress = () => {
         setCompletedActivities(mergedData.completedActivities);
         setChallengeScores(mergedData.challengeScores || {});
         setCompletedCommunity(mergedData.completedCommunity || []);
+        if (mergedData.gamification) setGamification(mergedData.gamification);
         
         const progress = calculateProgress(
           mergedData.completedVideos,
@@ -598,6 +609,7 @@ export const usePersistentProgress = () => {
 
   return {
     courseProgress,
+    gamification,
     completedVideos,
     completedModules,
     completedExams,
@@ -621,6 +633,7 @@ export const usePersistentProgress = () => {
     markCommunityComplete,
     resetProgress,
     refreshProgress,
+    syncGamification,
     setCompletedModules,
     setCourseProgress,
     recordLastTopic,

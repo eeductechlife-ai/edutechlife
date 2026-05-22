@@ -32,7 +32,7 @@ const IALabForumSearchBar = ({ onSearch }) => {
           ? 'border-petroleum/40 dark:border-petroleum/60 shadow-sm shadow-petroleum/5'
           : 'border-slate-200 dark:border-slate-700'
       }`}>
-        <Icon name="fa-search" className={`text-sm transition-colors ${isFocused ? 'text-petroleum dark:text-[#4DA8C4]' : 'text-slate-400'}`} />
+        <Icon name="fa-search" className={`text-sm transition-colors ${isFocused ? 'text-petroleum' : 'text-slate-600'}`} />
         <input
           ref={inputRef}
           type="text"
@@ -41,11 +41,11 @@ const IALabForumSearchBar = ({ onSearch }) => {
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           placeholder="Buscar en la comunidad..."
-          className="flex-1 bg-transparent text-sm text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:outline-none"
+          className="flex-1 bg-transparent text-sm text-slate-700 dark:text-slate-200 placeholder:text-slate-600 focus:outline-none"
           maxLength={200}
         />
         {query && (
-          <button onClick={handleClear} className="text-slate-400 hover:text-slate-600 transition-colors">
+          <button onClick={handleClear} className="text-slate-600 hover:text-slate-600 transition-colors">
             <Icon name="fa-xmark" className="text-sm" />
           </button>
         )}

@@ -31,7 +31,7 @@ const IALabForumPostDetail = ({ post, onBack, onAction }) => {
       <div className="p-4 border-b border-slate-100 dark:border-slate-700">
         <button
           onClick={onBack}
-          className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-petroleum dark:hover:text-[#4DA8C4] transition-colors mb-3"
+          className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-petroleum transition-colors mb-3"
         >
           <Icon name="fa-arrow-left" className="text-[10px]" />
           Volver a la comunidad
@@ -39,7 +39,7 @@ const IALabForumPostDetail = ({ post, onBack, onAction }) => {
 
         <div className="flex items-center gap-2 mb-2">
           {post.tags?.slice(0, 3).map((tag, i) => (
-            <span key={i} className="px-2 py-0.5 bg-petroleum/5 text-petroleum dark:text-[#4DA8C4] text-[10px] font-medium rounded-full">
+            <span key={i} className="px-2 py-0.5 bg-petroleum/5 text-petroleum text-[10px] font-medium rounded-full">
               {tag}
             </span>
           ))}
@@ -49,15 +49,15 @@ const IALabForumPostDetail = ({ post, onBack, onAction }) => {
         <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed whitespace-pre-wrap">{post.content}</p>
 
         <div className="flex items-center gap-3 mt-3 pt-3 border-t border-slate-100 dark:border-slate-700">
-          <div className="flex items-center gap-1.5 text-xs text-slate-400">
+          <div className="flex items-center gap-1.5 text-xs text-slate-600">
             <Icon name="fa-heart" />
             <span>{post.upvotes || 0} likes</span>
           </div>
-          <div className="flex items-center gap-1.5 text-xs text-slate-400">
+          <div className="flex items-center gap-1.5 text-xs text-slate-600">
             <Icon name="fa-comment" />
             <span>{post.comment_count || 0} comentarios</span>
           </div>
-          <span className="text-xs text-slate-400">
+          <span className="text-xs text-slate-600">
             {new Date(post.created_at).toLocaleDateString('es-ES', {
               day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
             })}

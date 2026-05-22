@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useUser, useAuth } from '@clerk/react';
 import UserProfileSmartCard from './UserProfileSmartCard';
-import HelpModal from './modals/HelpModal';
+import SettingsSupportModal from './modals/SettingsSupportModal';
 import CertificatesModal from './modals/CertificatesModal';
 import ChangeAvatarModal from './modals/ChangeAvatarModal';
 import ActivityHistory from './ActivityHistory';
 import ErrorBoundary from './forum/ErrorBoundary';
+import StudyPlannerModal from './IALab/StudyPlannerModal';
+
 import { useClerkAuth, getClerkUserInfo } from '../utils/clerk-utils';
 import { Icon } from '../utils/iconMapping.jsx';
 
@@ -83,10 +85,11 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
   
   // Estados para modales
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [isCertificatesOpen, setIsCertificatesOpen] = useState(false);
   const [isAvatarOpen, setIsAvatarOpen] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const [isSettingsSupportOpen, setIsSettingsSupportOpen] = useState(false);
+  const [showStudyPlanner, setShowStudyPlanner] = useState(false);
   
   // 🏆 MI PERFIL - Abre modal de perfil completo
   const handleProfile = () => {
@@ -100,10 +103,16 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
     setIsCertificatesOpen(true);
   };
 
-  // ❓ AYUDA Y SOPORTE - Abre modal de ayuda
-  const handleHelp = () => {
+  // 📖 PLAN DE ESTUDIO - Abre modal con notas + calendario
+  const handleStudyPlanner = () => {
     setIsOpen(false);
-    setIsHelpOpen(true);
+    setShowStudyPlanner(true);
+  };
+
+  // ⚙️ CONFIGURACIÓN Y SOPORTE
+  const handleSettingsSupport = () => {
+    setIsOpen(false);
+    setIsSettingsSupportOpen(true);
   };
 
   // 📋 MI HISTORIAL - Abre historial de aprendizaje
@@ -111,6 +120,7 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
     setIsOpen(false);
     setIsHistoryOpen(true);
   };
+
 
   // 📷 CAMBIAR FOTO - Abre modal de cambio de avatar
   const handleAvatarClick = (e) => {
@@ -144,7 +154,7 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
             title="Cambiar foto de perfil"
           >
             {userInfo.avatarUrl ? (
-              <img src={userInfo.avatarUrl} alt={displayName} className="w-full h-full object-cover" />
+              <img src={userInfo.avatarUrl} alt={displayName} loading="lazy" className="w-full h-full object-cover" />
             ) : (
               <div className="w-full h-full bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center">
                 <span className="text-white font-semibold text-sm">{getUserInitials()}</span>
@@ -157,6 +167,7 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
             className="flex-1 flex items-center gap-2 pl-2 pr-3 min-w-0"
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Menú de usuario"
+            data-tour="tour-undermenu-desktop"
           >
             {/* Texto: Nombre completo arriba, rol abajo */}
             <div className="flex-1 min-w-0 text-left">
@@ -195,7 +206,7 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
                   title="Cambiar foto de perfil"
                 >
                   {userInfo.avatarUrl ? (
-                    <img src={userInfo.avatarUrl} alt={displayName} className="w-full h-full object-cover" />
+                    <img src={userInfo.avatarUrl} alt={displayName} loading="lazy" className="w-full h-full object-cover" />
                   ) : (
                     <div className="w-full h-full bg-white/20 flex items-center justify-center">
                       <span className="text-white font-semibold text-xs">{getUserInitials()}</span>
@@ -217,38 +228,47 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
             <div className="p-2 space-y-1">
               {/* 🏆 MI PERFIL */}
               <button
-                className="group flex items-center gap-2.5 w-full px-3 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-[#004B63] rounded-lg shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50 transition-all duration-300 cursor-pointer text-left"
+                className="group flex items-center gap-2.5 w-full px-3 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-petroleum rounded-lg shadow-sm hover:shadow hover:border-l-corporate hover:bg-slate-50 transition-all duration-300 cursor-pointer text-left"
                 onClick={handleProfile}
               >
-                <Icon name="fa-user-circle" className="text-sm text-[#004B63] flex-shrink-0" />
-                <span className="text-xs font-semibold text-slate-800 group-hover:text-[#004B63] transition-colors duration-300">Mi Perfil</span>
+                <Icon name="fa-user-circle" className="text-sm text-petroleum flex-shrink-0" />
+                <span className="text-xs font-semibold text-slate-800 group-hover:text-petroleum transition-colors duration-300">Mi Perfil</span>
               </button>
               
               {/* 📋 MI HISTORIAL DE APRENDIZAJE */}
               <button
-                className="group flex items-center gap-2.5 w-full px-3 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-[#004B63] rounded-lg shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50 transition-all duration-300 cursor-pointer text-left"
+                className="group flex items-center gap-2.5 w-full px-3 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-petroleum rounded-lg shadow-sm hover:shadow hover:border-l-corporate hover:bg-slate-50 transition-all duration-300 cursor-pointer text-left"
                 onClick={handleHistory}
               >
-                <Icon name="fa-clock" className="text-sm text-[#004B63] flex-shrink-0" />
-                <span className="text-xs font-semibold text-slate-800 group-hover:text-[#004B63] transition-colors duration-300">Mi Historial de Aprendizaje</span>
+                <Icon name="fa-clock" className="text-sm text-petroleum flex-shrink-0" />
+                <span className="text-xs font-semibold text-slate-800 group-hover:text-petroleum transition-colors duration-300">Mi Historial de Aprendizaje</span>
               </button>
               
               {/* 🎓 MIS CERTIFICADOS */}
               <button
-                className="group flex items-center gap-2.5 w-full px-3 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-[#004B63] rounded-lg shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50 transition-all duration-300 cursor-pointer text-left"
+                className="group flex items-center gap-2.5 w-full px-3 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-petroleum rounded-lg shadow-sm hover:shadow hover:border-l-corporate hover:bg-slate-50 transition-all duration-300 cursor-pointer text-left"
                 onClick={handleCertificates}
               >
-                <Icon name="fa-certificate" className="text-sm text-[#004B63] flex-shrink-0" />
-                <span className="text-xs font-semibold text-slate-800 group-hover:text-[#004B63] transition-colors duration-300">Mis Certificados</span>
+                <Icon name="fa-certificate" className="text-sm text-petroleum flex-shrink-0" />
+                <span className="text-xs font-semibold text-slate-800 group-hover:text-petroleum transition-colors duration-300">Mis Certificados</span>
               </button>
 
-              {/* ❓ AYUDA Y SOPORTE */}
+              {/* 📖 PLAN DE ESTUDIO */}
               <button
-                className="group flex items-center gap-2.5 w-full px-3 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-[#004B63] rounded-lg shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50 transition-all duration-300 cursor-pointer text-left"
-                onClick={handleHelp}
+                className="group flex items-center gap-2.5 w-full px-3 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-petroleum rounded-lg shadow-sm hover:shadow hover:border-l-corporate hover:bg-slate-50 transition-all duration-300 cursor-pointer text-left"
+                onClick={handleStudyPlanner}
               >
-                <Icon name="fa-question-circle" className="text-sm text-[#004B63] flex-shrink-0" />
-                <span className="text-xs font-semibold text-slate-800 group-hover:text-[#004B63] transition-colors duration-300">Ayuda y Soporte</span>
+                <Icon name="fa-calendar" className="text-sm text-petroleum flex-shrink-0" />
+                <span className="text-xs font-semibold text-slate-800 group-hover:text-petroleum transition-colors duration-300">Plan de Estudio</span>
+              </button>
+
+              {/* ⚙️ CONFIGURACIÓN */}
+              <button
+                className="group flex items-center gap-2.5 w-full px-3 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-slate-400 rounded-lg shadow-sm hover:shadow hover:border-l-petroleum hover:bg-slate-50 transition-all duration-300 cursor-pointer text-left"
+                onClick={handleSettingsSupport}
+              >
+                <Icon name="fa-cog" className="text-sm text-slate-500 flex-shrink-0" />
+                <span className="text-xs font-semibold text-slate-800 group-hover:text-petroleum transition-colors duration-300">Configuración y Soporte</span>
               </button>
               
               {/* ——— SEPARADOR ——— */}
@@ -276,7 +296,9 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
         onOpenChangeAvatar={() => setIsAvatarOpen(true)}
       />
 
-      <HelpModal isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
+      <StudyPlannerModal isOpen={showStudyPlanner} onClose={() => setShowStudyPlanner(false)} />
+
+      <SettingsSupportModal isOpen={isSettingsSupportOpen} onClose={() => setIsSettingsSupportOpen(false)} />
 
       <CertificatesModal isOpen={isCertificatesOpen} onClose={() => setIsCertificatesOpen(false)} />
 

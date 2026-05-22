@@ -1,28 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { speakTextConversational, stopSpeech } from '../../utils/speech';
-
-const VoiceReader = ({ text }) => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const speak = () => {
-    if (isPlaying) { stopSpeech(); setIsPlaying(false); return; }
-    speakTextConversational(text, 'valerio', () => setIsPlaying(false));
-    setIsPlaying(true);
-  };
-  return (
-    <button onClick={speak}
-      className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-        isPlaying ? 'bg-red-100 text-red-600 hover:bg-red-200 shadow-sm' : 'bg-[#E0F7FA] text-[#004B63] hover:bg-[#B2EBF2] hover:shadow-md'
-      }`}
-      title="Escuchar con voz de Valerio">
-      {isPlaying ? (
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-      ) : (
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-      )}
-      {isPlaying ? 'Detener' : 'Escuchar con Valerio'}
-    </button>
-  );
-};
+import VoiceReader from './VoiceReader';
 
 const BrainIcon = ({ className = "" }) => (
   <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -327,7 +304,7 @@ export default function OVANotebookSimulator() {
               <p>Primero revisaremos los conceptos clave, luego 7 preguntas para evaluar tu comprensión. ¡Comencemos!</p>
             </div>
             <div className="flex justify-center mb-6"><VoiceReader text="¡Hola! Soy Valerio. En este simulador pondremos a prueba tus habilidades de análisis documental. Primero revisaremos conceptos clave, luego 7 preguntas para evaluar tu comprensión." /></div>
-            <button onClick={startGame} className="group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 bg-gradient-to-r from-[#2FA8C6] to-[#1E3A5F] rounded-xl focus:outline-none hover:scale-105 shadow-[0_10px_20px_rgba(47,168,198,0.3)]" style={{ animation: 'pulseGlow 3s infinite' }}>
+            <button onClick={startGame} className="group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 bg-gradient-to-r from-[#2FA8C6] to-[#1E3A5F] rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E3A5F] hover:scale-105 shadow-[0_10px_20px_rgba(47,168,198,0.3)]" style={{ animation: 'pulseGlow 3s infinite' }}>
               <span className="flex items-center gap-3 text-lg tracking-wide"><NetworkIcon /> Iniciar Simulador</span>
             </button>
           </div>
@@ -386,7 +363,7 @@ export default function OVANotebookSimulator() {
             <div className="flex flex-col lg:flex-row gap-8">
               <div className="w-full lg:w-2/5 flex flex-col gap-6">
                 <div className="relative rounded-2xl overflow-hidden shadow-xl border border-[#EAEAEA] h-64 lg:min-h-[300px] bg-white">
-                  <img src={screen.image} alt={screen.title} className="absolute inset-0 w-full h-full object-cover opacity-90" />
+                  <img src={screen.image} alt={screen.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover opacity-90" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#1E3A5F] via-transparent to-transparent opacity-80" />
                   <div className="absolute bottom-4 left-4 right-4">
                     <div className="flex items-center gap-2 text-white text-sm font-semibold bg-[#2FA8C6]/90 w-fit px-4 py-1.5 rounded-lg backdrop-blur-md shadow-lg border border-white/20"><NetworkIcon /> Aprendizaje Interactivo</div>
@@ -438,7 +415,7 @@ export default function OVANotebookSimulator() {
               <div className="flex gap-2">{contentScreens.map((_, i) => (<div key={i} className={`h-1.5 rounded-full transition-all duration-700 ${i === contentIdx ? 'w-8 bg-[#1E3A5F]' : 'w-2 bg-slate-200'}`} />))}</div>
               <button onClick={nextContent} className="px-6 py-3 bg-gradient-to-r from-[#2FA8C6] to-[#1E3A5F] text-white rounded-xl font-bold text-sm shadow-md hover:shadow-lg active:scale-95 transition-all flex items-center gap-2">{isLast ? 'Comenzar Evaluación' : 'Siguiente'} <ArrowRight /></button>
             </div>
-            <footer className="mt-8 pt-6 border-t border-[#EAEAEA] text-center"><p className="text-slate-400 text-xs">Laboratorio guiado por <strong className="text-[#2FA8C6]">Valerio</strong> &mdash; Coach de IA de Edutechlife.</p></footer>
+            <footer className="mt-8 pt-6 border-t border-[#EAEAEA] text-center"><p className="text-slate-600 text-xs">Laboratorio guiado por <strong className="text-[#2FA8C6]">Valerio</strong> &mdash; Coach de IA de Edutechlife.</p></footer>
           </div>
         </div>
         <style>{styles}</style>
@@ -466,7 +443,7 @@ export default function OVANotebookSimulator() {
           <div className="flex flex-col lg:flex-row gap-8">
             <div className="w-full lg:w-2/5 flex flex-col gap-6">
               <div className="relative rounded-2xl overflow-hidden shadow-xl border border-[#EAEAEA] group h-64 lg:h-auto lg:min-h-[300px] bg-white">
-                <img src={currentQ.image} alt="Contexto visual" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90" />
+                <img src={currentQ.image} alt="Contexto visual" loading="lazy" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1E3A5F] via-transparent to-transparent opacity-80" />
                 <div className="absolute bottom-4 left-4 right-4"><div className="flex items-center gap-2 text-white text-sm font-semibold bg-[#2FA8C6]/90 w-fit px-4 py-1.5 rounded-lg backdrop-blur-md shadow-lg border border-white/20"><NetworkIcon /> Escenario Interactivo</div></div>
               </div>
@@ -513,7 +490,7 @@ export default function OVANotebookSimulator() {
               </div>
             </div>
           </div>
-          <footer className="mt-8 pt-6 border-t border-[#EAEAEA] text-center"><p className="text-slate-400 text-xs">Laboratorio guiado por <strong className="text-[#2FA8C6]">Valerio</strong> &mdash; Coach de IA de Edutechlife.</p></footer>
+          <footer className="mt-8 pt-6 border-t border-[#EAEAEA] text-center"><p className="text-slate-600 text-xs">Laboratorio guiado por <strong className="text-[#2FA8C6]">Valerio</strong> &mdash; Coach de IA de Edutechlife.</p></footer>
         </div>
       </div>
       <style>{styles}</style>

@@ -210,9 +210,9 @@ const IALabChallengeSection = ({
                             ></div>
                         </div>
                         <div className="flex justify-between mt-1">
-                            <span className="text-xs text-slate-400">0%</span>
+                            <span className="text-xs text-slate-600">0%</span>
                             <span className="text-xs text-corporate font-medium">80%</span>
-                            <span className="text-xs text-slate-400">100%</span>
+                            <span className="text-xs text-slate-600">100%</span>
                         </div>
                     </div>
                 )}
