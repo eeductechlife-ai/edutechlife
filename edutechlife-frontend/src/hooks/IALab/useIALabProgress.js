@@ -1,5 +1,24 @@
+/**
+ * useIALabProgress — Carga/guarda progreso de usuario desde Supabase
+ *
+ * Responsabilidad: Gestiona la carga inicial de progreso (con cache localStorage
+ * para UX instantánea), track de actividades (exam, challenge, community,
+ * resource), y persistencia bidireccional localStorage ↔ Supabase.
+ *
+ * Store access: useIALabContext() para lecturas reactivas del progreso,
+ *   useIALabStore.getState() para cache operations (set/get/removeProgressCache)
+ *
+ * Flujo de carga:
+ *   1. Cache hit → aplicar inmediato (UX instantánea)
+ *   2. Supabase fetch → getAllProgress() → calculateGlobalProgressFromDB() (5 queries)
+ *   3. Guardar en cache → actualizar store con syncFromPersistence
+ *
+ * Side effects: beforeunload handler para cache, debounced save de última lección
+ *
+ * @see src/lib/progress.js — createProgressService (capa de datos Supabase)
+ */
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { useIALabContext } from '../../context/IALabContext';
+import { useIALabProgressContext, useIALabUIContext } from '../../context/IALabContext';
 import { useIALabStore } from '../../store/ialabStore';
 import { useSupabase } from '../useSupabase';
 import { 
@@ -22,26 +41,21 @@ import {
 
 export const useIALabProgress = () => {
   const {
-    user,
-    isLoaded,
-    activeMod,
-    completedModules,
-    setCompletedModules,
-    visitedModules,
-    setVisitedModules,
-    isLoadingProgress,
-    setIsLoadingProgress,
-    courseProgress,
-    setCourseProgress,
-    currentLessonIndex,
-    setCurrentLessonIndex,
-    isChallengeCompleted,
-    challengeScore,
-    quizPassed,
-    quizScore,
-    modules,
-    updateModuleActivity
-  } = useIALabContext();
+    activeMod, completedModules, setCompletedModules,
+    visitedModules, setVisitedModules,
+    isLoadingProgress, setIsLoadingProgress,
+    courseProgress, setCourseProgress,
+    modules, updateModuleActivity
+  } = useIALabProgressContext();
+
+  const isChallengeCompleted = useIALabStore(s => s.isChallengeCompleted);
+  const challengeScore = useIALabStore(s => s.challengeScore);
+  const quizPassed = useIALabStore(s => s.quizPassed);
+  const quizScore = useIALabStore(s => s.quizScore);
+
+  const {
+    user, isLoaded, currentLessonIndex, setCurrentLessonIndex
+  } = useIALabUIContext();
   
   // Obtener cliente Supabase con JWT de Clerk
   const { supabase: supabaseClient, isLoading: supabaseLoading } = useSupabase();
@@ -137,24 +151,21 @@ export const useIALabProgress = () => {
       
       if (cancelledRef.current) return;
       
-      // 2. Obtener todo el progreso del usuario
-      const allProgress = await progressService.getAllProgress(user.id);
+      // 2. Obtener todo el progreso en 1 query (reemplaza 16 queries separadas)
+      const fullProgress = await progressService.getFullUserProgress(user.id);
       
       if (cancelledRef.current) return;
       
-      if (allProgress && allProgress.length > 0) {
-        // 3. Filtrar filas resumen
+      if (fullProgress && fullProgress.allProgress.length > 0) {
+        const { allProgress, moduleBreakdowns, globalProgress, lastProgress } = fullProgress;
         const summaryRows = allProgress.filter(p => !p.activity_type && !p.resource_id);
         
-        // 4. Extraer módulos completados
         const completed = summaryRows
           .filter(p => p.is_completed || (p.module_score && p.module_score >= 80))
           .map(p => p.module_id);
         
-        // 5. Extraer módulos visitados
         const visited = [...new Set(allProgress.map(p => p.module_id))];
         
-        // 6. Actualizar estados
         if (!cancelledRef.current) {
           setCompletedModules(completed);
           setVisitedModules(prev => {
@@ -163,42 +174,31 @@ export const useIALabProgress = () => {
           });
         }
         
-        // 7. Calcular progreso global real
-        const globalProgress = await progressService.calculateGlobalProgressFromDB(user.id);
         if (!cancelledRef.current && globalProgress > 0) {
           setCourseProgress(globalProgress);
         }
         
         if (cancelledRef.current) return;
         
-        // 8. Cargar moduleProgress desde la DB para cada módulo
         for (let modId = 1; modId <= 5; modId++) {
           if (cancelledRef.current) return;
-          try {
-            const breakdown = await progressService.getModuleBreakdown(modId, user.id);
-            if (breakdown) {
-              if (breakdown.exam.passed) updateModuleActivity(modId, 'exam', true, breakdown.exam.score);
-              if (breakdown.challenge.score > 0) updateModuleActivity(modId, 'challenge', true, breakdown.challenge.score);
-              if (breakdown.resources.earned > 0) updateModuleActivity(modId, 'resourcesCompleted', true);
-              if (breakdown.community.commented) updateModuleActivity(modId, 'community', true);
-            }
-          } catch (err) {
-            console.error(`[PROGRESS] Error cargando módulo ${modId}:`, err);
+          const breakdown = moduleBreakdowns[modId];
+          if (breakdown) {
+            if (breakdown.exam.passed) updateModuleActivity(modId, 'exam', true, breakdown.exam.score);
+            if (breakdown.challenge.score > 0) updateModuleActivity(modId, 'challenge', true, breakdown.challenge.score);
+            if (breakdown.resources.earned > 0) updateModuleActivity(modId, 'resourcesCompleted', true);
+            if (breakdown.community.commented) updateModuleActivity(modId, 'community', true);
           }
         }
         
         if (cancelledRef.current) return;
         
-        // 9. Guardar en caché local
-        const finalProgress = await progressService.calculateGlobalProgressFromDB(user.id);
         saveToCache({
-          courseProgress: finalProgress > 0 ? finalProgress : 0,
+          courseProgress: globalProgress > 0 ? globalProgress : 0,
           completedModules: completed,
           visitedModules: visited
         });
         
-        // 10. Obtener última lección vista
-        const lastProgress = await progressService.getUserLastProgress(user.id);
         if (!cancelledRef.current && lastProgress && lastProgress.module_id === activeMod) {
           const lastLessonData = lastProgress.last_lesson_id || lastProgress.current_lesson;
           if (lastLessonData && lastLessonData >= 0) {
@@ -222,7 +222,6 @@ export const useIALabProgress = () => {
       if (!cancelledRef.current) {
         setProgressError(error.message || 'Error al cargar progreso');
         
-        // Fallback: mantener valores del caché
         if (!loadFromCache()) {
           setCompletedModules([]);
           setVisitedModules([1]);

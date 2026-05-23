@@ -1,0 +1,26 @@
+export const createSynthesizerSlice = (set, get) => ({
+  input: '',
+  setInput: (v) => set({ input: v }),
+  genData: null,
+  setGenData: (v) => set({ genData: v }),
+  loading: false,
+  setLoading: (v) => set({ loading: v }),
+  loadMsg: '',
+  setLoadMsg: (v) => set({ loadMsg: v }),
+
+  coachQ: '',
+  setCoachQ: (v) => set({ coachQ: v }),
+  coachMsg: '',
+  setCoachMsg: (v) => set({ coachMsg: v }),
+  coachLoad: false,
+  setCoachLoad: (v) => set({ coachLoad: v }),
+  isListening: false,
+  setIsListening: (v) => set({ isListening: v }),
+  avatarState: 'idle',
+  setAvatarState: (v) => set({ avatarState: v }),
+  showValerioDrawer: false,
+  setShowValerioDrawer: (v) => set({ showValerioDrawer: v }),
+
+  isSynthesizerOpen: false,
+  setIsSynthesizerOpen: (v) => set({ isSynthesizerOpen: v }),
+});

@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 
-const Breadcrumbs = ({ segments, className = '', separator = '/', size = 'text-xs' }) => {
+const Breadcrumbs = memo(function Breadcrumbs({ segments, className = '', separator = '/', size = 'text-xs' }) {
   if (!segments || segments.length === 0) return null;
   const visibleSegments = segments.slice(0, -1);
   const lastSegment = segments[segments.length - 1];
@@ -51,6 +51,7 @@ const Breadcrumbs = ({ segments, className = '', separator = '/', size = 'text-x
       </ol>
     </nav>
   );
-};
+});
 
 export default Breadcrumbs;
+

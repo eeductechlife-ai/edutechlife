@@ -2,6 +2,7 @@
 @import './design-system/tokens.css';
 @import './components/Valentina/Valentina.css';
 @import './components/DiagnosticoVAK/DiagnosticoVAK.css';
+@import './components/IALab/IALab.css';
 
 @tailwind base;
 @tailwind components;

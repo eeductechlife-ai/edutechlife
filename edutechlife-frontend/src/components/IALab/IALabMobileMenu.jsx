@@ -1,20 +1,26 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
-import { useIALabContext } from '../../context/IALabContext';
+import { useIALabProgressContext, useIALabUIContext } from '../../context/IALabContext';
 import { useProgressContext } from '../../context/ProgressContext';
 import { useIALabStore } from '../../store/ialabStore';
 import StudyPlannerModal from './StudyPlannerModal';
 
 const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenProfile, onOpenHistory, onOpenHelp }) => {
   const {
-    user, activeMod, setActiveMod, courseProgress, modules,
-    isModuleLocked, calculateModuleScore, sidebarDropdowns,
-    toggleSidebarDropdown, storedCertificate, getBadgesSummary,
-    setShowCertificateModal, courseCompleted, signOut
-  } = useIALabContext();
+    activeMod, setActiveMod, courseProgress, modules,
+    isModuleLocked, calculateModuleScore
+  } = useIALabProgressContext();
+
+  const {
+    user, sidebarDropdowns, toggleSidebarDropdown,
+    getBadgesSummary, setShowCertificateModal,
+    courseCompleted, signOut
+  } = useIALabUIContext();
 
   const { completedInfographics } = useProgressContext();
-  const { streak, getLevel, isStreakAtRisk } = useIALabStore();
+  const streak = useIALabStore(s => s.streak);
+  const getLevel = useIALabStore(s => s.getLevel);
+  const isStreakAtRisk = useIALabStore(s => s.isStreakAtRisk);
   const [showStudyPlanner, setShowStudyPlanner] = useState(false);
   const containerRef = useRef(null);
 
@@ -202,29 +208,25 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
         )}
       </div>
 
-      {/* INSIGNIAS + CERTIFICADO */}
-      {storedCertificate && (() => {
+      {/* INSIGNIAS */}
+      {(() => {
         const badgesSummary = getBadgesSummary();
-        if (badgesSummary.earned === 0 && !courseCompleted) return null;
+        if (badgesSummary.earned === 0) return null;
         return (
           <>
             <div className="mx-3 border-t border-slate-100 dark:border-slate-700" />
             <div className="px-3 py-3 space-y-2">
-              {badgesSummary.earned > 0 && (
-                <>
-                  <h3 className="text-[10px] font-bold tracking-[0.08em] uppercase text-corporate flex items-center gap-1.5">
-                    <Icon name="fa-award" className="text-corporate text-xs" /> INSIGNIAS
-                  </h3>
-                  <div className="flex items-center justify-between px-1">
-                    <span className="text-xs text-slate-500">{badgesSummary.earned}/{badgesSummary.total} ganadas</span>
-                    <span className="text-xs font-semibold text-corporate">{Math.round((badgesSummary.earned / badgesSummary.total) * 100)}%</span>
-                  </div>
-                  <div className="h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-petroleum to-corporate rounded-full transition-all duration-700"
-                         style={{ width: `${(badgesSummary.earned / badgesSummary.total) * 100}%` }} />
-                  </div>
-                </>
-              )}
+              <h3 className="text-[10px] font-bold tracking-[0.08em] uppercase text-corporate flex items-center gap-1.5">
+                <Icon name="fa-award" className="text-corporate text-xs" /> INSIGNIAS
+              </h3>
+              <div className="flex items-center justify-between px-1">
+                <span className="text-xs text-slate-500">{badgesSummary.earned}/{badgesSummary.total} ganadas</span>
+                <span className="text-xs font-semibold text-corporate">{Math.round((badgesSummary.earned / badgesSummary.total) * 100)}%</span>
+              </div>
+              <div className="h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                <div className="h-full bg-gradient-to-r from-petroleum to-corporate rounded-full transition-all duration-700"
+                     style={{ width: `${(badgesSummary.earned / badgesSummary.total) * 100}%` }} />
+              </div>
               {courseCompleted && (
                 <button onClick={() => { setShowCertificateModal(true); closeMobileMenu(); }}
                   className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-petroleum dark:text-petroleum bg-petroleum/5 hover:bg-petroleum/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/30 min-h-[44px]">

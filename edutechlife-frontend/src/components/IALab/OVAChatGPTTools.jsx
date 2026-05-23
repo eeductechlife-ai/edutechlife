@@ -25,16 +25,16 @@ const quizScenarios = [
 ];
 
 const WelcomeScreen = ({ onNext }) => (
-  <div className="flex flex-col items-center justify-center min-h-[60vh] text-center animate-fade-in px-4 py-8">
-    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 text-[#13374b] font-semibold text-sm mb-4">
+  <div className="flex flex-col items-center justify-center min-h-[60vh] text-center animate-[fadeIn_0.8s_ease-out_forwards] px-4 py-8 bg-white dark:bg-slate-800">
+    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 dark:bg-cyan-900/30 text-[#13374b] dark:text-slate-100 font-semibold text-sm mb-4">
       <Bot size={16} className="text-[#259eb5]" /><span>Laboratorio Guiado por Valerio</span>
     </div>
     <div className="w-16 h-16 bg-gradient-to-br from-[#259eb5] to-[#13374b] rounded-2xl flex items-center justify-center shadow-lg shadow-[#259eb5]/20 mb-6">
       <Zap className="text-white w-8 h-8" />
     </div>
-    <h1 className="text-3xl md:text-5xl font-black mb-3 leading-tight tracking-tight text-[#13374b]">Domina las Herramientas</h1>
-    <p className="text-lg md:text-xl text-slate-500 font-light mb-2">ChatGPT</p>
-    <p className="text-slate-600 max-w-xl mb-4">Hola, soy Valerio, tu coach de IA. En este laboratorio exploraremos 5 herramientas clave del ecosistema ChatGPT: Búsqueda Web, Intérprete de Código, DALL-E 3, Canvas y Memoria. ¡Descubramos juntos sus fortalezas!</p>
+    <h1 className="text-3xl md:text-5xl font-black mb-3 leading-tight tracking-tight text-[#13374b] dark:text-slate-100">Domina las Herramientas</h1>
+    <p className="text-lg md:text-xl text-slate-500 dark:text-slate-400 font-light mb-2">ChatGPT</p>
+    <p className="text-slate-600 dark:text-slate-400 max-w-xl mb-4">Hola, soy Valerio, tu coach de IA. En este laboratorio exploraremos 5 herramientas clave del ecosistema ChatGPT: Búsqueda Web, Intérprete de Código, DALL-E 3, Canvas y Memoria. ¡Descubramos juntos sus fortalezas!</p>
     <VoiceReader text="Hola, soy Valerio, tu coach de IA de Edutechlife. En este laboratorio exploraremos 5 herramientas clave del ecosistema ChatGPT: Búsqueda Web, Intérprete de Código, DALL-E 3, Canvas y Memoria y Proyectos. Aprenderemos cuándo usar cada una y sus limitaciones." />
     <button onClick={onNext} className="mt-4 px-8 py-4 bg-gradient-to-r from-[#259eb5] to-[#13374b] text-white rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all flex items-center gap-3"><Play size={20} />Comenzar Laboratorio</button>
   </div>
@@ -71,15 +71,15 @@ export default function OVAChatGPTTools() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 font-sans p-4 md:p-8">
+    <div className="min-h-screen bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-sans p-4 md:p-8">
       <nav className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
         <div className="flex items-center gap-2">
           <div className="w-10 h-10 bg-[#259eb5] rounded-xl flex items-center justify-center shadow-lg shadow-[#259eb5]/20"><Zap className="text-white w-6 h-6" /></div>
-          <span className="text-3xl font-black tracking-tight"><span className="text-[#259eb5]">Edu</span><span className="text-[#13374b]">techlife</span></span>
+          <span className="text-3xl font-black tracking-tight"><span className="text-[#259eb5]">Edu</span><span className="text-[#13374b] dark:text-slate-100">techlife</span></span>
         </div>
-        <div className="flex items-center gap-3 bg-slate-50 px-6 py-2.5 rounded-2xl border border-slate-100 shadow-sm">
-          <span className="text-xs font-black text-slate-600 uppercase tracking-widest">Ecosistema ChatGPT</span>
-          <div className="h-4 w-[2px] bg-slate-200"></div>
+        <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-700/30 px-6 py-2.5 rounded-2xl border border-slate-100 dark:border-slate-600 shadow-sm">
+          <span className="text-xs font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest">Ecosistema ChatGPT</span>
+          <div className="h-4 w-[2px] bg-slate-200 dark:bg-slate-600"></div>
           <span className="text-sm font-bold text-[#259eb5]">Módulo de Competencias</span>
         </div>
       </nav>
@@ -108,13 +108,13 @@ export default function OVAChatGPTTools() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {tools.map((tool, idx) => (
                   <motion.button key={tool.id} whileHover={{ y: -6 }} onClick={() => openTool(idx)}
-                    className={`group relative text-left bg-white p-6 rounded-2xl border-2 transition-all duration-300 shadow-sm hover:shadow-xl ${viewedTools.includes(idx) ? 'border-emerald-200' : 'border-slate-100 hover:border-[#259eb5]'}`}>
+                    className={`group relative text-left bg-white dark:bg-slate-800 p-6 rounded-2xl border-2 transition-all duration-300 shadow-sm hover:shadow-xl ${viewedTools.includes(idx) ? 'border-emerald-200 dark:border-emerald-400' : 'border-slate-100 dark:border-slate-600 hover:border-[#259eb5]'}`}>
                     <div className="flex justify-between items-start mb-4">
-                      <div className="p-3 rounded-xl bg-slate-50 group-hover:bg-cyan-50 transition-colors">{tool.icon}</div>
-                      {viewedTools.includes(idx) && <div className="bg-emerald-100 text-emerald-600 p-1.5 rounded-full border border-emerald-200"><CheckCircle2 size={16} /></div>}
+                      <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-700/30 group-hover:bg-cyan-50 dark:group-hover:bg-cyan-900/30 transition-colors">{tool.icon}</div>
+                      {viewedTools.includes(idx) && <div className="bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 p-1.5 rounded-full border border-emerald-200 dark:border-emerald-700"><CheckCircle2 size={16} /></div>}
                     </div>
-                    <h3 className="text-xl font-black text-[#13374b] mb-2 group-hover:text-[#259eb5] transition-colors">{tool.title}</h3>
-                    <p className="text-slate-500 text-sm leading-relaxed mb-4 line-clamp-2">{tool.desc}</p>
+                    <h3 className="text-xl font-black text-[#13374b] dark:text-slate-100 mb-2 group-hover:text-[#259eb5] transition-colors">{tool.title}</h3>
+                    <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-4 line-clamp-2">{tool.desc}</p>
                     <div className="flex items-center gap-1.5 text-[#259eb5] font-black text-[11px] uppercase tracking-widest">Explorar <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" /></div>
                   </motion.button>
                 ))}
@@ -128,7 +128,7 @@ export default function OVAChatGPTTools() {
                       <h3 className="text-2xl font-black mb-2">Desafío Estratégico</h3>
                       <p className="text-slate-200 text-sm leading-relaxed mb-6">Analiza 5 escenarios reales y elige la mejor herramienta.</p>
                     </div>
-                    <div className="bg-white text-[#13374b] font-black py-3 px-6 rounded-xl inline-flex items-center justify-center gap-2 group-hover:bg-cyan-50 transition-colors text-sm">Iniciar <Play size={16} /></div>
+                    <div className="bg-white text-[#13374b] dark:text-slate-100 font-black py-3 px-6 rounded-xl inline-flex items-center justify-center gap-2 group-hover:bg-cyan-50 dark:group-hover:bg-cyan-900/30 transition-colors text-sm">Iniciar <Play size={16} /></div>
                   </div>
                 </motion.button>
               </div>
@@ -136,32 +136,32 @@ export default function OVAChatGPTTools() {
           ) : (
             <motion.div key="quiz" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="max-w-3xl mx-auto">
               {!quizFinished ? (
-                <div className="bg-white rounded-[2rem] p-6 md:p-8 shadow-xl border border-slate-100">
-                  <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-50">
-                    <button onClick={() => { setShowQuiz(false); stopSpeech(); }} className="text-slate-600 hover:text-[#13374b] flex items-center gap-1 font-bold transition-colors text-xs"><ChevronLeft size={16} /> Salir</button>
-                    <div className="flex gap-1.5">{quizScenarios.map((_, i) => <div key={i} className={`h-1.5 rounded-full transition-all duration-500 ${i === quizStep ? 'w-10 bg-[#259eb5]' : i < quizStep ? 'w-6 bg-emerald-400' : 'w-4 bg-slate-100'}`} />)}</div>
+                <div className="bg-white dark:bg-slate-800 rounded-[2rem] p-6 md:p-8 shadow-xl border border-slate-100 dark:border-slate-600">
+                  <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-50 dark:border-slate-700">
+                    <button onClick={() => { setShowQuiz(false); stopSpeech(); }} className="text-slate-600 dark:text-slate-300 hover:text-[#13374b] dark:hover:text-slate-100 flex items-center gap-1 font-bold transition-colors text-xs"><ChevronLeft size={16} /> Salir</button>
+                    <div className="flex gap-1.5">{quizScenarios.map((_, i) => <div key={i} className={`h-1.5 rounded-full transition-all duration-500 ${i === quizStep ? 'w-10 bg-[#259eb5]' : i < quizStep ? 'w-6 bg-emerald-400' : 'w-4 bg-slate-100 dark:bg-slate-700'}`} />)}</div>
                   </div>
                   <h2 className="text-[10px] font-black text-[#259eb5] uppercase tracking-widest mb-3">Caso {quizStep + 1}</h2>
-                  <p className="text-xl md:text-2xl font-black text-[#13374b] mb-6 leading-tight">{quizScenarios[quizStep].question}</p>
+                  <p className="text-xl md:text-2xl font-black text-[#13374b] dark:text-slate-100 mb-6 leading-tight">{quizScenarios[quizStep].question}</p>
                   <div className="space-y-3">
                     {quizScenarios[quizStep].options.map((opt, i) => {
                       const isCorrect = i === quizScenarios[quizStep].correct;
                       const isSelected = selectedAnswer === i;
                       let btnClass = "w-full p-4 rounded-xl border-2 text-left font-bold transition-all flex items-center justify-between text-sm ";
-                      if (!feedback) btnClass += "border-slate-100 hover:border-[#259eb5] hover:bg-slate-50";
-                      else if (isCorrect) btnClass += "border-emerald-500 bg-emerald-50 text-emerald-700";
-                      else if (isSelected) btnClass += "border-rose-500 bg-rose-50 text-rose-700";
-                      else btnClass += "border-slate-50 opacity-40";
+                      if (!feedback) btnClass += "border-slate-100 dark:border-slate-600 hover:border-[#259eb5] hover:bg-slate-50 dark:hover:bg-slate-700/30";
+                      else if (isCorrect) btnClass += "border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300";
+                      else if (isSelected) btnClass += "border-rose-500 bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-300";
+                      else btnClass += "border-slate-50 dark:border-slate-700 opacity-40";
                       return <button key={i} disabled={feedback} onClick={() => handleQuizAnswer(i)} className={btnClass}>{opt}{feedback && isCorrect && <CheckCircle2 className="text-emerald-500" />}{feedback && isSelected && !isCorrect && <X className="text-rose-500" />}</button>;
                     })}
                   </div>
                   {feedback && (
-                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className={`mt-6 p-5 rounded-xl border-l-6 ${feedback === 'correct' ? 'bg-emerald-50 border-emerald-500' : 'bg-rose-50 border-rose-500'}`}>
+                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className={`mt-6 p-5 rounded-xl border-l-6 ${feedback === 'correct' ? 'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-500' : 'bg-rose-50 dark:bg-rose-900/20 border-rose-500'}`}>
                       <div className="flex items-start gap-3">
-                        <div className={`p-1.5 rounded-lg ${feedback === 'correct' ? 'bg-emerald-100 text-emerald-600' : 'bg-rose-100 text-rose-600'}`}>{feedback === 'correct' ? <Trophy size={20} /> : <AlertCircle size={20} />}</div>
+                        <div className={`p-1.5 rounded-lg ${feedback === 'correct' ? 'bg-emerald-100 dark:bg-emerald-800/30 text-emerald-600 dark:text-emerald-400' : 'bg-rose-100 dark:bg-rose-800/30 text-rose-600 dark:text-rose-400'}`}>{feedback === 'correct' ? <Trophy size={20} /> : <AlertCircle size={20} />}</div>
                         <div>
                           <h4 className="font-black text-sm mb-0.5">{feedback === 'correct' ? '¡Correcto!' : 'Incorrecto'}</h4>
-                          <p className="text-slate-600 text-xs leading-relaxed">{quizScenarios[quizStep].explanation}</p>
+                          <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">{quizScenarios[quizStep].explanation}</p>
                         </div>
                       </div>
                       <button onClick={nextQuestion} className="w-full mt-4 bg-[#13374b] text-white py-3 rounded-lg font-black hover:bg-[#259eb5] transition-colors shadow text-xs flex items-center justify-center gap-2">{quizStep < quizScenarios.length - 1 ? 'Siguiente' : 'Ver Resultados'} <ChevronRight size={16} /></button>
@@ -169,22 +169,22 @@ export default function OVAChatGPTTools() {
                   )}
                 </div>
               ) : (
-                <div className="bg-white rounded-[2.5rem] p-8 shadow-xl text-center border border-slate-100">
-                  <div className="inline-flex items-center justify-center w-24 h-24 bg-cyan-50 rounded-full mb-6 relative">
+                <div className="bg-white dark:bg-slate-800 rounded-[2.5rem] p-8 shadow-xl text-center border border-slate-100 dark:border-slate-600">
+                  <div className="inline-flex items-center justify-center w-24 h-24 bg-cyan-50 dark:bg-cyan-900/20 rounded-full mb-6 relative">
                     <Trophy className="text-[#259eb5] w-12 h-12" />
-                    <div className="absolute top-0 right-0 bg-emerald-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-black border-4 border-white shadow">{score}</div>
+                    <div className="absolute top-0 right-0 bg-emerald-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-black border-4 border-white dark:border-slate-800 shadow">{score}</div>
                   </div>
-                  <h2 className="text-2xl font-black text-[#13374b] mb-3">Reporte de Competencias</h2>
-                  <p className="text-slate-500 text-sm mb-6">Acertaste {score} de {quizScenarios.length} decisiones estratégicas.</p>
-                  <div className="bg-slate-50 p-5 rounded-2xl mb-6 text-left">
-                    <h3 className="font-black text-[#13374b] mb-3 flex items-center gap-2 text-sm"><Award className="text-[#259eb5]" size={18} /> Perfil:</h3>
-                    {score === 5 ? <p className="text-emerald-700 font-bold text-sm leading-relaxed">Nivel Maestro: Dominas perfectamente cada herramienta.</p>
-                    : score >= 3 ? <p className="text-amber-700 font-bold text-sm leading-relaxed">Nivel Avanzado: Tienes buen criterio, refuerza matices técnicos.</p>
-                    : <p className="text-rose-700 font-bold text-sm leading-relaxed">Nivel Explorador: Revisa las tarjetas informativas nuevamente.</p>}
+                  <h2 className="text-2xl font-black text-[#13374b] dark:text-slate-100 mb-3">Reporte de Competencias</h2>
+                  <p className="text-slate-500 dark:text-slate-400 text-sm mb-6">Acertaste {score} de {quizScenarios.length} decisiones estratégicas.</p>
+                  <div className="bg-slate-50 dark:bg-slate-700/30 p-5 rounded-2xl mb-6 text-left">
+                    <h3 className="font-black text-[#13374b] dark:text-slate-100 mb-3 flex items-center gap-2 text-sm"><Award className="text-[#259eb5]" size={18} /> Perfil:</h3>
+                    {score === 5 ? <p className="text-emerald-700 dark:text-emerald-300 font-bold text-sm leading-relaxed">Nivel Maestro: Dominas perfectamente cada herramienta.</p>
+                    : score >= 3 ? <p className="text-amber-700 dark:text-amber-300 font-bold text-sm leading-relaxed">Nivel Avanzado: Tienes buen criterio, refuerza matices técnicos.</p>
+                    : <p className="text-rose-700 dark:text-rose-300 font-bold text-sm leading-relaxed">Nivel Explorador: Revisa las tarjetas informativas nuevamente.</p>}
                   </div>
                   <div className="flex flex-col sm:flex-row gap-3 justify-center">
                     <button onClick={() => { setQuizStep(0); setScore(0); setQuizFinished(false); setFeedback(null); setSelectedAnswer(null); setShowQuiz(false); }} className="bg-[#259eb5] text-white px-8 py-3 rounded-xl font-black shadow shadow-[#259eb5]/30 hover:bg-[#13374b] transition-colors text-sm flex items-center justify-center gap-2"><RefreshCcw size={16} /> Reiniciar</button>
-                    <button onClick={() => setShowQuiz(false)} className="bg-white border-2 border-slate-200 text-slate-700 px-8 py-3 rounded-xl font-black hover:border-[#13374b] transition-colors text-sm">Volver</button>
+                    <button onClick={() => setShowQuiz(false)} className="bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 px-8 py-3 rounded-xl font-black hover:border-[#13374b] dark:hover:border-slate-100 transition-colors text-sm">Volver</button>
                   </div>
                 </div>
               )}
@@ -196,43 +196,43 @@ export default function OVAChatGPTTools() {
       <AnimatePresence>
         {activeModal !== null && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#13374b]/80 backdrop-blur-sm">
-            <motion.div initial={{ scale: 0.9, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.9, opacity: 0, y: 20 }} className="bg-white w-full max-w-3xl max-h-[85dvh] overflow-y-auto rounded-[2rem] shadow-2xl relative">
-              <button onClick={() => { setActiveModal(null); stopSpeech(); }} className="sticky top-4 right-4 float-right z-10 p-2.5 bg-slate-100 hover:bg-rose-50 text-slate-500 hover:text-rose-500 rounded-full transition-all shadow-sm"><X size={20} /></button>
+            <motion.div initial={{ scale: 0.9, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.9, opacity: 0, y: 20 }} className="bg-white dark:bg-slate-800 w-full max-w-3xl max-h-[85dvh] overflow-y-auto rounded-[2rem] shadow-2xl relative">
+              <button onClick={() => { setActiveModal(null); stopSpeech(); }} className="sticky top-4 right-4 float-right z-10 p-2.5 bg-slate-100 dark:bg-slate-700 hover:bg-rose-50 dark:hover:bg-rose-900/20 text-slate-500 dark:text-slate-400 hover:text-rose-500 rounded-full transition-all shadow-sm"><X size={20} /></button>
               <div className="p-6 md:p-8">
                 <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-6">
                   <div className="flex items-center gap-4">
-                    <div className="bg-slate-50 p-4 rounded-2xl shadow-inner border border-slate-100">{tools[activeModal].icon}</div>
+                    <div className="bg-slate-50 dark:bg-slate-700/30 p-4 rounded-2xl shadow-inner border border-slate-100 dark:border-slate-600">{tools[activeModal].icon}</div>
                     <div>
-                      <h1 className="text-2xl md:text-3xl font-black text-[#13374b]">{tools[activeModal].title}</h1>
+                      <h1 className="text-2xl md:text-3xl font-black text-[#13374b] dark:text-slate-100">{tools[activeModal].title}</h1>
                       <div className="flex items-center gap-1.5 text-[#259eb5] font-black uppercase tracking-widest text-[10px] mt-0.5"><Zap size={12} /> Función del Ecosistema</div>
                     </div>
                   </div>
                   <VoiceReader text={tools[activeModal].audio} />
                 </div>
-                <p className="text-base text-slate-500 leading-relaxed mb-6 font-medium">{tools[activeModal].desc}</p>
+                <p className="text-base text-slate-500 dark:text-slate-400 leading-relaxed mb-6 font-medium">{tools[activeModal].desc}</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                  <div className="bg-emerald-50/50 p-5 rounded-2xl border border-emerald-100">
-                    <h3 className="flex items-center gap-1.5 font-black text-emerald-800 mb-4 uppercase tracking-widest text-[10px]"><CheckCircle2 size={14} /> Cuándo usarlo</h3>
-                    <ul className="space-y-2">{tools[activeModal].pros.map((pro, i) => <li key={i} className="flex items-start gap-2 text-slate-700 font-bold text-xs"><span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0" /> {pro}</li>)}</ul>
+                  <div className="bg-emerald-50/50 p-5 rounded-2xl border border-emerald-100 dark:border-emerald-800">
+                    <h3 className="flex items-center gap-1.5 font-black text-emerald-800 dark:text-emerald-300 mb-4 uppercase tracking-widest text-[10px]"><CheckCircle2 size={14} /> Cuándo usarlo</h3>
+                    <ul className="space-y-2">{tools[activeModal].pros.map((pro, i) => <li key={i} className="flex items-start gap-2 text-slate-700 dark:text-slate-200 font-bold text-xs"><span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0" /> {pro}</li>)}</ul>
                   </div>
-                  <div className="bg-rose-50/50 p-5 rounded-2xl border border-rose-100">
-                    <h3 className="flex items-center gap-1.5 font-black text-rose-800 mb-4 uppercase tracking-widest text-[10px]"><AlertCircle size={14} /> Limitaciones</h3>
-                    <ul className="space-y-2">{tools[activeModal].cons.map((con, i) => <li key={i} className="flex items-start gap-2 text-slate-700 font-bold text-xs"><span className="w-1.5 h-1.5 rounded-full bg-rose-400 mt-1.5 shrink-0" /> {con}</li>)}</ul>
+                  <div className="bg-rose-50/50 p-5 rounded-2xl border border-rose-100 dark:border-rose-800">
+                    <h3 className="flex items-center gap-1.5 font-black text-rose-800 dark:text-rose-300 mb-4 uppercase tracking-widest text-[10px]"><AlertCircle size={14} /> Limitaciones</h3>
+                    <ul className="space-y-2">{tools[activeModal].cons.map((con, i) => <li key={i} className="flex items-start gap-2 text-slate-700 dark:text-slate-200 font-bold text-xs"><span className="w-1.5 h-1.5 rounded-full bg-rose-400 mt-1.5 shrink-0" /> {con}</li>)}</ul>
                   </div>
                 </div>
-                <div className="bg-slate-50 p-5 rounded-2xl mb-6">
-                  <h3 className="flex items-center gap-1.5 font-black text-[#13374b] mb-4 uppercase tracking-widest text-[10px]"><Lightbulb size={14} className="text-[#259eb5]" /> Casos de Uso</h3>
+                <div className="bg-slate-50 dark:bg-slate-700/30 p-5 rounded-2xl mb-6">
+                  <h3 className="flex items-center gap-1.5 font-black text-[#13374b] dark:text-slate-100 mb-4 uppercase tracking-widest text-[10px]"><Lightbulb size={14} className="text-[#259eb5]" /> Casos de Uso</h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                    {tools[activeModal].useCases.map((u, i) => <div key={i} className="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex items-center gap-2 font-bold text-slate-600 text-xs"><span className="text-[#259eb5] font-black">{i+1}.</span> {u}</div>)}
+                    {tools[activeModal].useCases.map((u, i) => <div key={i} className="bg-white dark:bg-slate-700 p-3 rounded-xl shadow-sm border border-slate-100 dark:border-slate-500 flex items-center gap-2 font-bold text-slate-600 dark:text-slate-300 text-xs"><span className="text-[#259eb5] font-black">{i+1}.</span> {u}</div>)}
                   </div>
                 </div>
                 <div className="bg-[#13374b] rounded-2xl p-6 text-white">
                   <div className="flex items-center justify-between mb-4">
-                    <h4 className="text-[9px] font-black uppercase tracking-[0.15em] text-slate-600">Prompt Estratégico</h4>
+                    <h4 className="text-[9px] font-black uppercase tracking-[0.15em] text-slate-400">Prompt Estratégico</h4>
                     <div className="flex gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-rose-500" /><div className="w-2.5 h-2.5 rounded-full bg-amber-500" /><div className="w-2.5 h-2.5 rounded-full bg-emerald-500" /></div>
                   </div>
                   <code className="text-cyan-300 block text-sm font-mono leading-relaxed bg-black/20 p-4 rounded-xl italic">"{tools[activeModal].prompt}"</code>
-                  <p className="text-slate-600 text-[9px] font-medium tracking-wide mt-3">Tip: Copia y adapta esta instrucción para tus flujos en Edutechlife.</p>
+                  <p className="text-slate-500 text-[9px] font-medium tracking-wide mt-3">Tip: Copia y adapta esta instrucción para tus flujos en Edutechlife.</p>
                 </div>
               </div>
             </motion.div>
@@ -240,14 +240,11 @@ export default function OVAChatGPTTools() {
         )}
       </AnimatePresence>
 
-      <footer className="max-w-6xl mx-auto mt-12 pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-600 text-[10px] font-bold pb-8 uppercase tracking-widest">
+      <footer className="max-w-6xl mx-auto mt-12 pt-8 border-t border-slate-100 dark:border-slate-600 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-600 dark:text-slate-400 text-[10px] font-bold pb-8 uppercase tracking-widest">
         <p>Laboratorio guiado por <span className="text-[#259eb5]">Valerio</span> — Coach de IA de Edutechlife.</p>
       </footer>
 
-      <style>{`
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-fade-in { animation: fadeIn 0.8s ease-out forwards; }
-      `}</style>
+
     </div>
   );
 }

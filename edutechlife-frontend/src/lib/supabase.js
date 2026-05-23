@@ -101,10 +101,10 @@ export const createClerkSupabaseClient = (clerkToken = null) => {
       if (status === 401) {
         console.warn(`⚠️ [Supabase] 401 Unauthorized: ${method} ${url.replace(supabaseUrl, '')}`);
         console.warn('   Razón: RLS (Row Level Security) está bloqueando acceso');
+      } else if (status === 404) {
+        // Silently ignore 404 — table may not exist yet
       } else if (status >= 400) {
         console.warn(`⚠️ [Supabase] ${status} ${statusText}: ${method} ${url.replace(supabaseUrl, '')}`);
-      } else if (status === 200 || status === 201) {
-
       }
     }
     

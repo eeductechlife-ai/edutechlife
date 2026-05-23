@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
-import { useIALabContext } from '../../context/IALabContext';
+import { useIALabProgressContext } from '../../context/IALabContext';
 import { useIALabStore } from '../../store/ialabStore';
 import useBodyScrollLock from '../../hooks/useBodyScrollLock';
 import useFocusTrap from '../../hooks/useFocusTrap';
@@ -103,8 +103,9 @@ const buildCalendar = () => {
 };
 
 const StudyPlannerModal = ({ isOpen, onClose }) => {
-  const { activeMod, modules } = useIALabContext();
-  const { streak } = useIALabStore();
+  const { activeMod, modules } = useIALabProgressContext();
+  const streak = useIALabStore(s => s.streak);
+  const getWeeklyXP = useIALabStore(s => s.getWeeklyXP);
   const [notes, setNotes] = useState(loadNotes);
   const [text, setText] = useState('');
   const [selectedMod, setSelectedMod] = useState(activeMod);
@@ -376,10 +377,10 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
                 </h4>
                 <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-relaxed">
                   {streak >= 7
-                    ? '¡Racha impresionante! Sigue así, la constancia es clave.'
+                    ? `¡Racha impresionante! Sigue así — ${getWeeklyXP().weekly}/${getWeeklyXP().weeklyTarget} XP esta semana.`
                     : streak >= 3
-                    ? 'Buena racha. Revisa tus notas para mantener el ritmo.'
-                    : 'Establece una meta diaria. 20 minutos al día marcan la diferencia.'}
+                    ? `Buena racha (${streak} días). ${getWeeklyXP().dailyAvg} XP/día de promedio esta semana.`
+                    : `Meta: 20 min diarios. Esta semana llevas ${getWeeklyXP().weekly} de ${getWeeklyXP().weeklyTarget} XP.`}
                 </p>
               </div>
             </div>

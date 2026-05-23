@@ -1,10 +1,16 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { getModuleContent } from './constants/moduleContent';
-import { useIALabContext } from '../../context/IALabContext';
+import { useIALabProgressContext } from '../../context/IALabContext';
+
+const SEARCHABLE_TYPES = [
+  'video', 'document', 'documento', 'pdf', 'pdf-thumbnail',
+  'image', 'imagen', 'interactive', 'interactivo',
+  'ova', 'ova-thumbnail', 'ova_interactive',
+];
 
 const GlobalSearchBar = ({ mobile, onClose }) => {
-  const { modules, activeMod, setActiveMod, openResourceById } = useIALabContext();
+  const { modules, activeMod, setActiveMod, openResourceById } = useIALabProgressContext();
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [isOpen, setIsOpen] = useState(false);

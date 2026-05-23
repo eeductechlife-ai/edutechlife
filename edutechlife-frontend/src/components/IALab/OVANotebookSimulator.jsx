@@ -39,9 +39,9 @@ const EdutechLogo = ({ size = "large" }) => {
   const isLarge = size === "large";
   return (
     <div className="flex items-center justify-center gap-3 select-none">
-      <div className={`relative flex items-center justify-center rounded-xl bg-white border border-[#EAEAEA] shadow-[0_4px_15px_rgba(47,168,198,0.15)] ${isLarge ? 'w-12 h-12 md:w-14 md:h-14' : 'w-10 h-10'}`}>
+      <div className={`relative flex items-center justify-center rounded-xl bg-white dark:bg-slate-800 border border-[#EAEAEA] dark:border-slate-600 shadow-[0_4px_15px_rgba(47,168,198,0.15)] ${isLarge ? 'w-12 h-12 md:w-14 md:h-14' : 'w-10 h-10'}`}>
         <BrainIcon className={`text-[#2FA8C6] ${isLarge ? 'w-7 h-7' : 'w-5 h-5'}`} />
-        <div className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-[#1E3A5F] rounded-full border-2 border-white shadow-[0_0_8px_#1E3A5F] animate-pulse"></div>
+        <div className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-[#1E3A5F] rounded-full border-2 border-white dark:border-slate-900 shadow-[0_0_8px_#1E3A5F] animate-pulse"></div>
       </div>
       <h1 className={`font-bold tracking-tight ${isLarge ? 'text-4xl md:text-5xl' : 'text-2xl md:text-3xl'}`}>
         <span className="text-[#2FA8C6]">Edu</span><span className="text-[#1E3A5F]">techlife</span>
@@ -269,37 +269,19 @@ export default function OVANotebookSimulator() {
     : gameState === 'quiz' ? 1 + contentScreens.length + currentQIndex
     : totalSteps - 1;
 
-  const styles = `
-    .tech-grid-bg { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: -1; background-image: linear-gradient(to right, #EAEAEA 1px, transparent 1px), linear-gradient(to bottom, #EAEAEA 1px, transparent 1px); background-size: 50px 50px; opacity: 0.6; }
-    .hologram-glow-1 { position: fixed; top: -15%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(47,168,198,0.15) 0%, rgba(255,255,255,0) 70%); z-index: -1; }
-    .hologram-glow-2 { position: fixed; bottom: -20%; right: -10%; width: 60vw; height: 60vw; background: radial-gradient(circle, rgba(30,58,95,0.08) 0%, rgba(255,255,255,0) 70%); z-index: -1; }
-    .glass-panel { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(47, 168, 198, 0.15); box-shadow: 0 10px 40px rgba(30, 58, 95, 0.08); }
-    .glass-panel-interactive { background: rgba(255, 255, 255, 0.95); border: 1px solid #EAEAEA; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-    .glass-panel-interactive:hover:not(:disabled) { border-color: #2FA8C6; box-shadow: 0 8px 25px rgba(47, 168, 198, 0.15); transform: translateY(-2px); }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
-    @keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 15px rgba(47, 168, 198, 0.4); } 50% { box-shadow: 0 0 30px rgba(47, 168, 198, 0.8); } }
-    .animate-fade-in { animation: fadeIn 0.6s ease-out forwards; }
-    .animate-float { animation: float 6s ease-in-out infinite; }
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(47, 168, 198, 0.3); border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(47, 168, 198, 0.6); }
-  `;
-
   if (gameState === 'welcome') {
     return (
       <div className="w-full relative" style={{ minHeight: '400px' }}>
-        <div className="tech-grid-bg" /><div className="hologram-glow-1" /><div className="hologram-glow-2" />
+        <div className="fixed inset-0 -z-10 opacity-60 bg-[linear-gradient(to_right,#EAEAEA_1px,transparent_1px),linear-gradient(to_bottom,#EAEAEA_1px,transparent_1px)] bg-[length:50px_50px]" /><div className="fixed -top-[15%] -left-[10%] w-[50vw] h-[50vw] -z-10 bg-[radial-gradient(circle,rgba(47,168,198,0.15)_0%,rgba(255,255,255,0)_70%)]" /><div className="fixed -bottom-[20%] -right-[10%] w-[60vw] h-[60vw] -z-10 bg-[radial-gradient(circle,rgba(30,58,95,0.08)_0%,rgba(255,255,255,0)_70%)]" />
         <div className="w-full flex items-center justify-center py-12 px-4 relative z-10">
-          <div className="w-full max-w-3xl glass-panel p-8 md:p-14 rounded-3xl animate-fade-in text-center border-t-4 border-t-[#2FA8C6] relative overflow-hidden">
+          <div className="w-full max-w-3xl bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border border-[#2FA8C6]/15 shadow-[0_8px_32px_rgba(31,38,135,0.1)] p-8 md:p-14 rounded-3xl animate-[fadeIn_0.6s_ease-out_forwards] text-center border-t-4 border-t-[#2FA8C6] relative overflow-hidden">
             <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none"><BrainIcon className="w-40 h-40 text-[#1E3A5F]" /></div>
-            <div className="mb-6 flex justify-center animate-float"><EdutechLogo size="large" /></div>
+            <div className="mb-6 flex justify-center animate-[float_6s_ease-in-out_infinite]"><EdutechLogo size="large" /></div>
             <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#E0F7FA] text-[#004B63] font-semibold text-[10px] uppercase tracking-[0.15em] border border-[#2FA8C6]/20 mb-6">
               <BrainIcon className="w-3.5 h-3.5" /><span>Laboratorio Guiado por Valerio</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-[#1E3A5F] mb-6 tracking-tight font-montserrat">Simulador: Análisis de Documentos</h2>
-            <div className="bg-[#EAEAEA]/50 p-6 rounded-2xl mb-6 text-[#1E3A5F] text-base md:text-lg leading-relaxed border border-[#2FA8C6]/20 shadow-inner">
+            <div className="bg-[#EAEAEA]/50 dark:bg-slate-700/30 p-6 rounded-2xl mb-6 text-[#1E3A5F] text-base md:text-lg leading-relaxed border border-[#2FA8C6]/20 shadow-inner">
               <p className="mb-4"><strong>¡Hola! Soy Valerio, tu coach de IA.</strong> En este simulador pondremos a prueba tus habilidades de análisis documental. Aprenderás a seleccionar fuentes, hacer síntesis cruzadas y desarrollar pensamiento crítico.</p>
               <p>Primero revisaremos los conceptos clave, luego 7 preguntas para evaluar tu comprensión. ¡Comencemos!</p>
             </div>
@@ -309,7 +291,7 @@ export default function OVANotebookSimulator() {
             </button>
           </div>
         </div>
-        <style>{styles}</style>
+        
       </div>
     );
   }
@@ -322,24 +304,24 @@ export default function OVANotebookSimulator() {
     else { message = "Requiere Práctica."; submessage = "El análisis documental se perfecciona con la práctica. Te sugiero repasar los fundamentos de curaduría y síntesis."; }
     return (
       <div className="w-full relative" style={{ minHeight: '400px' }}>
-        <div className="tech-grid-bg" /><div className="hologram-glow-1" /><div className="hologram-glow-2" />
+        <div className="fixed inset-0 -z-10 opacity-60 bg-[linear-gradient(to_right,#EAEAEA_1px,transparent_1px),linear-gradient(to_bottom,#EAEAEA_1px,transparent_1px)] bg-[length:50px_50px]" /><div className="fixed -top-[15%] -left-[10%] w-[50vw] h-[50vw] -z-10 bg-[radial-gradient(circle,rgba(47,168,198,0.15)_0%,rgba(255,255,255,0)_70%)]" /><div className="fixed -bottom-[20%] -right-[10%] w-[60vw] h-[60vw] -z-10 bg-[radial-gradient(circle,rgba(30,58,95,0.08)_0%,rgba(255,255,255,0)_70%)]" />
         <div className="w-full flex items-center justify-center py-12 px-4 relative z-10">
-          <div className="w-full max-w-2xl glass-panel p-8 md:p-16 rounded-3xl animate-fade-in text-center border-t-4 border-t-[#1E3A5F]">
+          <div className="w-full max-w-2xl bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border border-[#2FA8C6]/15 shadow-[0_8px_32px_rgba(31,38,135,0.1)] p-8 md:p-16 rounded-3xl animate-[fadeIn_0.6s_ease-out_forwards] text-center border-t-4 border-t-[#1E3A5F]">
             <div className="mb-6 flex justify-center"><EdutechLogo size="small" /></div>
-            <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-600 font-semibold text-[10px] uppercase tracking-[0.15em] border border-emerald-200 mb-4">
+            <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 font-semibold text-[10px] uppercase tracking-[0.15em] border border-emerald-200 dark:border-emerald-700 mb-4">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C7 4 7 7 4.5 7.5c-1.5.5-1.5 2.5 0 3.5"/><path d="M10 17.5V19a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-2"/><path d="M20 12.5V19a1 1 0 0 1-1 1h-2"/><path d="M18 4a2 2 0 0 1 2 2"/><path d="M10 4.5V12"/><path d="M2 10.5V12"/><path d="M2 17a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2"/><path d="M20 8.5V12"/></svg><span>Simulador Completado</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold mb-2 text-[#1E3A5F] font-montserrat">Resultados del Simulador</h2>
-            <div className="text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#2FA8C6] to-[#1E3A5F] my-8 drop-shadow-sm">{score}<span className="text-4xl text-gray-400">/7</span></div>
+            <div className="text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#2FA8C6] to-[#1E3A5F] my-8 drop-shadow-sm">{score}<span className="text-4xl text-gray-400 dark:text-slate-400">/7</span></div>
             <h3 className="text-2xl font-semibold text-[#2FA8C6] mb-4">{message}</h3>
             <p className="text-[#1E3A5F]/80 mb-6 text-lg">{submessage}</p>
             <div className="flex justify-center mb-6"><VoiceReader text={submessage} /></div>
-            <button onClick={startGame} className="px-8 py-3 rounded-xl bg-white text-[#1E3A5F] border-2 border-[#EAEAEA] hover:border-[#2FA8C6] hover:text-[#2FA8C6] transition-all font-semibold flex items-center justify-center gap-2 mx-auto shadow-sm">
+            <button onClick={startGame} className="px-8 py-3 rounded-xl bg-white dark:bg-slate-800 text-[#1E3A5F] dark:text-slate-100 border-2 border-[#EAEAEA] dark:border-slate-600 hover:border-[#2FA8C6] hover:text-[#2FA8C6] transition-all font-semibold flex items-center justify-center gap-2 mx-auto shadow-sm">
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>Reiniciar Simulador
             </button>
           </div>
         </div>
-        <style>{styles}</style>
+        
       </div>
     );
   }
@@ -350,29 +332,29 @@ export default function OVANotebookSimulator() {
     const isLast = contentIdx === contentScreens.length - 1;
     return (
       <div className="w-full relative" style={{ minHeight: '400px' }}>
-        <div className="tech-grid-bg" /><div className="hologram-glow-1" /><div className="hologram-glow-2" />
+        <div className="fixed inset-0 -z-10 opacity-60 bg-[linear-gradient(to_right,#EAEAEA_1px,transparent_1px),linear-gradient(to_bottom,#EAEAEA_1px,transparent_1px)] bg-[length:50px_50px]" /><div className="fixed -top-[15%] -left-[10%] w-[50vw] h-[50vw] -z-10 bg-[radial-gradient(circle,rgba(47,168,198,0.15)_0%,rgba(255,255,255,0)_70%)]" /><div className="fixed -bottom-[20%] -right-[10%] w-[60vw] h-[60vw] -z-10 bg-[radial-gradient(circle,rgba(30,58,95,0.08)_0%,rgba(255,255,255,0)_70%)]" />
         <div className="w-full py-6 px-4 relative z-10">
-          <div className="w-full max-w-5xl mx-auto animate-fade-in" key={screen.id}>
+          <div className="w-full max-w-5xl mx-auto animate-[fadeIn_0.6s_ease-out_forwards]" key={screen.id}>
             <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
               <EdutechLogo size="small" />
-              <span className="text-[#1E3A5F] font-semibold bg-white px-4 py-1.5 rounded-full border border-[#EAEAEA] shadow-sm text-sm">{contentIdx + 1} / {contentScreens.length}</span>
+              <span className="text-[#1E3A5F] font-semibold bg-white dark:bg-slate-800 px-4 py-1.5 rounded-full border border-[#EAEAEA] dark:border-slate-600 shadow-sm text-sm">{contentIdx + 1} / {contentScreens.length}</span>
             </div>
-            <div className="w-full bg-[#EAEAEA] rounded-full h-2.5 mb-8 overflow-hidden shadow-inner">
+            <div className="w-full bg-[#EAEAEA] dark:bg-slate-700 rounded-full h-2.5 mb-8 overflow-hidden shadow-inner">
               <div className="bg-gradient-to-r from-[#2FA8C6] to-[#1E3A5F] h-full rounded-full transition-all duration-500 ease-out" style={{ width: `${((1 + contentIdx) / totalSteps) * 100}%` }} />
             </div>
             <div className="flex flex-col lg:flex-row gap-8">
               <div className="w-full lg:w-2/5 flex flex-col gap-6">
-                <div className="relative rounded-2xl overflow-hidden shadow-xl border border-[#EAEAEA] h-64 lg:min-h-[300px] bg-white">
+                <div className="relative rounded-2xl overflow-hidden shadow-xl border border-[#EAEAEA] dark:border-slate-600 h-64 lg:min-h-[300px] bg-white dark:bg-slate-800">
                   <img src={screen.image} alt={screen.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover opacity-90" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#1E3A5F] via-transparent to-transparent opacity-80" />
                   <div className="absolute bottom-4 left-4 right-4">
                     <div className="flex items-center gap-2 text-white text-sm font-semibold bg-[#2FA8C6]/90 w-fit px-4 py-1.5 rounded-lg backdrop-blur-md shadow-lg border border-white/20"><NetworkIcon /> Aprendizaje Interactivo</div>
                   </div>
                 </div>
-                <div className="p-5 rounded-2xl bg-white border border-[#EAEAEA] shadow-sm"><VoiceReader text={screen.valerioText} /></div>
+                <div className="p-5 rounded-2xl bg-white dark:bg-slate-800 border border-[#EAEAEA] dark:border-slate-600 shadow-sm"><VoiceReader text={screen.valerioText} /></div>
               </div>
               <div className="w-full lg:w-3/5 max-h-[550px] overflow-y-auto">
-                <div className="glass-panel p-6 md:p-10 rounded-3xl flex flex-col border-t-4 border-t-[#2FA8C6]">
+                <div className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border border-[#2FA8C6]/15 shadow-[0_8px_32px_rgba(31,38,135,0.1)] p-6 md:p-10 rounded-3xl flex flex-col border-t-4 border-t-[#2FA8C6]">
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E0F7FA] text-[#004B63] font-semibold text-[9px] uppercase tracking-[0.15em] border border-[#2FA8C6]/20 w-fit mb-4"><BrainIcon className="w-3 h-3" /><span>{screen.subtitle}</span></div>
                   <h2 className="text-xl md:text-2xl font-bold text-[#1E3A5F] mb-4 font-montserrat">{screen.title}</h2>
                   <p className="text-[#1E3A5F]/80 text-sm leading-relaxed mb-6">{screen.valerioText}</p>
@@ -380,7 +362,7 @@ export default function OVANotebookSimulator() {
                     <h3 className="text-xs font-bold text-[#1E3A5F] uppercase tracking-wider mb-3">🎯 Objetivos de aprendizaje</h3>
                     <div className="space-y-2">
                       {screen.achievements.map((item, i) => (
-                        <div key={i} className="flex items-start gap-2.5 p-2.5 rounded-xl bg-[#E8F8F5] border border-[#22c55e]/20"><CheckIcon /><span className="text-xs font-medium text-[#166534] leading-relaxed">{item.text}</span></div>
+                        <div key={i} className="flex items-start gap-2.5 p-2.5 rounded-xl bg-[#E8F8F5] dark:bg-emerald-900/20 border border-[#22c55e]/20"><CheckIcon /><span className="text-xs font-medium text-[#166534] dark:text-emerald-300 leading-relaxed">{item.text}</span></div>
                       ))}
                     </div>
                   </div>
@@ -388,20 +370,20 @@ export default function OVANotebookSimulator() {
                     <h3 className="text-xs font-bold text-[#1E3A5F] uppercase tracking-wider mb-3">⚠️ Errores comunes a evitar</h3>
                     <div className="space-y-2">
                       {screen.warnings.map((item, i) => (
-                        <div key={i} className="flex items-start gap-2.5 p-2.5 rounded-xl bg-[#FDEDEC] border border-[#ef4444]/20"><CrossIcon /><span className="text-xs font-medium text-[#991b1b] leading-relaxed">{item.text}</span></div>
+                        <div key={i} className="flex items-start gap-2.5 p-2.5 rounded-xl bg-[#FDEDEC] dark:bg-red-900/20 border border-[#ef4444]/20"><CrossIcon /><span className="text-xs font-medium text-[#991b1b] dark:text-red-300 leading-relaxed">{item.text}</span></div>
                       ))}
                     </div>
                   </div>
                   <div>
                     <h3 className="text-xs font-bold text-[#1E3A5F] uppercase tracking-wider mb-3">💡 Ejemplo práctico</h3>
                     <div className="space-y-2">
-                      <div className="flex items-start gap-2.5 p-2.5 rounded-xl bg-red-50 border border-red-200">
+                      <div className="flex items-start gap-2.5 p-2.5 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                        <span className="text-xs font-medium text-red-700 leading-relaxed">{screen.example.weak}</span>
+                        <span className="text-xs font-medium text-red-700 dark:text-red-300 leading-relaxed">{screen.example.weak}</span>
                       </div>
-                      <div className="flex items-start gap-2.5 p-2.5 rounded-xl bg-[#E8F8F5] border border-emerald-200">
+                      <div className="flex items-start gap-2.5 p-2.5 rounded-xl bg-[#E8F8F5] dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-700">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                        <span className="text-xs font-medium text-[#166534] leading-relaxed">{screen.example.strong}</span>
+                        <span className="text-xs font-medium text-[#166534] dark:text-emerald-300 leading-relaxed">{screen.example.strong}</span>
                       </div>
                     </div>
                   </div>
@@ -409,16 +391,16 @@ export default function OVANotebookSimulator() {
               </div>
             </div>
             <div className="flex justify-between items-center mt-8 px-2">
-              <button onClick={prevContent} disabled={isFirst} className="p-3 bg-white border border-[#EAEAEA] text-[#1E3A5F] rounded-xl disabled:opacity-30 hover:border-[#2FA8C6] transition-all disabled:cursor-not-allowed">
+              <button onClick={prevContent} disabled={isFirst} className="p-3 bg-white dark:bg-slate-800 border border-[#EAEAEA] dark:border-slate-600 text-[#1E3A5F] rounded-xl disabled:opacity-30 hover:border-[#2FA8C6] transition-all disabled:cursor-not-allowed">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
               </button>
-              <div className="flex gap-2">{contentScreens.map((_, i) => (<div key={i} className={`h-1.5 rounded-full transition-all duration-700 ${i === contentIdx ? 'w-8 bg-[#1E3A5F]' : 'w-2 bg-slate-200'}`} />))}</div>
+              <div className="flex gap-2">{contentScreens.map((_, i) => (<div key={i} className={`h-1.5 rounded-full transition-all duration-700 ${i === contentIdx ? 'w-8 bg-[#1E3A5F]' : 'w-2 bg-slate-200 dark:bg-slate-600'}`} />))}</div>
               <button onClick={nextContent} className="px-6 py-3 bg-gradient-to-r from-[#2FA8C6] to-[#1E3A5F] text-white rounded-xl font-bold text-sm shadow-md hover:shadow-lg active:scale-95 transition-all flex items-center gap-2">{isLast ? 'Comenzar Evaluación' : 'Siguiente'} <ArrowRight /></button>
             </div>
-            <footer className="mt-8 pt-6 border-t border-[#EAEAEA] text-center"><p className="text-slate-600 text-xs">Laboratorio guiado por <strong className="text-[#2FA8C6]">Valerio</strong> &mdash; Coach de IA de Edutechlife.</p></footer>
+            <footer className="mt-8 pt-6 border-t border-[#EAEAEA] dark:border-slate-600 text-center"><p className="text-slate-600 dark:text-slate-400 text-xs">Laboratorio guiado por <strong className="text-[#2FA8C6]">Valerio</strong> &mdash; Coach de IA de Edutechlife.</p></footer>
           </div>
         </div>
-        <style>{styles}</style>
+        
       </div>
     );
   }
@@ -426,33 +408,33 @@ export default function OVANotebookSimulator() {
   const currentQ = questionsData[currentQIndex];
   return (
     <div className="w-full relative" style={{ minHeight: '400px' }}>
-      <div className="tech-grid-bg" /><div className="hologram-glow-1" /><div className="hologram-glow-2" />
+      <div className="fixed inset-0 -z-10 opacity-60 bg-[linear-gradient(to_right,#EAEAEA_1px,transparent_1px),linear-gradient(to_bottom,#EAEAEA_1px,transparent_1px)] bg-[length:50px_50px]" /><div className="fixed -top-[15%] -left-[10%] w-[50vw] h-[50vw] -z-10 bg-[radial-gradient(circle,rgba(47,168,198,0.15)_0%,rgba(255,255,255,0)_70%)]" /><div className="fixed -bottom-[20%] -right-[10%] w-[60vw] h-[60vw] -z-10 bg-[radial-gradient(circle,rgba(30,58,95,0.08)_0%,rgba(255,255,255,0)_70%)]" />
       <div className="w-full py-6 px-4 relative z-10" key={currentQ.id}>
-        <div className="w-full max-w-6xl mx-auto animate-fade-in">
+        <div className="w-full max-w-6xl mx-auto animate-[fadeIn_0.6s_ease-out_forwards]">
           <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
             <EdutechLogo size="small" />
             <div className="flex items-center gap-3">
               <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#E0F7FA] text-[#004B63] font-semibold text-[10px] uppercase tracking-[0.15em] border border-[#2FA8C6]/20"><BrainIcon className="w-3.5 h-3.5" /><span>Laboratorio Guiado por Valerio</span></div>
-              <span className="text-[#1E3A5F] font-semibold bg-white px-4 py-1.5 rounded-full border border-[#EAEAEA] shadow-sm text-sm">Nodo de Aprendizaje {currentQIndex + 1} / {questionsData.length}</span>
+              <span className="text-[#1E3A5F] font-semibold bg-white dark:bg-slate-800 px-4 py-1.5 rounded-full border border-[#EAEAEA] dark:border-slate-600 shadow-sm text-sm">Nodo de Aprendizaje {currentQIndex + 1} / {questionsData.length}</span>
               <span className="text-white font-semibold bg-[#2FA8C6] px-4 py-1.5 rounded-full shadow-[0_0_10px_rgba(47,168,198,0.4)] text-sm">Datos: {score}</span>
             </div>
           </div>
-          <div className="w-full bg-[#EAEAEA] rounded-full h-2.5 mb-8 overflow-hidden shadow-inner">
+          <div className="w-full bg-[#EAEAEA] dark:bg-slate-700 rounded-full h-2.5 mb-8 overflow-hidden shadow-inner">
             <div className="bg-gradient-to-r from-[#2FA8C6] to-[#1E3A5F] h-full rounded-full transition-all duration-500 ease-out" style={{ width: `${((1 + contentScreens.length + currentQIndex) / totalSteps) * 100}%` }} />
           </div>
           <div className="flex flex-col lg:flex-row gap-8">
             <div className="w-full lg:w-2/5 flex flex-col gap-6">
-              <div className="relative rounded-2xl overflow-hidden shadow-xl border border-[#EAEAEA] group h-64 lg:h-auto lg:min-h-[300px] bg-white">
+              <div className="relative rounded-2xl overflow-hidden shadow-xl border border-[#EAEAEA] dark:border-slate-600 group h-64 lg:h-auto lg:min-h-[300px] bg-white dark:bg-slate-800">
                 <img src={currentQ.image} alt="Contexto visual" loading="lazy" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1E3A5F] via-transparent to-transparent opacity-80" />
                 <div className="absolute bottom-4 left-4 right-4"><div className="flex items-center gap-2 text-white text-sm font-semibold bg-[#2FA8C6]/90 w-fit px-4 py-1.5 rounded-lg backdrop-blur-md shadow-lg border border-white/20"><NetworkIcon /> Escenario Interactivo</div></div>
               </div>
               {isAnswered && (
-                <div className={`p-6 rounded-2xl border animate-fade-in shadow-sm ${selectedOption === currentQ.correct ? 'bg-[#E8F8F5] border-[#22c55e]/40' : 'bg-[#FDEDEC] border-[#ef4444]/40'}`}>
+                <div className={`p-6 rounded-2xl border animate-[fadeIn_0.6s_ease-out_forwards] shadow-sm ${selectedOption === currentQ.correct ? 'bg-[#E8F8F5] dark:bg-emerald-900/20 border-[#22c55e]/40' : 'bg-[#FDEDEC] dark:bg-red-900/20 border-[#ef4444]/40'}`}>
                   <div className="flex items-center gap-3 mb-3">
                     {selectedOption === currentQ.correct
-                      ? <span className="flex items-center gap-2 text-[#166534] font-bold text-lg"><CheckCircleIcon /> Análisis Validado</span>
-                      : <span className="flex items-center gap-2 text-[#991b1b] font-bold text-lg"><XCircleIcon /> Desviación Crítica</span>}
+                      ? <span className="flex items-center gap-2 text-[#166534] dark:text-emerald-300 font-bold text-lg"><CheckCircleIcon /> Análisis Validado</span>
+                      : <span className="flex items-center gap-2 text-[#991b1b] dark:text-red-300 font-bold text-lg"><XCircleIcon /> Desviación Crítica</span>}
                   </div>
                   <p className="text-[#1E3A5F] text-sm leading-relaxed font-medium opacity-90">{currentQ.explanation}</p>
                   <div className="mt-4 pt-4 border-t border-white/40"><VoiceReader text={currentQ.explanation} /></div>
@@ -460,28 +442,28 @@ export default function OVANotebookSimulator() {
               )}
             </div>
             <div className="w-full lg:w-3/5">
-              <div className="glass-panel p-6 md:p-10 rounded-3xl h-full flex flex-col border-t-4 border-t-[#2FA8C6]">
+              <div className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border border-[#2FA8C6]/15 shadow-[0_8px_32px_rgba(31,38,135,0.1)] p-6 md:p-10 rounded-3xl h-full flex flex-col border-t-4 border-t-[#2FA8C6]">
                 <h2 className="text-xl md:text-2xl font-semibold text-[#1E3A5F] mb-8 leading-relaxed font-montserrat">{currentQ.question}</h2>
                 <div className="space-y-4 flex-grow">
                   {currentQ.options.map((option, index) => {
-                    let btnClass = "glass-panel-interactive w-full text-left p-4 md:p-5 rounded-2xl flex items-start gap-4 ";
+                    let btnClass = "bg-white/95 dark:bg-slate-800/95 border border-[#EAEAEA] dark:border-slate-600 shadow-[0_4px_20px_rgba(0,0,0,0.03)] transition-all duration-300 hover:border-[#2FA8C6] hover:shadow-[0_8px_25px_rgba(47,168,198,0.15)] hover:-translate-y-0.5 w-full text-left p-4 md:p-5 rounded-2xl flex items-start gap-4 ";
                     let iconClass = "flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center font-bold text-sm md:text-base transition-colors ";
                     let textClass = "text-base md:text-lg font-medium transition-colors ";
-                    if (!isAnswered) { btnClass += "cursor-pointer"; iconClass += "bg-[#EAEAEA] text-[#1E3A5F]"; textClass += "text-[#1E3A5F]/80"; }
-                    else if (index === currentQ.correct) { btnClass += "bg-[#E8F8F5] !border-[#22c55e] shadow-[0_0_20px_rgba(34,197,94,0.15)]"; iconClass += "bg-[#22c55e] text-white"; textClass += "text-[#166534]"; }
-                    else if (index === selectedOption) { btnClass += "bg-[#FDEDEC] !border-[#ef4444]"; iconClass += "bg-[#ef4444] text-white"; textClass += "text-[#991b1b]"; }
-                    else { btnClass += "opacity-50 cursor-not-allowed bg-white"; iconClass += "bg-[#EAEAEA] text-[#1E3A5F]/50"; textClass += "text-[#1E3A5F]/50"; }
+                    if (!isAnswered) { btnClass += "cursor-pointer"; iconClass += "bg-[#EAEAEA] dark:bg-slate-600 text-[#1E3A5F]"; textClass += "text-[#1E3A5F]/80"; }
+                    else if (index === currentQ.correct) { btnClass += "bg-[#E8F8F5] dark:bg-emerald-900/20 !border-[#22c55e] shadow-[0_0_20px_rgba(34,197,94,0.15)]"; iconClass += "bg-[#22c55e] text-white"; textClass += "text-[#166534] dark:text-emerald-300"; }
+                    else if (index === selectedOption) { btnClass += "bg-[#FDEDEC] dark:bg-red-900/20 !border-[#ef4444]"; iconClass += "bg-[#ef4444] text-white"; textClass += "text-[#991b1b] dark:text-red-300"; }
+                    else { btnClass += "opacity-50 cursor-not-allowed bg-white dark:bg-slate-800"; iconClass += "bg-[#EAEAEA] dark:bg-slate-600 text-[#1E3A5F]/50"; textClass += "text-[#1E3A5F]/50"; }
                     return (<button key={index} onClick={() => handleOptionClick(index)} disabled={isAnswered} className={btnClass}><div className={iconClass}>{['A', 'B', 'C', 'D'][index]}</div><span className={textClass}>{option}</span></button>);
                   })}
                 </div>
                 {!isAnswered && (
-                  <div className="mt-6 flex flex-col items-start gap-3 animate-fade-in">
-                    <button onClick={() => setShowHint(!showHint)} className="flex items-center gap-2 px-4 py-2 bg-[#EAEAEA]/40 hover:bg-[#EAEAEA] border border-[#2FA8C6]/30 rounded-xl text-[#1E3A5F] font-semibold text-sm transition-all duration-300"><LightbulbIcon />{showHint ? 'Ocultar Pista' : 'Ver Pista'}</button>
-                    {showHint && (<div className="w-full p-4 bg-[#E8F8F5] border border-[#2FA8C6]/50 rounded-xl text-[#1E3A5F] text-sm md:text-base font-medium animate-fade-in shadow-inner"><span className="text-[#2FA8C6] font-bold mr-2">💡 Pista:</span> {currentQ.hint}</div>)}
+                  <div className="mt-6 flex flex-col items-start gap-3 animate-[fadeIn_0.6s_ease-out_forwards]">
+                    <button onClick={() => setShowHint(!showHint)} className="flex items-center gap-2 px-4 py-2 bg-[#EAEAEA]/40 dark:bg-slate-700/40 hover:bg-[#EAEAEA] dark:hover:bg-slate-600 border border-[#2FA8C6]/30 rounded-xl text-[#1E3A5F] font-semibold text-sm transition-all duration-300"><LightbulbIcon />{showHint ? 'Ocultar Pista' : 'Ver Pista'}</button>
+                    {showHint && (<div className="w-full p-4 bg-[#E8F8F5] dark:bg-emerald-900/20 border border-[#2FA8C6]/50 rounded-xl text-[#1E3A5F] text-sm md:text-base font-medium animate-[fadeIn_0.6s_ease-out_forwards] shadow-inner"><span className="text-[#2FA8C6] font-bold mr-2">💡 Pista:</span> {currentQ.hint}</div>)}
                   </div>
                 )}
                 {isAnswered && (
-                  <div className="mt-8 flex justify-end animate-fade-in">
+                  <div className="mt-8 flex justify-end animate-[fadeIn_0.6s_ease-out_forwards]">
                     <button onClick={nextQuestion} className="px-8 py-3.5 bg-[#1E3A5F] hover:bg-[#2FA8C6] text-white font-semibold rounded-xl transition-all duration-300 flex items-center gap-3 shadow-lg hover:shadow-[0_8px_20px_rgba(47,168,198,0.4)] hover:-translate-y-1">
                       {currentQIndex === questionsData.length - 1 ? 'Procesar Resultados' : 'Siguiente Nodo'} <ArrowRight />
                     </button>
@@ -490,10 +472,10 @@ export default function OVANotebookSimulator() {
               </div>
             </div>
           </div>
-          <footer className="mt-8 pt-6 border-t border-[#EAEAEA] text-center"><p className="text-slate-600 text-xs">Laboratorio guiado por <strong className="text-[#2FA8C6]">Valerio</strong> &mdash; Coach de IA de Edutechlife.</p></footer>
+          <footer className="mt-8 pt-6 border-t border-[#EAEAEA] dark:border-slate-600 text-center"><p className="text-slate-600 dark:text-slate-400 text-xs">Laboratorio guiado por <strong className="text-[#2FA8C6]">Valerio</strong> &mdash; Coach de IA de Edutechlife.</p></footer>
         </div>
       </div>
-      <style>{styles}</style>
+      
     </div>
   );
 }

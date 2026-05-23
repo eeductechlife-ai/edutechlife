@@ -80,24 +80,24 @@ const ModuleHistory = () => {
  ];
 
  return (
-   <div className="space-y-6 animate-in fade-in">
+   <div className="space-y-6 animate-[fadeIn_1.1s_cubic-bezier(0.16,1,0.3,1)_forwards]">
      <div className="flex flex-wrap gap-2 justify-center">
        {sections.map((s, i) => (
          <button
            key={i}
            onClick={() => setActive(i)}
-           className={`px-4 py-2 rounded-2xl text-[10px] font-[800] uppercase tracking-widest transition-all ${active === i ? 'bg-[#0D2B5B] text-white shadow-lg' : 'bg-white border border-slate-200 text-slate-600 hover:border-[#00B4D8]'}`}
+            className={`px-4 py-2 rounded-2xl text-[10px] font-[800] uppercase tracking-widest transition-all ${active === i ? 'bg-[#0D2B5B] text-white shadow-lg' : 'bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-[#00B4D8]'}`}
          >
            {s.t.split('·')[0]}
          </button>
        ))}
      </div>
-     <div className="p-8 bg-white border border-slate-100 rounded-[2.5rem] shadow-xl relative overflow-hidden flex flex-col justify-center min-h-[220px]">
+      <div className="p-8 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-[2.5rem] shadow-xl relative overflow-hidden flex flex-col justify-center min-h-[220px]">
        <div className="absolute -right-4 -bottom-4 opacity-5 text-[#00B4D8]">
           {sections[active].icon}
        </div>
        <h4 className="text-[#0D2B5B] font-[900] text-lg mb-3 leading-none uppercase tracking-tighter">{sections[active].t}</h4>
-       <p className="text-slate-600 leading-relaxed text-sm font-medium">{sections[active].c}</p>
+        <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-sm font-medium">{sections[active].c}</p>
      </div>
    </div>
  );
@@ -115,13 +115,13 @@ const ModuleAnatomy = () => {
  ];
 
  return (
-   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center animate-in zoom-in">
+   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center animate-[zoomIn_0.6s_cubic-bezier(0.16,1,0.3,1)_forwards]">
      <div className="grid grid-cols-3 gap-2">
        {elements.map((el) => (
          <button
            key={el.k}
            onClick={() => setSel(el)}
-           className={`p-4 rounded-[1.8rem] border-2 transition-all flex flex-col items-center gap-2 group ${sel?.k === el.k ? 'border-[#00B4D8] bg-blue-50 shadow-md' : 'bg-white border-slate-50 hover:border-slate-200'}`}
+            className={`p-4 rounded-[1.8rem] border-2 transition-all flex flex-col items-center gap-2 group ${sel?.k === el.k ? 'border-[#00B4D8] bg-blue-50 dark:bg-blue-900/20 shadow-md' : 'bg-white dark:bg-slate-800 border-slate-50 dark:border-slate-700 hover:border-slate-200 dark:hover:border-slate-500'}`}
          >
            <div className={`w-10 h-10 ${el.c} text-white rounded-xl flex items-center justify-center shadow-md group-hover:scale-110 transition-transform`}>{el.i}</div>
            <span className="text-[9px] font-black text-[#0D2B5B] uppercase tracking-tighter leading-none">{el.k}</span>
@@ -130,7 +130,7 @@ const ModuleAnatomy = () => {
      </div>
      <div className="bg-[#0D2B5B] text-white p-8 rounded-[3rem] shadow-2xl relative min-h-[250px] flex flex-col justify-center border-b-4 border-[#00B4D8]">
        {sel ? (
-         <div className="animate-in slide-in-from-right">
+         <div className="animate-[slideInFromRight_0.6s_cubic-bezier(0.16,1,0.3,1)_forwards]">
            <h5 className="text-[#00B4D8] font-[900] text-xs uppercase tracking-[0.3em] mb-3">Elemento: {sel.k}</h5>
            <p className="text-base leading-relaxed font-medium">{sel.d}</p>
          </div>
@@ -202,8 +202,8 @@ const Quiz = ({ onComplete }) => {
  };
 
  return (
-   <div className="space-y-6 animate-in fade-in">
-     <div className="flex justify-between items-center text-[9px] font-black uppercase tracking-widest text-slate-600">
+   <div className="space-y-6 animate-[fadeIn_1.1s_cubic-bezier(0.16,1,0.3,1)_forwards]">
+      <div className="flex justify-between items-center text-[9px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-300">
        <span>Análisis de Lectura {currentQ + 1} de 5</span>
        <span className="text-[#00B4D8]">Aciertos: {score}</span>
      </div>
@@ -214,9 +214,9 @@ const Quiz = ({ onComplete }) => {
            key={i}
            onClick={() => handleSelect(i)}
            className={`p-4 rounded-2xl text-left text-sm font-bold border-2 transition-all ${
-             showFeedback
-               ? i === questions[currentQ].c ? 'bg-green-50 border-green-500 text-green-700' : selected === i ? 'bg-red-50 border-red-500 text-red-700' : 'bg-slate-50 border-transparent opacity-50'
-               : 'bg-white border-slate-100 hover:border-[#00B4D8]'
+              showFeedback
+                ? i === questions[currentQ].c ? 'bg-green-50 dark:bg-green-900/30 border-green-500 text-green-700 dark:text-green-300' : selected === i ? 'bg-red-50 dark:bg-red-900/30 border-red-500 text-red-700 dark:text-red-300' : 'bg-slate-50 dark:bg-slate-700/30 border-transparent opacity-50'
+                : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-[#00B4D8]'
            }`}
          >
            {opt}
@@ -224,7 +224,7 @@ const Quiz = ({ onComplete }) => {
        ))}
      </div>
      {showFeedback && (
-       <div className="p-5 bg-slate-100 rounded-[2rem] animate-in slide-in-from-top">
+        <div className="p-5 bg-slate-100 dark:bg-slate-700/50 rounded-[2rem] animate-[slideInFromTop_0.4s_cubic-bezier(0.16,1,0.3,1)_forwards]">
          <p className="text-xs font-bold leading-relaxed">{questions[currentQ].f}</p>
          <button onClick={handleNext} className="mt-4 w-full py-3 bg-[#0D2B5B] text-white font-black rounded-xl flex items-center justify-center gap-2 text-xs">
            {currentQ === 4 ? "Ver Resultados Finales" : "Continuar Análisis"} <ChevronRight size={14}/>
@@ -298,10 +298,10 @@ const QueEsPrompt_OVA_Original = ({ onClose }) => {
    switch (screen) {
      case 'welcome':
        return (
-         <div className="text-center space-y-10 py-6 animate-in fade-in duration-1000">
+         <div className="text-center space-y-10 py-6 animate-[fadeIn_1.1s_cubic-bezier(0.16,1,0.3,1)_forwards]">
             <div className="relative inline-block">
                <div className="absolute inset-0 bg-[#00B4D8] rounded-full blur-[80px] opacity-10 animate-pulse"></div>
-               <div className="relative bg-white p-10 rounded-[4rem] shadow-2xl border border-slate-50">
+                <div className="relative bg-white dark:bg-slate-800 p-10 rounded-[4rem] shadow-2xl border border-slate-50 dark:border-slate-700">
                   <div className="w-20 h-20 bg-gradient-to-tr from-[#0D2B5B] to-[#00B4D8] rounded-[1.8rem] flex items-center justify-center shadow-xl rotate-3">
                      <BrainCircuit className="w-10 h-10 text-white" />
                   </div>
@@ -322,30 +322,30 @@ const QueEsPrompt_OVA_Original = ({ onClose }) => {
        );
      case 'menu':
        return (
-         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 animate-in slide-in-from-bottom">
+         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 animate-[slideInFromBottom_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards]">
            {nav.slice(2).map((id) => (
-             <button key={id} onClick={() => setScreen(id)} className="group bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-lg hover:border-[#00B4D8] transition-all flex flex-col items-center text-center gap-4 relative overflow-hidden">
-               <div className="bg-[#F0F9FF] text-[#0D2B5B] p-4 rounded-[1.5rem] shadow-sm group-hover:scale-110 transition-transform">
+              <button key={id} onClick={() => setScreen(id)} className="group bg-white dark:bg-slate-700 p-6 rounded-[2.5rem] border border-slate-100 dark:border-slate-600 shadow-lg hover:border-[#00B4D8] transition-all flex flex-col items-center text-center gap-4 relative overflow-hidden">
+                <div className="bg-[#F0F9FF] dark:bg-slate-600 text-[#0D2B5B] dark:text-white p-4 rounded-[1.5rem] shadow-sm group-hover:scale-110 transition-transform">
                   <BookOpen className="w-6 h-6" />
                </div>
                <span className="font-[900] text-[#0D2B5B] text-[10px] uppercase tracking-[0.1em] leading-tight">{screensData[id].title}</span>
-               {completed.includes(id) && <div className="absolute top-4 right-4 bg-green-50 p-1 rounded-full"><CheckCircle2 className="text-green-500 w-4 h-4" /></div>}
+               {completed.includes(id) && <div className="absolute top-4 right-4 bg-green-50 dark:bg-green-900/30 p-1 rounded-full"><CheckCircle2 className="text-green-500 w-4 h-4" /></div>}
              </button>
            ))}
          </div>
        );
      case 'm1': return <ModuleHistory />;
      case 'm2': return (
-       <div className="space-y-8 animate-in fade-in">
-         <div className="p-10 bg-[#F0F9FF] rounded-[4rem] border-4 border-white shadow-xl relative overflow-hidden group">
+       <div className="space-y-8 animate-[fadeIn_1.1s_cubic-bezier(0.16,1,0.3,1)_forwards]">
+          <div className="p-10 bg-[#F0F9FF] dark:bg-slate-700/30 rounded-[4rem] border-4 border-white dark:border-slate-700 shadow-xl relative overflow-hidden group">
            <h4 className="text-[#0D2B5B] font-[900] text-3xl mb-6 tracking-tighter leading-none lowercase">el prompt como interfaz</h4>
-           <p className="text-slate-600 leading-relaxed font-bold text-lg max-w-2xl">
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed font-bold text-lg max-w-2xl">
              Es la interfaz de comunicación entre el usuario y un modelo de lenguaje. Es el conjunto de instrucciones que sirven de puente entre la mente humana y la red neuronal de la IA. Su diseño determina la calidad de los resultados.
            </p>
          </div>
-         <div className="bg-white border border-slate-100 p-6 rounded-[2.5rem] flex items-center gap-6 shadow-sm">
+          <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-6 rounded-[2.5rem] flex items-center gap-6 shadow-sm">
             <div className="p-4 bg-amber-50 rounded-2xl text-amber-500 shadow-inner"><Lightbulb size={32} /></div>
-            <p className="text-xs md:text-sm text-slate-500 font-bold italic leading-relaxed">
+             <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 font-bold italic leading-relaxed">
               "Dominarás qué es un prompt, sus tipos y por qué su calidad determina directamente la calidad de la respuesta de la IA."
             </p>
          </div>
@@ -353,7 +353,7 @@ const QueEsPrompt_OVA_Original = ({ onClose }) => {
      );
      case 'm3': return <ModuleAnatomy />;
      case 'm4': return (
-       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in slide-in-from-bottom">
+       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-[slideInFromBottom_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards]">
          {[
            { t: 'Chain of Thought', d: 'Pide a la IA que «piensa paso a paso» para mejorar el razonamiento.', i: <BrainCircuit className="w-5 h-5"/> },
            { t: 'Few-Shot Prompting', d: 'Incluye ejemplos del resultado esperado para guiar el modelo.', i: <Layers className="w-5 h-5"/> },
@@ -362,15 +362,15 @@ const QueEsPrompt_OVA_Original = ({ onClose }) => {
            { t: 'Descomposición', d: 'Divide tareas complejas en pasos pequeños y manejables.', i: <Target className="w-5 h-5"/> },
            { t: 'Prompt Chaining', d: 'Usa la salida de un prompt como entrada del siguiente.', i: <Sparkles className="w-5 h-5"/> }
          ].map((s, i) => (
-           <div key={i} className="flex items-start gap-4 p-5 bg-white border border-slate-100 rounded-[2.2rem] shadow-sm hover:shadow-lg transition-all group">
-             <div className="p-3 bg-slate-50 text-[#0D2B5B] rounded-[1rem] shadow-inner group-hover:bg-[#0D2B5B] group-hover:text-white transition-all">{s.i}</div>
-             <div><h5 className="font-[900] text-[#0D2B5B] text-xs uppercase mb-1 tracking-tighter leading-none">{s.t}</h5><p className="text-[10px] text-slate-500 font-medium leading-relaxed">{s.d}</p></div>
+            <div key={i} className="flex items-start gap-4 p-5 bg-white dark:bg-slate-700 border border-slate-100 dark:border-slate-600 rounded-[2.2rem] shadow-sm hover:shadow-lg transition-all group">
+              <div className="p-3 bg-slate-50 dark:bg-slate-600 text-[#0D2B5B] dark:text-white rounded-[1rem] shadow-inner group-hover:bg-[#0D2B5B] group-hover:text-white transition-all">{s.i}</div>
+              <div><h5 className="font-[900] text-[#0D2B5B] text-xs uppercase mb-1 tracking-tighter leading-none">{s.t}</h5><p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium leading-relaxed">{s.d}</p></div>
            </div>
          ))}
        </div>
      );
      case 'm5': return (
-       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 animate-in fade-in">
+       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 animate-[fadeIn_1.1s_cubic-bezier(0.16,1,0.3,1)_forwards]">
          {[
            { t: 'Prompts vagos', d: '«Ayúdame con mi tarea» no indica materia, objetivo ni formato.', i: <AlertTriangle /> },
            { t: 'Pedir demasiado', d: 'Hacer muchas peticiones en un solo prompt genera respuestas superficiales.', i: <FileText /> },
@@ -379,21 +379,21 @@ const QueEsPrompt_OVA_Original = ({ onClose }) => {
            { t: 'Olvidar el formato', d: 'Sin especificarlo, la respuesta puede ser difícil de usar directamente.', i: <Info /> },
            { t: 'Asumir memoria', d: 'Cada sesión nueva empieza sin recordar conversaciones pasadas.', i: <Clock /> }
          ].map((e, i) => (
-           <div key={i} className="p-5 bg-white border border-slate-100 rounded-[2rem] shadow-sm hover:shadow-md transition-all group">
-             <div className="w-8 h-8 bg-red-50 text-red-500 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">{e.i}</div>
+            <div key={i} className="p-5 bg-white dark:bg-slate-700 border border-slate-100 dark:border-slate-600 rounded-[2rem] shadow-sm hover:shadow-md transition-all group">
+              <div className="w-8 h-8 bg-red-50 dark:bg-red-900/30 text-red-500 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">{e.i}</div>
              <h5 className="font-[900] text-[#0D2B5B] text-[10px] uppercase tracking-widest leading-none mb-1">{e.t}</h5>
-             <p className="text-[10px] text-slate-500 leading-relaxed font-medium">{e.d}</p>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-relaxed font-medium">{e.d}</p>
            </div>
          ))}
        </div>
      );
      case 'm6': return quizScore !== null ? (
-       <div className="text-center py-8 animate-in zoom-in">
+       <div className="text-center py-8 animate-[zoomIn_0.6s_cubic-bezier(0.16,1,0.3,1)_forwards]">
          <div className="w-32 h-32 bg-amber-50 rounded-full flex items-center justify-center mx-auto mb-8 shadow-xl border-4 border-white"><Trophy className="w-16 h-16 text-amber-500" /></div>
          <h2 className="text-5xl font-black text-[#0D2B5B] tracking-tighter leading-none mb-3 uppercase">¡completado!</h2>
          <div className="bg-[#0D2B5B] text-white inline-block px-12 py-6 rounded-[3rem] mt-6 text-6xl font-black shadow-xl border-b-8 border-[#00B4D8]">{quizScore} / 5</div>
-         <p className="text-slate-500 mt-10 font-black text-lg uppercase tracking-[0.2em] opacity-40">edutechlife master</p>
-         <button onClick={() => { setScreen('menu'); setQuizScore(null); }} className="mt-12 px-12 py-4 bg-slate-100 text-slate-500 font-bold rounded-[1.5rem] hover:bg-slate-200 transition-all uppercase tracking-[0.1em] text-[10px]">Finalizar</button>
+          <p className="text-slate-500 dark:text-slate-400 mt-10 font-black text-lg uppercase tracking-[0.2em] opacity-40">edutechlife master</p>
+          <button onClick={() => { setScreen('menu'); setQuizScore(null); }} className="mt-12 px-12 py-4 bg-slate-100 dark:bg-slate-700/50 text-slate-500 dark:text-slate-400 font-bold rounded-[1.5rem] hover:bg-slate-200 dark:hover:bg-slate-600 transition-all uppercase tracking-[0.1em] text-[10px]">Finalizar</button>
        </div>
      ) : (
        <Quiz onComplete={(s) => { setQuizScore(s); setCompleted([...completed, 'm6']); }} />
@@ -403,36 +403,36 @@ const QueEsPrompt_OVA_Original = ({ onClose }) => {
  };
 
  return (
-   <div className="w-full h-fit bg-[#F8FAFC] text-slate-900 font-sans flex flex-col overflow-x-hidden selection:bg-blue-100">
+    <div className="w-full h-fit bg-[#F8FAFC] dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-sans flex flex-col overflow-x-hidden selection:bg-blue-100">
 
      {/* Header */}
-     <header className="sticky top-0 w-full bg-white/80 backdrop-blur-2xl border-b z-10 px-4 md:px-8 py-4 flex justify-between items-center shadow-sm">
+      <header className="sticky top-0 w-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-2xl border-b dark:border-slate-700 z-10 px-4 md:px-8 py-4 flex justify-between items-center shadow-sm">
        <Logo />
        <div className="flex items-center gap-8">
          <div className="hidden lg:flex flex-col items-end">
-           <span className="text-[9px] font-black text-slate-600 uppercase tracking-widest mb-1">PROGRESO</span>
-           <div className="w-32 h-2 bg-slate-100 rounded-full overflow-hidden border border-slate-50 shadow-inner">
+            <span className="text-[9px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest mb-1">PROGRESO</span>
+            <div className="w-32 h-2 bg-slate-100 dark:bg-slate-700/50 rounded-full overflow-hidden border border-slate-50 dark:border-slate-700 shadow-inner">
              <div className="h-full bg-gradient-to-r from-[#0D2B5B] to-[#00B4D8] transition-all duration-1000 ease-out shadow-lg" style={{ width: `${(completed.length/6)*100}%` }}></div>
            </div>
          </div>
-         <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-3 bg-[#F1F5F9] hover:bg-slate-200 rounded-[1.2rem] transition-all shadow-sm border border-slate-100"><Menu className="w-6 h-6 text-[#0D2B5B]" /></button>
-         <button onClick={onClose} className="p-3 bg-red-50 hover:bg-red-100 rounded-[1.2rem] transition-all shadow-sm border border-red-100" aria-label="Cerrar OVA">
+          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-3 bg-[#F1F5F9] dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-[1.2rem] transition-all shadow-sm border border-slate-100 dark:border-slate-600"><Menu className="w-6 h-6 text-[#0D2B5B]" /></button>
+          <button onClick={onClose} className="p-3 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 rounded-[1.2rem] transition-all shadow-sm border border-red-100 dark:border-red-900/30" aria-label="Cerrar OVA">
            <X className="w-6 h-6 text-red-500" />
          </button>
        </div>
      </header>
 
      {errorMsg && (
-       <div className="mx-auto mt-4 max-w-lg bg-red-600 text-white px-6 py-4 rounded-[2rem] text-xs font-black flex items-center gap-4 shadow-2xl animate-in slide-in-from-top">
+       <div className="mx-auto mt-4 max-w-lg bg-red-600 text-white px-6 py-4 rounded-[2rem] text-xs font-black flex items-center gap-4 shadow-2xl animate-[slideInFromTop_0.4s_cubic-bezier(0.16,1,0.3,1)_forwards]">
          <AlertCircle className="w-5 h-5 flex-shrink-0" /> {errorMsg}
        </div>
      )}
 
      {/* Main Content */}
      <main className="flex-1 pt-6 px-4 md:px-6 flex items-center justify-center">
-       <div className="w-full max-w-5xl bg-white rounded-[4.5rem] shadow-[0_60px_120px_-30px_rgba(0,0,0,0.08)] p-12 md:p-20 relative overflow-hidden border border-slate-50">
+        <div className="w-full max-w-5xl bg-white dark:bg-slate-800 rounded-[4.5rem] shadow-[0_60px_120px_-30px_rgba(0,0,0,0.08)] p-12 md:p-20 relative overflow-hidden border border-slate-50 dark:border-slate-700">
          {screen.startsWith('m') && (
-           <div className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-10 border-b border-slate-50 pb-12">
+            <div className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-10 border-b border-slate-50 dark:border-slate-700 pb-12">
              <div className="space-y-3">
                <div className="flex items-center gap-2 text-[#00B4D8] font-[900] text-[10px] tracking-[0.4em] uppercase"><Sparkles className="w-4 h-4" /> edutechlife master</div>
                <h1 className="text-4xl md:text-6xl font-[900] text-[#0D2B5B] tracking-tighter leading-[0.85]">{screensData[screen].title}</h1>
@@ -440,7 +440,7 @@ const QueEsPrompt_OVA_Original = ({ onClose }) => {
              <button
                onClick={() => handleTTS(screensData[screen].content)}
                disabled={audioLoading}
-               className={`flex items-center gap-4 px-10 py-4 rounded-[2.5rem] font-black text-[10px] transition-all shadow-xl group ${playing ? 'bg-red-600 text-white shadow-red-600/30' : 'bg-[#F1F5F9] text-[#0D2B5B] hover:bg-slate-200'}`}
+                className={`flex items-center gap-4 px-10 py-4 rounded-[2.5rem] font-black text-[10px] transition-all shadow-xl group ${playing ? 'bg-red-600 text-white shadow-red-600/30' : 'bg-[#F1F5F9] dark:bg-slate-700 text-[#0D2B5B] dark:text-white hover:bg-slate-200 dark:hover:bg-slate-600'}`}
              >
                {audioLoading ? <><Loader2 className="w-5 h-5 animate-spin" /> ...</> : playing ? <><Square className="w-4 h-4 fill-current" /> DETENER</> : <><Volume2 className="w-4 h-4 group-hover:scale-125 transition-transform" /> AUDIO</>}
              </button>
@@ -458,7 +458,7 @@ const QueEsPrompt_OVA_Original = ({ onClose }) => {
 
      {/* Nav Footer Fixed Bottom */}
      {screen !== 'welcome' && (
-       <footer className="sticky bottom-0 w-full bg-white/90 backdrop-blur-3xl border-t border-slate-100 p-4 md:p-6 z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.05)] flex justify-center">
+        <footer className="sticky bottom-0 w-full bg-white/90 dark:bg-slate-800/90 backdrop-blur-3xl border-t border-slate-100 dark:border-slate-700 p-4 md:p-6 z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.05)] flex justify-center">
          <div className="w-full max-w-4xl flex justify-between items-center gap-6">
            <button
              onClick={() => {
@@ -466,7 +466,7 @@ const QueEsPrompt_OVA_Original = ({ onClose }) => {
                stopSpeech();
                setPlaying(false);
              }}
-             className="p-4 bg-[#F1F5F9] text-slate-600 hover:text-[#0D2B5B] rounded-[1.5rem] disabled:opacity-10 transition-all shadow-inner border border-slate-50"
+              className="p-4 bg-[#F1F5F9] dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-[#0D2B5B] dark:hover:text-white rounded-[1.5rem] disabled:opacity-10 transition-all shadow-inner border border-slate-50 dark:border-slate-600"
              disabled={curIdx === 0}
            >
              <ChevronLeft className="w-6 h-6" />
@@ -474,7 +474,7 @@ const QueEsPrompt_OVA_Original = ({ onClose }) => {
            
            <div className="flex gap-3">
              {nav.map((_, i) => (
-               <div key={i} className={`h-2 rounded-full transition-all duration-700 ${i === curIdx ? 'w-16 bg-[#0D2B5B]' : 'w-2.5 bg-slate-200'}`}></div>
+                <div key={i} className={`h-2 rounded-full transition-all duration-700 ${i === curIdx ? 'w-16 bg-[#0D2B5B]' : 'w-2.5 bg-slate-200 dark:bg-slate-600'}`}></div>
              ))}
            </div>
 
@@ -502,12 +502,12 @@ const QueEsPrompt_OVA_Original = ({ onClose }) => {
 
      {/* Sidebar */}
      {isMenuOpen && (
-       <div className="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-md transition-opacity duration-500" onClick={() => setIsMenuOpen(false)}>
-         <div className="absolute right-0 h-full w-[400px] bg-white shadow-2xl p-12 flex flex-col gap-6 animate-in slide-in-from-right duration-300" onClick={e => e.stopPropagation()}>
-            <button onClick={() => setIsMenuOpen(false)} className="self-end p-3 hover:bg-slate-100 rounded-full transition-colors"><X className="w-8 h-8 text-slate-600" /></button>
-            <h3 className="font-[900] text-slate-300 text-xs tracking-[0.4em] mt-12 mb-8 uppercase border-b-2 border-slate-50 pb-6">Mapa del Módulo</h3>
+        <div className="fixed inset-0 z-[100] bg-slate-900/60 dark:bg-slate-950/80 backdrop-blur-md transition-opacity duration-500" onClick={() => setIsMenuOpen(false)}>
+          <div className="absolute right-0 h-full w-[400px] bg-white dark:bg-slate-800 shadow-2xl p-12 flex flex-col gap-6 animate-[slideInFromRight_0.6s_cubic-bezier(0.16,1,0.3,1)_forwards] duration-300" onClick={e => e.stopPropagation()}>
+             <button onClick={() => setIsMenuOpen(false)} className="self-end p-3 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full transition-colors"><X className="w-8 h-8 text-slate-600 dark:text-slate-300" /></button>
+             <h3 className="font-[900] text-slate-300 dark:text-slate-500 text-xs tracking-[0.4em] mt-12 mb-8 uppercase border-b-2 border-slate-50 dark:border-slate-700 pb-6">Mapa del Módulo</h3>
             {nav.map(id => (
-              <button key={id} onClick={() => { setScreen(id); setIsMenuOpen(false); }} className={`p-6 rounded-[2.5rem] text-left text-xs font-[900] transition-all flex items-center justify-between group ${screen === id ? 'bg-[#0D2B5B] text-white shadow-xl' : 'hover:bg-slate-50 text-slate-500'}`}>
+                 <button key={id} onClick={() => { setScreen(id); setIsMenuOpen(false); }} className={`p-6 rounded-[2.5rem] text-left text-xs font-[900] transition-all flex items-center justify-between group ${screen === id ? 'bg-[#0D2B5B] text-white shadow-xl' : 'hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400'}`}>
                 <span className="uppercase tracking-widest">{screensData[id].title}</span>
                 {completed.includes(id) && <CheckCircle2 className="w-6 h-6 text-[#00B4D8]" />}
               </button>
@@ -516,20 +516,13 @@ const QueEsPrompt_OVA_Original = ({ onClose }) => {
        </div>
      )}
 
-     <style>{`
-       @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
-       body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; color: #0D2B5B; }
-       @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-       @keyframes slideInFromBottom { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-       @keyframes slideInFromRight { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
-       @keyframes zoomIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-       @keyframes slideInFromTop { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-       .animate-in { animation: fadeIn 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-       .slide-in-from-bottom { animation: slideInFromBottom 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-       .slide-in-from-right { animation: slideInFromRight 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-       .zoom-in { animation: zoomIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-       .slide-in-from-top { animation: slideInFromTop 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-     `}</style>
+      <style>{`
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideInFromBottom { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideInFromRight { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        @keyframes slideInFromTop { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+      `}</style>
    </div>
  );
 };

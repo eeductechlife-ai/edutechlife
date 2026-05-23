@@ -1,5 +1,5 @@
-import { useState, useCallback } from 'react';
-import { useIALabContext } from '../../context/IALabContext';
+import { useState, useCallback, useRef, useEffect } from 'react';
+import { useIALabProgressContext } from '../../context/IALabContext';
 import { analyzePromptQuality, getQualityLevel, identifyPromptType, extractKeywords } from '../../utils/promptAnalyzer.js';
 import { selectAppropriateTechnique, applyTechnique, getAvailableTechniques, explainTechniqueSelection } from '../../utils/promptOptimizer.js';
 import { generateEducationalFeedback, generateComparisonMetrics, generateExecutiveSummary } from '../../utils/promptEvaluator.js';
@@ -15,7 +15,7 @@ export const useIALabSynthesizer = () => {
         activeMod, 
         modules, 
         completedModules 
-    } = useIALabContext();
+    } = useIALabProgressContext();
 
     const [input, setInput] = useState('');
     const [loading, setLoading] = useState(false);
@@ -28,6 +28,13 @@ export const useIALabSynthesizer = () => {
     const [deepSeekResult, setDeepSeekResult] = useState(null);
     const [isGenerating, setIsGenerating] = useState(false);
     const [apiError, setApiError] = useState(null);
+    const abortRef = useRef(null);
+
+    useEffect(() => {
+        return () => {
+            if (abortRef.current) abortRef.current.abort();
+        };
+    }, []);
 
     // Obtener contexto dinámico basado en módulo activo
     const getDynamicContext = useCallback(() => {
@@ -68,6 +75,10 @@ export const useIALabSynthesizer = () => {
         setApiError(null);
 
         try {
+            if (abortRef.current) abortRef.current.abort();
+            const controller = new AbortController();
+            abortRef.current = controller;
+
             // Intentar usar DeepSeek API primero
             const deepSeekResult = await (async () => {
                 setIsGenerating(true);
@@ -99,10 +110,9 @@ export const useIALabSynthesizer = () => {
                             temperature: 0.7,
                             max_tokens: 1000,
                             response_format: { type: "json_object" }
-                        })
+                        }),
+                        signal: controller.signal
                     });
-                    
-                    
                     if (!response.ok) {
                         const errorText = await response.text();
                         console.error('❌ Error de API:', response.status, errorText);
@@ -258,6 +268,7 @@ export const useIALabSynthesizer = () => {
             return result;
 
         } catch (error) {
+            if (error.name === 'AbortError') return null;
             console.error('Error en optimizePrompt:', error);
             setError(`Error al procesar la idea: ${error.message}`);
             return null;
@@ -468,6 +479,10 @@ export const useIALabSynthesizer = () => {
         
         // Funciones de integración con DeepSeek
         generateWithDeepSeek: async (userIdea) => {
+            if (abortRef.current) abortRef.current.abort();
+            const controller = new AbortController();
+            abortRef.current = controller;
+
             setIsGenerating(true);
             setApiError(null);
             setLoadMsg('Conectando con DeepSeek API...');
@@ -496,7 +511,8 @@ export const useIALabSynthesizer = () => {
                         temperature: 0.7,
                         max_tokens: 1000,
                         response_format: { type: "json_object" }
-                    })
+                    }),
+                    signal: controller.signal
                 });
                 
                 if (!response.ok) {
@@ -515,6 +531,7 @@ export const useIALabSynthesizer = () => {
                 return result;
                 
             } catch (error) {
+                if (error.name === 'AbortError') return null;
                 console.error('DeepSeek API Error:', error);
                 setApiError(`Error con DeepSeek API: ${error.message}. Verifica que la API key esté configurada en VITE_DEEPSEEK_API_KEY`);
                 return null;

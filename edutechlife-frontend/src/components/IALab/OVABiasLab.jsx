@@ -96,32 +96,20 @@ export default function OVABiasLab() {
     { id: 'game', icon: <Gamepad2 size={18}/>, label: 'Reto' },
   ];
 
-  const styles = `
-    .tech-grid-bg { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: -1; background-image: linear-gradient(to right, #EAEAEA 1px, transparent 1px), linear-gradient(to bottom, #EAEAEA 1px, transparent 1px); background-size: 50px 50px; opacity: 0.6; }
-    .hologram-glow-1 { position: fixed; top: -15%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(47,168,198,0.15) 0%, rgba(255,255,255,0) 70%); z-index: -1; }
-    .hologram-glow-2 { position: fixed; bottom: -20%; right: -10%; width: 60vw; height: 60vw; background: radial-gradient(circle, rgba(30,58,95,0.08) 0%, rgba(255,255,255,0) 70%); z-index: -1; }
-    .glass-panel { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(47, 168, 198, 0.15); box-shadow: 0 10px 40px rgba(30, 58, 95, 0.08); }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
-    .animate-fade-in { animation: fadeIn 0.6s ease-out forwards; }
-    .animate-float { animation: float 6s ease-in-out infinite; }
-    ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: rgba(47, 168, 198, 0.3); border-radius: 4px; }
-    @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 50%{transform:translateX(4px)} 75%{transform:translateX(-4px)} }
-    .animate-shake { animation: shake 0.4s ease-in-out; }
-  `;
+
 
   return (
-    <div className="w-full bg-blue-50 text-slate-800 font-sans flex flex-col md:flex-row overflow-hidden relative min-h-[500px]">
-      <div className="tech-grid-bg" /><div className="hologram-glow-1" /><div className="hologram-glow-2" />
-      <aside className="w-full md:w-64 bg-white/90 flex flex-col shadow-xl z-10 md:min-h-screen border-r border-blue-100">
+    <div className="w-full bg-blue-50 dark:bg-slate-900 text-slate-800 font-sans flex flex-col md:flex-row overflow-hidden relative min-h-[500px]">
+      <div className="fixed inset-0 -z-10 opacity-60 bg-[linear-gradient(to_right,#EAEAEA_1px,transparent_1px),linear-gradient(to_bottom,#EAEAEA_1px,transparent_1px)] bg-[length:50px_50px]" /><div className="fixed -top-[15%] -left-[10%] w-[50vw] h-[50vw] -z-10 bg-[radial-gradient(circle,rgba(47,168,198,0.15)_0%,rgba(255,255,255,0)_70%)]" /><div className="fixed -bottom-[20%] -right-[10%] w-[60vw] h-[60vw] -z-10 bg-[radial-gradient(circle,rgba(30,58,95,0.08)_0%,rgba(255,255,255,0)_70%)]" />
+      <aside className="w-full md:w-64 bg-white/90 dark:bg-slate-800/90 flex flex-col shadow-xl z-10 md:min-h-screen border-r border-blue-100">
         <div className="p-6 text-center border-b border-blue-50">
           <EdutechLogo />
-          <p className="text-[10px] uppercase mt-2 text-slate-600 font-bold tracking-[0.2em]">Ética e Inteligencia Artificial</p>
+          <p className="text-[10px] uppercase mt-2 text-slate-600 dark:text-slate-300 font-bold tracking-[0.2em]">Ética e Inteligencia Artificial</p>
         </div>
         <nav className="flex-1 p-4 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-visible">
           {navItems.map((item) => (
             <button key={item.id} onClick={() => setActiveSection(item.id)}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all min-w-max md:min-w-0 ${activeSection === item.id ? 'bg-gradient-to-r from-[#2FA8C6] to-[#1E3A5F] text-white font-semibold shadow-lg' : 'text-slate-500 hover:bg-[#E0F7FA] hover:text-[#004B63]'}`}>
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all min-w-max md:min-w-0 ${activeSection === item.id ? 'bg-gradient-to-r from-[#2FA8C6] to-[#1E3A5F] text-white font-semibold shadow-lg' : 'text-slate-500 dark:text-slate-400 hover:bg-[#E0F7FA] hover:text-[#004B63]'}`}>
               {item.icon}<span className="text-sm md:text-base">{item.label}</span>
             </button>
           ))}
@@ -132,27 +120,27 @@ export default function OVABiasLab() {
       </aside>
 
       <main className="flex-1 p-4 md:p-10 overflow-y-auto relative" style={{ maxHeight: '100vh' }}>
-        <div className="max-w-5xl mx-auto glass-panel rounded-3xl p-6 md:p-10 min-h-[80vh] flex flex-col relative z-10 border-t-4 border-t-[#2FA8C6]">
+        <div className="max-w-5xl mx-auto bg-white/85 dark:bg-slate-800/85 backdrop-blur-[20px] border border-[#2FA8C6]/15 shadow-[0_10px_40px_rgba(30,58,95,0.08)] rounded-3xl p-6 md:p-10 min-h-[80vh] flex flex-col relative z-10 border-t-4 border-t-[#2FA8C6]">
           {activeSection === 'intro' && (
-            <div className="animate-fade-in">
-              <h2 className="text-3xl md:text-4xl font-black text-[#1E3A5F] mb-6 font-montserrat">{contentData.intro.title}</h2>
+            <div className="animate-[fadeIn_0.6s_ease-out_forwards]">
+              <h2 className="text-3xl md:text-4xl font-black text-[#1E3A5F] dark:text-slate-100 mb-6 font-montserrat">{contentData.intro.title}</h2>
               <div className="w-full h-64 md:h-80 rounded-2xl mb-8 overflow-hidden shadow-xl border border-[#EAEAEA]">
                 <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=1000" alt="Ética IA" loading="lazy" className="w-full h-full object-cover" />
               </div>
-              <p className="text-lg text-slate-700 leading-relaxed">{contentData.intro.text}</p>
-              <div className="mt-6 p-6 bg-[#E0F7FA] border-l-8 border-[#2FA8C6] rounded-r-2xl italic text-[#1E3A5F] font-medium">"{contentData.intro.extended}"</div>
+              <p className="text-lg text-slate-700 dark:text-slate-200 leading-relaxed">{contentData.intro.text}</p>
+              <div className="mt-6 p-6 bg-[#E0F7FA] border-l-8 border-[#2FA8C6] rounded-r-2xl italic text-[#1E3A5F] dark:text-slate-100 font-medium">"{contentData.intro.extended}"</div>
             </div>
           )}
 
           {activeSection === 'cap2' && (
-            <div className="animate-fade-in">
-              <h2 className="text-3xl font-bold text-[#1E3A5F] mb-6 font-montserrat">{contentData.cap2.title}</h2>
+            <div className="animate-[fadeIn_0.6s_ease-out_forwards]">
+              <h2 className="text-3xl font-bold text-[#1E3A5F] dark:text-slate-100 mb-6 font-montserrat">{contentData.cap2.title}</h2>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-6">
                 <div className="space-y-4">
-                  <p className="text-base text-slate-600">{contentData.cap2.text}</p>
-                  <div className="bg-emerald-50 rounded-2xl p-6 border border-emerald-100">
+                  <p className="text-base text-slate-600 dark:text-slate-300">{contentData.cap2.text}</p>
+                  <div className="bg-emerald-50 dark:bg-emerald-900/20 rounded-2xl p-6 border border-emerald-100">
                     <h3 className="font-bold text-emerald-800 mb-4 flex items-center gap-2"><CheckCircle size={18}/> Prácticas Responsables</h3>
-                    <ul className="space-y-3">{contentData.cap2.dos.map((item, i) => (<li key={i} className="flex gap-3 text-emerald-900 text-sm bg-white/50 p-2 rounded-lg border border-emerald-50"><Zap size={14} className="mt-1 flex-shrink-0 text-emerald-500"/> {item}</li>))}</ul>
+                    <ul className="space-y-3">{contentData.cap2.dos.map((item, i) => (<li key={i} className="flex gap-3 text-emerald-900 dark:text-emerald-100 text-sm bg-white/50 dark:bg-slate-800/50 p-2 rounded-lg border border-emerald-50"><Zap size={14} className="mt-1 flex-shrink-0 text-emerald-500"/> {item}</li>))}</ul>
                   </div>
                 </div>
                 <div className="bg-gradient-to-br from-[#1E3A5F] to-[#0D1B2A] rounded-2xl p-6 text-white shadow-xl flex flex-col justify-center border-b-8 border-[#2FA8C6]">
@@ -171,57 +159,57 @@ export default function OVABiasLab() {
           )}
 
           {(activeSection === 'cap1' || activeSection === 'cap3' || activeSection === 'cap4') && (
-            <div className="animate-fade-in">
-              <h2 className="text-3xl font-bold text-[#1E3A5F] mb-6 font-montserrat">{contentData[activeSection].title}</h2>
-              <p className="text-base text-slate-600 mb-8">{contentData[activeSection].text}</p>
+            <div className="animate-[fadeIn_0.6s_ease-out_forwards]">
+              <h2 className="text-3xl font-bold text-[#1E3A5F] dark:text-slate-100 mb-6 font-montserrat">{contentData[activeSection].title}</h2>
+              <p className="text-base text-slate-600 dark:text-slate-300 mb-8">{contentData[activeSection].text}</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {(contentData[activeSection].principles || contentData[activeSection].risks || contentData[activeSection].biases).map((item, idx) => (
-                  <div key={idx} className="p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:border-[#2FA8C6] transition-all group">
-                    <h4 className="font-bold text-[#1E3A5F] mb-2 flex items-center gap-2">
+                  <div key={idx} className="p-6 bg-slate-50 dark:bg-slate-700/30 rounded-2xl border border-slate-100 dark:border-slate-700 hover:border-[#2FA8C6] transition-all group">
+                    <h4 className="font-bold text-[#1E3A5F] dark:text-slate-100 mb-2 flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-[#2FA8C6] group-hover:scale-150 transition-transform"></div>
                       {item.name}
                     </h4>
-                    <p className="text-sm text-slate-500 leading-relaxed">{item.desc}</p>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">{item.desc}</p>
                   </div>
                 ))}
               </div>
               {activeSection === 'cap3' && (
-                <div className="mt-6 p-6 bg-rose-50 border-2 border-rose-100 rounded-2xl">
-                  <h4 className="text-rose-700 font-black uppercase text-xs mb-2">⚠️ Atención</h4>
-                  <p className="text-rose-900 font-medium">{contentData.cap3.critical}</p>
+                <div className="mt-6 p-6 bg-rose-50 dark:bg-rose-900/20 border-2 border-rose-100 rounded-2xl">
+                  <h4 className="text-rose-700 dark:text-rose-300 font-black uppercase text-xs mb-2">⚠️ Atención</h4>
+                  <p className="text-rose-900 dark:text-rose-100 font-medium">{contentData.cap3.critical}</p>
                 </div>
               )}
             </div>
           )}
 
           {activeSection === 'game' && (
-            <div className="flex flex-col h-full items-center justify-center text-center animate-fade-in">
+            <div className="flex flex-col h-full items-center justify-center text-center animate-[fadeIn_0.6s_ease-out_forwards]">
               {matchedPairs.length < gameData.length ? (
                 <>
                   <div className="mb-8">
-                    <h2 className="text-3xl font-black text-[#1E3A5F] mb-2 font-montserrat">Desafío de Casos Reales</h2>
-                    <p className="text-slate-500">Relaciona cada caso con el concepto ético correcto</p>
+                    <h2 className="text-3xl font-black text-[#1E3A5F] dark:text-slate-100 mb-2 font-montserrat">Desafío de Casos Reales</h2>
+                    <p className="text-slate-500 dark:text-slate-400">Relaciona cada caso con el concepto ético correcto</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
                     <div className="space-y-3">{shuffledCases.map(item => (
                       <button key={item.id} disabled={matchedPairs.includes(item.id)} onClick={() => setSelectedCase(item)}
-                        className={`w-full p-4 text-left text-sm rounded-2xl border-2 transition-all ${matchedPairs.includes(item.id) ? 'bg-emerald-50 border-emerald-200 text-emerald-700 opacity-50' : selectedCase?.id === item.id ? 'border-[#2FA8C6] bg-[#E0F7FA] shadow-md scale-105' : 'bg-white border-slate-100 hover:border-[#2FA8C6]'} ${isError && selectedCase?.id === item.id ? 'animate-shake border-rose-400 bg-rose-50' : ''}`}>
+                        className={`w-full p-4 text-left text-sm rounded-2xl border-2 transition-all ${matchedPairs.includes(item.id) ? 'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 text-emerald-700 dark:text-emerald-300 opacity-50' : selectedCase?.id === item.id ? 'border-[#2FA8C6] bg-[#E0F7FA] shadow-md scale-105' : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-[#2FA8C6]'} ${isError && selectedCase?.id === item.id ? 'animate-[shake_0.4s_ease-in-out] border-rose-400 bg-rose-50 dark:bg-rose-900/20' : ''}`}>
                         {item.case}
                       </button>
                     ))}</div>
                     <div className="space-y-3">{shuffledConcepts.map(item => (
                       <button key={item.id} disabled={matchedPairs.includes(item.id)} onClick={() => setSelectedConcept(item)}
-                        className={`w-full p-4 text-center font-bold rounded-2xl border-2 transition-all ${matchedPairs.includes(item.id) ? 'bg-emerald-50 border-emerald-200 text-emerald-700 opacity-50' : selectedConcept?.id === item.id ? 'border-[#2FA8C6] bg-[#E0F7FA] shadow-md scale-105' : 'bg-white border-slate-100 hover:border-[#2FA8C6]'} ${isError && selectedConcept?.id === item.id ? 'animate-shake border-rose-400 bg-rose-50' : ''}`}>
+                        className={`w-full p-4 text-center font-bold rounded-2xl border-2 transition-all ${matchedPairs.includes(item.id) ? 'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 text-emerald-700 dark:text-emerald-300 opacity-50' : selectedConcept?.id === item.id ? 'border-[#2FA8C6] bg-[#E0F7FA] shadow-md scale-105' : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-[#2FA8C6]'} ${isError && selectedConcept?.id === item.id ? 'animate-[shake_0.4s_ease-in-out] border-rose-400 bg-rose-50 dark:bg-rose-900/20' : ''}`}>
                         {item.concept}
                       </button>
                     ))}</div>
                   </div>
                 </>
               ) : (
-                <div className="p-10 bg-emerald-50 rounded-3xl border-4 border-emerald-200 flex flex-col items-center">
+                <div className="p-10 bg-emerald-50 dark:bg-emerald-900/20 rounded-3xl border-4 border-emerald-200 flex flex-col items-center">
                   <Award className="w-24 h-24 text-emerald-500 mb-4 animate-bounce" />
-                  <h2 className="text-3xl font-black text-emerald-900 font-montserrat">¡Pensamiento Crítico Activado!</h2>
-                  <p className="text-emerald-700 mt-2">Has superado el laboratorio de Ética en IA.</p>
+                  <h2 className="text-3xl font-black text-emerald-900 dark:text-emerald-100 font-montserrat">¡Pensamiento Crítico Activado!</h2>
+                  <p className="text-emerald-700 dark:text-emerald-300 mt-2">Has superado el laboratorio de Ética en IA.</p>
                   <button onClick={() => { setActiveSection('intro'); setMatchedPairs([]); }}
                     className="mt-6 px-6 py-3 bg-gradient-to-r from-[#2FA8C6] to-[#1E3A5F] text-white rounded-xl font-bold shadow-md hover:shadow-lg transition-all">
                     Volver al inicio
@@ -231,11 +219,11 @@ export default function OVABiasLab() {
             </div>
           )}
         </div>
-        <footer className="mt-4 text-center text-slate-600 text-xs py-4">
+        <footer className="mt-4 text-center text-slate-600 dark:text-slate-300 text-xs py-4">
           Laboratorio guiado por <strong className="text-[#2FA8C6]">Valerio</strong> &mdash; Coach de IA de Edutechlife.
         </footer>
       </main>
-      <style>{styles}</style>
+      
     </div>
   );
 }

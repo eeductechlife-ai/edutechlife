@@ -1,11 +1,11 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
-import { useIALabContext } from '../../context/IALabContext';
+import { useIALabProgressContext } from '../../context/IALabContext';
 
 const IALabModuleRoadmap = () => {
   const prefersReducedMotion = useReducedMotion();
-  const { activeMod, modules, setActiveMod, isModuleLocked, calculateModuleScore } = useIALabContext();
+  const { activeMod, modules, setActiveMod, isModuleLocked, calculateModuleScore } = useIALabProgressContext();
 
   return (
     <div className="relative bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-sm p-4 md:p-5">

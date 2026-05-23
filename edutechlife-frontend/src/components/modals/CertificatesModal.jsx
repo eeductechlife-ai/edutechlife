@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useUser } from '@clerk/react';
 import { supabase } from '../../lib/supabase';
 import { useProgressContext } from '../../context/ProgressContext';
-import { useIALabContext } from '../../context/IALabContext';
+import { useIALabProgressContext, useIALabUIContext } from '../../context/IALabContext';
 import { Card, CardContent } from '../ui/card-simple';
 import { Icon } from '../../utils/iconMapping.jsx';
 import CertificatePreview from '../IALab/CertificatePreview';
@@ -14,7 +14,8 @@ const TOTAL_MODULES = 5;
 const CertificatesModal = ({ isOpen, onClose }) => {
   const { user } = useUser();
   const { courseProgress, completedModules, isLoading: progressLoading } = useProgressContext();
-  const { calculateModuleScore, storedCertificate, generateCertificate } = useIALabContext();
+  const { calculateModuleScore } = useIALabProgressContext();
+  const { storedCertificate, generateCertificate } = useIALabUIContext();
 
   const [loading, setLoading] = useState(true);
   const [certificate, setCertificate] = useState(null);

@@ -1,19 +1,19 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { useLocation } from 'react-router-dom';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { Bot, X, Send, MessageCircle, Minus, Square } from 'lucide-react';
 import AppRoutes from './routes/index.jsx';
-import NicoModern from './components/Nico/NicoModern';
-import AdminLoginModal from './components/AdminLoginModal';
-import LeadCaptureModal from './components/LeadCaptureModal';
-import ContactModal from './components/ContactModal';
-import LoadingScreen from './components/LoadingScreen';
 import { callDeepseekStream } from './utils/api';
 import { speakTextConversational, stopSpeech } from './utils/speech';
-import { StudentProvider } from './contexts/StudentContext';
+import { StudentProvider } from './context/StudentContext';
 import { useAuth } from './context/AuthContext';
 import { useAuth as useClerkAuth } from '@clerk/react';
 import { initSupabaseClient } from './lib/supabase';
+
+const LeadCaptureModal = lazy(() => import('./components/LeadCaptureModal'));
+const ContactModal = lazy(() => import('./components/ContactModal'));
+const LoadingScreen = lazy(() => import('./components/LoadingScreen'));
+const NicoModern = lazy(() => import('./components/Nico/NicoModern'));
 
 // Cache de preguntas frecuentes para respuestas instantáneas
 const responseCache = new Map();
@@ -727,28 +727,38 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                 
                 {/* Loading Screen */}
                 {isLoading && (
+                  <Suspense fallback={null}>
                     <LoadingScreen onComplete={handleLoadingComplete} minDuration={2000} />
+                  </Suspense>
                 )}
                 
                 {/* AppRoutes maneja toda la navegación */}
                 <AppRoutes />
                 
                 {/* Lead Capture Modal */}
-                <LeadCaptureModal 
+                <Suspense fallback={null}>
+                  <LeadCaptureModal 
                     isOpen={showLeadModal}
                     onClose={() => setShowLeadModal(false)}
                     onSubmit={handleLeadSubmit}
                     context={leadContext}
-                />
+                  />
+                </Suspense>
                 
                 {/* Contact Modal */}
-                <ContactModal 
+                <Suspense fallback={null}>
+                  <ContactModal 
                     isOpen={showContactModal}
                     onClose={() => setShowContactModal(false)}
-                />
+                  />
+                </Suspense>
                 
                 {/* Nico Premium Widget - oculto en IALab y SmartBoard */}
-                {!isIALabRoute && !isSmartBoardRoute && <NicoModern />}
+                {!isIALabRoute && !isSmartBoardRoute && (
+                  <Suspense fallback={null}>
+                    <NicoModern />
+                  </Suspense>
+                )}
             </div>
         </StudentProvider>
     );

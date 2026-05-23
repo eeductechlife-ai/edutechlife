@@ -1,16 +1,17 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import UserDropdownMenuSimplified from '../UserDropdownMenuSimplified';
 import NotificationPanel from '../NotificationPanel';
-import { useIALabContext } from '../../context/IALabContext';
+import { useIALabUIContext } from '../../context/IALabContext';
 import { useNotification } from '../../context/NotificationContext';
 import { useCourseReminders } from '../../hooks/useCourseReminders';
 import { useBrowserNotifications } from '../../hooks/useBrowserNotifications';
 import useForumNotifications from '../../hooks/IALab/forum/useForumNotifications';
 import GlobalSearchBar from './GlobalSearchBar';
+import { BADGE_INFO } from '../../data/ialab';
 
 const IALabHeader = () => {
-  const { onBack, courseCompleted, setShowCertificateModal } = useIALabContext();
+  const { onBack, courseCompleted, setShowCertificateModal } = useIALabUIContext();
   const { unreadCount, createNotification } = useNotification();
   const { unreadCount: forumUnreadCount } = useForumNotifications();
   const [notifOpen, setNotifOpen] = useState(false);
@@ -22,6 +23,25 @@ const IALabHeader = () => {
   
   // Notificaciones del navegador (push)
   useBrowserNotifications();
+
+  // Notificación al ganar insignias
+  useEffect(() => {
+    const handleBadges = (e) => {
+      const badgeIds = e.detail?.badges || [];
+      badgeIds.forEach(id => {
+        const info = BADGE_INFO?.[id];
+        if (!info) return;
+        createNotification({
+          type: 'success',
+          title: `🏅 ${info.label}`,
+          message: info.desc,
+          metadata: { badge: id, type: 'badge' }
+        });
+      });
+    };
+    window.addEventListener('ialab:badgesAwarded', handleBadges);
+    return () => window.removeEventListener('ialab:badgesAwarded', handleBadges);
+  }, [createNotification]);
 
   return (
     <header className="h-16 flex items-center justify-between px-6 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 w-full shadow-sm">

@@ -76,6 +76,7 @@ export function useSupabaseContent() {
           .order('sort_order') : { data: [] };
 
         const built = {};
+        let resourcesByTopic = {};
         for (const mod of modules) {
           const modLessons = (lessons || []).filter(l => l.module_id === mod.id);
           const modTopics = (topics || []).filter(t => t.module_id === mod.id);
@@ -84,7 +85,7 @@ export function useSupabaseContent() {
             if (!resMap[r.topic_id]) resMap[r.topic_id] = [];
             resMap[r.topic_id].push(r);
           }
-          const resourcesByTopic = {};
+          resourcesByTopic = {};
           for (const t of modTopics) {
             resourcesByTopic[t.title] = { title: t.title, description: t.description, learningObjectives: t.learning_objectives || [], estimatedTime: t.estimated_time, difficulty: t.difficulty, resources: resMap[t.id] || [] };
           }

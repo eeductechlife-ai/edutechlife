@@ -6,7 +6,11 @@ import ClerkProviderWrapper from './providers/ClerkProviderWrapper'
 import { AuthProvider } from './context/AuthContext'
 import { NotificationProvider } from './context/NotificationContext'
 import { ThemeProvider } from './context/ThemeContext'
+import ErrorBoundary from './components/forum/ErrorBoundary'
+import { registerSW } from './utils/registerSW'
 import './index.css'
+
+registerSW()
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -15,7 +19,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <AuthProvider>
           <NotificationProvider>
             <ThemeProvider>
-              <App />
+              <ErrorBoundary>
+                <App />
+              </ErrorBoundary>
             </ThemeProvider>
           </NotificationProvider>
         </AuthProvider>

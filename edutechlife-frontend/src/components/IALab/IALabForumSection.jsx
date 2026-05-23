@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import PlatformOptimizedCard from '../PlatformOptimizedCard';
-import { useIALabContext } from '../../context/IALabContext';
+import { useIALabProgressContext, useIALabUIContext } from '../../context/IALabContext';
 import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
 import useIALabForum from '../../hooks/IALab/useIALabForum';
 import { useAuth } from '../../context/AuthContext';
@@ -38,7 +38,8 @@ const IALabForumSection = ({
     ...rest
 }) => {
     const { user } = useAuth();
-    const { activeMod, insightsExpanded, setInsightsExpanded } = useIALabContext();
+    const { activeMod } = useIALabProgressContext();
+    const { insightsExpanded, setInsightsExpanded } = useIALabUIContext();
     const { trackCommunityComment } = useIALabProgress();
     const {
         forumPosts,

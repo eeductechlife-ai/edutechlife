@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
-import { useIALabContext } from '../../context/IALabContext';
+import { useIALabProgressContext } from '../../context/IALabContext';
 import { useIALabStore } from '../../store/ialabStore';
 import { useActivityTracker } from '../../hooks/useActivityTracker';
 
 const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge', onRetry }) => {
-    const { activeMod } = useIALabContext();
+    const { activeMod } = useIALabProgressContext();
     const { trackActivity } = useActivityTracker();
     const [gradeSaved, setGradeSaved] = useState(false);
     const [activeTab, setActiveTab] = useState('overview');

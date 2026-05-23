@@ -1,4 +1,5 @@
 import React, { useRef, useCallback, useMemo } from 'react';
+import { modules } from '../../data/ialab';
 import { useIALabStore } from '../../store/ialabStore';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
@@ -18,9 +19,8 @@ const parseResourceDuration = (resource) => {
   return 0;
 };
 
-const calculateUnviewedMinutes = (moduleId, viewedIds) => {
-  const store = useIALabStore.getState();
-  const modData = store.modules[moduleId - 1];
+const calculateUnviewedMinutes = (modules, moduleId, viewedIds) => {
+  const modData = modules?.[moduleId - 1];
   if (!modData?.topics) return null;
   let total = 0;
   modData.topics.forEach((topicTitle) => {
@@ -38,9 +38,11 @@ const calculateUnviewedMinutes = (moduleId, viewedIds) => {
 const PrimaryActionCard = ({ route, onContinue, mod }) => {
   const action = route.primaryAction;
   const prefersReducedMotion = useReducedMotion();
-  const store = useIALabStore();
-  const viewedIds = store.getViewedResources();
-  const remainingMin = useMemo(() => calculateUnviewedMinutes(mod?.id, viewedIds), [mod?.id, viewedIds]);
+  const courseProgress = useIALabStore(s => s.courseProgress);
+  const getWeeklyXP = useIALabStore(s => s.getWeeklyXP);
+  const getViewedResources = useIALabStore(s => s.getViewedResources);
+  const viewedIds = getViewedResources();
+  const remainingMin = useMemo(() => calculateUnviewedMinutes(modules, mod?.id, viewedIds), [modules, mod?.id, viewedIds]);
   if (!action) return null;
 
   return (
@@ -65,16 +67,24 @@ const PrimaryActionCard = ({ route, onContinue, mod }) => {
                 </h4>
                 <p className="text-white/80 text-sm font-medium">{action.title}</p>
               </>
-            ) : action.actionType === 'take_exam' || action.actionType === 'take_challenge' ? (
+            ) : action.actionType === 'take_exam' || action.actionType === 'take_challenge' || action.actionType === 'review_weak_topics' ? (
               <>
                 <h4 className="text-white font-bold text-base mb-1 flex items-center gap-2">
-                  Continúa tu aprendizaje
+                  {action.actionType === 'review_weak_topics' ? (
+                    <><Icon name="fa-book-open" className="w-4 h-4 text-amber-300" /> Repasa temas débiles</>
+                  ) : (
+                    <>Continúa tu aprendizaje</>
+                  )}
                   <span className="px-2 py-0.5 rounded-md bg-corporate/20 text-corporate text-[10px] font-bold uppercase tracking-wider border border-corporate/20">
                     Pendiente
                   </span>
                 </h4>
                 <p className="text-xs text-white/60 mb-1">Módulo {mod.id} · {mod.title}</p>
-                <p className="text-white/80 text-sm font-medium">{action.title}</p>
+                {action.actionType === 'review_weak_topics' ? (
+                  <p className="text-white/80 text-sm font-medium">{action.description}</p>
+                ) : (
+                  <p className="text-white/80 text-sm font-medium">{action.title}</p>
+                )}
               </>
             ) : (
               <>
@@ -99,6 +109,8 @@ const PrimaryActionCard = ({ route, onContinue, mod }) => {
               <><Icon name="fa-play-circle" className="w-4 h-4" /> Comenzar</>
             ) : action.actionType === 'take_exam' ? (
               <><Icon name="fa-file-text" className="w-4 h-4" /> Empezar examen</>
+            ) : action.actionType === 'review_weak_topics' ? (
+              <><Icon name="fa-book-open" className="w-4 h-4" /> Revisar temas</>
             ) : action.actionType === 'take_challenge' ? (
               <><Icon name="fa-trophy" className="w-4 h-4" /> Aceptar desafío</>
             ) : (
@@ -113,7 +125,7 @@ const PrimaryActionCard = ({ route, onContinue, mod }) => {
               ⏱️ ~{remainingMin} min restantes en este módulo
             </p>
             <p className="text-[10px] text-white/40">
-              Curso: {Math.round(store.courseProgress)}% completado · ~{Math.max(1, Math.ceil((100 - store.courseProgress) / 20))} días estimados
+              Curso: {Math.round(courseProgress)}% · ~{Math.max(1, Math.ceil((100 - courseProgress) / 20))} días · {getWeeklyXP().weekly}/{getWeeklyXP().weeklyTarget} XP esta semana
             </p>
           </div>
         )}
@@ -147,8 +159,10 @@ const LoadingSkeleton = () => (
 );
 
 const TuRutaDeHoy = ({ onAction }) => {
-  const store = useIALabStore();
-  const route = useMemo(() => store.getDailyRoute(), [store]);
+  const getDailyRoute = useIALabStore(s => s.getDailyRoute);
+  const setActiveModAction = useIALabStore(s => s.setActiveMod);
+  const setVisitedModules = useIALabStore(s => s.setVisitedModules);
+  const route = useMemo(() => getDailyRoute(), [getDailyRoute]);
   const topRef = useRef(null);
 
   const handleContinue = useCallback(() => {
@@ -161,17 +175,20 @@ const TuRutaDeHoy = ({ onAction }) => {
     } else {
       switch (action.actionType) {
         case 'take_exam': onAction?.('OPEN_EVALUATION'); break;
+        case 'review_weak_topics':
+          window.dispatchEvent(new CustomEvent('ialab:switchTab', { detail: 'contenido' }));
+          break;
         case 'take_challenge': onAction?.('OPEN_CHALLENGE'); break;
         case 'community': onAction?.('OPEN_COMMUNITY'); break;
         case 'next_module':
-          store.setActiveMod(action.nextModuleId);
-          store.setVisitedModules(prev => [...new Set([...prev, action.nextModuleId])]);
+          setActiveModAction(action.nextModuleId);
+          setVisitedModules(prev => [...new Set([...prev, action.nextModuleId])]);
           break;
         case 'course_complete': onAction?.('SHOW_CERTIFICATE'); break;
         default: break;
       }
     }
-  }, [route, store, onAction]);
+  }, [route, setActiveModAction, setVisitedModules, onAction]);
 
 
 

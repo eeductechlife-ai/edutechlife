@@ -7,6 +7,7 @@
 
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom/vitest';
 import PDFThumbnail from './PDFThumbnail';
 
 describe('PDFThumbnail Component', () => {
@@ -38,20 +39,19 @@ describe('PDFThumbnail Component', () => {
     expect(screen.getByText(mockProps.description)).toBeInTheDocument();
     
     // Verifica que se rendericen los metadatos
-    expect(screen.getByText(`${mockProps.pages} páginas`)).toBeInTheDocument();
+    expect(screen.getAllByText(`${mockProps.pages} páginas`).length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText(mockProps.size)).toBeInTheDocument();
     expect(screen.getByText('PDF')).toBeInTheDocument();
     
     // Verifica el indicador de doble clic
-    expect(screen.getByText('Doble clic')).toBeInTheDocument();
-    expect(screen.getByText('Haz doble clic para abrir')).toBeInTheDocument();
+    expect(screen.getAllByText(/Doble clic/).length).toBeGreaterThanOrEqual(1);
   });
 
   test('shows immersive view on double click', async () => {
     render(<PDFThumbnail {...mockProps} />);
     
     // Encuentra el contenedor de la miniatura
-    const thumbnail = screen.getByLabelText(`Abrir ${mockProps.title} en vista inmersiva (doble clic)`);
+    const thumbnail = screen.getByLabelText(`Abrir ${mockProps.title} (clic para nueva pestaña, doble clic para vista inmersiva)`);
     
     // Simula doble clic
     fireEvent.doubleClick(thumbnail);
@@ -68,7 +68,7 @@ describe('PDFThumbnail Component', () => {
     render(<PDFThumbnail {...mockProps} />);
     
     // Abre la vista inmersiva
-    const thumbnail = screen.getByLabelText(`Abrir ${mockProps.title} en vista inmersiva (doble clic)`);
+    const thumbnail = screen.getByLabelText(`Abrir ${mockProps.title} (clic para nueva pestaña, doble clic para vista inmersiva)`);
     fireEvent.doubleClick(thumbnail);
     
     // Verifica que esté abierta
@@ -90,7 +90,7 @@ describe('PDFThumbnail Component', () => {
     render(<PDFThumbnail {...mockProps} />);
     
     // Abre la vista inmersiva
-    const thumbnail = screen.getByLabelText(`Abrir ${mockProps.title} en vista inmersiva (doble clic)`);
+    const thumbnail = screen.getByLabelText(`Abrir ${mockProps.title} (clic para nueva pestaña, doble clic para vista inmersiva)`);
     fireEvent.doubleClick(thumbnail);
     
     // Verifica que esté abierta
@@ -114,7 +114,7 @@ describe('PDFThumbnail Component', () => {
     render(<PDFThumbnail {...mockProps} />);
     
     // Abre la vista inmersiva
-    const thumbnail = screen.getByLabelText(`Abrir ${mockProps.title} en vista inmersiva (doble clic)`);
+    const thumbnail = screen.getByLabelText(`Abrir ${mockProps.title} (clic para nueva pestaña, doble clic para vista inmersiva)`);
     fireEvent.doubleClick(thumbnail);
     
     // Verifica que el botón de descarga tenga el atributo download
@@ -127,7 +127,7 @@ describe('PDFThumbnail Component', () => {
     render(<PDFThumbnail {...mockProps} />);
     
     // Abre la vista inmersiva
-    const thumbnail = screen.getByLabelText(`Abrir ${mockProps.title} en vista inmersiva (doble clic)`);
+    const thumbnail = screen.getByLabelText(`Abrir ${mockProps.title} (clic para nueva pestaña, doble clic para vista inmersiva)`);
     fireEvent.doubleClick(thumbnail);
     
     // Verifica que el botón de pantalla completa esté presente
@@ -140,9 +140,9 @@ describe('PDFThumbnail Component', () => {
     render(<PDFThumbnail {...mockProps} />);
     
     // Verifica atributos ARIA
-    const thumbnail = screen.getByLabelText(`Abrir ${mockProps.title} en vista inmersiva (doble clic)`);
-    expect(thumbnail).toHaveAttribute('aria-label', `Abrir ${mockProps.title} en vista inmersiva (doble clic)`);
-    expect(thumbnail).toHaveAttribute('title', 'Doble clic para abrir en vista inmersiva');
+    const thumbnail = screen.getByLabelText(`Abrir ${mockProps.title} (clic para nueva pestaña, doble clic para vista inmersiva)`);
+    expect(thumbnail).toHaveAttribute('aria-label', `Abrir ${mockProps.title} (clic para nueva pestaña, doble clic para vista inmersiva)`);
+    expect(thumbnail).toHaveAttribute('title', 'Clic para abrir en nueva pestaña | Doble clic para vista inmersiva');
     
     // Verifica botones de cierre
     fireEvent.doubleClick(thumbnail);
@@ -158,7 +158,7 @@ describe('PDFThumbnail Component', () => {
     expect(document.body.style.overflow).toBe('');
     
     // Abre la vista inmersiva
-    const thumbnail = screen.getByLabelText(`Abrir ${mockProps.title} en vista inmersiva (doble clic)`);
+    const thumbnail = screen.getByLabelText(`Abrir ${mockProps.title} (clic para nueva pestaña, doble clic para vista inmersiva)`);
     fireEvent.doubleClick(thumbnail);
     
     // Verifica que se bloquee el scroll

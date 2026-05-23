@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
 
@@ -13,6 +13,11 @@ export const useIALabForum = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [likeStates, setLikeStates] = useState({});
+    const cancelledRef = useRef(false);
+
+    useEffect(() => {
+        return () => { cancelledRef.current = true; };
+    }, []);
 
     /**
      * Cargar posts del foro
@@ -31,6 +36,7 @@ export const useIALabForum = () => {
                 .limit(limit);
 
             if (postsError) throw postsError;
+            if (cancelledRef.current) return [];
 
             if (!posts || posts.length === 0) {
                 setForumPosts([]);
@@ -47,6 +53,7 @@ export const useIALabForum = () => {
                 .eq('user_id', user.id);
 
             if (votesError) console.warn('Error loading votes:', votesError.message);
+            if (cancelledRef.current) return [];
 
             const votedPostIds = new Set(votes?.map(v => v.post_id) || []);
 
@@ -114,6 +121,7 @@ export const useIALabForum = () => {
                     .eq('user_id', user.id);
 
                 if (deleteError) throw deleteError;
+                if (cancelledRef.current) return { success: false, error: 'Cancelado' };
             } else {
                 const { error: insertError } = await supabase
                     .from('forum_votes')
@@ -125,6 +133,8 @@ export const useIALabForum = () => {
 
                 if (insertError) throw insertError;
             }
+
+            if (cancelledRef.current) return { success: false, error: 'Cancelado' };
 
             const { error: updateError } = await supabase
                 .from('forum_posts')
@@ -208,6 +218,7 @@ export const useIALabForum = () => {
                 .single();
 
             if (insertError) throw insertError;
+            if (cancelledRef.current) return { success: false, error: 'Cancelado' };
 
             const newPost = {
                 ...post,
@@ -249,6 +260,8 @@ export const useIALabForum = () => {
             const { count: postCount, error: postErr } = await supabase
                 .from('forum_posts')
                 .select('*', { count: 'exact', head: true });
+
+            if (cancelledRef.current) return { success: false, data: {}, totalPosts: 0, totalComments: 0, totalLikes: 0, activeUsers: 0 };
 
             const { count: voteCount, error: voteErr } = await supabase
                 .from('forum_votes')

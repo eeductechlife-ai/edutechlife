@@ -1,0 +1,161 @@
+/* ==============================================
+   IALab — Estilos extraídos de inline <style> tags
+   ============================================== */
+
+/* OVA CSS custom properties */
+:root {
+  --ova-scrollbar-color: rgba(47, 168, 198, 0.3);
+  --ova-scrollbar-hover: rgba(47, 168, 198, 0.6);
+  --ova-glow-start: rgba(47, 168, 198, 0.4);
+  --ova-glow-end: rgba(47, 168, 198, 0.8);
+}
+
+.dark {
+  --ova-scrollbar-color: rgba(47, 168, 198, 0.5);
+  --ova-scrollbar-hover: rgba(47, 168, 198, 0.8);
+  --ova-glow-start: rgba(47, 168, 198, 0.6);
+  --ova-glow-end: rgba(47, 168, 198, 1.0);
+}
+
+/* OVA global scrollbar (matches previous inline <style> definitions) */
+::selection {
+  background: rgba(47, 168, 198, 0.3);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--ova-scrollbar-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ova-scrollbar-hover);
+}
+
+/* OVA global keyframes (named to match existing animate-[name] references) */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes zoomIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-4px); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 15px var(--ova-glow-start); }
+  50% { box-shadow: 0 0 30px var(--ova-glow-end); }
+}
+
+/* OVA global scrollbar */
+.ova-scrollbar::-webkit-scrollbar,
+.ova-scrollbar-thin::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ova-scrollbar::-webkit-scrollbar-track,
+.ova-scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ova-scrollbar::-webkit-scrollbar-thumb,
+.ova-scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--ova-scrollbar-color);
+  border-radius: 4px;
+}
+
+.ova-scrollbar::-webkit-scrollbar-thumb:hover,
+.ova-scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: var(--ova-scrollbar-hover);
+}
+
+/* Scrollbar delgada para iOS */
+.scrollbar-thin-ialab {
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+.scrollbar-thin-ialab::-webkit-scrollbar {
+  height: 4px;
+  width: 4px;
+}
+.scrollbar-thin-ialab::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin-ialab::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--color-petroleum) 25%, transparent);
+  border-radius: 20px;
+}
+.scrollbar-thin-ialab::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--color-petroleum) 40%, transparent);
+}
+
+/* Protección anti-impresión para evaluación */
+@media print {
+  .exam-protection-modal,
+  .exam-protection-modal * {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }
+
+  body::before {
+    content: "IMPRESIÓN BLOQUEADA - Este examen está protegido por el protocolo de seguridad Edutechlife";
+    display: block !important;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    color: red;
+    padding: 40px;
+    background: white;
+  }
+}
+
+/* Animación para mensajes temporales */
+@keyframes ialab-fade-in {
+  from { opacity: 0; transform: translate(-50%, -10px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+.animate-fade-in {
+  animation: ialab-fade-in 0.3s ease-out;
+}
+
+/* Efectos de botón premium */
+.button-pulse {
+  animation: ialab-pulse 2s infinite;
+}
+
+@keyframes ialab-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 188, 212, 0.4); }
+  50% { box-shadow: 0 0 0 10px rgba(0, 188, 212, 0); }
+}

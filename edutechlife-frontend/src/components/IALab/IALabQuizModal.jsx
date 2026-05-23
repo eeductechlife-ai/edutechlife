@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabQuiz } from '../../hooks/IALab/useIALabQuiz';
-import { useIALabContext } from '../../context/IALabContext';
+import { useIALabProgressContext } from '../../context/IALabContext';
 import { useIALabStore } from '../../store/ialabStore';
 import { useNotification } from '../../context/NotificationContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -12,37 +12,31 @@ import useFocusTrap from '../../hooks/useFocusTrap';
 
 const IALabQuizModal = ({ isOpen, onClose }) => {
   const {
-    quizQuestions,
-    quizAnswers,
-    quizScore,
-    quizPassed,
-    quizResult,
-    showScoreResult,
-    generateTopicFeedback,
-    TOTAL_QUESTIONS,
-    PASSING_SCORE,
-    SUGGESTED_TIME_SECONDS,
-    currentQuestion,
-    timeElapsed,
-    isTimerRunning,
-    showTimeWarning,
-    securityWarningCount,
-    setSecurityWarningCount,
-    MAX_SECURITY_WARNINGS,
-    SECURITY_WARNING_MESSAGES,
-    showSecurityMessage,
-    securityMessage,
-    canAttemptQuiz,
-    submitQuiz,
-    updateQuizAnswer,
-    openEvaluation,
-    closeEvaluationModal,
-    setCurrentQuestion,
-    setTimeElapsed,
-    formatTime,
+    quizQuestions, TOTAL_QUESTIONS, PASSING_SCORE, SUGGESTED_TIME_SECONDS,
+    MAX_SECURITY_WARNINGS, SECURITY_WARNING_MESSAGES,
+    canAttemptQuiz, submitQuiz, updateQuizAnswer, openEvaluation,
+    closeEvaluationModal, generateTopicFeedback, formatTime,
   } = useIALabQuiz();
 
-  const { activeMod, markExamComplete } = useIALabContext();
+  const {
+    activeMod, markExamComplete,
+  } = useIALabProgressContext();
+
+  const quizAnswers = useIALabStore(s => s.quizAnswers);
+  const quizScore = useIALabStore(s => s.quizScore);
+  const quizPassed = useIALabStore(s => s.quizPassed);
+  const quizResult = useIALabStore(s => s.quizResult);
+  const showScoreResult = useIALabStore(s => s.showScoreResult);
+  const currentQuestion = useIALabStore(s => s.currentQuestion);
+  const timeElapsed = useIALabStore(s => s.timeElapsed);
+  const isTimerRunning = useIALabStore(s => s.isTimerRunning);
+  const showTimeWarning = useIALabStore(s => s.showTimeWarning);
+  const securityWarningCount = useIALabStore(s => s.securityWarningCount);
+  const setSecurityWarningCount = useIALabStore(s => s.setSecurityWarningCount);
+  const showSecurityMessage = useIALabStore(s => s.showSecurityMessage);
+  const securityMessage = useIALabStore(s => s.securityMessage);
+  const setCurrentQuestion = useIALabStore(s => s.setCurrentQuestion);
+  const setTimeElapsed = useIALabStore(s => s.setTimeElapsed);
   const { createNotification } = useNotification();
 
   const [isSubmitting, setIsSubmitting] = useState(false);

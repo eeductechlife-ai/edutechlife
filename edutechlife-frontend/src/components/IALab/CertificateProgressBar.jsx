@@ -1,9 +1,9 @@
 import React from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
-import { useIALabContext } from '../../context/IALabContext';
+import { useIALabProgressContext } from '../../context/IALabContext';
 
 const CertificateProgressBar = () => {
-  const { modules, calculateModuleScore, courseProgress } = useIALabContext();
+  const { modules, calculateModuleScore, courseProgress } = useIALabProgressContext();
 
   const moduleScores = modules.map((mod) => ({
     id: mod.id,

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import IALabEvaluationModal from './IALabEvaluationModal';
-import { useIALabContext } from '../../context/IALabContext';
+import { useIALabProgressContext, useIALabUIContext } from '../../context/IALabContext';
+import { useIALabStore } from '../../store/ialabStore';
 import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
 import { useNotification } from '../../context/NotificationContext';
 
@@ -10,7 +11,10 @@ import { useNotification } from '../../context/NotificationContext';
  * SEPARACIÓN DE CONCERNS: La lógica de guardado se ejecuta aquí
  */
 const IALabEvaluationModalPremium = ({ isOpen, onClose }) => {
-    const { user, activeMod, setIsChallengeCompleted, setChallengeScore, markActivityComplete, markExamComplete, markChallengeComplete, updateModuleActivity, refreshProgress, recordLastTopic, modules } = useIALabContext();
+    const { activeMod, markActivityComplete, markExamComplete, markChallengeComplete, updateModuleActivity, refreshProgress, recordLastTopic, modules } = useIALabProgressContext();
+    const setIsChallengeCompleted = useIALabStore(s => s.setIsChallengeCompleted);
+    const setChallengeScore = useIALabStore(s => s.setChallengeScore);
+    const { user } = useIALabUIContext();
     const { saveProgress, PROGRESS_STATUS, trackChallengeResult } = useIALabProgress();
     const { createNotification } = useNotification();
     const [isProcessing, setIsProcessing] = useState(false);

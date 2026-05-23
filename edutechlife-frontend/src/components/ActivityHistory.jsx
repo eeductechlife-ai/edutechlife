@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
+import { motion } from 'framer-motion';
 import { useActivityTracker } from '../hooks/useActivityTracker';
 import { useIALabStore } from '../store/ialabStore';
+import { ALL_LESSONS, modules, BADGE_INFO } from '../data/ialab';
 import { Icon } from '../utils/iconMapping.jsx';
 import useBodyScrollLock from '../hooks/useBodyScrollLock';
 import useFocusTrap from '../hooks/useFocusTrap';
@@ -76,7 +78,7 @@ const ResourceBadge = ({ completed, total, icon }) => (
 );
 
 const ModuleProgressCard = ({ moduleId, title, icon, score, config, completedVideos, completedInfographics, completedExams, challengeScores, completedModules }) => {
-  const { lessonProgress, ALL_LESSONS } = useIALabStore();
+  const lessonProgress = useIALabStore(s => s.lessonProgress);
   const moduleVideos = completedVideos.filter(v => v.startsWith(`m${moduleId}`)).length;
   const moduleInfographics = completedInfographics.filter(i => i.startsWith(`i${moduleId}`)).length;
   const examScore = completedExams[moduleId] || 0;
@@ -147,6 +149,7 @@ const TABS = [
   { key: 'modules', icon: 'fa-cubes', label: 'Módulos y Notas' },
   { key: 'activities', icon: 'fa-list', label: 'Actividades' },
   { key: 'stats', icon: 'fa-chart-bar', label: 'Estadísticas' },
+  { key: 'recommendations', icon: 'fa-lightbulb', label: 'Recomendaciones' },
 ];
 
 const FILTER_OPTIONS = [
@@ -160,7 +163,30 @@ const FILTER_OPTIONS = [
 
 const ActivityHistory = ({ isOpen, onClose }) => {
   const { activities } = useActivityTracker();
-  const { lessonProgress, ALL_LESSONS, xp, streak, lastActivityDate, badges, getLevel, getXpForNextLevel, getLevelProgress, getTotalPoints, calculateModuleScore, BADGE_INFO, moduleProgress, getDaysSinceStart, completedModules, completedVideos, completedExams, completedInfographics, challengeScores, courseProgress, syncStatus, userId, getWeeklyXP, getDetailedRecommendations, modules, forumPostCount, forumCommentCount } = useIALabStore();
+  const lessonProgress = useIALabStore(s => s.lessonProgress);
+  const xp = useIALabStore(s => s.xp);
+  const streak = useIALabStore(s => s.streak);
+  const lastActivityDate = useIALabStore(s => s.lastActivityDate);
+  const badges = useIALabStore(s => s.badges);
+  const getLevel = useIALabStore(s => s.getLevel);
+  const getXpForNextLevel = useIALabStore(s => s.getXpForNextLevel);
+  const getLevelProgress = useIALabStore(s => s.getLevelProgress);
+  const getTotalPoints = useIALabStore(s => s.getTotalPoints);
+  const calculateModuleScore = useIALabStore(s => s.calculateModuleScore);
+  const moduleProgress = useIALabStore(s => s.moduleProgress);
+  const getDaysSinceStart = useIALabStore(s => s.getDaysSinceStart);
+  const completedModules = useIALabStore(s => s.completedModules);
+  const completedVideos = useIALabStore(s => s.completedVideos);
+  const completedExams = useIALabStore(s => s.completedExams);
+  const completedInfographics = useIALabStore(s => s.completedInfographics);
+  const challengeScores = useIALabStore(s => s.challengeScores);
+  const courseProgress = useIALabStore(s => s.courseProgress);
+  const syncStatus = useIALabStore(s => s.syncStatus);
+  const userId = useIALabStore(s => s.userId);
+  const getWeeklyXP = useIALabStore(s => s.getWeeklyXP);
+  const getDetailedRecommendations = useIALabStore(s => s.getDetailedRecommendations);
+  const forumPostCount = useIALabStore(s => s.forumPostCount);
+  const forumCommentCount = useIALabStore(s => s.forumCommentCount);
   const [activeTab, setActiveTab] = useState('modules');
   const [filter, setFilter] = useState('all');
   const [sessionStats, setSessionStats] = useState({ todayMinutes: 0, allMinutes: 0, sessionCount: 0, daysActive: 0 });
@@ -268,7 +294,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
     const seen = new Set();
     return all.filter(a => { const k = `${a.activity_type}_${a.module_id}_${a.id}_${trackedKey.has(`${a.activity_type}_${a.module_id}`) ? 'real' : 'synth'}`; if (seen.has(k)) return false; seen.add(k); return true; })
       .sort((a, b) => new Date(b.completed_at) - new Date(a.completed_at));
-  }, [activities, completedExams, challengeScores, completedModules, completedVideos, completedInfographics, lessonProgress, ALL_LESSONS, forumPostCount, forumCommentCount]);
+  }, [activities, completedExams, challengeScores, completedModules, completedVideos, completedInfographics, lessonProgress, forumPostCount, forumCommentCount]);
 
   const weeklyData = useMemo(() => {
     const days = [];
@@ -435,6 +461,130 @@ const ActivityHistory = ({ isOpen, onClose }) => {
     if (!info) return null;
     return { ...info, badgeId: next.id, current: Math.min(next.current, next.target), target: next.target };
   }, [badges, totalLessonsCompleted, streak, completedCount]);
+
+  const personalizedRecs = useMemo(() => {
+    const recs = [];
+
+    moduleScores.forEach(mod => {
+      if (mod.score < 80) {
+        const cfg = MODULE_RESOURCES.find(m => m.id === mod.id);
+        const pendingVideos = (cfg?.videos || 0) - completedVideos.filter(v => v.startsWith(`m${mod.id}`)).length;
+        const pendingInfographics = (cfg?.infographics || 0) - completedInfographics.filter(i => i.startsWith(`i${mod.id}`)).length;
+        const reasons = [];
+        if (pendingVideos > 0) reasons.push(`${pendingVideos} videos`);
+        if (pendingInfographics > 0) reasons.push(`${pendingInfographics} infografías`);
+        if (!mod.examScore || mod.examScore < 80) reasons.push('examen pendiente');
+        if (!mod.challengeScore || mod.challengeScore < 80) reasons.push('desafío pendiente');
+        recs.push({
+          id: `module_${mod.id}_score`,
+          type: 'module_score',
+          urgency: mod.id === weakestModule?.id ? 'high' : 'medium',
+          icon: 'fa-cubes',
+          title: `Módulo ${mod.id}: ${mod.title}`,
+          text: `Te falta completar el módulo (${mod.score}%). Pendiente${reasons.length > 1 ? 's' : ''}: ${reasons.join(', ')}.`,
+          action: { label: 'Ir al módulo', moduleId: mod.id },
+          moduleId: mod.id,
+        });
+      }
+    });
+
+    if (totalExams < 2) {
+      recs.push({
+        id: 'exams_low',
+        type: 'exams',
+        urgency: 'high',
+        icon: 'fa-file-alt',
+        title: 'Exámenes pendientes',
+        text: `Llevas solo ${totalExams}/5 exámenes aprobados. Cada examen completo suma hasta 100 XP. Prioriza los módulos con lecciones terminadas.`,
+      });
+    }
+
+    if (totalChallenges < 2) {
+      recs.push({
+        id: 'challenges_low',
+        type: 'challenges',
+        urgency: 'medium',
+        icon: 'fa-trophy',
+        title: 'Desafíos sin completar',
+        text: `Has completado ${totalChallenges}/5 desafíos. Cada desafío otorga 200 XP y mejora tu promedio general.`,
+      });
+    }
+
+    if (lessonsPerDay < 0.8 && daysSinceStart > 5) {
+      recs.push({
+        id: 'slow_pace',
+        type: 'pace',
+        urgency: 'medium',
+        icon: 'fa-gauge-high',
+        title: 'Ritmo de estudio bajo',
+        text: `Llevas ${lessonsPerDay.toFixed(1)} lecciones/día. Intenta al menos 20 minutos diarios para mantener el avance. Con 1 lección/día terminarías en ${estimatedDaysRemaining > 0 ? estimatedDaysRemaining : '~30'} días.`,
+      });
+    }
+
+    if (streak === 0 && lastActivityDate) {
+      const daysSince = Math.floor((Date.now() - new Date(lastActivityDate).getTime()) / 86400000);
+      if (daysSince >= 1) {
+        recs.push({
+          id: 'streak_lost',
+          type: 'streak',
+          urgency: 'high',
+          icon: 'fa-fire',
+          title: 'Racha perdida',
+          text: `Han pasado ${daysSince} día${daysSince > 1 ? 's' : ''} desde tu última actividad. Vuelve hoy para recuperar la consistencia y no perder tu progreso.`,
+        });
+      }
+    }
+
+    if (courseProgress < 30) {
+      recs.push({
+        id: 'progress_low',
+        type: 'progress',
+        urgency: 'medium',
+        icon: 'fa-chart-line',
+        title: 'Progreso general bajo',
+        text: `Llevas ${Math.round(courseProgress)}% del curso. Identifica el módulo donde tengas más lecciones disponibles y empieza por ahí para avanzar rápido.`,
+      });
+    }
+
+    if ((forumPostCount || 0) === 0 && completedModules.length >= 1) {
+      recs.push({
+        id: 'community',
+        type: 'community',
+        urgency: 'low',
+        icon: 'fa-comments',
+        title: 'Participación en comunidad',
+        text: 'Aún no has participado en los foros. Compartir tus dudas y experiencias refuerza el aprendizaje y te conecta con otros estudiantes.',
+      });
+    }
+
+    if (nextBadge) {
+      recs.push({
+        id: 'next_badge',
+        type: 'badge',
+        urgency: 'low',
+        icon: 'fa-award',
+        title: `Siguiente medalla: ${nextBadge.title || ''}`,
+        text: `Te falta${nextBadge.current > 0 ? ` ${nextBadge.target - nextBadge.current}` : ''} para obtener "${nextBadge.title || nextBadge.badgeId}". Sigue avanzando para desbloquearla.`,
+      });
+    }
+
+    recommendations.forEach(r => {
+      if (!recs.some(ex => ex.moduleId === r.moduleId && ex.type === r.type)) {
+        recs.push({
+          id: `engine_${recs.length}`,
+          type: r.type,
+          urgency: r.urgency || 'medium',
+          icon: r.type === 'exam' ? 'fa-file-alt' : r.type === 'challenge' ? 'fa-trophy' : 'fa-book-open',
+          title: r.moduleName ? `${r.moduleName}` : 'Recomendación',
+          text: r.text,
+          action: r.moduleId ? { label: 'Ir al módulo', moduleId: r.moduleId } : null,
+          moduleId: r.moduleId,
+        });
+      }
+    });
+
+    return { high: recs.filter(r => r.urgency === 'high'), medium: recs.filter(r => r.urgency === 'medium'), low: recs.filter(r => r.urgency === 'low') };
+  }, [moduleScores, weakestModule, totalExams, totalChallenges, lessonsPerDay, daysSinceStart, estimatedDaysRemaining, streak, lastActivityDate, courseProgress, forumPostCount, completedModules, nextBadge, recommendations, completedVideos, completedInfographics]);
 
   if (!isOpen) return null;
 
@@ -756,7 +906,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
             <button onClick={() => setIsExpanded(v => !v)} className="min-w-[44px] min-h-[44px] w-11 h-11 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center transition-all duration-200 active:scale-90 ring-1 ring-white/10" aria-label={isExpanded ? 'Contraer pantalla' : 'Expandir pantalla'}>
               <Icon name={isExpanded ? 'fa-compress' : 'fa-expand'} className="text-white text-sm" />
             </button>
-            <button onClick={onClose} className="min-w-[44px] min-h-[44px] w-11 h-11 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center transition-all duration-200 active:scale-90 ring-1 ring-white/10">
+            <button onClick={onClose} className="min-w-[44px] min-h-[44px] w-11 h-11 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center transition-all duration-200 active:scale-90 ring-1 ring-white/10" aria-label="Cerrar historial">
               <Icon name="fa-times" className="text-white text-sm" />
             </button>
           </div>
@@ -1100,28 +1250,6 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                 </div>
               </div>
 
-              {/* Recomendación */}
-              {recommendations.length > 0 && (
-                <div className="mb-5 bg-gradient-to-br from-amber-50 to-amber-50/50 rounded-xl border border-amber-200/60 shadow-sm p-5 hover:shadow-md transition-all duration-200">
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center">
-                      <Icon name="fa-lightbulb" className="text-amber-600 text-sm" />
-                    </div>
-                    <p className="text-xs font-bold text-amber-800 uppercase tracking-[0.15em]">Recomendaciones</p>
-                  </div>
-                  <div className="space-y-2">
-                    {recommendations.slice(0, 3).map((rec, i) => (
-                      <div key={i} className="flex items-start gap-2 text-sm text-amber-900 leading-relaxed">
-                        <div className={`w-5 h-5 rounded flex items-center justify-center flex-shrink-0 mt-0.5 ${rec.urgency === 'high' ? 'bg-amber-200' : 'bg-amber-100'}`}>
-                          <Icon name={rec.type === 'exam' ? 'fa-file-alt' : rec.type === 'challenge' ? 'fa-trophy' : 'fa-play-circle'} className={`text-[9px] ${rec.urgency === 'high' ? 'text-amber-700' : 'text-amber-600'}`} />
-                        </div>
-                        <span><span className="font-semibold">{rec.moduleName}:</span> {rec.text}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
               {/* Ritmo de Aprendizaje */}
               <div className="mb-5 bg-white rounded-xl border border-slate-200/40 shadow-sm p-5 hover:shadow-md transition-all duration-200">
                 <SectionHeader title="Ritmo de Aprendizaje" iconColor="from-corporate to-petroleum" />
@@ -1309,6 +1437,135 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                 <div className={`w-1.5 h-1.5 rounded-full ${syncStatus === 'synced' ? 'bg-emerald-500' : syncStatus === 'syncing' ? 'bg-amber-500 animate-pulse' : 'bg-slate-400'}`} />
                 <span className="text-[10px] font-medium text-slate-400">{syncStatus === 'synced' ? 'Datos sincronizados' : syncStatus === 'syncing' ? 'Sincronizando...' : syncStatus === 'offline' ? 'Modo offline' : 'Datos locales'}</span>
               </div>
+            </div>
+          )}
+
+          {activeTab === 'recommendations' && (
+            <div className="p-3 sm:p-5">
+              {personalizedRecs.high.length === 0 && personalizedRecs.medium.length === 0 && personalizedRecs.low.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-16 px-4">
+                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-50 to-emerald-100 flex items-center justify-center mb-5 shadow-inner">
+                    <Icon name="fa-check-circle" className="text-emerald-500 text-3xl" />
+                  </div>
+                  <p className="text-base font-bold text-slate-700 font-montserrat">¡Todo al día!</p>
+                  <p className="text-xs text-slate-400 text-center mt-1.5 max-w-xs leading-relaxed">No hay recomendaciones pendientes. Sigue así y continúa avanzando en tu curso.</p>
+                </div>
+              ) : (
+                <div className="space-y-5">
+                  {personalizedRecs.high.length > 0 && (
+                    <div>
+                      <div className="flex items-center gap-1.5 mb-3 px-0.5">
+                        <div className="w-4 h-4 rounded bg-rose-100 flex items-center justify-center">
+                          <Icon name="fa-flag" className="text-[8px] text-rose-600" />
+                        </div>
+                        <p className="text-[10px] font-bold text-rose-700 uppercase tracking-[0.15em]">Prioritarias</p>
+                        <div className="flex-1 h-px bg-gradient-to-r from-rose-200 to-transparent" />
+                      </div>
+                      <div className="space-y-2">
+                        {personalizedRecs.high.map((rec, i) => (
+                          <motion.div
+                            key={rec.id}
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: i * 0.06, duration: 0.2 }}
+                            className="group bg-white rounded-xl border border-rose-200/60 shadow-sm p-4 hover:shadow-md hover:border-rose-300/50 hover:-translate-y-0.5 transition-all duration-200"
+                          >
+                            <div className="flex items-start gap-3">
+                              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-rose-50 to-rose-100 flex items-center justify-center flex-shrink-0 shadow-sm">
+                                <Icon name={rec.icon} className="text-sm text-rose-600" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-sm font-bold text-slate-800">{rec.title}</p>
+                                <p className="text-xs text-slate-500 mt-1 leading-relaxed">{rec.text}</p>
+                              </div>
+                            </div>
+                            {rec.action && (
+                              <div className="mt-3 flex justify-end">
+                                <button className="px-4 py-1.5 text-[11px] font-semibold text-rose-600 bg-rose-50 border border-rose-200 rounded-lg hover:bg-rose-100 transition-colors active:scale-95">
+                                  <Icon name="fa-arrow-right" className="text-[9px] mr-1" />{rec.action.label}
+                                </button>
+                              </div>
+                            )}
+                          </motion.div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {personalizedRecs.medium.length > 0 && (
+                    <div>
+                      <div className="flex items-center gap-1.5 mb-3 px-0.5">
+                        <div className="w-4 h-4 rounded bg-amber-100 flex items-center justify-center">
+                          <Icon name="fa-list" className="text-[8px] text-amber-600" />
+                        </div>
+                        <p className="text-[10px] font-bold text-amber-700 uppercase tracking-[0.15em]">Sugerencias</p>
+                        <div className="flex-1 h-px bg-gradient-to-r from-amber-200 to-transparent" />
+                      </div>
+                      <div className="space-y-2">
+                        {personalizedRecs.medium.map((rec, i) => (
+                          <motion.div
+                            key={rec.id}
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: i * 0.04, duration: 0.2 }}
+                            className="group bg-white rounded-xl border border-amber-200/40 shadow-sm p-4 hover:shadow-md hover:border-amber-300/50 hover:-translate-y-0.5 transition-all duration-200"
+                          >
+                            <div className="flex items-start gap-3">
+                              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-50 to-amber-100 flex items-center justify-center flex-shrink-0 shadow-sm">
+                                <Icon name={rec.icon} className="text-sm text-amber-600" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-sm font-bold text-slate-800">{rec.title}</p>
+                                <p className="text-xs text-slate-500 mt-1 leading-relaxed">{rec.text}</p>
+                              </div>
+                            </div>
+                            {rec.action && (
+                              <div className="mt-3 flex justify-end">
+                                <button className="px-4 py-1.5 text-[11px] font-semibold text-amber-600 bg-amber-50 border border-amber-200 rounded-lg hover:bg-amber-100 transition-colors active:scale-95">
+                                  <Icon name="fa-arrow-right" className="text-[9px] mr-1" />{rec.action.label}
+                                </button>
+                              </div>
+                            )}
+                          </motion.div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {personalizedRecs.low.length > 0 && (
+                    <div>
+                      <div className="flex items-center gap-1.5 mb-3 px-0.5">
+                        <div className="w-4 h-4 rounded bg-sky-100 flex items-center justify-center">
+                          <Icon name="fa-lightbulb" className="text-[8px] text-sky-600" />
+                        </div>
+                        <p className="text-[10px] font-bold text-sky-700 uppercase tracking-[0.15em]">Tips</p>
+                        <div className="flex-1 h-px bg-gradient-to-r from-sky-200 to-transparent" />
+                      </div>
+                      <div className="space-y-2">
+                        {personalizedRecs.low.map((rec, i) => (
+                          <motion.div
+                            key={rec.id}
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: i * 0.03, duration: 0.2 }}
+                            className="group bg-white rounded-xl border border-sky-200/40 shadow-sm p-4 hover:shadow-md hover:border-sky-300/50 hover:-translate-y-0.5 transition-all duration-200"
+                          >
+                            <div className="flex items-start gap-3">
+                              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-50 to-sky-100 flex items-center justify-center flex-shrink-0 shadow-sm">
+                                <Icon name={rec.icon} className="text-sm text-sky-600" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-sm font-bold text-slate-800">{rec.title}</p>
+                                <p className="text-xs text-slate-500 mt-1 leading-relaxed">{rec.text}</p>
+                              </div>
+                            </div>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           )}
         </div>

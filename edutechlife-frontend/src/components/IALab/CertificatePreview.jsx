@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
-import jsPDF from 'jspdf';
 
 const COURSE_NAME = 'Introducción a la I.A Generativa';
 const COURSE_FULL_NAME = 'Introducción a la Inteligencia Artificial Generativa';
@@ -19,6 +18,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
   const handleDownloadPDF = async () => {
     setIsDownloading(true);
     try {
+      const { default: jsPDF } = await import('jspdf');
       const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
       const W = doc.internal.pageSize.getWidth();
       const H = doc.internal.pageSize.getHeight();

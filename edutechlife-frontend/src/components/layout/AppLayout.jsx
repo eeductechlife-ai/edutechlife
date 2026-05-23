@@ -101,7 +101,7 @@ const AppLayout = () => {
   return (
     <ProgressProvider>
       <div className="flex flex-col min-h-screen bg-white text-[#004B63]" style={{ fontFamily: "'Montserrat', sans-serif" }}>
-        <Suspense fallback={null}>
+        <Suspense fallback={<div className="fixed inset-0 z-[-1] bg-gradient-to-b from-petroleum/5 to-transparent" aria-hidden="true" />}>
           <GlobalCanvas />
         </Suspense>
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
-import { useIALabContext } from '../../context/IALabContext';
+import { useIALabProgressContext, useIALabUIContext } from '../../context/IALabContext';
 import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
 import { useIALabStore } from '../../store/ialabStore';
 
@@ -10,20 +10,17 @@ const IALabChallengeSection = ({
     style = {},
     ...rest
 }) => {
-    const { 
-        activeMod, 
-        modules, 
-        user,
-        challengeScore,
-        setChallengeScore,
-        isChallengeCompleted,
-        setIsChallengeCompleted,
-        isStartingChallenge,
-        setIsStartingChallenge,
-        isButtonDisabled,
-        setIsButtonDisabled,
-        setShowPremiumEvaluationModal
-    } = useIALabContext();
+    const { activeMod, modules } = useIALabProgressContext();
+    const challengeScore = useIALabStore(s => s.challengeScore);
+    const setChallengeScore = useIALabStore(s => s.setChallengeScore);
+    const isChallengeCompleted = useIALabStore(s => s.isChallengeCompleted);
+    const setIsChallengeCompleted = useIALabStore(s => s.setIsChallengeCompleted);
+    const isStartingChallenge = useIALabStore(s => s.isStartingChallenge);
+    const setIsStartingChallenge = useIALabStore(s => s.setIsStartingChallenge);
+    const isButtonDisabled = useIALabStore(s => s.isButtonDisabled);
+    const setIsButtonDisabled = useIALabStore(s => s.setIsButtonDisabled);
+    const setShowPremiumEvaluationModal = useIALabStore(s => s.setShowPremiumEvaluationModal);
+    const { user } = useIALabUIContext();
 
     const [showRetryConfirm, setShowRetryConfirm] = React.useState(false);
     const [notification, setNotification] = React.useState(null);

@@ -4,7 +4,7 @@ import html2pdf from 'html2pdf.js';
 import { speakTextConversational } from '../../utils/speech';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import { useInView, motion, AnimatePresence } from 'framer-motion';
-import { useStudent } from '../../contexts/StudentContext';
+import { useStudent } from '../../context/StudentContext';
 import useValentinaAgent from '../../hooks/useValentinaAgent';
 import { getQuestionsByAge, getAgeGroupKey } from '../../data/vakQuestions';
 import { VALENTINA_MESSAGES, getAgeGroup } from '../../utils/valentinaMessages';

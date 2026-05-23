@@ -1,9 +1,26 @@
-import React, { useState, useEffect, lazy, Suspense, useRef } from 'react';
+/**
+ * IALab — Componente principal del laboratorio IALab
+ *
+ * Responsabilidad: Layout shell que renderiza el header, sidebar, contenido
+ * principal, y modales lazy-loaded. Maneja autenticación, navegación por URL,
+ * y carga de progreso.
+ *
+ * Subcomponentes directos:
+ * - IALabProvider (context wrapper)
+ * - IALabHeader (125l) + IALabSidebar (544l) + IALabMobileMenu
+ * - TuRutaDeHoy (208l) + RecommendationsPanel (112l)
+ * - IALabQuizModal (697l) + IALabEvaluationModal (lazy)
+ * - ResourceViewerModal (1029l, lazy) + OVAs (lazy)
+ *
+ * @todo Extraer patrón skeleton repetido 5x a LoadableSection component
+ */
+import React, { useState, useEffect, useCallback, lazy, Suspense, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useClerk } from '@clerk/react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
-import { IALabProvider, useIALabContext } from '../../context/IALabContext';
+import { IALabProvider, useIALabProgressContext, useIALabUIContext } from '../../context/IALabContext';
+import { ALL_LESSONS } from '../../data/ialab';
 import { useIALabStore } from '../../store/ialabStore';
 const fireConfetti = (opts) => import('canvas-confetti').then(m => m.default(opts));
 
@@ -16,6 +33,7 @@ import ModuleOverviewCard from './ModuleOverviewCard';
 import ModuleInfoSection from './ModuleInfoSection';
 import ToolTutorAccordion from './ToolTutorAccordion';
 import TuRutaDeHoy from './TuRutaDeHoy';
+import RecommendationsPanel from './RecommendationsPanel';
 import ModuleActions from './ModuleActions';
 import IALabTour from './IALabTour';
 import Breadcrumbs from './Breadcrumbs';
@@ -26,11 +44,11 @@ import OfflineBanner from './OfflineBanner';
 import GlobalSearchBar from './GlobalSearchBar';
 import { RouteSkeleton, ModuleInfoSkeleton, ModuleOverviewSkeleton, ModuleActionsSkeleton, ToolsSkeleton } from './IALabSkeleton';
 import useIALabKeyboardShortcuts from '../../hooks/IALab/useIALabKeyboardShortcuts';
-import ErrorBoundary from '../forum/ErrorBoundary';
+import SectionErrorBoundary from './SectionErrorBoundary';
 import { useTheme } from '../../context/ThemeContext';
 import SettingsSupportModal from '../modals/SettingsSupportModal';
 import { useSessionTracker } from '../../hooks/useSessionTracker';
-import { useSidebarState } from '../../hooks/IALab/useSidebarState';
+
 
 // Lazy-loaded modals (only loaded when opened)
 const lazyImports = {
@@ -53,7 +71,15 @@ const ChallengeResultViewer = lazy(lazyImports.ChallengeResultViewer);
 const CertificatesModal = lazy(lazyImports.CertificatesModal);
 const ActivityHistory = lazy(lazyImports.ActivityHistory);
 
-const LoadingSpinner = ({ onRetry }) => {
+const TABS = [
+  { id: null, label: 'Todo' },
+  { id: 'objetivos', label: 'Objetivos' },
+  { id: 'contenido', label: 'Contenido' },
+  { id: 'actividades', label: 'Actividades' },
+  { id: 'herramientas', label: 'Herramientas' },
+];
+
+const LoadingSpinner = React.memo(({ onRetry }) => {
   const [showTimeout, setShowTimeout] = useState(false);
   React.useEffect(() => {
     const t = setTimeout(() => setShowTimeout(true), 5000);
@@ -73,9 +99,10 @@ const LoadingSpinner = ({ onRetry }) => {
       )}
     </div>
   );
-};
+});
+LoadingSpinner.displayName = 'LoadingSpinner';
 
-const SuspenseWrapper = ({ children, onRetry }) => {
+const SuspenseWrapper = React.memo(({ children, onRetry }) => {
   const [retryKey, setRetryKey] = useState(0);
   const handleRetry = onRetry ? onRetry : () => setRetryKey(k => k + 1);
   return (
@@ -83,7 +110,8 @@ const SuspenseWrapper = ({ children, onRetry }) => {
       <div key={retryKey}>{children}</div>
     </Suspense>
   );
-};
+});
+SuspenseWrapper.displayName = 'SuspenseWrapper';
 
 /**
  * Componente principal wrapper para IALab - Arquitectura modular premium
@@ -93,7 +121,10 @@ const SuspenseWrapper = ({ children, onRetry }) => {
  * @returns {JSX.Element} Componente IALab completo
  */
 const IALabContent = () => {
-    const { showPremiumEvaluationModal, setShowPremiumEvaluationModal, user, completedModules, courseProgress, activeMod, setActiveMod, showCertificateModal, setShowCertificateModal, completedExams, challengeScores, moduleProgress, modules } = useIALabContext();
+    const showPremiumEvaluationModal = useIALabStore(s => s.showPremiumEvaluationModal);
+    const setShowPremiumEvaluationModal = useIALabStore(s => s.setShowPremiumEvaluationModal);
+    const { user, showCertificateModal, setShowCertificateModal } = useIALabUIContext();
+    const { completedModules, courseProgress, activeMod, setActiveMod, completedExams, challengeScores, moduleProgress, modules } = useIALabProgressContext();
     const { isDarkMode, toggleDarkMode } = useTheme();
     const [showExamModal, setShowExamModal] = useState(false);
     const [showQuizModal, setShowQuizModal] = useState(false);
@@ -121,19 +152,22 @@ const IALabContent = () => {
     const { openUserProfile } = useClerk();
 
     useSessionTracker();
-    const { isCollapsed } = useSidebarState();
 
-    // === Deep Linking UNIFICADO: un solo flujo URL → Store ===
+    // === Deep Linking UNIFICADO: URL como fuente de verdad ===
     const { moduleId: urlMod } = useParams();
     const navigate = useNavigate();
     const prevModRef = useRef(activeMod);
     const directionRef = useRef(0);
     const prevActiveRef = useRef(activeMod);
-    if (prevActiveRef.current !== activeMod) {
-      directionRef.current = activeMod > prevActiveRef.current ? 1 : -1;
-      prevActiveRef.current = activeMod;
-    }
     const shouldReduceMotion = useReducedMotion();
+
+    // Dirección de animación derivada de cambios en activeMod
+    useEffect(() => {
+      if (prevActiveRef.current !== activeMod) {
+        directionRef.current = activeMod > prevActiveRef.current ? 1 : -1;
+        prevActiveRef.current = activeMod;
+      }
+    }, [activeMod]);
 
     const slideVariants = {
       enter: (dir) => ({
@@ -150,21 +184,13 @@ const IALabContent = () => {
       }),
     };
 
-    // Sincronización EN RENDER: elimina el flash de deep link (/ialab/4 → módulo 4 directo)
-    if (urlMod) {
-      const id = parseInt(urlMod, 10);
-      if (!isNaN(id) && id >= 1 && id <= 5 && id !== activeMod) {
-        setActiveMod(id);
-        prevModRef.current = id;
-      }
-    }
-
-    // Efecto único: URL cambió (back/forward/navegación externa) → actualizar store
+    // Sincronización URL ↔ Store (único punto de side-effect)
     useEffect(() => {
       if (urlMod) {
         const id = parseInt(urlMod, 10);
         if (!isNaN(id) && id >= 1 && id <= 5 && id !== activeMod) {
           setActiveMod(id);
+          prevModRef.current = id;
         }
       } else {
         navigate(`/ialab/${activeMod}`, { replace: true });
@@ -191,14 +217,6 @@ const IALabContent = () => {
         window.addEventListener('ialab:examCompleted', handler);
         return () => window.removeEventListener('ialab:examCompleted', handler);
     }, []);
-
-    const TABS = [
-      { id: null, label: 'Todo' },
-      { id: 'objetivos', label: 'Objetivos' },
-      { id: 'contenido', label: 'Contenido' },
-      { id: 'actividades', label: 'Actividades' },
-      { id: 'herramientas', label: 'Herramientas' },
-    ];
 
     React.useEffect(() => {
         if (toast) {
@@ -241,9 +259,8 @@ const IALabContent = () => {
     const isLoadingProgress = useIALabStore(s => s.isLoadingProgress);
     const hasStartedCourse = useIALabStore(s => s.hasStartedCourse());
     const lastVisitedLesson = useIALabStore(s => s.lastVisitedLesson);
-    const ALL_LESSONS_STORE = useIALabStore(s => s.ALL_LESSONS);
     const currentLessonTitle = lastVisitedLesson && lastVisitedLesson.moduleId === activeMod
-      ? ALL_LESSONS_STORE?.[activeMod]?.find(l => l.id === lastVisitedLesson.lessonId)?.title
+      ? ALL_LESSONS?.[activeMod]?.find(l => l.id === lastVisitedLesson.lessonId)?.title
       : null;
 
     // Celebración al aprobar módulo completamente (exam + challenge + resources + score >= 80)
@@ -282,7 +299,7 @@ const IALabContent = () => {
     }, [courseCompleted]);
 
     // Handler para acciones globales
-    const handleGlobalAction = (action, data) => {
+    const handleGlobalAction = useCallback((action, data) => {
         switch (action) {
             case 'OPEN_EVALUATION':
                 setShowExamModal(true);
@@ -321,13 +338,9 @@ const IALabContent = () => {
             default:
                 console.warn('Acción global no manejada:', action, data);
         }
-    };
+    }, []);
 
     useIALabKeyboardShortcuts(handleGlobalAction);
-
-    useEffect(() => {
-      Object.values(lazyImports).forEach(fn => fn());
-    }, []);
 
     return (
         <div className="flex flex-col h-dvh bg-bg-light dark:bg-slate-900">
@@ -365,7 +378,7 @@ const IALabContent = () => {
                 {/* Layout principal - Flexbox estricto para evitar overlap */}
                 <div className="flex flex-1 overflow-hidden">
                     {/* Sidebar - oculto en móviles, visible desde lg (tablet landscape) */}
-                    <div className={`${isCollapsed ? 'flex' : 'hidden lg:flex'}`} data-tour="tour-sidebar">
+                    <div className="hidden lg:flex" data-tour="tour-sidebar">
                       <IALabSidebar />
                     </div>
 
@@ -438,8 +451,13 @@ const IALabContent = () => {
                               </motion.div>
                             ) : (
                               <motion.div key={`content-ruta-${activeMod}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.25 }}>
+                                <SectionErrorBoundary name="RecommendationsPanel" title="Recomendaciones no disponibles">
+                                  <RecommendationsPanel onAction={handleGlobalAction} isLoading={isLoadingProgress} />
+                                </SectionErrorBoundary>
                                 <div data-tour="tour-ruta">
-                                  <TuRutaDeHoy onAction={handleGlobalAction} />
+                                  <SectionErrorBoundary name="TuRutaDeHoy" title="Ruta de hoy no disponible">
+                                    <TuRutaDeHoy onAction={handleGlobalAction} />
+                                  </SectionErrorBoundary>
                                 </div>
                               </motion.div>
                             )}
@@ -493,7 +511,9 @@ const IALabContent = () => {
                                   </div>
                                 ) : (
                                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.25 }}>
-                                    <IALabModuleHeader onAction={handleGlobalAction} />
+                                    <SectionErrorBoundary name="IALabModuleHeader" title="Encabezado no disponible">
+                                      <IALabModuleHeader onAction={handleGlobalAction} />
+                                    </SectionErrorBoundary>
                                   </motion.div>
                                 )}
                               </motion.div>
@@ -504,7 +524,11 @@ const IALabContent = () => {
                             <AnimatePresence mode="wait">
                             {(viewSection === null || viewSection === 'objetivos') && (
                               <motion.div key={`info-${activeMod}-${isLoadingProgress}`} exit={{ opacity: 0 }} transition={{ duration: 0.15 }} className="mt-4" data-tour="tour-objetivos">
-                                {isLoadingProgress ? <ModuleInfoSkeleton /> : <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.25 }}><ModuleInfoSection /></motion.div>}
+                                {isLoadingProgress ? <ModuleInfoSkeleton /> : <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.25 }}>
+                                  <SectionErrorBoundary name="ModuleInfoSection" title="Información no disponible">
+                                    <ModuleInfoSection />
+                                  </SectionErrorBoundary>
+                                </motion.div>}
                               </motion.div>
                             )}
                             </AnimatePresence>
@@ -513,9 +537,9 @@ const IALabContent = () => {
                             <AnimatePresence mode="wait">
                             {(viewSection === null || viewSection === 'contenido') && (
                               <motion.div key={`temas-${activeMod}-${isLoadingProgress}`} exit={{ opacity: 0 }} transition={{ duration: 0.15 }} data-tour="tour-temas">
-                              <ErrorBoundary>
+                              <SectionErrorBoundary>
                                 {isLoadingProgress ? <ModuleOverviewSkeleton /> : <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.25 }}><ModuleOverviewCard onAction={handleGlobalAction} onToggleForum={setIsForumOpen} /></motion.div>}
-                              </ErrorBoundary>
+                              </SectionErrorBoundary>
                               </motion.div>
                             )}
                             </AnimatePresence>
@@ -524,7 +548,7 @@ const IALabContent = () => {
                             <AnimatePresence mode="wait">
                             {(viewSection === null || viewSection === 'actividades') && (
                               <motion.div key={`actividades-${activeMod}-${isLoadingProgress}`} exit={{ opacity: 0 }} transition={{ duration: 0.15 }} data-tour="tour-actividades">
-                              <ErrorBoundary>
+                              <SectionErrorBoundary>
                               {isLoadingProgress ? <ModuleActionsSkeleton /> : <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.25 }}><ModuleActions
                                 onAction={handleGlobalAction}
                                 activeMod={activeMod}
@@ -534,7 +558,7 @@ const IALabContent = () => {
                                 isForumOpen={isForumOpen}
                                 onToggleForum={() => setIsForumOpen(prev => !prev)}
                               /></motion.div>}
-                              </ErrorBoundary>
+                              </SectionErrorBoundary>
                               </motion.div>
                             )}
                             </AnimatePresence>
@@ -544,11 +568,11 @@ const IALabContent = () => {
                             {/* 5. FORO DEL MÓDULO */}
                             {(viewSection === null || viewSection === 'actividades') && isForumOpen && (
                               <div id="forum-section">
-                                <ErrorBoundary>
+                                <SectionErrorBoundary>
                                   <Suspense fallback={<div className="h-20 bg-white/50 rounded-xl animate-pulse" />}>
                                     <IALabForumOptimized compact={false} initialLimit={3} />
                                   </Suspense>
-                                </ErrorBoundary>
+                                </SectionErrorBoundary>
                               </div>
                             )}
 
@@ -556,7 +580,11 @@ const IALabContent = () => {
                             <AnimatePresence mode="wait">
                             {(viewSection === null || viewSection === 'herramientas') && (
                               <motion.div key={`tools-${activeMod}-${isLoadingProgress}`} exit={{ opacity: 0 }} transition={{ duration: 0.15 }} className="mt-5" data-tour="tour-herramientas">
-                                {isLoadingProgress ? <ToolsSkeleton /> : <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.25 }}><ToolTutorAccordion onAction={handleGlobalAction} /></motion.div>}
+                                {isLoadingProgress ? <ToolsSkeleton /> : <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.25 }}>
+                                  <SectionErrorBoundary name="ToolTutorAccordion" title="Herramientas no disponibles">
+                                    <ToolTutorAccordion onAction={handleGlobalAction} />
+                                  </SectionErrorBoundary>
+                                </motion.div>}
                               </motion.div>
                             )}
                             </AnimatePresence>
@@ -567,54 +595,54 @@ const IALabContent = () => {
                 
                 {/* Modal de Evaluación */}
                 {showExamModal && (
-                    <ErrorBoundary>
+                    <SectionErrorBoundary>
                         <SuspenseWrapper>
                             <IALabEvaluationModal 
                                 isOpen={showExamModal}
                                 onClose={() => handleGlobalAction('CLOSE_EVALUATION')}
                             />
                         </SuspenseWrapper>
-                    </ErrorBoundary>
+                    </SectionErrorBoundary>
                 )}
                 
                 {/* Modal de Examen (8 preguntas) */}
                 {showQuizModal && (
-                    <ErrorBoundary>
+                    <SectionErrorBoundary>
                         <SuspenseWrapper>
                             <IALabQuizModal
                                 isOpen={showQuizModal}
                                 onClose={() => handleGlobalAction('CLOSE_QUIZ')}
                             />
                         </SuspenseWrapper>
-                    </ErrorBoundary>
+                    </SectionErrorBoundary>
                 )}
                 
                 {/* Panel de Coach IA Valerio */}
                 {showValerioPanel && (
-                    <ErrorBoundary>
+                    <SectionErrorBoundary>
                         <SuspenseWrapper>
                             <IALabValerioPanel 
                                 isOpen={showValerioPanel}
                                 onClose={() => handleGlobalAction('CLOSE_VALERIO')}
                             />
                         </SuspenseWrapper>
-                    </ErrorBoundary>
+                    </SectionErrorBoundary>
                 )}
                 
                 {/* Modal de Evaluación Premium (Nuevo Desafío) */}
                 {showPremiumEvaluationModal && (
-                    <ErrorBoundary>
+                    <SectionErrorBoundary>
                         <SuspenseWrapper>
                             <IALabEvaluationModalPremium 
                                 isOpen={showPremiumEvaluationModal}
                                 onClose={() => setShowPremiumEvaluationModal(false)}
                             />
                         </SuspenseWrapper>
-                    </ErrorBoundary>
+                    </SectionErrorBoundary>
                 )}
                 
                 {/* Modal de Certificado del Curso */}
-                <ErrorBoundary>
+                <SectionErrorBoundary>
                 <SuspenseWrapper>
                     <CertificatesModal
                         isOpen={showCertificateModal}
@@ -622,15 +650,15 @@ const IALabContent = () => {
                         initialTab="certificate"
                     />
                 </SuspenseWrapper>
-                </ErrorBoundary>
+                </SectionErrorBoundary>
 
                 {/* Modal de Resultado de Examen */}
                 {showExamResult && (
-                    <ErrorBoundary>
+                    <SectionErrorBoundary>
                     <SuspenseWrapper>
                         <ExamResultViewer
                             moduleId={activeMod}
-                            score={useIALabStore.getState().completedExams[activeMod]}
+                            score={completedExams[activeMod]}
                             onClose={() => setShowExamResult(false)}
                             onRetry={() => {
                                 setShowExamResult(false);
@@ -638,36 +666,36 @@ const IALabContent = () => {
                             }}
                         />
                     </SuspenseWrapper>
-                    </ErrorBoundary>
+                    </SectionErrorBoundary>
                 )}
 
                 {/* Modal de Historial de Aprendizaje */}
                 <AnimatePresence>
                 {showHistoryModal && (
-                    <ErrorBoundary>
+                    <SectionErrorBoundary>
                         <ActivityHistory
                             isOpen={showHistoryModal}
                             onClose={() => setShowHistoryModal(false)}
                         />
-                    </ErrorBoundary>
+                    </SectionErrorBoundary>
                 )}
                 </AnimatePresence>
 
                 {/* Modal de Ayuda */}
                 <AnimatePresence>
                 {showHelpModal && (
-                    <ErrorBoundary>
+                    <SectionErrorBoundary>
                         <SettingsSupportModal
                             isOpen={showHelpModal}
                             onClose={() => setShowHelpModal(false)}
                         />
-                    </ErrorBoundary>
+                    </SectionErrorBoundary>
                 )}
                 </AnimatePresence>
 
                 {/* Modal de Resultado de Desafío */}
                 {showChallengeResult && (
-                    <ErrorBoundary>
+                    <SectionErrorBoundary>
                     <SuspenseWrapper>
                         <ChallengeResultViewer
                             moduleId={activeMod}
@@ -680,7 +708,7 @@ const IALabContent = () => {
                             }}
                         />
                     </SuspenseWrapper>
-                    </ErrorBoundary>
+                    </SectionErrorBoundary>
                 )}
                 
                  {/* FAB de Valerio - posicionado relativo al viewport */}
@@ -699,92 +727,7 @@ const IALabContent = () => {
                     <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-emerald-400 rounded-full border-2 border-white dark:border-slate-900 shadow-sm" />
                 </button>
                 
-                {/* Scrollbar delgada visible en iOS */}
-                <style>{`
-                  .scrollbar-thin-ialab {
-                    scrollbar-width: thin;
-                    -webkit-overflow-scrolling: touch;
-                  }
-                  .scrollbar-thin-ialab::-webkit-scrollbar {
-                    height: 4px;
-                    width: 4px;
-                  }
-                  .scrollbar-thin-ialab::-webkit-scrollbar-track {
-                    background: transparent;
-                  }
-                  .scrollbar-thin-ialab::-webkit-scrollbar-thumb {
-                    background: color-mix(in srgb, var(--color-petroleum) 25%, transparent);
-                    border-radius: 20px;
-                  }
-                  .scrollbar-thin-ialab::-webkit-scrollbar-thumb:hover {
-                    background: color-mix(in srgb, var(--color-petroleum) 40%, transparent);
-                  }
-                `}</style>
 
-                {/* Estilos de protección anti-impresión (para modal de evaluación) */}
-                <style>
-                    {`
-                        @media print {
-                            .exam-protection-modal,
-                            .exam-protection-modal * {
-                                display: none !important;
-                                visibility: hidden !important;
-                                opacity: 0 !important;
-                            }
-                            
-                            body::before {
-                                content: "IMPRESIÓN BLOQUEADA - Este examen está protegido por el protocolo de seguridad Edutechlife";
-                                display: block !important;
-                                font-size: 24px;
-                                font-weight: bold;
-                                text-align: center;
-                                color: red;
-                                padding: 40px;
-                                background: white;
-                            }
-                        }
-                        
-                        /* Animación para mensajes temporales */
-                        @keyframes fade-in {
-                            from { opacity: 0; transform: translate(-50%, -10px); }
-                            to { opacity: 1; transform: translate(-50%, 0); }
-                        }
-                        
-                        .animate-fade-in {
-                            animation: fade-in 0.3s ease-out;
-                        }
-                        
-                        /* Efectos de botón premium */
-                        .button-pulse {
-                            animation: pulse 2s infinite;
-                        }
-                        
-                        @keyframes pulse {
-                            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 188, 212, 0.4); }
-                            50% { box-shadow: 0 0 0 10px rgba(0, 188, 212, 0); }
-                        }
-                        
-                        /* Scrollbar personalizada */
-                        ::-webkit-scrollbar {
-                            width: 8px;
-                            height: 8px;
-                        }
-                        
-                        ::-webkit-scrollbar-track {
-                            background: var(--color-slate-100);
-                            border-radius: 4px;
-                        }
-                        
-                        ::-webkit-scrollbar-thumb {
-                            background: linear-gradient(to bottom, var(--color-petroleum), var(--color-corporate));
-                            border-radius: 4px;
-                        }
-                        
-                        ::-webkit-scrollbar-thumb:hover {
-                            background: linear-gradient(to bottom, var(--color-petroleum-darker), var(--color-corporate));
-                        }
-                    `}
-                </style>
 
                 {/* Banner de conectividad */}
                 <OfflineBanner />
@@ -819,9 +762,9 @@ const IALabContent = () => {
 const IALab = () => {
     return (
         <IALabProvider>
-            <ErrorBoundary>
+            <SectionErrorBoundary>
                 <IALabContent />
-            </ErrorBoundary>
+            </SectionErrorBoundary>
         </IALabProvider>
     );
 };

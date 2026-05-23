@@ -1,9 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useIALabContext } from '../../context/IALabContext';
+import { useIALabProgressContext } from '../../context/IALabContext';
 
 const IALabModuleHeader = ({ onAction }) => {
-  const { activeMod, modules, courseProgress } = useIALabContext();
+  const { activeMod, modules, courseProgress } = useIALabProgressContext();
   const curr = modules.find(m => m.id === activeMod) || modules[0];
   
   return (

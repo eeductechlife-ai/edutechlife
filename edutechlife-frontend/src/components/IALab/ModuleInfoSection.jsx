@@ -2,7 +2,7 @@ import React from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { cn } from '../forum/forumDesignSystem';
 import { motion } from 'framer-motion';
-import { useIALabContext } from '../../context/IALabContext';
+import { useIALabProgressContext } from '../../context/IALabContext';
 
 /**
  * Sección Informativa del Módulo - Dinámica por módulo activo
@@ -14,7 +14,7 @@ import { useIALabContext } from '../../context/IALabContext';
  * @param {string} props.className - Clases CSS adicionales
  */
 const ModuleInfoSection = ({ className = '', ...rest }) => {
-    const { activeMod, moduleContent, completedExams, moduleProgress, calculateModuleScore } = useIALabContext();
+    const { activeMod, moduleContent, completedExams, moduleProgress, calculateModuleScore } = useIALabProgressContext();
     const moduleScore = calculateModuleScore(activeMod);
     const isModuleCompleted = moduleScore >= 80;
     

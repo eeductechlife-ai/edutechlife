@@ -5,6 +5,9 @@ import { createClerkSupabaseClient } from '../../lib/supabase';
 const NOTES_KEY = 'ialab_notes';
 const DAY_NOTES_KEY = 'ialab_day_notes';
 
+const STUDY_NOTES_EXISTS_KEY = 'ialab_study_notes_table_exists';
+let _studyNotesTableExists = localStorage.getItem(STUDY_NOTES_EXISTS_KEY) !== 'false';
+
 export const useStudyNotesSync = () => {
   const { session, isLoaded: sessionLoaded } = useSession();
   const { getToken } = useAuth();
@@ -42,7 +45,7 @@ export const useStudyNotesSync = () => {
   }, [session, sessionLoaded, getToken]);
 
   const upsertNote = useCallback(async (noteType, key, content) => {
-    if (!supabase || !userId) return;
+    if (!supabase || !userId || !_studyNotesTableExists) return;
     try {
       const { error } = await supabase
         .from('study_notes')
@@ -55,12 +58,17 @@ export const useStudyNotesSync = () => {
         }, { onConflict: 'user_id,note_type,key' });
       if (error) throw error;
     } catch (e) {
-      console.error('Error syncing note to Supabase:', e);
+      if (e?.status === 404 || e?.code === 'PGRST205' || e?.code === 'PGRST116') {
+        _studyNotesTableExists = false;
+        localStorage.setItem(STUDY_NOTES_EXISTS_KEY, 'false');
+        return;
+      }
+      console.warn('[NotesSync] Error syncing note to Supabase:', e);
     }
   }, [supabase, userId]);
 
   const loadNotesFromSupabase = useCallback(async () => {
-    if (!supabase || !userId) return null;
+    if (!supabase || !userId || !_studyNotesTableExists) return null;
     try {
       const { data, error } = await supabase
         .from('study_notes')
@@ -76,7 +84,12 @@ export const useStudyNotesSync = () => {
       });
       return { moduleNotes, dayNotes };
     } catch (e) {
-      console.error('Error loading notes from Supabase:', e);
+      if (e?.status === 404 || e?.code === 'PGRST205' || e?.code === 'PGRST116') {
+        _studyNotesTableExists = false;
+        localStorage.setItem(STUDY_NOTES_EXISTS_KEY, 'false');
+        return null;
+      }
+      console.warn('[NotesSync] Error loading notes from Supabase:', e);
       return null;
     }
   }, [supabase, userId]);

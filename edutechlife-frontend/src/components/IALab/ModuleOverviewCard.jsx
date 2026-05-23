@@ -1,17 +1,19 @@
-import React, { useState, useEffect, useRef, useMemo, useCallback, lazy, Suspense } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback, lazy, Suspense, memo } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
-import { useIALabContext } from '../../context/IALabContext';
+import { useIALabProgressContext } from '../../context/IALabContext';
 import { useIALabStore } from '../../store/ialabStore';
 import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
+import { ALL_LESSONS } from '../../data/ialab';
 import { getResourcesForTopic, getResourceTypesForTopic, countResourcesByType } from './constants/moduleResources';
 
 const ResourceViewerModal = lazy(() => import('./ResourceViewerModal'));
 
 const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
   const prefersReducedMotion = useReducedMotion();
-  const { activeMod, modules, moduleContent, completedExams, challengeScores, moduleProgress, markResourceAsViewed: markResourceInContext } = useIALabContext();
+  const { activeMod, modules, moduleContent, completedExams, challengeScores, moduleProgress, markResourceAsViewed: markResourceInContext } = useIALabProgressContext();
   const { trackResourceViewed } = useIALabProgress();
+  const lessonProgress = useIALabStore(s => s.lessonProgress);
   
   // Estado para el acordeón de temas
   const [expandedTopic, setExpandedTopic] = useState(null);
@@ -231,8 +233,8 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
                   </h3>
                   <span className="px-2.5 py-1 bg-slate-100 dark:bg-slate-700 text-petroleum dark:text-petroleum text-[10px] font-bold rounded-lg border border-slate-200/60 dark:border-slate-600">{moduleData.badge.duration}</span>
                   {(() => {
-                    const prog = useIALabStore.getState().lessonProgress[activeMod] || {};
-                    const total = (useIALabStore.getState().ALL_LESSONS[activeMod] || []).length;
+                    const prog = lessonProgress[activeMod] || {};
+                    const total = (ALL_LESSONS[activeMod] || []).length;
                     const done = Object.values(prog).filter(s => s === 'completed').length;
                     if (!total) return null;
                     return (
@@ -579,4 +581,4 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
     );
   };
 
-export default ModuleOverviewCard;
+export default memo(ModuleOverviewCard);

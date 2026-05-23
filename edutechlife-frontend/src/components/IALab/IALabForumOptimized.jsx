@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useAuth } from '../../context/AuthContext';
-import { useIALabContext } from '../../context/IALabContext';
+import { useIALabProgressContext } from '../../context/IALabContext';
 import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
 import useIALabForum from '../../hooks/IALab/useIALabForum';
 import { cn } from '../forum/forumDesignSystem';
@@ -14,7 +14,7 @@ const IALabForumOptimized = ({
     ...rest
 }) => {
     const { user } = useAuth();
-    const { activeMod } = useIALabContext();
+    const { activeMod } = useIALabProgressContext();
     const { trackCommunityComment } = useIALabProgress();
     const prefersReducedMotion = useReducedMotion();
     const {
@@ -218,7 +218,7 @@ const IALabForumOptimized = ({
                             )}
                         </div>
                         <p className="text-xs text-slate-500">
-                            {forumStats.totalPosts} debates &middot; {forumStats.totalComments} respuestas
+                            {forumStats.totalPosts} debates &middot; {forumStats.totalLikes} likes
                         </p>
                     </div>
                 </div>

@@ -1,10 +1,11 @@
 import React from 'react';
 
-function SkeletonBlock({ className = '' }) {
+const SkeletonBlock = React.memo(({ className = '' }) => {
   return (
     <div className={`animate-pulse bg-slate-200 dark:bg-slate-700 rounded-lg ${className}`} />
   );
-}
+});
+SkeletonBlock.displayName = 'SkeletonBlock';
 
 export function ModuleOverviewSkeleton() {
   return (

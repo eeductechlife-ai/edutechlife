@@ -1,7 +1,7 @@
 import React, { useState, lazy, Suspense } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
-import { useIALabContext } from '../../context/IALabContext';
+import { useIALabProgressContext } from '../../context/IALabContext';
 const ReactivePromptStation = lazy(() => import('./ReactivePromptStation'));
 const OVAPodcastStudio = lazy(() => import('./OVAPodcastStudio'));
 const IALabInteractionAdvisor = lazy(() => import('./IALabInteractionAdvisor'));
@@ -14,7 +14,7 @@ const previewVariants = {
 };
 
 const ToolTutorAccordion = ({ onAction }) => {
-  const { activeMod } = useIALabContext();
+  const { activeMod } = useIALabProgressContext();
   const [expanded, setExpanded] = useState(null);
 
   const toggle = (section) => {

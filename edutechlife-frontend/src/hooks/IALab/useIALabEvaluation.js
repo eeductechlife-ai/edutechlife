@@ -1,13 +1,29 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { createClerkSupabaseClient } from '../../lib/supabase';
 
 /**
- * Hook para evaluación inmersiva con DeepSeek API y persistencia en Supabase
- * Maneja la generación de ejercicios, evaluación de respuestas y guardado de notas
+ * useIALabEvaluation — Evaluación inmersiva con DeepSeek API + Supabase persist
+ *
+ * Responsabilidad: Genera 3 ejercicios de prompt-engineering vía DeepSeek,
+ * evalúa respuestas con scoring pedagógico (generoso), guarda notas en Supabase.
+ * Incluye fallback local cuando la API no está disponible.
+ *
+ * Store access: NINGUNO — todo el estado es local (useState).
+ * Solo depende de useAuth() para user.id.
+ *
+ * Nota: Es el hook más independiente del módulo. Candidato a extraerse
+ * como servicio reutilizable.
  */
 const useIALabEvaluation = () => {
     const { user } = useAuth();
+    const abortRef = useRef(null);
+
+    useEffect(() => {
+        return () => {
+            if (abortRef.current) abortRef.current.abort();
+        };
+    }, []);
     const [state, setState] = useState({
         step: 1, // 1, 2, 3, 'loading', 'results'
         exercises: null,
@@ -20,6 +36,10 @@ const useIALabEvaluation = () => {
     // Generar ejercicios con DeepSeek API
     const generateExercises = useCallback(async () => {
         setState(prev => ({ ...prev, loading: true, error: null }));
+
+        if (abortRef.current) abortRef.current.abort();
+        const controller = new AbortController();
+        abortRef.current = controller;
 
         try {
             const response = await fetch('https://api.deepseek.com/chat/completions', {
@@ -45,7 +65,8 @@ const useIALabEvaluation = () => {
                     }],
                     temperature: 0.7,
                     max_tokens: 1000
-                })
+                }),
+                signal: controller.signal
             });
 
             if (!response.ok) {
@@ -80,6 +101,7 @@ const useIALabEvaluation = () => {
             }));
 
         } catch (error) {
+            if (error.name === 'AbortError') return;
             console.error('Error generando ejercicios:', error);
             
             // Fallback a ejercicios predefinidos
@@ -102,6 +124,10 @@ const useIALabEvaluation = () => {
     // Evaluar respuestas con DeepSeek API
     const evaluateAnswers = useCallback(async (responses) => {
         setState(prev => ({ ...prev, loading: true, error: null }));
+
+        if (abortRef.current) abortRef.current.abort();
+        const controller = new AbortController();
+        abortRef.current = controller;
 
         try {
             const response = await fetch('https://api.deepseek.com/chat/completions', {
@@ -185,7 +211,8 @@ Recuerda: El estudiante está aprendiendo. Valora el intento y la comprensión b
                     }],
                     temperature: 0.3,
                     max_tokens: 2000
-                })
+                }),
+                signal: controller.signal
             });
 
             if (!response.ok) {
@@ -229,6 +256,7 @@ Recuerda: El estudiante está aprendiendo. Valora el intento y la comprensión b
             return evaluation;
 
         } catch (error) {
+            if (error.name === 'AbortError') return;
             console.error('Error evaluando respuestas:', error);
             
             // Fallback con calificación por ejercicio y feedback detallado

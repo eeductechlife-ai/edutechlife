@@ -208,14 +208,14 @@ const VideoPlayer = ({ url, title, autoPlay = false }) => {
                 ) : <Icon name="fa-play" className="text-sm" />}
               </button>
               <div className="flex items-center gap-1.5 group/vol">
-                <button onClick={toggleMute} className="w-7 h-7 flex items-center justify-center text-white/70 hover:text-white transition-colors">
+                <button onClick={toggleMute} className="w-7 h-7 flex items-center justify-center text-white/70 hover:text-white transition-colors" aria-label={muted ? 'Activar sonido' : 'Silenciar'}>
                   <Icon name={muted || volume === 0 ? 'fa-volume-mute' : 'fa-volume-up'} className="text-[10px]" />
                 </button>
               </div>
               <span className="text-xs text-white/70 font-mono whitespace-nowrap">{formatTime(currentTime)} / {formatTime(duration)}</span>
               <div className="flex-1" />
               <div className="relative">
-                <button onClick={() => setShowSpeed(!showSpeed)} className="px-2 h-7 text-[11px] font-bold text-white/70 hover:text-white rounded-md hover:bg-white/10">{rate}x</button>
+                <button onClick={() => setShowSpeed(!showSpeed)} className="px-2 h-7 text-[11px] font-bold text-white/70 hover:text-white rounded-md hover:bg-white/10" aria-label="Velocidad de reproducción">{rate}x</button>
                 {showSpeed && (
                   <div className="absolute bottom-full right-0 mb-2 bg-[#0A1729] border border-white/10 rounded-xl p-1.5 shadow-2xl min-w-[100px]">
                     <p className="text-[9px] text-white/40 uppercase tracking-wider px-2 pb-1">Velocidad</p>

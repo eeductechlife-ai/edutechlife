@@ -1,3 +1,24 @@
+/**
+ * progress.js — Capa de acceso a datos de progreso (Supabase)
+ *
+ * Responsabilidad: CRUD completo sobre la tabla user_progress y tablas
+ * relacionadas (user_video_progress, user_infographic_progress,
+ * user_activities, user_exams). Usa factory pattern (createProgressService)
+ * para inyectar cliente Supabase con JWT de Clerk.
+ *
+ * Exporta:
+ * - createProgressService(db) — factory que retorna 26 métodos de progreso
+ * - saveProgress(...args) — función legacy (backward compat, 2 consumidores)
+ * - setSupabaseClient(client) — inicializa cliente singleton en legacy
+ * - PROGRESS_STATUS, MODULE_TYPES (constantes)
+ * - countModuleResources(moduleId) — utility de conteo
+ *
+ * Tablas Supabase que usa: user_progress (16 queries), user_video_progress (2),
+ * user_infographic_progress (1), user_activities (2), user_exams (2)
+ *
+ * @see src/hooks/IALab/useIALabProgress.js — consumidor principal del factory
+ * @see src/components/{AIPanel,PromptEvaluationSystem}.jsx — consumidores legacy
+ */
 import { supabase as fallbackSupabase } from './supabase';
 
 const TABLE_NAME = 'user_progress';
@@ -754,6 +775,69 @@ export const createProgressService = (db) => {
       }
     },
 
+    getFullUserProgress: async (userId) => {
+      try {
+        const actualUserId = getUserId(userId);
+        if (!actualUserId) return null;
+
+        const allProgress = await createProgressService(db).getAllProgress(actualUserId);
+        if (!allProgress || allProgress.length === 0) return { allProgress: [], moduleBreakdowns: {}, globalProgress: 0, lastProgress: null };
+
+        const moduleBreakdowns = {};
+        let totalProgress = 0;
+
+        for (let mod = 1; mod <= 5; mod++) {
+          const progressData = allProgress.filter(p => p.module_id === mod);
+          const summary = progressData?.find(p => p.activity_type === null && p.resource_id === null) || {};
+          const resourcesViewed = summary.resources_viewed || 0;
+          const totalResources = summary.total_resources || _countModuleResources(mod);
+
+          const examProgress = progressData?.find(p => p.activity_type === 'exam');
+          const challengeProgress = progressData?.find(p => p.activity_type === 'challenge');
+          const communityProgress = progressData?.find(p => p.activity_type === 'community_comment');
+
+          const examScore = examProgress?.score || 0;
+          const examPassed = examScore >= 80;
+          const challengeScore = challengeProgress?.score || 0;
+          const challengePassed = challengeScore >= 80;
+
+          const examEarned = Math.round((examScore / 100) * 35 * 10) / 10;
+          const challengeEarned = Math.round((challengeScore / 100) * 30 * 10) / 10;
+          const resourcesPct = totalResources > 0 && (resourcesViewed / totalResources) >= 0.8 ? 30 : 0;
+          const communityEarned = communityProgress?.community_comment ? 5 : 0;
+
+          const earned = examEarned + challengeEarned + resourcesPct + communityEarned;
+          const moduleProgressPct = Math.min(20, Math.round((earned / 100) * 20 * 10) / 10);
+
+          moduleBreakdowns[mod] = {
+            moduleId: mod,
+            exam: { passed: examPassed, score: examScore, weight: 35, earned: examEarned },
+            challenge: { passed: challengePassed, score: challengeScore, weight: 30, earned: challengeEarned },
+            resources: { viewed: resourcesViewed, total: totalResources, weight: 30, earned: resourcesPct },
+            community: { commented: !!communityProgress?.community_comment, weight: 5, earned: communityEarned },
+            moduleScore: Math.min(100, Math.round(earned)),
+            moduleProgressPct,
+          };
+
+          totalProgress += moduleProgressPct;
+        }
+
+        const lastProgress = allProgress
+          .filter(p => p.activity_type === null && p.resource_id === null)
+          .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))[0] || null;
+
+        return {
+          allProgress,
+          moduleBreakdowns,
+          globalProgress: Math.min(100, Math.round(totalProgress)),
+          lastProgress,
+        };
+      } catch (err) {
+        console.error('Error getting full user progress:', err);
+        return null;
+      }
+    },
+
     getModuleBreakdown: async (moduleId, userId) => {
       try {
         const actualUserId = getUserId(userId);
@@ -856,8 +940,8 @@ export const createProgressService = (db) => {
 };
 
 // ============================================================
-// BACKWARD COMPATIBILITY: Exportar funciones que usan el cliente
-// desde useIALabProgress (inyectado dinámicamente)
+// BACKWARD COMPATIBILITY: Funciones legacy para consumidores
+// que no usan el factory pattern directamente
 // ============================================================
 
 let _supabaseClient = null;
@@ -871,33 +955,8 @@ const getService = () => {
   return createProgressService(db);
 };
 
-export const getProgress = (...args) => getService().getProgress(...args);
-export const getAllProgress = (...args) => getService().getAllProgress(...args);
 export const saveProgress = (...args) => getService().saveProgress(...args);
-export const markModuleStarted = (...args) => getService().markModuleStarted(...args);
-export const markModuleCompleted = (...args) => getService().markModuleCompleted(...args);
-export const resetModuleProgress = (...args) => getService().resetModuleProgress(...args);
-export const unlockNextModule = (...args) => getService().unlockNextModule(...args);
-export const getCompletedModules = (...args) => getService().getCompletedModules(...args);
-export const getModuleScore = (...args) => getService().getModuleScore(...args);
-export const getTotalProgress = (...args) => getService().getTotalProgress(...args);
-export const saveVideoProgress = (...args) => getService().saveVideoProgress(...args);
-export const getVideoProgress = (...args) => getService().getVideoProgress(...args);
-export const saveInfographicProgress = (...args) => getService().saveInfographicProgress(...args);
-export const saveActivitySubmission = (...args) => getService().saveActivitySubmission(...args);
-export const getActivitySubmission = (...args) => getService().getActivitySubmission(...args);
-export const saveExamResult = (...args) => getService().saveExamResult(...args);
-export const getExamResults = (...args) => getService().getExamResults(...args);
-export const saveLastLesson = (...args) => getService().saveLastLesson(...args);
-export const getLastLesson = (...args) => getService().getLastLesson(...args);
-export const getUserLastProgress = (...args) => getService().getUserLastProgress(...args);
-export const saveResourceViewed = (...args) => getService().saveResourceViewed(...args);
-export const saveExamProgress = (...args) => getService().saveExamProgress(...args);
-export const saveChallengeProgress = (...args) => getService().saveChallengeProgress(...args);
-export const saveCommunityProgress = (...args) => getService().saveCommunityProgress(...args);
-export const getModuleBreakdown = (...args) => getService().getModuleBreakdown(...args);
-export const calculateGlobalProgressFromDB = (...args) => getService().calculateGlobalProgressFromDB(...args);
-export const getViewedResources = (...args) => getService().getViewedResources(...args);
+export const getFullUserProgress = (...args) => getService().getFullUserProgress(...args);
 
 // countModuleResources no necesita db, se puede llamar directamente
 const _countModuleResources = (moduleId) => {
@@ -905,38 +964,3 @@ const _countModuleResources = (moduleId) => {
   return resourceCounts[moduleId] || 8;
 };
 export { _countModuleResources as countModuleResources };
-
-export default {
-  PROGRESS_STATUS,
-  MODULE_TYPES,
-  setSupabaseClient,
-  createProgressService,
-  getProgress,
-  getAllProgress,
-  saveProgress,
-  markModuleStarted,
-  markModuleCompleted,
-  resetModuleProgress,
-  unlockNextModule,
-  getCompletedModules,
-  getModuleScore,
-  getTotalProgress,
-  saveVideoProgress,
-  getVideoProgress,
-  saveInfographicProgress,
-  saveActivitySubmission,
-  getActivitySubmission,
-  saveExamResult,
-  getExamResults,
-  saveLastLesson,
-  getLastLesson,
-  getUserLastProgress,
-  saveResourceViewed,
-  saveExamProgress,
-  saveChallengeProgress,
-  saveCommunityProgress,
-  getModuleBreakdown,
-  calculateGlobalProgressFromDB,
-  getViewedResources,
-  countModuleResources: _countModuleResources,
-};

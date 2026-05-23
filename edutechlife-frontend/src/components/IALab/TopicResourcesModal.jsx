@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { cn } from '../forum/forumDesignSystem';
-import { useIALabContext } from '../../context/IALabContext';
+import { useIALabProgressContext } from '../../context/IALabContext';
 import { useIALabStore } from '../../store/ialabStore';
 import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
 import { useYouTubeDuration } from '../../hooks/useYouTubeDuration';
@@ -19,7 +19,7 @@ const TopicResourcesModal = ({
   topicData = null,
   className = ''
 }) => {
-  const { activeMod, markResourceAsViewed: markResourceInContext } = useIALabContext();
+  const { activeMod, markResourceAsViewed: markResourceInContext } = useIALabProgressContext();
   const { trackResourceViewed } = useIALabProgress();
   
   const [activeResourceIndex, setActiveResourceIndex] = useState(0);

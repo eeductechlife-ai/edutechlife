@@ -1,5 +1,3 @@
-import * as XLSX from 'xlsx';
-
 const STORAGE_KEY = 'edutechlife_leads';
 
 export const LEAD_STATUS = {
@@ -104,8 +102,9 @@ export const saveLead = (leadData) => {
   }
 };
 
-export const downloadLeadExcel = (lead) => {
+export const downloadLeadExcel = async (lead) => {
   try {
+    const XLSX = await import('xlsx').then(m => m.default || m);
     const data = [{
       'Fecha': lead.fecha,
       'Hora': lead.hora,
@@ -131,8 +130,9 @@ export const downloadLeadExcel = (lead) => {
   }
 };
 
-export const downloadAllLeadsExcel = () => {
+export const downloadAllLeadsExcel = async () => {
   try {
+    const XLSX = await import('xlsx').then(m => m.default || m);
     const existingData = localStorage.getItem(STORAGE_KEY);
     const leads = existingData ? JSON.parse(existingData) : [];
     

@@ -21,4 +21,4 @@ const OfflineBanner = () => {
   );
 };
 
-export default OfflineBanner;
+export default React.memo(OfflineBanner);
