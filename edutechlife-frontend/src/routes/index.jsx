@@ -2,12 +2,12 @@ import { lazy, Suspense, useEffect } from 'react';
 import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import AppLayout from '../components/layout/AppLayout';
 import AuthRouter from './auth-router';
-import LandingPage from '../components/pages/LandingPage';
 import ProtectedRoute from '../components/layout/ProtectedRoute';
 import RoleProtectedRoute from '../components/layout/RoleProtectedRoute';
 import { PageLoader } from '../components/LoadingScreen';
 
 // Lazy load para componentes pesados
+const LandingPage = lazy(() => import('../components/pages/LandingPage'));
 const WelcomeScreen = lazy(() => import('../components/WelcomeScreen'));
 const IALabSignUpPage = lazy(() => import('../components/IALabSignUpPage'));
 const SmartBoardSignUpPage = lazy(() => import('../components/SmartBoardSignUpPage'));
@@ -81,7 +81,11 @@ const AppRoutes = () => {
       {/* Layout principal con header, footer y modales globales */}
       <Route path="/" element={<AppLayout />}>
         {/* Ruta principal (pública) */}
-        <Route index element={<LandingPage />} />
+        <Route index element={
+          <Suspense fallback={<PageLoader message="Cargando..." />}>
+            <LandingPage />
+          </Suspense>
+        } />
         
         {/* Rutas de autenticación */}
         <Route path="auth-router" element={<AuthRouter />} />

@@ -66,9 +66,11 @@ const IALabHeader = () => {
         )}
       </div>
 
-      {/* Barra de búsqueda global */}
-      <div className="hidden md:block">
+      {/* Barra de búsqueda global e idioma */}
+      <div className="hidden md:flex items-center gap-3">
         <GlobalSearchBar />
+        <div className="w-px h-6 bg-slate-200 dark:bg-slate-700" />
+        <LocaleSwitcher />
       </div>
 
       <div className="flex items-center gap-4">
@@ -91,14 +93,17 @@ const IALabHeader = () => {
                 notifOpen
                   ? 'text-corporate'
                   : totalUnread > 0
-                    ? 'text-petroleum dark:text-[#66CCCC]'
+                    ? 'text-petroleum dark:text-corporate'
                     : 'text-corporate group-hover:text-petroleum'
               }`}
             />
             {totalUnread > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 flex items-center justify-center min-w-[18px] h-[18px] text-[10px] font-bold text-white bg-gradient-to-r from-petroleum to-corporate rounded-full border-2 border-white px-1 shadow-sm">
-                {totalUnread > 99 ? '99+' : totalUnread}
+              <span className="absolute -top-0.5 -right-0.5 flex items-center justify-center min-w-[18px] h-[18px] text-[11px] font-bold text-white bg-gradient-to-r from-petroleum to-corporate rounded-full border-2 border-white px-1 shadow-sm">
+                {totalUnread > 999 ? '999+' : totalUnread}
               </span>
+            )}
+            {forumUnreadCount > 0 && (
+              <span className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-amber-400 ring-1 ring-white dark:ring-slate-800 shadow-sm" title={`${forumUnreadCount} notificaciones del foro`} />
             )}
           </button>
 
@@ -110,7 +115,6 @@ const IALabHeader = () => {
           />
         </div>
 
-        <LocaleSwitcher />
         <UserDropdownMenuSimplified
           onNavigate={(view) => {
             if (view === 'landing') {
@@ -125,4 +129,4 @@ const IALabHeader = () => {
   );
 };
 
-export default IALabHeader;
+export default React.memo(IALabHeader);

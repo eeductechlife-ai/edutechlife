@@ -19,6 +19,7 @@ import UserProfileSmartCard from './UserProfileSmartCard';
 import ActivityHistory from './ActivityHistory';
 import ErrorBoundary from './forum/ErrorBoundary';
 import StudyPlannerModal from './IALab/StudyPlannerModal';
+import UserCoursesDashboard from './IALab/UserCoursesDashboard';
 
 /**
  * UserDropdownMenuPremium - Componente premium con shadcn/ui
@@ -37,6 +38,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
   const [showProfile, setShowProfile] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [showStudyPlanner, setShowStudyPlanner] = useState(false);
+  const [showCourses, setShowCourses] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   
   // Integración oficial Clerk - Patrón recomendado
@@ -81,11 +83,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
   
   // Manejar certificados
   const handleCertificates = () => {
-    if (onNavigate) {
-      onNavigate('certificados');
-    } else {
-      alert('Página de certificados en desarrollo');
-    }
+    setShowCourses(true);
   };
 
   const handleHistory = () => setShowHistory(true);
@@ -519,18 +517,31 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
          </Dialog>
        )}
 
-       {showStudyPlanner && (
-         <Dialog open={showStudyPlanner} onOpenChange={setShowStudyPlanner}>
-           <DialogContent className="sm:max-w-[700px] max-h-[85vh] overflow-y-auto bg-white rounded-2xl shadow-2xl border-0">
-             <DialogHeader>
-               <DialogTitle className="text-lg font-bold text-[#334155]">Plan de Estudio</DialogTitle>
-             </DialogHeader>
-             <ErrorBoundary>
-               <StudyPlannerModal onClose={() => setShowStudyPlanner(false)} />
-             </ErrorBoundary>
-           </DialogContent>
-         </Dialog>
-       )}
+        {showStudyPlanner && (
+          <Dialog open={showStudyPlanner} onOpenChange={setShowStudyPlanner}>
+            <DialogContent className="sm:max-w-[700px] max-h-[85vh] overflow-y-auto bg-white rounded-2xl shadow-2xl border-0">
+              <DialogHeader>
+                <DialogTitle className="text-lg font-bold text-[#334155]">Plan de Estudio</DialogTitle>
+              </DialogHeader>
+              <ErrorBoundary>
+                <StudyPlannerModal onClose={() => setShowStudyPlanner(false)} />
+              </ErrorBoundary>
+            </DialogContent>
+          </Dialog>
+        )}
+
+        {showCourses && (
+          <Dialog open={showCourses} onOpenChange={setShowCourses}>
+            <DialogContent className="sm:max-w-[800px] max-h-[85vh] overflow-y-auto bg-white rounded-2xl shadow-2xl border-0">
+              <DialogHeader>
+                <DialogTitle className="text-lg font-bold text-[#334155]">Mis Cursos y Certificados</DialogTitle>
+              </DialogHeader>
+              <ErrorBoundary>
+                <UserCoursesDashboard />
+              </ErrorBoundary>
+            </DialogContent>
+          </Dialog>
+        )}
     </>
   );
 };

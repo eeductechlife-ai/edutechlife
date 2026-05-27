@@ -160,7 +160,7 @@ const GlobalSearchBar = ({ mobile, onClose }) => {
             onChange={(e) => { setQuery(e.target.value); setIsOpen(true); }}
             onFocus={() => setIsOpen(true)}
             placeholder="Buscar..."
-            className="w-36 sm:w-48 lg:w-56 h-9 pl-8 pr-8 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-xs text-slate-700 dark:text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-petroleum/40 focus:border-petroleum/50 transition-all duration-200"
+            className="min-w-[180px] h-9 pl-8 pr-8 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-xs text-slate-700 dark:text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-petroleum/40 focus:border-petroleum/50 transition-all duration-200"
             aria-label="Buscar módulos, temas y recursos"
           />
           <kbd className="absolute right-2.5 top-1/2 -translate-y-1/2 hidden sm:inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono text-slate-600 bg-slate-100 dark:bg-slate-700 rounded border border-slate-200 dark:border-slate-600">

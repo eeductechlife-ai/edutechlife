@@ -8,7 +8,11 @@ import useBodyScrollLock from '../hooks/useBodyScrollLock';
 import useFocusTrap from '../hooks/useFocusTrap';
 import { getUnifiedSessionStats } from '../hooks/useSessionTracker';
 import { supabase } from '../lib/supabase';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Legend, Cell, PieChart, Pie } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, PieChart, Pie } from 'recharts';
+import ResourceBadge from '../components/ui/ResourceBadge';
+import SectionHeader from '../components/ui/SectionHeader';
+import ModuleProgressCard from '../components/IALab/ModuleProgressCard';
+import { useActivityCalendar } from '../hooks/useActivityCalendar';
 
 const ACTIVITY_CONFIG = {
   video: { icon: 'fa-play-circle', label: 'Video', color: 'var(--color-petroleum)' },
@@ -67,84 +71,6 @@ const calculateModuleScore = (moduleId, config, completedVideos, completedInfogr
   return Math.min(100, Math.round(score * 10) / 10);
 };
 
-const ResourceBadge = ({ completed, total, icon }) => (
-  <span className={`inline-flex items-center gap-[3px] text-[9px] font-bold px-1.5 py-0.5 rounded-md border ${
-    completed >= total ? 'bg-emerald-50 text-emerald-600 border-emerald-200' :
-    completed > 0 ? 'bg-amber-50 text-amber-600 border-amber-200' :
-    'bg-slate-50 text-slate-400 border-slate-100'
-  }`}>
-    <Icon name={icon} className="text-[7px]" /> {completed}/{total}
-  </span>
-);
-
-const ModuleProgressCard = ({ moduleId, title, icon, score, config, completedVideos, completedInfographics, completedExams, challengeScores, completedModules }) => {
-  const lessonProgress = useIALabStore(s => s.lessonProgress);
-  const moduleVideos = completedVideos.filter(v => v.startsWith(`m${moduleId}`)).length;
-  const moduleInfographics = completedInfographics.filter(i => i.startsWith(`i${moduleId}`)).length;
-  const examScore = completedExams[moduleId] || 0;
-  const challengeScore = challengeScores[moduleId] || 0;
-  const moduleLessonProgress = lessonProgress?.[moduleId] || {};
-  const moduleLessons = ALL_LESSONS?.[moduleId] || [];
-  const completedModuleLessons = Object.values(moduleLessonProgress).filter(s => s === 'completed').length;
-  const totalModuleLessons = moduleLessons.length;
-  const isPassed = score >= 80;
-  const barColor = isPassed ? 'from-emerald-500 to-emerald-400' : score >= 60 ? 'from-amber-500 to-amber-400' : 'from-slate-300 to-slate-400';
-
-  return (
-    <div className="flex items-start gap-3 p-4 rounded-xl bg-white border border-slate-200/60 shadow-sm hover:shadow-md hover:border-slate-300/50 transition-all duration-200 active:scale-[0.99] group">
-      <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5 transition-all duration-300 ${
-        isPassed ? 'bg-gradient-to-br from-emerald-500/10 to-emerald-600/10 shadow-sm shadow-emerald-500/10' : 'bg-gradient-to-br from-petroleum/10 to-corporate/10'
-      }`}>
-        <Icon name={icon} className={`text-sm transition-colors duration-300 ${isPassed ? 'text-emerald-600' : 'text-petroleum group-hover:text-corporate'}`} />
-      </div>
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center justify-between gap-2 mb-2">
-          <p className="text-sm font-semibold text-slate-800 truncate">{title}</p>
-          <span className={`text-xs font-bold flex-shrink-0 ${isPassed ? 'text-emerald-600' : score >= 60 ? 'text-amber-600' : 'text-slate-500'}`}>{Math.round(score)}%</span>
-        </div>
-        <div className="flex items-center gap-1.5 flex-wrap mb-2.5">
-          <ResourceBadge completed={moduleVideos} total={config.videos} icon="fa-play-circle" />
-          <ResourceBadge completed={moduleInfographics} total={config.infographics} icon="fa-file-image" />
-          {examScore > 0 && (
-            <span className={`inline-flex items-center gap-[3px] text-[9px] font-bold px-1.5 py-0.5 rounded-md border ${
-              examScore >= 80 ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : 'bg-amber-50 text-amber-600 border-amber-200'
-            }`}>
-              <Icon name="fa-file-alt" className="text-[7px]" /> E:{examScore}%
-            </span>
-          )}
-          {challengeScore > 0 && (
-            <span className={`inline-flex items-center gap-[3px] text-[9px] font-bold px-1.5 py-0.5 rounded-md border ${
-              challengeScore >= 80 ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : 'bg-amber-50 text-amber-600 border-amber-200'
-            }`}>
-              <Icon name="fa-trophy" className="text-[7px]" /> D:{challengeScore}%
-            </span>
-          )}
-          {completedModuleLessons > 0 && (
-            <span className="inline-flex items-center gap-[3px] text-[9px] font-bold px-1.5 py-0.5 rounded-md border bg-emerald-50 text-emerald-600 border-emerald-200">
-              <Icon name="fa-check-circle" className="text-[7px]" /> L:{completedModuleLessons}/{totalModuleLessons}
-            </span>
-          )}
-          {completedModules.includes(moduleId) && (examScore > 0 || challengeScore > 0) && (
-            <span className="inline-flex items-center gap-[3px] text-[9px] font-bold px-1.5 py-0.5 rounded-md border bg-petroleum/5 text-petroleum border-petroleum/10">
-              <Icon name="fa-comments" className="text-[7px]" /> Foro
-            </span>
-          )}
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-            <div className={`h-full rounded-full bg-gradient-to-r ${barColor} transition-all duration-700 ease-out`} style={{ width: `${Math.round(score)}%` }} />
-          </div>
-          {isPassed && (
-            <div className="w-5 h-5 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-sm shadow-emerald-500/20 flex items-center justify-center flex-shrink-0">
-              <Icon name="fa-check" className="text-white text-[9px]" />
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};
-
 const TABS = [
   { key: 'modules', icon: 'fa-cubes', label: 'Módulos y Notas' },
   { key: 'activities', icon: 'fa-list', label: 'Actividades' },
@@ -192,6 +118,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
   const [sessionStats, setSessionStats] = useState({ todayMinutes: 0, allMinutes: 0, sessionCount: 0, daysActive: 0 });
   const [timeRange, setTimeRange] = useState('7d');
   const [calendarYear, setCalendarYear] = useState(new Date().getFullYear());
+  const [accordionSections, setAccordionSections] = useState({ estudio: true, progreso: true, logros: false, calendario: false });
   const [isExpanded, setIsExpanded] = useState(false);
   const [pdfLoading, setPdfLoading] = useState(false);
   const panelRef = useRef(null);
@@ -204,8 +131,8 @@ const ActivityHistory = ({ isOpen, onClose }) => {
   useEffect(() => {
     if (!isOpen) return;
     const handleClickOutside = (e) => { if (panelRef.current && !panelRef.current.contains(e.target)) onClose(); };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+      document.addEventListener('pointerdown', handleClickOutside);
+    return () => document.removeEventListener('pointerdown', handleClickOutside);
   }, [isOpen, onClose]);
 
   const refreshStats = useCallback(async () => {
@@ -343,37 +270,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
     }));
   }, [activities]);
 
-  const calendarData = useMemo(() => {
-    const sessions = JSON.parse(localStorage.getItem('ialab_session_log') || '[]');
-    const map = {};
-    sessions.forEach(s => {
-      const d = new Date(s.completed_at).toDateString();
-      map[d] = (map[d] || 0) + (s.duration_seconds || 0);
-    });
-    const weeks = [];
-    const startDate = new Date(calendarYear, 0, 1);
-    const endDate = new Date(calendarYear, 11, 31);
-    let cursor = new Date(startDate);
-    while (cursor <= endDate) {
-      const week = [];
-      for (let i = 0; i < 7; i++) {
-        const dStr = cursor.toDateString();
-        const secs = map[dStr] || 0;
-        week.push({ date: new Date(cursor), mins: Math.round(secs / 60), level: secs === 0 ? 0 : secs < 300 ? 1 : secs < 900 ? 2 : secs < 1800 ? 3 : 4 });
-        cursor.setDate(cursor.getDate() + 1);
-      }
-      weeks.push(week);
-    }
-    const today = new Date().toDateString();
-    const totalActive = Object.keys(map).filter(d => new Date(d) <= new Date()).length;
-    const currentStreak = (() => {
-      let streak = 0;
-      const d = new Date();
-      while (map[d.toDateString()]) { streak++; d.setDate(d.getDate() - 1); }
-      return streak;
-    })();
-    return { weeks, totalActive, currentStreak, totalSessions: sessions.length };
-  }, [calendarYear, sessionStats]);
+  const calendarData = useActivityCalendar(calendarYear);
 
   const completedCount = completedModules?.length || 0;
   const totalExams = Object.values(completedExams || {}).filter(s => s > 0).length;
@@ -879,13 +776,61 @@ const ActivityHistory = ({ isOpen, onClose }) => {
     }
   };
 
+  const AccordionSection = React.memo(({ id, title, icon, children }) => {
+    const isOpen = accordionSections[id] ?? true;
+    return (
+      <div className="mb-4 bg-white rounded-xl border border-slate-200/40 shadow-sm overflow-hidden">
+        <button
+          onClick={() => setAccordionSections(prev => ({ ...prev, [id]: !prev[id] }))}
+          className="w-full flex items-center justify-between p-4 sm:p-5 hover:bg-slate-50/50 transition-colors"
+          aria-expanded={isOpen}
+        >
+          <div className="flex items-center gap-2.5">
+            {icon && <Icon name={icon} className="text-petroleum text-sm" />}
+            <h3 className="text-xs font-bold text-petroleum uppercase tracking-wider">{title}</h3>
+          </div>
+          <motion.div
+            animate={{ rotate: isOpen ? 180 : 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Icon name="fa-chevron-down" className="text-slate-400 text-[10px]" />
+          </motion.div>
+        </button>
+        <motion.div
+          initial={false}
+          animate={{ height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0 }}
+          transition={{ duration: 0.25, ease: 'easeInOut' }}
+          className="overflow-hidden"
+        >
+          <div className="p-4 sm:p-5 pt-0">
+            {children}
+          </div>
+        </motion.div>
+      </div>
+    );
+  });
+
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.15 }}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Mi Historial de Aprendizaje"
+      aria-describedby="activity-history-desc"
       className={`fixed inset-0 z-[1050] flex items-start justify-center bg-black/50 transition-all duration-300 ${isExpanded ? 'p-0' : 'pt-16 sm:pt-20 px-2 sm:px-4'}`}
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+      onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }}
     >
-      <div ref={(el) => { panelRef.current = el; focusTrapRef.current = el; }} className={`bg-white shadow-[0_8px_32px_rgba(0,75,99,0.12)] w-full overflow-hidden transition-all duration-300 ${
-        isExpanded ? 'max-w-none max-h-screen rounded-none' : 'rounded-2xl max-w-3xl max-h-[85vh] sm:max-h-[80vh]'
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        transition={{ duration: 0.2, ease: 'easeOut' }}
+        ref={(el) => { panelRef.current = el; focusTrapRef.current = el; }} className={`bg-white shadow-[0_8px_32px_rgba(0,75,99,0.12)] w-full overflow-hidden transition-all duration-300 ${
+        isExpanded ? 'max-w-none max-h-screen rounded-none' : 'rounded-2xl max-w-5xl max-h-[80vh]'
       }`}>
         {/* Header */}
         <div className="relative bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate px-4 sm:px-6 py-4 sm:py-5 flex items-center justify-between overflow-hidden">
@@ -895,8 +840,11 @@ const ActivityHistory = ({ isOpen, onClose }) => {
               <Icon name="fa-clock" className="text-white text-lg" />
             </div>
             <div>
-              <h2 className="text-white font-bold text-lg font-montserrat tracking-tight">Mi Historial de Aprendizaje</h2>
+              <h1 className="text-white font-bold text-lg font-montserrat tracking-tight">Mi Historial de Aprendizaje</h1>
               <p className="text-white/60 text-xs">Progreso sincronizado · {totalLessonsCompleted}/{totalLessonsCount} lecciones · {xp} XP</p>
+              <span id="activity-history-desc" className="sr-only">
+                Panel con tu progreso en el curso IALab. {totalLessonsCompleted} de {totalLessonsCount} lecciones completadas, nivel {level}, {xp} XP acumulados, racha de {streak} días. Contiene {TABS.length} secciones: {TABS.map(t => t.label).join(', ')}.
+              </span>
             </div>
           </div>
           <div className="flex items-center gap-2 relative z-10">
@@ -935,7 +883,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
             {TABS.map(tab => (
               <button key={tab.key} onClick={() => setActiveTab(tab.key)}
                 className={`px-3 sm:px-4 min-h-[44px] text-xs font-bold rounded-t-lg transition-all duration-200 flex items-center gap-2 active:scale-95 flex-shrink-0 ${
-                  activeTab === tab.key ? 'bg-gradient-to-r from-petroleum to-corporate text-white shadow-sm' : 'text-slate-500 hover:text-petroleum hover:bg-slate-50 border border-transparent'
+                  activeTab === tab.key ? 'bg-gradient-to-r from-petroleum to-corporate text-white shadow-sm border border-transparent' : 'text-slate-500 hover:text-petroleum hover:bg-slate-50 border border-transparent'
                 }`}>
                 <Icon name={tab.icon} className={`text-[10px] ${activeTab === tab.key ? 'text-white' : 'text-petroleum'}`} />{tab.label}
               </button>
@@ -1024,35 +972,67 @@ const ActivityHistory = ({ isOpen, onClose }) => {
           )}
 
           {activeTab === 'stats' && (
-            <div className="p-3 sm:p-5">
-              <SectionHeader title="Resumen de Recursos" />
-              <div className="grid grid-cols-2 gap-3">
-                {[
-                  { icon: 'fa-play-circle', label: 'Videos', value: `${totalVideos}/${totalVideosTarget}`, sub: 'completados', color: 'text-petroleum', pct: totalVideosTarget > 0 ? Math.round(totalVideos / totalVideosTarget * 100) : 0 },
-                  { icon: 'fa-file-image', label: 'Infografías', value: `${totalInfographics}/${totalInfographicsTarget}`, sub: 'completadas', color: 'text-corporate', pct: totalInfographicsTarget > 0 ? Math.round(totalInfographics / totalInfographicsTarget * 100) : 0 },
-                  { icon: 'fa-file-alt', label: 'Exámenes', value: `${totalExams}/5`, sub: 'aprobados', color: 'text-corporate', pct: Math.round(totalExams / 5 * 100) },
-                  { icon: 'fa-trophy', label: 'Desafíos', value: `${totalChallenges}/5`, sub: 'completados', color: 'text-warning', pct: Math.round(totalChallenges / 5 * 100) },
-                  { icon: 'fa-comments', label: 'Comunidad', value: `${forumPostCount || 0} posts · ${forumCommentCount || 0} coment.`, sub: 'participación', color: 'text-purple-500', pct: Math.min(100, ((forumPostCount || 0) + (forumCommentCount || 0)) * 10) },
-                ].map((item, i) => (
-                  <div key={i} className="group bg-white rounded-xl border border-slate-200/40 shadow-sm p-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
-                        <Icon name={item.icon} className={`text-sm ${item.color}`} />
-                      </div>
-                      <span className="text-xs font-bold text-slate-400">{item.pct}%</span>
-                    </div>
-                    <p className={`text-2xl font-bold font-montserrat tracking-tight ${item.color}`}>{item.value}</p>
-                    <div className="mt-2 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                      <div className="h-full rounded-full bg-gradient-to-r from-petroleum to-corporate transition-all duration-700 ease-out" style={{ width: `${item.pct}%` }} />
-                    </div>
-                    <p className="text-[10px] font-medium text-slate-400 mt-1.5">{item.sub}</p>
+            <div className="p-3 sm:p-5 space-y-4">
+
+              <div className="bg-gradient-to-br from-petroleum via-petroleum-dark to-corporate rounded-xl shadow-lg p-5 sm:p-6 text-white">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center backdrop-blur-sm">
+                    <Icon name="fa-chart-line" className="text-sm text-white" />
                   </div>
-                ))}
+                  <h2 className="text-sm font-bold font-montserrat tracking-wide text-white/90">Resumen Ejecutivo</h2>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+                  <div className="bg-white/10 rounded-xl p-3 backdrop-blur-sm">
+                    <p className="text-[9px] font-semibold text-white/80 uppercase tracking-wider">XP Total</p>
+                    <p className="text-xl font-bold font-montserrat tracking-tight mt-0.5">{xp}</p>
+                    <p className="text-[10px] text-white/70 mt-0.5">Nivel {level}</p>
+                  </div>
+                  <div className="bg-white/10 rounded-xl p-3 backdrop-blur-sm">
+                    <p className="text-[9px] font-semibold text-white/80 uppercase tracking-wider">Meta Semanal</p>
+                    <p className="text-xl font-bold font-montserrat tracking-tight mt-0.5">{weeklyXP.weekly}/{weeklyXP.weeklyTarget}</p>
+                    <div className="mt-1.5 h-1 bg-white/20 rounded-full overflow-hidden">
+                      <div className="h-full rounded-full bg-white transition-all duration-500" style={{ width: `${weeklyXP.weeklyPct}%` }} />
+                    </div>
+                  </div>
+                  <div className="bg-white/10 rounded-xl p-3 backdrop-blur-sm">
+                    <p className="text-[9px] font-semibold text-white/80 uppercase tracking-wider">Tiempo Estudio</p>
+                    <p className="text-xl font-bold font-montserrat tracking-tight mt-0.5">{sessionStats.sessionCount > 0 || liveSeconds >= 30 ? `${studyHours}h ${studyMins}m` : '—'}</p>
+                    <p className="text-[10px] text-white/70 mt-0.5">{daysActive} días activo</p>
+                  </div>
+                  <div className="bg-white/10 rounded-xl p-3 backdrop-blur-sm">
+                    <p className="text-[9px] font-semibold text-white/80 uppercase tracking-wider">Progreso Curso</p>
+                    <p className="text-xl font-bold font-montserrat tracking-tight mt-0.5">{Math.round(courseProgress || 0)}%</p>
+                    <div className="mt-1.5 h-1 bg-white/20 rounded-full overflow-hidden">
+                      <div className="h-full rounded-full bg-emerald-300 transition-all duration-500" style={{ width: `${Math.min(courseProgress || 0, 100)}%` }} />
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              {/* Tiempo Real de Estudio */}
-              <div className="mb-5 bg-white rounded-xl border border-slate-200/40 shadow-sm p-5 hover:shadow-md transition-all duration-200">
-                <SectionHeader title="Tiempo Real de Estudio" />
+              <div className="bg-white rounded-xl border border-slate-200/40 shadow-sm p-5">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
+                      <Icon name="fa-tachometer-alt" className="text-petroleum text-sm" />
+                    </div>
+                    <div>
+                      <h3 className="text-xs font-bold text-petroleum uppercase tracking-wider">Progreso Global</h3>
+                      <p className="text-[10px] text-slate-400">{totalVideos + totalInfographics + totalExams + totalChallenges + completedCount}/{totalItems} recursos completados</p>
+                    </div>
+                  </div>
+                  <span className="text-2xl font-bold text-petroleum font-montserrat tracking-tight">{Math.round(courseProgress || 0)}%</span>
+                </div>
+                <div className="h-3 bg-slate-100 rounded-full overflow-hidden shadow-inner">
+                  <div className="h-full rounded-full bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate transition-all duration-1000 ease-out shadow-sm" style={{ width: `${Math.min(courseProgress || 0, 100)}%` }} />
+                </div>
+                <div className="flex justify-between mt-3 pt-3 border-t border-slate-100 text-[10px] font-medium text-slate-400">
+                  <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-petroleum" />{completedCount}/5 módulos</span>
+                  <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-corporate" />{totalVideos}/{totalVideosTarget} videos</span>
+                  <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />{totalExams + totalChallenges}/10 eval.</span>
+                </div>
+              </div>
+
+              <AccordionSection id="estudio" title="Tiempo de Estudio" icon="fa-clock">
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-4">
                   <div className="text-center p-3 rounded-xl bg-gradient-to-b from-petroleum/5 to-transparent border border-petroleum/10">
                     <div className="text-xl font-bold text-petroleum">{sessionStats.sessionCount > 0 || liveSeconds >= 30 ? `${studyHours}h ${studyMins}m` : '—'}</div>
@@ -1085,7 +1065,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                     </div>
                     <span className="text-[9px] text-slate-400">{studyHours}h {studyMins}m total</span>
                   </div>
-                  <div className="h-32 sm:h-40">
+                  <div className="h-32 sm:h-40" role="img" aria-label={`Gráfico de tiempo de estudio: ${monthlyData.filter(d => d.mins > 0).length} días con actividad. Total: ${studyHours}h ${studyMins}m.`}>
                     {monthlyData.length > 0 && monthlyData.some(d => d.mins > 0) ? (
                       <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={monthlyData} margin={{ top: 4, right: 4, bottom: 0, left: -16 }}>
@@ -1110,66 +1090,147 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                     )}
                   </div>
                 </div>
-              </div>
+              </AccordionSection>
 
-              {/* Actividad por Tipo */}
-              {activityDistribution.length > 1 && (
-                <div className="mb-5 bg-white rounded-xl border border-slate-200/40 shadow-sm p-5 hover:shadow-md transition-all duration-200">
-                  <SectionHeader title="Actividad por Tipo" />
-                  <div className="flex flex-col sm:flex-row items-center gap-4">
-                    <div className="w-40 h-40 flex-shrink-0">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <PieChart>
-                          <Pie data={activityDistribution} cx="50%" cy="50%" innerRadius={32} outerRadius={56} paddingAngle={2} dataKey="value">
-                            {activityDistribution.map((entry, idx) => (
-                              <Cell key={idx} fill={entry.color} />
-                            ))}
-                          </Pie>
-                          <Tooltip
-                            contentStyle={{ fontSize: 11, borderRadius: 8, border: '1px solid #E2E8F0' }}
-                            formatter={(value, name, props) => [`${value} (${props.payload.pct}%)`, props.payload.name]}
-                          />
-                        </PieChart>
-                      </ResponsiveContainer>
-                    </div>
-                    <div className="flex-1 grid grid-cols-2 gap-2 w-full">
-                      {activityDistribution.map(item => (
-                        <div key={item.key} className="flex items-center gap-2 p-2 rounded-lg bg-slate-50">
-                          <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: item.color }} />
-                          <div className="flex-1 min-w-0">
-                            <p className="text-[10px] font-semibold text-slate-700 truncate">{item.name}</p>
-                            <div className="flex items-center gap-1">
-                              <div className="flex-1 h-1 bg-slate-200 rounded-full overflow-hidden">
-                                <div className="h-full rounded-full transition-all duration-500" style={{ width: `${item.pct}%`, backgroundColor: item.color }} />
+              <AccordionSection id="progreso" title="Progreso y Rendimiento" icon="fa-chart-bar">
+                {activityDistribution.length > 1 && (
+                  <div className="mb-5">
+                    <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3">Actividad por Tipo</h4>
+                    <div className="flex flex-col sm:flex-row items-center gap-4">
+                      <div className="w-36 h-36 flex-shrink-0" role="img" aria-label={`Distribución de actividades: ${activityDistribution.map(a => `${a.name} ${a.pct}%`).join(', ')}`}>
+                        <ResponsiveContainer width="100%" height="100%">
+                          <PieChart>
+                            <Pie data={activityDistribution} cx="50%" cy="50%" innerRadius={28} outerRadius={52} paddingAngle={2} dataKey="value">
+                              {activityDistribution.map((entry, idx) => (
+                                <Cell key={idx} fill={entry.color} />
+                              ))}
+                            </Pie>
+                            <Tooltip
+                              contentStyle={{ fontSize: 11, borderRadius: 8, border: '1px solid #E2E8F0' }}
+                              formatter={(value, name, props) => [`${value} (${props.payload.pct}%)`, props.payload.name]}
+                            />
+                          </PieChart>
+                        </ResponsiveContainer>
+                      </div>
+                      <div className="flex-1 grid grid-cols-2 gap-2 w-full">
+                        {activityDistribution.map(item => (
+                          <div key={item.key} className="flex items-center gap-2 p-2 rounded-lg bg-slate-50">
+                            <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: item.color }} />
+                            <div className="flex-1 min-w-0">
+                              <p className="text-[10px] font-semibold text-slate-700 truncate">{item.name}</p>
+                              <div className="flex items-center gap-1">
+                                <div className="flex-1 h-1 bg-slate-200 rounded-full overflow-hidden">
+                                  <div className="h-full rounded-full transition-all duration-500" style={{ width: `${item.pct}%`, backgroundColor: item.color }} />
+                                </div>
+                                <span className="text-[9px] font-bold text-slate-500">{item.pct}%</span>
                               </div>
-                              <span className="text-[9px] font-bold text-slate-500">{item.pct}%</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div>
+                  <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3">Puntaje por Módulo</h4>
+                  <div className="space-y-2.5">
+                    {moduleScores.map(mod => {
+                      const barColor = mod.score >= 80 ? 'from-emerald-500 to-emerald-400' : mod.score >= 60 ? 'from-amber-500 to-amber-400' : 'from-slate-400 to-slate-300';
+                      return (
+                        <div key={mod.id} className="flex items-center gap-3">
+                          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center flex-shrink-0">
+                            <Icon name={mod.icon} className="text-[10px] text-petroleum" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between mb-0.5">
+                              <span className="text-[11px] font-semibold text-slate-700 truncate">{mod.title}</span>
+                              <div className="flex items-center gap-1.5 flex-shrink-0 ml-2">
+                                {mod.examScore > 0 && (
+                                  <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-md border ${
+                                    mod.examScore >= 80 ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : 'bg-amber-50 text-amber-600 border-amber-200'
+                                  }`}>E:{mod.examScore}%</span>
+                                )}
+                                {mod.challengeScore > 0 && (
+                                  <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-md border ${
+                                    mod.challengeScore >= 80 ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : 'bg-amber-50 text-amber-600 border-amber-200'
+                                  }`}>D:{mod.challengeScore}%</span>
+                                )}
+                                {mod.dominance && (
+                                  <span className={`text-[8px] font-bold px-1.5 py-[1px] rounded-md border ${mod.dominance.bg} ${mod.dominance.color}`}>{mod.dominance.label}</span>
+                                )}
+                                <span className={`text-[10px] font-bold ${mod.score >= 80 ? 'text-emerald-600' : mod.score >= 60 ? 'text-amber-600' : 'text-slate-500'}`}>{Math.round(mod.score)}%</span>
+                              </div>
+                            </div>
+                            <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                              <div className={`h-full rounded-full bg-gradient-to-r ${barColor} transition-all duration-500`} style={{ width: `${Math.round(mod.score)}%` }} />
                             </div>
                           </div>
                         </div>
-                      ))}
-                    </div>
+                      );
+                    })}
                   </div>
                 </div>
-              )}
+              </AccordionSection>
 
-              {/* Calendario de Estudio */}
-              <div className="mb-5 bg-white rounded-xl border border-slate-200/40 shadow-sm p-5 hover:shadow-md transition-all duration-200">
+              <AccordionSection id="logros" title="Logros y Medallas" icon="fa-star">
+                {badges && badges.length > 0 ? (
+                  <>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 mb-4">
+                      {badges.map(badgeId => {
+                        const info = BADGE_INFO?.[badgeId] || { icon: 'fa-star', label: badgeId, desc: '', color: '#94A3B8' };
+                        return (
+                          <div key={badgeId} className="group bg-gradient-to-br from-white to-slate-50 rounded-xl border border-slate-200/40 shadow-sm p-3 text-center hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+                            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400/10 to-amber-500/10 flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform duration-200">
+                              <Icon name={info.icon} className="text-sm" style={{ color: info.color }} />
+                            </div>
+                            <p className="text-[10px] font-bold text-slate-700 leading-tight">{info.label}</p>
+                            <p className="text-[8px] text-slate-400 mt-0.5">{info.desc}</p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    {nextBadge && (
+                      <div className="pt-3 border-t border-slate-100/80">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center opacity-60 flex-shrink-0">
+                              <Icon name={nextBadge.icon} className="text-[10px] text-slate-500" />
+                            </div>
+                            <div>
+                              <p className="text-[10px] font-bold text-slate-500 leading-tight">Siguiente: {nextBadge.label}</p>
+                              <p className="text-[8px] text-slate-400">{nextBadge.desc}</p>
+                            </div>
+                          </div>
+                          <span className="text-[10px] font-bold text-slate-400">{nextBadge.current}/{nextBadge.target}</span>
+                        </div>
+                        <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                          <div className="h-full rounded-full bg-gradient-to-r from-slate-300 to-slate-400 transition-all duration-500" style={{ width: `${(nextBadge.current / nextBadge.target) * 100}%` }} />
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <p className="text-xs text-slate-400 text-center py-4">Aún no has obtenido medallas. ¡Sigue avanzando para desbloquear logros!</p>
+                )}
+              </AccordionSection>
+
+              <AccordionSection id="calendario" title="Calendario de Estudio" icon="fa-calendar-alt">
                 <div className="flex items-center justify-between mb-4">
-                  <SectionHeader title="Calendario de Estudio" />
                   <div className="flex items-center gap-1">
                     <button onClick={() => setCalendarYear(y => y - 1)} className="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-[10px] text-slate-600 transition-all">‹</button>
                     <span className="text-[11px] font-bold text-slate-700 w-14 text-center">{calendarYear}</span>
                     <button onClick={() => setCalendarYear(y => Math.min(y + 1, new Date().getFullYear()))} className="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-[10px] text-slate-600 transition-all">›</button>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 mb-3 text-[10px] text-slate-500">
+                <div className="flex items-center gap-3 mb-3 text-[10px] text-slate-500 flex-wrap">
                   <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-sm bg-slate-100" /> Sin actividad</span>
                   <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-sm" style={{ backgroundColor: '#004B63', opacity: 0.25 }} /> 1-5 min</span>
                   <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-sm" style={{ backgroundColor: '#004B63', opacity: 0.5 }} /> 5-15 min</span>
                   <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-sm" style={{ backgroundColor: '#004B63', opacity: 0.75 }} /> 15-30 min</span>
                   <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-sm" style={{ backgroundColor: '#004B63' }} /> 30+ min</span>
                 </div>
-                <div className="overflow-x-auto pb-2">
+                <div className="overflow-x-auto pb-2" role="img" aria-label={`Calendario de estudio ${calendarYear}. ${calendarData.totalActive} días activos, racha actual de ${calendarData.currentStreak} días.`}>
                   <div className="flex gap-[2px] min-w-[480px]">
                     {calendarData.weeks.map((week, wi) => (
                       <div key={wi} className="flex flex-col gap-[2px]">
@@ -1189,251 +1250,12 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                 </div>
                 <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100 text-[10px] text-slate-500">
                   <span>{calendarData.totalActive} días activos</span>
-                  <span>Racha actual: {calendarData.currentStreak > 0 ? `${calendarData.currentStreak} días consecutivos 🔥` : 'Sin racha activa'}</span>
+                  <span>Racha actual: {calendarData.currentStreak > 0 ? <>{calendarData.currentStreak} días consecutivos <Icon name="fa-fire" className="text-orange-500 text-[10px]" /></> : 'Sin racha activa'}</span>
                   <span>{calendarData.totalSessions} sesiones</span>
                 </div>
-              </div>
+              </AccordionSection>
 
-              {/* Puntos de Módulo */}
-              <div className="mb-5 bg-white rounded-xl border border-slate-200/40 shadow-sm p-5 hover:shadow-md transition-all duration-200"
-                   title="Cada módulo aporta hasta 200 pts. Rendimiento = Nota × 2. Máximo 1000 pts (5 módulos × 200 pts).">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
-                      <Icon name="fa-trophy" className="text-petroleum text-sm" />
-                    </div>
-                    <div>
-                      <h3 className="text-xs font-bold text-petroleum uppercase tracking-wider">Puntos de Módulo</h3>
-                      <p className="text-[10px] text-slate-400">Rendimiento acumulado</p>
-                    </div>
-                  </div>
-                  <span className="text-2xl font-bold text-petroleum font-montserrat tracking-tight">{totalPoints}/1000</span>
-                </div>
-                <div className="h-2 bg-slate-100 rounded-full overflow-hidden shadow-inner">
-                  <div className="h-full rounded-full bg-gradient-to-r from-petroleum to-corporate transition-all duration-700 ease-out" style={{ width: `${Math.min((totalPoints / 1000) * 100, 100)}%` }} />
-                </div>
-                <div className="flex justify-between mt-2 text-[10px] font-medium text-slate-400">
-                  <span>{totalPoints} pts</span>
-                  <span>{totalPoints >= 1000 ? '¡Puntuación máxima!' : `${1000 - totalPoints} pts para el máximo`}</span>
-                </div>
-              </div>
-
-              {/* XP & Level card */}
-              <div className="mb-5 bg-white rounded-xl border border-slate-200/40 shadow-sm p-5 hover:shadow-md transition-all duration-200">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400/10 to-amber-600/10 flex items-center justify-center">
-                      <Icon name="fa-trophy" className="text-amber-500 text-sm" />
-                    </div>
-                    <div>
-                      <h3 className="text-xs font-bold text-petroleum uppercase tracking-wider">Nivel {level}</h3>
-                      <p className="text-[10px] text-slate-400">{xp} XP acumulados de {xpForNext} XP</p>
-                    </div>
-                  </div>
-                  <span className="text-2xl font-bold text-amber-500 font-montserrat tracking-tight">{Math.round(levelProgress)}%</span>
-                </div>
-                <div className="h-2 bg-slate-100 rounded-full overflow-hidden shadow-inner">
-                  <div className="h-full rounded-full bg-gradient-to-r from-amber-400 to-amber-500 transition-all duration-700 ease-out" style={{ width: `${Math.min(levelProgress, 100)}%` }} />
-                </div>
-                <div className="flex justify-between mt-2 text-[10px] font-medium text-slate-400">
-                  <span>{xp} XP</span>
-                  <span>Siguiente nivel: {xpForNext} XP</span>
-                </div>
-                <div className="border-t border-slate-100 mt-3 pt-3">
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-[9px] font-semibold text-slate-400 uppercase tracking-wider">Meta semanal</span>
-                    <span className="text-[10px] font-bold text-corporate">{weeklyXP.weekly}/{weeklyXP.weeklyTarget} XP</span>
-                  </div>
-                  <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                    <div className="h-full rounded-full bg-gradient-to-r from-corporate to-emerald-400 transition-all duration-700" style={{ width: `${weeklyXP.weeklyPct}%` }} />
-                  </div>
-                </div>
-              </div>
-
-              {/* Ritmo de Aprendizaje */}
-              <div className="mb-5 bg-white rounded-xl border border-slate-200/40 shadow-sm p-5 hover:shadow-md transition-all duration-200">
-                <SectionHeader title="Ritmo de Aprendizaje" iconColor="from-corporate to-petroleum" />
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-4">
-                  <div className="text-center p-3 rounded-xl bg-gradient-to-b from-corporate/5 to-transparent border border-corporate/10">
-                    <div className="text-xl font-bold text-corporate">{lessonsPerDay > 0 ? lessonsPerDay.toFixed(1) : '—'}</div>
-                    <p className="text-[9px] text-slate-400 mt-0.5 uppercase tracking-wider">Lecciones/día</p>
-                  </div>
-                  <div className="text-center p-3 rounded-xl bg-gradient-to-b from-petroleum/5 to-transparent border border-petroleum/10">
-                    <div className="text-xl font-bold text-petroleum">{daysActive}</div>
-                    <p className="text-[9px] text-slate-400 mt-0.5 uppercase tracking-wider">Días activo</p>
-                  </div>
-                  <div className="text-center p-3 rounded-xl bg-gradient-to-b from-emerald-500/5 to-transparent border border-emerald-500/10">
-                    <div className="text-xl font-bold text-emerald-600">{estimatedDaysRemaining > 0 && estimatedDaysRemaining < 999 ? estimatedDaysRemaining : '—'}</div>
-                    <p className="text-[9px] text-slate-400 mt-0.5 uppercase tracking-wider">{estimatedEndDate ? `≈ ${estimatedEndDate}` : 'Días restantes'}</p>
-                  </div>
-                  <div className="text-center p-3 rounded-xl bg-gradient-to-b from-amber-500/5 to-transparent border border-amber-500/10">
-                    <div className="text-xl font-bold text-amber-500">{Math.round((totalLessonsCompleted / Math.max(totalLessonsCount, 1)) * 100)}%</div>
-                    <p className="text-[9px] text-slate-400 mt-0.5 uppercase tracking-wider">Completado</p>
-                  </div>
-                </div>
-                <div className="h-2 bg-slate-100 rounded-full overflow-hidden shadow-inner">
-                  <div className="h-full rounded-full bg-gradient-to-r from-petroleum via-corporate to-emerald-400 transition-all duration-700 ease-out" style={{ width: `${Math.min((totalLessonsCompleted / Math.max(totalLessonsCount, 1)) * 100, 100)}%` }} />
-                </div>
-              </div>
-
-              {/* Badges section */}
-              {badges && badges.length > 0 && (
-                <div className="mb-5 bg-white rounded-xl border border-slate-200/40 shadow-sm p-5 hover:shadow-md transition-all duration-200">
-                  <SectionHeader title="Logros y Medallas" iconColor="from-amber-400 to-amber-500" />
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
-                    {badges.map(badgeId => {
-                      const info = BADGE_INFO?.[badgeId] || { icon: 'fa-star', label: badgeId, desc: '', color: '#94A3B8' };
-                      return (
-                        <div key={badgeId} className="group bg-gradient-to-br from-white to-slate-50 rounded-xl border border-slate-200/40 shadow-sm p-3 text-center hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-                          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400/10 to-amber-500/10 flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform duration-200">
-                            <Icon name={info.icon} className="text-sm" style={{ color: info.color }} />
-                          </div>
-                          <p className="text-[10px] font-bold text-slate-700 leading-tight">{info.label}</p>
-                          <p className="text-[8px] text-slate-400 mt-0.5">{info.desc}</p>
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  {/* Next badge preview */}
-                  {nextBadge && (
-                    <div className="mt-4 pt-3 border-t border-slate-100/80">
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-2">
-                          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center opacity-60 flex-shrink-0">
-                            <Icon name={nextBadge.icon} className="text-[10px] text-slate-500" />
-                          </div>
-                          <div>
-                            <p className="text-[10px] font-bold text-slate-500 leading-tight">Siguiente: {nextBadge.label}</p>
-                            <p className="text-[8px] text-slate-400">{nextBadge.desc}</p>
-                          </div>
-                        </div>
-                        <span className="text-[10px] font-bold text-slate-400">{nextBadge.current}/{nextBadge.target}</span>
-                      </div>
-                      <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                        <div className="h-full rounded-full bg-gradient-to-r from-slate-300 to-slate-400 transition-all duration-500" style={{ width: `${(nextBadge.current / nextBadge.target) * 100}%` }} />
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              <SectionHeader title="Puntaje por Módulo" />
-              <div className="mb-5 bg-white rounded-xl border border-slate-200/40 shadow-sm p-5 hover:shadow-md transition-all duration-200">
-                <div className="mb-4 h-24 sm:h-32">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={moduleScores} margin={{ top: 8, right: 8, bottom: 4, left: -16 }}>
-                      <XAxis dataKey="title" tick={{ fontSize: 9, fill: '#94A3B8' }} interval={0} angle={-20} textAnchor="end" height={20} />
-                      <YAxis domain={[0, 100]} hide />
-                      <Tooltip
-                        contentStyle={{ fontSize: 11, borderRadius: 8, border: '1px solid #E2E8F0', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}
-                        formatter={(value) => [`${Math.round(value)}%`]}
-                      />
-                      <Line type="monotone" dataKey="score" stroke="#004B63" strokeWidth={2} dot={{ r: 4, fill: '#004B63', stroke: '#fff', strokeWidth: 2 }} activeDot={{ r: 6 }} />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-                <div className="space-y-2.5">
-                  {moduleScores.map(mod => {
-                    const barColor = mod.score >= 80 ? 'from-emerald-500 to-emerald-400' : mod.score >= 60 ? 'from-amber-500 to-amber-400' : 'from-slate-400 to-slate-300';
-                    return (
-                      <div key={mod.id} className="flex items-center gap-3">
-                        <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center flex-shrink-0">
-                          <Icon name={mod.icon} className="text-[10px] text-petroleum" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between mb-0.5">
-                            <span className="text-[11px] font-semibold text-slate-700 truncate">{mod.title}</span>
-                            <div className="flex items-center gap-1.5 flex-shrink-0 ml-2">
-                              {mod.examScore > 0 && (
-                                <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-md border ${
-                                  mod.examScore >= 80 ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : 'bg-amber-50 text-amber-600 border-amber-200'
-                                }`}>E:{mod.examScore}%</span>
-                              )}
-                              {mod.challengeScore > 0 && (
-                                <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-md border ${
-                                  mod.challengeScore >= 80 ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : 'bg-amber-50 text-amber-600 border-amber-200'
-                                }`}>D:{mod.challengeScore}%</span>
-                              )}
-                              {mod.dominance && (
-                                <span className={`text-[8px] font-bold px-1.5 py-[1px] rounded-md border ${mod.dominance.bg} ${mod.dominance.color}`}>{mod.dominance.label}</span>
-                              )}
-                              <span className={`text-[10px] font-bold ${mod.score >= 80 ? 'text-emerald-600' : mod.score >= 60 ? 'text-amber-600' : 'text-slate-500'}`}>{Math.round(mod.score)}%</span>
-                            </div>
-                          </div>
-                          <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                            <div className={`h-full rounded-full bg-gradient-to-r ${barColor} transition-all duration-500`} style={{ width: `${Math.round(mod.score)}%` }} />
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Radar Comparativo */}
-              <div className="mb-5 bg-white rounded-xl border border-slate-200/40 shadow-sm p-5 hover:shadow-md transition-all duration-200">
-                <SectionHeader title="Rendimiento por Dimensión" />
-                <div className="h-56 sm:h-64">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <RadarChart data={(() => {
-                      return moduleScores.map(mod => {
-                        const modProgress = moduleProgress?.[mod.id];
-                        const viewed = modProgress?.viewedResources?.length || 0;
-                        const total = 8;
-                        const modLessons = lessonProgress?.[mod.id] || {};
-                        const completedLessons = Object.values(modLessons).filter(s => s === 'completed').length;
-                        const totalModLessons = ALL_LESSONS?.[mod.id]?.length || 1;
-                        return {
-                          module: mod.title.split(' ').slice(0, 2).join(' '),
-                          Examen: mod.examScore || 0,
-                          Desafío: mod.challengeScore || 0,
-                          Recursos: Math.min(100, Math.round(viewed / total * 100)),
-                          Lecciones: Math.min(100, Math.round(completedLessons / totalModLessons * 100)),
-                          Comunidad: completedModules.includes(mod.id) ? 100 : 0,
-                        };
-                      });
-                    })()} margin={{ top: 8, right: 16, bottom: 8, left: 16 }}>
-                      <PolarGrid grid={{ stroke: '#E2E8F0' }} />
-                      <PolarAngleAxis dataKey="module" tick={{ fontSize: 9, fill: '#64748B' }} />
-                      <PolarRadiusAxis angle={90} domain={[0, 100]} tick={{ fontSize: 8, fill: '#94A3B8' }} />
-                      {['Examen', 'Desafío', 'Recursos', 'Lecciones', 'Comunidad'].map((dim, i) => {
-                        const colors = ['#004B63', '#00BCD4', '#10B981', '#F59E0B', '#8B5CF6'];
-                        return (
-                          <Radar key={dim} name={dim} dataKey={dim} stroke={colors[i]} fill={colors[i]} fillOpacity={0.08} strokeWidth={1.5} />
-                        );
-                      })}
-                      <Legend wrapperStyle={{ fontSize: 9, paddingTop: 8 }} />
-                      <Tooltip contentStyle={{ fontSize: 11, borderRadius: 8, border: '1px solid #E2E8F0' }} />
-                    </RadarChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-
-              <div className="mt-5 bg-white rounded-xl border border-slate-200/40 shadow-sm p-5 hover:shadow-md transition-all duration-200">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
-                      <Icon name="fa-tachometer-alt" className="text-petroleum text-sm" />
-                    </div>
-                    <div>
-                      <h3 className="text-xs font-bold text-petroleum uppercase tracking-wider">Progreso Global</h3>
-                      <p className="text-[10px] text-slate-400">{totalVideos + totalInfographics + totalExams + totalChallenges + completedCount}/{totalItems} recursos completados</p>
-                    </div>
-                  </div>
-                  <span className="text-2xl font-bold text-petroleum font-montserrat tracking-tight">{Math.round(courseProgress || 0)}%</span>
-                </div>
-                <div className="h-3 bg-slate-100 rounded-full overflow-hidden shadow-inner">
-                  <div className="h-full rounded-full bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate transition-all duration-1000 ease-out shadow-sm" style={{ width: `${Math.min(courseProgress || 0, 100)}%` }} />
-                </div>
-                <div className="flex justify-between mt-3 pt-3 border-t border-slate-100 text-[10px] font-medium text-slate-400">
-                  <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-petroleum" />{completedCount}/5 módulos</span>
-                  <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-corporate" />{totalVideos}/{totalVideosTarget} videos</span>
-                  <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />{totalExams + totalChallenges}/10 eval.</span>
-                </div>
-              </div>
-
-              <div className="mt-4 flex items-center justify-end gap-2 px-1">
+              <div className="flex items-center justify-end gap-2 px-1">
                 <div className={`w-1.5 h-1.5 rounded-full ${syncStatus === 'synced' ? 'bg-emerald-500' : syncStatus === 'syncing' ? 'bg-amber-500 animate-pulse' : 'bg-slate-400'}`} />
                 <span className="text-[10px] font-medium text-slate-400">{syncStatus === 'synced' ? 'Datos sincronizados' : syncStatus === 'syncing' ? 'Sincronizando...' : syncStatus === 'offline' ? 'Modo offline' : 'Datos locales'}</span>
               </div>
@@ -1569,21 +1391,9 @@ const ActivityHistory = ({ isOpen, onClose }) => {
             </div>
           )}
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
-
-const SectionHeader = ({ title, iconColor = 'from-petroleum to-corporate' }) => (
-  <div className="flex items-center gap-2 mb-4 px-0.5">
-    <div className={`w-1 h-5 rounded-full bg-gradient-to-b ${iconColor}`} />
-    <p className="text-[10px] font-bold text-petroleum uppercase tracking-[0.15em]">{title}</p>
-    <div className="flex-1 h-px bg-gradient-to-r from-petroleum/20 to-transparent" />
-  </div>
-);
-
-const SectionLine = () => (
-  <div className="w-1 h-5 rounded-full bg-gradient-to-b from-petroleum to-corporate" />
-);
 
 export default ActivityHistory;

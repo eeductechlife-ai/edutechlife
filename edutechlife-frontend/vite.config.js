@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
+import { visualizer } from 'rollup-plugin-visualizer'
 import path from 'path'
 
 export default defineConfig({
@@ -10,14 +11,7 @@ export default defineConfig({
     include: ['src/**/*.{test,spec}.{js,jsx}'],
   },
   plugins: [
-    react({
-      // Optimizaciones de React para mejor performance
-      babel: {
-        plugins: [
-          ['@babel/plugin-transform-react-jsx', { runtime: 'automatic' }]
-        ]
-      }
-    }),
+    react(),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'offline.html'],
@@ -70,6 +64,12 @@ export default defineConfig({
           }
         ]
       }
+    }),
+    visualizer({
+      filename: 'bundle-stats.html',
+      open: false,
+      gzipSize: true,
+      brotliSize: true,
     })
   ],
   server: {
@@ -83,23 +83,15 @@ export default defineConfig({
   },
   build: {
     target: 'es2020',
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_debugger: true,
-        pure_funcs: ['console.log', 'console.info', 'console.debug']
-      },
-      mangle: {
-        safari10: true
-      }
-    },
+    minify: 'esbuild',
     rollupOptions: {
       external: ['@solana/web3.js'],
       output: {
         manualChunks: {
           'react-vendor': ['react', 'react-dom'],
           'ui-vendor': ['framer-motion', 'lucide-react', 'canvas-confetti'],
-          'utils-vendor': ['html2pdf.js', 'jspdf', 'xlsx', 'marked'],
+          'pdf-vendor': ['html2pdf.js', 'jspdf'],
+          'xlsx-vendor': ['xlsx'],
           'charts-vendor': ['recharts'],
           'design-system': ['./src/design-system'],
           'vak-feature': ['./src/features/vak-diagnosis']

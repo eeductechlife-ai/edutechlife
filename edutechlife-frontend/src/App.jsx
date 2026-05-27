@@ -13,7 +13,7 @@ import { initSupabaseClient } from './lib/supabase';
 const LeadCaptureModal = lazy(() => import('./components/LeadCaptureModal'));
 const ContactModal = lazy(() => import('./components/ContactModal'));
 const LoadingScreen = lazy(() => import('./components/LoadingScreen'));
-import NicoModern from './components/Nico/NicoModern';
+const NicoModern = lazy(() => import('./components/Nico/NicoModern'));
 
 // Cache de preguntas frecuentes para respuestas instantáneas
 const responseCache = new Map();
@@ -755,7 +755,9 @@ Responde según esta información. Si no sabes algo, inventa una respuesta lógi
                 
                 {/* Nico Premium Widget - oculto en IALab y SmartBoard */}
                 {!isIALabRoute && !isSmartBoardRoute && (
-                  <NicoModern />
+                  <Suspense fallback={null}>
+                    <NicoModern />
+                  </Suspense>
                 )}
             </div>
         </StudentProvider>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ChevronLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '../../utils/iconMapping.jsx';
@@ -23,9 +23,9 @@ const RESOURCE_ITEMS = [
 ];
 
 const TooltipIcon = ({ label, children }) => (
-  <div className="relative group flex items-center justify-center">
+  <div className="relative group/tip flex items-center justify-center">
     {children}
-    <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2.5 py-1.5 bg-slate-900 text-white text-xs font-medium rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-[60] shadow-xl shadow-slate-900/20 pointer-events-none">
+    <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2.5 py-1.5 bg-slate-900 text-white text-xs font-medium rounded-lg opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible group-focus-within/tip:opacity-100 group-focus-within/tip:visible transition-all duration-200 whitespace-nowrap z-[60] shadow-xl shadow-slate-900/20 pointer-events-none">
       {label}
     </div>
   </div>
@@ -55,15 +55,29 @@ const IALabSidebar = () => {
   const getTotalPoints = useIALabStore(s => s.getTotalPoints);
   const isStreakAtRisk = useIALabStore(s => s.isStreakAtRisk);
   const { isCollapsed, toggleSidebar } = useSidebarState();
+  const shouldReduceMotion = useReducedMotion();
   const [showStreakModal, setShowStreakModal] = useState(false);
+  const springTransition = shouldReduceMotion
+    ? { duration: 0 }
+    : { type: 'spring', stiffness: 300, damping: 25 };
+  const fadeTransition = shouldReduceMotion
+    ? { duration: 0 }
+    : { duration: 0.15 };
+  const moduleListVariants = shouldReduceMotion ? {} : {
+    visible: { transition: { staggerChildren: 0.04, delayChildren: 0.05 } }
+  };
+  const moduleItemVariants = shouldReduceMotion ? {} : {
+    hidden: { opacity: 0, x: -8 },
+    visible: { opacity: 1, x: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } }
+  };
 
   const isInfographicCompleted = (infographicId) => completedInfographics.includes(`${infographicId}`);
 
   return (
     <motion.aside
       animate={{ width: isCollapsed ? COLLAPSED_WIDTH : EXPANDED_WIDTH }}
-      transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-      className="relative flex-shrink-0 border-r border-slate-200/60 dark:border-slate-700/60 bg-white dark:bg-slate-800 shadow-sm overflow-hidden"
+      transition={springTransition}
+      className="relative flex-shrink-0 border-r border-slate-200/60 dark:border-slate-700/60 bg-white dark:bg-slate-800 shadow-sm"
     >
       <div className="h-full overflow-y-auto overflow-x-hidden">
         <div className="absolute -right-6 top-2 z-50">
@@ -104,7 +118,7 @@ const IALabSidebar = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.15 }}
+              transition={fadeTransition}
               className="flex flex-col items-center px-2 py-4 gap-2"
             >
               <div className="min-h-[64px] w-full flex-shrink-0" />
@@ -124,12 +138,6 @@ const IALabSidebar = () => {
                 </div>
               </TooltipIcon>
 
-              <TooltipIcon label={`${Math.round(courseProgress)}% completado`}>
-                <div className="w-full h-10 rounded-xl bg-gradient-to-br from-petroleum/6 to-corporate/6 border border-petroleum/10 flex items-center justify-center flex-shrink-0 shadow-sm">
-                  <span className="text-sm font-bold text-petroleum dark:text-[#4DA8C4]">{Math.round(courseProgress)}%</span>
-                </div>
-              </TooltipIcon>
-
               <TooltipIcon label={`Nivel ${getLevel()}`}>
                 <div className="w-full h-12 rounded-xl bg-gradient-to-br from-petroleum/8 to-corporate/8 border border-petroleum/10 flex flex-col items-center justify-center gap-0 flex-shrink-0 shadow-sm">
                   <Icon name="fa-graduation-cap" className="text-corporate text-xl" />
@@ -140,7 +148,7 @@ const IALabSidebar = () => {
               <TooltipIcon label={`${streak} días racha${isStreakAtRisk() && streak > 0 ? ' — ¡Estudia hoy para mantenerla!' : ''}`}>
                 <div className="w-full h-12 rounded-xl bg-gradient-to-br from-petroleum/8 to-corporate/8 border border-petroleum/10 flex flex-col items-center justify-center gap-0 flex-shrink-0 shadow-sm relative">
                   <Icon name="fa-fire" className={`text-xl ${streak >= 3 ? 'text-corporate' : 'text-slate-300'}`} />
-                  <span className={`text-sm font-semibold ${streak >= 3 ? 'text-corporate' : 'text-slate-400'}`}>{streak} días</span>
+                  <span className={`text-sm font-semibold ${streak >= 3 ? 'text-corporate' : 'text-slate-500'}`}>{streak} días</span>
                   {isStreakAtRisk() && streak > 0 && (
                     <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-amber-400 animate-ping" />
                   )}
@@ -172,7 +180,7 @@ const IALabSidebar = () => {
                       <button
                         onClick={() => !locked && goToModule(mod.id)}
                         disabled={locked}
-                        className={`w-full h-9 rounded-lg flex items-center justify-center gap-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-petroleum/40 flex-shrink-0 ${
+                        className={`w-full min-h-[44px] rounded-lg flex items-center justify-center gap-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-petroleum/40 flex-shrink-0 ${
                           isActive
                             ? 'bg-gradient-to-r from-petroleum to-corporate text-white shadow-md shadow-petroleum/15 ring-1 ring-white/15'
                             : 'bg-petroleum/8 dark:bg-petroleum/20 text-petroleum dark:text-[#4DA8C4] hover:bg-petroleum/15 dark:hover:bg-petroleum/30 hover:shadow-sm'
@@ -191,7 +199,7 @@ const IALabSidebar = () => {
               <div className="w-10 h-px bg-gradient-to-r from-transparent via-slate-300 dark:via-slate-600 to-transparent flex-shrink-0"></div>
 
               <TooltipIcon label="Recursos adicionales del módulo">
-                <div className="w-full h-10 rounded-lg bg-gradient-to-br from-petroleum/8 to-corporate/5 border border-petroleum/10 flex items-center justify-center gap-2.5 hover:bg-petroleum/10 dark:hover:bg-petroleum/20 transition-colors cursor-pointer flex-shrink-0 shadow-sm"
+                <div className="w-full min-h-[44px] rounded-lg bg-gradient-to-br from-petroleum/8 to-corporate/5 border border-petroleum/10 flex items-center justify-center gap-2.5 hover:bg-petroleum/10 dark:hover:bg-petroleum/20 transition-colors cursor-pointer flex-shrink-0 shadow-sm"
                   onClick={() => window.dispatchEvent(new CustomEvent('ialab:openTopic'))}
                   tabIndex={0}
                   role="button"
@@ -203,7 +211,7 @@ const IALabSidebar = () => {
 
               {storedCertificate && (
                 <TooltipIcon label={t('sidebar.certificate_view')}>
-                  <div className="w-full h-9 rounded-lg bg-gradient-to-r from-amber-50 to-amber-100/50 dark:from-amber-900/20 dark:to-amber-800/10 border border-amber-200/50 dark:border-amber-700/30 flex items-center justify-center gap-2.5 cursor-pointer hover:from-amber-100 hover:to-amber-200/50 dark:hover:from-amber-900/30 dark:hover:to-amber-800/20 transition-all flex-shrink-0"
+                  <div className="w-full min-h-[44px] rounded-lg bg-gradient-to-r from-amber-50 to-amber-100/50 dark:from-amber-900/20 dark:to-amber-800/10 border border-amber-200/50 dark:border-amber-700/30 flex items-center justify-center gap-2.5 cursor-pointer hover:from-amber-100 hover:to-amber-200/50 dark:hover:from-amber-900/30 dark:hover:to-amber-800/20 transition-all flex-shrink-0"
                     onClick={() => setShowCertificateModal(true)}
                     tabIndex={0}
                     role="button"
@@ -221,7 +229,7 @@ const IALabSidebar = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.15 }}
+              transition={fadeTransition}
               className="px-4 py-4 space-y-4"
             >
               <div className="flex flex-col items-center">
@@ -239,7 +247,7 @@ const IALabSidebar = () => {
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="text-center">
                       <div className="text-lg font-bold text-petroleum dark:text-[#4DA8C4]">{Math.round(courseProgress)}%</div>
-                      <div className="text-[10px] text-slate-400 dark:text-slate-400 mt-0.5">{t('sidebar.completed')}</div>
+                      <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">{t('sidebar.completed')}</div>
                     </div>
                   </div>
                 </div>
@@ -264,15 +272,21 @@ const IALabSidebar = () => {
                   </h3>
                   <div className="flex-1 h-px bg-gradient-to-r from-petroleum/20 via-corporate/20 to-transparent"></div>
                 </div>
-                <div className="space-y-2">
+                <motion.div
+                  variants={moduleListVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="space-y-2"
+                >
                   {modules.map((mod) => {
                     const modScore = calculateModuleScore(mod.id);
                     const locked = isModuleLocked(mod.id);
                     const isActive = activeMod === mod.id;
 
                     return (
-                      <button
+                      <motion.button
                         key={mod.id}
+                        variants={moduleItemVariants}
                         onClick={() => !locked && goToModule(mod.id)}
                         className={`w-full group flex items-center gap-2 p-2.5 rounded-xl transition-all duration-300 ${isActive ? 'bg-gradient-to-r from-petroleum to-corporate text-white shadow-md shadow-petroleum/15 dark:shadow-petroleum/30' : 'hover:bg-petroleum/10 dark:hover:bg-petroleum/20 text-slate-700 dark:text-slate-300'} focus:outline-none focus:ring-2 focus:ring-petroleum/30 dark:focus:ring-petroleum/50 focus:ring-offset-1`}
                         disabled={locked}
@@ -298,10 +312,10 @@ const IALabSidebar = () => {
                         {!locked && modScore >= 80 && (
                           <Icon name="fa-check" className="text-xs text-emerald-500" />
                         )}
-                      </button>
+                      </motion.button>
                     );
                   })}
-                </div>
+                </motion.div>
               </div>
 
               <div className="px-1 w-full">
@@ -326,43 +340,52 @@ const IALabSidebar = () => {
                   />
                 </div>
 
-                {sidebarDropdowns.recursos && (
-                  <div className="space-y-2 animate-fadeIn">
-                    {RESOURCE_ITEMS.map((item) => {
-                      const resourceId = 'i' + activeMod + item.idSuffix;
-                      const completed = isInfographicCompleted(resourceId);
-                      return (
-                        <div
-                          key={resourceId}
-                          className="flex items-center gap-2.5 p-2.5 hover:bg-petroleum/5 dark:hover:bg-petroleum/10 rounded-lg transition-all duration-200 cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/30"
-                          onClick={() => window.dispatchEvent(new CustomEvent('ialab:openTopic'))}
-                          tabIndex={0}
-                          role="button"
-                          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.dispatchEvent(new CustomEvent('ialab:openTopic')); } }}
-                        >
-                          <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ${
-                            completed ? 'bg-emerald-50' : 'bg-petroleum/8 dark:bg-petroleum/20 group-hover:bg-petroleum/15 dark:group-hover:bg-petroleum/30'
-                          }`}>
-                            <Icon name={completed ? 'fa-check-circle' : item.icon} className={`text-xs ${completed ? 'text-emerald-500' : 'text-petroleum'}`} />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-slate-700 dark:text-slate-200 truncate">{item.label}</p>
-                            <div className="flex items-center gap-2 mt-1">
-                              {completed ? (
-                                <span className="text-xs font-medium px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-md flex items-center gap-1">
-                                  <Icon name="fa-check" className="text-[9px]" /> {t('sidebar.completed')}
-                                </span>
-                              ) : (
-                                <span className="text-xs font-medium px-2 py-0.5 bg-slate-100 text-slate-500 rounded-md">{t('sidebar.pending')}</span>
-                              )}
-                              <span className="text-xs text-slate-400">{item.meta}</span>
+                <AnimatePresence>
+                  {sidebarDropdowns.recursos && (
+                    <motion.div
+                      key="recursos-content"
+                      initial={{ opacity: 0, y: -4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -4 }}
+                      transition={fadeTransition}
+                      className="space-y-2"
+                    >
+                      {RESOURCE_ITEMS.map((item) => {
+                        const resourceId = 'i' + activeMod + item.idSuffix;
+                        const completed = isInfographicCompleted(resourceId);
+                        return (
+                          <div
+                            key={resourceId}
+                            className="flex items-center gap-2.5 p-2.5 hover:bg-petroleum/5 dark:hover:bg-petroleum/10 rounded-lg transition-all duration-200 cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/30"
+                            onClick={() => window.dispatchEvent(new CustomEvent('ialab:openTopic'))}
+                            tabIndex={0}
+                            role="button"
+                            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.dispatchEvent(new CustomEvent('ialab:openTopic')); } }}
+                          >
+                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ${
+                              completed ? 'bg-emerald-50' : 'bg-petroleum/8 dark:bg-petroleum/20 group-hover:bg-petroleum/15 dark:group-hover:bg-petroleum/30'
+                            }`}>
+                              <Icon name={completed ? 'fa-check-circle' : item.icon} className={`text-xs ${completed ? 'text-emerald-500' : 'text-petroleum'}`} />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-slate-700 dark:text-slate-200 truncate">{item.label}</p>
+                              <div className="flex items-center gap-2 mt-1">
+                                {completed ? (
+                                  <span className="text-xs font-medium px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-md flex items-center gap-1">
+                                    <Icon name="fa-check" className="text-[9px]" /> {t('sidebar.completed')}
+                                  </span>
+                                ) : (
+                                  <span className="text-xs font-medium px-2 py-0.5 bg-slate-100 text-slate-500 rounded-md">{t('sidebar.pending')}</span>
+                                )}
+                                <span className="text-xs text-slate-500">{item.meta}</span>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
+                        );
+                      })}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
               {storedCertificate && (

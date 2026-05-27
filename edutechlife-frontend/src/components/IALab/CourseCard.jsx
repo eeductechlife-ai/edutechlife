@@ -1,20 +1,23 @@
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { statusConfig } from './data/landingPageData';
 import { fadeInUp } from './constants/landingAnimations';
+import ErrorBoundary from '../../components/forum/ErrorBoundary';
 
 const CourseCard = ({ course, isSignedIn }) => {
   const navigate = useNavigate();
+  const shouldReduceMotion = useReducedMotion();
   const config = statusConfig[course.status];
   const fullStars = Math.floor(course.rating);
 
   return (
+    <ErrorBoundary>
     <motion.div
       variants={fadeInUp}
-      className="group relative bg-white border border-petroleum/10 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-full flex flex-col"
-      whileHover={{ y: -6, scale: 1.015 }}
-      whileTap={{ scale: 0.98 }}
+      className="group relative bg-white border border-petroleum/10 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-fit"
+      whileHover={shouldReduceMotion ? {} : { y: -6, scale: 1.015 }}
+      whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
     >
       <motion.div
@@ -34,7 +37,7 @@ const CourseCard = ({ course, isSignedIn }) => {
           <motion.div
             className="absolute top-4 right-10 w-24 h-24 rounded-full blur-3xl"
             style={{ background: 'rgba(0,188,212,0.3)' }}
-            animate={{ x: [0, 15, 0], y: [0, -15, 0] }}
+            animate={shouldReduceMotion ? {} : { x: [0, 15, 0], y: [0, -15, 0] }}
             transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
           />
         </div>
@@ -52,7 +55,7 @@ const CourseCard = ({ course, isSignedIn }) => {
         <div className="relative z-10">
           <motion.div
             className="w-11 h-11 mb-2.5 bg-white/15 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/20"
-            whileHover={{ scale: 1.15, rotate: 10 }}
+            whileHover={shouldReduceMotion ? {} : { scale: 1.15, rotate: 10 }}
             transition={{ type: 'spring', stiffness: 400, damping: 10 }}
           >
             <Icon name={course.icon} className="w-5 h-5 text-white" />
@@ -126,17 +129,20 @@ const CourseCard = ({ course, isSignedIn }) => {
         )}
 
         <motion.button
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.97 }}
+          whileHover={shouldReduceMotion ? {} : { scale: 1.03 }}
+          whileTap={shouldReduceMotion ? {} : { scale: 0.97 }}
           onClick={() => isSignedIn ? navigate(course.route) : navigate('/login?returnTo=/ialab')}
           className={`w-full py-3 text-sm font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2.5 relative overflow-hidden mt-auto ${config.buttonClass}`}
         >
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent"
-            animate={{ x: ['-100%', '200%'] }}
-            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          />
+          {!shouldReduceMotion && (
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent"
+              animate={{ x: ['-100%', '200%'] }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            />
+          )}
           <span className="relative">{config.buttonText(isSignedIn)}</span>
+          {!shouldReduceMotion && (
           <motion.span
             className="relative"
             animate={{ x: [0, 3, 0] }}
@@ -144,9 +150,16 @@ const CourseCard = ({ course, isSignedIn }) => {
           >
             <Icon name="fa-arrow-right" className="w-4 h-4" />
           </motion.span>
+          )}
+          {shouldReduceMotion && (
+            <span className="relative">
+              <Icon name="fa-arrow-right" className="w-4 h-4" />
+            </span>
+          )}
         </motion.button>
       </div>
     </motion.div>
+    </ErrorBoundary>
   );
 };
 

@@ -48,6 +48,8 @@ import { useTheme } from '../../context/ThemeContext';
 import { useTranslation } from '../../i18n/I18nProvider';
 import SettingsSupportModal from '../modals/SettingsSupportModal';
 import { useSessionTracker } from '../../hooks/useSessionTracker';
+import AchievementToast from './AchievementToast';
+import { useAchievementNotifications } from '../../hooks/useAchievementNotifications';
 
 
 const Forum = lazy(preloadForum);
@@ -109,6 +111,7 @@ const IALabContent = () => {
     const setShowBadgeGallery = useIALabStore(s => s.setShowBadgeGallery);
     const showLeaderboard = useIALabStore(s => s.showLeaderboard);
     const setShowLeaderboard = useIALabStore(s => s.setShowLeaderboard);
+    const { toasts: achievementToasts, removeToast: removeAchievementToast } = useAchievementNotifications(useIALabStore);
     const { completedModules, courseProgress, activeMod, setActiveMod, completedExams, challengeScores, moduleProgress, modules } = useIALabProgressContext();
     const { isDarkMode, toggleDarkMode } = useTheme();
     const [showExamModal, setShowExamModal] = useState(false);
@@ -642,6 +645,7 @@ const IALabContent = () => {
                     </div>
                 )}
 
+                <AchievementToast toasts={achievementToasts} removeToast={removeAchievementToast} />
 
         </div>
     );

@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
@@ -9,6 +9,16 @@ const TOTAL_MODULES = 5;
 const CourseCompletionSection = ({ hasCertificate, courseProgress, onViewCertificate }) => {
   const prefersReducedMotion = useReducedMotion();
   const { t } = useTranslation();
+  const [showContent, setShowContent] = useState(prefersReducedMotion);
+
+  useEffect(() => {
+    if (prefersReducedMotion) {
+      setShowContent(true);
+      return;
+    }
+    const timer = setTimeout(() => setShowContent(true), 600);
+    return () => clearTimeout(timer);
+  }, [prefersReducedMotion]);
 
   if (!hasCertificate) {
     return null;
@@ -21,12 +31,56 @@ const CourseCompletionSection = ({ hasCertificate, courseProgress, onViewCertifi
   ];
 
   return (
-    <div className="px-1 w-full">
+    <motion.div
+      initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: 'easeOut' }}
+      className="px-1 w-full"
+    >
       <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-petroleum via-petroleum-dark to-corporate p-5 shadow-lg">
         {/* Decoración */}
         <div className="absolute top-0 right-0 w-20 h-20 bg-white/5 rounded-full -translate-y-6 translate-x-6" />
         <div className="absolute bottom-0 left-0 w-16 h-16 bg-white/5 rounded-full translate-y-4 -translate-x-4" />
         
+        {/* Progress Bar */}
+        <div className="mb-4">
+          <div className="flex justify-between text-[10px] text-white/70 mb-1.5">
+            <span>{t('course_completion.progress')}</span>
+            <span>{Math.round(courseProgress)}%</span>
+          </div>
+          <div className="h-2 bg-white/15 rounded-full overflow-hidden">
+            <motion.div
+              initial={{ width: '0%' }}
+              animate={{ width: `${Math.min(courseProgress, 100)}%` }}
+              transition={{ duration: 0.8, delay: 0.3, ease: 'easeOut' }}
+              className="h-full bg-gradient-to-r from-[#FFD166] to-corporate rounded-full"
+            />
+          </div>
+        </div>
+
+        {/* Particle burst on 100% */}
+        {showContent && !prefersReducedMotion && courseProgress >= 100 && (
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 1, x: 80, y: 60, scale: 0 }}
+                animate={{
+                  opacity: 0,
+                  x: 80 + Math.cos(i * 0.8) * 60,
+                  y: 60 + Math.sin(i * 0.8) * 60,
+                  scale: [0, 1.2, 0],
+                }}
+                transition={{ duration: 0.8 + i * 0.1, delay: 0.5, ease: 'easeOut' }}
+                className="absolute w-2 h-2 rounded-full"
+                style={{
+                  backgroundColor: ['#FFD166', '#00BCD4', '#10B981', '#F59E0B', '#EC4899', '#8B5CF6', '#EF4444', '#2563EB'][i],
+                }}
+              />
+            ))}
+          </div>
+        )}
+
         {/* Icono de celebración animado */}
         <motion.div
           initial={prefersReducedMotion ? {} : { scale: 0, rotate: -180 }}
@@ -71,7 +125,7 @@ const CourseCompletionSection = ({ hasCertificate, courseProgress, onViewCertifi
           </motion.button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
