@@ -5,6 +5,7 @@ import { useIALabStore } from '../../store/ialabStore';
 import useBodyScrollLock from '../../hooks/useBodyScrollLock';
 import useFocusTrap from '../../hooks/useFocusTrap';
 import { useStudyNotesSync } from '../../hooks/IALab/useStudyNotesSync';
+import { useActivityCalendar } from '../../hooks/useActivityCalendar';
 
 // PDF helpers (jsPDF A4 portrait)
 const PW = 210, PH = 297, ML = 14, MR = 14, MT = 22, MB = 14;
@@ -115,6 +116,19 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
   const textareaRef = useRef(null);
   const dayTextareaRef = useRef(null);
   const calendar = buildCalendar();
+  const [calMonth, setCalMonth] = useState(() => new Date().getMonth());
+  const [calYear, setCalYear] = useState(() => new Date().getFullYear());
+  const monthlyCalendar = useActivityCalendar(calYear, calMonth);
+
+  const goToPrevMonth = () => {
+    if (calMonth === 0) { setCalYear(y => y - 1); setCalMonth(11); }
+    else setCalMonth(m => m - 1);
+  };
+
+  const goToNextMonth = () => {
+    if (calMonth === 11) { setCalYear(y => y + 1); setCalMonth(0); }
+    else setCalMonth(m => m + 1);
+  };
   const focusTrapRef = useFocusTrap(isOpen);
   const { syncModuleNote, syncDayNote, isConnected } = useStudyNotesSync();
 
@@ -248,10 +262,7 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-700">
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1">
-              <Icon name="fa-book" className="text-petroleum text-sm" />
-              <Icon name="fa-calendar" className="text-petroleum text-sm" />
-            </div>
+            <Icon name="fa-calendar" className="text-petroleum text-sm" />
             <h2 className="text-sm font-bold text-petroleum">Plan de Estudio</h2>
           </div>
           <div className="flex items-center gap-1">
@@ -266,9 +277,9 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
 
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-5">
-          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
+          <div className="flex flex-col gap-5">
             {/* Left: Notes */}
-            <div className="flex-1 min-w-0">
+            <div className="">
               <div className="flex items-center gap-1.5 mb-3 overflow-x-auto pb-1">
                 {(modules || []).map(mod => (
                   <button
@@ -297,16 +308,20 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
                 value={text}
                 onChange={(e) => handleChange(e.target.value)}
                 placeholder="Escribe tus notas, ideas o preguntas sobre este módulo..."
-                className="w-full h-[6.8rem] sm:h-[120px] p-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50 text-xs text-slate-700 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 resize-none focus:outline-none focus:ring-2 focus:ring-petroleum/40 focus:border-petroleum/50 transition-all duration-200"
+                className="w-full h-[8.5rem] p-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50 text-xs text-slate-700 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 resize-none focus:outline-none focus:ring-2 focus:ring-petroleum/40 focus:border-petroleum/50 transition-all duration-200"
                 aria-label="Notas del módulo"
               />
             </div>
 
             {/* Right: Calendar */}
-            <div className="w-full sm:w-56 sm:min-w-[200px]">
+            <div className="">
               <div className="bg-slate-50 dark:bg-slate-900/30 rounded-xl p-3 border border-slate-100 dark:border-slate-700">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-bold text-petroleum dark:text-petroleum">{calendar.label}</span>
+                  <div className="flex items-center gap-1">
+                    <button onClick={goToPrevMonth} className="w-6 h-6 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 flex items-center justify-center text-[10px] text-slate-600 dark:text-slate-300 transition-all">‹</button>
+                    <span className="text-xs font-bold text-petroleum dark:text-petroleum w-28 text-center">{calendar.label}</span>
+                    <button onClick={goToNextMonth} className="w-6 h-6 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 flex items-center justify-center text-[10px] text-slate-600 dark:text-slate-300 transition-all">›</button>
+                  </div>
                   <span className="text-[10px] text-amber-500 font-semibold">🔥 {streak}d</span>
                 </div>
                 <div className="grid grid-cols-7 gap-0.5 text-center">
@@ -337,9 +352,10 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
                     );
                   })}
                 </div>
-                <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-100 dark:border-slate-700">
-                  <span className="text-[9px] text-slate-500 dark:text-slate-400">Días pasados</span>
-                  <span className="text-[9px] text-amber-500 font-semibold">{streak} días seguidos</span>
+                <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-100 dark:border-slate-700 text-[10px] text-slate-500">
+                  <span>{monthlyCalendar.totalActive} días activos</span>
+                  <span>{monthlyCalendar.totalSessions} sesiones</span>
+                  <span className="text-amber-500 font-semibold">🔥 {streak}d</span>
                 </div>
               </div>
 
