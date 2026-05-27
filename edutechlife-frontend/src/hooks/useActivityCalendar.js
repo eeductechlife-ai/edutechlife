@@ -1,16 +1,26 @@
 import { useMemo } from 'react';
 
-export function useActivityCalendar(calendarYear) {
+export function useActivityCalendar(calendarYear, month) {
   return useMemo(() => {
     const sessions = JSON.parse(localStorage.getItem('ialab_session_log') || '[]');
     const map = {};
-    sessions.forEach(s => {
+    const filteredSessions = month !== undefined
+      ? sessions.filter(s => {
+          const d = new Date(s.completed_at);
+          return d.getFullYear() === calendarYear && d.getMonth() === month;
+        })
+      : sessions;
+    filteredSessions.forEach(s => {
       const d = new Date(s.completed_at).toDateString();
       map[d] = (map[d] || 0) + (s.duration_seconds || 0);
     });
     const weeks = [];
-    const startDate = new Date(calendarYear, 0, 1);
-    const endDate = new Date(calendarYear, 11, 31);
+    const startDate = month !== undefined
+      ? new Date(calendarYear, month, 1)
+      : new Date(calendarYear, 0, 1);
+    const endDate = month !== undefined
+      ? new Date(calendarYear, month + 1, 0)
+      : new Date(calendarYear, 11, 31);
     let cursor = new Date(startDate);
     while (cursor <= endDate) {
       const week = [];
@@ -30,5 +40,5 @@ export function useActivityCalendar(calendarYear) {
       return streak;
     })();
     return { weeks, totalActive, currentStreak, totalSessions: sessions.length };
-  }, [calendarYear]);
+  }, [calendarYear, month]);
 }
