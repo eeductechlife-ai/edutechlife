@@ -40,6 +40,7 @@ export const createPersistenceSlice = (set, get) => ({
       streak: Math.max(localGamification.streak, remoteGamification.streak || 0),
       lastActivityDate: [localGamification.lastActivityDate, remoteGamification.lastActivityDate].filter(Boolean).sort().pop() || null,
       badges: [...new Set([...(localGamification.badges || []), ...(remoteGamification.badges || [])])],
+      badgesDates: { ...(remoteGamification.badgesDates || {}), ...(localGamification.badgesDates || {}) },
       lessonProgress: { ...(remoteGamification.lessonProgress || {}), ...(localGamification.lessonProgress || {}) },
       checkpointAnswers: { ...(remoteGamification.checkpointAnswers || {}), ...(localGamification.checkpointAnswers || {}) },
       forumPostCount: Math.max(localGamification.forumPostCount || 0, remoteGamification.forumPostCount || 0),
@@ -64,6 +65,7 @@ export const createPersistenceSlice = (set, get) => ({
       streak: mergedGamification.streak,
       lastActivityDate: mergedGamification.lastActivityDate,
       badges: mergedGamification.badges,
+      badgesDates: mergedGamification.badgesDates,
       checkpointAnswers: mergedGamification.checkpointAnswers,
       forumPostCount: mergedGamification.forumPostCount,
       forumCommentCount: mergedGamification.forumCommentCount,
@@ -126,6 +128,7 @@ export const createPersistenceSlice = (set, get) => ({
     ls.set(LS_KEYS.STREAK, state.streak);
     ls.set(LS_KEYS.LAST_ACTIVITY_DATE, state.lastActivityDate);
     ls.set(LS_KEYS.BADGES, state.badges);
+    ls.set(LS_KEYS.BADGES_DATES, state.badgesDates);
     ls.set(LS_KEYS.CHECKPOINT_ANSWERS, state.checkpointAnswers);
     ls.set(LS_KEYS.FORUM_POST_COUNT, state.forumPostCount);
     ls.set(LS_KEYS.FORUM_COMMENT_COUNT, state.forumCommentCount);
@@ -138,11 +141,12 @@ export const createPersistenceSlice = (set, get) => ({
     const streak = ls.get(LS_KEYS.STREAK, 0);
     const lastActivityDate = ls.get(LS_KEYS.LAST_ACTIVITY_DATE, null);
     const badges = ls.get(LS_KEYS.BADGES, []);
+    const badgesDates = ls.get(LS_KEYS.BADGES_DATES, {});
     const checkpointAnswers = ls.get(LS_KEYS.CHECKPOINT_ANSWERS, {});
     const forumPostCount = ls.get(LS_KEYS.FORUM_POST_COUNT, 0);
     const forumCommentCount = ls.get(LS_KEYS.FORUM_COMMENT_COUNT, 0);
     const startDate = ls.get(LS_KEYS.START_DATE, null);
-    return { lessonProgress, xp, streak, lastActivityDate, badges, checkpointAnswers, forumPostCount, forumCommentCount, startDate };
+    return { lessonProgress, xp, streak, lastActivityDate, badges, badgesDates, checkpointAnswers, forumPostCount, forumCommentCount, startDate };
   },
 
   // ==================== LÍMITE DE INTENTOS ====================

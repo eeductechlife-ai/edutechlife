@@ -1,4 +1,7 @@
+import { encryptData, decryptData } from './crypto';
+
 const STORAGE_KEY = 'edutechlife_leads';
+const USER_ID_KEY = 'ialab_user_id';
 
 export const LEAD_STATUS = {
   NUEVO: 'nuevo',
@@ -70,17 +73,18 @@ export const shouldPromptForLead = (messageCount, hasInterest, hasLeadData) => {
   return hasInterest;
 };
 
-export const saveLead = (leadData) => {
+export const saveLead = async (leadData) => {
   try {
+    const userId = localStorage.getItem(USER_ID_KEY) || 'anonymous';
     const now = new Date();
     const lead = {
       id: `lead_${Date.now()}`,
       fecha: now.toLocaleDateString('es-CO'),
       hora: now.toLocaleTimeString('es-CO'),
       fechaCompleta: now.toISOString(),
-      nombre: leadData.nombre || '',
-      email: leadData.email || '',
-      telefono: leadData.telefono || '',
+      nombre: await encryptData(leadData.nombre || '', userId),
+      email: await encryptData(leadData.email || '', userId),
+      telefono: await encryptData(leadData.telefono || '', userId),
       interes: leadData.interes || LEAD_INTEREST.GENERAL,
       tema: leadData.tema || '',
       estado: LEAD_STATUS.NUEVO,
@@ -172,6 +176,23 @@ export const getLeads = () => {
     return existingData ? JSON.parse(existingData) : [];
   } catch (error) {
     console.error('[LEAD] Error al obtener leads:', error);
+    return [];
+  }
+};
+
+export const getLeadsDecrypted = async () => {
+  try {
+    const userId = localStorage.getItem(USER_ID_KEY) || 'anonymous';
+    const existingData = localStorage.getItem(STORAGE_KEY);
+    const leads = existingData ? JSON.parse(existingData) : [];
+    return Promise.all(leads.map(async (lead) => ({
+      ...lead,
+      nombre: await decryptData(lead.nombre, userId),
+      email: await decryptData(lead.email, userId),
+      telefono: await decryptData(lead.telefono, userId),
+    })));
+  } catch (error) {
+    console.error('[LEAD] Error al obtener leads descifrados:', error);
     return [];
   }
 };

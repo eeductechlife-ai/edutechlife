@@ -684,7 +684,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                              <ul className="list-disc pl-4 mt-1 space-y-1">
                                  <li>El sistema ha cambiado automáticamente al modo local</li>
                                  <li>Puedes continuar usando todas las funciones básicas</li>
-                                 <li>Para usar DeepSeek AI, configura VITE_DEEPSEEK_API_KEY en tu archivo .env</li>
+                                  <li>Para usar DeepSeek AI, verifica que el servidor backend esté ejecutándose</li>
                              </ul>
                          </div>
                      </div>

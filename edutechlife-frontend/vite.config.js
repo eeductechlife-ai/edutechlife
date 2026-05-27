@@ -20,7 +20,7 @@ export default defineConfig({
     }),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'manifest.json', 'offline.html'],
+      includeAssets: ['favicon.svg', 'offline.html'],
       manifest: {
         name: 'Edutechlife',
         short_name: 'Edutechlife',
@@ -32,13 +32,16 @@ export default defineConfig({
         orientation: 'portrait-primary',
         lang: 'es',
         icons: [
+          { src: '/pwa-192x192.png', type: 'image/png', sizes: '192x192' },
+          { src: '/pwa-512x512.png', type: 'image/png', sizes: '512x512' },
+          { src: '/pwa-512x512.png', type: 'image/png', sizes: '512x512', purpose: 'maskable' },
           { src: '/favicon.svg', type: 'image/svg+xml', sizes: 'any' }
         ]
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,webp}'],
         maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
-        navigateFallback: '/index.html',
+        navigateFallback: '/offline.html',
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -124,11 +127,7 @@ export default defineConfig({
     ],
     exclude: ['lottie-web', '@solana/web3.js']
   },
-  esbuild: {
-    loader: 'jsx',
-    include: /src\/.*\.jsx?$/,
-    exclude: [],
-  },
+
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

@@ -85,13 +85,12 @@ export const useIALabSynthesizer = () => {
                 setLoadMsg('Conectando con DeepSeek API...');
                 
                 try {
-                    const apiKey = import.meta.env.VITE_DEEPSEEK_API_KEY || '';
+                    const apiBase = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'http://localhost:3001';
                     
-                    const response = await fetch('https://api.deepseek.com/chat/completions', {
+                    const response = await fetch(`${apiBase}/api/chat`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${apiKey}`
                         },
                         body: JSON.stringify({
                             model: 'deepseek-chat',
@@ -109,7 +108,7 @@ export const useIALabSynthesizer = () => {
                             ],
                             temperature: 0.7,
                             max_tokens: 1000,
-                            response_format: { type: "json_object" }
+                            isJson: true
                         }),
                         signal: controller.signal
                     });
@@ -121,12 +120,12 @@ export const useIALabSynthesizer = () => {
                     
                     const data = await response.json();
                     
-                    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+                    if (!data.result) {
                         console.error('❌ Estructura de respuesta inválida:', data);
                         throw new Error('Respuesta de API inválida');
                     }
                     
-                    const result = JSON.parse(data.choices[0].message.content);
+                    const result = JSON.parse(data.result);
                     setDeepSeekResult(result);
                     return result;
                     
@@ -488,11 +487,11 @@ export const useIALabSynthesizer = () => {
             setLoadMsg('Conectando con DeepSeek API...');
             
             try {
-                const response = await fetch('https://api.deepseek.com/chat/completions', {
+                const apiBase = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'http://localhost:3001';
+                const response = await fetch(`${apiBase}/api/chat`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${import.meta.env.VITE_DEEPSEEK_API_KEY || ''}`
                     },
                     body: JSON.stringify({
                         model: 'deepseek-chat',
@@ -510,7 +509,7 @@ export const useIALabSynthesizer = () => {
                         ],
                         temperature: 0.7,
                         max_tokens: 1000,
-                        response_format: { type: "json_object" }
+                        isJson: true
                     }),
                     signal: controller.signal
                 });
@@ -522,18 +521,18 @@ export const useIALabSynthesizer = () => {
                 
                 const data = await response.json();
                 
-                if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+                if (!data.result) {
                     throw new Error('Respuesta de API inválida');
                 }
                 
-                const result = JSON.parse(data.choices[0].message.content);
+                const result = JSON.parse(data.result);
                 setDeepSeekResult(result);
                 return result;
                 
             } catch (error) {
                 if (error.name === 'AbortError') return null;
                 console.error('DeepSeek API Error:', error);
-                setApiError(`Error con DeepSeek API: ${error.message}. Verifica que la API key esté configurada en VITE_DEEPSEEK_API_KEY`);
+                setApiError(`Error con DeepSeek API: ${error.message}. Verifica que el servidor backend esté ejecutándose.`);
                 return null;
             } finally {
                 setIsGenerating(false);

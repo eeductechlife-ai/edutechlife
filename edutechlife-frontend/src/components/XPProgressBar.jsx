@@ -1,25 +1,14 @@
 import React, { useEffect, useState, memo, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, Zap, Flame, Star, Target, Award } from 'lucide-react';
+import { useIALabStore } from '../store/ialabStore';
 
-const levelThresholds = [
-  0, 100, 250, 450, 700, 1000, 1350, 1750, 2200, 2700,
-  3250, 3850, 4500, 5200, 5950, 6750, 7600, 8500, 9450, 10450
-];
+const levelThresholds = Array.from({ length: 100 }, (_, i) => i * i * 100);
 
 const levelTitles = [
   'Novato', 'Aprendiz', 'Estudiante', 'Avanzado', 'Experto',
   'Maestro', 'Sabio', 'Genio', 'Prodigio', 'Leyenda',
   'Ícono', 'Mito', 'Deidad', 'Cosmos', 'Infinito'
-];
-
-const achievements = [
-  { id: 1, name: 'Primeros Pasos', icon: Star, completed: true, xp: 50 },
-  { id: 2, name: 'Racha de 7 días', icon: Flame, completed: true, xp: 100 },
-  { id: 3, name: 'Master en Matemáticas', icon: Trophy, completed: true, xp: 200 },
-  { id: 4, name: 'Lab IA Completado', icon: Zap, completed: false, xp: 150 },
-  { id: 5, name: 'Racha de 30 días', icon: Flame, completed: false, xp: 300 },
-  { id: 6, name: 'Todas las Misiones', icon: Target, completed: false, xp: 500 },
 ];
 
 const LevelUpCelebration = memo(({ level, xpForNextLevel, xpInCurrentLevel, onClose }) => {
@@ -137,16 +126,42 @@ const AchievementCard = memo(({ achievement }) => {
 
 AchievementCard.displayName = 'AchievementCard';
 
-const XPProgressBar = memo(({ currentXP = 1250, level = 8, streak = 14 }) => {
+const XPProgressBar = memo(({ currentXP, level, streak }) => {
+  const storeXp = useIALabStore(s => s.xp);
+  const storeStreak = useIALabStore(s => s.streak);
+  const storeGetLevel = useIALabStore(s => s.getLevel);
+  const badges = useIALabStore(s => s.getUserBadges());
+  const badgesSummary = useIALabStore(s => s.getBadgesSummary());
+  const achievementList = useMemo(() => {
+    const badgeMap = [
+      { id: 'first_lesson', name: 'Primeros Pasos', icon: Star, xp: 50 },
+      { id: 'streak_7', name: 'Racha de 7 días', icon: Flame, xp: 100 },
+      { id: 'all_lessons', name: 'Sabio de la IA', icon: Trophy, xp: 200 },
+      { id: 'all_modules', name: 'Campeón del Curso', icon: Zap, xp: 150 },
+      { id: 'three_modules', name: 'Maestro en Progreso', icon: Target, xp: 300 },
+      { id: 'streak_3', name: 'Racha Inicial', icon: Flame, xp: 500 },
+    ];
+    const earnedBadgeIds = new Set(badges.map(b => b.id));
+    return badgeMap.map((b, i) => ({
+      ...b,
+      id: i,
+      completed: earnedBadgeIds.has(b.id),
+    }));
+  }, [badges]);
+
+  const effectiveXP = currentXP ?? storeXp;
+  const effectiveLevel = level ?? storeGetLevel();
+  const effectiveStreak = streak ?? storeStreak;
+
   const [animatedXP, setAnimatedXP] = useState(0);
-  const [animatedLevel, setAnimatedLevel] = useState(level - 1);
+  const [animatedLevel, setAnimatedLevel] = useState(effectiveLevel - 1);
   const [showLevelUp, setShowLevelUp] = useState(false);
 
   const levelData = useMemo(() => {
-    const currentLevelXP = levelThresholds[level - 1] || 0;
-    const nextLevelXP = levelThresholds[level] || 10000;
+    const currentLevelXP = levelThresholds[effectiveLevel - 1] || 0;
+    const nextLevelXP = levelThresholds[effectiveLevel] || 10000;
     const xpForNextLevel = nextLevelXP - currentLevelXP;
-    const xpInCurrentLevel = currentXP - currentLevelXP;
+    const xpInCurrentLevel = effectiveXP - currentLevelXP;
     const progressPercentage = (xpInCurrentLevel / xpForNextLevel) * 100;
     
     return {
@@ -155,33 +170,33 @@ const XPProgressBar = memo(({ currentXP = 1250, level = 8, streak = 14 }) => {
       xpForNextLevel,
       xpInCurrentLevel,
       progressPercentage,
-      title: levelTitles[level - 1] || 'Leyenda',
-      nextTitle: levelTitles[level] || 'Leyenda',
+      title: levelTitles[effectiveLevel - 1] || 'Leyenda',
+      nextTitle: levelTitles[effectiveLevel] || 'Leyenda',
     };
-  }, [currentXP, level]);
+  }, [effectiveXP, effectiveLevel]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setAnimatedXP(currentXP);
-      setAnimatedLevel(level);
+      setAnimatedXP(effectiveXP);
+      setAnimatedLevel(effectiveLevel);
     }, 300);
     return () => clearTimeout(timer);
-  }, [currentXP, level]);
+  }, [effectiveXP, effectiveLevel]);
 
   useEffect(() => {
-    if (animatedLevel === level && level > 1) {
+    if (animatedLevel === effectiveLevel && effectiveLevel > 1) {
       setShowLevelUp(true);
       const timer = setTimeout(() => setShowLevelUp(false), 3000);
       return () => clearTimeout(timer);
     }
-  }, [animatedLevel, level]);
+  }, [animatedLevel, effectiveLevel]);
 
   return (
     <div className="w-full relative">
       <AnimatePresence>
         {showLevelUp && (
           <LevelUpCelebration
-            level={level}
+            level={effectiveLevel}
             xpForNextLevel={levelData.xpForNextLevel}
             xpInCurrentLevel={levelData.xpInCurrentLevel}
             onClose={() => setShowLevelUp(false)}
@@ -241,7 +256,7 @@ const XPProgressBar = memo(({ currentXP = 1250, level = 8, streak = 14 }) => {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium text-[#334155] font-open-sans">
-              Nivel {level}: {levelData.title}
+              Nivel {effectiveLevel}: {levelData.title}
             </span>
             <span className="text-sm font-semibold text-[#66CCCC] font-open-sans">
               {levelData.xpInCurrentLevel.toLocaleString()} / {levelData.xpForNextLevel.toLocaleString()} XP
@@ -285,7 +300,7 @@ const XPProgressBar = memo(({ currentXP = 1250, level = 8, streak = 14 }) => {
               </div>
               <div>
                 <div className="text-2xl font-bold text-[#004B63] font-montserrat">
-                  {streak}
+                  {effectiveStreak}
                 </div>
                 <div className="text-xs text-[#64748B] font-open-sans">
                   Días de racha
@@ -304,7 +319,7 @@ const XPProgressBar = memo(({ currentXP = 1250, level = 8, streak = 14 }) => {
               </div>
               <div>
                 <div className="text-2xl font-bold text-[#004B63] font-montserrat">
-                  23
+                  {badgesSummary.earned}
                 </div>
                 <div className="text-xs text-[#64748B] font-open-sans">
                   Misiones completadas
@@ -323,7 +338,7 @@ const XPProgressBar = memo(({ currentXP = 1250, level = 8, streak = 14 }) => {
               </div>
               <div>
                 <div className="text-2xl font-bold text-[#004B63] font-montserrat">
-                  12
+                  {badgesSummary.earned}
                 </div>
                 <div className="text-xs text-[#64748B] font-open-sans">
                   Logros desbloqueados
@@ -343,7 +358,7 @@ const XPProgressBar = memo(({ currentXP = 1250, level = 8, streak = 14 }) => {
           </h4>
           
           <div className="grid grid-cols-2 gap-3">
-            {achievements.map((achievement) => (
+            {achievementList.map((achievement) => (
               <AchievementCard
                 key={achievement.id}
                 achievement={achievement}
@@ -364,14 +379,14 @@ const XPProgressBar = memo(({ currentXP = 1250, level = 8, streak = 14 }) => {
                 Próximo Nivel: {levelData.nextTitle}
               </h4>
               <p className="text-xs text-[#64748B] font-open-sans mt-1">
-                Necesitas {(levelData.nextLevelXP - currentXP).toLocaleString()} XP más
+                Necesitas {(levelData.nextLevelXP - effectiveXP).toLocaleString()} XP más
               </p>
             </div>
             
             <div className="flex items-center gap-2">
               <div className="px-3 py-1.5 rounded-full bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC]">
                 <span className="text-xs font-semibold text-white">
-                  {Math.ceil((levelData.nextLevelXP - currentXP) / 100)} días estimados
+                  {Math.ceil((levelData.nextLevelXP - effectiveXP) / 100)} días estimados
                 </span>
               </div>
             </div>

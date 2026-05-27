@@ -28,7 +28,7 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
   });
   const [showBookmarked, setShowBookmarked] = useState(false);
 
-  const toggleBookmark = (resourceId, e) => {
+  const toggleBookmark = useCallback((resourceId, e) => {
     e.stopPropagation();
     setBookmarkedIds((prev) => {
       const next = prev.includes(resourceId)
@@ -37,7 +37,7 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
       localStorage.setItem('ialab_bookmarked_resources', JSON.stringify(next));
       return next;
     });
-  };
+  }, []);
 
   // Estado para el modal de recursos
   const [viewerModalOpen, setViewerModalOpen] = useState(false);
@@ -121,7 +121,7 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
     return `${Math.max(minutes, 1)} min`;
   }, [resourcesByTopic]);
 
-  const handleMarkAsViewed = async (resourceId) => {
+  const handleMarkAsViewed = useCallback(async (resourceId) => {
     if (resourceId && activeMod) {
       markResourceInContext(activeMod, resourceId);
       const resourceType = 'document';
@@ -136,9 +136,9 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
         return prev;
       });
     }
-  };
+  }, [activeMod, markResourceInContext, trackResourceViewed]);
 
-  const handlePreviousResource = () => {
+  const handlePreviousResource = useCallback(() => {
     if (activeResourceIndex > 0) {
       const newIndex = activeResourceIndex - 1;
       setActiveResourceIndex(newIndex);
@@ -146,9 +146,9 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
       setSelectedResource(prev);
       setSelectedResourceType(prev.type);
     }
-  };
+  }, [activeResourceIndex, currentTopicResources]);
 
-  const handleNextResource = () => {
+  const handleNextResource = useCallback(() => {
     if (activeResourceIndex < currentTopicResources.length - 1) {
       const newIndex = activeResourceIndex + 1;
       setActiveResourceIndex(newIndex);
@@ -156,7 +156,7 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
       setSelectedResource(next);
       setSelectedResourceType(next.type);
     }
-  };
+  }, [activeResourceIndex, currentTopicResources]);
 
   useEffect(() => {
     setViewedIds(useIALabStore.getState().getViewedResources());
@@ -581,4 +581,4 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
     );
   };
 
-export default memo(ModuleOverviewCard);
+export default React.memo(ModuleOverviewCard);

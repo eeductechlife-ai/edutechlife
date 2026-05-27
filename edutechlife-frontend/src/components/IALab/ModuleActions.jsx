@@ -105,29 +105,29 @@ const ModuleActions = ({ onAction, activeMod, challengeScores, completedExams, m
     };
   }, [refreshAttempts]);
 
-  const handleCommunity = () => {
+  const handleCommunity = useCallback(() => {
     onToggleForum?.();
     // Scroll to forum after it renders
     setTimeout(() => {
       document.getElementById('forum-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 350);
-  };
+  }, [onToggleForum]);
 
-  const handleChallenge = () => {
+  const handleChallenge = useCallback(() => {
     if (challengeScores?.[activeMod]) {
       onAction?.('SHOW_CHALLENGE_RESULT');
     } else {
       onAction?.('OPEN_CHALLENGE');
     }
-  };
+  }, [challengeScores, activeMod, onAction]);
 
-  const handleExam = () => {
+  const handleExam = useCallback(() => {
     if (effectiveExamScore !== undefined) {
       onAction?.('SHOW_EXAM_RESULT');
     } else {
       onAction?.('OPEN_QUIZ');
     }
-  };
+  }, [effectiveExamScore, onAction]);
 
   return (
     <div className="relative bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-sm p-4 md:p-5">
@@ -172,4 +172,4 @@ const ModuleActions = ({ onAction, activeMod, challengeScores, completedExams, m
   );
 };
 
-export default ModuleActions;
+export default React.memo(ModuleActions);

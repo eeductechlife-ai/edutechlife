@@ -42,15 +42,15 @@ const useIALabEvaluation = () => {
         abortRef.current = controller;
 
         try {
-            const response = await fetch('https://api.deepseek.com/chat/completions', {
+            const apiBase = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'http://localhost:3001';
+            const response = await fetch(`${apiBase}/api/chat`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${import.meta.env.VITE_DEEPSEEK_API_KEY}`
                 },
                 body: JSON.stringify({
                     model: 'deepseek-chat',
-                    response_format: { type: 'json_object' },
+                    isJson: true,
                     messages: [{
                         role: 'system',
                         content: 'Eres un experto en diseño de prompts y evaluación educativa. Genera 3 ejercicios de nivel medio para evaluación de prompts. Devuelve SOLO JSON.'
@@ -74,7 +74,7 @@ const useIALabEvaluation = () => {
             }
 
             const data = await response.json();
-            const content = data.choices[0]?.message?.content;
+            const content = data.result;
             
             // Extraer JSON del contenido (soporta markdown y JSON plano)
             const jsonMatch = content.match(/```(?:json)?\s*\n?(\{[\s\S]*?\})\n?\s*```/) 
@@ -130,15 +130,15 @@ const useIALabEvaluation = () => {
         abortRef.current = controller;
 
         try {
-            const response = await fetch('https://api.deepseek.com/chat/completions', {
+            const apiBase = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'http://localhost:3001';
+            const response = await fetch(`${apiBase}/api/chat`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${import.meta.env.VITE_DEEPSEEK_API_KEY}`
                 },
                 body: JSON.stringify({
                     model: 'deepseek-chat',
-                    response_format: { type: 'json_object' },
+                    isJson: true,
                     messages: [{
                         role: 'system',
                         content: `Eres un evaluador EXPERTO de prompts educativos con enfoque pedagógico y BENÉVOLO. El estudiante está APRENDIENDO, no es un experto. Sé generoso en la calificación. Evalúa CADA ejercicio por separado. Devuelve SOLO JSON.
@@ -220,7 +220,7 @@ Recuerda: El estudiante está aprendiendo. Valora el intento y la comprensión b
             }
 
             const data = await response.json();
-            const content = data.choices[0]?.message?.content;
+            const content = data.result;
             
             // Extraer JSON del contenido (soporta markdown y JSON plano)
             const jsonMatch = content.match(/```(?:json)?\s*\n?(\{[\s\S]*?\})\n?\s*```/) 

@@ -632,7 +632,7 @@ Gracias.`
                 {aiResult.demo && (
                   <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-xl">
                     <p className="text-sm text-yellow-700">
-                      ⚠️ Modo demo activo. Configura VITE_DEEPSEEK_API_KEY en .env para usar la API real.
+                      ⚠️ Modo demo activo. Verifica que el servidor backend esté ejecutándose para usar la API real.
                     </p>
                   </div>
                 )}

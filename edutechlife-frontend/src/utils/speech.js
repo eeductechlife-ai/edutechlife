@@ -121,7 +121,6 @@ const VOICE_FALLBACKS = {
 };
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://edutechlife-q3blvmkur-eeductechlife-ais-projects.vercel.app';
-const GOOGLE_TTS_URL = 'https://texttospeech.googleapis.com/v1/text:synthesize';
 
 let currentAudio = null;
 let safetyTimeout = null;
@@ -141,7 +140,7 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
     safetyTimeout = null;
   }
 
-  const apiKey = import.meta.env.VITE_GOOGLE_TTS_API_KEY;
+  const apiBase = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'http://localhost:3001';
   const voice = VOICE_PROFILES[profile] || VOICE_PROFILES.valeria;
 
   const cleanup = () => {
@@ -207,108 +206,79 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
     }
   };
 
-  // Validación de API Key
-  if (!apiKey || apiKey.trim() === '') {
-    console.warn('⚠️ API Key de Google TTS no configurada, usando voz nativa');
-    useNativeSpeech();
-    return;
-  }
+  const voiceFallacks = VOICE_FALLBACKS[profile] || [];
+  let lastError = null;
 
-  try {
-
-
-    const voiceFallacks = VOICE_FALLBACKS[profile] || [];
-    let lastError = null;
-
-    for (const voiceOption of [voice, ...voiceFallacks]) {
-      try {
-        const response = await fetch(`${GOOGLE_TTS_URL}?key=${apiKey}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
+  let gotAudio = false;
+  for (const voiceOption of [voice, ...voiceFallacks]) {
+    try {
+      const response = await fetch(`${apiBase}/api/tts`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          input: { text },
+          voice: {
+            languageCode: voiceOption.languageCode,
+            name: voiceOption.name
           },
-          body: JSON.stringify({
-            input: { text: text },
-            voice: { 
-              languageCode: voiceOption.languageCode, 
-              name: voiceOption.name 
-            },
-            audioConfig: { 
-              audioEncoding: 'MP3', 
-              pitch: voiceOption.pitch || 0, 
-              speakingRate: voiceOption.speakingRate || 1.0 
-            }
-          })
-        });
-
-        const data = await response.json();
-        
-        if (data.error) {
-          console.warn('🚨 ERROR GOOGLE TTS: ' + data.error.message);
-          lastError = data.error;
-          continue;
-        }
-
-        if (data.audioContent) {
-
-
-          currentAudio = new Audio(`data:audio/mp3;base64,${data.audioContent}`);
-          currentAudio.volume = 1.0;
-          
-          currentAudio.onended = handleEnd;
-          currentAudio.onerror = (e) => {
-            console.error("Error reproduciendo audio:", e);
-            cleanup();
-            if (onEndCallback) onEndCallback();
-          };
-          
-          try {
-            await currentAudio.play();
-          } catch (playError) {
-            if (playError.name === 'NotAllowedError') {
-              console.warn('⚠️ Autoplay bloqueado por el navegador. Usando voz nativa...');
-              cleanup();
-              useNativeSpeech();
-              return;
-            }
-            throw playError;
+          audioConfig: {
+            audioEncoding: 'MP3',
+            pitch: voiceOption.pitch || 0,
+            speakingRate: voiceOption.speakingRate || 1.0
           }
+        })
+      });
 
-          return;
-        }
-      } catch (voiceError) {
-        if (voiceError.name === 'NotAllowedError') {
-          console.warn('⚠️ Audio bloqueado por el navegador (requiere gesto del usuario)');
-          if (onPermissionError) onPermissionError(voiceError.message);
-          lastError = voiceError;
-          break;
-        }
-        console.warn('🚨 ERROR DE CONEXIÓN: ' + voiceError.message);
-        console.warn('Voice option failed:', voiceError);
-        lastError = voiceError;
+      if (!response.ok) {
+        console.warn('⚠️ TTS backend error, probando fallback de voz...');
+        lastError = { message: `HTTP ${response.status}` };
         continue;
       }
+
+      const data = await response.json();
+
+      if (data.audioContent) {
+        gotAudio = true;
+        currentAudio = new Audio(`data:audio/mp3;base64,${data.audioContent}`);
+        currentAudio.volume = 1.0;
+        currentAudio.onended = handleEnd;
+        currentAudio.onerror = (e) => {
+          console.error("Error reproduciendo audio:", e);
+          cleanup();
+          if (onEndCallback) onEndCallback();
+        };
+        try {
+          await currentAudio.play();
+        } catch (playError) {
+          if (playError.name === 'NotAllowedError') {
+            console.warn('⚠️ Autoplay bloqueado por el navegador. Usando voz nativa...');
+            cleanup();
+            useNativeSpeech();
+            return;
+          }
+          throw playError;
+        }
+        return;
+      }
+    } catch (voiceError) {
+      if (voiceError.name === 'NotAllowedError') {
+        console.warn('⚠️ Audio bloqueado por el navegador (requiere gesto del usuario)');
+        if (onPermissionError) onPermissionError(voiceError.message);
+        lastError = voiceError;
+        break;
+      }
+      console.warn('🚨 ERROR DE CONEXIÓN: ' + voiceError.message);
+      console.warn('Voice option failed:', voiceError);
+      lastError = voiceError;
+      continue;
     }
+  }
 
+  if (!gotAudio) {
     console.error("All voice options failed:", lastError);
-    
-    // Intentar con voz nativa como último recurso
-
     const nativeSuccess = useNativeSpeech();
-    
     if (!nativeSuccess && onEndCallback) {
       onEndCallback();
-    }
-  } catch (error) {
-    console.error("Error en speakTextConversational:", error);
-    
-    // Intentar con voz nativa como último recurso
-
-    const nativeSuccess = useNativeSpeech();
-    
-    if (!nativeSuccess) {
-      cleanup();
-      if (onEndCallback) onEndCallback();
     }
   }
 };

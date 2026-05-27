@@ -9,4 +9,10 @@ export const createUiSlice = (set, get) => ({
   setIsSubmittingQuiz: (v) => set({ isSubmittingQuiz: v }),
   isQuizValid: false,
   setIsQuizValid: (v) => set({ isQuizValid: v }),
+
+  showBadgeGallery: false,
+  setShowBadgeGallery: (v) => set({ showBadgeGallery: v }),
+
+  showLeaderboard: false,
+  setShowLeaderboard: (v) => set({ showLeaderboard: v }),
 });

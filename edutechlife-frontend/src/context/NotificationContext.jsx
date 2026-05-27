@@ -48,33 +48,89 @@ export const NotificationProvider = ({ children }) => {
 
     fetchNotifications();
 
-    // Supabase Realtime
-    const channel = supabase
-      .channel('notification-changes')
-      .on(
-        'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'notifications', filter: `user_id=eq.${user.id}` },
-        (payload) => {
-          setNotifications((prev) => [payload.new, ...prev]);
-        }
-      )
-      .on(
-        'postgres_changes',
-        { event: 'UPDATE', schema: 'public', table: 'notifications', filter: `user_id=eq.${user.id}` },
-        (payload) => {
-          setNotifications((prev) =>
-            prev.map((n) => (n.id === payload.new.id ? payload.new : n))
-          );
-        }
-      )
-      .subscribe((status) => {
-        if (status === 'CHANNEL_ERROR') {
-          console.warn('[NOTIFICATIONS] Realtime subscription error');
-        }
-      });
+    let retryCount = 0;
+    const MAX_RETRIES = 5;
+    let retryTimer = null;
+    let pollingTimer = null;
+    let heartbeatTimer = null;
+    let channel = null;
+    let mounted = true;
+
+    const setupChannel = () => {
+      channel = supabase
+        .channel('notification-changes')
+        .on(
+          'postgres_changes',
+          { event: 'INSERT', schema: 'public', table: 'notifications', filter: `user_id=eq.${user.id}` },
+          (payload) => {
+            setNotifications((prev) => [payload.new, ...prev]);
+          }
+        )
+        .on(
+          'postgres_changes',
+          { event: 'UPDATE', schema: 'public', table: 'notifications', filter: `user_id=eq.${user.id}` },
+          (payload) => {
+            setNotifications((prev) =>
+              prev.map((n) => (n.id === payload.new.id ? payload.new : n))
+            );
+          }
+        )
+        .subscribe((status) => {
+          if (!mounted) return;
+          if (status === 'CHANNEL_ERROR') {
+            console.warn('[NOTIFICATIONS] Realtime subscription error');
+            cleanup();
+            if (retryCount < MAX_RETRIES) {
+              retryCount++;
+              const delay = Math.min(1000 * Math.pow(2, retryCount), 30000);
+              retryTimer = setTimeout(setupChannel, delay);
+            } else {
+              console.warn('[NOTIFICATIONS] Max retries reached, falling back to polling');
+              pollingTimer = setInterval(fetchNotifications, 30000);
+            }
+          }
+          if (status === 'SUBSCRIBED') {
+            retryCount = 0;
+          }
+        });
+    };
+
+    const cleanup = () => {
+      if (channel) {
+        supabase.removeChannel(channel);
+        channel = null;
+      }
+      if (retryTimer) {
+        clearTimeout(retryTimer);
+        retryTimer = null;
+      }
+    };
+
+    setupChannel();
+
+    heartbeatTimer = setInterval(async () => {
+      if (!mounted) return;
+      if (!channel) return;
+      const { error } = await supabase.from('notifications').select('id', { count: 'exact', head: true }).limit(0).eq('user_id', user.id);
+      if (error && error.code === '42P01') return;
+      if (error && !mounted) return;
+      if (error) {
+        cleanup();
+        setupChannel();
+      }
+    }, 60000);
 
     return () => {
-      supabase.removeChannel(channel);
+      mounted = false;
+      cleanup();
+      if (pollingTimer) {
+        clearInterval(pollingTimer);
+        pollingTimer = null;
+      }
+      if (heartbeatTimer) {
+        clearInterval(heartbeatTimer);
+        heartbeatTimer = null;
+      }
     };
   }, [user?.id, fetchNotifications]);
 

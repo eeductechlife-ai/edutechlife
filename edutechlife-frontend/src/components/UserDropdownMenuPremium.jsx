@@ -15,6 +15,10 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import { Icon } from '../utils/iconMapping.jsx';
 import { getClerkUserInfo } from '../utils/clerk-utils';
+import UserProfileSmartCard from './UserProfileSmartCard';
+import ActivityHistory from './ActivityHistory';
+import ErrorBoundary from './forum/ErrorBoundary';
+import StudyPlannerModal from './IALab/StudyPlannerModal';
 
 /**
  * UserDropdownMenuPremium - Componente premium con shadcn/ui
@@ -30,6 +34,9 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
+  const [showStudyPlanner, setShowStudyPlanner] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   
   // Integración oficial Clerk - Patrón recomendado
@@ -80,6 +87,9 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
       alert('Página de certificados en desarrollo');
     }
   };
+
+  const handleHistory = () => setShowHistory(true);
+  const handleStudyPlanner = () => setShowStudyPlanner(true);
 
   // Manejar cambio de contraseña integrado con Clerk
   const handleChangePassword = () => {
@@ -190,50 +200,72 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
           </DropdownMenuLabel>
           
            <DropdownMenuGroup className="p-2">
-             {/* Información General */}
-             <DropdownMenuItem 
-               className="flex items-center gap-3 px-4 py-3 w-full text-left cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-indigo-600 transition-colors duration-200"
-               onClick={handleProfile}
-             >
-               <div className="w-5 h-5 flex items-center justify-center text-slate-500 group-hover:text-indigo-600">
-                 <Icon name="fa-user" className="text-sm" />
-               </div>
-               <span className="text-sm font-medium">Información General</span>
-             </DropdownMenuItem>
-             
-             {/* Configuración */}
-             <DropdownMenuItem 
-               className="flex items-center gap-3 px-4 py-3 w-full text-left cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-indigo-600 transition-colors duration-200"
-               onClick={handleSettings}
-             >
-               <div className="w-5 h-5 flex items-center justify-center text-slate-500 group-hover:text-indigo-600">
-                 <Icon name="fa-cog" className="text-sm" />
-               </div>
-               <span className="text-sm font-medium">Configuración</span>
-             </DropdownMenuItem>
-              
-              {/* Mis Certificados */}
-              <DropdownMenuItem
+              {/* Mi Perfil */}
+              <DropdownMenuItem 
                 className="flex items-center gap-3 px-4 py-3 w-full text-left cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-indigo-600 transition-colors duration-200"
-                onClick={handleCertificates}
+                onClick={() => setShowProfile(true)}
               >
                 <div className="w-5 h-5 flex items-center justify-center text-slate-500 group-hover:text-indigo-600">
-                  <Icon name="fa-medal" className="text-sm" />
+                  <Icon name="fa-user-circle" className="text-sm" />
                 </div>
-                <span className="text-sm font-medium">Mis Certificados</span>
+                <span className="text-sm font-medium">Mi Perfil</span>
               </DropdownMenuItem>
 
-              {/* Cambiar Contraseña */}
-             <DropdownMenuItem 
-               className="flex items-center gap-3 px-4 py-3 w-full text-left cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-indigo-600 transition-colors duration-200"
-               onClick={handleChangePassword}
-             >
-               <div className="w-5 h-5 flex items-center justify-center text-slate-500 group-hover:text-indigo-600">
-                 <Icon name="fa-key" className="text-sm" />
-               </div>
-               <span className="text-sm font-medium">Cambiar Contraseña</span>
-             </DropdownMenuItem>
-           </DropdownMenuGroup>
+              {/* Mi Historial */}
+              <DropdownMenuItem 
+                className="flex items-center gap-3 px-4 py-3 w-full text-left cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-indigo-600 transition-colors duration-200"
+                onClick={handleHistory}
+              >
+                <div className="w-5 h-5 flex items-center justify-center text-slate-500 group-hover:text-indigo-600">
+                  <Icon name="fa-chart-line" className="text-sm" />
+                </div>
+                <span className="text-sm font-medium">Mi Historial</span>
+              </DropdownMenuItem>
+
+              {/* Plan de Estudio */}
+              <DropdownMenuItem 
+                className="flex items-center gap-3 px-4 py-3 w-full text-left cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-indigo-600 transition-colors duration-200"
+                onClick={handleStudyPlanner}
+              >
+                <div className="w-5 h-5 flex items-center justify-center text-slate-500 group-hover:text-indigo-600">
+                  <Icon name="fa-calendar" className="text-sm" />
+                </div>
+                <span className="text-sm font-medium">Plan de Estudio</span>
+              </DropdownMenuItem>
+              
+              {/* Configuración */}
+              <DropdownMenuItem 
+                className="flex items-center gap-3 px-4 py-3 w-full text-left cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-indigo-600 transition-colors duration-200"
+                onClick={handleSettings}
+              >
+                <div className="w-5 h-5 flex items-center justify-center text-slate-500 group-hover:text-indigo-600">
+                  <Icon name="fa-cog" className="text-sm" />
+                </div>
+                <span className="text-sm font-medium">Configuración</span>
+              </DropdownMenuItem>
+               
+               {/* Mis Certificados */}
+               <DropdownMenuItem
+                 className="flex items-center gap-3 px-4 py-3 w-full text-left cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-indigo-600 transition-colors duration-200"
+                 onClick={handleCertificates}
+               >
+                 <div className="w-5 h-5 flex items-center justify-center text-slate-500 group-hover:text-indigo-600">
+                   <Icon name="fa-medal" className="text-sm" />
+                 </div>
+                 <span className="text-sm font-medium">Mis Certificados</span>
+               </DropdownMenuItem>
+
+               {/* Cambiar Contraseña */}
+              <DropdownMenuItem 
+                className="flex items-center gap-3 px-4 py-3 w-full text-left cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-indigo-600 transition-colors duration-200"
+                onClick={handleChangePassword}
+              >
+                <div className="w-5 h-5 flex items-center justify-center text-slate-500 group-hover:text-indigo-600">
+                  <Icon name="fa-key" className="text-sm" />
+                </div>
+                <span className="text-sm font-medium">Cambiar Contraseña</span>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
           
            <DropdownMenuSeparator className="bg-slate-100" />
            
@@ -458,10 +490,49 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
               </div>
             </div>
           </div>
-        </DialogContent>
-      </Dialog>
-   </>
- );
+         </DialogContent>
+       </Dialog>
+
+       {showProfile && (
+         <Dialog open={showProfile} onOpenChange={setShowProfile}>
+           <DialogContent className="sm:max-w-[500px] max-h-[80vh] overflow-y-auto bg-white rounded-2xl shadow-2xl border-0">
+             <DialogHeader>
+               <DialogTitle className="text-lg font-bold text-[#334155]">Mi Perfil</DialogTitle>
+             </DialogHeader>
+             <ErrorBoundary>
+               <UserProfileSmartCard userId={user?.id} />
+             </ErrorBoundary>
+           </DialogContent>
+         </Dialog>
+       )}
+
+       {showHistory && (
+         <Dialog open={showHistory} onOpenChange={setShowHistory}>
+           <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto bg-white rounded-2xl shadow-2xl border-0">
+             <DialogHeader>
+               <DialogTitle className="text-lg font-bold text-[#334155]">Mi Historial</DialogTitle>
+             </DialogHeader>
+             <ErrorBoundary>
+               <ActivityHistory userId={user?.id} />
+             </ErrorBoundary>
+           </DialogContent>
+         </Dialog>
+       )}
+
+       {showStudyPlanner && (
+         <Dialog open={showStudyPlanner} onOpenChange={setShowStudyPlanner}>
+           <DialogContent className="sm:max-w-[700px] max-h-[85vh] overflow-y-auto bg-white rounded-2xl shadow-2xl border-0">
+             <DialogHeader>
+               <DialogTitle className="text-lg font-bold text-[#334155]">Plan de Estudio</DialogTitle>
+             </DialogHeader>
+             <ErrorBoundary>
+               <StudyPlannerModal onClose={() => setShowStudyPlanner(false)} />
+             </ErrorBoundary>
+           </DialogContent>
+         </Dialog>
+       )}
+    </>
+  );
 };
 
 export default UserDropdownMenuPremium;

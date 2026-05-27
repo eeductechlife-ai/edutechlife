@@ -3,6 +3,8 @@ import { Icon } from '../../utils/iconMapping.jsx';
 import UserDropdownMenuSimplified from '../UserDropdownMenuSimplified';
 import NotificationPanel from '../NotificationPanel';
 import { useIALabUIContext } from '../../context/IALabContext';
+import { useTranslation } from '../../i18n/I18nProvider';
+import LocaleSwitcher from '../LocaleSwitcher';
 import { useNotification } from '../../context/NotificationContext';
 import { useCourseReminders } from '../../hooks/useCourseReminders';
 import { useBrowserNotifications } from '../../hooks/useBrowserNotifications';
@@ -11,6 +13,7 @@ import GlobalSearchBar from './GlobalSearchBar';
 import { BADGE_INFO } from '../../data/ialab';
 
 const IALabHeader = () => {
+  const { t } = useTranslation();
   const { onBack, courseCompleted, setShowCertificateModal } = useIALabUIContext();
   const { unreadCount, createNotification } = useNotification();
   const { unreadCount: forumUnreadCount } = useForumNotifications();
@@ -53,13 +56,13 @@ const IALabHeader = () => {
           <button
             onClick={() => setShowCertificateModal(true)}
             className="text-lg font-bold text-petroleum dark:text-petroleum tracking-tight truncate hover:text-corporate transition-colors duration-200 flex items-center gap-2 group"
-            title="Ver certificado"
+            title={t('ialab.certificate_title')}
           >
-            <span>Introducción a la I.A Generativa</span>
+            <span>{t('ialab.course_title')}</span>
             <Icon name="fa-award" className="text-[#FFD166] text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
           </button>
         ) : (
-          <h1 className="text-lg font-bold text-petroleum dark:text-petroleum tracking-tight truncate">Introducción a la I.A Generativa</h1>
+          <h1 className="text-lg font-bold text-petroleum dark:text-petroleum tracking-tight truncate">{t('ialab.course_title')}</h1>
         )}
       </div>
 
@@ -79,7 +82,7 @@ const IALabHeader = () => {
                 ? 'border-petroleum/30 dark:border-petroleum/40 shadow-sm bg-gradient-to-br from-petroleum/5 to-corporate/5'
                 : 'border-transparent hover:border-petroleum/20 dark:hover:border-petroleum/40 hover:shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700'
             }`}
-            aria-label="Notificaciones"
+            aria-label={t('ialab.notifications_aria')}
             data-tour="tour-notificaciones"
           >
             <Icon
@@ -107,6 +110,7 @@ const IALabHeader = () => {
           />
         </div>
 
+        <LocaleSwitcher />
         <UserDropdownMenuSimplified
           onNavigate={(view) => {
             if (view === 'landing') {

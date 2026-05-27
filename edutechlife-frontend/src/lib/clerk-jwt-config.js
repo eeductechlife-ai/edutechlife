@@ -51,10 +51,7 @@ export const clerkSupabaseJWTConfig = {
   
   // Configuración para desarrollo
   development: {
-    // Para desarrollo local, podemos usar un secret compartido
-    sharedSecret: import.meta.env.VITE_CLERK_JWT_SECRET || 'dev-secret-for-testing',
-    
-    // URLs de desarrollo
+    // Para desarrollo local, usar un secret compartido
     supabaseUrl: import.meta.env.VITE_SUPABASE_URL,
     clerkFrontendApi: import.meta.env.VITE_CLERK_PUBLISHABLE_KEY?.replace('pk_', ''),
   }

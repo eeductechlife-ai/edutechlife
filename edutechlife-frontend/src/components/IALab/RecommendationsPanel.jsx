@@ -135,4 +135,4 @@ const RecommendationsPanel = ({ onAction, isLoading }) => {
   );
 };
 
-export default RecommendationsPanel;
+export default React.memo(RecommendationsPanel);

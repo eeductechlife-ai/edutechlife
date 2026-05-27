@@ -4,6 +4,7 @@ import { useIALabStore } from '../../store/ialabStore';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { getResourcesForTopic } from './constants/moduleResources';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const parseResourceDuration = (resource) => {
   if (resource.type === 'video' && resource.duration) {
@@ -36,6 +37,7 @@ const calculateUnviewedMinutes = (modules, moduleId, viewedIds) => {
 };
 
 const PrimaryActionCard = ({ route, onContinue, mod }) => {
+  const { t } = useTranslation();
   const action = route.primaryAction;
   const prefersReducedMotion = useReducedMotion();
   const courseProgress = useIALabStore(s => s.courseProgress);
@@ -56,14 +58,14 @@ const PrimaryActionCard = ({ route, onContinue, mod }) => {
               <>
                 <h4 className="text-white font-bold text-base mb-1 flex items-center gap-2">
                   <Icon name="fa-trophy" className="w-5 h-5 text-corporate" />
-                  ¡Curso Completado!
+                  {t('route.course_complete')}
                 </h4>
               </>
             ) : action.actionType === 'next_module' ? (
               <>
                 <h4 className="text-white font-bold text-base mb-1 flex items-center gap-2">
                   <Icon name="fa-check-circle" className="w-5 h-5 text-emerald-300" />
-                  ¡Módulo completado!
+                  {t('route.module_complete')}
                 </h4>
                 <p className="text-white/80 text-sm font-medium">{action.title}</p>
               </>
@@ -71,15 +73,15 @@ const PrimaryActionCard = ({ route, onContinue, mod }) => {
               <>
                 <h4 className="text-white font-bold text-base mb-1 flex items-center gap-2">
                   {action.actionType === 'review_weak_topics' ? (
-                    <><Icon name="fa-book-open" className="w-4 h-4 text-amber-300" /> Repasa temas débiles</>
+                    <><Icon name="fa-book-open" className="w-4 h-4 text-amber-300" /> {t('route.review_weak')}</>
                   ) : (
-                    <>Continúa tu aprendizaje</>
+                    <>{t('route.continue_learning')}</>
                   )}
                   <span className="px-2 py-0.5 rounded-md bg-corporate/20 text-corporate text-[10px] font-bold uppercase tracking-wider border border-corporate/20">
-                    Pendiente
+                    {t('route.pending')}
                   </span>
                 </h4>
-                <p className="text-xs text-white/60 mb-1">Módulo {mod.id} · {mod.title}</p>
+                <p className="text-xs text-white/60 mb-1">{t('route.module_label', { id: mod.id, title: mod.title })}</p>
                 {action.actionType === 'review_weak_topics' ? (
                   <p className="text-white/80 text-sm font-medium">{action.description}</p>
                 ) : (
@@ -89,9 +91,9 @@ const PrimaryActionCard = ({ route, onContinue, mod }) => {
             ) : (
               <>
                 <h4 className="text-white font-bold text-base mb-1">
-                  Continúa tu aprendizaje
+                  {t('route.continue_learning')}
                 </h4>
-                <p className="text-xs text-white/60 mb-1">Módulo {mod.id} · {mod.title}</p>
+                <p className="text-xs text-white/60 mb-1">{t('route.module_label', { id: mod.id, title: mod.title })}</p>
                 <p className="text-white/80 text-sm font-medium truncate">{action.title}</p>
               </>
             )}
@@ -104,17 +106,17 @@ const PrimaryActionCard = ({ route, onContinue, mod }) => {
             className="flex-shrink-0 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 flex items-center gap-1.5 active:scale-95 bg-white text-petroleum hover:bg-white/90 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-petroleum"
           >
             {action.actionType === 'course_complete' ? (
-              <><Icon name="fa-award" className="w-4 h-4" /> Ver mi certificado</>
+              <><Icon name="fa-award" className="w-4 h-4" /> {t('route.view_certificate')}</>
             ) : action.actionType === 'next_module' ? (
-              <><Icon name="fa-play-circle" className="w-4 h-4" /> Comenzar</>
+              <><Icon name="fa-play-circle" className="w-4 h-4" /> {t('route.start')}</>
             ) : action.actionType === 'take_exam' ? (
-              <><Icon name="fa-file-text" className="w-4 h-4" /> Empezar examen</>
+              <><Icon name="fa-file-text" className="w-4 h-4" /> {t('route.take_exam')}</>
             ) : action.actionType === 'review_weak_topics' ? (
-              <><Icon name="fa-book-open" className="w-4 h-4" /> Revisar temas</>
+              <><Icon name="fa-book-open" className="w-4 h-4" /> {t('route.review_topics')}</>
             ) : action.actionType === 'take_challenge' ? (
-              <><Icon name="fa-trophy" className="w-4 h-4" /> Aceptar desafío</>
+              <><Icon name="fa-trophy" className="w-4 h-4" /> {t('route.accept_challenge')}</>
             ) : (
-              <><Icon name="fa-play-circle" className="w-4 h-4" /> Continuar</>
+              <><Icon name="fa-play-circle" className="w-4 h-4" /> {t('route.continue')}</>
             )}
           </motion.button>
         </div>
@@ -122,10 +124,15 @@ const PrimaryActionCard = ({ route, onContinue, mod }) => {
         {remainingMin != null && remainingMin > 0 && (
           <div className="mt-2 space-y-0.5">
             <p className="text-xs text-white/60">
-              ⏱️ ~{remainingMin} min restantes en este módulo
+              {t('route.remaining_min', { min: remainingMin })}
             </p>
             <p className="text-[10px] text-white/40">
-              Curso: {Math.round(courseProgress)}% · ~{Math.max(1, Math.ceil((100 - courseProgress) / 20))} días · {getWeeklyXP().weekly}/{getWeeklyXP().weeklyTarget} XP esta semana
+              {t('route.course_progress', {
+                progress: Math.round(courseProgress),
+                days: Math.max(1, Math.ceil((100 - courseProgress) / 20)),
+                xp: getWeeklyXP().weekly,
+                target: getWeeklyXP().weeklyTarget,
+              })}
             </p>
           </div>
         )}
@@ -133,7 +140,7 @@ const PrimaryActionCard = ({ route, onContinue, mod }) => {
         {route.currentModule?.progressPct > 0 && (
           <div className="mt-3 space-y-1">
             <div className="flex justify-between items-center">
-              <span className="text-[10px] text-white/60">Progreso del módulo</span>
+              <span className="text-[10px] text-white/60">{t('route.module_progress')}</span>
               <span className="text-[10px] font-semibold text-white/80">{route.currentModule.progressPct}%</span>
             </div>
             <div className="h-1.5 bg-white/20 rounded-full overflow-hidden" role="progressbar" aria-valuenow={route.currentModule.progressPct} aria-valuemin="0" aria-valuemax="100">
@@ -209,4 +216,4 @@ const TuRutaDeHoy = ({ onAction }) => {
   );
 };
 
-export default TuRutaDeHoy;
+export default React.memo(TuRutaDeHoy);

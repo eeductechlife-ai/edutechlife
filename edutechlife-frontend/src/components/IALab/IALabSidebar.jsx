@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -7,7 +7,10 @@ import { useIALabProgressContext, useIALabUIContext } from '../../context/IALabC
 import { useProgressContext } from '../../context/ProgressContext';
 import { useIALabStore } from '../../store/ialabStore';
 import { useSidebarState } from '../../hooks/IALab/useSidebarState';
+import { useTranslation } from '../../i18n/I18nProvider';
 import CourseCompletionSection from './CourseCompletionSection';
+import StreakBadge from './StreakBadge';
+import StreakDetailsModal from './StreakDetailsModal';
 
 const COLLAPSED_WIDTH = 72;
 const EXPANDED_WIDTH = 256;
@@ -29,6 +32,7 @@ const TooltipIcon = ({ label, children }) => (
 );
 
 const IALabSidebar = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const goToModule = (id) => navigate(`/ialab/${id}`);
   const {
@@ -40,25 +44,20 @@ const IALabSidebar = () => {
     sidebarDropdowns, toggleSidebarDropdown,
     courseCompleted, setShowCertificateModal,
     storedCertificate, generateCertificate, certificateGenerating,
-    getBadgesSummary, getUserBadges,
   } = useIALabUIContext();
 
   const { completedInfographics } = useProgressContext();
   const xp = useIALabStore(s => s.xp);
   const streak = useIALabStore(s => s.streak);
-  const badges = useIALabStore(s => s.badges);
   const getLevel = useIALabStore(s => s.getLevel);
   const getXpForNextLevel = useIALabStore(s => s.getXpForNextLevel);
   const getLevelProgress = useIALabStore(s => s.getLevelProgress);
-  const calculateModulePoints = useIALabStore(s => s.calculateModulePoints);
   const getTotalPoints = useIALabStore(s => s.getTotalPoints);
   const isStreakAtRisk = useIALabStore(s => s.isStreakAtRisk);
   const { isCollapsed, toggleSidebar } = useSidebarState();
+  const [showStreakModal, setShowStreakModal] = useState(false);
 
   const isInfographicCompleted = (infographicId) => completedInfographics.includes(`${infographicId}`);
-
-  const badgesSummary = getBadgesSummary();
-  const showBadges = badgesSummary.earned > 0;
 
   return (
     <motion.aside
@@ -202,17 +201,8 @@ const IALabSidebar = () => {
                 </div>
               </TooltipIcon>
 
-              {showBadges && (
-                <TooltipIcon label={`${badgesSummary.earned}/${badgesSummary.total} insignias ganadas`}>
-                  <div className="w-full h-9 rounded-lg bg-petroleum/5 dark:bg-petroleum/[0.12] border border-petroleum/10 dark:border-petroleum/20 flex items-center justify-center gap-2.5 flex-shrink-0">
-                    <Icon name="fa-award" className="text-corporate text-lg" />
-                    <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">{badgesSummary.earned}/{badgesSummary.total}</span>
-                  </div>
-                </TooltipIcon>
-              )}
-
               {storedCertificate && (
-                <TooltipIcon label="Ver certificado del curso">
+                <TooltipIcon label={t('sidebar.certificate_view')}>
                   <div className="w-full h-9 rounded-lg bg-gradient-to-r from-amber-50 to-amber-100/50 dark:from-amber-900/20 dark:to-amber-800/10 border border-amber-200/50 dark:border-amber-700/30 flex items-center justify-center gap-2.5 cursor-pointer hover:from-amber-100 hover:to-amber-200/50 dark:hover:from-amber-900/30 dark:hover:to-amber-800/20 transition-all flex-shrink-0"
                     onClick={() => setShowCertificateModal(true)}
                     tabIndex={0}
@@ -220,7 +210,7 @@ const IALabSidebar = () => {
                     onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setShowCertificateModal(true); } }}
                   >
                     <Icon name="fa-certificate" className="text-amber-500 text-lg" />
-                    <span className="text-xs font-semibold text-amber-700 dark:text-amber-400">Certificado</span>
+                    <span className="text-xs font-semibold text-amber-700 dark:text-amber-400">{t('sidebar.certificate')}</span>
                   </div>
                 </TooltipIcon>
               )}
@@ -249,45 +239,20 @@ const IALabSidebar = () => {
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="text-center">
                       <div className="text-lg font-bold text-petroleum dark:text-[#4DA8C4]">{Math.round(courseProgress)}%</div>
-                      <div className="text-[10px] text-slate-400 dark:text-slate-400 mt-0.5">Completado</div>
+                      <div className="text-[10px] text-slate-400 dark:text-slate-400 mt-0.5">{t('sidebar.completed')}</div>
                     </div>
                   </div>
                 </div>
-                <h3 className="text-lg font-bold text-petroleum dark:text-[#4DA8C4] mt-3">Progreso del Curso</h3>
+                <h3 className="text-lg font-bold text-petroleum dark:text-[#4DA8C4] mt-3">{t('sidebar.progress')}</h3>
               </div>
 
-              <div className="w-full p-3 bg-gradient-to-br from-petroleum/5 to-corporate/5 rounded-xl border border-petroleum/10 space-y-2.5">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Icon name="fa-graduation-cap" className="text-corporate text-base" />
-                    <span className="text-sm font-bold text-petroleum dark:text-[#4DA8C4]">Nv.{getLevel()}</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <Icon name="fa-fire" className={`text-sm ${streak >= 3 ? 'text-corporate' : 'text-slate-300'}`} />
-                    <span className={`text-sm font-semibold ${streak >= 3 ? 'text-corporate' : 'text-slate-400'}`}>{streak} días</span>
-                    {isStreakAtRisk() && streak > 0 && (
-                      <span className="text-[9px] text-amber-500 font-medium ml-1 animate-pulse">⚠️</span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="border-t border-petroleum/10"></div>
-
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5">
-                    <Icon name="fa-award" className="text-corporate text-xs" />
-                    <span className="text-sm font-semibold text-petroleum dark:text-[#4DA8C4]">Puntos acumulados</span>
-                  </div>
-                  <div className="flex items-baseline gap-0.5">
-                    <span className="text-sm font-bold text-corporate dark:text-[#66CCCC]">{getTotalPoints()}</span>
-                    <span className="text-[9px] text-slate-400">/ 1000</span>
-                  </div>
-                </div>
-                <div className="h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden" role="progressbar" aria-valuenow={getTotalPoints()} aria-valuemin="0" aria-valuemax="1000" aria-label="Puntos acumulados">
-                  <div className="h-full rounded-full bg-petroleum transition-all duration-700"
-                       style={{ width: `${(getTotalPoints() / 1000) * 100}%` }} />
-                </div>
-              </div>
+              <StreakBadge
+                streak={streak}
+                xp={getTotalPoints()}
+                isAtRisk={isStreakAtRisk()}
+                level={getLevel()}
+                onClick={() => setShowStreakModal(true)}
+              />
 
               <div className="px-2 w-full">
                 <div className="flex items-center gap-2 mb-2">
@@ -295,7 +260,7 @@ const IALabSidebar = () => {
                     <Icon name="fa-layer-group" className="text-white text-[10px]" />
                   </div>
                   <h3 className="text-xs font-bold tracking-[0.12em] uppercase text-petroleum">
-                    MÓDULOS DEL CURSO
+                    {t('sidebar.modules')}
                   </h3>
                   <div className="flex-1 h-px bg-gradient-to-r from-petroleum/20 via-corporate/20 to-transparent"></div>
                 </div>
@@ -346,7 +311,7 @@ const IALabSidebar = () => {
                       <Icon name="fa-cubes" className="text-white text-[10px]" />
                     </div>
                     <h3 className="text-xs font-bold tracking-[0.08em] uppercase text-petroleum">
-                      RECURSOS ADICIONALES
+                      {t('sidebar.resources')}
                     </h3>
                     <div className="flex-1 h-px bg-gradient-to-r from-petroleum/20 via-corporate/20 to-transparent"></div>
                   </div>
@@ -385,10 +350,10 @@ const IALabSidebar = () => {
                             <div className="flex items-center gap-2 mt-1">
                               {completed ? (
                                 <span className="text-xs font-medium px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-md flex items-center gap-1">
-                                  <Icon name="fa-check" className="text-[9px]" /> Completado
+                                  <Icon name="fa-check" className="text-[9px]" /> {t('sidebar.completed')}
                                 </span>
                               ) : (
-                                <span className="text-xs font-medium px-2 py-0.5 bg-slate-100 text-slate-500 rounded-md">Pendiente</span>
+                                <span className="text-xs font-medium px-2 py-0.5 bg-slate-100 text-slate-500 rounded-md">{t('sidebar.pending')}</span>
                               )}
                               <span className="text-xs text-slate-400">{item.meta}</span>
                             </div>
@@ -399,52 +364,6 @@ const IALabSidebar = () => {
                   </div>
                 )}
               </div>
-
-              {showBadges && (
-                <div className="px-1 w-full">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-1.5">
-                      <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center shadow-sm flex-shrink-0">
-                        <Icon name="fa-award" className="text-white text-[10px]" />
-                      </div>
-                      <h3 className="text-[10px] font-bold tracking-[0.08em] uppercase text-petroleum">
-                        INSIGNIAS
-                      </h3>
-                      <div className="flex-1 h-px bg-gradient-to-r from-petroleum/20 via-corporate/20 to-transparent"></div>
-                    </div>
-                  </div>
-                  <div className="space-y-1.5">
-                    <div className="flex items-center justify-between px-1">
-                      <span className="text-[10px] md:text-xs text-slate-500">
-                        {badgesSummary.earned}/{badgesSummary.total} ganadas
-                      </span>
-                      <span className="text-[10px] md:text-xs font-semibold text-corporate">
-                        {Math.round((badgesSummary.earned / badgesSummary.total) * 100)}%
-                      </span>
-                    </div>
-                    <div className="h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden" role="progressbar" aria-valuenow={badgesSummary.earned} aria-valuemin="0" aria-valuemax={badgesSummary.total} aria-label="Progreso de insignias">
-                      <div
-                        className="h-full bg-gradient-to-r from-petroleum to-corporate rounded-full transition-all duration-700"
-                        style={{ width: `${(badgesSummary.earned / badgesSummary.total) * 100}%` }}
-                      />
-                    </div>
-                    <div className="grid grid-cols-4 gap-1.5 mt-2">
-                      {badgesSummary.recent.map((badge) => (
-                        <div
-                          key={badge.id}
-                          className="flex flex-col items-center p-2 rounded-lg bg-petroleum/5 hover:bg-petroleum/10 transition-colors group relative min-h-[52px]"
-                          aria-label={`${badge.label}: ${badge.desc}`}
-                        >
-                          <Icon name={badge.icon} className="text-sm text-corporate" />
-                          <span className="text-[9px] md:text-[10px] text-slate-500 mt-0.5 text-center leading-tight group-hover:text-petroleum transition-colors">
-                            {badge.label}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
 
               {storedCertificate && (
                 <div className="px-1 w-full mt-4">
@@ -464,8 +383,12 @@ const IALabSidebar = () => {
           )}
         </AnimatePresence>
       </div>
+      <StreakDetailsModal
+        isOpen={showStreakModal}
+        onClose={() => setShowStreakModal(false)}
+      />
     </motion.aside>
   );
 };
 
-export default IALabSidebar;
+export default React.memo(IALabSidebar);

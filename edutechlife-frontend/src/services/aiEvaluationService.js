@@ -1,5 +1,5 @@
-const DEEPSEEK_API_KEY = import.meta.env.VITE_DEEPSEEK_API_KEY;
-const DEEPSEEK_API_URL = 'https://api.deepseek.com/v1/chat/completions';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const API_URL = `${API_BASE_URL}/api/chat`;
 
 const VALERIO_SYSTEM_PROMPT = `Eres Valerio, el tutor experto de Edutechlife. Evalúa el prompt del alumno. Debes responder estrictamente en formato JSON con estas llaves: "score" (0-100), "feedback" (3 consejos breves), "improvedPrompt" (el prompt optimizado) y "level" (Novato, Pro, Maestro). Responde únicamente con JSON válido, sin texto adicional.`;
 
@@ -94,19 +94,13 @@ export const evaluateWithDeepseek = async (studentPrompt, moduleId = 1) => {
     };
   }
 
-  if (!DEEPSEEK_API_KEY || DEEPSEEK_API_KEY === 'sk-your-deepseek-key-here') {
-    console.warn('Deepseek API key no configurada, usando modo demo');
-    return generateDemoResponse(studentPrompt, moduleId);
-  }
-
   const evaluationPrompt = buildEvaluationPrompt(studentPrompt, moduleId);
 
   try {
-    const response = await fetch(DEEPSEEK_API_URL, {
+    const response = await fetch(API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${DEEPSEEK_API_KEY}`,
       },
       body: JSON.stringify({
         model: 'deepseek-chat',
@@ -122,7 +116,7 @@ export const evaluateWithDeepseek = async (studentPrompt, moduleId = 1) => {
         ],
         temperature: 0.7,
         max_tokens: 2000,
-        response_format: { type: 'json_object' },
+        isJson: true,
       }),
     });
 
@@ -132,7 +126,7 @@ export const evaluateWithDeepseek = async (studentPrompt, moduleId = 1) => {
     }
 
     const data = await response.json();
-    const content = data.choices?.[0]?.message?.content;
+    const content = data.result || data.choices?.[0]?.message?.content;
 
     if (!content) {
       throw new Error('Respuesta vacía de la API');

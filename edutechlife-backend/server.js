@@ -27,8 +27,25 @@ app.use((req, res, next) => {
     }
     next();
 });
-app.use(helmet());
-app.use(express.json());
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+            styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+            fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+            imgSrc: ["'self'", 'data:', 'blob:', 'https:'],
+            connectSrc: ["'self'", 'https://api.deepseek.com', 'https://texttospeech.googleapis.com'],
+            frameSrc: ["'self'", 'https://www.youtube.com'],
+            mediaSrc: ["'self'", 'blob:'],
+            objectSrc: ["'none'"],
+            upgradeInsecureRequests: [],
+        },
+    },
+    crossOriginEmbedderPolicy: false,
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
+}));
+app.use(express.json({ limit: '1mb' }));
 
 // Rate limiting
 const apiLimiter = rateLimit({
@@ -909,44 +926,32 @@ app.get('/api/ialab/resources', async (req, res) => {
     }
 });
 
-// Ruta para obtener token de Google Cloud (para Gemini TTS)
-app.get('/api/voice-token', async (req, res) => {
-    // 1. Configuración de encabezados para saltar el CORS
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-    res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+// Proxy para Google Cloud Text-to-Speech (protege la API key)
+const GOOGLE_TTS_URL = 'https://texttospeech.googleapis.com/v1/text:synthesize';
+const GOOGLE_TTS_API_KEY = process.env.GOOGLE_TTS_API_KEY;
 
-    // Responder a la petición preflight de los navegadores
-    if (req.method === 'OPTIONS') {
-        res.status(200).end();
-        return;
+app.post('/api/tts', express.json(), async (req, res) => {
+    if (!GOOGLE_TTS_API_KEY) {
+        return res.status(500).json({ error: 'TTS API key not configured on server' });
     }
-    
+
     try {
-        const { GoogleAuth } = require('google-auth-library');
-        
-        // 2. Limpieza de la llave privada (VITAL para evitar el 401)
-        const privateKey = process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n');
-        
-        if (!process.env.GOOGLE_CLIENT_EMAIL || !privateKey) {
-            return res.status(500).json({ error: 'Google credentials not configured' });
-        }
-        
-        const auth = new GoogleAuth({
-            scopes: ['https://www.googleapis.com/auth/cloud-platform'],
-            credentials: {
-                client_email: process.env.GOOGLE_CLIENT_EMAIL,
-                private_key: privateKey,
-            }
+        const response = await fetch(`${GOOGLE_TTS_URL}?key=${GOOGLE_TTS_API_KEY}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(req.body)
         });
-        
-        const client = await auth.getClient();
-        const token = await client.getAccessToken();
-        
-        res.json({ access_token: token });
+
+        if (!response.ok) {
+            const err = await response.text();
+            console.error('[TTS] Error:', err);
+            return res.status(response.status).json({ error: 'TTS upstream error' });
+        }
+
+        const data = await response.json();
+        res.json(data);
     } catch (error) {
-        console.error('Error generating Google token:', error);
+        console.error('[TTS] Proxy error:', error);
         res.status(500).json({ error: error.message });
     }
 });

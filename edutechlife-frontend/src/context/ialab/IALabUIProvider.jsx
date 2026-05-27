@@ -78,20 +78,21 @@ export function IALabUIProvider({ children, onBack }) {
   const setIsSynthesizerOpen = useIALabStore(s => s.setIsSynthesizerOpen);
   const isMarkingComplete = useIALabStore(s => s.isMarkingComplete);
   const setIsMarkingComplete = useIALabStore(s => s.setIsMarkingComplete);
+  const showBadgeGallery = useIALabStore(s => s.showBadgeGallery);
+  const setShowBadgeGallery = useIALabStore(s => s.setShowBadgeGallery);
+  const showLeaderboard = useIALabStore(s => s.showLeaderboard);
+  const setShowLeaderboard = useIALabStore(s => s.setShowLeaderboard);
   const isTouchDevice = useIALabStore(s => s.isTouchDevice);
   const setIsTouchDevice = useIALabStore(s => s.setIsTouchDevice);
   const isIOS = useIALabStore(s => s.isIOS);
   const setIsIOS = useIALabStore(s => s.setIsIOS);
   const isAndroid = useIALabStore(s => s.isAndroid);
   const setIsAndroid = useIALabStore(s => s.setIsAndroid);
+  const clearProgressFromStorage = useIALabStore(s => s.clearProgressFromStorage);
   const xp = useIALabStore(s => s.xp);
   const streak = useIALabStore(s => s.streak);
-  const lastActivityDate = useIALabStore(s => s.lastActivityDate);
   const badges = useIALabStore(s => s.badges);
   const lessonProgress = useIALabStore(s => s.lessonProgress);
-  const getBadgesSummary = useIALabStore(s => s.getBadgesSummary);
-  const getUserBadges = useIALabStore(s => s.getUserBadges);
-  const clearProgressFromStorage = useIALabStore(s => s.clearProgressFromStorage);
 
   const clerkRole = clerkUser?.publicMetadata?.role || 'student';
   const user = useMemo(() => clerkUser ? {
@@ -383,13 +384,10 @@ export function IALabUIProvider({ children, onBack }) {
     setIsIOS,
     isAndroid,
     setIsAndroid,
-    xp,
-    streak,
-    lastActivityDate,
-    badges,
-    lessonProgress,
-    getBadgesSummary,
-    getUserBadges,
+    showBadgeGallery,
+    setShowBadgeGallery,
+    showLeaderboard,
+    setShowLeaderboard,
     user,
     isLoaded: authLoaded,
     signOut,
@@ -405,7 +403,8 @@ export function IALabUIProvider({ children, onBack }) {
     storedCertificate, certificateGenerating,
     currentLessonIndex, isSynthesizerOpen, isMarkingComplete,
     isTouchDevice, isIOS, isAndroid,
-    xp, streak, lastActivityDate, badges, lessonProgress,
+    showBadgeGallery, setShowBadgeGallery,
+    showLeaderboard, setShowLeaderboard,
     user, authLoaded, signOut, onBack,
     generateCertificate,
   ]);

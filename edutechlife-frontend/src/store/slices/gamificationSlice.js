@@ -27,6 +27,7 @@ export const createGamificationSlice = (set, get) => ({
     return now;
   })(),
   badges: [],
+  badgesDates: {},
   forumPostCount: 0,
   forumCommentCount: 0,
 
@@ -74,7 +75,11 @@ export const createGamificationSlice = (set, get) => ({
   awardBadge: (badgeId) => {
     const state = get();
     if (state.badges.includes(badgeId)) return state;
-    set({ badges: [...state.badges, badgeId] });
+    const now = new Date().toISOString();
+    set({
+      badges: [...state.badges, badgeId],
+      badgesDates: { ...state.badgesDates, [badgeId]: now },
+    });
     get().persistGamificationState();
   },
 
@@ -95,7 +100,13 @@ export const createGamificationSlice = (set, get) => ({
     if (totalModulesCompleted >= 5 && !state.badges.includes('all_modules')) newBadges.push('all_modules');
 
     if (newBadges.length > 0) {
-      set({ badges: [...state.badges, ...newBadges] });
+      const now = new Date().toISOString();
+      const newDates = {};
+      newBadges.forEach(id => { newDates[id] = now; });
+      set({
+        badges: [...state.badges, ...newBadges],
+        badgesDates: { ...state.badgesDates, ...newDates },
+      });
       get().persistGamificationState();
       window.dispatchEvent(new CustomEvent('ialab:badgesAwarded', { detail: { badges: newBadges } }));
     }
@@ -121,7 +132,7 @@ export const createGamificationSlice = (set, get) => ({
     const state = get();
     return state.badges.map(id => {
       const info = BADGE_INFO[id];
-      return info ? { id, ...info } : null;
+      return info ? { id, ...info, dateEarned: state.badgesDates[id] || null } : null;
     }).filter(Boolean);
   },
 
@@ -132,7 +143,7 @@ export const createGamificationSlice = (set, get) => ({
       earned: state.badges.length,
       recent: state.badges.slice(-3).reverse().map(id => {
         const info = BADGE_INFO[id];
-        return info ? { id, ...info } : null;
+        return info ? { id, ...info, dateEarned: state.badgesDates[id] || null } : null;
       }).filter(Boolean),
     };
   },

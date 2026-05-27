@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import DOMPurify from 'dompurify';
 import { callDeepseekStream } from '../utils/api';
 import { speakTextConversational, iniciarReconocimiento } from '../utils/speech';
 import { evaluateWithDeepseek } from '../services/aiEvaluationService';
@@ -259,7 +260,7 @@ const AIPanel = ({ title, icon = 'fa-brain-circuit', placeholder, systemPrompt, 
                     </div>
                     <div 
                         className="ai-result-body" 
-                        dangerouslySetInnerHTML={{ __html: window.marked ? window.marked.parse(displayedRes) : displayedRes }} 
+                        dangerouslySetInnerHTML={{ __html: window.marked ? DOMPurify.sanitize(window.marked.parse(displayedRes)) : displayedRes }} 
                         ref={resultRef}
                     />
                 </div>

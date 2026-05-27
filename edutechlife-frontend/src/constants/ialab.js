@@ -22,6 +22,7 @@ export const LS_KEYS = {
   STREAK: 'ialab_streak',
   LAST_ACTIVITY_DATE: 'ialab_last_activity_date',
   BADGES: 'ialab_badges',
+  BADGES_DATES: 'ialab_badges_dates',
   CHECKPOINT_ANSWERS: 'ialab_checkpoint_answers',
   FORUM_POST_COUNT: 'ialab_forum_post_count',
   FORUM_COMMENT_COUNT: 'ialab_forum_comment_count',

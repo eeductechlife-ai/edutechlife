@@ -3,9 +3,11 @@ import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabProgressContext, useIALabUIContext } from '../../context/IALabContext';
 import { useProgressContext } from '../../context/ProgressContext';
 import { useIALabStore } from '../../store/ialabStore';
+import { useTranslation } from '../../i18n/I18nProvider';
 import StudyPlannerModal from './StudyPlannerModal';
 
 const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenProfile, onOpenHistory, onOpenHelp }) => {
+  const { t } = useTranslation();
   const {
     activeMod, setActiveMod, courseProgress, modules,
     isModuleLocked, calculateModuleScore
@@ -13,7 +15,7 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
 
   const {
     user, sidebarDropdowns, toggleSidebarDropdown,
-    getBadgesSummary, setShowCertificateModal,
+    setShowCertificateModal,
     courseCompleted, signOut
   } = useIALabUIContext();
 
@@ -21,6 +23,7 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
   const streak = useIALabStore(s => s.streak);
   const getLevel = useIALabStore(s => s.getLevel);
   const isStreakAtRisk = useIALabStore(s => s.isStreakAtRisk);
+  const getBadgesSummary = useIALabStore(s => s.getBadgesSummary);
   const [showStudyPlanner, setShowStudyPlanner] = useState(false);
   const containerRef = useRef(null);
 
@@ -58,9 +61,9 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
             {user?.full_name ? user.full_name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'U'}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 truncate">{user?.full_name || 'Usuario'}</p>
+            <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 truncate">{user?.full_name || t('mobile_menu.user_fallback')}</p>
             <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
-              <span>Nv.{getLevel()}</span>
+              <span>{t('mobile_menu.level')}{getLevel()}</span>
               <span>🔥 {streak}</span>
               {isStreakAtRisk() && streak > 0 && <span className="text-[9px] text-amber-500">⚠️</span>}
             </div>
@@ -76,7 +79,7 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
       <div className="px-3 py-3">
         <h3 className="text-[10px] font-bold tracking-[0.12em] uppercase text-corporate mb-2 flex items-center gap-1.5">
           <Icon name="fa-user" className="text-corporate text-xs" />
-          UNDRMENU
+          {t('mobile_menu.undermenu')}
         </h3>
         <div className="space-y-0.5">
           <button onClick={onOpenProfile}
@@ -84,7 +87,7 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
             <div className="w-7 h-7 rounded-lg bg-petroleum/8 dark:bg-petroleum/20 flex items-center justify-center flex-shrink-0">
               <Icon name="fa-user" className="text-xs text-petroleum dark:text-petroleum" />
             </div>
-            Mi Perfil
+            {t('mobile_menu.my_profile')}
           </button>
 
           <button onClick={onOpenHistory}
@@ -92,7 +95,7 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
             <div className="w-7 h-7 rounded-lg bg-petroleum/8 dark:bg-petroleum/20 flex items-center justify-center flex-shrink-0">
               <Icon name="fa-chart-line" className="text-xs text-petroleum dark:text-petroleum" />
             </div>
-            Mi Historial de Aprendizaje
+            {t('mobile_menu.my_history')}
           </button>
 
           <button onClick={() => setShowStudyPlanner(true)}
@@ -100,7 +103,7 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
             <div className="w-7 h-7 rounded-lg bg-petroleum/8 dark:bg-petroleum/20 flex items-center justify-center flex-shrink-0">
               <Icon name="fa-calendar" className="text-xs text-petroleum dark:text-petroleum" />
             </div>
-            Plan de Estudio
+            {t('mobile_menu.study_plan')}
           </button>
 
           <button onClick={() => { closeMobileMenu(); setShowCertificateModal(true); }}
@@ -108,7 +111,7 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
             <div className="w-7 h-7 rounded-lg bg-petroleum/8 dark:bg-petroleum/20 flex items-center justify-center flex-shrink-0">
               <Icon name="fa-certificate" className="text-xs text-petroleum dark:text-petroleum" />
             </div>
-            Certificados
+            {t('mobile_menu.certificates')}
           </button>
 
           <button onClick={onOpenHelp}
@@ -116,7 +119,7 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
             <div className="w-7 h-7 rounded-lg bg-petroleum/8 dark:bg-petroleum/20 flex items-center justify-center flex-shrink-0">
               <Icon name="fa-question-circle" className="text-xs text-petroleum dark:text-petroleum" />
             </div>
-            Ayuda
+            {t('mobile_menu.help')}
           </button>
 
         </div>
@@ -128,7 +131,7 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
       <div className="px-3 py-3">
         <h3 className="text-[10px] font-bold tracking-[0.12em] uppercase text-corporate mb-2 flex items-center gap-1.5">
           <Icon name="fa-layer-group" className="text-corporate text-xs" />
-          MODULOS DEL CURSO
+          {t('mobile_menu.modules')}
         </h3>
         <div className="space-y-0.5">
           {modules.map((mod) => {
@@ -172,21 +175,21 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
       <div className="px-3 py-3">
         <div className="flex items-center justify-between mb-2">
           <h3 className="text-[10px] font-bold tracking-[0.08em] uppercase text-corporate flex items-center gap-1.5">
-            <Icon name="fa-cubes" className="text-corporate text-xs" /> RECURSOS ADICIONALES
+            <Icon name="fa-cubes" className="text-corporate text-xs" /> {t('mobile_menu.resources')}
           </h3>
           <button onClick={() => toggleSidebarDropdown('recursos')}
             className="w-11 h-11 rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/30"
-            aria-label={sidebarDropdowns.recursos ? 'Colapsar recursos' : 'Expandir recursos'}>
+            aria-label={sidebarDropdowns.recursos ? t('mobile_menu.resources_collapse') : t('mobile_menu.resources_expand')}>
             <Icon name={sidebarDropdowns.recursos ? 'fa-chevron-up' : 'fa-chevron-down'} className="text-xs" />
           </button>
         </div>
         {sidebarDropdowns.recursos && (
           <div className="space-y-0.5">
             {[
-              { id: 'i' + activeMod, label: 'Cheat Sheet RTF', icon: 'fa-file-alt', meta: '2 paginas' },
-              { id: 'i' + activeMod + '_2', label: 'Ejemplos Practicos', icon: 'fa-code', meta: '15 ejemplos' },
-              { id: 'i' + activeMod + '_3', label: 'Plantillas Premium', icon: 'fa-clipboard', meta: '8 plantillas' },
-              { id: 'i' + activeMod + '_4', label: 'Casos de Estudio', icon: 'fa-chart-line', meta: '5 casos' },
+              { id: 'i' + activeMod, label: t('mobile_menu.resource_cheatsheet'), icon: 'fa-file-alt', meta: t('mobile_menu.resource_cheatsheet_meta') },
+              { id: 'i' + activeMod + '_2', label: t('mobile_menu.resource_examples'), icon: 'fa-code', meta: t('mobile_menu.resource_examples_meta') },
+              { id: 'i' + activeMod + '_3', label: t('mobile_menu.resource_templates'), icon: 'fa-clipboard', meta: t('mobile_menu.resource_templates_meta') },
+              { id: 'i' + activeMod + '_4', label: t('mobile_menu.resource_cases'), icon: 'fa-chart-line', meta: t('mobile_menu.resource_cases_meta') },
             ].map((r) => {
               const completed = isInfographicCompleted(r.id);
               return (
@@ -199,7 +202,7 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
                   </div>
                   <div className="flex-1 min-w-0 text-left">
                     <p className="text-sm truncate">{r.label}</p>
-                    <p className="text-[10px] text-slate-600">{completed ? 'Completado' : r.meta}</p>
+                    <p className="text-[10px] text-slate-600">{completed ? t('mobile_menu.completed') : r.meta}</p>
                   </div>
                 </button>
               );
@@ -217,10 +220,10 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
             <div className="mx-3 border-t border-slate-100 dark:border-slate-700" />
             <div className="px-3 py-3 space-y-2">
               <h3 className="text-[10px] font-bold tracking-[0.08em] uppercase text-corporate flex items-center gap-1.5">
-                <Icon name="fa-award" className="text-corporate text-xs" /> INSIGNIAS
+                <Icon name="fa-award" className="text-corporate text-xs" /> {t('mobile_menu.badges')}
               </h3>
               <div className="flex items-center justify-between px-1">
-                <span className="text-xs text-slate-500">{badgesSummary.earned}/{badgesSummary.total} ganadas</span>
+                <span className="text-xs text-slate-500">{t('mobile_menu.badges_earned', { earned: badgesSummary.earned, total: badgesSummary.total })}</span>
                 <span className="text-xs font-semibold text-corporate">{Math.round((badgesSummary.earned / badgesSummary.total) * 100)}%</span>
               </div>
               <div className="h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
@@ -230,7 +233,7 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
               {courseCompleted && (
                 <button onClick={() => { setShowCertificateModal(true); closeMobileMenu(); }}
                   className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-petroleum dark:text-petroleum bg-petroleum/5 hover:bg-petroleum/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/30 min-h-[44px]">
-                  <Icon name="fa-certificate" className="text-corporate text-sm" /> Ver Certificado
+                  <Icon name="fa-certificate" className="text-corporate text-sm" /> {t('mobile_menu.view_certificate')}
                 </button>
               )}
             </div>
@@ -245,7 +248,7 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
           className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-petroleum/5 dark:hover:bg-petroleum/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/30 min-h-[44px]">
           <span className="flex items-center gap-2.5">
             <Icon name={isDarkMode ? 'fa-sun' : 'fa-moon'} className={`text-sm ${isDarkMode ? 'text-amber-400' : 'text-slate-500'}`} />
-            Modo {isDarkMode ? 'Claro' : 'Oscuro'}
+            {t('mobile_menu.theme_mode', { mode: isDarkMode ? t('mobile_menu.theme_light') : t('mobile_menu.theme_dark') })}
           </span>
           <div className={`w-9 h-5 rounded-full transition-colors duration-200 ${isDarkMode ? 'bg-petroleum' : 'bg-slate-300'} relative`}>
             <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-transform duration-200 ${isDarkMode ? 'translate-x-[18px]' : 'translate-x-0.5'}`} />
@@ -261,7 +264,7 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
           <div className="w-7 h-7 rounded-lg bg-red-50 dark:bg-red-900/20 flex items-center justify-center flex-shrink-0">
             <Icon name="fa-sign-out-alt" className="text-xs text-red-500" />
           </div>
-          Cerrar Sesion
+          {t('mobile_menu.logout')}
         </button>
       </div>
 
@@ -271,4 +274,4 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
   );
 };
 
-export default IALabMobileMenu;
+export default React.memo(IALabMobileMenu);
