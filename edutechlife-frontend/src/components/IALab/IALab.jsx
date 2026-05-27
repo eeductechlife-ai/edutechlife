@@ -511,7 +511,7 @@ const IALabContent = () => {
                             {/* 2. SECCIÓN INFORMATIVA DEL MÓDULO */}
                             <AnimatePresence mode="wait">
                             {(viewSection === null || viewSection === 'objetivos') && (
-                              <motion.div key={`info-${activeMod}-${isLoadingProgress}`} exit={{ opacity: 0 }} transition={{ duration: 0.15 }} className="mt-4" data-tour="tour-objetivos">
+                              <motion.div key={`info-${activeMod}-${isLoadingProgress}`} exit={{ opacity: 0 }} transition={{ duration: 0.15 }} data-tour="tour-objetivos">
                                 {isLoadingProgress ? <ModuleInfoSkeleton /> : <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.25 }}>
                                   <SectionErrorBoundary name="ModuleInfoSection" title={t('ialab.info_unavailable')}>
                                     <ModuleInfoSection />
@@ -567,7 +567,7 @@ const IALabContent = () => {
                             {/* Herramientas + Tutorías */}
                             <AnimatePresence mode="wait">
                             {(viewSection === null || viewSection === 'herramientas') && (
-                              <motion.div key={`tools-${activeMod}-${isLoadingProgress}`} exit={{ opacity: 0 }} transition={{ duration: 0.15 }} className="mt-5" data-tour="tour-herramientas">
+                              <motion.div key={`tools-${activeMod}-${isLoadingProgress}`} exit={{ opacity: 0 }} transition={{ duration: 0.15 }} data-tour="tour-herramientas">
                                 {isLoadingProgress ? <ToolsSkeleton /> : <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.25 }}>
                                   <SectionErrorBoundary name="ToolTutorAccordion" title={t('ialab.tools_unavailable')}>
                                     <ToolTutorAccordion onAction={handleGlobalAction} />
