@@ -402,7 +402,7 @@ const IALabContent = () => {
                       </a>
 
                       {/* Área de Contenido Principal - scroll propio */}
-                       <main id="main-content" className="flex-1 overflow-y-auto px-4 pt-16 landscape:pt-12 pb-2 md:px-8 md:pt-4 lg:px-10 lg:py-5 xl:px-12 2xl:px-16">
+                       <main id="main-content"                         className="flex-1 overflow-y-auto px-4 pt-16 landscape:pt-12 pb-2 md:px-8 md:pt-4 lg:px-10 lg:pt-5 lg:pb-8 xl:px-12 2xl:px-16">
                         <AnimatePresence mode="wait" custom={directionRef.current}>
                           <motion.div
                             key={`content-${activeMod}`}
@@ -438,7 +438,7 @@ const IALabContent = () => {
                                 <RouteSkeleton />
                               </motion.div>
                             ) : (
-                              <motion.div key={`content-ruta-${activeMod}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.25 }}>
+                              <motion.div key={`content-ruta-${activeMod}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.25 }} className="space-y-4">
                                 <SectionErrorBoundary name="RecommendationsPanel" title={t('ialab.recommendations_unavailable')}>
                                   <RecommendationsPanel onAction={handleGlobalAction} isLoading={isLoadingProgress} />
                                 </SectionErrorBoundary>

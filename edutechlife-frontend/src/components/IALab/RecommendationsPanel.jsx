@@ -65,7 +65,7 @@ const RecommendationsPanel = ({ onAction, isLoading }) => {
     <div ref={topRef} className="space-y-2">
       <button
         onClick={toggleOpen}
-        className="w-full flex items-center gap-1.5 pt-2 text-left cursor-pointer group"
+        className="w-full flex items-center gap-1.5 text-left cursor-pointer group"
         aria-expanded={isOpen}
         aria-label={isOpen ? 'Ocultar recomendaciones' : 'Mostrar recomendaciones'}
       >
