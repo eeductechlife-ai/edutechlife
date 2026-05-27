@@ -1,83 +1,14 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
-import { useIALabProgressContext } from '../../context/IALabContext';
 import { useIALabStore } from '../../store/ialabStore';
 import useBodyScrollLock from '../../hooks/useBodyScrollLock';
 import useFocusTrap from '../../hooks/useFocusTrap';
 import { useStudyNotesSync } from '../../hooks/IALab/useStudyNotesSync';
 import { useActivityCalendar } from '../../hooks/useActivityCalendar';
 
-// PDF helpers (jsPDF A4 portrait)
-const PW = 210, PH = 297, ML = 14, MR = 14, MT = 22, MB = 14;
-const CW = PW - ML - MR;
-const CP = [0, 75, 99];
-const CC = [0, 188, 212];
-const CS = [100, 116, 139];
-const CD = [30, 41, 59];
-
-let cy = MT;
-
-const pdfResetY = () => { cy = MT; };
-const pdfCheckPage = (doc, need) => {
-  if (cy + need > PH - MB - 12) {
-    addFooter(doc);
-    doc.addPage();
-    pdfDrawHeader(doc);
-  }
-};
-const addFooter = (doc) => {
-  const n = doc.internal.getNumberOfPages();
-  doc.setFontSize(7);
-  doc.setTextColor(...CS);
-  doc.text(`Página ${n}`, PW - MR, PH - MB + 5, { align: 'right' });
-  doc.setDrawColor(200, 200, 200);
-  doc.line(ML, PH - MB + 2, PW - MR, PH - MB + 2);
-};
-const pdfDrawHeader = (doc) => {
-  doc.setFillColor(...CP);
-  doc.rect(0, 0, PW, 17, 'F');
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(14);
-  doc.setTextColor(255, 255, 255);
-  doc.text('Plan de Estudio', ML, 11);
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(7);
-  doc.text(`Generado el ${new Date().toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' })}`, ML, 15);
-  cy = MT;
-};
-const pdfSectionTitle = (doc, text) => {
-  pdfCheckPage(doc, 12);
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(10);
-  doc.setTextColor(...CP);
-  doc.text(text, ML, cy);
-  doc.setFillColor(...CC);
-  doc.rect(ML, cy + 1.5, 30, 1.2, 'F');
-  cy += 7;
-};
-const pdfPara = (doc, lines, size = 8.5) => {
-  if (!lines || lines.length === 0) return;
-  const lineH = size * 0.3528 * 1.35;
-  pdfCheckPage(doc, lines.length * lineH + 3);
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(size);
-  doc.setTextColor(...CD);
-  lines.forEach(l => {
-    doc.text(l, ML, cy);
-    cy += lineH;
-  });
-  cy += 2;
-};
-
-const NOTES_KEY = 'ialab_notes';
 const DAY_NOTES_KEY = 'ialab_day_notes';
 const DAYS = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 const MONTHS = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-
-const loadNotes = () => {
-  try { return JSON.parse(localStorage.getItem(NOTES_KEY)) || {}; } catch { return {}; }
-};
-const saveNotes = (notes) => localStorage.setItem(NOTES_KEY, JSON.stringify(notes));
 
 const loadDayNotes = () => {
   try { return JSON.parse(localStorage.getItem(DAY_NOTES_KEY)) || {}; } catch { return {}; }
@@ -104,16 +35,11 @@ const buildCalendar = () => {
 };
 
 const StudyPlannerModal = ({ isOpen, onClose }) => {
-  const { activeMod, modules } = useIALabProgressContext();
   const streak = useIALabStore(s => s.streak);
   const getWeeklyXP = useIALabStore(s => s.getWeeklyXP);
-  const [notes, setNotes] = useState(loadNotes);
-  const [text, setText] = useState('');
-  const [selectedMod, setSelectedMod] = useState(activeMod);
   const [dayNotes, setDayNotes] = useState(loadDayNotes);
   const [selectedDay, setSelectedDay] = useState(null);
   const [dayText, setDayText] = useState('');
-  const textareaRef = useRef(null);
   const dayTextareaRef = useRef(null);
   const calendar = buildCalendar();
   const [calMonth, setCalMonth] = useState(() => new Date().getMonth());
@@ -130,35 +56,15 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
     else setCalMonth(m => m + 1);
   };
   const focusTrapRef = useFocusTrap(isOpen);
-  const { syncModuleNote, syncDayNote, isConnected } = useStudyNotesSync();
+  const { syncDayNote, isConnected } = useStudyNotesSync();
 
   useBodyScrollLock(isOpen);
 
   useEffect(() => {
     if (isOpen) {
-      setSelectedMod(activeMod);
-      const all = loadNotes();
-      setNotes(all);
-      setText(all[activeMod] || '');
       setDayNotes(loadDayNotes());
-      setTimeout(() => textareaRef.current?.focus(), 200);
     }
-  }, [isOpen, activeMod]);
-
-  const handleChange = (val) => {
-    setText(val);
-    const updated = { ...notes, [selectedMod]: val };
-    setNotes(updated);
-    saveNotes(updated);
-    syncModuleNote(selectedMod, val);
-  };
-
-  const handleModChange = (modId) => {
-    setSelectedMod(modId);
-    const all = loadNotes();
-    setNotes(all);
-    setText(all[modId] || '');
-  };
+  }, [isOpen]);
 
   const handleDaySelect = (day) => {
     if (!day) return;
@@ -194,62 +100,7 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
     syncDayNote(selectedDay, '');
   };
 
-  const exportNotesPDF = useCallback(async () => {
-    const { default: jsPDF } = await import('jspdf');
-    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    pdfResetY();
-
-    pdfDrawHeader(doc);
-
-    // Sección 1: Notas por módulo
-    pdfSectionTitle(doc, 'Notas por Módulo');
-    const allNotes = loadNotes();
-    const allDayNotes = loadDayNotes();
-    const moduleIds = Object.keys(allNotes).filter(k => allNotes[k]?.trim());
-    if (moduleIds.length > 0) {
-      moduleIds.forEach(modId => {
-        const mod = modules?.find(m => m.id === Number(modId));
-        const title = mod?.title || `Módulo ${modId}`;
-        pdfCheckPage(doc, 10);
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(8.5);
-        doc.setTextColor(...CC);
-        doc.text(`M${modId}: ${title}`, ML, cy);
-        cy += 4;
-        const content = allNotes[modId];
-        const lines = doc.splitTextToSize ? doc.splitTextToSize(content, CW) : [content];
-        pdfPara(doc, lines, 8);
-      });
-    } else {
-      pdfPara(doc, ['No hay notas guardadas en ningún módulo.'], 8);
-    }
-
-    // Sección 2: Notas del calendario
-    if (Object.keys(allDayNotes).length > 0) {
-      pdfSectionTitle(doc, 'Notas del Calendario');
-      const sortedDates = Object.keys(allDayNotes).sort();
-      sortedDates.forEach(dateKey => {
-        const [y, m, d] = dateKey.split('-');
-        const label = `${d}/${m}/${y}`;
-        pdfCheckPage(doc, 10);
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(8.5);
-        doc.setTextColor(...CC);
-        doc.text(`Día ${label}`, ML, cy);
-        cy += 4;
-        const content = allDayNotes[dateKey];
-        const lines = doc.splitTextToSize ? doc.splitTextToSize(content, CW) : [content];
-        pdfPara(doc, lines, 8);
-      });
-    }
-
-    addFooter(doc);
-    doc.save(`plan_estudio_${new Date().toISOString().slice(0, 10)}.pdf`);
-  }, [modules]);
-
   if (!isOpen) return null;
-
-  const currentMod = modules?.find(m => m.id === selectedMod);
 
   return (
     <div className="fixed inset-0 z-[200] flex items-center justify-center p-3 sm:p-4" ref={focusTrapRef}>
@@ -266,9 +117,6 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
             <h2 className="text-sm font-bold text-petroleum">Plan de Estudio</h2>
           </div>
           <div className="flex items-center gap-1">
-            <button onClick={exportNotesPDF} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" aria-label="Exportar PDF" title="Exportar a PDF">
-              <Icon name="fa-file-pdf" className="text-slate-600 dark:text-slate-400 text-sm" />
-            </button>
             <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" aria-label="Cerrar">
               <Icon name="fa-times" className="text-slate-600 dark:text-slate-400 text-sm" />
             </button>
@@ -278,43 +126,8 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-5">
           <div className="flex flex-col gap-5">
-            {/* Left: Notes */}
-            <div className="">
-              <div className="flex items-center gap-1.5 mb-3 overflow-x-auto pb-1">
-                {(modules || []).map(mod => (
-                  <button
-                    key={mod.id}
-                    onClick={() => handleModChange(mod.id)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors flex-shrink-0 ${
-                      selectedMod === mod.id
-                        ? 'bg-gradient-to-r from-petroleum to-corporate text-white shadow-sm'
-                        : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-petroleum/10'
-                    }`}
-                  >
-                    M{mod.id}
-                  </button>
-                ))}
-              </div>
-
-              <div className="flex items-center justify-between mb-2">
-                <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 truncate">
-                  {currentMod?.title || `Módulo ${selectedMod}`}
-                </p>
-                <span className="text-[10px] text-slate-500 dark:text-slate-400 flex-shrink-0 ml-2">{text.length} caracteres</span>
-              </div>
-
-              <textarea
-                ref={textareaRef}
-                value={text}
-                onChange={(e) => handleChange(e.target.value)}
-                placeholder="Escribe tus notas, ideas o preguntas sobre este módulo..."
-                className="w-full h-[8.5rem] p-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50 text-xs text-slate-700 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 resize-none focus:outline-none focus:ring-2 focus:ring-petroleum/40 focus:border-petroleum/50 transition-all duration-200"
-                aria-label="Notas del módulo"
-              />
-            </div>
-
-            {/* Right: Calendar */}
-            <div className="">
+            {/* Calendar */}
+            <div>
               <div className="bg-slate-50 dark:bg-slate-900/30 rounded-xl p-3 border border-slate-100 dark:border-slate-700">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-1">
@@ -407,7 +220,7 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
         <div className="px-5 py-3 border-t border-slate-100 dark:border-slate-700 flex items-center justify-center gap-3">
           <p className="text-[10px] text-slate-500 dark:text-slate-400">
             <Icon name="fa-check" className="text-[9px] mr-1 text-emerald-500" />
-            Las notas se guardan automáticamente
+            Tus datos se guardan automáticamente
           </p>
           {isConnected && (
             <span className="text-[9px] text-emerald-500 flex items-center gap-1">
