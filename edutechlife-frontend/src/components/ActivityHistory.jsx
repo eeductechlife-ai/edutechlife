@@ -12,7 +12,6 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, PieCha
 import ResourceBadge from '../components/ui/ResourceBadge';
 import SectionHeader from '../components/ui/SectionHeader';
 import ModuleProgressCard from '../components/IALab/ModuleProgressCard';
-import { useActivityCalendar } from '../hooks/useActivityCalendar';
 
 const ACTIVITY_CONFIG = {
   video: { icon: 'fa-play-circle', label: 'Video', color: 'var(--color-petroleum)' },
@@ -117,8 +116,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
   const [filter, setFilter] = useState('all');
   const [sessionStats, setSessionStats] = useState({ todayMinutes: 0, allMinutes: 0, sessionCount: 0, daysActive: 0 });
   const [timeRange, setTimeRange] = useState('7d');
-  const [calendarYear, setCalendarYear] = useState(new Date().getFullYear());
-  const [accordionSections, setAccordionSections] = useState({ estudio: true, progreso: true, logros: false, calendario: false });
+  const [accordionSections, setAccordionSections] = useState({ estudio: true, progreso: true, logros: false });
   const [isExpanded, setIsExpanded] = useState(false);
   const [pdfLoading, setPdfLoading] = useState(false);
   const panelRef = useRef(null);
@@ -269,8 +267,6 @@ const ActivityHistory = ({ isOpen, onClose }) => {
       name: labels[k], value: v, pct: total > 0 ? Math.round(v / total * 100) : 0, color: colors[k], key: k,
     }));
   }, [activities]);
-
-  const calendarData = useActivityCalendar(calendarYear);
 
   const completedCount = completedModules?.length || 0;
   const totalExams = Object.values(completedExams || {}).filter(s => s > 0).length;
@@ -1213,46 +1209,6 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                 ) : (
                   <p className="text-xs text-slate-400 text-center py-4">Aún no has obtenido medallas. ¡Sigue avanzando para desbloquear logros!</p>
                 )}
-              </AccordionSection>
-
-              <AccordionSection id="calendario" title="Calendario de Estudio" icon="fa-calendar-alt">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-1">
-                    <button onClick={() => setCalendarYear(y => y - 1)} className="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-[10px] text-slate-600 transition-all">‹</button>
-                    <span className="text-[11px] font-bold text-slate-700 w-14 text-center">{calendarYear}</span>
-                    <button onClick={() => setCalendarYear(y => Math.min(y + 1, new Date().getFullYear()))} className="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-[10px] text-slate-600 transition-all">›</button>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 mb-3 text-[10px] text-slate-500 flex-wrap">
-                  <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-sm bg-slate-100" /> Sin actividad</span>
-                  <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-sm" style={{ backgroundColor: '#004B63', opacity: 0.25 }} /> 1-5 min</span>
-                  <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-sm" style={{ backgroundColor: '#004B63', opacity: 0.5 }} /> 5-15 min</span>
-                  <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-sm" style={{ backgroundColor: '#004B63', opacity: 0.75 }} /> 15-30 min</span>
-                  <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-sm" style={{ backgroundColor: '#004B63' }} /> 30+ min</span>
-                </div>
-                <div className="overflow-x-auto pb-2" role="img" aria-label={`Calendario de estudio ${calendarYear}. ${calendarData.totalActive} días activos, racha actual de ${calendarData.currentStreak} días.`}>
-                  <div className="flex gap-[2px] min-w-[480px]">
-                    {calendarData.weeks.map((week, wi) => (
-                      <div key={wi} className="flex flex-col gap-[2px]">
-                        {week.map((day, di) => (
-                          <div key={di}
-                            className={`w-3 h-3 rounded-sm transition-all duration-200 ${day.date > new Date() ? 'bg-transparent' : day.mins === 0 ? 'bg-slate-100' : ''}`}
-                            style={day.date <= new Date() && day.mins > 0 ? {
-                              backgroundColor: '#004B63',
-                              opacity: day.level === 1 ? 0.25 : day.level === 2 ? 0.5 : day.level === 3 ? 0.75 : 1,
-                            } : {}}
-                            title={`${day.date.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}: ${day.mins} min`}
-                          />
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100 text-[10px] text-slate-500">
-                  <span>{calendarData.totalActive} días activos</span>
-                  <span>Racha actual: {calendarData.currentStreak > 0 ? <>{calendarData.currentStreak} días consecutivos <Icon name="fa-fire" className="text-orange-500 text-[10px]" /></> : 'Sin racha activa'}</span>
-                  <span>{calendarData.totalSessions} sesiones</span>
-                </div>
               </AccordionSection>
 
               <div className="flex items-center justify-end gap-2 px-1">
