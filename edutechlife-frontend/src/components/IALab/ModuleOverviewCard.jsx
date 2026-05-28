@@ -6,17 +6,19 @@ import { useIALabStore } from '../../store/ialabStore';
 import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
 import { ALL_LESSONS } from '../../data/ialab';
 import { getResourcesForTopic, getResourceTypesForTopic, countResourcesByType } from './constants/moduleResources';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const ResourceViewerModal = lazy(() => import('./ResourceViewerModal'));
 
 const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
+  const { t } = useTranslation();
   const prefersReducedMotion = useReducedMotion();
   const { activeMod, modules, moduleContent, completedExams, challengeScores, moduleProgress, markResourceAsViewed: markResourceInContext } = useIALabProgressContext();
   const { trackResourceViewed } = useIALabProgress();
   const lessonProgress = useIALabStore(s => s.lessonProgress);
   
   // Estado para el acordeón de temas
-  const [expandedTopic, setExpandedTopic] = useState(null);
+  const [expandedTopic, setExpandedTopic] = useState(0);
   const [viewedIds, setViewedIds] = useState([]);
   
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
@@ -103,6 +105,33 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
     return map;
   }, [moduleData.topics]);
 
+  // Lista plana de todos los recursos en orden (para bloqueo secuencial)
+  const allResourcesOrdered = useMemo(() => {
+    const result = [];
+    moduleData.topics.forEach((topic, tIdx) => {
+      const tr = getResourcesForTopic(topic.title);
+      (tr?.resources || []).forEach((res, rIdx) => {
+        result.push({ ...res, topicTitle: topic.title, topicIndex: tIdx, resourceIndex: rIdx });
+      });
+    });
+    return result;
+  }, [moduleData.topics]);
+
+  // Índice del primer recurso no visto (el siguiente que debe ver)
+  const nextResourceGlobalIndex = useMemo(() => {
+    return allResourcesOrdered.findIndex(r => !viewedIds.includes(r.id));
+  }, [allResourcesOrdered, viewedIds]);
+
+  // Función: ¿este recurso está bloqueado?
+  const isResourceLocked = (topicIdx, resIdx, resourceId) => {
+    if (viewedIds.includes(resourceId)) return false;
+    const flatIdx = allResourcesOrdered.findIndex(
+      r => r.topicIndex === topicIdx && r.resourceIndex === resIdx
+    );
+    if (flatIdx === -1) return false;
+    return flatIdx > nextResourceGlobalIndex;
+  };
+
   const calculateTopicDuration = useCallback((topicTitle) => {
     const topicData = resourcesByTopic[topicTitle];
     if (!topicData?.resources) return "20 min";
@@ -168,6 +197,21 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
     }
   }, [viewerModalOpen]);
 
+  // Auto-avance: cuando se completa un tema, cerrarlo y abrir el siguiente
+  useEffect(() => {
+    if (expandedTopic === null || expandedTopic >= moduleData.topics.length - 1) return;
+    const currentTopic = moduleData.topics[expandedTopic];
+    const tr = getResourcesForTopic(currentTopic.title);
+    const ids = tr?.resources?.map(r => r.id) || [];
+    const allDone = ids.length > 0 && ids.every(id => viewedIds.includes(id));
+    if (allDone) {
+      const timer = setTimeout(() => {
+        setExpandedTopic(prev => (prev !== null ? prev + 1 : null));
+      }, 700);
+      return () => clearTimeout(timer);
+    }
+  }, [viewedIds, expandedTopic, moduleData.topics]);
+
   // Escucha el evento desde TuRutaDeHoy: lleva al recurso o actividad pendiente
   useEffect(() => {
     const handleOpenTopic = () => {
@@ -206,8 +250,10 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
         <motion.div
         whileHover={prefersReducedMotion ? {} : { boxShadow: "0px 8px 25px rgba(0,75,99,0.12)" }}
         transition={{ duration: 0.2 }}
-        className="relative z-10 bg-white rounded-2xl border border-slate-200/60 shadow-sm p-5 md:p-8 overflow-hidden mb-4 dark:bg-slate-800 dark:border-slate-700/60"
+        className="relative z-10 bg-white rounded-2xl border border-slate-200/60 shadow-sm p-5 md:p-8 overflow-hidden dark:bg-slate-800 dark:border-slate-700/60"
       >
+        <div className="absolute -top-6 -right-6 w-32 h-32 bg-gradient-to-br from-petroleum/6 to-corporate/4 rounded-full blur-2xl pointer-events-none"></div>
+        <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-tr from-petroleum/4 to-corporate/4 rounded-full blur-2xl pointer-events-none"></div>
         <style>{`
           @keyframes shimmer-pulse {
             0%, 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.3); }
@@ -228,9 +274,9 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
               {/* Texto principal */}
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
-                  <h3 className="text-xl md:text-2xl font-bold text-petroleum leading-tight dark:text-petroleum">
+                  <h2 className="text-xl md:text-2xl font-bold text-petroleum leading-tight dark:text-petroleum font-montserrat">
                     {moduleData.title}
-                  </h3>
+                  </h2>
                   <span className="px-2.5 py-1 bg-slate-100 dark:bg-slate-700 text-petroleum dark:text-petroleum text-[10px] font-bold rounded-lg border border-slate-200/60 dark:border-slate-600">{moduleData.badge.duration}</span>
                   {(() => {
                     const prog = lessonProgress[activeMod] || {};
@@ -239,7 +285,7 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
                     if (!total) return null;
                     return (
                       <span className={`px-2.5 py-1 text-[10px] font-bold rounded-lg border ${done === total ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-blue-50 text-blue-700 border-blue-200'}`}>
-                        {done}/{total} lecciones
+                        {t('ialab.module.lessons', { done, total })}
                       </span>
                     );
                   })()}
@@ -254,7 +300,7 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
                       onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
                       className="text-xs font-semibold text-corporate hover:text-petroleum transition-colors mb-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 rounded"
                     >
-                      {isDescriptionExpanded ? 'Ver menos' : 'Ver más'}
+                      {isDescriptionExpanded ? t('ialab.see_less') : t('ialab.see_more')}
                     </button>
                   )}
                
@@ -267,10 +313,10 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
                         onClick={() => setShowBookmarked((prev) => !prev)}
                         className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-50 border border-amber-200/60 hover:bg-amber-100/50 transition-all duration-200 text-left w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40"
                         aria-expanded={showBookmarked}
-                        aria-label={`Recursos guardados: ${bookmarkedResources.length}`}
+                        aria-label={t('ialab.bookmarked_aria', { count: bookmarkedResources.length })}
                       >
                         <Icon name="fa-bookmark" className="text-amber-500 text-sm" />
-                        <span className="text-xs font-semibold text-amber-700 flex-1">Guardados ({bookmarkedResources.length})</span>
+                        <span className="text-xs font-semibold text-amber-700 flex-1">{t('ialab.bookmarked', { count: bookmarkedResources.length })}</span>
                         <Icon name="fa-chevron-down" className={`text-amber-400 text-xs transition-transform duration-200 ${showBookmarked ? 'rotate-180' : ''}`} />
                       </button>
                       <AnimatePresence>
@@ -330,7 +376,7 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
                           ? 'border-l-4 border-l-emerald-500'
                           : 'border-l-4 border-l-petroleum hover:border-l-corporate'
                       }`}
-                      aria-label={`Ver recursos del tema: ${tema.title}`}
+                      aria-label={t('ialab.topic.resources_aria', { title: tema.title })}
                     >
                       {/* Icono temático */}
                       <div className="flex flex-col items-center gap-0.5">
@@ -339,18 +385,18 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
                       
                       {/* Título y metadatos */}
                       <div className="flex-1 min-w-0">
-<h4 className={`text-base font-semibold truncate transition-colors duration-300 flex items-center gap-2 ${
+<h4 className={`text-base font-semibold truncate transition-colors duration-300 flex items-center gap-2 font-montserrat ${
                            isTopicCompleted ? 'text-emerald-700' : 'text-slate-800 group-hover:text-petroleum dark:text-slate-100'
                          }`}>
                           {tema.title}
                           {isTopicCompleted && (
-                            <span className="text-[10px] font-bold text-emerald-600 bg-emerald-100 px-1.5 py-0.5 rounded-md flex-shrink-0">Completado</span>
+                            <span className="text-[10px] font-bold text-emerald-600 bg-emerald-100 px-1.5 py-0.5 rounded-md flex-shrink-0">{t('ialab.completed')}</span>
                           )}
                         </h4>
                         <div className="flex items-center gap-2 mt-1">
                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium text-petroleum dark:text-petroleum">
                              <Icon name="fa-file" className="w-3 h-3" />
-                             {tema.resources} recursos
+                             {tema.resources} {t('ialab.resources_label')}
                            </span>
                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium text-corporate bg-corporate/10">
                              <Icon name="fa-clock" className="w-3 h-3" />
@@ -383,14 +429,14 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
                           const types = getResourceTypesForTopic(tema.title);
                           const counts = countResourcesByType(tema.title);
                           if (!types || types.length <= 1) return null;
-                          const typeLabels = { video: 'Videos', pdf: 'PDFs', document: 'Documentos', ova: 'OVAs', ova_interactive: 'OVAs', image: 'Imágenes' };
+                          const typeLabels = { video: t('ialab.resource_type.video'), pdf: t('ialab.resource_type.pdf'), document: t('ialab.resource_type.document'), ova: t('ialab.resource_type.ova'), ova_interactive: t('ialab.resource_type.ova'), image: t('ialab.resource_type.image') };
                           return (
                             <div className="flex gap-1.5 pl-14 pr-4 pb-2 flex-wrap" onClick={(e) => e.stopPropagation()}>
                               <button
                                 onClick={() => setFilterType('all')}
                                 className={`text-xs font-medium px-3 py-2 min-h-[36px] rounded-full transition-all ${filterType === 'all' ? 'bg-petroleum dark:bg-petroleum text-white dark:text-white shadow-sm' : 'bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-300'}`}
                               >
-                                Todo {topicResources?.resources?.length || 0}
+                                {t('ialab.filter_all')} {topicResources?.resources?.length || 0}
                               </button>
                               {types.map(type => (
                                 <button
@@ -415,18 +461,20 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
                             };
                             const getResourceMeta = (res) => {
                               if (res.type === 'video') return res.duration || '';
-                              if (res.pages) return `${res.pages} págs`;
+                              if (res.pages) return t('ialab.resource_pages', { pages: res.pages });
                               if (res.estimatedTime) return res.estimatedTime;
                               if (res.format) return res.format;
                               if (res.size) return res.size;
                               return '';
                             };
                             const isResourceCompleted = viewedIds.includes(resource.id);
+                            const resourceLocked = isResourceLocked(index, resIndex, resource.id);
+                            const isNextToView = !resourceLocked && !isResourceCompleted;
                             return (
                               <motion.button
                                 key={resource.id}
-                                whileHover={prefersReducedMotion ? {} : { x: 4 }}
-                                onClick={(e) => {
+                                whileHover={prefersReducedMotion || resourceLocked ? {} : { x: 4 }}
+                                onClick={resourceLocked ? undefined : (e) => {
                                   e.stopPropagation();
                                   const allResources = topicResources?.resources || [];
                                   const idx = allResources.findIndex(r => r.id === resource.id);
@@ -436,30 +484,34 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
                                   setActiveResourceIndex(idx >= 0 ? idx : 0);
                                   setViewerModalOpen(true);
                                 }}
-  className={`w-full flex items-center gap-3 p-3 rounded-xl border transition-all duration-200 cursor-pointer text-left group/res ${
+  className={`w-full flex items-center gap-3 p-3 rounded-xl border transition-all duration-200 text-left group/res ${
                                      isResourceCompleted
-                                       ? 'bg-emerald-50/50 border-emerald-200/60'
-                                      : 'bg-white border-slate-200/60 hover:border-petroleum/30 hover:bg-petroleum/3 dark:bg-slate-800 dark:border-slate-700/60 dark:hover:border-petroleum/40'
+                                       ? 'bg-emerald-50/50 border-emerald-200/60 cursor-pointer'
+                                      : resourceLocked
+                                       ? 'bg-slate-50 border-slate-100 cursor-not-allowed opacity-60 dark:bg-slate-800/50 dark:border-slate-700/30'
+                                      : 'bg-white border-corporate/40 shadow-[0_0_12px_rgba(0,188,212,0.15)] hover:border-corporate hover:shadow-[0_0_20px_rgba(0,188,212,0.25)] cursor-pointer dark:bg-slate-800 dark:border-corporate/50 dark:hover:border-corporate'
                                    } ${justCompletedId === resource.id ? 'animate-shimmer-pulse' : ''}`}>
                                  <div className="flex items-center justify-center w-8 h-8 flex-shrink-0">
-                                   <Icon name={getResourceIcon(resource.type)} className="w-4 h-4" />
+                                   <Icon name={resourceLocked ? 'fa-lock' : getResourceIcon(resource.type)} className={`w-4 h-4 ${resourceLocked ? 'text-slate-300' : ''}`} />
                                  </div>
                                  <div className="flex-1 min-w-0 text-left">
 <p className={`text-sm font-medium truncate transition-colors ${
-                                     isResourceCompleted ? 'text-emerald-700' : 'text-slate-700 group-hover/res:text-petroleum dark:text-slate-200 dark:group-hover/res:text-petroleum'
+                                     isResourceCompleted ? 'text-emerald-700' : resourceLocked ? 'text-slate-400' : 'text-slate-700 group-hover/res:text-petroleum dark:text-slate-200 dark:group-hover/res:text-petroleum'
                                    }`}>
                                     {resource.title}
                                   </p>
                                   {getResourceMeta(resource) && (
-                                    <p className="text-xs text-slate-600 mt-0.5">{getResourceMeta(resource)}</p>
+                                    <p className={`text-xs mt-0.5 ${resourceLocked ? 'text-slate-300' : 'text-slate-600'}`}>{getResourceMeta(resource)}</p>
                                   )}
                                 </div>
                                 <div className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${
                                   isResourceCompleted
                                     ? 'bg-emerald-100 text-emerald-600'
-                                    : 'bg-slate-100 text-slate-500'
+                                    : resourceLocked
+                                    ? 'bg-slate-100 text-slate-400'
+                                    : 'bg-corporate/15 text-corporate font-bold animate-pulse'
                                 }`}>
-                                  {isResourceCompleted ? 'Visto' : 'Ver'}
+                                  {isResourceCompleted ? t('ialab.status.viewed') : resourceLocked ? t('ialab.status.locked') : t('ialab.status.start_here')}
                                 </div>
                                 <div
                                   onClick={(e) => toggleBookmark(resource.id, e)}
@@ -467,7 +519,7 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
                                   role="button"
                                   tabIndex={0}
                                   className="flex-shrink-0 min-w-[44px] min-h-[44px] flex items-center justify-center p-2 rounded-md hover:bg-amber-100/50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 cursor-pointer"
-                                  aria-label={bookmarkedIds.includes(resource.id) ? 'Quitar de guardados' : 'Guardar para después'}
+                                  aria-label={bookmarkedIds.includes(resource.id) ? t('ialab.bookmark.remove') : t('ialab.bookmark.save')}
                                 >
                                   <Icon
                                     name="fa-bookmark"
@@ -482,14 +534,14 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
                         {totalResources > 0 && (
                           <div className="pl-14 pr-4 pb-3 space-y-3">
                             <div className="flex items-center gap-3">
-                              <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden" role="progressbar" aria-valuenow={Math.round((topicCompletedCount / totalResources) * 100)} aria-valuemin="0" aria-valuemax="100" aria-label={`Progreso del tema: ${topicCompletedCount}/${totalResources}`}>
+                              <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden" role="progressbar" aria-valuenow={Math.round((topicCompletedCount / totalResources) * 100)} aria-valuemin="0" aria-valuemax="100" aria-label={t('ialab.topic.progress_aria', { completed: topicCompletedCount, total: totalResources })}>
                                 <div
                                   className="h-full bg-gradient-to-r from-petroleum to-corporate rounded-full transition-all duration-500"
                                   style={{ width: `${Math.round((topicCompletedCount / totalResources) * 100)}%` }}
                                 />
                               </div>
                               <span className="text-xs font-semibold text-slate-500 whitespace-nowrap">
-                                {topicCompletedCount}/{totalResources} Completadas
+                                {t('ialab.topic.completed', { completed: topicCompletedCount, total: totalResources })}
                               </span>
                             </div>
 
@@ -508,7 +560,7 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
                                     className="w-full py-2.5 rounded-xl bg-emerald-500 text-white text-sm font-bold flex items-center justify-center gap-2 cursor-not-allowed opacity-80"
                                   >
                                     <Icon name="fa-check" className="w-4 h-4" />
-                                    Completado
+                                    {t('ialab.completed')}
                                   </button>
                                 );
                               }
@@ -524,7 +576,7 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
                                       }}
                                       className="w-full py-2.5 rounded-xl bg-gradient-to-r from-petroleum to-corporate text-white text-sm font-bold flex items-center justify-center gap-2 hover:shadow-lg transition-all duration-200"
                                     >
-                                      Continuar lección
+                                      {t('ialab.continue_lesson')}
                                       <Icon name="fa-arrow-right" className="w-4 h-4" />
                                     </motion.button>
                                   );
@@ -537,7 +589,7 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
                                   onClick={() => setExpandedTopic(index + 1)}
                                   className="w-full py-2.5 rounded-xl bg-gradient-to-r from-petroleum to-corporate text-white text-sm font-bold flex items-center justify-center gap-2 hover:shadow-lg transition-all duration-200"
                                 >
-                                  Continuar lección
+                                  {t('ialab.continue_lesson')}
                                   <Icon name="fa-arrow-right" className="w-4 h-4" />
                                 </motion.button>
                               );

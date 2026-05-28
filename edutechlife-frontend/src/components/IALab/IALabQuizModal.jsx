@@ -9,8 +9,10 @@ import SecurityWarningModal from './SecurityWarningModal';
 import ScreenshotProtectionOverlay from './ScreenshotProtectionOverlay';
 import useScreenshotProtection from '../../hooks/IALab/useScreenshotProtection';
 import useFocusTrap from '../../hooks/useFocusTrap';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const IALabQuizModal = ({ isOpen, onClose }) => {
+  const { t } = useTranslation();
   const {
     quizQuestions, TOTAL_QUESTIONS, PASSING_SCORE, SUGGESTED_TIME_SECONDS,
     MAX_SECURITY_WARNINGS, SECURITY_WARNING_MESSAGES,
@@ -48,7 +50,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
 
   const { showOverlay, setShowOverlay } = useScreenshotProtection(isVisible && !showScoreResult, {
     onMaxViolations: () => {
-      setSecurityAlert({ message: 'Has excedido el máximo de infracciones de seguridad. El examen se cerrará.', level: 3, onClose: () => {
+      setSecurityAlert({ message: t('ialab.quiz.max_violations'), level: 3, onClose: () => {
         setSecurityAlert(null);
         closeEvaluationModal();
         onClose();
@@ -68,13 +70,14 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
         const newCount = (securityWarningCount || 0) + 1;
         setSecurityWarningCount(newCount);
         if (newCount >= MAX_SECURITY_WARNINGS) {
-          setSecurityAlert({ message: SECURITY_WARNING_MESSAGES[2], level: 3, onClose: () => {
+          setSecurityAlert({ message: t('ialab.quiz.security_warning_3'), level: 3, onClose: () => {
             setSecurityAlert(null);
             closeEvaluationModal();
             onClose();
           }});
         } else {
-          setSecurityAlert({ message: SECURITY_WARNING_MESSAGES[newCount - 1], level: newCount, onClose: () => setSecurityAlert(null) });
+          const warningKey = newCount === 1 ? 'ialab.quiz.security_warning_1' : 'ialab.quiz.security_warning_2';
+          setSecurityAlert({ message: t(warningKey), level: newCount, onClose: () => setSecurityAlert(null) });
         }
       }
     };
@@ -102,7 +105,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
   useEffect(() => {
     if (!isVisible || showScoreResult) return;
     const handleBeforePrint = () => {
-      setPrintWarning('Capturas de pantalla e impresión bloqueadas por seguridad del examen.');
+      setPrintWarning(t('ialab.quiz.security_print'));
       setTimeout(() => setPrintWarning(null), 4000);
     };
     window.addEventListener('beforeprint', handleBeforePrint);
@@ -167,7 +170,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
       if (markExamComplete) {
         markExamComplete(activeMod, score).catch((err) => {
           console.error('Error al sincronizar examen completado:', err);
-          createNotification({ type: 'error', title: 'Error de sincronización', message: 'No se pudo guardar el progreso del examen en el servidor.', metadata: { moduleId: activeMod, score } });
+          createNotification({ type: 'error', title: t('ialab.quiz.sync_error_title'), message: t('ialab.quiz.sync_error_msg'), metadata: { moduleId: activeMod, score } });
         });
       }
 
@@ -177,8 +180,12 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
     if (!practiceMode && submitResult?.success && submitResult?.result) {
       createNotification({
         type: submitResult.result.passed ? 'success' : 'warning',
-        title: submitResult.result.passed ? '📝 Examen Aprobado' : '📝 Examen No Aprobado',
-        message: `Tu nota en el examen del Módulo ${activeMod} fue ${submitResult.result.score}%. ${submitResult.result.passed ? '¡Buen trabajo!' : 'Necesitas 80% para aprobar. Revisa los temas y vuelve a intentarlo.'}`,
+        title: submitResult.result.passed ? t('ialab.quiz.exam_passed_notif_title') : t('ialab.quiz.exam_failed_notif_title'),
+        message: t('ialab.quiz.exam_notif_message', {
+          module: activeMod,
+          score: submitResult.result.score,
+          result: submitResult.result.passed ? t('ialab.quiz.exam_passed_result') : t('ialab.quiz.exam_failed_result')
+        }),
         metadata: { moduleId: activeMod, score: submitResult.result.score, type: 'exam' }
       });
     }
@@ -213,13 +220,13 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
     if (!store.canAttemptExamRetry(activeMod)) {
       const remaining = store.getExamRemainingAttempts(activeMod);
       if (remaining <= 0) {
-        alert('Has agotado tus 3 intentos para este examen.');
+        alert(t('ialab.quiz.exam_retry_alert_attempts'));
         return;
       }
       const nextTime = store.getExamNextAttemptTime(activeMod);
       if (nextTime && Date.now() < nextTime) {
         const hoursLeft = Math.ceil((nextTime - Date.now()) / 3600000);
-        alert(`Debes esperar ${hoursLeft}h para intentar de nuevo. (3 intentos máximo, 12h entre cada uno).`);
+        alert(t('ialab.quiz.exam_retry_alert_cooldown', { hours: hoursLeft }));
         return;
       }
     }
@@ -246,7 +253,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
         className="flex items-center gap-2 text-white/80 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition-colors"
       >
         <Icon name="fa-arrow-left" className="text-sm" />
-        <span className="text-sm font-medium">Salir</span>
+        <span className="text-sm font-medium">{t('ialab.quiz.exit')}</span>
       </button>
 
       <div className="flex items-center gap-6">
@@ -268,13 +275,13 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
               onChange={e => setPracticeMode(e.target.checked)}
               className="w-3.5 h-3.5 rounded border-white/30 bg-white/10 text-petroleum focus:ring-petroleum focus:ring-offset-0"
             />
-            <span className="text-[11px] font-medium text-white/80">Práctica</span>
+            <span className="text-[11px] font-medium text-white/80">{t('ialab.quiz.practice')}</span>
           </label>
         )}
 
         <div className="flex items-center gap-3">
           <span className="text-sm text-white/80">
-            {currentQuestion + 1} de {TOTAL_QUESTIONS}
+            {t('ialab.quiz.question_count', { current: currentQuestion + 1, total: TOTAL_QUESTIONS })}
           </span>
           <div className="w-32 h-2 bg-white/20 rounded-full overflow-hidden">
             <div
@@ -371,12 +378,12 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
         className="px-5 py-2.5 border-2 border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-500 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
       >
                         <Icon name="fa-arrow-left" className="text-sm" />
-                        <span className="hidden sm:inline text-sm font-medium">Anterior</span>
+                        <span className="hidden sm:inline text-sm font-medium">{t('ialab.quiz.previous')}</span>
       </button>
 
       <div className="flex items-center gap-3">
         <span className="text-sm text-slate-500">
-          {Object.keys(quizAnswers).length} de {TOTAL_QUESTIONS} respondidas
+          {t('ialab.quiz.answered_count', { count: Object.keys(quizAnswers).length, total: TOTAL_QUESTIONS })}
         </span>
       </div>
 
@@ -386,7 +393,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
           disabled={!quizAnswers[quizQuestions[currentQuestion]?.id]}
           className="px-5 py-2.5 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
         >
-                          <span className="text-sm font-medium">Siguiente</span>
+                          <span className="text-sm font-medium">{t('ialab.quiz.next')}</span>
                           <Icon name="fa-arrow-right" className="text-sm hidden sm:inline" />
         </button>
       ) : (
@@ -398,12 +405,12 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
           {isSubmitting ? (
             <>
               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-              <span className="text-sm font-medium">Enviando...</span>
+              <span className="text-sm font-medium">{t('ialab.quiz.submitting')}</span>
             </>
           ) : (
             <>
               <Icon name="fa-paper-plane" className="text-sm" />
-              <span className="text-sm font-medium">Enviar examen</span>
+              <span className="text-sm font-medium">{t('ialab.quiz.submit')}</span>
             </>
           )}
         </button>
@@ -423,7 +430,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
         >
           <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
             <Icon name="fa-list-check" className="text-sm mr-2" />
-            Revisar respuestas
+            {t('ialab.quiz.review_answers')}
           </span>
           <Icon
             name={showReview ? 'fa-chevron-up' : 'fa-chevron-down'}
@@ -458,15 +465,15 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
                       </p>
                       <div className="text-xs space-y-1">
                         <p className={isCorrect ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}>
-                          <span className="font-medium">Tu respuesta:</span> {userOption?.label || 'Sin responder'}
+                          <span className="font-medium">{t('ialab.quiz.your_answer')}</span> {userOption?.label || t('ialab.quiz.unanswered')}
                         </p>
                         {!isCorrect && (
                           <p className="text-emerald-600 dark:text-emerald-400">
-                            <span className="font-medium">Respuesta correcta:</span> {correctOption?.label}
+                            <span className="font-medium">{t('ialab.quiz.correct_answer')}</span> {correctOption?.label}
                           </p>
                         )}
                         <p className="text-slate-500 mt-1">
-                          <span className="font-medium">Tema:</span> {q.topic} · <span className="font-medium">Dificultad:</span> {q.difficulty}
+                          {t('ialab.quiz.topic_label', { topic: q.topic, difficulty: q.difficulty })}
                         </p>
                       </div>
                     </div>
@@ -508,12 +515,12 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
               </div>
             </div>
             <h2 className={`text-2xl font-bold mb-2 ${passed ? 'text-emerald-600' : 'text-red-600'}`}>
-              {passed ? '¡Examen Aprobado!' : 'Examen No Aprobado'}
+              {passed ? t('ialab.quiz.passed') : t('ialab.quiz.failed')}
             </h2>
             <p className="text-slate-600">
               {passed
-                ? 'Has demostrado comprensión de los temas del módulo.'
-                : `No alcanzaste el mínimo de ${PASSING_SCORE}%. Revisa los temas y vuelve a intentarlo.`}
+                ? t('ialab.quiz.passed_msg')
+                : t('ialab.quiz.failed_msg', { score: PASSING_SCORE })}
             </p>
           </div>
 
@@ -521,11 +528,11 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div className="text-center">
                 <div className="text-3xl font-bold text-slate-800 dark:text-slate-100 mb-1">{quizResult.correctCount}</div>
-                <div className="text-xs text-slate-500">Correctas</div>
+                <div className="text-xs text-slate-500">{t('ialab.quiz.correct_count')}</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-slate-800 mb-1">{TOTAL_QUESTIONS - quizResult.correctCount}</div>
-                <div className="text-xs text-slate-500">Incorrectas</div>
+                <div className="text-xs text-slate-500">{t('ialab.quiz.incorrect_count')}</div>
               </div>
             </div>
             <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
@@ -551,7 +558,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
             <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
               <h4 className="text-xs font-bold text-red-700 mb-2 flex items-center gap-1.5">
                 <Icon name="fa-lightbulb" className="text-sm" />
-                Áreas de mejora
+                {t('ialab.quiz.improvement_areas')}
               </h4>
               <p className="text-xs text-red-600 leading-relaxed">
                 {generateTopicFeedback(quizResult.failedQuestions).map((msg, i) => (
@@ -565,10 +572,10 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
             <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-6">
               <h4 className="text-xs font-bold text-emerald-700 mb-1 flex items-center gap-1.5">
                 <Icon name="fa-check-circle" className="text-sm" />
-                  Buen trabajo
+                  {t('ialab.quiz.good_work')}
                 </h4>
                 <p className="text-xs text-emerald-600 leading-relaxed">
-                  Has demostrado comprensión sólida de los temas. Revisa el feedback de cada pregunta para seguir perfeccionando tus conocimientos.
+                  {t('ialab.quiz.good_work_msg')}
                 </p>
             </div>
           )}
@@ -578,7 +585,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
               onClick={handleClose}
               className="w-full py-3 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 font-medium"
             >
-              Volver al módulo
+              {t('ialab.quiz.back_to_module')}
             </button>
             {!passed && (() => {
               const remaining = useIALabStore.getState().storageGetInt(`exam_attempts_remaining_m${activeMod}`, 3);
@@ -588,15 +595,15 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
               if (remaining > 0 && !inCooldown) {
                 return (
                   <>
-                    <button onClick={handleRetry} className="w-full py-3 border-2 border-red-200 text-red-600 rounded-xl hover:bg-red-50 hover:border-red-300 transition-all duration-300 font-medium">Reintentar examen</button>
-                    <p className="text-xs text-center text-slate-600">Te quedan {remaining - 1} de 3 intentos. Cada intento tiene un cooldown de 12h.</p>
+                    <button onClick={handleRetry} className="w-full py-3 border-2 border-red-200 text-red-600 rounded-xl hover:bg-red-50 hover:border-red-300 transition-all duration-300 font-medium">{t('ialab.quiz.retry')}</button>
+                    <p className="text-xs text-center text-slate-600">{t('ialab.quiz.retry_info', { remaining: remaining - 1 })}</p>
                   </>
                 );
               }
               if (remaining > 0 && inCooldown) {
-                return <p className="text-xs text-center text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">Espera {hoursLeft}h para tu siguiente intento. (12h entre cada uno, 3 intentos máximo).</p>;
+                return <p className="text-xs text-center text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">{t('ialab.quiz.cooldown_msg', { hours: hoursLeft })}</p>;
               }
-              return <p className="text-xs text-center text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">Has agotado tus 3 intentos para este examen. No puedes volver a intentarlo.</p>;
+              return <p className="text-xs text-center text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{t('ialab.quiz.no_attempts')}</p>;
             })()}
           </div>
         </div>
@@ -632,7 +639,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
               }}>
                 <div className="absolute inset-0 flex items-center justify-center">
                   <span className="text-petroleum text-8xl font-bold transform -rotate-12 select-none" style={{ whiteSpace: 'nowrap' }}>
-                    EXAMEN EDUTECHLIFE
+                    {t('ialab.quiz.watermark')}
                   </span>
                 </div>
               </div>

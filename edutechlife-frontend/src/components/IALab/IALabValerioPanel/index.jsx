@@ -7,6 +7,7 @@ import { callDeepseek } from '../../../utils/api';
 import COURSE_KNOWLEDGE from '../constants/courseKnowledge';
 import useFocusTrap from '../../../hooks/useFocusTrap';
 import { useValerioVoice } from './useValerioVoice';
+import { useTranslation } from '../../../i18n/I18nProvider';
 import ValerioPanelHeader from './ValerioPanelHeader';
 import ValerioQuickActions from './ValerioQuickActions';
 import ValerioConversationArea from './ValerioConversationArea';
@@ -40,6 +41,7 @@ INSTRUCCIONES:
 8. Usa el nombre del estudiante de forma natural y esporádica. No lo repitas en cada respuesta ni de forma forzada. Úsalo como lo haría un coach real: para dar apertura, reconocer un logro, o generar cercanía cuando sea pertinente.`;
 
 const IALabValerioPanel = ({ isOpen, onClose }) => {
+  const { t } = useTranslation();
   const {
     activeMod, modules, completedModules
   } = useIALabProgressContext();
@@ -85,25 +87,25 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
     const actions = [
       {
         id: 'explain_topic',
-        label: 'Explicar tema actual',
+        label: t('ialab.valerio.quick_explain_topic'),
         icon: 'fa-book',
         prompt: `Explica el tema principal del módulo "${currentModule?.title}" de manera clara y concisa.`
       },
       {
         id: 'give_example',
-        label: 'Dar ejemplo práctico',
+        label: t('ialab.valerio.quick_give_example'),
         icon: 'fa-lightbulb',
         prompt: `Proporciona un ejemplo práctico relacionado con "${currentModule?.challenge || 'ingeniería de prompts'}".`
       },
       {
         id: 'help_challenge',
-        label: 'Ayuda con desafío',
+        label: t('ialab.valerio.quick_help_challenge'),
         icon: 'fa-puzzle-piece',
         prompt: `¿Cómo puedo abordar el desafío "${currentModule?.challenge}" de manera efectiva?`
       },
       {
         id: 'study_tips',
-        label: 'Consejos de estudio',
+        label: t('ialab.valerio.quick_study_tips'),
         icon: 'fa-graduation-cap',
         prompt: `Dame consejos de estudio para el módulo "${currentModule?.title}" (nivel ${userLevel < 3 ? 'principiante' : userLevel < 6 ? 'intermedio' : 'avanzado'}).`
       }
@@ -186,7 +188,7 @@ Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, ayudarte con e
           setValerioState('idle');
         });
       } else {
-        const shortGreeting = userLevel < 3 ? 'Listo, ¿en qué te ayudo?' : 'Aquí estoy, ¿qué necesitas?';
+        const shortGreeting = userLevel < 3 ? t('ialab.valerio.short_greeting_low') : t('ialab.valerio.short_greeting_high');
         setValerioState('speaking');
         speakTextConversational(shortGreeting, 'valerio', () => setValerioState('idle'));
       }
@@ -291,12 +293,24 @@ Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, ayudarte con e
 
   if (!isOpen) return null;
 
+  if (!currentModule) {
+    return (
+      <div className="fixed inset-0 z-[90] flex items-end justify-end">
+        <div className="absolute inset-0 bg-black/20 backdrop-blur-sm" onClick={onClose} />
+        <div className="relative w-full max-w-md h-[90vh] bg-white rounded-t-2xl shadow-2xl flex flex-col items-center justify-center p-8 z-10">
+          <div className="w-12 h-12 border-2 border-petroleum/30 border-t-petroleum rounded-full animate-spin mb-4" />
+          <p className="text-slate-500 text-sm font-medium">{t('ialab.valerio.loading')}</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div ref={focusTrapRef} className="fixed inset-0 z-[90] flex items-end justify-end" role="dialog" aria-modal="true" aria-label="Panel de coach IA Valerio">
+    <div ref={focusTrapRef} className="fixed inset-0 z-[90] flex items-end justify-end" role="dialog" aria-modal="true" aria-label={t('ialab.valerio.panel_aria')}>
       <div
         className="absolute inset-0 bg-black/20 backdrop-blur-sm"
         onClick={onClose}
-        aria-label="Cerrar panel"
+        aria-label={t('ialab.valerio.close_aria')}
       />
 
       <motion.div

@@ -2,8 +2,10 @@ import { memo, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Icon } from '../utils/iconMapping.jsx';
 import FloatingParticles from './FloatingParticles';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const Esencia = memo(() => {
+    const { t } = useTranslation();
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isVisible, setIsVisible] = useState(false);
 
@@ -20,14 +22,14 @@ const Esencia = memo(() => {
     }, []);
 
     const slides = [
-        { image: '/images/edutech-carrusel-1.webp', title: 'Innovación Educativa' },
-        { image: '/images/edutech-carrusel-2.webp', title: 'Aprendizaje Personalizado' },
-        { image: '/images/edutech-carrusel-3.webp', title: 'Comunidad STEAM' },
-        { image: '/images/edutech-carrusel-5.webp', title: 'Metodología VAK' },
-        { image: '/images/edutech-carrusel-6.webp', title: 'Proyectos Prácticos' },
-        { image: '/images/eco-neuro.webp', title: 'Neuro-Entorno' },
-        { image: '/images/eco-b2b.webp', title: 'Consultoría B2B' },
-        { image: '/images/eco-nacional.webp', title: 'Proyectos Nacionales' }
+        { image: '/images/edutech-carrusel-1.webp', title: t('esencia.slide_1_title') },
+        { image: '/images/edutech-carrusel-2.webp', title: t('esencia.slide_2_title') },
+        { image: '/images/edutech-carrusel-3.webp', title: t('esencia.slide_3_title') },
+        { image: '/images/edutech-carrusel-5.webp', title: t('esencia.slide_4_title') },
+        { image: '/images/edutech-carrusel-6.webp', title: t('esencia.slide_5_title') },
+        { image: '/images/eco-neuro.webp', title: t('esencia.slide_6_title') },
+        { image: '/images/eco-b2b.webp', title: t('esencia.slide_7_title') },
+        { image: '/images/eco-nacional.webp', title: t('esencia.slide_8_title') }
     ];
 
     useEffect(() => {
@@ -38,10 +40,10 @@ const Esencia = memo(() => {
     }, [slides.length]);
 
     const values = [
-        { icon: 'fa-robot', text: 'Innovación', desc: 'IA al servicio de la educación' },
-        { icon: 'fa-heart', text: 'Pasión', desc: 'Por la educación' },
-        { icon: 'fa-shield-check', text: 'Compromiso', desc: 'Con cada estudiante' },
-        { icon: 'fa-school', text: 'Comunidad', desc: 'Juntos crecemos' }
+        { icon: 'fa-robot', text: t('esencia.value_1_title'), desc: t('esencia.value_1_desc') },
+        { icon: 'fa-heart', text: t('esencia.value_2_title'), desc: t('esencia.value_2_desc') },
+        { icon: 'fa-shield-check', text: t('esencia.value_3_title'), desc: t('esencia.value_3_desc') },
+        { icon: 'fa-school', text: t('esencia.value_4_title'), desc: t('esencia.value_4_desc') }
     ];
 
     return (
@@ -54,13 +56,13 @@ const Esencia = memo(() => {
             <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 py-12">
                 <div className={`text-center mb-8 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-petroleum tracking-tighter mb-4">
-                        Nuestra{' '}
+                        {t('esencia.title_before')}{' '}
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-petroleum">
-                            Esencia
+                            {t('esencia.title_highlight')}
                         </span>
                     </h2>
                     <p className="text-base text-slate-600 leading-relaxed max-w-2xl mx-auto">
-                        Somos un equipo de magísteres, pedagogos y desarrolladores apasionados por transformar la educación mediante la inteligencia artificial.
+                        {t('esencia.subtitle')}
                     </p>
                 </div>
 
@@ -94,17 +96,17 @@ const Esencia = memo(() => {
                                     <Icon name="fa-bullseye" className="text-lg" />
                                 </div>
                                 <div>
-                                    <span className="text-xs font-normal text-primary-light uppercase tracking-widest block mb-1">Objetivo</span>
-                                    <h3 className="text-lg md:text-xl font-normal">Misión</h3>
+                                    <span className="text-xs font-normal text-primary-light uppercase tracking-widest block mb-1">{t('esencia.mission_badge')}</span>
+                                    <h3 className="text-lg md:text-xl font-normal">{t('esencia.mission_title')}</h3>
                                 </div>
                             </div>
                             <p className="text-sm text-white/90 leading-relaxed font-normal">
-                                Democratizar la educación de calidad mediante herramientas de inteligencia artificial que se adapten al estilo de aprendizaje único de cada estudiante.
+                                {t('esencia.mission_text')}
                             </p>
                             <div className="mt-4 pt-3 border-t border-white/20">
                                 <div className="flex items-center gap-2 text-primary-light">
                                     <Icon name="fa-rocket" className="w-4 h-4" />
-                                    <span className="font-normal text-xs">Impulsando el futuro</span>
+                                    <span className="font-normal text-xs">{t('esencia.mission_tagline')}</span>
                                 </div>
                             </div>
                         </div>
@@ -115,17 +117,17 @@ const Esencia = memo(() => {
                                     <Icon name="fa-eye" className="text-lg text-white" />
                                 </div>
                                 <div>
-                                    <span className="text-xs font-normal text-primary-light uppercase tracking-widest block mb-1">Proyección</span>
-                                    <h3 className="text-lg md:text-xl font-normal text-petroleum">Visión</h3>
+                                    <span className="text-xs font-normal text-primary-light uppercase tracking-widest block mb-1">{t('esencia.vision_badge')}</span>
+                                    <h3 className="text-lg md:text-xl font-normal text-petroleum">{t('esencia.vision_title')}</h3>
                                 </div>
                             </div>
                             <p className="text-sm text-gray-600 leading-relaxed font-normal">
-                                Ser la plataforma líder en Latinoamérica en la integración de metodologías pedagógicas con inteligencia artificial para formar profesionales del futuro.
+                                {t('esencia.vision_text')}
                             </p>
                             <div className="mt-4 pt-3 border-t border-border-light">
                                 <div className="flex items-center gap-2 text-primary-light">
                                     <Icon name="fa-globe" className="w-4 h-4" />
-                                    <span className="font-normal text-xs text-petroleum">Liderazgo regional</span>
+                                    <span className="font-normal text-xs text-petroleum">{t('esencia.vision_tagline')}</span>
                                 </div>
                             </div>
                         </div>

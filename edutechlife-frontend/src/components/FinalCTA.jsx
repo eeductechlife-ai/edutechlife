@@ -1,6 +1,8 @@
 import { memo } from 'react';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const FinalCTA = memo(({ onNavigate }) => {
+    const { t } = useTranslation();
     return (
         <section className="w-full relative overflow-hidden bg-gradient-to-br from-[#004B63] via-[#004B63] to-[#4DA8C4]">
             {/* Background Pattern */}
@@ -32,15 +34,15 @@ const FinalCTA = memo(({ onNavigate }) => {
                                     <i className="fa-solid fa-brain text-2xl text-white" />
                                 </div>
                                 <div>
-                                    <h3 className="text-xl font-bold text-white">Diagnóstico VAK Gratis</h3>
-                                    <p className="text-white/70 text-sm">Diagnóstico en 5 minutos</p>
+                                    <h3 className="text-xl font-bold text-white">{t('final_cta.card_1_title')}</h3>
+                                    <p className="text-white/70 text-sm">{t('final_cta.card_1_subtitle')}</p>
                                 </div>
                             </div>
                             <p className="text-white/80 text-sm">
-                                Descubre cómo aprendes mejor con nuestro test de estilos de aprendizaje. Sin registro, directo y gratuito.
+                                {t('final_cta.card_1_desc')}
                             </p>
                             <div className="mt-4 flex items-center gap-2 text-[#4DA8C4] font-semibold">
-                                <span>Haz el test ahora</span>
+                                <span>{t('final_cta.card_1_button')}</span>
                                 <i className="fa-solid fa-arrow-right text-sm group-hover:translate-x-2 transition-transform" />
                             </div>
                         </button>
@@ -54,15 +56,15 @@ const FinalCTA = memo(({ onNavigate }) => {
                                     <i className="fa-solid fa-chart-line text-2xl text-white" />
                                 </div>
                                 <div>
-                                    <h3 className="text-xl font-bold text-white">Herramientas IA</h3>
-                                    <p className="text-white/70 text-sm">ROI y Automatización</p>
+                                    <h3 className="text-xl font-bold text-white">{t('final_cta.card_2_title')}</h3>
+                                    <p className="text-white/70 text-sm">{t('final_cta.card_2_subtitle')}</p>
                                 </div>
                             </div>
                             <p className="text-white/80 text-sm">
-                                Calcula el ROI de implementar IA en tu organización o diseña flujos de automatización personalizados.
+                                {t('final_cta.card_2_desc')}
                             </p>
                             <div className="mt-4 flex items-center gap-2 text-[#66CCCC] font-semibold">
-                                <span>Acceder gratis</span>
+                                <span>{t('final_cta.card_2_button')}</span>
                                 <i className="fa-solid fa-arrow-right text-sm group-hover:translate-x-2 transition-transform" />
                             </div>
                         </button>
@@ -76,23 +78,23 @@ const FinalCTA = memo(({ onNavigate }) => {
                             style={{ boxShadow: '0 10px 40px rgba(27, 158, 186, 0.4)' }}
                         >
                             <i className="fa-solid fa-rocket text-lg" />
-                            <span className="text-lg">Solicitar Consultoría</span>
+                            <span className="text-lg">{t('final_cta.cta_consultoria')}</span>
                         </button>
                         <button 
                             onClick={() => onNavigate('ialab')}
                             className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-white/10 text-white font-bold rounded-full border-2 border-white/30 transition-all duration-300 hover:bg-white hover:text-[#004B63] backdrop-blur-sm"
                         >
                             <i className="fa-solid fa-play text-lg" />
-                            <span className="text-lg">Ver Demo Gratuita</span>
+                            <span className="text-lg">{t('final_cta.cta_demo')}</span>
                         </button>
                     </div>
 
                     {/* Trust Indicators */}
                     <div className="flex flex-wrap justify-center gap-8 text-white/60 mt-12">
                         {[
-                            { icon: 'fa-shield-halved', text: 'Certificados Globally' },
-                            { icon: 'fa-clock', text: 'Soporte 24/7' },
-                            { icon: 'fa-users', text: '6,000+ Estudiantes' }
+                            { icon: 'fa-shield-halved', text: t('final_cta.trust_certified') },
+                            { icon: 'fa-clock', text: t('final_cta.trust_support') },
+                            { icon: 'fa-users', text: t('final_cta.trust_students') }
                         ].map((item, index) => (
                             <div key={index} className="flex items-center gap-2">
                                 <i className={`fa-solid ${item.icon} text-[#4DA8C4]`} />

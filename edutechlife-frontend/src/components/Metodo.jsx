@@ -2,8 +2,10 @@ import { memo, useState, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { Icon } from '../utils/iconMapping.jsx';
 import FloatingParticles from './FloatingParticles';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const Metodo = memo(() => {
+    const { t } = useTranslation();
     const [showForm, setShowForm] = useState(false);
     const [formData, setFormData] = useState({ nombre: '', email: '', telefono: '', interes: '' });
     const [submitted, setSubmitted] = useState(false);
@@ -37,23 +39,23 @@ const Metodo = memo(() => {
 
     const steps = [
         {
-            title: 'Diagnóstico VAK',
-            description: 'Identificamos tu estilo de aprendizaje único mediante nuestro sistema de IA.',
+            title: t('metodo.step_1_title'),
+            description: t('metodo.step_1_desc'),
             icon: 'fa-brain'
         },
         {
-            title: 'Ruta Personalizada',
-            description: 'Diseñamos un currículo STEAM adaptado a tus fortalezas neuro-cognitivas.',
+            title: t('metodo.step_2_title'),
+            description: t('metodo.step_2_desc'),
             icon: 'fa-route'
         },
         {
-            title: 'Ejecución Práctica',
-            description: 'Aplica lo aprendido en el SmartBoard interactivo con mentores expertos.',
+            title: t('metodo.step_3_title'),
+            description: t('metodo.step_3_desc'),
             icon: 'fa-laptop-code'
         },
         {
-            title: 'Certificación',
-            description: 'Obtén credenciales oficiales respaldadas por gigantes tecnológicos globales.',
+            title: t('metodo.step_4_title'),
+            description: t('metodo.step_4_desc'),
             icon: 'fa-certificate'
         }
     ];
@@ -115,13 +117,13 @@ const Metodo = memo(() => {
                     className="text-center mb-12"
                 >
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-petroleum tracking-tighter mb-4">
-                        Nuestro{' '}
+                        {t('metodo.title_before')}{' '}
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-petroleum">
-                            Método
+                            {t('metodo.title_highlight')}
                         </span>
                     </h2>
                     <p className="text-base text-slate-600 leading-relaxed max-w-3xl mx-auto">
-                        Un proceso claro, diseñado por magísteres, guiado por Inteligencia Artificial y enfocado en resultados medibles.
+                        {t('metodo.subtitle')}
                     </p>
                 </motion.div>
 
@@ -184,7 +186,7 @@ const Metodo = memo(() => {
                         className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-primary-light text-white font-normal rounded-full transition-all duration-300 hover:bg-petroleum hover:shadow-premium-lg"
                     >
                         <Icon name="fa-rocket" className="text-lg" />
-                        <span className="text-lg">Comenzar Mi Transformación</span>
+                        <span className="text-lg">{t('metodo.cta_text')}</span>
                         <Icon name="fa-arrow-right" className="text-lg" />
                     </button>
                 </motion.div>
@@ -210,8 +212,8 @@ const Metodo = memo(() => {
                                     <Icon name="fa-rocket" className="text-white text-lg" />
                                 </div>
                                 <div>
-                                    <h3 className="text-xl font-bold text-petroleum">Comenzar Mi Transformación</h3>
-                                    <p className="text-sm text-primary-light">Un asesor se comunicará contigo</p>
+                                    <h3 className="text-xl font-bold text-petroleum">{t('metodo.cta_text')}</h3>
+                                    <p className="text-sm text-primary-light">{t('metodo.modal_subtitle')}</p>
                                 </div>
                             </div>
                         </div>
@@ -222,19 +224,19 @@ const Metodo = memo(() => {
                                     <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary-light to-petroleum flex items-center justify-center mx-auto mb-6">
                                         <Icon name="fa-check" className="text-white text-3xl" />
                                     </div>
-                                    <h4 className="text-xl font-bold text-petroleum mb-2">¡Gracias por confiar en nosotros!</h4>
-                                    <p className="text-gray-600 mb-8">Un asesor especializado se pondrá en contacto contigo en las próximas 24 horas para guiarte en tu transformación educativa.</p>
+                                    <h4 className="text-xl font-bold text-petroleum mb-2">{t('metodo.success_title')}</h4>
+                                    <p className="text-gray-600 mb-8">{t('metodo.success_desc')}</p>
                                     <button
                                         onClick={closeForm}
                                         className="px-8 py-3 bg-gradient-to-r from-petroleum to-primary-light text-white font-semibold rounded-full hover:shadow-premium-lg transition-all duration-300"
                                     >
-                                        Cerrar
+                                        {t('metodo.success_close')}
                                     </button>
                                 </div>
                             ) : (
                                 <form onSubmit={handleSubmit} className="space-y-4">
                                     <div>
-                                        <label className="block text-sm font-semibold text-petroleum mb-1.5">Nombre completo <span className="text-red-400">*</span></label>
+                                        <label className="block text-sm font-semibold text-petroleum mb-1.5">{t('metodo.form_name_label')} <span className="text-red-400">*</span></label>
                                         <input
                                             type="text"
                                             name="nombre"
@@ -242,12 +244,12 @@ const Metodo = memo(() => {
                                             onChange={handleChange}
                                             required
                                             className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-light focus:border-primary-light outline-none transition-all text-petroleum text-sm"
-                                            placeholder="Tu nombre"
+                                            placeholder={t('metodo.form_name_placeholder')}
                                         />
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-semibold text-petroleum mb-1.5">Correo electrónico <span className="text-red-400">*</span></label>
+                                        <label className="block text-sm font-semibold text-petroleum mb-1.5">{t('metodo.form_email_label')} <span className="text-red-400">*</span></label>
                                         <input
                                             type="email"
                                             name="email"
@@ -255,12 +257,12 @@ const Metodo = memo(() => {
                                             onChange={handleChange}
                                             required
                                             className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-light focus:border-primary-light outline-none transition-all text-petroleum text-sm"
-                                            placeholder="tu@email.com"
+                                            placeholder={t('metodo.form_email_placeholder')}
                                         />
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-semibold text-petroleum mb-1.5">Teléfono <span className="text-red-400">*</span></label>
+                                        <label className="block text-sm font-semibold text-petroleum mb-1.5">{t('metodo.form_phone_label')} <span className="text-red-400">*</span></label>
                                         <input
                                             type="tel"
                                             name="telefono"
@@ -268,25 +270,25 @@ const Metodo = memo(() => {
                                             onChange={handleChange}
                                             required
                                             className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-light focus:border-primary-light outline-none transition-all text-petroleum text-sm"
-                                            placeholder="300 123 4567"
+                                            placeholder={t('metodo.form_phone_placeholder')}
                                         />
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-semibold text-petroleum mb-1.5">¿Qué te gustaría transformar?</label>
+                                        <label className="block text-sm font-semibold text-petroleum mb-1.5">{t('metodo.form_interest_label')}</label>
                                         <select
                                             name="interes"
                                             value={formData.interes}
                                             onChange={handleChange}
                                             className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-light focus:border-primary-light outline-none transition-all bg-white text-petroleum text-sm"
                                         >
-                                            <option value="">Selecciona una opción</option>
-                                            <option value="Diagnóstico VAK">Diagnóstico VAK</option>
-                                            <option value="Cursos STEAM">Cursos STEAM</option>
-                                            <option value="Tutorías Personalizadas">Tutorías Personalizadas</option>
-                                            <option value="SmartBoard">SmartBoard Interactivo</option>
-                                            <option value="Consultoría B2B">Consultoría B2B</option>
-                                            <option value="Otro">Otro</option>
+                                            <option value="">{t('metodo.form_select_default')}</option>
+                                            <option value="Diagnóstico VAK">{t('metodo.form_option_vak')}</option>
+                                            <option value="Cursos STEAM">{t('metodo.form_option_steam')}</option>
+                                            <option value="Tutorías Personalizadas">{t('metodo.form_option_tutoring')}</option>
+                                            <option value="SmartBoard">{t('metodo.form_option_smartboard')}</option>
+                                            <option value="Consultoría B2B">{t('metodo.form_option_b2b')}</option>
+                                            <option value="Otro">{t('metodo.form_option_other')}</option>
                                         </select>
                                     </div>
 
@@ -295,11 +297,11 @@ const Metodo = memo(() => {
                                         className="w-full py-3.5 bg-gradient-to-r from-petroleum to-primary-light text-white font-bold rounded-xl hover:shadow-premium-lg transition-all duration-300 flex items-center justify-center gap-2"
                                     >
                                         <Icon name="fa-paper-plane" className="text-sm" />
-                                        Enviar
+                                        {t('metodo.form_submit')}
                                     </button>
 
                                     <p className="text-xs text-gray-400 text-center">
-                                        Al enviar, aceptas que te contactemos para brindarte información sobre nuestros servicios educativos.
+                                        {t('metodo.form_privacy')}
                                     </p>
                                 </form>
                             )}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import ValerioClearConfirm from './ValerioClearConfirm';
+import { useTranslation } from '../../../i18n/I18nProvider';
 
 const ValerioChatInput = ({
   userInput,
@@ -19,6 +20,7 @@ const ValerioChatInput = ({
   conversationLength,
   moduleTitle,
 }) => {
+  const { t } = useTranslation();
   return (
     <div className="border-t border-slate-200 p-4">
       <div className="flex items-end gap-3">
@@ -27,7 +29,7 @@ const ValerioChatInput = ({
             value={userInput}
             onChange={(e) => onInputChange(e.target.value)}
             onKeyDown={onKeyDown}
-            placeholder={`Pregunta a Valerio sobre ${moduleTitle}...`}
+            placeholder={t('ialab.valerio.input_placeholder', { module: moduleTitle })}
             className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-corporate focus:border-transparent text-petroleum-darker placeholder-slate-500 resize-none min-h-[60px] max-h-[120px]"
             disabled={isProcessing}
             rows={2}
@@ -35,7 +37,7 @@ const ValerioChatInput = ({
           />
           <div className="flex items-center justify-between mt-2">
             <div id="input-hint" className="text-xs text-slate-500">
-              Presiona Enter para enviar, Shift+Enter para nueva línea
+              {t('ialab.valerio.input_hint')}
             </div>
             {showClearConfirm ? (
               <ValerioClearConfirm
@@ -48,7 +50,7 @@ const ValerioChatInput = ({
                 className="text-xs text-slate-500 hover:text-red-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300 rounded px-1"
                 disabled={conversationLength === 0}
               >
-                <Icon name="fa-trash" className="mr-1" /> Limpiar
+                <Icon name="fa-trash" className="mr-1" /> {t('ialab.valerio.clear_button')}
               </button>
             )}
           </div>
@@ -70,8 +72,8 @@ const ValerioChatInput = ({
                 ? 'bg-red-500 text-white shadow-[0_0_15px_rgba(239,68,68,0.4)] animate-pulse'
                 : 'bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-petroleum'
             }`}
-            aria-label={isListening ? 'Detener grabación' : 'Preguntar por voz'}
-            title={isListening ? 'Detener grabación' : 'Preguntar por voz'}
+            aria-label={isListening ? t('ialab.valerio.voice_stop_aria') : t('ialab.valerio.voice_start_aria')}
+            title={isListening ? t('ialab.valerio.voice_stop_aria') : t('ialab.valerio.voice_start_aria')}
           >
             <Icon name={isListening ? 'fa-microphone-slash' : 'fa-microphone'} className="text-sm" />
           </button>
@@ -81,7 +83,7 @@ const ValerioChatInput = ({
           onClick={onSend}
           disabled={isProcessing || !userInput.trim()}
           className="w-12 h-12 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-[0_0_15px_rgba(0,188,212,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-corporate focus-visible:ring-offset-2"
-          aria-label="Enviar mensaje"
+          aria-label={t('ialab.valerio.send_aria')}
         >
           {isProcessing ? (
             <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>

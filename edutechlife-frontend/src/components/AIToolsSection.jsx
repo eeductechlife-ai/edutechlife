@@ -2,54 +2,56 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Icon } from '../utils/iconMapping.jsx';
 import FloatingParticles from './FloatingParticles';
-
-const tools = [
-  {
-    id: 'ai-lab-academic',
-    name: 'AI Lab Academic',
-    subtitle: 'ACADEMIC',
-    path: '/ialab-academic',
-    icon: 'fa-rocket',
-    description: 'Entrenamiento de élite con agentes de IA para potenciar tu productividad y aprendizaje cognitivo.',
-    badges: ['ACADEMIC', 'CERTIFIED'],
-    buttonText: 'Comenzar Curso',
-    variant: 'main-dark',
-  },
-  {
-    id: 'automation',
-    name: 'Automatización',
-    subtitle: 'IA EMPRESARIAL',
-    path: '/automation',
-    icon: 'fa-robot',
-    description: 'Centro de Automatización Empresarial con IA. Diagnóstico, ROI y arquitectura alineados con estándares internacionales.',
-    features: ['Arquitectura de IA empresarial', 'Calculadora ROI interactiva', 'Estándares ISO/IEC 42001 y NIST AI RMF'],
-    buttonText: 'Comenzar',
-    variant: 'white-card',
-  },
-  {
-    id: 'vak',
-    name: 'Diagnóstico VAK',
-    subtitle: 'NEURO-COGNITIVO',
-    path: '/vak',
-    icon: 'fa-brain',
-    description: 'Identificamos tu estilo de aprendizaje único mediante algoritmos de visión cognitiva y procesamiento de lenguaje natural.',
-    buttonText: 'Comenzar Diagnóstico',
-    variant: 'white-card-vak',
-  },
-  {
-    id: 'smartboard',
-    name: 'SmartBoard',
-    subtitle: 'Dashboard 8-16 Años',
-    path: '/conoce-smartboard',
-    icon: 'fa-chalkboard',
-    description: 'Plataforma de acompañamiento académico y emocional con Valerio AI.',
-    buttonText: 'Prueba la SmartBoard',
-    variant: 'horizontal',
-  },
-];
+import { useTranslation } from '../../i18n/I18nProvider';
 
 function AIToolsSection() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
+
+  const tools = [
+    {
+      id: 'ai-lab-academic',
+      name: t('ai_tools.card_1_name'),
+      subtitle: 'ACADEMIC',
+      path: '/ialab-academic',
+      icon: 'fa-rocket',
+      description: t('ai_tools.card_1_desc'),
+      badges: ['ACADEMIC', 'CERTIFIED'],
+      buttonText: t('ai_tools.card_1_button'),
+      variant: 'main-dark',
+    },
+    {
+      id: 'automation',
+      name: t('ai_tools.card_2_name'),
+      subtitle: t('ai_tools.card_2_subtitle'),
+      path: '/automation',
+      icon: 'fa-robot',
+      description: t('ai_tools.card_2_desc'),
+      features: [t('ai_tools.card_2_feature_1'), t('ai_tools.card_2_feature_2'), t('ai_tools.card_2_feature_3')],
+      buttonText: t('ai_tools.card_2_button'),
+      variant: 'white-card',
+    },
+    {
+      id: 'vak',
+      name: t('ai_tools.card_3_name'),
+      subtitle: t('ai_tools.card_3_subtitle'),
+      path: '/vak',
+      icon: 'fa-brain',
+      description: t('ai_tools.card_3_desc'),
+      buttonText: t('ai_tools.card_3_button'),
+      variant: 'white-card-vak',
+    },
+    {
+      id: 'smartboard',
+      name: t('ai_tools.card_4_name'),
+      subtitle: t('ai_tools.card_4_subtitle'),
+      path: '/conoce-smartboard',
+      icon: 'fa-chalkboard',
+      description: t('ai_tools.card_4_desc'),
+      buttonText: t('ai_tools.card_4_button'),
+      variant: 'horizontal',
+    },
+  ];
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -75,10 +77,10 @@ function AIToolsSection() {
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           >
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-petroleum tracking-tighter mb-3">
-              Herramientas de <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-petroleum pr-1">Élite</span>
+              {t('ai_tools.title_before')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-petroleum pr-1">{t('ai_tools.title_highlight')}</span>
             </h2>
             <p className="text-base text-slate-500 max-w-2xl font-medium">
-              Ecosistema de soluciones cognitivas diseñadas para potenciar el aprendizaje mediante IA y Neuro-ciencia.
+              {t('ai_tools.subtitle')}
             </p>
           </motion.div>
         </div>

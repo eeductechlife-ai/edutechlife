@@ -1,6 +1,7 @@
 import { memo, useState, useEffect, useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Icon } from '../utils/iconMapping.jsx';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 let lottieInstance = null;
 
@@ -153,6 +154,7 @@ const TiltCard = ({ children, pilar, onClick }) => {
 };
 
 const Ecosystem = memo(() => {
+  const { t } = useTranslation();
   const sectionRef = useRef(null);
 
   const pilares = [
@@ -194,21 +196,21 @@ const Ecosystem = memo(() => {
           className="text-center mb-8 max-w-3xl mx-auto"
         >
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-petroleum tracking-tighter mb-4">
-            Ecosistema{' '}
+            {t('ecosystem.title_before')}{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-petroleum pr-1">
-              Interconectado
+              {t('ecosystem.title_highlight')}
             </span>
           </h2>
           <p className="text-base text-slate-600 leading-relaxed">
-            Accede a herramientas estructuradas para potenciar la educación mediante la sinergia de neuro-ciencia e inteligencia artificial.
+            {t('ecosystem.subtitle')}
           </p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
-            { bg: 'from-primary-light/20', border: 'border-primary-light/30', anim: brainAnimation, img: '/images/eco-neuro.webp', title: 'Neuro-Entorno Educativo', desc: 'Acompañamiento integral basado en metodologías VAK y STEAM. Docentes con maestría analizan procesos psicológicos y académicos para potenciar cada estilo de aprendizaje con herramientas de IA personalizadas.', delay: 0.1 },
-            { bg: 'from-mint/20', border: 'border-mint/30', anim: awardAnimation, img: '/images/eco-nacional.webp', title: 'Proyectos de Impacto Nacional', desc: 'Operadores oficiales SenaTIC. Certificamos a más de 6,000 estudiantes con respaldo internacional de IBM y Coursera. Maestros que forman maestros: más de 200 docentes colombianos transformados en líderes digitales.', delay: 0.2 },
-            { bg: 'from-[#FFD166]/20', border: 'border-[#FFD166]/30', anim: handshakeAnimation, img: '/images/edutech-carrusel-6.webp', title: 'Consultoría B2B y Automatización', desc: 'Transformamos organizaciones educativas y empresas con metodología STEAM aplicada. Agentes de IA personalizados y capacitación de alto nivel que generan productividad real desde el primer mes de implementación.', delay: 0.3 }
+            { bg: 'from-primary-light/20', border: 'border-primary-light/30', anim: brainAnimation, img: '/images/eco-neuro.webp', title: t('ecosystem.card_1_title'), desc: t('ecosystem.card_1_desc'), delay: 0.1 },
+            { bg: 'from-mint/20', border: 'border-mint/30', anim: awardAnimation, img: '/images/eco-nacional.webp', title: t('ecosystem.card_2_title'), desc: t('ecosystem.card_2_desc'), delay: 0.2 },
+            { bg: 'from-[#FFD166]/20', border: 'border-[#FFD166]/30', anim: handshakeAnimation, img: '/images/edutech-carrusel-6.webp', title: t('ecosystem.card_3_title'), desc: t('ecosystem.card_3_desc'), delay: 0.3 }
           ].map((card, i) => (
             <motion.div
               key={i}

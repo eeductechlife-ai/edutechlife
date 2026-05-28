@@ -1,7 +1,9 @@
 import React from 'react';
 import { Icon } from '../../../utils/iconMapping.jsx';
+import { useTranslation } from '../../../i18n/I18nProvider';
 
 const ValerioMessageBubble = ({ msg }) => {
+  const { t } = useTranslation();
   const isUser = msg.type === 'user';
   const time = new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
@@ -24,7 +26,7 @@ const ValerioMessageBubble = ({ msg }) => {
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-medium opacity-80">
-                {isUser ? 'Tú' : 'Valerio'}
+                {isUser ? t('ialab.valerio.message_you') : t('ialab.valerio.message_valerio')}
               </span>
               <span className="text-xs opacity-60">{time}</span>
             </div>
@@ -43,7 +45,7 @@ const ValerioMessageBubble = ({ msg }) => {
           {isUser && (
             <div className="flex-shrink-0">
               <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 text-xs font-bold">
-                Tú
+                {t('ialab.valerio.message_you')}
               </div>
             </div>
           )}
@@ -70,25 +72,28 @@ const ThinkingIndicator = () => (
   </div>
 );
 
-const EmptyState = ({ moduleTitle }) => (
-  <div className="h-full flex items-center justify-center text-center p-8">
-    <div>
-      <div className="w-16 h-16 bg-gradient-to-r from-petroleum/10 to-corporate/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-        <Icon name="fa-comments" className="text-corporate text-2xl" />
+const EmptyState = ({ moduleTitle }) => {
+  const { t } = useTranslation();
+  return (
+    <div className="h-full flex items-center justify-center text-center p-8">
+      <div>
+        <div className="w-16 h-16 bg-gradient-to-r from-petroleum/10 to-corporate/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <Icon name="fa-comments" className="text-corporate text-2xl" />
+        </div>
+        <h3 className="text-lg font-bold text-petroleum-darker mb-2">
+          {t('ialab.valerio.empty_title', { module: moduleTitle })}
+        </h3>
+        <p className="text-slate-600">
+          {t('ialab.valerio.empty_description')}
+        </p>
       </div>
-      <h3 className="text-lg font-bold text-petroleum-darker mb-2">
-        ¡Hablemos sobre {moduleTitle}!
-      </h3>
-      <p className="text-slate-600">
-        Pregúntame lo que necesites sobre el módulo actual o selecciona una acción rápida.
-      </p>
     </div>
-  </div>
-);
+  );
+};
 
 const ValerioConversationArea = ({ conversation, isProcessing, moduleTitle }) => {
   return (
-    <div className="flex-1 overflow-y-auto p-4" aria-live="polite" aria-label="Mensajes de la conversación">
+    <div className="flex-1 overflow-y-auto p-4" aria-live="polite" aria-label={t('ialab.valerio.conversation_aria')}>
       {conversation.length === 0 ? (
         <EmptyState moduleTitle={moduleTitle} />
       ) : (

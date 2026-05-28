@@ -1,10 +1,12 @@
 import React from 'react';
 import { Icon } from '../../../utils/iconMapping.jsx';
+import { useTranslation } from '../../../i18n/I18nProvider';
 
 const ValerioQuickActions = ({ quickActions, onAction, disabled }) => {
+  const { t } = useTranslation();
   return (
     <div className="p-4 border-b border-slate-100">
-      <h3 className="text-sm font-medium text-slate-600 mb-3">Acciones rápidas</h3>
+      <h3 className="text-sm font-medium text-slate-600 mb-3">{t('ialab.valerio.quick_actions_title')}</h3>
       <div className="grid grid-cols-2 gap-2">
         {quickActions.map((action) => (
           <button

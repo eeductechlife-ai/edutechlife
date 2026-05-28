@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import MagneticButton from './MagneticButton';
 import FloatingParticles from './FloatingParticles';
 import { Icon } from '../utils/iconMapping.jsx';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const useAnimatedCounter = (target, duration = 2000, start = false) => {
     const [count, setCount] = useState(0);
@@ -29,6 +30,7 @@ const useAnimatedCounter = (target, duration = 2000, start = false) => {
 };
 
 const Hero = memo(() => {
+    const { t } = useTranslation();
     const heroRef = useRef(null);
     const statsRef = useRef(null);
     const navigate = useNavigate();
@@ -75,9 +77,9 @@ const Hero = memo(() => {
                         transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
                         className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-petroleum tracking-tighter leading-[0.9] mb-6"
                     >
-                        Liderando la<br />
+                        {t('hero.title_line1')}<br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-petroleum pr-1">
-                            Educación del Futuro
+                            {t('hero.title_line2')}
                         </span>
                     </motion.h1>
 
@@ -87,7 +89,7 @@ const Hero = memo(() => {
                         transition={{ duration: 0.8, delay: 0.2 }}
                         className="text-base sm:text-lg text-slate-500 leading-relaxed font-normal mb-10 max-w-2xl"
                     >
-                        Infraestructura cognitiva asistida por inteligencia artificial. Tu entorno de aprendizaje evoluciona y se ajusta <span className="text-petroleum font-semibold">en tiempo real</span> a tu neuro-ergonomía.
+                        {t('hero.subtitle_before')}<span className="text-petroleum font-semibold">{t('hero.subtitle_highlight')}</span>{t('hero.subtitle_after')}
                     </motion.p>
 
                     <motion.div 
@@ -102,7 +104,7 @@ const Hero = memo(() => {
                                 {countEstudiantes.toLocaleString()}+
                             </div>
                             <div className="text-xs font-normal text-slate-500 uppercase tracking-widest">
-                                Estudiantes
+                                {t('hero.stat_estudiantes')}
                             </div>
                         </div>
                         <div className="text-center">
@@ -110,7 +112,7 @@ const Hero = memo(() => {
                                 {countExito}%
                             </div>
                             <div className="text-xs font-normal text-slate-500 uppercase tracking-widest">
-                                Éxito
+                                {t('hero.stat_exito')}
                             </div>
                         </div>
                         <div className="text-center">
@@ -118,7 +120,7 @@ const Hero = memo(() => {
                                 {countAños}+
                             </div>
                             <div className="text-xs font-normal text-slate-500 uppercase tracking-widest">
-                                Años de experiencia
+                                {t('hero.stat_anios_experiencia')}
                             </div>
                         </div>
                     </motion.div>
@@ -134,7 +136,7 @@ const Hero = memo(() => {
                             className="group relative overflow-hidden flex items-center justify-center gap-3 px-8 sm:px-12 py-4 rounded-full text-base sm:text-lg font-bold bg-primary-light text-white shadow-premium-lg hover:bg-petroleum hover:-translate-y-1 transition-all duration-300"
                         >
                             <span className="absolute inset-0 w-[150%] h-full -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-[sweep_1.5s_ease-in-out_infinite] skew-x-[-20deg]" />
-                            <span className="text-white relative z-10 font-semibold">Conoce el SmartBoard</span>
+                            <span className="text-white relative z-10 font-semibold">{t('hero.cta_conoce_smartboard')}</span>
                             <Icon name="fa-arrow-right" className="text-white/90 relative z-10" />
                         </MagneticButton>
                         
@@ -143,7 +145,7 @@ const Hero = memo(() => {
                             className="group flex items-center justify-center gap-3 px-8 sm:px-12 py-4 rounded-full text-base sm:text-lg font-bold bg-transparent border-2 border-petroleum text-petroleum hover:bg-petroleum hover:text-white transition-all duration-300"
                         >
                             <Icon name="fa-chalkboard" className="text-petroleum group-hover:text-white transition-colors duration-300" />
-                            <span className="font-semibold">SmartBoard</span>
+                            <span className="font-semibold">{t('hero.cta_smartboard')}</span>
                         </MagneticButton>
                     </motion.div>
                 </div>

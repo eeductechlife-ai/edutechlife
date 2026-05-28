@@ -1,24 +1,26 @@
 import { memo, useState, useRef } from 'react';
 import { GraduationCap, Globe, Building2, Search, Cloud, Award, FlaskConical, Laptop, Cpu, Sparkles } from 'lucide-react';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const Aliados = memo(() => {
+    const { t } = useTranslation();
     const sectionRef = useRef(null);
     const marqueeRef = useRef(null);
     const [isPaused, setIsPaused] = useState(false);
 
     const aliados = [
-        { id: 1, name: 'SENA', category: 'Educación Técnica', icon: GraduationCap, color: '#004B63' },
-        { id: 2, name: 'UNESCO', category: 'Organización Internacional', icon: Globe, color: '#4DA8C4' },
-        { id: 3, name: 'Ministerio', category: 'Educación Nacional', icon: Building2, color: '#66CCCC' },
-        { id: 4, name: 'Google', category: 'Tecnología', icon: Search, color: '#004B63' },
-        { id: 5, name: 'Microsoft', category: 'Cloud Computing', icon: Cloud, color: '#4DA8C4' },
-        { id: 6, name: 'AWS', category: 'Infraestructura', icon: Cloud, color: '#66CCCC' },
-        { id: 7, name: 'ICETEX', category: 'Financiamiento', icon: Award, color: '#004B63' },
-        { id: 8, name: 'Colciencias', category: 'Ciencia y Tecnología', icon: FlaskConical, color: '#4DA8C4' },
-        { id: 9, name: 'Apple', category: 'Tecnología', icon: Laptop, color: '#66CCCC' },
-        { id: 10, name: 'IBM', category: 'Inteligencia Artificial', icon: Cpu, color: '#004B63' },
-        { id: 11, name: 'Coursera', category: 'Educación Online', icon: Sparkles, color: '#4DA8C4' },
-        { id: 12, name: 'Steam', category: 'Educación STEM', icon: Cpu, color: '#66CCCC' },
+        { id: 1, name: 'SENA', category: t('aliados.category_sena'), icon: GraduationCap, color: '#004B63' },
+        { id: 2, name: 'UNESCO', category: t('aliados.category_unesco'), icon: Globe, color: '#4DA8C4' },
+        { id: 3, name: 'Ministerio', category: t('aliados.category_ministerio'), icon: Building2, color: '#66CCCC' },
+        { id: 4, name: 'Google', category: t('aliados.category_google'), icon: Search, color: '#004B63' },
+        { id: 5, name: 'Microsoft', category: t('aliados.category_microsoft'), icon: Cloud, color: '#4DA8C4' },
+        { id: 6, name: 'AWS', category: t('aliados.category_aws'), icon: Cloud, color: '#66CCCC' },
+        { id: 7, name: 'ICETEX', category: t('aliados.category_icetex'), icon: Award, color: '#004B63' },
+        { id: 8, name: 'Colciencias', category: t('aliados.category_colciencias'), icon: FlaskConical, color: '#4DA8C4' },
+        { id: 9, name: 'Apple', category: t('aliados.category_apple'), icon: Laptop, color: '#66CCCC' },
+        { id: 10, name: 'IBM', category: t('aliados.category_ibm'), icon: Cpu, color: '#004B63' },
+        { id: 11, name: 'Coursera', category: t('aliados.category_coursera'), icon: Sparkles, color: '#4DA8C4' },
+        { id: 12, name: 'Steam', category: t('aliados.category_steam'), icon: Cpu, color: '#66CCCC' },
     ];
 
     const duplicatedAliados = [...aliados, ...aliados, ...aliados];
@@ -37,14 +39,14 @@ const Aliados = memo(() => {
                     <div className="inline-flex items-center gap-3 mb-4">
                         <div className="w-10 h-[2px] bg-gradient-to-r from-transparent to-primary-light" />
                         <span className="text-sm font-bold text-primary-light uppercase tracking-widest block mb-2">
-                            Confían en nosotros
+                            {t('aliados.badge')}
                         </span>
                         <div className="w-10 h-[2px] bg-gradient-to-l from-transparent to-primary-light" />
                     </div>
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-petroleum tracking-tighter mb-3">
-                        Nuestros{' '}
+                        {t('aliados.title_before')}{' '}
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-petroleum">
-                            Aliados Estratégicos
+                            {t('aliados.title_highlight')}
                         </span>
                     </h2>
                 </div>
