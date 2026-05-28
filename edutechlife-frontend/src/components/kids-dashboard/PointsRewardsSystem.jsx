@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSmartBoardKids } from '../../context/SmartBoardKidsContext';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 // ==========================================
 // Reward Card Component
@@ -49,13 +50,14 @@ RewardCard.displayName = 'RewardCard';
 // Points Display Component
 // ==========================================
 const PointsDisplay = memo(({ totalPoints, totalActiveMinutes }) => {
+  const { t } = useTranslation();
   const safeMinutes = totalActiveMinutes || 0;
   const level = useMemo(() => {
-    if (totalPoints >= 5000) return { level: 'Maestro', emoji: '🏆', color: '#FFD166' };
-    if (totalPoints >= 2500) return { level: 'Experto', emoji: '⭐', color: '#4DA8C4' };
-    if (totalPoints >= 1000) return { level: 'Avanzado', emoji: '📚', color: '#66CCCC' };
-    if (totalPoints >= 500) return { level: 'Intermedio', emoji: '🌟', color: '#B2D8E5' };
-    return { level: 'Principiante', emoji: '🌱', color: '#66CCCC' };
+    if (totalPoints >= 5000) return { levelKey: 'kid.points_rewards.level_maestro', emoji: '🏆', color: '#FFD166' };
+    if (totalPoints >= 2500) return { levelKey: 'kid.points_rewards.level_experto', emoji: '⭐', color: '#4DA8C4' };
+    if (totalPoints >= 1000) return { levelKey: 'kid.points_rewards.level_avanzado', emoji: '📚', color: '#66CCCC' };
+    if (totalPoints >= 500) return { levelKey: 'kid.points_rewards.level_intermedio', emoji: '🌟', color: '#B2D8E5' };
+    return { levelKey: 'kid.points_rewards.level_principiante', emoji: '🌱', color: '#66CCCC' };
   }, [totalPoints]);
 
   return (
@@ -66,7 +68,7 @@ const PointsDisplay = memo(({ totalPoints, totalActiveMinutes }) => {
     >
       <div className="flex items-center justify-between mb-4">
         <div>
-          <p className="text-white/80 text-sm">Tus Puntos</p>
+          <p className="text-white/80 text-sm">{t('kid.points_rewards.your_points')}</p>
           <motion.p
             className="text-4xl font-black"
             animate={{ scale: [1, 1.05, 1] }}
@@ -76,9 +78,9 @@ const PointsDisplay = memo(({ totalPoints, totalActiveMinutes }) => {
           </motion.p>
         </div>
         <div className="text-right">
-          <p className="text-white/80 text-sm">Nivel</p>
+          <p className="text-white/80 text-sm">{t('kid.points_rewards.level')}</p>
           <p className="text-2xl font-bold" style={{ color: level.color }}>
-            {level.emoji} {level.level}
+            {level.emoji} {t(level.levelKey)}
           </p>
         </div>
       </div>
@@ -94,7 +96,7 @@ const PointsDisplay = memo(({ totalPoints, totalActiveMinutes }) => {
         />
       </div>
       <p className="text-xs text-white/60 mt-2">
-        {safeMinutes} minutos activo • {totalPoints % 500}/500 para siguiente nivel
+        {t('kid.points_rewards.minutes_to_next_level', { minutes: safeMinutes, current: totalPoints % 500, next: 500 })}
       </p>
     </motion.div>
   );
@@ -105,9 +107,11 @@ PointsDisplay.displayName = 'PointsDisplay';
 // ==========================================
 // Points History Component
 // ==========================================
-const PointsHistory = memo(({ history }) => (
+const PointsHistory = memo(({ history }) => {
+  const { t } = useTranslation();
+  return (
   <div className="bg-white/70 backdrop-blur-xl border border-[#E2E8F0]/50 rounded-2xl p-4 shadow-lg">
-    <h4 className="text-sm font-bold text-[#004B63] mb-3">📜 Historial de Puntos</h4>
+    <h4 className="text-sm font-bold text-[#004B63] mb-3">{t('kid.points_rewards.points_history_title')}</h4>
     <div className="space-y-2 max-h-48 overflow-y-auto">
       {history.slice(-10).reverse().map((entry, index) => (
         <motion.div
@@ -125,7 +129,8 @@ const PointsHistory = memo(({ history }) => (
       ))}
     </div>
   </div>
-));
+  );
+});
 
 PointsHistory.displayName = 'PointsHistory';
 
@@ -133,6 +138,7 @@ PointsHistory.displayName = 'PointsHistory';
 // Main Points & Rewards System Component
 // ==========================================
 const PointsRewardsSystem = memo(() => {
+  const { t } = useTranslation();
   const { totalPoints, pointsHistory, unlockedRewards, unlockReward, addPoints } = useSmartBoardKids();
   const [activeTab, setActiveTab] = useState('puntos');
   
@@ -173,7 +179,7 @@ const PointsRewardsSystem = memo(() => {
             {tab === 'puntos' && '💎 '} 
             {tab === 'tienda' && '🛒 '} 
             {tab === 'historial' && '📜 '} 
-            {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            {tab === 'puntos' ? t('kid.points_rewards.tab_points') : tab === 'tienda' ? t('kid.points_rewards.tab_store') : t('kid.points_rewards.tab_history')}
           </motion.button>
         ))}
       </div>
@@ -188,15 +194,15 @@ const PointsRewardsSystem = memo(() => {
         >
           {activeTab === 'puntos' && (
             <div className="bg-white rounded-2xl p-6 border border-[#E2E8F0]">
-              <h3 className="text-lg font-bold text-[#004B63] mb-4">💡 Cómo Ganar Puntos</h3>
+              <h3 className="text-lg font-bold text-[#004B63] mb-4">{t('kid.points_rewards.how_to_earn_title')}</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {[
-                  { icon: '⏱️', action: 'Minuto activo', points: 1, color: '#4DA8C4' },
-                  { icon: '📝', action: 'Subir actividad', points: 50, color: '#66CCCC' },
-                  { icon: '✅', action: 'Completar misión', points: 100, color: '#FFD166' },
-                  { icon: '🧠', action: 'Diagnóstico VAK', points: 300, color: '#FF6B9D' },
-                  { icon: '📚', action: 'Completar materia', points: 200, color: '#B2D8E5' },
-                  { icon: '🔥', action: 'Racha diaria', points: 150, color: '#4DA8C4' },
+                  { icon: '⏱️', actionKey: 'kid.points_rewards.action_active_minute', points: 1, color: '#4DA8C4' },
+                  { icon: '📝', actionKey: 'kid.points_rewards.action_upload_activity', points: 50, color: '#66CCCC' },
+                  { icon: '✅', actionKey: 'kid.points_rewards.action_complete_mission', points: 100, color: '#FFD166' },
+                  { icon: '🧠', actionKey: 'kid.points_rewards.action_vak_diagnosis', points: 300, color: '#FF6B9D' },
+                  { icon: '📚', actionKey: 'kid.points_rewards.action_complete_subject', points: 200, color: '#B2D8E5' },
+                  { icon: '🔥', actionKey: 'kid.points_rewards.action_daily_streak', points: 150, color: '#4DA8C4' },
                 ].map((item, index) => (
                   <motion.div
                     key={item.action}
@@ -207,8 +213,8 @@ const PointsRewardsSystem = memo(() => {
                   >
                     <span className="text-2xl">{item.icon}</span>
                     <div className="flex-1">
-                      <p className="text-sm font-semibold text-[#004B63]">{item.action}</p>
-                      <p className="text-xs text-[#64748B]">+{item.points} puntos</p>
+                      <p className="text-sm font-semibold text-[#004B63]">{t(item.actionKey)}</p>
+                      <p className="text-xs text-[#64748B]">{t('kid.points_rewards.points_format', { points: item.points })}</p>
                     </div>
                     <span className="text-sm font-bold" style={{ color: item.color }}>
                       +{item.points}

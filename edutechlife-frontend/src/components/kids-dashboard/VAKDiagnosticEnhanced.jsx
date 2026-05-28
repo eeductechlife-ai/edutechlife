@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useSmartBoardKids } from '../../context/SmartBoardKidsContext';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 // ==========================================
 // VAK Diagnostic Enhanced - 20 Questions
@@ -30,6 +31,7 @@ const questions = [
 ];
 
 const VAKDiagnosticEnhanced = ({ vakResult, onComplete }) => {
+  const { t } = useTranslation();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState([]);
   const [isCompleted, setIsCompleted] = useState(!!vakResult);
@@ -77,9 +79,9 @@ const VAKDiagnosticEnhanced = ({ vakResult, onComplete }) => {
         className="bg-white rounded-2xl p-8 shadow-lg border border-[#E2E8F0] text-center"
       >
         <div className="text-6xl mb-4">🎉</div>
-        <h3 className="text-2xl font-bold text-[#004B63] mb-2">¡Diagnóstico Completado!</h3>
+        <h3 className="text-2xl font-bold text-[#004B63] mb-2">{t('kid.vak.result_title')}</h3>
         <p className="text-lg text-[#4DA8C4] font-semibold mb-6">
-          Tu estilo predominante es: {vakResult.predominantStyle.toUpperCase()}
+          {t('kid.vak.result_subtitle')} {vakResult.predominantStyle.toUpperCase()}
         </p>
         
         <div className="grid grid-cols-3 gap-4 mb-6">
@@ -87,14 +89,14 @@ const VAKDiagnosticEnhanced = ({ vakResult, onComplete }) => {
             <div key={key} className="p-4 bg-[#F8FAFC] rounded-xl">
               <p className="text-3xl font-black text-[#4DA8C4]">{value}%</p>
               <p className="text-xs text-[#64748B] mt-1">
-                {key === 'visual' ? '👁️ Visual' : key === 'auditivo' ? '👂 Auditivo' : '🏃 Kinestésico'}
+                {key === 'visual' ? t('kid.vak.style_visual') : key === 'auditivo' ? t('kid.vak.style_auditory') : t('kid.vak.style_kinesthetic')}
               </p>
             </div>
           ))}
         </div>
         
         <p className="text-sm text-[#64748B]">
-          Dani ha guardado tus resultados y te recomendará actividades personalizadas.
+          {t('kid.vak.result_message')}
         </p>
       </motion.div>
     );
@@ -104,7 +106,7 @@ const VAKDiagnosticEnhanced = ({ vakResult, onComplete }) => {
     <div className="bg-white rounded-2xl p-8 shadow-lg border border-[#E2E8F0]">
       <div className="mb-6">
         <div className="flex items-center justify-between mb-2">
-          <h3 className="text-lg font-bold text-[#004B63]">🧠 Diagnóstico VAK</h3>
+          <h3 className="text-lg font-bold text-[#004B63]">{t('kid.vak.diagnostic_title')}</h3>
           <span className="text-sm text-[#64748B]">{currentQuestion + 1}/{questions.length}</span>
         </div>
         <div className="w-full h-2 bg-[#E2E8F0] rounded-full overflow-hidden">

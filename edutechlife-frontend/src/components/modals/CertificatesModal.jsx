@@ -7,11 +7,12 @@ import { useIALabProgressContext, useIALabUIContext } from '../../context/IALabC
 import { Card, CardContent } from '../ui/card-simple';
 import { Icon } from '../../utils/iconMapping.jsx';
 import CertificatePreview from '../IALab/CertificatePreview';
+import { useTranslation } from '../../i18n/I18nProvider';
 
-const COURSE_NAME = 'Introducción a la I.A Generativa';
 const TOTAL_MODULES = 5;
 
 const CertificatesModal = ({ isOpen, onClose }) => {
+  const { t } = useTranslation();
   const { user } = useUser();
   const { courseProgress, completedModules, isLoading: progressLoading } = useProgressContext();
   const { calculateModuleScore } = useIALabProgressContext();
@@ -66,17 +67,17 @@ const CertificatesModal = ({ isOpen, onClose }) => {
       setGenerating(true);
       setError(null);
       try {
-        const studentName = nameInput.trim() || user.fullName || 'Estudiante';
+        const studentName = nameInput.trim() || user.fullName || t('modals.certificates.student_fallback');
         const result = await generateCertificate(studentName);
         if (result && !result.error) {
           setCertificate(result);
         } else {
-          const errorMsg = result?.error || 'Error desconocido al generar certificado';
+          const errorMsg = result?.error || t('modals.certificates.error_unknown');
           setError(errorMsg);
           console.error('❌ Error en modal:', errorMsg);
         }
       } catch (err) {
-        setError(err.message || 'Error inesperado');
+        setError(err.message || t('modals.certificates.error_unexpected'));
         console.error('❌ Error inesperado generando certificado:', err);
       } finally {
         setGenerating(false);
@@ -104,16 +105,16 @@ const CertificatesModal = ({ isOpen, onClose }) => {
                 <Icon name="fa-check-circle" className="text-emerald-600 text-sm" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold text-emerald-800">¡Curso Completado!</p>
-                <p className="text-xs text-emerald-700 mt-1">
-                  Has completado los 5 módulos con un progreso del {Math.round(courseProgress)}%. Genera tu certificado ahora.
+                 <p className="text-sm font-bold text-emerald-800">{t('modals.certificates.course_completed')}</p>
+                 <p className="text-xs text-emerald-700 mt-1">
+                   {t('modals.certificates.course_completed_desc', { progress: Math.round(courseProgress) })}
                 </p>
               </div>
             </div>
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-slate-700 mb-1.5 block">Nombre para el certificado</label>
+            <label className="text-xs font-semibold text-slate-700 mb-1.5 block">{t('modals.certificates.name_label')}</label>
             <input
               type="text"
               value={nameInput}
@@ -121,7 +122,7 @@ const CertificatesModal = ({ isOpen, onClose }) => {
                 setNameInput(e.target.value);
                 if (error) setError(null);
               }}
-              placeholder={user?.fullName || 'Tu nombre completo'}
+              placeholder={user?.fullName || t('modals.certificates.name_placeholder')}
               className="w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#004B63]/30 focus:border-[#004B63] transition-all"
             />
           </div>
@@ -133,10 +134,10 @@ const CertificatesModal = ({ isOpen, onClose }) => {
                   <Icon name="fa-exclamation-triangle" className="text-red-600 text-sm" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-bold text-red-800">Error al generar certificado</p>
+                   <p className="text-sm font-bold text-red-800">{t('modals.certificates.error_title')}</p>
                   <p className="text-xs text-red-700 mt-1">{error}</p>
-                  <p className="text-[10px] text-red-600 mt-2 font-medium">
-                    💡 Solución: Ejecuta el script SQL en Supabase Dashboard:
+                   <p className="text-[10px] text-red-600 mt-2 font-medium">
+                     {t('modals.certificates.error_solution')}
                     <br />
                     <code className="bg-red-100 px-1.5 py-0.5 rounded text-[10px]">
                       sql/fix_certificates_rls.sql
@@ -157,12 +158,12 @@ const CertificatesModal = ({ isOpen, onClose }) => {
             {generating ? (
               <>
                 <Icon name="fa-spinner" className="animate-spin" />
-                Generando certificado...
+                {t('modals.certificates.generating')}
               </>
             ) : (
               <>
                 <Icon name="fa-award" />
-                Generar Certificado
+                {t('modals.certificates.generate')}
               </>
             )}
           </motion.button>
@@ -178,8 +179,8 @@ const CertificatesModal = ({ isOpen, onClose }) => {
               <Icon name="fa-graduation-cap" className="text-[#004B63] text-sm" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[10px] text-slate-500 font-medium uppercase tracking-wider">Curso Inscrito</p>
-              <p className="text-xs font-bold text-slate-800 leading-snug mt-0.5">{COURSE_NAME}</p>
+               <p className="text-[10px] text-slate-500 font-medium uppercase tracking-wider">{t('modals.certificates.course_enrolled')}</p>
+               <p className="text-xs font-bold text-slate-800 leading-snug mt-0.5">{t('modals.certificates.course_name')}</p>
             </div>
           </div>
         </div>
@@ -189,9 +190,9 @@ const CertificatesModal = ({ isOpen, onClose }) => {
             <div className="flex items-start gap-3">
               <Icon name="fa-trophy" className="text-amber-500 mt-0.5 flex-shrink-0" />
               <div>
-                <p className="font-semibold text-amber-800 text-sm">¡Sigue avanzando!</p>
-                <p className="text-xs text-amber-700 mt-1">
-                  Llevas {completedModulesCount}/{TOTAL_MODULES} módulos completados. Completa los restantes para obtener tu certificado.
+                 <p className="font-semibold text-amber-800 text-sm">{t('modals.certificates.keep_going')}</p>
+                 <p className="text-xs text-amber-700 mt-1">
+                   {t('modals.certificates.keep_going_desc', { count: completedModulesCount, total: TOTAL_MODULES })}
                 </p>
               </div>
             </div>
@@ -199,9 +200,9 @@ const CertificatesModal = ({ isOpen, onClose }) => {
         ) : (
           <div className="border border-slate-200 rounded-xl bg-slate-50 p-6 text-center">
             <Icon name="fa-rocket" className="text-[#00BCD4] text-3xl mx-auto mb-3" />
-            <p className="font-semibold text-slate-700 text-sm">¡Comienza tu curso!</p>
+            <p className="font-semibold text-slate-700 text-sm">{t('modals.certificates.start_course')}</p>
             <p className="text-xs text-slate-500 mt-1">
-              Completa los 5 módulos de <strong>{COURSE_NAME}</strong> para obtener tu certificado.
+              {t('modals.certificates.start_course_desc', { course: t('modals.certificates.course_name') })}
             </p>
           </div>
         )}
@@ -228,7 +229,7 @@ const CertificatesModal = ({ isOpen, onClose }) => {
         <button
           onClick={onClose}
           className="absolute top-4 right-4 z-50 p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-all duration-200"
-          aria-label="Cerrar"
+          aria-label={t('modals.certificates.close')}
         >
           <Icon name="fa-times" className="text-lg" />
         </button>
@@ -239,8 +240,8 @@ const CertificatesModal = ({ isOpen, onClose }) => {
               <Icon name="fa-award" className="text-white text-lg" />
             </div>
             <div>
-              <h2 className="text-white font-bold text-base">Mis Certificados</h2>
-              <p className="text-xs text-white/70 mt-0.5">{COURSE_NAME}</p>
+          <h2 className="text-white font-bold text-base">{t('modals.certificates.title')}</h2>
+          <p className="text-xs text-white/70 mt-0.5">{t('modals.certificates.course_name')}</p>
             </div>
           </div>
         </div>
@@ -253,7 +254,7 @@ const CertificatesModal = ({ isOpen, onClose }) => {
               className="flex flex-col items-center justify-center py-16"
             >
               <Icon name="fa-spinner" className="text-3xl text-[#00BCD4] animate-spin mb-4" />
-              <p className="text-sm text-slate-500">Cargando...</p>
+              <p className="text-sm text-slate-500">{t('modals.certificates.loading')}</p>
             </motion.div>
           ) : (
             <motion.div

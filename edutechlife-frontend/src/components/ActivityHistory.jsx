@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useActivityTracker } from '../hooks/useActivityTracker';
+import { useTranslation } from '../i18n/I18nProvider';
 import { useIALabStore } from '../store/ialabStore';
 import usePersonalizedRecommendations from '../hooks/IALab/usePersonalizedRecommendations';
 import { ALL_LESSONS, modules, BADGE_INFO } from '../data/ialab';
@@ -15,13 +16,13 @@ import SectionHeader from '../components/ui/SectionHeader';
 import ModuleProgressCard from '../components/IALab/ModuleProgressCard';
 
 const ACTIVITY_CONFIG = {
-  video: { icon: 'fa-play-circle', label: 'Video', color: 'var(--color-petroleum)' },
-  infographic: { icon: 'fa-file-image', label: 'Infografía', color: 'var(--color-petroleum)' },
-  exam: { icon: 'fa-file-alt', label: 'Examen', color: 'var(--color-corporate)' },
-  challenge: { icon: 'fa-trophy', label: 'Desafío', color: '#10B981' },
-  resource: { icon: 'fa-book', label: 'Recurso', color: '#F59E0B' },
-  community: { icon: 'fa-comments', label: 'Comunidad', color: 'var(--color-petroleum)' },
-  lesson: { icon: 'fa-check-circle', label: 'Lección', color: '#10B981' },
+  video: { icon: 'fa-play-circle', labelKey: 'activity.config.video', color: 'var(--color-petroleum)' },
+  infographic: { icon: 'fa-file-image', labelKey: 'activity.config.infographic', color: 'var(--color-petroleum)' },
+  exam: { icon: 'fa-file-alt', labelKey: 'activity.config.exam', color: 'var(--color-corporate)' },
+  challenge: { icon: 'fa-trophy', labelKey: 'activity.config.challenge', color: '#10B981' },
+  resource: { icon: 'fa-book', labelKey: 'activity.config.resource', color: '#F59E0B' },
+  community: { icon: 'fa-comments', labelKey: 'activity.config.community', color: 'var(--color-petroleum)' },
+  lesson: { icon: 'fa-check-circle', labelKey: 'activity.config.lesson', color: '#10B981' },
 };
 
 const MODULE_NAMES = {
@@ -41,15 +42,15 @@ const MODULE_RESOURCES = [
   { id: 5, title: MODULE_NAMES[5], icon: MODULE_ICONS[5], videos: 1, infographics: 2, hasExam: true, hasChallenge: true, hasCommunity: true },
 ];
 
-const formatTimeAgo = (date) => {
+const formatTimeAgo = (date, t) => {
   if (!date) return '';
   const now = new Date(); const then = new Date(date);
   const diffMs = now - then; const diffMin = Math.floor(diffMs / 60000);
   const diffHrs = Math.floor(diffMin / 60); const diffDays = Math.floor(diffHrs / 24);
-  if (diffMin < 1) return 'Ahora mismo';
-  if (diffMin < 60) return `Hace ${diffMin} min`;
-  if (diffHrs < 24) return `Hace ${diffHrs}h`;
-  if (diffDays < 7) return `Hace ${diffDays}d`;
+  if (diffMin < 1) return t ? t('activity.time.now') : 'Ahora mismo';
+  if (diffMin < 60) return t ? t('activity.time.minutes', { min: diffMin }) : `Hace ${diffMin} min`;
+  if (diffHrs < 24) return t ? t('activity.time.hours', { hours: diffHrs }) : `Hace ${diffHrs}h`;
+  if (diffDays < 7) return t ? t('activity.time.days', { days: diffDays }) : `Hace ${diffDays}d`;
   return then.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
 };
 
@@ -72,22 +73,23 @@ const calculateModuleScore = (moduleId, config, completedVideos, completedInfogr
 };
 
 const TABS = [
-  { key: 'modules', icon: 'fa-cubes', label: 'Módulos y Notas' },
-  { key: 'activities', icon: 'fa-list', label: 'Actividades' },
-  { key: 'stats', icon: 'fa-chart-bar', label: 'Estadísticas' },
-  { key: 'recommendations', icon: 'fa-lightbulb', label: 'Recomendaciones' },
+  { key: 'modules', icon: 'fa-cubes', labelKey: 'activity.tab.modules' },
+  { key: 'activities', icon: 'fa-list', labelKey: 'activity.tab.activities' },
+  { key: 'stats', icon: 'fa-chart-bar', labelKey: 'activity.tab.stats' },
+  { key: 'recommendations', icon: 'fa-lightbulb', labelKey: 'activity.tab.recommendations' },
 ];
 
 const FILTER_OPTIONS = [
-  { key: 'all', label: 'Todo', icon: 'fa-list' },
-  { key: 'exam', label: 'Exámenes', icon: 'fa-file-alt' },
-  { key: 'challenge', label: 'Desafíos', icon: 'fa-trophy' },
-  { key: 'video', label: 'Videos', icon: 'fa-play-circle' },
-  { key: 'lesson', label: 'Lecciones', icon: 'fa-check-circle' },
-  { key: 'community', label: 'Comunidad', icon: 'fa-comments' },
+  { key: 'all', labelKey: 'activity.filter.all', icon: 'fa-list' },
+  { key: 'exam', labelKey: 'activity.filter.exam', icon: 'fa-file-alt' },
+  { key: 'challenge', labelKey: 'activity.filter.challenge', icon: 'fa-trophy' },
+  { key: 'video', labelKey: 'activity.filter.video', icon: 'fa-play-circle' },
+  { key: 'lesson', labelKey: 'activity.filter.lesson', icon: 'fa-check-circle' },
+  { key: 'community', labelKey: 'activity.filter.community', icon: 'fa-comments' },
 ];
 
 const ActivityHistory = ({ isOpen, onClose }) => {
+  const { t } = useTranslation();
   const { activities } = useActivityTracker();
   const lessonProgress = useIALabStore(s => s.lessonProgress);
   const xp = useIALabStore(s => s.xp);
@@ -262,7 +264,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
     const counts = { video: 0, exam: 0, challenge: 0, lesson: 0, community: 0, resource: 0 };
     (activities || []).forEach(a => { if (counts[a.activity_type] !== undefined) counts[a.activity_type]++; });
     const colors = { video: '#004B63', exam: '#00BCD4', challenge: '#10B981', lesson: '#F59E0B', community: '#8B5CF6', resource: '#94A3B8' };
-    const labels = { video: 'Videos', exam: 'Exámenes', challenge: 'Desafíos', lesson: 'Lecciones', community: 'Comunidad', resource: 'Recursos' };
+    const labels = { video: t('activity.filter.video'), exam: t('activity.filter.exam'), challenge: t('activity.filter.challenge'), lesson: t('activity.filter.lesson'), community: t('activity.filter.community'), resource: t('activity.config.resource') };
     const total = Object.values(counts).reduce((s, v) => s + v, 0);
     return Object.entries(counts).filter(([_, v]) => v > 0).map(([k, v]) => ({
       name: labels[k], value: v, pct: total > 0 ? Math.round(v / total * 100) : 0, color: colors[k], key: k,
@@ -306,9 +308,9 @@ const ActivityHistory = ({ isOpen, onClose }) => {
     const d = new Date(lastActivityDate);
     const now = new Date();
     const isToday = d.toDateString() === now.toDateString();
-    if (isToday) return `Hoy a las ${d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}`;
+    if (isToday) return `${t('activity.stats.today')} ${d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}`;
     const yesterday = new Date(now - 86400000);
-    if (d.toDateString() === yesterday.toDateString()) return `Ayer a las ${d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}`;
+    if (d.toDateString() === yesterday.toDateString()) return `${t('activity.time.days', { days: 1 })} ${d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}`;
     return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
   })() : null;
 
@@ -331,10 +333,10 @@ const ActivityHistory = ({ isOpen, onClose }) => {
   const totalItems = totalVideosTarget + totalInfographicsTarget + 5 + 5 + 5 + totalLessonsCount;
   const totalPoints = getTotalPoints();
   const getStreakMessage = () => {
-    if (streak >= 30) return 'Legendario';
-    if (streak >= 7) return 'Imparable';
-    if (streak >= 3) return 'Buena racha';
-    return 'Sigue practicando';
+    if (streak >= 30) return t('streak.tier_imparable');
+    if (streak >= 7) return t('streak.tier_encendida');
+    if (streak >= 3) return t('streak.tier_activa');
+    return t('streak.study_today');
   };
 
   const nextBadge = useMemo(() => {
@@ -386,8 +388,8 @@ const ActivityHistory = ({ isOpen, onClose }) => {
         const pn = pageCount();
         doc.setFontSize(7);
         doc.setTextColor(...CG);
-        doc.text('Edutechlife · Mi Historial de Aprendizaje', ML, PH - MB);
-        doc.text(`Página ${pn}`, PW - MR, PH - MB, { align: 'right' });
+        doc.text(t('activity.pdf.title'), ML, PH - MB);
+        doc.text(t('activity.pdf.page', { n: pn }), PW - MR, PH - MB, { align: 'right' });
         doc.setDrawColor(...CP);
         doc.setLineWidth(0.2);
         doc.line(ML, PH - MB - 3, PW - MR, PH - MB - 3);
@@ -409,7 +411,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(7);
         doc.setTextColor(220, 250, 255);
-        doc.text('Mi Historial de Aprendizaje', ML, 15.5);
+        doc.text(t('activity.title'), ML, 15.5);
         cy = 22;
       };
 
@@ -467,15 +469,15 @@ const ActivityHistory = ({ isOpen, onClose }) => {
       drawHeader();
 
       // -- Resumen General --
-      sectionTitle('Resumen General');
+      sectionTitle(t('activity.pdf.section_general'));
       checkPage(25);
 
       const cards = [
-        { label: 'PROGRESO', val: `${Math.round(courseProgress)}%` },
-        { label: 'NIVEL', val: String(level) },
-        { label: 'XP TOTAL', val: String(xp) },
-        { label: 'RACHA', val: `${streak}d` },
-        { label: 'LECCIONES', val: `${totalLessonsCompleted}/${totalLessonsCount}` },
+        { label: t('activity.stats.progress').toUpperCase(), val: `${Math.round(courseProgress)}%` },
+        { label: t('kid.points_rewards.level').toUpperCase(), val: String(level) },
+        { label: 'XP ' + t('activity.stats.total_label').toUpperCase(), val: String(xp) },
+        { label: t('activity.stats.weekly_chart_label').toUpperCase(), val: `${streak}d` },
+        { label: t('activity.stats.lessons').toUpperCase(), val: `${totalLessonsCompleted}/${totalLessonsCount}` },
       ];
       const cw = (CW - 8) / 5;
       cards.forEach((c, i) => {
@@ -499,18 +501,18 @@ const ActivityHistory = ({ isOpen, onClose }) => {
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(7);
       doc.setTextColor(...CD);
-      doc.text(`Sesiones: ${sessionStats.sessionCount} · Días activo: ${daysActive} · Tiempo estudio: ${studyHours}h ${studyMins}m · Inicio: hace ${daysSinceStart || 0} días${estimatedEndDate ? ` · Final estimado: ${estimatedEndDate}` : ''}`, ML, cy);
+      doc.text(`${t('activity.stats.sessions_label')}: ${sessionStats.sessionCount} · ${t('activity.stats.days_active')}: ${daysActive} · ${t('activity.stats.study_time')}: ${t('activity.hours_minutes', { hours: studyHours, minutes: studyMins })} · ${t('activity.stats.weekly_chart_label')}: ${daysSinceStart || 0} ${t('activity.stats.days_active').toLowerCase()}${estimatedEndDate ? ` · ${t('activity.pdf.section_recommendation')}: ${estimatedEndDate}` : ''}`, ML, cy);
       cy += 8;
 
       // -- Progreso por Módulo --
-      sectionTitle('Progreso por Módulo');
-      const mCols = [['Módulo', 42], ['Puntaje', 14], ['Examen', 14], ['Desafío', 14], ['Estado', 22], ['', CW - 42 - 14 - 14 - 14 - 22]];
+      sectionTitle(t('activity.pdf.section_modules'));
+      const mCols = [[t('activity.pdf.section_modules'), 42], [t('activity.stats.by_module'), 14], [t('activity.config.exam'), 14], [t('activity.config.challenge'), 14], [t('activity.stats.weekly_chart_label'), 22], ['', CW - 42 - 14 - 14 - 14 - 22]];
       cy = tableRow(mCols, cy, true);
 
       moduleScores.forEach((mod, i) => {
         checkPage(8);
         const passed = mod.score >= 80;
-        const state = completedModules.includes(mod.id) ? '✓ Completado' : '○ En curso';
+        const state = completedModules.includes(mod.id) ? t('activity.pdf.status_completed') : t('activity.pdf.status_in_progress');
         const stripe = i % 2 === 1;
         if (stripe) {
           doc.setFillColor(248, 250, 252);
@@ -528,8 +530,8 @@ const ActivityHistory = ({ isOpen, onClose }) => {
 
       // -- Lecciones por Módulo --
       checkPage(20);
-      sectionTitle('Progreso de Lecciones');
-      const lCols = [['Módulo', 42], ['Completadas', 22], ['Total', 14], ['Avance', CW - 42 - 22 - 14]];
+      sectionTitle(t('activity.pdf.section_lessons'));
+      const lCols = [[t('activity.pdf.section_modules'), 42], [t('activity.stats.lessons'), 22], [t('activity.stats.range_all'), 14], [t('activity.stats.weekly_chart_label'), CW - 42 - 22 - 14]];
       cy = tableRow(lCols, cy, true);
       MODULE_RESOURCES.forEach((cfg, i) => {
         const modLess = lessonProgress?.[cfg.id] || {};
@@ -554,8 +556,8 @@ const ActivityHistory = ({ isOpen, onClose }) => {
       drawHeader();
 
       // -- Actividades Recientes --
-      sectionTitle('Actividades Recientes');
-      const aCols = [['Actividad', 55], ['Módulo', 50], ['Puntaje', 13], ['Fecha', CW - 55 - 50 - 13]];
+      sectionTitle(t('activity.pdf.section_recent'));
+      const aCols = [[t('activity.config.lesson'), 55], [t('activity.pdf.section_modules'), 50], [t('activity.stats.by_module'), 13], [t('activity.stats.weekly_chart_label'), CW - 55 - 50 - 13]];
       cy = tableRow(aCols, cy, true);
 
       const topActs = activitiesData.slice(0, 30);
@@ -563,7 +565,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(8);
         doc.setTextColor(...CG);
-        doc.text('No hay actividades registradas aún.', ML, cy + 4);
+        doc.text(t('activity.pdf.no_activities'), ML, cy + 4);
         cy += 8;
       } else {
         topActs.forEach((act, i) => {
@@ -587,17 +589,17 @@ const ActivityHistory = ({ isOpen, onClose }) => {
 
       // -- Estadísticas --
       checkPage(35);
-      sectionTitle('Resumen de Recursos');
-      const sCols = [['Recurso', 40], ['Valor', 30], ['Avance', CW - 40 - 30]];
+      sectionTitle(t('activity.pdf.section_resources'));
+      const sCols = [[t('activity.config.resource'), 40], [t('activity.stats.by_module'), 30], [t('activity.stats.weekly_chart_label'), CW - 40 - 30]];
       cy = tableRow(sCols, cy, true);
       const statsR = [
-        ['Videos', `${totalVideos}/${totalVideosTarget}`, totalVideosTarget > 0 ? totalVideos / totalVideosTarget : 0],
-        ['Infografías', `${totalInfographics}/${totalInfographicsTarget}`, totalInfographicsTarget > 0 ? totalInfographics / totalInfographicsTarget : 0],
-        ['Exámenes', `${totalExams}/5`, totalExams / 5],
-        ['Desafíos', `${totalChallenges}/5`, totalChallenges / 5],
+        [t('activity.config.video'), `${totalVideos}/${totalVideosTarget}`, totalVideosTarget > 0 ? totalVideos / totalVideosTarget : 0],
+        [t('activity.config.infographic'), `${totalInfographics}/${totalInfographicsTarget}`, totalInfographicsTarget > 0 ? totalInfographics / totalInfographicsTarget : 0],
+        [t('activity.config.exam'), `${totalExams}/5`, totalExams / 5],
+        [t('activity.config.challenge'), `${totalChallenges}/5`, totalChallenges / 5],
         ['Foro (posts)', String(forumPostCount || 0), 0],
         ['Foro (comentarios)', String(forumCommentCount || 0), 0],
-        ['Badges', String(badges?.length || 0), 0],
+        [t('activity.stats.achievements'), String(badges?.length || 0), 0],
       ];
       statsR.forEach(([label, val, pct], i) => {
         const stripe = i % 2 === 1;
@@ -617,7 +619,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
       // -- Recomendación --
       if (weakestModule && weakestModule.score < 80) {
         checkPage(12);
-        sectionTitle('Recomendación');
+        sectionTitle(t('activity.pdf.section_recommendation'));
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(7);
         doc.setTextColor(...CD);
@@ -629,7 +631,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
 
       // -- XP & Nivel --
       checkPage(12);
-      sectionTitle('XP y Nivel');
+      sectionTitle(t('activity.pdf.section_xp'));
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(7);
       doc.setTextColor(...CD);
@@ -637,7 +639,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
       cy += 4;
       const xpPct = getLevelProgress ? getLevelProgress() : 50;
       const nextLvl = getXpForNextLevel ? getXpForNextLevel() : 0;
-      doc.text(`Progreso al siguiente nivel: ${Math.round(xpPct)}% (${xp}/${nextLvl > 0 ? nextLvl : '—'} XP)`, ML, cy);
+      doc.text(`${t('activity.pdf.section_xp')}: ${Math.round(xpPct)}% (${xp}/${nextLvl > 0 ? nextLvl : '—'} XP)`, ML, cy);
       cy += 4;
       progressBar(xpPct, cy, CP);
       cy += 6;
@@ -693,7 +695,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
       transition={{ duration: 0.15 }}
       role="dialog"
       aria-modal="true"
-      aria-label="Mi Historial de Aprendizaje"
+      aria-label={t('activity.title')}
       aria-describedby="activity-history-desc"
       className={`fixed inset-0 z-[1050] flex items-start justify-center bg-black/50 transition-all duration-300 ${isExpanded ? 'p-0' : 'pt-16 sm:pt-20 px-2 sm:px-4'}`}
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
@@ -715,21 +717,21 @@ const ActivityHistory = ({ isOpen, onClose }) => {
               <Icon name="fa-clock" className="text-white text-lg" />
             </div>
             <div>
-              <h1 className="text-white font-bold text-lg font-montserrat tracking-tight">Mi Historial de Aprendizaje</h1>
-              <p className="text-white/60 text-xs">Progreso sincronizado · {totalLessonsCompleted}/{totalLessonsCount} lecciones · {xp} XP</p>
+              <h1 className="text-white font-bold text-lg font-montserrat tracking-tight">{t('activity.title')}</h1>
+              <p className="text-white/60 text-xs">{t('activity.stats.progress')} · {totalLessonsCompleted}/{totalLessonsCount} {t('activity.stats.lessons').toLowerCase()} · {xp} XP</p>
               <span id="activity-history-desc" className="sr-only">
-                Panel con tu progreso en el curso IALab. {totalLessonsCompleted} de {totalLessonsCount} lecciones completadas, nivel {level}, {xp} XP acumulados, racha de {streak} días. Contiene {TABS.length} secciones: {TABS.map(t => t.label).join(', ')}.
+                {t('activity.aria_description', { lessonsCompleted: totalLessonsCompleted, lessonsTotal: totalLessonsCount, level, xp, streak, tabs: TABS.length, tabLabels: TABS.map(tab => t(tab.labelKey)).join(', ') })}
               </span>
             </div>
           </div>
           <div className="flex items-center gap-2 relative z-10">
-            <button onClick={exportProgressPDF} disabled={pdfLoading} className="min-w-[36px] min-h-[36px] w-9 h-9 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center transition-all duration-200 active:scale-90 ring-1 ring-white/10 disabled:opacity-50" aria-label="Exportar PDF">
+            <button onClick={exportProgressPDF} disabled={pdfLoading} className="min-w-[36px] min-h-[36px] w-9 h-9 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center transition-all duration-200 active:scale-90 ring-1 ring-white/10 disabled:opacity-50" aria-label={t('activity.export_aria')}>
               <Icon name={pdfLoading ? 'fa-spinner' : 'fa-file-pdf'} className={`text-white text-xs ${pdfLoading ? 'animate-spin' : ''}`} />
             </button>
-            <button onClick={() => setIsExpanded(v => !v)} className="min-w-[44px] min-h-[44px] w-11 h-11 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center transition-all duration-200 active:scale-90 ring-1 ring-white/10" aria-label={isExpanded ? 'Contraer pantalla' : 'Expandir pantalla'}>
+            <button onClick={() => setIsExpanded(v => !v)} className="min-w-[44px] min-h-[44px] w-11 h-11 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center transition-all duration-200 active:scale-90 ring-1 ring-white/10" aria-label={isExpanded ? t('activity.collapse_aria') : t('activity.expand_aria')}>
               <Icon name={isExpanded ? 'fa-compress' : 'fa-expand'} className="text-white text-sm" />
             </button>
-            <button onClick={onClose} className="min-w-[44px] min-h-[44px] w-11 h-11 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center transition-all duration-200 active:scale-90 ring-1 ring-white/10" aria-label="Cerrar historial">
+            <button onClick={onClose} className="min-w-[44px] min-h-[44px] w-11 h-11 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center transition-all duration-200 active:scale-90 ring-1 ring-white/10" aria-label={t('activity.close_aria')}>
               <Icon name="fa-times" className="text-white text-sm" />
             </button>
           </div>
@@ -738,16 +740,16 @@ const ActivityHistory = ({ isOpen, onClose }) => {
         {/* Stats cards */}
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-3 px-4 sm:px-6 py-4 sm:py-5 bg-gradient-to-b from-petroleum/[0.02] to-white border-b border-slate-200/40">
           {[
-            { icon: 'fa-chart-line', value: `${Math.round(courseProgress || 0)}%`, label: 'Progreso', color: 'text-petroleum' },
+            { icon: 'fa-chart-line', value: `${Math.round(courseProgress || 0)}%`, labelKey: 'activity.stats.progress', color: 'text-petroleum' },
             { icon: 'fa-trophy', value: `Nv.${level}`, label: `${xp} XP`, color: 'text-warning' },
-            { icon: 'fa-check-circle', value: `${totalLessonsCompleted}/${totalLessonsCount}`, label: 'Lecciones', color: 'text-success' },
+            { icon: 'fa-check-circle', value: `${totalLessonsCompleted}/${totalLessonsCount}`, labelKey: 'activity.stats.lessons', color: 'text-success' },
             { icon: 'fa-fire', value: `${streak}d`, label: getStreakMessage(), color: streak >= 3 ? 'text-orange-500' : 'text-slate-400' },
-            { icon: 'fa-clock', value: lastActivityTime || '—', label: 'Última conexión', color: 'text-petroleum', small: true },
+            { icon: 'fa-clock', value: lastActivityTime || '—', labelKey: 'activity.stats.last_connection', color: 'text-petroleum', small: true },
           ].map((item, i) => (
             <div key={i} className={`group bg-white rounded-xl border border-slate-200/60 shadow-sm p-2 sm:p-3 text-center hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 ${item.small ? 'col-span-2 sm:col-span-1' : ''}`}>
               <Icon name={item.icon} className={`text-lg sm:text-xl mx-auto mb-1 group-hover:scale-110 transition-transform duration-200 ${item.color}`} />
               <p className={`text-base sm:text-lg font-bold font-montserrat tracking-tight ${item.color} ${item.small ? 'text-xs sm:text-sm truncate' : ''}`}>{item.value}</p>
-              <p className="text-[9px] sm:text-[10px] font-semibold text-slate-400 uppercase tracking-wider">{item.label}</p>
+              <p className="text-[9px] sm:text-[10px] font-semibold text-slate-400 uppercase tracking-wider">{item.labelKey ? t(item.labelKey) : item.label}</p>
             </div>
           ))}
         </div>
@@ -760,7 +762,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                 className={`px-3 sm:px-4 min-h-[44px] text-xs font-bold rounded-t-lg transition-all duration-200 flex items-center gap-2 active:scale-95 flex-shrink-0 ${
                   activeTab === tab.key ? 'bg-gradient-to-r from-petroleum to-corporate text-white shadow-sm border border-transparent' : 'text-slate-500 hover:text-petroleum hover:bg-slate-50 border border-transparent'
                 }`}>
-                <Icon name={tab.icon} className={`text-[10px] ${activeTab === tab.key ? 'text-white' : 'text-petroleum'}`} />{tab.label}
+                <Icon name={tab.icon} className={`text-[10px] ${activeTab === tab.key ? 'text-white' : 'text-petroleum'}`} />{t(tab.labelKey)}
               </button>
             ))}
           </div>
@@ -770,7 +772,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
         <div className={`overflow-y-auto modal-scrollable ${isExpanded ? 'max-h-[calc(100vh-280px)]' : 'max-h-[55vh] md:max-h-[45vh]'}`}>
           {activeTab === 'modules' && (
             <div className="p-3 sm:p-5 space-y-2.5">
-              <SectionHeader title="Progreso por Módulo" />
+              <SectionHeader title={t('activity.pdf.section_modules')} />
               {MODULE_RESOURCES.map(cfg => (
                 <ModuleProgressCard key={cfg.id} moduleId={cfg.id} title={cfg.title} icon={cfg.icon}
                   score={calculateModuleScore(cfg.id, cfg, completedVideos, completedInfographics, completedExams, challengeScores, completedModules)}
@@ -784,12 +786,12 @@ const ActivityHistory = ({ isOpen, onClose }) => {
             <div>
               <div className="px-4 sm:px-6 py-3 border-b border-slate-200/40 bg-white/80 backdrop-blur-sm sticky top-0 z-10">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-[10px] font-bold text-petroleum uppercase tracking-wider mr-0.5">Filtrar:</span>
-                  {FILTER_OPTIONS.map(({ key, label, icon }) => (
+                  <span className="text-[10px] font-bold text-petroleum uppercase tracking-wider mr-0.5">{t('activity.stats.filter_label')}</span>
+                  {FILTER_OPTIONS.map(({ key, labelKey, icon }) => (
                     <button key={key} onClick={() => setFilter(key)}
                       className={`px-3 min-h-[44px] text-[10px] font-bold rounded-lg transition-all duration-200 flex items-center gap-1.5 active:scale-95 ${
                         filter === key ? 'bg-gradient-to-r from-petroleum to-corporate text-white shadow-sm' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
-                      }`}><Icon name={icon} className="text-[9px]" />{label}</button>
+                      }`}><Icon name={icon} className="text-[9px]" />{t(labelKey)}</button>
                   ))}
                 </div>
               </div>
@@ -798,8 +800,8 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                   <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center mb-5 shadow-inner">
                     <Icon name="fa-clock" className="text-slate-400 text-3xl" />
                   </div>
-                  <p className="text-base font-bold text-slate-700 font-montserrat">Sin actividades registradas</p>
-                  <p className="text-xs text-slate-400 text-center mt-1.5 max-w-xs leading-relaxed">Tus actividades aparecerán aquí al completar exámenes, desafíos y recursos del curso</p>
+                  <p className="text-base font-bold text-slate-700 font-montserrat">{t('activity.empty.title')}</p>
+                  <p className="text-xs text-slate-400 text-center mt-1.5 max-w-xs leading-relaxed">{t('activity.empty.desc')}</p>
                 </div>
               ) : (
                 <div className="divide-y divide-slate-100">
@@ -825,7 +827,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                                 <div className="flex items-center gap-2 mt-0.5">
                                   <span className="text-[10px] font-medium text-slate-400">{moduleName}</span>
                                   <span className="w-1 h-1 rounded-full bg-slate-300" />
-                                  <span className="text-[10px] text-slate-400">{formatTimeAgo(activity.completed_at)}</span>
+                                  <span className="text-[10px] text-slate-400">                          {formatTimeAgo(activity.completed_at, t)}</span>
                                 </div>
                               </div>
                               {activity.score ? (
@@ -833,7 +835,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                                   activity.score >= 80 ? 'bg-emerald-50 text-emerald-600 border border-emerald-200 shadow-sm shadow-emerald-500/5' : 'bg-petroleum/5 text-petroleum border border-petroleum/10'
                                 }`}>{activity.score}%</div>
                               ) : (
-                                <div className="px-3 py-1.5 rounded-lg text-[10px] font-bold bg-slate-50 text-slate-400 border border-slate-100">{config.label}</div>
+                                <div className="px-3 py-1.5 rounded-lg text-[10px] font-bold bg-slate-50 text-slate-400 border border-slate-100">{t(config.labelKey)}</div>
                               )}
                             </div>
                           );
@@ -854,28 +856,28 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                   <div className="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center backdrop-blur-sm">
                     <Icon name="fa-chart-line" className="text-sm text-white" />
                   </div>
-                  <h2 className="text-sm font-bold font-montserrat tracking-wide text-white/90">Resumen Ejecutivo</h2>
+                  <h2 className="text-sm font-bold font-montserrat tracking-wide text-white/90">{t('activity.stats.executive_summary')}</h2>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
                   <div className="bg-white/10 rounded-xl p-3 backdrop-blur-sm">
-                    <p className="text-[9px] font-semibold text-white/80 uppercase tracking-wider">XP Total</p>
+                    <p className="text-[9px] font-semibold text-white/80 uppercase tracking-wider">XP {t('activity.stats.total_label')}</p>
                     <p className="text-xl font-bold font-montserrat tracking-tight mt-0.5">{xp}</p>
                     <p className="text-[10px] text-white/70 mt-0.5">Nivel {level}</p>
                   </div>
                   <div className="bg-white/10 rounded-xl p-3 backdrop-blur-sm">
-                    <p className="text-[9px] font-semibold text-white/80 uppercase tracking-wider">Meta Semanal</p>
+                    <p className="text-[9px] font-semibold text-white/80 uppercase tracking-wider">{t('activity.stats.weekly_xp')}</p>
                     <p className="text-xl font-bold font-montserrat tracking-tight mt-0.5">{weeklyXP.weekly}/{weeklyXP.weeklyTarget}</p>
                     <div className="mt-1.5 h-1 bg-white/20 rounded-full overflow-hidden">
                       <div className="h-full rounded-full bg-white transition-all duration-500" style={{ width: `${weeklyXP.weeklyPct}%` }} />
                     </div>
                   </div>
                   <div className="bg-white/10 rounded-xl p-3 backdrop-blur-sm">
-                    <p className="text-[9px] font-semibold text-white/80 uppercase tracking-wider">Tiempo Estudio</p>
+                    <p className="text-[9px] font-semibold text-white/80 uppercase tracking-wider">{t('activity.stats.study_time')}</p>
                     <p className="text-xl font-bold font-montserrat tracking-tight mt-0.5">{sessionStats.sessionCount > 0 || liveSeconds >= 30 ? `${studyHours}h ${studyMins}m` : '—'}</p>
-                    <p className="text-[10px] text-white/70 mt-0.5">{daysActive} días activo</p>
+                    <p className="text-[10px] text-white/70 mt-0.5">{t('activity.stats.active_days', { days: daysActive })}</p>
                   </div>
                   <div className="bg-white/10 rounded-xl p-3 backdrop-blur-sm">
-                    <p className="text-[9px] font-semibold text-white/80 uppercase tracking-wider">Progreso Curso</p>
+                    <p className="text-[9px] font-semibold text-white/80 uppercase tracking-wider">{t('activity.stats.course_progress')}</p>
                     <p className="text-xl font-bold font-montserrat tracking-tight mt-0.5">{Math.round(courseProgress || 0)}%</p>
                     <div className="mt-1.5 h-1 bg-white/20 rounded-full overflow-hidden">
                       <div className="h-full rounded-full bg-emerald-300 transition-all duration-500" style={{ width: `${Math.min(courseProgress || 0, 100)}%` }} />
@@ -891,8 +893,8 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                       <Icon name="fa-tachometer-alt" className="text-petroleum text-sm" />
                     </div>
                     <div>
-                      <h3 className="text-xs font-bold text-petroleum uppercase tracking-wider">Progreso Global</h3>
-                      <p className="text-[10px] text-slate-400">{totalVideos + totalInfographics + totalExams + totalChallenges + completedCount}/{totalItems} recursos completados</p>
+                      <h3 className="text-xs font-bold text-petroleum uppercase tracking-wider">{t('activity.stats.global_progress')}</h3>
+                      <p className="text-[10px] text-slate-400">{t('activity.progress_label', { completed: totalVideos + totalInfographics + totalExams + totalChallenges + completedCount, total: totalItems })}</p>
                     </div>
                   </div>
                   <span className="text-2xl font-bold text-petroleum font-montserrat tracking-tight">{Math.round(courseProgress || 0)}%</span>
@@ -901,29 +903,29 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                   <div className="h-full rounded-full bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate transition-all duration-1000 ease-out shadow-sm" style={{ width: `${Math.min(courseProgress || 0, 100)}%` }} />
                 </div>
                 <div className="flex justify-between mt-3 pt-3 border-t border-slate-100 text-[10px] font-medium text-slate-400">
-                  <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-petroleum" />{completedCount}/5 módulos</span>
-                  <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-corporate" />{totalVideos}/{totalVideosTarget} videos</span>
-                  <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />{totalExams + totalChallenges}/10 eval.</span>
+                  <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-petroleum" />{t('activity.modules_completed', { count: completedCount })}</span>
+                  <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-corporate" />{t('activity.videos_completed', { count: totalVideos, target: totalVideosTarget })}</span>
+                  <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />{t('activity.evaluations_completed', { count: totalExams + totalChallenges })}</span>
                 </div>
               </div>
 
-              <AccordionSection id="estudio" title="Tiempo de Estudio" icon="fa-clock">
+              <AccordionSection id="estudio" title={t('activity.stats.study_time')} icon="fa-clock">
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-4">
                   <div className="text-center p-3 rounded-xl bg-gradient-to-b from-petroleum/5 to-transparent border border-petroleum/10">
                     <div className="text-xl font-bold text-petroleum">{sessionStats.sessionCount > 0 || liveSeconds >= 30 ? `${studyHours}h ${studyMins}m` : '—'}</div>
-                    <p className="text-[9px] text-slate-400 mt-0.5 uppercase tracking-wider">Tiempo total</p>
+                    <p className="text-[9px] text-slate-400 mt-0.5 uppercase tracking-wider">{t('activity.stats.total_time_label')}</p>
                   </div>
                   <div className="text-center p-3 rounded-xl bg-gradient-to-b from-corporate/5 to-transparent border border-corporate/10">
                     <div className="text-xl font-bold text-corporate">{sessionStats.sessionCount}</div>
-                    <p className="text-[9px] text-slate-400 mt-0.5 uppercase tracking-wider">Sesiones</p>
+                    <p className="text-[9px] text-slate-400 mt-0.5 uppercase tracking-wider">{t('activity.stats.sessions_label')}</p>
                   </div>
                   <div className="text-center p-3 rounded-xl bg-gradient-to-b from-emerald-500/5 to-transparent border border-emerald-500/10">
                     <div className="text-xl font-bold text-emerald-600">{daysActive}</div>
-                    <p className="text-[9px] text-slate-400 mt-0.5 uppercase tracking-wider">Días activo</p>
+                    <p className="text-[9px] text-slate-400 mt-0.5 uppercase tracking-wider">{t('activity.stats.days_active')}</p>
                   </div>
                   <div className="text-center p-3 rounded-xl bg-gradient-to-b from-amber-500/5 to-transparent border border-amber-500/10">
                     <div className="text-xl font-bold text-amber-600">{sessionStats.sessionCount > 0 || liveSeconds >= 30 ? `${Math.round(effectiveTodayMinutes)} min` : '—'}</div>
-                    <p className="text-[9px] text-slate-400 mt-0.5 uppercase tracking-wider">Hoy</p>
+                    <p className="text-[9px] text-slate-400 mt-0.5 uppercase tracking-wider">{t('activity.stats.today')}</p>
                   </div>
                 </div>
                 <div className="border-t border-slate-100 pt-4 mt-1">
@@ -934,13 +936,13 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                           className={`px-3 py-1 text-[10px] font-bold rounded-lg transition-all duration-200 ${
                             timeRange === r ? 'bg-petroleum text-white shadow-sm' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
                           }`}>
-                          {r === '7d' ? '7 días' : r === '30d' ? '30 días' : 'Todo'}
+                          {r === '7d' ? t('activity.stats.range_7d') : r === '30d' ? t('activity.stats.range_30d') : t('activity.stats.range_all')}
                         </button>
                       ))}
                     </div>
-                    <span className="text-[9px] text-slate-400">{studyHours}h {studyMins}m total</span>
+                    <span className="text-[9px] text-slate-400">{t('activity.hours_minutes', { hours: studyHours, minutes: studyMins })} {t('activity.stats.total_label').toLowerCase()}</span>
                   </div>
-                  <div className="h-32 sm:h-40" role="img" aria-label={`Gráfico de tiempo de estudio: ${monthlyData.filter(d => d.mins > 0).length} días con actividad. Total: ${studyHours}h ${studyMins}m.`}>
+                  <div className="h-32 sm:h-40" role="img" aria-label={t('activity.stats.activity_aria', { days: monthlyData.filter(d => d.mins > 0).length, total: t('activity.hours_minutes', { hours: studyHours, minutes: studyMins }) })}>
                     {monthlyData.length > 0 && monthlyData.some(d => d.mins > 0) ? (
                       <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={monthlyData} margin={{ top: 4, right: 4, bottom: 0, left: -16 }}>
@@ -948,7 +950,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                           <YAxis hide domain={[0, 'dataMax']} />
                           <Tooltip
                             contentStyle={{ fontSize: 11, borderRadius: 8, border: '1px solid #E2E8F0', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}
-                            formatter={(value) => [`${value} min`, 'Tiempo']}
+                            formatter={(value) => [t('activity.minute_label', { min: value }), t('activity.stats.weekly_chart_label')]}
                             labelFormatter={(label) => label}
                           />
                           <Bar dataKey="mins" radius={[3, 3, 0, 0]} maxBarSize={timeRange === '7d' ? 32 : 12}>
@@ -960,19 +962,19 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                       </ResponsiveContainer>
                     ) : (
                       <div className="h-full flex items-center justify-center">
-                        <p className="text-xs text-slate-400">Aún no hay datos de tiempo. Comienza a estudiar para ver tu progreso.</p>
+                        <p className="text-xs text-slate-400">{t('activity.stats.no_time_data')}</p>
                       </div>
                     )}
                   </div>
                 </div>
               </AccordionSection>
 
-              <AccordionSection id="progreso" title="Progreso y Rendimiento" icon="fa-chart-bar">
+              <AccordionSection id="progreso" title={t('activity.stats.global_progress')} icon="fa-chart-bar">
                 {activityDistribution.length > 1 && (
                   <div className="mb-5">
-                    <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3">Actividad por Tipo</h4>
+                    <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3">{t('activity.stats.by_type')}</h4>
                     <div className="flex flex-col sm:flex-row items-center gap-4">
-                      <div className="w-36 h-36 flex-shrink-0" role="img" aria-label={`Distribución de actividades: ${activityDistribution.map(a => `${a.name} ${a.pct}%`).join(', ')}`}>
+                      <div className="w-36 h-36 flex-shrink-0" role="img" aria-label={`${t('activity.stats.by_type')}: ${activityDistribution.map(a => `${a.name} ${a.pct}%`).join(', ')}`}>
                         <ResponsiveContainer width="100%" height="100%">
                           <PieChart>
                             <Pie data={activityDistribution} cx="50%" cy="50%" innerRadius={28} outerRadius={52} paddingAngle={2} dataKey="value">
@@ -1008,7 +1010,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                 )}
 
                 <div>
-                  <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3">Puntaje por Módulo</h4>
+                  <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3">{t('activity.stats.by_module')}</h4>
                   <div className="space-y-2.5">
                     {moduleScores.map(mod => {
                       const barColor = mod.score >= 80 ? 'from-emerald-500 to-emerald-400' : mod.score >= 60 ? 'from-amber-500 to-amber-400' : 'from-slate-400 to-slate-300';
@@ -1048,7 +1050,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                 </div>
               </AccordionSection>
 
-              <AccordionSection id="logros" title="Logros y Medallas" icon="fa-star">
+              <AccordionSection id="logros" title={t('activity.stats.achievements')} icon="fa-star">
                 {badges && badges.length > 0 ? (
                   <>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 mb-4">
@@ -1073,7 +1075,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                               <Icon name={nextBadge.icon} className="text-[10px] text-slate-500" />
                             </div>
                             <div>
-                              <p className="text-[10px] font-bold text-slate-500 leading-tight">Siguiente: {nextBadge.label}</p>
+                              <p className="text-[10px] font-bold text-slate-500 leading-tight">{t('activity.stats.next_badge')} {nextBadge.label}</p>
                               <p className="text-[8px] text-slate-400">{nextBadge.desc}</p>
                             </div>
                           </div>
@@ -1086,13 +1088,13 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                     )}
                   </>
                 ) : (
-                  <p className="text-xs text-slate-400 text-center py-4">Aún no has obtenido medallas. ¡Sigue avanzando para desbloquear logros!</p>
+                  <p className="text-xs text-slate-400 text-center py-4">{t('activity.stats.no_badges')}</p>
                 )}
               </AccordionSection>
 
               <div className="flex items-center justify-end gap-2 px-1">
                 <div className={`w-1.5 h-1.5 rounded-full ${syncStatus === 'synced' ? 'bg-emerald-500' : syncStatus === 'syncing' ? 'bg-amber-500 animate-pulse' : 'bg-slate-400'}`} />
-                <span className="text-[10px] font-medium text-slate-400">{syncStatus === 'synced' ? 'Datos sincronizados' : syncStatus === 'syncing' ? 'Sincronizando...' : syncStatus === 'offline' ? 'Modo offline' : 'Datos locales'}</span>
+                <span className="text-[10px] font-medium text-slate-400">{syncStatus === 'synced' ? t('activity.stats.sync_synced') : syncStatus === 'syncing' ? t('activity.stats.sync_syncing') : syncStatus === 'offline' ? t('activity.stats.sync_offline') : t('activity.stats.sync_local')}</span>
               </div>
             </div>
           )}
@@ -1104,8 +1106,8 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                   <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-50 to-emerald-100 flex items-center justify-center mb-5 shadow-inner">
                     <Icon name="fa-check-circle" className="text-emerald-500 text-3xl" />
                   </div>
-                  <p className="text-base font-bold text-slate-700 font-montserrat">¡Todo al día!</p>
-                  <p className="text-xs text-slate-400 text-center mt-1.5 max-w-xs leading-relaxed">No hay recomendaciones pendientes. Sigue así y continúa avanzando en tu curso.</p>
+                  <p className="text-base font-bold text-slate-700 font-montserrat">{t('activity.recommendations.all_caught_up_title')}</p>
+                  <p className="text-xs text-slate-400 text-center mt-1.5 max-w-xs leading-relaxed">{t('activity.recommendations.all_caught_up_desc')}</p>
                 </div>
               ) : (
                 <div className="space-y-5">
@@ -1115,7 +1117,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                         <div className="w-4 h-4 rounded bg-rose-100 flex items-center justify-center">
                           <Icon name="fa-flag" className="text-[8px] text-rose-600" />
                         </div>
-                        <p className="text-[10px] font-bold text-rose-700 uppercase tracking-[0.15em]">Prioritarias</p>
+                        <p className="text-[10px] font-bold text-rose-700 uppercase tracking-[0.15em]">{t('activity.recommendations.section_high')}</p>
                         <div className="flex-1 h-px bg-gradient-to-r from-rose-200 to-transparent" />
                       </div>
                       <div className="space-y-2">
@@ -1155,7 +1157,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                         <div className="w-4 h-4 rounded bg-amber-100 flex items-center justify-center">
                           <Icon name="fa-list" className="text-[8px] text-amber-600" />
                         </div>
-                        <p className="text-[10px] font-bold text-amber-700 uppercase tracking-[0.15em]">Sugerencias</p>
+                        <p className="text-[10px] font-bold text-amber-700 uppercase tracking-[0.15em]">{t('activity.recommendations.section_medium')}</p>
                         <div className="flex-1 h-px bg-gradient-to-r from-amber-200 to-transparent" />
                       </div>
                       <div className="space-y-2">
@@ -1195,7 +1197,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
                         <div className="w-4 h-4 rounded bg-sky-100 flex items-center justify-center">
                           <Icon name="fa-lightbulb" className="text-[8px] text-sky-600" />
                         </div>
-                        <p className="text-[10px] font-bold text-sky-700 uppercase tracking-[0.15em]">Tips</p>
+                        <p className="text-[10px] font-bold text-sky-700 uppercase tracking-[0.15em]">{t('activity.recommendations.section_low')}</p>
                         <div className="flex-1 h-px bg-gradient-to-r from-sky-200 to-transparent" />
                       </div>
                       <div className="space-y-2">

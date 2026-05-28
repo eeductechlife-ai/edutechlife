@@ -1,11 +1,14 @@
 import { useState, useMemo, useCallback, memo } from 'react';
 import { motion } from 'framer-motion';
 import { useSmartBoardKids } from '../../context/SmartBoardKidsContext';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 // ==========================================
 // News Card Component
 // ==========================================
-const NewsCard = memo(({ news, isRead, onRead }) => (
+const NewsCard = memo(({ news, isRead, onRead }) => {
+  const { t } = useTranslation();
+  return (
   <motion.div
     whileHover={{ y: -8, scale: 1.03, boxShadow: '0 20px 40px rgba(77, 168, 196, 0.15)' }}
     className={`relative bg-white/70 backdrop-blur-xl rounded-2xl p-5 border-2 transition-all cursor-pointer ${
@@ -48,23 +51,26 @@ const NewsCard = memo(({ news, isRead, onRead }) => (
               day: 'numeric' 
             })}
           </span>
-          {!isRead ? (
-            <span className="text-xs font-semibold text-[#4DA8C4]">Marcar como leído →</span>
+            {!isRead ? (
+            <span className="text-xs font-semibold text-[#4DA8C4]">{t('kid.news.mark_as_read')}</span>
           ) : (
-            <span className="text-xs text-[#66CCCC]">✓ Leído</span>
+            <span className="text-xs text-[#66CCCC]">{t('kid.news.read_status')}</span>
           )}
         </div>
       </div>
     </div>
   </motion.div>
-));
+  );
+});
 
 NewsCard.displayName = 'NewsCard';
 
 // ==========================================
 // Featured News Banner
 // ==========================================
-const FeaturedNews = memo(({ news }) => (
+const FeaturedNews = memo(({ news }) => {
+  const { t } = useTranslation();
+  return (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
@@ -76,7 +82,7 @@ const FeaturedNews = memo(({ news }) => (
     <div className="relative z-10">
       <div className="flex items-center gap-2 mb-3">
         <span className="px-3 py-1 bg-white/20 rounded-full text-xs font-bold backdrop-blur-sm">
-          DESTACADO
+          {t('kid.news.featured_badge')}
         </span>
         <span className="text-xs text-white/80">{news.category}</span>
       </div>
@@ -85,11 +91,12 @@ const FeaturedNews = memo(({ news }) => (
       <p className="text-white/90 mb-4 max-w-2xl">{news.summary}</p>
       
       <button className="px-6 py-2 bg-white text-[#004B63] rounded-full font-semibold text-sm hover:bg-[#F8FAFC] transition-colors">
-        Leer Más →
+        {t('kid.news.read_more')}
       </button>
     </div>
   </motion.div>
-));
+  );
+});
 
 FeaturedNews.displayName = 'FeaturedNews';
 
@@ -97,11 +104,12 @@ FeaturedNews.displayName = 'FeaturedNews';
 // News Filters
 // ==========================================
 const NewsFilters = memo(({ activeFilter, onFilterChange, newsItems }) => {
+  const { t } = useTranslation();
   const filters = [
-    { key: 'todos', label: 'Todos', count: newsItems.length },
-    { key: 'IA', label: '🤖 IA', count: newsItems.filter(n => n.category === 'IA').length },
-    { key: 'STEAM', label: '🔬 STEAM', count: newsItems.filter(n => n.category === 'STEAM').length },
-    { key: 'Tips', label: '⏰ Tips', count: newsItems.filter(n => n.category === 'Tips').length },
+    { key: 'todos', label: t('kid.news.filter_all'), count: newsItems.length },
+    { key: 'IA', label: t('kid.news.filter_ia'), count: newsItems.filter(n => n.category === 'IA').length },
+    { key: 'STEAM', label: t('kid.news.filter_steam'), count: newsItems.filter(n => n.category === 'STEAM').length },
+    { key: 'Tips', label: t('kid.news.filter_tips'), count: newsItems.filter(n => n.category === 'Tips').length },
   ];
   
   return (
@@ -161,20 +169,20 @@ const NewsTechFeed = memo(() => {
         <div className="flex items-center gap-4">
           <div className="text-center">
             <p className="text-2xl font-black text-[#4DA8C4]">{newsItems.length}</p>
-            <p className="text-xs text-[#64748B]">Total</p>
+            <p className="text-xs text-[#64748B]">{t('kid.news.stat_total')}</p>
           </div>
           <div className="text-center">
             <p className="text-2xl font-black text-[#FFD166]">{unreadCount}</p>
-            <p className="text-xs text-[#64748B]">Sin leer</p>
+            <p className="text-xs text-[#64748B]">{t('kid.news.stat_unread')}</p>
           </div>
           <div className="text-center">
             <p className="text-2xl font-black text-[#66CCCC]">{readNews.length}</p>
-            <p className="text-xs text-[#64748B]">Leídos</p>
+            <p className="text-xs text-[#64748B]">{t('kid.news.stat_read')}</p>
           </div>
         </div>
         
         <button className="px-4 py-2 bg-[#4DA8C4]/10 text-[#4DA8C4] rounded-full text-sm font-semibold hover:bg-[#4DA8C4]/20 transition-colors">
-          Ver Todo →
+          {t('kid.news.view_all')}
         </button>
       </motion.div>
       
@@ -213,7 +221,7 @@ const NewsTechFeed = memo(() => {
           className="text-center py-12"
         >
           <p className="text-4xl mb-3">📰</p>
-          <p className="text-[#64748B]">No hay noticias en esta categoría</p>
+          <p className="text-[#64748B]">{t('kid.news.empty_category')}</p>
         </motion.div>
       )}
     </div>

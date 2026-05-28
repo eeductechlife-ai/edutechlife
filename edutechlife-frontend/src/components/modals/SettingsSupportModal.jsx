@@ -3,19 +3,7 @@ import { Icon } from '../../utils/iconMapping.jsx';
 import { useTheme } from '../../context/ThemeContext';
 import useBodyScrollLock from '../../hooks/useBodyScrollLock';
 import useFocusTrap from '../../hooks/useFocusTrap';
-
-const faqItems = [
-  { question: '¿Cómo accedo a las tutorías en vivo?', answer: 'Las tutorías en vivo se realizan todos los domingos de 4:00 a 6:00 PM (hora Bogotá). Encuentra el enlace directo en la sección "Tutorías Virtuales" del dashboard.' },
-  { question: '¿Cómo descargo mi certificado?', answer: 'Completa todos los módulos del curso con una calificación mínima del 80%. El certificado estará disponible automáticamente en tu perfil.' },
-  { question: '¿Puedo cambiar mi plan de suscripción?', answer: 'Sí, puedes actualizar o cambiar tu plan en cualquier momento desde la sección de Facturación. Los cambios se aplican en el próximo ciclo de facturación.' },
-  { question: '¿Cómo contacto con soporte técnico?', answer: 'Puedes escribirnos a soporte@edutechlife.com o usar el botón "Contactar Soporte" al final de esta sección. Respondemos en menos de 24 horas.' },
-  { question: '¿Mi progreso se guarda automáticamente?', answer: 'Sí, tu progreso se guarda automáticamente en la nube cada vez que completas una actividad. Puedes continuar desde cualquier dispositivo.' },
-];
-
-const TABS = [
-  { key: 'settings', icon: 'fa-cog', label: 'Configuración' },
-  { key: 'support', icon: 'fa-headset', label: 'Soporte' },
-];
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const SettingsSupportModal = ({ isOpen, onClose }) => {
   const { isDarkMode, toggleDarkMode } = useTheme();
@@ -27,8 +15,20 @@ const SettingsSupportModal = ({ isOpen, onClose }) => {
   const [autoMarkViewed, setAutoMarkViewed] = useState(() => localStorage.getItem('ialab_auto_mark') !== 'false');
   const [compactMode, setCompactMode] = useState(() => localStorage.getItem('ialab_compact_mode') === 'true');
 
+  const { t } = useTranslation();
   useBodyScrollLock(isOpen);
   const focusTrapRef = useFocusTrap(isOpen);
+  const TABS = [
+    { key: 'settings', icon: 'fa-cog', label: t('modals.settings.tab_settings') },
+    { key: 'support', icon: 'fa-headset', label: t('modals.settings.tab_support') },
+  ];
+  const faqItems = [
+    { question: t('modals.settings.faq_q1'), answer: t('modals.settings.faq_a1') },
+    { question: t('modals.settings.faq_q2'), answer: t('modals.settings.faq_a2') },
+    { question: t('modals.settings.faq_q3'), answer: t('modals.settings.faq_a3') },
+    { question: t('modals.settings.faq_q4'), answer: t('modals.settings.faq_a4') },
+    { question: t('modals.settings.faq_q5'), answer: t('modals.settings.faq_a5') },
+  ];
 
   if (!isOpen) return null;
 
@@ -39,24 +39,24 @@ const SettingsSupportModal = ({ isOpen, onClose }) => {
 
   const settingsSections = [
     {
-      icon: 'fa-palette', title: 'Apariencia',
+      icon: 'fa-palette', title: t('modals.settings.appearance_title'),
       items: [
-        { icon: 'fa-moon', label: 'Modo oscuro', desc: 'Cambia entre tema claro y oscuro', value: isDarkMode, onChange: toggleDarkMode },
-        { icon: 'fa-compress', label: 'Modo compacto', desc: 'Reduce el espaciado en las vistas', value: compactMode, onChange: (v) => savePref('ialab_compact_mode', v, setCompactMode) },
+        { icon: 'fa-moon', label: t('modals.settings.dark_mode_label'), desc: t('modals.settings.dark_mode_desc'), value: isDarkMode, onChange: toggleDarkMode },
+        { icon: 'fa-compress', label: t('modals.settings.compact_mode_label'), desc: t('modals.settings.compact_mode_desc'), value: compactMode, onChange: (v) => savePref('ialab_compact_mode', v, setCompactMode) },
       ],
     },
     {
-      icon: 'fa-bell', title: 'Notificaciones',
+      icon: 'fa-bell', title: t('modals.settings.notifications_title'),
       items: [
-        { icon: 'fa-clock', label: 'Recordatorios de estudio', desc: 'Recibe recordatorios para mantener tu racha', value: notifStudyReminders, onChange: (v) => savePref('ialab_notif_study', v, setNotifStudyReminders) },
-        { icon: 'fa-file-alt', label: 'Recordatorios de exámenes', desc: 'Notificaciones cuando tengas exámenes pendientes', value: notifExamReminders, onChange: (v) => savePref('ialab_notif_exam', v, setNotifExamReminders) },
-        { icon: 'fa-comments', label: 'Actividad en comunidad', desc: 'Notificaciones de respuestas y mensajes en el foro', value: notifCommunity, onChange: (v) => savePref('ialab_notif_community', v, setNotifCommunity) },
+        { icon: 'fa-clock', label: t('modals.settings.notif_study_label'), desc: t('modals.settings.notif_study_desc'), value: notifStudyReminders, onChange: (v) => savePref('ialab_notif_study', v, setNotifStudyReminders) },
+        { icon: 'fa-file-alt', label: t('modals.settings.notif_exam_label'), desc: t('modals.settings.notif_exam_desc'), value: notifExamReminders, onChange: (v) => savePref('ialab_notif_exam', v, setNotifExamReminders) },
+        { icon: 'fa-comments', label: t('modals.settings.notif_community_label'), desc: t('modals.settings.notif_community_desc'), value: notifCommunity, onChange: (v) => savePref('ialab_notif_community', v, setNotifCommunity) },
       ],
     },
     {
-      icon: 'fa-check-circle', title: 'Reproducción y Contenido',
+      icon: 'fa-check-circle', title: t('modals.settings.playback_title'),
       items: [
-        { icon: 'fa-check-double', label: 'Auto-marcar como visto', desc: 'Marca automáticamente los recursos como completados al abrirlos', value: autoMarkViewed, onChange: (v) => savePref('ialab_auto_mark', v, setAutoMarkViewed) },
+        { icon: 'fa-check-double', label: t('modals.settings.auto_mark_label'), desc: t('modals.settings.auto_mark_desc'), value: autoMarkViewed, onChange: (v) => savePref('ialab_auto_mark', v, setAutoMarkViewed) },
       ],
     },
   ];
@@ -72,9 +72,9 @@ const SettingsSupportModal = ({ isOpen, onClose }) => {
               <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
                 <Icon name="fa-cog" className="text-petroleum text-sm" />
               </div>
-              <h3 className="text-slate-800 font-bold text-base">Configuración y Soporte</h3>
+              <h3 className="text-slate-800 font-bold text-base">{t('modals.settings.title')}</h3>
             </div>
-            <button onClick={onClose} className="p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-800 rounded-full transition-all" aria-label="Cerrar">
+            <button onClick={onClose} className="p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-800 rounded-full transition-all" aria-label={t('modals.settings.close')}>
               <Icon name="fa-times" className="text-lg" />
             </button>
           </div>
@@ -132,7 +132,7 @@ const SettingsSupportModal = ({ isOpen, onClose }) => {
                 </div>
               ))}
               <div className="mt-6 pt-4 border-t border-slate-100">
-                <p className="text-[10px] text-slate-400 text-center">Las preferencias se guardan localmente en tu navegador.</p>
+                <p className="text-[10px] text-slate-400 text-center">{t('modals.settings.prefs_local')}</p>
               </div>
             </>
           )}
@@ -143,7 +143,7 @@ const SettingsSupportModal = ({ isOpen, onClose }) => {
               <div className="mb-6">
                 <h4 className="text-xs font-bold text-slate-700 mb-3 flex items-center gap-2">
                   <Icon name="fa-question-circle" className="text-petroleum" />
-                  Preguntas Frecuentes
+                  {t('modals.settings.faq_title')}
                 </h4>
                 <div className="space-y-2">
                   {faqItems.map((item, index) => (
@@ -172,8 +172,8 @@ const SettingsSupportModal = ({ isOpen, onClose }) => {
                     <Icon name="fa-compass" className="text-petroleum text-sm" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-slate-800">Tour Interactivo</h4>
-                    <p className="text-[10px] text-slate-500">Descubre todas las funciones de IALab</p>
+                    <h4 className="text-xs font-bold text-slate-800">{t('modals.settings.tour_title')}</h4>
+                    <p className="text-[10px] text-slate-500">{t('modals.settings.tour_desc')}</p>
                   </div>
                 </div>
                 <button
@@ -181,7 +181,7 @@ const SettingsSupportModal = ({ isOpen, onClose }) => {
                   className="w-full mt-2 px-4 py-2.5 bg-gradient-to-r from-petroleum to-corporate text-white text-xs font-bold rounded-lg hover:shadow-md hover:shadow-petroleum/20 transition-all duration-200 active:scale-[0.98]"
                 >
                   <Icon name="fa-play" className="text-xs mr-1.5" />
-                  Volver a ver tour
+                  {t('modals.settings.tour_button')}
                 </button>
               </div>
 
@@ -189,7 +189,7 @@ const SettingsSupportModal = ({ isOpen, onClose }) => {
               <div className="space-y-2">
                 <h4 className="text-xs font-bold text-slate-700 mb-3 flex items-center gap-2">
                   <Icon name="fa-envelope" className="text-petroleum" />
-                  Contactar Soporte
+                  {t('modals.settings.contact_title')}
                 </h4>
                 <a href="mailto:soporte@edutechlife.com"
                   className="w-full flex items-center gap-3 px-4 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-petroleum rounded-lg shadow-sm hover:shadow hover:border-l-corporate hover:bg-slate-50 transition-all duration-300"
@@ -198,7 +198,7 @@ const SettingsSupportModal = ({ isOpen, onClose }) => {
                     <Icon name="fa-envelope" className="text-petroleum text-xs" />
                   </div>
                   <div>
-                    <span className="text-xs font-semibold text-slate-800 block">Email</span>
+                    <span className="text-xs font-semibold text-slate-800 block">{t('modals.settings.contact_email')}</span>
                     <span className="text-[10px] text-slate-500">soporte@edutechlife.com</span>
                   </div>
                 </a>
@@ -207,8 +207,8 @@ const SettingsSupportModal = ({ isOpen, onClose }) => {
                     <Icon name="fa-clock" className="text-petroleum text-xs" />
                   </div>
                   <div>
-                    <span className="text-xs font-semibold text-slate-800 block">Horario de Atención</span>
-                    <span className="text-[10px] text-slate-500">Lun-Vie 8:00 AM - 6:00 PM (Bogotá)</span>
+                    <span className="text-xs font-semibold text-slate-800 block">{t('modals.settings.contact_hours_title')}</span>
+                    <span className="text-[10px] text-slate-500">{t('modals.settings.contact_hours_value')}</span>
                   </div>
                 </div>
               </div>

@@ -1,22 +1,23 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useTranslation } from '../i18n/I18nProvider';
 import SectionWrapper from './SectionWrapper';
 import { Icon } from '../utils/iconMapping.jsx';
-
-const carouselImages = [
-    { src: '/images/edutech-carrusel-1.webp', alt: 'Estudiantes Edutechlife' },
-    { src: '/images/edutech-carrusel-2.webp', alt: 'Aula Edutechlife' },
-    { src: '/images/edutech-carrusel-3.webp', alt: 'Tecnología Educativa' },
-    { src: '/images/edutech-carrusel-4.webp', alt: 'Aprendizaje Digital' },
-    { src: '/images/edutech-carrusel-5.webp', alt: 'Innovación' },
-    { src: '/images/edutech-carrusel-6.webp', alt: 'Comunidad' },
-    { src: '/images/edutech-carrusel-7.webp', alt: 'Educación del Futuro' },
-];
 
 const AboutCarousel = () => {
     const [active, setActive] = useState(0);
     const [paused, setPaused] = useState(false);
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [loadedImages, setLoadedImages] = useState({});
+    const { t } = useTranslation();
+    const carouselImages = [
+        { src: '/images/edutech-carrusel-1.webp', altKey: 'about.carousel.alt_1' },
+        { src: '/images/edutech-carrusel-2.webp', altKey: 'about.carousel.alt_2' },
+        { src: '/images/edutech-carrusel-3.webp', altKey: 'about.carousel.alt_3' },
+        { src: '/images/edutech-carrusel-4.webp', altKey: 'about.carousel.alt_4' },
+        { src: '/images/edutech-carrusel-5.webp', altKey: 'about.carousel.alt_5' },
+        { src: '/images/edutech-carrusel-6.webp', altKey: 'about.carousel.alt_6' },
+        { src: '/images/edutech-carrusel-7.webp', altKey: 'about.carousel.alt_7' },
+    ];
     const timerRef = useRef(null);
     const progressRef = useRef(null);
 
@@ -63,7 +64,7 @@ const AboutCarousel = () => {
                         {loadedImages[i] ? (
                             <img
                                 src={img.src}
-                                alt={img.alt}
+                                alt={t(img.altKey)}
                                 className="w-full h-full object-cover saturate-110"
                             />
                         ) : (
@@ -111,7 +112,7 @@ const AboutCarousel = () => {
             <div className="carousel-caption">
                 <div className="caption-badge">
                     <Icon name="fa-sparkles" />
-                    <span>Nuestra Esencia</span>
+                    <span>{t('about.caption_badge')}</span>
                 </div>
             </div>
         </div>
@@ -119,6 +120,7 @@ const AboutCarousel = () => {
 };
 
 const About = () => {
+    const { t } = useTranslation();
     const [isVisible, setIsVisible] = useState(false);
     const sectionRef = useRef(null);
 
@@ -147,45 +149,41 @@ const About = () => {
                     {/* Eyebrow */}
                     <div className="about-eyebrow">
                         <span className="eyebrow-line" />
-                        <span className="eyebrow-text">Nuestra Esencia</span>
+                        <span className="eyebrow-text">{t('about.eyebrow_text')}</span>
                     </div>
 
                     {/* Título */}
                     <h2 className="about-title">
-                        <span className="title-kicker">Nuestra esencia</span>
-                        <span className="title-main">El Factor</span>
+                        <span className="title-kicker">{t('about.title_kicker')}</span>
+                        <span className="title-main">{t('about.title_main')}</span>
                         <span className="title-accent">
-                            Humano.
+                            {t('about.title_accent')}
                             <span className="title-underline" />
                         </span>
-                        <span className="title-sub">Maestría detrás de la Tecnología</span>
+                        <span className="title-sub">{t('about.title_sub')}</span>
                     </h2>
 
                     {/* Descripción */}
                     <div className="about-description">
-                        <p>
-                            Edutechlife no es solo código — es pedagogía aplicada con rigor académico. Somos licenciados y magísteres con <strong>más de 10 años en el aula colombiana</strong> que entienden profundamente cómo aprende el cerebro humano.
-                        </p>
-                        <p>
-                            Aplicamos metodologías <strong>VAK y STEAM</strong> para que la Inteligencia Artificial sea una herramienta de transformación real. Hemos formado a más de <strong>200 docentes en IA avanzada</strong>, consolidándonos como el <em>Maestro de Maestros</em> de la comunidad educativa nacional.
-                        </p>
+                        <p dangerouslySetInnerHTML={{ __html: t('about.desc_1') }} />
+                        <p dangerouslySetInnerHTML={{ __html: t('about.desc_2') }} />
                     </div>
 
                     {/* Stats Preview */}
                     <div className="about-stats">
                         <div className="stat-item">
                             <span className="stat-number">10+</span>
-                            <span className="stat-label">Años de Experiencia</span>
+                            <span className="stat-label">{t('about.stat_years')}</span>
                         </div>
                         <div className="stat-divider" />
                         <div className="stat-item">
                             <span className="stat-number">6,000+</span>
-                            <span className="stat-label">Estudiantes</span>
+                            <span className="stat-label">{t('about.stat_students')}</span>
                         </div>
                         <div className="stat-divider" />
                         <div className="stat-item">
                             <span className="stat-number">98%</span>
-                            <span className="stat-label">Satisfacción</span>
+                            <span className="stat-label">{t('about.stat_satisfaction')}</span>
                         </div>
                     </div>
                 </div>

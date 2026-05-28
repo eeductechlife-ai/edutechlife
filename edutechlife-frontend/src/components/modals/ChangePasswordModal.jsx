@@ -2,6 +2,7 @@ import React from 'react';
 import { UserProfile } from '@clerk/react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card-simple';
 import { Icon } from '../../utils/iconMapping.jsx';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const CLERK_APPEARANCE = {
   variables: {
@@ -34,6 +35,7 @@ const CLERK_APPEARANCE = {
 };
 
 const ChangePasswordModal = ({ isOpen, onClose }) => {
+  const { t } = useTranslation();
   if (!isOpen) return null;
 
   return (
@@ -43,7 +45,7 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
         <button
           onClick={onClose}
           className="absolute top-4 right-4 z-50 p-2 text-slate-400 bg-white hover:bg-slate-100 hover:text-slate-800 rounded-full transition-all duration-200"
-          aria-label="Cerrar modal"
+          aria-label={t('modals.password.close')}
         >
           <Icon name="fa-times" className="text-lg" />
         </button>
@@ -54,7 +56,7 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
               <Icon name="fa-shield-halved" className="text-[#004B63]" />
             </div>
             <CardTitle className="text-slate-800 font-bold text-sm">
-              Seguridad - Cambiar Contraseña
+              {t('modals.password.title')}
             </CardTitle>
           </div>
         </CardHeader>
@@ -65,9 +67,9 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
               <div className="flex items-start gap-3">
                 <Icon name="fa-shield-halved" className="text-blue-500 mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="font-semibold text-blue-800 text-sm">Verificación de Seguridad</p>
+                  <p className="font-semibold text-blue-800 text-sm">{t('modals.password.security_title')}</p>
                   <p className="text-xs text-blue-700 mt-1">
-                    Por seguridad, Clerk requiere verificar tu identidad antes de cambiar la contraseña. Usa su panel nativo que maneja toda la verificación automáticamente.
+                    {t('modals.password.security_desc')}
                   </p>
                 </div>
               </div>
@@ -98,7 +100,7 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
               className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-[#004B63] rounded-lg shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50 transition-all duration-300 text-xs font-semibold text-slate-800"
             >
               <Icon name="fa-external-link-alt" />
-              Abrir Configuración Completa
+              {t('modals.password.open_full')}
             </button>
           </div>
         </CardContent>

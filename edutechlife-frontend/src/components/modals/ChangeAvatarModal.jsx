@@ -2,8 +2,10 @@ import React, { useState, useRef } from 'react';
 import { useUser } from '@clerk/react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card-simple';
 import { Icon } from '../../utils/iconMapping.jsx';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const ChangeAvatarModal = ({ isOpen, onClose }) => {
+  const { t } = useTranslation();
   const { user } = useUser();
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
@@ -18,12 +20,12 @@ const ChangeAvatarModal = ({ isOpen, onClose }) => {
     if (!file) return;
 
     if (!file.type.startsWith('image/')) {
-      setError('Solo se permiten archivos de imagen');
+      setError(t('modals.avatar.error_only_images'));
       return;
     }
 
     if (file.size > 10 * 1024 * 1024) {
-      setError('La imagen no debe superar los 10MB');
+      setError(t('modals.avatar.error_max_size'));
       return;
     }
 
@@ -33,14 +35,14 @@ const ChangeAvatarModal = ({ isOpen, onClose }) => {
 
     try {
       await user.setProfileImage({ file });
-      setSuccess('Foto de perfil actualizada correctamente');
+      setSuccess(t('modals.avatar.success_updated'));
       setTimeout(() => {
         setSuccess('');
         onClose();
       }, 1500);
     } catch (err) {
       console.error('Error uploading avatar:', err);
-      setError('No se pudo actualizar la foto. Intenta de nuevo.');
+      setError(t('modals.avatar.error_update'));
     } finally {
       setUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
@@ -49,21 +51,21 @@ const ChangeAvatarModal = ({ isOpen, onClose }) => {
   };
 
   const handleDeleteAvatar = async () => {
-    if (!confirm('¿Eliminar tu foto de perfil?')) return;
+    if (!confirm(t('modals.avatar.confirm_delete'))) return;
 
     setUploading(true);
     setError('');
 
     try {
       await user.deleteProfileImage();
-      setSuccess('Foto eliminada correctamente');
+      setSuccess(t('modals.avatar.success_deleted'));
       setTimeout(() => {
         setSuccess('');
         onClose();
       }, 1500);
     } catch (err) {
       console.error('Error deleting avatar:', err);
-      setError('No se pudo eliminar la foto. Intenta de nuevo.');
+      setError(t('modals.avatar.error_delete'));
     } finally {
       setUploading(false);
     }
@@ -79,7 +81,7 @@ const ChangeAvatarModal = ({ isOpen, onClose }) => {
         <button
           onClick={onClose}
           className="absolute top-4 right-4 z-50 p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-800 rounded-full transition-all duration-200"
-          aria-label="Cerrar"
+          aria-label={t('modals.avatar.close')}
         >
           <Icon name="fa-times" className="text-lg" />
         </button>
@@ -89,7 +91,7 @@ const ChangeAvatarModal = ({ isOpen, onClose }) => {
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center">
               <Icon name="fa-camera" className="text-[#004B63]" />
             </div>
-            <CardTitle className="text-slate-800 font-bold text-sm">Foto de Perfil</CardTitle>
+            <CardTitle className="text-slate-800 font-bold text-sm">{t('modals.avatar.title')}</CardTitle>
           </div>
         </CardHeader>
 
@@ -140,8 +142,8 @@ const ChangeAvatarModal = ({ isOpen, onClose }) => {
                 <Icon name="fa-folder-open" className="text-[#004B63] text-xs" />
               </div>
               <div className="flex-1">
-                <span className="text-xs font-semibold text-slate-800">Subir desde dispositivo</span>
-                <p className="text-[10px] text-slate-500">JPG, PNG o GIF (máx. 10MB)</p>
+                <span className="text-xs font-semibold text-slate-800">{t('modals.avatar.upload_device')}</span>
+                <p className="text-[10px] text-slate-500">{t('modals.avatar.upload_device_desc')}</p>
               </div>
             </button>
 
@@ -155,8 +157,8 @@ const ChangeAvatarModal = ({ isOpen, onClose }) => {
                 <Icon name="fa-camera" className="text-[#004B63] text-xs" />
               </div>
               <div className="flex-1">
-                <span className="text-xs font-semibold text-slate-800">Tomar con cámara</span>
-                <p className="text-[10px] text-slate-500">Usa la cámara de tu dispositivo</p>
+                <span className="text-xs font-semibold text-slate-800">{t('modals.avatar.take_photo')}</span>
+                <p className="text-[10px] text-slate-500">{t('modals.avatar.take_photo_desc')}</p>
               </div>
             </button>
 
@@ -170,7 +172,7 @@ const ChangeAvatarModal = ({ isOpen, onClose }) => {
                 <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-rose-400/10 to-rose-500/10 flex items-center justify-center flex-shrink-0">
                   <Icon name="fa-trash" className="text-rose-500 text-xs" />
                 </div>
-                <span className="text-xs font-semibold text-rose-600">Eliminar foto actual</span>
+                <span className="text-xs font-semibold text-rose-600">{t('modals.avatar.delete_current')}</span>
               </button>
             )}
           </div>
@@ -180,7 +182,7 @@ const ChangeAvatarModal = ({ isOpen, onClose }) => {
             <div className="absolute inset-0 bg-white/80 backdrop-blur-sm rounded-xl flex items-center justify-center">
               <div className="flex flex-col items-center gap-2">
                 <Icon name="fa-spinner" className="text-2xl text-[#00BCD4] animate-spin" />
-                <p className="text-xs text-slate-500">Actualizando foto...</p>
+                <p className="text-xs text-slate-500">{t('modals.avatar.uploading')}</p>
               </div>
             </div>
           )}
