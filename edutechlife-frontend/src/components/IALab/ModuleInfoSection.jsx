@@ -3,6 +3,7 @@ import { Icon } from '../../utils/iconMapping.jsx';
 import { cn } from '../forum/forumDesignSystem';
 import { motion } from 'framer-motion';
 import { useIALabProgressContext } from '../../context/IALabContext';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 /**
  * Sección Informativa del Módulo - Dinámica por módulo activo
@@ -14,6 +15,7 @@ import { useIALabProgressContext } from '../../context/IALabContext';
  * @param {string} props.className - Clases CSS adicionales
  */
 const ModuleInfoSection = ({ className = '', ...rest }) => {
+    const { t } = useTranslation();
     const { activeMod, moduleContent, completedExams, moduleProgress, calculateModuleScore } = useIALabProgressContext();
     const moduleScore = calculateModuleScore(activeMod);
     const isModuleCompleted = moduleScore >= 80;
@@ -73,17 +75,17 @@ const ModuleInfoSection = ({ className = '', ...rest }) => {
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate rounded-t-2xl" />
 
             {/* Contenido principal */}
-            <div className="p-4 md:p-6">
+            <div className="p-5 md:p-8">
                 {/* Header con objetivo */}
                 <div className="flex items-start gap-3 mb-4">
                     <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-petroleum to-petroleum-dark shadow-md shadow-petroleum/15 flex items-center justify-center flex-shrink-0">
                         <Icon name="fa-bullseye" className="text-base text-white" />
                     </div>
                     <div className="flex-1 min-w-0">
-<h3 className="text-sm font-bold text-petroleum uppercase tracking-wider">
-                             Objetivo del Módulo
-                         </h3>
-                         <p className="text-sm text-slate-600 leading-snug mt-1 dark:text-slate-300">
+<h4 className="text-xs font-bold text-petroleum uppercase tracking-wider font-montserrat">
+                              {t('ialab.module_info.objective_title')}
+                          </h4>
+                          <p className="text-sm text-slate-600 leading-relaxed mt-1 dark:text-slate-300">
                             {renderObjective()}
                         </p>
                     </div>
@@ -94,9 +96,9 @@ const ModuleInfoSection = ({ className = '', ...rest }) => {
 
                 {/* Lo que aprenderás */}
                 <div>
-<h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 dark:text-slate-400">
-                         Lo que aprenderás
-                     </h3>
+<h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 dark:text-slate-400 font-montserrat">
+                         {t('ialab.module_info.learning_title')}
+                     </h4>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         {moduleData.learningPoints.map((point, index) => (
                             <div
@@ -115,7 +117,7 @@ const ModuleInfoSection = ({ className = '', ...rest }) => {
                                         className="text-white text-xs"
                                     />
                                 </div>
-                                <p className={`text-sm font-medium leading-tight transition-colors duration-200 ${
+                                <p className={`text-sm font-medium leading-relaxed transition-colors duration-200 ${
                                   isModuleCompleted ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-700 dark:text-slate-200'
                                 }`}>
                                      {point.text}
@@ -126,10 +128,7 @@ const ModuleInfoSection = ({ className = '', ...rest }) => {
                 </div>
 
                 <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mt-5 font-montserrat">
-                    Composición de la nota: Comunidad <span className="font-semibold text-slate-600 dark:text-slate-300">(5%)</span>
-                    {' · '}Desafío <span className="font-semibold text-slate-600 dark:text-slate-300">(30%)</span>
-                    {' · '}Examen <span className="font-semibold text-slate-600 dark:text-slate-300">(35%)</span>
-                    {' · '}Recursos <span className="font-semibold text-slate-600 dark:text-slate-300">(30%)</span>
+                    {t('ialab.module_info.composition', { communityPct: '5%', challengePct: '30%', examPct: '35%', resourcesPct: '30%' })}
                 </p>
 
             </div>

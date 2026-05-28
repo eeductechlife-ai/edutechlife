@@ -5,6 +5,7 @@ import { speakTextConversational } from '../../utils/speech';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import { useInView, motion, AnimatePresence } from 'framer-motion';
 import { useStudent } from '../../context/StudentContext';
+import { useTranslation } from '../../i18n/I18nProvider';
 import useValentinaAgent from '../../hooks/useValentinaAgent';
 import { getQuestionsByAge, getAgeGroupKey } from '../../data/vakQuestions';
 import { VALENTINA_MESSAGES, getAgeGroup } from '../../utils/valentinaMessages';
@@ -38,6 +39,7 @@ const Confetti = ({ active }) => {
 
 // Componente de celebración
 const Celebration = ({ active, styleName }) => {
+  const { t } = useTranslation();
   if (!active) return null;
   
   return (
@@ -47,8 +49,8 @@ const Celebration = ({ active, styleName }) => {
           <Sparkles size={32} strokeWidth={1.5} className="text-white" />
         </div>
         <div>
-          <h3 className="text-2xl font-bold text-[var(--color-petroleum)]">¡Completado!</h3>
-          <p className="text-[var(--color-gray-500)]">Eres un aprendiz <span className="font-bold text-[var(--color-corporate)]">{styleName}</span></p>
+          <h3 className="text-2xl font-bold text-[var(--color-petroleum)]">{t('vak.ui.completed')}</h3>
+          <p className="text-[var(--color-gray-500)]">{t('vak.ui.you_are_a_learner')} <span className="font-bold text-[var(--color-corporate)]">{styleName}</span></p>
         </div>
         <div className="text-5xl">🎊</div>
       </div>
@@ -79,6 +81,7 @@ const ValeriaControls = ({
   isSpeaking,
   valeriaExpression
 }) => {
+  const { t } = useTranslation();
   const config = EXPRESSION_CONFIG[valeriaExpression] || EXPRESSION_CONFIG.neutral;
   
   return (
@@ -95,8 +98,8 @@ const ValeriaControls = ({
             )}
           </div>
           <div className="valeria-logo-content">
-            <span className="valeria-logo-text">Valeria</span>
-            <span className="valeria-logo-subtitle">Psicóloga VAK</span>
+            <span className="valeria-logo-text">{t('vak.ui.valeria_name')}</span>
+            <span className="valeria-logo-subtitle">{t('vak.ui.valeria_subtitle')}</span>
           </div>
         </div>
         
@@ -106,14 +109,14 @@ const ValeriaControls = ({
               <div className="wave"></div>
               <div className="wave"></div>
               <div className="wave"></div>
-              <span>Hablando...</span>
+              <span>{t('vak.ui.speaking')}</span>
             </div>
           )}
           
           <button
             onClick={() => setValeriaEnabled(!valeriaEnabled)}
             className={`valeria-btn-toggle-premium ${!valeriaEnabled ? 'muted' : ''}`}
-            title={valeriaEnabled ? "Silenciar voz" : "Activar voz"}
+            title={valeriaEnabled ? t('vak.ui.mute') : t('vak.ui.unmute')}
           >
             {valeriaEnabled ? <Volume className="valeria-icon-premium" /> : <VolumeOff className="valeria-icon-premium" />}
           </button>
@@ -127,7 +130,7 @@ const ValeriaControls = ({
             onChange={(e) => setValeriaVolume(parseFloat(e.target.value))}
             className="valeria-volume-slider"
             disabled={!valeriaEnabled}
-            title="Volumen"
+            title={t('vak.ui.volume')}
           />
           
           <span className="valeria-volume-label">
@@ -223,6 +226,7 @@ const getIconComponent = (iconName) => {
 };
 
 const DiagnosticoVAK = ({ onNavigate }) => {
+  const { t } = useTranslation();
   const { studentInfo, updateStudentInfo } = useStudent();
   
   const [phase, setPhase] = useState('intro');
@@ -536,7 +540,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     
     const age = parseInt(studentAge);
     if (age < 6 || age > 17) {
-      setError('La edad debe estar entre 6 y 17 años');
+      setError(t('vak.ui.error_age_range'));
       return;
     }
     
@@ -652,14 +656,14 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   const generatePDF = async () => {
     if (!diagnosis) {
       console.error('No hay diagnóstico disponible para PDF');
-      setError('No hay información de diagnóstico para generar el PDF');
+      setError(t('vak.ui.pdf_error_no_data'));
       return;
     }
     
     const el = document.getElementById('document-preview-content');
     if (!el) {
       console.error('No se encontró el elemento del documento preview');
-      setError('Error interno: No se puede generar el PDF en este momento');
+      setError(t('vak.ui.pdf_error_internal'));
       return;
     }
     
@@ -668,7 +672,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
 
     if (!contentLength || contentLength < 100) {
       console.error('El documento preview está vacío o es muy corto');
-      setError('El contenido del PDF está vacío. Por favor, recarga la página e intenta de nuevo.');
+      setError(t('vak.ui.pdf_error_empty'));
       return;
     }
     
@@ -708,10 +712,15 @@ const DiagnosticoVAK = ({ onNavigate }) => {
 
     } catch (e) {
       console.error('Error al generar PDF:', e);
-      setError(`Error al generar PDF: ${e.message || 'Error desconocido'}`);
+      setError(t('vak.ui.pdf_generic_error', { message: e.message || 'Error desconocido' }));
     } finally {
       setPdfLoading(false);
     }
+  };
+
+  const getMoodLabel = (moodValue) => {
+    const labels = { happy: t('vak.ui.mood_good'), neutral: t('vak.ui.mood_neutral'), sad: t('vak.ui.mood_bad') };
+    return labels[moodValue] || t('vak.ui.mood_neutral_fallback');
   };
 
   const getMoodFeedback = () => {
@@ -940,14 +949,10 @@ const DiagnosticoVAK = ({ onNavigate }) => {
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] flex items-center justify-center">
               <Target size={24} strokeWidth={2} className="text-white" />
             </div>
-            <h2 className="text-xl font-bold text-[#004B63]">¿Qué es el diagnóstico VAK?</h2>
+            <h2 className="text-xl font-bold text-[#004B63]">{t('vak.ui.what_is_vak')}</h2>
           </div>
           <p className="text-[#004B63]/80 leading-relaxed text-base">
-            El diagnóstico <span className="font-bold text-[#4DA8C4]">VAK</span> identifica tu estilo de aprendizaje predominante: 
-            <span className="font-semibold"> Visual</span>, 
-            <span className="font-semibold"> Auditivo</span> o 
-            <span className="font-semibold"> Kinestésico</span>. 
-            Conocer tu estilo te permite recibir <span className="font-semibold text-[#4DA8C4]">estrategias personalizadas</span> para mejorar tu rendimiento académico.
+            {t('vak.ui.vak_intro')}
           </p>
         </motion.div>
 
@@ -958,7 +963,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
           transition={{ delay: 0.2 }}
           className="mb-6"
         >
-          <h2 className="text-xl font-bold text-[#004B63] mb-4 text-center">Los 3 Estilos de Aprendizaje</h2>
+          <h2 className="text-xl font-bold text-[#004B63] mb-4 text-center">{t('vak.ui.three_styles_title')}</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* VISUAL */}
@@ -966,26 +971,26 @@ const DiagnosticoVAK = ({ onNavigate }) => {
               <div className="w-16 h-16 rounded-2xl bg-[#4DA8C4]/10 flex items-center justify-center mb-4 mx-auto">
                 <Eye size={32} strokeWidth={1.5} className="text-[#4DA8C4]" />
               </div>
-              <h3 className="text-lg font-bold text-[#4DA8C4] text-center mb-3 uppercase tracking-wide">Visual</h3>
+              <h3 className="text-lg font-bold text-[#4DA8C4] text-center mb-3 uppercase tracking-wide">{t('vak.ui.visual')}</h3>
               <p className="text-sm text-[#004B63]/70 text-center mb-4">
-                Aprende mejor viendo
+                {t('vak.ui.visual_short_desc')}
               </p>
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-sm text-[#004B63]/80">
                   <CheckCircle2 size={16} strokeWidth={2} className="text-[#4DA8C4] shrink-0" />
-                  <span>Imágenes y videos</span>
+                  <span>{t('vak.ui.feature_images_videos')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-[#004B63]/80">
                   <CheckCircle2 size={16} strokeWidth={2} className="text-[#4DA8C4] shrink-0" />
-                  <span>Mapas mentales</span>
+                  <span>{t('vak.ui.feature_mind_maps')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-[#004B63]/80">
                   <CheckCircle2 size={16} strokeWidth={2} className="text-[#4DA8C4] shrink-0" />
-                  <span>Diagramas</span>
+                  <span>{t('vak.ui.feature_diagrams')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-[#004B63]/80">
                   <CheckCircle2 size={16} strokeWidth={2} className="text-[#4DA8C4] shrink-0" />
-                  <span>Colores y esquemas</span>
+                  <span>{t('vak.ui.feature_colors_schemas')}</span>
                 </div>
               </div>
             </div>
@@ -995,26 +1000,26 @@ const DiagnosticoVAK = ({ onNavigate }) => {
               <div className="w-16 h-16 rounded-2xl bg-[#66CCCC]/10 flex items-center justify-center mb-4 mx-auto">
                 <Headphones size={32} strokeWidth={1.5} className="text-[#66CCCC]" />
               </div>
-              <h3 className="text-lg font-bold text-[#66CCCC] text-center mb-3 uppercase tracking-wide">Auditivo</h3>
+              <h3 className="text-lg font-bold text-[#66CCCC] text-center mb-3 uppercase tracking-wide">{t('vak.ui.auditory')}</h3>
               <p className="text-sm text-[#004B63]/70 text-center mb-4">
-                Aprende mejor escuchando
+                {t('vak.ui.auditory_short_desc')}
               </p>
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-sm text-[#004B63]/80">
                   <CheckCircle2 size={16} strokeWidth={2} className="text-[#66CCCC] shrink-0" />
-                  <span>Podcasts y audio</span>
+                  <span>{t('vak.ui.feature_podcasts_audio')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-[#004B63]/80">
                   <CheckCircle2 size={16} strokeWidth={2} className="text-[#66CCCC] shrink-0" />
-                  <span>Debates y discussions</span>
+                  <span>{t('vak.ui.feature_debates_discussions')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-[#004B63]/80">
                   <CheckCircle2 size={16} strokeWidth={2} className="text-[#66CCCC] shrink-0" />
-                  <span>Explicar en voz alta</span>
+                  <span>{t('vak.ui.feature_explain_aloud')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-[#004B63]/80">
                   <CheckCircle2 size={16} strokeWidth={2} className="text-[#66CCCC] shrink-0" />
-                  <span>Música y ritmos</span>
+                  <span>{t('vak.ui.feature_music_rhythms')}</span>
                 </div>
               </div>
             </div>
@@ -1024,26 +1029,26 @@ const DiagnosticoVAK = ({ onNavigate }) => {
               <div className="w-16 h-16 rounded-2xl bg-[#4DA8C4]/10 flex items-center justify-center mb-4 mx-auto">
                 <Activity size={32} strokeWidth={1.5} className="text-[#4DA8C4]" />
               </div>
-              <h3 className="text-lg font-bold text-[#4DA8C4] text-center mb-3 uppercase tracking-wide">Kinestésico</h3>
+              <h3 className="text-lg font-bold text-[#4DA8C4] text-center mb-3 uppercase tracking-wide">{t('vak.ui.kinesthetic')}</h3>
               <p className="text-sm text-[#004B63]/70 text-center mb-4">
-                Aprende mejor haciendo
+                {t('vak.ui.kinesthetic_short_desc')}
               </p>
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-sm text-[#004B63]/80">
                   <CheckCircle2 size={16} strokeWidth={2} className="text-[#4DA8C4] shrink-0" />
-                  <span>Experimentos prácticos</span>
+                  <span>{t('vak.ui.feature_hands_on')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-[#004B63]/80">
                   <CheckCircle2 size={16} strokeWidth={2} className="text-[#4DA8C4] shrink-0" />
-                  <span>Movimiento y pausas</span>
+                  <span>{t('vak.ui.feature_movement_breaks')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-[#004B63]/80">
                   <CheckCircle2 size={16} strokeWidth={2} className="text-[#4DA8C4] shrink-0" />
-                  <span>Proyectos manuales</span>
+                  <span>{t('vak.ui.feature_projects')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-[#004B63]/80">
                   <CheckCircle2 size={16} strokeWidth={2} className="text-[#4DA8C4] shrink-0" />
-                  <span>Juegos de roles</span>
+                  <span>{t('vak.ui.feature_role_play')}</span>
                 </div>
               </div>
             </div>
@@ -1057,32 +1062,32 @@ const DiagnosticoVAK = ({ onNavigate }) => {
           transition={{ delay: 0.3 }}
           className="bg-gradient-to-br from-[#004B63] to-[#4DA8C4] rounded-3xl p-6 md:p-8 shadow-xl mb-6"
         >
-          <h2 className="text-xl font-bold text-white mb-6 text-center">¿Qué recibirás?</h2>
+          <h2 className="text-xl font-bold text-white mb-6 text-center">{t('vak.ui.what_you_get_title')}</h2>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 text-center">
               <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mx-auto mb-3">
                 <Sparkles size={24} strokeWidth={2} className="text-white" />
               </div>
-              <p className="text-white font-semibold text-sm">Diagnóstico Personalizado</p>
+              <p className="text-white font-semibold text-sm">{t('vak.ui.personalized_diagnosis')}</p>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 text-center">
               <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mx-auto mb-3">
                 <Lightbulb size={24} strokeWidth={2} className="text-white" />
               </div>
-              <p className="text-white font-semibold text-sm">Estrategias Adaptadas</p>
+              <p className="text-white font-semibold text-sm">{t('vak.ui.adapted_strategies')}</p>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 text-center">
               <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mx-auto mb-3">
                 <Download size={24} strokeWidth={2} className="text-white" />
               </div>
-              <p className="text-white font-semibold text-sm">Informe PDF</p>
+              <p className="text-white font-semibold text-sm">{t('vak.ui.pdf_report')}</p>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 text-center">
               <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mx-auto mb-3">
                 <Zap size={24} strokeWidth={2} className="text-white" />
               </div>
-              <p className="text-white font-semibold text-sm">Tips Prácticos</p>
+              <p className="text-white font-semibold text-sm">{t('vak.ui.practical_tips')}</p>
             </div>
           </div>
         </motion.div>
@@ -1094,7 +1099,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
           transition={{ delay: 0.4 }}
           className="bg-white rounded-3xl p-6 shadow-lg border border-[#B2D8E5]/50 mb-6"
         >
-          <h2 className="text-xl font-bold text-[#004B63] mb-6 text-center">¿Qué esperar?</h2>
+          <h2 className="text-xl font-bold text-[#004B63] mb-6 text-center">{t('vak.ui.what_to_expect_title')}</h2>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <div className="text-center">
@@ -1102,43 +1107,43 @@ const DiagnosticoVAK = ({ onNavigate }) => {
                 <Clock size={28} strokeWidth={2} className="text-[#4DA8C4]" />
               </div>
               <p className="text-2xl font-bold text-[#004B63]">3 min</p>
-              <p className="text-xs text-[#004B63]/60">Duración</p>
+              <p className="text-xs text-[#004B63]/60">{t('vak.ui.duration')}</p>
             </div>
             <div className="text-center">
               <div className="w-14 h-14 rounded-2xl bg-[#66CCCC]/10 flex items-center justify-center mx-auto mb-2">
                 <List size={28} strokeWidth={2} className="text-[#66CCCC]" />
               </div>
               <p className="text-2xl font-bold text-[#004B63]">10</p>
-              <p className="text-xs text-[#004B63]/60">Preguntas</p>
+              <p className="text-xs text-[#004B63]/60">{t('vak.ui.questions_count')}</p>
             </div>
             <div className="text-center">
               <div className="w-14 h-14 rounded-2xl bg-[#4DA8C4]/10 flex items-center justify-center mx-auto mb-2">
                 <Target size={28} strokeWidth={2} className="text-[#4DA8C4]" />
               </div>
               <p className="text-2xl font-bold text-[#004B63]">100%</p>
-              <p className="text-xs text-[#004B63]/60">Personalizado</p>
+              <p className="text-xs text-[#004B63]/60">{t('vak.ui.personalized_label')}</p>
             </div>
             <div className="text-center">
               <div className="w-14 h-14 rounded-2xl bg-[#4DA8C4]/10 flex items-center justify-center mx-auto mb-2">
                 <CheckCircle2 size={28} strokeWidth={2} className="text-[#4DA8C4]" />
               </div>
               <p className="text-2xl font-bold text-[#004B63]">100%</p>
-              <p className="text-xs text-[#004B63]/60">Confidencial</p>
+              <p className="text-xs text-[#004B63]/60">{t('vak.ui.confidential_label')}</p>
             </div>
           </div>
 
           <div className="flex flex-wrap justify-center gap-3 text-sm">
             <span className="inline-flex items-center gap-2 bg-[#B2D8E5]/30 text-[#004B63] px-4 py-2 rounded-full">
               <Check size={16} strokeWidth={2} className="text-[#4DA8C4]" />
-              No hay respuestas incorrectas
+              {t('vak.ui.no_wrong_answers')}
             </span>
             <span className="inline-flex items-center gap-2 bg-[#B2D8E5]/30 text-[#004B63] px-4 py-2 rounded-full">
               <Check size={16} strokeWidth={2} className="text-[#4DA8C4]" />
-              Responde honestamente
+              {t('vak.ui.answer_honestly')}
             </span>
             <span className="inline-flex items-center gap-2 bg-[#B2D8E5]/30 text-[#004B63] px-4 py-2 rounded-full">
               <Check size={16} strokeWidth={2} className="text-[#4DA8C4]" />
-              Valeria te guiará paso a paso
+              {t('vak.ui.valeria_will_guide')}
             </span>
           </div>
         </motion.div>
@@ -1164,12 +1169,12 @@ const DiagnosticoVAK = ({ onNavigate }) => {
               {valentinaIntroComplete ? (
                 <>
                   <Rocket size={24} strokeWidth={2} />
-                  Comenzar Diagnóstico
+                  {t('vak.ui.start_diagnosis_btn')}
                 </>
               ) : (
                 <>
                   <Volume size={24} strokeWidth={2} className="animate-pulse" />
-                  Esperando a Valeria...
+                  {t('vak.ui.waiting_for_valeria')}
                 </>
               )}
             </span>
@@ -1183,7 +1188,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
           transition={{ delay: 0.6 }}
           className="text-center text-sm text-[#004B63]/50 mt-6"
         >
-          Desarrollado por <span className="font-semibold text-[#4DA8C4]">EdutechLife</span>
+          {t('vak.ui.developed_by')} <span className="font-semibold text-[#4DA8C4]">EdutechLife</span>
         </motion.p>
       </motion.div>
     </div>
@@ -1214,7 +1219,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
             <div className="w-10 h-10 rounded-xl bg-[#4DA8C4]/10 flex items-center justify-center">
               <Shield size={20} strokeWidth={2} className="text-[#4DA8C4]" />
             </div>
-            <h2 className="text-lg font-bold text-[#004B63]">Habeas Data</h2>
+            <h2 className="text-lg font-bold text-[#004B63]">{t('vak.ui.habeas_data_title')}</h2>
           </div>
           <button onClick={() => setShowHabeasModal(false)} className="text-[#004B63]/40 hover:text-[#004B63]">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -1274,7 +1279,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
           }}
           className="w-full mt-6 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-2xl py-3 font-bold text-sm hover:shadow-lg transition-all"
         >
-          Aceptar y continuar
+          {t('vak.ui.accept_and_continue')}
         </button>
       </motion.div>
     </div>
@@ -1306,10 +1311,10 @@ const DiagnosticoVAK = ({ onNavigate }) => {
             <User size={32} strokeWidth={2} className="text-white" />
           </div>
           <h1 className="text-2xl font-extrabold text-[#004B63] text-center">
-            Cuéntame sobre ti
+            {t('vak.ui.tell_me_about_you')}
           </h1>
           <p className="text-sm text-[#004B63]/70 leading-relaxed mt-2">
-            Completa tus datos para personalizar tu diagnóstico
+            {t('vak.ui.fill_data_personalize')}
           </p>
         </motion.div>
 
@@ -1321,14 +1326,14 @@ const DiagnosticoVAK = ({ onNavigate }) => {
           className="mb-4"
         >
           <label className="text-xs font-medium text-[#004B63]/60 uppercase tracking-wider mb-2 block text-left">
-            Tu nombre
+            {t('vak.ui.your_name_label')}
           </label>
           <div className="relative">
             <input
               type="text"
               value={studentName}
               onChange={(e) => setStudentName(e.target.value)}
-              placeholder="Escribe tu nombre completo"
+              placeholder={t('vak.ui.your_name_placeholder')}
               className="w-full rounded-2xl border-2 border-[#B2D8E5]/50 bg-white px-5 py-3.5 text-base font-medium text-[#004B63] placeholder-[#004B63]/30 focus:outline-none focus:ring-2 focus:ring-[#4DA8C4]/30 focus:border-[#4DA8C4] transition-all shadow-md"
             />
           </div>
@@ -1342,7 +1347,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
           className="mb-4"
         >
           <label className="text-xs font-medium text-[#004B63]/60 uppercase tracking-wider mb-2 block text-left">
-            Tu edad
+            {t('vak.ui.your_age_label')}
           </label>
           <div className="relative">
             <input
@@ -1351,7 +1356,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
               max="17"
               value={studentAge}
               onChange={(e) => setStudentAge(e.target.value)}
-              placeholder="Entre 6 y 17 años"
+              placeholder={t('vak.ui.your_age_placeholder')}
               className="w-full rounded-2xl border-2 border-[#B2D8E5]/50 bg-white px-5 py-3.5 text-base font-medium text-[#004B63] placeholder-[#004B63]/30 focus:outline-none focus:ring-2 focus:ring-[#4DA8C4]/30 focus:border-[#4DA8C4] transition-all shadow-md"
             />
           </div>
@@ -1364,12 +1369,12 @@ const DiagnosticoVAK = ({ onNavigate }) => {
           transition={{ delay: 0.25 }}
           className="mb-6"
         >
-          <label className="text-xs font-medium text-[#004B63]/60 uppercase tracking-wider mb-3 block text-left">¿Cómo te sientes hoy?</label>
+          <label className="text-xs font-medium text-[#004B63]/60 uppercase tracking-wider mb-3 block text-left">{t('vak.ui.how_feel_today')}</label>
           <div className="grid grid-cols-3 gap-3">
             {[
-              { value: 'happy', label: 'Bien', icon: Smile },
-              { value: 'neutral', label: 'Regular', icon: Meh },
-              { value: 'sad', label: 'No muy bien', icon: Frown }
+              { value: 'happy', label: t('vak.ui.mood_good'), icon: Smile },
+              { value: 'neutral', label: t('vak.ui.mood_neutral'), icon: Meh },
+              { value: 'sad', label: t('vak.ui.mood_bad'), icon: Frown }
             ].map((mood) => {
               const IconComponent = mood.icon;
               return (
@@ -1430,13 +1435,13 @@ const DiagnosticoVAK = ({ onNavigate }) => {
             />
             <div className="text-left">
               <p className="text-xs text-[#004B63]/80 leading-relaxed">
-                Acepto las <span className="font-semibold text-[#4DA8C4]">políticas de tratamiento de datos personales</span> de EdutechLife.
+                {t('vak.ui.accept_data_policy')}
               </p>
               <button
                 onClick={() => setShowHabeasModal(true)}
                 className="text-xs text-[#4DA8C4] font-medium hover:underline mt-1"
               >
-                Ver documento Habeas Data
+                {t('vak.ui.view_habeas_data')}
               </button>
             </div>
           </div>
@@ -1462,7 +1467,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
             <span className={`text-lg font-bold flex items-center justify-center gap-2 ${
               studentName.trim() && studentAge && studentMood && habeasDataAccepted ? 'text-white' : 'text-[#004B63]/50'
             }`}>
-              Iniciar Diagnóstico
+              {t('vak.ui.start_test_btn')}
               <ArrowRight size={20} strokeWidth={2} />
             </span>
           </motion.button>
@@ -1484,7 +1489,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
       <div className="max-w-3xl mx-auto p-4">
         {/* Top Bar con número de pregunta */}
         <div className="flex items-center justify-between mb-6">
-          <div className="text-xs font-medium text-slate-400 uppercase tracking-wider">Pregunta</div>
+          <div className="text-xs font-medium text-slate-400 uppercase tracking-wider">{t('vak.ui.question')}</div>
           <div className="bg-[#66CCCC] text-white rounded-full px-3 py-1 text-xs font-semibold">
             {currentQuestion + 1} / {ageQuestions.length}
           </div>
@@ -1525,7 +1530,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
                 className="px-8 py-4 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-3"
               >
                 <Sparkles size={24} strokeWidth={2} />
-                ¡Quiero saber cómo voy!
+                {t('vak.ui.want_feedback')}
               </motion.button>
             </div>
           )}
@@ -1588,17 +1593,17 @@ const DiagnosticoVAK = ({ onNavigate }) => {
               }}
               disabled={isValentinaSpeaking || feedbackPending}
               className="text-[#4DA8C4] text-xs font-medium uppercase tracking-wider flex items-center gap-2 hover:text-[#66CCCC] transition-colors px-4 py-2 rounded-full hover:bg-[#4DA8C4]/5"
-              title="Escuchar la pregunta de nuevo"
+              title={t('vak.ui.listen_again')}
             >
               <RotateCcw size={16} strokeWidth={2} />
-              <span>Repetir pregunta</span>
+              <span>{t('vak.ui.repeat_question')}</span>
             </button>
           </div>
         </motion.div>
 
         {/* Indicador de tiempo */}
         <div className="text-center">
-          <span className="text-xs text-slate-400 uppercase tracking-wider">Tiempo transcurrido: {formatTime(elapsedTime)}</span>
+          <span className="text-xs text-slate-400 uppercase tracking-wider">{t('vak.ui.time_elapsed')}: {formatTime(elapsedTime)}</span>
         </div>
       </div>
     );
@@ -1623,9 +1628,9 @@ const DiagnosticoVAK = ({ onNavigate }) => {
             <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] flex items-center justify-center shadow-lg mb-4">
               <Sparkles size={32} strokeWidth={2} className="text-white" />
             </div>
-            <h1 className="text-2xl font-extrabold text-[#004B63] mb-2">¡Casi terminamos!</h1>
+            <h1 className="text-2xl font-extrabold text-[#004B63] mb-2">{t('vak.ui.almost_done')}</h1>
             <p className="text-sm text-[#004B63]/70 leading-relaxed">
-              Completa los datos del acudiente para enviar los resultados de tu diagnóstico VAK
+              {t('vak.ui.parent_data_instruction')}
             </p>
           </motion.div>
           
@@ -1634,13 +1639,13 @@ const DiagnosticoVAK = ({ onNavigate }) => {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
               <label className="text-xs font-medium text-[#004B63]/60 uppercase tracking-wider mb-2 block">
                 <User size={14} strokeWidth={2} className="inline mr-1 text-[#4DA8C4]" />
-                Nombre del acudiente
+                {t('vak.ui.parent_name_label')}
               </label>
               <input
                 type="text"
                 value={parentName}
                 onChange={(e) => setParentName(e.target.value)}
-                placeholder="Nombre completo del padre o tutor"
+                placeholder={t('vak.ui.parent_name_placeholder')}
                 className="w-full rounded-2xl border-2 border-[#B2D8E5]/50 bg-white px-5 py-3.5 text-base font-medium text-[#004B63] placeholder-[#004B63]/30 focus:outline-none focus:ring-2 focus:ring-[#4DA8C4]/30 focus:border-[#4DA8C4] transition-all shadow-md"
               />
             </motion.div>
@@ -1648,13 +1653,13 @@ const DiagnosticoVAK = ({ onNavigate }) => {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
               <label className="text-xs font-medium text-[#004B63]/60 uppercase tracking-wider mb-2 block">
                 <Phone size={14} strokeWidth={2} className="inline mr-1 text-[#4DA8C4]" />
-                Teléfono de contacto
+                {t('vak.ui.contact_phone_label')}
               </label>
               <input
                 type="tel"
                 value={parentPhone}
                 onChange={(e) => setParentPhone(e.target.value)}
-                placeholder="Ej: 300 123 4567"
+                placeholder={t('vak.ui.phone_placeholder')}
                 className="w-full rounded-2xl border-2 border-[#B2D8E5]/50 bg-white px-5 py-3.5 text-base font-medium text-[#004B63] placeholder-[#004B63]/30 focus:outline-none focus:ring-2 focus:ring-[#4DA8C4]/30 focus:border-[#4DA8C4] transition-all shadow-md"
               />
             </motion.div>
@@ -1662,13 +1667,13 @@ const DiagnosticoVAK = ({ onNavigate }) => {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
               <label className="text-xs font-medium text-[#004B63]/60 uppercase tracking-wider mb-2 block">
                 <Mail size={14} strokeWidth={2} className="inline mr-1 text-[#4DA8C4]" />
-                Correo electrónico
+                {t('vak.ui.email_label')}
               </label>
               <input
                 type="email"
                 value={parentEmail}
                 onChange={(e) => setParentEmail(e.target.value)}
-                placeholder="correo@ejemplo.com"
+                placeholder={t('vak.ui.email_placeholder')}
                 className="w-full rounded-2xl border-2 border-[#B2D8E5]/50 bg-white px-5 py-3.5 text-base font-medium text-[#004B63] placeholder-[#004B63]/30 focus:outline-none focus:ring-2 focus:ring-[#4DA8C4]/30 focus:border-[#4DA8C4] transition-all shadow-md"
               />
             </motion.div>
@@ -1701,7 +1706,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
                   : 'bg-[#B2D8E5] text-[#004B63]/50 cursor-not-allowed'
               }`}
             >
-              Ver mis resultados
+              {t('vak.ui.view_results_btn')}
             </motion.button>
           </motion.div>
         </motion.div>
@@ -1713,7 +1718,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     if (!diagnosis || !diagnosis.styleDetails) {
       return (
         <div className="p-10 text-center text-gray-500">
-          No hay resultados disponibles.
+          {t('vak.ui.no_results_available')}
         </div>
       );
     }
@@ -1733,10 +1738,10 @@ const DiagnosticoVAK = ({ onNavigate }) => {
         {/* Header del resultado */}
         <div className="text-center mb-8">
           <h1 className="text-2xl font-extrabold text-[#004B63] text-center">
-            ¡Diagnóstico Completado!
+            {t('vak.ui.diagnosis_completed')}
           </h1>
           <p className="text-sm text-slate-600 leading-relaxed mt-2">
-            Hola, <span className="font-semibold text-[#4DA8C4]">{diagnosis.studentName}</span>. Aquí están tus resultados.
+            {t('vak.ui.hello_greeting_name')} <span className="font-semibold text-[#4DA8C4]">{diagnosis.studentName}</span>{t('vak.ui.hello_results_suffix')}
           </p>
         </div>
 
@@ -1768,7 +1773,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
                   {diagnosis.styleDetails.name}
                 </h2>
                 <p className="text-sm text-slate-600 leading-relaxed">
-                  {diagnosis.percentage}% de coincidencia
+                  {diagnosis.percentage}% {t('vak.ui.percentage_match')}
                 </p>
               </div>
             </div>
@@ -1778,7 +1783,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
             </p>
 
             <div className="space-y-4">
-              <h3 className="text-sm font-semibold text-slate-700">Estrategias Recomendadas</h3>
+              <h3 className="text-sm font-semibold text-slate-700">{t('vak.ui.recommended_strategies')}</h3>
               {(diagnosis.styleDetails.strategies || []).slice(0, 5).map((strategy, idx) => (
                 <div key={idx} className="flex items-start gap-3">
                   <div className="w-6 h-6 shrink-0 rounded-full bg-[#4DA8C4]/10 flex items-center justify-center mt-0.5">
@@ -1791,7 +1796,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
 
             {/* Consejo personalizado */}
             <div className="mt-6 p-4 bg-[#F0FDFF] rounded-xl border-l-4 border-[#4DA8C4]">
-              <p className="text-xs text-[#004B63] font-medium mb-1">Consejo Personalizado</p>
+              <p className="text-xs text-[#004B63] font-medium mb-1">{t('vak.ui.personalized_tip_title')}</p>
               <p className="text-sm text-slate-600 leading-relaxed">{diagnosis.styleDetails?.tip}</p>
             </div>
           </motion.div>
@@ -1806,7 +1811,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
           >
             {/* Radar Chart */}
             <div className="bg-white rounded-[2rem] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
-              <h3 className="text-lg font-bold text-[#004B63] mb-4">Perfil VAK</h3>
+              <h3 className="text-lg font-bold text-[#004B63] mb-4">{t('vak.ui.vak_profile')}</h3>
               <div className="w-full aspect-square max-w-[300px] mx-auto" ref={chartRef}>
                 <ResponsiveContainer width="100%" height="100%">
                   <RadarChart data={radarData}>
@@ -1814,7 +1819,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
                     <PolarAngleAxis dataKey="subject" tick={{ fill: '#64748B', fontSize: 12 }} />
                     <PolarRadiusAxis angle={30} domain={[0, 10]} tick={{ fill: '#94A3B8', fontSize: 10 }} />
                     <Radar
-                      name="Puntuación"
+                      name={t('vak.ui.scores')}
                       dataKey="A"
                       stroke="#4DA8C4"
                       fill="#4DA8C4"
@@ -1827,7 +1832,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
 
             {/* Puntuaciones numéricas */}
             <div className="bg-white rounded-[2rem] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
-              <h3 className="text-lg font-bold text-[#004B63] mb-4">Puntuaciones</h3>
+              <h3 className="text-lg font-bold text-[#004B63] mb-4">{t('vak.ui.scores')}</h3>
               
               {/* Visual */}
               <div className="mb-4">
@@ -1889,12 +1894,12 @@ const DiagnosticoVAK = ({ onNavigate }) => {
                     {React.createElement(getIconComponent(moodFeedback.icon), { size: 20, strokeWidth: 2 })}
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-[#004B63]">Estado de ánimo</p>
-                    <p className="text-xs text-slate-500">{moodFeedback.label}</p>
+                    <p className="text-sm font-medium text-[#004B63]">{t('vak.ui.mood_section')}</p>
+                    <p className="text-xs text-slate-500">{getMoodLabel(studentMood)}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-medium text-[#004B63]">Tiempo</p>
+                  <p className="text-sm font-medium text-[#004B63]">{t('vak.ui.time_section')}</p>
                   <p className="text-xs text-slate-500">{formatTime(diagnosis.timeSpent || elapsedTime)}</p>
                 </div>
               </div>
@@ -1918,7 +1923,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
           >
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
             <Eye size={20} strokeWidth={2} className="relative z-10" />
-            <span className="relative z-10 text-base font-semibold">Ver Documento Completo</span>
+            <span className="relative z-10 text-base font-semibold">{t('vak.ui.view_document_btn')}</span>
             <div className="absolute -bottom-2 left-4 right-4 h-4 bg-gradient-to-r from-[#4DA8C4]/30 to-[#66CCCC]/30 blur-md rounded-full"></div>
           </motion.button>
         </motion.div>
@@ -1946,12 +1951,12 @@ const DiagnosticoVAK = ({ onNavigate }) => {
             {pdfLoading ? (
               <>
                 <div className="relative z-10 w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin"></div>
-                <span className="relative z-10 text-base font-semibold">Generando PDF...</span>
+                <span className="relative z-10 text-base font-semibold">{t('vak.ui.generating_pdf')}</span>
               </>
             ) : (
               <>
                 <Download size={20} strokeWidth={2} className="relative z-10" />
-                <span className="relative z-10 text-base font-semibold">Descargar PDF del Resultado</span>
+                <span className="relative z-10 text-base font-semibold">{t('vak.ui.download_pdf_result')}</span>
               </>
             )}
             
@@ -1972,7 +1977,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#004B63]/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
             
             <Rocket size={20} strokeWidth={2} className="relative z-10" />
-            <span className="relative z-10 text-base font-semibold">Ir a inicio</span>
+            <span className="relative z-10 text-base font-semibold">{t('vak.ui.go_home')}</span>
             
             {/* Efecto de sombra 3D */}
             <div className="absolute -bottom-2 left-4 right-4 h-4 bg-[#004B63]/10 blur-md rounded-full"></div>
@@ -1996,13 +2001,13 @@ const DiagnosticoVAK = ({ onNavigate }) => {
             className="text-[#004B63]/50 hover:text-[#4DA8C4] text-sm font-medium flex items-center justify-center gap-2 transition-colors"
           >
             <RotateCcw size={16} strokeWidth={2} />
-            Volver al inicio
+            {t('vak.ui.back_to_start')}
           </motion.button>
         </motion.div>
 
         {/* Información adicional */}
         <div className="text-center mt-6">
-          <p className="text-xs text-slate-400 uppercase tracking-wider">Tiempo total: {formatTime(diagnosis.timeSpent || elapsedTime)} • Estado de ánimo: {moodFeedback.label}</p>
+          <p className="text-xs text-slate-400 uppercase tracking-wider">{t('vak.ui.total_time')}: {formatTime(diagnosis.timeSpent || elapsedTime)} • {t('vak.ui.mood_section')}: {getMoodLabel(studentMood)}</p>
         </div>
       </div>
     );
@@ -2012,7 +2017,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     if (!diagnosis) {
       return (
         <div className="p-10 text-center text-gray-500">
-          No hay diagnóstico disponible para mostrar.
+          {t('vak.ui.no_diagnosis_display')}
         </div>
       );
     }
@@ -2050,12 +2055,12 @@ const DiagnosticoVAK = ({ onNavigate }) => {
                 margin: '0 0 3px 0',
                 fontSize: '20px',
                 fontWeight: '800'
-              }}>Dictamen Psicopedagógico VAK</h1>
+              }}>{t('vak.ui.pdf_title')}</h1>
               <p style={{
                 margin: 0,
                 color: '#64748B',
                 fontSize: '11px'
-              }}>Edutechlife • Inteligencia Cognitiva</p>
+              }}>{t('vak.ui.pdf_company')}</p>
             </div>
             <div style={{ textAlign: 'right' }}>
               <div style={{
@@ -2093,25 +2098,22 @@ const DiagnosticoVAK = ({ onNavigate }) => {
                 letterSpacing: '1px',
                 borderBottom: '1px solid #E2E8F0',
                 paddingBottom: '6px'
-              }}>Estudiante</h3>
+              }}>{t('vak.ui.pdf_student_section')}</h3>
               <div style={{ fontSize: '12px', marginBottom: '4px' }}>
-                <span style={{ color: '#64748B', marginRight: '5px' }}>Nombre:</span>
+                <span style={{ color: '#64748B', marginRight: '5px' }}>{t('vak.ui.pdf_name')}:</span>
                 <span style={{ color: '#004B63', fontWeight: '600' }}>{diagnosis.studentName}</span>
               </div>
               <div style={{ fontSize: '12px', marginBottom: '4px' }}>
-                <span style={{ color: '#64748B', marginRight: '5px' }}>Edad:</span>
-                <span style={{ color: '#004B63' }}>{diagnosis.studentAge || studentAge || 'N/A'} años</span>
+                <span style={{ color: '#64748B', marginRight: '5px' }}>{t('vak.ui.pdf_age')}:</span>
+                <span style={{ color: '#004B63' }}>{diagnosis.studentAge || studentAge || 'N/A'} {t('vak.ui.years')}</span>
               </div>
               <div style={{ fontSize: '12px', marginBottom: '4px' }}>
-                <span style={{ color: '#64748B', marginRight: '5px' }}>Fecha:</span>
+                <span style={{ color: '#64748B', marginRight: '5px' }}>{t('vak.ui.pdf_date')}:</span>
                 <span style={{ color: '#004B63' }}>{diagnosis.date}</span>
               </div>
               <div style={{ fontSize: '12px' }}>
-                <span style={{ color: '#64748B', marginRight: '5px' }}>Ánimo:</span>
-                <span style={{ color: '#004B63' }}>{(() => {
-                  const mood = MOOD_OPTIONS.find(m => m.value === (diagnosis.studentMood || studentMood));
-                  return mood ? mood.label : 'Neutral';
-                })()}</span>
+                <span style={{ color: '#64748B', marginRight: '5px' }}>{t('vak.ui.pdf_mood')}:</span>
+                  <span style={{ color: '#004B63' }}>{getMoodLabel(diagnosis.studentMood || studentMood)}</span>
               </div>
             </div>
 
@@ -2129,17 +2131,17 @@ const DiagnosticoVAK = ({ onNavigate }) => {
                 letterSpacing: '1px',
                 borderBottom: '1px solid #E2E8F0',
                 paddingBottom: '6px'
-              }}>Acudiente</h3>
+              }}>{t('vak.ui.pdf_guardian_section')}</h3>
               <div style={{ fontSize: '12px', marginBottom: '4px' }}>
-                <span style={{ color: '#64748B', marginRight: '5px' }}>Nombre:</span>
+                <span style={{ color: '#64748B', marginRight: '5px' }}>{t('vak.ui.pdf_name')}:</span>
                 <span style={{ color: '#004B63' }}>{parentName || 'N/A'}</span>
               </div>
               <div style={{ fontSize: '12px', marginBottom: '4px' }}>
-                <span style={{ color: '#64748B', marginRight: '5px' }}>Tel:</span>
+                <span style={{ color: '#64748B', marginRight: '5px' }}>{t('vak.ui.contact_phone_label')}:</span>
                 <span style={{ color: '#004B63' }}>{parentPhone || 'N/A'}</span>
               </div>
               <div style={{ fontSize: '12px' }}>
-                <span style={{ color: '#64748B', marginRight: '5px' }}>Email:</span>
+                <span style={{ color: '#64748B', marginRight: '5px' }}>{t('vak.ui.email_label')}:</span>
                 <span style={{ color: '#004B63' }}>{parentEmail || 'N/A'}</span>
               </div>
             </div>
@@ -2154,7 +2156,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
             textAlign: 'center',
             color: 'white'
           }}>
-            <p style={{ margin: '0 0 8px 0', color: 'rgba(255,255,255,0.9)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '2px' }}>Perfil de Aprendizaje</p>
+            <p style={{ margin: '0 0 8px 0', color: 'rgba(255,255,255,0.9)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '2px' }}>{t('vak.ui.pdf_learning_profile')}</p>
             <h2 style={{ margin: '0 0 10px 0', fontSize: '28px', fontWeight: '800' }}>{diagnosis.styleDetails?.name}</h2>
             <div style={{ fontSize: '48px', fontWeight: '800', margin: '8px 0' }}>{diagnosis.percentage}%</div>
             <p style={{ margin: 0, opacity: 0.9, fontSize: '13px', lineHeight: '1.4' }}>{diagnosis.styleDetails?.description}</p>
@@ -2212,7 +2214,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
               fontSize: '13px',
               borderBottom: '1.5px solid #4DA8C4',
               paddingBottom: '5px'
-            }}>Análisis de Resultados</h4>
+            }}>{t('vak.ui.pdf_analysis')}</h4>
             <p style={{ margin: 0, color: '#334155', fontSize: '11px', lineHeight: '1.5' }}>
               {diagnosis.predominantStyle === 'visual' && `El canal Visual obtuvo ${diagnosis.counts?.visual || 0} de 10 puntos, siendo el sistema de representación dominante. Esto indica que el estudiante procesa información de manera óptima a través de imágenes, gráficos y organizadores visuales.`}
               {diagnosis.predominantStyle === 'auditivo' && `El canal Auditivo obtuvo ${diagnosis.counts?.auditivo || 0} de 10 puntos, siendo el sistema de representación dominante. Esto indica que el estudiante procesa información de manera óptima a través de la palabra hablada, explicaciones verbales y recursos sonoros.`}
@@ -2238,7 +2240,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
                   fontSize: '13px',
                   borderBottom: '1.5px solid #4DA8C4',
                   paddingBottom: '5px'
-                }}>Características del Estilo</h4>
+                }}>{t('vak.ui.pdf_style_features')}</h4>
                 <div style={{ fontSize: '11px' }}>
                   {getCaracteristicasEstilo(diagnosis.predominantStyle).map((c, i) => (
                     <div key={i} style={{ marginBottom: '4px', display: 'flex', alignItems: 'flex-start', gap: '6px' }}>
@@ -2261,7 +2263,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
                   margin: '0 0 6px 0',
                   fontSize: '11px',
                   textTransform: 'uppercase'
-                }}>Fortalezas Identificadas</h4>
+                }}>{t('vak.ui.pdf_identified_strengths')}</h4>
                 <div style={{ fontSize: '10px', lineHeight: '1.4' }}>
                   {diagnosis.predominantStyle === 'visual' && (
                     <>El estudiante posee una capacidad natural para procesar información visual, destacando en: memoria fotográfica, organización espacial, atención al detalle, síntesis gráfica de conceptos, y aprendizaje mediante observación. Estas fortalezas le permiten destacar en entornos que requieren análisis visual y pensamiento estructurado.</>
@@ -2286,7 +2288,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
                   fontSize: '13px',
                   borderBottom: '1.5px solid #4DA8C4',
                   paddingBottom: '5px'
-                }}>Estrategias de Estudio</h4>
+                }}>{t('vak.ui.pdf_study_strategies')}</h4>
                 <ol style={{ paddingLeft: '16px', margin: 0, fontSize: '11px', lineHeight: '1.5' }}>
                   {(diagnosis.styleDetails?.strategies || []).map((s, i) => (
                     <li key={i} style={{ marginBottom: '4px' }}>{s}</li>
@@ -2302,7 +2304,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
                   fontSize: '13px',
                   borderBottom: '1.5px solid #66CCCC',
                   paddingBottom: '5px'
-                }}>Carreras Recomendadas</h4>
+                }}>{t('vak.ui.pdf_recommended_careers')}</h4>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
                   {getCarrerasRecomendadas(diagnosis.predominantStyle).map((c, i) => (
                     <span key={i} style={{
@@ -2334,7 +2336,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
               fontSize: '12px',
               borderBottom: '1px solid #E2E8F0',
               paddingBottom: '5px'
-            }}>Recomendaciones para Padres y Acudientes</h4>
+            }}>{t('vak.ui.pdf_parent_tips')}</h4>
             <div style={{ fontSize: '11px', lineHeight: '1.5' }}>
               {getTipsPadres(diagnosis.predominantStyle).map((t, i) => (
                 <div key={i} style={{ marginBottom: '4px', display: 'flex', alignItems: 'flex-start', gap: '6px' }}>
@@ -2366,8 +2368,8 @@ const DiagnosticoVAK = ({ onNavigate }) => {
                 <span style={{ color: 'white', fontSize: '14px', fontWeight: 'bold' }}>VR</span>
               </div>
               <div>
-                <h4 style={{ color: '#004B63', margin: '0', fontSize: '13px', fontWeight: '700' }}>Valeria Rodríguez</h4>
-                <p style={{ margin: 0, color: '#64748B', fontSize: '10px' }}>Psicóloga Educativa • Especialista en Metodología VAK</p>
+                <h4 style={{ color: '#004B63', margin: '0', fontSize: '13px', fontWeight: '700' }}>{t('vak.ui.pdf_valeria_name')}</h4>
+                <p style={{ margin: 0, color: '#64748B', fontSize: '10px' }}>{t('vak.ui.pdf_valeria_title')}</p>
               </div>
             </div>
             <div style={{ margin: 0, color: '#334155', fontSize: '11px', lineHeight: '1.6', whiteSpace: 'pre-line' }}>
@@ -2384,7 +2386,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
               borderLeft: '3px solid #4DA8C4',
               marginBottom: '15px'
             }}>
-              <h4 style={{ color: '#004B63', margin: '0 0 5px 0', fontSize: '11px', textTransform: 'uppercase' }}>Consejo Personalizado</h4>
+              <h4 style={{ color: '#004B63', margin: '0 0 5px 0', fontSize: '11px', textTransform: 'uppercase' }}>{t('vak.ui.pdf_personalized_advice')}</h4>
               <p style={{ margin: 0, color: '#334155', fontSize: '11px', lineHeight: '1.4' }}>{diagnosis.styleDetails?.tip}</p>
             </div>
           )}
@@ -2400,18 +2402,18 @@ const DiagnosticoVAK = ({ onNavigate }) => {
           }}>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
               {qrUrl && (
-                <a href={qrUrl} target="_blank" rel="noopener noreferrer" title="Abrir resultados">
+                <a href={qrUrl} target="_blank" rel="noopener noreferrer" title={t('vak.ui.pdf_open_results')}>
                   <img
                     src={qrUrl}
-                    alt="Código QR - Resultados del diagnóstico"
+                    alt={t('vak.ui.pdf_qr_alt')}
                     style={{ width: 80, height: 80 }}
                     crossOrigin="anonymous"
                   />
                 </a>
               )}
               <div>
-                <p style={{ margin: '0 0 3px 0' }}>Documento generado por EdutechLife • Inteligencia Cognitiva</p>
-                <p style={{ margin: 0 }}>Ley 1581 de 2012 | Habeas Data | edutechlife.co</p>
+                <p style={{ margin: '0 0 3px 0' }}>{t('vak.ui.pdf_generated_by')}</p>
+                <p style={{ margin: 0 }}>{t('vak.ui.pdf_legal')}</p>
               </div>
             </div>
           </div>
@@ -2436,12 +2438,12 @@ const DiagnosticoVAK = ({ onNavigate }) => {
             {pdfLoading ? (
               <>
                 <div className="relative z-10 w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin"></div>
-                <span className="relative z-10 text-base font-semibold">Generando PDF...</span>
+                <span className="relative z-10 text-base font-semibold">{t('vak.ui.generating_pdf')}</span>
               </>
             ) : (
               <>
                 <Download size={20} strokeWidth={2} className="relative z-10" />
-                <span className="relative z-10 text-base font-semibold">Descargar PDF</span>
+                <span className="relative z-10 text-base font-semibold">{t('vak.ui.download_pdf_btn')}</span>
               </>
             )}
             <div className="absolute -bottom-2 left-4 right-4 h-4 bg-gradient-to-r from-[#4DA8C4]/30 to-[#66CCCC]/30 blur-md rounded-full"></div>
@@ -2456,7 +2458,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
           >
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#004B63]/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
             <ArrowRight size={20} strokeWidth={2} className="relative z-10" />
-            <span className="relative z-10 text-base font-semibold">Volver a Resultados</span>
+            <span className="relative z-10 text-base font-semibold">{t('vak.ui.back_to_results')}</span>
             <div className="absolute -bottom-2 left-4 right-4 h-4 bg-[#004B63]/10 blur-md rounded-full"></div>
           </motion.button>
 
@@ -2467,7 +2469,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
             className="text-[#004B63]/50 hover:text-[#4DA8C4] text-sm font-medium flex items-center justify-center gap-2 transition-colors"
           >
             <Rocket size={16} strokeWidth={2} />
-            <span>Ir a inicio</span>
+            <span>{t('vak.ui.go_home')}</span>
           </motion.button>
         </motion.div>
       </motion.div>
@@ -2476,12 +2478,12 @@ const DiagnosticoVAK = ({ onNavigate }) => {
 
   const renderError = () => (
     <div className="p-10 text-center">
-      <div className="text-red-500 mb-4 font-semibold">Ocurrió un error al cargar el Diagnóstico VAK.</div>
+      <div className="text-red-500 mb-4 font-semibold">{t('vak.ui.error_loading_diagnosis')}</div>
       <button 
         className="btn-primary"
         onClick={() => { setError(null); setPhase('intro'); }}
       >
-        Volver a iniciar
+        {t('vak.ui.restart_btn')}
       </button>
     </div>
   );
@@ -2510,7 +2512,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
             className="fixed top-4 right-4 z-50 flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-lg border border-green-400"
           >
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            <span className="text-sm font-medium text-green-700">Guardado ✓</span>
+            <span className="text-sm font-medium text-green-700">{t('vak.ui.save_indicator')} ✓</span>
           </motion.div>
         )}
       </AnimatePresence>
@@ -2519,8 +2521,8 @@ const DiagnosticoVAK = ({ onNavigate }) => {
       <button
         onClick={toggleHighContrast}
         className="fixed top-4 left-4 z-50 p-3 bg-white rounded-full shadow-lg border-2 border-[var(--color-gray-200)] hover:border-[var(--color-corporate)] transition-all"
-        title="Alt+C: Alternar modo de alto contraste"
-        aria-label="Alternar modo de alto contraste"
+        title={t('vak.ui.accessibility_title')}
+        aria-label={t('vak.ui.accessibility_label')}
       >
         {highContrast ? (
           <svg className="w-6 h-6 text-[var(--color-petroleum)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -1,9 +1,27 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { cn } from '../../forum/forumDesignSystem';
+import { useTranslation } from '../../../i18n/I18nProvider';
 
-const ImageViewer = ({ resource }) => {
+const ImageViewer = ({ resource, onAutoComplete }) => {
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(true);
+  const [hasViewed, setHasViewed] = useState(false);
+  const completedRef = useRef(false);
+
+  useEffect(() => {
+    if (completedRef.current) return;
+    if (!isLoading && !hasViewed) {
+      setHasViewed(true);
+      const timer = setTimeout(() => {
+        if (!completedRef.current) {
+          completedRef.current = true;
+          onAutoComplete?.();
+        }
+      }, 8000);
+      return () => clearTimeout(timer);
+    }
+  }, [isLoading, hasViewed, onAutoComplete]);
 
   return (
     <div className="w-full h-full flex flex-col bg-white dark:bg-slate-800 rounded-2xl overflow-auto">
@@ -15,7 +33,7 @@ const ImageViewer = ({ resource }) => {
           <div>
             <h4 className="font-semibold text-petroleum">{resource.title}</h4>
             {resource.interactive && (
-              <span className="text-sm text-petroleum font-medium">Interactiva</span>
+              <span className="text-sm text-petroleum font-medium">{t('ialab.viewer_modal.interactive_label')}</span>
             )}
           </div>
         </div>
@@ -27,7 +45,7 @@ const ImageViewer = ({ resource }) => {
             className="px-4 py-2 bg-gradient-to-r from-petroleum to-corporate text-white rounded-lg hover:from-corporate-deep hover:to-corporate-darker transition-colors duration-200 flex items-center gap-2 font-medium"
           >
             <Icon name="fa-download" className="w-4 h-4" />
-            Descargar
+            {t('ialab.viewer_modal.download')}
           </a>
         </div>
       </div>

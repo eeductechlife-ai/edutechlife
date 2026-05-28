@@ -4,12 +4,14 @@ import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabProgressContext, useIALabUIContext } from '../../context/IALabContext';
 import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
 import { useIALabStore } from '../../store/ialabStore';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const IALabChallengeSection = ({
     className = '',
     style = {},
     ...rest
 }) => {
+    const { t } = useTranslation();
     const { activeMod, modules } = useIALabProgressContext();
     const challengeScore = useIALabStore(s => s.challengeScore);
     const setChallengeScore = useIALabStore(s => s.setChallengeScore);
@@ -37,10 +39,10 @@ const IALabChallengeSection = ({
     const isApproved = challengeScore >= 80;
     const scoreColor = isApproved ? 'text-emerald-600' : 'text-red-600';
     const scoreBgColor = isApproved ? 'bg-emerald-100' : 'bg-red-100';
-    const scoreText = isApproved ? 'Aprobado' : 'Reprobado';
+    const scoreText = isApproved ? t('ialab.challenge.status_passed') : t('ialab.challenge.status_failed');
 
     const currentModule = modules.find(m => m.id === activeMod);
-    const challengeText = currentModule?.challenge || 'Crea un prompt para resolver un problema complejo de tu industria.';
+    const challengeText = currentModule?.challenge || t('ialab.challenge.default_text');
     const estimatedTime = "25 min";
 
     const handleStartChallenge = () => {
@@ -48,17 +50,18 @@ const IALabChallengeSection = ({
     };
 
     const handleViewSolution = () => {
-        setNotification({ type: 'info', message: 'La funcionalidad de "Solución Experta" estará disponible próximamente.' });
+        setNotification({ type: 'info', message: t('ialab.challenge.notification_solution_unavailable') });
     };
 
     const handleReviewCompleted = () => {
         const approved = challengeScore >= 80;
-        const message = `📊 Resumen del Desafío Completado\n\n` +
-                       `Puntuación: ${challengeScore}%\n` +
-                       `Estado: ${approved ? 'Aprobado' : 'Reprobado (necesitas 80%)'}\n` +
-                       `Módulo: ${currentModule?.title || 'Desafío del Curso'}\n` +
-                       `Fecha: ${new Date().toLocaleDateString()}\n\n` +
-                       `La funcionalidad de "Mis Proyectos" estará disponible próximamente.`;
+        const statusText = approved ? t('ialab.challenge.status_passed') : `${t('ialab.challenge.status_failed')} (${t('ialab.challenge.minimum_80')})`;
+        const message = `${t('ialab.challenge.summary_title')}\n\n` +
+                       `${t('ialab.challenge.score_label')}: ${challengeScore}%\n` +
+                       `${t('ialab.challenge.summary_status')}: ${statusText}\n` +
+                       `${t('ialab.challenge.summary_module')}: ${currentModule?.title || t('ialab.challenge.title_pending')}\n` +
+                       `${t('ialab.challenge.summary_date')}: ${new Date().toLocaleDateString()}\n\n` +
+                       `${t('ialab.challenge.summary_projects_unavailable')}`;
         setNotification({ type: approved ? 'success' : 'error', message });
     };
 
@@ -72,7 +75,7 @@ const IALabChallengeSection = ({
         if (!store.canAttemptChallengeRetry(activeMod)) {
             const nextAttemptTime = store.getNextAttemptTime(activeMod);
             const hoursLeft = nextAttemptTime ? Math.ceil((nextAttemptTime - Date.now()) / 3600000) : 12;
-            setNotification({ type: 'warning', message: `Debes esperar ${hoursLeft}h para intentar de nuevo. (3 intentos máximo, 12h entre cada uno).` });
+            setNotification({ type: 'warning', message: t('ialab.challenge.notification_retry_wait', { hours: hoursLeft }) });
             return;
         }
         store.decrementChallengeAttempt(activeMod);
@@ -89,10 +92,10 @@ const IALabChallengeSection = ({
             setIsChallengeCompleted(false);
             setIsButtonDisabled(false);
             setChallengeScore(0);
-            setNotification({ type: 'success', message: 'Desafío avanzado iniciado. Demuestra que puedes superar tu puntuación anterior.' });
+            setNotification({ type: 'success', message: t('ialab.challenge.notification_advanced_started') });
         } catch (error) {
             console.error('Error al iniciar desafío avanzado:', error);
-            setNotification({ type: 'error', message: 'Error al iniciar el desafío avanzado. Intenta nuevamente.' });
+            setNotification({ type: 'error', message: t('ialab.challenge.notification_advanced_error') });
         }
     };
 
@@ -134,8 +137,8 @@ const IALabChallengeSection = ({
                 </div>
                 <div className="flex-1">
                     <div className="flex items-center gap-3 mb-1">
-                        <h3 className="text-lg md:text-xl font-bold text-petroleum">
-                            {!isChallengeCompleted ? 'Desafío del Curso' : isApproved ? 'Desafío Completado' : 'Desafío Reprobado'}
+                        <h3 className="text-lg md:text-xl font-bold text-petroleum font-montserrat">
+                            {!isChallengeCompleted ? t('ialab.challenge.title_pending') : isApproved ? t('ialab.challenge.title_passed') : t('ialab.challenge.title_failed')}
                         </h3>
                         {isChallengeCompleted && (
                             <span className={`px-3 py-0.5 text-xs font-semibold rounded-full ${scoreBgColor} ${scoreColor}`}>
@@ -145,10 +148,10 @@ const IALabChallengeSection = ({
                     </div>
                     <p className="text-sm text-slate-600">
                         {!isChallengeCompleted
-                            ? 'Aplica lo aprendido en un reto práctico'
+                            ? t('ialab.challenge.desc_pending')
                             : isApproved
-                            ? `¡Felicidades! Completaste el desafío con ${challengeScore}%.`
-                            : `Completaste el desafío con ${challengeScore}% (mínimo 80% para aprobar).`
+                            ? t('ialab.challenge.desc_passed', { score: challengeScore })
+                            : t('ialab.challenge.desc_failed', { score: challengeScore })
                         }
                     </p>
                 </div>
@@ -171,19 +174,19 @@ const IALabChallengeSection = ({
                         <span className={`text-xs font-semibold ${
                             !isChallengeCompleted ? 'text-petroleum' : isApproved ? 'text-emerald-600' : 'text-red-600'
                         }`}>
-                            {!isChallengeCompleted ? estimatedTime : isApproved ? 'Completado' : 'Reprobado'}
+                            {!isChallengeCompleted ? estimatedTime : isApproved ? t('ialab.challenge.status_completed') : t('ialab.challenge.status_failed')}
                         </span>
                     </div>
                     <span className={`text-xs ${
                         !isChallengeCompleted ? 'text-slate-500' : isApproved ? 'text-emerald-500' : 'text-red-500'
                     }`}>
-                        {!isChallengeCompleted ? 'Pendiente' : isApproved ? 'Aprobado' : 'No aprobado'}
+                        {!isChallengeCompleted ? t('ialab.challenge.status_pending') : isApproved ? t('ialab.challenge.status_passed') : t('ialab.challenge.status_not_passed')}
                     </span>
                 </div>
 
                 <div className="mb-3">
-                    <h4 className="text-sm font-bold text-petroleum mb-2">
-                        {!isChallengeCompleted ? 'Desafío del Módulo' : isApproved ? 'Reto Superado' : 'Intenta de nuevo'}
+                    <h4 className="text-sm font-bold text-petroleum mb-2 font-montserrat">
+                        {!isChallengeCompleted ? t('ialab.challenge.section_label_pending') : isApproved ? t('ialab.challenge.section_label_passed') : t('ialab.challenge.section_label_failed')}
                     </h4>
                     <p className="text-sm text-slate-700 leading-relaxed border-l-2 border-petroleum pl-4 py-1">
                         &ldquo;{challengeText}&rdquo;
@@ -193,7 +196,7 @@ const IALabChallengeSection = ({
                 {isChallengeCompleted && challengeScore > 0 && (
                     <div className={`mt-4 pt-4 border-t ${isApproved ? 'border-emerald-200' : 'border-red-200'}`}>
                         <div className="flex items-center justify-between mb-2">
-                            <span className="text-xs font-medium text-slate-500">Puntuación</span>
+                            <span className="text-xs font-medium text-slate-500">{t('ialab.challenge.score_label')}</span>
                             <span className={`text-xs font-semibold ${scoreColor}`}>{challengeScore}%</span>
                         </div>
                         <div className="h-1.5 bg-white rounded-full overflow-hidden">
@@ -217,12 +220,12 @@ const IALabChallengeSection = ({
                 <div className="flex items-center gap-4 mt-4 pt-4 border-t border-slate-100">
                     <div className="flex items-center gap-1.5">
                         <Icon name="fa-brain" className="text-petroleum text-sm" />
-                        <span className="text-xs text-slate-500">Práctica</span>
+                        <span className="text-xs text-slate-500">{t('ialab.challenge.badge_practice')}</span>
                     </div>
                     <div className="flex items-center gap-1.5">
                         <Icon name="fa-chart-line" className="text-petroleum text-sm" />
                         <span className="text-xs text-slate-500">
-                            {isChallengeCompleted ? 'Avanzado' : 'Intermedio'}
+                            {isChallengeCompleted ? t('ialab.challenge.badge_advanced') : t('ialab.challenge.badge_intermediate')}
                         </span>
                     </div>
                 </div>
@@ -246,7 +249,7 @@ const IALabChallengeSection = ({
                             disabled={isButtonDisabled}
                         >
                             <Icon name={isApproved ? "fa-trophy" : "fa-chart-line"} className="text-sm" />
-                            <span>Ver Resultado</span>
+                            <span>{t('ialab.challenge.btn_view_result')}</span>
                         </motion.button>
                         <motion.button
                             whileHover={{ scale: 1.05 }}
@@ -263,7 +266,7 @@ const IALabChallengeSection = ({
                             disabled={isButtonDisabled}
                         >
                             <Icon name="fa-rocket" className="text-sm" />
-                            <span>{isApproved ? 'Versión Avanzada' : 'Reintentar'}</span>
+                            <span>{isApproved ? t('ialab.challenge.btn_advanced_version') : t('ialab.challenge.btn_retry')}</span>
                         </motion.button>
                     </>
                 ) : (
@@ -281,12 +284,12 @@ const IALabChallengeSection = ({
                             {isStartingChallenge ? (
                                 <>
                                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                    <span>Preparando...</span>
+                                    <span>{t('ialab.challenge.btn_preparing')}</span>
                                 </>
                             ) : (
                                 <>
                                     <Icon name="fa-play-circle" className="text-sm text-white hover:text-petroleum" />
-                                    <span className="text-sm text-white hover:text-petroleum">Iniciar Desafío</span>
+                                    <span className="text-sm text-white hover:text-petroleum">{t('ialab.challenge.btn_start')}</span>
                                 </>
                             )}
                         </motion.button>
@@ -299,11 +302,11 @@ const IALabChallengeSection = ({
                     <div className="flex items-center gap-4">
                         <div className="flex items-center gap-1.5">
                             <div className="w-1.5 h-1.5 bg-petroleum rounded-full"></div>
-                            <span className="text-xs text-slate-500">Dificultad: {isChallengeCompleted ? 'Dominada' : 'Media-Alta'}</span>
+                            <span className="text-xs text-slate-500">{isChallengeCompleted ? t('ialab.challenge.difficulty_mastered') : t('ialab.challenge.difficulty_medium_high')}</span>
                         </div>
                         <div className="flex items-center gap-1.5">
                             <div className="w-1.5 h-1.5 bg-petroleum rounded-full"></div>
-                            <span className="text-xs text-slate-500">Impacto: Alto</span>
+                            <span className="text-xs text-slate-500">{t('ialab.challenge.impact_high')}</span>
                         </div>
                     </div>
                 </div>
@@ -321,28 +324,28 @@ const IALabChallengeSection = ({
         >
             <div className="absolute -top-6 -right-6 w-32 h-32 bg-gradient-to-br from-petroleum/6 to-corporate/4 rounded-full blur-2xl pointer-events-none"></div>
             <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-tr from-petroleum/4 to-corporate/4 rounded-full blur-2xl pointer-events-none"></div>
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate rounded-t-2xl" />
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate rounded-t-2xl" />
 
             {/* Retry confirmation modal */}
             {showRetryConfirm && (
                 <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/20 backdrop-blur-sm rounded-2xl">
-                    <div className="bg-white rounded-2xl p-6 mx-4 max-w-sm shadow-xl border border-slate-200 text-center" role="dialog" aria-modal="true" aria-label="Confirmar versión avanzada">
+                    <div className="bg-white rounded-2xl p-6 mx-4 max-w-sm shadow-xl border border-slate-200 text-center" role="dialog" aria-modal="true" aria-label={t('ialab.challenge.confirm_title')}>
                         <p className="text-sm text-slate-700 mb-6 leading-relaxed">
-                            ¿Quieres realizar una versión avanzada de este desafío?<br />
-                            <span className="text-xs text-slate-500">Tu puntuación anterior se conservará como referencia.</span>
+                            {t('ialab.challenge.confirm_text')}<br />
+                            <span className="text-xs text-slate-500">{t('ialab.challenge.confirm_hint')}</span>
                         </p>
                         <div className="flex gap-3 justify-center">
                             <button
                                 onClick={cancelRetryChallenge}
                                 className="px-5 py-2.5 border border-slate-200 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300"
                             >
-                                Cancelar
+                                {t('ialab.challenge.confirm_cancel')}
                             </button>
                             <button
                                 onClick={confirmRetryChallenge}
                                 className="px-5 py-2.5 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl text-sm font-semibold hover:shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-corporate"
                             >
-                                Sí, empezar
+                                {t('ialab.challenge.confirm_accept')}
                             </button>
                         </div>
                     </div>

@@ -5,7 +5,7 @@ import AuthRouter from './auth-router';
 import ProtectedRoute from '../components/layout/ProtectedRoute';
 import RoleProtectedRoute from '../components/layout/RoleProtectedRoute';
 import { PageLoader } from '../components/LoadingScreen';
-import { useTranslation } from '../../i18n/I18nProvider';
+import { useTranslation } from '../i18n/I18nProvider';
 
 // Lazy load para componentes pesados
 const LandingPage = lazy(() => import('../components/pages/LandingPage'));

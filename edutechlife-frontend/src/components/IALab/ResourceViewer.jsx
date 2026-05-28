@@ -12,12 +12,14 @@
  * - Delegación a ResourceViewerModal para visualización completa
  */
 
-import React, { useState, lazy, Suspense } from 'react';
+import React, { useState, lazy, Suspense, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { cn } from '../forum/forumDesignSystem';
 import PDFThumbnail from './PDFThumbnail';
 import OVAThumbnail from './OVAThumbnail';
+import { useIALabStore } from '../../store/ialabStore';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const OVAChatGPTTools = lazy(() => import('./OVAChatGPTTools.jsx'));
 const OVAEcosystemGuide = lazy(() => import('./OVAEcosystemGuide.jsx'));
@@ -38,7 +40,19 @@ const ResourceViewer = ({
   onOpenImmersiveView,
   onOpenOVA
 }) => {
+  const { t } = useTranslation();
   const [viewerError, setViewerError] = useState(null);
+
+  const handleOVAComplete = useCallback(() => {
+    if (resource?.id) {
+      const store = useIALabStore.getState();
+      const moduleId = store.activeMod;
+      store.addViewedResource(resource.id);
+      if (moduleId && store.markResourceAsViewed) {
+        store.markResourceAsViewed(moduleId, resource.id);
+      }
+    }
+  }, [resource?.id]);
 
   // Renderizar la miniatura apropiada según el tipo de recurso
   const renderThumbnail = () => {
@@ -47,7 +61,7 @@ const ResourceViewer = ({
         <div className="w-full h-full flex items-center justify-center bg-slate-50 rounded-2xl">
           <div className="text-center">
             <Icon name="fa-file-circle-question" className="text-slate-600 text-4xl mb-4" />
-            <p className="text-slate-500 font-medium">No hay recurso seleccionado</p>
+            <p className="text-slate-500 font-medium">{t('ialab.resource_viewer.no_resource')}</p>
           </div>
         </div>
       );
@@ -72,11 +86,11 @@ const ResourceViewer = ({
                   {resource.title}
                 </h4>
                 <p className="text-slate-600 text-center mb-6">
-                  {resource.description || "Haz clic para ver este recurso"}
+                  {resource.description || {t('ialab.resource_viewer.click_to_view')}}
                 </p>
                 <div className="flex items-center gap-2 text-sm text-corporate font-medium">
                   <Icon name="fa-expand" className="w-4 h-4" />
-                  <span>Haz clic para abrir</span>
+                  <span>{t('ialab.resource_viewer.click_to_open')}</span>
                 </div>
               </div>
             </div>
@@ -100,11 +114,11 @@ const ResourceViewer = ({
                   {resource.title}
                 </h4>
                 <p className="text-slate-600 text-center mb-6">
-                  {resource.description || "Haz clic para ver este recurso"}
+                  {resource.description || {t('ialab.resource_viewer.click_to_view')}}
                 </p>
                 <div className="flex items-center gap-2 text-sm text-corporate font-medium">
                   <Icon name="fa-expand" className="w-4 h-4" />
-                  <span>Haz clic para abrir</span>
+                  <span>{t('ialab.resource_viewer.click_to_open')}</span>
                 </div>
               </div>
             </div>
@@ -128,11 +142,11 @@ const ResourceViewer = ({
                   {resource.title}
                 </h4>
                 <p className="text-slate-600 text-center mb-6">
-                  {resource.description || "Haz clic para ver este recurso"}
+                  {resource.description || {t('ialab.resource_viewer.click_to_view')}}
                 </p>
                 <div className="flex items-center gap-2 text-sm text-corporate font-medium">
                   <Icon name="fa-expand" className="w-4 h-4" />
-                  <span>Haz clic para abrir</span>
+                  <span>{t('ialab.resource_viewer.click_to_open')}</span>
                 </div>
               </div>
             </div>
@@ -156,11 +170,11 @@ const ResourceViewer = ({
                   {resource.title}
                 </h4>
                 <p className="text-slate-600 text-center mb-6">
-                  {resource.description || "Haz clic para ver este recurso"}
+                  {resource.description || {t('ialab.resource_viewer.click_to_view')}}
                 </p>
                 <div className="flex items-center gap-2 text-sm text-corporate font-medium">
                   <Icon name="fa-expand" className="w-4 h-4" />
-                  <span>Haz clic para abrir</span>
+                  <span>{t('ialab.resource_viewer.click_to_open')}</span>
                 </div>
               </div>
             </div>
@@ -194,12 +208,12 @@ const ResourceViewer = ({
               <div className="w-full h-64 flex items-center justify-center bg-slate-50 rounded-2xl">
                 <div className="text-center">
                   <div className="animate-spin w-8 h-8 border-4 border-petroleum border-t-transparent rounded-full mx-auto mb-3"></div>
-                  <p className="text-slate-500 font-medium">Cargando simulador interactivo...</p>
+                  <p className="text-slate-500 font-medium">{t('ialab.resource_viewer.loading_interactive')}</p>
                 </div>
               </div>
             }>
               <div className="w-full rounded-2xl overflow-hidden border border-slate-200 shadow-lg">
-                {resource.id === 'chatgpt-ova-ecosystem' ? <OVAEcosystemGuide /> : resource.id === 'notebooklm-ova-1' ? <OVANotebookLab /> : resource.id === 'notebook-summary-ova-1' ? <OVANotebookSimulator /> : resource.id === 'notebook-audio-guide-1' ? <OVANotebookPodcastGuide /> : resource.id === 'bias-ova-1' ? <OVABiasLab /> : resource.id === 'privacy-ova-1' ? <OVARiskSimulator /> : <OVAChatGPTTools />}
+                {resource.id === 'chatgpt-ova-ecosystem' ? <OVAEcosystemGuide onComplete={handleOVAComplete} /> : resource.id === 'notebooklm-ova-1' ? <OVANotebookLab onComplete={handleOVAComplete} /> : resource.id === 'notebook-summary-ova-1' ? <OVANotebookSimulator onComplete={handleOVAComplete} /> : resource.id === 'notebook-audio-guide-1' ? <OVANotebookPodcastGuide onComplete={handleOVAComplete} /> : resource.id === 'bias-ova-1' ? <OVABiasLab onComplete={handleOVAComplete} /> : resource.id === 'privacy-ova-1' ? <OVARiskSimulator onComplete={handleOVAComplete} /> : <OVAChatGPTTools onComplete={handleOVAComplete} />}
               </div>
             </Suspense>
           );
@@ -209,7 +223,7 @@ const ResourceViewer = ({
             <div className="w-full h-full flex items-center justify-center bg-amber-50 rounded-2xl">
               <div className="text-center">
                 <Icon name="fa-triangle-exclamation" className="text-amber-500 text-4xl mb-4" />
-                <p className="text-amber-700 font-medium">Tipo de recurso no soportado: {resource.type}</p>
+                <p className="text-amber-700 font-medium">{t('ialab.resource_viewer.type_unsupported', { type: resource.type })}</p>
               </div>
             </div>
           );
@@ -220,7 +234,7 @@ const ResourceViewer = ({
         <div className="w-full h-full flex items-center justify-center bg-red-50 rounded-2xl">
           <div className="text-center">
             <Icon name="fa-circle-xmark" className="text-red-500 text-4xl mb-4" />
-            <p className="text-red-700 font-medium">Error al cargar el recurso</p>
+            <p className="text-red-700 font-medium">{t('ialab.resource_viewer.load_error')}</p>
             <p className="text-red-600 text-sm mt-2">{error.message}</p>
           </div>
         </div>
@@ -242,7 +256,7 @@ const ResourceViewer = ({
         <div className="w-full h-full flex items-center justify-center bg-red-50 rounded-2xl">
           <div className="text-center">
             <Icon name="fa-circle-xmark" className="text-red-500 text-4xl mb-4" />
-            <p className="text-red-700 font-medium">Error en el visualizador</p>
+            <p className="text-red-700 font-medium">{t('ialab.resource_viewer.viewer_error')}</p>
             <p className="text-red-600 text-sm mt-2">{viewerError}</p>
           </div>
         </div>

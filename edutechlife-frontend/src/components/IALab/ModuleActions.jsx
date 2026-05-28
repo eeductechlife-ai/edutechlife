@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabStore } from '../../store/ialabStore';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const readLocalExamScores = () => {
   try {
@@ -9,13 +10,13 @@ const readLocalExamScores = () => {
   } catch { return {}; }
 };
 
-const WEIGHT_LABELS = {
-  Comunidad: '5% del puntaje del módulo',
-  Desafío: '30% del puntaje del módulo',
-  Examen: '35% del puntaje del módulo',
+const WEIGHT_LABEL_KEYS = {
+  Comunidad: 'ialab.module_actions.weight_community',
+  Desafío: 'ialab.module_actions.weight_challenge',
+  Examen: 'ialab.module_actions.weight_exam',
 };
 
-const ActionCard = ({ icon, label, onClick, completed, score, remainingAttempts, color = 'from-petroleum to-corporate' }) => {
+const ActionCard = ({ icon, label, onClick, completed, score, remainingAttempts, color = 'from-petroleum to-corporate', t }) => {
   const prefersReducedMotion = useReducedMotion();
   const isApproved = completed && score !== undefined && score >= 80;
   const isFailed = completed && score !== undefined && score < 80;
@@ -24,7 +25,7 @@ const ActionCard = ({ icon, label, onClick, completed, score, remainingAttempts,
       onClick={onClick}
       whileHover={prefersReducedMotion ? {} : { boxShadow: "0px 8px 25px rgba(0,75,99,0.12)" }}
       whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
-      title={WEIGHT_LABELS[label] || ''}
+      title={WEIGHT_LABEL_KEYS[label] ? t(WEIGHT_LABEL_KEYS[label]) : ''}
       className={`relative w-full flex items-center gap-4 p-4 rounded-xl border transition-all duration-200 text-left cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 ${
         isApproved
           ? 'bg-gradient-to-br from-emerald-50 to-emerald-50/50 border-emerald-200/60 hover:shadow-md hover:border-emerald-300'
@@ -63,11 +64,11 @@ const ActionCard = ({ icon, label, onClick, completed, score, remainingAttempts,
         <span className={`text-xs ${
           isApproved ? 'text-emerald-600 dark:text-emerald-400' : isFailed ? 'text-red-600 dark:text-red-400' : 'text-slate-500 dark:text-slate-400'
         }`}>
-          {isApproved ? `${score}% - Aprobado` : isFailed ? `${score}% - Reprobado` : 'Pendiente'}
+          {isApproved ? `${score}% - ${t('ialab.module_actions.status_passed')}` : isFailed ? `${score}% - ${t('ialab.module_actions.status_failed')}` : t('ialab.module_actions.status_pending')}
         </span>
         {!completed && remainingAttempts !== undefined && (
           <span className="text-[10px] text-amber-600 dark:text-amber-400 mt-0.5 block">
-            {remainingAttempts} de 3 intentos restantes
+            {t('ialab.module_actions.attempts_left', { remaining: remainingAttempts })}
           </span>
         )}
       </div>
@@ -83,6 +84,7 @@ const ActionCard = ({ icon, label, onClick, completed, score, remainingAttempts,
 };
 
 const ModuleActions = ({ onAction, activeMod, challengeScores, completedExams, moduleProgress, isForumOpen, onToggleForum }) => {
+  const { t } = useTranslation();
   const [localExamScores, setLocalExamScores] = useState(readLocalExamScores);
   const [examAttempts, setExamAttempts] = useState(3);
   const [challengeAttempts, setChallengeAttempts] = useState(3);
@@ -130,16 +132,18 @@ const ModuleActions = ({ onAction, activeMod, challengeScores, completedExams, m
   }, [effectiveExamScore, onAction]);
 
   return (
-    <div className="relative bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-sm p-4 md:p-5">
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate rounded-t-2xl" />
+    <div className="relative bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-sm p-5 md:p-8">
+      <div className="absolute -top-6 -right-6 w-32 h-32 bg-gradient-to-br from-petroleum/6 to-corporate/4 rounded-full blur-2xl pointer-events-none"></div>
+      <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-tr from-petroleum/4 to-corporate/4 rounded-full blur-2xl pointer-events-none"></div>
+      <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate rounded-t-2xl" />
 
-      <div className="flex items-center gap-2 mb-4">
-        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center shadow-sm flex-shrink-0">
-          <Icon name="fa-bolt" className="text-white text-sm" />
+      <div className="flex items-center gap-3 mb-5">
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center shadow-md shadow-petroleum/15 flex-shrink-0">
+          <Icon name="fa-bolt" className="text-white text-base" />
         </div>
         <div>
-          <h3 className="text-sm font-bold text-petroleum leading-tight">Actividades del Módulo</h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400">Completa cada actividad para aprobar el módulo</p>
+          <h4 className="text-sm font-bold text-petroleum uppercase tracking-wider font-montserrat dark:text-petroleum">{t('ialab.module_actions.title')}</h4>
+          <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">{t('ialab.module_actions.subtitle')}</p>
         </div>
       </div>
 
@@ -150,6 +154,7 @@ const ModuleActions = ({ onAction, activeMod, challengeScores, completedExams, m
           onClick={handleCommunity}
           completed={moduleProgress?.[activeMod]?.community}
           score={100}
+          t={t}
         />
         <ActionCard
           icon="fa-rocket"
@@ -158,6 +163,7 @@ const ModuleActions = ({ onAction, activeMod, challengeScores, completedExams, m
           completed={!!challengeScores?.[activeMod]}
           score={challengeScores?.[activeMod]}
           remainingAttempts={!challengeScores?.[activeMod] ? challengeAttempts : undefined}
+          t={t}
         />
         <ActionCard
           icon="fa-clipboard-check"
@@ -166,6 +172,7 @@ const ModuleActions = ({ onAction, activeMod, challengeScores, completedExams, m
           completed={effectiveExamScore !== undefined}
           score={effectiveExamScore}
           remainingAttempts={effectiveExamScore === undefined ? examAttempts : undefined}
+          t={t}
         />
       </div>
     </div>
