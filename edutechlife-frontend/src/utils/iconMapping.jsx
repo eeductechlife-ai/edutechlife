@@ -308,7 +308,7 @@ export const faToLucideMap = {
   'fa-medal': Award,
 
   'fa-chevron-up': ChevronUp,
-  'fa-cubes': Box,
+  'fa-box': Box,
   'fa-tag': Tag,
   'fa-envelope': Mail,
   'fa-check': Check,
