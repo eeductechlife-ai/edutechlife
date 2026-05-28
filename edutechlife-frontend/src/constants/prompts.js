@@ -1,10 +1,11 @@
-const locale = typeof window !== 'undefined'
-  ? (typeof localStorage !== 'undefined' ? (localStorage.getItem('edutechlife_locale') || 'es') : 'es')
-  : 'es';
+import * as esPrompts from './prompts.es.js';
+import * as enPrompts from './prompts.en.js';
 
-const prompts = locale === 'en'
-  ? require('./prompts.en.js')
-  : require('./prompts.es.js');
+const locale = typeof window !== 'undefined' && typeof localStorage !== 'undefined'
+  ? localStorage.getItem('edutechlife_locale')
+  : null;
+
+const prompts = locale === 'en' ? enPrompts : esPrompts;
 
 export const PROMPT_VALERIO_DOCENTE = prompts.PROMPT_VALERIO_DOCENTE;
 export const PROMPT_PSICOLOGO_VAK = prompts.PROMPT_PSICOLOGO_VAK;
