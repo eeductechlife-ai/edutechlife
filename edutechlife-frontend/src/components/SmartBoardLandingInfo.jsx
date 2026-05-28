@@ -238,7 +238,6 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
             >
               <p className="text-sm sm:text-base text-slate-500 leading-relaxed" dangerouslySetInnerHTML={{ __html: t('smartboard.landing_what_desc1') }} />
               <p className="text-sm text-slate-500 leading-relaxed" dangerouslySetInnerHTML={{ __html: t('smartboard.landing_what_desc2') }} />
-              </p>
               <div className="flex flex-wrap gap-2 pt-1">
                 {[t('smartboard.landing_tag_adaptive_ai'), t('smartboard.landing_tag_real_coaches'), t('smartboard.landing_tag_scientific_vak'), t('smartboard.landing_tag_live_reports')].map((tag) => (
                   <span key={tag} className="badge-clay px-4 py-2 rounded-full bg-petroleum/5 text-petroleum text-sm font-semibold border border-petroleum/10">{tag}</span>
@@ -280,12 +279,6 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
                   <div className="w-8 h-8 rounded-full bg-success/10 flex items-center justify-center">
                     <Icon name="fa-check-circle" className="text-success text-sm" aria-hidden="true" />
                   </div>
-                  <div>
-                    <p className="text-xs font-bold text-petroleum">{t('smartboard.landing_kids_count')}</p>
-                    <p className="text-[11px] text-slate-500">{t('smartboard.landing_kids_learning')}</p>
-                  </div>
-                </div>
-              </div>
                   <div>
                     <p className="text-xs font-bold text-petroleum">{t('smartboard.landing_kids_count')}</p>
                     <p className="text-[11px] text-slate-500">{t('smartboard.landing_kids_learning')}</p>

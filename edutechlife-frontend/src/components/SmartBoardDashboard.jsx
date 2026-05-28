@@ -128,7 +128,8 @@ const HomeView = memo(({
       </div>
     </GlassCard>
   </div>
-));
+  );
+});
 
 HomeView.displayName = 'HomeView';
 
@@ -137,7 +138,9 @@ const MissionsView = memo(({
   onMissionStart,
   onMissionComplete,
   onNavigate
-}) => (
+}) => {
+  const { t } = useTranslation();
+  return (
   <GlassCard animate>
     <div className="flex items-center justify-between mb-6">
       <h3 className="text-xl font-bold text-[#004B63] font-montserrat">{t('smartboard.all_missions')}</h3>
@@ -154,7 +157,8 @@ const MissionsView = memo(({
       ))}
     </div>
   </GlassCard>
-));
+  );
+});
 
 MissionsView.displayName = 'MissionsView';
 
@@ -162,7 +166,9 @@ const SubjectsView = memo(({
   subjects,
   onSelectSubject,
   onNavigate
-}) => (
+}) => {
+  const { t } = useTranslation();
+  return (
   <GlassCard animate>
     <div className="flex items-center justify-between mb-6">
       <h3 className="text-xl font-bold text-[#004B63] font-montserrat">{t('smartboard.your_subjects')}</h3>
@@ -173,11 +179,14 @@ const SubjectsView = memo(({
       onSelectSubject={onSelectSubject}
     />
   </GlassCard>
-));
+  );
+});
 
 SubjectsView.displayName = 'SubjectsView';
 
-const IALabView = memo(({ onNavigate }) => (
+const IALabView = memo(({ onNavigate }) => {
+  const { t } = useTranslation();
+  return (
   <div className="space-y-6">
     <GlassCard animate>
       <h3 className="text-xl font-bold text-[#004B63] font-montserrat mb-4">{t('smartboard.ialab_title')}</h3>
@@ -210,7 +219,8 @@ const IALabView = memo(({ onNavigate }) => (
       </div>
     </GlassCard>
   </div>
-));
+  );
+});
 
 IALabView.displayName = 'IALabView';
 

@@ -99,7 +99,6 @@ const SmartBoardSignUpPage = () => {
                   <p className="text-white/90 leading-relaxed" dangerouslySetInnerHTML={{ __html: t('smartboard.signup_signin_desc') }} />
                 ) : (
                   <p className="text-white/90 leading-relaxed" dangerouslySetInnerHTML={{ __html: t('smartboard.signup_signup_desc') }} />
-                  </p>
                 )}
                 <p className="text-white/80 mt-4 text-sm italic">
                   {t('smartboard.signup_quote')}
@@ -231,7 +230,6 @@ const SmartBoardSignUpPage = () => {
             <div className="mt-4 pt-4 border-t border-gray-200 w-full max-w-sm">
               {mode === 'signup' && (
                 <p className="text-center text-[#4DA8C4] text-xs" dangerouslySetInnerHTML={{ __html: t('smartboard.signup_terms') }} />
-                </p>
               )}
             </div>
           </div>
