@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import MagneticButton from './MagneticButton';
 import FloatingParticles from './FloatingParticles';
 import { Icon } from '../utils/iconMapping.jsx';
-import { useTranslation } from '../../i18n/I18nProvider';
+import { useTranslation } from '../i18n/I18nProvider';
 
 const useAnimatedCounter = (target, duration = 2000, start = false) => {
     const [count, setCount] = useState(0);

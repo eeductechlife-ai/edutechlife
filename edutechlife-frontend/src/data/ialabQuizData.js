@@ -6,6 +6,8 @@ export const SUGGESTED_TIME_MINUTES = 20;
 export const SUGGESTED_TIME_SECONDS = SUGGESTED_TIME_MINUTES * 60;
 
 export const MAX_SECURITY_WARNINGS = 3;
+// These are now translated via t() in IALabQuizModal.jsx using ialab.quiz.security_warning_* keys.
+// This constant is kept for backward compatibility but no longer used for display.
 export const SECURITY_WARNING_MESSAGES = [
   "Advertencia: No cambies de ventana durante el examen",
   "Segunda advertencia: El sistema detectó que abriste otra ventana",
@@ -16,6 +18,10 @@ export const SCREENSHOT_OVERLAY_DURATION = 5000;
 export const SECURITY_MESSAGE_DURATION = 3000;
 export const SECURITY_LOG_PREFIX = 'exam_security_logs';
 
+// NOTE: Question content (question text, options, feedback) is currently in Spanish.
+// For full i18n of questions, load localized question data from a locale-aware module
+// (e.g., `import { MODULE_EXAMS } from './ialabQuizData.es'`) based on the current locale.
+// Only the exam UI wrapping text (buttons, labels, messages) is translated via t() in IALabQuizModal.jsx.
 export const MODULE_EXAMS = {
   1: [
     {

@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Icon } from '../utils/iconMapping.jsx';
 import FloatingParticles from './FloatingParticles';
-import { useTranslation } from '../../i18n/I18nProvider';
+import { useTranslation } from '../i18n/I18nProvider';
 
 function AIToolsSection() {
   const { t } = useTranslation();

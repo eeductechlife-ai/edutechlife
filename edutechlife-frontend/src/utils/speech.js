@@ -10,7 +10,7 @@ const VOICE_PROFILES = {
     languageCode: 'es-US', 
     name: 'es-US-Neural2-B', 
     pitch: 0,
-    speakingRate: 1.0,
+    speakingRate: 1.05,
     volumeGainDb: 2.5
   },
   sistema: { 
@@ -82,9 +82,9 @@ const VOICE_FALLBACKS = {
     { languageCode: 'es-ES', name: 'es-ES-Neural2-A', pitch: 0, speakingRate: 0.95 }
   ],
   valerio: [
-    { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 0, speakingRate: 1.0 },
-    { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: 0, speakingRate: 1.0 },
-    { languageCode: 'es-ES', name: 'es-ES-Neural2-B', pitch: 0, speakingRate: 1.0 }
+    { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 0, speakingRate: 1.05 },
+    { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: 0, speakingRate: 1.05 },
+    { languageCode: 'es-ES', name: 'es-ES-Neural2-B', pitch: 0, speakingRate: 1.05 }
   ],
   nico: [
     { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 0, speakingRate: 1.0 },
@@ -164,7 +164,7 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
     if (onEndCallback) onEndCallback();
   }, 30000);
 
-  // Función para usar voz nativa del sistema (fallback)
+  // Función para usar voz nativa del sistema (optimizada para calidad)
   const useNativeSpeech = () => {
     if (typeof window === 'undefined' || !window.speechSynthesis) {
       console.error('❌ SpeechSynthesis no está disponible en este navegador');
@@ -173,37 +173,88 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
       return false;
     }
 
-    try {
+    const speakWithVoice = (voicesList) => {
+      try {
+        window.speechSynthesis.cancel();
+        
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'es-MX';
+        utterance.rate = 0.95;
+        utterance.pitch = 1.08;
+        utterance.volume = 1.0;
 
-      // Cancelar cualquier síntesis en curso
-      window.speechSynthesis.cancel();
-      
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'es-CO';
-      utterance.rate = 1.0;
-      utterance.pitch = 1.0;
-      utterance.volume = 1.0;
-      
-      utterance.onend = () => {
+        // Buscar la mejor voz disponible, en este orden de calidad
+        const voicePriority = [
+          // Voces Google (Chrome) - las más naturales
+          (v) => v.name.includes('Google') && v.lang.startsWith('es'),
+          (v) => v.name === 'Google español',
+          (v) => v.name === 'Google español de Estados Unidos',
+          // Voces Microsoft (Edge) - buena calidad
+          (v) => v.name.includes('Microsoft') && v.lang.startsWith('es'),
+          (v) => v.name === 'Microsoft Sabina - Spanish (Mexico)',
+          (v) => v.name === 'Microsoft Helena - Spanish (Spain)',
+          // Voces Apple (macOS/Safari) - calidad decente
+          (v) => v.name.includes('Monica') || v.name.includes('Paulina'),
+          (v) => v.name === 'Monica' || v.name === 'Paulina',
+          (v) => v.name === 'Jorge',
+          // Fallback: cualquier español
+          (v) => v.lang === 'es-MX',
+          (v) => v.lang === 'es-US',
+          (v) => v.lang === 'es-CO',
+          (v) => v.lang === 'es-419',
+          (v) => v.lang.startsWith('es'),
+        ];
 
-        handleEnd();
-      };
-      
-      utterance.onerror = (event) => {
-        console.error('❌ Error en voz nativa:', event.error);
-        cleanup();
-        if (onEndCallback) onEndCallback();
-      };
-      
-      window.speechSynthesis.speak(utterance);
-      isSpeaking = true;
-      return true;
-    } catch (nativeError) {
-      console.error('❌ Error al usar voz nativa:', nativeError);
-      cleanup();
-      if (onEndCallback) onEndCallback();
-      return false;
+        let bestVoice = null;
+        for (const matcher of voicePriority) {
+          bestVoice = voicesList.find(matcher);
+          if (bestVoice) break;
+        }
+
+        if (bestVoice) {
+          utterance.voice = bestVoice;
+        }
+
+        utterance.onend = () => handleEnd();
+        utterance.onerror = (event) => {
+          console.error('❌ Error en voz nativa:', event.error);
+          cleanup();
+          if (onEndCallback) onEndCallback();
+        };
+
+        window.speechSynthesis.speak(utterance);
+        isSpeaking = true;
+        return true;
+      } catch (e) {
+        console.error('❌ Error en speakWithVoice:', e);
+        return false;
+      }
+    };
+
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length > 0) {
+      return speakWithVoice(voices);
     }
+
+    // Si getVoices() está vacío (primer llamado), esperar a que carguen
+    let resolved = false;
+    const onVoicesChanged = () => {
+      if (resolved) return;
+      resolved = true;
+      window.speechSynthesis.onvoiceschanged = null;
+      const reloaded = window.speechSynthesis.getVoices();
+      speakWithVoice(reloaded.length > 0 ? reloaded : []);
+    };
+    window.speechSynthesis.onvoiceschanged = onVoicesChanged;
+    // Safety: si después de 2 segundos no cargaron, intentar sin voz específica
+    setTimeout(() => {
+      if (!resolved) {
+        resolved = true;
+        window.speechSynthesis.onvoiceschanged = null;
+        speakWithVoice([]);
+      }
+    }, 2000);
+    return true;
   };
 
   const voiceFallacks = VOICE_FALLBACKS[profile] || [];

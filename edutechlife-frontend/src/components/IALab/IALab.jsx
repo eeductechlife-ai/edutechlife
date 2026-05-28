@@ -402,7 +402,7 @@ const IALabContent = () => {
                       </a>
 
                       {/* Área de Contenido Principal - scroll propio */}
-                       <main id="main-content"                         className="flex-1 overflow-y-auto px-4 pt-16 landscape:pt-12 pb-2 md:px-8 md:pt-4 lg:px-10 lg:pt-5 lg:pb-8 xl:px-12 2xl:px-16">
+                       <main id="main-content"                         className="flex-1 overflow-y-auto px-4 pt-16 landscape:pt-12 pb-2 md:px-8 md:pt-0 lg:px-10 lg:pt-0 lg:pb-8 xl:px-12 2xl:px-16">
                         <AnimatePresence mode="wait" custom={directionRef.current}>
                           <motion.div
                             key={`content-${activeMod}`}
@@ -415,7 +415,7 @@ const IALabContent = () => {
                               x: { type: 'spring', stiffness: 300, damping: 30 },
                               opacity: { duration: shouldReduceMotion ? 0 : 0.2 },
                             }}
-                            className="space-y-5 w-full max-w-7xl pb-8"
+                            className="flex flex-col gap-5 w-full max-w-7xl pb-8"
                           >
                             {/* Info bar móvil - solo visible en móvil */}
                             <div className="md:hidden flex items-center justify-between px-4 py-3 bg-white dark:bg-slate-800 rounded-xl border border-petroleum/8 dark:border-petroleum/20 shadow-sm">
@@ -423,7 +423,7 @@ const IALabContent = () => {
                                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-petroleum to-petroleum-dark flex items-center justify-center text-white text-xs font-bold">
                                   {user?.full_name ? user.full_name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'U'}
                                 </div>
-                                <div>
+                          <div className="flex flex-col gap-5">
                                   <p className="text-xs font-semibold text-slate-800 dark:text-slate-100 leading-tight">{user?.full_name || t('ialab.user_fallback')}</p>
                                   <p className="text-[10px] text-slate-500 dark:text-slate-400">{t('ialab.module_progress', { current: activeMod, total: 5 })}</p>
                                 </div>
@@ -474,7 +474,7 @@ const IALabContent = () => {
                               </button>
                             </div>
 
-                          <div>
+                           <div className="flex flex-col gap-5">
                             <Breadcrumbs
                               segments={[
                                 { label: t('ialab.breadcrumb_home'), icon: 'fa-house', onClick: () => setViewSection(null) },

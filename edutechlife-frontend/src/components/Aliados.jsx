@@ -1,6 +1,6 @@
 import { memo, useState, useRef } from 'react';
 import { GraduationCap, Globe, Building2, Search, Cloud, Award, FlaskConical, Laptop, Cpu, Sparkles } from 'lucide-react';
-import { useTranslation } from '../../i18n/I18nProvider';
+import { useTranslation } from '../i18n/I18nProvider';
 
 const Aliados = memo(() => {
     const { t } = useTranslation();

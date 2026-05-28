@@ -3,7 +3,7 @@ import { useUser, useAuth } from '@clerk/react';
 import { useClerkAuth, getClerkUserInfo } from '../utils/clerk-utils';
 import { Icon } from '../utils/iconMapping.jsx';
 import ErrorBoundary from './forum/ErrorBoundary';
-import { useTranslation } from '../../i18n/I18nProvider';
+import { useTranslation } from '../i18n/I18nProvider';
 
 const UserProfileSmartCard = lazy(() => import('./UserProfileSmartCard'));
 const SettingsSupportModal = lazy(() => import('./modals/SettingsSupportModal'));

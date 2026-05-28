@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import { motion } from 'framer-motion';
 import { useActivityTracker } from '../hooks/useActivityTracker';
 import { useIALabStore } from '../store/ialabStore';
+import usePersonalizedRecommendations from '../hooks/IALab/usePersonalizedRecommendations';
 import { ALL_LESSONS, modules, BADGE_INFO } from '../data/ialab';
 import { Icon } from '../utils/iconMapping.jsx';
 import useBodyScrollLock from '../hooks/useBodyScrollLock';
@@ -355,129 +356,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
     return { ...info, badgeId: next.id, current: Math.min(next.current, next.target), target: next.target };
   }, [badges, totalLessonsCompleted, streak, completedCount]);
 
-  const personalizedRecs = useMemo(() => {
-    const recs = [];
-
-    moduleScores.forEach(mod => {
-      if (mod.score < 80) {
-        const cfg = MODULE_RESOURCES.find(m => m.id === mod.id);
-        const pendingVideos = (cfg?.videos || 0) - completedVideos.filter(v => v.startsWith(`m${mod.id}`)).length;
-        const pendingInfographics = (cfg?.infographics || 0) - completedInfographics.filter(i => i.startsWith(`i${mod.id}`)).length;
-        const reasons = [];
-        if (pendingVideos > 0) reasons.push(`${pendingVideos} videos`);
-        if (pendingInfographics > 0) reasons.push(`${pendingInfographics} infografías`);
-        if (!mod.examScore || mod.examScore < 80) reasons.push('examen pendiente');
-        if (!mod.challengeScore || mod.challengeScore < 80) reasons.push('desafío pendiente');
-        recs.push({
-          id: `module_${mod.id}_score`,
-          type: 'module_score',
-          urgency: mod.id === weakestModule?.id ? 'high' : 'medium',
-          icon: 'fa-cubes',
-          title: `Módulo ${mod.id}: ${mod.title}`,
-          text: `Te falta completar el módulo (${mod.score}%). Pendiente${reasons.length > 1 ? 's' : ''}: ${reasons.join(', ')}.`,
-          action: { label: 'Ir al módulo', moduleId: mod.id },
-          moduleId: mod.id,
-        });
-      }
-    });
-
-    if (totalExams < 2) {
-      recs.push({
-        id: 'exams_low',
-        type: 'exams',
-        urgency: 'high',
-        icon: 'fa-file-alt',
-        title: 'Exámenes pendientes',
-        text: `Llevas solo ${totalExams}/5 exámenes aprobados. Cada examen completo suma hasta 100 XP. Prioriza los módulos con lecciones terminadas.`,
-      });
-    }
-
-    if (totalChallenges < 2) {
-      recs.push({
-        id: 'challenges_low',
-        type: 'challenges',
-        urgency: 'medium',
-        icon: 'fa-trophy',
-        title: 'Desafíos sin completar',
-        text: `Has completado ${totalChallenges}/5 desafíos. Cada desafío otorga 200 XP y mejora tu promedio general.`,
-      });
-    }
-
-    if (lessonsPerDay < 0.8 && daysSinceStart > 5) {
-      recs.push({
-        id: 'slow_pace',
-        type: 'pace',
-        urgency: 'medium',
-        icon: 'fa-gauge-high',
-        title: 'Ritmo de estudio bajo',
-        text: `Llevas ${lessonsPerDay.toFixed(1)} lecciones/día. Intenta al menos 20 minutos diarios para mantener el avance. Con 1 lección/día terminarías en ${estimatedDaysRemaining > 0 ? estimatedDaysRemaining : '~30'} días.`,
-      });
-    }
-
-    if (streak === 0 && lastActivityDate) {
-      const daysSince = Math.floor((Date.now() - new Date(lastActivityDate).getTime()) / 86400000);
-      if (daysSince >= 1) {
-        recs.push({
-          id: 'streak_lost',
-          type: 'streak',
-          urgency: 'high',
-          icon: 'fa-fire',
-          title: 'Racha perdida',
-          text: `Han pasado ${daysSince} día${daysSince > 1 ? 's' : ''} desde tu última actividad. Vuelve hoy para recuperar la consistencia y no perder tu progreso.`,
-        });
-      }
-    }
-
-    if (courseProgress < 30) {
-      recs.push({
-        id: 'progress_low',
-        type: 'progress',
-        urgency: 'medium',
-        icon: 'fa-chart-line',
-        title: 'Progreso general bajo',
-        text: `Llevas ${Math.round(courseProgress)}% del curso. Identifica el módulo donde tengas más lecciones disponibles y empieza por ahí para avanzar rápido.`,
-      });
-    }
-
-    if ((forumPostCount || 0) === 0 && completedModules.length >= 1) {
-      recs.push({
-        id: 'community',
-        type: 'community',
-        urgency: 'low',
-        icon: 'fa-comments',
-        title: 'Participación en comunidad',
-        text: 'Aún no has participado en los foros. Compartir tus dudas y experiencias refuerza el aprendizaje y te conecta con otros estudiantes.',
-      });
-    }
-
-    if (nextBadge) {
-      recs.push({
-        id: 'next_badge',
-        type: 'badge',
-        urgency: 'low',
-        icon: 'fa-award',
-        title: `Siguiente medalla: ${nextBadge.title || ''}`,
-        text: `Te falta${nextBadge.current > 0 ? ` ${nextBadge.target - nextBadge.current}` : ''} para obtener "${nextBadge.title || nextBadge.badgeId}". Sigue avanzando para desbloquearla.`,
-      });
-    }
-
-    recommendations.forEach(r => {
-      if (!recs.some(ex => ex.moduleId === r.moduleId && ex.type === r.type)) {
-        recs.push({
-          id: `engine_${recs.length}`,
-          type: r.type,
-          urgency: r.urgency || 'medium',
-          icon: r.type === 'exam' ? 'fa-file-alt' : r.type === 'challenge' ? 'fa-trophy' : 'fa-book-open',
-          title: r.moduleName ? `${r.moduleName}` : 'Recomendación',
-          text: r.text,
-          action: r.moduleId ? { label: 'Ir al módulo', moduleId: r.moduleId } : null,
-          moduleId: r.moduleId,
-        });
-      }
-    });
-
-    return { high: recs.filter(r => r.urgency === 'high'), medium: recs.filter(r => r.urgency === 'medium'), low: recs.filter(r => r.urgency === 'low') };
-  }, [moduleScores, weakestModule, totalExams, totalChallenges, lessonsPerDay, daysSinceStart, estimatedDaysRemaining, streak, lastActivityDate, courseProgress, forumPostCount, completedModules, nextBadge, recommendations, completedVideos, completedInfographics]);
+  const personalizedRecs = usePersonalizedRecommendations();
 
   if (!isOpen) return null;
 

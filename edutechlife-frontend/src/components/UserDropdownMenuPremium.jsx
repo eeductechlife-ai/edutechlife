@@ -18,7 +18,7 @@ import { getClerkUserInfo } from '../utils/clerk-utils';
 import UserProfileSmartCard from './UserProfileSmartCard';
 import ActivityHistory from './ActivityHistory';
 import ErrorBoundary from './forum/ErrorBoundary';
-import { useTranslation } from '../../i18n/I18nProvider';
+import { useTranslation } from '../i18n/I18nProvider';
 import StudyPlannerModal from './IALab/StudyPlannerModal';
 import UserCoursesDashboard from './IALab/UserCoursesDashboard';
 
