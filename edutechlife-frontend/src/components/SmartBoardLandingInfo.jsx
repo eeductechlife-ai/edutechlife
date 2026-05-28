@@ -4,6 +4,7 @@ import { motion, AnimatePresence, useInView } from 'framer-motion';
 import FloatingParticles from './FloatingParticles';
 import MagneticButton from './MagneticButton';
 import { Icon } from '../utils/iconMapping.jsx';
+import { useTranslation } from '../i18n/I18nProvider';
 
 const useAnimatedCounter = (target, duration = 2000, start = false) => {
   const [count, setCount] = useState(0);
@@ -96,6 +97,7 @@ const FAQ_ITEMS = [
 ];
 
 const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [activeFaq, setActiveFaq] = useState(null);
   const [isPaused, setIsPaused] = useState(false);
@@ -117,7 +119,7 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
       {onBack && (
         <button
           onClick={() => onBack()}
-          aria-label="Volver al inicio"
+          aria-label={t('smartboard.back')}
           className="fixed top-6 left-6 z-50 w-9 h-9 rounded-full bg-white/80 backdrop-blur-md border border-petroleum/10 shadow-premium flex items-center justify-center text-petroleum hover:bg-petroleum hover:text-white transition-all duration-300"
         >
           <Icon name="fa-arrow-left" className="text-xs" />
@@ -139,7 +141,7 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
               className="badge-clay inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-petroleum/5 border border-petroleum/10 mb-6"
             >
               <Icon name="fa-flask-vial" className="text-petroleum text-xs" aria-hidden="true" />
-              <span className="text-[11px] font-semibold text-petroleum uppercase tracking-wider">Plataforma Educativa Inteligente</span>
+              <span className="text-[11px] font-semibold text-petroleum uppercase tracking-wider">{t('smartboard.landing_badge')}</span>
             </motion.div>
 
             <motion.h1
@@ -148,11 +150,11 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-petroleum tracking-tight leading-[1.05] mb-4 max-w-4xl"
             >
-              La plataforma que
+              {t('smartboard.landing_hero_line1')}
               <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light via-corporate to-petroleum pr-1">transforma la educación</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light via-corporate to-petroleum pr-1">{t('smartboard.landing_hero_line2')}</span>
               <br />
-              de tu hijo
+              {t('smartboard.landing_hero_line3')}
             </motion.h1>
 
             <motion.p
@@ -161,7 +163,7 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-sm sm:text-base text-slate-500 leading-relaxed max-w-2xl mb-6"
             >
-              Descubrimos cómo aprende, diseñamos un plan a su medida, lo acompañamos con coaches expertos y te entregamos reportes en tiempo real. Tú recuperas tu tranquilidad mientras nosotros nos encargamos de su éxito académico.
+              {t('smartboard.landing_hero_desc')}
             </motion.p>
 
             <motion.div
@@ -172,15 +174,15 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
             >
               <div className="text-center">
                 <div className="text-2xl sm:text-3xl font-black text-petroleum">+{countStudents.toLocaleString()}</div>
-                <div className="text-[11px] text-slate-500 uppercase tracking-widest mt-0.5">Estudiantes</div>
+                <div className="text-[11px] text-slate-500 uppercase tracking-widest mt-0.5">{t('smartboard.landing_stat_students')}</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl sm:text-3xl font-black text-primary-light">{countImprovement}%</div>
-                <div className="text-[11px] text-slate-500 uppercase tracking-widest mt-0.5">Mejora académica</div>
+                <div className="text-[11px] text-slate-500 uppercase tracking-widest mt-0.5">{t('smartboard.landing_stat_improvement')}</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl sm:text-3xl font-black text-mint">+{countHours.toLocaleString()}</div>
-                <div className="text-[11px] text-slate-500 uppercase tracking-widest mt-0.5">Horas ahorradas</div>
+                <div className="text-[11px] text-slate-500 uppercase tracking-widest mt-0.5">{t('smartboard.landing_stat_hours')}</div>
               </div>
             </motion.div>
 
@@ -195,7 +197,7 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
                 className="group relative overflow-hidden flex items-center justify-center gap-2.5 px-7 sm:px-10 py-3.5 rounded-full text-sm sm:text-base font-bold bg-primary-light text-white shadow-lg hover:bg-petroleum hover:-translate-y-0.5 transition-all duration-300"
               >
                 <span className="absolute inset-0 w-[150%] h-full -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-sweep skew-x-[-20deg]" />
-                <span className="text-white relative z-10 font-semibold">Quiero probarlo ahora</span>
+                <span className="text-white relative z-10 font-semibold">{t('smartboard.landing_cta_try')}</span>
                 <Icon name="fa-arrow-right" className="text-white/90 relative z-10" aria-hidden="true" />
               </MagneticButton>
               <MagneticButton
@@ -203,7 +205,7 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
                 className="group flex items-center justify-center gap-2.5 px-7 sm:px-10 py-3.5 rounded-full text-sm sm:text-base font-bold bg-transparent border-2 border-petroleum text-petroleum hover:bg-petroleum hover:text-white transition-all duration-300"
               >
                 <Icon name="fa-play-circle" className="text-petroleum group-hover:text-white transition-colors duration-300" aria-hidden="true" />
-                <span className="font-semibold">¿Cómo funciona?</span>
+                <span className="font-semibold">{t('smartboard.landing_cta_how')}</span>
               </MagneticButton>
             </motion.div>
           </div>
@@ -217,12 +219,12 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-8">
             <span className="badge-clay inline-block px-3.5 py-1 rounded-full bg-mint/10 text-petroleum text-[11px] font-bold uppercase tracking-widest mb-3">
-              ¿Qué es SmartBoard?
+              {t('smartboard.landing_what_badge')}
             </span>
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-petroleum leading-tight">
-              Mucho más que una
+              {t('smartboard.landing_what_title_line1')}
               <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-petroleum pr-1">plataforma educativa</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-petroleum pr-1">{t('smartboard.landing_what_title_line2')}</span>
             </h2>
           </motion.div>
 
@@ -234,17 +236,11 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
               transition={{ duration: 0.5 }}
               className="space-y-4"
             >
-              <p className="text-sm sm:text-base text-slate-500 leading-relaxed">
-                SmartBoard es una plataforma educativa inteligente que combina <strong className="text-petroleum">inteligencia artificial</strong>,{' '}
-                <strong className="text-petroleum">diagnóstico VAK</strong> y{' '}
-                <strong className="text-petroleum">coaches humanos expertos</strong> para crear una experiencia de aprendizaje única para cada niño.
-              </p>
-              <p className="text-sm text-slate-500 leading-relaxed">
-                No somos una plataforma genérica de videos o ejercicios repetitivos. Identificamos{' '}
-                <strong className="text-petroleum">cómo aprende realmente tu hijo</strong> — visual, auditivo o kinestésico — y diseñamos un plan de estudio que se adapta a su cerebro, no al revés.
+              <p className="text-sm sm:text-base text-slate-500 leading-relaxed" dangerouslySetInnerHTML={{ __html: t('smartboard.landing_what_desc1') }} />
+              <p className="text-sm text-slate-500 leading-relaxed" dangerouslySetInnerHTML={{ __html: t('smartboard.landing_what_desc2') }} />
               </p>
               <div className="flex flex-wrap gap-2 pt-1">
-                {['IA Adaptativa', 'Coaches Reales', 'VAK Científico', 'Reportes en Vivo'].map((tag) => (
+                {[t('smartboard.landing_tag_adaptive_ai'), t('smartboard.landing_tag_real_coaches'), t('smartboard.landing_tag_scientific_vak'), t('smartboard.landing_tag_live_reports')].map((tag) => (
                   <span key={tag} className="badge-clay px-4 py-2 rounded-full bg-petroleum/5 text-petroleum text-sm font-semibold border border-petroleum/10">{tag}</span>
                 ))}
               </div>
@@ -285,8 +281,14 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
                     <Icon name="fa-check-circle" className="text-success text-sm" aria-hidden="true" />
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-petroleum">+2.500 niños</p>
-                    <p className="text-[11px] text-slate-500">ya están aprendiendo</p>
+                    <p className="text-xs font-bold text-petroleum">{t('smartboard.landing_kids_count')}</p>
+                    <p className="text-[11px] text-slate-500">{t('smartboard.landing_kids_learning')}</p>
+                  </div>
+                </div>
+              </div>
+                  <div>
+                    <p className="text-xs font-bold text-petroleum">{t('smartboard.landing_kids_count')}</p>
+                    <p className="text-[11px] text-slate-500">{t('smartboard.landing_kids_learning')}</p>
                   </div>
                 </div>
               </div>
@@ -302,14 +304,14 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-8">
             <span className="badge-clay inline-block px-3.5 py-1 rounded-full bg-[#FFD166]/20 text-petroleum text-[11px] font-bold uppercase tracking-widest mb-3">
-              Primero entendemos cómo aprende
+              {t('smartboard.landing_vak_badge')}
             </span>
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-petroleum leading-tight mb-3">
-              Diagnóstico
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-mint pr-1"> VAK</span>
+              {t('smartboard.landing_vak_title')}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-mint pr-1">{t('smartboard.landing_vak_title_highlight')}</span>
             </h2>
             <p className="text-sm text-slate-500 leading-relaxed max-w-2xl mx-auto">
-              El modelo VAK — Visual, Auditivo y Kinestésico — identifica el canal sensorial dominante de cada niño. Así sabemos exactamente cómo potenciar su aprendizaje desde el primer día.
+              {t('smartboard.landing_vak_desc')}
             </p>
           </motion.div>
 
@@ -359,12 +361,12 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-8">
             <span className="badge-clay inline-block px-3.5 py-1 rounded-full bg-primary-light/10 text-petroleum text-[11px] font-bold uppercase tracking-widest mb-3">
-              Beneficios para tu hijo
+              {t('smartboard.landing_benefits_badge')}
             </span>
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-petroleum leading-tight">
-              Una experiencia que
+              {t('smartboard.landing_benefits_title_line1')}
               <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-petroleum pr-1">lo motiva a aprender</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-petroleum pr-1">{t('smartboard.landing_benefits_title_line2')}</span>
             </h2>
           </motion.div>
 
@@ -400,15 +402,15 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-8">
             <span className="badge-clay inline-block px-3.5 py-1 rounded-full bg-white/10 text-white/90 text-[11px] font-bold uppercase tracking-widest mb-3">
-              Tranquilidad para ti
+              {t('smartboard.landing_tranquility_badge')}
             </span>
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-white leading-tight mb-3">
-              Porque tu tiempo
+              {t('smartboard.landing_tranquility_title_line1')}
               <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-mint pr-1">también es valioso</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-mint pr-1">{t('smartboard.landing_tranquility_title_line2')}</span>
             </h2>
             <p className="text-sm text-white/70 leading-relaxed max-w-2xl mx-auto">
-              Sabemos que eres un padre ocupado. SmartBoard existe para que quieras lo mejor para tu hijo sin tener que sacrificar tu tiempo.
+              {t('smartboard.landing_tranquility_desc')}
             </p>
           </motion.div>
 
@@ -444,7 +446,7 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
             <div className="inline-flex items-center gap-2.5 bg-white/10 backdrop-blur-xl border border-white/10 rounded-2xl px-5 py-3">
               <Icon name="fa-quote-left" className="text-primary-light text-sm flex-shrink-0" aria-hidden="true" />
               <p className="text-white/80 text-xs italic max-w-lg">
-                Muchos padres no tienen el conocimiento para ayudar a sus hijos con el proceso académico. Para eso estamos nosotros: para quitarte esa carga y asegurarnos de que tu hijo reciba la mejor educación posible.
+                {t('smartboard.landing_quote')}
               </p>
             </div>
           </motion.div>
@@ -458,12 +460,12 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-8">
             <span className="badge-clay inline-block px-3.5 py-1 rounded-full bg-mint/10 text-petroleum text-[11px] font-bold uppercase tracking-widest mb-3">
-              ¿Cómo funciona?
+              {t('smartboard.landing_how_badge')}
             </span>
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-petroleum leading-tight">
-              Cuatro pasos para
+              {t('smartboard.landing_how_title_line1')}
               <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-petroleum pr-1">transformar su educación</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-petroleum pr-1">{t('smartboard.landing_how_title_line2')}</span>
             </h2>
           </motion.div>
 
@@ -509,7 +511,7 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
               className="group relative overflow-hidden inline-flex items-center justify-center gap-2.5 px-8 sm:px-10 py-3 rounded-full text-sm sm:text-base font-bold bg-petroleum text-white shadow-xl hover:bg-petroleum-dark hover:-translate-y-0.5 transition-all duration-300"
             >
               <span className="absolute inset-0 w-[150%] h-full -translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent group-hover:animate-sweep skew-x-[-20deg]" />
-              <span className="relative z-10 font-semibold">Empezar ahora</span>
+              <span className="relative z-10 font-semibold">{t('smartboard.landing_cta_start')}</span>
               <Icon name="fa-arrow-right" className="text-white/90 relative z-10" aria-hidden="true" />
             </MagneticButton>
           </motion.div>
@@ -523,15 +525,15 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-8">
             <span className="badge-clay inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FFD166]/20 text-petroleum text-xs font-bold uppercase tracking-widest mb-3">
-              Planes y precios
+              {t('smartboard.landing_pricing_badge')}
             </span>
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-petroleum leading-tight mb-3">
-              Invierte en el futuro
+              {t('smartboard.landing_pricing_title_line1')}
               <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-petroleum pr-1">de tu hijo</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-petroleum pr-1">{t('smartboard.landing_pricing_title_line2')}</span>
             </h2>
             <p className="text-sm text-slate-500 leading-relaxed max-w-xl mx-auto">
-              Elige el plan que mejor se adapte a las necesidades de tu hijo. Sin contratos forzados, cancela cuando quieras.
+              {t('smartboard.landing_pricing_desc')}
             </p>
           </motion.div>
 
@@ -554,7 +556,7 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
               >
                 {plan.popular && (
                   <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-5 py-1.5 rounded-full bg-gradient-to-r from-petroleum to-primary-light text-white text-xs font-bold uppercase tracking-wider shadow-premium-lg whitespace-nowrap">
-                    Más popular
+                    {t('smartboard.landing_pricing_popular')}
                   </div>
                 )}
                 <div className="text-center mb-8">
@@ -593,7 +595,7 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
                       : 'bg-petroleum/5 text-petroleum hover:bg-petroleum/10'
                   }`}
                 >
-                  <span>Elegir {plan.name}</span>
+                  <span>{t('smartboard.landing_pricing_choose', { name: plan.name })}</span>
                   <Icon name="fa-arrow-right" className="text-xs" aria-hidden="true" />
                 </MagneticButton>
               </motion.div>
@@ -609,12 +611,12 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-10">
             <span className="badge-clay inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-primary-light/10 text-petroleum text-xs font-bold uppercase tracking-widest mb-3">
-              Testimonios reales
+              {t('smartboard.landing_testimonials_badge')}
             </span>
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-petroleum leading-tight">
-              Lo que dicen
+              {t('smartboard.landing_testimonials_title_line1')}
               <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-petroleum pr-1">los padres</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-petroleum pr-1">{t('smartboard.landing_testimonials_title_line2')}</span>
             </h2>
           </motion.div>
 
@@ -697,12 +699,12 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-white leading-tight mb-4">
-              Dale a tu hijo
+              {t('smartboard.landing_cta_final_title_line1')}
               <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-mint pr-1">la ventaja que merece</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-mint pr-1">{t('smartboard.landing_cta_final_title_line2')}</span>
             </h2>
             <p className="text-sm text-white/70 leading-relaxed max-w-xl mx-auto mb-6">
-              No dejes que la falta de tiempo o conocimiento limite el potencial de tu hijo. SmartBoard está aquí para encargarse de todo mientras tú ves los resultados.
+              {t('smartboard.landing_cta_final_desc')}
             </p>
             <MagneticButton
               onClick={handleCta}
@@ -710,7 +712,7 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
               className="group relative overflow-hidden inline-flex items-center justify-center gap-2.5 px-8 sm:px-10 py-3 rounded-full text-sm sm:text-base font-bold bg-primary-light text-white shadow-xl hover:bg-mint hover:-translate-y-0.5 transition-all duration-300"
             >
               <span className="absolute inset-0 w-[150%] h-full -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-sweep skew-x-[-20deg]" />
-              <span className="relative z-10 font-semibold">Probar SmartBoard ahora</span>
+              <span className="relative z-10 font-semibold">{t('smartboard.landing_cta_final_btn')}</span>
               <Icon name="fa-arrow-right" className="text-white/90 relative z-10" aria-hidden="true" />
             </MagneticButton>
           </motion.div>
@@ -723,8 +725,8 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
             className="max-w-2xl mx-auto"
           >
             <h3 className="text-xl font-black text-white text-center mb-6">
-              Preguntas
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-mint"> frecuentes</span>
+              {t('smartboard.landing_faq_title')}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-mint">{t('smartboard.landing_faq_title_highlight')}</span>
             </h3>
             <div className="space-y-2">
               {FAQ_ITEMS.map((item, i) => (

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { cn } from '../../forum/forumDesignSystem';
 import { useIALabProgressContext } from '../../../context/IALabContext';
+import { useIALabStore } from '../../../store/ialabStore';
 import { useTranslation } from '../../../i18n/I18nProvider';
 import Breadcrumbs from '../Breadcrumbs';
 import { useIALabProgress } from '../../../hooks/IALab/useIALabProgress';
@@ -224,13 +225,14 @@ const renderOVAById = (resourceId) => {
 
   const handleMarkAsViewed = async () => {
     setIsMarkedAsViewed(true);
+    const currentMod = useIALabStore.getState().activeMod || activeMod;
     if (onMarkAsViewed) {
       onMarkAsViewed(resource.id);
     }
-    if (resource?.id && activeMod) {
-      markResourceInContext(activeMod, resource.id);
+    if (resource?.id && currentMod) {
+      markResourceInContext(currentMod, resource.id);
       const rt = resource.type || 'document';
-      await trackResourceViewed(activeMod, resource.id, rt);
+      await trackResourceViewed(currentMod, resource.id, rt);
 
       if (recordLastTopic) {
         const typeLabels = {
@@ -242,7 +244,7 @@ const renderOVAById = (resourceId) => {
           reading: t('ialab.viewer_modal.type_reading'),
         };
         recordLastTopic(
-          activeMod,
+          currentMod,
           '',
           resourceType,
           resource.title || `${typeLabels[rt] || t('ialab.viewer_modal.type_resource')}`,

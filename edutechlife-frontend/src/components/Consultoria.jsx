@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import AutomationArchitect from './AutomationArchitect';
 import { Icon } from '../utils/iconMapping.jsx';
+import { useTranslation } from '../i18n/I18nProvider';
 
 const Consultoria = ({ onBack }) => {
+    const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState('servicios');
     const [contactForm, setContactForm] = useState({ 
         nombre: '', 
@@ -103,20 +105,20 @@ const Consultoria = ({ onBack }) => {
 
     const validateForm = () => {
         const errors = {};
-        if (!contactForm.nombre.trim()) errors.nombre = 'El nombre es requerido';
-        if (!contactForm.empresa.trim()) errors.empresa = 'La empresa es requerida';
+        if (!contactForm.nombre.trim()) errors.nombre = t('consultoria.error_name');
+        if (!contactForm.empresa.trim()) errors.empresa = t('consultoria.error_company');
         if (!contactForm.email.trim()) {
-            errors.email = 'El correo es requerido';
+            errors.email = t('consultoria.error_email');
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactForm.email)) {
-            errors.email = 'Correo inválido';
+            errors.email = t('consultoria.error_email_invalid');
         }
         if (!contactForm.telefono.trim()) {
-            errors.telefono = 'El teléfono es requerido';
+            errors.telefono = t('consultoria.error_phone');
         } else if (!/^[0-9+\s-]{7,15}$/.test(contactForm.telefono)) {
-            errors.telefono = 'Teléfono inválido';
+            errors.telefono = t('consultoria.error_phone_invalid');
         }
-        if (!contactForm.servicio) errors.servicio = 'Selecciona un servicio';
-        if (!contactForm.mensaje.trim()) errors.mensaje = 'El mensaje es requerido';
+        if (!contactForm.servicio) errors.servicio = t('consultoria.error_service');
+        if (!contactForm.mensaje.trim()) errors.mensaje = t('consultoria.error_message');
         return errors;
     };
 
@@ -198,30 +200,29 @@ const Consultoria = ({ onBack }) => {
             <header className="pillar-header">
                 <button onClick={onBack} className="back-btn">
                     <Icon name="fa-arrow-left" />
-                    <span>Volver</span>
+                    <span>{t('consultoria.back')}</span>
                 </button>
                 <div className="pillar-badge" style={{ background: 'linear-gradient(135deg, #66CCCC, #4DA8C4)' }}>
                     <Icon name="fa-building" />
-                    <span>PILAR 03</span>
+                    <span>{t('consultoria.pilar_03')}</span>
                 </div>
             </header>
 
             <div className="pillar-hero" style={{ background: 'linear-gradient(135deg, #0B2A3A 0%, #004B63 50%, #0B2A3A 100%)' }}>
                 <div className="pillar-hero-content">
-                    <div className="pillar-kicker">CONSULTORÍA B2B Y AUTOMATIZACIÓN</div>
-                    <h1 className="pillar-title" style={{ color: 'white' }}>Transformación Digital Empresarial</h1>
+                    <div className="pillar-kicker">{t('consultoria.hero_kicker')}</div>
+                    <h1 className="pillar-title" style={{ color: 'white' }}>{t('consultoria.hero_title')}</h1>
                     <p className="pillar-subtitle" style={{ color: 'rgba(255,255,255,0.8)' }}>
-                        Agentes de IA personalizados y capacitación de alto nivel que generan 
-                        productividad real desde el primer mes de implementación.
+                        {t('consultoria.hero_subtitle')}
                     </p>
                     <div className="cta-buttons">
                         <button className="cta-primary" onClick={() => setActiveTab('contacto')}>
-                            <span>Solicitar Cotización</span>
+                            <span>{t('consultoria.cta_quote')}</span>
                             <Icon name="fa-arrow-right" />
                         </button>
                         <button className="cta-secondary" onClick={() => setActiveTab('casos')}>
                             <Icon name="fa-play" />
-                            <span>Ver Casos de Éxito</span>
+                            <span>{t('consultoria.cta_cases')}</span>
                         </button>
                     </div>
                 </div>
@@ -229,15 +230,15 @@ const Consultoria = ({ onBack }) => {
                     <div className="consulting-visual">
                         <div className="cv-card">
                             <Icon name="fa-robot" />
-                            <span>Agente IA</span>
+                            <span>{t('consultoria.visual_card_agent')}</span>
                         </div>
                         <div className="cv-card">
                             <Icon name="fa-users-cog" />
-                            <span>Capacitación</span>
+                            <span>{t('consultoria.visual_card_training')}</span>
                         </div>
                         <div className="cv-card">
                             <Icon name="fa-chart-pie" />
-                            <span>Métricas</span>
+                            <span>{t('consultoria.visual_card_metrics')}</span>
                         </div>
                     </div>
                 </div>
@@ -246,23 +247,23 @@ const Consultoria = ({ onBack }) => {
             <div className="pillar-tabs">
                 <button className={`tab-btn ${activeTab === 'servicios' ? 'active' : ''}`} onClick={() => setActiveTab('servicios')}>
                     <Icon name="fa-cubes" />
-                    Servicios
+                    {t('consultoria.tab_services')}
                 </button>
                 <button className={`tab-btn ${activeTab === 'casos' ? 'active' : ''}`} onClick={() => setActiveTab('casos')}>
                     <Icon name="fa-trophy" />
-                    Casos de Éxito
+                    {t('consultoria.tab_cases')}
                 </button>
                 <button className={`tab-btn ${activeTab === 'contacto' ? 'active' : ''}`} onClick={() => setActiveTab('contacto')}>
                     <Icon name="fa-envelope" />
-                    Contacto
+                    {t('consultoria.tab_contact')}
                 </button>
                 <button className={`tab-btn ${activeTab === 'roi' ? 'active' : ''}`} onClick={() => setActiveTab('roi')}>
                     <Icon name="fa-calculator" />
-                    Calculadora ROI
+                    {t('consultoria.tab_roi')}
                 </button>
                 <button className={`tab-btn ${activeTab === 'ai-tools' ? 'active' : ''}`} onClick={() => setActiveTab('ai-tools')}>
                     <Icon name="fa-brain" />
-                    Herramientas IA
+                    {t('consultoria.tab_ai_tools')}
                 </button>
             </div>
 
@@ -289,7 +290,7 @@ const Consultoria = ({ onBack }) => {
                                     ))}
                                 </ul>
                                 <button className="servicio-cta" onClick={() => { setContactForm(prev => ({...prev, servicio: s.title})); setActiveTab('contacto'); }}>
-                                    Solicitar Información
+                                    {t('consultoria.service_request_info')}
                                 </button>
                             </div>
                         ))}
@@ -299,8 +300,8 @@ const Consultoria = ({ onBack }) => {
                 {activeTab === 'casos' && (
                     <div className="casos-section">
                         <div className="casos-header">
-                            <h2>Resultados que Transforman</h2>
-                            <p>Casos de éxito de organizaciones que confiaron en Edutechlife</p>
+                            <h2>{t('consultoria.cases_title')}</h2>
+                            <p>{t('consultoria.cases_subtitle')}</p>
                         </div>
                         <div className="casos-grid">
                             {casosExito.map((c, i) => (
@@ -325,19 +326,19 @@ const Consultoria = ({ onBack }) => {
                                             <div className="caso-metrics">
                                                 <div className="metric-item">
                                                     <span className="metric-value">{c.metrics.satisfaction}%</span>
-                                                    <span className="metric-label">Satisfacción</span>
+                                                    <span className="metric-label">{t('consultoria.cases_metric_satisfaction')}</span>
                                                 </div>
                                                 <div className="metric-item">
                                                     <span className="metric-value">{c.metrics.retention}%</span>
-                                                    <span className="metric-label">Retención</span>
+                                                    <span className="metric-label">{t('consultoria.cases_metric_retention')}</span>
                                                 </div>
                                                 <div className="metric-item">
                                                     <span className="metric-value">+{c.metrics.performance}%</span>
-                                                    <span className="metric-label">Rendimiento</span>
+                                                    <span className="metric-label">{t('consultoria.cases_metric_performance')}</span>
                                                 </div>
                                             </div>
                                             <div className="caso-services">
-                                                <span className="services-label">Servicios utilizados:</span>
+                                                <span className="services-label">{t('consultoria.cases_services_used')}</span>
                                                 <div className="services-tags">
                                                     {c.services.map((svc, si) => (
                                                         <span key={si} className="service-tag">{svc}</span>
@@ -353,20 +354,20 @@ const Consultoria = ({ onBack }) => {
                             <div className="demo-content">
                                 <Icon name="fa-video" />
                                 <div>
-                                    <h3>¿Quieres ver una demo personalizada?</h3>
-                                    <p>Agenda una sesión de 30 minutos con nuestro equipo</p>
+                                    <h3>{t('consultoria.cases_demo_title')}</h3>
+                                    <p>{t('consultoria.cases_demo_subtitle')}</p>
                                 </div>
                             </div>
                             <button className="demo-btn" onClick={handleDemoRequest}>
                                 {demoRequested ? (
                                     <>
                                         <Icon name="fa-check" />
-                                        ¡Solicitud Enviada!
+                                        {t('consultoria.cases_demo_sent')}
                                     </>
                                 ) : (
                                     <>
                                         <Icon name="fa-calendar" />
-                                        Agendar Demo
+                                        {t('consultoria.cases_demo_btn')}
                                     </>
                                 )}
                             </button>
@@ -377,8 +378,8 @@ const Consultoria = ({ onBack }) => {
                 {activeTab === 'contacto' && (
                     <div className="contact-section">
                         <div className="contact-info">
-                            <h2>¿Listo para Transformar tu Organización?</h2>
-                            <p>Completa el formulario y nos pondremos en contacto en menos de 24 horas.</p>
+                            <h2>{t('consultoria.contact_title')}</h2>
+                            <p>{t('consultoria.contact_subtitle')}</p>
                             <div className="contact-methods">
                                 <div className="contact-method">
                                     <Icon name="fa-phone" />
@@ -395,28 +396,28 @@ const Consultoria = ({ onBack }) => {
                             </div>
                             <div className="response-guarantee">
                                 <Icon name="fa-shield-check" />
-                                <span>Respuesta garantizada en menos de 24 horas</span>
+                                <span>{t('consultoria.contact_response')}</span>
                             </div>
                         </div>
                         <form className="contact-form" onSubmit={handleSubmit}>
                             {submitted ? (
                                 <div className="success-message">
                                     <Icon name="fa-check-circle" />
-                                    <h3>¡Solicitud Enviada!</h3>
-                                    <p>Uno de nuestros consultores se pondrá en contacto contigo en menos de 24 horas.</p>
+                                    <h3>{t('consultoria.contact_success_title')}</h3>
+                                    <p>{t('consultoria.contact_success_desc')}</p>
                                     <button type="button" className="reset-form" onClick={() => { setSubmitted(false); setContactForm({ nombre: '', empresa: '', email: '', telefono: '', tamano: '', servicio: '', mensaje: '' }); setFormErrors({}); }}>
-                                        Enviar otra solicitud
+                                        {t('consultoria.contact_new_request')}
                                     </button>
                                 </div>
                             ) : (
                                 <>
                                     <div className="form-row">
                                          <div className="form-field">
-                                             <label htmlFor="consultoria-nombre">Nombre Completo *</label>
-                                             <input
-                                                 type="text"
-                                                 id="consultoria-nombre"
-                                                 placeholder="Ej: Juan Pérez"
+                                              <label htmlFor="consultoria-nombre">{t('consultoria.form_name')}</label>
+                                              <input
+                                                  type="text"
+                                                  id="consultoria-nombre"
+                                                  placeholder={t('consultoria.form_name_placeholder')}
                                                  value={contactForm.nombre}
                                                  onChange={(e) => setContactForm({...contactForm, nombre: e.target.value})}
                                                  className={formErrors.nombre ? 'error' : ''}
@@ -425,11 +426,11 @@ const Consultoria = ({ onBack }) => {
                                              {formErrors.nombre && <span className="field-error">{formErrors.nombre}</span>}
                                          </div>
                                          <div className="form-field">
-                                             <label htmlFor="consultoria-empresa">Empresa / Institución *</label>
-                                             <input
-                                                 type="text"
-                                                 id="consultoria-empresa"
-                                                 placeholder="Ej: Colegio San Ignacio"
+                                              <label htmlFor="consultoria-empresa">{t('consultoria.form_company')}</label>
+                                              <input
+                                                  type="text"
+                                                  id="consultoria-empresa"
+                                                  placeholder={t('consultoria.form_company_placeholder')}
                                                  value={contactForm.empresa}
                                                  onChange={(e) => setContactForm({...contactForm, empresa: e.target.value})}
                                                  className={formErrors.empresa ? 'error' : ''}
@@ -440,11 +441,11 @@ const Consultoria = ({ onBack }) => {
                                     </div>
                                     <div className="form-row">
                                          <div className="form-field">
-                                             <label htmlFor="consultoria-email">Correo Electrónico *</label>
-                                             <input
-                                                 type="email"
-                                                 id="consultoria-email"
-                                                 placeholder="Ej: juan@colegio.edu.co"
+                                              <label htmlFor="consultoria-email">{t('consultoria.form_email')}</label>
+                                              <input
+                                                  type="email"
+                                                  id="consultoria-email"
+                                                  placeholder={t('consultoria.form_email_placeholder')}
                                                  value={contactForm.email}
                                                  onChange={(e) => setContactForm({...contactForm, email: e.target.value})}
                                                  className={formErrors.email ? 'error' : ''}
@@ -453,11 +454,11 @@ const Consultoria = ({ onBack }) => {
                                              {formErrors.email && <span className="field-error">{formErrors.email}</span>}
                                          </div>
                                          <div className="form-field">
-                                             <label htmlFor="consultoria-telefono">Teléfono *</label>
-                                             <input
-                                                 type="tel"
-                                                 id="consultoria-telefono"
-                                                 placeholder="Ej: +57 300 123 4567"
+                                              <label htmlFor="consultoria-telefono">{t('consultoria.form_phone')}</label>
+                                              <input
+                                                  type="tel"
+                                                  id="consultoria-telefono"
+                                                  placeholder={t('consultoria.form_phone_placeholder')}
                                                  value={contactForm.telefono}
                                                  onChange={(e) => setContactForm({...contactForm, telefono: e.target.value})}
                                                  className={formErrors.telefono ? 'error' : ''}
@@ -468,41 +469,41 @@ const Consultoria = ({ onBack }) => {
                                     </div>
                                     <div className="form-row">
                                          <div className="form-field">
-                                             <label htmlFor="consultoria-tamano">Tamaño de Organización</label>
-                                             <select
-                                                 id="consultoria-tamano"
-                                                 value={contactForm.tamano}
-                                                 onChange={(e) => setContactForm({...contactForm, tamano: e.target.value})}
-                                             >
-                                                 <option value="">Selecciona...</option>
-                                                 <option value="micro">Micro (1-10 empleados)</option>
-                                                 <option value="pequeña">Pequeña (11-50 empleados)</option>
-                                                 <option value="mediana">Mediana (51-200 empleados)</option>
-                                                 <option value="grande">Grande (201+ empleados)</option>
+                                              <label htmlFor="consultoria-tamano">{t('consultoria.form_org_size')}</label>
+                                              <select
+                                                  id="consultoria-tamano"
+                                                  value={contactForm.tamano}
+                                                  onChange={(e) => setContactForm({...contactForm, tamano: e.target.value})}
+                                              >
+                                                  <option value="">{t('consultoria.form_org_select')}</option>
+                                                  <option value="micro">{t('consultoria.form_org_micro')}</option>
+                                                  <option value="pequeña">{t('consultoria.form_org_small')}</option>
+                                                  <option value="mediana">{t('consultoria.form_org_medium')}</option>
+                                                  <option value="grande">{t('consultoria.form_org_large')}</option>
                                              </select>
                                          </div>
                                          <div className="form-field">
-                                             <label htmlFor="consultoria-servicio">Servicio de Interés *</label>
-                                             <select
-                                                 id="consultoria-servicio"
-                                                 value={contactForm.servicio}
-                                                 onChange={(e) => setContactForm({...contactForm, servicio: e.target.value})}
-                                                 className={formErrors.servicio ? 'error' : ''}
-                                             >
-                                                 <option value="">Selecciona...</option>
-                                                 <option value="Agentes de IA Personalizados">Agentes de IA Personalizados</option>
-                                                 <option value="Capacitación STEAM">Capacitación STEAM</option>
-                                                 <option value="Consultoría Estratégica">Consultoría Estratégica</option>
-                                                 <option value="Paquete Completo">Paquete Completo</option>
+                                              <label htmlFor="consultoria-servicio">{t('consultoria.form_service')}</label>
+                                              <select
+                                                  id="consultoria-servicio"
+                                                  value={contactForm.servicio}
+                                                  onChange={(e) => setContactForm({...contactForm, servicio: e.target.value})}
+                                                  className={formErrors.servicio ? 'error' : ''}
+                                              >
+                                                  <option value="">{t('consultoria.form_service_select')}</option>
+                                                  <option value={t('consultoria.form_service_agent')}>{t('consultoria.form_service_agent')}</option>
+                                                  <option value={t('consultoria.form_service_steam')}>{t('consultoria.form_service_steam')}</option>
+                                                  <option value={t('consultoria.form_service_consulting')}>{t('consultoria.form_service_consulting')}</option>
+                                                  <option value={t('consultoria.form_service_package')}>{t('consultoria.form_service_package')}</option>
                                              </select>
                                              {formErrors.servicio && <span className="field-error">{formErrors.servicio}</span>}
                                          </div>
                                     </div>
                                      <div className="form-field">
-                                         <label htmlFor="consultoria-mensaje">¿En qué podemos ayudarte? *</label>
-                                         <textarea
-                                             id="consultoria-mensaje"
-                                             placeholder="Cuéntanos sobre tu organización y qué objetivos quieres alcanzar..."
+                                          <label htmlFor="consultoria-mensaje">{t('consultoria.form_message')}</label>
+                                          <textarea
+                                              id="consultoria-mensaje"
+                                              placeholder={t('consultoria.form_message_placeholder')}
                                              rows={4}
                                              value={contactForm.mensaje}
                                              onChange={(e) => setContactForm({...contactForm, mensaje: e.target.value})}
@@ -511,7 +512,7 @@ const Consultoria = ({ onBack }) => {
                                          {formErrors.mensaje && <span className="field-error">{formErrors.mensaje}</span>}
                                      </div>
                                     <button type="submit" className="submit-btn">
-                                        <span>Enviar Solicitud</span>
+                                        <span>{t('consultoria.form_submit')}</span>
                                          <Icon name="fa-paper-plane" />
                                     </button>
                                 </>
@@ -526,17 +527,17 @@ const Consultoria = ({ onBack }) => {
                             <div className="neural-badge">
                                 <div className="neural-pulse" />
                                 <Icon name="fa-brain" />
-                                <span>ROI Neural Calculator</span>
+                                <span>{t('consultoria.roi_badge')}</span>
                             </div>
-                            <h2>Calculadora de Retorno de Inversión</h2>
-                            <p>Proyecta el impacto financiero de implementar IA en tu organización</p>
+                            <h2>{t('consultoria.roi_title')}</h2>
+                            <p>{t('consultoria.roi_subtitle')}</p>
                         </div>
 
                         <div className="roi-neural-grid">
                             <div className="roi-neural-card inputs-card">
                                 <div className="card-header">
                                      <Icon name="fa-sliders" />
-                                    <h3>Parámetros</h3>
+                                    <h3>{t('consultoria.roi_params_title')}</h3>
                                 </div>
                                 
                                 <div className="roi-inputs-neural">
@@ -544,7 +545,7 @@ const Consultoria = ({ onBack }) => {
                                         <div className="input-header">
                                             <label>
                                                  <Icon name="fa-users" />
-                                                Empleados en tu organización
+                                                {t('consultoria.roi_employees')}
                                             </label>
                                             <span className="input-value">{roiData.empleados}</span>
                                         </div>
@@ -567,7 +568,7 @@ const Consultoria = ({ onBack }) => {
                                         <div className="input-header">
                                             <label>
                                                 <Icon name="fa-clock" />
-                                                Horas ahorradas por empleado/mes
+                                                {t('consultoria.roi_hours')}
                                             </label>
                                             <span className="input-value">{roiData.horasAhorradas}h</span>
                                         </div>
@@ -590,7 +591,7 @@ const Consultoria = ({ onBack }) => {
                                         <div className="input-header">
                                             <label>
                                                  <Icon name="fa-coins" />
-                                                Costo promedio hora (COP)
+                                                {t('consultoria.roi_cost')}
                                             </label>
                                             <span className="input-value">${roiData.costoHora.toLocaleString()}</span>
                                         </div>
@@ -613,9 +614,9 @@ const Consultoria = ({ onBack }) => {
                                         <div className="input-header">
                                             <label>
                                         <Icon name="fa-calendar" />
-                                                Duración del proyecto
+                                                {t('consultoria.roi_duration')}
                                             </label>
-                                            <span className="input-value">{roiData.mesesProyecto} meses</span>
+                                            <span className="input-value">{roiData.mesesProyecto} {t('consultoria.months')}</span>
                                         </div>
                                         <input 
                                             type="range" 
@@ -636,7 +637,7 @@ const Consultoria = ({ onBack }) => {
                                         <div className="input-header">
                                             <label>
                                                  <Icon name="fa-rocket" />
-                                                Inversión en implementación (COP)
+                                                {t('consultoria.roi_investment')}
                                             </label>
                                             <span className="input-value">${roiData.costoImplementacion.toLocaleString()}</span>
                                         </div>
@@ -664,12 +665,12 @@ const Consultoria = ({ onBack }) => {
                                     {isCalculating ? (
                                         <>
                                             <div className="calc-spinner" />
-                                            <span>Analizando...</span>
+                                            <span>{t('consultoria.roi_analyzing')}</span>
                                         </>
                                     ) : (
                                         <>
                                              <Icon name="fa-bolt" />
-                                            <span>Calcular ROI Neural</span>
+                                            <span>{t('consultoria.roi_calculate')}</span>
                                         </>
                                     )}
                                 </button>
@@ -678,7 +679,7 @@ const Consultoria = ({ onBack }) => {
                             <div className="roi-neural-card results-card">
                                 <div className="card-header">
                                     <Icon name="fa-chart-line" />
-                                    <h3>Proyección Neural</h3>
+                                    <h3>{t('consultoria.roi_projection')}</h3>
                                 </div>
 
                                 {!roiResult ? (
@@ -686,7 +687,7 @@ const Consultoria = ({ onBack }) => {
                                         <div className="placeholder-icon">
                                             <Icon name="fa-brain" />
                                         </div>
-                                        <p>Configura los parámetros y presiona "Calcular" para ver tu proyección de ROI</p>
+                                        <p>{t('consultoria.roi_placeholder')}</p>
                                         <div className="placeholder-glow" />
                                     </div>
                                 ) : (
@@ -702,11 +703,11 @@ const Consultoria = ({ onBack }) => {
                                         <div className="result-hero">
                                             <div className="hero-glow" />
                                             <div className="hero-content">
-                                                <span className="hero-label">Ganancia Neta Proyectada</span>
+                                                <span className="hero-label">{t('consultoria.roi_net_profit')}</span>
                                                 <span className="hero-value">
                                                     ${(animatedValues?.gananciaNeta || roiResult.gananciaNeta).toLocaleString()}
                                                 </span>
-                                                <span className="hero-sub">en {roiData.mesesProyecto} meses</span>
+                                                <span className="hero-sub">{t('consultoria.roi_in_month', { months: roiData.mesesProyecto })}</span>
                                             </div>
                                             <div className="roi-ring">
                                                 <svg viewBox="0 0 100 100">
@@ -733,7 +734,7 @@ const Consultoria = ({ onBack }) => {
                                                      <Icon name="fa-arrow-trend-up" />
                                                 </div>
                                                 <div className="metric-info">
-                                                    <span className="metric-label">Ahorro Mensual</span>
+                                                    <span className="metric-label">{t('consultoria.roi_monthly_savings')}</span>
                                                     <span className="metric-value">${(animatedValues?.ahorroMensual || roiResult.ahorroMensual).toLocaleString()}</span>
                                                 </div>
                                             </div>
@@ -743,7 +744,7 @@ const Consultoria = ({ onBack }) => {
                                                      <Icon name="fa-piggy-bank" />
                                                 </div>
                                                 <div className="metric-info">
-                                                    <span className="metric-label">Ahorro Total</span>
+                                                    <span className="metric-label">{t('consultoria.roi_total_savings')}</span>
                                                     <span className="metric-value">${roiResult.ahorroTotal.toLocaleString()}</span>
                                                 </div>
                                             </div>
@@ -753,8 +754,8 @@ const Consultoria = ({ onBack }) => {
                                                     <Icon name="fa-clock" />
                                                 </div>
                                                 <div className="metric-info">
-                                                    <span className="metric-label">Payback</span>
-                                                    <span className="metric-value">{roiResult.paybackMeses} meses</span>
+                                                    <span className="metric-label">{t('consultoria.roi_payback')}</span>
+                                                    <span className="metric-value">{roiResult.paybackMeses} {t('consultoria.months')}</span>
                                                 </div>
                                             </div>
 
@@ -763,7 +764,7 @@ const Consultoria = ({ onBack }) => {
                                                      <Icon name="fa-chart-pie" />
                                                 </div>
                                                 <div className="metric-info">
-                                                    <span className="metric-label">Eficiencia</span>
+                                                    <span className="metric-label">{t('consultoria.roi_efficiency')}</span>
                                                     <span className="metric-value">{roiResult.eficiencia}%</span>
                                                 </div>
                                             </div>
@@ -772,7 +773,7 @@ const Consultoria = ({ onBack }) => {
                                         <div className="result-comparison">
                                             <div className="comparison-bar">
                                                 <div className="bar-label">
-                                                    <span>Inversión</span>
+                                                    <span>{t('consultoria.roi_investment_label')}</span>
                                                     <span>${roiResult.inversion.toLocaleString()}</span>
                                                 </div>
                                                 <div className="bar-track">
@@ -784,7 +785,7 @@ const Consultoria = ({ onBack }) => {
                                             </div>
                                             <div className="comparison-bar">
                                                 <div className="bar-label">
-                                                    <span>Ahorro Total</span>
+                                                    <span>{t('consultoria.roi_savings_label')}</span>
                                                     <span>${roiResult.ahorroTotal.toLocaleString()}</span>
                                                 </div>
                                                 <div className="bar-track">
@@ -800,7 +801,7 @@ const Consultoria = ({ onBack }) => {
 
                                 <div className="roi-disclaimer-neural">
                                     <Icon name="fa-shield-halved" />
-                                    <span>Cálculos basados en promedios de la industria. Los resultados reales pueden variar. Consulta con nuestros especialistas para un análisis personalizado.</span>
+                                    <span>{t('consultoria.roi_disclaimer')}</span>
                                 </div>
                             </div>
                         </div>
@@ -812,10 +813,10 @@ const Consultoria = ({ onBack }) => {
                         <div className="ai-tools-header">
                             <div className="neural-badge">
                                 <Icon name="fa-brain" />
-                                <span>Herramientas de Análisis IA</span>
+                                <span>{t('consultoria.ai_tools_badge')}</span>
                             </div>
-                            <h2>Potencia tu Consultoría con Inteligencia Artificial</h2>
-                            <p>Accede a herramientas especializadas para análisis financiero y diseño de flujos de automatización</p>
+                            <h2>{t('consultoria.ai_tools_title')}</h2>
+                            <p>{t('consultoria.ai_tools_subtitle')}</p>
                         </div>
 
                         <div className="ai-tools-grid">
@@ -823,15 +824,15 @@ const Consultoria = ({ onBack }) => {
                                 <div className="ai-tool-icon">
                                      <Icon name="fa-chart-line" />
                                 </div>
-                                <h3>Calculadora ROI Neural</h3>
-                                <p>Calcula el retorno de inversión de implementaciones de IA con análisis financiero detallado</p>
+                                <h3>{t('consultoria.ai_tools_roi_title')}</h3>
+                                <p>{t('consultoria.ai_tools_roi_desc')}</p>
                                 <div className="ai-tool-features">
-                                     <span><Icon name="fa-check" /> ROI Proyectado</span>
-                                     <span><Icon name="fa-check" /> Ahorro Estimado</span>
-                                     <span><Icon name="fa-check" /> Análisis Porcentual</span>
+                                     <span><Icon name="fa-check" /> {t('consultoria.ai_tools_roi_feature1')}</span>
+                                     <span><Icon name="fa-check" /> {t('consultoria.ai_tools_roi_feature2')}</span>
+                                     <span><Icon name="fa-check" /> {t('consultoria.ai_tools_roi_feature3')}</span>
                                 </div>
                                 <div className="ai-tool-action">
-                                    <span>Acceder</span>
+                                    <span>{t('consultoria.ai_tools_access')}</span>
                                     <Icon name="fa-arrow-right" />
                                 </div>
                             </div>
@@ -840,15 +841,15 @@ const Consultoria = ({ onBack }) => {
                                 <div className="ai-tool-icon">
                                     <Icon name="fa-sitemap" />
                                 </div>
-                                <h3>Arquitecto de Automatización</h3>
-                                <p>Diseña workflows técnicos y sistemas de automatización paso a paso</p>
+                                <h3>{t('consultoria.ai_tools_architect_title')}</h3>
+                                <p>{t('consultoria.ai_tools_architect_desc')}</p>
                                 <div className="ai-tool-features">
-                                     <span><Icon name="fa-check" /> Workflows Detallados</span>
-                                     <span><Icon name="fa-check" /> Especificaciones Técnicas</span>
-                                     <span><Icon name="fa-check" /> Roadmap de Implementación</span>
+                                     <span><Icon name="fa-check" /> {t('consultoria.ai_tools_architect_feature1')}</span>
+                                     <span><Icon name="fa-check" /> {t('consultoria.ai_tools_architect_feature2')}</span>
+                                     <span><Icon name="fa-check" /> {t('consultoria.ai_tools_architect_feature3')}</span>
                                 </div>
                                 <div className="ai-tool-action">
-                                    <span>Acceder</span>
+                                    <span>{t('consultoria.ai_tools_access')}</span>
                                     <Icon name="fa-arrow-right" />
                                 </div>
                             </div>
@@ -858,13 +859,13 @@ const Consultoria = ({ onBack }) => {
                             <div className="cta-content">
                                 <Icon name="fa-rocket" />
                                 <div>
-                                    <h3>¿Necesitas un análisis personalizado?</h3>
-                                    <p>Agenda una sesión con nuestros consultores B2B para un diagnóstico específico</p>
+                                    <h3>{t('consultoria.ai_tools_cta_title')}</h3>
+                                    <p>{t('consultoria.ai_tools_cta_desc')}</p>
                                 </div>
                             </div>
                             <button className="cta-btn" onClick={() => setActiveTab('contacto')}>
                                 <Icon name="fa-calendar" />
-                                Agendar Consultoría
+                                {t('consultoria.ai_tools_cta_btn')}
                             </button>
                         </div>
                     </div>

@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useSmartBoardStats } from '../../hooks/useSmartBoardStats';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -47,6 +48,7 @@ const LOGRO_ICONS = {
 
 const SmartBoardStatsPage = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const stats = useSmartBoardStats();
 
   const {
@@ -81,24 +83,24 @@ const SmartBoardStatsPage = () => {
             <button
               onClick={() => navigate('/smartboard/app')}
               className="text-primary-light hover:text-mint flex items-center gap-2 transition-colors mb-2"
-              aria-label="Volver a SmartBoard"
+              aria-label={t('smartboard.stats_back')}
             >
               <ChevronLeft className="w-4 h-4" />
-              Volver a SmartBoard
+              {t('smartboard.stats_back')}
             </button>
             <div className="flex items-center gap-3">
               <h1 className="text-3xl font-bold text-petroleum">
-                Estadísticas SmartBoard
+                {t('smartboard.stats_title')}
               </h1>
               {isLive && (
                 <span className="badge-clay inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-50 text-green-600 text-xs font-semibold border border-green-200">
                   <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                  En vivo
+                  {t('smartboard.live')}
                 </span>
               )}
             </div>
             <p className="text-text-sub mt-2">
-              Progreso, rendimiento y actividad en la plataforma educativa
+              {t('smartboard.stats_desc')}
             </p>
           </div>
 
@@ -107,7 +109,7 @@ const SmartBoardStatsPage = () => {
               <Award className="w-3 h-3" />
               Nivel {nivel}
             </span>
-            <span className="text-text-sub text-sm font-medium">{puntos} pts</span>
+            <span className="text-text-sub text-sm font-medium">{t('smartboard.points', { points: puntos })}</span>
           </div>
         </motion.div>
 
@@ -124,7 +126,7 @@ const SmartBoardStatsPage = () => {
             className="card-clay-white bg-white rounded-2xl border border-slate-200/60 shadow-premium p-6"
           >
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-petroleum">Progreso General</h3>
+              <h3 className="text-lg font-semibold text-petroleum">{t('smartboard.progress_general')}</h3>
               <div className="w-12 h-12 bg-primary-light/10 rounded-2xl flex items-center justify-center">
                 <TrendingUp className="w-5 h-5 text-primary-light" />
               </div>
@@ -143,7 +145,7 @@ const SmartBoardStatsPage = () => {
             {racha.current > 0 && (
               <p className="text-text-sub text-sm mt-2 flex items-center gap-1">
                 <Flame className="w-3.5 h-3.5 text-orange-400" />
-                Racha de {racha.current} días
+                {t('smartboard.streak_days', { count: racha.current })}
               </p>
             )}
           </motion.div>
@@ -154,7 +156,7 @@ const SmartBoardStatsPage = () => {
             className="card-clay-white bg-white rounded-2xl border border-slate-200/60 shadow-premium p-6"
           >
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-petroleum">Misiones</h3>
+              <h3 className="text-lg font-semibold text-petroleum">{t('smartboard.missions')}</h3>
               <div className="w-12 h-12 bg-mint/10 rounded-2xl flex items-center justify-center">
                 <Target className="w-5 h-5 text-mint" />
               </div>
@@ -162,7 +164,7 @@ const SmartBoardStatsPage = () => {
             <div className="text-4xl font-bold text-petroleum mb-2">
               {misiones.completadas}/{misiones.total}
             </div>
-            <p className="text-text-sub text-sm">{misionesPct}% completadas</p>
+            <p className="text-text-sub text-sm">{t('smartboard.completed_pct', { pct: misionesPct })}</p>
           </motion.div>
 
           {/* Tiempo de Estudio */}
@@ -171,7 +173,7 @@ const SmartBoardStatsPage = () => {
             className="card-clay-white bg-white rounded-2xl border border-slate-200/60 shadow-premium p-6"
           >
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-petroleum">Tiempo de Estudio</h3>
+              <h3 className="text-lg font-semibold text-petroleum">{t('smartboard.study_time')}</h3>
               <div className="w-12 h-12 bg-[#FF6B9D]/10 rounded-2xl flex items-center justify-center">
                 <Clock className="w-5 h-5 text-[#FF6B9D]" />
               </div>
@@ -180,7 +182,7 @@ const SmartBoardStatsPage = () => {
               {tiempoEstudio.horas}h
             </div>
             <p className="text-text-sub text-sm">
-              {tiempoEstudio.totalMinutos} minutos en total
+              {t('smartboard.minutes_total', { minutes: tiempoEstudio.totalMinutos })}
             </p>
           </motion.div>
 
@@ -190,7 +192,7 @@ const SmartBoardStatsPage = () => {
             className="card-clay-white bg-white rounded-2xl border border-slate-200/60 shadow-premium p-6"
           >
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-petroleum">Puntuación</h3>
+              <h3 className="text-lg font-semibold text-petroleum">{t('smartboard.score')}</h3>
               <div className="w-12 h-12 bg-[#FFD166]/10 rounded-2xl flex items-center justify-center">
                 <Star className="w-5 h-5 text-[#FFD166]" />
               </div>
@@ -204,7 +206,7 @@ const SmartBoardStatsPage = () => {
             <div className="flex items-center gap-2 mt-3">
               <span className="badge-clay inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary-light/10 text-primary-light text-xs font-semibold">
                 <Award className="w-3 h-3" />
-                Nivel {nivel}
+              {t('smartboard.level', { level: nivel })}
               </span>
             </div>
           </motion.div>
@@ -223,7 +225,7 @@ const SmartBoardStatsPage = () => {
             className="card-clay-white bg-white rounded-2xl border border-slate-200/60 shadow-premium p-6"
           >
             <h3 className="text-lg font-semibold text-petroleum mb-6">
-              Progreso por Materia
+              {t('smartboard.progress_by_subject')}
             </h3>
             <div className="space-y-4">
               {materias.map((m) => (
@@ -245,7 +247,7 @@ const SmartBoardStatsPage = () => {
               ))}
               {materias.length === 0 && (
                 <p className="text-text-sub text-sm text-center py-8">
-                  No hay materias registradas aún
+                  {t('smartboard.no_subjects')}
                 </p>
               )}
             </div>
@@ -257,7 +259,7 @@ const SmartBoardStatsPage = () => {
             className="card-clay-white bg-white rounded-2xl border border-slate-200/60 shadow-premium p-6"
           >
             <h3 className="text-lg font-semibold text-petroleum mb-6">
-              Actividad Semanal
+              {t('smartboard.weekly_activity')}
             </h3>
             <div className="h-64 flex items-end gap-3">
               {actividadSemanal.map((item) => (
@@ -297,7 +299,7 @@ const SmartBoardStatsPage = () => {
             className="card-clay-white bg-white rounded-2xl border border-slate-200/60 shadow-premium p-6"
           >
             <h3 className="text-lg font-semibold text-petroleum mb-6">
-              Logros y Reconocimientos
+              {t('smartboard.achievements')}
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {logros.map((logro) => {

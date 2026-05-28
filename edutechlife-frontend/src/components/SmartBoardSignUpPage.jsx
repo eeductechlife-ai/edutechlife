@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FloatingParticles from './FloatingParticles';
 import { GraduationCap, BookOpen, Users, CheckCircle, ArrowLeft, LogIn, UserPlus } from 'lucide-react';
+import { useTranslation } from '../i18n/I18nProvider';
 
 const clerkAppearance = {
   variables: {
@@ -42,6 +43,7 @@ const clerkAppearance = {
 };
 
 const SmartBoardSignUpPage = () => {
+  const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
@@ -68,7 +70,7 @@ const SmartBoardSignUpPage = () => {
         className="absolute top-6 left-6 z-20 flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm text-white rounded-xl hover:bg-white/30 transition-all"
       >
         <ArrowLeft className="w-4 h-4" />
-        <span className="text-sm font-medium">Volver</span>
+        <span className="text-sm font-medium">{t('smartboard.signup_back')}</span>
       </button>
 
       <motion.div
@@ -87,23 +89,20 @@ const SmartBoardSignUpPage = () => {
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold">SmartBoard</h1>
-                  <p className="text-white/80 text-sm">Para estudiantes 8-16 años</p>
+                  <p className="text-white/80 text-sm">{t('smartboard.signup_for_students')}</p>
                 </div>
               </div>
 
               <div className="mb-8">
-                <h2 className="text-3xl font-bold mb-4">¡Bienvenido estudiante!</h2>
+                <h2 className="text-3xl font-bold mb-4">{t('smartboard.signup_welcome')}</h2>
                 {mode === 'signin' ? (
-                  <p className="text-white/90 leading-relaxed">
-                    Ingresa con tu correo y contraseña para continuar con tus <strong>misiones educativas</strong>, <strong>juegos interactivos</strong> y <strong>recompensas</strong>.
-                  </p>
+                  <p className="text-white/90 leading-relaxed" dangerouslySetInnerHTML={{ __html: t('smartboard.signup_signin_desc') }} />
                 ) : (
-                  <p className="text-white/90 leading-relaxed">
-                    Accede a <strong>misiones educativas</strong>, <strong>juegos interactivos</strong>, <strong>seguimiento de progreso</strong> y <strong>recompensas</strong> en una plataforma diseñada especialmente para tu aprendizaje.
+                  <p className="text-white/90 leading-relaxed" dangerouslySetInnerHTML={{ __html: t('smartboard.signup_signup_desc') }} />
                   </p>
                 )}
                 <p className="text-white/80 mt-4 text-sm italic">
-                  "El aprendizaje es un viaje divertido cuando tienes las herramientas correctas."
+                  {t('smartboard.signup_quote')}
                 </p>
               </div>
 
@@ -112,34 +111,34 @@ const SmartBoardSignUpPage = () => {
                   <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
                     <BookOpen className="w-5 h-5" />
                   </div>
-                  <span className="text-white/90">Misiones educativas interactivas</span>
+                    <span className="text-white/90">{t('smartboard.signup_feature_missions')}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
                     <Users className="w-5 h-5" />
                   </div>
-                  <span className="text-white/90">Comunidad de estudiantes</span>
+                    <span className="text-white/90">{t('smartboard.signup_feature_community')}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
                     <CheckCircle className="w-5 h-5" />
                   </div>
-                  <span className="text-white/90">Seguimiento de progreso personalizado</span>
+                    <span className="text-white/90">{t('smartboard.signup_feature_tracking')}</span>
                 </div>
               </div>
             </div>
 
             <div className="mt-8 pt-6 border-t border-white/20">
-              <p className="text-white/70 text-sm">
-                {mode === 'signin'
-                  ? '¿No tienes cuenta?'
-                  : '¿Ya tienes cuenta?'}
-                {' '}
-                <button
-                  onClick={() => setMode(mode === 'signin' ? 'signup' : 'signin')}
-                  className="text-white hover:underline font-medium"
-                >
-                  {mode === 'signin' ? 'Regístrate aquí' : 'Inicia sesión aquí'}
+                <p className="text-white/70 text-sm">
+                  {mode === 'signin'
+                    ? t('smartboard.signup_no_account')
+                    : t('smartboard.signup_have_account')}
+                  {' '}
+                  <button
+                    onClick={() => setMode(mode === 'signin' ? 'signup' : 'signin')}
+                    className="text-white hover:underline font-medium"
+                  >
+                    {mode === 'signin' ? t('smartboard.signup_register_here') : t('smartboard.signup_login_here')}
                 </button>
               </p>
             </div>
@@ -158,7 +157,7 @@ const SmartBoardSignUpPage = () => {
                 }`}
               >
                 <LogIn className="w-4 h-4" />
-                Iniciar Sesión
+                {t('smartboard.signup_login_tab')}
               </button>
               <button
                 onClick={() => setMode('signup')}
@@ -169,19 +168,19 @@ const SmartBoardSignUpPage = () => {
                 }`}
               >
                 <UserPlus className="w-4 h-4" />
-                Registrarse
+                {t('smartboard.signup_register_tab')}
               </button>
             </div>
 
             {/* Header */}
             <div className="mb-4 text-center w-full">
               <h3 className="text-xl font-bold text-[#004B63] mb-1">
-                {mode === 'signin' ? 'Inicia sesión en SmartBoard' : 'Regístrate en SmartBoard'}
+                {mode === 'signin' ? t('smartboard.signup_login_heading') : t('smartboard.signup_register_heading')}
               </h3>
               <p className="text-[#4DA8C4] text-sm">
                 {mode === 'signin'
-                  ? 'Ingresa con tu correo electrónico y contraseña'
-                  : 'Completa el formulario para estudiantes (8-16 años)'}
+                  ? t('smartboard.signup_login_sub')
+                  : t('smartboard.signup_register_sub')}
               </p>
             </div>
 
@@ -231,10 +230,7 @@ const SmartBoardSignUpPage = () => {
             {/* Footer info */}
             <div className="mt-4 pt-4 border-t border-gray-200 w-full max-w-sm">
               {mode === 'signup' && (
-                <p className="text-center text-[#4DA8C4] text-xs">
-                  Al registrarte como estudiante, aceptas nuestros{' '}
-                  <a href="#" className="text-[#004B63] hover:underline">Términos para estudiantes</a>{' '}
-                  y confirmas que tienes entre 8 y 16 años.
+                <p className="text-center text-[#4DA8C4] text-xs" dangerouslySetInnerHTML={{ __html: t('smartboard.signup_terms') }} />
                 </p>
               )}
             </div>

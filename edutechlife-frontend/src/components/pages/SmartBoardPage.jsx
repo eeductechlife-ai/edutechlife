@@ -2,18 +2,14 @@ import { lazy, Suspense } from 'react';
 import { useAuth } from '@clerk/react';
 import { useNavigate } from 'react-router-dom';
 import { PageLoader } from '../LoadingScreen';
+import { useTranslation } from '../../i18n/I18nProvider';
 
-// Lazy load del componente SmartBoardDashboard
 const SmartBoardDashboard = lazy(() => import('../SmartBoardDashboard'));
 
-/**
- * Página SmartBoard Dashboard
- * Ruta: /smartboard
- * Protegida: Requiere autenticación + rol 'smartboard'
- */
 const SmartBoardPage = () => {
   const { signOut } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   
   const handleLogout = async () => {
     await signOut();
@@ -21,7 +17,7 @@ const SmartBoardPage = () => {
   };
   
   return (
-    <Suspense fallback={<PageLoader message="Cargando SmartBoard..." />}>
+    <Suspense fallback={<PageLoader message={t('smartboard.loading')} />}>
       <SmartBoardDashboard onNavigate={navigate} onLogout={handleLogout} />
     </Suspense>
   );

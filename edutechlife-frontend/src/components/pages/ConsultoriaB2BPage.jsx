@@ -1,24 +1,20 @@
 import { lazy, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PageLoader } from '../LoadingScreen';
+import { useTranslation } from '../../i18n/I18nProvider';
 
-// Lazy load del componente ConsultoriaB2B
 const ConsultoriaB2B = lazy(() => import('../ConsultoriaB2B'));
 
-/**
- * Página Consultoría B2B
- * Ruta: /consultoria-b2b
- * Pública - no requiere autenticación
- */
 const ConsultoriaB2BPage = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   
   const handleBack = () => {
     navigate('/');
   };
   
   return (
-    <Suspense fallback={<PageLoader message="Cargando Consultoría B2B..." />}>
+    <Suspense fallback={<PageLoader message={t('page_loader.consulting_b2b')} />}>
       <ConsultoriaB2B onBack={handleBack} />
     </Suspense>
   );

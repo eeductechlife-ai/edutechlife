@@ -9,6 +9,7 @@ import SubjectGrid from './SubjectGrid';
 import GlassCard from './GlassCard';
 import { GraduationCap, Play, BookOpen, Trophy, TrendingUp, Mic, MessageCircle, Brain, LogOut, Download, FileText, Users, Clock, Target, Award, Sparkles } from 'lucide-react';
 import { callDeepseek } from '../utils/api';
+import { useTranslation } from '../i18n/I18nProvider';
 
 const HomeView = memo(({
   studentName,
@@ -19,7 +20,9 @@ const HomeView = memo(({
   onMissionStart,
   onMissionComplete,
   onGenerateReport
-}) => (
+}) => {
+  const { t } = useTranslation();
+  return (
   <div className="space-y-6">
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -28,18 +31,13 @@ const HomeView = memo(({
     >
       <div className="flex items-center justify-between">
         <div className="flex-1">
-          <h3 className="text-xl font-bold text-white font-montserrat mb-1">
-            ¡Bienvenido, {studentName}!
-          </h3>
-          <p className="text-white/80 text-sm font-open-sans">
-            Hoy tienes <span className="font-bold text-[#FFD166]">{missions.filter(m => !m.completed && !m.locked).length} misiones</span> pendientes 
-            y <span className="font-bold text-[#FFD166]">{subjects.filter(s => s.progress > 0 && s.progress < 100).length} materias</span> para repasar.
-          </p>
+          <h3 className="text-xl font-bold text-white font-montserrat mb-1" dangerouslySetInnerHTML={{ __html: t('smartboard.bienvenido', { name: studentName }) }} />
+          <p className="text-white/80 text-sm font-open-sans" dangerouslySetInnerHTML={{ __html: t('smartboard.today_missions', { count: missions.filter(m => !m.completed && !m.locked).length, subjects: subjects.filter(s => s.progress > 0 && s.progress < 100).length }) }} />
         </div>
         <div className="flex items-center gap-3 pl-4 border-l border-white/20">
           <div className="text-right mr-3">
             <p className="text-3xl font-bold text-white font-montserrat">{userLevel}</p>
-            <p className="text-xs text-white/70 font-open-sans">Nivel</p>
+            <p className="text-xs text-white/70 font-open-sans">{t('smartboard.level_label')}</p>
           </div>
           <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
             <GraduationCap className="w-7 h-7 text-white" />
@@ -56,7 +54,7 @@ const HomeView = memo(({
             animate={{ scale: [1, 1.2, 1], opacity: [1, 0.7, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
           />
-          <span className="text-sm text-[#64748B] font-open-sans">Valeria está lista para ayudarte</span>
+          <span className="text-sm text-[#64748B] font-open-sans">{t('smartboard.valeria_ready')}</span>
         </div>
         <div className="flex gap-2">
     <motion.button
@@ -64,18 +62,18 @@ const HomeView = memo(({
       className="px-4 py-2 bg-[#4DA8C4]/10 text-[#4DA8C4] rounded-lg text-sm font-semibold hover:bg-[#4DA8C4]/20 transition-all"
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      aria-label="Chat con Valeria"
+      aria-label={t('smartboard.chat_valeria')}
     >
-      <MessageCircle className="w-4 h-4 inline mr-1" />Chat con Valeria
+      <MessageCircle className="w-4 h-4 inline mr-1" />{t('smartboard.chat_valeria')}
     </motion.button>
     <motion.button
       onClick={() => onNavigate('vak')}
       className="px-4 py-2 bg-[#66CCCC]/10 text-[#004B63] rounded-lg text-sm font-semibold hover:bg-[#66CCCC]/20 transition-all"
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      aria-label="Diagnóstico VAK"
+      aria-label={t('smartboard.diagnostico_vak')}
     >
-      <Brain className="w-4 h-4 inline mr-1" />Diagnóstico VAK
+      <Brain className="w-4 h-4 inline mr-1" />{t('smartboard.diagnostico_vak')}
     </motion.button>
         </div>
       </div>
@@ -83,9 +81,9 @@ const HomeView = memo(({
 
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
       {[
-        { icon: Target, label: 'Misiones', count: missions.filter(m => !m.completed).length, gradient: 'from-[#4DA8C4] to-[#66CCCC]', onClick: () => onNavigate('misiones') },
-        { icon: BookOpen, label: 'Materias', count: subjects.length, gradient: 'from-[#66CCCC] to-[#004B63]', onClick: () => onNavigate('materias') },
-        { icon: Download, label: 'Mi Reporte', count: 'PDF', gradient: 'from-[#FFD166] to-[#FF8E53]', onClick: onGenerateReport },
+        { icon: Target, label: t('smartboard.missions_label'), count: missions.filter(m => !m.completed).length, gradient: 'from-[#4DA8C4] to-[#66CCCC]', onClick: () => onNavigate('misiones') },
+        { icon: BookOpen, label: t('smartboard.your_subjects'), count: subjects.length, gradient: 'from-[#66CCCC] to-[#004B63]', onClick: () => onNavigate('materias') },
+        { icon: Download, label: t('smartboard.download_report'), count: 'PDF', gradient: 'from-[#FFD166] to-[#FF8E53]', onClick: onGenerateReport },
         { icon: Brain, label: 'IA Lab', count: 'Pro', gradient: 'from-[#FF6B9D] to-[#FF8E53]', onClick: () => onNavigate('ialab') },
       ].map((action, index) => (
         <motion.button
@@ -102,20 +100,20 @@ const HomeView = memo(({
             <action.icon className="w-6 h-6 text-white" />
           </div>
           <p className="font-semibold text-[#004B63]">{action.label}</p>
-          <p className="text-xs text-[#64748B]">{action.count} {typeof action.count === 'number' ? 'pendientes' : ''}</p>
+          <p className="text-xs text-[#64748B]">{action.count} {typeof action.count === 'number' ? t('smartboard.pending') : ''}</p>
         </motion.button>
       ))}
     </div>
 
     <GlassCard animate delay={0.3}>
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-bold text-[#004B63] font-montserrat">Misiones del Día</h3>
+        <h3 className="text-xl font-bold text-[#004B63] font-montserrat">{t('smartboard.missions_day')}</h3>
         <button 
           onClick={() => onNavigate('misiones')}
           className="text-sm text-[#4DA8C4] font-semibold hover:underline"
-          aria-label="Ver todas las misiones"
+          aria-label={t('smartboard.view_all')}
         >
-          Ver todas →
+          {t('smartboard.view_all')} →
         </button>
       </div>
       <div className="space-y-4">
@@ -142,8 +140,8 @@ const MissionsView = memo(({
 }) => (
   <GlassCard animate>
     <div className="flex items-center justify-between mb-6">
-      <h3 className="text-xl font-bold text-[#004B63] font-montserrat">Todas las Misiones</h3>
-      <span className="text-sm text-[#64748B]">{missions.filter(m => m.completed).length}/{missions.length} completadas</span>
+      <h3 className="text-xl font-bold text-[#004B63] font-montserrat">{t('smartboard.all_missions')}</h3>
+      <span className="text-sm text-[#64748B]">{missions.filter(m => m.completed).length}/{missions.length} {t('smartboard.completed')}</span>
     </div>
     <div className="space-y-4">
       {missions.map(mission => (
@@ -167,8 +165,8 @@ const SubjectsView = memo(({
 }) => (
   <GlassCard animate>
     <div className="flex items-center justify-between mb-6">
-      <h3 className="text-xl font-bold text-[#004B63] font-montserrat">Tus Materias</h3>
-      <span className="text-sm text-[#64748B]">{subjects.filter(s => !s.locked).length} activas</span>
+      <h3 className="text-xl font-bold text-[#004B63] font-montserrat">{t('smartboard.your_subjects')}</h3>
+      <span className="text-sm text-[#64748B]">{subjects.filter(s => !s.locked).length} {t('smartboard.active')}</span>
     </div>
     <SubjectGrid 
       subjects={subjects}
@@ -182,15 +180,15 @@ SubjectsView.displayName = 'SubjectsView';
 const IALabView = memo(({ onNavigate }) => (
   <div className="space-y-6">
     <GlassCard animate>
-      <h3 className="text-xl font-bold text-[#004B63] font-montserrat mb-4">Laboratorio de IA</h3>
+      <h3 className="text-xl font-bold text-[#004B63] font-montserrat mb-4">{t('smartboard.ialab_title')}</h3>
       <p className="text-[#64748B] mb-6">
-        Explora herramientas avanzadas de inteligencia artificial para potenciar tu aprendizaje.
+        {t('smartboard.ialab_desc')}
       </p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {[
-          { icon: '🤖', title: 'Chat con Valeria', desc: 'Conversa con tu tutor IA', gradient: 'from-[#4DA8C4]/10 to-[#004B63]/5', action: () => onNavigate('lab-ia') },
-          { icon: '🧠', title: 'Diagnóstico VAK', desc: 'Descubre tu estilo de aprendizaje', gradient: 'from-[#66CCCC]/10 to-[#4DA8C4]/5', action: () => onNavigate('vak') },
-          { icon: '🏆', title: 'IA Lab Pro', desc: 'Certifícate en IA', gradient: 'from-[#FFD166]/10 to-[#FF8E53]/5', action: () => onNavigate('ialab') },
+          { icon: '🤖', title: t('smartboard.chat_valeria_title'), desc: t('smartboard.chat_valeria_desc'), gradient: 'from-[#4DA8C4]/10 to-[#004B63]/5', action: () => onNavigate('lab-ia') },
+          { icon: '🧠', title: t('smartboard.vak_title'), desc: t('smartboard.vak_desc'), gradient: 'from-[#66CCCC]/10 to-[#4DA8C4]/5', action: () => onNavigate('vak') },
+          { icon: '🏆', title: t('smartboard.ialab_pro_title'), desc: t('smartboard.ialab_pro_desc'), gradient: 'from-[#FFD166]/10 to-[#FF8E53]/5', action: () => onNavigate('ialab') },
         ].map((item, index) => (
           <motion.button
             key={item.title}
@@ -237,13 +235,13 @@ const ProgressView = memo(({
       </GlassCard>
       
       <GlassCard animate delay={0.1}>
-        <h3 className="text-xl font-bold text-[#004B63] font-montserrat mb-6">Estadísticas de Aprendizaje</h3>
+        <h3 className="text-xl font-bold text-[#004B63] font-montserrat mb-6">{t('smartboard.learning_stats')}</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {[
-            { label: 'Tiempo total', value: `${studentData.timeSpent || 0}min`, color: '#4DA8C4', bg: 'from-[#4DA8C4]/10 to-transparent' },
-            { label: 'Interacciones', value: studentData.interactions, color: '#66CCCC', bg: 'from-[#66CCCC]/10 to-transparent' },
-            { label: 'Promedio', value: `${averageProgress}%`, color: '#FFD166', bg: 'from-[#FFD166]/10 to-transparent' },
-            { label: 'Días racha', value: streakDays, color: '#FF6B9D', bg: 'from-[#FF6B9D]/10 to-transparent' },
+            { label: t('smartboard.total_time'), value: `${studentData.timeSpent || 0}min`, color: '#4DA8C4', bg: 'from-[#4DA8C4]/10 to-transparent' },
+            { label: t('smartboard.interactions'), value: studentData.interactions, color: '#66CCCC', bg: 'from-[#66CCCC]/10 to-transparent' },
+            { label: t('smartboard.average_progress'), value: `${averageProgress}%`, color: '#FFD166', bg: 'from-[#FFD166]/10 to-transparent' },
+            { label: t('smartboard.streak_days_label'), value: streakDays, color: '#FF6B9D', bg: 'from-[#FF6B9D]/10 to-transparent' },
           ].map((stat, index) => (
             <motion.div
               key={stat.label}
@@ -269,7 +267,7 @@ const ProgressView = memo(({
         whileTap={{ scale: 0.99 }}
       >
         <Download className="w-5 h-5" />
-        Descargar Reporte Completo
+        {t('smartboard.download_full_report')}
       </motion.button>
     </div>
   );
@@ -298,7 +296,7 @@ const ReportModal = memo(({
         ref={focusTrapRef}
         role="dialog"
         aria-modal="true"
-        aria-label="Reporte de aprendizaje"
+        aria-label={t('smartboard.report_title')}
         onClick={onClose}
         onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }}
       >
@@ -310,11 +308,11 @@ const ReportModal = memo(({
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-2xl font-bold text-[#004B63]">Reporte de Aprendizaje</h3>
+            <h3 className="text-2xl font-bold text-[#004B63]">{t('smartboard.report_title')}</h3>
             <button 
               onClick={onClose}
               className="text-[#64748B] hover:text-[#004B63] text-xl"
-              aria-label="Cerrar reporte"
+              aria-label={t('smartboard.close_report')}
             >
               ✕
             </button>
@@ -323,10 +321,10 @@ const ReportModal = memo(({
           <div className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
               {[
-                { label: 'Nivel', value: reportData.nivelActual, color: '#4DA8C4' },
-                { label: 'XP Total', value: reportData.xpActual, color: '#66CCCC' },
-                { label: 'Racha', value: `${reportData.diasRacha} días`, color: '#FFD166' },
-                { label: 'Tiempo', value: `${reportData.tiempoSesion}min`, color: '#FF6B9D' },
+                { label: t('smartboard.report_level'), value: reportData.nivelActual, color: '#4DA8C4' },
+                { label: t('smartboard.report_xp'), value: reportData.xpActual, color: '#66CCCC' },
+                { label: t('smartboard.report_streak'), value: t('smartboard.report_days', { days: reportData.diasRacha }), color: '#FFD166' },
+                { label: t('smartboard.report_time'), value: t('smartboard.report_min', { min: reportData.tiempoSesion }), color: '#FF6B9D' },
               ].map((stat) => (
                 <div
                   key={stat.label}
@@ -340,8 +338,8 @@ const ReportModal = memo(({
             </div>
 
             <div className="bg-[#F8FAFC] p-4 rounded-xl">
-              <p className="text-sm text-[#64748B] mb-2">Interacciones con Valeria</p>
-              <p className="text-lg font-bold text-[#004B63]">{reportData.questionsAsked} preguntas</p>
+              <p className="text-sm text-[#64748B] mb-2">{t('smartboard.interactions_with')}</p>
+              <p className="text-lg font-bold text-[#004B63]">{t('smartboard.questions_asked', { count: reportData.questionsAsked })}</p>
             </div>
 
             <div className="flex gap-3">
@@ -352,7 +350,7 @@ const ReportModal = memo(({
                 whileTap={{ scale: 0.98 }}
               >
                 <Download className="w-5 h-5" />
-                Descargar Reporte
+                {t('smartboard.download_report')}
               </motion.button>
               <motion.button
                 onClick={onClose}
@@ -360,7 +358,7 @@ const ReportModal = memo(({
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                Cerrar
+                {t('smartboard.close')}
               </motion.button>
             </div>
           </div>

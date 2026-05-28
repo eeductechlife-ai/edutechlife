@@ -9,6 +9,7 @@ import DaniTutorChat from './DaniTutorChat';
 import DaniAvatar3D from './DaniAvatar3D';
 import DashboardErrorBoundary from './DashboardErrorBoundary';
 import { VAKDiagnosticEnhanced } from './VAKDiagnosticEnhanced';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const KidsCalendar = lazy(() => import('./KidsCalendar'));
 const PointsRewardsSystem = lazy(() => import('./PointsRewardsSystem'));
@@ -89,16 +90,17 @@ const SectionFallback = ({ tab }) => {
 // Premium Sidebar - Glassmorphism
 // ==========================================
 const PremiumSidebar = ({ activeTab, onTabChange, totalPoints, vakCompleted, darkMode, streak, onNavigate, onLogout }) => {
+  const { t } = useTranslation();
   const tabs = [
-    { id: 'inicio', icon: '🏠', label: 'Inicio', color: '#4DA8C4' },
-    { id: 'vak', icon: '🧠', label: 'Mi VAK', color: '#66CCCC' },
-    { id: 'misiones', icon: '🎯', label: 'Misiones', color: '#FF6B9D' },
-    { id: 'materias', icon: '📚', label: 'Materias', color: '#4DA8C4' },
-    { id: 'actividades', icon: '📝', label: 'Actividades', color: '#FFD166' },
-    { id: 'calendario', icon: '📅', label: 'Calendario', color: '#FF6B9D' },
-    { id: 'progreso', icon: '📊', label: 'Progreso', color: '#66CCCC' },
-    { id: 'padres', icon: '👨‍👩‍👧', label: 'Vista Padres', color: '#4DA8C4' },
-    { id: 'noticias', icon: '📰', label: 'Noticias', color: '#004B63' },
+    { id: 'inicio', icon: '🏠', label: t('smartboard.tab_home'), color: '#4DA8C4' },
+    { id: 'vak', icon: '🧠', label: t('smartboard.tab_vak'), color: '#66CCCC' },
+    { id: 'misiones', icon: '🎯', label: t('smartboard.tab_missions'), color: '#FF6B9D' },
+    { id: 'materias', icon: '📚', label: t('smartboard.tab_subjects'), color: '#4DA8C4' },
+    { id: 'actividades', icon: '📝', label: t('smartboard.tab_activities'), color: '#FFD166' },
+    { id: 'calendario', icon: '📅', label: t('smartboard.tab_calendar'), color: '#FF6B9D' },
+    { id: 'progreso', icon: '📊', label: t('smartboard.tab_progress'), color: '#66CCCC' },
+    { id: 'padres', icon: '👨‍👩‍👧', label: t('smartboard.tab_parents'), color: '#4DA8C4' },
+    { id: 'noticias', icon: '📰', label: t('smartboard.tab_news'), color: '#004B63' },
   ];
 
   return (
@@ -121,11 +123,11 @@ const PremiumSidebar = ({ activeTab, onTabChange, totalPoints, vakCompleted, dar
             SmartBoard
           </h2>
         </motion.div>
-        <p className={`text-xs mt-1 transition-colors duration-500 ${darkMode ? 'text-[#94A3B8]' : 'text-[#64748B]'}`}>Premium SaaS</p>
+        <p className={`text-xs mt-1 transition-colors duration-500 ${darkMode ? 'text-[#94A3B8]' : 'text-[#64748B]'}`}>{t('smartboard.sb_subtitle')}</p>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-2 overflow-y-auto" aria-label="Navegación principal">
+      <nav className="flex-1 p-4 space-y-2 overflow-y-auto" aria-label={t('smartboard.nav_label')}>
         {tabs.map((tab, index) => (
           <motion.button
             key={tab.id}
@@ -176,7 +178,7 @@ const PremiumSidebar = ({ activeTab, onTabChange, totalPoints, vakCompleted, dar
             : 'bg-gradient-to-br from-[#F8FAFC] to-white border-[#E2E8F0]/50'
         }`}>
           <div className="flex items-center justify-between mb-2">
-            <span className={`text-xs transition-colors duration-500 ${darkMode ? 'text-[#94A3B8]' : 'text-[#64748B]'}`}>Nivel</span>
+            <span className={`text-xs transition-colors duration-500 ${darkMode ? 'text-[#94A3B8]' : 'text-[#64748B]'}`}>{t('smartboard.sidebar_level')}</span>
             <span className="text-xs font-bold text-[#4DA8C4]">
               {totalPoints >= 5000 ? '🏆 Maestro' : totalPoints >= 2500 ? '⭐ Experto' : totalPoints >= 1000 ? '📚 Avanzado' : totalPoints >= 500 ? '🌟 Intermedio' : '🌱 Principiante'}
             </span>
@@ -184,7 +186,7 @@ const PremiumSidebar = ({ activeTab, onTabChange, totalPoints, vakCompleted, dar
           <div className="flex items-center gap-2 mb-2">
             <span className="text-xs">🔥</span>
             <span className={`text-xs ${darkMode ? 'text-[#FFD166]' : 'text-[#FF8E53]'}`}>
-              {streak.current} días seguidos
+              {t('smartboard.sidebar_streak', { count: streak.current })}
             </span>
           </div>
           <div className="w-full h-2 bg-[#E2E8F0] rounded-full overflow-hidden">
@@ -200,14 +202,14 @@ const PremiumSidebar = ({ activeTab, onTabChange, totalPoints, vakCompleted, dar
           onClick={onLogout}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          aria-label="Cerrar sesión"
+          aria-label={t('smartboard.sidebar_logout')}
           className={`w-full mt-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-2 ${
             darkMode
               ? 'bg-[#334155] text-red-400 hover:bg-[#475569] hover:text-red-300'
               : 'bg-[#F8FAFC] text-red-500 hover:bg-red-50'
           }`}
         >
-          🚪 Cerrar sesión
+          🚪 {t('smartboard.sidebar_logout')}
         </motion.button>
       </div>
     </motion.aside>
@@ -237,11 +239,11 @@ const MobileBottomBar = ({ activeTab, onTabChange, darkMode }) => {
         darkMode ? 'bg-[#1E293B]/90 border-[#334155]/50' : 'bg-white/90 border-[#E2E8F0]'
       }`}
     >
-      <nav className="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory py-1 px-2 gap-1" aria-label="Navegación móvil"
+      <nav className="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory py-1 px-2 gap-1" aria-label={t('smartboard.mobile_nav')}
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {mobileTabs.map((tab) => {
-          const label = tab.id === 'inicio' ? 'Inicio' : tab.id === 'vak' ? 'VAK' : tab.id === 'misiones' ? 'Misiones' : tab.id === 'materias' ? 'Materias' : tab.id === 'actividades' ? 'Actividades' : tab.id === 'calendario' ? 'Calendario' : tab.id === 'noticias' ? 'Noticias' : 'Progreso';
+          const label = tab.id === 'inicio' ? t('smartboard.tab_home') : tab.id === 'vak' ? t('smartboard.tab_vak') : tab.id === 'misiones' ? t('smartboard.tab_missions') : tab.id === 'materias' ? t('smartboard.tab_subjects') : tab.id === 'actividades' ? t('smartboard.tab_activities') : tab.id === 'calendario' ? t('smartboard.tab_calendar') : tab.id === 'noticias' ? t('smartboard.tab_news') : t('smartboard.tab_progress');
           return (
             <motion.button
               key={tab.id}
@@ -270,10 +272,11 @@ const MobileBottomBar = ({ activeTab, onTabChange, darkMode }) => {
 // Missions View
 // ==========================================
 const MissionsView = memo(function MissionsView({ missions, onCompleteMission }) {
+  const { t } = useTranslation();
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between mb-2">
-        <h3 className="text-lg font-bold text-[#004B63]">🎯 Mis Misiones</h3>
+        <h3 className="text-lg font-bold text-[#004B63]">{t('smartboard.missions_view_title')}</h3>
         <span className="text-sm text-[#64748B]">{missions.filter(m => m.completed).length}/{missions.length}</span>
       </div>
       {missions.map((mission, index) => (
@@ -311,7 +314,7 @@ const MissionsView = memo(function MissionsView({ missions, onCompleteMission })
                   whileTap={{ scale: 0.95 }}
                   className="block mt-1 px-3 py-1 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white text-xs rounded-full font-semibold"
                 >
-                  Completar
+                  {t('smartboard.complete_btn')}
                 </motion.button>
               )}
             </div>
@@ -326,9 +329,10 @@ const MissionsView = memo(function MissionsView({ missions, onCompleteMission })
 // Subjects View
 // ==========================================
 const SubjectsView = memo(function SubjectsView({ subjects }) {
+  const { t } = useTranslation();
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-bold text-[#004B63]">📚 Mis Materias</h3>
+      <h3 className="text-lg font-bold text-[#004B63]">{t('smartboard.subjects_view_title')}</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {subjects.map((subject, index) => (
           <motion.div
@@ -357,7 +361,7 @@ const SubjectsView = memo(function SubjectsView({ subjects }) {
               />
             </div>
             <div className="flex justify-between items-center mt-2">
-              <span className="text-xs text-[#64748B]">Progreso</span>
+                    <span className="text-xs text-[#64748B]">{t('smartboard.progress')}</span>
               <span className="text-xs font-bold" style={{ color: subject.color }}>{subject.progress}%</span>
             </div>
           </motion.div>
@@ -371,6 +375,7 @@ const SubjectsView = memo(function SubjectsView({ subjects }) {
 // Main Content Area with Cinematic Scroll
 // ==========================================
 const CinematicContent = ({ activeTab, onTabChange, darkMode }) => {
+  const { t } = useTranslation();
   const { totalPoints, vakResult, addPoints, setVakResultAndRecommendations, streak, studentMoodHistory, academicTopics, conversationCount, missions, subjects, completeMission } = useSmartBoardKids();
   
   const handleVakComplete = useCallback((result) => {
@@ -382,7 +387,7 @@ const CinematicContent = ({ activeTab, onTabChange, darkMode }) => {
     switch (activeTab) {
       case 'inicio':
         return (
-          <DashboardErrorBoundary key="inicio" message="Error al cargar Inicio." onTabChange={onTabChange}>
+          <DashboardErrorBoundary key="inicio" message={t('smartboard.error_load_home')} onTabChange={onTabChange}>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -417,7 +422,7 @@ const CinematicContent = ({ activeTab, onTabChange, darkMode }) => {
       
       case 'misiones':
         return (
-          <DashboardErrorBoundary key="misiones" message="Error al cargar Misiones." onTabChange={onTabChange}>
+          <DashboardErrorBoundary key="misiones" message={t('smartboard.error_load_missions')} onTabChange={onTabChange}>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -431,7 +436,7 @@ const CinematicContent = ({ activeTab, onTabChange, darkMode }) => {
       
       case 'materias':
         return (
-          <DashboardErrorBoundary key="materias" message="Error al cargar Materias." onTabChange={onTabChange}>
+          <DashboardErrorBoundary key="materias" message={t('smartboard.error_load_subjects')} onTabChange={onTabChange}>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -445,7 +450,7 @@ const CinematicContent = ({ activeTab, onTabChange, darkMode }) => {
       
       case 'actividades':
         return (
-          <DashboardErrorBoundary key="actividades" message="Error al cargar Actividades." onTabChange={onTabChange}>
+          <DashboardErrorBoundary key="actividades" message={t('smartboard.error_load_activities')} onTabChange={onTabChange}>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -461,7 +466,7 @@ const CinematicContent = ({ activeTab, onTabChange, darkMode }) => {
 
       case 'calendario':
         return (
-          <DashboardErrorBoundary key="calendario" message="Error al cargar Calendario." onTabChange={onTabChange}>
+          <DashboardErrorBoundary key="calendario" message={t('smartboard.error_load_calendar')} onTabChange={onTabChange}>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -477,7 +482,7 @@ const CinematicContent = ({ activeTab, onTabChange, darkMode }) => {
       
       case 'puntos':
         return (
-          <DashboardErrorBoundary key="puntos" message="Error al cargar Puntos." onTabChange={onTabChange}>
+          <DashboardErrorBoundary key="puntos" message={t('smartboard.error_load_points')} onTabChange={onTabChange}>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -493,7 +498,7 @@ const CinematicContent = ({ activeTab, onTabChange, darkMode }) => {
       
       case 'noticias':
         return (
-          <DashboardErrorBoundary key="noticias" message="Error al cargar Noticias." onTabChange={onTabChange}>
+          <DashboardErrorBoundary key="noticias" message={t('smartboard.error_load_news')} onTabChange={onTabChange}>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -509,7 +514,7 @@ const CinematicContent = ({ activeTab, onTabChange, darkMode }) => {
       
       case 'vak':
         return (
-          <DashboardErrorBoundary key="vak" message="Error al cargar VAK." onTabChange={onTabChange}>
+          <DashboardErrorBoundary key="vak" message={t('smartboard.error_load_vak')} onTabChange={onTabChange}>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -603,7 +608,7 @@ const SmartBoardKidsDashboard = () => {
           >
             <span className="text-3xl">🎉</span>
             <div>
-              <p className="font-bold">¡Recompensa desbloqueada!</p>
+              <p className="font-bold">{t('smartboard.unlock_reward')}</p>
               <p className="text-sm opacity-90">{lastUnlockedReward.icon} {lastUnlockedReward.name}</p>
             </div>
           </motion.div>
@@ -656,14 +661,14 @@ const SmartBoardKidsDashboard = () => {
             }`}
           >
             <h1 className={`text-xl font-bold transition-colors duration-500 ${darkMode ? 'text-white' : 'text-[#004B63]'}`}>
-              {activeTab === 'inicio' && '🏠 Mi Panel'}
-              {activeTab === 'vak' && '🧠 Mi Perfil VAK'}
-              {activeTab === 'misiones' && '🎯 Mis Misiones'}
-              {activeTab === 'materias' && '📚 Mis Materias'}
-              {activeTab === 'actividades' && '📝 Mis Actividades'}
-              {activeTab === 'calendario' && '📅 Mi Calendario'}
-              {activeTab === 'noticias' && '📰 Noticias Tech'}
-              {activeTab === 'progreso' && '📊 Mi Progreso'}
+              {activeTab === 'inicio' && t('smartboard.topbar_home')}
+              {activeTab === 'vak' && t('smartboard.topbar_vak')}
+              {activeTab === 'misiones' && t('smartboard.topbar_missions')}
+              {activeTab === 'materias' && t('smartboard.topbar_subjects')}
+              {activeTab === 'actividades' && t('smartboard.topbar_activities')}
+              {activeTab === 'calendario' && t('smartboard.topbar_calendar')}
+              {activeTab === 'noticias' && t('smartboard.topbar_news')}
+              {activeTab === 'progreso' && t('smartboard.topbar_progress')}
             </h1>
             
             <div className="flex items-center gap-3">
@@ -674,7 +679,7 @@ const SmartBoardKidsDashboard = () => {
                 onClick={() => setIsDaniOpen(true)}
                 whileHover={{ scale: 1.05, boxShadow: '0 8px 25px rgba(77,168,196,0.4)' }}
                 whileTap={{ scale: 0.92 }}
-                aria-label="Hablar con Dani"
+                aria-label={t('smartboard.talk_dani')}
                 className="relative flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-full text-sm font-bold shadow-md hover:shadow-lg transition-all cursor-pointer select-none"
               >
                 <motion.span
@@ -683,7 +688,7 @@ const SmartBoardKidsDashboard = () => {
                 >
                   🤖
                 </motion.span>
-                <span className="hidden md:block">Hablar con Dani</span>
+                <span className="hidden md:block">{t('smartboard.talk_dani')}</span>
                 <motion.span
                   className="absolute inset-0 rounded-full border-2 border-white/40"
                   initial={{ opacity: 0, scale: 1 }}
@@ -698,13 +703,13 @@ const SmartBoardKidsDashboard = () => {
                   darkMode ? 'bg-[#334155]' : 'bg-[#F8FAFC]'
                 }`}
                 whileHover={{ scale: 1.02 }}
-                title="Racha de días"
+                title={t('smartboard.streak_title')}
               >
                 <span className="text-sm">🔥</span>
                 <span className={`text-xs font-bold ${darkMode ? 'text-[#FFD166]' : 'text-[#FF8E53]'}`}>
                   {streak.current}
                 </span>
-                <span className={`text-[10px] ${darkMode ? 'text-[#94A3B8]' : 'text-[#64748B]'}`}>días</span>
+                <span className={`text-[10px] ${darkMode ? 'text-[#94A3B8]' : 'text-[#64748B]'}`}>{t('smartboard.days')}</span>
               </motion.div>
 
               {/* Points Display */}
@@ -718,7 +723,7 @@ const SmartBoardKidsDashboard = () => {
               >
                 <span className="text-[#FFD166] font-bold text-lg">💎</span>
                 <span className={`text-sm font-bold transition-colors duration-500 ${darkMode ? 'text-white' : 'text-[#004B63]'}`}>{totalPoints.toLocaleString()}</span>
-                <span className={`text-[10px] ${darkMode ? 'text-[#94A3B8]' : 'text-[#64748B]'}`}>puntos</span>
+                <span className={`text-[10px] ${darkMode ? 'text-[#94A3B8]' : 'text-[#64748B]'}`}>{t('smartboard.points_display')}</span>
               </motion.div>
             </div>
           </motion.header>

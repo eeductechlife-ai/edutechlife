@@ -1,6 +1,7 @@
 import { useMemo, memo } from 'react';
 import { motion } from 'framer-motion';
 import { useSmartBoardKids } from '../../context/SmartBoardKidsContext';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const COLORS = {
   petroleum: '#004B63',
@@ -77,7 +78,7 @@ const CalendarMonth = ({ streakLog, darkMode }) => {
         📅 {monthName}
       </h3>
       <div className="grid grid-cols-7 gap-1.5">
-        {['D', 'L', 'M', 'M', 'J', 'V', 'S'].map(d => (
+        {t('smartboard.calendar_days').split('').map(d => (
           <span key={d} className="text-center text-[10px] font-semibold text-[#64748B] py-1">{d}</span>
         ))}
         {days.map((d, i) => {
@@ -95,7 +96,7 @@ const CalendarMonth = ({ streakLog, darkMode }) => {
                     ? darkMode ? 'bg-[#334155] text-[#64748B]' : 'bg-[#F1F5F9] text-[#94A3B8]'
                     : 'text-transparent'
               }`}
-              title={hour ? `${d.day} — conectado a las ${hour}` : `${d.day}`}
+              title={hour ? t('smartboard.connected_at', { day: d.day, hour }) : `${d.day}`}
             >
               {status !== 'future' && d.day}
               {status === 'active' && hour && (
@@ -106,8 +107,8 @@ const CalendarMonth = ({ streakLog, darkMode }) => {
         })}
       </div>
       <div className="flex items-center gap-4 mt-4 text-[10px] text-[#64748B]">
-        <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-gradient-to-br from-[#66CCCC] to-[#4DA8C4]" /> Conectado</span>
-        <span className="flex items-center gap-1"><span className={`w-2.5 h-2.5 rounded-full ${darkMode ? 'bg-[#334155]' : 'bg-[#F1F5F9]'}`} /> No conectado</span>
+        <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-gradient-to-br from-[#66CCCC] to-[#4DA8C4]" /> {t('smartboard.connected')}</span>
+        <span className="flex items-center gap-1"><span className={`w-2.5 h-2.5 rounded-full ${darkMode ? 'bg-[#334155]' : 'bg-[#F1F5F9]'}`} /> {t('smartboard.not_connected')}</span>
       </div>
     </motion.div>
   );
@@ -157,7 +158,7 @@ const PointsChart = ({ pointsHistory, darkMode }) => {
         })}
       </div>
       {dailyPoints.length === 0 && (
-        <p className="text-xs text-[#64748B] text-center py-8">Aún no hay datos de puntos</p>
+        <p className="text-xs text-[#64748B] text-center py-8">{t('smartboard.no_points_data')}</p>
       )}
     </motion.div>
   );
@@ -215,16 +216,16 @@ const SessionLog = ({ sessions, darkMode }) => {
         <div className={`flex items-center justify-between px-3 py-2 text-[10px] font-semibold ${
           darkMode ? 'text-[#64748B]' : 'text-[#94A3B8]'
         }`}>
-          <span className="w-16">Fecha</span>
-          <span className="w-16">Inicio</span>
-          <span className="w-14">Duración</span>
-          <span className="flex-1 text-right">Materia</span>
+          <span className="w-16">{t('smartboard.date')}</span>
+          <span className="w-16">{t('smartboard.start')}</span>
+          <span className="w-14">{t('smartboard.duration')}</span>
+          <span className="flex-1 text-right">{t('smartboard.subject')}</span>
         </div>
         {recent.map((s, i) => {
           const start = s.start ? new Date(s.start).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }) : '-';
           const date = s.date || (s.start ? new Date(s.start).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' }) : '-');
           const dur = s.duration ? `${s.duration} min` : '-';
-          const subj = s.subject || 'General';
+          const subj = s.subject || t('smartboard.general');
           return (
             <div key={i} className={`flex items-center justify-between px-3 py-2 rounded-lg text-xs transition-colors ${
               darkMode ? 'hover:bg-[#334155]' : 'hover:bg-[#F8FAFC]'
@@ -265,11 +266,11 @@ const RewardsGrid = ({ unlockedRewards, totalPoints, darkMode }) => {
               <div className="text-2xl mb-1">{r.icon}</div>
               <div className={`text-[11px] font-bold mb-0.5 ${darkMode ? 'text-white' : 'text-[#004B63]'}`}>{r.name}</div>
               <div className={`text-[10px] ${darkMode ? 'text-[#94A3B8]' : 'text-[#64748B]'}`}>{r.cost} pts</div>
-              {unlocked && <div className="text-[10px] text-green-500 font-semibold mt-1">✅ Desbloqueado</div>}
-              {!unlocked && canAfford && <div className="text-[10px] text-[#4DA8C4] font-semibold mt-1">Disponible</div>}
+              {unlocked && <div className="text-[10px] text-green-500 font-semibold mt-1">{t('smartboard.unlocked')}</div>}
+              {!unlocked && canAfford && <div className="text-[10px] text-[#4DA8C4] font-semibold mt-1">{t('smartboard.available')}</div>}
               {!unlocked && !canAfford && (
                 <div className="text-[10px] text-[#64748B] mt-1">
-                  Te faltan {r.cost - totalPoints} pts
+                  {t('smartboard.missing_points', { count: r.cost - totalPoints })}
                 </div>
               )}
             </div>
@@ -301,6 +302,7 @@ const SummaryCard = memo(function SummaryCard({ icon, label, value, sub, color, 
 });
 
 const SmartBoardProgress = () => {
+  const { t } = useTranslation();
   const {
     totalPoints, pointsHistory, streak, streakLog, sessions,
     totalActiveMinutes, unlockedRewards, darkMode,
@@ -319,29 +321,29 @@ const SmartBoardProgress = () => {
         {/* Summary Cards */}
         <div className="flex flex-wrap gap-4">
           <SummaryCard
-            icon="🔥" label="Racha actual"
-            value={`${streak.current} días`}
-            sub={streak.current > 0 ? `Récord: ${streak.longest} días` : 'Comienza hoy'}
+            icon="🔥" label={t('smartboard.current_streak')}
+            value={`${streak.current} ${t('smartboard.days')}`}
+            sub={streak.current > 0 ? t('smartboard.record', { days: streak.longest }) : t('smartboard.start_today')}
             color="text-[#FF8E53]" delay={0}
             darkMode={darkMode}
           />
           <SummaryCard
-            icon="💎" label="Puntos totales"
+            icon="💎" label={t('smartboard.total_points')}
             value={totalPoints.toLocaleString()}
-            sub={`${pointsHistory.length} transacciones`}
+            sub={t('smartboard.transactions', { count: pointsHistory.length })}
             color="text-[#FFD166]" delay={0.07}
             darkMode={darkMode}
           />
           <SummaryCard
-            icon="⏱" label="Tiempo activo"
-            value={`${totalActiveMinutes} min`}
+            icon="⏱" label={t('smartboard.active_time_min')}
+            value={`${totalActiveMinutes} ${t('smartboard.minutes')}`}
             sub={totalActiveMinutes >= 60 ? `(${(totalActiveMinutes / 60).toFixed(1)} h)` : ''}
             color="text-[#4DA8C4]" delay={0.14}
             darkMode={darkMode}
           />
           <SummaryCard
-            icon="🏆" label="Mejor racha"
-            value={`${streak.longest} días`}
+            icon="🏆" label={t('smartboard.best_streak')}
+            value={`${streak.longest} ${t('smartboard.days')}`}
             sub={level.name}
             color="text-[#66CCCC]" delay={0.21}
             darkMode={darkMode}
@@ -356,12 +358,12 @@ const SmartBoardProgress = () => {
             <div className="flex items-center gap-2">
               <span className="text-xl">{level.icon}</span>
               <span className={`text-sm font-bold ${darkMode ? 'text-white' : 'text-[#004B63]'}`}>
-                Nivel {level.name}
+                {t('smartboard.level_name', { name: level.name })}
               </span>
             </div>
             {level.next && (
               <span className={`text-[11px] ${darkMode ? 'text-[#94A3B8]' : 'text-[#64748B]'}`}>
-                {totalPoints.toLocaleString()} / {level.next.toLocaleString()} pts
+                {t('smartboard.points_progress', { current: totalPoints.toLocaleString(), next: level.next.toLocaleString() })}
               </span>
             )}
           </div>

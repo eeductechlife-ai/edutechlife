@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, TrendingUp, Award, Clock, Brain, Calendar, Trophy } from 'lucide-react';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const STORAGE_PREFIX = 'edutechlife';
 
@@ -53,7 +54,7 @@ const PointsChart = ({ history }) => {
 
   return (
     <div className="bg-white rounded-xl p-5 border border-[#E2E8F0]">
-      <h3 className="text-sm font-bold text-[#004B63] mb-4">📈 Puntos Últimos 14 Días</h3>
+      <h3 className="text-sm font-bold text-[#004B63] mb-4">{t('smartboard.chart_last_14')}</h3>
       <div className="flex items-end gap-2 h-32">
         {chartData.map((day, i) => (
           <motion.div
@@ -83,7 +84,7 @@ const ActivityLog = ({ history }) => {
   const recent = history.slice(-20).reverse();
   return (
     <div className="bg-white rounded-xl p-5 border border-[#E2E8F0]">
-      <h3 className="text-sm font-bold text-[#004B63] mb-4">📜 Actividad Reciente</h3>
+      <h3 className="text-sm font-bold text-[#004B63] mb-4">{t('smartboard.recent_activity')}</h3>
       <div className="space-y-2 max-h-64 overflow-y-auto">
         {recent.map((entry, i) => (
           <motion.div
@@ -111,6 +112,7 @@ const ActivityLog = ({ history }) => {
 
 const SmartBoardParentDashboard = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [data, setData] = useState({ points: 0, history: [], vakResult: null, minutes: 0, missions: [], subjects: [], events: [] });
 
@@ -152,17 +154,17 @@ const SmartBoardParentDashboard = () => {
             className="flex items-center gap-2 text-[#64748B] hover:text-[#004B63] transition-colors mb-4"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm font-medium">Volver al Dashboard</span>
+            <span className="text-sm font-medium">{t('smartboard.back_dashboard')}</span>
           </button>
-          <h1 className="text-3xl font-black text-[#004B63]">Panel para Padres</h1>
-          <p className="text-[#64748B] mt-1">Progreso y actividad de tu hijo en SmartBoard</p>
+          <h1 className="text-3xl font-black text-[#004B63]">{t('smartboard.parent_panel')}</h1>
+          <p className="text-[#64748B] mt-1">{t('smartboard.parent_desc')}</p>
         </motion.div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <StatCard icon={<Trophy className="w-5 h-5 text-[#FFD166]" />} label="Puntos" value={data.points.toLocaleString()} color="#FFD166" subtitle={`${level.emoji} ${level.name}`} />
-          <StatCard icon={<Award className="w-5 h-5 text-[#4DA8C4]" />} label="Misiones" value={`${completedMissions}/${totalMissions}`} color="#4DA8C4" subtitle={`${totalMissions - completedMissions} pendientes`} />
-          <StatCard icon={<Clock className="w-5 h-5 text-[#66CCCC]" />} label="Tiempo activo" value={`${data.minutes} min`} color="#66CCCC" subtitle={`${Math.floor(data.minutes / 60)}h en total`} />
-          <StatCard icon={<TrendingUp className="w-5 h-5" style={{ color: '#B2D8E5' }} />} label="Progreso" value={`${averageProgress}%`} color="#B2D8E5" subtitle="promedio materias" />
+          <StatCard icon={<Trophy className="w-5 h-5 text-[#FFD166]" />} label={t('smartboard.points_label')} value={data.points.toLocaleString()} color="#FFD166" subtitle={`${level.emoji} ${level.name}`} />
+          <StatCard icon={<Award className="w-5 h-5 text-[#4DA8C4]" />} label={t('smartboard.missions_label')} value={`${completedMissions}/${totalMissions}`} color="#4DA8C4" subtitle={`${totalMissions - completedMissions} ${t('smartboard.pending')}`} />
+          <StatCard icon={<Clock className="w-5 h-5 text-[#66CCCC]" />} label={t('smartboard.active_time')} value={`${data.minutes} ${t('smartboard.minutes')}`} color="#66CCCC" subtitle={t('smartboard.total_hours', { hours: Math.floor(data.minutes / 60) })} />
+          <StatCard icon={<TrendingUp className="w-5 h-5" style={{ color: '#B2D8E5' }} />} label={t('smartboard.progress_label')} value={`${averageProgress}%`} color="#B2D8E5" subtitle={t('smartboard.average')} />
         </div>
 
         {data.vakResult && (
@@ -173,7 +175,7 @@ const SmartBoardParentDashboard = () => {
           >
             <div className="flex items-center gap-3 mb-3">
               <Brain className="w-5 h-5 text-[#4DA8C4]" />
-              <h3 className="font-bold text-[#004B63]">Perfil VAK</h3>
+              <h3 className="font-bold text-[#004B63]">{t('smartboard.vak_profile')}</h3>
             </div>
             <div className="grid grid-cols-3 gap-4">
               {Object.entries(data.vakResult.scores || {}).map(([key, value]) => (
@@ -198,7 +200,7 @@ const SmartBoardParentDashboard = () => {
               ))}
             </div>
             <p className="text-sm text-[#4DA8C4] mt-3 font-semibold">
-              Estilo predominante: {data.vakResult.predominantStyle}
+              {t('smartboard.predominant_style', { style: data.vakResult.predominantStyle })}
             </p>
           </motion.div>
         )}
@@ -216,7 +218,7 @@ const SmartBoardParentDashboard = () => {
           >
             <div className="flex items-center gap-2 mb-4">
               <Calendar className="w-5 h-5 text-[#FF6B9D]" />
-              <h3 className="text-sm font-bold text-[#004B63]">Próximos Eventos ({data.events.length})</h3>
+              <h3 className="text-sm font-bold text-[#004B63]">{t('smartboard.upcoming_events', { count: data.events.length })}</h3>
             </div>
             <div className="space-y-2">
               {data.events.slice(-5).reverse().map((event, i) => (
@@ -231,7 +233,7 @@ const SmartBoardParentDashboard = () => {
 
         <div className="text-center mt-8">
           <p className="text-xs text-[#94A3B8]">
-            Los datos se actualizan automáticamente cada 5 segundos.
+            {t('smartboard.auto_update')}
           </p>
         </div>
       </div>

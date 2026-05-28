@@ -1,8 +1,10 @@
 import { useState, useRef } from 'react';
 import AIPanel from './AIPanel';
 import html2pdf from 'html2pdf.js';
+import { useTranslation } from '../i18n/I18nProvider';
 
 const ConsultoriaB2B = ({ onBack }) => {
+    const { t } = useTranslation();
     const [activeTool, setActiveTool] = useState('roi');
     const [roiResult, setRoiResult] = useState(null);
     
@@ -240,7 +242,7 @@ Sé muy técnico y detallado. Tu respuesta debe poder ser entregada a un equipo 
                             className="flex items-center gap-2 px-4 py-2 bg-[#F1F5F9] hover:bg-[#4DA8C4] hover:text-white border border-[#E2E8F0] rounded-lg transition-all duration-300"
                         >
                             <i className="fa-solid fa-arrow-left text-[#4DA8C4] hover:text-white" />
-                            <span className="text-sm text-[#64748B] hover:text-white">Volver</span>
+                            <span className="text-sm text-[#64748B] hover:text-white">{t('consultoria.b2b.back')}</span>
                         </button>
                         <div className="h-8 w-px bg-[#E2E8F0]" />
                         <div className="flex items-center gap-3">
@@ -248,14 +250,14 @@ Sé muy técnico y detallado. Tu respuesta debe poder ser entregada a un equipo 
                                 <i className="fa-solid fa-building text-white" />
                             </div>
                             <div>
-                                <h1 className="font-montserrat font-bold text-lg text-[#004B63]">Herramientas IA</h1>
-                                <p className="text-xs text-[#64748B]">Consultoría B2B de Edutechlife</p>
+                                <h1 className="font-montserrat font-bold text-lg text-[#004B63]">{t('consultoria.b2b.title')}</h1>
+                                <p className="text-xs text-[#64748B]">{t('consultoria.b2b.subtitle')}</p>
                             </div>
                         </div>
                     </div>
                     <div className="flex items-center gap-3">
                         <span className="px-3 py-1 bg-[#66CCCC]/20 border border-[#66CCCC]/40 rounded-full text-xs text-[#004B63] font-mono font-semibold">
-                            PREMIUM
+                            {t('consultoria.b2b.badge')}
                         </span>
                     </div>
                 </div>
@@ -278,8 +280,8 @@ Sé muy técnico y detallado. Tu respuesta debe poder ser entregada a un equipo 
                                 <i className={`fa-solid fa-chart-line text-2xl ${activeTool === 'roi' ? 'text-white' : 'text-[#4DA8C4]'}`} />
                             </div>
                             <div className="text-left">
-                                <div className="font-montserrat font-bold text-lg">Calculadora ROI Neural</div>
-                                <div className={`text-sm ${activeTool === 'roi' ? 'text-white/80' : 'text-[#64748B]'}`}>Análisis financiero con IA</div>
+                                <div className="font-montserrat font-bold text-lg">{t('consultoria.b2b.roi_tab_title')}</div>
+                                <div className={`text-sm ${activeTool === 'roi' ? 'text-white/80' : 'text-[#64748B]'}`}>{t('consultoria.b2b.roi_tab_desc')}</div>
                             </div>
                         </div>
                         {activeTool === 'roi' && (
@@ -299,8 +301,8 @@ Sé muy técnico y detallado. Tu respuesta debe poder ser entregada a un equipo 
                                 <i className={`fa-solid fa-sitemap text-2xl ${activeTool === 'automation' ? 'text-white' : 'text-[#66CCCC]'}`} />
                             </div>
                             <div className="text-left">
-                                <div className="font-montserrat font-bold text-lg">Arquitecto de Automatización</div>
-                                <div className={`text-sm ${activeTool === 'automation' ? 'text-white/80' : 'text-[#64748B]'}`}>Workflows y sistemas IA</div>
+                                <div className="font-montserrat font-bold text-lg">{t('consultoria.b2b.auto_tab_title')}</div>
+                                <div className={`text-sm ${activeTool === 'automation' ? 'text-white/80' : 'text-[#64748B]'}`}>{t('consultoria.b2b.auto_tab_desc')}</div>
                             </div>
                         </div>
                         {activeTool === 'automation' && (
@@ -314,10 +316,9 @@ Sé muy técnico y detallado. Tu respuesta debe poder ser entregada a un equipo 
                     {/* ROI Calculator Panel */}
                     <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-lg overflow-hidden">
                         <AIPanel
-                            title="CALCULADORA ROI NEURAL"
+                            title={t('consultoria.b2b.ai_roi_title')}
                             icon="fa-chart-line"
-                            placeholder="Ingresa los datos de tu organización para calcular el ROI...
-Ejemplo: Tenemos 50 empleados, queremos automatizar gestión de estudiantes y reportes. Presupuesto de $20 millones COP."
+                            placeholder={t('consultoria.b2b.ai_roi_placeholder')}
                             systemPrompt={roiSystemPrompt}
                             onResult={(result) => {
                                 setRoiResult(result);
@@ -332,14 +333,14 @@ Ejemplo: Tenemos 50 empleados, queremos automatizar gestión de estudiantes y re
                                         className="flex-1 px-6 py-4 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white rounded-xl font-montserrat font-bold hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-3 group"
                                     >
                                         <i className="fa-solid fa-file-pdf text-lg group-hover:scale-110 transition-transform" />
-                                        <span>Descargar PDF</span>
+                                        <span>{t('consultoria.b2b.download_pdf')}</span>
                                     </button>
                                     <button
                                         onClick={() => handleDownloadWord(roiResult, 'DIAGNÓSTICO ROI NEURAL', 'ROI')}
                                         className="flex-1 px-6 py-4 bg-white border-2 border-[#4DA8C4] text-[#004B63] rounded-xl font-montserrat font-bold hover:bg-[#4DA8C4]/10 transition-all duration-300 flex items-center justify-center gap-3"
                                     >
                                         <i className="fa-solid fa-file-word text-lg text-[#4DA8C4]" />
-                                        <span>Descargar Word</span>
+                                        <span>{t('consultoria.b2b.download_word')}</span>
                                     </button>
                                 </div>
                             </div>
@@ -349,10 +350,9 @@ Ejemplo: Tenemos 50 empleados, queremos automatizar gestión de estudiantes y re
                     {/* Automation Architect Panel */}
                     <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-lg overflow-hidden">
                         <AIPanel
-                            title="ARQUITECTO DE AUTOMATIZACIÓN"
+                            title={t('consultoria.b2b.ai_auto_title')}
                             icon="fa-diagram-project"
-                            placeholder="Describe los procesos que deseas automatizar...
-Ejemplo: Necesito automatizar el proceso de admisión de estudiantes: recepción de documentos, validación de requisitos, entrevistas, y generación de contratos."
+                            placeholder={t('consultoria.b2b.ai_auto_placeholder')}
                             systemPrompt={automationSystemPrompt}
                         />
                     </div>
@@ -364,22 +364,22 @@ Ejemplo: Necesito automatizar el proceso de admisión de estudiantes: recepción
                         <div className="w-14 h-14 bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] rounded-xl flex items-center justify-center mb-4">
                             <i className="fa-solid fa-shield-halved text-white text-xl" />
                         </div>
-                        <h3 className="font-montserrat font-bold text-[#004B63] mb-2">Datos Seguros</h3>
-                        <p className="text-sm text-[#64748B]">Toda la información se procesa de forma segura y no se almacena en servidores externos.</p>
+                        <h3 className="font-montserrat font-bold text-[#004B63] mb-2">{t('consultoria.b2b.feature1_title')}</h3>
+                        <p className="text-sm text-[#64748B]">{t('consultoria.b2b.feature1_desc')}</p>
                     </div>
                     <div className="p-6 bg-white border border-[#E2E8F0] rounded-2xl shadow-sm hover:shadow-lg transition-shadow">
                         <div className="w-14 h-14 bg-gradient-to-br from-[#66CCCC] to-[#B2D8E5] rounded-xl flex items-center justify-center mb-4">
                             <i className="fa-solid fa-file-contract text-white text-xl" />
                         </div>
-                        <h3 className="font-montserrat font-bold text-[#004B63] mb-2">Exportación Profesional</h3>
-                        <p className="text-sm text-[#64748B]">Descarga tus análisis en PDF y Word con el membrete oficial de Edutechlife.</p>
+                        <h3 className="font-montserrat font-bold text-[#004B63] mb-2">{t('consultoria.b2b.feature2_title')}</h3>
+                        <p className="text-sm text-[#64748B]">{t('consultoria.b2b.feature2_desc')}</p>
                     </div>
                     <div className="p-6 bg-white border border-[#E2E8F0] rounded-2xl shadow-sm hover:shadow-lg transition-shadow">
                         <div className="w-14 h-14 bg-gradient-to-br from-[#004B63] to-[#4DA8C4] rounded-xl flex items-center justify-center mb-4">
                             <i className="fa-solid fa-headset text-white text-xl" />
                         </div>
-                        <h3 className="font-montserrat font-bold text-[#004B63] mb-2">Soporte Dedicado</h3>
-                        <p className="text-sm text-[#64748B]">¿Necesitas ayuda? Agenda una sesión con nuestros consultores B2B.</p>
+                        <h3 className="font-montserrat font-bold text-[#004B63] mb-2">{t('consultoria.b2b.feature3_title')}</h3>
+                        <p className="text-sm text-[#64748B]">{t('consultoria.b2b.feature3_desc')}</p>
                     </div>
                 </div>
             </div>

@@ -4,6 +4,7 @@ import { callDeepseek } from '../utils/api';
 import { PROMPT_VALERIO_DOCENTE } from '../constants/prompts';
 import ValerioAvatar from './ValerioAvatar';
 import GlassCard from './GlassCard';
+import { useTranslation } from '../i18n/I18nProvider';
 
 const researchLines = [
   {
@@ -63,7 +64,7 @@ const ResearchCard = memo(({
     role="button"
     tabIndex={0}
     aria-pressed={isSelected}
-    aria-label={`${line.title}: ${line.subtitle}. Progreso ${line.progress}%`}
+    aria-label={`${line.title}: ${line.subtitle}. ${t('smartboard.progress_tab')} ${line.progress}%`}
     whileHover={{ y: -4 }}
     whileTap={{ scale: 0.98 }}
     layout
@@ -93,8 +94,8 @@ const ResearchCard = memo(({
 
     <div className="sb-research-progress">
       <div className="sb-progress-info flex items-center justify-between mb-2">
-        <span className="text-xs text-[#64748B] font-open-sans">Progreso</span>
-        <span className="sb-progress-value text-sm font-bold text-[#66CCCC] font-montserrat">{line.progress}%</span>
+        <span className="text-xs text-[#64748B] font-open-sans">{t('smartboard.progress_tab')}</span>
+        <span className="sb-progress-value text-sm font-bold text-[#66CCCC] font-montserrat">{t('smartboard.progress_pct', { pct: line.progress })}</span>
       </div>
       <div className="sb-progress-bar-container h-2 rounded-full bg-[#E2E8F0] overflow-hidden">
         <motion.div 
@@ -116,9 +117,9 @@ const ResearchCard = memo(({
         >
           <div className="sb-selected-content flex items-center gap-3">
             <i className={`fa-solid ${line.icon} text-[#4DA8C4]`} />
-            <span className="text-sm font-semibold text-[#004B63]">Línea seleccionada</span>
+            <span className="text-sm font-semibold text-[#004B63]">{t('smartboard.selected_line')}</span>
           </div>
-          <p className="text-xs text-[#64748B] mt-2">Los documentos se analizarán con este enfoque</p>
+          <p className="text-xs text-[#64748B] mt-2">{t('smartboard.analysis_context')}</p>
         </motion.div>
       )}
     </AnimatePresence>
@@ -138,7 +139,9 @@ const DropZone = memo(({
   onDrop,
   onFileSelect,
   fileInputRef
-}) => (
+}) => {
+  const { t } = useTranslation();
+  return (
   <motion.div
     className={`
       sb-analyzer-dropzone relative
@@ -157,7 +160,7 @@ const DropZone = memo(({
     onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInputRef.current?.click(); } }}
     role="button"
     tabIndex={0}
-    aria-label="Arrastra archivos aquí o haz clic para seleccionar. Formatos aceptados: PDF, DOC, TXT"
+    aria-label={t('smartboard.dropzone_label')}
     animate={{ 
       scale: isDragging ? 1.02 : 1,
       borderColor: isDragging ? '#4DA8C4' : '#E2E8F0'
@@ -205,8 +208,8 @@ const DropZone = memo(({
           className="sb-analyzing-state text-center"
         >
           <ValerioAvatar state="thinking" size={64} />
-          <h4 className="text-lg font-semibold text-[#004B63] mt-4 mb-2">Valerio está analizando...</h4>
-          <p className="text-sm text-[#64748B]">Identificando técnicas VAK óptimas para tu perfil</p>
+          <h4 className="text-lg font-semibold text-[#004B63] mt-4 mb-2">{t('smartboard.valerio_analyzing')}</h4>
+          <p className="text-sm text-[#64748B]">{t('smartboard.vak_techniques')}</p>
         </motion.div>
       ) : (
         <motion.div
@@ -223,8 +226,8 @@ const DropZone = memo(({
           >
             <i className="fa-solid fa-cloud-arrow-up text-3xl text-white" />
           </motion.div>
-          <h4 className="text-lg font-semibold text-[#004B63] mb-2">Arrastra archivos aquí</h4>
-          <p className="text-sm text-[#64748B] mb-4">o haz clic para seleccionar</p>
+          <h4 className="text-lg font-semibold text-[#004B63] mb-2">{t('smartboard.drag_files')}</h4>
+          <p className="text-sm text-[#64748B] mb-4">{t('smartboard.click_select')}</p>
           <div className="sb-file-types flex items-center justify-center gap-4">
             {[
               { icon: 'fa-file-pdf', label: 'PDF' },
@@ -248,7 +251,7 @@ const DropZone = memo(({
           exit={{ opacity: 0 }}
           className="sb-drag-overlay absolute inset-0 bg-[#4DA8C4]/10 rounded-2xl flex items-center justify-center"
         >
-          <span className="text-lg font-semibold text-[#4DA8C4]">Suelta para subir</span>
+          <span className="text-lg font-semibold text-[#4DA8C4]">{t('smartboard.drop_to_upload')}</span>
         </motion.div>
       )}
     </AnimatePresence>
@@ -261,7 +264,9 @@ const AnalysisCard = memo(({
   analysisResult,
   onCopy,
   onClear
-}) => (
+}) => {
+  const { t } = useTranslation();
+  return (
   <motion.div
     className="sb-analysis-card bg-white rounded-2xl p-6 shadow-lg border border-[#E2E8F0]"
     initial={{ opacity: 0, y: 20 }}
@@ -271,8 +276,8 @@ const AnalysisCard = memo(({
     <div className="sb-analysis-header flex items-center gap-4 mb-4">
       <ValerioAvatar state="speaking" size={48} />
       <div className="sb-analysis-title">
-        <h4 className="font-bold text-[#004B63] font-montserrat">Análisis de Valerio</h4>
-        <span className="text-xs text-[#64748B]">Informe personalizado VAK</span>
+        <h4 className="font-bold text-[#004B63] font-montserrat">{t('smartboard.valerio_analysis')}</h4>
+        <span className="text-xs text-[#64748B]">{t('smartboard.vak_report')}</span>
       </div>
     </div>
     <div className="sb-analysis-content p-4 bg-[#F8FAFC] rounded-xl mb-4">
@@ -287,7 +292,7 @@ const AnalysisCard = memo(({
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
       >
-        <i className="fa-solid fa-copy" /> Copiar
+        <i className="fa-solid fa-copy" /> {t('smartboard.copy')}
       </motion.button>
       <motion.button
         onClick={onClear}
@@ -295,7 +300,7 @@ const AnalysisCard = memo(({
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
       >
-        <i className="fa-solid fa-trash" /> Limpiar
+        <i className="fa-solid fa-trash" /> {t('smartboard.clear')}
       </motion.button>
     </div>
   </motion.div>
@@ -304,6 +309,7 @@ const AnalysisCard = memo(({
 AnalysisCard.displayName = 'AnalysisCard';
 
 const SmartBoard = ({ onAnalysisComplete, embedded = false }) => {
+  const { t } = useTranslation();
   const [isDragging, setIsDragging] = useState(false);
   const [uploadingFile, setUploadingFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -430,7 +436,7 @@ const SmartBoard = ({ onAnalysisComplete, embedded = false }) => {
         <div className="sb-header flex items-center justify-between mb-4">
           <div className="sb-status flex items-center gap-2">
             <div className="sb-status-dot w-2 h-2 rounded-full bg-[#66CCCC] animate-pulse" />
-            <span className="text-sm font-semibold text-[#004B63]">SmartBoard</span>
+            <span className="text-sm font-semibold text-[#004B63]">{t('smartboard.sb_name')}</span>
           </div>
           <div className="sb-valerio-mini">
             <ValerioAvatar state={avatarState} size={32} />
@@ -495,7 +501,7 @@ const SmartBoard = ({ onAnalysisComplete, embedded = false }) => {
           animate={{ opacity: 1, y: 0 }}
         >
           <i className="fa-solid fa-brain" />
-          <span className="text-sm font-bold">SMARTBOARD</span>
+          <span className="text-sm font-bold">{t('smartboard.sb_name')}</span>
         </motion.div>
         <motion.h1 
           className="text-3xl font-bold font-montserrat mb-2"
@@ -503,7 +509,7 @@ const SmartBoard = ({ onAnalysisComplete, embedded = false }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          Laboratorio de Investigación Inteligente
+          {t('smartboard.research_lab')}
         </motion.h1>
         <motion.p 
           className="text-white/80 font-open-sans max-w-2xl"
@@ -511,15 +517,14 @@ const SmartBoard = ({ onAnalysisComplete, embedded = false }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          Explora líneas de investigación, analiza documentos con IA y recibe 
-          recomendaciones personalizadas basadas en tu perfil de aprendizaje VAK.
+          {t('smartboard.research_desc')}
         </motion.p>
       </div>
 
       <div className="smartboard-tabs flex gap-2 p-4 border-b border-[#E2E8F0] bg-white">
         {[
-          { id: 'lines', label: 'Líneas de Investigación', icon: 'fa-diagram-project' },
-          { id: 'analyzer', label: 'Analizador de Documentos', icon: 'fa-file-analysis' },
+          { id: 'lines', label: t('smartboard.research_lines_tab'), icon: 'fa-diagram-project' },
+          { id: 'analyzer', label: t('smartboard.document_analyzer_tab'), icon: 'fa-file-analysis' },
         ].map((tab) => (
           <motion.button
             key={tab.id}
@@ -580,10 +585,9 @@ const SmartBoard = ({ onAnalysisComplete, embedded = false }) => {
                   >
                     <ValerioAvatar state={avatarState} size={48} />
                     <div className="sb-selected-text">
-                      <h4 className="font-bold text-[#004B63]">Línea de Investigación Activa</h4>
+                      <h4 className="font-bold text-[#004B63]">{t('smartboard.active_research_line')}</h4>
                       <p className="text-sm text-[#64748B]">
-                        Has seleccionado: <strong>{selectedLine}</strong>. 
-                        Los documentos que subas al analizador serán procesados con este contexto.
+                        {t('smartboard.selected_line_with_name', { line: selectedLine })}
                       </p>
                     </div>
                   </motion.div>
@@ -620,16 +624,16 @@ const SmartBoard = ({ onAnalysisComplete, embedded = false }) => {
                   <GlassCard padding="md">
                     <h4 className="font-bold text-[#004B63] mb-3 flex items-center gap-2">
                       <i className="fa-solid fa-wand-magic-sparkles text-[#4DA8C4]" /> 
-                      Análisis VAK
+                      {t('smartboard.vak_analysis')}
                     </h4>
                     <p className="text-sm text-[#64748B] mb-3">
-                      Valerio analizará tu documento y te proporcionará:
+                      {t('smartboard.valerio_will_analyze')}
                     </p>
                     <ul className="space-y-2">
                       {[
-                        'Resumen del contenido',
-                        'Técnicas de aprendizaje óptimas',
-                        'Preguntas reflexivas'
+                        t('smartboard.analysis_item_summary'),
+                        t('smartboard.analysis_item_techniques'),
+                        t('smartboard.analysis_item_questions')
                       ].map((item, i) => (
                         <li key={i} className="flex items-center gap-2 text-sm text-[#334155]">
                           <i className="fa-solid fa-check text-[#66CCCC]" />
@@ -642,11 +646,11 @@ const SmartBoard = ({ onAnalysisComplete, embedded = false }) => {
                   <GlassCard padding="md">
                     <h4 className="font-bold text-[#004B63] mb-3 flex items-center gap-2">
                       <i className="fa-solid fa-link text-[#4DA8C4]" /> 
-                      Conexión Activa
+                      {t('smartboard.active_connection')}
                     </h4>
                     <div className="sb-connection-status flex items-center gap-2">
                       <div className="sb-status-indicator w-2 h-2 rounded-full bg-[#66CCCC] animate-pulse" />
-                      <span className="text-sm text-[#64748B]">Conectado con IA Lab</span>
+                      <span className="text-sm text-[#64748B]">{t('smartboard.connected_ialab')}</span>
                     </div>
                   </GlassCard>
                 </div>

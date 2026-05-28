@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { GraduationCap, Lock, User, Eye, EyeOff, Sparkles } from 'lucide-react';
+import { useTranslation } from '../i18n/I18nProvider';
 
 const SmartBoardLogin = ({ onLogin }) => {
+  const { t } = useTranslation();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -19,7 +21,7 @@ const SmartBoardLogin = ({ onLogin }) => {
     if (username === '123' && password === '123') {
       onLogin({ username, password });
     } else {
-      setError('Usuario o contraseña incorrectos. Prueba: usuario: 123 / contraseña: 123');
+      setError(t('smartboard.login_error'));
     }
     
     setIsLoading(false);
@@ -40,7 +42,7 @@ const SmartBoardLogin = ({ onLogin }) => {
             SmartBoard
           </h1>
           <p className="text-lg text-[#64748B] font-open-sans">
-            Plataforma Educativa
+            {t('smartboard.login_subtitle')}
           </p>
         </div>
 
@@ -48,18 +50,18 @@ const SmartBoardLogin = ({ onLogin }) => {
         <div className="bg-white/95 backdrop-blur-xl rounded-2xl border border-[rgba(178,216,229,0.5)] shadow-2xl overflow-hidden">
           <div className="bg-gradient-to-r from-[#004B63] to-[#4DA8C4] p-6">
             <h2 className="text-xl font-bold text-white font-montserrat text-center">
-              Iniciar Sesión
+              {t('smartboard.login_heading')}
             </h2>
             <p className="text-white/80 text-sm font-open-sans text-center mt-1">
-              Accede a tu dashboard educativo
+              {t('smartboard.login_desc')}
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="p-8 space-y-6">
              {/* Username */}
              <div>
-               <label htmlFor="smartboard-username" className="block text-sm font-semibold text-[#004B63] font-open-sans mb-2">
-                 Usuario
+                <label htmlFor="smartboard-username" className="block text-sm font-semibold text-[#004B63] font-open-sans mb-2">
+                  {t('smartboard.username')}
                </label>
                <div className="relative">
                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#64748B]" />
@@ -68,7 +70,7 @@ const SmartBoardLogin = ({ onLogin }) => {
                    id="smartboard-username"
                    value={username}
                    onChange={(e) => setUsername(e.target.value)}
-                   placeholder="Ingresa tu usuario"
+                    placeholder={t('smartboard.username_placeholder')}
                    className="w-full pl-12 pr-4 py-3 rounded-xl border border-[#E2E8F0] focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] font-open-sans transition-all"
                    required
                    autoComplete="username"
@@ -78,8 +80,8 @@ const SmartBoardLogin = ({ onLogin }) => {
 
              {/* Password */}
              <div>
-               <label htmlFor="smartboard-password" className="block text-sm font-semibold text-[#004B63] font-open-sans mb-2">
-                 Contraseña
+                <label htmlFor="smartboard-password" className="block text-sm font-semibold text-[#004B63] font-open-sans mb-2">
+                  {t('smartboard.password')}
                </label>
                <div className="relative">
                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#64748B]" />
@@ -88,7 +90,7 @@ const SmartBoardLogin = ({ onLogin }) => {
                    id="smartboard-password"
                    value={password}
                    onChange={(e) => setPassword(e.target.value)}
-                   placeholder="Ingresa tu contraseña"
+                    placeholder={t('smartboard.password_placeholder')}
                    className="w-full pl-12 pr-12 py-3 rounded-xl border border-[#E2E8F0] focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] font-open-sans transition-all"
                    required
                    autoComplete="current-password"
@@ -121,12 +123,12 @@ const SmartBoardLogin = ({ onLogin }) => {
               {isLoading ? (
                 <>
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  Verificando...
+                  {t('smartboard.login_verifying')}
                 </>
               ) : (
                 <>
                   <Sparkles className="w-5 h-5" />
-                  Ingresar al Dashboard
+                  {t('smartboard.login_button')}
                 </>
               )}
             </button>
@@ -135,7 +137,7 @@ const SmartBoardLogin = ({ onLogin }) => {
 
         {/* Footer */}
         <p className="text-center text-sm text-[#64748B] font-open-sans mt-6">
-          ¿No tienes acceso? <button className="text-[#4DA8C4] font-semibold hover:underline">Solicita una cuenta</button>
+          {t('smartboard.no_access')} <button className="text-[#4DA8C4] font-semibold hover:underline">{t('smartboard.request_account')}</button>
         </p>
       </div>
     </div>
