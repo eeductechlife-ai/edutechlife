@@ -320,7 +320,7 @@ const AppLayout = () => {
               <div 
                 role="dialog"
                 aria-modal="true"
-                aria-label="Menú de navegación"
+                aria-label={t('ialab.nav_menu_aria')}
                 className={`fixed top-0 right-0 z-[1002] h-dvh w-80 bg-white shadow-2xl md:hidden flex flex-col ${drawerClosing ? 'animate-slide-out' : 'animate-slide-in'}`}
                 style={{ willChange: 'transform' }}
               >
@@ -341,7 +341,7 @@ const AppLayout = () => {
                   <button 
                     onClick={closeDrawer}
                     className="p-2 text-[#004B63] hover:text-[#4DA8C4] hover:bg-[#4DA8C4]/10 rounded-full transition-all duration-300"
-                    aria-label="Cerrar menú"
+                    aria-label={t('header.close_menu')}
                   >
                     <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -364,73 +364,73 @@ const AppLayout = () => {
                   {/* Navigation Categories */}
                   <div className="space-y-4">
                     <div>
-                      <h3 className="text-xs font-semibold text-[#4DA8C4] uppercase tracking-wider mb-2">INICIO</h3>
+                      <h3 className="text-xs font-semibold text-[#4DA8C4] uppercase tracking-wider mb-2">{t('nav.home_aria')}</h3>
                       <div className="space-y-1">
                         <button 
                           onClick={() => navigate('/')}
                           className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
                         >
-                          Herramientas IA
+                          {t('header.tools')}
                         </button>
                         <button 
                           onClick={() => navigateToSection('/', 'metodo')}
                           className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
                         >
-                          Método
+                          {t('header.method')}
                         </button>
                         <button 
                           onClick={() => navigateToSection('/', 'aliados')}
                           className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
                         >
-                          Aliados
+                          {t('header.allies')}
                         </button>
                       </div>
                     </div>
                     
                     <div>
-                      <h3 className="text-xs font-semibold text-[#4DA8C4] uppercase tracking-wider mb-2">HERRAMIENTAS</h3>
+                      <h3 className="text-xs font-semibold text-[#4DA8C4] uppercase tracking-wider mb-2">{t('header.tools')}</h3>
                       <div className="space-y-1">
                         <button 
                           onClick={() => navigate('/ialab')}
                           className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
                         >
-                          IA Lab Pro
+                          {t('nav.ialab_pro')}
                         </button>
                         <button 
                           onClick={() => navigate('/sign-up/smartboard')}
                           className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
                         >
-                          SmartBoard
+                          {t('nav.smartboard')}
                         </button>
                         <button 
                           onClick={() => navigate('/vak')}
                           className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
                         >
-                          Diagnóstico VAK
+                          {t('footer.vak')}
                         </button>
                         <button 
                           onClick={() => navigate('/automation')}
                           className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
                         >
-                          Automatización
+                          {t('footer.automation')}
                         </button>
                       </div>
                     </div>
                     
                     <div>
-                      <h3 className="text-xs font-semibold text-[#4DA8C4] uppercase tracking-wider mb-2">CONTACTO</h3>
+                      <h3 className="text-xs font-semibold text-[#4DA8C4] uppercase tracking-wider mb-2">{t('nav.contact')}</h3>
                       <div className="space-y-1">
                         <button 
                           onClick={openContactModal}
                           className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
                         >
-                          Contáctanos
+                          {t('header.contact_us')}
                         </button>
                         <button 
                           onClick={() => setShowLeadCaptureModal(true)}
                           className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
                         >
-                          Solicitar Demo
+                          {t('header.request_demo')}
                         </button>
                       </div>
                     </div>
@@ -449,7 +449,7 @@ const AppLayout = () => {
                         onClick={() => { closeDrawer(); setShowLeadCaptureModal(true); }}
                         className="w-full py-3 text-sm font-semibold text-[#004B63] border-2 border-[#4DA8C4]/30 rounded-full hover:border-[#4DA8C4] transition-colors"
                       >
-                        Solicitar Demo Gratuita
+                        {t('header.request_demo')}
                       </button>
                     </div>
                   )}
@@ -461,7 +461,7 @@ const AppLayout = () => {
         {/* Main Content Area */}
         <main className="flex-1">
           <ScrollToTop />
-          <Suspense fallback={<PageLoader message="Cargando contenido..." />}>
+          <Suspense fallback={<PageLoader message={t('header.loading')} />}>
             <Outlet />
           </Suspense>
         </main>

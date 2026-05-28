@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Icon } from '../utils/iconMapping.jsx';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const socialLinks = [
   { icon: 'fa-brands fa-facebook-f', label: 'Facebook', href: 'https://web.facebook.com/eductechlife/' },
@@ -9,28 +10,29 @@ const socialLinks = [
 ];
 
 const toolLinks = [
-  { label: 'IA Lab con Valerio', view: 'ialab' },
-  { label: 'SmartBoard', view: 'neuroentorno' },
-  { label: 'Diagnóstico VAK', view: 'vak' },
-  { label: 'ROI Calculator', view: 'consultoria' },
-  { label: 'Automatización Empresarial', view: 'automation' },
+  { label: 'IA Lab con Valerio', view: 'ialab', key: 'footer.ialab' },
+  { label: 'SmartBoard', view: 'neuroentorno', key: 'footer.smartboard' },
+  { label: 'Diagnóstico VAK', view: 'vak', key: 'footer.vak' },
+  { label: 'ROI Calculator', view: 'consultoria', key: 'footer.roi' },
+  { label: 'Automatización Empresarial', view: 'automation', key: 'footer.automation' },
 ];
 
 const resourceLinks = [
-  { label: 'Metodología VAK', action: 'vak' },
-  { label: 'Proyectos SenaTIC', view: 'proyectos' },
-  { label: 'Certificaciones', action: 'certificaciones' },
-  { label: 'Blog Educativo', action: 'blog' },
-  { label: 'Documentación', action: 'documentacion' },
+  { label: 'Metodología VAK', action: 'vak', key: 'footer.methodology' },
+  { label: 'Proyectos SenaTIC', view: 'proyectos', key: 'footer.projects' },
+  { label: 'Certificaciones', action: 'certificaciones', key: 'footer.certifications' },
+  { label: 'Blog Educativo', action: 'blog', key: 'footer.blog' },
+  { label: 'Documentación', action: 'documentacion', key: 'footer.docs' },
 ];
 
 const legalLinks = [
-  { label: 'Política de Privacidad', action: 'privacidad' },
-  { label: 'Términos de Uso', action: 'terminos' },
-  { label: 'Contacto', action: 'contacto' },
+  { label: 'Política de Privacidad', action: 'privacidad', key: 'footer.privacy' },
+  { label: 'Términos de Uso', action: 'terminos', key: 'footer.terms' },
+  { label: 'Contacto', action: 'contacto', key: 'footer.contact' },
 ];
 
 export default function Footer() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
   const [emailError, setEmailError] = useState(false);
@@ -97,7 +99,7 @@ export default function Footer() {
             
             {/* Descripción */}
             <p className="text-sm leading-relaxed mb-5 lg:mb-2" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-              Transformando la educación con inteligencia artificial y metodologías pedagógicas de vanguardia para el futuro digital.
+              {t('footer.tagline')}
             </p>
             
             {/* Social Icons */}
@@ -124,7 +126,7 @@ export default function Footer() {
           {/* Columna 2 - Herramientas */}
           <div>
             <h4 className="text-sm font-semibold uppercase tracking-wider text-white mb-4">
-              Herramientas
+              {t('footer.tools')}
             </h4>
             <ul className="space-y-2.5 lg:space-y-0">
               {toolLinks.map((item, index) => (
@@ -143,7 +145,7 @@ export default function Footer() {
                     }}
                   >
                     <Icon name="fa-chevron-right" className="text-xs" style={{ color: '#4DA8C4' }} />
-                    {item.label}
+                    {t(item.key)}
                   </button>
                 </li>
               ))}
@@ -153,7 +155,7 @@ export default function Footer() {
           {/* Columna 3 - Recursos */}
           <div>
             <h4 className="text-sm font-semibold uppercase tracking-wider text-white mb-4">
-              Recursos
+              {t('footer.resources')}
             </h4>
             <ul className="space-y-2.5 lg:space-y-0">
               {resourceLinks.map((item, index) => (
@@ -172,7 +174,7 @@ export default function Footer() {
                     }}
                   >
                     <Icon name="fa-chevron-right" className="text-xs" style={{ color: '#4DA8C4' }} />
-                    {item.label}
+                    {t(item.key)}
                   </button>
                 </li>
               ))}
@@ -185,7 +187,7 @@ export default function Footer() {
               className="text-base font-bold mb-3 lg:mb-2"
               style={{ color: '#FFFFFF' }}
             >
-              Newsletter
+              {t('footer.newsletter')}
             </h4>
             <p className="text-sm mb-4 lg:mb-2" style={{ color: 'rgba(255, 255, 255, 0.85)' }}>
               Recibe novedades educativas y actualizaciones de la plataforma.
@@ -204,10 +206,10 @@ export default function Footer() {
                   <Icon name="fa-check" className="text-xl" style={{ color: '#FFFFFF' }} />
                 </div>
                 <p className="text-base font-semibold" style={{ color: '#FFFFFF' }}>
-                  ¡Gracias por suscribirte!
+                  {t('footer.thanks')}
                 </p>
                 <p className="text-sm mt-1" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
-                  Te mantendremos informado
+                  {t('footer.thanks_msg')}
                 </p>
               </div>
             ) : (
@@ -218,7 +220,7 @@ export default function Footer() {
                     type="email"
                     value={email}
                     onChange={handleEmailChange}
-                    placeholder="tu@email.com"
+                    placeholder={t('footer.email_placeholder')}
                     className="w-full px-4 h-11 rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent"
                     style={{
                       backgroundColor: '#FFFFFF',
@@ -228,7 +230,7 @@ export default function Footer() {
                   />
                   {emailError && (
                     <p className="text-xs mt-1" style={{ color: '#FF6B9D' }}>
-                      Ingresa un email válido
+                      {t('footer.email_placeholder')}
                     </p>
                   )}
                 </div>
@@ -242,7 +244,7 @@ export default function Footer() {
                     boxShadow: '0 4px 15px rgba(77, 168, 196, 0.3)',
                   }}
                 >
-                  <span style={{ color: '#FFFFFF' }}>Suscribirme</span>
+                  <span style={{ color: '#FFFFFF' }}>{t('footer.subscribe')}</span>
                   <Icon name="fa-paper-plane" className="text-xs" style={{ color: '#FFFFFF' }} />
                 </button>
               </form>
@@ -262,7 +264,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 lg:gap-2">
           <div className="flex items-center gap-3 lg:gap-2">
             <p className="text-sm" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
-              © 2026 Edutechlife Premium. Todos los derechos reservados.
+              {t('footer.copyright')}
             </p>
           </div>
           
@@ -275,7 +277,7 @@ export default function Footer() {
                     className="text-sm transition-all duration-200 lg:hover:text-[#4DA8C4]"
                     style={{ color: 'rgba(255, 255, 255, 0.8)', background: 'none', border: 'none', padding: 0 }}
                   >
-                    {item.label}
+                    {t(item.key)}
                   </button>
                 </React.Fragment>
               ))}
@@ -328,7 +330,7 @@ function ModalVAK({ onClose }) {
             <Icon name="fa-brain" className="text-2xl" style={{ color: '#FFFFFF' }} />
           </div>
           <div>
-            <h2 className="text-2xl font-bold" style={{ color: '#004B63' }}>Metodología VAK</h2>
+            <h2 className="text-2xl font-bold" style={{ color: '#004B63' }}>{t('footer.methodology')}</h2>
             <p className="text-sm" style={{ color: '#4DA8C4' }}>Aprendizaje Visual, Auditivo y Kinestésico</p>
           </div>
         </div>
@@ -400,7 +402,7 @@ function ModalCertificaciones({ onClose }) {
             <Icon name="fa-certificate" className="text-2xl" style={{ color: '#FFFFFF' }} />
           </div>
           <div>
-            <h2 className="text-2xl font-bold" style={{ color: '#004B63' }}>Certificaciones</h2>
+            <h2 className="text-2xl font-bold" style={{ color: '#004B63' }}>{t('footer.certifications')}</h2>
             <p className="text-sm" style={{ color: '#4DA8C4' }}>Reconocimiento oficial de competencias</p>
           </div>
         </div>
@@ -765,7 +767,7 @@ function ModalBlog({ onClose }) {
                 className="h-8 w-auto"
                 style={{ filter: 'brightness(0) invert(1)' }}
               />
-              <span className="text-white font-medium text-sm">Blog Educativo</span>
+              <span className="text-white font-medium text-sm">{t('footer.blog')}</span>
             </div>
             <button 
               onClick={() => setSelectedArticle(null)} 
@@ -955,7 +957,7 @@ function ModalBlog({ onClose }) {
                   className="h-6 w-auto"
                   style={{ filter: 'brightness(0) invert(1)' }}
                 />
-                <span className="text-sm" style={{ color: '#6B7280' }}>Blog Educativo</span>
+                <span className="text-sm" style={{ color: '#6B7280' }}>{t('footer.blog')}</span>
               </div>
               <button 
                 onClick={() => setSelectedArticle(null)}
@@ -990,7 +992,7 @@ function ModalBlog({ onClose }) {
             <Icon name="fa-book-open" className="text-2xl" style={{ color: '#FFFFFF' }} />
           </div>
           <div>
-            <h2 className="text-2xl font-bold" style={{ color: '#004B63' }}>Blog Educativo</h2>
+            <h2 className="text-2xl font-bold" style={{ color: '#004B63' }}>{t('footer.blog')}</h2>
             <p className="text-sm" style={{ color: '#4DA8C4' }}>Artículos, noticias y recursos</p>
           </div>
         </div>
@@ -1335,7 +1337,7 @@ console.log(data);`,
                 className="h-8 w-auto"
                 style={{ filter: 'brightness(0) invert(1)' }}
               />
-              <span className="text-white font-medium text-sm">Documentación</span>
+              <span className="text-white font-medium text-sm">{t('footer.docs')}</span>
             </div>
             <button 
               onClick={() => setSelectedDoc(null)} 
@@ -1656,7 +1658,7 @@ console.log(data);`,
                   className="h-6 w-auto"
                   style={{ filter: 'brightness(0) invert(1)' }}
                 />
-                <span className="text-sm" style={{ color: '#6B7280' }}>Documentación</span>
+                <span className="text-sm" style={{ color: '#6B7280' }}>{t('footer.docs')}</span>
               </div>
               <button 
                 onClick={() => setSelectedDoc(null)}
@@ -1691,7 +1693,7 @@ console.log(data);`,
             <Icon name="fa-folder-open" className="text-2xl" style={{ color: '#FFFFFF' }} />
           </div>
           <div>
-            <h2 className="text-2xl font-bold" style={{ color: '#004B63' }}>Documentación</h2>
+            <h2 className="text-2xl font-bold" style={{ color: '#004B63' }}>{t('footer.docs')}</h2>
             <p className="text-sm" style={{ color: '#4DA8C4' }}>Manuales, guías y recursos técnicos</p>
           </div>
         </div>
@@ -1755,7 +1757,7 @@ function ModalPrivacidad({ onClose }) {
               className="h-8 w-auto"
               style={{ filter: 'brightness(0) invert(1)' }}
             />
-            <span className="text-white font-medium text-sm">Política de Privacidad</span>
+            <span className="text-white font-medium text-sm">{t('footer.privacy')}</span>
           </div>
           <button 
             onClick={onClose} 
@@ -1769,7 +1771,7 @@ function ModalPrivacidad({ onClose }) {
         {/* Contenido */}
         <div className="px-6 md:px-10 py-6 space-y-6">
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold" style={{ color: '#004B63' }}>Política de Privacidad</h1>
+            <h1 className="text-2xl font-bold" style={{ color: '#004B63' }}>{t('footer.privacy')}</h1>
             <p className="text-sm" style={{ color: '#4DA8C4' }}>Última actualización: 15 de Marzo 2026</p>
           </div>
 
@@ -1877,7 +1879,7 @@ function ModalPrivacidad({ onClose }) {
                 className="h-6 w-auto"
                 style={{ filter: 'brightness(0) invert(1)' }}
               />
-              <span className="text-sm" style={{ color: '#6B7280' }}>Política de Privacidad</span>
+              <span className="text-sm" style={{ color: '#6B7280' }}>{t('footer.privacy')}</span>
             </div>
             <button 
               onClick={onClose}
@@ -1886,7 +1888,7 @@ function ModalPrivacidad({ onClose }) {
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#003d52'}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#004B63'}
             >
-              Cerrar
+              {t('common.close')}
             </button>
           </div>
         </div>
@@ -1913,7 +1915,7 @@ function ModalTerminos({ onClose }) {
               className="h-8 w-auto"
               style={{ filter: 'brightness(0) invert(1)' }}
             />
-            <span className="text-white font-medium text-sm">Términos de Uso</span>
+            <span className="text-white font-medium text-sm">{t('footer.terms')}</span>
           </div>
           <button 
             onClick={onClose} 
@@ -1927,7 +1929,7 @@ function ModalTerminos({ onClose }) {
         {/* Contenido */}
         <div className="px-6 md:px-10 py-6 space-y-6">
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold" style={{ color: '#004B63' }}>Términos de Uso</h1>
+            <h1 className="text-2xl font-bold" style={{ color: '#004B63' }}>{t('footer.terms')}</h1>
             <p className="text-sm" style={{ color: '#4DA8C4' }}>Última actualización: 15 de Marzo 2026</p>
           </div>
 
@@ -2010,7 +2012,7 @@ function ModalTerminos({ onClose }) {
                 className="h-6 w-auto"
                 style={{ filter: 'brightness(0) invert(1)' }}
               />
-              <span className="text-sm" style={{ color: '#6B7280' }}>Términos de Uso</span>
+              <span className="text-sm" style={{ color: '#6B7280' }}>{t('footer.terms')}</span>
             </div>
             <button 
               onClick={onClose}
@@ -2019,7 +2021,7 @@ function ModalTerminos({ onClose }) {
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#003d52'}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#004B63'}
             >
-              Cerrar
+              {t('common.close')}
             </button>
           </div>
         </div>
@@ -2089,7 +2091,7 @@ function ModalContacto({ onClose }) {
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#003d52'}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#004B63'}
             >
-              Cerrar
+              {t('common.close')}
             </button>
           </div>
         </div>
@@ -2124,8 +2126,8 @@ function ModalContacto({ onClose }) {
               style={{ filter: 'brightness(0) invert(1)' }}
             />
             <div>
-              <h3 className="text-xl font-bold" style={{ color: '#004B63' }}>Contáctanos</h3>
-              <p className="text-sm" style={{ color: '#4DA8C4' }}>Estamos aquí para ayudarte</p>
+              <h3 className="text-xl font-bold" style={{ color: '#004B63' }}>{t('header.contact_us')}</h3>
+              <p className="text-sm" style={{ color: '#4DA8C4' }}>{t('nav.contact_subtitle')}</p>
             </div>
           </div>
         </div>
@@ -2254,10 +2256,10 @@ function ModalContacto({ onClose }) {
         <div className="px-6 py-3 border-t flex items-center justify-between" style={{ borderColor: '#E5E7EB', backgroundColor: '#F9FAFB' }}>
           <div className="flex items-center gap-2">
             <img src="/images/logo-edutechlife.webp" alt="Edutechlife" loading="lazy" className="h-5 w-auto" style={{ filter: 'brightness(0) invert(1)' }} />
-            <span className="text-xs" style={{ color: '#9CA3AF' }}>Contacto</span>
+            <span className="text-xs" style={{ color: '#9CA3AF' }}>{t('footer.contact')}</span>
           </div>
           <button onClick={handleClose} className="text-sm" style={{ color: '#6B7280' }} onMouseEnter={(e) => e.currentTarget.style.color = '#004B63'} onMouseLeave={(e) => e.currentTarget.style.color = '#6B7280'}>
-            Cerrar
+            {t('common.close')}
           </button>
         </div>
       </div>

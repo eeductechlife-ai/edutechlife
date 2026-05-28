@@ -11,14 +11,7 @@ import {
   Clock,
   LogOut
 } from 'lucide-react';
-
-const tabsConfig = [
-  { id: 'inicio', label: 'Inicio', icon: Home, color: 'text-[#4DA8C4]', bgActive: 'bg-[#4DA8C4]/20', badge: null },
-  { id: 'misiones', label: 'Misiones', icon: Target, color: 'text-[#66CCCC]', bgActive: 'bg-[#66CCCC]/20', badge: '3' },
-  { id: 'materias', label: 'Materias', icon: BookOpen, color: 'text-[#004B63]', bgActive: 'bg-[#004B63]/10', badge: '12' },
-  { id: 'lab-ia', label: 'Lab IA', icon: Cpu, color: 'text-[#FF6B9D]', bgActive: 'bg-[#FF6B9D]/20', badge: 'Nuevo' },
-  { id: 'progreso', label: 'Progreso', icon: BarChart3, color: 'text-[#FFD166]', bgActive: 'bg-[#FFD166]/20', badge: null },
-];
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const TabButton = memo(({ 
   tab, 
@@ -100,7 +93,16 @@ const SidebarNavigation = memo(({
   onNavigate, 
   onLogout 
 }) => {
+  const { t } = useTranslation();
   const [hoveredTab, setHoveredTab] = useState(null);
+
+  const tabsConfig = [
+    { id: 'inicio', label: t('sidebar.home'), icon: Home, color: 'text-[#4DA8C4]', bgActive: 'bg-[#4DA8C4]/20', badge: null },
+    { id: 'misiones', label: t('sidebar.missions'), icon: Target, color: 'text-[#66CCCC]', bgActive: 'bg-[#66CCCC]/20', badge: '3' },
+    { id: 'materias', label: t('sidebar.subjects'), icon: BookOpen, color: 'text-[#004B63]', bgActive: 'bg-[#004B63]/10', badge: '12' },
+    { id: 'lab-ia', label: t('sidebar.lab_ia'), icon: Cpu, color: 'text-[#FF6B9D]', bgActive: 'bg-[#FF6B9D]/20', badge: t('sidebar.new') },
+    { id: 'progreso', label: t('sidebar.progress'), icon: BarChart3, color: 'text-[#FFD166]', bgActive: 'bg-[#FFD166]/20', badge: null },
+  ];
 
   const stats = useMemo(() => ({
     xp: 1250,
@@ -145,10 +147,10 @@ const SidebarNavigation = memo(({
           >
             <div className="flex items-center gap-2">
               <Award className="w-4 h-4 text-[#FFD166]" />
-              <span className="text-xs text-[#64748B] font-open-sans">Nivel {stats.level}</span>
+              <span className="text-xs text-[#64748B] font-open-sans">{t('sidebar.level_label', { level: stats.level })}</span>
             </div>
             <span className="text-lg font-bold text-[#004B63] font-montserrat">
-              {stats.xp.toLocaleString()} XP
+              {stats.xp.toLocaleString()} {t('streak.xp')}
             </span>
           </motion.div>
           
@@ -159,7 +161,7 @@ const SidebarNavigation = memo(({
           >
             <div className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-[#FF6B9D]" />
-              <span className="text-xs text-[#64748B] font-open-sans">Racha</span>
+              <span className="text-xs text-[#64748B] font-open-sans">{t('streak.racha', { tier: '' })}</span>
             </div>
             <span className="text-lg font-bold text-[#004B63] font-montserrat flex items-center gap-1">
               {stats.streak} 🔥
@@ -173,7 +175,7 @@ const SidebarNavigation = memo(({
           >
             <div className="flex items-center gap-2">
               <Target className="w-4 h-4 text-[#4DA8C4]" />
-              <span className="text-xs text-[#64748B] font-open-sans">Misiones</span>
+              <span className="text-xs text-[#64748B] font-open-sans">{t('sidebar.missions')}</span>
             </div>
             <span className="text-lg font-bold text-[#004B63] font-montserrat">
               {stats.missionsCompleted}
@@ -197,17 +199,17 @@ const SidebarNavigation = memo(({
           </div>
           <div className="flex-1">
             <h4 className="text-sm font-semibold text-[#004B63] font-open-sans">
-              Estudiante Premium
+              {t('sidebar.student_premium')}
             </h4>
             <p className="text-xs text-[#64748B] font-open-sans">
-              Plan: Elite v2.286
+              {t('sidebar.plan_elite')}
             </p>
           </div>
         </motion.div>
         
         <div className="mt-3">
           <div className="flex items-center justify-between mb-1">
-            <span className="text-xs text-[#64748B] font-open-sans">Progreso diario</span>
+            <span className="text-xs text-[#64748B] font-open-sans">{t('sidebar.daily_progress')}</span>
             <span className="text-xs font-semibold text-[#66CCCC] font-open-sans">78%</span>
           </div>
           <div className="h-2 rounded-full bg-[#E2E8F0] overflow-hidden">
@@ -228,7 +230,7 @@ const SidebarNavigation = memo(({
         >
           <LogOut className="w-4 h-4 text-[#FF6B9D]" />
           <span className="text-sm font-semibold text-[#FF6B9D] font-open-sans">
-            Cerrar Sesión
+            {t('sidebar.logout')}
           </span>
         </motion.button>
       </div>
