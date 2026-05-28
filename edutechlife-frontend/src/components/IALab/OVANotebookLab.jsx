@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import VoiceReader from './VoiceReader';
+import { contentScreens, questionsData } from '../../data/ova/notebookLab';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const BrainIcon = ({ className = "" }) => (
   <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -50,172 +52,13 @@ const EdutechLogo = ({ size = "large" }) => {
   );
 };
 
-const contentScreens = [
-  {
-    id: 'intro',
-    title: '¿Qué es NotebookLM y para qué sirve?',
-    subtitle: 'Comprender qué es NotebookLM, cómo funciona y por qué es revolucionario',
-    objective: 'Entender el concepto de IA basada en fuentes propias y crear tu primer notebook',
-    valerioText: 'NotebookLM es una herramienta de Google que revoluciona la gestión del conocimiento personal. A diferencia de los chatbots tradicionales, trabaja exclusivamente con los documentos que tú le entregas. Esto significa que sus respuestas están 100% fundamentadas en tus fuentes, eliminando el riesgo de alucinaciones. Tu objetivo es comprender cómo funciona y por qué es diferente a los chatbots genéricos.',
-    achievements: [
-      { text: 'Entender el concepto de IA basada en fuentes propias' },
-      { text: 'Crear tu primer notebook con documentos' },
-      { text: 'Diferenciar NotebookLM de chatbots genéricos' },
-    ],
-    warnings: [
-      { text: 'Subir documentos sin curar ni organizar' },
-      { text: 'Esperar que funcione sin fuentes de calidad' },
-      { text: 'No entender que solo responde basado en tus fuentes' },
-    ],
-    example: { weak: 'Notebook vacío: Sin fuentes subidas, sin contexto', strong: 'Notebook potente: 5 PDFs de investigación académica + 3 artículos de industria = Asistente experto que responde con citas textuales de tus documentos' },
-    image: 'https://images.unsplash.com/photo-1461360370896-922624d12aa1?auto=format&fit=crop&q=80&w=1000',
-  },
-  {
-    id: 'features',
-    title: 'Curaduría de Fuentes y Síntesis de Documentos',
-    subtitle: 'Calidad sobre cantidad en tu investigación',
-    objective: 'Aprender a seleccionar, organizar y sintetizar documentos para maximizar el valor de tu notebook',
-    valerioText: 'La curaduría de fuentes es la clave para sacar el máximo provecho a NotebookLM. No se trata de subir la mayor cantidad de documentos, sino de seleccionar los más relevantes y organizarlos estratégicamente. Aprenderás a elegir fuentes confiables, categorizarlas por temas y generar síntesis cruzadas que te den una visión integral de tu investigación.',
-    achievements: [
-      { text: 'Seleccionar fuentes relevantes y confiables' },
-      { text: 'Organizar documentos por categorías temáticas' },
-      { text: 'Generar síntesis cruzadas entre múltiples fuentes' },
-    ],
-    warnings: [
-      { text: 'Subir 50 documentos sin filtro de calidad' },
-      { text: 'Mezclar fuentes contradictorias sin contexto' },
-      { text: 'No actualizar las fuentes regularmente' },
-    ],
-    example: { weak: 'Subir todo lo que encuentro sobre IA sin ningún criterio', strong: '10 papers seleccionados por relevancia, organizados por tema (ética, técnica, aplicaciones), con notas de contexto para cada grupo' },
-    image: 'https://images.unsplash.com/photo-1507146153580-69a1fe6d8aa1?auto=format&fit=crop&q=80&w=1000',
-  },
-  {
-    id: 'practices',
-    title: 'Audio Overviews y Gestión Documental con IA',
-    subtitle: 'Tu conocimiento en formato podcast',
-    objective: 'Transformar documentos complejos en conversaciones de audio con dos presentadores virtuales',
-    valerioText: 'Una de las funciones más impresionantes de NotebookLM es Audio Overview. Esta herramienta convierte tus documentos en conversaciones de podcast generadas por IA, con dos presentadores virtuales que discuten los hallazgos clave. Es ideal para repasar contenido mientras te desplazas, pero recuerda complementarlo con resúmenes escritos y siempre revisar el contenido generado.',
-    achievements: [
-      { text: 'Generar Audio Overviews desde tus documentos' },
-      { text: 'Personalizar el tono y enfoque del podcast' },
-      { text: 'Usar audio para repaso y aprendizaje móvil' },
-    ],
-    warnings: [
-      { text: 'Esperar audio perfecto con documentos cortos' },
-      { text: 'No revisar el contenido generado antes de compartir' },
-      { text: 'Usar solo audio sin complementar con resúmenes escritos' },
-    ],
-    example: { weak: 'Conversación vaga y genérica sobre el tema sin profundidad', strong: 'Podcast de 15 minutos donde dos presentadores discuten los hallazgos clave de 5 papers sobre neuroplasticidad, con ejemplos prácticos y analogías claras' },
-    image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1000',
-  },
-];
-
-const questionsData = [
-  {
-    id: 1,
-    image: "https://images.unsplash.com/photo-1461360370896-922624d12aa1?auto=format&fit=crop&q=80&w=1000",
-    question: "Según la guía, ¿cuál es el 'superpoder' principal de NotebookLM?",
-    options: [
-      "Busca información en todo internet para darte respuestas más largas.",
-      "Trabaja exclusivamente con las fuentes y documentos que tú le entregas.",
-      "Traduce documentos a más de 100 idiomas automáticamente.",
-      "Crea videos animados a partir de tus textos de estudio."
-    ],
-    correct: 1,
-    explanation: "¡Correcto! NotebookLM se diferencia porque solo usa la información que tú subes. Así se asegura de no inventar datos que no están en tus apuntes.",
-    hint: "Lee bien las opciones; este asistente está diseñado para ser totalmente fiel a tus propios documentos, no a internet."
-  },
-  {
-    id: 2,
-    image: "https://images.unsplash.com/photo-1507146153580-69a1fe6d8aa1?auto=format&fit=crop&q=80&w=1000",
-    question: "¿Cuál es la diferencia más importante entre usar ChatGPT y NotebookLM para estudiar?",
-    options: [
-      "ChatGPT usa 'todo el internet' y NotebookLM usa 'solo tus fuentes cargadas'.",
-      "ChatGPT es gratis y NotebookLM siempre es de pago.",
-      "NotebookLM solo funciona en celulares y ChatGPT en computadoras.",
-      "ChatGPT es para matemáticas y NotebookLM es para historia."
-    ],
-    correct: 0,
-    explanation: "Exacto. Mientras ChatGPT tiene conocimiento general de toda la web, NotebookLM se enfoca en ser súper preciso y estricto solo con los documentos que tú elegiste.",
-    hint: "Piensa en el origen de los datos de cada uno. Uno busca en todo el mundo y el otro solo en lo que tú le das."
-  },
-  {
-    id: 3,
-    image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1000",
-    question: "¿Qué increíble función tiene NotebookLM para ayudarte a 'escuchar' tus documentos?",
-    options: [
-      "Una canción estilo rap con las palabras clave más importantes.",
-      "Un audiolibro monótono narrado por tu propia voz clonada.",
-      "Una alarma para despertarte recordando el texto principal.",
-      "Un 'Podcast' (Audio Overview) generado por IA con dos voces que conversan sobre tu tema."
-    ],
-    correct: 3,
-    explanation: "¡Muy bien! La herramienta 'Audio Overview' crea una simulación de podcast muy realista donde dos anfitriones discuten tus apuntes, ideal para estudiar escuchando.",
-    hint: "Es un formato de audio muy popular hoy en día en el que dos anfitriones conversan sobre un tema."
-  },
-  {
-    id: 4,
-    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=1000",
-    question: "Se dice que NotebookLM está 'libre de alucinaciones'. ¿Qué significa esto?",
-    options: [
-      "Que no te permite subir documentos sobre temas de ciencia ficción.",
-      "Que bloquea automáticamente las páginas web con virus o publicidad engañosa.",
-      "Que la IA no inventa datos, sus respuestas se basan 100% en la evidencia de tus textos.",
-      "Que corrige tu ortografía y gramática sin que te des cuenta."
-    ],
-    correct: 2,
-    explanation: "Correcto. Como la IA está restringida (amarrada) solo a tus PDFs o documentos, se elimina casi por completo el riesgo de que invente información falsa (alucinación).",
-    hint: "En el mundo de la IA, 'alucinar' significa inventar cosas que no son reales."
-  },
-  {
-    id: 5,
-    image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1000",
-    question: "Si estás haciendo un trabajo en grupo para la escuela o universidad, ¿puedes usar NotebookLM con tus compañeros?",
-    options: [
-      "No, es una herramienta estrictamente para uso individual.",
-      "Sí, puedes compartir tus 'Cuadernos' con tu equipo igual que un Google Doc.",
-      "Solo si todos están conectados a la misma red Wi-Fi en el mismo salón.",
-      "Sí, pero la IA solo le responderá las preguntas al creador del grupo."
-    ],
-    correct: 1,
-    explanation: "¡Así es! Puedes colaborar en equipo. Todos pueden leer el mismo cuaderno, hacerle preguntas a las mismas fuentes y escuchar el mismo podcast generado.",
-    hint: "Como es una herramienta de Google, su función para grupos se parece mucho a cómo compartes archivos en Google Drive."
-  },
-  {
-    id: 6,
-    image: "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&q=80&w=1000",
-    question: "Según las 'Mejores Prácticas' de la guía, ¿qué debes hacer SIEMPRE que NotebookLM te da una respuesta?",
-    options: [
-      "Verificar siempre la cita o la parte exacta de donde sacó la información.",
-      "Borrar el documento original de tu computadora porque ya no lo necesitas.",
-      "Pedirle que lo traduzca a otro idioma para asegurar que sea de buena calidad.",
-      "Copiar y pegar la respuesta directamente en tu tarea sin necesidad de leerla."
-    ],
-    correct: 0,
-    explanation: "Excelente. NotebookLM es un gran asistente, pero tú eres el estudiante. Siempre debes verificar haciendo clic en las citas para ver de qué parte del texto original sacó la idea.",
-    hint: "Recuerda que tú eres el estudiante y la máquina es el asistente. Debes asegurarte de revisar las fuentes."
-  },
-  {
-    id: 7,
-    image: "https://images.unsplash.com/photo-1456324504439-367cee3b3c32?auto=format&fit=crop&q=80&w=1000",
-    question: "Según el manual, ¿cuántos documentos o fuentes diferentes puedes subir a un mismo cuaderno en NotebookLM?",
-    options: [
-      "Solo 1 fuente muy larga a la vez.",
-      "Hasta 5 fuentes pequeñas.",
-      "Fuentes ilimitadas (todo lo que tengas en tu computadora).",
-      "Hasta 50 fuentes de diversos formatos."
-    ],
-    correct: 3,
-    explanation: "Correcto. Puedes alimentar tu cuaderno con hasta 50 fuentes distintas (como PDFs, documentos, enlaces, etc.) para que la IA cruce la información entre todas ellas.",
-    hint: "No es infinito, pero es un número lo suficientemente grande como para armar una tesis completa (medio centenar)."
-  }
-];
-
 const infoSteps = ['welcome', 'content-0', 'content-1', 'content-2'];
 const totalSteps = infoSteps.length + questionsData.length + 1;
 
-export default function OVANotebookLab() {
+export default function OVANotebookLab({ onComplete }) {
+  const { t } = useTranslation();
   const [gameState, setGameState] = useState('welcome');
+  const certCompletedRef = useRef(false);
   const [contentIdx, setContentIdx] = useState(0);
   const [currentQIndex, setCurrentQIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -290,21 +133,21 @@ export default function OVANotebookLab() {
             </div>
             <div className="mb-6 flex justify-center animate-[float_6s_ease-in-out_infinite]"><EdutechLogo size="large" /></div>
             <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#E0F7FA] dark:bg-teal-900/30 text-[#004B63] dark:text-teal-200 font-semibold text-[10px] uppercase tracking-[0.15em] border border-[#2FA8C6]/20 mb-6">
-              <BrainIcon className="w-3.5 h-3.5" /><span>Laboratorio Guiado por Valerio</span>
+              <BrainIcon className="w-3.5 h-3.5" /><span>{t('ova.notebooklab.lab_title')}</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1E3A5F] dark:text-slate-100 mb-6 tracking-tight font-montserrat">Desafío: El Cuaderno del Futuro</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1E3A5F] dark:text-slate-100 mb-6 tracking-tight font-montserrat">{t('ova.notebooklab.welcome_title')}</h2>
             <div className="bg-[#EAEAEA]/50 dark:bg-slate-700/50 p-6 rounded-2xl mb-6 text-[#1E3A5F] dark:text-slate-100 text-base md:text-lg leading-relaxed border border-[#2FA8C6]/20 shadow-inner">
-              <p className="mb-4"><strong>¡Hola! Soy Valerio, tu coach de IA.</strong> Bienvenido al laboratorio interactivo de NotebookLM. Vamos a explorar esta poderosa herramienta de Google que está transformando la investigación académica.</p>
-              <p>Primero aprenderás los conceptos clave, luego pondremos a prueba tu conocimiento con 7 preguntas. ¿Estás listo?</p>
+              <p className="mb-4"><strong>{t('ova.notebooklab.welcome_hello')}</strong> {t('ova.notebooklab.welcome_desc_p1')}</p>
+              <p>{t('ova.notebooklab.welcome_desc_p2')}</p>
             </div>
             <div className="flex justify-center mb-6">
-              <VoiceReader text="¡Hola! Soy Valerio, tu coach de IA. Bienvenido al laboratorio interactivo de NotebookLM. Vamos a explorar esta herramienta de Google que está transformando la investigación académica. Primero aprenderás los conceptos clave, luego pondremos a prueba tu conocimiento con 7 preguntas." />
+              <VoiceReader text={t('ova.notebooklab.welcome_audio')} />
             </div>
             <button onClick={startGame}
               className="group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 bg-gradient-to-r from-[#2FA8C6] to-[#1E3A5F] rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E3A5F] hover:scale-105 shadow-[0_10px_20px_rgba(47,168,198,0.3)]"
               style={{ animation: 'pulseGlow 3s infinite' }}
             >
-              <span className="flex items-center gap-3 text-lg tracking-wide"><NetworkIcon /> Iniciar Ecosistema Interactivo</span>
+              <span className="flex items-center gap-3 text-lg tracking-wide"><NetworkIcon /> {t('ova.notebooklab.start_cta')}</span>
             </button>
           </div>
         </div>
@@ -314,11 +157,12 @@ export default function OVANotebookLab() {
   }
 
   if (gameState === 'results') {
+
     const percentage = Math.round((score / questionsData.length) * 100);
     let message = "", submessage = "";
-    if (percentage === 100) { message = "¡Maestría Absoluta!"; submessage = "Entiendes perfectamente la simbiosis entre la IA y la curaduría humana. Estás listo para liderar la innovación académica."; }
-    else if (percentage >= 70) { message = "¡Pensamiento Crítico Sólido!"; submessage = "Tienes una gran comprensión de las capacidades y límites tecnológicos. Solo afina algunos detalles estratégicos."; }
-    else { message = "Requiere Recalibración."; submessage = "Recuerda: la IA procesa, pero tú dominas. Te sugerimos repasar los fundamentos para evitar la dependencia pasiva."; }
+    if (percentage === 100) { message = t('ova.notebooklab.result_perfect_title'); submessage = t('ova.notebooklab.result_perfect_desc'); }
+    else if (percentage >= 70) { message = t('ova.notebooklab.result_good_title'); submessage = t('ova.notebooklab.result_good_desc'); }
+    else { message = t('ova.notebooklab.result_bad_title'); submessage = t('ova.notebooklab.result_bad_desc'); }
     return (
       <div className="w-full relative" style={{ minHeight: '400px' }}>
         <div className="fixed inset-0 -z-10 opacity-60 bg-[linear-gradient(to_right,#EAEAEA_1px,transparent_1px),linear-gradient(to_bottom,#EAEAEA_1px,transparent_1px)] bg-[length:50px_50px]" /><div className="fixed -top-[15%] -left-[10%] w-[50vw] h-[50vw] -z-10 bg-[radial-gradient(circle,rgba(47,168,198,0.15)_0%,rgba(255,255,255,0)_70%)]" /><div className="fixed -bottom-[20%] -right-[10%] w-[60vw] h-[60vw] -z-10 bg-[radial-gradient(circle,rgba(30,58,95,0.08)_0%,rgba(255,255,255,0)_70%)]" />
@@ -327,16 +171,23 @@ export default function OVANotebookLab() {
             <div className="mb-6 flex justify-center"><EdutechLogo size="small" /></div>
             <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 font-semibold text-[10px] uppercase tracking-[0.15em] border border-emerald-200 dark:border-emerald-700 mb-4">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C7 4 7 7 4.5 7.5c-1.5.5-1.5 2.5 0 3.5"/><path d="M10 17.5V19a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-2"/><path d="M20 12.5V19a1 1 0 0 1-1 1h-2"/><path d="M18 4a2 2 0 0 1 2 2"/><path d="M10 4.5V12"/><path d="M2 10.5V12"/><path d="M2 17a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2"/><path d="M20 8.5V12"/></svg>
-              <span>Laboratorio Completado</span>
+              <span>{t('ova.notebooklab.completed_label')}</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-2 text-[#1E3A5F] dark:text-slate-100 font-montserrat">Análisis de Rendimiento</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-2 text-[#1E3A5F] dark:text-slate-100 font-montserrat">{t('ova.notebooklab.results_title')}</h2>
             <div className="text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#2FA8C6] to-[#1E3A5F] my-8 drop-shadow-sm">{score}<span className="text-4xl text-gray-400 dark:text-slate-400">/7</span></div>
             <h3 className="text-2xl font-semibold text-[#2FA8C6] mb-4">{message}</h3>
             <p className="text-[#1E3A5F]/80 dark:text-slate-100/80 mb-6 text-lg">{submessage}</p>
-            <div className="flex justify-center mb-6"><VoiceReader text={submessage} /></div>
+            <div className="flex justify-center mb-4"><VoiceReader text={submessage} /></div>
+            {score >= 3 && !certCompletedRef.current && (
+              <button onClick={() => { certCompletedRef.current = true; onComplete?.(); }}
+                className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold text-base shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-2 mx-auto mb-3 animate-pulse">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                {t('ova.notebooklab.mark_complete')}
+              </button>
+            )}
             <button onClick={startGame} className="px-8 py-3 rounded-xl bg-white dark:bg-slate-800 text-[#1E3A5F] dark:text-slate-100 border-2 border-[#EAEAEA] dark:border-slate-600 hover:border-[#2FA8C6] hover:text-[#2FA8C6] dark:hover:text-[#2FA8C6] transition-all font-semibold flex items-center justify-center gap-2 mx-auto shadow-sm">
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-              Reiniciar Simulación
+              {t('ova.notebooklab.restart')}
             </button>
           </div>
         </div>
@@ -372,7 +223,7 @@ export default function OVANotebookLab() {
                   <div className="absolute inset-0 bg-gradient-to-t from-[#1E3A5F] via-transparent to-transparent opacity-80" />
                   <div className="absolute bottom-4 left-4 right-4">
                     <div className="flex items-center gap-2 text-white text-sm font-semibold bg-[#2FA8C6]/90 w-fit px-4 py-1.5 rounded-lg backdrop-blur-md shadow-lg border border-white/20">
-                      <NetworkIcon /> Aprendizaje Interactivo
+                      <NetworkIcon /> {t('ova.notebooklab.learning_badge')}
                     </div>
                   </div>
                 </div>
@@ -389,7 +240,7 @@ export default function OVANotebookLab() {
                   <p className="text-[#1E3A5F]/80 dark:text-slate-100/80 text-sm leading-relaxed mb-6">{screen.valerioText}</p>
 
                   <div className="mb-5">
-                    <h3 className="text-xs font-bold text-[#1E3A5F] dark:text-slate-100 uppercase tracking-wider mb-3">🎯 Objetivos de aprendizaje</h3>
+                    <h3 className="text-xs font-bold text-[#1E3A5F] dark:text-slate-100 uppercase tracking-wider mb-3">{t('ova.notebooklab.objectives_title')}</h3>
                     <div className="space-y-2">
                       {screen.achievements.map((item, i) => (
                         <div key={i} className="flex items-start gap-2.5 p-2.5 rounded-xl bg-[#E8F8F5] dark:bg-emerald-900/30 border border-[#22c55e]/20">
@@ -401,7 +252,7 @@ export default function OVANotebookLab() {
                   </div>
 
                   <div className="mb-5">
-                    <h3 className="text-xs font-bold text-[#1E3A5F] dark:text-slate-100 uppercase tracking-wider mb-3">⚠️ Errores comunes a evitar</h3>
+                    <h3 className="text-xs font-bold text-[#1E3A5F] dark:text-slate-100 uppercase tracking-wider mb-3">{t('ova.notebooklab.warnings_title')}</h3>
                     <div className="space-y-2">
                       {screen.warnings.map((item, i) => (
                         <div key={i} className="flex items-start gap-2.5 p-2.5 rounded-xl bg-[#FDEDEC] dark:bg-red-900/30 border border-[#ef4444]/20">
@@ -413,7 +264,7 @@ export default function OVANotebookLab() {
                   </div>
 
                   <div>
-                    <h3 className="text-xs font-bold text-[#1E3A5F] dark:text-slate-100 uppercase tracking-wider mb-3">💡 Ejemplo práctico</h3>
+                    <h3 className="text-xs font-bold text-[#1E3A5F] dark:text-slate-100 uppercase tracking-wider mb-3">{t('ova.notebooklab.example_title')}</h3>
                     <div className="space-y-2">
                       <div className="flex items-start gap-2.5 p-2.5 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -440,11 +291,11 @@ export default function OVANotebookLab() {
               </div>
               <button onClick={nextContent}
                 className="px-6 py-3 bg-gradient-to-r from-[#2FA8C6] to-[#1E3A5F] text-white rounded-xl font-bold text-sm shadow-md hover:shadow-lg active:scale-95 transition-all flex items-center gap-2">
-                {isLast ? 'Comenzar Evaluación' : 'Siguiente'} <ArrowRight />
+                {isLast ? t('ova.notebooklab.start_quiz') : t('ova.notebooklab.next')} <ArrowRight />
               </button>
             </div>
             <footer className="mt-8 pt-6 border-t border-[#EAEAEA] dark:border-slate-600 text-center">
-              <p className="text-slate-600 dark:text-slate-300 text-xs">Laboratorio guiado por <strong className="text-[#2FA8C6]">Valerio</strong> &mdash; Coach de IA de Edutechlife.</p>
+              <p className="text-slate-600 dark:text-slate-300 text-xs">{t('ova.notebooklab.footer')}</p>
             </footer>
           </div>
         </div>
@@ -463,13 +314,13 @@ export default function OVANotebookLab() {
             <EdutechLogo size="small" />
             <div className="flex items-center gap-3">
               <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#E0F7FA] dark:bg-teal-900/30 text-[#004B63] dark:text-teal-200 font-semibold text-[10px] uppercase tracking-[0.15em] border border-[#2FA8C6]/20">
-                <BrainIcon className="w-3.5 h-3.5" /><span>Laboratorio Guiado por Valerio</span>
+                <BrainIcon className="w-3.5 h-3.5" /><span>{t('ova.notebooklab.lab_title')}</span>
               </div>
               <span className="text-[#1E3A5F] dark:text-slate-100 font-semibold bg-white dark:bg-slate-800 px-4 py-1.5 rounded-full border border-[#EAEAEA] dark:border-slate-600 shadow-sm text-sm">
-                Nodo de Aprendizaje {currentQIndex + 1} / {questionsData.length}
+                {t('ova.notebooklab.node_label', { current: currentQIndex + 1, total: questionsData.length })}
               </span>
               <span className="text-white font-semibold bg-[#2FA8C6] px-4 py-1.5 rounded-full shadow-[0_0_10px_rgba(47,168,198,0.4)] text-sm">
-                Datos: {score}
+                {t('ova.notebooklab.score_label')} {score}
               </span>
             </div>
           </div>
@@ -480,11 +331,11 @@ export default function OVANotebookLab() {
           <div className="flex flex-col lg:flex-row gap-8">
             <div className="w-full lg:w-2/5 flex flex-col gap-6">
               <div className="relative rounded-2xl overflow-hidden shadow-xl border border-[#EAEAEA] dark:border-slate-600 group h-64 lg:h-auto lg:flex-grow bg-white dark:bg-slate-800">
-                <img src={currentQ.image} alt="Contexto visual" loading="lazy" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90" />
+                <img src={currentQ.image} alt={t('ova.notebooklab.image_alt')} loading="lazy" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1E3A5F] via-transparent to-transparent opacity-80" />
                 <div className="absolute bottom-4 left-4 right-4">
                   <div className="flex items-center gap-2 text-white text-sm font-semibold bg-[#2FA8C6]/90 w-fit px-4 py-1.5 rounded-lg backdrop-blur-md shadow-lg border border-white/20">
-                    <NetworkIcon /> Escenario Interactivo
+                    <NetworkIcon /> {t('ova.notebooklab.scenario_badge')}
                   </div>
                 </div>
               </div>
@@ -492,9 +343,9 @@ export default function OVANotebookLab() {
                 <div className={`p-6 rounded-2xl border animate-[fadeIn_0.6s_ease-out_forwards] shadow-sm ${selectedOption === currentQ.correct ? 'bg-[#E8F8F5] dark:bg-emerald-900/30 border-[#22c55e]/40' : 'bg-[#FDEDEC] dark:bg-red-900/30 border-[#ef4444]/40'}`}>
                   <div className="flex items-center gap-3 mb-3">
                     {selectedOption === currentQ.correct ? (
-                      <span className="flex items-center gap-2 text-[#166534] font-bold text-lg"><CheckCircle /> Análisis Validado</span>
+                      <span className="flex items-center gap-2 text-[#166534] font-bold text-lg"><CheckCircle /> {t('ova.notebooklab.correct_label')}</span>
                     ) : (
-                      <span className="flex items-center gap-2 text-[#991b1b] font-bold text-lg"><XCircle /> Desviación Crítica</span>
+                      <span className="flex items-center gap-2 text-[#991b1b] font-bold text-lg"><XCircle /> {t('ova.notebooklab.incorrect_label')}</span>
                     )}
                   </div>
                   <p className="text-[#1E3A5F] dark:text-slate-100 text-sm leading-relaxed font-medium opacity-90">{currentQ.explanation}</p>
@@ -526,11 +377,11 @@ export default function OVANotebookLab() {
                   <div className="mt-6 flex flex-col items-start gap-3 animate-[fadeIn_0.6s_ease-out_forwards]">
                     <button onClick={() => setShowHint(!showHint)}
                       className="flex items-center gap-2 px-4 py-2 bg-[#EAEAEA]/40 dark:bg-slate-700/40 hover:bg-[#EAEAEA] dark:hover:bg-slate-700 border border-[#2FA8C6]/30 rounded-xl text-[#1E3A5F] dark:text-slate-100 font-semibold text-sm transition-all duration-300">
-                      <LightbulbIcon />{showHint ? 'Ocultar Pista' : 'Ver Pista'}
+                      <LightbulbIcon />{showHint ? t('ova.notebooklab.hide_hint') : t('ova.notebooklab.show_hint')}
                     </button>
                     {showHint && (
                       <div className="w-full p-4 bg-[#E8F8F5] dark:bg-emerald-900/30 border border-[#2FA8C6]/50 rounded-xl text-[#1E3A5F] dark:text-slate-100 text-sm md:text-base font-medium animate-[fadeIn_0.6s_ease-out_forwards] shadow-inner">
-                        <span className="text-[#2FA8C6] font-bold mr-2">💡 Pista:</span> {currentQ.hint}
+                        <span className="text-[#2FA8C6] font-bold mr-2">{t('ova.notebooklab.hint_prefix')}</span> {currentQ.hint}
                       </div>
                     )}
                   </div>
@@ -539,7 +390,7 @@ export default function OVANotebookLab() {
                   <div className="mt-8 flex justify-end animate-[fadeIn_0.6s_ease-out_forwards]">
                     <button onClick={nextQuestion}
                       className="px-8 py-3.5 bg-[#1E3A5F] hover:bg-[#2FA8C6] text-white font-semibold rounded-xl transition-all duration-300 flex items-center gap-3 shadow-lg hover:shadow-[0_8px_20px_rgba(47,168,198,0.4)] hover:-translate-y-1">
-                      {currentQIndex === questionsData.length - 1 ? 'Procesar Resultados' : 'Siguiente Nodo'} <ArrowRight />
+                      {currentQIndex === questionsData.length - 1 ? t('ova.notebooklab.process_results') : t('ova.notebooklab.next_node')} <ArrowRight />
                     </button>
                   </div>
                 )}
@@ -547,7 +398,7 @@ export default function OVANotebookLab() {
             </div>
           </div>
           <footer className="mt-8 pt-6 border-t border-[#EAEAEA] dark:border-slate-600 text-center">
-            <p className="text-slate-600 dark:text-slate-300 text-xs">Laboratorio guiado por <strong className="text-[#2FA8C6]">Valerio</strong> &mdash; Coach de IA de Edutechlife.</p>
+            <p className="text-slate-600 dark:text-slate-300 text-xs">{t('ova.notebooklab.footer')}</p>
           </footer>
         </div>
       </div>

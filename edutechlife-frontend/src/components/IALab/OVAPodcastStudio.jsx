@@ -1,73 +1,18 @@
 import React, { useState } from 'react';
+import { useTranslation } from '../../i18n/I18nProvider';
 import VoiceReader from './VoiceReader';
-
-const CONTENT_TYPES = [
-  { id: 'academico', label: 'Académico', icon: '📚', desc: 'Papers, tesis, artículos de investigación' },
-  { id: 'tecnico', label: 'Técnico', icon: '⚙️', desc: 'Manuales, guías, documentación técnica' },
-  { id: 'creativo', label: 'Creativo', icon: '🎨', desc: 'Guías de diseño, marketing, contenido' },
-  { id: 'mixto', label: 'Mixto', icon: '📦', desc: 'Combinación de varios tipos' }
-];
-
-const GOALS = [
-  { id: 'estudiar', label: 'Estudiar', icon: '📖', desc: 'Repasar y comprender conceptos clave' },
-  { id: 'resumir', label: 'Resumir', icon: '📝', desc: 'Extraer lo esencial de documentos largos' },
-  { id: 'presentar', label: 'Presentar', icon: '🎤', desc: 'Preparar material para una exposición' },
-  { id: 'explorar', label: 'Explorar', icon: '🔍', desc: 'Investigación inicial sobre un tema nuevo' }
-];
-
-const DOC_COUNTS = [
-  { id: 'pocos', label: '1-2 docs', icon: '📄', desc: 'Pocos documentos, muy enfocados' },
-  { id: 'medio', label: '3-5 docs', icon: '📚', desc: 'Cantidad ideal para un buen debate' },
-  { id: 'varios', label: '6-10 docs', icon: '📚📚', desc: 'Visión amplia del tema' },
-  { id: 'muchos', label: '10+ docs', icon: '📚📚📚', desc: 'Investigación exhaustiva' }
-];
+import { CONTENT_TYPES, GOALS, DOC_COUNTS, SOURCE_TIPS, GOAL_TIPS, DOC_TIPS, ESTIMATED_TIME, IDEAL_SOURCES, FORMATS, CHECKLIST_ITEMS } from '../../data/ova/podcastStudio';
 
 const getRecommendations = (contentType, goal, docCount) => {
-  const plan = {};
+  const sourceTip = SOURCE_TIPS[contentType] || SOURCE_TIPS.mixto;
+  const goalTip = GOAL_TIPS[goal] || GOAL_TIPS.explorar;
+  const docTip = DOC_TIPS[docCount] || DOC_TIPS.medio;
+  const estimatedTime = ESTIMATED_TIME[docCount] || ESTIMATED_TIME.medio;
+  const idealSources = IDEAL_SOURCES[docCount] || IDEAL_SOURCES.medio;
+  const formats = FORMATS[contentType] || FORMATS.mixto;
 
-  const sourceTips = {
-    academico: 'Usa papers revisados por pares, tesis y artículos académicos. La calidad de las fuentes define la profundidad del análisis.',
-    tecnico: 'Manuales oficiales y documentación técnica generan podcasts precisos. Incluye ejemplos prácticos.',
-    creativo: 'Guías de estilo, briefs y casos de éxito. La IA captura bien el tono creativo si las fuentes son descriptivas.',
-    mixto: 'Agrupa tus fuentes por tema antes de subirlas. NotebookLM cruza información entre todas, así que la organización importa.'
-  };
-
-  const goalTips = {
-    estudiar: 'Escucha el podcast primero para contexto general, luego lee los documentos para profundizar. El audio te da el mapa mental.',
-    resumir: 'Selecciona las fuentes más importantes. El Audio Overview será un gran resumen conversacional, pero complementa con notas escritas.',
-    presentar: 'Genera el podcast para obtener una narrativa coherente. Úsalo como inspiración para estructurar tu presentación.',
-    explorar: 'Sube 5-10 fuentes diversas. El debate entre los presentadores te dará perspectivas que no habías considerado.'
-  };
-
-  const docTips = {
-    pocos: 'Con pocos documentos, el podcast será muy enfocado. Ideal para repasar conceptos específicos antes de un examen.',
-    medio: 'Cantidad ideal. Los presentadores tendrán suficiente material para generar un debate interesante con profundidad.',
-    varios: 'Buena variedad de perspectivas. El podcast será más amplio pero menos profundo en cada tema.',
-    muchos: 'El podcast cubrirá muchas ideas pero cada una superficialmente. Mejor divide en grupos temáticos y genera varios podcasts.'
-  };
-
-  const estimatedTime = docCount === 'pocos' ? '3-5 minutos' : docCount === 'medio' ? '5-10 minutos' : '10-15 minutos';
-  const idealSources = docCount === 'pocos' ? '2-3 fuentes' : docCount === 'medio' ? '3-5 fuentes' : '6-8 fuentes';
-  const formats = contentType === 'academico' ? 'PDF, Google Docs' : contentType === 'tecnico' ? 'PDF, TXT, URLs' : contentType === 'creativo' ? 'PDF, Google Docs, URLs' : 'PDF, Google Docs, TXT, URLs';
-
-  return {
-    sourceTip: sourceTips[contentType] || sourceTips.mixto,
-    goalTip: goalTips[goal] || goalTips.explorar,
-    docTip: docTips[docCount] || docTips.medio,
-    estimatedTime,
-    idealSources,
-    formats
-  };
+  return { sourceTip, goalTip, docTip, estimatedTime, idealSources, formats };
 };
-
-const CHECKLIST_ITEMS = [
-  { id: 'select', label: 'Seleccioné y organicé mis mejores fuentes' },
-  { id: 'create', label: 'Creé un notebook nuevo en NotebookLM' },
-  { id: 'upload', label: 'Subí todas mis fuentes al notebook' },
-  { id: 'generate', label: 'Inicié la generación del Audio Overview' },
-  { id: 'listen', label: 'Escuché el resultado completo' },
-  { id: 'notes', label: 'Tomé notas de los puntos clave' }
-];
 
 const StepIndicator = ({ current, total }) => (
   <div className="flex items-center justify-center gap-2 mb-6">
@@ -78,6 +23,7 @@ const StepIndicator = ({ current, total }) => (
 );
 
 export default function OVAPodcastStudio() {
+  const { t } = useTranslation();
   const [step, setStep] = useState('welcome');
   const [contentType, setContentType] = useState(null);
   const [goal, setGoal] = useState(null);
@@ -110,18 +56,18 @@ export default function OVAPodcastStudio() {
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center animate-fade-in px-4 py-8">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 dark:bg-cyan-900/30 text-[#13374b] dark:text-slate-100 font-semibold text-sm mb-4">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#259eb5" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="18" x="5" y="2" rx="3" ry="3"/><line x1="12" x2="12" y1="19" y2="22"/><line x1="8" x2="16" y1="22" y2="22"/></svg>
-          <span>Asistente de Audio Overview</span>
+          <span>{t('ova.podcaststudio.badge_assistant')}</span>
         </div>
         <div className="w-16 h-16 bg-gradient-to-br from-[#259eb5] to-[#13374b] rounded-2xl flex items-center justify-center shadow-lg shadow-[#259eb5]/20 mb-6">
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="18" x="5" y="2" rx="3" ry="3"/><line x1="12" x2="12" y1="19" y2="22"/><line x1="8" x2="16" y1="22" y2="22"/></svg>
         </div>
-        <h1 className="text-3xl md:text-5xl font-black mb-3 leading-tight tracking-tight text-[#13374b] dark:text-slate-100">Crea tu Audio Overview</h1>
-        <p className="text-lg md:text-xl text-slate-500 dark:text-slate-400 font-light mb-2">NotebookLM · Para cualquier curso o materia</p>
-        <p className="text-slate-600 dark:text-slate-300 max-w-xl mb-4">Hola, soy Valerio. Responde 3 preguntas sobre tu proyecto y recibirás un plan personalizado con recomendaciones y una checklist para crear tu podcast en NotebookLM. Funciona para cualquier tema: historia, ciencia, tecnología, arte, negocios...</p>
-        <VoiceReader text="Hola, soy Valerio. Responde 3 preguntas sobre tu proyecto y recibirás un plan personalizado con recomendaciones y una checklist para crear tu podcast en NotebookLM. Funciona para cualquier materia: historia, ciencia, tecnología, arte, negocios, lo que tú estudies." />
+        <h1 className="text-3xl md:text-5xl font-black mb-3 leading-tight tracking-tight text-[#13374b] dark:text-slate-100">{t('ova.podcaststudio.title')}</h1>
+        <p className="text-lg md:text-xl text-slate-500 dark:text-slate-400 font-light mb-2">{t('ova.podcaststudio.subtitle')}</p>
+        <p className="text-slate-600 dark:text-slate-300 max-w-xl mb-4">{t('ova.podcaststudio.welcome_desc')}</p>
+        <VoiceReader text={t('ova.podcaststudio.welcome_voice')} />
         <button onClick={handleStart} className="mt-4 px-8 py-4 bg-gradient-to-r from-[#259eb5] to-[#13374b] text-white rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all flex items-center gap-3">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          Comenzar
+          {t('ova.podcaststudio.start_btn')}
         </button>
       </div>
     );
@@ -137,11 +83,11 @@ export default function OVAPodcastStudio() {
         <div className="max-w-3xl mx-auto text-center mb-8">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 dark:bg-cyan-900/30 text-[#13374b] dark:text-slate-100 font-semibold text-sm mb-4">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#259eb5" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="18" x="5" y="2" rx="3" ry="3"/><line x1="12" x2="12" y1="19" y2="22"/><line x1="8" x2="16" y1="22" y2="22"/></svg>
-            <span>Cuéntame de tu proyecto</span>
+            <span>{t('ova.podcaststudio.badge_project')}</span>
           </div>
-          <h2 className="text-2xl md:text-3xl font-bold text-[#13374b] dark:text-slate-100 mb-2">Responde 3 preguntas</h2>
-          <p className="text-slate-500 dark:text-slate-400 text-sm mb-4">Recibirás recomendaciones personalizadas para tu caso.</p>
-          <VoiceReader text="Responde 3 preguntas sobre tu proyecto y recibiré recomendaciones personalizadas para crear el mejor Audio Overview en NotebookLM." />
+          <h2 className="text-2xl md:text-3xl font-bold text-[#13374b] dark:text-slate-100 mb-2">{t('ova.podcaststudio.questions_title')}</h2>
+          <p className="text-slate-500 dark:text-slate-400 text-sm mb-4">{t('ova.podcaststudio.questions_desc')}</p>
+          <VoiceReader text={t('ova.podcaststudio.questions_voice')} />
         </div>
 
         <StepIndicator current={currentQuestion} total={totalQuestions} />
@@ -149,7 +95,7 @@ export default function OVAPodcastStudio() {
         <div className="max-w-3xl mx-auto space-y-8">
           {showType && (
             <div>
-              <h3 className="text-lg font-bold text-[#13374b] dark:text-slate-100 mb-4 text-center">¿Qué tipo de contenido tienes?</h3>
+              <h3 className="text-lg font-bold text-[#13374b] dark:text-slate-100 mb-4 text-center">{t('ova.podcaststudio.q_content_type')}</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {CONTENT_TYPES.map(t => (
                   <button key={t.id} onClick={() => handleAnswer('contentType', t.id)}
@@ -166,7 +112,7 @@ export default function OVAPodcastStudio() {
 
           {showGoal && (
             <div>
-              <h3 className="text-lg font-bold text-[#13374b] dark:text-slate-100 mb-4 text-center">¿Cuál es tu objetivo?</h3>
+              <h3 className="text-lg font-bold text-[#13374b] dark:text-slate-100 mb-4 text-center">{t('ova.podcaststudio.q_goal')}</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {GOALS.map(g => (
                   <button key={g.id} onClick={() => handleAnswer('goal', g.id)}
@@ -183,7 +129,7 @@ export default function OVAPodcastStudio() {
 
           {showCount && (
             <div>
-              <h3 className="text-lg font-bold text-[#13374b] dark:text-slate-100 mb-4 text-center">¿Cuántos documentos tienes?</h3>
+              <h3 className="text-lg font-bold text-[#13374b] dark:text-slate-100 mb-4 text-center">{t('ova.podcaststudio.q_doc_count')}</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {DOC_COUNTS.map(d => (
                   <button key={d.id} onClick={() => handleAnswer('docCount', d.id)}
@@ -213,11 +159,11 @@ export default function OVAPodcastStudio() {
         <div className="max-w-3xl mx-auto text-center mb-8">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-100 text-emerald-700 dark:text-emerald-300 font-semibold text-sm mb-4">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
-            <span>Tu plan personalizado</span>
+            <span>{t('ova.podcaststudio.badge_plan')}</span>
           </div>
-          <h2 className="text-2xl md:text-3xl font-bold text-[#13374b] dark:text-slate-100 mb-2">Recomendaciones para tu podcast</h2>
-          <p className="text-slate-500 dark:text-slate-400 text-sm mb-4">Basado en tu contenido, objetivo y cantidad de documentos.</p>
-          <VoiceReader text={`Genial. Basado en tus respuestas, aquí tienes tu plan personalizado para crear un Audio Overview en NotebookLM. Tipo de contenido: ${cType?.label}. Objetivo: ${g?.label}. Documentos: ${dCount?.label}.`} />
+          <h2 className="text-2xl md:text-3xl font-bold text-[#13374b] dark:text-slate-100 mb-2">{t('ova.podcaststudio.plan_title')}</h2>
+          <p className="text-slate-500 dark:text-slate-400 text-sm mb-4">{t('ova.podcaststudio.plan_desc')}</p>
+          <VoiceReader text={t('ova.podcaststudio.plan_voice', { cTypeLabel: cType?.label, gLabel: g?.label, dCountLabel: dCount?.label })} />
         </div>
 
         <StepIndicator current={2} total={3} />
@@ -232,21 +178,21 @@ export default function OVAPodcastStudio() {
           <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-600 shadow-sm">
             <h3 className="font-bold text-[#13374b] dark:text-slate-100 mb-4 flex items-center gap-2">
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#259eb5" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/></svg>
-              Resumen de tu plan
+              {t('ova.podcaststudio.plan_summary')}
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-700">
-                <div className="text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-1">Fuentes ideales</div>
+                <div className="text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-1">{t('ova.podcaststudio.sources_label')}</div>
                 <div className="text-lg font-bold text-[#13374b] dark:text-slate-100">{recs.idealSources}</div>
-                <div className="text-xs text-slate-500 dark:text-slate-400">Formato: {recs.formats}</div>
+                <div className="text-xs text-slate-500 dark:text-slate-400">{t('ova.podcaststudio.format_label')} {recs.formats}</div>
               </div>
               <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-700">
-                <div className="text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-1">Tiempo estimado</div>
+                <div className="text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-1">{t('ova.podcaststudio.time_label')}</div>
                 <div className="text-lg font-bold text-[#13374b] dark:text-slate-100">{recs.estimatedTime}</div>
-                <div className="text-xs text-slate-500 dark:text-slate-400">De generación + duración</div>
+                <div className="text-xs text-slate-500 dark:text-slate-400">{t('ova.podcaststudio.time_sublabel')}</div>
               </div>
               <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-700">
-                <div className="text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-1">Enfoque</div>
+                <div className="text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-1">{t('ova.podcaststudio.focus_label')}</div>
                 <div className="text-lg font-bold text-[#13374b] dark:text-slate-100">{g?.label}</div>
                 <div className="text-xs text-slate-500 dark:text-slate-400">{g?.desc}</div>
               </div>
@@ -257,7 +203,7 @@ export default function OVAPodcastStudio() {
                 <div className="flex items-start gap-3">
                   <span className="text-lg flex-shrink-0 mt-0.5">📄</span>
                   <div>
-                    <div className="text-xs font-bold text-blue-800 uppercase tracking-wider mb-1">Sobre tus fuentes</div>
+                    <div className="text-xs font-bold text-blue-800 uppercase tracking-wider mb-1">{t('ova.podcaststudio.tip_sources')}</div>
                     <p className="text-sm text-blue-900 leading-relaxed">{recs.sourceTip}</p>
                   </div>
                 </div>
@@ -266,7 +212,7 @@ export default function OVAPodcastStudio() {
                 <div className="flex items-start gap-3">
                   <span className="text-lg flex-shrink-0 mt-0.5">🎯</span>
                   <div>
-                    <div className="text-xs font-bold text-purple-800 uppercase tracking-wider mb-1">Según tu objetivo</div>
+                    <div className="text-xs font-bold text-purple-800 uppercase tracking-wider mb-1">{t('ova.podcaststudio.tip_goal')}</div>
                     <p className="text-sm text-purple-900 leading-relaxed">{recs.goalTip}</p>
                   </div>
                 </div>
@@ -275,7 +221,7 @@ export default function OVAPodcastStudio() {
                 <div className="flex items-start gap-3">
                   <span className="text-lg flex-shrink-0 mt-0.5">📊</span>
                   <div>
-                    <div className="text-xs font-bold text-amber-800 uppercase tracking-wider mb-1">Según tu cantidad de documentos</div>
+                    <div className="text-xs font-bold text-amber-800 uppercase tracking-wider mb-1">{t('ova.podcaststudio.tip_docs')}</div>
                     <p className="text-sm text-amber-900 leading-relaxed">{recs.docTip}</p>
                   </div>
                 </div>
@@ -288,7 +234,7 @@ export default function OVAPodcastStudio() {
           <button onClick={() => setStep('checklist')}
             className="px-8 py-3 bg-gradient-to-r from-[#259eb5] to-[#13374b] text-white rounded-xl font-bold shadow-md hover:shadow-lg transition-all inline-flex items-center gap-2"
           >
-            Ir a la checklist
+            {t('ova.podcaststudio.go_checklist')}
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </button>
         </div>
@@ -304,11 +250,11 @@ export default function OVAPodcastStudio() {
       <div className="max-w-3xl mx-auto text-center mb-8">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 dark:bg-cyan-900/30 text-[#13374b] dark:text-slate-100 font-semibold text-sm mb-4">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#259eb5" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="18" x="5" y="2" rx="3" ry="3"/><line x1="12" x2="12" y1="19" y2="22"/><line x1="8" x2="16" y1="22" y2="22"/></svg>
-          <span>Checklist de preparación</span>
+          <span>{t('ova.podcaststudio.badge_checklist')}</span>
         </div>
-        <h2 className="text-2xl md:text-3xl font-bold text-[#13374b] dark:text-slate-100 mb-2">Sigue estos pasos</h2>
-        <p className="text-slate-500 dark:text-slate-400 text-sm mb-4">Marca cada paso al completarlo. Puedes tener NotebookLM abierto en otra pestaña.</p>
-        <VoiceReader text="Aquí tienes tu checklist de preparación. Marca cada paso a medida que lo completes mientras trabajas en NotebookLM. Yo te guiaré en el proceso." />
+        <h2 className="text-2xl md:text-3xl font-bold text-[#13374b] dark:text-slate-100 mb-2">{t('ova.podcaststudio.checklist_title')}</h2>
+        <p className="text-slate-500 dark:text-slate-400 text-sm mb-4">{t('ova.podcaststudio.checklist_desc')}</p>
+        <VoiceReader text={t('ova.podcaststudio.checklist_voice')} />
       </div>
 
       <StepIndicator current={3} total={3} />
@@ -316,7 +262,7 @@ export default function OVAPodcastStudio() {
       <div className="max-w-2xl mx-auto">
         <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-600 shadow-sm mb-6">
           <div className="flex justify-between items-center mb-4">
-            <span className="text-sm font-bold text-[#13374b] dark:text-slate-100">Tu progreso</span>
+            <span className="text-sm font-bold text-[#13374b] dark:text-slate-100">{t('ova.podcaststudio.progress_label')}</span>
             <span className="text-sm font-bold text-[#259eb5]">{checkedCount}/{CHECKLIST_ITEMS.length}</span>
           </div>
           <div className="w-full bg-slate-100 dark:bg-slate-700/50 rounded-full h-2.5 overflow-hidden">
@@ -350,9 +296,9 @@ export default function OVAPodcastStudio() {
         {checkedCount === CHECKLIST_ITEMS.length && (
           <div className="p-6 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 text-center mb-6 animate-fade-in">
             <div className="text-4xl mb-3">🎉</div>
-            <h3 className="text-lg font-bold text-emerald-800 dark:text-emerald-200 mb-2">¡Completaste todos los pasos!</h3>
-            <p className="text-sm text-emerald-700 dark:text-emerald-300 mb-4">Ya tienes todo listo para crear tu Audio Overview en NotebookLM. Ahora solo queda escuchar el resultado y tomar notas.</p>
-            <VoiceReader text="¡Excelente! Has completado todos los pasos. Ahora tienes tu Audio Overview generado en NotebookLM. Escúchalo con atención y toma notas de los puntos clave. Recuerda que puedes regenerar cuantas veces quieras para obtener diferentes perspectivas." />
+            <h3 className="text-lg font-bold text-emerald-800 dark:text-emerald-200 mb-2">{t('ova.podcaststudio.completed_title')}</h3>
+            <p className="text-sm text-emerald-700 dark:text-emerald-300 mb-4">{t('ova.podcaststudio.completed_desc')}</p>
+            <VoiceReader text={t('ova.podcaststudio.completed_voice')} />
           </div>
         )}
 
@@ -361,7 +307,7 @@ export default function OVAPodcastStudio() {
             className="px-6 py-3 bg-white dark:bg-slate-800 text-[#13374b] dark:text-slate-100 border-2 border-slate-200 dark:border-slate-600 hover:border-[#259eb5] rounded-xl font-semibold transition-all inline-flex items-center gap-2"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            Empezar de nuevo
+            {t('ova.podcaststudio.restart_btn')}
           </button>
         </div>
       </div>

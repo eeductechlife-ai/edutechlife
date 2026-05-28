@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import VoiceReader from './VoiceReader';
+import { useTranslation } from '../../i18n/I18nProvider';
 import {
     GraduationCap, Bot, MessageSquare, Mail, Settings, Zap,
     CheckCircle, Award, ChevronRight, Play,
@@ -39,31 +40,35 @@ const Card = ({ children, className = '' }) => (
     </div>
 );
 
-const WelcomeScreen = ({ onNext }) => (
+const WelcomeScreen = ({ onNext }) => {
+    const { t } = useTranslation();
+    return (
     <div className="flex flex-col items-center justify-center min-h-[80vh] text-center animate-[fadeIn_0.6s_ease-out_forwards] px-4">
         <div className="mb-8 transform hover:scale-105 transition-transform duration-500">
             <Logo />
         </div>
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 text-petroleum font-semibold text-sm mb-6">
             <Bot size={16} className="text-corporate" />
-            <span>Laboratorio Guiado por Valerio</span>
+            <span>{t('ova.buildgpt.lab_title')}</span>
         </div>
         <h1 className="text-4xl md:text-6xl font-extrabold text-petroleum mb-6 leading-tight">
-            Construye tu <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-corporate to-corporate-dark">GPT Personalizado</span>
+            {t('ova.buildgpt.welcome_title')}
         </h1>
         <p className="text-lg md:text-xl text-gray-600 dark:text-slate-300 mb-6 max-w-2xl">
-            Hola, soy Valerio, tu coach de IA. En este laboratorio te guiaré paso a paso para que crees tu propio GPT con acciones y conexiones a APIs externas. ¡Vamos allá!
+            {t('ova.buildgpt.welcome_desc')}
         </p>
-        <VoiceReader text="Hola, soy Valerio, tu coach de IA de Edutechlife. En este laboratorio te guiaré paso a paso para que crees tu propio GPT personalizado con acciones y conexión a APIs externas. Vamos a empezar esta aventura juntos." />
+        <VoiceReader text={t('ova.buildgpt.welcome_audio')} />
         <div className="mt-6">
             <Button onClick={onNext} icon={Play} className="text-lg px-8 py-4">
-                Comenzar Laboratorio
+                {t('ova.buildgpt.start')}
             </Button>
         </div>
     </div>
 );
+};
 
 const IntroScreen = ({ onNext, addXp }) => {
+    const { t } = useTranslation();
     useEffect(() => { addXp(50); }, []);
     const introText = "Los GPTs personalizados te permiten crear versiones a tu medida de ChatGPT para tareas específicas. A diferencia del ChatGPT estándar, un GPT personalizado sigue instrucciones precisas, tiene acceso a conocimiento propio y puede conectarse con APIs externas mediante Acciones. Es como tener un asistente entrenado exclusivamente para tu proyecto.";
 
@@ -73,27 +78,27 @@ const IntroScreen = ({ onNext, addXp }) => {
                 <div className="flex flex-col md:flex-row gap-8 items-center">
                     <div className="flex-1 space-y-6">
                         <div className="flex items-center justify-between">
-                            <h2 className="text-3xl font-bold text-petroleum">¿Qué es un GPT Personalizado?</h2>
+                            <h2 className="text-3xl font-bold text-petroleum">{t('ova.buildgpt.intro_title')}</h2>
                         </div>
                         <VoiceReader text={introText} />
                         <p className="text-gray-700 dark:text-slate-300 text-lg leading-relaxed">
-                            Los <strong>GPTs personalizados</strong> son versiones adaptadas de ChatGPT que puedes crear para una tarea específica, con instrucciones, conocimientos y acciones propias.
+                            {t('ova.buildgpt.intro_text')}
                         </p>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                             <div className="bg-[#F0FDFF] dark:bg-slate-700/30 p-5 rounded-xl border border-[#E0F7FA] dark:border-slate-600">
                                 <Bot className="text-corporate mb-3" size={28} />
-                                <h3 className="font-bold text-petroleum mb-2">GPT Personalizado</h3>
-                                <p className="text-sm text-gray-600 dark:text-slate-300">Sigue instrucciones específicas, usa tu base de conocimiento y se conecta con APIs externas.</p>
+                                <h3 className="font-bold text-petroleum mb-2">{t('ova.buildgpt.intro_gpt_title')}</h3>
+                                <p className="text-sm text-gray-600 dark:text-slate-300">{t('ova.buildgpt.intro_gpt_desc')}</p>
                             </div>
                             <div className="bg-gradient-to-br from-corporate/10 to-petroleum/10 p-5 rounded-xl border border-corporate/30 shadow-sm relative overflow-hidden">
                                 <div className="absolute top-0 right-0 p-2"><CheckCircle className="text-corporate" size={20}/></div>
                                 <Workflow className="text-petroleum mb-3" size={28} />
-                                <h3 className="font-bold text-petroleum mb-2">Acciones (APIs)</h3>
-                                <p className="text-sm text-gray-600 dark:text-slate-300">Conecta tu GPT con servicios externos como Google Sheets, Slack o tu propia API.</p>
+                                <h3 className="font-bold text-petroleum mb-2">{t('ova.buildgpt.intro_actions_title')}</h3>
+                                <p className="text-sm text-gray-600 dark:text-slate-300">{t('ova.buildgpt.intro_actions_desc')}</p>
                             </div>
                         </div>
-                        <Button onClick={onNext} icon={ChevronRight} className="mt-4">Crear mi Primer GPT</Button>
+                        <Button onClick={onNext} icon={ChevronRight} className="mt-4">{t('ova.buildgpt.intro_btn')}</Button>
                     </div>
                     <div className="flex-1 w-full relative">
                         <div className="absolute inset-0 bg-gradient-to-tr from-corporate to-petroleum rounded-full blur-3xl opacity-20 animate-pulse"></div>
@@ -106,6 +111,7 @@ const IntroScreen = ({ onNext, addXp }) => {
 };
 
 const ModuleSlack = ({ onNext, addXp }) => {
+    const { t } = useTranslation();
     const [messages, setMessages] = useState([
         { sender: 'Profe Ana', text: '¡Hola equipo! ¿Alguien tiene el resumen de la reunión de ayer sobre el nuevo currículo?', isBot: false }
     ]);
@@ -125,16 +131,16 @@ const ModuleSlack = ({ onNext, addXp }) => {
 
     return (
         <div className="max-w-4xl mx-auto animate-[fadeIn_0.6s_ease-out_forwards]">
-            <h2 className="text-3xl font-bold text-petroleum mb-2">Paso 1: Configurar un GPT para Slack</h2>
-            <p className="text-gray-600 dark:text-slate-300 mb-6">Transforma la comunicación educativa con un GPT conectado a tu equipo.</p>
+            <h2 className="text-3xl font-bold text-petroleum mb-2">{t('ova.buildgpt.slack_title')}</h2>
+            <p className="text-gray-600 dark:text-slate-300 mb-6">{t('ova.buildgpt.slack_desc')}</p>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <Card className="col-span-1 flex flex-col justify-between">
                     <div>
                         <MessageSquare className="text-corporate w-12 h-12 mb-4" />
-                        <h3 className="text-xl font-bold text-petroleum mb-3">¿Qué puede hacer?</h3>
+                        <h3 className="text-xl font-bold text-petroleum mb-3">{t('ova.buildgpt.slack_what_title')}</h3>
                         <ul className="space-y-3">
-                            {['Resumir reuniones automáticamente', 'Responder dudas frecuentes de alumnos', 'Generar ideas para clase'].map((item, i) => (
+                            {[t('ova.buildgpt.slack_item1'), t('ova.buildgpt.slack_item2'), t('ova.buildgpt.slack_item3')].map((item, i) => (
                                     <li key={i} className="flex items-start gap-2 text-sm text-gray-700 dark:text-slate-300">
                                     <CheckCircle size={16} className="text-green-500 mt-0.5 flex-shrink-0" />
                                     {item}
@@ -166,9 +172,9 @@ const ModuleSlack = ({ onNext, addXp }) => {
                         ))}
                     </div>
                     {!simulated ? (
-                        <Button onClick={simulateIA} icon={Zap} className="w-full">Probar GPT en Slack</Button>
+                        <Button onClick={simulateIA} icon={Zap} className="w-full">{t('ova.buildgpt.slack_btn')}</Button>
                     ) : (
-                        <Button onClick={onNext} variant="secondary" className="w-full">Siguiente Paso <ArrowRight size={16}/></Button>
+                        <Button onClick={onNext} variant="secondary" className="w-full">{t('ova.buildgpt.slack_next')} <ArrowRight size={16}/></Button>
                     )}
                 </Card>
             </div>
@@ -177,6 +183,7 @@ const ModuleSlack = ({ onNext, addXp }) => {
 };
 
 const ModuleGoogle = ({ onNext, addXp }) => {
+    const { t } = useTranslation();
     const [emailText, setEmailText] = useState("Hola estudiantes,\nles escribo para desirles que el examen es el lunes. estudien.\n\nSaludos.");
     const [improved, setImproved] = useState(false);
 
@@ -188,8 +195,8 @@ const ModuleGoogle = ({ onNext, addXp }) => {
 
     return (
         <div className="max-w-4xl mx-auto animate-[fadeIn_0.6s_ease-out_forwards]">
-            <h2 className="text-3xl font-bold text-petroleum mb-2">Paso 2: GPT + Google Workspace</h2>
-            <p className="text-gray-600 dark:text-slate-300 mb-6">Conecta tu GPT con Gmail, Google Docs y Sheets.</p>
+            <h2 className="text-3xl font-bold text-petroleum mb-2">{t('ova.buildgpt.google_title')}</h2>
+            <p className="text-gray-600 dark:text-slate-300 mb-6">{t('ova.buildgpt.google_desc')}</p>
 
             <Card className="mb-6">
                 <div className="flex justify-between items-center mb-4">
@@ -213,13 +220,13 @@ const ModuleGoogle = ({ onNext, addXp }) => {
                         />
                     </div>
                     <div className="bg-slate-50 dark:bg-slate-700/30 p-3 border-t dark:border-slate-700 flex justify-between items-center">
-                        <span className="text-xs text-slate-600 dark:text-slate-400">Borrador original</span>
+                        <span className="text-xs text-slate-600 dark:text-slate-400">{t('ova.buildgpt.google_draft')}</span>
                         {!improved ? (
                             <Button onClick={improveText} variant="secondary" className="!py-1.5 !px-4 text-sm" icon={Lightbulb}>
-                                Mejorar con GPT
+                                {t('ova.buildgpt.google_improve')}
                             </Button>
                         ) : (
-                            <span className="text-green-600 dark:text-green-400 text-sm font-bold flex items-center gap-1"><Check size={16}/> Texto optimizado por GPT</span>
+                            <span className="text-green-600 dark:text-green-400 text-sm font-bold flex items-center gap-1"><Check size={16}/> {t('ova.buildgpt.google_optimized')}</span>
                         )}
                     </div>
                 </div>
@@ -227,7 +234,7 @@ const ModuleGoogle = ({ onNext, addXp }) => {
 
             {improved && (
                 <div className="flex justify-end animate-[fadeIn_0.6s_ease-out_forwards]">
-                    <Button onClick={onNext}>Paso 3: Acciones Avanzadas <ArrowRight size={16}/></Button>
+                    <Button onClick={onNext}>{t('ova.buildgpt.google_next')} <ArrowRight size={16}/></Button>
                 </div>
             )}
         </div>
@@ -235,20 +242,21 @@ const ModuleGoogle = ({ onNext, addXp }) => {
 };
 
 const ModuleMakeZapier = ({ onNext, addXp }) => {
+    const { t } = useTranslation();
     const [tab, setTab] = useState('make');
     useEffect(() => { addXp(50); }, [tab]);
 
     return (
         <div className="max-w-4xl mx-auto animate-[fadeIn_0.6s_ease-out_forwards]">
-            <h2 className="text-3xl font-bold text-petroleum mb-2">Paso 3: Acciones con APIs Externas</h2>
-            <p className="text-gray-600 dark:text-slate-300 mb-6">Conecta tu GPT con el mundo exterior mediante Acciones personalizadas.</p>
+            <h2 className="text-3xl font-bold text-petroleum mb-2">{t('ova.buildgpt.api_title')}</h2>
+            <p className="text-gray-600 dark:text-slate-300 mb-6">{t('ova.buildgpt.api_desc')}</p>
 
             <div className="flex gap-4 mb-6">
                 <button onClick={() => setTab('make')} className={`flex-1 py-3 font-bold rounded-xl transition-all ${tab === 'make' ? 'bg-petroleum text-white shadow-lg' : 'bg-white dark:bg-slate-700 text-slate-500 dark:text-slate-300 border dark:border-slate-600 hover:border-petroleum'}`}>
-                    <Workflow className="inline mr-2" size={20}/> API REST
+                    <Workflow className="inline mr-2" size={20}/> {t('ova.buildgpt.api_rest')}
                 </button>
                 <button onClick={() => setTab('zapier')} className={`flex-1 py-3 font-bold rounded-xl transition-all ${tab === 'zapier' ? 'bg-corporate text-white shadow-lg' : 'bg-white dark:bg-slate-700 text-slate-500 dark:text-slate-300 border dark:border-slate-600 hover:border-corporate'}`}>
-                    <Zap className="inline mr-2" size={20}/> Webhooks
+                    <Zap className="inline mr-2" size={20}/> {t('ova.buildgpt.api_webhooks')}
                 </button>
             </div>
 
@@ -257,8 +265,8 @@ const ModuleMakeZapier = ({ onNext, addXp }) => {
                     <div className="animate-[fadeIn_0.6s_ease-out_forwards]">
                         <div className="flex justify-between items-start mb-6">
                             <div>
-                                <h3 className="text-2xl font-bold text-petroleum mb-2">Conectar con APIs REST</h3>
-                                <p className="text-gray-600 dark:text-slate-300">Tu GPT puede llamar a cualquier API externa usando las Acciones de OpenAI.</p>
+                                <h3 className="text-2xl font-bold text-petroleum mb-2">{t('ova.buildgpt.api_connect_title')}</h3>
+                                <p className="text-gray-600 dark:text-slate-300">{t('ova.buildgpt.api_connect_desc')}</p>
                             </div>
                             <VoiceReader text="Las Acciones de GPT funcionan como un puente: defines una especificación OpenAPI y tu GPT puede llamar a servicios externos. Por ejemplo, consultar el clima, buscar en una base de datos, o enviar notificaciones." />
                         </div>
@@ -266,22 +274,22 @@ const ModuleMakeZapier = ({ onNext, addXp }) => {
                         <div className="flex items-center justify-center gap-4 bg-slate-50 dark:bg-slate-700/30 p-8 rounded-xl border border-slate-200 dark:border-slate-600 overflow-x-auto">
                             <div className="flex flex-col items-center">
                                 <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center text-white shadow-lg z-10"><Mail/></div>
-                                <span className="text-xs font-bold mt-2 text-slate-600 dark:text-slate-300">Pregunta</span>
+                                <span className="text-xs font-bold mt-2 text-slate-600 dark:text-slate-300">{t('ova.buildgpt.api_question')}</span>
                             </div>
                             <div className="w-12 h-1 bg-slate-300 dark:bg-slate-600"></div>
                             <div className="flex flex-col items-center">
                                 <div className="w-16 h-16 bg-corporate rounded-full flex items-center justify-center text-white shadow-lg z-10"><Bot/></div>
-                                <span className="text-xs font-bold mt-2 text-slate-600 dark:text-slate-300">GPT Procesa</span>
+                                <span className="text-xs font-bold mt-2 text-slate-600 dark:text-slate-300">{t('ova.buildgpt.api_process')}</span>
                             </div>
                             <div className="w-12 h-1 bg-slate-300 dark:bg-slate-600"></div>
                             <div className="flex flex-col items-center">
                                 <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center text-white shadow-lg z-10"><Database/></div>
-                                <span className="text-xs font-bold mt-2 text-slate-600 dark:text-slate-300">API Externa</span>
+                                <span className="text-xs font-bold mt-2 text-slate-600 dark:text-slate-300">{t('ova.buildgpt.api_external')}</span>
                             </div>
                             <div className="w-12 h-1 bg-slate-300 dark:bg-slate-600"></div>
                             <div className="flex flex-col items-center">
                                 <div className="w-14 h-14 bg-petroleum rounded-full flex items-center justify-center text-white shadow-lg z-10"><CheckCircle/></div>
-                                <span className="text-xs font-bold mt-2 text-slate-600 dark:text-slate-300">Respuesta</span>
+                                <span className="text-xs font-bold mt-2 text-slate-600 dark:text-slate-300">{t('ova.buildgpt.api_response')}</span>
                             </div>
                         </div>
                     </div>
@@ -289,8 +297,8 @@ const ModuleMakeZapier = ({ onNext, addXp }) => {
                     <div className="animate-[fadeIn_0.6s_ease-out_forwards]">
                         <div className="flex justify-between items-start mb-6">
                             <div>
-                                <h3 className="text-2xl font-bold text-corporate mb-2">Webhooks y Eventos</h3>
-                                <p className="text-gray-600 dark:text-slate-300">Tu GPT puede reaccionar a eventos externos en tiempo real.</p>
+                                <h3 className="text-2xl font-bold text-corporate mb-2">{t('ova.buildgpt.api_webhook_title')}</h3>
+                                <p className="text-gray-600 dark:text-slate-300">{t('ova.buildgpt.api_webhook_desc')}</p>
                             </div>
                             <VoiceReader text="Los webhooks permiten que tu GPT reciba notificaciones cuando ocurre algo. Por ejemplo, cuando un estudiante entrega una tarea, el GPT puede automáticamente revisarla y dar retroalimentación." />
                         </div>
@@ -299,26 +307,26 @@ const ModuleMakeZapier = ({ onNext, addXp }) => {
                             <table className="w-full text-left bg-white dark:bg-slate-800">
                                 <thead className="bg-slate-50 dark:bg-slate-700/30 text-slate-600 dark:text-slate-300">
                                     <tr>
-                                        <th className="p-4 border-b">Característica</th>
-                                        <th className="p-4 border-b font-bold text-[#004B63]">API REST</th>
-                                        <th className="p-4 border-b font-bold text-corporate">Webhooks</th>
+                                        <th className="p-4 border-b">{t('ova.buildgpt.api_feature')}</th>
+                                        <th className="p-4 border-b font-bold text-[#004B63]">{t('ova.buildgpt.api_rest')}</th>
+                                        <th className="p-4 border-b font-bold text-corporate">{t('ova.buildgpt.api_webhooks')}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td className="p-4 border-b text-slate-700 dark:text-slate-300">Dirección</td>
-                                        <td className="p-4 border-b text-slate-600 dark:text-slate-300">GPT llama a la API</td>
-                                        <td className="p-4 border-b text-slate-600 dark:text-slate-300">La app avisa al GPT</td>
+                                        <td className="p-4 border-b text-slate-700 dark:text-slate-300">{t('ova.buildgpt.api_direction')}</td>
+                                        <td className="p-4 border-b text-slate-600 dark:text-slate-300">{t('ova.buildgpt.api_gpt_calls')}</td>
+                                        <td className="p-4 border-b text-slate-600 dark:text-slate-300">{t('ova.buildgpt.api_app_notifies')}</td>
                                     </tr>
                                     <tr>
-                                        <td className="p-4 border-b text-slate-700 dark:text-slate-300">Ideal para</td>
-                                        <td className="p-4 border-b text-slate-600 dark:text-slate-300">Consultar datos externos</td>
-                                        <td className="p-4 border-b text-slate-600 dark:text-slate-300">Recibir notificaciones</td>
+                                        <td className="p-4 border-b text-slate-700 dark:text-slate-300">{t('ova.buildgpt.api_ideal')}</td>
+                                        <td className="p-4 border-b text-slate-600 dark:text-slate-300">{t('ova.buildgpt.api_query_data')}</td>
+                                        <td className="p-4 border-b text-slate-600 dark:text-slate-300">{t('ova.buildgpt.api_receive_notif')}</td>
                                     </tr>
                                     <tr>
-                                        <td className="p-4 text-slate-700 dark:text-slate-300">Ejemplo</td>
-                                        <td className="p-4 text-slate-600 dark:text-slate-300">Buscar en base de datos</td>
-                                        <td className="p-4 text-slate-600 dark:text-slate-300">Nuevo formulario enviado</td>
+                                        <td className="p-4 text-slate-700 dark:text-slate-300">{t('ova.buildgpt.api_example')}</td>
+                                        <td className="p-4 text-slate-600 dark:text-slate-300">{t('ova.buildgpt.api_search_db')}</td>
+                                        <td className="p-4 text-slate-600 dark:text-slate-300">{t('ova.buildgpt.api_new_form')}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -328,13 +336,14 @@ const ModuleMakeZapier = ({ onNext, addXp }) => {
             </Card>
 
             <div className="flex justify-center mt-8">
-                <Button onClick={onNext} icon={Settings} className="text-lg">Ir a la Actividad Práctica</Button>
+                <Button onClick={onNext} icon={Settings} className="text-lg">{t('ova.buildgpt.api_practice_btn')}</Button>
             </div>
         </div>
     );
 };
 
 const ActivityBuilder = ({ onNext, addXp }) => {
+    const { t } = useTranslation();
     const [step, setStep] = useState(1);
     const [selections, setSelections] = useState({ trigger: null, ai: null, dest: null });
 
@@ -347,24 +356,24 @@ const ActivityBuilder = ({ onNext, addXp }) => {
     };
 
     const triggers = [
-        { id: 'form', icon: FileText, text: 'Nuevo formulario enviado' },
-        { id: 'email', icon: Mail, text: 'Nuevo correo recibido' },
+        { id: 'form', icon: FileText, text: t('ova.buildgpt.form') },
+        { id: 'email', icon: Mail, text: t('ova.buildgpt.email') },
     ];
     const actions = [
-        { id: 'summary', icon: Bot, text: 'Generar resumen automático' },
-        { id: 'sentiment', icon: Star, text: 'Analizar sentimiento' },
+        { id: 'summary', icon: Bot, text: t('ova.buildgpt.summary') },
+        { id: 'sentiment', icon: Star, text: t('ova.buildgpt.sentiment') },
     ];
     const destinations = [
-        { id: 'slack', icon: MessageSquare, text: 'Enviar a Slack' },
-        { id: 'sheets', icon: Database, text: 'Guardar en Google Sheets' },
+        { id: 'slack', icon: MessageSquare, text: t('ova.buildgpt.slack_dest') },
+        { id: 'sheets', icon: Database, text: t('ova.buildgpt.sheets_dest') },
     ];
 
     return (
         <div className="max-w-4xl mx-auto animate-[fadeIn_0.6s_ease-out_forwards]">
             <div className="text-center mb-8">
-                <span className="inline-block px-4 py-1 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 font-bold text-sm mb-3">Actividad Práctica</span>
-                <h2 className="text-3xl font-bold text-petroleum">Diseña tu Propio GPT</h2>
-                <p className="text-gray-600 dark:text-slate-300 mt-2">Selecciona las piezas para configurar tu GPT con acciones.</p>
+                <span className="inline-block px-4 py-1 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 font-bold text-sm mb-3">{t('ova.buildgpt.activity_badge')}</span>
+                <h2 className="text-3xl font-bold text-petroleum">{t('ova.buildgpt.activity_title')}</h2>
+                <p className="text-gray-600 dark:text-slate-300 mt-2">{t('ova.buildgpt.activity_desc')}</p>
             </div>
 
             <Card className="mb-8">
@@ -379,7 +388,7 @@ const ActivityBuilder = ({ onNext, addXp }) => {
 
                 {step === 1 && (
                     <div className="animate-[fadeIn_0.6s_ease-out_forwards]">
-                        <h3 className="text-xl font-bold text-center mb-6 text-slate-700 dark:text-slate-300">1. ¿Qué evento activará tu GPT?</h3>
+                        <h3 className="text-xl font-bold text-center mb-6 text-slate-700 dark:text-slate-300">{t('ova.buildgpt.activity_step1')}</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {triggers.map(t => (
                                 <button key={t.id} onClick={() => handleSelect('trigger', t.text)} className="p-6 border-2 border-slate-100 dark:border-slate-700 rounded-xl hover:border-corporate hover:bg-cyan-50 dark:hover:bg-cyan-900/20 flex flex-col items-center gap-3 transition-all">
@@ -392,7 +401,7 @@ const ActivityBuilder = ({ onNext, addXp }) => {
                 )}
                 {step === 2 && (
                     <div className="animate-[fadeIn_0.6s_ease-out_forwards]">
-                        <h3 className="text-xl font-bold text-center mb-6 text-slate-700 dark:text-slate-300">2. ¿Qué debe hacer tu GPT con la información?</h3>
+                        <h3 className="text-xl font-bold text-center mb-6 text-slate-700 dark:text-slate-300">{t('ova.buildgpt.activity_step2')}</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {actions.map(a => (
                                 <button key={a.id} onClick={() => handleSelect('ai', a.text)} className="p-6 border-2 border-slate-100 dark:border-slate-700 rounded-xl hover:border-corporate hover:bg-green-50 dark:hover:bg-green-900/20 flex flex-col items-center gap-3 transition-all">
@@ -405,7 +414,7 @@ const ActivityBuilder = ({ onNext, addXp }) => {
                 )}
                 {step === 3 && !selections.dest && (
                     <div className="animate-[fadeIn_0.6s_ease-out_forwards]">
-                        <h3 className="text-xl font-bold text-center mb-6 text-slate-700 dark:text-slate-300">3. ¿Dónde enviará el resultado?</h3>
+                        <h3 className="text-xl font-bold text-center mb-6 text-slate-700 dark:text-slate-300">{t('ova.buildgpt.activity_step3')}</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {destinations.map(d => (
                                 <button key={d.id} onClick={() => handleSelect('dest', d.text)} className="p-6 border-2 border-slate-100 dark:border-slate-700 rounded-xl hover:border-purple-500 hover:bg-purple-50 dark:hover:bg-purple-900/20 flex flex-col items-center gap-3 transition-all">
@@ -421,7 +430,7 @@ const ActivityBuilder = ({ onNext, addXp }) => {
                         <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4 text-green-500">
                             <CheckCircle size={40} />
                         </div>
-                        <h3 className="text-2xl font-bold text-petroleum mb-4">¡GPT Configurado!</h3>
+                        <h3 className="text-2xl font-bold text-petroleum mb-4">{t('ova.buildgpt.activity_done_title')}</h3>
                         <div className="bg-slate-50 dark:bg-slate-700/30 p-6 rounded-xl border dark:border-slate-600 inline-flex flex-col md:flex-row items-center gap-4 text-sm font-medium text-slate-700 dark:text-slate-300">
                             <span>{selections.trigger}</span>
                             <ArrowRight className="hidden md:block text-slate-300 dark:text-slate-600"/>
@@ -429,9 +438,9 @@ const ActivityBuilder = ({ onNext, addXp }) => {
                             <ArrowRight className="hidden md:block text-slate-300 dark:text-slate-600"/>
                             <span>{selections.dest}</span>
                         </div>
-                        <p className="mt-4 text-gray-500 dark:text-slate-400 text-sm">Así funciona un GPT con Acciones: evento → inteligencia → resultado.</p>
+                        <p className="mt-4 text-gray-500 dark:text-slate-400 text-sm">{t('ova.buildgpt.activity_done_desc')}</p>
                         <div className="mt-8">
-                            <Button onClick={onNext} className="mx-auto text-lg px-8">Ir a la Evaluación Final</Button>
+                            <Button onClick={onNext} className="mx-auto text-lg px-8">{t('ova.buildgpt.activity_final_btn')}</Button>
                         </div>
                     </div>
                 )}
@@ -505,16 +514,17 @@ const QuizScreen = ({ onNext, addXp }) => {
         }, 1500);
     };
 
+    const { t } = useTranslation();
     return (
         <div className="max-w-3xl mx-auto animate-[fadeIn_0.6s_ease-out_forwards] pb-12">
             <h2 className="text-3xl font-bold text-petroleum mb-6 flex items-center gap-3">
-                <CheckCircle className="text-corporate" size={32}/> Evaluación Final
+                <CheckCircle className="text-corporate" size={32}/> {t('ova.buildgpt.quiz_title')}
             </h2>
 
             {!showResult ? (
                 <Card className="mb-8">
                     <div className="flex justify-between items-center mb-6">
-                        <span className="text-sm font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wider">Pregunta {currentQ + 1} de {questions.length}</span>
+                        <span className="text-sm font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wider">{t('ova.buildgpt.quiz_question', { current: currentQ + 1, total: questions.length })}</span>
                     </div>
                     <h3 className="text-xl font-medium text-gray-800 dark:text-slate-200 mb-6">{questions[currentQ].q}</h3>
                     <div className="space-y-3">
@@ -554,25 +564,25 @@ const QuizScreen = ({ onNext, addXp }) => {
                     <div className="w-24 h-24 mx-auto bg-gradient-to-tr from-corporate to-petroleum rounded-full flex items-center justify-center text-white text-4xl mb-6 shadow-lg shadow-cyan-200">
                         <Award size={48} />
                     </div>
-                    <h3 className="text-3xl font-bold text-petroleum mb-2">¡Evaluación Completada!</h3>
-                    <p className="text-xl text-gray-600 dark:text-slate-300 mb-6">Obtuviste <span className="font-bold text-corporate">{score}</span> de <span className="font-bold">{questions.length}</span> aciertos.</p>
+                    <h3 className="text-3xl font-bold text-petroleum mb-2">{t('ova.buildgpt.quiz_result_title')}</h3>
+                    <p className="text-xl text-gray-600 dark:text-slate-300 mb-6">{t('ova.buildgpt.quiz_score', { score, total: questions.length })}</p>
 
                     {score === questions.length ? (
                         <div className="bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-300 p-4 rounded-xl mb-8 border border-green-200 dark:border-green-800">
-                            <p className="font-medium flex items-center justify-center gap-2"><Star className="text-yellow-500 fill-current" size={20}/> ¡Puntuación perfecta! Valerio está orgulloso de ti.</p>
+                            <p className="font-medium flex items-center justify-center gap-2"><Star className="text-yellow-500 fill-current" size={20}/> {t('ova.buildgpt.quiz_perfect')}</p>
                         </div>
                     ) : score >= 2 ? (
                         <div className="bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300 p-4 rounded-xl mb-8 border border-blue-200 dark:border-blue-800">
-                            <p className="font-medium">¡Buen trabajo! Repasa los conceptos que te hayan quedado dudosos.</p>
+                            <p className="font-medium">{t('ova.buildgpt.quiz_good')}</p>
                         </div>
                     ) : (
                         <div className="bg-orange-50 dark:bg-orange-900/20 text-orange-800 dark:text-orange-300 p-4 rounded-xl mb-8 border border-orange-200 dark:border-orange-800">
-                            <p className="font-medium">No te preocupes, repasa el laboratorio y vuelve a intentarlo. Valerio confía en ti.</p>
+                            <p className="font-medium">{t('ova.buildgpt.quiz_bad')}</p>
                         </div>
                     )}
 
                     <Button onClick={onNext} icon={Award} className="w-full sm:w-auto text-lg py-3 px-8 mx-auto">
-                        Recibir Certificado
+                        {t('ova.buildgpt.quiz_cert_btn')}
                     </Button>
                 </Card>
             )}
@@ -580,11 +590,12 @@ const QuizScreen = ({ onNext, addXp }) => {
     );
 };
 
-const CertificateScreen = ({ xp, onReset }) => {
+const CertificateScreen = ({ xp, onReset, showMarkButton, onMarkComplete }) => {
+    const { t } = useTranslation();
     return (
         <div className="max-w-4xl mx-auto animate-[fadeIn_0.6s_ease-out_forwards] text-center">
-            <h2 className="text-4xl font-extrabold text-petroleum mb-4">¡Felicidades, Constructor de GPTs!</h2>
-            <p className="text-lg text-gray-600 dark:text-slate-300 mb-8">Has completado el laboratorio guiado por Valerio. Ahora sabes crear GPTs personalizados con acciones.</p>
+            <h2 className="text-4xl font-extrabold text-petroleum mb-4">{t('ova.buildgpt.cert_title')}</h2>
+            <p className="text-lg text-gray-600 dark:text-slate-300 mb-8">{t('ova.buildgpt.cert_desc')}</p>
 
             <div className="bg-gradient-to-br from-petroleum to-[#002635] p-1 rounded-3xl shadow-2xl mb-10 max-w-2xl mx-auto transform hover:scale-105 transition-transform duration-500">
                 <div className="bg-white dark:bg-slate-800 rounded-[22px] p-8 md:p-12 border-4 border-transparent bg-clip-padding relative overflow-hidden">
@@ -594,20 +605,20 @@ const CertificateScreen = ({ xp, onReset }) => {
                     <div className="flex justify-center mb-6">
                         <Logo />
                     </div>
-                    <div className="text-sm font-bold tracking-widest text-corporate uppercase mb-2">Certificado de Finalización</div>
-                    <h3 className="text-2xl md:text-3xl font-bold text-slate-800 dark:text-slate-200 mb-6">Laboratorio: Construye un GPT Personalizado</h3>
+                    <div className="text-sm font-bold tracking-widest text-corporate uppercase mb-2">{t('ova.buildgpt.cert_subtitle')}</div>
+                    <h3 className="text-2xl md:text-3xl font-bold text-slate-800 dark:text-slate-200 mb-6">{t('ova.buildgpt.cert_course')}</h3>
 
                     <div className="flex justify-center gap-8 text-slate-600 dark:text-slate-300 border-t border-b border-slate-100 dark:border-slate-700 py-4 mb-6">
                         <div>
-                            <div className="text-xs uppercase tracking-wider">Puntaje XP</div>
+                            <div className="text-xs uppercase tracking-wider">{t('ova.buildgpt.cert_xp')}</div>
                             <div className="text-xl font-bold text-petroleum">{xp} / 1000</div>
                         </div>
                         <div>
-                            <div className="text-xs uppercase tracking-wider">Coach</div>
+                            <div className="text-xs uppercase tracking-wider">{t('ova.buildgpt.cert_coach')}</div>
                             <div className="text-xl font-bold text-petroleum">Valerio</div>
                         </div>
                         <div>
-                            <div className="text-xs uppercase tracking-wider">Fecha</div>
+                            <div className="text-xs uppercase tracking-wider">{t('ova.buildgpt.cert_date')}</div>
                             <div className="text-xl font-bold text-petroleum">{new Date().toLocaleDateString()}</div>
                         </div>
                     </div>
@@ -618,15 +629,24 @@ const CertificateScreen = ({ xp, onReset }) => {
                 </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Button onClick={onReset} variant="outline" icon={Settings}>Reiniciar Laboratorio</Button>
-                <Button onClick={() => alert('¡Sigue aprendiendo con Edutechlife y Valerio!')} icon={GraduationCap}>Explorar más cursos</Button>
-            </div>
+    <div className="flex flex-col sm:flex-row justify-center gap-4">
+      {showMarkButton && onMarkComplete && (
+        <button onClick={onMarkComplete}
+          className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold text-base shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-2 animate-pulse">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          {t('ova.buildgpt.cert_mark')}
+        </button>
+      )}
+      <Button onClick={onReset} variant="outline" icon={Settings}>{t('ova.buildgpt.cert_reset')}</Button>
+      <Button onClick={() => alert('¡Sigue aprendiendo con Edutechlife y Valerio!')} icon={GraduationCap}>{t('ova.buildgpt.cert_explore')}</Button>
+    </div>
         </div>
     );
 };
 
-export default function OVABuildGPT() {
+export default function OVABuildGPT({ onComplete }) {
+    const { t } = useTranslation();
+    const certCompletedRef = useRef(false);
     const [currentScreen, setCurrentScreen] = useState(0);
     const [xp, setXp] = useState(0);
     const totalXp = 1000;
@@ -649,8 +669,10 @@ export default function OVABuildGPT() {
         <ModuleMakeZapier onNext={nextScreen} addXp={addXp} />,
         <ActivityBuilder onNext={nextScreen} addXp={addXp} />,
         <QuizScreen onNext={nextScreen} addXp={addXp} />,
-        <CertificateScreen xp={xp} onReset={() => { setCurrentScreen(0); setXp(0); }} />
+        <CertificateScreen xp={xp} onReset={() => { setCurrentScreen(0); setXp(0); }} showMarkButton={!certCompletedRef.current} onMarkComplete={() => { certCompletedRef.current = true; onComplete?.(); }} />
     ];
+
+    
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-[#F0FDFF] to-[#E0F7FA] dark:from-slate-900 dark:to-slate-800 font-sans selection:bg-corporate selection:text-white">
@@ -664,7 +686,7 @@ export default function OVABuildGPT() {
                     {currentScreen > 0 && currentScreen < screens.length - 1 && (
                         <div className="flex items-center gap-4">
                             <div className="hidden sm:block text-sm font-semibold text-slate-500 dark:text-slate-400">
-                                Paso {currentScreen} de {screens.length - 2}
+                                {t('ova.buildgpt.step', { current: currentScreen, total: screens.length - 2 })}
                             </div>
                             <div className="flex items-center gap-2 bg-[#F0FDFF] dark:bg-slate-700/30 px-4 py-1.5 rounded-full border border-corporate/20">
                                 <Star className="text-yellow-500 fill-current" size={16} />
@@ -689,7 +711,7 @@ export default function OVABuildGPT() {
 
             {currentScreen > 0 && (
                 <footer className="border-t border-slate-200 dark:border-slate-700 mt-12 py-8 text-center text-slate-500 dark:text-slate-400 text-sm">
-                    <p>Laboratorio guiado por <strong className="text-corporate">Valerio</strong> — Coach de IA de Edutechlife.</p>
+                    <p>{t('ova.buildgpt.footer')}</p>
                 </footer>
             )}
         </div>

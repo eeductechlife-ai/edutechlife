@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import VoiceReader from './VoiceReader';
 import { CheckCircle, XCircle, Award, Brain, Shield, AlertTriangle, Scale, Eye, Lock, Users, Zap, BookOpen, Gamepad2 } from 'lucide-react';
+import { useTranslation } from '../../i18n/I18nProvider';
+import { contentData, gameData } from '../../data/ova/biasLab';
 
 const BrainIcon = ({ className = "" }) => (
   <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -20,53 +22,9 @@ const EdutechLogo = () => (
   </div>
 );
 
-const contentData = {
-  intro: { title: "Introducción a la Ética en IA", text: "La inteligencia artificial ha llegado para transformar áreas como la medicina, la educación y la justicia. Pero su poder no la hace neutral. Los sistemas de IA toman decisiones que afectan a millones, y pueden ser incorrectas o injustas. Comprender esto es una competencia ciudadana urgente.", extended: "Este módulo ofrece herramientas para usar la IA con responsabilidad, reconocer riesgos y mitigar sesgos algorítmicos." },
-  cap1: {
-    title: "1. Fundamentos Éticos", text: "La ética de la IA estudia los valores y normas que deben guiar su diseño y uso, buscando siempre el bienestar de todas las personas.",
-    principles: [
-      { icon: <Scale className="w-5 h-5"/>, name: "Equidad y justicia", desc: "No debe discriminar ni favorecer a grupos específicos." },
-      { icon: <Eye className="w-5 h-5"/>, name: "Transparencia", desc: "Los usuarios deben entender cómo y por qué la IA toma decisiones." },
-      { icon: <Lock className="w-5 h-5"/>, name: "Privacidad", desc: "Protección de datos personales y uso con consentimiento." },
-      { icon: <Shield className="w-5 h-5"/>, name: "Responsabilidad", desc: "Siempre debe haber un humano o institución responsable." },
-      { icon: <Users className="w-5 h-5"/>, name: "Beneficio social", desc: "Debe mejorar el bienestar de toda la sociedad." }
-    ]
-  },
-  cap2: {
-    title: "2. Uso Adecuado de la IA", text: "El uso adecuado es un uso consciente que no reemplaza el pensamiento crítico ni la autoría intelectual.",
-    dos: ["Usar IA para generar borradores y enriquecerlos con criterio propio.", "Citar explícitamente el uso de IA en trabajos académicos.", "Verificar datos en fuentes primarias para evitar alucinaciones.", "Usar la IA como tutor para ampliar el aprendizaje."],
-    toolTitle: "Herramienta Destacada: NotebookLM", toolDesc: "NotebookLM es un ejemplo de cómo usar la IA de forma responsable para la investigación, permitiendo centralizar fuentes y verificar información con citas directas."
-  },
-  cap3: {
-    title: "3. Riesgos y Desventajas", text: "Reconocer los riesgos permite usar la tecnología con mayor inteligencia y precaución.",
-    risks: [
-      { name: "Alucinaciones", desc: "Generación de información falsa con apariencia de verdad (ej. citas legales inexistentes)." },
-      { name: "Impacto Laboral", desc: "Automatización de empleos rutinarios y necesidad de reconversión." },
-      { name: "Privacidad y Vigilancia", desc: "Riesgos por reconocimiento facial y análisis de datos masivos." },
-      { name: "Concentración de Poder", desc: "Decisiones globales tomadas por pocas empresas tecnológicas." }
-    ],
-    critical: "Dependencia Cognitiva: Delegar el pensamiento a la IA reduce la capacidad de argumentar y memorizar aprendizajes profundos."
-  },
-  cap4: {
-    title: "4. Sesgos en la IA", text: "Los sesgos son errores sistemáticos que reflejan desigualdades históricas presentes en los datos de entrenamiento.",
-    biases: [
-      { name: "Sesgo de datos históricos", desc: "Refleja discriminaciones pasadas (ej. preferencia de género en empleos)." },
-      { name: "Sesgo de representación", desc: "Subrepresentación de minorías (ej. errores en reconocimiento facial de piel oscura)." },
-      { name: "Sesgo de automatización", desc: "Confianza excesiva en la IA sobre el criterio experto humano." },
-      { name: "Sesgo cultural", desc: "Marcos culturales ajenos que ignoran perspectivas locales." }
-    ]
-  }
-};
-
-const gameData = [
-  { id: 1, case: "Un abogado usa IA para un juicio y presenta leyes que no existen.", concept: "Alucinación del Modelo" },
-  { id: 2, case: "Un sistema de becas rechaza a candidatos solo por su código postal.", concept: "Sesgo de Datos Históricos" },
-  { id: 3, case: "Un estudiante deja de leer libros porque la IA le hace todos los resúmenes.", concept: "Dependencia Cognitiva" },
-  { id: 4, case: "Un banco no puede explicar por qué su algoritmo negó un préstamo.", concept: "Falta de Transparencia" },
-  { id: 5, case: "Un usuario asume que la IA tiene la razón aunque contradiga su manual técnico.", concept: "Sesgo de Automatización" }
-];
-
-export default function OVABiasLab() {
+export default function OVABiasLab({ onComplete }) {
+  const { t } = useTranslation();
+  const certCompletedRef = useRef(false);
   const [activeSection, setActiveSection] = useState('intro');
   const [shuffledCases, setShuffledCases] = useState([]);
   const [shuffledConcepts, setShuffledConcepts] = useState([]);
@@ -87,13 +45,15 @@ export default function OVABiasLab() {
     }
   }, [selectedCase, selectedConcept]);
 
+  
+
   const navItems = [
-    { id: 'intro', icon: <BookOpen size={18}/>, label: 'Inicio' },
-    { id: 'cap1', icon: <Scale size={18}/>, label: 'Fundamentos' },
-    { id: 'cap2', icon: <Shield size={18}/>, label: 'Uso Adecuado' },
-    { id: 'cap3', icon: <AlertTriangle size={18}/>, label: 'Riesgos' },
-    { id: 'cap4', icon: <Brain size={18}/>, label: 'Sesgos' },
-    { id: 'game', icon: <Gamepad2 size={18}/>, label: 'Reto' },
+    { id: 'intro', icon: <BookOpen size={18}/> },
+    { id: 'cap1', icon: <Scale size={18}/> },
+    { id: 'cap2', icon: <Shield size={18}/> },
+    { id: 'cap3', icon: <AlertTriangle size={18}/> },
+    { id: 'cap4', icon: <Brain size={18}/> },
+    { id: 'game', icon: <Gamepad2 size={18}/> },
   ];
 
 
@@ -104,13 +64,13 @@ export default function OVABiasLab() {
       <aside className="w-full md:w-64 bg-white/90 dark:bg-slate-800/90 flex flex-col shadow-xl z-10 md:min-h-screen border-r border-blue-100">
         <div className="p-6 text-center border-b border-blue-50">
           <EdutechLogo />
-          <p className="text-[10px] uppercase mt-2 text-slate-600 dark:text-slate-300 font-bold tracking-[0.2em]">Ética e Inteligencia Artificial</p>
+          <p className="text-[10px] uppercase mt-2 text-slate-600 dark:text-slate-300 font-bold tracking-[0.2em]">{t('ova.biaslab.sidebar_subtitle')}</p>
         </div>
         <nav className="flex-1 p-4 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-visible">
           {navItems.map((item) => (
             <button key={item.id} onClick={() => setActiveSection(item.id)}
               className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all min-w-max md:min-w-0 ${activeSection === item.id ? 'bg-gradient-to-r from-[#2FA8C6] to-[#1E3A5F] text-white font-semibold shadow-lg' : 'text-slate-500 dark:text-slate-400 hover:bg-[#E0F7FA] hover:text-[#004B63]'}`}>
-              {item.icon}<span className="text-sm md:text-base">{item.label}</span>
+              {item.icon}<span className="text-sm md:text-base">{t(`ova.biaslab.nav_${item.id}`)}</span>
             </button>
           ))}
         </nav>
@@ -125,7 +85,7 @@ export default function OVABiasLab() {
             <div className="animate-[fadeIn_0.6s_ease-out_forwards]">
               <h2 className="text-3xl md:text-4xl font-black text-[#1E3A5F] dark:text-slate-100 mb-6 font-montserrat">{contentData.intro.title}</h2>
               <div className="w-full h-64 md:h-80 rounded-2xl mb-8 overflow-hidden shadow-xl border border-[#EAEAEA]">
-                <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=1000" alt="Ética IA" loading="lazy" className="w-full h-full object-cover" />
+                <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=1000" alt={t('ova.biaslab.intro_img_alt')} loading="lazy" className="w-full h-full object-cover" />
               </div>
               <p className="text-lg text-slate-700 dark:text-slate-200 leading-relaxed">{contentData.intro.text}</p>
               <div className="mt-6 p-6 bg-[#E0F7FA] border-l-8 border-[#2FA8C6] rounded-r-2xl italic text-[#1E3A5F] dark:text-slate-100 font-medium">"{contentData.intro.extended}"</div>
@@ -139,7 +99,7 @@ export default function OVABiasLab() {
                 <div className="space-y-4">
                   <p className="text-base text-slate-600 dark:text-slate-300">{contentData.cap2.text}</p>
                   <div className="bg-emerald-50 dark:bg-emerald-900/20 rounded-2xl p-6 border border-emerald-100">
-                    <h3 className="font-bold text-emerald-800 mb-4 flex items-center gap-2"><CheckCircle size={18}/> Prácticas Responsables</h3>
+                    <h3 className="font-bold text-emerald-800 mb-4 flex items-center gap-2"><CheckCircle size={18}/> {t('ova.biaslab.responsible_practices')}</h3>
                     <ul className="space-y-3">{contentData.cap2.dos.map((item, i) => (<li key={i} className="flex gap-3 text-emerald-900 dark:text-emerald-100 text-sm bg-white/50 dark:bg-slate-800/50 p-2 rounded-lg border border-emerald-50"><Zap size={14} className="mt-1 flex-shrink-0 text-emerald-500"/> {item}</li>))}</ul>
                   </div>
                 </div>
@@ -150,7 +110,7 @@ export default function OVABiasLab() {
                   </div>
                   <p className="text-blue-100 text-sm mb-6">{contentData.cap2.toolDesc}</p>
                   <div className="bg-white/10 rounded-xl p-4 border border-white/20">
-                    <p className="text-xs uppercase tracking-widest text-[#2FA8C6] font-bold mb-2">Caso de Estudio</p>
+                    <p className="text-xs uppercase tracking-widest text-[#2FA8C6] font-bold mb-2">{t('ova.biaslab.case_study')}</p>
                     <p className="text-sm italic">"Domina NotebookLM como tu asistente definitivo para evitar alucinaciones."</p>
                   </div>
                 </div>
@@ -175,7 +135,7 @@ export default function OVABiasLab() {
               </div>
               {activeSection === 'cap3' && (
                 <div className="mt-6 p-6 bg-rose-50 dark:bg-rose-900/20 border-2 border-rose-100 rounded-2xl">
-                  <h4 className="text-rose-700 dark:text-rose-300 font-black uppercase text-xs mb-2">⚠️ Atención</h4>
+                  <h4 className="text-rose-700 dark:text-rose-300 font-black uppercase text-xs mb-2">{t('ova.biaslab.attention_label')}</h4>
                   <p className="text-rose-900 dark:text-rose-100 font-medium">{contentData.cap3.critical}</p>
                 </div>
               )}
@@ -187,8 +147,8 @@ export default function OVABiasLab() {
               {matchedPairs.length < gameData.length ? (
                 <>
                   <div className="mb-8">
-                    <h2 className="text-3xl font-black text-[#1E3A5F] dark:text-slate-100 mb-2 font-montserrat">Desafío de Casos Reales</h2>
-                    <p className="text-slate-500 dark:text-slate-400">Relaciona cada caso con el concepto ético correcto</p>
+                    <h2 className="text-3xl font-black text-[#1E3A5F] dark:text-slate-100 mb-2 font-montserrat">{t('ova.biaslab.game_title')}</h2>
+                    <p className="text-slate-500 dark:text-slate-400">{t('ova.biaslab.game_desc')}</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
                     <div className="space-y-3">{shuffledCases.map(item => (
@@ -208,11 +168,18 @@ export default function OVABiasLab() {
               ) : (
                 <div className="p-10 bg-emerald-50 dark:bg-emerald-900/20 rounded-3xl border-4 border-emerald-200 flex flex-col items-center">
                   <Award className="w-24 h-24 text-emerald-500 mb-4 animate-bounce" />
-                  <h2 className="text-3xl font-black text-emerald-900 dark:text-emerald-100 font-montserrat">¡Pensamiento Crítico Activado!</h2>
-                  <p className="text-emerald-700 dark:text-emerald-300 mt-2">Has superado el laboratorio de Ética en IA.</p>
+                  <h2 className="text-3xl font-black text-emerald-900 dark:text-emerald-100 font-montserrat">{t('ova.biaslab.game_complete_title')}</h2>
+                  <p className="text-emerald-700 dark:text-emerald-300 mt-2">{t('ova.biaslab.game_complete_desc')}</p>
+                  {!certCompletedRef.current && (
+                    <button onClick={() => { certCompletedRef.current = true; onComplete?.(); }}
+                      className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold text-base shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-2 mx-auto mb-3 animate-pulse">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      {t('common.mark_viewed')}
+                    </button>
+                  )}
                   <button onClick={() => { setActiveSection('intro'); setMatchedPairs([]); }}
                     className="mt-6 px-6 py-3 bg-gradient-to-r from-[#2FA8C6] to-[#1E3A5F] text-white rounded-xl font-bold shadow-md hover:shadow-lg transition-all">
-                    Volver al inicio
+                    {t('ova.biaslab.back_to_start')}
                   </button>
                 </div>
               )}
@@ -220,7 +187,7 @@ export default function OVABiasLab() {
           )}
         </div>
         <footer className="mt-4 text-center text-slate-600 dark:text-slate-300 text-xs py-4">
-          Laboratorio guiado por <strong className="text-[#2FA8C6]">Valerio</strong> &mdash; Coach de IA de Edutechlife.
+          {t('ova.biaslab.footer')}
         </footer>
       </main>
       

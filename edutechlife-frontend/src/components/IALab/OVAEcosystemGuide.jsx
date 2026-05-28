@@ -1,60 +1,12 @@
 import React, { useState } from 'react';
+import { useTranslation } from '../../i18n/I18nProvider';
 import {
   Volume2, TrendingUp, Cpu, Brain, Wrench, Search, Layout, Database,
   Share2, Zap, Settings, MessageSquare, Target, AlertTriangle,
   PlaySquare, Square, ChevronDown, Lightbulb, Bot, Play, GraduationCap
 } from 'lucide-react';
 import { speakTextConversational, stopSpeech } from '../../utils/speech';
-
-const infographicData = {
-  header: { title: "Dominando el Ecosistema ChatGPT", subtitle: "De la Teoría a la Acción Profesional" },
-  sections: [
-    {
-      id: "evolution", title: "Evolución del Motor de IA (Modelos GPT)", icon: TrendingUp, color: "border-blue-500",
-      content: "ChatGPT se convirtió en la aplicación de más rápido crecimiento en la historia tras su lanzamiento en noviembre de 2022, alcanzando 100 Millones de Usuarios en 2 meses.",
-      details: [
-        { title: "GPT-4o", date: "Mayo 2024", text: "Multimodal omni (texto, imagen, audio).", extendedText: "Este modelo rompió las barreras de latencia. Permite interacciones de voz en tiempo real sin los retrasos típicos, puede 'ver' a través de la cámara de un smartphone y analizar el entorno instantáneamente, y procesa audio de forma nativa en lugar de convertirlo previamente a texto." },
-        { title: "GPT-5", date: "Agosto 2025", text: "Sistema optimizado, drástica reducción de alucinaciones.", extendedText: "Un salto cualitativo hacia la fiabilidad empresarial. Se enfoca en flujos de trabajo orientados a agentes (Agentic Workflows), donde la IA puede interactuar de manera más segura con bases de datos externas y cometer significativamente menos errores lógicos o inventar datos." },
-        { title: "GPT-5.5", date: "Abril 2026", text: "Razonamiento autónomo y planificación paso a paso.", extendedText: "Representa el modelo más inteligente de la década. Puede recibir un objetivo complejo (ej. 'Crea una campaña de marketing completa'), desglosarlo en tareas pequeñas, ejecutar el código necesario, corregir sus propios errores y usar múltiples herramientas web sin intervención humana constante." }
-      ]
-    },
-    {
-      id: "modes", title: "Modos de Operación", icon: Cpu, color: "border-teal-500",
-      content: "La IA adapta su capacidad de procesamiento y tiempo de respuesta según la complejidad de la tarea.",
-      details: [
-        { title: "Modo Fast (Rápido)", text: "Respuestas instantáneas a tareas simples y directas.", extendedText: "Ideal para la productividad diaria: resumir cadenas de correos largos, generar ideas rápidas de contenido (brainstorming), redactar respuestas a clientes o corregir la gramática de un texto en segundos. Prioriza la velocidad sobre el análisis profundo." },
-        { title: "Modo Thinking (Profundo)", text: "Análisis detallados y decisiones estratégicas. Requiere tiempo de procesamiento.", extendedText: "La IA invierte tiempo en 'pensar' antes de escribir. Es esencial para resolver bugs de código complejos, diseñar arquitecturas de software, escribir ensayos académicos analíticos, o modelar escenarios financieros donde un error superficial sería costoso." }
-      ]
-    },
-    {
-      id: "tools", title: "La Caja de Herramientas Integrada", icon: Wrench, color: "border-orange-500",
-      content: "ChatGPT evolucionó de ser un simple chatbot a convertirse en un entorno de trabajo digital (Workspace) completo.",
-      details: [
-        { title: "Búsqueda Web e Intérprete de Código", text: "Acceso a datos en vivo y ejecución de scripts en Python.", icon: Search, extendedText: "Puedes subir un archivo Excel crudo y pedirle que limpie los datos, haga análisis estadísticos (como regresiones) y genere gráficos interactivos. La IA escribe el código Python en segundo plano, lo ejecuta y te entrega el resultado visual." },
-        { title: "Canvas: Edición Colaborativa", text: "Un entorno de trabajo conjunto en una ventana lateral.", icon: Layout, extendedText: "En lugar de regenerar todo un texto en el chat, Canvas te abre un documento lateral. Puedes seleccionar un solo párrafo y pedir 'haz este párrafo más profesional', o editar el código directamente mientras la IA revisa tus cambios. Ideal para proyectos largos." },
-        { title: "Memoria y Proyectos", text: "Recuerda preferencias y organiza contextos complejos bajo 'Proyectos'.", icon: Database, extendedText: "Si configuras un 'Proyecto' para Edutechlife, puedes subir el manual de marca y directrices. A partir de ahí, cualquier chat dentro de ese proyecto recordará usar tus colores, tono de voz institucional y formatos preferidos sin tener que repetirlo." }
-      ]
-    },
-    {
-      id: "automation", title: "Conectividad y Automatización", icon: Share2, color: "border-purple-500",
-      content: "El verdadero poder llega al conectar tu IA con el mundo exterior y tus aplicaciones del día a día.",
-      details: [
-        { title: "Zapier", text: "Automatizaciones Simples e intuitivas.", icon: Zap, extendedText: "Excelente para principiantes. Ejemplo: 'Cada vez que reciba un correo etiquetado como Factura en Gmail, usa la IA para extraer el monto y añádelo automáticamente a una fila en Google Sheets'." },
-        { title: "Make (Integromat)", text: "Flujos Complejos y potentes (1,000 operaciones/mes gratis).", icon: Settings, extendedText: "Permite bifurcaciones lógicas avanzadas. Ejemplo: 'Si entra un lead por Facebook, analiza su mensaje con IA. Si está enojado, notifica en Slack urgente. Si es una duda común, envía un email automático usando el manual de la empresa'." },
-        { title: "Integración Nativa: Workspace y Slack", text: "Capacidad de actuar directamente sobre tus plataformas corporativas.", icon: MessageSquare, extendedText: "La IA ya no vive solo en su app. Puedes usar @ChatGPT en Slack para que te resuma un hilo de 50 mensajes de tus compañeros mientras estabas en una reunión, ahorrando minutos vitales de lectura." }
-      ]
-    },
-    {
-      id: "prompt", title: "El Arte del Prompt Estratégico", icon: Target, color: "border-rose-500",
-      content: "La calidad de la respuesta de la IA depende directamente de la ingeniería de la instrucción (Prompt Engineering).",
-      details: [
-        { title: "Los 6 Elementos del Prompt Perfecto", text: "Rol, Contexto, Tarea, Formato, Restricciones y Ejemplos.", extendedText: "1. Rol: 'Actúa como un experto en e-learning'. 2. Contexto: 'Doy clases a universitarios'. 3. Tarea: 'Crea un temario'. 4. Formato: 'En tabla Markdown'. 5. Restricciones: 'Máximo 4 módulos'. 6. Ejemplos (Few-shot): 'Aquí tienes un ejemplo de cómo me gusta el estilo...'." },
-        { title: "Chain of Thought (Cadena de Pensamiento)", text: "Forzar a la IA a desglosar su razonamiento mejora su precisión.", icon: Brain, extendedText: "Si añades la frase 'Piensa paso a paso y explica tu lógica antes de dar la respuesta final', el rendimiento de la IA en matemáticas o toma de decisiones sube drásticamente, ya que el modelo se da espacio para procesar antes de predecir la última palabra." },
-        { title: "Gestión de Alucinaciones", text: "La advertencia crítica: La IA puede generar datos falsos con gran elocuencia.", icon: AlertTriangle, extendedText: "Los modelos lingüísticos buscan predecir la siguiente palabra de forma probable, no buscar la 'verdad'. Es imperativo usar la herramienta de 'Búsqueda Web' si necesitas hechos recientes, y siempre verificar fechas, cifras y citas bibliográficas en fuentes primarias." }
-      ]
-    }
-  ]
-};
+import { infographicData } from '../../data/ova/ecosystemGuide';
 
 const EdutechLogo = () => (
   <div className="flex items-center text-3xl md:text-4xl font-bold tracking-tight select-none">
@@ -64,6 +16,7 @@ const EdutechLogo = () => (
 );
 
 const VoiceReader = ({ text }) => {
+  const { t } = useTranslation();
   const [isPlaying, setIsPlaying] = useState(false);
   const speak = () => {
     if (isPlaying) { stopSpeech(); setIsPlaying(false); return; }
@@ -71,9 +24,9 @@ const VoiceReader = ({ text }) => {
     setIsPlaying(true);
   };
   return (
-    <button onClick={speak} className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors shrink-0 ${isPlaying ? 'bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-800/30' : 'bg-[#2596be] text-white hover:bg-[#1f7e9f] shadow-md'}`} title="Escuchar con voz de Valerio">
+    <button onClick={speak} className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors shrink-0 ${isPlaying ? 'bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-800/30' : 'bg-[#2596be] text-white hover:bg-[#1f7e9f] shadow-md'}`} title={t('ova.ecosystem.voice_title')}>
       {isPlaying ? <Square size={18} /> : <Volume2 size={18} />}
-      <span className="font-bold uppercase tracking-wide">{isPlaying ? 'Detener' : 'Escuchar con Valerio'}</span>
+      <span className="font-bold uppercase tracking-wide">{isPlaying ? t('ova.ecosystem.voice_stop') : t('ova.ecosystem.voice_listen')}</span>
     </button>
   );
 };
@@ -101,7 +54,7 @@ const DetailCard = ({ detail }) => {
             <div className="p-4 md:p-5 pt-0 bg-slate-50 dark:bg-slate-700/30 border-t border-slate-100 dark:border-slate-600">
               <div className="bg-blue-50/70 dark:bg-blue-900/20 p-4 rounded-lg text-sm text-slate-700 dark:text-slate-200 leading-relaxed flex gap-3 border border-blue-100 dark:border-blue-800 italic">
                 <Lightbulb className="text-amber-500 shrink-0 mt-0.5" size={20} />
-                <div><strong className="block mb-1 text-[#133c55] dark:text-slate-100 font-bold uppercase text-[11px] tracking-widest">Profundización:</strong>{detail.extendedText}</div>
+                <div><strong className="block mb-1 text-[#133c55] dark:text-slate-100 font-bold uppercase text-[11px] tracking-widest">{t('ova.ecosystem.detail_deep')}</strong>{detail.extendedText}</div>
               </div>
             </div>
           )}
@@ -123,21 +76,25 @@ const generateSectionTextToSpeech = (section) => {
   return textToRead;
 };
 
-const WelcomeScreen = ({ onNext }) => (
-  <div className="flex flex-col items-center justify-center min-h-[60vh] text-center animate-[fadeIn_0.8s_ease-out_forwards] px-4 py-8 bg-white dark:bg-slate-800">
-    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 dark:bg-cyan-900/30 text-petroleum dark:text-slate-100 font-semibold text-sm mb-4">
-      <Bot size={16} className="text-corporate" /><span>Laboratorio Guiado por Valerio</span>
+const WelcomeScreen = ({ onNext }) => {
+  const { t } = useTranslation();
+  return (
+    <div className="flex flex-col items-center justify-center min-h-[60vh] text-center animate-[fadeIn_0.8s_ease-out_forwards] px-4 py-8 bg-white dark:bg-slate-800">
+      <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 dark:bg-cyan-900/30 text-petroleum dark:text-slate-100 font-semibold text-sm mb-4">
+        <Bot size={16} className="text-corporate" /><span>{t('ova.ecosystem.lab_badge')}</span>
+      </div>
+      <EdutechLogo />
+      <h1 className="text-3xl md:text-5xl font-black mt-6 mb-3 leading-tight tracking-tight text-[#133c55] dark:text-slate-100">{infographicData.header.title}</h1>
+      <p className="text-lg md:text-xl text-slate-500 dark:text-slate-400 font-light mb-4">{infographicData.header.subtitle}</p>
+      <p className="text-slate-600 dark:text-slate-400 max-w-xl mb-4">{t('ova.ecosystem.welcome_desc')}</p>
+      <VoiceReader text={t('ova.ecosystem.welcome_voice')} />
+      <button onClick={onNext} className="mt-4 px-8 py-4 bg-gradient-to-r from-[#2596be] to-[#1f7e9f] text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all flex items-center gap-3"><Play size={20} />{t('ova.ecosystem.start_btn')}</button>
     </div>
-    <EdutechLogo />
-    <h1 className="text-3xl md:text-5xl font-black mt-6 mb-3 leading-tight tracking-tight text-[#133c55] dark:text-slate-100">{infographicData.header.title}</h1>
-    <p className="text-lg md:text-xl text-slate-500 dark:text-slate-400 font-light mb-4">{infographicData.header.subtitle}</p>
-    <p className="text-slate-600 dark:text-slate-400 max-w-xl mb-4">Hola, soy Valerio, tu coach de IA. En este laboratorio exploraremos la evolución de los modelos GPT, sus modos de operación, herramientas integradas y el arte del prompt estratégico.</p>
-    <VoiceReader text="Hola, soy Valerio, tu coach de IA de Edutechlife. En este laboratorio exploraremos el ecosistema ChatGPT: desde la evolución de los modelos GPT, los modos de operación, las herramientas integradas, la conectividad con APIs, hasta el arte del prompt estratégico. Vamos a descubrir cómo dominar cada aspecto." />
-    <button onClick={onNext} className="mt-4 px-8 py-4 bg-gradient-to-r from-[#2596be] to-[#1f7e9f] text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all flex items-center gap-3"><Play size={20} />Comenzar Laboratorio</button>
-  </div>
-);
+  );
+};
 
 export default function OVAEcosystemGuide() {
+  const { t } = useTranslation();
   const [currentScreen, setCurrentScreen] = useState(0);
   const [activeSectionId, setActiveSectionId] = useState('evolution');
 
@@ -147,12 +104,14 @@ export default function OVAEcosystemGuide() {
 
   if (currentScreen === 0) return <WelcomeScreen onNext={() => setCurrentScreen(1)} />;
 
+  const sectionIcons = { TrendingUp, Cpu, Wrench, Share2, Target };
+
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900 font-sans text-slate-800 dark:text-slate-100">
       <header className="bg-white dark:bg-slate-800 shadow-sm border-b sticky top-0 z-50" style={{ borderColor: '#2596be' }}>
         <div className="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
           <EdutechLogo />
-          <div className="text-[10px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-[0.2em] hidden md:block">Módulo de Entrenamiento Interactivo</div>
+          <div className="text-[10px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-[0.2em] hidden md:block">{t('ova.ecosystem.header_module')}</div>
         </div>
       </header>
 
@@ -166,7 +125,7 @@ export default function OVAEcosystemGuide() {
         <div className="space-y-4">
           {infographicData.sections.map((section) => {
             const isActive = activeSectionId === section.id;
-            const Icon = section.icon;
+            const Icon = sectionIcons[section.icon];
             return (
               <div key={section.id} className={`bg-white dark:bg-slate-800 rounded-3xl shadow-sm border transition-all duration-500 overflow-hidden ${isActive ? 'border-[#2596be] ring-1 ring-[#2596be]/10' : 'border-slate-100 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500'}`}>
                 <button onClick={() => handleSectionClick(section.id)} className="w-full flex items-center justify-between p-6 md:p-8 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2596be] focus-visible:ring-offset-2 rounded-3xl bg-white dark:bg-slate-800 transition-colors">
@@ -191,7 +150,7 @@ export default function OVAEcosystemGuide() {
                       </div>
                       <div className="flex items-center gap-2 mb-6 ml-1">
                         <div className="w-1.5 h-1.5 rounded-full bg-[#2596be]"></div>
-                        <h4 className="text-[10px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-[0.2em]">Desglose Técnico y Práctico</h4>
+                        <h4 className="text-[10px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-[0.2em]">{t('ova.ecosystem.detail_breakdown')}</h4>
                       </div>
                       <div className="grid grid-cols-1 gap-4">
                         {section.details.map((detail, idx) => <DetailCard key={idx} detail={detail} />)}
@@ -199,9 +158,9 @@ export default function OVAEcosystemGuide() {
                       {section.id === 'prompt' && (
                         <div className="mt-8 p-8 bg-[#133c55] text-white rounded-[2rem] text-center shadow-xl relative overflow-hidden group">
                           <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity"><Target size={120} /></div>
-                          <h5 className="font-black mb-6 text-[#2596be] text-sm uppercase tracking-widest">La Fórmula Maestra</h5>
+                          <h5 className="font-black mb-6 text-[#2596be] text-sm uppercase tracking-widest">{t('ova.ecosystem.master_formula')}</h5>
                           <div className="flex flex-wrap justify-center gap-3 relative z-10">
-                            {['Rol', 'Contexto', 'Tarea', 'Formato', 'Restricciones', 'Ejemplos'].map((elem, i) => (
+                            {[t('ova.ecosystem.formula_role'), t('ova.ecosystem.formula_context'), t('ova.ecosystem.formula_task'), t('ova.ecosystem.formula_format'), t('ova.ecosystem.formula_constraints'), t('ova.ecosystem.formula_examples')].map((elem, i) => (
                               <span key={i} className="px-5 py-2.5 bg-white/5 dark:bg-white/10 hover:bg-white/10 rounded-xl border border-white/10 text-sm font-bold transition-colors">{elem}</span>
                             ))}
                           </div>
@@ -218,9 +177,8 @@ export default function OVAEcosystemGuide() {
 
       <footer className="text-center pb-16 pt-8 border-t border-slate-100 dark:border-slate-600 mt-12 px-6">
         <EdutechLogo />
-        <p className="text-slate-600 dark:text-slate-400 text-xs font-bold uppercase tracking-widest mt-4">Laboratorio guiado por <span className="text-[#2596be]">Valerio</span> — Coach de IA de Edutechlife.</p>
+        <p className="text-slate-600 dark:text-slate-400 text-xs font-bold uppercase tracking-widest mt-4">{t('ova.ecosystem.footer')}</p>
       </footer>
-
 
     </div>
   );

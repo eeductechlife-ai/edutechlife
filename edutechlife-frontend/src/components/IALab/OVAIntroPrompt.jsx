@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import VoiceReader from './VoiceReader';
+import { useTranslation } from '../../i18n/I18nProvider';
 import {
   BrainCircuit, Bot, Play, ChevronRight, ChevronLeft,
   ArrowRightCircle, Star, Award, Trophy, Sparkles, BookOpen, CheckCircle2,
@@ -27,10 +28,12 @@ const Button = ({ children, onClick, className = '', icon: Icon = null, disabled
   </button>
 );
 
-const WelcomeScreen = ({ onNext }) => (
+const WelcomeScreen = ({ onNext }) => {
+  const { t } = useTranslation();
+  return (
   <div className="text-center space-y-4 py-4 animate-[fadeIn_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards]">
     <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#0D2B5B]/5 text-[#00B4D8] font-black text-[9px] uppercase tracking-[0.15em] border border-[#00B4D8]/20">
-      <Bot size={14} /><span>Laboratorio Guiado por Valerio</span>
+      <Bot size={14} /><span>{t('ova.introprompt.lab_title')}</span>
     </div>
     <div className="relative inline-block">
       <div className="absolute inset-0 bg-[#00B4D8] rounded-full blur-[60px] opacity-10 animate-pulse"></div>
@@ -41,28 +44,30 @@ const WelcomeScreen = ({ onNext }) => (
       </div>
     </div>
     <div className="space-y-1">
-      <h1 className="text-3xl md:text-4xl font-[400] text-[#0D2B5B] leading-[0.9] tracking-tighter lowercase">aprendamos qué es</h1>
-      <h2 className="text-2xl md:text-3xl font-[900] text-[#0D2B5B] tracking-tight">UN PROMPT</h2>
+      <h1 className="text-3xl md:text-4xl font-[400] text-[#0D2B5B] leading-[0.9] tracking-tighter lowercase">{t('ova.introprompt.welcome_title1')}</h1>
+      <h2 className="text-2xl md:text-3xl font-[900] text-[#0D2B5B] tracking-tight">{t('ova.introprompt.welcome_title2')}</h2>
     </div>
-    <p className="text-slate-500 dark:text-slate-300 max-w-lg mx-auto font-bold text-[13px]">Hola, soy Valerio, tu coach de IA. En este laboratorio descubriremos qué son los prompts, su anatomía, tipos y cómo escribirlos para obtener respuestas de alta calidad.</p>
-    <VoiceReader text="Hola, soy Valerio, tu coach de IA de Edutechlife. En este laboratorio aprenderemos qué es un prompt, la herramienta más importante para comunicarte con la inteligencia artificial. Exploraremos su anatomía, los tipos de prompts, errores comunes y cómo mejorarlos." />
-    <Button onClick={onNext} className="mx-auto bg-gradient-to-r from-[#0D2B5B] to-[#1A4D8C] text-white" icon={Play}>Comenzar Laboratorio</Button>
+    <p className="text-slate-500 dark:text-slate-300 max-w-lg mx-auto font-bold text-[13px]">{t('ova.introprompt.welcome_desc')}</p>
+    <VoiceReader text={t('ova.introprompt.welcome_audio')} />
+    <Button onClick={onNext} className="mx-auto bg-gradient-to-r from-[#0D2B5B] to-[#1A4D8C] text-white" icon={Play}>{t('ova.introprompt.start')}</Button>
   </div>
 );
+};
 
 const WhatIsPrompt = ({ onNext, addXp }) => {
+  const { t } = useTranslation();
   React.useEffect(() => { addXp(50); }, []);
   const text = "Un prompt es un conjunto de instrucciones que le das a la inteligencia artificial para guiar su respuesta. Es el puente entre tu intención humana y la capacidad de la máquina. La calidad del resultado depende directamente de la calidad del prompt.";
   return (
     <div className="animate-[fadeIn_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards] space-y-4">
       <div className="p-5 bg-[#F0F9FF] rounded-[2rem] border-2 border-white dark:border-slate-700 shadow-md">
-        <h4 className="text-[#0D2B5B] font-[900] text-xl mb-3 tracking-tighter lowercase">¿Qué es un Prompt?</h4>
+        <h4 className="text-[#0D2B5B] font-[900] text-xl mb-3 tracking-tighter lowercase">{t('ova.introprompt.whatis_title')}</h4>
         <p className="text-slate-600 dark:text-slate-300 leading-relaxed font-bold text-sm">{text}</p>
         <div className="mt-3"><VoiceReader text={text} /></div>
       </div>
       <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-4 rounded-xl flex items-start gap-3 shadow-sm">
         <Lightbulb className="text-amber-500 shrink-0 mt-1" size={20} />
-        <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">El prompt es la habilidad más importante al usar IA. Un buen prompt puede ser la diferencia entre una respuesta genérica y una solución precisa y útil.</p>
+        <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">{t('ova.introprompt.whatis_tip')}</p>
       </div>
       <div className="flex justify-end"></div>
     </div>
@@ -70,6 +75,7 @@ const WhatIsPrompt = ({ onNext, addXp }) => {
 };
 
 const AnatomyScreen = ({ onNext, addXp }) => {
+  const { t } = useTranslation();
   React.useEffect(() => { addXp(50); }, []);
   const [sel, setSel] = useState(null);
   const elements = [
@@ -95,14 +101,14 @@ const AnatomyScreen = ({ onNext, addXp }) => {
         <div className="bg-[#0D2B5B] text-white p-5 rounded-xl shadow-lg min-h-[160px] flex flex-col justify-center border-b-2 border-[#00B4D8]">
           {sel ? (
             <div className="animate-[slideInRight_0.5s_cubic-bezier(0.16,1,0.3,1)_forwards]">
-              <h5 className="text-[#00B4D8] font-[900] text-[10px] uppercase tracking-[0.2em] mb-2">Elemento: {sel.k}</h5>
+              <h5 className="text-[#00B4D8] font-[900] text-[10px] uppercase tracking-[0.2em] mb-2">{t('ova.introprompt.anatomy_element', { name: sel.k })}</h5>
               <p className="text-sm leading-relaxed font-medium text-white">{sel.d}</p>
               <div className="mt-3"><VoiceReader text={text} /></div>
             </div>
           ) : (
             <div className="text-center opacity-30 space-y-2">
               <MousePointer2 className="w-6 h-6 mx-auto animate-bounce" />
-              <p className="text-[8px] font-black uppercase tracking-widest">Explora los elementos</p>
+              <p className="text-[8px] font-black uppercase tracking-widest">{t('ova.introprompt.anatomy_explore')}</p>
             </div>
           )}
         </div>
@@ -174,7 +180,8 @@ const MistakesScreen = ({ onNext, addXp }) => {
   );
 };
 
-const QuizScreen = ({ onNext, addXp, onReset }) => {
+const QuizScreen = ({ onNext, addXp, onReset, showMarkButton, onMarkComplete }) => {
+  const { t } = useTranslation();
   const [currentQ, setCurrentQ] = useState(0);
   const [score, setScore] = useState(0);
   const [selected, setSelected] = useState(null);
@@ -196,20 +203,32 @@ const QuizScreen = ({ onNext, addXp, onReset }) => {
     if (currentQ < questions.length - 1) { setCurrentQ(q => q + 1); setSelected(null); setShowFeedback(false); }
     else setShowResult(true);
   };
-  if (showResult) return (
+  if (showResult) {
+    
+    return (
     <div className="text-center py-4 animate-[zoomIn_0.5s_cubic-bezier(0.175,0.885,0.32,1.275)_forwards]">
       <div className="w-20 h-20 bg-amber-50 dark:bg-amber-900/30 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg border-4 border-white dark:border-slate-700"><Trophy className="w-10 h-10 text-amber-500" /></div>
-      <h2 className="text-3xl font-black text-[#0D2B5B] tracking-tighter leading-none mb-2 uppercase">¡completado!</h2>
+      <h2 className="text-3xl font-black text-[#0D2B5B] tracking-tighter leading-none mb-2 uppercase">{t('ova.introprompt.quiz_completed')}</h2>
       <div className="bg-[#0D2B5B] text-white inline-block px-8 py-4 rounded-[2rem] mt-4 text-4xl font-black shadow-lg border-b-4 border-[#00B4D8]">{score} / 5</div>
-      <p className="text-slate-500 dark:text-slate-300 mt-4 font-bold text-sm">{score === 5 ? '¡Puntuación perfecta! Valerio está orgulloso.' : score >= 3 ? '¡Buen trabajo!' : 'Repasa el laboratorio. Valerio confía en ti.'}</p>
+      <p className="text-slate-500 dark:text-slate-300 mt-4 font-bold text-sm">{score === 5 ? t('ova.introprompt.quiz_perfect') : score >= 3 ? t('ova.introprompt.quiz_good') : t('ova.introprompt.quiz_bad')}</p>
+      {score >= 3 && showMarkButton && onMarkComplete && (
+        <div className="mt-6 flex justify-center">
+          <button onClick={onMarkComplete}
+            className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold text-base shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-2 animate-pulse">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            {t('ova.introprompt.quiz_mark')}
+          </button>
+        </div>
+      )}
       <div className="mt-6 flex justify-center">
-        <Button onClick={onReset} className="bg-[#0D2B5B] text-white">Reiniciar</Button>
+        <Button onClick={onReset} className="bg-[#0D2B5B] text-white">{t('ova.introprompt.quiz_reset')}</Button>
       </div>
     </div>
   );
+}
   return (
     <div className="space-y-4 animate-[fadeIn_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards]">
-      <div className="flex justify-between text-[9px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-300"><span>Pregunta {currentQ + 1} de 5</span><span className="text-[#00B4D8]">{score}</span></div>
+      <div className="flex justify-between text-[9px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-300"><span>{t('ova.introprompt.quiz_question', { current: currentQ + 1 })}</span><span className="text-[#00B4D8]">{score}</span></div>
       <h3 className="text-lg font-[900] text-[#0D2B5B] leading-tight">{questions[currentQ].q}</h3>
       <div className="grid gap-2">
         {questions[currentQ].o.map((opt, i) => (
@@ -218,7 +237,7 @@ const QuizScreen = ({ onNext, addXp, onReset }) => {
       </div>
       {showFeedback && (
         <div className="p-4 bg-slate-100 dark:bg-slate-700 rounded-xl animate-[fadeIn_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards]">
-          <button onClick={handleNext} className="w-full py-2.5 bg-[#0D2B5B] text-white font-black rounded-lg flex items-center justify-center gap-2 text-xs">{currentQ === 4 ? 'Ver Resultados' : 'Continuar'} <ChevronRight size={12} /></button>
+          <button onClick={handleNext} className="w-full py-2.5 bg-[#0D2B5B] text-white font-black rounded-lg flex items-center justify-center gap-2 text-xs">{currentQ === 4 ? t('ova.introprompt.quiz_results') : t('ova.introprompt.quiz_continue')} <ChevronRight size={12} /></button>
         </div>
       )}
     </div>
@@ -233,7 +252,9 @@ const screensData = {
   m5: { title: 'Evaluación Final' }
 };
 
-export default function OVAIntroPrompt() {
+export default function OVAIntroPrompt({ onComplete }) {
+  const { t } = useTranslation();
+  const certCompletedRef = useRef(false);
   const [screen, setScreen] = useState('welcome');
   const [completed, setCompleted] = useState([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -254,7 +275,7 @@ export default function OVAIntroPrompt() {
       case 'm2': return <AnatomyScreen onNext={() => { setScreen('m3'); }} addXp={addXp} />;
       case 'm3': return <TypesScreen onNext={() => { setScreen('m4'); }} addXp={addXp} />;
       case 'm4': return <MistakesScreen onNext={() => { setScreen('m5'); }} addXp={addXp} />;
-      case 'm5': return <QuizScreen onNext={() => {}} addXp={addXp} onReset={() => { setScreen('welcome'); setXp(0); setCompleted([]); }} />;
+      case 'm5': return <QuizScreen onNext={() => {}} addXp={addXp} onReset={() => { setScreen('welcome'); setXp(0); setCompleted([]); }} showMarkButton={!certCompletedRef.current} onMarkComplete={() => { certCompletedRef.current = true; onComplete?.(); }} />;
       default: return null;
     }
   };
@@ -265,7 +286,7 @@ export default function OVAIntroPrompt() {
         <Logo />
         <div className="flex items-center gap-4">
           <div className="hidden md:flex flex-col items-end">
-            <span className="text-[8px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest">PROGRESO</span>
+            <span className="text-[8px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest">{t('ova.introprompt.progress')}</span>
             <div className="w-24 h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden border border-slate-50 dark:border-slate-700 shadow-inner">
               <div className="h-full bg-gradient-to-r from-[#0D2B5B] to-[#00B4D8] transition-all duration-1000 ease-out" style={{ width: `${(xp / totalXp) * 100}%` }}></div>
             </div>
@@ -284,7 +305,7 @@ export default function OVAIntroPrompt() {
         <div className="w-full bg-white dark:bg-slate-800 rounded-2xl shadow-md p-4 md:p-6 relative overflow-hidden border border-slate-50 dark:border-slate-700">
           {screen.startsWith('m') && (
             <div className="mb-4 border-b border-slate-50 dark:border-slate-700 pb-3">
-              <div className="flex items-center gap-1.5 text-[#00B4D8] font-[900] text-[8px] tracking-[0.3em] uppercase"><Sparkles className="w-3 h-3" /> edutechlife master</div>
+              <div className="flex items-center gap-1.5 text-[#00B4D8] font-[900] text-[8px] tracking-[0.3em] uppercase"><Sparkles className="w-3 h-3" /> {t('ova.introprompt.master')}</div>
               <h1 className="text-lg md:text-xl font-[900] text-[#0D2B5B] tracking-tighter leading-tight">{screensData[screen]?.title}</h1>
             </div>
           )}
@@ -297,14 +318,14 @@ export default function OVAIntroPrompt() {
           <div className="w-full max-w-4xl flex justify-between items-center gap-3 px-4 py-3">
             <button onClick={() => { if (curIdx > 0) setScreen(nav[curIdx - 1]); stopSpeech(); }} className="p-3 bg-[#F1F5F9] dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-[#0D2B5B] dark:hover:text-[#00B4D8] rounded-xl disabled:opacity-10 transition-all border border-slate-50 dark:border-slate-700" disabled={curIdx <= 1}><ChevronLeft className="w-5 h-5" /></button>
             <div className="flex gap-2">{nav.map((_, i) => <div key={i} className={`h-1.5 rounded-full transition-all duration-700 ${i === curIdx ? 'w-10 bg-[#0D2B5B]' : 'w-2 bg-slate-200 dark:bg-slate-600'}`} />)}</div>
-            <button onClick={() => { if (curIdx < nav.length - 1) { if (screen.startsWith('m')) { const c = [...completed]; if (!c.includes(screen)) c.push(screen); setCompleted(c); } setScreen(nav[curIdx + 1]); stopSpeech(); } }} className="px-6 py-3 bg-gradient-to-r from-[#0D2B5B] to-[#1A4D8C] text-white rounded-xl font-[900] text-[11px] shadow-md active:scale-95 transition-all flex items-center gap-2 uppercase tracking-[0.15em]">Siguiente <ArrowRightCircle className="w-4 h-4" /></button>
+            <button onClick={() => { if (curIdx < nav.length - 1) { if (screen.startsWith('m')) { const c = [...completed]; if (!c.includes(screen)) c.push(screen); setCompleted(c); } setScreen(nav[curIdx + 1]); stopSpeech(); } }} className="px-6 py-3 bg-gradient-to-r from-[#0D2B5B] to-[#1A4D8C] text-white rounded-xl font-[900] text-[11px] shadow-md active:scale-95 transition-all flex items-center gap-2 uppercase tracking-[0.15em]">{t('ova.introprompt.next')} <ArrowRightCircle className="w-4 h-4" /></button>
           </div>
         </div>
       )}
 
       {screen !== 'welcome' && (
         <div className="border-t border-slate-100 dark:border-slate-700 py-3 text-center text-slate-500 dark:text-slate-300 text-[10px]">
-          <p>Laboratorio guiado por <strong className="text-[#00B4D8]">Valerio</strong> — Coach de IA de Edutechlife.</p>
+          <p>{t('ova.introprompt.footer')}</p>
         </div>
       )}
 
@@ -312,10 +333,10 @@ export default function OVAIntroPrompt() {
         <div className="fixed inset-0 z-[100] bg-slate-900/60 dark:bg-slate-950/60 backdrop-blur-md" onClick={() => setIsMenuOpen(false)}>
           <div className="absolute right-0 h-full w-[260px] bg-white dark:bg-slate-800 shadow-2xl p-5 flex flex-col gap-3 animate-[slideInRight_0.5s_cubic-bezier(0.16,1,0.3,1)_forwards]" onClick={e => e.stopPropagation()}>
             <button onClick={() => setIsMenuOpen(false)} className="self-end p-1.5 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full"><X className="w-5 h-5 text-slate-600 dark:text-slate-300" /></button>
-            <h3 className="font-[900] text-slate-300 dark:text-slate-500 text-[9px] tracking-[0.3em] uppercase border-b-2 border-slate-50 dark:border-slate-700 pb-3">Mapa</h3>
+            <h3 className="font-[900] text-slate-300 dark:text-slate-500 text-[9px] tracking-[0.3em] uppercase border-b-2 border-slate-50 dark:border-slate-700 pb-3">{t('ova.introprompt.map')}</h3>
             {nav.map(id => (
               <button key={id} onClick={() => { setScreen(id); setIsMenuOpen(false); }} className={`p-3 rounded-lg text-left text-[10px] font-[900] transition-all flex items-center justify-between ${screen === id ? 'bg-[#0D2B5B] text-white shadow-lg' : 'hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-300'}`}>
-                <span className="uppercase tracking-wider">{id === 'welcome' ? 'Inicio' : screensData[id]?.title}</span>
+                <span className="uppercase tracking-wider">{id === 'welcome' ? t('ova.introprompt.menu_welcome') : screensData[id]?.title}</span>
                 {completed.includes(id) && <CheckCircle2 className="w-3 h-3 text-[#00B4D8]" />}
               </button>
             ))}

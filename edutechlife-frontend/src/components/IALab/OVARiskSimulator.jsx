@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from '../../i18n/I18nProvider';
 import VoiceReader from './VoiceReader';
 import { Brain, Award, Star } from 'lucide-react';
+import { gameData, accordionData, mitigations } from '../../data/ova/riskSim';
 
 const EdutechLogo = () => (
   <div className="flex items-center gap-2 select-none">
@@ -14,42 +16,9 @@ const EdutechLogo = () => (
   </div>
 );
 
-const gameData = [
-  {
-    q: "Un sistema de IA genera una lista de 'Personajes Históricos Importantes' y todos son hombres europeos. ¿Qué sesgo identificas?",
-    opts: ["Sesgo de datos históricos y representación.", "Sesgo de automatización.", "Error de red de internet."],
-    correct: 0,
-    feedback: "¡Correcto! Refleja la falta de diversidad y el sesgo cultural en los datos de entrenamiento."
-  },
-  {
-    q: "Estás usando IA para un diagnóstico y arroja un resultado que contradice tu criterio profesional. ¿Cómo actúas?",
-    opts: ["Acepto la IA porque es más inteligente que yo.", "Cuestiono el sesgo de automatización y verifico con expertos.", "Dejo que la IA decida la medicación."],
-    correct: 1,
-    feedback: "¡Excelente! No debes delegar la responsabilidad moral a un sistema que no puede asumirla."
-  },
-  {
-    q: "Quieres que la IA escriba un cuento sobre liderazgo. Para evitar estereotipos de género, ¿qué haces?",
-    opts: ["Borro la aplicación.", "Genero el cuento y confío en que la IA será justa.", "Reformulo el prompt pidiendo explícitamente inclusión y equidad de género."],
-    correct: 2,
-    feedback: "¡Muy bien! Instruir explícitamente a la IA es una gran estrategia de mitigación."
-  }
-];
-
-const accordionData = [
-  { id: 'acc1', title: 'Sesgo Geográfico y Cultural', icon: '🌍', content: 'Los modelos entrenados principalmente con datos del Norte Global generan respuestas con marcos culturales ajenos. Ejemplo: Ejemplos sobre historia, política o cultura que ignoran perspectivas latinoamericanas o africanas.' },
-  { id: 'acc2', title: 'Sesgo de Representación y Género (Experimento Stanford)', icon: '👥', content: 'En 2023, investigadores pidieron a modelos de lenguaje: "Escribe la historia de un CEO exitoso". En el 78% de los casos, generó un hombre. Al pedir historias de "enfermeras", el 91% fueron mujeres. Esto muestra cómo los sesgos históricos se replican automáticamente.' },
-  { id: 'acc3', title: 'Sesgo de Automatización', icon: '🤖', content: 'Las personas tienden a confiar más en las respuestas de una IA que en las de un humano. Ejemplo: Aceptar sin cuestionar un diagnóstico o recomendación de IA aunque contradiga el criterio experto.' }
-];
-
-const mitigations = [
-  { title: 'Pensamiento Crítico', icon: '💡', desc: 'No aceptes ninguna respuesta de IA sin evaluar su coherencia, verificar datos clave y comparar con otras fuentes. Pregúntate: ¿De dónde viene esta afirmación?' },
-  { title: 'Diversificar Fuentes', icon: '📚', desc: 'Complementa las respuestas de la IA con fuentes académicas, perspectivas de autores latinoamericanos y datos locales. La IA tiene un sesgo hacia el mundo anglosajón.' },
-  { title: 'Asumir Responsabilidad', icon: '🛡️', desc: 'Cualquier contenido que publiques o entregues generado con IA es tu responsabilidad. Si contiene sesgos o errores, eres tú quien los respalda.' }
-];
-
-
-
-export default function OVARiskSimulator() {
+export default function OVARiskSimulator({ onComplete }) {
+  const { t } = useTranslation();
+  const certCompletedRef = useRef(false);
   const [activeTab, setActiveTab] = useState('content');
   const [openAccordion, setOpenAccordion] = useState(null);
   const [openModal, setOpenModal] = useState(null);
@@ -94,7 +63,7 @@ export default function OVARiskSimulator() {
             <button onClick={() => setOpenModal(null)} className="text-gray-400 hover:text-red-500 text-2xl">&times;</button>
           </div>
           <p className="text-gray-700 dark:text-slate-300 leading-relaxed mb-6">{openModal.desc}</p>
-          <button onClick={() => setOpenModal(null)} className="w-full bg-gradient-to-r from-[#2FA8C6] to-[#1E3A5F] text-white font-bold py-3 px-4 rounded-xl transition hover:shadow-lg">Entendido</button>
+          <button onClick={() => setOpenModal(null)} className="w-full bg-gradient-to-r from-[#2FA8C6] to-[#1E3A5F] text-white font-bold py-3 px-4 rounded-xl transition hover:shadow-lg">{t('ova.risksim.modal_button')}</button>
         </div>
       </div>
     );
@@ -104,8 +73,8 @@ export default function OVARiskSimulator() {
     if (starIndex === null) {
       return (
         <div className="text-center py-8">
-          <h3 className="text-2xl font-black text-white mb-2">🎮 Alcanza la Estrella Ética</h3>
-          <p className="text-gray-300 mb-8">Resuelve los casos prácticos seleccionando las estrellas</p>
+          <h3 className="text-2xl font-black text-white mb-2">{t('ova.risksim.game_title')}</h3>
+          <p className="text-gray-300 mb-8">{t('ova.risksim.game_desc')}</p>
           <div className="flex justify-center gap-6">
             {gameData.map((_, i) => (
               <button key={i} onClick={() => setStarIndex(i)}
@@ -118,8 +87,15 @@ export default function OVARiskSimulator() {
           {solvedStars.length === gameData.length && (
             <div className="mt-10 p-8 bg-emerald-50 dark:bg-emerald-900/30 rounded-3xl border-4 border-emerald-200 dark:border-emerald-700">
               <Award size={64} className="text-emerald-500 mx-auto mb-4 animate-bounce" />
-              <h3 className="text-2xl font-black text-emerald-900 dark:text-emerald-100">¡Ética Activada!</h3>
-              <p className="text-emerald-700 dark:text-emerald-300 mt-2">Has completado el simulador de evaluación de riesgos.</p>
+              <h3 className="text-2xl font-black text-emerald-900 dark:text-emerald-100">{t('ova.risksim.completion_title')}</h3>
+              <p className="text-emerald-700 dark:text-emerald-300 mt-2">{t('ova.risksim.completion_desc')}</p>
+              {!certCompletedRef.current && (
+                <button onClick={() => { certCompletedRef.current = true; onComplete?.(); }}
+                  className="mt-6 px-8 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold text-base shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-2 mx-auto animate-pulse">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  {t('ova.risksim.mark_complete')}
+                </button>
+              )}
             </div>
           )}
         </div>
@@ -141,12 +117,12 @@ export default function OVARiskSimulator() {
         </div>
         {showFeedback && (
           <div className={`mt-6 p-4 rounded-xl font-medium max-w-xl mx-auto ${selectedAnswer === data.correct ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-red-100 text-red-800 border border-red-300'}`}>
-            {selectedAnswer === data.correct ? data.feedback : 'Incorrecto. Recuerda aplicar el pensamiento crítico.'}
+            {selectedAnswer === data.correct ? data.feedback : t('ova.risksim.fallback_feedback')}
           </div>
         )}
         {showFeedback && (
           <button onClick={resetGame} className="mt-6 px-6 py-3 bg-gradient-to-r from-[#2FA8C6] to-[#1E3A5F] text-white rounded-xl font-bold shadow-md hover:shadow-lg transition-all">
-            Volver a estrellas
+            {t('ova.risksim.back_stars')}
           </button>
         )}
       </div>
@@ -162,12 +138,12 @@ export default function OVARiskSimulator() {
         <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
           <EdutechLogo />
           <div className="flex items-center gap-4">
-            <span className="hidden md:inline text-xs font-semibold text-gray-500 dark:text-slate-400">Módulo 5: Ética de la IA</span>
-            <VoiceReader text="Bienvenido al simulador de evaluación de riesgos de IA. Explora los contenidos educativos y completa el desafío de las estrellas éticas." />
+            <span className="hidden md:inline text-xs font-semibold text-gray-500 dark:text-slate-400">{t('ova.risksim.module_label')}</span>
+            <VoiceReader text={t('ova.risksim.welcome_voice')} />
           </div>
         </div>
         <div className="flex border-b border-gray-100 dark:border-slate-700">
-          {[{ id: 'content', label: 'Contenido' }, { id: 'game', label: 'Desafío Estrellas' }].map(tab => (
+          {[{ id: 'content', label: t('ova.risksim.tab_content') }, { id: 'game', label: t('ova.risksim.tab_game') }].map(tab => (
             <button key={tab.id} onClick={() => setActiveTab(tab.id)}
               className={`flex-1 py-3 text-sm font-bold transition-all ${activeTab === tab.id ? 'text-[#2FA8C6] border-b-2 border-[#2FA8C6] bg-[#E0F7FA]/30' : 'text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:hover:text-slate-300'}`}>
               {tab.label}
@@ -180,23 +156,23 @@ export default function OVARiskSimulator() {
         {activeTab === 'content' && (
           <div className="space-y-10 animate-[fadeIn_0.6s_ease-out_forwards]">
             <section className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border border-[#2FA8C6]/15 shadow-[0_8px_32px_rgba(31,38,135,0.1)] rounded-2xl p-8 text-center border-t-4 border-[#2FA8C6]">
-              <h1 className="text-3xl md:text-4xl font-black text-[#1E3A5F] dark:text-slate-100 mb-4">Ética de la Inteligencia Artificial</h1>
-              <p className="text-lg text-gray-600 dark:text-slate-300 mb-6">Uso Responsable, Riesgos, Sesgos y Cómo Mitigarlos</p>
+              <h1 className="text-3xl md:text-4xl font-black text-[#1E3A5F] dark:text-slate-100 mb-4">{t('ova.risksim.title')}</h1>
+              <p className="text-lg text-gray-600 dark:text-slate-300 mb-6">{t('ova.risksim.subtitle')}</p>
               <div className="flex justify-center gap-6 text-2xl">
-                <span className="text-[#2FA8C6]" title="Justicia">⚖️</span>
-                <span className="text-[#2FA8C6]" title="Privacidad">🛡️</span>
-                <span className="text-[#2FA8C6]" title="Transparencia">🔍</span>
+                <span className="text-[#2FA8C6]" title={t('ova.risksim.icon_justice')}>⚖️</span>
+                <span className="text-[#2FA8C6]" title={t('ova.risksim.icon_privacy')}>🛡️</span>
+                <span className="text-[#2FA8C6]" title={t('ova.risksim.icon_transparency')}>🔍</span>
               </div>
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-[#1E3A5F] dark:text-slate-100 mb-6 flex items-center gap-2"><Brain size={24} className="text-[#2FA8C6]" /> Sesgos en la IA</h2>
+              <h2 className="text-2xl font-bold text-[#1E3A5F] dark:text-slate-100 mb-6 flex items-center gap-2"><Brain size={24} className="text-[#2FA8C6]" /> {t('ova.risksim.section_bias')}</h2>
               {renderAccordion()}
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-[#1E3A5F] dark:text-slate-100 mb-6 flex items-center gap-2">🔧 Cómo Mitigar los Riesgos</h2>
-              <p className="mb-4 text-gray-600 dark:text-slate-300 text-sm">Haz clic en cada tarjeta para descubrir cómo actuar:</p>
+              <h2 className="text-2xl font-bold text-[#1E3A5F] dark:text-slate-100 mb-6 flex items-center gap-2">{t('ova.risksim.section_mitigations')}</h2>
+              <p className="mb-4 text-gray-600 dark:text-slate-300 text-sm">{t('ova.risksim.click_hint')}</p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {mitigations.map((m, i) => (
                   <button key={i} onClick={() => setOpenModal(m)}
@@ -209,9 +185,9 @@ export default function OVARiskSimulator() {
             </section>
 
             <section className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border border-[#2FA8C6]/15 shadow-[0_8px_32px_rgba(31,38,135,0.1)] p-8 rounded-2xl border-l-8 border-[#2FA8C6]">
-              <h2 className="text-2xl font-bold text-[#1E3A5F] dark:text-slate-100 mb-4">Decálogo del usuario ético de la IA</h2>
+              <h2 className="text-2xl font-bold text-[#1E3A5F] dark:text-slate-100 mb-4">{t('ova.risksim.decalogue_title')}</h2>
               <ul className="space-y-3 text-gray-700 dark:text-slate-300">
-                {['Verifico siempre la información antes de usarla o compartirla.', 'Declaro cuándo uso IA en mis trabajos académicos y profesionales.', 'Uso la IA para aprender más y mejor, no para evitar el esfuerzo de aprender.', 'Recuerdo que detrás de cada sistema de IA hay decisiones humanas, y esas decisiones son cuestionables.'].map((item, i) => (
+                {[t('ova.risksim.decalogue_1'), t('ova.risksim.decalogue_2'), t('ova.risksim.decalogue_3'), t('ova.risksim.decalogue_4')].map((item, i) => (
                   <li key={i} className="flex gap-3">
                     <span className="text-[#2FA8C6] font-bold">{i + 1}.</span>
                     <span>{item}</span>
@@ -230,7 +206,7 @@ export default function OVARiskSimulator() {
       </main>
 
       <footer className="text-center text-slate-600 dark:text-slate-400 text-xs py-4 border-t border-gray-100 dark:border-slate-700">
-        Simulador guiado por <strong className="text-[#2FA8C6]">Valerio</strong> &mdash; Coach de IA de Edutechlife.
+        {t('ova.risksim.footer')}
       </footer>
 
       {renderModal()}
