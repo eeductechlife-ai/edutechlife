@@ -3,6 +3,7 @@ import { useUser, useAuth } from '@clerk/react';
 import { useClerkAuth, getClerkUserInfo } from '../utils/clerk-utils';
 import { Icon } from '../utils/iconMapping.jsx';
 import ErrorBoundary from './forum/ErrorBoundary';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const UserProfileSmartCard = lazy(() => import('./UserProfileSmartCard'));
 const SettingsSupportModal = lazy(() => import('./modals/SettingsSupportModal'));
@@ -14,6 +15,7 @@ const StudyPlannerModal = lazy(() => import('./IALab/StudyPlannerModal'));
 const MENU_ITEMS_COUNT = 6;
 
 const UserDropdownMenuSimplified = ({ onNavigate }) => {
+  const { t } = useTranslation();
   const { user: clerkUser, isSignedIn: isClerkSignedIn, signOut: clerkSignOut, openUserProfile } = useClerkAuth();
   const { user: clerkUserOfficial } = useUser();
   const { signOut: clerkSignOutOfficial } = useAuth();
@@ -375,7 +377,7 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
                 style={staggerStyle(5)}
               >
                 <Icon name="fa-sign-out-alt" className="text-sm text-rose-500 flex-shrink-0" />
-                <span className="text-xs font-semibold text-rose-600 group-hover:text-rose-700 transition-colors duration-200">Cerrar Sesión</span>
+                <span className="text-xs font-semibold text-rose-600 group-hover:text-rose-700 transition-colors duration-200">{t('sidebar.logout')}</span>
               </button>
             </div>
           </div>

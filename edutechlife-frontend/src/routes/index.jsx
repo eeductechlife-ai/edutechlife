@@ -5,6 +5,7 @@ import AuthRouter from './auth-router';
 import ProtectedRoute from '../components/layout/ProtectedRoute';
 import RoleProtectedRoute from '../components/layout/RoleProtectedRoute';
 import { PageLoader } from '../components/LoadingScreen';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 // Lazy load para componentes pesados
 const LandingPage = lazy(() => import('../components/pages/LandingPage'));
@@ -49,23 +50,22 @@ const SmartBoardSignUpPageWrapper = () => <SmartBoardSignUpPage />;
 const GenericSignUpRedirect = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useTranslation();
   
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const returnTo = searchParams.get('returnTo') || '/ialab';
     
-    // Determinar formulario basado en returnTo
     let targetSignUp = '/sign-up/ialab';
     
     if (returnTo === '/smartboard' || returnTo.startsWith('/smartboard/')) {
       targetSignUp = '/sign-up/smartboard';
     }
     
-    // Redirigir al formulario específico manteniendo returnTo
     navigate(`${targetSignUp}?returnTo=${encodeURIComponent(returnTo)}`, { replace: true });
   }, [navigate, location]);
   
-  return <PageLoader message="Redirigiendo al formulario de registro..." />;
+  return <PageLoader message={t('page_loader.redirect')} />;
 };
 /**
  * Configuración de rutas principales de la aplicación
@@ -76,103 +76,94 @@ const GenericSignUpRedirect = () => {
  * - Rutas de autenticación: /auth-router (redirección inteligente)
  */
 const AppRoutes = () => {
+  const { t } = useTranslation();
   return (
     <Routes>
-      {/* Layout principal con header, footer y modales globales */}
       <Route path="/" element={<AppLayout />}>
-        {/* Ruta principal (pública) */}
         <Route index element={
-          <Suspense fallback={<PageLoader message="Cargando..." />}>
+          <Suspense fallback={<PageLoader message={t('common.loading')} />}>
             <LandingPage />
           </Suspense>
         } />
         
-        {/* Rutas de autenticación */}
         <Route path="auth-router" element={<AuthRouter />} />
         
-        {/* Rutas públicas (no requieren autenticación) */}
         <Route path="neuroentorno" element={
-          <Suspense fallback={<PageLoader message="Cargando Neuro Entorno..." />}>
+          <Suspense fallback={<PageLoader message={t('page_loader.neuro')} />}>
             <NeuroEntornoPage />
           </Suspense>
         } />
         
         <Route path="proyectos" element={
-          <Suspense fallback={<PageLoader message="Cargando Proyectos..." />}>
+          <Suspense fallback={<PageLoader message={t('page_loader.projects')} />}>
             <ProyectosNacionalPage />
           </Suspense>
         } />
         
         <Route path="consultoria" element={
-          <Suspense fallback={<PageLoader message="Cargando Consultoría..." />}>
+          <Suspense fallback={<PageLoader message={t('page_loader.consulting')} />}>
             <ConsultoriaPage />
           </Suspense>
         } />
         
         <Route path="consultoria-b2b" element={
-          <Suspense fallback={<PageLoader message="Cargando Consultoría B2B..." />}>
+          <Suspense fallback={<PageLoader message={t('page_loader.consulting')} />}>
             <ConsultoriaB2BPage />
           </Suspense>
         } />
         
         <Route path="automation" element={
-          <Suspense fallback={<PageLoader message="Cargando Automation Architect..." />}>
+          <Suspense fallback={<PageLoader message={t('common.loading')} />}>
             <AutomationArchitectPage />
           </Suspense>
         } />
         
-        {/* VAK Diagnosis - múltiples variantes */}
         <Route path="vak" element={
-          <Suspense fallback={<PageLoader message="Cargando Diagnóstico VAK..." />}>
+          <Suspense fallback={<PageLoader message={t('common.loading')} />}>
             <VAKDiagnosisPage variant="premium" />
           </Suspense>
         } />
         
         <Route path="vak-simple" element={
-          <Suspense fallback={<PageLoader message="Cargando Diagnóstico VAK Simple..." />}>
+          <Suspense fallback={<PageLoader message={t('common.loading')} />}>
             <VAKDiagnosisPage variant="simple" />
           </Suspense>
         } />
         
         <Route path="vak-premium" element={
-          <Suspense fallback={<PageLoader message="Cargando Diagnóstico VAK Premium..." />}>
+          <Suspense fallback={<PageLoader message={t('common.loading')} />}>
             <VAKDiagnosisPage variant="premium" />
           </Suspense>
         } />
         
-        {/* IA Lab Academic - Public landing page */}
         <Route path="ialab-academic" element={
-          <Suspense fallback={<PageLoader message="Cargando AI Lab Academic..." />}>
+          <Suspense fallback={<PageLoader message={t('common.loading')} />}>
             <IALabProLandingPage />
           </Suspense>
         } />
         <Route path="ialab-pro" element={<Navigate to="/ialab-academic" replace />} />
         
-        {/* SmartBoard Landing Informativa - Página para padres */}
         <Route path="conoce-smartboard" element={
-          <Suspense fallback={<PageLoader message="Cargando SmartBoard..." />}>
+          <Suspense fallback={<PageLoader message={t('common.loading')} />}>
             <SmartBoardInfoPage />
           </Suspense>
         } />
 
-        {/* SmartBoard Kids Dashboard - Dashboard para niños 8-16 años */}
         <Route path="smartboard" element={
-          <Suspense fallback={<PageLoader message="Cargando SmartBoard Kids..." />}>
+          <Suspense fallback={<PageLoader message={t('common.loading')} />}>
             <SmartBoardLandingPage />
           </Suspense>
         } />
         
-        {/* SmartBoard Parent Dashboard - Panel para padres */}
         <Route path="smartboard/padres" element={
-          <Suspense fallback={<PageLoader message="Cargando Panel de Padres..." />}>
+          <Suspense fallback={<PageLoader message={t('common.loading')} />}>
             <SmartBoardParentDashboard />
           </Suspense>
         } />
         
-        {/* Rutas protegidas por autenticación */}
         <Route path="ialab/:moduleId?" element={
           <RoleProtectedRoute requiredRole="ialab">
-            <Suspense fallback={<PageLoader message="Preparando AILab..." />}>
+            <Suspense fallback={<PageLoader message={t('page_loader.ailab')} />}>
               <AILabPage />
             </Suspense>
           </RoleProtectedRoute>
@@ -180,7 +171,7 @@ const AppRoutes = () => {
         
         <Route path="smartboard/app" element={
           <RoleProtectedRoute requiredRole="smartboard">
-            <Suspense fallback={<PageLoader message="Preparando SmartBoard..." />}>
+            <Suspense fallback={<PageLoader message={t('common.loading')} />}>
               <SmartBoardPage />
             </Suspense>
           </RoleProtectedRoute>
@@ -188,54 +179,46 @@ const AppRoutes = () => {
         
         <Route path="admin" element={
           <RoleProtectedRoute requiredRole="admin">
-            <Suspense fallback={<PageLoader message="Preparando Admin Dashboard..." />}>
+            <Suspense fallback={<PageLoader message={t('common.loading')} />}>
               <AdminPage />
             </Suspense>
           </RoleProtectedRoute>
         } />
         
-        {/* Rutas adicionales para datos y estadísticas */}
         <Route path="smartboard/estadisticas" element={
           <RoleProtectedRoute requiredRole="smartboard">
-            <Suspense fallback={<PageLoader message="Cargando Estadísticas SmartBoard..." />}>
+            <Suspense fallback={<PageLoader message={t('common.loading')} />}>
               <SmartBoardStatsPage />
             </Suspense>
           </RoleProtectedRoute>
         } />
         
-
-        
-        {/* Ruta de registro para IALAB (adultos 18+ años) */}
         <Route path="sign-up/ialab" element={
-          <Suspense fallback={<PageLoader message="Cargando registro IALAB..." />}>
+          <Suspense fallback={<PageLoader message={t('common.loading')} />}>
             <IALabSignUpPageWrapper />
           </Suspense>
         } />
         
-        {/* Ruta de registro para SmartBoard (estudiantes 8-16 años) */}
         <Route path="sign-up/smartboard" element={
-          <Suspense fallback={<PageLoader message="Cargando registro SmartBoard..." />}>
+          <Suspense fallback={<PageLoader message={t('common.loading')} />}>
             <SmartBoardSignUpPageWrapper />
           </Suspense>
         } />
         
-        {/* Ruta de registro genérica - redirige según returnTo o a IALAB por defecto */}
         <Route path="sign-up" element={
-          <Suspense fallback={<PageLoader message="Cargando registro..." />}>
+          <Suspense fallback={<PageLoader message={t('common.loading')} />}>
             <GenericSignUpRedirect />
           </Suspense>
         } />
         
-        {/* Ruta de login (WelcomeScreen) - se muestra cuando no hay usuario autenticado */}
         <Route path="login" element={
-          <Suspense fallback={<PageLoader message="Cargando login..." />}>
+          <Suspense fallback={<PageLoader message={t('common.loading')} />}>
             <WelcomeScreen />
           </Suspense>
         } />
         
-        {/* Ruta 404 - Not Found */}
         <Route path="*" element={
-          <Suspense fallback={<PageLoader message="Cargando..." />}>
+          <Suspense fallback={<PageLoader message={t('common.loading')} />}>
             <NotFoundPage />
           </Suspense>
         } />

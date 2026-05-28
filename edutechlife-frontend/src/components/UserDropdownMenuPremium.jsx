@@ -18,6 +18,7 @@ import { getClerkUserInfo } from '../utils/clerk-utils';
 import UserProfileSmartCard from './UserProfileSmartCard';
 import ActivityHistory from './ActivityHistory';
 import ErrorBoundary from './forum/ErrorBoundary';
+import { useTranslation } from '../../i18n/I18nProvider';
 import StudyPlannerModal from './IALab/StudyPlannerModal';
 import UserCoursesDashboard from './IALab/UserCoursesDashboard';
 
@@ -31,6 +32,7 @@ import UserCoursesDashboard from './IALab/UserCoursesDashboard';
  * 4. Funcionalidades 100% operativas con fallback robusto
  */
 const UserDropdownMenuPremium = ({ onNavigate }) => {
+  const { t } = useTranslation();
   // Estados faltantes - CRÍTICO para estabilización
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -275,7 +277,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
              <div className="w-5 h-5 flex items-center justify-center">
                <Icon name="fa-sign-out" className="text-sm" />
              </div>
-             <span className="text-sm font-medium">Cerrar Sesión</span>
+              <span className="text-sm font-medium">{t('sidebar.logout')}</span>
            </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
