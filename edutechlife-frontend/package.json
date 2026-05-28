@@ -13,7 +13,8 @@
     "test:watch": "vitest",
     "qa:pdfs": "node scripts/qa/run-qa-pdfs.js",
     "sync:video-durations": "node src/components/IALab/constants/syncVideoDurations.mjs",
-    "test": "vitest run"
+    "i18n:validate": "node scripts/validate-i18n.js",
+    "i18n:extract": "node scripts/extract-hardcoded.js"
   },
   "dependencies": {
     "@clerk/localizations": "^3.4.1",
