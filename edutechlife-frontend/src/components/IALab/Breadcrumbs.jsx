@@ -1,13 +1,15 @@
 import React, { memo } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const Breadcrumbs = memo(function Breadcrumbs({ segments, className = '', separator = '/', size = 'text-xs' }) {
+  const { t } = useTranslation();
   if (!segments || segments.length === 0) return null;
   const visibleSegments = segments.slice(0, -1);
   const lastSegment = segments[segments.length - 1];
 
   return (
-    <nav aria-label="Breadcrumb" className={`mb-2 ${className}`}>
+    <nav aria-label={t('ialab.breadcrumb.aria_label')} className={`mb-2 ${className}`}>
       <ol className={`flex items-center gap-1.5 ${size} text-slate-500 dark:text-slate-400`}>
         {visibleSegments.map((seg, i) => (
           <React.Fragment key={i}>

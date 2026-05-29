@@ -1,5 +1,6 @@
 import React from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
+import { useTranslation } from '../../i18n/I18nProvider';
 import { FORUM_COMPONENTS, FORUM_TYPOGRAPHY, FORUM_EFFECTS, GRADIENTS, cn } from '../forum/forumDesignSystem';
 
 const SynthesizerInput = React.memo(({
@@ -12,13 +13,14 @@ const SynthesizerInput = React.memo(({
   onOptimize,
   onKeyDown,
 }) => {
+  const { t } = useTranslation();
   return (
     <div className="space-y-4">
       <textarea
         value={input}
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={onKeyDown}
-        placeholder={`Escribe tu idea básica aquí (ej: "educacion", "marketing", "salud")...\n\nEjemplos de ideas básicas:\n• "educacion" → Generará prompt para crear contenido educativo\n• "marketing digital" → Generará prompt para estrategias de marketing\n• "salud mental" → Generará prompt para consejos de bienestar\n• "tecnologia" → Generará prompt para explicaciones técnicas\n• "finanzas personales" → Generará prompt para gestión financiera`}
+        placeholder={t('ialab.synthesizer_input.placeholder')}
         className={cn(
           FORUM_COMPONENTS.TEXTAREA_BASE,
           "mb-4",
@@ -62,7 +64,7 @@ const SynthesizerInput = React.memo(({
           {quickAnalysis.suggestions?.length > 0 && (
             <div className="mt-3 pt-3 border-t border-slate-200">
               <p className={cn(FORUM_TYPOGRAPHY.BODY.XS, FORUM_TYPOGRAPHY.MEDIUM, "text-slate-700 mb-1")}>
-                Sugerencias rápidas:
+                {t('ialab.synthesizer_input.quick_suggestions')}
               </p>
               <ul className="space-y-1">
                 {quickAnalysis.suggestions.map((suggestion, index) => (
@@ -79,7 +81,7 @@ const SynthesizerInput = React.memo(({
 
       <div className="flex items-center justify-between">
         <div className="text-sm text-slate-500">
-          {input.length}/500 caracteres • {isValidInput(input) ? '✅ Listo para generar con DeepSeek' : `⚠️ Mínimo ${3 - input.length} caracteres más`}
+          {t('ialab.synthesizer_input.chars_count', { length: input.length, status: isValidInput(input) ? t('ialab.synthesizer_input.ready_status') : t('ialab.synthesizer_input.min_status', { remaining: 3 - input.length }) })}
         </div>
 
         <button
@@ -96,7 +98,7 @@ const SynthesizerInput = React.memo(({
             "disabled:opacity-70 disabled:cursor-not-allowed",
             loading && "opacity-70 cursor-not-allowed"
           )}
-          aria-label={loading ? `Procesando: ${loadMsg}` : "Generar prompt maestro con DeepSeek AI"}
+          aria-label={loading ? t('ialab.synthesizer_input.loading_aria', { msg: loadMsg }) : t('ialab.synthesizer_input.generate_aria')}
         >
           {loading ? (
             <>
@@ -106,7 +108,7 @@ const SynthesizerInput = React.memo(({
           ) : (
             <>
               <Icon name="fa-brain" />
-              <span>Generar con DeepSeek AI</span>
+              <span>{t('ialab.synthesizer_input.generate_btn')}</span>
             </>
           )}
         </button>

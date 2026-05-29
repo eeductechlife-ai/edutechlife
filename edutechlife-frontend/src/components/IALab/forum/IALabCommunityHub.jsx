@@ -9,9 +9,11 @@ import IALabForumSearchBar from './IALabForumSearchBar';
 import IALabForumPostList from './IALabForumPostList';
 import IALabForumPostDetail from './IALabForumPostDetail';
 import IALabForumNotifications from './IALabForumNotifications';
+import { useTranslation } from '../../../i18n/I18nProvider';
 
 const IALabCommunityHub = ({ onAction }) => {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [selectedPost, setSelectedPost] = useState(null);
   const [showCreatePost, setShowCreatePost] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -51,8 +53,8 @@ const IALabCommunityHub = ({ onAction }) => {
                   <Icon name="fa-comments" className="text-white text-sm" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-petroleum">Comunidad IALab</h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">Comparte, aprende y conecta con otros estudiantes</p>
+                  <h3 className="text-lg font-bold text-petroleum">{t('ialab.forum.hub.title')}</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">{t('ialab.forum.hub.subtitle')}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -65,7 +67,7 @@ const IALabCommunityHub = ({ onAction }) => {
                     className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-petroleum to-corporate text-white text-sm font-medium hover:shadow-lg hover:shadow-petroleum/20 transition-all duration-200 flex items-center gap-2"
                   >
                     <Icon name="fa-plus" className="text-xs" />
-                    <span className="hidden sm:inline">Nuevo Post</span>
+                    <span className="hidden sm:inline">{t('ialab.forum.hub.new_post')}</span>
                   </motion.button>
                 )}
               </div>

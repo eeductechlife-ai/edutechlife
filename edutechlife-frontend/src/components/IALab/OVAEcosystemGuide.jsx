@@ -31,9 +31,12 @@ const VoiceReader = ({ text }) => {
   );
 };
 
+const detailIconMap = { Search, Layout, Database, Zap, Settings, MessageSquare, Brain, AlertTriangle };
+
 const DetailCard = ({ detail }) => {
+  const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(false);
-  const DetailIcon = detail.icon || PlaySquare;
+  const DetailIcon = detailIconMap[detail.icon] || PlaySquare;
   return (
     <div className={`bg-white dark:bg-slate-800 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border overflow-hidden group ${isExpanded ? 'border-[#2596be]' : 'border-slate-200 dark:border-slate-600'}`}>
       <button onClick={() => setIsExpanded(!isExpanded)} className="w-full flex items-start gap-4 p-4 md:p-5 text-left relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2596be] focus-visible:ring-offset-2 rounded-lg">
@@ -106,6 +109,11 @@ export default function OVAEcosystemGuide() {
 
   const sectionIcons = { TrendingUp, Cpu, Wrench, Share2, Target };
 
+  const SectionIcon = ({ iconName }) => {
+    const Icon = sectionIcons[iconName];
+    return Icon ? <Icon size={32} /> : null;
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900 font-sans text-slate-800 dark:text-slate-100">
       <header className="bg-white dark:bg-slate-800 shadow-sm border-b sticky top-0 z-50" style={{ borderColor: '#2596be' }}>
@@ -125,12 +133,11 @@ export default function OVAEcosystemGuide() {
         <div className="space-y-4">
           {infographicData.sections.map((section) => {
             const isActive = activeSectionId === section.id;
-            const Icon = sectionIcons[section.icon];
             return (
               <div key={section.id} className={`bg-white dark:bg-slate-800 rounded-3xl shadow-sm border transition-all duration-500 overflow-hidden ${isActive ? 'border-[#2596be] ring-1 ring-[#2596be]/10' : 'border-slate-100 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500'}`}>
                 <button onClick={() => handleSectionClick(section.id)} className="w-full flex items-center justify-between p-6 md:p-8 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2596be] focus-visible:ring-offset-2 rounded-3xl bg-white dark:bg-slate-800 transition-colors">
                   <div className="flex items-center gap-5 md:gap-6">
-                    <div className={`p-4 rounded-2xl transition-all duration-500 ${isActive ? 'bg-[#2596be] text-white shadow-lg rotate-3' : 'bg-slate-50 dark:bg-slate-700/30 text-slate-600 dark:text-slate-300'}`}><Icon size={32} /></div>
+                    <div className={`p-4 rounded-2xl transition-all duration-500 ${isActive ? 'bg-[#2596be] text-white shadow-lg rotate-3' : 'bg-slate-50 dark:bg-slate-700/30 text-slate-600 dark:text-slate-300'}`}><SectionIcon iconName={section.icon} /></div>
                     <div>
                       <h2 className={`text-2xl md:text-3xl font-black tracking-tight transition-colors duration-300 ${isActive ? 'text-[#133c55]' : 'text-slate-700 dark:text-slate-200'}`}>{section.title}</h2>
                       <div className={`h-0.5 bg-[#2596be] transition-all duration-500 ${isActive ? 'w-full opacity-50' : 'w-0 opacity-0'}`}></div>

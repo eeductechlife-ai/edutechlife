@@ -3,12 +3,13 @@ import { useUser, useClerk, useAuth as useClerkAuth } from '@clerk/react';
 import { useProgressContext } from '../ProgressContext';
 import { useNotification } from '../NotificationContext';
 import { useActivityTracker } from '../../hooks/useActivityTracker';
+import { useTranslation } from '../../i18n/I18nProvider';
 import { supabase } from '../../lib/supabase';
 import { modules as STATIC_MODULES } from '@/data/ialab';
 import { LS_KEYS } from '@/constants/ialab';
 import { useIALabStore } from '../../store/ialabStore';
 
-const ANALYZING_MSGS = ['Analizando contexto...', 'Aplicando técnicas élite...', 'Optimizando estructura...', 'Generando masterPrompt...'];
+const getAnalyzingMsgs = (t) => [t('progress.analyzing_1'), t('progress.analyzing_2'), t('progress.analyzing_3'), t('progress.analyzing_4')];
 
 export const IALabUIContext = createContext(null);
 
@@ -21,6 +22,7 @@ export const useIALabUIContext = () => {
 };
 
 export function IALabUIProvider({ children, onBack }) {
+  const { t } = useTranslation();
   const { user: clerkUser } = useUser();
   const { signOut: clerkSignOut } = useClerk();
   const { isLoaded: authLoaded } = useClerkAuth();
@@ -97,7 +99,7 @@ export function IALabUIProvider({ children, onBack }) {
   const clerkRole = clerkUser?.publicMetadata?.role || 'student';
   const user = useMemo(() => clerkUser ? {
     id: clerkUser.id,
-    full_name: clerkUser.fullName || 'Usuario',
+    full_name: clerkUser.fullName || t('profile.user_fallback'),
     email: clerkUser.emailAddresses?.[0]?.emailAddress || '',
     fullName: clerkUser.fullName,
     firstName: clerkUser.firstName,
@@ -161,7 +163,7 @@ export function IALabUIProvider({ children, onBack }) {
   const generateCertificate = useCallback(async (overrideName) => {
     if (!user?.id) {
       console.error('❌ generateCertificate: user.id no disponible');
-      return { success: false, error: 'Usuario no autenticado' };
+      return { success: false, error: t('progress.unauthenticated') };
     }
 
     setCertificateGenerating(true);
@@ -182,7 +184,7 @@ export function IALabUIProvider({ children, onBack }) {
         return existingCert.data;
       }
 
-      const studentName = (overrideName || certName).trim() || user.full_name || 'Estudiante';
+      const studentName = (overrideName || certName).trim() || user.full_name || t('progress.student_fallback');
       const s = useIALabStore.getState();
       const moduleScores = [1, 2, 3, 4, 5].map(id => s.calculateModuleScore(id));
       const overallScore = Math.round(moduleScores.reduce((a, b) => a + b, 0) / 5);
@@ -200,15 +202,15 @@ export function IALabUIProvider({ children, onBack }) {
         .select()
         .single();
 
-      if (error) throw new Error(error.message || 'Error al generar certificado');
+      if (error) throw new Error(error.message || t('certificate.error_generating'));
 
       setStoredCertificate(data);
       setCourseCompleted(true);
 
       await createNotification({
         type: 'certificate_earned',
-        title: '🎓 ¡Certificado Generado!',
-        message: `Felicitaciones ${studentName}, has completado el curso con ${Math.max(overallScore, 80)}% de calificacion. Tu certificado ya esta disponible.`,
+        title: t('certificate.generated_title'),
+        message: t('certificate.generated_msg', { studentName, score: Math.max(overallScore, 80) }),
         metadata: { score: Math.max(overallScore, 80), certId: data.id, studentName },
       });
 
@@ -216,7 +218,7 @@ export function IALabUIProvider({ children, onBack }) {
         moduleId: 0,
         type: 'resource',
         resourceId: `certificate_${data.id}`,
-        title: `Certificado Generado - ${studentName}`,
+        title: t('progress.certificate_generated_activity', { studentName }),
         score: Math.max(overallScore, 80),
         metadata: { action: 'certificate_generated', certId: data.id, studentName }
       });
@@ -224,7 +226,7 @@ export function IALabUIProvider({ children, onBack }) {
       return data;
     } catch (err) {
       console.error('❌ Error generando certificado:', err);
-      return { success: false, error: err.message || 'Error desconocido' };
+      return { success: false, error: err.message || t('progress.unknown_error') };
     } finally {
       setCertificateGenerating(false);
     }
@@ -240,8 +242,8 @@ export function IALabUIProvider({ children, onBack }) {
       localStorage.setItem(LS_KEYS.NOTIFIED_CERTIFICATION, 'true');
       createNotification({
         type: 'certificate_earned',
-        title: '🎓 ¡Curso Completado y Certificado!',
-        message: `Felicitaciones, has aprobado los 5 modulos con ${Math.round(s.courseProgress)}% de progreso general. Tu certificado ya esta disponible para descargar.`,
+        title: t('certificate.course_completed_title'),
+        message: t('certificate.course_completed_msg', { progress: Math.round(s.courseProgress) }),
         metadata: { progress: s.courseProgress, allModulesApproved: true },
       });
 
@@ -249,7 +251,7 @@ export function IALabUIProvider({ children, onBack }) {
         moduleId: 0,
         type: 'resource',
         resourceId: 'course_completed',
-        title: 'Curso Completado y Certificado',
+        title: t('progress.course_completed_activity'),
         score: Math.round(s.courseProgress),
         metadata: { action: 'course_certified', progress: s.courseProgress }
       });
@@ -267,12 +269,12 @@ export function IALabUIProvider({ children, onBack }) {
 
     completedMods.forEach(modId => {
       if (modId < 1 || modId > 5) return;
-      const moduleName = STATIC_MODULES.find(m => m.id === modId)?.title || `Modulo ${modId}`;
+      const moduleName = STATIC_MODULES.find(m => m.id === modId)?.title || t('progress.module_fallback', { id: modId });
       const score = Math.max(s.calculateModuleScore(modId), 80);
       createNotification({
         type: 'module_complete',
-        title: `✅ ${moduleName} Completado`,
-        message: `¡Felicitaciones! Aprobaste con ${score}% de calificacion.`,
+        title: t('progress.module_completed_title', { moduleName }),
+        message: t('progress.module_completed_msg', { score, nextMsg: t('progress.module_completed_all') }),
         metadata: { moduleId: modId, score, backfilled: true },
       });
     });
@@ -297,14 +299,14 @@ export function IALabUIProvider({ children, onBack }) {
 
     let title, message;
     if (prevPassed) {
-      title = `🚀 ¡Modulo ${activeModule} desbloqueado!`;
-      message = `${mod.title} ya esta disponible. ${prevModuleId < 5 ? `Superaste el modulo anterior con ${prevScore}%. ¡Sigue avanzando!` : '¡Ultimo modulo del curso!'}`;
+      title = t('progress.module_unlocked_title', { moduleId: activeModule });
+      message = t('progress.module_unlocked_msg', { moduleName: mod.title, prevMsg: prevModuleId < 5 ? t('progress.module_unlocked_passed', { score: prevScore }) : t('progress.module_unlocked_last') });
     } else if (prevModuleId >= 1) {
-      title = `📖 ${mod.title}`;
-      message = `Explora el contenido de este modulo. Recuerda completar todas las actividades para aprobar.`;
+      title = t('progress.module_view_title', { moduleName: mod.title });
+      message = t('progress.module_explore_msg');
     } else {
-      title = `📖 ${mod.title}`;
-      message = `Nuevo modulo disponible. Explora los recursos y completa las actividades.`;
+      title = t('progress.module_view_title', { moduleName: mod.title });
+      message = t('progress.module_new_msg');
     }
 
     createNotification({
@@ -318,7 +320,7 @@ export function IALabUIProvider({ children, onBack }) {
       moduleId: activeModule,
       type: 'resource',
       resourceId: `m${activeModule}_module_entered`,
-      title: `${mod.title} - Módulo Iniciado`,
+        title: t('progress.module_started_activity', { moduleName: mod.title }),
       metadata: { action: 'module_started', prevScore }
     });
 
@@ -392,7 +394,7 @@ export function IALabUIProvider({ children, onBack }) {
     isLoaded: authLoaded,
     signOut,
     onBack,
-    msgs: ANALYZING_MSGS,
+    msgs: getAnalyzingMsgs(t),
     generateCertificate,
   }), [
     activeTab, sidebarDropdowns, openAccordions, visibleAccordions,

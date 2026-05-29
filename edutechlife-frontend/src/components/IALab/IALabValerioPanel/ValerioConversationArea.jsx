@@ -92,6 +92,7 @@ const EmptyState = ({ moduleTitle }) => {
 };
 
 const ValerioConversationArea = ({ conversation, isProcessing, moduleTitle }) => {
+  const { t } = useTranslation();
   return (
     <div className="flex-1 overflow-y-auto p-4" aria-live="polite" aria-label={t('ialab.valerio.conversation_aria')}>
       {conversation.length === 0 ? (

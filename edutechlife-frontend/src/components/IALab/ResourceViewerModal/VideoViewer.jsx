@@ -12,7 +12,7 @@ const formatTime = (s) => {
 const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
 const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded }) => {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const containerRef = useRef(null);
   const playerRef = useRef(null);
   const endedRef = useRef(onVideoEnded);
@@ -83,7 +83,7 @@ const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded 
     };
     if (window.YT && window.YT.Player && window.YT.loaded) { init(); return; }
     const tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
+    tag.src = `https://www.youtube.com/iframe_api?origin=${encodeURIComponent(window.location.origin)}`;
     document.head.appendChild(tag);
     const ci = setInterval(() => {
       if (window.YT && window.YT.Player && window.YT.loaded) { clearInterval(ci); init(); }
@@ -154,7 +154,7 @@ const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded 
         setTimeout(() => {
           try {
             const tracks = playerRef.current?.getOption('captions', 'tracklist') || [];
-            const es = tracks.find(t => t.languageCode === 'es');
+            const es = tracks.find(t => t.languageCode === (locale === 'en' ? 'en' : 'es'));
             if (es) playerRef.current?.setOption('captions', 'track', es);
             else if (tracks.length > 0) playerRef.current?.setOption('captions', 'track', tracks[0]);
           } catch {}

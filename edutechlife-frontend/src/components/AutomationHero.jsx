@@ -1,21 +1,13 @@
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-
-const metrics = [
-  { value: '+340%', label: 'Eficiencia Operativa', color: '#4DA8C4' },
-  { value: '-60%', label: 'Reducción de Costos', color: '#66CCCC' },
-  { value: '12+', label: 'Sectores', color: '#004B63' },
-  { value: '4.2x', label: 'ROI Promedio', color: '#4DA8C4' },
-];
-
-const standards = [
-  { name: 'ISO/IEC 42001', label: 'Gestión de IA' },
-  { name: 'NIST AI RMF', label: 'Riesgos de IA' },
-  { name: 'ISO/IEC 23053', label: 'Framework ML' },
-];
+import { useTranslation } from '../i18n/I18nProvider';
+import { getMetrics, getStandards } from './AutomationData';
 
 const AutomationHero = ({ onStartDiagnosis, onViewCases }) => {
+  const { t, locale } = useTranslation();
+  const metrics = getMetrics(locale);
+  const standards = getStandards(locale);
   const navigate = useNavigate();
   const [counts, setCounts] = useState([0, 0, 0, 0]);
 
@@ -52,15 +44,14 @@ const AutomationHero = ({ onStartDiagnosis, onViewCases }) => {
         >
 
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#004B63] leading-tight mb-4">
-            Transforma tu Empresa con{' '}
+            {t('automation.hero.title_1')}{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC]">
-              Inteligencia Artificial
+              {t('automation.hero.title_2')}
             </span>
           </h1>
 
           <p className="text-lg md:text-xl text-slate-500 max-w-3xl mx-auto mb-8 leading-relaxed">
-            Diseñamos e implementamos soluciones de automatización inteligente alineadas con estándares internacionales.
-            Reduce costos, aumenta eficiencia y escala tu negocio con IA.
+            {t('automation.hero.subtitle')}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
@@ -71,7 +62,7 @@ const AutomationHero = ({ onStartDiagnosis, onViewCases }) => {
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
               </svg>
-              Comenzar Diagnóstico
+              {t('automation.hero.btn_diagnosis')}
             </button>
             <button
               onClick={onViewCases}
@@ -80,7 +71,7 @@ const AutomationHero = ({ onStartDiagnosis, onViewCases }) => {
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
               </svg>
-              Ver Casos de Éxito
+              {t('automation.hero.btn_cases')}
             </button>
           </div>
 
@@ -110,7 +101,7 @@ const AutomationHero = ({ onStartDiagnosis, onViewCases }) => {
             className="flex flex-wrap items-center justify-center gap-6"
           >
             <span className="text-xs font-semibold text-slate-400 uppercase tracking-widest">
-              Alineado con:
+              {t('automation.hero.standards_label')}
             </span>
             {standards.map((s) => (
               <div

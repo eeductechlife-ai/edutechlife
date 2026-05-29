@@ -3,10 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform, useInView, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@clerk/react';
 import { Icon } from '../../utils/iconMapping.jsx';
+import { useTranslation } from '../../i18n/I18nProvider';
+import { getCategories, getCourses, getBenefits, getStats, getStatusConfig } from '../IALab/data/landingPageData';
 import NicoModern from '../Nico/NicoModern';
 import Footer from '../Footer';
 
 const IALabProLandingPage = () => {
+  const { t, locale } = useTranslation();
   const navigate = useNavigate();
   const { isSignedIn } = useAuth();
   const [activeCategory, setActiveCategory] = useState('all');
@@ -47,197 +50,17 @@ const IALabProLandingPage = () => {
     return () => window.removeEventListener('mousemove', handleMouse);
   }, []);
 
-  const categories = [
-    { id: 'all', label: 'Todos', icon: 'fa-bolt' },
-    { id: 'ia-generativa', label: 'IA Generativa', icon: 'fa-brain' },
-    { id: 'automatizaciones', label: 'Automatizaciones', icon: 'fa-robot' },
-    { id: 'productividad', label: 'Productividad', icon: 'fa-chart-line' },
-    { id: 'desarrollo', label: 'Desarrollo', icon: 'fa-code' },
-  ];
+  const categories = getCategories(locale);
 
-  const courses = [
-    {
-      id: 'ia-generativa',
-      title: 'Introducción a la I.A Generativa',
-      description: 'Domina la inteligencia artificial generativa con prompts, APIs, DeepResearch y NotebookLM.',
-      category: 'ia-generativa',
-      modules: 5,
-      duration: '10h',
-      level: 'Principiante',
-      hasCertificate: true,
-      route: '/ialab',
-      icon: 'fa-brain',
-      status: 'active',
-      rating: 4.8,
-      students: '2,500+',
-      features: ['Proyectos reales', 'Certificado IA', 'Soporte 24/7'],
-      progress: 60
-    },
-    {
-      id: 'prompt-avanzado',
-      title: 'Prompt Engineering Avanzado',
-      description: 'Técnicas avanzadas de prompting para maximizar resultados con modelos de IA.',
-      category: 'ia-generativa',
-      modules: 4,
-      duration: '8h',
-      level: 'Intermedio',
-      hasCertificate: true,
-      route: '/ialab',
-      icon: 'fa-wand-magic-sparkles',
-      status: 'coming-soon',
-      rating: 4.9,
-      students: '1,200+',
-      features: ['Prompts complejos', 'APIs avanzadas', 'Automatización'],
-      progress: 0
-    },
-    {
-      id: 'chatgpt-productividad',
-      title: 'ChatGPT para Productividad',
-      description: 'Automatiza tareas diarias y aumenta tu productividad con ChatGPT avanzado.',
-      category: 'productividad',
-      modules: 4,
-      duration: '6h',
-      level: 'Principiante',
-      hasCertificate: true,
-      route: '/ialab',
-      icon: 'fa-rocket',
-      status: 'coming-soon',
-      rating: 4.7,
-      students: '3,100+',
-      features: ['Automatización', 'Plantillas GPT', 'Workflows'],
-      progress: 0
-    },
-    {
-      id: 'automatizaciones-ia',
-      title: 'Automatizaciones con IA',
-      description: 'Crea flujos de trabajo automatizados usando herramientas de IA avanzadas.',
-      category: 'automatizaciones',
-      modules: 5,
-      duration: '12h',
-      level: 'Intermedio',
-      hasCertificate: true,
-      route: '/ialab',
-      icon: 'fa-cog',
-      status: 'coming-soon',
-      rating: 4.6,
-      students: '890+',
-      features: ['Zapier + IA', 'APIs sin código', 'Flujos multi-paso'],
-      progress: 0
-    },
-    {
-      id: 'desarrollo-ia',
-      title: 'Desarrollo de Apps con IA',
-      description: 'Construye aplicaciones inteligentes integrando APIs de modelos de lenguaje.',
-      category: 'desarrollo',
-      modules: 6,
-      duration: '15h',
-      level: 'Avanzado',
-      hasCertificate: true,
-      route: '/ialab',
-      icon: 'fa-laptop-code',
-      status: 'coming-soon',
-      rating: 4.9,
-      students: '650+',
-      features: ['APIs OpenAI', 'Frontend + IA', 'Despliegue'],
-      progress: 0
-    },
-    {
-      id: 'ia-marketing',
-      title: 'IA para Marketing Digital',
-      description: 'Genera contenido, campañas y estrategias de marketing con inteligencia artificial.',
-      category: 'productividad',
-      modules: 4,
-      duration: '8h',
-      level: 'Principiante',
-      hasCertificate: true,
-      route: '/ialab',
-      icon: 'fa-chart-pie',
-      status: 'coming-soon',
-      rating: 4.5,
-      students: '1,800+',
-      features: ['Contenido IA', 'SEO inteligente', 'Analítica'],
-      progress: 0
-    },
-    {
-      id: 'notebooklm-experto',
-      title: 'NotebookLM Experto',
-      description: 'Domina NotebookLM para investigación, análisis y generación de contenido.',
-      category: 'ia-generativa',
-      modules: 3,
-      duration: '6h',
-      level: 'Intermedio',
-      hasCertificate: true,
-      route: '/ialab',
-      icon: 'fa-book-open',
-      status: 'coming-soon',
-      rating: 4.8,
-      students: '950+',
-      features: ['Deep Research', 'Podcasts IA', 'Fuentes'],
-      progress: 0
-    },
-    {
-      id: 'ia-educacion',
-      title: 'IA para Educadores',
-      description: 'Herramientas de IA para crear contenido educativo personalizado y efectivo.',
-      category: 'productividad',
-      modules: 4,
-      duration: '8h',
-      level: 'Principiante',
-      hasCertificate: true,
-      route: '/ialab',
-      icon: 'fa-graduation-cap',
-      status: 'coming-soon',
-      rating: 4.7,
-      students: '1,400+',
-      features: ['Planes clase IA', 'Evaluación IA', 'Personalización'],
-      progress: 0
-    },
-  ];
+  const courses = getCourses(locale);
 
   const filteredCourses = activeCategory === 'all'
     ? courses
     : courses.filter(c => c.category === activeCategory);
 
-  const stats = [
-    { icon: 'fa-brain', value: '8+', label: 'Cursos' },
-    { icon: 'fa-clock', value: '200h+', label: 'Contenido' },
-    { icon: 'fa-trophy', value: 'Certificados', label: 'Profesionales' },
-    { icon: 'fa-headset', value: '24/7', label: 'Soporte' }
-  ];
-
-  const benefits = [
-    { icon: 'fa-brain', title: '8+ Cursos', desc: 'Más de 200h de contenido con certificación profesional al completar cada curso' },
-    { icon: 'fa-headset', title: 'Soporte 24/7', desc: 'Asistencia personalizada cuando la necesites' },
-    { icon: 'fa-flask', title: '100% Práctico', desc: 'Aprende haciendo con proyectos reales y ejercicios' },
-    { icon: 'fa-users', title: 'Comunidad', desc: 'Conecta con otros estudiantes y profesionales de IA' }
-  ];
-
-  const statusConfig = {
-    active: {
-      bg: 'from-[#004B63] via-[#00334A] to-[#0A1628]',
-      badge: 'bg-[#66CCCC] text-white',
-      badgeText: 'Disponible',
-      buttonText: isSignedIn ? 'Comenzar' : 'Inscríbete',
-      buttonClass: 'bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white hover:from-[#4DA8C4] hover:to-[#66CCCC] shadow-md hover:shadow-lg',
-      disabled: false
-    },
-    'coming-soon': {
-      bg: 'from-[#2A5F73] via-[#1E6B7A] to-[#154F5E]',
-      badge: 'bg-white/20 backdrop-blur-sm text-white',
-      badgeText: 'Próximamente',
-      buttonText: 'Explorar',
-      buttonClass: 'bg-white/20 text-white hover:bg-white/30 border border-white/20 cursor-pointer',
-      disabled: false
-    },
-    new: {
-      bg: 'from-[#004B63] via-[#4DA8C4] to-[#66CCCC]',
-      badge: 'bg-[#4DA8C4] text-white',
-      badgeText: 'Nuevo',
-      buttonText: 'Comenzar',
-      buttonClass: 'bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white hover:from-[#4DA8C4] hover:to-[#66CCCC] shadow-md hover:shadow-lg',
-      disabled: false
-    }
-  };
+  const stats = getStats(locale);
+  const benefits = getBenefits(locale);
+  const statusConfig = getStatusConfig(locale);
 
   const particles = [
     { size: 4, x: '10%', y: '20%', delay: 0, duration: 7 },
@@ -267,12 +90,12 @@ const IALabProLandingPage = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2, duration: 0.4 }}
           className="absolute top-6 left-4 md:top-8 md:left-8 z-30 flex items-center gap-2.5 px-4 py-2.5 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-white text-sm font-bold hover:bg-white/20 hover:border-white/30 transition-all duration-300 shadow-lg"
-          aria-label="Volver al inicio"
+          aria-label={t('ialab.landing.back_aria')}
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m0 0l11 11" />
           </svg>
-          Volver
+          {t('ialab.landing.back_label')}
         </motion.button>
 
         {/* Grid Background */}
@@ -348,7 +171,7 @@ const IALabProLandingPage = () => {
               className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full mb-6 md:mb-8"
             >
               <Icon name="fa-flask" className="w-4 h-4 text-[#00334A]" />
-              <span className="text-sm font-semibold text-white tracking-wide">Laboratorio de Innovación Educativa</span>
+              <span className="text-sm font-semibold text-white tracking-wide">{t('ialab.landing.hero_badge')}</span>
             </motion.div>
 
             {/* TABLET — Hiperrealista con tracking 3D */}
@@ -588,7 +411,7 @@ const IALabProLandingPage = () => {
                       </div>
                     ))}
                   </div>
-                  <span><strong className="text-white">4.200+</strong> <span className="text-white font-semibold">estudiantes</span></span>
+                  <span><strong className="text-white">4.200+</strong> <span className="text-white font-semibold">{t('ialab.landing.students_label')}</span></span>
                 </div>
                 <div className="h-7 w-px bg-white/10" />
                 <div className="flex items-center gap-1 text-amber-400">
@@ -600,7 +423,7 @@ const IALabProLandingPage = () => {
                 <div className="h-7 w-px bg-white/10" />
                 <div className="flex items-center gap-1.5 text-emerald-400">
                   <Icon name="fa-shield-check" className="w-4 h-4" />
-                  <span className="text-white">Certificado profesional</span>
+                  <span className="text-white">{t('ialab.landing.certified_label')}</span>
                 </div>
               </div>
             </motion.div>
@@ -629,10 +452,10 @@ const IALabProLandingPage = () => {
             className="text-center mb-8"
           >
             <h2 className="font-display text-3xl md:text-4xl font-bold text-[#004B63] mb-3">
-              ¿Por qué AI Lab Academic?
+              {t('ialab.landing.why_title')}
             </h2>
             <p className="font-body text-base text-[#475569] max-w-2xl mx-auto">
-              Una plataforma diseñada para tu éxito en la era de la inteligencia artificial
+              {t('ialab.landing.why_subtitle')}
             </p>
           </motion.div>
 
@@ -679,10 +502,10 @@ const IALabProLandingPage = () => {
             className="text-center mb-12"
           >
             <h2 className="font-display text-3xl md:text-4xl font-bold text-[#004B63] mb-4">
-              Catálogo de Cursos
+              {t('ialab.landing.catalog_title')}
             </h2>
             <p className="font-body text-lg text-[#475569] max-w-2xl mx-auto">
-              Explora nuestro catálogo de cursos y comienza a transformar tu futuro profesional
+              {t('ialab.landing.catalog_subtitle')}
             </p>
           </motion.div>
 
@@ -795,7 +618,7 @@ const IALabProLandingPage = () => {
                         </div>
                         <span className="font-semibold text-white text-xs">{course.rating}</span>
                         <span className="text-white/50">•</span>
-                        <span>{course.students} est.</span>
+                        <span>{course.students} {t('ialab.landing.students_abbr')}</span>
                       </div>
                     </div>
 
@@ -818,12 +641,12 @@ const IALabProLandingPage = () => {
                       <div className="flex items-center gap-3 mb-3 text-xs text-[#004B63]">
                         <span className="flex items-center gap-1">
                           <Icon name="fa-book-open" className="w-3 h-3 text-[#4DA8C4]" />
-                          {course.modules} módulos
+                          {course.modules} {t('ialab.landing.modules_label')}
                         </span>
                         {course.hasCertificate && (
                           <span className="flex items-center gap-1">
                             <Icon name="fa-check-circle" className="w-3 h-3 text-emerald-500" />
-                            Certificado
+                            {t('ialab.landing.certified_badge')}
                           </span>
                         )}
                         <span className="ml-auto px-2 py-0.5 bg-[#4DA8C4]/10 rounded text-[10px] font-bold text-[#004B63] uppercase tracking-wider">
@@ -835,7 +658,7 @@ const IALabProLandingPage = () => {
                       {course.status === 'active' && course.progress > 0 && (
                         <div className="mb-3">
                           <div className="flex items-center justify-between text-[10px] text-slate-500 mb-1">
-                            <span>Progreso</span>
+                            <span>{t('ialab.landing.progress_label')}</span>
                             <span className="font-semibold text-[#004B63]">{course.progress}%</span>
                           </div>
                           <div className="h-1.5 bg-[#004B63]/10 rounded-full overflow-hidden">
@@ -862,7 +685,7 @@ const IALabProLandingPage = () => {
                           animate={{ x: ['-100%', '200%'] }}
                           transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
                         />
-                        <span className="relative">{config.buttonText}</span>
+                        <span className="relative">{config.buttonText(isSignedIn)}</span>
                         <motion.span
                           className="relative"
                           animate={{ x: [0, 3, 0] }}

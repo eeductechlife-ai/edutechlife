@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Video, Clock } from 'lucide-react';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const MEETING_URL = 'https://meet.google.com/ywc-jumh-wnh';
 const TUTORIA_HOUR = 16; // 4 PM
@@ -55,6 +56,7 @@ const isTutoriaActive = () => {
 };
 
 const IALabTutoriasVirtuales = () => {
+  const { t } = useTranslation();
   const [active, setActive] = useState(isTutoriaActive());
   const [countdown, setCountdown] = useState(getTimeUntilNextTutoria());
 
@@ -97,7 +99,7 @@ const IALabTutoriasVirtuales = () => {
           <div>
             <div className="flex items-center gap-3 mb-1">
               <h3 className="text-lg md:text-xl font-bold text-petroleum">
-                Tutorías Virtuales en Vivo
+                {t('ialab.tutorias_virtuales.title')}
               </h3>
               {active && (
                 <span className="flex items-center gap-1.5 px-2.5 py-0.5 bg-red-100 text-red-600 text-xs font-semibold rounded-full">
@@ -105,20 +107,18 @@ const IALabTutoriasVirtuales = () => {
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
                   </span>
-                  EN VIVO
+                  {t('ialab.tutorias_virtuales.live')}
                 </span>
               )}
             </div>
             <p className="text-sm md:text-base text-slate-600 leading-relaxed mt-2">
-              ¿Tienes alguna dificultad durante el curso? Te acompañamos en tu proceso.
-              Únete a nuestras tutorías virtuales todos los domingos a las 4:00 PM
-              para resolver tus dudas en directo.
+              {t('ialab.tutorias_virtuales.description')}
             </p>
             {!active && (
               <div className="flex items-center gap-2 mt-3 text-sm text-slate-500">
                 <Clock className="w-4 h-4" />
                 <span>
-                  Próxima tutoría en <span className="font-semibold text-petroleum font-mono">{formatCountdown()}</span>
+                  {t('ialab.tutorias_virtuales.countdown', { time: formatCountdown() })}
                 </span>
               </div>
             )}
@@ -136,7 +136,7 @@ const IALabTutoriasVirtuales = () => {
             className="flex-shrink-0 px-6 py-3 bg-gradient-to-r from-red-500 via-red-600 to-red-500 text-white rounded-xl font-semibold text-sm flex items-center gap-2 shadow-sm hover:shadow-[0_0_20px_rgba(239,68,68,0.3)] transition-all duration-300"
           >
             <Video className="w-4 h-4" />
-            Unirse a la Sala
+            {t('ialab.tutorias_virtuales.join')}
           </motion.a>
         ) : (
           <motion.div
@@ -144,7 +144,7 @@ const IALabTutoriasVirtuales = () => {
             className="flex-shrink-0 px-6 py-3 bg-slate-100 text-slate-600 rounded-xl font-semibold text-sm flex items-center gap-2 cursor-not-allowed select-none"
           >
             <Video className="w-4 h-4" />
-            Disponible en vivo
+            {t('ialab.tutorias_virtuales.unavailable')}
           </motion.div>
         )}
       </div>

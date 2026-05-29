@@ -4,9 +4,11 @@ import { Icon } from '../../../utils/iconMapping.jsx';
 import useForumComments from '../../../hooks/IALab/forum/useForumComments';
 import IALabForumCommentThread from './IALabForumCommentThread';
 import IALabForumRichEditor from './IALabForumRichEditor';
+import { useTranslation } from '../../../i18n/I18nProvider';
 
 const IALabForumPostDetail = ({ post, onBack, onAction }) => {
   const { comments, isLoading, loadComments, addComment } = useForumComments();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (post?.id) loadComments(post.id);
@@ -34,7 +36,7 @@ const IALabForumPostDetail = ({ post, onBack, onAction }) => {
           className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-petroleum transition-colors mb-3"
         >
           <Icon name="fa-arrow-left" className="text-[10px]" />
-          Volver a la comunidad
+          {t('ialab.forum.detail.back')}
         </button>
 
         <div className="flex items-center gap-2 mb-2">
@@ -51,11 +53,11 @@ const IALabForumPostDetail = ({ post, onBack, onAction }) => {
         <div className="flex items-center gap-3 mt-3 pt-3 border-t border-slate-100 dark:border-slate-700">
           <div className="flex items-center gap-1.5 text-xs text-slate-600">
             <Icon name="fa-heart" />
-            <span>{post.upvotes || 0} likes</span>
+            <span>{t('ialab.forum.detail.likes_count', { count: post.upvotes || 0 })}</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs text-slate-600">
             <Icon name="fa-comment" />
-            <span>{post.comment_count || 0} comentarios</span>
+            <span>{t('ialab.forum.detail.comments_count', { count: post.comment_count || 0 })}</span>
           </div>
           <span className="text-xs text-slate-600">
             {new Date(post.created_at).toLocaleDateString('es-ES', {
@@ -68,7 +70,7 @@ const IALabForumPostDetail = ({ post, onBack, onAction }) => {
       <div className="p-4">
         <h4 className="text-sm font-bold text-slate-800 dark:text-slate-200 mb-3 flex items-center gap-2">
           <Icon name="fa-comments" className="text-corporate text-xs" />
-          Comentarios ({post.comment_count || 0})
+          {t('ialab.forum.detail.comments_title', { count: post.comment_count || 0 })}
         </h4>
 
         {isLoading ? (
@@ -85,9 +87,9 @@ const IALabForumPostDetail = ({ post, onBack, onAction }) => {
 
         <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-700">
           <IALabForumRichEditor
-            placeholder="Escribe un comentario..."
+            placeholder={t('ialab.forum.detail.comment_placeholder')}
             onSubmit={handleAddComment}
-            buttonLabel="Comentar"
+            buttonLabel={t('ialab.forum.detail.comment_btn')}
           />
         </div>
       </div>

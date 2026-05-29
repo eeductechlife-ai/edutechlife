@@ -15,19 +15,28 @@ const ValerioAvatar = ({ state = 'idle', size = 80, onStateChange }) => {
             
             const loadVoices = () => {
                 const voices = synthRef.current.getVoices();
-                const spanishVoices = voices.filter(voice => 
-                    voice.lang.startsWith('es')
+                
+                // Priorizar español latino: primero voces es-US, es-419, es-MX, es-CO
+                const latinoVoices = voices.filter(v => 
+                    (v.lang === 'es-US' || v.lang === 'es-419' || v.lang === 'es-MX' || v.lang === 'es-CO') &&
+                    (v.name.includes('Neural2') || v.name.includes('WaveNet') || v.name.includes('Google') || v.name.includes('Microsoft'))
+                );
+                
+                if (latinoVoices.length > 0) {
+                    setSelectedVoice(latinoVoices[0]);
+                    return;
+                }
+                
+                // Fallback: cualquier voz Neural2/WaveNet/Google/Microsoft en español
+                const spanishVoices = voices.filter(v => 
+                    v.lang.startsWith('es') &&
+                    (v.name.includes('Neural2') || v.name.includes('WaveNet') || v.name.includes('Google') || v.name.includes('Microsoft'))
                 );
                 
                 if (spanishVoices.length > 0) {
-                    const preferred = spanishVoices.find(v => 
-                        v.name.includes('Neural2') || 
-                        v.name.includes('WaveNet') || 
-                        v.name.includes('Google') || 
-                        v.name.includes('Microsoft')
-                    );
-                    setSelectedVoice(preferred || spanishVoices[0]);
-                } else {
+                    setSelectedVoice(spanishVoices[0]);
+                } else if (voices.length > 0) {
+                    // Último recurso: cualquier voz disponible
                     setSelectedVoice(voices[0]);
                 }
             };

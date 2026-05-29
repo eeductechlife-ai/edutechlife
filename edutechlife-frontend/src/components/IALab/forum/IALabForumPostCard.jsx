@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { useAuth } from '../../../context/AuthContext';
 import useForumProfile from '../../../hooks/IALab/forum/useForumProfile';
+import { useTranslation } from '../../../i18n/I18nProvider';
 
 const BOOKMARKS_KEY = 'ialab_forum_bookmarks';
 
@@ -43,7 +44,7 @@ const getInitials = (name) => {
   return name.split(' ').map(p => p[0]).join('').toUpperCase().substring(0, 2);
 };
 
-const formatRelativeTime = (dateString) => {
+const formatRelativeTime = (dateString, t, locale) => {
   const date = new Date(dateString);
   const now = new Date();
   const diffMs = now - date;
@@ -51,11 +52,11 @@ const formatRelativeTime = (dateString) => {
   const diffHours = Math.floor(diffMs / 3600000);
   const diffDays = Math.floor(diffMs / 86400000);
 
-  if (diffMins < 1) return 'Ahora';
-  if (diffMins < 60) return `Hace ${diffMins}min`;
-  if (diffHours < 24) return `Hace ${diffHours}h`;
-  if (diffDays < 7) return `Hace ${diffDays}d`;
-  return date.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+  if (diffMins < 1) return t('ialab.forum.post_card.now');
+  if (diffMins < 60) return t('ialab.forum.post_card.min_ago', { mins: diffMins });
+  if (diffHours < 24) return t('ialab.forum.post_card.hour_ago', { hours: diffHours });
+  if (diffDays < 7) return t('ialab.forum.post_card.day_ago', { days: diffDays });
+  return date.toLocaleDateString(locale === 'en' ? 'en-US' : 'es-ES', { day: 'numeric', month: 'short' });
 };
 
 const IALabForumPostCard = ({
@@ -69,6 +70,7 @@ const IALabForumPostCard = ({
   index,
 }) => {
   const { user } = useAuth();
+  const { t, locale } = useTranslation();
   const [showProfileCard, setShowProfileCard] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [shareFeedback, setShareFeedback] = useState(false);
@@ -131,22 +133,22 @@ const IALabForumPostCard = ({
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-0.5">
               <span className="text-sm font-semibold text-slate-800 dark:text-slate-200 truncate">
-                {profile.full_name || post.user_name || 'Usuario'}
+                {profile.full_name || post.user_name || t('ialab.forum.post_card.user_fallback')}
               </span>
-              {profile.title && profile.title !== 'Estudiante' && (
+              {profile.title && !['Estudiante', 'Student'].includes(profile.title) && (
                 <span className="px-1.5 py-0.5 bg-petroleum/5 text-petroleum text-[9px] font-medium rounded-full flex-shrink-0">
                   {profile.title}
                 </span>
               )}
               <span className="text-[10px] text-slate-600 dark:text-slate-500 flex-shrink-0">
-                {formatRelativeTime(post.created_at)}
+                {formatRelativeTime(post.created_at, t, locale)}
               </span>
             </div>
 
             <div className="flex items-center gap-2 mb-2">
               <span className={`px-2 py-0.5 rounded-full text-[9px] font-semibold ${categoryStyle.bg} ${categoryStyle.text}`}>
                 <Icon name={categoryStyle.icon} className="mr-0.5" />
-                {POST_CATEGORY_LABELS[post.category] || 'Discusión'}
+                {getCategoryLabel(post.category, t)}
               </span>
               {post.tags?.slice(0, 2).map((tag, i) => (
                 <span key={i} className="text-[9px] text-slate-600 dark:text-slate-500 bg-slate-100 dark:bg-slate-700 px-1.5 py-0.5 rounded-full">
@@ -192,7 +194,7 @@ const IALabForumPostCard = ({
             </div>
 
             {post.updated_at && new Date(post.updated_at) > new Date(post.created_at) && (
-              <span className="text-[9px] text-slate-600">Editado</span>
+              <span className="text-[9px] text-slate-600">{t('ialab.forum.post_card.edited_label')}</span>
             )}
           </div>
 
@@ -200,7 +202,7 @@ const IALabForumPostCard = ({
             <button onClick={handleShare} className="text-xs text-slate-600 hover:text-petroleum transition-colors relative">
               <Icon name={shareFeedback ? 'fa-check' : 'fa-share'} />
               {shareFeedback && (
-                <span className="absolute -top-1 left-1/2 -translate-x-1/2 text-[8px] font-medium text-emerald-600 whitespace-nowrap">Copiado</span>
+                <span className="absolute -top-1 left-1/2 -translate-x-1/2 text-[8px] font-medium text-emerald-600 whitespace-nowrap">{t('ialab.forum.post_card.copied_tooltip')}</span>
               )}
             </button>
             <button onClick={handleBookmark} className={`text-xs transition-colors ${isBookmarked ? 'text-amber-500' : 'text-slate-600 hover:text-amber-500'}`}>
@@ -213,12 +215,15 @@ const IALabForumPostCard = ({
   );
 };
 
-const POST_CATEGORY_LABELS = {
-  question: 'Pregunta',
-  discussion: 'Discusión',
-  resource: 'Recurso',
-  announcement: 'Anuncio',
-  feedback: 'Feedback',
+const getCategoryLabel = (category, t) => {
+  const labels = {
+    question: t('ialab.forum.post_card.category_question'),
+    discussion: t('ialab.forum.post_card.category_discussion'),
+    resource: t('ialab.forum.post_card.category_resource'),
+    announcement: t('ialab.forum.post_card.category_announcement'),
+    feedback: t('ialab.forum.post_card.category_feedback'),
+  };
+  return labels[category] || labels.discussion;
 };
 
 export default IALabForumPostCard;

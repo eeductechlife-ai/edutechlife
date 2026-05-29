@@ -5,6 +5,7 @@ import FloatingParticles from './FloatingParticles';
 import MagneticButton from './MagneticButton';
 import { Icon } from '../utils/iconMapping.jsx';
 import { useTranslation } from '../i18n/I18nProvider';
+import { getVakStyles, getPricingPlans, getTestimonials, getBeneficios, getTranquilidad, getPasos, getFaqItems } from './SmartBoardLandingData';
 
 const useAnimatedCounter = (target, duration = 2000, start = false) => {
   const [count, setCount] = useState(0);
@@ -47,57 +48,17 @@ const cardVariants = {
   visible: { opacity: 1, y: 0, scale: 1, transition: { type: 'spring', stiffness: 120, damping: 15 } },
 };
 
-const VAQ_STYLES = [
-  { key: 'visual', icon: 'fa-eye', title: 'Visual', color: '#4DA8C4', description: 'Aprende mejor viendo: imágenes, videos, mapas mentales y diagramas. Su cerebro procesa la información a través del canal visual con alta retención.', traits: ['Mapas mentales', 'Videos educativos', 'Esquemas de color', 'Flashcards con imágenes'] },
-  { key: 'auditivo', icon: 'fa-headphones', title: 'Auditivo', color: '#66CCCC', description: 'Aprende mejor escuchando: podcasts, debates, explicaciones en voz alta. Retiene información a través de conversaciones y audio.', traits: ['Podcasts educativos', 'Debates guiados', 'Audiolibros', 'Grabaciones de clase'] },
-  { key: 'kinestesico', icon: 'fa-hand-pointer', title: 'Kinestésico', color: '#FF6B9D', description: 'Aprende mejor haciendo: experimentos, movimiento, proyectos manuales. Necesita tocar y experimentar para comprender.', traits: ['Experimentos prácticos', 'Juegos de rol', 'Pausas activas', 'Proyectos manuales'] },
-];
 
-const PRICING_PLANS = [
-  { name: 'Básico', price: '$30.000', period: '/mes', popular: false, features: ['Diagnóstico VAK completo', 'Plan de estudio personalizado', 'Acceso a recursos académicos', 'Sistema de puntos y recompensas', 'Reportes semanales', 'Coach virtual Dani', 'Soporte por email'] },
-  { name: 'Premium', price: '$50.000', period: '/mes', popular: true, features: ['Todo lo del plan Básico', 'Coach humano dedicado', 'Reportes en tiempo real', 'Actividades avanzadas', 'Talleres de tecnología', 'Sesiones mensuales con experto', 'Prioridad en soporte', 'Certificados de logro'] },
-];
-
-const TESTIMONIALS = [
-  { name: 'Ana Lucía Romero', role: 'Mamá de Santiago, 10 años', rating: 5, text: 'Al principio me daba miedo que mi hijo pasara más tiempo en pantallas, pero SmartBoard es diferente. Dani lo guía paso a paso, y en dos meses sus notas en matemáticas pasaron de 3.5 a 4.8. Lo mejor es que ya no tengo que rogarle para que estudie — él solito abre la plataforma.' },
-  { name: 'Carlos Rodríguez', role: 'Papá de Valentina, 12 años', rating: 5, text: 'El diagnóstico VAK nos cambió la perspectiva. Descubrimos que Valentina es kinestésica — toda su vida le dijeron que era distraída, pero en realidad necesita aprender haciendo. Con SmartBoard, sus trabajos de ciencias son los mejores de la clase y hasta ayudó a sus compañeros con un experimento.' },
-  { name: 'Laura Méndez', role: 'Mamá de Mateo, 8 años', rating: 5, text: 'Trabajo hasta tarde y siempre vivía angustiada por las tareas de Mateo. SmartBoard me dio tranquilidad. Recibo un reporte cada semana con su avance, y si algo preocupa a su coach, me llega una alerta al celular. Ya no llego a casa con miedo de revisar la mochila.' },
-  { name: 'Fernando Morales', role: 'Papá de Camila, 14 años', rating: 5, text: 'Camila estaba perdiendo el interés en el colegio, típico de la edad. Desde que usa SmartBoard su motivación cambió por completo. Habla con Dani sobre tecnología, y el sistema de puntos la mantiene enfocada en sus metas. Hasta pidió hacer cursos de programación por su cuenta.' },
-  { name: 'Patricia Vega', role: 'Mamá de Tomás y Lucía, 9 y 11 años', rating: 5, text: 'Tener dos hijos en edad escolar era una locura: tareas distintas, horarios, materias, exámenes. SmartBoard los tiene a ambos organizados con su propio plan de estudio. Yo solo recibo los reportes y veo cómo avanzan cada uno a su ritmo. Mi nivel de estrés se redujo drásticamente.' },
-];
-
-const BENEFICIOS_HIJO = [
-  { icon: 'fa-brain', title: 'Plan personalizado', desc: 'Creamos una ruta de aprendizaje única basada en su estilo VAK. Cada actividad está diseñada para cómo él o ella aprende mejor.' },
-  { icon: 'fa-laptop-code', title: 'Habilidades tecnológicas', desc: 'Desarrolla competencias digitales reales mientras estudia: pensamiento computacional, IA generativa y creatividad digital.' },
-  { icon: 'fa-star', title: 'Puntos y recompensas', desc: 'Cada actividad completada le da puntos que puede canjear por premios reales. La motivación se convierte en un juego.' },
-  { icon: 'fa-robot', title: 'Coach virtual Dani', desc: 'Un tutor con IA disponible 24/7 que lo guía, responde sus preguntas y lo anima en cada paso.' },
-  { icon: 'fa-user-graduate', title: 'Coach humano experto', desc: 'Un profesional real que supervisa su progreso y ajusta su plan según su evolución académica y emocional.' },
-  { icon: 'fa-book-open', title: 'Recursos premium', desc: 'Acceso ilimitado a guías, videos, ejercicios interactivos y materiales seleccionados por expertos en educación.' },
-];
-
-const TRANQUILIDAD = [
-  { icon: 'fa-chart-line', title: 'Reportes en tiempo real', desc: '¿Está conectado? ¿Cuánto estudió hoy? ¿En qué tema va? Recibe datos actualizados al instante desde tu celular.' },
-  { icon: 'fa-clock', title: 'Recupera tu tiempo', desc: 'No más horas ayudando con tareas que no entiendes. Nuestros coaches se encargan del proceso académico.' },
-  { icon: 'fa-shield-halved', title: 'Tu hijo en buenas manos', desc: 'Profesionales supervisan su progreso. Tú recibes alertas solo cuando es necesario tu apoyo.' },
-  { icon: 'fa-face-smile', title: 'Adiós al estrés escolar', desc: 'Se acabaron las discusiones por las tareas. Tu hijo estudia motivado y recuperas la armonía en casa.' },
-];
-
-const PASOS = [
-  { step: '01', icon: 'fa-user-plus', title: 'Registro', desc: 'Creas una cuenta en 2 minutos. Solo necesitas sus datos básicos y elegir tu plan.' },
-  { step: '02', icon: 'fa-chart-bar', title: 'Diagnóstico VAK', desc: 'Tu hijo hace un test interactivo de 10 preguntas. En 3 minutos sabemos cómo aprende.' },
-  { step: '03', icon: 'fa-route', title: 'Plan personalizado', desc: 'Nuestra IA crea una ruta de aprendizaje a su medida con actividades, horarios y recursos según su estilo.' },
-  { step: '04', icon: 'fa-rocket', title: 'Aprendizaje activo', desc: 'Tu hijo empieza a estudiar con Dani y nuestros coaches. Tú recibes reportes de su progreso.' },
-];
-
-const FAQ_ITEMS = [
-  { q: '¿Desde qué edad pueden usar SmartBoard?', a: 'SmartBoard está diseñado para niños entre 8 y 16 años. Nuestro sistema adapta el contenido y las actividades según la edad y el estilo de aprendizaje de cada estudiante.' },
-  { q: '¿Necesito estar presente mientras mi hijo estudia?', a: 'No. SmartBoard está diseñado para que tu hijo aprenda de forma autónoma con el acompañamiento de Dani (coach virtual) y nuestro equipo de coaches humanos. Tú recibes reportes periódicos de su progreso.' },
-  { q: '¿Cómo funciona el diagnóstico VAK?', a: 'El diagnóstico VAK es un test interactivo de 10 preguntas que identifica el estilo de aprendizaje predominante de tu hijo: Visual, Auditivo o Kinestésico. A partir de los resultados, creamos un plan de estudio totalmente personalizado.' },
-  { q: '¿Puedo cancelar en cualquier momento?', a: 'Sí. No hay permanencia forzada. Puedes cancelar tu suscripción cuando quieras sin penalización.' },
-];
 
 const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
+  const vakStyles = getVakStyles(locale);
+  const pricingPlans = getPricingPlans(locale);
+  const testimonials = getTestimonials(locale);
+  const beneficios = getBeneficios(locale);
+  const tranquilidad = getTranquilidad(locale);
+  const pasos = getPasos(locale);
+  const faqItems = getFaqItems(locale);
   const navigate = useNavigate();
   const [activeFaq, setActiveFaq] = useState(null);
   const [isPaused, setIsPaused] = useState(false);
@@ -315,13 +276,13 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
             viewport={{ once: true, margin: '-50px' }}
             className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5"
           >
-            {VAQ_STYLES.map((style) => (
+            {vakStyles.map((style) => (
               <motion.div
                 key={style.key}
                 variants={cardVariants}
                 animate={{
                   y: [0, -5, 0],
-                  transition: { duration: 3.5 + VAQ_STYLES.indexOf(style) * 0.3, delay: VAQ_STYLES.indexOf(style) * 0.2, repeat: Infinity, ease: 'easeInOut' },
+                  transition: { duration: 3.5 + vakStyles.indexOf(style) * 0.3, delay: vakStyles.indexOf(style) * 0.2, repeat: Infinity, ease: 'easeInOut' },
                 }}
                 className="group relative card-clay-white bg-white rounded-2xl border border-slate-200/60 shadow-premium hover:shadow-premium-lg transition-all duration-500 overflow-hidden"
               >
@@ -370,7 +331,7 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
             viewport={{ once: true, margin: '-50px' }}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
           >
-            {BENEFICIOS_HIJO.map((item) => (
+            {beneficios.map((item) => (
               <motion.div
                 key={item.title}
                 variants={childVariant}
@@ -414,7 +375,7 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
             viewport={{ once: true, margin: '-50px' }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
           >
-            {TRANQUILIDAD.map((item) => (
+            {tranquilidad.map((item) => (
               <motion.div
                 key={item.title}
                 variants={childVariant}
@@ -469,7 +430,7 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
             viewport={{ once: true, margin: '-50px' }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
           >
-            {PASOS.map((item, index) => (
+            {pasos.map((item, index) => (
               <motion.div
                 key={item.title}
                 variants={cardVariants}
@@ -500,7 +461,7 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
           >
             <MagneticButton
               onClick={handleCta}
-              aria-label="Empezar ahora con SmartBoard"
+              aria-label={t('smartboard.landing.start_aria')}
               className="group relative overflow-hidden inline-flex items-center justify-center gap-2.5 px-8 sm:px-10 py-3 rounded-full text-sm sm:text-base font-bold bg-petroleum text-white shadow-xl hover:bg-petroleum-dark hover:-translate-y-0.5 transition-all duration-300"
             >
               <span className="absolute inset-0 w-[150%] h-full -translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent group-hover:animate-sweep skew-x-[-20deg]" />
@@ -537,7 +498,7 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
             viewport={{ once: true, margin: '-50px' }}
             className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto"
           >
-            {PRICING_PLANS.map((plan) => (
+            {pricingPlans.map((plan) => (
               <motion.div
                 key={plan.name}
                 variants={childVariant}
@@ -581,7 +542,7 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
                 </ul>
                 <MagneticButton
                   onClick={handleCta}
-                  aria-label={`Elegir plan ${plan.name}`}
+                  aria-label={t('smartboard.landing.choose_plan_aria', { name: plan.name })}
                   className={`w-full flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl text-sm font-bold transition-all duration-300 ${
                     plan.popular
                       ? 'bg-white text-petroleum shadow-premium-lg hover:shadow-xl hover:-translate-y-0.5'
@@ -635,7 +596,7 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
                     animation: isPaused ? 'none' : 'testimonialMarquee 50s linear infinite',
                   }}
                 >
-                  {[...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS].map((t, idx) => {
+                  {[...testimonials, ...testimonials, ...testimonials].map((t, idx) => {
                     const avatarGradients = [
                       'from-petroleum to-primary-light',
                       'from-primary-light to-mint',
@@ -701,7 +662,7 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
             </p>
             <MagneticButton
               onClick={handleCta}
-              aria-label="Probar SmartBoard ahora"
+              aria-label={t('smartboard.landing.try_aria')}
               className="group relative overflow-hidden inline-flex items-center justify-center gap-2.5 px-8 sm:px-10 py-3 rounded-full text-sm sm:text-base font-bold bg-primary-light text-white shadow-xl hover:bg-mint hover:-translate-y-0.5 transition-all duration-300"
             >
               <span className="absolute inset-0 w-[150%] h-full -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-sweep skew-x-[-20deg]" />
@@ -722,7 +683,7 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-mint">{t('smartboard.landing_faq_title_highlight')}</span>
             </h3>
             <div className="space-y-2">
-              {FAQ_ITEMS.map((item, i) => (
+              {faqItems.map((item, i) => (
                 <div key={item.q} className="bg-white/6 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden">
                   <button
                     onClick={() => setActiveFaq(activeFaq === i ? null : i)}

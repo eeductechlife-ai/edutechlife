@@ -3,8 +3,9 @@ import { useUser } from '@clerk/react';
 import { useProgressContext } from '../ProgressContext';
 import { useNotification } from '../NotificationContext';
 import { useActivityTracker } from '../../hooks/useActivityTracker';
+import { useTranslation } from '../../i18n/I18nProvider';
 import { moduleContent } from '../../components/IALab/constants/moduleContent';
-import { modules as STATIC_MODULES, ALL_LESSONS } from '@/data/ialab';
+import { getModules, getAllLessons, modules as STATIC_MODULES } from '@/data/ialab';
 import { LAST_MODULE_ID } from '@/constants/ialab';
 import { useIALabStore } from '../../store/ialabStore';
 
@@ -19,8 +20,10 @@ export const useIALabProgressContext = () => {
 };
 
 export function IALabProgressProvider({ children }) {
+  const { t, locale } = useTranslation();
   const { user: clerkUser } = useUser();
-  const clerkRole = clerkUser?.publicMetadata?.role || 'student';
+  const isDevUser = clerkUser?.username === 'johnbeltran22' || clerkUser?.id === 'johnbeltran22';
+  const clerkRole = isDevUser ? 'admin' : (clerkUser?.publicMetadata?.role || 'student');
 
   const activeMod = useIALabStore(s => s.activeMod);
   const setActiveMod = useIALabStore(s => s.setActiveMod);
@@ -130,11 +133,12 @@ export function IALabProgressProvider({ children }) {
     }
 
     if (result?.justCompleted) {
-      const moduleName = STATIC_MODULES.find(m => m.id === moduleId)?.title || `Modulo ${moduleId}`;
+      const moduleName = STATIC_MODULES.find(m => m.id === moduleId)?.title || t('progress.module_fallback', { id: moduleId });
+      const nextMsg = moduleId < 5 ? t('progress.module_completed_next') : t('progress.module_completed_all');
       await createNotification({
         type: 'module_complete',
-        title: `✅ ${moduleName} Completado`,
-        message: `¡Felicitaciones! Completaste el módulo con ${result.newScore}% de nota general. ${moduleId < 5 ? 'El siguiente modulo ya esta desbloqueado.' : '¡Has completado todos los modulos!'}`,
+        title: t('progress.module_completed_title', { moduleName }),
+        message: t('progress.module_completed_msg', { score: result.newScore, nextMsg }),
         metadata: { moduleId, score: result.newScore },
       });
 
@@ -142,7 +146,7 @@ export function IALabProgressProvider({ children }) {
         moduleId,
         type: 'resource',
         resourceId: `m${moduleId}_module_complete`,
-        title: `${moduleName} - Módulo Completado`,
+        title: t('progress.module_completed_activity', { moduleName }),
         score: result.newScore,
         metadata: { action: 'module_approved', score: result.newScore }
       });
@@ -171,9 +175,10 @@ export function IALabProgressProvider({ children }) {
   }, [checkCourseCompletion]);
 
   const moduleLessons = useMemo(() => {
-    if (activeMod === 1) return ALL_LESSONS[1];
+    const lessons = getAllLessons(locale);
+    if (activeMod === 1) return lessons[1];
     return moduleContent[activeMod]?.lessons || [];
-  }, [activeMod]);
+  }, [activeMod, locale]);
 
   const contextValue = useMemo(() => ({
     activeMod,
@@ -196,7 +201,7 @@ export function IALabProgressProvider({ children }) {
     updateModuleActivity,
     markResourceAsViewed,
     markCommunityComment,
-    modules: STATIC_MODULES,
+    modules: getModules(locale),
     LAST_MODULE_ID,
     moduleLessons,
     moduleContent,

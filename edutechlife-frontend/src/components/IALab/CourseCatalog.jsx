@@ -5,10 +5,20 @@ import { Icon } from '../../utils/iconMapping.jsx';
 import { categories, courses } from './data/landingPageData';
 import { fadeInUp, staggerContainer } from './constants/landingAnimations';
 import CourseCard from './CourseCard';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const CourseCatalog = () => {
+  const { t } = useTranslation();
   const [activeCategory, setActiveCategory] = useState('all');
   const { isSignedIn } = useAuth();
+
+  const categoryLabels = {
+    all: t('ialab.course_catalog.category_all'),
+    'ia-generativa': t('ialab.course_catalog.category_generativa'),
+    automatizaciones: t('ialab.course_catalog.category_automatizaciones'),
+    productividad: t('ialab.course_catalog.category_productividad'),
+    desarrollo: t('ialab.course_catalog.category_desarrollo'),
+  };
 
   const filteredCourses = activeCategory === 'all'
     ? courses
@@ -25,10 +35,10 @@ const CourseCatalog = () => {
           className="text-center mb-12"
         >
           <h2 className="font-display text-3xl md:text-4xl font-bold text-petroleum mb-4">
-            Catálogo de Cursos
+            {t('ialab.course_catalog.title')}
           </h2>
           <p className="font-body text-lg text-slate-600 max-w-2xl mx-auto">
-            Explora nuestro catálogo de cursos y comienza a transformar tu futuro profesional
+            {t('ialab.course_catalog.subtitle')}
           </p>
         </motion.div>
 
@@ -53,7 +63,7 @@ const CourseCatalog = () => {
                 />
               )}
               <Icon name={category.icon} className="w-4 h-4 relative z-10" />
-              <span className="relative z-10">{category.label}</span>
+              <span className="relative z-10">{categoryLabels[category.id]}</span>
             </motion.button>
           ))}
         </div>

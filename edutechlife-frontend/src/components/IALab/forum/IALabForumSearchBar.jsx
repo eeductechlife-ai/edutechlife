@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Icon } from '../../../utils/iconMapping.jsx';
+import { useTranslation } from '../../../i18n/I18nProvider';
 
 const IALabForumSearchBar = ({ onSearch }) => {
   const [query, setQuery] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef(null);
   const debounceRef = useRef(null);
+  const { t } = useTranslation();
 
   const handleChange = (value) => {
     setQuery(value);
@@ -40,7 +42,7 @@ const IALabForumSearchBar = ({ onSearch }) => {
           onChange={(e) => handleChange(e.target.value)}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          placeholder="Buscar en la comunidad..."
+          placeholder={t('ialab.forum.search_bar.placeholder')}
           className="flex-1 bg-transparent text-sm text-slate-700 dark:text-slate-200 placeholder:text-slate-600 focus:outline-none"
           maxLength={200}
         />

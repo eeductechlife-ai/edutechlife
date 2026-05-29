@@ -1,8 +1,11 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const ScreenshotProtectionOverlay = ({ isOpen }) => {
+  const { t } = useTranslation();
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -14,7 +17,7 @@ const ScreenshotProtectionOverlay = ({ isOpen }) => {
           className="fixed inset-0 z-[9998] bg-black/70 backdrop-blur-md flex items-center justify-center select-none"
           style={{ WebkitUserSelect: 'none', userSelect: 'none' }}
           role="alert"
-          aria-label="Protección anti-captura activada"
+          aria-label={t('ialab.screenshot_protection.aria_label')}
         >
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <span
@@ -33,7 +36,7 @@ const ScreenshotProtectionOverlay = ({ isOpen }) => {
                   transform: `rotate(${i % 2 === 0 ? -15 : 15}deg)`,
                 }}
               >
-                PROTECCIÓN ACTIVA
+                {t('ialab.screenshot_protection.title')}
               </span>
             ))}
           </div>
@@ -54,7 +57,7 @@ const ScreenshotProtectionOverlay = ({ isOpen }) => {
               transition={{ delay: 0.2 }}
               className="text-xl font-bold text-white mb-2 font-montserrat"
             >
-              Protección anti-captura activada
+              {t('ialab.screenshot_protection.title')}
             </motion.h3>
 
             <motion.p
@@ -63,8 +66,7 @@ const ScreenshotProtectionOverlay = ({ isOpen }) => {
               transition={{ delay: 0.3 }}
               className="text-sm text-white/60 max-w-sm leading-relaxed"
             >
-              La pantalla ha sido bloqueada temporalmente mientras cambias de ventana. 
-              Vuelve al examen para continuar.
+              {t('ialab.screenshot_protection.description')}
             </motion.p>
 
             <motion.div
@@ -74,7 +76,7 @@ const ScreenshotProtectionOverlay = ({ isOpen }) => {
               className="mt-8 flex items-center gap-2 text-white/40 text-xs"
             >
               <div className="w-2 h-2 rounded-full bg-corporate animate-pulse" />
-              <span>Esperando tu regreso...</span>
+              <span>{t('ialab.screenshot_protection.waiting')}</span>
             </motion.div>
           </div>
         </motion.div>

@@ -15,7 +15,7 @@ import ValerioChatInput from './ValerioChatInput';
 
 const VALERIO_MEMORY_KEY = 'ialab_valerio_conversation';
 
-const PROMPT_VALERIO_DOCENTE = `Eres Valerio, el coach de IA de Edutechlife.
+const PROMPT_VALERIO_DOCENTE_ES = `Eres Valerio, el coach de IA de Edutechlife.
 
 IDENTIDAD:
 - Eres un Psicólogo Experto en Metodología VAK del programa Edutechlife
@@ -40,8 +40,32 @@ INSTRUCCIONES:
 7. Sé cálido y motivador, como un coach personal
 8. Usa el nombre del estudiante de forma natural y esporádica. No lo repitas en cada respuesta ni de forma forzada. Úsalo como lo haría un coach real: para dar apertura, reconocer un logro, o generar cercanía cuando sea pertinente.`;
 
+const PROMPT_VALERIO_DOCENTE_EN = `You are Valerio, the AI coach from Edutechlife.
+
+IDENTITY:
+- You are an Expert Psychologist in VAK Methodology from the Edutechlife program
+- You have over 10 years of experience with students
+- You are an expert in educational coaching with AI
+
+PERSONALITY:
+- Warm, approachable and motivating like a personal trainer
+- Explain complex concepts simply with practical examples
+- Detect the student's emotional state and adapt your response
+- Use clear, positive and constructive language
+- Always relate your answers to the IALab course content
+
+INSTRUCTIONS:
+1. Answer using the module content provided below as context
+2. Be specific: mention topic names, videos and available resources
+3. If asked about a topic, explain it using the module concepts
+4. Recommend specific videos, PDFs or OVAs from the module based on the question
+5. If you don't know something, say so honestly and suggest reviewing the material
+6. Respond in English, maximum 3 paragraphs
+7. Be warm and motivating, like a personal coach
+8. Use the student's name naturally and sparingly. Do not repeat it in every answer or force it. Use it as a real coach would: to open a conversation, acknowledge an achievement, or create rapport when appropriate.`;
+
 const IALabValerioPanel = ({ isOpen, onClose }) => {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const {
     activeMod, modules, completedModules
   } = useIALabProgressContext();
@@ -66,7 +90,7 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
   const currentModule = modules.find(m => m.id === activeMod);
   const userLevel = completedModules.length;
 
-  const voice = useValerioVoice(isOpen, setUserInput);
+  const voice = useValerioVoice(isOpen, setUserInput, locale);
 
   useEffect(() => {
     if (!isOpen) {
@@ -84,58 +108,72 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
   }, [conversation]);
 
   useEffect(() => {
+    const isEn = locale === 'en';
     const actions = [
       {
         id: 'explain_topic',
         label: t('ialab.valerio.quick_explain_topic'),
         icon: 'fa-book',
-        prompt: `Explica el tema principal del módulo "${currentModule?.title}" de manera clara y concisa.`
+        prompt: isEn ? `Explain the main topic of the "${currentModule?.title}" module clearly and concisely.` : `Explica el tema principal del módulo "${currentModule?.title}" de manera clara y concisa.`
       },
       {
         id: 'give_example',
         label: t('ialab.valerio.quick_give_example'),
         icon: 'fa-lightbulb',
-        prompt: `Proporciona un ejemplo práctico relacionado con "${currentModule?.challenge || 'ingeniería de prompts'}".`
+        prompt: isEn ? `Provide a practical example related to "${currentModule?.challenge || 'prompt engineering'}".` : `Proporciona un ejemplo práctico relacionado con "${currentModule?.challenge || 'ingeniería de prompts'}".`
       },
       {
         id: 'help_challenge',
         label: t('ialab.valerio.quick_help_challenge'),
         icon: 'fa-puzzle-piece',
-        prompt: `¿Cómo puedo abordar el desafío "${currentModule?.challenge}" de manera efectiva?`
+        prompt: isEn ? `How can I effectively approach the "${currentModule?.challenge}" challenge?` : `¿Cómo puedo abordar el desafío "${currentModule?.challenge}" de manera efectiva?`
       },
       {
         id: 'study_tips',
         label: t('ialab.valerio.quick_study_tips'),
         icon: 'fa-graduation-cap',
-        prompt: `Dame consejos de estudio para el módulo "${currentModule?.title}" (nivel ${userLevel < 3 ? 'principiante' : userLevel < 6 ? 'intermedio' : 'avanzado'}).`
+        prompt: isEn ? `Give me study tips for the "${currentModule?.title}" module (level ${userLevel < 3 ? 'beginner' : userLevel < 6 ? 'intermediate' : 'advanced'}).` : `Dame consejos de estudio para el módulo "${currentModule?.title}" (nivel ${userLevel < 3 ? 'principiante' : userLevel < 6 ? 'intermedio' : 'avanzado'}).`
       }
     ];
     setQuickActions(actions);
-  }, [currentModule, userLevel]);
+  }, [currentModule, userLevel, locale]);
 
   const buildValerioSystemPrompt = () => {
+    const isEn = locale === 'en';
     const currentModuleId = currentModule?.id || 1;
     const currentModuleData = COURSE_KNOWLEDGE.find(m => m.id === currentModuleId);
     const moduleContent = currentModuleData
       ? JSON.stringify(currentModuleData, null, 2)
-      : 'No hay información del módulo disponible.';
+      : isEn ? 'No module information available.' : 'No hay información del módulo disponible.';
 
-    return `${PROMPT_VALERIO_DOCENTE}
+    const prompt = isEn ? PROMPT_VALERIO_DOCENTE_EN : PROMPT_VALERIO_DOCENTE_ES;
 
-## MÓDULO ACTUAL DEL ESTUDIANTE:
+    return `${prompt}
+
+## ${isEn ? 'CURRENT STUDENT MODULE' : 'MÓDULO ACTUAL DEL ESTUDIANTE'}:
 ${moduleContent}
 
-## CONTEXTO DEL ESTUDIANTE:
-Nombre: ${studentName || 'Estudiante'}
-Nivel: ${userLevel < 3 ? 'Principiante' : userLevel < 6 ? 'Intermedio' : 'Avanzado'}
-Módulos completados: ${completedModules.length}`;
+## ${isEn ? 'STUDENT CONTEXT' : 'CONTEXTO DEL ESTUDIANTE'}:
+${isEn ? 'Name' : 'Nombre'}: ${studentName || (isEn ? 'Student' : 'Estudiante')}
+${isEn ? 'Level' : 'Nivel'}: ${userLevel < 3 ? (isEn ? 'Beginner' : 'Principiante') : userLevel < 6 ? (isEn ? 'Intermediate' : 'Intermedio') : (isEn ? 'Advanced' : 'Avanzado')}
+${isEn ? 'Completed modules' : 'Módulos completados'}: ${completedModules.length}`;
   };
 
-  const generateFallbackResponse = (inputText) => {
+  const generateFallbackResponse = (inputText, locale) => {
+    const isEn = locale === 'en';
     const text = inputText.toLowerCase();
 
-    if (text.includes('explic') || text.includes('qué es')) {
-      const topicList = currentModule?.topics?.join(', ') || 'conceptos clave de IA';
+    if (text.includes('explic') || text.includes('qu') || text.includes('what') || text.includes('explain') || text.includes('how')) {
+      const topicList = currentModule?.topics?.join(', ') || (isEn ? 'key AI concepts' : 'conceptos clave de IA');
+      if (isEn) {
+        return `Of course! Let's take it step by step.
+
+We are in the ${currentModule?.title || 'this topic'} module, where we explore ${topicList}. The idea is to understand how each concept works and why it matters, not just memorize it.
+
+Since you are at ${userLevel < 3 ? 'beginner' : userLevel < 6 ? 'intermediate' : 'advanced'} level, I suggest you ${userLevel < 3 ? 'start with the basics: get familiar with the fundamentals and practice with simple examples' : userLevel < 6 ? 'dive deeper into intermediate techniques and apply them to real cases' : 'explore advanced applications. You are at a level where you can innovate and optimize'}.
+
+Tell me, is there anything specific about this topic you would like me to explain in more detail?`;
+      }
       return `¡Claro que sí! Vamos a verlo con calma.
 
 Estamos en el módulo de ${currentModule?.title || 'este tema'}, donde exploramos ${topicList}. La idea es que entiendas cómo funciona cada concepto y por qué es importante, no solo que lo memorices.
@@ -145,7 +183,16 @@ Como vas en nivel ${userLevel < 3 ? 'principiante' : userLevel < 6 ? 'intermedio
 Dime, ¿hay algo en particular de este tema que te gustaría que te explique con más detalle?`;
     }
 
-    if (text.includes('ejemplo') || text.includes('cómo hacer')) {
+    if (text.includes('ejemplo') || text.includes('example') || text.includes('cómo') || text.includes('how to')) {
+      if (isEn) {
+        return `Great question, I love that you want to see this in action.
+
+Let's think about this module's challenge: ${currentModule?.challenge || 'creating something practical with what you have learned'}. One way to approach it is:
+
+First, ask yourself: what exactly do I want to achieve? Having a clear goal is key. Then, think about the role you need the AI to take on and give it enough context to understand your situation.
+
+Are you seeing where this is going? If you want, we can build an example together step by step.`;
+      }
       return `Buena pregunta, me encanta que quieras ver esto en acción.
 
 Pensemos en el desafío de este módulo: ${currentModule?.challenge || 'crear algo práctico con lo aprendido'}. Una forma de abordarlo es así:
@@ -155,6 +202,13 @@ Primero, pregúntate: ¿qué quiero lograr exactamente? Tener claro el objetivo 
 ¿Vas viendo por dónde va la cosa? Si quieres, podemos construir un ejemplo juntos paso a paso.`;
     }
 
+    if (isEn) {
+      return `I understand your question about "${inputText}". Let me think about how I can best help you with that.
+
+Considering you are in ${currentModule?.title || 'this module'}, I suggest you review the material you already have available, as it contains the foundations to answer your question. Then, practice with related examples — practice is what really solidifies concepts.
+
+Would you like me to explain a specific concept or would you prefer a practical example related to your question? Whatever works best for you, I am here for that.`;
+    }
     return `Entiendo tu pregunta sobre "${inputText}". Déjame pensar cómo puedo ayudarte mejor con eso.
 
 Considerando que estás en ${currentModule?.title || 'este módulo'}, te sugiero que revises el material que ya tienes disponible, porque allí encuentras las bases para responder tu duda. Luego, practica con ejemplos relacionados — la práctica es la que realmente fija los conceptos.
@@ -169,7 +223,13 @@ Considerando que estás en ${currentModule?.title || 'este módulo'}, te sugiero
 
       if (!alreadyWelcomed) {
         useIALabStore.getState().setValerioWelcomed();
-        const welcomeMessage = `¡Hola${studentName ? ', ' + studentName : ''}! Qué gusto tenerte por acá. Soy Valerio, tu coach, y veo que estás en el módulo "${currentModule?.title}" — ¡qué tema tan interesante!
+        const welcomeMessage = locale === 'en'
+          ? `Hello${studentName ? ', ' + studentName : ''}! Great to have you here. I am Valerio, your coach, and I see you are in the "${currentModule?.title}" module — what an interesting topic!
+
+No matter if this is new to you, you are at ${userLevel < 3 ? 'beginner' : userLevel < 6 ? 'intermediate' : 'advanced'} level, and we will discover it together.
+
+Ask me anything: explain a topic, give you an example, help you with the challenge, or just chat about what you are learning. Where would you like to start?`
+          : `¡Hola${studentName ? ', ' + studentName : ''}! Qué gusto tenerte por acá. Soy Valerio, tu coach, y veo que estás en el módulo "${currentModule?.title}" — ¡qué tema tan interesante!
 
 No importa si esto es nuevo para ti, estamos en nivel ${userLevel < 3 ? 'principiante' : userLevel < 6 ? 'intermedio' : 'avanzado'}, y lo iremos descubriendo juntos.
 
@@ -238,7 +298,7 @@ Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, ayudarte con e
       speakTextConversational(response, 'valerio', () => setValerioState('idle'));
     } catch (error) {
       console.warn('⚠️ API DeepSeek no disponible, usando respuesta local:', error.message);
-      const fallbackResponse = generateFallbackResponse(inputText);
+      const fallbackResponse = generateFallbackResponse(inputText, locale);
 
       const valerioMessage = {
         id: `valerio_${Date.now()}`,

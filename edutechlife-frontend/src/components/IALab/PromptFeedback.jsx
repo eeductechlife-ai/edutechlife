@@ -1,11 +1,13 @@
 import React from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
+import { useTranslation } from '../../i18n/I18nProvider';
 import { FORUM_TYPOGRAPHY, FORUM_EFFECTS, cn } from '../forum/forumDesignSystem';
 
 /**
  * Componente para mostrar feedback educativo sobre la optimización de prompts
  */
 const PromptFeedback = ({ feedback, technique, analysis, onCopy }) => {
+  const { t } = useTranslation();
   if (!feedback || !technique || !analysis) return null;
 
   const { qualityAssessment, improvementsMade, educationalTips, similarExample, nextSteps } = feedback;
@@ -34,12 +36,12 @@ const PromptFeedback = ({ feedback, technique, analysis, onCopy }) => {
                 FORUM_TYPOGRAPHY.BODY.SM,
                 "text-slate-600"
               )}>
-                Puntuación: {qualityAssessment.score}/100
+                {t('ialab.prompt_feedback.score', { score: qualityAssessment.score })}
               </p>
             </div>
           </div>
           <div className="text-right">
-            <div className="text-sm text-slate-500">Técnica aplicada</div>
+            <div className="text-sm text-slate-500">{t('ialab.prompt_feedback.applied_technique')}</div>
             <div className="flex items-center gap-2">
               <div className="text-lg">{technique.icon}</div>
               <span className={cn(
@@ -64,9 +66,9 @@ const PromptFeedback = ({ feedback, technique, analysis, onCopy }) => {
                 {value}/100
               </div>
               <div className="text-xs text-slate-600 capitalize">
-                {key === 'clarity' ? 'Claridad' :
-                 key === 'specificity' ? 'Especificidad' :
-                 key === 'context' ? 'Contexto' : 'Estructura'}
+                {key === 'clarity' ? t('ialab.synthesizer.metric_clarity') :
+                 key === 'specificity' ? t('ialab.synthesizer.metric_precision') :
+                 key === 'context' ? t('ialab.synthesizer.metric_context') : t('ialab.synthesizer.structure_label')}
               </div>
             </div>
           ))}
@@ -122,7 +124,7 @@ const PromptFeedback = ({ feedback, technique, analysis, onCopy }) => {
               FORUM_TYPOGRAPHY.SEMIBOLD,
               "text-green-800"
             )}>
-              Mejoras aplicadas
+              {t('ialab.prompt_feedback.improvements')}
             </h4>
           </div>
           <ul className="space-y-2">
@@ -154,7 +156,7 @@ const PromptFeedback = ({ feedback, technique, analysis, onCopy }) => {
               FORUM_TYPOGRAPHY.SEMIBOLD,
               "text-blue-800"
             )}>
-              Consejos para mejorar
+              {t('ialab.prompt_feedback.tips')}
             </h4>
           </div>
           <ul className="space-y-3">
@@ -188,7 +190,7 @@ const PromptFeedback = ({ feedback, technique, analysis, onCopy }) => {
               FORUM_TYPOGRAPHY.SEMIBOLD,
               "text-purple-800"
             )}>
-              Ejemplo relacionado
+              {t('ialab.prompt_feedback.related_example')}
             </h4>
           </div>
           
@@ -199,7 +201,7 @@ const PromptFeedback = ({ feedback, technique, analysis, onCopy }) => {
                 FORUM_TYPOGRAPHY.MEDIUM,
                 "text-purple-900 mb-1"
               )}>
-                Prompt original:
+                {t('ialab.prompt_feedback.original_prompt')}
               </p>
               <div className="p-3 bg-white/50 rounded-lg border border-purple-200">
                 <p className={cn(
@@ -217,7 +219,7 @@ const PromptFeedback = ({ feedback, technique, analysis, onCopy }) => {
                 FORUM_TYPOGRAPHY.MEDIUM,
                 "text-purple-900 mb-1"
               )}>
-                Prompt optimizado:
+                {t('ialab.prompt_feedback.optimized_prompt')}
               </p>
               <div className="p-3 bg-white/50 rounded-lg border border-purple-200">
                 <p className={cn(
@@ -235,7 +237,7 @@ const PromptFeedback = ({ feedback, technique, analysis, onCopy }) => {
                 FORUM_TYPOGRAPHY.MEDIUM,
                 "text-purple-900 mb-1"
               )}>
-                Mejoras clave:
+                {t('ialab.prompt_feedback.key_improvements')}
               </p>
               <div className="flex flex-wrap gap-2">
                 {similarExample.improvements.map((imp, index) => (
@@ -265,7 +267,7 @@ const PromptFeedback = ({ feedback, technique, analysis, onCopy }) => {
               FORUM_TYPOGRAPHY.SEMIBOLD,
               "text-amber-800"
             )}>
-              Próximos pasos
+              {t('ialab.prompt_feedback.next_steps')}
             </h4>
           </div>
           <ol className="space-y-3">
@@ -299,7 +301,7 @@ const PromptFeedback = ({ feedback, technique, analysis, onCopy }) => {
               FORUM_TYPOGRAPHY.SEMIBOLD,
               "text-red-800"
             )}>
-              Problemas identificados
+              {t('ialab.prompt_feedback.identified_problems')}
             </h4>
           </div>
           <div className="space-y-3">
@@ -318,7 +320,7 @@ const PromptFeedback = ({ feedback, technique, analysis, onCopy }) => {
                     FORUM_TYPOGRAPHY.BODY.XS,
                     "text-red-700"
                   )}>
-                    Sugerencia: {problem.suggestion}
+                    {t('ialab.prompt_feedback.suggestion', { text: problem.suggestion })}
                   </p>
                 </div>
               </div>

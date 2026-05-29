@@ -1,7 +1,9 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
+import { useTranslation } from '../i18n/I18nProvider';
 
 const AutomationROICalculator = ({ onGeneratePlan }) => {
+  const { t } = useTranslation();
   const [inputs, setInputs] = useState({
     ingresos: 500000,
     costosOperativos: 40000,
@@ -101,41 +103,41 @@ const AutomationROICalculator = ({ onGeneratePlan }) => {
     <div className="max-w-4xl mx-auto">
       <div className="grid md:grid-cols-2 gap-8">
         <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 md:p-8">
-          <h3 className="text-lg font-bold text-[#004B63] mb-6">Datos de tu Empresa</h3>
+          <h3 className="text-lg font-bold text-[#004B63] mb-6">{t('automation.roi.company_data')}</h3>
 
-          <Slider label="Ingresos Anuales" value={inputs.ingresos} min={100000} max={5000000} step={10000} unit="" field="ingresos" />
-          <Slider label="Costos Operativos/mes" value={inputs.costosOperativos} min={5000} max={200000} step={1000} unit="" field="costosOperativos" color="#66CCCC" />
-          <Slider label="Empleados" value={inputs.empleados} min={5} max={500} step={1} unit="" field="empleados" color="#004B63" />
-          <Slider label="Horas manuales/semana/persona" value={inputs.horasManuales} min={5} max={60} step={1} unit="h" field="horasManuales" color="#4DA8C4" />
-          <Slider label="Eficiencia esperada con IA" value={inputs.eficiencia} min={10} max={80} step={5} unit="%" field="eficiencia" color="#10B981" />
+          <Slider label={t('automation.roi.slider_ingresos')} value={inputs.ingresos} min={100000} max={5000000} step={10000} unit="" field="ingresos" />
+          <Slider label={t('automation.roi.slider_costos')} value={inputs.costosOperativos} min={5000} max={200000} step={1000} unit="" field="costosOperativos" color="#66CCCC" />
+          <Slider label={t('automation.roi.slider_empleados')} value={inputs.empleados} min={5} max={500} step={1} unit="" field="empleados" color="#004B63" />
+          <Slider label={t('automation.roi.slider_horas')} value={inputs.horasManuales} min={5} max={60} step={1} unit="h" field="horasManuales" color="#4DA8C4" />
+          <Slider label={t('automation.roi.slider_eficiencia')} value={inputs.eficiencia} min={10} max={80} step={5} unit="%" field="eficiencia" color="#10B981" />
 
           <div className="mt-6 pt-6 border-t border-slate-100">
             <div className="flex items-center gap-2 text-xs text-slate-400 mb-3">
               <svg className="w-4 h-4 text-[#4DA8C4]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              Los cálculos se basan en estándares de industria y casos reales de automatización.
+              {t('automation.roi.disclaimer')}
             </div>
           </div>
         </div>
 
         <div>
           <div className="grid grid-cols-2 gap-3 mb-4">
-            <MetricCard label="Inversión" value={results.inversion} color="#4DA8C4" delay={0} icon="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            <MetricCard label="Ahorro Anual" value={results.ahorroAnual} color="#10B981" delay={0.1} icon="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+            <MetricCard label={t('automation.roi.metric_inversion')} value={results.inversion} color="#4DA8C4" delay={0} icon="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <MetricCard label={t('automation.roi.metric_ahorro')} value={results.ahorroAnual} color="#10B981" delay={0.1} icon="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
           </div>
           <div className="grid grid-cols-2 gap-3 mb-4">
-            <MetricCard label="ROI" value={results.roi} sub={`${results.roi}x de retorno`} color="#004B63" delay={0.2} icon="M13 10V3L4 14h7v7l9-11h-7z" />
-            <MetricCard label="Payback" value={results.payback} sub="meses" color="#66CCCC" delay={0.3} icon="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <MetricCard label={t('automation.roi.metric_roi')} value={results.roi} sub={`${results.roi}x ${t('automation.roi.retorno')}`} color="#004B63" delay={0.2} icon="M13 10V3L4 14h7v7l9-11h-7z" />
+            <MetricCard label={t('automation.roi.metric_payback')} value={results.payback} sub={t('automation.roi.meses')} color="#66CCCC" delay={0.3} icon="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
           </div>
 
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
-            <h4 className="text-sm font-bold text-[#004B63] mb-4">Comparativa Antes vs Después</h4>
+            <h4 className="text-sm font-bold text-[#004B63] mb-4">{t('automation.roi.comparativa')}</h4>
 
             <div className="space-y-3">
               <div>
                 <div className="flex justify-between text-xs text-slate-500 mb-1">
-                  <span>Costo Operativo Anual</span>
+                  <span>{t('automation.roi.costo_actual')}</span>
                   <span className="font-semibold text-[#004B63]">${results.costoActual?.toLocaleString()}</span>
                 </div>
                 <div className="w-full bg-slate-100 rounded-full h-2">
@@ -144,7 +146,7 @@ const AutomationROICalculator = ({ onGeneratePlan }) => {
               </div>
               <div>
                 <div className="flex justify-between text-xs text-slate-500 mb-1">
-                  <span>Con Automatización IA</span>
+                  <span>{t('automation.roi.costo_futuro')}</span>
                   <span className="font-semibold text-[#10B981]">${results.costoFuturo?.toLocaleString()}</span>
                 </div>
                 <div className="w-full bg-slate-100 rounded-full h-2">
@@ -160,8 +162,8 @@ const AutomationROICalculator = ({ onGeneratePlan }) => {
 
             <div className="mt-4 pt-4 border-t border-slate-100">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-slate-500">Productividad recuperada:</span>
-                <span className="text-sm font-bold text-[#10B981]">{results.productividadGanada?.toLocaleString()} hrs/año</span>
+                <span className="text-sm text-slate-500">{t('automation.roi.productividad')}</span>
+                <span className="text-sm font-bold text-[#10B981]">{results.productividadGanada?.toLocaleString()} {t('automation.roi.hrs_anio')}</span>
               </div>
             </div>
 
@@ -172,7 +174,7 @@ const AutomationROICalculator = ({ onGeneratePlan }) => {
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
               </svg>
-              Generar Plan con estos Datos
+              {t('automation.roi.btn_generar')}
             </button>
           </div>
         </div>

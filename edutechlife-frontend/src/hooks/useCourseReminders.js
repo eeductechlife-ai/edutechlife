@@ -2,6 +2,7 @@ import { useEffect, useRef, useCallback } from 'react';
 import { useUser } from '@clerk/react';
 import { useNotification } from '../context/NotificationContext';
 import { useProgressContext } from '../context/ProgressContext';
+import { useTranslation } from '../i18n/I18nProvider';
 
 const MODULE_NAMES = {
   1: 'Ingenieria de Prompts',
@@ -17,6 +18,7 @@ const LAST_NOTIFIED_ABSENCE = 'ialab_last_notified_absence';
 const NOTIFIED_EXAMS_KEY = 'ialab_notified_exams';
 
 export const useCourseReminders = () => {
+  const { t } = useTranslation();
   const { user } = useUser();
   const { createNotification } = useNotification();
   const { completedModules, completedExams, courseProgress } = useProgressContext();
@@ -66,24 +68,24 @@ export const useCourseReminders = () => {
     const nextModule = getNextModule(completedModules);
     if (!nextModule) return;
 
-    const moduleName = MODULE_NAMES[nextModule] || `Modulo ${nextModule}`;
+    const moduleName = MODULE_NAMES[nextModule] || t('progress.module_fallback', { id: nextModule });
     const lastTopic = getLastViewedTopic();
 
     let title, message;
 
     const topicContext = lastTopic
-      ? `Tu ultima clase fue: "${lastTopic.resourceTitle}" en ${lastTopic.moduleName}.`
+      ? t('reminder.topic_context', { title: lastTopic.resourceTitle, moduleName: lastTopic.moduleName })
       : '';
 
     if (daysFloor >= 7) {
-      title = '¡Te extranamos!';
-      message = `Han pasado ${daysFloor} dias sin estudiar. ${topicContext} ${moduleName} te esta esperando. ¡Vuelve y continua tu progreso!`;
+      title = t('reminder.inactivity_7_title');
+      message = t('reminder.inactivity_7_msg', { days: daysFloor, topicContext, moduleName });
     } else if (daysFloor >= 4) {
-      title = '¡No te pierdas!';
-      message = `${daysFloor} dias sin avanzar. ${topicContext} Retoma ${moduleName} y sigue aprendiendo.`;
+      title = t('reminder.inactivity_4_title');
+      message = t('reminder.inactivity_4_msg', { days: daysFloor, topicContext, moduleName });
     } else {
-      title = '¡Vuelve a aprender!';
-      message = `${daysFloor} dias sin estudiar. ${topicContext} Continua con: ${moduleName}`;
+      title = t('reminder.inactivity_2_title');
+      message = t('reminder.inactivity_2_msg', { days: daysFloor, topicContext, moduleName });
     }
 
     await createNotification({
@@ -124,12 +126,12 @@ export const useCourseReminders = () => {
     for (const modId of incompleteExams) {
       if (notifiedExams.includes(modId)) continue;
 
-      const moduleName = MODULE_NAMES[modId] || `Modulo ${modId}`;
+      const moduleName = MODULE_NAMES[modId] || t('progress.module_fallback', { id: modId });
 
       await createNotification({
         type: 'exam_reminder',
-        title: 'Desafio pendiente',
-        message: `Tienes el desafio de ${moduleName} sin completar. ¡No lo dejes para despues!`,
+        title: t('reminder.pending_challenge_title'),
+        message: t('reminder.pending_challenge_msg', { moduleName }),
         metadata: { moduleId: modId },
       });
 

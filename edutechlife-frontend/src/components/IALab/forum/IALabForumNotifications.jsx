@@ -2,23 +2,24 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import useForumNotifications from '../../../hooks/IALab/forum/useForumNotifications';
+import { useTranslation } from '../../../i18n/I18nProvider';
 
 const getInitials = (name) => {
   if (!name) return '?';
   return name.split(' ').map(p => p[0]).join('').toUpperCase().substring(0, 2);
 };
 
-const formatRelativeTime = (dateString) => {
+const formatRelativeTime = (dateString, t, locale) => {
   const date = new Date(dateString);
   const now = new Date();
   const diffMins = Math.floor((now - date) / 60000);
-  if (diffMins < 1) return 'Ahora';
-  if (diffMins < 60) return `Hace ${diffMins}min`;
+  if (diffMins < 1) return t('ialab.forum.notifications.now');
+  if (diffMins < 60) return t('ialab.forum.notifications.min_ago', { mins: diffMins });
   const diffHours = Math.floor(diffMins / 60);
-  if (diffHours < 24) return `Hace ${diffHours}h`;
+  if (diffHours < 24) return t('ialab.forum.notifications.hour_ago', { hours: diffHours });
   const diffDays = Math.floor(diffHours / 24);
-  if (diffDays < 7) return `Hace ${diffDays}d`;
-  return date.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+  if (diffDays < 7) return t('ialab.forum.notifications.day_ago', { days: diffDays });
+  return date.toLocaleDateString(locale === 'en' ? 'en-US' : 'es-ES', { day: 'numeric', month: 'short' });
 };
 
 const NOTIFICATION_ICONS = {
@@ -29,12 +30,15 @@ const NOTIFICATION_ICONS = {
   answer: { icon: 'fa-check-circle', color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-900/20' },
 };
 
-const NOTIFICATION_LABELS = {
-  reply: 'te respondió',
-  like: 'le gusta tu post',
-  mention: 'te mencionó',
-  system: 'Sistema',
-  answer: 'respondió tu pregunta',
+const getNotificationLabel = (type, t) => {
+  const labels = {
+    reply: t('ialab.forum.notifications.label_reply'),
+    like: t('ialab.forum.notifications.label_like'),
+    mention: t('ialab.forum.notifications.label_mention'),
+    system: t('ialab.forum.notifications.label_system'),
+    answer: t('ialab.forum.notifications.label_answer'),
+  };
+  return labels[type] || t('ialab.forum.notifications.fallback');
 };
 
 const IALabForumNotifications = () => {
@@ -42,6 +46,7 @@ const IALabForumNotifications = () => {
   const [isOpen, setIsOpen] = useState(false);
   const triggerRef = useRef(null);
   const panelRef = useRef(null);
+  const { t, locale } = useTranslation();
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -59,7 +64,7 @@ const IALabForumNotifications = () => {
         ref={triggerRef}
         onClick={() => setIsOpen(!isOpen)}
         className="relative flex items-center justify-center w-9 h-9 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 hover:border-petroleum/30 transition-all"
-        aria-label="Notificaciones"
+        aria-label={t('ialab.forum.notifications.aria')}
       >
         <Icon name="fa-bell" className={`text-sm transition-colors ${unreadCount > 0 ? 'text-petroleum' : 'text-slate-600'}`} />
         {unreadCount > 0 && (
@@ -80,13 +85,13 @@ const IALabForumNotifications = () => {
             className="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xl overflow-hidden z-50"
           >
             <div className="flex items-center justify-between p-3 border-b border-slate-100 dark:border-slate-700">
-              <h4 className="text-sm font-bold text-petroleum">Notificaciones</h4>
+              <h4 className="text-sm font-bold text-petroleum">{t('ialab.forum.notifications.title')}</h4>
               {unreadCount > 0 && (
                 <button
                   onClick={markAllAsRead}
                   className="text-[10px] text-corporate hover:text-petroleum font-medium transition-colors"
                 >
-                  Marcar todas leídas
+                  {t('ialab.forum.notifications.mark_all_read')}
                 </button>
               )}
             </div>
@@ -97,7 +102,7 @@ const IALabForumNotifications = () => {
                   <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center mx-auto mb-2">
                     <Icon name="fa-bell-slash" className="text-slate-600" />
                   </div>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">Sin notificaciones</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">{t('ialab.forum.notifications.empty')}</p>
                 </div>
               ) : (
                 <div className="divide-y divide-slate-100 dark:divide-slate-700/50">
@@ -117,12 +122,12 @@ const IALabForumNotifications = () => {
                         <div className="flex-1 min-w-0">
                           <p className="text-xs text-slate-600 dark:text-slate-300 leading-snug">
                             <span className="font-semibold text-slate-800 dark:text-slate-100">
-                              {NOTIFICATION_LABELS[notif.type] || 'Notificación'}
+                              {getNotificationLabel(notif.type, t)}
                             </span>
                             {notif.title && `: ${notif.title}`}
                           </p>
                           <span className="text-[10px] text-slate-600">
-                            {formatRelativeTime(notif.created_at)}
+                            {formatRelativeTime(notif.created_at, t, locale)}
                           </span>
                         </div>
                         {!notif.is_read && (

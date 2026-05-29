@@ -3,7 +3,7 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { X, Loader2 } from 'lucide-react';
 import { useIALabStore } from '../../store/ialabStore';
 import { useSupabase } from '../../hooks/useSupabase';
-import { BADGE_INFO } from '../../data/ialab';
+import { getBadgeInfo } from '../../data/ialab';
 import { Icon } from '../../utils/iconMapping';
 import BadgeCard from './BadgeCard';
 import { getWeekDays } from './useWeekDays';
@@ -63,7 +63,8 @@ const StreakCircle = ({ filled, label, isToday, index, prefersReducedMotion }) =
 
 const StreakDetailsModal = ({ isOpen, onClose }) => {
   const prefersReducedMotion = useReducedMotion();
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
+  const BADGE_INFO = getBadgeInfo(locale);
   const xp = useIALabStore(s => s.xp);
   const streak = useIALabStore(s => s.streak);
   const level = useIALabStore(s => s.getLevel());

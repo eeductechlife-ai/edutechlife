@@ -1,6 +1,7 @@
 import React from 'react';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import IALabForumComment from './IALabForumComment';
+import { useTranslation } from '../../../i18n/I18nProvider';
 
 const IALabForumCommentThread = ({ comments, onReply, depth = 0 }) => {
   if (!comments?.length) return null;

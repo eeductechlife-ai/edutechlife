@@ -6,6 +6,7 @@ import { useIALabProgressContext } from '../../context/IALabContext';
 import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
 import useIALabForum from '../../hooks/IALab/useIALabForum';
 import { cn } from '../forum/forumDesignSystem';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const IALabForumOptimized = ({
     compact = false,
@@ -14,6 +15,7 @@ const IALabForumOptimized = ({
     ...rest
 }) => {
     const { user } = useAuth();
+    const { t } = useTranslation();
     const { activeMod } = useIALabProgressContext();
     const { trackCommunityComment } = useIALabProgress();
     const prefersReducedMotion = useReducedMotion();
@@ -208,17 +210,17 @@ const IALabForumOptimized = ({
                     <div>
                         <div className="flex items-center gap-2">
                             <h3 className="text-lg font-bold text-petroleum">
-                                Comunidad IALab
+                                {t('ialab.forum.optimized.title')}
                             </h3>
                             {showLiveIndicator && (
                                 <span className="flex items-center gap-1 px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[10px] font-semibold rounded-full">
                                     <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full live-pulse" />
-                                    En vivo
+                                    {t('ialab.forum.optimized.live_badge')}
                                 </span>
                             )}
                         </div>
                         <p className="text-xs text-slate-500">
-                            {forumStats.totalPosts} debates &middot; {forumStats.totalLikes} likes
+                            {t('ialab.forum.optimized.stats_line', { posts: forumStats.totalPosts, likes: forumStats.totalLikes })}
                         </p>
                     </div>
                 </div>
@@ -263,7 +265,7 @@ const IALabForumOptimized = ({
                     <div className="flex items-center justify-center h-full">
                         <div className="text-center">
                             <div className="w-8 h-8 border-2 border-petroleum/20 border-t-[#004B63] rounded-full animate-spin mx-auto mb-3" />
-                            <p className="text-sm text-slate-500">Cargando conversaciones...</p>
+                            <p className="text-sm text-slate-500">{t('ialab.forum.optimized.loading')}</p>
                         </div>
                     </div>
                 ) : error ? (
@@ -275,7 +277,7 @@ const IALabForumOptimized = ({
                                 onClick={() => loadForumPosts(initialLimit)}
                                 className="text-xs text-petroleum hover:text-petroleum-dark font-medium"
                             >
-                                Intentar de nuevo
+                                {t('ialab.forum.optimized.retry')}
                             </button>
                         </div>
                     </div>
@@ -286,10 +288,10 @@ const IALabForumOptimized = ({
                                 <Icon name="fa-comment-dots" className="text-petroleum text-xl" />
                             </div>
                             <h4 className="text-sm font-bold text-slate-800 mb-1">
-                                Sé el primero en comentar
+                                {t('ialab.forum.optimized.empty_title')}
                             </h4>
                             <p className="text-xs text-slate-500 max-w-xs mx-auto">
-                                Inicia una conversación sobre IA educativa y prompt engineering
+                                {t('ialab.forum.optimized.empty_desc')}
                             </p>
                         </div>
                     </div>
@@ -329,11 +331,11 @@ const IALabForumOptimized = ({
                                             <div>
                                                 <div className="flex items-center gap-2">
                                                     <span className="text-xs font-bold text-slate-800">
-                                                        {post.profiles?.full_name || 'Usuario'}
+                                                        {post.profiles?.full_name || t('ialab.forum.optimized.user_fallback')}
                                                     </span>
                                                     {post.tags?.includes('Mentor') && (
                                                         <span className="px-1.5 py-0.5 bg-petroleum/5 text-petroleum text-[10px] font-medium rounded-full">
-                                                            Mentor
+                                                            {t('ialab.forum.optimized.mentor_badge')}
                                                         </span>
                                                     )}
                                                 </div>
@@ -407,7 +409,7 @@ const IALabForumOptimized = ({
                                     onClick={handleLoadMore}
                                     className="text-xs text-petroleum hover:text-petroleum-dark font-medium"
                                 >
-                                    Ver {forumPosts.length - initialLimit} mensajes más ↓
+                                    {t('ialab.forum.optimized.show_more', { count: forumPosts.length - initialLimit })}
                                 </button>
                             </div>
                         )}
@@ -439,7 +441,7 @@ const IALabForumOptimized = ({
                                 type="text"
                                 value={newMessage}
                                 onChange={(e) => setNewMessage(e.target.value)}
-                                placeholder="Escribe tu mensaje aquí..."
+                                placeholder={t('ialab.forum.optimized.input_placeholder')}
                                 disabled={isSubmitting || !user}
                                 className={cn(
                                     "w-full px-4 py-3 pr-12",
@@ -487,12 +489,12 @@ const IALabForumOptimized = ({
                             {isSubmitting ? (
                                 <>
                                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                    <span>Enviando...</span>
+                                    <span>{t('ialab.forum.optimized.sending')}</span>
                                 </>
                             ) : (
                                 <>
                                     <Icon name="fa-paper-plane" />
-                                    <span className="hidden sm:inline">Enviar</span>
+                                    <span className="hidden sm:inline">{t('ialab.forum.optimized.send')}</span>
                                 </>
                             )}
                         </motion.button>
@@ -502,8 +504,8 @@ const IALabForumOptimized = ({
                         <div className="mt-2 text-center">
                             <p className="text-xs text-slate-500">
                                 <a href="/auth" className="text-petroleum hover:text-petroleum-dark font-medium">
-                                    Inicia sesión
-                                </a> para participar en la conversación
+                                    {t('ialab.forum.optimized.login_link')}
+                                </a>{t('ialab.forum.optimized.login_prompt')}
                             </p>
                         </div>
                     )}

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useTranslation } from '../../../i18n/I18nProvider';
 
 const IALabForumRichEditor = ({ placeholder, onSubmit, buttonLabel, compact, onCancel }) => {
   const [content, setContent] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { t } = useTranslation();
 
   const handleSubmit = async (e) => {
     e?.preventDefault();
@@ -26,7 +28,7 @@ const IALabForumRichEditor = ({ placeholder, onSubmit, buttonLabel, compact, onC
           value={content}
           onChange={(e) => setContent(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder={placeholder || 'Escribe algo...'}
+          placeholder={placeholder || t('ialab.forum.rich_editor.default_placeholder')}
           className={`w-full px-3 py-2 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl text-sm text-slate-700 dark:text-slate-200 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-corporate/20 focus:border-corporate/30 transition-all resize-none ${
             compact ? 'min-h-[60px]' : 'min-h-[80px]'
           }`}
@@ -39,7 +41,7 @@ const IALabForumRichEditor = ({ placeholder, onSubmit, buttonLabel, compact, onC
 
       <div className="flex items-center justify-between">
         <p className="text-[10px] text-slate-600">
-          <kbd className="px-1 py-0.5 bg-slate-100 dark:bg-slate-700 rounded text-[9px] font-mono">⌘Enter</kbd> para enviar
+          <kbd className="px-1 py-0.5 bg-slate-100 dark:bg-slate-700 rounded text-[9px] font-mono">⌘Enter</kbd>{t('ialab.forum.rich_editor.send_hint')}
         </p>
         <div className="flex items-center gap-1.5">
           {onCancel && (
@@ -48,7 +50,7 @@ const IALabForumRichEditor = ({ placeholder, onSubmit, buttonLabel, compact, onC
               onClick={onCancel}
               className="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
             >
-              Cancelar
+              {t('ialab.forum.rich_editor.cancel')}
             </button>
           )}
           <button
@@ -58,7 +60,7 @@ const IALabForumRichEditor = ({ placeholder, onSubmit, buttonLabel, compact, onC
               compact ? 'text-[11px]' : 'text-xs'
             }`}
           >
-            {isSubmitting ? 'Enviando...' : buttonLabel || 'Enviar'}
+            {isSubmitting ? t('ialab.forum.rich_editor.sending') : buttonLabel || t('ialab.forum.rich_editor.send_default')}
           </button>
         </div>
       </div>

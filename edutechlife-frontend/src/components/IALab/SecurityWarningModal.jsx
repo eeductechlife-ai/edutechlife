@@ -1,32 +1,35 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
+import { useTranslation } from '../../i18n/I18nProvider';
 
-const WARNING_LEVELS = {
+const getWarningLevels = (t) => ({
   1: {
-    title: 'Advertencia de seguridad',
+    title: t('ialab.security_warning.level_1_title'),
     variant: 'warning',
     icon: 'fa-shield-halved',
   },
   2: {
-    title: 'Segunda advertencia',
+    title: t('ialab.security_warning.level_2_title'),
     variant: 'warning',
     icon: 'fa-shield-halved',
   },
   3: {
-    title: 'Última advertencia',
+    title: t('ialab.security_warning.level_3_title'),
     variant: 'danger',
     icon: 'fa-shield-alt',
   },
   penalty: {
-    title: 'Penalización aplicada',
+    title: t('ialab.security_warning.penalty_title'),
     variant: 'danger',
     icon: 'fa-exclamation-triangle',
   },
-};
+});
 
 const SecurityWarningModal = ({ isOpen, message, level = 1, onClose }) => {
-  const config = WARNING_LEVELS[level] || WARNING_LEVELS[1];
+  const { t } = useTranslation();
+  const levels = getWarningLevels(t);
+  const config = levels[level] || levels[1];
   const isDanger = config.variant === 'danger';
 
   return (
@@ -86,9 +89,9 @@ const SecurityWarningModal = ({ isOpen, message, level = 1, onClose }) => {
                       <Icon name="fa-info-circle" className="text-slate-600" />
                       <span>
                         {level === 1
-                          ? 'Si cambias de ventana 2 veces más, el examen se cerrará automáticamente.'
+                          ? t('ialab.security_warning.level_1_hint')
                           : level === 2
-                          ? 'Si cambias de ventana 1 vez más, el examen se cerrará automáticamente.'
+                          ? t('ialab.security_warning.level_2_hint')
                           : ''}
                       </span>
                     </div>
@@ -97,14 +100,14 @@ const SecurityWarningModal = ({ isOpen, message, level = 1, onClose }) => {
                   {isDanger && level === 3 && (
                     <div className="flex items-center gap-2 justify-center text-xs text-red-500 dark:text-red-400">
                       <Icon name="fa-exclamation-circle" className="text-red-500" />
-                      <span>El examen se cerrará al cambiar de ventana nuevamente.</span>
+                      <span>{t('ialab.security_warning.level_3_hint')}</span>
                     </div>
                   )}
 
                   {level === 3 && (
                     <div className="flex items-center gap-2 justify-center text-xs text-red-400">
                       <Icon name="fa-clock" className="text-red-400" />
-                      <span>Has perdido 1 intento por infracción de seguridad.</span>
+                      <span>{t('ialab.security_warning.lost_attempt')}</span>
                     </div>
                   )}
 
@@ -117,7 +120,7 @@ const SecurityWarningModal = ({ isOpen, message, level = 1, onClose }) => {
                     }`}
                   >
                     <Icon name="fa-check" className="text-sm" />
-                    Entendido
+                    {t('ialab.security_warning.understood')}
                   </button>
                 </div>
               </div>

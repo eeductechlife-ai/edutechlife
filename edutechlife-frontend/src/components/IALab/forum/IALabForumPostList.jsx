@@ -5,6 +5,7 @@ import useForumPosts, { POST_CATEGORIES } from '../../../hooks/IALab/forum/useFo
 import useForumVotes from '../../../hooks/IALab/forum/useForumVotes';
 import useForumProfile from '../../../hooks/IALab/forum/useForumProfile';
 import IALabForumPostCard from './IALabForumPostCard';
+import { useTranslation } from '../../../i18n/I18nProvider';
 
 const IALabForumPostList = ({ onSelectPost, onAction }) => {
   const {
@@ -13,6 +14,7 @@ const IALabForumPostList = ({ onSelectPost, onAction }) => {
     sortBy, setSortBy,
     refreshPosts, loadMore,
   } = useForumPosts();
+  const { t } = useTranslation();
 
   const { voteStates, loadVotes, toggleVote, formatCount } = useForumVotes();
   const { showHoverProfile, hideHoverProfile, hoverProfile } = useForumProfile();
@@ -45,7 +47,7 @@ const IALabForumPostList = ({ onSelectPost, onAction }) => {
             <p className="text-sm font-medium text-red-700 dark:text-red-400">{error}</p>
           </div>
           <button onClick={refreshPosts} className="text-xs text-red-600 hover:text-red-800 font-medium flex-shrink-0">
-            Reintentar
+            {t('ialab.forum.post_list.retry')}
           </button>
         </div>
       )}
@@ -73,26 +75,26 @@ const IALabForumPostList = ({ onSelectPost, onAction }) => {
           </div>
           <h4 className="text-base font-bold text-slate-800 dark:text-slate-200 mb-1">
             {category !== 'all'
-              ? `No hay posts en "${activeCategory?.label}"`
-              : 'Sé el primero en publicar'}
+              ? t('ialab.forum.post_list.empty_category_title', { label: activeCategory?.label })
+              : t('ialab.forum.post_list.empty_all_title')}
           </h4>
           <p className="text-sm text-slate-500 dark:text-slate-400 text-center max-w-sm">
             {category !== 'all'
-              ? 'Intenta cambiar de categoría o crea un nuevo post.'
-              : 'Comparte tu experiencia, haz preguntas o ayuda a otros estudiantes.'}
+              ? t('ialab.forum.post_list.empty_category_desc')
+              : t('ialab.forum.post_list.empty_all_desc')}
           </p>
         </div>
       ) : (
         <>
           <div className="flex items-center justify-between px-1">
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              {totalCount} {totalCount === 1 ? 'discusión' : 'discusiones'}
+              {t('ialab.forum.post_list.count', { count: totalCount })}
             </p>
             <div className="flex items-center gap-1">
               {[
-                { id: 'latest', label: 'Recientes' },
-                { id: 'popular', label: 'Populares' },
-                { id: 'activity', label: 'Actividad' },
+                { id: 'latest', label: t('ialab.forum.post_list.sort_latest') },
+                { id: 'popular', label: t('ialab.forum.post_list.sort_popular') },
+                { id: 'activity', label: t('ialab.forum.post_list.sort_activity') },
               ].map(opt => (
                 <button
                   key={opt.id}

@@ -150,34 +150,41 @@ export const createPersistenceSlice = (set, get) => ({
   },
 
   // ==================== LÍMITE DE INTENTOS ====================
-  _attemptOps: (prefix) => ({
-    getRemainingAttempts: (moduleId) => {
-      const key = `${prefix}_attempts_remaining_m${moduleId}`;
-      return ls.get(key, 3);
-    },
-    getNextAttemptTime: (moduleId) => {
-      const key = `${prefix}_next_attempt_m${moduleId}`;
-      return ls.get(key, null);
-    },
-    canAttemptRetry: (moduleId) => {
-      const key = `${prefix}_attempts_remaining_m${moduleId}`;
-      const remaining = ls.get(key, 3);
-      if (remaining <= 0) return false;
-      const nextKey = `${prefix}_next_attempt_m${moduleId}`;
-      const nextTime = ls.get(nextKey, null);
-      if (nextTime && Date.now() < nextTime) return false;
-      return true;
-    },
-    decrementAttempt: (moduleId) => {
-      const key = `${prefix}_attempts_remaining_m${moduleId}`;
-      const current = ls.get(key, 3);
-      const newVal = Math.max(0, current - 1);
-      ls.set(key, newVal);
-      const nextKey = `${prefix}_next_attempt_m${moduleId}`;
-      ls.set(nextKey, Date.now() + 12 * 60 * 60 * 1000);
-      return newVal;
-    },
-  }),
+  _attemptOps: (prefix) => {
+    const isAdmin = get().userRole === 'admin';
+    return {
+      getRemainingAttempts: (moduleId) => {
+        if (isAdmin) return 99;
+        const key = `${prefix}_attempts_remaining_m${moduleId}`;
+        return ls.get(key, 3);
+      },
+      getNextAttemptTime: (moduleId) => {
+        if (isAdmin) return null;
+        const key = `${prefix}_next_attempt_m${moduleId}`;
+        return ls.get(key, null);
+      },
+      canAttemptRetry: (moduleId) => {
+        if (isAdmin) return true;
+        const key = `${prefix}_attempts_remaining_m${moduleId}`;
+        const remaining = ls.get(key, 3);
+        if (remaining <= 0) return false;
+        const nextKey = `${prefix}_next_attempt_m${moduleId}`;
+        const nextTime = ls.get(nextKey, null);
+        if (nextTime && Date.now() < nextTime) return false;
+        return true;
+      },
+      decrementAttempt: (moduleId) => {
+        if (isAdmin) return 99;
+        const key = `${prefix}_attempts_remaining_m${moduleId}`;
+        const current = ls.get(key, 3);
+        const newVal = Math.max(0, current - 1);
+        ls.set(key, newVal);
+        const nextKey = `${prefix}_next_attempt_m${moduleId}`;
+        ls.set(nextKey, Date.now() + 12 * 60 * 60 * 1000);
+        return newVal;
+      },
+    };
+  },
 
   getChallengeRemainingAttempts: (moduleId) => get()._attemptOps('challenge').getRemainingAttempts(moduleId),
   getNextAttemptTime: (moduleId) => get()._attemptOps('challenge').getNextAttemptTime(moduleId),

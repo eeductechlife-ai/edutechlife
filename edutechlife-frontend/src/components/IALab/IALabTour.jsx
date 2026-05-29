@@ -1,56 +1,57 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
+import { useTranslation } from '../../i18n/I18nProvider';
 
-const STEPS = [
+const getSteps = (t) => [
   {
     target: 'tour-sidebar',
-    title: 'Panel de navegación',
-    description: 'Tu centro de control. Monitorea tu progreso, navega entre módulos, accede a recursos y personaliza tu experiencia con el modo oscuro.',
+    title: t('ialab.tour.step_0_title'),
+    description: t('ialab.tour.step_0_desc'),
   },
   {
     target: 'tour-tabs',
-    title: 'Menú de secciones',
-    description: 'Filtra el contenido del módulo activo: Objetivos, Contenido, Actividades y Herramientas. Cada pestaña muestra información específica.',
+    title: t('ialab.tour.step_1_title'),
+    description: t('ialab.tour.step_1_desc'),
   },
   {
     target: 'tour-ruta',
-    title: 'Tu ruta de hoy',
-    description: 'Aquí encontrarás la próxima acción recomendada para avanzar en tu módulo. Sigue la ruta y no te detengas.',
+    title: t('ialab.tour.step_2_title'),
+    description: t('ialab.tour.step_2_desc'),
   },
   {
     target: 'tour-objetivos',
-    title: 'Objetivos del módulo',
-    description: 'Cada módulo tiene un objetivo claro de aprendizaje. La nota se compone de: Comunidad (5%), Desafío (30%), Examen (35%) y Recursos (30%).',
+    title: t('ialab.tour.step_3_title'),
+    description: t('ialab.tour.step_3_desc'),
   },
   {
     target: 'tour-temas',
-    title: 'Temas del módulo',
-    description: 'Cada tema contiene recursos multimedia (videos, PDFs, OVAs). Expande un tema y completa todos los recursos para avanzar.',
+    title: t('ialab.tour.step_4_title'),
+    description: t('ialab.tour.step_4_desc'),
   },
   {
     target: 'tour-actividades',
-    title: 'Actividades del módulo',
-    description: 'Completa las 3 actividades (Comunidad, Desafío, Examen) para aprobar el módulo con 80% o más.',
+    title: t('ialab.tour.step_5_title'),
+    description: t('ialab.tour.step_5_desc'),
   },
   {
     target: 'tour-notificaciones',
-    title: 'Campana de notificaciones',
-    description: 'Recibirás alertas importantes: recordatorios de estudio, nuevos recursos y actualizaciones de tu progreso. ¡No te pierdas ninguna novedad!',
+    title: t('ialab.tour.step_6_title'),
+    description: t('ialab.tour.step_6_desc'),
   },
   {
     target: ['tour-undermenu-mobile', 'tour-undermenu-desktop'],
-    title: 'Menú de usuario',
-    description: 'En móvil: abre el menú con las tres líneas (☰). En computador: tu perfil con acceso a configuración, certificados y más. Personaliza tu experiencia.',
+    title: t('ialab.tour.step_7_title'),
+    description: t('ialab.tour.step_7_desc'),
   },
   {
     target: 'tour-valerio',
-    title: 'Coach IA Valerio',
-    description: 'Tu tutor inteligente. Pregunta sobre el módulo actual, recibe ejemplos prácticos y consejos de estudio. Usa voz o texto. ¡Valerio te guía paso a paso!',
+    title: t('ialab.tour.step_8_title'),
+    description: t('ialab.tour.step_8_desc'),
   },
   {
     target: 'tour-herramientas',
-    title: 'Herramientas + Tutorías',
-    description: 'Sintetizador de Prompts, Advisor IA, Ética IA y Tutorías Virtuales. Potencia tu aprendizaje con estas herramientas interactivas.',
+    title: t('ialab.tour.step_9_title'),
+    description: t('ialab.tour.step_9_desc'),
   },
 ];
 
@@ -60,6 +61,8 @@ const RETRY_INTERVAL = 300;
 const MAX_RETRIES = 10;
 
 const IALabTour = ({ hasStartedCourse }) => {
+  const { t } = useTranslation();
+  const STEPS = useMemo(() => getSteps(t), [t]);
   const [step, setStep] = useState(-1);
   const [targetRect, setTargetRect] = useState(null);
   const [ready, setReady] = useState(false);
@@ -244,18 +247,18 @@ const IALabTour = ({ hasStartedCourse }) => {
 
       <div
         className="fixed z-[70] w-72 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 p-4"
-        aria-live="polite" aria-label={`Tour: paso ${step + 1} de ${STEPS.length}`}
+        aria-live="polite" aria-label={t('ialab.tour.aria_label', { step: step + 1, total: STEPS.length })}
         style={tooltipPos ? { top: tooltipPos.top, left: tooltipPos.left } : {}}
       >
         <div className="flex items-center justify-between mb-2">
           <span className="text-[10px] font-bold text-corporate uppercase tracking-wider">
-            {step + 1} de {STEPS.length}
+            {t('ialab.tour.step_label', { step: step + 1, total: STEPS.length })}
           </span>
           <button
             onClick={handleSkip}
             className="text-xs text-slate-600 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
           >
-            Saltar
+            {t('ialab.tour.skip')}
           </button>
         </div>
         <h4 className="text-sm font-bold text-petroleum mb-1">{current.title}</h4>
@@ -264,7 +267,7 @@ const IALabTour = ({ hasStartedCourse }) => {
           onClick={handleNext}
           className="w-full py-2 rounded-lg bg-gradient-to-r from-petroleum to-corporate text-white text-xs font-bold hover:shadow-md transition-all duration-200 flex items-center justify-center gap-1.5"
         >
-          {isLast ? '¡Comenzar!' : 'Siguiente'}
+          {isLast ? t('ialab.tour.start') : t('ialab.tour.next')}
           {!isLast && <Icon name="fa-arrow-right" className="text-[10px]" />}
         </button>
       </div>

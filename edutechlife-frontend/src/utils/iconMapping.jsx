@@ -86,6 +86,7 @@ import {
   Globe2,
   File,
   MessageSquare,
+  Square,
   TriangleAlert,
   // Icon aliases
   CalculatorIcon,
@@ -281,6 +282,7 @@ export const faToLucideMap = {
   'fa-trash-can': Trash2,
    'fa-shield-alt': Shield,
   'fa-shield-halved': Shield,
+  'fa-shield': Shield,
   'fa-user': User,
   'fa-eye-slash': EyeOff,
   'fa-exclamation-circle': AlertCircle,
@@ -350,6 +352,7 @@ export const faToLucideMap = {
   'fa-times': X,
   'fa-sliders-h': Sliders,
   'fa-question-circle': CircleHelp,
+  'fa-stop': Square,
   'fa-user-shield': Shield,
   'fa-desktop': Monitor,
   'fa-bell': Bell,

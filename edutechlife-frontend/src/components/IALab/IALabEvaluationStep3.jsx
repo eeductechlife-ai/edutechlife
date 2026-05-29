@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 /**
  * Componente para Paso 3: Crear un prompt desde cero
@@ -11,6 +12,7 @@ import { Icon } from '../../utils/iconMapping.jsx';
  * @param {Function} props.onResponseChange - Handler para actualizar respuesta
  */
 const IALabEvaluationStep3 = ({ exercise, response, onResponseChange }) => {
+    const { t } = useTranslation();
     const [createdPrompt, setCreatedPrompt] = useState(response || '');
     const [characterCount, setCharacterCount] = useState(response?.length || 0);
     const [activeTab, setActiveTab] = useState('editor');
@@ -148,9 +150,9 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                         <Icon name="fa-plus-circle" className="text-white text-lg" />
                     </div>
                     <div>
-                        <h3 className="text-lg font-bold text-slate-800">Crea un prompt desde cero</h3>
+                        <h3 className="text-lg font-bold text-slate-800">{t('ialab.evaluation.step3.title')}</h3>
                         <p className="text-slate-500 text-sm">
-                            Diseña un prompt efectivo para el caso de uso proporcionado
+                            {t('ialab.evaluation.step3.subtitle')}
                         </p>
                     </div>
                 </div>
@@ -160,7 +162,7 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
             <div className="space-y-4">
                 <div className="flex items-center gap-2">
                     <Icon name="fa-briefcase" className="text-corporate" />
-                    <h4 className="text-lg font-semibold text-slate-800">Caso de uso</h4>
+                    <h4 className="text-lg font-semibold text-slate-800">{t('ialab.evaluation.step3.use_case')}</h4>
                 </div>
                 <div className="bg-slate-50/50 rounded-xl p-5 border border-slate-200">
                     <div className="flex items-start gap-3">
@@ -184,7 +186,7 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                         }`}
                     >
                         <Icon name="fa-edit" className="mr-2" />
-                        Editor Avanzado
+                        {t('ialab.evaluation.step3.tab_editor')}
                     </button>
                     <button
                         onClick={() => setActiveTab('constructor')}
@@ -195,7 +197,7 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                         }`}
                     >
                         <Icon name="fa-puzzle-piece" className="mr-2" />
-                        Constructor Modular
+                        {t('ialab.evaluation.step3.tab_constructor')}
                     </button>
                 </div>
             </div>
@@ -206,11 +208,11 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                             <Icon name="fa-keyboard" className="text-emerald-500" />
-                            <h4 className="text-lg font-semibold text-slate-800">Editor de Prompt</h4>
+                            <h4 className="text-lg font-semibold text-slate-800">{t('ialab.evaluation.step3.editor_title')}</h4>
                         </div>
                         <div className="flex items-center gap-4">
                             <span className={`text-sm ${characterCount < 100 ? 'text-red-500' : 'text-emerald-600'}`}>
-                                {characterCount} caracteres
+                                {t('ialab.evaluation.step3.characters', { count: characterCount })}
                             </span>
                             <button
                                 onClick={generateWithAI}
@@ -220,12 +222,12 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                                 {isGenerating ? (
                                     <>
                                         <div className="w-4 h-4 border-2 border-corporate border-t-transparent rounded-full animate-spin"></div>
-                                        Generando...
+                                        {t('ialab.evaluation.step3.generating')}
                                     </>
                                 ) : (
                                     <>
                                         <Icon name="fa-robot" />
-                                        Ayuda de IA
+                                        {t('ialab.evaluation.step3.ai_help')}
                                     </>
                                 )}
                             </button>
@@ -236,7 +238,7 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                         <textarea
                             value={createdPrompt}
                             onChange={(e) => handleChange(e.target.value)}
-                            placeholder={`## Rol\nEres un experto en...\n\n## Contexto\nTrabajando para...\n\n## Objetivo\nCrear un...\n\n## Audiencia\nDirigido a...\n\n## Requisitos\n- Requisito 1\n- Requisito 2\n\n## Formato de respuesta\nEn formato de...`}
+                            placeholder={`## ${t('ialab.evaluation.step3.section_role')}\n${t('ialab.evaluation.step3.placeholder_role')}\n\n## ${t('ialab.evaluation.step3.section_context')}\n${t('ialab.evaluation.step3.placeholder_context')}\n\n## ${t('ialab.evaluation.step3.section_objective')}\n${t('ialab.evaluation.step3.placeholder_objective')}\n\n## ${t('ialab.evaluation.step3.section_audience')}\n${t('ialab.evaluation.step3.placeholder_audience')}\n\n## ${t('ialab.evaluation.step3.section_requirements')}\n${t('ialab.evaluation.step3.placeholder_requirement_1')}\n${t('ialab.evaluation.step3.placeholder_requirement_2')}\n\n## ${t('ialab.evaluation.step3.section_format')}\n${t('ialab.evaluation.step3.placeholder_format')}`}
                             className="w-full h-80 bg-white border-2 border-slate-200 rounded-xl p-5 text-slate-700 placeholder-slate-500 focus:outline-none focus:border-corporate focus:ring-2 focus:ring-corporate/20 resize-none font-mono text-sm leading-relaxed"
                             spellCheck="false"
                             autoFocus
@@ -247,7 +249,7 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                             characterCount < 200 ? 'bg-amber-50 text-amber-600' :
                             'bg-emerald-50 text-emerald-600'
                         }`}>
-                            {characterCount}/1000
+                            {t('ialab.evaluation.step3.char_counter', { count: characterCount })}
                         </div>
                     </div>
                 </div>
@@ -256,14 +258,14 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                             <Icon name="fa-cubes" className="text-petroleum" />
-                            <h4 className="text-lg font-semibold text-slate-800">Constructor Modular</h4>
+                            <h4 className="text-lg font-semibold text-slate-800">{t('ialab.evaluation.step3.constructor_title')}</h4>
                         </div>
                         <button
                             onClick={() => handleChange('')}
                             className="px-4 py-2 bg-white border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 transition-colors"
                         >
                             <Icon name="fa-trash" className="mr-2" />
-                            Limpiar todo
+                            {t('ialab.evaluation.step3.clear_all')}
                         </button>
                     </div>
 
@@ -284,7 +286,7 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                                             className="text-petroleum" 
                                         />
                                     </div>
-                                    <h5 className="font-semibold text-slate-800 capitalize">{type}</h5>
+                                    <h5 className="font-semibold text-slate-800">{t(`ialab.evaluation.step3.section_${type}`)}</h5>
                                 </div>
                                 
                                 <div className="space-y-2">
@@ -313,7 +315,7 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                     <div className="space-y-4">
                         <div className="flex items-center gap-2">
                             <Icon name="fa-eye" className="text-emerald-500" />
-                            <h4 className="text-lg font-semibold text-slate-800">Vista previa</h4>
+                            <h4 className="text-lg font-semibold text-slate-800">{t('ialab.evaluation.step3.preview')}</h4>
                         </div>
                         
                         <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
@@ -325,7 +327,7 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                                 <div className="text-center py-8">
                                     <Icon name="fa-cube" className="text-slate-300 text-3xl mb-3" />
                                     <p className="text-slate-600">
-                                        Añade componentes para construir tu prompt
+                                        {t('ialab.evaluation.step3.empty_prompt')}
                                     </p>
                                 </div>
                             )}
@@ -338,39 +340,39 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
             <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
                 <div className="flex items-center gap-3 mb-4">
                     <Icon name="fa-graduation-cap" className="text-amber-500" />
-                    <h4 className="text-lg font-semibold text-slate-800">Guía para prompts efectivos</h4>
+                    <h4 className="text-lg font-semibold text-slate-800">{t('ialab.evaluation.step3.guide_title')}</h4>
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-3">
                         <h5 className="font-medium text-slate-700 flex items-center gap-2">
                             <div className="w-2 h-2 bg-corporate rounded-full"></div>
-                            Estructura recomendada
+                            {t('ialab.evaluation.step3.guide_structure')}
                         </h5>
                         <ol className="space-y-2 text-sm text-slate-500">
                             <li className="flex items-start gap-2">
                                 <span className="text-corporate font-bold">1.</span>
-                                <span>Comienza con el <strong>Rol</strong> específico del asistente</span>
+                                <span>{t('ialab.evaluation.step3.guide_role')}</span>
                             </li>
                             <li className="flex items-start gap-2">
                                 <span className="text-corporate font-bold">2.</span>
-                                <span>Define el <strong>Contexto</strong> y situación</span>
+                                <span>{t('ialab.evaluation.step3.guide_context')}</span>
                             </li>
                             <li className="flex items-start gap-2">
                                 <span className="text-corporate font-bold">3.</span>
-                                <span>Establece el <strong>Objetivo</strong> claro y medible</span>
+                                <span>{t('ialab.evaluation.step3.guide_objective')}</span>
                             </li>
                             <li className="flex items-start gap-2">
                                 <span className="text-corporate font-bold">4.</span>
-                                <span>Describe la <strong>Audiencia</strong> objetivo</span>
+                                <span>{t('ialab.evaluation.step3.guide_audience')}</span>
                             </li>
                             <li className="flex items-start gap-2">
                                 <span className="text-corporate font-bold">5.</span>
-                                <span>Lista los <strong>Requisitos</strong> específicos</span>
+                                <span>{t('ialab.evaluation.step3.guide_requirements')}</span>
                             </li>
                             <li className="flex items-start gap-2">
                                 <span className="text-corporate font-bold">6.</span>
-                                <span>Especifica el <strong>Formato</strong> de respuesta</span>
+                                <span>{t('ialab.evaluation.step3.guide_format')}</span>
                             </li>
                         </ol>
                     </div>
@@ -378,28 +380,28 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                     <div className="space-y-3">
                         <h5 className="font-medium text-slate-700 flex items-center gap-2">
                             <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
-                            Consejos clave
+                            {t('ialab.evaluation.step3.guide_tips')}
                         </h5>
                         <ul className="space-y-2 text-sm text-slate-500">
                             <li className="flex items-start gap-2">
                                 <Icon name="fa-check" className="text-emerald-500 mt-0.5 flex-shrink-0" />
-                                <span>Sé <strong>específico</strong> en lugar de general</span>
+                                <span>{t('ialab.evaluation.step3.guide_tip_specific')}</span>
                             </li>
                             <li className="flex items-start gap-2">
                                 <Icon name="fa-check" className="text-emerald-500 mt-0.5 flex-shrink-0" />
-                                <span>Incluye <strong>ejemplos</strong> cuando sea posible</span>
+                                <span>{t('ialab.evaluation.step3.guide_tip_examples')}</span>
                             </li>
                             <li className="flex items-start gap-2">
                                 <Icon name="fa-check" className="text-emerald-500 mt-0.5 flex-shrink-0" />
-                                <span>Usa un <strong>tono</strong> apropiado para el contexto</span>
+                                <span>{t('ialab.evaluation.step3.guide_tip_tone')}</span>
                             </li>
                             <li className="flex items-start gap-2">
                                 <Icon name="fa-check" className="text-emerald-500 mt-0.5 flex-shrink-0" />
-                                <span>Define <strong>métricas</strong> de éxito claras</span>
+                                <span>{t('ialab.evaluation.step3.guide_tip_metrics')}</span>
                             </li>
                             <li className="flex items-start gap-2">
                                 <Icon name="fa-check" className="text-emerald-500 mt-0.5 flex-shrink-0" />
-                                <span>Considera las <strong>limitaciones</strong> y restricciones</span>
+                                <span>{t('ialab.evaluation.step3.guide_tip_limitations')}</span>
                             </li>
                         </ul>
                     </div>

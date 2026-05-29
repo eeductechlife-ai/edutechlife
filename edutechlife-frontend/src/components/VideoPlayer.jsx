@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useTranslation } from '../i18n/I18nProvider';
 import { Icon } from '../utils/iconMapping.jsx';
 
 const formatTime = (s) => {
@@ -11,6 +12,7 @@ const formatTime = (s) => {
 const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
 const VideoPlayer = ({ url, title, autoPlay = false }) => {
+  const { t, locale } = useTranslation();
   const containerRef = useRef(null);
   const playerRef = useRef(null);
   const hideTimer = useRef(null);
@@ -56,7 +58,7 @@ const VideoPlayer = ({ url, title, autoPlay = false }) => {
     };
     if (window.YT && window.YT.Player && window.YT.loaded) { init(); return; }
     const tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
+    tag.src = `https://www.youtube.com/iframe_api?origin=${encodeURIComponent(window.location.origin)}`;
     document.head.appendChild(tag);
     const ci = setInterval(() => {
       if (window.YT && window.YT.Player && window.YT.loaded) { clearInterval(ci); init(); }
@@ -116,7 +118,7 @@ const VideoPlayer = ({ url, title, autoPlay = false }) => {
         setTimeout(() => {
           try {
             const tracks = playerRef.current?.getOption('captions', 'tracklist') || [];
-            const es = tracks.find(t => t.languageCode === 'es');
+            const es = tracks.find(t => t.languageCode === (locale === 'en' ? 'en' : 'es'));
             if (es) playerRef.current?.setOption('captions', 'track', es);
             else if (tracks.length > 0) playerRef.current?.setOption('captions', 'track', tracks[0]);
           } catch {}
@@ -151,8 +153,8 @@ const VideoPlayer = ({ url, title, autoPlay = false }) => {
           <div className="w-20 h-20 mb-4 bg-white/10 rounded-full flex items-center justify-center">
             <Icon name="fa-video-slash" className="text-3xl text-white/50" />
           </div>
-          <h3 className="text-xl font-bold text-white mb-2">Video no disponible</h3>
-          <p className="text-[#B2D8E5] text-center max-w-md">El contenido de video estará disponible próximamente.</p>
+          <h3 className="text-xl font-bold text-white mb-2">{t('video.unavailable_title')}</h3>
+          <p className="text-[#B2D8E5] text-center max-w-md">{t('video.unavailable_desc')}</p>
         </div>
       </div>
     );
@@ -167,8 +169,8 @@ const VideoPlayer = ({ url, title, autoPlay = false }) => {
               <Icon name="fa-play" className="text-white" />
             </div>
             <div>
-              <h3 className="font-bold text-white">{title || 'Video del Módulo'}</h3>
-              <p className="text-sm text-[#B2D8E5]">Contenido educativo premium</p>
+              <h3 className="font-bold text-white">{title || t('video.module_video')}</h3>
+              <p className="text-sm text-[#B2D8E5]">{t('video.premium_content')}</p>
             </div>
           </div>
         </div>
@@ -202,33 +204,33 @@ const VideoPlayer = ({ url, title, autoPlay = false }) => {
               <div className="absolute -top-1.5 left-0 w-3 h-3 bg-[#00BCD4] rounded-full shadow-lg opacity-0 group-hover/progress:opacity-100 transition-opacity" style={{ left: `calc(${progress}% - 6px)` }} />
             </div>
             <div className="flex items-center gap-3">
-              <button onClick={togglePlay} className="w-8 h-8 flex items-center justify-center text-white hover:text-[#00BCD4] transition-colors" aria-label={playing ? 'Pausar' : 'Reproducir'}>
+              <button onClick={togglePlay} className="w-8 h-8 flex items-center justify-center text-white hover:text-[#00BCD4] transition-colors" aria-label={playing ? t('video.pause') : t('video.play')}>
                 {playing ? (
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1" /><rect x="14" y="4" width="4" height="16" rx="1" /></svg>
                 ) : <Icon name="fa-play" className="text-sm" />}
               </button>
               <div className="flex items-center gap-1.5 group/vol">
-                <button onClick={toggleMute} className="w-7 h-7 flex items-center justify-center text-white/70 hover:text-white transition-colors" aria-label={muted ? 'Activar sonido' : 'Silenciar'}>
+                <button onClick={toggleMute} className="w-7 h-7 flex items-center justify-center text-white/70 hover:text-white transition-colors" aria-label={muted ? t('video.unmute') : t('video.mute')}>
                   <Icon name={muted || volume === 0 ? 'fa-volume-mute' : 'fa-volume-up'} className="text-[10px]" />
                 </button>
               </div>
               <span className="text-xs text-white/70 font-mono whitespace-nowrap">{formatTime(currentTime)} / {formatTime(duration)}</span>
               <div className="flex-1" />
               <div className="relative">
-                <button onClick={() => setShowSpeed(!showSpeed)} className="px-2 h-7 text-[11px] font-bold text-white/70 hover:text-white rounded-md hover:bg-white/10" aria-label="Velocidad de reproducción">{rate}x</button>
+                <button onClick={() => setShowSpeed(!showSpeed)} className="px-2 h-7 text-[11px] font-bold text-white/70 hover:text-white rounded-md hover:bg-white/10" aria-label={t('video.playback_speed')}>{rate}x</button>
                 {showSpeed && (
                   <div className="absolute bottom-full right-0 mb-2 bg-[#0A1729] border border-white/10 rounded-xl p-1.5 shadow-2xl min-w-[100px]">
-                    <p className="text-[9px] text-white/40 uppercase tracking-wider px-2 pb-1">Velocidad</p>
+                    <p className="text-[9px] text-white/40 uppercase tracking-wider px-2 pb-1">{t('video.speed')}</p>
                     {SPEEDS.map(s => (
                       <button key={s} onClick={() => changeRate(s)} className={`block w-full text-left px-3 py-1.5 text-xs rounded-lg transition-colors ${rate === s ? 'bg-[#00BCD4]/20 text-[#00BCD4] font-bold' : 'text-white/70 hover:bg-white/10'}`}>{s}x</button>
                     ))}
                   </div>
                 )}
               </div>
-              <button onClick={toggleCaptions} className="w-7 h-7 flex items-center justify-center transition-colors" aria-label="Subtítulos" title="Subtítulos">
+              <button onClick={toggleCaptions} className="w-7 h-7 flex items-center justify-center transition-colors" aria-label={t('video.subtitles')} title={t('video.subtitles')}>
                 <Icon name="fa-closed-captioning" className={`text-[10px] ${ccActive ? 'text-[#00BCD4]' : 'text-white/70 hover:text-white'}`} />
               </button>
-              <button onClick={goFullscreen} className="w-7 h-7 flex items-center justify-center text-white/70 hover:text-white" aria-label="Pantalla completa">
+              <button onClick={goFullscreen} className="w-7 h-7 flex items-center justify-center text-white/70 hover:text-white" aria-label={t('video.fullscreen')}>
                 <Icon name="fa-expand" className="text-[10px]" />
               </button>
             </div>
@@ -239,26 +241,26 @@ const VideoPlayer = ({ url, title, autoPlay = false }) => {
       <div className="p-6 border-t border-[#4DA8C4]/20">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-[#0A3550]/30 rounded-xl p-4">
-            <h4 className="font-bold text-white mb-3 flex items-center gap-2"><Icon name="fa-keyboard" /> Atajos de Teclado</h4>
+            <h4 className="font-bold text-white mb-3 flex items-center gap-2"><Icon name="fa-keyboard" /> {t('video.keyboard_shortcuts')}</h4>
             <div className="space-y-2 text-sm">
-              {[['Espacio / K', 'Play/Pause'], ['M', 'Silenciar'], ['C', 'Subtítulos'], ['F', 'Pantalla completa'], ['Flechas / J/L', 'Avanzar/Retroceder 10s']].map(([k, v]) => (
+              {[['Space / K', 'Play/Pause'], ['M', 'Mute'], ['C', 'Subtitles'], ['F', 'Fullscreen'], ['Arrows / J/L', 'Seek +/-10s']].map(([k, v]) => (
                 <div key={k} className="flex justify-between"><span className="text-[#B2D8E5]">{k}</span><span className="text-white">{v}</span></div>
               ))}
             </div>
           </div>
           <div className="bg-[#0A3550]/30 rounded-xl p-4">
-            <h4 className="font-bold text-white mb-3 flex items-center gap-2"><Icon name="fa-circle-info" /> Información</h4>
+            <h4 className="font-bold text-white mb-3 flex items-center gap-2"><Icon name="fa-circle-info" /> {t('video.info')}</h4>
             <div className="space-y-2 text-sm">
-              <div className="flex justify-between"><span className="text-[#B2D8E5]">Velocidad</span><span className="text-white">{rate}x</span></div>
-              <div className="flex justify-between"><span className="text-[#B2D8E5]">Formato</span><span className="text-white">YouTube</span></div>
-              <div className="flex justify-between"><span className="text-[#B2D8E5]">Subtítulos</span><span className="text-white">{ccActive ? 'Activados' : 'Disponibles (C)'}</span></div>
+              <div className="flex justify-between"><span className="text-[#B2D8E5]">{t('video.speed')}</span><span className="text-white">{rate}x</span></div>
+              <div className="flex justify-between"><span className="text-[#B2D8E5]">{t('video.format')}</span><span className="text-white">YouTube</span></div>
+              <div className="flex justify-between"><span className="text-[#B2D8E5]">{t('video.subtitles')}</span><span className="text-white">{ccActive ? t('video.cc_on') : t('video.cc_off')}</span></div>
             </div>
           </div>
           <div className="bg-[#0A3550]/30 rounded-xl p-4">
-            <h4 className="font-bold text-white mb-3 flex items-center gap-2"><Icon name="fa-lightbulb" /> Consejos</h4>
+            <h4 className="font-bold text-white mb-3 flex items-center gap-2"><Icon name="fa-lightbulb" /> {t('video.tips')}</h4>
             <ul className="space-y-2 text-sm text-[#B2D8E5]">
-              {['Toma notas durante el video', 'Pausa para practicar los conceptos', 'Usa velocidad 1.25x para repasar'].map(t => (
-                <li key={t} className="flex items-start gap-2"><Icon name="fa-check" className="text-[#66CCCC] mt-0.5" /><span>{t}</span></li>
+              {[t('video.tip_1'), t('video.tip_2'), t('video.tip_3')].map(tip => (
+                <li key={tip} className="flex items-start gap-2"><Icon name="fa-check" className="text-[#66CCCC] mt-0.5" /><span>{tip}</span></li>
               ))}
             </ul>
           </div>

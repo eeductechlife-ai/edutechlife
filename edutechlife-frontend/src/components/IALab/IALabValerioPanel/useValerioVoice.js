@@ -2,7 +2,8 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 
 const MAX_NO_SPEECH_RETRIES = 3;
 
-export function useValerioVoice(isOpen, onTranscript) {
+export function useValerioVoice(isOpen, onTranscript, locale = 'es') {
+  const recognitionLang = locale === 'en' ? 'en-US' : 'es-CO';
   const [isListening, setIsListening] = useState(false);
   const [speechSupported, setSpeechSupported] = useState(true);
   const [speechError, setSpeechError] = useState('');
@@ -43,7 +44,7 @@ export function useValerioVoice(isOpen, onTranscript) {
 
     try {
       const recognition = new SpeechRecognition();
-      recognition.lang = 'es-CO';
+      recognition.lang = recognitionLang;
       recognition.continuous = true;
       recognition.interimResults = true;
       recognition.maxAlternatives = 1;
@@ -83,7 +84,7 @@ export function useValerioVoice(isOpen, onTranscript) {
               if (!userCancelRef.current) {
                 try {
                   const r = new SpeechRecognition();
-                  r.lang = 'es-CO';
+                  r.lang = recognitionLang;
                   r.continuous = true;
                   r.interimResults = true;
                   r.maxAlternatives = 1;

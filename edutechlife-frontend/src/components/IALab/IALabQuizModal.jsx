@@ -13,6 +13,8 @@ import { useTranslation } from '../../i18n/I18nProvider';
 
 const IALabQuizModal = ({ isOpen, onClose }) => {
   const { t } = useTranslation();
+  const userRole = useIALabStore(s => s.userRole);
+  const isAdmin = userRole === 'admin';
   const {
     quizQuestions, TOTAL_QUESTIONS, PASSING_SCORE, SUGGESTED_TIME_SECONDS,
     MAX_SECURITY_WARNINGS, SECURITY_WARNING_MESSAGES,
@@ -47,6 +49,19 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
   const [securityAlert, setSecurityAlert] = useState(null);
   const [printWarning, setPrintWarning] = useState(null);
   const [practiceMode, setPracticeMode] = useState(false);
+  const [markedQuestions, setMarkedQuestions] = useState(new Set());
+  const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
+
+  const toggleMarkForReview = (questionId) => {
+    setMarkedQuestions(prev => {
+      const next = new Set(prev);
+      if (next.has(questionId)) next.delete(questionId);
+      else next.add(questionId);
+      return next;
+    });
+  };
+
+  const unansweredCount = quizQuestions.filter(q => !quizAnswers[q.id]).length;
 
   const { showOverlay, setShowOverlay } = useScreenshotProtection(isVisible && !showScoreResult, {
     onMaxViolations: () => {
@@ -152,6 +167,11 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
 
   const handleSubmit = async () => {
     if (isSubmitting) return;
+    if (unansweredCount > 0 && !showSubmitConfirm) {
+      setShowSubmitConfirm(true);
+      return;
+    }
+    setShowSubmitConfirm(false);
     setIsSubmitting(true);
     const submitResult = await submitQuiz();
     setIsSubmitting(false);
@@ -330,6 +350,18 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
                 <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${getDifficultyColor(question.difficulty)}`}>
                   {question.difficulty}
                 </span>
+                <button
+                  onClick={() => toggleMarkForReview(question.id)}
+                  className={`ml-auto flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-200 ${
+                    markedQuestions.has(question.id)
+                      ? 'bg-amber-100 text-amber-700 border border-amber-200'
+                      : 'bg-slate-100 text-slate-500 border border-slate-200 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-400 dark:border-slate-600 dark:hover:bg-slate-600'
+                  }`}
+                  aria-label={markedQuestions.has(question.id) ? t('ialab.quiz.unmark_review') : t('ialab.quiz.mark_review')}
+                >
+                  <Icon name={markedQuestions.has(question.id) ? 'fa-bookmark' : 'fa-bookmark'} className="text-xs" />
+                  {markedQuestions.has(question.id) ? t('ialab.quiz.marked') : t('ialab.quiz.mark_review')}
+                </button>
               </div>
             </div>
           </div>
@@ -399,7 +431,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
       ) : (
         <button
           onClick={handleSubmit}
-          disabled={Object.keys(quizAnswers).length < TOTAL_QUESTIONS || isSubmitting}
+          disabled={isSubmitting}
           className="px-5 py-2.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
         >
           {isSubmitting ? (
@@ -588,6 +620,14 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
               {t('ialab.quiz.back_to_module')}
             </button>
             {!passed && (() => {
+              if (isAdmin) {
+                return (
+                  <>
+                    <button onClick={handleRetry} className="w-full py-3 border-2 border-red-200 text-red-600 rounded-xl hover:bg-red-50 hover:border-red-300 transition-all duration-300 font-medium">{t('ialab.quiz.retry')}</button>
+                    <p className="text-xs text-center text-slate-600">{t('ialab.quiz.retry_info', { remaining: 99 })}</p>
+                  </>
+                );
+              }
               const remaining = useIALabStore.getState().storageGetInt(`exam_attempts_remaining_m${activeMod}`, 3);
               const nextTime = useIALabStore.getState().storageGet(`exam_next_attempt_m${activeMod}`, null);
               const inCooldown = nextTime && Date.now() < nextTime;
@@ -630,6 +670,37 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
           transition={{ duration: 0.3 }}
         >
           {renderHeader()}
+
+          {!showScoreResult && (
+            <div className="px-6 py-2 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex items-center gap-2 overflow-x-auto">
+              {quizQuestions.map((q, idx) => {
+                const answered = !!quizAnswers[q.id];
+                const marked = markedQuestions.has(q.id);
+                return (
+                  <button
+                    key={q.id}
+                    onClick={() => setCurrentQuestion(idx)}
+                    className={`w-8 h-8 rounded-lg text-xs font-bold transition-all duration-200 flex items-center justify-center flex-shrink-0 ${
+                      idx === currentQuestion
+                        ? 'ring-2 ring-corporate ring-offset-1 dark:ring-offset-slate-800'
+                        : ''
+                    } ${
+                      answered
+                        ? marked
+                          ? 'bg-amber-400 text-white'
+                          : 'bg-emerald-500 text-white'
+                        : marked
+                          ? 'bg-amber-200 text-amber-700'
+                          : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
+                    }`}
+                    title={`${t('ialab.quiz.question_count', { current: idx + 1, total: '' })}${marked ? ` (${t('ialab.quiz.marked')})` : ''}`}
+                  >
+                    {idx + 1}
+                  </button>
+                );
+              })}
+            </div>
+          )}
 
           <div className="flex-1 overflow-y-auto min-h-0">
             {/* Watermark de seguridad - anti-screenshot */}
@@ -691,6 +762,50 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
       />
 
       <ScreenshotProtectionOverlay isOpen={showOverlay && !showScoreResult} />
+
+      <AnimatePresence>
+        {showSubmitConfirm && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] bg-black/50 flex items-center justify-center p-4"
+            onClick={() => setShowSubmitConfirm(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={e => e.stopPropagation()}
+              className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-6 max-w-sm w-full"
+            >
+              <div className="text-center mb-5">
+                <div className="w-14 h-14 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center mx-auto mb-3">
+                  <Icon name="fa-clock" className="text-amber-500 text-2xl" />
+                </div>
+                <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">{t('ialab.quiz.confirm_title')}</h3>
+                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                  {t('ialab.quiz.confirm_msg', { count: unansweredCount })}
+                </p>
+              </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowSubmitConfirm(false)}
+                  className="flex-1 py-2.5 border-2 border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition-all text-sm font-medium"
+                >
+                  {t('ialab.quiz.confirm_review')}
+                </button>
+                <button
+                  onClick={handleSubmit}
+                  className="flex-1 py-2.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all text-sm font-medium"
+                >
+                  {t('ialab.quiz.confirm_submit')}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </AnimatePresence>
   );
 };

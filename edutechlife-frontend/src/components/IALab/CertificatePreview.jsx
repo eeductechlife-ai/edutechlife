@@ -1,19 +1,21 @@
 import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const COURSE_NAME = 'Introducción a la I.A Generativa';
 const COURSE_FULL_NAME = 'Introducción a la Inteligencia Artificial Generativa';
 
 const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false }) => {
+  const { t, locale } = useTranslation();
   const certificateRef = useRef(null);
   const [isDownloading, setIsDownloading] = useState(false);
 
-  const displayName = studentName || 'Estudiante';
+  const displayName = studentName || t('ialab.certificate_preview.student_fallback');
   const displayCertNumber = certNumber || 'EDL-2026-00000000';
   const displayDate = issuedAt 
-    ? new Date(issuedAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })
-    : new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+    ? new Date(issuedAt).toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' })
+    : new Date().toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' });
 
   const handleDownloadPDF = async () => {
     setIsDownloading(true);
@@ -177,7 +179,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
 
       doc.save(`Certificado_${COURSE_NAME.replace(/\s+/g, '_')}_${displayName.replace(/\s+/g, '_')}.pdf`);
     } catch (err) {
-      console.error('Error generando PDF:', err);
+      console.error('Error generating PDF:', err);
     } finally {
       setIsDownloading(false);
     }
@@ -185,7 +187,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
 
   if (compact) {
     return (
-      <div className="text-center py-2">
+        <div className="text-center py-2">
         <button
           onClick={handleDownloadPDF}
           disabled={isDownloading}
@@ -194,12 +196,12 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
           {isDownloading ? (
             <>
               <Icon name="fa-spinner" className="animate-spin" />
-              Generando...
+              {t('ialab.certificate_preview.generating_compact')}
             </>
           ) : (
             <>
               <Icon name="fa-download" />
-              Descargar PDF
+              {t('ialab.certificate_preview.download')}
             </>
           )}
         </button>
@@ -268,7 +270,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
             className="text-3xl md:text-4xl font-black tracking-[0.2em]"
             style={{ color: '#004B63' }}
           >
-            CERTIFICADO
+            {t('ialab.certificate_preview.certificate_title_react')}
           </motion.h2>
 
           {/* Cyan divider */}
@@ -293,7 +295,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
 
           {/* Intro text */}
           <p className="text-sm mb-2" style={{ color: '#94A3B8' }}>
-            Este certificado se otorga a:
+            {t('ialab.certificate_preview.issued_to')}
           </p>
 
           {/* Student name */}
@@ -324,9 +326,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
             className="text-sm max-w-md mx-auto leading-relaxed mb-8"
             style={{ color: '#64748B' }}
           >
-            Por haber completado exitosamente los{' '}
-            <span className="font-semibold" style={{ color: '#004B63' }}>5 módulos</span>{' '}
-            del curso de {COURSE_NAME} con desempeño sobresaliente.
+            {t('ialab.certificate_preview.completed_text', { count: 5, course: COURSE_NAME })}
           </motion.p>
 
           {/* Divider */}
@@ -341,7 +341,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
           >
             <div className="text-center">
               <p className="text-[10px] uppercase tracking-wider mb-1" style={{ color: '#94A3B8' }}>
-                Fecha de Emisión
+                {t('ialab.certificate_preview.issue_date')}
               </p>
               <p className="text-sm font-bold" style={{ color: '#004B63' }}>
                 {displayDate}
@@ -350,7 +350,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
 
             <div className="text-center">
               <p className="text-[10px] uppercase tracking-wider mb-1" style={{ color: '#94A3B8' }}>
-                Nº Certificado
+                {t('ialab.certificate_preview.cert_number')}
               </p>
               <p className="text-sm font-bold font-mono" style={{ color: '#004B63' }}>
                 {displayCertNumber}
@@ -374,7 +374,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
                 {/* Inner circle */}
                 <div className="w-14 h-14 rounded-full border-2 border-white/50 flex flex-col items-center justify-center">
                   <span className="text-[8px] font-bold leading-tight" style={{ color: '#004B63' }}>
-                    VERIFICADO
+                    {t('ialab.certificate_preview.verified')}
                   </span>
                   <span className="text-[7px] font-semibold leading-tight" style={{ color: 'var(--color-petroleum-dark)' }}>
                     EDUTECHLIFE
@@ -398,7 +398,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
         {/* Bottom bar */}
         <div className="relative z-10 bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate px-6 py-2.5 text-center">
           <p className="text-[10px] text-white/70 tracking-wide">
-            www.edutechlife.com  •  Certificado digital verificable
+            www.edutechlife.com  •  {t('ialab.certificate_preview.verified')}
           </p>
         </div>
       </motion.div>
@@ -419,12 +419,12 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
           {isDownloading ? (
             <>
               <Icon name="fa-spinner" className="animate-spin" />
-              Generando PDF...
+              {t('ialab.certificate_preview.generating')}
             </>
           ) : (
             <>
               <Icon name="fa-download" />
-              Descargar PDF
+              {t('ialab.certificate_preview.download')}
             </>
           )}
         </motion.button>

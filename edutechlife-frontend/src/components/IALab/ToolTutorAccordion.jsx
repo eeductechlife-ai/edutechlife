@@ -1,6 +1,7 @@
 import React, { useState, lazy, Suspense } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
+import { useTranslation } from '../../i18n/I18nProvider';
 import { useIALabProgressContext } from '../../context/IALabContext';
 const ReactivePromptStation = lazy(() => import('./ReactivePromptStation'));
 const OVAPodcastStudio = lazy(() => import('./OVAPodcastStudio'));
@@ -14,6 +15,7 @@ const previewVariants = {
 };
 
 const ToolTutorAccordion = ({ onAction }) => {
+  const { t } = useTranslation();
   const { activeMod } = useIALabProgressContext();
   const [expanded, setExpanded] = useState(null);
 
@@ -25,14 +27,14 @@ const ToolTutorAccordion = ({ onAction }) => {
   const isToolMod4 = activeMod === 4;
   const isToolMod5 = activeMod === 5;
   const toolConfig = isToolMod2
-    ? { title: 'Asesor de Interacción ChatGPT', subtitle: 'Describe tu tarea y descubre qué herramienta de ChatGPT usar', icon: 'fa-wand-magic-sparkles', ctaIcon: 'fa-wand-magic-sparkles', ctaText: 'Abrir asesor' }
+    ? { title: t('ialab.tool_tutor.interaction_title'), subtitle: t('ialab.tool_tutor.interaction_subtitle'), icon: 'fa-wand-magic-sparkles', ctaIcon: 'fa-wand-magic-sparkles', ctaText: t('ialab.tool_tutor.tool_cta') }
     : isToolMod4
-    ? { title: 'Estudio de Podcast IA', subtitle: 'Crea podcasts IA desde tus documentos como en NotebookLM', icon: 'fa-microphone', ctaIcon: 'fa-microphone', ctaText: 'Abrir estudio' }
+    ? { title: t('ialab.tool_tutor.podcast_title'), subtitle: t('ialab.tool_tutor.podcast_subtitle'), icon: 'fa-microphone', ctaIcon: 'fa-microphone', ctaText: t('ialab.tool_tutor.tool_cta') }
     : isToolMod5
-    ? { title: 'Laboratorio de Ética IA', subtitle: 'Explora los 3 pilares de la IA responsable: sesgos, privacidad y regulación', icon: 'fa-balance-scale', ctaIcon: 'fa-balance-scale', ctaText: 'Abrir laboratorio' }
-    : { title: 'Herramientas para Crear Prompts', subtitle: 'Mejora tus prompts con análisis y optimización IA', icon: 'fa-wand-magic-sparkles', ctaIcon: 'fa-hand-pointer', ctaText: 'Abrir herramienta' };
+    ? { title: t('ialab.tool_tutor.ethics_title'), subtitle: t('ialab.tool_tutor.ethics_subtitle'), icon: 'fa-balance-scale', ctaIcon: 'fa-balance-scale', ctaText: t('ialab.tool_tutor.tool_cta') }
+    : { title: t('ialab.tool_tutor.tool_title'), subtitle: t('ialab.tool_tutor.tool_subtitle'), icon: 'fa-wand-magic-sparkles', ctaIcon: 'fa-hand-pointer', ctaText: t('ialab.tool_tutor.tool_cta') };
 
-  const tutoringConfig = { title: 'Tutorías Virtuales', subtitle: 'Conecta en vivo todos los domingos 4PM Bogotá', icon: 'fa-video', ctaIcon: 'fa-video', ctaText: 'Ver disponibilidad' };
+  const tutoringConfig = { title: t('ialab.tool_tutor.tutoring_title'), subtitle: t('ialab.tool_tutor.tutoring_subtitle'), icon: 'fa-video', ctaIcon: 'fa-video', ctaText: t('ialab.tool_tutor.tutoring_cta') };
 
   const PreviewCard = ({ config, section }) => {
     const isActive = expanded === section;

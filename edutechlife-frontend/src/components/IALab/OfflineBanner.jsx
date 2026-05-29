@@ -1,7 +1,9 @@
 import React from 'react';
+import { useTranslation } from '../../i18n/I18nProvider';
 import useConnectivity from '../../hooks/useConnectivity';
 
 const OfflineBanner = () => {
+  const { t } = useTranslation();
   const isOnline = useConnectivity();
 
   if (isOnline) return null;
@@ -16,7 +18,7 @@ const OfflineBanner = () => {
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636a9 9 0 010 12.728m-2.829-2.829a5 5 0 000-7.07m-4.243 4.243a1 1 0 010-1.414" />
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3l18 18" />
       </svg>
-      <span>Sin conexión. Los cambios se guardarán cuando tengas internet.</span>
+      <span>{t('ialab.offline_banner.message')}</span>
     </div>
   );
 };

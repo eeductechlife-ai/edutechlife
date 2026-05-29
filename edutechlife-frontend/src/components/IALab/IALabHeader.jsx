@@ -10,10 +10,11 @@ import { useCourseReminders } from '../../hooks/useCourseReminders';
 import { useBrowserNotifications } from '../../hooks/useBrowserNotifications';
 import useForumNotifications from '../../hooks/IALab/forum/useForumNotifications';
 import GlobalSearchBar from './GlobalSearchBar';
-import { BADGE_INFO } from '../../data/ialab';
+import { getBadgeInfo } from '../../data/ialab';
 
 const IALabHeader = () => {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
+  const BADGE_INFO = getBadgeInfo(locale);
   const { onBack, courseCompleted, setShowCertificateModal } = useIALabUIContext();
   const { unreadCount, createNotification } = useNotification();
   const { unreadCount: forumUnreadCount } = useForumNotifications();

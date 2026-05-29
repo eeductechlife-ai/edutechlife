@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
+import { useTranslation } from '../../i18n/I18nProvider';
 import { useIALabProgressContext } from '../../context/IALabContext';
 import useIALabSynthesizer from '../../hooks/IALab/useIALabSynthesizer';
 import PromptFeedback from './PromptFeedback';
@@ -15,6 +16,7 @@ import { FORUM_COMPONENTS, FORUM_TYPOGRAPHY, FORUM_EFFECTS, GRADIENTS, cn } from
  * @param {string} props.className - Clases CSS adicionales
  */
 const IALabSynthesizer = ({ className = '', ...rest }) => {
+    const { t } = useTranslation();
     const { activeMod, modules } = useIALabProgressContext();
     const {
         input,
@@ -51,7 +53,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
     // Handler para optimizar prompt
     const handleOptimize = async () => {
         if (!isValidInput(input)) {
-            alert(`El prompt debe tener entre 3 y 500 caracteres (actual: ${input.length})`);
+            alert(t('ialab.synthesizer.validation_error', { length: input.length }));
             return;
         }
         
@@ -105,13 +107,13 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                         FORUM_TYPOGRAPHY.DISPLAY.LG,
                         FORUM_TYPOGRAPHY.TEXT_PRIMARY
                     )}>
-                        Herramientas para la creacion de Promts
+                        {t('ialab.synthesizer.title')}
                     </h3>
                     <p className={cn(
                         FORUM_TYPOGRAPHY.BODY.SM,
                         FORUM_TYPOGRAPHY.TEXT_LIGHT
                     )}>
-                        Aprende prompt engineering con análisis real y feedback educativo
+                        {t('ialab.synthesizer.subtitle')}
                     </p>
                 </div>
             </div>
@@ -157,7 +159,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                 FORUM_TYPOGRAPHY.TEXT_PRIMARY,
                 "mb-3"
             )}>
-                💡 Sugerencias para practicar
+                {t('ialab.synthesizer.suggestions')}
             </h4>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -208,31 +210,31 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                                 <Icon name="fa-brain" className="text-white text-xl" />
                             </div>
                             <div>
-                                <h3 className="text-2xl font-bold text-slate-800 font-sans">Dashboard Analítico de Prompt</h3>
-                                <p className="text-slate-600 font-sans">Tu idea transformada en prompt profesional por DeepSeek AI</p>
+                                <h3 className="text-2xl font-bold text-slate-800 font-sans">{t('ialab.synthesizer.dashboard_title')}</h3>
+                                <p className="text-slate-600 font-sans">{t('ialab.synthesizer.dashboard_desc')}</p>
                             </div>
                         </div>
                         <div className="px-4 py-2 bg-gradient-to-r from-petroleum/10 to-corporate/10 rounded-full border border-petroleum/20">
-                            <span className="text-sm font-bold text-petroleum font-sans">🚀 LIVE</span>
+                            <span className="text-sm font-bold text-petroleum font-sans">{t('ialab.synthesizer.live')}</span>
                         </div>
                     </div>
                     
                     {/* Stats bar */}
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                         <div className="bg-white p-4 rounded-xl border border-slate-100">
-                            <div className="text-sm text-slate-500 mb-1 font-sans">Modelo</div>
+                            <div className="text-sm text-slate-500 mb-1 font-sans">{t('ialab.synthesizer.model')}</div>
                             <div className="font-bold text-slate-800 font-sans">deepseek-chat</div>
                         </div>
                         <div className="bg-white p-4 rounded-xl border border-slate-100">
-                            <div className="text-sm text-slate-500 mb-1 font-sans">Temperatura</div>
+                            <div className="text-sm text-slate-500 mb-1 font-sans">{t('ialab.synthesizer.temperature')}</div>
                             <div className="font-bold text-slate-800 font-sans">0.7</div>
                         </div>
                         <div className="bg-white p-4 rounded-xl border border-slate-100">
-                            <div className="text-sm text-slate-500 mb-1 font-sans">Tokens</div>
+                            <div className="text-sm text-slate-500 mb-1 font-sans">{t('ialab.synthesizer.tokens')}</div>
                             <div className="font-bold text-slate-800 font-sans">~{Math.round(deepSeekData.prompt_maestro.length / 4)}</div>
                         </div>
                         <div className="bg-white p-4 rounded-xl border border-slate-100">
-                            <div className="text-sm text-slate-500 mb-1 font-sans">Calidad</div>
+                            <div className="text-sm text-slate-500 mb-1 font-sans">{t('ialab.synthesizer.quality')}</div>
                             <div className="font-bold text-green-600 font-sans">Premium</div>
                         </div>
                     </div>
@@ -244,7 +246,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                     <div className="bg-white border border-slate-200/60 shadow-sm rounded-3xl p-6 hover:-translate-y-1 hover:shadow transition-all duration-300 relative overflow-hidden">
                         <div className="flex items-center gap-2 mb-3">
                             <Icon name="fa-user-tie" className="text-petroleum" />
-                            <span className="text-xs font-black text-petroleum tracking-widest uppercase font-sans">ROL</span>
+                            <span className="text-xs font-black text-petroleum tracking-widest uppercase font-sans">{t('ialab.synthesizer.rol')}</span>
                         </div>
                         <p className="text-slate-800 font-medium leading-relaxed font-sans">{deepSeekData.rol}</p>
                         <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-petroleum/5 rounded-full blur-sm"></div>
@@ -254,7 +256,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                     <div className="bg-white border border-slate-200/60 shadow-sm rounded-3xl p-6 hover:-translate-y-1 hover:shadow transition-all duration-300 relative overflow-hidden">
                         <div className="flex items-center gap-2 mb-3">
                             <Icon name="fa-target" className="text-corporate" />
-                            <span className="text-xs font-black text-corporate tracking-widest uppercase font-sans">TAREA</span>
+                            <span className="text-xs font-black text-corporate tracking-widest uppercase font-sans">{t('ialab.synthesizer.task')}</span>
                         </div>
                         <p className="text-slate-800 font-medium leading-relaxed font-sans">{deepSeekData.tarea}</p>
                         <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-corporate/5 rounded-full blur-sm"></div>
@@ -264,7 +266,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                     <div className="bg-white border border-slate-200/60 shadow-sm rounded-3xl p-6 hover:-translate-y-1 hover:shadow transition-all duration-300 relative overflow-hidden">
                         <div className="flex items-center gap-2 mb-3">
                             <Icon name="fa-file-alt" className="text-petroleum" />
-                            <span className="text-xs font-black text-petroleum tracking-widest uppercase font-sans">FORMATO</span>
+                            <span className="text-xs font-black text-petroleum tracking-widest uppercase font-sans">{t('ialab.synthesizer.format')}</span>
                         </div>
                         <p className="text-slate-800 font-medium leading-relaxed font-sans">{deepSeekData.formato}</p>
                         <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-petroleum/5 rounded-full blur-sm"></div>
@@ -283,7 +285,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                             </div>
                             <div className="flex items-center gap-2">
                                 <Icon name="fa-terminal" className="text-slate-600" />
-                                <span className="text-sm font-bold text-slate-300 font-sans">PROMPT_MAESTRO.js</span>
+                                <span className="text-sm font-bold text-slate-300 font-sans">{t('ialab.synthesizer.terminal_header')}</span>
                             </div>
                         </div>
                         
@@ -291,9 +293,9 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                         <button 
                             onClick={() => copyToClipboard(deepSeekData.prompt_maestro)}
                             className="absolute top-6 right-6 bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2 transition-all hover:scale-105 active:scale-95 font-sans"
-                            aria-label="Copiar prompt maestro al portapapeles"
+                            aria-label={t('ialab.synthesizer.copy_aria')}
                         >
-                            <Icon name="fa-copy" className="text-sm" /> Copiar
+                            <Icon name="fa-copy" className="text-sm" /> {t('ialab.synthesizer.copy')}
                         </button>
                     </div>
                     
@@ -307,11 +309,11 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                         <div className="flex items-center gap-4">
                             <span className="flex items-center gap-1">
                                 <Icon name="fa-code" className="text-xs" />
-                                <span>Prompt Engineering</span>
+                                <span>{t('ialab.synthesizer.prompt_engineering')}</span>
                             </span>
                             <span className="flex items-center gap-1">
                                 <Icon name="fa-brain" className="text-xs" />
-                                <span>DeepSeek AI</span>
+                                <span>{t('ialab.synthesizer.deepseek_ai')}</span>
                             </span>
                         </div>
                         <div className="text-xs">
@@ -334,8 +336,8 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                             <Icon name="fa-lightbulb" className="text-white" />
                         </div>
                         <div>
-                            <h4 className="text-lg font-bold text-petroleum font-sans">💡 Análisis Técnico</h4>
-                            <p className="text-sm text-petroleum font-sans">Feedback educativo sobre tu idea</p>
+                            <h4 className="text-lg font-bold text-petroleum font-sans">{t('ialab.synthesizer.technical_analysis')}</h4>
+                            <p className="text-sm text-petroleum font-sans">{t('ialab.synthesizer.technical_analysis_desc')}</p>
                         </div>
                     </div>
                     
@@ -348,16 +350,16 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                         {/* Píldoras de técnicas aplicadas */}
                         <div className="flex flex-wrap gap-2">
                             <span className="bg-white border border-petroleum/20 text-petroleum px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
-                                Estructura RTF
+                                {t('ialab.synthesizer.structure_rtf')}
                             </span>
                             <span className="bg-white border border-corporate/20 text-corporate px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
-                                Especificidad
+                                {t('ialab.synthesizer.specificity')}
                             </span>
                             <span className="bg-white border border-petroleum/20 text-petroleum px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
-                                Claridad
+                                {t('ialab.synthesizer.clarity')}
                             </span>
                             <span className="bg-white border border-slate-200 text-slate-600 px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
-                                Contexto
+                                {t('ialab.synthesizer.context')}
                             </span>
                         </div>
                     </div>
@@ -369,7 +371,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                         <div className="flex items-center gap-3">
                             <Icon name="fa-info-circle" className="text-slate-600" />
                             <div>
-                                <p className="text-sm font-medium text-slate-700 font-sans">Generado con DeepSeek API</p>
+                                <p className="text-sm font-medium text-slate-700 font-sans">{t('ialab.synthesizer.generated_with')}</p>
                                 <p className="text-xs text-slate-500 font-sans">Modelo: deepseek-chat • Temperatura: 0.7 • Response Format: JSON</p>
                             </div>
                         </div>
@@ -377,7 +379,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                             onClick={handleNewGeneration}
                             className="px-4 py-2 text-sm font-medium text-petroleum bg-petroleum/10 hover:bg-petroleum/20 rounded-lg transition-colors font-sans"
                         >
-                            <Icon name="fa-rotate-right" className="mr-2" /> Generar Nuevo
+                            <Icon name="fa-rotate-right" className="mr-2" /> {t('ialab.synthesizer.generate_new')}
                         </button>
                     </div>
                 </div>
@@ -403,18 +405,18 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                             FORUM_TYPOGRAPHY.BODY.LG,
                             FORUM_TYPOGRAPHY.SEMIBOLD
                         )}>
-                            Resumen de Optimización
+                            {t('ialab.synthesizer.optimization_summary')}
                         </h4>
                     </div>
                     <div className="space-y-3">
                         <div className="flex items-center justify-between">
-                            <span className={cn(FORUM_TYPOGRAPHY.BODY.SM, "text-white/80")}>Calidad original:</span>
+                            <span className={cn(FORUM_TYPOGRAPHY.BODY.SM, "text-white/80")}>{t('ialab.synthesizer.original_quality')}</span>
                             <span className={cn(FORUM_TYPOGRAPHY.BODY.SM, FORUM_TYPOGRAPHY.MEDIUM)}>
                                 {genData.analysis.score}/100
                             </span>
                         </div>
                         <div className="flex items-center justify-between">
-                            <span className={cn(FORUM_TYPOGRAPHY.BODY.SM, "text-white/80")}>Técnica aplicada:</span>
+                            <span className={cn(FORUM_TYPOGRAPHY.BODY.SM, "text-white/80")}>{t('ialab.synthesizer.applied_technique')}</span>
                             <span className="flex items-center gap-2">
                                 <span>{genData.techniqueApplied.icon}</span>
                                 <span className={cn(FORUM_TYPOGRAPHY.BODY.SM, FORUM_TYPOGRAPHY.MEDIUM)}>
@@ -423,7 +425,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                             </span>
                         </div>
                         <div className="flex items-center justify-between">
-                            <span className={cn(FORUM_TYPOGRAPHY.BODY.SM, "text-white/80")}>Mejora esperada:</span>
+                            <span className={cn(FORUM_TYPOGRAPHY.BODY.SM, "text-white/80")}>{t('ialab.synthesizer.expected_improvement')}</span>
                             <span className={cn(
                                 FORUM_TYPOGRAPHY.BODY.SM,
                                 FORUM_TYPOGRAPHY.MEDIUM,
@@ -452,7 +454,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                                 FORUM_TYPOGRAPHY.SEMIBOLD,
                                 "text-red-600"
                             )}>
-                                Prompt Original
+                                {t('ialab.synthesizer.original_prompt')}
                             </h4>
                         </div>
                         <div className={cn(
@@ -479,7 +481,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                                 FORUM_TYPOGRAPHY.SEMIBOLD,
                                 "text-green-600"
                             )}>
-                                Prompt Optimizado
+                                {t('ialab.synthesizer.optimized_prompt')}
                             </h4>
                         </div>
                         <div className={cn(
@@ -499,9 +501,9 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                                 FORUM_EFFECTS.TRANSITION_ALL,
                                 "focus:outline-none focus:ring-1 focus:ring-corporate"
                             )}
-                            aria-label="Copiar prompt optimizado al portapapeles"
+                            aria-label={t('ialab.synthesizer.copy_optimized_aria')}
                         >
-                            <Icon name="fa-copy" className="text-xs" /> Copiar
+                            <Icon name="fa-copy" className="text-xs" /> {t('ialab.synthesizer.copy')}
                         </button>
                     </div>
                 </div>
@@ -523,15 +525,15 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div className="text-center">
                             <div className="text-2xl font-bold text-petroleum">{usageStats.totalOptimizations}</div>
-                            <div className="text-xs text-slate-600">Optimizaciones totales</div>
+                            <div className="text-xs text-slate-600">{t('ialab.synthesizer.total_optimizations')}</div>
                         </div>
                         <div className="text-center">
                             <div className="text-2xl font-bold text-corporate">{usageStats.averageScore || 0}</div>
-                            <div className="text-xs text-slate-600">Puntuación promedio</div>
+                            <div className="text-xs text-slate-600">{t('ialab.synthesizer.average_score')}</div>
                         </div>
                         <div className="text-center">
                             <div className="text-2xl font-bold text-corporate">{usageStats.favoriteTechnique || 'N/A'}</div>
-                            <div className="text-xs text-slate-600">Técnica favorita</div>
+                            <div className="text-xs text-slate-600">{t('ialab.synthesizer.favorite_technique')}</div>
                         </div>
                         <div className="text-center">
                             <div className={cn(
@@ -541,7 +543,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                             )}>
                                 {usageStats.improvementTrend > 0 ? '+' : ''}{usageStats.improvementTrend || 0}
                             </div>
-                            <div className="text-xs text-slate-600">Tendencia de mejora</div>
+                            <div className="text-xs text-slate-600">{t('ialab.synthesizer.improvement_trend')}</div>
                         </div>
                     </div>
                 </div>
@@ -559,14 +561,14 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                          FORUM_TYPOGRAPHY.SEMIBOLD,
                          FORUM_TYPOGRAPHY.TEXT_PRIMARY
                      )}>
-                         📋 Historial reciente
+                         {t('ialab.synthesizer.recent_history')}
                      </h4>
                      <button
                          onClick={clearHistory}
                          className="text-sm text-slate-500 hover:text-red-500 transition-colors duration-300"
-                         aria-label="Limpiar historial"
-                     >
-                         <Icon name="fa-trash" className="mr-1" /> Limpiar
+                          aria-label={t('ialab.synthesizer.clear_aria')}
+                      >
+                          <Icon name="fa-trash" className="mr-1" /> {t('ialab.synthesizer.clear')}
                      </button>
                  </div>
                  
@@ -640,7 +642,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                              FORUM_TYPOGRAPHY.SEMIBOLD,
                              "text-red-700"
                          )}>
-                             Error de optimización
+                              {t('ialab.synthesizer.error_title')}
                          </h4>
                          <p className={cn(
                              FORUM_TYPOGRAPHY.BODY.SM,
@@ -671,7 +673,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                              FORUM_TYPOGRAPHY.SEMIBOLD,
                              "text-amber-700"
                          )}>
-                             Información de API
+                              {t('ialab.synthesizer.api_info')}
                          </h4>
                          <p className={cn(
                              FORUM_TYPOGRAPHY.BODY.SM,
@@ -680,11 +682,11 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                              {apiError}
                          </p>
                          <div className="mt-3 text-xs text-amber-700">
-                             <p className="font-medium">Solución automática:</p>
-                             <ul className="list-disc pl-4 mt-1 space-y-1">
-                                 <li>El sistema ha cambiado automáticamente al modo local</li>
-                                 <li>Puedes continuar usando todas las funciones básicas</li>
-                                  <li>Para usar DeepSeek AI, verifica que el servidor backend esté ejecutándose</li>
+                              <p className="font-medium">{t('ialab.synthesizer.api_solution')}</p>
+                              <ul className="list-disc pl-4 mt-1 space-y-1">
+                                  <li>{t('ialab.synthesizer.api_local_mode')}</li>
+                                  <li>{t('ialab.synthesizer.api_continue')}</li>
+                                   <li>{t('ialab.synthesizer.api_verify_backend')}</li>
                              </ul>
                          </div>
                      </div>

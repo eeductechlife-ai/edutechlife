@@ -15,19 +15,25 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
+import { useTranslation } from '../../i18n/I18nProvider';
 import QueEsPrompt_OVA_Original from './QueEsPrompt_OVA_Original';
 
 /**
  * Componente principal OVAThumbnail
  */
 const OVAThumbnail = ({ 
-  title = "Laboratorio: Ética en la I.A.",
-  description = "OVA completo sobre anatomía de prompts con simulador interactivo",
-  estimatedTime = "15 minutos",
-  difficulty = "Intermedio",
+  title: titleProp,
+  description: descProp,
+  estimatedTime: timeProp,
+  difficulty: diffProp,
   interactiveElements = 5,
   onOpenOVA = null
 }) => {
+  const { t } = useTranslation();
+  const title = titleProp ?? t('ialab.ova_thumbnail.title');
+  const description = descProp ?? t('ialab.ova_thumbnail.description');
+  const estimatedTime = timeProp ?? t('ialab.ova_thumbnail.estimated_time');
+  const difficulty = diffProp ?? t('ialab.ova_thumbnail.difficulty');
   // Estado para controlar la visualización del OVA
   const [isOVAOpen, setIsOVAOpen] = useState(false);
 
@@ -58,14 +64,14 @@ const OVAThumbnail = ({
         transition={{ duration: 0.3 }}
         onClick={handleClick}
         className="group relative w-full bg-white rounded-2xl border border-slate-200/60 border-l-4 border-l-petroleum shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden hover:scale-[1.02] active:scale-[0.98]"
-        aria-label={`Abrir ${title}`}
-        title="Haz clic para abrir el OVA interactivo"
+        aria-label={t('ialab.ova_thumbnail.aria_open', { title: title || t('ialab.ova_thumbnail.title') })}
+        title={t('ialab.ova_thumbnail.title_click')}
       >
         {/* Indicador de interactividad */}
         <div className="absolute top-3 right-3 z-10">
           <div className="flex items-center gap-1 bg-gradient-to-br from-petroleum/10 to-corporate/10 px-2 py-1 rounded-full">
             <Icon name="fa-play" className="w-3 h-3 text-petroleum" />
-            <span className="text-xs font-bold text-petroleum">Contenido Interactivo</span>
+            <span className="text-xs font-bold text-petroleum">{t('ialab.ova_thumbnail.interactive_label')}</span>
           </div>
         </div>
 
@@ -119,7 +125,7 @@ const OVAThumbnail = ({
           {/* Badge interactivo */}
           <div className="absolute top-3 left-3 bg-gradient-to-r from-petroleum to-corporate text-white px-3 py-1 rounded-full shadow-md flex items-center gap-2">
             <Icon name="fa-play" className="w-3 h-3" />
-            <span className="text-xs font-bold">HACER CLIC PARA EXPLORAR</span>
+            <span className="text-xs font-bold">{t('ialab.ova_thumbnail.click_to_explore_badge')}</span>
           </div>
         </div>
 
@@ -142,7 +148,7 @@ const OVAThumbnail = ({
                   <Icon name="fa-clock" className="text-petroleum w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs text-slate-500">Duración</div>
+                  <div className="text-xs text-slate-500">{t('ialab.ova_thumbnail.duration')}</div>
                   <div className="text-sm font-medium text-slate-700">{estimatedTime}</div>
                 </div>
               </div>
@@ -152,7 +158,7 @@ const OVAThumbnail = ({
                   <Icon name="fa-signal" className="text-petroleum w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs text-slate-500">Dificultad</div>
+                  <div className="text-xs text-slate-500">{t('ialab.ova_thumbnail.difficulty_label')}</div>
                   <div className="text-sm font-medium text-slate-700">{difficulty}</div>
                 </div>
               </div>
@@ -162,7 +168,7 @@ const OVAThumbnail = ({
                   <Icon name="fa-mouse-pointer" className="text-petroleum w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs text-slate-500">Interactividades</div>
+                  <div className="text-xs text-slate-500">{t('ialab.ova_thumbnail.interactivities')}</div>
                   <div className="text-sm font-medium text-slate-700">{interactiveElements}</div>
                 </div>
               </div>
@@ -172,8 +178,8 @@ const OVAThumbnail = ({
                   <Icon name="fa-graduation-cap" className="text-petroleum w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs text-slate-500">Certificación</div>
-                  <div className="text-sm font-medium text-slate-700">Incluida</div>
+                  <div className="text-xs text-slate-500">{t('ialab.ova_thumbnail.certification')}</div>
+                  <div className="text-sm font-medium text-slate-700">{t('ialab.ova_thumbnail.included')}</div>
                 </div>
               </div>
             </div>
@@ -185,11 +191,11 @@ const OVAThumbnail = ({
               <div className="flex items-center gap-2">
                 <Icon name="fa-hand-pointer" className="w-4 h-4 text-petroleum" />
                 <span className="text-sm text-slate-600 font-medium">
-                  Haz clic para explorar
+                  {t('ialab.ova_thumbnail.click_to_explore')}
                 </span>
               </div>
               <div className="flex items-center gap-1">
-                <span className="text-xs text-petroleum font-bold">EXPLORAR</span>
+                <span className="text-xs text-petroleum font-bold">{t('ialab.ova_thumbnail.explore')}</span>
                 <Icon name="fa-arrow-right" className="w-4 h-4 text-petroleum" />
               </div>
             </div>

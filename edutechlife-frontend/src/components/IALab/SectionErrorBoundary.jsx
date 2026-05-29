@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
+import { withTranslation } from '../../i18n/withTranslation';
 
 class SectionErrorBoundary extends Component {
   constructor(props) {
@@ -36,33 +37,33 @@ class SectionErrorBoundary extends Component {
             <Icon name="fa-circle-exclamation" className="w-6 h-6 text-red-500" />
           </div>
           <h3 className="text-base font-bold text-slate-800 dark:text-slate-100 mb-1">
-            {this.props.title || 'Sección no disponible'}
+            {this.props.title || this.props.t('ialab.error_boundary.title')}
           </h3>
           <p className="text-sm text-slate-500 dark:text-slate-400 text-center mb-5 max-w-sm">
-            {this.props.message || 'Ocurrió un error al cargar esta sección. Puedes intentar de nuevo.'}
+            {this.props.message || this.props.t('ialab.error_boundary.message')}
           </p>
           <div className="flex gap-3">
             <button
               onClick={this.handleRetry}
               className="px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-petroleum to-corporate rounded-xl hover:opacity-90 transition-opacity shadow-sm"
             >
-              Reintentar
+              {this.props.t('ialab.error_boundary.retry')}
             </button>
             {this.props.showReload !== false && (
               <button
                 onClick={() => window.location.reload()}
                 className="px-5 py-2.5 text-sm font-semibold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
               >
-                Recargar página
+                {this.props.t('ialab.error_boundary.reload')}
               </button>
             )}
           </div>
           {this.props.showDetails && this.state.error && (
             <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-700 text-left w-full max-w-md">
-              <details className="text-xs">
-                <summary className="cursor-pointer text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 mb-2 font-medium">
-                  Detalles del error
-                </summary>
+              <div className="text-xs">
+                <div className="font-semibold text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 mb-2">
+                  {this.props.t('ialab.error_boundary.details')}
+                </div>
                 <div className="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-lg font-mono text-xs overflow-auto max-h-40 border border-slate-200 dark:border-slate-700">
                   <div className="text-red-600 font-semibold mb-1">
                     {this.state.error.toString()}
@@ -71,7 +72,7 @@ class SectionErrorBoundary extends Component {
                     {this.state.errorInfo?.componentStack}
                   </div>
                 </div>
-              </details>
+              </div>
             </div>
           )}
         </div>
@@ -82,4 +83,4 @@ class SectionErrorBoundary extends Component {
   }
 }
 
-export default SectionErrorBoundary;
+export default withTranslation(SectionErrorBoundary);

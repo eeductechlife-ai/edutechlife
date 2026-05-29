@@ -2,13 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useUser, useClerk } from '@clerk/react';
 import { supabase } from '../lib/supabase';
 import { useProgressContext } from '../context/ProgressContext';
+import { useTranslation } from '../i18n/I18nProvider';
 import { Card, CardContent } from './ui/card-simple';
 import { Icon } from '../utils/iconMapping.jsx';
 
-const COURSE_NAME = 'Introducción a la Inteligencia Artificial Generativa';
 const TOTAL_MODULES = 5;
 
 const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
+  const { t, locale } = useTranslation();
   const { user: clerkUser, isLoaded: clerkIsLoaded } = useUser();
   const { openUserProfile } = useClerk();
   const { courseProgress, completedModules, completedVideos, completedExams, completedInfographics, completedActivities, isLoading: progressLoading } = useProgressContext();
@@ -55,8 +56,8 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
   };
 
   const getRoleLabel = (role) => {
-    const labels = { student: 'Estudiante', teacher: 'Profesor', admin: 'Administrador', premium_student: 'Estudiante Premium' };
-    return labels[role] || 'Estudiante';
+    const labels = { student: t('mobile_menu.role_student'), teacher: t('mobile_menu.role_teacher'), admin: t('profile.role_admin'), premium_student: t('profile.role_premium_student') };
+    return labels[role] || t('mobile_menu.role_student');
   };
 
   const getRoleBadgeColor = (role) => {
@@ -73,10 +74,10 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
     if (!phone || phone.length === 0) return '';
     const digits = phone.replace(/\D/g, '');
     if (digits.length === 10 && !digits.startsWith('3')) {
-      return 'Debe comenzar con 3 (celular Colombia)';
+      return t('profile.phone_error_format');
     }
     if (digits.length > 0 && digits.length < 10) {
-      return `Faltan ${10 - digits.length} dígitos`;
+      return t('profile.phone_error_digits', { count: 10 - digits.length });
     }
     return '';
   };
@@ -91,7 +92,7 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
 
     setIsLoading(true);
 
-    const clerkName = clerkUser.fullName || clerkUser.firstName || 'Usuario Edutechlife';
+    const clerkName = clerkUser.fullName || clerkUser.firstName || t('profile.user_fallback');
     const clerkEmail = clerkUser.primaryEmailAddress?.emailAddress || '';
     const clerkRole = clerkUser.publicMetadata?.role || 'student';
     const clerkCreatedAt = clerkUser.createdAt;
@@ -275,11 +276,11 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
         detail: { full_name: updates.full_name, phone: updates.phone }
       }));
 
-      setSaveMessage({ type: 'success', text: 'Cambios guardados exitosamente' });
+      setSaveMessage({ type: 'success', text: t('profile.save_success') });
       setTimeout(() => setSaveMessage(null), 3000);
     } catch (err) {
       console.error('Error saving profile:', err.message);
-      setSaveMessage({ type: 'error', text: 'Error al guardar. Intenta de nuevo.' });
+      setSaveMessage({ type: 'error', text: t('profile.save_error') });
       setTimeout(() => setSaveMessage(null), 3000);
     } finally {
       setIsSaving(false);
@@ -301,7 +302,7 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
   };
 
   const handleLogout = async () => {
-    if (window.confirm('¿Cerrar sesión?')) {
+    if (window.confirm(t('profile.confirm_logout'))) {
       try {
         if (window.Clerk?.signOut) await window.Clerk.signOut();
       } catch (err) {
@@ -313,14 +314,14 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
   };
 
   const formatDate = (date) => {
-    if (!date) return 'N/A';
-    return new Date(date).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
+    if (!date) return t('profile.na');
+    return new Date(date).toLocaleDateString(locale === 'en' ? 'en-US' : 'es-CO', { day: 'numeric', month: 'short', year: 'numeric' });
   };
 
   if (!isOpen) return null;
 
   const displayEmail = profileData.email || clerkUser?.primaryEmailAddress?.emailAddress || '';
-  const displayName = profileData.full_name || clerkUser?.fullName || clerkUser?.firstName || 'Usuario';
+  const displayName = profileData.full_name || clerkUser?.fullName || clerkUser?.firstName || t('profile.user_fallback');
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -330,7 +331,7 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
         <button
           onClick={onClose}
           className="absolute top-4 right-4 z-50 p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-all duration-200"
-          aria-label="Cerrar"
+          aria-label={t('common.close')}
         >
           <Icon name="fa-times" className="text-lg" />
         </button>
@@ -366,11 +367,11 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
                 <Icon name="fa-graduation-cap" className="text-[#004B63] text-sm" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-[10px] text-slate-500 font-medium uppercase tracking-wider">Curso Inscrito</p>
-                <p className="text-xs font-bold text-slate-800 leading-snug mt-0.5">{COURSE_NAME}</p>
+                <p className="text-[10px] text-slate-500 font-medium uppercase tracking-wider">{t('profile.enrolled_course')}</p>
+                <p className="text-xs font-bold text-slate-800 leading-snug mt-0.5">{t('profile.course_name')}</p>
                 {stats.enrollmentDate && (
                   <p className="text-[10px] text-slate-500 mt-1">
-                    Inscrito desde: {formatDate(stats.enrollmentDate)}
+                    {t('profile.enrolled_from', { date: formatDate(stats.enrollmentDate) })}
                   </p>
                 )}
               </div>
@@ -381,17 +382,17 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
           <div className="mb-5">
             <h4 className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-1.5">
               <Icon name="fa-user" className="text-[#004B63] text-xs" />
-              Información Personal
+              {t('profile.personal_info')}
             </h4>
 
             <div className="space-y-2.5">
               {/* Email */}
               <div>
-                <label className="text-[10px] font-medium text-slate-500 block mb-1">Correo electrónico</label>
+                <label className="text-[10px] font-medium text-slate-500 block mb-1">{t('profile.email_label')}</label>
                 <div className="px-3 py-2.5 bg-slate-50 border border-slate-200/60 rounded-full flex items-center justify-between">
                   <div className="flex items-center gap-2 min-w-0 flex-1">
                     <Icon name="fa-envelope" className="text-slate-400 text-xs flex-shrink-0" />
-                    <span className="text-xs text-slate-700 truncate">{displayEmail || 'Sin correo'}</span>
+                    <span className="text-xs text-slate-700 truncate">{displayEmail || t('profile.no_email')}</span>
                   </div>
                   <Icon name="fa-lock" className="text-slate-300 text-xs ml-2 flex-shrink-0" />
                 </div>
@@ -399,7 +400,7 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
 
               {/* Teléfono */}
               <div>
-                <label className="text-[10px] font-medium text-slate-500 block mb-1">Teléfono</label>
+                <label className="text-[10px] font-medium text-slate-500 block mb-1">{t('profile.phone_label')}</label>
                 {editingField === 'phone' ? (
                   <div>
                     <div className="relative">
@@ -410,7 +411,7 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
                         onChange={(e) => handleTempChange('phone', e.target.value)}
                         onKeyDown={(e) => { if (e.key === 'Escape') handleCancelEdit(); }}
                         className="w-full pl-9 pr-8 py-2.5 bg-white border border-slate-200 rounded-full focus:outline-none focus:ring-2 focus:ring-[#00BCD4]/50 focus:border-[#00BCD4] text-xs"
-                        placeholder="3001234567"
+                        placeholder={t('profile.phone_placeholder')}
                         maxLength="10"
                         disabled={isSaving}
                       />
@@ -429,7 +430,7 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
                     <div className="flex items-center gap-2 min-w-0 flex-1">
                       <Icon name="fa-phone" className="text-slate-400 text-xs flex-shrink-0" />
                       <span className={`text-xs truncate ${profileData.phone ? 'text-slate-700' : 'text-slate-400 italic'}`}>
-                        {profileData.phone || 'Toca para agregar'}
+                        {profileData.phone || t('profile.tap_to_add')}
                       </span>
                     </div>
                     <Icon name="fa-pencil" className="text-slate-400 text-xs ml-2 flex-shrink-0" />
@@ -439,7 +440,7 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
 
               {/* Nombre completo */}
               <div>
-                <label className="text-[10px] font-medium text-slate-500 block mb-1">Nombre completo</label>
+                <label className="text-[10px] font-medium text-slate-500 block mb-1">{t('profile.name_label')}</label>
                 {editingField === 'full_name' ? (
                   <div className="relative">
                     <input
@@ -449,7 +450,7 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
                       onChange={(e) => handleTempChange('full_name', e.target.value)}
                       onKeyDown={(e) => { if (e.key === 'Escape') handleCancelEdit(); }}
                       className="w-full pl-9 pr-8 py-2.5 bg-white border border-slate-200 rounded-full focus:outline-none focus:ring-2 focus:ring-[#00BCD4]/50 focus:border-[#00BCD4] text-xs"
-                      placeholder="Tu nombre completo"
+                      placeholder={t('profile.name_placeholder')}
                       disabled={isSaving}
                     />
                     <Icon name="fa-user" className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs" />
@@ -484,12 +485,12 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
                 {isSaving ? (
                   <>
                     <Icon name="fa-spinner" className="animate-spin" />
-                    Guardando...
+                    {t('profile.saving')}
                   </>
                 ) : (
                   <>
                     <Icon name="fa-save" />
-                    Guardar Cambios
+                    {t('profile.save_button')}
                   </>
                 )}
               </button>
@@ -510,7 +511,7 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
           <div>
             <h4 className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-1.5">
               <Icon name="fa-cog" className="text-[#004B63] text-xs" />
-              Acciones
+              {t('profile.actions_title')}
             </h4>
 
             <div className="space-y-2">
@@ -521,7 +522,7 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
                 <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center flex-shrink-0">
                   <Icon name="fa-camera" className="text-[#004B63] text-xs" />
                 </div>
-                <span className="text-xs font-semibold text-slate-800">Cambiar Foto de Perfil</span>
+                <span className="text-xs font-semibold text-slate-800">{t('profile.change_photo')}</span>
               </button>
 
               <button
@@ -531,7 +532,7 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
                 <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center flex-shrink-0">
                   <Icon name="fa-key" className="text-[#004B63] text-xs" />
                 </div>
-                <span className="text-xs font-semibold text-slate-800">Cambiar Contraseña</span>
+                <span className="text-xs font-semibold text-slate-800">{t('mobile_menu.change_password')}</span>
               </button>
             </div>
           </div>
@@ -541,7 +542,7 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
             <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-20">
               <div className="flex flex-col items-center gap-2">
                 <Icon name="fa-spinner" className="text-2xl text-[#00BCD4] animate-spin" />
-                <p className="text-xs text-slate-500">Cargando perfil...</p>
+                <p className="text-xs text-slate-500">{t('profile.loading')}</p>
               </div>
             </div>
           )}

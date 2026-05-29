@@ -192,7 +192,7 @@ export default function Footer() {
               {t('footer.newsletter')}
             </h4>
             <p className="text-sm mb-4 lg:mb-2" style={{ color: 'rgba(255, 255, 255, 0.85)' }}>
-              Recibe novedades educativas y actualizaciones de la plataforma.
+              {t('footer.contact_modal.newsletter_tagline')}
             </p>
             
             {subscribed ? (
@@ -315,6 +315,7 @@ export default function Footer() {
 }
 
 function ModalVAK({ onClose, content }) {
+  const { t } = useTranslation();
   const c = content.vakContent;
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" onClick={onClose}>
@@ -364,6 +365,7 @@ function ModalVAK({ onClose, content }) {
 }
 
 function ModalCertificaciones({ onClose, content }) {
+  const { t } = useTranslation();
   const c = content.certificationsContent;
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" onClick={onClose}>
@@ -422,6 +424,7 @@ function ModalCertificaciones({ onClose, content }) {
 }
 
 function ModalBlog({ onClose, content }) {
+  const { t, locale } = useTranslation();
   const [selectedArticle, setSelectedArticle] = useState(null);
   const blogArticles = content.blogArticles;
   const blogArticleContents = content.blogArticleContents;
@@ -637,7 +640,7 @@ function ModalBlog({ onClose, content }) {
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#003d52'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#004B63'}
               >
-                {content.blogSubtitle === 'Articles, news and resources' ? 'Back to blog' : 'Volver al blog'}
+                {locale === 'en' ? 'Back to blog' : 'Volver al blog'}
               </button>
             </div>
           </div>
@@ -703,7 +706,7 @@ function ModalBlog({ onClose, content }) {
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#003d52'}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#004B63'}
             >
-              {content.blogSubtitle === 'Articles, news and resources' ? 'View all articles' : 'Ver todos los artículos'}
+              {locale === 'en' ? 'View all articles' : 'Ver todos los artículos'}
             </button>
           </div>
         </div>
@@ -713,6 +716,7 @@ function ModalBlog({ onClose, content }) {
 }
 
 function ModalDocumentacion({ onClose, content }) {
+  const { t, locale } = useTranslation();
   const [selectedDoc, setSelectedDoc] = useState(null);
   const helpArticles = content.helpArticles;
   const helpArticleContents = content.helpArticleContents;
@@ -755,7 +759,7 @@ function ModalDocumentacion({ onClose, content }) {
               </div>
               <div>
                 <h1 className="text-2xl font-bold" style={{ color: '#004B63' }}>{doc.titulo}</h1>
-                <p className="text-sm" style={{ color: '#4DA8C4' }}>{helpArticles.find(d => d.id === selectedDoc)?.tiempo} {content.helpSubtitle === 'Manuals, guides and technical resources' ? 'read' : 'de lectura'}</p>
+                <p className="text-sm" style={{ color: '#4DA8C4' }}>{helpArticles.find(d => d.id === selectedDoc)?.tiempo} {locale === 'en' ? 'read' : 'de lectura'}</p>
               </div>
             </div>
 
@@ -809,7 +813,7 @@ function ModalDocumentacion({ onClose, content }) {
                       <div key={i} className="p-4 rounded-xl" style={{ backgroundColor: '#F3F9FB' }}>
                         <h4 className="font-semibold" style={{ color: '#004B63' }}>{modelo.nombre}</h4>
                         <p className="text-sm text-gray-600 mt-1">{modelo.descripcion}</p>
-                        <span className="inline-block mt-2 px-2 py-1 rounded text-xs" style={{ backgroundColor: '#E8F4F8', color: '#4DA8C4' }}>{content.helpSubtitle === 'Manuals, guides and technical resources' ? 'Use: ' : 'Uso: '}{modelo.caso}</span>
+                        <span className="inline-block mt-2 px-2 py-1 rounded text-xs" style={{ backgroundColor: '#E8F4F8', color: '#4DA8C4' }}>{locale === 'en' ? 'Use: ' : 'Uso: '}{modelo.caso}</span>
                       </div>
                     ))}
                   </div>
@@ -846,7 +850,7 @@ function ModalDocumentacion({ onClose, content }) {
 
                 {seccion.grafica === 'linea' && (
                   <div className="p-4 rounded-xl" style={{ backgroundColor: '#F3F9FB' }}>
-                    <h4 className="text-sm font-semibold mb-4" style={{ color: '#004B63' }}>{content.helpSubtitle === 'Manuals, guides and technical resources' ? 'Evolution' : 'Evolución'}</h4>
+                    <h4 className="text-sm font-semibold mb-4" style={{ color: '#004B63' }}>{locale === 'en' ? 'Evolution' : 'Evolución'}</h4>
                     <div className="flex items-end justify-between h-40 gap-2">
                       {seccion.datos.map((d, i) => {
                         const max = Math.max(...seccion.datos.map(x => x.engagement || x.valor || 100));
@@ -870,7 +874,7 @@ function ModalDocumentacion({ onClose, content }) {
 
                 {seccion.grafica === 'barras' && (
                   <div className="p-4 rounded-xl" style={{ backgroundColor: '#F3F9FB' }}>
-                    <h4 className="text-sm font-semibold mb-4" style={{ color: '#004B63' }}>{content.helpSubtitle === 'Manuals, guides and technical resources' ? 'Metrics' : 'Métricas'}</h4>
+                    <h4 className="text-sm font-semibold mb-4" style={{ color: '#004B63' }}>{locale === 'en' ? 'Metrics' : 'Métricas'}</h4>
                     <div className="space-y-3">
                       {seccion.datos.map((d, i) => {
                         const max = Math.max(...seccion.datos.map(x => x.antes || x.despues || x.valor || 100));
@@ -897,7 +901,7 @@ function ModalDocumentacion({ onClose, content }) {
 
                 {seccion.grafica === 'dona' && (
                   <div className="p-4 rounded-xl" style={{ backgroundColor: '#F3F9FB' }}>
-                    <h4 className="text-sm font-semibold mb-4" style={{ color: '#004B63' }}>{content.helpSubtitle === 'Manuals, guides and technical resources' ? 'Distribution' : 'Distribución'}</h4>
+                    <h4 className="text-sm font-semibold mb-4" style={{ color: '#004B63' }}>{locale === 'en' ? 'Distribution' : 'Distribución'}</h4>
                     <div className="flex items-center justify-center gap-6">
                       <div className="relative w-28 h-28">
                         <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
@@ -944,9 +948,9 @@ function ModalDocumentacion({ onClose, content }) {
                     <table className="w-full text-sm">
                       <thead>
                         <tr style={{ backgroundColor: '#F3F9FB' }}>
-                          <th className="px-4 py-2 text-left font-semibold" style={{ color: '#004B63' }}>{content.helpSubtitle === 'Manuals, guides and technical resources' ? 'Method' : 'Método'}</th>
+                          <th className="px-4 py-2 text-left font-semibold" style={{ color: '#004B63' }}>{locale === 'en' ? 'Method' : 'Método'}</th>
                           <th className="px-4 py-2 text-left font-semibold" style={{ color: '#004B63' }}>Route</th>
-                          <th className="px-4 py-2 text-left font-semibold" style={{ color: '#004B63' }}>{content.helpSubtitle === 'Manuals, guides and technical resources' ? 'Description' : 'Descripción'}</th>
+                          <th className="px-4 py-2 text-left font-semibold" style={{ color: '#004B63' }}>{locale === 'en' ? 'Description' : 'Descripción'}</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -1060,7 +1064,7 @@ function ModalDocumentacion({ onClose, content }) {
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#003d52'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#004B63'}
               >
-                {content.helpSubtitle === 'Manuals, guides and technical resources' ? 'Back' : 'Volver'}
+                {locale === 'en' ? 'Back' : 'Volver'}
               </button>
             </div>
           </div>
@@ -1129,6 +1133,7 @@ function ModalDocumentacion({ onClose, content }) {
 }
 
 function ModalPrivacidad({ onClose, content }) {
+  const { t } = useTranslation();
   const c = content.privacyContent;
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-4" onClick={onClose}>
@@ -1234,6 +1239,7 @@ function ModalPrivacidad({ onClose, content }) {
 }
 
 function ModalTerminos({ onClose, content }) {
+  const { t } = useTranslation();
   const c = content.termsContent;
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-4" onClick={onClose}>
@@ -1317,6 +1323,7 @@ function ModalTerminos({ onClose, content }) {
 }
 
 function ModalContacto({ onClose }) {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     nombre: '',
     email: '',
@@ -1368,8 +1375,8 @@ function ModalContacto({ onClose }) {
             <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#DCFCE7' }}>
               <Icon name="fa-check" className="text-3xl" style={{ color: '#16A34A' }} />
             </div>
-            <h3 className="text-xl font-bold mb-2" style={{ color: '#004B63' }}>¡Gracias!</h3>
-            <p className="text-gray-600 mb-6">Un asesor te contactará pronto.</p>
+            <h3 className="text-xl font-bold mb-2" style={{ color: '#004B63' }}>{t('footer.contact_modal.success_title')}</h3>
+            <p className="text-gray-600 mb-6">{t('footer.contact_modal.success_desc')}</p>
             <button
               onClick={handleClose}
               className="px-6 py-2 rounded-full font-semibold transition-colors"
@@ -1423,7 +1430,7 @@ function ModalContacto({ onClose }) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Información de contacto */}
             <div className="space-y-4">
-              <h4 className="font-bold" style={{ color: '#004B63' }}>Información de contacto</h4>
+              <h4 className="font-bold" style={{ color: '#004B63' }}>{t('footer.contact_modal.contact_info')}</h4>
               
               <div className="space-y-3">
                 <div className="flex items-center gap-3 p-3 rounded-xl" style={{ backgroundColor: '#F3F9FB' }}>
@@ -1431,8 +1438,8 @@ function ModalContacto({ onClose }) {
                     <Icon name="fa-envelope" className="text-sm" style={{ color: '#FFFFFF' }} />
                   </div>
                   <div>
-                    <p className="text-xs" style={{ color: '#6B7280' }}>Email</p>
-                    <p className="text-sm font-medium" style={{ color: '#004B63' }}>contacto@edutechlife.com</p>
+                    <p className="text-xs" style={{ color: '#6B7280' }}>{t('footer.contact_modal.email')}</p>
+                    <p className="text-sm font-medium" style={{ color: '#004B63' }}>{t('footer.contact_email_text')}</p>
                   </div>
                 </div>
 
@@ -1441,8 +1448,8 @@ function ModalContacto({ onClose }) {
                     <Icon name="fa-phone" className="text-sm" style={{ color: '#FFFFFF' }} />
                   </div>
                   <div>
-                    <p className="text-xs" style={{ color: '#6B7280' }}>Teléfono</p>
-                    <p className="text-sm font-medium" style={{ color: '#004B63' }}>+52 (55) 1234-5678</p>
+                    <p className="text-xs" style={{ color: '#6B7280' }}>{t('footer.contact_modal.phone')}</p>
+                    <p className="text-sm font-medium" style={{ color: '#004B63' }}>{t('footer.contact_phone_text')}</p>
                   </div>
                 </div>
 
@@ -1451,30 +1458,30 @@ function ModalContacto({ onClose }) {
                     <Icon name="fa-location-dot" className="text-sm" style={{ color: '#FFFFFF' }} />
                   </div>
                   <div>
-                    <p className="text-xs" style={{ color: '#6B7280' }}>Dirección</p>
-                    <p className="text-sm font-medium" style={{ color: '#004B63' }}>Av. Principal 123, Centro</p>
+                    <p className="text-xs" style={{ color: '#6B7280' }}>{t('footer.contact_modal.address')}</p>
+                    <p className="text-sm font-medium" style={{ color: '#004B63' }}>{t('footer.contact_address_text')}</p>
                   </div>
                 </div>
               </div>
 
               {/* Horario */}
               <div className="p-4 rounded-xl" style={{ backgroundColor: '#E8F4F8' }}>
-                <h5 className="font-semibold mb-2" style={{ color: '#004B63' }}>Horario de atención</h5>
+                <h5 className="font-semibold mb-2" style={{ color: '#004B63' }}>{t('footer.contact_modal.schedule_title')}</h5>
                 <div className="space-y-1 text-sm">
                   <div className="flex justify-between">
-                    <span style={{ color: '#374151' }}>Lunes - Viernes</span>
+                    <span style={{ color: '#374151' }}>{t('footer.contact_modal.mon_fri')}</span>
                     <span style={{ color: '#6B7280' }}>9:00 - 18:00</span>
                   </div>
                   <div className="flex justify-between">
-                    <span style={{ color: '#374151' }}>Sábado</span>
+                    <span style={{ color: '#374151' }}>{t('footer.contact_modal.saturday')}</span>
                     <span style={{ color: '#6B7280' }}>10:00 - 14:00</span>
                   </div>
                   <div className="flex justify-between">
-                    <span style={{ color: '#374151' }}>Domingo</span>
-                    <span style={{ color: '#6B7280' }}>Cerrado</span>
+                    <span style={{ color: '#374151' }}>{t('footer.contact_modal.sunday')}</span>
+                    <span style={{ color: '#6B7280' }}>{t('footer.contact_modal.closed')}</span>
                   </div>
                   <div className="flex justify-between pt-1 border-t" style={{ borderColor: '#CBD5E1' }}>
-                    <span style={{ color: '#004B63', fontWeight: '600' }}>Chat en vivo</span>
+                    <span style={{ color: '#004B63', fontWeight: '600' }}>{t('footer.contact_modal.live_chat')}</span>
                     <span style={{ color: '#16A34A' }}>24/7</span>
                   </div>
                 </div>
@@ -1482,7 +1489,7 @@ function ModalContacto({ onClose }) {
 
               {/* Redes sociales */}
               <div>
-                <h5 className="font-semibold mb-2" style={{ color: '#004B63' }}>Síguenos en redes</h5>
+                <h5 className="font-semibold mb-2" style={{ color: '#004B63' }}>{t('footer.contact_modal.follow_us')}</h5>
                 <div className="flex gap-2">
                   <a href="https://web.facebook.com/eductechlife/" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full flex items-center justify-center transition-colors" style={{ backgroundColor: '#004B63', color: '#FFFFFF' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#003d52'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#004B63'}>
                     <Icon name="fa-facebook-f" className="text-sm" />
@@ -1505,33 +1512,33 @@ function ModalContacto({ onClose }) {
 
             {/* Formulario */}
             <div>
-              <h4 className="font-bold mb-4" style={{ color: '#004B63' }}>Envíanos un mensaje</h4>
+              <h4 className="font-bold mb-4" style={{ color: '#004B63' }}>{t('footer.contact_modal.form_title')}</h4>
               <form onSubmit={handleSubmit} className="space-y-3">
                  <div>
-                   <label htmlFor="footer-nombre" className="block text-sm font-semibold mb-1" style={{ color: '#004B63' }}>Nombre completo</label>
-                   <input type="text" id="footer-nombre" name="nombre" value={formData.nombre} onChange={handleChange} required className="w-full px-4 py-2.5 rounded-xl text-sm" style={{ border: '2px solid #E5E7EB', color: '#004B63', outline: 'none' }} placeholder="Tu nombre" onFocus={(e) => e.target.style.borderColor = '#4DA8C4'} onBlur={(e) => e.target.style.borderColor = '#E5E7EB' } autoComplete="name" />
+                    <label htmlFor="footer-nombre" className="block text-sm font-semibold mb-1" style={{ color: '#004B63' }}>{t('footer.contact_modal.label_name')}</label>
+                    <input type="text" id="footer-nombre" name="nombre" value={formData.nombre} onChange={handleChange} required className="w-full px-4 py-2.5 rounded-xl text-sm" style={{ border: '2px solid #E5E7EB', color: '#004B63', outline: 'none' }} placeholder={t('footer.contact_modal.placeholder_name')} onFocus={(e) => e.target.style.borderColor = '#4DA8C4'} onBlur={(e) => e.target.style.borderColor = '#E5E7EB' } autoComplete="name" />
                  </div>
                  <div>
-                   <label htmlFor="footer-email" className="block text-sm font-semibold mb-1" style={{ color: '#004B63' }}>Correo electrónico</label>
-                   <input type="email" id="footer-email" name="email" value={formData.email} onChange={handleChange} required className="w-full px-4 py-2.5 rounded-xl text-sm" style={{ border: '2px solid #E5E7EB', color: '#004B63', outline: 'none' }} placeholder="tu@email.com" onFocus={(e) => e.target.style.borderColor = '#4DA8C4'} onBlur={(e) => e.target.style.borderColor = '#E5E7EB' } autoComplete="email" />
+                    <label htmlFor="footer-email" className="block text-sm font-semibold mb-1" style={{ color: '#004B63' }}>{t('footer.contact_modal.label_email')}</label>
+                    <input type="email" id="footer-email" name="email" value={formData.email} onChange={handleChange} required className="w-full px-4 py-2.5 rounded-xl text-sm" style={{ border: '2px solid #E5E7EB', color: '#004B63', outline: 'none' }} placeholder={t('footer.contact_modal.placeholder_email')} onFocus={(e) => e.target.style.borderColor = '#4DA8C4'} onBlur={(e) => e.target.style.borderColor = '#E5E7EB' } autoComplete="email" />
                  </div>
                  <div>
-                   <label htmlFor="footer-telefono" className="block text-sm font-semibold mb-1" style={{ color: '#004B63' }}>Teléfono</label>
-                   <input type="tel" id="footer-telefono" name="telefono" value={formData.telefono} onChange={handleChange} className="w-full px-4 py-2.5 rounded-xl text-sm" style={{ border: '2px solid #E5E7EB', color: '#004B63', outline: 'none' }} placeholder="300 123 4567" onFocus={(e) => e.target.style.borderColor = '#4DA8C4'} onBlur={(e) => e.target.style.borderColor = '#E5E7EB' } autoComplete="tel" />
+                    <label htmlFor="footer-telefono" className="block text-sm font-semibold mb-1" style={{ color: '#004B63' }}>{t('footer.contact_modal.label_phone')}</label>
+                    <input type="tel" id="footer-telefono" name="telefono" value={formData.telefono} onChange={handleChange} className="w-full px-4 py-2.5 rounded-xl text-sm" style={{ border: '2px solid #E5E7EB', color: '#004B63', outline: 'none' }} placeholder={t('footer.contact_modal.placeholder_phone')} onFocus={(e) => e.target.style.borderColor = '#4DA8C4'} onBlur={(e) => e.target.style.borderColor = '#E5E7EB' } autoComplete="tel" />
                  </div>
                  <div>
-                   <label htmlFor="footer-motivo" className="block text-sm font-semibold mb-1" style={{ color: '#004B63' }}>Motivo de contacto</label>
-                   <select id="footer-motivo" name="motivo" value={formData.motivo} onChange={handleChange} className="w-full px-4 py-2.5 rounded-xl text-sm bg-white" style={{ border: '2px solid #E5E7EB', color: '#004B63', outline: 'none' }} onFocus={(e) => e.target.style.borderColor = '#4DA8C4'} onBlur={(e) => e.target.style.borderColor = '#E5E7EB' }>
-                     <option value="">Selecciona un motivo</option>
-                     <option value="informacion">Información sobre servicios</option>
-                     <option value="diagnostico">Diagnóstico VAK</option>
-                     <option value="cursos">Cursos STEAM</option>
-                     <option value="consultoria">Consultoría B2B</option>
-                     <option value="otro">Otro</option>
+                    <label htmlFor="footer-motivo" className="block text-sm font-semibold mb-1" style={{ color: '#004B63' }}>{t('footer.contact_modal.label_reason')}</label>
+                    <select id="footer-motivo" name="motivo" value={formData.motivo} onChange={handleChange} className="w-full px-4 py-2.5 rounded-xl text-sm bg-white" style={{ border: '2px solid #E5E7EB', color: '#004B63', outline: 'none' }} onFocus={(e) => e.target.style.borderColor = '#4DA8C4'} onBlur={(e) => e.target.style.borderColor = '#E5E7EB' }>
+                      <option value="">{t('footer.contact_modal.reason_placeholder')}</option>
+                      <option value="informacion">{t('footer.contact_modal.reason_info')}</option>
+                      <option value="diagnostico">{t('footer.contact_modal.reason_vak')}</option>
+                      <option value="cursos">{t('footer.contact_modal.reason_courses')}</option>
+                      <option value="consultoria">{t('footer.contact_modal.reason_consulting')}</option>
+                      <option value="otro">{t('footer.contact_modal.reason_other')}</option>
                    </select>
                  </div>
                 <button type="submit" className="w-full py-3 font-semibold rounded-xl transition-all duration-300" style={{ background: 'linear-gradient(to right, #004B63, #4DA8C4)', color: '#FFFFFF', boxShadow: '0 4px 15px rgba(77, 168, 196, 0.3)' }} onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 6px 20px rgba(77, 168, 196, 0.5)'} onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 4px 15px rgba(77, 168, 196, 0.3)'}>
-                  Enviar mensaje
+                  {t('footer.contact_modal.submit')}
                 </button>
               </form>
             </div>

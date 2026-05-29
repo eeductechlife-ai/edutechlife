@@ -1,7 +1,9 @@
 import React from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const ModuleProgressBar = ({ moduleScore, activeMod, totalModules = 5, challengeScores, completedExams }) => {
+  const { t } = useTranslation();
   const challengeDone = challengeScores?.[activeMod];
   const examDone = completedExams?.[activeMod];
 
@@ -15,13 +17,13 @@ const ModuleProgressBar = ({ moduleScore, activeMod, totalModules = 5, challenge
             <Icon name="fa-chart-line" className="text-white text-lg" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-petroleum leading-tight">Progreso del Módulo</h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">Módulo {activeMod} de {totalModules}</p>
+            <h3 className="text-sm font-bold text-petroleum leading-tight">{t('ialab.module_progress_bar.label')}</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400">{t('ialab.module_progress', { current: activeMod, total: totalModules })}</p>
           </div>
         </div>
         <div className="text-right flex-shrink-0 ml-4">
           <div className="text-2xl md:text-3xl font-bold text-petroleum dark:text-white">{moduleScore}%</div>
-          <div className="text-[10px] text-slate-600 dark:text-slate-500 uppercase tracking-wider font-medium">Completado</div>
+          <div className="text-[10px] text-slate-600 dark:text-slate-500 uppercase tracking-wider font-medium">{t('ialab.module_progress_bar.completed_label')}</div>
         </div>
       </div>
 
@@ -35,32 +37,32 @@ const ModuleProgressBar = ({ moduleScore, activeMod, totalModules = 5, challenge
       </div>
 
       <div className="flex items-center gap-4 mt-2.5 text-[11px] text-slate-600 dark:text-slate-500">
-        <span className="flex items-center gap-1">
-          <Icon name="fa-file" className="text-xs" />
-          Recursos
-        </span>
+          <span className="flex items-center gap-1">
+            <Icon name="fa-file" className="text-xs" />
+            {t('ialab.module_progress_bar.resources')}
+          </span>
         {challengeDone && (
           <span className="flex items-center gap-1">
             <Icon name="fa-rocket" className="text-xs" />
-            Desafío: {challengeDone}%
+            {t('ialab.module_progress_bar.challenge', { score: challengeDone })}
           </span>
         )}
         {examDone && (
           <span className="flex items-center gap-1">
             <Icon name="fa-clipboard-check" className="text-xs" />
-            Examen: {examDone}%
+            {t('ialab.module_progress_bar.exam', { score: examDone })}
           </span>
         )}
         {!challengeDone && (
           <span className="flex items-center gap-1 text-amber-500">
             <Icon name="fa-hourglass" className="text-xs" />
-            Desafío pendiente
+            {t('ialab.module_progress_bar.challenge_pending')}
           </span>
         )}
         {!examDone && (
           <span className="flex items-center gap-1 text-amber-500">
             <Icon name="fa-hourglass" className="text-xs" />
-            Examen pendiente
+            {t('ialab.module_progress_bar.exam_pending')}
           </span>
         )}
       </div>

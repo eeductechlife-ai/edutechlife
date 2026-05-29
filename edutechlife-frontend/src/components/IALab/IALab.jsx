@@ -47,6 +47,7 @@ import SectionErrorBoundary from './SectionErrorBoundary';
 import { useTheme } from '../../context/ThemeContext';
 import { useTranslation } from '../../i18n/I18nProvider';
 import SettingsSupportModal from '../modals/SettingsSupportModal';
+import ValerioFloatingButton from './ValerioFloatingButton';
 import { useSessionTracker } from '../../hooks/useSessionTracker';
 import AchievementToast from './AchievementToast';
 import { useAchievementNotifications } from '../../hooks/useAchievementNotifications';
@@ -605,21 +606,10 @@ const IALabContent = () => {
                   setShowChallengeResult={setShowChallengeResult}
                 />
 
-                {/* FAB de Valerio - posicionado relativo al viewport */}
-                 <button 
-                       className="fixed bottom-4 right-4 landscape:bottom-2 landscape:right-2 lg:bottom-8 lg:right-8 w-12 h-12 landscape:w-10 landscape:h-10 lg:w-16 lg:h-16 bg-gradient-to-br from-petroleum to-corporate rounded-xl lg:rounded-2xl shadow-lg dark:shadow-premium-lg hover:shadow-xl dark:hover:shadow-premium hover:scale-105 active:scale-95 transition-all duration-300 z-50 flex items-center justify-center group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-corporate focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 safe-area-bottom"
-                       onClick={() => handleGlobalAction('OPEN_VALERIO')}
-                       aria-label={t('ialab.valerio_aria')}
-                       data-tour="tour-valerio"
-                   >
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 landscape:w-6 landscape:h-6 group-hover:scale-110 transition-transform duration-300">
-                        <path d="M12 3C8.5 3 6 5.5 6 9C6 10.5 6.5 12 7.5 13C8.5 14 9.5 15 10 16C10.5 17 11 18 12 18C13 18 13.5 17 14 16C14.5 15 15.5 14 16.5 13C17.5 12 18 10.5 18 9C18 5.5 15.5 3 12 3Z" fill="white" />
-                        <path d="M9 7C8.5 7 8 7.5 8 8C8 8.5 8.5 9 9 9C9.5 9 10 8.5 10 8C10 7.5 9.5 7 9 7Z" fill="var(--color-petroleum-dark)" />
-                        <path d="M15 7C14.5 7 14 7.5 14 8C14 8.5 14.5 9 15 9C15.5 9 16 8.5 16 8C16 7.5 15.5 7 15 7Z" fill="var(--color-petroleum-dark)" />
-                        <path d="M12 5C11.5 5 11 5.5 11 6C11 6.5 11.5 7 12 7C12.5 7 13 6.5 13 6C13 5.5 12.5 5 12 5Z" fill="white" />
-                    </svg>
-                    <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-emerald-400 rounded-full border-2 border-white dark:border-slate-900 shadow-sm" />
-                </button>
+                <ValerioFloatingButton
+                  onClick={() => handleGlobalAction('OPEN_VALERIO')}
+                  t={t}
+                />
                 
 
 

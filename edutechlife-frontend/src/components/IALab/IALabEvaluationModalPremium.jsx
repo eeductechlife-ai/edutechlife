@@ -4,6 +4,7 @@ import { useIALabProgressContext, useIALabUIContext } from '../../context/IALabC
 import { useIALabStore } from '../../store/ialabStore';
 import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
 import { useNotification } from '../../context/NotificationContext';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 /**
  * Wrapper para el modal de evaluación premium
@@ -11,6 +12,7 @@ import { useNotification } from '../../context/NotificationContext';
  * SEPARACIÓN DE CONCERNS: La lógica de guardado se ejecuta aquí
  */
 const IALabEvaluationModalPremium = ({ isOpen, onClose }) => {
+    const { t } = useTranslation();
     const { activeMod, markActivityComplete, markExamComplete, markChallengeComplete, updateModuleActivity, refreshProgress, recordLastTopic, modules } = useIALabProgressContext();
     const setIsChallengeCompleted = useIALabStore(s => s.setIsChallengeCompleted);
     const setChallengeScore = useIALabStore(s => s.setChallengeScore);
@@ -60,9 +62,9 @@ const IALabEvaluationModalPremium = ({ isOpen, onClose }) => {
             }
             
             // Registrar ultimo tema visto (desafio del modulo)
-            const moduleName = modules?.find(m => m.id === activeMod)?.title || `Modulo ${activeMod}`;
+            const moduleName = modules?.find(m => m.id === activeMod)?.title || t('ialab.evaluation.modal_premium.module_name', { id: activeMod });
             if (recordLastTopic) {
-              recordLastTopic(activeMod, moduleName, 'challenge', `Desafio - ${moduleName}`, `challenge_${activeMod}`);
+              recordLastTopic(activeMod, moduleName, 'challenge', t('ialab.evaluation.modal_premium.challenge_label', { name: moduleName }), `challenge_${activeMod}`);
             }
             
             // Actualizar estado UI
@@ -80,8 +82,10 @@ const IALabEvaluationModalPremium = ({ isOpen, onClose }) => {
 
             createNotification({
                 type: passed ? 'success' : 'warning',
-                title: passed ? '🏆 Desafío Aprobado' : '🏆 Desafío No Aprobado',
-                message: `Tu nota en el desafío del Módulo ${activeMod} fue ${score}%. ${passed ? '¡Excelente trabajo!' : 'Necesitas 80% para aprobar. Revisa el feedback y vuelve a intentarlo.'}`,
+                title: passed ? t('ialab.evaluation.modal_premium.challenge_passed') : t('ialab.evaluation.modal_premium.challenge_failed'),
+                message: passed
+                    ? t('ialab.evaluation.modal_premium.result_passed', { module: activeMod, score })
+                    : t('ialab.evaluation.modal_premium.result_failed', { module: activeMod, score }),
                 metadata: { moduleId: activeMod, score, type: 'challenge' }
             });
         } catch (error) {

@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
+import { useTranslation } from '../../i18n/I18nProvider';
 import useIALabSynthesizer from '../../hooks/IALab/useIALabSynthesizer';
 import { cn } from '../forum/forumDesignSystem';
 
 const ReactivePromptStation = ({ className = '', ...rest }) => {
+  const { t } = useTranslation();
     const {
         input,
         setInput,
@@ -55,7 +57,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
 
     const handleOptimize = async () => {
         if (!isValidInput(input)) {
-            alert(`El prompt debe tener entre 3 y 500 caracteres (actual: ${input.length})`);
+            alert(t('ialab.synthesizer.validation_error', { length: input.length }));
             return;
         }
         await optimizePrompt(input);
@@ -105,9 +107,9 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
     };
 
     const metrics = [
-        { name: 'Claridad', key: 'clarity' },
-        { name: 'Contexto', key: 'context' },
-        { name: 'Precisión', key: 'specificity' }
+        { name: t('ialab.synthesizer.clarity_label'), key: 'clarity' },
+        { name: t('ialab.synthesizer.context_label'), key: 'context' },
+        { name: t('ialab.synthesizer.metric_precision'), key: 'specificity' }
     ];
 
     const improvements = genData?.feedback?.improvements || [];
@@ -139,16 +141,16 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
             >
                 <div className="flex-1">
                     <h2 className="text-lg md:text-xl font-bold text-petroleum group-hover:text-corporate transition-colors duration-300">
-                        Herramientas para la Creación de Prompts
+                        {t('ialab.reactive_prompt.title')}
                     </h2>
                     <p className="text-slate-600 text-sm md:text-base leading-relaxed mt-1">
-                        Escribe una idea básica y la IA la transformará en una instrucción maestra
+                        {t('ialab.reactive_prompt.subtitle')}
                     </p>
                     {!isOpen && (
                         <div className="mt-4">
                             <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-petroleum to-corporate rounded-xl shadow-sm hover:from-petroleum-dark hover:to-corporate-dark hover:shadow group-hover:scale-105 transition-all duration-300 cursor-pointer">
                                 <Icon name="fa-hand-pointer" className="w-4 h-4 text-white" />
-                                <span className="text-sm font-bold text-white tracking-wide">Abrir Herramientas para la Creación de Prompts</span>
+                                <span className="text-sm font-bold text-white tracking-wide">{t('ialab.reactive_prompt.open_tools')}</span>
                                 <Icon name="fa-chevron-right" className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform duration-300" />
                             </div>
                         </div>
@@ -177,7 +179,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                                 value={input}
                                 onChange={handleInputChange}
                                 onKeyDown={handleKeyDown}
-                                placeholder="Describe brevemente tu idea para un prompt..."
+                                placeholder={t('ialab.reactive_prompt.input_placeholder')}
                                 className={cn(
                                     "w-full h-32 md:h-40",
                                     "bg-slate-50/50 border border-slate-200 rounded-xl",
@@ -196,11 +198,11 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                                 "text-xs",
                                 charCount > 450 ? "text-amber-500" : "text-slate-500"
                             )}>
-                                {charCount} / 500 caracteres
+                                {t('ialab.reactive_prompt.chars', { count: charCount })}
                             </span>
                             {charCount > 0 && charCount < 3 && (
                                 <span className="text-xs text-amber-500">
-                                    Mínimo 3 caracteres
+                                    {t('ialab.reactive_prompt.min_chars')}
                                 </span>
                             )}
                         </div>
@@ -224,17 +226,17 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                                 "focus:outline-none focus:ring-2 focus:ring-corporate/30 focus:ring-offset-2",
                                 "disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:bg-transparent disabled:hover:text-white"
                             )}
-                            aria-label={loading ? "Analizando y mejorando..." : "Generar prompt profesional"}
+                            aria-label={loading ? t('ialab.reactive_prompt.generating') : t('ialab.reactive_prompt.generate')}
                         >
                             {loading ? (
                                 <>
                                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                    <span>Analizando y Mejorando...</span>
+                                    <span>{t('ialab.reactive_prompt.generating')}</span>
                                 </>
                             ) : (
                                 <>
                                     <Icon name="fa-wand-magic-sparkles" className="text-sm text-white hover:text-petroleum" />
-                                    <span className="text-sm text-white hover:text-petroleum">Generar Prompt Profesional</span>
+                                    <span className="text-sm text-white hover:text-petroleum">{t('ialab.reactive_prompt.generate')}</span>
                                 </>
                             )}
                         </motion.button>
@@ -256,7 +258,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                     <div className="h-full flex flex-col justify-center">
                         <div className="mb-4">
                             <h3 className="text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                                Análisis en Vivo
+                                {t('ialab.reactive_prompt.live_analysis')}
                             </h3>
                         </div>
 
@@ -301,11 +303,11 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                         <div className="mt-4 pt-3 border-t border-petroleum/10">
                             {!input.trim() ? (
                                 <p className="text-xs text-slate-600 text-center">
-                                    Escribe para analizar
+                                    {t('ialab.reactive_prompt.write_to_analyze')}
                                 </p>
                             ) : input.trim().length < 3 ? (
                                 <p className="text-xs text-amber-500 text-center">
-                                    Mínimo 3 caracteres
+                                    {t('ialab.reactive_prompt.min_chars')}
                                 </p>
                             ) : quickAnalysis ? (
                                 <div className="flex flex-col items-center">
@@ -325,13 +327,13 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                                     </div>
                                     {quickAnalysis.score > 0 && (
                                         <span className="text-xs text-slate-500 mt-1">
-                                            Puntuación: {quickAnalysis.score}%
+                                            {t('ialab.reactive_prompt.score', { score: quickAnalysis.score })}
                                         </span>
                                     )}
                                 </div>
                             ) : (
                                 <p className="text-xs text-slate-600 text-center">
-                                    Analizando calidad...
+                                    {t('ialab.reactive_prompt.analyzing')}
                                 </p>
                             )}
                         </div>
@@ -348,7 +350,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                         <div className="flex items-center gap-2">
                             <Icon name="fa-terminal" className="text-petroleum w-4 h-4" />
                             <span className="text-xs font-bold tracking-[0.12em] uppercase text-petroleum">
-                                Resultado
+                                {t('ialab.reactive_prompt.result')}
                             </span>
                             <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 ${
                                 isResultOpen ? 'bg-petroleum/10' : 'bg-corporate/15'
@@ -364,7 +366,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                             className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-petroleum text-xs font-semibold rounded-lg transition-all duration-200"
                         >
                             <Icon name={copied ? "fa-check" : "fa-copy"} className="w-3 h-3" />
-                            <span>{copied ? "Copiado" : "Copiar"}</span>
+                            <span>{copied ? t('ialab.reactive_prompt.copied') : t('ialab.reactive_prompt.copy')}</span>
                         </button>
                     </div>
 
@@ -376,7 +378,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                                         <Icon name="fa-terminal" className="text-white w-3.5 h-3.5" />
                                     </div>
                                     <span className="text-xs font-bold tracking-[0.12em] uppercase text-petroleum">
-                                        Prompt Generado
+                                        {t('ialab.reactive_prompt.generated_prompt')}
                                     </span>
                                 </div>
                                 <div className="overflow-x-auto">
@@ -391,7 +393,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                                     <div className="w-7 h-7 rounded-md bg-petroleum/10 flex items-center justify-center flex-shrink-0">
                                         <Icon name="fa-lightbulb" className="text-petroleum w-3.5 h-3.5" />
                                     </div>
-                                    <span className="font-semibold text-petroleum text-sm">Feedback Educativo</span>
+                                    <span className="font-semibold text-petroleum text-sm">{t('ialab.reactive_prompt.educational_feedback')}</span>
                                 </div>
                                 <p className="text-slate-600 text-sm md:text-base leading-relaxed">
                                     {genData.feedback?.educationalInsights || genData.feedback?.summary || ''}
@@ -403,7 +405,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                                             <div className="w-5 h-5 rounded-md bg-petroleum/10 flex items-center justify-center flex-shrink-0">
                                                 <Icon name="fa-list-check" className="text-petroleum w-2.5 h-2.5" />
                                             </div>
-                                            <span className="text-xs font-semibold text-petroleum uppercase tracking-wider">Mejoras aplicadas</span>
+                                            <span className="text-xs font-semibold text-petroleum uppercase tracking-wider">{t('ialab.reactive_prompt.improvements')}</span>
                                         </div>
                                         <ul className="space-y-2">
                                             {improvements.map((imp, i) => (

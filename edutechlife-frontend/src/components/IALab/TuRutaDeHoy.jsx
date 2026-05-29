@@ -1,5 +1,5 @@
 import React, { useRef, useCallback, useMemo } from 'react';
-import { modules } from '../../data/ialab';
+import { getModules } from '../../data/ialab';
 import { useIALabStore } from '../../store/ialabStore';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
@@ -20,12 +20,12 @@ const parseResourceDuration = (resource) => {
   return 0;
 };
 
-const calculateUnviewedMinutes = (modules, moduleId, viewedIds) => {
+const calculateUnviewedMinutes = (modules, moduleId, viewedIds, locale) => {
   const modData = modules?.[moduleId - 1];
   if (!modData?.topics) return null;
   let total = 0;
   modData.topics.forEach((topicTitle) => {
-    const tr = getResourcesForTopic(topicTitle);
+    const tr = getResourcesForTopic(topicTitle, locale);
     if (!tr?.resources) return;
     tr.resources.forEach((resource) => {
       if (!viewedIds.includes(resource.id)) {
@@ -37,14 +37,14 @@ const calculateUnviewedMinutes = (modules, moduleId, viewedIds) => {
 };
 
 const PrimaryActionCard = ({ route, onContinue, mod }) => {
-  const { t } = useTranslation();
-  const action = route.primaryAction;
+  const { t, locale } = useTranslation();
+  const action = route?.primaryAction;
   const prefersReducedMotion = useReducedMotion();
   const courseProgress = useIALabStore(s => s.courseProgress);
   const getWeeklyXP = useIALabStore(s => s.getWeeklyXP);
   const getViewedResources = useIALabStore(s => s.getViewedResources);
   const viewedIds = getViewedResources();
-  const remainingMin = useMemo(() => calculateUnviewedMinutes(modules, mod?.id, viewedIds), [modules, mod?.id, viewedIds]);
+  const remainingMin = useMemo(() => calculateUnviewedMinutes(getModules(locale), mod?.id, viewedIds, locale), [locale, mod?.id, viewedIds]);
   if (!action) return null;
 
   return (

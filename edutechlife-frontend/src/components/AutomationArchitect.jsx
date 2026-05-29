@@ -1,8 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { callDeepseek } from '../utils/api';
 import AutomationArchitectureViewer from './AutomationArchitectureViewer';
+import { useTranslation } from '../i18n/I18nProvider';
+import { getProcesosOptions, getIndustrias, getArquitecturasPredefinidas } from './AutomationData';
 
 const AutomationArchitect = ({ onBack, embedded = false }) => {
+    const { t, locale } = useTranslation();
     const [activeStep, setActiveStep] = useState(1);
     const [formData, setFormData] = useState({
         empresa: '',
@@ -19,70 +22,13 @@ const AutomationArchitect = ({ onBack, embedded = false }) => {
     const [architectures, setArchitectures] = useState([]);
     const [selectedArchitecture, setSelectedArchitecture] = useState(null);
 
-    const procesosOptions = [
-        'Atención al cliente',
-        'Facturación y cobros',
-        'Gestión de inventario',
-        'Procesos contables',
-        'Recursos humanos',
-        'Marketing y ventas',
-        'Logística y envíos',
-        'Análisis de datos',
-        'Comunicación interna',
-        'Documentación y reportes'
-    ];
-
-    const industrias = [
-        { id: 'educacion', label: 'Educación' },
-        { id: 'retail', label: 'Retail / Comercio' },
-        { id: 'logistica', label: 'Logística / Transporte' },
-        { id: 'salud', label: 'Salud / Clínicas' },
-        { id: 'fintech', label: 'Fintech / Bancario' },
-        { id: 'manufactura', label: 'Manufactura / Industria' },
-        { id: 'servicios', label: 'Servicios Profesionales' },
-        { id: 'turismo', label: 'Hotelería / Turismo' },
-    ];
-
-    const arquitecturasPredefinidas = [
-        {
-            id: 'basica',
-            nombre: 'Arquitectura Básica',
-            descripcion: 'Automatización de procesos clave con chatbots, reportes automáticos y notificaciones inteligentes.',
-            componentes: ['Chatbot IA', 'Generador de reportes', 'Sistema de notificaciones', 'Integración básica CRM'],
-            tiempo: '1-3 meses',
-            costo: '$5-10M',
-            complejidad: 'Baja',
-            icono: 'fa-robot',
-            color: '#4DA8C4'
-        },
-        {
-            id: 'intermedia',
-            nombre: 'Arquitectura Intermedia',
-            descripcion: 'Sistema integrado con IA predictiva, dashboards analíticos y automatización de flujos multi-paso.',
-            componentes: ['IA predictiva', 'Dashboard analítico', 'Sistema de recomendaciones', 'API de integración', 'Automatización de flujos'],
-            tiempo: '3-6 meses',
-            costo: '$15-25M',
-            complejidad: 'Media',
-            icono: 'fa-brain',
-            color: '#66CCCC'
-        },
-        {
-            id: 'avanzada',
-            nombre: 'Arquitectura Avanzada',
-            descripcion: 'Ecosistema completo con multi-agentes IA, automatización end-to-end y analítica en tiempo real.',
-            componentes: ['Multi-agentes IA', 'Automatización end-to-end', 'Analítica en tiempo real', 'Integración ERP', 'Sistema de aprendizaje automático'],
-            tiempo: '6-12 meses',
-            costo: '$30-50M',
-            complejidad: 'Alta',
-            icono: 'fa-network-wired',
-            color: '#004B63'
-        }
-    ];
+    const procesosOptions = getProcesosOptions(locale);
+    const industrias = getIndustrias(locale);
+    const arquitecturasPredefinidas = getArquitecturasPredefinidas(locale);
 
     useEffect(() => {
-        // Simular carga de arquitecturas predefinidas
         setArchitectures(arquitecturasPredefinidas);
-    }, []);
+    }, [arquitecturasPredefinidas]);
 
     const handleInputChange = (field, value) => {
         setFormData(prev => ({
@@ -132,7 +78,7 @@ Formato: Título, descripción, y secciones claras con viñetas.`;
             setActiveStep(4);
         } catch (error) {
             console.error('Error generando plan:', error);
-            setGeneratedPlan('Error al generar el plan. Por favor intenta nuevamente.');
+            setGeneratedPlan(t('automation.architect.error_generating'));
         } finally {
             setIsGenerating(false);
         }
@@ -170,13 +116,10 @@ Formato: Título, descripción, y secciones claras con viñetas.`;
             <div className="aa-header">
                 <div className="aa-badge">
                     <i className="fa-solid fa-robot" />
-                    <span>ARQUITECTO DE AUTOMATIZACIÓN</span>
+                    <span>{t('automation.architect.badge')}</span>
                 </div>
-                <h1>Diseña tu Ecosistema de IA Empresarial</h1>
-                <p>
-                    Crea un plan personalizado de automatización con arquitectura, fases de implementación,
-                    ROI estimado y estándares internacionales para tu empresa.
-                </p>
+                <h1>{t('automation.architect.title')}</h1>
+                <p>{t('automation.architect.desc')}</p>
                 <div className="flex flex-wrap items-center justify-center gap-3 mt-4">
                     <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#004B63]/5 border border-[#004B63]/10 rounded-full text-[10px] font-semibold text-[#004B63]">
                         <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
@@ -201,10 +144,10 @@ Formato: Título, descripción, y secciones claras con viñetas.`;
                             {step}
                         </div>
                         <span className="aa-step-label">
-                            {step === 1 && 'Diagnóstico'}
-                            {step === 2 && 'Arquitectura'}
-                            {step === 3 && 'Personalización'}
-                            {step === 4 && 'Plan'}
+                            {step === 1 && t('automation.architect.step_diagnosis')}
+                            {step === 2 && t('automation.architect.step_architecture')}
+                            {step === 3 && t('automation.architect.step_customization')}
+                            {step === 4 && t('automation.architect.step_plan')}
                         </span>
                     </div>
                 ))}
@@ -214,20 +157,20 @@ Formato: Título, descripción, y secciones claras con viñetas.`;
             <div className="aa-content">
                 {activeStep === 1 && (
                     <div className="aa-step-content">
-                        <h2><i className="fa-solid fa-clipboard-question" /> Diagnóstico Inicial</h2>
-                        <p className="aa-subtitle">Cuéntanos sobre tu empresa para diseñar la arquitectura ideal.</p>
+                        <h2><i className="fa-solid fa-clipboard-question" /> {t('automation.architect.step1_title')}</h2>
+                        <p className="aa-subtitle">{t('automation.architect.step1_subtitle')}</p>
                         <div className="aa-form-grid">
                             <div className="aa-form-group">
-                                <label>Nombre de la Empresa</label>
+                                <label>{t('automation.architect.empresa_label')}</label>
                                 <input
                                     type="text"
                                     value={formData.empresa}
                                     onChange={(e) => handleInputChange('empresa', e.target.value)}
-                                    placeholder="Ej: TechCorp S.A.S"
+                                    placeholder={t('automation.architect.empresa_placeholder')}
                                 />
                             </div>
                             <div className="aa-form-group">
-                                <label>Industria</label>
+                                <label>{t('automation.architect.sector_label')}</label>
                                 <select
                                     value={formData.industria}
                                     onChange={(e) => handleInputChange('industria', e.target.value)}
@@ -238,7 +181,7 @@ Formato: Título, descripción, y secciones claras con viñetas.`;
                                 </select>
                             </div>
                             <div className="aa-form-group">
-                                <label>Número de Empleados</label>
+                                <label>{t('automation.architect.empleados_label')}</label>
                                 <div className="aa-slider-container">
                                     <input
                                         type="range"
@@ -248,13 +191,13 @@ Formato: Título, descripción, y secciones claras con viñetas.`;
                                         value={formData.empleados}
                                         onChange={(e) => handleInputChange('empleados', parseInt(e.target.value))}
                                     />
-                                    <span className="aa-slider-value">{formData.empleados} empleados</span>
+                                    <span className="aa-slider-value">{t('automation.architect.empleados_suffix', { value: formData.empleados })}</span>
                                 </div>
                             </div>
                         </div>
 
                         <div className="aa-processes-section">
-                            <h3>Procesos a Automatizar</h3>
+                            <h3>{t('automation.architect.procesos_label')}</h3>
                             <div className="aa-processes-grid">
                                 {procesosOptions.map((proceso, index) => (
                                     <div
@@ -272,11 +215,11 @@ Formato: Título, descripción, y secciones claras con viñetas.`;
                         </div>
 
                         <div className="aa-form-group">
-                            <label>Objetivos Principales</label>
+                            <label>{t('automation.architect.objetivos_label')}</label>
                             <textarea
                                 value={formData.objetivos}
                                 onChange={(e) => handleInputChange('objetivos', e.target.value)}
-                                placeholder="Describe tus objetivos (reducir costos, mejorar eficiencia, escalar operaciones, etc.)"
+                                placeholder={t('automation.architect.objetivos_placeholder')}
                                 rows="4"
                             />
                         </div>
@@ -287,7 +230,7 @@ Formato: Título, descripción, y secciones claras con viñetas.`;
                                 onClick={() => setActiveStep(2)}
                                 disabled={!formData.empresa || !formData.sector || formData.procesos.length === 0}
                             >
-                                Siguiente: Seleccionar Arquitectura
+                                {t('automation.architect.btn_next_arch')}
                                 <i className="fa-solid fa-arrow-right" />
                             </button>
                         </div>
@@ -296,8 +239,8 @@ Formato: Título, descripción, y secciones claras con viñetas.`;
 
                 {activeStep === 2 && (
                     <div className="aa-step-content">
-                        <h2><i className="fa-solid fa-diagram-project" /> Selecciona tu Arquitectura</h2>
-                        <p className="aa-subtitle">Elige una arquitectura base que se ajuste a tus necesidades</p>
+                        <h2><i className="fa-solid fa-diagram-project" /> {t('automation.architect.select_arch')}</h2>
+                        <p className="aa-subtitle">{t('automation.architect.step2_subtitle')}</p>
                         
                         <div className="aa-architectures-grid">
                             {architectures.map((arch) => (
@@ -329,10 +272,16 @@ Formato: Título, descripción, y secciones claras con viñetas.`;
                                         </div>
 
                                         <div className="aa-arch-components">
-                                            <h4>Componentes Principales</h4>
+                                            <h4>{t('automation.architect.components_title')}</h4>
                                             <ul>
                                                 {arch.componentes.map((comp, idx) => (
-                                                    <li key={idx}><i className="fa-solid fa-check" /> {comp}</li>
+                                                    <li key={idx}>
+                                                        <i className="fa-solid fa-check" />
+                                                        <div>
+                                                            <strong>{comp.nombre}</strong>
+                                                            <span className="block text-xs text-slate-400">{comp.desc}</span>
+                                                        </div>
+                                                    </li>
                                                 ))}
                                             </ul>
                                         </div>
@@ -347,14 +296,14 @@ Formato: Título, descripción, y secciones claras con viñetas.`;
                                 onClick={() => setActiveStep(1)}
                             >
                                 <i className="fa-solid fa-arrow-left" />
-                                Anterior
+                                {t('automation.test.prev')}
                             </button>
                             <button 
                                 className="aa-btn-primary"
                                 onClick={() => setActiveStep(3)}
                                 disabled={!selectedArchitecture}
                             >
-                                Siguiente: Personalizar Plan
+                                {t('automation.architect.btn_next_custom')}
                                 <i className="fa-solid fa-arrow-right" />
                             </button>
                         </div>
@@ -363,11 +312,11 @@ Formato: Título, descripción, y secciones claras con viñetas.`;
 
                 {activeStep === 3 && (
                     <div className="aa-step-content">
-                        <h2><i className="fa-solid fa-sliders" /> Personalización del Plan</h2>
+                        <h2><i className="fa-solid fa-sliders" /> {t('automation.architect.step3_title')}</h2>
                         
                         <div className="aa-customization-grid">
                             <div className="aa-custom-card">
-                                <h3><i className="fa-solid fa-money-bill" /> Presupuesto</h3>
+                                <h3><i className="fa-solid fa-money-bill" /> {t('automation.architect.budget_title')}</h3>
                                 <div className="aa-radio-group">
                                     {['bajo', 'medio', 'alto'].map((nivel) => (
                                         <label key={nivel} className="aa-radio-label">
@@ -386,7 +335,7 @@ Formato: Título, descripción, y secciones claras con viñetas.`;
                             </div>
 
                             <div className="aa-custom-card">
-                                <h3><i className="fa-solid fa-calendar" /> Tiempo Estimado</h3>
+                                <h3><i className="fa-solid fa-calendar" /> {t('automation.architect.time_title')}</h3>
                                 <div className="aa-radio-group">
                                     {['1-3 meses', '3-6 meses', '6-12 meses', '12+ meses'].map((tiempo) => (
                                         <label key={tiempo} className="aa-radio-label">
@@ -406,30 +355,30 @@ Formato: Título, descripción, y secciones claras con viñetas.`;
                         </div>
 
                         <div className="aa-summary">
-                            <h3>Resumen de tu Proyecto</h3>
+                            <h3>{t('automation.architect.summary_title')}</h3>
                             <div className="aa-summary-grid">
                                 <div className="aa-summary-item">
-                                    <span>Institución</span>
-                                    <strong>{formData.empresa || 'No especificado'}</strong>
+                                    <span>{t('automation.architect.summary_empresa')}</span>
+                                    <strong>{formData.empresa || t('automation.architect.not_specified')}</strong>
                                 </div>
                                 <div className="aa-summary-item">
-                                    <span>Sector</span>
-                                    <strong>{formData.sector || 'No especificado'}</strong>
+                                    <span>{t('automation.architect.summary_sector')}</span>
+                                    <strong>{formData.sector || t('automation.architect.not_specified')}</strong>
                                 </div>
                                 <div className="aa-summary-item">
-                                    <span>Empleados</span>
+                                    <span>{t('automation.architect.summary_empleados')}</span>
                                     <strong>{formData.empleados}</strong>
                                 </div>
                                 <div className="aa-summary-item">
-                                    <span>Procesos</span>
+                                    <span>{t('automation.architect.summary_procesos')}</span>
                                     <strong>{formData.procesos.length}</strong>
                                 </div>
                                 <div className="aa-summary-item">
-                                    <span>Arquitectura</span>
-                                    <strong>{selectedArchitecture?.nombre || 'No seleccionada'}</strong>
+                                    <span>{t('automation.architect.summary_arquitectura')}</span>
+                                    <strong>{selectedArchitecture?.nombre || t('automation.architect.not_selected')}</strong>
                                 </div>
                                 <div className="aa-summary-item">
-                                    <span>Presupuesto</span>
+                                    <span>{t('automation.architect.summary_presupuesto')}</span>
                                     <strong>{formData.presupuesto.toUpperCase()}</strong>
                                 </div>
                             </div>
@@ -441,7 +390,7 @@ Formato: Título, descripción, y secciones claras con viñetas.`;
                                 onClick={() => setActiveStep(2)}
                             >
                                 <i className="fa-solid fa-arrow-left" />
-                                Anterior
+                                {t('automation.test.prev')}
                             </button>
                             <button 
                                 className="aa-btn-primary"
@@ -451,12 +400,12 @@ Formato: Título, descripción, y secciones claras con viñetas.`;
                                 {isGenerating ? (
                                     <>
                                         <i className="fa-solid fa-spinner fa-spin" />
-                                        Generando Plan...
+                                        {t('automation.architect.generating')}
                                     </>
                                 ) : (
                                     <>
                                         <i className="fa-solid fa-magic" />
-                                        Generar Plan de Automatización
+                                        {t('automation.architect.btn_generate')}
                                     </>
                                 )}
                             </button>
@@ -466,22 +415,22 @@ Formato: Título, descripción, y secciones claras con viñetas.`;
 
                 {activeStep === 4 && generatedPlan && (
                     <div className="aa-step-content">
-                        <h2><i className="fa-solid fa-file-contract" /> Plan Generado</h2>
+                        <h2><i className="fa-solid fa-file-contract" /> {t('automation.architect.plan_title')}</h2>
                         
                         <div className="aa-plan-header">
                             <div className="aa-plan-badge">
                                 <i className="fa-solid fa-check-circle" />
-                                <span>PLAN COMPLETADO</span>
+                                <span>{t('automation.architect.plan_badge')}</span>
                             </div>
-                            <h3>Plan de Automatización para {formData.empresa}</h3>
+                            <h3>{t('automation.architect.plan_for', { empresa: formData.empresa })}</h3>
                             <p className="text-slate-500 text-sm mt-1">
-                                Industria: {industrias.find(i => i.id === formData.industria)?.label || formData.industria} — Arquitectura: {selectedArchitecture?.nombre || 'Personalizada'}
+                                {industrias.find(i => i.id === formData.industria)?.label || formData.industria} — {selectedArchitecture?.nombre || ''}
                             </p>
                         </div>
 
                         <div className="aa-plan-content">
                             <div className="mb-6">
-                                <h4 className="text-sm font-bold text-[#004B63] mb-3"><i className="fa-solid fa-diagram-project" /> Arquitectura Visual</h4>
+                                <h4 className="text-sm font-bold text-[#004B63] mb-3"><i className="fa-solid fa-diagram-project" /> {t('automation.architect.visual_architecture')}</h4>
                                 <AutomationArchitectureViewer
                                     architectures={arquitecturasPredefinidas}
                                     selectedArchitecture={selectedArchitecture}
@@ -489,7 +438,7 @@ Formato: Título, descripción, y secciones claras con viñetas.`;
                             </div>
 
                             <div className="aa-plan-card">
-                                <h4><i className="fa-solid fa-robot" /> Resumen Ejecutivo</h4>
+                                <h4><i className="fa-solid fa-robot" /> {t('automation.architect.executive_summary')}</h4>
                                 <div className="aa-plan-text">
                                     {generatedPlan.split('\n').map((line, idx) => (
                                         <p key={idx}>{line}</p>
@@ -503,14 +452,14 @@ Formato: Título, descripción, y secciones claras con viñetas.`;
                                     onClick={downloadPlan}
                                 >
                                     <i className="fa-solid fa-download" />
-                                    Descargar Plan
+                                    {t('automation.architect.download')}
                                 </button>
                                 <button 
                                     className="aa-btn-secondary"
                                     onClick={resetForm}
                                 >
                                     <i className="fa-solid fa-redo" />
-                                    Crear Nuevo Plan
+                                    {t('automation.architect.new_plan')}
                                 </button>
                                 {onBack && !embedded && (
                                     <button 
@@ -518,7 +467,7 @@ Formato: Título, descripción, y secciones claras con viñetas.`;
                                         onClick={onBack}
                                     >
                                         <i className="fa-solid fa-arrow-left" />
-                                        Volver al Dashboard
+                                        {t('automation.architect.back_dashboard')}
                                     </button>
                                 )}
                             </div>

@@ -3,9 +3,11 @@ import { motion } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { useAuth } from '../../../context/AuthContext';
 import useForumPosts, { POST_CATEGORIES } from '../../../hooks/IALab/forum/useForumPosts';
+import { useTranslation } from '../../../i18n/I18nProvider';
 
 const IALabForumCreatePost = ({ onClose, onCreated }) => {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const { createPost } = useForumPosts();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -31,7 +33,7 @@ const IALabForumCreatePost = ({ onClose, onCreated }) => {
     if (result.success) {
       onCreated?.();
     } else {
-      setError(result.error || 'Error al crear el post');
+      setError(result.error || t('ialab.forum.create_post.error_generic'));
     }
     setIsSubmitting(false);
   }, [title, content, category, tagsInput, createPost, onCreated]);
@@ -57,7 +59,7 @@ const IALabForumCreatePost = ({ onClose, onCreated }) => {
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center">
               <Icon name="fa-plus" className="text-white text-xs" />
             </div>
-            <h3 className="text-base font-bold text-petroleum">Nuevo Post</h3>
+            <h3 className="text-base font-bold text-petroleum">{t('ialab.forum.create_post.title')}</h3>
           </div>
           <button onClick={onClose} className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-500 hover:text-slate-700 transition-colors">
             <Icon name="fa-xmark" />
@@ -84,7 +86,7 @@ const IALabForumCreatePost = ({ onClose, onCreated }) => {
                 }`}
               >
                 <Icon name={opt.icon} className="text-[10px]" />
-                {opt.label}
+                {t(`ialab.forum.create_post.cat_${opt.id}`)}
               </button>
             ))}
           </div>
@@ -94,7 +96,7 @@ const IALabForumCreatePost = ({ onClose, onCreated }) => {
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Título de tu publicación"
+              placeholder={t('ialab.forum.create_post.title_placeholder')}
               className="w-full px-4 py-2.5 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl text-sm text-slate-800 dark:text-slate-200 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-corporate/20 focus:border-corporate/30 transition-all"
               maxLength={200}
               autoFocus
@@ -105,7 +107,7 @@ const IALabForumCreatePost = ({ onClose, onCreated }) => {
             <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              placeholder="Escribe tu contenido aquí... Comparte tu experiencia, haz una pregunta o inicia una discusión."
+              placeholder={t('ialab.forum.create_post.content_placeholder')}
               className="w-full px-4 py-2.5 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl text-sm text-slate-800 dark:text-slate-200 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-corporate/20 focus:border-corporate/30 transition-all resize-none"
               rows={5}
               maxLength={5000}
@@ -122,19 +124,19 @@ const IALabForumCreatePost = ({ onClose, onCreated }) => {
               type="text"
               value={tagsInput}
               onChange={(e) => setTagsInput(e.target.value)}
-              placeholder="Etiquetas (separadas por coma): IA, Prompts, ChatGPT"
+              placeholder={t('ialab.forum.create_post.tags_placeholder')}
               className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl text-sm text-slate-800 dark:text-slate-200 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-corporate/20 focus:border-corporate/30 transition-all"
             />
           </div>
 
           <div className="flex items-center justify-between pt-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
-            >
-              Cancelar
-            </button>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="px-4 py-2 text-sm text-slate-600 hover:text-slate-800 transition-colors"
+                >
+                  {t('ialab.forum.create_post.cancel')}
+                </button>
             <motion.button
               type="submit"
               whileHover={{ scale: 1.02 }}
@@ -145,12 +147,12 @@ const IALabForumCreatePost = ({ onClose, onCreated }) => {
               {isSubmitting ? (
                 <>
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  Publicando...
+                  {t('ialab.forum.create_post.publishing')}
                 </>
               ) : (
                 <>
                   <Icon name="fa-paper-plane" className="text-xs" />
-                  Publicar
+                  {t('ialab.forum.create_post.publish')}
                 </>
               )}
             </motion.button>

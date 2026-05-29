@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 /**
  * Componente para Paso 1: Identificar elementos en un escenario
@@ -11,6 +12,7 @@ import { Icon } from '../../utils/iconMapping.jsx';
  * @param {Function} props.onResponseChange - Handler para actualizar respuesta
  */
 const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
+    const { t } = useTranslation();
     const [selectedElements, setSelectedElements] = useState({
         rol: '',
         contexto: '',
@@ -122,13 +124,13 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                         <Icon name="fa-search" className="text-white text-lg" />
                     </div>
                     <div>
-                        <h3 className="text-lg font-bold text-slate-800">Identifica los elementos clave</h3>
+                        <h3 className="text-lg font-bold text-slate-800">{t('ialab.evaluation.step1.title')}</h3>
                         <p className="text-slate-500 text-sm">
-                            Analiza el escenario y clasifica cada parte como Rol, Contexto o Tarea
+                            {t('ialab.evaluation.step1.subtitle')}
                         </p>
                         <div className="mt-3 p-4 bg-blue-50 border border-blue-100 rounded-xl">
                             <p className="text-xs text-slate-600 leading-relaxed">
-                                <strong className="text-petroleum">¿Cómo resolver este ejercicio?</strong> Lee atentamente el escenario. Debajo encontrarás fragmentos de texto que debes arrastrar hacia la columna correcta. Si no ves 3 opciones, busca frases como "Eres un...", "Trabajando para..." o "Debes..." en el texto del escenario para identificarlas.
+                                <strong className="text-petroleum">{t('ialab.evaluation.step1.how_to_title')}</strong> {t('ialab.evaluation.step1.how_to_desc')}
                             </p>
                         </div>
                     </div>
@@ -139,7 +141,7 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
             <div className="space-y-3">
                 <div className="flex items-center gap-2">
                     <Icon name="fa-scroll" className="text-corporate" />
-                    <h4 className="text-lg font-semibold text-slate-800">Escenario</h4>
+                    <h4 className="text-lg font-semibold text-slate-800">{t('ialab.evaluation.step1.scenario')}</h4>
                 </div>
                 <div className="bg-slate-50/50 rounded-xl p-5 border border-slate-200">
                     <p className="text-slate-700 leading-relaxed whitespace-pre-wrap">
@@ -160,10 +162,10 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                         <div className="w-8 h-8 rounded-lg bg-corporate/10 flex items-center justify-center">
                             <Icon name="fa-user-tie" className="text-corporate" />
                         </div>
-                        <h4 className="text-lg font-semibold text-slate-800">Rol</h4>
+                        <h4 className="text-lg font-semibold text-slate-800">{t('ialab.evaluation.step1.role')}</h4>
                     </div>
                     <p className="text-slate-500 text-sm mb-4">
-                        ¿Quién eres? Arrastra aquí frases que definan el rol del asistente.
+                        {t('ialab.evaluation.step1.role_hint')}
                     </p>
                     
                     {selectedElements.rol ? (
@@ -181,7 +183,7 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                     ) : (
                         <div className="text-center py-8 border-2 border-dashed border-slate-300 rounded-lg">
                             <Icon name="fa-arrow-down" className="text-slate-600 text-xl mb-2" />
-                            <p className="text-slate-600 text-sm">Arrastra un elemento aquí</p>
+                            <p className="text-slate-600 text-sm">{t('ialab.evaluation.step1.drop_here')}</p>
                         </div>
                     )}
                 </div>
@@ -196,10 +198,10 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                         <div className="w-8 h-8 rounded-lg bg-petroleum/10 flex items-center justify-center">
                             <Icon name="fa-building" className="text-petroleum" />
                         </div>
-                        <h4 className="text-lg font-semibold text-slate-800">Contexto</h4>
+                        <h4 className="text-lg font-semibold text-slate-800">{t('ialab.evaluation.step1.context')}</h4>
                     </div>
                     <p className="text-slate-500 text-sm mb-4">
-                        ¿Dónde? Arrastra aquí frases sobre la situación o entorno.
+                        {t('ialab.evaluation.step1.context_hint')}
                     </p>
                     
                     {selectedElements.contexto ? (
@@ -217,7 +219,7 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                     ) : (
                         <div className="text-center py-8 border-2 border-dashed border-slate-300 rounded-lg">
                             <Icon name="fa-arrow-down" className="text-slate-600 text-xl mb-2" />
-                            <p className="text-slate-600 text-sm">Arrastra un elemento aquí</p>
+                            <p className="text-slate-600 text-sm">{t('ialab.evaluation.step1.drop_here')}</p>
                         </div>
                     )}
                 </div>
@@ -232,10 +234,10 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                         <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
                             <Icon name="fa-tasks" className="text-emerald-500" />
                         </div>
-                        <h4 className="text-lg font-semibold text-slate-800">Tarea</h4>
+                        <h4 className="text-lg font-semibold text-slate-800">{t('ialab.evaluation.step1.task')}</h4>
                     </div>
                     <p className="text-slate-500 text-sm mb-4">
-                        ¿Qué debes hacer? Arrastra aquí frases sobre la tarea u objetivo.
+                        {t('ialab.evaluation.step1.task_hint')}
                     </p>
                     
                     {selectedElements.tarea ? (
@@ -253,7 +255,7 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                     ) : (
                         <div className="text-center py-8 border-2 border-dashed border-slate-300 rounded-lg">
                             <Icon name="fa-arrow-down" className="text-slate-600 text-xl mb-2" />
-                            <p className="text-slate-600 text-sm">Arrastra un elemento aquí</p>
+                            <p className="text-slate-600 text-sm">{t('ialab.evaluation.step1.drop_here')}</p>
                         </div>
                     )}
                 </div>
@@ -263,7 +265,7 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
             <div className="space-y-3">
                 <div className="flex items-center gap-2">
                     <Icon name="fa-puzzle-piece" className="text-slate-600" />
-                    <h4 className="text-lg font-semibold text-slate-800">Elementos para clasificar</h4>
+                    <h4 className="text-lg font-semibold text-slate-800">{t('ialab.evaluation.step1.elements_to_classify')}</h4>
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -310,34 +312,34 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
             <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
                 <div className="flex items-center gap-3 mb-3">
                     <Icon name="fa-lightbulb" className="text-amber-500" />
-                    <h4 className="text-lg font-semibold text-slate-800">Consejos para identificar</h4>
+                    <h4 className="text-lg font-semibold text-slate-800">{t('ialab.evaluation.step1.tips_title')}</h4>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="space-y-2">
                         <div className="flex items-center gap-2">
                             <div className="w-2 h-2 bg-corporate rounded-full"></div>
-                            <span className="text-sm font-medium text-slate-700">Rol</span>
+                            <span className="text-sm font-medium text-slate-700">{t('ialab.evaluation.step1.role')}</span>
                         </div>
                         <p className="text-slate-500 text-sm">
-                            Busca frases como "Eres un...", "Como experto en...", "Tu rol es..."
+                            {t('ialab.evaluation.step1.role_tip')}
                         </p>
                     </div>
                     <div className="space-y-2">
                         <div className="flex items-center gap-2">
                             <div className="w-2 h-2 bg-petroleum rounded-full"></div>
-                            <span className="text-sm font-medium text-slate-700">Contexto</span>
+                            <span className="text-sm font-medium text-slate-700">{t('ialab.evaluation.step1.context')}</span>
                         </div>
                         <p className="text-slate-500 text-sm">
-                            Identifica la empresa, industria, situación específica o restricciones
+                            {t('ialab.evaluation.step1.context_tip')}
                         </p>
                     </div>
                     <div className="space-y-2">
                         <div className="flex items-center gap-2">
                             <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
-                            <span className="text-sm font-medium text-slate-700">Tarea</span>
+                            <span className="text-sm font-medium text-slate-700">{t('ialab.evaluation.step1.task')}</span>
                         </div>
                         <p className="text-slate-500 text-sm">
-                            Encuentra el objetivo claro: "Debes...", "Necesitas...", "Crea un..."
+                            {t('ialab.evaluation.step1.task_tip')}
                         </p>
                     </div>
                 </div>

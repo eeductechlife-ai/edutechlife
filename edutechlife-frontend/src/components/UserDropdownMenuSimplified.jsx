@@ -31,7 +31,7 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
 
   const activeUser = clerkUser || clerkUserOfficial;
   const userInfo = getClerkUserInfo(activeUser);
-  const displayName = profileName || activeUser?.fullName || activeUser?.firstName || userInfo?.displayName || 'Usuario';
+  const displayName = profileName || activeUser?.fullName || activeUser?.firstName || userInfo?.displayName || t('mobile_menu.user_fallback');
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -229,8 +229,8 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
           <button
             onClick={handleAvatarClick}
             className="flex-shrink-0 w-9 h-9 rounded-full overflow-hidden border-2 border-white shadow-sm hover:ring-2 hover:ring-corporate/50 hover:ring-offset-2 transition-all duration-200 cursor-pointer"
-            aria-label="Cambiar foto de perfil"
-            title="Cambiar foto de perfil"
+            aria-label={t('modals.settings.change_photo_aria')}
+            title={t('modals.settings.change_photo_aria')}
           >
             {userInfo.avatarUrl ? (
               <img src={userInfo.avatarUrl} alt={displayName} loading="lazy" className="w-full h-full object-cover" />
@@ -247,7 +247,7 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
             onClick={handleTriggerClick}
             aria-haspopup="true"
             aria-expanded={isOpen}
-            aria-label="Menú de usuario"
+            aria-label={t('modals.settings.user_menu_aria')}
             data-tour="tour-undermenu-desktop"
           >
             <div className="flex-1 min-w-0 text-left">
@@ -255,7 +255,7 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
                 {displayName}
               </div>
               <div className="text-xs text-slate-500 truncate">
-                {userInfo.role === 'teacher' ? 'Profesor' : 'Estudiante'}
+                {userInfo.role === 'teacher' ? t('mobile_menu.role_teacher') : t('mobile_menu.role_student')}
               </div>
             </div>
 
@@ -275,7 +275,7 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
           <div
             className={`absolute right-0 top-full mt-2 w-60 border border-slate-200/60 shadow-xl rounded-xl bg-white z-[999] overflow-hidden ${animClasses}`}
             role="menu"
-            aria-label="Opciones de usuario"
+            aria-label={t('modals.settings.user_options_aria')}
             onKeyDown={handleMenuKeyDown}
           >
             <div className="p-3 bg-gradient-to-r from-petroleum to-corporate">
@@ -283,8 +283,8 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
                 <button
                   onClick={handleAvatarClick}
                   className="h-8 w-8 rounded-full overflow-hidden border border-white/30 hover:ring-2 hover:ring-white/50 transition-all duration-200 flex-shrink-0 cursor-pointer"
-                  aria-label="Cambiar foto de perfil"
-                  title="Cambiar foto de perfil"
+                  aria-label={t('modals.settings.change_photo_aria')}
+                  title={t('modals.settings.change_photo_aria')}
                 >
                   {userInfo.avatarUrl ? (
                     <img src={userInfo.avatarUrl} alt={displayName} loading="lazy" className="w-full h-full object-cover" />
@@ -315,7 +315,7 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
                 style={staggerStyle(0)}
               >
                 <Icon name="fa-user-circle" className="text-sm text-petroleum flex-shrink-0" />
-                <span className="text-xs font-semibold text-slate-800 group-hover:text-petroleum transition-colors duration-200">Mi Perfil</span>
+                <span className="text-xs font-semibold text-slate-800 group-hover:text-petroleum transition-colors duration-200">{t('mobile_menu.my_profile')}</span>
               </button>
 
               <button
@@ -327,7 +327,7 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
                 style={staggerStyle(1)}
               >
                 <Icon name="fa-clock" className="text-sm text-petroleum flex-shrink-0" />
-                <span className="text-xs font-semibold text-slate-800 group-hover:text-petroleum transition-colors duration-200">Mi Historial de Aprendizaje</span>
+                <span className="text-xs font-semibold text-slate-800 group-hover:text-petroleum transition-colors duration-200">{t('mobile_menu.my_history')}</span>
               </button>
 
               <button
@@ -339,7 +339,7 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
                 style={staggerStyle(2)}
               >
                 <Icon name="fa-certificate" className="text-sm text-petroleum flex-shrink-0" />
-                <span className="text-xs font-semibold text-slate-800 group-hover:text-petroleum transition-colors duration-200">Mis Certificados</span>
+                <span className="text-xs font-semibold text-slate-800 group-hover:text-petroleum transition-colors duration-200">{t('mobile_menu.certificates')}</span>
               </button>
 
               <button
@@ -351,7 +351,7 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
                 style={staggerStyle(3)}
               >
                 <Icon name="fa-calendar" className="text-sm text-petroleum flex-shrink-0" />
-                <span className="text-xs font-semibold text-slate-800 group-hover:text-petroleum transition-colors duration-200">Plan de Estudio</span>
+                <span className="text-xs font-semibold text-slate-800 group-hover:text-petroleum transition-colors duration-200">{t('mobile_menu.study_plan')}</span>
               </button>
 
               <button
@@ -363,7 +363,7 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
                 style={staggerStyle(4)}
               >
                 <Icon name="fa-cog" className="text-sm text-slate-600 flex-shrink-0" />
-                <span className="text-xs font-semibold text-slate-800 group-hover:text-petroleum transition-colors duration-200">Configuración y Soporte</span>
+                <span className="text-xs font-semibold text-slate-800 group-hover:text-petroleum transition-colors duration-200">{t('modals.settings.title')}</span>
               </button>
 
               <div className="border-t border-slate-200/60 my-1"></div>

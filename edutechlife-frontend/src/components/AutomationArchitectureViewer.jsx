@@ -1,3 +1,5 @@
+import { useTranslation } from '../i18n/I18nProvider';
+
 const architectures = {
   basica: {
     nodes: [
@@ -55,7 +57,27 @@ const architectures = {
   },
 };
 
+const labelMap = {
+  'Usuarios': 'automation.viewer.users',
+  'Web / App': 'automation.viewer.web_app',
+  'Chatbot IA': 'automation.viewer.chatbot',
+  'Reportes': 'automation.viewer.reports',
+  'Notificaciones': 'automation.viewer.notifications',
+  'CRM': 'automation.viewer.crm',
+  'API Gateway': 'automation.viewer.api_gateway',
+  'IA Predictiva': 'automation.viewer.predictive_ai',
+  'Dashboard': 'automation.viewer.dashboard',
+  'Recomendador': 'automation.viewer.recommender',
+  'ML Engine': 'automation.viewer.ml_engine',
+  'ERP': 'automation.viewer.erp',
+  'Multi-Agentes': 'automation.viewer.multi_agents',
+  'Analítica Tiempo Real': 'automation.viewer.realtime_analytics',
+  'ML/Aprendizaje': 'automation.viewer.ml_learning',
+  'E2E Automation': 'automation.viewer.e2e_automation',
+};
+
 const ArchitectureSVG = ({ data, title, description }) => {
+  const { t } = useTranslation();
   const w = 450;
   const h = 290;
 
@@ -102,7 +124,7 @@ const ArchitectureSVG = ({ data, title, description }) => {
               fontWeight="600"
               fontFamily="Montserrat, sans-serif"
             >
-              {node.label}
+              {t(labelMap[node.label] || node.label)}
             </text>
             {/* Mini icon dot */}
             <circle cx={node.x + 35} cy={node.y + 28} r="4" fill="white" opacity="0.3" />

@@ -10,13 +10,7 @@ const readLocalExamScores = () => {
   } catch { return {}; }
 };
 
-const WEIGHT_LABEL_KEYS = {
-  Comunidad: 'ialab.module_actions.weight_community',
-  Desafío: 'ialab.module_actions.weight_challenge',
-  Examen: 'ialab.module_actions.weight_exam',
-};
-
-const ActionCard = ({ icon, label, onClick, completed, score, remainingAttempts, color = 'from-petroleum to-corporate', t }) => {
+const ActionCard = ({ icon, label, weightKey, onClick, completed, score, remainingAttempts, color = 'from-petroleum to-corporate', t }) => {
   const prefersReducedMotion = useReducedMotion();
   const isApproved = completed && score !== undefined && score >= 80;
   const isFailed = completed && score !== undefined && score < 80;
@@ -25,7 +19,7 @@ const ActionCard = ({ icon, label, onClick, completed, score, remainingAttempts,
       onClick={onClick}
       whileHover={prefersReducedMotion ? {} : { boxShadow: "0px 8px 25px rgba(0,75,99,0.12)" }}
       whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
-      title={WEIGHT_LABEL_KEYS[label] ? t(WEIGHT_LABEL_KEYS[label]) : ''}
+      title={weightKey ? t(weightKey) : ''}
       className={`relative w-full flex items-center gap-4 p-4 rounded-xl border transition-all duration-200 text-left cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 ${
         isApproved
           ? 'bg-gradient-to-br from-emerald-50 to-emerald-50/50 border-emerald-200/60 hover:shadow-md hover:border-emerald-300'
@@ -150,7 +144,8 @@ const ModuleActions = ({ onAction, activeMod, challengeScores, completedExams, m
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <ActionCard
           icon="fa-comments"
-          label="Comunidad"
+          label={t('ialab.module_actions.community')}
+          weightKey="ialab.module_actions.weight_community"
           onClick={handleCommunity}
           completed={moduleProgress?.[activeMod]?.community}
           score={100}
@@ -158,7 +153,8 @@ const ModuleActions = ({ onAction, activeMod, challengeScores, completedExams, m
         />
         <ActionCard
           icon="fa-rocket"
-          label="Desafío"
+          label={t('ialab.module_actions.challenge')}
+          weightKey="ialab.module_actions.weight_challenge"
           onClick={handleChallenge}
           completed={!!challengeScores?.[activeMod]}
           score={challengeScores?.[activeMod]}
@@ -167,7 +163,8 @@ const ModuleActions = ({ onAction, activeMod, challengeScores, completedExams, m
         />
         <ActionCard
           icon="fa-clipboard-check"
-          label="Examen"
+          label={t('ialab.module_actions.exam')}
+          weightKey="ialab.module_actions.weight_exam"
           onClick={handleExam}
           completed={effectiveExamScore !== undefined}
           score={effectiveExamScore}

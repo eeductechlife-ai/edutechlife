@@ -9,9 +9,9 @@ const VOICE_PROFILES = {
   valerio: { 
     languageCode: 'es-US', 
     name: 'es-US-Neural2-B', 
-    pitch: 0,
-    speakingRate: 1.05,
-    volumeGainDb: 2.5
+    pitch: 1.2,
+    speakingRate: 1.15,
+    volumeGainDb: 3.0
   },
   sistema: { 
     languageCode: 'es-US', 
@@ -82,9 +82,10 @@ const VOICE_FALLBACKS = {
     { languageCode: 'es-ES', name: 'es-ES-Neural2-A', pitch: 0, speakingRate: 0.95 }
   ],
   valerio: [
-    { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 0, speakingRate: 1.05 },
-    { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: 0, speakingRate: 1.05 },
-    { languageCode: 'es-ES', name: 'es-ES-Neural2-B', pitch: 0, speakingRate: 1.05 }
+    { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 0, speakingRate: 1.15 },
+    { languageCode: 'es-US', name: 'es-US-Neural2-D', pitch: 0, speakingRate: 1.15 },
+    { languageCode: 'es-US', name: 'es-US-Studio-B', pitch: 0, speakingRate: 1.15 },
+    { languageCode: 'es-ES', name: 'es-ES-Neural2-B', pitch: 0, speakingRate: 1.1 }
   ],
   nico: [
     { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 0, speakingRate: 1.0 },
@@ -167,7 +168,6 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
   // Función para usar voz nativa del sistema (optimizada para calidad)
   const useNativeSpeech = () => {
     if (typeof window === 'undefined' || !window.speechSynthesis) {
-      console.error('❌ SpeechSynthesis no está disponible en este navegador');
       cleanup();
       if (onEndCallback) onEndCallback();
       return false;
@@ -179,29 +179,28 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
         
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'es-MX';
-        utterance.rate = 0.95;
-        utterance.pitch = 1.08;
+        utterance.rate = 1.1;
+        utterance.pitch = 1.2;
         utterance.volume = 1.0;
 
-        // Buscar la mejor voz disponible, en este orden de calidad
+        // Buscar la mejor voz disponible, priorizando español latino sobre España
         const voicePriority = [
-          // Voces Google (Chrome) - las más naturales
-          (v) => v.name.includes('Google') && v.lang.startsWith('es'),
-          (v) => v.name === 'Google español',
+          // Voces Google (Chrome) - priorizar latino
+          (v) => (v.name.includes('Google') || v.name.includes('WaveNet')) && (v.lang === 'es-US' || v.lang === 'es-419' || v.lang === 'es-MX' || v.lang === 'es-CO'),
           (v) => v.name === 'Google español de Estados Unidos',
-          // Voces Microsoft (Edge) - buena calidad
-          (v) => v.name.includes('Microsoft') && v.lang.startsWith('es'),
+          (v) => (v.name.includes('Google') || v.name.includes('WaveNet')) && v.lang.startsWith('es'),
+          // Voces Microsoft (Edge) - latinoamericano
+          (v) => v.name.includes('Microsoft') && (v.lang === 'es-MX' || v.lang === 'es-US' || v.lang === 'es-CO' || v.lang === 'es-419'),
           (v) => v.name === 'Microsoft Sabina - Spanish (Mexico)',
-          (v) => v.name === 'Microsoft Helena - Spanish (Spain)',
-          // Voces Apple (macOS/Safari) - calidad decente
-          (v) => v.name.includes('Monica') || v.name.includes('Paulina'),
-          (v) => v.name === 'Monica' || v.name === 'Paulina',
+          (v) => v.name.includes('Microsoft') && v.lang.startsWith('es'),
+          // Voces Apple (macOS) - priorizar latino, evitar Paulina/Monica (España)
           (v) => v.name === 'Jorge',
-          // Fallback: cualquier español
-          (v) => v.lang === 'es-MX',
-          (v) => v.lang === 'es-US',
-          (v) => v.lang === 'es-CO',
-          (v) => v.lang === 'es-419',
+          (v) => v.lang === 'es-MX' || v.lang === 'es-US',
+          (v) => v.lang === 'es-CO' || v.lang === 'es-419',
+          // Voces neutras de cualquier región
+          (v) => v.name.includes('Neural2') && v.lang.startsWith('es'),
+          // Fallback: cualquier español latino, luego cualquier español
+          (v) => v.lang.startsWith('es') && !v.lang.startsWith('es-ES'),
           (v) => v.lang.startsWith('es'),
         ];
 
@@ -259,6 +258,9 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
 
   const voiceFallacks = VOICE_FALLBACKS[profile] || [];
   let lastError = null;
+
+  const nativeSuccess = useNativeSpeech();
+  if (nativeSuccess) return;
 
   let gotAudio = false;
   for (const voiceOption of [voice, ...voiceFallacks]) {
@@ -318,17 +320,15 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
         lastError = voiceError;
         break;
       }
-      console.warn('🚨 ERROR DE CONEXIÓN: ' + voiceError.message);
-      console.warn('Voice option failed:', voiceError);
+      console.warn('⚠️ TTS no disponible, usando voz nativa del navegador');
       lastError = voiceError;
       continue;
     }
   }
 
   if (!gotAudio) {
-    console.error("All voice options failed:", lastError);
-    const nativeSuccess = useNativeSpeech();
-    if (!nativeSuccess && onEndCallback) {
+    const nativeRetry = useNativeSpeech();
+    if (!nativeRetry && onEndCallback) {
       onEndCallback();
     }
   }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 /**
  * Componente para Paso 2: Optimizar un prompt mal redactado
@@ -11,6 +12,7 @@ import { Icon } from '../../utils/iconMapping.jsx';
  * @param {Function} props.onResponseChange - Handler para actualizar respuesta
  */
 const IALabEvaluationStep2 = ({ exercise, response, onResponseChange }) => {
+    const { t } = useTranslation();
     const [optimizedPrompt, setOptimizedPrompt] = useState(response || '');
     const [characterCount, setCharacterCount] = useState(response?.length || 0);
     const [showSuggestions, setShowSuggestions] = useState(true);
@@ -24,41 +26,41 @@ const IALabEvaluationStep2 = ({ exercise, response, onResponseChange }) => {
     // Sugerencias de mejora predefinidas
     const improvementSuggestions = [
         {
-            title: "Especificidad",
-            description: "Añade detalles concretos en lugar de términos vagos",
-            example: "En lugar de 'mejorar ventas', especifica 'aumentar conversiones en un 15%'"
+            title: t('ialab.evaluation.step2.suggestion_specificity'),
+            description: t('ialab.evaluation.step2.suggestion_specificity_desc'),
+            example: t('ialab.evaluation.step2.suggestion_specificity_ex')
         },
         {
-            title: "Audiencia",
-            description: "Define claramente a quién va dirigido el prompt",
-            example: "Especifica 'para emprendedores de e-commerce' en lugar de 'para negocios'"
+            title: t('ialab.evaluation.step2.suggestion_audience'),
+            description: t('ialab.evaluation.step2.suggestion_audience_desc'),
+            example: t('ialab.evaluation.step2.suggestion_audience_ex')
         },
         {
-            title: "Estructura",
-            description: "Organiza el prompt en secciones lógicas",
-            example: "Usa encabezados como ## Objetivo, ## Audiencia, ## Requisitos"
+            title: t('ialab.evaluation.step2.suggestion_structure'),
+            description: t('ialab.evaluation.step2.suggestion_structure_desc'),
+            example: t('ialab.evaluation.step2.suggestion_structure_ex')
         },
         {
-            title: "Llamada a la acción",
-            description: "Incluye instrucciones claras sobre qué hacer",
-            example: "Añade 'Genera 3 opciones diferentes' o 'Proporciona ejemplos concretos'"
+            title: t('ialab.evaluation.step2.suggestion_cta'),
+            description: t('ialab.evaluation.step2.suggestion_cta_desc'),
+            example: t('ialab.evaluation.step2.suggestion_cta_ex')
         },
         {
-            title: "Tono y estilo",
-            description: "Define el tono deseado (profesional, creativo, técnico)",
-            example: "Especifica 'Usa un tono profesional pero accesible para no expertos'"
+            title: t('ialab.evaluation.step2.suggestion_tone'),
+            description: t('ialab.evaluation.step2.suggestion_tone_desc'),
+            example: t('ialab.evaluation.step2.suggestion_tone_ex')
         },
         {
-            title: "Formato de salida",
-            description: "Indica cómo quieres que se presente la respuesta",
-            example: "Pide 'en formato de lista con viñetas' o 'en una tabla comparativa'"
+            title: t('ialab.evaluation.step2.suggestion_format'),
+            description: t('ialab.evaluation.step2.suggestion_format_desc'),
+            example: t('ialab.evaluation.step2.suggestion_format_ex')
         }
     ];
 
     // Plantillas de prompts optimizados
     const promptTemplates = [
         {
-            name: "Prompt Estratégico",
+            name: t('ialab.evaluation.step2.template_strategic'),
             template: `## Rol
 Eres un [especificar rol experto]
 
@@ -80,7 +82,7 @@ Eres un [especificar rol experto]
 [Especificar formato deseado]`
         },
         {
-            name: "Prompt Creativo",
+            name: t('ialab.evaluation.step2.template_creative'),
             template: `## Brief creativo
 [Descripción del proyecto o campaña]
 
@@ -101,7 +103,7 @@ Eres un [especificar rol experto]
 [Lista de lo que se espera recibir]`
         },
         {
-            name: "Prompt Técnico",
+            name: t('ialab.evaluation.step2.template_technical'),
             template: `## Problema a resolver
 [Descripción técnica del problema]
 
@@ -156,9 +158,9 @@ Eres un [especificar rol experto]
                         <Icon name="fa-magic" className="text-white text-lg" />
                     </div>
                     <div>
-                        <h3 className="text-lg font-bold text-slate-800">Optimiza este prompt</h3>
+                        <h3 className="text-lg font-bold text-slate-800">{t('ialab.evaluation.step2.title')}</h3>
                         <p className="text-slate-500 text-sm">
-                            Mejora el prompt mal redactado haciéndolo más específico, claro y efectivo
+                            {t('ialab.evaluation.step2.subtitle')}
                         </p>
                     </div>
                 </div>
@@ -169,10 +171,10 @@ Eres un [especificar rol experto]
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <Icon name="fa-exclamation-triangle" className="text-amber-500" />
-                        <h4 className="text-lg font-semibold text-slate-800">Prompt a optimizar</h4>
+                        <h4 className="text-lg font-semibold text-slate-800">{t('ialab.evaluation.step2.prompt_to_optimize')}</h4>
                     </div>
                     <span className="px-3 py-1 bg-amber-50 text-amber-600 text-xs font-medium rounded-full">
-                        Necesita mejora
+                        {t('ialab.evaluation.step2.needs_improvement')}
                     </span>
                 </div>
                 <div className="bg-amber-50 border border-amber-200 rounded-xl p-5">
@@ -190,17 +192,17 @@ Eres un [especificar rol experto]
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <Icon name="fa-check-circle" className="text-emerald-500" />
-                        <h4 className="text-lg font-semibold text-slate-800">Tu versión optimizada</h4>
+                        <h4 className="text-lg font-semibold text-slate-800">{t('ialab.evaluation.step2.your_optimized')}</h4>
                     </div>
                     <div className="flex items-center gap-4">
                         <span className={`text-sm ${characterCount < 50 ? 'text-red-500' : 'text-emerald-600'}`}>
-                            {characterCount} caracteres
+                            {t('ialab.evaluation.step2.characters', { count: characterCount })}
                         </span>
                         <button
                             onClick={() => setShowSuggestions(!showSuggestions)}
                             className="text-sm text-slate-500 hover:text-slate-700"
                         >
-                            {showSuggestions ? 'Ocultar sugerencias' : 'Mostrar sugerencias'}
+                            {showSuggestions ? t('ialab.evaluation.step2.hide_suggestions') : t('ialab.evaluation.step2.show_suggestions')}
                         </button>
                     </div>
                 </div>
@@ -209,7 +211,7 @@ Eres un [especificar rol experto]
                     <textarea
                         value={optimizedPrompt}
                         onChange={(e) => handleChange(e.target.value)}
-                        placeholder="Escribe aquí tu prompt optimizado. Sé específico, claro y estructurado..."
+                        placeholder={t('ialab.evaluation.step2.placeholder')}
                         className="w-full h-64 bg-white border-2 border-slate-200 rounded-xl p-5 text-slate-700 placeholder-slate-500 focus:outline-none focus:border-corporate focus:ring-2 focus:ring-corporate/20 resize-none font-mono text-sm leading-relaxed"
                         spellCheck="false"
                         autoFocus
@@ -231,7 +233,7 @@ Eres un [especificar rol experto]
                 <div className="space-y-6">
                     <div className="flex items-center gap-2">
                         <Icon name="fa-lightbulb" className="text-corporate" />
-                        <h4 className="text-lg font-semibold text-slate-800">Sugerencias para mejorar</h4>
+                        <h4 className="text-lg font-semibold text-slate-800">{t('ialab.evaluation.step2.suggestions_title')}</h4>
                     </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -261,7 +263,7 @@ Eres un [especificar rol experto]
                     <div className="space-y-4">
                         <div className="flex items-center gap-2">
                             <Icon name="fa-copy" className="text-petroleum" />
-                            <h4 className="text-lg font-semibold text-slate-800">Plantillas de estructura</h4>
+                            <h4 className="text-lg font-semibold text-slate-800">{t('ialab.evaluation.step2.templates_title')}</h4>
                         </div>
                         
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -278,7 +280,7 @@ Eres un [especificar rol experto]
                                         <h5 className="font-semibold text-slate-800">{template.name}</h5>
                                     </div>
                                     <p className="text-slate-500 text-sm">
-                                        Haz clic para usar esta estructura como base para tu prompt optimizado.
+                                        {t('ialab.evaluation.step2.template_hint')}
                                     </p>
                                 </button>
                             ))}
@@ -291,17 +293,17 @@ Eres un [especificar rol experto]
             <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
                 <div className="flex items-center gap-3 mb-4">
                     <Icon name="fa-clipboard-check" className="text-emerald-500" />
-                    <h4 className="text-lg font-semibold text-slate-800">Checklist de calidad</h4>
+                    <h4 className="text-lg font-semibold text-slate-800">{t('ialab.evaluation.step2.checklist_title')}</h4>
                 </div>
                 
                 <div className="space-y-3">
                     {[
-                        { text: "El prompt es específico y evita términos vagos", met: characterCount > 50 },
-                        { text: "Define claramente el rol y contexto", met: optimizedPrompt.includes('##') || optimizedPrompt.toLowerCase().includes('rol') },
-                        { text: "Incluye objetivos medibles", met: optimizedPrompt.toLowerCase().includes('objetivo') || optimizedPrompt.includes('%') || optimizedPrompt.includes('aumentar') },
-                        { text: "Especifica la audiencia objetivo", met: optimizedPrompt.toLowerCase().includes('audiencia') || optimizedPrompt.toLowerCase().includes('público') },
-                        { text: "Tiene una estructura organizada", met: optimizedPrompt.split('\n').length > 5 },
-                        { text: "Incluye formato de respuesta deseado", met: optimizedPrompt.toLowerCase().includes('formato') || optimizedPrompt.toLowerCase().includes('estructura') }
+                        { text: t('ialab.evaluation.step2.checklist_specific'), met: characterCount > 50 },
+                        { text: t('ialab.evaluation.step2.checklist_role_context'), met: optimizedPrompt.includes('##') || optimizedPrompt.toLowerCase().includes('rol') },
+                        { text: t('ialab.evaluation.step2.checklist_objectives'), met: optimizedPrompt.toLowerCase().includes('objetivo') || optimizedPrompt.includes('%') || optimizedPrompt.includes('aumentar') },
+                        { text: t('ialab.evaluation.step2.checklist_target_audience'), met: optimizedPrompt.toLowerCase().includes('audiencia') || optimizedPrompt.toLowerCase().includes('público') },
+                        { text: t('ialab.evaluation.step2.checklist_structure'), met: optimizedPrompt.split('\n').length > 5 },
+                        { text: t('ialab.evaluation.step2.checklist_response_format'), met: optimizedPrompt.toLowerCase().includes('formato') || optimizedPrompt.toLowerCase().includes('estructura') }
                     ].map((item, index) => (
                         <div key={index} className="flex items-center gap-3">
                             <div className={`w-5 h-5 rounded flex items-center justify-center flex-shrink-0 ${

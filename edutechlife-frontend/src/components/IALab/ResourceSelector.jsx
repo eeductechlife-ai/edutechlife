@@ -16,6 +16,7 @@ import { motion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { cn } from '../forum/forumDesignSystem';
 import { RESOURCE_TYPE_CONFIG, getResourceDuration } from './constants/moduleResources';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const ResourceSelector = ({ 
   resources = [], 
@@ -24,6 +25,7 @@ const ResourceSelector = ({
   onResourceSelect,
   className = ''
 }) => {
+  const { t } = useTranslation();
   const [typeFilter, setTypeFilter] = React.useState(null);
   if (!resources.length) {
     return (
@@ -33,7 +35,7 @@ const ResourceSelector = ({
       )}>
         <div className="text-center">
           <Icon name="fa-folder-open" className="text-slate-600 text-3xl mb-3" />
-          <p className="text-slate-500 font-medium">No hay recursos disponibles</p>
+          <p className="text-slate-500 font-medium">{t('ialab.resource_selector.no_resources')}</p>
         </div>
       </div>
     );
@@ -51,10 +53,10 @@ const ResourceSelector = ({
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
               <Icon name="fa-layer-group" className="text-petroleum w-4 h-4" />
             </div>
-            <h3 className="font-semibold text-slate-800 text-sm">Recursos del Tema</h3>
+            <h3 className="font-semibold text-slate-800 text-sm">{t('ialab.resource_selector.resources_title')}</h3>
           </div>
           <div className="text-xs text-slate-500 flex items-center gap-2">
-            <span>{(typeFilter ? completedIds.filter(id => resources.some(r => r.id === id && r.type === typeFilter)).length : completedIds.filter(id => resources.some(r => r.id === id)).length)}/{(typeFilter ? resources.filter(r => r.type === typeFilter).length : resources.length)} visto{resources.length !== 1 ? 's' : ''}</span>
+            <span>{t('ialab.resource_selector.viewed_count', { completed: (typeFilter ? completedIds.filter(id => resources.some(r => r.id === id && r.type === typeFilter)).length : completedIds.filter(id => resources.some(r => r.id === id)).length), total: (typeFilter ? resources.filter(r => r.type === typeFilter).length : resources.length) })}</span>
           </div>
         </div>
       </div>
@@ -68,7 +70,7 @@ const ResourceSelector = ({
             <button onClick={() => setTypeFilter(null)} className={cn(
               "px-2 py-1 rounded-md text-xs font-medium transition-colors",
               typeFilter === null ? "bg-petroleum text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-            )}>Todos</button>
+            )}>{t('ialab.tab_all')}</button>
             {types.map(type => {
               const cfg = RESOURCE_TYPE_CONFIG[type] || { label: type, color: "#64748B", bg: "bg-slate-50" };
               return (
@@ -89,7 +91,7 @@ const ResourceSelector = ({
           const originalIndex = resources.indexOf(resource);
           const isActive = originalIndex === activeResourceIndex;
           const isCompleted = completedIds.includes(resource.id);
-          const typeCfg = RESOURCE_TYPE_CONFIG[resource.type] || { icon: "fa-file", label: "Recurso", color: "#64748B", bg: "bg-slate-50" };
+          const typeCfg = RESOURCE_TYPE_CONFIG[resource.type] || { icon: "fa-file", label: t('ialab.resource_selector.resource_label'), color: "#64748B", bg: "bg-slate-50" };
           const duration = getResourceDuration(resource);
 
           return (
@@ -107,7 +109,7 @@ const ResourceSelector = ({
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.99 }}
               aria-current={isActive ? 'page' : undefined}
-              aria-label={`Abrir ${resource.title}`}
+              aria-label={t('ialab.resource_selector.open_resource', { title: resource.title })}
             >
               <div className={cn(
                 "w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-300",
@@ -127,7 +129,7 @@ const ResourceSelector = ({
                 )}>
                   {resource.title}
                   {isCompleted && (
-                    <span className="text-[10px] font-bold text-emerald-600 bg-emerald-100 px-1.5 py-0.5 rounded-md flex-shrink-0">Completado</span>
+                    <span className="text-[10px] font-bold text-emerald-600 bg-emerald-100 px-1.5 py-0.5 rounded-md flex-shrink-0">{t('ialab.resource_selector.completed_badge')}</span>
                   )}
                 </div>
                 <div className="flex items-center gap-2 mt-1">
@@ -160,9 +162,9 @@ const ResourceSelector = ({
         <div className="flex items-center justify-between text-xs">
           <div className="flex items-center gap-2">
             <div className={`w-2 h-2 rounded-full ${completedIds.includes(resources[activeResourceIndex]?.id) ? 'bg-emerald-500' : 'bg-corporate animate-pulse'}`}></div>
-            <span className="text-slate-600">{completedIds.includes(resources[activeResourceIndex]?.id) ? 'Completado:' : 'Activo:'}</span>
+            <span className="text-slate-600">{completedIds.includes(resources[activeResourceIndex]?.id) ? t('ialab.resource_selector.status_completed') : t('ialab.resource_selector.status_active')}</span>
             <span className={`font-medium truncate max-w-[200px] ${completedIds.includes(resources[activeResourceIndex]?.id) ? 'text-emerald-600' : 'text-petroleum'}`}>
-              {resources[activeResourceIndex]?.title || 'Ninguno'}
+              {resources[activeResourceIndex]?.title || t('ialab.resource_selector.none')}
             </span>
           </div>
           <div className="text-slate-500">

@@ -202,6 +202,7 @@ const AppLayout = () => {
               
               {/* Navigation Links - Desktop */}
               <nav className="hidden md:flex items-center gap-3">
+                <LocaleSwitcher />
                 {/* Dropdown Iniciar Sesión */}
                 <div className="relative" ref={loginDropdownRef}>
                   <button
@@ -228,7 +229,6 @@ const AppLayout = () => {
                   </div>
                 </div>
                 
-                <LocaleSwitcher />
                 {/* Contacto - Inline Info */}
                 <div className="relative" ref={contactInfoRef}>
                   <button

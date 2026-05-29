@@ -1,78 +1,12 @@
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-
-const questions = [
-  { id: 1, category: 'Procesos', text: '¿Cómo se gestionan actualmente tus procesos operativos?', options: [
-    { value: 1, label: 'Totalmente manuales (papel, hojas de cálculo)' },
-    { value: 2, label: 'Semi-automatizados con herramientas básicas' },
-    { value: 3, label: 'Automatizados con software especializado' },
-    { value: 4, label: 'Automatizados con IA y analítica avanzada' },
-  ]},
-  { id: 2, category: 'Procesos', text: '¿Con qué frecuencia se optimizan los procesos?', options: [
-    { value: 1, label: 'Nunca / No hay un proceso definido' },
-    { value: 2, label: 'Anualmente' },
-    { value: 3, label: 'Trimestralmente' },
-    { value: 4, label: 'Continuamente con métricas en tiempo real' },
-  ]},
-  { id: 3, category: 'Datos', text: '¿Cómo se almacenan y gestionan los datos de tu empresa?', options: [
-    { value: 1, label: 'Archivos locales sin estructura' },
-    { value: 2, label: 'Sistemas básicos con bases de datos simples' },
-    { value: 3, label: 'Data warehouse o data lake' },
-    { value: 4, label: 'Plataforma integrada con analítica en tiempo real' },
-  ]},
-  { id: 4, category: 'Datos', text: '¿Qué nivel de calidad tienen tus datos?', options: [
-    { value: 1, label: 'Datos inconsistentes con duplicados frecuentes' },
-    { value: 2, label: 'Datos parcialmente limpios' },
-    { value: 3, label: 'Datos limpios con procesos de validación' },
-    { value: 4, label: 'Datos gobernados con calidad automatizada' },
-  ]},
-  { id: 5, category: 'Tecnología', text: '¿Qué stack tecnológico utiliza tu empresa?', options: [
-    { value: 1, label: 'Herramientas básicas ofimáticas' },
-    { value: 2, label: 'Software de gestión (ERP/CRM básico)' },
-    { value: 3, label: 'Plataformas cloud con APIs' },
-    { value: 4, label: 'Arquitectura cloud-native con IA integrada' },
-  ]},
-  { id: 6, category: 'Tecnología', text: '¿Tu empresa utiliza APIs o integraciones entre sistemas?', options: [
-    { value: 1, label: 'No, los sistemas están aislados' },
-    { value: 2, label: 'Integraciones puntuales manuales' },
-    { value: 3, label: 'APIs estándar entre sistemas principales' },
-    { value: 4, label: 'Arquitectura orientada a servicios (SOA/microservicios)' },
-  ]},
-  { id: 7, category: 'Equipo', text: '¿Qué nivel de habilidades digitales tiene tu equipo?', options: [
-    { value: 1, label: 'Básico: uso de herramientas ofimáticas' },
-    { value: 2, label: 'Intermedio: manejo de software especializado' },
-    { value: 3, label: 'Avanzado: team con perfil técnico/data literate' },
-    { value: 4, label: 'Expertos: equipo dedicado a innovación digital' },
-  ]},
-  { id: 8, category: 'Equipo', text: '¿Existe una cultura de innovación y adopción tecnológica?', options: [
-    { value: 1, label: 'Resistente al cambio tecnológico' },
-    { value: 2, label: 'Abierta pero sin procesos definidos' },
-    { value: 3, label: 'Programas de capacitación continua' },
-    { value: 4, label: 'Cultura data-driven con innovación constante' },
-  ]},
-  { id: 9, category: 'Presupuesto', text: '¿Qué presupuesto destinas a tecnología e innovación?', options: [
-    { value: 1, label: 'Menos del 2% de ingresos' },
-    { value: 2, label: 'Entre 2% y 5% de ingresos' },
-    { value: 3, label: 'Entre 5% y 10% de ingresos' },
-    { value: 4, label: 'Más del 10% de ingresos' },
-  ]},
-  { id: 10, category: 'Presupuesto', text: '¿Has implementado soluciones de IA en tu empresa?', options: [
-    { value: 1, label: 'No, nunca' },
-    { value: 2, label: 'Proyectos piloto sin escala' },
-    { value: 3, label: 'IA implementada en áreas específicas' },
-    { value: 4, label: 'IA integrada en procesos core del negocio' },
-  ]},
-];
-
-const levels = [
-  { min: 10, max: 17, name: 'Emergente', color: '#EF4444', description: 'Tu empresa está en las etapas iniciales de transformación digital. Hay un gran potencial de mejora mediante automatización básica.', actions: ['Automatizar procesos manuales repetitivos', 'Implementar un CRM/ERP básico', 'Digitalizar documentos y procesos'], standards: 'ISO/IEC 42001 Sección 6.2 — Planificación del SGA' },
-  { min: 18, max: 24, name: 'Básico', color: '#F59E0B', description: 'Tienes bases digitales pero falta integración y automatización de procesos multi-paso.', actions: ['Integrar sistemas mediante APIs', 'Implementar chatbots para atención al cliente', 'Automatizar reportes y documentación'], standards: 'ISO/IEC 23053 — Framework para sistemas IA' },
-  { min: 25, max: 31, name: 'Intermedio', color: '#4DA8C4', description: 'Buena base tecnológica. El siguiente nivel es implementar IA predictiva y automatización inteligente.', actions: ['Implementar IA predictiva para toma de decisiones', 'Automatizar flujos multi-paso con IA', 'Dashboard analítico en tiempo real'], standards: 'NIST AI RMF — Mapear, Medir, Gestionar' },
-  { min: 32, max: 37, name: 'Avanzado', color: '#66CCCC', description: 'Tu empresa está preparada para automatización cognitiva y agentes de IA autónomos.', actions: ['Desplegar multi-agentes IA autónomos', 'Automatización end-to-end de procesos core', 'Analítica prescriptiva con ML'], standards: 'ISO/IEC 42001 Sección 8 — Evaluación del SGA' },
-  { min: 38, max: 40, name: 'Optimizado', color: '#004B63', description: 'Eres líder en transformación digital. El foco ahora es innovación continua y escalar IA a toda la organización.', actions: ['Escalar IA a toda la organización', 'Innovación continua con IA generativa', 'Crear centro de excelencia en IA'], standards: 'ISO/IEC 42001 + EU AI Act Compliance' },
-];
+import { useTranslation } from '../i18n/I18nProvider';
+import { getQuestions, getLevels } from './AutomationData';
 
 const AutomationReadinessTest = ({ onComplete }) => {
+  const { t, locale } = useTranslation();
+  const questions = getQuestions(locale);
+  const levels = getLevels(locale);
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({});
   const [result, setResult] = useState(null);
@@ -129,9 +63,9 @@ const AutomationReadinessTest = ({ onComplete }) => {
             {result.name}
           </div>
 
-          <h3 className="text-2xl font-black text-[#004B63] mb-2">
-            Madurez Digital: {result.score}/40
-          </h3>
+            <h3 className="text-2xl font-black text-[#004B63] mb-2">
+              {t('automation.test.tu_nivel')}: {result.score}/40
+            </h3>
           <p className="text-slate-500 mb-6">{result.description}</p>
 
           <div className="w-full bg-slate-100 rounded-full h-3 mb-6 overflow-hidden">
@@ -145,7 +79,7 @@ const AutomationReadinessTest = ({ onComplete }) => {
           </div>
 
           <div className="text-left bg-slate-50 rounded-2xl p-6 mb-6">
-            <h4 className="font-bold text-[#004B63] text-sm mb-3">Recomendaciones:</h4>
+            <h4 className="font-bold text-[#004B63] text-sm mb-3">{t('automation.test.acciones')}:</h4>
             <ul className="space-y-2">
               {result.actions.map((a, i) => (
                 <li key={i} className="flex items-start gap-3 text-sm text-slate-600">
@@ -174,7 +108,7 @@ const AutomationReadinessTest = ({ onComplete }) => {
               onClick={handleRestart}
               className="px-6 py-3 border border-slate-200 text-slate-600 rounded-full font-semibold text-sm hover:bg-slate-50 transition-all"
             >
-              Volver a Intentar
+              {t('automation.test.retry')}
             </button>
           </div>
         </div>
@@ -191,7 +125,7 @@ const AutomationReadinessTest = ({ onComplete }) => {
               Categoría: {currentQ.category}
             </span>
             <h3 className="text-lg font-bold text-[#004B63] mt-1">
-              Pregunta {step + 1} de {questions.length}
+              {t('automation.test.pregunta')} {step + 1} {t('automation.test.de')} {questions.length}
             </h3>
           </div>
           <span className="text-sm font-semibold text-slate-400">
@@ -258,7 +192,7 @@ const AutomationReadinessTest = ({ onComplete }) => {
             <svg className="w-4 h-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
-            Anterior
+            {t('automation.test.prev')}
           </button>
           <button
             onClick={handleNext}
@@ -266,8 +200,8 @@ const AutomationReadinessTest = ({ onComplete }) => {
             className="px-6 py-2.5 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white rounded-full text-sm font-bold hover:shadow-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed"
           >
             {step < questions.length - 1 ? (
-              <>Siguiente <svg className="w-4 h-4 inline ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg></>
-            ) : 'Ver Resultados'}
+              <>{t('automation.test.next')} <svg className="w-4 h-4 inline ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg></>
+            ) : t('automation.test.complete')}
           </button>
         </div>
       </div>

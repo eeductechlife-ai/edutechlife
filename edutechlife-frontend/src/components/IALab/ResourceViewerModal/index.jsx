@@ -97,6 +97,11 @@ const ResourceViewerModal = ({
   }
 
 const OVA_COMPONENTS = {
+  'workflow-ova-herramientas': OVAChatGPTTools,
+  'gemini-ova-1': InteractiveViewer,
+  'workspace-ova-1': InteractiveViewer,
+  'gemini-cases-ova-1': InteractiveViewer,
+  'ethics-ova-1': InteractiveViewer,
   'gpts-ova-1': OVABuildGPT,
   'chatgpt-ova-ecosystem': OVAEcosystemGuide,
   'intro-ova-1': OVAEtica,
@@ -111,7 +116,10 @@ const OVA_COMPONENTS = {
 
 const renderOVAById = (resourceId) => {
   const OVAComponent = OVA_COMPONENTS[resourceId];
-  return OVAComponent ? <OVAComponent onComplete={handleAutoComplete} /> : <OVAChatGPTTools onComplete={handleAutoComplete} />;
+  if (OVAComponent === InteractiveViewer) {
+    return <InteractiveViewer resource={resource} />;
+  }
+  return OVAComponent ? <OVAComponent onComplete={handleAutoComplete} /> : <InteractiveViewer resource={resource} />;
 };
 
   const renderViewer = () => {

@@ -107,7 +107,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
       <Button 
         variant="ghost" 
         className="relative h-10 w-10 rounded-full p-0"
-        aria-label="Usuario no autenticado"
+        aria-label={t('modals.settings.unauthenticated_aria')}
         onClick={() => {
           // Redirigir a login si no está autenticado
           window.location.href = '/login';
@@ -128,7 +128,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
       <Button 
         variant="ghost" 
         className="relative h-10 w-10 rounded-full p-0 hover:bg-cyan-50"
-        aria-label="Iniciar sesión"
+        aria-label={t('modals.settings.sign_in_aria')}
         onClick={() => window.location.href = '/login'}
       >
         <Avatar className="h-10 w-10 border-2 border-white">
@@ -147,7 +147,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
           <Button 
             variant="ghost" 
             className="relative h-10 w-10 rounded-full p-0 hover:bg-cyan-50 transition-all duration-200"
-            aria-label="Menú de usuario"
+            aria-label={t('modals.settings.user_menu_aria')}
           >
             <Avatar className="h-10 w-10 border-2 border-white shadow-md">
               {userInfo.avatarUrl ? (
@@ -187,7 +187,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
                  </p>
                  <div className="flex items-center gap-1 mt-2">
                     <span className="text-[10px] px-2 py-0.5 bg-indigo-50 text-indigo-700 uppercase font-bold rounded-full">
-                     {userInfo.role === 'teacher' ? 'Profesor' : 'Estudiante'}
+                      {userInfo.role === 'teacher' ? t('mobile_menu.role_teacher') : t('mobile_menu.role_student')}
                    </span>
                     {isSignedIn && (
                       <span className="text-[10px] px-2 py-0.5 bg-slate-100 text-slate-600 uppercase font-bold rounded-full">
@@ -208,7 +208,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
                 <div className="w-5 h-5 flex items-center justify-center text-slate-500 group-hover:text-indigo-600">
                   <Icon name="fa-user-circle" className="text-sm" />
                 </div>
-                <span className="text-sm font-medium">Mi Perfil</span>
+                <span className="text-sm font-medium">{t('mobile_menu.my_profile')}</span>
               </DropdownMenuItem>
 
               {/* Mi Historial */}
@@ -219,7 +219,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
                 <div className="w-5 h-5 flex items-center justify-center text-slate-500 group-hover:text-indigo-600">
                   <Icon name="fa-chart-line" className="text-sm" />
                 </div>
-                <span className="text-sm font-medium">Mi Historial</span>
+                <span className="text-sm font-medium">{t('mobile_menu.my_history')}</span>
               </DropdownMenuItem>
 
               {/* Plan de Estudio */}
@@ -230,7 +230,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
                 <div className="w-5 h-5 flex items-center justify-center text-slate-500 group-hover:text-indigo-600">
                   <Icon name="fa-calendar" className="text-sm" />
                 </div>
-                <span className="text-sm font-medium">Plan de Estudio</span>
+                <span className="text-sm font-medium">{t('mobile_menu.study_plan')}</span>
               </DropdownMenuItem>
               
               {/* Configuración */}
@@ -241,7 +241,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
                 <div className="w-5 h-5 flex items-center justify-center text-slate-500 group-hover:text-indigo-600">
                   <Icon name="fa-cog" className="text-sm" />
                 </div>
-                <span className="text-sm font-medium">Configuración</span>
+                <span className="text-sm font-medium">{t('modals.settings.tab_settings')}</span>
               </DropdownMenuItem>
                
                {/* Mis Certificados */}
@@ -252,7 +252,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
                  <div className="w-5 h-5 flex items-center justify-center text-slate-500 group-hover:text-indigo-600">
                    <Icon name="fa-medal" className="text-sm" />
                  </div>
-                 <span className="text-sm font-medium">Mis Certificados</span>
+                 <span className="text-sm font-medium">{t('mobile_menu.certificates')}</span>
                </DropdownMenuItem>
 
                {/* Cambiar Contraseña */}
@@ -263,7 +263,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
                 <div className="w-5 h-5 flex items-center justify-center text-slate-500 group-hover:text-indigo-600">
                   <Icon name="fa-key" className="text-sm" />
                 </div>
-                <span className="text-sm font-medium">Cambiar Contraseña</span>
+                <span className="text-sm font-medium">{t('mobile_menu.change_password')}</span>
               </DropdownMenuItem>
             </DropdownMenuGroup>
           
@@ -289,7 +289,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
           <button
             onClick={() => setIsChangePasswordOpen(false)}
             className="absolute top-4 right-4 text-slate-400 hover:text-slate-800 hover:bg-slate-100 p-2 rounded-full transition-colors duration-200 z-50"
-            aria-label="Cerrar modal"
+            aria-label={t('modals.password.close')}
           >
             <Icon name="fa-times" className="text-sm" />
           </button>
@@ -297,25 +297,25 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
           <div className="space-y-6 p-6">
             {/* Título personalizado */}
             <div>
-              <h2 className="text-xl font-bold text-slate-800 mb-2">Cambiar Contraseña</h2>
-              <p className="text-sm text-slate-500">Gestiona la seguridad de tu cuenta</p>
+              <h2 className="text-xl font-bold text-slate-800 mb-2">{t('modals.password.change_password')}</h2>
+              <p className="text-sm text-slate-500">{t('modals.password.manage_security')}</p>
             </div>
             
             <div className="space-y-4">
-               <p className="text-sm text-slate-600">
-                {isSignedIn 
-                  ? 'Utiliza la funcionalidad de cambio de contraseña de Clerk desde tu perfil.'
-                  : 'Esta funcionalidad estará disponible cuando inicies sesión.'
-                }
-              </p>
+                <p className="text-sm text-slate-600">
+                 {isSignedIn 
+                   ? t('modals.password.use_clerk')
+                   : t('modals.password.not_available')
+                 }
+               </p>
               
               <div className="bg-gradient-to-br from-indigo-50/80 to-white p-4 rounded-xl border border-slate-100 transition-all duration-300 hover:shadow-sm">
-                <p className="text-sm text-slate-800 font-medium">
-                  {isSignedIn 
-                    ? '✅ Clerk está configurado para gestión segura de contraseñas.'
-                    : '⚠ Para una gestión segura de contraseñas, inicia sesión primero.'
-                  }
-                </p>
+                 <p className="text-sm text-slate-800 font-medium">
+                   {isSignedIn 
+                     ? t('modals.password.clerk_configured')
+                     : t('modals.password.clerk_not_signed_in')
+                   }
+                 </p>
               </div>
               
               {isSignedIn && (
@@ -326,7 +326,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
                   }}
                   className="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white font-semibold py-3 rounded-xl transition-all duration-300 hover:shadow-lg hover:scale-[1.02]"
                 >
-                  Ir a Mi Perfil
+                  {t('modals.password.go_to_profile')}
                 </Button>
               )}
             </div>
@@ -341,7 +341,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
           <button
             onClick={() => setIsSettingsOpen(false)}
             className="absolute top-4 right-4 text-slate-400 hover:text-slate-800 hover:bg-slate-100 p-2 rounded-full transition-colors duration-200 z-50"
-            aria-label="Cerrar modal"
+            aria-label={t('modals.settings.close')}
           >
             <Icon name="fa-times" className="text-sm" />
           </button>
@@ -349,14 +349,14 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
           <div className="space-y-6 p-6">
             {/* Título personalizado */}
             <div>
-              <h2 className="text-xl font-bold text-slate-800 mb-2">Configuración de la Cuenta</h2>
-              <p className="text-sm text-slate-500">Personaliza tu experiencia en la plataforma</p>
+              <h2 className="text-xl font-bold text-slate-800 mb-2">{t('modals.settings.account_settings_title')}</h2>
+              <p className="text-sm text-slate-500">{t('modals.settings.customize_experience')}</p>
             </div>
             
             <div className="space-y-6">
               {/* Sección Preferencias */}
               <div className="bg-gradient-to-b from-slate-50 to-white p-6 rounded-2xl border border-slate-100">
-                <h3 className="text-lg font-semibold text-slate-800 mb-4">Preferencias</h3>
+                <h3 className="text-lg font-semibold text-slate-800 mb-4">{t('modals.settings.preferences_title')}</h3>
                 
                 <div className="space-y-4">
                   {/* Notificaciones por email */}
@@ -364,8 +364,8 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
                     <div className="flex items-center gap-3">
                       <Icon name="fa-bell" className="text-slate-400 group-hover:text-indigo-600" />
                       <div>
-                        <p className="font-medium">Notificaciones por email</p>
-                        <p className="text-xs text-slate-500 group-hover:text-indigo-500">Recibe actualizaciones sobre tus cursos</p>
+                        <p className="font-medium">{t('modals.settings.email_notifications_label')}</p>
+                        <p className="text-xs text-slate-500 group-hover:text-indigo-500">{t('modals.settings.email_notifications_desc')}</p>
                       </div>
                     </div>
                     <div className="h-6 w-11 rounded-full bg-slate-200 relative group-hover:bg-indigo-200 transition-colors duration-300">
@@ -378,8 +378,8 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
                     <div className="flex items-center gap-3">
                       <Icon name="fa-moon" className="text-slate-400 group-hover:text-indigo-600" />
                       <div>
-                        <p className="font-medium">Modo oscuro</p>
-                        <p className="text-xs text-slate-500 group-hover:text-indigo-500">Interfaz con colores oscuros</p>
+                        <p className="font-medium">{t('modals.settings.dark_mode_label')}</p>
+                        <p className="text-xs text-slate-500 group-hover:text-indigo-500">{t('modals.settings.dark_interface_desc')}</p>
                       </div>
                     </div>
                     <div className="h-6 w-11 rounded-full bg-slate-200 relative group-hover:bg-indigo-200 transition-colors duration-300">
@@ -391,18 +391,18 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
               
               {/* Sección Privacidad */}
               <div className="bg-gradient-to-b from-slate-50 to-white p-6 rounded-2xl border border-slate-100">
-                <h3 className="text-lg font-semibold text-slate-800 mb-4">Privacidad</h3>
+                <h3 className="text-lg font-semibold text-slate-800 mb-4">{t('modals.settings.privacy_title')}</h3>
                 
                 <div className="space-y-4">
                   <p className="text-sm text-slate-600">
-                    Controla cómo se muestran tus datos en la plataforma
+                    {t('modals.settings.privacy_desc')}
                   </p>
                   
                   <Button 
                     variant="outline" 
                     className="w-full border-slate-200 text-slate-600 hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700 transition-all duration-300 hover:translate-x-1"
                   >
-                    Ver Política de Privacidad
+                    {t('modals.settings.view_privacy_policy')}
                   </Button>
                 </div>
               </div>
@@ -418,7 +418,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
           <button
             onClick={() => setIsProfileOpen(false)}
             className="absolute top-4 right-4 text-slate-400 hover:text-slate-800 hover:bg-slate-100 p-2 rounded-full transition-colors duration-200 z-50"
-            aria-label="Cerrar modal"
+            aria-label={t('modals.settings.close')}
           >
             <Icon name="fa-times" className="text-sm" />
           </button>
@@ -426,8 +426,8 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
           <div className="space-y-6 p-6">
             {/* Título personalizado */}
             <div>
-              <h2 className="text-xl font-bold text-slate-800 mb-2">Perfil de Usuario</h2>
-              <p className="text-sm text-slate-500">Gestiona tu información personal</p>
+              <h2 className="text-xl font-bold text-slate-800 mb-2">{t('modals.settings.user_profile_title')}</h2>
+              <p className="text-sm text-slate-500">{t('modals.settings.manage_info_desc')}</p>
             </div>
             
             {/* Cabecera con degradado */}
@@ -444,35 +444,35 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
               <div>
                 <h3 className="text-lg font-semibold text-slate-800">{userInfo.displayName}</h3>
                 <p className="text-sm text-slate-500">{userInfo.displayEmail}</p>
-                <p className="text-xs text-slate-400 mt-1">ID: {user?.id || 'No disponible'}</p>
+                <p className="text-xs text-slate-400 mt-1">ID: {user?.id || t('common.not_available')}</p>
               </div>
             </div>
             
             {/* Información de la Cuenta */}
             <div className="bg-gradient-to-b from-slate-50 to-white p-6 rounded-2xl border border-slate-100">
-              <h3 className="text-lg font-semibold text-slate-800 mb-4">Información de la Cuenta</h3>
+              <h3 className="text-lg font-semibold text-slate-800 mb-4">{t('modals.settings.account_info_title')}</h3>
               
               <div className="space-y-6">
                 <div className="grid grid-cols-2 gap-4">
                   {/* Rol */}
                   <div className="group p-3 rounded-xl transition-all duration-300 hover:bg-indigo-50/80 hover:translate-x-1">
-                    <p className="text-sm font-medium text-slate-500 group-hover:text-indigo-600">Rol</p>
+                    <p className="text-sm font-medium text-slate-500 group-hover:text-indigo-600">{t('modals.settings.role_label')}</p>
                     <p className="text-sm text-slate-800 font-semibold group-hover:text-indigo-700">
-                      {userInfo.role === 'teacher' ? 'Profesor' : 'Estudiante'}
+                      {userInfo.role === 'teacher' ? t('mobile_menu.role_teacher') : t('mobile_menu.role_student')}
                     </p>
                   </div>
                   
                   {/* Estado */}
                   <div className="group p-3 rounded-xl transition-all duration-300 hover:bg-indigo-50/80 hover:translate-x-1">
-                    <p className="text-sm font-medium text-slate-500 group-hover:text-indigo-600">Estado</p>
-                    <p className="text-sm text-green-600 font-semibold group-hover:text-green-700">Activo</p>
+                    <p className="text-sm font-medium text-slate-500 group-hover:text-indigo-600">{t('modals.settings.status_label')}</p>
+                    <p className="text-sm text-green-600 font-semibold group-hover:text-green-700">{t('modals.settings.active_status')}</p>
                   </div>
                 </div>
                 
                 {/* Separador */}
                 <div className="border-t border-slate-100 pt-4">
                   <p className="text-sm text-slate-600 mb-4">
-                    Para gestionar tu perfil completo, utiliza la interfaz oficial de Clerk.
+                    {t('modals.settings.clerk_profile_desc')}
                   </p>
                   
                   <Button 
@@ -484,7 +484,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
                     }}
                     className="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white font-semibold py-3 rounded-xl transition-all duration-300 hover:shadow-lg hover:scale-[1.02]"
                   >
-                    Abrir Perfil Completo
+                    {t('modals.settings.open_full_profile')}
                   </Button>
                 </div>
               </div>
@@ -497,7 +497,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
          <Dialog open={showProfile} onOpenChange={setShowProfile}>
            <DialogContent className="sm:max-w-[500px] max-h-[80vh] overflow-y-auto bg-white rounded-2xl shadow-2xl border-0">
              <DialogHeader>
-               <DialogTitle className="text-lg font-bold text-[#334155]">Mi Perfil</DialogTitle>
+               <DialogTitle className="text-lg font-bold text-[#334155]">{t('mobile_menu.my_profile')}</DialogTitle>
              </DialogHeader>
              <ErrorBoundary>
                <UserProfileSmartCard userId={user?.id} />
@@ -510,7 +510,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
          <Dialog open={showHistory} onOpenChange={setShowHistory}>
            <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto bg-white rounded-2xl shadow-2xl border-0">
              <DialogHeader>
-               <DialogTitle className="text-lg font-bold text-[#334155]">Mi Historial</DialogTitle>
+               <DialogTitle className="text-lg font-bold text-[#334155]">{t('mobile_menu.my_history')}</DialogTitle>
              </DialogHeader>
              <ErrorBoundary>
                <ActivityHistory userId={user?.id} />
@@ -523,7 +523,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
           <Dialog open={showStudyPlanner} onOpenChange={setShowStudyPlanner}>
             <DialogContent className="sm:max-w-[700px] max-h-[85vh] overflow-y-auto bg-white rounded-2xl shadow-2xl border-0">
               <DialogHeader>
-                <DialogTitle className="text-lg font-bold text-[#334155]">Plan de Estudio</DialogTitle>
+                <DialogTitle className="text-lg font-bold text-[#334155]">{t('mobile_menu.study_plan')}</DialogTitle>
               </DialogHeader>
               <ErrorBoundary>
                 <StudyPlannerModal onClose={() => setShowStudyPlanner(false)} />
@@ -536,7 +536,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
           <Dialog open={showCourses} onOpenChange={setShowCourses}>
             <DialogContent className="sm:max-w-[800px] max-h-[85vh] overflow-y-auto bg-white rounded-2xl shadow-2xl border-0">
               <DialogHeader>
-                <DialogTitle className="text-lg font-bold text-[#334155]">Mis Cursos y Certificados</DialogTitle>
+                <DialogTitle className="text-lg font-bold text-[#334155]">{t('modals.certificates.my_courses_title')}</DialogTitle>
               </DialogHeader>
               <ErrorBoundary>
                 <UserCoursesDashboard />

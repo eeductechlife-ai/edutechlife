@@ -70,7 +70,7 @@ const ModalsSection = ({
       )}
 
       {showPremiumEvaluationModal && (
-        <SectionErrorBoundary>
+        <SectionErrorBoundary showDetails>
           <Suspense fallback={<LoadingFallback />}>
             <IALabEvaluationModalPremium
               isOpen={showPremiumEvaluationModal}

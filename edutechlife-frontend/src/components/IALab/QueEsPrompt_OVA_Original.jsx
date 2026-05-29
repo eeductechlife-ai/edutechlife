@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
  History,
  MessageSquare,
@@ -31,6 +31,7 @@ import {
  Search,
  Clock
 } from 'lucide-react';
+import { useTranslation } from '../../i18n/I18nProvider';
 import { speakTextConversational, stopSpeech } from '../../utils/speech';
 
 const COLORS = {
@@ -104,6 +105,7 @@ const ModuleHistory = () => {
 };
 
 const ModuleAnatomy = () => {
+ const { t } = useTranslation();
  const [sel, setSel] = useState(null);
  const elements = [
    { k: 'Rol', d: 'Define quién debe ser la IA (ej. experto en marketing, tutor de matemáticas, programador senior). Esto establece el tono y el nivel de experticia.', i: '👤', c: 'bg-[#0D2B5B]' },
@@ -131,13 +133,13 @@ const ModuleAnatomy = () => {
      <div className="bg-[#0D2B5B] text-white p-8 rounded-[3rem] shadow-2xl relative min-h-[250px] flex flex-col justify-center border-b-4 border-[#00B4D8]">
        {sel ? (
          <div className="animate-[slideInFromRight_0.6s_cubic-bezier(0.16,1,0.3,1)_forwards]">
-           <h5 className="text-[#00B4D8] font-[900] text-xs uppercase tracking-[0.3em] mb-3">Elemento: {sel.k}</h5>
+            <h5 className="text-[#00B4D8] font-[900] text-xs uppercase tracking-[0.3em] mb-3">{t('ialab.que_es_prompt.element_label', { name: sel.k })}</h5>
            <p className="text-base leading-relaxed font-medium">{sel.d}</p>
          </div>
        ) : (
          <div className="text-center opacity-30 space-y-3">
            <MousePointer2 className="w-8 h-8 mx-auto animate-bounce" />
-           <p className="text-[9px] font-black uppercase tracking-widest leading-none">Explora la anatomía interactiva</p>
+            <p className="text-[9px] font-black uppercase tracking-widest leading-none">{t('ialab.que_es_prompt.explore_anatomy')}</p>
          </div>
        )}
      </div>
@@ -146,6 +148,7 @@ const ModuleAnatomy = () => {
 };
 
 const Quiz = ({ onComplete }) => {
+ const { t } = useTranslation();
  const [currentQ, setCurrentQ] = useState(0);
  const [score, setScore] = useState(0);
  const [selected, setSelected] = useState(null);
@@ -204,8 +207,8 @@ const Quiz = ({ onComplete }) => {
  return (
    <div className="space-y-6 animate-[fadeIn_1.1s_cubic-bezier(0.16,1,0.3,1)_forwards]">
       <div className="flex justify-between items-center text-[9px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-300">
-       <span>Análisis de Lectura {currentQ + 1} de 5</span>
-       <span className="text-[#00B4D8]">Aciertos: {score}</span>
+        <span>{t('ialab.que_es_prompt.quiz_analysis', { current: currentQ + 1, total: 5 })}</span>
+        <span className="text-[#00B4D8]">{t('ialab.que_es_prompt.quiz_score', { score })}</span>
      </div>
      <h3 className="text-xl font-[900] text-[#0D2B5B] leading-tight">{questions[currentQ].q}</h3>
      <div className="grid gap-2">
@@ -227,7 +230,7 @@ const Quiz = ({ onComplete }) => {
         <div className="p-5 bg-slate-100 dark:bg-slate-700/50 rounded-[2rem] animate-[slideInFromTop_0.4s_cubic-bezier(0.16,1,0.3,1)_forwards]">
          <p className="text-xs font-bold leading-relaxed">{questions[currentQ].f}</p>
          <button onClick={handleNext} className="mt-4 w-full py-3 bg-[#0D2B5B] text-white font-black rounded-xl flex items-center justify-center gap-2 text-xs">
-           {currentQ === 4 ? "Ver Resultados Finales" : "Continuar Análisis"} <ChevronRight size={14}/>
+            {currentQ === 4 ? t('ialab.que_es_prompt.quiz_see_results') : t('ialab.que_es_prompt.quiz_continue')} <ChevronRight size={14}/>
          </button>
        </div>
      )}
@@ -236,6 +239,7 @@ const Quiz = ({ onComplete }) => {
 };
 
 const QueEsPrompt_OVA_Original = ({ onClose }) => {
+ const { t } = useTranslation();
  const [screen, setScreen] = useState('welcome');
  const [completed, setCompleted] = useState([]);
  const [quizScore, setQuizScore] = useState(null);
@@ -244,40 +248,40 @@ const QueEsPrompt_OVA_Original = ({ onClose }) => {
  const [isMenuOpen, setIsMenuOpen] = useState(false);
  const [errorMsg, setErrorMsg] = useState("");
 
- const screensData = {
+ const screensData = useMemo(() => ({
    welcome: {
-     title: 'Historia de la IA Generativa e Ingeniería de Prompts',
+     title: t('ialab.que_es_prompt.title'),
      content: 'Bienvenidos. La IA generativa es una realidad que transforma la educación y el trabajo. Hoy aprenderás la habilidad más importante: saber hablarle a la máquina con inteligencia y criterio.'
    },
    menu: {
-     title: '¿Qué aprenderás en este módulo?',
-     content: 'Esta guía contextualiza el origen de la IA generativa y desarrolla la habilidad de diseño inteligente de prompts.'
+     title: t('ialab.que_es_prompt.menu_title'),
+     content: t('ialab.que_es_prompt.menu_desc')
    },
    m1: {
-     title: 'Breve Historia de la IA Generativa',
+     title: t('ialab.que_es_prompt.screen_m1'),
      content: 'Más de 70 años de investigación culminaron en los modelos actuales. Conocerás los hitos clave desde el Test de Turing hasta la arquitectura Transformer.'
    },
    m2: {
-     title: 'El concepto de prompt',
+     title: t('ialab.que_es_prompt.screen_m2'),
      content: 'Un prompt es la interfaz de comunicación entre el usuario y un modelo de lenguaje. Es el conjunto de instrucciones que sirven de puente entre la mente humana y la IA.'
    },
    m3: {
-     title: 'Anatomía de un Prompt',
+     title: t('ialab.que_es_prompt.screen_m3'),
      content: 'Un prompt efectivo incluye rol, contexto, tarea, formato, restricciones y ejemplos. Aprenderás a integrar cada componente.'
    },
    m4: {
-     title: 'Ingeniería de prompts',
+     title: t('ialab.que_es_prompt.screen_m4'),
      content: 'Dispondrás de estrategias concretas como Chain of Thought, few-shot e iteración para obtener resultados de alta calidad.'
    },
    m5: {
-     title: 'Errores Comunes al Diseñar Prompts',
+     title: t('ialab.que_es_prompt.screen_m5'),
      content: 'Evita fallos como prompts vagos, pedir demasiado en una sola instrucción o no verificar la información generada.'
    },
    m6: {
-     title: 'Reto de Comprensión General',
+     title: t('ialab.que_es_prompt.screen_m6'),
      content: 'Es hora de demostrar tu capacidad de interpretación y comprensión de la lectura. El futuro pertenece a quienes sepan colaborar con la IA.'
    }
- };
+ }), [t]);
 
  const nav = ['welcome', 'menu', 'm1', 'm2', 'm3', 'm4', 'm5', 'm6'];
  const curIdx = nav.indexOf(screen);
@@ -309,14 +313,14 @@ const QueEsPrompt_OVA_Original = ({ onClose }) => {
             </div>
             <div className="space-y-2">
                <h1 className="text-5xl md:text-7xl font-[400] text-[#0D2B5B] leading-[0.9] tracking-tighter lowercase">
-                 ia generativa
-               </h1>
-               <h2 className="text-3xl md:text-5xl font-[900] text-[#0D2B5B] tracking-tight">
-                 INGENIERIA DE PROMPTS
-               </h2>
+                  {t('ialab.que_es_prompt.welcome_subtitle')}
+                </h1>
+                <h2 className="text-3xl md:text-5xl font-[900] text-[#0D2B5B] tracking-tight">
+                  {t('ialab.que_es_prompt.welcome_title')}
+                </h2>
             </div>
             <button onClick={() => setScreen('menu')} className="group px-12 py-5 bg-[#0D2B5B] text-white rounded-[2rem] font-black text-lg shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center gap-4 mx-auto" style={{ background: COLORS.gradient }}>
-              Comenzar Módulo <ArrowRightCircle className="w-6 h-6" />
+              {t('ialab.que_es_prompt.start_module')} <ArrowRightCircle className="w-6 h-6" />
             </button>
          </div>
        );
@@ -390,10 +394,10 @@ const QueEsPrompt_OVA_Original = ({ onClose }) => {
      case 'm6': return quizScore !== null ? (
        <div className="text-center py-8 animate-[zoomIn_0.6s_cubic-bezier(0.16,1,0.3,1)_forwards]">
          <div className="w-32 h-32 bg-amber-50 rounded-full flex items-center justify-center mx-auto mb-8 shadow-xl border-4 border-white"><Trophy className="w-16 h-16 text-amber-500" /></div>
-         <h2 className="text-5xl font-black text-[#0D2B5B] tracking-tighter leading-none mb-3 uppercase">¡completado!</h2>
-         <div className="bg-[#0D2B5B] text-white inline-block px-12 py-6 rounded-[3rem] mt-6 text-6xl font-black shadow-xl border-b-8 border-[#00B4D8]">{quizScore} / 5</div>
-          <p className="text-slate-500 dark:text-slate-400 mt-10 font-black text-lg uppercase tracking-[0.2em] opacity-40">edutechlife master</p>
-          <button onClick={() => { setScreen('menu'); setQuizScore(null); }} className="mt-12 px-12 py-4 bg-slate-100 dark:bg-slate-700/50 text-slate-500 dark:text-slate-400 font-bold rounded-[1.5rem] hover:bg-slate-200 dark:hover:bg-slate-600 transition-all uppercase tracking-[0.1em] text-[10px]">Finalizar</button>
+          <h2 className="text-5xl font-black text-[#0D2B5B] tracking-tighter leading-none mb-3 uppercase">{t('ialab.que_es_prompt.quiz_completed')}</h2>
+          <div className="bg-[#0D2B5B] text-white inline-block px-12 py-6 rounded-[3rem] mt-6 text-6xl font-black shadow-xl border-b-8 border-[#00B4D8]">{t('ialab.que_es_prompt.quiz_result', { score: quizScore, total: 5 })}</div>
+           <p className="text-slate-500 dark:text-slate-400 mt-10 font-black text-lg uppercase tracking-[0.2em] opacity-40">{t('ialab.que_es_prompt.edutechlife_master')}</p>
+           <button onClick={() => { setScreen('menu'); setQuizScore(null); }} className="mt-12 px-12 py-4 bg-slate-100 dark:bg-slate-700/50 text-slate-500 dark:text-slate-400 font-bold rounded-[1.5rem] hover:bg-slate-200 dark:hover:bg-slate-600 transition-all uppercase tracking-[0.1em] text-[10px]">{t('ialab.que_es_prompt.quiz_finalize')}</button>
        </div>
      ) : (
        <Quiz onComplete={(s) => { setQuizScore(s); setCompleted([...completed, 'm6']); }} />
@@ -410,13 +414,13 @@ const QueEsPrompt_OVA_Original = ({ onClose }) => {
        <Logo />
        <div className="flex items-center gap-8">
          <div className="hidden lg:flex flex-col items-end">
-            <span className="text-[9px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest mb-1">PROGRESO</span>
+             <span className="text-[9px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest mb-1">{t('ialab.que_es_prompt.progress')}</span>
             <div className="w-32 h-2 bg-slate-100 dark:bg-slate-700/50 rounded-full overflow-hidden border border-slate-50 dark:border-slate-700 shadow-inner">
              <div className="h-full bg-gradient-to-r from-[#0D2B5B] to-[#00B4D8] transition-all duration-1000 ease-out shadow-lg" style={{ width: `${(completed.length/6)*100}%` }}></div>
            </div>
          </div>
           <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-3 bg-[#F1F5F9] dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-[1.2rem] transition-all shadow-sm border border-slate-100 dark:border-slate-600"><Menu className="w-6 h-6 text-[#0D2B5B]" /></button>
-          <button onClick={onClose} className="p-3 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 rounded-[1.2rem] transition-all shadow-sm border border-red-100 dark:border-red-900/30" aria-label="Cerrar OVA">
+          <button onClick={onClose} className="p-3 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 rounded-[1.2rem] transition-all shadow-sm border border-red-100 dark:border-red-900/30" aria-label={t('ialab.que_es_prompt.close_aria')}>
            <X className="w-6 h-6 text-red-500" />
          </button>
        </div>
@@ -434,7 +438,7 @@ const QueEsPrompt_OVA_Original = ({ onClose }) => {
          {screen.startsWith('m') && (
             <div className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-10 border-b border-slate-50 dark:border-slate-700 pb-12">
              <div className="space-y-3">
-               <div className="flex items-center gap-2 text-[#00B4D8] font-[900] text-[10px] tracking-[0.4em] uppercase"><Sparkles className="w-4 h-4" /> edutechlife master</div>
+                <div className="flex items-center gap-2 text-[#00B4D8] font-[900] text-[10px] tracking-[0.4em] uppercase"><Sparkles className="w-4 h-4" /> {t('ialab.que_es_prompt.edutechlife_master')}</div>
                <h1 className="text-4xl md:text-6xl font-[900] text-[#0D2B5B] tracking-tighter leading-[0.85]">{screensData[screen].title}</h1>
              </div>
              <button
@@ -442,7 +446,7 @@ const QueEsPrompt_OVA_Original = ({ onClose }) => {
                disabled={audioLoading}
                 className={`flex items-center gap-4 px-10 py-4 rounded-[2.5rem] font-black text-[10px] transition-all shadow-xl group ${playing ? 'bg-red-600 text-white shadow-red-600/30' : 'bg-[#F1F5F9] dark:bg-slate-700 text-[#0D2B5B] dark:text-white hover:bg-slate-200 dark:hover:bg-slate-600'}`}
              >
-               {audioLoading ? <><Loader2 className="w-5 h-5 animate-spin" /> ...</> : playing ? <><Square className="w-4 h-4 fill-current" /> DETENER</> : <><Volume2 className="w-4 h-4 group-hover:scale-125 transition-transform" /> AUDIO</>}
+               {audioLoading ? <><Loader2 className="w-5 h-5 animate-spin" /> ...</> : playing ? <><Square className="w-4 h-4 fill-current" /> {t('ialab.que_es_prompt.stop')}</> : <><Volume2 className="w-4 h-4 group-hover:scale-125 transition-transform" /> {t('ialab.que_es_prompt.audio')}</>}
              </button>
            </div>
          )}
@@ -494,7 +498,7 @@ const QueEsPrompt_OVA_Original = ({ onClose }) => {
              className="px-10 py-4 bg-[#0D2B5B] text-white rounded-[1.8rem] font-[900] text-xs shadow-xl active:scale-95 transition-all flex items-center gap-3 uppercase tracking-[0.2em]"
              style={{ background: COLORS.gradient }}
            >
-             Siguiente <ArrowRightCircle className="w-6 h-6" />
+              {t('ialab.que_es_prompt.next')} <ArrowRightCircle className="w-6 h-6" />
            </button>
          </div>
        </footer>
@@ -505,7 +509,7 @@ const QueEsPrompt_OVA_Original = ({ onClose }) => {
         <div className="fixed inset-0 z-[100] bg-slate-900/60 dark:bg-slate-950/80 backdrop-blur-md transition-opacity duration-500" onClick={() => setIsMenuOpen(false)}>
           <div className="absolute right-0 h-full w-[400px] bg-white dark:bg-slate-800 shadow-2xl p-12 flex flex-col gap-6 animate-[slideInFromRight_0.6s_cubic-bezier(0.16,1,0.3,1)_forwards] duration-300" onClick={e => e.stopPropagation()}>
              <button onClick={() => setIsMenuOpen(false)} className="self-end p-3 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full transition-colors"><X className="w-8 h-8 text-slate-600 dark:text-slate-300" /></button>
-             <h3 className="font-[900] text-slate-300 dark:text-slate-500 text-xs tracking-[0.4em] mt-12 mb-8 uppercase border-b-2 border-slate-50 dark:border-slate-700 pb-6">Mapa del Módulo</h3>
+             <h3 className="font-[900] text-slate-300 dark:text-slate-500 text-xs tracking-[0.4em] mt-12 mb-8 uppercase border-b-2 border-slate-50 dark:border-slate-700 pb-6">{t('ialab.que_es_prompt.sidebar_title')}</h3>
             {nav.map(id => (
                  <button key={id} onClick={() => { setScreen(id); setIsMenuOpen(false); }} className={`p-6 rounded-[2.5rem] text-left text-xs font-[900] transition-all flex items-center justify-between group ${screen === id ? 'bg-[#0D2B5B] text-white shadow-xl' : 'hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400'}`}>
                 <span className="uppercase tracking-widest">{screensData[id].title}</span>

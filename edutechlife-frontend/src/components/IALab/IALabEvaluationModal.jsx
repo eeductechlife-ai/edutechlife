@@ -10,8 +10,60 @@ import IALabEvaluationResults from './IALabEvaluationResults';
 import SecurityWarningModal from './SecurityWarningModal';
 import ScreenshotProtectionOverlay from './ScreenshotProtectionOverlay';
 import useScreenshotProtection from '../../hooks/IALab/useScreenshotProtection';
+import ValerioChallengeIntro from './challenges/challengeIntro/ValerioChallengeIntro';
+import ChatGPTStep1 from './challenges/module2/ChatGPTStep1';
+import ChatGPTStep2 from './challenges/module2/ChatGPTStep2';
+import ChatGPTStep3 from './challenges/module2/ChatGPTStep3';
+import GeminiStep1 from './challenges/module3/GeminiStep1';
+import GeminiStep2 from './challenges/module3/GeminiStep2';
+import GeminiStep3 from './challenges/module3/GeminiStep3';
+import GeminiStep4 from './challenges/module3/GeminiStep4';
+import AutoSaveIndicator from './challenges/shared/AutoSaveIndicator';
+import NotebookStep1 from './challenges/module4/NotebookStep1';
+import NotebookStep2 from './challenges/module4/NotebookStep2';
+import NotebookStep3 from './challenges/module4/NotebookStep3';
+import EthicsStep1 from './challenges/module5/EthicsStep1';
+import EthicsStep2 from './challenges/module5/EthicsStep2';
+import EthicsStep3 from './challenges/module5/EthicsStep3';
 import { motion, AnimatePresence } from 'framer-motion';
 import useFocusTrap from '../../hooks/useFocusTrap';
+import { useTranslation } from '../../i18n/I18nProvider';
+
+const usePrefersReducedMotion = () => {
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mq.matches);
+    const handler = (e) => setPrefersReducedMotion(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+  return prefersReducedMotion;
+};
+
+const STEP_COMPONENTS = {
+  1: [IALabEvaluationStep1, IALabEvaluationStep2, IALabEvaluationStep3],
+  2: [ChatGPTStep1, ChatGPTStep2, ChatGPTStep3],
+  3: [GeminiStep1, GeminiStep2, GeminiStep3, GeminiStep4],
+  4: [NotebookStep1, NotebookStep2, NotebookStep3],
+  5: [EthicsStep1, EthicsStep2, EthicsStep3],
+};
+
+const STEP_TITLE_KEYS = {
+  1: ['ialab.evaluation.modal.step1_title', 'ialab.evaluation.modal.step2_title', 'ialab.evaluation.modal.step3_title'],
+  2: ['ialab.challenge.m2.step1_title', 'ialab.challenge.m2.step2_title', 'ialab.challenge.m2.step3_title'],
+  3: ['ialab.challenge.m3.step1_title', 'ialab.challenge.m3.step2_title', 'ialab.challenge.m3.step3_title', 'ialab.challenge.m3.step4_title'],
+  4: ['ialab.challenge.m4.step1_title', 'ialab.challenge.m4.step2_title', 'ialab.challenge.m4.step3_title'],
+  5: ['ialab.challenge.m5.step1_title', 'ialab.challenge.m5.step2_title', 'ialab.challenge.m5.step3_title'],
+};
+
+const STEP_DESC_KEYS = {
+  1: ['ialab.evaluation.modal.step1_desc', 'ialab.evaluation.modal.step2_desc', 'ialab.evaluation.modal.step3_desc'],
+  2: ['ialab.challenge.m2.step1_desc', 'ialab.challenge.m2.step2_desc', 'ialab.challenge.m2.step3_desc'],
+  3: ['ialab.challenge.m3.step1_desc', 'ialab.challenge.m3.step2_desc', 'ialab.challenge.m3.step3_desc', 'ialab.challenge.m3.step4_desc'],
+  4: ['ialab.challenge.m4.step1_desc', 'ialab.challenge.m4.step2_desc', 'ialab.challenge.m4.step3_desc'],
+  5: ['ialab.challenge.m5.step1_desc', 'ialab.challenge.m5.step2_desc', 'ialab.challenge.m5.step3_desc'],
+};
 
 /**
  * Componente premium para evaluación inmersiva de IALab con DeepSeek API
@@ -33,8 +85,15 @@ import useFocusTrap from '../../hooks/useFocusTrap';
  * @param {boolean} props.isPremium - Indica si es el modal premium del desafío
  * @param {number} props.moduleId - ID del módulo actual para auto-save
  */
-const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, onComplete }) => {
+const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId: propModuleId, onComplete }) => {
+    const { t, locale } = useTranslation();
     const { user } = useAuth();
+    const effectiveModuleId = propModuleId || 1;
+    const steps = STEP_COMPONENTS[effectiveModuleId] || STEP_COMPONENTS[1];
+    const totalSteps = steps.length;
+    const titleKeys = STEP_TITLE_KEYS[effectiveModuleId] || STEP_TITLE_KEYS[1];
+    const descKeys = STEP_DESC_KEYS[effectiveModuleId] || STEP_DESC_KEYS[1];
+
     const {
         state,
         generateExercises,
@@ -42,8 +101,11 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
         saveGradeToSupabase,
         setStep,
         setResponse,
-        resetEvaluation
-    } = useIALabEvaluation();
+        resetEvaluation,
+        config
+    } = useIALabEvaluation(effectiveModuleId, locale);
+
+    const displayStep = typeof state.step === 'number' ? state.step : 0;
 
     const [securityWarning, setSecurityWarning] = useState('');
     const [securityAlert, setSecurityAlert] = useState(null);
@@ -54,11 +116,12 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
     const [securityViolations, setSecurityViolations] = useState(0);
     const MAX_SECURITY_VIOLATIONS = 3;
     const saveDraftTimerRef = useRef(null);
+    const prefersReducedMotion = usePrefersReducedMotion();
 
-    const isChallengeActive = isVisible && state.step !== 'results';
+    const isChallengeActive = isVisible && state.step !== 'results' && state.step !== 'intro';
     const { showOverlay } = useScreenshotProtection(isChallengeActive, {
       onMaxViolations: () => {
-        setSecurityAlert({ message: 'Has excedido el máximo de infracciones de seguridad. El desafío se cerrará.', level: 3, onClose: () => {
+        setSecurityAlert({ message: t('ialab.evaluation.modal.max_security_violations'), level: 3, onClose: () => {
           setSecurityAlert(null);
           resetEvaluation();
           onClose();
@@ -70,14 +133,14 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
 
     // Inicializar evaluación cuando se abre el modal
     useEffect(() => {
-        if (isOpen && !state.exercises && !state.loading) {
-            generateExercises();
+        if (isOpen && !state.exercises && !state.loading && state.step !== 'intro') {
+            setStep('intro');
         }
-    }, [isOpen, state.exercises, state.loading, generateExercises]);
+    }, [isOpen, state.exercises, state.loading, setStep]);
 
     // Restaurar borrador guardado al abrir el modal
     useEffect(() => {
-        if (isOpen && user?.id && moduleId && !hasRestoredDraftRef.current) {
+        if (isOpen && user?.id && effectiveModuleId && !hasRestoredDraftRef.current) {
             hasRestoredDraftRef.current = true;
             const restoreDraft = async () => {
                 try {
@@ -85,7 +148,7 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
                         .from('user_progress')
                         .select('completed_lessons')
                         .eq('user_id', user.id)
-                        .eq('module_id', moduleId)
+                        .eq('module_id', effectiveModuleId)
                         .eq('activity_type', 'challenge_draft')
                         .is('resource_id', null)
                         .maybeSingle();
@@ -103,11 +166,11 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
             };
             restoreDraft();
         }
-    }, [isOpen, user?.id, moduleId]);
+    }, [isOpen, user?.id, effectiveModuleId]);
 
     // Auto-save de borradores con debounce
     useEffect(() => {
-        if (!isOpen || !user?.id || !moduleId) return;
+        if (!isOpen || !user?.id || !effectiveModuleId) return;
         if (!state.responses.ej1 && !state.responses.ej2 && !state.responses.ej3) return;
 
         if (saveDraftTimerRef.current) {
@@ -120,7 +183,7 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
                     .from('user_progress')
                     .upsert({
                         user_id: user.id,
-                        module_id: moduleId,
+                        module_id: effectiveModuleId,
                         activity_type: 'challenge_draft',
                         resource_id: null,
                         completed_lessons: { ...state.responses },
@@ -139,18 +202,18 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
                 clearTimeout(saveDraftTimerRef.current);
             }
         };
-    }, [state.responses, isOpen, user?.id, moduleId]);
+    }, [state.responses, isOpen, user?.id, effectiveModuleId]);
 
     // Limpiar borrador al completar el desafío
     useEffect(() => {
-        if (state.step === 'results' && user?.id && moduleId) {
+        if (state.step === 'results' && user?.id && effectiveModuleId) {
             const clearDraft = async () => {
                 try {
                     await supabase
                         .from('user_progress')
                         .delete()
                         .eq('user_id', user.id)
-                        .eq('module_id', moduleId)
+                        .eq('module_id', effectiveModuleId)
                         .eq('activity_type', 'challenge_draft')
                         .is('resource_id', null);
                 } catch (err) {
@@ -159,7 +222,7 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
             };
             clearDraft();
         }
-    }, [state.step, user?.id, moduleId]);
+    }, [state.step, user?.id, effectiveModuleId]);
 
     // Animación de entrada/salida
     useEffect(() => {
@@ -181,19 +244,19 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
 
     // Seguridad: detección de cambio de ventana
     useEffect(() => {
-        if (!isVisible || state.step === 'results' || state.loading) return;
+        if (!isVisible || state.step === 'results' || state.loading || state.step === 'intro') return;
         const handleVisibilityChange = () => {
             if (document.hidden) {
                 setSecurityViolations(prev => {
                     const newCount = prev + 1;
                     if (newCount >= MAX_SECURITY_VIOLATIONS) {
-                        setSecurityAlert({ message: 'Has excedido el máximo de infracciones por cambio de ventana. El desafío se cerrará.', level: 3, onClose: () => {
+                        setSecurityAlert({ message: t('ialab.evaluation.modal.max_window_violations'), level: 3, onClose: () => {
                             setSecurityAlert(null);
                             resetEvaluation();
                             onClose();
                         }});
                     } else {
-                        setSecurityWarning(`⚠️ Alerta ${newCount}/${MAX_SECURITY_VIOLATIONS}: No cambies de ventana durante el desafío`);
+                        setSecurityWarning(t('ialab.evaluation.modal.window_warning', { count: newCount, max: MAX_SECURITY_VIOLATIONS }));
                         setTimeout(() => setSecurityWarning(''), 3000);
                     }
                     return newCount;
@@ -206,7 +269,7 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
 
     // Seguridad: bloquear atajos de teclado
     useEffect(() => {
-        if (!isVisible || state.step === 'results') return;
+        if (!isVisible || state.step === 'results' || state.step === 'intro') return;
         const handleKeyDown = (e) => {
             if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'v' || e.key === 'p' || e.key === 's' || e.key === 'u')) {
                 e.preventDefault(); e.stopPropagation();
@@ -221,9 +284,9 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
 
     // Seguridad: bloquear capturas de pantalla e impresión
     useEffect(() => {
-        if (!isVisible || state.step === 'results') return;
+        if (!isVisible || state.step === 'results' || state.step === 'intro') return;
         const handleBeforePrint = () => {
-            setPrintWarning('Capturas de pantalla e impresión bloqueadas por seguridad.');
+            setPrintWarning(t('ialab.evaluation.modal.print_blocked'));
             setSecurityViolations(prev => prev + 1);
             setTimeout(() => setPrintWarning(null), 4000);
         };
@@ -237,13 +300,13 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
         setSecurityViolations(prev => {
             const newCount = prev + 1;
             if (newCount >= MAX_SECURITY_VIOLATIONS) {
-                setSecurityAlert({ message: 'Has excedido el máximo de infracciones de seguridad. El desafío se cerrará.', level: 3, onClose: () => {
+        setSecurityAlert({ message: t('ialab.evaluation.modal.max_security_violations'), level: 3, onClose: () => {
                     setSecurityAlert(null);
                     resetEvaluation();
                     onClose();
                 }});
             } else {
-                setSecurityWarning(`⚠️ Advertencia ${newCount}/${MAX_SECURITY_VIOLATIONS}: Escribe tus propias respuestas`);
+                setSecurityWarning(t('ialab.evaluation.modal.write_own_warning', { count: newCount, max: MAX_SECURITY_VIOLATIONS }));
                 setTimeout(() => setSecurityWarning(''), 3000);
             }
             return newCount;
@@ -259,22 +322,24 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
 
     // Handler para avanzar al siguiente paso
     const handleNextStep = useCallback(() => {
-        if (state.step < 3) {
+        if (typeof state.step === 'number' && state.step < totalSteps) {
             setStep(state.step + 1);
         }
-    }, [state.step, setStep]);
+    }, [state.step, setStep, totalSteps]);
 
     // Handler para retroceder al paso anterior
     const handlePrevStep = useCallback(() => {
-        if (state.step > 1) {
+        if (typeof state.step === 'number' && state.step > 1) {
             setStep(state.step - 1);
         }
     }, [state.step, setStep]);
 
     // Handler para enviar evaluación final
     const handleSubmitEvaluation = useCallback(async () => {
-        if (!state.responses.ej1 || !state.responses.ej2 || !state.responses.ej3) {
-            setFormError('Debes completar todos los ejercicios antes de enviar.');
+        const keys = Array.from({ length: totalSteps }, (_, i) => `ej${i + 1}`);
+        const allFilled = keys.every(k => state.responses[k]);
+        if (!allFilled) {
+            setFormError(t('ialab.evaluation.modal.form_error_incomplete'));
             setTimeout(() => setFormError(null), 4000);
             return;
         }
@@ -286,7 +351,7 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
             if (evaluation) {
                 // Guardar nota en Supabase
                 setIsSavingGrade(true);
-                const saveResult = await saveGradeToSupabase(evaluation, moduleId);
+                const saveResult = await saveGradeToSupabase(evaluation, effectiveModuleId);
                 
                 if (saveResult.success) {
                     if (onComplete) {
@@ -294,18 +359,19 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
                     }
                     setStep('results');
                 } else {
-                    setFormError(`Error al guardar tu nota: ${saveResult.error}`);
+                    setFormError(t('ialab.evaluation.modal.form_error_save', { error: saveResult.error }));
+
                     setTimeout(() => setFormError(null), 6000);
                 }
             }
         } catch (error) {
             console.error('Error en evaluación:', error);
-            setFormError('Error al evaluar tus respuestas. Intenta nuevamente.');
+            setFormError(t('ialab.evaluation.modal.form_error_evaluation'));
             setTimeout(() => setFormError(null), 6000);
         } finally {
             setIsSavingGrade(false);
         }
-    }, [state.responses, evaluateAnswers, saveGradeToSupabase, setStep, moduleId, onComplete]);
+    }, [state.responses, evaluateAnswers, saveGradeToSupabase, setStep, effectiveModuleId, onComplete, totalSteps]);
 
     // Render header con progreso
     const renderHeader = () => (
@@ -316,20 +382,22 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
                 disabled={state.loading || isSavingGrade}
             >
                 <Icon name="fa-arrow-left" className="text-sm" />
-                <span className="text-sm font-medium">Salir</span>
+                <span className="text-sm font-medium">{t('ialab.evaluation.modal.exit')}</span>
             </button>
 
             <div className="flex items-center gap-6">
                 {/* Barra de progreso */}
-                <div className="flex items-center gap-3">
-                    <div className="text-sm text-white/80">Paso {state.step} de 3</div>
-                    <div className="w-32 h-2 bg-white/20 rounded-full overflow-hidden">
-                        <div 
-                            className="h-full bg-petroleum transition-all duration-500"
-                            style={{ width: `${(state.step / 3) * 100}%` }}
-                        ></div>
+                {typeof state.step === 'number' && (
+                    <div className="flex items-center gap-3">
+                        <div className="text-sm text-white/80">{t('ialab.evaluation.modal.step_of', { step: state.step, total: totalSteps })}</div>
+                        <div className="w-32 h-2 bg-white/20 rounded-full overflow-hidden">
+                            <div 
+                                className="h-full bg-petroleum transition-all duration-500"
+                                style={{ width: `${(displayStep / totalSteps) * 100}%` }}
+                            ></div>
+                        </div>
                     </div>
-                </div>
+                )}
 
                 {/* Indicador de seguridad */}
                 {securityWarning && (
@@ -348,10 +416,10 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
                 <div className="w-10 h-10 border-3 border-corporate border-t-transparent rounded-full animate-spin"></div>
             </div>
             <h3 className="text-xl font-bold text-slate-700 mb-2">
-                {state.step === 'loading' ? 'La IA está diseñando tu desafío...' : 'Edutechlife está evaluando tus respuestas...'}
+                {state.step === 'loading' ? t('ialab.evaluation.modal.ai_designing') : t('ialab.evaluation.modal.evaluating')}
             </h3>
             <p className="text-slate-500 text-center max-w-md">
-                Esto puede tomar unos segundos. Por favor, espera mientras procesamos tu evaluación.
+                {t('ialab.evaluation.modal.loading_desc')}
             </p>
         </div>
     );
@@ -362,14 +430,14 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
             <div className="w-20 h-20 rounded-full bg-red-500/20 flex items-center justify-center mb-6">
                 <Icon name="fa-exclamation-triangle" className="text-red-400 text-3xl" />
             </div>
-            <h3 className="text-xl font-bold text-slate-700 mb-2">Error al cargar la evaluación</h3>
+            <h3 className="text-xl font-bold text-slate-700 mb-2">{t('ialab.evaluation.modal.load_error_title')}</h3>
             <p className="text-slate-500 text-center max-w-md mb-6">{state.error}</p>
             <button
                 onClick={generateExercises}
                 className="px-6 py-3 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300"
             >
                 <Icon name="fa-redo" className="mr-2" />
-                Reintentar
+                {t('ialab.evaluation.modal.retry')}
             </button>
         </div>
     );
@@ -377,25 +445,84 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
     // Render contenido principal (pasos)
     const renderContent = () => {
         if (!state.exercises) return null;
+        const StepComponent = steps[state.step - 1];
+        const exerciseKeys = Object.keys(state.exercises);
+        const currentExercise = state.step <= exerciseKeys.length ? state.exercises[exerciseKeys[state.step - 1]] : state.exercises;
+        const responseKey = `ej${state.step}`;
+        const exercises = state.exercises;
+
+        const ej1Parsed = (() => {
+            try { return JSON.parse(state.responses.ej1 || '{}'); }
+            catch { return {}; }
+        })();
+        const selectedCase = ej1Parsed.selectedCase || '';
+        const researchTopic = ej1Parsed.topic || currentExercise?.temaInvestigacion || currentExercise?.documentos?.[0]?.tema || '';
+        const selectedDocCount = (() => {
+            try { return JSON.parse(state.responses.ej1 || '{}').documents?.length || 0; }
+            catch { return 0; }
+        })();
+
+        const selectedDocs = (() => {
+            try {
+                const ej1 = JSON.parse(state.responses.ej1 || '{}');
+                const docs = ej1.documents || [];
+                return docs.map(d => {
+                    const docObj = currentExercise?.documentos?.[d.index];
+                    return docObj ? { index: d.index, title: docObj.titulo, tipo: docObj.tipo } : null;
+                }).filter(Boolean);
+            } catch {
+                return [];
+            }
+        })();
+
+        const step1Biases = (() => {
+            try {
+                const ej1 = JSON.parse(state.responses.ej1 || '{}');
+                const rawBiases = ej1.biases || [];
+                const tiposSesgo = exercises?.tiposSesgo || [];
+                return rawBiases.map(b => ({
+                    index: b.index,
+                    label: typeof tiposSesgo[b.index] === 'string' ? tiposSesgo[b.index] : (tiposSesgo[b.index]?.nombre || `Bias #${b.index}`),
+                    pipeline: b.pipeline
+                }));
+            } catch { return []; }
+        })();
 
         return (
             <div className="max-w-4xl mx-auto p-6 pb-20">
+                    {state.fallbackMode && (
+                        <div className="mb-4 px-4 py-3 bg-amber-50 border border-amber-200 rounded-xl flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+                                <Icon name="fa-wifi-slash" className="text-amber-600 text-sm" />
+                            </div>
+                            <div className="flex-1">
+                                <p className="text-xs font-semibold text-amber-800">{t('ialab.evaluation.modal.offline_title')}</p>
+                                <p className="text-[10px] text-amber-600">{t('ialab.evaluation.modal.offline_desc')}</p>
+                            </div>
+                            <button
+                                onClick={() => generateExercises(locale)}
+                                className="text-[10px] font-semibold text-amber-700 hover:text-amber-800 bg-amber-100 hover:bg-amber-200 px-3 py-1.5 rounded-lg transition-colors flex-shrink-0"
+                            >
+                                <Icon name="fa-redo" className="mr-1" />
+                                {t('ialab.evaluation.modal.retry')}
+                            </button>
+                        </div>
+                    )}
                     {/* Título del paso actual */}
                     <div className="mb-8">
                         <div className="flex items-center gap-3 mb-4">
                             <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center">
                                 <Icon name="fa-clipboard-check" className="text-white text-xl" />
                             </div>
-                            <div>
-                                <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">
-                                    {state.step === 1 && 'Paso 1: Identificar'}
-                                    {state.step === 2 && 'Paso 2: Optimizar'}
-                                    {state.step === 3 && 'Paso 3: Crear'}
-                                </h2>
+                            <div className="flex-1">
+                                <div className="flex items-center gap-3">
+                                    <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">
+                                        {t(titleKeys[state.step - 1] || 'ialab.evaluation.modal.step1_title')}
+                                    </h2>
+                                    <AutoSaveIndicator response={state.responses[responseKey] || ''} />
+                                </div>
                                 <p className="text-slate-500 dark:text-slate-400">
-                                    {state.step === 1 && 'Analiza el escenario y clasifica los elementos clave'}
-                                    {state.step === 2 && 'Mejora el prompt mal redactado'}
-                                    {state.step === 3 && 'Crea un prompt desde cero para el caso de uso'}
+                                    {t(descKeys[state.step - 1] || '')}
                                 </p>
                             </div>
                         </div>
@@ -409,25 +536,18 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
                         onCut={handleSecurityEvent}
                         onContextMenu={handleSecurityEvent}
                     >
-                        {state.step === 1 && (
-                            <IALabEvaluationStep1
-                                exercise={state.exercises.ejercicio1}
-                                response={state.responses.ej1}
-                                onResponseChange={(response) => setResponse('ej1', response)}
-                            />
-                        )}
-                        {state.step === 2 && (
-                            <IALabEvaluationStep2
-                                exercise={state.exercises.ejercicio2}
-                                response={state.responses.ej2}
-                                onResponseChange={(response) => setResponse('ej2', response)}
-                            />
-                        )}
-                        {state.step === 3 && (
-                            <IALabEvaluationStep3
-                                exercise={state.exercises.ejercicio3}
-                                response={state.responses.ej3}
-                                onResponseChange={(response) => setResponse('ej3', response)}
+                        {StepComponent && (
+                            <StepComponent
+                                exercise={currentExercise}
+                                response={state.responses[responseKey] || ''}
+                                onResponseChange={(response) => setResponse(responseKey, response)}
+                                t={t}
+                                selectedCase={selectedCase}
+                                topic={researchTopic}
+                                docCount={selectedDocCount}
+                                selectedDocs={selectedDocs}
+                                exercises={exercises}
+                                biases={step1Biases}
                             />
                         )}
                     </div>
@@ -448,38 +568,38 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
                             className="px-6 py-3 border-2 border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-500 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <Icon name="fa-arrow-left" className="mr-2" />
-                            Anterior
+                            {t('ialab.evaluation.modal.previous')}
                         </button>
 
                         <div className="flex items-center gap-4">
                             <span className="text-sm text-slate-500">
-                                Paso {state.step} de 3
+                                {t('ialab.evaluation.modal.step_of', { step: state.step, total: totalSteps })}
                             </span>
                             
-                            {state.step < 3 ? (
+                            {state.step < totalSteps ? (
                                 <button
                                     onClick={handleNextStep}
-                                    disabled={!state.responses[`ej${state.step}`] || state.loading}
+                                    disabled={!state.responses[responseKey] || state.loading}
                                     className="px-6 py-3 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                    Siguiente
+                                    {t('ialab.evaluation.modal.next')}
                                     <Icon name="fa-arrow-right" className="ml-2" />
                                 </button>
                             ) : (
                                 <button
                                     onClick={handleSubmitEvaluation}
-                                    disabled={!state.responses.ej3 || state.loading || isSavingGrade}
+                                    disabled={!state.responses[responseKey] || state.loading || isSavingGrade}
                                     className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                                 >
                                     {isSavingGrade ? (
                                         <>
                                             <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                            Guardando nota...
+                                            {t('ialab.evaluation.modal.saving_grade')}
                                         </>
                                     ) : (
                                         <>
                                             <Icon name="fa-paper-plane" />
-                                            Enviar Evaluación
+                                            {t('ialab.evaluation.modal.submit_evaluation')}
                                         </>
                                     )}
                                 </button>
@@ -524,7 +644,7 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
                         />
 
                         {/* Watermark de seguridad anti-screenshot */}
-                        {state.step !== 'results' && (
+                        {state.step !== 'results' && state.step !== 'intro' && (
                             <div className="fixed inset-0 pointer-events-none z-[101] opacity-[0.03] select-none" style={{
                                 background: `repeating-linear-gradient(45deg, var(--color-petroleum), var(--color-petroleum) 2px, transparent 2px, transparent 60px)`,
                             }}>
@@ -536,6 +656,9 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
                             </div>
                         )}
 
+                        <div aria-live="polite" className="sr-only">
+                            {typeof state.step === 'number' ? `${state.step} de ${totalSteps}` : ''}
+                        </div>
                         <div className="relative flex flex-col min-h-0 flex-1">
                             {renderHeader()}
 
@@ -552,7 +675,7 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
                                         >
                                             {renderLoading()}
                                         </motion.div>
-                                    ) : state.error ? (
+                                    ) : state.error && !state.exercises ? (
                                         <motion.div
                                             key="error"
                                             initial={{ opacity: 0, y: 20 }}
@@ -562,6 +685,24 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
                                             className="h-full"
                                         >
                                             {renderError()}
+                                        </motion.div>
+                                    ) : state.step === 'intro' ? (
+                                        <motion.div
+                                            key="intro"
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: -20 }}
+                                            transition={{ duration: 0.3 }}
+                                            className="h-full"
+                                        >
+                                            <ValerioChallengeIntro
+                                                moduleId={effectiveModuleId}
+                                                onStart={() => {
+                                                    setStep(1);
+                                                    generateExercises(locale);
+                                                }}
+                                                t={t}
+                                            />
                                         </motion.div>
                                     ) : state.step === 'results' ? (
                                         <motion.div
@@ -580,10 +721,10 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId, on
                                     ) : (
                                         <motion.div
                                             key={`step-${state.step}`}
-                                            initial={{ opacity: 0, x: state.step > prevStepRef.current ? 50 : -50 }}
-                                            animate={{ opacity: 1, x: 0 }}
-                                            exit={{ opacity: 0, x: state.step > prevStepRef.current ? -50 : 50 }}
-                                            transition={{ duration: 0.3 }}
+                                            initial={prefersReducedMotion ? false : { opacity: 0, x: state.step > prevStepRef.current ? 50 : -50 }}
+                                            animate={prefersReducedMotion ? {} : { opacity: 1, x: 0 }}
+                                            exit={prefersReducedMotion ? false : { opacity: 0, x: state.step > prevStepRef.current ? -50 : 50 }}
+                                            transition={{ duration: prefersReducedMotion ? 0 : 0.3 }}
                                             className="h-fit"
                                         >
                                             {renderContent()}

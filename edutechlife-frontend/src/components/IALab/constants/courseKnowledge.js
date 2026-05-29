@@ -43,22 +43,6 @@ const COURSE_KNOWLEDGE = [
           { type: "pdf", title: "Guía: Anatomía de un Prompt", pages: 12 },
           { type: "ova", title: "Infografía Interactiva: Prompt Engineering" }
         ]
-      },
-      {
-        title: "Estructura Básica de un Prompt Efectivo",
-        description: "Patrones y estructuras probadas para crear prompts que generen respuestas precisas y útiles.",
-        difficulty: "Intermedio",
-        learningObjectives: [
-          "Aplicar la estructura ROL-TAREA-FORMATO-CONTEXTO",
-          "Utilizar delimitadores y marcadores de sección",
-          "Incorporar ejemplos de few-shot learning",
-          "Ajustar el nivel de detalle según el objetivo"
-        ],
-        resources: [
-          { type: "video", title: "Tutorial: Construyendo Prompts Paso a Paso", duration: "9:45" },
-          { type: "document", title: "Plantillas de Estructura Avanzada (JSON)" },
-          { type: "document", title: "Case Study: Prompt para Análisis de Datos" }
-        ]
       }
     ]
   },
@@ -216,8 +200,8 @@ const COURSE_KNOWLEDGE = [
           "Usar audio para aprendizaje y repaso"
         ],
         resources: [
-          { type: "video", title: "Audio Overview: Tu Contenido en Podcast", duration: "10:50" },
-          { type: "pdf", title: "Guía de Audio Overview", pages: 10 },
+          { type: "video", title: "Crea tu propio podcast", duration: "2:15" },
+          { type: "pdf", title: "Notebook LM", pages: 10 },
           { type: "ova", title: "Laboratorio: Crea tu Podcast IA" }
         ]
       }

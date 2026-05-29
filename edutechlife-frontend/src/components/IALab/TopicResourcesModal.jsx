@@ -6,6 +6,7 @@ import { useIALabProgressContext } from '../../context/IALabContext';
 import { useIALabStore } from '../../store/ialabStore';
 import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
 import { useYouTubeDuration } from '../../hooks/useYouTubeDuration';
+import { useTranslation } from '../../i18n/I18nProvider';
 import ResourceSelector from './ResourceSelector';
 import ResourceViewerModal from './ResourceViewerModal';
 import QueEsPrompt_OVA_Original from './QueEsPrompt_OVA_Original';
@@ -19,6 +20,7 @@ const TopicResourcesModal = ({
   topicData = null,
   className = ''
 }) => {
+  const { t } = useTranslation();
   const { activeMod, markResourceAsViewed: markResourceInContext } = useIALabProgressContext();
   const { trackResourceViewed } = useIALabProgress();
   
@@ -209,10 +211,10 @@ const TopicResourcesModal = ({
                     "bg-white/20 text-white hover:bg-white/30 transition-colors duration-200",
                     "flex-shrink-0 w-full sm:w-auto justify-center sm:justify-start flex items-center gap-2"
                   )}
-                  aria-label={isModalFullscreen ? "Salir de pantalla completa" : "Pantalla completa"}
+                  aria-label={isModalFullscreen ? t('ialab.viewer_modal.fullscreen_exit') : t('ialab.viewer_modal.fullscreen_enter')}
                 >
                   <Icon name={isModalFullscreen ? "fa-compress" : "fa-expand"} className="w-4 h-4 sm:w-5 sm:h-5" />
-                  <span className="text-sm sm:hidden">{isModalFullscreen ? "Salir" : "Fullscreen"}</span>
+                  <span className="text-sm sm:hidden">{isModalFullscreen ? t('ialab.viewer_modal.fullscreen_exit_btn') : t('ialab.viewer_modal.fullscreen')}</span>
                 </button>
                 <button
                   onClick={() => { stopSpeech(); onClose(); }}
@@ -221,10 +223,10 @@ const TopicResourcesModal = ({
                     "bg-white text-petroleum hover:bg-petroleum/10 transition-colors duration-200",
                     "flex-shrink-0 w-full sm:w-auto justify-center sm:justify-start flex items-center gap-2"
                   )}
-                  aria-label="Cerrar modal"
+                  aria-label={t('ialab.viewer_modal.close_aria')}
                 >
                   <Icon name="fa-xmark" className="w-4 h-4 sm:w-5 sm:h-5" />
-                  <span className="text-sm sm:hidden">Cerrar</span>
+                  <span className="text-sm sm:hidden">{t('ialab.viewer_modal.close')}</span>
                 </button>
               </div>
 
@@ -247,7 +249,7 @@ const TopicResourcesModal = ({
                   <div className="w-6 h-6 rounded-md bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
                     <Icon name="fa-layer-group" className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-petroleum" />
                   </div>
-                  <span>{resources.length} recurso{resources.length !== 1 ? 's' : ''}</span>
+                  <span>{t('ialab.topic_resources.resources_count', { count: resources.length })}</span>
                 </div>
               </div>
 
@@ -258,7 +260,7 @@ const TopicResourcesModal = ({
                       <div className="w-6 h-6 rounded-md bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
                         <Icon name="fa-bullseye" className="text-petroleum w-3.5 h-3.5 sm:w-4 sm:h-4" />
                       </div>
-                      Objetivo de aprendizaje
+                      {t('ialab.topic_resources.learning_objective')}
                     </h4>
                     <p className="text-sm sm:text-base text-petroleum/70 leading-relaxed ml-7">
                       {topicResources.learningObjectives[0]}
@@ -321,12 +323,12 @@ const TopicResourcesModal = ({
                   </div>
                   <div className="min-w-0">
                     <h4 className="font-semibold text-petroleum text-xs sm:text-sm truncate">
-                      {resources[activeResourceIndex]?.title || "Selecciona un recurso"}
+                      {resources[activeResourceIndex]?.title || t('ialab.topic_resources.select_resource')}
                     </h4>
                     <div className="flex items-center gap-1 sm:gap-2 text-xs text-petroleum/60">
                       {resources[activeResourceIndex]?.type === 'video' && (
                         <span>
-                          {durationLoading ? 'Cargando...' : (youtubeDuration || resources[activeResourceIndex]?.duration)}
+                          {durationLoading ? t('common.loading') : (youtubeDuration || resources[activeResourceIndex]?.duration)}
                         </span>
                       )}
                       {resources[activeResourceIndex]?.format && (
@@ -351,7 +353,7 @@ const TopicResourcesModal = ({
                       activeResourceIndex <= 0 ? "text-petroleum/50 cursor-not-allowed opacity-40" : "text-petroleum hover:bg-petroleum/5 hover:border-l-corporate hover:shadow"
                     )}
                     style={{ boxShadow: '0 1px 3px 0 rgba(0,75,99,0.15), 0 1px 2px -1px rgba(0,75,99,0.12)' }}
-                    aria-label="Recurso anterior"
+                    aria-label={t('ialab.viewer_modal.previous_aria')}
                   >
                     <Icon name="fa-chevron-left" className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
@@ -372,7 +374,7 @@ const TopicResourcesModal = ({
                       activeResourceIndex >= resources.length - 1 ? "text-petroleum/50 cursor-not-allowed opacity-40" : "text-petroleum hover:bg-petroleum/5 hover:border-l-corporate hover:shadow"
                     )}
                     style={{ boxShadow: '0 1px 3px 0 rgba(0,75,99,0.15), 0 1px 2px -1px rgba(0,75,99,0.12)' }}
-                    aria-label="Siguiente recurso"
+                    aria-label={t('ialab.viewer_modal.next_aria')}
                   >
                     <Icon name="fa-chevron-right" className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
@@ -413,9 +415,9 @@ const TopicResourcesModal = ({
                     <div>
                       <h2 className="text-xl font-bold text-white">{immersivePdfResource.title}</h2>
                       <div className="flex items-center gap-3 text-white/80 text-sm mt-1">
-                        <span>Vista inmersiva</span>
+                        <span>{t('ialab.topic_resources.immersive_view')}</span>
                         <span>•</span>
-                        <span>Pantalla completa</span>
+                        <span>{t('ialab.viewer_modal.fullscreen')}</span>
                       </div>
                     </div>
                   </div>
@@ -424,20 +426,20 @@ const TopicResourcesModal = ({
                     className="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-colors duration-200 flex items-center gap-2 font-medium border-none"
                   >
                     <Icon name="fa-expand" className="w-5 h-5 text-white" />
-                    Pantalla completa
+                    {t('ialab.viewer_modal.fullscreen')}
                   </button>
                   <button
                     onClick={handleCloseViewerModals}
                     className="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-colors duration-200 flex items-center gap-2 font-medium border-none"
                   >
                     <Icon name="fa-times" className="w-5 h-5 text-white" />
-                    Cerrar
+                    {t('ialab.viewer_modal.close')}
                   </button>
                 </div>
                 <div className="flex-1 relative">
                   <iframe
                     src={`${immersivePdfResource.url}#view=FitH&toolbar=0&navpanes=0&scrollbar=1`}
-                    title={`${immersivePdfResource.title} - Vista inmersiva`}
+                    title={`${immersivePdfResource.title} - ${t('ialab.topic_resources.immersive_view')}`}
                     id="immersive-pdf-iframe" className="w-full h-full border-0"
                     allowFullScreen
                   />

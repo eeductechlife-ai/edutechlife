@@ -65,7 +65,6 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
     topics: [
       { title: "Introducción a la Inteligencia Artificial Generativa", icon: "fa-brain", resources: 2, duration: "20 min" },
       { title: "¿Qué es un Prompt?", icon: "fa-comments", resources: 3, duration: "20 min" },
-      { title: "Estructura Básica de un Prompt Efectivo", icon: "fa-sitemap", resources: 3, duration: "20 min" },
     ],
   };
 
@@ -131,6 +130,9 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
     if (flatIdx === -1) return false;
     return flatIdx > nextResourceGlobalIndex;
   };
+  
+  // Admin bypass: el usuario johnbeltran22 (dev) puede ver todos los recursos sin restricciones
+  const isAdmin = useIALabStore(s => s.userRole === 'admin');
 
   const calculateTopicDuration = useCallback((topicTitle) => {
     const topicData = resourcesByTopic[topicTitle];
@@ -197,7 +199,8 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
     }
   }, [viewerModalOpen]);
 
-  // Auto-avance: cuando se completa un tema, cerrarlo y abrir el siguiente
+  // Los recursos ya vistos SIEMPRE se pueden reabrir haciendo clic en ellos.
+  // Auto-avance: al completar un tema, abrir el siguiente para mantener el flujo
   useEffect(() => {
     if (expandedTopic === null || expandedTopic >= moduleData.topics.length - 1) return;
     const currentTopic = moduleData.topics[expandedTopic];
@@ -207,12 +210,11 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
     if (allDone) {
       const timer = setTimeout(() => {
         setExpandedTopic(prev => (prev !== null ? prev + 1 : null));
-      }, 700);
+      }, 1500);
       return () => clearTimeout(timer);
     }
   }, [viewedIds, expandedTopic, moduleData.topics]);
 
-  // Escucha el evento desde TuRutaDeHoy: lleva al recurso o actividad pendiente
   useEffect(() => {
     const handleOpenTopic = () => {
       const viewed = useIALabStore.getState().getViewedResources();
@@ -468,7 +470,7 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
                               return '';
                             };
                             const isResourceCompleted = viewedIds.includes(resource.id);
-                            const resourceLocked = isResourceLocked(index, resIndex, resource.id);
+                            const resourceLocked = isAdmin ? false : isResourceLocked(index, resIndex, resource.id);
                             const isNextToView = !resourceLocked && !isResourceCompleted;
                             return (
                               <motion.button

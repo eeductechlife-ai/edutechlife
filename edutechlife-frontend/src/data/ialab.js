@@ -15,6 +15,15 @@ export const modules = [
   { id: 5, title: 'Proyecto Disruptivo', icon: 'fa-trophy', color: '#FFD166', topics: ['Integración Total', 'MVP Inteligente', 'Pitch Deck IA', 'Roadmap Estratégico'], challenge: 'Analiza un caso real de sesgo algorítmico en IA y propón un protocolo ético para prevenir y mitigar este tipo de discriminación.', desc: 'Aplica todo lo aprendido en un proyecto de impacto real.', duration: '2h', level: 'Experto', videos: 6, projects: 5 },
 ];
 
+/** @type {Module[]} */
+export const modules_en = [
+  { id: 1, title: 'Prompt Engineering', icon: 'fa-terminal', color: '#4DA8C4', topics: ['Giving clear instructions to AI', 'Improving any question for better answers', 'Understanding why AI fails and how to fix it', 'Getting useful results faster', 'Applying AI in study, work, and daily life', 'Asking exactly what you need, no beating around the bush'], challenge: "It's practice time! Apply everything you've learned in this module by solving a real-world case. Consolidate your knowledge, overcome the challenge, and take your skills to the next level.", desc: 'In this module, we have designed a strategic path that will take you from the fundamentals of Generative AI to creating high-impact prompts. Your mission: Explore each topic and its multimedia resources (videos, guides, and labs). Your progress bar will come to life with every step you take. Keep going: each completed resource brings you 20% closer to your global certification. The power of clear instructions is in your hands!', duration: '2h', level: 'Advanced', videos: 12, projects: 3 },
+  { id: 2, title: 'Power Up ChatGPT', icon: 'fa-robot', color: '#66CCCC', topics: ['Predictive Analytics', 'Custom GPTs', 'Function Calling', 'System Prompts'], challenge: 'Create a custom GPT to automate a task from your professional field and connect it with an external API using Function Calling.', desc: 'Become a ChatGPT expert: master system prompts, create custom GPTs, and automate your workflow.', duration: '2h', level: 'Advanced', videos: 15, projects: 4 },
+  { id: 3, title: 'Deep Research', icon: 'fa-search', color: '#B2D8E5', topics: ['Multimodal Reasoning', 'Real-Time Grounding', 'Deep Research', 'AI Fact-Checking'], challenge: 'Use Gemini Deep Research to investigate a current topic, verify every cited source, and present a professional report with your own conclusions.', desc: 'Master Google Gemini to research, verify data, and analyze information like a professional.', duration: '2h', level: 'Intermediate', videos: 10, projects: 2 },
+  { id: 4, title: 'NotebookLM Immersion', icon: 'fa-microphone', color: '#004B63', topics: ['Source Curation', 'Knowledge Synthesis', 'Audio Overviews', 'Document Management'], challenge: 'Generate a podcast analyzing 5 papers about neuroplasticity.', desc: 'Transform PDFs and documents into smart summaries, podcasts, and personalized research assistants.', duration: '2h', level: 'Intermediate', videos: 8, projects: 3 },
+  { id: 5, title: 'Disruptive Project', icon: 'fa-trophy', color: '#FFD166', topics: ['Total Integration', 'Smart MVP', 'AI Pitch Deck', 'Strategic Roadmap'], challenge: 'Analyze a real case of algorithmic bias in AI and propose an ethical protocol to prevent and mitigate this type of discrimination.', desc: 'Apply everything you have learned in a real-impact project.', duration: '2h', level: 'Expert', videos: 6, projects: 5 },
+];
+
 /** @type {Record<number, Lesson[]>} */
 export const ALL_LESSONS = {
   1: [
@@ -44,26 +53,55 @@ export const ALL_LESSONS = {
   ],
 };
 
+/** @type {Record<number, Lesson[]>} */
+export const ALL_LESSONS_EN = {
+  1: [
+    { id: 1, title: 'Generative AI: Your First Step', description: 'Discover how generative AI is transforming education and master the key concepts to apply it starting today.', duration: '20 min', type: 'teoría', hasMedia: true, icon: 'fa-brain', objectives: ['Understand what generative AI is and how it works', 'Identify practical applications in education', 'Recognize limitations and ethical considerations'] },
+    { id: 2, title: 'The Power of a Good Prompt', description: 'Learn to communicate with AI like an expert: the right prompt makes the difference between a generic result and a custom solution.', duration: '20 min', type: 'práctica', hasMedia: true, icon: 'fa-comments', objectives: ['Define what a prompt is and its role in AI communication', 'Differentiate between effective and generic prompts', 'Apply practical prompt examples in educational contexts'] },
+    { id: 3, title: 'Build Flawless Prompts', description: 'Learn the magic formula: Context + Instruction + Format = Precise Result.', duration: '20 min', type: 'teoría', hasMedia: true, icon: 'fa-sitemap', objectives: ['Master the Context + Instruction + Format formula', 'Build structured prompts with precise results', 'Evaluate and refine AI response quality'] },
+  ],
+  2: [
+    { id: 1, title: 'Predict Trends with ChatGPT', description: 'Use GPT to anticipate trends and make strategic decisions based on real data.', duration: '25 min', type: 'teoría', hasMedia: true, icon: 'fa-chart-line', objectives: ['Understand how GPT can analyze structured data', 'Apply AI forecasting techniques', 'Identify patterns and trends in historical data'] },
+    { id: 2, title: 'Create Your Own AI Assistant', description: 'Design custom AI assistants trained for your specific tasks and needs.', duration: '30 min', type: 'laboratorio', hasMedia: true, icon: 'fa-robot', objectives: ['Configure a specialized GPT for specific tasks', 'Customize instructions and knowledge base', 'Publish and share GPTs with your team'] },
+    { id: 3, title: 'Automate with APIs and ChatGPT', description: 'Connect GPT with your tools and automate complex workflows effortlessly.', duration: '25 min', type: 'práctica', hasMedia: false, icon: 'fa-code', objectives: ['Integrate external functions with GPT models', 'Automate complex workflows', 'Manage structured responses from the API'] },
+  ],
+  3: [
+    { id: 1, title: 'See, Read, and Analyze with Gemini', description: 'Analyze text, images, and data in one place with the multimodal power of AI.', duration: '20 min', type: 'teoría', hasMedia: true, icon: 'fa-brain', objectives: ['Combine text, images, and data in a single analysis', 'Understand current AI multimodal capabilities', 'Apply multimodal reasoning to research cases'] },
+    { id: 2, title: 'Always Up-to-Date Answers', description: 'Get real-time answers by connecting AI to live information sources.', duration: '25 min', type: 'práctica', hasMedia: true, icon: 'fa-search', objectives: ['Connect AI with live data sources', 'Verify answers with up-to-date information', 'Implement grounding in practical applications'] },
+    { id: 3, title: 'The Art of Research with AI', description: 'Research deeply and verify any facts with advanced AI-assisted research techniques.', duration: '30 min', type: 'laboratorio', hasMedia: false, icon: 'fa-microscope', objectives: ['Conduct deep AI-assisted research', 'Automatically verify facts and sources', 'Structure research reports with AI'] },
+  ],
+  4: [
+    { id: 1, title: 'Select Sources Like an Expert', description: 'Build your library of trusted sources with the help of AI for solid research.', duration: '20 min', type: 'teoría', hasMedia: true, icon: 'fa-bookmark', objectives: ['Select relevant sources for academic research', 'Organize and categorize documents with AI', 'Evaluate source quality and credibility'] },
+    { id: 2, title: 'Turn Data into Wisdom', description: 'Convert dense documents into clear summaries ready to use in your projects.', duration: '25 min', type: 'práctica', hasMedia: true, icon: 'fa-compress', objectives: ['Transform complex documents into executive summaries', 'Extract key insights from multiple sources', 'Structure knowledge in an actionable way'] },
+    { id: 3, title: 'Your Notes Become a Podcast', description: 'Listen to your documents and organize your digital knowledge library with AI.', duration: '25 min', type: 'laboratorio', hasMedia: true, icon: 'fa-microphone', objectives: ['Convert written documents into audio content', 'Manage a digital knowledge library', 'Optimize documentation workflows with AI'] },
+  ],
+  5: [
+    { id: 1, title: 'Unite All AIs in One Flow', description: 'Integrate your entire AI stack into a unified and powerful workflow.', duration: '30 min', type: 'proyecto', hasMedia: true, icon: 'fa-puzzle-piece', objectives: ['Combine multiple AI tools in a unified workflow', 'Design efficient integration architectures', 'Solve complex problems with a full AI stack'] },
+    { id: 2, title: 'Create Your First AI Product', description: 'Build an MVP with integrated AI to validate your ideas in record time.', duration: '35 min', type: 'proyecto', hasMedia: true, icon: 'fa-rocket', objectives: ['Build a minimum viable product with integrated AI', 'Prioritize core features for rapid validation', 'Iterate based on user feedback'] },
+    { id: 3, title: 'Present Your Idea Like a Pro', description: 'Design a professional presentation and roadmap that sells your disruptive project.', duration: '25 min', type: 'proyecto', hasMedia: false, icon: 'fa-presentation', objectives: ['Prepare a professional AI project presentation', 'Design a strategic roadmap', 'Communicate project value to stakeholders'] },
+  ],
+};
+
 /** @type {Record<number, ModuleQuestion[]>} */
 export const MODULE_QUESTIONS = {
   1: [
     { id: 'm1q1', topic: 'Ingeniería de Prompts', correctAnswer: 'm1q1_b' },
-    { id: 'm1q2', topic: 'Chain-of-Thought', correctAnswer: 'm1q2_b' },
+    { id: 'm1q2', topic: 'Método RTF', correctAnswer: 'm1q2_a' },
     { id: 'm1q3', topic: 'Mastery Framework', correctAnswer: 'm1q3_b' },
-    { id: 'm1q4', topic: 'Zero-Shot Prompting', correctAnswer: 'm1q4_b' },
-    { id: 'm1q5', topic: 'Contexto Dinámico', correctAnswer: 'm1q5_b' },
+    { id: 'm1q4', topic: 'Estructura de Prompts', correctAnswer: 'm1q4_b' },
+    { id: 'm1q5', topic: 'Aplicación RTF', correctAnswer: 'm1q5_b' },
     { id: 'm1q6', topic: 'Ética en IA', correctAnswer: 'm1q6_b' },
-    { id: 'm1q7', topic: 'Técnicas de Prompting', correctAnswer: 'm1q7_a' },
+    { id: 'm1q7', topic: 'Análisis Comparativo RTF', correctAnswer: 'm1q7_b' },
     { id: 'm1q8', topic: 'Mastery Framework', correctAnswer: 'm1q8_b' },
   ],
   2: [
-    { id: 'm2q1', topic: 'Herramientas ChatGPT', correctAnswer: 'm2q1_b' },
+    { id: 'm2q1', topic: 'Herramientas ChatGPT', correctAnswer: 'm2q1_a' },
     { id: 'm2q2', topic: 'Análisis de Datos', correctAnswer: 'm2q2_b' },
-    { id: 'm2q3', topic: 'GPTs Personalizados', correctAnswer: 'm2q3_b' },
-    { id: 'm2q4', topic: 'Canvas', correctAnswer: 'm2q4_b' },
+    { id: 'm2q3', topic: 'GPTs Personalizados', correctAnswer: 'm2q3_a' },
+    { id: 'm2q4', topic: 'Function Calling', correctAnswer: 'm2q4_a' },
     { id: 'm2q5', topic: 'Function Calling', correctAnswer: 'm2q5_b' },
     { id: 'm2q6', topic: 'Proyectos ChatGPT', correctAnswer: 'm2q6_c' },
-    { id: 'm2q7', topic: 'Automatización', correctAnswer: 'm2q7_b' },
+    { id: 'm2q7', topic: 'Automatización', correctAnswer: 'm2q7_a' },
     { id: 'm2q8', topic: 'Uso Responsable', correctAnswer: 'm2q8_a' },
   ],
   3: [
@@ -77,23 +115,23 @@ export const MODULE_QUESTIONS = {
     { id: 'm3q8', topic: 'Investigación Profesional', correctAnswer: 'm3q8_b' },
   ],
   4: [
-    { id: 'm4q1', topic: 'NotebookLM', correctAnswer: 'm4q1_b' },
-    { id: 'm4q2', topic: 'NotebookLM', correctAnswer: 'm4q2_d' },
-    { id: 'm4q3', topic: 'Audio Overview', correctAnswer: 'm4q3_b' },
-    { id: 'm4q4', topic: 'Precisión', correctAnswer: 'm4q4_b' },
+    { id: 'm4q1', topic: 'NotebookLM', correctAnswer: 'm4q1_a' },
+    { id: 'm4q2', topic: 'NotebookLM', correctAnswer: 'm4q2_a' },
+    { id: 'm4q3', topic: 'Audio Overview', correctAnswer: 'm4q3_a' },
+    { id: 'm4q4', topic: 'Precisión', correctAnswer: 'm4q4_a' },
     { id: 'm4q5', topic: 'Curaduría', correctAnswer: 'm4q5_b' },
     { id: 'm4q6', topic: 'Análisis Crítico', correctAnswer: 'm4q6_b' },
     { id: 'm4q7', topic: 'Verificación', correctAnswer: 'm4q7_a' },
-    { id: 'm4q8', topic: 'Colaboración', correctAnswer: 'm4q8_b' },
+    { id: 'm4q8', topic: 'Colaboración', correctAnswer: 'm4q8_a' },
   ],
   5: [
-    { id: 'm5q1', topic: 'Sesgos en IA', correctAnswer: 'm5q1_b' },
-    { id: 'm5q2', topic: 'Alucinaciones', correctAnswer: 'm5q2_b' },
+    { id: 'm5q1', topic: 'Sesgos en IA', correctAnswer: 'm5q1_a' },
+    { id: 'm5q2', topic: 'Alucinaciones', correctAnswer: 'm5q2_a' },
     { id: 'm5q3', topic: 'Responsabilidad', correctAnswer: 'm5q3_b' },
     { id: 'm5q4', topic: 'Privacidad', correctAnswer: 'm5q4_a' },
-    { id: 'm5q5', topic: 'Transparencia', correctAnswer: 'm5q5_b' },
-    { id: 'm5q6', topic: 'Uso Responsable', correctAnswer: 'm5q6_b' },
-    { id: 'm5q7', topic: 'Sesgo de Automatización', correctAnswer: 'm5q7_b' },
+    { id: 'm5q5', topic: 'Transparencia', correctAnswer: 'm5q5_a' },
+    { id: 'm5q6', topic: 'Uso Responsable', correctAnswer: 'm5q6_a' },
+    { id: 'm5q7', topic: 'Sesgo de Automatización', correctAnswer: 'm5q7_a' },
     { id: 'm5q8', topic: 'Protección de Datos', correctAnswer: 'm5q8_b' },
   ],
 };
@@ -109,3 +147,27 @@ export const BADGE_INFO = {
   three_modules: { icon: 'fa-award', label: 'Maestro en Progreso', desc: 'Completa 3 módulos', color: '#EC4899' },
   all_modules: { icon: 'fa-crown', label: 'Campeón del Curso', desc: 'Completa los 5 módulos', color: '#FFD166' },
 };
+
+/** @type {Record<string, BadgeInfo>} */
+export const BADGE_INFO_EN = {
+  first_lesson: { icon: 'fa-star', label: 'First Steps', desc: 'Complete your first lesson', color: '#FFD166' },
+  five_lessons: { icon: 'fa-book-open', label: 'Dedicated Student', desc: 'Complete 5 lessons', color: '#00BCD4' },
+  all_lessons: { icon: 'fa-graduation-cap', label: 'AI Sage', desc: 'Complete all 15 lessons', color: '#10B981' },
+  streak_3: { icon: 'fa-fire', label: 'Initial Streak', desc: '3 consecutive days', color: '#F59E0B' },
+  streak_7: { icon: 'fa-fire', label: 'Unstoppable Streak', desc: '7 consecutive days', color: '#EF4444' },
+  first_module: { icon: 'fa-trophy', label: 'First Module', desc: 'Complete your first module', color: '#8B5CF6' },
+  three_modules: { icon: 'fa-award', label: 'Master in Progress', desc: 'Complete 3 modules', color: '#EC4899' },
+  all_modules: { icon: 'fa-crown', label: 'Course Champion', desc: 'Complete all 5 modules', color: '#FFD166' },
+};
+
+export function getModules(locale) {
+  return locale === 'en' ? modules_en : modules;
+}
+
+export function getAllLessons(locale) {
+  return locale === 'en' ? ALL_LESSONS_EN : ALL_LESSONS;
+}
+
+export function getBadgeInfo(locale) {
+  return locale === 'en' ? BADGE_INFO_EN : BADGE_INFO;
+}

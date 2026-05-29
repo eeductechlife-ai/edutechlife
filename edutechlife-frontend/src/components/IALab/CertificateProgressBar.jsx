@@ -1,8 +1,10 @@
 import React from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabProgressContext } from '../../context/IALabContext';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const CertificateProgressBar = () => {
+  const { t } = useTranslation();
   const { modules, calculateModuleScore, courseProgress } = useIALabProgressContext();
 
   const moduleScores = modules.map((mod) => ({
@@ -23,12 +25,12 @@ const CertificateProgressBar = () => {
           <Icon name="fa-award" className="text-white text-sm" />
         </div>
         <div className="flex-1">
-          <h3 className="text-sm font-bold text-petroleum leading-tight">Progreso hacia tu certificado</h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400">{completedCount} de 5 módulos aprobados</p>
+          <h3 className="text-sm font-bold text-petroleum leading-tight">{t('ialab.certificate_progress.label')}</h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400">{t('ialab.certificate_progress.modules_approved', { count: completedCount, total: 5 })}</p>
         </div>
         <div className="text-right flex-shrink-0">
           <div className="text-lg font-bold text-petroleum dark:text-white">{Math.round(courseProgress)}%</div>
-          <div className="text-[9px] text-slate-600 uppercase tracking-wider font-medium">Global</div>
+          <div className="text-[9px] text-slate-600 uppercase tracking-wider font-medium">{t('ialab.certificate_progress.global')}</div>
         </div>
       </div>
 

@@ -4,12 +4,27 @@ import { Icon } from '../../utils/iconMapping.jsx';
 import { statusConfig } from './data/landingPageData';
 import { fadeInUp } from './constants/landingAnimations';
 import ErrorBoundary from '../../components/forum/ErrorBoundary';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const CourseCard = ({ course, isSignedIn }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
   const config = statusConfig[course.status];
   const fullStars = Math.floor(course.rating);
+  const badgeLabels = {
+    active: t('ialab.course_card.status_active'),
+    'coming-soon': t('ialab.course_card.status_coming_soon'),
+    new: t('ialab.course_card.status_new'),
+  };
+  const getButtonText = (status, signedIn) => {
+    const map = {
+      active: signedIn ? t('ialab.course_card.btn_start') : t('ialab.course_card.btn_enroll'),
+      'coming-soon': t('ialab.course_card.btn_explore'),
+      new: t('ialab.course_card.btn_start'),
+    };
+    return map[status] || t('ialab.course_card.btn_start');
+  };
 
   return (
     <ErrorBoundary>
@@ -44,7 +59,7 @@ const CourseCard = ({ course, isSignedIn }) => {
 
         <div className="flex items-start justify-between relative z-10">
           <div className={`px-2.5 py-1 rounded-md text-[10px] md:text-[11px] font-bold uppercase tracking-wider ${config.badge}`}>
-            {config.badgeText}
+            {badgeLabels[course.status]}
           </div>
           <div className="flex items-center gap-1 px-2 py-1 bg-white/10 backdrop-blur-sm rounded-md border border-white/20">
             <Icon name="fa-clock" className="w-3 h-3 text-primary-light" />
@@ -77,7 +92,7 @@ const CourseCard = ({ course, isSignedIn }) => {
           </div>
           <span className="font-semibold text-white text-xs">{course.rating}</span>
           <span className="text-white/50">•</span>
-          <span>{course.students} est.</span>
+          <span>{t('ialab.course_card.students', { count: course.students })}</span>
         </div>
       </div>
 
@@ -97,12 +112,12 @@ const CourseCard = ({ course, isSignedIn }) => {
         <div className="flex items-center gap-3 mb-3 text-xs text-petroleum">
           <span className="flex items-center gap-1">
             <Icon name="fa-book-open" className="w-3 h-3 text-primary-light" />
-            {course.modules} módulos
+            {t('ialab.course_card.modules', { count: course.modules })}
           </span>
           {course.hasCertificate && (
             <span className="flex items-center gap-1">
               <Icon name="fa-check-circle" className="w-3 h-3 text-emerald-500" />
-              Certificado
+              {t('ialab.course_card.certificate')}
             </span>
           )}
           <span className="ml-auto px-2 py-0.5 bg-primary-light/10 rounded text-[10px] md:text-xs font-bold text-petroleum uppercase tracking-wider">
@@ -113,7 +128,7 @@ const CourseCard = ({ course, isSignedIn }) => {
         {course.status === 'active' && course.progress > 0 && (
           <div className="mb-3">
             <div className="flex items-center justify-between text-[10px] md:text-xs text-slate-500 mb-1">
-              <span>Progreso</span>
+              <span>{t('ialab.course_card.progress')}</span>
               <span className="font-semibold text-petroleum">{course.progress}%</span>
             </div>
             <div className="h-1.5 bg-petroleum/10 rounded-full overflow-hidden">
@@ -141,7 +156,7 @@ const CourseCard = ({ course, isSignedIn }) => {
               transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
             />
           )}
-          <span className="relative">{config.buttonText(isSignedIn)}</span>
+          <span className="relative">{getButtonText(course.status, isSignedIn)}</span>
           {!shouldReduceMotion && (
           <motion.span
             className="relative"

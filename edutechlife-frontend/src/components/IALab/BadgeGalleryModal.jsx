@@ -2,10 +2,13 @@ import { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import { useIALabStore } from '../../store/ialabStore';
-import { BADGE_INFO } from '../../data/ialab';
+import { getBadgeInfo } from '../../data/ialab';
 import BadgeCard from './BadgeCard';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const BadgeGalleryModal = ({ isOpen, onClose }) => {
+  const { t, locale } = useTranslation();
+  const BADGE_INFO = getBadgeInfo(locale);
   const badges = useIALabStore(s => s.badges);
   const badgesDates = useIALabStore(s => s.badgesDates);
 
@@ -42,15 +45,15 @@ const BadgeGalleryModal = ({ isOpen, onClose }) => {
           >
             <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-700 bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm">
               <div>
-                <h2 className="text-lg font-bold text-petroleum dark:text-corporate">Insignias</h2>
+                <h2 className="text-lg font-bold text-petroleum dark:text-corporate">{t('ialab.badge_gallery.title')}</h2>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                  {earned.length}/{Object.keys(BADGE_INFO).length} obtenidas
+                  {t('ialab.badge_gallery.count', { earned: earned.length, total: Object.keys(BADGE_INFO).length })}
                 </p>
               </div>
               <button
                 onClick={onClose}
                 className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40"
-                aria-label="Cerrar galería"
+                aria-label={t('common.close')}
               >
                 <X className="w-4 h-4 text-slate-500" />
               </button>
@@ -61,7 +64,7 @@ const BadgeGalleryModal = ({ isOpen, onClose }) => {
                 <div className="mb-8">
                   <h3 className="text-sm font-bold text-emerald-700 dark:text-emerald-400 mb-3 flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                    Obtenidas
+                    {t('badge.obtained')}
                   </h3>
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                     {earned.map(badge => (
@@ -75,7 +78,7 @@ const BadgeGalleryModal = ({ isOpen, onClose }) => {
                 <div>
                   <h3 className="text-sm font-bold text-slate-500 dark:text-slate-400 mb-3 flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
-                    Por obtener
+                    {t('badge.locked')}
                   </h3>
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                     {locked.map(badge => (

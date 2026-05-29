@@ -1,14 +1,24 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useNotification } from '../context/NotificationContext';
+import { useTranslation } from '../i18n/I18nProvider';
 import { Icon } from '../utils/iconMapping.jsx';
 
 const NOTIFICATION_CONFIG = {
-  lesson_reminder: { icon: 'fa-book', color: '#004B63', label: 'Recordatorio' },
-  exam_reminder: { icon: 'fa-file-alt', color: '#00BCD4', label: 'Examen' },
-  module_complete: { icon: 'fa-check-circle', color: '#004B63', label: 'Completado' },
-  certificate_earned: { icon: 'fa-award', color: '#004B63', label: 'Certificado' },
-  course_update: { icon: 'fa-info-circle', color: '#00BCD4', label: 'Actualización' },
-  general: { icon: 'fa-bell', color: '#00BCD4', label: 'General' },
+  lesson_reminder: { icon: 'fa-book', color: '#004B63' },
+  exam_reminder: { icon: 'fa-file-alt', color: '#00BCD4' },
+  module_complete: { icon: 'fa-check-circle', color: '#004B63' },
+  certificate_earned: { icon: 'fa-award', color: '#004B63' },
+  course_update: { icon: 'fa-info-circle', color: '#00BCD4' },
+  general: { icon: 'fa-bell', color: '#00BCD4' },
+};
+
+const TYPE_LABEL_KEYS = {
+  lesson_reminder: 'notification.type_lesson_reminder',
+  exam_reminder: 'notification.type_exam_reminder',
+  module_complete: 'notification.type_module_complete',
+  certificate_earned: 'notification.type_certificate_earned',
+  course_update: 'notification.type_course_update',
+  general: 'notification.type_general',
 };
 
 const getIconColorClass = (color) => {
@@ -21,7 +31,7 @@ const getBadgeBgClass = (color) => {
     : 'from-[#00BCD4]/10 to-[#00BCD4]/20';
 };
 
-const formatTimeAgo = (date) => {
+const formatTimeAgo = (date, t, locale) => {
   const now = new Date();
   const then = new Date(date);
   const diffMs = now - then;
@@ -29,14 +39,15 @@ const formatTimeAgo = (date) => {
   const diffHrs = Math.floor(diffMin / 60);
   const diffDays = Math.floor(diffHrs / 24);
 
-  if (diffMin < 1) return 'Ahora mismo';
-  if (diffMin < 60) return `Hace ${diffMin} min`;
-  if (diffHrs < 24) return `Hace ${diffHrs}h`;
-  if (diffDays < 7) return `Hace ${diffDays}d`;
-  return then.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+  if (diffMin < 1) return t('notification.time_just_now');
+  if (diffMin < 60) return t('notification.time_ago_min', { count: diffMin });
+  if (diffHrs < 24) return t('notification.time_ago_h', { count: diffHrs });
+  if (diffDays < 7) return t('notification.time_ago_d', { count: diffDays });
+  return then.toLocaleDateString(locale === 'en' ? 'en-US' : 'es-CO', { day: 'numeric', month: 'short' });
 };
 
 const NotificationPanel = ({ isOpen, onClose, triggerRef, forumUnreadCount = 0 }) => {
+  const { t, locale } = useTranslation();
   const { notifications, unreadCount, loading, markAsRead, markAllAsRead, dismissNotification, clearAllNotifications } = useNotification();
   const panelRef = useRef(null);
   const [confirmClear, setConfirmClear] = useState(false);
@@ -83,14 +94,14 @@ const NotificationPanel = ({ isOpen, onClose, triggerRef, forumUnreadCount = 0 }
         <div className="bg-gradient-to-r from-[#004B63] to-[#00BCD4] px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Icon name="fa-bell" className="text-white text-sm" />
-            <h3 className="text-white font-bold text-sm">Notificaciones</h3>
+            <h3 className="text-white font-bold text-sm">{t('notification.panel_title')}</h3>
             {unreadCount > 0 && (
               <span className="bg-white/20 text-white text-[10px] font-semibold px-2 py-0.5 rounded-full">
-                {unreadCount} nueva{unreadCount > 1 ? 's' : ''}
+                {t('notification.unread_count', { count: unreadCount })}
               </span>
             )}
           </div>
-          <button onClick={onClose} className="text-white/70 hover:text-white transition-colors p-1 rounded-lg hover:bg-white/10" aria-label="Cerrar notificaciones">
+          <button onClick={onClose} className="text-white/70 hover:text-white transition-colors p-1 rounded-lg hover:bg-white/10" aria-label={t('notification.close_aria')}>
             <Icon name="fa-xmark" className="text-sm" />
           </button>
         </div>
@@ -103,7 +114,7 @@ const NotificationPanel = ({ isOpen, onClose, triggerRef, forumUnreadCount = 0 }
               className="flex items-center gap-1.5 text-[10px] font-semibold text-[#004B63] hover:text-[#00BCD4] transition-colors px-2 py-1 rounded-md hover:bg-[#004B63]/5"
             >
               <Icon name="fa-check-double" className="text-[10px]" />
-              Marcar todas como leídas
+              {t('notification.mark_all_read')}
             </button>
             {notificationCount > 0 && (
               <button
@@ -115,7 +126,7 @@ const NotificationPanel = ({ isOpen, onClose, triggerRef, forumUnreadCount = 0 }
                 }`}
               >
                 <Icon name="fa-trash-can" className="text-[10px]" />
-                {confirmClear ? '¿Confirmar?' : 'Limpiar todo'}
+                {confirmClear ? t('notification.confirm_clear') : t('notification.clear_all')}
               </button>
             )}
           </div>
@@ -126,16 +137,16 @@ const NotificationPanel = ({ isOpen, onClose, triggerRef, forumUnreadCount = 0 }
           {loading ? (
             <div className="flex flex-col items-center justify-center py-12 px-4">
               <div className="w-8 h-8 rounded-full border-2 border-[#004B63] border-t-transparent animate-spin mb-3" />
-              <p className="text-xs text-slate-500">Cargando notificaciones...</p>
+              <p className="text-xs text-slate-500">{t('notification.loading')}</p>
             </div>
           ) : notificationCount === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 px-4">
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center mb-3">
                 <Icon name="fa-bell" className="text-[#004B63] text-lg" />
               </div>
-              <p className="text-sm font-semibold text-slate-600">Sin notificaciones</p>
+              <p className="text-sm font-semibold text-slate-600">{t('notification.empty_title')}</p>
               <p className="text-xs text-slate-400 text-center mt-1">
-                Aquí aparecerán tus recordatorios y actualizaciones del curso
+                {t('notification.empty_desc')}
               </p>
             </div>
           ) : (
@@ -167,13 +178,13 @@ const NotificationPanel = ({ isOpen, onClose, triggerRef, forumUnreadCount = 0 }
                           <button
                             onClick={(e) => { e.stopPropagation(); dismissNotification(notif.id); }}
                             className="opacity-0 group-hover:opacity-100 p-1 text-slate-400 hover:text-rose-500 transition-all flex-shrink-0 rounded-md hover:bg-rose-50"
-                            aria-label="Eliminar notificación"
+                            aria-label={t('notification.delete_aria')}
                           >
                             <Icon name="fa-xmark" className="text-xs" />
                           </button>
                         </div>
                         <div className="flex items-center gap-2 mt-1.5">
-                          <span className="text-[10px] text-slate-400">{formatTimeAgo(notif.created_at)}</span>
+                          <span className="text-[10px] text-slate-400">{formatTimeAgo(notif.created_at, t, locale)}</span>
                           {!notif.is_read && (
                             <span className="w-1.5 h-1.5 rounded-full bg-[#00BCD4]" />
                           )}
@@ -186,7 +197,7 @@ const NotificationPanel = ({ isOpen, onClose, triggerRef, forumUnreadCount = 0 }
                       <button
                         onClick={() => markAsRead(notif.id)}
                         className="absolute inset-0 z-10"
-                        aria-label="Marcar como leída"
+                        aria-label={t('notification.mark_read_aria')}
                       />
                     )}
                   </div>
@@ -205,7 +216,7 @@ const NotificationPanel = ({ isOpen, onClose, triggerRef, forumUnreadCount = 0 }
             >
               <Icon name="fa-comments" className="text-corporate text-xs" />
               <span>
-                {forumUnreadCount} notificación{forumUnreadCount > 1 ? 'es' : ''} en el foro
+                {t('notification.forum_count', { count: forumUnreadCount })}
               </span>
               <Icon name="fa-arrow-right" className="text-corporate text-[10px] ml-auto" />
             </button>

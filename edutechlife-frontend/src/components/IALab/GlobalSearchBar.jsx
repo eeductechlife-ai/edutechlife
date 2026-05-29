@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { getModuleContent } from './constants/moduleContent';
 import { useIALabProgressContext } from '../../context/IALabContext';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const SEARCHABLE_TYPES = [
   'video', 'document', 'documento', 'pdf', 'pdf-thumbnail',
@@ -10,6 +11,7 @@ const SEARCHABLE_TYPES = [
 ];
 
 const GlobalSearchBar = ({ mobile, onClose }) => {
+  const { t } = useTranslation();
   const { modules, activeMod, setActiveMod, openResourceById } = useIALabProgressContext();
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
@@ -25,14 +27,14 @@ const GlobalSearchBar = ({ mobile, onClose }) => {
 
     modules.forEach(mod => {
       if (mod.title.toLowerCase().includes(lower)) {
-        hits.push({ type: 'module', id: mod.id, label: mod.title, sublabel: `Módulo ${mod.id}`, modId: mod.id });
+        hits.push({ type: 'module', id: mod.id, label: mod.title, sublabel: t('ialab.global_search.module_label', { id: mod.id }), modId: mod.id });
       }
       const content = getModuleContent(mod.id);
       if (content?.accordion) {
         const topics = Array.isArray(content.accordion) ? content.accordion : [];
         topics.forEach(topic => {
           if (topic.title?.toLowerCase().includes(lower)) {
-            hits.push({ type: 'topic', id: `mod${mod.id}-${topic.id}`, label: topic.title, sublabel: `${mod.title} - Tema`, modId: mod.id });
+            hits.push({ type: 'topic', id: `mod${mod.id}-${topic.id}`, label: topic.title, sublabel: t('ialab.global_search.topic_label', { title: mod.title }), modId: mod.id });
           }
           if (topic.resources) {
             topic.resources.forEach(r => {
@@ -95,7 +97,7 @@ const GlobalSearchBar = ({ mobile, onClose }) => {
     return (
       <div className="fixed inset-0 z-[1002] bg-white dark:bg-slate-900 flex flex-col">
         <div className="flex items-center gap-3 p-4 border-b border-slate-200 dark:border-slate-700">
-          <button onClick={onClose} className="w-9 h-9 flex items-center justify-center text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 -ml-1" aria-label="Cerrar búsqueda">
+          <button onClick={onClose} className="w-9 h-9 flex items-center justify-center text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 -ml-1" aria-label={t('ialab.global_search.close_aria')}>
             <Icon name="fa-arrow-left" className="text-lg" />
           </button>
           <div className="flex-1 relative">
@@ -105,17 +107,17 @@ const GlobalSearchBar = ({ mobile, onClose }) => {
               type="text"
               value={query}
               onChange={(e) => { setQuery(e.target.value); setIsOpen(true); }}
-              placeholder="Buscar módulos, temas y recursos..."
+              placeholder={t('ialab.global_search.placeholder')}
               className="w-full h-11 pl-10 pr-4 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 text-sm text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-petroleum/40 focus:border-petroleum/50"
               autoFocus
-              aria-label="Buscar"
+              aria-label={t('ialab.search_aria')}
             />
           </div>
         </div>
         <div className="flex-1 overflow-y-auto p-4">
           {query && (
             <p className="text-xs text-slate-400 mb-3">
-              {results.length > 0 ? `${results.length} resultado${results.length !== 1 ? 's' : ''}` : `Sin resultados para "${query}"`}
+              {results.length > 0 ? t('ialab.global_search.results_count', { count: results.length }) : t('ialab.global_search.no_results', { query })}
             </p>
           )}
           {results.map((hit, i) => (
@@ -139,8 +141,8 @@ const GlobalSearchBar = ({ mobile, onClose }) => {
               <div className="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
                 <Icon name="fa-search" className="text-2xl text-slate-400" />
               </div>
-              <p className="text-sm font-semibold text-slate-500">Busca módulos, temas y recursos</p>
-              <p className="text-xs text-slate-400 mt-1">Escribe para comenzar a buscar</p>
+              <p className="text-sm font-semibold text-slate-500">{t('ialab.global_search.empty_title')}</p>
+              <p className="text-xs text-slate-400 mt-1">{t('ialab.global_search.empty_hint')}</p>
             </div>
           )}
         </div>
@@ -159,9 +161,9 @@ const GlobalSearchBar = ({ mobile, onClose }) => {
             value={query}
             onChange={(e) => { setQuery(e.target.value); setIsOpen(true); }}
             onFocus={() => setIsOpen(true)}
-            placeholder="Buscar..."
+            placeholder={t('ialab.global_search.placeholder_short')}
             className="min-w-[180px] h-9 pl-8 pr-8 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-xs text-slate-700 dark:text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-petroleum/40 focus:border-petroleum/50 transition-all duration-200"
-            aria-label="Buscar módulos, temas y recursos"
+            aria-label={t('ialab.global_search.search_aria')}
           />
           <kbd className="absolute right-2.5 top-1/2 -translate-y-1/2 hidden sm:inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono text-slate-600 bg-slate-100 dark:bg-slate-700 rounded border border-slate-200 dark:border-slate-600">
             ⌘K
@@ -191,14 +193,14 @@ const GlobalSearchBar = ({ mobile, onClose }) => {
             ))}
           </div>
           <div className="px-3 py-1.5 border-t border-slate-100 dark:border-slate-700">
-            <p className="text-[10px] text-slate-600">{results.length} resultado{results.length !== 1 ? 's' : ''}</p>
+            <p className="text-[10px] text-slate-600">{t('ialab.global_search.results_count', { count: results.length })}</p>
           </div>
         </div>
       )}
 
       {isOpen && query && results.length === 0 && (
         <div className="absolute top-full mt-1.5 left-0 w-72 sm:w-80 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-xl z-[300] p-4 text-center">
-          <p className="text-xs text-slate-600">Sin resultados para "{query}"</p>
+          <p className="text-xs text-slate-600">{t('ialab.global_search.no_results', { query })}</p>
         </div>
       )}
     </div>

@@ -5,6 +5,7 @@ import { useIALabProgressContext, useIALabUIContext } from '../../context/IALabC
 import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
 import useIALabForum from '../../hooks/IALab/useIALabForum';
 import { useAuth } from '../../context/AuthContext';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 /**
  * Componente premium para foro de IALab - REFACTORIZACIÓN UI/UX PREMIUM
@@ -38,6 +39,7 @@ const IALabForumSection = ({
     ...rest
 }) => {
     const { user } = useAuth();
+    const { t, locale } = useTranslation();
     const { activeMod } = useIALabProgressContext();
     const { insightsExpanded, setInsightsExpanded } = useIALabUIContext();
     const { trackCommunityComment } = useIALabProgress();
@@ -76,7 +78,7 @@ const IALabForumSection = ({
     // Handler para crear nuevo post
     const handleCreatePost = async () => {
         if (!newPostTitle.trim() || !newPostContent.trim()) {
-            alert('Por favor, ingresa un título y contenido para tu post');
+            alert(t('ialab.forum.section.validation_empty'));
             return;
         }
 
@@ -90,9 +92,9 @@ const IALabForumSection = ({
             if (activeMod) {
                 try { await trackCommunityComment(activeMod); } catch (e) {}
             }
-            alert('🎉 ¡Post creado exitosamente!');
+            alert(t('ialab.forum.section.post_success'));
         } else {
-            alert(`❌ Error al crear post: ${result.error}`);
+            alert(t('ialab.forum.section.post_error', { error: result.error }));
         }
         
         setIsCreatingPost(false);
@@ -153,10 +155,10 @@ const IALabForumSection = ({
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                     <h2 className="text-2xl font-bold text-petroleum-darker font-montserrat">
-                        Foro de Discusión IALab
+                        {t('ialab.forum.section.title')}
                     </h2>
                     <p className="text-sm text-slate-600 mt-1">
-                        Debate, aprende y colabora con estudiantes y mentores
+                        {t('ialab.forum.section.subtitle')}
                     </p>
                 </div>
                 
@@ -166,7 +168,7 @@ const IALabForumSection = ({
                     className="px-5 py-3 bg-gradient-to-r from-corporate to-corporate-dark text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 flex items-center gap-2 font-medium whitespace-nowrap"
                 >
                     <Icon name="fa-plus" className="w-4 h-4" />
-                    + Crear Nuevo Debate
+                    {t('ialab.forum.section.create_discussion')}
                 </button>
             </div>
             
@@ -177,12 +179,12 @@ const IALabForumSection = ({
                 </div>
                 <input
                     type="text"
-                    placeholder="Buscar debates o preguntas..."
+                    placeholder={t('ialab.forum.section.search_placeholder')}
                     className="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-corporate focus:border-transparent text-petroleum-darker placeholder-slate-500 shadow-sm"
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
                     <span className="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded-md">
-                        ⌘K
+                        {t('ialab.forum.section.kbd_hint')}
                     </span>
                 </div>
             </div>
@@ -192,15 +194,15 @@ const IALabForumSection = ({
                 <div className="flex items-center gap-4 pt-2">
                     <div className="text-center px-4 py-2 bg-petroleum/5 rounded-xl">
                         <div className="text-lg font-bold text-petroleum">{forumStats.total_posts || 0}</div>
-                        <div className="text-xs text-slate-600">Debates</div>
+                        <div className="text-xs text-slate-600">{t('ialab.forum.section.stat_debates')}</div>
                     </div>
                     <div className="text-center px-4 py-2 bg-corporate/5 rounded-xl">
                         <div className="text-lg font-bold text-corporate">{forumStats.total_likes || 0}</div>
-                        <div className="text-xs text-slate-600">Interacciones</div>
+                        <div className="text-xs text-slate-600">{t('ialab.forum.section.stat_interactions')}</div>
                     </div>
                     <div className="text-center px-4 py-2 bg-petroleum/5 rounded-xl">
                         <div className="text-lg font-bold text-petroleum">{forumStats.active_users || 42}</div>
-                        <div className="text-xs text-slate-600">Miembros</div>
+                        <div className="text-xs text-slate-600">{t('ialab.forum.section.stat_members')}</div>
                     </div>
                 </div>
             )}
@@ -219,7 +221,7 @@ const IALabForumSection = ({
                 }`}
             >
                 <Icon name="fa-layer-group" className="mr-2" />
-                Todos los Debates
+                {t('ialab.forum.section.filter_all')}
             </button>
             <button
                 onClick={() => setActiveFilter('mine')}
@@ -230,7 +232,7 @@ const IALabForumSection = ({
                 }`}
             >
                 <Icon name="fa-user" className="mr-2" />
-                Míos
+                {t('ialab.forum.section.filter_mine')}
             </button>
             <button
                 onClick={() => setActiveFilter('unanswered')}
@@ -241,7 +243,7 @@ const IALabForumSection = ({
                 }`}
             >
                 <Icon name="fa-question-circle" className="mr-2" />
-                Sin Respuesta
+                {t('ialab.forum.section.filter_unanswered')}
             </button>
             <button
                 onClick={() => setActiveFilter('popular')}
@@ -252,7 +254,7 @@ const IALabForumSection = ({
                 }`}
             >
                 <Icon name="fa-fire" className="mr-2" />
-                Populares
+                {t('ialab.forum.section.filter_popular')}
             </button>
         </div>
     );
@@ -260,14 +262,14 @@ const IALabForumSection = ({
     // Render input para crear post
     const renderPostInput = () => (
         <div className="mb-8 bg-white rounded-2xl p-6 border border-corporate/20 shadow-[0_8px_32px_rgba(0,188,212,0.1)]">
-            <h3 className="text-lg font-bold text-petroleum-darker mb-4">Comparte tu insight</h3>
+            <h3 className="text-lg font-bold text-petroleum-darker mb-4">{t('ialab.forum.section.post_input_title')}</h3>
             
             <div className="space-y-4">
                 <input
                     type="text"
                     value={newPostTitle}
                     onChange={(e) => setNewPostTitle(e.target.value)}
-                    placeholder="Título de tu post..."
+                    placeholder={t('ialab.forum.section.post_input_title_placeholder')}
                     className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-corporate focus:border-transparent text-petroleum-darker placeholder-slate-500"
                     disabled={isCreatingPost}
                 />
@@ -275,7 +277,7 @@ const IALabForumSection = ({
                 <textarea
                     value={newPostContent}
                     onChange={(e) => setNewPostContent(e.target.value.slice(0, 500))}
-                    placeholder="¿Qué quieres compartir con la comunidad?..."
+                    placeholder={t('ialab.forum.section.post_input_content_placeholder')}
                     className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-corporate focus:border-transparent text-petroleum-darker placeholder-slate-500 min-h-[120px] resize-none"
                     disabled={isCreatingPost}
                     maxLength={500}
@@ -283,7 +285,7 @@ const IALabForumSection = ({
                 
                 <div className="flex items-center justify-between">
                     <div className="text-sm text-slate-500">
-                        {newPostContent.length}/500 caracteres
+                        {t('ialab.forum.section.char_count', { count: newPostContent.length })}
                     </div>
                     
                     <button
@@ -294,12 +296,12 @@ const IALabForumSection = ({
                         {isCreatingPost ? (
                             <>
                                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                Publicando...
+                                {t('ialab.forum.section.publishing')}
                             </>
                         ) : (
                             <>
                                 <Icon name="fa-paper-plane" />
-                                Publicar
+                                {t('ialab.forum.section.publish')}
                             </>
                         )}
                     </button>
@@ -311,7 +313,7 @@ const IALabForumSection = ({
     // Render post individual premium MEJORADO con estructura de tarjeta de debate
     const renderPost = (post) => {
         const likeProps = getLikeButtonProps(post.id);
-        const formattedDate = new Date(post.created_at).toLocaleDateString('es-ES', {
+        const formattedDate = new Date(post.created_at).toLocaleDateString(locale === 'en' ? 'en-US' : 'es-ES', {
             day: 'numeric',
             month: 'short',
             hour: '2-digit',
@@ -326,7 +328,7 @@ const IALabForumSection = ({
             lastResponder: {
                 name: post.last_responder || 'Ana García',
                 avatar: post.last_responder_avatar || null,
-                time: 'hace 5 min'
+                time: t('ialab.forum.section.last_reply_time')
             }
         };
 
@@ -340,14 +342,14 @@ const IALabForumSection = ({
                     {/* Columna Izquierda: Autor y Rol */}
                     <div className="flex-shrink-0">
                         <div className="w-14 h-14 rounded-full bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center text-white font-bold text-lg mb-2">
-                            {post.profiles?.full_name?.charAt(0) || 'U'}
+                            {post.profiles?.full_name?.charAt(0) || t('ialab.forum.section.initial_fallback')}
                         </div>
                         <div className={`text-xs font-medium px-2 py-1 rounded-full text-center ${
                             simulatedData.role === 'Mentor' 
                                 ? 'bg-corporate/10 text-corporate border border-corporate/20' 
                                 : 'bg-petroleum/10 text-petroleum border border-petroleum/20'
                         }`}>
-                            {simulatedData.role}
+                            {simulatedData.role === 'Mentor' ? t('ialab.forum.section.role_mentor') : t('ialab.forum.section.role_student')}
                         </div>
                     </div>
                     
@@ -355,10 +357,10 @@ const IALabForumSection = ({
                     <div className="flex-1 min-w-0">
                         <div className="mb-3">
                             <h4 className="font-bold text-petroleum-darker text-lg mb-1">
-                                {post.title || 'Duda sobre el Framework RTF en el Módulo 5'}
+                                {post.title || t('ialab.forum.section.title_fallback')}
                             </h4>
                             <p className="text-sm text-slate-600 line-clamp-2 leading-relaxed">
-                                {post.content || 'Estoy teniendo problemas para entender cómo implementar el framework RTF en el proyecto del módulo 5. ¿Alguien podría explicarme los pasos clave?'}
+                                {post.content || t('ialab.forum.section.content_fallback')}
                             </p>
                         </div>
                         
@@ -396,7 +398,7 @@ const IALabForumSection = ({
                                             {post.comment_count || 8}
                                         </span>
                                     </div>
-                                    <span className="text-xs text-slate-500">Respuestas</span>
+                                    <span className="text-xs text-slate-500">{t('ialab.forum.section.replies_label')}</span>
                                 </div>
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-1">
@@ -405,7 +407,7 @@ const IALabForumSection = ({
                                             {simulatedData.views}
                                         </span>
                                     </div>
-                                    <span className="text-xs text-slate-500">Vistas</span>
+                                    <span className="text-xs text-slate-500">{t('ialab.forum.section.views_label')}</span>
                                 </div>
                             </div>
                             
@@ -470,7 +472,7 @@ const IALabForumSection = ({
                             disabled={!user}
                         >
                             <Icon name="fa-reply" className="w-3.5 h-3.5" />
-                            <span className="text-sm font-medium">Responder</span>
+                            <span className="text-sm font-medium">{t('ialab.forum.section.reply_btn')}</span>
                         </button>
                     </div>
 
@@ -478,13 +480,13 @@ const IALabForumSection = ({
                     <div className="flex items-center gap-1">
                         <button
                             className="p-1.5 text-slate-600 hover:text-corporate transition-colors duration-200 rounded-md hover:bg-slate-50"
-                            aria-label="Guardar debate"
+                            aria-label={t('ialab.forum.section.save_aria')}
                         >
                             <Icon name="fa-bookmark" className="w-4 h-4" />
                         </button>
                         <button
                             className="p-1.5 text-slate-600 hover:text-corporate transition-colors duration-200 rounded-md hover:bg-slate-50"
-                            aria-label="Compartir debate"
+                            aria-label={t('ialab.forum.section.share_aria')}
                         >
                             <Icon name="fa-share" className="w-4 h-4" />
                         </button>
@@ -497,13 +499,13 @@ const IALabForumSection = ({
                         <div className="flex items-center gap-1.5">
                             <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></div>
                             <span className="text-xs font-medium text-amber-600">
-                                Debate activo
+                                {t('ialab.forum.section.active_discussion')}
                             </span>
                         </div>
                     )}
                     {post.comment_count >= 3 && (
                         <div className="text-xs text-slate-500">
-                            {post.comment_count} respuestas • Última: {simulatedData.lastResponder.time}
+                            {t('ialab.forum.section.replies_info', { count: post.comment_count, time: simulatedData.lastResponder.time })}
                         </div>
                     )}
                 </div>
@@ -523,13 +525,13 @@ const IALabForumSection = ({
                 {error ? (
                     <div className="bg-red-50 border border-red-200 rounded-2xl p-6 text-center">
                         <Icon name="fa-exclamation-triangle" className="text-red-500 text-2xl mb-3" />
-                        <p className="text-red-700 font-medium">Error al cargar los posts</p>
+                        <p className="text-red-700 font-medium">{t('ialab.forum.section.error_title')}</p>
                         <p className="text-red-600 text-sm mt-1">{error}</p>
                         <button
                             onClick={() => loadForumPosts(limit)}
                             className="mt-4 px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors duration-300"
                         >
-                            Reintentar
+                            {t('ialab.forum.section.retry_btn')}
                         </button>
                     </div>
                 ) : forumPosts.length === 0 ? (
@@ -540,13 +542,13 @@ const IALabForumSection = ({
                             <Icon name="fa-comments" className="text-corporate text-3xl" />
                         </div>
                         <h3 className="text-2xl font-bold text-petroleum-darker font-montserrat mb-3">
-                            ¡Inicia el primer debate!
+                            {t('ialab.forum.section.empty_title')}
                         </h3>
                         <p className="text-slate-600 text-lg mb-2 max-w-2xl mx-auto">
-                            Sé el pionero en crear conversaciones valiosas para la comunidad IALab
+                            {t('ialab.forum.section.empty_desc')}
                         </p>
                         <p className="text-slate-500 text-sm mb-8 max-w-xl mx-auto">
-                            Comparte dudas, insights o preguntas técnicas. Tu participación inspira a otros estudiantes y mentores.
+                            {t('ialab.forum.section.empty_hint')}
                         </p>
                         
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 max-w-3xl mx-auto">
@@ -554,22 +556,22 @@ const IALabForumSection = ({
                                 <div className="w-10 h-10 rounded-full bg-petroleum/10 flex items-center justify-center mb-3">
                                     <Icon name="fa-lightbulb" className="text-petroleum w-5 h-5" />
                                 </div>
-                                <h4 className="font-bold text-petroleum mb-1">Comparte insights</h4>
-                                <p className="text-slate-600 text-sm">Lo que aprendiste en los módulos</p>
+                                <h4 className="font-bold text-petroleum mb-1">{t('ialab.forum.section.empty_card1_title')}</h4>
+                                <p className="text-slate-600 text-sm">{t('ialab.forum.section.empty_card1_desc')}</p>
                             </div>
                             <div className="bg-white p-4 rounded-xl border border-slate-200 text-left">
                                 <div className="w-10 h-10 rounded-full bg-corporate/10 flex items-center justify-center mb-3">
                                     <Icon name="fa-question-circle" className="text-corporate w-5 h-5" />
                                 </div>
-                                <h4 className="font-bold text-corporate mb-1">Haz preguntas</h4>
-                                <p className="text-slate-600 text-sm">Resuelve dudas con la comunidad</p>
+                                <h4 className="font-bold text-corporate mb-1">{t('ialab.forum.section.empty_card2_title')}</h4>
+                                <p className="text-slate-600 text-sm">{t('ialab.forum.section.empty_card2_desc')}</p>
                             </div>
                             <div className="bg-white p-4 rounded-xl border border-slate-200 text-left">
                                 <div className="w-10 h-10 rounded-full bg-petroleum/10 flex items-center justify-center mb-3">
                                     <Icon name="fa-users" className="text-petroleum w-5 h-5" />
                                 </div>
-                                <h4 className="font-bold text-petroleum mb-1">Colabora</h4>
-                                <p className="text-slate-600 text-sm">Trabaja en proyectos con otros</p>
+                                <h4 className="font-bold text-petroleum mb-1">{t('ialab.forum.section.empty_card3_title')}</h4>
+                                <p className="text-slate-600 text-sm">{t('ialab.forum.section.empty_card3_desc')}</p>
                             </div>
                         </div>
                         
@@ -579,7 +581,7 @@ const IALabForumSection = ({
                                 className="px-8 py-4 bg-gradient-to-r from-corporate to-corporate-dark text-white rounded-xl hover:shadow-[0_0_25px_rgba(0,188,212,0.4)] transition-all duration-300 flex items-center gap-3 font-medium text-lg mx-auto"
                             >
                                 <Icon name="fa-plus" className="w-5 h-5" />
-                                Crear Primer Debate
+                                {t('ialab.forum.section.empty_cta')}
                             </button>
                         )}
                     </div>
@@ -597,7 +599,7 @@ const IALabForumSection = ({
                         className="px-6 py-3 border-2 border-corporate text-corporate rounded-xl hover:bg-corporate/5 transition-all duration-300 font-medium"
                     >
                         <Icon name="fa-sync" className="mr-2" />
-                        Cargar más posts
+                        {t('ialab.forum.section.load_more')}
                     </button>
                 </div>
             )}
@@ -608,16 +610,16 @@ const IALabForumSection = ({
                     <button 
                         onClick={() => setInsightsExpanded(!insightsExpanded)}
                         className="text-corporate hover:text-petroleum-darker font-bold text-xs uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2 mx-auto group focus:outline-none focus:ring-1 focus:ring-corporate rounded px-2 py-1"
-                        aria-label={insightsExpanded ? "Contraer muro de insights" : "Expandir para ver toda la conversación"}
+                        aria-label={insightsExpanded ? t('ialab.forum.section.collapse_aria') : t('ialab.forum.section.expand_aria')}
                     >
                         {insightsExpanded ? (
                             <>
-                                <span>Contraer muro</span>
+                                <span>{t('ialab.forum.section.collapse')}</span>
                                 <Icon name="fa-chevron-up" className="text-xs group-hover:-translate-y-1 transition-transform duration-300" />
                             </>
                         ) : (
                             <>
-                                <span>Explorar toda la conversación</span>
+                                <span>{t('ialab.forum.section.expand')}</span>
                                 <Icon name="fa-chevron-down" className="text-xs group-hover:translate-y-1 transition-transform duration-300" />
                             </>
                         )}

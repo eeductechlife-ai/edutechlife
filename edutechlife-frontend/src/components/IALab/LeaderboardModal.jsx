@@ -4,6 +4,7 @@ import { X, Trophy, Loader2 } from 'lucide-react';
 import { useSupabase } from '../../hooks/useSupabase';
 import { useIALabStore } from '../../store/ialabStore';
 import { Icon } from '../../utils/iconMapping';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const POSITION_ICONS = {
   1: { icon: 'fa-trophy', color: 'text-amber-400', bg: 'bg-amber-50 dark:bg-amber-900/20' },
@@ -12,6 +13,7 @@ const POSITION_ICONS = {
 };
 
 const LeaderboardModal = ({ isOpen, onClose }) => {
+  const { t } = useTranslation();
   const { supabase, userId } = useSupabase();
   const myXp = useIALabStore(s => s.xp);
   const myStreak = useIALabStore(s => s.streak);
@@ -95,12 +97,12 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
             <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-700 bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm">
               <div className="flex items-center gap-2">
                 <Trophy className="w-5 h-5 text-amber-400" />
-                <h2 className="text-lg font-bold text-petroleum dark:text-corporate">Leaderboard</h2>
+                <h2 className="text-lg font-bold text-petroleum dark:text-corporate">{t('leaderboard.title')}</h2>
               </div>
               <button
                 onClick={onClose}
                 className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40"
-                aria-label="Cerrar leaderboard"
+                aria-label={t('ialab.leaderboard_modal.close_aria')}
               >
                 <X className="w-4 h-4 text-slate-500" />
               </button>
@@ -114,8 +116,8 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
               ) : entries.length === 0 ? (
                 <div className="flex flex-col items-center py-16 text-slate-400">
                   <Trophy className="w-12 h-12 mb-3 opacity-30" />
-                  <p className="text-sm font-medium">Aún no hay datos en el leaderboard</p>
-                  <p className="text-xs mt-1">Completa lecciones para aparecer aquí</p>
+                  <p className="text-sm font-medium">{t('leaderboard.empty')}</p>
+                  <p className="text-xs mt-1">{t('leaderboard.empty_hint')}</p>
                 </div>
               ) : (
                 <div className="p-4 space-y-1">
@@ -152,18 +154,18 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 truncate">
                             {entry.name}
-                            {isMe && <span className="text-[10px] text-petroleum font-medium ml-1.5">(tú)</span>}
+                            {isMe && <span className="text-[10px] text-petroleum font-medium ml-1.5">{t('leaderboard.you_label')}</span>}
                           </p>
                           <div className="flex items-center gap-2 text-xs text-slate-400">
-                            <span>{entry.streak} días racha</span>
+                            <span>{t('leaderboard.streak', { days: entry.streak })}</span>
                             <span>·</span>
-                            <span>{entry.badges} insignias</span>
+                            <span>{t('leaderboard.badges', { count: entry.badges })}</span>
                           </div>
                         </div>
 
                         <div className="text-right flex-shrink-0">
                           <p className="text-sm font-bold text-petroleum dark:text-corporate">{entry.xp.toLocaleString()}</p>
-                          <p className="text-[10px] text-slate-400">XP</p>
+                          <p className="text-[10px] text-slate-400">{t('streak.xp')}</p>
                         </div>
                       </div>
                     );
@@ -181,12 +183,12 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
                       Y
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">Tu posición</p>
-                      <p className="text-xs text-slate-400">{myXp.toLocaleString()} XP · {myStreak} días racha</p>
+                      <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">{t('leaderboard.position')}</p>
+                      <p className="text-xs text-slate-400">{t('streak.position_line', { xp: myXp.toLocaleString(), days: myStreak })}</p>
                     </div>
                     <div className="text-right">
                       <p className="text-sm font-bold text-petroleum dark:text-corporate">{myXp.toLocaleString()}</p>
-                      <p className="text-[10px] text-slate-400">XP</p>
+                      <p className="text-[10px] text-slate-400">{t('streak.xp')}</p>
                     </div>
                   </div>
                 </div>

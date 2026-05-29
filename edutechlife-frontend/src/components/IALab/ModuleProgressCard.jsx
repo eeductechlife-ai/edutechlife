@@ -3,8 +3,10 @@ import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabStore } from '../../store/ialabStore';
 import { ALL_LESSONS } from '../../data/ialab';
 import ResourceBadge from '../ui/ResourceBadge';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const ModuleProgressCard = React.memo(({ moduleId, title, icon, score, config, completedVideos, completedInfographics, completedExams, challengeScores, completedModules }) => {
+  const { t } = useTranslation();
   const lessonProgress = useIALabStore(s => s.lessonProgress);
   const moduleVideos = completedVideos.filter(v => v.startsWith(`m${moduleId}`)).length;
   const moduleInfographics = completedInfographics.filter(i => i.startsWith(`i${moduleId}`)).length;
@@ -36,24 +38,24 @@ const ModuleProgressCard = React.memo(({ moduleId, title, icon, score, config, c
             <span className={`inline-flex items-center gap-[3px] text-[9px] font-bold px-1.5 py-0.5 rounded-md border ${
               examScore >= 80 ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : 'bg-amber-50 text-amber-600 border-amber-200'
             }`}>
-              <Icon name="fa-file-alt" className="text-[7px]" /> E:{examScore}%
+              <Icon name="fa-file-alt" className="text-[7px]" /> {t('ialab.module_progress_card.exam_abbr')}{examScore}%
             </span>
           )}
           {challengeScore > 0 && (
             <span className={`inline-flex items-center gap-[3px] text-[9px] font-bold px-1.5 py-0.5 rounded-md border ${
               challengeScore >= 80 ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : 'bg-amber-50 text-amber-600 border-amber-200'
             }`}>
-              <Icon name="fa-trophy" className="text-[7px]" /> D:{challengeScore}%
+              <Icon name="fa-trophy" className="text-[7px]" /> {t('ialab.module_progress_card.challenge_abbr')}{challengeScore}%
             </span>
           )}
           {completedModuleLessons > 0 && (
             <span className="inline-flex items-center gap-[3px] text-[9px] font-bold px-1.5 py-0.5 rounded-md border bg-emerald-50 text-emerald-600 border-emerald-200">
-              <Icon name="fa-check-circle" className="text-[7px]" /> L:{completedModuleLessons}/{totalModuleLessons}
+              <Icon name="fa-check-circle" className="text-[7px]" /> {t('ialab.module_progress_card.lesson_abbr')}{completedModuleLessons}/{totalModuleLessons}
             </span>
           )}
           {completedModules.includes(moduleId) && (examScore > 0 || challengeScore > 0) && (
             <span className="inline-flex items-center gap-[3px] text-[9px] font-bold px-1.5 py-0.5 rounded-md border bg-petroleum/5 text-petroleum border-petroleum/10">
-              <Icon name="fa-comments" className="text-[7px]" /> Foro
+              <Icon name="fa-comments" className="text-[7px]" /> {t('ialab.module_progress_card.forum_label')}
             </span>
           )}
         </div>

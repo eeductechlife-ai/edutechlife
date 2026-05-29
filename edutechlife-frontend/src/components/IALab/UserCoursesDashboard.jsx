@@ -6,14 +6,15 @@ import { useTranslation } from '../../i18n/I18nProvider';
 import { courses as ALL_COURSES } from './data/landingPageData';
 import CourseCard from './CourseCard';
 
-const FILTER_TABS = [
-  { id: 'all', label: 'Todos' },
-  { id: 'in-progress', label: 'En Progreso' },
-  { id: 'completed', label: 'Completados' },
+const FILTER_TABS = (t) => [
+  { id: 'all', label: t('ialab.dashboard.filter_all') },
+  { id: 'in-progress', label: t('ialab.dashboard.filter_in_progress') },
+  { id: 'completed', label: t('ialab.dashboard.filter_completed') },
 ];
 
 const UserCoursesDashboard = () => {
   const { t } = useTranslation();
+  const tabs = FILTER_TABS(t);
   const [activeFilter, setActiveFilter] = useState('all');
 
   const storeXp = useIALabStore(s => s.xp);
@@ -124,7 +125,7 @@ const UserCoursesDashboard = () => {
 
       {/* Filter tabs */}
       <div className="flex gap-1.5 bg-slate-100 rounded-xl p-1 w-fit">
-        {FILTER_TABS.map(tab => (
+        {tabs.map(tab => (
           <button
             key={tab.id}
             onClick={() => setActiveFilter(tab.id)}
@@ -183,7 +184,7 @@ const UserCoursesDashboard = () => {
         >
           <h3 className="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
             <Icon name="fa-award" className="text-corporate" />
-            Certificados Obtenidos
+            {t('ialab.dashboard.certificates_title')}
           </h3>
           <div className="bg-gradient-to-br from-emerald-50 to-white rounded-xl p-4 border border-emerald-100 flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center shrink-0">
@@ -191,13 +192,13 @@ const UserCoursesDashboard = () => {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-bold text-slate-800 truncate">{activeCourse.title}</p>
-              <p className="text-xs text-slate-500">Completado al {Math.round(activeCourse.progress)}%</p>
+              <p className="text-xs text-slate-500">{t('ialab.dashboard.completed_at', { pct: Math.round(activeCourse.progress) })}</p>
             </div>
             <button
               onClick={() => setShowCertificateModal(true)}
               className="px-3 py-1.5 text-xs font-bold text-emerald-700 bg-emerald-100 hover:bg-emerald-200 rounded-lg transition-colors"
             >
-              Ver Certificado
+              {t('ialab.dashboard.view_certificate')}
             </button>
           </div>
         </motion.div>

@@ -2,9 +2,11 @@ import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabProgressContext } from '../../context/IALabContext';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const IALabModuleRoadmap = () => {
   const prefersReducedMotion = useReducedMotion();
+  const { t } = useTranslation();
   const { activeMod, modules, setActiveMod, isModuleLocked, calculateModuleScore } = useIALabProgressContext();
 
   return (
@@ -16,8 +18,8 @@ const IALabModuleRoadmap = () => {
           <Icon name="fa-map-signs" className="text-white text-sm" />
         </div>
         <div>
-          <h3 className="text-sm font-bold text-petroleum leading-tight">Tu ruta de aprendizaje</h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400">5 módulos hacia tu certificación</p>
+          <h3 className="text-sm font-bold text-petroleum leading-tight">{t('ialab.module_roadmap.title')}</h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400">{t('ialab.module_roadmap.subtitle')}</p>
         </div>
       </div>
 
@@ -47,7 +49,7 @@ const IALabModuleRoadmap = () => {
                     ? 'bg-emerald-50/50 border border-emerald-200/60'
                     : 'bg-slate-50 dark:bg-slate-700/50 border border-slate-200/60 dark:border-slate-600/60 hover:border-petroleum/30'
                 }`}
-                aria-label={`${locked ? 'Bloqueado: ' : ''}Módulo ${mod.id}: ${mod.title}${completed ? ' - Completado' : score > 0 ? ` - ${Math.round(score)}%` : ''}`}
+                aria-label={`${locked ? t('ialab.module_roadmap.locked_prefix') : ''}${t('ialab.module_header.module')} ${mod.id}: ${mod.title}${completed ? t('ialab.module_roadmap.completed_suffix') : score > 0 ? ` - ${Math.round(score)}%` : ''}`}
               >
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
                   isActive

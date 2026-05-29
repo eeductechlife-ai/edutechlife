@@ -1,6 +1,7 @@
 import React from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabStore } from '../../store/ialabStore';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const PASSING_SCORE = 80;
 const TOTAL_QUESTIONS = 8;
@@ -15,6 +16,9 @@ const readStore = (key, fallback = null) => {
 };
 
 const ExamResultViewer = ({ moduleId, score, onClose, onRetry }) => {
+  const { t } = useTranslation();
+  const userRole = useIALabStore(s => s.userRole);
+  const isAdmin = userRole === 'admin';
   const passed = score >= PASSING_SCORE;
 
   let storedAttempt = null;
@@ -29,10 +33,12 @@ const ExamResultViewer = ({ moduleId, score, onClose, onRetry }) => {
 
   // Lógica de intentos
   const remaining = (() => {
+    if (isAdmin) return 99;
     try { return parseInt(localStorage.getItem(`exam_attempts_remaining_m${moduleId}`) || MAX_ATTEMPTS); }
     catch { return MAX_ATTEMPTS; }
   })();
   const nextAttempt = (() => {
+    if (isAdmin) return 0;
     try { return parseInt(localStorage.getItem(`exam_next_attempt_m${moduleId}`) || '0'); }
     catch { return 0; }
   })();
@@ -42,12 +48,12 @@ const ExamResultViewer = ({ moduleId, score, onClose, onRetry }) => {
   const handleRetry = () => {
     if (remaining <= 0) return;
     if (inCooldown) return;
-
-    const newRemaining = remaining - 1;
-    localStorage.setItem(`exam_attempts_remaining_m${moduleId}`, newRemaining);
-    localStorage.setItem(`exam_next_attempt_m${moduleId}`, Date.now() + COOLDOWN_MS);
-    window.dispatchEvent(new Event('ialab:attemptsUpdated'));
-
+    if (!isAdmin) {
+      const newRemaining = remaining - 1;
+      localStorage.setItem(`exam_attempts_remaining_m${moduleId}`, newRemaining);
+      localStorage.setItem(`exam_next_attempt_m${moduleId}`, Date.now() + COOLDOWN_MS);
+      window.dispatchEvent(new Event('ialab:attemptsUpdated'));
+    }
     if (onRetry) onRetry();
   };
 
@@ -69,12 +75,12 @@ const ExamResultViewer = ({ moduleId, score, onClose, onRetry }) => {
               </div>
             </div>
             <h2 className={`text-xl font-bold mb-1 font-montserrat ${passed ? 'text-emerald-600' : 'text-red-600'}`}>
-              {passed ? '¡Examen Aprobado!' : 'Examen No Aprobado'}
+              {passed ? t('ialab.exam_result.title_passed') : t('ialab.exam_result.title_failed')}
             </h2>
             <p className="text-sm text-slate-500">
               {passed
-                ? 'Has demostrado comprensión de los temas.'
-                : `Mínimo requerido: ${PASSING_SCORE}%.`}
+                ? t('ialab.exam_result.desc_passed')
+                : t('ialab.exam_result.desc_failed', { score: PASSING_SCORE })}
             </p>
           </div>
 
@@ -83,15 +89,15 @@ const ExamResultViewer = ({ moduleId, score, onClose, onRetry }) => {
             <div className="flex justify-around text-center">
               <div>
                 <div className="text-2xl font-bold text-slate-800">{correctCount}</div>
-                <div className="text-xs text-slate-500">Correctas</div>
+                <div className="text-xs text-slate-500">{t('ialab.exam_result.correct')}</div>
               </div>
               <div>
                 <div className="text-2xl font-bold text-slate-800">{incorrectCount}</div>
-                <div className="text-xs text-slate-500">Incorrectas</div>
+                <div className="text-xs text-slate-500">{t('ialab.exam_result.incorrect')}</div>
               </div>
               <div>
                 <div className="text-2xl font-bold text-slate-800">{TOTAL_QUESTIONS}</div>
-                <div className="text-xs text-slate-500">Total</div>
+                <div className="text-xs text-slate-500">{t('ialab.exam_result.total')}</div>
               </div>
             </div>
             <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden mt-3">
@@ -105,10 +111,10 @@ const ExamResultViewer = ({ moduleId, score, onClose, onRetry }) => {
             <div className="bg-red-50 border border-red-100 rounded-xl p-4 mb-4">
               <h4 className="text-xs font-bold text-red-700 mb-2 flex items-center gap-1.5">
                 <Icon name="fa-lightbulb" className="text-sm" />
-                Áreas de mejora
+                {t('ialab.exam_result.improvement_areas')}
               </h4>
               <p className="text-xs text-red-600 leading-relaxed">
-                Debes repasar los siguientes temas para mejorar tu desempeño. Revisa los recursos del módulo antes de reintentar.
+                {t('ialab.exam_result.improvement_desc')}
               </p>
             </div>
           )}
@@ -121,21 +127,21 @@ const ExamResultViewer = ({ moduleId, score, onClose, onRetry }) => {
                   <button onClick={handleRetry}
                     className="w-full py-3 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-lg transition-all duration-200 font-bold text-sm mb-2 flex items-center justify-center gap-2">
                     <Icon name="fa-rocket" />
-                    Reintentar examen
+                    {t('ialab.exam_result.retry')}
                   </button>
                   <p className="text-xs text-center text-slate-600">
-                    Te quedan {remaining - 1} de {MAX_ATTEMPTS} intentos. Cooldown de 12h entre cada uno.
+                    {t('ialab.exam_result.retry_info', { remaining: remaining - 1, max: MAX_ATTEMPTS })}
                   </p>
                 </>
               )}
               {remaining > 0 && inCooldown && (
                 <p className="text-xs text-center text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
-                  ⏳ Espera {hoursLeft}h para tu siguiente intento. (12h entre cada uno, {MAX_ATTEMPTS} intentos máximo).
+                  {t('ialab.exam_result.cooldown', { hours: hoursLeft, max: MAX_ATTEMPTS })}
                 </p>
               )}
               {remaining <= 0 && (
                 <p className="text-xs text-center text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
-                  Has agotado tus {MAX_ATTEMPTS} intentos para este examen. No puedes volver a intentarlo.
+                  {t('ialab.exam_result.no_attempts', { max: MAX_ATTEMPTS })}
                 </p>
               )}
             </div>
@@ -144,7 +150,7 @@ const ExamResultViewer = ({ moduleId, score, onClose, onRetry }) => {
           {/* Close button */}
           <button onClick={onClose}
             className="w-full py-2.5 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-lg transition-all duration-200 font-bold text-sm">
-            Volver al módulo
+            {t('ialab.exam_result.back_to_module')}
           </button>
         </div>
       </div>

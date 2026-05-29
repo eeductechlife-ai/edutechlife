@@ -1,15 +1,17 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
+import { useTranslation } from '../../../i18n/I18nProvider';
 
 const IALabForumFilterBar = ({ category, onCategoryChange }) => {
+  const { t } = useTranslation();
   const categories = [
-    { id: 'all', label: 'Todos', icon: 'fa-comments' },
-    { id: 'question', label: 'Preguntas', icon: 'fa-question-circle' },
-    { id: 'discussion', label: 'Discusiones', icon: 'fa-comment-dots' },
-    { id: 'resource', label: 'Recursos', icon: 'fa-book' },
-    { id: 'announcement', label: 'Anuncios', icon: 'fa-bullhorn' },
-    { id: 'feedback', label: 'Feedback', icon: 'fa-lightbulb' },
+    { id: 'all', label: t('ialab.forum.filter_bar.all'), icon: 'fa-comments' },
+    { id: 'question', label: t('ialab.forum.filter_bar.questions'), icon: 'fa-question-circle' },
+    { id: 'discussion', label: t('ialab.forum.filter_bar.discussions'), icon: 'fa-comment-dots' },
+    { id: 'resource', label: t('ialab.forum.filter_bar.resources'), icon: 'fa-book' },
+    { id: 'announcement', label: t('ialab.forum.filter_bar.announcements'), icon: 'fa-bullhorn' },
+    { id: 'feedback', label: t('ialab.forum.filter_bar.feedback'), icon: 'fa-lightbulb' },
   ];
 
   return (

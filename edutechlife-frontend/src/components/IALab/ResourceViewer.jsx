@@ -86,7 +86,7 @@ const ResourceViewer = ({
                   {resource.title}
                 </h4>
                 <p className="text-slate-600 text-center mb-6">
-                  {resource.description || {t('ialab.resource_viewer.click_to_view')}}
+                  {resource.description || t('ialab.resource_viewer.click_to_view')}
                 </p>
                 <div className="flex items-center gap-2 text-sm text-corporate font-medium">
                   <Icon name="fa-expand" className="w-4 h-4" />
@@ -114,7 +114,7 @@ const ResourceViewer = ({
                   {resource.title}
                 </h4>
                 <p className="text-slate-600 text-center mb-6">
-                  {resource.description || {t('ialab.resource_viewer.click_to_view')}}
+                  {resource.description || t('ialab.resource_viewer.click_to_view')}
                 </p>
                 <div className="flex items-center gap-2 text-sm text-corporate font-medium">
                   <Icon name="fa-expand" className="w-4 h-4" />
@@ -142,7 +142,7 @@ const ResourceViewer = ({
                   {resource.title}
                 </h4>
                 <p className="text-slate-600 text-center mb-6">
-                  {resource.description || {t('ialab.resource_viewer.click_to_view')}}
+                  {resource.description || t('ialab.resource_viewer.click_to_view')}
                 </p>
                 <div className="flex items-center gap-2 text-sm text-corporate font-medium">
                   <Icon name="fa-expand" className="w-4 h-4" />
@@ -170,7 +170,7 @@ const ResourceViewer = ({
                   {resource.title}
                 </h4>
                 <p className="text-slate-600 text-center mb-6">
-                  {resource.description || {t('ialab.resource_viewer.click_to_view')}}
+                  {resource.description || t('ialab.resource_viewer.click_to_view')}
                 </p>
                 <div className="flex items-center gap-2 text-sm text-corporate font-medium">
                   <Icon name="fa-expand" className="w-4 h-4" />

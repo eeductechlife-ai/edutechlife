@@ -2,8 +2,10 @@ import { motion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { fadeInUp, staggerContainer } from './constants/landingAnimations';
 import { benefits as benefitsData } from './data/landingPageData';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const BenefitsSection = () => {
+  const { t } = useTranslation();
   return (
     <section className="py-16 md:py-20 lg:py-24 bg-gradient-to-b from-white to-[#F0F7FA] relative overflow-hidden">
       <div className="absolute inset-0 opacity-[0.02]"
@@ -21,10 +23,10 @@ const BenefitsSection = () => {
           className="text-center mb-12"
         >
           <h2 className="font-display text-3xl md:text-4xl font-bold text-petroleum mb-4">
-            ¿Por qué I.Alab Academic?
+            {t('ialab.benefits.title')}
           </h2>
           <p className="font-body text-lg text-slate-600 max-w-2xl mx-auto">
-            Una plataforma diseñada para tu éxito en la era de la inteligencia artificial
+            {t('ialab.benefits.subtitle')}
           </p>
         </motion.div>
 

@@ -55,7 +55,7 @@ export function useYouTubeDuration(videoUrl) {
     // Cargar la API de YouTube IFrame
     if (!window.YT) {
       const tag = document.createElement('script');
-      tag.src = 'https://www.youtube.com/iframe_api';
+      tag.src = `https://www.youtube.com/iframe_api?origin=${encodeURIComponent(window.location.origin)}`;
       document.head.appendChild(tag);
     }
 
