@@ -1,0 +1,17 @@
+/* ==================== UTILITY CLASSES ==================== */
+
+.animate-premium-pulse {
+  animation: premium-pulse 3s ease-in-out infinite;
+}
+
+.animate-glass-pulse {
+  animation: glass-pulse 4s ease-in-out infinite;
+}
+
+.animate-icon-glow {
+  animation: icon-glow 2s ease-in-out infinite;
+}
+
+.animate-text-reveal {
+  animation: text-reveal 1.5s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+}

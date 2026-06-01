@@ -128,6 +128,11 @@ export default defineConfig({
   },
   preview: {
     port: 4173,
-    host: true
+    host: true,
+    headers: {
+      'X-Frame-Options': 'DENY',
+      'X-Content-Type-Options': 'nosniff',
+      'Referrer-Policy': 'strict-origin-when-cross-origin',
+    }
   }
 })
