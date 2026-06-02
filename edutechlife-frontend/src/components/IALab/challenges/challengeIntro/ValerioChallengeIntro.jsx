@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { Icon } from '../../../../utils/iconMapping.jsx';
 import { useTranslation } from '../../../../i18n/I18nProvider';
 import VoiceReader from '../../VoiceReader';
@@ -101,6 +101,14 @@ const ValerioChallengeIntro = ({ moduleId, onStart, t, locale: localeProp }) => 
       </p>
     </div>
   );
+};
+
+
+ValerioChallengeIntro.propTypes = {
+  moduleId: PropTypes.any,
+  onStart: PropTypes.any,
+  t: PropTypes.any,
+  locale: PropTypes.any,
 };
 
 export default ValerioChallengeIntro;

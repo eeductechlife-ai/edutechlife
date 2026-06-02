@@ -23,19 +23,19 @@ export { default as SynthesizerSuggestions } from './SynthesizerSuggestions';
 export { default as DeepSeekDashboard } from './DeepSeekDashboard';
 export { default as ScoreBreakdown } from './ScoreBreakdown';
 export { default as FeedbackPanel } from './FeedbackPanel';
-export { default as IALabForumSection } from './IALabForumSection';
-export { default as IALabForumOptimized } from './IALabForumOptimized';
-export { default as IALabEvaluationModal } from './IALabEvaluationModal';
-export { default as IALabEvaluationResults } from './IALabEvaluationResults';
-export { default as IALabChallengeSection } from './IALabChallengeSection';
-export { default as IALabQuizModal } from './IALabQuizModal';
-export { default as IALabTutoriasVirtuales } from './IALabTutoriasVirtuales';
-export { default as IALabSynthesizer } from './IALabSynthesizer';
-export { default as IALabInteractionAdvisor } from './IALabInteractionAdvisor';
 export { default as SectionErrorBoundary } from './SectionErrorBoundary';
+export { default as CertificatePreview } from './CertificatePreview';
+export { default as StudyPlannerModal } from './StudyPlannerModal';
+export { default as UserCoursesDashboard } from './UserCoursesDashboard';
+export { default as ModuleProgressCard } from './ModuleProgressCard';
+export { default as TopicResourcesModal } from './TopicResourcesModal';
+export { default as BadgeGalleryModal } from './BadgeGalleryModal';
+export { default as StreakDetailsModal } from './StreakDetailsModal';
+export { default as OVABiasLab } from './OVABiasLab';
+export { default as OVARiskSimulator } from './OVARiskSimulator';
+export { default as OVANotebookPodcastGuide } from './OVANotebookPodcastGuide';
 export * from './shared';
 export {
   IALabCommunityHub, IALabForumPostCard, IALabForumPostList, IALabForumPostDetail,
   IALabForumStats, IALabForumTagFilter, IALabForumSkeleton, IALabForumEmptyState,
-  ForumCreatePost,
 } from './forum';

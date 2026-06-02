@@ -3,6 +3,17 @@ import { Icon } from '../utils/iconMapping.jsx';
 import { useTranslation } from '../i18n/I18nProvider';
 import { getFooterContent } from '../data/footer/footerContent';
 
+const footerWhiteText = { color: '#FFFFFF' };
+const footerPrimaryText = { color: '#004B63' };
+const footerAccentText = { color: '#4DA8C4' };
+const footerDarkText = { color: '#374151' };
+const footerMutedText = { color: '#6B7280' };
+const footerWhiteBg = { backgroundColor: '#FFFFFF' };
+const footerLightBg = { backgroundColor: '#F3F9FB' };
+const footerLighterBg = { backgroundColor: '#E8F4F8' };
+const footerLogoInvert = { filter: 'brightness(0) invert(1)' };
+const footerPrimaryButton = { backgroundColor: '#004B63', color: '#FFFFFF' };
+
 const socialLinks = [
   { icon: 'fa-brands fa-facebook-f', label: 'Facebook', href: 'https://web.facebook.com/eductechlife/' },
   { icon: 'fa-brands fa-instagram', label: 'Instagram', href: 'https://www.instagram.com/edu_techlife/' },
@@ -119,7 +130,7 @@ export default function Footer() {
                     color: '#FFFFFF',
                   }}
                 >
-                  <Icon name={social.icon} className="text-base lg:text-sm" style={{ color: '#FFFFFF' }} />
+                  <Icon name={social.icon} className="text-base lg:text-sm" style={footerWhiteText} />
                 </a>
               ))}
             </div>
@@ -146,7 +157,7 @@ export default function Footer() {
                       fontFamily: 'inherit',
                     }}
                   >
-                    <Icon name="fa-chevron-right" className="text-xs" style={{ color: '#4DA8C4' }} />
+                    <Icon name="fa-chevron-right" className="text-xs" style={footerAccentText} />
                     {t(item.key)}
                   </button>
                 </li>
@@ -175,7 +186,7 @@ export default function Footer() {
                       fontFamily: 'inherit',
                     }}
                   >
-                    <Icon name="fa-chevron-right" className="text-xs" style={{ color: '#4DA8C4' }} />
+                    <Icon name="fa-chevron-right" className="text-xs" style={footerAccentText} />
                     {t(item.key)}
                   </button>
                 </li>
@@ -187,7 +198,7 @@ export default function Footer() {
           <div>
             <h4 
               className="text-base font-bold mb-3 lg:mb-2"
-              style={{ color: '#FFFFFF' }}
+              style={footerWhiteText}
             >
               {t('footer.newsletter')}
             </h4>
@@ -205,9 +216,9 @@ export default function Footer() {
                   className="w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center"
                   style={{ backgroundColor: '#4DA8C4' }}
                 >
-                  <Icon name="fa-check" className="text-xl" style={{ color: '#FFFFFF' }} />
+                  <Icon name="fa-check" className="text-xl" style={footerWhiteText} />
                 </div>
-                <p className="text-base font-semibold" style={{ color: '#FFFFFF' }}>
+                <p className="text-base font-semibold" style={footerWhiteText}>
                   {t('footer.thanks')}
                 </p>
                 <p className="text-sm mt-1" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
@@ -246,8 +257,8 @@ export default function Footer() {
                     boxShadow: '0 4px 15px rgba(77, 168, 196, 0.3)',
                   }}
                 >
-                  <span style={{ color: '#FFFFFF' }}>{t('footer.subscribe')}</span>
-                  <Icon name="fa-paper-plane" className="text-xs" style={{ color: '#FFFFFF' }} />
+                  <span style={footerWhiteText}>{t('footer.subscribe')}</span>
+                  <Icon name="fa-paper-plane" className="text-xs" style={footerWhiteText} />
                 </button>
               </form>
             )}
@@ -322,20 +333,20 @@ function ModalVAK({ onClose, content }) {
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
       <div 
         className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl p-6 md:p-8"
-        style={{ backgroundColor: '#FFFFFF' }}
+        style={footerWhiteBg}
         onClick={(e) => e.stopPropagation()}
       >
-        <button onClick={onClose} className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center transition-colors hover:bg-gray-100" style={{ color: '#004B63' }}>
+        <button onClick={onClose} className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center transition-colors hover:bg-gray-100" style={footerPrimaryText}>
           <Icon name="fa-xmark" className="text-xl" />
         </button>
         
         <div className="flex items-center gap-4 mb-6">
           <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ backgroundColor: '#004B63' }}>
-            <Icon name="fa-brain" className="text-2xl" style={{ color: '#FFFFFF' }} />
+            <Icon name="fa-brain" className="text-2xl" style={footerWhiteText} />
           </div>
           <div>
-            <h2 className="text-2xl font-bold" style={{ color: '#004B63' }}>{t('footer.methodology')}</h2>
-            <p className="text-sm" style={{ color: '#4DA8C4' }}>{c.subtitle}</p>
+            <h2 className="text-2xl font-bold" style={footerPrimaryText}>{t('footer.methodology')}</h2>
+            <p className="text-sm" style={footerAccentText}>{c.subtitle}</p>
           </div>
         </div>
 
@@ -344,11 +355,11 @@ function ModalVAK({ onClose, content }) {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {c.styles.map((s, i) => (
-              <div key={i} className="p-4 rounded-xl" style={{ backgroundColor: '#E8F4F8' }}>
+              <div key={i} className="p-4 rounded-xl" style={footerLighterBg}>
                 <div className="w-10 h-10 rounded-lg mb-3 flex items-center justify-center" style={{ backgroundColor: '#4DA8C4' }}>
-                  <Icon name={s.icon} className="text-lg" style={{ color: '#FFFFFF' }} />
+                  <Icon name={s.icon} className="text-lg" style={footerWhiteText} />
                 </div>
-                <h3 className="font-semibold mb-2" style={{ color: '#004B63' }}>{s.title}</h3>
+                <h3 className="font-semibold mb-2" style={footerPrimaryText}>{s.title}</h3>
                 <p className="text-sm text-gray-600">{s.description}</p>
               </div>
             ))}
@@ -372,20 +383,20 @@ function ModalCertificaciones({ onClose, content }) {
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
       <div 
         className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl p-6 md:p-8"
-        style={{ backgroundColor: '#FFFFFF' }}
+        style={footerWhiteBg}
         onClick={(e) => e.stopPropagation()}
       >
-        <button onClick={onClose} className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center transition-colors hover:bg-gray-100" style={{ color: '#004B63' }}>
+        <button onClick={onClose} className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center transition-colors hover:bg-gray-100" style={footerPrimaryText}>
           <Icon name="fa-xmark" className="text-xl" />
         </button>
         
         <div className="flex items-center gap-4 mb-6">
           <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ backgroundColor: '#004B63' }}>
-            <Icon name="fa-certificate" className="text-2xl" style={{ color: '#FFFFFF' }} />
+            <Icon name="fa-certificate" className="text-2xl" style={footerWhiteText} />
           </div>
           <div>
-            <h2 className="text-2xl font-bold" style={{ color: '#004B63' }}>{t('footer.certifications')}</h2>
-            <p className="text-sm" style={{ color: '#4DA8C4' }}>{c.subtitle}</p>
+            <h2 className="text-2xl font-bold" style={footerPrimaryText}>{t('footer.certifications')}</h2>
+            <p className="text-sm" style={footerAccentText}>{c.subtitle}</p>
           </div>
         </div>
 
@@ -400,7 +411,7 @@ function ModalCertificaciones({ onClose, content }) {
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <h3 className="font-semibold" style={{ color: '#004B63' }}>{cert.titulo}</h3>
+                  <h3 className="font-semibold" style={footerPrimaryText}>{cert.titulo}</h3>
                   <p className="text-sm text-gray-600 mt-1">{cert.descripcion}</p>
                 </div>
                 <span 
@@ -438,7 +449,7 @@ function ModalBlog({ onClose, content }) {
         <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
         <div 
           className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl"
-          style={{ backgroundColor: '#FFFFFF' }}
+          style={footerWhiteBg}
           onClick={(e) => e.stopPropagation()}
         >
           <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b" style={{ backgroundColor: '#004B63', borderColor: '#003d52' }}>
@@ -447,14 +458,14 @@ function ModalBlog({ onClose, content }) {
                 src="/images/logo-edutechlife.webp" 
                 alt="Edutechlife" 
                 className="h-8 w-auto"
-                style={{ filter: 'brightness(0) invert(1)' }}
+                style={footerLogoInvert}
               />
               <span className="text-white font-medium text-sm">{t('footer.blog')}</span>
             </div>
             <button 
               onClick={() => setSelectedArticle(null)} 
               className="w-9 h-9 rounded-full flex items-center justify-center transition-colors hover:bg-white/20"
-              style={{ color: '#FFFFFF' }}
+              style={footerWhiteText}
             >
               <Icon name="fa-xmark" className="text-lg" />
             </button>
@@ -477,16 +488,16 @@ function ModalBlog({ onClose, content }) {
 
           <div className="px-6 py-4 flex flex-wrap items-center gap-4 text-sm" style={{ backgroundColor: '#F8FAFC' }}>
             <div className="flex items-center gap-2">
-              <Icon name="fa-user" className="text-sm" style={{ color: '#4DA8C4' }} />
-              <span style={{ color: '#374151' }}>{blogArticles.find(a => a.id === selectedArticle)?.autor}</span>
+              <Icon name="fa-user" className="text-sm" style={footerAccentText} />
+              <span style={footerDarkText}>{blogArticles.find(a => a.id === selectedArticle)?.autor}</span>
             </div>
             <div className="flex items-center gap-2">
-              <Icon name="fa-calendar" className="text-sm" style={{ color: '#4DA8C4' }} />
-              <span style={{ color: '#374151' }}>{blogArticles.find(a => a.id === selectedArticle)?.fecha}</span>
+              <Icon name="fa-calendar" className="text-sm" style={footerAccentText} />
+              <span style={footerDarkText}>{blogArticles.find(a => a.id === selectedArticle)?.fecha}</span>
             </div>
             <div className="flex items-center gap-2">
-              <Icon name="fa-clock" className="text-sm" style={{ color: '#4DA8C4' }} />
-              <span style={{ color: '#374151' }}>{blogArticles.find(a => a.id === selectedArticle)?.tiempoLectura}</span>
+              <Icon name="fa-clock" className="text-sm" style={footerAccentText} />
+              <span style={footerDarkText}>{blogArticles.find(a => a.id === selectedArticle)?.tiempoLectura}</span>
             </div>
           </div>
 
@@ -497,15 +508,15 @@ function ModalBlog({ onClose, content }) {
 
             {article.secciones.map((seccion, idx) => (
               <div key={idx} className="space-y-4">
-                <h2 className="text-xl font-bold" style={{ color: '#004B63' }}>{seccion.titulo}</h2>
-                <p className="text-base leading-relaxed" style={{ color: '#374151' }}>{seccion.contenido}</p>
+                <h2 className="text-xl font-bold" style={footerPrimaryText}>{seccion.titulo}</h2>
+                <p className="text-base leading-relaxed" style={footerDarkText}>{seccion.contenido}</p>
 
                 {seccion.lista && (
                   <ul className="space-y-2 ml-4">
                     {seccion.lista.map((item, i) => (
                       <li key={i} className="flex items-start gap-2">
                         <span className="w-2 h-2 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: '#4DA8C4' }} />
-                        <span style={{ color: '#374151' }}>{item}</span>
+                        <span style={footerDarkText}>{item}</span>
                       </li>
                     ))}
                   </ul>
@@ -520,8 +531,8 @@ function ModalBlog({ onClose, content }) {
                 )}
 
                 {seccion.grafica === 'linea' && (
-                  <div className="p-4 rounded-xl" style={{ backgroundColor: '#F3F9FB' }}>
-                    <h4 className="text-sm font-semibold mb-4" style={{ color: '#004B63' }}>Evolución {seccion.unidad}</h4>
+                  <div className="p-4 rounded-xl" style={footerLightBg}>
+                    <h4 className="text-sm font-semibold mb-4" style={footerPrimaryText}>Evolución {seccion.unidad}</h4>
                     <div className="flex items-end justify-between h-40 gap-2">
                       {seccion.datos.map((d, i) => {
                         const max = Math.max(...seccion.datos.map(x => x.valor || x.antes || x.despues));
@@ -535,7 +546,7 @@ function ModalBlog({ onClose, content }) {
                                 backgroundColor: i === seccion.datos.length - 1 ? '#004B63' : '#4DA8C4' 
                               }}
                             />
-                            <span className="text-xs mt-2" style={{ color: '#6B7280' }}>{d.anio}</span>
+                            <span className="text-xs mt-2" style={footerMutedText}>{d.anio}</span>
                           </div>
                         );
                       })}
@@ -544,8 +555,8 @@ function ModalBlog({ onClose, content }) {
                 )}
 
                 {seccion.grafica === 'barras' && (
-                  <div className="p-4 rounded-xl" style={{ backgroundColor: '#F3F9FB' }}>
-                    <h4 className="text-sm font-semibold mb-4" style={{ color: '#004B63' }}>{seccion.unidad}</h4>
+                  <div className="p-4 rounded-xl" style={footerLightBg}>
+                    <h4 className="text-sm font-semibold mb-4" style={footerPrimaryText}>{seccion.unidad}</h4>
                     <div className="space-y-3">
                       {seccion.datos.map((d, i) => {
                         const max = Math.max(...seccion.datos.map(x => x.valor || x.mejora || x.mejora || x.despues || 100));
@@ -554,8 +565,8 @@ function ModalBlog({ onClose, content }) {
                         return (
                           <div key={i}>
                             <div className="flex justify-between text-sm mb-1">
-                              <span style={{ color: '#374151' }}>{d.categoria}</span>
-                              <span className="font-semibold" style={{ color: '#004B63' }}>{val}{seccion.unidad.includes('%') ? '%' : ''}</span>
+                              <span style={footerDarkText}>{d.categoria}</span>
+                              <span className="font-semibold" style={footerPrimaryText}>{val}{seccion.unidad.includes('%') ? '%' : ''}</span>
                             </div>
                             <div className="h-3 rounded-full overflow-hidden" style={{ backgroundColor: '#E5E7EB' }}>
                               <div 
@@ -571,8 +582,8 @@ function ModalBlog({ onClose, content }) {
                 )}
 
                 {seccion.grafica === 'dona' && (
-                  <div className="p-4 rounded-xl" style={{ backgroundColor: '#F3F9FB' }}>
-                    <h4 className="text-sm font-semibold mb-4" style={{ color: '#004B63' }}>Distribución</h4>
+                  <div className="p-4 rounded-xl" style={footerLightBg}>
+                    <h4 className="text-sm font-semibold mb-4" style={footerPrimaryText}>Distribución</h4>
                     <div className="flex items-center justify-center gap-6">
                       <div className="relative w-28 h-28">
                         <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
@@ -606,7 +617,7 @@ function ModalBlog({ onClose, content }) {
                             <span className="w-3 h-3 rounded-full" style={{ 
                               backgroundColor: ['#004B63', '#4DA8C4', '#66CCCC', '#88D4E5'][i] 
                             }} />
-                            <span style={{ color: '#374151' }}>{d.nombre}: {d.valor}%</span>
+                            <span style={footerDarkText}>{d.nombre}: {d.valor}%</span>
                           </div>
                         ))}
                       </div>
@@ -616,9 +627,9 @@ function ModalBlog({ onClose, content }) {
               </div>
             ))}
 
-            <div className="p-6 rounded-xl" style={{ backgroundColor: '#E8F4F8' }}>
-              <h3 className="font-bold text-lg mb-2" style={{ color: '#004B63' }}>Conclusión</h3>
-              <p className="text-base leading-relaxed" style={{ color: '#374151' }}>{article.conclusion}</p>
+            <div className="p-6 rounded-xl" style={footerLighterBg}>
+              <h3 className="font-bold text-lg mb-2" style={footerPrimaryText}>Conclusión</h3>
+              <p className="text-base leading-relaxed" style={footerDarkText}>{article.conclusion}</p>
             </div>
           </div>
 
@@ -629,14 +640,14 @@ function ModalBlog({ onClose, content }) {
                   src="/images/logo-edutechlife.webp" 
                   alt="Edutechlife" 
                   className="h-6 w-auto"
-                  style={{ filter: 'brightness(0) invert(1)' }}
+                  style={footerLogoInvert}
                 />
-                <span className="text-sm" style={{ color: '#6B7280' }}>{t('footer.blog')}</span>
+                <span className="text-sm" style={footerMutedText}>{t('footer.blog')}</span>
               </div>
               <button 
                 onClick={() => setSelectedArticle(null)}
                 className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-                style={{ backgroundColor: '#004B63', color: '#FFFFFF' }}
+                style={footerPrimaryButton}
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#003d52'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#004B63'}
               >
@@ -654,20 +665,20 @@ function ModalBlog({ onClose, content }) {
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
       <div 
         className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl p-6 md:p-8"
-        style={{ backgroundColor: '#FFFFFF' }}
+        style={footerWhiteBg}
         onClick={(e) => e.stopPropagation()}
       >
-        <button onClick={onClose} className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center transition-colors hover:bg-gray-100" style={{ color: '#004B63' }}>
+        <button onClick={onClose} className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center transition-colors hover:bg-gray-100" style={footerPrimaryText}>
           <Icon name="fa-xmark" className="text-xl" />
         </button>
         
         <div className="flex items-center gap-4 mb-6">
           <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ backgroundColor: '#004B63' }}>
-            <Icon name="fa-book-open" className="text-2xl" style={{ color: '#FFFFFF' }} />
+            <Icon name="fa-book-open" className="text-2xl" style={footerWhiteText} />
           </div>
           <div>
-            <h2 className="text-2xl font-bold" style={{ color: '#004B63' }}>{t('footer.blog')}</h2>
-            <p className="text-sm" style={{ color: '#4DA8C4' }}>{content.blogSubtitle}</p>
+            <h2 className="text-2xl font-bold" style={footerPrimaryText}>{t('footer.blog')}</h2>
+            <p className="text-sm" style={footerAccentText}>{content.blogSubtitle}</p>
           </div>
         </div>
 
@@ -690,7 +701,7 @@ function ModalBlog({ onClose, content }) {
                 </span>
                 <span className="text-xs text-gray-500">{articulo.fecha}</span>
               </div>
-              <h3 className="font-semibold" style={{ color: '#004B63' }}>{articulo.titulo}</h3>
+              <h3 className="font-semibold" style={footerPrimaryText}>{articulo.titulo}</h3>
               <div className="flex items-center gap-3 mt-2 text-xs text-gray-500">
                 <span>{articulo.autor}</span>
                 <span>•</span>
@@ -702,7 +713,7 @@ function ModalBlog({ onClose, content }) {
           <div className="mt-6 text-center">
             <button 
               className="px-6 py-3 rounded-xl font-semibold transition-all"
-              style={{ backgroundColor: '#004B63', color: '#FFFFFF' }}
+              style={footerPrimaryButton}
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#003d52'}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#004B63'}
             >
@@ -730,7 +741,7 @@ function ModalDocumentacion({ onClose, content }) {
         <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
         <div 
           className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl"
-          style={{ backgroundColor: '#FFFFFF' }}
+          style={footerWhiteBg}
           onClick={(e) => e.stopPropagation()}
         >
           <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b" style={{ backgroundColor: '#004B63', borderColor: '#003d52' }}>
@@ -739,14 +750,14 @@ function ModalDocumentacion({ onClose, content }) {
                 src="/images/logo-edutechlife.webp" 
                 alt="Edutechlife" 
                 className="h-8 w-auto"
-                style={{ filter: 'brightness(0) invert(1)' }}
+                style={footerLogoInvert}
               />
               <span className="text-white font-medium text-sm">{t('footer.docs')}</span>
             </div>
             <button 
               onClick={() => setSelectedDoc(null)} 
               className="w-9 h-9 rounded-full flex items-center justify-center transition-colors hover:bg-white/20"
-              style={{ color: '#FFFFFF' }}
+              style={footerWhiteText}
             >
               <Icon name="fa-xmark" className="text-lg" />
             </button>
@@ -754,28 +765,28 @@ function ModalDocumentacion({ onClose, content }) {
 
           <div className="px-6 md:px-10 py-6 space-y-6">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#E8F4F8' }}>
-                <Icon name={helpArticles.find(d => d.id === selectedDoc)?.icono || 'fa-file'} className="text-xl" style={{ color: '#004B63' }} />
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={footerLighterBg}>
+                <Icon name={helpArticles.find(d => d.id === selectedDoc)?.icono || 'fa-file'} className="text-xl" style={footerPrimaryText} />
               </div>
               <div>
-                <h1 className="text-2xl font-bold" style={{ color: '#004B63' }}>{doc.titulo}</h1>
-                <p className="text-sm" style={{ color: '#4DA8C4' }}>{helpArticles.find(d => d.id === selectedDoc)?.tiempo} {locale === 'en' ? 'read' : 'de lectura'}</p>
+                <h1 className="text-2xl font-bold" style={footerPrimaryText}>{doc.titulo}</h1>
+                <p className="text-sm" style={footerAccentText}>{helpArticles.find(d => d.id === selectedDoc)?.tiempo} {locale === 'en' ? 'read' : 'de lectura'}</p>
               </div>
             </div>
 
-            <p className="text-lg leading-relaxed" style={{ color: '#374151' }}>{doc.introduccion}</p>
+            <p className="text-lg leading-relaxed" style={footerDarkText}>{doc.introduccion}</p>
 
             {doc.secciones.map((seccion, idx) => (
               <div key={idx} className="space-y-4">
-                <h2 className="text-xl font-bold" style={{ color: '#004B63' }}>{seccion.titulo}</h2>
-                <p className="text-base leading-relaxed" style={{ color: '#374151' }}>{seccion.contenido}</p>
+                <h2 className="text-xl font-bold" style={footerPrimaryText}>{seccion.titulo}</h2>
+                <p className="text-base leading-relaxed" style={footerDarkText}>{seccion.contenido}</p>
 
                 {seccion.pasos && (
                   <ol className="space-y-2 ml-4">
                     {seccion.pasos.map((paso, i) => (
                       <li key={i} className="flex items-start gap-3">
                         <span className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0" style={{ backgroundColor: '#4DA8C4', color: '#FFFFFF' }}>{i + 1}</span>
-                        <span style={{ color: '#374151' }}>{paso}</span>
+                        <span style={footerDarkText}>{paso}</span>
                       </li>
                     ))}
                   </ol>
@@ -786,7 +797,7 @@ function ModalDocumentacion({ onClose, content }) {
                     {seccion.consejos.map((consejo, i) => (
                       <li key={i} className="flex items-start gap-2">
                         <Icon name="fa-lightbulb" className="text-sm mt-1" style={{ color: '#F59E0B' }} />
-                        <span style={{ color: '#374151' }}>{consejo}</span>
+                        <span style={footerDarkText}>{consejo}</span>
                       </li>
                     ))}
                   </ul>
@@ -798,8 +809,8 @@ function ModalDocumentacion({ onClose, content }) {
                       <tbody>
                         {seccion.especificacion.map((spec, i) => (
                           <tr key={i} className="border-b" style={{ borderColor: '#E5E7EB' }}>
-                            <td className="py-2 font-medium" style={{ color: '#004B63' }}>{spec.label}</td>
-                            <td className="py-2" style={{ color: '#374151' }}>{spec.valor}</td>
+                            <td className="py-2 font-medium" style={footerPrimaryText}>{spec.label}</td>
+                            <td className="py-2" style={footerDarkText}>{spec.valor}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -810,8 +821,8 @@ function ModalDocumentacion({ onClose, content }) {
                 {seccion.modelos && (
                   <div className="space-y-3">
                     {seccion.modelos.map((modelo, i) => (
-                      <div key={i} className="p-4 rounded-xl" style={{ backgroundColor: '#F3F9FB' }}>
-                        <h4 className="font-semibold" style={{ color: '#004B63' }}>{modelo.nombre}</h4>
+                      <div key={i} className="p-4 rounded-xl" style={footerLightBg}>
+                        <h4 className="font-semibold" style={footerPrimaryText}>{modelo.nombre}</h4>
                         <p className="text-sm text-gray-600 mt-1">{modelo.descripcion}</p>
                         <span className="inline-block mt-2 px-2 py-1 rounded text-xs" style={{ backgroundColor: '#E8F4F8', color: '#4DA8C4' }}>{locale === 'en' ? 'Use: ' : 'Uso: '}{modelo.caso}</span>
                       </div>
@@ -823,8 +834,8 @@ function ModalDocumentacion({ onClose, content }) {
                   <ul className="space-y-2 ml-4">
                     {seccion.lista.map((item, i) => (
                       <li key={i} className="flex items-start gap-2">
-                        <Icon name="fa-check" className="text-sm mt-1" style={{ color: '#4DA8C4' }} />
-                        <span style={{ color: '#374151' }}>{item}</span>
+                        <Icon name="fa-check" className="text-sm mt-1" style={footerAccentText} />
+                        <span style={footerDarkText}>{item}</span>
                       </li>
                     ))}
                   </ul>
@@ -834,7 +845,7 @@ function ModalDocumentacion({ onClose, content }) {
                   <div className="space-y-2">
                     {seccion.opciones.map((opcion, i) => (
                       <div key={i} className="p-3 rounded-lg border-2" style={{ borderColor: '#E8F4F8' }}>
-                        <span style={{ color: '#374151' }}>{opcion}</span>
+                        <span style={footerDarkText}>{opcion}</span>
                       </div>
                     ))}
                   </div>
@@ -849,8 +860,8 @@ function ModalDocumentacion({ onClose, content }) {
                 )}
 
                 {seccion.grafica === 'linea' && (
-                  <div className="p-4 rounded-xl" style={{ backgroundColor: '#F3F9FB' }}>
-                    <h4 className="text-sm font-semibold mb-4" style={{ color: '#004B63' }}>{locale === 'en' ? 'Evolution' : 'Evolución'}</h4>
+                  <div className="p-4 rounded-xl" style={footerLightBg}>
+                    <h4 className="text-sm font-semibold mb-4" style={footerPrimaryText}>{locale === 'en' ? 'Evolution' : 'Evolución'}</h4>
                     <div className="flex items-end justify-between h-40 gap-2">
                       {seccion.datos.map((d, i) => {
                         const max = Math.max(...seccion.datos.map(x => x.engagement || x.valor || 100));
@@ -864,7 +875,7 @@ function ModalDocumentacion({ onClose, content }) {
                                 backgroundColor: i === seccion.datos.length - 1 ? '#004B63' : '#4DA8C4' 
                               }}
                             />
-                            <span className="text-xs mt-2" style={{ color: '#6B7280' }}>{d.anio}</span>
+                            <span className="text-xs mt-2" style={footerMutedText}>{d.anio}</span>
                           </div>
                         );
                       })}
@@ -873,8 +884,8 @@ function ModalDocumentacion({ onClose, content }) {
                 )}
 
                 {seccion.grafica === 'barras' && (
-                  <div className="p-4 rounded-xl" style={{ backgroundColor: '#F3F9FB' }}>
-                    <h4 className="text-sm font-semibold mb-4" style={{ color: '#004B63' }}>{locale === 'en' ? 'Metrics' : 'Métricas'}</h4>
+                  <div className="p-4 rounded-xl" style={footerLightBg}>
+                    <h4 className="text-sm font-semibold mb-4" style={footerPrimaryText}>{locale === 'en' ? 'Metrics' : 'Métricas'}</h4>
                     <div className="space-y-3">
                       {seccion.datos.map((d, i) => {
                         const max = Math.max(...seccion.datos.map(x => x.antes || x.despues || x.valor || 100));
@@ -883,8 +894,8 @@ function ModalDocumentacion({ onClose, content }) {
                         return (
                           <div key={i}>
                             <div className="flex justify-between text-sm mb-1">
-                              <span style={{ color: '#374151' }}>{d.categoria}</span>
-                              <span className="font-semibold" style={{ color: '#004B63' }}>{d.despues || d.valor}%</span>
+                              <span style={footerDarkText}>{d.categoria}</span>
+                              <span className="font-semibold" style={footerPrimaryText}>{d.despues || d.valor}%</span>
                             </div>
                             <div className="h-3 rounded-full overflow-hidden" style={{ backgroundColor: '#E5E7EB' }}>
                               <div 
@@ -900,8 +911,8 @@ function ModalDocumentacion({ onClose, content }) {
                 )}
 
                 {seccion.grafica === 'dona' && (
-                  <div className="p-4 rounded-xl" style={{ backgroundColor: '#F3F9FB' }}>
-                    <h4 className="text-sm font-semibold mb-4" style={{ color: '#004B63' }}>{locale === 'en' ? 'Distribution' : 'Distribución'}</h4>
+                  <div className="p-4 rounded-xl" style={footerLightBg}>
+                    <h4 className="text-sm font-semibold mb-4" style={footerPrimaryText}>{locale === 'en' ? 'Distribution' : 'Distribución'}</h4>
                     <div className="flex items-center justify-center gap-6">
                       <div className="relative w-28 h-28">
                         <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
@@ -935,7 +946,7 @@ function ModalDocumentacion({ onClose, content }) {
                             <span className="w-3 h-3 rounded-full" style={{ 
                               backgroundColor: ['#004B63', '#4DA8C4', '#66CCCC', '#88D4E5'][i] 
                             }} />
-                            <span style={{ color: '#374151' }}>{d.nombre}: {d.valor}%</span>
+                            <span style={footerDarkText}>{d.nombre}: {d.valor}%</span>
                           </div>
                         ))}
                       </div>
@@ -947,10 +958,10 @@ function ModalDocumentacion({ onClose, content }) {
                   <div className="overflow-x-auto">
                     <table className="w-full text-sm">
                       <thead>
-                        <tr style={{ backgroundColor: '#F3F9FB' }}>
-                          <th className="px-4 py-2 text-left font-semibold" style={{ color: '#004B63' }}>{locale === 'en' ? 'Method' : 'Método'}</th>
-                          <th className="px-4 py-2 text-left font-semibold" style={{ color: '#004B63' }}>Route</th>
-                          <th className="px-4 py-2 text-left font-semibold" style={{ color: '#004B63' }}>{locale === 'en' ? 'Description' : 'Descripción'}</th>
+                        <tr style={footerLightBg}>
+                          <th className="px-4 py-2 text-left font-semibold" style={footerPrimaryText}>{locale === 'en' ? 'Method' : 'Método'}</th>
+                          <th className="px-4 py-2 text-left font-semibold" style={footerPrimaryText}>Route</th>
+                          <th className="px-4 py-2 text-left font-semibold" style={footerPrimaryText}>{locale === 'en' ? 'Description' : 'Descripción'}</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -962,8 +973,8 @@ function ModalDocumentacion({ onClose, content }) {
                                 color: ep.metodo === 'GET' ? '#166534' : ep.metodo === 'POST' ? '#1E40AF' : '#92400E'
                               }}>{ep.metodo}</span>
                             </td>
-                            <td className="px-4 py-2 font-mono text-xs" style={{ color: '#374151' }}>{ep.ruta}</td>
-                            <td className="px-4 py-2" style={{ color: '#374151' }}>{ep.descripcion}</td>
+                            <td className="px-4 py-2 font-mono text-xs" style={footerDarkText}>{ep.ruta}</td>
+                            <td className="px-4 py-2" style={footerDarkText}>{ep.descripcion}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -984,22 +995,22 @@ function ModalDocumentacion({ onClose, content }) {
                 )}
 
                 {seccion.detalle && (
-                  <div className="grid grid-cols-2 gap-4 p-4 rounded-xl" style={{ backgroundColor: '#F3F9FB' }}>
+                  <div className="grid grid-cols-2 gap-4 p-4 rounded-xl" style={footerLightBg}>
                     <div>
-                      <span className="text-xs" style={{ color: '#6B7280' }}>Base URL</span>
-                      <p className="font-mono text-sm" style={{ color: '#004B63' }}>{seccion.detalle.base}</p>
+                      <span className="text-xs" style={footerMutedText}>Base URL</span>
+                      <p className="font-mono text-sm" style={footerPrimaryText}>{seccion.detalle.base}</p>
                     </div>
                     <div>
-                      <span className="text-xs" style={{ color: '#6B7280' }}>Format</span>
-                      <p className="font-mono text-sm" style={{ color: '#004B63' }}>{seccion.detalle.formato}</p>
+                      <span className="text-xs" style={footerMutedText}>Format</span>
+                      <p className="font-mono text-sm" style={footerPrimaryText}>{seccion.detalle.formato}</p>
                     </div>
                     <div>
-                      <span className="text-xs" style={{ color: '#6B7280' }}>Auth</span>
-                      <p className="font-mono text-sm" style={{ color: '#004B63' }}>{seccion.detalle.autenticacion}</p>
+                      <span className="text-xs" style={footerMutedText}>Auth</span>
+                      <p className="font-mono text-sm" style={footerPrimaryText}>{seccion.detalle.autenticacion}</p>
                     </div>
                     <div>
-                      <span className="text-xs" style={{ color: '#6B7280' }}>Version</span>
-                      <p className="font-mono text-sm" style={{ color: '#004B63' }}>{seccion.detalle.version}</p>
+                      <span className="text-xs" style={footerMutedText}>Version</span>
+                      <p className="font-mono text-sm" style={footerPrimaryText}>{seccion.detalle.version}</p>
                     </div>
                   </div>
                 )}
@@ -1008,17 +1019,17 @@ function ModalDocumentacion({ onClose, content }) {
                   <div className="overflow-x-auto">
                     <table className="w-full text-sm">
                       <thead>
-                        <tr style={{ backgroundColor: '#F3F9FB' }}>
-                          <th className="px-4 py-2 text-left font-semibold" style={{ color: '#004B63' }}>LMS</th>
-                          <th className="px-4 py-2 text-left font-semibold" style={{ color: '#004B63' }}>Type</th>
-                          <th className="px-4 py-2 text-left font-semibold" style={{ color: '#004B63' }}>Status</th>
+                        <tr style={footerLightBg}>
+                          <th className="px-4 py-2 text-left font-semibold" style={footerPrimaryText}>LMS</th>
+                          <th className="px-4 py-2 text-left font-semibold" style={footerPrimaryText}>Type</th>
+                          <th className="px-4 py-2 text-left font-semibold" style={footerPrimaryText}>Status</th>
                         </tr>
                       </thead>
                       <tbody>
                         {seccion.integraciones.map((int, i) => (
                           <tr key={i} className="border-b" style={{ borderColor: '#E5E7EB' }}>
-                            <td className="px-4 py-2 font-medium" style={{ color: '#374151' }}>{int.lms}</td>
-                            <td className="px-4 py-2" style={{ color: '#374151' }}>{int.tipo}</td>
+                            <td className="px-4 py-2 font-medium" style={footerDarkText}>{int.lms}</td>
+                            <td className="px-4 py-2" style={footerDarkText}>{int.tipo}</td>
                             <td className="px-4 py-2">
                               <span className="px-2 py-1 rounded text-xs" style={{ 
                                 backgroundColor: int.estado === 'Production' || int.estado === 'Producción' ? '#DCFCE7' : '#FEF3C7',
@@ -1036,8 +1047,8 @@ function ModalDocumentacion({ onClose, content }) {
                   <div className="space-y-4">
                     {seccion.faqs.map((faq, i) => (
                       <div key={i} className="p-4 rounded-xl border-2" style={{ borderColor: '#E8F4F8' }}>
-                        <h4 className="font-semibold mb-2" style={{ color: '#004B63' }}>{faq.q}</h4>
-                        <p className="text-sm" style={{ color: '#374151' }}>{faq.a}</p>
+                        <h4 className="font-semibold mb-2" style={footerPrimaryText}>{faq.q}</h4>
+                        <p className="text-sm" style={footerDarkText}>{faq.a}</p>
                       </div>
                     ))}
                   </div>
@@ -1053,14 +1064,14 @@ function ModalDocumentacion({ onClose, content }) {
                   src="/images/logo-edutechlife.webp" 
                   alt="Edutechlife" 
                   className="h-6 w-auto"
-                  style={{ filter: 'brightness(0) invert(1)' }}
+                  style={footerLogoInvert}
                 />
-                <span className="text-sm" style={{ color: '#6B7280' }}>{t('footer.docs')}</span>
+                <span className="text-sm" style={footerMutedText}>{t('footer.docs')}</span>
               </div>
               <button 
                 onClick={() => setSelectedDoc(null)}
                 className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-                style={{ backgroundColor: '#004B63', color: '#FFFFFF' }}
+                style={footerPrimaryButton}
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#003d52'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#004B63'}
               >
@@ -1078,20 +1089,20 @@ function ModalDocumentacion({ onClose, content }) {
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
       <div 
         className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl p-6 md:p-8"
-        style={{ backgroundColor: '#FFFFFF' }}
+        style={footerWhiteBg}
         onClick={(e) => e.stopPropagation()}
       >
-        <button onClick={onClose} className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center transition-colors hover:bg-gray-100" style={{ color: '#004B63' }}>
+        <button onClick={onClose} className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center transition-colors hover:bg-gray-100" style={footerPrimaryText}>
           <Icon name="fa-xmark" className="text-xl" />
         </button>
         
         <div className="flex items-center gap-4 mb-6">
           <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ backgroundColor: '#004B63' }}>
-            <Icon name="fa-folder-open" className="text-2xl" style={{ color: '#FFFFFF' }} />
+            <Icon name="fa-folder-open" className="text-2xl" style={footerWhiteText} />
           </div>
           <div>
-            <h2 className="text-2xl font-bold" style={{ color: '#004B63' }}>{t('footer.docs')}</h2>
-            <p className="text-sm" style={{ color: '#4DA8C4' }}>{content.helpSubtitle}</p>
+            <h2 className="text-2xl font-bold" style={footerPrimaryText}>{t('footer.docs')}</h2>
+            <p className="text-sm" style={footerAccentText}>{content.helpSubtitle}</p>
           </div>
         </div>
 
@@ -1105,24 +1116,24 @@ function ModalDocumentacion({ onClose, content }) {
               style={{ borderColor: '#E8F4F8', backgroundColor: '#FAFDFF' }}
               onClick={() => setSelectedDoc(doc.id)}
             >
-              <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#E8F4F8' }}>
-                <Icon name={doc.icono} className="text-lg" style={{ color: '#004B63' }} />
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={footerLighterBg}>
+                <Icon name={doc.icono} className="text-lg" style={footerPrimaryText} />
               </div>
               <div className="flex-1">
-                <h3 className="font-semibold" style={{ color: '#004B63' }}>{doc.titulo}</h3>
+                <h3 className="font-semibold" style={footerPrimaryText}>{doc.titulo}</h3>
                 <p className="text-sm text-gray-600">{doc.descripcion}</p>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-xs" style={{ color: '#4DA8C4' }}>{doc.tiempo}</span>
-                <Icon name="fa-chevron-right" className="text-sm" style={{ color: '#4DA8C4' }} />
+                <span className="text-xs" style={footerAccentText}>{doc.tiempo}</span>
+                <Icon name="fa-chevron-right" className="text-sm" style={footerAccentText} />
               </div>
             </div>
           ))}
 
-          <div className="mt-6 p-5 rounded-xl" style={{ backgroundColor: '#E8F4F8' }}>
+          <div className="mt-6 p-5 rounded-xl" style={footerLighterBg}>
             <div className="flex items-center gap-3 mb-2">
-              <Icon name="fa-life-ring" className="text-lg" style={{ color: '#004B63' }} />
-              <h3 className="font-semibold" style={{ color: '#004B63' }}>{content.helpNeedHelp}</h3>
+              <Icon name="fa-life-ring" className="text-lg" style={footerPrimaryText} />
+              <h3 className="font-semibold" style={footerPrimaryText}>{content.helpNeedHelp}</h3>
             </div>
             <p className="text-sm text-gray-600">{content.helpNeedHelpDesc}</p>
           </div>
@@ -1140,7 +1151,7 @@ function ModalPrivacidad({ onClose, content }) {
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
       <div 
         className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl"
-        style={{ backgroundColor: '#FFFFFF' }}
+        style={footerWhiteBg}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b" style={{ backgroundColor: '#004B63', borderColor: '#003d52' }}>
@@ -1149,14 +1160,14 @@ function ModalPrivacidad({ onClose, content }) {
               src="/images/logo-edutechlife.webp" 
               alt="Edutechlife" 
               className="h-8 w-auto"
-              style={{ filter: 'brightness(0) invert(1)' }}
+              style={footerLogoInvert}
             />
             <span className="text-white font-medium text-sm">{t('footer.privacy')}</span>
           </div>
           <button 
             onClick={onClose} 
             className="w-9 h-9 rounded-full flex items-center justify-center transition-colors hover:bg-white/20"
-            style={{ color: '#FFFFFF' }}
+            style={footerWhiteText}
           >
             <Icon name="fa-xmark" className="text-lg" />
           </button>
@@ -1164,22 +1175,22 @@ function ModalPrivacidad({ onClose, content }) {
 
         <div className="px-6 md:px-10 py-6 space-y-6">
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold" style={{ color: '#004B63' }}>{t('footer.privacy')}</h1>
-            <p className="text-sm" style={{ color: '#4DA8C4' }}>{c.lastUpdate}</p>
+            <h1 className="text-2xl font-bold" style={footerPrimaryText}>{t('footer.privacy')}</h1>
+            <p className="text-sm" style={footerAccentText}>{c.lastUpdate}</p>
           </div>
 
           <div className="space-y-6">
             {c.sections.map((section, si) => (
               <section key={si} className="space-y-3">
-                <h2 className="text-lg font-bold" style={{ color: '#004B63' }}>{section.title}</h2>
-                <p className="text-base leading-relaxed" style={{ color: '#374151' }}>{section.content}</p>
+                <h2 className="text-lg font-bold" style={footerPrimaryText}>{section.title}</h2>
+                <p className="text-base leading-relaxed" style={footerDarkText}>{section.content}</p>
 
                 {section.items && (
                   <ul className="space-y-2 ml-4">
                     {section.items.map((item, ii) => (
                       <li key={ii} className="flex items-start gap-2">
-                        <Icon name="fa-check" className="text-sm mt-1" style={{ color: '#4DA8C4' }} />
-                        <span style={{ color: '#374151' }}>{item}</span>
+                        <Icon name="fa-check" className="text-sm mt-1" style={footerAccentText} />
+                        <span style={footerDarkText}>{item}</span>
                       </li>
                     ))}
                   </ul>
@@ -1188,9 +1199,9 @@ function ModalPrivacidad({ onClose, content }) {
                 {section.uses && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {section.uses.map((use, ui) => (
-                      <div key={ui} className="p-4 rounded-xl" style={{ backgroundColor: '#F3F9FB' }}>
-                        <h4 className="font-semibold mb-2" style={{ color: '#004B63' }}>{use.title}</h4>
-                        <p className="text-sm" style={{ color: '#374151' }}>{use.desc}</p>
+                      <div key={ui} className="p-4 rounded-xl" style={footerLightBg}>
+                        <h4 className="font-semibold mb-2" style={footerPrimaryText}>{use.title}</h4>
+                        <p className="text-sm" style={footerDarkText}>{use.desc}</p>
                       </div>
                     ))}
                   </div>
@@ -1199,9 +1210,9 @@ function ModalPrivacidad({ onClose, content }) {
                 {section.security && (
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {section.security.map((item, ii) => (
-                      <div key={ii} className="p-3 rounded-xl text-center" style={{ backgroundColor: '#E8F4F8' }}>
-                        <Icon name={item.icon} className="text-xl mb-2" style={{ color: '#004B63' }} />
-                        <p className="text-xs" style={{ color: '#374151' }}>{item.label}</p>
+                      <div key={ii} className="p-3 rounded-xl text-center" style={footerLighterBg}>
+                        <Icon name={item.icon} className="text-xl mb-2" style={footerPrimaryText} />
+                        <p className="text-xs" style={footerDarkText}>{item.label}</p>
                       </div>
                     ))}
                   </div>
@@ -1218,14 +1229,14 @@ function ModalPrivacidad({ onClose, content }) {
                 src="/images/logo-edutechlife.webp" 
                 alt="Edutechlife" 
                 className="h-6 w-auto"
-                style={{ filter: 'brightness(0) invert(1)' }}
+                style={footerLogoInvert}
               />
-              <span className="text-sm" style={{ color: '#6B7280' }}>{t('footer.privacy')}</span>
+              <span className="text-sm" style={footerMutedText}>{t('footer.privacy')}</span>
             </div>
             <button 
               onClick={onClose}
               className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-              style={{ backgroundColor: '#004B63', color: '#FFFFFF' }}
+              style={footerPrimaryButton}
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#003d52'}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#004B63'}
             >
@@ -1246,7 +1257,7 @@ function ModalTerminos({ onClose, content }) {
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
       <div 
         className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl"
-        style={{ backgroundColor: '#FFFFFF' }}
+        style={footerWhiteBg}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b" style={{ backgroundColor: '#004B63', borderColor: '#003d52' }}>
@@ -1255,14 +1266,14 @@ function ModalTerminos({ onClose, content }) {
               src="/images/logo-edutechlife.webp" 
               alt="Edutechlife" 
               className="h-8 w-auto"
-              style={{ filter: 'brightness(0) invert(1)' }}
+              style={footerLogoInvert}
             />
             <span className="text-white font-medium text-sm">{t('footer.terms')}</span>
           </div>
           <button 
             onClick={onClose} 
             className="w-9 h-9 rounded-full flex items-center justify-center transition-colors hover:bg-white/20"
-            style={{ color: '#FFFFFF' }}
+            style={footerWhiteText}
           >
             <Icon name="fa-xmark" className="text-lg" />
           </button>
@@ -1270,15 +1281,15 @@ function ModalTerminos({ onClose, content }) {
 
         <div className="px-6 md:px-10 py-6 space-y-6">
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold" style={{ color: '#004B63' }}>{t('footer.terms')}</h1>
-            <p className="text-sm" style={{ color: '#4DA8C4' }}>{c.lastUpdate}</p>
+            <h1 className="text-2xl font-bold" style={footerPrimaryText}>{t('footer.terms')}</h1>
+            <p className="text-sm" style={footerAccentText}>{c.lastUpdate}</p>
           </div>
 
           <div className="space-y-6">
             {c.sections.map((section, si) => (
               <section key={si} className="space-y-3">
-                <h2 className="text-lg font-bold" style={{ color: '#004B63' }}>{section.title}</h2>
-                <p className="text-base leading-relaxed" style={{ color: '#374151' }}>{section.content}</p>
+                <h2 className="text-lg font-bold" style={footerPrimaryText}>{section.title}</h2>
+                <p className="text-base leading-relaxed" style={footerDarkText}>{section.content}</p>
 
                 {section.prohibitions && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -1302,14 +1313,14 @@ function ModalTerminos({ onClose, content }) {
                 src="/images/logo-edutechlife.webp" 
                 alt="Edutechlife" 
                 className="h-6 w-auto"
-                style={{ filter: 'brightness(0) invert(1)' }}
+                style={footerLogoInvert}
               />
-              <span className="text-sm" style={{ color: '#6B7280' }}>{t('footer.terms')}</span>
+              <span className="text-sm" style={footerMutedText}>{t('footer.terms')}</span>
             </div>
             <button 
               onClick={onClose}
               className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-              style={{ backgroundColor: '#004B63', color: '#FFFFFF' }}
+              style={footerPrimaryButton}
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#003d52'}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#004B63'}
             >
@@ -1368,19 +1379,19 @@ function ModalContacto({ onClose }) {
         <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
         <div 
           className="relative w-full max-w-md mx-4 overflow-hidden rounded-2xl"
-          style={{ backgroundColor: '#FFFFFF' }}
+          style={footerWhiteBg}
           onClick={(e) => e.stopPropagation()}
         >
           <div className="p-8 text-center">
             <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#DCFCE7' }}>
               <Icon name="fa-check" className="text-3xl" style={{ color: '#16A34A' }} />
             </div>
-            <h3 className="text-xl font-bold mb-2" style={{ color: '#004B63' }}>{t('footer.contact_modal.success_title')}</h3>
+            <h3 className="text-xl font-bold mb-2" style={footerPrimaryText}>{t('footer.contact_modal.success_title')}</h3>
             <p className="text-gray-600 mb-6">{t('footer.contact_modal.success_desc')}</p>
             <button
               onClick={handleClose}
               className="px-6 py-2 rounded-full font-semibold transition-colors"
-              style={{ backgroundColor: '#004B63', color: '#FFFFFF' }}
+              style={footerPrimaryButton}
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#003d52'}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#004B63'}
             >
@@ -1397,7 +1408,7 @@ function ModalContacto({ onClose }) {
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
       <div 
         className="relative w-full max-w-2xl mx-4 overflow-hidden rounded-2xl max-h-[90vh] overflow-y-auto"
-        style={{ backgroundColor: '#FFFFFF' }}
+        style={footerWhiteBg}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -1416,11 +1427,11 @@ function ModalContacto({ onClose }) {
               src="/images/logo-edutechlife.webp" 
               alt="Edutechlife" 
               className="h-10 w-auto"
-              style={{ filter: 'brightness(0) invert(1)' }}
+              style={footerLogoInvert}
             />
             <div>
-              <h3 className="text-xl font-bold" style={{ color: '#004B63' }}>{t('header.contact_us')}</h3>
-              <p className="text-sm" style={{ color: '#4DA8C4' }}>{t('nav.contact_subtitle')}</p>
+              <h3 className="text-xl font-bold" style={footerPrimaryText}>{t('header.contact_us')}</h3>
+              <p className="text-sm" style={footerAccentText}>{t('nav.contact_subtitle')}</p>
             </div>
           </div>
         </div>
@@ -1430,55 +1441,55 @@ function ModalContacto({ onClose }) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Información de contacto */}
             <div className="space-y-4">
-              <h4 className="font-bold" style={{ color: '#004B63' }}>{t('footer.contact_modal.contact_info')}</h4>
+              <h4 className="font-bold" style={footerPrimaryText}>{t('footer.contact_modal.contact_info')}</h4>
               
               <div className="space-y-3">
-                <div className="flex items-center gap-3 p-3 rounded-xl" style={{ backgroundColor: '#F3F9FB' }}>
+                <div className="flex items-center gap-3 p-3 rounded-xl" style={footerLightBg}>
                   <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#4DA8C4' }}>
-                    <Icon name="fa-envelope" className="text-sm" style={{ color: '#FFFFFF' }} />
+                    <Icon name="fa-envelope" className="text-sm" style={footerWhiteText} />
                   </div>
                   <div>
-                    <p className="text-xs" style={{ color: '#6B7280' }}>{t('footer.contact_modal.email')}</p>
-                    <p className="text-sm font-medium" style={{ color: '#004B63' }}>{t('footer.contact_email_text')}</p>
+                    <p className="text-xs" style={footerMutedText}>{t('footer.contact_modal.email')}</p>
+                    <p className="text-sm font-medium" style={footerPrimaryText}>{t('footer.contact_email_text')}</p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 p-3 rounded-xl" style={{ backgroundColor: '#F3F9FB' }}>
+                <div className="flex items-center gap-3 p-3 rounded-xl" style={footerLightBg}>
                   <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#4DA8C4' }}>
-                    <Icon name="fa-phone" className="text-sm" style={{ color: '#FFFFFF' }} />
+                    <Icon name="fa-phone" className="text-sm" style={footerWhiteText} />
                   </div>
                   <div>
-                    <p className="text-xs" style={{ color: '#6B7280' }}>{t('footer.contact_modal.phone')}</p>
-                    <p className="text-sm font-medium" style={{ color: '#004B63' }}>{t('footer.contact_phone_text')}</p>
+                    <p className="text-xs" style={footerMutedText}>{t('footer.contact_modal.phone')}</p>
+                    <p className="text-sm font-medium" style={footerPrimaryText}>{t('footer.contact_phone_text')}</p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 p-3 rounded-xl" style={{ backgroundColor: '#F3F9FB' }}>
+                <div className="flex items-center gap-3 p-3 rounded-xl" style={footerLightBg}>
                   <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#4DA8C4' }}>
-                    <Icon name="fa-location-dot" className="text-sm" style={{ color: '#FFFFFF' }} />
+                    <Icon name="fa-location-dot" className="text-sm" style={footerWhiteText} />
                   </div>
                   <div>
-                    <p className="text-xs" style={{ color: '#6B7280' }}>{t('footer.contact_modal.address')}</p>
-                    <p className="text-sm font-medium" style={{ color: '#004B63' }}>{t('footer.contact_address_text')}</p>
+                    <p className="text-xs" style={footerMutedText}>{t('footer.contact_modal.address')}</p>
+                    <p className="text-sm font-medium" style={footerPrimaryText}>{t('footer.contact_address_text')}</p>
                   </div>
                 </div>
               </div>
 
               {/* Horario */}
-              <div className="p-4 rounded-xl" style={{ backgroundColor: '#E8F4F8' }}>
-                <h5 className="font-semibold mb-2" style={{ color: '#004B63' }}>{t('footer.contact_modal.schedule_title')}</h5>
+              <div className="p-4 rounded-xl" style={footerLighterBg}>
+                <h5 className="font-semibold mb-2" style={footerPrimaryText}>{t('footer.contact_modal.schedule_title')}</h5>
                 <div className="space-y-1 text-sm">
                   <div className="flex justify-between">
-                    <span style={{ color: '#374151' }}>{t('footer.contact_modal.mon_fri')}</span>
-                    <span style={{ color: '#6B7280' }}>9:00 - 18:00</span>
+                    <span style={footerDarkText}>{t('footer.contact_modal.mon_fri')}</span>
+                    <span style={footerMutedText}>9:00 - 18:00</span>
                   </div>
                   <div className="flex justify-between">
-                    <span style={{ color: '#374151' }}>{t('footer.contact_modal.saturday')}</span>
-                    <span style={{ color: '#6B7280' }}>10:00 - 14:00</span>
+                    <span style={footerDarkText}>{t('footer.contact_modal.saturday')}</span>
+                    <span style={footerMutedText}>10:00 - 14:00</span>
                   </div>
                   <div className="flex justify-between">
-                    <span style={{ color: '#374151' }}>{t('footer.contact_modal.sunday')}</span>
-                    <span style={{ color: '#6B7280' }}>{t('footer.contact_modal.closed')}</span>
+                    <span style={footerDarkText}>{t('footer.contact_modal.sunday')}</span>
+                    <span style={footerMutedText}>{t('footer.contact_modal.closed')}</span>
                   </div>
                   <div className="flex justify-between pt-1 border-t" style={{ borderColor: '#CBD5E1' }}>
                     <span style={{ color: '#004B63', fontWeight: '600' }}>{t('footer.contact_modal.live_chat')}</span>
@@ -1489,9 +1500,9 @@ function ModalContacto({ onClose }) {
 
               {/* Redes sociales */}
               <div>
-                <h5 className="font-semibold mb-2" style={{ color: '#004B63' }}>{t('footer.contact_modal.follow_us')}</h5>
+                <h5 className="font-semibold mb-2" style={footerPrimaryText}>{t('footer.contact_modal.follow_us')}</h5>
                 <div className="flex gap-2">
-                  <a href="https://web.facebook.com/eductechlife/" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full flex items-center justify-center transition-colors" style={{ backgroundColor: '#004B63', color: '#FFFFFF' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#003d52'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#004B63'}>
+                  <a href="https://web.facebook.com/eductechlife/" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full flex items-center justify-center transition-colors" style={footerPrimaryButton} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#003d52'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#004B63'}>
                     <Icon name="fa-facebook-f" className="text-sm" />
                   </a>
                   <a href="https://www.instagram.com/edu_techlife/" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full flex items-center justify-center transition-colors" style={{ backgroundColor: '#4DA8C4', color: '#FFFFFF' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#66CCCC'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#4DA8C4'}>
@@ -1512,22 +1523,22 @@ function ModalContacto({ onClose }) {
 
             {/* Formulario */}
             <div>
-              <h4 className="font-bold mb-4" style={{ color: '#004B63' }}>{t('footer.contact_modal.form_title')}</h4>
+              <h4 className="font-bold mb-4" style={footerPrimaryText}>{t('footer.contact_modal.form_title')}</h4>
               <form onSubmit={handleSubmit} className="space-y-3">
                  <div>
-                    <label htmlFor="footer-nombre" className="block text-sm font-semibold mb-1" style={{ color: '#004B63' }}>{t('footer.contact_modal.label_name')}</label>
+                    <label htmlFor="footer-nombre" className="block text-sm font-semibold mb-1" style={footerPrimaryText}>{t('footer.contact_modal.label_name')}</label>
                     <input type="text" id="footer-nombre" name="nombre" value={formData.nombre} onChange={handleChange} required className="w-full px-4 py-2.5 rounded-xl text-sm" style={{ border: '2px solid #E5E7EB', color: '#004B63', outline: 'none' }} placeholder={t('footer.contact_modal.placeholder_name')} onFocus={(e) => e.target.style.borderColor = '#4DA8C4'} onBlur={(e) => e.target.style.borderColor = '#E5E7EB' } autoComplete="name" />
                  </div>
                  <div>
-                    <label htmlFor="footer-email" className="block text-sm font-semibold mb-1" style={{ color: '#004B63' }}>{t('footer.contact_modal.label_email')}</label>
+                    <label htmlFor="footer-email" className="block text-sm font-semibold mb-1" style={footerPrimaryText}>{t('footer.contact_modal.label_email')}</label>
                     <input type="email" id="footer-email" name="email" value={formData.email} onChange={handleChange} required className="w-full px-4 py-2.5 rounded-xl text-sm" style={{ border: '2px solid #E5E7EB', color: '#004B63', outline: 'none' }} placeholder={t('footer.contact_modal.placeholder_email')} onFocus={(e) => e.target.style.borderColor = '#4DA8C4'} onBlur={(e) => e.target.style.borderColor = '#E5E7EB' } autoComplete="email" />
                  </div>
                  <div>
-                    <label htmlFor="footer-telefono" className="block text-sm font-semibold mb-1" style={{ color: '#004B63' }}>{t('footer.contact_modal.label_phone')}</label>
+                    <label htmlFor="footer-telefono" className="block text-sm font-semibold mb-1" style={footerPrimaryText}>{t('footer.contact_modal.label_phone')}</label>
                     <input type="tel" id="footer-telefono" name="telefono" value={formData.telefono} onChange={handleChange} className="w-full px-4 py-2.5 rounded-xl text-sm" style={{ border: '2px solid #E5E7EB', color: '#004B63', outline: 'none' }} placeholder={t('footer.contact_modal.placeholder_phone')} onFocus={(e) => e.target.style.borderColor = '#4DA8C4'} onBlur={(e) => e.target.style.borderColor = '#E5E7EB' } autoComplete="tel" />
                  </div>
                  <div>
-                    <label htmlFor="footer-motivo" className="block text-sm font-semibold mb-1" style={{ color: '#004B63' }}>{t('footer.contact_modal.label_reason')}</label>
+                    <label htmlFor="footer-motivo" className="block text-sm font-semibold mb-1" style={footerPrimaryText}>{t('footer.contact_modal.label_reason')}</label>
                     <select id="footer-motivo" name="motivo" value={formData.motivo} onChange={handleChange} className="w-full px-4 py-2.5 rounded-xl text-sm bg-white" style={{ border: '2px solid #E5E7EB', color: '#004B63', outline: 'none' }} onFocus={(e) => e.target.style.borderColor = '#4DA8C4'} onBlur={(e) => e.target.style.borderColor = '#E5E7EB' }>
                       <option value="">{t('footer.contact_modal.reason_placeholder')}</option>
                       <option value="informacion">{t('footer.contact_modal.reason_info')}</option>
@@ -1548,10 +1559,10 @@ function ModalContacto({ onClose }) {
         {/* Footer */}
         <div className="px-6 py-3 border-t flex items-center justify-between" style={{ borderColor: '#E5E7EB', backgroundColor: '#F9FAFB' }}>
           <div className="flex items-center gap-2">
-            <img src="/images/logo-edutechlife.webp" alt="Edutechlife" loading="lazy" className="h-5 w-auto" style={{ filter: 'brightness(0) invert(1)' }} />
+            <img src="/images/logo-edutechlife.webp" alt="Edutechlife" loading="lazy" className="h-5 w-auto" style={footerLogoInvert} />
             <span className="text-xs" style={{ color: '#9CA3AF' }}>{t('footer.contact')}</span>
           </div>
-          <button onClick={handleClose} className="text-sm" style={{ color: '#6B7280' }} onMouseEnter={(e) => e.currentTarget.style.color = '#004B63'} onMouseLeave={(e) => e.currentTarget.style.color = '#6B7280'}>
+          <button onClick={handleClose} className="text-sm" style={footerMutedText} onMouseEnter={(e) => e.currentTarget.style.color = '#004B63'} onMouseLeave={(e) => e.currentTarget.style.color = '#6B7280'}>
             {t('common.close')}
           </button>
         </div>

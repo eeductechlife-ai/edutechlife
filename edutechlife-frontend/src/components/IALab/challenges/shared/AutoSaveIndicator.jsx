@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react'
+import PropTypes from 'prop-types';;
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../../../utils/iconMapping.jsx';
 
@@ -50,6 +51,11 @@ const AutoSaveIndicator = ({ response }) => {
       </AnimatePresence>
     </div>
   );
+};
+
+
+AutoSaveIndicator.propTypes = {
+  response: PropTypes.any,
 };
 
 export default AutoSaveIndicator;

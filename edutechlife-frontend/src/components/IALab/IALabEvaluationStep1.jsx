@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react'
+import PropTypes from 'prop-types';;
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
 
@@ -20,7 +21,7 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
     });
 
     // Parsear respuesta existente si hay
-    React.useEffect(() => {
+    useEffect(() => {
         if (response) {
             try {
                 const parsed = JSON.parse(response);
@@ -346,6 +347,13 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
             </div>
         </div>
     );
+};
+
+
+IALabEvaluationStep1.propTypes = {
+  exercise: PropTypes.any,
+  response: PropTypes.any,
+  onResponseChange: PropTypes.any,
 };
 
 export default IALabEvaluationStep1;

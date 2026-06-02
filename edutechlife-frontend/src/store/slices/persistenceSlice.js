@@ -3,11 +3,13 @@
  *
  * Estado: syncFromPersistence, clearProgressFromStorage, bookmark CRUD,
  *         valerioWelcomed, sidebarState, progressCache, storage get/set,
- *         persistGamificationState, loadGamificationState,
  *         challenge/exam attempt limits (remaining, cooldown, decrement)
  *
- * LS keys usadas: todas en LS_KEYS (VIEWED_RESOURCES, COMPLETED_VIDEOS,
- *   LESSON_PROGRESS, XP, STREAK, BADGES, BOOKMARKED_RESOURCES, etc.)
+ * LS keys usadas: BOOKMARKED_RESOURCES, COMPLETED_VIDEOS, VALERIO_WELCOMED,
+ *   SIDEBAR_STATE, PROGRESS_CACHE, VIEWED_RESOURCES, attempt keys
+ *
+ * La persistencia de gamificación (xp, streak, badges, etc.) se maneja
+ * automáticamente vía Zustand persist middleware en ialabStore.js.
  *
  * Cross-slice: syncFromPersistence escribe en gamification, lesson, progress
  *   (xp, streak, badges, lessonProgress, completedModules, courseProgress, etc.)
@@ -33,7 +35,16 @@ export const createPersistenceSlice = (set, get) => ({
       ? Math.max(storeProgress, incomingProgress)
       : (storeProgress > 0 ? storeProgress : (incomingProgress > 0 ? incomingProgress : 0));
 
-    const localGamification = state.loadGamificationState();
+    const localGamification = {
+      xp: state.xp, streak: state.streak,
+      lastActivityDate: state.lastActivityDate,
+      badges: state.badges, badgesDates: state.badgesDates,
+      lessonProgress: state.lessonProgress,
+      checkpointAnswers: state.checkpointAnswers,
+      forumPostCount: state.forumPostCount,
+      forumCommentCount: state.forumCommentCount,
+      startDate: state.startDate,
+    };
     const remoteGamification = data.gamification;
     const mergedGamification = remoteGamification ? {
       xp: Math.max(localGamification.xp, remoteGamification.xp || 0),
@@ -69,12 +80,13 @@ export const createPersistenceSlice = (set, get) => ({
       checkpointAnswers: mergedGamification.checkpointAnswers,
       forumPostCount: mergedGamification.forumPostCount,
       forumCommentCount: mergedGamification.forumCommentCount,
-      startDate: mergedGamification.startDate || state.loadGamificationState().startDate || new Date().toISOString(),
+      startDate: mergedGamification.startDate || state.startDate || new Date().toISOString(),
     });
   },
 
   clearProgressFromStorage: () => {
     Object.values(LS_KEYS).forEach(key => ls.remove(key));
+    try { localStorage.removeItem('ialab-store'); } catch {}
   },
 
   getBookmarkedResources: () => ls.get(LS_KEYS.BOOKMARKED_RESOURCES, []),
@@ -118,35 +130,6 @@ export const createPersistenceSlice = (set, get) => ({
   },
   storageSetString: (key, value) => {
     ls.set(key, value);
-  },
-
-  // ==================== PERSISTENCIA DE GAMIFICACIÓN ====================
-  persistGamificationState: () => {
-    const state = get();
-    ls.set(LS_KEYS.LESSON_PROGRESS, state.lessonProgress);
-    ls.set(LS_KEYS.XP, state.xp);
-    ls.set(LS_KEYS.STREAK, state.streak);
-    ls.set(LS_KEYS.LAST_ACTIVITY_DATE, state.lastActivityDate);
-    ls.set(LS_KEYS.BADGES, state.badges);
-    ls.set(LS_KEYS.BADGES_DATES, state.badgesDates);
-    ls.set(LS_KEYS.CHECKPOINT_ANSWERS, state.checkpointAnswers);
-    ls.set(LS_KEYS.FORUM_POST_COUNT, state.forumPostCount);
-    ls.set(LS_KEYS.FORUM_COMMENT_COUNT, state.forumCommentCount);
-    ls.set(LS_KEYS.START_DATE, state.startDate);
-  },
-
-  loadGamificationState: () => {
-    const lessonProgress = ls.get(LS_KEYS.LESSON_PROGRESS, {});
-    const xp = ls.get(LS_KEYS.XP, 0);
-    const streak = ls.get(LS_KEYS.STREAK, 0);
-    const lastActivityDate = ls.get(LS_KEYS.LAST_ACTIVITY_DATE, null);
-    const badges = ls.get(LS_KEYS.BADGES, []);
-    const badgesDates = ls.get(LS_KEYS.BADGES_DATES, {});
-    const checkpointAnswers = ls.get(LS_KEYS.CHECKPOINT_ANSWERS, {});
-    const forumPostCount = ls.get(LS_KEYS.FORUM_POST_COUNT, 0);
-    const forumCommentCount = ls.get(LS_KEYS.FORUM_COMMENT_COUNT, 0);
-    const startDate = ls.get(LS_KEYS.START_DATE, null);
-    return { lessonProgress, xp, streak, lastActivityDate, badges, badgesDates, checkpointAnswers, forumPostCount, forumCommentCount, startDate };
   },
 
   // ==================== LÍMITE DE INTENTOS ====================

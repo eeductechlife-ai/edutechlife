@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react'
+import PropTypes from 'prop-types';;
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../../../utils/iconMapping.jsx';
 import { useTranslation } from '../../../../i18n/I18nProvider';
@@ -267,9 +268,9 @@ const EthicsStep2 = ({ exercise, response, onResponseChange, topic = '', exercis
                   <AnimatePresence>
                     {isSelected && (
                       <motion.div
-                        initial={shouldReduceMotion ? false : { opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
+                        initial={shouldReduceMotion ? false : { opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
                         transition={{ duration: 0.2 }}
                         className="px-4 pb-4 space-y-3"
                       >
@@ -381,6 +382,16 @@ const EthicsStep2 = ({ exercise, response, onResponseChange, topic = '', exercis
       />
     </div>
   );
+};
+
+
+EthicsStep2.propTypes = {
+  exercise: PropTypes.any,
+  response: PropTypes.any,
+  onResponseChange: PropTypes.any,
+  topic: PropTypes.any,
+  exercises: PropTypes.any,
+  biases: PropTypes.any,
 };
 
 export default EthicsStep2;

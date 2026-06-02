@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'
+import PropTypes from 'prop-types';;
 import { motion, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
@@ -50,10 +51,11 @@ const CourseCompletionSection = ({ hasCertificate, courseProgress, onViewCertifi
           </div>
           <div className="h-2 bg-white/15 rounded-full overflow-hidden">
             <motion.div
-              initial={{ width: '0%' }}
-              animate={{ width: `${Math.min(courseProgress, 100)}%` }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.3, ease: 'easeOut' }}
               className="h-full bg-gradient-to-r from-[#FFD166] to-corporate rounded-full"
+              style={{ width: `${Math.min(courseProgress, 100)}%` }}
             />
           </div>
         </div>
@@ -115,7 +117,7 @@ const CourseCompletionSection = ({ hasCertificate, courseProgress, onViewCertifi
 
           {/* Botón Ver Certificado */}
           <motion.button
-            whileHover={prefersReducedMotion ? {} : { boxShadow: '0 0 20px rgba(255,209,102,0.3)' }}
+            whileHover={prefersReducedMotion ? {} : { scale: 1.03 }}
             whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
             onClick={onViewCertificate}
             className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-white rounded-xl text-petroleum font-bold text-xs shadow-md hover:shadow-lg transition-all duration-300"
@@ -127,6 +129,13 @@ const CourseCompletionSection = ({ hasCertificate, courseProgress, onViewCertifi
       </div>
     </motion.div>
   );
+};
+
+
+CourseCompletionSection.propTypes = {
+  hasCertificate: PropTypes.any,
+  courseProgress: PropTypes.any,
+  onViewCertificate: PropTypes.any,
 };
 
 export default CourseCompletionSection;

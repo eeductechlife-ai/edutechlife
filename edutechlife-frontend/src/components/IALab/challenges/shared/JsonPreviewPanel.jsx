@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
+import PropTypes from 'prop-types';;
 import { Icon } from '../../../../utils/iconMapping.jsx';
 
 const JsonPreviewPanel = ({ functionName, description, parameters }) => {
@@ -45,6 +46,13 @@ const JsonPreviewPanel = ({ functionName, description, parameters }) => {
       )}
     </div>
   );
+};
+
+
+JsonPreviewPanel.propTypes = {
+  functionName: PropTypes.any,
+  description: PropTypes.any,
+  parameters: PropTypes.any,
 };
 
 export default JsonPreviewPanel;

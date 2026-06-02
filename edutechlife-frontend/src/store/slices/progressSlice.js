@@ -2,7 +2,7 @@
  * progressSlice — Module progress, scoring, exam/challenge/resource tracking
  *
  * Estado: moduleProgress, completedModules, courseProgress, completedExams,
- *         completedVideos, completedInfographics, completedActivities,
+ *         completedInfographics, completedActivities,
  *         challengeScores, isLoadingProgress, syncStatus, isUsingJWT,
  *         userId, userRole
  *
@@ -31,7 +31,6 @@ export const createProgressSlice = (set, get) => ({
   moduleProgress: INITIAL_MODULE_PROGRESS,
   completedModules: [],
   courseProgress: 0,
-  completedVideos: [],
   completedExams: ls.get(LS_KEYS.COMPLETED_EXAMS, {}),
   completedInfographics: [],
   completedActivities: [],

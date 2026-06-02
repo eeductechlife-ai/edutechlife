@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import ValerioAvatar from '../../ValerioAvatar';
 import { stopSpeech } from '../../../utils/speech';
@@ -55,6 +55,15 @@ const ValerioPanelHeader = ({ valerioState, setValerioState, currentModule, user
       </div>
     </div>
   );
+};
+
+
+ValerioPanelHeader.propTypes = {
+  valerioState: PropTypes.any,
+  setValerioState: PropTypes.any,
+  currentModule: PropTypes.any,
+  userLevel: PropTypes.any,
+  onClose: PropTypes.any,
 };
 
 export default ValerioPanelHeader;

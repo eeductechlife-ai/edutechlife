@@ -12,7 +12,8 @@
  * - Delegación a ResourceViewerModal para visualización completa
  */
 
-import React, { useState, lazy, Suspense, useCallback } from 'react';
+import React, { useState, lazy, Suspense, useCallback } from 'react'
+import PropTypes from 'prop-types';;
 import { motion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { cn } from '../forum/forumDesignSystem';
@@ -265,6 +266,14 @@ const ResourceViewer = ({
       )}
     </motion.div>
   );
+};
+
+
+ResourceViewer.propTypes = {
+  resource: PropTypes.any,
+  onOpenViewerModal: PropTypes.any,
+  onOpenImmersiveView: PropTypes.any,
+  onOpenOVA: PropTypes.any,
 };
 
 export default ResourceViewer;

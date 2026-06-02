@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react'
+import PropTypes from 'prop-types';;
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { useTranslation } from '../../../i18n/I18nProvider';
 
@@ -37,7 +38,7 @@ const IALabForumSearchBar = ({ onSearch }) => {
         <Icon name="fa-search" className={`text-sm transition-colors ${isFocused ? 'text-petroleum' : 'text-slate-600'}`} />
         <input
           ref={inputRef}
-          type="text"
+          type="search" inputMode="search"
           value={query}
           onChange={(e) => handleChange(e.target.value)}
           onFocus={() => setIsFocused(true)}
@@ -47,13 +48,18 @@ const IALabForumSearchBar = ({ onSearch }) => {
           maxLength={200}
         />
         {query && (
-          <button onClick={handleClear} className="text-slate-600 hover:text-slate-600 transition-colors">
+          <button onClick={handleClear} aria-label="Limpiar búsqueda" className="min-w-[44px] min-h-[44px] text-slate-600 hover:text-slate-600 transition-colors">
             <Icon name="fa-xmark" className="text-sm" />
           </button>
         )}
       </div>
     </div>
   );
+};
+
+
+IALabForumSearchBar.propTypes = {
+  onSearch: PropTypes.any,
 };
 
 export default IALabForumSearchBar;

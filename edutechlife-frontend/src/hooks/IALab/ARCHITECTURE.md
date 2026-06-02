@@ -2,17 +2,17 @@
 
 ## Resumen
 
-11 hooks principales + 5 sub-hooks de foro. ~4,100 líneas totales.
-Solo 1 tiene tests (useSidebarState: 17 tests, 223 líneas).
+15 hooks principales + 5 sub-hooks de foro.
+11/15 hooks tienen tests.
 
 ## Hooks principales
 
 | Hook | Lines | Store | Context | API externa | Tests |
 |------|-------|-------|---------|-------------|-------|
-| useIALabQuiz | 934 | ✅ getState() | ✅ | ❌ | ❌ |
+| useIALabQuiz | 353 | ✅ getState() | ✅ | ❌ | ❌ |
 | useIALabProgress | 550 | ✅ getState() | ✅ | Supabase | ❌ |
 | useIALabSynthesizer | 535 | ❌ | ✅ | DeepSeek | ❌ |
-| useIALabEvaluation | 417 | ❌ | ❌ | DeepSeek | ❌ |
+| useIALabEvaluation | 788 | ❌ | ❌ | DeepSeek | ❌ |
 | useIALabForum | 364 | ❌ | ❌ | Supabase | ❌ |
 | useSidebarState | 164 | ✅ full hook | ❌ | ❌ | ✅ (17) |
 | useSupabaseContent | 177 | ❌ | ❌ | Supabase | ❌ |
@@ -85,6 +85,16 @@ y patrón #3 solo para operaciones fire-and-forget.
 - Fetch de contenido desde Supabase (module_content, lessons, topics, resources)
 - localStorage cache con TTL 5 min
 - Fallback a constantes hardcodeadas
+
+## Hooks sin tests (4)
+
+| Hook | Lines | Propósito |
+|------|-------|-----------|
+| useCelebrationEffects | — | Efectos visuales de celebración |
+| useIdlePause | — | Pausa por inactividad |
+| usePullToRefresh | — | Pull-to-refresh táctil |
+| useSoundEffects | — | Efectos de sonido |
+| useSwipeNavigation | — | Navegación por swipe |
 
 ## Reglas para hooks nuevos
 1. No mezclar data estática con lógica — extraer a archivos data/

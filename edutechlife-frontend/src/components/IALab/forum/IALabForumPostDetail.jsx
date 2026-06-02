@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from 'react'
+import PropTypes from 'prop-types';;
 import { motion } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import useForumComments from '../../../hooks/IALab/forum/useForumComments';
@@ -95,6 +96,13 @@ const IALabForumPostDetail = ({ post, onBack, onAction }) => {
       </div>
     </motion.div>
   );
+};
+
+
+IALabForumPostDetail.propTypes = {
+  post: PropTypes.any,
+  onBack: PropTypes.any,
+  onAction: PropTypes.any,
 };
 
 export default IALabForumPostDetail;

@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../../../utils/iconMapping.jsx';
 
@@ -53,6 +53,14 @@ const StepFeedback = ({ completed, total, hints = [], t }) => {
       </motion.div>
     </AnimatePresence>
   );
+};
+
+
+StepFeedback.propTypes = {
+  completed: PropTypes.any,
+  total: PropTypes.any,
+  hints: PropTypes.any,
+  t: PropTypes.any,
 };
 
 export default StepFeedback;

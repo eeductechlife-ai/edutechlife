@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
+import PropTypes from 'prop-types';;
 import { Icon } from '../../../../utils/iconMapping.jsx';
 import { useTranslation } from '../../../../i18n/I18nProvider';
 
@@ -27,6 +28,11 @@ const ExampleToggle = ({ example }) => {
       )}
     </div>
   );
+};
+
+
+ExampleToggle.propTypes = {
+  example: PropTypes.any,
 };
 
 export default ExampleToggle;

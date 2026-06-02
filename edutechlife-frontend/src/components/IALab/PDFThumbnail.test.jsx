@@ -5,7 +5,6 @@
  * con doble clic para visualización inmersiva
  */
 
-import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import PDFThumbnail from './PDFThumbnail';
@@ -39,28 +38,28 @@ describe('PDFThumbnail Component', () => {
     expect(screen.getByText(mockProps.description)).toBeInTheDocument();
     
     // Verifica que se rendericen los metadatos
-    expect(screen.getAllByText(`${mockProps.pages} páginas`).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('ialab.pdf_thumbnail.pages_label').length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText(mockProps.size)).toBeInTheDocument();
-    expect(screen.getByText('PDF')).toBeInTheDocument();
+    expect(screen.getByText('ialab.pdf_thumbnail.pdf_label')).toBeInTheDocument();
     
     // Verifica el indicador de doble clic
-    expect(screen.getAllByText(/Doble clic/).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('ialab.pdf_thumbnail.double_click').length).toBeGreaterThanOrEqual(1);
   });
 
   test('shows immersive view on double click', async () => {
     render(<PDFThumbnail {...mockProps} />);
     
     // Encuentra el contenedor de la miniatura
-    const thumbnail = screen.getByLabelText(`Abrir ${mockProps.title} (clic para nueva pestaña, doble clic para vista inmersiva)`);
+    const thumbnail = screen.getByLabelText('ialab.pdf_thumbnail.aria_label');
     
     // Simula doble clic
     fireEvent.doubleClick(thumbnail);
     
     // Verifica que se abra la vista inmersiva
     await waitFor(() => {
-      expect(screen.getByText('Vista inmersiva')).toBeInTheDocument();
-      expect(screen.getByText('Cerrar Visor')).toBeInTheDocument();
-      expect(screen.getByText('Volver al Dashboard')).toBeInTheDocument();
+      expect(screen.getByText('ialab.pdf_thumbnail.immersive_view')).toBeInTheDocument();
+      expect(screen.getByText('ialab.pdf_thumbnail.close_viewer')).toBeInTheDocument();
+      expect(screen.getByText('ialab.pdf_thumbnail.back')).toBeInTheDocument();
     });
   });
 
@@ -68,21 +67,21 @@ describe('PDFThumbnail Component', () => {
     render(<PDFThumbnail {...mockProps} />);
     
     // Abre la vista inmersiva
-    const thumbnail = screen.getByLabelText(`Abrir ${mockProps.title} (clic para nueva pestaña, doble clic para vista inmersiva)`);
+    const thumbnail = screen.getByLabelText('ialab.pdf_thumbnail.aria_label');
     fireEvent.doubleClick(thumbnail);
     
     // Verifica que esté abierta
     await waitFor(() => {
-      expect(screen.getByText('Cerrar Visor')).toBeInTheDocument();
+      expect(screen.getByText('ialab.pdf_thumbnail.close_viewer')).toBeInTheDocument();
     });
     
     // Cierra la vista inmersiva
-    const closeButton = screen.getByText('Cerrar Visor');
+    const closeButton = screen.getByText('ialab.pdf_thumbnail.close_viewer');
     fireEvent.click(closeButton);
     
     // Verifica que se cierre
     await waitFor(() => {
-      expect(screen.queryByText('Cerrar Visor')).not.toBeInTheDocument();
+      expect(screen.queryByText('ialab.pdf_thumbnail.close_viewer')).not.toBeInTheDocument();
     });
   });
 
@@ -90,12 +89,12 @@ describe('PDFThumbnail Component', () => {
     render(<PDFThumbnail {...mockProps} />);
     
     // Abre la vista inmersiva
-    const thumbnail = screen.getByLabelText(`Abrir ${mockProps.title} (clic para nueva pestaña, doble clic para vista inmersiva)`);
+    const thumbnail = screen.getByLabelText('ialab.pdf_thumbnail.aria_label');
     fireEvent.doubleClick(thumbnail);
     
     // Verifica que esté abierta
     await waitFor(() => {
-      expect(screen.getByText('Vista inmersiva')).toBeInTheDocument();
+      expect(screen.getByText('ialab.pdf_thumbnail.immersive_view')).toBeInTheDocument();
     });
     
     // Encuentra el overlay (background)
@@ -106,7 +105,7 @@ describe('PDFThumbnail Component', () => {
     
     // Verifica que se cierre
     await waitFor(() => {
-      expect(screen.queryByText('Vista inmersiva')).not.toBeInTheDocument();
+      expect(screen.queryByText('ialab.pdf_thumbnail.immersive_view')).not.toBeInTheDocument();
     });
   });
 
@@ -114,11 +113,11 @@ describe('PDFThumbnail Component', () => {
     render(<PDFThumbnail {...mockProps} />);
     
     // Abre la vista inmersiva
-    const thumbnail = screen.getByLabelText(`Abrir ${mockProps.title} (clic para nueva pestaña, doble clic para vista inmersiva)`);
+    const thumbnail = screen.getByLabelText('ialab.pdf_thumbnail.aria_label');
     fireEvent.doubleClick(thumbnail);
     
     // Verifica que el botón de descarga tenga el atributo download
-    const downloadButton = screen.getByText('Descargar');
+    const downloadButton = screen.getByText('ialab.pdf_thumbnail.download');
     expect(downloadButton.closest('a')).toHaveAttribute('href', mockProps.pdfUrl);
     expect(downloadButton.closest('a')).toHaveAttribute('download');
   });
@@ -127,12 +126,12 @@ describe('PDFThumbnail Component', () => {
     render(<PDFThumbnail {...mockProps} />);
     
     // Abre la vista inmersiva
-    const thumbnail = screen.getByLabelText(`Abrir ${mockProps.title} (clic para nueva pestaña, doble clic para vista inmersiva)`);
+    const thumbnail = screen.getByLabelText('ialab.pdf_thumbnail.aria_label');
     fireEvent.doubleClick(thumbnail);
     
     // Verifica que el botón de pantalla completa esté presente
     await waitFor(() => {
-      expect(screen.getByText('Pantalla completa')).toBeInTheDocument();
+      expect(screen.getByText('ialab.pdf_thumbnail.fullscreen')).toBeInTheDocument();
     });
   });
 
@@ -140,15 +139,15 @@ describe('PDFThumbnail Component', () => {
     render(<PDFThumbnail {...mockProps} />);
     
     // Verifica atributos ARIA
-    const thumbnail = screen.getByLabelText(`Abrir ${mockProps.title} (clic para nueva pestaña, doble clic para vista inmersiva)`);
-    expect(thumbnail).toHaveAttribute('aria-label', `Abrir ${mockProps.title} (clic para nueva pestaña, doble clic para vista inmersiva)`);
-    expect(thumbnail).toHaveAttribute('title', 'Clic para abrir en nueva pestaña | Doble clic para vista inmersiva');
+    const thumbnail = screen.getByLabelText('ialab.pdf_thumbnail.aria_label');
+    expect(thumbnail).toHaveAttribute('aria-label', 'ialab.pdf_thumbnail.aria_label');
+    expect(thumbnail).toHaveAttribute('title', 'ialab.pdf_thumbnail.title_attr');
     
     // Verifica botones de cierre
     fireEvent.doubleClick(thumbnail);
     
-    const closeButton = screen.getByText('Cerrar Visor');
-    expect(closeButton).toHaveAttribute('aria-label', 'Cerrar visor y volver al dashboard');
+    const closeButton = screen.getByText('ialab.pdf_thumbnail.close_viewer');
+    expect(closeButton).toHaveAttribute('aria-label', 'ialab.pdf_thumbnail.close_aria');
   });
 
   test('blocks body scroll when immersive view is open', async () => {
@@ -158,7 +157,7 @@ describe('PDFThumbnail Component', () => {
     expect(document.body.style.overflow).toBe('');
     
     // Abre la vista inmersiva
-    const thumbnail = screen.getByLabelText(`Abrir ${mockProps.title} (clic para nueva pestaña, doble clic para vista inmersiva)`);
+    const thumbnail = screen.getByLabelText('ialab.pdf_thumbnail.aria_label');
     fireEvent.doubleClick(thumbnail);
     
     // Verifica que se bloquee el scroll
@@ -167,7 +166,7 @@ describe('PDFThumbnail Component', () => {
     });
     
     // Cierra la vista inmersiva
-    const closeButton = screen.getByText('Cerrar Visor');
+    const closeButton = screen.getByText('ialab.pdf_thumbnail.close_viewer');
     fireEvent.click(closeButton);
     
     // Verifica que se restaure el scroll

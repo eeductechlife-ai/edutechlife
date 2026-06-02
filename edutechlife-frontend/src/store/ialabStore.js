@@ -14,6 +14,9 @@
  * @see src/store/ARCHITECTURE.md
  */
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { LS_KEYS } from '@/constants/ialab';
+import { ls } from '@/utils/ialab';
 import { MODULE_QUESTIONS, modules, ALL_LESSONS } from '@/data/ialab';
 import { LAST_MODULE_ID } from '@/constants/ialab';
 import { analyzeQuizFailures, generateRecommendations } from '@/utils/ialab';
@@ -28,7 +31,47 @@ import { createSynthesizerSlice } from './slices/synthesizerSlice';
 import { createCertificateSlice } from './slices/certificateSlice';
 import { createSeguridadSlice } from './slices/seguridadSlice';
 
-export const useIALabStore = create((set, get) => ({
+/**
+ * @typedef {Object} Module
+ * @property {string} id
+ * @property {string} title
+ * @property {string} description
+ * @property {'locked'|'available'|'completed'} status
+ * @property {number} progress
+ * @property {number} score
+ */
+
+/**
+ * @typedef {Object} Streak
+ * @property {number} current
+ * @property {number} best
+ * @property {boolean} atRisk
+ * @property {number} freezes
+ */
+
+/**
+ * @typedef {Object} Badge
+ * @property {string} id
+ * @property {string} name
+ * @property {string} icon
+ * @property {boolean} earned
+ * @property {string} [earnedAt]
+ */
+
+/**
+ * @typedef {Object} IALabState
+ * @property {Module[]} modules
+ * @property {number} activeModule
+ * @property {Streak} streak
+ * @property {Badge[]} badges
+ * @property {string[]} completions
+ * @property {boolean} loading
+ * @property {string|null} error
+ */
+
+export const useIALabStore = create(
+  persist(
+    (set, get) => ({
   ...createPersistenceSlice(set, get),
   ...createGamificationSlice(set, get),
   ...createLessonSlice(set, get),
@@ -292,4 +335,21 @@ export const useIALabStore = create((set, get) => ({
     const weakTopicsByModule = analyzeQuizFailures(state.storageGet);
     return generateRecommendations(state.moduleProgress, state.calculateModuleScore, state.completedExams, state.challengeScores, weakTopicsByModule);
   },
-}));
+}),
+  {
+    name: 'ialab-store',
+    storage: createJSONStorage(() => localStorage),
+    partialize: (state) => ({
+      xp: state.xp,
+      streak: state.streak,
+      lastActivityDate: state.lastActivityDate,
+      startDate: state.startDate,
+      badges: state.badges,
+      badgesDates: state.badgesDates,
+      forumPostCount: state.forumPostCount,
+      forumCommentCount: state.forumCommentCount,
+      lessonProgress: state.lessonProgress,
+      checkpointAnswers: state.checkpointAnswers,
+    }),
+  })
+);

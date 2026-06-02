@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react'
+import PropTypes from 'prop-types';;
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../../../utils/iconMapping.jsx';
 import { useTranslation } from '../../../../i18n/I18nProvider';
@@ -244,8 +245,8 @@ const NotebookStep1 = ({ exercise, response, onResponseChange, topic = '' }) => 
 
                     {selected && entry && (
                       <motion.div
-                        initial={shouldReduceMotion ? false : { opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
+                        initial={shouldReduceMotion ? false : { opacity: 0 }}
+                        animate={{ opacity: 1 }}
                         transition={{ duration: 0.2 }}
                         className="mt-4 ml-0 space-y-3"
                       >
@@ -364,6 +365,14 @@ const NotebookStep1 = ({ exercise, response, onResponseChange, topic = '' }) => 
       />
     </div>
   );
+};
+
+
+NotebookStep1.propTypes = {
+  exercise: PropTypes.any,
+  response: PropTypes.any,
+  onResponseChange: PropTypes.any,
+  topic: PropTypes.any,
 };
 
 export default NotebookStep1;

@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { withTranslation } from '../../i18n/withTranslation';
 
@@ -32,7 +33,7 @@ class SectionErrorBoundary extends Component {
       if (fallback) return fallback;
 
       return (
-        <div className="flex flex-col items-center justify-center py-12 px-6">
+        <div role="alert" aria-live="assertive" className="flex flex-col items-center justify-center py-12 px-6">
           <div className="w-14 h-14 bg-red-50 dark:bg-red-900/20 rounded-2xl flex items-center justify-center mb-4">
             <Icon name="fa-circle-exclamation" className="w-6 h-6 text-red-500" />
           </div>
@@ -82,5 +83,15 @@ class SectionErrorBoundary extends Component {
     return this.props.children;
   }
 }
+
+SectionErrorBoundary.propTypes = {
+  children: PropTypes.node,
+  fallback: PropTypes.node,
+  title: PropTypes.string,
+  message: PropTypes.string,
+  showReload: PropTypes.bool,
+  onRetry: PropTypes.func,
+  t: PropTypes.func,
+};
 
 export default withTranslation(SectionErrorBoundary);

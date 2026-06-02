@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import ValerioClearConfirm from './ValerioClearConfirm';
 import { useTranslation } from '../../../i18n/I18nProvider';
@@ -33,6 +33,8 @@ const ValerioChatInput = ({
             className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-corporate focus:border-transparent text-petroleum-darker placeholder-slate-500 resize-none min-h-[60px] max-h-[120px]"
             disabled={isProcessing}
             rows={2}
+            inputMode="text"
+            autoCapitalize="sentences"
             aria-describedby="input-hint"
           />
           <div className="flex items-center justify-between mt-2">
@@ -94,6 +96,25 @@ const ValerioChatInput = ({
       </div>
     </div>
   );
+};
+
+
+ValerioChatInput.propTypes = {
+  userInput: PropTypes.any,
+  onInputChange: PropTypes.any,
+  onKeyDown: PropTypes.any,
+  onSend: PropTypes.any,
+  onClear: PropTypes.any,
+  onVoiceToggle: PropTypes.any,
+  isProcessing: PropTypes.any,
+  isListening: PropTypes.any,
+  speechSupported: PropTypes.any,
+  speechError: PropTypes.any,
+  showClearConfirm: PropTypes.any,
+  onConfirmClear: PropTypes.any,
+  onCancelClear: PropTypes.any,
+  conversationLength: PropTypes.any,
+  moduleTitle: PropTypes.any,
 };
 
 export default ValerioChatInput;

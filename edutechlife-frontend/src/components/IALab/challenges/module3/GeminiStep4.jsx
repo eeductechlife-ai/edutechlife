@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react'
+import PropTypes from 'prop-types';;
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useTranslation } from '../../../../i18n/I18nProvider';
 import { Icon } from '../../../../utils/iconMapping.jsx';
@@ -193,9 +194,9 @@ const GeminiStep4 = ({ exercise, response, onResponseChange, t: tProp, topic = '
                 {isExpanded && (
                   <motion.div
                     key="content"
-                    initial={shouldReduceMotion ? false : { opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={shouldReduceMotion ? false : { opacity: 0, height: 0 }}
+                    initial={shouldReduceMotion ? false : { opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={shouldReduceMotion ? false : { opacity: 0 }}
                     transition={{ duration: 0.2 }}
                     className="border-t border-slate-100 dark:border-slate-700"
                     id={`section-${key}`}
@@ -248,6 +249,15 @@ const GeminiStep4 = ({ exercise, response, onResponseChange, t: tProp, topic = '
       />
     </div>
   );
+};
+
+
+GeminiStep4.propTypes = {
+  exercise: PropTypes.any,
+  response: PropTypes.any,
+  onResponseChange: PropTypes.any,
+  t: PropTypes.any,
+  topic: PropTypes.any,
 };
 
 export default GeminiStep4;

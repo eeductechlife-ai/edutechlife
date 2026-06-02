@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
 import { FORUM_TYPOGRAPHY, FORUM_EFFECTS, cn } from '../forum/forumDesignSystem';
@@ -330,6 +330,14 @@ const PromptFeedback = ({ feedback, technique, analysis, onCopy }) => {
       )}
     </div>
   );
+};
+
+
+PromptFeedback.propTypes = {
+  feedback: PropTypes.any,
+  technique: PropTypes.any,
+  analysis: PropTypes.any,
+  onCopy: PropTypes.any,
 };
 
 export default PromptFeedback;

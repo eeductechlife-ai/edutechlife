@@ -1,4 +1,5 @@
-import { ALL_LESSONS } from '@/data/ialab.js';
+import PropTypes from 'prop-types';
+import { ALL_LESSONS } from '../../../data/ialab';
 
 const ModuleHeaderSection = ({ moduleData, activeMod, isDescriptionExpanded, setIsDescriptionExpanded, lessonProgress, t }) => {
   return (
@@ -34,6 +35,16 @@ const ModuleHeaderSection = ({ moduleData, activeMod, isDescriptionExpanded, set
       )}
     </>
   );
+};
+
+
+ModuleHeaderSection.propTypes = {
+  moduleData: PropTypes.any,
+  activeMod: PropTypes.any,
+  isDescriptionExpanded: PropTypes.any,
+  setIsDescriptionExpanded: PropTypes.any,
+  lessonProgress: PropTypes.any,
+  t: PropTypes.any,
 };
 
 export default ModuleHeaderSection;

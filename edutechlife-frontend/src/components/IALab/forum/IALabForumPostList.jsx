@@ -1,4 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react'
+import PropTypes from 'prop-types';;
+import { FixedSizeList } from 'react-window';
 import { motion } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import useForumPosts, { POST_CATEGORIES } from '../../../hooks/IALab/forum/useForumPosts';
@@ -111,19 +113,31 @@ const IALabForumPostList = ({ onSelectPost, onAction }) => {
             </div>
           </div>
 
-          {posts.map((post, index) => (
-            <IALabForumPostCard
-              key={post.id}
-              post={post}
-              voteState={voteStates[post.id]}
-              onVote={() => toggleVote(post.id, post.upvotes)}
-              onSelect={() => onSelectPost(post)}
-              onShowProfile={() => showHoverProfile(post.user_id)}
-              onHideProfile={hideHoverProfile}
-              formatCount={formatCount}
-              index={index}
-            />
-          ))}
+          <FixedSizeList
+            height={600}
+            itemCount={posts.length}
+            itemSize={180}
+            itemData={posts}
+            overscanCount={3}
+          >
+            {({ data, index, style }) => {
+              const post = data[index];
+              return (
+                <div style={style} key={post.id}>
+                  <IALabForumPostCard
+                    post={post}
+                    voteState={voteStates[post.id]}
+                    onVote={() => toggleVote(post.id, post.upvotes)}
+                    onSelect={() => onSelectPost(post)}
+                    onShowProfile={() => showHoverProfile(post.user_id)}
+                    onHideProfile={hideHoverProfile}
+                    formatCount={formatCount}
+                    index={index}
+                  />
+                </div>
+              );
+            }}
+          </FixedSizeList>
 
           {hasMore && (
             <div ref={loaderRef} className="flex justify-center py-4">
@@ -134,6 +148,12 @@ const IALabForumPostList = ({ onSelectPost, onAction }) => {
       )}
     </div>
   );
+};
+
+
+IALabForumPostList.propTypes = {
+  onSelectPost: PropTypes.any,
+  onAction: PropTypes.any,
 };
 
 export default IALabForumPostList;

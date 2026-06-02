@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { Icon } from '../../../../utils/iconMapping.jsx';
 
@@ -30,29 +30,32 @@ const VerdictSummaryBar = ({ claims, t }) => {
       <div className="h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden flex">
         {verified > 0 && (
           <motion.div
-            initial={{ width: 0 }}
-            animate={{ width: `${(verified / total) * 100}%` }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.5, ease: 'easeOut' }}
             className="h-full bg-emerald-500"
             title={`Verified: ${verified}`}
+            style={{ width: `${(verified / total) * 100}%` }}
           />
         )}
         {questionable > 0 && (
           <motion.div
-            initial={{ width: 0 }}
-            animate={{ width: `${(questionable / total) * 100}%` }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.5, ease: 'easeOut', delay: 0.1 }}
             className="h-full bg-amber-500"
             title={`Questionable: ${questionable}`}
+            style={{ width: `${(questionable / total) * 100}%` }}
           />
         )}
         {unverifiable > 0 && (
           <motion.div
-            initial={{ width: 0 }}
-            animate={{ width: `${(unverifiable / total) * 100}%` }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.5, ease: 'easeOut', delay: 0.2 }}
             className="h-full bg-slate-400 dark:bg-slate-500"
             title={`Unverifiable: ${unverifiable}`}
+            style={{ width: `${(unverifiable / total) * 100}%` }}
           />
         )}
       </div>
@@ -91,6 +94,12 @@ const VerdictSummaryBar = ({ claims, t }) => {
       )}
     </motion.div>
   );
+};
+
+
+VerdictSummaryBar.propTypes = {
+  claims: PropTypes.any,
+  t: PropTypes.any,
 };
 
 export default VerdictSummaryBar;

@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState } from 'react'
+import PropTypes from 'prop-types';;
 import { useTranslation } from '../../../../i18n/I18nProvider';
 import { CheckCircle, Check, Award, Star } from 'lucide-react';
 import { Button, Card } from '../shared';
@@ -45,6 +46,12 @@ const questions = [
     answer: 0
   }
 ];
+
+
+QuizScreen.propTypes = {
+  onNext: PropTypes.any,
+  addXp: PropTypes.any,
+};
 
 export default function QuizScreen({ onNext, addXp }) {
   const { t } = useTranslation();

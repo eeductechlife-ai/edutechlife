@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Icon } from '../../utils/iconMapping.jsx';
 
 const ScoreBreakdown = ({ evaluation, isApproved, scoreBarColor, circumference, strokeDashoffset, t }) => (
@@ -64,5 +65,15 @@ const ScoreBreakdown = ({ evaluation, isApproved, scoreBarColor, circumference, 
     </div>
   </div>
 );
+
+
+ScoreBreakdown.propTypes = {
+  evaluation: PropTypes.any,
+  isApproved: PropTypes.any,
+  scoreBarColor: PropTypes.any,
+  circumference: PropTypes.any,
+  strokeDashoffset: PropTypes.any,
+  t: PropTypes.any,
+};
 
 export default ScoreBreakdown;

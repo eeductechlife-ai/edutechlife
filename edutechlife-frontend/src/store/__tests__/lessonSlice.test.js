@@ -247,6 +247,9 @@ describe('lessonSlice — completed videos (localStorage)', () => {
 });
 
 describe('lessonSlice — hasStartedCourse', () => {
+  beforeEach(() => {
+    useIALabStore.setState({ completedVideos: [] });
+  });
   test('returns false initially', () => {
     expect(useIALabStore.getState().hasStartedCourse()).toBe(false);
   });

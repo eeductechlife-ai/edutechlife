@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { cn } from '../../forum/forumDesignSystem';
@@ -66,6 +67,19 @@ const OVANavTabs = ({
       </div>
     </div>
   );
+};
+
+
+OVANavTabs.propTypes = {
+  tabs: PropTypes.any,
+  activeTab: PropTypes.any,
+  onTabChange: PropTypes.any,
+  currentIndex: PropTypes.any,
+  totalTabs: PropTypes.any,
+  onNext: PropTypes.any,
+  onPrev: PropTypes.any,
+  nextLabel: PropTypes.any,
+  prevLabel: PropTypes.any,
 };
 
 export default OVANavTabs;

@@ -1,4 +1,4 @@
-import React from 'react';
+import { Fragment } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabProgressContext } from '../../context/IALabContext';
 import { useTranslation } from '../../i18n/I18nProvider';
@@ -36,7 +36,7 @@ const CertificateProgressBar = () => {
 
       <div className="flex items-center gap-1.5">
         {moduleScores.map((mod, idx) => (
-          <React.Fragment key={mod.id}>
+          <Fragment key={mod.id}>
             <div className="flex-1 flex flex-col items-center gap-1">
               <div
                 className={`w-full h-1.5 rounded-full transition-all duration-500 ${
@@ -65,7 +65,7 @@ const CertificateProgressBar = () => {
             {idx < moduleScores.length - 1 && (
               <div className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-600 flex-shrink-0" />
             )}
-          </React.Fragment>
+          </Fragment>
         ))}
       </div>
     </div>

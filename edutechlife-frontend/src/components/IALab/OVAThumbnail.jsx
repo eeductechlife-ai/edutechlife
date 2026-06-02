@@ -12,7 +12,8 @@
  * - Integración con cuadrícula de recursos
  */
 
-import React, { useState } from 'react';
+import React, { useState } from 'react'
+import PropTypes from 'prop-types';;
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
@@ -216,6 +217,16 @@ const OVAThumbnail = ({
       </AnimatePresence>
     </>
   );
+};
+
+
+OVAThumbnail.propTypes = {
+  title: PropTypes.any,
+  description: PropTypes.any,
+  estimatedTime: PropTypes.any,
+  difficulty: PropTypes.any,
+  interactiveElements: PropTypes.any,
+  onOpenOVA: PropTypes.any,
 };
 
 export default OVAThumbnail;

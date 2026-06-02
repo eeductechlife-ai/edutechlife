@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, memo, useCallback } from 'react'
+import PropTypes from 'prop-types';;
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabProgressContext } from '../../context/IALabContext';
 import { useIALabStore } from '../../store/ialabStore';
 import { useActivityTracker } from '../../hooks/useActivityTracker';
 import { useTranslation } from '../../i18n/I18nProvider';
+import ScoreBreakdown from './ScoreBreakdown';
+import FeedbackPanel from './FeedbackPanel';
 
 const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge', onRetry }) => {
     const { t } = useTranslation();
@@ -20,7 +23,7 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
         setRemainingAttempts(current);
     }, [activityType, activeMod]);
 
-    const handleRetry = () => {
+    const handleRetry = useCallback(() => {
         if (activityType !== 'challenge') return;
         const state = useIALabStore.getState();
         if (!state.canAttemptChallengeRetry(activeMod)) {
@@ -34,7 +37,7 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
         const newVal = state.decrementChallengeAttempt(activeMod);
         setRemainingAttempts(newVal);
         if (onRetry) onRetry();
-    };
+    }, [activityType, activeMod, onRetry, t]);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -172,258 +175,11 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
                         </div>
 
                         {activeTab === 'overview' && (
-                            <div className="space-y-6">
-                                {/* Score circular */}
-                                <div className="bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700 rounded-2xl p-6">
-                                    <div className="flex flex-col md:flex-row items-center gap-8">
-                                        <div className="relative w-48 h-48">
-                                            <svg className="w-full h-full" viewBox="0 0 100 100">
-                                                <circle cx="50" cy="50" r="45" fill="none" stroke="#e2e8f0" strokeWidth="8" />
-                                                <circle
-                                                    cx="50" cy="50" r="45" fill="none"
-                                                    stroke={isApproved ? "var(--color-success)" : "#ef4444"}
-                                                    strokeWidth="8"
-                                                    strokeDasharray={circumference}
-                                                    strokeDashoffset={strokeDashoffset}
-                                                    strokeLinecap="round"
-                                                    transform="rotate(-90 50 50)"
-                                                />
-                                                <text x="50" y="46" textAnchor="middle" className="text-2xl font-bold fill-slate-800">
-                                                    {evaluation.notaGlobal}%
-                                                </text>
-                                                <text x="50" y="60" textAnchor="middle" className="text-xs fill-slate-500">
-                                                    {t('ialab.evaluation.results.final_grade')}
-                                                </text>
-                                            </svg>
-                                        </div>
-
-                                        <div className="flex-1 w-full">
-                                            <h3 className="text-xl font-bold text-slate-800 mb-4">{t('ialab.evaluation.results.performance_analysis')}</h3>
-                                            <div className="space-y-4">
-                                                <div>
-                                                    <div className="flex items-center justify-between mb-1">
-                                                        <span className="text-slate-500">{t('ialab.evaluation.results.status_label')}</span>
-                                                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                                                            isApproved ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'
-                                                        }`}>
-                                                            <Icon name={isApproved ? "fa-check-circle" : "fa-xmark-circle"} className="mr-1" />
-                                                            {isApproved ? t('ialab.evaluation.results.status_approved') : t('ialab.evaluation.results.status_in_progress')}
-                                                        </span>
-                                                    </div>
-                                                    <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
-                                                        <div 
-                                                            className={`h-full bg-gradient-to-r ${scoreBarColor}`}
-                                                            style={{ width: `${evaluation.notaGlobal}%` }}
-                                                        ></div>
-                                                    </div>
-                                                </div>
-
-                                                 <div className="grid grid-cols-2 gap-4">
-                                                    <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-4">
-                                                        <div className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-1">
-                                                            {isApproved ? t('ialab.evaluation.results.mastery_high') : t('ialab.evaluation.results.mastery_medium')}
-                                                        </div>
-                                                        <div className="text-sm text-slate-500 dark:text-slate-400">{t('ialab.evaluation.results.mastery_level')}</div>
-                                                    </div>
-                                                    <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-4">
-                                                        <div className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-1">
-                                                            3/3
-                                                        </div>
-                                                        <div className="text-sm text-slate-500 dark:text-slate-400">{t('ialab.evaluation.results.exercises_completed')}</div>
-                                                    </div>
-                                                </div>
-
-                                                <div className="pt-4 border-t border-slate-100">
-                                                    <h4 className="text-sm font-semibold text-slate-600 mb-3">{t('ialab.evaluation.results.exercise_breakdown')}</h4>
-                                                    <div className="space-y-2">
-                                                        <div className="flex items-center justify-between text-sm">
-                                                            <span className="text-slate-500">{t('ialab.evaluation.results.exercise_1')}</span>
-                                                            <span className={`font-semibold ${
-                                                                (evaluation.nota_ej1 || 0) >= 80 ? 'text-emerald-600' :
-                                                                (evaluation.nota_ej1 || 0) >= 60 ? 'text-amber-600' : 'text-red-600'
-                                                            }`}>{evaluation.nota_ej1 || 0}%</span>
-                                                        </div>
-                                                        <div className="flex items-center justify-between text-sm">
-                                                            <span className="text-slate-500">{t('ialab.evaluation.results.exercise_2')}</span>
-                                                            <span className={`font-semibold ${
-                                                                (evaluation.nota_ej2 || 0) >= 80 ? 'text-emerald-600' :
-                                                                (evaluation.nota_ej2 || 0) >= 60 ? 'text-amber-600' : 'text-red-600'
-                                                            }`}>{evaluation.nota_ej2 || 0}%</span>
-                                                        </div>
-                                                        <div className="flex items-center justify-between text-sm">
-                                                            <span className="text-slate-500">{t('ialab.evaluation.results.exercise_3')}</span>
-                                                            <span className={`font-semibold ${
-                                                                (evaluation.nota_ej3 || 0) >= 80 ? 'text-emerald-600' :
-                                                                (evaluation.nota_ej3 || 0) >= 60 ? 'text-amber-600' : 'text-red-600'
-                                                            }`}>{evaluation.nota_ej3 || 0}%</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Recomendaciones personalizadas */}
-                                <div className="bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700 rounded-2xl p-6">
-                                    <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100 mb-4">{t('ialab.evaluation.results.personalized_recommendations')}</h3>
-                                    <div className="space-y-4">
-                                        {isApproved ? (
-                                            <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
-                                                <div className="flex items-center gap-3 mb-2">
-                                                    <Icon name="fa-star" className="text-emerald-500" />
-                                                    <h4 className="font-semibold text-slate-800">{t('ialab.evaluation.results.congrats_approved')}</h4>
-                                                </div>
-                                                <p className="text-slate-600">
-                                                    {evaluation.notaGlobal >= 90 
-                                                        ? t('ialab.evaluation.results.feedback_exceptional')
-                                                        : evaluation.notaGlobal >= 85
-                                                        ? t('ialab.evaluation.results.feedback_good')
-                                                        : t('ialab.evaluation.results.feedback_passing')
-                                                    }
-                                                </p>
-                                            </div>
-                                        ) : (
-                                            <div className="bg-red-50 border border-red-200 rounded-xl p-4">
-                                                <div className="flex items-center gap-3 mb-2">
-                                                    <Icon name="fa-lightbulb" className="text-red-600" />
-                                                    <h4 className="font-semibold text-slate-800">{t('ialab.evaluation.results.encouragement')}</h4>
-                                                </div>
-                                                <p className="text-slate-600 mb-3">
-                                                    {t('ialab.evaluation.results.need_80')}
-                                                </p>
-                                                <div className="space-y-2">
-                                                    {(evaluation.nota_ej1 || 0) < 80 && (
-                                                        <div className="flex items-start gap-2 text-sm text-slate-600">
-                                                            <Icon name="fa-search" className="text-corporate mt-0.5" />
-                                                            <span dangerouslySetInnerHTML={{ __html: t('ialab.evaluation.results.retry_exercise1_hint') }} />
-                                                        </div>
-                                                    )}
-                                                    {(evaluation.nota_ej2 || 0) < 80 && (
-                                                        <div className="flex items-start gap-2 text-sm text-slate-600">
-                                                            <Icon name="fa-magic" className="text-emerald-500 mt-0.5" />
-                                                            <span dangerouslySetInnerHTML={{ __html: t('ialab.evaluation.results.retry_exercise2_hint') }} />
-                                                        </div>
-                                                    )}
-                                                    {(evaluation.nota_ej3 || 0) < 80 && (
-                                                        <div className="flex items-start gap-2 text-sm text-slate-600">
-                                                            <Icon name="fa-plus-circle" className="text-petroleum mt-0.5" />
-                                                            <span dangerouslySetInnerHTML={{ __html: t('ialab.evaluation.results.retry_exercise3_hint') }} />
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-4">
-                                                <div className="flex items-center gap-2 mb-2">
-                                                    <Icon name="fa-book" className="text-corporate" />
-                                                    <h4 className="font-medium text-slate-800 dark:text-slate-100">{t('ialab.evaluation.results.next_steps')}</h4>
-                                                </div>
-                                                <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
-                                                    <li className="flex items-start gap-2">
-                                                        <Icon name="fa-check" className="text-emerald-500 mt-0.5" />
-                                                        <span>{t('ialab.evaluation.results.next_step_1')}</span>
-                                                    </li>
-                                                    <li className="flex items-start gap-2">
-                                                        <Icon name="fa-check" className="text-emerald-500 mt-0.5" />
-                                                        <span>{t('ialab.evaluation.results.next_step_2')}</span>
-                                                    </li>
-                                                    <li className="flex items-start gap-2">
-                                                        <Icon name="fa-check" className="text-emerald-500 mt-0.5" />
-                                                        <span>{t('ialab.evaluation.results.next_step_3')}</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-4">
-                                                <div className="flex items-center gap-2 mb-2">
-                                                    <Icon name="fa-calendar" className="text-petroleum" />
-                                                    <h4 className="font-medium text-slate-800 dark:text-slate-100">{t('ialab.evaluation.results.next_evaluation')}</h4>
-                                                </div>
-                                                <p className="text-sm text-slate-500 mb-2">
-                                                    {t('ialab.evaluation.results.next_attempt_label')}
-                                                </p>
-                                                <div className="px-3 py-2 bg-petroleum/10 border border-petroleum/20 rounded-lg">
-                                                    <div className="text-petroleum font-medium">{t('ialab.evaluation.results.cooldown_24h')}</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <ScoreBreakdown evaluation={evaluation} isApproved={isApproved} scoreBarColor={scoreBarColor} circumference={circumference} strokeDashoffset={strokeDashoffset} t={t} />
                         )}
 
                         {activeTab === 'feedback' && (
-                            <div className="space-y-6">
-                                {[
-                                        { 
-                                        title: t('ialab.evaluation.results.exercise_1'),
-                                        feedback: evaluation.feedback_ej1,
-                                        nota: evaluation.nota_ej1,
-                                        icon: 'fa-search',
-                                        color: 'text-corporate',
-                                        bgColor: 'bg-corporate/10'
-                                    },
-                                    { 
-                                        title: t('ialab.evaluation.results.exercise_2'),
-                                        feedback: evaluation.feedback_ej2,
-                                        nota: evaluation.nota_ej2,
-                                        icon: 'fa-magic',
-                                        color: 'text-emerald-500',
-                                        bgColor: 'bg-emerald-500/10'
-                                    },
-                                    { 
-                                        title: t('ialab.evaluation.results.exercise_3'),
-                                        feedback: evaluation.feedback_ej3,
-                                        nota: evaluation.nota_ej3,
-                                        icon: 'fa-plus-circle',
-                                        color: 'text-petroleum',
-                                        bgColor: 'bg-petroleum/10'
-                                    }
-                                ].map((exercise, index) => (
-                                    <div key={index} className="bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700 rounded-2xl p-6">
-                                        <div className="flex items-center gap-4 mb-4">
-                                            <div className={`w-12 h-12 rounded-xl ${exercise.bgColor} flex items-center justify-center`}>
-                                                <Icon name={exercise.icon} className={`${exercise.color} text-lg`} />
-                                            </div>
-                                            <div className="flex-1">
-                                                <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">{exercise.title}</h3>
-                                                <p className="text-slate-500 dark:text-slate-400 text-sm">{t('ialab.evaluation.results.detailed_analysis')}</p>
-                                            </div>
-                                            <div className={`px-4 py-2 rounded-lg text-lg font-bold ${
-                                                exercise.nota >= 80 ? 'bg-emerald-50 text-emerald-600' :
-                                                exercise.nota >= 60 ? 'bg-amber-50 text-amber-600' :
-                                                'bg-red-50 text-red-600'
-                                            }`}>
-                                                {exercise.nota}%
-                                            </div>
-                                        </div>
-                                        
-                                        <div className="mb-3">
-                                            <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
-                                                <div 
-                                                    className={`h-full rounded-full transition-all duration-500 ${
-                                                        exercise.nota >= 80 ? 'bg-gradient-to-r from-emerald-500 to-emerald-400' :
-                                                        exercise.nota >= 60 ? 'bg-gradient-to-r from-amber-500 to-amber-400' :
-                                                        'bg-gradient-to-r from-red-500 to-red-400'
-                                                    }`}
-                                                    style={{ width: `${exercise.nota}%` }}
-                                                ></div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-600">
-                                            <div className="flex items-start gap-3">
-                                                <Icon name="fa-comment" className="text-slate-600 mt-1" />
-                                                <p className="text-slate-700 dark:text-slate-200 leading-relaxed whitespace-pre-wrap">
-                                                    {exercise.feedback}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
+                            <FeedbackPanel evaluation={evaluation} t={t} />
                         )}
                     </div>
 
@@ -557,4 +313,12 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
     );
 };
 
-export default IALabEvaluationResults;
+
+IALabEvaluationResults.propTypes = {
+  evaluation: PropTypes.any,
+  onClose: PropTypes.any,
+  activityType: PropTypes.any,
+  onRetry: PropTypes.any,
+};
+
+export default memo(IALabEvaluationResults);

@@ -1,7 +1,14 @@
-import { useEffect } from 'react';
+import { useEffect } from 'react'
+import PropTypes from 'prop-types';;
 import { useTranslation } from '../../../../i18n/I18nProvider';
 import { CheckCircle, Bot, Workflow, ChevronRight } from 'lucide-react';
 import { Button, Card } from '../shared';
+
+
+IntroScreen.propTypes = {
+  onNext: PropTypes.any,
+  addXp: PropTypes.any,
+};
 
 export default function IntroScreen({ onNext, addXp }) {
   const { t } = useTranslation();

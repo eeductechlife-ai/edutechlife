@@ -1,4 +1,5 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense } from 'react'
+import PropTypes from 'prop-types';;
 import { AnimatePresence } from 'framer-motion';
 import { useIALabStore } from '../../store/ialabStore';
 import SectionErrorBoundary from './SectionErrorBoundary';
@@ -80,33 +81,39 @@ const ModalsSection = ({
         </SectionErrorBoundary>
       )}
 
-      <SectionErrorBoundary>
-        <Suspense fallback={<LoadingFallback />}>
-          <CertificatesModal
-            isOpen={showCertificateModal}
-            onClose={() => setShowCertificateModal(false)}
-            initialTab="certificate"
-          />
-        </Suspense>
-      </SectionErrorBoundary>
+      {showCertificateModal && (
+        <SectionErrorBoundary>
+          <Suspense fallback={<LoadingFallback />}>
+            <CertificatesModal
+              isOpen={showCertificateModal}
+              onClose={() => setShowCertificateModal(false)}
+              initialTab="certificate"
+            />
+          </Suspense>
+        </SectionErrorBoundary>
+      )}
 
-      <SectionErrorBoundary>
-        <Suspense fallback={<LoadingFallback />}>
-          <BadgeGalleryModal
-            isOpen={showBadgeGallery}
-            onClose={() => setShowBadgeGallery(false)}
-          />
-        </Suspense>
-      </SectionErrorBoundary>
+      {showBadgeGallery && (
+        <SectionErrorBoundary>
+          <Suspense fallback={<LoadingFallback />}>
+            <BadgeGalleryModal
+              isOpen={showBadgeGallery}
+              onClose={() => setShowBadgeGallery(false)}
+            />
+          </Suspense>
+        </SectionErrorBoundary>
+      )}
 
-      <SectionErrorBoundary>
-        <Suspense fallback={<LoadingFallback />}>
-          <LeaderboardModal
-            isOpen={showLeaderboard}
-            onClose={() => setShowLeaderboard(false)}
-          />
-        </Suspense>
-      </SectionErrorBoundary>
+      {showLeaderboard && (
+        <SectionErrorBoundary>
+          <Suspense fallback={<LoadingFallback />}>
+            <LeaderboardModal
+              isOpen={showLeaderboard}
+              onClose={() => setShowLeaderboard(false)}
+            />
+          </Suspense>
+        </SectionErrorBoundary>
+      )}
 
       {showExamResult && (
         <SectionErrorBoundary>
@@ -164,6 +171,31 @@ const ModalsSection = ({
       )}
     </>
   );
+};
+
+
+ModalsSection.propTypes = {
+  showExamModal: PropTypes.any,
+  handleGlobalAction: PropTypes.any,
+  showQuizModal: PropTypes.any,
+  showValerioPanel: PropTypes.any,
+  showPremiumEvaluationModal: PropTypes.any,
+  setShowPremiumEvaluationModal: PropTypes.any,
+  showCertificateModal: PropTypes.any,
+  setShowCertificateModal: PropTypes.any,
+  showBadgeGallery: PropTypes.any,
+  setShowBadgeGallery: PropTypes.any,
+  showLeaderboard: PropTypes.any,
+  setShowLeaderboard: PropTypes.any,
+  showExamResult: PropTypes.any,
+  activeMod: PropTypes.any,
+  completedExams: PropTypes.any,
+  showHistoryModal: PropTypes.any,
+  setShowHistoryModal: PropTypes.any,
+  showHelpModal: PropTypes.any,
+  setShowHelpModal: PropTypes.any,
+  showChallengeResult: PropTypes.any,
+  setShowChallengeResult: PropTypes.any,
 };
 
 export default React.memo(ModalsSection);

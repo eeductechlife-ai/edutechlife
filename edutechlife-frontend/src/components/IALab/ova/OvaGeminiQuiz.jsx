@@ -1,7 +1,23 @@
+import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { cn } from '../../forum/forumDesignSystem';
 import { useTranslation } from '../../../i18n/I18nProvider';
+
+
+OvaGeminiQuiz.propTypes = {
+  quiz: PropTypes.any,
+  selectedAnswers: PropTypes.any,
+  showResults: PropTypes.any,
+  isAllCorrect: PropTypes.any,
+  answeredCount: PropTypes.any,
+  totalQuestions: PropTypes.any,
+  correctCount: PropTypes.any,
+  handleAnswerSelect: PropTypes.any,
+  handleCheckAnswers: PropTypes.any,
+  handleComplete: PropTypes.any,
+  isES: PropTypes.any,
+};
 
 export default function OvaGeminiQuiz({
   quiz, selectedAnswers, showResults, isAllCorrect, answeredCount,
@@ -90,7 +106,7 @@ export default function OvaGeminiQuiz({
                           "w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold border-2 flex-shrink-0",
                           isSelected && !showResults
                             ? 'bg-corporate border-corporate text-white'
-                            : 'bg-transparent border-slate-300 text-slate-500'
+                            : 'bg-transparent border-slate-300 dark:border-slate-600 text-slate-500 dark:text-slate-400'
                         )}>
                           {opt.id.toUpperCase()}
                         </span>

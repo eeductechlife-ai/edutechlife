@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { useTranslation } from '../../../i18n/I18nProvider';
 
@@ -61,6 +62,11 @@ const InteractiveViewer = ({ resource }) => {
       </div>
     </div>
   );
+};
+
+
+InteractiveViewer.propTypes = {
+  resource: PropTypes.any,
 };
 
 export default InteractiveViewer;

@@ -1,5 +1,6 @@
+import PropTypes from 'prop-types';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Icon } from '@/utils/iconMapping.jsx';
+import { Icon } from '../../../utils/iconMapping.jsx';
 
 const ModuleBookmarkFilter = ({ bookmarkedResources, showBookmarked, setShowBookmarked, toggleBookmark, setSelectedResource, setSelectedResourceType, setViewerModalOpen, t }) => {
   return (
@@ -49,6 +50,18 @@ const ModuleBookmarkFilter = ({ bookmarkedResources, showBookmarked, setShowBook
       </AnimatePresence>
     </>
   );
+};
+
+
+ModuleBookmarkFilter.propTypes = {
+  bookmarkedResources: PropTypes.any,
+  showBookmarked: PropTypes.any,
+  setShowBookmarked: PropTypes.any,
+  toggleBookmark: PropTypes.any,
+  setSelectedResource: PropTypes.any,
+  setSelectedResourceType: PropTypes.any,
+  setViewerModalOpen: PropTypes.any,
+  t: PropTypes.any,
 };
 
 export default ModuleBookmarkFilter;

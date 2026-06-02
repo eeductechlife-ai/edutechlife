@@ -1,4 +1,5 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react'
+import PropTypes from 'prop-types';;
 import { motion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
@@ -216,13 +217,11 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
         initial={{ opacity: 0, y: 20, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
-        className="relative bg-white rounded-xl overflow-hidden shadow-xl"
-        style={{ border: '3px solid #FFD166' }}
+        className="relative bg-white rounded-xl overflow-hidden shadow-xl border-[3px] border-[#FFD166]"
       >
         {/* Outer decorative border */}
         <div
-          className="absolute inset-2 pointer-events-none rounded-lg"
-          style={{ border: '1px solid rgba(255, 209, 102, 0.5)' }}
+          className="absolute inset-2 pointer-events-none rounded-lg border border-[#FFD166]/50"
         />
 
         {/* Corner ornaments */}
@@ -237,10 +236,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
 
         {/* Watermark */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0">
-          <span
-            className="font-black text-[200px] md:text-[250px] opacity-[0.03]"
-            style={{ color: '#004B63' }}
-          >
+          <span className="font-black text-[200px] md:text-[250px] opacity-[0.03] text-petroleum">
             E
           </span>
         </div>
@@ -267,8 +263,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.5 }}
-            className="text-3xl md:text-4xl font-black tracking-[0.2em]"
-            style={{ color: '#004B63' }}
+            className="text-3xl md:text-4xl font-black tracking-[0.2em] text-petroleum"
           >
             {t('ialab.certificate_preview.certificate_title_react')}
           </motion.h2>
@@ -278,8 +273,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ delay: 0.3, duration: 0.6 }}
-            className="w-24 h-0.5 mx-auto my-3"
-            style={{ background: 'linear-gradient(90deg, transparent, #00BCD4, transparent)' }}
+            className="w-24 h-0.5 mx-auto my-3 bg-gradient-to-r from-transparent via-corporate to-transparent"
           />
 
           {/* Course name */}
@@ -287,14 +281,13 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.5 }}
-            className="text-sm md:text-base font-medium tracking-wide uppercase mb-8"
-            style={{ color: '#64748B' }}
+            className="text-sm md:text-base font-medium tracking-wide uppercase mb-8 text-slate-500"
           >
             {COURSE_FULL_NAME}
           </motion.p>
 
           {/* Intro text */}
-          <p className="text-sm mb-2" style={{ color: '#94A3B8' }}>
+          <p className="text-sm mb-2 text-slate-400">
             {t('ialab.certificate_preview.issued_to')}
           </p>
 
@@ -303,8 +296,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5, duration: 0.5 }}
-            className="text-2xl md:text-3xl font-bold mb-3 px-4"
-            style={{ color: '#004B63' }}
+            className="text-2xl md:text-3xl font-bold mb-3 px-4 text-petroleum"
           >
             {displayName}
           </motion.h3>
@@ -314,8 +306,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ delay: 0.6, duration: 0.5 }}
-            className="w-48 h-0.5 mx-auto mb-6"
-            style={{ background: 'linear-gradient(90deg, transparent, rgba(0,75,99,0.3), transparent)' }}
+            className="w-48 h-0.5 mx-auto mb-6 bg-gradient-to-r from-transparent via-petroleum/30 to-transparent"
           />
 
           {/* Description */}
@@ -323,8 +314,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.7, duration: 0.5 }}
-            className="text-sm max-w-md mx-auto leading-relaxed mb-8"
-            style={{ color: '#64748B' }}
+            className="text-sm max-w-md mx-auto leading-relaxed mb-8 text-slate-500"
           >
             {t('ialab.certificate_preview.completed_text', { count: 5, course: COURSE_NAME })}
           </motion.p>
@@ -340,19 +330,19 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
             className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-16"
           >
             <div className="text-center">
-              <p className="text-[10px] uppercase tracking-wider mb-1" style={{ color: '#94A3B8' }}>
+              <p className="text-[10px] uppercase tracking-wider mb-1 text-slate-400">
                 {t('ialab.certificate_preview.issue_date')}
               </p>
-              <p className="text-sm font-bold" style={{ color: '#004B63' }}>
+              <p className="text-sm font-bold text-petroleum">
                 {displayDate}
               </p>
             </div>
 
             <div className="text-center">
-              <p className="text-[10px] uppercase tracking-wider mb-1" style={{ color: '#94A3B8' }}>
+              <p className="text-[10px] uppercase tracking-wider mb-1 text-slate-400">
                 {t('ialab.certificate_preview.cert_number')}
               </p>
-              <p className="text-sm font-bold font-mono" style={{ color: '#004B63' }}>
+              <p className="text-sm font-bold font-mono text-petroleum">
                 {displayCertNumber}
               </p>
             </div>
@@ -365,15 +355,11 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
               className="relative"
             >
               <div
-                className="w-16 h-16 rounded-full flex flex-col items-center justify-center"
-                style={{
-                  background: 'linear-gradient(135deg, #FFD166 0%, #F59E0B 100%)',
-                  boxShadow: '0 4px 15px rgba(255, 209, 102, 0.4)',
-                }}
+                className="w-16 h-16 rounded-full flex flex-col items-center justify-center bg-gradient-to-br from-[#FFD166] to-amber-500 shadow-[0_4px_15px_rgba(255,209,102,0.4)]"
               >
                 {/* Inner circle */}
                 <div className="w-14 h-14 rounded-full border-2 border-white/50 flex flex-col items-center justify-center">
-                  <span className="text-[8px] font-bold leading-tight" style={{ color: '#004B63' }}>
+                  <span className="text-[8px] font-bold leading-tight text-petroleum">
                     {t('ialab.certificate_preview.verified')}
                   </span>
                   <span className="text-[7px] font-semibold leading-tight" style={{ color: 'var(--color-petroleum-dark)' }}>
@@ -383,13 +369,10 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
               </div>
               {/* Shimmer effect */}
               <motion.div
-                className="absolute inset-0 rounded-full overflow-hidden"
+                className="absolute inset-0 rounded-full overflow-hidden bg-gradient-to-r from-transparent via-white/30 to-transparent"
                 initial={{ x: '-100%' }}
                 animate={{ x: '100%' }}
-                transition={{ delay: 1.2, duration: 1.5, repeat: Infinity, repeatDelay: 3 }}
-                style={{
-                  background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%)',
-                }}
+                transition={{ delay: 1.2, duration: 1.5, repeat: 1, repeatDelay: 3 }}
               />
             </motion.div>
           </motion.div>
@@ -431,6 +414,14 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
       </motion.div>
     </div>
   );
+};
+
+
+CertificatePreview.propTypes = {
+  studentName: PropTypes.any,
+  certNumber: PropTypes.any,
+  issuedAt: PropTypes.any,
+  compact: PropTypes.any,
 };
 
 export default CertificatePreview;

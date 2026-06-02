@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { useTranslation } from '../../../i18n/I18nProvider';
 
@@ -107,6 +107,11 @@ const ValerioConversationArea = ({ conversation, isProcessing, moduleTitle }) =>
       )}
     </div>
   );
+};
+
+
+ValerioMessageBubble.propTypes = {
+  msg: PropTypes.any,
 };
 
 export default ValerioConversationArea;

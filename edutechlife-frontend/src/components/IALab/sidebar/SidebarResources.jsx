@@ -1,4 +1,5 @@
-import React from 'react';
+import React from 'react'
+import PropTypes from 'prop-types';;
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
 
@@ -83,5 +84,15 @@ const SidebarResources = ({
     </AnimatePresence>
   </div>
 );
+
+
+SidebarResources.propTypes = {
+  activeMod: PropTypes.any,
+  sidebarDropdowns: PropTypes.any,
+  toggleSidebarDropdown: PropTypes.any,
+  isInfographicCompleted: PropTypes.any,
+  fadeTransition: PropTypes.any,
+  t: PropTypes.any,
+};
 
 export default React.memo(SidebarResources);

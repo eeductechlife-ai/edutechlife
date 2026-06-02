@@ -1,9 +1,13 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react'
+import PropTypes from 'prop-types';;
 import { motion } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { useAuth } from '../../../context/AuthContext';
 import useForumPosts, { POST_CATEGORIES } from '../../../hooks/IALab/forum/useForumPosts';
 import { useTranslation } from '../../../i18n/I18nProvider';
+import useFocusTrap from '../../../hooks/useFocusTrap';
+
+const COOLDOWN_MS = 5000;
 
 const IALabForumCreatePost = ({ onClose, onCreated }) => {
   const { user } = useAuth();
@@ -13,12 +17,19 @@ const IALabForumCreatePost = ({ onClose, onCreated }) => {
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('discussion');
   const [tagsInput, setTagsInput] = useState('');
+  const [lastSubmit, setLastSubmit] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
+
+  const focusTrapRef = useFocusTrap(true);
 
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
     if (!title.trim() || !content.trim()) return;
+
+    const now = Date.now();
+    if (now - lastSubmit < COOLDOWN_MS) return;
+    setLastSubmit(now);
 
     setIsSubmitting(true);
     setError(null);
@@ -36,7 +47,7 @@ const IALabForumCreatePost = ({ onClose, onCreated }) => {
       setError(result.error || t('ialab.forum.create_post.error_generic'));
     }
     setIsSubmitting(false);
-  }, [title, content, category, tagsInput, createPost, onCreated]);
+  }, [title, content, category, tagsInput, createPost, onCreated, lastSubmit]);
 
   const categoryOptions = POST_CATEGORIES.filter(c => c.id !== 'all');
 
@@ -45,6 +56,8 @@ const IALabForumCreatePost = ({ onClose, onCreated }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      ref={focusTrapRef}
+      role="dialog" aria-modal="true" aria-label={t('ialab.forum.create_post.title')}
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
@@ -61,7 +74,7 @@ const IALabForumCreatePost = ({ onClose, onCreated }) => {
             </div>
             <h3 className="text-base font-bold text-petroleum">{t('ialab.forum.create_post.title')}</h3>
           </div>
-          <button onClick={onClose} className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-500 hover:text-slate-700 transition-colors">
+          <button onClick={onClose} aria-label="Cerrar" className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-500 hover:text-slate-700 transition-colors">
             <Icon name="fa-xmark" />
           </button>
         </div>
@@ -161,6 +174,12 @@ const IALabForumCreatePost = ({ onClose, onCreated }) => {
       </motion.div>
     </motion.div>
   );
+};
+
+
+IALabForumCreatePost.propTypes = {
+  onClose: PropTypes.any,
+  onCreated: PropTypes.any,
 };
 
 export default IALabForumCreatePost;

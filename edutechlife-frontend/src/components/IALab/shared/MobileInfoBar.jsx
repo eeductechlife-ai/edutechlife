@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { useTranslation } from '../../../i18n/I18nProvider';
 
 const MobileInfoBar = ({ user, activeMod, courseProgress }) => {
@@ -21,6 +22,13 @@ const MobileInfoBar = ({ user, activeMod, courseProgress }) => {
 };
 
 MobileInfoBar.displayName = 'MobileInfoBar';
+
+
+MobileInfoBar.propTypes = {
+  user: PropTypes.any,
+  activeMod: PropTypes.any,
+  courseProgress: PropTypes.any,
+};
 
 export default MobileInfoBar;
 export { MobileInfoBar };

@@ -35,12 +35,12 @@ AILabPage.jsx (wrapper, lazy load)
     │   └── IALabForumOptimized — forum (lazy loaded)
     │
     └── Lazy-loaded Modals
-        ├── IALabQuizModal (697 lines)
+        ├── IALabQuizModal (411 lines)
         ├── IALabEvaluationModal
         ├── IALabEvaluationModalPremium
         ├── IALabValerioPanel — AI coach
         ├── ExamResultViewer / ChallengeResultViewer
-        ├── ResourceViewerModal (1029 lines)
+        ├── ResourceViewerModal (476 lines)
         │   └── OVA components (lazy): BuildGPT, IntroPrompt, ChatGPTTools,
         │       NotebookLab, EcosystemGuide, Etica, BiasLab, RiskSimulator,
         │       PodcastStudio, NotebookPodcastGuide, NotebookSimulator
@@ -77,7 +77,7 @@ AILabPage.jsx (wrapper, lazy load)
 - **Archivos de test:** ComponentName.test.jsx
 
 ## Reglas de arquitectura (objetivo)
-1. **NO** llamar al store directo desde componentes — usar IALabContext
+1. **PREFERIR** selectores granulares del store (`useIALabStore(s => s.valor)`). El acceso directo al store es aceptable cuando el contexto no agrega valor.
 2. **NO** usar `<style>` tags — usar Tailwind classes o CSS modules
 3. **NO** mutar datos — siempre inmutabilidad
 4. **TODO** componente >400 líneas debe dividirse en subcomponentes
@@ -86,7 +86,8 @@ AILabPage.jsx (wrapper, lazy load)
 
 ## Problemas conocidos
 1. IALabSidebar renderiza DOM duplicado (collapsed + expanded)
-2. ResourceViewerModal (1029 líneas) es un god component
+2. ResourceViewerModal (476 líneas) — se redujo significativamente
 3. 12 componentes OVA usan `<style>` tags inline
 4. 12 componentes OVA sin dark mode
 5. IALab.jsx tiene side-effect en render (setActiveMod)
+6. No existe barrel export (`index.js`) a nivel raíz de componentes/IALab

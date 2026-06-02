@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react'
+import PropTypes from 'prop-types';;
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabProgressContext, useIALabUIContext } from '../../context/IALabContext';
 import { useProgressContext } from '../../context/ProgressContext';
 import { useIALabStore } from '../../store/ialabStore';
 import { useTranslation } from '../../i18n/I18nProvider';
-import StudyPlannerModal from './StudyPlannerModal';
+const StudyPlannerModal = lazy(() => import('./StudyPlannerModal'));
 
 const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenProfile, onOpenHistory, onOpenHelp }) => {
   const { t } = useTranslation();
@@ -178,7 +179,7 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
             <Icon name="fa-cubes" className="text-corporate text-xs" /> {t('mobile_menu.resources')}
           </h3>
           <button onClick={() => toggleSidebarDropdown('recursos')}
-            className="w-11 h-11 rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/30"
+            className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/30"
             aria-label={sidebarDropdowns.recursos ? t('mobile_menu.resources_collapse') : t('mobile_menu.resources_expand')}>
             <Icon name={sidebarDropdowns.recursos ? 'fa-chevron-up' : 'fa-chevron-down'} className="text-xs" />
           </button>
@@ -194,7 +195,7 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
               const completed = isInfographicCompleted(r.id);
               return (
                 <button key={r.id} onClick={() => window.dispatchEvent(new CustomEvent('ialab:openTopic'))}
-                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-petroleum/5 dark:hover:bg-petroleum/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/30 min-h-[44px]">
+                  className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-petroleum/5 dark:hover:bg-petroleum/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/30 min-h-[44px] min-w-[44px]">
                   <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${
                     completed ? 'bg-emerald-50 text-emerald-500' : 'bg-petroleum/8 dark:bg-petroleum/20 text-petroleum dark:text-petroleum'
                   }`}>
@@ -268,10 +269,22 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
         </button>
       </div>
 
-      <StudyPlannerModal isOpen={showStudyPlanner} onClose={() => setShowStudyPlanner(false)} />
+      <Suspense fallback={null}>
+        <StudyPlannerModal isOpen={showStudyPlanner} onClose={() => setShowStudyPlanner(false)} />
+      </Suspense>
 
     </div>
   );
+};
+
+
+IALabMobileMenu.propTypes = {
+  closeMobileMenu: PropTypes.any,
+  toggleDarkMode: PropTypes.any,
+  isDarkMode: PropTypes.any,
+  onOpenProfile: PropTypes.any,
+  onOpenHistory: PropTypes.any,
+  onOpenHelp: PropTypes.any,
 };
 
 export default React.memo(IALabMobileMenu);

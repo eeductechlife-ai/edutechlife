@@ -1,11 +1,11 @@
-import React from 'react';
+import { memo } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabStore } from '../../store/ialabStore';
 import { ALL_LESSONS } from '../../data/ialab';
 import ResourceBadge from '../ui/ResourceBadge';
 import { useTranslation } from '../../i18n/I18nProvider';
 
-const ModuleProgressCard = React.memo(({ moduleId, title, icon, score, config, completedVideos, completedInfographics, completedExams, challengeScores, completedModules }) => {
+const ModuleProgressCard = memo(({ moduleId, title, icon, score, config, completedVideos, completedInfographics, completedExams, challengeScores, completedModules }) => {
   const { t } = useTranslation();
   const lessonProgress = useIALabStore(s => s.lessonProgress);
   const moduleVideos = completedVideos.filter(v => v.startsWith(`m${moduleId}`)).length;

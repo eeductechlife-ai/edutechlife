@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react'
+import PropTypes from 'prop-types';;
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { useTranslation } from '../../../i18n/I18nProvider';
 
@@ -292,6 +293,14 @@ const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded 
       )}
     </div>
   );
+};
+
+
+VideoViewer.propTypes = {
+  resource: PropTypes.any,
+  youtubeDuration: PropTypes.any,
+  durationLoading: PropTypes.any,
+  onVideoEnded: PropTypes.any,
 };
 
 export default VideoViewer;

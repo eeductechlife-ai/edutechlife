@@ -1,4 +1,5 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from 'react'
+import PropTypes from 'prop-types';;
 import { useIALabStore } from '../../store/ialabStore';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
@@ -114,11 +115,10 @@ const RecommendationsPanel = ({ onAction, isLoading }) => {
       <AnimatePresence initial={false}>
         {isOpen && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.2, ease: 'easeInOut' }}
-            className="overflow-hidden"
           >
             <div className="flex flex-col gap-3 pt-2">
               {(['high', 'medium', 'low']).map(urgency => {
@@ -174,6 +174,12 @@ const RecommendationsPanel = ({ onAction, isLoading }) => {
       </AnimatePresence>
     </div>
   );
+};
+
+
+RecommendationsPanel.propTypes = {
+  onAction: PropTypes.any,
+  isLoading: PropTypes.any,
 };
 
 export default React.memo(RecommendationsPanel);

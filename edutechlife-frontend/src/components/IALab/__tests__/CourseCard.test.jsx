@@ -84,30 +84,30 @@ describe('CourseCard', () => {
 
   test('shows progress bar for active courses with progress > 0', () => {
     renderCard();
-    expect(screen.getByText('Progreso')).toBeInTheDocument();
+    expect(screen.getByText('ialab.course_card.progress')).toBeInTheDocument();
     expect(screen.getByText('60%')).toBeInTheDocument();
   });
 
   test('hides progress bar when progress is 0', () => {
     renderCard({ ...baseCourse, progress: 0 });
-    expect(screen.queryByText('Progreso')).not.toBeInTheDocument();
+    expect(screen.queryByText('ialab.course_card.progress')).not.toBeInTheDocument();
   });
 
   test('hides progress bar for coming-soon courses', () => {
     renderCard({ ...baseCourse, status: 'coming-soon' });
-    expect(screen.queryByText('Progreso')).not.toBeInTheDocument();
+    expect(screen.queryByText('ialab.course_card.progress')).not.toBeInTheDocument();
   });
 
   test('shows coming-soon badge for coming-soon courses', () => {
     renderCard({ ...baseCourse, status: 'coming-soon' });
-    expect(screen.getByText('Próximamente')).toBeInTheDocument();
+    expect(screen.getByText('ialab.course_card.status_coming_soon')).toBeInTheDocument();
   });
 
   test('navigates to /ialab when isSignedIn is true', () => {
     const navigate = vi.fn();
     useNavigate.mockReturnValue(navigate);
     renderCard(baseCourse, true);
-    fireEvent.click(screen.getByText('Comenzar'));
+    fireEvent.click(screen.getByText('ialab.course_card.btn_start'));
     expect(navigate).toHaveBeenCalledWith('/ialab');
   });
 
@@ -115,7 +115,7 @@ describe('CourseCard', () => {
     const navigate = vi.fn();
     useNavigate.mockReturnValue(navigate);
     renderCard(baseCourse, false);
-    fireEvent.click(screen.getByText('Inscríbete'));
+    fireEvent.click(screen.getByText('ialab.course_card.btn_enroll'));
     expect(navigate).toHaveBeenCalledWith('/login?returnTo=/ialab');
   });
 
@@ -133,12 +133,12 @@ describe('CourseCard', () => {
 
   test('shows modules count', () => {
     renderCard();
-    expect(screen.getByText('5 módulos')).toBeInTheDocument();
+    expect(screen.getByText('ialab.course_card.modules')).toBeInTheDocument();
   });
 
   test('shows certificate badge when hasCertificate is true', () => {
     renderCard();
-    expect(screen.getByText('Certificado')).toBeInTheDocument();
+    expect(screen.getByText('ialab.course_card.certificate')).toBeInTheDocument();
   });
 
   test('shows level and duration', () => {

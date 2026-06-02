@@ -11,7 +11,8 @@
  * - Estados hover y focus accesibles
  */
 
-import React from 'react';
+import { useState } from 'react'
+import PropTypes from 'prop-types';;
 import { motion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { cn } from '../forum/forumDesignSystem';
@@ -26,7 +27,7 @@ const ResourceSelector = ({
   className = ''
 }) => {
   const { t } = useTranslation();
-  const [typeFilter, setTypeFilter] = React.useState(null);
+  const [typeFilter, setTypeFilter] = useState(null);
   if (!resources.length) {
     return (
       <div className={cn(
@@ -174,6 +175,14 @@ const ResourceSelector = ({
       </div>
     </div>
   );
+};
+
+
+ResourceSelector.propTypes = {
+  resources: PropTypes.any,
+  activeResourceIndex: PropTypes.any,
+  completedIds: PropTypes.any,
+  onResourceSelect: PropTypes.any,
 };
 
 export default ResourceSelector;

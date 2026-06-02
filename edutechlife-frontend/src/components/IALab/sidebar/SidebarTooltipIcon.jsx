@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
+import PropTypes from 'prop-types';;
 
 const TooltipIcon = ({ label, children, premium }) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -29,6 +30,12 @@ const TooltipIcon = ({ label, children, premium }) => {
       )}
     </div>
   );
+};
+
+
+TooltipIcon.propTypes = {
+  label: PropTypes.any,
+  premium: PropTypes.any,
 };
 
 export default TooltipIcon;

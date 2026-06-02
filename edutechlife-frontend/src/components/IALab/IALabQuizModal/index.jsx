@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react'
+import PropTypes from 'prop-types';;
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useIALabQuiz } from '../../../hooks/IALab/useIALabQuiz';
 import { useIALabProgressContext } from '../../../context/IALabContext';
@@ -406,6 +407,12 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
       />
     </AnimatePresence>
   );
+};
+
+
+IALabQuizModal.propTypes = {
+  isOpen: PropTypes.any,
+  onClose: PropTypes.any,
 };
 
 export default IALabQuizModal;

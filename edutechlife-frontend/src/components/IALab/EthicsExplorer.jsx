@@ -94,7 +94,7 @@ const getScoreLabel = (score, t) => {
 };
 
 const Welcome = ({ onNext, t }) => (
-  <div className="flex flex-col items-center justify-center min-h-[60vh] text-center animate-fade-in px-4 py-8">
+  <div className="flex flex-col items-center justify-center min-h-[60vh] text-center ialab-animate-fade-in px-4 py-8">
     <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 text-[#13374b] font-semibold text-sm mb-4">
       <SvgShield className="w-4 h-4 text-[#259eb5]" /><span>{t('ialab.ethics_explorer.badge')}</span>
     </div>
@@ -152,7 +152,7 @@ export default function EthicsExplorer() {
   if (step === 'paste') {
     const hasText = respuesta.trim().length > 0;
     return (
-      <div className="animate-fade-in px-4 py-8 max-w-3xl mx-auto">
+      <div className="ialab-animate-fade-in px-4 py-8 max-w-3xl mx-auto">
         <div className="text-center mb-6">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 text-[#13374b] font-semibold text-sm mb-4">
             <SvgPaste className="w-4 h-4 text-[#259eb5]" /><span>{t('ialab.ethics_explorer.paste_btn')}</span>
@@ -197,7 +197,7 @@ export default function EthicsExplorer() {
   if (step === 'evaluate') {
     const allEvaluated = evaluatedCount === totalFilters;
     return (
-      <div className="animate-fade-in px-4 py-8 max-w-3xl mx-auto">
+      <div className="ialab-animate-fade-in px-4 py-8 max-w-3xl mx-auto">
         <div className="text-center mb-6">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 text-[#13374b] font-semibold text-sm mb-4">
             <SvgSearch className="w-4 h-4 text-[#259eb5]" /><span>{t('ialab.ethics_explorer.evaluate_title')}</span>
@@ -282,7 +282,7 @@ export default function EthicsExplorer() {
 
   if (step === 'report') {
     return (
-      <div className="animate-fade-in px-4 py-8 max-w-3xl mx-auto">
+      <div className="ialab-animate-fade-in px-4 py-8 max-w-3xl mx-auto">
         <div className="text-center mb-6">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 text-[#13374b] font-semibold text-sm mb-4">
             <SvgShield className="w-4 h-4 text-[#259eb5]" /><span>{t('ialab.ethics_explorer.report_badge')}</span>
@@ -307,8 +307,8 @@ export default function EthicsExplorer() {
           </div>
 
           <div className="w-full bg-slate-100 h-3 rounded-full overflow-hidden mb-6">
-            <motion.div initial={{ width: 0 }} animate={{ width: `${score}%` }}
-              className={`h-full rounded-full ${getScoreBg(score)}`} transition={{ duration: 1, ease: 'easeOut' }} />
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+              className={`h-full rounded-full ${getScoreBg(score)}`} transition={{ duration: 1, ease: 'easeOut' }} style={{ width: `${score}%` }} />
           </div>
 
           <div className="space-y-3">

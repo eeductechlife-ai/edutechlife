@@ -59,7 +59,7 @@ export function QuestionRenderer({ question, questionIndex, totalQuestions, sele
               role="radio"
               aria-checked={isSelected}
               onClick={() => onSelectAnswer(option.id)}
-              className={`w-full text-left p-3.5 rounded-xl border-2 transition-all duration-300 flex items-start gap-3 ${
+              className={`w-full text-left min-h-[44px] p-3.5 rounded-xl border-2 transition-all duration-300 flex items-start gap-3 ${
                 isSelected
                   ? 'border-corporate bg-corporate/5 shadow-[0_0_15px_rgba(0,188,212,0.15)] dark:border-mint dark:bg-mint/10 dark:shadow-mint/20'
                   : 'border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:hover:bg-slate-700 dark:hover:border-slate-500'

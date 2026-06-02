@@ -12,7 +12,8 @@
  * - Botón de cierre para regresar al dashboard
  */
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef } from 'react'
+import PropTypes from 'prop-types';;
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
@@ -289,6 +290,16 @@ const PDFThumbnail = ({
       </AnimatePresence>
     </>
   );
+};
+
+
+PDFThumbnail.propTypes = {
+  title: PropTypes.any,
+  pdfUrl: PropTypes.any,
+  description: PropTypes.any,
+  size: PropTypes.any,
+  pages: PropTypes.any,
+  onOpenImmersiveView: PropTypes.any,
 };
 
 export default PDFThumbnail;

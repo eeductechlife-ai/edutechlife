@@ -1,4 +1,5 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react'
+import PropTypes from 'prop-types';;
 import { motion, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabStore } from '../../store/ialabStore';
@@ -17,7 +18,7 @@ const ActionCard = ({ icon, label, weightKey, onClick, completed, score, remaini
   return (
     <motion.button
       onClick={onClick}
-      whileHover={prefersReducedMotion ? {} : { boxShadow: "0px 8px 25px rgba(0,75,99,0.12)" }}
+      whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
       whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
       title={weightKey ? t(weightKey) : ''}
       className={`relative w-full flex items-center gap-4 p-4 rounded-xl border transition-all duration-200 text-left cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 ${
@@ -174,6 +175,19 @@ const ModuleActions = ({ onAction, activeMod, challengeScores, completedExams, m
       </div>
     </div>
   );
+};
+
+
+ActionCard.propTypes = {
+  icon: PropTypes.any,
+  label: PropTypes.any,
+  weightKey: PropTypes.any,
+  onClick: PropTypes.any,
+  completed: PropTypes.any,
+  score: PropTypes.any,
+  remainingAttempts: PropTypes.any,
+  color: PropTypes.any,
+  t: PropTypes.any,
 };
 
 export default React.memo(ModuleActions);

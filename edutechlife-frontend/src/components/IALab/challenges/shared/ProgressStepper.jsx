@@ -1,4 +1,4 @@
-import React from 'react';
+import { Fragment } from 'react';
 import { motion } from 'framer-motion';
 import { Icon } from '../../../../utils/iconMapping.jsx';
 
@@ -18,7 +18,7 @@ const ProgressStepper = ({ currentStep, completedSteps = {}, t, steps }) => {
         const isCompleted = completedSteps[step.key];
 
         return (
-          <React.Fragment key={step.key}>
+          <Fragment key={step.key}>
             <div className="flex items-center gap-2">
               <motion.div
                 animate={{ scale: isActive ? 1 : 0.95 }}
@@ -53,7 +53,7 @@ const ProgressStepper = ({ currentStep, completedSteps = {}, t, steps }) => {
                 isCompleted ? 'bg-emerald-400' : 'bg-slate-200 dark:bg-slate-700'
               }`} />
             )}
-          </React.Fragment>
+          </Fragment>
         );
       })}
     </div>

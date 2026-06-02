@@ -133,7 +133,7 @@ const COURSE_KNOWLEDGE = [
         resources: [
           { type: "video", title: "Gemini + Google Workspace: Tutorial Completo", duration: "20:15" },
           { type: "document", title: "Plantillas para Google Workspace" },
-          { type: "ova", title: "Simulador: Workspace con Gemini" }
+          { type: "ova", title: "Gemini: Recorrido Interactivo" }
         ]
       },
       {
@@ -224,8 +224,8 @@ const COURSE_KNOWLEDGE = [
           "Aplicar un checklist ético antes de usar IA"
         ],
         resources: [
-          { type: "video", title: "Sesgos en IA: Explicación y Ejemplos", duration: "12:15" },
-          { type: "pdf", title: "Guía de Detección de Sesgos", pages: 15 },
+          { type: "video", title: "Los Pilares de la I.A", duration: "1:54" },
+          { type: "pdf", title: "Etica de la Inteligencia artificial", pages: 9 },
           { type: "ova", title: "Laboratorio: Detecta el Sesgo" }
         ]
       },
@@ -239,8 +239,8 @@ const COURSE_KNOWLEDGE = [
           "Aplicar mejores prácticas de protección"
         ],
         resources: [
-          { type: "video", title: "Privacidad y IA: Lo que Debes Saber", duration: "14:40" },
-          { type: "pdf", title: "Manual de Privacidad en IA", pages: 20 },
+          { type: "video", title: "Privacidad y IA: Lo que Debes Saber", duration: "9:20" },
+          { type: "pdf", title: "Manual de Privacidad en IA", pages: 13 },
           { type: "ova", title: "Simulador: Evaluación de Riesgos" }
         ]
       },
@@ -254,8 +254,7 @@ const COURSE_KNOWLEDGE = [
           "Promover transparencia en el uso de IA"
         ],
         resources: [
-          { type: "video", title: "IA Ética: Principios y Práctica", duration: "16:25" },
-          { type: "pdf", title: "Código de Ética para Uso de IA", pages: 18 },
+          { type: "video", title: "IA Ética: Principios y Práctica", duration: "6:05" },
           { type: "ova", title: "Laboratorio: Dilemas Éticos" }
         ]
       }

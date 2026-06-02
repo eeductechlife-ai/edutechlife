@@ -22,6 +22,12 @@
   --color-primary-softBlue: #B2D8E5;
   --color-primary-mint: #66CCCC;
   --color-primary-navy: #0A1628;
+  --color-primary: #4DA8C4;
+  --color-primary-light: #7CC4D9;
+  --color-primary-dark: #2D7A94;
+  --color-accent: #66CCCC;
+  --color-accent-light: #8EDEDE;
+  --color-accent-dark: #4DB3B3;
   
   /* Colores VAK */
   --color-vak-visual-50: #F0F9FF;
@@ -78,6 +84,16 @@
   --color-gray-700: #334155;
   --color-gray-800: #1E293B;
   --color-gray-900: #0F172A;
+  --color-slate-50: #F8FAFC;
+  --color-slate-100: #F1F5F9;
+  --color-slate-200: #E2E8F0;
+  --color-slate-300: #CBD5E1;
+  --color-slate-400: #94A3B8;
+  --color-slate-500: #64748B;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1E293B;
+  --color-slate-900: #0F172A;
   
   /* Fondos - Colores más claros corporativos EdutechLife */
   --color-background-light: #F8FCFD;
@@ -95,6 +111,9 @@
   --font-family-display: 'Montserrat', system-ui, -apple-system, sans-serif;
   --font-family-body: 'Open Sans', system-ui, -apple-system, sans-serif;
   --font-family-mono: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
+  --font-display: 'Montserrat', system-ui, -apple-system, sans-serif;
+  --font-body: 'Open Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
   
   /* Tamaños */
   --font-size-xs: 0.75rem;
@@ -174,6 +193,18 @@
   --spacing-72: 18rem;
   --spacing-80: 20rem;
   --spacing-96: 24rem;
+  --space-unit: 0.25rem;
+  --space-3xs: 0.125rem;
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  --space-4xl: 6rem;
+  --space-5xl: 8rem;
   
   /* ==================== BORDES ==================== */
   
@@ -193,6 +224,11 @@
   --border-radius-2xl: 1rem;
   --border-radius-3xl: 1.5rem;
   --border-radius-full: 9999px;
+  --radius-sm: 0.5rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
+  --radius-xl: 2rem;
+  --radius-full: 9999px;
   
   /* ==================== SOMBRAS ==================== */
   
@@ -210,13 +246,18 @@
   
   /* Sombras internas */
   --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-blur: 20px;
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-shadow: 0 12px 40px rgba(0, 75, 99, 0.15);
+  --glass-shadow-hover: 0 20px 60px rgba(0, 75, 99, 0.25);
   
   /* ==================== GRADIENTES ==================== */
   
   /* Primarios */
-  --gradient-primary-horizontal: linear-gradient(90deg, #004B63 0%, #4DA8C4 100%);
-  --gradient-primary-vertical: linear-gradient(180deg, #004B63 0%, #4DA8C4 100%);
-  --gradient-primary-diagonal: linear-gradient(135deg, #004B63 0%, #4DA8C4 100%);
+  --gradient-primary-horizontal: linear-gradient(90deg, #004B63 0%, #00BCD4 100%);
+  --gradient-primary-vertical: linear-gradient(180deg, #004B63 0%, #00BCD4 100%);
+  --gradient-primary-diagonal: linear-gradient(135deg, #004B63 0%, #00BCD4 100%);
   
   /* VAK */
   --gradient-vak-visual: linear-gradient(135deg, #4DA8C4 0%, #66CCCC 100%);
@@ -226,6 +267,10 @@
   /* Glass */
   --gradient-glass-light: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
   --gradient-glass-dark: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(15, 23, 42, 0.6) 100%);
+  --gradient-primary: linear-gradient(135deg, #4DA8C4 0%, #66CCCC 100%);
+  --gradient-dark: linear-gradient(135deg, #004B63 0%, #0A1628 100%);
+  --gradient-light: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
   
   /* ==================== ANIMACIONES ==================== */
   
@@ -243,6 +288,9 @@
   --animation-timing-ease-out: ease-out;
   --animation-timing-ease-in-out: ease-in-out;
   --animation-timing-spring: cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
   
   /* ==================== Z-INDEX ==================== */
   
@@ -309,7 +357,7 @@
 
   /* Brand colors (source of truth for IALab components) */
   --ialab-petroleum: #004B63;
-  --ialab-petroleum-dark: #00334A;
+  --ialab-petroleum-dark: #0A3550;
   --ialab-cyan: #00BCD4;
   --ialab-cyan-dark: #0097A7;
   --ialab-navy: #0D2B5B;
@@ -330,7 +378,7 @@
   /* Gradients */
   --ialab-gradient-primary: linear-gradient(135deg, #004B63 0%, #00BCD4 100%);
   --ialab-gradient-cyan: linear-gradient(135deg, #00BCD4 0%, #0097A7 100%);
-  --ialab-gradient-dark: linear-gradient(135deg, #004B63 0%, #00334A 100%);
+  --ialab-gradient-dark: linear-gradient(135deg, #004B63 0%, #0A3550 100%);
 
   /* Shadows */
   --ialab-shadow-sm: 0 1px 3px rgba(0, 75, 99, 0.06);
@@ -352,6 +400,58 @@
   --ialab-transition-fast: 150ms ease;
   --ialab-transition-base: 200ms ease;
   --ialab-transition-slow: 300ms ease;
+
+  /* ==================== ACCESSIBILITY TOKENS ==================== */
+
+  --a11y-focus-ring-color: #0097A7;
+  --a11y-focus-ring-width: 3px;
+  --a11y-focus-ring-offset: 2px;
+  --a11y-skip-link-bg: #004B63;
+  --a11y-skip-link-text: #FFFFFF;
+  --a11y-live-region-z-index: 9999;
+
+  /* ==================== VARIABLES ADICIONALES (desde index.css) ==================== */
+  --color-corporate-light: #6BC5E0;
+  --color-mint-light: #8CE0E0;
+  --color-navy-light: #1A2744;
+  --glass-refraction: 1.5;
+  --neon-cyan: #4DA8C4;
+  --neon-petroleum: #004B63;
+  --aura-violet: #8B5CF6;
+  --aura-cyan: #06B6D4;
+
+  /* ==================== CURSOR VARIABLES ==================== */
+  --cursor-color: #004B63;
+  --cursor-color-hover: #4DA8C4;
+  --cursor-size: 20px;
+
+  /* ==================== LEGACY ALIASES (from index.css) ==================== */
+  --color-text-gray: #4A4A4A;
+  --color-navy-deep: #0B0F19;
+  --color-white: #FFFFFF;
+  --navy: #004B63;
+  --primary: #4DA8C4;
+  --accent: #66CCCC;
+  --bg-light: #F8FAFC;
+  --bg-dark: #ffffff;
+  --text-main: #004B63;
+  --text-sub: #334155;
+
+  /* Prototype Dashboard Variables */
+  --dashboard-bg: #0B0F19;
+  --dashboard-card: rgba(255, 255, 255, 0.03);
+  --dashboard-border: rgba(255, 255, 255, 0.08);
+  --dashboard-accent: #66CCCC;
+  --dashboard-accent-glow: rgba(102, 204, 204, 0.3);
+  --ai-panel-bg: rgba(0, 75, 99, 0.6);
+  --smartboard-bg: #0B0F19;
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --a11y-focus-ring-width: 4px;
+    --a11y-focus-ring-offset: 3px;
+  }
 }
 
 /* ==================== MODO OSCURO ==================== */
@@ -385,6 +485,8 @@ html.dark,
   --color-mint: #7CC4D9;
   --color-navy: #B2D8E5;
   --color-success: #34D399;
+  --color-primary: #7CC4D9;
+  --color-accent: #8EDEDE;
 
   --color-bg-dark: #0A1628;
   --color-bg-light: #0F172A;
@@ -574,4 +676,30 @@ html.dark,
 
 .card-glow {
   animation: card-glow 4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  [class*="hover:"]:hover {
+    transform: none !important;
+    box-shadow: none !important;
+    translate: none !important;
+    scale: none !important;
+  }
+}
+
+/* Safe area insets para notch + Dynamic Island */
+:root {
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-left: env(safe-area-inset-left, 0px);
+  --safe-area-right: env(safe-area-inset-right, 0px);
 }

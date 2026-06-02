@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 const IALabForumSkeleton = ({ showHeader }) => (
   <div className="animate-pulse space-y-6">
     {showHeader && (
@@ -33,5 +34,10 @@ const IALabForumSkeleton = ({ showHeader }) => (
     </div>
   </div>
 );
+
+
+IALabForumSkeleton.propTypes = {
+  showHeader: PropTypes.any,
+};
 
 export default IALabForumSkeleton;

@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, forwardRef } from 'react';
 
-const AutoGrowTextarea = forwardRef(({ value, onChange, placeholder, className = '', maxLength = 2000, ...props }, ref) => {
+const AutoGrowTextarea = forwardRef(({ value, onChange, placeholder, className = '', maxLength = 2000, ariaRequired, ariaDescribedby, ...props }, ref) => {
   const innerRef = useRef(null);
   const textareaRef = ref || innerRef;
 
@@ -19,6 +19,8 @@ const AutoGrowTextarea = forwardRef(({ value, onChange, placeholder, className =
         if (e.target.value.length <= maxLength) onChange(e.target.value);
       }}
       placeholder={placeholder}
+      aria-required={ariaRequired}
+      aria-describedby={ariaDescribedby}
       className={`w-full bg-white border-2 border-slate-200 rounded-xl p-5 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-corporate focus:ring-2 focus:ring-corporate/20 resize-none text-sm leading-relaxed min-h-[120px] max-h-[320px] ${className}`}
       {...props}
     />

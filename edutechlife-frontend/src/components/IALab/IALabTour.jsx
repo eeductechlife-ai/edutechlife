@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
+import PropTypes from 'prop-types';;
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
 
@@ -273,6 +274,11 @@ const IALabTour = ({ hasStartedCourse }) => {
       </div>
     </>
   );
+};
+
+
+IALabTour.propTypes = {
+  hasStartedCourse: PropTypes.any,
 };
 
 export default IALabTour;

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
+import PropTypes from 'prop-types';;
 import { useTranslation } from '../../../i18n/I18nProvider';
 
 const IALabForumRichEditor = ({ placeholder, onSubmit, buttonLabel, compact, onCancel }) => {
@@ -66,6 +67,15 @@ const IALabForumRichEditor = ({ placeholder, onSubmit, buttonLabel, compact, onC
       </div>
     </form>
   );
+};
+
+
+IALabForumRichEditor.propTypes = {
+  placeholder: PropTypes.any,
+  onSubmit: PropTypes.any,
+  buttonLabel: PropTypes.any,
+  compact: PropTypes.any,
+  onCancel: PropTypes.any,
 };
 
 export default IALabForumRichEditor;

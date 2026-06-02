@@ -5,7 +5,6 @@
  * del PDFThumbnail de forma aislada
  */
 
-import React from 'react';
 import PDFThumbnail from './PDFThumbnail';
 
 const PDFThumbnailDemo = () => {

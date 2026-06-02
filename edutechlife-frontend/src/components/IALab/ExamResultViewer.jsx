@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabStore } from '../../store/ialabStore';
 import { useTranslation } from '../../i18n/I18nProvider';
@@ -58,7 +58,7 @@ const ExamResultViewer = ({ moduleId, score, onClose, onRetry }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={onClose}>
+    <div role="dialog" aria-modal="true" aria-label={passed ? t('ialab.exam_result.title_passed') : t('ialab.exam_result.title_failed')} className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={onClose}>
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden" onClick={e => e.stopPropagation()}>
         <div className="p-8">
           {/* Score Circle */}
@@ -156,6 +156,14 @@ const ExamResultViewer = ({ moduleId, score, onClose, onRetry }) => {
       </div>
     </div>
   );
+};
+
+
+ExamResultViewer.propTypes = {
+  moduleId: PropTypes.any,
+  score: PropTypes.any,
+  onClose: PropTypes.any,
+  onRetry: PropTypes.any,
 };
 
 export default ExamResultViewer;

@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, memo } from 'react'
+import PropTypes from 'prop-types';;
 import { motion, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useAuth } from '../../context/AuthContext';
@@ -78,7 +79,7 @@ const IALabForumOptimized = ({
         }
     }, [visiblePosts, isLoading]);
 
-    const handleSubmitMessage = async (e) => {
+    const handleSubmitMessage = useCallback(async (e) => {
         e.preventDefault();
         if (!newMessage.trim() || !user) return;
 
@@ -108,11 +109,11 @@ const IALabForumOptimized = ({
         } finally {
             setIsSubmitting(false);
         }
-    };
+    }, [newMessage, user, createPost, activeMod, hasTrackedCommunity, trackCommunityComment, t]);
 
-    const handleLoadMore = () => {
+    const handleLoadMore = useCallback(() => {
         setShowAll(true);
-    };
+    }, []);
 
     const getInitials = (name) => {
         if (!name) return '?';
@@ -156,7 +157,7 @@ const IALabForumOptimized = ({
 
     return (
         <motion.div
-            whileHover={prefersReducedMotion ? {} : { scale: 1.02, y: -4, boxShadow: "0px 8px 25px rgba(17,17,26,0.1)" }}
+            whileHover={prefersReducedMotion ? {} : { scale: 1.02, y: -4 }}
             transition={{ duration: 0.2 }}
             className={cn(
                 "relative z-10 bg-white rounded-2xl shadow-[0px_4px_16px_rgba(17,17,26,0.05)] border border-slate-100",
@@ -171,29 +172,7 @@ const IALabForumOptimized = ({
             <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-tr from-petroleum/4 to-corporate/2 rounded-full blur-2xl pointer-events-none"></div>
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate rounded-t-2xl" />
 
-            {/* Estilos para animaciones */}
-            <style>{`
-                @keyframes fadeInUp {
-                    from { opacity: 0; transform: translateY(10px); }
-                    to { opacity: 1; transform: translateY(0); }
-                }
-                @keyframes livePulse {
-                    0%, 100% { opacity: 1; transform: scale(1); }
-                    50% { opacity: 0.7; transform: scale(1.05); }
-                }
-                .animate-in { animation-duration: 300ms; animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1); animation-fill-mode: both; }
-                .fade-in-up { animation-name: fadeInUp; }
-                .animation-delay-100 { animation-delay: 100ms; }
-                .animation-delay-200 { animation-delay: 200ms; }
-                .animation-delay-300 { animation-delay: 300ms; }
-                .live-pulse { animation: livePulse 2s ease-in-out infinite; }
-                .scrollbar-thin::-webkit-scrollbar { width: 6px; }
-                .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
-                .scrollbar-thin::-webkit-scrollbar-thumb { background-color: rgba(0, 188, 212, 0.3); border-radius: 20px; }
-                .scrollbar-thin::-webkit-scrollbar-thumb:hover { background-color: rgba(0, 188, 212, 0.5); }
-                .message-bubble { transition: all 0.3s ease; }
-                .message-bubble:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(0, 75, 99, 0.08); }
-            `}</style>
+
 
             {/* Header */}
             <div className="flex items-center justify-between p-4 md:p-6 border-b border-slate-100">
@@ -308,7 +287,7 @@ const IALabForumOptimized = ({
                                     className={cn(
                                         "bg-white border border-slate-100 rounded-xl p-4",
                                         "message-bubble",
-                                        "animate-in fade-in-up",
+                                        "ialab-animate-in fade-in-up",
                                         index === 0 ? "animation-delay-100" :
                                         index === 1 ? "animation-delay-200" :
                                         index === 2 ? "animation-delay-300" : ""
@@ -515,4 +494,10 @@ const IALabForumOptimized = ({
     );
 };
 
-export default IALabForumOptimized;
+
+IALabForumOptimized.propTypes = {
+  compact: PropTypes.any,
+  initialLimit: PropTypes.any,
+};
+
+export default memo(IALabForumOptimized);

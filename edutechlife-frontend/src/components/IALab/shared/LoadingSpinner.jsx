@@ -1,5 +1,11 @@
 import { memo, useState, useEffect } from 'react';
 
+/**
+ * @param {Object} props
+ * @param {() => void} [props.onRetry]
+ * @param {string} [props.loadingText]
+ * @param {string} [props.retryText]
+ */
 const LoadingSpinner = memo(({ onRetry, loadingText = 'Cargando...', retryText = 'Reintentar' }) => {
   const [showTimeout, setShowTimeout] = useState(false);
   useEffect(() => {
@@ -7,7 +13,7 @@ const LoadingSpinner = memo(({ onRetry, loadingText = 'Cargando...', retryText =
     return () => clearTimeout(t);
   }, []);
   return (
-    <div className="flex flex-col items-center justify-center py-12">
+    <div role="status" aria-live="polite" className="flex flex-col items-center justify-center py-12">
       <div className="w-8 h-8 border-2 border-petroleum/30 border-t-petroleum rounded-full animate-spin mb-4" />
       <p className="text-sm text-slate-500 font-medium">{loadingText}</p>
       {showTimeout && onRetry && (

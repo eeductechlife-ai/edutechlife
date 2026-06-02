@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
@@ -130,6 +130,14 @@ const SecurityWarningModal = ({ isOpen, message, level = 1, onClose }) => {
       )}
     </AnimatePresence>
   );
+};
+
+
+SecurityWarningModal.propTypes = {
+  isOpen: PropTypes.any,
+  message: PropTypes.any,
+  level: PropTypes.any,
+  onClose: PropTypes.any,
 };
 
 export default SecurityWarningModal;

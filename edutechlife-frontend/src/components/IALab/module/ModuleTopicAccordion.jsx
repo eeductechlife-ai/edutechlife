@@ -1,7 +1,8 @@
-import { Fragment } from 'react';
+import { Fragment } from 'react'
+import PropTypes from 'prop-types';;
 import { motion, AnimatePresence } from 'framer-motion';
-import { Icon } from '@/utils/iconMapping.jsx';
-import { useIALabStore } from '@/store/ialabStore';
+import { Icon } from '../../../utils/iconMapping.jsx';
+import { useIALabStore } from '../../../store/ialabStore';
 import { getResourcesForTopic, getResourceTypesForTopic, countResourcesByType } from '../constants/moduleResources';
 
 const ModuleTopicAccordion = ({
@@ -277,6 +278,31 @@ const ModuleTopicAccordion = ({
       )})}
     </>
   );
+};
+
+
+ModuleTopicAccordion.propTypes = {
+  moduleData: PropTypes.any,
+  expandedTopic: PropTypes.any,
+  setExpandedTopic: PropTypes.any,
+  filterType: PropTypes.any,
+  setFilterType: PropTypes.any,
+  resourcesByTopic: PropTypes.any,
+  viewedIds: PropTypes.any,
+  isAdmin: PropTypes.any,
+  isResourceLocked: PropTypes.any,
+  calculateTopicDuration: PropTypes.any,
+  toggleBookmark: PropTypes.any,
+  prefersReducedMotion: PropTypes.any,
+  activeMod: PropTypes.any,
+  setSelectedResource: PropTypes.any,
+  setSelectedResourceType: PropTypes.any,
+  setCurrentTopicResources: PropTypes.any,
+  setActiveResourceIndex: PropTypes.any,
+  setViewerModalOpen: PropTypes.any,
+  justCompletedId: PropTypes.any,
+  bookmarkedIds: PropTypes.any,
+  t: PropTypes.any,
 };
 
 export default ModuleTopicAccordion;

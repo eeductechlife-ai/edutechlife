@@ -65,7 +65,65 @@ export default defineConfig({
               cacheName: 'cdnjs-cache',
               expiration: {
                 maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 30 // 30 días
+                maxAgeSeconds: 60 * 60 * 24 * 30
+              }
+            }
+          },
+          {
+            urlPattern: /^\/Doc\/.*\.pdf$/i,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'local-pdfs',
+              expiration: {
+                maxEntries: 20,
+                maxAgeSeconds: 60 * 60 * 24 * 30
+              }
+            }
+          },
+          {
+            urlPattern: /^\/ialab-resources\/.*\.mp4$/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'video-cache',
+              expiration: {
+                maxEntries: 20,
+                maxAgeSeconds: 60 * 60 * 24 * 60
+              }
+            }
+          },
+          {
+            urlPattern: /^\/dashboard\.mp4$/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'video-cache',
+              expiration: {
+                maxEntries: 20,
+                maxAgeSeconds: 60 * 60 * 24 * 60
+              }
+            }
+          },
+          {
+            urlPattern: /^\/infographics\/.*\.pdf$/i,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'infographics-cache',
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24 * 30
+              }
+            }
+          },
+          {
+            urlPattern: /\.(png|jpg|jpeg|webp|gif|svg)$/i,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'image-cache',
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 60 * 60 * 24 * 30
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
               }
             }
           }

@@ -1,7 +1,14 @@
-import { useState } from 'react';
+import { useState } from 'react'
+import PropTypes from 'prop-types';;
 import { useTranslation } from '../../../../i18n/I18nProvider';
 import { Bot, MessageSquare, CheckCircle, Zap, ArrowRight } from 'lucide-react';
 import { Button, Card } from '../shared';
+
+
+ModuleSlack.propTypes = {
+  onNext: PropTypes.any,
+  addXp: PropTypes.any,
+};
 
 export default function ModuleSlack({ onNext, addXp }) {
   const { t } = useTranslation();

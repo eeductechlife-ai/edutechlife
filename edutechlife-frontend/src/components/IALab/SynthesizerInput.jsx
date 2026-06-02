@@ -1,9 +1,9 @@
-import React from 'react';
+import { memo } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
 import { FORUM_COMPONENTS, FORUM_TYPOGRAPHY, FORUM_EFFECTS, GRADIENTS, cn } from '../forum/forumDesignSystem';
 
-const SynthesizerInput = React.memo(({
+const SynthesizerInput = memo(({
   input,
   setInput,
   loading,

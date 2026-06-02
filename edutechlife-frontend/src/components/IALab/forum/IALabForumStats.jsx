@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Icon } from '../../../utils/iconMapping.jsx';
 
 const IALabForumStats = ({ forumStats, t }) => {
@@ -19,6 +20,12 @@ const IALabForumStats = ({ forumStats, t }) => {
       </div>
     </div>
   );
+};
+
+
+IALabForumStats.propTypes = {
+  forumStats: PropTypes.any,
+  t: PropTypes.any,
 };
 
 export default IALabForumStats;

@@ -1,4 +1,5 @@
-import React from 'react';
+import React from 'react'
+import PropTypes from 'prop-types';;
 import { motion } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
 
@@ -35,7 +36,7 @@ const SidebarModuleList = ({
             role="listitem"
             variants={moduleItemVariants}
             onClick={() => !locked && goToModule(mod.id)}
-            className={`w-full group flex items-center gap-2 p-2.5 rounded-xl transition-all duration-300 ${isActive ? 'bg-gradient-to-r from-petroleum to-corporate text-white shadow-md shadow-petroleum/15 dark:shadow-petroleum/30' : 'hover:bg-petroleum/10 dark:hover:bg-petroleum/20 text-slate-700 dark:text-slate-300'} focus:outline-none focus:ring-2 focus:ring-petroleum/30 dark:focus:ring-petroleum/50 focus:ring-offset-1`}
+            className={`w-full group flex items-center gap-2 min-h-[44px] p-2.5 rounded-xl transition-all duration-300 ${isActive ? 'bg-gradient-to-r from-petroleum to-corporate text-white shadow-md shadow-petroleum/15 dark:shadow-petroleum/30' : 'hover:bg-petroleum/10 dark:hover:bg-petroleum/20 text-slate-700 dark:text-slate-300'} focus:outline-none focus:ring-2 focus:ring-petroleum/30 dark:focus:ring-petroleum/50 focus:ring-offset-1`}
             disabled={locked}
             aria-current={isActive ? 'page' : undefined}
             aria-label={`${locked ? 'Módulo bloqueado: ' : ''}${mod.title}`}
@@ -66,5 +67,17 @@ const SidebarModuleList = ({
     </motion.div>
   </div>
 );
+
+
+SidebarModuleList.propTypes = {
+  modules: PropTypes.any,
+  activeMod: PropTypes.any,
+  calculateModuleScore: PropTypes.any,
+  isModuleLocked: PropTypes.any,
+  goToModule: PropTypes.any,
+  moduleListVariants: PropTypes.any,
+  moduleItemVariants: PropTypes.any,
+  t: PropTypes.any,
+};
 
 export default React.memo(SidebarModuleList);

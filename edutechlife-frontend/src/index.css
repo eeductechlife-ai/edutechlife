@@ -3,6 +3,90 @@
 @import './components/Valentina/Valentina.css';
 @import './components/DiagnosticoVAK/DiagnosticoVAK.css';
 @import './components/IALab/IALab.css';
+@import './styles/animations.css';
+@import './styles/utilities.css';
+@import './styles/platform-optimizations.css';
+
+/* ==================== ACCESSIBILITY ==================== */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: var(--z-index-skipLink, 1600);
+  padding: 0.75rem 1.5rem;
+  background: var(--a11y-skip-link-bg, #004B63);
+  color: var(--a11y-skip-link-text, #FFFFFF);
+  font-size: 0.875rem;
+  font-weight: 700;
+  border-radius: 0 0 0.5rem 0.5rem;
+  text-decoration: none;
+  transition: top 0.15s ease;
+  outline: none;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: var(--a11y-focus-ring-width, 3px) solid var(--a11y-focus-ring-color, #0097A7);
+  outline-offset: var(--a11y-focus-ring-offset, 2px);
+}
+
+/* Focus ring global utility */
+:focus-visible {
+  outline: var(--a11y-focus-ring-width, 3px) solid var(--a11y-focus-ring-color, #0097A7);
+  outline-offset: var(--a11y-focus-ring-offset, 2px);
+}
+
+/* Remove focus ring for mouse clicks, keep for keyboard */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* High contrast mode adjustments */
+@media (prefers-contrast: more) {
+  :root {
+    --a11y-focus-ring-width: 4px;
+  }
+
+  .btn,
+  button,
+  [role="button"] {
+    border-width: 2px;
+  }
+}
+
+/* Screen reader only utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.sr-only-focusable:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
 
 @tailwind base;
 @tailwind components;
@@ -91,52 +175,6 @@
    ============================ */
 
 @layer base {
-  /* === ROOT VARIABLES (CSS Custom Properties) === */
-  :root {
-    /* Paleta de Azules Corporativos - ÚNICA FUENTE DE VERDAD */
-    --color-petroleum: #004B63;
-    --color-corporate: #00BCD4;
-    --color-soft-blue: #B2D8E5;
-    --color-mint: #66CCCC;
-    --color-navy: #4A6B7C;
-    
-    /* Colores primarios y accent más claros */
-    --color-primary: #4DA8C4;
-    --color-primary-light: #7CC4D9;
-    --color-primary-dark: #2D7A94;
-    --color-accent: #66CCCC;
-    --color-accent-light: #8EDEDE;
-    --color-accent-dark: #4DB3B3;
-    
-    /* Sistema de Grises Premium (basados en azul) */
-    --color-slate-50: #F8FAFC;
-    --color-slate-100: #F1F5F9;
-    --color-slate-200: #E2E8F0;
-    --color-slate-300: #CBD5E1;
-    --color-slate-400: #94A3B8;
-    --color-slate-500: #64748B;
-    --color-slate-600: #475569;
-    --color-slate-700: #334155;
-    --color-slate-800: #1E293B;
-    --color-slate-900: #0F172A;
-    
-    /* Tipografía */
-    --font-display: 'Montserrat', system-ui, -apple-system, sans-serif;
-    --font-body: 'Open Sans', system-ui, -apple-system, sans-serif;
-    --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
-    
-    /* Espaciado 8pt Grid */
-    --space-unit: 0.25rem;
-  }
-
-  .dark {
-    --color-petroleum: #4DA8C4;
-    --color-primary: #7CC4D9;
-    --color-corporate: #66CCCC;
-    --color-accent: #8EDEDE;
-    --color-navy: #4A6B7C;
-  }
-
   /* === RESET & BASE === */
   *,
   *::before,
@@ -504,13 +542,6 @@
   }
 }
 
-/* ==================== PREMIUM CURSOR - ZERO LATENCY ==================== */
-:root {
-  --cursor-color: #004B63;
-  --cursor-color-hover: #4DA8C4;
-  --cursor-size: 20px;
-}
-
 html,
 body {
   cursor: default;
@@ -567,104 +598,6 @@ html {
 body.is-scrolling .glass-card,
 body.is-scrolling .glass-card-dark {
   backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-}
-
-:root {
-  /* Paleta de Colores Premium - Manteniendo identidad */
-  --color-petroleum: #004B63;
-  --color-corporate: #00BCD4;
-  --color-mint: #66CCCC;
-  --color-soft-blue: #B2D8E5;
-  --color-navy: #0A1628;
-
-  /* Colores Extendidos para Premium */
-  --color-petroleum-dark: #00354A;
-  --color-corporate-light: #6BC5E0;
-  --color-mint-light: #8CE0E0;
-  --color-navy-light: #1A2744;
-
-  /* Sistema de Grises Premium */
-  --color-gray-50: #F8FAFC;
-  --color-gray-100: #F1F5F9;
-  --color-gray-200: #E2E8F0;
-  --color-gray-300: #CBD5E1;
-  --color-gray-400: #94A3B8;
-  --color-gray-500: #64748B;
-  --color-gray-600: #475569;
-  --color-gray-700: #334155;
-  --color-gray-800: #1E293B;
-  --color-gray-900: #0F172A;
-
-  /* Glassmorphism Premium */
-  --glass-bg: rgba(255, 255, 255, 0.08);
-  --glass-blur: 20px;
-  --glass-border: rgba(255, 255, 255, 0.15);
-  --glass-shadow: 0 12px 40px rgba(0, 75, 99, 0.15);
-  --glass-shadow-hover: 0 20px 60px rgba(0, 75, 99, 0.25);
-
-  /* Sombras Premium */
-  --shadow-sm: 0 2px 8px rgba(0, 75, 99, 0.08);
-  --shadow-md: 0 8px 24px rgba(0, 75, 99, 0.12);
-  --shadow-lg: 0 16px 48px rgba(0, 75, 99, 0.16);
-  --shadow-xl: 0 24px 64px rgba(0, 75, 99, 0.20);
-
-  /* Gradientes Premium */
-  --gradient-primary: linear-gradient(135deg, #4DA8C4 0%, #66CCCC 100%);
-  --gradient-dark: linear-gradient(135deg, #004B63 0%, #0A1628 100%);
-  --gradient-light: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-  --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-
-  /* Tipografía Premium - Sistema de 3 Familias */
-  /* Display: Montserrat 700, 900 - Autoridd editorial */
-  /* Body: Open Sans 300, 400 - Legibilidad maxima */
-  /* Mono: JetBrains Mono - Datos tecnologicos/IA */
-  --font-display: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-body: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, 'Fira Code', monospace;
-
-  /* Espaciado Premium - Sistema 8pt Grid */
-  --space-3xs: 0.125rem;
-  /* 2px */
-  --space-2xs: 0.25rem;
-  /* 4px */
-  --space-xs: 0.5rem;
-  /* 8px */
-  --space-sm: 0.75rem;
-  /* 12px */
-  --space-md: 1rem;
-  /* 16px */
-  --space-lg: 1.5rem;
-  /* 24px */
-  --space-xl: 2rem;
-  /* 32px */
-  --space-2xl: 3rem;
-  /* 48px */
-  --space-3xl: 4rem;
-  /* 64px */
-  --space-4xl: 6rem;
-  /* 96px */
-  --space-5xl: 8rem;
-  /* 128px */
-
-  /* Border Radius Premium */
-  --radius-sm: 0.5rem;
-  --radius-md: 1rem;
-  --radius-lg: 1.5rem;
-  --radius-xl: 2rem;
-  --radius-full: 9999px;
-
-  /* Transiciones Premium */
-  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
-
-  /* Antigravity Engine Variables */
-  --glass-refraction: 1.5;
-  --neon-cyan: #4DA8C4;
-  --neon-petroleum: #004B63;
-  --aura-violet: #8B5CF6;
-  --aura-cyan: #06B6D4;
 }
 
 /* --- HARDWARE ACCELERATION FOR GLASSMORPHISM --- */
@@ -2130,49 +2063,7 @@ body.is-scrolling .glass-card-dark {
   }
 }
 
-:root {
-  --font-display: 'Montserrat', sans-serif;
-  --font-body: 'Open Sans', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
 
-  --color-petroleum: #004B63;
-  /* =========================
-     PETROLEUM ELITE PALETTE
-     ========================= */
-  /* Petroleum #004B63 - Navegación, títulos H1, Footer - Autoridad y profundidad */
-  /* Corporate #00BCD4 - Botones CTAs, iconos, acentos - Confianza tecnológica */
-  /* Soft Blue #B2D8E5 - Fondos de iconos, hover - Claridad y calma */
-  /* Mint #66CCCC - Badges IA, barras - Innovación y vitalidad */
-  /* Navy Deep #0B0F19 - Paneles IA, modales - Premium y contraste */
-
-  --color-petroleum: #004B63;
-  --color-corporate: #00BCD4;
-  --color-soft-blue: #B2D8E5;
-  --color-navy: #0A1628;
-  --color-text-gray: #4A4A4A;
-  --color-mint: #66CCCC;
-  --color-navy-deep: #0B0F19;
-  --color-white: #FFFFFF;
-
-  --navy: #004B63;
-  --primary: #4DA8C4;
-  --accent: #66CCCC;
-  --bg-light: #F8FAFC;
-  --bg-dark: #ffffff;
-  --text-main: #004B63;
-  --text-sub: #334155;
-  --glass-bg: rgba(255, 255, 255, 0.9);
-  --glass-border: rgba(77, 168, 196, 0.2);
-
-  /* Prototype Enhancement Variables */
-  --dashboard-bg: #0B0F19;
-  --dashboard-card: rgba(255, 255, 255, 0.03);
-  --dashboard-border: rgba(255, 255, 255, 0.08);
-  --dashboard-accent: #66CCCC;
-  --dashboard-accent-glow: rgba(102, 204, 204, 0.3);
-  --ai-panel-bg: rgba(0, 75, 99, 0.6);
-  --smartboard-bg: #0B0F19;
-}
 
 /* Main content without extra space */
 main {
@@ -12503,410 +12394,8 @@ span:not(h1 span):not(h2 span):not(h3 span):not(.stat-number),
   animation: gentle-pulse 2s infinite;
 }
 
-/* ==================== NEUROENTORNO PREMIUM ANIMATIONS ==================== */
+ /* MOVED TO src/styles/animations.css */
 
-/* Border Pulse Animation for Premium Cards */
-@keyframes border-pulse {
-  0%, 100% {
-    border-color: rgba(255, 255, 255, 0.3);
-    box-shadow: 0 0 0 0 rgba(77, 168, 196, 0.4);
-  }
-  50% {
-    border-color: rgba(255, 255, 255, 0.7);
-    box-shadow: 0 0 0 4px rgba(77, 168, 196, 0.2);
-  }
-}
+ /* MOVED TO src/styles/utilities.css */
 
-/* Sparkle Effect for Premium Interactions */
-@keyframes sparkle {
-  0%, 100% {
-    transform: scale(0.8);
-    opacity: 0.3;
-  }
-  50% {
-    transform: scale(1.2);
-    opacity: 1;
-  }
-}
-
-/* Mini Float Animation for Particles */
-@keyframes float-mini {
-  0%, 100% {
-    transform: translateY(0) translateX(0);
-  }
-  33% {
-    transform: translateY(-4px) translateX(2px);
-  }
-  66% {
-    transform: translateY(2px) translateX(-2px);
-  }
-}
-
-/* Shake Animation for Kinesthetic Icon */
-@keyframes shake {
-  0%, 100% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(-5deg);
-  }
-  75% {
-    transform: rotate(5deg);
-  }
-}
-
-/* Sweep Animation for Button Effects */
-@keyframes sweep {
-  0% {
-    transform: translateX(-100%) skewX(-20deg);
-  }
-  100% {
-    transform: translateX(200%) skewX(-20deg);
-  }
-}
-
-/* Premium Pulse Animation */
-@keyframes premium-pulse {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow: 0 20px 40px rgba(0, 75, 99, 0.15);
-  }
-  50% {
-    transform: scale(1.02);
-    box-shadow: 0 25px 50px rgba(0, 75, 99, 0.25);
-  }
-}
-
-/* Glassmorphism Pulse */
-@keyframes glass-pulse {
-  0%, 100% {
-    backdrop-filter: blur(10px);
-    background: rgba(255, 255, 255, 0.1);
-  }
-  50% {
-    backdrop-filter: blur(15px);
-    background: rgba(255, 255, 255, 0.15);
-  }
-}
-
-/* Icon Glow Pulse */
-@keyframes icon-glow {
-  0%, 100% {
-    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.3));
-  }
-  50% {
-    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
-  }
-}
-
-/* Text Reveal Animation */
-@keyframes text-reveal {
-  0% {
-    clip-path: inset(0 100% 0 0);
-  }
-  100% {
-    clip-path: inset(0 0 0 0);
-  }
-}
-
-/* Gradient Shift Premium */
-@keyframes gradient-shift-premium {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-/* ==================== UTILITY CLASSES ==================== */
-
-.animate-premium-pulse {
-  animation: premium-pulse 3s ease-in-out infinite;
-}
-
-.animate-glass-pulse {
-  animation: glass-pulse 4s ease-in-out infinite;
-}
-
-.animate-icon-glow {
-  animation: icon-glow 2s ease-in-out infinite;
-}
-
-.animate-text-reveal {
-  animation: text-reveal 1.5s cubic-bezier(0.77, 0, 0.175, 1) forwards;
-}
-
-/* ==================== PLATFORM-SPECIFIC OPTIMIZATIONS ==================== */
-
-/* iOS Safari Optimizations */
-.ios-optimized {
-  -webkit-font-smoothing: subpixel-antialiased;
-  -webkit-tap-highlight-color: rgba(0, 188, 212, 0.1);
-  -webkit-overflow-scrolling: touch;
-}
-
-/* Android Chrome Optimizations */
-.android-optimized {
-  touch-action: manipulation;
-}
-
-.android-optimized input,
-.android-optimized textarea,
-.android-optimized select {
-  font-size: 16px !important; /* Prevent auto-zoom on focus */
-}
-
-/* Touch Device Optimizations */
-.touch-optimized {
-  -webkit-tap-highlight-color: transparent;
-}
-
-.touch-optimized button,
-.touch-optimized [role="button"] {
-  min-height: 44px; /* WCAG minimum touch target */
-  min-width: 44px;
-}
-
-/* HiDPI/Retina Display Optimizations */
-.hidpi-optimized {
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
-}
-
-.hidpi-optimized img,
-.hidpi-optimized canvas,
-.hidpi-optimized video {
-  image-rendering: crisp-edges;
-}
-
-/* Desktop Optimizations */
-.desktop-optimized {
-  scroll-behavior: smooth;
-}
-
-.desktop-optimized:hover .hover\:scale-\[1\.01\] {
-  transform: scale(1.01);
-}
-
-/* Mobile Optimizations */
-.mobile-optimized {
-  -webkit-text-size-adjust: 100%;
-}
-
-.mobile-optimized input,
-.mobile-optimized textarea {
-  font-size: 16px;
-}
-
-/* Tablet Optimizations */
-.tablet-optimized {
-  -webkit-font-smoothing: antialiased;
-}
-
-/* Platform-specific shadow optimizations */
-.ios-optimized .platform-shadow {
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.03);
-  -webkit-box-shadow: 0 20px 40px rgba(0, 0, 0, 0.03);
-}
-
-.android-optimized .platform-shadow {
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
-}
-
-.desktop-optimized .platform-shadow {
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-}
-
-/* Animaciones para el Foro Edutechlife */
-@keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slide-up {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes scale-in {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.animate-fade-in {
-  animation: fade-in 0.3s ease-out;
-}
-
-.animate-slide-up {
-  animation: slide-up 0.4s ease-out;
-}
-
-.animate-scale-in {
-  animation: scale-in 0.3s ease-out;
-}
-
-/* Animación para comentarios expandidos */
-@keyframes comment-expand {
-  from {
-    max-height: 0;
-    opacity: 0;
-  }
-  to {
-    max-height: 500px;
-    opacity: 1;
-  }
-}
-
-.comment-expand {
-  animation: comment-expand 0.4s ease-out;
-}
-
-/* Animación para botones de interacción */
-@keyframes button-pulse {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-}
-
-.button-pulse {
-  animation: button-pulse 0.3s ease-out;
-}
-
-/* Reduced Motion Support */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-  
-  .animate-gentle-pulse {
-    animation: none;
-  }
-  
-  .animate-premium-pulse,
-  .animate-glass-pulse,
-  .animate-icon-glow,
-  .animate-text-reveal {
-    animation: none;
-  }
-  
-  .animate-fade-in,
-  .animate-slide-up,
-  .animate-scale-in,
-  .comment-expand,
-  .button-pulse {
-    animation: none;
-  }
-}
-
-/* ======================
-   CLERK BUTTON TEXT VISIBILITY FIX
-   Using only public API selectors (no structural CSS)
-   ====================== */
-.cl-formButtonPrimary,
-.cl-formButtonPrimary *,
-.cl-button--primary,
-.cl-button--primary * {
-  color: #ffffff !important;
-}
-
-.cl-formButtonPrimary:hover,
-.cl-formButtonPrimary:hover *,
-.cl-button--primary:hover,
-.cl-button--primary:hover * {
-  color: #ffffff !important;
-}
-
-/* ======================
-   SAFE AREA UTILITIES
-   ====================== */
-@supports (padding-top: env(safe-area-inset-top)) {
-  .safe-area-top {
-    padding-top: env(safe-area-inset-top);
-  }
-  .safe-area-bottom {
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-  .safe-area-left {
-    padding-left: env(safe-area-inset-left);
-  }
-  .safe-area-right {
-    padding-right: env(safe-area-inset-right);
-  }
-  .safe-area-inset {
-    padding-top: env(safe-area-inset-top);
-    padding-bottom: env(safe-area-inset-bottom);
-    padding-left: env(safe-area-inset-left);
-    padding-right: env(safe-area-inset-right);
-  }
-}
-
-/* Fallback for older iOS using constant() */
-@supports (padding-top: constant(safe-area-inset-top)) {
-  .safe-area-top {
-    padding-top: constant(safe-area-inset-top);
-  }
-  .safe-area-bottom {
-    padding-bottom: constant(safe-area-inset-bottom);
-  }
-  .safe-area-left {
-    padding-left: constant(safe-area-inset-left);
-  }
-  .safe-area-right {
-    padding-right: constant(safe-area-inset-right);
-  }
-  .safe-area-inset {
-    padding-top: constant(safe-area-inset-top);
-    padding-bottom: constant(safe-area-inset-bottom);
-    padding-left: constant(safe-area-inset-left);
-    padding-right: constant(safe-area-inset-right);
-  }
-}
-
-/* Overscroll behavior for modals */
-.modal-scrollable {
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* Touch-action for sliders */
-.touch-slider {
-  touch-action: none;
-}
-
-/* Reduce motion exceptions for functional animations */
-@media (prefers-reduced-motion: reduce) {
-  .allow-animation {
-    animation-duration: inherit !important;
-    animation-iteration-count: inherit !important;
-    transition-duration: inherit !important;
-  }
-}
+ /* MOVED TO src/styles/platform-optimizations.css */

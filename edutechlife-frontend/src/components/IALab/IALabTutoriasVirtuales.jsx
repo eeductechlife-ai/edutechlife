@@ -82,7 +82,7 @@ const IALabTutoriasVirtuales = () => {
 
   return (
     <motion.div
-      whileHover={{ scale: 1.02, y: -4, boxShadow: "0px 8px 25px rgba(17,17,26,0.1)" }}
+      whileHover={{ scale: 1.04 }}
       transition={{ duration: 0.2 }}
       className="relative z-10 bg-white rounded-2xl border border-slate-200/60 shadow-sm p-5 md:p-8 overflow-hidden"
     >

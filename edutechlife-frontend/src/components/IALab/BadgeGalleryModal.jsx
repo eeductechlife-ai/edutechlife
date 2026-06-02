@@ -1,16 +1,20 @@
-import { useMemo } from 'react';
+import { useMemo } from 'react'
+import PropTypes from 'prop-types';;
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import { useIALabStore } from '../../store/ialabStore';
 import { getBadgeInfo } from '../../data/ialab';
 import BadgeCard from './BadgeCard';
 import { useTranslation } from '../../i18n/I18nProvider';
+import useFocusTrap from '../../hooks/useFocusTrap';
 
 const BadgeGalleryModal = ({ isOpen, onClose }) => {
   const { t, locale } = useTranslation();
   const BADGE_INFO = getBadgeInfo(locale);
   const badges = useIALabStore(s => s.badges);
   const badgesDates = useIALabStore(s => s.badgesDates);
+
+  const focusTrapRef = useFocusTrap(isOpen);
 
   const { earned, locked } = useMemo(() => {
     const earnedList = [];
@@ -32,6 +36,8 @@ const BadgeGalleryModal = ({ isOpen, onClose }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          ref={focusTrapRef}
+          role="dialog" aria-modal="true" aria-label={t('ialab.badge_gallery.title')}
           className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
           onClick={onClose}
         >
@@ -93,6 +99,12 @@ const BadgeGalleryModal = ({ isOpen, onClose }) => {
       )}
     </AnimatePresence>
   );
+};
+
+
+BadgeGalleryModal.propTypes = {
+  isOpen: PropTypes.any,
+  onClose: PropTypes.any,
 };
 
 export default BadgeGalleryModal;

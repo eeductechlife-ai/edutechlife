@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Icon } from '../../../utils/iconMapping.jsx';
 
 const FILTERS = [
@@ -32,6 +33,13 @@ const IALabForumTagFilter = ({ activeFilter, setActiveFilter, t }) => {
       })}
     </div>
   );
+};
+
+
+IALabForumTagFilter.propTypes = {
+  activeFilter: PropTypes.any,
+  setActiveFilter: PropTypes.any,
+  t: PropTypes.any,
 };
 
 export default IALabForumTagFilter;

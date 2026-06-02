@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
+import PropTypes from 'prop-types';;
 import { Volume2, Square } from 'lucide-react';
 import { speakTextConversational, stopSpeech } from '../../utils/speech';
 import { useTranslation } from '../../i18n/I18nProvider';
@@ -27,6 +28,11 @@ const VoiceReader = ({ text }) => {
       {isPlaying ? t('ialab.voice_reader.stop') : t('ialab.voice_reader.listen')}
     </button>
   );
+};
+
+
+VoiceReader.propTypes = {
+  text: PropTypes.any,
 };
 
 export default VoiceReader;

@@ -3,6 +3,7 @@ import { Icon } from '../../utils/iconMapping.jsx';
 import UserDropdownMenuSimplified from '../UserDropdownMenuSimplified';
 import NotificationPanel from '../NotificationPanel';
 import { useIALabUIContext } from '../../context/IALabContext';
+import { useTheme } from '../../context/ThemeContext';
 import { useTranslation } from '../../i18n/I18nProvider';
 import LocaleSwitcher from '../LocaleSwitcher';
 import { useNotification } from '../../context/NotificationContext';
@@ -18,6 +19,7 @@ const IALabHeader = () => {
   const { onBack, courseCompleted, setShowCertificateModal } = useIALabUIContext();
   const { unreadCount, createNotification } = useNotification();
   const { unreadCount: forumUnreadCount } = useForumNotifications();
+  const { isDarkMode, toggleDarkMode } = useTheme();
   const [notifOpen, setNotifOpen] = useState(false);
   const notifTriggerRef = useRef(null);
   const totalUnread = unreadCount + forumUnreadCount;
@@ -51,7 +53,7 @@ const IALabHeader = () => {
     <header className="h-16 flex items-center justify-between px-6 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 w-full shadow-sm">
       <div className="flex items-center gap-3">
         <div className="w-9 h-9 bg-gradient-to-br from-petroleum via-petroleum-dark to-corporate rounded-xl flex items-center justify-center shadow-sm shadow-petroleum/15">
-          <Icon name="fa-flask-vial" className="text-white text-sm" />
+          <Icon name="fa-flask-vial" className="text-white text-sm" aria-hidden="true" />
         </div>
         {courseCompleted ? (
           <button
@@ -60,10 +62,10 @@ const IALabHeader = () => {
             title={t('ialab.certificate_title')}
           >
             <span>{t('ialab.course_title')}</span>
-            <Icon name="fa-award" className="text-[#FFD166] text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+            <Icon name="fa-award" className="text-[#FFD166] text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200" aria-hidden="true" />
           </button>
         ) : (
-          <h1 className="text-lg font-bold text-petroleum dark:text-petroleum tracking-tight truncate">{t('ialab.course_title')}</h1>
+          <h2 className="text-lg font-bold text-petroleum dark:text-petroleum tracking-tight truncate">{t('ialab.course_title')}</h2>
         )}
       </div>
 
@@ -86,10 +88,13 @@ const IALabHeader = () => {
                 : 'border-transparent hover:border-petroleum/20 dark:hover:border-petroleum/40 hover:shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700'
             }`}
             aria-label={t('ialab.notifications_aria')}
+            aria-haspopup="dialog"
+            aria-expanded={notifOpen}
             data-tour="tour-notificaciones"
           >
             <Icon
               name="fa-bell"
+              aria-hidden="true"
               className={`text-lg transition-all duration-200 ${
                 notifOpen
                   ? 'text-corporate'
@@ -116,6 +121,13 @@ const IALabHeader = () => {
           />
         </div>
 
+        <button
+          onClick={toggleDarkMode}
+          className="relative flex items-center justify-center p-2 rounded-xl border border-transparent hover:border-petroleum/20 dark:hover:border-petroleum/40 hover:shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-all duration-200 group"
+          aria-label={isDarkMode ? 'Activar modo claro' : 'Activar modo oscuro'}
+        >
+          <Icon name={isDarkMode ? 'fa-sun' : 'fa-moon'} className={`text-lg transition-all duration-200 ${isDarkMode ? 'text-amber-400' : 'text-corporate group-hover:text-petroleum'}`} aria-hidden="true" />
+        </button>
         <UserDropdownMenuSimplified
           onNavigate={(view) => {
             if (view === 'landing') {

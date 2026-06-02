@@ -479,4 +479,6 @@ export const getValentinaVoiceConfig = (age = 12) => {
   };
 };
 
+export const fireConfetti = (opts) => import('canvas-confetti').then(m => m.default(opts));
+
 export { speakTextConversational, stopSpeech, iniciarReconocimiento, stopRecognition };

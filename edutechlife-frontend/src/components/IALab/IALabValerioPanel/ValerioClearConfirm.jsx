@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { useTranslation } from '../../../i18n/I18nProvider';
 
 const ValerioClearConfirm = ({ onConfirm, onCancel }) => {
@@ -22,6 +22,12 @@ const ValerioClearConfirm = ({ onConfirm, onCancel }) => {
       </button>
     </div>
   );
+};
+
+
+ValerioClearConfirm.propTypes = {
+  onConfirm: PropTypes.any,
+  onCancel: PropTypes.any,
 };
 
 export default ValerioClearConfirm;

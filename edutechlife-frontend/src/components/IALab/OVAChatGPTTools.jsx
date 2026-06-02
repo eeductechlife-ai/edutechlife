@@ -1,4 +1,5 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef } from 'react'
+import PropTypes from 'prop-types';;
 import { useTranslation } from '../../i18n/I18nProvider';
 import VoiceReader from './VoiceReader';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -35,6 +36,12 @@ const WelcomeScreen = ({ onNext }) => {
       <button onClick={onNext} className="mt-4 px-8 py-4 bg-gradient-to-r from-[#259eb5] to-[#13374b] text-white rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all flex items-center gap-3"><Play size={20} />{t('ova.chatgpttools.start_btn')}</button>
     </div>
   );
+};
+
+
+ToolIcon.propTypes = {
+  icon: PropTypes.any,
+  iconColor: PropTypes.any,
 };
 
 export default function OVAChatGPTTools({ onComplete }) {
@@ -98,7 +105,7 @@ export default function OVAChatGPTTools({ onComplete }) {
                       <span className="text-xl font-black">{progress}%</span>
                     </div>
                     <div className="w-full bg-white/20 h-1.5 rounded-full overflow-hidden">
-                      <motion.div className="bg-cyan-400 h-full" initial={{ width: 0 }} animate={{ width: `${progress}%` }} transition={{ duration: 1 }} />
+                      <motion.div className="bg-cyan-400 h-full" initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ width: `${progress}%` }} />
                     </div>
                   </div>
                 </div>
@@ -203,9 +210,9 @@ export default function OVAChatGPTTools({ onComplete }) {
 
       <AnimatePresence>
         {activeModal !== null && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#13374b]/80 backdrop-blur-sm">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} role="dialog" aria-modal="true" aria-label={tools[activeModal].title} className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#13374b]/80 backdrop-blur-sm">
             <motion.div initial={{ scale: 0.9, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.9, opacity: 0, y: 20 }} className="bg-white dark:bg-slate-800 w-full max-w-3xl max-h-[85dvh] overflow-y-auto rounded-[2rem] shadow-2xl relative">
-              <button onClick={() => { setActiveModal(null); stopSpeech(); }} className="sticky top-4 right-4 float-right z-10 p-2.5 bg-slate-100 dark:bg-slate-700 hover:bg-rose-50 dark:hover:bg-rose-900/20 text-slate-500 dark:text-slate-400 hover:text-rose-500 rounded-full transition-all shadow-sm"><X size={20} /></button>
+              <button onClick={() => { setActiveModal(null); stopSpeech(); }} aria-label="Cerrar" className="sticky top-4 right-4 float-right z-10 p-2.5 bg-slate-100 dark:bg-slate-700 hover:bg-rose-50 dark:hover:bg-rose-900/20 text-slate-500 dark:text-slate-400 hover:text-rose-500 rounded-full transition-all shadow-sm"><X size={20} /></button>
               <div className="p-6 md:p-8">
                 <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-6">
                   <div className="flex items-center gap-4">
@@ -242,7 +249,7 @@ export default function OVAChatGPTTools({ onComplete }) {
                     <div className="flex gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-rose-500" /><div className="w-2.5 h-2.5 rounded-full bg-amber-500" /><div className="w-2.5 h-2.5 rounded-full bg-emerald-500" /></div>
                   </div>
                   <code className="text-cyan-300 block text-sm font-mono leading-relaxed bg-black/20 p-4 rounded-xl italic">"{tools[activeModal].prompt}"</code>
-                  <p className="text-slate-500 text-[9px] font-medium tracking-wide mt-3">{t('ova.chatgpttools.modal_tip')}</p>
+                  <p className="text-slate-500 dark:text-slate-400 text-[9px] font-medium tracking-wide mt-3">{t('ova.chatgpttools.modal_tip')}</p>
                 </div>
               </div>
             </motion.div>

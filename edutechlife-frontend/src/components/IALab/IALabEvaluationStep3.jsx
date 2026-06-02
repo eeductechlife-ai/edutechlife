@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
+import PropTypes from 'prop-types';;
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
 
@@ -236,15 +237,18 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                     
                     <div className="relative">
                         <textarea
+                            id="evaluation-step3-textarea"
                             value={createdPrompt}
                             onChange={(e) => handleChange(e.target.value)}
                             placeholder={`## ${t('ialab.evaluation.step3.section_role')}\n${t('ialab.evaluation.step3.placeholder_role')}\n\n## ${t('ialab.evaluation.step3.section_context')}\n${t('ialab.evaluation.step3.placeholder_context')}\n\n## ${t('ialab.evaluation.step3.section_objective')}\n${t('ialab.evaluation.step3.placeholder_objective')}\n\n## ${t('ialab.evaluation.step3.section_audience')}\n${t('ialab.evaluation.step3.placeholder_audience')}\n\n## ${t('ialab.evaluation.step3.section_requirements')}\n${t('ialab.evaluation.step3.placeholder_requirement_1')}\n${t('ialab.evaluation.step3.placeholder_requirement_2')}\n\n## ${t('ialab.evaluation.step3.section_format')}\n${t('ialab.evaluation.step3.placeholder_format')}`}
+                            aria-required="true"
+                            aria-describedby="evaluation-step3-chars"
                             className="w-full h-80 bg-white border-2 border-slate-200 rounded-xl p-5 text-slate-700 placeholder-slate-500 focus:outline-none focus:border-corporate focus:ring-2 focus:ring-corporate/20 resize-none font-mono text-sm leading-relaxed"
                             spellCheck="false"
                             autoFocus
                         />
                         
-                        <div className={`absolute bottom-3 right-3 px-2 py-1 rounded text-xs font-medium ${
+                        <div id="evaluation-step3-chars" className={`absolute bottom-3 right-3 px-2 py-1 rounded text-xs font-medium ${
                             characterCount < 100 ? 'bg-red-50 text-red-600' :
                             characterCount < 200 ? 'bg-amber-50 text-amber-600' :
                             'bg-emerald-50 text-emerald-600'
@@ -409,6 +413,13 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
             </div>
         </div>
     );
+};
+
+
+IALabEvaluationStep3.propTypes = {
+  exercise: PropTypes.any,
+  response: PropTypes.any,
+  onResponseChange: PropTypes.any,
 };
 
 export default IALabEvaluationStep3;

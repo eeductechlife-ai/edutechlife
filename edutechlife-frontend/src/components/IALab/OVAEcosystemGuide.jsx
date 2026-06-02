@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react'
+import PropTypes from 'prop-types';;
 import { useTranslation } from '../../i18n/I18nProvider';
 import {
   Volume2, TrendingUp, Cpu, Brain, Wrench, Search, Layout, Database,
@@ -96,8 +97,14 @@ const WelcomeScreen = ({ onNext }) => {
   );
 };
 
-export default function OVAEcosystemGuide() {
+
+VoiceReader.propTypes = {
+  text: PropTypes.any,
+};
+
+export default function OVAEcosystemGuide({ onComplete }) {
   const { t } = useTranslation();
+  const certCompletedRef = useRef(false);
   const [currentScreen, setCurrentScreen] = useState(0);
   const [activeSectionId, setActiveSectionId] = useState('evolution');
 
@@ -187,6 +194,15 @@ export default function OVAEcosystemGuide() {
         <p className="text-slate-600 dark:text-slate-400 text-xs font-bold uppercase tracking-widest mt-4">{t('ova.ecosystem.footer')}</p>
       </footer>
 
+      <div className="text-center pb-12">
+        {!certCompletedRef.current && (
+          <button onClick={() => { certCompletedRef.current = true; onComplete?.(); }}
+            className="px-8 py-3 bg-gradient-to-r from-petroleum to-corporate text-white font-bold rounded-xl hover:opacity-90 transition-all shadow-lg"
+          >
+            {t('ova.ecosystem.mark_complete') || 'Marcar como completado'}
+          </button>
+        )}
+      </div>
     </div>
   );
 }

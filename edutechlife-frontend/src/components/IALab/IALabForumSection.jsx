@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, memo, useCallback } from 'react'
+import PropTypes from 'prop-types';;
+import { FixedSizeList } from 'react-window';
 import { Icon } from '../../utils/iconMapping.jsx';
 import PlatformOptimizedCard from '../PlatformOptimizedCard';
 import { useIALabProgressContext, useIALabUIContext } from '../../context/IALabContext';
@@ -6,6 +8,12 @@ import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
 import useIALabForum from '../../hooks/IALab/useIALabForum';
 import { useAuth } from '../../context/AuthContext';
 import { useTranslation } from '../../i18n/I18nProvider';
+import { useForumFilters } from '../hooks/useForumFilters';
+import IALabForumStats from './forum/IALabForumStats';
+import IALabForumTagFilter from './forum/IALabForumTagFilter';
+import IALabForumSkeleton from './forum/IALabForumSkeleton';
+import IALabForumEmptyState from './forum/IALabForumEmptyState';
+import ToastNotification from './shared/ToastNotification';
 
 /**
  * Componente premium para foro de IALab - REFACTORIZACIÓN UI/UX PREMIUM
@@ -59,8 +67,9 @@ const IALabForumSection = ({
     const [newPostTitle, setNewPostTitle] = useState('');
     const [newPostContent, setNewPostContent] = useState('');
     const [isCreatingPost, setIsCreatingPost] = useState(false);
+    const [toast, setToast] = useState(null);
     const [forumStats, setForumStats] = useState(null);
-    const [activeFilter, setActiveFilter] = useState('recent'); // 'recent', 'popular', 'following'
+    const { filteredPosts, searchQuery, setSearchQuery, activeFilter, setActiveFilter } = useForumFilters(forumPosts);
 
     // Cargar estadísticas del foro
     useEffect(() => {
@@ -76,9 +85,9 @@ const IALabForumSection = ({
     }, [user, showStats, getForumStats]);
 
     // Handler para crear nuevo post
-    const handleCreatePost = async () => {
+    const handleCreatePost = useCallback(async () => {
         if (!newPostTitle.trim() || !newPostContent.trim()) {
-            alert(t('ialab.forum.section.validation_empty'));
+            setToast({ type: 'error', message: t('ialab.forum.section.validation_empty') });
             return;
         }
 
@@ -92,61 +101,23 @@ const IALabForumSection = ({
             if (activeMod) {
                 try { await trackCommunityComment(activeMod); } catch (e) {}
             }
-            alert(t('ialab.forum.section.post_success'));
+            setToast({ type: 'success', message: t('ialab.forum.section.post_success') });
         } else {
-            alert(t('ialab.forum.section.post_error', { error: result.error }));
+            setToast({ type: 'error', message: t('ialab.forum.section.post_error', { error: result.error }) });
         }
         
         setIsCreatingPost(false);
-    };
+    }, [newPostTitle, newPostContent, createPost, activeMod, trackCommunityComment, t]);
 
     // Handler para dar/quitar like
-    const handleLikeToggle = async (postId, currentLikeCount) => {
+    const handleLikeToggle = useCallback(async (postId, currentLikeCount) => {
         const result = await toggleLike(postId, currentLikeCount);
         if (!result.success) {
             console.error('Error al actualizar like:', result.error);
         }
-    };
+    }, [toggleLike]);
 
-    // Render skeleton loading premium
-    const renderSkeleton = () => (
-        <div className="animate-pulse space-y-6">
-            {/* Header skeleton */}
-            {showHeader && (
-                <div className="flex items-center justify-between mb-6">
-                    <div className="space-y-3">
-                        <div className="h-8 bg-gradient-to-r from-slate-200 to-slate-300 rounded-lg w-48"></div>
-                        <div className="h-4 bg-gradient-to-r from-slate-200 to-slate-300 rounded w-32"></div>
-                    </div>
-                    <div className="h-10 bg-gradient-to-r from-slate-200 to-slate-300 rounded-xl w-32"></div>
-                </div>
-            )}
-
-            {/* Posts skeleton */}
-            <div className="space-y-4">
-                {[1, 2, 3].map((i) => (
-                    <div key={i} className="bg-white rounded-2xl p-6 border border-slate-100">
-                        <div className="flex items-center gap-4 mb-4">
-                            <div className="w-12 h-12 bg-gradient-to-r from-slate-200 to-slate-300 rounded-full"></div>
-                            <div className="flex-1 space-y-2">
-                                <div className="h-4 bg-gradient-to-r from-slate-200 to-slate-300 rounded w-3/4"></div>
-                                <div className="h-3 bg-gradient-to-r from-slate-200 to-slate-300 rounded w-1/2"></div>
-                            </div>
-                        </div>
-                        <div className="space-y-3">
-                            <div className="h-5 bg-gradient-to-r from-slate-200 to-slate-300 rounded w-full"></div>
-                            <div className="h-5 bg-gradient-to-r from-slate-200 to-slate-300 rounded w-5/6"></div>
-                            <div className="h-5 bg-gradient-to-r from-slate-200 to-slate-300 rounded w-4/6"></div>
-                        </div>
-                        <div className="flex items-center gap-4 mt-6">
-                            <div className="h-8 bg-gradient-to-r from-slate-200 to-slate-300 rounded-lg w-24"></div>
-                            <div className="h-8 bg-gradient-to-r from-slate-200 to-slate-300 rounded-lg w-20"></div>
-                        </div>
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
+    const renderSkeleton = () => <IALabForumSkeleton showHeader={showHeader} />;
 
     // Render header premium MEJORADO con botón y búsqueda
     const renderHeader = () => (
@@ -179,6 +150,8 @@ const IALabForumSection = ({
                 </div>
                 <input
                     type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder={t('ialab.forum.section.search_placeholder')}
                     className="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-corporate focus:border-transparent text-petroleum-darker placeholder-slate-500 shadow-sm"
                 />
@@ -189,73 +162,7 @@ const IALabForumSection = ({
                 </div>
             </div>
             
-            {/* Tercera fila: Stats (si están disponibles) */}
-            {showStats && forumStats && (
-                <div className="flex items-center gap-4 pt-2">
-                    <div className="text-center px-4 py-2 bg-petroleum/5 rounded-xl">
-                        <div className="text-lg font-bold text-petroleum">{forumStats.total_posts || 0}</div>
-                        <div className="text-xs text-slate-600">{t('ialab.forum.section.stat_debates')}</div>
-                    </div>
-                    <div className="text-center px-4 py-2 bg-corporate/5 rounded-xl">
-                        <div className="text-lg font-bold text-corporate">{forumStats.total_likes || 0}</div>
-                        <div className="text-xs text-slate-600">{t('ialab.forum.section.stat_interactions')}</div>
-                    </div>
-                    <div className="text-center px-4 py-2 bg-petroleum/5 rounded-xl">
-                        <div className="text-lg font-bold text-petroleum">{forumStats.active_users || 42}</div>
-                        <div className="text-xs text-slate-600">{t('ialab.forum.section.stat_members')}</div>
-                    </div>
-                </div>
-            )}
-        </div>
-    );
-
-    // Render filtros MEJORADO con 4 pestañas didácticas
-    const renderFilters = () => (
-        <div className="flex items-center gap-2 mb-6 overflow-x-auto pb-2">
-            <button
-                onClick={() => setActiveFilter('all')}
-                className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap ${
-                    activeFilter === 'all'
-                        ? 'bg-petroleum text-white shadow-sm'
-                        : 'bg-white text-petroleum border border-slate-200 hover:bg-slate-50'
-                }`}
-            >
-                <Icon name="fa-layer-group" className="mr-2" />
-                {t('ialab.forum.section.filter_all')}
-            </button>
-            <button
-                onClick={() => setActiveFilter('mine')}
-                className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap ${
-                    activeFilter === 'mine'
-                        ? 'bg-petroleum text-white shadow-sm'
-                        : 'bg-white text-petroleum border border-slate-200 hover:bg-slate-50'
-                }`}
-            >
-                <Icon name="fa-user" className="mr-2" />
-                {t('ialab.forum.section.filter_mine')}
-            </button>
-            <button
-                onClick={() => setActiveFilter('unanswered')}
-                className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap ${
-                    activeFilter === 'unanswered'
-                        ? 'bg-corporate text-white shadow-sm'
-                        : 'bg-white text-corporate border border-slate-200 hover:bg-slate-50'
-                }`}
-            >
-                <Icon name="fa-question-circle" className="mr-2" />
-                {t('ialab.forum.section.filter_unanswered')}
-            </button>
-            <button
-                onClick={() => setActiveFilter('popular')}
-                className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap ${
-                    activeFilter === 'popular'
-                        ? 'bg-petroleum text-white shadow-sm'
-                        : 'bg-white text-petroleum border border-slate-200 hover:bg-slate-50'
-                }`}
-            >
-                <Icon name="fa-fire" className="mr-2" />
-                {t('ialab.forum.section.filter_popular')}
-            </button>
+            {showStats && <IALabForumStats forumStats={forumStats} t={t} />}
         </div>
     );
 
@@ -517,7 +424,7 @@ const IALabForumSection = ({
     const renderContent = () => (
         <>
             {showHeader && renderHeader()}
-            {!compact && renderFilters()}
+            {!compact && <IALabForumTagFilter activeFilter={activeFilter} setActiveFilter={setActiveFilter} t={t} />}
             {showInput && user && renderPostInput()}
 
             {/* Lista de posts con espaciado premium */}
@@ -534,60 +441,22 @@ const IALabForumSection = ({
                             {t('ialab.forum.section.retry_btn')}
                         </button>
                     </div>
-                ) : forumPosts.length === 0 ? (
-                    <>
-                        {/* Empty State Premium - Invita a participar */}
-                        <div className="bg-gradient-to-br from-white to-slate-50 rounded-2xl p-10 text-center border border-slate-100 shadow-sm">
-                        <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
-                            <Icon name="fa-comments" className="text-corporate text-3xl" />
-                        </div>
-                        <h3 className="text-2xl font-bold text-petroleum-darker font-montserrat mb-3">
-                            {t('ialab.forum.section.empty_title')}
-                        </h3>
-                        <p className="text-slate-600 text-lg mb-2 max-w-2xl mx-auto">
-                            {t('ialab.forum.section.empty_desc')}
-                        </p>
-                        <p className="text-slate-500 text-sm mb-8 max-w-xl mx-auto">
-                            {t('ialab.forum.section.empty_hint')}
-                        </p>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 max-w-3xl mx-auto">
-                            <div className="bg-white p-4 rounded-xl border border-slate-200 text-left">
-                                <div className="w-10 h-10 rounded-full bg-petroleum/10 flex items-center justify-center mb-3">
-                                    <Icon name="fa-lightbulb" className="text-petroleum w-5 h-5" />
-                                </div>
-                                <h4 className="font-bold text-petroleum mb-1">{t('ialab.forum.section.empty_card1_title')}</h4>
-                                <p className="text-slate-600 text-sm">{t('ialab.forum.section.empty_card1_desc')}</p>
-                            </div>
-                            <div className="bg-white p-4 rounded-xl border border-slate-200 text-left">
-                                <div className="w-10 h-10 rounded-full bg-corporate/10 flex items-center justify-center mb-3">
-                                    <Icon name="fa-question-circle" className="text-corporate w-5 h-5" />
-                                </div>
-                                <h4 className="font-bold text-corporate mb-1">{t('ialab.forum.section.empty_card2_title')}</h4>
-                                <p className="text-slate-600 text-sm">{t('ialab.forum.section.empty_card2_desc')}</p>
-                            </div>
-                            <div className="bg-white p-4 rounded-xl border border-slate-200 text-left">
-                                <div className="w-10 h-10 rounded-full bg-petroleum/10 flex items-center justify-center mb-3">
-                                    <Icon name="fa-users" className="text-petroleum w-5 h-5" />
-                                </div>
-                                <h4 className="font-bold text-petroleum mb-1">{t('ialab.forum.section.empty_card3_title')}</h4>
-                                <p className="text-slate-600 text-sm">{t('ialab.forum.section.empty_card3_desc')}</p>
-                            </div>
-                        </div>
-                        
-                        {user && showInput && (
-                            <button
-                                onClick={() => document.querySelector('textarea')?.focus()}
-                                className="px-8 py-4 bg-gradient-to-r from-corporate to-corporate-dark text-white rounded-xl hover:shadow-[0_0_25px_rgba(0,188,212,0.4)] transition-all duration-300 flex items-center gap-3 font-medium text-lg mx-auto"
-                            >
-                                <Icon name="fa-plus" className="w-5 h-5" />
-                                {t('ialab.forum.section.empty_cta')}
-                            </button>
-                        )}
-                    </div>
-                    </>
+                ) : filteredPosts.length === 0 ? (
+                    <IALabForumEmptyState user={user} showInput={showInput} t={t} />
                 ) : (
-                    forumPosts.map(renderPost)
+                    <FixedSizeList
+                        height={600}
+                        itemCount={filteredPosts.length}
+                        itemSize={180}
+                        itemData={filteredPosts}
+                        overscanCount={3}
+                    >
+                        {({ data, index, style }) => (
+                            <div style={style} key={data[index].id}>
+                                {renderPost(data[index])}
+                            </div>
+                        )}
+                    </FixedSizeList>
                 )}
             </div>
 
@@ -630,23 +499,35 @@ const IALabForumSection = ({
     );
 
     return (
-        <PlatformOptimizedCard
-            className={`
-                ${compact ? 'h-[400px]' : 'min-h-[500px]'} 
-                flex flex-col overflow-hidden
-                bg-white
-                rounded-[28px]
-                p-6
-                ${className}
-            `.trim()}
-            withShadow={true}
-            shadowIntensity="medium"
-            withTouchOptimization={true}
-            {...rest}
-        >
-            {isLoading ? renderSkeleton() : renderContent()}
-        </PlatformOptimizedCard>
+        <>
+            <PlatformOptimizedCard
+                className={`
+                    ${compact ? 'h-[400px]' : 'min-h-[500px]'} 
+                    flex flex-col overflow-hidden
+                    bg-white
+                    rounded-[28px]
+                    p-6
+                    ${className}
+                `.trim()}
+                withShadow={true}
+                shadowIntensity="medium"
+                withTouchOptimization={true}
+                {...rest}
+            >
+                {isLoading ? renderSkeleton() : renderContent()}
+            </PlatformOptimizedCard>
+            <ToastNotification toast={toast} onDismiss={() => setToast(null)} />
+        </>
     );
 };
 
-export default IALabForumSection;
+
+IALabForumSection.propTypes = {
+  compact: PropTypes.any,
+  showHeader: PropTypes.any,
+  showInput: PropTypes.any,
+  showStats: PropTypes.any,
+  limit: PropTypes.any,
+};
+
+export default memo(IALabForumSection);

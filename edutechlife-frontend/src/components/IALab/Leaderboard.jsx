@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import SectionErrorBoundary from './SectionErrorBoundary';
 import { motion, LayoutGroup } from 'framer-motion';
 import { useIALabStore } from '../../store/ialabStore';
 import { useTranslation } from '../../i18n/I18nProvider';
@@ -42,6 +43,7 @@ const Leaderboard = () => {
   };
 
   return (
+    <SectionErrorBoundary name="Leaderboard">
     <LayoutGroup>
       <div className="space-y-1">
         {leaders.map((user, i) => {
@@ -90,6 +92,7 @@ const Leaderboard = () => {
         })}
       </div>
     </LayoutGroup>
+    </SectionErrorBoundary>
   );
 };
 

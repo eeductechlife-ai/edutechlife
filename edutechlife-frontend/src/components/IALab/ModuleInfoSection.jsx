@@ -1,4 +1,3 @@
-import React from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { cn } from '../forum/forumDesignSystem';
 import { motion } from 'framer-motion';
@@ -16,7 +15,7 @@ import { useTranslation } from '../../i18n/I18nProvider';
  */
 const ModuleInfoSection = ({ className = '', ...rest }) => {
     const { t } = useTranslation();
-    const { activeMod, moduleContent, completedExams, moduleProgress, calculateModuleScore } = useIALabProgressContext();
+    const { activeMod, moduleContent, calculateModuleScore } = useIALabProgressContext();
     const moduleScore = calculateModuleScore(activeMod);
     const isModuleCompleted = moduleScore >= 80;
     
@@ -59,7 +58,7 @@ const ModuleInfoSection = ({ className = '', ...rest }) => {
     return (
         <motion.div 
             aria-live="polite" aria-label={`Información del módulo ${activeMod}`}
-            whileHover={{ boxShadow: "0px 8px 25px rgba(0,75,99,0.12)" }}
+            whileHover={{ scale: 1.02 }}
             transition={{ duration: 0.2 }}
             className={cn(
                 "relative z-10 bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden dark:bg-slate-800 dark:border-slate-700/60 hover:border-petroleum/20 dark:hover:border-petroleum/30",

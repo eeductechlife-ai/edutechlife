@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types';;
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 
@@ -77,6 +78,12 @@ const ValerioFloatingButton = ({ onClick, t }) => {
       )}
     </AnimatePresence>
   );
+};
+
+
+ValerioFloatingButton.propTypes = {
+  onClick: PropTypes.any,
+  t: PropTypes.any,
 };
 
 export default ValerioFloatingButton;

@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import { useTranslation } from '../../i18n/I18nProvider';
 import useConnectivity from '../../hooks/useConnectivity';
 
@@ -23,4 +23,4 @@ const OfflineBanner = () => {
   );
 };
 
-export default React.memo(OfflineBanner);
+export default memo(OfflineBanner);

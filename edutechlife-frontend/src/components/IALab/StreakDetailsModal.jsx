@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react'
+import PropTypes from 'prop-types';;
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { X, Loader2 } from 'lucide-react';
 import { useIALabStore } from '../../store/ialabStore';
@@ -152,6 +153,7 @@ const StreakDetailsModal = ({ isOpen, onClose }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          role="dialog" aria-modal="true" aria-label={t('modal.progress_title')}
           className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
           onClick={onClose}
         >
@@ -172,7 +174,7 @@ const StreakDetailsModal = ({ isOpen, onClose }) => {
               </div>
               <button
                 onClick={onClose}
-                className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-slate-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40"
+                className="min-w-[44px] min-h-[44px] w-8 h-8 rounded-lg flex items-center justify-center hover:bg-slate-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40"
                 aria-label={t('common.close')}
               >
                 <X className="w-4 h-4 text-slate-500" />
@@ -199,10 +201,11 @@ const StreakDetailsModal = ({ isOpen, onClose }) => {
                 </div>
                 <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
                   <motion.div
-                    initial={prefersReducedMotion ? { width: `${levelProgress}%` } : { width: 0 }}
-                    animate={{ width: `${levelProgress}%` }}
-                    transition={prefersReducedMotion ? {} : { duration: 1, delay: 0.3, ease: 'easeOut' }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 1, delay: 0.3, ease: 'easeOut' }}
                     className="h-full bg-gradient-to-r from-petroleum to-corporate rounded-full"
+                    style={{ width: `${levelProgress}%` }}
                   />
                 </div>
               </motion.div>
@@ -419,6 +422,15 @@ const StreakDetailsModal = ({ isOpen, onClose }) => {
       )}
     </AnimatePresence>
   );
+};
+
+
+StreakCircle.propTypes = {
+  filled: PropTypes.any,
+  label: PropTypes.any,
+  isToday: PropTypes.any,
+  index: PropTypes.any,
+  prefersReducedMotion: PropTypes.any,
 };
 
 export default StreakDetailsModal;

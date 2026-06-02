@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { useTranslation } from '../../../i18n/I18nProvider';
 
@@ -22,6 +22,13 @@ const ValerioQuickActions = ({ quickActions, onAction, disabled }) => {
       </div>
     </div>
   );
+};
+
+
+ValerioQuickActions.propTypes = {
+  quickActions: PropTypes.any,
+  onAction: PropTypes.any,
+  disabled: PropTypes.any,
 };
 
 export default ValerioQuickActions;

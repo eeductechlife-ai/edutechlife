@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
+import PropTypes from 'prop-types';;
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
 
@@ -209,16 +210,19 @@ Eres un [especificar rol experto]
                 
                 <div className="relative">
                     <textarea
+                        id="evaluation-step2-textarea"
                         value={optimizedPrompt}
                         onChange={(e) => handleChange(e.target.value)}
                         placeholder={t('ialab.evaluation.step2.placeholder')}
+                        aria-required="true"
+                        aria-describedby="evaluation-step2-chars"
                         className="w-full h-64 bg-white border-2 border-slate-200 rounded-xl p-5 text-slate-700 placeholder-slate-500 focus:outline-none focus:border-corporate focus:ring-2 focus:ring-corporate/20 resize-none font-mono text-sm leading-relaxed"
                         spellCheck="false"
                         autoFocus
                     />
                     
                     {/* Contador de caracteres en esquina inferior derecha */}
-                    <div className={`absolute bottom-3 right-3 px-2 py-1 rounded text-xs font-medium ${
+                    <div id="evaluation-step2-chars" className={`absolute bottom-3 right-3 px-2 py-1 rounded text-xs font-medium ${
                         characterCount < 50 ? 'bg-red-50 text-red-600' :
                         characterCount < 100 ? 'bg-amber-50 text-amber-600' :
                         'bg-emerald-50 text-emerald-600'
@@ -324,6 +328,13 @@ Eres un [especificar rol experto]
             </div>
         </div>
     );
+};
+
+
+IALabEvaluationStep2.propTypes = {
+  exercise: PropTypes.any,
+  response: PropTypes.any,
+  onResponseChange: PropTypes.any,
 };
 
 export default IALabEvaluationStep2;

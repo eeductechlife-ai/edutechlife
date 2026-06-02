@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
 
@@ -19,9 +20,9 @@ const HeroContent = ({ heroInView }) => {
         <motion.span
           className="bg-gradient-to-r from-primary-light to-mint bg-clip-text text-transparent"
           animate={{ textShadow: [
-            '0 0 20px rgba(77,168,196,0.2)',
-            '0 0 40px rgba(77,168,196,0.5)',
-            '0 0 20px rgba(77,168,196,0.2)'
+            '0 0 20px rgba(0,188,212,0.2)',
+            '0 0 40px rgba(0,188,212,0.5)',
+            '0 0 20px rgba(0,188,212,0.2)'
           ]}}
           transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
         >
@@ -41,6 +42,11 @@ const HeroContent = ({ heroInView }) => {
 
     </motion.div>
   );
+};
+
+
+HeroContent.propTypes = {
+  heroInView: PropTypes.any,
 };
 
 export default HeroContent;

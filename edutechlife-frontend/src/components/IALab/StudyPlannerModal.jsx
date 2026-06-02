@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react'
+import PropTypes from 'prop-types';;
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabStore } from '../../store/ialabStore';
 import { useTranslation } from '../../i18n/I18nProvider';
@@ -142,9 +143,9 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
               <div className="bg-slate-50 dark:bg-slate-900/30 rounded-xl p-3 border border-slate-100 dark:border-slate-700">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-1">
-                    <button onClick={goToPrevMonth} className="w-6 h-6 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 flex items-center justify-center text-[10px] text-slate-600 dark:text-slate-300 transition-all">‹</button>
+                    <button onClick={goToPrevMonth} aria-label="Mes anterior" className="w-6 h-6 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 flex items-center justify-center text-[10px] text-slate-600 dark:text-slate-300 transition-all">‹</button>
                     <span className="text-xs font-bold text-petroleum dark:text-petroleum w-28 text-center">{calendar.label}</span>
-                    <button onClick={goToNextMonth} className="w-6 h-6 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 flex items-center justify-center text-[10px] text-slate-600 dark:text-slate-300 transition-all">›</button>
+                    <button onClick={goToNextMonth} aria-label="Mes siguiente" className="w-6 h-6 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 flex items-center justify-center text-[10px] text-slate-600 dark:text-slate-300 transition-all">›</button>
                   </div>
                   <span className="text-[10px] text-amber-500 font-semibold">🔥 {streak}d</span>
                 </div>
@@ -243,6 +244,12 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
       </div>
     </div>
   );
+};
+
+
+StudyPlannerModal.propTypes = {
+  isOpen: PropTypes.any,
+  onClose: PropTypes.any,
 };
 
 export default StudyPlannerModal;

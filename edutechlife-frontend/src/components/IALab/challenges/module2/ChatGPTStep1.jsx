@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types';;
 import { motion } from 'framer-motion';
 import { Icon } from '../../../../utils/iconMapping.jsx';
 import { useTranslation } from '../../../../i18n/I18nProvider';
@@ -240,6 +241,13 @@ const ChatGPTStep1 = ({ exercise, response, onResponseChange }) => {
       </div>
     </div>
   );
+};
+
+
+ChatGPTStep1.propTypes = {
+  exercise: PropTypes.any,
+  response: PropTypes.any,
+  onResponseChange: PropTypes.any,
 };
 
 export default ChatGPTStep1;

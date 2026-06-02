@@ -1,15 +1,18 @@
 import { useEffect, useCallback, useState } from 'react';
 import { useTranslation } from '../i18n/I18nProvider';
+import { useSoundEffects } from './IALab/useSoundEffects';
 import { BADGE_INFO } from '../data/ialab';
 
 const NOTIFICATION_DURATION = 4000;
 
 export function useAchievementNotifications(store) {
   const { t } = useTranslation();
+  const { playSound } = useSoundEffects();
   const [toasts, setToasts] = useState([]);
 
   const addToast = useCallback((type, title, description, icon) => {
     const id = Date.now() + Math.random();
+    playSound('achievement');
     setToasts(prev => {
       const next = [...prev, { id, type, title, description, icon }];
       return next.slice(-3);
@@ -17,7 +20,7 @@ export function useAchievementNotifications(store) {
     setTimeout(() => {
       setToasts(prev => prev.filter(t => t.id !== id));
     }, NOTIFICATION_DURATION);
-  }, []);
+  }, [playSound]);
 
   useEffect(() => {
     if (!store) return;

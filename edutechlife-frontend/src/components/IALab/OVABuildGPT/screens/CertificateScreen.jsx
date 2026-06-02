@@ -1,6 +1,15 @@
+import PropTypes from 'prop-types';
 import { useTranslation } from '../../../../i18n/I18nProvider';
 import { GraduationCap, Award, Settings, Check } from 'lucide-react';
 import { Button } from '../shared';
+
+
+CertificateScreen.propTypes = {
+  xp: PropTypes.any,
+  onReset: PropTypes.any,
+  showMarkButton: PropTypes.any,
+  onMarkComplete: PropTypes.any,
+};
 
 export default function CertificateScreen({ xp, onReset, showMarkButton, onMarkComplete }) {
   const { t } = useTranslation();

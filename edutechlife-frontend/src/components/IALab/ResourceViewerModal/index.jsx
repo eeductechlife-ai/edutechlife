@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect, lazy, Suspense } from 'react';
+import { useState, useRef, useEffect, lazy, Suspense } from 'react'
+import PropTypes from 'prop-types';;
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { cn } from '../../forum/forumDesignSystem';
@@ -8,6 +9,7 @@ import { useTranslation } from '../../../i18n/I18nProvider';
 import Breadcrumbs from '../Breadcrumbs';
 import { useIALabProgress } from '../../../hooks/IALab/useIALabProgress';
 import useFullscreen from '../hooks/useFullscreen';
+import useFocusTrap from '../../../hooks/useFocusTrap';
 import { stopSpeech } from '../../../utils/speech';
 import VideoViewer from './VideoViewer';
 import DocumentViewer from './DocumentViewer';
@@ -16,17 +18,19 @@ import InteractiveViewer from './InteractiveViewer';
 import PDFThumbnailViewer from './PDFThumbnailViewer';
 import OVAViewer from './OVAViewer';
 
-const OVAChatGPTTools = lazy(() => import('../OVAChatGPTTools.jsx'));
-const OVAEcosystemGuide = lazy(() => import('../OVAEcosystemGuide.jsx'));
-const OVABuildGPT = lazy(() => import('../OVABuildGPT.jsx'));
-const OVAEtica = lazy(() => import('../OVAEtica.jsx'));
-const OVAIntroPrompt = lazy(() => import('../OVAIntroPrompt.jsx'));
-const OVANotebookLab = lazy(() => import('../OVANotebookLab.jsx'));
-const OVANotebookSimulator = lazy(() => import('../OVANotebookSimulator.jsx'));
-const OVANotebookPodcastGuide = lazy(() => import('../OVANotebookPodcastGuide.jsx'));
-const OVAPodcastStudio = lazy(() => import('../OVAPodcastStudio.jsx'));
-const OVABiasLab = lazy(() => import('../OVABiasLab.jsx'));
-const OVARiskSimulator = lazy(() => import('../OVARiskSimulator.jsx'));
+const OVAChatGPTTools = lazy(() => import(/* webpackChunkName: "ova-chatgpttools" */ '../OVAChatGPTTools.jsx'));
+const OVAEcosystemGuide = lazy(() => import(/* webpackChunkName: "ova-ecosystemguide" */ '../OVAEcosystemGuide.jsx'));
+const OVABuildGPT = lazy(() => import(/* webpackChunkName: "ova-buildgpt" */ '../OVABuildGPT'));
+const OVAEtica = lazy(() => import(/* webpackChunkName: "ova-etica" */ '../OVAEtica.jsx'));
+const OVAIntroPrompt = lazy(() => import(/* webpackChunkName: "ova-introprompt" */ '../OVAIntroPrompt.jsx'));
+const OVANotebookLab = lazy(() => import(/* webpackChunkName: "ova-notebooklab" */ '../OVANotebookLab.jsx'));
+const OVANotebookSimulator = lazy(() => import(/* webpackChunkName: "ova-notebooksimulator" */ '../OVANotebookSimulator.jsx'));
+const OVANotebookPodcastGuide = lazy(() => import(/* webpackChunkName: "ova-notebookpodcastguide" */ '../OVANotebookPodcastGuide.jsx'));
+const OVAPodcastStudio = lazy(() => import(/* webpackChunkName: "ova-podcaststudio" */ '../OVAPodcastStudio.jsx'));
+const OVABiasLab = lazy(() => import(/* webpackChunkName: "ova-biaslab" */ '../OVABiasLab.jsx'));
+const OVARiskSimulator = lazy(() => import(/* webpackChunkName: "ova-risksimulator" */ '../OVARiskSimulator.jsx'));
+const OVAEthicalDilemmas = lazy(() => import(/* webpackChunkName: "ova-ethicaldilemmas" */ '../OVAEthicalDilemmas.jsx'));
+const OvaEdutechlife = lazy(() => import(/* webpackChunkName: "ova-edutechlife" */ '../OvaEdutechlife.jsx'));
 
 const ResourceViewerModal = ({ 
   isOpen = false,
@@ -52,6 +56,7 @@ const ResourceViewerModal = ({
   const [isOvaFullscreen, setIsOvaFullscreen] = useState(false);
   
   const modalRef = useRef(null);
+  const focusTrapRef = useFocusTrap(isOpen);
   const { isFullscreen: isModalFullscreen, toggleFullscreen: toggleModalFullscreen } = useFullscreen(modalRef);
 
   const handleClose = () => {
@@ -99,9 +104,9 @@ const ResourceViewerModal = ({
 const OVA_COMPONENTS = {
   'workflow-ova-herramientas': OVAChatGPTTools,
   'gemini-ova-1': InteractiveViewer,
-  'workspace-ova-1': InteractiveViewer,
+  'workspace-ova-1': OvaEdutechlife,
   'gemini-cases-ova-1': InteractiveViewer,
-  'ethics-ova-1': InteractiveViewer,
+  'ethics-ova-1': OVAEthicalDilemmas,
   'gpts-ova-1': OVABuildGPT,
   'chatgpt-ova-ecosystem': OVAEcosystemGuide,
   'intro-ova-1': OVAEtica,
@@ -283,12 +288,12 @@ const renderOVAById = (resourceId) => {
 
               <div className="fixed inset-0 z-[201] flex items-center justify-center p-2 sm:p-4 pointer-events-none">
                 <motion.div
-                  ref={modalRef}
+                  ref={(node) => { modalRef.current = node; focusTrapRef.current = node; }}
                   variants={modalVariants}
                   initial="hidden"
                   animate="visible"
                   exit="exit"
-                  role="dialog" aria-modal="true"
+                  role="dialog" aria-modal="true" aria-label={resource.title}
                   className={cn(
                     "w-full max-w-6xl bg-white dark:bg-slate-800 rounded-2xl sm:rounded-3xl",
                     "pointer-events-auto overflow-hidden",
@@ -467,6 +472,23 @@ const renderOVAById = (resourceId) => {
       )}
     </AnimatePresence>
   );
+};
+
+
+ResourceViewerModal.propTypes = {
+  isOpen: PropTypes.any,
+  onClose: PropTypes.any,
+  resource: PropTypes.any,
+  resourceType: PropTypes.any,
+  onMarkAsViewed: PropTypes.any,
+  onPreviousResource: PropTypes.any,
+  onNextResource: PropTypes.any,
+  currentIndex: PropTypes.any,
+  totalResources: PropTypes.any,
+  onOpenImmersiveView: PropTypes.any,
+  onOpenOVA: PropTypes.any,
+  youtubeDuration: PropTypes.any,
+  durationLoading: PropTypes.any,
 };
 
 export default ResourceViewerModal;

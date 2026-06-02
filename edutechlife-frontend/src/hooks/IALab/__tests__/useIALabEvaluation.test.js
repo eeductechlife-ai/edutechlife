@@ -24,11 +24,9 @@ vi.mock('../../../lib/supabase', () => ({
   createClerkSupabaseClient: vi.fn(() => mockSupabase),
 }));
 
-const DEEPSEEK_OK = (content) => ({
+const API_OK = (result) => ({
   ok: true,
-  json: vi.fn().mockResolvedValue({
-    choices: [{ message: { content } }],
-  }),
+  json: vi.fn().mockResolvedValue({ result }),
 });
 
 const VALID_EXERCISES_JSON = JSON.stringify({
@@ -71,10 +69,11 @@ describe('useIALabEvaluation', () => {
     expect(result.current.state).toEqual({
       step: 1,
       exercises: null,
-      responses: { ej1: '', ej2: '', ej3: '' },
+      responses: { ej1: '', ej2: '', ej3: '', ej4: '' },
       evaluation: null,
       loading: false,
       error: null,
+      fallbackMode: false,
     });
   });
 
@@ -128,7 +127,7 @@ describe('useIALabEvaluation', () => {
     expect(result.current.state).toEqual({
       step: 1,
       exercises: null,
-      responses: { ej1: '', ej2: '', ej3: '' },
+      responses: { ej1: '', ej2: '', ej3: '', ej4: '' },
       evaluation: null,
       loading: false,
       error: null,
@@ -138,7 +137,7 @@ describe('useIALabEvaluation', () => {
   describe('generateExercises', () => {
     test('calls DeepSeek API and sets exercises on success', async () => {
       globalThis.fetch.mockResolvedValue(
-        DEEPSEEK_OK(JSON.stringify({ ejercicio1: 'test', ejercicio2: 'test2', ejercicio3: 'test3' }))
+        API_OK(JSON.stringify({ ejercicio1: 'test', ejercicio2: 'test2', ejercicio3: 'test3' }))
       );
 
       const { result } = renderHook(() => useIALabEvaluation());
@@ -148,7 +147,7 @@ describe('useIALabEvaluation', () => {
       });
 
       expect(globalThis.fetch).toHaveBeenCalledTimes(1);
-      expect(globalThis.fetch).toHaveBeenCalledWith('https://api.deepseek.com/chat/completions', expect.objectContaining({
+      expect(globalThis.fetch).toHaveBeenCalledWith(expect.stringContaining('/api/chat'), expect.objectContaining({
         method: 'POST',
         headers: expect.objectContaining({ 'Content-Type': 'application/json' }),
       }));
@@ -176,7 +175,7 @@ describe('useIALabEvaluation', () => {
       expect(result.current.state.exercises.ejercicio1).toBeTruthy();
       expect(result.current.state.exercises.ejercicio2).toBeTruthy();
       expect(result.current.state.exercises.ejercicio3).toBeTruthy();
-      expect(result.current.state.error).toContain('Usando ejercicios predefinidos');
+      expect(result.current.state.fallbackMode).toBe(true);
     });
 
     test('falls back on HTTP error status', async () => {
@@ -190,11 +189,11 @@ describe('useIALabEvaluation', () => {
 
       expect(result.current.state.loading).toBe(false);
       expect(result.current.state.exercises).toBeTruthy();
-      expect(result.current.state.error).toContain('ejercicios predefinidos');
+      expect(result.current.state.fallbackMode).toBe(true);
     });
 
     test('falls back when JSON cannot be extracted', async () => {
-      globalThis.fetch.mockResolvedValue(DEEPSEEK_OK('texto sin json'));
+      globalThis.fetch.mockResolvedValue(API_OK('texto sin json'));
 
       const { result } = renderHook(() => useIALabEvaluation());
 
@@ -208,7 +207,7 @@ describe('useIALabEvaluation', () => {
 
     test('falls back when all exercises are empty strings', async () => {
       globalThis.fetch.mockResolvedValue(
-        DEEPSEEK_OK(JSON.stringify({ ejercicio1: '', ejercicio2: '', ejercicio3: '' }))
+        API_OK(JSON.stringify({ ejercicio1: '', ejercicio2: '', ejercicio3: '' }))
       );
 
       const { result } = renderHook(() => useIALabEvaluation());
@@ -237,7 +236,7 @@ describe('useIALabEvaluation', () => {
 
       await act(async () => {
         resolveFetch(
-          DEEPSEEK_OK(JSON.stringify({ ejercicio1: 'a', ejercicio2: 'b', ejercicio3: 'c' }))
+          API_OK(JSON.stringify({ ejercicio1: 'a', ejercicio2: 'b', ejercicio3: 'c' }))
         );
       });
 
@@ -248,8 +247,8 @@ describe('useIALabEvaluation', () => {
   describe('evaluateAnswers', () => {
     test('calls DeepSeek API and sets evaluation on success', async () => {
       globalThis.fetch
-        .mockResolvedValueOnce(DEEPSEEK_OK(VALID_EXERCISES_JSON))
-        .mockResolvedValueOnce(DEEPSEEK_OK(VALID_EVALUATION_JSON));
+        .mockResolvedValueOnce(API_OK(VALID_EXERCISES_JSON))
+        .mockResolvedValueOnce(API_OK(VALID_EVALUATION_JSON));
 
       const { result } = renderHook(() => useIALabEvaluation());
 
@@ -274,8 +273,8 @@ describe('useIALabEvaluation', () => {
 
     test('applies defaults for missing evaluation fields', async () => {
       globalThis.fetch
-        .mockResolvedValueOnce(DEEPSEEK_OK(VALID_EXERCISES_JSON))
-        .mockResolvedValueOnce(DEEPSEEK_OK(JSON.stringify({ nota_ej1: 'not-a-number' })));
+        .mockResolvedValueOnce(API_OK(VALID_EXERCISES_JSON))
+        .mockResolvedValueOnce(API_OK(JSON.stringify({ nota_ej1: 'not-a-number' })));
 
       const { result } = renderHook(() => useIALabEvaluation());
 
@@ -293,7 +292,7 @@ describe('useIALabEvaluation', () => {
 
     test('falls back to local scoring on API error', async () => {
       globalThis.fetch
-        .mockResolvedValueOnce(DEEPSEEK_OK(VALID_EXERCISES_JSON))
+        .mockResolvedValueOnce(API_OK(VALID_EXERCISES_JSON))
         .mockRejectedValueOnce(new Error('API error'));
 
       const { result } = renderHook(() => useIALabEvaluation());
@@ -315,12 +314,12 @@ describe('useIALabEvaluation', () => {
       expect(evalResult.nota_ej1).toBe(100);
       expect(evalResult.nota_ej2).toBeGreaterThan(50);
       expect(evalResult.nota_ej3).toBeGreaterThan(50);
-      expect(result.current.state.error).toContain('evaluación local');
+      expect(result.current.state.fallbackMode).toBe(true);
     });
 
     test('local fallback scores ej1 correctly for drag-and-drop JSON', async () => {
       globalThis.fetch
-        .mockResolvedValueOnce(DEEPSEEK_OK(VALID_EXERCISES_JSON))
+        .mockResolvedValueOnce(API_OK(VALID_EXERCISES_JSON))
         .mockRejectedValueOnce(new Error('fallback'));
 
       const { result } = renderHook(() => useIALabEvaluation());
@@ -347,7 +346,7 @@ describe('useIALabEvaluation', () => {
 
     test('local fallback ej1: 0 score when no valid JSON', async () => {
       globalThis.fetch
-        .mockResolvedValueOnce(DEEPSEEK_OK(VALID_EXERCISES_JSON))
+        .mockResolvedValueOnce(API_OK(VALID_EXERCISES_JSON))
         .mockRejectedValueOnce(new Error('fallback'));
 
       const { result } = renderHook(() => useIALabEvaluation());
@@ -366,7 +365,7 @@ describe('useIALabEvaluation', () => {
 
     test('local fallback ej2: 50 for short answers', async () => {
       globalThis.fetch
-        .mockResolvedValueOnce(DEEPSEEK_OK(VALID_EXERCISES_JSON))
+        .mockResolvedValueOnce(API_OK(VALID_EXERCISES_JSON))
         .mockRejectedValueOnce(new Error('fallback'));
 
       const { result } = renderHook(() => useIALabEvaluation());
@@ -385,7 +384,7 @@ describe('useIALabEvaluation', () => {
 
     test('local fallback ej3: 50 for short answers', async () => {
       globalThis.fetch
-        .mockResolvedValueOnce(DEEPSEEK_OK(VALID_EXERCISES_JSON))
+        .mockResolvedValueOnce(API_OK(VALID_EXERCISES_JSON))
         .mockRejectedValueOnce(new Error('fallback'));
 
       const { result } = renderHook(() => useIALabEvaluation());
@@ -405,7 +404,7 @@ describe('useIALabEvaluation', () => {
     test('sets loading true during evaluation', async () => {
       let resolveFetch;
       globalThis.fetch
-        .mockResolvedValueOnce(DEEPSEEK_OK(VALID_EXERCISES_JSON))
+        .mockResolvedValueOnce(API_OK(VALID_EXERCISES_JSON))
         .mockImplementationOnce(() => new Promise((resolve) => { resolveFetch = resolve; }));
 
       const { result } = renderHook(() => useIALabEvaluation());
@@ -423,7 +422,7 @@ describe('useIALabEvaluation', () => {
       });
 
       await act(async () => {
-        resolveFetch(DEEPSEEK_OK(VALID_EVALUATION_JSON));
+        resolveFetch(API_OK(VALID_EVALUATION_JSON));
       });
 
       expect(result.current.state.loading).toBe(false);

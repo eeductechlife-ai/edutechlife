@@ -1,4 +1,5 @@
-import React from 'react';
+import React from 'react'
+import PropTypes from 'prop-types';;
 
 const SidebarProgressCircle = ({ courseProgress, t }) => (
   <div className="flex flex-col items-center">
@@ -23,5 +24,11 @@ const SidebarProgressCircle = ({ courseProgress, t }) => (
     <h3 className="text-lg font-bold text-petroleum dark:text-[#4DA8C4] mt-3">{t('sidebar.progress')}</h3>
   </div>
 );
+
+
+SidebarProgressCircle.propTypes = {
+  courseProgress: PropTypes.any,
+  t: PropTypes.any,
+};
 
 export default React.memo(SidebarProgressCircle);

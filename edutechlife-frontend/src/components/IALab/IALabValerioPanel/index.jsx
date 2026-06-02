@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react'
+import PropTypes from 'prop-types';;
 import { motion } from 'framer-motion';
 import { useIALabProgressContext, useIALabUIContext } from '../../../context/IALabContext';
 import { useIALabStore } from '../../../store/ialabStore';
@@ -6,6 +7,7 @@ import { speakTextConversational, stopSpeech } from '../../../utils/speech';
 import { callDeepseek } from '../../../utils/api';
 import COURSE_KNOWLEDGE from '../constants/courseKnowledge';
 import useFocusTrap from '../../../hooks/useFocusTrap';
+import SectionErrorBoundary from '../SectionErrorBoundary';
 import { useValerioVoice } from './useValerioVoice';
 import { useTranslation } from '../../../i18n/I18nProvider';
 import ValerioPanelHeader from './ValerioPanelHeader';
@@ -366,7 +368,8 @@ Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, ayudarte con e
   }
 
   return (
-    <div ref={focusTrapRef} className="fixed inset-0 z-[90] flex items-end justify-end" role="dialog" aria-modal="true" aria-label={t('ialab.valerio.panel_aria')}>
+    <SectionErrorBoundary name="ValerioPanel">
+    <div ref={focusTrapRef} className="fixed inset-0 z-[90] flex items-end justify-end" role="dialog" aria-modal="true" aria-label={t('ialab.valerio.panel_aria')} onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }}>
       <div
         className="absolute inset-0 bg-black/20 backdrop-blur-sm"
         onClick={onClose}
@@ -423,7 +426,14 @@ Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, ayudarte con e
         </div>
       </motion.div>
     </div>
+    </SectionErrorBoundary>
   );
+};
+
+
+IALabValerioPanel.propTypes = {
+  isOpen: PropTypes.any,
+  onClose: PropTypes.any,
 };
 
 export default IALabValerioPanel;

@@ -1,4 +1,4 @@
-import React from 'react';
+import { Fragment } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabProgressContext } from '../../context/IALabContext';
@@ -32,7 +32,7 @@ const IALabModuleRoadmap = () => {
           const isLast = idx === modules.length - 1;
 
           return (
-            <React.Fragment key={mod.id}>
+            <Fragment key={mod.id}>
               <motion.button
                 onClick={() => !locked && setActiveMod(mod.id)}
                 whileHover={prefersReducedMotion || locked ? {} : { scale: 1.05, y: -2 }}
@@ -89,7 +89,7 @@ const IALabModuleRoadmap = () => {
                   <div className={`h-px w-full ${completed || isActive ? 'bg-corporate/40' : 'bg-slate-200 dark:bg-slate-600'}`} />
                 </div>
               )}
-            </React.Fragment>
+            </Fragment>
           );
         })}
       </div>

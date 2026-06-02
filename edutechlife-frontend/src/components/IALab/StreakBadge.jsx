@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'
+import PropTypes from 'prop-types';;
 import { motion, useReducedMotion, useSpring, useTransform } from 'framer-motion';
+import { useIdlePause } from '../../hooks/IALab/useIdlePause';
 import { Icon } from '../../utils/iconMapping';
 import { getWeekDays } from './useWeekDays';
 import { useTranslation } from '../../i18n/I18nProvider';
@@ -77,6 +79,7 @@ const StreakCircle = ({ filled, label, isToday, index, prefersReducedMotion }) =
 
 const StreakBadge = ({ streak, xp, isAtRisk, level, onClick }) => {
   const prefersReducedMotion = useReducedMotion();
+  const isIdle = useIdlePause(60000);
   const { t } = useTranslation();
   const weekDays = getWeekDays(streak);
   const animatedStreak = useSpring(0, { stiffness: 80, damping: 15 });
@@ -143,7 +146,7 @@ const StreakBadge = ({ streak, xp, isAtRisk, level, onClick }) => {
         <div className="flex items-center gap-2.5 mb-2.5">
           <motion.div
             animate={
-              !prefersReducedMotion && streak > 0
+              !prefersReducedMotion && streak > 0 && !isIdle
                 ? { scale: [1, 1.08, 1], rotate: [0, -3, 3, 0] }
                 : { scale: 1 }
             }
@@ -189,6 +192,11 @@ const StreakBadge = ({ streak, xp, isAtRisk, level, onClick }) => {
       </motion.div>
     </button>
   );
+};
+
+
+Sparkle.propTypes = {
+  index: PropTypes.any,
 };
 
 export default StreakBadge;

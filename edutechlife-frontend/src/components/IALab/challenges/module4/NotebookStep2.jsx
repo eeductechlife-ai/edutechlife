@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react'
+import PropTypes from 'prop-types';;
 import { motion, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../../../utils/iconMapping.jsx';
 import { useTranslation } from '../../../../i18n/I18nProvider';
@@ -301,6 +302,16 @@ const NotebookStep2 = ({ exercise, response, onResponseChange, topic = '', docCo
       />
     </div>
   );
+};
+
+
+NotebookStep2.propTypes = {
+  exercise: PropTypes.any,
+  response: PropTypes.any,
+  onResponseChange: PropTypes.any,
+  topic: PropTypes.any,
+  docCount: PropTypes.any,
+  selectedDocs: PropTypes.any,
 };
 
 export default NotebookStep2;

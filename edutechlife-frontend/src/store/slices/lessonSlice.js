@@ -1,22 +1,27 @@
 /**
  * lessonSlice — Lesson progress, checkpoints, video/resource tracking
  *
- * Estado: lessonProgress, checkpointAnswers, lastVisitedLesson
+ * Estado: lessonProgress, checkpointAnswers, lastVisitedLesson, completedVideos
  *
  * Cross-slice calls:
  *   - markLessonComplete → addXp (gamification), recordActivity,
- *     checkAndAwardBadges, persistGamificationState
+ *     checkAndAwardBadges
  *
  * Dependencias: ALL_LESSONS (data), LS_KEYS (constants), ls (utils)
+ *
+ * Nota: lessonProgress y checkpointAnswers se sincronizan automáticamente
+ * vía Zustand persist middleware (partialize). completedVideos mantiene
+ * su propia persistencia manual (LS + store).
  */
 import { LS_KEYS } from '@/constants/ialab';
 import { ALL_LESSONS } from '@/data/ialab';
 import { ls } from '@/utils/ialab';
 
 export const createLessonSlice = (set, get) => ({
-  lessonProgress: {},
-  checkpointAnswers: {},
+  lessonProgress: ls.get(LS_KEYS.LESSON_PROGRESS, {}),
+  checkpointAnswers: ls.get(LS_KEYS.CHECKPOINT_ANSWERS, {}),
   lastVisitedLesson: null,
+  completedVideos: ls.get(LS_KEYS.COMPLETED_VIDEOS, []),
 
   markLessonComplete: (moduleId, lessonId) => {
     const state = get();
@@ -28,7 +33,6 @@ export const createLessonSlice = (set, get) => ({
     get().addXp(50);
     get().recordActivity();
     get().checkAndAwardBadges();
-    get().persistGamificationState();
   },
 
   markLessonInProgress: (moduleId, lessonId) => set((state) => {
@@ -82,8 +86,8 @@ export const createLessonSlice = (set, get) => ({
     }
   },
 
-  getCompletedVideos: () => ls.get(LS_KEYS.COMPLETED_VIDEOS, []),
-  setCompletedVideos: (ids) => ls.set(LS_KEYS.COMPLETED_VIDEOS, ids),
+  getCompletedVideos: () => get().completedVideos,
+  setCompletedVideos: (ids) => { ls.set(LS_KEYS.COMPLETED_VIDEOS, ids); set({ completedVideos: ids }); },
 
   hasStartedCourse: () => {
     const state = get();

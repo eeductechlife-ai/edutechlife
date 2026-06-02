@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react'
+import PropTypes from 'prop-types';;
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { cn } from '../forum/forumDesignSystem';
@@ -181,7 +182,7 @@ const TopicResourcesModal = ({
               initial="hidden"
               animate="visible"
               exit="exit"
-              role="dialog" aria-modal="true"
+              role="dialog" aria-modal="true" aria-label={topicData.title}
               className={cn(
                 "w-full max-w-4xl bg-white rounded-2xl sm:rounded-3xl",
                 "pointer-events-auto overflow-hidden flex flex-col",
@@ -450,6 +451,13 @@ const TopicResourcesModal = ({
       )}
     </AnimatePresence>
   );
+};
+
+
+TopicResourcesModal.propTypes = {
+  isOpen: PropTypes.any,
+  onClose: PropTypes.any,
+  topicData: PropTypes.any,
 };
 
 export default TopicResourcesModal;

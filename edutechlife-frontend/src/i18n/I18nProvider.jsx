@@ -1,16 +1,16 @@
-import { createContext, useContext, useState, useCallback, useMemo } from 'react';
-import es from './es.json';
-import en from './en.json';
+import { createContext, useContext, useState, useCallback, useMemo, useEffect } from 'react';
 
-const LOCALES = { es, en };
+const localeModules = {
+  es: () => import('./es.json'),
+  en: () => import('./en.json'),
+};
 const STORAGE_KEY = 'edutechlife_locale';
 
 const getInitialLocale = () => {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored === 'es' || stored === 'en') return stored;
-    const browserLang = navigator.language?.startsWith('es') ? 'es' : 'en';
-    return browserLang;
+    return 'es';
   } catch {
     return 'es';
   }
@@ -33,15 +33,21 @@ export const useTranslation = () => {
 
 export const I18nProvider = ({ children }) => {
   const [locale, setLocaleState] = useState(getInitialLocale);
+  const [translations, setTranslations] = useState(null);
+
+  useEffect(() => {
+    localeModules[locale]()
+      .then(mod => setTranslations(mod.default || mod))
+      .catch(() => setTranslations(null));
+  }, [locale]);
 
   const setLocale = useCallback((lang) => {
     setLocaleState(lang);
     try { localStorage.setItem(STORAGE_KEY, lang); } catch {}
   }, []);
 
-  const translations = LOCALES[locale] || es;
-
   const t = useCallback((key, params) => {
+    if (!translations) return key;
     const value = translations[key];
     if (value === undefined) {
       if (process.env.NODE_ENV === 'development') {

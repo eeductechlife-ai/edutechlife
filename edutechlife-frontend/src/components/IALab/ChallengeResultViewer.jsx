@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types';;
 import { useUser } from '@clerk/react';
 import { supabase } from '../../lib/supabase';
 import { Icon } from '../../utils/iconMapping.jsx';
@@ -65,7 +66,7 @@ const ChallengeResultViewer = ({ moduleId, onClose, onRetry }) => {
 
   if (loading) {
     return (
-      <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/40 backdrop-blur-sm">
+      <div role="dialog" aria-modal="true" aria-label={t('ialab.challenge_result.loading')} className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/40 backdrop-blur-sm">
         <div className="bg-white rounded-2xl shadow-2xl p-8 flex flex-col items-center">
           <div className="w-10 h-10 border-2 border-petroleum border-t-transparent rounded-full animate-spin mb-4" />
           <p className="text-sm text-slate-500">{t('ialab.challenge_result.loading')}</p>
@@ -76,7 +77,7 @@ const ChallengeResultViewer = ({ moduleId, onClose, onRetry }) => {
 
   if (evaluation) {
     return (
-      <div className="fixed inset-0 z-[1000] flex items-start justify-center pt-10 pb-10 bg-black/40 backdrop-blur-sm overflow-y-auto">
+      <div role="dialog" aria-modal="true" aria-label={t('ialab.challenge_result.title', { module: moduleId })} className="fixed inset-0 z-[1000] flex items-start justify-center pt-10 pb-10 bg-black/40 backdrop-blur-sm overflow-y-auto">
         <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90dvh] overflow-y-auto animate-in fade-in-0 zoom-in-95 duration-200 mx-4">
           <div className="sticky top-0 z-10 bg-white border-b border-slate-200/60 px-6 py-3 flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -95,6 +96,13 @@ const ChallengeResultViewer = ({ moduleId, onClose, onRetry }) => {
   }
 
   return null;
+};
+
+
+ChallengeResultViewer.propTypes = {
+  moduleId: PropTypes.any,
+  onClose: PropTypes.any,
+  onRetry: PropTypes.any,
 };
 
 export default ChallengeResultViewer;

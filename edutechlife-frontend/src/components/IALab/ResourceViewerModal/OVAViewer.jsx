@@ -1,4 +1,5 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react'
+import PropTypes from 'prop-types';;
 import QueEsPrompt_OVA_Original from '../QueEsPrompt_OVA_Original';
 
 const OVAViewer = ({ resource, onClose }) => {
@@ -27,6 +28,12 @@ const OVAViewer = ({ resource, onClose }) => {
       </div>
     </div>
   );
+};
+
+
+OVAViewer.propTypes = {
+  resource: PropTypes.any,
+  onClose: PropTypes.any,
 };
 
 export default OVAViewer;

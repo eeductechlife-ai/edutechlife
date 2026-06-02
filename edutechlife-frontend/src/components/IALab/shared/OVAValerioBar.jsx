@@ -1,10 +1,16 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react'
+import PropTypes from 'prop-types';;
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { speakTextConversational, stopSpeech } from '../../../utils/speech';
 import { useTranslation } from '../../../i18n/I18nProvider';
 import { cn } from '../../forum/forumDesignSystem';
 
+/**
+ * @param {Object} props
+ * @param {string} props.text
+ * @param {boolean} [props.autoPlay]
+ */
 const OVAValerioBar = ({ text, autoPlay = false }) => {
   const { t } = useTranslation();
   const [isPlaying, setIsPlaying] = useState(false);
@@ -58,7 +64,7 @@ const OVAValerioBar = ({ text, autoPlay = false }) => {
           <button
             onClick={togglePlay}
             className={cn(
-              'flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all',
+              'min-w-[44px] min-h-[44px] flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all',
               isPlaying
                 ? 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100'
                 : 'bg-cyan-50 dark:bg-cyan-900/20 text-corporate hover:bg-cyan-100'
@@ -95,7 +101,7 @@ const OVAValerioBar = ({ text, autoPlay = false }) => {
 
           <button
             onClick={() => setIsMinimized(!isMinimized)}
-            className="p-1 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            className="min-w-[44px] min-h-[44px] p-1 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
           >
             <Icon
               name={isMinimized ? 'fa-chevron-up' : 'fa-chevron-down'}
@@ -106,6 +112,12 @@ const OVAValerioBar = ({ text, autoPlay = false }) => {
       </motion.div>
     </AnimatePresence>
   );
+};
+
+
+OVAValerioBar.propTypes = {
+  text: PropTypes.any,
+  autoPlay: PropTypes.any,
 };
 
 export default OVAValerioBar;

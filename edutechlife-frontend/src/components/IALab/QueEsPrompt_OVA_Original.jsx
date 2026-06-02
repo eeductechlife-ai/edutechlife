@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react'
+import PropTypes from 'prop-types';;
 import {
  History,
  MessageSquare,
@@ -419,7 +420,7 @@ const QueEsPrompt_OVA_Original = ({ onClose }) => {
              <div className="h-full bg-gradient-to-r from-[#0D2B5B] to-[#00B4D8] transition-all duration-1000 ease-out shadow-lg" style={{ width: `${(completed.length/6)*100}%` }}></div>
            </div>
          </div>
-          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-3 bg-[#F1F5F9] dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-[1.2rem] transition-all shadow-sm border border-slate-100 dark:border-slate-600"><Menu className="w-6 h-6 text-[#0D2B5B]" /></button>
+          <button onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Menú de navegación" className="p-3 bg-[#F1F5F9] dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-[1.2rem] transition-all shadow-sm border border-slate-100 dark:border-slate-600"><Menu className="w-6 h-6 text-[#0D2B5B]" /></button>
           <button onClick={onClose} className="p-3 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 rounded-[1.2rem] transition-all shadow-sm border border-red-100 dark:border-red-900/30" aria-label={t('ialab.que_es_prompt.close_aria')}>
            <X className="w-6 h-6 text-red-500" />
          </button>
@@ -464,16 +465,17 @@ const QueEsPrompt_OVA_Original = ({ onClose }) => {
      {screen !== 'welcome' && (
         <footer className="sticky bottom-0 w-full bg-white/90 dark:bg-slate-800/90 backdrop-blur-3xl border-t border-slate-100 dark:border-slate-700 p-4 md:p-6 z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.05)] flex justify-center">
          <div className="w-full max-w-4xl flex justify-between items-center gap-6">
-           <button
-             onClick={() => {
-               if (curIdx > 0) setScreen(nav[curIdx - 1]);
-               stopSpeech();
-               setPlaying(false);
-             }}
+<button
+              onClick={() => {
+                if (curIdx > 0) setScreen(nav[curIdx - 1]);
+                stopSpeech();
+                setPlaying(false);
+              }}
+              aria-label="Anterior"
               className="p-4 bg-[#F1F5F9] dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-[#0D2B5B] dark:hover:text-white rounded-[1.5rem] disabled:opacity-10 transition-all shadow-inner border border-slate-50 dark:border-slate-600"
-             disabled={curIdx === 0}
-           >
-             <ChevronLeft className="w-6 h-6" />
+              disabled={curIdx === 0}
+            >
+              <ChevronLeft className="w-6 h-6" />
            </button>
            
            <div className="flex gap-3">
@@ -508,7 +510,7 @@ const QueEsPrompt_OVA_Original = ({ onClose }) => {
      {isMenuOpen && (
         <div className="fixed inset-0 z-[100] bg-slate-900/60 dark:bg-slate-950/80 backdrop-blur-md transition-opacity duration-500" onClick={() => setIsMenuOpen(false)}>
           <div className="absolute right-0 h-full w-[400px] bg-white dark:bg-slate-800 shadow-2xl p-12 flex flex-col gap-6 animate-[slideInFromRight_0.6s_cubic-bezier(0.16,1,0.3,1)_forwards] duration-300" onClick={e => e.stopPropagation()}>
-             <button onClick={() => setIsMenuOpen(false)} className="self-end p-3 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full transition-colors"><X className="w-8 h-8 text-slate-600 dark:text-slate-300" /></button>
+             <button onClick={() => setIsMenuOpen(false)} aria-label="Cerrar menú" className="self-end p-3 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full transition-colors"><X className="w-8 h-8 text-slate-600 dark:text-slate-300" /></button>
              <h3 className="font-[900] text-slate-300 dark:text-slate-500 text-xs tracking-[0.4em] mt-12 mb-8 uppercase border-b-2 border-slate-50 dark:border-slate-700 pb-6">{t('ialab.que_es_prompt.sidebar_title')}</h3>
             {nav.map(id => (
                  <button key={id} onClick={() => { setScreen(id); setIsMenuOpen(false); }} className={`p-6 rounded-[2.5rem] text-left text-xs font-[900] transition-all flex items-center justify-between group ${screen === id ? 'bg-[#0D2B5B] text-white shadow-xl' : 'hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400'}`}>
@@ -520,15 +522,14 @@ const QueEsPrompt_OVA_Original = ({ onClose }) => {
        </div>
      )}
 
-      <style>{`
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideInFromBottom { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideInFromRight { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
-        @keyframes zoomIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-        @keyframes slideInFromTop { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-      `}</style>
+
    </div>
  );
+};
+
+
+Quiz.propTypes = {
+  onComplete: PropTypes.any,
 };
 
 export default QueEsPrompt_OVA_Original;

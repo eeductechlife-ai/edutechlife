@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types';;
 import { motion } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { useAuth } from '../../../context/AuthContext';
@@ -174,7 +175,7 @@ const IALabForumPostCard = ({
             <button
               onClick={(e) => { e.stopPropagation(); onVote(); }}
               disabled={!user || voteState?.isLoading}
-              className={`flex items-center gap-1 text-xs font-medium transition-all ${
+              className={`min-w-[44px] min-h-[44px] flex items-center gap-1 text-xs font-medium transition-all ${
                 voteState?.userVoted
                   ? 'text-red-500'
                   : 'text-slate-600 hover:text-red-400'
@@ -199,13 +200,13 @@ const IALabForumPostCard = ({
           </div>
 
           <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-            <button onClick={handleShare} className="text-xs text-slate-600 hover:text-petroleum transition-colors relative">
+            <button onClick={handleShare} aria-label="Compartir" className="min-w-[44px] min-h-[44px] text-xs text-slate-600 hover:text-petroleum transition-colors relative">
               <Icon name={shareFeedback ? 'fa-check' : 'fa-share'} />
               {shareFeedback && (
                 <span className="absolute -top-1 left-1/2 -translate-x-1/2 text-[8px] font-medium text-emerald-600 whitespace-nowrap">{t('ialab.forum.post_card.copied_tooltip')}</span>
               )}
             </button>
-            <button onClick={handleBookmark} className={`text-xs transition-colors ${isBookmarked ? 'text-amber-500' : 'text-slate-600 hover:text-amber-500'}`}>
+            <button onClick={handleBookmark} aria-label={isBookmarked ? 'Guardado' : 'Guardar'} className={`min-w-[44px] min-h-[44px] text-xs transition-colors ${isBookmarked ? 'text-amber-500' : 'text-slate-600 hover:text-amber-500'}`}>
               <Icon name={isBookmarked ? 'fa-bookmark' : 'fa-bookmark'} />
             </button>
           </div>
@@ -224,6 +225,18 @@ const getCategoryLabel = (category, t) => {
     feedback: t('ialab.forum.post_card.category_feedback'),
   };
   return labels[category] || labels.discussion;
+};
+
+
+IALabForumPostCard.propTypes = {
+  post: PropTypes.any,
+  voteState: PropTypes.any,
+  onVote: PropTypes.any,
+  onSelect: PropTypes.any,
+  onShowProfile: PropTypes.any,
+  onHideProfile: PropTypes.any,
+  formatCount: PropTypes.any,
+  index: PropTypes.any,
 };
 
 export default IALabForumPostCard;

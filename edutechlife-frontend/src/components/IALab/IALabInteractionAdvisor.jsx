@@ -1,4 +1,5 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from 'react'
+import PropTypes from 'prop-types';;
 import { motion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
@@ -86,7 +87,7 @@ const IALabInteractionAdvisor = ({ className = '', ...rest }) => {
   const handleKeyDown = (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleRecommend(); } };
 
   return (
-    <motion.div whileHover={{ scale: 1.01, y: -2, boxShadow: "0px 8px 25px rgba(17,17,26,0.1)" }} transition={{ duration: 0.2 }}
+    <motion.div whileHover={{ scale: 1.03 }} transition={{ duration: 0.2 }}
       className={cn("relative z-10 bg-white rounded-2xl p-5 md:p-8 shadow-sm border border-slate-200/60 overflow-hidden space-y-6", className)} {...rest}>
       <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate rounded-t-2xl" />
 
@@ -112,7 +113,7 @@ const IALabInteractionAdvisor = ({ className = '', ...rest }) => {
       </div>
 
       {isOpen && (
-        <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="space-y-5">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-5">
           <div className="bg-gradient-to-br from-[#F0F9FF] to-[#E0F7FA] p-5 rounded-xl border border-corporate/10">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
@@ -201,6 +202,11 @@ const IALabInteractionAdvisor = ({ className = '', ...rest }) => {
       )}
     </motion.div>
   );
+};
+
+
+VoiceReader.propTypes = {
+  text: PropTypes.any,
 };
 
 export default IALabInteractionAdvisor;

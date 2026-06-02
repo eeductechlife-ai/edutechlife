@@ -106,6 +106,16 @@ export function IALabProgressProvider({ children }) {
     clerkRole, progressLoading,
   ]);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (useIALabStore.getState().isLoadingProgress) {
+        console.warn('[IALabProgress] Safety timeout — forcing isLoadingProgress=false');
+        useIALabStore.getState().setIsLoadingProgress(false);
+      }
+    }, 10000);
+    return () => clearTimeout(timer);
+  }, []);
+
   const updateModuleActivity = useCallback(async (moduleId, activity, value, score) => {
     const result = useIALabStore.getState().updateModuleActivity(moduleId, activity, value, score);
 

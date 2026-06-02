@@ -9,3 +9,7 @@ export { default as IALabForumSearchBar } from './IALabForumSearchBar';
 export { default as IALabForumFilterBar } from './IALabForumFilterBar';
 export { default as IALabForumNotifications } from './IALabForumNotifications';
 export { default as IALabForumRichEditor } from './IALabForumRichEditor';
+export { default as IALabForumStats } from './IALabForumStats';
+export { default as IALabForumTagFilter } from './IALabForumTagFilter';
+export { default as IALabForumSkeleton } from './IALabForumSkeleton';
+export { default as IALabForumEmptyState } from './IALabForumEmptyState';

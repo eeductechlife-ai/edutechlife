@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
+import PropTypes from 'prop-types';;
 import IALabEvaluationModal from './IALabEvaluationModal';
 import { useIALabProgressContext, useIALabUIContext } from '../../context/IALabContext';
 import { useIALabStore } from '../../store/ialabStore';
@@ -104,6 +105,12 @@ const IALabEvaluationModalPremium = ({ isOpen, onClose }) => {
             onComplete={handleComplete}
         />
     );
+};
+
+
+IALabEvaluationModalPremium.propTypes = {
+  isOpen: PropTypes.any,
+  onClose: PropTypes.any,
 };
 
 export default IALabEvaluationModalPremium;

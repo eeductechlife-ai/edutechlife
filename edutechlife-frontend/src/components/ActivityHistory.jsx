@@ -653,6 +653,10 @@ const ActivityHistory = ({ isOpen, onClose }) => {
     }
   };
 
+  const SectionLine = () => (
+    <div className="w-1 h-5 rounded-full bg-gradient-to-b from-petroleum to-corporate" />
+  );
+
   const AccordionSection = React.memo(({ id, title, icon, children }) => {
     const isOpen = accordionSections[id] ?? true;
     return (

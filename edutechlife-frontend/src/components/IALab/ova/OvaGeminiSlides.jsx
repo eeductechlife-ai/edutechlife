@@ -1,6 +1,15 @@
+import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { SLIDE_ICONS } from './ovaData';
+
+
+OvaGeminiSlides.propTypes = {
+  currentSlide: PropTypes.any,
+  slideContent: PropTypes.any,
+  slideDescs: PropTypes.any,
+  slideTitles: PropTypes.any,
+};
 
 export default function OvaGeminiSlides({ currentSlide, slideContent, slideDescs, slideTitles }) {
   return (

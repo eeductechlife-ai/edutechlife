@@ -49,11 +49,9 @@ vi.mock('../../../utils/promptEvaluator.js', () => ({
 }));
 
 const originalFetch = globalThis.fetch;
-const DEEPSEEK_OK = (content) => ({
+const API_OK = (result) => ({
   ok: true,
-  json: vi.fn().mockResolvedValue({
-    choices: [{ message: { content } }],
-  }),
+  json: vi.fn().mockResolvedValue({ result }),
 });
 
 function setupMocks() {
@@ -244,7 +242,7 @@ describe('useIALabSynthesizer', () => {
 
     test('returns stats based on history', async () => {
       globalThis.fetch.mockResolvedValue(
-        DEEPSEEK_OK(JSON.stringify({
+        API_OK(JSON.stringify({
           rol: 'expert', tarea: 'analyze', formato: 'json',
           prompt_maestro: 'optimized prompt text',
           analisis_tecnico: 'good feedback',
@@ -303,7 +301,7 @@ describe('useIALabSynthesizer', () => {
 
     test('uses DeepSeek API when available', async () => {
       globalThis.fetch.mockResolvedValue(
-        DEEPSEEK_OK(JSON.stringify({
+        API_OK(JSON.stringify({
           rol: 'expert', tarea: 'analyze', formato: 'json',
           prompt_maestro: 'optimized prompt text',
           analisis_tecnico: 'good feedback',
@@ -317,7 +315,7 @@ describe('useIALabSynthesizer', () => {
       });
 
       expect(globalThis.fetch).toHaveBeenCalledWith(
-        'https://api.deepseek.com/chat/completions',
+        expect.stringContaining('/api/chat'),
         expect.any(Object)
       );
       expect(result.current.genData).not.toBeNull();
@@ -415,7 +413,7 @@ describe('useIALabSynthesizer', () => {
   describe('generateWithDeepSeek', () => {
     test('calls DeepSeek API and returns result', async () => {
       globalThis.fetch.mockResolvedValue(
-        DEEPSEEK_OK(JSON.stringify({
+        API_OK(JSON.stringify({
           rol: 'expert', tarea: 'test', formato: 'json',
           prompt_maestro: 'prompt', analisis_tecnico: 'ok',
         }))

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
+import PropTypes from 'prop-types';;
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { useAuth } from '../../../context/AuthContext';
@@ -95,6 +96,11 @@ const IALabCommunityHub = ({ onAction }) => {
       </AnimatePresence>
     </motion.div>
   );
+};
+
+
+IALabCommunityHub.propTypes = {
+  onAction: PropTypes.any,
 };
 
 export default IALabCommunityHub;

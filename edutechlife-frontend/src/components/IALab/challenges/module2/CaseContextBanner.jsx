@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { Icon } from '../../../../utils/iconMapping.jsx';
 
 const CASE_META = {
@@ -28,6 +28,13 @@ const CaseContextBanner = ({ selectedCase, stepNumber, locale = 'es' }) => {
       </div>
     </div>
   );
+};
+
+
+CaseContextBanner.propTypes = {
+  selectedCase: PropTypes.any,
+  stepNumber: PropTypes.any,
+  locale: PropTypes.any,
 };
 
 export default CaseContextBanner;

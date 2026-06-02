@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
 
@@ -68,6 +68,15 @@ const ModuleProgressBar = ({ moduleScore, activeMod, totalModules = 5, challenge
       </div>
     </div>
   );
+};
+
+
+ModuleProgressBar.propTypes = {
+  moduleScore: PropTypes.any,
+  activeMod: PropTypes.any,
+  totalModules: PropTypes.any,
+  challengeScores: PropTypes.any,
+  completedExams: PropTypes.any,
 };
 
 export default ModuleProgressBar;

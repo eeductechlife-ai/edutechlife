@@ -9,7 +9,7 @@ export function NavigationBar({ currentQuestion, totalQuestions, hasAnsweredCurr
       <button
         onClick={onPrev}
         disabled={currentQuestion === 0}
-        className="px-5 py-2.5 border-2 border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-500 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+        className="px-5 py-2.5 min-h-[44px] border-2 border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-500 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
       >
         <Icon name="fa-arrow-left" className="text-sm" aria-hidden="true" />
         <span className="hidden sm:inline text-sm font-medium">{t('ialab.quiz.previous')}</span>
@@ -25,7 +25,7 @@ export function NavigationBar({ currentQuestion, totalQuestions, hasAnsweredCurr
         <button
           onClick={onNext}
           disabled={!hasAnsweredCurrent}
-          className="px-5 py-2.5 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          className="px-5 py-2.5 min-h-[44px] bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
         >
           <span className="text-sm font-medium">{t('ialab.quiz.next')}</span>
           <Icon name="fa-arrow-right" className="text-sm hidden sm:inline" aria-hidden="true" />
@@ -34,7 +34,7 @@ export function NavigationBar({ currentQuestion, totalQuestions, hasAnsweredCurr
         <button
           onClick={onSubmit}
           disabled={isSubmitting}
-          className="px-5 py-2.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          className="px-5 py-2.5 min-h-[44px] bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
         >
           {isSubmitting ? (
             <>

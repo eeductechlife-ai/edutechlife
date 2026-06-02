@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
+import PropTypes from 'prop-types';;
 import { motion } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import IALabForumRichEditor from './IALabForumRichEditor';
@@ -75,7 +76,7 @@ const IALabForumComment = ({ comment, onReply, depth, children }) => {
           <div className="flex items-center gap-2 mt-1.5">
             <button
               onClick={() => setShowReplyEditor(!showReplyEditor)}
-              className="flex items-center gap-1 text-[10px] text-slate-600 hover:text-petroleum transition-colors"
+              className="min-w-[44px] min-h-[44px] flex items-center gap-1 text-[10px] text-slate-600 hover:text-petroleum transition-colors"
             >
               <Icon name="fa-reply" className="text-[9px]" />
               {t('ialab.forum.comment.reply_btn')}
@@ -99,6 +100,13 @@ const IALabForumComment = ({ comment, onReply, depth, children }) => {
       {children}
     </motion.div>
   );
+};
+
+
+IALabForumComment.propTypes = {
+  comment: PropTypes.any,
+  onReply: PropTypes.any,
+  depth: PropTypes.any,
 };
 
 export default IALabForumComment;

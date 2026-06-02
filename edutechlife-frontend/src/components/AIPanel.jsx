@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import DOMPurify from 'dompurify';
+import { marked } from 'marked';
 import { callDeepseekStream } from '../utils/api';
 import { speakTextConversational, iniciarReconocimiento } from '../utils/speech';
 import { evaluateWithDeepseek } from '../services/aiEvaluationService';
@@ -176,7 +177,7 @@ const AIPanel = ({ title, icon = 'fa-brain-circuit', placeholder, systemPrompt, 
             </div>
             <h2 style="font-family: 'Syne', sans-serif; font-size: 18px; color: #061322; margin-bottom: 20px;">Reporte: ${title}</h2>
             <div style="line-height: 1.6; font-size: 14px;" class="pdf-content">
-                ${window.marked ? window.marked.parse(res) : res}
+                ${DOMPurify.sanitize(marked.parse(res))}
             </div>
             <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb; font-family: 'DM Mono', monospace; font-size: 10px; color: #6b7280; text-align: center;">
                 Generado automáticamente por IA Lab Pro de Edutechlife — ${new Date().toLocaleDateString('es-CO')}
@@ -260,7 +261,7 @@ const AIPanel = ({ title, icon = 'fa-brain-circuit', placeholder, systemPrompt, 
                     </div>
                     <div 
                         className="ai-result-body" 
-                        dangerouslySetInnerHTML={{ __html: window.marked ? DOMPurify.sanitize(window.marked.parse(displayedRes)) : displayedRes }} 
+                        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked.parse(displayedRes)) }} 
                         ref={resultRef}
                     />
                 </div>

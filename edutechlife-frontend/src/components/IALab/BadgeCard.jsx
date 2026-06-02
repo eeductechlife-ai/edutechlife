@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping';
 import { useTranslation } from '../../i18n/I18nProvider';
@@ -104,7 +105,7 @@ const BadgeCard = ({ badge, earned, dateEarned, onClick, isNewlyEarned, index = 
         className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-2 relative"
         style={{
           backgroundColor: earned ? `${badge.color}20` : 'transparent',
-          color: earned ? badge.color : '#94a3b8',
+          color: earned ? badge.color : '#64748b',
         }}
       >
         <motion.div
@@ -117,7 +118,7 @@ const BadgeCard = ({ badge, earned, dateEarned, onClick, isNewlyEarned, index = 
           <Icon name={badge.icon} />
         </motion.div>
       </div>
-      <span className={`text-xs font-semibold text-center leading-tight ${earned ? 'text-slate-700 dark:text-slate-200' : 'text-slate-400 dark:text-slate-500'}`}>
+      <span className={`text-xs font-semibold text-center leading-tight ${earned ? 'text-slate-700 dark:text-slate-200' : 'text-slate-500 dark:text-slate-400'}`}>
         {badge.label}
       </span>
       <span className="text-[10px] text-slate-400 dark:text-slate-500 text-center mt-1 leading-tight">
@@ -137,15 +138,24 @@ const BadgeCard = ({ badge, earned, dateEarned, onClick, isNewlyEarned, index = 
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="absolute inset-0 rounded-xl bg-slate-100/60 dark:bg-slate-900/40 flex items-center justify-center"
+          className="absolute inset-0 rounded-xl bg-slate-200/60 dark:bg-slate-900/40 flex items-center justify-center"
         >
           <div className="w-8 h-8 rounded-full bg-white/80 dark:bg-slate-700/80 flex items-center justify-center shadow-sm">
-            <Icon name="fa-lock" className="text-slate-300 dark:text-slate-500 text-xs" />
+            <Icon name="fa-lock" className="text-slate-400 dark:text-slate-500 text-xs" />
           </div>
         </motion.div>
       )}
     </motion.button>
   );
+};
+
+
+Sparkle.propTypes = {
+  x: PropTypes.any,
+  y: PropTypes.any,
+  size: PropTypes.any,
+  delay: PropTypes.any,
+  color: PropTypes.any,
 };
 
 export default BadgeCard;

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types';;
 import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from '../../../../i18n/I18nProvider';
 import { Icon } from '../../../../utils/iconMapping.jsx';
@@ -203,6 +204,14 @@ const GeminiStep1 = ({ exercise, response, onResponseChange, t: tProp }) => {
       />
     </div>
   );
+};
+
+
+GeminiStep1.propTypes = {
+  exercise: PropTypes.any,
+  response: PropTypes.any,
+  onResponseChange: PropTypes.any,
+  t: PropTypes.any,
 };
 
 export default GeminiStep1;

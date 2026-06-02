@@ -12,6 +12,7 @@ export function SubmitConfirmDialog({ isOpen, unansweredCount, onConfirm, onCanc
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          role="alertdialog" aria-modal="true" aria-label={t('ialab.quiz.confirm_title')}
           className="fixed inset-0 z-[200] bg-black/50 flex items-center justify-center p-4"
           onClick={onCancel}
         >

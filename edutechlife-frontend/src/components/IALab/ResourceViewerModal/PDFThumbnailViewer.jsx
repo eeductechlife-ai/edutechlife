@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react'
+import PropTypes from 'prop-types';;
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { useTranslation } from '../../../i18n/I18nProvider';
 
@@ -77,6 +78,12 @@ const PDFThumbnailViewer = ({ resource, onAutoComplete }) => {
       </div>
     </div>
   );
+};
+
+
+PDFThumbnailViewer.propTypes = {
+  resource: PropTypes.any,
+  onAutoComplete: PropTypes.any,
 };
 
 export default PDFThumbnailViewer;

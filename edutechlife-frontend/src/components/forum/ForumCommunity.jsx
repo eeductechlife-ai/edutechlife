@@ -673,7 +673,7 @@ const ForumCommunity = ({
                 key={index} 
                 className={cn(
                   FORUM_TYPOGRAPHY.BODY.XS,
-                  "text-[#004B63]/70 bg-[#F8FAFC] p-3 rounded-xl animate-fade-in",
+                  "text-[#004B63]/70 bg-[#F8FAFC] p-3 rounded-xl ialab-animate-fade-in",
                   "border border-[#004B63]/5"
                 )}
               >

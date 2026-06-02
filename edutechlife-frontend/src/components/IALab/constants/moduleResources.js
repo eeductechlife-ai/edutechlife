@@ -21,7 +21,7 @@ const RESOURCES_ES = {
       "Identificar aplicaciones prácticas en educación y negocios",
       "Reconocer los límites éticos y técnicos actuales"
     ],
-    estimatedTime: "20 minutos",
+    estimatedTime: "16 minutos",
     difficulty: "Principiante",
     resources: [
       {
@@ -54,7 +54,7 @@ const RESOURCES_ES = {
     learningObjectives: [
       "Comprender qué es un prompt y cómo usarlo para comunicarte efectivamente con la IA"
     ],
-    estimatedTime: "20 minutos",
+    estimatedTime: "15 minutos",
     difficulty: "Principiante",
     resources: [
       {
@@ -103,7 +103,7 @@ const RESOURCES_ES = {
       "Aplicar técnicas de prompt engineering específicas para ChatGPT",
       "Identificar las limitaciones y mejores usos de ChatGPT"
     ],
-    estimatedTime: "25 minutos",
+    estimatedTime: "26 minutos",
     difficulty: "Principiante",
     resources: [
       {
@@ -151,7 +151,7 @@ const RESOURCES_ES = {
       "Combinar múltiples herramientas en flujos de trabajo eficientes",
       "Resolver escenarios reales usando las herramientas integradas"
     ],
-    estimatedTime: "30 minutos",
+    estimatedTime: "25 minutos",
     difficulty: "Intermedio",
     resources: [
       {
@@ -189,7 +189,7 @@ const RESOURCES_ES = {
       "Compartir y utilizar GPTs de la comunidad",
       "Evaluar cuándo usar un GPT personalizado vs ChatGPT estándar"
     ],
-    estimatedTime: "30 minutos",
+    estimatedTime: "25 minutos",
     difficulty: "Avanzado",
     resources: [
       {
@@ -229,24 +229,24 @@ const RESOURCES_ES = {
       "Comparar Gemini con otros modelos de IA",
       "Aplicar Gemini en contextos creativos y analíticos"
     ],
-    estimatedTime: "25 minutos",
+    estimatedTime: "29 minutos",
     difficulty: "Principiante",
     resources: [
       {
         id: "gemini-video-1",
         type: "video",
-        title: "Gemini en 14 Minutos",
-        url: "https://www.youtube.com/embed/XV-2xnFMJqI",
+        title: "Aprende de Gemini",
+        url: "https://www.youtube.com/embed/Y5-5dI3Iero",
         duration: "14:10",
-        thumbnail: "https://img.youtube.com/vi/XV-2xnFMJqI/maxresdefault.jpg",
+        thumbnail: "https://img.youtube.com/vi/Y5-5dI3Iero/maxresdefault.jpg",
         provider: "youtube",
-        description: "Descubre todo lo que Gemini puede hacer: desde analizar imágenes hasta escribir código. La demo completa en 14 minutos."
+        description: "Descubre todo lo que Gemini puede hacer: desde analizar imágenes hasta escribir código. La demo completa en un video claro y didáctico."
       },
       {
         id: "gemini-guide-1",
         type: "pdf",
-        title: "Manual de Gemini",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/recursos-edutechlife/guia_gemini_modulo3.pdf",
+        title: "Introducción a Gemini",
+        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/modulo%203/2-%20guia_edutechlife_modulo3_gemini.pdf",
         pages: 16,
         format: "PDF",
         size: "2.8 MB",
@@ -254,17 +254,6 @@ const RESOURCES_ES = {
         thumbnailType: "premium",
         immersiveView: true
       },
-      {
-        id: "gemini-ova-1",
-        type: "ova_interactive",
-        title: "Laboratorio: Experimenta con Multimodalidad",
-        description: "Pon a prueba Gemini: súbele imágenes, textos y audios para ver cómo responde en tiempo real.",
-        estimatedTime: "15 minutos",
-        difficulty: "Intermedio",
-        interactiveElements: 5,
-        thumbnailType: "premium",
-        fullscreen: true
-      }
     ]
   },
 
@@ -277,36 +266,29 @@ const RESOURCES_ES = {
       "Gestionar correos electrónicos con Gemini en Gmail",
       "Crear presentaciones asistidas por Gemini"
     ],
-    estimatedTime: "30 minutos",
+    estimatedTime: "40 minutos",
     difficulty: "Intermedio",
     resources: [
       {
-        id: "workspace-video-1",
-        type: "video",
-        title: "Gemini en Google Drive: Guía Completa",
-        url: "https://www.youtube.com/embed/0pQKzGzZjZ0",
-        duration: "20:15",
-        thumbnail: "https://img.youtube.com/vi/0pQKzGzZjZ0/maxresdefault.jpg",
-        provider: "youtube",
-        description: "Aprende a integrar Gemini en todas tus herramientas de Google y automatiza tu trabajo diario en minutos."
-      },
-      {
         id: "workspace-template-1",
-        type: "document",
-        title: "Plantillas para Google Workspace",
-        url: "/templates/gemini-workspace-templates.json",
-        format: "JSON",
-        size: "2.1 MB",
-        description: "Plantillas listas para usar en cada app de Google Workspace. Solo copia, pega y adapta."
+        type: "pdf",
+        title: "Gemini a la Práctica",
+        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/modulo%203/3%20Gemini_Research_Mastery.pdf",
+        pages: 20,
+        format: "PDF",
+        size: "3.2 MB",
+        description: "Domina Gemini con ejercicios prácticos y casos de aplicación real para potenciar tu productividad.",
+        thumbnailType: "premium",
+        immersiveView: true
       },
       {
         id: "workspace-ova-1",
         type: "ova_interactive",
-        title: "Simulador: Workspace con Gemini",
-        description: "Simula escenarios reales de trabajo con Gemini integrado en tu Google Workspace.",
-        estimatedTime: "20 minutos",
+        title: "Gemini: Recorrido Interactivo",
+        description: "Explora la arquitectura de Gemini, su capacidad multimodal, Deep Research y la integración con Google Workspace en un recorrido interactivo con audio y quiz final.",
+        estimatedTime: "25 minutos",
         difficulty: "Intermedio",
-        interactiveElements: 7,
+        interactiveElements: 5,
         thumbnailType: "premium",
         fullscreen: true
       }
@@ -322,14 +304,14 @@ const RESOURCES_ES = {
       "Implementar Gemini en procesos educativos",
       "Leverage Gemini para investigación académica"
     ],
-    estimatedTime: "25 minutos",
+    estimatedTime: "42 minutos",
     difficulty: "Avanzado",
     resources: [
       {
         id: "gemini-cases-video-1",
         type: "video",
         title: "Gemini en Acción: Casos Reales",
-        url: "https://www.youtube.com/embed/1pG8VvJGQgE",
+        url: "https://www.youtube.com/embed/hTtQClaIuRQ",
         duration: "16:30",
         thumbnail: "https://img.youtube.com/vi/1pG8VvJGQgE/maxresdefault.jpg",
         provider: "youtube",
@@ -337,13 +319,12 @@ const RESOURCES_ES = {
       },
       {
         id: "gemini-cases-guide-1",
-        type: "pdf",
-        title: "Guía de Casos de Uso",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/recursos-edutechlife/guia_casos_de_uso_gemini_modulo3.pdf",
-        pages: 24,
-        format: "PDF",
-        size: "5.1 MB",
-        description: "20 casos de uso reales con los prompts exactos que usaron. Aprende de los mejores.",
+        type: "image",
+        title: "Domina el Ecosistema de Gemini",
+        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/modulo%203/3-infografia.png",
+        format: "PNG",
+        size: "1.2 MB",
+        description: "Infografía completa del ecosistema Gemini: herramientas, capacidades y casos de uso en un vistazo.",
         thumbnailType: "premium",
         immersiveView: true
       },
@@ -373,7 +354,7 @@ const RESOURCES_ES = {
       "Generar resúmenes inteligentes de contenido",
       "Comparar información entre múltiples fuentes"
     ],
-    estimatedTime: "20 minutos",
+    estimatedTime: "28 minutos",
     difficulty: "Principiante",
     resources: [
       {
@@ -421,7 +402,7 @@ const RESOURCES_ES = {
       "Conectar respuestas a fuentes originales",
       "Validar la precisión de la información generada"
     ],
-    estimatedTime: "25 minutos",
+    estimatedTime: "20 minutos",
     difficulty: "Intermedio",
     resources: [
       {
@@ -468,7 +449,7 @@ const RESOURCES_ES = {
       "Usar audio para aprendizaje y repaso",
       "Compartir Audio Overviews con equipos"
     ],
-    estimatedTime: "20 minutos",
+    estimatedTime: "47 minutos",
     difficulty: "Avanzado",
     resources: [
       {
@@ -518,15 +499,15 @@ const RESOURCES_ES = {
       "Aplicar estrategias para reducir sesgos",
       "Evaluar la equidad de resultados de IA"
     ],
-    estimatedTime: "20 minutos",
+    estimatedTime: "17 minutos",
     difficulty: "Intermedio",
     resources: [
       {
         id: "bias-video-1",
         type: "video",
-        title: "Sesgos en IA: Explicación y Ejemplos",
+        title: "Los Pilares de la I.A",
         url: "https://www.youtube.com/embed/RDkOIf82v6A",
-        duration: "12:15",
+        duration: "1:54",
         thumbnail: "https://img.youtube.com/vi/RDkOIf82v6A/maxresdefault.jpg",
         provider: "youtube",
         description: "Descubre cómo los sesgos invisibles afectan cada respuesta de IA y aprende a detectarlos antes de que afecten tu trabajo."
@@ -534,9 +515,9 @@ const RESOURCES_ES = {
       {
         id: "bias-guide-1",
         type: "pdf",
-        title: "Guía de Detección de Sesgos",
+        title: "Etica de la Inteligencia artificial",
         url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/modulo%205/2-guia_edutechlife_modulo5.pdf",
-        pages: 15,
+        pages: 9,
         format: "PDF",
         size: "2.6 MB",
         description: "Aprende el método paso a paso para identificar, analizar y corregir sesgos en cualquier sistema de IA.",
@@ -566,7 +547,7 @@ const RESOURCES_ES = {
       "Aplicar mejores prácticas de protección",
       "Configurar opciones de privacidad en herramientas de IA"
     ],
-    estimatedTime: "25 minutos",
+    estimatedTime: "29 minutos",
     difficulty: "Intermedio",
     resources: [
       {
@@ -574,7 +555,7 @@ const RESOURCES_ES = {
         type: "video",
         title: "Privacidad y IA: Lo que Debes Saber",
         url: "https://www.youtube.com/embed/ADvjzvJjx5c",
-        duration: "14:40",
+        duration: "9:20",
         thumbnail: "https://img.youtube.com/vi/ADvjzvJjx5c/maxresdefault.jpg",
         provider: "youtube",
         description: "Todo lo que necesitas saber para usar la IA sin poner en riesgo tus datos personales. Guía práctica y directa."
@@ -584,7 +565,7 @@ const RESOURCES_ES = {
         type: "pdf",
         title: "Manual de Privacidad en IA",
         url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/modulo%205/7-Ethical_AI_Mastery.pdf",
-        pages: 20,
+        pages: 13,
         format: "PDF",
         size: "3.8 MB",
         description: "Checklist práctico de 7 pasos para blindar tu privacidad mientras aprovechas al máximo la inteligencia artificial.",
@@ -614,7 +595,7 @@ const RESOURCES_ES = {
       "Promover transparencia en el uso de IA",
       "Desarrollar políticas de uso responsable"
     ],
-    estimatedTime: "20 minutos",
+    estimatedTime: "31 minutos",
     difficulty: "Avanzado",
     resources: [
       {
@@ -622,22 +603,10 @@ const RESOURCES_ES = {
         type: "video",
         title: "IA Ética: Principios y Práctica",
         url: "https://www.youtube.com/embed/idplIgnLStI",
-        duration: "16:25",
+        duration: "6:05",
         thumbnail: "https://img.youtube.com/vi/idplIgnLStI/maxresdefault.jpg",
         provider: "youtube",
         description: "Aprende los principios éticos esenciales para usar la IA con responsabilidad. La guía que todo profesional debe conocer."
-      },
-      {
-        id: "ethics-guide-1",
-        type: "pdf",
-        title: "Código de Ética para Uso de IA",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/recursos-edutechlife/codigo_etica_ia_modulo5.pdf",
-        pages: 18,
-        format: "PDF",
-        size: "3.2 MB",
-        description: "Marco ético completo con casos prácticos.",
-        thumbnailType: "premium",
-        immersiveView: true
       },
       {
         id: "ethics-ova-1",
@@ -667,7 +636,7 @@ const RESOURCES_EN = {
       "Identify practical applications in education and business",
       "Recognize current ethical and technical limitations"
     ],
-    estimatedTime: "20 minutes",
+    estimatedTime: "16 minutes",
     difficulty: "Beginner",
     resources: [
       {
@@ -700,7 +669,7 @@ const RESOURCES_EN = {
     learningObjectives: [
       "Understand what a prompt is and how to use it to communicate effectively with AI"
     ],
-    estimatedTime: "20 minutes",
+    estimatedTime: "15 minutes",
     difficulty: "Beginner",
     resources: [
       {
@@ -749,7 +718,7 @@ const RESOURCES_EN = {
       "Apply ChatGPT-specific prompt engineering techniques",
       "Identify ChatGPT's limitations and best use cases"
     ],
-    estimatedTime: "25 minutes",
+    estimatedTime: "26 minutes",
     difficulty: "Beginner",
     resources: [
       {
@@ -797,7 +766,7 @@ const RESOURCES_EN = {
       "Combine multiple tools into efficient workflows",
       "Solve real-world scenarios using integrated tools"
     ],
-    estimatedTime: "30 minutes",
+    estimatedTime: "25 minutes",
     difficulty: "Intermediate",
     resources: [
       {
@@ -835,7 +804,7 @@ const RESOURCES_EN = {
       "Share and use community GPTs",
       "Evaluate when to use a custom GPT vs standard ChatGPT"
     ],
-    estimatedTime: "30 minutes",
+    estimatedTime: "25 minutes",
     difficulty: "Advanced",
     resources: [
       {
@@ -868,14 +837,14 @@ const RESOURCES_EN = {
   // ============================================================================
   "Introduction to Google Gemini": {
     title: "Introduction to Google Gemini",
-    description: "Meet Gemini, Google's AI that understands text, images, audio, and video all at once. One assistant for everything.",
+    description: "Meet Gemini, Google's AI that understands text, images, audio, and video simultaneously. One assistant for everything.",
     learningObjectives: [
       "Understand Gemini's multimodal capabilities",
       "Use Gemini with different input types",
       "Compare Gemini with other AI models",
       "Apply Gemini in creative and analytical contexts"
     ],
-    estimatedTime: "25 minutes",
+    estimatedTime: "29 minutes",
     difficulty: "Beginner",
     resources: [
       {
@@ -921,9 +890,9 @@ const RESOURCES_EN = {
       "Use Gemini inside Google Docs for writing",
       "Analyze data with Gemini in Google Sheets",
       "Manage emails with Gemini in Gmail",
-      "Create Gemini-assisted presentations"
+      "Create presentations assisted by Gemini"
     ],
-    estimatedTime: "30 minutes",
+    estimatedTime: "40 minutes",
     difficulty: "Intermediate",
     resources: [
       {
@@ -961,14 +930,14 @@ const RESOURCES_EN = {
 
   "Deep Research and Fact-Checking with AI": {
     title: "Deep Research and Fact-Checking with AI",
-    description: "Discover how professionals from different industries are using Gemini to stand out. Real cases and proven results.",
+    description: "Find out how professionals from different industries are using Gemini to stand out. Real cases and proven results.",
     learningObjectives: [
       "Apply Gemini in marketing strategies",
       "Use Gemini for programming assistance",
       "Implement Gemini in educational processes",
       "Leverage Gemini for academic research"
     ],
-    estimatedTime: "25 minutes",
+    estimatedTime: "42 minutes",
     difficulty: "Advanced",
     resources: [
       {
@@ -1019,7 +988,7 @@ const RESOURCES_EN = {
       "Generate intelligent content summaries",
       "Compare information across multiple sources"
     ],
-    estimatedTime: "20 minutes",
+    estimatedTime: "28 minutes",
     difficulty: "Beginner",
     resources: [
       {
@@ -1067,7 +1036,7 @@ const RESOURCES_EN = {
       "Connect answers to original sources",
       "Validate the accuracy of generated information"
     ],
-    estimatedTime: "25 minutes",
+    estimatedTime: "20 minutes",
     difficulty: "Intermediate",
     resources: [
       {
@@ -1114,7 +1083,7 @@ const RESOURCES_EN = {
       "Use audio for learning and review",
       "Share Audio Overviews with teams"
     ],
-    estimatedTime: "20 minutes",
+    estimatedTime: "47 minutes",
     difficulty: "Advanced",
     resources: [
       {
@@ -1164,15 +1133,15 @@ const RESOURCES_EN = {
       "Apply strategies to reduce biases",
       "Evaluate the fairness of AI results"
     ],
-    estimatedTime: "20 minutes",
+    estimatedTime: "17 minutes",
     difficulty: "Intermediate",
     resources: [
       {
         id: "bias-video-1",
         type: "video",
-        title: "AI Biases: Explanation and Examples",
+        title: "Los Pilares de la I.A",
         url: "https://www.youtube.com/embed/RDkOIf82v6A",
-        duration: "12:15",
+        duration: "1:54",
         thumbnail: "https://img.youtube.com/vi/RDkOIf82v6A/maxresdefault.jpg",
         provider: "youtube",
         description: "Discover how invisible biases affect every AI response and learn to detect them before they affect your work."
@@ -1180,9 +1149,9 @@ const RESOURCES_EN = {
       {
         id: "bias-guide-1",
         type: "pdf",
-        title: "Bias Detection Guide",
+        title: "Etica de la Inteligencia artificial",
         url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/modulo%205/2-guia_edutechlife_modulo5.pdf",
-        pages: 15,
+        pages: 9,
         format: "PDF",
         size: "2.6 MB",
         description: "Learn the step-by-step method to identify, analyze, and correct biases in any AI system.",
@@ -1212,7 +1181,7 @@ const RESOURCES_EN = {
       "Apply best protection practices",
       "Configure privacy options in AI tools"
     ],
-    estimatedTime: "25 minutes",
+    estimatedTime: "29 minutes",
     difficulty: "Intermediate",
     resources: [
       {
@@ -1220,7 +1189,7 @@ const RESOURCES_EN = {
         type: "video",
         title: "Privacy and AI: What You Need to Know",
         url: "https://www.youtube.com/embed/ADvjzvJjx5c",
-        duration: "14:40",
+        duration: "9:20",
         thumbnail: "https://img.youtube.com/vi/ADvjzvJjx5c/maxresdefault.jpg",
         provider: "youtube",
         description: "Everything you need to know to use AI without risking your personal data. Practical and direct guide."
@@ -1230,7 +1199,7 @@ const RESOURCES_EN = {
         type: "pdf",
         title: "AI Privacy Manual",
         url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/modulo%205/7-Ethical_AI_Mastery.pdf",
-        pages: 20,
+        pages: 13,
         format: "PDF",
         size: "3.8 MB",
         description: "Practical 7-step checklist to protect your privacy while making the most of artificial intelligence.",
@@ -1260,7 +1229,7 @@ const RESOURCES_EN = {
       "Promote transparency in AI use",
       "Develop responsible use policies"
     ],
-    estimatedTime: "20 minutes",
+    estimatedTime: "31 minutes",
     difficulty: "Advanced",
     resources: [
       {
@@ -1268,22 +1237,10 @@ const RESOURCES_EN = {
         type: "video",
         title: "Ethical AI: Principles and Practice",
         url: "https://www.youtube.com/embed/idplIgnLStI",
-        duration: "16:25",
+        duration: "6:05",
         thumbnail: "https://img.youtube.com/vi/idplIgnLStI/maxresdefault.jpg",
         provider: "youtube",
         description: "Learn the essential ethical principles for using AI responsibly. The guide every professional should know."
-      },
-      {
-        id: "ethics-guide-1",
-        type: "pdf",
-        title: "Code of Ethics for AI Use",
-        url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/recursos-edutechlife/codigo_etica_ia_modulo5.pdf",
-        pages: 18,
-        format: "PDF",
-        size: "3.2 MB",
-        description: "Complete ethical framework with practical cases.",
-        thumbnailType: "premium",
-        immersiveView: true
       },
       {
         id: "ethics-ova-1",

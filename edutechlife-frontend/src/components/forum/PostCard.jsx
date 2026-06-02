@@ -296,7 +296,7 @@ const PostCard = ({
                    ? "bg-gradient-to-r from-[#00BCD4]/20 to-[#004B63]/10 text-[#00BCD4] border border-[#00BCD4]/30 shadow-[#00BCD4]/20"
                    : "bg-[#004B63]/5 text-[#004B63]/70 hover:bg-[#004B63]/10",
                  "disabled:opacity-50 disabled:cursor-not-allowed",
-                 likeState && likeState.userLiked && "button-pulse",
+                 likeState && likeState.userLiked && "ialab-button-pulse",
                  "focus:outline-none focus:ring-2 focus:ring-[#00BCD4]/50 focus:ring-offset-2"
                )}
                tabIndex={user ? 0 : -1}

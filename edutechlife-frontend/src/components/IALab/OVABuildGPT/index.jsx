@@ -1,4 +1,5 @@
-import { useState, useRef } from 'react';
+import { useState, useRef } from 'react'
+import PropTypes from 'prop-types';;
 import { useTranslation } from '../../../i18n/I18nProvider';
 import { GraduationCap, Star } from 'lucide-react';
 import { OVAIntro, OVAValerioBar } from '../shared';
@@ -22,6 +23,11 @@ const screens = [
 ];
 
 const totalXp = 1000;
+
+
+OVABuildGPT.propTypes = {
+  onComplete: PropTypes.any,
+};
 
 export default function OVABuildGPT({ onComplete }) {
   const { t, locale } = useTranslation();

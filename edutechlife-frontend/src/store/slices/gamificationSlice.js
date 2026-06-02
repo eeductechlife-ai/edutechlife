@@ -5,10 +5,9 @@
  *         forumPostCount, forumCommentCount
  *
  * Cross-slice calls:
- *   - persistGamificationState() (persistenceSlice) — en addXp, recordActivity, awardBadge
  *   - get().lessonProgress y get().completedModules — en checkAndAwardBadges
  *
- * Side effects: localStorage persist via persistGamificationState(),
+ * Side effects: persistencia automática vía Zustand persist middleware,
  *   window.dispatchEvent('ialab:badgesAwarded')
  */
 import { LS_KEYS } from '@/constants/ialab';
@@ -16,9 +15,9 @@ import { ls } from '@/utils/ialab';
 import { BADGE_INFO } from '@/data/ialab';
 
 export const createGamificationSlice = (set, get) => ({
-  xp: 0,
-  streak: 0,
-  lastActivityDate: null,
+  xp: ls.get(LS_KEYS.XP, 0),
+  streak: ls.get(LS_KEYS.STREAK, 0),
+  lastActivityDate: ls.get(LS_KEYS.LAST_ACTIVITY_DATE, null),
   startDate: (() => {
     const stored = ls.get(LS_KEYS.START_DATE);
     if (stored) return stored;
@@ -26,15 +25,14 @@ export const createGamificationSlice = (set, get) => ({
     try { localStorage.setItem(LS_KEYS.START_DATE, JSON.stringify(now)); } catch {}
     return now;
   })(),
-  badges: [],
-  badgesDates: {},
-  forumPostCount: 0,
-  forumCommentCount: 0,
+  badges: ls.get(LS_KEYS.BADGES, []),
+  badgesDates: ls.get(LS_KEYS.BADGES_DATES, {}),
+  forumPostCount: ls.get(LS_KEYS.FORUM_POST_COUNT, 0),
+  forumCommentCount: ls.get(LS_KEYS.FORUM_COMMENT_COUNT, 0),
 
   addXp: (amount) => {
     const safe = typeof amount === 'number' && !Number.isNaN(amount) ? amount : 0;
     set((state) => ({ xp: state.xp + safe }));
-    get().persistGamificationState();
   },
 
   recordActivity: () => {
@@ -44,13 +42,11 @@ export const createGamificationSlice = (set, get) => ({
     const lastDateStr = lastActivityDate ? new Date(lastActivityDate).toDateString() : null;
     if (lastDateStr === todayDateStr) {
       set({ lastActivityDate: now.toISOString() });
-      get().persistGamificationState();
       return true;
     }
     const yesterday = new Date(Date.now() - 86400000).toDateString();
     const newStreak = lastDateStr === yesterday ? streak + 1 : 1;
     set({ streak: newStreak, lastActivityDate: now.toISOString() });
-    get().persistGamificationState();
     if (newStreak === 3) get().addXp(50);
     if (newStreak === 7) get().addXp(100);
     if (newStreak === 30) get().addXp(500);
@@ -80,7 +76,6 @@ export const createGamificationSlice = (set, get) => ({
       badges: [...state.badges, badgeId],
       badgesDates: { ...state.badgesDates, [badgeId]: now },
     });
-    get().persistGamificationState();
   },
 
   checkAndAwardBadges: () => {
@@ -107,7 +102,6 @@ export const createGamificationSlice = (set, get) => ({
         badges: [...state.badges, ...newBadges],
         badgesDates: { ...state.badgesDates, ...newDates },
       });
-      get().persistGamificationState();
       window.dispatchEvent(new CustomEvent('ialab:badgesAwarded', { detail: { badges: newBadges } }));
     }
   },

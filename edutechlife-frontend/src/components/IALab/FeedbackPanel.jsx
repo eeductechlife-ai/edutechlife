@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Icon } from '../../utils/iconMapping.jsx';
 
 const EXERCISE_CONFIG = [
@@ -41,5 +42,11 @@ const FeedbackPanel = ({ evaluation, t }) => (
     })}
   </div>
 );
+
+
+FeedbackPanel.propTypes = {
+  evaluation: PropTypes.any,
+  t: PropTypes.any,
+};
 
 export default FeedbackPanel;

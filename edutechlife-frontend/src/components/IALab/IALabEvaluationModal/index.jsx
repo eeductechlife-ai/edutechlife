@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react'
+import PropTypes from 'prop-types';;
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../../context/AuthContext';
 import { supabase } from '../../../lib/supabase';
@@ -99,6 +100,15 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId: pr
   } = useIALabEvaluation(effectiveModuleId, locale);
 
   const [formError, setFormError] = useState(null);
+  const errorTimeoutRef = useRef(null);
+  const clearFormError = useCallback(() => {
+    if (errorTimeoutRef.current) clearTimeout(errorTimeoutRef.current);
+    setFormError(null);
+  }, []);
+  const setTimeoutFormError = useCallback((ms) => {
+    if (errorTimeoutRef.current) clearTimeout(errorTimeoutRef.current);
+    errorTimeoutRef.current = setTimeout(() => setFormError(null), ms);
+  }, []);
   const [isSavingGrade, setIsSavingGrade] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const prefersReducedMotion = usePrefersReducedMotion();
@@ -185,7 +195,7 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId: pr
     const allFilled = keys.every(k => state.responses[k]);
     if (!allFilled) {
       setFormError(t('ialab.evaluation.modal.form_error_incomplete'));
-      setTimeout(() => setFormError(null), 4000);
+      setTimeoutFormError(4000);
       return;
     }
 
@@ -199,13 +209,13 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId: pr
           setStep('results');
         } else {
           setFormError(t('ialab.evaluation.modal.form_error_save', { error: saveResult.error }));
-          setTimeout(() => setFormError(null), 6000);
+          setTimeoutFormError(6000);
         }
       }
     } catch (error) {
       console.error('Error en evaluación:', error);
       setFormError(t('ialab.evaluation.modal.form_error_evaluation'));
-      setTimeout(() => setFormError(null), 6000);
+      setTimeoutFormError(6000);
     } finally {
       setIsSavingGrade(false);
     }
@@ -214,6 +224,12 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId: pr
   useEffect(() => {
     prevStepRef.current = state.step;
   }, [state.step]);
+
+  useEffect(() => {
+    return () => {
+      if (errorTimeoutRef.current) clearTimeout(errorTimeoutRef.current);
+    };
+  }, []);
 
   const focusTrapRef = useFocusTrap(isVisible);
 
@@ -358,6 +374,15 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId: pr
       <ScreenshotProtectionOverlay isOpen={showOverlay && state.step !== 'results'} />
     </AnimatePresence>
   );
+};
+
+
+IALabEvaluationModal.propTypes = {
+  isOpen: PropTypes.any,
+  onClose: PropTypes.any,
+  isPremium: PropTypes.any,
+  moduleId: PropTypes.any,
+  onComplete: PropTypes.any,
 };
 
 export default IALabEvaluationModal;

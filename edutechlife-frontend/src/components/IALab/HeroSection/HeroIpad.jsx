@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 
 const HeroIpad = ({ mousePos }) => {
@@ -31,7 +32,7 @@ const HeroIpad = ({ mousePos }) => {
         >
           <motion.div
             className="absolute -inset-32 md:-inset-48 rounded-[100px]"
-            style={{ background: 'radial-gradient(circle, rgba(77,168,196,0.35) 0%, rgba(102,204,204,0.12) 30%, rgba(0,188,212,0.04) 60%, transparent 80%)' }}
+            style={{ background: 'radial-gradient(circle, rgba(0,188,212,0.35) 0%, rgba(102,204,204,0.12) 30%, rgba(0,188,212,0.04) 60%, transparent 80%)' }}
             animate={{ scale: [1, 1.2, 0.95, 1], opacity: [0.4, 1, 0.6, 0.4] }}
             transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
           />
@@ -107,10 +108,10 @@ const HeroIpad = ({ mousePos }) => {
               <motion.div
                 className="absolute inset-0 rounded-[26px] z-20 pointer-events-none"
                 animate={{ background: [
-                  'linear-gradient(135deg, rgba(77,168,196,0.18) 0%, transparent 40%, rgba(102,204,204,0.12) 60%, transparent 100%)',
-                  'linear-gradient(135deg, rgba(102,204,204,0.15) 0%, transparent 40%, rgba(77,168,196,0.18) 60%, transparent 100%)',
+                  'linear-gradient(135deg, rgba(0,188,212,0.18) 0%, transparent 40%, rgba(102,204,204,0.12) 60%, transparent 100%)',
+                  'linear-gradient(135deg, rgba(102,204,204,0.15) 0%, transparent 40%, rgba(0,188,212,0.18) 60%, transparent 100%)',
                   'linear-gradient(135deg, rgba(0,188,212,0.12) 0%, transparent 40%, rgba(102,204,204,0.15) 60%, transparent 100%)',
-                  'linear-gradient(135deg, rgba(77,168,196,0.18) 0%, transparent 40%, rgba(102,204,204,0.12) 60%, transparent 100%)',
+                  'linear-gradient(135deg, rgba(0,188,212,0.18) 0%, transparent 40%, rgba(102,204,204,0.12) 60%, transparent 100%)',
                 ]}}
                 transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
               />
@@ -139,7 +140,7 @@ const HeroIpad = ({ mousePos }) => {
                 style={{ background: 'linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.08) 50%, transparent 60%)' }}
               />
               <div className="absolute inset-0 rounded-[26px] z-10 pointer-events-none"
-                style={{ boxShadow: 'inset 0 0 50px rgba(77,168,196,0.08), 0 0 30px rgba(77,168,196,0.05)' }}
+                style={{ boxShadow: 'inset 0 0 50px rgba(0,188,212,0.08), 0 0 30px rgba(0,188,212,0.05)' }}
               />
 
               <div className="absolute top-3 left-3 z-30 flex items-center gap-1.5 px-2 py-1 bg-black/50 backdrop-blur-sm rounded-md border border-white/10">
@@ -219,6 +220,11 @@ const HeroIpad = ({ mousePos }) => {
       </div>
     </motion.div>
   );
+};
+
+
+HeroIpad.propTypes = {
+  mousePos: PropTypes.any,
 };
 
 export default HeroIpad;

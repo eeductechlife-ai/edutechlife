@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, memo, useCallback } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
 import { useIALabProgressContext } from '../../context/IALabContext';
@@ -6,6 +6,9 @@ import useIALabSynthesizer from '../../hooks/IALab/useIALabSynthesizer';
 import PromptFeedback from './PromptFeedback';
 import SynthesizerSkeleton from './SynthesizerSkeleton';
 import SynthesizerInput from './SynthesizerInput';
+import SynthesizerSuggestions from './SynthesizerSuggestions';
+import GenerationHistory from './GenerationHistory';
+import DeepSeekDashboard from './DeepSeekDashboard';
 import { FORUM_COMPONENTS, FORUM_TYPOGRAPHY, FORUM_EFFECTS, GRADIENTS, cn } from '../forum/forumDesignSystem';
 
 /**
@@ -51,33 +54,33 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
     const [quickAnalysis, setQuickAnalysis] = useState(null);
 
     // Handler para optimizar prompt
-    const handleOptimize = async () => {
+    const handleOptimize = useCallback(async () => {
         if (!isValidInput(input)) {
             alert(t('ialab.synthesizer.validation_error', { length: input.length }));
             return;
         }
         
         await optimizePrompt(input);
-    };
+    }, [input, isValidInput, optimizePrompt, t]);
 
     // Handler para teclado (Enter para optimizar)
-    const handleKeyDown = (e) => {
+    const handleKeyDown = useCallback((e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             handleOptimize();
         }
-    };
+    }, [handleOptimize]);
 
     // Handler para nueva generación (reset local)
-    const handleNewGeneration = () => {
+    const handleNewGeneration = useCallback(() => {
         setInput('');
         if (clearHistory) clearHistory();
-    };
+    }, [setInput, clearHistory]);
 
     // Handler para sugerencia rápida
-    const handleSuggestionClick = (suggestion) => {
+    const handleSuggestionClick = useCallback((suggestion) => {
         setInput(suggestion);
-    };
+    }, [setInput]);
 
     // Efecto para análisis en tiempo real
     useEffect(() => {
@@ -150,241 +153,10 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
       />
     );
 
-    // Render sugerencias rápidas
-    const renderSuggestions = () => (
-        <div className="mt-6">
-            <h4 className={cn(
-                FORUM_TYPOGRAPHY.BODY.LG,
-                FORUM_TYPOGRAPHY.SEMIBOLD,
-                FORUM_TYPOGRAPHY.TEXT_PRIMARY,
-                "mb-3"
-            )}>
-                {t('ialab.synthesizer.suggestions')}
-            </h4>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {suggestions.map((suggestion, index) => (
-                    <button
-                        key={index}
-                        onClick={() => handleSuggestionClick(suggestion)}
-                        className={cn(
-                            "text-left p-4 rounded-xl border border-slate-200/60",
-                            "bg-white",
-                            "hover:bg-slate-50",
-                            "hover:border-corporate/40 hover:shadow-sm",
-                            FORUM_EFFECTS.TRANSITION_ALL,
-                            "focus:outline-none focus:ring-2 focus:ring-corporate/50"
-                        )}
-                        disabled={loading}
-                    >
-                        <div className="flex items-start gap-3">
-                            <div className="w-6 h-6 rounded-full bg-corporate/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                <Icon name="fa-lightbulb" className="text-corporate text-xs" />
-                            </div>
-                            <p className={cn(
-                                FORUM_TYPOGRAPHY.BODY.SM,
-                                "text-petroleum-darker leading-relaxed"
-                            )}>
-                                {suggestion}
-                            </p>
-                        </div>
-                    </button>
-                ))}
-            </div>
-        </div>
-    );
-
     // Render resultados de DeepSeek - Dashboard Analítico Premium
     const renderDeepSeekResults = () => {
         if (!genData || !genData.deepSeekData) return null;
-        
-        const deepSeekData = genData.deepSeekData;
-        
-        return (
-            <div className="mt-8 space-y-8 animate-in fade-in duration-500">
-                {/* ==================== ENCABEZADO PREMIUM DASHBOARD ==================== */}
-                <div className="mb-8">
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center shadow-lg">
-                                <Icon name="fa-brain" className="text-white text-xl" />
-                            </div>
-                            <div>
-                                <h3 className="text-2xl font-bold text-slate-800 font-sans">{t('ialab.synthesizer.dashboard_title')}</h3>
-                                <p className="text-slate-600 font-sans">{t('ialab.synthesizer.dashboard_desc')}</p>
-                            </div>
-                        </div>
-                        <div className="px-4 py-2 bg-gradient-to-r from-petroleum/10 to-corporate/10 rounded-full border border-petroleum/20">
-                            <span className="text-sm font-bold text-petroleum font-sans">{t('ialab.synthesizer.live')}</span>
-                        </div>
-                    </div>
-                    
-                    {/* Stats bar */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                        <div className="bg-white p-4 rounded-xl border border-slate-100">
-                            <div className="text-sm text-slate-500 mb-1 font-sans">{t('ialab.synthesizer.model')}</div>
-                            <div className="font-bold text-slate-800 font-sans">deepseek-chat</div>
-                        </div>
-                        <div className="bg-white p-4 rounded-xl border border-slate-100">
-                            <div className="text-sm text-slate-500 mb-1 font-sans">{t('ialab.synthesizer.temperature')}</div>
-                            <div className="font-bold text-slate-800 font-sans">0.7</div>
-                        </div>
-                        <div className="bg-white p-4 rounded-xl border border-slate-100">
-                            <div className="text-sm text-slate-500 mb-1 font-sans">{t('ialab.synthesizer.tokens')}</div>
-                            <div className="font-bold text-slate-800 font-sans">~{Math.round(deepSeekData.prompt_maestro.length / 4)}</div>
-                        </div>
-                        <div className="bg-white p-4 rounded-xl border border-slate-100">
-                            <div className="text-sm text-slate-500 mb-1 font-sans">{t('ialab.synthesizer.quality')}</div>
-                            <div className="font-bold text-green-600 font-sans">Premium</div>
-                        </div>
-                    </div>
-                </div>
-                
-                {/* ==================== GRID DE ESTRUCTURA PREMIUM - ROL, TAREA, FORMATO ==================== */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8 animate-in slide-in-from-bottom-4 duration-300">
-                    {/* Tarjeta ROL */}
-                    <div className="bg-white border border-slate-200/60 shadow-sm rounded-3xl p-6 hover:-translate-y-1 hover:shadow transition-all duration-300 relative overflow-hidden">
-                        <div className="flex items-center gap-2 mb-3">
-                            <Icon name="fa-user-tie" className="text-petroleum" />
-                            <span className="text-xs font-black text-petroleum tracking-widest uppercase font-sans">{t('ialab.synthesizer.rol')}</span>
-                        </div>
-                        <p className="text-slate-800 font-medium leading-relaxed font-sans">{deepSeekData.rol}</p>
-                        <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-petroleum/5 rounded-full blur-sm"></div>
-                    </div>
-                    
-                    {/* Tarjeta TAREA */}
-                    <div className="bg-white border border-slate-200/60 shadow-sm rounded-3xl p-6 hover:-translate-y-1 hover:shadow transition-all duration-300 relative overflow-hidden">
-                        <div className="flex items-center gap-2 mb-3">
-                            <Icon name="fa-target" className="text-corporate" />
-                            <span className="text-xs font-black text-corporate tracking-widest uppercase font-sans">{t('ialab.synthesizer.task')}</span>
-                        </div>
-                        <p className="text-slate-800 font-medium leading-relaxed font-sans">{deepSeekData.tarea}</p>
-                        <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-corporate/5 rounded-full blur-sm"></div>
-                    </div>
-                    
-                    {/* Tarjeta FORMATO */}
-                    <div className="bg-white border border-slate-200/60 shadow-sm rounded-3xl p-6 hover:-translate-y-1 hover:shadow transition-all duration-300 relative overflow-hidden">
-                        <div className="flex items-center gap-2 mb-3">
-                            <Icon name="fa-file-alt" className="text-petroleum" />
-                            <span className="text-xs font-black text-petroleum tracking-widest uppercase font-sans">{t('ialab.synthesizer.format')}</span>
-                        </div>
-                        <p className="text-slate-800 font-medium leading-relaxed font-sans">{deepSeekData.formato}</p>
-                        <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-petroleum/5 rounded-full blur-sm"></div>
-                    </div>
-                </div>
-                
-                {/* ==================== BLOQUE DEL PROMPT MAESTRO - TERMINAL PREMIUM ==================== */}
-                <div className="bg-slate-900 text-slate-100 rounded-[2.5rem] p-8 relative shadow-2xl overflow-hidden mb-8 animate-in zoom-in duration-400">
-                    {/* Header de la terminal */}
-                    <div className="flex items-center justify-between mb-6">
-                        <div className="flex items-center gap-3">
-                            <div className="flex items-center gap-2">
-                                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                                <div className="w-3 h-3 bg-amber-500 rounded-full"></div>
-                                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <Icon name="fa-terminal" className="text-slate-600" />
-                                <span className="text-sm font-bold text-slate-300 font-sans">{t('ialab.synthesizer.terminal_header')}</span>
-                            </div>
-                        </div>
-                        
-                        {/* Botón Copiar Premium - FUNCIONALIDAD PRESERVADA */}
-                        <button 
-                            onClick={() => copyToClipboard(deepSeekData.prompt_maestro)}
-                            className="absolute top-6 right-6 bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2 transition-all hover:scale-105 active:scale-95 font-sans"
-                            aria-label={t('ialab.synthesizer.copy_aria')}
-                        >
-                            <Icon name="fa-copy" className="text-sm" /> {t('ialab.synthesizer.copy')}
-                        </button>
-                    </div>
-                    
-                    {/* Contenido del prompt */}
-                    <div className="font-mono font-medium leading-relaxed text-lg text-slate-200 whitespace-pre-wrap bg-slate-800/50 rounded-2xl p-6 border border-slate-700/50">
-                        {deepSeekData.prompt_maestro}
-                    </div>
-                    
-                    {/* Footer de la terminal */}
-                    <div className="mt-6 pt-4 border-t border-slate-700/50 flex items-center justify-between text-sm text-slate-600 font-sans">
-                        <div className="flex items-center gap-4">
-                            <span className="flex items-center gap-1">
-                                <Icon name="fa-code" className="text-xs" />
-                                <span>{t('ialab.synthesizer.prompt_engineering')}</span>
-                            </span>
-                            <span className="flex items-center gap-1">
-                                <Icon name="fa-brain" className="text-xs" />
-                                <span>{t('ialab.synthesizer.deepseek_ai')}</span>
-                            </span>
-                        </div>
-                        <div className="text-xs">
-                            {deepSeekData.prompt_maestro.split(' ').length} palabras • {deepSeekData.prompt_maestro.length} caracteres
-                        </div>
-                    </div>
-                </div>
-                
-                {/* ==================== BLOQUE DE ANÁLISIS TÉCNICO - NOTA DEL PROFESOR ==================== */}
-                <div className="bg-gradient-to-r from-indigo-50 to-blue-50 border-l-4 border-petroleum rounded-r-3xl rounded-l-md p-8 shadow-sm relative mb-8 overflow-hidden animate-in slide-in-from-right-4 duration-300">
-                    {/* Icono de bombillo en el fondo */}
-                    <Icon 
-                        name="fa-lightbulb" 
-                        className="absolute right-4 bottom-4 text-petroleum/10 opacity-20 w-32 h-32" 
-                    />
-                    
-                    {/* Header del análisis */}
-                    <div className="flex items-center gap-3 mb-4">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center">
-                            <Icon name="fa-lightbulb" className="text-white" />
-                        </div>
-                        <div>
-                            <h4 className="text-lg font-bold text-petroleum font-sans">{t('ialab.synthesizer.technical_analysis')}</h4>
-                            <p className="text-sm text-petroleum font-sans">{t('ialab.synthesizer.technical_analysis_desc')}</p>
-                        </div>
-                    </div>
-                    
-                    {/* Contenido del análisis */}
-                    <div className="relative z-10">
-                        <p className="text-slate-700 font-medium leading-relaxed mb-6 font-sans">
-                            {deepSeekData.analisis_tecnico}
-                        </p>
-                        
-                        {/* Píldoras de técnicas aplicadas */}
-                        <div className="flex flex-wrap gap-2">
-                            <span className="bg-white border border-petroleum/20 text-petroleum px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
-                                {t('ialab.synthesizer.structure_rtf')}
-                            </span>
-                            <span className="bg-white border border-corporate/20 text-corporate px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
-                                {t('ialab.synthesizer.specificity')}
-                            </span>
-                            <span className="bg-white border border-petroleum/20 text-petroleum px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
-                                {t('ialab.synthesizer.clarity')}
-                            </span>
-                            <span className="bg-white border border-slate-200 text-slate-600 px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
-                                {t('ialab.synthesizer.context')}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                
-                {/* ==================== FOOTER INFORMATIVO ==================== */}
-                <div className="bg-gradient-to-r from-slate-50 to-white p-6 rounded-2xl border border-slate-200">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                            <Icon name="fa-info-circle" className="text-slate-600" />
-                            <div>
-                                <p className="text-sm font-medium text-slate-700 font-sans">{t('ialab.synthesizer.generated_with')}</p>
-                                <p className="text-xs text-slate-500 font-sans">Modelo: deepseek-chat • Temperatura: 0.7 • Response Format: JSON</p>
-                            </div>
-                        </div>
-                        <button 
-                            onClick={handleNewGeneration}
-                            className="px-4 py-2 text-sm font-medium text-petroleum bg-petroleum/10 hover:bg-petroleum/20 rounded-lg transition-colors font-sans"
-                        >
-                            <Icon name="fa-rotate-right" className="mr-2" /> {t('ialab.synthesizer.generate_new')}
-                        </button>
-                    </div>
-                </div>
-            </div>
-        );
+        return <DeepSeekDashboard deepSeekData={genData.deepSeekData} t={t} copyToClipboard={copyToClipboard} handleNewGeneration={handleNewGeneration} />;
     };
 
     // Render resultado optimizado (para resultados locales)
@@ -551,80 +323,9 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
         );
     };
 
-    // Render historial
-     const renderHistory = () => (
-         history.length > 0 && (
-             <div className="mt-8 pt-6 border-t border-slate-100">
-                 <div className="flex items-center justify-between mb-4">
-                     <h4 className={cn(
-                         FORUM_TYPOGRAPHY.BODY.LG,
-                         FORUM_TYPOGRAPHY.SEMIBOLD,
-                         FORUM_TYPOGRAPHY.TEXT_PRIMARY
-                     )}>
-                         {t('ialab.synthesizer.recent_history')}
-                     </h4>
-                     <button
-                         onClick={clearHistory}
-                         className="text-sm text-slate-500 hover:text-red-500 transition-colors duration-300"
-                          aria-label={t('ialab.synthesizer.clear_aria')}
-                      >
-                          <Icon name="fa-trash" className="mr-1" /> {t('ialab.synthesizer.clear')}
-                     </button>
-                 </div>
-                 
-                 <div className="space-y-3">
-                     {history.slice(0, 5).map((item, index) => {
-                         // Verificar que el item tenga la estructura correcta
-                         if (!item || !item.originalPrompt || !item.techniqueApplied || !item.analysis) {
-                             return null;
-                         }
-                         
-                         return (
-                             <button
-                                 key={index}
-                                 onClick={() => loadFromHistory(index)}
-                                 className={cn(
-                                     "w-full text-left p-4 rounded-xl",
-                                     "bg-white border border-slate-100",
-                                     "hover:bg-corporate/5 hover:border-corporate/30",
-                                     FORUM_EFFECTS.TRANSITION_ALL,
-                                     "focus:outline-none focus:ring-2 focus:ring-corporate/50"
-                                 )}
-                             >
-                                 <div className="flex items-start justify-between">
-                                     <div className="flex-1 min-w-0">
-                                         <p className={cn(
-                                             FORUM_TYPOGRAPHY.BODY.SM,
-                                             "text-petroleum-darker truncate"
-                                         )}>
-                                             {item.originalPrompt}
-                                         </p>
-                                         <div className="flex items-center gap-2 mt-2">
-                                             <span className="text-xs text-slate-500">
-                                                 {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                             </span>
-                                             <span className="text-xs px-2 py-0.5 bg-petroleum/10 text-petroleum rounded-full">
-                                                 {item.techniqueApplied.name}
-                                             </span>
-                                             <span className={cn(
-                                                 "text-xs px-2 py-0.5 rounded-full",
-                                                 item.analysis.score >= 70 ? "bg-green-100 text-green-800" :
-                                                 item.analysis.score >= 50 ? "bg-yellow-100 text-yellow-800" :
-                                                 "bg-red-100 text-red-800"
-                                             )}>
-                                                 {item.analysis.score}/100
-                                             </span>
-                                         </div>
-                                     </div>
-                                     <Icon name="fa-chevron-right" className="text-slate-600 ml-2 flex-shrink-0" />
-                                 </div>
-                             </button>
-                         );
-                     })}
-                 </div>
-             </div>
-         )
-     );
+    const renderHistory = () => (
+        <GenerationHistory history={history} clearHistory={clearHistory} loadFromHistory={loadFromHistory} t={t} />
+    );
 
      // Render error
      const renderError = () => (
@@ -709,7 +410,7 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
                 <>
                     {renderHeader()}
                     {renderInputArea()}
-                    {renderSuggestions()}
+                    <SynthesizerSuggestions suggestions={suggestions} loading={loading} onSuggestionClick={handleSuggestionClick} t={t} />
                      {genData && genData.deepSeekData && renderDeepSeekResults()}
                      {genData && !genData.deepSeekData && renderLocalResult()}
                     {renderError()}
@@ -721,4 +422,4 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
     );
 };
 
-export default IALabSynthesizer;
+export default memo(IALabSynthesizer);

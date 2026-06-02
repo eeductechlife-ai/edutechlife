@@ -58,8 +58,8 @@ const CONTENT_ES = {
       mission: "Completa cada lección y domina la IA más usada del mundo. Cada recurso completado te acerca a un nivel profesional. ¡Lleva tus habilidades al siguiente nivel!",
       topics: [
         { title: "Guía Completa de ChatGPT", icon: "fa-book-open", resources: 3, duration: "20 min" },
-        { title: "Plantillas de Flujos de Trabajo", icon: "fa-layer-group", resources: 3, duration: "20 min" },
-        { title: "Function Calling y APIs de OpenAI", icon: "fa-code", resources: 3, duration: "20 min" }
+        { title: "Plantillas de Flujos de Trabajo", icon: "fa-layer-group", resources: 2, duration: "20 min" },
+        { title: "Function Calling y APIs de OpenAI", icon: "fa-code", resources: 2, duration: "20 min" }
       ]
     },
     lessons: [
@@ -174,8 +174,8 @@ const CONTENT_ES = {
       description: "En este módulo, dominarás Google Gemini para investigación avanzada. Aprenderás a cruzar datos en tiempo real, analizar múltiples formatos y verificar información con precisión.",
       mission: "Conviértete en un investigador de élite. Domina Google Gemini y descubre cómo cruzar datos, verificar fuentes y crear informes profesionales con IA.",
       topics: [
-        { title: "Introducción a Google Gemini", icon: "fa-google", resources: 3, duration: "20 min" },
-        { title: "Razonamiento Multimodal y Grounding", icon: "fa-layer-group", resources: 3, duration: "20 min" },
+        { title: "Introducción a Google Gemini", icon: "fa-google", resources: 2, duration: "20 min" },
+        { title: "Razonamiento Multimodal y Grounding", icon: "fa-layer-group", resources: 2, duration: "20 min" },
         { title: "Deep Research y Fact-Checking con IA", icon: "fa-search", resources: 3, duration: "20 min" }
       ]
     },
@@ -410,7 +410,7 @@ const CONTENT_ES = {
       topics: [
         { title: "Ética en la Inteligencia Artificial", icon: "fa-balance-scale", resources: 3, duration: "20 min" },
         { title: "Sesgos Algorítmicos y Equidad", icon: "fa-exclamation-triangle", resources: 3, duration: "20 min" },
-        { title: "Privacidad, Regulación y IA Responsable", icon: "fa-shield-alt", resources: 3, duration: "20 min" }
+        { title: "Privacidad, Regulación y IA Responsable", icon: "fa-shield-alt", resources: 2, duration: "20 min" }
       ]
     },
     lessons: [
@@ -549,8 +549,8 @@ const CONTENT_EN = {
       mission: "Complete each lesson and master the world's most used AI. Each completed resource brings you closer to a professional level. Take your skills to the next level!",
       topics: [
         { title: "Complete ChatGPT Guide", icon: "fa-book-open", resources: 3, duration: "20 min" },
-        { title: "Workflow Templates", icon: "fa-layer-group", resources: 3, duration: "20 min" },
-        { title: "Function Calling and OpenAI APIs", icon: "fa-code", resources: 3, duration: "20 min" }
+        { title: "Workflow Templates", icon: "fa-layer-group", resources: 2, duration: "20 min" },
+        { title: "Function Calling and OpenAI APIs", icon: "fa-code", resources: 2, duration: "20 min" }
       ]
     },
     lessons: [
@@ -892,7 +892,7 @@ const CONTENT_EN = {
       topics: [
         { title: "Ethics in Artificial Intelligence", icon: "fa-balance-scale", resources: 3, duration: "20 min" },
         { title: "Algorithmic Biases and Fairness", icon: "fa-exclamation-triangle", resources: 3, duration: "20 min" },
-        { title: "Privacy, Regulation, and Responsible AI", icon: "fa-shield-alt", resources: 3, duration: "20 min" }
+        { title: "Privacy, Regulation, and Responsible AI", icon: "fa-shield-alt", resources: 2, duration: "20 min" }
       ]
     },
     lessons: [

@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'
+import PropTypes from 'prop-types';;
 import { motion } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { speakTextConversational, stopSpeech } from '../../../utils/speech';
@@ -126,6 +127,17 @@ const OVAIntro = ({
       </motion.div>
     </div>
   );
+};
+
+
+OVAIntro.propTypes = {
+  icon: PropTypes.any,
+  badge: PropTypes.any,
+  title: PropTypes.any,
+  description: PropTypes.any,
+  audioText: PropTypes.any,
+  onStart: PropTypes.any,
+  startLabel: PropTypes.any,
 };
 
 export default OVAIntro;

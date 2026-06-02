@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { useUser, useClerk } from '@clerk/react';
 import { 
   DropdownMenu,
@@ -16,10 +16,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import { Icon } from '../utils/iconMapping.jsx';
 import { getClerkUserInfo } from '../utils/clerk-utils';
 import UserProfileSmartCard from './UserProfileSmartCard';
-import ActivityHistory from './ActivityHistory';
+const ActivityHistory = lazy(() => import('./ActivityHistory'));
 import ErrorBoundary from './forum/ErrorBoundary';
 import { useTranslation } from '../i18n/I18nProvider';
-import StudyPlannerModal from './IALab/StudyPlannerModal';
+const StudyPlannerModal = lazy(() => import('./IALab/StudyPlannerModal'));
 import UserCoursesDashboard from './IALab/UserCoursesDashboard';
 
 /**
@@ -512,9 +512,11 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
              <DialogHeader>
                <DialogTitle className="text-lg font-bold text-[#334155]">{t('mobile_menu.my_history')}</DialogTitle>
              </DialogHeader>
-             <ErrorBoundary>
-               <ActivityHistory userId={user?.id} />
-             </ErrorBoundary>
+              <ErrorBoundary>
+                <Suspense fallback={<div className="p-8 text-center text-sm text-slate-500">{t('loading')}</div>}>
+                  <ActivityHistory userId={user?.id} />
+                </Suspense>
+              </ErrorBoundary>
            </DialogContent>
          </Dialog>
        )}
@@ -526,7 +528,9 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
                 <DialogTitle className="text-lg font-bold text-[#334155]">{t('mobile_menu.study_plan')}</DialogTitle>
               </DialogHeader>
               <ErrorBoundary>
-                <StudyPlannerModal onClose={() => setShowStudyPlanner(false)} />
+                <Suspense fallback={<div className="p-8 text-center text-sm text-slate-500">{t('loading')}</div>}>
+                  <StudyPlannerModal onClose={() => setShowStudyPlanner(false)} />
+                </Suspense>
               </ErrorBoundary>
             </DialogContent>
           </Dialog>

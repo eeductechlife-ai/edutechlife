@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 export const Button = ({ children, onClick, variant = 'primary', className = '', icon: Icon = null, disabled = false }) => {
   const baseStyle = "flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100";
   const variants = {
@@ -16,3 +17,11 @@ export const Card = ({ children, className = '' }) => (
     {children}
   </div>
 );
+
+Button.propTypes = {
+  onClick: PropTypes.any,
+  variant: PropTypes.any,
+  icon: PropTypes.any,
+  disabled: PropTypes.any,
+};
+

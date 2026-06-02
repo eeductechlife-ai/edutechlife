@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { Icon } from '../../../../utils/iconMapping.jsx';
 
@@ -25,6 +25,13 @@ const ResearchContextBanner = ({ topic, stepNumber, locale = 'es' }) => {
       </div>
     </motion.div>
   );
+};
+
+
+ResearchContextBanner.propTypes = {
+  topic: PropTypes.any,
+  stepNumber: PropTypes.any,
+  locale: PropTypes.any,
 };
 
 export default ResearchContextBanner;

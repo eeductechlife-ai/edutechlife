@@ -4,22 +4,22 @@
 
 /* OVA CSS custom properties */
 :root {
-  --ova-scrollbar-color: rgba(47, 168, 198, 0.3);
-  --ova-scrollbar-hover: rgba(47, 168, 198, 0.6);
-  --ova-glow-start: rgba(47, 168, 198, 0.4);
-  --ova-glow-end: rgba(47, 168, 198, 0.8);
+  --ova-scrollbar-color: rgba(0, 188, 212, 0.3);
+  --ova-scrollbar-hover: rgba(0, 188, 212, 0.6);
+  --ova-glow-start: rgba(0, 188, 212, 0.4);
+  --ova-glow-end: rgba(0, 188, 212, 0.8);
 }
 
 .dark {
-  --ova-scrollbar-color: rgba(47, 168, 198, 0.5);
-  --ova-scrollbar-hover: rgba(47, 168, 198, 0.8);
-  --ova-glow-start: rgba(47, 168, 198, 0.6);
-  --ova-glow-end: rgba(47, 168, 198, 1.0);
+  --ova-scrollbar-color: rgba(0, 188, 212, 0.5);
+  --ova-scrollbar-hover: rgba(0, 188, 212, 0.8);
+  --ova-glow-start: rgba(0, 188, 212, 0.6);
+  --ova-glow-end: rgba(0, 188, 212, 1.0);
 }
 
 /* OVA global scrollbar (matches previous inline <style> definitions) */
 ::selection {
-  background: rgba(47, 168, 198, 0.3);
+  background: rgba(0, 188, 212, 0.3);
 }
 
 ::-webkit-scrollbar {
@@ -58,11 +58,6 @@
 @keyframes scaleIn {
   from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
 }
 
 @keyframes shake {
@@ -146,16 +141,96 @@
   to { opacity: 1; transform: translate(-50%, 0); }
 }
 
-.animate-fade-in {
+.ialab-animate-fade-in {
   animation: ialab-fade-in 0.3s ease-out;
 }
 
 /* Efectos de botón premium */
-.button-pulse {
+.ialab-button-pulse {
   animation: ialab-pulse 2s infinite;
 }
 
 @keyframes ialab-pulse {
   0%, 100% { box-shadow: 0 0 0 0 rgba(0, 188, 212, 0.4); }
   50% { box-shadow: 0 0 0 10px rgba(0, 188, 212, 0); }
+}
+
+/* OVA keyframes (QueEsPrompt) */
+@keyframes slideInFromBottom {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInFromRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInFromTop {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ModuleOverviewCard shimmer */
+@keyframes shimmer-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.3); }
+  50% { box-shadow: 0 0 0 8px rgba(16,185,129,0); }
+}
+
+.ialab-animate-shimmer-pulse {
+  animation: shimmer-pulse 1s ease-out forwards;
+}
+
+/* Forum animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes livePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.05); }
+}
+
+.ialab-animate-in { animation-duration: 300ms; animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1); animation-fill-mode: both; }
+.fade-in-up { animation-name: fadeInUp; }
+.animation-delay-100 { animation-delay: 100ms; }
+.animation-delay-200 { animation-delay: 200ms; }
+.animation-delay-300 { animation-delay: 300ms; }
+.live-pulse { animation: livePulse 2s ease-in-out infinite; }
+.scrollbar-thin::-webkit-scrollbar { width: 6px; }
+.scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+.scrollbar-thin::-webkit-scrollbar-thumb { background-color: rgba(0, 188, 212, 0.3); border-radius: 20px; }
+.scrollbar-thin::-webkit-scrollbar-thumb:hover { background-color: rgba(0, 188, 212, 0.5); }
+.message-bubble { transition: all 0.3s ease; }
+.message-bubble:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(0, 75, 99, 0.08); }
+
+/* FlashcardArena 3D transforms */
+.ialab-perspective { perspective: 1000px; }
+.ialab-preserve-3d { transform-style: preserve-3d; }
+.ialab-backface-hidden { backface-visibility: hidden; }
+.ialab-rotate-y-180 { transform: rotateY(180deg); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ialab-animate-in,
+  .fade-in-up,
+  .live-pulse,
+  .message-bubble,
+  [class*="animate-"] {
+    animation: none !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.safe-area-top {
+  padding-top: var(--safe-area-top);
+}
+.safe-area-bottom {
+  padding-bottom: var(--safe-area-bottom);
+}
+.touch-manipulation {
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
 }

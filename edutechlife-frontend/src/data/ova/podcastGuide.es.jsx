@@ -25,10 +25,10 @@ export const MODULE_DATA = [
     content: [
       { type: 'text', title: "Múltiples Formatos", text: "Para que NotebookLM funcione, debes crear un 'Cuaderno' (Notebook) y agregarle 'Fuentes'. Puedes subir varios tipos de archivos para enriquecer tu investigación." },
       { type: 'grid', title: "Tipos de Fuentes Aceptadas", items: [
-        { title: "Archivos Locales", desc: "PDFs, Archivos de texto (.txt) y Markdown.", icon: <FileText className="w-8 h-8 text-[#2FA8C6]" /> },
-        { title: "Google Drive", desc: "Google Docs y Google Slides directamente desde tu nube.", icon: <BookOpen className="w-8 h-8 text-[#2FA8C6]" /> },
-        { title: "Enlaces Web", desc: "URLs de artículos o páginas web públicas.", icon: <LinkIcon className="w-8 h-8 text-[#2FA8C6]" /> },
-        { title: "Multimedia", desc: "Audios (mp3) y Videos de YouTube.", icon: <Headphones className="w-8 h-8 text-[#2FA8C6]" /> }
+        { title: "Archivos Locales", desc: "PDFs, Archivos de texto (.txt) y Markdown.", icon: <FileText className="w-8 h-8 text-corporate" /> },
+        { title: "Google Drive", desc: "Google Docs y Google Slides directamente desde tu nube.", icon: <BookOpen className="w-8 h-8 text-corporate" /> },
+        { title: "Enlaces Web", desc: "URLs de artículos o páginas web públicas.", icon: <LinkIcon className="w-8 h-8 text-corporate" /> },
+        { title: "Multimedia", desc: "Audios (mp3) y Videos de YouTube.", icon: <Headphones className="w-8 h-8 text-corporate" /> }
       ]},
       { type: 'activity', title: "Comprueba tu aprendizaje", text: "¿Cuál es la principal ventaja de subir diferentes tipos de fuentes (ej. un PDF y un video de YouTube) a un mismo cuaderno?", options: [
         { text: "La IA puede cruzar información y encontrar conexiones entre el texto y el video.", correct: true, feedback: "¡Exacto! Al mezclar fuentes, NotebookLM sintetiza la información de todas ellas, dándote una visión global." },
@@ -67,9 +67,9 @@ export const MODULE_DATA = [
     content: [
       { type: 'text', title: "Casos de Uso Reales", text: "NotebookLM se adapta a cualquier carrera. Veamos cómo lo usan diferentes estudiantes." },
       { type: 'grid', title: "Ejemplos por Facultad", items: [
-        { title: "Derecho", desc: "Subir decenas de sentencias judiciales para encontrar jurisprudencia cruzada.", icon: <BookOpen className="w-8 h-8 text-[#2FA8C6]" /> },
-        { title: "Medicina", desc: "Subir papers científicos médicos para extraer síntomas y tratamientos en una tabla.", icon: <Brain className="w-8 h-8 text-[#2FA8C6]" /> },
-        { title: "Ingeniería", desc: "Subir manuales técnicos extensos para buscar especificaciones precisas.", icon: <Lightbulb className="w-8 h-8 text-[#2FA8C6]" /> }
+        { title: "Derecho", desc: "Subir decenas de sentencias judiciales para encontrar jurisprudencia cruzada.", icon: <BookOpen className="w-8 h-8 text-corporate" /> },
+        { title: "Medicina", desc: "Subir papers científicos médicos para extraer síntomas y tratamientos en una tabla.", icon: <Brain className="w-8 h-8 text-corporate" /> },
+        { title: "Ingeniería", desc: "Subir manuales técnicos extensos para buscar especificaciones precisas.", icon: <Lightbulb className="w-8 h-8 text-corporate" /> }
       ]},
       { type: 'activity', title: "Comprueba tu aprendizaje", text: "Eres estudiante de Humanidades y tienes que leer 3 libros diferentes sobre la Revolución Francesa. ¿Cómo te ayuda NotebookLM?", options: [
         { text: "Lee los libros por mí y yo no tengo que hacer nada.", correct: false, feedback: "Incorrecto. La IA asiste, pero el aprendizaje requiere tu análisis crítico." },

@@ -9,6 +9,7 @@ import { StudentProvider } from './context/StudentContext';
 import { useAuth } from './context/AuthContext';
 import { useAuth as useClerkAuth } from '@clerk/react';
 import { initSupabaseClient } from './lib/supabase';
+import { useTranslation } from './i18n/I18nProvider';
 
 const LeadCaptureModal = lazy(() => import('./components/LeadCaptureModal'));
 const ContactModal = lazy(() => import('./components/ContactModal'));
@@ -191,6 +192,7 @@ const App = () => {
     const isIALabRoute = location.pathname.includes('/ialab');
     const isSmartBoardRoute = location.pathname.includes('/smartboard');
     const { user, isLoaded } = useAuth();
+    const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(true);
     // Auto-upgrade supabase client cuando Clerk esté listo
     const { isLoaded: clerkLoaded, getToken } = useClerkAuth();
@@ -208,7 +210,7 @@ const App = () => {
     const [isBotClosing, setIsBotClosing] = useState(false);
     const [botMsgs, setBotMsgs] = useState([{ 
         role: 'assistant', 
-        text: 'Hola, soy Nico. ¿En qué puedo ayudarte hoy?',
+        text: t('chatbot.greeting'),
         timestamp: new Date()
     }]);
     const [botInput, setBotInput] = useState('');
@@ -252,7 +254,7 @@ const App = () => {
             if (leadData && leadData.nombre) {
                 setBotMsgs([{ 
                     role: 'assistant', 
-                    text: `Hola ${leadData.nombre}, bienvenido de nuevo. ¿En qué puedo ayudarte hoy?`,
+                    text: `${t('chatbot.greeting')} ${t('chatbot.welcome_back')}`,
                     timestamp: new Date()
                 }]);
                 setHasLeadData(true);

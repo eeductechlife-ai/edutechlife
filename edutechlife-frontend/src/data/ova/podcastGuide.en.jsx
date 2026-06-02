@@ -25,10 +25,10 @@ export const MODULE_DATA = [
     content: [
       { type: 'text', title: "Multiple Formats", text: "For NotebookLM to work, you must create a 'Notebook' and add 'Sources' to it. You can upload various file types to enrich your research." },
       { type: 'grid', title: "Accepted Source Types", items: [
-        { title: "Local Files", desc: "PDFs, Text files (.txt) and Markdown.", icon: <FileText className="w-8 h-8 text-[#2FA8C6]" /> },
-        { title: "Google Drive", desc: "Google Docs and Google Slides directly from your cloud.", icon: <BookOpen className="w-8 h-8 text-[#2FA8C6]" /> },
-        { title: "Web Links", desc: "URLs of articles or public web pages.", icon: <LinkIcon className="w-8 h-8 text-[#2FA8C6]" /> },
-        { title: "Multimedia", desc: "Audio (mp3) and YouTube Videos.", icon: <Headphones className="w-8 h-8 text-[#2FA8C6]" /> }
+        { title: "Local Files", desc: "PDFs, Text files (.txt) and Markdown.", icon: <FileText className="w-8 h-8 text-corporate" /> },
+        { title: "Google Drive", desc: "Google Docs and Google Slides directly from your cloud.", icon: <BookOpen className="w-8 h-8 text-corporate" /> },
+        { title: "Web Links", desc: "URLs of articles or public web pages.", icon: <LinkIcon className="w-8 h-8 text-corporate" /> },
+        { title: "Multimedia", desc: "Audio (mp3) and YouTube Videos.", icon: <Headphones className="w-8 h-8 text-corporate" /> }
       ]},
       { type: 'activity', title: "Check your learning", text: "What is the main advantage of uploading different types of sources (e.g., a PDF and a YouTube video) to the same notebook?", options: [
         { text: "The AI can cross-reference information and find connections between text and video.", correct: true, feedback: "Exactly! By mixing sources, NotebookLM synthesizes information from all of them, giving you a global view." },
@@ -67,9 +67,9 @@ export const MODULE_DATA = [
     content: [
       { type: 'text', title: "Real Use Cases", text: "NotebookLM adapts to any field of study. Let's see how different students use it." },
       { type: 'grid', title: "Examples by Faculty", items: [
-        { title: "Law", desc: "Upload dozens of court rulings to find cross-referenced case law.", icon: <BookOpen className="w-8 h-8 text-[#2FA8C6]" /> },
-        { title: "Medicine", desc: "Upload medical scientific papers to extract symptoms and treatments in a table.", icon: <Brain className="w-8 h-8 text-[#2FA8C6]" /> },
-        { title: "Engineering", desc: "Upload extensive technical manuals to search for precise specifications.", icon: <Lightbulb className="w-8 h-8 text-[#2FA8C6]" /> }
+        { title: "Law", desc: "Upload dozens of court rulings to find cross-referenced case law.", icon: <BookOpen className="w-8 h-8 text-corporate" /> },
+        { title: "Medicine", desc: "Upload medical scientific papers to extract symptoms and treatments in a table.", icon: <Brain className="w-8 h-8 text-corporate" /> },
+        { title: "Engineering", desc: "Upload extensive technical manuals to search for precise specifications.", icon: <Lightbulb className="w-8 h-8 text-corporate" /> }
       ]},
       { type: 'activity', title: "Check your learning", text: "You're a Humanities student and you need to read 3 different books about the French Revolution. How does NotebookLM help you?", options: [
         { text: "It reads the books for me and I don't have to do anything.", correct: false, feedback: "Incorrect. AI assists, but learning requires your critical analysis." },

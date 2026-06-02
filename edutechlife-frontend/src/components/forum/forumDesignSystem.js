@@ -118,7 +118,7 @@ export const FORUM_EFFECTS = {
   TRANSITION_OPACITY: 'transition-opacity duration-200 ease-out',
   
   // Animaciones
-  ANIMATION_FADE_IN: 'animate-fade-in',
+  ANIMATION_FADE_IN: 'ialab-animate-fade-in',
   ANIMATION_SLIDE_UP: 'animate-slide-up',
   ANIMATION_SCALE_IN: 'animate-scale-in',
   ANIMATION_PULSE: 'animate-pulse',

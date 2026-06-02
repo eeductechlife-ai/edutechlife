@@ -1,10 +1,13 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react'
+import PropTypes from 'prop-types';;
 import { motion, AnimatePresence } from 'framer-motion';
+import SectionErrorBoundary from './SectionErrorBoundary';
 import { X, Trophy, Loader2 } from 'lucide-react';
 import { useSupabase } from '../../hooks/useSupabase';
 import { useIALabStore } from '../../store/ialabStore';
 import { Icon } from '../../utils/iconMapping';
 import { useTranslation } from '../../i18n/I18nProvider';
+import useFocusTrap from '../../hooks/useFocusTrap';
 
 const POSITION_ICONS = {
   1: { icon: 'fa-trophy', color: 'text-amber-400', bg: 'bg-amber-50 dark:bg-amber-900/20' },
@@ -73,16 +76,21 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
     if (isOpen) fetchLeaderboard();
   }, [isOpen, fetchLeaderboard]);
 
+  const focusTrapRef = useFocusTrap(isOpen);
+
   const myEntry = entries.find(e => e.userId === userId);
   const myRank = myEntry?.rank || null;
 
   return (
+    <SectionErrorBoundary name="LeaderboardModal">
     <AnimatePresence>
       {isOpen && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          ref={focusTrapRef}
+          role="dialog" aria-modal="true" aria-label={t('leaderboard.title')}
           className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
           onClick={onClose}
         >
@@ -101,7 +109,7 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
               </div>
               <button
                 onClick={onClose}
-                className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40"
+                className="min-w-[44px] min-h-[44px] w-8 h-8 rounded-lg flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40"
                 aria-label={t('ialab.leaderboard_modal.close_aria')}
               >
                 <X className="w-4 h-4 text-slate-500" />
@@ -198,7 +206,14 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
         </motion.div>
       )}
     </AnimatePresence>
+    </SectionErrorBoundary>
   );
+};
+
+
+LeaderboardModal.propTypes = {
+  isOpen: PropTypes.any,
+  onClose: PropTypes.any,
 };
 
 export default LeaderboardModal;

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types';;
 import { motion } from 'framer-motion';
 import { Icon } from '../../../../utils/iconMapping.jsx';
 import { useTranslation } from '../../../../i18n/I18nProvider';
@@ -121,9 +122,12 @@ const ChatGPTStep2 = ({ exercise, response, onResponseChange, selectedCase }) =>
             </div>
             <input
               type="text"
+              id="chatgpt-step2-role"
               value={gptRole}
               onChange={(e) => { setGptRole(e.target.value); emitChange({ gptRole: e.target.value }); }}
               placeholder={t('ialab.challenge.m2.step2_role_placeholder')}
+              aria-required="true"
+              aria-label={t('ialab.challenge.m2.step2_role')}
               className="w-full px-4 py-3 bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 rounded-xl text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:border-corporate focus:ring-2 focus:ring-corporate/20 text-sm"
             />
           </div>
@@ -268,8 +272,8 @@ const ChatGPTStep2 = ({ exercise, response, onResponseChange, selectedCase }) =>
         </button>
         {showPreview && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             className="px-4 pb-4"
           >
             <div className="bg-slate-900 dark:bg-slate-950 rounded-xl p-5 font-mono text-xs leading-relaxed">
@@ -331,6 +335,14 @@ const ChatGPTStep2 = ({ exercise, response, onResponseChange, selectedCase }) =>
       </div>
     </div>
   );
+};
+
+
+ChatGPTStep2.propTypes = {
+  exercise: PropTypes.any,
+  response: PropTypes.any,
+  onResponseChange: PropTypes.any,
+  selectedCase: PropTypes.any,
 };
 
 export default ChatGPTStep2;

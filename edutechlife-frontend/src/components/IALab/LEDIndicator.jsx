@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { cn } from '../forum/forumDesignSystem';
 import { LEDIndicators } from './GlassDesignSystem';
 
@@ -124,6 +124,14 @@ export const LEDIndicatorGroup = ({ indicators, className = '' }) => {
       ))}
     </div>
   );
+};
+
+
+LEDIndicator.propTypes = {
+  type: PropTypes.any,
+  label: PropTypes.any,
+  showLabel: PropTypes.any,
+  size: PropTypes.any,
 };
 
 export default LEDIndicator;

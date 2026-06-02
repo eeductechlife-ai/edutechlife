@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState } from 'react'
+import PropTypes from 'prop-types';;
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { cn } from '../../forum/forumDesignSystem';
@@ -67,6 +68,20 @@ const OVALayout = ({
       <OVAValerioBar text={valerioText} autoPlay={valerioAutoPlay} />
     </div>
   );
+};
+
+
+OVALayout.propTypes = {
+  title: PropTypes.any,
+  icon: PropTypes.any,
+  tabs: PropTypes.any,
+  currentTab: PropTypes.any,
+  onTabChange: PropTypes.any,
+  valerioText: PropTypes.any,
+  valerioAutoPlay: PropTypes.any,
+  showNav: PropTypes.any,
+  nextLabel: PropTypes.any,
+  prevLabel: PropTypes.any,
 };
 
 export default OVALayout;

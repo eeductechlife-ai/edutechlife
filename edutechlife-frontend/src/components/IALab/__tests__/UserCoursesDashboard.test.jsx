@@ -88,9 +88,9 @@ describe('UserCoursesDashboard', () => {
   test('renders filter tabs', () => {
     setupStore();
     render(<UserCoursesDashboard />);
-    expect(screen.getByText('Todos')).toBeInTheDocument();
-    expect(screen.getByText('En Progreso')).toBeInTheDocument();
-    expect(screen.getByText('Completados')).toBeInTheDocument();
+    expect(screen.getByText('ialab.dashboard.filter_all')).toBeInTheDocument();
+    expect(screen.getByText('ialab.dashboard.filter_in_progress')).toBeInTheDocument();
+    expect(screen.getByText('ialab.dashboard.filter_completed')).toBeInTheDocument();
   });
 
   test('shows all courses by default', () => {
@@ -103,7 +103,7 @@ describe('UserCoursesDashboard', () => {
   test('filter "in-progress" shows only active courses with progress between 0 and 100', () => {
     setupStore({ courseProgress: 60, completedModules: [] });
     render(<UserCoursesDashboard />);
-    fireEvent.click(screen.getByText('En Progreso'));
+    fireEvent.click(screen.getByText('ialab.dashboard.filter_in_progress'));
     const cards = screen.getAllByTestId('course-card');
     expect(cards.length).toBe(1);
     expect(cards[0]).toHaveTextContent('Introducción a la I.A Generativa');
@@ -112,7 +112,7 @@ describe('UserCoursesDashboard', () => {
   test('shows empty state when no courses match filter', () => {
     setupStore({ courseProgress: 0, completedModules: [] });
     render(<UserCoursesDashboard />);
-    fireEvent.click(screen.getByText('Completados'));
+    fireEvent.click(screen.getByText('ialab.dashboard.filter_completed'));
     expect(screen.queryByTestId('course-card')).not.toBeInTheDocument();
     expect(screen.getByText('leaderboard.empty')).toBeInTheDocument();
   });
@@ -120,12 +120,12 @@ describe('UserCoursesDashboard', () => {
   test('shows certificate section when progress >= 80', () => {
     setupStore({ courseProgress: 90, completedModules: [] });
     render(<UserCoursesDashboard />);
-    expect(screen.getByText('Certificados Obtenidos')).toBeInTheDocument();
+    expect(screen.getByText('ialab.dashboard.certificates_title')).toBeInTheDocument();
   });
 
   test('hides certificate section when progress < 80', () => {
     setupStore({ courseProgress: 40, completedModules: [] });
     render(<UserCoursesDashboard />);
-    expect(screen.queryByText('Certificados Obtenidos')).not.toBeInTheDocument();
+    expect(screen.queryByText('ialab.dashboard.certificates_title')).not.toBeInTheDocument();
   });
 });

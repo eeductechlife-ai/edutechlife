@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import IALabForumComment from './IALabForumComment';
 import { useTranslation } from '../../../i18n/I18nProvider';
@@ -26,6 +26,13 @@ const IALabForumCommentThread = ({ comments, onReply, depth = 0 }) => {
       ))}
     </div>
   );
+};
+
+
+IALabForumCommentThread.propTypes = {
+  comments: PropTypes.any,
+  onReply: PropTypes.any,
+  depth: PropTypes.any,
 };
 
 export default IALabForumCommentThread;

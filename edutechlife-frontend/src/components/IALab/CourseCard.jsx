@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '../../utils/iconMapping.jsx';
@@ -176,6 +177,12 @@ const CourseCard = ({ course, isSignedIn }) => {
     </motion.div>
     </ErrorBoundary>
   );
+};
+
+
+CourseCard.propTypes = {
+  course: PropTypes.any,
+  isSignedIn: PropTypes.any,
 };
 
 export default CourseCard;

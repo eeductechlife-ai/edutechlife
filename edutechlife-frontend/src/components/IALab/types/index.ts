@@ -302,8 +302,6 @@ export interface IALabStore
   storageSet: (key: string, val: unknown) => void;
   storageRemove: (key: string) => void;
   storageGetInt: (key: string, def: number) => number;
-  persistGamificationState: () => void;
-  loadGamificationState: () => Partial<GamificationState>;
   addBookmark: (id: string) => void;
   removeBookmark: (id: string) => void;
   isBookmarked: (id: string) => boolean;

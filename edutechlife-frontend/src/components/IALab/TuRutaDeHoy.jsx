@@ -1,4 +1,5 @@
-import React, { useRef, useCallback, useMemo } from 'react';
+import React, { useRef, useCallback, useMemo } from 'react'
+import PropTypes from 'prop-types';;
 import { getModules } from '../../data/ialab';
 import { useIALabStore } from '../../store/ialabStore';
 import { motion, useReducedMotion } from 'framer-motion';
@@ -43,8 +44,10 @@ const PrimaryActionCard = ({ route, onContinue, mod }) => {
   const courseProgress = useIALabStore(s => s.courseProgress);
   const getWeeklyXP = useIALabStore(s => s.getWeeklyXP);
   const getViewedResources = useIALabStore(s => s.getViewedResources);
-  const viewedIds = getViewedResources();
-  const remainingMin = useMemo(() => calculateUnviewedMinutes(getModules(locale), mod?.id, viewedIds, locale), [locale, mod?.id, viewedIds]);
+  const remainingMin = useMemo(() => {
+    const viewedIds = getViewedResources();
+    return calculateUnviewedMinutes(getModules(locale), mod?.id, viewedIds, locale);
+  }, [locale, mod?.id, getViewedResources]);
   if (!action) return null;
 
   return (
@@ -214,6 +217,13 @@ const TuRutaDeHoy = ({ onAction }) => {
 
     </div>
   );
+};
+
+
+PrimaryActionCard.propTypes = {
+  route: PropTypes.any,
+  onContinue: PropTypes.any,
+  mod: PropTypes.any,
 };
 
 export default React.memo(TuRutaDeHoy);

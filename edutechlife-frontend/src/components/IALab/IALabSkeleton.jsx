@@ -1,6 +1,6 @@
-import React from 'react';
+import { memo } from 'react';
 
-const SkeletonBlock = React.memo(({ className = '' }) => {
+const SkeletonBlock = memo(({ className = '' }) => {
   return (
     <div className={`animate-pulse bg-slate-200 dark:bg-slate-700 rounded-lg ${className}`} />
   );

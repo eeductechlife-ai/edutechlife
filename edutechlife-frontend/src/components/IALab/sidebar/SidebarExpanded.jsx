@@ -1,4 +1,5 @@
-import React from 'react';
+import React from 'react'
+import PropTypes from 'prop-types';;
 import { motion } from 'framer-motion';
 import SidebarProgressCircle from './SidebarProgressCircle';
 import SidebarModuleList from './SidebarModuleList';
@@ -69,5 +70,32 @@ const SidebarExpanded = ({
     )}
   </motion.div>
 );
+
+
+SidebarExpanded.propTypes = {
+  courseProgress: PropTypes.any,
+  t: PropTypes.any,
+  streak: PropTypes.any,
+  getTotalPoints: PropTypes.any,
+  isStreakAtRisk: PropTypes.any,
+  getLevel: PropTypes.any,
+  setShowStreakModal: PropTypes.any,
+  setShowCertificateModal: PropTypes.any,
+  modules: PropTypes.any,
+  activeMod: PropTypes.any,
+  calculateModuleScore: PropTypes.any,
+  isModuleLocked: PropTypes.any,
+  goToModule: PropTypes.any,
+  moduleListVariants: PropTypes.any,
+  moduleItemVariants: PropTypes.any,
+  sidebarDropdowns: PropTypes.any,
+  toggleSidebarDropdown: PropTypes.any,
+  isInfographicCompleted: PropTypes.any,
+  fadeTransition: PropTypes.any,
+  storedCertificate: PropTypes.any,
+  courseCompleted: PropTypes.any,
+  completedModules: PropTypes.any,
+  certificateGenerating: PropTypes.any,
+};
 
 export default React.memo(SidebarExpanded);

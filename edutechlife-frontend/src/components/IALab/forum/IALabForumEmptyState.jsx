@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Icon } from '../../../utils/iconMapping.jsx';
 
 const IALabForumEmptyState = ({ user, showInput, t }) => (
@@ -48,5 +49,12 @@ const IALabForumEmptyState = ({ user, showInput, t }) => (
     )}
   </div>
 );
+
+
+IALabForumEmptyState.propTypes = {
+  user: PropTypes.any,
+  showInput: PropTypes.any,
+  t: PropTypes.any,
+};
 
 export default IALabForumEmptyState;

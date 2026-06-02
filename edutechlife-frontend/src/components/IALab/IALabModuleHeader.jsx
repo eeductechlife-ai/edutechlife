@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { useIALabProgressContext } from '../../context/IALabContext';
 import { useTranslation } from '../../i18n/I18nProvider';
@@ -10,7 +10,7 @@ const IALabModuleHeader = ({ onAction }) => {
   
   return (
     <motion.div
-      whileHover={{ boxShadow: "0px 8px 25px rgba(0,75,99,0.12)" }}
+      whileHover={{ scale: 1.02 }}
       transition={{ duration: 0.2 }}
       className="bg-white rounded-2xl shadow-[0px_4px_16px_rgba(17,17,26,0.05)] border border-slate-100 overflow-hidden dark:bg-slate-800 dark:border-slate-700 hover:border-petroleum/20 dark:hover:border-petroleum/30"
     >
@@ -27,6 +27,11 @@ const IALabModuleHeader = ({ onAction }) => {
       </div>
     </motion.div>
   );
+};
+
+
+IALabModuleHeader.propTypes = {
+  onAction: PropTypes.any,
 };
 
 export default IALabModuleHeader;

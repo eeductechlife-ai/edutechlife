@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
@@ -83,6 +83,11 @@ const ScreenshotProtectionOverlay = ({ isOpen }) => {
       )}
     </AnimatePresence>
   );
+};
+
+
+ScreenshotProtectionOverlay.propTypes = {
+  isOpen: PropTypes.any,
 };
 
 export default ScreenshotProtectionOverlay;

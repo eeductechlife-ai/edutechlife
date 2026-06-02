@@ -1,4 +1,5 @@
-import React from 'react';
+import React from 'react'
+import PropTypes from 'prop-types';;
 import { motion } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import TooltipIcon from './SidebarTooltipIcon';
@@ -167,5 +168,23 @@ const SidebarCollapsed = ({
     )}
   </motion.div>
 );
+
+
+SidebarCollapsed.propTypes = {
+  courseProgress: PropTypes.any,
+  modules: PropTypes.any,
+  activeMod: PropTypes.any,
+  isModuleLocked: PropTypes.any,
+  calculateModuleScore: PropTypes.any,
+  streak: PropTypes.any,
+  isStreakAtRisk: PropTypes.any,
+  getLevel: PropTypes.any,
+  getTotalPoints: PropTypes.any,
+  storedCertificate: PropTypes.any,
+  setShowCertificateModal: PropTypes.any,
+  goToModule: PropTypes.any,
+  fadeTransition: PropTypes.any,
+  t: PropTypes.any,
+};
 
 export default React.memo(SidebarCollapsed);

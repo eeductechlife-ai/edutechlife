@@ -1,8 +1,14 @@
-import { useState, useRef } from 'react';
+import { useState, useRef } from 'react'
+import PropTypes from 'prop-types';;
 import { useTranslation } from '../../i18n/I18nProvider';
 import { Brain, Scale, Shield, AlertTriangle, CheckCircle, XCircle, Award, BookOpen } from 'lucide-react';
 import { dilemmas, accordionData } from '../../data/ova/ethicalDilemmas';
 import { OVAIntro, OVAValerioBar } from './shared';
+
+
+OVAEthicalDilemmas.propTypes = {
+  onComplete: PropTypes.any,
+};
 
 export default function OVAEthicalDilemmas({ onComplete }) {
   const { t, locale } = useTranslation();

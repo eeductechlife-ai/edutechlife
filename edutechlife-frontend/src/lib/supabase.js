@@ -1,24 +1,10 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Usar valores de entorno o valores por defecto para producción
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://srirrwpgswlnuqfgtule.supabase.co';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_k08noZw4qI-0oytgCaUAhg_V3cEIkfn';
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-// Solo mostrar logs en desarrollo
-if (import.meta.env.DEV) {
-
-
-  if (!supabaseUrl || !supabaseAnonKey) {
-    console.warn(
-      '⚠️ Supabase credentials not configured. ' +
-      'Please add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to your .env file.'
-    );
-  }
-}
-
-// Validar que las credenciales estén presentes
 if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Supabase credentials are required. Please check your environment variables.');
+  throw new Error('VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY must be defined in environment');
 }
 
 // Cache de clientes Supabase por token para evitar múltiples instancias

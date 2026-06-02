@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react'
+import PropTypes from 'prop-types';;
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { cn } from '../../forum/forumDesignSystem';
 import { useTranslation } from '../../../i18n/I18nProvider';
@@ -77,6 +78,12 @@ const ImageViewer = ({ resource, onAutoComplete }) => {
       )}
     </div>
   );
+};
+
+
+ImageViewer.propTypes = {
+  resource: PropTypes.any,
+  onAutoComplete: PropTypes.any,
 };
 
 export default ImageViewer;

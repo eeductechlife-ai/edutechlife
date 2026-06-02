@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import DOMPurify from 'dompurify';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
 
@@ -14,6 +15,7 @@ export const useIALabForum = () => {
     const [error, setError] = useState(null);
     const [likeStates, setLikeStates] = useState({});
     const cancelledRef = useRef(false);
+    const loadingPromiseRef = useRef(null);
 
     useEffect(() => {
         return () => { cancelledRef.current = true; };
@@ -21,80 +23,94 @@ export const useIALabForum = () => {
 
     /**
      * Cargar posts del foro
+     * @param {number} [limit=10]
+     * @returns {Promise<Array>}
      */
     const loadForumPosts = useCallback(async (limit = 10) => {
         if (!user) return;
-
+        if (loadingPromiseRef.current) return loadingPromiseRef.current;
         setIsLoading(true);
         setError(null);
 
-        try {
-            const { data: posts, error: postsError } = await supabase
-                .from('forum_posts')
-                .select('*')
-                .order('created_at', { ascending: false })
-                .limit(limit);
+        const promise = (async () => {
+            try {
+                const { data: posts, error: postsError } = await supabase
+                    .from('forum_posts')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(limit);
 
-            if (postsError) throw postsError;
-            if (cancelledRef.current) return [];
+                if (postsError) throw postsError;
+                if (cancelledRef.current) return [];
 
-            if (!posts || posts.length === 0) {
-                setForumPosts([]);
-                setLikeStates({});
-                return [];
-            }
-
-            // Cargar votos del usuario
-            const postIds = posts.map(p => p.id);
-            const { data: votes, error: votesError } = await supabase
-                .from('forum_votes')
-                .select('post_id')
-                .in('post_id', postIds)
-                .eq('user_id', user.id);
-
-            if (votesError) console.warn('Error loading votes:', votesError.message);
-            if (cancelledRef.current) return [];
-
-            const votedPostIds = new Set(votes?.map(v => v.post_id) || []);
-
-            // Combinar datos
-            const postsWithLikes = posts.map(post => ({
-                ...post,
-                user_has_liked: votedPostIds.has(post.id),
-                like_count: post.upvotes || 0,
-                upvote_count: post.upvotes || 0,
-                profiles: {
-                    full_name: post.user_name || 'Usuario',
-                    avatar_url: post.user_avatar || null
+                if (!posts || posts.length === 0) {
+                    setForumPosts([]);
+                    setLikeStates({});
+                    return [];
                 }
-            }));
 
-            setForumPosts(postsWithLikes);
+                // Cargar votos del usuario
+                const postIds = posts.map(p => p.id);
+                const { data: votes, error: votesError } = await supabase
+                    .from('forum_votes')
+                    .select('post_id')
+                    .in('post_id', postIds)
+                    .eq('user_id', user.id);
 
-            // Inicializar estados de likes
-            const initialLikeStates = {};
-            postsWithLikes.forEach(post => {
-                initialLikeStates[post.id] = {
-                    userLiked: post.user_has_liked,
-                    isLoading: false,
-                    likeCount: post.like_count,
-                    likeColor: post.user_has_liked ? '#00BCD4' : '#004B63'
-                };
-            });
-            setLikeStates(initialLikeStates);
+                if (votesError) console.warn('Error loading votes:', votesError.message);
+                if (cancelledRef.current) return [];
 
-            return postsWithLikes;
-        } catch (err) {
-            console.error('Error loading forum posts:', err);
-            setError(err.message);
-            return [];
+                const votedPostIds = new Set(votes?.map(v => v.post_id) || []);
+
+                // Combinar datos
+                const postsWithLikes = posts.map(post => ({
+                    ...post,
+                    user_has_liked: votedPostIds.has(post.id),
+                    like_count: post.upvotes || 0,
+                    upvote_count: post.upvotes || 0,
+                    profiles: {
+                        full_name: post.user_name || 'Usuario',
+                        avatar_url: post.user_avatar || null
+                    }
+                }));
+
+                setForumPosts(postsWithLikes);
+
+                // Inicializar estados de likes
+                const initialLikeStates = {};
+                postsWithLikes.forEach(post => {
+                    initialLikeStates[post.id] = {
+                        userLiked: post.user_has_liked,
+                        isLoading: false,
+                        likeCount: post.like_count,
+                        likeColor: post.user_has_liked ? '#00BCD4' : '#004B63'
+                    };
+                });
+                setLikeStates(initialLikeStates);
+
+                return postsWithLikes;
+            } catch (err) {
+                console.error('Error loading forum posts:', err);
+                setError(err.message);
+                return [];
+            } finally {
+                setIsLoading(false);
+            }
+        })();
+
+        loadingPromiseRef.current = promise;
+        try {
+            return await promise;
         } finally {
-            setIsLoading(false);
+            loadingPromiseRef.current = null;
         }
     }, [user]);
 
     /**
      * Alternar like en un post
+     * @param {string} postId
+     * @param {number} currentLikeCount
+     * @returns {Promise<{success: boolean, newLikeCount?: number, userLiked?: boolean, error?: string}>}
      */
     const toggleLike = useCallback(async (postId, currentLikeCount) => {
         if (!user) {
@@ -181,6 +197,9 @@ export const useIALabForum = () => {
 
     /**
      * Crear un nuevo post
+     * @param {string|{title: string, content: string, tags?: string[]}} titleOrObj
+     * @param {string} [content]
+     * @returns {Promise<{success: boolean, post?: Object, error?: string}>}
      */
     const createPost = useCallback(async (titleOrObj, content) => {
         if (!user) {
@@ -204,11 +223,14 @@ export const useIALabForum = () => {
         }
 
         try {
+            const sanitizedTitle = DOMPurify.sanitize(title, { ALLOWED_TAGS: [] });
+            const sanitizedContent = DOMPurify.sanitize(postContent, { ALLOWED_TAGS: ['b', 'i', 'u', 'a', 'p', 'br'] });
+
             const { data: post, error: insertError } = await supabase
                 .from('forum_posts')
                 .insert({
-                    title: title.trim(),
-                    content: postContent.trim(),
+                    title: sanitizedTitle.trim(),
+                    content: sanitizedContent.trim(),
                     user_id: user.id,
                     upvotes: 0,
                     comment_count: 0,
@@ -252,6 +274,7 @@ export const useIALabForum = () => {
 
     /**
      * Estadísticas del foro (simplificado)
+     * @returns {Promise<{success: boolean, data: Object, totalPosts: number, totalComments: number, totalLikes: number, activeUsers: number}>}
      */
     const getForumStats = useCallback(async () => {
         if (!user) return { totalPosts: 0, totalComments: 0, totalLikes: 0, activeUsers: 0 };
@@ -290,6 +313,7 @@ export const useIALabForum = () => {
 
     /**
      * Suscribirse a actualizaciones en tiempo real
+     * @returns {Function} unsubscribe function
      */
     const subscribeToRealtimeLikes = useCallback(() => {
         if (!user) return () => {};
@@ -353,10 +377,18 @@ export const useIALabForum = () => {
         toggleLike,
         createPost,
         getForumStats,
+        /**
+         * @param {number} count
+         * @returns {string}
+         */
         formatLikeCount: (count) => {
             if (count >= 1000) return `${(count / 1000).toFixed(1)}k`;
             return count.toString();
         },
+        /**
+         * @param {string} postId
+         * @returns {{userLiked: boolean, isLoading: boolean, likeCount: number, likeColor: string, likeIcon: string, ariaLabel: string, buttonClass: string}}
+         */
         getLikeButtonProps: (postId) => {
             const state = likeStates[postId] || { userLiked: false, isLoading: false, likeCount: 0, likeColor: '#004B63' };
             return {

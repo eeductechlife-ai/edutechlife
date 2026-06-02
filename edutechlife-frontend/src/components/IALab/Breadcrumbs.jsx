@@ -1,7 +1,18 @@
-import React, { memo } from 'react';
+import { memo, Fragment } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
 
+/**
+ * Breadcrumbs — Barra de navegación con migas de pan.
+ * Renderiza segmentos de ruta clickeables con íconos opcionales
+ * y un separador configurable. El último segmento se muestra resaltado.
+ *
+ * @param {Object}   props
+ * @param {Array}    props.segments   - Arreglo de { label, icon?, onClick?, href? }
+ * @param {string}   [props.className=''] - Clases CSS adicionales
+ * @param {string}   [props.separator='/'] - Caracter separador
+ * @param {string}   [props.size='text-xs'] - Clase de tamaño de texto Tailwind
+ */
 const Breadcrumbs = memo(function Breadcrumbs({ segments, className = '', separator = '/', size = 'text-xs' }) {
   const { t } = useTranslation();
   if (!segments || segments.length === 0) return null;
@@ -10,9 +21,9 @@ const Breadcrumbs = memo(function Breadcrumbs({ segments, className = '', separa
 
   return (
     <nav aria-label={t('ialab.breadcrumb.aria_label')} className={`mb-2 ${className}`}>
-      <ol className={`flex items-center gap-1.5 ${size} text-slate-500 dark:text-slate-400`}>
+      <ol className={`flex items-center gap-1.5 ${size} text-slate-600 dark:text-slate-400`}>
         {visibleSegments.map((seg, i) => (
-          <React.Fragment key={i}>
+          <Fragment key={i}>
             {i > 0 && (
               <li className="text-slate-300 dark:text-slate-600" aria-hidden="true">{separator}</li>
             )}
@@ -39,7 +50,7 @@ const Breadcrumbs = memo(function Breadcrumbs({ segments, className = '', separa
                 </span>
               )}
             </li>
-          </React.Fragment>
+          </Fragment>
         ))}
         {visibleSegments.length > 0 && (
           <li className="text-slate-300 dark:text-slate-600" aria-hidden="true">{separator}</li>

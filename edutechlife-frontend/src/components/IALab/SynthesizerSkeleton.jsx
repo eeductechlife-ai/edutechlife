@@ -1,6 +1,6 @@
-import React from 'react';
+import { memo } from 'react';
 
-const SynthesizerSkeleton = React.memo(() => (
+const SynthesizerSkeleton = memo(() => (
   <div className="animate-pulse space-y-8">
     <div className="flex items-center gap-4">
       <div className="w-12 h-12 bg-gradient-to-r from-slate-200 to-slate-300 rounded-xl" />
