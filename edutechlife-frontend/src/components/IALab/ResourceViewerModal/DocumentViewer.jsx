@@ -56,7 +56,7 @@ const DocumentViewer = ({ resource, onAutoComplete }) => {
         </div>
         <div className="flex items-center gap-3">
           {!completedRef.current && !hasScrolledEnough && (
-            <span className="text-xs text-amber-600 bg-amber-50 px-3 py-1 rounded-full font-medium">{t('ialab.viewer_modal.scroll_to_end')}</span>
+            <span className="text-xs text-corporate bg-corporate/10 px-3 py-1 rounded-full font-medium">{t('ialab.viewer_modal.scroll_to_end')}</span>
           )}
           <a
             href={resource.url}

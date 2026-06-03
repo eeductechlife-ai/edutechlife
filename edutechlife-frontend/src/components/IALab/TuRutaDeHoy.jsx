@@ -79,7 +79,7 @@ const PrimaryActionCard = ({ route, onContinue, mod }) => {
               <>
                 <h4 className="text-white font-bold text-base mb-1 flex items-center gap-2">
                   {action.actionType === 'review_weak_topics' ? (
-                    <><Icon name="fa-book-open" className="w-4 h-4 text-amber-300" /> {t('route.review_weak')}</>
+                    <><Icon name="fa-book-open" className="w-4 h-4 text-corporate" /> {t('route.review_weak')}</>
                   ) : (
                     <>{t('route.continue_learning')}</>
                   )}

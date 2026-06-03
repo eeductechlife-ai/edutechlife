@@ -8,9 +8,9 @@ const VOICE_PROFILES = {
   },
   valerio: { 
     languageCode: 'es-US', 
-    name: 'es-US-Neural2-B', 
-    pitch: 0,
-    speakingRate: 0.9,
+    name: 'es-US-Neural2-A', 
+    pitch: -3.5,
+    speakingRate: 1.0,
     volumeGainDb: 3.0
   },
   sistema: { 
@@ -82,10 +82,10 @@ const VOICE_FALLBACKS = {
     { languageCode: 'es-ES', name: 'es-ES-Neural2-A', pitch: 0, speakingRate: 0.95 }
   ],
   valerio: [
-    { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 0, speakingRate: 0.9, volumeGainDb: 3.0 },
-    { languageCode: 'es-US', name: 'es-US-Wavenet-B', pitch: 0, speakingRate: 0.95, volumeGainDb: 3.0 },
-    { languageCode: 'es-US', name: 'es-US-Studio-B', pitch: 0, speakingRate: 0.9, volumeGainDb: 3.0 },
-    { languageCode: 'es-CO', name: 'es-CO-Neural2-B', pitch: 0, speakingRate: 0.9, volumeGainDb: 3.0 }
+    { languageCode: 'es-US', name: 'es-US-Neural2-A', pitch: -3.5, speakingRate: 1.0, volumeGainDb: 3.0 },
+    { languageCode: 'es-US', name: 'es-US-Neural2-A', pitch: -2.5, speakingRate: 1.0, volumeGainDb: 3.0 },
+    { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: -1.0, speakingRate: 1.0, volumeGainDb: 3.0 },
+    { languageCode: 'es-ES', name: 'es-ES-Neural2-C', pitch: -0.5, speakingRate: 1.0, volumeGainDb: 3.0 }
   ],
   nico: [
     { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 0, speakingRate: 1.0 },
@@ -123,22 +123,6 @@ const VOICE_FALLBACKS = {
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://edutechlife-q3blvmkur-eeductechlife-ais-projects.vercel.app';
 
-window.__voiceDebug = { lastVoice: null, lastProfile: null, lastPitch: null, path: null };
-let __backendReachable = null; // null=unknown, true/false
-
-const __testBackend = async (apiBase) => {
-  if (__backendReachable !== null) return __backendReachable;
-  try {
-    const r = await fetch(`${apiBase}/api/health`, { method: 'GET', signal: AbortSignal.timeout(3000) });
-    __backendReachable = r.ok;
-    console.log(`🔌 BACKEND ${r.ok ? 'CONECTADO' : 'NO RESPONDE'} → ${apiBase}/api/health (${r.status})`);
-  } catch (e) {
-    __backendReachable = false;
-    console.warn(`🔌 BACKEND INALCANZABLE → ${apiBase}/api/health (${e.message})`);
-  }
-  return __backendReachable;
-};
-
 let currentAudio = null;
 let safetyTimeout = null;
 let isSpeaking = false;
@@ -159,16 +143,6 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
 
   const apiBase = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'http://localhost:3001';
   const voice = VOICE_PROFILES[profile] || VOICE_PROFILES.valeria;
-
-  console.log(`🎤 SPEECH: perfil="${profile}", voz="${voice.name}", api="${apiBase}"`);
-  const backendOk = await __testBackend(apiBase);
-  if (!backendOk) {
-    console.warn(`🎤 BACKEND NO DISPONIBLE → usando fallback nativo (${apiBase})`);
-    window.__voiceDebug = { ...window.__voiceDebug, backendReachable: false, apiBase };
-  } else {
-    console.log(`🎤 BACKEND DISPONIBLE → intentando Google TTS`);
-    window.__voiceDebug = { ...window.__voiceDebug, backendReachable: true, apiBase };
-  }
 
   const cleanup = () => {
     isSpeaking = false;
@@ -202,11 +176,7 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
     const speakWithVoice = (voicesList) => {
       try {
         window.speechSynthesis.cancel();
-
-        const spanishVoices = voicesList.filter(v => v.lang && v.lang.startsWith('es'));
-        console.log(`🎤 VOCES NATIVAS DISPONIBLES: ${voicesList.length} total, ${spanishVoices.length} español`);
-        spanishVoices.forEach(v => console.log(`   → ${v.name} (${v.lang})`));
-
+        
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'es-MX';
         utterance.rate = 1.0;
@@ -215,23 +185,8 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
 
         // Buscar la mejor voz MASCULINA disponible, priorizando español latino
         const isMaleName = (name) => {
-          // Google TTS gender labels for es-US:
-          // FEMALE: A, Chirp-HD-F, Chirp-HD-O, Chirp3-HD-*(stellar female names)
-          // MALE: B, C, Studio-B, WaveNet-B, WaveNet-C, Chirp3-HD-*(stellar male names)
-          // Default: ends in B/C or contains known male keywords
-          const femaleEndings = ['A', 'D', 'F', 'H', 'J'];
-          const maleEndings = ['B', 'C', 'E', 'G', 'I'];
-          const femaleKeywords = ['Chirp-HD-F', 'Chirp-HD-O', 'Chirp3-HD-Aoede', 'Chirp3-HD-Autonoe', 'Chirp3-HD-Callirrhoe',
-            'Chirp3-HD-Despina', 'Chirp3-HD-Erinome', 'Chirp3-HD-Gacrux', 'Chirp3-HD-Kore', 'Chirp3-HD-Laomedeia',
-            'Chirp3-HD-Leda', 'Chirp3-HD-Pulcherrima', 'Chirp3-HD-Sulafat', 'Chirp3-HD-Vindemiatrix', 'Chirp3-HD-Zephyr',
-            'Paulina', 'Monica', 'Sabina', 'Helena', 'Laura', 'Sofia', 'Valentina', 'Daniela', 'Camila', 'Lucia',
-            'Sandy', 'Shelley', 'Grandma', 'Google español'];
-          const maleKeywords = ['Male', 'Masculine', 'Jorge', 'Andres', 'Carlos', 'Microsoft', 'Grandpa', 'Rocko', 'Reed', 'Eddy'];
-          if (maleKeywords.some(k => name.includes(k))) return true;
-          if (femaleKeywords.some(k => name.includes(k))) return false;
-          if (maleEndings.some(e => name.endsWith(e))) return true;
-          if (femaleEndings.some(e => name.endsWith(e))) return false;
-          return true; // default: assume male
+          const female = ['Paulina', 'Monica', 'Sabina', 'Helena', 'Laura', 'Sofia', 'Valentina', 'Daniela', 'Camila', 'Lucia'];
+          return !female.some(f => name.includes(f)) && !/[BDFHJ]$/.test(name);
         };
 
         const voicePriority = [
@@ -243,8 +198,6 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
           (v) => isMaleName(v.name) && (v.name.includes('WaveNet') || v.name.includes('Chirp')) && (v.lang === 'es-US' || v.lang === 'es-419' || v.lang === 'es-MX' || v.lang === 'es-CO'),
           // Masculinas Google latino
           (v) => isMaleName(v.name) && v.name.includes('Google') && (v.lang === 'es-US' || v.lang === 'es-419' || v.lang === 'es-MX' || v.lang === 'es-CO'),
-          // Cualquier voz masculina latina
-          (v) => isMaleName(v.name) && (v.lang === 'es-MX' || v.lang === 'es-US' || v.lang === 'es-CO' || v.lang === 'es-419'),
           // Cualquier voz latino (último recurso)
           (v) => v.lang === 'es-MX' || v.lang === 'es-US' || v.lang === 'es-CO' || v.lang === 'es-419',
           // Cualquier español
@@ -259,25 +212,9 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
 
         if (bestVoice) {
           utterance.voice = bestVoice;
-          window.__voiceDebug = {
-            lastVoice: bestVoice.name,
-            lastProfile: profile,
-            lastPitch: 'nativo',
-            lastSpeakingRate: 'nativo',
-            path: 'native-fallback',
-            backendReachable: __backendReachable
-          };
-          console.log(`🎤 VOZ ACTIVA [NATIVA] → ${bestVoice.name} (${bestVoice.lang})`);
+          console.log(`🎤 Valerio: native speech fallback → ${bestVoice.name} (${bestVoice.lang})`);
         } else {
-          window.__voiceDebug = {
-            lastVoice: 'default',
-            lastProfile: profile,
-            lastPitch: 'nativo',
-            lastSpeakingRate: 'nativo',
-            path: 'native-fallback',
-            backendReachable: __backendReachable
-          };
-          console.warn(`🎤 VOZ ACTIVA [NATIVA] → default voice (sin voz específica encontrada)`);
+          console.warn('🎤 Valerio: native speech fallback → no voice selected, using default');
         }
 
         utterance.onend = () => handleEnd();
@@ -355,16 +292,7 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
 
       if (data.audioContent) {
         const bytes = atob(data.audioContent).length;
-        window.__voiceDebug = {
-          lastVoice: voiceOption.name,
-          lastProfile: profile,
-          lastPitch: voiceOption.pitch,
-          lastSpeakingRate: voiceOption.speakingRate,
-          path: 'google-tts',
-          backendReachable: true,
-          apiBase
-        };
-        console.log(`🎤 VOZ ACTIVA [GOOGLE TTS] → ${voiceOption.name} (pitch:${voiceOption.pitch}, rate:${voiceOption.speakingRate}, profile:${profile}, size:${(bytes/1024).toFixed(0)}KB)`);
+        console.log(`🎤 Valerio: Google TTS OK → ${voiceOption.name} (pitch:${voiceOption.pitch}, size:${(bytes/1024).toFixed(0)}KB)`);
         gotAudio = true;
         currentAudio = new Audio(`data:audio/mp3;base64,${data.audioContent}`);
         currentAudio.volume = 1.0;

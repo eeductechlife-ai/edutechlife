@@ -21,7 +21,7 @@ const Breadcrumbs = memo(function Breadcrumbs({ segments, className = '', separa
 
   return (
     <nav aria-label={t('ialab.breadcrumb.aria_label')} className={`mb-2 ${className}`}>
-      <ol className={`flex items-center gap-1.5 ${size} text-slate-600 dark:text-slate-400`}>
+      <ol className={`flex items-center gap-1.5 ${size}`}>
         {visibleSegments.map((seg, i) => (
           <Fragment key={i}>
             {i > 0 && (

@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState } from 'react';
+import { useEffect, useCallback, useState, useRef } from 'react';
 import { useTranslation } from '../i18n/I18nProvider';
 import { useSoundEffects } from './IALab/useSoundEffects';
 import { BADGE_INFO } from '../data/ialab';
@@ -9,11 +9,13 @@ export function useAchievementNotifications(store) {
   const { t } = useTranslation();
   const { playSound } = useSoundEffects();
   const [toasts, setToasts] = useState([]);
+  const lastNotifiedLevelRef = useRef(null);
 
   const addToast = useCallback((type, title, description, icon) => {
     const id = Date.now() + Math.random();
     playSound('achievement');
     setToasts(prev => {
+      if (prev.some(t => t.type === type && t.title === title)) return prev;
       const next = [...prev, { id, type, title, description, icon }];
       return next.slice(-3);
     });
@@ -24,16 +26,17 @@ export function useAchievementNotifications(store) {
 
   useEffect(() => {
     if (!store) return;
-    let prevXp = store.getState().xp;
+    let prevLevel = store.getState().getLevel();
     let prevStreak = store.getState().streak;
     let prevBadgesCount = store.getState().badges.length;
 
     const unsub = store.subscribe((state) => {
-      if (state.xp > prevXp + 50) {
-        const level = state.getLevel();
-        addToast('level_up', t('achievement.level_up_title', { level }), t('achievement.level_up_desc', { level }), 'fa-arrow-up');
+      const newLevel = state.getLevel();
+      if (newLevel > prevLevel && lastNotifiedLevelRef.current !== newLevel) {
+        lastNotifiedLevelRef.current = newLevel;
+        addToast('level_up', t('achievement.level_up_title', { level: newLevel }), t('achievement.level_up_desc', { level: newLevel }), 'fa-arrow-up');
       }
-      prevXp = state.xp;
+      prevLevel = newLevel;
 
       if (state.badges.length > prevBadgesCount) {
         const diff = state.badges.slice(prevBadgesCount - state.badges.length);

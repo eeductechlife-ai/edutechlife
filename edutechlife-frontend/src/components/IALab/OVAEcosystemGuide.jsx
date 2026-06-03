@@ -1,208 +1,487 @@
 import React, { useState, useRef } from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 import { useTranslation } from '../../i18n/I18nProvider';
 import {
-  Volume2, TrendingUp, Cpu, Brain, Wrench, Search, Layout, Database,
-  Share2, Zap, Settings, MessageSquare, Target, AlertTriangle,
-  PlaySquare, Square, ChevronDown, Lightbulb, Bot, Play, GraduationCap
+  BrainCircuit, ChevronRight, ChevronLeft,
+  ArrowRightCircle, Star, Sparkles, CheckCircle2, Menu, MousePointer2,
+  Lightbulb, Target, Globe, Zap, Settings, MessageSquare,
+  TrendingUp, Cpu, Wrench, Share2, Search, Layout, Database,
+  Bot, Volume2, Image, FileText, Link, HelpCircle, Rocket,
+  ChevronDown, Users, Play, Briefcase
 } from 'lucide-react';
-import { speakTextConversational, stopSpeech } from '../../utils/speech';
+import { stopSpeech } from '../../utils/speech';
+import { OVAIntro } from './shared';
+import VoiceReader from './VoiceReader';
 import { infographicData } from '../../data/ova/ecosystemGuide';
 
-const EdutechLogo = () => (
-  <div className="flex items-center text-3xl md:text-4xl font-bold tracking-tight select-none">
-    <span style={{ color: '#2596be' }}>Edu</span>
-    <span style={{ color: '#133c55' }}>techlife</span>
+const Logo = () => (
+  <div className="flex items-center gap-2 select-none group cursor-pointer">
+    <div className="relative w-9 h-9 flex items-center justify-center">
+      <div className="absolute inset-0 bg-gradient-to-tr from-petroleum to-corporate rounded-xl rotate-3 shadow-md group-hover:rotate-0 transition-transform"></div>
+      <BrainCircuit className="w-5 h-5 text-white relative z-10" />
+    </div>
+    <div className="text-xl tracking-tighter flex items-center lowercase">
+      <span className="font-[900] text-petroleum">edutech</span>
+      <span className="font-[400] text-corporate">life</span>
+    </div>
   </div>
 );
 
-const VoiceReader = ({ text }) => {
-  const { t } = useTranslation();
-  const [isPlaying, setIsPlaying] = useState(false);
-  const speak = () => {
-    if (isPlaying) { stopSpeech(); setIsPlaying(false); return; }
-    speakTextConversational(text, 'valerio', () => setIsPlaying(false));
-    setIsPlaying(true);
-  };
-  return (
-    <button onClick={speak} className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors shrink-0 ${isPlaying ? 'bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-800/30' : 'bg-[#2596be] text-white hover:bg-[#1f7e9f] shadow-md'}`} title={t('ova.ecosystem.voice_title')}>
-      {isPlaying ? <Square size={18} /> : <Volume2 size={18} />}
-      <span className="font-bold uppercase tracking-wide">{isPlaying ? t('ova.ecosystem.voice_stop') : t('ova.ecosystem.voice_listen')}</span>
-    </button>
-  );
-};
-
-const detailIconMap = { Search, Layout, Database, Zap, Settings, MessageSquare, Brain, AlertTriangle };
+const detailIconMap = { Search, Layout, Database, Zap, Settings, MessageSquare };
 
 const DetailCard = ({ detail }) => {
   const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(false);
-  const DetailIcon = detailIconMap[detail.icon] || PlaySquare;
+  const DetailIcon = detailIconMap[detail.icon] || null;
   return (
-    <div className={`bg-white dark:bg-slate-800 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border overflow-hidden group ${isExpanded ? 'border-[#2596be]' : 'border-slate-200 dark:border-slate-600'}`}>
-      <button onClick={() => setIsExpanded(!isExpanded)} className="w-full flex items-start gap-4 p-4 md:p-5 text-left relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2596be] focus-visible:ring-offset-2 rounded-lg">
-        <div className={`absolute top-0 left-0 w-1 h-full transition-all duration-300 ${isExpanded ? 'bg-[#2596be]' : 'bg-slate-200 dark:bg-slate-600 group-hover:bg-[#2596be]'}`}></div>
-        <div className={`mt-1 transition-colors duration-300 ${isExpanded ? 'text-[#133c55]' : 'text-[#2596be]'}`}><DetailIcon size={22} /></div>
-        <div className="flex-grow">
-          <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-2 mb-1">
-            <h5 className="font-bold text-slate-800 dark:text-slate-100 text-base md:text-lg leading-tight">{detail.title}</h5>
-            {detail.date && <span className="text-[10px] font-black tracking-widest uppercase px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-[#2596be] rounded-md self-start md:self-auto">{detail.date}</span>}
-          </div>
-          <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed pr-2 md:pr-6">{detail.text}</p>
+    <div className={`bg-white dark:bg-slate-800 rounded-xl border-2 transition-all ${isExpanded ? 'border-corporate' : 'border-slate-100 dark:border-slate-700 hover:border-slate-200 dark:hover:border-slate-600'}`}>
+      <button onClick={() => setIsExpanded(!isExpanded)} className="w-full flex items-center gap-4 p-4 text-left">
+        <div className={`shrink-0 transition-colors ${isExpanded ? 'text-corporate' : 'text-slate-400'}`}>
+          {DetailIcon ? <DetailIcon size={20} /> : <ChevronDown size={20} />}
         </div>
-        <div className={`text-slate-600 dark:text-slate-400 mt-2 transition-transform duration-300 ${isExpanded ? 'rotate-180 text-[#2596be]' : ''}`}><ChevronDown size={20} /></div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <h5 className="font-[900] text-petroleum text-xs uppercase">{detail.title}</h5>
+            {detail.date && <span className="text-[10px] font-black text-corporate bg-corporate/10 px-2 py-0.5 rounded-md">{detail.date}</span>}
+          </div>
+          <p className="text-xs text-slate-500 dark:text-slate-300 mt-0.5 leading-relaxed">{detail.text}</p>
+        </div>
+        <ChevronDown size={18} className={`text-slate-300 dark:text-slate-500 shrink-0 transition-transform duration-300 ${isExpanded ? 'rotate-180 text-corporate' : ''}`} />
       </button>
-      <div className={`grid transition-all duration-500 ease-in-out ${isExpanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
-        <div className="overflow-hidden">
-          {detail.extendedText && (
-            <div className="p-4 md:p-5 pt-0 bg-slate-50 dark:bg-slate-700/30 border-t border-slate-100 dark:border-slate-600">
-              <div className="bg-blue-50/70 dark:bg-blue-900/20 p-4 rounded-lg text-sm text-slate-700 dark:text-slate-200 leading-relaxed flex gap-3 border border-blue-100 dark:border-blue-800 italic">
-                <Lightbulb className="text-amber-500 shrink-0 mt-0.5" size={20} />
-                <div><strong className="block mb-1 text-[#133c55] dark:text-slate-100 font-bold uppercase text-[11px] tracking-widest">{t('ova.ecosystem.detail_deep')}</strong>{detail.extendedText}</div>
+      {detail.extendedText && (
+        <div className={`grid transition-all duration-500 ease-in-out ${isExpanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+          <div className="overflow-hidden">
+            <div className="px-4 pb-4 pt-0">
+              <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800 text-xs text-slate-600 dark:text-slate-300 leading-relaxed italic flex gap-2">
+                <Lightbulb size={16} className="text-amber-500 shrink-0 mt-0.5" />
+                <span>{detail.extendedText}</span>
               </div>
             </div>
-          )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const sectionIcons = { TrendingUp, Cpu, Wrench, Share2 };
+
+const SectionScreen = ({ section }) => {
+  const { t } = useTranslation();
+  const SectionIcon = sectionIcons[section.icon] || null;
+  return (
+    <div className="animate-[fadeIn_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards] space-y-4">
+      <div className="flex items-center gap-3">
+        <div className="w-12 h-12 bg-gradient-to-br from-petroleum to-corporate text-white rounded-xl flex items-center justify-center shadow-md">
+          {SectionIcon && <SectionIcon size={22} />}
+        </div>
+        <div>
+          <h4 className="font-[900] text-petroleum text-lg tracking-tighter lowercase">{section.title}</h4>
+          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed font-medium">{section.content}</p>
         </div>
       </div>
+      <div className="space-y-2">
+        {section.details.map((detail, idx) => (
+          <DetailCard key={idx} detail={detail} />
+        ))}
+      </div>
     </div>
   );
 };
 
-const generateSectionTextToSpeech = (section) => {
-  let textToRead = `${section.title}. ${section.content} `;
-  if (section.details && section.details.length > 0) {
-    textToRead += "Conceptos clave: ";
-    section.details.forEach(detail => {
-      textToRead += `${detail.title}. ${detail.text} `;
-      if (detail.extendedText) textToRead += `Profundización: ${detail.extendedText} `;
-    });
-  }
-  return textToRead;
+const StrategiesScreen = () => {
+  const { t } = useTranslation();
+  const [active, setActive] = useState(null);
+  const strategies = [
+    { k: 'gpts', icon: <Bot className="w-5 h-5" />, color: 'bg-petroleum' },
+    { k: 'voice', icon: <Volume2 className="w-5 h-5" />, color: 'bg-corporate' },
+    { k: 'dalle', icon: <Image className="w-5 h-5" />, color: 'bg-[#4361EE]' },
+    { k: 'files', icon: <FileText className="w-5 h-5" />, color: 'bg-[#4CC9F0]' },
+    { k: 'sharing', icon: <Link className="w-5 h-5" />, color: 'bg-[#F72585]' },
+  ];
+  return (
+    <div className="animate-[fadeIn_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards] space-y-3">
+      <p className="text-sm text-slate-500 dark:text-slate-300 font-bold">{t('ova.ecosystem.strategies_desc')}</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        {strategies.map(s => (
+          <button key={s.k} onClick={() => setActive(active === s.k ? null : s.k)}
+            className={`p-4 rounded-xl border-2 transition-all text-left ${active === s.k ? 'border-corporate bg-blue-50 shadow-md' : 'bg-white dark:bg-slate-800 border-slate-50 dark:border-slate-700 hover:border-slate-200 dark:hover:border-slate-600'}`}>
+            <div className={`w-10 h-10 ${s.color} text-white rounded-lg flex items-center justify-center mb-2 shadow-sm`}>{s.icon}</div>
+            <h5 className="font-[900] text-petroleum text-xs uppercase tracking-wider">{t(`ova.ecosystem.strategies_${s.k}_title`)}</h5>
+          </button>
+        ))}
+      </div>
+      {active ? (
+        <div className="p-4 bg-petroleum text-white rounded-xl">
+          <h5 className="text-corporate font-[900] text-xs uppercase tracking-[0.2em] mb-2">{t(`ova.ecosystem.strategies_${active}_title`)}</h5>
+          <p className="text-sm text-white leading-relaxed font-medium">{t(`ova.ecosystem.strategies_${active}_desc`)}</p>
+        </div>
+      ) : (
+        <div className="text-center py-6 opacity-30 space-y-2">
+          <MousePointer2 className="w-6 h-6 mx-auto animate-bounce" />
+          <p className="text-[10px] font-black uppercase tracking-widest">{t('ova.ecosystem.strategies_select')}</p>
+        </div>
+      )}
+    </div>
+  );
 };
 
-const WelcomeScreen = ({ onNext }) => {
+const QuizScreen = () => {
+  const { t } = useTranslation();
+  const [step, setStep] = useState(0);
+  const [answers, setAnswers] = useState([]);
+  const [result, setResult] = useState(null);
+
+  const questions = [
+    { key: 'q1', options: ['o1', 'o2', 'o3'] },
+    { key: 'q2', options: ['o1', 'o2', 'o3'] },
+    { key: 'q3', options: ['o1', 'o2', 'o3'] },
+  ];
+
+  const getScore = () => {
+    const r = answers.reduce((sum, a) => sum + a, 0);
+    if (r <= 3) return 'beginner';
+    if (r <= 5) return 'creator';
+    if (r <= 7) return 'pro';
+    return 'power';
+  };
+
+  const handleAnswer = (val) => {
+    const newAnswers = [...answers, val];
+    setAnswers(newAnswers);
+    if (step < 2) {
+      setStep(step + 1);
+    } else {
+      setResult(getScore());
+    }
+  };
+
+  const restart = () => { setStep(0); setAnswers([]); setResult(null); };
+
+  if (result) {
+    return (
+      <div className="animate-[fadeIn_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards] space-y-4 text-center">
+        <div className="w-16 h-16 bg-gradient-to-br from-corporate to-petroleum rounded-full flex items-center justify-center mx-auto shadow-lg">
+          <Users className="w-8 h-8 text-white" />
+        </div>
+        <h4 className="font-[900] text-petroleum text-xl tracking-tighter lowercase">{t(`ova.ecosystem.quiz_result_${result}_title`)}</h4>
+        <div className="p-4 bg-gradient-to-br from-corporate/5 to-white rounded-xl border border-corporate/20">
+          <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">{t(`ova.ecosystem.quiz_result_${result}`)}</p>
+        </div>
+        <button onClick={restart} className="px-6 py-3 bg-slate-100 dark:bg-slate-700 text-petroleum font-black rounded-xl text-xs uppercase tracking-wider hover:bg-slate-200 transition-all">
+          {t('ova.ecosystem.quiz_restart')}
+        </button>
+      </div>
+    );
+  }
+
+  const q = questions[step];
+  return (
+    <div className="animate-[fadeIn_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards] space-y-4">
+      <div className="flex items-center gap-2 mb-2">
+        <HelpCircle className="w-4 h-4 text-corporate" />
+        <span className="text-[10px] font-black text-petroleum uppercase tracking-wider">{t('ova.ecosystem.quiz_desc')}</span>
+      </div>
+      <div className="flex gap-1.5 mb-4">
+        {[0, 1, 2].map(i => (
+          <div key={i} className={`h-1.5 rounded-full transition-all ${i === step ? 'w-8 bg-petroleum' : i < step ? 'w-2 bg-corporate' : 'w-2 bg-slate-200 dark:bg-slate-600'}`} />
+        ))}
+      </div>
+      <h4 className="font-[900] text-petroleum text-base leading-tight">{t(`ova.ecosystem.quiz_${q.key}`)}</h4>
+      <div className="space-y-2">
+        {q.options.map((opt, i) => (
+          <button key={i} onClick={() => handleAnswer(i + 1)}
+            className="w-full p-4 bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 hover:border-corporate rounded-xl text-left text-xs font-medium text-slate-600 dark:text-slate-300 transition-all">
+            {t(`ova.ecosystem.quiz_${q.key}_${opt}`)}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const ChallengeScreen = () => {
+  const { t } = useTranslation();
+  const [scenario, setScenario] = useState(null);
+  const [revealed, setRevealed] = useState(false);
+  const scenarios = [
+    { k: 'student', icon: <Star className="w-5 h-5" />, color: 'bg-petroleum' },
+    { k: 'teacher', icon: <Zap className="w-5 h-5" />, color: 'bg-corporate' },
+    { k: 'pro', icon: <Briefcase className="w-5 h-5" />, color: 'bg-[#4361EE]' },
+  ];
+
+  if (!scenario) {
+    return (
+      <div className="animate-[fadeIn_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards] space-y-3">
+        <p className="text-sm text-slate-500 dark:text-slate-300 font-bold">{t('ova.ecosystem.challenge_desc')}</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+          {scenarios.map(s => (
+            <button key={s.k} onClick={() => { setScenario(s.k); setRevealed(false); }}
+              className="p-4 bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 hover:border-corporate rounded-xl text-center transition-all">
+              <div className={`w-10 h-10 ${s.color} text-white rounded-lg flex items-center justify-center mx-auto mb-2`}>{s.icon}</div>
+              <h5 className="font-[900] text-petroleum text-xs uppercase">{t(`ova.ecosystem.challenge_option_${s.k}`)}</h5>
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="animate-[fadeIn_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards] space-y-4">
+      <button onClick={() => { setScenario(null); setRevealed(false); }} className="text-[10px] font-black text-corporate uppercase tracking-wider hover:underline">
+        &larr; {t('ova.ecosystem.challenge_desc')}
+      </button>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="p-4 bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-700 rounded-xl">
+          <span className="text-[10px] font-black text-red-600 uppercase tracking-wider">{t('ova.ecosystem.challenge_before_label')}</span>
+          <p className="text-sm text-slate-600 dark:text-slate-300 font-mono italic mt-2">{t(`ova.ecosystem.challenge_${scenario}_before`)}</p>
+        </div>
+        {revealed && (
+          <div className="p-4 bg-green-50 dark:bg-green-900/20 border-2 border-green-200 dark:border-green-700 rounded-xl animate-[fadeIn_0.6s_cubic-bezier(0.16,1,0.3,1)_forwards]">
+            <span className="text-[10px] font-black text-green-700 uppercase tracking-wider">{t('ova.ecosystem.challenge_after_label')}</span>
+            <p className="text-xs text-slate-700 dark:text-slate-200 font-medium leading-relaxed mt-2">{t(`ova.ecosystem.challenge_${scenario}_after`)}</p>
+          </div>
+        )}
+      </div>
+      {!revealed && (
+        <button onClick={() => setRevealed(true)}
+          className="w-full py-3 bg-gradient-to-r from-petroleum to-corporate text-white font-black rounded-xl flex items-center justify-center gap-2 text-xs uppercase tracking-wider shadow-lg">
+          {t('ova.ecosystem.challenge_reveal')} <ArrowRightCircle className="w-4 h-4" />
+        </button>
+      )}
+    </div>
+  );
+};
+
+const ConclusionScreen = () => {
   const { t } = useTranslation();
   return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] text-center animate-[fadeIn_0.8s_ease-out_forwards] px-4 py-8 bg-white dark:bg-slate-800">
-      <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 dark:bg-cyan-900/30 text-petroleum dark:text-slate-100 font-semibold text-sm mb-4">
-        <Bot size={16} className="text-corporate" /><span>{t('ova.ecosystem.lab_badge')}</span>
+    <div className="animate-[fadeIn_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards] space-y-4 text-center">
+      <div className="w-16 h-16 bg-gradient-to-br from-petroleum to-corporate rounded-[2rem] flex items-center justify-center mx-auto shadow-lg">
+        <Rocket className="w-8 h-8 text-white" />
       </div>
-      <EdutechLogo />
-      <h1 className="text-3xl md:text-5xl font-black mt-6 mb-3 leading-tight tracking-tight text-[#133c55] dark:text-slate-100">{infographicData.header.title}</h1>
-      <p className="text-lg md:text-xl text-slate-500 dark:text-slate-400 font-light mb-4">{infographicData.header.subtitle}</p>
-      <p className="text-slate-600 dark:text-slate-400 max-w-xl mb-4">{t('ova.ecosystem.welcome_desc')}</p>
-      <VoiceReader text={t('ova.ecosystem.welcome_voice')} />
-      <button onClick={onNext} className="mt-4 px-8 py-4 bg-gradient-to-r from-[#2596be] to-[#1f7e9f] text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all flex items-center gap-3"><Play size={20} />{t('ova.ecosystem.start_btn')}</button>
+      <h4 className="font-[900] text-petroleum text-2xl tracking-tighter lowercase">{t('ova.ecosystem.conclusion_title')}</h4>
+      <p className="text-slate-600 dark:text-slate-300 leading-relaxed font-bold text-sm max-w-lg mx-auto">{t('ova.ecosystem.conclusion_desc')}</p>
     </div>
   );
 };
 
+const screensData = {
+  m1: { title: 'Evolución del Motor de IA' },
+  m2: { title: 'Modos de Operación' },
+  m3: { title: 'Caja de Herramientas' },
+  m4: { title: 'Conectividad y Automatización' },
+  m5: { title: 'Estrategias Exclusivas ChatGPT' },
+  m6: { title: '¿Qué Perfil Eres?' },
+  m7: { title: 'Reto Práctico' },
+  m8: { title: 'Conclusión' }
+};
 
-VoiceReader.propTypes = {
-  text: PropTypes.any,
+OVAEcosystemGuide.propTypes = {
+  onComplete: PropTypes.any,
 };
 
 export default function OVAEcosystemGuide({ onComplete }) {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
+  const [screen, setScreen] = useState('welcome');
+  const [completed, setCompleted] = useState([]);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const certCompletedRef = useRef(false);
-  const [currentScreen, setCurrentScreen] = useState(0);
-  const [activeSectionId, setActiveSectionId] = useState('evolution');
+  const nav = ['welcome', 'm1', 'm2', 'm3', 'm4', 'm5', 'm6', 'm7', 'm8'];
+  const curIdx = nav.indexOf(screen);
 
-  const handleSectionClick = (sectionId) => {
-    setActiveSectionId(prev => prev === sectionId ? null : sectionId);
+  const sections = infographicData.sections;
+
+  const nextScreen = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (screen === 'welcome') { setScreen('m1'); return; }
+    const c = [...completed];
+    if (!c.includes(screen)) c.push(screen);
+    setCompleted(c);
+    const next = nav.indexOf(screen) + 1;
+    if (next < nav.length) setScreen(nav[next]);
   };
 
-  if (currentScreen === 0) return <WelcomeScreen onNext={() => setCurrentScreen(1)} />;
+  const goToScreen = (id) => {
+    setScreen(id);
+    setIsMenuOpen(false);
+  };
 
-  const sectionIcons = { TrendingUp, Cpu, Wrench, Share2, Target };
+  const isLastScreen = screen === 'm8';
 
-  const SectionIcon = ({ iconName }) => {
-    const Icon = sectionIcons[iconName];
-    return Icon ? <Icon size={32} /> : null;
+  const handleMarkComplete = () => {
+    if (!certCompletedRef.current) {
+      certCompletedRef.current = true;
+      onComplete?.();
+    }
+  };
+
+  const renderContent = () => {
+    switch (screen) {
+      case 'welcome': return (
+        <>
+          <OVAIntro
+            icon="fa-brain"
+            badge={t('ova.ecosystem.lab_badge')}
+            title="Dominando el Ecosistema ChatGPT"
+            description={t('ova.ecosystem.welcome_desc')}
+            onStart={nextScreen}
+            startLabel={t('ova.ecosystem.start_btn')}
+          />
+          <div className="flex justify-center mt-6">
+            <VoiceReader text={t('ova.ecosystem.welcome_voice')} />
+          </div>
+        </>
+      );
+      case 'm1': return (
+        <>
+          <SectionScreen section={sections[0]} />
+          <div className="flex justify-center mt-6">
+            <VoiceReader text={sections[0].content} />
+          </div>
+        </>
+      );
+      case 'm2': return (
+        <>
+          <SectionScreen section={sections[1]} />
+          <div className="flex justify-center mt-6">
+            <VoiceReader text={sections[1].content} />
+          </div>
+        </>
+      );
+      case 'm3': return (
+        <>
+          <SectionScreen section={sections[2]} />
+          <div className="flex justify-center mt-6">
+            <VoiceReader text={sections[2].content} />
+          </div>
+        </>
+      );
+      case 'm4': return (
+        <>
+          <SectionScreen section={sections[3]} />
+          <div className="flex justify-center mt-6">
+            <VoiceReader text={sections[3].content} />
+          </div>
+        </>
+      );
+      case 'm5': return (
+        <>
+          <StrategiesScreen />
+          <div className="flex justify-center mt-6">
+            <VoiceReader text={t('ova.ecosystem.strategies_voice')} />
+          </div>
+        </>
+      );
+      case 'm6': return (
+        <>
+          <QuizScreen />
+          <div className="flex justify-center mt-6">
+            <VoiceReader text={t('ova.ecosystem.quiz_voice')} />
+          </div>
+        </>
+      );
+      case 'm7': return (
+        <>
+          <ChallengeScreen />
+          <div className="flex justify-center mt-6">
+            <VoiceReader text={t('ova.ecosystem.challenge_voice')} />
+          </div>
+        </>
+      );
+      case 'm8': return (
+        <>
+          <ConclusionScreen />
+          <div className="flex justify-center mt-6">
+            <VoiceReader text={t('ova.ecosystem.conclusion_voice')} />
+          </div>
+        </>
+      );
+      default: return null;
+    }
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 font-sans text-slate-800 dark:text-slate-100">
-      <header className="bg-white dark:bg-slate-800 shadow-sm border-b sticky top-0 z-50" style={{ borderColor: '#2596be' }}>
-        <div className="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
-          <EdutechLogo />
-          <div className="text-[10px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-[0.2em] hidden md:block">{t('ova.ecosystem.header_module')}</div>
+    <div className="w-full bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-sans flex flex-col selection:bg-blue-100 dark:selection:bg-blue-900">
+      <header className="sticky top-0 w-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-2xl border-b z-50 px-4 py-3 flex justify-between items-center shadow-sm">
+        <Logo />
+        <div className="flex items-center gap-4">
+          {screen !== 'welcome' && (
+            <div className="flex items-center gap-1.5 bg-blue-50 dark:bg-blue-900/30 px-3 py-1 rounded-full border border-corporate/20">
+              <Star className="text-corporate fill-current" size={14} />
+              <span className="font-bold text-petroleum text-xs">{nav.filter(id => completed.includes(id)).length}/{nav.length - 1}</span>
+            </div>
+          )}
+          <button onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Menú de navegación" className="min-w-[44px] min-h-[44px] p-2.5 bg-[#F1F5F9] dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-xl transition-all border border-slate-100 dark:border-slate-700"><Menu className="w-5 h-5 text-petroleum" /></button>
         </div>
       </header>
 
-      <main className="max-w-3xl mx-auto px-4 md:px-6 py-8">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-black mb-3 leading-tight tracking-tight text-[#133c55] dark:text-slate-100">{infographicData.header.title}</h1>
-          <p className="text-lg md:text-xl text-slate-500 dark:text-slate-400 font-light">{infographicData.header.subtitle}</p>
-          <div className="h-1 w-20 bg-[#2596be] mx-auto mt-4 rounded-full opacity-50"></div>
-        </div>
-
-        <div className="space-y-4">
-          {infographicData.sections.map((section) => {
-            const isActive = activeSectionId === section.id;
-            return (
-              <div key={section.id} className={`bg-white dark:bg-slate-800 rounded-3xl shadow-sm border transition-all duration-500 overflow-hidden ${isActive ? 'border-[#2596be] ring-1 ring-[#2596be]/10' : 'border-slate-100 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500'}`}>
-                <button onClick={() => handleSectionClick(section.id)} className="w-full flex items-center justify-between p-6 md:p-8 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2596be] focus-visible:ring-offset-2 rounded-3xl bg-white dark:bg-slate-800 transition-colors">
-                  <div className="flex items-center gap-5 md:gap-6">
-                    <div className={`p-4 rounded-2xl transition-all duration-500 ${isActive ? 'bg-[#2596be] text-white shadow-lg rotate-3' : 'bg-slate-50 dark:bg-slate-700/30 text-slate-600 dark:text-slate-300'}`}><SectionIcon iconName={section.icon} /></div>
-                    <div>
-                      <h2 className={`text-2xl md:text-3xl font-black tracking-tight transition-colors duration-300 ${isActive ? 'text-[#133c55]' : 'text-slate-700 dark:text-slate-200'}`}>{section.title}</h2>
-                      <div className={`h-0.5 bg-[#2596be] transition-all duration-500 ${isActive ? 'w-full opacity-50' : 'w-0 opacity-0'}`}></div>
-                    </div>
-                  </div>
-                  <div className={`p-2 transition-all duration-500 ${isActive ? 'text-[#2596be] rotate-180' : 'text-slate-300 dark:text-slate-500'}`}><ChevronDown size={28} /></div>
-                </button>
-
-                <div className={`grid transition-all duration-500 ease-in-out ${isActive ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
-                  <div className="overflow-hidden">
-                    <div className="p-6 md:p-8 pt-0 bg-slate-50/30 dark:bg-slate-800/30">
-                      <div className="flex flex-col md:flex-row gap-6 justify-between items-start mb-8 bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-100 dark:border-slate-600 shadow-sm">
-                        <div className="flex-grow">
-                          <p className="text-slate-700 dark:text-slate-200 leading-relaxed text-lg md:text-xl border-l-4 pl-6" style={{ borderColor: '#2596be' }}>{section.content}</p>
-                        </div>
-                        <VoiceReader text={generateSectionTextToSpeech(section)} />
-                      </div>
-                      <div className="flex items-center gap-2 mb-6 ml-1">
-                        <div className="w-1.5 h-1.5 rounded-full bg-[#2596be]"></div>
-                        <h4 className="text-[10px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-[0.2em]">{t('ova.ecosystem.detail_breakdown')}</h4>
-                      </div>
-                      <div className="grid grid-cols-1 gap-4">
-                        {section.details.map((detail, idx) => <DetailCard key={idx} detail={detail} />)}
-                      </div>
-                      {section.id === 'prompt' && (
-                        <div className="mt-8 p-8 bg-[#133c55] text-white rounded-[2rem] text-center shadow-xl relative overflow-hidden group">
-                          <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity"><Target size={120} /></div>
-                          <h5 className="font-black mb-6 text-[#2596be] text-sm uppercase tracking-widest">{t('ova.ecosystem.master_formula')}</h5>
-                          <div className="flex flex-wrap justify-center gap-3 relative z-10">
-                            {[t('ova.ecosystem.formula_role'), t('ova.ecosystem.formula_context'), t('ova.ecosystem.formula_task'), t('ova.ecosystem.formula_format'), t('ova.ecosystem.formula_constraints'), t('ova.ecosystem.formula_examples')].map((elem, i) => (
-                              <span key={i} className="px-5 py-2.5 bg-white/5 dark:bg-white/10 hover:bg-white/10 rounded-xl border border-white/10 text-sm font-bold transition-colors">{elem}</span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+      <main className="flex-1 px-3 py-4">
+        <div className="w-full bg-white dark:bg-slate-800 rounded-2xl shadow-md p-4 md:p-6 relative overflow-hidden border border-slate-50 dark:border-slate-700">
+          {screen.startsWith('m') && (
+            <div className="mb-4 border-b border-slate-50 dark:border-slate-700 pb-3">
+              <div className="flex items-center gap-1.5 text-corporate font-[900] text-[10px] tracking-[0.3em] uppercase"><Sparkles className="w-3 h-3" /> {t('ova.introprompt.master')}</div>
+              <h1 className="text-lg md:text-xl font-[900] text-petroleum tracking-tighter leading-tight">{screensData[screen]?.title}</h1>
+            </div>
+          )}
+          <div className="relative z-10 min-h-[180px] flex flex-col justify-center">{renderContent()}</div>
         </div>
       </main>
 
-      <footer className="text-center pb-16 pt-8 border-t border-slate-100 dark:border-slate-600 mt-12 px-6">
-        <EdutechLogo />
-        <p className="text-slate-600 dark:text-slate-400 text-xs font-bold uppercase tracking-widest mt-4">{t('ova.ecosystem.footer')}</p>
-      </footer>
+      {screen !== 'welcome' && (
+        <>
+          <div className="flex justify-center border-t border-slate-100 dark:border-slate-700 bg-white/90 dark:bg-slate-800/90">
+            <div className="w-full max-w-4xl flex justify-between items-center gap-3 px-4 py-3">
+              <button onClick={() => { if (curIdx > 1) setScreen(nav[curIdx - 1]); stopSpeech(); }} aria-label="Anterior" className="p-3 min-w-[44px] min-h-[44px] bg-[#F1F5F9] dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-petroleum dark:hover:text-corporate rounded-xl disabled:opacity-10 transition-all border border-slate-50 dark:border-slate-700" disabled={curIdx <= 1}><ChevronLeft className="w-5 h-5" /></button>
+              <div className="flex gap-1.5">{nav.slice(1).map((_, i) => <div key={i} className={`h-1.5 rounded-full transition-all duration-700 ${i + 1 === curIdx ? 'w-8 bg-petroleum' : completed.includes(nav[i + 1]) ? 'w-2 bg-corporate' : 'w-2 bg-slate-200 dark:bg-slate-600'}`} />)}</div>
+              <button onClick={isLastScreen ? handleMarkComplete : nextScreen} className={`px-6 min-h-[44px] rounded-xl font-[900] text-xs shadow-md active:scale-95 transition-all flex items-center gap-2 uppercase tracking-[0.15em] ${isLastScreen ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-gradient-to-r from-petroleum to-corporate text-white'}`}>
+                {isLastScreen ? t('ova.ecosystem.mark_complete') : t('ova.introprompt.next')} <ArrowRightCircle className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+          <div className="border-t border-slate-100 dark:border-slate-700 py-3 text-center text-slate-500 dark:text-slate-300 text-xs">
+            <p>{t('ova.ecosystem.footer')}</p>
+          </div>
+        </>
+      )}
 
-      <div className="text-center pb-12">
-        {!certCompletedRef.current && (
-          <button onClick={() => { certCompletedRef.current = true; onComplete?.(); }}
-            className="px-8 py-3 bg-gradient-to-r from-petroleum to-corporate text-white font-bold rounded-xl hover:opacity-90 transition-all shadow-lg"
-          >
-            {t('ova.ecosystem.mark_complete') || 'Marcar como completado'}
-          </button>
-        )}
-      </div>
+      {isMenuOpen && (
+        <div className="fixed inset-0 z-[100] bg-slate-900/60 dark:bg-slate-950/60 backdrop-blur-md" onClick={() => setIsMenuOpen(false)}>
+          <div className="absolute right-0 h-full w-[300px] bg-white dark:bg-slate-800 shadow-2xl p-6 flex flex-col gap-4 animate-[slideInRight_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards]" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between border-b-2 border-slate-50 dark:border-slate-700 pb-4">
+              <h3 className="font-[900] text-slate-300 dark:text-slate-500 text-xs tracking-[0.3em] uppercase">{t('ova.introprompt.map')}</h3>
+              <div className="flex items-center gap-1.5 text-[10px] font-black text-petroleum">
+                <Star className="w-3 h-3 text-corporate fill-current" />
+                {completed.filter(id => id.startsWith('m')).length}/{nav.filter(id => id.startsWith('m')).length}
+              </div>
+            </div>
+            <div className="flex-1 overflow-y-auto space-y-1.5">
+              {nav.map((id, idx) => {
+                const stepNum = idx;
+                const isCompleted = completed.includes(id);
+                const isCurrent = screen === id;
+                return (
+                  <button key={id} onClick={() => goToScreen(id)} className={`p-3 rounded-xl text-left text-xs font-[900] transition-all group w-full ${isCurrent ? 'bg-petroleum text-white shadow-lg' : 'hover:bg-slate-50 dark:hover:bg-slate-700'}`}>
+                    <div className="flex items-center gap-3">
+                      <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 transition-all ${isCompleted ? 'bg-corporate text-white' : isCurrent ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-400'}`}>{stepNum}</div>
+                      <div className="flex-1 min-w-0">
+                        <div className={`uppercase tracking-wider ${isCurrent ? 'text-white' : isCompleted ? 'text-petroleum dark:text-corporate' : 'text-slate-500 dark:text-slate-400'}`}>
+                          {id === 'welcome' ? t('ova.introprompt.menu_welcome') : screensData[id]?.title}
+                        </div>
+                        <div className="mt-1.5 w-full h-1 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                          <div className={`h-full rounded-full transition-all duration-700 ${isCompleted ? 'w-full bg-corporate' : isCurrent ? 'w-1/3 bg-petroleum' : 'w-0'}`} />
+                        </div>
+                      </div>
+                      {isCompleted && <CheckCircle2 className="w-4 h-4 text-corporate shrink-0" />}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

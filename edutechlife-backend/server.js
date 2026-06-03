@@ -930,6 +930,10 @@ app.get('/api/ialab/resources', async (req, res) => {
 const GOOGLE_TTS_URL = 'https://texttospeech.googleapis.com/v1/text:synthesize';
 const GOOGLE_TTS_API_KEY = process.env.GOOGLE_TTS_API_KEY;
 
+app.get('/api/health', (req, res) => {
+    res.json({ status: 'ok', timestamp: Date.now() });
+});
+
 app.post('/api/tts', express.json(), async (req, res) => {
     if (!GOOGLE_TTS_API_KEY) {
         return res.status(500).json({ error: 'TTS API key not configured on server' });

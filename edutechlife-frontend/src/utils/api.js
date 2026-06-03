@@ -78,7 +78,7 @@ export async function callDeepseek(messagesOrPrompt, systemPromptOrOpts = null, 
 
     try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000);
+        const timeoutId = setTimeout(() => controller.abort(new DOMException('Timeout agotado', 'TimeoutError')), 5000);
         
         const response = await fetch(url, { 
             method: 'POST', 
@@ -113,6 +113,10 @@ export async function callDeepseek(messagesOrPrompt, systemPromptOrOpts = null, 
         
         return result;
     } catch (e) { 
+        if (e.name === 'AbortError' || e.name === 'TimeoutError') {
+            console.warn('⚠️ API timeout:', e.message);
+            throw new Error('El servidor no respondió a tiempo. Intenta de nuevo.');
+        }
         console.warn('⚠️ API connection error:', e.message);
         throw e;
     }

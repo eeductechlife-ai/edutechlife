@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, lazy, Suspense } from 'react'
 import PropTypes from 'prop-types';;
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { cn } from '../../forum/forumDesignSystem';
 import { useIALabProgressContext } from '../../../context/IALabContext';
@@ -58,6 +58,7 @@ const ResourceViewerModal = ({
   const modalRef = useRef(null);
   const focusTrapRef = useFocusTrap(isOpen);
   const { isFullscreen: isModalFullscreen, toggleFullscreen: toggleModalFullscreen } = useFullscreen(modalRef);
+  const prefersReducedMotion = useReducedMotion();
 
   const handleClose = () => {
     stopSpeech();
@@ -184,10 +185,10 @@ const renderOVAById = (resourceId) => {
         
         default:
           return (
-            <div className="w-full h-full flex items-center justify-center bg-amber-50 rounded-2xl">
+            <div className="w-full h-full flex items-center justify-center bg-corporate/5 rounded-2xl">
               <div className="text-center">
-                <Icon name="fa-triangle-exclamation" className="text-amber-500 text-4xl mb-4" />
-                <p className="text-amber-700 font-medium">{t('ialab.resource_viewer.type_unsupported', { type: resource.type })}</p>
+                <Icon name="fa-triangle-exclamation" className="text-corporate text-4xl mb-4" />
+                <p className="text-corporate/80 font-medium">{t('ialab.resource_viewer.type_unsupported', { type: resource.type })}</p>
               </div>
             </div>
           );
@@ -210,7 +211,11 @@ const renderOVAById = (resourceId) => {
     visible: { opacity: 1 }
   };
 
-  const modalVariants = {
+  const modalVariants = prefersReducedMotion ? {
+    hidden: { opacity: 1 },
+    visible: { opacity: 1 },
+    exit: { opacity: 1 }
+  } : {
     hidden: { 
       opacity: 0,
       scale: 0.95,
@@ -329,7 +334,7 @@ const renderOVAById = (resourceId) => {
                     <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight truncate">
                       {resource.title}
                     </h2>
-                    <div className="flex flex-wrap items-center gap-1 sm:gap-3 text-white/80 text-xs sm:text-sm mt-1">
+                    <div className="flex flex-wrap items-center gap-1 sm:gap-3 text-white/90 text-xs sm:text-sm mt-1">
                       {resource.type === 'video' && (
                         <>
                           <span>{durationLoading ? '...' : (youtubeDuration || resource.duration)}</span>
@@ -353,7 +358,7 @@ const renderOVAById = (resourceId) => {
                   </div>
                 </div>
 
-                {resource.type !== 'video' && (
+                {!['video', 'pdf', 'pdf-thumbnail'].includes(resource.type) && (
                   <button
                     onClick={toggleModalFullscreen}
                     className="mt-3 sm:mt-0 ml-0 sm:ml-2 px-4 py-2 sm:px-5 sm:py-2.5 bg-white/10 hover:bg-white/20 text-white border-none rounded-lg sm:rounded-xl transition-colors duration-200 flex items-center gap-2 font-medium flex-shrink-0 w-full sm:w-auto justify-center sm:justify-start"
@@ -378,7 +383,7 @@ const renderOVAById = (resourceId) => {
                 {renderViewer()}
               </div>
 
-              <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-petroleum/25 dark:border-petroleum/40 bg-white dark:bg-slate-800">
+              <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-petroleum/25 dark:border-petroleum/40 bg-white dark:bg-slate-800 relative z-[60]">
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
                   {totalResources > 1 && (
                     <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-center sm:justify-start">
@@ -424,12 +429,12 @@ const renderOVAById = (resourceId) => {
                       <span>{t('ialab.viewer_modal.completed_auto')}</span>
                     </div>
                   ) : resource.type === 'video' || resource.type === 'ova' || resource.type === 'ova_interactive' || resource.type === 'ova-thumbnail' ? (
-                    <div className="px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl bg-amber-50 border border-amber-200 text-amber-700 font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base text-center">
+                    <div className="px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl bg-corporate/10 border border-corporate/20 text-corporate font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base text-center">
                       <Icon name="fa-hourglass-half" className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
                       <span>{t('ialab.viewer_modal.complete_resource_hint')}</span>
                     </div>
                   ) : resource.type === 'pdf' || resource.type === 'pdf-thumbnail' ? (
-                    <div className="px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl bg-amber-50 border border-amber-200 text-amber-700 font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base text-center">
+                    <div className="px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl bg-corporate/10 border border-corporate/20 text-corporate font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base text-center">
                       <Icon name="fa-hourglass-half" className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
                       <span>{t('ialab.viewer_modal.scroll_to_end_hint')}</span>
                     </div>

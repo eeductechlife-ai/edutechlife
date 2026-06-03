@@ -1,16 +1,75 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { speakTextConversational, stopSpeech } from '../utils/speech';
 
 const ValerioAvatar = ({ state = 'idle', size = 80, onStateChange }) => {
     const canvasRef = useRef(null);
     const animationRef = useRef(null);
     const [isMuted, setIsMuted] = useState(false);
     const [isSpeaking, setIsSpeaking] = useState(false);
+    const [selectedVoice, setSelectedVoice] = useState(null);
+    const synthRef = useRef(null);
 
-    // Función speak - usa Google TTS via speakTextConversational
+    // Inicializar sintetizador de voz
+    useEffect(() => {
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            synthRef.current = window.speechSynthesis;
+            
+            const loadVoices = () => {
+                const voices = synthRef.current.getVoices();
+
+                const isMaleVoice = (name) => {
+                  const femaleEndings = /[BDFHJ]$/;
+                  const maleKeywords = ['Male', 'Masculine', 'Jorge', 'Andrés', 'Carlos'];
+                  const isFemaleName = femaleEndings.test(name);
+                  const isMaleKeyword = maleKeywords.some(k => name.includes(k));
+                  return isMaleKeyword || !isFemaleName;
+                };
+
+                // Priorizar español latino: primero voces es-US, es-419, es-MX, es-CO
+                const latinoVoices = voices.filter(v =>
+                    (v.lang === 'es-US' || v.lang === 'es-419' || v.lang === 'es-MX' || v.lang === 'es-CO') &&
+                    (v.name.includes('Chirp3') || v.name.includes('Neural2') || v.name.includes('WaveNet') || v.name.includes('Google') || v.name.includes('Microsoft'))
+                );
+
+                // Intentar primero latino masculina, luego latino cualquiera
+                const maleLatino = latinoVoices.find(v => isMaleVoice(v.name));
+                let chosen = null;
+                if (maleLatino) {
+                    chosen = maleLatino;
+                } else if (latinoVoices.length > 0) {
+                    chosen = latinoVoices[0];
+                } else {
+                    const spanishVoices = voices.filter(v =>
+                        v.lang.startsWith('es') &&
+                        (v.name.includes('Chirp3') || v.name.includes('Neural2') || v.name.includes('WaveNet') || v.name.includes('Google') || v.name.includes('Microsoft'))
+                    );
+                    const maleSpanish = spanishVoices.find(v => isMaleVoice(v.name));
+                    chosen = maleSpanish || (spanishVoices.length > 0 ? spanishVoices[0] : null);
+                    if (!chosen && voices.length > 0) {
+                        chosen = voices.find(v => isMaleVoice(v.name)) || voices[0];
+                    }
+                }
+                if (chosen) {
+                    console.log(`🎤 ValerioAvatar: selected native voice → ${chosen.name} (${chosen.lang})`);
+                    setSelectedVoice(chosen);
+                }
+            };
+
+            loadVoices();
+            synthRef.current.onvoiceschanged = loadVoices;
+        }
+
+        return () => {
+            if (synthRef.current) {
+                synthRef.current.cancel();
+            }
+        };
+    }, []);
+
+    // Función speak - puede ser llamada externamente
     const speak = useCallback((text) => {
-        if (isMuted || !text) return;
+        if (!synthRef.current || isMuted || !text) return;
         
+        // Limpiar texto de markdown/asteriscos
         const cleanText = text
             .replace(/\*\*/g, '')
             .replace(/\*/g, '')
@@ -22,27 +81,65 @@ const ValerioAvatar = ({ state = 'idle', size = 80, onStateChange }) => {
 
         if (!cleanText) return;
 
-        setIsSpeaking(true);
-        if (onStateChange) onStateChange('speaking');
+        // Detener cualquier habla anterior
+        synthRef.current.cancel();
+        // Forzar reinicio del motor de voz (necesario en Android Chrome)
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.pause();
+            window.speechSynthesis.resume();
+        }
 
-        speakTextConversational(cleanText, 'valerio', () => {
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        
+        if (selectedVoice) {
+            utterance.voice = selectedVoice;
+            utterance.lang = selectedVoice.lang;
+        } else {
+            utterance.lang = 'es-CO';
+        }
+
+        utterance.rate = 1.0;
+        utterance.pitch = 1.0;
+        utterance.volume = 1.0;
+
+        utterance.onstart = () => {
+            setIsSpeaking(true);
+            if (onStateChange) onStateChange('speaking');
+        };
+
+        utterance.onend = () => {
             setIsSpeaking(false);
             if (onStateChange) onStateChange('idle');
-        });
-    }, [isMuted, onStateChange]);
+        };
+
+        utterance.onerror = (event) => {
+            console.error('Valerio: error en speechSynthesis:', event?.error || event);
+            setIsSpeaking(false);
+            if (onStateChange) onStateChange('idle');
+        };
+
+        try {
+            synthRef.current.speak(utterance);
+        } catch (err) {
+            console.error('Valerio: excepción al hablar:', err);
+            setIsSpeaking(false);
+            if (onStateChange) onStateChange('idle');
+        }
+    }, [isMuted, selectedVoice, onStateChange]);
 
     // Exponer función speak al window para acceso externo
     useEffect(() => {
         window.valerioSpeak = speak;
         return () => {
             delete window.valerioSpeak;
-            stopSpeech();
         };
     }, [speak]);
 
     // Función para silenciar
     const toggleMute = () => {
-        stopSpeech();
+        if (isMuted) {
+            synthRef.current?.cancel();
+        }
         setIsMuted(!isMuted);
     };
 
@@ -248,10 +345,6 @@ const ValerioAvatar = ({ state = 'idle', size = 80, onStateChange }) => {
                     width={size}
                     height={size}
                     className="valerio-canvas"
-                    onDoubleClick={() => {
-                        console.log('🎤 VOZ DIAGNÓSTICO:', window.__voiceDebug);
-                        alert(`Voz activa: ${window.__voiceDebug?.lastVoice || 'N/A'}\nPitch: ${window.__voiceDebug?.lastPitch || 'N/A'}\nPerfil: ${window.__voiceDebug?.lastProfile || 'N/A'}`);
-                    }}
                 />
                 
                 {/* Botón Mute */}

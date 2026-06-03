@@ -287,7 +287,7 @@ const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded 
       </div>
 
       {!hasEnded && (
-        <div className="absolute top-3 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-amber-50/95 border border-amber-200 rounded-lg text-xs font-medium text-amber-700 shadow-sm z-10 backdrop-blur-sm">
+        <div className="absolute top-3 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-corporate/10 border border-corporate/20 rounded-lg text-xs font-medium text-corporate shadow-sm z-10 backdrop-blur-sm">
           {t('ialab.viewer_modal.warning_no_skip')}
         </div>
       )}
