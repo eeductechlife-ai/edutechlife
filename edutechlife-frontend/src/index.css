@@ -12399,3 +12399,20 @@ span:not(h1 span):not(h2 span):not(h3 span):not(.stat-number),
  /* MOVED TO src/styles/utilities.css */
 
  /* MOVED TO src/styles/platform-optimizations.css */
+
+/* ======================
+   FOCUS RING OVERRIDES – GRAY BOX FIX
+   Prevents gray outline/box on mouse click while preserving :focus-visible for keyboard users
+   ====================== */
+button:focus:not(:focus-visible),
+div:focus:not(:focus-visible),
+[role="button"]:focus:not(:focus-visible),
+a:focus:not(:focus-visible),
+[tabindex]:focus:not(:focus-visible) {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+

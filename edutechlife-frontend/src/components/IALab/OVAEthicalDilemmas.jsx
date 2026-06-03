@@ -314,7 +314,7 @@ export default function OVAEthicalDilemmas({ onComplete }) {
 
         </div>
         <footer className="mt-4 text-center text-slate-600 dark:text-slate-300 text-xs py-4">
-          {t('ova.biaslab.footer')}
+          {t('ova.ethical_dilemmas.footer')}
         </footer>
       </main>
 

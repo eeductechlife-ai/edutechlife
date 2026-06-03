@@ -26,7 +26,7 @@ const Aliados = memo(() => {
     const duplicatedAliados = [...aliados, ...aliados, ...aliados];
 
     return (
-        <section id="aliados" ref={sectionRef} className="relative w-full py-12 lg:py-16 overflow-hidden bg-bg-light">
+        <section id="aliados" ref={sectionRef} className="relative w-full py-12 lg:py-16 overflow-hidden bg-white">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(77,168,196,0.08)_0%,transparent_50%),radial-gradient(circle_at_70%_50%,rgba(0,75,99,0.05)_0%,transparent_50%)]" />
             
             <div className="absolute inset-0 opacity-[0.03]" style={{
@@ -43,7 +43,7 @@ const Aliados = memo(() => {
                         </span>
                         <div className="w-10 h-[2px] bg-gradient-to-l from-transparent to-primary-light" />
                     </div>
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-petroleum tracking-tighter mb-3">
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-[#004B63] tracking-tighter mb-3">
                         {t('aliados.title_before')}{' '}
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-petroleum">
                             {t('aliados.title_highlight')}
@@ -52,8 +52,8 @@ const Aliados = memo(() => {
                 </div>
 
                 <div className="relative">
-                    <div className="absolute left-0 top-0 bottom-0 w-32 z-10 bg-gradient-to-r from-bg-light to-transparent pointer-events-none" />
-                    <div className="absolute right-0 top-0 bottom-0 w-32 z-10 bg-gradient-to-l from-bg-light to-transparent pointer-events-none" />
+                    <div className="absolute left-0 top-0 bottom-0 w-32 z-10 bg-gradient-to-r from-white to-transparent pointer-events-none" />
+                    <div className="absolute right-0 top-0 bottom-0 w-32 z-10 bg-gradient-to-l from-white to-transparent pointer-events-none" />
 
                     <div 
                         ref={marqueeRef}
@@ -87,7 +87,7 @@ const Aliados = memo(() => {
                                     </div>
                                     
                                     <div className="flex flex-col">
-                                        <span className="font-bold text-petroleum group-hover:text-primary-light transition-colors duration-300">{aliado.name}</span>
+                                        <span className="font-bold text-[#004B63] group-hover:text-primary-light transition-colors duration-300">{aliado.name}</span>
                                         <span className="font-mono text-xs tracking-widest text-gray-600 uppercase">
                                             {aliado.category}
                                         </span>

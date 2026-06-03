@@ -179,7 +179,7 @@ const Ecosystem = memo(() => {
   ];
 
   return (
-    <section id="ecosystem" ref={sectionRef} className="relative w-full overflow-hidden bg-bg-light">
+    <section id="ecosystem" ref={sectionRef} className="relative w-full overflow-hidden bg-white">
       <div className="absolute top-0 right-[-10%] w-[600px] h-[600px] rounded-full bg-primary-light/5 blur-[100px] pointer-events-none animate-[pulse-slow_8s_ease-in-out_infinite]" />
       <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] rounded-full bg-mint/5 blur-[100px] pointer-events-none animate-[pulse-slow_8s_ease-in-out_infinite]" style={{ animationDelay: '-4s' }} />
 
@@ -195,7 +195,7 @@ const Ecosystem = memo(() => {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-center mb-8 max-w-3xl mx-auto"
         >
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-petroleum tracking-tighter mb-4">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-[#004B63] tracking-tighter mb-4">
             {t('ecosystem.title_before')}{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-petroleum pr-1">
               {t('ecosystem.title_highlight')}
@@ -228,7 +228,7 @@ const Ecosystem = memo(() => {
               </div>
               <div className="p-6 relative z-10">
                 <CardWithLottie animationData={card.anim}>
-                  <h3 className="text-xl font-bold text-petroleum mt-6 mb-4 group-hover:text-primary-light transition-colors duration-300">{card.title}</h3>
+                  <h3 className="text-xl font-bold text-[#004B63] mt-6 mb-4 group-hover:text-primary-light transition-colors duration-300">{card.title}</h3>
                   <p className="text-gray-600 leading-relaxed">{card.desc}</p>
                 </CardWithLottie>
               </div>

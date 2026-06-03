@@ -455,25 +455,9 @@
 }
 
 /* ==================== MODO OSCURO ==================== */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background-light: #0A1628;
-    --color-background-dark: #FFFFFF;
-    --color-gray-50: #0F172A;
-    --color-gray-100: #1E293B;
-    --color-gray-200: #334155;
-    --color-gray-300: #475569;
-    --color-gray-400: #64748B;
-    --color-gray-500: #94A3B8;
-    --color-gray-600: #CBD5E1;
-    --color-gray-700: #E2E8F0;
-    --color-gray-800: #F1F5F9;
-    --color-gray-900: #F8FAFC;
-  }
-}
+/* Dark mode CSS variables se activan solo dentro de .dark (IALab) */
 
-html.dark,
-:root.dark {
+.dark {
   --color-petroleum: #4DA8C4;
   --color-petroleum-dark: #7CC4D9;
   --color-petroleum-darker: #B2D8E5;

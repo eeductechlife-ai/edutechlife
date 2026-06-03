@@ -1841,6 +1841,7 @@ export type TranslationKeys = {
   "ialab.viewer_modal.next": string;
   "ialab.viewer_modal.next_aria": string;
   "ialab.viewer_modal.open_fullscreen": string;
+  "ialab.viewer_modal.open_new_tab": string;
   "ialab.viewer_modal.pages": string;
   "ialab.viewer_modal.pause": string;
   "ialab.viewer_modal.play": string;
@@ -2307,6 +2308,7 @@ export type TranslationKeys = {
   "ova.ecosystem.welcome_voice": string;
   "ova.ethical_dilemmas.back_to_start": string;
   "ova.ethical_dilemmas.correct_count": string;
+  "ova.ethical_dilemmas.footer": string;
   "ova.ethical_dilemmas.correct_label": string;
   "ova.ethical_dilemmas.dilemmas_title": string;
   "ova.ethical_dilemmas.incorrect_label": string;

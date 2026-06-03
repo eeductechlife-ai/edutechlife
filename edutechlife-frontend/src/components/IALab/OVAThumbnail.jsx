@@ -17,6 +17,7 @@ import PropTypes from 'prop-types';;
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
+import { useEffect, useRef } from 'react';
 import QueEsPrompt_OVA_Original from './QueEsPrompt_OVA_Original';
 
 /**
@@ -31,12 +32,21 @@ const OVAThumbnail = ({
   onOpenOVA = null
 }) => {
   const { t } = useTranslation();
+  useEffect(() => {
+    return () => {
+      if (bodyLockedRef.current) {
+        document.body.style.overflow = '';
+      }
+    };
+  }, []);
+
   const title = titleProp ?? t('ialab.ova_thumbnail.title');
   const description = descProp ?? t('ialab.ova_thumbnail.description');
   const estimatedTime = timeProp ?? t('ialab.ova_thumbnail.estimated_time');
   const difficulty = diffProp ?? t('ialab.ova_thumbnail.difficulty');
   // Estado para controlar la visualización del OVA
-  const [isOVAOpen, setIsOVAOpen] = useState(false);
+   const [isOVAOpen, setIsOVAOpen] = useState(false);
+   const bodyLockedRef = useRef(false);
 
   // Manejar clic para abrir OVA
   const handleClick = () => {
@@ -46,6 +56,7 @@ const OVAThumbnail = ({
       setIsOVAOpen(true);
       // Bloquear scroll del body cuando se abre el OVA
       document.body.style.overflow = 'hidden';
+      bodyLockedRef.current = true;
     }
   };
 

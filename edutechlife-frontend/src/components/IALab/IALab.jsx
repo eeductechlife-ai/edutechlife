@@ -269,7 +269,7 @@ const IALabContent = () => {
     });
 
     return (
-        <div className="flex flex-col h-dvh bg-bg-light dark:bg-slate-900 touch-manipulation" onTouchStart={swipeStart} onTouchEnd={swipeEnd}>
+        <div className={`flex flex-col h-dvh bg-bg-light touch-manipulation${isDarkMode ? ' dark' : ''}`} onTouchStart={swipeStart} onTouchEnd={swipeEnd}>
                 <MobileHeader onOpenMobileMenu={() => setShowMobileMenu(true)} setIsSearchOpen={setIsSearchOpen} isSearchOpen={isSearchOpen} />
 
                 {isSearchOpen && (
@@ -462,6 +462,7 @@ const IALabContent = () => {
                   showLeaderboard={showLeaderboard}
                   setShowLeaderboard={setShowLeaderboard}
                   showExamResult={showExamResult}
+                  setShowExamResult={setShowExamResult}
                   activeMod={activeMod}
                   completedExams={completedExams}
                   showHistoryModal={showHistoryModal}

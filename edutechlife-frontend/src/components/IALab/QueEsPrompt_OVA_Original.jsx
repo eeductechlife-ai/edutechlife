@@ -296,8 +296,7 @@ const QueEsPrompt_OVA_Original = ({ onClose }) => {
        setAudioLoading(false);
    });
    setPlaying(true);
-   setAudioLoading(false);
- };
+  };
 
  const renderContent = () => {
    switch (screen) {

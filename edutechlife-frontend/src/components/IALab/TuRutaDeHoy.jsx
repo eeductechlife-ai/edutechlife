@@ -18,6 +18,9 @@ const parseResourceDuration = (resource) => {
     const match = resource.estimatedTime.match(/(\d+)/);
     return match ? parseInt(match[1]) : 0;
   }
+  if (resource.type === 'pdf' && resource.pages) {
+    return resource.pages * 2;
+  }
   return 0;
 };
 

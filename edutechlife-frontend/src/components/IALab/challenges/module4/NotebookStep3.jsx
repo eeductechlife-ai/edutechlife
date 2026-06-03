@@ -299,13 +299,12 @@ const NotebookStep3 = ({ exercise, response, onResponseChange, topic = '' }) => 
           </div>
 
           <div className="flex justify-center">
-            <button
-              type="button"
-              className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 cursor-default opacity-80"
+            <div
+              className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl cursor-default opacity-80"
             >
               <Icon name="fa-play-circle" className="text-xl" />
               <span className="text-sm font-semibold">{t('ialab.challenge.m4.step3.preview_play')}</span>
-            </button>
+            </div>
           </div>
         </motion.div>
       )}

@@ -8,9 +8,9 @@ const VOICE_PROFILES = {
   },
   valerio: { 
     languageCode: 'es-US', 
-    name: 'es-US-Neural2-B', 
-    pitch: 1.2,
-    speakingRate: 1.15,
+    name: 'es-US-Neural2-A', 
+    pitch: -2.5,
+    speakingRate: 1.0,
     volumeGainDb: 3.0
   },
   sistema: { 
@@ -82,10 +82,10 @@ const VOICE_FALLBACKS = {
     { languageCode: 'es-ES', name: 'es-ES-Neural2-A', pitch: 0, speakingRate: 0.95 }
   ],
   valerio: [
-    { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 0, speakingRate: 1.15 },
-    { languageCode: 'es-US', name: 'es-US-Neural2-D', pitch: 0, speakingRate: 1.15 },
-    { languageCode: 'es-US', name: 'es-US-Studio-B', pitch: 0, speakingRate: 1.15 },
-    { languageCode: 'es-ES', name: 'es-ES-Neural2-B', pitch: 0, speakingRate: 1.1 }
+    { languageCode: 'es-US', name: 'es-US-Neural2-A', pitch: -2.5, speakingRate: 1.0, volumeGainDb: 3.0 },
+    { languageCode: 'es-US', name: 'es-US-Neural2-A', pitch: -2.0, speakingRate: 1.0, volumeGainDb: 3.0 },
+    { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: -1.0, speakingRate: 1.0, volumeGainDb: 3.0 },
+    { languageCode: 'es-ES', name: 'es-ES-Neural2-C', pitch: 0, speakingRate: 1.0, volumeGainDb: 3.0 }
   ],
   nico: [
     { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 0, speakingRate: 1.0 },
@@ -179,28 +179,28 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
         
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'es-MX';
-        utterance.rate = 1.1;
-        utterance.pitch = 1.2;
+        utterance.rate = 1.0;
+        utterance.pitch = 1.0;
         utterance.volume = 1.0;
 
-        // Buscar la mejor voz disponible, priorizando español latino sobre España
+        // Buscar la mejor voz MASCULINA disponible, priorizando español latino
+        const isMaleName = (name) => {
+          const female = ['Paulina', 'Monica', 'Sabina', 'Helena', 'Laura', 'Sofia', 'Valentina', 'Daniela', 'Camila', 'Lucia'];
+          return !female.some(f => name.includes(f)) && !/[BDFHJ]$/.test(name);
+        };
+
         const voicePriority = [
-          // Voces Google (Chrome) - priorizar latino
-          (v) => (v.name.includes('Google') || v.name.includes('WaveNet')) && (v.lang === 'es-US' || v.lang === 'es-419' || v.lang === 'es-MX' || v.lang === 'es-CO'),
-          (v) => v.name === 'Google español de Estados Unidos',
-          (v) => (v.name.includes('Google') || v.name.includes('WaveNet')) && v.lang.startsWith('es'),
-          // Voces Microsoft (Edge) - latinoamericano
-          (v) => v.name.includes('Microsoft') && (v.lang === 'es-MX' || v.lang === 'es-US' || v.lang === 'es-CO' || v.lang === 'es-419'),
-          (v) => v.name === 'Microsoft Sabina - Spanish (Mexico)',
-          (v) => v.name.includes('Microsoft') && v.lang.startsWith('es'),
-          // Voces Apple (macOS) - priorizar latino, evitar Paulina/Monica (España)
+          // Masculinas Neural2 latino
+          (v) => isMaleName(v.name) && v.name.includes('Neural2') && (v.lang === 'es-US' || v.lang === 'es-419' || v.lang === 'es-MX' || v.lang === 'es-CO'),
+          // Jorge (Apple macOS) - masculino latino
           (v) => v.name === 'Jorge',
-          (v) => v.lang === 'es-MX' || v.lang === 'es-US',
-          (v) => v.lang === 'es-CO' || v.lang === 'es-419',
-          // Voces neutras de cualquier región
-          (v) => v.name.includes('Neural2') && v.lang.startsWith('es'),
-          // Fallback: cualquier español latino, luego cualquier español
-          (v) => v.lang.startsWith('es') && !v.lang.startsWith('es-ES'),
+          // Masculinas WaveNet/Chirp latino
+          (v) => isMaleName(v.name) && (v.name.includes('WaveNet') || v.name.includes('Chirp')) && (v.lang === 'es-US' || v.lang === 'es-419' || v.lang === 'es-MX' || v.lang === 'es-CO'),
+          // Masculinas Google latino
+          (v) => isMaleName(v.name) && v.name.includes('Google') && (v.lang === 'es-US' || v.lang === 'es-419' || v.lang === 'es-MX' || v.lang === 'es-CO'),
+          // Cualquier voz latino (último recurso)
+          (v) => v.lang === 'es-MX' || v.lang === 'es-US' || v.lang === 'es-CO' || v.lang === 'es-419',
+          // Cualquier español
           (v) => v.lang.startsWith('es'),
         ];
 
@@ -258,9 +258,6 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
 
   const voiceFallacks = VOICE_FALLBACKS[profile] || [];
   let lastError = null;
-
-  const nativeSuccess = useNativeSpeech();
-  if (nativeSuccess) return;
 
   let gotAudio = false;
   for (const voiceOption of [voice, ...voiceFallacks]) {
@@ -327,8 +324,8 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
   }
 
   if (!gotAudio) {
-    const nativeRetry = useNativeSpeech();
-    if (!nativeRetry && onEndCallback) {
+    const nativeSuccess = useNativeSpeech();
+    if (!nativeSuccess && onEndCallback) {
       onEndCallback();
     }
   }

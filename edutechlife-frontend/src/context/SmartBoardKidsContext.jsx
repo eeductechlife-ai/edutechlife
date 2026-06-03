@@ -266,10 +266,7 @@ export const SmartBoardKidsProvider = ({ children }) => {
   }, []);
 
   // ==================== APPLY REWARD EFFECTS ====================
-  useEffect(() => {
-    if (!dataLoaded) return;
-    document.documentElement.classList.toggle('dark', darkMode);
-  }, [darkMode, dataLoaded]);
+  // Dark mode handled locally in SmartBoardKidsDashboard via conditional classes
 
   // ==================== SYNC TO LOCALSTORAGE + SUPABASE ====================
   useEffect(() => {

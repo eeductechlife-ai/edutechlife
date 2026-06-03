@@ -15,29 +15,42 @@ const ValerioAvatar = ({ state = 'idle', size = 80, onStateChange }) => {
             
             const loadVoices = () => {
                 const voices = synthRef.current.getVoices();
-                
+
+                // Priorizar voces masculinas: evitar sufijos de voz femenina (B, D, F, H, J)
+                const isMaleVoice = (name) => !/[BDFHJ]$/.test(name);
+
                 // Priorizar español latino: primero voces es-US, es-419, es-MX, es-CO
-                const latinoVoices = voices.filter(v => 
+                const latinoVoices = voices.filter(v =>
                     (v.lang === 'es-US' || v.lang === 'es-419' || v.lang === 'es-MX' || v.lang === 'es-CO') &&
-                    (v.name.includes('Neural2') || v.name.includes('WaveNet') || v.name.includes('Google') || v.name.includes('Microsoft'))
+                    (v.name.includes('Chirp3') || v.name.includes('Neural2') || v.name.includes('WaveNet') || v.name.includes('Google') || v.name.includes('Microsoft'))
                 );
+
+                // Intentar primero latino masculina, luego latino cualquiera
+                const maleLatino = latinoVoices.find(v => isMaleVoice(v.name));
+                if (maleLatino) {
+                    setSelectedVoice(maleLatino);
+                    return;
+                }
                 
                 if (latinoVoices.length > 0) {
                     setSelectedVoice(latinoVoices[0]);
                     return;
                 }
-                
-                // Fallback: cualquier voz Neural2/WaveNet/Google/Microsoft en español
-                const spanishVoices = voices.filter(v => 
+
+                // Fallback: cualquier voz Chirp3/Neural2/WaveNet/Google/Microsoft en español
+                const spanishVoices = voices.filter(v =>
                     v.lang.startsWith('es') &&
-                    (v.name.includes('Neural2') || v.name.includes('WaveNet') || v.name.includes('Google') || v.name.includes('Microsoft'))
+                    (v.name.includes('Chirp3') || v.name.includes('Neural2') || v.name.includes('WaveNet') || v.name.includes('Google') || v.name.includes('Microsoft'))
                 );
-                
-                if (spanishVoices.length > 0) {
+
+                const maleSpanish = spanishVoices.find(v => isMaleVoice(v.name));
+                if (maleSpanish) {
+                    setSelectedVoice(maleSpanish);
+                } else if (spanishVoices.length > 0) {
                     setSelectedVoice(spanishVoices[0]);
                 } else if (voices.length > 0) {
-                    // Último recurso: cualquier voz disponible
-                    setSelectedVoice(voices[0]);
+                    const maleAny = voices.find(v => isMaleVoice(v.name));
+                    setSelectedVoice(maleAny || voices[0]);
                 }
             };
 
@@ -86,7 +99,7 @@ const ValerioAvatar = ({ state = 'idle', size = 80, onStateChange }) => {
         }
 
         utterance.rate = 1.0;
-        utterance.pitch = 1.1;
+        utterance.pitch = 1.0;
         utterance.volume = 1.0;
 
         utterance.onstart = () => {

@@ -1,5 +1,6 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Icon } from '../utils/iconMapping.jsx';
 import FloatingParticles from './FloatingParticles';
 import { useTranslation } from '../i18n/I18nProvider';
@@ -7,6 +8,57 @@ import { useTranslation } from '../i18n/I18nProvider';
 function AIToolsSection() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const prefersReducedMotion = useReducedMotion();
+
+  const [isHovered, setIsHovered] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
+  const [isVideoError, setIsVideoError] = useState(false);
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 768px)');
+    setIsDesktop(mq.matches);
+    const handler = (e) => setIsDesktop(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
+  const [isHoveredSmartboard, setIsHoveredSmartboard] = useState(false);
+  const [isVideoErrorSmartboard, setIsVideoErrorSmartboard] = useState(false);
+  const videoRefSmartboard = useRef(null);
+
+  const handleMouseEnter = useCallback(() => setIsHovered(true), []);
+  const handleMouseLeave = useCallback(() => setIsHovered(false), []);
+  const handleMouseEnterSmartboard = useCallback(() => {
+    setIsVideoErrorSmartboard(false);
+    setIsHoveredSmartboard(true);
+  }, []);
+  const handleMouseLeaveSmartboard = useCallback(() => setIsHoveredSmartboard(false), []);
+
+  const showVideo = isDesktop && isHovered && !isVideoError;
+  const showVideoSmartboard = isDesktop && isHoveredSmartboard && !isVideoErrorSmartboard;
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (showVideo) {
+      video.play().catch(() => {});
+    } else {
+      video.pause();
+      video.currentTime = 0;
+    }
+  }, [showVideo]);
+
+  useEffect(() => {
+    const video = videoRefSmartboard.current;
+    if (!video) return;
+    if (showVideoSmartboard) {
+      video.play().catch(() => {});
+    } else {
+      video.pause();
+      video.currentTime = 0;
+    }
+  }, [showVideoSmartboard]);
 
   const tools = [
     {
@@ -93,32 +145,79 @@ function AIToolsSection() {
           whileInView="visible"
           viewport={{ once: true }}
         >
-          {/* Card 1: AI Lab Academic (Main Dark) */}
-          <motion.div variants={itemVariants} className="col-span-1 md:col-span-2 card-clay-dark text-white p-8 flex flex-col">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-14 h-14 rounded-xl bg-primary-light/15 flex items-center justify-center flex-shrink-0">
-                <Icon name={tools[0].icon} className="text-2xl text-primary-light" />
-              </div>
-              <div>
-                <h3 className="text-2xl md:text-3xl font-black text-primary-light">{tools[0].name}</h3>
-                <div className="flex flex-wrap gap-2 mt-1">
-                  {tools[0].badges.map((badge) => (
-                    <span key={badge} className="px-2.5 py-0.5 rounded-full bg-white/10 text-[10px] text-white font-bold uppercase tracking-wider border border-white/15">{badge}</span>
-                  ))}
+          {/* Card 1: AI Lab Academic (Main Dark) — hover overlays video */}
+          <motion.div
+            variants={itemVariants}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            tabIndex={0}
+            onFocus={handleMouseEnter}
+            onBlur={handleMouseLeave}
+            className="col-span-1 md:col-span-2 card-clay-dark text-white p-8 flex flex-col relative overflow-hidden cursor-pointer"
+          >
+            <div className="flex flex-col h-full">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-14 h-14 rounded-xl bg-primary-light/15 flex items-center justify-center flex-shrink-0">
+                  <Icon name={tools[0].icon} className="text-2xl text-primary-light" />
+                </div>
+                <div>
+                  <h3 className="text-2xl md:text-3xl font-black text-primary-light">{tools[0].name}</h3>
+                  <div className="flex flex-wrap gap-2 mt-1">
+                    {tools[0].badges.map((badge) => (
+                      <span key={badge} className="px-2.5 py-0.5 rounded-full bg-white/10 text-[10px] text-white font-bold uppercase tracking-wider border border-white/15">{badge}</span>
+                    ))}
+                  </div>
                 </div>
               </div>
+              <p className="text-white/80 max-w-xl text-base md:text-lg leading-relaxed">{tools[0].description}</p>
+              <div className="mt-auto pt-6">
+                <a
+                  href={tools[0].path}
+                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(tools[0].path); }}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary-light text-white text-sm font-semibold hover:bg-mint transition-colors"
+                >
+                  {tools[0].buttonText}
+                  <Icon name="fa-arrow-right" className="text-xs" />
+                </a>
+              </div>
             </div>
-            <p className="text-white/80 max-w-xl text-base md:text-lg leading-relaxed">{tools[0].description}</p>
-            <div className="mt-auto pt-6">
-              <a
-                href={tools[0].path}
-                onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(tools[0].path); }}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary-light text-white text-sm font-semibold hover:bg-mint transition-colors"
-              >
-                {tools[0].buttonText}
-                <Icon name="fa-arrow-right" className="text-xs" />
-              </a>
-            </div>
+
+            <AnimatePresence>
+              {showVideo && (
+                <motion.div
+                  key="video"
+                  initial={prefersReducedMotion ? {} : { opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={prefersReducedMotion ? {} : { opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="absolute inset-0"
+                >
+                  <video
+                    ref={videoRef}
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    onError={() => setIsVideoError(true)}
+                    className="w-full h-full object-cover"
+                  >
+                    <source src="/dashboard.mp4" type="video/mp4" />
+                    <source src="/dashboard.mov" type="video/quicktime" />
+                  </video>
+                  <div className="absolute inset-0 bg-gradient-to-t from-petroleum/60 via-transparent to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 flex justify-center">
+                    <a
+                      href={tools[0].path}
+                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(tools[0].path); }}
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-petroleum/70 backdrop-blur-sm text-white text-sm font-semibold hover:bg-primary-light transition-colors border border-white/20"
+                    >
+                      {tools[0].buttonText}
+                      <Icon name="fa-arrow-right" className="text-xs" />
+                    </a>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
 
           {/* Card 2: Automatización */}
@@ -138,11 +237,11 @@ function AIToolsSection() {
                 ))}
               </div>
             </div>
-            <div className="mt-6">
+            <div className="mt-6 pt-1">
               <a
                 href={tools[1].path}
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(tools[1].path); }}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200 text-slate-600 text-sm font-semibold hover:border-primary-light hover:text-primary-light hover:bg-primary-light/5 transition-all"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border-2 border-petroleum/20 text-petroleum text-sm font-semibold hover:bg-petroleum hover:text-white transition-all"
               >
                 {tools[1].buttonText}
                 <Icon name="fa-arrow-right" className="text-xs" />
@@ -160,7 +259,7 @@ function AIToolsSection() {
               <p className="text-xs text-primary-light font-semibold uppercase tracking-wider mb-3">{tools[2].subtitle}</p>
               <p className="text-slate-500 text-sm">{tools[2].description}</p>
             </div>
-            <div className="mt-6">
+            <div className="mt-6 pt-1">
               <a
                 href={tools[2].path}
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(tools[2].path); }}
@@ -172,26 +271,75 @@ function AIToolsSection() {
             </div>
           </motion.div>
 
-          {/* Card 4: SmartBoard (Horizontal) */}
-          <motion.div variants={itemVariants} className="col-span-1 md:col-span-2 card-clay bg-primary-light/5 p-8 flex flex-col md:flex-row items-center gap-6">
-            <div className="flex items-center gap-5 flex-1 min-w-0">
-              <div className="w-16 h-16 rounded-xl bg-primary-light/15 flex items-center justify-center flex-shrink-0">
-                <Icon name={tools[3].icon} className="text-3xl text-primary-light" />
-              </div>
-              <div className="min-w-0">
-                <h3 className="text-2xl md:text-3xl font-black text-petroleum">{tools[3].name}</h3>
-                <p className="text-xs text-primary-light font-semibold uppercase tracking-wider">{tools[3].subtitle}</p>
-                <p className="text-petroleum/70 text-base mt-1.5">{tools[3].description}</p>
+          {/* Card 4: SmartBoard (Horizontal) — hover overlays video */}
+          <motion.div
+            variants={itemVariants}
+            onMouseEnter={handleMouseEnterSmartboard}
+            onMouseLeave={handleMouseLeaveSmartboard}
+            tabIndex={0}
+            onFocus={handleMouseEnterSmartboard}
+            onBlur={handleMouseLeaveSmartboard}
+            className="col-span-1 md:col-span-2 card-clay bg-primary-light/5 p-8 flex flex-col relative overflow-hidden cursor-pointer"
+          >
+            <div className="flex flex-col h-full">
+              <div className="flex flex-col md:flex-row items-center gap-6">
+                <div className="flex items-center gap-5 flex-1 min-w-0">
+                  <div className="w-14 h-14 rounded-xl bg-primary-light/15 flex items-center justify-center flex-shrink-0">
+                    <Icon name={tools[3].icon} className="text-2xl text-primary-light" />
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-2xl md:text-3xl font-black text-petroleum">{tools[3].name}</h3>
+                    <p className="text-xs text-primary-light font-semibold uppercase tracking-wider">{tools[3].subtitle}</p>
+                    <p className="text-petroleum/70 text-base mt-1.5">{tools[3].description}</p>
+                  </div>
+                </div>
+                <a
+                  href={tools[3].path}
+                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(tools[3].path); }}
+                  className="flex-shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary-light text-white text-sm font-semibold hover:bg-petroleum transition-all"
+                >
+                  {tools[3].buttonText}
+                  <Icon name="fa-arrow-right" className="text-xs" />
+                </a>
               </div>
             </div>
-            <a
-              href={tools[3].path}
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(tools[3].path); }}
-              className="flex-shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary-light text-white text-sm font-semibold hover:bg-petroleum transition-all border border-primary-light/20"
-            >
-              {tools[3].buttonText}
-              <Icon name="fa-arrow-right" className="text-xs" />
-            </a>
+
+            <AnimatePresence>
+              {showVideoSmartboard && (
+                <motion.div
+                  key="video-smartboard"
+                  initial={prefersReducedMotion ? {} : { opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={prefersReducedMotion ? {} : { opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="absolute inset-0"
+                >
+                  <video
+                    ref={videoRefSmartboard}
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    onError={() => setIsVideoErrorSmartboard(true)}
+                    className="w-full h-full object-cover"
+                  >
+                    <source src="/smarboard.mp4" type="video/mp4" />
+                    <source src="/smarboard.mov" type="video/quicktime" />
+                  </video>
+                  <div className="absolute inset-0 bg-gradient-to-t from-petroleum/60 via-transparent to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 flex justify-center">
+                    <a
+                      href={tools[3].path}
+                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(tools[3].path); }}
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-petroleum/70 backdrop-blur-sm text-white text-sm font-semibold hover:bg-primary-light transition-colors border border-white/20"
+                    >
+                      {tools[3].buttonText}
+                      <Icon name="fa-arrow-right" className="text-xs" />
+                    </a>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
 
         </motion.div>

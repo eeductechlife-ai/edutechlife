@@ -11,43 +11,16 @@ export function ThemeProvider({ children }) {
   useEffect(() => {
     const storedTheme = safeStorage.getItem(THEME_KEY);
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-    if (storedTheme === 'dark' || (!storedTheme && prefersDark)) {
-      setIsDarkMode(true);
-      document.documentElement.classList.add('dark');
-    } else {
-      setIsDarkMode(false);
-      document.documentElement.classList.remove('dark');
-    }
-
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleChange = (e) => {
-      const current = safeStorage.getItem(THEME_KEY);
-      if (!current) {
-        if (e.matches) {
-          setIsDarkMode(true);
-          document.documentElement.classList.add('dark');
-        } else {
-          setIsDarkMode(false);
-          document.documentElement.classList.remove('dark');
-        }
-      }
-    };
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
+    setIsDarkMode(storedTheme === 'dark' || (!storedTheme && prefersDark));
   }, []);
 
   const toggleDarkMode = useCallback(() => {
-    const newDarkMode = !isDarkMode;
-    setIsDarkMode(newDarkMode);
-    if (newDarkMode) {
-      document.documentElement.classList.add('dark');
-      safeStorage.setItem(THEME_KEY, 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      safeStorage.setItem(THEME_KEY, 'light');
-    }
-  }, [isDarkMode]);
+    setIsDarkMode(prev => {
+      const next = !prev;
+      safeStorage.setItem(THEME_KEY, next ? 'dark' : 'light');
+      return next;
+    });
+  }, []);
 
   return (
     <ThemeContext.Provider value={{ isDarkMode, toggleDarkMode }}>

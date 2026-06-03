@@ -68,8 +68,8 @@ const ToolTutorAccordion = React.memo(function ToolTutorAccordion({ onAction }) 
             : 'bg-gradient-to-r from-petroleum/40 via-petroleum-dark/40 to-corporate/40'
         }`} />
 
-        <div className={`p-5 transition-all duration-300 ${isActive ? 'bg-gradient-to-b from-corporate/5 to-transparent' : ''}`}>
-          <div className="flex items-center gap-4">
+        <div className={`p-5 h-full flex flex-col transition-all duration-300 ${isActive ? 'bg-gradient-to-b from-corporate/5 to-transparent' : ''}`}>
+          <div className="flex items-center gap-4 flex-1">
             <div className={`w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
               isActive
                 ? 'bg-gradient-to-br from-petroleum to-corporate shadow-md'
@@ -77,7 +77,7 @@ const ToolTutorAccordion = React.memo(function ToolTutorAccordion({ onAction }) 
             }`}>
               <Icon name={config.icon} className={`w-6 h-6 ${isActive ? 'text-white' : 'text-petroleum'}`} aria-hidden="true" />
             </div>
-            <div className="flex-1 min-w-0">
+            <div className="flex-1 min-w-0 self-stretch flex flex-col">
               <h3 className={`text-base md:text-lg font-bold transition-colors duration-300 ${
                 isActive ? 'text-petroleum dark:text-slate-100' : 'text-slate-800 dark:text-slate-100 group-hover:text-petroleum'
               }`}>
@@ -85,7 +85,7 @@ const ToolTutorAccordion = React.memo(function ToolTutorAccordion({ onAction }) 
               </h3>
               <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">{config.subtitle}</p>
               {!isActive && (
-                <div className="mt-3">
+                <div className="mt-auto pt-3">
                   <div className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-petroleum to-corporate rounded-xl shadow-sm hover:from-petroleum-dark hover:to-corporate-dark hover:shadow group-hover:scale-105 transition-all duration-300">
                     <Icon name={config.ctaIcon} className="w-3.5 h-3.5 text-white" aria-hidden="true" />
                     <span className="text-xs font-bold text-white tracking-wide">{config.ctaText}</span>

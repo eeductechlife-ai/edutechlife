@@ -151,6 +151,9 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
         const match = resource.estimatedTime.match(/(\d+)\s*(minutos|minutes|min|mins)/i);
         if (match) totalSeconds += parseInt(match[1]) * 60;
       }
+      if (resource.type === 'pdf' && resource.pages) {
+        totalSeconds += resource.pages * 2 * 60;
+      }
     });
     if (totalSeconds === 0) return "20 min";
     const hours = Math.floor(totalSeconds / 3600);
