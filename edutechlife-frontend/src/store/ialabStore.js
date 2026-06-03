@@ -350,6 +350,13 @@ export const useIALabStore = create(
       forumCommentCount: state.forumCommentCount,
       lessonProgress: state.lessonProgress,
       checkpointAnswers: state.checkpointAnswers,
+      moduleProgress: state.moduleProgress,
+      courseProgress: state.courseProgress,
+      completedModules: state.completedModules,
+      completedExams: state.completedExams,
+      completedInfographics: state.completedInfographics,
+      completedActivities: state.completedActivities,
+      challengeScores: state.challengeScores,
     }),
   })
 );

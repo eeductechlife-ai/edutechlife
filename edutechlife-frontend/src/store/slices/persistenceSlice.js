@@ -17,8 +17,8 @@
  * Side effects: localStorage reads/writes via ls.get/ls.set/ls.remove,
  *   window.dispatchEvent('ialab:attemptsUpdated')
  */
-import { LS_KEYS } from '@/constants/ialab';
-import { ls } from '@/utils/ialab';
+import { LS_KEYS, INITIAL_MODULE_PROGRESS, MODULE_RESOURCE_COUNTS, RESOURCE_MODULE_MAP } from '@/constants/ialab';
+import { ls, calcModuleScore } from '@/utils/ialab';
 
 export const createPersistenceSlice = (set, get) => ({
   syncFromPersistence: (data) => {
@@ -82,6 +82,39 @@ export const createPersistenceSlice = (set, get) => ({
       forumCommentCount: mergedGamification.forumCommentCount,
       startDate: mergedGamification.startDate || state.startDate || new Date().toISOString(),
     });
+
+    const currentModuleProgress = get().moduleProgress;
+    const hasAnyViewed = Object.values(currentModuleProgress).some(
+      m => (m.viewedResources?.length || 0) > 0
+    );
+    if (!hasAnyViewed) {
+      const flatViewed = get().getViewedResources();
+      if (Array.isArray(flatViewed) && flatViewed.length > 0) {
+        const rebuiltProgress = JSON.parse(JSON.stringify(INITIAL_MODULE_PROGRESS));
+        const completedMods = get().completedModules || [];
+
+        flatViewed.forEach(id => {
+          const modId = RESOURCE_MODULE_MAP[id];
+          if (modId && rebuiltProgress[modId]) {
+            if (!rebuiltProgress[modId].viewedResources.includes(id)) {
+              rebuiltProgress[modId].viewedResources.push(id);
+            }
+          }
+        });
+
+        Object.entries(rebuiltProgress).forEach(([modId, mod]) => {
+          const mid = Number(modId);
+          const viewed = mod.viewedResources || [];
+          const total = MODULE_RESOURCE_COUNTS[mid] || 8;
+          const pct = Math.round((viewed.length / total) * 100);
+          mod.resourcesPct = pct;
+          mod.resourcesCompleted = completedMods.includes(mid) || viewed.length >= total;
+          mod.currentScore = calcModuleScore(mod);
+        });
+
+        set({ moduleProgress: rebuiltProgress });
+      }
+    }
   },
 
   clearProgressFromStorage: () => {

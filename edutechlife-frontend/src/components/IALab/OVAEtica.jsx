@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types';;
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -315,6 +315,13 @@ export default function OVAEtica({ onComplete }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [xp, setXp] = useState(0);
   const totalXp = 500;
+
+  useEffect(() => {
+    if (screen === 'certificate' && !certCompletedRef.current) {
+      certCompletedRef.current = true;
+      onComplete?.();
+    }
+  }, [screen, onComplete]);
 
   const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const screenVariants = {

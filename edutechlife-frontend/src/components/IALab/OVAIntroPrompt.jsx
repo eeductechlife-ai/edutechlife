@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import PropTypes from 'prop-types';
 import { useTranslation } from '../../i18n/I18nProvider';
 import { OVAIntro } from './shared';
@@ -334,14 +334,25 @@ const FinalChallenge = () => {
 
 const Conclusion = () => {
   const { t } = useTranslation();
-  const text = t('ova.introprompt.conclusion_desc');
   return (
-    <div className="animate-[fadeIn_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards] space-y-4 text-center">
-      <div className="w-16 h-16 bg-gradient-to-br from-petroleum to-corporate rounded-[2rem] flex items-center justify-center mx-auto shadow-lg">
-        <Rocket className="w-8 h-8 text-white" />
+    <div className="mx-auto text-center animate-[fadeIn_1.1s_cubic-bezier(0.16,1,0.3,1)_forwards] max-w-md">
+      <div className="w-20 h-20 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center mx-auto mb-5 shadow-xl border-4 border-white dark:border-slate-700">
+        <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 2L14.5 9H22L16 13.5L18.5 21L12 16.5L5.5 21L8 13.5L2 9H9.5L12 2Z" />
+        </svg>
       </div>
-      <h4 className="text-petroleum font-[900] text-2xl tracking-tighter lowercase">{t('ova.introprompt.conclusion_title')}</h4>
-      <p className="text-slate-600 dark:text-slate-300 leading-relaxed font-bold text-sm max-w-lg mx-auto">{text}</p>
+      <h2 className="text-3xl font-black text-petroleum mb-2 uppercase tracking-tighter">{t('ova.introprompt.cert_title')}</h2>
+      <div className="bg-petroleum text-white inline-block px-10 py-5 rounded-[2rem] text-5xl font-black shadow-lg border-b-4 border-corporate mb-5">
+        5 / 5
+      </div>
+      <div className="flex justify-center gap-1.5 mb-5">
+        {[1,2,3,4,5].map(i => (
+          <svg key={i} className={`w-7 h-7 ${i <= 5 ? 'text-amber-400 fill-amber-400 drop-shadow-sm' : 'text-slate-200 dark:text-slate-600'}`} viewBox="0 0 24 24">
+            <path d="M12 2L14.5 9H22L16 13.5L18.5 21L12 16.5L5.5 21L8 13.5L2 9H9.5L12 2Z" />
+          </svg>
+        ))}
+      </div>
+      <p className="text-base text-slate-600 dark:text-slate-300 font-bold mb-6 leading-relaxed">{t('ova.introprompt.cert_score_msg')}</p>
     </div>
   );
 };
@@ -360,15 +371,24 @@ const screensData = {
 
 OVAIntroPrompt.propTypes = {
   onComplete: PropTypes.any,
+  onClose: PropTypes.any,
 };
 
-export default function OVAIntroPrompt({ onComplete }) {
+export default function OVAIntroPrompt({ onComplete, onClose }) {
   const { t, locale } = useTranslation();
   const [screen, setScreen] = useState('welcome');
   const [completed, setCompleted] = useState([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const autoCompletedRef = useRef(false);
   const nav = ['welcome', 'm1', 'm2', 'm3', 'm4', 'm5', 'm6', 'm7', 'm8'];
   const curIdx = nav.indexOf(screen);
+
+  useEffect(() => {
+    if (screen === 'm8' && !autoCompletedRef.current) {
+      autoCompletedRef.current = true;
+      onComplete?.();
+    }
+  }, [screen, onComplete]);
 
   const nextScreen = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -503,8 +523,8 @@ export default function OVAIntroPrompt({ onComplete }) {
           <div className="w-full max-w-4xl flex justify-between items-center gap-3 px-4 py-3">
             <button onClick={() => { if (curIdx > 1) setScreen(nav[curIdx - 1]); stopSpeech(); }} aria-label="Anterior" className="p-3 min-w-[44px] min-h-[44px] bg-[#F1F5F9] dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-petroleum dark:hover:text-corporate rounded-xl disabled:opacity-10 transition-all border border-slate-50 dark:border-slate-700" disabled={curIdx <= 1}><ChevronLeft className="w-5 h-5" /></button>
             <div className="flex gap-1.5">{nav.slice(1).map((_, i) => <div key={i} className={`h-1.5 rounded-full transition-all duration-700 ${i + 1 === curIdx ? 'w-8 bg-petroleum' : completed.includes(nav[i + 1]) ? 'w-2 bg-corporate' : 'w-2 bg-slate-200 dark:bg-slate-600'}`} />)}</div>
-            <button onClick={nextScreen} className={`px-6 min-h-[44px] rounded-xl font-[900] text-xs shadow-md active:scale-95 transition-all flex items-center gap-2 uppercase tracking-[0.15em] ${isLastScreen ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-gradient-to-r from-petroleum to-corporate text-white'}`}>
-              {isLastScreen ? t('ova.introprompt.quiz_mark') : t('ova.introprompt.next')} <ArrowRightCircle className="w-4 h-4" />
+            <button onClick={isLastScreen ? () => { onClose?.(); } : nextScreen} className={`px-6 min-h-[44px] rounded-xl font-[900] text-xs shadow-md active:scale-95 transition-all flex items-center gap-2 uppercase tracking-[0.15em] ${isLastScreen ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-gradient-to-r from-petroleum to-corporate text-white'}`}>
+              {isLastScreen ? t('ova.introprompt.finish_btn') : t('ova.introprompt.next')} <ArrowRightCircle className="w-4 h-4" />
             </button>
           </div>
         </div>

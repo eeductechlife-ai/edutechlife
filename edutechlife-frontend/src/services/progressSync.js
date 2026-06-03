@@ -318,7 +318,10 @@ const transformProgressData = (data) => {
   const completedInfographics = [];
   const completedActivities = [];
   const challengeScores = {};
+  const completedCommunity = [];
   let gamification = null;
+
+  const resourcesPerModule = {};
 
   data?.forEach(record => {
     if (!record.is_completed) return;
@@ -329,18 +332,20 @@ const transformProgressData = (data) => {
         break;
       case 'module':
         if (record.resource_id) {
-          const moduleId = record.resource_id.replace('module_', '');
-          completedModules.push(moduleId);
+          const moduleId = parseInt(record.resource_id.replace('module_', ''), 10);
+          if (!isNaN(moduleId)) completedModules.push(moduleId);
         }
         break;
-      case 'exam':
-        if (record.score !== null && record.score !== undefined) {
-          const examModuleId = record.module_id || record.resource_id?.replace('exam_', '');
-          completedExams[examModuleId] = record.score;
+      case 'exam': {
+        const examScore = record.score;
+        if (examScore !== null && examScore !== undefined) {
+          const mId = Number(record.module_id || record.resource_id?.replace('exam_', ''));
+          if (!isNaN(mId)) completedExams[mId] = examScore;
         } else if (record.module_id) {
-          completedExams[record.module_id] = true;
+          completedExams[record.module_id] = 100;
         }
         break;
+      }
       case 'infographic':
         completedInfographics.push(record.resource_id);
         break;
@@ -352,11 +357,43 @@ const transformProgressData = (data) => {
           challengeScores[record.module_id] = record.score;
         }
         break;
+      case 'community_comment':
+        if (record.module_id) {
+          completedCommunity.push(record.module_id);
+        }
+        break;
       case 'gamification':
         if (record.gamification_data) {
           gamification = record.gamification_data;
         }
         break;
+      default:
+        if (record.module_id && record.resource_id) {
+          if (!resourcesPerModule[record.module_id]) resourcesPerModule[record.module_id] = { viewed: 0, total: 8 };
+          resourcesPerModule[record.module_id].viewed++;
+        }
+        break;
+    }
+
+    if (record.activity_type === null && record.resource_id === null && record.module_id) {
+      if (!resourcesPerModule[record.module_id]) {
+        resourcesPerModule[record.module_id] = { viewed: 0, total: 8 };
+      }
+      const mod = resourcesPerModule[record.module_id];
+      mod.total = record.total_resources || mod.total || 8;
+      mod.viewed = Math.max(mod.viewed, record.resources_viewed || 0);
+    }
+  });
+
+  Object.entries(resourcesPerModule).forEach(([modId, info]) => {
+    if (info.viewed <= 0) return;
+    const nid = parseInt(modId, 10);
+    if (isNaN(nid)) return;
+    const existingCount = completedVideos.filter(v => String(v).startsWith(`m${nid}`)).length
+      + completedInfographics.filter(i => String(i).startsWith(`i${nid}`)).length;
+    const needed = info.viewed - existingCount;
+    for (let i = 0; i < needed; i++) {
+      completedVideos.push(`m${nid}_viewed_${i}`);
     }
   });
 
@@ -365,11 +402,12 @@ const transformProgressData = (data) => {
     error: null,
     data: {
       completedVideos,
-      completedModules,
+      completedModules: [...new Set(completedModules)],
       completedExams,
       completedInfographics,
       completedActivities,
       challengeScores,
+      completedCommunity,
       gamification,
       recordCount: data?.length || 0
     }
@@ -428,6 +466,7 @@ export const mergeProgress = (localData, remoteData) => {
     completedInfographics: mergeArrays(localData.completedInfographics || [], remoteData.completedInfographics || []),
     completedActivities: mergeArrays(localData.completedActivities || [], remoteData.completedActivities || []),
     challengeScores: mergeChallengeScores(localData.challengeScores || {}, remoteData.challengeScores || {}),
+    completedCommunity: mergeArrays(localData.completedCommunity || [], remoteData.completedCommunity || []),
     gamification: mergeGamification(localData.gamification, remoteData.gamification)
   };
 };

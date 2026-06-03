@@ -125,7 +125,7 @@ const renderOVAById = (resourceId) => {
   if (OVAComponent === InteractiveViewer) {
     return <InteractiveViewer resource={resource} />;
   }
-  return OVAComponent ? <OVAComponent onComplete={handleAutoComplete} /> : <InteractiveViewer resource={resource} />;
+  return OVAComponent ? <OVAComponent onComplete={handleAutoComplete} onClose={handleClose} /> : <InteractiveViewer resource={resource} />;
 };
 
   const renderViewer = () => {
