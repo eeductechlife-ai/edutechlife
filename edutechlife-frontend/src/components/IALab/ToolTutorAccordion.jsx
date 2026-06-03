@@ -37,7 +37,7 @@ const ToolTutorAccordion = React.memo(function ToolTutorAccordion({ onAction }) 
     : { title: t('ialab.tool_tutor.tool_title'), subtitle: t('ialab.tool_tutor.tool_subtitle'), icon: 'fa-wand-magic-sparkles', ctaIcon: 'fa-hand-pointer', ctaText: t('ialab.tool_tutor.tool_cta') };
 
   const tutoringConfig = { title: t('ialab.tool_tutor.tutoring_title'), subtitle: t('ialab.tool_tutor.tutoring_subtitle'), icon: 'fa-video', ctaIcon: 'fa-video', ctaText: t('ialab.tool_tutor.tutoring_cta') };
-  const flashcardConfig = { title: 'Flashcards — Repaso Espaciado', subtitle: 'Refuerza conceptos clave con el algoritmo SM-2. Las tarjetas difíciles aparecen más seguido.', icon: 'fa-brain', ctaIcon: 'fa-brain', ctaText: 'Practicar ahora' };
+  const flashcardConfig = { title: 'Cápsulas de Conocimiento', subtitle: 'Aprende y retén conceptos clave con repaso inteligente.', icon: 'fa-brain', ctaIcon: 'fa-brain', ctaText: 'Comenzar' };
 
   const PreviewCard = ({ config, section }) => {
     const isActive = expanded === section;
@@ -94,10 +94,10 @@ const ToolTutorAccordion = React.memo(function ToolTutorAccordion({ onAction }) 
                 </div>
               )}
             </div>
-            <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
+            <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
               isActive ? 'bg-petroleum/10 rotate-180 shadow-sm' : 'bg-corporate/15 group-hover:scale-110'
             }`}>
-              <Icon name="fa-chevron-down" className={`w-4 h-4 transition-colors ${
+              <Icon name="fa-chevron-down" className={`w-3 h-3 transition-colors ${
                 isActive ? 'text-petroleum' : 'text-corporate'
               }`} aria-hidden="true" />
             </div>
@@ -132,10 +132,10 @@ const ToolTutorAccordion = React.memo(function ToolTutorAccordion({ onAction }) 
                     {isToolMod2 ? <IALabInteractionAdvisor /> : isToolMod4 ? <OVAPodcastStudio /> : isToolMod5 ? <EthicsExplorer /> : <ReactivePromptStation />}
                   </SectionErrorBoundary>
                 ) : expanded === 'flashcards' ? (
-                  <SectionErrorBoundary name="FlashcardSection" title="Error al cargar flashcards — Repaso Espaciado">
+                  <SectionErrorBoundary name="FlashcardSection" title="Error al cargar Cápsulas de Conocimiento">
                     <div className="p-4">
                       <h3 className="text-lg font-semibold text-petroleum mb-4">
-                        Flashcards — Repaso Espaciado (SM-2)
+                        Cápsulas de Conocimiento
                       </h3>
                       <FlashcardArena moduleId={activeMod} />
                     </div>

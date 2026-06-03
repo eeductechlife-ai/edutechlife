@@ -208,7 +208,7 @@ const DailyPlan = ({ onAction, isLoading }) => {
         </h4>
         <span className="text-[10px] text-slate-400 ml-auto flex items-center gap-1">
           {pendingCount > 0 && (
-            <span className="px-1.5 py-0.5 rounded bg-amber-50 text-amber-600 font-semibold">
+            <span className="px-1.5 py-0.5 rounded bg-corporate/10 text-corporate font-semibold">
               {pendingCount}
             </span>
           )}
@@ -237,18 +237,18 @@ const DailyPlan = ({ onAction, isLoading }) => {
                       initial={prefersReducedMotion ? {} : { opacity: 0, y: 6 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.04, duration: 0.2 }}
-                      className="group bg-white rounded-xl border border-amber-200/60 hover:border-amber-300/60 hover:shadow-sm p-2.5 transition-all duration-200"
+                      className="group bg-white rounded-xl border border-corporate/20 hover:border-corporate/40 hover:shadow-sm p-2.5 transition-all duration-200"
                     >
                       <div className="flex items-start gap-2">
-                        <div className="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/60 flex items-center justify-center flex-shrink-0">
-                          <Icon name={item.icon} className="text-sm text-amber-500" />
+                        <div className="w-8 h-8 rounded-lg bg-corporate/10 border border-corporate/20 flex items-center justify-center flex-shrink-0">
+                          <Icon name={item.icon} className="text-sm text-corporate" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between gap-1.5">
                             <p className="text-xs font-semibold text-slate-800">{item.title}</p>
                             <button
                               onClick={() => completeChallenge(item.id, item.xpReward)}
-                              className="flex-shrink-0 text-[10px] font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200 hover:bg-amber-100 transition-colors active:scale-95"
+                              className="flex-shrink-0 text-[10px] font-medium text-corporate bg-corporate/10 px-2 py-0.5 rounded-md border border-corporate/20 hover:bg-corporate/20 transition-colors active:scale-95"
                             >
                               <Icon name="fa-check" className="text-[8px] mr-0.5" />Completar
                             </button>
@@ -256,8 +256,8 @@ const DailyPlan = ({ onAction, isLoading }) => {
                           <p className="text-[11px] text-slate-500 mt-0.5">{item.description}</p>
                           <div className="flex items-center gap-3 mt-0.5">
                             <span className="flex items-center gap-1">
-                              <Icon name="fa-star" className="text-[9px] text-amber-400" />
-                              <span className="text-[10px] font-semibold text-amber-500">+{item.xpReward} XP</span>
+                              <Icon name="fa-star" className="text-[9px] text-corporate" />
+                              <span className="text-[10px] font-semibold text-corporate">+{item.xpReward} XP</span>
                             </span>
                             <span className="text-[9px] font-medium text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">
                               Desafío

@@ -50,13 +50,13 @@ const DailyChallenges = () => {
         aria-expanded={isOpen}
       >
         <motion.div animate={{ rotate: isOpen ? 45 : 0 }} transition={{ duration: 0.2 }}>
-          <Icon name="fa-trophy" className="w-3.5 h-3.5 text-amber-500 group-hover:text-amber-400 transition-colors" />
+          <Icon name="fa-trophy" className="w-3.5 h-3.5 text-corporate group-hover:text-corporate/80 transition-colors" />
         </motion.div>
         <h4 className="text-xs font-bold text-petroleum uppercase tracking-wider group-hover:text-corporate transition-colors">
           Desafíos diarios
         </h4>
         <span className="text-[10px] font-medium ml-auto flex items-center gap-1">
-          <span className={`px-1.5 py-0.5 rounded ${progress.done === progress.total ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'}`}>
+          <span className={`px-1.5 py-0.5 rounded ${progress.done === progress.total ? 'bg-emerald-50 text-emerald-600' : 'bg-corporate/10 text-corporate'}`}>
             {progress.done}/{progress.total}
           </span>
         </span>
@@ -81,13 +81,13 @@ const DailyChallenges = () => {
                     className={`group flex items-center gap-3 p-2.5 rounded-xl border transition-all duration-200 ${
                       isDone
                         ? 'bg-emerald-50/50 border-emerald-200/60 opacity-70'
-                        : 'bg-white border-slate-200/60 hover:border-amber-300/60 hover:shadow-sm'
+                        : 'bg-white border-slate-200/60 hover:border-corporate/40 hover:shadow-sm'
                     }`}
                   >
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                      isDone ? 'bg-emerald-100' : 'bg-amber-50 border border-amber-200/60'
+                      isDone ? 'bg-emerald-100' : 'bg-corporate/10 border border-corporate/20'
                     }`}>
-                      <Icon name={c.icon} className={`text-sm ${isDone ? 'text-emerald-500' : 'text-amber-500'}`} aria-hidden="true" />
+                      <Icon name={c.icon} className={`text-sm ${isDone ? 'text-emerald-500' : 'text-corporate'}`} aria-hidden="true" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-1">
@@ -97,7 +97,7 @@ const DailyChallenges = () => {
                         {!isDone && (
                           <button
                             onClick={() => completeChallenge(c.id, c.xp)}
-                            className="flex-shrink-0 text-[10px] font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200 hover:bg-amber-100 transition-colors active:scale-95"
+                            className="flex-shrink-0 text-[10px] font-medium text-corporate bg-corporate/10 px-2 py-0.5 rounded-md border border-corporate/20 hover:bg-corporate/20 transition-colors active:scale-95"
                           >
                             <Icon name="fa-check" className="text-[8px] mr-0.5" />Completar
                           </button>
@@ -107,8 +107,8 @@ const DailyChallenges = () => {
                         {c.description}
                       </p>
                       <div className="flex items-center gap-1 mt-0.5">
-                        <Icon name="fa-star" className="text-[9px] text-amber-400" aria-hidden="true" />
-                        <span className="text-[10px] font-semibold text-amber-500">+{c.xp} XP</span>
+                        <Icon name="fa-star" className="text-[9px] text-corporate" aria-hidden="true" />
+                        <span className="text-[10px] font-semibold text-corporate">+{c.xp} XP</span>
                       </div>
                     </div>
                     {isDone && (
