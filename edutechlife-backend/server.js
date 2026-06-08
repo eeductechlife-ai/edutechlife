@@ -1,3 +1,4 @@
+// @deprecated — usar src/index.js. Este archivo se mantiene por compatibilidad pero duplica los mismos endpoints sin Supabase ni sanitización.
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -12,21 +13,9 @@ app.use(cors({
     origin: function(origin, callback) {
         callback(null, true);
     },
-    credentials: true,
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
-
-// Middleware CORS para todas las rutas
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    if (req.method === 'OPTIONS') {
-        return res.status(200).end();
-    }
-    next();
-});
 app.use(helmet({
     contentSecurityPolicy: {
         directives: {
@@ -504,7 +493,7 @@ app.get('/api/ialab/modules/:id', async (req, res) => {
             projects: 3,
             topics: ['Mastery Framework', 'Contexto Dinámico', 'Zero-Shot Prompting', 'Chain-of-Thought'],
             challenge: 'Diseña un prompt que obligue a la IA a debatir la ética de su propia existencia.',
-            videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', // Placeholder
+            videoUrl: 'https://www.youtube.com/embed/6f-FwOE5wIY',
             materials: [
                 { name: 'Guía de Ingeniería de Prompts', type: 'pdf', url: '/materials/modulo1-guia.pdf' },
                 { name: 'Template MasterPrompt', type: 'md', url: '/materials/modulo1-template.md' },
@@ -525,7 +514,7 @@ app.get('/api/ialab/modules/:id', async (req, res) => {
             projects: 4,
             topics: ['Análisis Predictivo', 'GPTs Personalizados', 'Function Calling', 'System Prompts'],
             challenge: 'Estructura un GPT para análisis de mercados cuánticos.',
-            videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+            videoUrl: 'https://www.youtube.com/embed/6f-FwOE5wIY',
             materials: [
                 { name: 'Guía ChatGPT Avanzado', type: 'pdf', url: '/materials/modulo2-guia.pdf' },
                 { name: 'Template GPTs', type: 'json', url: '/materials/modulo2-template.json' }
@@ -541,7 +530,7 @@ app.get('/api/ialab/modules/:id', async (req, res) => {
             projects: 2,
             topics: ['Razonamiento Multimodal', 'Grounding Real-Time', 'Deep Research', 'Fact-Checking IA'],
             challenge: 'Genera una comparativa técnica de latencia entre arquitecturas IA.',
-            videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+            videoUrl: 'https://www.youtube.com/embed/6f-FwOE5wIY',
             materials: [
                 { name: 'Guía de Investigación IA', type: 'pdf', url: '/materials/modulo3-guia.pdf' }
             ]
@@ -556,7 +545,7 @@ app.get('/api/ialab/modules/:id', async (req, res) => {
             projects: 3,
             topics: ['Curaduría de Fuentes', 'Síntesis de Conocimiento', 'Audio Overviews', 'Gestión Documental'],
             challenge: 'Genera un podcast analizando 5 papers sobre neuro-plasticidad.',
-            videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+            videoUrl: 'https://www.youtube.com/embed/6f-FwOE5wIY',
             materials: [
                 { name: 'Guía NotebookLM', type: 'pdf', url: '/materials/modulo4-guia.pdf' },
                 { name: 'Template Podcast', type: 'md', url: '/materials/modulo4-template.md' }
@@ -572,7 +561,7 @@ app.get('/api/ialab/modules/:id', async (req, res) => {
             projects: 5,
             topics: ['Integración Total', 'MVP Inteligente', 'Pitch Deck IA', 'Roadmap Estratégico'],
             challenge: 'Propón una automatización integral para una industria local de alto nivel.',
-            videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+            videoUrl: 'https://www.youtube.com/embed/6f-FwOE5wIY',
             materials: [
                 { name: 'Plantilla Proyecto Final', type: 'pdf', url: '/materials/modulo5-plantilla.pdf' },
                 { name: 'Guía Pitch Deck', type: 'pptx', url: '/materials/modulo5-pitch.pptx' }
@@ -929,10 +918,6 @@ app.get('/api/ialab/resources', async (req, res) => {
 // Proxy para Google Cloud Text-to-Speech (protege la API key)
 const GOOGLE_TTS_URL = 'https://texttospeech.googleapis.com/v1/text:synthesize';
 const GOOGLE_TTS_API_KEY = process.env.GOOGLE_TTS_API_KEY;
-
-app.get('/api/health', (req, res) => {
-    res.json({ status: 'ok', timestamp: Date.now() });
-});
 
 app.post('/api/tts', express.json(), async (req, res) => {
     if (!GOOGLE_TTS_API_KEY) {

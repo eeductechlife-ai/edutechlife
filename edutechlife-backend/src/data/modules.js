@@ -1,3 +1,5 @@
+const STORAGE = 'https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public';
+
 const modulesData = {
   1: {
     id: 1,
@@ -9,11 +11,11 @@ const modulesData = {
     projects: 3,
     topics: ['Mastery Framework', 'Contexto Dinámico', 'Zero-Shot Prompting', 'Chain-of-Thought'],
     challenge: 'Diseña un prompt que obligue a la IA a debatir la ética de su propia existencia.',
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    videoUrl: 'https://www.youtube.com/embed/6f-FwOE5wIY',
     materials: [
-      { name: 'Guía de Ingeniería de Prompts', type: 'pdf', url: '/materials/modulo1-guia.pdf' },
-      { name: 'Template MasterPrompt', type: 'md', url: '/materials/modulo1-template.md' },
-      { name: 'Ejercicios Prácticos', type: 'pdf', url: '/materials/modulo1-ejercicios.pdf' }
+      { name: 'Guía de Ingeniería de Prompts', type: 'pdf', url: STORAGE + '/recursos-edutechlife/guia_edutechlife_modulo1.pdf' },
+      { name: 'Template MasterPrompt', type: 'md', url: STORAGE + '/recursos-edutechlife/guia_edutechlife_modulo1.pdf' },
+      { name: 'Ejercicios Prácticos', type: 'pdf', url: STORAGE + '/recursos-edutechlife/guia_edutechlife_modulo1.pdf' }
     ],
     resources: [
       { title: 'Documentación Oficial', url: 'https://platform.openai.com/docs/guides/prompt-engineering' },
@@ -30,10 +32,10 @@ const modulesData = {
     projects: 4,
     topics: ['Análisis Predictivo', 'GPTs Personalizados', 'Function Calling', 'System Prompts'],
     challenge: 'Estructura un GPT para análisis de mercados cuánticos.',
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    videoUrl: 'https://www.youtube.com/embed/iOlo-K7yj2M',
     materials: [
-      { name: 'Guía ChatGPT Avanzado', type: 'pdf', url: '/materials/modulo2-guia.pdf' },
-      { name: 'Template GPTs', type: 'json', url: '/materials/modulo2-template.json' }
+      { name: 'Guía ChatGPT Avanzado', type: 'pdf', url: STORAGE + '/modulo%202%20guia%20de%20intro/guia_edutechlife_modulo2.pdf' },
+      { name: 'Template GPTs', type: 'json', url: STORAGE + '/modulo%202%20guia%20de%20intro/Las-Herramientas-Integradas-de-ChatGPT.pdf' }
     ]
   },
   3: {
@@ -46,9 +48,9 @@ const modulesData = {
     projects: 2,
     topics: ['Razonamiento Multimodal', 'Grounding Real-Time', 'Deep Research', 'Fact-Checking IA'],
     challenge: 'Genera una comparativa técnica de latencia entre arquitecturas IA.',
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    videoUrl: 'https://www.youtube.com/embed/Y5-5dI3Iero',
     materials: [
-      { name: 'Guía de Investigación IA', type: 'pdf', url: '/materials/modulo3-guia.pdf' }
+      { name: 'Guía de Investigación IA', type: 'pdf', url: STORAGE + '/modulo%203/2-%20guia_edutechlife_modulo3_gemini.pdf' }
     ]
   },
   4: {
@@ -61,10 +63,10 @@ const modulesData = {
     projects: 3,
     topics: ['Curaduría de Fuentes', 'Síntesis de Conocimiento', 'Audio Overviews', 'Gestión Documental'],
     challenge: 'Genera un podcast analizando 5 papers sobre neuro-plasticidad.',
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    videoUrl: 'https://www.youtube.com/embed/PV0oNcmIYII',
     materials: [
-      { name: 'Guía NotebookLM', type: 'pdf', url: '/materials/modulo4-guia.pdf' },
-      { name: 'Template Podcast', type: 'md', url: '/materials/modulo4-template.md' }
+      { name: 'Guía NotebookLM', type: 'pdf', url: STORAGE + '/guia%204%20nootbook%20lm/6-%20NotebookLM_El_Cuaderno_del_Futuro.pdf' },
+      { name: 'Template Podcast', type: 'md', url: STORAGE + '/guia%204%20nootbook%20lm/3-INFOGRAFIA.jpeg' }
     ]
   },
   5: {
@@ -77,10 +79,10 @@ const modulesData = {
     projects: 5,
     topics: ['Integración Total', 'MVP Inteligente', 'Pitch Deck IA', 'Roadmap Estratégico'],
     challenge: 'Propón una automatización integral para una industria local de alto nivel.',
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    videoUrl: 'https://www.youtube.com/embed/RDkOIf82v6A',
     materials: [
-      { name: 'Plantilla Proyecto Final', type: 'pdf', url: '/materials/modulo5-plantilla.pdf' },
-      { name: 'Guía Pitch Deck', type: 'pptx', url: '/materials/modulo5-pitch.pptx' }
+      { name: 'Plantilla Proyecto Final', type: 'pdf', url: STORAGE + '/modulo%205/2-guia_edutechlife_modulo5.pdf' },
+      { name: 'Guía Pitch Deck', type: 'pptx', url: STORAGE + '/modulo%205/7-Ethical_AI_Mastery.pdf' }
     ]
   }
 };

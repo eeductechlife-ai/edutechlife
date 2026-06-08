@@ -152,7 +152,7 @@ const MicroVideos = () => {
           title: 'MasterPrompt: La Plantilla Definitiva',
           duration: '7:15',
           description: 'Crea prompts profesionales reutilizables',
-          youtubeId: 'dQw4w9WgXcQ',
+          youtubeId: '6f-FwOE5wIY',
           transcript: `El MasterPrompt es una plantilla estructurada que garantiza resultados consistentes y profesionales.
 
 Estructura del MasterPrompt:
@@ -232,7 +232,7 @@ Casos de éxito:
           title: 'Function Calling Avanzado',
           duration: '9:10',
           description: 'Conecta ChatGPT con el mundo real',
-          youtubeId: 'dQw4w9WgXcQ',
+          youtubeId: 'iOlo-K7yj2M',
           transcript: `Function Calling permite que ChatGPT interactúe con sistemas externos.
 
 Aplicaciones:

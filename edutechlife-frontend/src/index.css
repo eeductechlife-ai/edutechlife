@@ -202,6 +202,10 @@
     min-height: 100vh;
   }
 
+  .dark body {
+    background-color: #0F172A;
+  }
+
   /* === TYPOGRAPHY SYSTEM === */
   
   /* Body Text - Open Sans */
@@ -1205,13 +1209,23 @@ body.is-scrolling .glass-card-dark {
     color: var(--color-petroleum);
   }
 
-  @media (pointer: fine) {
+  @media (pointer: fine) and (hover: hover) {
 
     body,
     a,
     button,
     [role="button"] {
       cursor: none;
+    }
+  }
+
+  @media (pointer: coarse) {
+
+    body,
+    a,
+    button,
+    [role="button"] {
+      cursor: auto;
     }
   }
 
