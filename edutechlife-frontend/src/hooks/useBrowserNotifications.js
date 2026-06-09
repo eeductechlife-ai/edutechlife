@@ -1,5 +1,7 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { useNotification } from '../context/NotificationContext';
+import { supabase } from '../lib/supabase';
+import { useUser } from '@clerk/react';
 
 const STORAGE_KEY = 'ialab_browser_notif_permission';
 const LAST_NOTIFIED_KEY = 'ialab_last_browser_notif_id';
@@ -16,10 +18,38 @@ const NOTIFICATION_ICONS = {
 
 const IMPORTANT_TYPES = ['module_complete', 'certificate_earned'];
 
+const VAPID_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY;
+
 export const useBrowserNotifications = () => {
+  const { user } = useUser();
+  const userId = user?.id;
   const { notifications } = useNotification();
   const notifiedIdsRef = useRef(new Set());
   const permissionRequestedRef = useRef(false);
+
+  const subscribeToPush = useCallback(async () => {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window) || !VAPID_KEY) return null;
+    try {
+      const reg = await navigator.serviceWorker.ready;
+      let sub = await reg.pushManager.getSubscription();
+      if (!sub) {
+        sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: VAPID_KEY });
+      }
+      return sub;
+    } catch { return null; }
+  }, []);
+
+  const syncPushSubscription = useCallback(async (subscription) => {
+    if (!subscription || !userId) return;
+    try {
+      await supabase.from('push_subscriptions').upsert({
+        user_id: userId,
+        subscription: subscription.toJSON(),
+        user_agent: navigator.userAgent,
+        updated_at: new Date().toISOString(),
+      }, { onConflict: 'user_id' });
+    } catch (e) { console.warn('[PUSH] sync error:', e); }
+  }, [userId]);
 
   const requestPermission = useCallback(async () => {
     if (!('Notification' in window)) {
@@ -46,12 +76,16 @@ export const useBrowserNotifications = () => {
       localStorage.setItem(STORAGE_KEY, permission);
       localStorage.setItem(PERMISSION_REQUESTED_KEY, 'true');
       permissionRequestedRef.current = true;
+      if (permission === 'granted') {
+        const sub = await subscribeToPush();
+        if (sub) await syncPushSubscription(sub);
+      }
       return permission === 'granted';
     } catch (err) {
       console.error('[BROWSER_NOTIF] Error solicitando permiso:', err);
       return false;
     }
-  }, []);
+  }, [subscribeToPush, syncPushSubscription]);
 
   const sendBrowserNotification = useCallback((title, body, options = {}) => {
     if (!('Notification' in window)) return;
@@ -129,6 +163,8 @@ export const useBrowserNotifications = () => {
   return {
     requestPermission,
     sendBrowserNotification,
+    subscribeToPush,
+    syncPushSubscription,
     permission: typeof Notification !== 'undefined' ? Notification.permission : 'unknown',
     supported: 'Notification' in window,
   };

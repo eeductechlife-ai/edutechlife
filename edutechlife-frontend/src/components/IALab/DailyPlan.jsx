@@ -45,7 +45,7 @@ const URGENCY_CONFIG = {
   },
 };
 
-const MAX_ITEMS = 8;
+const MAX_ITEMS = 6;
 
 const DailyPlan = ({ onAction, isLoading }) => {
   const { t } = useTranslation();
@@ -53,7 +53,11 @@ const DailyPlan = ({ onAction, isLoading }) => {
   const setActiveModAction = useIALabStore(s => s.setActiveMod);
   const setVisitedModules = useIALabStore(s => s.setVisitedModules);
   const addXp = useIALabStore(s => s.addXp);
+  const moduleProgress = useIALabStore(s => s.moduleProgress);
+  const courseProgress = useIALabStore(s => s.courseProgress);
   const personalizedRecs = usePersonalizedRecommendations();
+
+  const nextAction = useMemo(() => useIALabStore.getState().getNextSuggestedAction(), [moduleProgress, courseProgress]);
 
   const [completed, setCompleted] = useState(loadCompletion);
   const [isOpen, setIsOpen] = useState(false);
@@ -88,7 +92,13 @@ const DailyPlan = ({ onAction, isLoading }) => {
     const items = [];
 
     const activeChallenges = DAILY_CHALLENGES.filter(c => !completed[c.id]);
-    activeChallenges.forEach(c => {
+    const sortedChallenges = [...activeChallenges].sort((a, b) => {
+      if (a.id === 'dc-1') return -1;
+      if (b.id === 'dc-1') return 1;
+      return 0;
+    });
+    sortedChallenges.forEach(c => {
+      if (items.length >= MAX_ITEMS) return;
       items.push({
         id: c.id,
         type: 'challenge',
@@ -98,6 +108,7 @@ const DailyPlan = ({ onAction, isLoading }) => {
         description: c.description,
         xpReward: c.xp,
         completed: false,
+        isMorningStreak: c.id === 'dc-1',
       });
     });
 
@@ -160,13 +171,16 @@ const DailyPlan = ({ onAction, isLoading }) => {
       <div className="flex flex-col gap-1">
         <button
           onClick={toggleOpen}
-          className="w-full flex items-center gap-1.5 text-left cursor-pointer group"
+          className="relative w-full overflow-hidden bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate text-white font-bold py-3 px-5 rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 flex items-center gap-3 group"
           aria-expanded={isOpen}
         >
-          <Icon name="fa-check-circle" className="w-3.5 h-3.5 text-emerald-400" />
-          <h4 className="text-xs font-bold text-petroleum uppercase tracking-wider">
+          <div className="absolute inset-0 bg-white/0 group-hover:bg-white/20 transition-colors duration-300" />
+          <div className="w-7 h-7 rounded-full bg-white/20 group-hover:bg-emerald-500/20 backdrop-blur flex items-center justify-center flex-shrink-0">
+            <Icon name="fa-check-circle" className="w-3.5 h-3.5 text-emerald-300 group-hover:text-petroleum" />
+          </div>
+          <span className="text-sm font-bold text-white group-hover:text-corporate flex-1 text-left drop-shadow-sm">
             {t('ialab.daily_plan.title')}
-          </h4>
+          </span>
         </button>
         <AnimatePresence initial={false}>
           {isOpen && (
@@ -194,26 +208,28 @@ const DailyPlan = ({ onAction, isLoading }) => {
     <div className="flex flex-col gap-1">
       <button
         onClick={toggleOpen}
-        className="w-full flex items-center gap-1.5 text-left cursor-pointer group"
+        className="relative w-full overflow-hidden bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate text-white font-bold py-3 px-5 rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 flex items-center gap-3 group"
         aria-expanded={isOpen}
       >
+        <div className="absolute inset-0 bg-white/0 group-hover:bg-white/20 transition-colors duration-300" />
         <motion.div
           animate={{ rotate: isOpen ? 45 : 0 }}
           transition={{ duration: 0.2, ease: 'easeInOut' }}
+          className="w-7 h-7 rounded-full bg-white/20 group-hover:bg-corporate/20 backdrop-blur flex items-center justify-center flex-shrink-0"
         >
-          <Icon name="fa-lightbulb" className="w-3.5 h-3.5 text-corporate group-hover:text-corporate/80 transition-colors" />
+          <Icon name="fa-lightbulb" className="w-3.5 h-3.5 text-white group-hover:text-petroleum" />
         </motion.div>
-        <h4 className="text-xs font-bold text-petroleum uppercase tracking-wider group-hover:text-corporate transition-colors">
+        <span className="text-sm font-bold text-white group-hover:text-corporate flex-1 text-left drop-shadow-sm">
           {t('ialab.daily_plan.title')}
-        </h4>
-        <span className="text-[10px] text-slate-400 ml-auto flex items-center gap-1">
+        </span>
+        <span className="relative flex items-center gap-1.5">
           {pendingCount > 0 && (
-            <span className="px-1.5 py-0.5 rounded bg-corporate/10 text-corporate font-semibold">
+            <span className="px-2 py-0.5 rounded-full bg-white/20 group-hover:bg-corporate/20 text-white group-hover:text-corporate text-[10px] font-semibold">
               {pendingCount}
             </span>
           )}
           {completedCount > 0 && (
-            <span className="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-600 text-[9px]">
+            <span className="px-2 py-0.5 rounded-full bg-white/20 text-emerald-200 text-[10px] font-semibold">
               {completedCount}/{DAILY_CHALLENGES.length}
             </span>
           )}
@@ -228,27 +244,72 @@ const DailyPlan = ({ onAction, isLoading }) => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2, ease: 'easeInOut' }}
           >
+            {nextAction && nextAction.action !== 'start' && nextAction.action !== 'explore' && (
+              <div className="mb-2 p-2.5 rounded-xl bg-gradient-to-r from-petroleum/5 to-corporate/5 border border-petroleum/15">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center flex-shrink-0 shadow-sm">
+                    <Icon name={nextAction.action === 'exam' ? 'fa-file-text' : nextAction.action === 'challenge' ? 'fa-trophy' : nextAction.action === 'community' ? 'fa-comments' : nextAction.action === 'certificate' ? 'fa-certificate' : 'fa-play-circle'} className="text-xs text-white" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-semibold text-slate-700">{t('ialab.daily_plan.next_action')}</p>
+                    <p className="text-[11px] text-slate-500 truncate">{nextAction.label}</p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      if (nextAction.action === 'exam') {
+                        onAction?.('OPEN_EVALUATION');
+                      } else if (nextAction.action === 'challenge') {
+                        onAction?.('OPEN_CHALLENGE');
+                      } else if (nextAction.action === 'certificate') {
+                        onAction?.('SHOW_CERTIFICATE');
+                      } else {
+                        if (nextAction.moduleId) {
+                          setActiveModAction(nextAction.moduleId);
+                          setVisitedModules(prev => [...new Set([...prev, nextAction.moduleId])]);
+                        }
+                        const tab = nextAction.action === 'community' ? 'comunidad' : 'contenido';
+                        window.dispatchEvent(new CustomEvent('ialab:switchTab', { detail: tab }));
+                      }
+                    }}
+                    className="flex-shrink-0 text-[10px] font-semibold text-white bg-gradient-to-r from-petroleum to-corporate px-3 py-1.5 rounded-lg hover:shadow-md transition-all active:scale-95"
+                  >
+                    {t('ialab.daily_plan.continue')}
+                  </button>
+                </div>
+              </div>
+            )}
             <div className="flex flex-col gap-1.5 pt-2">
               {mergedItems.map((item, i) => {
                 if (item.type === 'challenge') {
+                  const isMorning = item.isMorningStreak;
                   return (
                     <motion.div
                       key={item.id}
                       initial={prefersReducedMotion ? {} : { opacity: 0, y: 6 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.04, duration: 0.2 }}
-                      className="group bg-white rounded-xl border border-corporate/20 hover:border-corporate/40 hover:shadow-sm p-2.5 transition-all duration-200"
+                      className={`group relative pl-3 border-l-2 transition-all duration-200 py-1.5 ${
+                        isMorning
+                          ? 'border-amber-400/40 hover:border-amber-500 bg-gradient-to-r from-amber-50/40 to-transparent'
+                          : 'border-corporate/30 hover:border-corporate'
+                      }`}
                     >
                       <div className="flex items-start gap-2">
-                        <div className="w-8 h-8 rounded-lg bg-corporate/10 border border-corporate/20 flex items-center justify-center flex-shrink-0">
-                          <Icon name={item.icon} className="text-sm text-corporate" />
+                        <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                          isMorning ? 'bg-gradient-to-br from-amber-400 to-amber-500' : 'bg-corporate/10'
+                        }`}>
+                          <Icon name={item.icon} className={`text-sm ${isMorning ? 'text-white' : 'text-corporate'}`} />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between gap-1.5">
-                            <p className="text-xs font-semibold text-slate-800">{item.title}</p>
+                            <p className={`text-xs font-semibold ${isMorning ? 'text-amber-800' : 'text-slate-800'}`}>{item.title}</p>
                             <button
                               onClick={() => completeChallenge(item.id, item.xpReward)}
-                              className="flex-shrink-0 text-[10px] font-medium text-corporate bg-corporate/10 px-2 py-0.5 rounded-md border border-corporate/20 hover:bg-corporate/20 transition-colors active:scale-95"
+                              className={`flex-shrink-0 text-[10px] font-medium px-2 py-0.5 rounded-md border transition-colors active:scale-95 ${
+                                isMorning
+                                  ? 'text-amber-700 bg-amber-100 border-amber-300 hover:bg-amber-200'
+                                  : 'text-corporate bg-corporate/10 border-corporate/20 hover:bg-corporate/20'
+                              }`}
                             >
                               <Icon name="fa-check" className="text-[8px] mr-0.5" />Completar
                             </button>
@@ -256,12 +317,19 @@ const DailyPlan = ({ onAction, isLoading }) => {
                           <p className="text-[11px] text-slate-500 mt-0.5">{item.description}</p>
                           <div className="flex items-center gap-3 mt-0.5">
                             <span className="flex items-center gap-1">
-                              <Icon name="fa-star" className="text-[9px] text-corporate" />
-                              <span className="text-[10px] font-semibold text-corporate">+{item.xpReward} XP</span>
+                              <Icon name="fa-star" className={`text-[9px] ${isMorning ? 'text-amber-500' : 'text-corporate'}`} />
+                              <span className={`text-[10px] font-semibold ${isMorning ? 'text-amber-600' : 'text-corporate'}`}>+{item.xpReward} XP</span>
                             </span>
-                            <span className="text-[9px] font-medium text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">
-                              Desafío
-                            </span>
+                            {isMorning && (
+                              <span className="text-[9px] font-medium text-amber-600 bg-amber-100 px-1.5 py-0.5 rounded">
+                                Mañanero
+                              </span>
+                            )}
+                            {!isMorning && (
+                              <span className="text-[9px] font-medium text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">
+                                Desafío
+                              </span>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -276,10 +344,14 @@ const DailyPlan = ({ onAction, isLoading }) => {
                     initial={prefersReducedMotion ? {} : { opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.04, duration: 0.2 }}
-                    className={`group bg-white rounded-xl border ${cfg.borderClass} ${cfg.hoverBorder} p-2.5 transition-all duration-200`}
+                    className={`group relative pl-3 border-l-2 transition-all duration-200 py-1.5 ${
+                      item.urgency === 'high' ? 'border-petroleum/30 hover:border-petroleum' :
+                      item.urgency === 'medium' ? 'border-corporate/30 hover:border-corporate' :
+                      'border-slate-300 hover:border-slate-500'
+                    }`}
                   >
                     <div className="flex items-start gap-2">
-                      <div className={`w-7 h-7 rounded-lg bg-gradient-to-br ${cfg.gradientFrom} ${cfg.gradientTo} flex items-center justify-center flex-shrink-0`}>
+                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${cfg.bgColor}`}>
                         <Icon name={item.icon} className={`text-xs ${cfg.iconColor}`} />
                       </div>
                       <div className="flex-1 min-w-0">

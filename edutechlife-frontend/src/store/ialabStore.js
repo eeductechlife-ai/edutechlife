@@ -335,6 +335,26 @@ export const useIALabStore = create(
     const weakTopicsByModule = analyzeQuizFailures(state.storageGet);
     return generateRecommendations(state.moduleProgress, state.calculateModuleScore, state.completedExams, state.challengeScores, weakTopicsByModule);
   },
+
+  getNextSuggestedAction: () => {
+    const st = get();
+    for (let id = 1; id <= 5; id++) {
+      const mp = st.moduleProgress[id];
+      if (!mp || !mp.isUnlocked) {
+        if (id === 1) return { action: 'start', moduleId: 1, label: 'Comenzar Módulo 1' };
+        continue;
+      }
+      const approved = mp.exam && mp.challenge && mp.resourcesCompleted && (mp.currentScore || 0) >= 80;
+      if (approved) continue;
+      if (!mp.resourcesCompleted) return { action: 'resources', moduleId: id, label: 'Ver recursos del Módulo ' + id };
+      if (!mp.exam) return { action: 'exam', moduleId: id, label: 'Tomar examen del Módulo ' + id };
+      if (!mp.challenge) return { action: 'challenge', moduleId: id, label: 'Aceptar desafío del Módulo ' + id };
+      if (!mp.community) return { action: 'community', moduleId: id, label: 'Participar en la comunidad' };
+      return { action: 'improve', moduleId: id, label: 'Mejorar nota del Módulo ' + id };
+    }
+    if (st.courseProgress >= 80) return { action: 'certificate', moduleId: null, label: 'Obtener tu certificado' };
+    return { action: 'explore', moduleId: 1, label: 'Explorar IALab' };
+  },
 }),
   {
     name: 'ialab-store',
@@ -357,6 +377,7 @@ export const useIALabStore = create(
       completedInfographics: state.completedInfographics,
       completedActivities: state.completedActivities,
       challengeScores: state.challengeScores,
+      completedCommunity: state.completedCommunity,
     }),
   })
 );

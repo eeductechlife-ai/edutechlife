@@ -1,7 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useNotification } from '../context/NotificationContext';
 import { useTranslation } from '../i18n/I18nProvider';
 import { Icon } from '../utils/iconMapping.jsx';
+import useBrowserNotifications from '../hooks/useBrowserNotifications';
 
 const NOTIFICATION_CONFIG = {
   lesson_reminder: { icon: 'fa-book', color: '#004B63' },
@@ -46,9 +48,20 @@ const formatTimeAgo = (date, t, locale) => {
   return then.toLocaleDateString(locale === 'en' ? 'en-US' : 'es-CO', { day: 'numeric', month: 'short' });
 };
 
+const ROUTE_MAP = {
+  lesson_reminder: (m) => `/ialab/${m?.moduleId || 1}`,
+  exam_reminder: (m) => `/ialab/${m?.moduleId || 1}`,
+  module_complete: (m) => `/ialab/${m?.moduleId || 1}`,
+  certificate_earned: () => '#certificate',
+  course_update: () => '/ialab',
+  general: (m) => m?.moduleId ? `/ialab/${m.moduleId}` : '/ialab',
+};
+
 const NotificationPanel = ({ isOpen, onClose, triggerRef, forumUnreadCount = 0 }) => {
+  const navigate = useNavigate();
   const { t, locale } = useTranslation();
-  const { notifications, unreadCount, loading, markAsRead, markAllAsRead, dismissNotification, clearAllNotifications } = useNotification();
+  const { notifications, unreadCount, loading, markAsRead, markAllAsRead, dismissNotification, clearAllNotifications, preferences, updatePreferences } = useNotification();
+  const { subscribeToPush, syncPushSubscription } = useBrowserNotifications();
   const panelRef = useRef(null);
   const [confirmClear, setConfirmClear] = useState(false);
 
@@ -132,6 +145,32 @@ const NotificationPanel = ({ isOpen, onClose, triggerRef, forumUnreadCount = 0 }
           </div>
         )}
 
+        {/* Push toggle */}
+        <div className="px-3 py-2 border-b border-slate-200/60 bg-slate-50/50">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Notif. push</span>
+            <button
+              onClick={async (e) => {
+                e.stopPropagation();
+                if (preferences.push && Notification.permission === 'granted') {
+                  updatePreferences({ ...preferences, push: false });
+                } else {
+                  const perm = await Notification.requestPermission();
+                  if (perm === 'granted') {
+                    const sub = await subscribeToPush();
+                    if (sub) await syncPushSubscription(sub);
+                    updatePreferences({ ...preferences, push: true });
+                  }
+                }
+              }}
+              className={`relative w-9 h-5 rounded-full transition-colors ${preferences.push && Notification.permission === 'granted' ? 'bg-corporate' : 'bg-slate-300'}`}
+              aria-label="Toggle push notifications"
+            >
+              <span className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${preferences.push && Notification.permission === 'granted' ? 'translate-x-4' : ''}`} />
+            </button>
+          </div>
+        </div>
+
         {/* Lista de notificaciones */}
         <div className="max-h-96 overflow-y-auto">
           {loading ? (
@@ -154,17 +193,27 @@ const NotificationPanel = ({ isOpen, onClose, triggerRef, forumUnreadCount = 0 }
               {notifications.map((notif) => {
                 const config = NOTIFICATION_CONFIG[notif.type] || NOTIFICATION_CONFIG.general;
                 return (
-                  <div
+                    <div
                     key={notif.id}
-                    className={`relative group px-4 py-3 transition-colors hover:bg-slate-50/50 ${!notif.is_read ? 'bg-[#004B63]/[0.02]' : ''}`}
+                    onClick={() => {
+                      if (!notif.is_read) markAsRead(notif.id);
+                      if (!notif.id?.startsWith('local_')) {
+                        const metadata = notif.metadata || {};
+                        const routeFn = ROUTE_MAP[notif.type] || ROUTE_MAP.general;
+                        const route = routeFn(metadata);
+                        if (route && !route.startsWith('#')) {
+                          navigate(route);
+                          onClose();
+                        }
+                      }
+                    }}
+                    className={`relative group px-4 py-3 transition-colors hover:bg-slate-50/50 cursor-pointer ${!notif.is_read ? 'bg-[#004B63]/[0.02]' : ''}`}
                   >
                     <div className="flex gap-3">
-                      {/* Icono - Single color IALab */}
                       <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${getBadgeBgClass(config.color)} flex items-center justify-center flex-shrink-0 mt-0.5`}>
                         <Icon name={config.icon} className={`text-sm ${getIconColorClass(config.color)}`} />
                       </div>
 
-                      {/* Contenido */}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between gap-2">
                           <div className="flex-1 min-w-0">
@@ -191,15 +240,6 @@ const NotificationPanel = ({ isOpen, onClose, triggerRef, forumUnreadCount = 0 }
                         </div>
                       </div>
                     </div>
-
-                    {/* Botón para marcar como leída */}
-                    {!notif.is_read && (
-                      <button
-                        onClick={() => markAsRead(notif.id)}
-                        className="absolute inset-0 z-10"
-                        aria-label={t('notification.mark_read_aria')}
-                      />
-                    )}
                   </div>
                 );
               })}

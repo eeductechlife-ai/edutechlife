@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useUser } from '@clerk/react';
 import { supabase } from '../lib/supabase';
+import { calcModuleScore } from '../utils/ialab';
+import { WEIGHTS } from '../constants/ialab';
 
 const ACTIVITY_LOG_KEY = 'ialab_activity_log';
 const RESOURCE_STATUS_KEY = 'ialab_resource_status';
@@ -179,17 +181,17 @@ export const useActivityTracker = () => {
 
     const examScore = exams.length > 0 ? Math.max(...exams.map(e => e.score || 0)) : 0;
     const challengeScore = challenges.length > 0 ? Math.max(...challenges.map(c => c.score || 0)) : 0;
-    const resourceCount = resources.length;
-    const communityCount = community.length;
+    const resourceCount = Math.min(resources.length, 5);
 
-    let score = 0;
-    score += (examScore / 100) * 35;
-    score += (challengeScore / 100) * 30;
-    if (resourceCount >= 5) score += 30;
-    else if (resourceCount > 0) score += (resourceCount / 5) * 30;
-    if (communityCount > 0) score += 5;
-
-    return Math.min(100, Math.round(score * 10) / 10);
+    return calcModuleScore({
+      exam: examScore >= 80,
+      examEarned: (examScore / 100) * WEIGHTS.exam,
+      challenge: challengeScore >= 80,
+      challengeEarned: (challengeScore / 100) * WEIGHTS.challenge,
+      resourcesCompleted: resources.length >= 5,
+      resourcesEarned: (resourceCount / 5) * WEIGHTS.resources,
+      community: community.length > 0,
+    });
   }, [activities]);
 
   const getResourceStatus = useCallback((resourceId) => {
@@ -198,6 +200,35 @@ export const useActivityTracker = () => {
 
   const getAllActivities = useCallback(() => {
     return activities;
+  }, [activities]);
+
+  const getTimeTrackingStats = useCallback(() => {
+    const now = new Date();
+    const today = now.toDateString();
+    const thisWeek = [];
+    const weekStart = new Date(now);
+    weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(weekStart);
+      d.setDate(d.getDate() + i);
+      thisWeek.push(d.toDateString());
+    }
+    const dayCount = {};
+    const weekCount = {};
+    activities.forEach(a => {
+      const key = new Date(a.completed_at).toDateString();
+      dayCount[key] = (dayCount[key] || 0) + 1;
+      if (thisWeek.includes(key)) weekCount[key] = (weekCount[key] || 0) + 1;
+    });
+    return {
+      today: dayCount[today] || 0,
+      weekTotal: Object.values(weekCount).reduce((a, b) => a + b, 0),
+      weekDaily: thisWeek.map(d => ({ day: d, count: weekCount[d] || 0 })),
+      avgPerDay: Object.keys(dayCount).length > 0
+        ? Math.round(activities.length / Object.keys(dayCount).length)
+        : 0,
+      totalDaysActive: Object.keys(dayCount).length,
+    };
   }, [activities]);
 
   const getStudentStats = useCallback(() => {
@@ -282,6 +313,7 @@ export const useActivityTracker = () => {
     getResourceStatus,
     getAllActivities,
     getStudentStats,
+    getTimeTrackingStats,
     refresh: loadActivities,
   };
 };

@@ -35,7 +35,8 @@ export const createProgressSlice = (set, get) => ({
   completedInfographics: [],
   completedActivities: [],
   challengeScores: {},
-  isLoadingProgress: true,
+  completedCommunity: [],
+  isLoadingProgress: false,
   syncStatus: null,
   isUsingJWT: false,
   userId: null,
@@ -205,5 +206,21 @@ export const createProgressSlice = (set, get) => ({
     if (get().userRole === 'admin') return false;
     if (moduleId === 1) return false;
     return !get().completedModules.includes(moduleId - 1);
+  },
+
+  getModuleBreakdown: () => {
+    const st = get();
+    const breakdown = {};
+    for (let id = 1; id <= 5; id++) {
+      const mp = st.moduleProgress[id];
+      breakdown[id] = {
+        score: mp?.currentScore || 0,
+        exam: !!mp?.exam,
+        challenge: !!mp?.challenge,
+        resources: mp?.resourcesCompleted ? 5 : Math.min(mp?.resourcesViewed || 0, 5),
+        community: !!mp?.community,
+      };
+    }
+    return breakdown;
   },
 });

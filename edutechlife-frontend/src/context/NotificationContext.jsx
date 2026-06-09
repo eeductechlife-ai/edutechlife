@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { useUser } from '@clerk/react';
 import { supabase } from '../lib/supabase';
 
@@ -290,6 +290,47 @@ export const NotificationProvider = ({ children }) => {
 
   const unreadCount = notifications.filter((n) => !n.is_read).length;
 
+  const [preferences, setPrefs] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('ialab_notif_prefs') || '{"push":true,"reminders":true,"forum":true}'); }
+    catch { return { push: true, reminders: true, forum: true }; }
+  });
+
+  const updatePreferences = useCallback((p) => { setPrefs(p); localStorage.setItem('ialab_notif_prefs', JSON.stringify(p)); }, []);
+
+  const studyReminderRef = useRef(null);
+
+  useEffect(() => {
+    if (!user?.id) return;
+    const checkReminder = () => {
+      if (!preferences.reminders) return;
+      const lastActivity = localStorage.getItem('ialab_last_activity_date');
+      if (!lastActivity) return;
+      const daysSince = Math.floor((Date.now() - new Date(lastActivity).getTime()) / 86400000);
+      if (daysSince < 2) return;
+      const lastReminder = localStorage.getItem('ialab_last_study_reminder');
+      if (lastReminder === new Date().toDateString()) return;
+      if (daysSince >= 7) {
+        createNotification({
+          type: 'lesson_reminder',
+          title: '📚 ¡Una semana sin estudiar!',
+          message: 'Han pasado 7+ días. Vuelve hoy para no perder tu progreso.',
+          metadata: { moduleId: 1 }
+        });
+      } else if (daysSince >= 2) {
+        createNotification({
+          type: 'lesson_reminder',
+          title: '📚 Te esperamos en IALab',
+          message: `${daysSince} días sin actividad. Una lección rápida mantiene tu racha.`,
+          metadata: { moduleId: 1 }
+        });
+      }
+      localStorage.setItem('ialab_last_study_reminder', new Date().toDateString());
+    };
+    studyReminderRef.current = setInterval(checkReminder, 6 * 3600000);
+    checkReminder();
+    return () => { if (studyReminderRef.current) clearInterval(studyReminderRef.current); };
+  }, [user?.id, createNotification, preferences.reminders]);
+
   return (
     <NotificationContext.Provider
       value={{
@@ -302,6 +343,8 @@ export const NotificationProvider = ({ children }) => {
         clearAllNotifications,
         createNotification,
         refresh: fetchNotifications,
+        preferences,
+        updatePreferences,
       }}
     >
       {children}
