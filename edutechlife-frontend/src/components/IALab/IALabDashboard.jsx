@@ -39,75 +39,44 @@ function MiniStat({ icon, label, value, accent, color }) {
   );
 }
 
-function TimerBar({ pct }) {
-  return (
-    <div className="absolute bottom-0 left-0 right-0 h-1 bg-slate-200/30 dark:bg-slate-700/30">
-      <div className="h-full bg-white/50 rounded-full transition-all duration-100 ease-linear" style={{ width: `${pct}%` }} />
-    </div>
-  );
-}
-
 function ModuleRow({ id, title, icon, color, approved, unlocked, score, examScore, challengeScore, onNavigate }) {
   return (
-    <div className={`relative flex items-center gap-3 bg-white dark:bg-slate-800 border ${unlocked ? 'border-slate-200/60' : 'border-slate-100'} rounded-xl p-3.5 transition-all duration-200 shadow-sm ${unlocked ? 'hover:shadow-md' : ''}`}>
-      <div className="absolute left-0 top-2 bottom-2 w-0.5 rounded-r-full" style={{ backgroundColor: unlocked ? color : '#cbd5e1' }} />
+    <motion.div
+      whileHover={unlocked ? { x: 4, scale: 1.01 } : {}}
+      transition={{ type: 'spring', stiffness: 300, damping: 16 }}
+      className={`relative flex items-center gap-3 bg-white dark:bg-slate-800 border ${unlocked ? (approved ? 'border-slate-200/60' : 'border-corporate/40 shadow-[0_4px_16px_rgba(0,188,212,0.08)]') : 'border-slate-100'} rounded-xl p-3.5 shadow-sm`}>
+      <div className={`absolute left-0 top-2 bottom-2 w-0.5 rounded-r-full ${unlocked && !approved ? 'bg-gradient-to-b from-petroleum to-corporate' : ''}`} style={{ backgroundColor: !unlocked || approved ? (unlocked ? color : '#cbd5e1') : undefined }} />
 
       <motion.div
-        whileHover={{ scale: 1.2, rotateZ: 5 }}
-        whileTap={{ scale: 0.9 }}
+        whileHover={unlocked ? { scale: 1.2, rotateY: 15 } : {}}
+        whileTap={unlocked ? { scale: 0.9 } : {}}
         transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+        style={{ perspective: 600 }}
         className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${unlocked ? 'bg-gradient-to-br from-petroleum/10 to-corporate/10' : 'bg-slate-50'}`}>
         <Icon name={icon} className="w-3.5 h-3.5" style={{ color: unlocked ? color : '#94a3b8' }} />
       </motion.div>
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <span className={`text-sm font-bold truncate ${unlocked ? 'text-slate-800 dark:text-slate-100' : 'text-slate-400 dark:text-slate-500'}`}>
-            M{id}: {title}
-          </span>
-          {approved && (
-            <span className="text-[10px] font-semibold text-petroleum bg-petroleum/[0.05] border border-petroleum/20 px-1.5 py-0.5 rounded-full flex-shrink-0">
-              ✔
-            </span>
-          )}
+          <span className={`text-sm font-bold truncate ${unlocked ? 'text-slate-800 dark:text-slate-100' : 'text-slate-400 dark:text-slate-500'}`}>M{id}: {title}</span>
+          {approved && <span className="text-[10px] font-semibold text-petroleum bg-petroleum/[0.05] border border-petroleum/20 px-1.5 py-0.5 rounded-full flex-shrink-0">✔</span>}
         </div>
-
-        {unlocked && !approved && (
-          <div className="mt-1 h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-            <div className="h-full rounded-full transition-all duration-700"
-              style={{ width: `${score}%`, backgroundColor: color }} />
-          </div>
-        )}
-        {approved && (
-          <div className="flex items-center gap-2 text-[11px] text-slate-500 mt-0.5">
-            {examScore && <span>Examen: {examScore}%</span>}
-            {challengeScore && <span>Desafío: {challengeScore}%</span>}
-            <span className="font-semibold text-petroleum">{score}%</span>
-          </div>
-        )}
-        {!unlocked && (
-          <p className="text-[11px] text-slate-400 flex items-center gap-1 mt-0.5">
-            <Icon name="fa-lock" className="w-2.5 h-2.5 text-slate-300" />
-            Completa el módulo anterior
-          </p>
-        )}
+        {unlocked && !approved && <div className="mt-1 h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden"><div className="h-full rounded-full transition-all duration-700" style={{ width: `${score}%`, backgroundColor: color }} /></div>}
+        {approved && <div className="flex items-center gap-2 text-[11px] text-slate-500 mt-0.5">{examScore && <span>Examen: {examScore}%</span>}{challengeScore && <span>Desafío: {challengeScore}%</span>}<span className="font-semibold text-petroleum">{score}%</span></div>}
+        {!unlocked && <p className="text-[11px] text-slate-400 flex items-center gap-1 mt-0.5"><Icon name="fa-lock" className="w-2.5 h-2.5 text-slate-300" />Completa el módulo anterior</p>}
       </div>
 
       {unlocked && (
-        <motion.button
-          whileHover={{ scale: 1.06 }}
-          whileTap={{ scale: 0.92 }}
+        <motion.button whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.92 }}
           transition={{ type: 'spring', stiffness: 500, damping: 12 }}
           onClick={onNavigate}
-          className={`flex-shrink-0 text-[11px] font-bold px-3 py-1.5 rounded-xl ${
-            approved
-              ? 'bg-slate-100 text-slate-600 hover:bg-slate-200 border border-slate-200/60'
-              : 'bg-gradient-to-r from-petroleum to-corporate text-white hover:shadow-[0_0_15px_rgba(0,188,212,0.2)] shadow-sm'
+          className={`flex-shrink-0 text-[11px] font-bold px-3 py-1.5 rounded-xl shadow-sm ${
+            approved ? 'bg-slate-100 text-slate-600 hover:bg-slate-200 border border-slate-200/60' : 'bg-gradient-to-r from-petroleum to-corporate text-white hover:shadow-[0_0_15px_rgba(0,188,212,0.3)]'
           }`}>
           {approved ? 'Revisar' : 'Continuar'}
         </motion.button>
       )}
-    </div>
+    </motion.div>
   );
 }
 
@@ -226,26 +195,46 @@ export default function IALabDashboard() {
     return (
       <div className="relative max-w-4xl mx-auto px-4 py-8 space-y-6"><BgPattern /><h1 className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate">IALab</h1><p className="text-sm text-slate-500 dark:text-slate-400 -mt-3">{t('route.continue_learning')}</p>
         <section className="relative overflow-hidden bg-gradient-to-br from-petroleum via-petroleum-dark to-[#003549] rounded-2xl p-8 text-center shadow-xl">
-          <div className="absolute -top-10 -left-10 w-40 h-40 bg-corporate/10 rounded-full blur-3xl" />
-          <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-white/5 rounded-full blur-3xl" />
-          <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur flex items-center justify-center mx-auto mb-3">
+          <motion.div animate={{ y: [0, -4, 0] }} transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
+            className="w-14 h-14 rounded-full bg-white/20 backdrop-blur flex items-center justify-center mx-auto mb-3">
             <Icon name="fa-rocket" className="w-6 h-6 text-white" />
-          </div>
+          </motion.div>
           <h2 className="text-xl font-bold text-white mb-1">¡Bienvenido a IALab!</h2>
-          <p className="text-sm text-white/70 mb-5 max-w-md mx-auto">Comienza tu viaje por la inteligencia artificial. Aprende prompts, ChatGPT, búsqueda profunda y más.</p>
-          <button onClick={() => navigate('/ialab/1')} className="inline-flex items-center gap-2 bg-white text-petroleum font-bold px-7 py-3.5 rounded-xl hover:bg-slate-50 hover:scale-[1.03] active:scale-[0.96] transition-all shadow-lg">
+          <p className="text-sm text-white/70 mb-5 max-w-md mx-auto">Comienza tu viaje por la inteligencia artificial.</p>
+          <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.95 }}
+            transition={{ type: 'spring', stiffness: 500, damping: 14 }}
+            onClick={() => navigate('/ialab/1')}
+            className="inline-flex items-center gap-2 bg-white text-petroleum font-bold px-7 py-3.5 rounded-xl shadow-lg">
             <Icon name="fa-play-circle" className="w-5 h-5" />
             {t('route.start')}
-          </button>
+          </motion.button>
+          <div className="grid grid-cols-3 gap-2.5 mt-6">
+            <div className="bg-white/10 backdrop-blur-xl rounded-[14px] py-3.5 px-2 text-center border border-white/[0.06]">
+              <div className="w-8 h-8 rounded-xl bg-corporate/15 flex items-center justify-center mx-auto mb-1.5">
+                <Icon name="fa-star" className="w-3.5 h-3.5 text-corporate" />
+              </div>
+              <p className="text-lg font-bold text-white leading-tight">0</p>
+              <p className="text-[9px] text-white/50 uppercase tracking-wider">XP Ganados</p>
+              <p className="text-[7px] text-white/30 mt-0.5">Tu experiencia acumulada</p>
+            </div>
+            <div className="bg-white/10 backdrop-blur-xl rounded-[14px] py-3.5 px-2 text-center border border-white/[0.06]">
+              <div className="w-8 h-8 rounded-xl bg-petroleum/20 flex items-center justify-center mx-auto mb-1.5">
+                <Icon name="fa-fire" className="w-3.5 h-3.5 text-petroleum" />
+              </div>
+              <p className="text-lg font-bold text-white leading-tight">0</p>
+              <p className="text-[9px] text-white/50 uppercase tracking-wider">Racha Actual</p>
+              <p className="text-[7px] text-white/30 mt-0.5">Días consecutivos</p>
+            </div>
+            <div className="bg-white/10 backdrop-blur-xl rounded-[14px] py-3.5 px-2 text-center border border-white/[0.06]">
+              <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center mx-auto mb-1.5">
+                <Icon name="fa-chart-line" className="w-3.5 h-3.5 text-white" />
+              </div>
+              <p className="text-lg font-bold text-white leading-tight">—</p>
+              <p className="text-[9px] text-white/50 uppercase tracking-wider">Score Promedio</p>
+              <p className="text-[7px] text-white/30 mt-0.5">Exámenes completados</p>
+            </div>
+          </div>
         </section>
-
-        <section className="grid grid-cols-3 gap-3">
-          <MiniStat icon="fa-star" label="XP" value="0" accent="border-t-corporate" color="text-corporate" />
-          <MiniStat icon="fa-fire" label={t('streak.days')} value="0" accent="border-t-petroleum" color="text-petroleum" />
-          <MiniStat icon="fa-chart-line" label="Score" value="—" accent="border-t-petroleum" color="text-petroleum" />
-        </section>
-
-        <p className="text-center text-sm text-slate-400 py-8">Comienza el Módulo 1 para ver tu progreso aquí.</p>
       </div>
     );
   }
@@ -253,54 +242,84 @@ export default function IALabDashboard() {
     return (
       <div className="relative max-w-4xl mx-auto px-4 py-8 space-y-6"><BgPattern /><h1 className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate">IALab</h1><p className="text-sm text-slate-500 dark:text-slate-400 -mt-3">{t('route.continue_learning')}</p>
         <section className="relative overflow-hidden bg-gradient-to-br from-petroleum/[0.03] to-corporate/[0.03] rounded-2xl border border-petroleum/10 p-6 sm:p-8 text-center">
-          <div className="absolute -top-10 -right-10 w-40 h-40 bg-petroleum/[0.05] rounded-full blur-3xl" />
-          <motion.div
-            animate={{ y: [0, -4, 0], scale: [1, 1.03, 1] }}
-            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+          <motion.div animate={{ y: [0, -4, 0], scale: [1, 1.03, 1] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
             className="w-14 h-14 rounded-full bg-gradient-to-br from-corporate to-petroleum flex items-center justify-center mx-auto mb-3 shadow-lg shadow-corporate/30">
             <Icon name="fa-trophy" className="w-6 h-6 text-white" />
           </motion.div>
-          <h2 className="text-xl font-bold text-petroleum dark:text-petroleum">{t('route.course_complete')}</h2>
+          <h2 className="text-xl font-bold text-petroleum">{t('route.course_complete')}</h2>
           <p className="text-sm text-petroleum/70 mt-1">Explora otros cursos o certificaciones</p>
-          <button onClick={() => navigate('/ialab/certificate')} className="mt-4 inline-flex items-center gap-2 bg-white text-petroleum font-semibold px-5 py-2.5 rounded-xl border border-petroleum/20 hover:bg-petroleum/[0.03] hover:scale-[1.03] active:scale-[0.96] transition-all shadow-sm">
+          <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.95 }}
+            transition={{ type: 'spring', stiffness: 500, damping: 14 }}
+            onClick={() => navigate('/ialab/certificate')}
+            className="mt-4 inline-flex items-center gap-2 bg-white text-petroleum font-semibold px-5 py-2.5 rounded-xl border border-petroleum/20 shadow-sm">
             <Icon name="fa-certificate" className="w-4 h-4" />
             {t('route.view_certificate')}
-          </button>
-        </section>
-
-        <section className="grid grid-cols-3 gap-3">
-          <MiniStat icon="fa-star" label="XP" value={xp?.toLocaleString() || '0'} accent="border-t-corporate" color="text-corporate" />
-          <MiniStat icon="fa-fire" label={t('streak.days')} value={`${streak || 0}`} accent="border-t-petroleum" color="text-petroleum" />
-          <MiniStat icon="fa-chart-line" label="Score Promedio" value={`${stats.avgScore}%`} accent="border-t-petroleum" color="text-petroleum" />
+          </motion.button>
+          <div className="grid grid-cols-3 gap-2.5 mt-6">
+            <div className="bg-white/80 backdrop-blur rounded-[14px] py-3.5 px-2 text-center border border-petroleum/10 shadow-sm">
+              <div className="w-8 h-8 rounded-xl bg-corporate/15 flex items-center justify-center mx-auto mb-1.5">
+                <Icon name="fa-star" className="w-3.5 h-3.5 text-corporate" />
+              </div>
+              <p className="text-lg font-bold text-petroleum leading-tight">{xp?.toLocaleString() || '0'}</p>
+              <p className="text-[9px] text-petroleum/50 uppercase tracking-wider">XP Ganados</p>
+              <p className="text-[7px] text-petroleum/30 mt-0.5">Tu experiencia acumulada</p>
+            </div>
+            <div className="bg-white/80 backdrop-blur rounded-[14px] py-3.5 px-2 text-center border border-petroleum/10 shadow-sm">
+              <div className="w-8 h-8 rounded-xl bg-petroleum/20 flex items-center justify-center mx-auto mb-1.5">
+                <Icon name="fa-fire" className="w-3.5 h-3.5 text-petroleum" />
+              </div>
+              <p className="text-lg font-bold text-petroleum leading-tight">{streak || 0}</p>
+              <p className="text-[9px] text-petroleum/50 uppercase tracking-wider">Racha Actual</p>
+              <p className="text-[7px] text-petroleum/30 mt-0.5">Días consecutivos</p>
+            </div>
+            <div className="bg-white/80 backdrop-blur rounded-[14px] py-3.5 px-2 text-center border border-petroleum/10 shadow-sm">
+              <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center mx-auto mb-1.5">
+                <Icon name="fa-chart-line" className="w-3.5 h-3.5 text-petroleum" />
+              </div>
+              <p className="text-lg font-bold text-petroleum leading-tight">{stats.avgScore}%</p>
+              <p className="text-[9px] text-petroleum/50 uppercase tracking-wider">Score Promedio</p>
+              <p className="text-[7px] text-petroleum/30 mt-0.5">Exámenes completados</p>
+            </div>
+          </div>
         </section>
 
         <section>
-          <div className="flex gap-1 bg-slate-100 dark:bg-slate-800 rounded-xl p-1 w-fit mb-3">
-            <button onClick={() => setActiveTab('modules')}
-              className={`px-4 py-2 rounded-lg text-sm font-bold transition-all hover:scale-[1.03] active:scale-[0.96] ${
+          <div className="flex gap-2 mb-3">
+            <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.95 }}
+              transition={{ type: 'spring', stiffness: 500, damping: 14 }}
+              onClick={() => setActiveTab('modules')}
+              className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-bold transition-colors ${
                 activeTab === 'modules'
-                  ? 'bg-gradient-to-r from-petroleum to-corporate text-white shadow-sm'
-                  : 'text-slate-500 hover:text-slate-700'
+                  ? 'bg-gradient-to-r from-petroleum to-corporate text-white shadow-md'
+                  : 'bg-slate-100/80 text-slate-500 hover:text-slate-700'
               }`}>
+              <Icon name="fa-layer-group" className="w-4 h-4" />
               {t('dashboard.modules_progress', { completed: stats.completed })}
-            </button>
-            <button onClick={() => setActiveTab('activity')}
-              className={`px-4 py-2 rounded-lg text-sm font-bold transition-all hover:scale-[1.03] active:scale-[0.96] ${
+            </motion.button>
+            <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.95 }}
+              transition={{ type: 'spring', stiffness: 500, damping: 14 }}
+              onClick={() => setActiveTab('activity')}
+              className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-bold transition-colors ${
                 activeTab === 'activity'
-                  ? 'bg-gradient-to-r from-petroleum to-corporate text-white shadow-sm'
-                  : 'text-slate-500 hover:text-slate-700'
+                  ? 'bg-gradient-to-r from-petroleum to-corporate text-white shadow-md'
+                  : 'bg-slate-100/80 text-slate-500 hover:text-slate-700'
               }`}>
+              <Icon name="fa-chart-line" className="w-4 h-4" />
               {t('dashboard.activity_trends')}
-            </button>
+            </motion.button>
           </div>
           {activeTab === 'modules' && (
             <div className="space-y-2">
-              {modules.map(mod => (
-                <ModuleRow key={mod.id} id={mod.id} title={moduleTitles[mod.id]}
+              {modules.map((mod, index) => (
+                <motion.div key={mod.id} initial={{ opacity: 0, x: -15 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.06, duration: 0.3, ease: 'easeOut' }}>
+                  <ModuleRow key={mod.id} id={mod.id} title={moduleTitles[mod.id]}
                   icon={moduleIcons[mod.id]} color={moduleColors[mod.id]}
                   approved={mod.approved} unlocked={mod.unlocked} score={mod.score}
                   examScore={mod.examScore} challengeScore={mod.challengeScore}
                   onNavigate={() => navigate(`/ialab/${mod.id}`)} />
+                </motion.div>
               ))}
             </div>
           )}
@@ -317,69 +336,136 @@ export default function IALabDashboard() {
 
   return (
     <div className="relative max-w-4xl mx-auto px-4 py-8 space-y-6"><BgPattern /><h1 className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate">IALab</h1><p className="text-sm text-slate-500 dark:text-slate-400 -mt-3">{t('route.continue_learning')}</p>
-      {/* ─── Hero Continue (full card clickable) ────── */}
-      <section onClick={doNavigate} className="relative overflow-hidden bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate rounded-2xl shadow-lg cursor-pointer group">
-        <div className="absolute inset-0 bg-white/0 group-hover:bg-white/[0.05] transition-colors duration-300" />
-        <div className="absolute -top-8 -right-8 w-40 h-40 bg-white/[0.06] rounded-full blur-3xl" />
+      {/* ─── Hero Glass 3D Depth + Stats ────────────── */}
+      <motion.section whileHover={{ scale: 1.012, rotateY: 1.8 }} whileTap={{ scale: 0.98 }}
+        transition={{ type: 'spring', stiffness: 350, damping: 16 }}
+        style={{ perspective: 800 }} onClick={doNavigate}
+        className="relative overflow-hidden bg-gradient-to-br from-petroleum via-petroleum-dark to-corporate rounded-2xl shadow-lg cursor-pointer group">
 
-        <div className="px-6 pt-5 pb-3">
-          <div className="flex items-center justify-between mb-1">
-            <span className="text-xs font-medium text-white/70">Progreso del curso</span>
-            <span className="text-xs font-bold text-white">{courseProgress}%</span>
-          </div>
-          <div className="h-1.5 bg-white/20 rounded-full overflow-hidden">
-            <div className={`h-full bg-gradient-to-r ${progressBarColor} rounded-full transition-all duration-1000`} style={{ width: `${courseProgress}%` }} />
-          </div>
+        {/* Glass orbs flotantes */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ borderRadius: 'inherit' }}>
+          <motion.div animate={{ x: [0, 15, -10, 0], y: [0, -20, 10, 0], scale: [1, 1.1, 0.95, 1] }}
+            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute -top-[15%] -right-[8%] w-[45%] h-[55%] rounded-full bg-corporate/15" style={{ filter: 'blur(80px)' }} />
+          <motion.div animate={{ x: [0, -12, 8, 0], y: [0, 15, -20, 0], scale: [1, 0.95, 1.08, 1] }}
+            transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+            className="absolute -bottom-[12%] -left-[5%] w-[35%] h-[40%] rounded-full bg-petroleum/20" style={{ filter: 'blur(80px)' }} />
+          <motion.div animate={{ x: [0, 10, -15, 0], y: [0, -10, 15, 0], scale: [1, 1.05, 0.92, 1] }}
+            transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 4 }}
+            className="absolute top-[30%] left-[40%] w-[25%] h-[30%] rounded-full bg-white/[0.04]" style={{ filter: 'blur(80px)' }} />
         </div>
-        <div className="flex items-center justify-between px-6 pb-5 pt-2">
-          <div className="flex items-center gap-3">
-            <motion.div animate={{ y: [0, -3, 0] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-              whileHover={{ scale: 1.15, rotateY: 15 }}
-              className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center group-hover:bg-white/30 transition-colors" style={{ perspective: 800 }}>
-              <Icon name={actionIcon} className="w-5 h-5 text-white" />
-            </motion.div>
-            <div className="text-left">
-              <p className="text-sm font-bold text-white">{suggestedAction.label}</p>
-              <p className="text-xs text-white/60">{t('route.continue')}</p>
+
+        {/* Shine sweep */}
+        <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.04) 45%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 55%, transparent 60%)', backgroundSize: '200% 100%' }}>
+          <motion.div className="absolute inset-0" style={{ background: 'inherit', backgroundSize: 'inherit' }}
+            animate={{ backgroundPosition: ['200% 0', '0% 0', '200% 0'] }}
+            transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }} />
+        </div>
+
+        {/* Hover overlay */}
+        <div className="absolute inset-0 bg-white/0 group-hover:bg-white/[0.05] transition-colors duration-300 pointer-events-none" />
+
+        <div className="relative z-10 px-6 pt-5 pb-5">
+          {/* ── Progress ── */}
+          <div className="mb-4">
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="flex items-center gap-1.5 text-xs font-medium text-white/70">
+                <Icon name="fa-graduation-cap" className="w-3 h-3" />
+                Progreso del curso
+              </span>
+              <span className="text-xs font-bold text-white bg-white/10 backdrop-blur px-2.5 py-0.5 rounded-full">{courseProgress}%</span>
+            </div>
+            <div className="h-1 bg-white/15 rounded-full overflow-hidden">
+              <div className="h-full rounded-full relative transition-all duration-1000"
+                style={{ width: `${courseProgress}%`, background: 'linear-gradient(to right, #00BCD4, #fff)' }}>
+                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_6px_rgba(255,255,255,0.6)]" />
+              </div>
             </div>
           </div>
-          <Icon name="fa-arrow-right" className="w-5 h-5 text-white/60 group-hover:text-white group-hover:translate-x-0.5 transition-transform" />
-        </div>
-        <div className="absolute bottom-0 left-0 right-0 px-6 pb-1 flex justify-end pointer-events-none">
-          <span className="text-[10px] text-white/40 font-medium">{t('dashboard.redirect_seconds', { s: Math.ceil((1 - idlePct / 100) * (IDLE_TIMEOUT / 1000)) })}</span>
-        </div>
 
-        <TimerBar pct={idlePct} />
-      </section>
+          {/* ── Action + Timer Ring ── */}
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center gap-3.5">
+              <div className="relative">
+                <motion.div animate={{ y: [0, -3, 0] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                  whileHover={{ scale: 1.25, rotateY: 20 }} style={{ perspective: 400 }}
+                  className="w-12 h-12 rounded-xl bg-white/15 backdrop-blur flex items-center justify-center group-hover:bg-white/25 transition-colors">
+                  <Icon name={actionIcon} className="w-5 h-5 text-white" />
+                </motion.div>
+                <motion.div animate={{ scale: [1, 1.08, 1], opacity: [0.3, 0.8, 0.3] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                  className="absolute -inset-1 rounded-[14px] border-2 border-corporate/30 pointer-events-none" />
+              </div>
+              <div className="text-left">
+                <p className="text-sm font-bold text-white">{suggestedAction.label}</p>
+                <p className="text-xs text-white/55 flex items-center gap-1 mt-0.5">
+                  <Icon name="fa-arrow-right" className="w-2.5 h-2.5" />
+                  {t('route.continue')}
+                </p>
+              </div>
+            </div>
 
-      {/* ─── Express Stats ──────────────────────────────── */}
-      <section className="grid grid-cols-3 gap-3">
-        <MiniStat icon="fa-star" label="XP" value={xp?.toLocaleString() || '0'} accent="border-t-corporate" color="text-corporate" />
-        <MiniStat icon="fa-fire" label={t('streak.days')} value={`${streak || 0}`} accent="border-t-petroleum" color="text-petroleum" />
-        <MiniStat icon="fa-chart-line" label="Score Promedio" value={`${stats.avgScore}%`} accent="border-t-petroleum" color="text-petroleum" />
-      </section>
+            {/* Timer SVG Ring */}
+            <div className="relative w-[52px] h-[52px] flex items-center justify-center">
+              <svg viewBox="0 0 48 48" className="absolute inset-0" style={{ transform: 'rotate(-90deg)' }}>
+                <circle cx="24" cy="24" r="22" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="3" />
+                <circle cx="24" cy="24" r="22" fill="none" stroke="rgba(0,188,212,0.7)" strokeWidth="3" strokeLinecap="round"
+                  strokeDasharray="138.23" strokeDashoffset={138.23 * (idlePct / 100)} />
+              </svg>
+              <div className="flex flex-col items-center">
+                <Icon name="fa-clock" className="w-2.5 h-2.5 text-white/40" />
+                <span className="text-sm font-bold text-white leading-none mt-0.5">{Math.ceil((1 - idlePct / 100) * (IDLE_TIMEOUT / 1000))}s</span>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Stats Glass Bubbles ── */}
+          <div className="grid grid-cols-3 gap-2.5">
+            {[
+              { icon: 'fa-star', iconBg: 'bg-corporate/15', iconColor: 'text-corporate', value: xp?.toLocaleString() || '0', label: 'XP Ganados', desc: 'Tu experiencia acumulada', delay: 0 },
+              { icon: 'fa-fire', iconBg: 'bg-petroleum/20', iconColor: 'text-petroleum', value: streak || 0, label: 'Racha Actual', desc: 'Días consecutivos', delay: 0.08 },
+              { icon: 'fa-chart-line', iconBg: 'bg-white/10', iconColor: 'text-white', value: `${stats.avgScore}%`, label: 'Score Promedio', desc: 'Exámenes completados', delay: 0.16 },
+            ].map((s, i) => (
+              <motion.div key={s.icon} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: s.delay }} whileHover={{ y: -3, scale: 1.03 }}
+                className="bg-white/10 backdrop-blur-xl rounded-[14px] py-3.5 px-2 text-center border border-white/[0.06] cursor-default group/stat">
+                <div className={`w-8 h-8 rounded-xl ${s.iconBg} flex items-center justify-center mx-auto mb-1.5 transition-transform duration-300 group-hover/stat:scale-110`}>
+                  <Icon name={s.icon} className={`w-3.5 h-3.5 ${s.iconColor}`} />
+                </div>
+                <p className="text-lg font-bold text-white leading-tight">{s.value}</p>
+                <p className="text-[9px] text-white/50 uppercase tracking-wider">{s.label}</p>
+                <p className="text-[7px] text-white/30 mt-0.5">{s.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </motion.section>
 
       {/* ─── Tabs: Tu Progreso | Actividad ─────────── */}
       <section>
-        <div className="flex gap-1 mb-4 bg-slate-100 dark:bg-slate-800 rounded-xl p-1 w-fit">
-          <button onClick={() => setActiveTab('modules')}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-bold transition-all hover:scale-[1.03] active:scale-[0.96] ${
+        <div className="flex gap-2 mb-4">
+          <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.95 }}
+            transition={{ type: 'spring', stiffness: 500, damping: 14 }}
+            onClick={() => setActiveTab('modules')}
+            className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-bold transition-colors ${
               activeTab === 'modules'
-                ? 'bg-gradient-to-r from-petroleum to-corporate text-white shadow-sm'
-                : 'text-slate-500 hover:text-slate-700'
+                ? 'bg-gradient-to-r from-petroleum to-corporate text-white shadow-md'
+                : 'bg-slate-100/80 text-slate-500 hover:text-slate-700'
             }`}>
-            <Icon name="fa-layer-group" className="w-3.5 h-3.5" />
+            <Icon name="fa-layer-group" className="w-4 h-4" />
             {t('dashboard.modules_progress', { completed: stats.completed })}
-          </button>
-          <button onClick={() => setActiveTab('activity')}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-bold transition-all hover:scale-[1.03] active:scale-[0.96] ${
+          </motion.button>
+          <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.95 }}
+            transition={{ type: 'spring', stiffness: 500, damping: 14 }}
+            onClick={() => setActiveTab('activity')}
+            className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-bold transition-colors ${
               activeTab === 'activity'
-                ? 'bg-gradient-to-r from-petroleum to-corporate text-white shadow-sm'
-                : 'text-slate-500 hover:text-slate-700'
+                ? 'bg-gradient-to-r from-petroleum to-corporate text-white shadow-md'
+                : 'bg-slate-100/80 text-slate-500 hover:text-slate-700'
             }`}>
-            <Icon name="fa-chart-line" className="w-3.5 h-3.5" />
+            <Icon name="fa-chart-line" className="w-4 h-4" />
             {t('dashboard.activity_trends')}
-          </button>
+          </motion.button>
         </div>
 
         {activeTab === 'modules' && (
@@ -422,7 +508,7 @@ export default function IALabDashboard() {
         )}
 
         {activeTab === 'activity' && (
-          <div className="space-y-4">
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="space-y-4">
             {weeklyData.length > 1 && (
               <div className="relative overflow-hidden bg-white dark:bg-slate-800 border border-slate-200/60 dark:border-slate-700 rounded-2xl p-5 shadow-sm">
                 <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-petroleum/40 via-corporate to-petroleum/40 rounded-t-2xl" />
@@ -490,7 +576,7 @@ export default function IALabDashboard() {
                 </div>
               </div>
             )}
-          </div>
+          </motion.div>
         )}
       </section>
     </div>
