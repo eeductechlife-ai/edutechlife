@@ -10,6 +10,8 @@ import useBodyScrollLock from '../hooks/useBodyScrollLock';
 import useFocusTrap from '../hooks/useFocusTrap';
 import { getUnifiedSessionStats } from '../hooks/useSessionTracker';
 import { supabase } from '../lib/supabase';
+import { calcModuleScore } from '../utils/ialab';
+import { WEIGHTS } from '../constants/ialab';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, PieChart, Pie } from 'recharts';
 import ResourceBadge from '../components/ui/ResourceBadge';
 import SectionHeader from '../components/ui/SectionHeader';
@@ -59,17 +61,19 @@ const formatDate = (date) => new Date(date).toLocaleDateString('es-ES', {
 });
 
 const calculateModuleScore = (moduleId, config, completedVideos, completedInfographics, completedExams, challengeScores, completedModules) => {
-  let score = 0;
-  const moduleVideos = completedVideos.filter(v => v.startsWith(`m${moduleId}`)).length;
-  const moduleInfographics = completedInfographics.filter(i => i.startsWith(`i${moduleId}`)).length;
+  const moduleVideos = (completedVideos || []).filter(v => v.startsWith(`m${moduleId}`)).length;
+  const moduleInfographics = (completedInfographics || []).filter(i => i.startsWith(`i${moduleId}`)).length;
   const totalResources = config.videos + config.infographics;
-  if (totalResources > 0 && (moduleVideos + moduleInfographics) / totalResources >= 0.8) score += 30;
-  const exam = completedExams[moduleId] || 0;
-  score += (exam / 100) * 35;
-  const challenge = challengeScores[moduleId] || 0;
-  score += (challenge / 100) * 30;
-  if (completedModules.includes(moduleId)) score += 5;
-  return Math.min(100, Math.round(score * 10) / 10);
+  const exam = completedExams?.[moduleId] || 0;
+  const challenge = challengeScores?.[moduleId] || 0;
+  return calcModuleScore({
+    exam: exam >= 80,
+    examEarned: (exam / 100) * WEIGHTS.exam,
+    challenge: challenge >= 80,
+    challengeEarned: (challenge / 100) * WEIGHTS.challenge,
+    resourcesCompleted: totalResources > 0 && (moduleVideos + moduleInfographics) / totalResources >= 0.8,
+    community: (completedModules || []).includes(moduleId),
+  });
 };
 
 const TABS = [
@@ -100,7 +104,6 @@ const ActivityHistory = ({ isOpen, onClose }) => {
   const getXpForNextLevel = useIALabStore(s => s.getXpForNextLevel);
   const getLevelProgress = useIALabStore(s => s.getLevelProgress);
   const getTotalPoints = useIALabStore(s => s.getTotalPoints);
-  const calculateModuleScore = useIALabStore(s => s.calculateModuleScore);
   const moduleProgress = useIALabStore(s => s.moduleProgress);
   const getDaysSinceStart = useIALabStore(s => s.getDaysSinceStart);
   const completedModules = useIALabStore(s => s.completedModules);

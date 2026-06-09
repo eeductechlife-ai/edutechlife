@@ -1,0 +1,110 @@
+<h2>Opción B — Con Animaciones 3D</h2>
+<p class="subtitle">Framer Motion: spring, rotateY, stagger, floating</p>
+
+<div style="max-width:720px;margin:0 auto;">
+
+  <!-- HERO con 3D hover -->
+  <div style="background:linear-gradient(135deg,#004B63,#00BCD4);border-radius:20px;padding:28px 24px;position:relative;overflow:hidden;box-shadow:0 8px 32px rgba(0,75,99,0.25);margin-bottom:24px;transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);cursor:pointer;"
+       onmouseenter="this.style.transform='scale(1.02) rotateY(2deg)'" onmouseleave="this.style.transform='scale(1) rotateY(0)'">
+    <div style="position:absolute;top:-30px;right:-30px;width:180px;height:180px;background:rgba(255,255,255,0.06);border-radius:50%;"></div>
+    <div style="position:absolute;bottom:-40px;left:-20px;width:120px;height:120px;background:rgba(255,255,255,0.04);border-radius:50%;"></div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <span style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:0.5px;">Progreso del curso</span>
+      <span style="font-size:13px;font-weight:800;color:#fff;">45%</span>
+    </div>
+    <div style="height:4px;background:rgba(255,255,255,0.2);border-radius:4px;overflow:hidden;">
+      <div style="width:45%;height:100%;background:linear-gradient(90deg,#fff,#00BCD4);border-radius:4px;transition:width 1s cubic-bezier(0.34,1.56,0.64,1);"></div>
+    </div>
+
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:18px;gap:12px;">
+      <div style="display:flex;align-items:center;gap:14px;flex:1;">
+        <div style="width:44px;height:44px;border-radius:14px;background:rgba(255,255,255,0.18);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);"
+             onmouseenter="this.style.transform='scale(1.2) rotateY(15deg)'" onmouseleave="this.style.transform='scale(1) rotateY(0)'">
+          <div style="font-size:20px;transition:transform 0.3s;">🚀</div>
+        </div>
+        <div>
+          <div style="font-size:15px;font-weight:700;color:#fff;">Continuar Módulo 2</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.6);">ChatGPT — Lección 3 de 5</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:4px;background:rgba(255,255,255,0.12);border-radius:10px;padding:6px 12px;">
+        <div style="font-size:10px;font-weight:600;color:rgba(255,255,255,0.7);">Auto en</div>
+        <div style="font-size:14px;font-weight:800;color:#fff;">8s</div>
+      </div>
+    </div>
+
+    <!-- STATS como glassmorphism flotantes -->
+    <div style="display:flex;gap:10px;margin-top:18px;">
+      <div style="flex:1;background:rgba(255,255,255,0.1);backdrop-filter:blur(12px);border-radius:14px;padding:12px 10px;text-align:center;border:1px solid rgba(255,255,255,0.08);transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1),background 0.2s;"
+           onmouseenter="this.style.transform='translateY(-4px) scale(1.04)';this.style.background='rgba(255,255,255,0.18)'" onmouseleave="this.style.transform='translateY(0) scale(1)';this.style.background='rgba(255,255,255,0.1)'">
+        <div style="font-size:18px;font-weight:800;color:#fff;">1,250</div>
+        <div style="font-size:9px;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.5px;">XP</div>
+      </div>
+      <div style="flex:1;background:rgba(255,255,255,0.1);backdrop-filter:blur(12px);border-radius:14px;padding:12px 10px;text-align:center;border:1px solid rgba(255,255,255,0.08);transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1),background 0.2s;"
+           onmouseenter="this.style.transform='translateY(-4px) scale(1.04)';this.style.background='rgba(255,255,255,0.18)'" onmouseleave="this.style.transform='translateY(0) scale(1)';this.style.background='rgba(255,255,255,0.1)'">
+        <div style="font-size:18px;font-weight:800;color:#fff;">5</div>
+        <div style="font-size:9px;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.5px;">Racha</div>
+      </div>
+      <div style="flex:1;background:rgba(255,255,255,0.1);backdrop-filter:blur(12px);border-radius:14px;padding:12px 10px;text-align:center;border:1px solid rgba(255,255,255,0.08);transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1),background 0.2s;"
+           onmouseenter="this.style.transform='translateY(-4px) scale(1.04)';this.style.background='rgba(255,255,255,0.18)'" onmouseleave="this.style.transform='translateY(0) scale(1)';this.style.background='rgba(255,255,255,0.1)'">
+        <div style="font-size:18px;font-weight:800;color:#fff;">72%</div>
+        <div style="font-size:9px;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.5px;">Score</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABS como píldoras con spring -->
+  <div style="display:flex;gap:8px;margin-bottom:20px;">
+    <div style="flex:1;padding:12px 16px;background:linear-gradient(135deg,#004B63,#00BCD4);border-radius:12px;color:#fff;font-weight:700;font-size:13px;text-align:center;box-shadow:0 2px 8px rgba(0,75,99,0.15);transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.2s;cursor:pointer;"
+         onmouseenter="this.style.transform='scale(1.04)'" onmouseleave="this.style.transform='scale(1)'" onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1.04)'">
+      📚 Tu Progreso (2/5)
+    </div>
+    <div style="flex:1;padding:12px 16px;background:#f1f5f9;border-radius:12px;color:#64748b;font-weight:600;font-size:13px;text-align:center;transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.2s;cursor:pointer;"
+         onmouseenter="this.style.transform='scale(1.04)';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.06)'" onmouseleave="this.style.transform='scale(1)';this.style.boxShadow='none'" onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1.04)'">
+      📈 Actividad
+    </div>
+  </div>
+
+  <!-- MODULE ROWS con stagger entrance + 3D hover -->
+  <div style="display:flex;flex-direction:column;gap:8px;">
+    <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:#fff;border-radius:14px;border:1px solid #e2e8f0;box-shadow:0 1px 3px rgba(0,0,0,0.04);transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.25s;"
+         onmouseenter="this.style.transform='translateX(4px) scale(1.01)';this.style.boxShadow='0 4px 12px rgba(0,0,0,0.08)'" onmouseleave="this.style.transform='translateX(0) scale(1)';this.style.boxShadow='0 1px 3px rgba(0,0,0,0.04)'">
+      <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,rgba(77,168,196,0.15),rgba(77,168,196,0.05));display:flex;align-items:center;justify-content:center;font-size:14px;transition:transform 0.2s;" onmouseenter="this.style.transform='scale(1.2)'" onmouseleave="this.style.transform='scale(1)'">💻</div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:700;color:#1e293b;">M1: Prompt Engineering</div>
+        <div style="height:4px;background:#e2e8f0;border-radius:4px;margin-top:6px;overflow:hidden;">
+          <div style="width:85%;height:100%;background:#4DA8C4;border-radius:4px;"></div>
+        </div>
+      </div>
+      <div style="font-size:12px;font-weight:700;color:#004B63;">85%</div>
+      <button style="padding:6px 14px;background:#f1f5f9;border:none;border-radius:10px;font-size:11px;font-weight:700;color:#64748b;cursor:default;transition:transform 0.2s,background 0.2s;" onmouseenter="this.style.transform='scale(1.06)';this.style.background='#e2e8f0'" onmouseleave="this.style.transform='scale(1)';this.style.background='#f1f5f9'">Revisar</button>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:#fff;border-radius:14px;border:1px solid #e2e8f0;box-shadow:0 1px 3px rgba(0,0,0,0.04);border-left:3px solid #00BCD4;transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.25s;"
+         onmouseenter="this.style.transform='translateX(4px) scale(1.01)';this.style.boxShadow='0 4px 12px rgba(0,0,0,0.08)'" onmouseleave="this.style.transform='translateX(0) scale(1)';this.style.boxShadow='0 1px 3px rgba(0,0,0,0.04)'">
+      <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,rgba(0,188,212,0.15),rgba(0,188,212,0.05));display:flex;align-items:center;justify-content:center;font-size:14px;transition:transform 0.2s;" onmouseenter="this.style.transform='scale(1.2) rotateZ(5deg)'" onmouseleave="this.style.transform='scale(1) rotateZ(0)'">🤖</div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:700;color:#1e293b;">M2: ChatGPT</div>
+        <div style="height:4px;background:#e2e8f0;border-radius:4px;margin-top:6px;overflow:hidden;">
+          <div style="width:45%;height:100%;background:#00BCD4;border-radius:4px;"></div>
+        </div>
+      </div>
+      <div style="font-size:12px;font-weight:700;color:#00BCD4;">45%</div>
+      <button style="padding:6px 14px;background:linear-gradient(135deg,#004B63,#00BCD4);border:none;border-radius:10px;font-size:11px;font-weight:700;color:#fff;cursor:default;transition:transform 0.2s,box-shadow 0.2s;" onmouseenter="this.style.transform='scale(1.06)';this.style.boxShadow='0 0 20px rgba(0,188,212,0.3)'" onmouseleave="this.style.transform='scale(1)';this.style.boxShadow='none'">Continuar</button>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:#f8fafc;border-radius:14px;border:1px solid #e2e8f0;opacity:0.55;">
+      <div style="width:32px;height:32px;border-radius:10px;background:#e2e8f0;display:flex;align-items:center;justify-content:center;font-size:14px;">🔍</div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:600;color:#94a3b8;">M3: Deep Search</div>
+      </div>
+      <div style="font-size:10px;color:#94a3b8;">🔒 Bloqueado</div>
+    </div>
+  </div>
+
+  <!-- Espacio para el tab Actividad (card conchart) -->
+  <div style="margin-top:16px;padding:20px;background:#fff;border-radius:16px;border:1px solid #e2e8f0;box-shadow:0 1px 3px rgba(0,0,0,0.04);text-align:center;color:#94a3b8;font-size:13px;">
+    📊 Tendencia Semanal — gráfico LineChart aquí (al hacer click en Actividad)
+  </div>
+</div>

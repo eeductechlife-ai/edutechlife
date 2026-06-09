@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types';;
 import { Icon } from '../../utils/iconMapping.jsx';
 import { getModuleContent } from './constants/moduleContent';
@@ -10,6 +10,28 @@ const SEARCHABLE_TYPES = [
   'image', 'imagen', 'interactive', 'interactivo',
   'ova', 'ova-thumbnail', 'ova_interactive',
 ];
+
+const fuzzyScore = (query, target) => {
+  if (!query || !target) return 0;
+  const q = query.toLowerCase();
+  const t = target.toLowerCase();
+  if (t.includes(q)) return 100 + q.length;
+  let qi = 0;
+  let score = 0;
+  let consecutive = 0;
+  for (let ti = 0; ti < t.length && qi < q.length; ti++) {
+    if (t[ti] === q[qi]) {
+      qi++;
+      consecutive++;
+      score += consecutive * 10;
+    } else {
+      consecutive = 0;
+    }
+  }
+  if (qi < q.length) return 0;
+  const gapPenalty = Math.max(0, t.length - q.length);
+  return Math.max(1, score - gapPenalty);
+};
 
 /**
  * GlobalSearchBar — Barra de búsqueda global del IA Lab.
@@ -33,25 +55,28 @@ const GlobalSearchBar = ({ mobile, onClose }) => {
 
   const performSearch = useCallback((q) => {
     if (!q.trim()) { setResults([]); return; }
-    const lower = q.toLowerCase();
     const hits = [];
 
     modules.forEach(mod => {
-      if (mod.title.toLowerCase().includes(lower)) {
-        hits.push({ type: 'module', id: mod.id, label: mod.title, sublabel: t('ialab.global_search.module_label', { id: mod.id }), modId: mod.id });
+      const modScore = fuzzyScore(q, mod.title);
+      if (modScore > 0) {
+        hits.push({ score: modScore, type: 'module', id: mod.id, label: mod.title, sublabel: t('ialab.global_search.module_label', { id: mod.id }), modId: mod.id });
       }
       const content = getModuleContent(mod.id);
       if (content?.accordion) {
         const topics = Array.isArray(content.accordion) ? content.accordion : [];
         topics.forEach(topic => {
-          if (topic.title?.toLowerCase().includes(lower)) {
-            hits.push({ type: 'topic', id: `mod${mod.id}-${topic.id}`, label: topic.title, sublabel: t('ialab.global_search.topic_label', { title: mod.title }), modId: mod.id });
+          const topicScore = fuzzyScore(q, topic.title || '');
+          if (topicScore > 0) {
+            hits.push({ score: topicScore, type: 'topic', id: `mod${mod.id}-${topic.id}`, label: topic.title, sublabel: t('ialab.global_search.topic_label', { title: mod.title }), modId: mod.id });
           }
           if (topic.resources) {
             topic.resources.forEach(r => {
               const rTitle = r.title || r.name || '';
-              if (rTitle.toLowerCase().includes(lower) && SEARCHABLE_TYPES.includes(r.type)) {
-                hits.push({ type: 'resource', id: r.id, label: rTitle, sublabel: `${mod.title}`,
+              if (!SEARCHABLE_TYPES.includes(r.type)) return;
+              const resScore = fuzzyScore(q, rTitle);
+              if (resScore > 0) {
+                hits.push({ score: resScore, type: 'resource', id: r.id, label: rTitle, sublabel: `${mod.title}`,
                   modId: mod.id, resource: r, topicId: topic.id });
               }
             });
@@ -60,6 +85,7 @@ const GlobalSearchBar = ({ mobile, onClose }) => {
       }
     });
 
+    hits.sort((a, b) => b.score - a.score);
     setResults(hits.slice(0, 10));
   }, [modules]);
 

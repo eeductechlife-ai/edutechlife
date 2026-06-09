@@ -2,11 +2,15 @@ import { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types';;
 import QueEsPrompt_OVA_Original from '../QueEsPrompt_OVA_Original';
 
-const OVAViewer = ({ resource, onClose }) => {
+const OVAViewer = ({ resource, onClose, onComplete }) => {
   const autoMarkedRef = useRef(false);
 
   useEffect(() => {
-  }, []);
+    if (!autoMarkedRef.current) {
+      autoMarkedRef.current = true;
+      onComplete?.();
+    }
+  }, [onComplete]);
 
   if (resource.url) {
     return (
@@ -34,6 +38,7 @@ const OVAViewer = ({ resource, onClose }) => {
 OVAViewer.propTypes = {
   resource: PropTypes.any,
   onClose: PropTypes.any,
+  onComplete: PropTypes.any,
 };
 
 export default OVAViewer;

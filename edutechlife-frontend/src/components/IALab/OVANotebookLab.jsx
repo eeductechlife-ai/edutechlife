@@ -41,6 +41,14 @@ export default function OVANotebookLab({ onComplete }) {
   const [selectedOption, setSelectedOption] = useState(null);
   const [isAnswered, setIsAnswered] = useState(false);
   const [showHint, setShowHint] = useState(false);
+  const autoCompletedRef = useRef(false);
+
+  useEffect(() => {
+    if (gameState === 'results' && score >= 5 && !autoCompletedRef.current) {
+      autoCompletedRef.current = true;
+      onComplete?.();
+    }
+  }, [gameState, score, onComplete]);
 
   const isES = locale === 'es';
 
@@ -160,13 +168,6 @@ export default function OVANotebookLab({ onComplete }) {
             <div className="text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-corporate to-petroleum my-8 drop-shadow-sm">{score}<span className="text-4xl text-gray-400 dark:text-slate-400">/7</span></div>
             <h3 className="text-2xl font-semibold text-corporate mb-4">{message}</h3>
             <p className="text-petroleum/80 dark:text-slate-100/80 mb-6 text-lg">{submessage}</p>
-            {score >= 3 && !certCompletedRef.current && (
-              <button onClick={() => { certCompletedRef.current = true; onComplete?.(); }}
-                className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold text-base shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-2 mx-auto mb-3 animate-pulse">
-                <Check size={20} />
-                {t('ova.notebooklab.mark_complete')}
-              </button>
-            )}
             <button onClick={startGame} className="px-8 py-3 rounded-xl bg-white dark:bg-slate-800 text-petroleum dark:text-slate-100 border-2 border-gray-200 dark:border-slate-600 hover:border-corporate hover:text-corporate dark:hover:text-corporate transition-all font-semibold flex items-center justify-center gap-2 mx-auto shadow-sm">
               <Play size={18} />
               {t('ova.notebooklab.restart')}

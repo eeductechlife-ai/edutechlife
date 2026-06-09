@@ -470,7 +470,7 @@ describe('useIALabProgress', () => {
         return result.current.trackExamResult(1, 85, true);
       });
 
-      expect(mockStoreGetState.addXp).toHaveBeenCalledWith(100);
+      expect(mockContext.updateModuleActivity).toHaveBeenCalledWith(1, 'exam', true, 85);
     });
 
     test('does not award XP when score < 80', async () => {
@@ -480,7 +480,7 @@ describe('useIALabProgress', () => {
         return result.current.trackExamResult(1, 70, false);
       });
 
-      expect(mockStoreGetState.addXp).not.toHaveBeenCalled();
+      expect(mockContext.updateModuleActivity).toHaveBeenCalledWith(1, 'exam', false, 70);
     });
 
     test('handles DB error with local fallback', async () => {
@@ -526,7 +526,7 @@ describe('useIALabProgress', () => {
         return result.current.trackChallengeResult(1, 90);
       });
 
-      expect(mockStoreGetState.addXp).toHaveBeenCalledWith(100);
+      expect(mockContext.updateModuleActivity).toHaveBeenCalledWith(1, 'challenge', true, 90);
     });
 
     test('does not award XP when score < 80', async () => {
@@ -536,7 +536,7 @@ describe('useIALabProgress', () => {
         return result.current.trackChallengeResult(1, 70);
       });
 
-      expect(mockStoreGetState.addXp).not.toHaveBeenCalled();
+      expect(mockContext.updateModuleActivity).toHaveBeenCalledWith(1, 'challenge', false, 70);
     });
 
     test('handles DB error with local fallback', async () => {

@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Icon } from '../../../../utils/iconMapping';
+import { fireConfetti } from '../../../../utils/speech';
 import { useIALabStore } from '../../../../store/ialabStore';
 import { useTranslation } from '../../../../i18n/I18nProvider';
 
@@ -77,12 +79,39 @@ function AnswerReview({ quizQuestions, quizAnswers }) {
 
 export function QuizResults({ quizQuestions, quizAnswers, quizScore, quizPassed, quizResult, activeMod, PASSING_SCORE, TOTAL_QUESTIONS, generateTopicFeedback, isAdmin, onClose, onRetry }) {
   const { t } = useTranslation();
+  const [displayScore, setDisplayScore] = useState(0);
+  const [showContent, setShowContent] = useState(false);
+
+  useEffect(() => {
+    if (quizPassed) {
+      fireConfetti({ particleCount: 80, spread: 70, origin: { y: 0.6 }, colors: ['#004B63', '#00BCD4', '#10B981'] });
+    }
+  }, [quizPassed]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowContent(true), 50);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (!showContent) return;
+    if (displayScore < quizScore) {
+      const step = Math.max(1, Math.ceil((quizScore - displayScore) / 8));
+      const timer = setTimeout(() => setDisplayScore(s => Math.min(s + step, quizScore)), 40);
+      return () => clearTimeout(timer);
+    }
+  }, [showContent, displayScore, quizScore]);
 
   if (!quizResult) return null;
 
   return (
     <div className="flex-1 flex items-center justify-center p-6">
-      <div className="max-w-md w-full">
+      <motion.div
+        className="max-w-md w-full"
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
+      >
         <div className="text-center mb-8">
           <div className={`w-28 h-28 mx-auto rounded-full flex items-center justify-center mb-6 ${
             quizPassed ? 'bg-emerald-50' : 'bg-red-50'
@@ -93,11 +122,16 @@ export function QuizResults({ quizQuestions, quizAnswers, quizScore, quizPassed,
                 className={`text-5xl ${quizPassed ? 'text-emerald-500' : 'text-red-500'}`}
                 aria-hidden="true"
               />
-              <div className={`absolute -top-2 -right-2 w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold ${
-                quizPassed ? 'bg-emerald-500' : 'bg-red-500'
-              }`}>
-                {quizScore}%
-              </div>
+              <motion.div
+                className={`absolute -top-2 -right-2 w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold ${
+                  quizPassed ? 'bg-emerald-500' : 'bg-red-500'
+                }`}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 15, delay: 0.3 }}
+              >
+                {displayScore}%
+              </motion.div>
             </div>
           </div>
           <h2 className={`text-2xl font-bold mb-2 ${quizPassed ? 'text-emerald-600' : 'text-red-600'}`}>
@@ -182,7 +216,7 @@ export function QuizResults({ quizQuestions, quizAnswers, quizScore, quizPassed,
             </button>
           )}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

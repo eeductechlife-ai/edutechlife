@@ -74,7 +74,7 @@ const ResourceViewer = ({
           return (
             <div 
               onClick={() => onOpenViewerModal && onOpenViewerModal()}
-              className="group relative w-full h-full bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer overflow-hidden flex flex-col"
+              className="group relative w-full h-fit bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer overflow-hidden flex flex-col"
             >
               <div className="flex-1 p-6 flex flex-col items-center justify-center">
                 <div className={cn(
@@ -101,10 +101,9 @@ const ResourceViewer = ({
         case 'document':
           return (
             <div 
-              onClick={() => onOpenViewerModal && onOpenViewerModal()}
-              className="group relative w-full h-full bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer overflow-hidden flex flex-col"
+              className="group relative w-full h-fit bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col"
             >
-              <div className="flex-1 p-6 flex flex-col items-center justify-center">
+              <div onClick={() => onOpenViewerModal && onOpenViewerModal()} className="flex-1 p-6 flex flex-col items-center justify-center cursor-pointer">
                 <div className={cn(
                   "w-24 h-24 rounded-2xl flex items-center justify-center mb-6",
                   "bg-gradient-to-br from-petroleum to-corporate"
@@ -122,6 +121,17 @@ const ResourceViewer = ({
                   <span>{t('ialab.resource_viewer.click_to_open')}</span>
                 </div>
               </div>
+              {resource.url && (
+                <a
+                  href={resource.url}
+                  download
+                  onClick={(e) => e.stopPropagation()}
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 border-t border-slate-100 text-xs font-semibold text-petroleum hover:bg-petroleum/5 transition-colors"
+                >
+                  <Icon name="fa-download" className="w-3.5 h-3.5" />
+                  {t('ialab.viewer_modal.download')}
+                </a>
+              )}
             </div>
           );
         
@@ -129,10 +139,9 @@ const ResourceViewer = ({
         case 'image':
           return (
             <div 
-              onClick={() => onOpenViewerModal && onOpenViewerModal()}
-              className="group relative w-full h-full bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer overflow-hidden flex flex-col"
+              className="group relative w-full h-fit bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col"
             >
-              <div className="flex-1 p-6 flex flex-col items-center justify-center">
+              <div onClick={() => onOpenViewerModal && onOpenViewerModal()} className="flex-1 p-6 flex flex-col items-center justify-center cursor-pointer">
                 <div className={cn(
                   "w-24 h-24 rounded-2xl flex items-center justify-center mb-6",
                   "bg-gradient-to-br from-petroleum to-corporate"
@@ -150,6 +159,17 @@ const ResourceViewer = ({
                   <span>{t('ialab.resource_viewer.click_to_open')}</span>
                 </div>
               </div>
+              {resource.url && (
+                <a
+                  href={resource.url}
+                  download
+                  onClick={(e) => e.stopPropagation()}
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 border-t border-slate-100 text-xs font-semibold text-petroleum hover:bg-petroleum/5 transition-colors"
+                >
+                  <Icon name="fa-download" className="w-3.5 h-3.5" />
+                  {t('ialab.viewer_modal.download')}
+                </a>
+              )}
             </div>
           );
         
@@ -157,10 +177,9 @@ const ResourceViewer = ({
         case 'interactive':
           return (
             <div 
-              onClick={() => onOpenViewerModal && onOpenViewerModal()}
-              className="group relative w-full h-full bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer overflow-hidden flex flex-col"
+              className="group relative w-full h-fit bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col"
             >
-              <div className="flex-1 p-6 flex flex-col items-center justify-center">
+              <div onClick={() => onOpenViewerModal && onOpenViewerModal()} className="flex-1 p-6 flex flex-col items-center justify-center cursor-pointer">
                 <div className={cn(
                   "w-24 h-24 rounded-2xl flex items-center justify-center mb-6",
                   "bg-gradient-to-br from-petroleum to-corporate"
@@ -178,6 +197,17 @@ const ResourceViewer = ({
                   <span>{t('ialab.resource_viewer.click_to_open')}</span>
                 </div>
               </div>
+              {resource.url && (
+                <a
+                  href={resource.url}
+                  download
+                  onClick={(e) => e.stopPropagation()}
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 border-t border-slate-100 text-xs font-semibold text-petroleum hover:bg-petroleum/5 transition-colors"
+                >
+                  <Icon name="fa-download" className="w-3.5 h-3.5" />
+                  {t('ialab.viewer_modal.download')}
+                </a>
+              )}
             </div>
           );
         

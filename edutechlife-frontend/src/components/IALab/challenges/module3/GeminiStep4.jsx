@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useTranslation } from '../../../../i18n/I18nProvider';
 import { Icon } from '../../../../utils/iconMapping.jsx';
@@ -38,7 +38,7 @@ const sectionVariants = {
 };
 
 const GeminiStep4 = ({ exercise, response, onResponseChange, t: tProp, topic = '' }) => {
-  const { t, locale } = useTranslation();
+  const { t } = useTranslation();
   const translate = tProp || t;
   const shouldReduceMotion = useReducedMotion();
 
@@ -74,7 +74,7 @@ const GeminiStep4 = ({ exercise, response, onResponseChange, t: tProp, topic = '
       setSections(initial);
       setExpanded(expandedState);
     }
-  }, [response]);
+  }, [response, defaultSections]);
 
   const updateSection = (key, value) => {
     const next = { ...sections, [key]: value };
@@ -119,7 +119,7 @@ const GeminiStep4 = ({ exercise, response, onResponseChange, t: tProp, topic = '
         </div>
       </motion.div>
 
-      <ResearchContextBanner topic={topic} stepNumber={4} locale={locale} />
+      <ResearchContextBanner topic={topic} stepNumber={4} />
 
       <motion.div
         initial={shouldReduceMotion ? false : { opacity: 0, y: -5 }}

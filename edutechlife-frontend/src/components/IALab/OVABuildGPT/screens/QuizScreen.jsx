@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types';;
 import { useTranslation } from '../../../../i18n/I18nProvider';
-import { CheckCircle, Check, Award, Star } from 'lucide-react';
-import { Button, Card } from '../shared';
+import { CheckCircle, Check, Award, Star, CheckCircle2 } from 'lucide-react';
+import { Card } from '../shared';
 
 const questions = [
   {
@@ -51,9 +51,10 @@ const questions = [
 QuizScreen.propTypes = {
   onNext: PropTypes.any,
   addXp: PropTypes.any,
+  onMarkComplete: PropTypes.any,
 };
 
-export default function QuizScreen({ onNext, addXp }) {
+export default function QuizScreen({ onNext, addXp, onMarkComplete }) {
   const { t } = useTranslation();
   const [currentQ, setCurrentQ] = useState(0);
   const [score, setScore] = useState(0);
@@ -134,9 +135,11 @@ export default function QuizScreen({ onNext, addXp }) {
               <p className="font-medium">{t('ova.buildgpt.quiz_bad')}</p>
             </div>
           )}
-          <Button onClick={onNext} icon={Award} className="w-full sm:w-auto text-lg py-3 px-8 mx-auto">
-            {t('ova.buildgpt.quiz_cert_btn')}
-          </Button>
+          <button onClick={() => { onMarkComplete?.(); onNext?.(); }}
+            className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold text-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-2 mx-auto">
+            <CheckCircle2 size={22} />
+            {t('common.mark_viewed')}
+          </button>
         </Card>
       )}
     </div>

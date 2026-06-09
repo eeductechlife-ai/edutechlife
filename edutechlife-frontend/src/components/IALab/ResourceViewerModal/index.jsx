@@ -1,13 +1,15 @@
-import { useState, useRef, useEffect, lazy, Suspense } from 'react'
+import { useState, useRef, useEffect, useCallback, lazy, Suspense } from 'react'
 import PropTypes from 'prop-types';;
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { cn } from '../../forum/forumDesignSystem';
+import SectionErrorBoundary from '../SectionErrorBoundary';
 import { useIALabProgressContext } from '../../../context/IALabContext';
 import { useIALabStore } from '../../../store/ialabStore';
 import { useTranslation } from '../../../i18n/I18nProvider';
 import Breadcrumbs from '../Breadcrumbs';
 import { useIALabProgress } from '../../../hooks/IALab/useIALabProgress';
+import { useStudyNotesSync } from '../../../hooks/IALab/useStudyNotesSync';
 import useFullscreen from '../hooks/useFullscreen';
 import useFocusTrap from '../../../hooks/useFocusTrap';
 import { stopSpeech } from '../../../utils/speech';
@@ -31,6 +33,7 @@ const OVABiasLab = lazy(() => import(/* webpackChunkName: "ova-biaslab" */ '../O
 const OVARiskSimulator = lazy(() => import(/* webpackChunkName: "ova-risksimulator" */ '../OVARiskSimulator.jsx'));
 const OVAEthicalDilemmas = lazy(() => import(/* webpackChunkName: "ova-ethicaldilemmas" */ '../OVAEthicalDilemmas.jsx'));
 const OvaEdutechlife = lazy(() => import(/* webpackChunkName: "ova-edutechlife" */ '../OvaEdutechlife.jsx'));
+const OVAPracticalCases = lazy(() => import(/* webpackChunkName: "ova-practicalcases" */ '../OVAPracticalCases.jsx'));
 
 const ResourceViewerModal = ({ 
   isOpen = false,
@@ -94,6 +97,47 @@ const ResourceViewerModal = ({
     };
   }, [isOpen]);
 
+  const RESOURCE_NOTES_KEY = 'ialab_resource_notes';
+  const [noteText, setNoteText] = useState('');
+  const [showNotes, setShowNotes] = useState(false);
+  const [noteSaved, setNoteSaved] = useState(true);
+  const noteDebounceRef = useRef(null);
+  const { syncResourceNote } = useStudyNotesSync();
+
+  useEffect(() => {
+    setNoteText('');
+    setShowNotes(false);
+    setNoteSaved(true);
+    if (resource?.id) {
+      try {
+        const allNotes = JSON.parse(localStorage.getItem(RESOURCE_NOTES_KEY) || '{}');
+        setNoteText(allNotes[resource.id] || '');
+      } catch {}
+    }
+  }, [resource?.id]);
+
+  const handleNoteChange = useCallback((e) => {
+    const val = e.target.value;
+    setNoteText(val);
+    setNoteSaved(false);
+    if (noteDebounceRef.current) clearTimeout(noteDebounceRef.current);
+    noteDebounceRef.current = setTimeout(() => {
+      try {
+        const allNotes = JSON.parse(localStorage.getItem(RESOURCE_NOTES_KEY) || '{}');
+        allNotes[resource.id] = val;
+        localStorage.setItem(RESOURCE_NOTES_KEY, JSON.stringify(allNotes));
+      } catch {}
+      syncResourceNote(resource.id, val);
+      setNoteSaved(true);
+    }, 1500);
+  }, [resource, syncResourceNote]);
+
+  useEffect(() => {
+    return () => {
+      if (noteDebounceRef.current) clearTimeout(noteDebounceRef.current);
+    };
+  }, []);
+
   useEffect(() => {
     setIsMarkedAsViewed(false);
   }, [resource?.id]);
@@ -106,7 +150,7 @@ const OVA_COMPONENTS = {
   'workflow-ova-herramientas': OVAChatGPTTools,
   'gemini-ova-1': InteractiveViewer,
   'workspace-ova-1': OvaEdutechlife,
-  'gemini-cases-ova-1': InteractiveViewer,
+  'gemini-cases-ova-1': OVAPracticalCases,
   'ethics-ova-1': OVAEthicalDilemmas,
   'gpts-ova-1': OVABuildGPT,
   'chatgpt-ova-ecosystem': OVAEcosystemGuide,
@@ -179,7 +223,9 @@ const renderOVAById = (resourceId) => {
                 </div>
               </div>
             }>
-              {renderOVAById(resource.id)}
+              <SectionErrorBoundary showDetails onRetry={() => window.location.reload()}>
+                {renderOVAById(resource.id)}
+              </SectionErrorBoundary>
             </Suspense>
           );
         
@@ -381,10 +427,44 @@ const renderOVAById = (resourceId) => {
 
               <div className="flex-1 overflow-auto bg-white dark:bg-slate-800">
                 {renderViewer()}
+                {showNotes && (
+                  <div className="border-t border-petroleum/10 dark:border-slate-600 px-4 sm:px-6 py-4 bg-white dark:bg-slate-800">
+                    <div className="flex items-center justify-between mb-3">
+                      <h4 className="text-sm font-semibold text-petroleum dark:text-petroleum-light flex items-center gap-2">
+                        <Icon name="fa-note-sticky" className="w-4 h-4" />
+                        {t('ialab.viewer_modal.notes_title')}
+                      </h4>
+                      <span className={`text-xs ${noteSaved ? 'text-emerald-600' : 'text-amber-600'}`}>
+                        {noteSaved ? t('ialab.viewer_modal.notes_saved') : t('ialab.viewer_modal.notes_saving')}
+                      </span>
+                    </div>
+                    <textarea
+                      value={noteText}
+                      onChange={handleNoteChange}
+                      placeholder={t('ialab.viewer_modal.notes_placeholder')}
+                      className="w-full min-h-[100px] p-3 border border-petroleum/20 dark:border-slate-600 rounded-xl resize-y text-sm bg-white dark:bg-slate-900 text-petroleum dark:text-slate-200 focus:outline-none focus:border-corporate focus:ring-1 focus:ring-corporate/30 transition-colors"
+                      aria-label={t('ialab.viewer_modal.notes_aria')}
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-petroleum/25 dark:border-petroleum/40 bg-white dark:bg-slate-800 relative z-[60]">
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setShowNotes(s => !s)}
+                      className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg flex items-center gap-1 sm:gap-2 transition-colors duration-200 text-sm sm:text-base font-medium border ${
+                        showNotes
+                          ? 'bg-corporate/10 border-corporate/30 text-corporate'
+                          : 'bg-white dark:bg-slate-800 border-petroleum/25 dark:border-petroleum/40 text-petroleum/80 dark:text-petroleum hover:bg-petroleum/5 hover:text-petroleum'
+                      }`}
+                      aria-label={t('ialab.viewer_modal.notes_toggle_aria')}
+                    >
+                      <Icon name="fa-note-sticky" className="w-3 h-3 sm:w-4 sm:h-4" />
+                      <span className="hidden sm:inline">{t('ialab.viewer_modal.notes')}</span>
+                    </button>
+                  </div>
                   {totalResources > 1 && (
                     <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-center sm:justify-start">
                       <button
@@ -429,9 +509,19 @@ const renderOVAById = (resourceId) => {
                       <span>{t('ialab.viewer_modal.completed_auto')}</span>
                     </div>
                   ) : resource.type === 'video' || resource.type === 'ova' || resource.type === 'ova_interactive' || resource.type === 'ova-thumbnail' ? (
-                    <div className="px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl bg-corporate/10 border border-corporate/20 text-corporate font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base text-center">
-                      <Icon name="fa-hourglass-half" className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
-                      <span>{t('ialab.viewer_modal.complete_resource_hint')}</span>
+                    <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 w-full sm:w-auto">
+                      <div className="px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl bg-corporate/10 border border-corporate/20 text-corporate font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base text-center">
+                        <Icon name="fa-hourglass-half" className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+                        <span>{t('ialab.viewer_modal.complete_resource_hint')}</span>
+                      </div>
+                      <button
+                        onClick={handleMarkAsViewed}
+                        aria-label={t('ialab.viewer_modal.mark_viewed')}
+                        className="px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-200 flex items-center gap-2 sm:gap-3 text-sm sm:text-base justify-center border-none bg-gradient-to-r from-petroleum to-corporate hover:from-corporate-deep hover:to-corporate-darker text-white shadow-md hover:shadow-lg"
+                      >
+                        <Icon name="fa-check" className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <span>{t('ialab.viewer_modal.mark_viewed')}</span>
+                      </button>
                     </div>
                   ) : resource.type === 'pdf' || resource.type === 'pdf-thumbnail' ? (
                     <div className="px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl bg-corporate/10 border border-corporate/20 text-corporate font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base text-center">

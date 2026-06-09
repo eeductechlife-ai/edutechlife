@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import PropTypes from 'prop-types';;
+import { useState, useEffect, useCallback } from 'react'
+import PropTypes from 'prop-types';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../../../utils/iconMapping.jsx';
 import { useTranslation } from '../../../../i18n/I18nProvider';
@@ -22,7 +22,6 @@ const TABLE_ROWS = [
 ];
 
 const buildEmptyData = (count) => ({
-  quotes: Array(count).fill(''),
   table: {
     hallazgo: Array(count).fill(''),
     implicacion: Array(count).fill(''),
@@ -33,13 +32,8 @@ const buildEmptyData = (count) => ({
 
 const defaultResponse = JSON.stringify(buildEmptyData(0));
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 15 },
-  visible: { opacity: 1, y: 0 },
-};
-
 const NotebookStep2 = ({ exercise, response, onResponseChange, topic = '', docCount = 0, selectedDocs = [] }) => {
-  const { t, locale } = useTranslation();
+  const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
 
   const parseResponse = useCallback(() => {
@@ -47,8 +41,6 @@ const NotebookStep2 = ({ exercise, response, onResponseChange, topic = '', docCo
     try {
       const parsed = JSON.parse(response);
       const count = selectedDocs.length;
-      const quotes = Array.isArray(parsed.quotes) && parsed.quotes.length === count
-        ? parsed.quotes : Array(count).fill('');
       const table = {
         hallazgo: Array.isArray(parsed.table?.hallazgo) && parsed.table.hallazgo.length === count
           ? parsed.table.hallazgo : Array(count).fill(''),
@@ -57,7 +49,7 @@ const NotebookStep2 = ({ exercise, response, onResponseChange, topic = '', docCo
         limitacion: Array.isArray(parsed.table?.limitacion) && parsed.table.limitacion.length === count
           ? parsed.table.limitacion : Array(count).fill(''),
       };
-      return { quotes, table, synthesis: parsed.synthesis || '' };
+      return { table, synthesis: parsed.synthesis || '' };
     } catch {
       return buildEmptyData(selectedDocs.length);
     }
@@ -74,12 +66,6 @@ const NotebookStep2 = ({ exercise, response, onResponseChange, topic = '', docCo
     onResponseChange(JSON.stringify(next));
   };
 
-  const updateQuote = (idx, value) => {
-    const quotes = [...data.quotes];
-    quotes[idx] = value;
-    sync({ ...data, quotes });
-  };
-
   const updateTable = (rowKey, colIdx, value) => {
     const table = { ...data.table };
     table[rowKey] = [...table[rowKey]];
@@ -91,7 +77,6 @@ const NotebookStep2 = ({ exercise, response, onResponseChange, topic = '', docCo
     sync({ ...data, synthesis: value });
   };
 
-  const quoteCount = data.quotes.filter(q => q.trim().length > 0).length;
   const synthesisDone = data.synthesis.trim().length > 0;
 
   return (
@@ -115,7 +100,7 @@ const NotebookStep2 = ({ exercise, response, onResponseChange, topic = '', docCo
         </div>
       </motion.div>
 
-      <ResearchContextBanner topic={topic} stepNumber={2} locale={locale} />
+      <ResearchContextBanner topic={topic} stepNumber={2} moduleId={4} />
 
       <motion.div
         initial={shouldReduceMotion ? false : { opacity: 0, y: -5 }}
@@ -149,7 +134,7 @@ const NotebookStep2 = ({ exercise, response, onResponseChange, topic = '', docCo
               key={d.index}
               className="inline-flex items-center gap-1 px-2 py-0.5 bg-corporate/10 dark:bg-corporate-dark/20 text-corporate dark:text-corporate-dark text-xs rounded-full"
             >
-              <Icon name="fa-file" className="w-3 h-3" />
+              <Icon name="fa-bookmark" className="w-3 h-3" />
               <span className="max-w-[120px] truncate">{d.title}</span>
             </span>
           ))}
@@ -158,43 +143,6 @@ const NotebookStep2 = ({ exercise, response, onResponseChange, topic = '', docCo
 
       {selectedDocs.length > 0 ? (
         <div className="space-y-8">
-          <motion.div
-            variants={shouldReduceMotion ? undefined : { hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }}
-            initial={shouldReduceMotion ? false : 'hidden'}
-            animate="visible"
-            className="space-y-4"
-          >
-            {selectedDocs.map((doc, idx) => (
-              <motion.div
-                key={doc.index}
-                variants={shouldReduceMotion ? undefined : itemVariants}
-                transition={{ duration: 0.3 }}
-                className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5"
-              >
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-8 h-8 rounded-lg bg-corporate/10 dark:bg-corporate-dark/20 flex items-center justify-center flex-shrink-0">
-                    <Icon name="fa-quote-right" className="text-corporate dark:text-corporate-dark w-4 h-4" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 truncate">{doc.title}</p>
-                    <span className="text-xs text-slate-400 dark:text-slate-500">
-                      {t('ialab.challenge.m4.step2.quote_for_doc')} {idx + 1}
-                    </span>
-                  </div>
-                  <span className="text-xs text-slate-400 dark:text-slate-500">
-                    {(data.quotes[idx] || '').length}/200
-                  </span>
-                </div>
-                <AutoGrowTextarea
-                  value={data.quotes[idx] || ''}
-                  onChange={(v) => updateQuote(idx, v)}
-                  placeholder={t('ialab.challenge.m4.step2.quote_placeholder')}
-                  maxLength={200}
-                />
-              </motion.div>
-            ))}
-          </motion.div>
-
           <motion.div
             initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -253,7 +201,7 @@ const NotebookStep2 = ({ exercise, response, onResponseChange, topic = '', docCo
           >
             <div className="flex items-center gap-3 mb-3">
               <div className="w-8 h-8 rounded-lg bg-corporate/10 dark:bg-corporate-dark/20 flex items-center justify-center">
-                <Icon name="fa-file-text" className="text-corporate dark:text-corporate-dark w-4 h-4" />
+                <Icon name="fa-pen-fancy" className="text-corporate dark:text-corporate-dark w-4 h-4" />
               </div>
               <div>
                 <h4 className="text-base font-semibold text-slate-800 dark:text-slate-100">{t('ialab.challenge.m4.step2.synthesis_title')}</h4>
@@ -295,8 +243,8 @@ const NotebookStep2 = ({ exercise, response, onResponseChange, topic = '', docCo
       )}
 
       <StepFeedback
-        completed={quoteCount + (synthesisDone ? 1 : 0)}
-        total={selectedDocs.length + (selectedDocs.length > 0 ? 1 : 0)}
+        completed={synthesisDone ? 1 : 0}
+        total={1}
         hints={[t('ialab.challenge.m4.step2_howto_desc')]}
         t={t}
       />

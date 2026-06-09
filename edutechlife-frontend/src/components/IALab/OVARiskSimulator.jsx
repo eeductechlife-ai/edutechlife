@@ -4,7 +4,7 @@ import SectionErrorBoundary from './SectionErrorBoundary';
 import { GLASS_CARD, FOCUS_RING } from './constants/styles';
 import { useTranslation } from '../../i18n/I18nProvider';
 import VoiceReader from './VoiceReader';
-import { Brain, Award, Star } from 'lucide-react';
+import { Brain, Award, Star, Scale, Shield, Search } from 'lucide-react';
 import { gameData, accordionData, mitigations } from '../../data/ova/riskSim';
 import useFocusTrap from '../../hooks/useFocusTrap';
 
@@ -35,6 +35,13 @@ export default function OVARiskSimulator({ onComplete }) {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [showFeedback, setShowFeedback] = useState(false);
   const [solvedStars, setSolvedStars] = useState([]);
+
+  useEffect(() => {
+    if (solvedStars.length === gameData.length && !certCompletedRef.current) {
+      certCompletedRef.current = true;
+      onComplete?.();
+    }
+  }, [solvedStars, onComplete]);
 
   const focusTrapRef = useFocusTrap(!!openModal);
 
@@ -100,13 +107,6 @@ export default function OVARiskSimulator({ onComplete }) {
               <Award size={64} className="text-emerald-500 mx-auto mb-4 animate-bounce" />
               <h3 className="text-2xl font-black text-emerald-900 dark:text-emerald-100">{t('ova.risksim.completion_title')}</h3>
               <p className="text-emerald-700 dark:text-emerald-300 mt-2">{t('ova.risksim.completion_desc')}</p>
-              {!certCompletedRef.current && (
-                <button onClick={() => { certCompletedRef.current = true; onComplete?.(); }}
-                  className={`mt-6 px-8 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold text-base shadow-lg hover:shadow-xl hover:scale-105 ${FOCUS_RING} flex items-center justify-center gap-2 mx-auto animate-pulse`}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                  {t('ova.risksim.mark_complete')}
-                </button>
-              )}
             </div>
           )}
         </div>
@@ -171,9 +171,9 @@ export default function OVARiskSimulator({ onComplete }) {
               <h1 className="text-3xl md:text-4xl font-black text-petroleum-dark dark:text-slate-100 mb-4">{t('ova.risksim.title')}</h1>
               <p className="text-lg text-gray-600 dark:text-slate-300 mb-6">{t('ova.risksim.subtitle')}</p>
               <div className="flex justify-center gap-6 text-2xl">
-                <span className="text-corporate" title={t('ova.risksim.icon_justice')}>⚖️</span>
-                <span className="text-corporate" title={t('ova.risksim.icon_privacy')}>🛡️</span>
-                <span className="text-corporate" title={t('ova.risksim.icon_transparency')}>🔍</span>
+                <Scale className="text-corporate" size={24} title={t('ova.risksim.icon_justice')} />
+                <Shield className="text-corporate" size={24} title={t('ova.risksim.icon_privacy')} />
+                <Search className="text-corporate" size={24} title={t('ova.risksim.icon_transparency')} />
               </div>
             </section>
 

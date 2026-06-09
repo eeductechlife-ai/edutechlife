@@ -22,7 +22,7 @@ import IALabSidebar from './IALabSidebar';
 import IALabModals from './IALabModals';
 import IALabModuleHeader from './IALabModuleHeader';
 import ModuleInfoSection from './ModuleInfoSection';
-import TuRutaDeHoy from './TuRutaDeHoy';
+
 import Breadcrumbs from './Breadcrumbs';
 
 const preloadForum = () => import('./IALabForumOptimized');
@@ -99,6 +99,17 @@ const IALabContent = () => {
     const [examRefreshKey, setExamRefreshKey] = useState(0);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [refreshKey, setRefreshKey] = useState(0);
+    const [isModuleTransitioning, setIsModuleTransitioning] = useState(false);
+    const prevActiveModRef = useRef(activeMod);
+
+    useEffect(() => {
+      if (prevActiveModRef.current !== activeMod) {
+        setIsModuleTransitioning(true);
+        prevActiveModRef.current = activeMod;
+        const timer = setTimeout(() => setIsModuleTransitioning(false), 300);
+        return () => clearTimeout(timer);
+      }
+    }, [activeMod]);
     const { openUserProfile } = useClerk();
     const { containerRef, pullDistance, isRefreshing, handleTouchStart, handleTouchMove, handleTouchEnd } = usePullToRefresh({
       onRefresh: async () => {
@@ -193,7 +204,7 @@ const IALabContent = () => {
         return () => window.removeEventListener('popstate', forceScrollToTop);
     }, []);
 
-    // Escucha evento para abrir la comunidad desde TuRutaDeHoy
+    // Escucha evento para abrir la comunidad
     useEffect(() => {
         const handleSwitchTab = (e) => {
             if (e.detail === 'comunidad') {
@@ -342,11 +353,6 @@ const IALabContent = () => {
                                     <DailyPlan onAction={handleGlobalAction} isLoading={isLoadingProgress} />
                                   </SectionErrorBoundary>
                                 </Suspense>
-                                <div data-tour="tour-ruta">
-                                  <SectionErrorBoundary name="TuRutaDeHoy" title={t('ialab.route_unavailable')}>
-                                    <TuRutaDeHoy onAction={handleGlobalAction} />
-                                  </SectionErrorBoundary>
-                                </div>
                               </motion.div>
                             )}
 
@@ -367,7 +373,7 @@ const IALabContent = () => {
                             />
 
                             {/* 1. TÍTULO PRINCIPAL */}
-                            <AnimatedSection show={viewSection === null} loading={isLoadingProgress} skeleton={
+                                <AnimatedSection show={viewSection === null} loading={isLoadingProgress || isModuleTransitioning} skeleton={
                               <div className="flex items-center gap-3 p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
                                 <div className="w-12 h-12 rounded-xl bg-slate-200 dark:bg-slate-700 animate-pulse" />
                                 <div className="space-y-2 flex-1">
@@ -382,7 +388,7 @@ const IALabContent = () => {
                             </AnimatedSection>
 
                             {/* 2. SECCIÓN INFORMATIVA DEL MÓDULO */}
-                            <AnimatedSection show={viewSection === null || viewSection === 'objetivos'} loading={isLoadingProgress} skeleton={<ModuleInfoSkeleton />}>
+                            <AnimatedSection show={viewSection === null || viewSection === 'objetivos'} loading={isLoadingProgress || isModuleTransitioning} skeleton={<ModuleInfoSkeleton />}>
                               <div id="panel-objetivos" role="tabpanel" aria-labelledby="tab-objetivos">
                                 <SectionErrorBoundary name="ModuleInfoSection" title={t('ialab.info_unavailable')}>
                                   <ModuleInfoSection />
@@ -391,7 +397,7 @@ const IALabContent = () => {
                             </AnimatedSection>
 
                             {/* 3. TEMAS DEL MÓDULO - ACORDEÓN */}
-                            <AnimatedSection show={viewSection === null || viewSection === 'contenido'} loading={isLoadingProgress} skeleton={<ModuleOverviewSkeleton />}>
+                            <AnimatedSection show={viewSection === null || viewSection === 'contenido'} loading={isLoadingProgress || isModuleTransitioning} skeleton={<ModuleOverviewSkeleton />}>
                               <div id="panel-contenido" role="tabpanel" aria-labelledby="tab-contenido">
                                 <Suspense fallback={<ModuleOverviewSkeleton />}>
                                   <SectionErrorBoundary>
@@ -402,7 +408,7 @@ const IALabContent = () => {
                             </AnimatedSection>
 
                             {/* 4. ACTIVIDADES DEL MÓDULO */}
-                            <AnimatedSection show={viewSection === null || viewSection === 'actividades'} loading={isLoadingProgress} skeleton={<ModuleActionsSkeleton />}>
+                            <AnimatedSection show={viewSection === null || viewSection === 'actividades'} loading={isLoadingProgress || isModuleTransitioning} skeleton={<ModuleActionsSkeleton />}>
                               <div id="panel-actividades" role="tabpanel" aria-labelledby="tab-actividades">
                                 <Suspense fallback={<ModuleActionsSkeleton />}>
                                   <SectionErrorBoundary>
@@ -434,7 +440,7 @@ const IALabContent = () => {
                             )}
 
                             {/* Herramientas + Tutorías */}
-                            <AnimatedSection show={viewSection === null || viewSection === 'herramientas'} loading={isLoadingProgress} skeleton={<ToolsSkeleton />}>
+                            <AnimatedSection show={viewSection === null || viewSection === 'herramientas'} loading={isLoadingProgress || isModuleTransitioning} skeleton={<ToolsSkeleton />}>
                               <div id="panel-herramientas" role="tabpanel" aria-labelledby="tab-herramientas">
                                 <Suspense fallback={<ToolsSkeleton />}>
                                   <SectionErrorBoundary name="ToolTutorAccordion" title={t('ialab.tools_unavailable')}>

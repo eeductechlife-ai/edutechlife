@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
+import { calcModuleScore, calcGlobalProgress } from '../utils/ialab';
+import { WEIGHTS } from '../constants/ialab';
 
 const STORAGE_KEYS = {
   videos: 'ialab_completed_videos',
@@ -17,51 +19,43 @@ const MODULE_CONFIG = [
   { id: 5, videos: 1, infographics: 2, hasExam: true, hasActivity: true }
 ];
 
-const MODULE_WEIGHTS = { exam: 35, challenge: 30, resources: 30, community: 5 };
-const MODULE_PERCENTAGE = 20;
-
-const calculateModuleProgressInternal = (moduleId, completedVideos, completedExams, completedInfographics, completedActivities) => {
+const buildModuleProgress = (moduleId, completedVideos, completedExams, completedInfographics, completedActivities) => {
   const config = MODULE_CONFIG.find(m => m.id === moduleId);
-  if (!config) return 0;
+  if (!config) return null;
 
   const moduleVideos = completedVideos.filter(v => v.startsWith(`m${moduleId}`));
   const moduleInfographics = completedInfographics.filter(i => i.startsWith(`i${moduleId}`));
-  const moduleActivities = completedActivities.filter(a => a.startsWith(`a${moduleId}`));
-  const examPassed = completedExams[moduleId];
-
-  let moduleScore = 0;
-
+  const resourcesCompleted = moduleVideos.length + moduleInfographics.length;
   const totalResources = config.videos + config.infographics;
-  if (totalResources > 0) {
-    const resourcesCompleted = moduleVideos.length + moduleInfographics.length;
-    const resourcesPct = resourcesCompleted / totalResources;
-    if (resourcesPct >= 0.8) {
-      moduleScore += MODULE_WEIGHTS.resources;
-    }
-  }
+  const examPassed = !!completedExams[moduleId];
+  const hasActivities = completedActivities.filter(a => a.startsWith(`a${moduleId}`)).length > 0;
 
-  if (examPassed) {
-    moduleScore += MODULE_WEIGHTS.exam;
-  }
+  return {
+    exam: examPassed,
+    examEarned: examPassed ? WEIGHTS.exam : 0,
+    challenge: hasActivities,
+    challengeEarned: hasActivities ? WEIGHTS.challenge : 0,
+    resourcesCompleted: resourcesCompleted >= totalResources || resourcesCompleted / totalResources >= 0.8,
+    community: false,
+  };
+};
 
-  if (moduleActivities.length > 0) {
-    moduleScore += MODULE_WEIGHTS.challenge;
-  }
-
-  return moduleScore;
+const calculateModuleProgressInternal = (moduleId, completedVideos, completedExams, completedInfographics, completedActivities) => {
+  const mod = buildModuleProgress(moduleId, completedVideos, completedExams, completedInfographics, completedActivities);
+  if (!mod) return 0;
+  return calcModuleScore(mod);
 };
 
 const calculateGlobalProgressInternal = (completedModules, completedVideos, completedExams, completedInfographics, completedActivities) => {
-  let totalProgress = 0;
-
+  const scores = {};
   for (let i = 1; i <= 5; i++) {
-    const moduleScore = calculateModuleProgressInternal(i, completedVideos, completedExams, completedInfographics, completedActivities);
-    const moduleCompleted = completedModules.includes(i);
-    const effectiveScore = Math.max(moduleScore, moduleCompleted ? 100 : 0);
-    totalProgress += (effectiveScore / 100) * MODULE_PERCENTAGE;
+    let moduleScore = calculateModuleProgressInternal(i, completedVideos, completedExams, completedInfographics, completedActivities);
+    if (completedModules.includes(i)) {
+      moduleScore = Math.max(moduleScore, 100);
+    }
+    scores[i] = moduleScore;
   }
-
-  return Math.min(100, Math.round(totalProgress));
+  return calcGlobalProgress(scores);
 };
 
 export const useCourseProgress = () => {

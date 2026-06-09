@@ -9,6 +9,8 @@ import {
   mergeProgress,
   setupConnectionListener
 } from '../services/progressSync';
+import { calcModuleScore, calcGlobalProgress } from '../utils/ialab';
+import { WEIGHTS } from '../constants/ialab';
 
 const STORAGE_KEYS = {
   videos: 'ialab_completed_videos',
@@ -29,51 +31,38 @@ const MODULE_CONFIG = [
   { id: 5, videos: 1, infographics: 2, hasExam: true, hasActivity: true }
 ];
 
-const MODULE_WEIGHTS = { exam: 35, challenge: 30, resources: 30, community: 5 };
 const MODULE_PERCENTAGE = 20;
-
 const MODULE_THRESHOLD = 80;
+const TOTAL_RESOURCES = 8;
 
-const calculateModuleProgressInternal = (moduleId, completedVideos, completedExams, completedInfographics, completedActivities, challengeScores, completedCommunity = []) => {
-  const config = MODULE_CONFIG.find(m => m.id === moduleId);
-  if (!config) return 0;
-
+const buildModuleProgress = (moduleId, completedVideos, completedExams, completedInfographics, challengeScores, completedCommunity) => {
   const moduleVideos = completedVideos.filter(v => v.startsWith(`m${moduleId}`));
   const moduleInfographics = completedInfographics.filter(i => i.startsWith(`i${moduleId}`));
-  const moduleActivities = completedActivities.filter(a => a.startsWith(`a${moduleId}`));
+  const resourcesCompleted = moduleVideos.length + moduleInfographics.length;
   const examScore = completedExams[moduleId] || 0;
   const challengeScore = challengeScores?.[moduleId] || 0;
 
-  let moduleScore = 0;
+  return {
+    exam: examScore >= MODULE_THRESHOLD,
+    examEarned: (examScore / 100) * WEIGHTS.exam,
+    challenge: challengeScore >= MODULE_THRESHOLD,
+    challengeEarned: (challengeScore / 100) * WEIGHTS.challenge,
+    resourcesCompleted: resourcesCompleted >= TOTAL_RESOURCES,
+    community: completedCommunity?.includes(moduleId) || false,
+  };
+};
 
-  const totalResources = 8;
-  if (totalResources > 0) {
-    const resourcesCompleted = moduleVideos.length + moduleInfographics.length;
-    if (resourcesCompleted >= totalResources) {
-      moduleScore += MODULE_WEIGHTS.resources;
-    }
-  }
-
-  moduleScore += (examScore / 100) * MODULE_WEIGHTS.exam;
-  moduleScore += (challengeScore / 100) * MODULE_WEIGHTS.challenge;
-  if (completedCommunity.includes(moduleId)) {
-    moduleScore += MODULE_WEIGHTS.community;
-  }
-
-  return Math.min(100, Math.round(moduleScore * 10) / 10);
+const calculateModuleProgressInternal = (moduleId, completedVideos, completedExams, completedInfographics, completedActivities, challengeScores, completedCommunity = []) => {
+  const mod = buildModuleProgress(moduleId, completedVideos, completedExams, completedInfographics, challengeScores, completedCommunity);
+  return calcModuleScore(mod);
 };
 
 const calculateGlobalProgressInternal = (completedModules, completedVideos, completedExams, completedInfographics, completedActivities, challengeScores, completedCommunity = []) => {
-  let totalProgress = 0;
-
+  const scores = {};
   for (let i = 1; i <= 5; i++) {
-    const moduleScore = calculateModuleProgressInternal(i, completedVideos, completedExams, completedInfographics, completedActivities, challengeScores, completedCommunity);
-    const moduleCompleted = completedModules.includes(i);
-    const effectiveScore = Math.max(moduleScore, moduleCompleted ? 100 : 0);
-    totalProgress += (effectiveScore / 100) * MODULE_PERCENTAGE;
+    scores[i] = calculateModuleProgressInternal(i, completedVideos, completedExams, completedInfographics, completedActivities, challengeScores, completedCommunity);
   }
-
-  return Math.min(100, Math.round(totalProgress));
+  return calcGlobalProgress(scores);
 };
 
 /**

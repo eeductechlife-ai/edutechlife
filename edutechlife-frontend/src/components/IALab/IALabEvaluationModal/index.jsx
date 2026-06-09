@@ -295,12 +295,6 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId: pr
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <a
-            href="#eval-content"
-            className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[110] focus:px-4 focus:py-2 focus:bg-white focus:text-petroleum focus:rounded-lg focus:text-sm focus:font-bold focus:shadow-lg"
-          >
-            {t('ialab.evaluation.modal.skip_link')}
-          </a>
 
           <div className="absolute inset-0" onCopy={handleSecurityEvent} onPaste={handleSecurityEvent} onCut={handleSecurityEvent} onContextMenu={handleSecurityEvent} />
 

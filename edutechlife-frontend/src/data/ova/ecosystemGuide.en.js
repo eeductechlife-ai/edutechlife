@@ -36,5 +36,49 @@ export const infographicData = {
         { title: "Native Integration: Workspace and Slack", text: "Ability to act directly on your corporate platforms.", icon: "MessageSquare", extendedText: "AI no longer lives only in its app. You can use @ChatGPT in Slack to summarize a 50-message thread from colleagues while you were in a meeting, saving vital reading minutes." }
       ]
     }
-  ]
+  ],
+  quiz: {
+    questions: [
+      {
+        question: "What is the main advantage of ChatGPT's Thinking Mode?",
+        options: [
+          { text: "Faster responses than normal mode", score: 1, feedback: "Thinking Mode prioritizes depth, not speed. It's designed to be slower but more rigorous." },
+          { text: "Detailed analysis and step-by-step reasoning before responding", score: 3, feedback: "Correct! Thinking Mode invests time in reasoning before answering, ideal for complex tasks." },
+          { text: "Consumes fewer server resources", score: 1, feedback: "It actually consumes more resources because it performs deeper processing before responding." }
+        ]
+      },
+      {
+        question: "What is the function of Canvas in ChatGPT?",
+        options: [
+          { text: "Generates images from text", score: 1, feedback: "That's DALL-E's job, not Canvas. Canvas is a collaborative text and code editor." },
+          { text: "Allows collaborative document editing in a side panel", score: 3, feedback: "Exactly! Canvas opens a side document where you can edit and AI reviews changes in real time." },
+          { text: "Connects ChatGPT to social networks", score: 1, feedback: "No, Canvas has nothing to do with social networks. It's a collaborative workspace." }
+        ]
+      },
+      {
+        question: "How would a teacher benefit from using ChatGPT's Projects feature?",
+        options: [
+          { text: "Upload the curriculum and course guides so the AI remembers the context", score: 3, feedback: "Correct! Projects let you upload reference documents that the AI will use across all chats." },
+          { text: "Creates exams automatically without review", score: 1, feedback: "AI can help create exams, but they always require human review to ensure accuracy." },
+          { text: "Replaces the teacher in live sessions", score: 1, feedback: "ChatGPT is a support tool, not a replacement. The teacher's expertise is irreplaceable." }
+        ]
+      },
+      {
+        question: "What is the main difference between Zapier and Make (Integromat)?",
+        options: [
+          { text: "Make allows more complex flows with advanced logical branching", score: 3, feedback: "Correct! Make offers logical branching (if/else) and more powerful data transformations than Zapier." },
+          { text: "Zapier is more expensive than Make", score: 1, feedback: "Not necessarily. Both have different pricing models. Make offers 1,000 free operations per month." },
+          { text: "Make only works with Google Workspace", score: 1, feedback: "Make integrates with hundreds of apps, not just Google Workspace." }
+        ]
+      },
+      {
+        question: "What is the most efficient way to start using generative AI in the classroom?",
+        options: [
+          { text: "Implement AI in all areas at once", score: 1, feedback: "Implementing everything at once can be overwhelming. Better to start with one specific area." },
+          { text: "Start with one specific task (summarize, create material) and expand gradually", score: 3, feedback: "Exactly! The best strategy is to start with one concrete task, master it, then gradually expand." },
+          { text: "Wait for the technology to mature before using it", score: 1, feedback: "AI is already mature enough for many educational tasks. Starting now allows progressive learning." }
+        ]
+      }
+    ]
+  }
 };

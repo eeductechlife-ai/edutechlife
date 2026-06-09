@@ -10,6 +10,7 @@ import CertificatePreview from '../IALab/CertificatePreview';
 import { useTranslation } from '../../i18n/I18nProvider';
 
 const TOTAL_MODULES = 5;
+const COURSE_NAME = 'Introducción a la I.A Generativa';
 
 const CertificatesModal = ({ isOpen, onClose }) => {
   const { t } = useTranslation();
@@ -37,6 +38,9 @@ const CertificatesModal = ({ isOpen, onClose }) => {
           .eq('user_id', user.id)
           .maybeSingle();
 
+        if (certRes.error && certRes.error.code !== 'PGRST116') {
+          console.error('Error loading certificate:', certRes.error);
+        }
         setCertificate(certRes.data);
       } catch (err) {
         console.error('Error loading certificate:', err);
@@ -87,12 +91,26 @@ const CertificatesModal = ({ isOpen, onClose }) => {
 
   const renderCertificateTab = () => {
     if (certificate) {
+      const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent('https://edutechlife.com')}&title=${encodeURIComponent(`Certificado en ${COURSE_NAME}`)}&summary=${encodeURIComponent(`He completado el curso "${COURSE_NAME}" en Edutechlife. Certificado Nº ${certificate.cert_number}`)}`;
       return (
-        <CertificatePreview
-          studentName={certificate.cert_name}
-          certNumber={certificate.cert_number}
-          issuedAt={certificate.issued_at}
-        />
+        <div className="space-y-4">
+          <CertificatePreview
+            studentName={certificate.cert_name}
+            certNumber={certificate.cert_number}
+            issuedAt={certificate.issued_at}
+          />
+          <motion.a
+            href={shareUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#0A66C2] text-white rounded-xl font-semibold text-sm shadow-md hover:shadow-lg hover:bg-[#004182] transition-all duration-300"
+          >
+            <Icon name="fa-linkedin-in" className="text-base" />
+            {t('modals.certificates.share_linkedin') || 'Compartir en LinkedIn'}
+          </motion.a>
+        </div>
       );
     }
 

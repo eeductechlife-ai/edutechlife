@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';;
 import { AnimatePresence } from 'framer-motion';
 import { useIALabStore } from '../../store/ialabStore';
 import SectionErrorBoundary from './SectionErrorBoundary';
+import useFocusTrap from '../../hooks/useFocusTrap';
+import { cn } from '../forum/forumDesignSystem';
 
 const IALabEvaluationModal = lazy(() => import('./IALabEvaluationModal'));
 const IALabQuizModal = lazy(() => import('./IALabQuizModal'));
@@ -22,6 +24,15 @@ const LoadingFallback = () => (
   </div>
 );
 
+function FocusTrapModal({ isOpen, children, className }) {
+  const trapRef = useFocusTrap(isOpen);
+  return (
+    <div ref={trapRef} className={cn("outline-none", className)}>
+      {children}
+    </div>
+  );
+}
+
 const ModalsSection = ({
   showExamModal, handleGlobalAction,
   showQuizModal,
@@ -37,17 +48,21 @@ const ModalsSection = ({
 }) => {
   return (
     <>
+      <FocusTrapModal isOpen={showExamModal}>
       {showExamModal && (
         <SectionErrorBoundary>
           <Suspense fallback={<LoadingFallback />}>
             <IALabEvaluationModal
               isOpen={showExamModal}
               onClose={() => handleGlobalAction('CLOSE_EVALUATION')}
+              moduleId={activeMod}
             />
           </Suspense>
         </SectionErrorBoundary>
       )}
+      </FocusTrapModal>
 
+      <FocusTrapModal isOpen={showQuizModal}>
       {showQuizModal && (
         <SectionErrorBoundary>
           <Suspense fallback={<LoadingFallback />}>
@@ -58,7 +73,9 @@ const ModalsSection = ({
           </Suspense>
         </SectionErrorBoundary>
       )}
+      </FocusTrapModal>
 
+      <FocusTrapModal isOpen={showValerioPanel}>
       {showValerioPanel && (
         <SectionErrorBoundary>
           <Suspense fallback={<LoadingFallback />}>
@@ -69,7 +86,9 @@ const ModalsSection = ({
           </Suspense>
         </SectionErrorBoundary>
       )}
+      </FocusTrapModal>
 
+      <FocusTrapModal isOpen={showPremiumEvaluationModal}>
       {showPremiumEvaluationModal && (
         <SectionErrorBoundary showDetails>
           <Suspense fallback={<LoadingFallback />}>
@@ -80,7 +99,9 @@ const ModalsSection = ({
           </Suspense>
         </SectionErrorBoundary>
       )}
+      </FocusTrapModal>
 
+      <FocusTrapModal isOpen={showCertificateModal}>
       {showCertificateModal && (
         <SectionErrorBoundary>
           <Suspense fallback={<LoadingFallback />}>
@@ -92,7 +113,9 @@ const ModalsSection = ({
           </Suspense>
         </SectionErrorBoundary>
       )}
+      </FocusTrapModal>
 
+      <FocusTrapModal isOpen={showBadgeGallery}>
       {showBadgeGallery && (
         <SectionErrorBoundary>
           <Suspense fallback={<LoadingFallback />}>
@@ -103,7 +126,9 @@ const ModalsSection = ({
           </Suspense>
         </SectionErrorBoundary>
       )}
+      </FocusTrapModal>
 
+      <FocusTrapModal isOpen={showLeaderboard}>
       {showLeaderboard && (
         <SectionErrorBoundary>
           <Suspense fallback={<LoadingFallback />}>
@@ -114,7 +139,9 @@ const ModalsSection = ({
           </Suspense>
         </SectionErrorBoundary>
       )}
+      </FocusTrapModal>
 
+      <FocusTrapModal isOpen={showExamResult}>
       {showExamResult && (
         <SectionErrorBoundary>
           <Suspense fallback={<LoadingFallback />}>
@@ -130,7 +157,9 @@ const ModalsSection = ({
           </Suspense>
         </SectionErrorBoundary>
       )}
+      </FocusTrapModal>
 
+      <FocusTrapModal isOpen={showHistoryModal}>
       <AnimatePresence>
         {showHistoryModal && (
           <SectionErrorBoundary>
@@ -141,7 +170,9 @@ const ModalsSection = ({
           </SectionErrorBoundary>
         )}
       </AnimatePresence>
+      </FocusTrapModal>
 
+      <FocusTrapModal isOpen={showHelpModal}>
       <AnimatePresence>
         {showHelpModal && (
           <SectionErrorBoundary>
@@ -152,7 +183,9 @@ const ModalsSection = ({
           </SectionErrorBoundary>
         )}
       </AnimatePresence>
+      </FocusTrapModal>
 
+      <FocusTrapModal isOpen={showChallengeResult}>
       {showChallengeResult && (
         <SectionErrorBoundary>
           <Suspense fallback={<LoadingFallback />}>
@@ -169,6 +202,7 @@ const ModalsSection = ({
           </Suspense>
         </SectionErrorBoundary>
       )}
+      </FocusTrapModal>
     </>
   );
 };

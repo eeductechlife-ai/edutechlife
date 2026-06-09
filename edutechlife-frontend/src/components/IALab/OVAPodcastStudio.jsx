@@ -1,7 +1,7 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types';;
 import { useTranslation } from '../../i18n/I18nProvider';
-import { Monitor, Play, CheckCircle, Check, ChevronRight, Pencil } from 'lucide-react';
+import { Monitor, Play, CheckCircle, Check, ChevronRight, Pencil, Target, BarChart3, FileText } from 'lucide-react';
 import { OVAIntro, OVAValerioBar } from './shared';
 import { CONTENT_TYPES, GOALS, DOC_COUNTS, SOURCE_TIPS, GOAL_TIPS, DOC_TIPS, ESTIMATED_TIME, IDEAL_SOURCES, FORMATS, CHECKLIST_ITEMS } from '../../data/ova/podcastStudio';
 
@@ -38,6 +38,16 @@ export default function OVAPodcastStudio({ onComplete }) {
   const [goal, setGoal] = useState(null);
   const [docCount, setDocCount] = useState(null);
   const [checked, setChecked] = useState({});
+
+  const checkedCount = Object.values(checked).filter(Boolean).length;
+  const checklistComplete = checkedCount === CHECKLIST_ITEMS.length;
+
+  useEffect(() => {
+    if (step === 'checklist' && checklistComplete && !certCompletedRef.current) {
+      certCompletedRef.current = true;
+      onComplete?.();
+    }
+  }, [step, checklistComplete, onComplete]);
 
   const totalQuestions = 3;
   const currentQuestion = contentType ? (goal ? 2 : 1) : 0;
@@ -215,7 +225,7 @@ export default function OVAPodcastStudio({ onComplete }) {
               <div className="space-y-3">
                 <div className="p-4 rounded-xl bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-200">
                   <div className="flex items-start gap-3">
-                    <span className="text-lg flex-shrink-0 mt-0.5">📄</span>
+                    <FileText size={18} className="flex-shrink-0 mt-0.5 text-blue-800" />
                     <div>
                       <div className="text-xs font-bold text-blue-800 uppercase tracking-wider mb-1">{t('ova.podcaststudio.tip_sources')}</div>
                       <p className="text-sm text-blue-900 leading-relaxed">{recs.sourceTip}</p>
@@ -224,7 +234,7 @@ export default function OVAPodcastStudio({ onComplete }) {
                 </div>
                 <div className="p-4 rounded-xl bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200">
                   <div className="flex items-start gap-3">
-                    <span className="text-lg flex-shrink-0 mt-0.5">🎯</span>
+                    <Target size={18} className="flex-shrink-0 mt-0.5 text-purple-800" />
                     <div>
                       <div className="text-xs font-bold text-purple-800 uppercase tracking-wider mb-1">{t('ova.podcaststudio.tip_goal')}</div>
                       <p className="text-sm text-purple-900 leading-relaxed">{recs.goalTip}</p>
@@ -233,7 +243,7 @@ export default function OVAPodcastStudio({ onComplete }) {
                 </div>
                 <div className="p-4 rounded-xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200">
                   <div className="flex items-start gap-3">
-                    <span className="text-lg flex-shrink-0 mt-0.5">📊</span>
+                    <BarChart3 size={18} className="flex-shrink-0 mt-0.5 text-amber-800" />
                     <div>
                       <div className="text-xs font-bold text-amber-800 uppercase tracking-wider mb-1">{t('ova.podcaststudio.tip_docs')}</div>
                       <p className="text-sm text-amber-900 leading-relaxed">{recs.docTip}</p>
@@ -258,7 +268,6 @@ export default function OVAPodcastStudio({ onComplete }) {
     );
   }
 
-  const checkedCount = Object.values(checked).filter(Boolean).length;
   const progress = Math.round((checkedCount / CHECKLIST_ITEMS.length) * 100);
 
   return (
@@ -314,13 +323,6 @@ export default function OVAPodcastStudio({ onComplete }) {
               <div className="text-4xl mb-3">🎉</div>
               <h3 className="text-lg font-bold text-emerald-800 dark:text-emerald-200 mb-2">{t('ova.podcaststudio.completed_title')}</h3>
               <p className="text-sm text-emerald-700 dark:text-emerald-300 mb-4">{t('ova.podcaststudio.completed_desc')}</p>
-              {!certCompletedRef.current && (
-                <button onClick={() => { certCompletedRef.current = true; onComplete?.(); }}
-                  className="px-6 py-3 bg-gradient-to-r from-petroleum to-corporate text-white font-bold rounded-xl hover:opacity-90 transition-all shadow-lg"
-                >
-                  {t('ova.podcaststudio.mark_complete') || 'Marcar como completado'}
-                </button>
-              )}
             </div>
           )}
 

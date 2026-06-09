@@ -20,8 +20,8 @@ const StepFeedback = ({ completed, total, hints = [], t }) => {
               <Icon name="fa-check-circle" className="text-emerald-500 text-xl" />
             </div>
             <div>
-              <p className="text-sm font-bold text-emerald-700">{t('ialab.challenge.m2.step_completed')}</p>
-              <p className="text-xs text-emerald-600">{t('ialab.challenge.m2.step_completed_desc')}</p>
+              <p className="text-sm font-bold text-emerald-700">{t('ialab.challenge.step_completed')}</p>
+              <p className="text-xs text-emerald-600">{t('ialab.challenge.step_completed_desc')}</p>
             </div>
           </div>
         ) : (
@@ -37,7 +37,7 @@ const StepFeedback = ({ completed, total, hints = [], t }) => {
             </div>
             {hints.length > 0 && completed < total && (
               <div className="text-xs text-slate-500">
-                <p className="font-medium text-slate-600 mb-1">{t('ialab.challenge.m2.step_tips_label')}</p>
+                <p className="font-medium text-slate-600 mb-1">{t('ialab.challenge.step_tips_label')}</p>
                 <ul className="space-y-1">
                   {hints.slice(0, 3).map((h, i) => (
                     <li key={i} className="flex items-start gap-2">

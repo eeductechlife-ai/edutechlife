@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types';;
 import { useTranslation } from '../../i18n/I18nProvider';
 import VoiceReader from './VoiceReader';
@@ -46,7 +46,6 @@ ToolIcon.propTypes = {
 
 export default function OVAChatGPTTools({ onComplete }) {
   const { t } = useTranslation();
-  const certCompletedRef = useRef(false);
   const [screen, setScreen] = useState('welcome');
   const [activeModal, setActiveModal] = useState(null);
   const [viewedTools, setViewedTools] = useState([]);
@@ -56,6 +55,15 @@ export default function OVAChatGPTTools({ onComplete }) {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [feedback, setFeedback] = useState(null);
   const [quizFinished, setQuizFinished] = useState(false);
+
+  const autoCompletedRef = useRef(false);
+
+  useEffect(() => {
+    if (quizFinished && score >= 3 && !autoCompletedRef.current) {
+      autoCompletedRef.current = true;
+      onComplete?.();
+    }
+  }, [quizFinished, score, onComplete]);
 
   const progress = Math.round((viewedTools.length / tools.length) * 100);
 
@@ -190,13 +198,6 @@ export default function OVAChatGPTTools({ onComplete }) {
                     : score >= 3 ? <p className="text-amber-700 dark:text-amber-300 font-bold text-sm leading-relaxed">{t('ova.chatgpttools.profile_advanced')}</p>
                     : <p className="text-rose-700 dark:text-rose-300 font-bold text-sm leading-relaxed">{t('ova.chatgpttools.profile_explorer')}</p>}
                   </div>
-                  {score >= 3 && !certCompletedRef.current && (
-                    <button onClick={() => { certCompletedRef.current = true; onComplete?.(); }}
-                      className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold text-base shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-2 mx-auto mb-3 animate-pulse">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                      {t('ova.chatgpttools.mark_complete')}
-                    </button>
-                  )}
                   <div className="flex flex-col sm:flex-row gap-3 justify-center">
                     <button onClick={() => { setQuizStep(0); setScore(0); setQuizFinished(false); setFeedback(null); setSelectedAnswer(null); setShowQuiz(false); }} className="bg-[#259eb5] text-white px-8 py-3 rounded-xl font-black shadow shadow-[#259eb5]/30 hover:bg-[#13374b] transition-colors text-sm flex items-center justify-center gap-2"><RefreshCcw size={16} /> {t('ova.chatgpttools.restart_btn')}</button>
                     <button onClick={() => setShowQuiz(false)} className="bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 px-8 py-3 rounded-xl font-black hover:border-[#13374b] dark:hover:border-slate-100 transition-colors text-sm">{t('ova.chatgpttools.back_btn')}</button>

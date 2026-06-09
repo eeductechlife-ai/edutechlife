@@ -250,7 +250,7 @@ const QuizScreen = ({ texts, onNext, addXp, onScore }) => {
   );
 };
 
-const CertificateScreen = ({ texts, quizScore, showMarkButton, onMarkComplete }) => {
+const CertificateScreen = ({ texts, quizScore }) => {
   const getMessage = () => {
     if (quizScore === null) return texts.certificate_desc;
     if (quizScore === 5) return texts.quiz_result_perfect;
@@ -284,17 +284,6 @@ const CertificateScreen = ({ texts, quizScore, showMarkButton, onMarkComplete })
         </div>
       )}
       <p className="text-base text-slate-600 dark:text-slate-300 font-bold mb-6 leading-relaxed">{getMessage()}</p>
-      {showMarkButton && onMarkComplete && (
-        <motion.button
-          onClick={onMarkComplete}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="px-10 py-4 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2.5 mx-auto"
-        >
-          <CheckCircle2 className="w-6 h-6" />
-          {texts.certificate_mark_done}
-        </motion.button>
-      )}
     </div>
   );
 };
@@ -432,7 +421,7 @@ export default function OVAEtica({ onComplete }) {
       case 'm6': return <QuizScreen texts={texts} onNext={() => { setScreen('certificate'); }} addXp={addXp} onScore={setQuizScore} />;
       case 'certificate': return (
         <>
-          <CertificateScreen texts={texts} quizScore={quizScore} showMarkButton={!certCompletedRef.current} onMarkComplete={() => { certCompletedRef.current = true; onComplete?.(); }} />
+          <CertificateScreen texts={texts} quizScore={quizScore} />
           <div className="flex justify-center mt-6">
             <VoiceReader text={texts.certificate_desc} />
           </div>

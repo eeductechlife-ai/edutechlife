@@ -47,7 +47,12 @@ export default function OVABiasLab({ onComplete }) {
     }
   }, [selectedCase, selectedConcept]);
 
-  
+  useEffect(() => {
+    if (matchedPairs.length === gameData.length && !certCompletedRef.current) {
+      certCompletedRef.current = true;
+      onComplete?.();
+    }
+  }, [matchedPairs, onComplete]);
 
   const navItems = [
     { id: 'intro', icon: <BookOpen size={18}/> },
@@ -173,13 +178,6 @@ export default function OVABiasLab({ onComplete }) {
                   <Award className="w-24 h-24 text-emerald-500 mb-4 animate-bounce" />
                   <h2 className="text-3xl font-black text-emerald-900 dark:text-emerald-100 font-montserrat">{t('ova.biaslab.game_complete_title')}</h2>
                   <p className="text-emerald-700 dark:text-emerald-300 mt-2">{t('ova.biaslab.game_complete_desc')}</p>
-                  {!certCompletedRef.current && (
-                    <button onClick={() => { certCompletedRef.current = true; onComplete?.(); }}
-                      className={`px-8 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold text-base shadow-lg hover:shadow-xl hover:scale-105 ${FOCUS_RING} flex items-center justify-center gap-2 mx-auto mb-3 animate-pulse`}>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                      {t('common.mark_viewed')}
-                    </button>
-                  )}
                   <button onClick={() => { setActiveSection('intro'); setMatchedPairs([]); }}
                     className={`mt-6 px-6 py-3 bg-gradient-to-r from-corporate to-petroleum-dark text-white rounded-xl font-bold shadow-md hover:shadow-lg ${FOCUS_RING}`}>
                     {t('ova.biaslab.back_to_start')}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from '../../../../i18n/I18nProvider';
 import { Icon } from '../../../../utils/iconMapping.jsx';
@@ -9,7 +9,7 @@ import ExampleToggle from '../../challenges/shared/ExampleToggle';
 
 const TOPIC_ICONS = ['fa-atom', 'fa-brain', 'fa-microchip'];
 
-const GeminiStep1 = ({ exercise, response, onResponseChange, t: tProp }) => {
+const GeminiStep1 = ({ exercise, response, onResponseChange, t: tProp, topic = '' }) => {
   const { t } = useTranslation();
   const translate = tProp || t;
   const shouldReduceMotion = useReducedMotion();
@@ -18,6 +18,7 @@ const GeminiStep1 = ({ exercise, response, onResponseChange, t: tProp }) => {
 
   const topics = React.useMemo(() => {
     if (!tema) return [];
+    if (!tema.includes(',')) return [{ id: tema.trim().toLowerCase().replace(/\s+/g, '_'), label: tema.trim(), icon: TOPIC_ICONS[0] }];
     const lines = tema.split(',').filter(Boolean);
     return lines.length >= 3
       ? lines.slice(0, 3).map((s, i) => ({ id: s.trim().toLowerCase().replace(/\s+/g, '_'), label: s.trim(), icon: TOPIC_ICONS[i % TOPIC_ICONS.length] }))
@@ -69,7 +70,7 @@ const GeminiStep1 = ({ exercise, response, onResponseChange, t: tProp }) => {
         </div>
       </motion.div>
 
-      {tema && (
+      {tema ? (
         <motion.div
           initial={shouldReduceMotion ? false : { opacity: 0, y: -5 }}
           animate={{ opacity: 1, y: 0 }}
@@ -82,6 +83,10 @@ const GeminiStep1 = ({ exercise, response, onResponseChange, t: tProp }) => {
           </div>
           <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">{tema}</p>
         </motion.div>
+      ) : (
+        <div className="bg-amber-50 dark:bg-amber-900/20 rounded-xl p-4 border border-amber-200 dark:border-amber-700 text-sm text-amber-700 dark:text-amber-300">
+          {translate('ialab.challenge.m3.step1_no_topic')}
+        </div>
       )}
 
       <motion.div
@@ -212,6 +217,7 @@ GeminiStep1.propTypes = {
   response: PropTypes.any,
   onResponseChange: PropTypes.any,
   t: PropTypes.any,
+  topic: PropTypes.any,
 };
 
 export default GeminiStep1;

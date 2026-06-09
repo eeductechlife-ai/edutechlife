@@ -7,6 +7,12 @@ import { useTranslation } from '../../i18n/I18nProvider';
 const COURSE_NAME = 'Introducción a la I.A Generativa';
 const COURSE_FULL_NAME = 'Introducción a la Inteligencia Artificial Generativa';
 
+const SPONSORS = [
+  { name: 'Colciencias', initials: 'CO', color: [0, 102, 179] },
+  { name: 'MinTIC', initials: 'MT', color: [0, 153, 51] },
+  { name: 'Edutechlife', initials: 'EL', color: [0, 75, 99] },
+];
+
 const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false }) => {
   const { t, locale } = useTranslation();
   const certificateRef = useRef(null);
@@ -163,6 +169,23 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
       doc.setFontSize(10);
       doc.setTextColor(0, 75, 99);
       doc.text('EDUTECHLIFE', W / 2 + 45, footerY + 6, { align: 'center' });
+
+      // Sponsor logos
+      const sponsorY = footerY + 18;
+      const sponsorStartX = W / 2 - ((SPONSORS.length * 20) / 2);
+      SPONSORS.forEach((s, i) => {
+        const cx = sponsorStartX + i * 20 + 10;
+        doc.setFillColor(s.color[0], s.color[1], s.color[2]);
+        doc.circle(cx, sponsorY, 7, 'F');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(5);
+        doc.setTextColor(255, 255, 255);
+        doc.text(s.initials, cx, sponsorY + 1.5, { align: 'center' });
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(4.5);
+        doc.setTextColor(148, 163, 184);
+        doc.text(s.name, cx, sponsorY + 10, { align: 'center' });
+      });
 
       // Bottom bar
       for (let x = 0; x < W; x++) {

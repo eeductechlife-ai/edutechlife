@@ -21,23 +21,25 @@ const formatDate = (year, month, day) => {
   return `${year}-${m}-${d}`;
 };
 
-const buildCalendar = (months) => {
+const buildCalendar = (year, month, months) => {
   const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth();
   const firstDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const todayDate = today.getDate();
+  const isCurrentMonth = today.getFullYear() === year && today.getMonth() === month;
+  const todayDate = isCurrentMonth ? today.getDate() : -1;
+  const isPastMonth = today.getFullYear() > year || (today.getFullYear() === year && today.getMonth() > month);
+  const isFutureMonth = today.getFullYear() < year || (today.getFullYear() === year && today.getMonth() < month);
   const days = [];
   for (let i = 0; i < firstDay; i++) days.push(null);
   for (let d = 1; d <= daysInMonth; d++) days.push(d);
-  return { year, month, days, todayDate, label: `${months[month]} ${year}` };
+  return { year, month, days, todayDate, isPastMonth, isFutureMonth, label: `${months[month]} ${year}` };
 };
 
 const StudyPlannerModal = ({ isOpen, onClose }) => {
   const { t } = useTranslation();
   const streak = useIALabStore(s => s.streak);
   const getWeeklyXP = useIALabStore(s => s.getWeeklyXP);
+  const weeklyStats = getWeeklyXP();
   const DAYS = useMemo(() => [
     t('ialab.study_planner.day_dom'), t('ialab.study_planner.day_lun'), t('ialab.study_planner.day_mar'),
     t('ialab.study_planner.day_mie'), t('ialab.study_planner.day_jue'), t('ialab.study_planner.day_vie'),
@@ -53,9 +55,9 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
   const [selectedDay, setSelectedDay] = useState(null);
   const [dayText, setDayText] = useState('');
   const dayTextareaRef = useRef(null);
-  const calendar = buildCalendar(MONTHS);
   const [calMonth, setCalMonth] = useState(() => new Date().getMonth());
   const [calYear, setCalYear] = useState(() => new Date().getFullYear());
+  const calendar = buildCalendar(calYear, calMonth, MONTHS);
   const monthlyCalendar = useActivityCalendar(calYear, calMonth);
 
   const goToPrevMonth = () => {
@@ -147,7 +149,7 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
                     <span className="text-xs font-bold text-petroleum dark:text-petroleum w-28 text-center">{calendar.label}</span>
                     <button onClick={goToNextMonth} aria-label="Mes siguiente" className="w-6 h-6 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 flex items-center justify-center text-[10px] text-slate-600 dark:text-slate-300 transition-all">›</button>
                   </div>
-                  <span className="text-[10px] text-amber-500 font-semibold">🔥 {streak}d</span>
+                  <span className="text-[10px] text-amber-500 font-semibold"><Icon name="fa-fire" className="text-amber-500 text-[10px]" /> {streak}d</span>
                 </div>
                 <div className="grid grid-cols-7 gap-0.5 text-center">
                   {DAYS.map(d => (
@@ -165,7 +167,7 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
                           d === null ? 'cursor-default' :
                           isSelected ? 'ring-2 ring-petroleum bg-petroleum/15 font-bold text-petroleum' :
                           d === calendar.todayDate ? 'bg-gradient-to-r from-petroleum to-corporate text-white font-bold shadow-sm' :
-                          d < calendar.todayDate ? 'bg-petroleum/10 dark:bg-petroleum/20 text-slate-500 dark:text-slate-400 hover:bg-petroleum/20' :
+                          calendar.isPastMonth || d < calendar.todayDate ? 'bg-petroleum/10 dark:bg-petroleum/20 text-slate-500 dark:text-slate-400 hover:bg-petroleum/20' :
                           'text-slate-600 dark:text-slate-400 hover:bg-petroleum/5'
                         }`}
                       >
@@ -180,7 +182,30 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
                 <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-100 dark:border-slate-700 text-[10px] text-slate-500">
                   <span>{t('ialab.study_planner.active_days', { count: monthlyCalendar.totalActive })}</span>
                   <span>{t('ialab.study_planner.sessions', { count: monthlyCalendar.totalSessions })}</span>
-                  <span className="text-amber-500 font-semibold">🔥 {streak}d</span>
+                  <span className="text-amber-500 font-semibold"><Icon name="fa-fire" className="text-amber-500" /> {streak}d</span>
+                </div>
+              </div>
+
+              <div className="p-3 rounded-xl bg-gradient-to-br from-petroleum/5 to-corporate/5 border border-petroleum/10">
+                <div className="flex items-center justify-between mb-1.5">
+                  <h4 className="text-[10px] font-bold text-petroleum flex items-center gap-1">
+                    <Icon name="fa-chart-simple" className="text-[9px]" />
+                    {t('ialab.study_planner.weekly_summary')}
+                  </h4>
+                  <span className="text-[9px] text-slate-500">{t('ialab.study_planner.daily_avg', { avg: weeklyStats.dailyAvg })}</span>
+                </div>
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-xs font-bold text-petroleum">{weeklyStats.weekly} XP</span>
+                  <span className="text-[9px] text-slate-500">{t('ialab.study_planner.of_target', { target: weeklyStats.weeklyTarget })}</span>
+                </div>
+                <div className="w-full h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-petroleum to-corporate rounded-full transition-all duration-500"
+                    style={{ width: `${weeklyStats.weeklyPct}%` }}
+                  />
+                </div>
+                <div className="mt-1.5 text-[9px] text-slate-400 text-right">
+                  {t('ialab.study_planner.weekly_pct', { pct: weeklyStats.weeklyPct })}
                 </div>
               </div>
 

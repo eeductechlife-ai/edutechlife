@@ -88,6 +88,7 @@ export function IALabProgressProvider({ children }) {
       completedModules: persistentCompletedModules,
       completedVideos: progressCompletedVideos,
       completedExams: progressCompletedExams,
+      completedCommunity,
       completedInfographics: progressCompletedInfographics,
       completedActivities: progressCompletedActivities,
       challengeScores: progressChallengeScores,

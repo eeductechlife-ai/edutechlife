@@ -104,7 +104,7 @@ const IALabHeader = () => {
               }`}
             />
             {totalUnread > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 flex items-center justify-center min-w-[18px] h-[18px] text-[11px] font-bold text-white bg-gradient-to-r from-petroleum to-corporate rounded-full border-2 border-white px-1 shadow-sm">
+              <span className="absolute -top-0.5 -right-0.5 flex items-center justify-center min-w-[18px] h-[18px] text-[11px] font-bold text-white bg-gradient-to-r from-petroleum to-corporate rounded-full border-2 border-white dark:border-slate-800 px-1 shadow-sm">
                 {totalUnread > 999 ? '999+' : totalUnread}
               </span>
             )}

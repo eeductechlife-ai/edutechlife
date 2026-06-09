@@ -5,11 +5,11 @@ import SectionErrorBoundary from './SectionErrorBoundary';
 import { FOCUS_RING } from './constants/styles';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Volume2, VolumeX, CheckCircle, XCircle, ChevronRight, 
+  CheckCircle, XCircle, ChevronRight, 
   ChevronLeft, Award, Play, BookOpen, Brain, Star, FileText, 
-  Headphones, Lightbulb, AlertTriangle, Link as LinkIcon 
+  Lightbulb, AlertTriangle, Link as LinkIcon 
 } from 'lucide-react';
-import { speakTextConversational, stopSpeech } from '../../utils/speech';
+import { stopSpeech } from '../../utils/speech';
 import { MODULE_DATA, FINAL_CHALLENGE } from '../../data/ova/podcastGuide';
 import { useTranslation } from '../../i18n/I18nProvider';
 
@@ -25,23 +25,22 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
   const [currentModuleIndex, setCurrentModuleIndex] = useState(0);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [score, setScore] = useState(0);
-  const [isNarrating, setIsNarrating] = useState(false);
   const [activityState, setActivityState] = useState(null);
   const [challengeAnswers, setChallengeAnswers] = useState([]);
 
   const totalSlides = MODULE_DATA.reduce((acc, mod) => acc + mod.content.length, 0);
   const currentTotalProgress = Math.min(100, (MODULE_DATA.slice(0, currentModuleIndex).reduce((acc, mod) => acc + mod.content.length, 0) + currentSlide) / totalSlides * 100);
 
-  const handleNarrate = (textToRead) => {
-    if (isNarrating) { stopSpeech(); setIsNarrating(false); return; }
-    speakTextConversational(textToRead, 'valerio', () => setIsNarrating(false));
-    setIsNarrating(true);
-  };
-
   useEffect(() => {
     stopSpeech();
-    setIsNarrating(false);
   }, [currentSlide, currentModuleIndex, currentScreen]);
+
+  useEffect(() => {
+    if (currentScreen === 'certificate' && score >= 100 && !certCompletedRef.current) {
+      certCompletedRef.current = true;
+      onComplete?.();
+    }
+  }, [currentScreen, score, onComplete]);
 
   const EdutechLogo = () => (
     <div className="flex items-center gap-2 select-none">
@@ -117,10 +116,7 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full font-bold"><Star className="w-5 h-5 fill-current" /> {score} {t('ova.podcastguide.score_label')}</div>
-            <button onClick={() => handleNarrate(textToRead)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full font-bold ${FOCUS_RING} shadow-sm ${isNarrating ? 'bg-red-100 text-red-600' : 'bg-cyan-50 text-petroleum hover:bg-cyan-100'}`}>
-              {isNarrating ? <><VolumeX className="w-5 h-5"/> {t('ova.podcastguide.stop_btn')}</> : <><Volume2 className="w-5 h-5"/> {t('ova.podcastguide.audio_btn')}</>}
-            </button>
+
           </div>
         </header>
         <div className="flex flex-1 flex-col md:flex-row">
@@ -281,7 +277,9 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
           <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: "spring" }}
             className="max-w-2xl w-full bg-white dark:bg-slate-800 rounded-3xl shadow-2xl p-10 text-center relative overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-corporate to-petroleum"></div>
-            <Award className="w-24 h-24 text-yellow-500 mx-auto mb-6" />
+            <div className="w-24 h-24 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl border-4 border-white dark:border-slate-700">
+              <CheckCircle className="w-12 h-12 text-white" />
+            </div>
             <h2 className="text-4xl font-bold text-petroleum dark:text-slate-100 mb-2 font-montserrat">{t('ova.podcastguide.cert_title')}</h2>
             <p className="text-xl text-gray-500 dark:text-slate-400 mb-8">{t('ova.podcastguide.cert_subtitle')}</p>
             <div className="bg-gray-50 dark:bg-slate-700/30 rounded-2xl p-8 mb-8 border border-gray-100 dark:border-slate-700">
@@ -289,14 +287,6 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
               <p className="text-6xl font-black text-corporate mb-4">{score}</p>
               <p className="text-gray-600 dark:text-slate-300">{t('ova.podcastguide.cert_message')}</p>
             </div>
-            <div className="flex justify-center mb-8"><EdutechLogo /></div>
-            {score >= 100 && !certCompletedRef.current && (
-              <button onClick={() => { certCompletedRef.current = true; onComplete?.(); }}
-                className={`px-8 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold text-base shadow-lg hover:shadow-xl hover:scale-105 ${FOCUS_RING} flex items-center justify-center gap-2 mx-auto mb-3 animate-pulse`}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                {t('common.mark_viewed')}
-              </button>
-            )}
             <button onClick={() => { setCurrentScreen('intro'); setCurrentModuleIndex(0); setCurrentSlide(0); setScore(0); }}
               className={`mt-4 bg-gradient-to-r from-corporate to-petroleum text-white px-8 py-4 rounded-xl font-bold shadow-lg ${FOCUS_RING} hover:shadow-xl`}>
               {t('ova.podcastguide.cert_reset')}

@@ -30,7 +30,7 @@ const ChallengeResultViewer = ({ moduleId, onClose, onRetry }) => {
         if (!error && data) {
           const lessons = data.completed_lessons || {};
           setEvaluation({
-            notaGlobal: data.score || 80,
+            notaGlobal: data.score ?? 0,
             nota_ej1: lessons.nota_ej1 || 0,
             nota_ej2: lessons.nota_ej2 || 0,
             nota_ej3: lessons.nota_ej3 || 0,
@@ -40,7 +40,7 @@ const ChallengeResultViewer = ({ moduleId, onClose, onRetry }) => {
           });
         } else {
           setEvaluation({
-            notaGlobal: 80,
+            notaGlobal: 0,
             nota_ej1: 0, nota_ej2: 0, nota_ej3: 0,
             feedback_ej1: t('ialab.challenge_result.no_feedback_stored'),
             feedback_ej2: t('ialab.challenge_result.no_feedback_stored'),

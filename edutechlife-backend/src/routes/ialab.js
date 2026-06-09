@@ -2,10 +2,15 @@ const { Router } = require('express');
 const { chat, validateMessages } = require('../services/deepseek');
 const { IALAB_SYSTEM_PROMPT, generateFallbackResult } = require('../services/ialabPrompts');
 const { modulesData, modulesList } = require('../data/modules');
+const supabase = require('../db/supabase');
 
 const router = Router();
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
 const progressStore = new Map();
+
+function isSupabaseReady() {
+  return !!(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_KEY);
+}
 
 router.post('/prompts', async (req, res) => {
   const { prompt, templateType = 'general' } = req.body;
@@ -71,7 +76,7 @@ router.post('/prompts', async (req, res) => {
   }
 });
 
-router.post('/progress', (req, res) => {
+router.post('/progress', async (req, res) => {
   const { userId, moduleId, completed, score, timestamp } = req.body;
 
   if (!userId || typeof userId !== 'string') {
@@ -82,6 +87,65 @@ router.post('/progress', (req, res) => {
   }
 
   try {
+    if (isSupabaseReady()) {
+      const upsertData = {
+        user_id: userId,
+        module_id: moduleId,
+        is_completed: completed || false,
+        score: score || 0,
+        updated_at: new Date().toISOString()
+      };
+
+      const { data: existing, error: findError } = await supabase
+        .from('user_progress')
+        .select('id')
+        .eq('user_id', userId)
+        .eq('module_id', moduleId)
+        .maybeSingle();
+
+      let dbError;
+      if (existing) {
+        const { error } = await supabase.from('user_progress').update(upsertData).eq('id', existing.id);
+        dbError = error;
+      } else {
+        upsertData.created_at = new Date().toISOString();
+        const { error } = await supabase.from('user_progress').insert(upsertData);
+        dbError = error;
+      }
+
+      if (findError || dbError) {
+        console.error('[IALab Progress] Supabase error:', findError || dbError);
+        throw findError || dbError;
+      }
+
+      const { data: allProgress } = await supabase
+        .from('user_progress')
+        .select('*')
+        .eq('user_id', userId);
+
+      const moduleEntries = allProgress || [];
+      const completedModules = moduleEntries.filter(m => m.is_completed).length;
+      const overallProgress = Math.round((completedModules / 5) * 100);
+      const totalScore = moduleEntries.reduce((sum, m) => sum + (m.score || 0), 0);
+
+      const achievements = [];
+      if (completed) achievements.push('module_' + moduleId + '_complete');
+      if (score >= 4) achievements.push('module_' + moduleId + '_excellent');
+      if (completedModules === 5) achievements.push('course_complete');
+
+      console.log('[IALab Progress] Saved to Supabase for user: ' + userId + ', module: ' + moduleId);
+      return res.json({
+        success: true,
+        progress: {
+          userId, modules: moduleEntries,
+          overallProgress, totalScore,
+          completedModules, achievements,
+          lastUpdated: new Date().toISOString()
+        },
+        message: 'Progress saved successfully'
+      });
+    }
+
     let userProgress = progressStore.get(userId) || {
       userId,
       modules: {},
@@ -116,7 +180,7 @@ router.post('/progress', (req, res) => {
     }
 
     progressStore.set(userId, userProgress);
-    console.log('[IALab Progress] Updated progress for user: ' + userId + ', module: ' + moduleId + ', completed: ' + completed + ', score: ' + score);
+    console.log('[IALab Progress] Saved in-memory for user: ' + userId + ', module: ' + moduleId);
 
     res.json({ success: true, progress: userProgress, message: 'Progress saved successfully' });
   } catch (e) {
@@ -125,11 +189,44 @@ router.post('/progress', (req, res) => {
   }
 });
 
-router.get('/progress/:userId', (req, res) => {
+router.get('/progress/:userId', async (req, res) => {
   const { userId } = req.params;
   if (!userId) return res.status(400).json({ error: 'userId is required' });
 
   try {
+    if (isSupabaseReady()) {
+      const { data: allProgress } = await supabase
+        .from('user_progress')
+        .select('*')
+        .eq('user_id', userId);
+
+      if (!allProgress || allProgress.length === 0) {
+        return res.json({
+          userId, modules: {}, overallProgress: 0, totalScore: 0,
+          completedModules: 0, lastUpdated: null, achievements: [],
+          message: 'No progress found for this user'
+        });
+      }
+
+      const moduleEntries = allProgress.map(m => ({
+        moduleId: m.module_id,
+        completed: m.is_completed,
+        score: m.score,
+        timestamp: m.created_at
+      }));
+      const completedCount = allProgress.filter(m => m.is_completed).length;
+
+      return res.json({
+        userId,
+        modules: moduleEntries,
+        overallProgress: Math.round((completedCount / 5) * 100),
+        totalScore: allProgress.reduce((sum, m) => sum + (m.score || 0), 0),
+        completedModules: completedCount,
+        lastUpdated: new Date().toISOString(),
+        achievements: []
+      });
+    }
+
     const userProgress = progressStore.get(userId);
     if (!userProgress) {
       return res.json({
@@ -145,12 +242,26 @@ router.get('/progress/:userId', (req, res) => {
   }
 });
 
-router.get('/modules/:id', (req, res) => {
+router.get('/modules/:id', async (req, res) => {
   const { id } = req.params;
   const moduleId = parseInt(id);
   if (isNaN(moduleId) || moduleId < 1 || moduleId > 5) {
     return res.status(400).json({ error: 'Module ID must be a number between 1 and 5' });
   }
+
+  if (isSupabaseReady()) {
+    try {
+      const { data: fullModule, error } = await supabase
+        .rpc('get_module_full', { module_id: moduleId });
+
+      if (!error && fullModule && fullModule.module) {
+        return res.json(fullModule);
+      }
+    } catch (dbErr) {
+      console.warn('[IALab Modules] DB fallback for module ' + moduleId + ':', dbErr.message);
+    }
+  }
+
   const module = modulesData[moduleId];
   if (!module) return res.status(404).json({ error: 'Module not found' });
   res.json(module);
@@ -160,19 +271,37 @@ router.get('/modules', (req, res) => {
   res.json(modulesList);
 });
 
-router.post('/templates', (req, res) => {
+router.post('/templates', async (req, res) => {
   try {
     const { userId, templateName, templateData, category, difficulty } = req.body;
     if (!userId || !templateName || !templateData) {
       return res.status(400).json({ error: 'Missing required fields: userId, templateName, templateData' });
     }
+
+    if (isSupabaseReady()) {
+      const { data, error } = await supabase.from('prompt_templates').insert({
+        user_id: userId,
+        name: templateName,
+        data: typeof templateData === 'string' ? templateData : JSON.stringify(templateData),
+        category: category || 'general',
+        difficulty: difficulty || 'intermediate',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        usage_count: 0
+      }).select('*').single();
+
+      if (error) throw error;
+      console.log('[IALab Templates] Saved to Supabase: ' + templateName + ' for user: ' + userId);
+      return res.status(201).json({ success: true, message: 'Template saved successfully', template: data });
+    }
+
     const templateId = 'template_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
     const savedTemplate = {
       id: templateId, userId, name: templateName, data: templateData,
       category: category || 'general', difficulty: difficulty || 'intermediate',
       createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), usageCount: 0
     };
-    console.log('[IALab Templates] Saved template: ' + templateName + ' for user: ' + userId);
+    console.log('[IALab Templates] Saved in-memory: ' + templateName + ' for user: ' + userId);
     res.status(201).json({ success: true, message: 'Template saved successfully', template: savedTemplate });
   } catch (error) {
     console.error('Error saving IALab template:', error);
@@ -180,11 +309,22 @@ router.post('/templates', (req, res) => {
   }
 });
 
-router.get('/templates/:userId', (req, res) => {
+router.get('/templates/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
     const { category, difficulty } = req.query;
     if (!userId) return res.status(400).json({ error: 'User ID is required' });
+
+    if (isSupabaseReady()) {
+      let query = supabase.from('prompt_templates').select('*').eq('user_id', userId);
+      if (category && category !== 'all') query = query.eq('category', category);
+      if (difficulty && difficulty !== 'all') query = query.eq('difficulty', difficulty);
+
+      const { data, error } = await query.order('created_at', { ascending: false });
+      if (error) throw error;
+
+      return res.json({ success: true, templates: data || [], total: (data || []).length });
+    }
 
     const exampleTemplates = [
       {
@@ -223,11 +363,25 @@ router.get('/templates/:userId', (req, res) => {
   }
 });
 
-router.put('/templates/:templateId', (req, res) => {
+router.put('/templates/:templateId', async (req, res) => {
   try {
     const { templateId } = req.params;
     const { templateName, templateData, category, difficulty } = req.body;
     if (!templateId) return res.status(400).json({ error: 'Template ID is required' });
+
+    if (isSupabaseReady()) {
+      const updateData = { updated_at: new Date().toISOString() };
+      if (templateName) updateData.name = templateName;
+      if (templateData) updateData.data = typeof templateData === 'string' ? templateData : JSON.stringify(templateData);
+      if (category) updateData.category = category;
+      if (difficulty) updateData.difficulty = difficulty;
+
+      const { data, error } = await supabase.from('prompt_templates')
+        .update(updateData).eq('id', templateId).select('*').single();
+
+      if (error) throw error;
+      return res.json({ success: true, message: 'Template updated successfully', template: data });
+    }
 
     console.log('[IALab Templates] Updated template: ' + templateId + ', new name: ' + templateName);
     res.json({
@@ -244,10 +398,17 @@ router.put('/templates/:templateId', (req, res) => {
   }
 });
 
-router.delete('/templates/:templateId', (req, res) => {
+router.delete('/templates/:templateId', async (req, res) => {
   try {
     const { templateId } = req.params;
     if (!templateId) return res.status(400).json({ error: 'Template ID is required' });
+
+    if (isSupabaseReady()) {
+      const { error } = await supabase.from('prompt_templates').delete().eq('id', templateId);
+      if (error) throw error;
+      return res.json({ success: true, message: 'Template deleted successfully' });
+    }
+
     console.log('[IALab Templates] Deleted template: ' + templateId);
     res.json({ success: true, message: 'Template deleted successfully' });
   } catch (error) {
@@ -312,47 +473,86 @@ router.post('/evaluate-prompt', (req, res) => {
   }
 });
 
+const STORAGE = 'https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public';
+
 const resourcesData = {
   module1: [
-    { id: 'res1_m1', name: 'Guía de Prompt Engineering', type: 'pdf', url: '/ialab-resources/templates/module1/masterprompt-template.md' },
-    { id: 'res2_m1', name: 'Template MasterPrompt', type: 'template', url: '/ialab-resources/templates/module1/masterprompt-template.md' },
-    { id: 'res3_m1', name: 'Infografía Módulo 1', type: 'infographic', url: '/ialab-resources/infographics/module1-infographic.html' }
+    { id: 'res1_m1', name: 'Guía de Prompt Engineering', type: 'pdf', url: STORAGE + '/recursos-edutechlife/guia_edutechlife_modulo1.pdf' },
+    { id: 'res2_m1', name: 'Template MasterPrompt', type: 'template', url: STORAGE + '/recursos-edutechlife/guia_edutechlife_modulo1.pdf' },
+    { id: 'res3_m1', name: 'Infografía Módulo 1', type: 'infographic', url: STORAGE + '/recursos-edutechlife/guia_edutechlife_modulo1.pdf' }
   ],
   module2: [
-    { id: 'res1_m2', name: 'Configuración GPTs', type: 'json', url: '/ialab-resources/templates/module2/gpt-config-template.json' },
-    { id: 'res2_m2', name: 'Guía ChatGPT Avanzado', type: 'guide', url: '/ialab-resources/templates/module2/chatgpt-workflow-guide.md' },
-    { id: 'res3_m2', name: 'Infografía Módulo 2', type: 'infographic', url: '/ialab-resources/infographics/module2-infographic.html' }
+    { id: 'res1_m2', name: 'Configuración GPTs', type: 'json', url: STORAGE + '/modulo%202%20guia%20de%20intro/Las-Herramientas-Integradas-de-ChatGPT.pdf' },
+    { id: 'res2_m2', name: 'Guía ChatGPT Avanzado', type: 'guide', url: STORAGE + '/modulo%202%20guia%20de%20intro/guia_edutechlife_modulo2.pdf' },
+    { id: 'res3_m2', name: 'Infografía Módulo 2', type: 'infographic', url: STORAGE + '/modulo%202%20guia%20de%20intro/guia_edutechlife_modulo2.pdf' }
   ],
   module3: [
-    { id: 'res1_m3', name: 'Template Investigación', type: 'html', url: '/ialab-resources/templates/module3/research-template.html' },
-    { id: 'res2_m3', name: 'Metodología Deep Research', type: 'guide', url: '/ialab-resources/templates/module3/deep-research-methodology.md' },
-    { id: 'res3_m3', name: 'Infografía Módulo 3', type: 'infographic', url: '/ialab-resources/infographics/module3-infographic.html' }
+    { id: 'res1_m3', name: 'Template Investigación', type: 'html', url: STORAGE + '/modulo%203/3%20Gemini_Research_Mastery.pdf' },
+    { id: 'res2_m3', name: 'Metodología Deep Research', type: 'guide', url: STORAGE + '/modulo%203/2-%20guia_edutechlife_modulo3_gemini.pdf' },
+    { id: 'res3_m3', name: 'Infografía Módulo 3', type: 'infographic', url: STORAGE + '/modulo%203/3-infografia.png' }
   ],
   module4: [
-    { id: 'res1_m4', name: 'Workflow NotebookLM', type: 'guide', url: '/ialab-resources/templates/module4/notebooklm-workflow.md' },
-    { id: 'res2_m4', name: 'Template Podcast', type: 'template', url: '/ialab-resources/templates/module4/podcast-template.md' },
-    { id: 'res3_m4', name: 'Infografía Módulo 4', type: 'infographic', url: '/ialab-resources/infographics/module4-infographic.html' }
+    { id: 'res1_m4', name: 'Workflow NotebookLM', type: 'guide', url: STORAGE + '/guia%204%20nootbook%20lm/6-%20NotebookLM_El_Cuaderno_del_Futuro.pdf' },
+    { id: 'res2_m4', name: 'Template Podcast', type: 'template', url: STORAGE + '/guia%204%20nootbook%20lm/3-INFOGRAFIA.jpeg' },
+    { id: 'res3_m4', name: 'Infografía Módulo 4', type: 'infographic', url: STORAGE + '/guia%204%20nootbook%20lm/3-INFOGRAFIA.jpeg' }
   ],
   module5: [
-    { id: 'res1_m5', name: 'Template Proyecto Final', type: 'template', url: '/ialab-resources/templates/module5/final-project-template.md' },
-    { id: 'res2_m5', name: 'Plantilla Pitch Deck', type: 'template', url: '/ialab-resources/templates/module5/pitch-deck-template.md' },
-    { id: 'res3_m5', name: 'Infografía Módulo 5', type: 'infographic', url: '/ialab-resources/infographics/module5-infographic.html' }
+    { id: 'res1_m5', name: 'Template Proyecto Final', type: 'template', url: STORAGE + '/modulo%205/2-guia_edutechlife_modulo5.pdf' },
+    { id: 'res2_m5', name: 'Plantilla Pitch Deck', type: 'template', url: STORAGE + '/modulo%205/7-Ethical_AI_Mastery.pdf' },
+    { id: 'res3_m5', name: 'Infografía Módulo 5', type: 'infographic', url: STORAGE + '/modulo%205/2-guia_edutechlife_modulo5.pdf' }
   ]
 };
 
-router.get('/resources', (req, res) => {
+router.get('/resources', async (req, res) => {
   try {
     const { moduleId, resourceType } = req.query;
 
     let filteredResources = [];
-    if (moduleId && resourcesData[moduleId]) {
-      filteredResources = resourcesData[moduleId];
-    } else {
-      Object.values(resourcesData).forEach(mr => { filteredResources.push(...mr); });
+
+    if (isSupabaseReady()) {
+      try {
+        let topicQuery = supabase.from('module_topics').select('id');
+        if (moduleId) {
+          const modNum = parseInt(moduleId.replace('module', ''));
+          topicQuery = topicQuery.eq('module_id', modNum);
+        }
+        const { data: topics } = await topicQuery;
+        const topicIds = (topics || []).map(t => t.id);
+
+        if (topicIds.length > 0) {
+          let resQuery = supabase
+            .from('module_resources')
+            .select('id, title, type, url, description, sort_order')
+            .in('topic_id', topicIds);
+          if (resourceType && resourceType !== 'all') {
+            resQuery = resQuery.eq('type', resourceType);
+          }
+          const { data: dbResources, error } = await resQuery.order('sort_order');
+
+          if (!error && dbResources && dbResources.length > 0) {
+            filteredResources = dbResources.map((r, i) => ({
+              id: r.id || 'res_db_' + i,
+              name: r.title,
+              type: r.type,
+              url: r.url,
+              description: r.description || ''
+            }));
+          }
+        }
+      } catch (dbErr) {
+        console.warn('[IALab Resources] DB fallback to static:', dbErr.message);
+      }
     }
 
-    if (resourceType && resourceType !== 'all') {
-      filteredResources = filteredResources.filter(r => r.type === resourceType);
+    if (filteredResources.length === 0) {
+      if (moduleId && resourcesData[moduleId]) {
+        filteredResources = resourcesData[moduleId];
+      } else {
+        Object.values(resourcesData).forEach(mr => { filteredResources.push(...mr); });
+      }
+      if (resourceType && resourceType !== 'all') {
+        filteredResources = filteredResources.filter(r => r.type === resourceType);
+      }
     }
 
     console.log('[IALab Resources] Retrieved ' + filteredResources.length + ' resources');

@@ -1,4 +1,4 @@
-export const TOTAL_QUESTIONS = 8;
+export const TOTAL_QUESTIONS = 12;
 export const PASSING_SCORE = 80;
 export const MAX_ATTEMPTS = 3;
 export const ATTEMPT_COOLDOWN_MS = 12 * 60 * 60 * 1000;
@@ -18,10 +18,8 @@ export const SCREENSHOT_OVERLAY_DURATION = 5000;
 export const SECURITY_MESSAGE_DURATION = 3000;
 export const SECURITY_LOG_PREFIX = 'exam_security_logs';
 
-// NOTE: Question content (question text, options, feedback) is currently in Spanish.
-// For full i18n of questions, load localized question data from a locale-aware module
-// (e.g., `import { MODULE_EXAMS } from './ialabQuizData.es'`) based on the current locale.
-// Only the exam UI wrapping text (buttons, labels, messages) is translated via t() in IALabQuizModal.jsx.
+import { MODULE_EXAMS_EN } from './ialabQuizData.en';
+
 export const MODULE_EXAMS = {
   1: [
     {
@@ -54,7 +52,7 @@ export const MODULE_EXAMS = {
         { id: 'm1q3_c', label: 'Elimina la necesidad de contexto' },
         { id: 'm1q3_d', label: 'Automatiza completamente el proceso' }
       ],
-      correctAnswer: 'm1q3_b', topic: 'Mastery Framework', difficulty: 'fácil',
+      correctAnswer: 'm1q3_b', topic: 'Marco de Maestría', difficulty: 'fácil',
       feedback: 'Repasa "La Fórmula del Prompt Perfecto" en los recursos del módulo.'
     },
     {
@@ -109,9 +107,53 @@ export const MODULE_EXAMS = {
         { id: 'm1q8_c', label: 'Usando la menor cantidad de palabras posible' },
         { id: 'm1q8_d', label: 'Copiando prompts de internet' }
       ],
-      correctAnswer: 'm1q8_b', topic: 'Mastery Framework', difficulty: 'difícil',
+      correctAnswer: 'm1q8_b', topic: 'Marco de Maestría', difficulty: 'difícil',
       feedback: 'Practica con las plantillas JSON del módulo para dominar la estructura RTF.'
-    }
+    },
+    {
+      id: 'm1q9', question: 'Trabajas en una empresa que lanza un nuevo producto cada mes. Necesitas que ChatGPT redacte correos promocionales consistentes con la voz de la marca. ¿Cuál es la estrategia más eficiente para mantener consistencia sin reescribir instrucciones cada vez?',
+      options: [
+        { id: 'm1q9_a', label: 'Crear un GPT personalizado con instrucciones de tono, voz y ejemplos de la marca en la base de conocimiento' },
+        { id: 'm1q9_b', label: 'Copiar y pegar las instrucciones manualmente en cada nueva conversación' },
+        { id: 'm1q9_c', label: 'Usar el chat estándar y pedirle que recuerde el tono cada vez' },
+        { id: 'm1q9_d', label: 'Escribir los correos manualmente sin ayuda de IA' }
+      ],
+      correctAnswer: 'm1q9_a', topic: 'GPTs Personalizados', difficulty: 'medio',
+      feedback: 'Un GPT personalizado con instrucciones persistentes y base de conocimiento es la forma más eficiente de mantener consistencia. Revisa el tema de GPTs personalizados en los recursos del módulo.'
+    },
+    {
+      id: 'm1q10', question: 'Escribes un prompt pidiendo un plan de marketing. La IA te da algo genérico. ¿Cuál es el mejor siguiente paso?',
+      options: [
+        { id: 'm1q10_a', label: 'Aceptar el resultado genérico porque la IA ya dio lo mejor que podía' },
+        { id: 'm1q10_b', label: 'Refinar el prompt agregando contexto específico: industria, presupuesto, audiencia objetivo y ejemplos de campañas anteriores' },
+        { id: 'm1q10_c', label: 'Cambiar completamente de tema y empezar de cero' },
+        { id: 'm1q10_d', label: 'Quejarse con el equipo de soporte de la IA' }
+      ],
+      correctAnswer: 'm1q10_b', topic: 'Refinamiento Iterativo', difficulty: 'fácil',
+      feedback: 'La ingeniería de prompts es un proceso iterativo. Cada refinamiento agrega contexto que la IA necesita para darte resultados específicos y útiles. Revisa el tema "Refinamiento de Prompts" en los recursos del módulo.'
+    },
+    {
+      id: 'm1q11', question: '¿Cuál es la diferencia clave entre un prompt zero-shot y uno few-shot?',
+      options: [
+        { id: 'm1q11_a', label: 'Zero-shot no usa ejemplos; few-shot incluye ejemplos en el prompt para guiar a la IA' },
+        { id: 'm1q11_b', label: 'Zero-shot funciona sin internet; few-shot necesita conexión' },
+        { id: 'm1q11_c', label: 'Zero-shot solo funciona con imágenes; few-shot solo con texto' },
+        { id: 'm1q11_d', label: 'No hay diferencia, son términos intercambiables' }
+      ],
+      correctAnswer: 'm1q11_a', topic: 'Estrategias de Prompting', difficulty: 'medio',
+      feedback: 'En zero-shot le das una instrucción directa (una sola vez). En few-shot le proporcionas ejemplos (varias muestras) para establecer el patrón de respuesta deseado. Revisa el tema de estrategias de prompting en los recursos del módulo.'
+    },
+    {
+      id: 'm1q12', question: '¿Qué ventaja tiene usar un system prompt (instrucción del sistema) en lugar de incluir instrucciones en cada mensaje?',
+      options: [
+        { id: 'm1q12_a', label: 'El system prompt establece el comportamiento base de la IA para toda la conversación, evitando repetir instrucciones' },
+        { id: 'm1q12_b', label: 'El system prompt hace que la IA responda más rápido' },
+        { id: 'm1q12_c', label: 'El system prompt solo funciona en la versión paga de ChatGPT' },
+        { id: 'm1q12_d', label: 'No hay diferencia, ambos métodos funcionan igual' }
+      ],
+      correctAnswer: 'm1q12_a', topic: 'System Prompts', difficulty: 'medio',
+      feedback: 'Los system prompts definen el rol, tono y reglas base para toda la interacción. Esto es especialmente útil en GPTs personalizados y aplicaciones donde la consistencia es clave. Revisa el tema de system prompts en los recursos del módulo.'
+    },
   ],
   2: [
     {
@@ -203,82 +245,183 @@ export const MODULE_EXAMS = {
       feedback: 'La IA debe aumentar la capacidad humana, no reemplazarla sin supervisión. La mejor práctica es un sistema híbrido: IA para velocidad + supervisión humana para precisión. Revisa las buenas prácticas del módulo sobre uso responsable de IA.'
     },
     {
-      id: 'm3q2', question: '¿Qué es Deep Research en Gemini y para qué sirve?',
+      id: 'm2q9', question: 'Un equipo de 5 vendedores quiere usar ChatGPT para mantener actualizada su base de conocimientos de productos. Cada vendedor tiene conversaciones diferentes con clientes distintos. ¿Cuál es la mejor estrategia para que todos compartan información actualizada?',
       options: [
-        { id: 'm3q2_a', label: 'Una función que hace búsquedas superficiales en Google' },
-        { id: 'm3q2_b', label: 'Una herramienta que investiga a profundidad, analiza múltiples fuentes y genera informes con citas verificables' },
-        { id: 'm3q2_c', label: 'Un juego de preguntas y respuestas' },
-        { id: 'm3q2_d', label: 'Una extensión para el navegador Chrome' }
+        { id: 'm2q9_a', label: 'Crear un Proyecto compartido con instrucciones de producto y actualizar la base de conocimiento centralizada' },
+        { id: 'm2q9_b', label: 'Cada vendedor mantiene su propio chat con las instrucciones que recuerda' },
+        { id: 'm2q9_c', label: 'Usar un GPT público que todos puedan descargar' },
+        { id: 'm2q9_d', label: 'Compartir capturas de pantalla de los chats por correo electrónico' }
       ],
-      correctAnswer: 'm3q2_b', topic: 'Deep Research', difficulty: 'fácil',
+      correctAnswer: 'm2q9_a', topic: 'Proyectos ChatGPT', difficulty: 'medio',
+      feedback: 'Los Proyectos en ChatGPT permiten agrupar conversaciones bajo instrucciones y archivos compartidos. Revisa el tema de Proyectos en los recursos del módulo.'
+    },
+    {
+      id: 'm2q10', question: 'Estás diseñando un GPT de atención al cliente. Quieres que pueda consultar el catálogo de productos actualizado diariamente. ¿Qué funcionalidad debes activar?',
+      options: [
+        { id: 'm2q10_a', label: 'Subir el catálogo como base de conocimiento y usar Actions (API) para consultar actualizaciones en tiempo real' },
+        { id: 'm2q10_b', label: 'Pedir al usuario que copie y pegue el catálogo cada vez' },
+        { id: 'm2q10_c', label: 'Usar DALL-E para generar imágenes del catálogo' },
+        { id: 'm2q10_d', label: 'No es posible consultar datos actualizados en un GPT' }
+      ],
+      correctAnswer: 'm2q10_a', topic: 'GPTs Personalizados', difficulty: 'difícil',
+      feedback: 'Los GPTs pueden tener base de conocimiento estática + Actions (API calls) para datos dinámicos. Esto permite consultar información actualizada en tiempo real. Revisa el tema "Conecta ChatGPT con el Mundo Real".'
+    },
+    {
+      id: 'm2q11', question: 'Un GPT que creaste para tu startup está funcionando muy bien internamente. Tu socio sugiere publicarlo en la GPT Store para que otras startups también lo usen. ¿Qué consideración de privacidad debes evaluar PRIMERO?',
+      options: [
+        { id: 'm2q11_a', label: 'Si el GPT contiene datos sensibles de tu empresa en la base de conocimiento o en las instrucciones del sistema' },
+        { id: 'm2q11_b', label: 'Si el nombre del GPT es lo suficientemente llamativo' },
+        { id: 'm2q11_c', label: 'Si el GPT tiene suficientes funcionalidades para justificar su precio' },
+        { id: 'm2q11_d', label: 'Si el logo del GPT se ve profesional' }
+      ],
+      correctAnswer: 'm2q11_a', topic: 'Privacidad GPT', difficulty: 'medio',
+      feedback: 'Antes de publicar un GPT, verifica que no contenga datos confidenciales (secretos comerciales, datos de clientes, estrategias internas). Lo que funciona internamente no siempre es seguro para publicación pública. Repasa el tema de privacidad en GPTs.'
+    },
+    {
+      id: 'm2q12', question: 'Quieres crear un flujo automatizado donde ChatGPT analice comentarios de redes sociales, identifique quejas urgentes y envíe notificaciones al equipo de soporte. ¿Qué combinación de herramientas necesitas?',
+      options: [
+        { id: 'm2q12_a', label: 'Un GPT personalizado con Actions (API) conectado a la red social + webhook al sistema de tickets del equipo' },
+        { id: 'm2q12_b', label: 'ChatGPT estándar con Búsqueda Web activada' },
+        { id: 'm2q12_c', label: 'DALL-E 3 para generar respuestas visuales automáticas' },
+        { id: 'm2q12_d', label: 'Canvas para editar manualmente cada comentario' }
+      ],
+      correctAnswer: 'm2q12_a', topic: 'Automatización', difficulty: 'difícil',
+      feedback: 'La automatización con IA requiere: un GPT preparado para la tarea + Actions (API) para conectarse a servicios externos + un webhook o API para disparar acciones. Repasa el tema de automatización y Function Calling en el módulo.'
+    },
+  ],
+  3: [
+    {
+      id: 'm3q1', question: '¿Qué es Deep Research en Gemini y para qué sirve?',
+      options: [
+        { id: 'm3q1_a', label: 'Una función que hace búsquedas superficiales en Google' },
+        { id: 'm3q1_b', label: 'Una herramienta que investiga a profundidad, analiza múltiples fuentes y genera informes con citas verificables' },
+        { id: 'm3q1_c', label: 'Un juego de preguntas y respuestas' },
+        { id: 'm3q1_d', label: 'Una extensión para el navegador Chrome' }
+      ],
+      correctAnswer: 'm3q1_b', topic: 'Deep Research', difficulty: 'fácil',
       feedback: 'Deep Research crea informes detallados con fuentes citadas y verificables. Explora el tema "Investiga como un Detective Digital".'
     },
     {
-      id: 'm3q3', question: '¿Por qué es importante verificar las fuentes que Gemini cita en sus investigaciones?',
+      id: 'm3q2', question: '¿Por qué es importante verificar las fuentes que Gemini cita en sus investigaciones?',
       options: [
-        { id: 'm3q3_a', label: 'Porque las citas siempre son incorrectas' },
-        { id: 'm3q3_b', label: 'Porque aunque Gemini es muy preciso, siempre debes confirmar que la fuente es real y el contexto es correcto' },
-        { id: 'm3q3_c', label: 'Porque Gemini no proporciona fuentes' },
-        { id: 'm3q3_d', label: 'Porque las fuentes solo funcionan en inglés' }
+        { id: 'm3q2_a', label: 'Porque las citas siempre son incorrectas' },
+        { id: 'm3q2_b', label: 'Porque aunque Gemini es muy preciso, siempre debes confirmar que la fuente es real y el contexto es correcto' },
+        { id: 'm3q2_c', label: 'Porque Gemini no proporciona fuentes' },
+        { id: 'm3q2_d', label: 'Porque las fuentes solo funcionan en inglés' }
       ],
-      correctAnswer: 'm3q3_b', topic: 'Verificación de Fuentes', difficulty: 'medio',
+      correctAnswer: 'm3q2_b', topic: 'Verificación de Fuentes', difficulty: 'medio',
       feedback: 'La verificación humana es esencial. Incluso la mejor IA puede cometer errores. Revisa el OVA "De Cero a Experto en IA".'
     },
     {
-      id: 'm3q4', question: '¿Qué ventaja ofrece Canvas al trabajar con documentos largos en un entorno de IA?',
+      id: 'm3q3', question: '¿Qué ventaja ofrece Canvas al trabajar con documentos largos en un entorno de IA?',
       options: [
-        { id: 'm3q4_a', label: 'Solo sirve para hacer dibujos artísticos' },
-        { id: 'm3q4_b', label: 'Permite editar partes específicas de un texto sin tener que regenerar todo el contenido, ideal para informes y ensayos' },
-        { id: 'm3q4_c', label: 'Convierte automáticamente cualquier texto en un video' },
-        { id: 'm3q4_d', label: 'Traduce documentos a más de 200 idiomas' }
+        { id: 'm3q3_a', label: 'Solo sirve para hacer dibujos artísticos' },
+        { id: 'm3q3_b', label: 'Permite editar partes específicas de un texto sin tener que regenerar todo el contenido, ideal para informes y ensayos' },
+        { id: 'm3q3_c', label: 'Convierte automáticamente cualquier texto en un video' },
+        { id: 'm3q3_d', label: 'Traduce documentos a más de 200 idiomas' }
       ],
-      correctAnswer: 'm3q4_b', topic: 'Canvas', difficulty: 'medio',
+      correctAnswer: 'm3q3_b', topic: 'Canvas', difficulty: 'medio',
       feedback: 'Canvas es perfecto para editar secciones de documentos extensos. Revisa el OVA "Gemini en Acción: Casos Reales".'
     },
     {
-      id: 'm3q5', question: '¿Cómo se integra Gemini con Google Workspace (Docs, Sheets, Gmail)?',
+      id: 'm3q4', question: '¿Cómo se integra Gemini con Google Workspace (Docs, Sheets, Gmail)?',
       options: [
-        { id: 'm3q5_a', label: 'No se integra, son productos separados' },
-        { id: 'm3q5_b', label: 'Gemini puede resumir correos, analizar datos en Sheets y ayudar a redactar en Docs directamente desde cada aplicación' },
-        { id: 'm3q5_c', label: 'Solo funciona en Google Slides' },
-        { id: 'm3q5_d', label: 'Requiere instalar un programa adicional en la computadora' }
+        { id: 'm3q4_a', label: 'No se integra, son productos separados' },
+        { id: 'm3q4_b', label: 'Gemini puede resumir correos, analizar datos en Sheets y ayudar a redactar en Docs directamente desde cada aplicación' },
+        { id: 'm3q4_c', label: 'Solo funciona en Google Slides' },
+        { id: 'm3q4_d', label: 'Requiere instalar un programa adicional en la computadora' }
       ],
-      correctAnswer: 'm3q5_b', topic: 'Google Workspace', difficulty: 'medio',
+      correctAnswer: 'm3q4_b', topic: 'Google Workspace', difficulty: 'medio',
       feedback: 'Gemini está integrado en todo Google Workspace. Repasa el tema "Gemini en Google Drive: Guía Completa".'
     },
     {
-      id: 'm3q6', question: '¿Qué es el "grounding" o conexión a datos en tiempo real en Gemini?',
+      id: 'm3q5', question: '¿Qué es el "grounding" o conexión a datos en tiempo real en Gemini?',
       options: [
-        { id: 'm3q6_a', label: 'Una técnica para que la IA funcione sin internet' },
-        { id: 'm3q6_b', label: 'La capacidad de conectar las respuestas de Gemini con información actualizada de Google Search y otras fuentes en vivo' },
-        { id: 'm3q6_c', label: 'Un tipo de cable para conectar la computadora' },
-        { id: 'm3q6_d', label: 'Una función que solo funciona los fines de semana' }
+        { id: 'm3q5_a', label: 'Una técnica para que la IA funcione sin internet' },
+        { id: 'm3q5_b', label: 'La capacidad de conectar las respuestas de Gemini con información actualizada de Google Search y otras fuentes en vivo' },
+        { id: 'm3q5_c', label: 'Un tipo de cable para conectar la computadora' },
+        { id: 'm3q5_d', label: 'Una función que solo funciona los fines de semana' }
       ],
-      correctAnswer: 'm3q6_b', topic: 'Grounding', difficulty: 'difícil',
+      correctAnswer: 'm3q5_b', topic: 'Grounding', difficulty: 'difícil',
       feedback: 'El grounding te da respuestas basadas en información actual. Explora el tema "Respuestas Siempre Actualizadas".'
     },
     {
-      id: 'm3q7', question: 'En el contexto de aprendizaje guiado, ¿cuál es la mejor manera de usar Gemini para estudiar un tema nuevo?',
+      id: 'm3q6', question: 'En el contexto de aprendizaje guiado, ¿cuál es la mejor manera de usar Gemini para estudiar un tema nuevo?',
       options: [
-        { id: 'm3q7_a', label: 'Pedirle que escriba todo el ensayo y entregarlo sin leer' },
-        { id: 'm3q7_b', label: 'Usarlo como tutor: hacer preguntas progresivas, pedir ejemplos, verificar conceptos y practicar con ejercicios guiados' },
-        { id: 'm3q7_c', label: 'Solo usarlo para traducir textos' },
-        { id: 'm3q7_d', label: 'Evitar usarlo porque confunde más de lo que ayuda' }
+        { id: 'm3q6_a', label: 'Pedirle que escriba todo el ensayo y entregarlo sin leer' },
+        { id: 'm3q6_b', label: 'Usarlo como tutor: hacer preguntas progresivas, pedir ejemplos, verificar conceptos y practicar con ejercicios guiados' },
+        { id: 'm3q6_c', label: 'Solo usarlo para traducir textos' },
+        { id: 'm3q6_d', label: 'Evitar usarlo porque confunde más de lo que ayuda' }
       ],
-      correctAnswer: 'm3q7_b', topic: 'Aprendizaje Guiado', difficulty: 'fácil',
+      correctAnswer: 'm3q6_b', topic: 'Aprendizaje Guiado', difficulty: 'fácil',
       feedback: 'La IA es tu tutor personal 24/7. Úsala para aprender activamente, no para evitar el esfuerzo. Repasa el laboratorio guiado por Valerio.'
     },
     {
-      id: 'm3q8', question: 'Tienes que investigar las 5 tendencias principales de IA en 2025. ¿Qué flujo de trabajo con Gemini te daría el resultado más completo y verificable?',
+      id: 'm3q7', question: 'Tienes que investigar las 5 tendencias principales de IA en 2025. ¿Qué flujo de trabajo con Gemini te daría el resultado más completo y verificable?',
       options: [
-        { id: 'm3q8_a', label: 'Preguntar "¿cuáles son las tendencias de IA?" y aceptar la primera respuesta' },
-        { id: 'm3q8_b', label: 'Usar Deep Research con instrucciones específicas, verificar cada fuente citada, cruzar datos con Google Search y generar un informe estructurado' },
-        { id: 'm3q8_c', label: 'Buscar en Google manualmente y copiar los primeros resultados' },
-        { id: 'm3q8_d', label: 'Usar solo el chat básico sin pedir fuentes' }
+        { id: 'm3q7_a', label: 'Preguntar "¿cuáles son las tendencias de IA?" y aceptar la primera respuesta' },
+        { id: 'm3q7_b', label: 'Usar Deep Research con instrucciones específicas, verificar cada fuente citada, cruzar datos con Google Search y generar un informe estructurado' },
+        { id: 'm3q7_c', label: 'Buscar en Google manualmente y copiar los primeros resultados' },
+        { id: 'm3q7_d', label: 'Usar solo el chat básico sin pedir fuentes' }
       ],
-      correctAnswer: 'm3q8_b', topic: 'Investigación Profesional', difficulty: 'difícil',
+      correctAnswer: 'm3q7_b', topic: 'Investigación Profesional', difficulty: 'difícil',
       feedback: 'El flujo profesional combina Deep Research + verificación + síntesis. Practica con el OVA "Casos Prácticos de Gemini".'
-    }
+    },
+    {
+      id: 'm3q8', question: 'Un periodista necesita investigar un tema complejo (cambio climático en Latinoamérica) con fuentes verificables. Tiene 2 horas para preparar un informe. ¿Qué flujo con Gemini le daría el mejor resultado en el menor tiempo?',
+      options: [
+        { id: 'm3q8_a', label: 'Usar Deep Research con palabras clave específicas, luego verificar las fuentes citadas y sintetizar en un informe estructurado en Google Docs con Gemini integrado' },
+        { id: 'm3q8_b', label: 'Leer 20 artículos manualmente en Google y escribir el informe desde cero' },
+        { id: 'm3q8_c', label: 'Pedirle al chat de Gemini que resuma todo de una sola vez sin pedir fuentes' },
+        { id: 'm3q8_d', label: 'Usar solo Google Search tradicional sin ayuda de IA' }
+      ],
+      correctAnswer: 'm3q8_a', topic: 'Deep Research', difficulty: 'medio',
+      feedback: 'La combinación Deep Research + verificación + Gemini en Google Docs acelera la investigación sin sacrificar precisión. Deep Research encuentra y analiza fuentes, tú verificas y sintetizas. Repasa el tema "Investiga como un Detective Digital".'
+    },
+    {
+      id: 'm3q9', question: 'Gemini puede procesar texto, imágenes, audio y video en una misma conversación. ¿Cómo se llama esta capacidad?',
+      options: [
+        { id: 'm3q9_a', label: 'Multimodalidad — Gemini puede entender y razonar sobre múltiples tipos de contenido simultáneamente' },
+        { id: 'm3q9_b', label: 'Transfer learning — Gemini aprende de un tipo de dato y lo aplica a otro' },
+        { id: 'm3q9_c', label: 'Tokenización avanzada — Gemini convierte todo a tokens numéricos' },
+        { id: 'm3q9_d', label: 'Procesamiento por lotes — Gemini procesa cada tipo de dato por separado' }
+      ],
+      correctAnswer: 'm3q9_a', topic: 'Multimodalidad', difficulty: 'fácil',
+      feedback: 'La multimodalidad es una de las capacidades más potentes de Gemini: puedes mostrarle una imagen, pedirle que analice un video, y que lea un PDF todo en la misma conversación. Revisa el OVA "Gemini en Acción: Casos Reales".'
+    },
+    {
+      id: 'm3q10', question: 'Estás en una reunión y necesitas que Gemini analice un gráfico financiero que te acaban de mostrar en la computadora, sin tener que subir el archivo. ¿Cómo puedes hacerlo?',
+      options: [
+        { id: 'm3q10_a', label: 'Usar Gemini Live para compartir pantalla y hacer preguntas en tiempo real sobre lo que se muestra' },
+        { id: 'm3q10_b', label: 'Tomar foto del gráfico con el celular y subirla después de la reunión' },
+        { id: 'm3q10_c', label: 'Dibujar el gráfico de memoria y pedirle a Gemini que lo interprete' },
+        { id: 'm3q10_d', label: 'No es posible — Gemini solo analiza archivos subidos explícitamente' }
+      ],
+      correctAnswer: 'm3q10_a', topic: 'Gemini Live', difficulty: 'medio',
+      feedback: 'Gemini Live permite interacciones en tiempo real con capacidad de compartir pantalla, ideal para reuniones y sesiones de trabajo colaborativo. Repasa el tema "Gemini en Tiempo Real" en los recursos del módulo.'
+    },
+    {
+      id: 'm3q11', question: '¿Cuál es la ventaja de usar extensiones de Gemini (Google Flights, Hotels, Maps) integradas en el chat?',
+      options: [
+        { id: 'm3q11_a', label: 'Gemini puede acceder a información actualizada de servicios de Google sin salir del chat, dando respuestas contextuales con datos en vivo' },
+        { id: 'm3q11_b', label: 'Las extensiones reemplazan completamente a los sitios web de Google' },
+        { id: 'm3q11_c', label: 'Solo funcionan para reservar vuelos, no para otras tareas' },
+        { id: 'm3q11_d', label: 'Requieren una suscripción adicional a Google One' }
+      ],
+      correctAnswer: 'm3q11_a', topic: 'Extensiones Gemini', difficulty: 'medio',
+      feedback: 'Las extensiones conectan Gemini con servicios de Google en tiempo real, permitiendo respuestas contextuales y actualizadas. Es parte del ecosistema de grounding de Gemini. Repasa el tema "Extiende las Capacidades de Gemini".'
+    },
+    {
+      id: 'm3q12', question: 'Un estudiante universitario usa Gemini Advanced para investigar. ¿Qué beneficio adicional obtiene con Google One AI Premium?',
+      options: [
+        { id: 'm3q12_a', label: 'Acceso a Gemini en Gmail, Docs, Sheets y Slides, más almacenamiento en la nube y las capacidades más avanzadas del modelo' },
+        { id: 'm3q12_b', label: 'Solo más almacenamiento en Google Drive, sin beneficios de IA' },
+        { id: 'm3q12_c', label: 'Acceso ilimitado a DALL-E 3 para generar imágenes' },
+        { id: 'm3q12_d', label: 'Eliminación completa de los límites de uso de Gemini' }
+      ],
+      correctAnswer: 'm3q12_a', topic: 'Google One', difficulty: 'fácil',
+      feedback: 'Google One AI Premium integra Gemini en todo Workspace + da acceso al modelo más avanzado + almacenamiento adicional. Es el plan más completo para estudiantes e investigadores. Revisa el tema "Planes y Suscripciones de Gemini".'
+    },
   ],
   4: [
     {
@@ -369,6 +512,50 @@ export const MODULE_EXAMS = {
       correctAnswer: 'm4q8_a', topic: 'Colaboración', difficulty: 'medio',
       feedback: 'NotebookLM permite compartir notebooks como Google Docs. Cada miembro puede tener su notebook temático y compartirlo, dando acceso a todo el equipo para consultar fuentes y hacer preguntas de forma independiente. Repasa el OVA "Laboratorio: Crea tu Notebook".'
     },
+    {
+      id: 'm4q9', question: 'Tienes 10 fuentes en tu notebook y quieres extraer solo las conclusiones principales sobre un tema específico (ej: "eficiencia energética"). ¿Cuál es la forma más eficiente de hacerlo?',
+      options: [
+        { id: 'm4q9_a', label: 'Hacer una pregunta específica a NotebookLM como "Según mis fuentes, ¿cuáles son las conclusiones principales sobre eficiencia energética? Las respuestas deben citar textualmente las fuentes"' },
+        { id: 'm4q9_b', label: 'Leer las 10 fuentes completas una por una y tomar notas manualmente' },
+        { id: 'm4q9_c', label: 'Pedirle a ChatGPT que haga el análisis sin subir las fuentes' },
+        { id: 'm4q9_d', label: 'Usar la Guía de Estudio automática y copiar todo sin filtrar' }
+      ],
+      correctAnswer: 'm4q9_a', topic: 'NotebookLM', difficulty: 'medio',
+      feedback: 'La ventaja de NotebookLM es que puedes hacer preguntas específicas y obtienes respuestas citadas de tus fuentes. No necesitas leer todo — la IA encuentra las secciones relevantes por ti. Repasa el video "Primeros Pasos con NotebookLM".'
+    },
+    {
+      id: 'm4q10', question: '¿Cuál es el límite actual de fuentes que puedes agregar a un solo notebook en NotebookLM?',
+      options: [
+        { id: 'm4q10_a', label: 'Hasta 50 fuentes por notebook, cada fuente puede tener hasta 500,000 palabras aproximadamente' },
+        { id: 'm4q10_b', label: 'Ilimitado, puedes subir todas las fuentes que quieras sin restricción' },
+        { id: 'm4q10_c', label: 'Máximo 10 fuentes por notebook, sin importar su tamaño' },
+        { id: 'm4q10_d', label: 'Máximo 100 fuentes pero cada una de solo 10 páginas' }
+      ],
+      correctAnswer: 'm4q10_a', topic: 'Límites NotebookLM', difficulty: 'medio',
+      feedback: 'Conocer los límites técnicos de las herramientas es parte del uso profesional. NotebookLM permite hasta 50 fuentes con un límite de palabras considerable. Revisa la documentación y los recursos del módulo sobre NotebookLM.'
+    },
+    {
+      id: 'm4q11', question: 'Generas un Audio Overview desde tu notebook y los anfitriones IA conversan sobre tus fuentes. ¿Qué control tienes sobre el contenido del audio generado?',
+      options: [
+        { id: 'm4q11_a', label: 'Puedes personalizar los temas a cubrir y regenerar si no te gusta el resultado, pero el formato es conversacional entre dos voces IA' },
+        { id: 'm4q11_b', label: 'No tienes ningún control, el audio se genera automáticamente sin opciones' },
+        { id: 'm4q11_c', label: 'Puedes elegir la voz exacta, el tono y escribir el guion completo manualmente' },
+        { id: 'm4q11_d', label: 'Solo puedes decidir si incluir música de fondo o no' }
+      ],
+      correctAnswer: 'm4q11_a', topic: 'Audio Overview', difficulty: 'fácil',
+      feedback: 'Audio Overview genera un podcast conversacional automático. Puedes regenerarlo si no se ajusta a lo que necesitas y orientarlo con las instrucciones del notebook. Revisa el video "Audio Overview: Tu Contenido en Podcast".'
+    },
+    {
+      id: 'm4q12', question: 'Un abogado sube 30 contratos legales a un notebook y pregunta: "¿Qué contratos tienen cláusulas de confidencialidad que expiran en menos de 2 años?" NotebookLM responde citando 5 contratos específicos con números de página. ¿Qué validación adicional debería hacer el abogado?',
+      options: [
+        { id: 'm4q12_a', label: 'Hacer clic en cada cita para verificar que la interpretación de la IA coincide con el texto completo de la cláusula, no solo el fragmento citado' },
+        { id: 'm4q12_b', label: 'Confiar en la respuesta porque NotebookLM cita textualmente las fuentes' },
+        { id: 'm4q12_c', label: 'Revisar solo 1 de los 5 contratos citados para ahorrar tiempo' },
+        { id: 'm4q12_d', label: 'Pedirle a ChatGPT que verifique si NotebookLM tenía razón' }
+      ],
+      correctAnswer: 'm4q12_a', topic: 'Validación Legal', difficulty: 'difícil',
+      feedback: 'En contextos legales, la verificación humana es obligatoria. Aunque NotebookLM cita textualmente, el contexto completo de la cláusula puede cambiar la interpretación. La IA acelera la revisión, pero el profesional legal es el responsable final. Repasa el tema de verificación de fuentes en el módulo.'
+    },
   ],
   5: [
     {
@@ -458,6 +645,57 @@ export const MODULE_EXAMS = {
       ],
       correctAnswer: 'm5q8_b', topic: 'Protección de Datos', difficulty: 'difícil',
       feedback: 'La protección de datos es responsabilidad tuya. Usa herramientas seguras, anonimiza y nunca compartas información sensible. Repasa "Protege tus Datos en la Era de la IA".'
+    },
+    {
+      id: 'm5q9', question: 'La Unión Europea clasifica los sistemas de IA por nivel de riesgo (mínimo, limitado, alto, inaceptable). Un sistema que determina el acceso a servicios financieros esenciales (como aprobar una hipoteca) entraría en la categoría de "alto riesgo". ¿Qué obligación impone esta clasificación?',
+      options: [
+        { id: 'm5q9_a', label: 'Evaluaciones de conformidad, documentación técnica, transparencia y supervisión humana obligatoria' },
+        { id: 'm5q9_b', label: 'Prohibición total del uso de IA en servicios financieros' },
+        { id: 'm5q9_c', label: 'Registro voluntario sin obligaciones específicas' },
+        { id: 'm5q9_d', label: 'Solo pagar una tasa anual por usar el sistema' }
+      ],
+      correctAnswer: 'm5q9_a', topic: 'Marco Regulatorio', difficulty: 'difícil',
+      feedback: 'El AI Act europeo es el primer marco regulatorio integral de IA. Los sistemas de alto riesgo requieren evaluaciones de conformidad, documentación, transparencia y supervisión humana. Es importante conocer el marco regulatorio al desarrollar soluciones de IA. Revisa el tema "Marco Legal y Regulatorio de la IA".'
+    },
+    {
+      id: 'm5q10', question: 'Un equipo de data scientists entrena un modelo para predecir éxito académico. Descubren que el modelo asigna puntuaciones más bajas a estudiantes de ciertas regiones geográficas, incluso controlando por calificaciones y recursos. ¿Qué métrica de equidad deberían priorizar para diagnosticar el problema?',
+      options: [
+        { id: 'm5q10_a', label: 'Paridad demográfica — verificar si la tasa de predicción positiva es similar entre grupos geográficos' },
+        { id: 'm5q10_b', label: 'Precisión general del modelo sin desglosar por grupos' },
+        { id: 'm5q10_c', label: 'Velocidad de entrenamiento del modelo' },
+        { id: 'm5q10_d', label: 'Cantidad total de datos de entrenamiento' }
+      ],
+      correctAnswer: 'm5q10_a', topic: 'Equidad Algorítmica', difficulty: 'difícil',
+      feedback: 'La paridad demográfica (demographic parity) mide si las predicciones del modelo son equitativas entre grupos. Si el modelo predice éxito con menor frecuencia para ciertas regiones, hay un sesgo que debe investigarse y corregirse. Revisa el OVA "Laboratorio: Detecta el Sesgo".'
+    },
+    {
+      id: 'm5q11', question: 'Estás desarrollando una app educativa con IA que recopila datos de rendimiento de estudiantes. Siguiendo el principio de minimización de datos, ¿cuál es la práctica correcta?',
+      options: [
+        { id: 'm5q11_a', label: 'Recopilar solo los datos estrictamente necesarios para la funcionalidad educativa, con consentimiento informado y política de eliminación clara' },
+        { id: 'm5q11_b', label: 'Recopilar todos los datos posibles "por si acaso" se necesitan después' },
+        { id: 'm5q11_c', label: 'Compartir los datos automáticamente con terceros sin notificar a los usuarios' },
+        { id: 'm5q11_d', label: 'Almacenar los datos indefinidamente sin plan de eliminación' }
+      ],
+      correctAnswer: 'm5q11_a', topic: 'Privacidad por Diseño', difficulty: 'medio',
+      feedback: 'La minimización de datos es un principio fundamental de privacidad: solo recopila lo necesario, con consentimiento, y ten un plan claro de eliminación. Repasa el tema "Protege tus Datos en la Era de la IA" y el PDF "Manual de Privacidad en IA".'
+    },
+    {
+      id: 'm5q12', question: 'Un equipo de IA documenta su modelo con una model card (tarjeta de modelo). Según las mejores prácticas, ¿qué información DEBE incluir?',
+      options: [
+        { id: 'm5q12_a', label: 'Propósito del modelo, datos de entrenamiento, métricas de rendimiento por subgrupos, limitaciones conocidas y consideraciones éticas' },
+        { id: 'm5q12_b', label: 'Solo el nombre del modelo y la versión' },
+        { id: 'm5q12_c', label: 'Los nombres completos de los desarrolladores y sus salarios' },
+        { id: 'm5q12_d', label: 'El código fuente completo del modelo' }
+      ],
+      correctAnswer: 'm5q12_a', topic: 'Documentación Ética', difficulty: 'medio',
+      feedback: 'Las model cards son un estándar de transparencia en IA. Incluyen propósito, datos, métricas por subgrupo, limitaciones y consideraciones éticas. Permiten a los usuarios entender las capacidades y limitaciones del modelo antes de usarlo. Repasa el tema de transparencia en IA en los recursos del módulo.'
     }
   ]
 };
+
+export function getModuleExams(locale) {
+  if (locale && locale.startsWith('en')) {
+    return MODULE_EXAMS_EN;
+  }
+  return MODULE_EXAMS;
+}

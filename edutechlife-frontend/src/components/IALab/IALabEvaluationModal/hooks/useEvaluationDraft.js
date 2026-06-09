@@ -19,7 +19,7 @@ export function useEvaluationDraft({ isOpen, userId, moduleId, responses, onSubm
       if (error) throw error;
       if (data?.completed_lessons) {
         const draft = data.completed_lessons;
-        return { ej1: draft.ej1, ej2: draft.ej2, ej3: draft.ej3 };
+        return { ej1: draft.ej1, ej2: draft.ej2, ej3: draft.ej3, ej4: draft.ej4 };
       }
     } catch (err) {
       console.warn('Error restaurando borrador:', err);
@@ -51,6 +51,7 @@ export function useEvaluationDraft({ isOpen, userId, moduleId, responses, onSubm
           if (draft.ej1) onSubmitComplete('ej1', draft.ej1);
           if (draft.ej2) onSubmitComplete('ej2', draft.ej2);
           if (draft.ej3) onSubmitComplete('ej3', draft.ej3);
+          if (draft.ej4) onSubmitComplete('ej4', draft.ej4);
         }
       };
       restore();
@@ -59,7 +60,7 @@ export function useEvaluationDraft({ isOpen, userId, moduleId, responses, onSubm
 
   useEffect(() => {
     if (!isOpen || !userId || !moduleId) return;
-    const hasContent = responses.ej1 || responses.ej2 || responses.ej3;
+    const hasContent = responses.ej1 || responses.ej2 || responses.ej3 || responses.ej4;
     if (!hasContent) return;
 
     if (saveDraftTimerRef.current) {

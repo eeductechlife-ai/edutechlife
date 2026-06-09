@@ -13,7 +13,7 @@ export function useSwipeNavigation({ onSwipeLeft, onSwipeRight, threshold = 80 }
     const dx = e.changedTouches[0].clientX - touchStartX.current;
     const dy = e.changedTouches[0].clientY - touchStartY.current;
 
-    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > threshold) {
+    if (Math.abs(dx) > Math.abs(dy) * 1.5 && Math.abs(dx) > threshold) {
       if (dx > 0) onSwipeRight?.();
       else onSwipeLeft?.();
     }

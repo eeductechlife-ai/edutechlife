@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from '../i18n/I18nProvider';
 import { Icon } from '../utils/iconMapping.jsx';
 
@@ -17,6 +17,7 @@ const VideoPlayer = ({ url, title, autoPlay = false }) => {
   const playerRef = useRef(null);
   const hideTimer = useRef(null);
   const progressTimer = useRef(null);
+  const transcriptRef = useRef(null);
 
   const [playing, setPlaying] = useState(autoPlay);
   const [currentTime, setCurrentTime] = useState(0);
@@ -28,6 +29,10 @@ const VideoPlayer = ({ url, title, autoPlay = false }) => {
   const [buffering, setBuffering] = useState(false);
   const [showControls, setShowControls] = useState(true);
   const [ccActive, setCcActive] = useState(false);
+  const [transcript, setTranscript] = useState(null);
+  const [showTranscript, setShowTranscript] = useState(false);
+  const [loadingTranscript, setLoadingTranscript] = useState(false);
+  const [transcriptError, setTranscriptError] = useState(null);
 
   const videoId = url?.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/v\/)([^&\n?#]+)/)?.[1] ||
     url?.match(/youtube\.com\/watch\?.*v=([^&\n?#]+)/)?.[1];
@@ -128,6 +133,48 @@ const VideoPlayer = ({ url, title, autoPlay = false }) => {
     } catch {}
   };
 
+  const fetchTranscript = useCallback(async () => {
+    if (!videoId) return;
+    setLoadingTranscript(true);
+    setTranscriptError(null);
+    try {
+      const res = await fetch(`https://youtubetranscript.com/?v=${videoId}`);
+      if (!res.ok) throw new Error('Transcript fetch failed');
+      const data = await res.json();
+      setTranscript(data);
+    } catch {
+      setTranscriptError(t('video.transcript_error'));
+      setTranscript(null);
+    } finally {
+      setLoadingTranscript(false);
+    }
+  }, [videoId, t]);
+
+  const seekToCue = (time) => {
+    if (!playerRef.current || !duration) return;
+    try {
+      playerRef.current.seekTo(time, true);
+      if (!playing) playerRef.current.playVideo();
+    } catch {}
+  };
+
+  const activeCueIndex = transcript
+    ? transcript.findIndex((cue) => currentTime >= cue.start && currentTime < cue.start + cue.duration)
+    : -1;
+
+  useEffect(() => {
+    if (showTranscript && !transcript && !loadingTranscript && !transcriptError) {
+      fetchTranscript();
+    }
+  }, [showTranscript, transcript, loadingTranscript, transcriptError, fetchTranscript]);
+
+  useEffect(() => {
+    if (showTranscript && activeCueIndex >= 0 && transcriptRef.current) {
+      const el = transcriptRef.current.querySelector(`[data-cue-index="${activeCueIndex}"]`);
+      if (el) el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+  }, [activeCueIndex, showTranscript]);
+
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   useEffect(() => {
@@ -140,6 +187,7 @@ const VideoPlayer = ({ url, title, autoPlay = false }) => {
         case 'ArrowRight': case 'l': e.preventDefault(); seek(Math.min(1, (currentTime + 10) / Math.max(duration, 1))); break;
         case 'ArrowLeft': case 'j': e.preventDefault(); seek(Math.max(0, (currentTime - 10) / Math.max(duration, 1))); break;
         case 'c': e.preventDefault(); toggleCaptions(); break;
+        case 't': e.preventDefault(); setShowTranscript(s => !s); break;
       }
     };
     window.addEventListener('keydown', h);
@@ -163,17 +211,29 @@ const VideoPlayer = ({ url, title, autoPlay = false }) => {
   return (
     <div className="relative bg-gradient-to-br from-[#0A1729] to-[#004B63] rounded-2xl overflow-hidden border border-[#4DA8C4]/20 shadow-2xl">
       <div className="px-6 py-4 border-b border-[#4DA8C4]/20 bg-gradient-to-r from-[#004B63]/50 to-transparent">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] rounded-lg flex items-center justify-center">
-              <Icon name="fa-play" className="text-white" />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] rounded-lg flex items-center justify-center">
+                <Icon name="fa-play" className="text-white" />
+              </div>
+              <div>
+                <h3 className="font-bold text-white">{title || t('video.module_video')}</h3>
+                <p className="text-sm text-[#B2D8E5]">{t('video.premium_content')}</p>
+              </div>
             </div>
-            <div>
-              <h3 className="font-bold text-white">{title || t('video.module_video')}</h3>
-              <p className="text-sm text-[#B2D8E5]">{t('video.premium_content')}</p>
-            </div>
+            <button
+              onClick={() => setShowTranscript(s => !s)}
+              className={`px-3 py-1.5 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors border-none ${
+                showTranscript
+                  ? 'bg-[#00BCD4]/20 text-[#00BCD4]'
+                  : 'bg-white/10 text-white/80 hover:bg-white/20 hover:text-white'
+              }`}
+              aria-label={t('video.transcript')}
+            >
+              <Icon name="fa-align-left" className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">{t('video.transcript')}</span>
+            </button>
           </div>
-        </div>
       </div>
 
       <div className="relative aspect-video group select-none" onMouseMove={() => { setShowControls(true); clearTimeout(hideTimer.current); hideTimer.current = setTimeout(() => setShowControls(false), 3000); }} onMouseLeave={() => setShowControls(false)}>
@@ -238,12 +298,50 @@ const VideoPlayer = ({ url, title, autoPlay = false }) => {
         </div>
       </div>
 
+      {showTranscript && (
+        <div className="bg-[#0A3550]/30 border-t border-[#4DA8C4]/20 max-h-[400px] overflow-y-auto" ref={transcriptRef}>
+          {loadingTranscript ? (
+            <div className="p-6 text-center text-[#B2D8E5]">
+              <div className="animate-spin w-6 h-6 border-2 border-[#4DA8C4] border-t-transparent rounded-full mx-auto mb-2" />
+              <p className="text-sm">{t('video.transcript_loading')}</p>
+            </div>
+          ) : transcriptError ? (
+            <div className="p-6 text-center">
+              <Icon name="fa-triangle-exclamation" className="text-amber-400 text-xl mb-2" />
+              <p className="text-sm text-[#B2D8E5]">{transcriptError}</p>
+            </div>
+          ) : transcript && transcript.length > 0 ? (
+            <div className="p-4 space-y-1">
+              {transcript.map((cue, i) => (
+                <button
+                  key={i}
+                  data-cue-index={i}
+                  onClick={() => seekToCue(cue.start)}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors border-none ${
+                    i === activeCueIndex
+                      ? 'bg-[#00BCD4]/20 text-[#00BCD4] font-medium'
+                      : 'text-[#B2D8E5] hover:bg-white/5 hover:text-white'
+                  }`}
+                >
+                  <span className="text-[10px] font-mono text-white/40 mr-2">{formatTime(cue.start)}</span>
+                  {cue.text}
+                </button>
+              ))}
+            </div>
+          ) : transcript && transcript.length === 0 ? (
+            <div className="p-6 text-center text-[#B2D8E5] text-sm">
+              <p>{t('video.transcript_empty')}</p>
+            </div>
+          ) : null}
+        </div>
+      )}
+
       <div className="p-6 border-t border-[#4DA8C4]/20">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-[#0A3550]/30 rounded-xl p-4">
             <h4 className="font-bold text-white mb-3 flex items-center gap-2"><Icon name="fa-keyboard" /> {t('video.keyboard_shortcuts')}</h4>
             <div className="space-y-2 text-sm">
-              {[['Space / K', 'Play/Pause'], ['M', 'Mute'], ['C', 'Subtitles'], ['F', 'Fullscreen'], ['Arrows / J/L', 'Seek +/-10s']].map(([k, v]) => (
+              {[['Space / K', 'Play/Pause'], ['M', 'Mute'], ['C', 'Subtitles'], ['T', 'Transcript'], ['F', 'Fullscreen'], ['Arrows / J/L', 'Seek +/-10s']].map(([k, v]) => (
                 <div key={k} className="flex justify-between"><span className="text-[#B2D8E5]">{k}</span><span className="text-white">{v}</span></div>
               ))}
             </div>

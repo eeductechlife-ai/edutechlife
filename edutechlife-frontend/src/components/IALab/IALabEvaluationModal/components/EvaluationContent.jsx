@@ -59,7 +59,7 @@ export function StepContent({
     catch { return {}; }
   })();
   const selectedCase = ej1Parsed.selectedCase || '';
-  const researchTopic = ej1Parsed.topic || currentExercise?.temaInvestigacion || currentExercise?.documentos?.[0]?.tema || '';
+  const researchTopic = ej1Parsed.topic || currentExercise?.temaInvestigacion || currentExercise?.conceptos?.[0]?.tema || currentExercise?.documentos?.[0]?.tema || '';
   const selectedDocCount = (() => {
     try { return JSON.parse(responses.ej1 || '{}').documents?.length || 0; }
     catch { return 0; }

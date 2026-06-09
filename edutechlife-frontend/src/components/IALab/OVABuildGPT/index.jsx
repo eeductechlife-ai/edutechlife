@@ -116,7 +116,7 @@ export default function OVABuildGPT({ onComplete }) {
       </header>
 
       <main className="max-w-6xl mx-auto px-4 py-10 md:py-16">
-        <ScreenComponent onNext={nextScreen} addXp={addXp} />
+        <ScreenComponent onNext={nextScreen} addXp={addXp} onMarkComplete={() => { certCompletedRef.current = true; onComplete?.(); }} {...(currentScreen === screens.length - 1 ? { xp, onReset: () => { setCurrentScreen(0); setXp(0); }, showMarkButton: !certCompletedRef.current } : {})} />
       </main>
 
       <footer className="border-t border-slate-200 dark:border-slate-700 mt-12 py-8 text-center text-slate-500 dark:text-slate-400 text-sm">

@@ -7,6 +7,7 @@ export const useForumNotifications = () => {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [tableExists, setTableExists] = useState(true);
 
   const loadNotifications = useCallback(async () => {
     if (!user) return;
@@ -30,6 +31,7 @@ export const useForumNotifications = () => {
           error.message?.includes('relation') ||
           error.status === 404;
         if (isTableMissing) {
+          setTableExists(false);
           const local = JSON.parse(localStorage.getItem('ialab_forum_notifications') || '[]');
           setNotifications(local);
           setUnreadCount(local.filter(n => !n.is_read).length);
@@ -50,6 +52,7 @@ export const useForumNotifications = () => {
         err?.message?.includes('relation') ||
         err?.status === 404;
       if (isTableMissing) {
+        setTableExists(false);
         const local = JSON.parse(localStorage.getItem('ialab_forum_notifications') || '[]');
         setNotifications(local);
         setUnreadCount(local.filter(n => !n.is_read).length);
@@ -152,7 +155,7 @@ export const useForumNotifications = () => {
   }, [user]);
 
   const subscribeRealtime = useCallback(() => {
-    if (!user) return () => {};
+    if (!user || !tableExists) return () => {};
 
     const subscription = supabase
       .channel('forum-notifications')
@@ -165,12 +168,13 @@ export const useForumNotifications = () => {
       )
       .subscribe((status) => {
         if (status === 'CHANNEL_ERROR') {
-          console.warn('[FORUM NOTIFICATIONS] Realtime subscription error (table may not exist)');
+          setTableExists(false);
+          subscription.unsubscribe();
         }
       });
 
     return () => subscription.unsubscribe();
-  }, [user]);
+  }, [user, tableExists]);
 
   useEffect(() => {
     if (user) loadNotifications();

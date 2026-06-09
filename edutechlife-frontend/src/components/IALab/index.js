@@ -5,7 +5,6 @@ export { default as IALabModals } from './IALabModals';
 export { default as ModuleOverviewCard } from './ModuleOverviewCard';
 export { default as Breadcrumbs } from './Breadcrumbs';
 export { default as GlobalSearchBar } from './GlobalSearchBar';
-export { default as TuRutaDeHoy } from './TuRutaDeHoy';
 export { default as RecommendationsPanel } from './RecommendationsPanel';
 export { default as DailyChallenges } from './DailyChallenges';
 export { default as ModuleActions } from './ModuleActions';

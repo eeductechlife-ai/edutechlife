@@ -298,31 +298,31 @@ Devuelve SOLO JSON válido.`,
       return { nota_ej1: n1, nota_ej2: n2, nota_ej3: n3, nota_ej4: n4, notaGlobal: Math.round(((n1 + n2 + n3 + n4) / 4) * 10) / 10, feedback_ej1: 'Buena pregunta de investigación. Para mejorarla, sé más específico y añade sub-preguntas.', feedback_ej2: 'Buen análisis de fuentes. Asegúrate de justificar por qué cada fuente es o no relevante.', feedback_ej3: 'Buena clasificación. Explica el razonamiento detrás de cada veredicto.', feedback_ej4: 'Buen informe. Añade más detalles y citas específicas de las fuentes.' };
     }
   },
-  4: {
-    name: { es: 'Tu Primer Notebook con IA', en: 'Your First AI Notebook' },
+    4: {
+    name: { es: 'Inmersión NotebookLM', en: 'NotebookLM Immersion' },
     totalSteps: 3,
     generateSystemPrompt: () => 'Eres un experto en NotebookLM, curación de fuentes y síntesis de documentos. Genera 3 ejercicios sobre organización y análisis de información con IA. Devuelve SOLO JSON.',
     generateUserPrompt: () => `Genera un JSON con 3 ejercicios sobre NotebookLM:
-1. documentos: Array con 5 objetos. Cada uno: { "titulo": "string", "tipo": "articulo"|"pdf"|"enlace"|"nota"|"video", "contenido": "string", "tema": "string" }. El estudiante debe seleccionar hasta 4 y extraer el insight principal de cada uno.
-2. preguntasSintesis: 2 preguntas que el estudiante debe responder integrando múltiples fuentes. Ejemplo: "¿En qué coinciden y en qué se contradicen los documentos seleccionados?"
+1. conceptos: Array con 5 objetos. Cada uno: { "titulo": "string", "contenido": "string", "tema": "string" }. El estudiante debe seleccionar hasta 4 y extraer el insight principal de cada uno.
+2. preguntasSintesis: 2 preguntas que el estudiante debe responder integrando múltiples fuentes. Ejemplo: "¿En qué coinciden y en qué se contradicen los conceptos seleccionados?"
 3. guionTemplate: Un esquema de guión de podcast con secciones: introduccion, desarrollo (3 puntos), conclusion.
 
 Formato JSON exacto:
 {
-  "documentos": [{ "titulo": "string", "tipo": "string", "contenido": "string", "tema": "string" }],
+  "conceptos": [{ "titulo": "string", "contenido": "string", "tema": "string" }],
   "preguntasSintesis": ["string"],
   "guionTemplate": { "introduccion": "", "desarrollo": ["", "", ""], "conclusion": "" }
 }`,
     evaluateSystemPrompt: () => `Eres un evaluador EXPERTO en NotebookLM y síntesis documental. Sé BENÉVOLO. Devuelve SOLO JSON.
 
-CRITERIOS - EJERCICIO 1 (Curación de fuentes):
-- Seleccionó fuentes: 50%
+CRITERIOS - EJERCICIO 1 (Análisis de conceptos):
+- Seleccionó conceptos: 50%
 - Insights precisos y relevantes: 70%
-- Insights profundos que conectan fuentes: 80-100%
+- Insights profundos que conectan conceptos: 80-100%
 
 CRITERIOS - EJERCICIO 2 (Síntesis):
 - Respondió las preguntas: 50%
-- Integra múltiples fuentes en la respuesta: 70%
+- Integra múltiples conceptos en la respuesta: 70%
 - Síntesis profunda con conexiones originales: 80-100%
 
 CRITERIOS - EJERCICIO 3 (Guión de audio):
@@ -333,7 +333,7 @@ CRITERIOS - EJERCICIO 3 (Guión de audio):
 Formato: { "nota_ej1": N, "nota_ej2": N, "nota_ej3": N, "notaGlobal": N, "feedback_ej1": "S", "feedback_ej2": "S", "feedback_ej3": "S" }`,
     evaluateUserPrompt: (exercises, responses) => `Evalúa estas respuestas de NotebookLM. Sé BENÉVOLO.
 
-DOCUMENTOS: ${JSON.stringify(exercises?.documentos)}
+CONCEPTOS: ${JSON.stringify(exercises?.conceptos)}
 Selección e insights del estudiante: ${responses.ej1}
 
 PREGUNTAS DE SÍNTESIS: ${JSON.stringify(exercises?.preguntasSintesis)}
@@ -346,25 +346,25 @@ Devuelve SOLO JSON válido.`,
       const isEn = locale === 'en';
       return isEn
         ? {
-            documentos: [
-              { titulo: "Neuroplasticity: The Brain's Ability to Rewire", tipo: "articulo", contenido: "The brain can form new neural connections throughout life. This ability is called neuroplasticity.", tema: "Neuroplasticity", category: "" },
-              { titulo: "Exercise and Brain Health", tipo: "pdf", contenido: "Regular physical exercise increases BDNF levels, promoting neurogenesis in the hippocampus.", tema: "Exercise", category: "" },
-              { titulo: "Sleep and Memory Consolidation", tipo: "articulo", contenido: "During sleep, the brain consolidates memories and clears metabolic waste.", tema: "Sleep", category: "" },
-              { titulo: "Learning Music Changes the Brain", tipo: "video", contenido: "Musicians have larger gray matter volume in motor and auditory areas.", tema: "Music", category: "" },
-              { titulo: "Digital Amnesia", tipo: "nota", contenido: "Reliance on smartphones reduces memory retention. The Google Effect.", tema: "Technology", category: "" }
+            conceptos: [
+              { titulo: "Neuroplasticity: The Brain's Ability to Rewire", contenido: "The brain can form new neural connections throughout life. This ability is called neuroplasticity.", tema: "Neuroplasticity" },
+              { titulo: "Exercise and Brain Health", contenido: "Regular physical exercise increases BDNF levels, promoting neurogenesis in the hippocampus.", tema: "Exercise" },
+              { titulo: "Sleep and Memory Consolidation", contenido: "During sleep, the brain consolidates memories and clears metabolic waste.", tema: "Sleep" },
+              { titulo: "Learning Music Changes the Brain", contenido: "Musicians have larger gray matter volume in motor and auditory areas.", tema: "Music" },
+              { titulo: "Digital Amnesia", contenido: "Reliance on smartphones reduces memory retention. The Google Effect.", tema: "Technology" }
             ],
-            preguntasSintesis: ["How do exercise and sleep complement each other in neuroplasticity?", "Which lifestyle factors impact brain health the most according to the documents?"],
+            preguntasSintesis: ["How do exercise and sleep complement each other in neuroplasticity?", "Which lifestyle factors impact brain health the most according to the concepts?"],
             guionTemplate: { introduccion: "", desarrollo: ["", "", ""], conclusion: "" }
           }
         : {
-            documentos: [
-              { titulo: "Neuroplasticidad: La capacidad del cerebro de reconectarse", tipo: "articulo", contenido: "El cerebro puede formar nuevas conexiones neuronales durante toda la vida. Esta capacidad se llama neuroplasticidad.", tema: "Neuroplasticidad", category: "" },
-              { titulo: "Ejercicio y salud cerebral", tipo: "pdf", contenido: "El ejercicio físico regular aumenta los niveles de BDNF, promoviendo la neurogénesis en el hipocampo.", tema: "Ejercicio", category: "" },
-              { titulo: "Sueño y consolidación de memoria", tipo: "articulo", contenido: "Durante el sueño, el cerebro consolida memorias y elimina desechos metabólicos.", tema: "Sueño", category: "" },
-              { titulo: "Aprender música cambia el cerebro", tipo: "video", contenido: "Los músicos tienen mayor volumen de materia gris en áreas motoras y auditivas.", tema: "Música", category: "" },
-              { titulo: "Amnesia digital", tipo: "nota", contenido: "La dependencia del smartphone reduce la retención de memoria. El Efecto Google.", tema: "Tecnología", category: "" }
+            conceptos: [
+              { titulo: "Neuroplasticidad: La capacidad del cerebro de reconectarse", contenido: "El cerebro puede formar nuevas conexiones neuronales durante toda la vida. Esta capacidad se llama neuroplasticidad.", tema: "Neuroplasticidad" },
+              { titulo: "Ejercicio y salud cerebral", contenido: "El ejercicio físico regular aumenta los niveles de BDNF, promoviendo la neurogénesis en el hipocampo.", tema: "Ejercicio" },
+              { titulo: "Sueño y consolidación de memoria", contenido: "Durante el sueño, el cerebro consolida memorias y elimina desechos metabólicos.", tema: "Sueño" },
+              { titulo: "Aprender música cambia el cerebro", contenido: "Los músicos tienen mayor volumen de materia gris en áreas motoras y auditivas.", tema: "Música" },
+              { titulo: "Amnesia digital", contenido: "La dependencia del smartphone reduce la retención de memoria. El Efecto Google.", tema: "Tecnología" }
             ],
-            preguntasSintesis: ["¿Cómo se complementan el ejercicio físico y el sueño en la neuroplasticidad?", "¿Qué factores del estilo de vida impactan más en la salud cerebral según los documentos?"],
+            preguntasSintesis: ["¿Cómo se complementan el ejercicio físico y el sueño en la neuroplasticidad?", "¿Qué factores del estilo de vida impactan más en la salud cerebral según los conceptos?"],
             guionTemplate: { introduccion: "", desarrollo: ["", "", ""], conclusion: "" }
           };
     },
@@ -393,8 +393,8 @@ Devuelve SOLO JSON válido.`,
       return {
         nota_ej1: n1, nota_ej2: n2, nota_ej3: n3,
         notaGlobal: Math.round(((n1 + n2 + n3) / 3) * 10) / 10,
-        feedback_ej1: docCount === 0 ? 'No seleccionaste documentos. Selecciona al menos 2 documentos para empezar.' : docCount < 4 ? 'Buena selección. Intenta seleccionar 4 documentos para tener más perspectivas.' : 'Excelente selección de 4 documentos con categorías y rankings.',
-        feedback_ej2: synthesisFilled ? 'Buena síntesis. Asegúrate de que tu tabla comparativa esté completa.' : 'Completa la tabla comparativa y escribe una síntesis que integre todos los documentos.',
+        feedback_ej1: docCount === 0 ? 'No seleccionaste conceptos. Selecciona al menos 2 conceptos para empezar.' : docCount < 4 ? 'Buena selección. Intenta seleccionar 4 conceptos para tener más perspectivas.' : 'Excelente selección de 4 conceptos con categorías y rankings.',
+        feedback_ej2: synthesisFilled ? 'Buena síntesis. Asegúrate de que tu tabla comparativa esté completa.' : 'Completa la tabla comparativa y escribe una síntesis que integre todos los conceptos.',
         feedback_ej3: scriptFilled < 4 ? 'Completa más secciones del guión y responde las preguntas del MCQ.' : 'Buen guión. Asegúrate de que todas las secciones estén bien desarrolladas.'
       };
     }
@@ -601,7 +601,21 @@ const useIALabEvaluation = (moduleId = 1, locale = 'es') => {
                 throw new Error('No se pudo extraer JSON de la respuesta');
             }
 
-            const exercises = JSON.parse(jsonMatch[1] || jsonMatch[0]);
+            const rawJson = jsonMatch[1] || jsonMatch[0];
+            const cleaned = rawJson
+                .replace(/,\s*}/g, '}')
+                .replace(/,\s*]/g, ']')
+                .replace(/([{,])\s*(\w+)\s*:/g, '$1"$2":');
+            let exercises;
+            try {
+                exercises = JSON.parse(cleaned);
+            } catch {
+                try {
+                    exercises = JSON.parse(rawJson);
+                } catch {
+                    throw new Error('JSON inválido en la respuesta');
+                }
+            }
             if (!exercises || typeof exercises !== 'object' || Object.keys(exercises).length === 0) {
                 throw new Error('Estructura de ejercicios inválida');
             }

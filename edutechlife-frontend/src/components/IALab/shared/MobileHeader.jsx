@@ -13,7 +13,7 @@ import { useTranslation } from '../../../i18n/I18nProvider';
 const MobileHeader = ({ onOpenMobileMenu, setIsSearchOpen, searchQuery, setSearchQuery, isSearchOpen }) => {
   const { t } = useTranslation();
   return (
-    <div role="banner" className="md:hidden fixed top-0 left-0 right-0 h-16 landscape:h-12 bg-white dark:bg-slate-800 z-50 flex items-center justify-between px-4 landscape:px-3 border-b border-slate-200 dark:border-slate-700 pt-[var(--safe-area-top)]">
+    <div role="banner" onTouchStart={(e) => e.stopPropagation()} className="md:hidden fixed top-0 left-0 right-0 h-16 landscape:h-12 bg-white dark:bg-slate-800 z-50 flex items-center justify-between px-4 landscape:px-3 border-b border-slate-200 dark:border-slate-700 pt-[var(--safe-area-top)]">
       <h1 className="text-2xl font-bold text-petroleum dark:text-petroleum tracking-tight">{t('ialab.title')}</h1>
       <div className="flex items-center gap-2">
         <button

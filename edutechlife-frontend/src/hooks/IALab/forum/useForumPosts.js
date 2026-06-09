@@ -89,11 +89,15 @@ export const useForumPosts = () => {
     if (!title?.trim() || !content?.trim()) return { success: false, error: 'Título y contenido requeridos' };
 
     try {
-      const { data: profile } = await supabase
+      const { data: profile, error: profileError } = await supabase
         .from('forum_profiles')
         .select('full_name, avatar_url')
         .eq('user_id', user.id)
         .single();
+
+      if (profileError && profileError.code !== 'PGRST116') {
+        console.warn('Error fetching profile:', profileError);
+      }
 
       const { data: post, error: insertError } = await supabase
         .from('forum_posts')

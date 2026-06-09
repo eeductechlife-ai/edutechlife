@@ -5,6 +5,7 @@ import { useIALabProgressContext, useIALabUIContext } from '../../../context/IAL
 import { useIALabStore } from '../../../store/ialabStore';
 import { speakTextConversational, stopSpeech } from '../../../utils/speech';
 import { callDeepseek } from '../../../utils/api';
+import { analyzeQuizFailures } from '../../../utils/ialab';
 import COURSE_KNOWLEDGE from '../constants/courseKnowledge';
 import useFocusTrap from '../../../hooks/useFocusTrap';
 import SectionErrorBoundary from '../SectionErrorBoundary';
@@ -142,6 +143,7 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
 
   const buildValerioSystemPrompt = () => {
     const isEn = locale === 'en';
+    const store = useIALabStore.getState();
     const currentModuleId = currentModule?.id || 1;
     const currentModuleData = COURSE_KNOWLEDGE.find(m => m.id === currentModuleId);
     const moduleContent = currentModuleData
@@ -149,6 +151,34 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
       : isEn ? 'No module information available.' : 'No hay información del módulo disponible.';
 
     const prompt = isEn ? PROMPT_VALERIO_DOCENTE_EN : PROMPT_VALERIO_DOCENTE_ES;
+
+    const moduleScores = [];
+    for (let i = 1; i <= 5; i++) {
+      const score = store.calculateModuleScore(i);
+      const modInfo = modules.find(m => m.id === i);
+      moduleScores.push(`${modInfo?.title || `Module ${i}`}: ${score}%`);
+    }
+
+    const weakTopicsByModule = analyzeQuizFailures(store.storageGet);
+    const weakTopicsStr = Object.entries(weakTopicsByModule)
+      .map(([modId, topics]) => {
+        const modInfo = modules.find(m => m.id === Number(modId));
+        const topicsStr = Object.entries(topics)
+          .map(([topic, count]) => `${topic} (${count} ${isEn ? 'failures' : 'fallos'})`)
+          .join(', ');
+        return `${modInfo?.title || `Module ${modId}`}: ${topicsStr}`;
+      })
+      .join('\n') || (isEn ? 'None identified' : 'Ninguno identificado');
+
+    const lastActivityStr = store.lastActivityDate
+      ? new Date(store.lastActivityDate).toLocaleDateString(isEn ? 'en-US' : 'es-CO', { year: 'numeric', month: 'short', day: 'numeric' })
+      : (isEn ? 'No activity yet' : 'Sin actividad aún');
+
+    const weeklyXP = store.getWeeklyXP();
+
+    const streakStatus = store.streak > 0
+      ? `${store.streak} ${isEn ? 'days' : 'días'}${store.isStreakAtRisk() ? ` (${isEn ? 'at risk' : 'en riesgo'})` : ' ✅'}`
+      : (isEn ? 'No streak' : 'Sin racha');
 
     return `${prompt}
 
@@ -158,7 +188,18 @@ ${moduleContent}
 ## ${isEn ? 'STUDENT CONTEXT' : 'CONTEXTO DEL ESTUDIANTE'}:
 ${isEn ? 'Name' : 'Nombre'}: ${studentName || (isEn ? 'Student' : 'Estudiante')}
 ${isEn ? 'Level' : 'Nivel'}: ${userLevel < 3 ? (isEn ? 'Beginner' : 'Principiante') : userLevel < 6 ? (isEn ? 'Intermediate' : 'Intermedio') : (isEn ? 'Advanced' : 'Avanzado')}
-${isEn ? 'Completed modules' : 'Módulos completados'}: ${completedModules.length}`;
+${isEn ? 'Completed modules' : 'Módulos completados'}: ${completedModules.length} / 5
+${isEn ? 'Course progress' : 'Progreso del curso'}: ${store.courseProgress}%
+${isEn ? 'Total XP' : 'XP Total'}: ${store.xp}
+${isEn ? 'Weekly XP' : 'XP Semanal'}: ${weeklyXP.weekly} / ${weeklyXP.weeklyTarget} (${Math.round(weeklyXP.weeklyPct)}%)
+${isEn ? 'Streak' : 'Racha'}: ${streakStatus}
+${isEn ? 'Last activity' : 'Última actividad'}: ${lastActivityStr}
+
+${isEn ? 'Module scores' : 'Puntajes por módulo'}:
+${moduleScores.join('\n')}
+
+${isEn ? 'Weak topics (most failed in exams)' : 'Temas débiles (más fallados en exámenes)'}:
+${weakTopicsStr}`;
   };
 
   const generateFallbackResponse = (inputText, locale) => {
@@ -218,6 +259,66 @@ Considerando que estás en ${currentModule?.title || 'este módulo'}, te sugiero
 ¿Te gustaría que te explique algún concepto en particular o prefieres un ejemplo práctico relacionado con tu pregunta? Lo que más te sirva, aquí estoy para eso.`;
   };
 
+  const buildContextualWelcome = () => {
+    const isEn = locale === 'en';
+    const store = useIALabStore.getState();
+    const name = studentName || (isEn ? 'Student' : 'Estudiante');
+    const moduleTitle = currentModule?.title || (isEn ? 'this module' : 'este módulo');
+    const levelLabel = userLevel < 3
+      ? (isEn ? 'beginner' : 'principiante')
+      : userLevel < 6
+        ? (isEn ? 'intermediate' : 'intermedio')
+        : (isEn ? 'advanced' : 'avanzado');
+
+    const modScore = store.calculateModuleScore(activeMod);
+    const isModComplete = modScore >= 80;
+    const overallPct = store.courseProgress;
+    const streakNum = store.streak;
+    const atRisk = store.isStreakAtRisk();
+
+    const daysSinceLast = store.lastActivityDate
+      ? Math.floor((Date.now() - new Date(store.lastActivityDate).getTime()) / 86400000)
+      : null;
+
+    if (isEn) {
+      if (daysSinceLast !== null && daysSinceLast >= 3) {
+        return `Welcome back, ${name}! It's been ${daysSinceLast} days — great to see you again. You're working on "${moduleTitle}" at ${levelLabel} level. Need a refresher or want to keep moving forward?`;
+      }
+      if (streakNum > 0 && atRisk) {
+        return `Hey ${name}! Your ${streakNum}-day streak is at risk today. How about one quick activity to keep it going? You're in "${moduleTitle}" at ${levelLabel} level — let's do this!`;
+      }
+      if (streakNum >= 5) {
+        return `Wow, ${streakNum} days in a row, ${name}! Your consistency is amazing. You're making great progress in "${moduleTitle}" (${levelLabel} level). What would you like to work on today?`;
+      }
+      if (isModComplete && overallPct < 100) {
+        const recModule = store.getDailyRoute()?.nextModule;
+        return `Awesome, ${name}! You aced this module 🎉. Overall you're at ${overallPct}% of the course. ${recModule ? `Ready to jump into "${recModule.title}"?` : 'Ready for the next challenge?'} Ask me anything!`;
+      }
+      if (overallPct >= 80) {
+        return `You're almost there, ${name}! ${overallPct}% complete — just the final stretch left. Keep pushing, and let me know if you need help with anything!`;
+      }
+      return `Hello${studentName ? ', ' + studentName : ''}! I'm Valerio, your coach. I see you're in "${moduleTitle}" — great topic! You're at ${levelLabel} level, and we'll explore it together. Ask me anything: explain a topic, give you an example, or help you with the challenge. Where would you like to start?`;
+    }
+
+    if (daysSinceLast !== null && daysSinceLast >= 3) {
+      return `¡Bienvenido de vuelta, ${name}! Hacía ${daysSinceLast} días — qué gusto verte de nuevo. Estás en "${moduleTitle}" nivel ${levelLabel}. ¿Necesitas un repaso o quieres seguir avanzando?`;
+    }
+    if (streakNum > 0 && atRisk) {
+      return `¡Oye ${name}! Tu racha de ${streakNum} días está en riesgo hoy. ¿Qué tal una actividad rápida para mantenerla? Estás en "${moduleTitle}" nivel ${levelLabel} — ¡vamos!`;
+    }
+    if (streakNum >= 5) {
+      return `¡${streakNum} días seguidos, ${name}! Tu constancia es increíble. Vas muy bien en "${moduleTitle}" (nivel ${levelLabel}). ¿En qué te gustaría trabajar hoy?`;
+    }
+    if (isModComplete && overallPct < 100) {
+      const recModule = store.getDailyRoute()?.nextModule;
+      return `¡${name}, dominaste este módulo! 🎉 Llevas ${overallPct}% del curso. ${recModule ? `¿Listo para saltar a "${recModule.title}"?` : '¿Listo para el siguiente reto?'} ¡Pregúntame lo que quieras!`;
+    }
+    if (overallPct >= 80) {
+      return `Ya casi terminas, ${name}! ${overallPct}% completado — solo queda el empujón final. ¡Sigue así y cuéntame si necesitas ayuda con algo!`;
+    }
+    return `¡Hola${studentName ? ', ' + studentName : ''}! Soy Valerio, tu coach. Veo que estás en "${moduleTitle}" — ¡qué tema tan interesante! Estás en nivel ${levelLabel}, y lo exploraremos juntos. Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, o ayudarte con el desafío. ¿Por dónde te gustaría empezar?`;
+  };
+
   useEffect(() => {
     if (isOpen && !welcomeSpokenRef.current) {
       welcomeSpokenRef.current = true;
@@ -225,17 +326,7 @@ Considerando que estás en ${currentModule?.title || 'este módulo'}, te sugiero
 
       if (!alreadyWelcomed) {
         useIALabStore.getState().setValerioWelcomed();
-        const welcomeMessage = locale === 'en'
-          ? `Hello${studentName ? ', ' + studentName : ''}! Great to have you here. I am Valerio, your coach, and I see you are in the "${currentModule?.title}" module — what an interesting topic!
-
-No matter if this is new to you, you are at ${userLevel < 3 ? 'beginner' : userLevel < 6 ? 'intermediate' : 'advanced'} level, and we will discover it together.
-
-Ask me anything: explain a topic, give you an example, help you with the challenge, or just chat about what you are learning. Where would you like to start?`
-          : `¡Hola${studentName ? ', ' + studentName : ''}! Qué gusto tenerte por acá. Soy Valerio, tu coach, y veo que estás en el módulo "${currentModule?.title}" — ¡qué tema tan interesante!
-
-No importa si esto es nuevo para ti, estamos en nivel ${userLevel < 3 ? 'principiante' : userLevel < 6 ? 'intermedio' : 'avanzado'}, y lo iremos descubriendo juntos.
-
-Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, ayudarte con el desafío, o simplemente conversar sobre lo que estás aprendiendo. ¿Por dónde te gustaría empezar?`;
+        const welcomeMessage = buildContextualWelcome();
 
         setMessage(welcomeMessage);
         setConversation([{

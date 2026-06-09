@@ -1,10 +1,4 @@
-import { speakTextConversational, stopSpeech } from './speech';
-
-const VOICE_PROFILES = {
-  valeria: { languageCode: 'es-US', name: 'es-US-Neural2-B', pitch: 0, speakingRate: 1.0 },
-  valerio: { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: -2.0, speakingRate: 1.0 },
-  sistema: { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: 0, speakingRate: 1.0 }
-};
+import { speakTextConversational, stopSpeech, VOICE_PROFILES } from './speech';
 
 class VoiceEngine {
   constructor() {

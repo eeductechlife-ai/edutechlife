@@ -314,10 +314,9 @@ const FinalChallenge = () => {
         <h3 className="text-2xl font-black text-petroleum uppercase tracking-tighter mb-3">Desafío 1</h3>
         <div className="bg-gradient-to-br from-petroleum/[0.04] to-corporate/[0.04] rounded-2xl p-5 border border-petroleum/10 max-w-lg w-full mb-3">
           <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed italic">
-            &ldquo;{t('ova.introprompt.challenge_instructions')}&rdquo;
+            {t('ova.introprompt.challenge_instructions')}
           </p>
         </div>
-        <VoiceReader text={t('ova.introprompt.challenge_instructions')} />
         <div className="grid grid-cols-3 gap-3 max-w-xs w-full mt-4">
           <div className="bg-gradient-to-br from-petroleum/5 to-corporate/5 rounded-xl p-3 text-center border border-petroleum/10">
             <BrainCircuit className="w-4 h-4 text-corporate mx-auto mb-1" />
@@ -375,28 +374,17 @@ const Conclusion = ({ onComplete, onClose }) => {
   const { t } = useTranslation();
   return (
     <div className="mx-auto text-center animate-[fadeIn_1.1s_cubic-bezier(0.16,1,0.3,1)_forwards] max-w-md">
-      <div className="w-20 h-20 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center mx-auto mb-5 shadow-xl border-4 border-white dark:border-slate-700">
-        <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 2L14.5 9H22L16 13.5L18.5 21L12 16.5L5.5 21L8 13.5L2 9H9.5L12 2Z" />
-        </svg>
+      <div className="w-20 h-20 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-5 shadow-xl border-4 border-white dark:border-slate-700">
+        <CheckCircle2 className="w-10 h-10 text-white" />
       </div>
       <h2 className="text-3xl font-black text-petroleum mb-2 uppercase tracking-tighter">{t('ova.introprompt.cert_title')}</h2>
-      <div className="bg-petroleum text-white inline-block px-10 py-5 rounded-[2rem] text-5xl font-black shadow-lg border-b-4 border-corporate mb-5">
-        5 / 5
-      </div>
-      <div className="flex justify-center gap-1.5 mb-5">
-        {[1,2,3,4,5].map(i => (
-          <svg key={i} className={`w-7 h-7 ${i <= 5 ? 'text-amber-400 fill-amber-400 drop-shadow-sm' : 'text-slate-200 dark:text-slate-600'}`} viewBox="0 0 24 24">
-            <path d="M12 2L14.5 9H22L16 13.5L18.5 21L12 16.5L5.5 21L8 13.5L2 9H9.5L12 2Z" />
-          </svg>
-        ))}
-      </div>
-      <p className="text-base text-slate-600 dark:text-slate-300 font-bold mb-6 leading-relaxed">{t('ova.introprompt.cert_score_msg')}</p>
+      <p className="text-base text-slate-600 dark:text-slate-300 font-bold mb-8 leading-relaxed">{t('ova.introprompt.cert_score_msg')}</p>
       <button
         onClick={() => { onComplete?.(); onClose?.(); }}
-        className="px-8 py-3.5 bg-gradient-to-r from-petroleum to-corporate text-white font-black rounded-xl shadow-lg hover:shadow-xl transition-all active:scale-95 text-sm uppercase tracking-wider flex items-center gap-2 mx-auto border-none"
+        className="px-8 py-3.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-black rounded-xl shadow-lg hover:shadow-xl transition-all active:scale-95 text-sm uppercase tracking-wider flex items-center gap-2 mx-auto border-none"
       >
-        {t('ova.introprompt.cert_receive_btn')}
+        <CheckCircle2 className="w-5 h-5" />
+        {t('common.mark_viewed')}
       </button>
     </div>
   );

@@ -239,7 +239,7 @@ const Quiz = ({ onComplete }) => {
  );
 };
 
-const QueEsPrompt_OVA_Original = ({ onClose }) => {
+const QueEsPrompt_OVA_Original = ({ onClose, onComplete }) => {
  const { t } = useTranslation();
  const [screen, setScreen] = useState('welcome');
  const [completed, setCompleted] = useState([]);
@@ -247,9 +247,17 @@ const QueEsPrompt_OVA_Original = ({ onClose }) => {
  const [audioLoading, setAudioLoading] = useState(false);
  const [playing, setPlaying] = useState(false);
  const [isMenuOpen, setIsMenuOpen] = useState(false);
- const [errorMsg, setErrorMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+  const autoCompletedRef = useRef(false);
 
- const screensData = useMemo(() => ({
+  useEffect(() => {
+    if (quizScore !== null && quizScore >= 3 && !autoCompletedRef.current) {
+      autoCompletedRef.current = true;
+      onComplete?.();
+    }
+  }, [quizScore, onComplete]);
+
+  const screensData = useMemo(() => ({
    welcome: {
      title: t('ialab.que_es_prompt.title'),
      content: 'Bienvenidos. La IA generativa es una realidad que transforma la educación y el trabajo. Hoy aprenderás la habilidad más importante: saber hablarle a la máquina con inteligencia y criterio.'

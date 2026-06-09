@@ -261,12 +261,11 @@ const ialabService = {
 
   // Métodos de utilidad
   getCurrentUserId: () => {
-    // En un sistema real, esto vendría de la autenticación
-    // Por ahora, usamos un ID de usuario simulado
-    const storedUserId = localStorage.getItem('ialab_user_id');
+    let storedUserId;
+    try { storedUserId = localStorage.getItem('ialab_user_id'); } catch { storedUserId = null; }
     if (!storedUserId) {
       const newUserId = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      localStorage.setItem('ialab_user_id', newUserId);
+      try { localStorage.setItem('ialab_user_id', newUserId); } catch {}
       return newUserId;
     }
     return storedUserId;

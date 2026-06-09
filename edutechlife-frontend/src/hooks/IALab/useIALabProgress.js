@@ -391,7 +391,6 @@ export const useIALabProgress = () => {
     if (!progressService) return { success: false, error: 'Servicio no disponible' };
     // Actualizar estado local siempre primero (updateModuleActivity recalcula courseProgress en el store)
     updateModuleActivity(moduleId, 'exam', score >= 80, score);
-    if (score >= 80) useIALabStore.getState().addXp(100);
     try {
       const result = await progressService.saveExamProgress(moduleId, score, passed, user.id);
       return result;
@@ -406,7 +405,6 @@ export const useIALabProgress = () => {
     if (!progressService) return { success: false, error: 'Servicio no disponible' };
     // Actualizar estado local siempre primero
     updateModuleActivity(moduleId, 'challenge', score >= 80, score);
-    if (score >= 80) useIALabStore.getState().addXp(100);
     try {
       const result = await progressService.saveChallengeProgress(moduleId, score, user.id);
       return result;

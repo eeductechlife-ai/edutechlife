@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
 import { useIALabStore } from '../../store/ialabStore';
 import { ALL_LESSONS, BADGE_INFO } from '../../data/ialab';
+import { calcModuleScore } from '../../utils/ialab';
+import { WEIGHTS } from '../../constants/ialab';
 
 const MODULE_NAMES = {
   1: 'Ingeniería de Prompts', 2: 'Potencia ChatGPT', 3: 'Rastreo Profundo',
@@ -18,20 +20,6 @@ const MODULE_RESOURCES = [
   { id: 4, title: MODULE_NAMES[4], icon: MODULE_ICONS[4], videos: 2, infographics: 3, hasExam: true, hasChallenge: true, hasCommunity: true },
   { id: 5, title: MODULE_NAMES[5], icon: MODULE_ICONS[5], videos: 1, infographics: 2, hasExam: true, hasChallenge: true, hasCommunity: true },
 ];
-
-const calculateModuleScore = (moduleId, config, completedVideos, completedInfographics, completedExams, challengeScores, completedModules) => {
-  let score = 0;
-  const moduleVideos = completedVideos.filter(v => v.startsWith(`m${moduleId}`)).length;
-  const moduleInfographics = completedInfographics.filter(i => i.startsWith(`i${moduleId}`)).length;
-  const totalResources = config.videos + config.infographics;
-  if (totalResources > 0 && (moduleVideos + moduleInfographics) / totalResources >= 0.8) score += 30;
-  const exam = completedExams[moduleId] || 0;
-  score += (exam / 100) * 35;
-  const challenge = challengeScores[moduleId] || 0;
-  score += (challenge / 100) * 30;
-  if (completedModules.includes(moduleId)) score += 5;
-  return Math.round(Math.min(score, 100));
-};
 
 export default function usePersonalizedRecommendations() {
   const streak = useIALabStore(s => s.streak);
@@ -65,16 +53,53 @@ export default function usePersonalizedRecommendations() {
   const totalLessonsCount = ALL_LESSONS ? Object.values(ALL_LESSONS).reduce((sum, arr) => sum + arr.length, 0) : 0;
   const remainingLessons = totalLessonsCount - totalLessonsCompleted;
   const estimatedDaysRemaining = lessonsPerDay > 0 ? Math.ceil(remainingLessons / lessonsPerDay) : 0;
+
+  const modulesPerDay = daysSinceStart > 0 ? completedCount / daysSinceStart : 0;
+  const remainingModules = 5 - completedCount;
+  const modsForecastDays = modulesPerDay > 0 ? Math.ceil(remainingModules / modulesPerDay) : null;
+
+  const weightedDays = modsForecastDays !== null
+    ? Math.round((estimatedDaysRemaining + modsForecastDays * 7) / 2)
+    : estimatedDaysRemaining;
+
+  const completionForecast = weightedDays > 0
+    ? {
+        estimatedDate: new Date(Date.now() + weightedDays * 86400000),
+        daysRemaining: weightedDays,
+        pace: weightedDays <= 15 ? 'fast' : weightedDays <= 45 ? 'moderate' : 'slow',
+        conservative: weightedDays > 15 ? Math.ceil(weightedDays * 1.4) : Math.ceil(weightedDays * 1.2),
+        optimistic: Math.ceil(weightedDays * 0.6),
+      }
+    : null;
+
   const recommendations = getDetailedRecommendations();
 
-  const moduleScores = [1, 2, 3, 4, 5].map(id => ({
-    id,
-    title: MODULE_NAMES[id],
-    score: moduleProgress?.[id]?.currentScore ?? Math.round(calculateModuleScore(id, MODULE_RESOURCES.find(r => r.id === id) || MODULE_RESOURCES[0], completedVideos, completedInfographics, completedExams, challengeScores, completedModules)),
-    icon: MODULE_ICONS[id],
-    examScore: completedExams?.[id] || 0,
-    challengeScore: challengeScores?.[id] || 0,
-  }));
+  const moduleScores = [1, 2, 3, 4, 5].map(id => {
+    const config = MODULE_RESOURCES.find(r => r.id === id) || MODULE_RESOURCES[0];
+    const moduleVideos = (completedVideos || []).filter(v => v.startsWith(`m${id}`)).length;
+    const moduleInfographics = (completedInfographics || []).filter(i => i.startsWith(`i${id}`)).length;
+    const totalResources = config.videos + config.infographics;
+    const exam = completedExams?.[id] || 0;
+    const challenge = challengeScores?.[id] || 0;
+
+    const fallbackScore = calcModuleScore({
+      exam: exam >= 80,
+      examEarned: (exam / 100) * WEIGHTS.exam,
+      challenge: challenge >= 80,
+      challengeEarned: (challenge / 100) * WEIGHTS.challenge,
+      resourcesCompleted: totalResources > 0 && (moduleVideos + moduleInfographics) / totalResources >= 0.8,
+      community: (completedModules || []).includes(id),
+    });
+
+    return {
+      id,
+      title: MODULE_NAMES[id],
+      score: moduleProgress?.[id]?.currentScore ?? Math.round(fallbackScore),
+      icon: MODULE_ICONS[id],
+      examScore: completedExams?.[id] || 0,
+      challengeScore: challengeScores?.[id] || 0,
+    };
+  });
   const weakestModule = [...moduleScores].sort((a, b) => a.score - b.score)[0];
 
   const nextBadge = useMemo(() => {
@@ -217,11 +242,11 @@ export default function usePersonalizedRecommendations() {
       }
     });
 
-    return { high: recs.filter(r => r.urgency === 'high'), medium: recs.filter(r => r.urgency === 'medium'), low: recs.filter(r => r.urgency === 'low') };
+    return { high: recs.filter(r => r.urgency === 'high'), medium: recs.filter(r => r.urgency === 'medium'), low: recs.filter(r => r.urgency === 'low'), completionForecast };
   }, [
     moduleScores, weakestModule,
     totalExams, totalChallenges, lessonsPerDay, daysSinceStart, estimatedDaysRemaining,
     streak, lastActivityDate, courseProgress, forumPostCount, completedModules,
-    nextBadge, recommendations, completedVideos, completedInfographics,
+    nextBadge, recommendations, completedVideos, completedInfographics, completionForecast,
   ]);
 }

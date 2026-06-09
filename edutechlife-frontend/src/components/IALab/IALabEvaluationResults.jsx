@@ -53,9 +53,11 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
                         nota_ej1: evaluation.nota_ej1,
                         nota_ej2: evaluation.nota_ej2,
                         nota_ej3: evaluation.nota_ej3,
+                        nota_ej4: evaluation.nota_ej4,
                         feedback_ej1: evaluation.feedback_ej1,
                         feedback_ej2: evaluation.feedback_ej2,
                         feedback_ej3: evaluation.feedback_ej3,
+                        feedback_ej4: evaluation.feedback_ej4,
                     }
                 });
             }

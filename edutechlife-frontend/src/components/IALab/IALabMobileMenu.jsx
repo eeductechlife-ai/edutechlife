@@ -65,8 +65,8 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
             <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 truncate">{user?.full_name || t('mobile_menu.user_fallback')}</p>
             <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
               <span>{t('mobile_menu.level')}{getLevel()}</span>
-              <span>🔥 {streak}</span>
-              {isStreakAtRisk() && streak > 0 && <span className="text-[9px] text-amber-500">⚠️</span>}
+              <Icon name="fa-fire" className="text-amber-500 text-xs" /> {streak}
+              {isStreakAtRisk() && streak > 0 && <Icon name="fa-exclamation-triangle" className="text-amber-500 text-[9px]" />}
             </div>
           </div>
         </div>

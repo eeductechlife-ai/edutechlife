@@ -2,12 +2,15 @@
   "name": "edutechlife-server",
   "version": "1.0.0",
   "description": "Backend proxy server for Edutechlife API calls",
-  "main": "server.js",
+  "main": "src/index.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
+    "start": "node src/index.js",
+    "dev": "node src/index.js",
+    "start:legacy": "node server.js"
   },
   "dependencies": {
+    "@clerk/backend": "^3.5.0",
+    "@supabase/supabase-js": "^2.107.0",
     "axios": "^1.14.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
@@ -15,6 +18,8 @@
     "express-rate-limit": "^8.3.1",
     "google-auth-library": "^9.0.0",
     "helmet": "^8.1.0",
-    "node-fetch": "^3.3.2"
+    "node-fetch": "^3.3.2",
+    "pg": "^8.21.0",
+    "vercel": "^54.9.1"
   }
 }

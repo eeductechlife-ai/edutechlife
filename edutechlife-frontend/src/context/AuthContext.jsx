@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
   const { user: clerkUser, isLoaded: clerkIsLoaded } = useUser();
   const { signOut: clerkSignOut, openSignIn, openSignUp } = useClerk();
   const { supabase, isLoading: supabaseLoading } = useSupabase();
-  
+
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -68,14 +68,17 @@ export const AuthProvider = ({ children }) => {
         imageUrl: clerkUser.imageUrl,
         createdAt: clerkUser.createdAt,
       };
-      
+
       setUser(localUser);
       fetchProfile(clerkUser.id);
-      setTimeout(() => processPendingForms(), 1000);
 
+      let isActive = true;
+      const pendingTimer = setTimeout(() => {
+        if (isActive) processPendingForms();
+      }, 1000);
       const syncProfileToSupabase = async () => {
         if (!supabase) return;
-        
+
         try {
           const { data: existing } = await supabase
             .from('profiles')
@@ -83,7 +86,7 @@ export const AuthProvider = ({ children }) => {
             .eq('id', clerkUser.id)
             .single();
 
-          if (!existing) {
+          if (!existing && isActive) {
             const { error } = await supabase
               .from('profiles')
               .insert({
@@ -95,8 +98,6 @@ export const AuthProvider = ({ children }) => {
 
             if (error) {
               console.warn('Profile sync warning:', error.message);
-            } else {
-
             }
           }
         } catch (err) {
@@ -105,6 +106,11 @@ export const AuthProvider = ({ children }) => {
       };
 
       syncProfileToSupabase();
+
+      return () => {
+        isActive = false;
+        clearTimeout(pendingTimer);
+      };
     } else {
       setUser(null);
       setProfile(null);

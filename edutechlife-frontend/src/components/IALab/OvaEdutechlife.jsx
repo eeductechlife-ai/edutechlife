@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types';;
 import { motion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
@@ -35,7 +35,13 @@ const OvaEdutechlife = ({ onComplete }) => {
 
   const handleCheckAnswers = () => setShowResults(true);
 
-  const isAllCorrect = showResults && quiz.every((q, idx) => selectedAnswers[idx] === q.correct);
+  const totalQuestions = quiz.length;
+  const answeredCount = Object.keys(selectedAnswers).length;
+  const correctCount = showResults
+    ? quiz.filter((q, idx) => selectedAnswers[idx] === q.correct).length
+    : 0;
+
+  const isPassed = showResults && correctCount >= 3;
 
   const handleComplete = () => {
     if (completed) return;
@@ -43,11 +49,13 @@ const OvaEdutechlife = ({ onComplete }) => {
     if (onComplete) onComplete();
   };
 
-  const totalQuestions = quiz.length;
-  const answeredCount = Object.keys(selectedAnswers).length;
-  const correctCount = showResults
-    ? quiz.filter((q, idx) => selectedAnswers[idx] === q.correct).length
-    : 0;
+  const isQuizComplete = isPassed;
+
+  useEffect(() => {
+    if (isPassed && !completed) {
+      handleComplete();
+    }
+  }, [isPassed, completed]);
 
   if (screen === 'intro') {
     const introText = isES
@@ -86,8 +94,6 @@ const OvaEdutechlife = ({ onComplete }) => {
   const handlePrev = () => { if (currentSlide > 0) goToSlide(currentSlide - 1); };
   const handleNext = () => { if (currentSlide < 4) goToSlide(currentSlide + 1); };
 
-  const isQuizComplete = showResults && isAllCorrect;
-
   return (
     <OVALayout
       icon="fa-brain"
@@ -108,7 +114,7 @@ const OvaEdutechlife = ({ onComplete }) => {
               quiz={quiz}
               selectedAnswers={selectedAnswers}
               showResults={showResults}
-              isAllCorrect={isAllCorrect}
+              isAllCorrect={isPassed}
               answeredCount={answeredCount}
               totalQuestions={totalQuestions}
               correctCount={correctCount}

@@ -28,6 +28,7 @@ const IALabProLandingPage = lazy(() => import('../components/pages/IALabProLandi
 const SmartBoardInfoPage = lazy(() => import('../components/pages/SmartBoardInfoPage'));
 const SmartBoardParentDashboard = lazy(() => import('../components/pages/SmartBoardParentDashboard'));
 const SmartBoardStatsPage = lazy(() => import('../components/pages/SmartBoardStatsPage'));
+const IALabDashboard = lazy(() => import('../components/IALab/IALabDashboard'));
 
 // Componente wrapper para IALabSignUpPage que maneja navegación
 const IALabSignUpPageWrapper = () => {
@@ -161,7 +162,14 @@ const AppRoutes = () => {
           </Suspense>
         } />
         
-        <Route path="ialab/:moduleId?" element={
+        <Route path="ialab" element={
+          <RoleProtectedRoute requiredRole="ialab">
+            <Suspense fallback={<PageLoader message={t('page_loader.ailab')} />}>
+              <IALabDashboard />
+            </Suspense>
+          </RoleProtectedRoute>
+        } />
+        <Route path="ialab/:moduleId" element={
           <RoleProtectedRoute requiredRole="ialab">
             <Suspense fallback={<PageLoader message={t('page_loader.ailab')} />}>
               <AILabPage />

@@ -21,6 +21,7 @@ export const createLessonSlice = (set, get) => ({
   lessonProgress: ls.get(LS_KEYS.LESSON_PROGRESS, {}),
   checkpointAnswers: ls.get(LS_KEYS.CHECKPOINT_ANSWERS, {}),
   lastVisitedLesson: null,
+  _viewedResourcesVersion: 0,
   completedVideos: ls.get(LS_KEYS.COMPLETED_VIDEOS, []),
 
   markLessonComplete: (moduleId, lessonId) => {
@@ -83,6 +84,7 @@ export const createLessonSlice = (set, get) => ({
     if (!viewed.includes(id)) {
       const updated = [...viewed, id];
       ls.set(LS_KEYS.VIEWED_RESOURCES, updated);
+      set({ _viewedResourcesVersion: Date.now() });
     }
   },
 

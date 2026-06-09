@@ -27,6 +27,7 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [filterType, setFilterType] = useState('all');
   const [justCompletedId, setJustCompletedId] = useState(null);
+  const storeToggleBookmark = useIALabStore(s => s.toggleBookmark);
   const [bookmarkedIds, setBookmarkedIds] = useState(() => {
     try { return JSON.parse(localStorage.getItem('ialab_bookmarked_resources') || '[]'); }
     catch { return []; }
@@ -35,14 +36,13 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
 
   const toggleBookmark = useCallback((resourceId, e) => {
     e.stopPropagation();
-    setBookmarkedIds((prev) => {
-      const next = prev.includes(resourceId)
+    storeToggleBookmark(resourceId);
+    setBookmarkedIds((prev) =>
+      prev.includes(resourceId)
         ? prev.filter((id) => id !== resourceId)
-        : [...prev, resourceId];
-      localStorage.setItem('ialab_bookmarked_resources', JSON.stringify(next));
-      return next;
-    });
-  }, []);
+        : [...prev, resourceId]
+    );
+  }, [storeToggleBookmark]);
 
   // Estado para el modal de recursos
   const [viewerModalOpen, setViewerModalOpen] = useState(false);
@@ -200,14 +200,14 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
   }, [activeResourceIndex, currentTopicResources]);
 
   useEffect(() => {
-    setViewedIds(useIALabStore.getState().getViewedResources());
+    const updateViewed = () => setViewedIds(useIALabStore.getState().getViewedResources());
+    updateViewed();
+    const unsub = useIALabStore.subscribe(
+      (s) => s._viewedResourcesVersion,
+      updateViewed
+    );
+    return unsub;
   }, []);
-
-  useEffect(() => {
-    if (!viewerModalOpen) {
-      setViewedIds(useIALabStore.getState().getViewedResources());
-    }
-  }, [viewerModalOpen]);
 
   // Los recursos ya vistos SIEMPRE se pueden reabrir haciendo clic en ellos.
   // Auto-avance: al completar un tema, abrir el siguiente para mantener el flujo
@@ -285,7 +285,30 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
                   lessonProgress={lessonProgress}
                   t={t}
                 />
-               
+
+                {allResourcesOrdered.length > 0 && (() => {
+                  const total = allResourcesOrdered.length;
+                  const viewed = allResourcesOrdered.filter(r => viewedIds.includes(r.id)).length;
+                  const pct = Math.round((viewed / total) * 100);
+                  return (
+                    <div className="mt-4 mb-1">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                          <Icon name="fa-chart-line" className="text-[10px] text-petroleum" />
+                          {t('ialab.module.progress_title')}
+                        </span>
+                        <span className="text-[10px] font-bold text-petroleum">{viewed}/{total} &middot; {pct}%</span>
+                      </div>
+                      <div className="w-full h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-petroleum to-corporate rounded-full transition-all duration-500 ease-out"
+                          style={{ width: `${pct}%` }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })()}
+                
                 {/* Temas en columna única - Tarjetas premium */}
                 <div className="flex flex-col gap-3 mt-4">
                   {bookmarkedResources.length > 0 && (

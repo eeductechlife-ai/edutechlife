@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'
-import PropTypes from 'prop-types';;
+import { useState, useEffect, useCallback, useRef } from 'react'
+import PropTypes from 'prop-types';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../../../utils/iconMapping.jsx';
 import { useTranslation } from '../../../../i18n/I18nProvider';
@@ -8,14 +8,6 @@ import StepFeedback from '../../challenges/shared/StepFeedback';
 import ExampleToggle from '../../challenges/shared/ExampleToggle';
 import ResearchContextBanner from '../../challenges/shared/ResearchContextBanner';
 import ProgressStepper from '../../challenges/shared/ProgressStepper';
-
-const tipoIconMap = {
-  articulo: 'fa-file-text',
-  pdf: 'fa-file-pdf',
-  enlace: 'fa-external-link',
-  nota: 'fa-bookmark',
-  video: 'fa-video',
-};
 
 const CATEGORIES = [
   { key: 'cientifica', labelKey: 'ialab.challenge.m4.step1.category_cientifica' },
@@ -38,7 +30,7 @@ const itemVariants = {
 };
 
 const NotebookStep1 = ({ exercise, response, onResponseChange, topic = '' }) => {
-  const { t, locale } = useTranslation();
+  const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
   const documentos = exercise?.documentos || [];
   const insightRefs = useRef({});
@@ -123,7 +115,7 @@ const NotebookStep1 = ({ exercise, response, onResponseChange, topic = '' }) => 
         </div>
       </motion.div>
 
-      <ResearchContextBanner topic={topic} stepNumber={1} locale={locale} />
+      <ResearchContextBanner topic={topic} stepNumber={1} moduleId={4} />
 
       <motion.div
         initial={shouldReduceMotion ? false : { opacity: 0, y: -5 }}
@@ -214,22 +206,8 @@ const NotebookStep1 = ({ exercise, response, onResponseChange, topic = '' }) => 
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-2">
-                      <div className="w-9 h-9 rounded-lg bg-corporate/10 dark:bg-corporate-dark/20 flex items-center justify-center flex-shrink-0">
-                        <Icon
-                          name={tipoIconMap[doc.tipo] || 'fa-file'}
-                          className="text-corporate dark:text-corporate-dark w-4 h-4"
-                        />
-                      </div>
                       <div className="flex-1 min-w-0">
                         <p className="font-semibold text-slate-800 dark:text-slate-100 truncate">{doc.titulo}</p>
-                        <span className="inline-block px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 text-xs rounded-full capitalize">
-                          {doc.tipo === 'articulo' ? t('ialab.challenge.m4.step1.tipo_articulo') :
-                           doc.tipo === 'pdf' ? t('ialab.challenge.m4.step1.tipo_pdf') :
-                           doc.tipo === 'enlace' ? t('ialab.challenge.m4.step1.tipo_enlace') :
-                           doc.tipo === 'nota' ? t('ialab.challenge.m4.step1.tipo_nota') :
-                           doc.tipo === 'video' ? t('ialab.challenge.m4.step1.tipo_video') :
-                           doc.tipo}
-                        </span>
                       </div>
                     </div>
 
@@ -320,7 +298,7 @@ const NotebookStep1 = ({ exercise, response, onResponseChange, topic = '' }) => 
           animate={{ opacity: 1 }}
           className="text-center py-12 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl"
         >
-          <Icon name="fa-file" className="text-slate-300 dark:text-slate-600 text-3xl mx-auto mb-3" />
+          <Icon name="fa-lightbulb" className="text-slate-300 dark:text-slate-600 text-3xl mx-auto mb-3" />
           <p className="text-slate-500 dark:text-slate-400">{t('ialab.challenge.m4.step1.no_documents')}</p>
         </motion.div>
       )}
@@ -342,7 +320,7 @@ const NotebookStep1 = ({ exercise, response, onResponseChange, topic = '' }) => 
                 key={d.index}
                 className="inline-flex items-center gap-1 px-2.5 py-1 bg-corporate/10 dark:bg-corporate-dark/20 text-corporate dark:text-corporate-dark text-xs rounded-full font-medium"
               >
-                <Icon name="fa-file" className="w-3 h-3" />
+                <Icon name="fa-bookmark" className="w-3 h-3" />
                 <span className="max-w-[120px] truncate">{doc.titulo}</span>
                 <button
                   onClick={() => removeDoc(d.index)}

@@ -1,5 +1,6 @@
 import { Icon } from '../../../../utils/iconMapping';
 import { useTranslation } from '../../../../i18n/I18nProvider';
+import VoiceReader from '../../VoiceReader';
 
 function getDifficultyColor(difficulty) {
   switch (difficulty) {
@@ -26,11 +27,12 @@ export function QuestionRenderer({ question, questionIndex, totalQuestions, sele
             <h2 className="text-lg md:text-xl font-bold text-slate-800 dark:text-slate-100 leading-relaxed">
               {question.question}
             </h2>
-            <div className="flex items-center gap-2 mt-2">
+            <div className="flex items-center gap-2 mt-2 flex-wrap">
               <span className="text-xs text-slate-500">{question.topic}</span>
               <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${getDifficultyColor(question.difficulty)}`}>
                 {question.difficulty}
               </span>
+              <VoiceReader text={question.question} />
               <button
                 onClick={() => onToggleMark(question.id)}
                 className={`ml-auto flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-200 ${

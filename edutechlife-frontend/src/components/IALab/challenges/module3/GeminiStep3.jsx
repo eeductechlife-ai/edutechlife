@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from '../../../../i18n/I18nProvider';
 import { Icon } from '../../../../utils/iconMapping.jsx';
@@ -21,7 +21,7 @@ const itemVariants = {
 };
 
 const GeminiStep3 = ({ exercise, response, onResponseChange, t: tProp, topic = '' }) => {
-  const { t, locale } = useTranslation();
+  const { t } = useTranslation();
   const translate = tProp || t;
   const shouldReduceMotion = useReducedMotion();
 
@@ -76,7 +76,7 @@ const GeminiStep3 = ({ exercise, response, onResponseChange, t: tProp, topic = '
         </div>
       </motion.div>
 
-      <ResearchContextBanner topic={topic} stepNumber={3} locale={locale} />
+      <ResearchContextBanner topic={topic} stepNumber={3} />
 
       <motion.div
         initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.97 }}

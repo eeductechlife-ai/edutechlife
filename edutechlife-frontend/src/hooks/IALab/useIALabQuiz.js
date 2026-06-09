@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import { useIALabProgressContext, useIALabUIContext } from '../../context/IALabContext';
 import { useIALabStore } from '../../store/ialabStore';
 import {
@@ -6,13 +6,25 @@ import {
   SUGGESTED_TIME_SECONDS,
   MAX_SECURITY_WARNINGS, SECURITY_WARNING_MESSAGES,
   SECURITY_VIOLATION_PENALTY,
-  SECURITY_MESSAGE_DURATION, SECURITY_LOG_PREFIX, MODULE_EXAMS,
+  SECURITY_MESSAGE_DURATION, SECURITY_LOG_PREFIX, MODULE_EXAMS, getModuleExams,
 } from '../../data/ialabQuizData';
+import { useTranslation } from '../../i18n/I18nProvider';
+
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
 export const useIALabQuiz = () => {
   const {
     activeMod, updateModuleActivity, markExamComplete,
   } = useIALabProgressContext();
+  const { locale } = useTranslation();
+  const shuffledQuestionsRef = useRef(null);
 
   const quizAnswers = useIALabStore(s => s.quizAnswers);
   const setQuizAnswers = useIALabStore(s => s.setQuizAnswers);
@@ -57,7 +69,9 @@ export const useIALabQuiz = () => {
 
   const { user } = useIALabUIContext();
 
-  const quizQuestions = MODULE_EXAMS[activeMod] || MODULE_EXAMS[1];
+  const localeExams = getModuleExams(locale);
+  const rawQuestions = localeExams[activeMod] || MODULE_EXAMS[1];
+  const quizQuestions = shuffledQuestionsRef.current || rawQuestions;
 
   const calculateQuizScore = useCallback((answers) => {
     let correct = 0;
@@ -216,6 +230,12 @@ export const useIALabQuiz = () => {
       return false;
     }
 
+    const base = getModuleExams(locale)[activeMod] || MODULE_EXAMS[1];
+    shuffledQuestionsRef.current = shuffleArray(base).map(q => ({
+      ...q,
+      options: shuffleArray(q.options),
+    }));
+
     setShowExamModal(true);
     setIsTimerRunning(true);
     setSecurityWarningCount(0);
@@ -229,6 +249,7 @@ export const useIALabQuiz = () => {
 
   const closeEvaluationModal = useCallback((forceClose = false) => {
     setShowExamModal(false);
+    shuffledQuestionsRef.current = null;
     resetQuizForRetry();
     return true;
   }, [resetQuizForRetry, setShowExamModal]);
@@ -349,5 +370,6 @@ export const useIALabQuiz = () => {
     closeEvaluationModal,
     generateTopicFeedback,
     formatTime,
+    penalizeAttempt,
   };
 };

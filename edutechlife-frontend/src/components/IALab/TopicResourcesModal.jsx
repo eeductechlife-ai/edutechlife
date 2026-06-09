@@ -65,7 +65,6 @@ const TopicResourcesModal = ({
       setActiveResourceIndex(0);
       setViewerModalOpen(false);
       setSelectedResource(null);
-      setViewedIds([]);
       setOvaModalOpen(false);
       setImmersivePdfModalOpen(false);
     }

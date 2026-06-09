@@ -61,14 +61,16 @@ export const syncProgressToSupabase = async (supabase, userId, progressData) => 
       });
     });
 
-    Object.entries(completedExams).forEach(([moduleId, passed]) => {
-      if (passed) {
+    Object.entries(completedExams).forEach(([moduleId, score]) => {
+      const numericScore = typeof score === 'number' ? score : (score ? 100 : 0);
+      if (numericScore > 0) {
         recordsToUpsert.push({
           user_id: userId,
           module_id: parseInt(moduleId) || 0,
           activity_type: 'exam',
           resource_id: null,
           is_completed: true,
+          score: numericScore,
           updated_at: new Date().toISOString()
         });
       }

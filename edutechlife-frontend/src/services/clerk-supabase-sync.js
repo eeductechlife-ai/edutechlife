@@ -280,12 +280,11 @@ export const setupAutoSync = (clerkInstance) => {
 
       if (event.type === 'userUpdated' && event.user) {
         // Sincronizar cuando se actualiza el usuario
-        syncUserWithSupabase(event.user).catch(console.error);
+        syncUserWithSupabase(event.user).catch(e => console.error('Sync error:', e));
       }
-      
+
       if (event.type === 'signOut') {
-        // Limpiar sesión de Supabase al cerrar sesión en Clerk
-        supabase.auth.signOut().catch(console.error);
+        supabase.auth.signOut().catch(e => console.error('SignOut error:', e));
       }
     });
 

@@ -1,0 +1,13 @@
+{"type":"click","text":"1\n    \n      Barra de Progreso Global\n      \"Módulo 3 de 5 • 60% completado\" con barra de progreso animada","choice":"progress","id":null,"timestamp":1780694371388}
+{"type":"click","text":"2\n    \n      Stats Rápidas\n      XP total • Días consecutivos • Score promedio • certificados obtenidos","choice":"stats","id":null,"timestamp":1780694372773}
+{"type":"click","text":"3\n    \n      Timeline de Módulos\n      Lista vertical con: estado (✅/▶/🔒), score, botón \"continuar\" por módulo","choice":"timeline","id":null,"timestamp":1780694373809}
+{"type":"click","text":"3\n    \n      Timeline de Módulos\n      Lista vertical con: estado (✅/▶/🔒), score, botón \"continuar\" por módulo","choice":"timeline","id":null,"timestamp":1780694374615}
+{"type":"click","text":"2\n    \n      Stats Rápidas\n      XP total • Días consecutivos • Score promedio • certificados obtenidos","choice":"stats","id":null,"timestamp":1780694375179}
+{"type":"click","text":"1\n    \n      Barra de Progreso Global\n      \"Módulo 3 de 5 • 60% completado\" con barra de progreso animada","choice":"progress","id":null,"timestamp":1780694375731}
+{"type":"click","text":"1\n    \n      Barra de Progreso Global\n      \"Módulo 3 de 5 • 60% completado\" con barra de progreso animada","choice":"progress","id":null,"timestamp":1780694386879}
+{"type":"click","text":"2\n    \n      Stats Rápidas\n      XP total • Días consecutivos • Score promedio • certificados obtenidos","choice":"stats","id":null,"timestamp":1780694391457}
+{"type":"click","text":"3\n    \n      Timeline de Módulos\n      Lista vertical con: estado (✅/▶/🔒), score, botón \"continuar\" por módulo","choice":"timeline","id":null,"timestamp":1780694406281}
+{"type":"click","text":"4\n    \n      CTA \"Continuar donde lo dejaste\"\n      Botón grande que lleva al último módulo activo o pendiente","choice":"continue","id":null,"timestamp":1780694407100}
+{"type":"click","text":"5\n    \n      Checklist de Pendientes\n      Tareas del módulo activo: ver videos, completar quiz, pasar desafío","choice":"checklist","id":null,"timestamp":1780694409003}
+{"type":"click","text":"5\n    \n      Checklist de Pendientes\n      Tareas del módulo activo: ver videos, completar quiz, pasar desafío","choice":"checklist","id":null,"timestamp":1780694411594}
+{"type":"click","text":"5\n    \n      Checklist de Pendientes\n      Tareas del módulo activo: ver videos, completar quiz, pasar desafío","choice":"checklist","id":null,"timestamp":1780694433303}

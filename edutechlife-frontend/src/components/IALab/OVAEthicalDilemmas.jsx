@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types';;
 import { useTranslation } from '../../i18n/I18nProvider';
 import { Brain, Scale, Shield, AlertTriangle, CheckCircle, XCircle, Award, BookOpen } from 'lucide-react';
@@ -24,6 +24,13 @@ export default function OVAEthicalDilemmas({ onComplete }) {
   const totalDilemmas = dilemmas.length;
   const correctCount = Object.values(answers).filter(a => a.correct).length;
   const allAnswered = Object.keys(answers).length === totalDilemmas;
+
+  useEffect(() => {
+    if (activeSection === 'principles' && allAnswered && !certCompletedRef.current) {
+      certCompletedRef.current = true;
+      onComplete?.();
+    }
+  }, [activeSection, allAnswered, onComplete]);
 
   const handleAnswer = (idx) => {
     if (showFeedback) return;
@@ -297,13 +304,6 @@ export default function OVAEthicalDilemmas({ onComplete }) {
               </div>
 
               <div className="flex flex-col items-center">
-                {!certCompletedRef.current && (
-                  <button onClick={() => { certCompletedRef.current = true; onComplete?.(); }}
-                    className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold text-base shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-2 mb-3 animate-pulse">
-                    <CheckCircle size={18} />
-                    {t('common.mark_viewed')}
-                  </button>
-                )}
                 <button onClick={() => { setActiveSection('intro'); setCurrentDilemma(0); setSelectedAnswer(null); setShowFeedback(false); setAnswers({}); }}
                   className="mt-4 px-6 py-3 bg-gradient-to-r from-corporate to-petroleum text-white rounded-xl font-bold shadow-md hover:shadow-lg transition-all">
                   {t('ova.ethical_dilemmas.back_to_start', 'Volver al Inicio')}

@@ -42,6 +42,8 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
   const [showStudyPlanner, setShowStudyPlanner] = useState(false);
   const [showCourses, setShowCourses] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [emailNotifications, setEmailNotifications] = useState(true);
+  const [darkMode, setDarkMode] = useState(false);
   
   // Integración oficial Clerk - Patrón recomendado
   const { user, isLoaded, isSignedIn } = useUser();
@@ -368,9 +370,15 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
                         <p className="text-xs text-slate-500 group-hover:text-indigo-500">{t('modals.settings.email_notifications_desc')}</p>
                       </div>
                     </div>
-                    <div className="h-6 w-11 rounded-full bg-slate-200 relative group-hover:bg-indigo-200 transition-colors duration-300">
-                      <div className="h-5 w-5 rounded-full bg-white absolute top-0.5 left-0.5 shadow-sm group-hover:shadow-md transition-all duration-300"></div>
-                    </div>
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={emailNotifications}
+                      onClick={() => setEmailNotifications(!emailNotifications)}
+                      className={`h-6 w-11 rounded-full relative transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 ${emailNotifications ? 'bg-indigo-500' : 'bg-slate-200'}`}
+                    >
+                      <div className={`h-5 w-5 rounded-full bg-white absolute top-0.5 shadow-sm transition-all duration-300 ${emailNotifications ? 'left-[calc(100%-1.25rem)]' : 'left-0.5'}`}></div>
+                    </button>
                   </div>
                   
                   {/* Modo oscuro */}
@@ -382,9 +390,15 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
                         <p className="text-xs text-slate-500 group-hover:text-indigo-500">{t('modals.settings.dark_interface_desc')}</p>
                       </div>
                     </div>
-                    <div className="h-6 w-11 rounded-full bg-slate-200 relative group-hover:bg-indigo-200 transition-colors duration-300">
-                      <div className="h-5 w-5 rounded-full bg-white absolute top-0.5 left-0.5 shadow-sm group-hover:shadow-md transition-all duration-300"></div>
-                    </div>
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={darkMode}
+                      onClick={() => setDarkMode(!darkMode)}
+                      className={`h-6 w-11 rounded-full relative transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 ${darkMode ? 'bg-indigo-500' : 'bg-slate-200'}`}
+                    >
+                      <div className={`h-5 w-5 rounded-full bg-white absolute top-0.5 shadow-sm transition-all duration-300 ${darkMode ? 'left-[calc(100%-1.25rem)]' : 'left-0.5'}`}></div>
+                    </button>
                   </div>
                 </div>
               </div>

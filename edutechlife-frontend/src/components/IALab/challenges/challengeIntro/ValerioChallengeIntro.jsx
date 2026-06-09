@@ -1,9 +1,15 @@
+import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types';
 import { Icon } from '../../../../utils/iconMapping.jsx';
 import { useTranslation } from '../../../../i18n/I18nProvider';
 import VoiceReader from '../../VoiceReader';
+import { speakTextConversational, stopSpeech } from '../../../../utils/speech';
 
 const INTRO_TEXTS = {
+  1: {
+    es: "Bienvenido al desafío de Prompt Engineering. Aquí pondrás a prueba todo lo aprendido sobre la creación de prompts efectivos. El desafío tiene 3 pasos: Primero, aplicarás la plantilla universal para estructurar un prompt completo. Segundo, analizarás cómo piensa la IA y ajustarás parámetros como la temperatura. Tercero, detectarás y corregirás errores en prompts existentes usando el método CREATE. ¡Demuestra lo que sabes!",
+    en: "Welcome to the Prompt Engineering challenge. Here you will test everything you learned about creating effective prompts. The challenge has 3 steps: First, apply the universal template to structure a complete prompt. Second, analyze how AI thinks and adjust parameters like temperature. Third, detect and fix errors in existing prompts using the CREATE method. Show what you know!"
+  },
   2: {
     es: "Bienvenido al desafío de ChatGPT. Aquí aprenderás a crear tu propio GPT personalizado. El desafío tiene 3 pasos: Primero, analizarás un caso de negocio y elegirás cuál automatizar. Segundo, configurarás las instrucciones, conocimientos y capacidades de tu GPT. Tercero, definirás una función para conectarlo con una API externa usando Function Calling. ¡Manos a la obra!",
     en: "Welcome to the ChatGPT challenge. You will create your own custom GPT. The challenge has 3 steps: First, analyze a business case and choose which to automate. Second, configure instructions, knowledge, and capabilities for your GPT. Third, define a function to connect it with an external API using Function Calling. Let's get started!"
@@ -27,6 +33,15 @@ const ValerioChallengeIntro = ({ moduleId, onStart, t, locale: localeProp }) => 
   const locale = localeProp || ctxLocale || 'es';
   const moduleTexts = INTRO_TEXTS[moduleId];
   const text = moduleTexts?.[locale] || moduleTexts?.es || '';
+  const [audioPlaying, setAudioPlaying] = useState(false);
+
+  useEffect(() => {
+    if (text) {
+      speakTextConversational(text, 'valerio', () => setAudioPlaying(false));
+      setAudioPlaying(true);
+    }
+    return () => stopSpeech();
+  }, [text]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] px-6 py-12">

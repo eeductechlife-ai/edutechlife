@@ -36,5 +36,49 @@ export const infographicData = {
         { title: "Integración Nativa: Workspace y Slack", text: "Capacidad de actuar directamente sobre tus plataformas corporativas.", icon: "MessageSquare", extendedText: "La IA ya no vive solo en su app. Puedes usar @ChatGPT en Slack para que te resuma un hilo de 50 mensajes de tus compañeros mientras estabas en una reunión, ahorrando minutos vitales de lectura." }
       ]
     }
-  ]
+  ],
+  quiz: {
+    questions: [
+      {
+        question: "¿Cuál es la principal ventaja del Modo Thinking de ChatGPT?",
+        options: [
+          { text: "Respuestas más rápidas que el modo normal", score: 1, feedback: "El modo Thinking prioriza profundidad, no velocidad. Está diseñado para ser más lento pero más riguroso." },
+          { text: "Análisis detallados y razonamiento paso a paso antes de responder", score: 3, feedback: "¡Correcto! Thinking invierte tiempo en razonar antes de responder, ideal para tareas complejas." },
+          { text: "Consume menos recursos del servidor", score: 1, feedback: "En realidad consume más recursos porque realiza un procesamiento más profundo antes de responder." }
+        ]
+      },
+      {
+        question: "¿Qué función cumple Canvas en ChatGPT?",
+        options: [
+          { text: "Genera imágenes a partir de texto", score: 1, feedback: "Eso lo hace DALL-E, no Canvas. Canvas es un editor colaborativo de texto y código." },
+          { text: "Permite editar documentos de forma colaborativa en una ventana lateral", score: 3, feedback: "¡Exacto! Canvas abre un documento lateral donde puedes editar y la IA revisa cambios en tiempo real." },
+          { text: "Conecta ChatGPT con redes sociales", score: 1, feedback: "No, Canvas no tiene nada que ver con redes sociales. Es un espacio de trabajo colaborativo." }
+        ]
+      },
+      {
+        question: "¿Cómo se beneficiaría un docente al usar la función de Proyectos en ChatGPT?",
+        options: [
+          { text: "Puede subir el plan de estudios y guías del curso para que la IA recuerde el contexto", score: 3, feedback: "¡Correcto! Los Proyectos permiten cargar documentos de referencia que la IA usará en todos los chats." },
+          { text: "Crea exámenes automáticamente sin revisión", score: 1, feedback: "La IA puede ayudar a crear exámenes, pero siempre requieren revisión humana para garantizar precisión." },
+          { text: "Reemplaza al docente en sesiones en vivo", score: 1, feedback: "ChatGPT es una herramienta de apoyo, no un reemplazo. El criterio del docente es irremplazable." }
+        ]
+      },
+      {
+        question: "¿Qué diferencia principal hay entre Zapier y Make (Integromat)?",
+        options: [
+          { text: "Make permite flujos más complejos con bifurcaciones lógicas avanzadas", score: 3, feedback: "¡Correcto! Make ofrece bifurcaciones lógicas (if/else) y transformaciones de datos más potentes que Zapier." },
+          { text: "Zapier es más caro que Make", score: 1, feedback: "No necesariamente. Ambos tienen modelos de precios diferentes. Make ofrece 1,000 operaciones gratis al mes." },
+          { text: "Make solo funciona con Google Workspace", score: 1, feedback: "Make se integra con cientos de aplicaciones, no solo Google Workspace." }
+        ]
+      },
+      {
+        question: "¿Cuál es la forma más eficiente de comenzar a usar IA generativa en el aula?",
+        options: [
+          { text: "Implementar la IA en todas las áreas de una vez", score: 1, feedback: "Implementar todo a la vez puede ser abrumador. Es mejor comenzar con un área específica." },
+          { text: "Comenzar con una tarea específica (resumir, crear material) e ir expandiendo", score: 3, feedback: "¡Exacto! La mejor estrategia es comenzar con una tarea concreta, dominarla, y luego expandir gradualmente." },
+          { text: "Esperar a que la tecnología madure antes de usarla", score: 1, feedback: "La IA ya está lo suficientemente madura para muchas tareas educativas. Comenzar ahora permite aprender progresivamente." }
+        ]
+      }
+    ]
+  }
 };

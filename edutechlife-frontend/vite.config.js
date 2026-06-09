@@ -136,6 +136,13 @@ export default defineConfig({
     cors: true,
     hmr: {
       overlay: true
+    },
+    proxy: {
+      '/api': {
+        target: process.env.VITE_API_URL || 'https://edutechlife-api.vercel.app',
+        changeOrigin: true,
+        secure: false
+      }
     }
   },
   build: {

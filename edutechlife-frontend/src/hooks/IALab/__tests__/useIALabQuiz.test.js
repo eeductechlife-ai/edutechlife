@@ -118,7 +118,7 @@ describe('useIALabQuiz', () => {
     const { result } = renderHook(() => useIALabQuiz());
 
     expect(result.current.quizQuestions).toBeDefined();
-    expect(result.current.TOTAL_QUESTIONS).toBe(8);
+    expect(result.current.TOTAL_QUESTIONS).toBe(12);
     expect(result.current.PASSING_SCORE).toBe(80);
     expect(result.current.SUGGESTED_TIME_SECONDS).toBe(1200);
     expect(result.current.canAttemptQuiz).toBeInstanceOf(Function);
@@ -134,7 +134,7 @@ describe('useIALabQuiz', () => {
     const { result } = renderHook(() => useIALabQuiz());
 
     expect(Array.isArray(result.current.quizQuestions)).toBe(true);
-    expect(result.current.quizQuestions.length).toBe(8);
+    expect(result.current.quizQuestions.length).toBe(12);
     expect(result.current.quizQuestions[0].id).toBe('m1q1');
   });
 

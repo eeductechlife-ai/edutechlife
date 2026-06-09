@@ -26,43 +26,49 @@ const SidebarCollapsed = ({
     <div className="min-h-[64px] w-full flex-shrink-0" />
 
     <TooltipIcon label={`${Math.round(courseProgress)}% completado`} premium>
-      <div className="w-full h-12 rounded-xl bg-gradient-to-br from-petroleum/8 to-corporate/8 border border-petroleum/10 flex items-center justify-center flex-shrink-0 shadow-sm relative" role="progressbar" aria-valuenow={Math.round(courseProgress)} aria-valuemin="0" aria-valuemax="100">
-        <svg className="w-[38px] h-[38px] -rotate-90" viewBox="0 0 120 120">
-          <defs>
-            <linearGradient id="sidebar-progress-grad-collapsed" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#004B63" />
-              <stop offset="100%" stopColor="#00BCD4" />
-            </linearGradient>
-            <filter id="progress-glow">
-              <feGaussianBlur stdDeviation="3" result="blur"/>
-              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-            </filter>
-          </defs>
-          <circle cx="60" cy="60" r="50" className="stroke-slate-200 dark:stroke-slate-700" strokeWidth="12" fill="none" />
-          <motion.circle cx="60" cy="60" r="50" stroke="url(#sidebar-progress-grad-collapsed)" strokeWidth="12" fill="none" strokeLinecap="round" strokeDasharray="314.159" strokeDashoffset={314.159 - (314.159 * Math.min(courseProgress, 100)) / 100} className="transition-all duration-700 ease-out" filter="url(#progress-glow)"
-            animate={{ opacity: [0.85, 1, 0.85] }}
-            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-          />
-        </svg>
+      <div className="w-full h-12 flex items-center justify-center flex-shrink-0 relative group" role="progressbar" aria-valuenow={Math.round(courseProgress)} aria-valuemin="0" aria-valuemax="100">
+        <div className="transition-transform duration-200 group-hover:scale-110 group-active:scale-95">
+          <svg className="w-[38px] h-[38px] -rotate-90" viewBox="0 0 120 120">
+            <defs>
+              <linearGradient id="sidebar-progress-grad-collapsed" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#004B63" />
+                <stop offset="100%" stopColor="#00BCD4" />
+              </linearGradient>
+              <filter id="progress-glow">
+                <feGaussianBlur stdDeviation="3" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <circle cx="60" cy="60" r="50" className="stroke-slate-200 dark:stroke-slate-700" strokeWidth="12" fill="none" />
+            <motion.circle cx="60" cy="60" r="50" stroke="url(#sidebar-progress-grad-collapsed)" strokeWidth="12" fill="none" strokeLinecap="round" strokeDasharray="314.159" strokeDashoffset={314.159 - (314.159 * Math.min(courseProgress, 100)) / 100} className="transition-all duration-700 ease-out" filter="url(#progress-glow)"
+              animate={{ opacity: [0.85, 1, 0.85] }}
+              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+            />
+          </svg>
+        </div>
       </div>
     </TooltipIcon>
 
     <TooltipIcon label={`Nivel ${getLevel()}`} premium>
-      <div className="w-full h-12 rounded-xl bg-gradient-to-br from-petroleum/8 to-corporate/8 border border-petroleum/10 flex flex-col items-center justify-center gap-0 flex-shrink-0 shadow-sm">
-        <Icon name="fa-graduation-cap" className="text-corporate text-xl" aria-hidden="true" />
-        <span className="text-sm font-bold text-petroleum dark:text-[#4DA8C4]">Nv.{getLevel()}</span>
+      <div className="w-full h-12 flex flex-col items-center justify-center gap-0 flex-shrink-0 group">
+        <div className="flex flex-col items-center justify-center gap-0 transition-transform duration-200 group-hover:scale-110 group-active:scale-95">
+          <Icon name="fa-graduation-cap" className="text-corporate text-lg" aria-hidden="true" />
+          <span className="text-[10px] font-bold text-petroleum dark:text-[#4DA8C4] leading-tight">Nv.{getLevel()}</span>
+        </div>
       </div>
     </TooltipIcon>
 
     <TooltipIcon label={`${streak} días racha${isStreakAtRisk() && streak > 0 ? ' — ¡Estudia hoy para mantenerla!' : ''}`} premium>
-      <div className="w-full h-12 rounded-xl bg-gradient-to-br from-petroleum/8 to-corporate/8 border border-petroleum/10 flex flex-col items-center justify-center gap-0 flex-shrink-0 shadow-sm relative">
-        <motion.div
-          animate={streak > 0 ? { scale: [1, 1.08, 1] } : {}}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-        >
-          <Icon name="fa-fire" className={`text-xl ${streak >= 3 ? 'text-orange-500' : 'text-slate-300'}`} aria-hidden="true" />
-        </motion.div>
-        <span className={`text-sm font-semibold ${streak >= 3 ? 'text-orange-600' : 'text-slate-500'}`}>{streak} días</span>
+      <div className="w-full h-12 flex flex-col items-center justify-center gap-0 flex-shrink-0 relative group">
+        <div className="flex flex-col items-center justify-center gap-0 transition-transform duration-200 group-hover:scale-110 group-active:scale-95">
+          <motion.div
+            animate={streak > 0 ? { scale: [1, 1.08, 1] } : {}}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            <Icon name="fa-fire" className={`text-lg ${streak >= 3 ? 'text-orange-500' : 'text-slate-300'}`} aria-hidden="true" />
+          </motion.div>
+          <span className={`text-[10px] font-semibold leading-tight ${streak >= 3 ? 'text-orange-600' : 'text-slate-500'}`}>{streak}</span>
+        </div>
         {isStreakAtRisk() && streak > 0 && (
           <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-amber-400 animate-ping" />
         )}
@@ -70,9 +76,11 @@ const SidebarCollapsed = ({
     </TooltipIcon>
 
     <TooltipIcon label={`${getTotalPoints()} puntos acumulados`} premium>
-      <div className="w-full h-12 rounded-xl bg-gradient-to-br from-petroleum/8 to-corporate/8 border border-petroleum/10 flex flex-col items-center justify-center gap-0 flex-shrink-0 shadow-sm">
-        <Icon name="fa-award" className="text-corporate text-2xl" aria-hidden="true" />
-        <span className="text-sm font-bold text-petroleum dark:text-[#4DA8C4]">{formatPoints(getTotalPoints())}</span>
+      <div className="w-full h-12 flex flex-col items-center justify-center gap-0 flex-shrink-0 group">
+        <div className="flex flex-col items-center justify-center gap-0 transition-transform duration-200 group-hover:scale-110 group-active:scale-95">
+          <Icon name="fa-award" className="text-corporate text-xl" aria-hidden="true" />
+          <span className="text-[10px] font-bold text-petroleum dark:text-[#4DA8C4] leading-tight">{formatPoints(getTotalPoints())}</span>
+        </div>
       </div>
     </TooltipIcon>
 
@@ -112,10 +120,10 @@ const SidebarCollapsed = ({
             <button
               onClick={() => !locked && goToModule(mod.id)}
               disabled={locked}
-              className={`relative w-full min-h-[44px] rounded-lg flex items-center justify-center gap-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-petroleum/40 flex-shrink-0 ${
+              className={`relative w-full min-h-[44px] rounded-lg flex items-center justify-center gap-2 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 flex-shrink-0 ${
                 isActive
                   ? 'bg-gradient-to-r from-petroleum to-corporate text-white shadow-md shadow-petroleum/15 ring-1 ring-white/15'
-                  : 'bg-petroleum/8 dark:bg-petroleum/20 text-petroleum dark:text-[#4DA8C4] hover:bg-petroleum/15 dark:hover:bg-petroleum/30 hover:shadow-sm hover:scale-[1.03]'
+                  : 'text-petroleum/60 dark:text-slate-400 hover:text-petroleum dark:hover:text-[#4DA8C4] hover:scale-110 active:scale-95'
               } ${locked ? 'opacity-35 cursor-not-allowed' : 'cursor-pointer'}`}
               aria-current={isActive ? 'page' : undefined}
               aria-label={`${mod.title}${locked ? ' (bloqueado)' : ''}`}
@@ -143,26 +151,26 @@ const SidebarCollapsed = ({
     </div>
 
     <TooltipIcon label="Recursos adicionales del módulo">
-      <div className="w-full min-h-[44px] rounded-lg bg-gradient-to-br from-petroleum/8 to-corporate/5 border border-petroleum/10 flex items-center justify-center gap-2.5 hover:bg-petroleum/10 dark:hover:bg-petroleum/20 transition-colors cursor-pointer flex-shrink-0 shadow-sm"
+      <div className="w-full min-h-[44px] flex items-center justify-center cursor-pointer flex-shrink-0 transition-transform duration-200 hover:scale-110 active:scale-95 group"
         onClick={() => window.dispatchEvent(new CustomEvent('ialab:openTopic'))}
         tabIndex={0}
         role="button"
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.dispatchEvent(new CustomEvent('ialab:openTopic')); } }}
       >
-        <Icon name="fa-cubes" className="text-corporate text-lg" aria-hidden="true" />
+        <Icon name="fa-cubes" className="text-xl text-corporate/70 group-hover:text-corporate transition-colors duration-200" aria-hidden="true" />
       </div>
     </TooltipIcon>
 
     {storedCertificate && (
       <TooltipIcon label={t('sidebar.certificate_view')}>
-        <div className="w-full min-h-[44px] rounded-lg bg-gradient-to-r from-amber-50 to-amber-100/50 dark:from-amber-900/20 dark:to-amber-800/10 border border-amber-200/50 dark:border-amber-700/30 flex items-center justify-center gap-2.5 cursor-pointer hover:from-amber-100 hover:to-amber-200/50 dark:hover:from-amber-900/30 dark:hover:to-amber-800/20 transition-all flex-shrink-0"
+        <div className="w-full min-h-[44px] flex items-center justify-center gap-1 cursor-pointer flex-shrink-0 transition-transform duration-200 hover:scale-110 active:scale-95 group"
           onClick={() => setShowCertificateModal(true)}
           tabIndex={0}
           role="button"
           onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setShowCertificateModal(true); } }}
         >
-          <Icon name="fa-certificate" className="text-amber-500 text-lg" aria-hidden="true" />
-          <span className="text-xs font-semibold text-amber-700 dark:text-amber-400">{t('sidebar.certificate')}</span>
+          <Icon name="fa-certificate" className="text-lg text-amber-500/70 group-hover:text-amber-500 transition-colors duration-200" aria-hidden="true" />
+          <span className="text-[10px] font-semibold text-amber-600/70 group-hover:text-amber-600 transition-colors duration-200">{t('sidebar.certificate')}</span>
         </div>
       </TooltipIcon>
     )}

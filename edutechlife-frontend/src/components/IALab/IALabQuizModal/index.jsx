@@ -35,6 +35,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
     MAX_SECURITY_WARNINGS,
     canAttemptQuiz, submitQuiz, updateQuizAnswer, openEvaluation,
     closeEvaluationModal, generateTopicFeedback, formatTime,
+    penalizeAttempt,
   } = useIALabQuiz();
 
   const { activeMod, markExamComplete } = useIALabProgressContext();
@@ -81,6 +82,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
     showScoreResult,
     MAX_SECURITY_WARNINGS,
     onSecurityMaxOut: () => {
+      penalizeAttempt();
       closeEvaluationModal();
       onClose();
     },
@@ -129,13 +131,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
     }
   }, [currentQuestion, setCurrentQuestion]);
 
-  const handleSubmit = useCallback(async () => {
-    if (isSubmitting) return;
-    if (unansweredCount > 0 && !showSubmitConfirm) {
-      setShowSubmitConfirm(true);
-      return;
-    }
-    setShowSubmitConfirm(false);
+  const performSubmit = useCallback(async () => {
     setIsSubmitting(true);
     const submitResult = await submitQuiz();
     setIsSubmitting(false);
@@ -179,7 +175,17 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
         metadata: { moduleId: activeMod, score: submitResult.result.score, type: 'exam' },
       });
     }
-  }, [isSubmitting, unansweredCount, showSubmitConfirm, practiceMode, submitQuiz, activeMod, markExamComplete, t, createNotification]);
+  }, [practiceMode, submitQuiz, activeMod, markExamComplete, t, createNotification]);
+
+  const handleSubmit = useCallback(async () => {
+    if (isSubmitting) return;
+    if (unansweredCount > 0 && !showSubmitConfirm) {
+      setShowSubmitConfirm(true);
+      return;
+    }
+    setShowSubmitConfirm(false);
+    await performSubmit();
+  }, [isSubmitting, unansweredCount, showSubmitConfirm, performSubmit]);
 
   const handleSubmitRef = useRef(handleSubmit);
   useEffect(() => { handleSubmitRef.current = handleSubmit; }, [handleSubmit]);
@@ -378,30 +384,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
         unansweredCount={unansweredCount}
         onConfirm={() => {
           setShowSubmitConfirm(false);
-          setIsSubmitting(true);
-          submitQuiz().then((result) => {
-            setIsSubmitting(false);
-            setShowSubmitConfirm(false);
-            if (!practiceMode && result?.result) {
-              const { score, passed } = result.result;
-              const st = useIALabStore.getState();
-              st.updateModuleActivity(activeMod, 'exam', passed, score);
-              try {
-                const key = 'ialab_completed_exams';
-                const current = JSON.parse(localStorage.getItem(key) || '{}');
-                current[activeMod] = score;
-                localStorage.setItem(key, JSON.stringify(current));
-              } catch (e) { /* ignore */ }
-              if (markExamComplete) {
-                markExamComplete(activeMod, score).catch((err) => {
-                  console.error('Error al sincronizar examen completado:', err);
-                });
-              }
-              window.dispatchEvent(new CustomEvent('ialab:examCompleted', {
-                detail: { moduleId: activeMod, score, passed },
-              }));
-            }
-          });
+          performSubmit();
         }}
         onCancel={() => setShowSubmitConfirm(false)}
       />

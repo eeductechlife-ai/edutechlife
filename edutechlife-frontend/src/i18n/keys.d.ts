@@ -632,8 +632,14 @@ export type TranslationKeys = {
   "ialab.challenge.desc_pending": string;
   "ialab.challenge.difficulty_mastered": string;
   "ialab.challenge.difficulty_medium_high": string;
+  "ialab.challenge.example_toggle_hide": string;
+  "ialab.challenge.example_toggle_label": string;
+  "ialab.challenge.example_toggle_show": string;
   "ialab.challenge.impact_high": string;
   "ialab.challenge.m2.resource_ova": string;
+  "ialab.challenge.step_completed": string;
+  "ialab.challenge.step_completed_desc": string;
+  "ialab.challenge.step_tips_label": string;
   "ialab.challenge.m2.resource_pdf": string;
   "ialab.challenge.m2.resource_video": string;
   "ialab.challenge.m2.step1_case_dev": string;
@@ -717,6 +723,7 @@ export type TranslationKeys = {
   "ialab.challenge.m2.step3_tip_3": string;
   "ialab.challenge.m2.step3_tips_title": string;
   "ialab.challenge.m2.step3_title": string;
+  "ialab.challenge.m3.researching": string;
   "ialab.challenge.m3.step1_desc": string;
   "ialab.challenge.m3.step1_example_q": string;
   "ialab.challenge.m3.step1_example_sub": string;
@@ -725,6 +732,7 @@ export type TranslationKeys = {
   "ialab.challenge.m3.step1_main_placeholder": string;
   "ialab.challenge.m3.step1_main_question": string;
   "ialab.challenge.m3.step1_min_hint": string;
+  "ialab.challenge.m3.step1_no_topic": string;
   "ialab.challenge.m3.step1_pick_topic": string;
   "ialab.challenge.m3.step1_sub_placeholder": string;
   "ialab.challenge.m3.step1_sub_questions": string;
@@ -739,6 +747,7 @@ export type TranslationKeys = {
   "ialab.challenge.m3.step2_keydata_label": string;
   "ialab.challenge.m3.step2_keydata_placeholder": string;
   "ialab.challenge.m3.step2_no_sources": string;
+  "ialab.challenge.m3.step2_no_sources_desc": string;
   "ialab.challenge.m3.step2_relevant": string;
   "ialab.challenge.m3.step2_subtitle": string;
   "ialab.challenge.m3.step2_title": string;
@@ -771,10 +780,12 @@ export type TranslationKeys = {
   "ialab.challenge.m3.step4_tip_desc": string;
   "ialab.challenge.m3.step4_tip_title": string;
   "ialab.challenge.m3.step4_title": string;
+  "ialab.challenge.m3.step_label": string;
   "ialab.challenge.m3.verdict_all_classified": string;
   "ialab.challenge.m3.verdict_progress_label": string;
   "ialab.challenge.m3.verdict_summary_title": string;
   "ialab.challenge.m4.doc_context_label": string;
+  "ialab.challenge.m4.researching": string;
   "ialab.challenge.m4.step1.category_cientifica": string;
   "ialab.challenge.m4.step1.category_complementario": string;
   "ialab.challenge.m4.step1.category_label": string;
@@ -791,11 +802,6 @@ export type TranslationKeys = {
   "ialab.challenge.m4.step1.selected_docs": string;
   "ialab.challenge.m4.step1.show_content": string;
   "ialab.challenge.m4.step1.subtitle": string;
-  "ialab.challenge.m4.step1.tipo_articulo": string;
-  "ialab.challenge.m4.step1.tipo_enlace": string;
-  "ialab.challenge.m4.step1.tipo_nota": string;
-  "ialab.challenge.m4.step1.tipo_pdf": string;
-  "ialab.challenge.m4.step1.tipo_video": string;
   "ialab.challenge.m4.step1.title": string;
   "ialab.challenge.m4.step1_desc": string;
   "ialab.challenge.m4.step1_example_insight": string;
@@ -804,8 +810,6 @@ export type TranslationKeys = {
   "ialab.challenge.m4.step1_title": string;
   "ialab.challenge.m4.step2.doc_context_selected": string;
   "ialab.challenge.m4.step2.no_questions": string;
-  "ialab.challenge.m4.step2.quote_for_doc": string;
-  "ialab.challenge.m4.step2.quote_placeholder": string;
   "ialab.challenge.m4.step2.subtitle": string;
   "ialab.challenge.m4.step2.synthesis_desc": string;
   "ialab.challenge.m4.step2.synthesis_placeholder": string;
@@ -846,6 +850,7 @@ export type TranslationKeys = {
   "ialab.challenge.m4.step3_howto_desc": string;
   "ialab.challenge.m4.step3_howto_title": string;
   "ialab.challenge.m4.step3_title": string;
+  "ialab.challenge.m4.step_label": string;
   "ialab.challenge.m5.step1.bias_hint": string;
   "ialab.challenge.m5.step1.bias_title": string;
   "ialab.challenge.m5.step1.case_title": string;
@@ -870,6 +875,7 @@ export type TranslationKeys = {
   "ialab.challenge.m5.step2.affected_candidates": string;
   "ialab.challenge.m5.step2.affected_company": string;
   "ialab.challenge.m5.step2.affected_society": string;
+  "ialab.challenge.m5.step2.cause_placeholder": string;
   "ialab.challenge.m5.step2.causes_title": string;
   "ialab.challenge.m5.step2.connect_biases": string;
   "ialab.challenge.m5.step2.impact_candidates": string;
@@ -2686,6 +2692,9 @@ export type TranslationKeys = {
   "route.module_complete": string;
   "route.module_label": string;
   "route.module_progress": string;
+  "dashboard.modules_progress": string;
+  "dashboard.activity_trends": string;
+  "dashboard.redirect_seconds": string;
   "route.pending": string;
   "route.remaining_min": string;
   "route.review_topics": string;

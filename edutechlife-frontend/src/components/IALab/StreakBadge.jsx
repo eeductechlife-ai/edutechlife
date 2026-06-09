@@ -123,16 +123,10 @@ const StreakBadge = ({ streak, xp, isAtRisk, level, onClick }) => {
           ease: 'easeOut',
           ...(justChanged ? { scale: { duration: 0.6, ease: 'easeInOut' } } : {}),
         }}
-        className={`relative overflow-hidden rounded-xl border p-3 transition-all duration-300 cursor-pointer
-          group-hover:shadow-md group-hover:-translate-y-0.5
+        className={`relative rounded-xl p-3 transition-all duration-300 cursor-pointer
+          group-hover:-translate-y-0.5
           group-focus-visible:ring-2 group-focus-visible:ring-petroleum/40 group-focus-visible:ring-offset-2
-          ${
-          isAtRisk && streak > 0
-            ? 'border-amber-200 dark:border-amber-700/50 bg-gradient-to-br from-amber-50/80 to-white dark:from-amber-900/10 dark:to-slate-800'
-            : streak >= 3
-              ? 'border-corporate/20 dark:border-corporate/30 bg-gradient-to-br from-corporate/[0.04] to-white dark:from-corporate/[0.06] dark:to-slate-800'
-              : 'border-slate-200/60 dark:border-slate-700/60 bg-white dark:bg-slate-800'
-        }`}
+          bg-transparent`}
       >
         {!prefersReducedMotion && isAtRisk && streak > 0 && (
           <motion.div
@@ -178,7 +172,7 @@ const StreakBadge = ({ streak, xp, isAtRisk, level, onClick }) => {
           </div>
           {xp > 0 && (
             <div className="text-right shrink-0">
-              <p className="text-[10px] font-medium text-slate-400">{t('streak.level')} {level}</p>
+              <p className="text-[10px] font-medium text-slate-400 dark:text-slate-500">{t('streak.level')} {level}</p>
               <p className="text-xs font-bold text-corporate">{xp} {t('streak.xp')}</p>
             </div>
           )}

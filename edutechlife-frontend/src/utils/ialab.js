@@ -2,25 +2,13 @@ import { MODULE_QUESTIONS, modules } from '@/data/ialab';
 import { WEIGHTS, MODULE_RESOURCE_COUNTS } from '@/constants/ialab';
 
 /**
- * @typedef {{ exam: boolean, challenge: boolean, resourcesCompleted: boolean, community: boolean, currentScore: number, isUnlocked: boolean, examScore?: number, examEarned?: number, challengeScore?: number, challengeEarned?: number, viewedResources?: string[], resourcesPct?: number }} ModuleProgress
+ * @typedef {{ exam: boolean, challenge: boolean, resourcesCompleted: boolean, community: boolean, currentScore: number, isUnlocked: boolean, examScore?: number, examEarned?: number, challengeScore?: number, challengeEarned?: number, resourcesEarned?: number, viewedResources?: string[], resourcesPct?: number }} ModuleProgress
  */
 
-/** Batched localStorage wrapper */
+/** Synchronous localStorage wrapper — writes immediately, no batching */
 export const ls = {
-  _pending: null,
-  _flush: () => {
-    if (!ls._pending) return;
-    const batch = ls._pending;
-    ls._pending = null;
-    try {
-      for (const [key, value] of batch) {
-        localStorage.setItem(key, JSON.stringify(value));
-      }
-    } catch {}
-  },
   /** @param {string} key @param {*} [fallback] */
   get: (key, fallback = null) => {
-    if (ls._pending?.has(key)) return ls._pending.get(key);
     try {
       const val = localStorage.getItem(key);
       return val ? JSON.parse(val) : fallback;
@@ -28,15 +16,10 @@ export const ls = {
   },
   /** @param {string} key @param {*} value */
   set: (key, value) => {
-    if (!ls._pending) {
-      ls._pending = new Map();
-      queueMicrotask(ls._flush);
-    }
-    ls._pending.set(key, value);
+    try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
   },
   /** @param {string} key */
   remove: (key) => {
-    if (ls._pending?.has(key)) ls._pending.delete(key);
     try { localStorage.removeItem(key); } catch {}
   },
 };
@@ -71,7 +54,7 @@ export const calcModuleScore = (mod) => {
   let score = 0;
   score += mod.examEarned || (mod.exam ? WEIGHTS.exam : 0);
   score += mod.challengeEarned || (mod.challenge ? WEIGHTS.challenge : 0);
-  if (mod.resourcesCompleted) score += WEIGHTS.resources;
+  score += mod.resourcesEarned || (mod.resourcesCompleted ? WEIGHTS.resources : 0);
   if (mod.community) score += WEIGHTS.community;
   return Math.min(100, Math.round(score * 10) / 10);
 };

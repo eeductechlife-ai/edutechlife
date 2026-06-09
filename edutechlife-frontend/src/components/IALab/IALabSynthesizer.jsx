@@ -124,10 +124,10 @@ const IALabSynthesizer = ({ className = '', ...rest }) => {
             {/* Context badge */}
             <div className="flex flex-wrap gap-2 mb-4">
                 <div className="px-3 py-1 bg-petroleum/10 text-petroleum text-xs font-medium rounded-full">
-                    🎯 {context.challenge}
+                    <Icon name="fa-bullseye" className="text-xs" /> {context.challenge}
                 </div>
                 <div className="px-3 py-1 bg-corporate/10 text-corporate text-xs font-medium rounded-full">
-                    📚 {context.userLevel}
+                    <Icon name="fa-book-open" className="text-xs" /> {context.userLevel}
                 </div>
                 {techniques.slice(0, 2).map((tech, index) => (
                     <div key={index} className="px-3 py-1 bg-corporate/10 text-corporate text-xs font-medium rounded-full">

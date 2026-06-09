@@ -21,7 +21,6 @@ const UserCoursesDashboard = () => {
   const storeLevel = useIALabStore(s => s.getLevel());
   const storeStreak = useIALabStore(s => s.streak);
   const courseProgressVal = useIALabStore(s => s.courseProgress);
-  const isLoadingProgress = useIALabStore(s => s.isLoadingProgress);
   const completedModules = useIALabStore(s => s.completedModules);
   const setShowCertificateModal = useIALabStore(s => s.setShowCertificateModal);
   const shouldReduceMotion = useReducedMotion();
@@ -45,26 +44,6 @@ const UserCoursesDashboard = () => {
 
   const activeCourse = courses.find(c => c.id === 'ia-generativa');
   const hasCert = activeCourse?.progress >= 80;
-
-  if (isLoadingProgress) {
-    return (
-      <div className="space-y-6">
-        <div className="grid grid-cols-3 gap-3">
-          {[1, 2, 3].map(i => (
-            <div key={i} className="animate-pulse bg-slate-100 rounded-xl p-3 border border-slate-100">
-              <div className="h-3 w-12 bg-slate-200 rounded mb-2" />
-              <div className="h-6 w-16 bg-slate-200 rounded" />
-            </div>
-          ))}
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {[1, 2].map(i => (
-            <div key={i} className="animate-pulse bg-slate-100 rounded-2xl h-72" />
-          ))}
-        </div>
-      </div>
-    );
-  }
 
   const statVariants = {
     hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 12 },

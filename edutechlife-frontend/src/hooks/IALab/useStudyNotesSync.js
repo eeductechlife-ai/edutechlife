@@ -4,9 +4,26 @@ import { createClerkSupabaseClient } from '../../lib/supabase';
 
 const NOTES_KEY = 'ialab_notes';
 const DAY_NOTES_KEY = 'ialab_day_notes';
+const RESOURCE_NOTES_KEY = 'ialab_resource_notes';
 
 const STUDY_NOTES_EXISTS_KEY = 'ialab_study_notes_table_exists';
-let _studyNotesTableExists = localStorage.getItem(STUDY_NOTES_EXISTS_KEY) !== 'false';
+let _studyNotesTableExists;
+try {
+  _studyNotesTableExists = localStorage.getItem(STUDY_NOTES_EXISTS_KEY) !== 'false';
+} catch {
+  _studyNotesTableExists = true;
+}
+
+function isTableNotFound(e) {
+  if (!e) return false;
+  if (e.status === 404) return true;
+  if (e.code === 'PGRST116' || e.code === 'PGRST205') return true;
+  if (e.error?.status === 404) return true;
+  if (e.error?.code === 'PGRST116' || e.error?.code === 'PGRST205') return true;
+  if (e.message?.includes?.('PGRST116')) return true;
+  if (e.message?.includes?.('relation') && e.message?.includes?.('does not exist')) return true;
+  return false;
+}
 
 export const useStudyNotesSync = () => {
   const { session, isLoaded: sessionLoaded } = useSession();
@@ -58,7 +75,7 @@ export const useStudyNotesSync = () => {
         }, { onConflict: 'user_id,note_type,key' });
       if (error) throw error;
     } catch (e) {
-      if (e?.status === 404 || e?.code === 'PGRST205' || e?.code === 'PGRST116') {
+      if (isTableNotFound(e)) {
         _studyNotesTableExists = false;
         localStorage.setItem(STUDY_NOTES_EXISTS_KEY, 'false');
         return;
@@ -78,13 +95,15 @@ export const useStudyNotesSync = () => {
       if (!data || data.length === 0) return null;
       const moduleNotes = {};
       const dayNotes = {};
+      const resourceNotes = {};
       data.forEach(row => {
         if (row.note_type === 'module') moduleNotes[row.key] = row.content;
         else if (row.note_type === 'day') dayNotes[row.key] = row.content;
+        else if (row.note_type === 'resource') resourceNotes[row.key] = row.content;
       });
-      return { moduleNotes, dayNotes };
+      return { moduleNotes, dayNotes, resourceNotes };
     } catch (e) {
-      if (e?.status === 404 || e?.code === 'PGRST205' || e?.code === 'PGRST116') {
+      if (isTableNotFound(e)) {
         _studyNotesTableExists = false;
         localStorage.setItem(STUDY_NOTES_EXISTS_KEY, 'false');
         return null;
@@ -106,6 +125,11 @@ export const useStudyNotesSync = () => {
       const currentDayNotes = JSON.parse(localStorage.getItem(DAY_NOTES_KEY) || '{}');
       const mergedDayNotes = { ...currentDayNotes, ...remote.dayNotes };
       localStorage.setItem(DAY_NOTES_KEY, JSON.stringify(mergedDayNotes));
+    } catch (e) { /* ignore */ }
+    try {
+      const currentResourceNotes = JSON.parse(localStorage.getItem(RESOURCE_NOTES_KEY) || '{}');
+      const mergedResourceNotes = { ...currentResourceNotes, ...remote.resourceNotes };
+      localStorage.setItem(RESOURCE_NOTES_KEY, JSON.stringify(mergedResourceNotes));
     } catch (e) { /* ignore */ }
   }, [loadNotesFromSupabase]);
 
@@ -153,11 +177,20 @@ export const useStudyNotesSync = () => {
     setLastSync(new Date());
   }, [upsertNote]);
 
+  const syncResourceNote = useCallback((resourceId, content) => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(async () => {
+      await upsertNote('resource', String(resourceId), content || '');
+      setLastSync(new Date());
+    }, 2000);
+  }, [upsertNote]);
+
   return {
     syncModuleNote,
     syncDayNote,
     syncModuleNotes,
     syncDayNotes,
+    syncResourceNote,
     isLoading,
     lastSync,
     isConnected: !!supabase && !!userId,

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from '../../../../i18n/I18nProvider';
 import { Icon } from '../../../../utils/iconMapping.jsx';
@@ -28,7 +28,7 @@ const itemVariants = {
 };
 
 const GeminiStep2 = ({ exercise, response, onResponseChange, t: tProp, topic = '' }) => {
-  const { t, locale } = useTranslation();
+  const { t } = useTranslation();
   const translate = tProp || t;
   const shouldReduceMotion = useReducedMotion();
 
@@ -59,9 +59,10 @@ const GeminiStep2 = ({ exercise, response, onResponseChange, t: tProp, topic = '
 
   if (!fuentes.length) {
     return (
-      <div className="flex items-center justify-center py-12 text-slate-400 dark:text-slate-500">
-        <Icon name="fa-file-text" className="mr-2" />
-        {translate('ialab.challenge.m3.step2_no_sources')}
+      <div className="flex flex-col items-center justify-center py-12 text-slate-400 dark:text-slate-500">
+        <Icon name="fa-file-text" className="text-3xl mb-3" />
+        <p className="text-sm font-medium">{translate('ialab.challenge.m3.step2_no_sources')}</p>
+        <p className="text-xs mt-1">{translate('ialab.challenge.m3.step2_no_sources_desc')}</p>
       </div>
     );
   }
@@ -85,7 +86,7 @@ const GeminiStep2 = ({ exercise, response, onResponseChange, t: tProp, topic = '
         </div>
       </motion.div>
 
-      <ResearchContextBanner topic={topic} stepNumber={2} locale={locale} />
+      <ResearchContextBanner topic={topic} stepNumber={2} />
 
       <motion.div
         initial={shouldReduceMotion ? false : { opacity: 0, y: -5 }}

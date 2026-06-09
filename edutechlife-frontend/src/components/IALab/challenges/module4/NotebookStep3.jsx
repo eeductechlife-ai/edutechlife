@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import PropTypes from 'prop-types';;
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { useState, useEffect, useCallback } from 'react'
+import PropTypes from 'prop-types';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../../../utils/iconMapping.jsx';
 import { useTranslation } from '../../../../i18n/I18nProvider';
 import AutoGrowTextarea from '../../challenges/shared/AutoGrowTextarea';
@@ -51,7 +51,7 @@ const sectionVariants = {
 };
 
 const NotebookStep3 = ({ exercise, response, onResponseChange, topic = '' }) => {
-  const { t, locale } = useTranslation();
+  const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
 
   const parseResponse = useCallback(() => {
@@ -128,7 +128,7 @@ const NotebookStep3 = ({ exercise, response, onResponseChange, topic = '' }) => 
         </div>
       </motion.div>
 
-      <ResearchContextBanner topic={topic} stepNumber={3} locale={locale} />
+      <ResearchContextBanner topic={topic} stepNumber={3} moduleId={4} />
 
       <motion.div
         initial={shouldReduceMotion ? false : { opacity: 0, y: -5 }}

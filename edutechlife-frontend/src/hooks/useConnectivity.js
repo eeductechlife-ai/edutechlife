@@ -1,15 +1,21 @@
 import { useState, useEffect, useRef } from 'react';
 
-const PING_URL = 'https://clerk.accounts.dev/.well-known/favicon.ico';
+const PING_URL = 'https://www.google.com/favicon.ico';
 const PING_INTERVAL = 15000;
+
+function pingImage(url) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    const timeout = setTimeout(() => { img.src = ''; resolve(false); }, 3000);
+    img.onload = () => { clearTimeout(timeout); resolve(true); };
+    img.onerror = () => { clearTimeout(timeout); resolve(false); };
+    img.src = url;
+  });
+}
 
 async function checkConnectivity() {
   try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 3000);
-    const res = await fetch(PING_URL, { method: 'HEAD', mode: 'no-cors', signal: controller.signal });
-    clearTimeout(timeout);
-    return true;
+    return await pingImage(PING_URL);
   } catch {
     return navigator.onLine;
   }

@@ -15,13 +15,13 @@ const ExampleToggle = ({ example }) => {
         aria-expanded={show}
       >
         <Icon name={show ? 'fa-eye-slash' : 'fa-eye'} className="text-xs" />
-        {show ? t('ialab.challenge.m2.example_toggle_hide') : t('ialab.challenge.m2.example_toggle_show')}
+        {show ? t('ialab.challenge.example_toggle_hide') : t('ialab.challenge.example_toggle_show')}
       </button>
       {show && (
         <div className="mt-2 p-3 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-800 leading-relaxed">
           <div className="flex items-center gap-2 mb-1">
             <Icon name="fa-lightbulb" className="text-amber-500" />
-            <span className="font-semibold">{t('ialab.challenge.m2.example_toggle_label')}</span>
+            <span className="font-semibold">{t('ialab.challenge.example_toggle_label')}</span>
           </div>
           <p>{example}</p>
         </div>

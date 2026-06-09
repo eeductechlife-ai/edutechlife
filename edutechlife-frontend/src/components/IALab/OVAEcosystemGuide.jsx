@@ -1,5 +1,6 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from '../../i18n/I18nProvider';
 import {
   BrainCircuit, ChevronRight, ChevronLeft,
@@ -7,12 +8,26 @@ import {
   Lightbulb, Target, Globe, Zap, Settings, MessageSquare,
   TrendingUp, Cpu, Wrench, Share2, Search, Layout, Database,
   Bot, Volume2, Image, FileText, Link, HelpCircle, Rocket,
-  ChevronDown, Users, Play, Briefcase
+  ChevronDown, Users, Play, Briefcase, Trophy
 } from 'lucide-react';
 import { stopSpeech } from '../../utils/speech';
 import { OVAIntro } from './shared';
 import VoiceReader from './VoiceReader';
 import { infographicData } from '../../data/ova/ecosystemGuide';
+import EvolutionTimeline from './OVAEcosystemGuide/EvolutionTimeline';
+import ToolsMatchup from './OVAEcosystemGuide/ToolsMatchup';
+import ExpandedQuiz from './OVAEcosystemGuide/ExpandedQuiz';
+import XPTracker from './OVAEcosystemGuide/XPTracker';
+
+const screenVariants = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 200, damping: 25 } },
+  exit: { opacity: 0, y: -20, transition: { duration: 0.15 } },
+};
+
+const XP_PER_SCREEN = 15;
+const QUIZ_XP_BONUS = 25;
+const MAX_XP = 145;
 
 const Logo = () => (
   <div className="flex items-center gap-2 select-none group cursor-pointer">
@@ -34,7 +49,7 @@ const DetailCard = ({ detail }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const DetailIcon = detailIconMap[detail.icon] || null;
   return (
-    <div className={`bg-white dark:bg-slate-800 rounded-xl border-2 transition-all ${isExpanded ? 'border-corporate' : 'border-slate-100 dark:border-slate-700 hover:border-slate-200 dark:hover:border-slate-600'}`}>
+    <div className={`bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm rounded-2xl border transition-all shadow-sm ${isExpanded ? 'border-corporate/40 shadow-md' : 'border-slate-100 dark:border-slate-700 hover:border-corporate/30 hover:shadow-md'}`}>
       <button onClick={() => setIsExpanded(!isExpanded)} className="w-full flex items-center gap-4 p-4 text-left">
         <div className={`shrink-0 transition-colors ${isExpanded ? 'text-corporate' : 'text-slate-400'}`}>
           {DetailIcon ? <DetailIcon size={20} /> : <ChevronDown size={20} />}
@@ -126,80 +141,6 @@ const StrategiesScreen = () => {
   );
 };
 
-const QuizScreen = () => {
-  const { t } = useTranslation();
-  const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState([]);
-  const [result, setResult] = useState(null);
-
-  const questions = [
-    { key: 'q1', options: ['o1', 'o2', 'o3'] },
-    { key: 'q2', options: ['o1', 'o2', 'o3'] },
-    { key: 'q3', options: ['o1', 'o2', 'o3'] },
-  ];
-
-  const getScore = () => {
-    const r = answers.reduce((sum, a) => sum + a, 0);
-    if (r <= 3) return 'beginner';
-    if (r <= 5) return 'creator';
-    if (r <= 7) return 'pro';
-    return 'power';
-  };
-
-  const handleAnswer = (val) => {
-    const newAnswers = [...answers, val];
-    setAnswers(newAnswers);
-    if (step < 2) {
-      setStep(step + 1);
-    } else {
-      setResult(getScore());
-    }
-  };
-
-  const restart = () => { setStep(0); setAnswers([]); setResult(null); };
-
-  if (result) {
-    return (
-      <div className="animate-[fadeIn_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards] space-y-4 text-center">
-        <div className="w-16 h-16 bg-gradient-to-br from-corporate to-petroleum rounded-full flex items-center justify-center mx-auto shadow-lg">
-          <Users className="w-8 h-8 text-white" />
-        </div>
-        <h4 className="font-[900] text-petroleum text-xl tracking-tighter lowercase">{t(`ova.ecosystem.quiz_result_${result}_title`)}</h4>
-        <div className="p-4 bg-gradient-to-br from-corporate/5 to-white rounded-xl border border-corporate/20">
-          <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">{t(`ova.ecosystem.quiz_result_${result}`)}</p>
-        </div>
-        <button onClick={restart} className="px-6 py-3 bg-slate-100 dark:bg-slate-700 text-petroleum font-black rounded-xl text-xs uppercase tracking-wider hover:bg-slate-200 transition-all">
-          {t('ova.ecosystem.quiz_restart')}
-        </button>
-      </div>
-    );
-  }
-
-  const q = questions[step];
-  return (
-    <div className="animate-[fadeIn_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards] space-y-4">
-      <div className="flex items-center gap-2 mb-2">
-        <HelpCircle className="w-4 h-4 text-corporate" />
-        <span className="text-[10px] font-black text-petroleum uppercase tracking-wider">{t('ova.ecosystem.quiz_desc')}</span>
-      </div>
-      <div className="flex gap-1.5 mb-4">
-        {[0, 1, 2].map(i => (
-          <div key={i} className={`h-1.5 rounded-full transition-all ${i === step ? 'w-8 bg-petroleum' : i < step ? 'w-2 bg-corporate' : 'w-2 bg-slate-200 dark:bg-slate-600'}`} />
-        ))}
-      </div>
-      <h4 className="font-[900] text-petroleum text-base leading-tight">{t(`ova.ecosystem.quiz_${q.key}`)}</h4>
-      <div className="space-y-2">
-        {q.options.map((opt, i) => (
-          <button key={i} onClick={() => handleAnswer(i + 1)}
-            className="w-full p-4 bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 hover:border-corporate rounded-xl text-left text-xs font-medium text-slate-600 dark:text-slate-300 transition-all">
-            {t(`ova.ecosystem.quiz_${q.key}_${opt}`)}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-};
-
 const ChallengeScreen = () => {
   const { t } = useTranslation();
   const [scenario, setScenario] = useState(null);
@@ -287,18 +228,44 @@ export default function OVAEcosystemGuide({ onComplete }) {
   const [screen, setScreen] = useState('welcome');
   const [completed, setCompleted] = useState([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [xp, setXp] = useState(0);
+  const [showConfetti, setShowConfetti] = useState(false);
   const certCompletedRef = useRef(false);
+  const m8AutoCompletedRef = useRef(false);
   const nav = ['welcome', 'm1', 'm2', 'm3', 'm4', 'm5', 'm6', 'm7', 'm8'];
   const curIdx = nav.indexOf(screen);
 
   const sections = infographicData.sections;
 
+  useEffect(() => {
+    if (screen === 'm8' && !m8AutoCompletedRef.current) {
+      m8AutoCompletedRef.current = true;
+      handleMarkComplete();
+    }
+  }, [screen]);
+
+  useEffect(() => {
+    if (showConfetti) {
+      import('canvas-confetti').then(({ default: confetti }) => {
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ['#004B63', '#00BCD4', '#10B981', '#F59E0B'],
+        });
+      });
+    }
+  }, [showConfetti]);
+
   const nextScreen = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     if (screen === 'welcome') { setScreen('m1'); return; }
-    const c = [...completed];
-    if (!c.includes(screen)) c.push(screen);
-    setCompleted(c);
+    if (!completed.includes(screen)) {
+      setCompleted(prev => [...prev, screen]);
+      if (screen !== 'm6') {
+        setXp(prev => prev + XP_PER_SCREEN);
+      }
+    }
     const next = nav.indexOf(screen) + 1;
     if (next < nav.length) setScreen(nav[next]);
   };
@@ -313,6 +280,12 @@ export default function OVAEcosystemGuide({ onComplete }) {
   const handleMarkComplete = () => {
     if (!certCompletedRef.current) {
       certCompletedRef.current = true;
+      if (!completed.includes('m6')) {
+        setXp(prev => prev + XP_PER_SCREEN + QUIZ_XP_BONUS);
+      } else {
+        setXp(prev => prev + QUIZ_XP_BONUS);
+      }
+      setShowConfetti(true);
       onComplete?.();
     }
   };
@@ -336,7 +309,7 @@ export default function OVAEcosystemGuide({ onComplete }) {
       );
       case 'm1': return (
         <>
-          <SectionScreen section={sections[0]} />
+          <EvolutionTimeline items={sections[0].details} />
           <div className="flex justify-center mt-6">
             <VoiceReader text={sections[0].content} />
           </div>
@@ -352,7 +325,7 @@ export default function OVAEcosystemGuide({ onComplete }) {
       );
       case 'm3': return (
         <>
-          <SectionScreen section={sections[2]} />
+          <ToolsMatchup items={sections[2].details} />
           <div className="flex justify-center mt-6">
             <VoiceReader text={sections[2].content} />
           </div>
@@ -376,7 +349,7 @@ export default function OVAEcosystemGuide({ onComplete }) {
       );
       case 'm6': return (
         <>
-          <QuizScreen />
+          <ExpandedQuiz questions={infographicData.quiz?.questions || []} />
           <div className="flex justify-center mt-6">
             <VoiceReader text={t('ova.ecosystem.quiz_voice')} />
           </div>
@@ -408,9 +381,8 @@ export default function OVAEcosystemGuide({ onComplete }) {
         <Logo />
         <div className="flex items-center gap-4">
           {screen !== 'welcome' && (
-            <div className="flex items-center gap-1.5 bg-blue-50 dark:bg-blue-900/30 px-3 py-1 rounded-full border border-corporate/20">
-              <Star className="text-corporate fill-current" size={14} />
-              <span className="font-bold text-petroleum text-xs">{nav.filter(id => completed.includes(id)).length}/{nav.length - 1}</span>
+            <div className="w-32">
+              <XPTracker xp={xp} maxXp={MAX_XP} />
             </div>
           )}
           <button onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Menú de navegación" className="min-w-[44px] min-h-[44px] p-2.5 bg-[#F1F5F9] dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-xl transition-all border border-slate-100 dark:border-slate-700"><Menu className="w-5 h-5 text-petroleum" /></button>
@@ -425,7 +397,19 @@ export default function OVAEcosystemGuide({ onComplete }) {
               <h1 className="text-lg md:text-xl font-[900] text-petroleum tracking-tighter leading-tight">{screensData[screen]?.title}</h1>
             </div>
           )}
-          <div className="relative z-10 min-h-[180px] flex flex-col justify-center">{renderContent()}</div>
+          <div className="relative z-10 min-h-[180px] flex flex-col justify-center">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={screen}
+                variants={screenVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+              >
+                {renderContent()}
+              </motion.div>
+            </AnimatePresence>
+          </div>
         </div>
       </main>
 

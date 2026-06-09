@@ -65,6 +65,7 @@ export const createPersistenceSlice = (set, get) => ({
       completedInfographics: data.completedInfographics ?? state.completedInfographics,
       completedActivities: data.completedActivities ?? state.completedActivities,
       challengeScores: data.challengeScores ?? state.challengeScores,
+      completedCommunity: data.completedCommunity ?? state.completedCommunity,
       courseProgress: effectiveProgress,
       syncStatus: data.syncStatus ?? state.syncStatus,
       isUsingJWT: data.isUsingJWT ?? state.isUsingJWT,
