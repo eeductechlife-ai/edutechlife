@@ -57,10 +57,10 @@ const StepFeedback = ({ completed, total, hints = [], t }) => {
 
 
 StepFeedback.propTypes = {
-  completed: PropTypes.any,
-  total: PropTypes.any,
-  hints: PropTypes.any,
-  t: PropTypes.any,
+  completed: PropTypes.number,
+  total: PropTypes.number,
+  hints: PropTypes.arrayOf(PropTypes.string),
+  t: PropTypes.func.isRequired,
 };
 
 export default StepFeedback;

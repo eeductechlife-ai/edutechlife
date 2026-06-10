@@ -22,8 +22,9 @@ import IALabSidebar from './IALabSidebar';
 import IALabModals from './IALabModals';
 import IALabModuleHeader from './IALabModuleHeader';
 import ModuleInfoSection from './ModuleInfoSection';
-
 import Breadcrumbs from './Breadcrumbs';
+import handleGlobalAction from './handleGlobalAction';
+import { createSlideVariants } from './IALabAnimations';
 
 const preloadForum = () => import('./IALabForumOptimized');
 const IALabForumOptimized = lazy(preloadForum);
@@ -39,7 +40,7 @@ import { RouteSkeleton, ModuleInfoSkeleton, ModuleOverviewSkeleton, ModuleAction
 import useIALabKeyboardShortcuts from '../../hooks/IALab/useIALabKeyboardShortcuts';
 import SectionErrorBoundary from './SectionErrorBoundary';
 import {
-  SPRING_STIFFNESS, SPRING_DAMPING, SLIDE_DISTANCE, MOBILE_MENU_WIDTH,
+  SPRING_STIFFNESS, SPRING_DAMPING, MOBILE_MENU_WIDTH,
   LOADING_TIMEOUT, TOAST_DURATION, MODAL_DELAY, SCROLL_DELAY,
   SWIPE_THRESHOLD, PULL_REFRESH_THRESHOLD,
   CONFETTI_PARTICLE_COUNT, CONFETTI_SPREAD,
@@ -49,9 +50,8 @@ import { useTheme } from '../../context/ThemeContext';
 import { useTranslation } from '../../i18n/I18nProvider';
 import ValerioFloatingButton from './ValerioFloatingButton';
 import { useSessionTracker } from '../../hooks/useSessionTracker';
-
 import { useAchievementNotifications } from '../../hooks/useAchievementNotifications';
-import { LoadingSpinner } from './shared/LoadingSpinner';
+const IALabValerioPanel = lazy(() => import('./IALabValerioPanel'));
 import MobileHeader from './shared/MobileHeader';
 import MobileInfoBar from './shared/MobileInfoBar';
 import ToastNotification from './shared/ToastNotification';
@@ -65,18 +65,10 @@ const IALabContent = () => {
       { id: 'actividades', label: t('ialab.tab_activities') },
       { id: 'herramientas', label: t('ialab.tab_tools') },
     ];
-    const showPremiumEvaluationModal = useIALabStore(s => s.showPremiumEvaluationModal);
-    const setShowPremiumEvaluationModal = useIALabStore(s => s.setShowPremiumEvaluationModal);
-    const { user, showCertificateModal, setShowCertificateModal } = useIALabUIContext();
-    const showBadgeGallery = useIALabStore(s => s.showBadgeGallery);
-    const setShowBadgeGallery = useIALabStore(s => s.setShowBadgeGallery);
-    const showLeaderboard = useIALabStore(s => s.showLeaderboard);
-    const setShowLeaderboard = useIALabStore(s => s.setShowLeaderboard);
+    const { user } = useIALabUIContext();
     const { toasts: achievementToasts, removeToast: removeAchievementToast } = useAchievementNotifications(useIALabStore);
     const { completedModules, courseProgress, activeMod, setActiveMod, completedExams, challengeScores, moduleProgress, modules } = useIALabProgressContext();
     const { isDarkMode, toggleDarkMode } = useTheme();
-    const [showExamModal, setShowExamModal] = useState(false);
-    const [showQuizModal, setShowQuizModal] = useState(false);
     const [showValerioPanel, setShowValerioPanel] = useState(false);
     const [showMobileMenu, setShowMobileMenu] = useState(false);
     const [mobileMenuClosing, setMobileMenuClosing] = useState(false);
@@ -88,14 +80,10 @@ const IALabContent = () => {
         setMobileMenuClosing(false);
       }, 250);
     };
-    const [showExamResult, setShowExamResult] = useState(false);
-    const [showChallengeResult, setShowChallengeResult] = useState(false);
     const [isForumOpen, setIsForumOpen] = useState(false);
     const [toast, setToast] = useState(null);
 
     const [viewSection, setViewSection] = useState(null);
-    const [showHistoryModal, setShowHistoryModal] = useState(false);
-    const [showHelpModal, setShowHelpModal] = useState(false);
     const [examRefreshKey, setExamRefreshKey] = useState(0);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [refreshKey, setRefreshKey] = useState(0);
@@ -139,20 +127,7 @@ const IALabContent = () => {
       }
     }, [activeMod]);
 
-    const slideVariants = {
-      enter: (dir) => ({
-        x: shouldReduceMotion ? 0 : dir > 0 ? SLIDE_DISTANCE : -SLIDE_DISTANCE,
-        opacity: shouldReduceMotion ? 1 : 0,
-      }),
-      center: {
-        x: 0,
-        opacity: 1,
-      },
-      exit: (dir) => ({
-        x: shouldReduceMotion ? 0 : dir > 0 ? -SLIDE_DISTANCE : SLIDE_DISTANCE,
-        opacity: shouldReduceMotion ? 1 : 0,
-      }),
-    };
+    const slideVariants = createSlideVariants(shouldReduceMotion);
 
     // Sincronización URL ↔ Store (useLayoutEffect para evitar flash)
     useLayoutEffect(() => {
@@ -218,6 +193,12 @@ const IALabContent = () => {
         return () => window.removeEventListener('ialab:switchTab', handleSwitchTab);
     }, []);
 
+    // Auto-cerrar Valerio cuando se abre un modal inmersivo (video/OVA)
+    const immersiveModalOpen = useIALabStore(s => s.immersiveModalOpen);
+    useEffect(() => {
+        if (immersiveModalOpen) setShowValerioPanel(false);
+    }, [immersiveModalOpen]);
+
     // Tour: no mostrar si ya empezó el curso
     const isLoadingProgress = useIALabStore(s => s.isLoadingProgress);
     const hasStartedCourse = useIALabStore(s => s.hasStartedCourse());
@@ -227,45 +208,11 @@ const IALabContent = () => {
       : null;
 
     // Handler para acciones globales
-    const handleGlobalAction = useCallback((action, data) => {
-        switch (action) {
-            case 'OPEN_EVALUATION':
-                setShowExamModal(true);
-                break;
-            case 'OPEN_QUIZ':
-                setShowQuizModal(true);
-                break;
-            case 'OPEN_CHALLENGE':
-                setShowPremiumEvaluationModal(true);
-                break;
-            case 'SHOW_EXAM_RESULT':
-                setShowExamResult(true);
-                break;
-            case 'SHOW_CHALLENGE_RESULT':
-                setShowChallengeResult(true);
-                break;
-            case 'OPEN_VALERIO':
-                setShowValerioPanel(true);
-                break;
-            case 'CLOSE_EVALUATION':
-                setShowExamModal(false);
-                break;
-            case 'CLOSE_QUIZ':
-                setShowQuizModal(false);
-                break;
-            case 'CLOSE_VALERIO':
-                setShowValerioPanel(false);
-                break;
-            case 'OPEN_CERTIFICATE':
-            case 'SHOW_CERTIFICATE':
-                setShowCertificateModal(true);
-                break;
-            case 'OPEN_COMMUNITY':
-                window.dispatchEvent(new CustomEvent('ialab:switchTab', { detail: 'comunidad' }));
-                break;
-            default:
-                console.warn('Acción global no manejada:', action, data);
-        }
+    const handleAction = useCallback((action, data) => {
+        if (action === 'OPEN_VALERIO') { setShowValerioPanel(true); return; }
+        if (action === 'CLOSE_VALERIO') { setShowValerioPanel(false); return; }
+        const s = useIALabStore.getState();
+        handleGlobalAction(action, data, s);
     }, []);
 
     useCelebrationEffects(activeMod, handleGlobalAction);
@@ -293,8 +240,8 @@ const IALabContent = () => {
                 
                 {/* Layout principal - Flexbox estricto para evitar overlap */}
                 <div className="flex flex-1 overflow-hidden">
-                    {/* Sidebar - oculto en móviles, visible desde lg (tablet landscape) */}
-                    <div className="hidden lg:flex" data-tour="tour-sidebar">
+                    {/* Sidebar - oculto en móviles, visible desde md (tablet) */}
+                    <div className="hidden md:flex" data-tour="tour-sidebar">
                       <IALabSidebar />
                     </div>
 
@@ -455,36 +402,24 @@ const IALabContent = () => {
                 </div>
 
                 <IALabModals
-                  showExamModal={showExamModal}
                   handleGlobalAction={handleGlobalAction}
-                  showQuizModal={showQuizModal}
-                  showValerioPanel={showValerioPanel}
-                  showPremiumEvaluationModal={showPremiumEvaluationModal}
-                  setShowPremiumEvaluationModal={setShowPremiumEvaluationModal}
-                  showCertificateModal={showCertificateModal}
-                  setShowCertificateModal={setShowCertificateModal}
-                  showBadgeGallery={showBadgeGallery}
-                  setShowBadgeGallery={setShowBadgeGallery}
-                  showLeaderboard={showLeaderboard}
-                  setShowLeaderboard={setShowLeaderboard}
-                  showExamResult={showExamResult}
-                  setShowExamResult={setShowExamResult}
                   activeMod={activeMod}
                   completedExams={completedExams}
-                  showHistoryModal={showHistoryModal}
-                  setShowHistoryModal={setShowHistoryModal}
-                  showHelpModal={showHelpModal}
-                  setShowHelpModal={setShowHelpModal}
-                  showChallengeResult={showChallengeResult}
-                  setShowChallengeResult={setShowChallengeResult}
                 />
 
                 <ValerioFloatingButton
-                  onClick={() => handleGlobalAction('OPEN_VALERIO')}
+                  onClick={() => handleAction('OPEN_VALERIO')}
                   t={t}
                 />
-                
 
+                <Suspense fallback={null}>
+                  {showValerioPanel && (
+                    <IALabValerioPanel
+                      isOpen={showValerioPanel}
+                      onClose={() => setShowValerioPanel(false)}
+                    />
+                  )}
+                </Suspense>
 
                 {/* Banner de conectividad */}
                 <OfflineBanner />

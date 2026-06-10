@@ -321,10 +321,10 @@ const NotebookStep3 = ({ exercise, response, onResponseChange, topic = '' }) => 
 
 
 NotebookStep3.propTypes = {
-  exercise: PropTypes.any,
-  response: PropTypes.any,
-  onResponseChange: PropTypes.any,
-  topic: PropTypes.any,
+  exercise: PropTypes.object,
+  response: PropTypes.string,
+  onResponseChange: PropTypes.func,
+  topic: PropTypes.string,
 };
 
 export default NotebookStep3;

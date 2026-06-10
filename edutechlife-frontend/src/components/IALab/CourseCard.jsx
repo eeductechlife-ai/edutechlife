@@ -181,8 +181,8 @@ const CourseCard = ({ course, isSignedIn }) => {
 
 
 CourseCard.propTypes = {
-  course: PropTypes.any,
-  isSignedIn: PropTypes.any,
+  course: PropTypes.object,
+  isSignedIn: PropTypes.bool,
 };
 
 export default CourseCard;

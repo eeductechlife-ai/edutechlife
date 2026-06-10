@@ -12,12 +12,11 @@
  * - Integración con cuadrícula de recursos
  */
 
-import React, { useState } from 'react'
-import PropTypes from 'prop-types';;
+import { useState, useEffect, useRef } from 'react'
+import PropTypes from 'prop-types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
-import { useEffect, useRef } from 'react';
 import QueEsPrompt_OVA_Original from './QueEsPrompt_OVA_Original';
 
 /**
@@ -75,7 +74,7 @@ const OVAThumbnail = ({
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3 }}
         onClick={handleClick}
-        className="group relative w-full bg-white rounded-2xl border border-slate-200/60 border-l-4 border-l-petroleum shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden hover:scale-[1.02] active:scale-[0.98]"
+        className="group relative w-full bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 border-l-4 border-l-petroleum shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden hover:scale-[1.02] active:scale-[0.98]"
         aria-label={t('ialab.ova_thumbnail.aria_open', { title: title || t('ialab.ova_thumbnail.title') })}
         title={t('ialab.ova_thumbnail.title_click')}
       >
@@ -88,12 +87,12 @@ const OVAThumbnail = ({
         </div>
 
         {/* Imagen de previsualización premium */}
-          <div className="relative h-48 overflow-hidden bg-gradient-to-br from-petroleum/10 to-corporate/10 border-b border-slate-200/60">
+          <div className="relative h-48 overflow-hidden bg-gradient-to-br from-petroleum/10 to-corporate/10 border-b border-slate-200/60 dark:border-slate-700/60">
           {/* Patrón de fondo */}
           <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-1/4 left-1/4 w-32 h-32 rounded-full bg-white"></div>
-            <div className="absolute bottom-1/4 right-1/4 w-24 h-24 rounded-full bg-white"></div>
-            <div className="absolute top-1/3 right-1/3 w-16 h-16 rounded-full bg-white"></div>
+            <div className="absolute top-1/4 left-1/4 w-32 h-32 rounded-full bg-white dark:bg-white/20"></div>
+            <div className="absolute bottom-1/4 right-1/4 w-24 h-24 rounded-full bg-white dark:bg-white/20"></div>
+            <div className="absolute top-1/3 right-1/3 w-16 h-16 rounded-full bg-white dark:bg-white/20"></div>
           </div>
           
           {/* Cerebro central interactivo */}
@@ -145,23 +144,23 @@ const OVAThumbnail = ({
         <div className="p-5">
           {/* Información del OVA */}
           <div className="space-y-3">
-            <h4 className="font-bold text-slate-800 text-lg leading-tight">
+            <h4 className="font-bold text-slate-800 dark:text-slate-100 text-lg leading-tight">
               {title}
             </h4>
             
-            <p className="text-slate-600 text-sm leading-relaxed">
+            <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
               {description}
             </p>
 
             {/* Metadatos del OVA */}
-            <div className="grid grid-cols-2 gap-3 pt-3">
+             <div className="grid grid-cols-2 gap-3 pt-3">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
                   <Icon name="fa-clock" className="text-petroleum w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs text-slate-500">{t('ialab.ova_thumbnail.duration')}</div>
-                  <div className="text-sm font-medium text-slate-700">{estimatedTime}</div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400">{t('ialab.ova_thumbnail.duration')}</div>
+                  <div className="text-sm font-medium text-slate-700 dark:text-slate-200">{estimatedTime}</div>
                 </div>
               </div>
 
@@ -170,8 +169,8 @@ const OVAThumbnail = ({
                   <Icon name="fa-signal" className="text-petroleum w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs text-slate-500">{t('ialab.ova_thumbnail.difficulty_label')}</div>
-                  <div className="text-sm font-medium text-slate-700">{difficulty}</div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400">{t('ialab.ova_thumbnail.difficulty_label')}</div>
+                  <div className="text-sm font-medium text-slate-700 dark:text-slate-200">{difficulty}</div>
                 </div>
               </div>
 
@@ -180,8 +179,8 @@ const OVAThumbnail = ({
                   <Icon name="fa-mouse-pointer" className="text-petroleum w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs text-slate-500">{t('ialab.ova_thumbnail.interactivities')}</div>
-                  <div className="text-sm font-medium text-slate-700">{interactiveElements}</div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400">{t('ialab.ova_thumbnail.interactivities')}</div>
+                  <div className="text-sm font-medium text-slate-700 dark:text-slate-200">{interactiveElements}</div>
                 </div>
               </div>
 
@@ -190,19 +189,19 @@ const OVAThumbnail = ({
                   <Icon name="fa-graduation-cap" className="text-petroleum w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs text-slate-500">{t('ialab.ova_thumbnail.certification')}</div>
-                  <div className="text-sm font-medium text-slate-700">{t('ialab.ova_thumbnail.included')}</div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400">{t('ialab.ova_thumbnail.certification')}</div>
+                  <div className="text-sm font-medium text-slate-700 dark:text-slate-200">{t('ialab.ova_thumbnail.included')}</div>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Indicador de acción */}
-          <div className="mt-4 pt-4 border-t border-slate-200/60">
+          <div className="mt-4 pt-4 border-t border-slate-200/60 dark:border-slate-700/60">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Icon name="fa-hand-pointer" className="w-4 h-4 text-petroleum" />
-                <span className="text-sm text-slate-600 font-medium">
+                <span className="text-sm text-slate-600 dark:text-slate-300 font-medium">
                   {t('ialab.ova_thumbnail.click_to_explore')}
                 </span>
               </div>
@@ -210,8 +209,9 @@ const OVAThumbnail = ({
                 <span className="text-xs text-petroleum font-bold">{t('ialab.ova_thumbnail.explore')}</span>
                 <Icon name="fa-arrow-right" className="w-4 h-4 text-petroleum" />
               </div>
-            </div>
           </div>
+        </div>
+        </div>
 
         {/* Efecto hover */}
         <div className="absolute inset-0 bg-gradient-to-t from-petroleum/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
@@ -232,12 +232,12 @@ const OVAThumbnail = ({
 
 
 OVAThumbnail.propTypes = {
-  title: PropTypes.any,
-  description: PropTypes.any,
-  estimatedTime: PropTypes.any,
-  difficulty: PropTypes.any,
-  interactiveElements: PropTypes.any,
-  onOpenOVA: PropTypes.any,
+  title: PropTypes.string,
+  description: PropTypes.string,
+  estimatedTime: PropTypes.string,
+  difficulty: PropTypes.string,
+  interactiveElements: PropTypes.number,
+  onOpenOVA: PropTypes.func,
 };
 
 export default OVAThumbnail;

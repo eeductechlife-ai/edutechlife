@@ -5,10 +5,10 @@ import { SLIDE_ICONS } from './ovaData';
 
 
 OvaGeminiSlides.propTypes = {
-  currentSlide: PropTypes.any,
-  slideContent: PropTypes.any,
-  slideDescs: PropTypes.any,
-  slideTitles: PropTypes.any,
+  currentSlide: PropTypes.number,
+  slideContent: PropTypes.array,
+  slideDescs: PropTypes.array,
+  slideTitles: PropTypes.array,
 };
 
 export default function OvaGeminiSlides({ currentSlide, slideContent, slideDescs, slideTitles }) {

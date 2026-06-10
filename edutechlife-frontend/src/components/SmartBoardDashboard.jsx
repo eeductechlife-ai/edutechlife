@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback, useMemo, memo } from '
 import { motion, AnimatePresence } from 'framer-motion';
 import SidebarNavigation from './SidebarNavigation';
 import useFocusTrap from '../hooks/useFocusTrap';
+import { sanitize } from '../utils/sanitize';
 
 import XPProgressBar from './XPProgressBar';
 import MissionCard from './MissionCard';
@@ -31,8 +32,8 @@ const HomeView = memo(({
     >
       <div className="flex items-center justify-between">
         <div className="flex-1">
-          <h3 className="text-xl font-bold text-white font-montserrat mb-1" dangerouslySetInnerHTML={{ __html: t('smartboard.bienvenido', { name: studentName }) }} />
-          <p className="text-white/80 text-sm font-open-sans" dangerouslySetInnerHTML={{ __html: t('smartboard.today_missions', { count: missions.filter(m => !m.completed && !m.locked).length, subjects: subjects.filter(s => s.progress > 0 && s.progress < 100).length }) }} />
+          <h3 className="text-xl font-bold text-white font-montserrat mb-1" dangerouslySetInnerHTML={{ __html: sanitize(t('smartboard.bienvenido', { name: studentName })) }} />
+          <p className="text-white/80 text-sm font-open-sans" dangerouslySetInnerHTML={{ __html: sanitize(t('smartboard.today_missions', { count: missions.filter(m => !m.completed && !m.locked).length, subjects: subjects.filter(s => s.progress > 0 && s.progress < 100).length })) }} />
         </div>
         <div className="flex items-center gap-3 pl-4 border-l border-white/20">
           <div className="text-right mr-3">

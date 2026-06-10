@@ -6,22 +6,20 @@ import { useTranslation } from '../../../i18n/I18nProvider';
 
 
 OvaGeminiQuiz.propTypes = {
-  quiz: PropTypes.any,
-  selectedAnswers: PropTypes.any,
-  showResults: PropTypes.any,
-  isAllCorrect: PropTypes.any,
-  answeredCount: PropTypes.any,
-  totalQuestions: PropTypes.any,
-  correctCount: PropTypes.any,
-  handleAnswerSelect: PropTypes.any,
-  handleCheckAnswers: PropTypes.any,
-  handleComplete: PropTypes.any,
-  isES: PropTypes.any,
+  quiz: PropTypes.array,
+  selectedAnswers: PropTypes.object,
+  showResults: PropTypes.bool,
+  isAllCorrect: PropTypes.bool,
+  answeredCount: PropTypes.number,
+  totalQuestions: PropTypes.number,
+  correctCount: PropTypes.number,
+  handleAnswerSelect: PropTypes.func,
+  handleCheckAnswers: PropTypes.func,
 };
 
 export default function OvaGeminiQuiz({
   quiz, selectedAnswers, showResults, isAllCorrect, answeredCount,
-  totalQuestions, correctCount, handleAnswerSelect, handleCheckAnswers, handleComplete, isES
+  totalQuestions, correctCount, handleAnswerSelect, handleCheckAnswers
 }) {
   const { t } = useTranslation();
 
@@ -33,18 +31,16 @@ export default function OvaGeminiQuiz({
         </div>
         <div>
           <h3 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-white font-montserrat">
-            {isES ? 'Quiz Final' : 'Final Quiz'}
+            {t('ova.quiz.final_quiz')}
           </h3>
           <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
-            {isES ? 'Pon a prueba lo aprendido' : 'Test what you learned'}
+            {t('ova.quiz.put_to_test')}
           </p>
         </div>
       </div>
 
       <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 sm:mb-6">
-        {isES
-          ? `Responde las siguientes ${totalQuestions} preguntas para verificar lo aprendido.`
-          : `Answer the following ${totalQuestions} questions to verify what you learned.`}
+        {t('ova.quiz.answer_prompt', { count: totalQuestions })}
       </p>
 
       <div className="space-y-4 sm:space-y-6">
@@ -149,13 +145,13 @@ export default function OvaGeminiQuiz({
               : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
           )}
         >
-          {isES ? 'Verificar Respuestas' : 'Check Answers'}
+          {t('ova.quiz.check_answers')}
         </motion.button>
       ) : (
         <div className="mt-4 sm:mt-6 space-y-3">
           <div className="flex items-center justify-between px-4 py-3 sm:py-4 rounded-xl sm:rounded-2xl bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 border border-cyan-100 dark:border-cyan-800">
             <span className="text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-200">
-              {isES ? 'Resultado:' : 'Result:'}
+              {t('ova.quiz.result_label')}
             </span>
             <span className="text-sm sm:text-base font-bold">
               <span className={correctCount === totalQuestions ? 'text-green-500' : correctCount >= 2 ? 'text-cyan-500' : 'text-amber-500'}>
@@ -168,20 +164,19 @@ export default function OvaGeminiQuiz({
           </div>
 
           {isAllCorrect ? (
-            <motion.button
-              onClick={handleComplete}
-              className="w-full py-2.5 sm:py-3.5 rounded-xl sm:rounded-2xl font-bold text-sm sm:text-base bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg shadow-green-500/25 hover:shadow-xl hover:shadow-green-500/30 hover:-translate-y-0.5 transition-all cursor-pointer"
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="p-4 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-700 text-center"
             >
-              <span className="flex items-center justify-center gap-2">
-                <Icon name="fa-check-circle" className="text-base sm:text-lg" />
-                {isES ? 'Completar y Marcar como Visto' : 'Complete & Mark as Viewed'}
-              </span>
-            </motion.button>
+              <p className="text-sm font-semibold text-green-700 dark:text-green-300">
+                <Icon name="fa-check-circle" className="text-green-500 mr-1 inline" />
+                {t('ova.quiz.completed')}
+              </p>
+            </motion.div>
           ) : (
             <p className="text-center text-xs sm:text-sm text-gray-400 dark:text-gray-500">
-              {isES
-                ? 'Responde correctamente todas las preguntas para completar este recorrido.'
-                : 'Answer all questions correctly to complete this tour.'}
+              {t('ova.quiz.all_correct_hint')}
             </p>
           )}
         </div>

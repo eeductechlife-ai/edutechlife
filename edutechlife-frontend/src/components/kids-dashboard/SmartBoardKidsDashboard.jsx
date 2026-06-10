@@ -17,6 +17,10 @@ const NewsTechFeed = lazy(() => import('./NewsTechFeed'));
 const ActivityUploader = lazy(() => import('./ActivityUploader'));
 const SmartBoardProgress = lazy(() => import('./SmartBoardProgress'));
 const PersonalizedPlan = lazy(() => import('./PersonalizedPlan'));
+const ExamPrep = lazy(() => import('./ExamPrep'));
+const FlashcardSystem = lazy(() => import('./FlashcardSystem'));
+const SmartBookReader = lazy(() => import('./SmartBookReader'));
+const ProblemScanner = lazy(() => import('./ProblemScanner'));
 
 const SkeletonBar = ({ className = '' }) => (
   <div className={`animate-pulse bg-gradient-to-r from-[#E2E8F0] via-[#CBD5E1] to-[#E2E8F0] rounded-lg ${className}`} />
@@ -77,6 +81,19 @@ const SectionFallback = ({ tab }) => {
       </div>
     );
   }
+  if (tab === 'examenes' || tab === 'flashcards' || tab === 'libros') {
+    return (
+      <div className="space-y-4 p-4">
+        <SkeletonBar className="h-8 w-48" />
+        <div className="grid grid-cols-2 gap-4">
+          <SkeletonBar className="h-32" />
+          <SkeletonBar className="h-32" />
+          <SkeletonBar className="h-32" />
+          <SkeletonBar className="h-32" />
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="space-y-4 p-4">
       <SkeletonBar className="h-8 w-48" />
@@ -99,6 +116,10 @@ const PremiumSidebar = ({ activeTab, onTabChange, totalPoints, vakCompleted, dar
     { id: 'actividades', icon: '📝', label: t('smartboard.tab_activities'), color: '#FFD166' },
     { id: 'calendario', icon: '📅', label: t('smartboard.tab_calendar'), color: '#FF6B9D' },
     { id: 'progreso', icon: '📊', label: t('smartboard.tab_progress'), color: '#66CCCC' },
+    { id: 'examenes', icon: '📋', label: 'Exámenes', color: '#FF6B9D' },
+    { id: 'flashcards', icon: '🗂️', label: 'Flashcards', color: '#FFD166' },
+    { id: 'libros', icon: '📖', label: 'Libro Intel.', color: '#4DA8C4' },
+    { id: 'escaner', icon: '📷', label: 'Escáner', color: '#66CCCC' },
     { id: 'padres', icon: '👨‍👩‍👧', label: t('smartboard.tab_parents'), color: '#4DA8C4' },
     { id: 'noticias', icon: '📰', label: t('smartboard.tab_news'), color: '#004B63' },
   ];
@@ -228,6 +249,10 @@ const MobileBottomBar = ({ activeTab, onTabChange, darkMode }) => {
     { id: 'actividades', icon: '📝' },
     { id: 'calendario', icon: '📅' },
     { id: 'progreso', icon: '📊' },
+    { id: 'examenes', icon: '📋' },
+    { id: 'flashcards', icon: '🗂️' },
+    { id: 'libros', icon: '📖' },
+    { id: 'escaner', icon: '📷' },
     { id: 'noticias', icon: '📰' },
   ];
 
@@ -243,7 +268,7 @@ const MobileBottomBar = ({ activeTab, onTabChange, darkMode }) => {
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {mobileTabs.map((tab) => {
-          const label = tab.id === 'inicio' ? t('smartboard.tab_home') : tab.id === 'vak' ? t('smartboard.tab_vak') : tab.id === 'misiones' ? t('smartboard.tab_missions') : tab.id === 'materias' ? t('smartboard.tab_subjects') : tab.id === 'actividades' ? t('smartboard.tab_activities') : tab.id === 'calendario' ? t('smartboard.tab_calendar') : tab.id === 'noticias' ? t('smartboard.tab_news') : t('smartboard.tab_progress');
+          const label = tab.id === 'inicio' ? t('smartboard.tab_home') : tab.id === 'vak' ? t('smartboard.tab_vak') : tab.id === 'misiones' ? t('smartboard.tab_missions') : tab.id === 'materias' ? t('smartboard.tab_subjects') : tab.id === 'actividades' ? t('smartboard.tab_activities') : tab.id === 'calendario' ? t('smartboard.tab_calendar') : tab.id === 'examenes' ? 'Exámenes' : tab.id === 'flashcards' ? 'Flashcards' : tab.id === 'libros' ? 'Libros' : tab.id === 'escaner' ? 'Escáner' : tab.id === 'noticias' ? t('smartboard.tab_news') : t('smartboard.tab_progress');
           return (
             <motion.button
               key={tab.id}
@@ -531,6 +556,70 @@ const CinematicContent = ({ activeTab, onTabChange, darkMode }) => {
           </motion.div>
         );
 
+      case 'examenes':
+        return (
+          <DashboardErrorBoundary key="examenes" message="Error al cargar exámenes" onTabChange={onTabChange}>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={sharedTransition}
+          >
+            <Suspense fallback={<SectionFallback tab="examenes" />}>
+              <ExamPrep />
+            </Suspense>
+          </motion.div>
+          </DashboardErrorBoundary>
+        );
+
+      case 'flashcards':
+        return (
+          <DashboardErrorBoundary key="flashcards" message="Error al cargar flashcards" onTabChange={onTabChange}>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={sharedTransition}
+          >
+            <Suspense fallback={<SectionFallback tab="flashcards" />}>
+              <FlashcardSystem />
+            </Suspense>
+          </motion.div>
+          </DashboardErrorBoundary>
+        );
+
+      case 'libros':
+        return (
+          <DashboardErrorBoundary key="libros" message="Error al cargar libros" onTabChange={onTabChange}>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={sharedTransition}
+          >
+            <Suspense fallback={<SectionFallback tab="libros" />}>
+              <SmartBookReader />
+            </Suspense>
+          </motion.div>
+          </DashboardErrorBoundary>
+        );
+
+      case 'escaner':
+        return (
+          <DashboardErrorBoundary key="escaner" message="Error al cargar escáner" onTabChange={onTabChange}>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={sharedTransition}
+          >
+            <Suspense fallback={<SectionFallback tab="escaner" />}>
+              <ProblemScanner />
+            </Suspense>
+          </motion.div>
+          </DashboardErrorBoundary>
+        );
+
       case 'progreso':
         return (
           <motion.div
@@ -582,7 +671,7 @@ const SmartBoardKidsDashboard = () => {
   // Handle URL tab parameter
   useEffect(() => {
     const tab = searchParams.get('tab');
-    if (tab && ['inicio', 'vak', 'misiones', 'materias', 'actividades', 'calendario', 'noticias', 'progreso', 'padres'].includes(tab)) {
+    if (tab && ['inicio', 'vak', 'misiones', 'materias', 'actividades', 'calendario', 'noticias', 'progreso', 'examenes', 'flashcards', 'libros', 'escaner', 'padres'].includes(tab)) {
       setActiveTab(tab);
     }
   }, [searchParams]);

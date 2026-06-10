@@ -15,7 +15,7 @@ import { useTranslation } from '../../i18n/I18nProvider';
 
 
 OVANotebookPodcastGuide.propTypes = {
-  onComplete: PropTypes.any,
+  onComplete: PropTypes.func,
 };
 
 export default function OVANotebookPodcastGuide({ onComplete }) {

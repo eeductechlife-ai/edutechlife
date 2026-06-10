@@ -25,9 +25,9 @@ MobileInfoBar.displayName = 'MobileInfoBar';
 
 
 MobileInfoBar.propTypes = {
-  user: PropTypes.any,
-  activeMod: PropTypes.any,
-  courseProgress: PropTypes.any,
+  user: PropTypes.object,
+  activeMod: PropTypes.number,
+  courseProgress: PropTypes.number,
 };
 
 export default MobileInfoBar;

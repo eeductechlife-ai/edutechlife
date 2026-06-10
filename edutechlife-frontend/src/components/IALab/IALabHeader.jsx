@@ -109,7 +109,7 @@ const IALabHeader = () => {
               </span>
             )}
             {forumUnreadCount > 0 && (
-              <span className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-amber-400 ring-1 ring-white dark:ring-slate-800 shadow-sm" title={`${forumUnreadCount} notificaciones del foro`} />
+              <span className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-amber-400 ring-1 ring-white dark:ring-slate-800 shadow-sm" title={t('header.notifications_forum', { count: forumUnreadCount })} />
             )}
           </button>
 
@@ -124,7 +124,7 @@ const IALabHeader = () => {
         <button
           onClick={toggleDarkMode}
           className={`relative flex items-center justify-center p-2 rounded-xl border transition-all duration-200 group ${isDarkMode ? 'bg-amber-400/10 border-amber-400/30' : 'border-transparent hover:border-petroleum/20 hover:shadow-sm hover:bg-slate-50 dark:hover:border-petroleum/40 dark:hover:bg-slate-700'}`}
-          aria-label={isDarkMode ? 'Activar modo claro' : 'Activar modo oscuro'}
+          aria-label={isDarkMode ? t('header.light_mode') : t('header.dark_mode')}
         >
           <Icon name={isDarkMode ? 'fa-sun' : 'fa-moon'} className={`text-lg transition-all duration-200 ${isDarkMode ? 'text-amber-400' : 'text-corporate group-hover:text-petroleum'}`} aria-hidden="true" />
         </button>

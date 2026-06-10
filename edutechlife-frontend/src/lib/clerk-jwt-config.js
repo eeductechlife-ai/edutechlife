@@ -7,6 +7,8 @@
 /**
  * Configuración del JWT Template de Clerk para Supabase
  */
+import { createClerkSupabaseClient } from '../lib/supabase';
+
 export const clerkSupabaseJWTConfig = {
   // Nombre del template JWT configurado en Clerk (debe ser 'supabase')
   templateName: 'supabase',
@@ -90,46 +92,9 @@ export const getClerkJWTForSupabase = async (session) => {
  * @returns {Promise<Object|null>} Cliente Supabase configurado o null si error
  */
 export const createSupabaseClientWithClerkJWT = async (session) => {
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-  const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-  
-  if (!supabaseUrl || !supabaseAnonKey) {
-    console.error('Supabase URL o Anon Key no configurados');
-    return null;
-  }
-  
   try {
-    const { createClient } = await import('@supabase/supabase-js');
-    
-    return createClient(supabaseUrl, supabaseAnonKey, {
-      auth: {
-        autoRefreshToken: false, // Clerk maneja la sesión
-        persistSession: false,   // No persistir en localStorage
-        detectSessionInUrl: false,
-        
-        // Override storage para usar token de Clerk
-        storageKey: 'clerk-supabase-token',
-        storage: {
-          getItem: async (key) => {
-            if (key === 'clerk-supabase-token' && session?.getToken) {
-              const token = await session.getToken({ template: 'supabase' });
-              return JSON.stringify({ access_token: token });
-            }
-            return null;
-          },
-          setItem: () => {}, // No-op, Clerk maneja el token
-          removeItem: () => {}, // No-op
-        },
-      },
-      global: {
-        headers: {
-          'X-Client-Info': 'edutechlife-clerk-jwt',
-        },
-      },
-      db: {
-        schema: 'public',
-      },
-    });
+    const token = await getClerkJWTForSupabase(session);
+    return createClerkSupabaseClient(token);
   } catch (error) {
     console.error('Error creando cliente Supabase con Clerk JWT:', error);
     return null;

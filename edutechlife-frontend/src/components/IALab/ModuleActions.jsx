@@ -179,15 +179,15 @@ const ModuleActions = ({ onAction, activeMod, challengeScores, completedExams, m
 
 
 ActionCard.propTypes = {
-  icon: PropTypes.any,
-  label: PropTypes.any,
-  weightKey: PropTypes.any,
-  onClick: PropTypes.any,
-  completed: PropTypes.any,
-  score: PropTypes.any,
-  remainingAttempts: PropTypes.any,
-  color: PropTypes.any,
-  t: PropTypes.any,
+  icon: PropTypes.string,
+  label: PropTypes.string,
+  weightKey: PropTypes.string,
+  onClick: PropTypes.func,
+  completed: PropTypes.bool,
+  score: PropTypes.number,
+  remainingAttempts: PropTypes.number,
+  color: PropTypes.string,
+  t: PropTypes.func,
 };
 
 export default React.memo(ModuleActions);

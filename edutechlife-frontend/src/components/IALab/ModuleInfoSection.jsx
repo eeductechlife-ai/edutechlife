@@ -21,14 +21,14 @@ const ModuleInfoSection = ({ className = '', ...rest }) => {
     
     // Módulo 1: Datos originales (INTACTOS)
     const module1Data = {
-        objective: "Desarrolla habilidades de ",
-        objectiveHighlight: "prompt engineering",
-        objectiveSuffix: " para obtener resultados precisos de la IA en contextos reales.",
+        objective: t('ialab.module_info.objective'),
+        objectiveHighlight: t('ialab.module_info.objective_highlight'),
+        objectiveSuffix: t('ialab.module_info.objective_suffix'),
         learningPoints: [
-            { text: "Instrucciones claras a la IA", icon: "fa-bullseye" },
-            { text: "Mejorar preguntas y respuestas", icon: "fa-wand-magic-sparkles" },
-            { text: "Detectar y corregir errores", icon: "fa-exclamation-triangle" },
-            { text: "Aplicar IA en estudio y trabajo", icon: "fa-rocket" }
+            { text: t('ialab.module_info.learning_1'), icon: "fa-bullseye" },
+            { text: t('ialab.module_info.learning_2'), icon: "fa-wand-magic-sparkles" },
+            { text: t('ialab.module_info.learning_3'), icon: "fa-exclamation-triangle" },
+            { text: t('ialab.module_info.learning_4'), icon: "fa-rocket" }
         ]
     };
     

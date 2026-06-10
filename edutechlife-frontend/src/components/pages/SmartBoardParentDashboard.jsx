@@ -1,8 +1,11 @@
 import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@clerk/react';
 import { ArrowLeft, TrendingUp, Award, Clock, Brain, Calendar, Trophy } from 'lucide-react';
 import { useTranslation } from '../../i18n/I18nProvider';
+import { createClerkSupabaseClient } from '../../lib/supabase';
+import { loadFromSupabase } from '../../services/smartboardSync';
 
 const STORAGE_PREFIX = 'edutechlife';
 
@@ -113,25 +116,60 @@ const ActivityLog = ({ history }) => {
 const SmartBoardParentDashboard = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { userId, getToken, isLoaded } = useAuth();
 
   const [data, setData] = useState({ points: 0, history: [], vakResult: null, minutes: 0, missions: [], subjects: [], events: [] });
 
   useEffect(() => {
-    const points = parseInt(localStorage.getItem(`${STORAGE_PREFIX}_points_student`) || '0', 10);
-    const history = loadData(`${STORAGE_PREFIX}_points_history_student`) || [];
-    const vakResult = loadData(`${STORAGE_PREFIX}_vak_student`);
-    const minutes = parseInt(localStorage.getItem(`${STORAGE_PREFIX}_minutes_student`) || '0', 10);
-    const missions = loadData('edutechlife_missions') || [];
-    const subjects = loadData('edutechlife_subjects') || [];
-    const events = loadData(`${STORAGE_PREFIX}_calendar_student`) || [];
-    setData({ points, history, vakResult, minutes, missions, subjects, events });
+    if (!isLoaded) return;
+    if (!userId) {
+      navigate('/login');
+      return;
+    }
+
+    const suffix = `_${userId}`;
+
+    const loadLocalData = () => {
+      const points = parseInt(localStorage.getItem(`${STORAGE_PREFIX}_points${suffix}`) || '0', 10);
+      const history = loadData(`${STORAGE_PREFIX}_points_history${suffix}`) || [];
+      const vakResult = loadData(`${STORAGE_PREFIX}_vak${suffix}`);
+      const minutes = parseInt(localStorage.getItem(`${STORAGE_PREFIX}_minutes${suffix}`) || '0', 10);
+      const missions = loadData(`${STORAGE_PREFIX}_missions${suffix}`) || [];
+      const subjects = loadData(`${STORAGE_PREFIX}_subjects${suffix}`) || [];
+      const events = loadData(`${STORAGE_PREFIX}_calendar${suffix}`) || [];
+      return { points, history, vakResult, minutes, missions, subjects, events };
+    };
+
+    setData(loadLocalData());
+
+    const loadRemote = async () => {
+      try {
+        const token = await getToken();
+        const supabase = createClerkSupabaseClient(token);
+        const result = await loadFromSupabase(supabase, userId);
+        if (result.success && result.data) {
+          setData(prev => ({
+            points: result.data.totalPoints ?? prev.points,
+            history: result.data.pointsHistory ?? prev.history,
+            vakResult: result.data.vakResult ?? prev.vakResult,
+            minutes: result.data.totalActiveMinutes ?? prev.minutes,
+            missions: result.data.missions ?? prev.missions,
+            subjects: result.data.subjects ?? prev.subjects,
+            events: result.data.calendarEvents ?? prev.events,
+          }));
+        }
+      } catch (e) {
+        console.error('Error loading SmartBoard data from Supabase:', e);
+      }
+    };
+    loadRemote();
 
     const interval = setInterval(() => {
-      const updated = parseInt(localStorage.getItem(`${STORAGE_PREFIX}_points_student`) || '0', 10);
+      const updated = parseInt(localStorage.getItem(`${STORAGE_PREFIX}_points${suffix}`) || '0', 10);
       setData(prev => ({ ...prev, points: updated }));
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [userId, isLoaded, navigate, getToken]);
 
   const level = LEVELS.find(l => data.points >= l.min) || LEVELS[LEVELS.length - 1];
   const completedMissions = data.missions.filter(m => m.completed).length;

@@ -32,9 +32,9 @@ const CaseContextBanner = ({ selectedCase, stepNumber, locale = 'es' }) => {
 
 
 CaseContextBanner.propTypes = {
-  selectedCase: PropTypes.any,
-  stepNumber: PropTypes.any,
-  locale: PropTypes.any,
+  selectedCase: PropTypes.string,
+  stepNumber: PropTypes.number,
+  locale: PropTypes.string,
 };
 
 export default CaseContextBanner;

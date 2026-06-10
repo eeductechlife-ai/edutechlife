@@ -426,11 +426,11 @@ const StreakDetailsModal = ({ isOpen, onClose }) => {
 
 
 StreakCircle.propTypes = {
-  filled: PropTypes.any,
-  label: PropTypes.any,
-  isToday: PropTypes.any,
-  index: PropTypes.any,
-  prefersReducedMotion: PropTypes.any,
+  filled: PropTypes.bool,
+  label: PropTypes.string,
+  isToday: PropTypes.bool,
+  index: PropTypes.number,
+  prefersReducedMotion: PropTypes.bool,
 };
 
 export default StreakDetailsModal;

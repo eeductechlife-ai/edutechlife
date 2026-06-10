@@ -278,7 +278,7 @@ const IALabTour = ({ hasStartedCourse }) => {
 
 
 IALabTour.propTypes = {
-  hasStartedCourse: PropTypes.any,
+  hasStartedCourse: PropTypes.bool,
 };
 
 export default IALabTour;

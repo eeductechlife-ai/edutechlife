@@ -190,7 +190,7 @@ const StreakBadge = ({ streak, xp, isAtRisk, level, onClick }) => {
 
 
 Sparkle.propTypes = {
-  index: PropTypes.any,
+  index: PropTypes.number,
 };
 
 export default StreakBadge;

@@ -6,7 +6,7 @@ import { Icon } from '../../../utils/iconMapping.jsx';
 import useForumPosts, { POST_CATEGORIES } from '../../../hooks/IALab/forum/useForumPosts';
 import useForumVotes from '../../../hooks/IALab/forum/useForumVotes';
 import useForumProfile from '../../../hooks/IALab/forum/useForumProfile';
-import IALabForumPostCard from './IALabForumPostCard';
+import IALabForumPostCardListItem from './IALabForumPostCardListItem';
 import { useTranslation } from '../../../i18n/I18nProvider';
 
 const IALabForumPostList = ({ onSelectPost, onAction }) => {
@@ -124,7 +124,7 @@ const IALabForumPostList = ({ onSelectPost, onAction }) => {
               const post = data[index];
               return (
                 <div style={style} key={post.id}>
-                  <IALabForumPostCard
+                  <IALabForumPostCardListItem
                     post={post}
                     voteState={voteStates[post.id]}
                     onVote={() => toggleVote(post.id, post.upvotes)}
@@ -152,8 +152,8 @@ const IALabForumPostList = ({ onSelectPost, onAction }) => {
 
 
 IALabForumPostList.propTypes = {
-  onSelectPost: PropTypes.any,
-  onAction: PropTypes.any,
+  onSelectPost: PropTypes.func,
+  onAction: PropTypes.func,
 };
 
 export default IALabForumPostList;

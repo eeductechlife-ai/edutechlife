@@ -6,8 +6,7 @@ import { challenges } from '../../data/ova/practicalCases';
 import { OVAIntro, OVAValerioBar } from './shared';
 
 const OVAPracticalCases = ({ onComplete }) => {
-  const { t, locale } = useTranslation();
-  const isES = locale === 'es';
+  const { t } = useTranslation();
   const certCompletedRef = useRef(false);
   const [screen, setScreen] = useState('intro');
   const [currentChallenge, setCurrentChallenge] = useState(0);
@@ -54,9 +53,7 @@ const OVAPracticalCases = ({ onComplete }) => {
 
   const getValerioText = () => {
     if (screen === 'intro') {
-      return isES
-        ? 'Bienvenido al laboratorio de casos prácticos con Gemini. Vas a enfrentar 6 desafíos del mundo real y aprenderás a utilizar Gemini como tu asistente experto para resolverlos.'
-        : 'Welcome to the Gemini practical cases lab. You will face 6 real-world challenges and learn to use Gemini as your expert assistant to solve them.';
+      return t('ova.practical.welcome_text');
     }
     const c = challenges[currentChallenge];
     return `${c.title}. ${c.scenario} ${c.options.join('. ')}`;
@@ -67,16 +64,12 @@ const OVAPracticalCases = ({ onComplete }) => {
       <div className="w-full h-full bg-gradient-to-br from-cyan-50 to-white dark:from-gray-900 dark:to-gray-800 flex items-center justify-center rounded-2xl">
         <OVAIntro
           icon="fa-briefcase"
-          badge={isES ? 'Casos Prácticos' : 'Practical Cases'}
-          title={isES ? 'Laboratorio: Casos Prácticos con Gemini' : 'Lab: Practical Cases with Gemini'}
-          description={isES
-            ? 'Enfréntate a 6 desafíos del mundo real y resuélvelos usando Gemini como tu asistente experto. Cada caso pondrá a prueba tu capacidad para aprovechar la IA de forma estratégica.'
-            : 'Face 6 real-world challenges and solve them using Gemini as your expert assistant. Each case will test your ability to leverage AI strategically.'}
-          audioText={isES
-            ? 'Bienvenido al laboratorio de casos prácticos con Gemini. Vas a enfrentar 6 desafíos del mundo real donde aprenderás a utilizar Gemini como tu asistente experto. Cada caso te enseñará una habilidad diferente: investigación, análisis de documentos, automatización, análisis multimodal, depuración de código y extracción de insights de datos.'
-            : 'Welcome to the Gemini practical cases lab. You will face 6 real-world challenges where you will learn to use Gemini as your expert assistant. Each case teaches a different skill: research, document analysis, automation, multimodal analysis, code debugging, and data insights.'}
+          badge={t('ova.practical.badge')}
+          title={t('ova.practical.title')}
+          description={t('ova.practical.description')}
+          audioText={t('ova.practical.audio_text')}
           onStart={() => setScreen('slides')}
-          startLabel={isES ? 'Comenzar Desafíos' : 'Start Challenges'}
+          startLabel={t('ova.practical.start_btn')}
         />
       </div>
     );
@@ -99,14 +92,14 @@ const OVAPracticalCases = ({ onComplete }) => {
             </div>
           </div>
           <p className="text-[10px] uppercase mt-2 text-slate-600 dark:text-slate-300 font-bold tracking-[0.2em]">
-            {isES ? 'Casos Prácticos Gemini' : 'Gemini Practical Cases'}
+            {t('ova.practical.sidebar_badge')}
           </p>
         </div>
 
         <div className="p-4 space-y-2">
           <div className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-petroleum uppercase tracking-wider">
             <Target size={14} />
-            <span>{isES ? 'Progreso' : 'Progress'}</span>
+            <span>{t('ova.practical.progress')}</span>
             <span className="ml-auto text-corporate">{correctCount}/{totalChallenges}</span>
           </div>
           {challenges.map((ch, i) => (
@@ -155,9 +148,9 @@ const OVAPracticalCases = ({ onComplete }) => {
             <div className="p-3 bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/20 dark:to-emerald-900/10 rounded-xl border border-emerald-200 dark:border-emerald-800 text-center">
               <Award className="w-8 h-8 text-emerald-500 mx-auto mb-1" />
               <p className="text-xs font-bold text-emerald-700 dark:text-emerald-300">
-                {correctCount === totalChallenges
-                  ? isES ? '¡Puntuación perfecta!' : 'Perfect score!'
-                  : `${correctCount}/${totalChallenges} ${isES ? 'correctos' : 'correct'}`}
+{correctCount === totalChallenges
+                    ? t('ova.practical.perfect_score')
+                    : `${correctCount}/${totalChallenges} ${t('ova.practical.correct')}`}
               </p>
             </div>
           </div>
@@ -176,7 +169,7 @@ const OVAPracticalCases = ({ onComplete }) => {
                   {c.title}
                 </h2>
                 <span className="text-xs text-corporate font-semibold">
-                  {isES ? 'Desafío' : 'Challenge'} {currentChallenge + 1} / {totalChallenges}
+                  {t('ova.practical.challenge')} {currentChallenge + 1} / {totalChallenges}
                 </span>
               </div>
             </div>
@@ -197,7 +190,7 @@ const OVAPracticalCases = ({ onComplete }) => {
               <div className="flex items-center gap-2 mb-4">
                 <Building2 className="text-corporate" size={18} />
                 <span className="text-xs uppercase tracking-widest text-corporate font-bold">
-                  {isES ? 'CONTEXTO' : 'CONTEXT'}
+                  {t('ova.practical.context_label')}
                 </span>
               </div>
               <div className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-cyan-100 dark:border-slate-600 text-sm text-slate-600 dark:text-slate-300">
@@ -212,7 +205,7 @@ const OVAPracticalCases = ({ onComplete }) => {
               <div className="flex items-center gap-2 mb-4">
                 <Target className="text-corporate" size={18} />
                 <span className="text-xs uppercase tracking-widest text-corporate font-bold">
-                  {isES ? 'ESCENARIO' : 'SCENARIO'}
+                  {t('ova.practical.scenario_label')}
                 </span>
               </div>
               <p className="text-lg text-slate-800 dark:text-slate-100 font-medium leading-relaxed">
@@ -222,7 +215,7 @@ const OVAPracticalCases = ({ onComplete }) => {
 
             <div className="space-y-3">
               <p className="text-xs uppercase tracking-widest text-slate-400 font-bold mb-3">
-                {isES ? '¿CUÁL ES LA MEJOR OPCIÓN?' : 'WHAT IS THE BEST OPTION?'}
+                {t('ova.practical.best_option')}
               </p>
               {c.options.map((opt, idx) => {
                 const isSelected = selectedAnswer === idx;
@@ -278,8 +271,8 @@ const OVAPracticalCases = ({ onComplete }) => {
                         : 'text-rose-800 dark:text-rose-200'
                     }`}>
                       {isCorrect
-                        ? isES ? '¡Correcto!' : 'Correct!'
-                        : isES ? 'Incorrecto' : 'Incorrect'}
+                        ? t('ova.practical.correct_feedback')
+                        : t('ova.practical.incorrect_feedback')}
                     </p>
                     <p className={`text-sm ${
                       isCorrect
@@ -292,7 +285,7 @@ const OVAPracticalCases = ({ onComplete }) => {
                       <div className="flex items-start gap-2">
                         <Star size={14} className="text-amber-500 flex-shrink-0 mt-0.5" />
                         <p className="text-xs text-amber-800 dark:text-amber-200 font-medium">
-                          <span className="font-bold">{isES ? 'Tip profesional:' : 'Pro tip:'}</span> {c.tip}
+                          <span className="font-bold">{t('ova.practical.pro_tip')}</span> {c.tip}
                         </p>
                       </div>
                     </div>
@@ -306,14 +299,14 @@ const OVAPracticalCases = ({ onComplete }) => {
                 <button onClick={prevChallenge}
                   className="flex items-center gap-1 text-sm text-slate-500 dark:text-slate-400 hover:text-petroleum transition-colors">
                   <ArrowLeft size={14} />
-                  {isES ? 'Anterior' : 'Previous'}
+                  {t('ova.practical.previous')}
                 </button>
               )}
               <div className="ml-auto flex gap-3">
                 {showFeedback && currentChallenge < totalChallenges - 1 && (
                   <button onClick={nextChallenge}
                     className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-corporate to-petroleum text-white font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all text-sm">
-                    {isES ? 'Siguiente Desafío' : 'Next Challenge'}
+                    {t('ova.practical.next_challenge')}
                     <ArrowRight size={16} />
                   </button>
                 )}
@@ -323,9 +316,7 @@ const OVAPracticalCases = ({ onComplete }) => {
                     className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all text-sm cursor-default opacity-80"
                   >
                     <Award size={16} />
-                    {isES
-                      ? `Completado (${correctCount}/${totalChallenges})`
-                      : `Completed (${correctCount}/${totalChallenges})`}
+                    {t('ova.practical.completed_prefix')} ({correctCount}/{totalChallenges})
                   </button>
                 )}
               </div>
@@ -333,9 +324,7 @@ const OVAPracticalCases = ({ onComplete }) => {
           </div>
         </div>
         <footer className="mt-4 text-center text-slate-600 dark:text-slate-300 text-xs py-4">
-          {isES
-            ? 'Laboratorio de Casos Prácticos · Edutechlife'
-            : 'Practical Cases Lab · Edutechlife'}
+          {t('ova.practical.footer')}
         </footer>
       </main>
 
@@ -345,7 +334,7 @@ const OVAPracticalCases = ({ onComplete }) => {
 };
 
 OVAPracticalCases.propTypes = {
-  onComplete: PropTypes.any,
+  onComplete: PropTypes.func,
 };
 
 export default OVAPracticalCases;

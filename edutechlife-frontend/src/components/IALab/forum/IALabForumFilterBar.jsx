@@ -36,8 +36,8 @@ const IALabForumFilterBar = ({ category, onCategoryChange }) => {
 
 
 IALabForumFilterBar.propTypes = {
-  category: PropTypes.any,
-  onCategoryChange: PropTypes.any,
+  category: PropTypes.string,
+  onCategoryChange: PropTypes.func,
 };
 
 export default IALabForumFilterBar;

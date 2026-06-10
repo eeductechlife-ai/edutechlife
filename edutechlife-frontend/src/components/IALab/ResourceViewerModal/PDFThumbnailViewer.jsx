@@ -102,8 +102,8 @@ const PDFThumbnailViewer = ({ resource, onAutoComplete }) => {
 
 
 PDFThumbnailViewer.propTypes = {
-  resource: PropTypes.any,
-  onAutoComplete: PropTypes.any,
+  resource: PropTypes.object,
+  onAutoComplete: PropTypes.func,
 };
 
 export default PDFThumbnailViewer;

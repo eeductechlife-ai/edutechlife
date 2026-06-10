@@ -1,0 +1,86 @@
+<h2>Transformación Técnica (en detalle)</h2>
+
+<div class="section">
+  <p class="subtitle">El núcleo del enfoque C es convertir rangos (offset start/end) en elementos &lt;mark&gt; dentro del HTML</p>
+</div>
+
+<div class="section">
+  <h3>Algoritmo de transformación</h3>
+  <pre style="background:#1a1a2e;color:#e0e0e0;padding:16px;border-radius:8px;font-size:13px;line-height:1.6">
+1. Recibir: rawHTML + highlights[{startOffset, endOffset, color}]
+2. Extraer texto plano del HTML (eliminar etiquetas)
+3. Para cada highlight:
+   - Calcular offset en el texto plano
+   - Mapear offset de texto plano → offset en HTML con etiquetas
+4. Insertar &lt;mark&gt; en las posiciones correctas del HTML
+5. Devolver HTML transformado con highlights visibles
+  </pre>
+</div>
+
+<div class="section">
+  <h3>Ejemplo concreto</h3>
+  <div style="display:flex;gap:16px">
+    <div class="mockup" style="flex:1">
+      <div class="mockup-header">HTML original</div>
+      <div style="padding:12px;font-size:13px;font-family:monospace;word-break:break-all">
+        &lt;p&gt;El &lt;strong&gt;aprendizaje profundo&lt;/strong&gt; permite...&lt;/p&gt;
+      </div>
+    </div>
+    <div class="mockup" style="flex:1">
+      <div class="mockup-header">Texto plano</div>
+      <div style="padding:12px;font-size:13px;font-family:monospace;word-break:break-all">
+        El aprendizaje profundo permite...
+        ↑highlight desde offset 3 hasta 23
+      </div>
+    </div>
+    <div class="mockup" style="flex:1">
+      <div class="mockup-header">HTML transformado</div>
+      <div style="padding:12px;font-size:13px;font-family:monospace;word-break:break-all">
+        El &lt;mark&gt;aprendizaje profundo&lt;/mark&gt; permite...
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Persistencia</h3>
+  <div class="pros-cons">
+    <div class="pros">
+      <h4>Guarda</h4>
+      <ul>
+        <li><code>resourceId</code></li>
+        <li><code>startOffset</code> (texto plano)</li>
+        <li><code>endOffset</code> (texto plano)</li>
+        <li><code>color</code> — #FFEB3B por defecto</li>
+        <li><code>createdAt</code> — timestamp ISO</li>
+      </ul>
+    </div>
+    <div class="cons">
+      <h4>No guarda</h4>
+      <ul>
+        <li>Fragmentos del HTML original</li>
+        <li>Información de nodo DOM</li>
+        <li>Clases CSS o estilos</li>
+      </ul>
+    </div>
+  </div>
+  <p style="margin-top:8px;font-size:13px;color:#888">Los offsets en texto plano son estables incluso si el HTML cambia de formato</p>
+</div>
+
+<div class="section">
+  <h3>Edge Cases cubiertos</h3>
+  <div class="cards" style="display:flex;flex-wrap:wrap;gap:8px">
+    <div class="card" style="padding:8px 12px;flex:1;min-width:150px">
+      <p style="font-size:13px">✅ Highlights solapados</p>
+    </div>
+    <div class="card" style="padding:8px 12px;flex:1;min-width:150px">
+      <p style="font-size:13px">✅ Texto con etiquetas HTML anidadas</p>
+    </div>
+    <div class="card" style="padding:8px 12px;flex:1;min-width:150px">
+      <p style="font-size:13px">✅ HTML sin texto (imágenes, iframes)</p>
+    </div>
+    <div class="card" style="padding:8px 12px;flex:1;min-width:150px">
+      <p style="font-size:13px">✅ Múltiples highlights en un párrafo</p>
+    </div>
+  </div>
+</div>

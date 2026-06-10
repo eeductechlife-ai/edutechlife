@@ -254,12 +254,12 @@ const NotebookStep2 = ({ exercise, response, onResponseChange, topic = '', docCo
 
 
 NotebookStep2.propTypes = {
-  exercise: PropTypes.any,
-  response: PropTypes.any,
-  onResponseChange: PropTypes.any,
-  topic: PropTypes.any,
-  docCount: PropTypes.any,
-  selectedDocs: PropTypes.any,
+  exercise: PropTypes.object,
+  response: PropTypes.string,
+  onResponseChange: PropTypes.func,
+  topic: PropTypes.string,
+  docCount: PropTypes.number,
+  selectedDocs: PropTypes.array,
 };
 
 export default NotebookStep2;

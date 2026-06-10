@@ -36,9 +36,9 @@ const OVAViewer = ({ resource, onClose, onComplete }) => {
 
 
 OVAViewer.propTypes = {
-  resource: PropTypes.any,
-  onClose: PropTypes.any,
-  onComplete: PropTypes.any,
+  resource: PropTypes.object,
+  onClose: PropTypes.func,
+  onComplete: PropTypes.func,
 };
 
 export default OVAViewer;

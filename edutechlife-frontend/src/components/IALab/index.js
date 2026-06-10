@@ -1,4 +1,5 @@
 export { default as IALab } from './IALab';
+export { default as IALabDashboard } from './IALabDashboard';
 export { default as IALabSidebar } from './IALabSidebar';
 export { default as IALabHeader } from './IALabHeader';
 export { default as IALabModals } from './IALabModals';
@@ -35,6 +36,6 @@ export { default as OVARiskSimulator } from './OVARiskSimulator';
 export { default as OVANotebookPodcastGuide } from './OVANotebookPodcastGuide';
 export * from './shared';
 export {
-  IALabCommunityHub, IALabForumPostCard, IALabForumPostList, IALabForumPostDetail,
+  IALabCommunityHub, IALabForumPostCardListItem, IALabForumPostList, IALabForumPostDetail,
   IALabForumStats, IALabForumTagFilter, IALabForumSkeleton, IALabForumEmptyState,
 } from './forum';

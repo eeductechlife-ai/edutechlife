@@ -6,8 +6,8 @@ import { Button, Card } from '../shared';
 
 
 ModuleSlack.propTypes = {
-  onNext: PropTypes.any,
-  addXp: PropTypes.any,
+  onNext: PropTypes.func,
+  addXp: PropTypes.func,
 };
 
 export default function ModuleSlack({ onNext, addXp }) {

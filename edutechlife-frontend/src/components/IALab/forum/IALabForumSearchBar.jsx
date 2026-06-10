@@ -59,7 +59,7 @@ const IALabForumSearchBar = ({ onSearch }) => {
 
 
 IALabForumSearchBar.propTypes = {
-  onSearch: PropTypes.any,
+  onSearch: PropTypes.func,
 };
 
 export default IALabForumSearchBar;

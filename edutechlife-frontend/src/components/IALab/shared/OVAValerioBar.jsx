@@ -116,8 +116,8 @@ const OVAValerioBar = ({ text, autoPlay = false }) => {
 
 
 OVAValerioBar.propTypes = {
-  text: PropTypes.any,
-  autoPlay: PropTypes.any,
+  text: PropTypes.string,
+  autoPlay: PropTypes.bool,
 };
 
 export default OVAValerioBar;

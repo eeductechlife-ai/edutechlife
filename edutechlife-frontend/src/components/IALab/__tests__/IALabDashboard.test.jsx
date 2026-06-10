@@ -30,19 +30,22 @@ vi.mock('../../../data/ialab', () => ({
   ],
 }));
 
-vi.mock('../../../hooks/IALab/usePersonalizedRecommendations', () => ({
+vi.mock('../../../context/ThemeContext', () => ({
+  useTheme: () => ({ isDarkMode: false, toggleDarkMode: vi.fn() }),
+}));
+
+vi.mock('../../LocaleSwitcher', () => ({
+  default: () => null,
+}));
+
+vi.mock('../../../hooks/useActivityTracker', () => ({
   default: () => ({
-    high: [],
-    medium: [],
-    low: [],
-    completionForecast: {
-      estimatedDate: new Date('2026-08-15'),
-      daysRemaining: 70,
-      pace: 'moderate',
-      conservative: 98,
-      optimistic: 42,
-    },
+    getTimeTrackingStats: () => ({ today: 0, weekTotal: 0, avgPerDay: 0, weekDaily: [] }),
   }),
+}));
+
+vi.mock('@clerk/react', () => ({
+  useUser: () => ({ user: null }),
 }));
 
 vi.mock('framer-motion', () => {
@@ -60,7 +63,7 @@ vi.mock('framer-motion', () => {
       return comp;
     },
   });
-  return { motion, AnimatePresence: ({ children }) => children };
+  return { motion, AnimatePresence: ({ children }) => children, useReducedMotion: () => false };
 });
 
 import { useIALabStore } from '../../../store/ialabStore';
@@ -74,11 +77,13 @@ const defaultStore = {
   completedExams: {},
   challengeScores: {},
   courseCompleted: false,
+  getNextSuggestedAction: () => null,
 };
 
 function setupStore(overrides = {}) {
   const state = { ...defaultStore, ...overrides };
   useIALabStore.mockImplementation((selector) => selector(state));
+  useIALabStore.getState = () => state;
 }
 
 beforeEach(() => {
@@ -86,73 +91,31 @@ beforeEach(() => {
 });
 
 describe('IALabDashboard', () => {
-  test('renders progress bar with course progress', () => {
-    setupStore({ courseProgress: 45 });
-    render(<IALabDashboard />);
-    expect(screen.getByText('45%')).toBeInTheDocument();
-  });
-
-  test('renders stats cards with XP, streak, avg score, modules', () => {
-    setupStore({ xp: 1200, streak: 7, completedExams: { 1: 85, 2: 90 } });
-    render(<IALabDashboard />);
-    expect(screen.getByText('1,200')).toBeInTheDocument();
-    expect(screen.getByText('7')).toBeInTheDocument();
-    expect(screen.getByText('0/5')).toBeInTheDocument();
-  });
-
   test('renders welcome section when no progress', () => {
     render(<IALabDashboard />);
-    expect(screen.getByText(/Bienvenido/i)).toBeInTheDocument();
+    expect(screen.getByText('dashboard.welcome_title')).toBeInTheDocument();
   });
 
-  test('renders completion forecast card', () => {
+  test('renders DashboardInProgress when user has progress', () => {
     setupStore({
+      moduleProgress: {
+        1: { exam: true, challenge: true, resourcesCompleted: true, community: false, currentScore: 30, isUnlocked: true },
+      },
       courseProgress: 45,
-      streak: 5,
-      moduleProgress: {
-        1: { exam: false, challenge: false, resourcesCompleted: false, community: false, currentScore: 30, isUnlocked: true },
-      },
+      xp: 1200,
+      streak: 7,
+      completedExams: { 1: 85 },
     });
     render(<IALabDashboard />);
-    expect(screen.getByText(/Pronóstico/i)).toBeInTheDocument();
+    expect(screen.getByText('dashboard.continue_learning')).toBeInTheDocument();
+    expect(screen.getByText('1,200')).toBeInTheDocument();
+    expect(screen.getByText('7')).toBeInTheDocument();
   });
 
-  test('renders module timeline items by score', () => {
-    setupStore({
-      moduleProgress: {
-        1: { exam: false, challenge: false, resourcesCompleted: false, community: false, currentScore: 30, isUnlocked: true },
-        2: { exam: false, challenge: false, resourcesCompleted: false, community: false, currentScore: 0, isUnlocked: false },
-      },
-    });
-    render(<IALabDashboard />);
-    expect(screen.getByText(/30%/)).toBeInTheDocument();
-  });
-
-  test('shows pending tasks for active module', () => {
-    setupStore({
-      moduleProgress: {
-        1: { exam: false, challenge: false, resourcesCompleted: false, community: false, currentScore: 0, isUnlocked: true },
-      },
-    });
-    render(<IALabDashboard />);
-    expect(screen.getByText(/route\.pending/)).toBeInTheDocument();
-  });
-
-  test('hides forecast when course is completed', () => {
-    setupStore({
-      courseCompleted: true,
-      moduleProgress: {
-        1: { exam: true, challenge: true, resourcesCompleted: true, community: true, currentScore: 100, isUnlocked: true },
-      },
-      completedModules: [1],
-    });
-    render(<IALabDashboard />);
-    expect(screen.queryByText(/pronóstico/i)).not.toBeInTheDocument();
-  });
-
-  test('shows course completion message when all modules done', () => {
+  test('renders DashboardCompleted when course is completed', () => {
     setupStore({
       courseProgress: 100,
+      courseCompleted: true,
       moduleProgress: {
         1: { exam: true, challenge: true, resourcesCompleted: true, community: true, currentScore: 100, isUnlocked: true },
         2: { exam: true, challenge: true, resourcesCompleted: true, community: true, currentScore: 100, isUnlocked: true },
@@ -165,16 +128,44 @@ describe('IALabDashboard', () => {
       challengeScores: { 1: 100, 2: 95, 3: 90, 4: 85, 5: 88 },
     });
     render(<IALabDashboard />);
-    expect(screen.getByText(/progress\.module_completed_all/)).toBeInTheDocument();
+    expect(screen.getByText('route.course_complete')).toBeInTheDocument();
   });
 
-  test('renders continue button for active module', () => {
+  test('renders module tabs in DashboardInProgress', () => {
     setupStore({
       moduleProgress: {
-        1: { exam: false, challenge: false, resourcesCompleted: false, community: false, currentScore: 0, isUnlocked: true },
+        1: { exam: true, challenge: true, resourcesCompleted: true, community: false, currentScore: 30, isUnlocked: true },
       },
+      courseProgress: 45,
     });
     render(<IALabDashboard />);
-    expect(screen.getByText('Continuar')).toBeInTheDocument();
+    expect(screen.getByText('dashboard.your_progress')).toBeInTheDocument();
+    expect(screen.getByText('dashboard.activity_trends')).toBeInTheDocument();
+  });
+
+  test('renders global progress donut for in-progress user', () => {
+    setupStore({
+      moduleProgress: {
+        1: { exam: true, challenge: true, resourcesCompleted: true, community: false, currentScore: 30, isUnlocked: true },
+      },
+      courseProgress: 45,
+    });
+    render(<IALabDashboard />);
+    expect(screen.getByText('dashboard.global_progress')).toBeInTheDocument();
+  });
+
+  test('renders DashboardCompleted when all 5 modules completed by score', () => {
+    setupStore({
+      moduleProgress: {
+        1: { exam: true, challenge: true, resourcesCompleted: true, community: true, currentScore: 85, isUnlocked: true },
+        2: { exam: true, challenge: true, resourcesCompleted: true, community: true, currentScore: 85, isUnlocked: true },
+        3: { exam: true, challenge: true, resourcesCompleted: true, community: true, currentScore: 85, isUnlocked: true },
+        4: { exam: true, challenge: true, resourcesCompleted: true, community: true, currentScore: 85, isUnlocked: true },
+        5: { exam: true, challenge: true, resourcesCompleted: true, community: true, currentScore: 85, isUnlocked: true },
+      },
+      completedExams: { 1: 85, 2: 85, 3: 85, 4: 85, 5: 85 },
+    });
+    render(<IALabDashboard />);
+    expect(screen.getByText('route.course_complete')).toBeInTheDocument();
   });
 });

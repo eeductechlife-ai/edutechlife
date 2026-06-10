@@ -111,7 +111,12 @@ const ValerioConversationArea = ({ conversation, isProcessing, moduleTitle }) =>
 
 
 ValerioMessageBubble.propTypes = {
-  msg: PropTypes.any,
+  msg: PropTypes.shape({
+    id: PropTypes.string,
+    type: PropTypes.string,
+    content: PropTypes.string,
+    timestamp: PropTypes.string,
+  }),
 };
 
 export default ValerioConversationArea;

@@ -37,7 +37,7 @@ const IALabForumSkeleton = ({ showHeader }) => (
 
 
 IALabForumSkeleton.propTypes = {
-  showHeader: PropTypes.any,
+  showHeader: PropTypes.bool,
 };
 
 export default IALabForumSkeleton;

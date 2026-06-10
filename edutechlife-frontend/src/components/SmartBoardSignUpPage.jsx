@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import FloatingParticles from './FloatingParticles';
 import { GraduationCap, BookOpen, Users, CheckCircle, ArrowLeft, LogIn, UserPlus } from 'lucide-react';
 import { useTranslation } from '../i18n/I18nProvider';
+import { sanitize } from '../utils/sanitize';
 
 const clerkAppearance = {
   variables: {
@@ -96,9 +97,9 @@ const SmartBoardSignUpPage = () => {
               <div className="mb-8">
                 <h2 className="text-3xl font-bold mb-4">{t('smartboard.signup_welcome')}</h2>
                 {mode === 'signin' ? (
-                  <p className="text-white/90 leading-relaxed" dangerouslySetInnerHTML={{ __html: t('smartboard.signup_signin_desc') }} />
+                  <p className="text-white/90 leading-relaxed" dangerouslySetInnerHTML={{ __html: sanitize(t('smartboard.signup_signin_desc')) }} />
                 ) : (
-                  <p className="text-white/90 leading-relaxed" dangerouslySetInnerHTML={{ __html: t('smartboard.signup_signup_desc') }} />
+                  <p className="text-white/90 leading-relaxed" dangerouslySetInnerHTML={{ __html: sanitize(t('smartboard.signup_signup_desc')) }} />
                 )}
                 <p className="text-white/80 mt-4 text-sm italic">
                   {t('smartboard.signup_quote')}
@@ -229,7 +230,7 @@ const SmartBoardSignUpPage = () => {
             {/* Footer info */}
             <div className="mt-4 pt-4 border-t border-gray-200 w-full max-w-sm">
               {mode === 'signup' && (
-                <p className="text-center text-[#4DA8C4] text-xs" dangerouslySetInnerHTML={{ __html: t('smartboard.signup_terms') }} />
+                <p className="text-center text-[#4DA8C4] text-xs" dangerouslySetInnerHTML={{ __html: sanitize(t('smartboard.signup_terms')) }} />
               )}
             </div>
           </div>

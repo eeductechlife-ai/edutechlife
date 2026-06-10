@@ -11,7 +11,7 @@ const TYPE_STYLES = {
 const AchievementToast = ({ toasts, removeToast }) => {
   const shouldReduceMotion = useReducedMotion();
   return (
-    <div className="fixed bottom-4 right-4 z-[100] flex flex-col gap-2 pointer-events-none" aria-live="polite" role="status">
+    <div className="fixed bottom-4 right-4 z-[100] flex flex-col gap-2 pointer-events-none" aria-live="polite" role="alert">
       <AnimatePresence mode="popLayout">
         {toasts.map((toast) => {
           const style = TYPE_STYLES[toast.type] || TYPE_STYLES.badge;
@@ -51,8 +51,8 @@ const AchievementToast = ({ toasts, removeToast }) => {
 
 
 AchievementToast.propTypes = {
-  toasts: PropTypes.any,
-  removeToast: PropTypes.any,
+  toasts: PropTypes.array,
+  removeToast: PropTypes.func,
 };
 
 export default AchievementToast;

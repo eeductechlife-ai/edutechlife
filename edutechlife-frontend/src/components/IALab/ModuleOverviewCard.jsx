@@ -46,6 +46,14 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
 
   // Estado para el modal de recursos
   const [viewerModalOpen, setViewerModalOpen] = useState(false);
+  const immersiveModalOpen = useIALabStore(s => s.immersiveModalOpen);
+  useEffect(() => {
+    if (viewerModalOpen && !immersiveModalOpen) {
+      useIALabStore.getState().setImmersiveModalOpen(true);
+    } else if (!viewerModalOpen && immersiveModalOpen) {
+      useIALabStore.getState().setImmersiveModalOpen(false);
+    }
+  }, [viewerModalOpen, immersiveModalOpen]);
   const [selectedResource, setSelectedResource] = useState(null);
   const [selectedResourceType, setSelectedResourceType] = useState(null);
   const [currentTopicResources, setCurrentTopicResources] = useState([]);
@@ -61,13 +69,13 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
       duration: "2h",
     },
     icon: "fa-terminal",
-    title: "Domina las Instrucciones",
-    description: "En este módulo, hemos diseñado una ruta estratégica que te llevará desde los fundamentos de la Inteligencia Artificial Generativa hasta la creación de instrucciones de alto impacto.",
+    title: t('ialab.module_overview.module1_title'),
+    description: t('ialab.module_overview.module1_description'),
     missionIcon: "fa-bullseye",
-    mission: "Explorar cada tema y sus recursos multimedia (videos, guías y laboratorios). Notarás que tu barra de progreso cobrará vida con cada paso que des. No te detengas: cada recurso completado te acerca un 20% más a tu certificación global. ¡El poder de las instrucciones claras está en tus manos!",
+    mission: t('ialab.module_overview.module1_mission'),
     topics: [
-      { title: "Introducción a la Inteligencia Artificial Generativa", icon: "fa-brain", resources: 2, duration: "20 min" },
-      { title: "¿Qué es un Prompt?", icon: "fa-comments", resources: 3, duration: "20 min" },
+      { title: t('ialab.module_overview.topic_1_title'), icon: "fa-brain", resources: 2, duration: "20 min" },
+      { title: t('ialab.module_overview.topic_2_title'), icon: "fa-comments", resources: 3, duration: "20 min" },
     ],
   };
 
@@ -380,8 +388,8 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
 
 
 ModuleOverviewCard.propTypes = {
-  onAction: PropTypes.any,
-  onToggleForum: PropTypes.any,
+  onAction: PropTypes.func,
+  onToggleForum: PropTypes.func,
 };
 
 export default memo(ModuleOverviewCard);

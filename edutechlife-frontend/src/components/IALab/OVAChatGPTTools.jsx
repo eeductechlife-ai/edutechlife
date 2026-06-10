@@ -40,8 +40,8 @@ const WelcomeScreen = ({ onNext }) => {
 
 
 ToolIcon.propTypes = {
-  icon: PropTypes.any,
-  iconColor: PropTypes.any,
+  icon: PropTypes.string,
+  iconColor: PropTypes.string,
 };
 
 export default function OVAChatGPTTools({ onComplete }) {

@@ -386,12 +386,12 @@ const EthicsStep2 = ({ exercise, response, onResponseChange, topic = '', exercis
 
 
 EthicsStep2.propTypes = {
-  exercise: PropTypes.any,
-  response: PropTypes.any,
-  onResponseChange: PropTypes.any,
-  topic: PropTypes.any,
-  exercises: PropTypes.any,
-  biases: PropTypes.any,
+  exercise: PropTypes.object,
+  response: PropTypes.string,
+  onResponseChange: PropTypes.func,
+  topic: PropTypes.string,
+  exercises: PropTypes.object,
+  biases: PropTypes.array,
 };
 
 export default EthicsStep2;

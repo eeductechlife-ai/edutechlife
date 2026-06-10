@@ -10,6 +10,7 @@ const chatRoutes = require('./routes/chat');
 const ialabRoutes = require('./routes/ialab');
 const voiceRoutes = require('./routes/voice');
 const ttsRoutes = require('./routes/tts');
+const smartboardRoutes = require('./routes/smartboard');
 
 const ALLOWED_ORIGINS = [
   'https://edutechlife.co',
@@ -41,6 +42,9 @@ app.use('/api', apiLimiter);
 app.use('/api/chat', deepseekLimiter);
 app.use('/api/ialab/prompts', deepseekLimiter);
 app.use('/api/voice-token', authLimiter);
+app.use('/api/smartboard/data', requireAuth);
+app.use('/api/smartboard/progress', requireAuth);
+app.use('/api/smartboard/chat', deepseekLimiter);
 app.use('/api/ialab/progress', requireAuth);
 app.use('/api/ialab/templates', requireAuth);
 
@@ -49,6 +53,7 @@ app.use('/api/chat', chatRoutes);
 app.use('/api/ialab', ialabRoutes);
 app.use('/api/voice-token', voiceRoutes);
 app.use('/api/tts', ttsRoutes);
+app.use('/api/smartboard', smartboardRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

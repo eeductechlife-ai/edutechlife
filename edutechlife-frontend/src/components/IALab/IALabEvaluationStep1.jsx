@@ -351,9 +351,9 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
 
 
 IALabEvaluationStep1.propTypes = {
-  exercise: PropTypes.any,
-  response: PropTypes.any,
-  onResponseChange: PropTypes.any,
+  exercise: PropTypes.string,
+  response: PropTypes.string,
+  onResponseChange: PropTypes.func,
 };
 
 export default IALabEvaluationStep1;

@@ -25,7 +25,7 @@ const SidebarCollapsed = ({
   >
     <div className="min-h-[64px] w-full flex-shrink-0" />
 
-    <TooltipIcon label={`${Math.round(courseProgress)}% completado`} premium>
+    <TooltipIcon label={t('sidebar.completed_pct', { pct: Math.round(courseProgress) })} premium>
       <div className="w-full h-12 flex items-center justify-center flex-shrink-0 relative group" role="progressbar" aria-valuenow={Math.round(courseProgress)} aria-valuemin="0" aria-valuemax="100">
         <div className="transition-transform duration-200 group-hover:scale-110 group-active:scale-95">
           <svg className="w-[38px] h-[38px] -rotate-90" viewBox="0 0 120 120">
@@ -49,16 +49,16 @@ const SidebarCollapsed = ({
       </div>
     </TooltipIcon>
 
-    <TooltipIcon label={`Nivel ${getLevel()}`} premium>
+    <TooltipIcon label={t('sidebar.level_label', { level: getLevel() })} premium>
       <div className="w-full h-12 flex flex-col items-center justify-center gap-0 flex-shrink-0 group">
         <div className="flex flex-col items-center justify-center gap-0 transition-transform duration-200 group-hover:scale-110 group-active:scale-95">
           <Icon name="fa-graduation-cap" className="text-corporate text-lg" aria-hidden="true" />
-          <span className="text-[10px] font-bold text-petroleum dark:text-[#4DA8C4] leading-tight">Nv.{getLevel()}</span>
+          <span className="text-[10px] font-bold text-petroleum dark:text-[#4DA8C4] leading-tight">{t('sidebar.level', { level: getLevel() })}</span>
         </div>
       </div>
     </TooltipIcon>
 
-    <TooltipIcon label={`${streak} días racha${isStreakAtRisk() && streak > 0 ? ' — ¡Estudia hoy para mantenerla!' : ''}`} premium>
+    <TooltipIcon label={`${t('sidebar.streak_days', { streak })}${isStreakAtRisk() && streak > 0 ? ` — ${t('sidebar.streak_study_today')}` : ''}`} premium>
       <div className="w-full h-12 flex flex-col items-center justify-center gap-0 flex-shrink-0 relative group">
         <div className="flex flex-col items-center justify-center gap-0 transition-transform duration-200 group-hover:scale-110 group-active:scale-95">
           <motion.div
@@ -75,7 +75,7 @@ const SidebarCollapsed = ({
       </div>
     </TooltipIcon>
 
-    <TooltipIcon label={`${getTotalPoints()} puntos acumulados`} premium>
+    <TooltipIcon label={t('sidebar.points_accumulated', { points: formatPoints(getTotalPoints()) })} premium>
       <div className="w-full h-12 flex flex-col items-center justify-center gap-0 flex-shrink-0 group">
         <div className="flex flex-col items-center justify-center gap-0 transition-transform duration-200 group-hover:scale-110 group-active:scale-95">
           <Icon name="fa-award" className="text-corporate text-xl" aria-hidden="true" />
@@ -89,13 +89,13 @@ const SidebarCollapsed = ({
       <div className="absolute w-1 h-1 rounded-full bg-petroleum/30 dark:bg-petroleum/50" />
     </div>
 
-    <TooltipIcon label="Módulos del curso">
+    <TooltipIcon label={t('sidebar.modules')}>
       <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center shadow-sm flex-shrink-0">
         <Icon name="fa-layer-group" className="text-white text-sm" aria-hidden="true" />
       </div>
     </TooltipIcon>
 
-    <div className="flex flex-col gap-1.5 w-full" role="list" aria-live="polite">
+    <div className="flex flex-col gap-1.5 w-full" role="list">
       {modules.map((mod) => {
         const locked = isModuleLocked(mod.id);
         const isActive = activeMod === mod.id;
@@ -107,7 +107,7 @@ const SidebarCollapsed = ({
             premium
             label={
               <div>
-                <p className="text-xs font-bold text-petroleum dark:text-corporate">Módulo {mod.id}: {mod.title}</p>
+                <p className="text-xs font-bold text-petroleum dark:text-corporate">{t('sidebar.module_tooltip', { id: mod.id, title: mod.title })}</p>
                 <div className="flex items-center gap-2 mt-1">
                   <span className="text-[10px] text-corporate font-semibold">{modScore}%</span>
                   <div className="w-16 h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
@@ -126,7 +126,7 @@ const SidebarCollapsed = ({
                   : 'text-petroleum/60 dark:text-slate-400 hover:text-petroleum dark:hover:text-[#4DA8C4] hover:scale-110 active:scale-95'
               } ${locked ? 'opacity-35 cursor-not-allowed' : 'cursor-pointer'}`}
               aria-current={isActive ? 'page' : undefined}
-              aria-label={`${mod.title}${locked ? ' (bloqueado)' : ''}`}
+              aria-label={`${mod.title}${locked ? ` (${t('sidebar.locked')})` : ''}`}
             >
               {isActive && (
                 <motion.div layoutId="activeModuleBar" className="absolute -left-1.5 w-[3px] h-5 rounded-full bg-gradient-to-b from-petroleum-dark to-corporate shadow-sm" />
@@ -150,7 +150,7 @@ const SidebarCollapsed = ({
       <div className="absolute w-1 h-1 rounded-full bg-petroleum/30 dark:bg-petroleum/50" />
     </div>
 
-    <TooltipIcon label="Recursos adicionales del módulo">
+    <TooltipIcon label={t('sidebar.resources_tooltip')}>
       <div className="w-full min-h-[44px] flex items-center justify-center cursor-pointer flex-shrink-0 transition-transform duration-200 hover:scale-110 active:scale-95 group"
         onClick={() => window.dispatchEvent(new CustomEvent('ialab:openTopic'))}
         tabIndex={0}
@@ -179,20 +179,20 @@ const SidebarCollapsed = ({
 
 
 SidebarCollapsed.propTypes = {
-  courseProgress: PropTypes.any,
-  modules: PropTypes.any,
-  activeMod: PropTypes.any,
-  isModuleLocked: PropTypes.any,
-  calculateModuleScore: PropTypes.any,
-  streak: PropTypes.any,
-  isStreakAtRisk: PropTypes.any,
-  getLevel: PropTypes.any,
-  getTotalPoints: PropTypes.any,
-  storedCertificate: PropTypes.any,
-  setShowCertificateModal: PropTypes.any,
-  goToModule: PropTypes.any,
-  fadeTransition: PropTypes.any,
-  t: PropTypes.any,
+  courseProgress: PropTypes.number,
+  modules: PropTypes.array,
+  activeMod: PropTypes.number,
+  isModuleLocked: PropTypes.func,
+  calculateModuleScore: PropTypes.func,
+  streak: PropTypes.number,
+  isStreakAtRisk: PropTypes.func,
+  getLevel: PropTypes.func,
+  getTotalPoints: PropTypes.func,
+  storedCertificate: PropTypes.bool,
+  setShowCertificateModal: PropTypes.func,
+  goToModule: PropTypes.func,
+  fadeTransition: PropTypes.object,
+  t: PropTypes.func,
 };
 
 export default React.memo(SidebarCollapsed);

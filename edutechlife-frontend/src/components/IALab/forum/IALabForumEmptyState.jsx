@@ -52,9 +52,9 @@ const IALabForumEmptyState = ({ user, showInput, t }) => (
 
 
 IALabForumEmptyState.propTypes = {
-  user: PropTypes.any,
-  showInput: PropTypes.any,
-  t: PropTypes.any,
+  user: PropTypes.object,
+  showInput: PropTypes.bool,
+  t: PropTypes.func,
 };
 
 export default IALabForumEmptyState;

@@ -6,8 +6,8 @@ import { Button, Card } from '../shared';
 
 
 ModuleMakeZapier.propTypes = {
-  onNext: PropTypes.any,
-  addXp: PropTypes.any,
+  onNext: PropTypes.func,
+  addXp: PropTypes.func,
 };
 
 export default function ModuleMakeZapier({ onNext, addXp }) {

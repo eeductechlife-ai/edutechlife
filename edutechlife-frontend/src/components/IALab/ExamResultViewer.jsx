@@ -160,10 +160,10 @@ const ExamResultViewer = ({ moduleId, score, onClose, onRetry }) => {
 
 
 ExamResultViewer.propTypes = {
-  moduleId: PropTypes.any,
-  score: PropTypes.any,
-  onClose: PropTypes.any,
-  onRetry: PropTypes.any,
+  moduleId: PropTypes.number,
+  score: PropTypes.number,
+  onClose: PropTypes.func,
+  onRetry: PropTypes.func,
 };
 
 export default ExamResultViewer;

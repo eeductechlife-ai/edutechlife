@@ -394,8 +394,8 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
 
 
 IALabQuizModal.propTypes = {
-  isOpen: PropTypes.any,
-  onClose: PropTypes.any,
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func,
 };
 
 export default IALabQuizModal;

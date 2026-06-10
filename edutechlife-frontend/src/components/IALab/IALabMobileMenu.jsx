@@ -279,12 +279,12 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
 
 
 IALabMobileMenu.propTypes = {
-  closeMobileMenu: PropTypes.any,
-  toggleDarkMode: PropTypes.any,
-  isDarkMode: PropTypes.any,
-  onOpenProfile: PropTypes.any,
-  onOpenHistory: PropTypes.any,
-  onOpenHelp: PropTypes.any,
+  closeMobileMenu: PropTypes.func,
+  toggleDarkMode: PropTypes.func,
+  isDarkMode: PropTypes.bool,
+  onOpenProfile: PropTypes.func,
+  onOpenHistory: PropTypes.func,
+  onOpenHelp: PropTypes.func,
 };
 
 export default React.memo(IALabMobileMenu);

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { callDeepseek } from '../../utils/api';
-import { PROMPT_DANI_EXPERTO, PROMPT_TUTOR_TAREAS } from '../../constants/prompts';
+import { PROMPT_DANI_EXPERTO, PROMPT_TUTOR_TAREAS, PROMPT_DANI_SOCRATICO } from '../../constants/prompts';
 import { useSmartBoardKids } from '../../context/SmartBoardKidsContext';
 import { speakTextConversational, stopSpeech } from '../../utils/speech';
 import useFocusTrap from '../../hooks/useFocusTrap';
@@ -68,6 +68,7 @@ const QuickActions = memo(({ onAction, darkMode }) => {
     { icon: '🎯', label: 'Mi estilo VAK', value: 'vak_estrategias' },
     { icon: '📅', label: 'Qué debo hacer hoy', value: 'que_hacer_hoy' },
     { icon: '🧠', label: 'Explícame un tema', value: 'explicar_tema' },
+    { icon: '🤗', label: 'Apoyo emocional', value: 'apoyo_emocional' },
   ];
 
   return (
@@ -131,6 +132,8 @@ RecentTopics.displayName = 'RecentTopics';
 // ==========================================
 function inferMoodFromText(text) {
   const t = text.toLowerCase();
+  if (/suicid|matarme|quitarme la vida|no quiero vivir|dañarme|lastimarme|acabar con todo|desaparecer|no vale la pena|sin esperanza|quiero morir|me duele el alma/i.test(t))
+    return { mood: 'CRISIS_ALERT', confidence: 0.95 };
   if (/triste|mal|aburrido|cansado|desanimado|no puedo|difícil|frustrado|pesado|agotado/i.test(t))
     return { mood: 'triste', confidence: 0.7 };
   if (/feliz|genial|excelente|logré|entendí|me encantó|gracias|increíble|contento|alegre|wow|divertido/i.test(t))
@@ -209,6 +212,12 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
     const saved = localStorage.getItem('edutechlife_dani_voice');
     return saved !== null ? saved === 'true' : true;
   });
+  const [socraticMode, setSocraticMode] = useState(() => {
+    const saved = localStorage.getItem('edutechlife_dani_socratic');
+    return saved === 'true';
+  });
+  const [showCrisisResources, setShowCrisisResources] = useState(false);
+  const [showEmotionalBanner, setShowEmotionalBanner] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [voiceBlocked, setVoiceBlocked] = useState(false);
   const messagesEndRef = useRef(null);
@@ -309,6 +318,11 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
   useEffect(() => {
     localStorage.setItem('edutechlife_dani_voice', voiceEnabled);
   }, [voiceEnabled]);
+
+  // Persist socratic mode
+  useEffect(() => {
+    localStorage.setItem('edutechlife_dani_socratic', socraticMode);
+  }, [socraticMode]);
 
   // Stop speech when chat closes
   useEffect(() => {
@@ -416,7 +430,12 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
     try {
       // Use document analysis context if available
       const hasDocumentContext = !!documentForDani;
-      const systemPrompt = hasDocumentContext ? PROMPT_TUTOR_TAREAS : PROMPT_DANI_EXPERTO;
+      let systemPrompt = hasDocumentContext ? PROMPT_TUTOR_TAREAS : PROMPT_DANI_EXPERTO;
+
+      // Socratic mode: append socratic instructions
+      if (socraticMode) {
+        systemPrompt += `\n\n${PROMPT_DANI_SOCRATICO}`;
+      }
 
       // Build context info string
       let contextInfo = buildDaniContext();
@@ -435,6 +454,20 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
         contextInfo += `\nIMPORTANTE: El estudiante acaba de subir este documento. Usa el análisis para guiar la tutoría. Pregúntale qué parte quiere mejorar o qué no entiende.`;
       }
 
+      // Detect mood from user message (before API call for prompt modification)
+      const mood = inferMoodFromText(userMessage.text);
+
+      // Emotional support: modify system prompt if negative mood detected
+      if (mood && ['triste', 'enojado', 'ansioso'].includes(mood.mood) && mood.confidence >= 0.7) {
+        setShowEmotionalBanner(true);
+        systemPrompt += `\n\n## INSTRUCCIÓN DE APOYO EMOCIONAL\nEl estudiante está mostrando signos de ${mood.mood} en su mensaje: "${userMessage.text.substring(0, 100)}". Prioriza la VALIDACIÓN EMOCIONAL antes de continuar con contenido académico. Ofrece estrategias de afrontamiento concretas y un espacio seguro para que el estudiante se exprese.`;
+      }
+
+      // Crisis detection: show banner
+      if (mood && mood.mood === 'CRISIS_ALERT' && mood.confidence >= 0.9) {
+        setShowCrisisResources(true);
+      }
+
       // Build messages array for API
       const messages = [
         { role: 'system', content: systemPrompt },
@@ -445,6 +478,14 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
         messages.push({
           role: 'user',
           content: `[INFORMACIÓN DEL ESTUDIANTE - USA ESTO PARA PERSONALIZAR TU RESPUESTA]\n${contextInfo}\n\nNota: Esta información se actualiza en cada mensaje. No la repitas textualmente en tu respuesta, úsala para adaptar tu tono y sugerencias.`,
+        });
+      }
+
+      // Crisis: inject hotline info into messages
+      if (mood && mood.mood === 'CRISIS_ALERT' && mood.confidence >= 0.9) {
+        messages.push({
+          role: 'user',
+          content: `[ALERTA DE CRISIS - RESPUESTA OBLIGATORIA]\nEl estudiante ha expresado pensamientos de crisis. Es CRÍTICO que:\n1. Respondas con apoyo emocional inmediato\n2. Proporciones las siguientes líneas de ayuda colombianas:\n   • Línea 106 — Atención en salud mental (24/7)\n   • Línea 123 — Emergencias\n   • Línea 141 — ICBF\n3. NO continúes con contenido académico hasta abordar esto\n\nTu prioridad #1 es la seguridad y bienestar del estudiante.`,
         });
       }
 
@@ -488,8 +529,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
         }
       }
 
-      // Auto-detect mood from user message
-      const mood = inferMoodFromText(userMessage.text);
+      // Record mood inference
       if (mood) {
         recordMoodInference(mood.mood, mood.confidence, userMessage.text.substring(0, 100));
       }
@@ -513,7 +553,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
       setIsTyping(false);
       setDaniMood('happy');
     }
-  }, [addDaniMessage, buildDaniContext, daniChatHistory, recordMoodInference, trackAcademicTopic, setDaniMood, voiceEnabled, setVoiceBlocked]);
+  }, [addDaniMessage, buildDaniContext, daniChatHistory, recordMoodInference, trackAcademicTopic, setDaniMood, voiceEnabled, setVoiceBlocked, socraticMode]);
 
   const handleQuickAction = useCallback((action) => {
     const now = new Date();
@@ -526,6 +566,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
       'vak_estrategias': `Dani, recuérdame cuál es mi estilo VAK y dame estrategias concretas para estudiar mejor`,
       'que_hacer_hoy': `Dani, ¿qué me recomiendas hacer ${timeOfDay} para ser productivo en mis estudios?`,
       'explicar_tema': `Dani, explícame un tema académico interesante de forma fácil y divertida`,
+      'apoyo_emocional': `Dani, necesito apoyo emocional. No me siento bien y necesito que me ayudes a sentirme mejor.`,
     };
 
     handleSendMessage(actionMessages[action] || action);
@@ -603,8 +644,74 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
                   🔥 {streak.current}
                 </div>
               )}
+              <motion.button
+                onClick={() => setSocraticMode(prev => !prev)}
+                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm transition-all ${
+                  socraticMode
+                    ? 'bg-purple-500/40 text-purple-200 hover:bg-purple-500/50'
+                    : 'bg-white/10 text-white/50 hover:bg-white/20'
+                }`}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                title={'Modo Socrático: guía con preguntas — ' + (socraticMode ? 'ACTIVADO' : 'DESACTIVADO')}
+              >
+                {socraticMode ? '🧠' : '💬'}
+              </motion.button>
             </div>
           </div>
+
+          {/* Crisis Resources Banner */}
+          {showCrisisResources && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="mx-4 mt-2 px-4 py-3 bg-red-50 border border-red-300 rounded-xl"
+            >
+              <div className="flex items-start gap-3">
+                <span className="text-2xl">🆘</span>
+                <div className="flex-1">
+                  <p className="text-sm font-bold text-red-800 mb-1">Líneas de ayuda disponibles</p>
+                  <p className="text-xs text-red-700 leading-relaxed">
+                    <strong>Línea 106</strong> — Atención en salud mental (24/7){' | '}
+                    <strong>Línea 123</strong> — Emergencias{' | '}
+                    <strong>Línea 141</strong> — ICBF
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowCrisisResources(false)}
+                  className="text-red-400 hover:text-red-600 text-sm"
+                  aria-label="Cerrar"
+                >
+                  ✕
+                </button>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Emotional Support Banner */}
+          {showEmotionalBanner && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="mx-4 mt-2 px-3 py-2 bg-gradient-to-r from-[#4DA8C4]/10 to-[#66CCCC]/10 border border-[#4DA8C4]/30 rounded-xl"
+            >
+              <div className="flex items-center gap-2">
+                <span className="text-lg">🤗</span>
+                <p className="text-xs text-[#004B63] flex-1">
+                  Parece que no te sientes muy bien... ¿Quieres hablar de eso?
+                </p>
+                <button
+                  onClick={() => setShowEmotionalBanner(false)}
+                  className="text-[#64748B] hover:text-[#004B63] text-xs"
+                  aria-label="Cerrar"
+                >
+                  ✕
+                </button>
+              </div>
+            </motion.div>
+          )}
 
           {/* Mood bar — subtle indicator of recent detected moods */}
           {studentMoodHistory.length > 0 && (

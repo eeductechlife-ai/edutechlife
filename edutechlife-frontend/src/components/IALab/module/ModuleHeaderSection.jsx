@@ -39,12 +39,12 @@ const ModuleHeaderSection = ({ moduleData, activeMod, isDescriptionExpanded, set
 
 
 ModuleHeaderSection.propTypes = {
-  moduleData: PropTypes.any,
-  activeMod: PropTypes.any,
-  isDescriptionExpanded: PropTypes.any,
-  setIsDescriptionExpanded: PropTypes.any,
-  lessonProgress: PropTypes.any,
-  t: PropTypes.any,
+  moduleData: PropTypes.object,
+  activeMod: PropTypes.string,
+  isDescriptionExpanded: PropTypes.bool,
+  setIsDescriptionExpanded: PropTypes.func,
+  lessonProgress: PropTypes.object,
+  t: PropTypes.func,
 };
 
 export default ModuleHeaderSection;

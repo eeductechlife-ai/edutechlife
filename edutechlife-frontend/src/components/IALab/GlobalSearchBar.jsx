@@ -281,8 +281,8 @@ const GlobalSearchBar = ({ mobile, onClose }) => {
 
 
 GlobalSearchBar.propTypes = {
-  mobile: PropTypes.any,
-  onClose: PropTypes.any,
+  mobile: PropTypes.bool,
+  onClose: PropTypes.func,
 };
 
 export default GlobalSearchBar;

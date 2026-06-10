@@ -87,7 +87,7 @@ const ScreenshotProtectionOverlay = ({ isOpen }) => {
 
 
 ScreenshotProtectionOverlay.propTypes = {
-  isOpen: PropTypes.any,
+  isOpen: PropTypes.bool,
 };
 
 export default ScreenshotProtectionOverlay;

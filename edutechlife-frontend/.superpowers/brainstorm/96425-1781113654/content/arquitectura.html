@@ -1,0 +1,53 @@
+<h2>Arquitectura</h2>
+
+<div class="section">
+  <h3>Archivos nuevos (3)</h3>
+  <div class="mockup" style="text-align:left">
+    <div style="padding:12px">
+      <code><strong>src/hooks/IALab/useAnnotations.js</strong></code>
+      <p style="margin:4px 0 0 12px;font-size:14px">Hook central: estado, persistencia localStorage, transformación HTML</p>
+
+      <code style="display:block;margin-top:12px"><strong>src/components/IALab/AnnotationLayer.jsx</strong></code>
+      <p style="margin:4px 0 0 12px;font-size:14px">Wrapper que renderiza contenido con highlights injectados + detecta selección</p>
+
+      <code style="display:block;margin-top:12px"><strong>src/components/IALab/FloatingHighlightToolbar.jsx</strong></code>
+      <p style="margin:4px 0 0 12px;font-size:14px">Toolbar flotante que aparece al seleccionar texto</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Data Flow</h3>
+  <pre style="background:#f5f5f5;padding:12px;border-radius:8px;font-size:13px">
+Raw HTML ──→ AnnotationLayer ──→ HTML con &lt;mark&gt; injectados
+                  │
+        Text selection detected
+                  │
+                  ▼
+     FloatingHighlightToolbar
+         [Highlight] btn
+                  │
+                  ▼
+     useAnnotations.addHighlight(startOffset, endOffset)
+                  │
+                  ▼
+     localStorage → re-transform HTML
+  </pre>
+</div>
+
+<div class="section">
+  <h3>Datos guardados</h3>
+  <pre style="background:#f5f5f5;padding:12px;border-radius:8px;font-size:13px">
+{
+  "resource_&lt;id&gt;": [
+    {
+      id: "hl_1712345678",
+      startOffset: 142,
+      endOffset: 189,
+      color: "#FFEB3B",
+      createdAt: "2026-06-10T..."
+    }
+  ]
+}
+  </pre>
+</div>

@@ -178,8 +178,8 @@ const RecommendationsPanel = ({ onAction, isLoading }) => {
 
 
 RecommendationsPanel.propTypes = {
-  onAction: PropTypes.any,
-  isLoading: PropTypes.any,
+  onAction: PropTypes.func,
+  isLoading: PropTypes.bool,
 };
 
 export default React.memo(RecommendationsPanel);

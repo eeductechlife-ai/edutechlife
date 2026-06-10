@@ -61,7 +61,7 @@ const IALabSignUpPage = ({ onBack }) => {
 
                {/* Welcome Text específico para IALAB */}
                <div className="mb-8">
-                 <h2 className="text-3xl font-bold mb-4">Únete a IA Lab Pro</h2>
+                 <h2 className="text-3xl font-bold mb-4">Únete a IA Lab Academic</h2>
                  <p className="text-white/90 leading-relaxed">
                    Accede a <strong>IA Generativa avanzada</strong>, <strong>Prompts profesionales</strong>, <strong>APIs empresariales</strong>, <strong>DeepResearch</strong> y <strong>herramientas de productividad</strong> diseñadas para profesionales y adultos.
                  </p>
@@ -72,24 +72,24 @@ const IALabSignUpPage = ({ onBack }) => {
 
                {/* Features */}
                <div className="space-y-4">
-                 <div className="flex items-center gap-3">
-                   <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
-                     <CheckCircle className="w-5 h-5" />
-                   </div>
-                   <span className="text-white/90">Tu puerta al futuro de la IA</span>
-                 </div>
-                 <div className="flex items-center gap-3">
-                   <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
-                     <CheckCircle className="w-5 h-5" />
-                   </div>
-                   <span className="text-white/90">Herramientas IA avanzadas</span>
-                 </div>
-                 <div className="flex items-center gap-3">
-                   <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
-                     <CheckCircle className="w-5 h-5" />
-                   </div>
-                   <span className="text-white/90">Seguimiento académico completo</span>
-                 </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+                      <CheckCircle className="w-5 h-5" />
+                    </div>
+                    <span className="text-white/90">5 módulos con proyectos reales</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+                      <CheckCircle className="w-5 h-5" />
+                    </div>
+                    <span className="text-white/90">Certificado al completar el curso</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+                      <CheckCircle className="w-5 h-5" />
+                    </div>
+                    <span className="text-white/90">Acceso a herramientas IA avanzadas</span>
+                  </div>
                </div>
             </div>
 
@@ -106,7 +106,7 @@ const IALabSignUpPage = ({ onBack }) => {
             {/* Header */}
             <div className="mb-6 text-center w-full">
                <h3 className="text-2xl font-bold text-[#004B63] mb-2">
-                 Regístrate en IA Lab Pro
+                 Regístrate en IA Lab Academic
                </h3>
                <p className="text-[#4DA8C4]">
                  Completa el formulario para adultos (18+ años)

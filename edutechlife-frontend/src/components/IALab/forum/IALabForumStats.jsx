@@ -24,8 +24,8 @@ const IALabForumStats = ({ forumStats, t }) => {
 
 
 IALabForumStats.propTypes = {
-  forumStats: PropTypes.any,
-  t: PropTypes.any,
+  forumStats: PropTypes.object,
+  t: PropTypes.func,
 };
 
 export default IALabForumStats;

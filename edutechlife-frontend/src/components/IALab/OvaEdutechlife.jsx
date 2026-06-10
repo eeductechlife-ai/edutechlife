@@ -17,10 +17,9 @@ const OvaEdutechlife = ({ onComplete }) => {
   const [showResults, setShowResults] = useState(false);
   const [completed, setCompleted] = useState(false);
 
-  const isES = locale === 'es';
-  const slideTitles = isES ? SLIDE_TITLES_ES : SLIDE_TITLES_EN;
-  const slideDescs = isES ? SLIDE_DESCRIPTIONS_ES : SLIDE_DESCRIPTIONS_EN;
-  const slideContent = isES ? SLIDE_CONTENT_ES : SLIDE_CONTENT_EN;
+  const slideTitles = locale === 'es' ? SLIDE_TITLES_ES : SLIDE_TITLES_EN;
+  const slideDescs = locale === 'es' ? SLIDE_DESCRIPTIONS_ES : SLIDE_DESCRIPTIONS_EN;
+  const slideContent = locale === 'es' ? SLIDE_CONTENT_ES : SLIDE_CONTENT_EN;
   const quiz = QUIZ_DATA[locale] || QUIZ_DATA.es;
 
   const goToSlide = (index) => {
@@ -58,22 +57,16 @@ const OvaEdutechlife = ({ onComplete }) => {
   }, [isPassed, completed]);
 
   if (screen === 'intro') {
-    const introText = isES
-      ? 'Bienvenido al Recorrido Interactivo de Gemini. Vamos a explorar la arquitectura, la multimodalidad, el deep research y la integración con Google Workspace. ¡Comencemos!'
-      : 'Welcome to the Interactive Gemini Tour. Let\'s explore the architecture, multimodality, deep research and Google Workspace integration. Let\'s begin!';
-
     return (
       <div className="w-full h-full bg-gradient-to-br from-slate-50 to-white dark:from-gray-900 dark:to-gray-800 rounded-2xl">
         <OVAIntro
           icon="fa-brain"
-          badge={isES ? 'OVA Interactivo' : 'Interactive OVA'}
-          title={isES ? 'Recorrido Interactivo: Gemini' : 'Interactive Tour: Gemini'}
-          description={isES
-            ? 'Explora la arquitectura, la multimodalidad, el deep research y la integración con Google Workspace de Gemini en 5 paradas interactivas.'
-            : 'Explore Gemini\'s architecture, multimodality, deep research and Google Workspace integration in 5 interactive stops.'}
-          audioText={introText}
+          badge={t('ova.tour.interactive_badge')}
+          title={t('ova.tour.title')}
+          description={t('ova.tour.description')}
+          audioText={t('ova.tour.welcome_audio')}
           onStart={() => setScreen('slides')}
-          startLabel={isES ? 'Comenzar Recorrido' : 'Start Tour'}
+          startLabel={t('ova.tour.start_btn')}
         />
       </div>
     );
@@ -86,9 +79,7 @@ const OvaEdutechlife = ({ onComplete }) => {
       const content = slideContent[currentSlide];
       return `${slideTitles[currentSlide]}. ${content.paragraphs.join(' ')}`;
     }
-    return isES
-      ? 'Pon a prueba lo aprendido responde las preguntas del quiz final.'
-      : 'Test what you have learned by answering the final quiz questions.';
+    return t('ova.tour.valerio_quiz_text');
   };
 
   const handlePrev = () => { if (currentSlide > 0) goToSlide(currentSlide - 1); };
@@ -97,15 +88,15 @@ const OvaEdutechlife = ({ onComplete }) => {
   return (
     <OVALayout
       icon="fa-brain"
-      title={isES ? 'Recorrido Interactivo: Gemini' : 'Interactive Tour: Gemini'}
+      title={t('ova.tour.title')}
       tabs={GEMINI_SLIDE_TABS}
       currentTab={currentTabId}
       onTabChange={(idx) => goToSlide(idx)}
       valerioText={getValerioText()}
       valerioAutoPlay={false}
       showNav={!isQuizComplete}
-      nextLabel={isES ? 'Siguiente' : 'Next'}
-      prevLabel={isES ? 'Anterior' : 'Previous'}
+      nextLabel={t('ova.nav.next')}
+      prevLabel={t('ova.nav.prev')}
     >
       <div className="max-w-3xl mx-auto">
         {currentSlide < 4
@@ -121,7 +112,6 @@ const OvaEdutechlife = ({ onComplete }) => {
               handleAnswerSelect={handleAnswerSelect}
               handleCheckAnswers={handleCheckAnswers}
               handleComplete={handleComplete}
-              isES={isES}
             />
         }
       </div>
@@ -131,7 +121,7 @@ const OvaEdutechlife = ({ onComplete }) => {
 
 
 OvaEdutechlife.propTypes = {
-  onComplete: PropTypes.any,
+  onComplete: PropTypes.func,
 };
 
 export default OvaEdutechlife;

@@ -179,10 +179,10 @@ const ResourceSelector = ({
 
 
 ResourceSelector.propTypes = {
-  resources: PropTypes.any,
-  activeResourceIndex: PropTypes.any,
-  completedIds: PropTypes.any,
-  onResourceSelect: PropTypes.any,
+  resources: PropTypes.array,
+  activeResourceIndex: PropTypes.number,
+  completedIds: PropTypes.array,
+  onResourceSelect: PropTypes.func,
 };
 
 export default ResourceSelector;

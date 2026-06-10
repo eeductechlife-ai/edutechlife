@@ -7,7 +7,7 @@ import { OVAIntro, OVAValerioBar } from './shared';
 
 
 OVAEthicalDilemmas.propTypes = {
-  onComplete: PropTypes.any,
+  onComplete: PropTypes.func,
 };
 
 export default function OVAEthicalDilemmas({ onComplete }) {

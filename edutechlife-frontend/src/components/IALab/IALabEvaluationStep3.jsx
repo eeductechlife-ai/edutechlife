@@ -417,9 +417,9 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
 
 
 IALabEvaluationStep3.propTypes = {
-  exercise: PropTypes.any,
-  response: PropTypes.any,
-  onResponseChange: PropTypes.any,
+  exercise: PropTypes.string,
+  response: PropTypes.string,
+  onResponseChange: PropTypes.func,
 };
 
 export default IALabEvaluationStep3;

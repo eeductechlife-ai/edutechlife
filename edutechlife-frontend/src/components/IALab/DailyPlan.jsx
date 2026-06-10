@@ -104,6 +104,8 @@ const DailyPlan = ({ onAction, isLoading }) => {
         type: 'challenge',
         priority: 1,
         icon: c.icon,
+        titleKey: c.titleKey,
+        descriptionKey: c.descriptionKey,
         title: c.title,
         description: c.description,
         xpReward: c.xp,
@@ -302,7 +304,7 @@ const DailyPlan = ({ onAction, isLoading }) => {
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between gap-1.5">
-                            <p className={`text-xs font-semibold ${isMorning ? 'text-amber-800' : 'text-slate-800'}`}>{item.title}</p>
+                            <p className={`text-xs font-semibold ${isMorning ? 'text-amber-800' : 'text-slate-800'}`}>{t(item.titleKey)}</p>
                             <button
                               onClick={() => completeChallenge(item.id, item.xpReward)}
                               className={`flex-shrink-0 text-[10px] font-medium px-2 py-0.5 rounded-md border transition-colors active:scale-95 ${
@@ -311,10 +313,10 @@ const DailyPlan = ({ onAction, isLoading }) => {
                                   : 'text-corporate bg-corporate/10 border-corporate/20 hover:bg-corporate/20'
                               }`}
                             >
-                              <Icon name="fa-check" className="text-[8px] mr-0.5" />Completar
+                              <Icon name="fa-check" className="text-[8px] mr-0.5" />{t('ialab.daily_plan.complete')}
                             </button>
                           </div>
-                          <p className="text-[11px] text-slate-500 mt-0.5">{item.description}</p>
+                          <p className="text-[11px] text-slate-500 mt-0.5">{t(item.descriptionKey)}</p>
                           <div className="flex items-center gap-3 mt-0.5">
                             <span className="flex items-center gap-1">
                               <Icon name="fa-star" className={`text-[9px] ${isMorning ? 'text-amber-500' : 'text-corporate'}`} />
@@ -322,12 +324,12 @@ const DailyPlan = ({ onAction, isLoading }) => {
                             </span>
                             {isMorning && (
                               <span className="text-[9px] font-medium text-amber-600 bg-amber-100 px-1.5 py-0.5 rounded">
-                                Mañanero
+                                {t('ialab.daily_plan.morning_streak')}
                               </span>
                             )}
                             {!isMorning && (
                               <span className="text-[9px] font-medium text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">
-                                Desafío
+                                {t('ialab.daily_plan.challenge_badge')}
                               </span>
                             )}
                           </div>

@@ -1,12 +1,14 @@
 import { SignIn, SignUp } from '@clerk/react';
-import { esES } from '@clerk/localizations';
+import { esES, enUS } from '@clerk/localizations';
 import { motion } from 'framer-motion';
 import FloatingParticles from './FloatingParticles';
 import { Brain, CheckCircle } from 'lucide-react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { useTranslation } from '../i18n/I18nProvider';
 
 const WelcomeScreen = ({ onNavigate }) => {
+  const { t, locale } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [isSignUpMode, setIsSignUpMode] = useState(false);
@@ -14,6 +16,7 @@ const WelcomeScreen = ({ onNavigate }) => {
   const urlReturnTo = searchParams.get('returnTo');
   const storageReturnTo = sessionStorage.getItem('clerk_return_to');
   const returnTo = urlReturnTo || (storageReturnTo ? `/${storageReturnTo}` : '/ialab');
+  const clerkLocale = locale === 'en' ? enUS : esES;
   
   useEffect(() => {
     const action = searchParams.get('action');
@@ -90,20 +93,18 @@ const WelcomeScreen = ({ onNavigate }) => {
               {/* Welcome Message */}
               <div className="mb-10">
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-full mb-6">
-                  <span className="text-[#66CCCC] text-xs font-semibold uppercase tracking-wider">Plataforma SaaS Premium</span>
+                  <span className="text-[#66CCCC] text-xs font-semibold uppercase tracking-wider">{t('welcome.badge')}</span>
                 </div>
                 <h2 className="text-3xl lg:text-4xl font-bold mb-4 leading-tight text-white">
-                  Domina la IA Generativa
+                  {t('welcome.heading')}
                 </h2>
                 <p className="text-white text-base leading-relaxed mb-4">
-                  Transforma tu forma de aprender y trabajar con inteligencia artificial. 
-                  Un curso diseñado para llevarte desde los fundamentos hasta la creación 
-                  de soluciones reales con herramientas de vanguardia.
+                  {t('welcome.description')}
                 </p>
                 <p className="text-white/80 text-sm">
-                  <span className="text-[#66CCCC] font-semibold">10 horas</span> de contenido · 
-                  <span className="text-[#66CCCC] font-semibold"> 5 módulos</span> prácticos · 
-                  Certificación profesional
+                  <span className="text-[#66CCCC] font-semibold">10 {t('welcome.hours')}</span> · 
+                  <span className="text-[#66CCCC] font-semibold"> 5 {t('welcome.modules')}</span> · 
+                  {t('welcome.certification')}
                 </p>
               </div>
 
@@ -111,15 +112,15 @@ const WelcomeScreen = ({ onNavigate }) => {
               <div className="space-y-4">
                 <div className="flex items-center gap-3 p-3 bg-white/10 backdrop-blur-sm rounded-lg">
                   <CheckCircle className="w-5 h-5 text-white flex-shrink-0" />
-                  <span className="text-white font-medium">Certificación incluida</span>
+                  <span className="text-white font-medium">{t('welcome.benefit_cert')}</span>
                 </div>
                 <div className="flex items-center gap-3 p-3 bg-white/10 backdrop-blur-sm rounded-lg">
                   <CheckCircle className="w-5 h-5 text-white flex-shrink-0" />
-                  <span className="text-white font-medium">Soporte 24/7</span>
+                  <span className="text-white font-medium">{t('welcome.benefit_support')}</span>
                 </div>
                 <div className="flex items-center gap-3 p-3 bg-white/10 backdrop-blur-sm rounded-lg">
                   <CheckCircle className="w-5 h-5 text-white flex-shrink-0" />
-                  <span className="text-white font-medium">Soporte personalizado</span>
+                  <span className="text-white font-medium">{t('welcome.benefit_personalized')}</span>
                 </div>
               </div>
             </div>
@@ -127,7 +128,7 @@ const WelcomeScreen = ({ onNavigate }) => {
             {/* Footer */}
             <div className="pt-6 border-t border-white/20">
               <p className="text-white/70 text-sm">
-                ¿Necesitas ayuda? <a href="mailto:info@edutechlife.co" className="text-white hover:underline">info@edutechlife.co</a>
+                {t('welcome.help')} <a href="mailto:info@edutechlife.co" className="text-white hover:underline">info@edutechlife.co</a>
               </p>
             </div>
           </div>
@@ -142,12 +143,10 @@ const WelcomeScreen = ({ onNavigate }) => {
                 </div>
               </div>
               <h3 className="text-2xl lg:text-3xl font-bold text-[#004B63] mb-2">
-                {isSignUpMode ? 'Comienza tu Transformación' : 'Bienvenido al Futuro del Aprendizaje'}
+                {isSignUpMode ? t('welcome.signup_title') : t('welcome.signin_title')}
               </h3>
               <p className="text-[#4DA8C4] text-base max-w-md mx-auto">
-                {isSignUpMode 
-                  ? 'Únete a miles de estudiantes que ya dominan la IA generativa' 
-                  : 'Accede a tu laboratorio de IA y continúa tu camino hacia la maestría'}
+                {isSignUpMode ? t('welcome.signup_subtitle') : t('welcome.signin_subtitle')}
               </p>
             </div>
 
@@ -158,7 +157,7 @@ const WelcomeScreen = ({ onNavigate }) => {
                   fallbackRedirectUrl={returnTo}
                   signInUrl="/login"
                   appearance={clerkAppearance}
-                  localization={esES}
+                  localization={clerkLocale}
                   afterSignUpUrl={returnTo}
                 />
               ) : (
@@ -166,12 +165,12 @@ const WelcomeScreen = ({ onNavigate }) => {
                   fallbackRedirectUrl={returnTo}
                   signUpUrl="/login?action=signup"
                   appearance={clerkAppearance}
-                  localization={esES}
+                  localization={clerkLocale}
                 />
               )}
             </div>
 
-            {/* Back to IA Lab Pro Button */}
+            {/* Back to IA Lab Academic Button */}
             <div className="mt-6 flex justify-center">
               <motion.button
                 onClick={() => navigate('/ialab-academic')}
@@ -182,7 +181,7 @@ const WelcomeScreen = ({ onNavigate }) => {
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m0 0l11 11" />
                 </svg>
-                Volver a AI Lab Academic
+                {t('welcome.back_btn')}
               </motion.button>
             </div>
           </div>

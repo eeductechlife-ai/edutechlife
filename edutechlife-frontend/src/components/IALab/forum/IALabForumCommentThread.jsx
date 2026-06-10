@@ -30,9 +30,9 @@ const IALabForumCommentThread = ({ comments, onReply, depth = 0 }) => {
 
 
 IALabForumCommentThread.propTypes = {
-  comments: PropTypes.any,
-  onReply: PropTypes.any,
-  depth: PropTypes.any,
+  comments: PropTypes.array,
+  onReply: PropTypes.func,
+  depth: PropTypes.number,
 };
 
 export default IALabForumCommentThread;

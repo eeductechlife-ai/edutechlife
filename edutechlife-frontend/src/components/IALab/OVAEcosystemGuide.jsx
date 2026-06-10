@@ -220,10 +220,10 @@ const screensData = {
 };
 
 OVAEcosystemGuide.propTypes = {
-  onComplete: PropTypes.any,
+  onComplete: PropTypes.func,
 };
 
-export default function OVAEcosystemGuide({ onComplete }) {
+export default function OVAEcosystemGuide({ onComplete, onClose }) {
   const { t, locale } = useTranslation();
   const [screen, setScreen] = useState('welcome');
   const [completed, setCompleted] = useState([]);
@@ -417,10 +417,10 @@ export default function OVAEcosystemGuide({ onComplete }) {
         <>
           <div className="flex justify-center border-t border-slate-100 dark:border-slate-700 bg-white/90 dark:bg-slate-800/90">
             <div className="w-full max-w-4xl flex justify-between items-center gap-3 px-4 py-3">
-              <button onClick={() => { if (curIdx > 1) setScreen(nav[curIdx - 1]); stopSpeech(); }} aria-label="Anterior" className="p-3 min-w-[44px] min-h-[44px] bg-[#F1F5F9] dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-petroleum dark:hover:text-corporate rounded-xl disabled:opacity-10 transition-all border border-slate-50 dark:border-slate-700" disabled={curIdx <= 1}><ChevronLeft className="w-5 h-5" /></button>
+              <button onClick={() => { if (curIdx > 1) setScreen(nav[curIdx - 1]); stopSpeech(); }} aria-label={t('ova.nav.prev_aria')} className="p-3 min-w-[44px] min-h-[44px] bg-[#F1F5F9] dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-petroleum dark:hover:text-corporate rounded-xl disabled:opacity-10 transition-all border border-slate-50 dark:border-slate-700" disabled={curIdx <= 1}><ChevronLeft className="w-5 h-5" /></button>
               <div className="flex gap-1.5">{nav.slice(1).map((_, i) => <div key={i} className={`h-1.5 rounded-full transition-all duration-700 ${i + 1 === curIdx ? 'w-8 bg-petroleum' : completed.includes(nav[i + 1]) ? 'w-2 bg-corporate' : 'w-2 bg-slate-200 dark:bg-slate-600'}`} />)}</div>
-              <button onClick={isLastScreen ? handleMarkComplete : nextScreen} className={`px-6 min-h-[44px] rounded-xl font-[900] text-xs shadow-md active:scale-95 transition-all flex items-center gap-2 uppercase tracking-[0.15em] ${isLastScreen ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-gradient-to-r from-petroleum to-corporate text-white'}`}>
-                {isLastScreen ? t('ova.ecosystem.mark_complete') : t('ova.introprompt.next')} <ArrowRightCircle className="w-4 h-4" />
+              <button onClick={isLastScreen ? () => onClose?.() : nextScreen} className={`px-6 min-h-[44px] rounded-xl font-[900] text-xs shadow-md active:scale-95 transition-all flex items-center gap-2 uppercase tracking-[0.15em] ${isLastScreen ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-gradient-to-r from-petroleum to-corporate text-white'}`}>
+                {isLastScreen ? t('ova.introprompt.finish_btn') : t('ova.introprompt.next')} <ArrowRightCircle className="w-4 h-4" />
               </button>
             </div>
           </div>

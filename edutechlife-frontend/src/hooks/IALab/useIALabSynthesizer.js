@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useIALabProgressContext } from '../../context/IALabContext';
+import { API_BASE_URL } from '../../config/api';
 import { analyzePromptQuality, getQualityLevel, identifyPromptType, extractKeywords } from '../../utils/promptAnalyzer.js';
 import { selectAppropriateTechnique, applyTechnique, getAvailableTechniques, explainTechniqueSelection } from '../../utils/promptOptimizer.js';
 import { generateEducationalFeedback, generateComparisonMetrics, generateExecutiveSummary } from '../../utils/promptEvaluator.js';
@@ -85,9 +86,7 @@ export const useIALabSynthesizer = () => {
                 setLoadMsg('Conectando con DeepSeek API...');
                 
                 try {
-                    const apiBase = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'http://localhost:3001';
-                    
-                    const response = await fetch(`${apiBase}/api/chat`, {
+                    const response = await fetch(`${API_BASE_URL}/api/chat`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -487,8 +486,7 @@ export const useIALabSynthesizer = () => {
             setLoadMsg('Conectando con DeepSeek API...');
             
             try {
-                const apiBase = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'http://localhost:3001';
-                const response = await fetch(`${apiBase}/api/chat`, {
+                const response = await fetch(`${API_BASE_URL}/api/chat`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

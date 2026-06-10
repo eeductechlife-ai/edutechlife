@@ -27,7 +27,7 @@ const totalSteps = 1 + contentScreens.length + questionsData.length + 1;
 
 
 EdutechLogo.propTypes = {
-  size: PropTypes.any,
+  size: PropTypes.string,
 };
 
 export default function OVANotebookSimulator({ onComplete }) {
@@ -49,8 +49,6 @@ export default function OVANotebookSimulator({ onComplete }) {
       onComplete?.();
     }
   }, [gameState, score, onComplete]);
-
-  const isES = locale === 'es';
 
   useEffect(() => {
     if (gameState === 'results' && score > 4) {
@@ -101,9 +99,7 @@ export default function OVANotebookSimulator({ onComplete }) {
 
   const getValerioText = () => {
     if (screen === 'intro') {
-      return isES
-        ? 'Bienvenido al simulador de NotebookLM. Vamos a practicar cómo crear cuadernos de investigación paso a paso.'
-        : 'Welcome to the NotebookLM simulator. Let us practice how to create research notebooks step by step.';
+      return t('ova.notebooksim.welcome_audio');
     }
     if (gameState === 'content') {
       return contentScreens[contentIdx]?.valerioText || '';
@@ -111,9 +107,7 @@ export default function OVANotebookSimulator({ onComplete }) {
     if (gameState === 'quiz') {
       return questionsData[currentQIndex]?.question || '';
     }
-    return isES
-      ? 'Has completado el simulador. Revisa tus resultados y continúa aprendiendo.'
-      : 'You have completed the simulator. Review your results and continue learning.';
+    return t('ova.notebooksim.completed_text');
   };
 
   if (screen === 'intro') {
@@ -121,16 +115,12 @@ export default function OVANotebookSimulator({ onComplete }) {
       <div className="w-full h-full bg-gradient-to-br from-cyan-50 to-white dark:from-gray-900 dark:to-gray-800 flex items-center justify-center rounded-2xl min-h-[400px]">
         <OVAIntro
           icon="fa-brain"
-          badge={isES ? 'Simulador NotebookLM' : 'NotebookLM Simulator'}
-          title={isES ? 'Simulador de NotebookLM' : 'NotebookLM Simulator'}
-          description={isES
-            ? 'Practica el uso de NotebookLM con ejercicios interactivos. Aprende a configurar fuentes, generar resúmenes y optimizar tus cuadernos de investigación con IA.'
-            : 'Practice using NotebookLM with interactive exercises. Learn to configure sources, generate summaries, and optimize your research notebooks with AI.'}
-          audioText={isES
-            ? 'Bienvenido al simulador de NotebookLM. Vamos a practicar cómo crear cuadernos de investigación paso a paso.'
-            : 'Welcome to the NotebookLM simulator. Let us practice how to create research notebooks step by step.'}
+          badge={t('ova.notebooksim.learning_badge')}
+          title={t('ova.notebooksim.lab_title')}
+          description={t('ova.notebooksim.welcome_desc_p1')}
+          audioText={t('ova.notebooksim.welcome_audio')}
           onStart={startGame}
-          startLabel={isES ? 'Comenzar Simulador' : 'Start Simulator'}
+          startLabel={t('ova.notebooksim.start_cta')}
         />
       </div>
     );
@@ -252,7 +242,7 @@ export default function OVANotebookSimulator({ onComplete }) {
               </div>
             </div>
             <div className="flex justify-between items-center mt-8 px-2">
-              <button onClick={prevContent} disabled={isFirst} aria-label="Anterior"
+              <button onClick={prevContent} disabled={isFirst} aria-label={t('ova.nav.prev_aria')}
                 className="p-3 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 text-petroleum dark:text-slate-100 rounded-xl disabled:opacity-30 hover:border-corporate transition-all disabled:cursor-not-allowed">
                 <ArrowLeft size={20} />
               </button>

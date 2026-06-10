@@ -72,16 +72,16 @@ const OVALayout = ({
 
 
 OVALayout.propTypes = {
-  title: PropTypes.any,
-  icon: PropTypes.any,
-  tabs: PropTypes.any,
-  currentTab: PropTypes.any,
-  onTabChange: PropTypes.any,
-  valerioText: PropTypes.any,
-  valerioAutoPlay: PropTypes.any,
-  showNav: PropTypes.any,
-  nextLabel: PropTypes.any,
-  prevLabel: PropTypes.any,
+  title: PropTypes.string,
+  icon: PropTypes.string,
+  tabs: PropTypes.array,
+  currentTab: PropTypes.string,
+  onTabChange: PropTypes.func,
+  valerioText: PropTypes.string,
+  valerioAutoPlay: PropTypes.bool,
+  showNav: PropTypes.bool,
+  nextLabel: PropTypes.string,
+  prevLabel: PropTypes.string,
 };
 
 export default OVALayout;

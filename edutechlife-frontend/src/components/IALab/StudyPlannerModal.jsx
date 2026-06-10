@@ -273,8 +273,8 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
 
 
 StudyPlannerModal.propTypes = {
-  isOpen: PropTypes.any,
-  onClose: PropTypes.any,
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func,
 };
 
 export default StudyPlannerModal;

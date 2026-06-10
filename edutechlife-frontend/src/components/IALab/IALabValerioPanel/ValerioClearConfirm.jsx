@@ -26,8 +26,8 @@ const ValerioClearConfirm = ({ onConfirm, onCancel }) => {
 
 
 ValerioClearConfirm.propTypes = {
-  onConfirm: PropTypes.any,
-  onCancel: PropTypes.any,
+  onConfirm: PropTypes.func,
+  onCancel: PropTypes.func,
 };
 
 export default ValerioClearConfirm;

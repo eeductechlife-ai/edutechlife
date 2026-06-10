@@ -206,7 +206,7 @@ const IALabInteractionAdvisor = ({ className = '', ...rest }) => {
 
 
 VoiceReader.propTypes = {
-  text: PropTypes.any,
+  text: PropTypes.string,
 };
 
 export default IALabInteractionAdvisor;

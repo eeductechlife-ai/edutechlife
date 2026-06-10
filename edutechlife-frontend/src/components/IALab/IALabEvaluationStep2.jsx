@@ -332,9 +332,9 @@ Eres un [especificar rol experto]
 
 
 IALabEvaluationStep2.propTypes = {
-  exercise: PropTypes.any,
-  response: PropTypes.any,
-  onResponseChange: PropTypes.any,
+  exercise: PropTypes.string,
+  response: PropTypes.string,
+  onResponseChange: PropTypes.func,
 };
 
 export default IALabEvaluationStep2;

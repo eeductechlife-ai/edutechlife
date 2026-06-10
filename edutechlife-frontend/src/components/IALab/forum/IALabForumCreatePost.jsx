@@ -178,8 +178,8 @@ const IALabForumCreatePost = ({ onClose, onCreated }) => {
 
 
 IALabForumCreatePost.propTypes = {
-  onClose: PropTypes.any,
-  onCreated: PropTypes.any,
+  onClose: PropTypes.func,
+  onCreated: PropTypes.func,
 };
 
 export default IALabForumCreatePost;

@@ -4,7 +4,7 @@ import IALabMobileMenu from '../IALabMobileMenu';
 
 export function MobileMenuOverlay({ showMobileMenu, mobileMenuClosing, closeMobileMenu, MOBILE_MENU_WIDTH, SPRING_DAMPING, SPRING_STIFFNESS, toggleDarkMode, isDarkMode, handleOpenProfile, handleOpenHistory, handleOpenHelp }) {
   return (showMobileMenu || mobileMenuClosing) ? (
-    <div className="fixed inset-0 z-[1001] lg:hidden" role="dialog" aria-modal="true" aria-label="Menú de navegación">
+    <div className="fixed inset-0 z-[1001] md:hidden" role="dialog" aria-modal="true" aria-label="Menú de navegación">
       <div className={`absolute inset-0 bg-black/40 dark:bg-black/60 transition-opacity duration-250 ${mobileMenuClosing ? 'opacity-0' : 'opacity-100'}`} onClick={closeMobileMenu} />
       <motion.div
         initial={false}

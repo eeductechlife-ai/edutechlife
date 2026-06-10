@@ -100,7 +100,7 @@ const IALabCommunityHub = ({ onAction }) => {
 
 
 IALabCommunityHub.propTypes = {
-  onAction: PropTypes.any,
+  onAction: PropTypes.func,
 };
 
 export default IALabCommunityHub;

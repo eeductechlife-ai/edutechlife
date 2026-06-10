@@ -37,7 +37,7 @@ const ToolTutorAccordion = React.memo(function ToolTutorAccordion({ onAction }) 
     : { title: t('ialab.tool_tutor.tool_title'), subtitle: t('ialab.tool_tutor.tool_subtitle'), icon: 'fa-wand-magic-sparkles', ctaIcon: 'fa-hand-pointer', ctaText: t('ialab.tool_tutor.tool_cta') };
 
   const tutoringConfig = { title: t('ialab.tool_tutor.tutoring_title'), subtitle: t('ialab.tool_tutor.tutoring_subtitle'), icon: 'fa-video', ctaIcon: 'fa-video', ctaText: t('ialab.tool_tutor.tutoring_cta') };
-  const flashcardConfig = { title: 'Cápsulas de Conocimiento', subtitle: 'Aprende y retén conceptos clave con repaso inteligente.', icon: 'fa-brain', ctaIcon: 'fa-brain', ctaText: 'Comenzar' };
+  const flashcardConfig = { title: t('ialab.tool_tutor.flashcard_title'), subtitle: t('ialab.tool_tutor.flashcard_subtitle'), icon: 'fa-brain', ctaIcon: 'fa-brain', ctaText: t('ialab.tool_tutor.tool_cta') };
 
   const PreviewCard = ({ config, section }) => {
     const isActive = expanded === section;

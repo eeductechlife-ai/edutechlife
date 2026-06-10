@@ -55,7 +55,7 @@ const AutoSaveIndicator = ({ response }) => {
 
 
 AutoSaveIndicator.propTypes = {
-  response: PropTypes.any,
+  response: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 };
 
 export default AutoSaveIndicator;

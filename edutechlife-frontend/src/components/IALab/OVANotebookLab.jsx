@@ -27,7 +27,7 @@ const totalSteps = 1 + contentScreens.length + questionsData.length + 1;
 
 
 EdutechLogo.propTypes = {
-  size: PropTypes.any,
+  size: PropTypes.string,
 };
 
 export default function OVANotebookLab({ onComplete }) {
@@ -49,8 +49,6 @@ export default function OVANotebookLab({ onComplete }) {
       onComplete?.();
     }
   }, [gameState, score, onComplete]);
-
-  const isES = locale === 'es';
 
   useEffect(() => {
     if (gameState === 'results' && score > 4) {
@@ -111,9 +109,7 @@ export default function OVANotebookLab({ onComplete }) {
 
   const getValerioText = () => {
     if (screen === 'intro') {
-      return isES
-        ? 'Bienvenido al laboratorio de NotebookLM. Vamos a explorar cómo crear cuadernos de investigación con inteligencia artificial.'
-        : 'Welcome to the NotebookLM lab. Let us explore how to create research notebooks with artificial intelligence.';
+      return t('ova.notebooklab.welcome_audio');
     }
     if (gameState === 'content') {
       return contentScreens[contentIdx]?.valerioText || '';
@@ -121,9 +117,7 @@ export default function OVANotebookLab({ onComplete }) {
     if (gameState === 'quiz') {
       return questionsData[currentQIndex]?.question || '';
     }
-    return isES
-      ? 'Has completado el laboratorio. Revisa tus resultados y continúa aprendiendo.'
-      : 'You have completed the lab. Review your results and continue learning.';
+    return t('ova.notebooklab.completed_text');
   };
 
   if (screen === 'intro') {
@@ -131,16 +125,12 @@ export default function OVANotebookLab({ onComplete }) {
       <div className="w-full h-full bg-gradient-to-br from-cyan-50 to-white dark:from-gray-900 dark:to-gray-800 flex items-center justify-center rounded-2xl min-h-[400px]">
         <OVAIntro
           icon="fa-brain"
-          badge={isES ? 'Laboratorio NotebookLM' : 'NotebookLM Lab'}
-          title={isES ? 'Laboratorio de NotebookLM' : 'NotebookLM Lab'}
-          description={isES
-            ? 'Aprende a usar NotebookLM, la herramienta de IA para crear cuadernos de investigación inteligentes. Domina la organización y análisis de información con asistencia artificial.'
-            : 'Learn to use NotebookLM, the AI tool for creating intelligent research notebooks. Master information organization and analysis with AI assistance.'}
-          audioText={isES
-            ? 'Bienvenido al laboratorio de NotebookLM. Vamos a explorar cómo crear cuadernos de investigación con inteligencia artificial.'
-            : 'Welcome to the NotebookLM lab. Let us explore how to create research notebooks with artificial intelligence.'}
+          badge={t('ova.notebooklab.learning_badge')}
+          title={t('ova.notebooklab.lab_title')}
+          description={t('ova.notebooklab.welcome_desc_p1')}
+          audioText={t('ova.notebooklab.welcome_audio')}
           onStart={startGame}
-          startLabel={isES ? 'Comenzar Laboratorio' : 'Start Lab'}
+          startLabel={t('ova.notebooklab.start_cta')}
         />
       </div>
     );
@@ -262,7 +252,7 @@ export default function OVANotebookLab({ onComplete }) {
               </div>
             </div>
             <div className="flex justify-between items-center mt-8 px-2">
-              <button onClick={prevContent} disabled={isFirst} aria-label="Anterior"
+              <button onClick={prevContent} disabled={isFirst} aria-label={t('ova.nav.prev_aria')}
                 className="p-3 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 text-petroleum dark:text-slate-100 rounded-xl disabled:opacity-30 hover:border-corporate transition-all disabled:cursor-not-allowed">
                 <ArrowLeft size={20} />
               </button>

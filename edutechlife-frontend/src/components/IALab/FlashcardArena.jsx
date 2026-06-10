@@ -1,8 +1,9 @@
 import React, { useState, useCallback } from 'react';
+import { useTranslation } from '../../i18n/I18nProvider';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 
-const MODULE_FLASHCARDS = {
+const MODULE_FLASHCARDS_ES = {
   1: [
     { id: 'm1-f1', front: '¿Qué es un prompt?', back: 'Instrucción o entrada que se le da a un modelo de IA para generar una respuesta.' },
     { id: 'm1-f2', front: '¿Qué es fine-tuning?', back: 'Entrenar un modelo pre-entrenado con datos específicos para una tarea concreta.' },
@@ -50,7 +51,58 @@ const MODULE_FLASHCARDS = {
   ],
 };
 
+const MODULE_FLASHCARDS_EN = {
+  1: [
+    { id: 'm1-f1', front: 'What is a prompt?', back: 'Instruction or input given to an AI model to generate a response.' },
+    { id: 'm1-f2', front: 'What is fine-tuning?', back: 'Training a pre-trained model with specific data for a concrete task.' },
+    { id: 'm1-f3', front: 'What is temperature in an LLM?', back: 'Controls randomness: low = precise, high = creative.' },
+    { id: 'm1-f4', front: 'What is RAG?', back: 'Technique that combines document search with text generation.' },
+    { id: 'm1-f5', front: 'What is an LLM?', back: 'Language model trained on vast amounts of text to understand and generate human language.' },
+    { id: 'm1-f6', front: 'What is pre-training?', back: 'Phase where the model learns language patterns from massive unlabeled data.' },
+    { id: 'm1-f7', front: 'What are parameters?', back: 'Numerical values the model adjusts while learning. More parameters = greater capacity.' },
+  ],
+  2: [
+    { id: 'm2-f1', front: 'What is ChatGPT?', back: "OpenAI's language model based on the GPT architecture." },
+    { id: 'm2-f2', front: 'What are tokens?', back: 'Units into which text is divided for processing. 1 token ≈ 0.75 words.' },
+    { id: 'm2-f3', front: 'What is a context window?', back: 'Maximum tokens a model processes in one interaction (e.g., 8K, 32K, 128K).' },
+    { id: 'm2-f4', front: 'What is a system prompt?', back: 'Initial instruction defining the assistant role and rules throughout the conversation.' },
+    { id: 'm2-f5', front: 'What is GPT?', back: 'Generative Pre-trained Transformer: architecture using transformers for coherent text.' },
+    { id: 'm2-f6', front: 'What is RLHF?', back: 'Technique using human feedback to align responses with human preferences.' },
+    { id: 'm2-f7', front: 'What are embeddings?', back: 'Numerical representations capturing the semantic meaning of words.' },
+  ],
+  3: [
+    { id: 'm3-f1', front: 'What is Google Gemini?', back: "Google's multimodal model processing text, images, audio, and video." },
+    { id: 'm3-f2', front: 'What is chain-of-thought?', back: 'Technique that guides the model to reason step by step before responding.' },
+    { id: 'm3-f3', front: 'What is few-shot prompting?', back: 'Providing input-output examples in the prompt to guide the model.' },
+    { id: 'm3-f4', front: 'What is grounding?', back: 'Connecting AI responses to verifiable sources to reduce hallucinations.' },
+    { id: 'm3-f5', front: 'What is multimodal?', back: 'Ability to process text, images, audio, and video simultaneously.' },
+    { id: 'm3-f6', front: 'What is zero-shot prompting?', back: 'The model performs a task without prior examples, using only the instruction.' },
+    { id: 'm3-f7', front: 'Temperature in Gemini', back: 'Controls response creativity: low = precise, high = creative.' },
+  ],
+  4: [
+    { id: 'm4-f1', front: 'What is an AI agent?', back: 'Autonomous system that perceives, decides, and executes actions to achieve a goal.' },
+    { id: 'm4-f2', front: 'What are tool calls?', back: "LLM's ability to invoke APIs, databases, or execute code." },
+    { id: 'm4-f3', front: 'What is memory in agents?', back: 'Mechanism to remember information between sessions using vectors or databases.' },
+    { id: 'm4-f4', front: 'What is a multi-agent system?', back: 'Multiple AI agents collaborate, each specialized in one task.' },
+    { id: 'm4-f5', front: 'What is planning?', back: 'Decomposing a complex goal into smaller actionable steps.' },
+    { id: 'm4-f6', front: 'What is reasoning?', back: 'Analyzing information, evaluating options, and deciding the best course of action.' },
+    { id: 'm4-f7', front: 'What is autonomy?', back: "Agent's level of independence to operate without direct human intervention." },
+  ],
+  5: [
+    { id: 'm5-f1', front: 'What is responsible AI?', back: 'AI development prioritizing fairness, transparency, privacy, and accountability.' },
+    { id: 'm5-f2', front: 'What is bias in AI?', back: 'Biases due to unbalanced data or incorrect labeling during training.' },
+    { id: 'm5-f3', front: 'What is differential privacy?', back: 'Adding controlled noise to data to protect individual information.' },
+    { id: 'm5-f4', front: 'What is explainable AI?', back: 'Branch making model decisions interpretable for humans.' },
+    { id: 'm5-f5', front: 'What is fairness in AI?', back: 'Principle of not discriminating based on race, gender, age, or other characteristics.' },
+    { id: 'm5-f6', front: 'What is transparency?', back: 'Making visible how a model works, what data it uses, and how it decides.' },
+    { id: 'm5-f7', front: 'What are algorithmic biases?', back: 'Systematic errors caused by incomplete data or historical prejudices.' },
+  ],
+};
+
 export function FlashcardArena({ moduleId }) {
+  const { t, locale } = useTranslation();
+  const isEn = locale === 'en';
+  const MODULE_FLASHCARDS = isEn ? MODULE_FLASHCARDS_EN : MODULE_FLASHCARDS_ES;
   const cards = MODULE_FLASHCARDS[moduleId] || MODULE_FLASHCARDS[1];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
@@ -89,14 +141,14 @@ export function FlashcardArena({ moduleId }) {
         <div className="w-16 h-16 rounded-2xl bg-petroleum/10 flex items-center justify-center mb-4">
           <Icon name="fa-check" className="text-petroleum text-3xl" aria-hidden="true" />
         </div>
-        <h3 className="text-lg font-bold text-petroleum">¡Dominas los conceptos!</h3>
-        <p className="text-sm text-petroleum/70 mt-1 mb-4">Completaste las 7 cápsulas de este módulo.</p>
+        <h3 className="text-lg font-bold text-petroleum">{t('flashcard.mastered_title')}</h3>
+        <p className="text-sm text-petroleum/70 mt-1 mb-4">{t('flashcard.completed_desc', { count: cards.length })}</p>
         <button
           onClick={resetCards}
           className="px-4 py-2 rounded-xl bg-petroleum/10 text-petroleum text-sm font-semibold hover:bg-petroleum/20 transition-colors"
         >
           <Icon name="fa-rotate" className="mr-2" aria-hidden="true" />
-          Repetir todas
+          {t('flashcard.repeat_all')}
         </button>
       </div>
     );
@@ -107,11 +159,11 @@ export function FlashcardArena({ moduleId }) {
       <div className="flex items-center justify-between text-sm text-petroleum/70 mb-4" role="status" aria-live="polite">
         <span className="flex items-center gap-1.5">
           <Icon name="fa-layer-group" className="text-corporate" aria-hidden="true" />
-          {currentIndex + 1} de {cards.length} cápsulas
+          {t('flashcard.progress', { current: currentIndex + 1, total: cards.length })}
         </span>
         <span className="flex items-center gap-1.5">
           <Icon name="fa-clock" className="text-petroleum" aria-hidden="true" />
-          {cards.length - currentIndex - 1} restantes
+          {t('flashcard.remaining', { count: cards.length - currentIndex - 1 })}
         </span>
       </div>
 
@@ -135,7 +187,7 @@ export function FlashcardArena({ moduleId }) {
             className="relative w-full h-full"
             role="button"
             tabIndex={0}
-            aria-label={isFlipped ? 'Respuesta de la cápsula' : 'Pregunta de la cápsula. Presione Enter para ver la respuesta.'}
+            aria-label={isFlipped ? t('flashcard.answer_aria') : t('flashcard.question_aria')}
             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setIsFlipped(v => !v); } }}
           >
             <div
@@ -164,20 +216,20 @@ export function FlashcardArena({ moduleId }) {
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-petroleum/20 text-petroleum text-sm font-semibold hover:bg-petroleum/5 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
           >
             <Icon name="fa-arrow-left" className="text-xs" aria-hidden="true" />
-            Anterior
+            {t('flashcard.prev_btn')}
           </button>
           <button
             onClick={goToNext}
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-petroleum text-white text-sm font-semibold hover:bg-petroleum-dark transition-all"
           >
-            Siguiente
+            {t('flashcard.next_btn')}
             <Icon name="fa-arrow-right" className="text-xs" aria-hidden="true" />
           </button>
         </div>
       )}
 
       <p className="text-center text-xs text-petroleum/50 mt-4">
-        Haz clic en la cápsula para ver el concepto
+        {t('flashcard.click_hint')}
       </p>
 
       <div className="flex justify-center mt-4">
@@ -186,7 +238,7 @@ export function FlashcardArena({ moduleId }) {
           className="text-xs text-petroleum/50 hover:text-petroleum transition-colors flex items-center gap-1"
         >
           <Icon name="fa-rotate" aria-hidden="true" />
-          Volver a empezar
+          {t('flashcard.restart_btn')}
         </button>
       </div>
     </div>

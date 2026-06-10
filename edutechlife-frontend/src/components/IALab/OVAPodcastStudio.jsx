@@ -26,8 +26,8 @@ const StepIndicator = ({ current, total }) => (
 
 
 StepIndicator.propTypes = {
-  current: PropTypes.any,
-  total: PropTypes.any,
+  current: PropTypes.number,
+  total: PropTypes.number,
 };
 
 export default function OVAPodcastStudio({ onComplete }) {

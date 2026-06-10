@@ -294,12 +294,12 @@ const PDFThumbnail = ({
 
 
 PDFThumbnail.propTypes = {
-  title: PropTypes.any,
-  pdfUrl: PropTypes.any,
-  description: PropTypes.any,
-  size: PropTypes.any,
-  pages: PropTypes.any,
-  onOpenImmersiveView: PropTypes.any,
+  title: PropTypes.string,
+  pdfUrl: PropTypes.string,
+  description: PropTypes.string,
+  size: PropTypes.string,
+  pages: PropTypes.number,
+  onOpenImmersiveView: PropTypes.func,
 };
 
 export default PDFThumbnail;

@@ -1,6 +1,8 @@
 export const DAILY_CHALLENGES = [
   {
     id: 'dc-1',
+    titleKey: 'ialab.daily_challenges.dc1_title',
+    descriptionKey: 'ialab.daily_challenges.dc1_desc',
     title: 'Racha matutina',
     description: 'Completa una lección antes de las 10 AM',
     xp: 50,
@@ -8,31 +10,12 @@ export const DAILY_CHALLENGES = [
   },
   {
     id: 'dc-2',
+    titleKey: 'ialab.daily_challenges.dc2_title',
+    descriptionKey: 'ialab.daily_challenges.dc2_desc',
     title: 'Practicante',
     description: 'Responde 10 flashcards correctamente',
     xp: 75,
     icon: 'fa-brain',
-  },
-  {
-    id: 'dc-3',
-    title: 'Explorador',
-    description: 'Abre 3 recursos diferentes',
-    xp: 30,
-    icon: 'fa-compass',
-  },
-  {
-    id: 'dc-4',
-    title: 'Sin distracciones',
-    description: 'Completa un quiz sin cambiar de pestaña',
-    xp: 100,
-    icon: 'fa-shield',
-  },
-  {
-    id: 'dc-5',
-    title: 'Ayudante',
-    description: 'Publica una pregunta en el foro',
-    xp: 40,
-    icon: 'fa-comments',
   },
 ];
 

@@ -245,9 +245,9 @@ const ChatGPTStep1 = ({ exercise, response, onResponseChange }) => {
 
 
 ChatGPTStep1.propTypes = {
-  exercise: PropTypes.any,
-  response: PropTypes.any,
-  onResponseChange: PropTypes.any,
+  exercise: PropTypes.object,
+  response: PropTypes.string,
+  onResponseChange: PropTypes.func,
 };
 
 export default ChatGPTStep1;

@@ -104,9 +104,9 @@ const IALabForumComment = ({ comment, onReply, depth, children }) => {
 
 
 IALabForumComment.propTypes = {
-  comment: PropTypes.any,
-  onReply: PropTypes.any,
-  depth: PropTypes.any,
+  comment: PropTypes.object,
+  onReply: PropTypes.func,
+  depth: PropTypes.number,
 };
 
 export default IALabForumComment;

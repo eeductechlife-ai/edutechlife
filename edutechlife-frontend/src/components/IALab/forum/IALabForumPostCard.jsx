@@ -1,242 +1,200 @@
-import React, { useState, useEffect } from 'react'
-import PropTypes from 'prop-types';;
-import { motion } from 'framer-motion';
-import { Icon } from '../../../utils/iconMapping.jsx';
-import { useAuth } from '../../../context/AuthContext';
-import useForumProfile from '../../../hooks/IALab/forum/useForumProfile';
-import { useTranslation } from '../../../i18n/I18nProvider';
+import PropTypes from 'prop-types'
+import { Icon } from '../../utils/iconMapping.jsx'
 
-const BOOKMARKS_KEY = 'ialab_forum_bookmarks';
+const IALabForumPostCard = ({ post, onLikeToggle, formatLikeCount, getLikeButtonProps, t, locale, user }) => {
+    const likeProps = getLikeButtonProps(post.id);
+    const formattedDate = new Date(post.created_at).toLocaleDateString(locale === 'en' ? 'en-US' : 'es-ES', {
+        day: 'numeric',
+        month: 'short',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
 
-const getBookmarks = () => {
-  try { return JSON.parse(localStorage.getItem(BOOKMARKS_KEY) || '[]'); } catch { return []; }
-};
-const toggleBookmark = (postId) => {
-  const bookmarks = getBookmarks();
-  const idx = bookmarks.indexOf(postId);
-  if (idx >= 0) bookmarks.splice(idx, 1); else bookmarks.push(postId);
-  localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(bookmarks));
-  return idx < 0;
-};
+    const simulatedData = {
+        role: post.profiles?.role || (Math.random() > 0.5 ? 'Mentor' : 'Estudiante'),
+        tags: post.tags || ['Módulo 5', 'Framework RTF', 'Ayuda'],
+        views: post.view_count || Math.floor(Math.random() * 150) + 10,
+        lastResponder: {
+            name: post.last_responder || 'Ana García',
+            avatar: post.last_responder_avatar || null,
+            time: t('ialab.forum.section.last_reply_time')
+        }
+    };
 
-const CATEGORY_STYLES = {
-  question: { bg: 'bg-amber-50 dark:bg-amber-900/20', text: 'text-amber-700 dark:text-amber-400', icon: 'fa-question-circle' },
-  discussion: { bg: 'bg-blue-50 dark:bg-blue-900/20', text: 'text-blue-700 dark:text-blue-400', icon: 'fa-comment-dots' },
-  resource: { bg: 'bg-emerald-50 dark:bg-emerald-900/20', text: 'text-emerald-700 dark:text-emerald-400', icon: 'fa-book' },
-  announcement: { bg: 'bg-purple-50 dark:bg-purple-900/20', text: 'text-purple-700 dark:text-purple-400', icon: 'fa-bullhorn' },
-  feedback: { bg: 'bg-rose-50 dark:bg-rose-900/20', text: 'text-rose-700 dark:text-rose-400', icon: 'fa-lightbulb' },
-};
+    return (
+        <div className="bg-white rounded-2xl p-6 border border-slate-100 hover:border-corporate/20 hover:bg-slate-50 hover:shadow-[0_8px_32px_rgba(0,188,212,0.08)] transition-all duration-300 cursor-pointer">
+            <div className="flex items-start gap-4 mb-6">
+                <div className="flex-shrink-0">
+                    <div className="w-14 h-14 rounded-full bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center text-white font-bold text-lg mb-2">
+                        {post.profiles?.full_name?.charAt(0) || t('ialab.forum.section.initial_fallback')}
+                    </div>
+                    <div className={`text-xs font-medium px-2 py-1 rounded-full text-center ${
+                        simulatedData.role === 'Mentor'
+                            ? 'bg-corporate/10 text-corporate border border-corporate/20'
+                            : 'bg-petroleum/10 text-petroleum border border-petroleum/20'
+                    }`}>
+                        {simulatedData.role === 'Mentor' ? t('ialab.forum.section.role_mentor') : t('ialab.forum.section.role_student')}
+                    </div>
+                </div>
 
-const getAvatarGradient = (name) => {
-  if (!name) return 'from-petroleum to-petroleum-dark';
-  const colors = [
-    'from-petroleum to-petroleum-dark',
-    'from-petroleum-dark to-corporate',
-    'from-petroleum to-corporate',
-    'from-petroleum-dark to-corporate',
-    'from-petroleum to-petroleum-dark',
-  ];
-  const hash = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-  return colors[hash % colors.length];
-};
+                <div className="flex-1 min-w-0">
+                    <div className="mb-3">
+                        <h4 className="font-bold text-petroleum-darker text-lg mb-1">
+                            {post.title || t('ialab.forum.section.title_fallback')}
+                        </h4>
+                        <p className="text-sm text-slate-600 line-clamp-2 leading-relaxed">
+                            {post.content || t('ialab.forum.section.content_fallback')}
+                        </p>
+                    </div>
 
-const getInitials = (name) => {
-  if (!name) return '?';
-  return name.split(' ').map(p => p[0]).join('').toUpperCase().substring(0, 2);
-};
+                    <div className="flex flex-wrap gap-2 mb-4">
+                        {simulatedData.tags.map((tag, index) => (
+                            <span
+                                key={index}
+                                className="text-xs px-3 py-1 bg-slate-100 text-slate-700 rounded-full border border-slate-200 hover:bg-slate-200 transition-colors duration-200"
+                            >
+                                {tag}
+                            </span>
+                        ))}
+                    </div>
 
-const formatRelativeTime = (dateString, t, locale) => {
-  const date = new Date(dateString);
-  const now = new Date();
-  const diffMs = now - date;
-  const diffMins = Math.floor(diffMs / 60000);
-  const diffHours = Math.floor(diffMs / 3600000);
-  const diffDays = Math.floor(diffMs / 86400000);
+                    <div className="flex items-center gap-3 text-sm text-slate-500">
+                        <span className="font-medium text-petroleum">
+                            {post.profiles?.full_name || 'Carlos López'}
+                        </span>
+                        <span>•</span>
+                        <span>{formattedDate}</span>
+                    </div>
+                </div>
 
-  if (diffMins < 1) return t('ialab.forum.post_card.now');
-  if (diffMins < 60) return t('ialab.forum.post_card.min_ago', { mins: diffMins });
-  if (diffHours < 24) return t('ialab.forum.post_card.hour_ago', { hours: diffHours });
-  if (diffDays < 7) return t('ialab.forum.post_card.day_ago', { days: diffDays });
-  return date.toLocaleDateString(locale === 'en' ? 'en-US' : 'es-ES', { day: 'numeric', month: 'short' });
-};
+                <div className="flex-shrink-0 w-32">
+                    <div className="space-y-4">
+                        <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-1">
+                                    <Icon name="fa-comment" className="w-3.5 h-3.5 text-slate-500" />
+                                    <span className="text-sm font-medium text-slate-700">
+                                        {post.comment_count || 8}
+                                    </span>
+                                </div>
+                                <span className="text-xs text-slate-500">{t('ialab.forum.section.replies_label')}</span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-1">
+                                    <Icon name="fa-eye" className="w-3.5 h-3.5 text-slate-500" />
+                                    <span className="text-sm font-medium text-slate-700">
+                                        {simulatedData.views}
+                                    </span>
+                                </div>
+                                <span className="text-xs text-slate-500">{t('ialab.forum.section.views_label')}</span>
+                            </div>
+                        </div>
 
-const IALabForumPostCard = ({
-  post,
-  voteState,
-  onVote,
-  onSelect,
-  onShowProfile,
-  onHideProfile,
-  formatCount,
-  index,
-}) => {
-  const { user } = useAuth();
-  const { t, locale } = useTranslation();
-  const [showProfileCard, setShowProfileCard] = useState(false);
-  const [isBookmarked, setIsBookmarked] = useState(false);
-  const [shareFeedback, setShareFeedback] = useState(false);
-  const categoryStyle = CATEGORY_STYLES[post.category] || CATEGORY_STYLES.discussion;
-
-  useEffect(() => {
-    setIsBookmarked(getBookmarks().includes(post.id));
-  }, [post.id]);
-
-  const handleShare = async (e) => {
-    e.stopPropagation();
-    const url = `${window.location.origin}/ialab/forum/${post.id}`;
-    if (navigator.share) {
-      try { await navigator.share({ title: post.title, text: post.content?.slice(0, 100), url }); } catch {}
-    } else {
-      try {
-        await navigator.clipboard.writeText(url);
-        setShareFeedback(true);
-        setTimeout(() => setShareFeedback(false), 2000);
-      } catch {}
-    }
-  };
-
-  const handleBookmark = (e) => {
-    e.stopPropagation();
-    const now = toggleBookmark(post.id);
-    setIsBookmarked(now);
-  };
-
-  const profile = post.profiles || post.forum_profiles || {};
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: Math.min(index * 0.04, 0.3) }}
-      className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200/60 dark:border-slate-700/60 hover:border-petroleum/20 dark:hover:border-petroleum/40 hover:shadow-md transition-all duration-200 cursor-pointer group relative"
-      onClick={onSelect}
-    >
-      <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-petroleum/0 via-petroleum/20 to-corporate/0 opacity-0 group-hover:opacity-100 transition-opacity rounded-t-xl" />
-
-      <div className="p-4">
-        <div className="flex items-start gap-3">
-          {/* Avatar */}
-          <div
-            className="relative flex-shrink-0"
-            onMouseEnter={() => { setShowProfileCard(true); onShowProfile(); }}
-            onMouseLeave={() => { setShowProfileCard(false); onHideProfile(); }}
-          >
-            <div className={`w-9 h-9 rounded-full bg-gradient-to-tr ${getAvatarGradient(profile.full_name)} flex items-center justify-center shadow-sm`}>
-              <span className="text-xs font-bold text-white">{getInitials(profile.full_name)}</span>
-            </div>
-            {profile.badges?.length > 0 && (
-              <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-amber-400 rounded-full flex items-center justify-center border-2 border-white dark:border-slate-800">
-                <Icon name="fa-star" className="text-[6px] text-white" />
-              </div>
-            )}
-          </div>
-
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-0.5">
-              <span className="text-sm font-semibold text-slate-800 dark:text-slate-200 truncate">
-                {profile.full_name || post.user_name || t('ialab.forum.post_card.user_fallback')}
-              </span>
-              {profile.title && !['Estudiante', 'Student'].includes(profile.title) && (
-                <span className="px-1.5 py-0.5 bg-petroleum/5 text-petroleum text-[9px] font-medium rounded-full flex-shrink-0">
-                  {profile.title}
-                </span>
-              )}
-              <span className="text-[10px] text-slate-600 dark:text-slate-500 flex-shrink-0">
-                {formatRelativeTime(post.created_at, t, locale)}
-              </span>
+                        <div className="pt-3 border-t border-slate-100">
+                            <div className="flex items-center gap-2">
+                                <div className="w-6 h-6 rounded-full bg-gradient-to-r from-corporate/20 to-petroleum/20 flex items-center justify-center text-xs font-medium text-petroleum">
+                                    {simulatedData.lastResponder.name.charAt(0)}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                    <p className="text-xs text-slate-600 truncate">
+                                        {simulatedData.lastResponder.name}
+                                    </p>
+                                    <p className="text-xs text-slate-600">
+                                        {simulatedData.lastResponder.time}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div className="flex items-center gap-2 mb-2">
-              <span className={`px-2 py-0.5 rounded-full text-[9px] font-semibold ${categoryStyle.bg} ${categoryStyle.text}`}>
-                <Icon name={categoryStyle.icon} className="mr-0.5" />
-                {getCategoryLabel(post.category, t)}
-              </span>
-              {post.tags?.slice(0, 2).map((tag, i) => (
-                <span key={i} className="text-[9px] text-slate-600 dark:text-slate-500 bg-slate-100 dark:bg-slate-700 px-1.5 py-0.5 rounded-full">
-                  {tag}
-                </span>
-              ))}
-              {post.tags?.length > 2 && (
-                <span className="text-[9px] text-slate-600">+{post.tags.length - 2}</span>
-              )}
+            <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+                <div className="flex items-center gap-3">
+                    <button
+                        onClick={() => onLikeToggle(post.id, likeProps.likeCount)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                onLikeToggle(post.id, likeProps.likeCount);
+                            }
+                        }}
+                        disabled={!user || likeProps.isLoading}
+                        aria-label={likeProps.ariaLabel}
+                        aria-pressed={likeProps.userLiked}
+                        className={`
+                            flex items-center gap-2 px-3 py-1.5 rounded-lg
+                            transition-all duration-200 hover:scale-105 active:scale-95
+                            ${likeProps.buttonClass}
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            focus:outline-none focus:ring-1 focus:ring-corporate/30
+                            ${likeProps.userLiked ? 'shadow-[0_0_8px_rgba(0,188,212,0.2)]' : ''}
+                        `}
+                        tabIndex={user ? 0 : -1}
+                    >
+                        <Icon
+                            name={likeProps.likeIcon}
+                            className={`w-3.5 h-3.5 ${likeProps.isLoading ? 'animate-spin' : ''}`}
+                            style={{ color: likeProps.likeColor }}
+                        />
+                        <span className="text-sm font-medium">
+                            {formatLikeCount(likeProps.likeCount)}
+                        </span>
+                    </button>
+
+                    <button
+                        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 text-slate-600 hover:bg-slate-100 transition-all duration-200"
+                        disabled={!user}
+                    >
+                        <Icon name="fa-reply" className="w-3.5 h-3.5" />
+                        <span className="text-sm font-medium">{t('ialab.forum.section.reply_btn')}</span>
+                    </button>
+                </div>
+
+                <div className="flex items-center gap-1">
+                    <button
+                        className="p-1.5 text-slate-600 hover:text-corporate transition-colors duration-200 rounded-md hover:bg-slate-50"
+                        aria-label={t('ialab.forum.section.save_aria')}
+                    >
+                        <Icon name="fa-bookmark" className="w-4 h-4" />
+                    </button>
+                    <button
+                        className="p-1.5 text-slate-600 hover:text-corporate transition-colors duration-200 rounded-md hover:bg-slate-50"
+                        aria-label={t('ialab.forum.section.share_aria')}
+                    >
+                        <Icon name="fa-share" className="w-4 h-4" />
+                    </button>
+                </div>
             </div>
 
-            <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100 mb-1 leading-snug group-hover:text-petroleum transition-colors">
-              {post.title}
-            </h4>
-            <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-2 leading-snug">
-              {post.content}
-            </p>
-          </div>
+            <div className="mt-3 flex items-center justify-between">
+                {likeProps.likeCount >= 5 && (
+                    <div className="flex items-center gap-1.5">
+                        <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></div>
+                        <span className="text-xs font-medium text-amber-600">
+                            {t('ialab.forum.section.active_discussion')}
+                        </span>
+                    </div>
+                )}
+                {post.comment_count >= 3 && (
+                    <div className="text-xs text-slate-500">
+                        {t('ialab.forum.section.replies_info', { count: post.comment_count, time: simulatedData.lastResponder.time })}
+                    </div>
+                )}
+            </div>
         </div>
-
-        <div className="flex items-center justify-between mt-3 pt-2 border-t border-slate-100 dark:border-slate-700/50">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={(e) => { e.stopPropagation(); onVote(); }}
-              disabled={!user || voteState?.isLoading}
-              className={`min-w-[44px] min-h-[44px] flex items-center gap-1 text-xs font-medium transition-all ${
-                voteState?.userVoted
-                  ? 'text-red-500'
-                  : 'text-slate-600 hover:text-red-400'
-              } disabled:opacity-50`}
-            >
-              {voteState?.isLoading ? (
-                <div className="w-3.5 h-3.5 border-2 border-petroleum/20 border-t-petroleum rounded-full animate-spin" />
-              ) : (
-                <Icon name={voteState?.userVoted ? 'fa-heart' : 'fa-heart'} />
-              )}
-              <span>{formatCount(voteState?.userVoted ? (post.upvotes || 0) : (post.upvotes || 0))}</span>
-            </button>
-
-            <div className="flex items-center gap-1 text-xs text-slate-600">
-              <Icon name="fa-comment" />
-              <span>{post.comment_count || 0}</span>
-            </div>
-
-            {post.updated_at && new Date(post.updated_at) > new Date(post.created_at) && (
-              <span className="text-[9px] text-slate-600">{t('ialab.forum.post_card.edited_label')}</span>
-            )}
-          </div>
-
-          <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-            <button onClick={handleShare} aria-label="Compartir" className="min-w-[44px] min-h-[44px] text-xs text-slate-600 hover:text-petroleum transition-colors relative">
-              <Icon name={shareFeedback ? 'fa-check' : 'fa-share'} />
-              {shareFeedback && (
-                <span className="absolute -top-1 left-1/2 -translate-x-1/2 text-[8px] font-medium text-emerald-600 whitespace-nowrap">{t('ialab.forum.post_card.copied_tooltip')}</span>
-              )}
-            </button>
-            <button onClick={handleBookmark} aria-label={isBookmarked ? 'Guardado' : 'Guardar'} className={`min-w-[44px] min-h-[44px] text-xs transition-colors ${isBookmarked ? 'text-amber-500' : 'text-slate-600 hover:text-amber-500'}`}>
-              <Icon name={isBookmarked ? 'fa-bookmark' : 'fa-bookmark'} />
-            </button>
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
-};
-
-const getCategoryLabel = (category, t) => {
-  const labels = {
-    question: t('ialab.forum.post_card.category_question'),
-    discussion: t('ialab.forum.post_card.category_discussion'),
-    resource: t('ialab.forum.post_card.category_resource'),
-    announcement: t('ialab.forum.post_card.category_announcement'),
-    feedback: t('ialab.forum.post_card.category_feedback'),
-  };
-  return labels[category] || labels.discussion;
+    );
 };
 
 
 IALabForumPostCard.propTypes = {
-  post: PropTypes.any,
-  voteState: PropTypes.any,
-  onVote: PropTypes.any,
-  onSelect: PropTypes.any,
-  onShowProfile: PropTypes.any,
-  onHideProfile: PropTypes.any,
-  formatCount: PropTypes.any,
-  index: PropTypes.any,
+    post: PropTypes.object,
+    onLikeToggle: PropTypes.func,
+    formatLikeCount: PropTypes.func,
+    getLikeButtonProps: PropTypes.func,
+    t: PropTypes.func,
+    locale: PropTypes.string,
+    user: PropTypes.object,
 };
 
 export default IALabForumPostCard;

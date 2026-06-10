@@ -32,7 +32,7 @@ const ExampleToggle = ({ example }) => {
 
 
 ExampleToggle.propTypes = {
-  example: PropTypes.any,
+  example: PropTypes.string,
 };
 
 export default ExampleToggle;

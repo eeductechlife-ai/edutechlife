@@ -98,8 +98,10 @@ const VerdictSummaryBar = ({ claims, t }) => {
 
 
 VerdictSummaryBar.propTypes = {
-  claims: PropTypes.any,
-  t: PropTypes.any,
+  claims: PropTypes.arrayOf(PropTypes.shape({
+    verdict: PropTypes.string,
+  })).isRequired,
+  t: PropTypes.func.isRequired,
 };
 
 export default VerdictSummaryBar;

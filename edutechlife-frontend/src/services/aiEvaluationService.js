@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'http://localhost:3001';
+import { API_BASE_URL } from '../config/api';
 const API_URL = `${API_BASE_URL}/api/chat`;
 
 const VALERIO_SYSTEM_PROMPT = `Eres Valerio, el tutor experto de Edutechlife. Evalúa el prompt del alumno. Debes responder estrictamente en formato JSON con estas llaves: "score" (0-100), "feedback" (3 consejos breves), "improvedPrompt" (el prompt optimizado) y "level" (Novato, Pro, Maestro). Responde únicamente con JSON válido, sin texto adicional.`;

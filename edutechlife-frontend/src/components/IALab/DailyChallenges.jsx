@@ -2,6 +2,7 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabStore } from '../../store/ialabStore';
+import { useTranslation } from '../../i18n/I18nProvider';
 import { DAILY_CHALLENGES, CHALLENGES_STORAGE_KEY } from './constants/dailyChallenges';
 
 const getTodayKey = () => new Date().toISOString().split('T')[0];
@@ -17,6 +18,7 @@ const loadCompletion = () => {
 };
 
 const DailyChallenges = () => {
+  const { t } = useTranslation();
   const [completed, setCompleted] = useState(loadCompletion);
   const [isOpen, setIsOpen] = useState(false);
   const addXp = useIALabStore(s => s.addXp);
@@ -53,7 +55,7 @@ const DailyChallenges = () => {
           <Icon name="fa-trophy" className="w-3.5 h-3.5 text-corporate group-hover:text-corporate/80 transition-colors" />
         </motion.div>
         <h4 className="text-xs font-bold text-petroleum uppercase tracking-wider group-hover:text-corporate transition-colors">
-          Desafíos diarios
+          {t('ialab.daily_challenges.title')}
         </h4>
         <span className="text-[10px] font-medium ml-auto flex items-center gap-1">
           <span className={`px-1.5 py-0.5 rounded ${progress.done === progress.total ? 'bg-emerald-50 text-emerald-600' : 'bg-corporate/10 text-corporate'}`}>
@@ -92,19 +94,19 @@ const DailyChallenges = () => {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-1">
                         <p className={`text-xs font-semibold ${isDone ? 'text-slate-400 line-through' : 'text-slate-800'}`}>
-                          {c.title}
+                          {t(c.titleKey)}
                         </p>
                         {!isDone && (
                           <button
                             onClick={() => completeChallenge(c.id, c.xp)}
                             className="flex-shrink-0 text-[10px] font-medium text-corporate bg-corporate/10 px-2 py-0.5 rounded-md border border-corporate/20 hover:bg-corporate/20 transition-colors active:scale-95"
                           >
-                            <Icon name="fa-check" className="text-[8px] mr-0.5" />Completar
+                            <Icon name="fa-check" className="text-[8px] mr-0.5" />{t('ialab.daily_challenges.complete')}
                           </button>
                         )}
                       </div>
                       <p className={`text-[11px] mt-0.5 ${isDone ? 'text-slate-300' : 'text-slate-500'}`}>
-                        {c.description}
+                        {t(c.descriptionKey)}
                       </p>
                       <div className="flex items-center gap-1 mt-0.5">
                         <Icon name="fa-star" className="text-[9px] text-corporate" aria-hidden="true" />

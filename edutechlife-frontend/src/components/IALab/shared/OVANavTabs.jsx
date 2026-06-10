@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { cn } from '../../forum/forumDesignSystem';
+import { useTranslation } from '../../../i18n/I18nProvider';
 
 const OVANavTabs = ({
   tabs = [],
@@ -15,6 +16,7 @@ const OVANavTabs = ({
   prevLabel,
   className,
 }) => {
+  const { t } = useTranslation();
   const showTabs = tabs.length > 0;
   const showNav = totalTabs > 0;
 
@@ -27,7 +29,7 @@ const OVANavTabs = ({
             className="flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-corporate transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
           >
             <Icon name="fa-chevron-left" className="text-xs" />
-            {prevLabel || 'Anterior'}
+            {prevLabel || t('ova.nav.prev')}
           </button>
         ) : (
           <div />
@@ -58,7 +60,7 @@ const OVANavTabs = ({
             onClick={onNext}
             className="flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-corporate transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
           >
-            {nextLabel || 'Siguiente'}
+            {nextLabel || t('ova.nav.next')}
             <Icon name="fa-chevron-right" className="text-xs" />
           </button>
         ) : (
@@ -71,15 +73,15 @@ const OVANavTabs = ({
 
 
 OVANavTabs.propTypes = {
-  tabs: PropTypes.any,
-  activeTab: PropTypes.any,
-  onTabChange: PropTypes.any,
-  currentIndex: PropTypes.any,
-  totalTabs: PropTypes.any,
-  onNext: PropTypes.any,
-  onPrev: PropTypes.any,
-  nextLabel: PropTypes.any,
-  prevLabel: PropTypes.any,
+  tabs: PropTypes.array,
+  activeTab: PropTypes.string,
+  onTabChange: PropTypes.func,
+  currentIndex: PropTypes.number,
+  totalTabs: PropTypes.number,
+  onNext: PropTypes.func,
+  onPrev: PropTypes.func,
+  nextLabel: PropTypes.string,
+  prevLabel: PropTypes.string,
 };
 
 export default OVANavTabs;

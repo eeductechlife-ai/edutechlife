@@ -31,7 +31,7 @@ const IALabModuleHeader = ({ onAction }) => {
 
 
 IALabModuleHeader.propTypes = {
-  onAction: PropTypes.any,
+  onAction: PropTypes.func,
 };
 
 export default IALabModuleHeader;

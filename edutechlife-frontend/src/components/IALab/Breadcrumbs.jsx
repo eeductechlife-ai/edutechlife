@@ -55,7 +55,7 @@ const Breadcrumbs = memo(function Breadcrumbs({ segments, className = '', separa
         {visibleSegments.length > 0 && (
           <li className="text-slate-300 dark:text-slate-600" aria-hidden="true">{separator}</li>
         )}
-        <li>
+        <li aria-current="page">
           <span className="font-semibold text-petroleum dark:text-corporate truncate max-w-[120px] sm:max-w-[200px] inline-block align-bottom">
             {lastSegment.icon && <Icon name={lastSegment.icon} className="text-[9px] mr-1 inline" />}
             {lastSegment.label}

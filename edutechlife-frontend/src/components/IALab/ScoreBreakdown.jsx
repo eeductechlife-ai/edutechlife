@@ -74,12 +74,12 @@ const ScoreBreakdown = ({ evaluation, isApproved, scoreBarColor, circumference, 
 
 
 ScoreBreakdown.propTypes = {
-  evaluation: PropTypes.any,
-  isApproved: PropTypes.any,
-  scoreBarColor: PropTypes.any,
-  circumference: PropTypes.any,
-  strokeDashoffset: PropTypes.any,
-  t: PropTypes.any,
+  evaluation: PropTypes.object,
+  isApproved: PropTypes.bool,
+  scoreBarColor: PropTypes.string,
+  circumference: PropTypes.number,
+  strokeDashoffset: PropTypes.number,
+  t: PropTypes.func,
 };
 
 export default ScoreBreakdown;

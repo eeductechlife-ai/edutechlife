@@ -22,7 +22,7 @@ const EdutechLogo = () => (
 
 
 OVARiskSimulator.propTypes = {
-  onComplete: PropTypes.any,
+  onComplete: PropTypes.func,
 };
 
 export default function OVARiskSimulator({ onComplete }) {

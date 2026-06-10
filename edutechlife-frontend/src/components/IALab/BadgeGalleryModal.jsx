@@ -103,8 +103,8 @@ const BadgeGalleryModal = ({ isOpen, onClose }) => {
 
 
 BadgeGalleryModal.propTypes = {
-  isOpen: PropTypes.any,
-  onClose: PropTypes.any,
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func,
 };
 
 export default BadgeGalleryModal;

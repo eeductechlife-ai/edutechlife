@@ -120,10 +120,10 @@ const ValerioChallengeIntro = ({ moduleId, onStart, t, locale: localeProp }) => 
 
 
 ValerioChallengeIntro.propTypes = {
-  moduleId: PropTypes.any,
-  onStart: PropTypes.any,
-  t: PropTypes.any,
-  locale: PropTypes.any,
+  moduleId: PropTypes.number,
+  onStart: PropTypes.func,
+  t: PropTypes.func,
+  locale: PropTypes.string,
 };
 
 export default ValerioChallengeIntro;

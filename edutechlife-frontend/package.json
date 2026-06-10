@@ -17,8 +17,22 @@
     "sync:video-durations": "node src/components/IALab/constants/syncVideoDurations.mjs",
     "i18n:validate": "node scripts/validate-i18n.js",
     "i18n:extract": "node scripts/extract-hardcoded.js",
+    "test:smoke": "vitest run src/store/__tests__/ src/components/IALab/__tests__/ src/components/IALab/IALabValerioPanel/__tests__/ src/components/IALab/IALabQuizModal/__tests__/",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint src/components/IALab/ --ext .js,.jsx --max-warnings 1300",
+    "lint:all": "ESLINT_USE_FLAT_CONFIG=false eslint src --ext .js,.jsx --max-warnings 6000",
+    "typecheck": "tsc --noEmit -p tsconfig.typecheck.json",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "src/**/*.css": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@clerk/localizations": "^3.4.1",
@@ -62,9 +76,17 @@
     "@types/react-dom": "^18.2.0",
     "@vitejs/plugin-react": "^4.2.0",
     "autoprefixer": "^10.4.17",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-security": "^4.0.0",
+    "husky": "^9.1.7",
     "jest-axe": "^10.0.0",
     "jsdom": "^29.1.1",
+    "lint-staged": "^17.0.7",
     "postcss": "^8.4.35",
+    "prettier": "^3.8.4",
     "rollup-plugin-visualizer": "^7.0.1",
     "tailwindcss": "^3.4.1",
     "typescript": "^6.0.3",

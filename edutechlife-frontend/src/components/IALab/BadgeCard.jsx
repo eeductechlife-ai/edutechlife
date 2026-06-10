@@ -151,11 +151,11 @@ const BadgeCard = ({ badge, earned, dateEarned, onClick, isNewlyEarned, index = 
 
 
 Sparkle.propTypes = {
-  x: PropTypes.any,
-  y: PropTypes.any,
-  size: PropTypes.any,
-  delay: PropTypes.any,
-  color: PropTypes.any,
+  x: PropTypes.number,
+  y: PropTypes.number,
+  size: PropTypes.number,
+  delay: PropTypes.number,
+  color: PropTypes.string,
 };
 
 export default BadgeCard;

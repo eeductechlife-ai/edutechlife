@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useSmartBoardKids } from '../../context/SmartBoardKidsContext';
 import { useTranslation } from '../../i18n/I18nProvider';
+import { sanitize } from '../../utils/sanitize';
 
 const STYLE_COLORS = {
   visual: '#4DA8C4',
@@ -91,7 +92,7 @@ const PersonalizedPlan = () => {
       >
         <div className="text-6xl mb-4">📋</div>
         <h3 className="text-2xl font-bold text-[#004B63] mb-3">{t('kid.personalized_plan.title_empty')}</h3>
-        <p className="text-[#64748B]" dangerouslySetInnerHTML={{ __html: t('kid.personalized_plan.desc_empty') }} />
+        <p className="text-[#64748B]" dangerouslySetInnerHTML={{ __html: sanitize(t('kid.personalized_plan.desc_empty')) }} />
         <p className="text-sm text-[#4DA8C4] mt-4">{t('kid.personalized_plan.hint_empty')}</p>
       </motion.div>
     );

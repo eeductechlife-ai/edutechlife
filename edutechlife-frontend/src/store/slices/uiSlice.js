@@ -15,4 +15,18 @@ export const createUiSlice = (set, get) => ({
 
   showLeaderboard: false,
   setShowLeaderboard: (v) => set({ showLeaderboard: v }),
+
+  immersiveModalOpen: false,
+  setImmersiveModalOpen: (v) => set({ immersiveModalOpen: v }),
+
+  showQuizModal: false,
+  setShowQuizModal: (v) => set({ showQuizModal: v }),
+  showExamResult: false,
+  setShowExamResult: (v) => set({ showExamResult: v }),
+  showChallengeResult: false,
+  setShowChallengeResult: (v) => set({ showChallengeResult: v }),
+  showHistoryModal: false,
+  setShowHistoryModal: (v) => set({ showHistoryModal: v }),
+  showHelpModal: false,
+  setShowHelpModal: (v) => set({ showHelpModal: v }),
 });

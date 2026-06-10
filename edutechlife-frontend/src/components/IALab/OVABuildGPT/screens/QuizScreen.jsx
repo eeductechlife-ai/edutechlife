@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types';;
 import { useTranslation } from '../../../../i18n/I18nProvider';
 import { CheckCircle, Check, Award, Star, CheckCircle2 } from 'lucide-react';
@@ -49,9 +49,9 @@ const questions = [
 
 
 QuizScreen.propTypes = {
-  onNext: PropTypes.any,
-  addXp: PropTypes.any,
-  onMarkComplete: PropTypes.any,
+  onNext: PropTypes.func,
+  addXp: PropTypes.func,
+  onMarkComplete: PropTypes.func,
 };
 
 export default function QuizScreen({ onNext, addXp, onMarkComplete }) {
@@ -60,6 +60,14 @@ export default function QuizScreen({ onNext, addXp, onMarkComplete }) {
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [selected, setSelected] = useState(null);
+  const autoCompletedRef = useRef(false);
+
+  useEffect(() => {
+    if (showResult && !autoCompletedRef.current) {
+      autoCompletedRef.current = true;
+      onMarkComplete?.();
+    }
+  }, [showResult, onMarkComplete]);
 
   const handleAnswer = (index) => {
     setSelected(index);
@@ -135,10 +143,10 @@ export default function QuizScreen({ onNext, addXp, onMarkComplete }) {
               <p className="font-medium">{t('ova.buildgpt.quiz_bad')}</p>
             </div>
           )}
-          <button onClick={() => { onMarkComplete?.(); onNext?.(); }}
+          <button onClick={() => onNext?.()}
             className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold text-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-2 mx-auto">
             <CheckCircle2 size={22} />
-            {t('common.mark_viewed')}
+            {t('ova.nav.next')}
           </button>
         </Card>
       )}

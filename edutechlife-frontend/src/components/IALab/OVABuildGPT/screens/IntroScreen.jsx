@@ -6,8 +6,8 @@ import { Button, Card } from '../shared';
 
 
 IntroScreen.propTypes = {
-  onNext: PropTypes.any,
-  addXp: PropTypes.any,
+  onNext: PropTypes.func,
+  addXp: PropTypes.func,
 };
 
 export default function IntroScreen({ onNext, addXp }) {

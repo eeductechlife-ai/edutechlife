@@ -134,10 +134,10 @@ const SecurityWarningModal = ({ isOpen, message, level = 1, onClose }) => {
 
 
 SecurityWarningModal.propTypes = {
-  isOpen: PropTypes.any,
-  message: PropTypes.any,
-  level: PropTypes.any,
-  onClose: PropTypes.any,
+  isOpen: PropTypes.bool,
+  message: PropTypes.string,
+  level: PropTypes.number,
+  onClose: PropTypes.func,
 };
 
 export default SecurityWarningModal;

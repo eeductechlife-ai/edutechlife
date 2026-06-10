@@ -4,9 +4,6 @@ import { motion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
 
-const COURSE_NAME = 'Introducción a la I.A Generativa';
-const COURSE_FULL_NAME = 'Introducción a la Inteligencia Artificial Generativa';
-
 const SPONSORS = [
   { name: 'Colciencias', initials: 'CO', color: [0, 102, 179] },
   { name: 'MinTIC', initials: 'MT', color: [0, 153, 51] },
@@ -15,6 +12,8 @@ const SPONSORS = [
 
 const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false }) => {
   const { t, locale } = useTranslation();
+  const courseName = t('ialab.course_title');
+  const courseFullName = t('profile.course_name');
   const certificateRef = useRef(null);
   const [isDownloading, setIsDownloading] = useState(false);
 
@@ -50,7 +49,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(11);
       doc.setTextColor(255, 255, 255);
-      doc.text('EDUTECHLIFE', 15, 12);
+      doc.text(t('certificate.edutechlife'), 15, 12);
       doc.setFontSize(8);
       doc.setFont('helvetica', 'normal');
       doc.text('www.edutechlife.com', W - 15, 12, { align: 'right' });
@@ -81,7 +80,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(36);
       doc.setTextColor(0, 75, 99);
-      doc.text('CERTIFICADO', W / 2, 50, { align: 'center' });
+      doc.text(t('certificate.title_pdf'), W / 2, 50, { align: 'center' });
 
       // Cyan line under title
       doc.setDrawColor(0, 188, 212);
@@ -92,12 +91,12 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(13);
       doc.setTextColor(100, 116, 139);
-      doc.text(COURSE_FULL_NAME, W / 2, 63, { align: 'center' });
+      doc.text(courseFullName, W / 2, 63, { align: 'center' });
 
       // Intro text
       doc.setFontSize(11);
       doc.setTextColor(100, 116, 139);
-      doc.text('Este certificado se otorga a:', W / 2, 78, { align: 'center' });
+      doc.text(t('certificate.awarded_to'), W / 2, 78, { align: 'center' });
 
       // Student name
       doc.setFont('helvetica', 'bold');
@@ -115,8 +114,8 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(11);
       doc.setTextColor(100, 116, 139);
-      doc.text('Por haber completado exitosamente los 5 módulos del curso', W / 2, 108, { align: 'center' });
-      doc.text(`de ${COURSE_NAME} con desempeño sobresaliente.`, W / 2, 115, { align: 'center' });
+      doc.text(t('certificate.completed_course'), W / 2, 108, { align: 'center' });
+      doc.text(t('certificate.outstanding_performance', { course: courseName }), W / 2, 115, { align: 'center' });
 
       // Seal circle
       const sealX = W / 2 + 70;
@@ -130,8 +129,8 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(7);
       doc.setTextColor(0, 75, 99);
-      doc.text('VERIFICADO', sealX, sealY - 2, { align: 'center' });
-      doc.text('EDUTECHLIFE', sealX, sealY + 4, { align: 'center' });
+      doc.text(t('certificate.verified_seal'), sealX, sealY - 2, { align: 'center' });
+      doc.text(t('certificate.edutechlife'), sealX, sealY + 4, { align: 'center' });
 
       // Divider line
       doc.setDrawColor(226, 232, 240);
@@ -144,7 +143,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
       doc.setTextColor(148, 163, 184);
 
       // Date
-      doc.text('Fecha de Emisión', W / 2 - 45, footerY, { align: 'center' });
+      doc.text(t('certificate.issue_date_pdf'), W / 2 - 45, footerY, { align: 'center' });
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(10);
       doc.setTextColor(0, 75, 99);
@@ -154,7 +153,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(8);
       doc.setTextColor(148, 163, 184);
-      doc.text('Nº Certificado', W / 2, footerY, { align: 'center' });
+      doc.text(t('certificate.cert_number_pdf'), W / 2, footerY, { align: 'center' });
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(10);
       doc.setTextColor(0, 75, 99);
@@ -164,11 +163,11 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(8);
       doc.setTextColor(148, 163, 184);
-      doc.text('Certificado Verificado', W / 2 + 45, footerY, { align: 'center' });
+      doc.text(t('certificate.verified_pdf'), W / 2 + 45, footerY, { align: 'center' });
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(10);
       doc.setTextColor(0, 75, 99);
-      doc.text('EDUTECHLIFE', W / 2 + 45, footerY + 6, { align: 'center' });
+      doc.text(t('certificate.edutechlife'), W / 2 + 45, footerY + 6, { align: 'center' });
 
       // Sponsor logos
       const sponsorY = footerY + 18;
@@ -199,9 +198,9 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(7);
       doc.setTextColor(255, 255, 255);
-      doc.text('www.edutechlife.com  •  Certificado digital verificable', W / 2, H - 4, { align: 'center' });
+      doc.text(t('certificate.footer_pdf'), W / 2, H - 4, { align: 'center' });
 
-      doc.save(`Certificado_${COURSE_NAME.replace(/\s+/g, '_')}_${displayName.replace(/\s+/g, '_')}.pdf`);
+      doc.save(`${t('certificate.filename_prefix')}_${courseName.replace(/\s+/g, '_')}_${displayName.replace(/\s+/g, '_')}.pdf`);
     } catch (err) {
       console.error('Error generating PDF:', err);
     } finally {
@@ -306,7 +305,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
             transition={{ delay: 0.4, duration: 0.5 }}
             className="text-sm md:text-base font-medium tracking-wide uppercase mb-8 text-slate-500"
           >
-            {COURSE_FULL_NAME}
+            {courseFullName}
           </motion.p>
 
           {/* Intro text */}
@@ -339,7 +338,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
             transition={{ delay: 0.7, duration: 0.5 }}
             className="text-sm max-w-md mx-auto leading-relaxed mb-8 text-slate-500"
           >
-            {t('ialab.certificate_preview.completed_text', { count: 5, course: COURSE_NAME })}
+            {t('ialab.certificate_preview.completed_text', { count: 5, course: courseName })}
           </motion.p>
 
           {/* Divider */}
@@ -441,10 +440,10 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
 
 
 CertificatePreview.propTypes = {
-  studentName: PropTypes.any,
-  certNumber: PropTypes.any,
-  issuedAt: PropTypes.any,
-  compact: PropTypes.any,
+  studentName: PropTypes.string,
+  certNumber: PropTypes.string,
+  issuedAt: PropTypes.string,
+  compact: PropTypes.bool,
 };
 
 export default CertificatePreview;

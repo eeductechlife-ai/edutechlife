@@ -2,17 +2,19 @@ import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types';;
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Layers, Zap, ChevronRight, ChevronLeft,
-  CheckCircle2, Trophy, Info, Menu, X,
+  Layers, Zap, ChevronLeft,
+  CheckCircle2, Info, Menu, X,
   BookOpen, MousePointer2, BrainCircuit, Sparkles, Rocket,
   Target, FileText, Cpu, Globe, ArrowRightCircle, AlertTriangle,
-  Lightbulb, Search, Clock, Award, Star, XCircle
+  Lightbulb, Search, Clock, Award, Star
 } from 'lucide-react';
 import { stopSpeech } from '../../utils/speech';
 import { useOVATranslations } from '../../hooks/useOVATranslations';
 import { useTranslation } from '../../i18n/I18nProvider';
 import { OVAIntro } from './shared';
 import VoiceReader from './VoiceReader';
+import QuizScreen from './ova-etica/QuizScreen'
+import CertificateScreen from './ova-etica/CertificateScreen'
 
 const Logo = () => (
   <div className="flex items-center gap-2 select-none group cursor-pointer">
@@ -175,127 +177,13 @@ const ErrorSection = ({ texts }) => (
   </div>
 );
 
-const QuizScreen = ({ texts, onNext, addXp, onScore }) => {
-  const [currentQ, setCurrentQ] = useState(0);
-  const [score, setScore] = useState(0);
-  const [selected, setSelected] = useState(null);
-  const [showFeedback, setShowFeedback] = useState(false);
-  const [showResult, setShowResult] = useState(false);
-  const questions = [
-    { q: texts.quiz_1_q, o: [texts.quiz_1_o1, texts.quiz_1_o2, texts.quiz_1_o3, texts.quiz_1_o4], c: 1, f: texts.quiz_1_f },
-    { q: texts.quiz_2_q, o: [texts.quiz_2_o1, texts.quiz_2_o2, texts.quiz_2_o3, texts.quiz_2_o4], c: 2, f: texts.quiz_2_f },
-    { q: texts.quiz_3_q, o: [texts.quiz_3_o1, texts.quiz_3_o2, texts.quiz_3_o3, texts.quiz_3_o4], c: 1, f: texts.quiz_3_f },
-    { q: texts.quiz_4_q, o: [texts.quiz_4_o1, texts.quiz_4_o2, texts.quiz_4_o3, texts.quiz_4_o4], c: 2, f: texts.quiz_4_f },
-    { q: texts.quiz_5_q, o: [texts.quiz_5_o1, texts.quiz_5_o2, texts.quiz_5_o3, texts.quiz_5_o4], c: 2, f: texts.quiz_5_f }
-  ];
-  const handleSelect = (idx) => {
-    if (showFeedback) return;
-    setSelected(idx);
-    setShowFeedback(true);
-    if (idx === questions[currentQ].c) { setScore(s => s + 1); addXp(100); }
-  };
-  const handleNext = () => {
-    if (currentQ < questions.length - 1) { setCurrentQ(currentQ + 1); setSelected(null); setShowFeedback(false); }
-    else { setShowResult(true); onScore?.(score); }
-  };
-  if (showResult) {
-    return (
-      <div className="text-center py-4 animate-[zoomIn_0.6s_cubic-bezier(0.175,0.885,0.32,1.275)_forwards]">
-        <div className="w-20 h-20 bg-corporate/10 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg border-4 border-white dark:border-slate-700"><Trophy className="w-10 h-10 text-corporate" /></div>
-        <h2 className="text-3xl font-black text-petroleum tracking-tighter leading-none mb-2 uppercase">{texts.quiz_result_title}</h2>
-        <div className="bg-petroleum text-white inline-block px-8 py-4 rounded-[2rem] mt-4 text-4xl font-black shadow-lg border-b-4 border-corporate">{score} / 5</div>
-        <p className="text-slate-500 dark:text-slate-300 mt-4 font-bold text-sm">{score === 5 ? texts.quiz_result_perfect : score >= 3 ? texts.quiz_result_good : texts.quiz_result_keep_trying}</p>
-        <Button onClick={onNext} className="mt-6 bg-petroleum text-white mx-auto">{texts.quiz_result_cta}</Button>
-      </div>
-    );
-  }
-  return (
-    <div className="space-y-6 animate-[fadeIn_1.1s_cubic-bezier(0.16,1,0.3,1)_forwards]">
-      <div className="flex justify-between items-center text-xs font-black uppercase tracking-widest text-slate-600 dark:text-slate-300">
-        <span>{texts.quiz_label_question} {currentQ + 1} {texts.quiz_label_of} 5</span>
-        <span className="text-corporate">{texts.quiz_label_score} {score}</span>
-      </div>
-      <h3 className="text-xl font-[900] text-petroleum leading-tight">{questions[currentQ].q}</h3>
-      <div className="grid gap-2">
-        {questions[currentQ].o.map((opt, i) => {
-          const isCorrect = showFeedback && i === questions[currentQ].c;
-          const isWrong = showFeedback && selected === i && i !== questions[currentQ].c;
-          return (
-            <motion.button
-              key={i}
-              onClick={() => handleSelect(i)}
-              whileTap={{ scale: 0.97 }}
-              animate={isCorrect ? { scale: [1, 1.02, 1], transition: { duration: 0.4 } } : isWrong ? { x: [0, -4, 4, -2, 2, 0], transition: { duration: 0.4 } } : {}}
-              className={`p-4 rounded-2xl text-left text-sm font-bold border-2 transition-all flex items-center justify-between gap-3 ${isCorrect ? 'bg-green-50 border-green-500 text-green-700 shadow-md' : isWrong ? 'bg-red-50 border-red-500 text-red-700 shadow-md' : showFeedback ? 'bg-slate-50 border-transparent opacity-50' : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-corporate'}`}
-            >
-              <span className="flex-1">{opt}</span>
-              {isCorrect && <CheckCircle2 className="w-5 h-5 shrink-0 text-green-500" />}
-              {isWrong && <XCircle className="w-5 h-5 shrink-0 text-red-500" />}
-            </motion.button>
-          );
-        })}
-      </div>
-      {showFeedback && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, ease: 'easeOut' }}
-          className="p-5 bg-slate-100 dark:bg-slate-700 rounded-[2rem]"
-        >
-          <p className="text-xs font-bold leading-relaxed">{questions[currentQ].f}</p>
-          <button onClick={handleNext} className="mt-4 w-full py-3 bg-petroleum text-white font-black rounded-xl flex items-center justify-center gap-2 text-xs">{currentQ === 4 ? texts.quiz_label_see_results : texts.quiz_label_continue} <ChevronRight size={14} /></button>
-        </motion.div>
-      )}
-    </div>
-  );
-};
-
-const CertificateScreen = ({ texts, quizScore }) => {
-  const getMessage = () => {
-    if (quizScore === null) return texts.certificate_desc;
-    if (quizScore === 5) return texts.quiz_result_perfect;
-    if (quizScore >= 3) return texts.quiz_result_good;
-    return texts.quiz_result_keep_trying;
-  };
-  return (
-    <div className="mx-auto text-center animate-[fadeIn_1.1s_cubic-bezier(0.16,1,0.3,1)_forwards] max-w-md">
-      <motion.div initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: 'spring', stiffness: 200, damping: 15 }}>
-        <div className="w-24 h-24 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center mx-auto mb-5 shadow-xl border-4 border-white dark:border-slate-700">
-          <Trophy className="w-12 h-12 text-white" />
-        </div>
-      </motion.div>
-      <h2 className="text-3xl font-black text-petroleum mb-2 uppercase tracking-tighter">{texts.quiz_result_title}</h2>
-      {quizScore !== null ? (
-        <>
-          <div className="bg-petroleum text-white inline-block px-10 py-5 rounded-[2rem] text-5xl font-black shadow-lg border-b-4 border-corporate mb-5">
-            {quizScore} / 5
-          </div>
-          <div className="flex justify-center gap-1.5 mb-5">
-            {[1,2,3,4,5].map(i => (
-              <motion.div key={i} initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }} transition={{ delay: i * 0.12, type: 'spring', stiffness: 300 }}>
-                <Star className={`w-7 h-7 ${i <= quizScore ? 'text-amber-400 fill-amber-400 drop-shadow-sm' : 'text-slate-200 dark:text-slate-600'}`} />
-              </motion.div>
-            ))}
-          </div>
-        </>
-      ) : (
-        <div className="w-16 h-16 bg-corporate/10 rounded-full flex items-center justify-center mx-auto mb-5">
-          <CheckCircle2 className="w-8 h-8 text-corporate" />
-        </div>
-      )}
-      <p className="text-base text-slate-600 dark:text-slate-300 font-bold mb-6 leading-relaxed">{getMessage()}</p>
-    </div>
-  );
-};
-
-
 Button.propTypes = {
-  onClick: PropTypes.any,
-  disabled: PropTypes.any,
+  onClick: PropTypes.func,
+  disabled: PropTypes.bool,
 };
 
 export default function OVAEtica({ onComplete }) {
-  const { locale } = useTranslation();
+  const { t, locale } = useTranslation();
   const texts = useOVATranslations('etica');
   const certCompletedRef = useRef(false);
   const [screen, setScreen] = useState('welcome');
@@ -484,7 +372,7 @@ export default function OVAEtica({ onComplete }) {
       {screen !== 'welcome' && screen !== 'certificate' && (
         <div className="flex justify-center border-t border-slate-100 dark:border-slate-700 bg-white/90 dark:bg-slate-800/90 backdrop-blur-3xl">
           <div className="w-full max-w-4xl flex justify-between items-center gap-3 px-4 py-3">
-            <button onClick={() => { if (curIdx > 0) setScreen(nav[curIdx - 1]); stopSpeech(); }} aria-label="Anterior" className="p-3 bg-[#F1F5F9] dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-petroleum dark:hover:text-corporate rounded-xl disabled:opacity-10 transition-all shadow-inner border border-slate-50 dark:border-slate-700" disabled={curIdx === 0}><ChevronLeft className="w-5 h-5" /></button>
+            <button onClick={() => { if (curIdx > 0) setScreen(nav[curIdx - 1]); stopSpeech(); }} aria-label={t('ova.nav.prev_aria')} className="p-3 bg-[#F1F5F9] dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-petroleum dark:hover:text-corporate rounded-xl disabled:opacity-10 transition-all shadow-inner border border-slate-50 dark:border-slate-700" disabled={curIdx === 0}><ChevronLeft className="w-5 h-5" /></button>
             <div className="flex gap-2">
               {nav.map((_, i) => <div key={i} className={`h-1.5 rounded-full transition-all duration-700 ${i === curIdx ? 'w-10 bg-petroleum' : 'w-2 bg-slate-200 dark:bg-slate-600'}`}></div>)}
             </div>

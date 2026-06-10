@@ -358,10 +358,11 @@
   /* Brand colors (source of truth for IALab components) */
   --ialab-petroleum: #004B63;
   --ialab-petroleum-dark: #0A3550;
-  --ialab-cyan: #00BCD4;
-  --ialab-cyan-dark: #0097A7;
+  --ialab-cyan: #0097A7; /* Mejorado para contraste WCAG AA */
+  --ialab-cyan-dark: #007C8A;
   --ialab-navy: #0D2B5B;
   --ialab-teal: #2596be;
+  --ialab-focus-ring: 0 0 0 3px rgba(0, 151, 167, 0.4);
 
   /* Surfaces */
   --ialab-bg: #F8FAFC;

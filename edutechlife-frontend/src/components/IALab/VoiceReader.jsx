@@ -32,7 +32,7 @@ const VoiceReader = ({ text }) => {
 
 
 VoiceReader.propTypes = {
-  text: PropTypes.any,
+  text: PropTypes.string,
 };
 
 export default VoiceReader;

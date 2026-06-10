@@ -1,15 +1,11 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react'
 import PropTypes from 'prop-types';;
 import {
- History,
- MessageSquare,
  Layers,
  Zap,
- ChevronRight,
  ChevronLeft,
  Volume2,
  CheckCircle2,
- Play,
  Trophy,
  Info,
  Menu,
@@ -34,6 +30,8 @@ import {
 } from 'lucide-react';
 import { useTranslation } from '../../i18n/I18nProvider';
 import { speakTextConversational, stopSpeech } from '../../utils/speech';
+import Quiz from './que-es-prompt/Quiz';
+import Sidebar from './que-es-prompt/Sidebar';
 
 const COLORS = {
  primary: '#0D2B5B',
@@ -148,96 +146,7 @@ const ModuleAnatomy = () => {
  );
 };
 
-const Quiz = ({ onComplete }) => {
- const { t } = useTranslation();
- const [currentQ, setCurrentQ] = useState(0);
- const [score, setScore] = useState(0);
- const [selected, setSelected] = useState(null);
- const [showFeedback, setShowFeedback] = useState(false);
 
- const questions = [
-   {
-     q: "Si un prompt genera una respuesta 'vaga y genérica', ¿cuál es probablemente la razón principal según la lectura?",
-     o: ["La IA no tiene suficiente memoria", "Falta de contexto y especificidad en la instrucción", "El servidor de la IA está saturado", "La IA no sabe hablar español"],
-     c: 1,
-     f: "La lectura enfatiza que la IA no conoce tu contexto personal a menos que tú se lo proporciones explícitamente."
-   },
-   {
-     q: "Al usar la técnica 'Chain of Thought' (Cadena de Pensamiento), el objetivo principal es:",
-     o: ["Que la IA responda más rápido", "Hacer que la IA escriba textos creativos", "Obligar a la IA a mostrar su razonamiento paso a paso para mejorar la precisión", "Ahorrar tokens en la respuesta"],
-     c: 2,
-     f: "Esta técnica mejora drásticamente los resultados en tareas de lógica y resolución de problemas."
-   },
-   {
-     q: "¿Por qué el prompt se define como un 'puente de comunicación'?",
-     o: ["Porque permite conectar dos computadoras", "Porque es la única interfaz que guía el razonamiento y la creatividad de la máquina", "Porque traduce idiomas automáticamente", "Porque conecta a la IA con el internet"],
-     c: 1,
-     f: "El prompt es la herramienta que permite que la intención humana se convierta en una salida útil de la IA."
-   },
-   {
-     q: "En la 'Anatomía de un Prompt', ¿cuál es la función del componente de Restricciones?",
-     o: ["Hacer el prompt más largo", "Dar ejemplos del resultado", "Establecer límites y condiciones de lo que la IA NO debe hacer", "Elegir el idioma de salida"],
-     c: 2,
-     f: "Las restricciones acotan el resultado final evitando tecnicismos innecesarios o extensiones excesivas."
-   },
-   {
-     q: "¿Qué implica la 'Iteración' en la ingeniería de prompts?",
-     o: ["Aceptar la primera respuesta de la IA", "Copiar y pegar el mismo prompt varias veces", "Evaluar, identificar limitaciones y ajustar la instrucción hasta lograr el resultado óptimo", "Apagar y encender el sistema"],
-     c: 2,
-     f: "La ingeniería de prompts es un proceso dinámico y estratégico de refinamiento constante."
-   }
- ];
-
- const handleSelect = (idx) => {
-   if (showFeedback) return;
-   setSelected(idx);
-   setShowFeedback(true);
-   if (idx === questions[currentQ].c) setScore(score + 1);
- };
-
- const handleNext = () => {
-   if (currentQ < questions.length - 1) {
-     setCurrentQ(currentQ + 1);
-     setSelected(null);
-     setShowFeedback(false);
-   } else {
-     onComplete(score);
-   }
- };
-
- return (
-   <div className="space-y-6 animate-[fadeIn_1.1s_cubic-bezier(0.16,1,0.3,1)_forwards]">
-      <div className="flex justify-between items-center text-[9px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-300">
-        <span>{t('ialab.que_es_prompt.quiz_analysis', { current: currentQ + 1, total: 5 })}</span>
-        <span className="text-[#00B4D8]">{t('ialab.que_es_prompt.quiz_score', { score })}</span>
-     </div>
-     <h3 className="text-xl font-[900] text-[#0D2B5B] leading-tight">{questions[currentQ].q}</h3>
-     <div className="grid gap-2">
-       {questions[currentQ].o.map((opt, i) => (
-         <button
-           key={i}
-           onClick={() => handleSelect(i)}
-           className={`p-4 rounded-2xl text-left text-sm font-bold border-2 transition-all ${
-              showFeedback
-                ? i === questions[currentQ].c ? 'bg-green-50 dark:bg-green-900/30 border-green-500 text-green-700 dark:text-green-300' : selected === i ? 'bg-red-50 dark:bg-red-900/30 border-red-500 text-red-700 dark:text-red-300' : 'bg-slate-50 dark:bg-slate-700/30 border-transparent opacity-50'
-                : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-[#00B4D8]'
-           }`}
-         >
-           {opt}
-         </button>
-       ))}
-     </div>
-     {showFeedback && (
-        <div className="p-5 bg-slate-100 dark:bg-slate-700/50 rounded-[2rem] animate-[slideInFromTop_0.4s_cubic-bezier(0.16,1,0.3,1)_forwards]">
-         <p className="text-xs font-bold leading-relaxed">{questions[currentQ].f}</p>
-         <button onClick={handleNext} className="mt-4 w-full py-3 bg-[#0D2B5B] text-white font-black rounded-xl flex items-center justify-center gap-2 text-xs">
-            {currentQ === 4 ? t('ialab.que_es_prompt.quiz_see_results') : t('ialab.que_es_prompt.quiz_continue')} <ChevronRight size={14}/>
-         </button>
-       </div>
-     )}
-   </div>
- );
-};
 
 const QueEsPrompt_OVA_Original = ({ onClose, onComplete }) => {
  const { t } = useTranslation();
@@ -478,7 +387,7 @@ const QueEsPrompt_OVA_Original = ({ onClose, onComplete }) => {
                 stopSpeech();
                 setPlaying(false);
               }}
-              aria-label="Anterior"
+              aria-label={t('ova.nav.prev_aria')}
               className="p-4 bg-[#F1F5F9] dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-[#0D2B5B] dark:hover:text-white rounded-[1.5rem] disabled:opacity-10 transition-all shadow-inner border border-slate-50 dark:border-slate-600"
               disabled={curIdx === 0}
             >
@@ -513,30 +422,10 @@ const QueEsPrompt_OVA_Original = ({ onClose, onComplete }) => {
        </footer>
      )}
 
-     {/* Sidebar */}
-     {isMenuOpen && (
-        <div className="fixed inset-0 z-[100] bg-slate-900/60 dark:bg-slate-950/80 backdrop-blur-md transition-opacity duration-500" onClick={() => setIsMenuOpen(false)}>
-          <div className="absolute right-0 h-full w-[400px] bg-white dark:bg-slate-800 shadow-2xl p-12 flex flex-col gap-6 animate-[slideInFromRight_0.6s_cubic-bezier(0.16,1,0.3,1)_forwards] duration-300" onClick={e => e.stopPropagation()}>
-             <button onClick={() => setIsMenuOpen(false)} aria-label="Cerrar menú" className="self-end p-3 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full transition-colors"><X className="w-8 h-8 text-slate-600 dark:text-slate-300" /></button>
-             <h3 className="font-[900] text-slate-300 dark:text-slate-500 text-xs tracking-[0.4em] mt-12 mb-8 uppercase border-b-2 border-slate-50 dark:border-slate-700 pb-6">{t('ialab.que_es_prompt.sidebar_title')}</h3>
-            {nav.map(id => (
-                 <button key={id} onClick={() => { setScreen(id); setIsMenuOpen(false); }} className={`p-6 rounded-[2.5rem] text-left text-xs font-[900] transition-all flex items-center justify-between group ${screen === id ? 'bg-[#0D2B5B] text-white shadow-xl' : 'hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400'}`}>
-                <span className="uppercase tracking-widest">{screensData[id].title}</span>
-                {completed.includes(id) && <CheckCircle2 className="w-6 h-6 text-[#00B4D8]" />}
-              </button>
-            ))}
-         </div>
-       </div>
-     )}
+      <Sidebar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} screen={screen} setScreen={setScreen} completed={completed} screensData={screensData} />
 
 
    </div>
  );
 };
-
-
-Quiz.propTypes = {
-  onComplete: PropTypes.any,
-};
-
 export default QueEsPrompt_OVA_Original;

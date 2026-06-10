@@ -297,10 +297,10 @@ const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded 
 
 
 VideoViewer.propTypes = {
-  resource: PropTypes.any,
-  youtubeDuration: PropTypes.any,
-  durationLoading: PropTypes.any,
-  onVideoEnded: PropTypes.any,
+  resource: PropTypes.object,
+  youtubeDuration: PropTypes.string,
+  durationLoading: PropTypes.bool,
+  onVideoEnded: PropTypes.func,
 };
 
 export default VideoViewer;

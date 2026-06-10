@@ -16,7 +16,7 @@ const ExerciseFeedback = ({ icon, iconColor, iconBg, title, nota, feedback }) =>
       </div>
       <div className="flex-1">
         <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">{title}</h3>
-        <p className="text-slate-500 dark:text-slate-400 text-sm">{'Análisis detallado'}</p>
+        <p className="text-slate-500 dark:text-slate-400 text-sm">{t('ialab.evaluation.results.detailed_analysis')}</p>
       </div>
       <div className={`px-4 py-2 rounded-lg text-lg font-bold ${nota >= 80 ? 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400' : nota >= 60 ? 'bg-amber-50 dark:bg-amber-950/30 text-amber-600 dark:text-amber-400' : 'bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400'}`}>
         {nota}%
@@ -59,8 +59,8 @@ const FeedbackPanel = ({ evaluation, t }) => (
 
 
 FeedbackPanel.propTypes = {
-  evaluation: PropTypes.any,
-  t: PropTypes.any,
+  evaluation: PropTypes.object,
+  t: PropTypes.func,
 };
 
 export default FeedbackPanel;

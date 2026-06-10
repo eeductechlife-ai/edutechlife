@@ -100,9 +100,9 @@ const ChallengeResultViewer = ({ moduleId, onClose, onRetry }) => {
 
 
 ChallengeResultViewer.propTypes = {
-  moduleId: PropTypes.any,
-  onClose: PropTypes.any,
-  onRetry: PropTypes.any,
+  moduleId: PropTypes.number,
+  onClose: PropTypes.func,
+  onRetry: PropTypes.func,
 };
 
 export default ChallengeResultViewer;

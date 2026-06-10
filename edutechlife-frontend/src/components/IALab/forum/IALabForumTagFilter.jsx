@@ -37,9 +37,9 @@ const IALabForumTagFilter = ({ activeFilter, setActiveFilter, t }) => {
 
 
 IALabForumTagFilter.propTypes = {
-  activeFilter: PropTypes.any,
-  setActiveFilter: PropTypes.any,
-  t: PropTypes.any,
+  activeFilter: PropTypes.string,
+  setActiveFilter: PropTypes.func,
+  t: PropTypes.func,
 };
 
 export default IALabForumTagFilter;

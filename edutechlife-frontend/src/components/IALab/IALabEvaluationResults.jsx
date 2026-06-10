@@ -317,10 +317,10 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
 
 
 IALabEvaluationResults.propTypes = {
-  evaluation: PropTypes.any,
-  onClose: PropTypes.any,
-  activityType: PropTypes.any,
-  onRetry: PropTypes.any,
+  evaluation: PropTypes.object,
+  onClose: PropTypes.func,
+  activityType: PropTypes.string,
+  onRetry: PropTypes.func,
 };
 
 export default memo(IALabEvaluationResults);

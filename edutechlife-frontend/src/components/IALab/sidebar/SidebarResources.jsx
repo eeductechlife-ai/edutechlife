@@ -3,17 +3,19 @@ import PropTypes from 'prop-types';;
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
 
-const RESOURCE_ITEMS = [
-  { idSuffix: '', label: 'Cheat Sheet RTF', icon: 'fa-file-alt', meta: '2 páginas' },
-  { idSuffix: '_2', label: 'Ejemplos Prácticos', icon: 'fa-code', meta: '15 ejemplos' },
-  { idSuffix: '_3', label: 'Plantillas Premium', icon: 'fa-clipboard', meta: '8 plantillas' },
-  { idSuffix: '_4', label: 'Casos de Estudio', icon: 'fa-chart-line', meta: '5 casos' },
+const getResourceItems = (t) => [
+  { idSuffix: '', label: t('sidebar.resource_cheatsheet'), icon: 'fa-file-alt', meta: t('sidebar.resource_cheatsheet_desc') },
+  { idSuffix: '_2', label: t('sidebar.resource_examples'), icon: 'fa-code', meta: t('sidebar.resource_examples_desc') },
+  { idSuffix: '_3', label: t('sidebar.resource_templates'), icon: 'fa-clipboard', meta: t('sidebar.resource_templates_desc') },
+  { idSuffix: '_4', label: t('sidebar.resource_studies'), icon: 'fa-chart-line', meta: t('sidebar.resource_studies_desc') },
 ];
 
 const SidebarResources = ({
   activeMod, sidebarDropdowns, toggleSidebarDropdown,
   isInfographicCompleted, fadeTransition, t,
-}) => (
+}) => {
+  const RESOURCE_ITEMS = getResourceItems(t);
+  return (
   <div className="px-1 w-full" aria-labelledby="sidebar-resources-heading">
     <div className="flex items-center justify-between mb-2">
       <div className="flex items-center gap-1.5">
@@ -31,7 +33,7 @@ const SidebarResources = ({
         onClick={() => toggleSidebarDropdown('recursos')}
         tabIndex={0}
         role="button"
-        aria-label={sidebarDropdowns.recursos ? "Colapsar recursos" : "Expandir recursos"}
+        aria-label={sidebarDropdowns.recursos ? t('sidebar.resource_collapse') : t('sidebar.resource_expand')}
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleSidebarDropdown('recursos'); } }}
       />
     </div>
@@ -84,15 +86,15 @@ const SidebarResources = ({
     </AnimatePresence>
   </div>
 );
-
+};
 
 SidebarResources.propTypes = {
-  activeMod: PropTypes.any,
-  sidebarDropdowns: PropTypes.any,
-  toggleSidebarDropdown: PropTypes.any,
-  isInfographicCompleted: PropTypes.any,
-  fadeTransition: PropTypes.any,
-  t: PropTypes.any,
+  activeMod: PropTypes.number,
+  sidebarDropdowns: PropTypes.object,
+  toggleSidebarDropdown: PropTypes.func,
+  isInfographicCompleted: PropTypes.func,
+  fadeTransition: PropTypes.object,
+  t: PropTypes.func,
 };
 
 export default React.memo(SidebarResources);

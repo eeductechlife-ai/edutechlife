@@ -1,0 +1,44 @@
+<h2>3 Enfoques para Anotaciones Inline</h2>
+<p class="subtitle">Selecciona el que prefieras</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Hook + Componentes Independientes</h3>
+      <p><strong>useAnnotations.js</strong> — hook que maneja selección, highlights, persistencia</p>
+      <p><strong>AnnotationLayer.jsx</strong> — overlay que se posiciona sobre el contenido</p>
+      <p><strong>FloatingToolbar.jsx</strong> — menú flotante al seleccionar texto</p>
+      <div class="pros-cons" style="margin-top:8px">
+        <div class="pros"><ul><li>100% aditivo</li><li>Fácil de testear</li><li>Desacoplado</li></ul></div>
+        <div class="cons"><ul><li>Requiere wrapper en resource viewer</li></ul></div>
+      </div>
+    </div>
+  </div>
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Sistema Overlay Global</h3>
+      <p>Intercepta selección en cualquier parte del resource viewer</p>
+      <p>Guarda highlights como rangos serializados (offset start/end)</p>
+      <p>Renderiza highlights como elementos posicionados absolutamente</p>
+      <div class="pros-cons" style="margin-top:8px">
+        <div class="pros"><ul><li>Funciona con cualquier contenido</li><li>Sin modificar viewers</li></ul></div>
+        <div class="cons"><ul><li>Serialización de rangos frágil</li><li>Más complejo de mantener</li></ul></div>
+      </div>
+    </div>
+  </div>
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Transformación de Contenido</h3>
+      <p>Procesa el HTML del recurso al cargarlo</p>
+      <p>Inyecta spans de highlight directamente en el markup</p>
+      <p>Re-renderiza al añadir/quitar highlights</p>
+      <div class="pros-cons" style="margin-top:8px">
+        <div class="pros"><ul><li>Más simple conceptualmente</li><li>Flujo DOM natural</li></ul></div>
+        <div class="cons"><ul><li>Acoplado al contenido</li><li>Re-renderiza completo en cada cambio</li></ul></div>
+      </div>
+    </div>
+  </div>
+</div>

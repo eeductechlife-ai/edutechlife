@@ -54,14 +54,14 @@ const ModuleBookmarkFilter = ({ bookmarkedResources, showBookmarked, setShowBook
 
 
 ModuleBookmarkFilter.propTypes = {
-  bookmarkedResources: PropTypes.any,
-  showBookmarked: PropTypes.any,
-  setShowBookmarked: PropTypes.any,
-  toggleBookmark: PropTypes.any,
-  setSelectedResource: PropTypes.any,
-  setSelectedResourceType: PropTypes.any,
-  setViewerModalOpen: PropTypes.any,
-  t: PropTypes.any,
+  bookmarkedResources: PropTypes.array,
+  showBookmarked: PropTypes.bool,
+  setShowBookmarked: PropTypes.func,
+  toggleBookmark: PropTypes.func,
+  setSelectedResource: PropTypes.func,
+  setSelectedResourceType: PropTypes.func,
+  setViewerModalOpen: PropTypes.func,
+  t: PropTypes.func,
 };
 
 export default ModuleBookmarkFilter;

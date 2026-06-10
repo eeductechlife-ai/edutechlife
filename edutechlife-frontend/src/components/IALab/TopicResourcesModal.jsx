@@ -14,6 +14,7 @@ import QueEsPrompt_OVA_Original from './QueEsPrompt_OVA_Original';
 import { getResourcesForTopic, RESOURCE_TYPE_CONFIG } from './constants/moduleResources';
 import { stopSpeech } from '../../utils/speech';
 import useFullscreen from './hooks/useFullscreen';
+import TrafficLightControls from './shared/TrafficLightControls';
 
 const TopicResourcesModal = ({
   isOpen = false,
@@ -82,6 +83,10 @@ const TopicResourcesModal = ({
       stopSpeech();
     };
   }, [isOpen]);
+
+  useEffect(() => {
+    useIALabStore.getState().setImmersiveModalOpen(viewerModalOpen || ovaModalOpen || immersivePdfModalOpen);
+  }, [viewerModalOpen, ovaModalOpen, immersivePdfModalOpen]);
 
   const handleOpenViewerModal = (resourceIndex) => {
     const resource = resources[resourceIndex];
@@ -161,6 +166,50 @@ const TopicResourcesModal = ({
     exit: { opacity: 0, scale: 0.95, y: 20, transition: { duration: 0.2 } }
   };
 
+  const immersiveComponent = immersivePdfModalOpen && immersivePdfResource
+    ? <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
+              <div className="relative w-full h-full max-w-6xl bg-white rounded-3xl overflow-hidden flex flex-col" style={{ boxShadow: '0 25px 50px -12px rgba(0,75,99,0.25)' }}>
+                <div className="flex items-center justify-between p-6 border-b border-white/10 bg-gradient-to-r from-petroleum to-corporate backdrop-blur-sm">
+                  <div className="flex items-center gap-4">
+                    <div className="bg-white/10 p-3 rounded-xl">
+                      <Icon name="fa-file-pdf" className="text-[#06B6D4] text-xl" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-bold text-white">{immersivePdfResource.title}</h2>
+                      <div className="flex items-center gap-3 text-white/80 text-sm mt-1">
+                        <span>{t('ialab.topic_resources.immersive_view')}</span>
+                        <span>•</span>
+                        <span>{t('ialab.viewer_modal.fullscreen')}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => { document.documentElement.requestFullscreen?.(); }}
+                    className="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-colors duration-200 flex items-center gap-2 font-medium border-none"
+                  >
+                    <Icon name="fa-expand" className="w-5 h-5 text-white" />
+                    {t('ialab.viewer_modal.fullscreen')}
+                  </button>
+                  <button
+                    onClick={handleCloseViewerModals}
+                    className="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-colors duration-200 flex items-center gap-2 font-medium border-none"
+                  >
+                    <Icon name="fa-times" className="w-5 h-5 text-white" />
+                    {t('ialab.viewer_modal.close')}
+                  </button>
+                </div>
+                <div className="flex-1 relative">
+                  <iframe
+                    src={`${immersivePdfResource.url}#view=FitH&toolbar=0&navpanes=0&scrollbar=1`}
+                    title={`${immersivePdfResource.title} - ${t('ialab.topic_resources.immersive_view')}`}
+                    id="immersive-pdf-iframe" className="w-full h-full border-0"
+                    allowFullScreen
+                  />
+                </div>
+              </div>
+            </div>
+    : null;
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -204,30 +253,16 @@ const TopicResourcesModal = ({
                     </h2>
                   </div>
                 </div>
-                <button
-                  onClick={toggleModalFullscreen}
-                  className={cn(
-                    "mt-3 sm:mt-0 ml-0 sm:ml-4 p-2 sm:p-2.5 rounded-lg sm:rounded-xl",
-                    "bg-white/20 text-white hover:bg-white/30 transition-colors duration-200",
-                    "flex-shrink-0 w-full sm:w-auto justify-center sm:justify-start flex items-center gap-2"
-                  )}
-                  aria-label={isModalFullscreen ? t('ialab.viewer_modal.fullscreen_exit') : t('ialab.viewer_modal.fullscreen_enter')}
-                >
-                  <Icon name={isModalFullscreen ? "fa-compress" : "fa-expand"} className="w-4 h-4 sm:w-5 sm:h-5" />
-                  <span className="text-sm sm:hidden">{isModalFullscreen ? t('ialab.viewer_modal.fullscreen_exit_btn') : t('ialab.viewer_modal.fullscreen')}</span>
-                </button>
-                <button
-                  onClick={() => { stopSpeech(); onClose(); }}
-                  className={cn(
-                    "mt-3 sm:mt-0 ml-0 sm:ml-2 p-2 sm:p-2.5 rounded-lg sm:rounded-xl",
-                    "bg-white text-petroleum hover:bg-petroleum/10 transition-colors duration-200",
-                    "flex-shrink-0 w-full sm:w-auto justify-center sm:justify-start flex items-center gap-2"
-                  )}
-                  aria-label={t('ialab.viewer_modal.close_aria')}
-                >
-                  <Icon name="fa-xmark" className="w-4 h-4 sm:w-5 sm:h-5" />
-                  <span className="text-sm sm:hidden">{t('ialab.viewer_modal.close')}</span>
-                </button>
+                <div className="flex-shrink-0 mt-3 sm:mt-0 ml-0 sm:ml-4 w-full sm:w-auto flex justify-center sm:justify-start">
+                  <TrafficLightControls
+                    onClose={() => { stopSpeech(); onClose(); }}
+                    onToggleFullscreen={toggleModalFullscreen}
+                    isFullscreen={isModalFullscreen}
+                    closeLabel={t('ialab.viewer_modal.close_aria')}
+                    fullscreenEnterLabel={t('ialab.viewer_modal.fullscreen_enter')}
+                    fullscreenExitLabel={t('ialab.viewer_modal.fullscreen_exit')}
+                  />
+                </div>
               </div>
 
               <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-petroleum/70 px-4 sm:px-6 py-3 bg-white border-b border-petroleum/25">
@@ -404,48 +439,7 @@ const TopicResourcesModal = ({
             <QueEsPrompt_OVA_Original onClose={handleCloseViewerModals} />
           )}
 
-          {immersivePdfModalOpen && immersivePdfResource && (
-            <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
-              <div className="relative w-full h-full max-w-6xl bg-white rounded-3xl overflow-hidden flex flex-col" style={{ boxShadow: '0 25px 50px -12px rgba(0,75,99,0.25)' }}>
-                <div className="flex items-center justify-between p-6 border-b border-white/10 bg-gradient-to-r from-petroleum to-corporate backdrop-blur-sm">
-                  <div className="flex items-center gap-4">
-                    <div className="bg-white/10 p-3 rounded-xl">
-                      <Icon name="fa-file-pdf" className="text-[#06B6D4] text-xl" />
-                    </div>
-                    <div>
-                      <h2 className="text-xl font-bold text-white">{immersivePdfResource.title}</h2>
-                      <div className="flex items-center gap-3 text-white/80 text-sm mt-1">
-                        <span>{t('ialab.topic_resources.immersive_view')}</span>
-                        <span>•</span>
-                        <span>{t('ialab.viewer_modal.fullscreen')}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => { document.documentElement.requestFullscreen?.(); }}
-                    className="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-colors duration-200 flex items-center gap-2 font-medium border-none"
-                  >
-                    <Icon name="fa-expand" className="w-5 h-5 text-white" />
-                    {t('ialab.viewer_modal.fullscreen')}
-                  </button>
-                  <button
-                    onClick={handleCloseViewerModals}
-                    className="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-colors duration-200 flex items-center gap-2 font-medium border-none"
-                  >
-                    <Icon name="fa-times" className="w-5 h-5 text-white" />
-                    {t('ialab.viewer_modal.close')}
-                  </button>
-                </div>
-                <div className="flex-1 relative">
-                  <iframe
-                    src={`${immersivePdfResource.url}#view=FitH&toolbar=0&navpanes=0&scrollbar=1`}
-                    title={`${immersivePdfResource.title} - ${t('ialab.topic_resources.immersive_view')}`}
-                    id="immersive-pdf-iframe" className="w-full h-full border-0"
-                    allowFullScreen
-                  />
-                </div>
-            </div>
-          )}
+          {immersiveComponent}
         </>
       )}
     </AnimatePresence>
@@ -454,9 +448,9 @@ const TopicResourcesModal = ({
 
 
 TopicResourcesModal.propTypes = {
-  isOpen: PropTypes.any,
-  onClose: PropTypes.any,
-  topicData: PropTypes.any,
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func,
+  topicData: PropTypes.object,
 };
 
 export default TopicResourcesModal;

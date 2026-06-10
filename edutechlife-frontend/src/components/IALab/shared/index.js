@@ -11,3 +11,4 @@ export { default as MobileMenuOverlay } from './MobileMenuOverlay';
 export { default as TabPills } from './TabPills';
 export { default as AnimatedSection } from './AnimatedSection';
 export { default as SkipLink } from './SkipLink';
+export { default as AnimatedProgressBar } from './AnimatedProgressBar';

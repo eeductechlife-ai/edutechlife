@@ -5,13 +5,14 @@ import { OVAIntro } from './shared';
 import VoiceReader from './VoiceReader';
 import {
   BrainCircuit, ChevronRight, ChevronLeft,
-  ArrowRightCircle, Star, Award, Sparkles, BookOpen, CheckCircle2,
-  Menu, X, MousePointer2, AlertTriangle, Zap, Info, Search, Clock,
-  Lightbulb, Target, Globe, Layers, FileText, Settings,
-  Cpu, Rocket, HelpCircle, User, MapPin, ZapOff, File, Ban, Brain, RefreshCcw, Users,
-  Hash, Sliders, Bug, ArrowLeftRight, XCircle
+  ArrowRightCircle, Star, Award, Sparkles, CheckCircle2,
+  Menu, MousePointer2, Zap, Target, Globe, Layers,
+  Hash, Sliders
 } from 'lucide-react';
-import { stopSpeech, speakTextConversational } from '../../utils/speech';
+import { stopSpeech } from '../../utils/speech';
+import DetectAndFix from './ova-intro-prompt/DetectAndFix';
+import CreatePattern from './ova-intro-prompt/CreatePattern';
+import FinalChallenge from './ova-intro-prompt/FinalChallenge';
 
 const Logo = () => (
   <div className="flex items-center gap-2 select-none group cursor-pointer">
@@ -151,226 +152,7 @@ const HowAIThinks = () => {
   );
 };
 
-const DetectAndFix = () => {
-  const { t } = useTranslation();
-  const [round, setRound] = useState(0);
-  const [selected, setSelected] = useState(null);
-  const [showFix, setShowFix] = useState(false);
-  const [correct, setCorrect] = useState(false);
-  const R = [
-    { prompt: t('ova.introprompt.detect_r1_prompt') || '"Explícame la fotosíntesis"', errors: ['context', 'format', 'task'], correctIdx: 0 },
-    { prompt: t('ova.introprompt.detect_r2_prompt') || '"Eres tutor de matemáticas. Explica fracciones a un niño de 10 años."', errors: ['context', 'format', 'task'], correctIdx: 1 },
-    { prompt: t('ova.introprompt.detect_r3_prompt') || '"Eres experto. Dame lección del sistema solar con tabla, 5 preguntas y resumen."', errors: ['context', 'format', 'task'], correctIdx: 2 },
-  ];
-  const opts = [
-    t('ova.introprompt.detect_opt_context'),
-    t('ova.introprompt.detect_opt_format'),
-    t('ova.introprompt.detect_opt_task'),
-  ];
-  const fixes = [
-    t('ova.introprompt.detect_fix_1'),
-    t('ova.introprompt.detect_fix_2'),
-    t('ova.introprompt.detect_fix_3'),
-  ];
-  const handleSelect = (idx) => {
-    if (showFix) return;
-    setSelected(idx);
-    const isCorrect = idx === R[round].correctIdx;
-    setCorrect(isCorrect);
-    if (isCorrect) setShowFix(true);
-  };
-  const nextRound = () => {
-    if (round < 2) { setRound(round + 1); setSelected(null); setShowFix(false); setCorrect(false); }
-  };
-  return (
-    <div className="animate-[fadeIn_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards] space-y-3">
-      <p className="text-sm text-slate-500 dark:text-slate-300 font-bold">{t('ova.introprompt.detect_desc')}</p>
-      <div className="flex items-center gap-2 mb-2">
-        <Bug className="w-4 h-4 text-corporate" />
-        <span className="text-[10px] font-black text-petroleum uppercase tracking-wider">{t('ova.introprompt.detect_round')} {round + 1} {t('ova.introprompt.detect_of')} 3</span>
-      </div>
-      <div className="p-4 bg-amber-50 dark:bg-amber-900/20 border-2 border-amber-200 dark:border-amber-700 rounded-xl">
-        <p className="text-xs font-bold text-amber-800 dark:text-amber-200 uppercase tracking-wider mb-2">{t('ova.introprompt.detect_prompt_label')}</p>
-        <p className="text-sm text-slate-700 dark:text-slate-200 font-mono font-medium">{R[round].prompt}</p>
-      </div>
-      <div className="space-y-2">
-        <p className="text-[10px] font-black text-slate-500 uppercase tracking-wider">{t('ova.introprompt.detect_whats_wrong')}</p>
-        {opts.map((opt, i) => {
-          const isSelected = selected === i;
-          const isCorrectOpt = showFix && i === R[round].correctIdx;
-          const isWrong = isSelected && !correct;
-          return (
-            <button key={i} onClick={() => handleSelect(i)}
-              className={`w-full p-3 rounded-xl border-2 text-left text-xs font-medium transition-all flex items-center justify-between gap-2 ${isCorrectOpt ? 'bg-green-50 border-green-500 text-green-700' : isWrong ? 'bg-red-50 border-red-500 text-red-700' : isSelected ? 'border-corporate bg-blue-50' : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-slate-200'}`}>
-              <span>{opt}</span>
-              {isCorrectOpt && <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />}
-              {isWrong && <XCircle className="w-4 h-4 text-red-500 shrink-0" />}
-            </button>
-          );
-        })}
-      </div>
-      {showFix && (
-        <div className="p-4 bg-green-50 dark:bg-green-900/20 border-2 border-green-200 dark:border-green-700 rounded-xl">
-          <div className="flex items-center gap-2 mb-2">
-            <CheckCircle2 className="w-4 h-4 text-green-600" />
-            <span className="text-[10px] font-black text-green-700 dark:text-green-300 uppercase tracking-wider">{t('ova.introprompt.detect_fix_label')}</span>
-          </div>
-          <p className="text-xs text-slate-700 dark:text-slate-200 font-medium leading-relaxed">{fixes[round]}</p>
-          {round < 2 && (
-            <button onClick={nextRound} className="mt-3 px-4 py-2 bg-petroleum text-white rounded-xl text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5">
-              {t('ova.introprompt.next')} <ChevronRight className="w-3 h-3" />
-            </button>
-          )}
-          {round === 2 && (
-            <p className="mt-3 text-xs font-bold text-green-700 dark:text-green-300">{t('ova.introprompt.detect_complete')}</p>
-          )}
-        </div>
-      )}
-    </div>
-  );
-};
-
-const CreatePattern = () => {
-  const { t } = useTranslation();
-  const [step, setStep] = useState(0);
-  const createSteps = [
-    { letter: 'C', key: 'c', color: 'bg-petroleum' },
-    { letter: 'R', key: 'r', color: 'bg-corporate' },
-    { letter: 'E', key: 'e', color: 'bg-[#4361EE]' },
-    { letter: 'A', key: 'a', color: 'bg-[#4CC9F0]' },
-    { letter: 'T', key: 't', color: 'bg-[#F72585]' },
-    { letter: 'E', key: 'e2', color: 'bg-[#FF9F1C]' },
-  ];
-  const isLast = step >= createSteps.length;
-
-  if (isLast) {
-    return (
-      <div className="animate-[fadeIn_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards] space-y-4">
-        <div className="p-5 bg-gradient-to-br from-emerald-50 to-white rounded-[2rem] border-2 border-emerald-200 dark:border-slate-700 shadow-md text-center">
-          <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-3">
-            <CheckCircle2 className="w-6 h-6 text-emerald-600" />
-          </div>
-          <h4 className="text-petroleum font-[900] text-lg tracking-tighter lowercase mb-2">{t('ova.introprompt.create_result_title')}</h4>
-          <p className="text-xs text-slate-500 mb-4">{t('ova.introprompt.create_result_desc')}</p>
-          <div className="bg-petroleum text-white p-4 rounded-xl text-left text-xs leading-relaxed font-medium">
-            {t('ova.introprompt.create_prompt_result')}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  const cs = createSteps[step];
-  return (
-    <div className="animate-[fadeIn_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards] space-y-4">
-      <div className="flex items-center gap-2 justify-between">
-        <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">{t('ova.introprompt.create_step')} {step + 1} / 6</span>
-        <div className="flex gap-1">
-          {createSteps.map((s, i) => (
-            <div key={i} className={`h-1.5 rounded-full transition-all ${i === step ? 'w-6 bg-petroleum' : i < step ? 'w-2 bg-corporate' : 'w-2 bg-slate-200 dark:bg-slate-600'}`} />
-          ))}
-        </div>
-      </div>
-      <div className="flex items-center gap-4">
-        <div className={`w-14 h-14 ${cs.color} text-white rounded-2xl flex items-center justify-center shadow-lg shrink-0`}>
-          <span className="text-2xl font-black">{cs.letter}</span>
-        </div>
-        <div>
-          <h4 className="font-[900] text-petroleum text-lg tracking-tighter lowercase">{t(`ova.introprompt.create_${cs.key}`)}</h4>
-          <p className="text-xs text-slate-500 dark:text-slate-300 leading-relaxed font-medium">{t(`ova.introprompt.create_${cs.key}_desc`)}</p>
-        </div>
-      </div>
-      <div className="p-4 bg-slate-50 dark:bg-slate-700 rounded-xl border border-slate-100 dark:border-slate-600">
-        <p className="text-xs text-slate-500 dark:text-slate-300 font-bold mb-1 uppercase tracking-wider">Ejemplo</p>
-        <p className="text-sm text-petroleum dark:text-corporate font-mono font-medium leading-relaxed">{t(`ova.introprompt.create_${cs.key}_example`)}</p>
-      </div>
-      <button onClick={() => setStep(step + 1)}
-        className="w-full py-3 bg-gradient-to-r from-petroleum to-corporate text-white font-black rounded-xl flex items-center justify-center gap-2 text-xs uppercase tracking-wider">
-        {t('ova.introprompt.create_next')} <ChevronRight className="w-4 h-4" />
-      </button>
-    </div>
-  );
-};
-
-const FinalChallenge = () => {
-  const { t } = useTranslation();
-  const [revealed, setRevealed] = useState(false);
-  const [audioPlayed, setAudioPlayed] = useState(false);
-
-  useEffect(() => {
-    if (!audioPlayed) {
-      speakTextConversational(t('ova.introprompt.challenge_instructions'), 'valerio', () => {});
-      setAudioPlayed(true);
-    }
-    return () => stopSpeech();
-  }, [audioPlayed, t]);
-
-  return (
-    <div className="animate-[fadeIn_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards] space-y-5">
-      <div className="flex flex-col items-center text-center mb-2">
-        <div className="w-20 h-20 rounded-full bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center shadow-lg mb-4 mt-2">
-          <BrainCircuit className="w-10 h-10 text-white" />
-        </div>
-        <h3 className="text-2xl font-black text-petroleum uppercase tracking-tighter mb-3">Desafío 1</h3>
-        <div className="bg-gradient-to-br from-petroleum/[0.04] to-corporate/[0.04] rounded-2xl p-5 border border-petroleum/10 max-w-lg w-full mb-3">
-          <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed italic">
-            {t('ova.introprompt.challenge_instructions')}
-          </p>
-        </div>
-        <div className="grid grid-cols-3 gap-3 max-w-xs w-full mt-4">
-          <div className="bg-gradient-to-br from-petroleum/5 to-corporate/5 rounded-xl p-3 text-center border border-petroleum/10">
-            <BrainCircuit className="w-4 h-4 text-corporate mx-auto mb-1" />
-            <p className="text-[9px] font-semibold text-petroleum uppercase tracking-wider">{t('ova.introprompt.challenge_badge_apply') || 'Aplicar'}</p>
-          </div>
-          <div className="bg-gradient-to-br from-petroleum/5 to-corporate/5 rounded-xl p-3 text-center border border-petroleum/10">
-            <Star className="w-4 h-4 text-amber-500 mx-auto mb-1 fill-amber-500" />
-            <p className="text-[9px] font-semibold text-petroleum uppercase tracking-wider">{t('ova.introprompt.challenge_badge_practice') || 'Practicar'}</p>
-          </div>
-          <div className="bg-gradient-to-br from-petroleum/5 to-corporate/5 rounded-xl p-3 text-center border border-petroleum/10">
-            <Award className="w-4 h-4 text-amber-500 mx-auto mb-1" />
-            <p className="text-[9px] font-semibold text-petroleum uppercase tracking-wider">{t('ova.introprompt.challenge_badge_challenge') || 'Desafiar'}</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="border-t border-slate-100 dark:border-slate-700 pt-5">
-        <p className="text-sm text-slate-500 dark:text-slate-300 font-bold mb-3">{t('ova.introprompt.challenge_desc')}</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div className="p-4 bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-700 rounded-xl">
-            <div className="flex items-center gap-2 mb-2">
-              <AlertTriangle className="w-4 h-4 text-red-500" />
-              <span className="text-[10px] font-black text-red-600 uppercase tracking-wider">{t('ova.introprompt.challenge_before_title')}</span>
-            </div>
-            <p className="text-sm text-slate-600 dark:text-slate-300 font-mono italic">{t('ova.introprompt.challenge_before')}</p>
-          </div>
-          {revealed && (
-            <div className="p-4 bg-green-50 dark:bg-green-900/20 border-2 border-green-200 dark:border-green-700 rounded-xl animate-[fadeIn_0.6s_cubic-bezier(0.16,1,0.3,1)_forwards]">
-              <div className="flex items-center gap-2 mb-2">
-                <Rocket className="w-4 h-4 text-green-600" />
-                <span className="text-[10px] font-black text-green-700 uppercase tracking-wider">{t('ova.introprompt.challenge_after_title')}</span>
-              </div>
-              <p className="text-xs text-slate-700 dark:text-slate-200 font-medium leading-relaxed">{t('ova.introprompt.challenge_after')}</p>
-            </div>
-          )}
-        </div>
-        {!revealed && (
-          <button onClick={() => setRevealed(true)}
-            className="w-full py-4 bg-gradient-to-r from-petroleum to-corporate text-white font-black rounded-xl flex items-center justify-center gap-2 text-sm uppercase tracking-wider shadow-lg mt-3">
-            <ArrowLeftRight className="w-5 h-5" /> {t('ova.introprompt.challenge_reveal')}
-          </button>
-        )}
-        {revealed && (
-          <div className="p-4 bg-petroleum text-white rounded-xl text-center mt-3">
-            <Rocket className="w-8 h-8 mx-auto mb-2 text-corporate" />
-            <p className="font-bold text-sm text-white leading-relaxed">{t('ova.introprompt.challenge_complete')}</p>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-const Conclusion = ({ onComplete, onClose }) => {
+const Conclusion = () => {
   const { t } = useTranslation();
   return (
     <div className="mx-auto text-center animate-[fadeIn_1.1s_cubic-bezier(0.16,1,0.3,1)_forwards] max-w-md">
@@ -379,13 +161,6 @@ const Conclusion = ({ onComplete, onClose }) => {
       </div>
       <h2 className="text-3xl font-black text-petroleum mb-2 uppercase tracking-tighter">{t('ova.introprompt.cert_title')}</h2>
       <p className="text-base text-slate-600 dark:text-slate-300 font-bold mb-8 leading-relaxed">{t('ova.introprompt.cert_score_msg')}</p>
-      <button
-        onClick={() => { onComplete?.(); onClose?.(); }}
-        className="px-8 py-3.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-black rounded-xl shadow-lg hover:shadow-xl transition-all active:scale-95 text-sm uppercase tracking-wider flex items-center gap-2 mx-auto border-none"
-      >
-        <CheckCircle2 className="w-5 h-5" />
-        {t('common.mark_viewed')}
-      </button>
     </div>
   );
 };
@@ -403,8 +178,8 @@ const screensData = {
 
 
 OVAIntroPrompt.propTypes = {
-  onComplete: PropTypes.any,
-  onClose: PropTypes.any,
+  onComplete: PropTypes.func,
+  onClose: PropTypes.func,
 };
 
 export default function OVAIntroPrompt({ onComplete, onClose }) {
@@ -514,7 +289,7 @@ export default function OVAIntroPrompt({ onComplete, onClose }) {
       );
       case 'm8': return (
         <>
-          <Conclusion onComplete={onComplete} onClose={onClose} />
+          <Conclusion />
           <div className="flex justify-center mt-6">
             <VoiceReader text={t('ova.introprompt.conclusion_desc')} />
           </div>
@@ -554,7 +329,7 @@ export default function OVAIntroPrompt({ onComplete, onClose }) {
       {screen !== 'welcome' && (
         <div className="flex justify-center border-t border-slate-100 dark:border-slate-700 bg-white/90 dark:bg-slate-800/90">
           <div className="w-full max-w-4xl flex justify-between items-center gap-3 px-4 py-3">
-            <button onClick={() => { if (curIdx > 1) setScreen(nav[curIdx - 1]); stopSpeech(); }} aria-label="Anterior" className="p-3 min-w-[44px] min-h-[44px] bg-[#F1F5F9] dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-petroleum dark:hover:text-corporate rounded-xl disabled:opacity-10 transition-all border border-slate-50 dark:border-slate-700" disabled={curIdx <= 1}><ChevronLeft className="w-5 h-5" /></button>
+            <button onClick={() => { if (curIdx > 1) setScreen(nav[curIdx - 1]); stopSpeech(); }} aria-label={t('ova.nav.prev_aria')} className="p-3 min-w-[44px] min-h-[44px] bg-[#F1F5F9] dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-petroleum dark:hover:text-corporate rounded-xl disabled:opacity-10 transition-all border border-slate-50 dark:border-slate-700" disabled={curIdx <= 1}><ChevronLeft className="w-5 h-5" /></button>
             <div className="flex gap-1.5">{nav.slice(1).map((_, i) => <div key={i} className={`h-1.5 rounded-full transition-all duration-700 ${i + 1 === curIdx ? 'w-8 bg-petroleum' : completed.includes(nav[i + 1]) ? 'w-2 bg-corporate' : 'w-2 bg-slate-200 dark:bg-slate-600'}`} />)}</div>
             <button onClick={isLastScreen ? () => { onClose?.(); } : nextScreen} className={`px-6 min-h-[44px] rounded-xl font-[900] text-xs shadow-md active:scale-95 transition-all flex items-center gap-2 uppercase tracking-[0.15em] ${isLastScreen ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-gradient-to-r from-petroleum to-corporate text-white'}`}>
               {isLastScreen ? t('ova.introprompt.finish_btn') : t('ova.introprompt.next')} <ArrowRightCircle className="w-4 h-4" />

@@ -131,13 +131,13 @@ const OVAIntro = ({
 
 
 OVAIntro.propTypes = {
-  icon: PropTypes.any,
-  badge: PropTypes.any,
-  title: PropTypes.any,
-  description: PropTypes.any,
-  audioText: PropTypes.any,
-  onStart: PropTypes.any,
-  startLabel: PropTypes.any,
+  icon: PropTypes.string,
+  badge: PropTypes.string,
+  title: PropTypes.string,
+  description: PropTypes.string,
+  audioText: PropTypes.string,
+  onStart: PropTypes.func,
+  startLabel: PropTypes.string,
 };
 
 export default OVAIntro;

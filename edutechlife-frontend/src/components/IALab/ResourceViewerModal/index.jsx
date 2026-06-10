@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect, useCallback, lazy, Suspense } from 'react'
-import PropTypes from 'prop-types';;
+import { useState, useRef, useEffect, useCallback, Suspense } from 'react'
+import PropTypes from 'prop-types';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { cn } from '../../forum/forumDesignSystem';
@@ -9,7 +9,6 @@ import { useIALabStore } from '../../../store/ialabStore';
 import { useTranslation } from '../../../i18n/I18nProvider';
 import Breadcrumbs from '../Breadcrumbs';
 import { useIALabProgress } from '../../../hooks/IALab/useIALabProgress';
-import { useStudyNotesSync } from '../../../hooks/IALab/useStudyNotesSync';
 import useFullscreen from '../hooks/useFullscreen';
 import useFocusTrap from '../../../hooks/useFocusTrap';
 import { stopSpeech } from '../../../utils/speech';
@@ -19,21 +18,9 @@ import ImageViewer from './ImageViewer';
 import InteractiveViewer from './InteractiveViewer';
 import PDFThumbnailViewer from './PDFThumbnailViewer';
 import OVAViewer from './OVAViewer';
-
-const OVAChatGPTTools = lazy(() => import(/* webpackChunkName: "ova-chatgpttools" */ '../OVAChatGPTTools.jsx'));
-const OVAEcosystemGuide = lazy(() => import(/* webpackChunkName: "ova-ecosystemguide" */ '../OVAEcosystemGuide.jsx'));
-const OVABuildGPT = lazy(() => import(/* webpackChunkName: "ova-buildgpt" */ '../OVABuildGPT'));
-const OVAEtica = lazy(() => import(/* webpackChunkName: "ova-etica" */ '../OVAEtica.jsx'));
-const OVAIntroPrompt = lazy(() => import(/* webpackChunkName: "ova-introprompt" */ '../OVAIntroPrompt.jsx'));
-const OVANotebookLab = lazy(() => import(/* webpackChunkName: "ova-notebooklab" */ '../OVANotebookLab.jsx'));
-const OVANotebookSimulator = lazy(() => import(/* webpackChunkName: "ova-notebooksimulator" */ '../OVANotebookSimulator.jsx'));
-const OVANotebookPodcastGuide = lazy(() => import(/* webpackChunkName: "ova-notebookpodcastguide" */ '../OVANotebookPodcastGuide.jsx'));
-const OVAPodcastStudio = lazy(() => import(/* webpackChunkName: "ova-podcaststudio" */ '../OVAPodcastStudio.jsx'));
-const OVABiasLab = lazy(() => import(/* webpackChunkName: "ova-biaslab" */ '../OVABiasLab.jsx'));
-const OVARiskSimulator = lazy(() => import(/* webpackChunkName: "ova-risksimulator" */ '../OVARiskSimulator.jsx'));
-const OVAEthicalDilemmas = lazy(() => import(/* webpackChunkName: "ova-ethicaldilemmas" */ '../OVAEthicalDilemmas.jsx'));
-const OvaEdutechlife = lazy(() => import(/* webpackChunkName: "ova-edutechlife" */ '../OvaEdutechlife.jsx'));
-const OVAPracticalCases = lazy(() => import(/* webpackChunkName: "ova-practicalcases" */ '../OVAPracticalCases.jsx'));
+import { OVA_COMPONENTS, renderOVAById } from './ovaComponents';
+import useResourceNotes from './useResourceNotes';
+import TrafficLightControls from '../shared/TrafficLightControls';
 
 const ResourceViewerModal = ({ 
   isOpen = false,
@@ -55,13 +42,13 @@ const ResourceViewerModal = ({
   const { trackResourceViewed } = useIALabProgress();
   
   const [isMarkedAsViewed, setIsMarkedAsViewed] = useState(false);
-
   const [isOvaFullscreen, setIsOvaFullscreen] = useState(false);
   
   const modalRef = useRef(null);
   const focusTrapRef = useFocusTrap(isOpen);
   const { isFullscreen: isModalFullscreen, toggleFullscreen: toggleModalFullscreen } = useFullscreen(modalRef);
   const prefersReducedMotion = useReducedMotion();
+  const { noteText, showNotes, setShowNotes, noteSaved, handleNoteChange } = useResourceNotes(resource);
 
   const handleClose = () => {
     stopSpeech();
@@ -78,7 +65,6 @@ const ResourceViewerModal = ({
         }
       }
     };
-
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
   }, [isOpen, onClose, isOvaFullscreen]);
@@ -90,53 +76,11 @@ const ResourceViewerModal = ({
       document.body.style.overflow = 'unset';
       stopSpeech();
     }
-    
     return () => {
       document.body.style.overflow = 'unset';
       stopSpeech();
     };
   }, [isOpen]);
-
-  const RESOURCE_NOTES_KEY = 'ialab_resource_notes';
-  const [noteText, setNoteText] = useState('');
-  const [showNotes, setShowNotes] = useState(false);
-  const [noteSaved, setNoteSaved] = useState(true);
-  const noteDebounceRef = useRef(null);
-  const { syncResourceNote } = useStudyNotesSync();
-
-  useEffect(() => {
-    setNoteText('');
-    setShowNotes(false);
-    setNoteSaved(true);
-    if (resource?.id) {
-      try {
-        const allNotes = JSON.parse(localStorage.getItem(RESOURCE_NOTES_KEY) || '{}');
-        setNoteText(allNotes[resource.id] || '');
-      } catch {}
-    }
-  }, [resource?.id]);
-
-  const handleNoteChange = useCallback((e) => {
-    const val = e.target.value;
-    setNoteText(val);
-    setNoteSaved(false);
-    if (noteDebounceRef.current) clearTimeout(noteDebounceRef.current);
-    noteDebounceRef.current = setTimeout(() => {
-      try {
-        const allNotes = JSON.parse(localStorage.getItem(RESOURCE_NOTES_KEY) || '{}');
-        allNotes[resource.id] = val;
-        localStorage.setItem(RESOURCE_NOTES_KEY, JSON.stringify(allNotes));
-      } catch {}
-      syncResourceNote(resource.id, val);
-      setNoteSaved(true);
-    }, 1500);
-  }, [resource, syncResourceNote]);
-
-  useEffect(() => {
-    return () => {
-      if (noteDebounceRef.current) clearTimeout(noteDebounceRef.current);
-    };
-  }, []);
 
   useEffect(() => {
     setIsMarkedAsViewed(false);
@@ -145,32 +89,6 @@ const ResourceViewerModal = ({
   if (!isOpen || !resource) {
     return null;
   }
-
-const OVA_COMPONENTS = {
-  'workflow-ova-herramientas': OVAChatGPTTools,
-  'gemini-ova-1': InteractiveViewer,
-  'workspace-ova-1': OvaEdutechlife,
-  'gemini-cases-ova-1': OVAPracticalCases,
-  'ethics-ova-1': OVAEthicalDilemmas,
-  'gpts-ova-1': OVABuildGPT,
-  'chatgpt-ova-ecosystem': OVAEcosystemGuide,
-  'intro-ova-1': OVAEtica,
-  'prompt-ova-html-1': OVAIntroPrompt,
-  'notebooklm-ova-1': OVANotebookLab,
-  'notebook-summary-ova-1': OVANotebookSimulator,
-  'notebook-audio-guide-1': OVANotebookPodcastGuide,
-  'notebook-audio-ova-1': OVAPodcastStudio,
-  'bias-ova-1': OVABiasLab,
-  'privacy-ova-1': OVARiskSimulator,
-};
-
-const renderOVAById = (resourceId) => {
-  const OVAComponent = OVA_COMPONENTS[resourceId];
-  if (OVAComponent === InteractiveViewer) {
-    return <InteractiveViewer resource={resource} />;
-  }
-  return OVAComponent ? <OVAComponent onComplete={handleAutoComplete} onClose={handleClose} /> : <InteractiveViewer resource={resource} />;
-};
 
   const renderViewer = () => {
     if (!resource) {
@@ -207,11 +125,7 @@ const renderOVAById = (resourceId) => {
         
         case 'ova':
         case 'ova-thumbnail':
-          return <OVAViewer 
-            resource={resource} 
-            onClose={onClose}
-            onComplete={handleAutoComplete}
-          />;
+          return <OVAViewer resource={resource} onClose={onClose} onComplete={handleAutoComplete} />;
         
         case 'ova_interactive':
           return (
@@ -224,7 +138,7 @@ const renderOVAById = (resourceId) => {
               </div>
             }>
               <SectionErrorBoundary showDetails onRetry={() => window.location.reload()}>
-                {renderOVAById(resource.id)}
+                {renderOVAById(resource.id, resource, handleAutoComplete, handleClose)}
               </SectionErrorBoundary>
             </Suspense>
           );
@@ -262,29 +176,9 @@ const renderOVAById = (resourceId) => {
     visible: { opacity: 1 },
     exit: { opacity: 1 }
   } : {
-    hidden: { 
-      opacity: 0,
-      scale: 0.95,
-      y: 20
-    },
-    visible: { 
-      opacity: 1,
-      scale: 1,
-      y: 0,
-      transition: {
-        type: "spring",
-        damping: 25,
-        stiffness: 300
-      }
-    },
-    exit: {
-      opacity: 0,
-      scale: 0.95,
-      y: 20,
-      transition: {
-        duration: 0.2
-      }
-    }
+    hidden: { opacity: 0, scale: 0.95, y: 20 },
+    visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", damping: 25, stiffness: 300 } },
+    exit: { opacity: 0, scale: 0.95, y: 20, transition: { duration: 0.2 } }
   };
 
   const handleMarkAsViewed = async () => {
@@ -297,7 +191,6 @@ const renderOVAById = (resourceId) => {
       markResourceInContext(currentMod, resource.id);
       const rt = resource.type || 'document';
       await trackResourceViewed(currentMod, resource.id, rt);
-
       if (recordLastTopic) {
         const typeLabels = {
           video: t('ialab.viewer_modal.type_video'),
@@ -307,13 +200,7 @@ const renderOVAById = (resourceId) => {
           lab: t('ialab.viewer_modal.type_lab'),
           reading: t('ialab.viewer_modal.type_reading'),
         };
-        recordLastTopic(
-          currentMod,
-          '',
-          resourceType,
-          resource.title || `${typeLabels[rt] || t('ialab.viewer_modal.type_resource')}`,
-          resource.id
-        );
+        recordLastTopic(currentMod, '', resourceType, resource.title || `${typeLabels[rt] || t('ialab.viewer_modal.type_resource')}`, resource.id);
       }
     }
   };
@@ -328,33 +215,18 @@ const renderOVAById = (resourceId) => {
     <AnimatePresence>
       {isOpen && (
         <>
-          <motion.div
-            variants={backdropVariants}
-            initial="hidden"
-            animate="visible"
-            exit="hidden"
+          <motion.div variants={backdropVariants} initial="hidden" animate="visible" exit="hidden"
             aria-hidden="true" className="fixed inset-0 z-[200] backdrop-blur-md bg-black/40"
-            onClick={handleClose}
-          />
-
-              <div className="fixed inset-0 z-[201] flex items-center justify-center p-2 sm:p-4 pointer-events-none">
-                <motion.div
-                  ref={(node) => { modalRef.current = node; focusTrapRef.current = node; }}
-                  variants={modalVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  role="dialog" aria-modal="true" aria-label={resource.title}
-                  className={cn(
-                    "w-full max-w-6xl bg-white dark:bg-slate-800 rounded-2xl sm:rounded-3xl",
-                    "pointer-events-auto overflow-hidden",
-                    "flex flex-col",
-                    "h-[90dvh] max-h-[900px]",
-                    "mx-2 sm:mx-4",
-                    "shadow-xl shadow-petroleum/20"
-                  )}
-                  onClick={(e) => e.stopPropagation()}
-                >
+            onClick={handleClose} />
+          <div className="fixed inset-0 z-[201] flex items-center justify-center p-2 sm:p-4 pointer-events-none">
+            <motion.div
+              ref={(node) => { modalRef.current = node; focusTrapRef.current = node; }}
+              variants={modalVariants} initial="hidden" animate="visible" exit="exit"
+              role="dialog" aria-modal="true" aria-label={resource.title}
+              className={cn("w-full max-w-6xl bg-white dark:bg-slate-800 rounded-2xl sm:rounded-3xl",
+                "pointer-events-auto overflow-hidden", "flex flex-col",
+                "h-[90dvh] max-h-[900px]", "mx-2 sm:mx-4", "shadow-xl shadow-petroleum/20")}
+              onClick={(e) => e.stopPropagation()}>
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 border-b border-white/10 bg-gradient-to-r from-petroleum to-corporate backdrop-blur-sm">
                 <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0 w-full sm:w-auto">
                   <div className="bg-white/10 p-2 rounded-lg flex-shrink-0">
@@ -366,174 +238,102 @@ const renderOVAById = (resourceId) => {
                       (resource.type === 'ova' || resource.type === 'ova-thumbnail' || resource.type === 'ova_interactive') ? <Icon name="fa-brain" className="text-white w-5 h-5 sm:w-6 sm:h-6" /> :
                      <Icon name="fa-file" className="text-white w-5 h-5 sm:w-6 sm:h-6" />}
                   </div>
-                  
                   <div className="flex-1 min-w-0">
-                    <Breadcrumbs
-                      segments={[
-                        { label: t('ialab.breadcrumb_home') },
-                        { label: modules?.find(m => m.id === activeMod)?.title || `Módulo ${activeMod}` },
-                        { label: resource.type?.replace(/_/g, ' ')?.toUpperCase() },
-                      ]}
-                      size="text-xs"
-                      className="mb-1 text-white/60"
-                    />
-                    <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight truncate">
-                      {resource.title}
-                    </h2>
+                    <Breadcrumbs segments={[{ label: t('ialab.breadcrumb_home') }, { label: modules?.find(m => m.id === activeMod)?.title || `Módulo ${activeMod}` }, { label: resource.type?.replace(/_/g, ' ')?.toUpperCase() }]} size="text-xs" className="mb-1 text-white/60" />
+                    <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight truncate">{resource.title}</h2>
                     <div className="flex flex-wrap items-center gap-1 sm:gap-3 text-white/90 text-xs sm:text-sm mt-1">
-                      {resource.type === 'video' && (
-                        <>
-                          <span>{durationLoading ? '...' : (youtubeDuration || resource.duration)}</span>
-                          <span>•</span>
-                        </>
-                      )}
-                      {resource.format && (
-                        <>
-                          <span>{resource.format}</span>
-                          <span>•</span>
-                        </>
-                      )}
-                      {resource.size && (
-                        <>
-                          <span>{resource.size}</span>
-                          <span>•</span>
-                        </>
-                      )}
+                      {resource.type === 'video' && (<><span>{durationLoading ? '...' : (youtubeDuration || resource.duration)}</span><span>•</span></>)}
+                      {resource.format && (<><span>{resource.format}</span><span>•</span></>)}
+                      {resource.size && (<><span>{resource.size}</span><span>•</span></>)}
                       <span>{t('ialab.viewer_modal.preview')}</span>
                     </div>
                   </div>
                 </div>
-
-                {!['video', 'pdf', 'pdf-thumbnail'].includes(resource.type) && (
-                  <button
-                    onClick={toggleModalFullscreen}
-                    className="mt-3 sm:mt-0 ml-0 sm:ml-2 px-4 py-2 sm:px-5 sm:py-2.5 bg-white/10 hover:bg-white/20 text-white border-none rounded-lg sm:rounded-xl transition-colors duration-200 flex items-center gap-2 font-medium flex-shrink-0 w-full sm:w-auto justify-center sm:justify-start"
-                    aria-label={isModalFullscreen ? t('ialab.viewer_modal.fullscreen_exit') : t('ialab.viewer_modal.fullscreen_enter')}
-                  >
-                    <Icon name={isModalFullscreen ? "fa-compress" : "fa-expand"} className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                    <span className="text-sm sm:text-base text-white">{isModalFullscreen ? t('ialab.viewer_modal.fullscreen_exit_btn') : t('ialab.viewer_modal.fullscreen_enter')}</span>
-                  </button>
-                )}
-
-                <button
-                  onClick={handleClose}
-                  className="mt-3 sm:mt-0 ml-0 sm:ml-2 px-4 py-2 sm:px-5 sm:py-2.5 bg-white/10 hover:bg-white/20 text-white border-none rounded-lg sm:rounded-xl transition-colors duration-200 flex items-center gap-2 font-medium flex-shrink-0 w-full sm:w-auto justify-center sm:justify-start"
-                  aria-label={t('ialab.viewer_modal.close_aria')}
-                >
-                  <Icon name="fa-times" className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                  <span className="text-sm sm:text-base text-white">{t('ialab.viewer_modal.close')}</span>
-                </button>
+                <div className="flex-shrink-0 mt-3 sm:mt-0 ml-0 sm:ml-2 w-full sm:w-auto flex justify-center sm:justify-start">
+                  <TrafficLightControls
+                    onClose={handleClose}
+                    onToggleFullscreen={!['video', 'pdf', 'pdf-thumbnail'].includes(resource.type) ? toggleModalFullscreen : undefined}
+                    isFullscreen={isModalFullscreen}
+                    showFullscreen={!['video', 'pdf', 'pdf-thumbnail'].includes(resource.type)}
+                    closeLabel={t('ialab.viewer_modal.close_aria')}
+                    fullscreenEnterLabel={t('ialab.viewer_modal.fullscreen_enter')}
+                    fullscreenExitLabel={t('ialab.viewer_modal.fullscreen_exit')}
+                  />
+                </div>
               </div>
-
               <div className="flex-1 overflow-auto bg-white dark:bg-slate-800">
                 {renderViewer()}
                 {showNotes && (
                   <div className="border-t border-petroleum/10 dark:border-slate-600 px-4 sm:px-6 py-4 bg-white dark:bg-slate-800">
                     <div className="flex items-center justify-between mb-3">
                       <h4 className="text-sm font-semibold text-petroleum dark:text-petroleum-light flex items-center gap-2">
-                        <Icon name="fa-note-sticky" className="w-4 h-4" />
-                        {t('ialab.viewer_modal.notes_title')}
+                        <Icon name="fa-note-sticky" className="w-4 h-4" />{t('ialab.viewer_modal.notes_title')}
                       </h4>
                       <span className={`text-xs ${noteSaved ? 'text-emerald-600' : 'text-amber-600'}`}>
                         {noteSaved ? t('ialab.viewer_modal.notes_saved') : t('ialab.viewer_modal.notes_saving')}
                       </span>
                     </div>
-                    <textarea
-                      value={noteText}
-                      onChange={handleNoteChange}
+                    <textarea value={noteText} onChange={handleNoteChange}
                       placeholder={t('ialab.viewer_modal.notes_placeholder')}
                       className="w-full min-h-[100px] p-3 border border-petroleum/20 dark:border-slate-600 rounded-xl resize-y text-sm bg-white dark:bg-slate-900 text-petroleum dark:text-slate-200 focus:outline-none focus:border-corporate focus:ring-1 focus:ring-corporate/30 transition-colors"
-                      aria-label={t('ialab.viewer_modal.notes_aria')}
-                    />
+                      aria-label={t('ialab.viewer_modal.notes_aria')} />
                   </div>
                 )}
               </div>
-
               <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-petroleum/25 dark:border-petroleum/40 bg-white dark:bg-slate-800 relative z-[60]">
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
                   <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => setShowNotes(s => !s)}
+                    <button onClick={() => setShowNotes(s => !s)}
                       className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg flex items-center gap-1 sm:gap-2 transition-colors duration-200 text-sm sm:text-base font-medium border ${
-                        showNotes
-                          ? 'bg-corporate/10 border-corporate/30 text-corporate'
-                          : 'bg-white dark:bg-slate-800 border-petroleum/25 dark:border-petroleum/40 text-petroleum/80 dark:text-petroleum hover:bg-petroleum/5 hover:text-petroleum'
-                      }`}
-                      aria-label={t('ialab.viewer_modal.notes_toggle_aria')}
-                    >
+                        showNotes ? 'bg-corporate/10 border-corporate/30 text-corporate'
+                          : 'bg-white dark:bg-slate-800 border-petroleum/25 dark:border-petroleum/40 text-petroleum/80 dark:text-petroleum hover:bg-petroleum/5 hover:text-petroleum'}`}
+                      aria-label={t('ialab.viewer_modal.notes_toggle_aria')}>
                       <Icon name="fa-note-sticky" className="w-3 h-3 sm:w-4 sm:h-4" />
                       <span className="hidden sm:inline">{t('ialab.viewer_modal.notes')}</span>
                     </button>
                   </div>
                   {totalResources > 1 && (
                     <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-center sm:justify-start">
-                      <button
-                        onClick={onPreviousResource}
-                        disabled={currentIndex <= 0}
-                        className={cn(
-                          "px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg flex items-center gap-1 sm:gap-2 transition-colors duration-200 text-sm sm:text-base font-medium",
-                          currentIndex <= 0
-                            ? "text-petroleum/50 cursor-not-allowed"
-                            : "bg-white dark:bg-slate-800 border border-petroleum/25 dark:border-petroleum/40 text-petroleum/80 dark:text-petroleum hover:bg-petroleum/5 hover:text-petroleum"
-                        )}
-                        aria-label={t('ialab.viewer_modal.previous_aria')}
-                      >
+                      <button onClick={onPreviousResource} disabled={currentIndex <= 0}
+                        className={cn("px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg flex items-center gap-1 sm:gap-2 transition-colors duration-200 text-sm sm:text-base font-medium",
+                          currentIndex <= 0 ? "text-petroleum/50 cursor-not-allowed"
+                            : "bg-white dark:bg-slate-800 border border-petroleum/25 dark:border-petroleum/40 text-petroleum/80 dark:text-petroleum hover:bg-petroleum/5 hover:text-petroleum")}
+                        aria-label={t('ialab.viewer_modal.previous_aria')}>
                         <Icon name="fa-chevron-left" className="w-3 h-3 sm:w-4 sm:h-4" />
                         <span className="hidden sm:inline">{t('ialab.viewer_modal.previous')}</span>
                       </button>
-                      
                       <div className="px-3 py-1.5 sm:px-4 sm:py-2 bg-petroleum/10 rounded-lg text-petroleum/80 font-medium text-sm sm:text-base">
                         {currentIndex + 1} / {totalResources}
                       </div>
-                      
-                      <button
-                        onClick={onNextResource}
-                        disabled={currentIndex >= totalResources - 1}
-                        className={cn(
-                          "px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg flex items-center gap-1 sm:gap-2 transition-colors duration-200 text-sm sm:text-base font-medium",
-                          currentIndex >= totalResources - 1
-                            ? "text-petroleum/50 cursor-not-allowed"
-                            : "bg-white dark:bg-slate-800 border border-petroleum/25 dark:border-petroleum/40 text-petroleum/80 dark:text-petroleum hover:bg-petroleum/5 hover:text-petroleum"
-                        )}
-                        aria-label={t('ialab.viewer_modal.next_aria')}
-                      >
+                      <button onClick={onNextResource} disabled={currentIndex >= totalResources - 1}
+                        className={cn("px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg flex items-center gap-1 sm:gap-2 transition-colors duration-200 text-sm sm:text-base font-medium",
+                          currentIndex >= totalResources - 1 ? "text-petroleum/50 cursor-not-allowed"
+                            : "bg-white dark:bg-slate-800 border border-petroleum/25 dark:border-petroleum/40 text-petroleum/80 dark:text-petroleum hover:bg-petroleum/5 hover:text-petroleum")}
+                        aria-label={t('ialab.viewer_modal.next_aria')}>
                         <span className="hidden sm:inline">{t('ialab.viewer_modal.next')}</span>
                         <Icon name="fa-chevron-right" className="w-3 h-3 sm:w-4 sm:h-4" />
                       </button>
                     </div>
                   )}
-
                   {isMarkedAsViewed ? (
                     <div className="px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl bg-emerald-100 text-emerald-700 font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base border-none">
                       <Icon name="fa-check-circle" className="w-4 h-4 sm:w-5 sm:h-5" />
                       <span>{t('ialab.viewer_modal.completed_auto')}</span>
                     </div>
-                  ) : resource.type === 'video' || resource.type === 'ova' || resource.type === 'ova_interactive' || resource.type === 'ova-thumbnail' ? (
-                    <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 w-full sm:w-auto">
-                      <div className="px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl bg-corporate/10 border border-corporate/20 text-corporate font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base text-center">
-                        <Icon name="fa-hourglass-half" className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
-                        <span>{t('ialab.viewer_modal.complete_resource_hint')}</span>
-                      </div>
-                      <button
-                        onClick={handleMarkAsViewed}
-                        aria-label={t('ialab.viewer_modal.mark_viewed')}
-                        className="px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-200 flex items-center gap-2 sm:gap-3 text-sm sm:text-base justify-center border-none bg-gradient-to-r from-petroleum to-corporate hover:from-corporate-deep hover:to-corporate-darker text-white shadow-md hover:shadow-lg"
-                      >
-                        <Icon name="fa-check" className="w-4 h-4 sm:w-5 sm:h-5" />
-                        <span>{t('ialab.viewer_modal.mark_viewed')}</span>
-                      </button>
-                    </div>
-                  ) : resource.type === 'pdf' || resource.type === 'pdf-thumbnail' ? (
+                  ) : resource.type === 'video' || resource.type === 'pdf' || resource.type === 'pdf-thumbnail' ? (
                     <div className="px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl bg-corporate/10 border border-corporate/20 text-corporate font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base text-center">
                       <Icon name="fa-hourglass-half" className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
-                      <span>{t('ialab.viewer_modal.scroll_to_end_hint')}</span>
+                      <span>{resource.type === 'video' ? t('ialab.viewer_modal.complete_resource_hint') : t('ialab.viewer_modal.scroll_to_end_hint')}</span>
+                    </div>
+                  ) : resource.type === 'ova' || resource.type === 'ova_interactive' || resource.type === 'ova-thumbnail' ? (
+                    <div className="px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl bg-corporate/10 border border-corporate/20 text-corporate font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base text-center">
+                      <Icon name="fa-hourglass-half" className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+                      <span>{t('ialab.viewer_modal.complete_resource_hint')}</span>
                     </div>
                   ) : (
-                    <button
-                      onClick={handleMarkAsViewed}
+                    <button onClick={handleMarkAsViewed}
                       aria-label={t('ialab.viewer_modal.mark_viewed')}
-                      className="px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-200 flex items-center gap-2 sm:gap-3 text-sm sm:text-base w-full sm:w-auto justify-center border-none bg-gradient-to-r from-petroleum to-corporate hover:from-corporate-deep hover:to-corporate-darker text-white shadow-md hover:shadow-lg"
-                    >
+                      className="px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-200 flex items-center gap-2 sm:gap-3 text-sm sm:text-base w-full sm:w-auto justify-center border-none bg-gradient-to-r from-petroleum to-corporate hover:from-corporate-deep hover:to-corporate-darker text-white shadow-md hover:shadow-lg">
                       <Icon name="fa-check" className="w-4 h-4 sm:w-5 sm:h-5" />
                       <span>{t('ialab.viewer_modal.mark_viewed')}</span>
                     </button>
@@ -542,25 +342,18 @@ const renderOVAById = (resourceId) => {
               </div>
             </motion.div>
           </div>
-
           {isOvaFullscreen && (
             <div className="fixed inset-0 z-[400] bg-white dark:bg-slate-900 flex flex-col">
               <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
-                <span className="text-sm font-medium text-slate-500 dark:text-slate-400 truncate mr-4">
-                  {resource?.title}
-                </span>
-                <button
-                  onClick={() => setIsOvaFullscreen(false)}
+                <span className="text-sm font-medium text-slate-500 dark:text-slate-400 truncate mr-4">{resource?.title}</span>
+                <button onClick={() => setIsOvaFullscreen(false)}
                   className="px-5 py-2.5 bg-petroleum hover:bg-petroleum-dark text-white rounded-xl flex items-center gap-2 font-medium transition-colors shadow-md border-none flex-shrink-0"
-                  aria-label={t('ialab.viewer_modal.fullscreen_exit')}
-                >
+                  aria-label={t('ialab.viewer_modal.fullscreen_exit')}>
                   <Icon name="fa-compress" className="w-4 h-4" />
                   <span>{t('ialab.viewer_modal.fullscreen_exit_btn')}</span>
                 </button>
               </div>
-              <div className="flex-1 overflow-auto bg-white dark:bg-slate-800">
-                {renderViewer()}
-              </div>
+              <div className="flex-1 overflow-auto bg-white dark:bg-slate-800">{renderViewer()}</div>
             </div>
           )}
         </>
@@ -569,21 +362,20 @@ const renderOVAById = (resourceId) => {
   );
 };
 
-
 ResourceViewerModal.propTypes = {
-  isOpen: PropTypes.any,
-  onClose: PropTypes.any,
-  resource: PropTypes.any,
-  resourceType: PropTypes.any,
-  onMarkAsViewed: PropTypes.any,
-  onPreviousResource: PropTypes.any,
-  onNextResource: PropTypes.any,
-  currentIndex: PropTypes.any,
-  totalResources: PropTypes.any,
-  onOpenImmersiveView: PropTypes.any,
-  onOpenOVA: PropTypes.any,
-  youtubeDuration: PropTypes.any,
-  durationLoading: PropTypes.any,
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func,
+  resource: PropTypes.object,
+  resourceType: PropTypes.string,
+  onMarkAsViewed: PropTypes.func,
+  onPreviousResource: PropTypes.func,
+  onNextResource: PropTypes.func,
+  currentIndex: PropTypes.number,
+  totalResources: PropTypes.number,
+  onOpenImmersiveView: PropTypes.func,
+  onOpenOVA: PropTypes.func,
+  youtubeDuration: PropTypes.string,
+  durationLoading: PropTypes.bool,
 };
 
 export default ResourceViewerModal;

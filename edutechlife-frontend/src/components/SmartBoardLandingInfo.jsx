@@ -5,6 +5,7 @@ import FloatingParticles from './FloatingParticles';
 import MagneticButton from './MagneticButton';
 import { Icon } from '../utils/iconMapping.jsx';
 import { useTranslation } from '../i18n/I18nProvider';
+import { sanitize } from '../utils/sanitize';
 import { getVakStyles, getPricingPlans, getTestimonials, getBeneficios, getTranquilidad, getPasos, getFaqItems } from './SmartBoardLandingData';
 
 const useAnimatedCounter = (target, duration = 2000, start = false) => {
@@ -197,8 +198,8 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
               transition={{ duration: 0.5 }}
               className="space-y-4"
             >
-              <p className="text-sm sm:text-base text-slate-500 leading-relaxed" dangerouslySetInnerHTML={{ __html: t('smartboard.landing_what_desc1') }} />
-              <p className="text-sm text-slate-500 leading-relaxed" dangerouslySetInnerHTML={{ __html: t('smartboard.landing_what_desc2') }} />
+              <p className="text-sm sm:text-base text-slate-500 leading-relaxed" dangerouslySetInnerHTML={{ __html: sanitize(t('smartboard.landing_what_desc1')) }} />
+              <p className="text-sm text-slate-500 leading-relaxed" dangerouslySetInnerHTML={{ __html: sanitize(t('smartboard.landing_what_desc2')) }} />
               <div className="flex flex-wrap gap-2 pt-1">
                 {[t('smartboard.landing_tag_adaptive_ai'), t('smartboard.landing_tag_real_coaches'), t('smartboard.landing_tag_scientific_vak'), t('smartboard.landing_tag_live_reports')].map((tag) => (
                   <span key={tag} className="badge-clay px-4 py-2 rounded-full bg-petroleum/5 text-petroleum text-sm font-semibold border border-petroleum/10">{tag}</span>

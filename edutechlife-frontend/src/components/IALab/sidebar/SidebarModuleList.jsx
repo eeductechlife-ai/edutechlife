@@ -23,7 +23,6 @@ const SidebarModuleList = ({
       animate="visible"
       className="space-y-2"
       role="list"
-      aria-live="polite"
     >
       {modules.map((mod) => {
         const modScore = calculateModuleScore(mod.id);
@@ -70,14 +69,14 @@ const SidebarModuleList = ({
 
 
 SidebarModuleList.propTypes = {
-  modules: PropTypes.any,
-  activeMod: PropTypes.any,
-  calculateModuleScore: PropTypes.any,
-  isModuleLocked: PropTypes.any,
-  goToModule: PropTypes.any,
-  moduleListVariants: PropTypes.any,
-  moduleItemVariants: PropTypes.any,
-  t: PropTypes.any,
+  modules: PropTypes.array,
+  activeMod: PropTypes.number,
+  calculateModuleScore: PropTypes.func,
+  isModuleLocked: PropTypes.func,
+  goToModule: PropTypes.func,
+  moduleListVariants: PropTypes.object,
+  moduleItemVariants: PropTypes.object,
+  t: PropTypes.func,
 };
 
 export default React.memo(SidebarModuleList);

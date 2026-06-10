@@ -4,7 +4,6 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
 
-const COURSE_NAME = 'Introducción a la I.A Generativa';
 const TOTAL_MODULES = 5;
 
 const CourseCompletionSection = ({ hasCertificate, courseProgress, onViewCertificate }) => {
@@ -101,7 +100,7 @@ const CourseCompletionSection = ({ hasCertificate, courseProgress, onViewCertifi
             {t('course_completion.title')}
           </h3>
           <p className="text-xs text-white/85 leading-relaxed mb-4">
-            {t('course_completion.message', { name: COURSE_NAME })}
+            {t('course_completion.message', { name: t('ialab.course_title') })}
           </p>
 
           {/* Checklist de logros */}
@@ -133,9 +132,9 @@ const CourseCompletionSection = ({ hasCertificate, courseProgress, onViewCertifi
 
 
 CourseCompletionSection.propTypes = {
-  hasCertificate: PropTypes.any,
-  courseProgress: PropTypes.any,
-  onViewCertificate: PropTypes.any,
+  hasCertificate: PropTypes.bool,
+  courseProgress: PropTypes.number,
+  onViewCertificate: PropTypes.func,
 };
 
 export default CourseCompletionSection;

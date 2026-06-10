@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useIALabStore } from '../../store/ialabStore';
 import { SECTION_DATA, MODULE_DATA, COURSE_DATA } from '../../components/IALab/constants/sidebarData';
 
-const MOBILE_BREAKPOINT = 1024;
+const MOBILE_BREAKPOINT = 768;
 
 export function useSidebarState(initialState = { videos: true, recursos: false }) {
   const getSidebarState = useIALabStore(s => s.getSidebarState);

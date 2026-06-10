@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { API_BASE_URL } from '../../config/api';
 import { createClerkSupabaseClient } from '../../lib/supabase';
 
 const MODULE_CONFIG = {
@@ -568,8 +569,7 @@ const useIALabEvaluation = (moduleId = 1, locale = 'es') => {
         abortRef.current = controller;
 
         try {
-            const apiBase = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'http://localhost:3001';
-            const response = await fetch(`${apiBase}/api/chat`, {
+            const response = await fetch(`${API_BASE_URL}/api/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -650,8 +650,7 @@ const useIALabEvaluation = (moduleId = 1, locale = 'es') => {
         abortRef.current = controller;
 
         try {
-            const apiBase = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'http://localhost:3001';
-            const response = await fetch(`${apiBase}/api/chat`, {
+            const response = await fetch(`${API_BASE_URL}/api/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

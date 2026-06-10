@@ -59,11 +59,11 @@ const ValerioPanelHeader = ({ valerioState, setValerioState, currentModule, user
 
 
 ValerioPanelHeader.propTypes = {
-  valerioState: PropTypes.any,
-  setValerioState: PropTypes.any,
-  currentModule: PropTypes.any,
-  userLevel: PropTypes.any,
-  onClose: PropTypes.any,
+  valerioState: PropTypes.string,
+  setValerioState: PropTypes.func,
+  currentModule: PropTypes.object,
+  userLevel: PropTypes.number,
+  onClose: PropTypes.func,
 };
 
 export default ValerioPanelHeader;

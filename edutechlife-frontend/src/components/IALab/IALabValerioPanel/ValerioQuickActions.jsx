@@ -26,9 +26,9 @@ const ValerioQuickActions = ({ quickActions, onAction, disabled }) => {
 
 
 ValerioQuickActions.propTypes = {
-  quickActions: PropTypes.any,
-  onAction: PropTypes.any,
-  disabled: PropTypes.any,
+  quickActions: PropTypes.array,
+  onAction: PropTypes.func,
+  disabled: PropTypes.bool,
 };
 
 export default ValerioQuickActions;

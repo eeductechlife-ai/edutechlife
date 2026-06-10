@@ -100,9 +100,9 @@ const IALabForumPostDetail = ({ post, onBack, onAction }) => {
 
 
 IALabForumPostDetail.propTypes = {
-  post: PropTypes.any,
-  onBack: PropTypes.any,
-  onAction: PropTypes.any,
+  post: PropTypes.object,
+  onBack: PropTypes.func,
+  onAction: PropTypes.func,
 };
 
 export default IALabForumPostDetail;

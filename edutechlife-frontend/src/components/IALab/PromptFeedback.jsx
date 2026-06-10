@@ -334,10 +334,10 @@ const PromptFeedback = ({ feedback, technique, analysis, onCopy }) => {
 
 
 PromptFeedback.propTypes = {
-  feedback: PropTypes.any,
-  technique: PropTypes.any,
-  analysis: PropTypes.any,
-  onCopy: PropTypes.any,
+  feedback: PropTypes.object,
+  technique: PropTypes.object,
+  analysis: PropTypes.object,
+  onCopy: PropTypes.func,
 };
 
 export default PromptFeedback;

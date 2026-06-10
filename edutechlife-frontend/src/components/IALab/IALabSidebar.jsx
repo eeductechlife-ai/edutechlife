@@ -59,7 +59,7 @@ const IALabSidebar = () => {
   return (
     <motion.aside
       role="navigation"
-      aria-label="Panel lateral del laboratorio IA"
+      aria-label={t('sidebar.panel_aria')}
       style={{ width: isCollapsed ? COLLAPSED_WIDTH : EXPANDED_WIDTH }}
       className="relative flex-shrink-0 border-r border-slate-200/60 dark:border-slate-700/60 bg-white dark:bg-slate-800 shadow-sm transition-[width] duration-300"
     >
@@ -81,7 +81,7 @@ const IALabSidebar = () => {
               focus:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 focus-visible:ring-offset-2"
             whileHover={{ x: 4 }}
             whileTap={{ scale: 0.95 }}
-            aria-label={isCollapsed ? 'Expandir sidebar' : 'Colapsar sidebar'}
+            aria-label={isCollapsed ? t('sidebar.expand') : t('sidebar.collapse')}
             aria-expanded={!isCollapsed}
           >
             <div className="absolute -left-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
@@ -93,11 +93,11 @@ const IALabSidebar = () => {
               }`}
             />
             <span className="text-sm font-bold text-petroleum dark:text-corporate whitespace-nowrap overflow-hidden max-w-0 group-hover:max-w-[100px] transition-all duration-300">
-              {isCollapsed ? 'Expandir' : 'Colapsar'}
+              {isCollapsed ? t('sidebar.expand_btn') : t('sidebar.collapse_btn')}
             </span>
           </motion.button>
           <div className="absolute -top-1 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-900 text-white text-[10px] font-medium rounded-md opacity-0 invisible group-hover/toggle:opacity-100 group-hover/toggle:visible transition-all duration-200 whitespace-nowrap z-[70] shadow-lg pointer-events-none">
-            {isCollapsed ? 'Expandir sidebar' : 'Colapsar sidebar'}
+            {isCollapsed ? t('sidebar.expand') : t('sidebar.collapse')}
           </div>
         </div>
 

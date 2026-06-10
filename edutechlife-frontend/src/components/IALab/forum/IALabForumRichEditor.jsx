@@ -71,11 +71,11 @@ const IALabForumRichEditor = ({ placeholder, onSubmit, buttonLabel, compact, onC
 
 
 IALabForumRichEditor.propTypes = {
-  placeholder: PropTypes.any,
-  onSubmit: PropTypes.any,
-  buttonLabel: PropTypes.any,
-  compact: PropTypes.any,
-  onCancel: PropTypes.any,
+  placeholder: PropTypes.string,
+  onSubmit: PropTypes.func,
+  buttonLabel: PropTypes.string,
+  compact: PropTypes.bool,
+  onCancel: PropTypes.func,
 };
 
 export default IALabForumRichEditor;

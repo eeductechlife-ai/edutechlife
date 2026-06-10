@@ -41,11 +41,11 @@ MobileHeader.displayName = 'MobileHeader';
 
 
 MobileHeader.propTypes = {
-  onOpenMobileMenu: PropTypes.any,
-  setIsSearchOpen: PropTypes.any,
-  searchQuery: PropTypes.any,
-  setSearchQuery: PropTypes.any,
-  isSearchOpen: PropTypes.any,
+  onOpenMobileMenu: PropTypes.func,
+  setIsSearchOpen: PropTypes.func,
+  searchQuery: PropTypes.string,
+  setSearchQuery: PropTypes.func,
+  isSearchOpen: PropTypes.bool,
 };
 
 export default MobileHeader;

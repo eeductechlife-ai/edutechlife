@@ -66,7 +66,7 @@ const InteractiveViewer = ({ resource }) => {
 
 
 InteractiveViewer.propTypes = {
-  resource: PropTypes.any,
+  resource: PropTypes.object,
 };
 
 export default InteractiveViewer;

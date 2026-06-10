@@ -100,21 +100,21 @@ const ValerioChatInput = ({
 
 
 ValerioChatInput.propTypes = {
-  userInput: PropTypes.any,
-  onInputChange: PropTypes.any,
-  onKeyDown: PropTypes.any,
-  onSend: PropTypes.any,
-  onClear: PropTypes.any,
-  onVoiceToggle: PropTypes.any,
-  isProcessing: PropTypes.any,
-  isListening: PropTypes.any,
-  speechSupported: PropTypes.any,
-  speechError: PropTypes.any,
-  showClearConfirm: PropTypes.any,
-  onConfirmClear: PropTypes.any,
-  onCancelClear: PropTypes.any,
-  conversationLength: PropTypes.any,
-  moduleTitle: PropTypes.any,
+  userInput: PropTypes.string,
+  onInputChange: PropTypes.func,
+  onKeyDown: PropTypes.func,
+  onSend: PropTypes.func,
+  onClear: PropTypes.func,
+  onVoiceToggle: PropTypes.func,
+  isProcessing: PropTypes.bool,
+  isListening: PropTypes.bool,
+  speechSupported: PropTypes.bool,
+  speechError: PropTypes.string,
+  showClearConfirm: PropTypes.bool,
+  onConfirmClear: PropTypes.func,
+  onCancelClear: PropTypes.func,
+  conversationLength: PropTypes.number,
+  moduleTitle: PropTypes.string,
 };
 
 export default ValerioChatInput;

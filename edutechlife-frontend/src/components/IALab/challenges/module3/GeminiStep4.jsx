@@ -253,11 +253,11 @@ const GeminiStep4 = ({ exercise, response, onResponseChange, t: tProp, topic = '
 
 
 GeminiStep4.propTypes = {
-  exercise: PropTypes.any,
-  response: PropTypes.any,
-  onResponseChange: PropTypes.any,
-  t: PropTypes.any,
-  topic: PropTypes.any,
+  exercise: PropTypes.object,
+  response: PropTypes.string,
+  onResponseChange: PropTypes.func,
+  t: PropTypes.func,
+  topic: PropTypes.string,
 };
 
 export default GeminiStep4;

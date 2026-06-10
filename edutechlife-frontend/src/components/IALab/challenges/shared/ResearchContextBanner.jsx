@@ -32,8 +32,8 @@ const ResearchContextBanner = ({ topic, stepNumber, moduleId = 3 }) => {
 
 
 ResearchContextBanner.propTypes = {
-  topic: PropTypes.any,
-  stepNumber: PropTypes.any,
+  topic: PropTypes.string,
+  stepNumber: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   moduleId: PropTypes.number,
 };
 
