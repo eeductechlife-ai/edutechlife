@@ -139,6 +139,7 @@ NewsFilters.displayName = 'NewsFilters';
 // Main News Tech Feed Component
 // ==========================================
 const NewsTechFeed = memo(() => {
+  const { t } = useTranslation();
   const { newsItems, readNews, markNewsAsRead } = useSmartBoardKids();
   const [activeFilter, setActiveFilter] = useState('todos');
   const [expandedNews, setExpandedNews] = useState(null);

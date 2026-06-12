@@ -190,7 +190,7 @@ export default function DashboardInProgress() {
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-2.5">
+            <div className="grid grid-cols-3 max-sm:grid-cols-2 gap-2.5">
               {[
                 { icon: 'fa-star', value: xp?.toLocaleString() || '0', label: t('dashboard.xp_earned') },
                 { icon: 'fa-fire', value: streak || 0, label: t('dashboard.current_streak') },

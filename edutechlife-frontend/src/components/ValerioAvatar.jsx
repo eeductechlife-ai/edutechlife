@@ -1,290 +1,185 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
-import { speakTextConversational, stopSpeech } from '../utils/speech';
+import { useEffect, useRef, useCallback } from 'react'
+import { motion } from 'framer-motion'
+import { speakTextConversational, stopSpeech } from '../utils/speech'
 
-const ValerioAvatar = ({ state = 'idle', size = 80, onStateChange }) => {
-    const canvasRef = useRef(null);
-    const animationRef = useRef(null);
-    const [isMuted, setIsMuted] = useState(false);
-    const [isSpeaking, setIsSpeaking] = useState(false);
+const STATE_COLORS = {
+  idle: { r: '0,75,99' },
+  listening: { r: '16,185,129' },
+  thinking: { r: '139,92,246' },
+  speaking: { r: '14,165,233' },
+}
 
-    // Función speak - usa Google TTS via speakTextConversational
-    const speak = useCallback((text) => {
-        if (isMuted || !text) return;
-        
-        const cleanText = text
-            .replace(/\*\*/g, '')
-            .replace(/\*/g, '')
-            .replace(/```/g, '')
-            .replace(/`/g, '')
-            .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-            .replace(/[_*~]/g, '')
-            .trim();
+const STATE_DOT_COLORS = {
+  idle: 'bg-[#4DA8C4]',
+  listening: 'bg-emerald-500',
+  thinking: 'bg-purple-500',
+  speaking: 'bg-cyan-500',
+}
 
-        if (!cleanText) return;
+const ValerioAvatar = ({ state = 'idle', size = 80, enable3DTilt = true }) => {
+  const containerRef = useRef(null)
+  const animRef = useRef(null)
+  const stateRef = useRef(state)
+  stateRef.current = state
 
-        setIsSpeaking(true);
-        if (onStateChange) onStateChange('speaking');
+  const tiltRef = useRef({ x: 0, y: 0 })
 
-        speakTextConversational(cleanText, 'valerio', () => {
-            setIsSpeaking(false);
-            if (onStateChange) onStateChange('idle');
-        });
-    }, [isMuted, onStateChange]);
+  const colors = STATE_COLORS[state] || STATE_COLORS.idle
+  const dotColor = STATE_DOT_COLORS[state] || STATE_DOT_COLORS.idle
 
-    // Exponer función speak al window para acceso externo
-    useEffect(() => {
-        window.valerioSpeak = speak;
-        return () => {
-            delete window.valerioSpeak;
-            stopSpeech();
-        };
-    }, [speak]);
+  useEffect(() => {
+    let active = true
+    const animate = () => {
+      if (!active) return
+      animRef.current = requestAnimationFrame(animate)
+    }
+    animRef.current = requestAnimationFrame(animate)
+    return () => {
+      active = false
+      if (animRef.current) cancelAnimationFrame(animRef.current)
+    }
+  }, [])
 
-    // Función para silenciar
-    const toggleMute = () => {
-        stopSpeech();
-        setIsMuted(!isMuted);
-    };
+  const speak = useCallback((text) => {
+    if (!text) return
+    const cleanText = text
+      .replace(/\*\*/g, '')
+      .replace(/\*/g, '')
+      .replace(/```/g, '')
+      .replace(/`/g, '')
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+      .replace(/[_*~]/g, '')
+      .trim()
+    if (cleanText) speakTextConversational(cleanText, 'valerio', () => {})
+  }, [])
 
-    // Efecto visual mientras habla
-    const getContainerClass = () => {
-        let baseClass = 'valerio-avatar-container relative inline-block';
-        if (isSpeaking) {
-            baseClass += ' animate-pulse';
-        }
-        return baseClass;
-    };
+  useEffect(() => {
+    window.valerioSpeak = speak
+    window.__valerioStateRef = stateRef
+    return () => {
+      delete window.valerioSpeak
+      delete window.__valerioStateRef
+      stopSpeech()
+    }
+  }, [speak])
 
-    const getGlowStyle = () => {
-        if (isSpeaking) {
-            return {
-                boxShadow: '0 0 30px rgba(77, 168, 196, 0.6)',
-                transition: 'box-shadow 0.3s ease'
-            };
-        }
-        return {};
-    };
+  const dotSize = Math.max(10, size * 0.13)
+  const ringWidth = Math.max(1.5, size * 0.028)
 
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
+  return (
+    <motion.div
+      animate={{ y: [0, -3, 0] }}
+      transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+      style={{ perspective: '800px', display: 'inline-flex', lineHeight: 0 }}
+    >
+      <motion.div
+        ref={containerRef}
+        style={{
+          width: size,
+          height: size,
+          borderRadius: '50%',
+          position: 'relative',
+          overflow: 'hidden',
+          transition: 'transform .06s ease-out',
+          cursor: 'pointer',
+          filter: `drop-shadow(0 4px 24px rgba(${colors.r},.25))`,
+        }}
+        onPointerMove={(e) => {
+          if (!enable3DTilt) return
+          const rect = containerRef.current.getBoundingClientRect()
+          const nx = (e.clientX - rect.left) / rect.width
+          const ny = (e.clientY - rect.top) / rect.height
+          tiltRef.current.x = ((ny - 0.5) * 2) * -12
+          tiltRef.current.y = ((nx - 0.5) * 2) * 12
+          containerRef.current.style.transform = `rotateX(${tiltRef.current.x}deg) rotateY(${tiltRef.current.y}deg)`
+        }}
+        onPointerLeave={() => {
+          if (!enable3DTilt) return
+          tiltRef.current = { x: 0, y: 0 }
+          containerRef.current.style.transform = 'rotateX(0deg) rotateY(0deg)'
+        }}
+      >
+        <img
+          src="/VALERIO.png"
+          alt="Valerio"
+          draggable={false}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            display: 'block',
+          }}
+        />
 
-        const ctx = canvas.getContext('2d');
-        const centerX = size / 2;
-        const centerY = size / 2;
-        let time = 0;
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            borderRadius: '50%',
+            border: `${ringWidth}px solid rgba(${colors.r},.3)`,
+            pointerEvents: 'none',
+          }}
+        />
 
-        const draw = () => {
-            ctx.clearRect(0, 0, size, size);
-            time += 0.05;
+        <div
+          style={{
+            position: 'absolute',
+            top: '18%',
+            left: '22%',
+            width: '35%',
+            height: '20%',
+            borderRadius: '50%',
+            background: 'rgba(255,255,255,.15)',
+            transform: 'rotate(-20deg)',
+            pointerEvents: 'none',
+          }}
+        />
 
-            if (state === 'listening') {
-                drawListening(ctx, centerX, centerY, time);
-            } else if (state === 'thinking') {
-                drawThinking(ctx, centerX, centerY, time);
-            } else if (state === 'speaking') {
-                drawSpeaking(ctx, centerX, centerY, time);
-            } else {
-                drawIdle(ctx, centerX, centerY);
-            }
+        <div
+          style={{
+            position: 'absolute',
+            bottom: Math.max(2, size * 0.035),
+            right: Math.max(2, size * 0.035),
+            width: dotSize,
+            height: dotSize,
+            borderRadius: '50%',
+            border: `${Math.max(1.5, size * 0.02)}px solid rgba(255,255,255,.8)`,
+            pointerEvents: 'none',
+            zIndex: 2,
+          }}
+          className={`${dotColor} ${state === 'listening' ? 'animate-pulse' : state === 'speaking' ? 'animate-ping' : ''}`}
+        />
 
-            animationRef.current = requestAnimationFrame(draw);
-        };
+        {Array.from({ length: 6 }, (_, i) => {
+          const angle = i * 1.047 + Date.now() * 0.0003
+          const dist = 0.35 + Math.random() * 0.4
+          const px = Math.cos(angle) * dist * (size * 0.45) + size * 0.5
+          const py = Math.sin(angle) * dist * (size * 0.45) + size * 0.5
+          const opacity = state === 'speaking' ? 0.2 : state === 'idle' ? 0.06 : 0.1
+          return (
+            <motion.div
+              key={i}
+              style={{
+                position: 'absolute',
+                left: px,
+                top: py,
+                width: Math.max(2, size * 0.02),
+                height: Math.max(2, size * 0.02),
+                borderRadius: '50%',
+                backgroundColor: `rgba(${colors.r},${opacity})`,
+                pointerEvents: 'none',
+              }}
+              animate={{
+                left: [px, px + Math.cos(angle + 1) * size * 0.08],
+                top: [py, py + Math.sin(angle + 1) * size * 0.08],
+              }}
+              transition={{ duration: 2 + Math.random() * 3, repeat: Infinity, ease: 'easeInOut' }}
+            />
+          )
+        })}
+      </motion.div>
+    </motion.div>
+  )
+}
 
-        draw();
-
-        return () => {
-            if (animationRef.current) {
-                cancelAnimationFrame(animationRef.current);
-            }
-        };
-    }, [state, size]);
-
-    const drawIdle = (ctx, cx, cy) => {
-        const gradient = ctx.createRadialGradient(cx, cy - 5, 0, cx, cy, size * 0.4);
-        gradient.addColorStop(0, '#4DA8C4');
-        gradient.addColorStop(1, '#004B63');
-        
-        ctx.beginPath();
-        ctx.arc(cx, cy, size * 0.35, 0, Math.PI * 2);
-        ctx.fillStyle = gradient;
-        ctx.fill();
-        
-        ctx.beginPath();
-        ctx.arc(cx, cy - size * 0.08, size * 0.12, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-        ctx.fill();
-    };
-
-    const drawListening = (ctx, cx, cy, time) => {
-        for (let i = 3; i >= 0; i--) {
-            const pulseScale = 1 + Math.sin(time * 3 + i * 0.8) * 0.15;
-            const radius = size * 0.35 * pulseScale + i * 8;
-            const alpha = 0.3 - i * 0.08;
-            
-            ctx.beginPath();
-            ctx.arc(cx, cy, radius, 0, Math.PI * 2);
-            ctx.strokeStyle = `rgba(16, 185, 129, ${alpha})`;
-            ctx.lineWidth = 2;
-            ctx.stroke();
-        }
-
-        const gradient = ctx.createRadialGradient(cx, cy - 5, 0, cx, cy, size * 0.35);
-        gradient.addColorStop(0, '#10B981');
-        gradient.addColorStop(0.7, '#059669');
-        gradient.addColorStop(1, '#047857');
-        
-        ctx.beginPath();
-        ctx.arc(cx, cy, size * 0.35, 0, Math.PI * 2);
-        ctx.fillStyle = gradient;
-        ctx.fill();
-
-        const eyeY = cy - size * 0.05;
-        const eyeSpacing = size * 0.1;
-        
-        ctx.beginPath();
-        ctx.arc(cx - eyeSpacing, eyeY, size * 0.05, 0, Math.PI * 2);
-        ctx.arc(cx + eyeSpacing, eyeY, size * 0.05, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
-        ctx.fill();
-    };
-
-    const drawThinking = (ctx, cx, cy, time) => {
-        for (let i = 0; i < 3; i++) {
-            const breathe = Math.sin(time * 1.5 + i * 1.2) * 0.1 + 1;
-            const dotY = cy - size * 0.45 - i * 12 - 5;
-            const dotX = cx + (i - 1) * 12;
-            
-            ctx.beginPath();
-            ctx.arc(dotX, dotY, 4 * breathe, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(139, 92, 246, ${0.6 + i * 0.15})`;
-            ctx.fill();
-        }
-
-        const gradient = ctx.createRadialGradient(cx, cy - 5, 0, cx, cy, size * 0.35);
-        gradient.addColorStop(0, '#8B5CF6');
-        gradient.addColorStop(0.7, '#7C3AED');
-        gradient.addColorStop(1, '#6D28D9');
-        
-        const breatheScale = Math.sin(time * 2) * 0.03 + 1;
-        ctx.beginPath();
-        ctx.arc(cx, cy, size * 0.35 * breatheScale, 0, Math.PI * 2);
-        ctx.fillStyle = gradient;
-        ctx.fill();
-
-        ctx.beginPath();
-        ctx.arc(cx, cy - size * 0.08, size * 0.12, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
-        ctx.fill();
-    };
-
-    const drawSpeaking = (ctx, cx, cy, time) => {
-        const waveCount = 4;
-        for (let i = 0; i < waveCount; i++) {
-            const angle = (i / waveCount) * Math.PI * 2;
-            const distance = size * 0.55 + Math.sin(time * 4 + i) * 8;
-            const waveX = cx + Math.cos(angle + time * 0.5) * distance;
-            const waveY = cy + Math.sin(angle + time * 0.5) * distance;
-            const waveSize = 3 + Math.sin(time * 3 + i) * 2;
-
-            ctx.beginPath();
-            ctx.arc(waveX, waveY, waveSize, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(77, 168, 196, ${0.4 + Math.sin(time * 2 + i) * 0.2})`;
-            ctx.fill();
-        }
-
-        for (let i = 0; i < 3; i++) {
-            const arcRadius = size * 0.5 + i * 15;
-            const arcStart = -Math.PI / 3 + Math.sin(time * 2 + i) * 0.2;
-            const arcEnd = Math.PI / 3 - Math.sin(time * 2 + i) * 0.2;
-            
-            ctx.beginPath();
-            ctx.arc(cx, cy, arcRadius, arcStart, arcEnd);
-            ctx.strokeStyle = `rgba(77, 168, 196, ${0.3 - i * 0.08})`;
-            ctx.lineWidth = 2;
-            ctx.stroke();
-        }
-
-        const gradient = ctx.createRadialGradient(cx, cy - 5, 0, cx, cy, size * 0.35);
-        gradient.addColorStop(0, '#4DA8C4');
-        gradient.addColorStop(0.7, '#0EA5E9');
-        gradient.addColorStop(1, '#0284C7');
-        
-        ctx.beginPath();
-        ctx.arc(cx, cy, size * 0.35, 0, Math.PI * 2);
-        ctx.fillStyle = gradient;
-        ctx.fill();
-
-        const mouthWidth = size * 0.15 + Math.sin(time * 8) * size * 0.03;
-        ctx.beginPath();
-        ctx.ellipse(cx, cy + size * 0.05, mouthWidth, size * 0.06, 0, 0, Math.PI);
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-        ctx.fill();
-    };
-
-    const getStatusLabel = () => {
-        switch (state) {
-            case 'listening': return 'Escuchando...';
-            case 'thinking': return 'Pensando...';
-            case 'speaking': return 'Hablando...';
-            default: return 'Listo para ayudarte';
-        }
-    };
-
-    const getStatusColor = () => {
-        switch (state) {
-            case 'listening': return '#10B981';
-            case 'thinking': return '#8B5CF6';
-            case 'speaking': return '#0EA5E9';
-            default: return '#4DA8C4';
-        }
-    };
-
-    return (
-        <div className="flex flex-col items-center gap-2">
-            <div className="relative" style={getGlowStyle()}>
-                <canvas 
-                    ref={canvasRef}
-                    width={size}
-                    height={size}
-                    className="valerio-canvas"
-                    onDoubleClick={() => {
-                        console.log('🎤 VOZ DIAGNÓSTICO:', window.__voiceDebug);
-                        alert(`Voz activa: ${window.__voiceDebug?.lastVoice || 'N/A'}\nPitch: ${window.__voiceDebug?.lastPitch || 'N/A'}\nPerfil: ${window.__voiceDebug?.lastProfile || 'N/A'}`);
-                    }}
-                />
-                
-                {/* Botón Mute */}
-                <button
-                    onClick={toggleMute}
-                    className="absolute -top-1 -right-1 w-6 h-6 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-gray-100 transition-colors"
-                    title={isMuted ? 'Activar sonido' : 'Silenciar'}
-                >
-                    {isMuted ? (
-                        <svg className="w-3 h-3 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.414-4.414a10 10 0 0114.14 0M17 14l2-2m0 0l2-2m-2 2l-2-2" />
-                        </svg>
-                    ) : (
-                        <svg className="w-3 h-3 text-[#004B63]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.414-4.414a10 10 0 0114.14 0" />
-                        </svg>
-                    )}
-                </button>
-            </div>
-            
-            <div 
-                className="valerio-status px-3 py-1 rounded-full text-xs font-medium border"
-                style={{ 
-                    background: `${getStatusColor()}20`,
-                    borderColor: `${getStatusColor()}40`,
-                    color: getStatusColor()
-                }}
-            >
-                <span className={`inline-block w-2 h-2 rounded-full mr-2 ${state}`} style={{ background: getStatusColor() }} />
-                {getStatusLabel()}
-            </div>
-        </div>
-    );
-};
-
-export default ValerioAvatar;
+export default ValerioAvatar

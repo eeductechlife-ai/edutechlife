@@ -30,12 +30,13 @@ const questions = [
   { q: 'Al terminar una tarea, ¿cómo celebrás?', v: 'Mostrando tu trabajo', a: 'Contándoselo a otros', k: 'Haciendo una celebración especial' },
 ];
 
-const VAKDiagnosticEnhanced = ({ vakResult, onComplete }) => {
+const VAKDiagnosticEnhanced = ({ vakResult: propVakResult, onComplete }) => {
   const { t } = useTranslation();
+  const { addPoints, vakResult: contextVakResult } = useSmartBoardKids();
+  const vakResult = propVakResult || contextVakResult;
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState([]);
   const [isCompleted, setIsCompleted] = useState(!!vakResult);
-  const { addPoints } = useSmartBoardKids();
 
   const handleAnswer = useCallback((type) => {
     const newAnswers = [...answers, type];

@@ -153,7 +153,7 @@ const OVAThumbnail = ({
             </p>
 
             {/* Metadatos del OVA */}
-             <div className="grid grid-cols-2 gap-3 pt-3">
+             <div className="grid grid-cols-2 max-sm:grid-cols-1 gap-3 pt-3">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
                   <Icon name="fa-clock" className="text-petroleum w-4 h-4" />

@@ -6,7 +6,7 @@ import MagneticButton from './MagneticButton';
 import { Icon } from '../utils/iconMapping.jsx';
 import { useTranslation } from '../i18n/I18nProvider';
 import { sanitize } from '../utils/sanitize';
-import { getVakStyles, getPricingPlans, getTestimonials, getBeneficios, getTranquilidad, getPasos, getFaqItems } from './SmartBoardLandingData';
+import { getVakStyles, getPricingPlans, getTestimonials, getBeneficios, getTranquilidad, getPasos, getFaqItems, getPaymentMethods, getGuarantee } from './SmartBoardLandingData';
 
 const useAnimatedCounter = (target, duration = 2000, start = false) => {
   const [count, setCount] = useState(0);
@@ -60,6 +60,8 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
   const tranquilidad = getTranquilidad(locale);
   const pasos = getPasos(locale);
   const faqItems = getFaqItems(locale);
+  const paymentMethods = getPaymentMethods(locale);
+  const guarantee = getGuarantee(locale);
   const navigate = useNavigate();
   const [activeFaq, setActiveFaq] = useState(null);
   const [isPaused, setIsPaused] = useState(false);
@@ -146,6 +148,18 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
                 <div className="text-2xl sm:text-3xl font-black text-mint">+{countHours.toLocaleString()}</div>
                 <div className="text-[11px] text-slate-500 uppercase tracking-widest mt-0.5">{t('smartboard.landing_stat_hours')}</div>
               </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={heroInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.35 }}
+              className="flex flex-wrap justify-center gap-2 mb-6"
+            >
+              <span className="px-3.5 py-1.5 rounded-full bg-red-50 border border-red-200 text-[11px] font-semibold text-red-600">📚 {t('smartboard.landing_pain_point1')}</span>
+              <span className="px-3.5 py-1.5 rounded-full bg-amber-50 border border-amber-200 text-[11px] font-semibold text-amber-600">📱 {t('smartboard.landing_pain_point2')}</span>
+              <span className="px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-[11px] font-semibold text-blue-600">📊 {t('smartboard.landing_pain_point3')}</span>
+              <span className="px-3.5 py-1.5 rounded-full bg-purple-50 border border-purple-200 text-[11px] font-semibold text-purple-600">😰 {t('smartboard.landing_pain_point4')}</span>
             </motion.div>
 
             <motion.div
@@ -514,7 +528,18 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
                     {t('smartboard.landing_pricing_popular')}
                   </div>
                 )}
-                <div className="text-center mb-8">
+
+                <div className="mb-2 text-center">
+                  <span className={`inline-block px-3 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                    plan.popular
+                      ? 'bg-primary-light/20 text-primary-light'
+                      : 'bg-mint/20 text-petroleum'
+                  }`}>
+                    🎁 {plan.trial}
+                  </span>
+                </div>
+
+                <div className="text-center mb-6">
                   <h3 className={`text-xl lg:text-2xl font-bold mb-1 ${plan.popular ? 'text-white' : 'text-petroleum'}`}>
                     {plan.name}
                   </h3>
@@ -526,10 +551,14 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
                       {plan.period}
                     </span>
                   </div>
+                  <span className={`text-[11px] ${plan.popular ? 'text-white/50' : 'text-slate-400'} block mt-1`}>
+                    ≈ {plan.priceUSD} USD
+                  </span>
                 </div>
-                <ul className="space-y-4 mb-8 flex-1">
+
+                <ul className="space-y-3 mb-8 flex-1">
                   {plan.features.map((feat) => (
-                    <li key={feat} className="flex items-start gap-3.5">
+                    <li key={feat} className="flex items-start gap-3">
                       <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
                         plan.popular ? 'bg-white/15' : 'bg-success/10'
                       }`}>
@@ -541,13 +570,14 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
                     </li>
                   ))}
                 </ul>
+
                 <MagneticButton
                   onClick={handleCta}
                   aria-label={t('smartboard.landing.choose_plan_aria', { name: plan.name })}
                   className={`w-full flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl text-sm font-bold transition-all duration-300 ${
                     plan.popular
                       ? 'bg-white text-petroleum shadow-premium-lg hover:shadow-xl hover:-translate-y-0.5'
-                      : 'bg-petroleum/5 text-petroleum hover:bg-petroleum/10'
+                      : 'bg-primary-light text-white hover:bg-petroleum hover:-translate-y-0.5'
                   }`}
                 >
                   <span>{t('smartboard.landing_pricing_choose', { name: plan.name })}</span>
@@ -555,6 +585,39 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
                 </MagneticButton>
               </motion.div>
             ))}
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="mt-10 text-center"
+          >
+            <div className="inline-flex flex-wrap items-center justify-center gap-3 px-6 py-3 rounded-xl bg-petroleum/5 border border-petroleum/10">
+              {paymentMethods.map((method) => (
+                <div key={method.name} className="flex items-center gap-1.5 text-[11px] text-slate-500 font-medium" title={method.name}>
+                  <Icon name={method.icon} className="text-petroleum text-sm" aria-hidden="true" />
+                  <span className="hidden sm:inline">{method.name}</span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className="mt-4 text-center"
+          >
+            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-success/10 border border-success/20">
+              <Icon name={guarantee.icon} className="text-success text-sm" aria-hidden="true" />
+              <div className="text-left">
+                <span className="text-xs font-bold text-petroleum block">{guarantee.title}</span>
+                <span className="text-[10px] text-slate-500 block">{guarantee.desc}</span>
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>

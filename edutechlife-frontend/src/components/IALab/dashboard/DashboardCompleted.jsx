@@ -56,7 +56,7 @@ export default function DashboardCompleted() {
           <Icon name="fa-certificate" className="w-4 h-4" />
           {t('route.view_certificate')}
         </motion.button>
-        <div className="grid grid-cols-3 gap-2.5 mt-6">
+        <div className="grid grid-cols-3 max-sm:grid-cols-2 gap-2.5 mt-6">
           <div className="bg-white/80 backdrop-blur rounded-[14px] py-3.5 px-2 text-center border border-petroleum/10 shadow-sm">
             <div className="w-8 h-8 rounded-xl bg-corporate/15 flex items-center justify-center mx-auto mb-1.5">
               <Icon name="fa-star" className="w-3.5 h-3.5 text-corporate" />

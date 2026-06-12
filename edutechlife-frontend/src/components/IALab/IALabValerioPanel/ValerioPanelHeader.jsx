@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import { Icon } from '../../../utils/iconMapping.jsx';
-import ValerioAvatar from '../../ValerioAvatar';
 import { stopSpeech } from '../../../utils/speech';
 import { useTranslation } from '../../../i18n/I18nProvider';
+import { tutorAvatars, DEFAULT_AVATAR } from '../../../data/tutorAvatars';
 
 const ValerioPanelHeader = ({ valerioState, setValerioState, currentModule, userLevel, onClose }) => {
   const { t } = useTranslation();
@@ -10,10 +10,10 @@ const ValerioPanelHeader = ({ valerioState, setValerioState, currentModule, user
     <div className="sticky top-0 bg-gradient-to-r from-petroleum to-corporate text-white p-6 rounded-t-2xl">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-4">
-          <ValerioAvatar
-            state={valerioState}
-            size={48}
-            onStateChange={setValerioState}
+          <img
+            src={tutorAvatars.Valerio || DEFAULT_AVATAR}
+            alt="Valerio"
+            className="w-16 h-16 rounded-full object-cover ring-2 ring-white/30"
           />
           <div>
             <h2 className="text-xl font-bold">{t('ialab.valerio.title')}</h2>

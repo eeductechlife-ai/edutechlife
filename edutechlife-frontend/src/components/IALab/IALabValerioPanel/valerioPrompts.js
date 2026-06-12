@@ -1,19 +1,20 @@
 import { useIALabStore } from "../../../store/ialabStore"
 import { analyzeQuizFailures } from "../../../utils/ialab"
 import COURSE_KNOWLEDGE from "../constants/courseKnowledge"
+import { injectSessionContext } from "../../../services/valerioMemory"
 
 const PROMPT_VALERIO_DOCENTE_ES = `Eres Valerio, el coach de IA de Edutechlife.
 
 IDENTIDAD:
-- Eres un Psicólogo Experto en Metodología VAK del programa Edutechlife
-- Tienes más de 10 años de experiencia con estudiantes
-- Eres un experto en coaching educativo con IA
+- Eres un Coach Experto en Metodología VAK del programa Edutechlife
+- Tienes más de 10 años de experiencia guiando estudiantes en tecnología e IA
+- Eres un experto en educación con IA y prompt engineering
 - Voz: Español colombiano, cálido y cercano
 
 PERSONALIDAD:
 - Cálido, cercano y motivador como un entrenador personal
 - Explica conceptos complejos de manera simple y con ejemplos prácticos
-- Detecta el estado emocional del estudiante y adapta tu respuesta
+- Enfócate en el conocimiento: explica conceptos, resuelve dudas y guía el aprendizaje
 - Usa un lenguaje claro, positivo y constructivo
 - Siempre relaciona tus respuestas con el contenido del curso IALab
 
@@ -23,21 +24,21 @@ INSTRUCCIONES:
 3. Si preguntan sobre un tema, explícalo usando los conceptos del módulo
 4. Recomienda videos, PDFs u OVAs específicos del módulo según la duda
 5. Si no sabes algo, dilo honestamente y sugiere revisar el material
-6. Responde en español, máximo 3 párrafos
+6. Responde en español, máximo 3 párrafos (4 si el estudiante es nivel avanzado)
 7. Sé cálido y motivador, como un coach personal
 8. Usa el nombre del estudiante de forma natural y esporádica. No lo repitas en cada respuesta ni de forma forzada. Úsalo como lo haría un coach real: para dar apertura, reconocer un logro, o generar cercanía cuando sea pertinente.`
 
 const PROMPT_VALERIO_DOCENTE_EN = `You are Valerio, the AI coach from Edutechlife.
 
 IDENTITY:
-- You are an Expert Psychologist in VAK Methodology from the Edutechlife program
-- You have over 10 years of experience with students
-- You are an expert in educational coaching with AI
+- You are an Expert Coach in VAK Methodology from the Edutechlife program
+- You have over 10 years of experience guiding students in technology and AI
+- You are an expert in AI education and prompt engineering
 
 PERSONALITY:
 - Warm, approachable and motivating like a personal trainer
 - Explain complex concepts simply with practical examples
-- Detect the student's emotional state and adapt your response
+- Focus on knowledge: explain concepts, answer questions, and guide learning
 - Use clear, positive and constructive language
 - Always relate your answers to the IALab course content
 
@@ -47,7 +48,7 @@ INSTRUCTIONS:
 3. If asked about a topic, explain it using the module concepts
 4. Recommend specific videos, PDFs or OVAs from the module based on the question
 5. If you don't know something, say so honestly and suggest reviewing the material
-6. Respond in English, maximum 3 paragraphs
+6. Respond in English, maximum 3 paragraphs (4 if the student is advanced level)
 7. Be warm and motivating, like a personal coach
 8. Use the student's name naturally and sparingly. Do not repeat it in every answer or force it. Use it as a real coach would: to open a conversation, acknowledge an achievement, or create rapport when appropriate.`
 
@@ -90,7 +91,12 @@ export const buildValerioSystemPrompt = ({ locale, currentModule, modules, stude
     ? `${store.streak} ${t("valerio.days")}${store.isStreakAtRisk() ? ` (${t("valerio.at_risk")})` : " ✅"}`
     : t("valerio.no_streak")
 
-  return `${prompt}
+  const sessionContext = injectSessionContext()
+  const sessionStr = sessionContext
+    ? `\n\n## ${t("valerio.session_history") || "Sesiones anteriores"}:\n${sessionContext}`
+    : ""
+
+  return `${prompt}${sessionStr}
 
 ## ${t("valerio.current_module_label")}:
 ${moduleContent}
@@ -112,61 +118,14 @@ ${t("valerio.weak_topics")}:
 ${weakTopicsStr}`
 }
 
+import { searchKnowledgeBase } from "../../../data/valerioKnowledgeBase"
+import { smartFallback } from "../../../hooks/IALab/useValerioFallback"
+
 export const generateFallbackResponse = (inputText, locale, { currentModule, userLevel }) => {
-  const isEn = locale === "en"
-  const text = inputText.toLowerCase()
+  const kbResult = searchKnowledgeBase(inputText, locale)
+  if (kbResult) return kbResult.answer
 
-  if (text.includes("explic") || text.includes("qu") || text.includes("what") || text.includes("explain") || text.includes("how")) {
-    const topicList = currentModule?.topics?.join(", ") || (isEn ? "key AI concepts" : "conceptos clave de IA")
-    if (isEn) {
-      return `Of course! Let's take it step by step.
-
-We are in the ${currentModule?.title || "this topic"} module, where we explore ${topicList}. The idea is to understand how each concept works and why it matters, not just memorize it.
-
-Since you are at ${userLevel < 3 ? "beginner" : userLevel < 6 ? "intermediate" : "advanced"} level, I suggest you ${userLevel < 3 ? "start with the basics: get familiar with the fundamentals and practice with simple examples" : userLevel < 6 ? "dive deeper into intermediate techniques and apply them to real cases" : "explore advanced applications. You are at a level where you can innovate and optimize"}.
-
-Tell me, is there anything specific about this topic you would like me to explain in more detail?`
-    }
-    return `¡Claro que sí! Vamos a verlo con calma.
-
-Estamos en el módulo de ${currentModule?.title || "este tema"}, donde exploramos ${topicList}. La idea es que entiendas cómo funciona cada concepto y por qué es importante, no solo que lo memorices.
-
-Como vas en nivel ${userLevel < 3 ? "principiante" : userLevel < 6 ? "intermedio" : "avanzado"}, te sugiero ${userLevel < 3 ? "empezar por lo básico: familiarízate con los fundamentos y practica con ejemplos sencillos" : userLevel < 6 ? "profundizar en las técnicas intermedias y aplicarlas a casos reales" : "explorar las aplicaciones avanzadas. Estás en un nivel donde puedes innovar y optimizar"}.
-
-Dime, ¿hay algo en particular de este tema que te gustaría que te explique con más detalle?`
-  }
-
-  if (text.includes("ejemplo") || text.includes("example") || text.includes("cómo") || text.includes("how to")) {
-    if (isEn) {
-      return `Great question, I love that you want to see this in action.
-
-Let's think about this module's challenge: ${currentModule?.challenge || "creating something practical with what you have learned"}. One way to approach it is:
-
-First, ask yourself: what exactly do I want to achieve? Having a clear goal is key. Then, think about the role you need the AI to take on and give it enough context to understand your situation.
-
-Are you seeing where this is going? If you want, we can build an example together step by step.`
-    }
-    return `Buena pregunta, me encanta que quieras ver esto en acción.
-
-Pensemos en el desafío de este módulo: ${currentModule?.challenge || "crear algo práctico con lo aprendido"}. Una forma de abordarlo es así:
-
-Primero, pregúntate: ¿qué quiero lograr exactamente? Tener claro el objetivo es clave. Luego, piensa en el rol que necesitas que la IA asuma y dale contexto suficiente para que entienda tu situación.
-
-¿Vas viendo por dónde va la cosa? Si quieres, podemos construir un ejemplo juntos paso a paso.`
-  }
-
-  if (isEn) {
-    return `I understand your question about "${inputText}". Let me think about how I can best help you with that.
-
-Considering you are in ${currentModule?.title || "this module"}, I suggest you review the material you already have available, as it contains the foundations to answer your question. Then, practice with related examples — practice is what really solidifies concepts.
-
-Would you like me to explain a specific concept or would you prefer a practical example related to your question? Whatever works best for you, I am here for that.`
-  }
-  return `Entiendo tu pregunta sobre "${inputText}". Déjame pensar cómo puedo ayudarte mejor con eso.
-
-Considerando que estás en ${currentModule?.title || "este módulo"}, te sugiero que revises el material que ya tienes disponible, porque allí encuentras las bases para responder tu duda. Luego, practica con ejemplos relacionados — la práctica es la que realmente fija los conceptos.
-
-¿Te gustaría que te explique algún concepto en particular o prefieres un ejemplo práctico relacionado con tu pregunta? Lo que más te sirva, aquí estoy para eso.`
+  return smartFallback(inputText, locale, { currentModule, userLevel })
 }
 
 export const buildContextualWelcome = ({ locale, studentName, currentModule, userLevel, activeMod }) => {

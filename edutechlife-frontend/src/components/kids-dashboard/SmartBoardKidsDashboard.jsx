@@ -10,6 +10,7 @@ import DaniAvatar3D from './DaniAvatar3D';
 import DashboardErrorBoundary from './DashboardErrorBoundary';
 import { VAKDiagnosticEnhanced } from './VAKDiagnosticEnhanced';
 import { useTranslation } from '../../i18n/I18nProvider';
+import PremiumGate from './PremiumGate';
 
 const KidsCalendar = lazy(() => import('./KidsCalendar'));
 const PointsRewardsSystem = lazy(() => import('./PointsRewardsSystem'));
@@ -106,22 +107,25 @@ const SectionFallback = ({ tab }) => {
 // ==========================================
 // Premium Sidebar - Glassmorphism
 // ==========================================
-const PremiumSidebar = ({ activeTab, onTabChange, totalPoints, vakCompleted, darkMode, streak, onNavigate, onLogout }) => {
+const PREMIUM_TABS = ['libros', 'noticias', 'padres'];
+
+const PremiumSidebar = ({ activeTab, onTabChange, totalPoints, vakCompleted, darkMode, streak, onNavigate, onLogout, subscriptionTier }) => {
   const { t } = useTranslation();
+  const isPremium = subscriptionTier === 'premium';
   const tabs = [
-    { id: 'inicio', icon: '🏠', label: t('smartboard.tab_home'), color: '#4DA8C4' },
-    { id: 'vak', icon: '🧠', label: t('smartboard.tab_vak'), color: '#66CCCC' },
-    { id: 'misiones', icon: '🎯', label: t('smartboard.tab_missions'), color: '#FF6B9D' },
-    { id: 'materias', icon: '📚', label: t('smartboard.tab_subjects'), color: '#4DA8C4' },
-    { id: 'actividades', icon: '📝', label: t('smartboard.tab_activities'), color: '#FFD166' },
-    { id: 'calendario', icon: '📅', label: t('smartboard.tab_calendar'), color: '#FF6B9D' },
-    { id: 'progreso', icon: '📊', label: t('smartboard.tab_progress'), color: '#66CCCC' },
-    { id: 'examenes', icon: '📋', label: 'Exámenes', color: '#FF6B9D' },
-    { id: 'flashcards', icon: '🗂️', label: 'Flashcards', color: '#FFD166' },
-    { id: 'libros', icon: '📖', label: 'Libro Intel.', color: '#4DA8C4' },
-    { id: 'escaner', icon: '📷', label: 'Escáner', color: '#66CCCC' },
-    { id: 'padres', icon: '👨‍👩‍👧', label: t('smartboard.tab_parents'), color: '#4DA8C4' },
-    { id: 'noticias', icon: '📰', label: t('smartboard.tab_news'), color: '#004B63' },
+    { id: 'inicio', icon: '🏠', label: t('smartboard.tab_home'), color: '#4DA8C4', premium: false },
+    { id: 'vak', icon: '🧠', label: t('smartboard.tab_vak'), color: '#66CCCC', premium: false },
+    { id: 'misiones', icon: '🎯', label: t('smartboard.tab_missions'), color: '#FF6B9D', premium: false },
+    { id: 'materias', icon: '📚', label: t('smartboard.tab_subjects'), color: '#4DA8C4', premium: false },
+    { id: 'actividades', icon: '📝', label: t('smartboard.tab_activities'), color: '#FFD166', premium: false },
+    { id: 'calendario', icon: '📅', label: t('smartboard.tab_calendar'), color: '#FF6B9D', premium: false },
+    { id: 'progreso', icon: '📊', label: t('smartboard.tab_progress'), color: '#66CCCC', premium: false },
+    { id: 'examenes', icon: '📋', label: 'Exámenes', color: '#FF6B9D', premium: false },
+    { id: 'flashcards', icon: '🗂️', label: 'Flashcards', color: '#FFD166', premium: false },
+    { id: 'escaner', icon: '📷', label: 'Escáner', color: '#66CCCC', premium: false },
+    { id: 'libros', icon: '📖', label: 'Libro Intel.', color: '#4DA8C4', premium: true },
+    { id: 'noticias', icon: '📰', label: t('smartboard.tab_news'), color: '#004B63', premium: true },
+    { id: 'padres', icon: '👨‍👩‍👧', label: t('smartboard.tab_parents'), color: '#4DA8C4', premium: true },
   ];
 
   return (
@@ -178,6 +182,16 @@ const PremiumSidebar = ({ activeTab, onTabChange, totalPoints, vakCompleted, dar
             
             <span className="relative z-10 text-xl">{tab.icon}</span>
             <span className="relative z-10 font-semibold text-sm">{tab.label}</span>
+
+            {/* Premium lock badge */}
+            {tab.premium && !isPremium && (
+              <span className="ml-auto relative z-10 text-[10px]">🔒</span>
+            )}
+
+            {/* Premium check badge for premium users */}
+            {tab.premium && isPremium && (
+              <span className="ml-auto relative z-10 text-[10px]">⭐</span>
+            )}
             
             {/* Plan active badge on VAK tab */}
             {tab.id === 'vak' && vakCompleted && (
@@ -219,6 +233,25 @@ const PremiumSidebar = ({ activeTab, onTabChange, totalPoints, vakCompleted, dar
             />
           </div>
         </div>
+        {/* Upgrade CTA for Basic users */}
+        {!isPremium && (
+          <motion.button
+            onClick={() => onNavigate('/conoce-smartboard')}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            className={`block w-full mt-3 px-4 py-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 bg-gradient-to-r from-[#D4A017] to-[#FFD166] text-white shadow-lg hover:shadow-xl cursor-pointer`}
+          >
+            <span>⭐</span>
+            <span>Actualizar a Premium</span>
+          </motion.button>
+        )}
+        {/* Premium badge for Premium users */}
+        {isPremium && (
+          <div className="w-full mt-3 px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 bg-gradient-to-r from-[#D4A017] to-[#FFD166] text-white shadow-md">
+            <span>⭐</span>
+            <span>Plan Premium Activo</span>
+          </div>
+        )}
         <motion.button
           onClick={onLogout}
           whileHover={{ scale: 1.02 }}
@@ -240,7 +273,11 @@ const PremiumSidebar = ({ activeTab, onTabChange, totalPoints, vakCompleted, dar
 // ==========================================
 // Mobile Bottom Tab Bar
 // ==========================================
-const MobileBottomBar = ({ activeTab, onTabChange, darkMode }) => {
+const MOBILE_PREMIUM_TABS = ['libros', 'noticias'];
+
+const MobileBottomBar = ({ activeTab, onTabChange, darkMode, subscriptionTier }) => {
+  const { t } = useTranslation();
+  const isPremium = subscriptionTier === 'premium';
   const mobileTabs = [
     { id: 'inicio', icon: '🏠' },
     { id: 'vak', icon: '🧠' },
@@ -282,9 +319,12 @@ const MobileBottomBar = ({ activeTab, onTabChange, darkMode }) => {
               whileTap={{ scale: 0.9 }}
             >
               <span className="text-xl">{tab.icon}</span>
-            <span className="text-[10px] font-medium whitespace-nowrap">
-              {label}
-            </span>
+              <span className="text-[10px] font-medium whitespace-nowrap flex items-center gap-1">
+                {label}
+                {MOBILE_PREMIUM_TABS.includes(tab.id) && !isPremium && (
+                  <span className="text-[8px]">🔒</span>
+                )}
+              </span>
           </motion.button>
           );
         })}
@@ -399,8 +439,15 @@ const SubjectsView = memo(function SubjectsView({ subjects }) {
 // ==========================================
 // Main Content Area with Cinematic Scroll
 // ==========================================
-const CinematicContent = ({ activeTab, onTabChange, darkMode }) => {
+const PREMIUM_FEATURES = {
+  libros: { icon: '📖', title: 'SmartBook Reader', description: 'Analiza textos con IA, extrae conceptos clave y organiza tu aprendizaje visualmente. Disponible solo en plan Premium.' },
+  noticias: { icon: '📰', title: 'Noticias Tech', description: 'Mantente al día con noticias personalizadas de tecnología, ciencia e innovación. Disponible solo en plan Premium.' },
+  padres: { icon: '👨‍👩‍👧', title: 'Panel para Padres', description: 'Seguimiento en tiempo real del progreso académico y emocional de tu hijo. Disponible solo en plan Premium.' },
+};
+
+const CinematicContent = ({ activeTab, onTabChange, darkMode, subscriptionTier }) => {
   const { t } = useTranslation();
+  const isPremium = subscriptionTier === 'premium';
   const { totalPoints, vakResult, addPoints, setVakResultAndRecommendations, streak, studentMoodHistory, academicTopics, conversationCount, missions, subjects, completeMission } = useSmartBoardKids();
   
   const handleVakComplete = useCallback((result) => {
@@ -438,7 +485,15 @@ const CinematicContent = ({ activeTab, onTabChange, darkMode }) => {
               transition={{ duration: 0.8, delay: 0.2 }}
             >
               <Suspense fallback={<SectionFallback tab="noticias" />}>
-                <NewsTechFeed />
+                {isPremium ? <NewsTechFeed /> : (
+                  <PremiumGate
+                    icon="📰"
+                    title={PREMIUM_FEATURES.noticias.title}
+                    description={PREMIUM_FEATURES.noticias.description}
+                  >
+                    <NewsTechFeed />
+                  </PremiumGate>
+                )}
               </Suspense>
             </motion.div>
             </motion.div>
@@ -531,7 +586,15 @@ const CinematicContent = ({ activeTab, onTabChange, darkMode }) => {
             transition={sharedTransition}
           >
             <Suspense fallback={<SectionFallback tab="noticias" />}>
-              <NewsTechFeed />
+              {isPremium ? <NewsTechFeed /> : (
+                <PremiumGate
+                  icon={PREMIUM_FEATURES.noticias.icon}
+                  title={PREMIUM_FEATURES.noticias.title}
+                  description={PREMIUM_FEATURES.noticias.description}
+                >
+                  <NewsTechFeed />
+                </PremiumGate>
+              )}
             </Suspense>
           </motion.div>
           </DashboardErrorBoundary>
@@ -554,6 +617,7 @@ const CinematicContent = ({ activeTab, onTabChange, darkMode }) => {
               </Suspense>
             )}
           </motion.div>
+          </DashboardErrorBoundary>
         );
 
       case 'examenes':
@@ -598,7 +662,15 @@ const CinematicContent = ({ activeTab, onTabChange, darkMode }) => {
             transition={sharedTransition}
           >
             <Suspense fallback={<SectionFallback tab="libros" />}>
-              <SmartBookReader />
+              {isPremium ? <SmartBookReader /> : (
+                <PremiumGate
+                  icon={PREMIUM_FEATURES.libros.icon}
+                  title={PREMIUM_FEATURES.libros.title}
+                  description={PREMIUM_FEATURES.libros.description}
+                >
+                  <SmartBookReader />
+                </PremiumGate>
+              )}
             </Suspense>
           </motion.div>
           </DashboardErrorBoundary>
@@ -622,6 +694,7 @@ const CinematicContent = ({ activeTab, onTabChange, darkMode }) => {
 
       case 'progreso':
         return (
+          <DashboardErrorBoundary key="progreso" message="Error al cargar progreso" onTabChange={onTabChange}>
           <motion.div
             key="progreso"
             initial={{ opacity: 0, y: 30 }}
@@ -633,6 +706,48 @@ const CinematicContent = ({ activeTab, onTabChange, darkMode }) => {
             <Suspense fallback={<SectionFallback tab="progreso" />}>
               <SmartBoardProgress />
             </Suspense>
+          </motion.div>
+          </DashboardErrorBoundary>
+        );
+
+      case 'padres':
+        return (
+          <DashboardErrorBoundary key="padres" message="Error al cargar panel padres" onTabChange={onTabChange}>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={sharedTransition}
+          >
+            {isPremium ? (
+              <div className="flex flex-col items-center justify-center min-h-[300px] text-center p-8">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#004B63] to-[#4DA8C4] flex items-center justify-center mb-4">
+                  <span className="text-3xl">👨‍👩‍👧</span>
+                </div>
+                <h3 className="text-lg font-black text-[#004B63] mb-2">Panel de Padres</h3>
+                <p className="text-sm text-[#64748B] max-w-md mb-6">
+                  Haz clic abajo para abrir el panel de padres en tiempo real.
+                </p>
+                <a
+                  href="/smartboard/padres"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white font-bold text-sm shadow-lg hover:shadow-xl transition-all"
+                >
+                  <span>📊</span>
+                  <span>Abrir Panel de Padres</span>
+                </a>
+              </div>
+            ) : (
+              <PremiumGate
+                icon={PREMIUM_FEATURES.padres.icon}
+                title={PREMIUM_FEATURES.padres.title}
+                description={PREMIUM_FEATURES.padres.description}
+              >
+                <div className="flex flex-col items-center justify-center min-h-[300px] text-center p-8">
+                  <span className="text-6xl mb-4">👨‍👩‍👧</span>
+                  <p className="text-sm text-[#64748B]">Panel de padres</p>
+                </div>
+              </PremiumGate>
+            )}
           </motion.div>
           </DashboardErrorBoundary>
         );
@@ -655,9 +770,10 @@ const CinematicContent = ({ activeTab, onTabChange, darkMode }) => {
 // Main SmartBoard Kids Dashboard Component
 // ==========================================
 const SmartBoardKidsDashboard = () => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('inicio');
   const [isDaniOpen, setIsDaniOpen] = useState(false);
-  const { totalPoints, vakResult, addPoints, setVakResultAndRecommendations, darkMode, avatarAnimado, fondoGalaxia, lastUnlockedReward, streak, missions, subjects, completeMission } = useSmartBoardKids();
+  const { totalPoints, vakResult, addPoints, setVakResultAndRecommendations, darkMode, avatarAnimado, fondoGalaxia, lastUnlockedReward, streak, missions, subjects, completeMission, subscriptionTier } = useSmartBoardKids();
   const prefersReducedMotion = useReducedMotion();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -737,6 +853,7 @@ const SmartBoardKidsDashboard = () => {
             streak={streak}
             onNavigate={navigate}
             onLogout={handleLogout}
+            subscriptionTier={subscriptionTier}
           />
 
         {/* Main Content Area */}
@@ -822,12 +939,13 @@ const SmartBoardKidsDashboard = () => {
             activeTab={activeTab}
             onTabChange={setActiveTab}
             darkMode={darkMode}
+            subscriptionTier={subscriptionTier}
           />
         </div>
       </div>
 
       {/* Mobile Bottom Bar */}
-      <MobileBottomBar activeTab={activeTab} onTabChange={setActiveTab} darkMode={darkMode} />
+      <MobileBottomBar activeTab={activeTab} onTabChange={setActiveTab} darkMode={darkMode} subscriptionTier={subscriptionTier} />
 
       {/* Dani Chat Modal - Full Premium Experience */}
       <AnimatePresence>

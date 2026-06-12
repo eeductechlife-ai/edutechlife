@@ -139,7 +139,7 @@ PointsHistory.displayName = 'PointsHistory';
 // ==========================================
 const PointsRewardsSystem = memo(() => {
   const { t } = useTranslation();
-  const { totalPoints, pointsHistory, unlockedRewards, unlockReward, addPoints } = useSmartBoardKids();
+  const { totalPoints, pointsHistory, unlockedRewards, unlockReward, addPoints, totalActiveMinutes } = useSmartBoardKids();
   const [activeTab, setActiveTab] = useState('puntos');
   
   const rewards = useMemo(() => [
@@ -160,7 +160,7 @@ const PointsRewardsSystem = memo(() => {
   return (
     <div className="space-y-6">
       {/* Points Display */}
-      <PointsDisplay totalPoints={totalPoints} totalActiveMinutes={0} />
+      <PointsDisplay totalPoints={totalPoints} totalActiveMinutes={totalActiveMinutes || 0} />
       
       {/* Tabs */}
       <div className="flex gap-2">
@@ -205,7 +205,7 @@ const PointsRewardsSystem = memo(() => {
                   { icon: '🔥', actionKey: 'kid.points_rewards.action_daily_streak', points: 150, color: '#4DA8C4' },
                 ].map((item, index) => (
                   <motion.div
-                    key={item.action}
+                    key={item.actionKey}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.1 }}

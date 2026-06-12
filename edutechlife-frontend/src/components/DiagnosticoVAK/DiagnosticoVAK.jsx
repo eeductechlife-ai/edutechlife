@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, lazy, Suspense } from 'react';
-import { Eye, Download, Brain, Sparkles, ArrowRight, Check, Volume, VolumeOff, RotateCcw, Video, Headphones, Activity, Target, Zap, Users, Globe, Cpu, Lightbulb, Wrench, ListOrdered, CheckSquare, CheckCircle2, Rocket, List, BookOpen, Mic, MessageCircle, Smile, Meh, Frown, Clock, Shield, User, Mail, Phone, Music, Star, Heart, AlertCircle, Search } from 'lucide-react';
+import { Eye, Download, Sparkles, ArrowRight, Check, Volume, VolumeOff, RotateCcw, Video, Headphones, Activity, Target, Zap, Users, Globe, Cpu, Lightbulb, Wrench, ListOrdered, CheckSquare, CheckCircle2, Rocket, List, BookOpen, Mic, MessageCircle, Smile, Meh, Frown, Clock, Shield, User, Mail, Phone, Music, Star, Heart, AlertCircle, Search } from 'lucide-react';
 import html2pdf from 'html2pdf.js';
 import { speakTextConversational } from '../../utils/speech';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
@@ -11,6 +11,7 @@ import { getQuestionsByAge, getAgeGroupKey } from '../../data/vakQuestions';
 import { VALENTINA_MESSAGES, getAgeGroup } from '../../utils/valentinaMessages';
 import { safeStorage } from '../../utils/storage';
 import './DiagnosticoVAK.css';
+import { tutorAvatars, DEFAULT_AVATAR } from '../../data/tutorAvatars';
 
 // Componente de Confetti
 const Confetti = ({ active }) => {
@@ -89,9 +90,9 @@ const ValeriaControls = ({
       <div className="max-w-6xl mx-auto px-4 flex items-center justify-between py-3">
         <div className="valeria-logo">
           <div className="valeria-avatar-container">
-            <div className={`valeria-avatar ${isSpeaking ? 'speaking' : ''}`}
-              style={{ background: `linear-gradient(135deg, ${config.color}22, ${config.color}44)` }}>
-              <Brain size={20} strokeWidth={2} style={{ color: config.color }} />
+            <div className={`valeria-avatar ${isSpeaking ? 'speaking' : ''}`}>
+              <img src={tutorAvatars.Valeria || DEFAULT_AVATAR} alt="Valeria"
+                className="w-10 h-10 rounded-full object-cover ring-2 ring-white/30" />
             </div>
             {isSpeaking && (
               <div className="valeria-avatar-pulse" style={{ borderColor: config.color }}></div>

@@ -1,8 +1,8 @@
 import { PROMPT_ANALIZAR_DOCUMENTO } from '../constants/prompts';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://edutechlife-backend.onrender.com';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'https://edutechlife-backend.onrender.com';
 
-const TIMEOUT_MS = 10000; // 10 segundos timeout
+const TIMEOUT_MS = 30000; // 30 segundos timeout
 
 async function fetchWithTimeout(url, options, timeout = TIMEOUT_MS) {
     const controller = new AbortController();
@@ -78,7 +78,7 @@ export async function callDeepseek(messagesOrPrompt, systemPromptOrOpts = null, 
 
     try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(new DOMException('Timeout agotado', 'TimeoutError')), 5000);
+        const timeoutId = setTimeout(() => controller.abort(new DOMException('Timeout agotado', 'TimeoutError')), 30000);
         
         const response = await fetch(url, { 
             method: 'POST', 

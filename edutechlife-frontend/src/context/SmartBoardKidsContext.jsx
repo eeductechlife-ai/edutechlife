@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react';
+import { createContext, useContext, useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import useSmartBoardSync from '../hooks/useSmartBoardSync';
 
 // ==========================================
@@ -118,6 +118,7 @@ export const SmartBoardKidsProvider = ({ children }) => {
   const [analyzedActivities, setAnalyzedActivities] = useState([]);
   const [documentForDani, setDocumentForDani] = useState(null);
 
+  const [subscriptionTier, setSubscriptionTier] = useState(() => getLocalStorage('subscription_tier', 'basic'));
   const [darkMode, setDarkMode] = useState(false);
   const [avatarAnimado, setAvatarAnimado] = useState(false);
   const [fondoGalaxia, setFondoGalaxia] = useState(false);
@@ -151,13 +152,15 @@ export const SmartBoardKidsProvider = ({ children }) => {
         darkMode: getLocalStorage(`dark_mode_${userId}`, false),
         avatarAnimado: getLocalStorage(`avatar_animado_${userId}`, false),
         fondoGalaxia: getLocalStorage(`fondo_galaxia_${userId}`, false),
+        subscriptionTier: getLocalStorage(`subscription_tier`, 'basic'),
         vakResult: getLocalStorage(`vak_${userId}`, null),
       };
 
       // Load from Supabase
       let merged = localData;
+      let remoteData = null;
       if (navigator.onLine) {
-        const remoteData = await loadData();
+        remoteData = await loadData();
         if (remoteData) {
           merged = mergeWithLocal(localData, remoteData);
         }
@@ -186,6 +189,7 @@ export const SmartBoardKidsProvider = ({ children }) => {
       setDarkMode(!!merged.darkMode);
       setAvatarAnimado(!!merged.avatarAnimado);
       setFondoGalaxia(!!merged.fondoGalaxia);
+      if (merged.subscriptionTier === 'premium') setSubscriptionTier('premium');
       if (merged.vakResult) setVakResult(merged.vakResult);
 
       // Sync local->remote if remote was empty
@@ -295,6 +299,7 @@ export const SmartBoardKidsProvider = ({ children }) => {
     setLocalStorage(`dark_mode_${userId}`, darkMode);
     setLocalStorage(`avatar_animado_${userId}`, avatarAnimado);
     setLocalStorage(`fondo_galaxia_${userId}`, fondoGalaxia);
+    setLocalStorage('subscription_tier', subscriptionTier);
 
     // Debounced sync to Supabase
     if (syncTimeoutRef.current) clearTimeout(syncTimeoutRef.current);
@@ -305,7 +310,7 @@ export const SmartBoardKidsProvider = ({ children }) => {
         totalActiveMinutes, sessions, streak, streakLog, subjectTime,
         calendarEvents, readNews, missions, subjects,
         uploadedActivities, analyzedActivities,
-        darkMode, avatarAnimado, fondoGalaxia,
+        darkMode, avatarAnimado, fondoGalaxia, subscriptionTier,
       });
     }, 2000);
   }, [
@@ -314,7 +319,7 @@ export const SmartBoardKidsProvider = ({ children }) => {
     totalActiveMinutes, sessions, streak, streakLog, subjectTime,
     calendarEvents, readNews, missions, subjects,
     uploadedActivities, analyzedActivities,
-    darkMode, avatarAnimado, fondoGalaxia,
+    darkMode, avatarAnimado, fondoGalaxia, subscriptionTier,
   ]);
 
   // ==================== ACTIONS ====================
@@ -467,6 +472,20 @@ export const SmartBoardKidsProvider = ({ children }) => {
     setReadNews(prev => [...prev, newsId]);
   }, []);
 
+  // Compute upcoming deadlines from calendar events
+  const computedUpcomingDeadlines = useMemo(() => {
+    const now = new Date();
+    return calendarEvents
+      .filter(e => new Date(e.date) >= now)
+      .sort((a, b) => new Date(a.date) - new Date(b.date))
+      .slice(0, 10);
+  }, [calendarEvents]);
+
+  // Sync computed deadlines to state
+  useEffect(() => {
+    setUpcomingDeadlines(computedUpcomingDeadlines);
+  }, [computedUpcomingDeadlines]);
+
   // ==================== VALUE ====================
   const value = {
     // Dani
@@ -531,6 +550,10 @@ export const SmartBoardKidsProvider = ({ children }) => {
     addAnalyzedActivity,
     documentForDani,
     setDocumentForDani,
+
+    // Subscription
+    subscriptionTier,
+    setSubscriptionTier,
 
     // Missions & Subjects
     missions,

@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { useTranslation } from '../../../i18n/I18nProvider';
@@ -72,6 +73,37 @@ const ThinkingIndicator = () => (
   </div>
 );
 
+const StreamingMessage = ({ content }) => {
+  return (
+    <div className="flex justify-start mb-4">
+      <div className="max-w-[80%] rounded-2xl p-4 break-words overflow-wrap-anywhere bg-white border border-slate-200 shadow-sm">
+        <div className="flex items-start gap-3">
+          <div className="flex-shrink-0">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center text-white text-xs font-bold">
+              V
+            </div>
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="text-xs font-medium opacity-80 mb-2">
+              Valerio
+            </div>
+            <div className="prose prose-sm max-w-none text-petroleum-darker">
+              {content.split('\n').map((line, i) => (
+                <p key={i} className="mb-2 last:mb-0">
+                  {line}
+                  {i === content.split('\n').length - 1 && (
+                    <span className="inline-block w-1.5 h-4 bg-corporate ml-0.5 animate-pulse align-text-bottom" />
+                  )}
+                </p>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const EmptyState = ({ moduleTitle }) => {
   const { t } = useTranslation();
   return (
@@ -91,18 +123,26 @@ const EmptyState = ({ moduleTitle }) => {
   );
 };
 
-const ValerioConversationArea = ({ conversation, isProcessing, moduleTitle }) => {
+const ValerioConversationArea = ({ conversation, isProcessing, moduleTitle, streamingMessage }) => {
   const { t } = useTranslation();
+  const bottomRef = useRef(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [conversation, streamingMessage, isProcessing]);
+
   return (
     <div className="flex-1 overflow-y-auto p-4" aria-live="polite" aria-label={t('ialab.valerio.conversation_aria')}>
-      {conversation.length === 0 ? (
+      {conversation.length === 0 && !streamingMessage ? (
         <EmptyState moduleTitle={moduleTitle} />
       ) : (
         <div className="space-y-4">
           {conversation.map((msg) => (
             <ValerioMessageBubble key={msg.id} msg={msg} />
           ))}
-          {isProcessing && <ThinkingIndicator />}
+          {streamingMessage && <StreamingMessage content={streamingMessage} />}
+          {isProcessing && !streamingMessage && <ThinkingIndicator />}
+          <div ref={bottomRef} />
         </div>
       )}
     </div>

@@ -41,7 +41,7 @@ const ScoreBreakdown = ({ evaluation, isApproved, scoreBarColor, circumference, 
                   <div className={`h-full bg-gradient-to-r ${scoreBarColor}`} style={{ width: `${evaluation.notaGlobal}%` }} />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 max-sm:grid-cols-1 gap-4">
                 <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-4">
                   <div className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-1">
                     {isApproved ? t('ialab.evaluation.results.mastery_high') : t('ialab.evaluation.results.mastery_medium')}

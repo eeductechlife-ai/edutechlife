@@ -678,6 +678,78 @@ export const getValentinaVoiceConfig = (age = 12) => {
   };
 };
 
+const findBestSpanishVoice = (profile = 'valerio') => {
+  if (typeof window === 'undefined' || !window.speechSynthesis) return null;
+  const voices = window.speechSynthesis.getVoices();
+  const spanishVoices = voices.filter(v => v.lang && v.lang.startsWith('es'));
+  const isMaleProfile = ['valerio', 'nico', 'nico_premium', 'nico_authority'].includes(profile);
+
+  const maleKeywords = ['Jorge', 'Andres', 'Carlos', 'Pablo', 'Santiago',
+    'Microsoft Carlos', 'Microsoft Pablo', 'Microsoft Santiago',
+    'Microsoft Jorge', 'Microsoft Andres', 'Microsoft Felipe',
+    'David', 'James', 'Google UK English Male', 'Google US English Male',
+    'Microsoft David Desktop', 'Microsoft Mark', 'Rocko', 'Eddy', 'Reed'];
+  const femaleKeywords = ['Paulina', 'Monica', 'Sabina', 'Helena', 'Laura', 'Sofia',
+    'Valentina', 'Daniela', 'Camila', 'Lucia', 'Sandy', 'Shelley', 'Grandma',
+    'Microsoft Sabina', 'Microsoft Helena', 'Microsoft Laura', 'Microsoft Paulina',
+    'Microsoft Monica', 'Microsoft Sabina Desktop', 'Zira', 'Susan', 'Hazel',
+    'Google US English', 'Google UK English Female'];
+
+  const isMaleName = (name) => {
+    if (maleKeywords.some(k => name.includes(k))) return true;
+    if (femaleKeywords.some(k => name.includes(k))) return false;
+    return !femaleKeywords.some(k => ['A', 'D', 'F', 'H', 'J'].some(e => name.endsWith(e)));
+  };
+
+  const latinRegions = ['es-MX', 'es-US', 'es-CO', 'es-419', 'es-ES'];
+  const latinMatch = (v) => latinRegions.some(r => v.lang === r);
+
+  const priority = [
+    ...(isMaleProfile ? [
+      (v) => isMaleName(v.name) && latinMatch(v) && (v.name.includes('Microsoft') || v.name.includes('Carlos') || v.name.includes('Jorge')),
+      (v) => isMaleName(v.name) && latinMatch(v),
+    ] : [
+      (v) => !isMaleName(v.name) && latinMatch(v) && (v.name.includes('Microsoft') || v.name.includes('Google')),
+      (v) => !isMaleName(v.name) && latinMatch(v),
+    ]),
+    (v) => latinMatch(v),
+    (v) => v.lang.startsWith('es'),
+    ...(isMaleProfile ? [(v) => isMaleName(v.name)] : [(v) => !isMaleName(v.name)]),
+    (v) => true,
+  ];
+
+  for (const matcher of priority) {
+    const found = voices.find(matcher);
+    if (found) return found;
+  }
+  return null;
+};
+
+export const speakValerioSentence = (text, onEnd) => {
+  try {
+    window.speechSynthesis.cancel();
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length === 0) {
+      window.speechSynthesis.onvoiceschanged = () => {
+        window.speechSynthesis.onvoiceschanged = null;
+        speakValerioSentence(text, onEnd);
+      };
+      return;
+    }
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'es-MX';
+    utterance.rate = 0.9;
+    const bestVoice = findBestSpanishVoice('valerio');
+    if (bestVoice) {
+      utterance.voice = bestVoice;
+      utterance.pitch = 0.95;
+    }
+    if (onEnd) utterance.onend = onEnd;
+    utterance.onerror = () => onEnd && onEnd();
+    window.speechSynthesis.speak(utterance);
+  } catch {}
+};
+
 export const fireConfetti = (opts) => import('canvas-confetti').then(m => m.default(opts));
 
 export { speakTextConversational, stopSpeech, iniciarReconocimiento, stopRecognition, audioCache, VOICE_PROFILES };

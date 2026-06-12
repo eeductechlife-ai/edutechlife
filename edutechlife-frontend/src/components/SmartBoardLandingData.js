@@ -11,13 +11,85 @@ const VAQ_STYLES_EN = [
 ];
 
 const PRICING_PLANS_ES = [
-  { name: 'Básico', price: '$30.000', period: '/mes', popular: false, features: ['Diagnóstico VAK completo', 'Plan de estudio personalizado', 'Acceso a recursos académicos', 'Sistema de puntos y recompensas', 'Reportes semanales', 'Coach virtual Dani', 'Soporte por email'] },
-  { name: 'Premium', price: '$50.000', period: '/mes', popular: true, features: ['Todo lo del plan Básico', 'Coach humano dedicado', 'Reportes en tiempo real', 'Actividades avanzadas', 'Talleres de tecnología', 'Sesiones mensuales con experto', 'Prioridad en soporte', 'Certificados de logro'] },
+  {
+    name: 'Básico',
+    price: '$30.000',
+    priceUSD: '$7',
+    period: '/mes',
+    popular: false,
+    trial: '7 días gratis',
+    features: [
+      'Diagnóstico VAK completo',
+      'Tutor IA Dani — chat ilimitado',
+      'Preparación de exámenes',
+      'Sistema de flashcards',
+      'Escáner de problemas con IA',
+      'Plan de estudio personalizado',
+      'Sistema de puntos y recompensas',
+      'Reporte semanal a padres',
+    ],
+  },
+  {
+    name: 'Premium',
+    price: '$50.000',
+    priceUSD: '$12',
+    period: '/mes',
+    popular: true,
+    trial: '7 días gratis',
+    features: [
+      'Todo lo del plan Básico',
+      'SmartBook Reader — análisis IA de textos',
+      'Modo Socrático — pensamiento crítico',
+      'Apoyo emocional con detección de crisis',
+      'Noticias tech personalizadas',
+      'Panel padres en tiempo real',
+      'Reportes mensuales descargables PDF',
+      'Avatar 3D de Dani con emociones',
+      'Coach humano disponible',
+      'Prioridad en soporte',
+    ],
+  },
 ];
 
 const PRICING_PLANS_EN = [
-  { name: 'Basic', price: '$30.000', period: '/mo', popular: false, features: ['Complete VAK diagnosis', 'Personalized study plan', 'Access to academic resources', 'Points and rewards system', 'Weekly reports', 'Virtual coach Dani', 'Email support'] },
-  { name: 'Premium', price: '$50.000', period: '/mo', popular: true, features: ['Everything in Basic', 'Dedicated human coach', 'Real-time reports', 'Advanced activities', 'Tech workshops', 'Monthly expert sessions', 'Priority support', 'Achievement certificates'] },
+  {
+    name: 'Basic',
+    price: '$30.000',
+    priceUSD: '$7',
+    period: '/mo',
+    popular: false,
+    trial: '7 days free',
+    features: [
+      'Complete VAK diagnosis',
+      'AI Tutor Dani — unlimited chat',
+      'Exam preparation',
+      'Flashcard system',
+      'AI problem scanner',
+      'Personalized study plan',
+      'Points and rewards system',
+      'Weekly parent report',
+    ],
+  },
+  {
+    name: 'Premium',
+    price: '$50.000',
+    priceUSD: '$12',
+    period: '/mo',
+    popular: true,
+    trial: '7 days free',
+    features: [
+      'Everything in Basic',
+      'SmartBook Reader — AI text analysis',
+      'Socratic Mode — critical thinking',
+      'Emotional support with crisis detection',
+      'Personalized tech news feed',
+      'Real-time parent dashboard',
+      'Monthly downloadable PDF reports',
+      '3D Dani avatar with emotions',
+      'Human coach available',
+      'Priority support',
+    ],
+  },
 ];
 
 const TESTIMONIALS_ES = [
@@ -82,28 +154,66 @@ const PASOS_EN = [
   { step: '04', icon: 'fa-rocket', title: 'Active learning', desc: 'Your child starts studying with Dani and our coaches. You receive progress reports.' },
 ];
 
+const PAYMENT_METHODS_ES = [
+  { icon: 'fa-credit-card', name: 'Tarjetas débito/crédito' },
+  { icon: 'fa-building-columns', name: 'Transferencia bancaria' },
+  { icon: 'fa-mobile-screen', name: 'Mercado Pago' },
+  { icon: 'fa-qrcode', name: 'Nequi' },
+];
+
+const PAYMENT_METHODS_EN = [
+  { icon: 'fa-credit-card', name: 'Debit/Credit cards' },
+  { icon: 'fa-building-columns', name: 'Bank transfer' },
+  { icon: 'fa-mobile-screen', name: 'Mercado Pago' },
+  { icon: 'fa-qrcode', name: 'Nequi / PSE' },
+];
+
+const GUARANTEE_ES = {
+  icon: 'fa-shield-halved',
+  title: 'Cancela cuando quieras',
+  desc: 'Sin permanencia. Sin multas. Sin preguntas.',
+};
+
+const GUARANTEE_EN = {
+  icon: 'fa-shield-halved',
+  title: 'Cancel anytime',
+  desc: 'No commitment. No penalties. No questions asked.',
+};
+
 const FAQ_ITEMS_ES = [
   { q: '¿Desde qué edad pueden usar SmartBoard?', a: 'SmartBoard está diseñado para niños entre 8 y 16 años. Nuestro sistema adapta el contenido y las actividades según la edad y el estilo de aprendizaje de cada estudiante.' },
   { q: '¿Necesito estar presente mientras mi hijo estudia?', a: 'No. SmartBoard está diseñado para que tu hijo aprenda de forma autónoma con el acompañamiento de Dani (coach virtual) y nuestro equipo de coaches humanos. Tú recibes reportes periódicos de su progreso.' },
   { q: '¿Cómo funciona el diagnóstico VAK?', a: 'El diagnóstico VAK es un test interactivo de 10 preguntas que identifica el estilo de aprendizaje predominante de tu hijo: Visual, Auditivo o Kinestésico. A partir de los resultados, creamos un plan de estudio totalmente personalizado.' },
-  { q: '¿Puedo cancelar en cualquier momento?', a: 'Sí. No hay permanencia forzada. Puedes cancelar tu suscripción cuando quieras sin penalización.' },
+  { q: '¿Qué métodos de pago aceptan?', a: 'Aceptamos tarjetas de crédito y débito (Visa, Mastercard, American Express), Mercado Pago, Nequi, transferencia bancaria y PSE. Todos los pagos están protegidos con cifrado SSL de grado bancario.' },
+  { q: '¿Puedo pagar en efectivo o en cuotas?', a: 'Sí. A través de Mercado Pago y Nequi puedes pagar en efectivo (Efecty, Baloto) y en cuotas sin interés con tarjetas de crédito seleccionadas.' },
+  { q: '¿Hay prueba gratuita?', a: 'Sí. Ambos planes incluyen 7 días de prueba gratuita sin compromiso. Puedes cancelar antes de que termine el periodo y no se te cobrará nada.' },
+  { q: '¿Puedo cancelar en cualquier momento?', a: 'Sí. No hay permanencia forzada. Puedes cancelar tu suscripción cuando quieras sin penalización. Si cancelas, seguirás teniendo acceso hasta el final del periodo pagado.' },
+  { q: '¿Los datos de mi hijo están seguros?', a: 'Absolutamente. Todos los datos están cifrados (SSL/TLS), almacenados en servidores seguros con cumplimiento de protección de datos. No compartimos información con terceros. Los reportes solo son visibles para los padres.' },
+  { q: '¿Qué pasa si mi hijo no quiere usarlo?', a: 'Lo entendemos. Por eso el diagnóstico VAK es el primer paso: cuando un niño descubre cómo aprende mejor, estudiar deja de ser una obligación y se vuelve interesante. Además, el sistema de gamificación (puntos, logros, recompensas) mantiene su motivación alta.' },
 ];
 
 const FAQ_ITEMS_EN = [
   { q: 'What age is SmartBoard for?', a: 'SmartBoard is designed for children ages 8 to 16. Our system adapts content and activities based on each student\'s age and learning style.' },
   { q: 'Do I need to be present while my child studies?', a: 'No. SmartBoard is designed for your child to learn independently with Dani (virtual coach) and our human coach team. You receive periodic progress reports.' },
   { q: 'How does the VAK diagnosis work?', a: 'The VAK diagnosis is a 10-question interactive test that identifies your child\'s predominant learning style: Visual, Auditory, or Kinesthetic. Based on results, we create a fully personalized study plan.' },
-  { q: 'Can I cancel anytime?', a: 'Yes. There is no forced commitment. You can cancel your subscription anytime without penalty.' },
+  { q: 'What payment methods do you accept?', a: 'We accept credit and debit cards (Visa, Mastercard, American Express), Mercado Pago, Nequi, bank transfer, and PSE. All payments are protected with bank-grade SSL encryption.' },
+  { q: 'Can I pay in cash or installments?', a: 'Yes. Through Mercado Pago and Nequi you can pay in cash (Efecty, Baloto) and in interest-free installments with selected credit cards.' },
+  { q: 'Is there a free trial?', a: 'Yes. Both plans include a 7-day free trial with no commitment. You can cancel before the trial ends and you won\'t be charged.' },
+  { q: 'Can I cancel anytime?', a: 'Yes. There is no forced commitment. You can cancel your subscription anytime without penalty. If you cancel, you\'ll still have access until the end of the paid period.' },
+  { q: 'Is my child\'s data safe?', a: 'Absolutely. All data is encrypted (SSL/TLS), stored in secure servers with data protection compliance. We do not share information with third parties. Reports are only visible to parents.' },
+  { q: 'What if my child doesn\'t want to use it?', a: 'We understand. That\'s why the VAK diagnosis is the first step: when a child discovers how they learn best, studying stops being a chore and becomes interesting. Plus, the gamification system (points, achievements, rewards) keeps their motivation high.' },
 ];
 
 const getData = (locale) => locale === 'en'
   ? {
       vakStyles: VAQ_STYLES_EN, pricingPlans: PRICING_PLANS_EN, testimonials: TESTIMONIALS_EN,
       beneficios: BENEFICIOS_HIJO_EN, tranquilidad: TRANQUILIDAD_EN, pasos: PASOS_EN, faq: FAQ_ITEMS_EN,
+      paymentMethods: PAYMENT_METHODS_EN, guarantee: GUARANTEE_EN,
     }
   : {
       vakStyles: VAQ_STYLES_ES, pricingPlans: PRICING_PLANS_ES, testimonials: TESTIMONIALS_ES,
       beneficios: BENEFICIOS_HIJO_ES, tranquilidad: TRANQUILIDAD_ES, pasos: PASOS_ES, faq: FAQ_ITEMS_ES,
+      paymentMethods: PAYMENT_METHODS_ES, guarantee: GUARANTEE_ES,
     };
 
 export const getVakStyles = (locale) => getData(locale).vakStyles;
@@ -113,3 +223,5 @@ export const getBeneficios = (locale) => getData(locale).beneficios;
 export const getTranquilidad = (locale) => getData(locale).tranquilidad;
 export const getPasos = (locale) => getData(locale).pasos;
 export const getFaqItems = (locale) => getData(locale).faq;
+export const getPaymentMethods = (locale) => getData(locale).paymentMethods;
+export const getGuarantee = (locale) => getData(locale).guarantee;

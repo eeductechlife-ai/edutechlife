@@ -41,7 +41,7 @@ export default function DashboardActivityView() {
 
   return (
     <div className="space-y-3">
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-3 max-sm:grid-cols-2 gap-2">
         {[
           { label: t('dashboard.today'), value: timeTracking?.today ?? 0 },
           { label: t('dashboard.this_week'), value: timeTracking?.weekTotal ?? 0 },

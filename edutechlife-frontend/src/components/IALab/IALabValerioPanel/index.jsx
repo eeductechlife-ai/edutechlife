@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import PropTypes from 'prop-types';;
 import { motion } from 'framer-motion';
 import { useIALabProgressContext, useIALabUIContext } from '../../../context/IALabContext';
 import { useIALabStore } from '../../../store/ialabStore';
-import { speakTextConversational, stopSpeech } from '../../../utils/speech';
-import { callDeepseek } from '../../../utils/api';
+import { speakTextConversational, speakValerioSentence, stopSpeech } from '../../../utils/speech';
+import { callDeepseekStream } from '../../../utils/api';
 
 import SectionErrorBoundary from '../SectionErrorBoundary';
 import { useValerioVoice } from './useValerioVoice';
@@ -14,6 +14,7 @@ import ValerioQuickActions from './ValerioQuickActions';
 import ValerioConversationArea from './ValerioConversationArea';
 import ValerioChatInput from './ValerioChatInput';
 import { buildValerioSystemPrompt, generateFallbackResponse, buildContextualWelcome } from './valerioPrompts'
+import { startSession, endSession, updateSession } from '../../../services/valerioMemory'
 
 const VALERIO_MEMORY_KEY = 'ialab_valerio_conversation';
 
@@ -35,22 +36,52 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
   });
   const [userInput, setUserInput] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [streamingMessage, setStreamingMessage] = useState('');
   const [quickActions, setQuickActions] = useState([]);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const welcomeSpokenRef = useRef(false);
+  const abortRef = useRef(null);
+  const warmupDoneRef = useRef(false);
+  const firstChunkRef = useRef(false);
 
   const studentName = user?.firstName || user?.full_name || '';
   const currentModule = modules.find(m => m.id === activeMod);
   const userLevel = completedModules.length;
+  const conversationRef = useRef(conversation);
+  conversationRef.current = conversation;
 
   const voice = useValerioVoice(isOpen, setUserInput, locale);
 
+  const systemPrompt = useMemo(() =>
+    buildValerioSystemPrompt({ locale, currentModule, modules, studentName, userLevel, completedModules, t }),
+    [locale, currentModule?.id, studentName, userLevel, completedModules?.length]
+  );
+
   useEffect(() => {
-    if (!isOpen) {
+    if (isOpen) {
+      startSession(activeMod);
+      if (!warmupDoneRef.current) {
+        warmupDoneRef.current = true;
+        const baseUrl = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'https://edutechlife-backend.onrender.com';
+        fetch(`${baseUrl}/api/chat/stream`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            messages: [{ role: 'user', content: 'ping' }],
+            temperature: 0.5,
+            maxTokens: 10,
+          }),
+          signal: AbortSignal.timeout(12000),
+        }).then(r => r.body?.cancel?.()).catch(() => {});
+      }
+    } else {
+      warmupDoneRef.current = false;
+      endSession(conversationRef.current);
       stopSpeech();
       setValerioState('idle');
     }
     return () => {
+      endSession(conversationRef.current);
       stopSpeech();
     };
   }, [isOpen]);
@@ -58,6 +89,9 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
   useEffect(() => {
     try { localStorage.setItem(VALERIO_MEMORY_KEY, JSON.stringify(conversation)); }
     catch { /* ignore */ }
+    if (conversation.length > 0) {
+      updateSession({ messageCount: conversation.length });
+    }
   }, [conversation]);
 
   useEffect(() => {
@@ -96,12 +130,15 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
   useEffect(() => {
     if (isOpen && !welcomeSpokenRef.current) {
       welcomeSpokenRef.current = true;
-      const alreadyWelcomed = useIALabStore.getState().getValerioWelcomed();
+      setValerioState('speaking');
 
+      const greeting = '¡Hola! Soy Valerio, ¿en qué puedo ayudarte?';
+      speakValerioSentence(greeting, () => setValerioState('idle'));
+
+      const alreadyWelcomed = useIALabStore.getState().getValerioWelcomed();
       if (!alreadyWelcomed) {
         useIALabStore.getState().setValerioWelcomed();
         const welcomeMessage = buildContextualWelcome({ locale, studentName, currentModule, userLevel, activeMod });
-
         setMessage(welcomeMessage);
         setConversation([{
           id: 'welcome',
@@ -109,15 +146,6 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
           content: welcomeMessage,
           timestamp: new Date().toISOString()
         }]);
-
-        setValerioState('speaking');
-        speakTextConversational(welcomeMessage, 'valerio', () => {
-          setValerioState('idle');
-        });
-      } else {
-        const shortGreeting = userLevel < 3 ? t('ialab.valerio.short_greeting_low') : t('ialab.valerio.short_greeting_high');
-        setValerioState('speaking');
-        speakTextConversational(shortGreeting, 'valerio', () => setValerioState('idle'));
       }
     }
   }, [isOpen]);
@@ -127,6 +155,7 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
 
     setIsProcessing(true);
     setValerioState('thinking');
+    setStreamingMessage('');
 
     const userMessage = {
       id: `user_${Date.now()}`,
@@ -138,33 +167,62 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
     setConversation(prev => [...prev, userMessage]);
     setUserInput('');
 
-    try {
-      const systemPrompt = buildValerioSystemPrompt({ locale, currentModule, modules, studentName, userLevel, completedModules, t });
-      const response = await Promise.race([
-        callDeepseek(inputText, systemPrompt, false),
-        new Promise((_, reject) =>
-          setTimeout(() => reject(new Error('timeout')), 10000)
-        )
-      ]);
+    const messages = [
+      { role: 'system', content: systemPrompt },
+      ...conversationRef.current.map(m => ({
+        role: m.type === 'user' ? 'user' : 'assistant',
+        content: m.content
+      })),
+      { role: 'user', content: inputText }
+    ];
 
-      if (!response || response.length < 10) {
+    const controller = new AbortController();
+    abortRef.current = controller;
+    const timeoutId = setTimeout(() => controller.abort(), 20000);
+
+    try {
+      firstChunkRef.current = false;
+      let fullResponse = '';
+      await callDeepseekStream(
+        messages,
+        { temperature: 0.7, maxTokens: 800 },
+        false,
+        (chunk) => {
+          fullResponse += chunk;
+          if (!firstChunkRef.current && chunk.trim()) {
+            firstChunkRef.current = true;
+            setValerioState('speaking');
+          }
+          setStreamingMessage(fullResponse);
+        }
+      );
+
+      clearTimeout(timeoutId);
+
+      if (fullResponse.length < 5) {
         throw new Error('Respuesta vacía o muy corta');
       }
 
       const valerioMessage = {
         id: `valerio_${Date.now()}`,
         type: 'valerio',
-        content: response,
+        content: fullResponse,
         timestamp: new Date().toISOString()
       };
 
       setConversation(prev => [...prev, valerioMessage]);
-      setMessage(response);
+      setMessage(fullResponse);
+      setStreamingMessage('');
 
-      setValerioState('speaking');
-      speakTextConversational(response, 'valerio', () => setValerioState('idle'));
+      speakTextConversational(fullResponse, 'valerio', () => setValerioState('idle'));
     } catch (error) {
-      console.warn('⚠️ API DeepSeek no disponible, usando respuesta local:', error.message);
+      clearTimeout(timeoutId);
+      if (error.name === 'AbortError') {
+        console.warn('⚠️ Timeout al contactar DeepSeek');
+      } else {
+        console.warn('⚠️ API DeepSeek no disponible:', error.message);
+      }
+
       const fallbackResponse = generateFallbackResponse(inputText, locale, { currentModule, userLevel });
 
       const valerioMessage = {
@@ -176,13 +234,14 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
 
       setConversation(prev => [...prev, valerioMessage]);
       setMessage(fallbackResponse);
+      setStreamingMessage('');
 
-      setValerioState('speaking');
       speakTextConversational(fallbackResponse, 'valerio', () => setValerioState('idle'));
     } finally {
       setIsProcessing(false);
+      abortRef.current = null;
     }
-  }, [currentModule, userLevel, isProcessing]);
+  }, [currentModule, userLevel, isProcessing, locale, studentName, completedModules, t, systemPrompt]);
 
   const handleQuickAction = (action) => {
     processUserInput(action.prompt);
@@ -202,12 +261,14 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
   };
 
   const handleClearConversation = () => {
+    if (abortRef.current) abortRef.current.abort();
     setShowClearConfirm(true);
   };
 
   const confirmClearConversation = () => {
     setConversation([]);
     setMessage('');
+    setStreamingMessage('');
     setShowClearConfirm(false);
     try { localStorage.removeItem(VALERIO_MEMORY_KEY); } catch { /* ignore */ }
   };
@@ -231,7 +292,7 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
 
   return (
     <SectionErrorBoundary name="ValerioPanel">
-    <div className="fixed right-0 top-0 bottom-0 z-[90] flex flex-col" role="dialog" aria-label={t('ialab.valerio.panel_aria')} onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }}>
+    <div className="fixed right-0 top-0 bottom-0 z-[90] flex flex-col" role="dialog" aria-label={t('ialab.valerio.panel_aria')} onKeyDown={(e) => { if (e.key === 'Escape') { stopSpeech(); onClose(); } }}>
       <motion.div
         initial={{ x: '100%' }}
         animate={{ x: 0 }}
@@ -259,6 +320,7 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
             conversation={conversation}
             isProcessing={isProcessing}
             moduleTitle={currentModule?.title}
+            streamingMessage={streamingMessage}
           />
 
           <ValerioChatInput

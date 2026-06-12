@@ -283,7 +283,7 @@ const IALabEvaluationResults = ({ evaluation, onClose, activityType = 'challenge
                                     </p>
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-3">
+                                <div className="grid grid-cols-2 max-sm:grid-cols-1 gap-3">
                                     <div className="text-center bg-slate-50 rounded-lg p-3">
                                         <div className="text-2xl font-bold text-slate-800">{remainingAttempts}</div>
                                         <div className="text-xs text-slate-500">{t('ialab.evaluation.results.remaining_attempts')}</div>

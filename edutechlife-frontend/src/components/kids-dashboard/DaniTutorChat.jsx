@@ -1,17 +1,19 @@
 import { useState, useRef, useEffect, useCallback, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { callDeepseek } from '../../utils/api';
 import { PROMPT_DANI_EXPERTO, PROMPT_TUTOR_TAREAS, PROMPT_DANI_SOCRATICO } from '../../constants/prompts';
 import { useSmartBoardKids } from '../../context/SmartBoardKidsContext';
-import { speakTextConversational, stopSpeech } from '../../utils/speech';
+import { speakTextConversational, stopSpeech, iniciarReconocimiento, stopRecognition } from '../../utils/speech';
 import useFocusTrap from '../../hooks/useFocusTrap';
-import DaniAvatar3D from './DaniAvatar3D';
+import { tutorAvatars, DEFAULT_AVATAR } from '../../data/tutorAvatars';
 
 // ==========================================
 // Dani Avatar Component
 // ==========================================
-const DaniAvatar = memo(({ mood, isTyping, isSpeaking }) => (
-  <DaniAvatar3D mood={mood} isTyping={isTyping} isSpeaking={isSpeaking} size="md" />
+const DaniAvatar = memo(() => (
+  <img src={tutorAvatars.Dani || DEFAULT_AVATAR} alt="Dani"
+    className="w-10 h-10 rounded-full object-cover ring-2 ring-white/30 flex-shrink-0" />
 ));
 
 DaniAvatar.displayName = 'DaniAvatar';
@@ -35,7 +37,7 @@ const MessageBubble = memo(({ message, isDani, darkMode }) => {
     >
       {isDani && (
         <div className="mr-3 mt-1 flex-shrink-0">
-          <DaniAvatar mood="happy" isTyping={false} />
+          <DaniAvatar />
         </div>
       )}
       <div
@@ -186,6 +188,7 @@ function extractTopic(text) {
 // Main Dani Tutor Chat Component
 // ==========================================
 const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
+  const navigate = useNavigate();
   const {
     daniChatHistory,
     addDaniMessage,
@@ -204,6 +207,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
     calendarEvents,
     documentForDani,
     setDocumentForDani,
+    subscriptionTier,
   } = useSmartBoardKids();
 
   const [inputText, setInputText] = useState('');
@@ -220,6 +224,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
   const [showEmotionalBanner, setShowEmotionalBanner] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [voiceBlocked, setVoiceBlocked] = useState(false);
+  const [isListening, setIsListening] = useState(false);
   const messagesEndRef = useRef(null);
   const hasSentWelcome = useRef(false);
   const isSpeakingRef = useRef(false);
@@ -361,11 +366,10 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [daniChatHistory]);
 
-  // Force voice enabled every time chat opens
+  // Reset welcome flag so it plays again on next open
   useEffect(() => {
-    if (isOpen) {
-      setVoiceEnabled(true);
-      localStorage.setItem('edutechlife_dani_voice', 'true');
+    if (!isOpen) {
+      hasSentWelcome.current = false;
     }
   }, [isOpen]);
 
@@ -576,6 +580,22 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
     handleSendMessage(`Dani, explícame sobre ${topic}, quiero entenderlo bien`);
   }, [handleSendMessage]);
 
+  const handleMicClick = useCallback(() => {
+    if (isListening) {
+      stopRecognition();
+      return;
+    }
+    iniciarReconocimiento(
+      setInputText,
+      (finalText) => {
+        if (finalText.trim()) {
+          handleSendMessage(finalText);
+        }
+      },
+      setIsListening
+    );
+  }, [isListening, handleSendMessage]);
+
   if (!isOpen) return null;
 
   return (
@@ -606,7 +626,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
           {/* Header */}
           <div className="bg-gradient-to-r from-[#004B63] to-[#4DA8C4] p-4 flex items-center justify-between shadow-lg">
             <div className="flex items-center gap-3">
-              <DaniAvatar mood={daniMood} isTyping={isTyping} isSpeaking={isSpeaking} />
+              <DaniAvatar />
               <div>
                 <h3 className="text-white font-bold text-lg">Dani</h3>
                 <p className="text-white/80 text-xs">
@@ -834,6 +854,22 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
                     : 'bg-[#F8FAFC] border border-[#E2E8F0] text-[#004B63]'
                 }`}
               />
+              <motion.button
+                onClick={handleMicClick}
+                disabled={isTyping}
+                className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 transition-all ${
+                  isListening
+                    ? 'bg-red-500 text-white shadow-lg shadow-red-500/30'
+                    : 'bg-[#F8FAFC] border border-[#E2E8F0] text-[#64748B] hover:bg-[#E2E8F0]'
+                }`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                title={isListening ? 'Toca para detener' : 'Hablar con Dani'}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                </svg>
+              </motion.button>
               <motion.button
                 onClick={() => handleSendMessage(inputText)}
                 disabled={!inputText.trim() || isTyping}

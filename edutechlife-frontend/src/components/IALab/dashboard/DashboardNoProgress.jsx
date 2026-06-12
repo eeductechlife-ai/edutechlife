@@ -27,7 +27,7 @@ export default function DashboardNoProgress() {
           <Icon name="fa-play-circle" className="w-5 h-5" />
           {t('route.start')}
         </motion.button>
-        <div className="grid grid-cols-3 gap-2.5 mt-6">
+        <div className="grid grid-cols-3 max-sm:grid-cols-2 gap-2.5 mt-6">
           {[
             { icon: 'fa-star', label: t('dashboard.xp_earned'), sub: t('dashboard.xp_sub') },
             { icon: 'fa-fire', label: t('dashboard.current_streak'), sub: t('dashboard.days_consecutive') },

@@ -5,7 +5,7 @@
 -- =============================================
 
 CREATE TABLE IF NOT EXISTS smartboard_kids_data (
-  user_id UUID PRIMARY KEY,
+  user_id TEXT PRIMARY KEY,
   platform TEXT NOT NULL DEFAULT 'smartboard',
   
   -- Estado completo del dashboard (equivalente a localStorage)
@@ -40,26 +40,26 @@ CREATE TRIGGER trg_smartboard_updated_at
 -- =============================================
 ALTER TABLE smartboard_kids_data ENABLE ROW LEVEL SECURITY;
 
--- Policy: SELECT solo propia fila
+-- Policy: SELECT solo propia fila (compatible Clerk — user_id es TEXT)
 CREATE POLICY "smartboard_select_own" ON smartboard_kids_data
   FOR SELECT
-  USING (auth.uid() = user_id);
+  USING (auth.jwt() ->> 'sub' = user_id);
 
--- Policy: INSERT solo propia fila
+-- Policy: INSERT solo propia fila (compatible Clerk)
 CREATE POLICY "smartboard_insert_own" ON smartboard_kids_data
   FOR INSERT
-  WITH CHECK (auth.uid() = user_id);
+  WITH CHECK (auth.jwt() ->> 'sub' = user_id);
 
--- Policy: UPDATE solo propia fila
+-- Policy: UPDATE solo propia fila (compatible Clerk)
 CREATE POLICY "smartboard_update_own" ON smartboard_kids_data
   FOR UPDATE
-  USING (auth.uid() = user_id)
-  WITH CHECK (auth.uid() = user_id);
+  USING (auth.jwt() ->> 'sub' = user_id)
+  WITH CHECK (auth.jwt() ->> 'sub' = user_id);
 
--- Policy: DELETE solo propia fila
+-- Policy: DELETE solo propia fila (compatible Clerk)
 CREATE POLICY "smartboard_delete_own" ON smartboard_kids_data
   FOR DELETE
-  USING (auth.uid() = user_id);
+  USING (auth.jwt() ->> 'sub' = user_id);
 
 -- Policy: Admin puede ver todo
 CREATE POLICY "smartboard_admin_all" ON smartboard_kids_data

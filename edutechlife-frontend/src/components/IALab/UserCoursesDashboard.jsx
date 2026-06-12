@@ -82,7 +82,7 @@ const UserCoursesDashboard = () => {
   return (
     <div className="space-y-6">
       {/* Stats row */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-3 max-sm:grid-cols-2 gap-3">
         {[
           { label: t('streak.xp'), value: storeXp.toLocaleString() },
           { label: t('streak.level'), value: storeLevel },
