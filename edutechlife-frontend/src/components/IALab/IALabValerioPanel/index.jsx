@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { useIALabProgressContext, useIALabUIContext } from '../../../context/IALabContext';
 import { useIALabStore } from '../../../store/ialabStore';
@@ -218,9 +218,9 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
     } catch (error) {
       clearTimeout(timeoutId);
       if (error.name === 'AbortError') {
-        console.warn('⚠️ Timeout al contactar DeepSeek');
+        if (import.meta.env.DEV) console.warn('⚠️ Timeout al contactar DeepSeek');
       } else {
-        console.warn('⚠️ API DeepSeek no disponible:', error.message);
+        if (import.meta.env.DEV) console.warn('⚠️ API DeepSeek no disponible:', error.message);
       }
 
       const fallbackResponse = generateFallbackResponse(inputText, locale, { currentModule, userLevel });

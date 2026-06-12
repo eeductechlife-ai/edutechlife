@@ -1,6 +1,6 @@
-// Servicio para interactuar con los endpoints de IALab del backend
+import { API_BASE_URL as CONFIG_API_URL } from '../config/api';
 
-const API_BASE_URL = 'http://localhost:3001/api';
+const API_BASE_URL = CONFIG_API_URL ? `${CONFIG_API_URL}/api` : 'http://localhost:3001/api';
 
 // Función para manejar errores de fetch
 const handleResponse = async (response) => {

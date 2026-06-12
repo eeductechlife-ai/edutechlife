@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 import SectionErrorBoundary from './SectionErrorBoundary';
 import { GLASS_CARD, FOCUS_RING } from './constants/styles';
 import { useTranslation } from '../../i18n/I18nProvider';

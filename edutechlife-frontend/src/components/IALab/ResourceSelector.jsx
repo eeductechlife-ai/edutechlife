@@ -12,7 +12,7 @@
  */
 
 import { useState } from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { cn } from '../forum/forumDesignSystem';

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 import { Volume2, Square } from 'lucide-react';
 import { speakTextConversational, stopSpeech } from '../../utils/speech';
 import { useTranslation } from '../../i18n/I18nProvider';

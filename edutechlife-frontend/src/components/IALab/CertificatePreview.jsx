@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
@@ -202,7 +202,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
 
       doc.save(`${t('certificate.filename_prefix')}_${courseName.replace(/\s+/g, '_')}_${displayName.replace(/\s+/g, '_')}.pdf`);
     } catch (err) {
-      console.error('Error generating PDF:', err);
+      if (import.meta.env.DEV) console.error('Error generating PDF:', err);
     } finally {
       setIsDownloading(false);
     }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 import IALabEvaluationModal from './IALabEvaluationModal';
 import { useIALabProgressContext, useIALabUIContext } from '../../context/IALabContext';
 import { useIALabStore } from '../../store/ialabStore';
@@ -36,7 +36,7 @@ const IALabEvaluationModalPremium = ({ isOpen, onClose }) => {
                         }
                     );
                 } catch (error) {
-                    console.warn('⚠️ Error no crítico al guardar progreso:', error);
+                    if (import.meta.env.DEV) console.warn('⚠️ Error no crítico al guardar progreso:', error);
                 }
             };
             
@@ -76,7 +76,7 @@ const IALabEvaluationModalPremium = ({ isOpen, onClose }) => {
             try {
                 if (refreshProgress) await refreshProgress();
             } catch (e) {
-                console.warn('⚠️ Error al refrescar progreso:', e);
+                if (import.meta.env.DEV) console.warn('⚠️ Error al refrescar progreso:', e);
             }
             
             const passed = score >= 80;
@@ -90,7 +90,7 @@ const IALabEvaluationModalPremium = ({ isOpen, onClose }) => {
                 metadata: { moduleId: activeMod, score, type: 'challenge' }
             });
         } catch (error) {
-            console.error('❌ Error procesando resultado del desafío:', error);
+            if (import.meta.env.DEV) console.error('❌ Error procesando resultado del desafío:', error);
         } finally {
             setIsProcessing(false);
         }

@@ -12,12 +12,13 @@
  * - Integración con cuadrícula de recursos
  */
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, lazy, Suspense } from 'react'
 import PropTypes from 'prop-types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
-import QueEsPrompt_OVA_Original from './QueEsPrompt_OVA_Original';
+import SectionErrorBoundary from './SectionErrorBoundary';
+const QueEsPrompt_OVA_Original = lazy(() => import('./QueEsPrompt_OVA_Original'));
 
 /**
  * Componente principal OVAThumbnail
@@ -223,7 +224,11 @@ const OVAThumbnail = ({
       {/* OVA A PANTALLA COMPLETA */}
       <AnimatePresence>
         {isOVAOpen && (
-          <QueEsPrompt_OVA_Original onClose={handleCloseOVA} />
+          <Suspense fallback={<div className="w-full h-64 flex items-center justify-center text-petroleum/60">Cargando OVA...</div>}>
+            <SectionErrorBoundary name="QueEsPrompt">
+              <QueEsPrompt_OVA_Original onClose={handleCloseOVA} />
+            </SectionErrorBoundary>
+          </Suspense>
         )}
       </AnimatePresence>
     </>

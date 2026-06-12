@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 import { motion, AnimatePresence } from 'framer-motion';
 import SectionErrorBoundary from './SectionErrorBoundary';
 import { X, Trophy, Loader2 } from 'lucide-react';
@@ -66,7 +66,7 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
 
       setEntries(enriched);
     } catch (err) {
-      console.error('Error fetching leaderboard:', err);
+      if (import.meta.env.DEV) console.error('Error fetching leaderboard:', err);
     } finally {
       setLoading(false);
     }

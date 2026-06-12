@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import { useIALabStore } from '../../store/ialabStore';

@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 interface ProviderComposerProps {
   providers: (React.ReactElement | React.ComponentType<{ children?: ReactNode }>)[];
@@ -6,14 +6,16 @@ interface ProviderComposerProps {
 }
 
 export const ProviderComposer = ({ providers, children }: ProviderComposerProps) => {
-  return providers.reduceRight<ReactNode>((acc, provider) => {
-    if (React.isValidElement(provider)) {
-      return React.cloneElement(provider, null, acc);
-    }
+  let result = children;
+  for (let i = providers.length - 1; i >= 0; i--) {
+    const provider = providers[i];
     if (typeof provider === 'function') {
       const Provider = provider as React.ComponentType<{ children?: ReactNode }>;
-      return <Provider>{acc}</Provider>;
+      result = <Provider>{result}</Provider>;
+    } else {
+      const el = provider as React.ReactElement<{ children?: ReactNode }>;
+      result = <el.type {...el.props}>{result}</el.type>;
     }
-    return acc;
-  }, children);
+  }
+  return result;
 };

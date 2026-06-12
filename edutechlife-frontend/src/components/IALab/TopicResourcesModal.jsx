@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react'
-import PropTypes from 'prop-types';;
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react'
+import PropTypes from 'prop-types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { cn } from '../forum/forumDesignSystem';
@@ -10,7 +10,8 @@ import { useYouTubeDuration } from '../../hooks/useYouTubeDuration';
 import { useTranslation } from '../../i18n/I18nProvider';
 import ResourceSelector from './ResourceSelector';
 import ResourceViewerModal from './ResourceViewerModal';
-import QueEsPrompt_OVA_Original from './QueEsPrompt_OVA_Original';
+import SectionErrorBoundary from './SectionErrorBoundary';
+const QueEsPrompt_OVA_Original = lazy(() => import('./QueEsPrompt_OVA_Original'));
 import { getResourcesForTopic, RESOURCE_TYPE_CONFIG } from './constants/moduleResources';
 import { stopSpeech } from '../../utils/speech';
 import useFullscreen from './hooks/useFullscreen';
@@ -168,7 +169,7 @@ const TopicResourcesModal = ({
 
   const immersiveComponent = immersivePdfModalOpen && immersivePdfResource
     ? <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
-              <div className="relative w-full h-full max-w-6xl bg-white rounded-3xl overflow-hidden flex flex-col" style={{ boxShadow: '0 25px 50px -12px rgba(0,75,99,0.25)' }}>
+              <div className="relative w-full h-full max-w-6xl bg-white rounded-3xl overflow-hidden flex flex-col shadow-[0_25px_50px_-12px_rgba(0,75,99,0.25)]">
                 <div className="flex items-center justify-between p-6 border-b border-white/10 bg-gradient-to-r from-petroleum to-corporate backdrop-blur-sm">
                   <div className="flex items-center gap-4">
                     <div className="bg-white/10 p-3 rounded-xl">
@@ -384,10 +385,9 @@ const TopicResourcesModal = ({
                     }}
                     disabled={activeResourceIndex <= 0}
                     className={cn(
-                      "w-9 h-9 sm:w-11 sm:h-11 rounded-xl border border-petroleum/25 border-l-4 border-l-petroleum transition-all duration-200 flex items-center justify-center bg-white",
+                      "w-9 h-9 sm:w-11 sm:h-11 rounded-xl border border-petroleum/25 border-l-4 border-l-petroleum transition-all duration-200 flex items-center justify-center bg-white shadow-sm",
                       activeResourceIndex <= 0 ? "text-petroleum/50 cursor-not-allowed opacity-40" : "text-petroleum hover:bg-petroleum/5 hover:border-l-corporate hover:shadow"
                     )}
-                    style={{ boxShadow: '0 1px 3px 0 rgba(0,75,99,0.15), 0 1px 2px -1px rgba(0,75,99,0.12)' }}
                     aria-label={t('ialab.viewer_modal.previous_aria')}
                   >
                     <Icon name="fa-chevron-left" className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -405,10 +405,9 @@ const TopicResourcesModal = ({
                     }}
                     disabled={activeResourceIndex >= resources.length - 1}
                     className={cn(
-                      "w-9 h-9 sm:w-11 sm:h-11 rounded-xl border border-petroleum/25 border-l-4 border-l-petroleum transition-all duration-200 flex items-center justify-center bg-white",
+                      "w-9 h-9 sm:w-11 sm:h-11 rounded-xl border border-petroleum/25 border-l-4 border-l-petroleum transition-all duration-200 flex items-center justify-center bg-white shadow-sm",
                       activeResourceIndex >= resources.length - 1 ? "text-petroleum/50 cursor-not-allowed opacity-40" : "text-petroleum hover:bg-petroleum/5 hover:border-l-corporate hover:shadow"
                     )}
-                    style={{ boxShadow: '0 1px 3px 0 rgba(0,75,99,0.15), 0 1px 2px -1px rgba(0,75,99,0.12)' }}
                     aria-label={t('ialab.viewer_modal.next_aria')}
                   >
                     <Icon name="fa-chevron-right" className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -436,7 +435,11 @@ const TopicResourcesModal = ({
           />
 
           {ovaModalOpen && selectedResource && (
-            <QueEsPrompt_OVA_Original onClose={handleCloseViewerModals} />
+            <Suspense fallback={<div className="w-full h-64 flex items-center justify-center text-petroleum/60">Cargando OVA...</div>}>
+              <SectionErrorBoundary name="QueEsPrompt">
+                <QueEsPrompt_OVA_Original onClose={handleCloseViewerModals} />
+              </SectionErrorBoundary>
+            </Suspense>
           )}
 
           {immersiveComponent}

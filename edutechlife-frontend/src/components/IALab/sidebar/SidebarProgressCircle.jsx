@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 
 const SidebarProgressCircle = ({ courseProgress, t }) => (
   <div className="flex flex-col items-center">

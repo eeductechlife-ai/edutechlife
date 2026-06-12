@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 import { OVAIntro, OVAValerioBar } from './shared';
 import SectionErrorBoundary from './SectionErrorBoundary';
 import { FOCUS_RING } from './constants/styles';

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { useUser } from '@clerk/react';
 import { supabase } from '../../lib/supabase';
@@ -6,8 +6,9 @@ import { useProgressContext } from '../../context/ProgressContext';
 import { useIALabProgressContext, useIALabUIContext } from '../../context/IALabContext';
 import { Card, CardContent } from '../ui/card-simple';
 import { Icon } from '../../utils/iconMapping.jsx';
-import CertificatePreview from '../IALab/CertificatePreview';
 import { useTranslation } from '../../i18n/I18nProvider';
+
+const CertificatePreview = lazy(() => import('../IALab/CertificatePreview'));
 
 const TOTAL_MODULES = 5;
 const COURSE_NAME = 'Introducción a la I.A Generativa';
@@ -94,11 +95,13 @@ const CertificatesModal = ({ isOpen, onClose }) => {
       const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent('https://edutechlife.com')}&title=${encodeURIComponent(`Certificado en ${COURSE_NAME}`)}&summary=${encodeURIComponent(`He completado el curso "${COURSE_NAME}" en Edutechlife. Certificado Nº ${certificate.cert_number}`)}`;
       return (
         <div className="space-y-4">
-          <CertificatePreview
-            studentName={certificate.cert_name}
-            certNumber={certificate.cert_number}
-            issuedAt={certificate.issued_at}
-          />
+          <Suspense fallback={<div className="w-full h-48 flex items-center justify-center"><Icon name="fa-spinner" className="animate-spin text-2xl text-[#00BCD4]" /></div>}>
+            <CertificatePreview
+              studentName={certificate.cert_name}
+              certNumber={certificate.cert_number}
+              issuedAt={certificate.issued_at}
+            />
+          </Suspense>
           <motion.a
             href={shareUrl}
             target="_blank"

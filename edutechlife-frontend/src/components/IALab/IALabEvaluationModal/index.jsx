@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../../context/AuthContext';
 import { supabase } from '../../../lib/supabase';
@@ -213,7 +213,7 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId: pr
         }
       }
     } catch (error) {
-      console.error('Error en evaluación:', error);
+      if (import.meta.env.DEV) console.error('Error en evaluación:', error);
       setFormError(t('ialab.evaluation.modal.form_error_evaluation'));
       setTimeoutFormError(6000);
     } finally {

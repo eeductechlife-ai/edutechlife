@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 import { useTranslation } from '../../i18n/I18nProvider';
 import VoiceReader from './VoiceReader';
 import { motion, AnimatePresence } from 'framer-motion';

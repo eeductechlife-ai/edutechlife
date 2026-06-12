@@ -1,5 +1,5 @@
 import React, { useState, useId } from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 
 const TooltipIcon = ({ label, children, premium }) => {
   const [isFocused, setIsFocused] = useState(false);

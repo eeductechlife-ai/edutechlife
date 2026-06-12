@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 import { useTranslation } from '../../../../i18n/I18nProvider';
 import { Mail, FileText, Database, Lightbulb, Check, ArrowRight } from 'lucide-react';
 import { Button, Card } from '../shared';

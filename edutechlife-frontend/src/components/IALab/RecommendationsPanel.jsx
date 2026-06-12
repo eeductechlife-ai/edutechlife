@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo } from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 import { useIALabStore } from '../../store/ialabStore';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';

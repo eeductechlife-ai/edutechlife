@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 import { useTranslation } from '../../../../i18n/I18nProvider';
 import { Mail, Bot, Database, CheckCircle, Workflow, Zap, Settings } from 'lucide-react';
 import { Button, Card } from '../shared';

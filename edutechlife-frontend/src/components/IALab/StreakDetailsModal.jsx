@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { X, Loader2 } from 'lucide-react';
 import { useIALabStore } from '../../store/ialabStore';
@@ -134,7 +134,7 @@ const StreakDetailsModal = ({ isOpen, onClose }) => {
       }));
       setEntries(enriched);
     } catch (err) {
-      console.error('Error fetching leaderboard:', err);
+      if (import.meta.env.DEV) console.error('Error fetching leaderboard:', err);
     } finally {
       setLoadingLb(false);
     }

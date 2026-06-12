@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 import { motion, useReducedMotion, useSpring, useTransform } from 'framer-motion';
 import { useIdlePause } from '../../hooks/IALab/useIdlePause';
 import { Icon } from '../../utils/iconMapping';

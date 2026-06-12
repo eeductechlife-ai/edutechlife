@@ -14,12 +14,12 @@ const LoadingSpinner = memo(({ onRetry, loadingText = 'Cargando...', retryText =
   }, []);
   return (
     <div role="status" aria-live="polite" className="flex flex-col items-center justify-center py-12">
-      <div className="w-8 h-8 border-2 border-petroleum/30 border-t-petroleum rounded-full animate-spin mb-4" />
-      <p className="text-sm text-slate-500 font-medium">{loadingText}</p>
+      <div className="w-8 h-8 border-2 border-petroleum/30 border-t-petroleum dark:border-corporate/30 dark:border-t-corporate rounded-full animate-spin mb-4" />
+      <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">{loadingText}</p>
       {showTimeout && onRetry && (
         <button
           onClick={onRetry}
-          className="mt-4 px-4 py-2 text-xs font-semibold text-petroleum border border-petroleum/30 rounded-xl hover:bg-petroleum/5 transition-colors"
+          className="mt-4 px-4 py-2 text-xs font-semibold text-petroleum dark:text-corporate border border-petroleum/30 dark:border-corporate/30 rounded-xl hover:bg-petroleum/5 dark:hover:bg-corporate/5 transition-colors"
         >
           {retryText}
         </button>

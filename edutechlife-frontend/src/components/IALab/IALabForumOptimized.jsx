@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback, memo } from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useAuth } from '../../context/AuthContext';
@@ -8,7 +8,7 @@ import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
 import useIALabForum from '../../hooks/IALab/useIALabForum';
 import { cn } from '../forum/forumDesignSystem';
 import { useTranslation } from '../../i18n/I18nProvider';
-import IALabForumOptimizedInput from '../IALab/forum/IALabForumOptimizedInput';
+import IALabForumOptimizedInput from './forum/IALabForumOptimizedInput';
 
 const IALabForumOptimized = ({
     compact = false,
@@ -93,7 +93,7 @@ const IALabForumOptimized = ({
             });
             
             if (!result.success) {
-                console.error('Error al crear post:', result.error);
+                if (import.meta.env.DEV) console.error('Error al crear post:', result.error);
                 return;
             }
             
@@ -106,7 +106,7 @@ const IALabForumOptimized = ({
             setShowLiveIndicator(true);
             setTimeout(() => setShowLiveIndicator(false), 3000);
         } catch (err) {
-            console.error('Error al enviar mensaje:', err);
+            if (import.meta.env.DEV) console.error('Error al enviar mensaje:', err);
         } finally {
             setIsSubmitting(false);
         }

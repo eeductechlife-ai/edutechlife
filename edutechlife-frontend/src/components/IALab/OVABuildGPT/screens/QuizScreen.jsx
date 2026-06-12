@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 import { useTranslation } from '../../../../i18n/I18nProvider';
 import { CheckCircle, Check, Award, Star, CheckCircle2 } from 'lucide-react';
 import { Card } from '../shared';

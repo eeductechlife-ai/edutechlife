@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, lazy, Suspense } from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabProgressContext, useIALabUIContext } from '../../context/IALabContext';
 import { useProgressContext } from '../../context/ProgressContext';

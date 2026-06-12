@@ -8,7 +8,7 @@
     { "source": "/ialab-resources/(.*)", "destination": "/ialab-resources/$1" },
     {
       "source": "/api/:path*",
-      "destination": "https://edutechlife-backend.onrender.com/api/:path*"
+      "destination": "https://edutechlife.onrender.com/api/:path*"
     },
     { "source": "/(.*)", "destination": "/index.html" }
   ],

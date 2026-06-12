@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useIALabQuiz } from '../../../hooks/IALab/useIALabQuiz';
 import { useIALabProgressContext } from '../../../context/IALabContext';
@@ -149,7 +149,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
 
       if (markExamComplete) {
         markExamComplete(activeMod, score).catch((err) => {
-          console.error('Error al sincronizar examen completado:', err);
+          if (import.meta.env.DEV) console.error('Error al sincronizar examen completado:', err);
           createNotification({
             type: 'error', title: t('ialab.quiz.sync_error_title'),
             message: t('ialab.quiz.sync_error_msg'),

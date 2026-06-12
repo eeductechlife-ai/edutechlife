@@ -1,6 +1,8 @@
-import { useRef, useEffect } from 'react'
-import PropTypes from 'prop-types';;
-import QueEsPrompt_OVA_Original from '../QueEsPrompt_OVA_Original';
+import { useRef, useEffect, lazy, Suspense } from 'react'
+import PropTypes from 'prop-types';
+import SectionErrorBoundary from '../SectionErrorBoundary';
+
+const QueEsPrompt_OVA_Original = lazy(() => import('../QueEsPrompt_OVA_Original'));
 
 const OVAViewer = ({ resource, onClose, onComplete }) => {
   const autoMarkedRef = useRef(false);
@@ -28,7 +30,11 @@ const OVAViewer = ({ resource, onClose, onComplete }) => {
   return (
     <div className="w-full h-full flex flex-col bg-white dark:bg-slate-800 rounded-2xl overflow-auto">
       <div className="flex-1 relative">
-        <QueEsPrompt_OVA_Original onClose={onClose} />
+        <Suspense fallback={<div className="w-full h-64 flex items-center justify-center text-petroleum/60">Cargando OVA...</div>}>
+          <SectionErrorBoundary name="QueEsPrompt">
+            <QueEsPrompt_OVA_Original onClose={onClose} />
+          </SectionErrorBoundary>
+        </Suspense>
       </div>
     </div>
   );

@@ -1,20 +1,20 @@
 import { lazy } from 'react';
 import InteractiveViewer from './InteractiveViewer';
 
-const OVAChatGPTTools = lazy(() => import(/* webpackChunkName: "ova-chatgpttools" */ '../OVAChatGPTTools.jsx'));
-const OVAEcosystemGuide = lazy(() => import(/* webpackChunkName: "ova-ecosystemguide" */ '../OVAEcosystemGuide.jsx'));
-const OVABuildGPT = lazy(() => import(/* webpackChunkName: "ova-buildgpt" */ '../OVABuildGPT'));
-const OVAEtica = lazy(() => import(/* webpackChunkName: "ova-etica" */ '../OVAEtica.jsx'));
-const OVAIntroPrompt = lazy(() => import(/* webpackChunkName: "ova-introprompt" */ '../OVAIntroPrompt.jsx'));
-const OVANotebookLab = lazy(() => import(/* webpackChunkName: "ova-notebooklab" */ '../OVANotebookLab.jsx'));
-const OVANotebookSimulator = lazy(() => import(/* webpackChunkName: "ova-notebooksimulator" */ '../OVANotebookSimulator.jsx'));
-const OVANotebookPodcastGuide = lazy(() => import(/* webpackChunkName: "ova-notebookpodcastguide" */ '../OVANotebookPodcastGuide.jsx'));
-const OVAPodcastStudio = lazy(() => import(/* webpackChunkName: "ova-podcaststudio" */ '../OVAPodcastStudio.jsx'));
-const OVABiasLab = lazy(() => import(/* webpackChunkName: "ova-biaslab" */ '../OVABiasLab.jsx'));
-const OVARiskSimulator = lazy(() => import(/* webpackChunkName: "ova-risksimulator" */ '../OVARiskSimulator.jsx'));
-const OVAEthicalDilemmas = lazy(() => import(/* webpackChunkName: "ova-ethicaldilemmas" */ '../OVAEthicalDilemmas.jsx'));
-const OvaEdutechlife = lazy(() => import(/* webpackChunkName: "ova-edutechlife" */ '../OvaEdutechlife.jsx'));
-const OVAPracticalCases = lazy(() => import(/* webpackChunkName: "ova-practicalcases" */ '../OVAPracticalCases.jsx'));
+const OVAChatGPTTools = lazy(() => import('../OVAChatGPTTools.jsx'));
+const OVAEcosystemGuide = lazy(() => import('../OVAEcosystemGuide.jsx'));
+const OVABuildGPT = lazy(() => import('../OVABuildGPT'));
+const OVAEtica = lazy(() => import('../OVAEtica.jsx'));
+const OVAIntroPrompt = lazy(() => import('../OVAIntroPrompt.jsx'));
+const OVANotebookLab = lazy(() => import('../OVANotebookLab.jsx'));
+const OVANotebookSimulator = lazy(() => import('../OVANotebookSimulator.jsx'));
+const OVANotebookPodcastGuide = lazy(() => import('../OVANotebookPodcastGuide.jsx'));
+const OVAPodcastStudio = lazy(() => import('../OVAPodcastStudio.jsx'));
+const OVABiasLab = lazy(() => import('../OVABiasLab.jsx'));
+const OVARiskSimulator = lazy(() => import('../OVARiskSimulator.jsx'));
+const OVAEthicalDilemmas = lazy(() => import('../OVAEthicalDilemmas.jsx'));
+const OvaEdutechlife = lazy(() => import('../OvaEdutechlife.jsx'));
+const OVAPracticalCases = lazy(() => import('../OVAPracticalCases.jsx'));
 
 export const OVA_COMPONENTS = {
   'workflow-ova-herramientas': OVAChatGPTTools,

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 import { FixedSizeList } from 'react-window';
 import { motion } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';

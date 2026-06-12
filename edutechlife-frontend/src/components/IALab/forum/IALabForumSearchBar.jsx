@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { useTranslation } from '../../../i18n/I18nProvider';
 

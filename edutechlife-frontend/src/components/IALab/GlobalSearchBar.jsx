@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { getModuleContent } from './constants/moduleContent';
 import { useIALabProgressContext } from '../../context/IALabContext';

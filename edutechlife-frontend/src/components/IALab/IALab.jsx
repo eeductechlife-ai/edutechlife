@@ -163,16 +163,12 @@ const IALabContent = () => {
         return () => window.removeEventListener('ialab:examCompleted', handler);
     }, []);
 
-    // Reset scroll al inicio al cargar el dashboard
     useEffect(() => {
         const forceScrollToTop = () => {
-            const mainEl = document.querySelector('main');
-            if (mainEl) {
-                mainEl.scrollTop = 0;
-                requestAnimationFrame(() => {
-                    mainEl.scrollTop = 0;
-                });
-            }
+            requestAnimationFrame(() => {
+                const mainEl = document.querySelector('main');
+                if (mainEl) mainEl.scrollTop = 0;
+            });
         };
         forceScrollToTop();
         window.addEventListener('popstate', forceScrollToTop);

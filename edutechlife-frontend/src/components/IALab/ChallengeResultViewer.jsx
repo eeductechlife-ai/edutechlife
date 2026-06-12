@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import PropTypes from 'prop-types';;
+import PropTypes from 'prop-types';
 import { useUser } from '@clerk/react';
 import { supabase } from '../../lib/supabase';
 import { Icon } from '../../utils/iconMapping.jsx';
@@ -48,7 +48,7 @@ const ChallengeResultViewer = ({ moduleId, onClose, onRetry }) => {
           });
         }
       } catch (err) {
-        console.error('[CHALLENGE_RESULT] Error loading:', err);
+        if (import.meta.env.DEV) console.error('[CHALLENGE_RESULT] Error loading:', err);
         setEvaluation({
           notaGlobal: 80,
           nota_ej1: 0, nota_ej2: 0, nota_ej3: 0,
