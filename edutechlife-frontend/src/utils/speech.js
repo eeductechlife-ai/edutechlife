@@ -11,8 +11,7 @@ const VOICE_PROFILES = {
     name: 'es-US-Studio-B',
     pitch: -2.0,
     speakingRate: 0.9,
-    volumeGainDb: 3.0,
-    effectsProfileId: ['telephony-class-application']
+    volumeGainDb: 3.0
   },
   sistema: {
     languageCode: 'es-US',
@@ -82,7 +81,7 @@ const VOICE_FALLBACKS = {
     { languageCode: 'es-ES', name: 'es-ES-Neural2-A', pitch: 0, speakingRate: 0.95 }
   ],
   valerio: [
-    { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: -2.0, speakingRate: 0.9, volumeGainDb: 3.0, effectsProfileId: ['telephony-class-application'] },
+    { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: -2.0, speakingRate: 0.9, volumeGainDb: 3.0 },
     { languageCode: 'es-US', name: 'es-US-Wavenet-C', pitch: -1.5, speakingRate: 0.9, volumeGainDb: 2.5 },
     { languageCode: 'es-US', name: 'es-US-Neural2-D', pitch: -1.0, speakingRate: 0.95, volumeGainDb: 2.5 },
     { languageCode: 'es-CO', name: 'es-CO-Neural2-B', pitch: -1.0, speakingRate: 0.9, volumeGainDb: 2.5 }
@@ -235,6 +234,7 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
 
   const isDev = import.meta.env.DEV || typeof window !== 'undefined' && window.location.hostname === 'localhost';
   const apiBase = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || (isDev ? 'http://localhost:3001' : 'https://edutechlife-api.vercel.app');
+  window.__voiceDebug = { apiBase, profile, isDev, backendVars: { VITE_API_BASE_URL: import.meta.env.VITE_API_BASE_URL, VITE_API_URL: import.meta.env.VITE_API_URL } };
   const voice = VOICE_PROFILES[profile] || VOICE_PROFILES.valeria;
 
   const cleanup = () => {
@@ -393,6 +393,7 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
   const cachedAudio = audioCache.get(profile, text);
   if (cachedAudio) {
     gotAudio = true;
+    window.__voiceDebug = { path: 'from-cache', profile, cacheSize: audioCache.size };
     currentAudio = new Audio(`data:audio/mp3;base64,${cachedAudio}`);
     currentAudio.volume = 1.0;
     currentAudio.onended = handleEnd;
@@ -442,7 +443,7 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
         const response = await fetch(`${currentApi}/api/tts`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          signal: AbortSignal.timeout(8000),
+          signal: AbortSignal.timeout(20000),
           body: JSON.stringify({
             input: { text },
             voice: {
@@ -459,7 +460,9 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
         });
 
         if (!response.ok) {
-          console.warn(`⚠️ TTS error HTTP ${response.status} en ${currentApi}, saltando backend...`);
+          const errText = await response.text().catch(() => '');
+          window.__voiceDebug = { path: 'http-error', status: response.status, api: currentApi, voice: voiceOption.name, response: errText.substring(0, 200) };
+          console.warn(`⚠️ TTS error HTTP ${response.status} en ${currentApi}, saltando backend...`, errText.substring(0, 200));
           break;
         }
 
@@ -515,7 +518,13 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
           return;
         }
         if (voiceError.name === 'TypeError' || voiceError.message?.includes('Failed to fetch') || voiceError.message?.includes('NetworkError')) {
+          window.__voiceDebug = { path: 'network-error', api: currentApi, voice: voiceOption.name, error: voiceError.message, code: voiceError.code };
           console.warn(`⚠️ Backend ${currentApi} no disponible, probando siguiente...`);
+          break;
+        }
+        if (voiceError.name === 'AbortError' || voiceError.message?.includes('aborted')) {
+          window.__voiceDebug = { path: 'timeout', api: currentApi, voice: voiceOption.name, timeout: 20000 };
+          console.warn(`⚠️ TTS timeout (20s) en ${currentApi} para ${voiceOption.name}, probando siguiente...`);
           break;
         }
         console.warn(`⚠️ TTS fallback: ${voiceOption.name} (${voiceError.message || voiceError})`);
@@ -525,6 +534,7 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
   }
 
   if (!gotAudio) {
+    window.__voiceDebug = { ...window.__voiceDebug, path: window.__voiceDebug?.path || 'fallback-native', allBackendsExhausted: true, profile };
     if (gen !== currentTtsGeneration) {
       cleanup();
       return;

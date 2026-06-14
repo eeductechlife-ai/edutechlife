@@ -91,9 +91,9 @@ beforeEach(() => {
 });
 
 describe('IALabDashboard', () => {
-  test('renders welcome section when no progress', () => {
+  test('renders dashboard tour when no progress', () => {
     render(<IALabDashboard />);
-    expect(screen.getByText('dashboard.welcome_title')).toBeInTheDocument();
+    expect(screen.getByText('ialab.dashboard_tour.welcome_title')).toBeInTheDocument();
   });
 
   test('renders DashboardInProgress when user has progress', () => {

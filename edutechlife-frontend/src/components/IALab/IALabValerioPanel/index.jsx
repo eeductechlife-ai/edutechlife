@@ -71,7 +71,17 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
             temperature: 0.5,
             maxTokens: 10,
           }),
-          signal: AbortSignal.timeout(12000),
+          signal: AbortSignal.timeout(20000),
+        }).then(r => r.body?.cancel?.()).catch(() => {});
+        fetch(`${baseUrl}/api/tts`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            input: { text: 'ping' },
+            voice: { languageCode: 'es-US', name: 'es-US-Standard-B' },
+            audioConfig: { audioEncoding: 'MP3', pitch: 0, speakingRate: 1.0 }
+          }),
+          signal: AbortSignal.timeout(20000),
         }).then(r => r.body?.cancel?.()).catch(() => {});
       }
     } else {
