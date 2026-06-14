@@ -525,7 +525,7 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
         if (voiceError.name === 'AbortError' || voiceError.message?.includes('aborted')) {
           window.__voiceDebug = { path: 'timeout', api: currentApi, voice: voiceOption.name, timeout: 20000 };
           console.warn(`⚠️ TTS timeout (20s) en ${currentApi} para ${voiceOption.name}, probando siguiente...`);
-          break;
+          continue;
         }
         console.warn(`⚠️ TTS fallback: ${voiceOption.name} (${voiceError.message || voiceError})`);
         continue;
