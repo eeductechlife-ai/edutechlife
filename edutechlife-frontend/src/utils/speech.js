@@ -234,7 +234,6 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
 
   const isDev = import.meta.env.DEV || typeof window !== 'undefined' && window.location.hostname === 'localhost';
   const apiBase = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || (isDev ? 'http://localhost:3001' : 'https://edutechlife-api.vercel.app');
-  window.__voiceDebug = { apiBase, profile, isDev, backendVars: { VITE_API_BASE_URL: import.meta.env.VITE_API_BASE_URL, VITE_API_URL: import.meta.env.VITE_API_URL } };
   const voice = VOICE_PROFILES[profile] || VOICE_PROFILES.valeria;
 
   const cleanup = () => {
@@ -393,7 +392,6 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
   const cachedAudio = audioCache.get(profile, text);
   if (cachedAudio) {
     gotAudio = true;
-    window.__voiceDebug = { path: 'from-cache', profile, cacheSize: audioCache.size };
     currentAudio = new Audio(`data:audio/mp3;base64,${cachedAudio}`);
     currentAudio.volume = 1.0;
     currentAudio.onended = handleEnd;
@@ -460,9 +458,7 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
         });
 
         if (!response.ok) {
-          const errText = await response.text().catch(() => '');
-          window.__voiceDebug = { path: 'http-error', status: response.status, api: currentApi, voice: voiceOption.name, response: errText.substring(0, 200) };
-          console.warn(`⚠️ TTS error HTTP ${response.status} en ${currentApi}, saltando backend...`, errText.substring(0, 200));
+          console.warn(`⚠️ TTS error HTTP ${response.status} en ${currentApi}, saltando backend...`);
           break;
         }
 
@@ -534,7 +530,6 @@ const speakTextConversational = async (text, profile = 'valeria', onEndCallback,
   }
 
   if (!gotAudio) {
-    window.__voiceDebug = { ...window.__voiceDebug, path: window.__voiceDebug?.path || 'fallback-native', allBackendsExhausted: true, profile };
     if (gen !== currentTtsGeneration) {
       cleanup();
       return;
