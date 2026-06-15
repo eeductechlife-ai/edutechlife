@@ -211,9 +211,9 @@ const IALabContent = () => {
         handleGlobalAction(action, data, s);
     }, []);
 
-    useCelebrationEffects(activeMod, handleGlobalAction);
+    useCelebrationEffects(activeMod, handleAction);
 
-    useIALabKeyboardShortcuts(handleGlobalAction);
+    useIALabKeyboardShortcuts(handleAction);
 
     const setActiveModStore = useIALabStore(s => s.setActiveMod);
     const { handleTouchStart: swipeStart, handleTouchEnd: swipeEnd } = useSwipeNavigation({
@@ -231,7 +231,7 @@ const IALabContent = () => {
                 )}
 
                 <header role="banner" className="hidden md:block">
-                  <IALabHeader onAction={handleGlobalAction} />
+                  <IALabHeader onAction={handleAction} />
                 </header>
                 
                 {/* Layout principal - Flexbox estricto para evitar overlap */}
@@ -293,7 +293,7 @@ const IALabContent = () => {
                               <motion.div key={`content-ruta-${activeMod}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.25 }} className="space-y-4">
                                 <Suspense fallback={<RouteSkeleton />}>
                                   <SectionErrorBoundary name="DailyPlan">
-                                    <DailyPlan onAction={handleGlobalAction} isLoading={isLoadingProgress} />
+                                    <DailyPlan onAction={handleAction} isLoading={isLoadingProgress} />
                                   </SectionErrorBoundary>
                                 </Suspense>
                               </motion.div>
@@ -326,7 +326,7 @@ const IALabContent = () => {
                               </div>
                             }>
                               <SectionErrorBoundary name="IALabModuleHeader" title={t('ialab.header_unavailable')}>
-                                <IALabModuleHeader onAction={handleGlobalAction} />
+                                <IALabModuleHeader onAction={handleAction} />
                               </SectionErrorBoundary>
                             </AnimatedSection>
 
@@ -344,7 +344,7 @@ const IALabContent = () => {
                               <div id="panel-contenido" role="tabpanel" aria-labelledby="tab-contenido">
                                 <Suspense fallback={<ModuleOverviewSkeleton />}>
                                   <SectionErrorBoundary>
-                                    <ModuleOverviewCard onAction={handleGlobalAction} onToggleForum={setIsForumOpen} />
+                                    <ModuleOverviewCard onAction={handleAction} onToggleForum={setIsForumOpen} />
                                   </SectionErrorBoundary>
                                 </Suspense>
                               </div>
@@ -355,8 +355,8 @@ const IALabContent = () => {
                               <div id="panel-actividades" role="tabpanel" aria-labelledby="tab-actividades">
                                 <Suspense fallback={<ModuleActionsSkeleton />}>
                                   <SectionErrorBoundary>
-                                    <ModuleActions
-                                      onAction={handleGlobalAction}
+                    <ModuleActions
+                      onAction={handleAction}
                                       activeMod={activeMod}
                                       challengeScores={challengeScores}
                                       completedExams={completedExams}
@@ -387,7 +387,7 @@ const IALabContent = () => {
                               <div id="panel-herramientas" role="tabpanel" aria-labelledby="tab-herramientas">
                                 <Suspense fallback={<ToolsSkeleton />}>
                                   <SectionErrorBoundary name="ToolTutorAccordion" title={t('ialab.tools_unavailable')}>
-                                    <ToolTutorAccordion onAction={handleGlobalAction} />
+                                    <ToolTutorAccordion onAction={handleAction} />
                                   </SectionErrorBoundary>
                                 </Suspense>
                               </div>
@@ -398,7 +398,7 @@ const IALabContent = () => {
                 </div>
 
                 <IALabModals
-                  handleGlobalAction={handleGlobalAction}
+                  handleGlobalAction={handleAction}
                   activeMod={activeMod}
                   completedExams={completedExams}
                 />

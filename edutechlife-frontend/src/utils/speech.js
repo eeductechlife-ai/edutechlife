@@ -730,24 +730,30 @@ const findBestSpanishVoice = (profile = 'valerio') => {
   return null;
 };
 
-export const speakValerioSentence = (text, onEnd) => {
+export const speakValerioSentence = (text, onEnd, lang = 'es-MX') => {
   try {
     window.speechSynthesis.cancel();
     const voices = window.speechSynthesis.getVoices();
     if (voices.length === 0) {
       window.speechSynthesis.onvoiceschanged = () => {
         window.speechSynthesis.onvoiceschanged = null;
-        speakValerioSentence(text, onEnd);
+        speakValerioSentence(text, onEnd, lang);
       };
       return;
     }
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'es-MX';
+    utterance.lang = lang;
     utterance.rate = 0.9;
-    const bestVoice = findBestSpanishVoice('valerio');
-    if (bestVoice) {
-      utterance.voice = bestVoice;
-      utterance.pitch = 0.95;
+    if (lang.startsWith('es')) {
+      const bestVoice = findBestSpanishVoice('valerio');
+      if (bestVoice) {
+        utterance.voice = bestVoice;
+        utterance.pitch = 0.95;
+      }
+    } else {
+      const englishVoices = voices.filter(v => v.lang && v.lang.startsWith('en'));
+      const bestEnglish = englishVoices.find(v => /male|david|mark|james/i.test(v.name)) || englishVoices[0];
+      if (bestEnglish) utterance.voice = bestEnglish;
     }
     if (onEnd) utterance.onend = onEnd;
     utterance.onerror = () => onEnd && onEnd();

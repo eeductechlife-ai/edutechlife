@@ -1,0 +1,81 @@
+<h2>⭐ Plan Premium — Implementado en Dashboard</h2>
+<p class="subtitle">Feature gating + upgrade CTA + suscripción en contexto</p>
+
+<div class="section">
+  <h3>📁 Archivos creados/modificados</h3>
+  <ul>
+    <li><strong>PremiumGate.jsx</strong> (nuevo) — Componente paywall: muestra blur + overlay de upgrade para features Premium</li>
+    <li><strong>SmartBoardKidsContext.jsx</strong> — <code>subscriptionTier</code> ('basic' | 'premium'), persistido en localStorage</li>
+    <li><strong>SmartBoardKidsDashboard.jsx</strong> — Gating en sidebar, mobile bar, contenido, upgrade CTA</li>
+    <li><strong>DaniTutorChat.jsx</strong> — Modo Socrático bloqueado para Basic</li>
+  </ul>
+</div>
+
+<div class="section">
+  <h3>🔒 Features gated por tier</h3>
+  <div class="split">
+    <div class="mockup" style="border-color: #66CCCC;">
+      <div class="mockup-header" style="background: linear-gradient(135deg, #004B63, #2A8B9E);">🌱 Basic (default)</div>
+      <div class="mockup-body" style="text-align:left; padding: 1rem;">
+        <p style="font-size: 0.8rem;">✅ Inicio, VAK, Misiones</p>
+        <p style="font-size: 0.8rem;">✅ Materias, Actividades</p>
+        <p style="font-size: 0.8rem;">✅ Calendario, Progreso</p>
+        <p style="font-size: 0.8rem;">✅ Exámenes, Flashcards</p>
+        <p style="font-size: 0.8rem;">✅ Escáner, DaniChat básico</p>
+        <p style="font-size: 0.8rem; margin-top: 0.5rem; color: #94A3B8;">🔒 Libro Intel. (Premium)</p>
+        <p style="font-size: 0.8rem; color: #94A3B8;">🔒 Noticias Tech (Premium)</p>
+        <p style="font-size: 0.8rem; color: #94A3B8;">🔒 Panel Padres (Premium)</p>
+        <p style="font-size: 0.8rem; color: #94A3B8;">🔒 Modo Socrático (Premium)</p>
+      </div>
+    </div>
+    <div class="mockup" style="border-color: #FFD166;">
+      <div class="mockup-header" style="background: linear-gradient(135deg, #D4A017, #FFD166);">⭐ Premium</div>
+      <div class="mockup-body" style="text-align:left; padding: 1rem;">
+        <p style="font-size: 0.8rem;">✅ Todo lo de Basic</p>
+        <p style="font-size: 0.8rem;">✅ SmartBook Reader</p>
+        <p style="font-size: 0.8rem;">✅ Noticias Tech personalizadas</p>
+        <p style="font-size: 0.8rem;">✅ Panel Padres en tiempo real</p>
+        <p style="font-size: 0.8rem;">✅ Modo Socrático 🧠</p>
+        <p style="font-size: 0.8rem;">✅ Avatar 3D con emociones</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>🖥️ Sidebar — Lo que ve cada usuario</h3>
+  <div class="split">
+    <div class="mockup">
+      <div class="mockup-header" style="background: #004B63;">🌱 Basic</div>
+      <div class="mockup-body" style="text-align:left; padding: 0.75rem;">
+        <p>🏠 Inicio</p>
+        <p>🧠 VAK</p>
+        <p>🎯 Misiones</p>
+        <p>📖 Libro Intel. <span style="color: #94A3B8;">🔒</span></p>
+        <p>📰 Noticias <span style="color: #94A3B8;">🔒</span></p>
+        <p style="margin-top: 0.75rem; padding: 0.4rem; background: linear-gradient(135deg, #D4A017, #FFD166); color: white; border-radius: 0.75rem; text-align: center; font-weight: bold; font-size: 0.8rem;">⭐ Actualizar a Premium</p>
+      </div>
+    </div>
+    <div class="mockup">
+      <div class="mockup-header" style="background: linear-gradient(135deg, #D4A017, #FFD166);">⭐ Premium</div>
+      <div class="mockup-body" style="text-align:left; padding: 0.75rem;">
+        <p>🏠 Inicio</p>
+        <p>🧠 VAK</p>
+        <p>🎯 Misiones</p>
+        <p>📖 Libro Intel. <span style="color: #FFD166;">⭐</span></p>
+        <p>📰 Noticias <span style="color: #FFD166;">⭐</span></p>
+        <p style="margin-top: 0.75rem; padding: 0.4rem; background: linear-gradient(135deg, #D4A017, #FFD166); color: white; border-radius: 0.75rem; text-align: center; font-weight: bold; font-size: 0.8rem;">⭐ Plan Premium Activo</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>🎬 PremiumGate — Comportamiento</h3>
+  <p class="subtitle">Cuando un usuario Basic hace clic en una feature Premium:</p>
+  <ol>
+    <li>Primer clic: muestra badge "⭐ Premium" en la esquina</li>
+    <li>Segundo clic: overlay con blur + "Actualizar a Premium — $50.000/mes"</li>
+    <li>Redirige a /conoce-smartboard (la página de aterrizaje mejorada)</li>
+  </ol>
+</div>

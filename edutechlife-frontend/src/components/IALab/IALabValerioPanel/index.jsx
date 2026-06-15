@@ -71,21 +71,22 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
             temperature: 0.5,
             maxTokens: 10,
           }),
-          signal: AbortSignal.timeout(20000),
+          signal: AbortSignal.timeout(12000),
         }).then(r => r.body?.cancel?.()).catch(() => {});
         fetch(`${baseUrl}/api/tts`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            input: { text: 'ping' },
-            voice: { languageCode: 'es-US', name: 'es-US-Standard-B' },
-            audioConfig: { audioEncoding: 'MP3', pitch: 0, speakingRate: 1.0 }
+            input: { text: 'Hola' },
+            voice: { languageCode: 'es-US', name: 'es-US-Neural2-C' },
+            audioConfig: { audioEncoding: 'MP3' }
           }),
-          signal: AbortSignal.timeout(20000),
+          signal: AbortSignal.timeout(12000),
         }).then(r => r.body?.cancel?.()).catch(() => {});
       }
     } else {
       warmupDoneRef.current = false;
+      welcomeSpokenRef.current = false;
       endSession(conversationRef.current);
       stopSpeech();
       setValerioState('idle');
@@ -142,12 +143,13 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
       welcomeSpokenRef.current = true;
       setValerioState('speaking');
 
-      const greeting = '¡Hola! Soy Valerio, ¿en qué puedo ayudarte?';
-      speakValerioSentence(greeting, () => setValerioState('idle'));
-
       const alreadyWelcomed = useIALabStore.getState().getValerioWelcomed();
       if (!alreadyWelcomed) {
         useIALabStore.getState().setValerioWelcomed();
+        const introGreeting = locale === 'en'
+          ? 'Hello! I am Valerio, how can I help you?'
+          : '¡Hola! Soy Valerio, ¿en qué puedo ayudarte?';
+        speakValerioSentence(introGreeting, () => setValerioState('idle'));
         const welcomeMessage = buildContextualWelcome({ locale, studentName, currentModule, userLevel, activeMod });
         setMessage(welcomeMessage);
         setConversation([{
@@ -156,6 +158,11 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
           content: welcomeMessage,
           timestamp: new Date().toISOString()
         }]);
+      } else {
+        const greeting = studentName
+          ? (locale === 'en' ? `Hello ${studentName}! How can I help you?` : `¡Hola ${studentName}! ¿En qué puedo ayudarte?`)
+          : (locale === 'en' ? 'Hello! How can I help you?' : '¡Hola! ¿En qué puedo ayudarte?');
+        speakValerioSentence(greeting, () => setValerioState('idle'));
       }
     }
   }, [isOpen]);

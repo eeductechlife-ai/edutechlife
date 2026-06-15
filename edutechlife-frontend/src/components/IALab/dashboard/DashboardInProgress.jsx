@@ -12,7 +12,6 @@ import DashboardTabs from './DashboardTabs';
 import DashboardModuleList from './DashboardModuleList';
 import DashboardActivityView from './DashboardActivityView';
 
-
 const MODULES = [1, 2, 3, 4, 5];
 const IDLE_TIMEOUT = 10000;
 
@@ -128,7 +127,7 @@ export default function DashboardInProgress() {
         <p className="text-sm text-slate-500 -mt-3">{t('dashboard.continue_learning')}</p>
       )}
 
-      <section className="relative overflow-hidden bg-gradient-to-br from-petroleum via-petroleum-dark to-corporate rounded-3xl shadow-lg" data-tour="dashboard-continue"
+      <section className="relative overflow-hidden bg-gradient-to-br from-petroleum via-petroleum-dark to-corporate rounded-3xl shadow-lg"
         style={{ boxShadow: '0 20px 60px rgba(0,75,99,0.25),0 8px 20px rgba(0,0,0,0.08)' }}>
         <div className="grid grid-cols-[280px_1fr] gap-8 p-7 max-md:grid-cols-1 max-md:p-5 max-md:gap-5">
           <div className="flex flex-col items-center">
@@ -191,7 +190,7 @@ export default function DashboardInProgress() {
               </div>
             </div>
 
-            <div className="grid grid-cols-3 max-sm:grid-cols-2 gap-2.5" data-tour="dashboard-stats">
+            <div className="grid grid-cols-3 max-sm:grid-cols-2 gap-2.5">
               {[
                 { icon: 'fa-star', value: xp?.toLocaleString() || '0', label: t('dashboard.xp_earned') },
                 { icon: 'fa-fire', value: streak || 0, label: t('dashboard.current_streak') },
@@ -211,17 +210,13 @@ export default function DashboardInProgress() {
         </div>
       </section>
 
-      <div data-tour="dashboard-tabs">
-        <DashboardTabs activeTab={activeTab} setActiveTab={setActiveTab} />
-      </div>
+      <DashboardTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
-      <div data-tour="dashboard-modules">
-        {activeTab === 'modules' ? (
-          <DashboardModuleList />
-        ) : (
-          <DashboardActivityView />
-        )}
-      </div>
+      {activeTab === 'modules' ? (
+        <DashboardModuleList />
+      ) : (
+        <DashboardActivityView />
+      )}
     </div>
   );
 }
