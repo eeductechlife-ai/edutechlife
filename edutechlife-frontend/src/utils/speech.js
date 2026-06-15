@@ -8,9 +8,9 @@ const VOICE_PROFILES = {
   },
   valerio: {
     languageCode: 'es-US',
-    name: 'es-US-Studio-B',
-    pitch: -2.0,
-    speakingRate: 0.9,
+    name: 'es-US-Neural2-C',
+    pitch: -1.0,
+    speakingRate: 0.95,
     volumeGainDb: 3.0
   },
   sistema: {
@@ -81,7 +81,7 @@ const VOICE_FALLBACKS = {
     { languageCode: 'es-ES', name: 'es-ES-Neural2-A', pitch: 0, speakingRate: 0.95 }
   ],
   valerio: [
-    { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: -2.0, speakingRate: 0.9, volumeGainDb: 3.0 },
+    { languageCode: 'es-US', name: 'es-US-Neural2-C', pitch: -1.0, speakingRate: 0.95, volumeGainDb: 3.0 },
     { languageCode: 'es-US', name: 'es-US-Wavenet-C', pitch: -1.5, speakingRate: 0.9, volumeGainDb: 2.5 },
     { languageCode: 'es-US', name: 'es-US-Neural2-D', pitch: -1.0, speakingRate: 0.95, volumeGainDb: 2.5 },
     { languageCode: 'es-CO', name: 'es-CO-Neural2-B', pitch: -1.0, speakingRate: 0.9, volumeGainDb: 2.5 }
