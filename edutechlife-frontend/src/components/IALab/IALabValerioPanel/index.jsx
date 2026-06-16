@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { useIALabProgressContext, useIALabUIContext } from '../../../context/IALabContext';
 import { useIALabStore } from '../../../store/ialabStore';
-import { speakTextConversational, speakValerioSentence, stopSpeech } from '../../../utils/speech';
+import { speakTextConversational, stopSpeech } from '../../../utils/speech';
 import { callDeepseekStream } from '../../../utils/api';
 
 import SectionErrorBoundary from '../SectionErrorBoundary';
@@ -149,7 +149,7 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
         const introGreeting = locale === 'en'
           ? 'Hello! I am Valerio, how can I help you?'
           : '¡Hola! Soy Valerio, ¿en qué puedo ayudarte?';
-        speakValerioSentence(introGreeting, () => setValerioState('idle'));
+        speakTextConversational(introGreeting, 'valerio', () => setValerioState('idle'));
         const welcomeMessage = buildContextualWelcome({ locale, studentName, currentModule, userLevel, activeMod });
         setMessage(welcomeMessage);
         setConversation([{
@@ -162,7 +162,7 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
         const greeting = studentName
           ? (locale === 'en' ? `Hello ${studentName}! How can I help you?` : `¡Hola ${studentName}! ¿En qué puedo ayudarte?`)
           : (locale === 'en' ? 'Hello! How can I help you?' : '¡Hola! ¿En qué puedo ayudarte?');
-        speakValerioSentence(greeting, () => setValerioState('idle'));
+        speakTextConversational(greeting, 'valerio', () => setValerioState('idle'));
       }
     }
   }, [isOpen]);
