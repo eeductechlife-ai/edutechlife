@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useIALabProgressContext, useIALabUIContext } from '../../../context/IALabContext';
 import { useIALabStore } from '../../../store/ialabStore';
 import { speakTextConversational, stopSpeech } from '../../../utils/speech';
+import { cleanTextForTTS } from '../../../utils/textCleaner';
 import { callDeepseekStream } from '../../../utils/api';
 
 import SectionErrorBoundary from '../SectionErrorBoundary';
@@ -231,7 +232,7 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
       setMessage(fullResponse);
       setStreamingMessage('');
 
-      speakTextConversational(fullResponse, 'valerio', () => setValerioState('idle'));
+      speakTextConversational(cleanTextForTTS(fullResponse), 'valerio', () => setValerioState('idle'));
     } catch (error) {
       clearTimeout(timeoutId);
       if (error.name === 'AbortError') {
@@ -253,7 +254,7 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
       setMessage(fallbackResponse);
       setStreamingMessage('');
 
-      speakTextConversational(fallbackResponse, 'valerio', () => setValerioState('idle'));
+      speakTextConversational(cleanTextForTTS(fallbackResponse), 'valerio', () => setValerioState('idle'));
     } finally {
       setIsProcessing(false);
       abortRef.current = null;

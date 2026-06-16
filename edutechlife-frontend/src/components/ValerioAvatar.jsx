@@ -1,6 +1,7 @@
 import { useEffect, useRef, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { speakTextConversational, stopSpeech } from '../utils/speech'
+import { cleanTextForTTS } from '../utils/textCleaner'
 
 const STATE_COLORS = {
   idle: { r: '0,75,99' },
@@ -42,14 +43,7 @@ const ValerioAvatar = ({ state = 'idle', size = 80, enable3DTilt = true }) => {
 
   const speak = useCallback((text) => {
     if (!text) return
-    const cleanText = text
-      .replace(/\*\*/g, '')
-      .replace(/\*/g, '')
-      .replace(/```/g, '')
-      .replace(/`/g, '')
-      .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-      .replace(/[_*~]/g, '')
-      .trim()
+    const cleanText = cleanTextForTTS(text)
     if (cleanText) speakTextConversational(cleanText, 'valerio', () => {})
   }, [])
 
