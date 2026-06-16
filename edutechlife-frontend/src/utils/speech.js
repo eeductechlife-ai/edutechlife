@@ -763,4 +763,27 @@ export const speakValerioSentence = (text, onEnd, lang = 'es-MX') => {
 
 export const fireConfetti = (opts) => import('canvas-confetti').then(m => m.default(opts));
 
+export const prefetchTts = async (text, profile = 'valeria') => {
+  if (!text || text.length < 3) return;
+  try {
+    const cached = audioCache.get(profile, text);
+    if (cached) return;
+    const apiBase = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || (typeof window !== 'undefined' && window.location.hostname === 'localhost' ? 'http://localhost:3001' : 'https://edutechlife-backend.onrender.com');
+    const voice = VOICE_PROFILES[profile] || VOICE_PROFILES.valeria;
+    const response = await fetch(`${apiBase}/api/tts`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      signal: AbortSignal.timeout(15000),
+      body: JSON.stringify({
+        input: { text },
+        voice: { languageCode: voice.languageCode, name: voice.name },
+        audioConfig: { audioEncoding: 'MP3', pitch: voice.pitch || 0, speakingRate: voice.speakingRate || 1.0 }
+      })
+    });
+    if (!response.ok) return;
+    const data = await response.json();
+    if (data.audioContent) audioCache.set(profile, text, data.audioContent);
+  } catch {}
+};
+
 export { speakTextConversational, stopSpeech, iniciarReconocimiento, stopRecognition, audioCache, VOICE_PROFILES };

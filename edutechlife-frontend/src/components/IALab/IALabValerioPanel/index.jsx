@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { useIALabProgressContext, useIALabUIContext } from '../../../context/IALabContext';
 import { useIALabStore } from '../../../store/ialabStore';
-import { speakTextConversational, stopSpeech } from '../../../utils/speech';
+import { speakTextConversational, stopSpeech, prefetchTts } from '../../../utils/speech';
 import { cleanTextForTTS } from '../../../utils/textCleaner';
 import { callDeepseekStream } from '../../../utils/api';
 
@@ -44,6 +44,9 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
   const abortRef = useRef(null);
   const warmupDoneRef = useRef(false);
   const firstChunkRef = useRef(false);
+  const ttsQueueRef = useRef([]);
+  const ttsPlayingRef = useRef(false);
+  const pendingSentenceRef = useRef('');
 
   const studentName = user?.firstName || user?.full_name || '';
   const currentModule = modules.find(m => m.id === activeMod);
@@ -57,6 +60,19 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
     buildValerioSystemPrompt({ locale, currentModule, modules, studentName, userLevel, completedModules, t }),
     [locale, currentModule?.id, studentName, userLevel, completedModules?.length]
   );
+
+  const processTtsQueue = useCallback(() => {
+    if (ttsPlayingRef.current || ttsQueueRef.current.length === 0) return;
+    ttsPlayingRef.current = true;
+    const text = ttsQueueRef.current.shift();
+    speakTextConversational(cleanTextForTTS(text), 'valerio', () => {
+      ttsPlayingRef.current = false;
+      if (ttsQueueRef.current.length === 0) {
+        setValerioState('idle');
+      }
+      processTtsQueue();
+    });
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -84,18 +100,46 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
           }),
           signal: AbortSignal.timeout(12000),
         }).then(r => r.body?.cancel?.()).catch(() => {});
+        const OVA_INTRO_TEXTS = {
+          1: { es: 'Bienvenido al desafío de Prompt Engineering. Aquí pondrás a prueba todo lo aprendido sobre la creación de prompts efectivos.', en: 'Welcome to the Prompt Engineering challenge. Here you will test everything you learned about creating effective prompts.' },
+          2: { es: 'Bienvenido al desafío de ChatGPT. Aquí aprenderás a crear tu propio GPT personalizado.', en: 'Welcome to the ChatGPT challenge. You will create your own custom GPT.' },
+          3: { es: 'Bienvenido al desafío de Gemini. Te convertirás en un investigador digital.', en: 'Welcome to the Gemini challenge. You will become a digital researcher.' },
+          4: { es: 'Bienvenido al desafío de NotebookLM. Aprenderás a curar información y crear un podcast académico.', en: 'Welcome to the NotebookLM challenge. You will curate information and create an academic podcast.' },
+          5: { es: 'Bienvenido al desafío de Ética en IA. Analizarás un caso real de sesgo algorítmico.', en: 'Welcome to the AI Ethics challenge. You will analyze a real case of algorithmic bias.' }
+        };
+        const moduleTexts = OVA_INTRO_TEXTS[activeMod];
+        if (moduleTexts) {
+          prefetchTts(moduleTexts.es, 'valerio');
+          if (locale !== 'es') prefetchTts(moduleTexts.en, 'valerio');
+        }
+        prefetchTts(locale === 'en' ? 'Read the instructions carefully and complete each step. Good luck!' : 'Lee las instrucciones cuidadosamente y completa cada paso. ¡Buena suerte!', 'sistema');
       }
     } else {
       warmupDoneRef.current = false;
       welcomeSpokenRef.current = false;
+      ttsQueueRef.current = [];
+      ttsPlayingRef.current = false;
+      pendingSentenceRef.current = '';
       endSession(conversationRef.current);
       stopSpeech();
       setValerioState('idle');
     }
     return () => {
+      ttsQueueRef.current = [];
+      ttsPlayingRef.current = false;
+      pendingSentenceRef.current = '';
       endSession(conversationRef.current);
       stopSpeech();
     };
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'https://edutechlife-backend.onrender.com';
+    const interval = setInterval(() => {
+      fetch(`${baseUrl}/api/health`, { method: 'GET', signal: AbortSignal.timeout(5000) }).catch(() => {});
+    }, 180000);
+    return () => clearInterval(interval);
   }, [isOpen]);
 
   useEffect(() => {
@@ -174,6 +218,10 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
     setIsProcessing(true);
     setValerioState('thinking');
     setStreamingMessage('');
+    ttsQueueRef.current = [];
+    ttsPlayingRef.current = false;
+    pendingSentenceRef.current = '';
+    stopSpeech();
 
     const userMessage = {
       id: `user_${Date.now()}`,
@@ -200,6 +248,7 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
 
     try {
       firstChunkRef.current = false;
+      pendingSentenceRef.current = '';
       let fullResponse = '';
       await callDeepseekStream(
         messages,
@@ -212,6 +261,19 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
             setValerioState('speaking');
           }
           setStreamingMessage(fullResponse);
+
+          pendingSentenceRef.current += chunk;
+          while (true) {
+            const match = pendingSentenceRef.current.match(/[.!?](?:\s|$)/);
+            if (!match) break;
+            const endIdx = match.index + 1;
+            const sentence = pendingSentenceRef.current.slice(0, endIdx).trim();
+            pendingSentenceRef.current = pendingSentenceRef.current.slice(endIdx + match[0].length);
+            if (sentence.length >= 10) {
+              ttsQueueRef.current.push(sentence);
+              processTtsQueue();
+            }
+          }
         }
       );
 
@@ -219,6 +281,12 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
 
       if (fullResponse.length < 5) {
         throw new Error('Respuesta vacía o muy corta');
+      }
+
+      const remaining = pendingSentenceRef.current.trim();
+      if (remaining.length > 3) {
+        ttsQueueRef.current.push(remaining);
+        processTtsQueue();
       }
 
       const valerioMessage = {
@@ -231,8 +299,6 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
       setConversation(prev => [...prev, valerioMessage]);
       setMessage(fullResponse);
       setStreamingMessage('');
-
-      speakTextConversational(cleanTextForTTS(fullResponse), 'valerio', () => setValerioState('idle'));
     } catch (error) {
       clearTimeout(timeoutId);
       if (error.name === 'AbortError') {
