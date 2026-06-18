@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, useScroll, useTransform, useInView, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useTransform, useInView, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useAuth } from '@clerk/react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
@@ -15,6 +15,10 @@ const IALabProLandingPage = () => {
   const [activeCategory, setActiveCategory] = useState('all');
 
   const { scrollYProgress, scrollY } = useScroll();
+  const prefersReducedMotion = useReducedMotion();
+  const [showFAB, setShowFAB] = useState(false);
+  const [showMobileCTA, setShowMobileCTA] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
 
   const fadeInUp = {
     initial: { opacity: 0, y: 30 },
@@ -50,6 +54,14 @@ const IALabProLandingPage = () => {
     return () => window.removeEventListener('mousemove', handleMouse);
   }, []);
 
+  useEffect(() => {
+    const unsub = scrollY.on('change', (latest) => {
+      setShowFAB(latest > 600);
+      setShowMobileCTA(latest > 400);
+    });
+    return () => unsub();
+  }, [scrollY]);
+
   const categories = getCategories(locale);
 
   const courses = getCourses(locale);
@@ -69,6 +81,30 @@ const IALabProLandingPage = () => {
     { size: 3, x: '25%', y: '80%', delay: 2, duration: 6 },
     { size: 4, x: '70%', y: '60%', delay: 0.5, duration: 10 },
   ];
+
+  const AnimatedCounter = ({ from = 0, to, suffix = '', prefix = '', duration = 2, formatter }) => {
+    const [value, setValue] = useState(from);
+    const cRef = useRef(null);
+    const inView = useInView(cRef, { once: true, margin: '-100px' });
+
+    useEffect(() => {
+      if (!inView) return;
+      let startTime;
+      let rafId;
+      const animate = (time) => {
+        if (!startTime) startTime = time;
+        const progress = Math.min((time - startTime) / (duration * 1000), 1);
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        setValue(from + (to - from) * easeOut);
+        if (progress < 1) rafId = requestAnimationFrame(animate);
+      };
+      rafId = requestAnimationFrame(animate);
+      return () => cancelAnimationFrame(rafId);
+    }, [inView, from, to, duration]);
+
+    const display = formatter ? formatter(value) : Math.round(value);
+    return <span ref={cRef}>{prefix}{display}{suffix}</span>;
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -130,7 +166,7 @@ const IALabProLandingPage = () => {
             key={i}
             className="absolute rounded-full bg-[#00334A]/25"
             style={{ width: p.size * 2, height: p.size * 2, left: p.x, top: p.y }}
-            animate={{ y: [0, -40, 0], opacity: [0.2, 0.6, 0.2] }}
+            animate={!prefersReducedMotion ? { y: [0, -40, 0], opacity: [0.2, 0.6, 0.2] } : {}}
             transition={{ duration: p.duration, repeat: Infinity, delay: p.delay, ease: 'easeInOut' }}
           />
         ))}
@@ -337,12 +373,30 @@ const IALabProLandingPage = () => {
                         <span className="text-[10px] font-semibold text-white uppercase tracking-wider">Demo</span>
                       </div>
 
+                      {/* Skeleton placeholder while video loads */}
+                      {!videoLoaded && (
+                        <div className="absolute inset-0 bg-gradient-to-br from-[#0A1628] to-[#1a2a3a] z-5 flex items-center justify-center">
+                          <div className="flex flex-col items-center gap-3">
+                            <motion.div
+                              className="w-10 h-10 rounded-full border-2 border-[#4DA8C4]/30 border-t-[#4DA8C4]"
+                              animate={!prefersReducedMotion ? { rotate: 360 } : {}}
+                              transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                            />
+                            <motion.div
+                              className="h-1.5 w-24 bg-gradient-to-r from-[#4DA8C4]/20 via-[#4DA8C4]/40 to-[#4DA8C4]/20 rounded-full"
+                              animate={!prefersReducedMotion ? { x: ['-100%', '100%'] } : {}}
+                              transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+                            />
+                          </div>
+                        </div>
+                      )}
                       <video
                         autoPlay
                         muted
                         loop
                         playsInline
                         preload="metadata"
+                        onLoadedData={() => setVideoLoaded(true)}
                         className="w-full h-auto block"
                         style={{
                           backfaceVisibility: 'hidden',
@@ -411,14 +465,14 @@ const IALabProLandingPage = () => {
                       </div>
                     ))}
                   </div>
-                  <span><strong className="text-white">4.200+</strong> <span className="text-white font-semibold">{t('ialab.landing.students_label')}</span></span>
+                  <span><strong className="text-white"><AnimatedCounter from={0} to={4200} suffix="+" formatter={(v) => Math.floor(v).toLocaleString(locale === 'en' ? 'en-US' : 'es-ES')} /></strong> <span className="text-white font-semibold">{t('ialab.landing.students_label')}</span></span>
                 </div>
                 <div className="h-7 w-px bg-white/10" />
                 <div className="flex items-center gap-1 text-amber-400">
                   {[1,2,3,4,5].map((s) => (
                     <Icon key={s} name="fa-star" className="w-4 h-4" />
                   ))}
-                  <span className="text-white ml-1.5"><strong className="text-white">4.8</strong></span>
+                  <span className="text-white ml-1.5"><strong className="text-white"><AnimatedCounter from={0} to={4.8} formatter={(v) => v.toFixed(1)} /></strong></span>
                 </div>
                 <div className="h-7 w-px bg-white/10" />
                 <div className="flex items-center gap-1.5 text-emerald-400">
@@ -432,8 +486,25 @@ const IALabProLandingPage = () => {
         </div>
       </section>
 
-      {/* Smooth transition from hero to benefits */}
-      <div className="h-6 bg-gradient-to-b from-[#004064] to-white" />
+      {/* Animated wave divider */}
+      <div className="relative h-16 md:h-20 bg-gradient-to-b from-[#004064] to-white overflow-hidden">
+        <motion.div
+          className="absolute top-0 left-1/4 right-1/4 h-px bg-gradient-to-r from-transparent via-[#4DA8C4]/40 to-transparent"
+          animate={!prefersReducedMotion ? { opacity: [0.2, 0.6, 0.2], scaleX: [1, 1.2, 1] } : {}}
+          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <svg className="absolute bottom-0 w-full h-8 md:h-12" viewBox="0 0 1440 48" preserveAspectRatio="none" fill="#F0F7FA">
+          <motion.path
+            d="M0,24 C360,48 1080,0 1440,24 L1440,48 L0,48 Z"
+            animate={!prefersReducedMotion ? { d: [
+              'M0,24 C360,48 1080,0 1440,24 L1440,48 L0,48 Z',
+              'M0,24 C360,0 1080,48 1440,24 L1440,48 L0,48 Z',
+              'M0,24 C360,48 1080,0 1440,24 L1440,48 L0,48 Z',
+            ]} : {}}
+            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        </svg>
+      </div>
 
       {/* BENEFITS SECTION */}
       <section className="pt-8 md:pt-12 lg:pt-16 pb-8 md:pb-12 bg-gradient-to-b from-white to-[#F0F7FA] relative overflow-hidden">
@@ -543,6 +614,7 @@ const IALabProLandingPage = () => {
               variants={staggerContainer}
               initial="initial"
               animate="animate"
+              exit={{ opacity: 0, y: 20, transition: { duration: 0.2 } }}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-stretch"
             >
               {filteredCourses.map((course, index) => {
@@ -552,7 +624,7 @@ const IALabProLandingPage = () => {
                   <motion.div
                     key={course.id}
                     variants={fadeInUp}
-                    className="group relative bg-white border border-[#004B63]/10 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-full flex flex-col"
+                    className="group relative bg-white border border-[#004B63]/10 rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,75,99,0.06)] hover:shadow-[0_12px_40px_rgba(0,75,99,0.12)] transition-all duration-300 h-full flex flex-col"
                     whileHover={{ y: -6, scale: 1.015 }}
                     transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                   >
@@ -702,6 +774,53 @@ const IALabProLandingPage = () => {
           </AnimatePresence>
         </div>
       </section>
+
+      {/* Floating Action Button */}
+      <AnimatePresence>
+        {showFAB && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="fixed bottom-6 right-6 z-50 w-12 h-12 bg-[#004B63] rounded-full shadow-lg hover:shadow-[0_0_30px_rgba(0,75,99,0.3)] flex items-center justify-center text-white transition-all duration-300 hover:bg-[#00BCD4]"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            aria-label="Scroll to top"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7m0 0l7 7m0 0v11" />
+            </svg>
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* Sticky CTA for mobile */}
+      <AnimatePresence>
+        {showMobileCTA && (
+          <motion.div
+            initial={{ y: 100 }}
+            animate={{ y: 0 }}
+            exit={{ y: 100 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            className="fixed bottom-0 inset-x-0 z-50 bg-white/95 backdrop-blur-lg border-t border-[#004B63]/10 p-4 md:hidden shadow-[0_-4px_20px_rgba(0,0,0,0.08)]"
+          >
+            <div className="flex items-center justify-between max-w-lg mx-auto">
+              <span className="text-sm font-bold text-[#004B63]">AI Lab Academic</span>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => {
+                  document.getElementById('cursos')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="px-6 py-2.5 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white text-sm font-bold rounded-lg shadow-lg"
+              >
+                {t('ialab.landing.hero_badge')}
+              </motion.button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <Footer />
       <NicoModern />

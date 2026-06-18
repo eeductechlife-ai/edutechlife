@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect, useRef, useCallback } from 'react';
+import { useMemo, useState, useEffect, useRef, useCallback, memo } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '@clerk/react';
@@ -15,7 +15,7 @@ import DashboardActivityView from './DashboardActivityView';
 const MODULES = [1, 2, 3, 4, 5];
 const IDLE_TIMEOUT = 10000;
 
-export default function DashboardInProgress() {
+function DashboardInProgress() {
   const { t, locale } = useTranslation();
   const navigate = useNavigate();
   const { user: clerkUser } = useUser();
@@ -220,3 +220,5 @@ export default function DashboardInProgress() {
     </div>
   );
 }
+
+export default memo(DashboardInProgress);

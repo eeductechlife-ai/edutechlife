@@ -18,28 +18,50 @@ const ProblemScanner = memo(() => {
   const { setDocumentForDani, darkMode: dm } = useSmartBoardKids();
   const [mode, setMode] = useState('scan');
   const [img, setImg] = useState(null);
+  const [originalFile, setOriginalFile] = useState(null);
   const [subj, setSubj] = useState('');
   const [desc, setDesc] = useState('');
   const ref = useRef(null);
   const sl = sbj.find((s) => s.v === subj)?.l || subj;
 
+  const [ocrText, setOcrText] = useState('');
+  const [ocrProgress, setOcrProgress] = useState(0);
+
   const hf = (f) => {
     if (!f?.type.startsWith('image/')) return;
+    setOriginalFile(f);
     const r = new FileReader();
     r.onload = (e) => setImg(e.target.result);
     r.readAsDataURL(f);
   };
 
-  const hc = useCallback(() => { setMode('processing'); setTimeout(() => setMode('result'), 1200); }, []);
+  const hc = useCallback(async () => {
+    setMode('processing');
+    setOcrProgress(0);
+    if (originalFile) {
+      try {
+        const { extractDocumentText } = await import('../../utils/documentParser');
+        const text = await extractDocumentText(originalFile);
+        setOcrText(text);
+        setOcrProgress(100);
+      } catch (e) {
+        console.warn('OCR no disponible:', e.message);
+        setOcrText('');
+        setOcrProgress(0);
+      }
+    }
+    setMode('result');
+  }, [originalFile]);
   const ha = useCallback(() => {
     setDocumentForDani({
       type: 'problem_scanner', subject: sl,
       summary: `Necesito ayuda con un problema de ${sl}${desc ? `: ${desc}` : ''}. El estudiante tomó una foto del problema.`,
       description: desc, hasImage: !!img,
+      ocrText: ocrText || null,
     });
     document.getElementById('openDaniChat')?.click();
-  }, [sl, desc, img, setDocumentForDani]);
-  const hr = useCallback(() => { setMode('scan'); setImg(null); setSubj(''); setDesc(''); }, []);
+  }, [sl, desc, img, ocrText, setDocumentForDani]);
+  const hr = useCallback(() => { setMode('scan'); setImg(null); setOriginalFile(null); setSubj(''); setDesc(''); setOcrText(''); setOcrProgress(0); }, []);
 
   return (
     <div className="space-y-5">
@@ -136,10 +158,10 @@ const ProblemScanner = memo(() => {
               animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}>
               <span className="text-4xl">🔍</span>
             </motion.div>
-            <h4 className={`text-xl font-bold mb-2 ${dc(dm, 'text-[#004B63]', 'text-[#E2F0FF]')}`}>Dani está analizando tu problema...</h4>
-            <p className={`text-sm ${dc(dm, 'text-[#64748B]', 'text-[#94A3B8]')}`}>Preparando la explicación paso a paso</p>
+            <h4 className={`text-xl font-bold mb-2 ${dc(dm, 'text-[#004B63]', 'text-[#E2F0FF]')}`}>Analizando tu problema con IA...</h4>
+            <p className={`text-sm ${dc(dm, 'text-[#64748B]', 'text-[#94A3B8]')}`}>Extrayendo texto de la imagen mediante OCR</p>
             <div className="w-48 h-2 bg-[#E2E8F0] rounded-full mx-auto mt-4 overflow-hidden">
-              <motion.div className={`h-full ${gd}`} initial={{ width: '0%' }} animate={{ width: '100%' }} transition={{ duration: 1.2, ease: 'easeInOut' }} />
+              <motion.div className={`h-full ${gd}`} initial={{ width: '0%' }} animate={{ width: `${Math.max(ocrProgress, 20)}%` }} transition={{ duration: 0.5, ease: 'easeOut' }} />
             </div>
           </motion.div>
         )}
@@ -154,6 +176,12 @@ const ProblemScanner = memo(() => {
               <div className="p-5 space-y-4">
                 {img && <img src={img} alt="Problema" className="w-full max-h-72 object-contain rounded-xl border border-[#E2E8F0] shadow-sm" />}
                 {desc && <p className={`text-sm leading-relaxed ${dc(dm, 'text-[#64748B]', 'text-[#94A3B8]')}`}><span className="font-semibold text-[#004B63]">Descripción:</span> {desc}</p>}
+                {ocrText && (
+                  <div className={`p-4 rounded-xl border ${dm ? 'bg-[#0F172A] border-[#334155]' : 'bg-[#F0FDF4] border-[#66CCCC]/30'}`}>
+                    <p className={`text-xs font-semibold mb-1 ${dc(dm, 'text-[#66CCCC]', 'text-[#004B63]')}`}>📝 Texto extraído por OCR:</p>
+                    <p className={`text-xs leading-relaxed ${dc(dm, 'text-[#94A3B8]', 'text-[#475569]')}`}>{ocrText.substring(0, 300)}{ocrText.length > 300 ? '...' : ''}</p>
+                  </div>
+                )}
                 <div className={`p-4 rounded-xl border ${dm ? 'bg-[#0F172A] border-[#334155]' : 'bg-[#F8FAFC] border-[#E2E8F0]'}`}>
                   <p className={`text-xs ${dc(dm, 'text-[#64748B]', 'text-[#94A3B8]')}`}>
                     🤖 Dani recibirá la información de tu problema y te guiará con una explicación paso a paso adaptada a tu estilo de aprendizaje.

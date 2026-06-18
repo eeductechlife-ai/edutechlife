@@ -1,12 +1,13 @@
 import { useState, useRef, useEffect, useCallback, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { callDeepseek } from '../../utils/api';
+import { callDeepseek, callDeepseekStream } from '../../utils/api';
 import { PROMPT_DANI_EXPERTO, PROMPT_TUTOR_TAREAS, PROMPT_DANI_SOCRATICO } from '../../constants/prompts';
 import { useSmartBoardKids } from '../../context/SmartBoardKidsContext';
 import { speakTextConversational, stopSpeech, iniciarReconocimiento, stopRecognition } from '../../utils/speech';
 import useFocusTrap from '../../hooks/useFocusTrap';
 import { tutorAvatars, DEFAULT_AVATAR } from '../../data/tutorAvatars';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
 
 // ==========================================
 // Dani Avatar Component
@@ -17,6 +18,113 @@ const DaniAvatar = memo(() => (
 ));
 
 DaniAvatar.displayName = 'DaniAvatar';
+
+const COLORS = ['#4DA8C4', '#66CCCC', '#FF6B9D', '#FFD166', '#A855F7', '#22C55E'];
+
+const ChartRenderer = memo(({ chartData, darkMode }) => {
+  if (!chartData?.data?.length) return null;
+
+  if (chartData.type === 'bar') {
+    return (
+      <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 200 }}
+        className={`rounded-xl border p-3 my-2 ${darkMode ? 'bg-[#1E293B] border-[#334155]' : 'bg-white border-[#E2E8F0]'}`}
+      >
+        <ResponsiveContainer width="100%" height={160}>
+          <BarChart data={chartData.data}>
+            <XAxis dataKey="name" tick={{ fontSize: 10 }} />
+            <YAxis tick={{ fontSize: 10 }} />
+            <Tooltip contentStyle={darkMode ? { background: '#1E293B', border: '1px solid #334155', borderRadius: 8, fontSize: 12 } : { borderRadius: 8, fontSize: 12 }} />
+            <Bar dataKey="value" fill="#4DA8C4" radius={[4, 4, 0, 0]}>
+              {chartData.data.map((_, idx) => (
+                <Cell key={idx} fill={COLORS[idx % COLORS.length]} />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </motion.div>
+    );
+  }
+
+  if (chartData.type === 'pie') {
+    return (
+      <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 200 }}
+        className={`rounded-xl border p-3 my-2 ${darkMode ? 'bg-[#1E293B] border-[#334155]' : 'bg-white border-[#E2E8F0]'}`}
+      >
+        <ResponsiveContainer width="100%" height={160}>
+          <PieChart>
+            <Pie data={chartData.data} cx="50%" cy="50%" outerRadius={60} dataKey="value" label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}>
+              {chartData.data.map((_, idx) => (
+                <Cell key={idx} fill={COLORS[idx % COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip />
+          </PieChart>
+        </ResponsiveContainer>
+      </motion.div>
+    );
+  }
+
+  if (chartData.type === 'line') {
+    return (
+      <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 200 }}
+        className={`rounded-xl border p-3 my-2 ${darkMode ? 'bg-[#1E293B] border-[#334155]' : 'bg-white border-[#E2E8F0]'}`}
+      >
+        <ResponsiveContainer width="100%" height={160}>
+          <LineChart data={chartData.data}>
+            <XAxis dataKey="name" tick={{ fontSize: 10 }} />
+            <YAxis tick={{ fontSize: 10 }} />
+            <Tooltip contentStyle={darkMode ? { background: '#1E293B', border: '1px solid #334155', borderRadius: 8, fontSize: 12 } : { borderRadius: 8, fontSize: 12 }} />
+            <Line type="monotone" dataKey="value" stroke="#4DA8C4" strokeWidth={2} dot={{ fill: '#4DA8C4', r: 3 }} />
+          </LineChart>
+        </ResponsiveContainer>
+      </motion.div>
+    );
+  }
+
+  return null;
+});
+ChartRenderer.displayName = 'ChartRenderer';
+
+const VideoEmbed = memo(({ videoData, darkMode }) => {
+  const [loaded, setLoaded] = useState(false);
+  if (!videoData?.url) return null;
+
+  const getId = (url) => {
+    const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
+    return m?.[1] || null;
+  };
+
+  const videoId = getId(videoData.url);
+  if (!videoId) return null;
+
+  return (
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+      className={`rounded-xl overflow-hidden my-2 ${loaded ? '' : 'cursor-pointer'}`}
+      onClick={() => !loaded && setLoaded(true)}
+    >
+      {loaded ? (
+        <div className="relative" style={{ paddingBottom: '56.25%' }}>
+          <iframe
+            src={`https://www.youtube.com/embed/${videoId}`}
+            title={videoData.title || 'Video'}
+            className="absolute inset-0 w-full h-full rounded-xl"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+      ) : (
+        <div className={`flex items-center gap-3 p-3 rounded-xl border ${darkMode ? 'bg-[#1E293B] border-[#334155]' : 'bg-white border-[#E2E8F0]'}`}>
+          <div className="w-12 h-12 rounded-lg bg-[#FF0000] flex items-center justify-center text-white text-xl flex-shrink-0">▶️</div>
+          <div className="min-w-0">
+            <p className="text-sm font-semibold truncate">{videoData.title || 'Ver video'}</p>
+            <p className="text-xs text-[#64748B]">YouTube · Toca para cargar</p>
+          </div>
+        </div>
+      )}
+    </motion.div>
+  );
+});
+VideoEmbed.displayName = 'VideoEmbed';
 
 // ==========================================
 // Message Bubble Component
@@ -207,6 +315,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
     calendarEvents,
     documentForDani,
     setDocumentForDani,
+    daniMemory, updateDaniMemory, buildMemoryInjection,
     subscriptionTier,
   } = useSmartBoardKids();
 
@@ -229,7 +338,9 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
   const hasSentWelcome = useRef(false);
   const isSpeakingRef = useRef(false);
   const speechPrimed = useRef(false);
+  const pendingSentenceRef = useRef('');
   const focusTrapRef = useFocusTrap(isOpen);
+  const [streamingMessage, setStreamingMessage] = useState('');
 
   // ==========================================
   // Rich contextual welcome builder
@@ -391,9 +502,24 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
     }
   }, [isOpen]);
 
+  const getVoiceOverrides = useCallback(() => {
+    const mood = daniMood || 'neutral';
+    const map = {
+      happy: { pitch: 2, speakingRate: 1.05 },
+      excited: { pitch: 3, speakingRate: 1.1 },
+      encouraging: { pitch: 1.5, speakingRate: 0.95 },
+      thinking: { pitch: -1, speakingRate: 0.85 },
+      explaining: { pitch: 0, speakingRate: 0.9 },
+      serious: { pitch: -2, speakingRate: 0.85 },
+      sad: { pitch: -3, speakingRate: 0.8 },
+      supportive: { pitch: 1, speakingRate: 0.9 },
+    };
+    return map[mood] || {};
+  }, [daniMood]);
+
   // Proactive contextual welcome every time chat opens
   useEffect(() => {
-    if (!isOpen || hasSentWelcome.current) return;
+    if (!isOpen || hasSentWelcome.current || daniChatHistory.length > 0) return;
     hasSentWelcome.current = true;
     setIsTyping(true);
     setDaniMood('thinking');
@@ -406,7 +532,8 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
       addDaniMessage({ role: 'assistant', text: welcomeText });
       setIsSpeaking(true);
       isSpeakingRef.current = true;
-      speakTextConversational(welcomeText, 'dani', () => {
+      const voiceOverrides = getVoiceOverrides();
+      speakTextConversational(welcomeText, 'dani', voiceOverrides, () => {
         setIsSpeaking(false);
         isSpeakingRef.current = false;
       }, (err) => {
@@ -435,6 +562,24 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
       // Use document analysis context if available
       const hasDocumentContext = !!documentForDani;
       let systemPrompt = hasDocumentContext ? PROMPT_TUTOR_TAREAS : PROMPT_DANI_EXPERTO;
+
+      // Inject memory context
+      const memoryInjection = buildMemoryInjection();
+      if (memoryInjection) {
+        systemPrompt += '\n\n' + memoryInjection;
+      }
+
+      // Personality adaptation based on memory
+      const cs = daniMemory?.studentProfile?.communicationStyle;
+      if (cs === 'shy') {
+        systemPrompt += '\n\n## ADAPTACIÓN\nEste estudiante es reservado. Sé paciente, usa preguntas abiertas y celebra cada intento.';
+      } else if (cs === 'direct') {
+        systemPrompt += '\n\n## ADAPTACIÓN\nEste estudiante es directo. Ve al grano, respuestas concisas.';
+      } else if (cs === 'playful') {
+        systemPrompt += '\n\n## ADAPTACIÓN\nEste estudiante es juguetón. Usa emojis, mantén un tono alegre.';
+      } else if (cs === 'curious') {
+        systemPrompt += '\n\n## ADAPTACIÓN\nEste estudiante es curioso. Ofrece datos interesantes, invita a explorar.';
+      }
 
       // Socratic mode: append socratic instructions
       if (socraticMode) {
@@ -508,29 +653,97 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
         setDocumentForDani(null);
       }
 
-      const response = await callDeepseek(messages, {
+      // Streaming response with sentence-level TTS
+      let fullResponse = '';
+      pendingSentenceRef.current = '';
+
+      await callDeepseekStream(messages, {
         temperature: 0.7,
         maxTokens: 800,
+      }, false, (chunk) => {
+        fullResponse += chunk;
+        setDaniMood('explaining');
+        setStreamingMessage(fullResponse);
+        setDaniMood('explaining');
+
+        pendingSentenceRef.current += chunk;
+        while (true) {
+          const match = pendingSentenceRef.current.match(/[.!?](?:\s|$)/);
+          if (!match) break;
+          const endIdx = match.index + 1;
+          const sentence = pendingSentenceRef.current.slice(0, endIdx).trim();
+          pendingSentenceRef.current = pendingSentenceRef.current.slice(endIdx + match[0].length);
+          if (voiceEnabled && sentence.length >= 8 && !isSpeakingRef.current) {
+            setIsSpeaking(true);
+            isSpeakingRef.current = true;
+            const cleanSentence = sentence.replace(/[😊🔥🧠🎉💙📚💭🌟📅💬🎯🤔📖🔬🌍🎨💻🤖⭐💎📰✨]/g, '').trim();
+            if (cleanSentence.length > 0) {
+              const voiceOverrides = getVoiceOverrides();
+              speakTextConversational(cleanSentence, 'dani', voiceOverrides, () => {
+                setIsSpeaking(false);
+                isSpeakingRef.current = false;
+              }, (err) => {
+                setIsSpeaking(false);
+                isSpeakingRef.current = false;
+                if (err && err.includes('bloqueado')) setVoiceBlocked(true);
+              });
+            } else {
+              setIsSpeaking(false);
+              isSpeakingRef.current = false;
+            }
+          }
+        }
       });
 
-      setDaniMood('explaining');
-      addDaniMessage({ role: 'assistant', text: response });
-
-      // Speak response aloud if voice is enabled
-      if (voiceEnabled) {
-        const cleanText = response.replace(/[😊🔥🧠🎉💙📚💭🌟📅💬🎯🤔📖🔬🌍🎨💻🤖⭐💎📰✨]/g, '').trim();
-        if (cleanText.length > 0) {
-          setIsSpeaking(true);
-          isSpeakingRef.current = true;
-          speakTextConversational(cleanText, 'dani', () => {
+      // Speak remaining text
+      const remaining = pendingSentenceRef.current.trim();
+      if (remaining.length >= 8 && voiceEnabled) {
+        setIsSpeaking(true);
+        isSpeakingRef.current = true;
+        const cleanRemaining = remaining.replace(/[😊🔥🧠🎉💙📚💭🌟📅💬🎯🤔📖🔬🌍🎨💻🤖⭐💎📰✨]/g, '').trim();
+        if (cleanRemaining.length > 0) {
+          const voiceOverrides = getVoiceOverrides();
+          speakTextConversational(cleanRemaining, 'dani', voiceOverrides, () => {
             setIsSpeaking(false);
             isSpeakingRef.current = false;
           }, (err) => {
-            if (err && err.includes('bloqueado')) {
-              setVoiceBlocked(true);
-            }
+            setIsSpeaking(false);
+            isSpeakingRef.current = false;
+            if (err && err.includes('bloqueado')) setVoiceBlocked(true);
           });
         }
+      }
+
+      setDaniMood('explaining');
+      setStreamingMessage('');
+      // Check for structured data in response
+      try {
+        const chartMatch = fullResponse.match(/<!CHART>(.*?)<\/!CHART>/s);
+        if (chartMatch) {
+          const chartData = JSON.parse(chartMatch[1].trim());
+          addDaniMessage({ role: 'assistant', type: 'chart', data: chartData });
+        }
+        const videoMatch = fullResponse.match(/<!VIDEO>(.*?)<\/!VIDEO>/s);
+        if (videoMatch) {
+          const videoData = JSON.parse(videoMatch[1].trim());
+          addDaniMessage({ role: 'assistant', type: 'video', data: videoData });
+        }
+      } catch (e) {
+        // Ignore parse errors
+      }
+      // Parse <memoria> block (invisible to user)
+      const cleanResponse = fullResponse.replace(/<memoria>[\s\S]*?<\/memoria>/, '').trim();
+      addDaniMessage({ role: 'assistant', text: cleanResponse || fullResponse });
+
+      // Extract memory metadata
+      try {
+        const memoriaMatch = fullResponse.match(/<memoria>([\s\S]*?)<\/memoria>/);
+        if (memoriaMatch) {
+          const parsed = JSON.parse(memoriaMatch[1].trim());
+          updateDaniMemory(parsed);
+        }
+      } catch (e) {
+        console.warn('[Dani] Memoria parse error:', e.message);
       }
 
       // Record mood inference
@@ -557,7 +770,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
       setIsTyping(false);
       setDaniMood('happy');
     }
-  }, [addDaniMessage, buildDaniContext, daniChatHistory, recordMoodInference, trackAcademicTopic, setDaniMood, voiceEnabled, setVoiceBlocked, socraticMode]);
+  }, [addDaniMessage, buildDaniContext, daniChatHistory, recordMoodInference, trackAcademicTopic, setDaniMood, voiceEnabled, setVoiceBlocked, socraticMode, documentForDani]);
 
   const handleQuickAction = useCallback((action) => {
     const now = new Date();
@@ -793,14 +1006,42 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
           <div className={`flex-1 overflow-y-auto p-4 space-y-2 ${
             darkMode ? 'scrollbar-thin scrollbar-thumb-[#334155]' : ''
           }`} role="log" aria-live="polite" aria-label="Mensajes del chat">
-            {daniChatHistory.map((msg, index) => (
-              <MessageBubble
-                key={index}
-                message={msg}
-                isDani={msg.role === 'assistant'}
-                darkMode={darkMode}
-              />
-            ))}
+            {daniChatHistory.map((msg, index) => {
+              if (msg.type === 'chart') {
+                return <ChartRenderer key={index} chartData={msg.data} darkMode={darkMode} />;
+              }
+              if (msg.type === 'video') {
+                return <VideoEmbed key={index} videoData={msg.data} darkMode={darkMode} />;
+              }
+              return (
+                <MessageBubble key={index} message={msg} isDani={msg.role === 'assistant'} darkMode={darkMode} />
+              );
+            })}
+            {streamingMessage && (
+              <motion.div
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                className="flex justify-start mb-4"
+              >
+                <div className="mr-3 mt-1 flex-shrink-0">
+                  <DaniAvatar />
+                </div>
+                <div className={`max-w-[75%] px-4 py-3 rounded-2xl rounded-tl-md shadow-sm ${
+                  darkMode
+                    ? 'bg-[#1E293B] border border-[#334155] text-[#E2E8F0]'
+                    : 'bg-white border border-[#E2E8F0] text-[#004B63]'
+                }`}>
+                  <p className="text-sm leading-relaxed whitespace-pre-wrap">
+                    {streamingMessage}
+                    <motion.span
+                      className="inline-block w-1.5 h-4 bg-[#4DA8C4] ml-0.5 align-middle"
+                      animate={{ opacity: [1, 0] }}
+                      transition={{ duration: 0.6, repeat: Infinity }}
+                    />
+                  </p>
+                </div>
+              </motion.div>
+            )}
             {isTyping && (
               <motion.div
                 initial={{ opacity: 0 }}

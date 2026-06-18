@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSmartBoardKids } from '../../context/SmartBoardKidsContext';
+import { analyzeDocumentText } from '../../utils/api';
+import { extractDocumentText } from '../../utils/documentParser';
 
 const LS = 'edutechlife_exams';
 const subjects = [
@@ -104,7 +106,86 @@ const ExamCard = memo(({ e: exam, i, onView, onDelete }) => {
   );
 });
 
-const ExamDetail = memo(({ e: exam, tips, onDelete, onBack, onAskDani }) => {
+const MaterialUploader = memo(({ examId, onMaterialUploaded }) => {
+  const [uploading, setUploading] = useState(false);
+  const [drag, setDrag] = useState(false);
+
+  const handleFile = useCallback(async (file) => {
+    setUploading(true);
+    try {
+      const text = await extractDocumentText(file);
+      const analysis = await analyzeDocumentText(text, file.name, 'General');
+      onMaterialUploaded(examId, { fileName: file.name, ...analysis });
+    } catch (e) {
+      console.warn('Upload failed:', e);
+    }
+    setUploading(false);
+  }, [examId, onMaterialUploaded]);
+
+  return (
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+      className={`relative border-2 border-dashed rounded-xl p-4 text-center transition-all cursor-pointer ${drag ? 'border-[#4DA8C4] bg-[#4DA8C4]/10 scale-[1.02]' : 'border-[#E2E8F0] bg-[#F8FAFC] hover:border-[#4DA8C4]/50'}`}
+      onDragEnter={(e) => { e.preventDefault(); setDrag(true); }}
+      onDragLeave={() => setDrag(false)}
+      onDragOver={(e) => e.preventDefault()}
+      onDrop={(e) => { e.preventDefault(); setDrag(false); const f = e.dataTransfer.files[0]; if (f) handleFile(f); }}>
+      <input type="file" accept=".pdf,.txt,.png,.jpg,.jpeg" onChange={(e) => { const f = e.target.files[0]; if (f) handleFile(f); }} className="hidden" id={`upload-${examId}`} />
+      <label htmlFor={`upload-${examId}`} className="cursor-pointer block">
+        {uploading ? (
+          <div className="flex items-center justify-center gap-2">
+            <motion.div className="w-5 h-5 border-2 border-[#4DA8C4] border-t-transparent rounded-full" animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} />
+            <span className="text-sm text-[#64748B]">Analizando material...</span>
+          </div>
+        ) : (
+          <div className="flex items-center justify-center gap-2">
+            <span className="text-lg">📄</span>
+            <span className="text-sm text-[#64748B]">Sube apuntes, PDF o foto para generar plan de estudio IA</span>
+          </div>
+        )}
+      </label>
+    </motion.div>
+  );
+});
+
+const StudyPlanCard = memo(({ material }) => {
+  if (!material) return null;
+  return (
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+      className="p-4 rounded-xl bg-gradient-to-br from-[#4DA8C4]/5 to-[#66CCCC]/10 border border-[#4DA8C4]/20 space-y-3">
+      <div className="flex items-center gap-2">
+        <span className="text-lg">📋</span>
+        <h4 className="text-sm font-bold text-[#004B63]">Plan de Estudio IA</h4>
+        <span className="text-[10px] text-[#64748B] ml-auto">{material.fileName}</span>
+      </div>
+      {material.strengths?.length > 0 && (
+        <div>
+          <p className="text-[10px] font-semibold text-[#66CCCC] uppercase tracking-wider mb-1">Fortalezas</p>
+          <div className="flex flex-wrap gap-1">{material.strengths.map((s, i) => (
+            <span key={i} className="px-2 py-0.5 bg-green-50 text-green-700 text-[10px] rounded-full border border-green-200">{s}</span>
+          ))}</div>
+        </div>
+      )}
+      {material.improvements?.length > 0 && (
+        <div>
+          <p className="text-[10px] font-semibold text-[#FF6B9D] uppercase tracking-wider mb-1">Por mejorar</p>
+          <div className="flex flex-wrap gap-1">{material.improvements.map((s, i) => (
+            <span key={i} className="px-2 py-0.5 bg-red-50 text-red-600 text-[10px] rounded-full border border-red-200">{s}</span>
+          ))}</div>
+        </div>
+      )}
+      {material.tutoringQuestions?.length > 0 && (
+        <div>
+          <p className="text-[10px] font-semibold text-[#4DA8C4] uppercase tracking-wider mb-1">Preguntas guía</p>
+          <ul className="space-y-1">{material.tutoringQuestions.slice(0, 3).map((q, i) => (
+            <li key={i} className="text-xs text-[#64748B] flex items-start gap-2"><span className="text-[#4DA8C4]">•</span>{q}</li>
+          ))}</ul>
+        </div>
+      )}
+    </motion.div>
+  );
+});
+
+const ExamDetail = memo(({ e: exam, tips, materials, onDelete, onBack, onAskDani, onUploadMaterial }) => {
   const d = daysLeft(exam.date);
   const p = Math.min(exam.studyProgress || 0, 100);
   const si = sbj(exam.subject);
@@ -154,6 +235,10 @@ const ExamDetail = memo(({ e: exam, tips, onDelete, onBack, onAskDani }) => {
             </ul>
           </div>
         )}
+        {materials?.length > 0 && materials.map((m, i) => (
+          <StudyPlanCard key={i} material={m} />
+        ))}
+        <MaterialUploader examId={exam.id} onMaterialUploaded={onUploadMaterial} />
         <motion.button onClick={onAskDani} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
           className={`${gdCls} w-full py-3 flex items-center justify-center gap-2`}>
           🤖 Preguntar a Dani sobre este examen
@@ -163,9 +248,14 @@ const ExamDetail = memo(({ e: exam, tips, onDelete, onBack, onAskDani }) => {
   );
 });
 
+const MATERIALS_LS = 'edutechlife_exam_materials';
+
+const getMaterials = () => { try { return JSON.parse(localStorage.getItem(MATERIALS_LS)) || {}; } catch { return {}; } };
+
 const ExamPrep = memo(() => {
   const { vakResult, setDocumentForDani } = useSmartBoardKids();
   const [exams, setExams] = useState(() => { try { return JSON.parse(localStorage.getItem(LS)) || []; } catch { return []; } });
+  const [materials, setMaterials] = useState(getMaterials);
   const [mode, setMode] = useState('list');
   const [detailId, setDetailId] = useState(null);
   const [name, setName] = useState('');
@@ -174,6 +264,7 @@ const ExamPrep = memo(() => {
   const [grade, setGrade] = useState(70);
 
   useEffect(() => { localStorage.setItem(LS, JSON.stringify(exams)); }, [exams]);
+  useEffect(() => { localStorage.setItem(MATERIALS_LS, JSON.stringify(materials)); }, [materials]);
 
   const addExam = useCallback(() => {
     if (!name.trim() || !date) return;
@@ -183,12 +274,21 @@ const ExamPrep = memo(() => {
 
   const deleteExam = useCallback((id) => {
     setExams((prev) => prev.filter((e) => e.id !== id));
+    setMaterials((prev) => { const next = { ...prev }; delete next[id]; return next; });
     if (detailId === id) { setMode('list'); setDetailId(null); }
   }, [detailId]);
+
+  const handleUploadMaterial = useCallback((examId, analysis) => {
+    setMaterials((prev) => ({
+      ...prev,
+      [examId]: [...(prev[examId] || []), { ...analysis, uploadedAt: new Date().toISOString() }],
+    }));
+  }, []);
 
   const sorted = [...exams].sort((a, b) => new Date(a.date) - new Date(b.date));
   const detailExam = exams.find((e) => e.id === detailId);
   const tips = detailExam ? getTips(vakResult) : [];
+  const examMaterials = detailId ? (materials[detailId] || []) : [];
 
   return (
     <div className="space-y-6">
@@ -225,13 +325,15 @@ const ExamPrep = memo(() => {
         )}
 
         {mode === 'detail' && detailExam && (
-          <ExamDetail key="detail" e={detailExam} tips={tips} onDelete={deleteExam}
+          <ExamDetail key="detail" e={detailExam} tips={tips} materials={examMaterials}
+            onDelete={deleteExam}
             onBack={() => { setMode('list'); setDetailId(null); }}
             onAskDani={() => {
-              setDocumentForDani({ type: 'exam_prep', exam: detailExam, tips });
+              setDocumentForDani({ type: 'exam_prep', exam: detailExam, tips, materials: examMaterials });
               const btn = document.getElementById('openDaniChat');
               if (btn) btn.click();
-            }} />
+            }}
+            onUploadMaterial={handleUploadMaterial} />
         )}
       </AnimatePresence>
     </div>

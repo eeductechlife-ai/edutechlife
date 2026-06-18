@@ -86,6 +86,15 @@ const FlashcardSystem = memo(() => {
   const [correct, setCorrect] = useState(0);
   const [incorrect, setIncorrect] = useState(0);
   const [done, setDone] = useState(false);
+  const [showImport, setShowImport] = useState(false);
+  const [importCode, setImportCode] = useState('');
+  const [shareMessage, setShareMessage] = useState('');
+  const [multiplayerMode, setMultiplayerMode] = useState(false);
+  const [score1, setScore1] = useState(0);
+  const [score2, setScore2] = useState(0);
+  const [mpCurrentPlayer, setMpCurrentPlayer] = useState(1);
+  const [qIdx, setQIdx] = useState(0);
+  const [playerAnswer, setPlayerAnswer] = useState('');
 
   useEffect(() => { setDecks(load()); }, []);
   useEffect(() => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(decks)); } catch {} }, [decks]);
@@ -123,6 +132,11 @@ const FlashcardSystem = memo(() => {
   }, [decks]);
 
   const handleResult = useCallback((known) => {
+    if (multiplayerMode) {
+      if (mpCurrentPlayer === 1) setScore1(prev => known ? prev + 1 : prev);
+      else setScore2(prev => known ? prev + 1 : prev);
+      setMpCurrentPlayer(prev => prev === 1 ? 2 : 1);
+    }
     if (known) setCorrect(prev => prev + 1); else setIncorrect(prev => prev + 1);
     const d = decks.find(x => x.id === currentDeckId);
     if (!d) return;
@@ -135,7 +149,7 @@ const FlashcardSystem = memo(() => {
         streak: known ? (x.stats?.streak || 0) + 1 : 0,
       } } : x));
     } else { setCardIdx(prev => prev + 1); setFlipped(false); }
-  }, [currentDeckId, cardIdx, decks, saveDecks]);
+  }, [currentDeckId, cardIdx, decks, saveDecks, multiplayerMode, mpCurrentPlayer]);
 
   const rate = useMemo(() => { const t = correct + incorrect; return t > 0 ? Math.round((correct / t) * 100) : 0; }, [correct, incorrect]);
 
@@ -172,25 +186,41 @@ const FlashcardSystem = memo(() => {
     );
 
     return (
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-bold text-[#004B63]">📖 {deck.title}</h3>
-          <motion.button onClick={() => setMode('decks')}
-            whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-            className="text-sm text-[#64748B] hover:text-[#004B63]">
-            ✕ Cerrar
-          </motion.button>
-        </div>
-        <div className="w-full h-2 bg-[#E2E8F0] rounded-full overflow-hidden">
-          <motion.div
-            className="h-full bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC]"
-            initial={{ width: 0 }}
-            animate={{ width: `${((cardIdx + 1) / deck.cards.length) * 100}%` }}
-          />
-        </div>
-        <QuizCard card={deck.cards[cardIdx]} flipped={flipped} onFlip={() => setFlipped(prev => !prev)}
-          onResult={handleResult} idx={cardIdx} total={deck.cards.length} />
-      </motion.div>
+      <>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-bold text-[#004B63]">📖 {deck.title}</h3>
+            <motion.button onClick={() => setMode('decks')}
+              whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+              className="text-sm text-[#64748B] hover:text-[#004B63]">
+              ✕ Cerrar
+            </motion.button>
+          </div>
+          <div className="w-full h-2 bg-[#E2E8F0] rounded-full overflow-hidden">
+            <motion.div
+              className="h-full bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC]"
+              initial={{ width: 0 }}
+              animate={{ width: `${((cardIdx + 1) / deck.cards.length) * 100}%` }}
+            />
+          </div>
+          <QuizCard card={deck.cards[cardIdx]} flipped={flipped} onFlip={() => setFlipped(prev => !prev)}
+            onResult={handleResult} idx={cardIdx} total={deck.cards.length} />
+        </motion.div>
+        {multiplayerMode && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+            className="fixed top-4 right-4 z-50 flex gap-3"
+          >
+            <div className={`p-3 rounded-xl shadow-lg text-center ${mpCurrentPlayer === 1 ? 'ring-2 ring-[#4DA8C4] bg-white' : 'bg-white/80'}`}>
+              <p className="text-[10px] font-semibold text-[#64748B]">J1</p>
+              <p className="text-lg font-black text-[#004B63]">{score1}</p>
+            </div>
+            <div className={`p-3 rounded-xl shadow-lg text-center ${mpCurrentPlayer === 2 ? 'ring-2 ring-[#FF6B9D] bg-white' : 'bg-white/80'}`}>
+              <p className="text-[10px] font-semibold text-[#64748B]">J2</p>
+              <p className="text-lg font-black text-[#004B63]">{score2}</p>
+            </div>
+          </motion.div>
+        )}
+      </>
     );
   }
 
@@ -283,6 +313,98 @@ const FlashcardSystem = memo(() => {
           <p className="text-sm text-[#64748B] mt-2">¡Crea tu primer mazo para empezar a estudiar!</p>
         </motion.div>
       )}
+
+      {/* Share/Import + Multiplayer */}
+      {decks.length > 0 && (
+        <div className="space-y-4">
+          <div className="flex gap-2">
+            <motion.button
+              whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+              onClick={() => {
+                const deck = decks[0];
+                const code = deck.shareCode || Math.random().toString(36).substring(2, 8).toUpperCase();
+                if (!deck.shareCode) {
+                  const updated = { ...deck, shareCode: code };
+                  saveDecks(prev => prev.map(d => d.id === deck.id ? updated : d));
+                }
+                navigator.clipboard.writeText(code);
+                setShareMessage('¡Código copiado!');
+                setTimeout(() => setShareMessage(''), 2000);
+              }}
+              className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white text-sm font-bold"
+            >📤 Compartir mazo</motion.button>
+            <motion.button
+              whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+              onClick={() => setShowImport(true)}
+              className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-[#FFD166] to-[#FFB300] text-white text-sm font-bold"
+            >📥 Importar mazo</motion.button>
+          </div>
+          {shareMessage && (
+            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-xs text-center text-[#4DA8C4] font-semibold">{shareMessage}</motion.p>
+          )}
+          <motion.button
+            whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+            onClick={() => {
+              if (decks.length > 0) {
+                setMultiplayerMode(true);
+                setCurrentDeckId(decks[0].id);
+                setMode('quiz');
+                setScore1(0); setScore2(0); setMpCurrentPlayer(1); setQIdx(0);
+                setPlayerAnswer('');
+              }
+            }}
+            className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#FF6B9D] to-[#A855F7] text-white text-sm font-bold flex items-center justify-center gap-2"
+          >
+            👥 Modo 2 Jugadores
+          </motion.button>
+        </div>
+      )}
+
+      {/* Import dialog */}
+      <AnimatePresence>
+        {showImport && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setShowImport(false)}
+          >
+            <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }}
+              className="p-6 rounded-2xl max-w-sm w-full bg-white shadow-xl" onClick={(e) => e.stopPropagation()}
+            >
+              <h3 className="text-lg font-bold text-[#004B63] mb-4">Importar mazo</h3>
+              <input value={importCode} onChange={(e) => setImportCode(e.target.value.toUpperCase())}
+                placeholder="Ej: F3K7M9"
+                maxLength={6}
+                className="w-full p-3 rounded-xl border border-[#E2E8F0] text-center text-lg font-bold tracking-widest mb-4 bg-[#F8FAFC] text-[#004B63]"
+              />
+              <div className="flex gap-2">
+                <motion.button whileTap={{ scale: 0.95 }}
+                  onClick={() => setShowImport(false)}
+                  className="flex-1 py-2.5 rounded-xl border border-[#E2E8F0] text-sm font-bold text-[#64748B]"
+                >Cancelar</motion.button>
+                <motion.button whileTap={{ scale: 0.95 }}
+                  onClick={() => {
+                    const allDecks = [
+                      ...(JSON.parse(localStorage.getItem('edutechlife_flashcards') || '[]')),
+                      ...(JSON.parse(localStorage.getItem('edutechlife_shared_decks') || '[]'))
+                    ];
+                    const found = allDecks.find(d => d.shareCode === importCode);
+                    if (found) {
+                      const imported = JSON.parse(localStorage.getItem('edutechlife_shared_decks') || '[]');
+                      if (!imported.some(d => d.shareCode === importCode)) {
+                        imported.push({ ...found, id: `${found.id}_imported_${Date.now()}` });
+                        localStorage.setItem('edutechlife_shared_decks', JSON.stringify(imported));
+                      }
+                      setShowImport(false);
+                      setImportCode('');
+                    }
+                  }}
+                  disabled={importCode.length < 4}
+                  className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white text-sm font-bold disabled:opacity-50"
+                >Importar</motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 });

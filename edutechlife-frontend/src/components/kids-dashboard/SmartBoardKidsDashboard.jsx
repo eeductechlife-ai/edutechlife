@@ -22,6 +22,44 @@ const ExamPrep = lazy(() => import('./ExamPrep'));
 const FlashcardSystem = lazy(() => import('./FlashcardSystem'));
 const SmartBookReader = lazy(() => import('./SmartBookReader'));
 const ProblemScanner = lazy(() => import('./ProblemScanner'));
+const CurriculumView = lazy(() => import('./CurriculumView'));
+const StudyPodcast = lazy(() => import('./StudyPodcast'));
+const OralExamSimulator = lazy(() => import('./OralExamSimulator'));
+const SmartBoardAnalytics = lazy(() => import('./SmartBoardAnalytics'));
+
+const CATEGORY_MAP = {
+  inicio: 'home',
+  materias: 'learn', curriculo: 'learn', libros: 'learn', podcast: 'learn',
+  examenes: 'practice', flashcards: 'practice', oral: 'practice', escaner: 'practice',
+  vak: 'progress', progreso: 'progress', analitica: 'progress', calendario: 'progress',
+  misiones: 'explore', actividades: 'explore', noticias: 'explore',
+};
+
+const CATEGORIES = [
+  { id: 'home',    icon: '🏠', label: 'Inicio',    color: '#4DA8C4', tabs: ['inicio'], premium: false },
+  { id: 'learn',   icon: '📚', label: 'Aprender',  color: '#66CCCC', tabs: ['materias', 'curriculo', 'libros', 'podcast'], premium: false },
+  { id: 'practice',icon: '✏️', label: 'Practicar', color: '#FF6B9D', tabs: ['examenes', 'flashcards', 'oral', 'escaner'], premium: false },
+  { id: 'progress',icon: '📊', label: 'Progreso',  color: '#FFD166', tabs: ['vak', 'progreso', 'analitica', 'calendario'], premium: false },
+  { id: 'explore', icon: '🎮', label: 'Explorar',  color: '#A855F7', tabs: ['misiones', 'actividades', 'noticias'], premium: false },
+];
+
+const CATEGORY_TAB_LABELS = {
+  materias: 'Materias', curriculo: 'Currículo', libros: 'Libros', podcast: 'Podcast',
+  examenes: 'Exámenes', flashcards: 'Flashcards', oral: 'Oral', escaner: 'Escáner',
+  vak: 'VAK', progreso: 'Progreso', analitica: 'Analítica', calendario: 'Calendario',
+  misiones: 'Misiones', actividades: 'Actividades', noticias: 'Noticias',
+  inicio: 'Inicio',
+};
+
+const PREMIUM_TABS = ['libros', 'noticias', 'analitica'];
+
+const TOP_BAR_LABELS = {
+  inicio: 'Inicio',
+  materias: 'Materias', curriculo: 'Currículo', libros: 'Libros Intel.', podcast: 'Podcast',
+  examenes: 'Exámenes', flashcards: 'Flashcards', oral: 'Oral', escaner: 'Escáner',
+  vak: 'Diagnóstico VAK', progreso: 'Progreso', analitica: 'Analítica', calendario: 'Calendario',
+  misiones: 'Misiones', actividades: 'Actividades', noticias: 'Noticias',
+};
 
 const SkeletonBar = ({ className = '' }) => (
   <div className={`animate-pulse bg-gradient-to-r from-[#E2E8F0] via-[#CBD5E1] to-[#E2E8F0] rounded-lg ${className}`} />
@@ -82,7 +120,7 @@ const SectionFallback = ({ tab }) => {
       </div>
     );
   }
-  if (tab === 'examenes' || tab === 'flashcards' || tab === 'libros') {
+  if (tab === 'examenes' || tab === 'flashcards' || tab === 'libros' || tab === 'oral') {
     return (
       <div className="space-y-4 p-4">
         <SkeletonBar className="h-8 w-48" />
@@ -107,163 +145,149 @@ const SectionFallback = ({ tab }) => {
 // ==========================================
 // Premium Sidebar - Glassmorphism
 // ==========================================
-const PREMIUM_TABS = ['libros', 'noticias', 'padres'];
 
 const PremiumSidebar = ({ activeTab, onTabChange, totalPoints, vakCompleted, darkMode, streak, onNavigate, onLogout, subscriptionTier }) => {
   const { t } = useTranslation();
   const isPremium = subscriptionTier === 'premium';
-  const tabs = [
-    { id: 'inicio', icon: '🏠', label: t('smartboard.tab_home'), color: '#4DA8C4', premium: false },
-    { id: 'vak', icon: '🧠', label: t('smartboard.tab_vak'), color: '#66CCCC', premium: false },
-    { id: 'misiones', icon: '🎯', label: t('smartboard.tab_missions'), color: '#FF6B9D', premium: false },
-    { id: 'materias', icon: '📚', label: t('smartboard.tab_subjects'), color: '#4DA8C4', premium: false },
-    { id: 'actividades', icon: '📝', label: t('smartboard.tab_activities'), color: '#FFD166', premium: false },
-    { id: 'calendario', icon: '📅', label: t('smartboard.tab_calendar'), color: '#FF6B9D', premium: false },
-    { id: 'progreso', icon: '📊', label: t('smartboard.tab_progress'), color: '#66CCCC', premium: false },
-    { id: 'examenes', icon: '📋', label: 'Exámenes', color: '#FF6B9D', premium: false },
-    { id: 'flashcards', icon: '🗂️', label: 'Flashcards', color: '#FFD166', premium: false },
-    { id: 'escaner', icon: '📷', label: 'Escáner', color: '#66CCCC', premium: false },
-    { id: 'libros', icon: '📖', label: 'Libro Intel.', color: '#4DA8C4', premium: true },
-    { id: 'noticias', icon: '📰', label: t('smartboard.tab_news'), color: '#004B63', premium: true },
-    { id: 'padres', icon: '👨‍👩‍👧', label: t('smartboard.tab_parents'), color: '#4DA8C4', premium: true },
-  ];
+  const [expandedCat, setExpandedCat] = useState(() => {
+    return localStorage.getItem('edutechlife_sidebar_cat') || 'home';
+  });
+
+  const activeCategory = CATEGORY_MAP[activeTab] || 'home';
+
+  useEffect(() => {
+    localStorage.setItem('edutechlife_sidebar_cat', activeCategory);
+    setExpandedCat(activeCategory);
+  }, [activeCategory]);
+
+  const toggleCategory = (catId) => {
+    setExpandedCat(prev => prev === catId ? null : catId);
+  };
 
   return (
     <motion.aside
       initial={{ x: -100, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-      className={`hidden md:flex w-64 flex-col h-full backdrop-blur-xl border-r relative z-20 transition-colors duration-500 ${
+      className={`hidden md:flex w-56 flex-col h-full backdrop-blur-xl border-r relative z-20 transition-colors duration-500 ${
         darkMode ? 'bg-[#1E293B]/80 border-[#334155]/50' : 'bg-white/80 border-[#E2E8F0]'
       }`}
     >
-      {/* Logo Area */}
-      <div className="p-6 border-b border-[#E2E8F0]/50">
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ type: 'spring', damping: 15, stiffness: 400, delay: 0.3 }}
+      {/* Logo + Stats */}
+      <div className="p-4 border-b border-[#E2E8F0]/50">
+        <motion.h2 initial={{ scale: 0 }} animate={{ scale: 1 }}
+          className="text-lg font-black bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] bg-clip-text text-transparent"
         >
-          <h2 className="text-2xl font-black bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] bg-clip-text text-transparent">
-            SmartBoard
-          </h2>
-        </motion.div>
-        <p className={`text-xs mt-1 transition-colors duration-500 ${darkMode ? 'text-[#94A3B8]' : 'text-[#64748B]'}`}>{t('smartboard.sb_subtitle')}</p>
-      </div>
-
-      {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-2 overflow-y-auto" aria-label={t('smartboard.nav_label')}>
-        {tabs.map((tab, index) => (
-          <motion.button
-            key={tab.id}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.4 + index * 0.05 }}
-            onClick={() => tab.id === 'padres' ? onNavigate?.('/smartboard/padres') : onTabChange(tab.id)}
-            aria-label={tab.label}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all relative overflow-hidden group ${
-              activeTab === tab.id
-                ? 'text-white shadow-lg'
-                : darkMode
-                  ? 'text-[#94A3B8] hover:bg-[#334155]/50'
-                  : 'text-[#64748B] hover:bg-[#F8FAFC]'
-            }`}
-            whileHover={{ x: 4 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            {/* Active Indicator */}
-            {activeTab === tab.id && (
-              <motion.div
-                layoutId="activeTab"
-                className="absolute inset-0 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] rounded-xl -z-10"
-                transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              />
-            )}
-            
-            <span className="relative z-10 text-xl">{tab.icon}</span>
-            <span className="relative z-10 font-semibold text-sm">{tab.label}</span>
-
-            {/* Premium lock badge */}
-            {tab.premium && !isPremium && (
-              <span className="ml-auto relative z-10 text-[10px]">🔒</span>
-            )}
-
-            {/* Premium check badge for premium users */}
-            {tab.premium && isPremium && (
-              <span className="ml-auto relative z-10 text-[10px]">⭐</span>
-            )}
-            
-            {/* Plan active badge on VAK tab */}
-            {tab.id === 'vak' && vakCompleted && (
-              <span className="ml-auto relative z-10 text-[10px] px-1.5 py-0.5 bg-green-400 text-white rounded-full font-bold">
-                Plan
-              </span>
-            )}
-            
-
-          </motion.button>
-        ))}
-      </nav>
-
-      {/* User Level */}
-      <div className={`p-4 border-t transition-colors duration-500 ${darkMode ? 'border-[#334155]/50' : 'border-[#E2E8F0]/50'}`}>
-        <div className={`px-4 py-3 rounded-xl border transition-colors duration-500 ${
-          darkMode
-            ? 'bg-gradient-to-br from-[#334155] to-[#1E293B] border-[#475569]/50'
-            : 'bg-gradient-to-br from-[#F8FAFC] to-white border-[#E2E8F0]/50'
-        }`}>
-          <div className="flex items-center justify-between mb-2">
-            <span className={`text-xs transition-colors duration-500 ${darkMode ? 'text-[#94A3B8]' : 'text-[#64748B]'}`}>{t('smartboard.sidebar_level')}</span>
-            <span className="text-xs font-bold text-[#4DA8C4]">
-              {totalPoints >= 5000 ? '🏆 Maestro' : totalPoints >= 2500 ? '⭐ Experto' : totalPoints >= 1000 ? '📚 Avanzado' : totalPoints >= 500 ? '🌟 Intermedio' : '🌱 Principiante'}
-            </span>
+          SmartBoard
+        </motion.h2>
+        <div className="flex items-center gap-3 mt-2">
+          <div className="flex items-center gap-1 text-xs">
+            <span>🔥</span>
+            <span className={`font-bold ${darkMode ? 'text-[#FFD166]' : 'text-[#FF8E53]'}`}>{streak?.current ?? 0}</span>
           </div>
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-xs">🔥</span>
-            <span className={`text-xs ${darkMode ? 'text-[#FFD166]' : 'text-[#FF8E53]'}`}>
-              {t('smartboard.sidebar_streak', { count: streak.current })}
-            </span>
-          </div>
-          <div className="w-full h-2 bg-[#E2E8F0] rounded-full overflow-hidden">
-            <motion.div
-              className="h-full bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] rounded-full"
-              initial={{ width: 0 }}
-              animate={{ width: `${Math.min((totalPoints % 500) / 5, 100)}%` }}
-              transition={{ duration: 1, ease: 'easeOut' }}
-            />
+          <div className="flex items-center gap-1 text-xs">
+            <span>💎</span>
+            <span className={`font-bold ${darkMode ? 'text-white' : 'text-[#004B63]'}`}>{totalPoints?.toLocaleString() || 0}</span>
           </div>
         </div>
-        {/* Upgrade CTA for Basic users */}
-        {!isPremium && (
-          <motion.button
-            onClick={() => onNavigate('/conoce-smartboard')}
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            className={`block w-full mt-3 px-4 py-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 bg-gradient-to-r from-[#D4A017] to-[#FFD166] text-white shadow-lg hover:shadow-xl cursor-pointer`}
-          >
-            <span>⭐</span>
-            <span>Actualizar a Premium</span>
-          </motion.button>
-        )}
-        {/* Premium badge for Premium users */}
-        {isPremium && (
-          <div className="w-full mt-3 px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 bg-gradient-to-r from-[#D4A017] to-[#FFD166] text-white shadow-md">
-            <span>⭐</span>
-            <span>Plan Premium Activo</span>
-          </div>
-        )}
+      </div>
+
+      {/* Categories */}
+      <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
+        {CATEGORIES.map((cat) => {
+          const isActiveCategory = expandedCat === cat.id;
+          const hasActiveTab = activeCategory === cat.id;
+          const anyPremiumInCategory = cat.tabs.some(t => PREMIUM_TABS.includes(t));
+          const showChildren = isActiveCategory;
+
+          return (
+            <div key={cat.id}>
+              <motion.button
+                onClick={() => toggleCategory(cat.id)}
+                whileTap={{ scale: 0.98 }}
+                className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all text-sm font-semibold ${
+                  hasActiveTab
+                    ? 'text-white shadow-sm'
+                    : darkMode
+                      ? 'text-[#94A3B8] hover:bg-[#334155]/50'
+                      : 'text-[#64748B] hover:bg-[#F1F5F9]'
+                }`}
+                style={hasActiveTab ? { background: `linear-gradient(135deg, ${cat.color}, ${cat.color}dd)` } : {}}
+              >
+                <span className="text-lg">{cat.icon}</span>
+                <span className="flex-1 text-left">{cat.label}</span>
+                {anyPremiumInCategory && !isPremium && <span className="text-[9px]">🔒</span>}
+                <motion.span
+                  animate={{ rotate: showChildren ? 180 : 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="text-[10px] opacity-50"
+                >▾</motion.span>
+              </motion.button>
+
+              <AnimatePresence initial={false}>
+                {showChildren && (
+                  <motion.div
+                    key="sub"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.2, ease: 'easeInOut' }}
+                    className="overflow-hidden"
+                  >
+                    <div className="ml-2 mt-0.5 space-y-0.5 border-l-2 pl-2"
+                      style={{ borderColor: `${cat.color}40` }}>
+                      {cat.tabs.map((tabId) => {
+                        if (cat.id === 'home') return null;
+                        const isActive = activeTab === tabId;
+                        const isPremiumTab = PREMIUM_TABS.includes(tabId);
+                        return (
+                          <motion.button
+                            key={tabId}
+                            onClick={() => onTabChange(tabId)}
+                            whileTap={{ scale: 0.97 }}
+                            className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+                              isActive
+                                ? darkMode ? 'bg-[#334155] text-white' : 'bg-[#F1F5F9] text-[#004B63]'
+                                : darkMode ? 'text-[#94A3B8] hover:bg-[#334155]/30' : 'text-[#64748B] hover:bg-[#F8FAFC]'
+                            }`}
+                            style={isActive ? { borderLeft: `3px solid ${cat.color}` } : {}}
+                          >
+                            <span className="flex-1 text-left">{CATEGORY_TAB_LABELS[tabId] || tabId}</span>
+                            {isPremiumTab && !isPremium && <span className="text-[9px]">🔒</span>}
+                            {isPremiumTab && isPremium && <span className="text-[9px]">⭐</span>}
+                          </motion.button>
+                        );
+                      })}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          );
+        })}
+      </nav>
+
+      {/* Parents + Logout */}
+      <div className="p-3 border-t border-[#E2E8F0]/50 space-y-1">
         <motion.button
-          onClick={onLogout}
-          whileHover={{ scale: 1.02 }}
+          onClick={() => onNavigate?.('/smartboard/padres')}
           whileTap={{ scale: 0.98 }}
-          aria-label={t('smartboard.sidebar_logout')}
-          className={`w-full mt-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-2 ${
-            darkMode
-              ? 'bg-[#334155] text-red-400 hover:bg-[#475569] hover:text-red-300'
-              : 'bg-[#F8FAFC] text-red-500 hover:bg-red-50'
+          className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
+            darkMode ? 'text-[#94A3B8] hover:bg-[#334155]/50' : 'text-[#64748B] hover:bg-[#F1F5F9]'
           }`}
         >
-          🚪 {t('smartboard.sidebar_logout')}
+          <span className="text-lg">👨‍👩‍👧</span>
+          <span>{t('smartboard.tab_parents')}</span>
+        </motion.button>
+        <motion.button
+          onClick={onLogout}
+          whileTap={{ scale: 0.98 }}
+          className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs transition-all ${
+            darkMode ? 'text-[#64748B] hover:bg-[#334155]/30' : 'text-[#94A3B8] hover:bg-[#F1F5F9]'
+          }`}
+        >
+          <span>🚪</span>
+          <span>{t('smartboard.logout')}</span>
         </motion.button>
       </div>
     </motion.aside>
@@ -273,25 +297,15 @@ const PremiumSidebar = ({ activeTab, onTabChange, totalPoints, vakCompleted, dar
 // ==========================================
 // Mobile Bottom Tab Bar
 // ==========================================
-const MOBILE_PREMIUM_TABS = ['libros', 'noticias'];
-
 const MobileBottomBar = ({ activeTab, onTabChange, darkMode, subscriptionTier }) => {
   const { t } = useTranslation();
   const isPremium = subscriptionTier === 'premium';
-  const mobileTabs = [
-    { id: 'inicio', icon: '🏠' },
-    { id: 'vak', icon: '🧠' },
-    { id: 'misiones', icon: '🎯' },
-    { id: 'materias', icon: '📚' },
-    { id: 'actividades', icon: '📝' },
-    { id: 'calendario', icon: '📅' },
-    { id: 'progreso', icon: '📊' },
-    { id: 'examenes', icon: '📋' },
-    { id: 'flashcards', icon: '🗂️' },
-    { id: 'libros', icon: '📖' },
-    { id: 'escaner', icon: '📷' },
-    { id: 'noticias', icon: '📰' },
-  ];
+  const activeCategory = CATEGORY_MAP[activeTab] || 'home';
+
+  const getFirstTab = (catId) => {
+    const cat = CATEGORIES.find(c => c.id === catId);
+    return cat ? cat.tabs[0] : 'inicio';
+  };
 
   return (
     <motion.div
@@ -301,31 +315,25 @@ const MobileBottomBar = ({ activeTab, onTabChange, darkMode, subscriptionTier })
         darkMode ? 'bg-[#1E293B]/90 border-[#334155]/50' : 'bg-white/90 border-[#E2E8F0]'
       }`}
     >
-      <nav className="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory py-1 px-2 gap-1" aria-label={t('smartboard.mobile_nav')}
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-      >
-        {mobileTabs.map((tab) => {
-          const label = tab.id === 'inicio' ? t('smartboard.tab_home') : tab.id === 'vak' ? t('smartboard.tab_vak') : tab.id === 'misiones' ? t('smartboard.tab_missions') : tab.id === 'materias' ? t('smartboard.tab_subjects') : tab.id === 'actividades' ? t('smartboard.tab_activities') : tab.id === 'calendario' ? t('smartboard.tab_calendar') : tab.id === 'examenes' ? 'Exámenes' : tab.id === 'flashcards' ? 'Flashcards' : tab.id === 'libros' ? 'Libros' : tab.id === 'escaner' ? 'Escáner' : tab.id === 'noticias' ? t('smartboard.tab_news') : t('smartboard.tab_progress');
+      <nav className="flex justify-around items-center py-1 px-2">
+        {CATEGORIES.map((cat) => {
+          const isActive = activeCategory === cat.id;
+          const anyPremiumInCategory = cat.tabs.some(t => PREMIUM_TABS.includes(t));
+          const locked = anyPremiumInCategory && !isPremium;
           return (
             <motion.button
-              key={tab.id}
-              onClick={() => onTabChange(tab.id)}
-              aria-label={label}
-              className={`snap-start flex flex-col items-center gap-1 px-4 py-3 rounded-xl transition-all flex-shrink-0 min-w-[56px] ${
-                activeTab === tab.id
-                  ? 'bg-[#4DA8C4]/10 text-[#004B63]'
-                  : 'text-[#64748B]'
-              }`}
+              key={cat.id}
+              onClick={() => onTabChange(activeCategory === cat.id ? activeTab : getFirstTab(cat.id))}
               whileTap={{ scale: 0.9 }}
+              className={`relative flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-all min-w-[56px] ${
+                isActive ? 'text-white shadow-sm' : darkMode ? 'text-[#64748B]' : 'text-[#94A3B8]'
+              }`}
+              style={isActive ? { background: `linear-gradient(135deg, ${cat.color}, ${cat.color}dd)` } : {}}
             >
-              <span className="text-xl">{tab.icon}</span>
-              <span className="text-[10px] font-medium whitespace-nowrap flex items-center gap-1">
-                {label}
-                {MOBILE_PREMIUM_TABS.includes(tab.id) && !isPremium && (
-                  <span className="text-[8px]">🔒</span>
-                )}
-              </span>
-          </motion.button>
+              <span className="text-xl">{cat.icon}</span>
+              <span className="text-[9px] font-semibold whitespace-nowrap">{cat.label}</span>
+              {locked && <span className="text-[8px] absolute top-0 right-1">🔒</span>}
+            </motion.button>
           );
         })}
       </nav>
@@ -443,6 +451,7 @@ const PREMIUM_FEATURES = {
   libros: { icon: '📖', title: 'SmartBook Reader', description: 'Analiza textos con IA, extrae conceptos clave y organiza tu aprendizaje visualmente. Disponible solo en plan Premium.' },
   noticias: { icon: '📰', title: 'Noticias Tech', description: 'Mantente al día con noticias personalizadas de tecnología, ciencia e innovación. Disponible solo en plan Premium.' },
   padres: { icon: '👨‍👩‍👧', title: 'Panel para Padres', description: 'Seguimiento en tiempo real del progreso académico y emocional de tu hijo. Disponible solo en plan Premium.' },
+  analitica: { icon: '📈', title: 'Analítica Avanzada', description: 'Métricas detalladas de rendimiento, predicciones y hábitos de estudio. Disponible solo en plan Premium.' },
 };
 
 const CinematicContent = ({ activeTab, onTabChange, darkMode, subscriptionTier }) => {
@@ -620,6 +629,28 @@ const CinematicContent = ({ activeTab, onTabChange, darkMode, subscriptionTier }
           </DashboardErrorBoundary>
         );
 
+      case 'curriculo':
+        return (
+          <DashboardErrorBoundary key="curriculo" message="Error al cargar currículo" onTabChange={onTabChange}>
+          <motion.div key="curriculo" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={sharedTransition} className="h-full">
+            <Suspense fallback={<SectionFallback tab="curriculo" />}>
+              <CurriculumView />
+            </Suspense>
+          </motion.div>
+          </DashboardErrorBoundary>
+        );
+
+      case 'oral':
+        return (
+          <DashboardErrorBoundary key="oral" message="Error al cargar examen oral" onTabChange={onTabChange}>
+          <motion.div key="oral" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={sharedTransition} className="h-full">
+            <Suspense fallback={<SectionFallback tab="oral" />}>
+              <OralExamSimulator />
+            </Suspense>
+          </motion.div>
+          </DashboardErrorBoundary>
+        );
+
       case 'examenes':
         return (
           <DashboardErrorBoundary key="examenes" message="Error al cargar exámenes" onTabChange={onTabChange}>
@@ -710,47 +741,49 @@ const CinematicContent = ({ activeTab, onTabChange, darkMode, subscriptionTier }
           </DashboardErrorBoundary>
         );
 
-      case 'padres':
+      case 'podcast':
         return (
-          <DashboardErrorBoundary key="padres" message="Error al cargar panel padres" onTabChange={onTabChange}>
+          <DashboardErrorBoundary key="podcast" message="Error al cargar podcast" onTabChange={onTabChange}>
           <motion.div
+            key="podcast"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={sharedTransition}
+            className="h-full"
           >
+            <Suspense fallback={<SectionFallback tab="podcast" />}>
+              <StudyPodcast />
+            </Suspense>
+          </motion.div>
+          </DashboardErrorBoundary>
+        );
+
+      case 'analitica':
+        return (
+          <DashboardErrorBoundary key="analitica" message="Error al cargar analytics" onTabChange={onTabChange}>
+          <motion.div key="analitica" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={sharedTransition} className="h-full">
             {isPremium ? (
-              <div className="flex flex-col items-center justify-center min-h-[300px] text-center p-8">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#004B63] to-[#4DA8C4] flex items-center justify-center mb-4">
-                  <span className="text-3xl">👨‍👩‍👧</span>
-                </div>
-                <h3 className="text-lg font-black text-[#004B63] mb-2">Panel de Padres</h3>
-                <p className="text-sm text-[#64748B] max-w-md mb-6">
-                  Haz clic abajo para abrir el panel de padres en tiempo real.
-                </p>
-                <a
-                  href="/smartboard/padres"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white font-bold text-sm shadow-lg hover:shadow-xl transition-all"
-                >
-                  <span>📊</span>
-                  <span>Abrir Panel de Padres</span>
-                </a>
-              </div>
+              <Suspense fallback={<SectionFallback tab="analitica" />}>
+                <SmartBoardAnalytics />
+              </Suspense>
             ) : (
               <PremiumGate
-                icon={PREMIUM_FEATURES.padres.icon}
-                title={PREMIUM_FEATURES.padres.title}
-                description={PREMIUM_FEATURES.padres.description}
+                icon={PREMIUM_FEATURES.analitica.icon}
+                title={PREMIUM_FEATURES.analitica.title}
+                description={PREMIUM_FEATURES.analitica.description}
               >
                 <div className="flex flex-col items-center justify-center min-h-[300px] text-center p-8">
-                  <span className="text-6xl mb-4">👨‍👩‍👧</span>
-                  <p className="text-sm text-[#64748B]">Panel de padres</p>
+                  <span className="text-6xl mb-4">📈</span>
+                  <p className="text-sm text-[#64748B]">Analítica Avanzada</p>
                 </div>
               </PremiumGate>
             )}
           </motion.div>
           </DashboardErrorBoundary>
         );
+
+      case 'padres':
 
       default:
         return null;
@@ -772,7 +805,14 @@ const CinematicContent = ({ activeTab, onTabChange, darkMode, subscriptionTier }
 const SmartBoardKidsDashboard = () => {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('inicio');
+  useEffect(() => {
+    try {
+      localStorage.setItem('edutechlife_current_tab', activeTab);
+      localStorage.setItem('edutechlife_last_activity', new Date().toISOString());
+    } catch {}
+  }, [activeTab]);
   const [isDaniOpen, setIsDaniOpen] = useState(false);
+  const [showDaniReminder, setShowDaniReminder] = useState(false);
   const { totalPoints, vakResult, addPoints, setVakResultAndRecommendations, darkMode, avatarAnimado, fondoGalaxia, lastUnlockedReward, streak, missions, subjects, completeMission, subscriptionTier } = useSmartBoardKids();
   const prefersReducedMotion = useReducedMotion();
   const navigate = useNavigate();
@@ -784,10 +824,31 @@ const SmartBoardKidsDashboard = () => {
     navigate('/');
   }, [signOut, navigate]);
 
+  // Proactive Dani reminder after inactivity
+  useEffect(() => {
+    const lastDani = parseInt(localStorage.getItem('edutechlife_last_dani_close') || '0', 10);
+    const elapsed = Date.now() - lastDani;
+    if (lastDani > 0 && elapsed > 300000 && elapsed < 3600000) {
+      const timer = setTimeout(() => setShowDaniReminder(true), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [isDaniOpen]);
+
+  useEffect(() => {
+    if (isDaniOpen) {
+      setShowDaniReminder(false);
+      localStorage.removeItem('edutechlife_last_dani_close');
+    } else {
+      if (!localStorage.getItem('edutechlife_last_dani_close')) {
+        localStorage.setItem('edutechlife_last_dani_close', Date.now().toString());
+      }
+    }
+  }, [isDaniOpen]);
+
   // Handle URL tab parameter
   useEffect(() => {
     const tab = searchParams.get('tab');
-    if (tab && ['inicio', 'vak', 'misiones', 'materias', 'actividades', 'calendario', 'noticias', 'progreso', 'examenes', 'flashcards', 'libros', 'escaner', 'padres'].includes(tab)) {
+    if (tab && ['inicio', 'vak', 'misiones', 'materias', 'actividades', 'calendario', 'noticias', 'progreso', 'curriculo', 'oral', 'examenes', 'flashcards', 'libros', 'escaner', 'analitica', 'padres', 'podcast'].includes(tab)) {
       setActiveTab(tab);
     }
   }, [searchParams]);
@@ -867,14 +928,10 @@ const SmartBoardKidsDashboard = () => {
             }`}
           >
             <h1 className={`text-xl font-bold transition-colors duration-500 ${darkMode ? 'text-white' : 'text-[#004B63]'}`}>
-              {activeTab === 'inicio' && t('smartboard.topbar_home')}
-              {activeTab === 'vak' && t('smartboard.topbar_vak')}
-              {activeTab === 'misiones' && t('smartboard.topbar_missions')}
-              {activeTab === 'materias' && t('smartboard.topbar_subjects')}
-              {activeTab === 'actividades' && t('smartboard.topbar_activities')}
-              {activeTab === 'calendario' && t('smartboard.topbar_calendar')}
-              {activeTab === 'noticias' && t('smartboard.topbar_news')}
-              {activeTab === 'progreso' && t('smartboard.topbar_progress')}
+              <span className="flex items-center gap-2">
+                <span className="text-base">{CATEGORIES.find(c => c.tabs.includes(activeTab))?.icon}</span>
+                <span>{TOP_BAR_LABELS[activeTab] || activeTab}</span>
+              </span>
             </h1>
             
             <div className="flex items-center gap-3">
@@ -943,6 +1000,39 @@ const SmartBoardKidsDashboard = () => {
           />
         </div>
       </div>
+
+      {/* Proactive Dani Reminder */}
+      <AnimatePresence>
+        {showDaniReminder && (
+          <motion.button
+            initial={{ opacity: 0, y: 20, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.9 }}
+            onClick={() => { setShowDaniReminder(false); setIsDaniOpen(true); }}
+            className="fixed bottom-24 md:bottom-6 left-6 z-50 flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-2xl shadow-xl cursor-pointer"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <motion.span
+              className="text-xl"
+              animate={{ rotate: [0, -10, 10, -10, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 2 }}
+            >
+              🤖
+            </motion.span>
+            <div className="text-left">
+              <p className="text-xs font-bold">¿Necesitas ayuda?</p>
+              <p className="text-[10px] text-white/80">Dani está aquí para ti</p>
+            </div>
+            <motion.button
+              onClick={(e) => { e.stopPropagation(); setShowDaniReminder(false); }}
+              className="text-white/50 hover:text-white text-sm ml-2"
+            >
+              ✕
+            </motion.button>
+          </motion.button>
+        )}
+      </AnimatePresence>
 
       {/* Mobile Bottom Bar */}
       <MobileBottomBar activeTab={activeTab} onTabChange={setActiveTab} darkMode={darkMode} subscriptionTier={subscriptionTier} />

@@ -1,0 +1,842 @@
+{
+  "version": "1.0",
+  "source": "MEN Colombia",
+  "grades": [
+    {
+      "grado": 1,
+      "materias": [
+        {
+          "id": "matematicas",
+          "nombre": "Matemáticas",
+          "icon": "🔢",
+          "color": "#4DA8C4",
+          "competencias": ["Pensamiento numérico", "Pensamiento espacial", "Pensamiento métrico", "Pensamiento aleatorio"],
+          "dba": [
+            "Reconoce y escribe números hasta 100",
+            "Realiza sumas y restas básicas con números de una y dos cifras",
+            "Identifica figuras geométricas básicas (círculo, cuadrado, triángulo)",
+            "Mide longitudes con unidades no convencionales",
+            "Interpreta datos en tablas y pictogramas simples"
+          ]
+        },
+        {
+          "id": "lenguaje",
+          "nombre": "Lenguaje",
+          "icon": "📖",
+          "color": "#FF6B9D",
+          "competencias": ["Producción textual", "Comprensión lectora", "Literatura infantil"],
+          "dba": [
+            "Reconoce las letras del alfabeto y su sonido",
+            "Lee y escribe palabras y oraciones simples",
+            "Comprende cuentos cortos e identifica personajes",
+            "Produce textos cortos con intención comunicativa"
+          ]
+        },
+        {
+          "id": "ciencias",
+          "nombre": "Ciencias Naturales",
+          "icon": "🔬",
+          "color": "#66CCCC",
+          "competencias": ["Exploración del entorno", "Observación y registro"],
+          "dba": [
+            "Identifica las partes del cuerpo humano",
+            "Reconoce los sentidos y su función",
+            "Clasifica seres vivos e inertes de su entorno",
+            "Observa cambios en la naturaleza (día, noche, estaciones)"
+          ]
+        },
+        {
+          "id": "sociales",
+          "nombre": "Ciencias Sociales",
+          "icon": "🌍",
+          "color": "#FFD166",
+          "competencias": ["Identidad y convivencia", "Relaciones espaciales"],
+          "dba": [
+            "Reconoce su entorno familiar y escolar",
+            "Identifica las normas básicas de convivencia",
+            "Ubica su casa y escuela en el barrio",
+            "Reconoce símbolos patrios de Colombia"
+          ]
+        }
+      ]
+    },
+    {
+      "grado": 2,
+      "materias": [
+        {
+          "id": "matematicas",
+          "nombre": "Matemáticas",
+          "icon": "🔢",
+          "color": "#4DA8C4",
+          "competencias": ["Pensamiento numérico", "Pensamiento espacial", "Pensamiento métrico", "Pensamiento aleatorio"],
+          "dba": [
+            "Reconoce y escribe números hasta 1000",
+            "Realiza sumas y restas con llevadas",
+            "Identifica y dibuja cuerpos geométricos (cubo, esfera, cilindro)",
+            "Mide y compara capacidades y masas",
+            "Construye y lee gráficos de barras simples"
+          ]
+        },
+        {
+          "id": "lenguaje",
+          "nombre": "Lenguaje",
+          "icon": "📖",
+          "color": "#FF6B9D",
+          "competencias": ["Producción textual", "Comprensión lectora", "Literatura"],
+          "dba": [
+            "Lee y comprende textos narrativos cortos",
+            "Escribe párrafos con cohesión básica",
+            "Identifica el propósito de diferentes tipos de texto",
+            "Utiliza adecuadamente mayúsculas y signos de puntuación"
+          ]
+        },
+        {
+          "id": "ciencias",
+          "nombre": "Ciencias Naturales",
+          "icon": "🔬",
+          "color": "#66CCCC",
+          "competencias": ["Exploración del entorno", "Indagación científica"],
+          "dba": [
+            "Clasifica animales según su hábitat y alimentación",
+            "Identifica las partes de las plantas",
+            "Reconoce los estados del agua en la naturaleza",
+            "Observa y describe el ciclo de vida de los seres vivos"
+          ]
+        },
+        {
+          "id": "sociales",
+          "nombre": "Ciencias Sociales",
+          "icon": "🌍",
+          "color": "#FFD166",
+          "competencias": ["Identidad social", "Relaciones espaciales y temporales"],
+          "dba": [
+            "Reconoce los grupos sociales a los que pertenece",
+            "Identifica las dependencias de su municipio",
+            "Comprende la noción de tiempo (ayer, hoy, mañana)",
+            "Reconoce las regiones naturales de Colombia"
+          ]
+        }
+      ]
+    },
+    {
+      "grado": 3,
+      "materias": [
+        {
+          "id": "matematicas",
+          "nombre": "Matemáticas",
+          "icon": "🔢",
+          "color": "#4DA8C4",
+          "competencias": ["Pensamiento numérico", "Pensamiento espacial", "Pensamiento métrico", "Pensamiento aleatorio", "Pensamiento variacional"],
+          "dba": [
+            "Lee y escribe números hasta 10.000",
+            "Comprende la multiplicación como suma repetida",
+            "Realiza divisiones exactas con divisores de una cifra",
+            "Identifica fracciones en contextos cotidianos",
+            "Calcula perímetros de figuras planas"
+          ]
+        },
+        {
+          "id": "lenguaje",
+          "nombre": "Lenguaje",
+          "icon": "📖",
+          "color": "#FF6B9D",
+          "competencias": ["Producción textual", "Comprensión lectora", "Literatura", "Medios de comunicación"],
+          "dba": [
+            "Lee y comprende textos informativos y literarios",
+            "Produce textos narrativos con estructura clara",
+            "Identifica la idea principal de un texto",
+            "Reconoce elementos de la comunicación (emisor, receptor, mensaje)"
+          ]
+        },
+        {
+          "id": "ciencias",
+          "nombre": "Ciencias Naturales",
+          "icon": "🔬",
+          "color": "#66CCCC",
+          "competencias": ["Uso del conocimiento científico", "Indagación"],
+          "dba": [
+            "Identifica los sistemas del cuerpo humano",
+            "Clasifica los materiales según sus propiedades",
+            "Comprende la importancia del agua y el aire para la vida",
+            "Reconoce las fuentes de energía naturales"
+          ]
+        },
+        {
+          "id": "sociales",
+          "nombre": "Ciencias Sociales",
+          "icon": "🌍",
+          "color": "#FFD166",
+          "competencias": ["Pensamiento social", "Relaciones espaciales y ambientales"],
+          "dba": [
+            "Identifica las actividades económicas de su región",
+            "Reconoce los derechos y deberes de los niños",
+            "Comprende la organización del municipio",
+            "Identifica los pisos térmicos de Colombia"
+          ]
+        },
+        {
+          "id": "ingles",
+          "nombre": "Inglés",
+          "icon": "🇬🇧",
+          "color": "#4DA8C4",
+          "competencias": ["Comprensión oral", "Producción oral básica"],
+          "dba": [
+            "Comprende saludos y expresiones cotidianas",
+            "Identifica vocabulario básico (colores, números, familia)",
+            "Sigue instrucciones simples en inglés",
+            "Responde preguntas personales básicas"
+          ]
+        }
+      ]
+    },
+    {
+      "grado": 4,
+      "materias": [
+        {
+          "id": "matematicas",
+          "nombre": "Matemáticas",
+          "icon": "🔢",
+          "color": "#4DA8C4",
+          "competencias": ["Pensamiento numérico", "Pensamiento espacial", "Pensamiento métrico", "Pensamiento aleatorio", "Pensamiento variacional"],
+          "dba": [
+            "Opera con números fraccionarios básicos",
+            "Comprende el concepto de decimal y su relación con fracciones",
+            "Resuelve problemas de multiplicación y división",
+            "Identifica ángulos y sus medidas",
+            "Calcula áreas de figuras planas"
+          ]
+        },
+        {
+          "id": "lenguaje",
+          "nombre": "Lenguaje",
+          "icon": "📖",
+          "color": "#FF6B9D",
+          "competencias": ["Producción textual", "Comprensión e interpretación", "Literatura", "Medios de comunicación"],
+          "dba": [
+            "Comprende textos expositivos y argumentativos simples",
+            "Produce textos con estructura de párrafo coherente",
+            "Identifica recursos literarios en cuentos y poemas",
+            "Analiza mensajes de medios de comunicación"
+          ]
+        },
+        {
+          "id": "ciencias",
+          "nombre": "Ciencias Naturales",
+          "icon": "🔬",
+          "color": "#66CCCC",
+          "competencias": ["Uso del conocimiento científico", "Explicación de fenómenos", "Indagación"],
+          "dba": [
+            "Comprende los procesos de digestión y respiración",
+            "Identifica la clasificación de los seres vivos",
+            "Explica los cambios de estado de la materia",
+            "Reconoce la importancia de los ecosistemas"
+          ]
+        },
+        {
+          "id": "sociales",
+          "nombre": "Ciencias Sociales",
+          "icon": "🌍",
+          "color": "#FFD166",
+          "competencias": ["Pensamiento social", "Interpretación histórica"],
+          "dba": [
+            "Analiza las culturas precolombinas en Colombia",
+            "Comprende el proceso de descubrimiento de América",
+            "Identifica la organización política de Colombia",
+            "Reconoce la diversidad étnica y cultural del país"
+          ]
+        },
+        {
+          "id": "ingles",
+          "nombre": "Inglés",
+          "icon": "🇬🇧",
+          "color": "#4DA8C4",
+          "competencias": ["Comprensión oral", "Comprensión lectora", "Producción oral"],
+          "dba": [
+            "Comprende descripciones cortas en inglés",
+            "Lee y entiende textos cortos ilustrados",
+            "Describe personas y objetos usando vocabulario básico",
+            "Participa en diálogos cortos sobre temas familiares"
+          ]
+        }
+      ]
+    },
+    {
+      "grado": 5,
+      "materias": [
+        {
+          "id": "matematicas",
+          "nombre": "Matemáticas",
+          "icon": "🔢",
+          "color": "#4DA8C4",
+          "competencias": ["Pensamiento numérico", "Pensamiento espacial", "Pensamiento métrico", "Pensamiento aleatorio", "Pensamiento variacional"],
+          "dba": [
+            "Opera con fracciones y decimales en contextos cotidianos",
+            "Resuelve problemas con porcentajes básicos",
+            "Comprende el concepto de volumen",
+            "Interpreta datos en tablas de frecuencia y gráficos",
+            "Identifica patrones y regularidades numéricas"
+          ]
+        },
+        {
+          "id": "lenguaje",
+          "nombre": "Lenguaje",
+          "icon": "📖",
+          "color": "#FF6B9D",
+          "competencias": ["Producción textual", "Comprensión e interpretación", "Literatura", "Medios de comunicación"],
+          "dba": [
+            "Analiza textos literarios de diferentes géneros",
+            "Produce textos argumentativos con opiniones fundamentadas",
+            "Comprende el uso de conectores textuales",
+            "Identifica la estructura de diferentes tipos de texto"
+          ]
+        },
+        {
+          "id": "ciencias",
+          "nombre": "Ciencias Naturales",
+          "icon": "🔬",
+          "color": "#66CCCC",
+          "competencias": ["Uso del conocimiento científico", "Explicación de fenómenos", "Indagación"],
+          "dba": [
+            "Comprende los sistemas circulatorio y excretor",
+            "Explica la reproducción en plantas y animales",
+            "Identifica las propiedades físicas de la materia",
+            "Reconoce la importancia de la conservación del ambiente"
+          ]
+        },
+        {
+          "id": "sociales",
+          "nombre": "Ciencias Sociales",
+          "icon": "🌍",
+          "color": "#FFD166",
+          "competencias": ["Pensamiento social", "Interpretación histórica", "Pensamiento espacial"],
+          "dba": [
+            "Analiza el período de la colonia en Colombia",
+            "Comprende el proceso de independencia",
+            "Identifica los océanos y continentes del mundo",
+            "Reconoce la organización territorial de Colombia"
+          ]
+        },
+        {
+          "id": "ingles",
+          "nombre": "Inglés",
+          "icon": "🇬🇧",
+          "color": "#4DA8C4",
+          "competencias": ["Comprensión oral", "Comprensión lectora", "Producción oral y escrita"],
+          "dba": [
+            "Comprende instrucciones escritas y orales en inglés",
+            "Lee y entiende textos descriptivos cortos",
+            "Escribe párrafos simples sobre temas conocidos",
+            "Participa en conversaciones cotidianas en inglés"
+          ]
+        }
+      ]
+    },
+    {
+      "grado": 6,
+      "materias": [
+        {
+          "id": "matematicas",
+          "nombre": "Matemáticas",
+          "icon": "🔢",
+          "color": "#4DA8C4",
+          "competencias": [
+            "Pensamiento numérico y sistemas numéricos",
+            "Pensamiento espacial y sistemas geométricos",
+            "Pensamiento métrico y sistemas de medidas",
+            "Pensamiento aleatorio y sistemas de datos",
+            "Pensamiento variacional y sistemas algebraicos"
+          ],
+          "dba": [
+            "Comprende la relación entre fracciones, decimales y porcentajes",
+            "Resuelve problemas que involucran operaciones con números enteros",
+            "Identifica y clasifica figuras geométricas según sus propiedades",
+            "Calcula áreas y perímetros de figuras planas",
+            "Interpreta y construye gráficos estadísticos básicos",
+            "Resuelve ecuaciones simples de primer grado",
+            "Comprende el concepto de proporcionalidad directa e inversa",
+            "Utiliza el plano cartesiano para ubicar puntos"
+          ]
+        },
+        {
+          "id": "lenguaje",
+          "nombre": "Lenguaje",
+          "icon": "📖",
+          "color": "#FF6B9D",
+          "competencias": [
+            "Producción textual",
+            "Comprensión e interpretación textual",
+            "Literatura",
+            "Medios de comunicación",
+            "Ética de la comunicación"
+          ],
+          "dba": [
+            "Comprende textos narrativos, líricos y dramáticos",
+            "Produce textos escritos con coherencia y cohesión",
+            "Identifica la intención comunicativa de diferentes tipos de texto",
+            "Reconoce las características de los géneros literarios",
+            "Utiliza correctamente reglas ortográficas y gramaticales básicas"
+          ]
+        },
+        {
+          "id": "ciencias",
+          "nombre": "Ciencias Naturales",
+          "icon": "🔬",
+          "color": "#66CCCC",
+          "competencias": [
+            "Uso comprensivo del conocimiento científico",
+            "Explicación de fenómenos",
+            "Indagación"
+          ],
+          "dba": [
+            "Comprende la clasificación de los seres vivos en reinos",
+            "Explica los ciclos biogeoquímicos básicos (agua, carbono)",
+            "Identifica las propiedades de la materia y sus estados",
+            "Comprende conceptos básicos de energía y sus transformaciones",
+            "Reconoce la importancia de la biodiversidad en Colombia"
+          ]
+        },
+        {
+          "id": "sociales",
+          "nombre": "Ciencias Sociales",
+          "icon": "🌍",
+          "color": "#FFD166",
+          "competencias": [
+            "Pensamiento social",
+            "Interpretación y análisis de perspectivas",
+            "Pensamiento reflexivo y sistémico"
+          ],
+          "dba": [
+            "Comprende las características del relieve colombiano",
+            "Identifica las regiones naturales de Colombia",
+            "Reconoce la organización política y administrativa del país",
+            "Comprende conceptos básicos de democracia y participación ciudadana",
+            "Analiza las causas y consecuencias de la independencia de Colombia"
+          ]
+        },
+        {
+          "id": "ingles",
+          "nombre": "Inglés",
+          "icon": "🇬🇧",
+          "color": "#4DA8C4",
+          "competencias": [
+            "Comprensión oral",
+            "Comprensión de lectura",
+            "Producción oral",
+            "Producción escrita"
+          ],
+          "dba": [
+            "Comprende instrucciones y expresiones cotidianas",
+            "Identifica información básica en textos cortos en inglés",
+            "Produce frases y oraciones simples sobre temas familiares",
+            "Participa en conversaciones breves sobre temas conocidos"
+          ]
+        }
+      ]
+    },
+    {
+      "grado": 7,
+      "materias": [
+        {
+          "id": "matematicas",
+          "nombre": "Matemáticas",
+          "icon": "🔢",
+          "color": "#4DA8C4",
+          "competencias": [
+            "Pensamiento numérico y sistemas numéricos",
+            "Pensamiento espacial y sistemas geométricos",
+            "Pensamiento métrico y sistemas de medidas",
+            "Pensamiento aleatorio y sistemas de datos",
+            "Pensamiento variacional y sistemas algebraicos"
+          ],
+          "dba": [
+            "Opera con números racionales en diferentes contextos",
+            "Comprende el concepto de función y sus representaciones",
+            "Resuelve problemas utilizando proporcionalidad y porcentajes",
+            "Identifica transformaciones geométricas (traslación, rotación, reflexión)",
+            "Calcula volúmenes de cuerpos geométricos simples",
+            "Interpreta datos a partir de medidas de tendencia central"
+          ]
+        },
+        {
+          "id": "lenguaje",
+          "nombre": "Lenguaje",
+          "icon": "📖",
+          "color": "#FF6B9D",
+          "competencias": [
+            "Producción textual",
+            "Comprensión e interpretación textual",
+            "Literatura",
+            "Medios de comunicación",
+            "Ética de la comunicación"
+          ],
+          "dba": [
+            "Analiza textos argumentativos identificando tesis y argumentos",
+            "Produce textos argumentativos con estructura clara",
+            "Comprende el contexto histórico de obras literarias",
+            "Identifica figuras retóricas en textos poéticos"
+          ]
+        },
+        {
+          "id": "ciencias",
+          "nombre": "Ciencias Naturales",
+          "icon": "🔬",
+          "color": "#66CCCC",
+          "competencias": [
+            "Uso comprensivo del conocimiento científico",
+            "Explicación de fenómenos",
+            "Indagación"
+          ],
+          "dba": [
+            "Comprende la organización del sistema solar",
+            "Explica los fenómenos de la herencia genética básica",
+            "Identifica los niveles de organización ecológica",
+            "Comprende las relaciones tróficas en los ecosistemas"
+          ]
+        },
+        {
+          "id": "sociales",
+          "nombre": "Ciencias Sociales",
+          "icon": "🌍",
+          "color": "#FFD166",
+          "competencias": [
+            "Pensamiento social",
+            "Interpretación y análisis de perspectivas",
+            "Pensamiento reflexivo y sistémico"
+          ],
+          "dba": [
+            "Analiza el proceso de colonización en América",
+            "Comprende las características de la época colonial en Colombia",
+            "Identifica los movimientos independentistas en Latinoamérica",
+            "Reconoce la diversidad étnica y cultural de Colombia"
+          ]
+        },
+        {
+          "id": "ingles",
+          "nombre": "Inglés",
+          "icon": "🇬🇧",
+          "color": "#4DA8C4",
+          "competencias": [
+            "Comprensión oral",
+            "Comprensión de lectura",
+            "Producción oral",
+            "Producción escrita"
+          ],
+          "dba": [
+            "Comprende la idea principal en textos orales y escritos",
+            "Describe personas, lugares y objetos en inglés",
+            "Expresa opiniones simples sobre temas cotidianos",
+            "Escribe párrafos cortos sobre experiencias personales"
+          ]
+        }
+      ]
+    },
+    {
+      "grado": 8,
+      "materias": [
+        {
+          "id": "matematicas",
+          "nombre": "Matemáticas",
+          "icon": "🔢",
+          "color": "#4DA8C4",
+          "competencias": [
+            "Pensamiento numérico y sistemas numéricos",
+            "Pensamiento espacial y sistemas geométricos",
+            "Pensamiento métrico y sistemas de medidas",
+            "Pensamiento aleatorio y sistemas de datos",
+            "Pensamiento variacional y sistemas algebraicos"
+          ],
+          "dba": [
+            "Factoriza expresiones algebraicas simples",
+            "Resuelve sistemas de ecuaciones lineales 2x2",
+            "Comprende el concepto de función lineal y afín",
+            "Aplica el teorema de Pitágoras en la resolución de problemas",
+            "Calcula probabilidades de eventos simples y compuestos"
+          ]
+        },
+        {
+          "id": "ciencias",
+          "nombre": "Ciencias Naturales",
+          "icon": "🔬",
+          "color": "#66CCCC",
+          "competencias": [
+            "Uso comprensivo del conocimiento científico",
+            "Explicación de fenómenos",
+            "Indagación"
+          ],
+          "dba": [
+            "Comprende la estructura del átomo y los elementos químicos",
+            "Explica reacciones químicas simples",
+            "Identifica las leyes de Newton y sus aplicaciones",
+            "Comprende conceptos de ondas, sonido y luz"
+          ]
+        },
+        {
+          "id": "sociales",
+          "nombre": "Ciencias Sociales",
+          "icon": "🌍",
+          "color": "#FFD166",
+          "competencias": [
+            "Pensamiento social",
+            "Interpretación y análisis de perspectivas",
+            "Pensamiento reflexivo y sistémico"
+          ],
+          "dba": [
+            "Analiza la Revolución Industrial y sus consecuencias",
+            "Comprende las causas de la Primera Guerra Mundial",
+            "Identifica los procesos de globalización económica",
+            "Reconoce los derechos humanos y mecanismos de protección"
+          ]
+        },
+        {
+          "id": "ingles",
+          "nombre": "Inglés",
+          "icon": "🇬🇧",
+          "color": "#4DA8C4",
+          "competencias": [
+            "Comprensión oral",
+            "Comprensión de lectura",
+            "Producción oral",
+            "Producción escrita"
+          ],
+          "dba": [
+            "Comprende textos narrativos y descriptivos en inglés",
+            "Participa en discusiones sobre temas familiares",
+            "Escribe textos coherentes usando conectores básicos",
+            "Comprende información detallada en conversaciones"
+          ]
+        }
+      ]
+    },
+    {
+      "grado": 9,
+      "materias": [
+        {
+          "id": "matematicas",
+          "nombre": "Matemáticas",
+          "icon": "🔢",
+          "color": "#4DA8C4",
+          "competencias": [
+            "Pensamiento numérico y sistemas numéricos",
+            "Pensamiento espacial y sistemas geométricos",
+            "Pensamiento métrico y sistemas de medidas",
+            "Pensamiento aleatorio y sistemas de datos",
+            "Pensamiento variacional y sistemas algebraicos"
+          ],
+          "dba": [
+            "Resuelve ecuaciones cuadráticas por diferentes métodos",
+            "Comprende la función cuadrática y sus aplicaciones",
+            "Aplica razones trigonométricas en triángulos rectángulos",
+            "Analiza datos bivariados y correlaciones básicas",
+            "Comprende sucesiones y progresiones aritméticas y geométricas"
+          ]
+        },
+        {
+          "id": "ciencias",
+          "nombre": "Ciencias Naturales",
+          "icon": "🔬",
+          "color": "#66CCCC",
+          "competencias": [
+            "Uso comprensivo del conocimiento científico",
+            "Explicación de fenómenos",
+            "Indagación"
+          ],
+          "dba": [
+            "Comprende los fundamentos de la genética mendeliana",
+            "Explica los procesos de evolución y selección natural",
+            "Identifica los compuestos químicos inorgánicos y sus reacciones",
+            "Comprende conceptos de electricidad y magnetismo"
+          ]
+        },
+        {
+          "id": "sociales",
+          "nombre": "Ciencias Sociales",
+          "icon": "🌍",
+          "color": "#FFD166",
+          "competencias": [
+            "Pensamiento social",
+            "Interpretación y análisis de perspectivas",
+            "Pensamiento reflexivo y sistémico"
+          ],
+          "dba": [
+            "Analiza la Guerra Fría y sus repercusiones globales",
+            "Comprende el conflicto armado en Colombia",
+            "Identifica los procesos de integración económica regional",
+            "Reconoce las problemáticas ambientales contemporáneas"
+          ]
+        },
+        {
+          "id": "ingles",
+          "nombre": "Inglés",
+          "icon": "🇬🇧",
+          "color": "#4DA8C4",
+          "competencias": [
+            "Comprensión oral",
+            "Comprensión de lectura",
+            "Producción oral",
+            "Producción escrita"
+          ],
+          "dba": [
+            "Comprende textos argumentativos y expositivos en inglés",
+            "Expresa y justifica opiniones en discusiones formales",
+            "Escribe ensayos cortos con estructura argumentativa",
+            "Comprende discursos y presentaciones académicas"
+          ]
+        }
+      ]
+    },
+    {
+      "grado": 10,
+      "materias": [
+        {
+          "id": "matematicas",
+          "nombre": "Matemáticas",
+          "icon": "🔢",
+          "color": "#4DA8C4",
+          "competencias": [
+            "Pensamiento numérico y sistemas numéricos",
+            "Pensamiento espacial y sistemas geométricos",
+            "Pensamiento métrico y sistemas de medidas",
+            "Pensamiento aleatorio y sistemas de datos",
+            "Pensamiento variacional y sistemas algebraicos"
+          ],
+          "dba": [
+            "Comprende el concepto de límite y continuidad",
+            "Aplica la derivada como razón de cambio",
+            "Resuelve problemas de optimización usando cálculo diferencial",
+            "Analiza distribuciones de probabilidad discretas",
+            "Comprende conceptos de estadística inferencial básica"
+          ]
+        },
+        {
+          "id": "ciencias",
+          "nombre": "Ciencias Naturales",
+          "icon": "🔬",
+          "color": "#66CCCC",
+          "competencias": [
+            "Uso comprensivo del conocimiento científico",
+            "Explicación de fenómenos",
+            "Indagación"
+          ],
+          "dba": [
+            "Comprende la química orgánica y los hidrocarburos",
+            "Explica los procesos de síntesis de proteínas",
+            "Identifica los principios de la termodinámica",
+            "Comprende los conceptos de ácidos, bases y pH"
+          ]
+        },
+        {
+          "id": "sociales",
+          "nombre": "Ciencias Sociales",
+          "icon": "🌍",
+          "color": "#FFD166",
+          "competencias": [
+            "Pensamiento social",
+            "Interpretación y análisis de perspectivas",
+            "Pensamiento reflexivo y sistémico"
+          ],
+          "dba": [
+            "Analiza las teorías económicas contemporáneas",
+            "Comprende la estructura del Estado colombiano",
+            "Identifica los mecanismos de participación ciudadana",
+            "Reconoce los desafíos del desarrollo sostenible"
+          ]
+        },
+        {
+          "id": "ingles",
+          "nombre": "Inglés",
+          "icon": "🇬🇧",
+          "color": "#4DA8C4",
+          "competencias": [
+            "Comprensión oral",
+            "Comprensión de lectura",
+            "Producción oral",
+            "Producción escrita"
+          ],
+          "dba": [
+            "Comprende textos académicos y técnicos en inglés",
+            "Realiza presentaciones formales en inglés",
+            "Escribe documentos formales como ensayos e informes",
+            "Participa en debates académicos en inglés"
+          ]
+        }
+      ]
+    },
+    {
+      "grado": 11,
+      "materias": [
+        {
+          "id": "matematicas",
+          "nombre": "Matemáticas",
+          "icon": "🔢",
+          "color": "#4DA8C4",
+          "competencias": [
+            "Pensamiento numérico y sistemas numéricos",
+            "Pensamiento espacial y sistemas geométricos",
+            "Pensamiento métrico y sistemas de medidas",
+            "Pensamiento aleatorio y sistemas de datos",
+            "Pensamiento variacional y sistemas algebraicos"
+          ],
+          "dba": [
+            "Comprende la integral definida como acumulación de cambios",
+            "Aplica métodos de integración en problemas de área y volumen",
+            "Analiza distribuciones de probabilidad continua",
+            "Resuelve problemas de inferencia estadística y pruebas de hipótesis",
+            "Aplica herramientas del cálculo en problemas de física y economía"
+          ]
+        },
+        {
+          "id": "ciencias",
+          "nombre": "Ciencias Naturales",
+          "icon": "🔬",
+          "color": "#66CCCC",
+          "competencias": [
+            "Uso comprensivo del conocimiento científico",
+            "Explicación de fenómenos",
+            "Indagación"
+          ],
+          "dba": [
+            "Comprende los fundamentos de la bioquímica y el metabolismo",
+            "Explica los avances en biotecnología y sus implicaciones",
+            "Identifica los principios de la física moderna (relatividad, cuántica)",
+            "Comprende conceptos de química ambiental y sostenibilidad"
+          ]
+        },
+        {
+          "id": "sociales",
+          "nombre": "Ciencias Sociales",
+          "icon": "🌍",
+          "color": "#FFD166",
+          "competencias": [
+            "Pensamiento social",
+            "Interpretación y análisis de perspectivas",
+            "Pensamiento reflexivo y sistémico"
+          ],
+          "dba": [
+            "Analiza los desafíos geopolíticos del siglo XXI",
+            "Comprende las teorías del desarrollo económico",
+            "Identifica las problemáticas sociales contemporáneas",
+            "Reconoce la importancia de la paz y la reconciliación en Colombia"
+          ]
+        },
+        {
+          "id": "ingles",
+          "nombre": "Inglés",
+          "icon": "🇬🇧",
+          "color": "#4DA8C4",
+          "competencias": [
+            "Comprensión oral",
+            "Comprensión de lectura",
+            "Producción oral",
+            "Producción escrita"
+          ],
+          "dba": [
+            "Comprende textos especializados y literatura académica",
+            "Produce discursos argumentativos complejos en inglés",
+            "Analiza críticamente fuentes de información en inglés",
+            "Comunica con fluidez ideas complejas en contextos formales"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, memo } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useIALabStore } from '../../store/ialabStore';
 import { Icon } from '../../utils/iconMapping.jsx';
@@ -385,4 +385,4 @@ const DailyPlan = ({ onAction, isLoading }) => {
   );
 };
 
-export default DailyPlan;
+export default memo(DailyPlan);

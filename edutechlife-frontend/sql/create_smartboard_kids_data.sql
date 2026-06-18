@@ -4,6 +4,9 @@
 -- en una sola fila por usuario con JSONB
 -- =============================================
 
+-- ⚠️ Si la tabla ya existe con user_id como UUID, ejecutar:
+-- ALTER TABLE smartboard_kids_data ALTER COLUMN user_id TYPE TEXT;
+
 CREATE TABLE IF NOT EXISTS smartboard_kids_data (
   user_id TEXT PRIMARY KEY,
   platform TEXT NOT NULL DEFAULT 'smartboard',

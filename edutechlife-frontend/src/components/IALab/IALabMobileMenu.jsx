@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef, lazy, Suspense } from 'react'
 import PropTypes from 'prop-types';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabProgressContext, useIALabUIContext } from '../../context/IALabContext';
-import { useProgressContext } from '../../context/ProgressContext';
 import { useIALabStore } from '../../store/ialabStore';
 import { useTranslation } from '../../i18n/I18nProvider';
+import useInfographicCompletion from '../../hooks/IALab/useInfographicCompletion';
 const StudyPlannerModal = lazy(() => import('./StudyPlannerModal'));
 
 const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenProfile, onOpenHistory, onOpenHelp }) => {
@@ -46,7 +46,7 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const isInfographicCompleted = (infographicId) => completedInfographics.includes(`${infographicId}`);
+  const isInfographicCompleted = useInfographicCompletion();
 
   const handleLogout = async () => {
     closeMobileMenu();

@@ -57,6 +57,13 @@ export const SmartBoardKidsProvider = ({ children }) => {
   const [sessions, setSessions] = useState([]);
   const [streak, setStreak] = useState({ current: 0, longest: 0, lastActive: null });
   const [streakLog, setStreakLog] = useState([]);
+  const [daniMemory, setDaniMemory] = useState({
+    conversations: [],
+    studentProfile: { communicationStyle: null, strengths: [], challenges: [], interests: [] },
+    pendingTopics: [],
+    interactionCount: 0,
+    lastSessionSummary: null,
+  });
   const [subjectTime, setSubjectTime] = useState({});
   const currentSessionRef = useRef(null);
 
@@ -142,6 +149,13 @@ export const SmartBoardKidsProvider = ({ children }) => {
         sessions: getLocalStorage(`sessions_${userId}`, []),
         streak: getLocalStorage(`streak_${userId}`, { current: 0, longest: 0, lastActive: null }),
         streakLog: getLocalStorage(`streak_log_${userId}`, []),
+        daniMemory: getLocalStorage(`dani_memory_${userId}`, {
+          conversations: [],
+          studentProfile: { communicationStyle: null, strengths: [], challenges: [], interests: [] },
+          pendingTopics: [],
+          interactionCount: 0,
+          lastSessionSummary: null,
+        }),
         subjectTime: getLocalStorage(`subject_time_${userId}`, {}),
         calendarEvents: getLocalStorage(`calendar_${userId}`, []),
         readNews: getLocalStorage(`read_news_${userId}`, []),
@@ -179,6 +193,13 @@ export const SmartBoardKidsProvider = ({ children }) => {
       setSessions(merged.sessions || []);
       setStreak(merged.streak || { current: 0, longest: 0, lastActive: null });
       setStreakLog(merged.streakLog || []);
+      setDaniMemory(merged.daniMemory || {
+        conversations: [],
+        studentProfile: { communicationStyle: null, strengths: [], challenges: [], interests: [] },
+        pendingTopics: [],
+        interactionCount: 0,
+        lastSessionSummary: null,
+      });
       setSubjectTime(merged.subjectTime || {});
       setCalendarEvents(merged.calendarEvents || []);
       setReadNews(merged.readNews || []);
@@ -289,6 +310,7 @@ export const SmartBoardKidsProvider = ({ children }) => {
     setLocalStorage(`sessions_${userId}`, sessions);
     setLocalStorage(`streak_${userId}`, streak);
     setLocalStorage(`streak_log_${userId}`, streakLog);
+    setLocalStorage(`dani_memory_${userId}`, daniMemory);
     setLocalStorage(`subject_time_${userId}`, subjectTime);
     setLocalStorage(`calendar_${userId}`, calendarEvents);
     setLocalStorage(`read_news_${userId}`, readNews);
@@ -307,7 +329,7 @@ export const SmartBoardKidsProvider = ({ children }) => {
       saveData({
         daniChatHistory, studentMoodHistory, academicTopics, conversationCount,
         studentAge, vakResult, totalPoints, pointsHistory, unlockedRewards,
-        totalActiveMinutes, sessions, streak, streakLog, subjectTime,
+        totalActiveMinutes, sessions, streak, streakLog, daniMemory, subjectTime,
         calendarEvents, readNews, missions, subjects,
         uploadedActivities, analyzedActivities,
         darkMode, avatarAnimado, fondoGalaxia, subscriptionTier,
@@ -380,6 +402,62 @@ export const SmartBoardKidsProvider = ({ children }) => {
         : [...prev, { topic, count: 1, lastAsked: new Date() }];
     });
   }, []);
+
+  const updateDaniMemory = useCallback((parsed) => {
+    if (!parsed || !parsed.topics) return;
+    setDaniMemory(prev => {
+      const next = { ...prev, studentProfile: { ...prev.studentProfile } };
+      next.interactionCount = prev.interactionCount + 1;
+
+      if (Array.isArray(parsed.topics) && parsed.topics.length) {
+        parsed.topics.forEach(topic => {
+          const existing = next.pendingTopics.find(t => t.topic === topic);
+          if (existing) {
+            existing.lastSeen = new Date().toISOString();
+            existing.count = (existing.count || 0) + 1;
+          } else {
+            next.pendingTopics.push({ topic, lastSeen: new Date().toISOString(), count: 1 });
+          }
+        });
+      }
+
+      if (parsed.challengeObserved && !next.studentProfile.challenges.includes(parsed.challengeObserved)) {
+        next.studentProfile.challenges = [...next.studentProfile.challenges, parsed.challengeObserved].slice(-10);
+      }
+      if (parsed.strengthObserved && !next.studentProfile.strengths.includes(parsed.strengthObserved)) {
+        next.studentProfile.strengths = [...next.studentProfile.strengths, parsed.strengthObserved].slice(-10);
+      }
+      if (parsed.communicationStyle) {
+        next.studentProfile.communicationStyle = parsed.communicationStyle;
+      }
+      if (parsed.studentMood) {
+        next.studentProfile.lastKnownMood = parsed.studentMood;
+      }
+
+      return next;
+    });
+  }, []);
+
+  const buildMemoryInjection = useCallback(() => {
+    const profile = daniMemory.studentProfile;
+    const parts = [];
+    if (profile.communicationStyle) parts.push(`Estilo de comunicación detectado: ${profile.communicationStyle}.`);
+    if (profile.challenges.length > 0) parts.push(`Dificultades observadas: ${profile.challenges.slice(-3).join(', ')}.`);
+    if (profile.strengths.length > 0) parts.push(`Fortalezas: ${profile.strengths.slice(-3).join(', ')}.`);
+    if (profile.lastKnownMood) parts.push(`Último estado de ánimo: ${profile.lastKnownMood}.`);
+
+    const pending = daniMemory.pendingTopics.filter(t => {
+      const daysSince = (Date.now() - new Date(t.lastSeen).getTime()) / 86400000;
+      return daysSince > 0.5 && daysSince < 7;
+    });
+    if (pending.length > 0) {
+      parts.push(`Temas para retomar: ${pending.map(t => t.topic).join(', ')}.`);
+    }
+
+    return parts.length > 0
+      ? `## MEMORIA DEL ESTUDIANTE\n${parts.join('\n')}\nUsa esta información para personalizar tu respuesta. Si hay temas pendientes, retómalos brevemente.`
+      : '';
+  }, [daniMemory]);
 
   const buildDaniContext = useCallback(() => {
     const now = new Date();
@@ -499,6 +577,7 @@ export const SmartBoardKidsProvider = ({ children }) => {
     recordMoodInference,
     trackAcademicTopic,
     buildDaniContext,
+    daniMemory, updateDaniMemory, buildMemoryInjection,
 
     // Student
     studentAge,

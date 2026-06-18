@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import React, { useState, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useIALabProgressContext, useIALabUIContext } from '../../context/IALabContext';
-import { useProgressContext } from '../../context/ProgressContext';
 import { useIALabStore } from '../../store/ialabStore';
 import { useSidebarState } from '../../hooks/IALab/useSidebarState';
 import { useTranslation } from '../../i18n/I18nProvider';
+import useInfographicCompletion from '../../hooks/IALab/useInfographicCompletion';
 import StreakDetailsModal from './StreakDetailsModal';
 import SidebarCollapsed from './sidebar/SidebarCollapsed';
 import SidebarExpanded from './sidebar/SidebarExpanded';
@@ -35,26 +35,14 @@ const IALabSidebar = () => {
     storedCertificate, certificateGenerating,
   } = useIALabUIContext();
 
-  const { completedInfographics } = useProgressContext();
   const streak = useIALabStore(s => s.streak);
   const getLevel = useIALabStore(s => s.getLevel);
   const getTotalPoints = useIALabStore(s => s.getTotalPoints);
   const isStreakAtRisk = useIALabStore(s => s.isStreakAtRisk);
   const { isCollapsed, toggleSidebar } = useSidebarState();
-  const shouldReduceMotion = useReducedMotion();
   const [showStreakModal, setShowStreakModal] = useState(false);
-  const fadeTransition = shouldReduceMotion
-    ? { duration: 0 }
-    : { duration: 0.15 };
-  const moduleListVariants = shouldReduceMotion ? {} : {
-    visible: { transition: { staggerChildren: 0.04, delayChildren: 0.05 } }
-  };
-  const moduleItemVariants = shouldReduceMotion ? {} : {
-    hidden: { opacity: 0, x: -8 },
-    visible: { opacity: 1, x: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } }
-  };
 
-  const isInfographicCompleted = (infographicId) => completedInfographics.includes(`${infographicId}`);
+  const isInfographicCompleted = useInfographicCompletion();
 
   return (
     <motion.aside
@@ -117,35 +105,11 @@ const IALabSidebar = () => {
               storedCertificate={storedCertificate}
               setShowCertificateModal={setShowCertificateModal}
               goToModule={goToModule}
-              fadeTransition={fadeTransition}
               t={t}
             />
           ) : (
             <SidebarExpanded
               key="expanded"
-              courseProgress={courseProgress}
-              t={t}
-              streak={streak}
-              getTotalPoints={getTotalPoints}
-              isStreakAtRisk={isStreakAtRisk}
-              getLevel={getLevel}
-              setShowStreakModal={setShowStreakModal}
-              setShowCertificateModal={setShowCertificateModal}
-              modules={modules}
-              activeMod={activeMod}
-              calculateModuleScore={calculateModuleScore}
-              isModuleLocked={isModuleLocked}
-              goToModule={goToModule}
-              moduleListVariants={moduleListVariants}
-              moduleItemVariants={moduleItemVariants}
-              sidebarDropdowns={sidebarDropdowns}
-              toggleSidebarDropdown={toggleSidebarDropdown}
-              isInfographicCompleted={isInfographicCompleted}
-              fadeTransition={fadeTransition}
-              storedCertificate={storedCertificate}
-              courseCompleted={courseCompleted}
-              completedModules={completedModules}
-              certificateGenerating={certificateGenerating}
             />
           )}
         </AnimatePresence>

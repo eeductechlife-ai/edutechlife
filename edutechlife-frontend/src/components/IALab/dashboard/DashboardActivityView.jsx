@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from 'framer-motion';
-import { useMemo } from 'react';
+import { useMemo, memo } from 'react';
 import { useTranslation } from '../../../i18n/I18nProvider';
 import useActivityTracker from '../../../hooks/useActivityTracker';
 import { useIALabStore } from '../../../store/ialabStore';
@@ -16,7 +16,7 @@ const cardVariants = {
   visible: i => ({ opacity: 1, y: 0, transition: { delay: i * 0.08, duration: 0.3 } }),
 };
 
-export default function DashboardActivityView() {
+function DashboardActivityView() {
   const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
   const moduleProgress = useIALabStore(s => s.moduleProgress);
@@ -33,7 +33,7 @@ export default function DashboardActivityView() {
         score: mod?.currentScore || 0,
       };
     }),
-    [moduleProgress, completedExams, challengeScores]
+    [moduleProgress]
   );
 
   const vp = { once: true, margin: '-30px' };
@@ -100,3 +100,5 @@ export default function DashboardActivityView() {
     </div>
   );
 }
+
+export default memo(DashboardActivityView);

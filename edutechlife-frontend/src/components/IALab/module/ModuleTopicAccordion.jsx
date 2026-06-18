@@ -5,6 +5,23 @@ import { Icon } from '../../../utils/iconMapping.jsx';
 import { useIALabStore } from '../../../store/ialabStore';
 import { getResourcesForTopic, getResourceTypesForTopic, countResourcesByType } from '../constants/moduleResources';
 
+const getResourceIcon = (type) => {
+  if (type === 'video') return 'fa-video';
+  if (type === 'pdf' || type === 'document') return 'fa-file-lines';
+  if (type === 'ova' || type === 'ova_interactive') return 'fa-brain';
+  if (type === 'image') return 'fa-image';
+  return 'fa-file';
+};
+
+const getResourceMeta = (res, t) => {
+  if (res.type === 'video') return res.duration || '';
+  if (res.pages) return t('ialab.resource_pages', { pages: res.pages });
+  if (res.estimatedTime) return res.estimatedTime;
+  if (res.format) return res.format;
+  if (res.size) return res.size;
+  return '';
+};
+
 const ModuleTopicAccordion = ({
   moduleData,
   expandedTopic,
@@ -126,21 +143,6 @@ const ModuleTopicAccordion = ({
             })()}
             <div className="pl-14 pr-4 pb-2 space-y-1.5">
               {topicResources.resources.filter(res => filterType === 'all' || res.type === filterType).map((resource, resIndex) => {
-                const getResourceIcon = (type) => {
-                  if (type === 'video') return 'fa-video';
-                  if (type === 'pdf' || type === 'document') return 'fa-file-lines';
-                  if (type === 'ova' || type === 'ova_interactive') return 'fa-brain';
-                  if (type === 'image') return 'fa-image';
-                  return 'fa-file';
-                };
-                const getResourceMeta = (res) => {
-                  if (res.type === 'video') return res.duration || '';
-                  if (res.pages) return t('ialab.resource_pages', { pages: res.pages });
-                  if (res.estimatedTime) return res.estimatedTime;
-                  if (res.format) return res.format;
-                  if (res.size) return res.size;
-                  return '';
-                };
                 const isResourceCompleted = viewedIds.includes(resource.id);
                 const resourceLocked = isAdmin ? false : isResourceLocked(index, resIndex, resource.id);
                 const isNextToView = !resourceLocked && !isResourceCompleted;
@@ -174,8 +176,8 @@ const ModuleTopicAccordion = ({
                        }`}>
                         {resource.title}
                       </p>
-                      {getResourceMeta(resource) && (
-                        <p className={`text-xs mt-0.5 ${resourceLocked ? 'text-slate-300' : 'text-slate-600'}`}>{getResourceMeta(resource)}</p>
+                      {getResourceMeta(resource, t) && (
+                        <p className={`text-xs mt-0.5 ${resourceLocked ? 'text-slate-300' : 'text-slate-600'}`}>{getResourceMeta(resource, t)}</p>
                       )}
                     </div>
                     <div className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${

@@ -215,7 +215,7 @@ let isSpeaking = false;
 let ttsGeneration = 0;
 let currentTtsGeneration = 0;
 
-const speakTextConversational = async (text, profile = 'valeria', onEndCallback, onPermissionError) => {
+const speakTextConversational = async (text, profile = 'valeria', overrides = {}, onEndCallback, onPermissionError) => {
   const gen = ++ttsGeneration;
   currentTtsGeneration = gen;
 
@@ -769,7 +769,7 @@ export const prefetchTts = async (text, profile = 'valeria') => {
     const cached = audioCache.get(profile, text);
     if (cached) return;
     const apiBase = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || (typeof window !== 'undefined' && window.location.hostname === 'localhost' ? 'http://localhost:3001' : 'https://edutechlife-backend.onrender.com');
-    const voice = VOICE_PROFILES[profile] || VOICE_PROFILES.valeria;
+  const voice = { ...(VOICE_PROFILES[profile] || VOICE_PROFILES.valeria), ...overrides };
     const response = await fetch(`${apiBase}/api/tts`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

@@ -1,7 +1,7 @@
 /**
  * IALab — Componente principal del laboratorio IALab
  */
-import { useState, useEffect, useCallback, lazy, Suspense, useRef, useLayoutEffect } from 'react';
+import { useState, useEffect, useCallback, lazy, Suspense, useRef, useLayoutEffect, memo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useClerk } from '@clerk/react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
@@ -56,7 +56,7 @@ import MobileHeader from './shared/MobileHeader';
 import MobileInfoBar from './shared/MobileInfoBar';
 import ToastNotification from './shared/ToastNotification';
 
-const IALabContent = () => {
+const IALabContent = memo(function () {
     const { t } = useTranslation();
     const TABS = [
       { id: null, label: t('ialab.tab_all') },
@@ -112,7 +112,6 @@ const IALabContent = () => {
     // === Deep Linking UNIFICADO: URL como fuente de verdad ===
     const { moduleId: urlMod } = useParams();
     const navigate = useNavigate();
-    const prevModRef = useRef(activeMod);
     const directionRef = useRef(0);
     const prevActiveRef = useRef(activeMod);
     const shouldReduceMotion = useReducedMotion();
@@ -135,7 +134,6 @@ const IALabContent = () => {
         const id = parseInt(urlMod, 10);
         if (!isNaN(id) && id >= 1 && id <= 5) {
           useIALabStore.getState().setActiveMod(id);
-          prevModRef.current = id;
         }
       } else {
         navigate(`/ialab/${useIALabStore.getState().activeMod}`, { replace: true });
@@ -146,14 +144,6 @@ const IALabContent = () => {
     const handleOpenProfile = () => {
       closeMobileMenu();
       openUserProfile();
-    };
-    const handleOpenHistory = () => {
-      closeMobileMenu();
-      setTimeout(() => setShowHistoryModal(true), MODAL_DELAY);
-    };
-    const handleOpenHelp = () => {
-      closeMobileMenu();
-      setTimeout(() => setShowHelpModal(true), MODAL_DELAY);
     };
 
     // Escuchar eventos de examen completado para forzar refresco UI
@@ -216,6 +206,11 @@ const IALabContent = () => {
     useIALabKeyboardShortcuts(handleAction);
 
     const setActiveModStore = useIALabStore(s => s.setActiveMod);
+    const setMainRef = useCallback((el) => {
+      mainRef.current = el;
+      containerRef.current = el;
+    }, []);
+    const resetViewSection = useCallback(() => setViewSection(null), []);
     const { handleTouchStart: swipeStart, handleTouchEnd: swipeEnd } = useSwipeNavigation({
       onSwipeLeft: () => activeMod < 5 && setActiveModStore(activeMod + 1),
       onSwipeRight: () => activeMod > 1 && setActiveModStore(activeMod - 1),
@@ -251,14 +246,13 @@ const IALabContent = () => {
                       toggleDarkMode={toggleDarkMode}
                       isDarkMode={isDarkMode}
                       handleOpenProfile={handleOpenProfile}
-                      handleOpenHistory={handleOpenHistory}
-                      handleOpenHelp={handleOpenHelp}
                     />
                     
                       <SkipLink />
 
                       {/* Área de Contenido Principal - scroll propio */}
-                        <main role="main" ref={(el) => { mainRef.current = el; containerRef.current = el; }} id="main-content" tabIndex={-1}                        className="flex-1 outline-none overflow-y-auto px-4 pt-16 landscape:pt-12 pb-2 safe-area-bottom md:px-8 md:pt-0 lg:px-10 lg:pt-0 lg:pb-8 xl:px-12 2xl:px-16" onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
+                        <main role="main" ref={setMainRef} id="main-content" tabIndex={-1}
+                          className="flex-1 outline-none overflow-y-auto px-4 pt-16 landscape:pt-12 pb-2 safe-area-bottom md:px-8 md:pt-0 lg:px-10 lg:pt-0 lg:pb-8 xl:px-12 2xl:px-16" onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
                           {pullDistance > 0 && (
                             <div
                               className="flex items-center justify-center transition-all duration-100"
@@ -307,8 +301,8 @@ const IALabContent = () => {
                            <div className="flex flex-col gap-5">
                             <Breadcrumbs
                               segments={[
-                                { label: t('ialab.breadcrumb_home'), icon: 'fa-house', onClick: () => setViewSection(null) },
-                                { label: modules?.find(m => m.id === activeMod)?.title || t('ialab.breadcrumb_module', { id: activeMod }), onClick: () => setViewSection(null) },
+                                { label: t('ialab.breadcrumb_home'), icon: 'fa-house', onClick: resetViewSection },
+                                { label: modules?.find(m => m.id === activeMod)?.title || t('ialab.breadcrumb_module', { id: activeMod }), onClick: resetViewSection },
                                 ...(viewSection ? [{ label: TABS.find(t => t.id === viewSection)?.label || viewSection }] : []),
                                 ...(viewSection === null && currentLessonTitle ? [{ label: currentLessonTitle }] : []),
                               ]}
@@ -433,7 +427,7 @@ const IALabContent = () => {
 
         </div>
     );
-};
+  });
 
 /**
  * Componente principal wrapper que provee el contexto

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react'
+import React, { memo, useRef, useEffect, useState, useCallback } from 'react'
 import PropTypes from 'prop-types';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
@@ -11,7 +11,7 @@ const readLocalExamScores = () => {
   } catch { return {}; }
 };
 
-const ActionCard = ({ icon, label, weightKey, onClick, completed, score, remainingAttempts, color = 'from-petroleum to-corporate', t }) => {
+const ActionCard = memo(({ icon, label, weightKey, onClick, completed, score, remainingAttempts, color = 'from-petroleum to-corporate', t }) => {
   const prefersReducedMotion = useReducedMotion();
   const isApproved = completed && score !== undefined && score >= 80;
   const isFailed = completed && score !== undefined && score < 80;
@@ -76,7 +76,7 @@ const ActionCard = ({ icon, label, weightKey, onClick, completed, score, remaini
       )}
     </motion.button>
   );
-};
+});
 
 const ModuleActions = ({ onAction, activeMod, challengeScores, completedExams, moduleProgress, isForumOpen, onToggleForum }) => {
   const { t } = useTranslation();
