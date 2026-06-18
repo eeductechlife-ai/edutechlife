@@ -43,15 +43,37 @@ const IALabGuideModal = ({ isOpen, onClose }) => {
     setDownloading(true);
     try {
       const { default: html2pdf } = await import('html2pdf.js');
+
+      const original = contentRef.current;
+      const clone = original.cloneNode(true);
+      clone.style.maxHeight = 'none';
+      clone.style.overflow = 'visible';
+      clone.style.position = 'fixed';
+      clone.style.left = '-9999px';
+      clone.style.top = '0';
+      clone.style.width = original.offsetWidth + 'px';
+      clone.style.zIndex = '-1';
+      clone.style.background = '#fff';
+      document.body.appendChild(clone);
+
       const opt = {
         margin: [0.5, 0.5, 0.5, 0.5],
         filename: `IALab-Guia-${new Date().toISOString().split('T')[0]}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, logging: false },
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
+          logging: false,
+          height: clone.scrollHeight,
+          width: clone.scrollWidth,
+          windowHeight: clone.scrollHeight,
+        },
         jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
         pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
       };
-      await html2pdf().set(opt).from(contentRef.current).save();
+
+      await html2pdf().set(opt).from(clone).save();
+      document.body.removeChild(clone);
     } catch (e) {
       console.error('PDF error:', e);
     } finally {
