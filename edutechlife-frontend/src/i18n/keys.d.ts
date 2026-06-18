@@ -2121,6 +2121,7 @@ export type TranslationKeys = {
   "modals.settings.guide_title": string;
   "modals.settings.guide_desc": string;
   "modals.settings.guide_loading": string;
+  "modals.settings.guide_download": string;
   "modals.settings.unauthenticated_aria": string;
   "modals.settings.user_menu_aria": string;
   "modals.settings.user_options_aria": string;

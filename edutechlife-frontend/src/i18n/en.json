@@ -1919,6 +1919,7 @@
   "modals.settings.guide_title": "IALab Guide",
   "modals.settings.guide_desc": "Complete guide to using the course dashboard",
   "modals.settings.guide_loading": "Loading guide...",
+  "modals.settings.guide_download": "Download PDF",
   "modals.settings.tour_title": "Interactive Tour",
   "modals.settings.tour_desc": "Discover all IALab features",
   "modals.settings.tour_button": "Replay tour",

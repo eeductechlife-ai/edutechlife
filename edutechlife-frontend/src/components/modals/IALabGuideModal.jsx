@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { marked } from 'marked';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
@@ -6,6 +6,8 @@ import { useTranslation } from '../../i18n/I18nProvider';
 const IALabGuideModal = ({ isOpen, onClose }) => {
   const [html, setHtml] = useState('');
   const [loading, setLoading] = useState(true);
+  const [downloading, setDownloading] = useState(false);
+  const contentRef = useRef(null);
   const { t, locale } = useTranslation();
 
   useEffect(() => {
@@ -36,6 +38,27 @@ const IALabGuideModal = ({ isOpen, onClose }) => {
     if (scrollEl) scrollEl.scrollTop = 0;
   }, [isOpen]);
 
+  const handleDownloadPdf = useCallback(async () => {
+    if (downloading || !contentRef.current) return;
+    setDownloading(true);
+    try {
+      const { default: html2pdf } = await import('html2pdf.js');
+      const opt = {
+        margin: [0.5, 0.5, 0.5, 0.5],
+        filename: `IALab-Guia-${new Date().toISOString().split('T')[0]}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, logging: false },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+      };
+      await html2pdf().set(opt).from(contentRef.current).save();
+    } catch (e) {
+      console.error('PDF error:', e);
+    } finally {
+      setDownloading(false);
+    }
+  }, [downloading]);
+
   if (!isOpen) return null;
 
   return (
@@ -51,13 +74,23 @@ const IALabGuideModal = ({ isOpen, onClose }) => {
               </div>
               <h3 className="text-slate-800 font-bold text-base">{t('modals.settings.guide_title')}</h3>
             </div>
-            <button
-              onClick={onClose}
-              className="p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-800 rounded-full transition-all"
-              aria-label={t('modals.settings.close')}
-            >
-              <Icon name="fa-times" className="text-lg" />
-            </button>
+            <div className="flex items-center gap-1">
+              <button
+                onClick={handleDownloadPdf}
+                disabled={downloading || loading}
+                className="p-2 text-slate-400 hover:bg-white/50 hover:text-petroleum rounded-full transition-all disabled:opacity-40"
+                aria-label={t('modals.settings.guide_download')}
+              >
+                <Icon name={downloading ? 'fa-spinner' : 'fa-download'} className={`text-base ${downloading ? 'animate-spin' : ''}`} />
+              </button>
+              <button
+                onClick={onClose}
+                className="p-2 text-slate-400 hover:bg-white/50 hover:text-slate-800 rounded-full transition-all"
+                aria-label={t('modals.settings.close')}
+              >
+                <Icon name="fa-times" className="text-lg" />
+              </button>
+            </div>
           </div>
           <p className="text-[11px] text-slate-500 mt-1 ml-12">{t('modals.settings.guide_desc')}</p>
         </div>
@@ -65,6 +98,7 @@ const IALabGuideModal = ({ isOpen, onClose }) => {
         {/* Content */}
         <div
           id="ialab-guide-scroll"
+          ref={contentRef}
           className="p-6 overflow-y-auto"
           style={{ maxHeight: 'calc(90vh - 100px)' }}
         >

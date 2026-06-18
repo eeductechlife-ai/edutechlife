@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, lazy, Suspense } from 'react';
 import { Eye, Download, Sparkles, ArrowRight, Check, Volume, VolumeOff, RotateCcw, Video, Headphones, Activity, Target, Zap, Users, Globe, Cpu, Lightbulb, Wrench, ListOrdered, CheckSquare, CheckCircle2, Rocket, List, BookOpen, Mic, MessageCircle, Smile, Meh, Frown, Clock, Shield, User, Mail, Phone, Music, Star, Heart, AlertCircle, Search } from 'lucide-react';
 import html2pdf from 'html2pdf.js';
-import { speakTextConversational } from '../../utils/speech';
+import { speakTextConversational, warmupTts } from '../../utils/speech';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import { useInView, motion, AnimatePresence } from 'framer-motion';
 import { useStudent } from '../../context/StudentContext';
@@ -329,6 +329,10 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     enabled: valeriaEnabled
   });
 
+  // Efecto: Pre-calentar TTS inmediatamente al montar (elimina latencia cold start)
+  useEffect(() => {
+    warmupTts();
+  }, []);
   // Efecto: Hablar al entrar en intro
   useEffect(() => {
     if (phase === 'intro' && valeriaEnabled) {

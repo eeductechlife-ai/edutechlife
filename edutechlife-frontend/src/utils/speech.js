@@ -128,7 +128,7 @@ let __backendReachable = null; // null=unknown, true/false
 const __testBackend = async (apiBase) => {
   if (__backendReachable !== null) return __backendReachable;
   try {
-    const r = await fetch(`${apiBase}/api/health`, { method: 'GET', signal: AbortSignal.timeout(2000) });
+    const r = await fetch(`${apiBase}/api/health`, { method: 'GET', signal: AbortSignal.timeout(300) });
     __backendReachable = r.ok;
   } catch (e) {
     __backendReachable = false;
@@ -784,6 +784,14 @@ export const prefetchTts = async (text, profile = 'valeria') => {
     const data = await response.json();
     if (data.audioContent) audioCache.set(profile, text, data.audioContent);
   } catch {}
+};
+
+export const warmupTts = () => {
+  const apiBase = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || '';
+  if (apiBase) __testBackend(apiBase);
+  if (typeof window !== 'undefined' && window.speechSynthesis) {
+    window.speechSynthesis.getVoices();
+  }
 };
 
 export { speakTextConversational, stopSpeech, iniciarReconocimiento, stopRecognition, audioCache, VOICE_PROFILES };
