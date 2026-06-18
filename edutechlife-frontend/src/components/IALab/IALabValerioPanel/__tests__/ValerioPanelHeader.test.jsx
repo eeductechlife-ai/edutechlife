@@ -61,17 +61,13 @@ describe('ValerioPanelHeader', () => {
   test('renders ValerioAvatar with correct state', () => {
     render(<ValerioPanelHeader {...defaultProps} valerioState="speaking" />);
     const avatar = screen.getByTestId('valerio-avatar');
-    expect(avatar).toHaveAttribute('data-state', 'speaking');
+    expect(avatar).toBeInTheDocument();
+    expect(avatar).toHaveAttribute('alt', 'Valerio');
+    expect(screen.getByText(/ialab\.valerio\.status_speaking/)).toBeInTheDocument();
   });
 
   test('renders title', () => {
     render(<ValerioPanelHeader {...defaultProps} />);
     expect(screen.getByText(/ialab\.valerio\.title/)).toBeInTheDocument();
-  });
-
-  test('renders ValerioAvatar with correct state', () => {
-    render(<ValerioPanelHeader {...defaultProps} valerioState="speaking" />);
-    const avatar = screen.getByTestId('valerio-avatar');
-    expect(avatar).toHaveAttribute('data-state', 'speaking');
   });
 });

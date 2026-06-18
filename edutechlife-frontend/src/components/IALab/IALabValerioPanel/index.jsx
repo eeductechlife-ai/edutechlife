@@ -244,7 +244,7 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
 
     const controller = new AbortController();
     abortRef.current = controller;
-    const timeoutId = setTimeout(() => controller.abort(), 20000);
+    const timeoutId = setTimeout(() => controller.abort(), 35000);
 
     try {
       firstChunkRef.current = false;
@@ -252,7 +252,7 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
       let fullResponse = '';
       await callDeepseekStream(
         messages,
-        { temperature: 0.7, maxTokens: 800 },
+        { temperature: 0.7, maxTokens: 2000 },
         false,
         (chunk) => {
           fullResponse += chunk;
@@ -264,12 +264,12 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
 
           pendingSentenceRef.current += chunk;
           while (true) {
-            const match = pendingSentenceRef.current.match(/[.!?](?:\s|$)/);
+            const match = pendingSentenceRef.current.match(/[.!?…](?:\s|$|[\n\r])/);
             if (!match) break;
             const endIdx = match.index + 1;
             const sentence = pendingSentenceRef.current.slice(0, endIdx).trim();
             pendingSentenceRef.current = pendingSentenceRef.current.slice(endIdx + match[0].length);
-            if (sentence.length >= 10) {
+            if (sentence.length >= 5) {
               ttsQueueRef.current.push(sentence);
               processTtsQueue();
             }

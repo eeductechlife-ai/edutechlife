@@ -1,3 +1,4 @@
+// DEPRECATED: Use src/data/vakQuestions.js + src/hooks/useVAKScoring.js instead. Will be removed after VAK redesign migration.
 import * as esData from './vakData.es.js';
 import * as enData from './vakData.en.js';
 

@@ -2,9 +2,9 @@ import React from 'react'
 import { motion, useReducedMotion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useIALabProgressContext, useIALabUIContext } from '../../../context/IALabContext';
-import { useProgressContext } from '../../../context/ProgressContext';
 import { useIALabStore } from '../../../store/ialabStore';
 import { useTranslation } from '../../../i18n/I18nProvider';
+import useInfographicCompletion from '../../../hooks/IALab/useInfographicCompletion';
 import SidebarProgressCircle from './SidebarProgressCircle';
 import SidebarModuleList from './SidebarModuleList';
 import SidebarResources from './SidebarResources';
@@ -37,16 +37,11 @@ const SidebarExpanded = () => {
     setShowStreakModal,
   } = useIALabUIContext();
 
-  const { completedInfographics } = useProgressContext();
   const streak = useIALabStore(s => s.streak);
   const getLevel = useIALabStore(s => s.getLevel);
   const getTotalPoints = useIALabStore(s => s.getTotalPoints);
   const isStreakAtRisk = useIALabStore(s => s.isStreakAtRisk);
-
-  const isInfographicCompleted = React.useCallback(
-    (infographicId) => completedInfographics.includes(`${infographicId}`),
-    [completedInfographics]
-  );
+  const isInfographicCompleted = useInfographicCompletion();
 
   return (
     <motion.div

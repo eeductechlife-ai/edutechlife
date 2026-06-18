@@ -17,6 +17,7 @@ const ActionCard = memo(({ icon, label, weightKey, onClick, completed, score, re
   const isFailed = completed && score !== undefined && score < 80;
   return (
     <motion.button
+      data-testid={`action-card-${icon}`}
       onClick={onClick}
       whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
       whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}

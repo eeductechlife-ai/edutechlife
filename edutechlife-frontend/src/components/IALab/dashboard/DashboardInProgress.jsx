@@ -132,7 +132,7 @@ function DashboardInProgress() {
         <div className="grid grid-cols-[280px_1fr] gap-8 p-7 max-md:grid-cols-1 max-md:p-5 max-md:gap-5">
           <div className="flex flex-col items-center">
             <div className="relative w-[170px] h-[170px] max-md:w-[140px] max-md:h-[140px]">
-              <svg viewBox="0 0 150 150" className="w-full h-full -rotate-90">
+              <svg viewBox="0 0 150 150" className="w-full h-full -rotate-90" data-testid="progress-ring">
                 <circle cx="75" cy="75" r="70" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="8" />
                 <circle cx="75" cy="75" r="70" fill="none" stroke="#00BCD4" strokeWidth="8" strokeLinecap="round"
                   strokeDasharray={2 * Math.PI * 70} strokeDashoffset={2 * Math.PI * 70 * (1 - courseProgress / 100)} />
@@ -181,7 +181,8 @@ function DashboardInProgress() {
                   </svg>
                   <span className="text-xs font-bold text-white">{Math.ceil((1 - idlePct / 100) * (IDLE_TIMEOUT / 1000))}s</span>
                 </div>
-                <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.95 }}
+                  <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.95 }}
+                  data-testid="dashboard-continue-btn"
                   transition={{ type: 'spring', stiffness: 500, damping: 14 }}
                   onClick={doNavigate}
                   className="bg-corporate text-white text-sm font-bold px-5 py-2.5 rounded-xl flex items-center gap-2 shadow-[0_4px_14px_rgba(0,188,212,0.3)] hover:shadow-[0_6px_20px_rgba(0,188,212,0.4)] transition-all">

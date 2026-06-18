@@ -51,7 +51,7 @@ export async function callDeepseek(messagesOrPrompt, systemPromptOrOpts = null, 
             messages,
             isJson: opts.isJson ?? legacyIsJson,
             temperature: opts.temperature ?? 0.7,
-            maxTokens: opts.maxTokens ?? 800,
+            maxTokens: opts.maxTokens ?? 2000,
             model: opts.model,
         };
     } else {
@@ -136,7 +136,7 @@ export async function callDeepseekStream(messagesOrPrompt, systemPromptOrOpts = 
             messages,
             isJson: opts.isJson ?? legacyIsJson,
             temperature: opts.temperature ?? 0.7,
-            maxTokens: opts.maxTokens ?? 800,
+            maxTokens: opts.maxTokens ?? 2000,
             model: opts.model,
         };
         // onChunk might be the third arg if opts was null

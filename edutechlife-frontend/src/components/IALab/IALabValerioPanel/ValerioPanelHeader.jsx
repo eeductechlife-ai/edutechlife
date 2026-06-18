@@ -13,6 +13,7 @@ const ValerioPanelHeader = ({ valerioState, setValerioState, currentModule, user
           <img
             src={tutorAvatars.Valerio || DEFAULT_AVATAR}
             alt="Valerio"
+            data-testid="valerio-avatar"
             className="w-16 h-16 rounded-full object-cover ring-2 ring-white/30"
           />
           <div>

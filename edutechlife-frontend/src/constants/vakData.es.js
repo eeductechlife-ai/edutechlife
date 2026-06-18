@@ -1,3 +1,4 @@
+// DEPRECATED: Use src/data/vakQuestions.js + src/hooks/useVAKScoring.js instead. Will be removed after VAK redesign migration.
 export const QUESTIONS_8_11 = [
   {
     id: 1,

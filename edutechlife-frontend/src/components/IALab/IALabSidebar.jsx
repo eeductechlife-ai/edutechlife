@@ -46,6 +46,7 @@ const IALabSidebar = () => {
 
   return (
     <motion.aside
+      data-testid="ialab-sidebar"
       role="navigation"
       aria-label={t('sidebar.panel_aria')}
       style={{ width: isCollapsed ? COLLAPSED_WIDTH : EXPANDED_WIDTH }}

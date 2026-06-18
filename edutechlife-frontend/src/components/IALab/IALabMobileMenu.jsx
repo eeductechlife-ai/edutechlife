@@ -20,7 +20,6 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
     courseCompleted, signOut
   } = useIALabUIContext();
 
-  const { completedInfographics } = useProgressContext();
   const streak = useIALabStore(s => s.streak);
   const getLevel = useIALabStore(s => s.getLevel);
   const isStreakAtRisk = useIALabStore(s => s.isStreakAtRisk);

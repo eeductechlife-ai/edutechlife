@@ -9,7 +9,7 @@ const ValerioMessageBubble = ({ msg }) => {
   const time = new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
   return (
-    <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-4`}>
+    <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-4`} data-testid={`msg-${msg.id}`}>
       <div className={`max-w-[80%] rounded-2xl p-4 break-words overflow-wrap-anywhere ${
         isUser
           ? 'bg-gradient-to-r from-petroleum to-corporate text-white'
@@ -132,7 +132,7 @@ const ValerioConversationArea = ({ conversation, isProcessing, moduleTitle, stre
   }, [conversation, streamingMessage, isProcessing]);
 
   return (
-    <div className="flex-1 overflow-y-auto p-4" aria-live="polite" aria-label={t('ialab.valerio.conversation_aria')}>
+    <div className="flex-1 overflow-y-auto p-4" data-testid="conversation-area" aria-live="polite" aria-label={t('ialab.valerio.conversation_aria')}>
       {conversation.length === 0 && !streamingMessage ? (
         <EmptyState moduleTitle={moduleTitle} />
       ) : (

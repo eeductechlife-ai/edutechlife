@@ -218,7 +218,7 @@ const IALabContent = memo(function () {
     });
 
     return (
-        <div className={`flex flex-col h-dvh bg-bg-light touch-manipulation${isDarkMode ? ' dark' : ''}`} onTouchStart={swipeStart} onTouchEnd={swipeEnd}>
+        <div data-testid="ialab-container" className={`flex flex-col h-dvh bg-bg-light touch-manipulation${isDarkMode ? ' dark' : ''}`} onTouchStart={swipeStart} onTouchEnd={swipeEnd}>
                 <MobileHeader onOpenMobileMenu={() => setShowMobileMenu(true)} setIsSearchOpen={setIsSearchOpen} isSearchOpen={isSearchOpen} />
 
                 {isSearchOpen && (
@@ -251,7 +251,7 @@ const IALabContent = memo(function () {
                       <SkipLink />
 
                       {/* Área de Contenido Principal - scroll propio */}
-                        <main role="main" ref={setMainRef} id="main-content" tabIndex={-1}
+                        <main data-testid="ialab-main-content" role="main" ref={setMainRef} id="main-content" tabIndex={-1}
                           className="flex-1 outline-none overflow-y-auto px-4 pt-16 landscape:pt-12 pb-2 safe-area-bottom md:px-8 md:pt-0 lg:px-10 lg:pt-0 lg:pb-8 xl:px-12 2xl:px-16" onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
                           {pullDistance > 0 && (
                             <div
@@ -294,7 +294,7 @@ const IALabContent = memo(function () {
                             )}
 
                             {/* TAB PILLS - Navegación entre secciones */}
-                            <div data-tour="tour-tabs" role="tablist" className="flex items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-thin-ialab">
+                            <div data-tour="tour-tabs" data-testid="ialab-tabs" role="tablist" className="flex items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-thin-ialab">
                               <TabPills TABS={TABS} viewSection={viewSection} setViewSection={setViewSection} />
                             </div>
 

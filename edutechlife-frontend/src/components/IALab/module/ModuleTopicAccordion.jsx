@@ -58,6 +58,7 @@ const ModuleTopicAccordion = ({
         return (
         <Fragment key={index}>
         <motion.button
+          data-testid={`topic-btn-${index}`}
           whileHover={prefersReducedMotion ? {} : { scale: 1.01 }}
           whileTap={prefersReducedMotion ? {} : { scale: 0.99 }}
           transition={{ type: "spring", stiffness: 400, damping: 20 }}
@@ -149,6 +150,7 @@ const ModuleTopicAccordion = ({
                 return (
                   <motion.button
                     key={resource.id}
+                    data-testid={`resource-btn-${resource.id}`}
                     whileHover={prefersReducedMotion || resourceLocked ? {} : { x: 4 }}
                     onClick={resourceLocked ? undefined : (e) => {
                       e.stopPropagation();

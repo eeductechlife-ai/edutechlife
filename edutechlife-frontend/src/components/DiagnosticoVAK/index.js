@@ -1,3 +1,1 @@
-import DiagnosticoVAK from './DiagnosticoVAK';
-
-export default DiagnosticoVAK;
+export { default } from './VAKLayout';

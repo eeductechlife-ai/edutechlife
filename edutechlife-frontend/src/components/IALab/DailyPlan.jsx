@@ -207,7 +207,7 @@ const DailyPlan = ({ onAction, isLoading }) => {
   }
 
   return (
-    <div className="flex flex-col gap-1">
+    <div data-testid="daily-plan" className="flex flex-col gap-1">
       <button
         onClick={toggleOpen}
         className="relative w-full overflow-hidden bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate text-white font-bold py-3 px-5 rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 flex items-center gap-3 group"

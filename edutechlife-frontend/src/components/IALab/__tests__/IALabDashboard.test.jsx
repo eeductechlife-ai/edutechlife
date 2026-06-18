@@ -54,7 +54,7 @@ vi.mock('framer-motion', () => {
       const comp = ({ children, ...props }) => {
         const filtered = {};
         for (const [key, val] of Object.entries(props)) {
-          if (['children', 'className', 'style', 'onClick', 'disabled', 'href', 'target', 'rel', 'aria-label'].includes(key)) {
+          if (['children', 'className', 'style', 'onClick', 'disabled', 'href', 'target', 'rel', 'aria-label', 'data-testid'].includes(key)) {
             filtered[key] = val;
           }
         }
@@ -72,7 +72,7 @@ const defaultStore = {
   moduleProgress: {},
   completedModules: [],
   courseProgress: 0,
-  xp: 0,
+  xp: 1,
   streak: 0,
   completedExams: {},
   challengeScores: {},

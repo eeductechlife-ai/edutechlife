@@ -3,6 +3,10 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import ValerioConversationArea from '../ValerioConversationArea';
 
+beforeEach(() => {
+  Element.prototype.scrollIntoView = vi.fn();
+});
+
 vi.mock('../../../../utils/iconMapping', () => ({
   Icon: ({ name }) => <span data-testid="icon" data-icon={name} />,
 }));
