@@ -165,6 +165,7 @@ export default function useValentinaAgent(options = {}) {
     setValeriaExpression('happy');
     await speakAsValentina(confirmMsg);
     setValeriaExpression('thinking');
+    await delay(600);
     
     const askAgeMsg = VALENTINA_MESSAGES[ageGroup].askAge(name);
     await speakAsValentina(askAgeMsg);
@@ -183,6 +184,7 @@ export default function useValentinaAgent(options = {}) {
     setValeriaExpression('proud');
     await speakAsValentina(confirmMsg);
     setValeriaExpression('thinking');
+    await delay(600);
     
     const askEmailMsg = VALENTINA_MESSAGES[ageGroup].askEmail();
     await speakAsValentina(askEmailMsg);
@@ -198,6 +200,7 @@ export default function useValentinaAgent(options = {}) {
     setValeriaExpression('happy');
     await speakAsValentina("¡Perfecto! Tu correo está guardado.");
     setValeriaExpression('curious');
+    await delay(600);
     
     await speakAsValentina("¿Y tu número de teléfono?");
     setValeriaExpression('neutral');
@@ -212,6 +215,7 @@ export default function useValentinaAgent(options = {}) {
     setValeriaExpression('happy');
     await speakAsValentina("¡Listo! Ya tengo tus datos.");
     setValeriaExpression('excited');
+    await delay(600);
     
     const ageGroup = getAgeGroup(parseInt(studentAge) || 12);
     const askMoodMsg = VALENTINA_MESSAGES[ageGroup].askMood(name);
@@ -351,6 +355,7 @@ export default function useValentinaAgent(options = {}) {
     );
     
     setValeriaExpression('celebrating');
+    await delay(1500);
     await speakAsValentina(resultsMessage);
     setValeriaExpression('happy');
   }, [speakAsValentina, valentinaMode, diagnosis, studentName, studentAge]);

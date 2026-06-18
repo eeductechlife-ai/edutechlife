@@ -4,6 +4,7 @@ import { useTheme } from '../../context/ThemeContext';
 import useBodyScrollLock from '../../hooks/useBodyScrollLock';
 import useFocusTrap from '../../hooks/useFocusTrap';
 import { useTranslation } from '../../i18n/I18nProvider';
+import IALabGuideModal from './IALabGuideModal';
 
 const SettingsSupportModal = ({ isOpen, onClose }) => {
   const { isDarkMode, toggleDarkMode } = useTheme();
@@ -14,6 +15,7 @@ const SettingsSupportModal = ({ isOpen, onClose }) => {
   const [notifCommunity, setNotifCommunity] = useState(() => localStorage.getItem('ialab_notif_community') !== 'false');
   const [autoMarkViewed, setAutoMarkViewed] = useState(() => localStorage.getItem('ialab_auto_mark') !== 'false');
   const [compactMode, setCompactMode] = useState(() => localStorage.getItem('ialab_compact_mode') === 'true');
+  const [showGuide, setShowGuide] = useState(false);
 
   const { t } = useTranslation();
   useBodyScrollLock(isOpen);
@@ -185,6 +187,26 @@ const SettingsSupportModal = ({ isOpen, onClose }) => {
                 </button>
               </div>
 
+              {/* Guía IALab */}
+              <div className="mb-6 p-4 bg-gradient-to-br from-petroleum/5 to-[#66CCCC]/5 rounded-xl border border-petroleum/10">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-petroleum/10 to-[#66CCCC]/10 flex items-center justify-center">
+                    <Icon name="fa-book" className="text-petroleum text-sm" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-slate-800">{t('modals.settings.guide_title')}</h4>
+                    <p className="text-[10px] text-slate-500">{t('modals.settings.guide_desc')}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowGuide(true)}
+                  className="w-full mt-2 px-4 py-2.5 bg-gradient-to-r from-petroleum to-[#66CCCC] text-white text-xs font-bold rounded-lg hover:shadow-md hover:shadow-petroleum/20 transition-all duration-200 active:scale-[0.98]"
+                >
+                  <Icon name="fa-book-open" className="text-xs mr-1.5" />
+                  {t('modals.settings.guide_title')}
+                </button>
+              </div>
+
               {/* Contacto */}
               <div className="space-y-2">
                 <h4 className="text-xs font-bold text-slate-700 mb-3 flex items-center gap-2">
@@ -216,6 +238,7 @@ const SettingsSupportModal = ({ isOpen, onClose }) => {
           )}
         </div>
       </div>
+      <IALabGuideModal isOpen={showGuide} onClose={() => setShowGuide(false)} />
     </div>
   );
 };

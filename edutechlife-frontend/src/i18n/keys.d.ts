@@ -2118,6 +2118,9 @@ export type TranslationKeys = {
   "modals.settings.tour_button": string;
   "modals.settings.tour_desc": string;
   "modals.settings.tour_title": string;
+  "modals.settings.guide_title": string;
+  "modals.settings.guide_desc": string;
+  "modals.settings.guide_loading": string;
   "modals.settings.unauthenticated_aria": string;
   "modals.settings.user_menu_aria": string;
   "modals.settings.user_options_aria": string;
