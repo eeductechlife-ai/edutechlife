@@ -263,6 +263,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   const [valeriaEnabled, setValeriaEnabled] = useState(true);
   const [valeriaVolume, setValeriaVolume] = useState(1.0);
   const [valentinaIntroComplete, setValentinaIntroComplete] = useState(false);
+  const welcomeTimeoutRef = useRef(null);
   const [feedbackPending, setFeedbackPending] = useState(false);
   const [showFeedbackButton, setShowFeedbackButton] = useState(false);
   
@@ -337,10 +338,15 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   useEffect(() => {
     if (phase === 'intro' && valeriaEnabled) {
       startWelcomeSequence(() => {
-        // Cuando Valeria termina de hablar, habilitar el botón
         setValentinaIntroComplete(true);
       });
     }
+    welcomeTimeoutRef.current = setTimeout(() => {
+      setValentinaIntroComplete(true);
+    }, 3000);
+    return () => {
+      if (welcomeTimeoutRef.current) clearTimeout(welcomeTimeoutRef.current);
+    };
   }, [phase, valeriaEnabled]);
 
   // Efecto: Leer pregunta al entrar en fase test
