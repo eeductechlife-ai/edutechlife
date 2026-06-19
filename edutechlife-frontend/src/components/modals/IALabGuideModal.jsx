@@ -44,17 +44,12 @@ const IALabGuideModal = ({ isOpen, onClose }) => {
     try {
       const { default: html2pdf } = await import('html2pdf.js');
 
-      const original = contentRef.current;
-      const clone = original.cloneNode(true);
-      clone.style.maxHeight = 'none';
-      clone.style.overflow = 'visible';
-      clone.style.position = 'fixed';
-      clone.style.left = '-9999px';
-      clone.style.top = '0';
-      clone.style.width = original.offsetWidth + 'px';
-      clone.style.zIndex = '-1';
-      clone.style.background = '#fff';
-      document.body.appendChild(clone);
+      const el = contentRef.current;
+      const savedMaxHeight = el.style.maxHeight;
+      const savedOverflow = el.style.overflow;
+
+      el.style.maxHeight = 'none';
+      el.style.overflow = 'visible';
 
       const opt = {
         margin: [0.5, 0.5, 0.5, 0.5],
@@ -64,16 +59,18 @@ const IALabGuideModal = ({ isOpen, onClose }) => {
           scale: 2,
           useCORS: true,
           logging: false,
-          height: clone.scrollHeight,
-          width: clone.scrollWidth,
-          windowHeight: clone.scrollHeight,
+          height: el.scrollHeight,
+          width: el.scrollWidth,
+          windowHeight: el.scrollHeight,
         },
         jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
         pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
       };
 
-      await html2pdf().set(opt).from(clone).save();
-      document.body.removeChild(clone);
+      await html2pdf().set(opt).from(el).save();
+
+      el.style.maxHeight = savedMaxHeight;
+      el.style.overflow = savedOverflow;
     } catch (e) {
       console.error('PDF error:', e);
     } finally {
