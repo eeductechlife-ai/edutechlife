@@ -326,16 +326,41 @@ const AppLayout = () => {
                         userInfo={clerkUser}
                         onNavigate={navigate}
                       />
+                      <div className="mt-3 px-3">
+                        <LocaleSwitcher />
+                      </div>
                     </div>
                   )}
-                  
+
+                  {/* Sign In & Locale — top for signed-out users */}
+                  {!isSignedIn && (
+                    <div className="mb-6 pb-4 border-b border-[#4DA8C4]/20 space-y-2">
+                      <div className="flex items-center justify-between mb-2">
+                        <LocaleSwitcher />
+                      </div>
+                      <button
+                        onClick={() => { closeDrawer(); navigate('/login'); }}
+                        className="w-full py-3 text-sm font-semibold text-white bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] rounded-full shadow-md hover:shadow-lg transition-all"
+                      >
+                        <i className="fa-solid fa-right-to-bracket mr-2"></i>
+                        {t('nav.login')}
+                      </button>
+                      <button
+                        onClick={() => { closeDrawer(); setShowLeadCaptureModal(true); }}
+                        className="w-full py-3 text-sm font-semibold text-[#004B63] border-2 border-[#4DA8C4]/30 rounded-full hover:border-[#4DA8C4] transition-colors"
+                      >
+                        {t('header.request_demo')}
+                      </button>
+                    </div>
+                  )}
+
                   {/* Navigation Categories */}
                   <div className="space-y-4">
                     <div>
                       <h3 className="text-xs font-semibold text-[#4DA8C4] uppercase tracking-wider mb-2">{t('nav.home_aria')}</h3>
                       <div className="space-y-1">
-                        <button 
-                          onClick={() => navigate('/')}
+                         <button 
+                          onClick={() => navigateToSection('/', 'herramientas')}
                           className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
                         >
                           {t('header.tools')}
@@ -403,24 +428,6 @@ const AppLayout = () => {
                       </div>
                     </div>
                   </div>
-
-                  {!isSignedIn && (
-                    <div className="mt-6 pt-4 border-t border-[#4DA8C4]/20 space-y-2">
-                      <button
-                        onClick={() => { closeDrawer(); navigate('/login'); }}
-                        className="w-full py-3 text-sm font-semibold text-white bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] rounded-full shadow-md hover:shadow-lg transition-all"
-                      >
-                        <i className="fa-solid fa-right-to-bracket mr-2"></i>
-                        {t('nav.login')}
-                      </button>
-                      <button
-                        onClick={() => { closeDrawer(); setShowLeadCaptureModal(true); }}
-                        className="w-full py-3 text-sm font-semibold text-[#004B63] border-2 border-[#4DA8C4]/30 rounded-full hover:border-[#4DA8C4] transition-colors"
-                      >
-                        {t('header.request_demo')}
-                      </button>
-                    </div>
-                  )}
                 </div>
               </div>
             </>
