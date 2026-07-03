@@ -306,15 +306,18 @@ const AppLayout = () => {
                       }}
                     />
                   </div>
-                  <button 
-                    onClick={closeDrawer}
-                    className="p-2 text-[#004B63] hover:text-[#4DA8C4] hover:bg-[#4DA8C4]/10 rounded-full transition-all duration-300"
-                    aria-label={t('header.close_menu')}
-                  >
-                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
+                  <div className="flex items-center gap-1">
+                    <LocaleSwitcher />
+                    <button 
+                      onClick={closeDrawer}
+                      className="p-2 text-[#004B63] hover:text-[#4DA8C4] hover:bg-[#4DA8C4]/10 rounded-full transition-all duration-300"
+                      aria-label={t('header.close_menu')}
+                    >
+                      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
                 
                 {/* Mobile Menu Content */}
@@ -326,18 +329,12 @@ const AppLayout = () => {
                         userInfo={clerkUser}
                         onNavigate={navigate}
                       />
-                      <div className="mt-3 px-3">
-                        <LocaleSwitcher />
-                      </div>
                     </div>
                   )}
 
-                  {/* Sign In & Locale — top for signed-out users */}
+                  {/* Sign In — top for signed-out users */}
                   {!isSignedIn && (
                     <div className="mb-6 pb-4 border-b border-[#4DA8C4]/20 space-y-2">
-                      <div className="flex items-center justify-between mb-2">
-                        <LocaleSwitcher />
-                      </div>
                       <button
                         onClick={() => { closeDrawer(); navigate('/login'); }}
                         className="w-full py-3 text-sm font-semibold text-white bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] rounded-full shadow-md hover:shadow-lg transition-all"
