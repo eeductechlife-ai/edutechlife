@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, lazy, Suspense } from 'react';
-import { Eye, Download, Sparkles, ArrowRight, Check, Volume, VolumeOff, RotateCcw, Video, Headphones, Activity, Target, Zap, Users, Globe, Cpu, Lightbulb, Wrench, ListOrdered, CheckSquare, CheckCircle2, Rocket, List, BookOpen, Mic, MessageCircle, Smile, Meh, Frown, Clock, Shield, User, Mail, Phone, Music, Star, Heart, AlertCircle, Search } from 'lucide-react';
+import { Eye, Download, Sparkles, ArrowRight, Check, Volume, VolumeOff, RotateCcw, Video, Headphones, Activity, Target, Zap, Users, Globe, Cpu, Lightbulb, Wrench, ListOrdered, CheckSquare, CheckCircle2, Rocket, List, BookOpen, Mic, MessageCircle, Smile, Meh, Frown, Music, User, Mail, Phone, Clock } from 'lucide-react';
 import html2pdf from 'html2pdf.js';
 import { speakTextConversational, warmupTts } from '../../utils/speech';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
@@ -7,57 +7,14 @@ import { useInView, motion, AnimatePresence } from 'framer-motion';
 import { useStudent } from '../../context/StudentContext';
 import { useTranslation } from '../../i18n/I18nProvider';
 import useValentinaAgent from '../../hooks/useValentinaAgent';
-import { getQuestionsByAge, getAgeGroupKey } from '../../data/vakQuestions';
+import { getQuestionsByAge } from '../../data/vakQuestions';
 import { VALENTINA_MESSAGES, getAgeGroup } from '../../utils/valentinaMessages';
 import { safeStorage } from '../../utils/storage';
+import { STYLE_MAP, getCaracteristicasEstilo, getTipsPadres, getCarrerasRecomendadas, getValentinaCommentary } from './vakStyles';
+import { MOOD_OPTIONS, buildResultsURL, getMoodLabel, getMoodFeedback, formatTime, validateEmail } from './vakHelpers';
+import { Confetti, Celebration } from './vakComponents.jsx';
 import './DiagnosticoVAK.css';
 import { tutorAvatars, DEFAULT_AVATAR } from '../../data/tutorAvatars';
-
-// Componente de Confetti
-const Confetti = ({ active }) => {
-  if (!active) return null;
-  
-  return (
-    <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2">
-        <Sparkles size={64} strokeWidth={1} className="text-[#4DA8C4] opacity-50 animate-pulse" />
-      </div>
-      {[...Array(12)].map((_, i) => (
-        <div
-          key={i}
-          className="absolute w-3 h-3 rounded-full opacity-60"
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-            background: ['#4DA8C4', '#66CCCC', '#B2D8E5'][i % 3],
-            animation: `confetti-fall ${1 + Math.random() * 2}s ease-in ${Math.random() * 0.5}s infinite`
-          }}
-        />
-      ))}
-    </div>
-  );
-};
-
-// Componente de celebración
-const Celebration = ({ active, styleName }) => {
-  const { t } = useTranslation();
-  if (!active) return null;
-  
-  return (
-    <div className="fixed inset-0 pointer-events-none z-40 flex items-center justify-center">
-      <div className="bg-white rounded-3xl shadow-2xl p-6 flex items-center gap-4 animate-pulse">
-        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] flex items-center justify-center">
-          <Sparkles size={32} strokeWidth={1.5} className="text-white" />
-        </div>
-        <div>
-          <h3 className="text-2xl font-bold text-[var(--color-petroleum)]">{t('vak.ui.completed')}</h3>
-          <p className="text-[var(--color-gray-500)]">{t('vak.ui.you_are_a_learner')} <span className="font-bold text-[var(--color-corporate)]">{styleName}</span></p>
-        </div>
-        <div className="text-5xl">🎊</div>
-      </div>
-    </div>
-  );
-};
 
 // Mapeo de expresiones a iconos y colores EdutechLife
 const EXPRESSION_CONFIG = {
@@ -144,61 +101,6 @@ const ValeriaControls = ({
   );
 };
 
-const MOOD_OPTIONS = [
-  { value: 'happy', label: 'Bien', icon: 'Smile', message: '¡Qué genial que estás con buena energía! Vamos a pasarlo muy bien.' },
-  { value: 'neutral', label: 'Regular', icon: 'Meh', message: 'Gracias por compartir. Estoy aquí para acompañarte en cada paso.' },
-  { value: 'sad', label: 'No muy bien', icon: 'Frown', message: 'Entiendo cómo te sientes. Este diagnóstico te ayudará a conocerte mejor.' }
-];
-
-const STYLE_MAP = {
-  visual: { 
-    name: 'APRENDIZ VISUAL', 
-    color: 'var(--color-corporate)', 
-    bgGradient: 'linear-gradient(135deg, rgba(77, 168, 196, 0.15), rgba(77, 168, 196, 0.05))',
-    description: 'Tu cerebro procesa mejor la información cuando la ves. Aprendes más fácil con imágenes, gráficos, colores y diagramas.',
-    strategies: ['Usa colores y subrayados en tus notas', 'Crea mapas mentales y diagramas', 'Prefiere videos educativos', 'Usa flashcards con imágenes', 'Organiza en esquemas visuales'],
-    icon: 'Video', // Icono más moderno y corporativo
-    tip: 'Visiona el contenido antes de estudiarlo para mejor comprensión'
-  },
-  auditivo: { 
-    name: 'APRENDIZ AUDITIVO', 
-    color: 'var(--color-mint)', 
-    bgGradient: 'linear-gradient(135deg, rgba(102, 204, 204, 0.15), rgba(102, 204, 204, 0.05))',
-    description: 'Aprendes mejor escuchando y hablando. Retienes información a través de conversaciones y audio.',
-    strategies: ['Graba y escucha tus notas', 'Explica en voz alto lo que aprendes', 'Escucha podcasts educativos', 'Participa en debates y discusiones', 'Usa grabadora para clases'],
-    icon: 'Headphones', // Icono más moderno y corporativo
-    tip: 'Graba tus notas y escúchalas en tus momentos de ocio'
-  },
-  kinestesico: { 
-    name: 'APRENDIZ KINESTÉSICO', 
-    color: 'var(--color-accent)', 
-    bgGradient: 'linear-gradient(135deg, rgba(0, 194, 224, 0.15), rgba(0, 194, 224, 0.05))',
-    description: 'Necesitas moverte y practicar para aprender. Tu mejor aprendizaje viene de la experiencia práctica.',
-    strategies: ['Toma notas a mano', 'Haz pausas activas cada 25 minutos', 'Practica con ejercicios reales', 'Usa el cuerpo para memorizar', 'Aprende haciendo proyectos'],
-    icon: 'Activity', // Icono más moderno y corporativo
-    tip: 'Estudiar de pie o caminando mejora tu concentración'
-  }
-};
-
-const buildResultsURL = (diag) => {
-  if (!diag) return '';
-  try {
-    const base = 'https://edutechlife.co';
-    const payload = encodeURIComponent(JSON.stringify({ 
-      studentName: diag.studentName, 
-      date: diag.date, 
-      predominantStyle: diag.predominantStyle, 
-      percentage: diag.percentage 
-    }));
-    const dataURL = `${base}/diagnosis/vak/results?payload=${payload}`;
-    const qrURL = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(dataURL)}`;
-    return qrURL;
-  } catch (e) {
-    return '';
-  }
-};
-
-// Función para obtener el componente de icono basado en el nombre
 const getIconComponent = (iconName) => {
   switch (iconName) {
     case 'Eye': return Eye;
@@ -224,6 +126,15 @@ const getIconComponent = (iconName) => {
     case 'Lightbulb': return Lightbulb;
     default: return Video;
   }
+};
+
+const SVG_ICONS = {
+  user: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#004B63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+  users: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#66CCCC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+  lightbulb: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E8A838" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>`,
+  checkCircle: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>`,
+  lock: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
+  star: `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="#E8A838" stroke-width="1" opacity="0.3"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`
 };
 
 const DiagnosticoVAK = ({ onNavigate }) => {
@@ -259,11 +170,12 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   const [highContrast, setHighContrast] = useState(false);
   const [showSaveIndicator, setShowSaveIndicator] = useState(false);
   
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
   // Estados para Valeria
   const [valeriaEnabled, setValeriaEnabled] = useState(true);
   const [valeriaVolume, setValeriaVolume] = useState(1.0);
   const [valentinaIntroComplete, setValentinaIntroComplete] = useState(false);
-  const welcomeTimeoutRef = useRef(null);
   const [feedbackPending, setFeedbackPending] = useState(false);
   const [showFeedbackButton, setShowFeedbackButton] = useState(false);
   
@@ -289,7 +201,8 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   const isChartInView = useInView(chartRef);
   const timerRef = useRef(null);
   const questionJustReadRef = useRef(false);
-  const timeoutRefs = useRef([]);
+   const timeoutRefs = useRef([]);
+  const welcomeStartedRef = useRef(false);
   const setTimeoutSafe = (fn, delay) => {
     const id = setTimeout(() => {
       timeoutRefs.current = timeoutRefs.current.filter(t => t !== id);
@@ -334,20 +247,24 @@ const DiagnosticoVAK = ({ onNavigate }) => {
   useEffect(() => {
     warmupTts();
   }, []);
-  // Efecto: Hablar al entrar en intro
+  // Efecto: Hablar al entrar en intro (solo una vez, incluso en StrictMode)
   useEffect(() => {
-    if (phase === 'intro' && valeriaEnabled) {
+    if (phase === 'intro' && valeriaEnabled && !welcomeStartedRef.current) {
+      welcomeStartedRef.current = true;
       startWelcomeSequence(() => {
         setValentinaIntroComplete(true);
       });
     }
-    welcomeTimeoutRef.current = setTimeout(() => {
+  }, [phase, valeriaEnabled]);
+
+  // Fallback: permitir continuar tras 3s aunque Valeria no hable
+  useEffect(() => {
+    if (phase !== 'intro') return;
+    const timeout = setTimeout(() => {
       setValentinaIntroComplete(true);
     }, 3000);
-    return () => {
-      if (welcomeTimeoutRef.current) clearTimeout(welcomeTimeoutRef.current);
-    };
-  }, [phase, valeriaEnabled]);
+    return () => clearTimeout(timeout);
+  }, [phase]);
 
   // Efecto: Leer pregunta al entrar en fase test
   useEffect(() => {
@@ -363,7 +280,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     if (!isValentinaSpeaking && questionJustReadRef.current && phase === 'test' && valeriaEnabled) {
       questionJustReadRef.current = false;
       const questionNum = currentQuestion + 1;
-      if (questionNum === 3 || questionNum === 6 || questionNum === 9) {
+      if (questionNum === 6) {
         setFeedbackPending(true);
         setShowFeedbackButton(true);
       }
@@ -531,12 +448,6 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     return re.test(email);
   };
 
-  const formatTime = (seconds) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
-
   const startTest = () => {
     if (valeriaEnabled && !valentinaIntroComplete) return;
     setPhase('calibration');
@@ -559,6 +470,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     setStudentAge(studentAge);
     setStartTime(Date.now());
     setElapsedTime(0);
+    setIsTransitioning(true);
     
     // Actualizar preguntas según la edad
     setAgeQuestions(getQuestionsByAge(age));
@@ -571,13 +483,17 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     });
     
     if (valeriaEnabled) {
-      await transitionToTest(studentName.trim());
+      await Promise.race([
+        transitionToTest(studentName.trim()),
+        new Promise(resolve => setTimeout(resolve, 10000))
+      ]);
       setPhase('test');
       setCurrentQuestion(0);
     } else {
       setPhase('test');
       setCurrentQuestion(0);
     }
+    setTimeout(() => setIsTransitioning(false), 800);
   };
 
   const handleFeedbackClick = async () => {
@@ -635,7 +551,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
           counts: c,
           predominantStyle: predominant,
           styleDetails: style,
-          percentage: Math.round((max / 10) * 100),
+          percentage: Math.round((max / ageQuestions.length) * 100),
           answers: nextAnswers
         };
         
@@ -708,10 +624,11 @@ const DiagnosticoVAK = ({ onNavigate }) => {
       filename: `${fileName}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { 
-        scale: 2, 
+        scale: 3, 
+        width: 794,
         useCORS: true, 
         letterRendering: true, 
-        logging: true,
+        logging: false,
         backgroundColor: '#ffffff'
       },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
@@ -727,212 +644,6 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     } finally {
       setPdfLoading(false);
     }
-  };
-
-  const getMoodLabel = (moodValue) => {
-    const labels = { happy: t('vak.ui.mood_good'), neutral: t('vak.ui.mood_neutral'), sad: t('vak.ui.mood_bad') };
-    return labels[moodValue] || t('vak.ui.mood_neutral_fallback');
-  };
-
-  const getMoodFeedback = () => {
-    const mood = MOOD_OPTIONS.find(m => m.value === studentMood);
-    return mood || MOOD_OPTIONS[1];
-  };
-
-  const getCaracteristicasEstilo = (style) => {
-    const map = {
-      visual: [
-        'Aprende mejor viendo imágenes, gráficos y diagramas',
-        'Prefiere mapas mentales, esquemas y resúmenes visuales',
-        'Excelente memoria fotográfica para rostros y lugares',
-        'Organizado, detallista y con buena percepción espacial',
-        'Se distrae con ruidos fuertes o ambientes caóticos',
-        'Disfruta el arte, el diseño y las presentaciones visuales',
-        'Procesa información rápidamente cuando está bien presentada',
-        'Prefiere leer instrucciones antes que escucharlas'
-      ],
-      auditivo: [
-        'Aprende mejor escuchando explicaciones y participando en diálogos',
-        'Prefiere debates, discusiones y dinámicas verbales',
-        'Excelente memoria para melodías, ritmos y secuencias habladas',
-        'Se expresa con claridad y fluidez verbal',
-        'Disfruta la música, los podcasts y los audiolibros',
-        'Puede distraerse con estímulos visuales excesivos',
-        'Procesa información repitiendo en voz alta o grabando',
-        'Tiene facilidad para aprender idiomas y expresión oral'
-      ],
-      kinestesico: [
-        'Aprende mejor haciendo, tocando y experimentando físicamente',
-        'Prefiere actividades prácticas, proyectos y experimentos',
-        'Excelente coordinación motora y memoria muscular',
-        'Necesita movimiento frecuente para mantener la concentración',
-        'Disfruta los deportes, la danza y las manualidades',
-        'Aprendizaje experiencial: recuerda lo que vive y siente',
-        'Procesa información mientras camina o se mueve',
-        'Tiene facilidad para trabajos que requieren destreza física'
-      ]
-    };
-    return map[style] || map.visual;
-  };
-
-  const getTipsPadres = (style) => {
-    const map = {
-      visual: [
-        'Crea un espacio de estudio visualmente organizado con colores y esquemas',
-        'Utiliza calendarios visuales y listas de tareas con dibujos o iconos',
-        'Refuerza el aprendizaje con documentales, infografías y videos educativos',
-        'Anímalo a usar mapas mentales, cuadros sinópticos y resúmenes con colores',
-        'Evita distracciones auditivas como música con letra o ruido ambiental',
-        'Proporciona marcadores, post-its y herramientas de diseño visual',
-        'Permite que decore y personalice su espacio de estudio'
-      ],
-      auditivo: [
-        'Lee en voz alta los temas de estudio o pídele que te explique lo aprendido',
-        'Graba las lecciones importantes para que pueda repasarlas después',
-        'Utiliza podcasts educativos, audiolibros y canciones didácticas',
-        'Fomenta discusiones y debates sobre temas escolares en casa',
-        'Crea rimas, canciones o mnemotecnias para memorizar conceptos',
-        'Permítele estudiar con música instrumental de fondo si lo necesita',
-        'Anímalo a participar en grupos de estudio y exposiciones orales'
-      ],
-      kinestesico: [
-        'Permite pausas activas frecuentes cada 20-25 minutos de estudio',
-        'Utiliza experimentos prácticos, maquetas y proyectos manuales',
-        'Anímalo a caminar, moverse o usar un balance board mientras repasa',
-        'Proporciona materiales manipulables como plastilina, rompecabezas o kits',
-        'Integra el movimiento en la rutina: estudiar de pie o con intervalos activos',
-        'Usa juegos de rol, simulaciones y actividades al aire libre para enseñar',
-        'Permite que tome notas a mano en lugar de escribir en computadora'
-      ]
-    };
-    return map[style] || map.visual;
-  };
-
-  const getCarrerasRecomendadas = (style) => {
-    const map = {
-      visual: ['Diseño Gráfico y Comunicación Visual', 'Arquitectura y Urbanismo', 'Cine, Fotografía y Producción Audiovisual', 'Desarrollo Web, UX/UI y Diseño Digital', 'Ilustración, Animación y Arte Digital', 'Marketing Visual y Publicidad', 'Ingeniería en Sistemas (interfaces visuales)', 'Diseño de Interiores y Decoración'],
-      auditivo: ['Música, Composición y Producción Musical', 'Periodismo y Comunicación Social', 'Derecho y Ciencias Jurídicas', 'Psicología Clínica y Educativa', 'Docencia y Pedagogía', 'Traducción e Interpretación de Idiomas', 'Locución, Radio y Medios Audiovisuales', 'Terapia del Lenguaje y Foniatría'],
-      kinestesico: ['Ingeniería Civil, Mecánica o Industrial', 'Medicina, Cirugía y Enfermería', 'Ciencias del Deporte y Entrenamiento Físico', 'Gastronomía y Artes Culinarias', 'Artes Escénicas: Teatro, Danza y Circo', 'Diseño Industrial y Fabricación Digital', 'Fisioterapia y Rehabilitación Física', 'Arquitectura Paisajista y Construcción']
-    };
-    return map[style] || map.visual;
-  };
-
-  // Generar informe profesional de Valeria para el diagnóstico
-  const getValentinaCommentary = () => {
-    if (!diagnosis) return '';
-    
-    const age = parseInt(diagnosis.studentAge) || parseInt(studentAge);
-    if (!age || isNaN(age)) return '';
-    
-    let ageGroup = 'teen';
-    if (age >= 6 && age <= 10) ageGroup = 'child';
-    else if (age >= 11 && age <= 14) ageGroup = 'preteen';
-    
-    const style = diagnosis.predominantStyle;
-    const percentage = diagnosis.percentage;
-    const name = diagnosis.studentName || studentName || 'Estudiante';
-    const counts = diagnosis.counts || { visual: 0, auditivo: 0, kinestesico: 0 };
-    
-    const styleNames = {
-      visual: 'VISUAL',
-      auditivo: 'AUDITIVO',
-      kinestesico: 'KINESTÉSICO'
-    };
-
-    const buildReport = (styleKey) => {
-      const styleName = styleNames[styleKey];
-      const secondPlace = Object.entries(counts)
-        .filter(([k]) => k !== styleKey)
-        .sort(([,a], [,b]) => b - a)[0];
-      const secondName = secondPlace ? styleNames[secondPlace[0]] : '';
-      const secondScore = secondPlace ? secondPlace[1] : 0;
-
-      const reportSections = {
-        visual: {
-          child: [
-            `Informe Psicopedagógico — ${name}`,
-            `Después de aplicar y analizar el Diagnóstico VAK, he identificado que tu estilo de aprendizaje predominante es VISUAL con un ${percentage}% de correspondencia. Esto significa que tu cerebro procesa y retiene información de manera más eficiente cuando utilizas el canal visual: imágenes, colores, diagramas y organizadores gráficos.`,
-            `Puntajes obtenidos: Visual ${counts.visual}/10 — Auditivo ${counts.auditivo}/10 — Kinestésico ${counts.kinestesico}/10. Tu segundo canal más desarrollado es ${secondName} con ${secondScore}/10, lo que indica que también puedes beneficiarte de estrategias complementarias de ese estilo.`,
-            `Fortalezas identificadas: Excelente capacidad para recordar información presentada visualmente; habilidad para organizar ideas mediante esquemas y mapas conceptuales; facilidad para detectar detalles y patrones; buena orientación espacial y sentido estético.`,
-            `Como psicóloga educativa especialista en metodología VAK, te recomiendo priorizar estas estrategias: utiliza colores y símbolos en tus apuntes, crea mapas mentales antes de cada evaluación, transforma texto en diagramas de flujo, y complementa tu estudio con videos educativos e infografías.`,
-            `Confío en que aplicando estas recomendaciones potenciarás significativamente tu rendimiento académico. Tu perfil visual es una fortaleza enorme en un mundo cada vez más gráfico y digital. ¡Adelante!`
-          ],
-          preteen: [
-            `Informe Psicopedagógico — ${name}`,
-            `Tras aplicar el Diagnóstico VAK y analizar detalladamente tus respuestas, determino que tu estilo de aprendizaje predominante es VISUAL con un ${percentage}% de consistencia. Procesas mejor la información cuando puedes verla representada gráficamente: imágenes, esquemas, colores y organizadores visuales facilitan tu comprensión y memoria.`,
-            `Desglose de resultados: canal Visual ${counts.visual}/10, Auditivo ${counts.auditivo}/10, Kinestésico ${counts.kinestesico}/10. Tu perfil muestra un ${secondName} como canal secundario con ${secondScore}/10, lo que enriquece tu versatilidad para aprender en diferentes contextos.`,
-            `Fortalezas detectadas: Piensas en imágenes y recuerdas con facilidad lo que has visto; tienes buena capacidad de síntesis visual; eres observador y detallista; aprendes rápidamente con demostraciones visuales; disfrutas organizar información de manera estructurada.`,
-            `Recomendaciones basadas en evidencia: diseña tus apuntes con colores y jerarquía visual, utiliza herramientas digitales como Canva o Notion para organizar información, transforma conceptos complejos en dibujos o diagramas, y practica con flashcards visuales. Alterna con estrategias auditivas como explicar en voz alta lo que aprendes.`,
-            `Tu perfil visual es una ventaja competitiva en tu formación académica. Implementa estas estrategias de manera constante y verás una mejora notable en tu rendimiento. Estoy aquí para acompañarte en este proceso.`
-          ],
-          teen: [
-            `Informe Psicopedagógico VAK — ${name}`,
-            `Tras aplicar el instrumento de Diagnóstico VAK (Visual-Auditivo-Kinestésico) y realizar el análisis cuantitativo y cualitativo de tus respuestas, determino que tu perfil de aprendizaje predominante es VISUAL con un ${percentage}% de correspondencia sobre el total de ítems evaluados. Este resultado indica que tu sistema de representación primario procesa información de manera más eficiente a través del canal visual, privilegiando estímulos como imágenes, gráficos, diagramas, mapas conceptuales y códigos cromáticos.`,
-            `Resultados cuantitativos: canal Visual ${counts.visual}/10 — Auditivo ${counts.auditivo}/10 — Kinestésico ${counts.kinestesico}/10. Se observa que tu canal secundario es ${secondName} con ${secondScore}/10, lo que sugiere que posees flexibilidad cognitiva para beneficiarte de estrategias multimodales. La diferencia entre tu canal primario y los secundarios refleja una clara especialización en el procesamiento visual de la información.`,
-            `Fortalezas cognitivas identificadas: capacidad sobresaliente para sintetizar información compleja en representaciones visuales; memoria fotográfica para detalles y patrones; habilidad para establecer relaciones conceptuales mediante organizadores gráficos; pensamiento espacial desarrollado; preferencia por el orden visual y la estética en la presentación de información.`,
-            `Recomendaciones estratégicas fundamentadas en neuroeducación: implementa la técnica de Cornell con códigos de color para la toma de apuntes; utiliza software de mapas mentales como XMind o MindMeister para estructurar conocimientos; complementa tu estudio con infografías, tutoriales visuales y documentales; practica la conversión de información textual a diagramas de flujo o cuadros sinópticos. Integra estrategias de tu canal secundario para maximizar la retención.`,
-            `Como especialista en psicología educativa con enfoque VAK, concluyo que tu perfil visual constituye una ventaja significativa en entornos académicos que demandan procesamiento simbólico y representación gráfica. La implementación sistemática de estas recomendaciones optimizará tu rendimiento y facilitará un aprendizaje más profundo y significativo.`
-          ]
-        },
-        auditivo: {
-          child: [
-            `Informe Psicopedagógico — ${name}`,
-            `¡Qué emoción! Después de completar el Diagnóstico VAK, he descubierto que tu estilo de aprendizaje predominante es AUDITIVO con un ${percentage}% de correspondencia. Esto quiere decir que tu cerebro aprende mejor cuando escuchas, hablas y trabajas con sonidos y palabras. ¡Tu oído es tu superpoder!`,
-            `Resultados: Auditivo ${counts.auditivo}/10 — Visual ${counts.visual}/10 — Kinestésico ${counts.kinestesico}/10. Tu segundo canal más fuerte es ${secondName} con ${secondScore}/10, lo que significa que también puedes aprender combinando con imágenes o movimiento.`,
-            `Tus fortalezas: Tienes una memoria excelente para canciones, rimas y explicaciones; te expresas muy bien y te gusta participar en clase; aprendes fácilmente cuando alguien te explica; disfrutas los cuentos y las conversaciones; eres bueno para recordar instrucciones verbales.`,
-            `Te recomiendo: graba tus clases y escúchalas después, explica en voz alta lo que aprendiste, escucha podcasts educativos, inventa canciones para memorizar, y participa en grupos de estudio donde puedas hablar y discutir.`,
-            `Tu forma de aprender es muy valiosa. Usa estos consejos y verás cómo todo se vuelve más fácil. ¡Estoy muy orgullosa de ti!`
-          ],
-          preteen: [
-            `Informe Psicopedagógico — ${name}`,
-            `Tras analizar tus respuestas en el Diagnóstico VAK, determino que tu estilo de aprendizaje predominante es AUDITIVO con un ${percentage}% de correspondencia. Eres una persona que procesa y retiene información de manera óptima a través del canal auditivo, aprovechando el sonido, la palabra hablada y las explicaciones verbales.`,
-            `Desglose de puntajes: Auditivo ${counts.auditivo}/10 — Visual ${counts.visual}/10 — Kinestésico ${counts.kinestesico}/10. Tu segundo canal más desarrollado es ${secondName} con ${secondScore}/10, lo que amplía tus posibilidades de aprendizaje cuando combinas estrategias.`,
-            `Fortalezas identificadas: Excelente memoria para secuencias verbales y melodías; facilidad para expresar ideas de forma clara y organizada; buena capacidad para seguir instrucciones orales; aprendes eficazmente en discusiones y debates; disfrutas explorar temas a través de podcasts y audiolibros.`,
-            `Estrategias recomendadas: utiliza grabadoras de voz para registrar tus clases y repasarlas, participa activamente en debates y exposiciones, estudia en voz alta explicando los temas como si enseñaras a alguien más, escucha contenido educativo relevante y coméntalo con compañeros. Complementa con resúmenes escritos para reforzar.`,
-            `Tu perfil auditivo es una fortaleza en entornos colaborativos y de diálogo. Aplicando estas estrategias potenciarás tu aprendizaje y te sentirás más seguro en tu proceso académico. Cuenta conmigo para seguir acompañándote.`
-          ],
-          teen: [
-            `Informe Psicopedagógico VAK — ${name}`,
-            `Tras aplicar el instrumento de Diagnóstico VAK (Visual-Auditivo-Kinestésico) y realizar el análisis cuantitativo y cualitativo de tus respuestas, determino que tu perfil de aprendizaje predominante es AUDITIVO con un ${percentage}% de correspondencia. Este resultado indica que tu sistema de representación primario procesa información de manera más eficiente a través del canal auditivo, privilegiando estímulos como la palabra hablada, las explicaciones verbales, los debates y los recursos sonoros.`,
-            `Resultados cuantitativos: Auditivo ${counts.auditivo}/10 — Visual ${counts.visual}/10 — Kinestésico ${counts.kinestesico}/10. Se observa que tu canal secundario es ${secondName} con ${secondScore}/10, lo que sugiere que posees flexibilidad cognitiva para beneficiarte de estrategias multimodales complementarias.`,
-            `Fortalezas cognitivas identificadas: capacidad sobresaliente para procesar y retener información verbal; habilidad para articular ideas con claridad y estructura lógica; memoria auditiva desarrollada para secuencias, ritmos y patrones sonoros; facilidad para el aprendizaje de idiomas y expresión oral; pensamiento dialéctico desarrollado a través de la discusión y el debate.`,
-            `Recomendaciones estratégicas fundamentadas en neuroeducación: implementa la técnica de grabación y repaso auditivo para consolidar contenidos; participa activamente en grupos de discusión y seminarios; utiliza la técnica de Feynman (explicar en voz alta como si enseñaras) para verificar comprensión; complementa tu estudio con podcasts académicos y audiolibros especializados; integra estrategias visuales complementarias como esquemas para reforzar la retención.`,
-            `Como especialista en psicología educativa con enfoque VAK, concluyo que tu perfil auditivo constituye una ventaja significativa en entornos académicos que demandan procesamiento verbal, expresión oral y pensamiento crítico-discursivo. La implementación sistemática de estas recomendaciones optimizará tu rendimiento y facilitará un aprendizaje más profundo y significativo.`
-          ]
-        },
-        kinestesico: {
-          child: [
-            `Informe Psicopedagógico — ${name}`,
-            `¡Qué increíble! Después de hacer el Diagnóstico VAK, descubrí que tu estilo de aprendizaje predominante es KINESTÉSICO con un ${percentage}% de correspondencia. ¡Eres un aprendiz que necesita moverse, tocar y experimentar! Tu cuerpo es parte importante de cómo aprendes.`,
-            `Puntajes obtenidos: Kinestésico ${counts.kinestesico}/10 — Visual ${counts.visual}/10 — Auditivo ${counts.auditivo}/10. Tu segundo canal más desarrollado es ${secondName} con ${secondScore}/10.`,
-            `Tus fortalezas: Aprendes mejor cuando haces las cosas con tus propias manos; tienes mucha energía y coordinación; eres muy bueno para los deportes y actividades físicas; recuerdas mejor lo que has vivido y practicado; eres creativo y te gusta construir cosas.`,
-            `Te recomiendo: toma notas a mano en lugar de escribir en computadora, haz pausas para moverte cada 20 minutos, estudia caminando o de pie, usa materiales como plastilina o maquetas para entender conceptos, y convierte el estudio en un juego o experimento.`,
-            `¡Tu forma de aprender es muy especial! Aprovecha estas estrategias y verás lo fácil que puede ser estudiar cuando usas todo tu cuerpo. ¡Sigue brillando!`
-          ],
-          preteen: [
-            `Informe Psicopedagógico — ${name}`,
-            `Tras analizar tus respuestas en el Diagnóstico VAK, determino que tu estilo de aprendizaje predominante es KINESTÉSICO con un ${percentage}% de correspondencia. Eres una persona que necesita la experiencia práctica y el movimiento para procesar y retener información de manera efectiva.`,
-            `Desglose de puntajes: Kinestésico ${counts.kinestesico}/10 — Visual ${counts.visual}/10 — Auditivo ${counts.auditivo}/10. Tu canal secundario es ${secondName} con ${secondScore}/10, lo que enriquece tu perfil de aprendizaje.`,
-            `Fortalezas identificadas: Excelente coordinación y memoria muscular; facilidad para aprender mediante experimentación y práctica directa; alta energía y capacidad de concentración en actividades físicas; pensamiento creativo aplicado a la resolución de problemas; aprendizaje significativo a través de experiencias concretas.`,
-            `Estrategias recomendadas: toma notas escritas a mano para activar la memoria muscular, realiza pausas activas cada 20-25 minutos, estudia en movimiento (caminando o de pie), utiliza materiales manipulables como maquetas o kits de experimentos, y aplica lo aprendido en proyectos prácticos. Complementa con resúmenes visuales para reforzar.`,
-            `Tu perfil kinestésico es una fortaleza en contextos que requieren aplicación práctica y resolución activa de problemas. Implementa estas recomendaciones y transformarás tu experiencia de aprendizaje. Estoy aquí para apoyarte.`
-          ],
-          teen: [
-            `Informe Psicopedagógico VAK — ${name}`,
-            `Tras aplicar el instrumento de Diagnóstico VAK (Visual-Auditivo-Kinestésico) y realizar el análisis cuantitativo y cualitativo de tus respuestas, determino que tu perfil de aprendizaje predominante es KINESTÉSICO con un ${percentage}% de correspondencia. Este resultado indica que tu sistema de representación primario procesa información de manera más eficiente a través del canal kinestésico, privilegiando la experiencia práctica, el movimiento, la manipulación de objetos y el aprendizaje basado en la acción.`,
-            `Resultados cuantitativos: Kinestésico ${counts.kinestesico}/10 — Visual ${counts.visual}/10 — Auditivo ${counts.auditivo}/10. Se observa que tu canal secundario es ${secondName} con ${secondScore}/10, lo que sugiere que posees flexibilidad cognitiva para complementar tu aprendizaje con estrategias multimodales.`,
-            `Fortalezas cognitivas identificadas: capacidad sobresaliente para el aprendizaje experiencial y la aplicación práctica de conocimientos; excelente coordinación motora y memoria procedimental; facilidad para resolver problemas mediante ensayo y error; pensamiento concreto aplicado a situaciones reales; alta resistencia y concentración en actividades que involucran movimiento y manipulación.`,
-            `Recomendaciones estratégicas fundamentadas en neuroeducación: implementa la técnica de estudio activo alternando períodos de 25 minutos de trabajo con 5 minutos de movimiento; utiliza métodos de aprendizaje basados en proyectos y simulaciones prácticas; transforma conceptos abstractos en experiencias concretas mediante maquetas, laboratorios o prototipos; estudia en espacios que permitan movimiento; complementa con organizadores visuales y discusiones orales para integrar los canales secundarios.`,
-            `Como especialista en psicología educativa con enfoque VAK, concluyo que tu perfil kinestésico constituye una ventaja significativa en entornos de aprendizaje activo y aplicación práctica del conocimiento. La implementación sistemática de estas recomendaciones optimizará tu rendimiento y facilitará un aprendizaje más profundo, significativo y duradero.`
-          ]
-        }
-      };
-
-      return reportSections[styleKey]?.[ageGroup]?.join('\n\n') || 
-        `Hola ${name}, soy Valeria, psicóloga educativa especialista en VAK. Tras analizar tus respuestas, he identificado que tu estilo de aprendizaje predominante es ${styleName} con un ${percentage}% de correspondencia. Tus resultados completos son: Visual ${counts.visual}/10, Auditivo ${counts.auditivo}/10, Kinestésico ${counts.kinestesico}/10. Te recomiendo implementar las estrategias detalladas en este informe para optimizar tu proceso de aprendizaje.`;
-    };
-
-    return buildReport(style);
   };
 
   const renderWelcome = () => (
@@ -1117,7 +828,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
               <div className="w-14 h-14 rounded-2xl bg-[#4DA8C4]/10 flex items-center justify-center mx-auto mb-2">
                 <Clock size={28} strokeWidth={2} className="text-[#4DA8C4]" />
               </div>
-              <p className="text-2xl font-bold text-[#004B63]">3 min</p>
+              <p className="text-2xl font-bold text-[#004B63]">10 min</p>
               <p className="text-xs text-[#004B63]/60">{t('vak.ui.duration')}</p>
             </div>
             <div className="text-center">
@@ -1366,11 +1077,25 @@ const DiagnosticoVAK = ({ onNavigate }) => {
               min="6"
               max="17"
               value={studentAge}
-              onChange={(e) => setStudentAge(e.target.value)}
+              onChange={(e) => {
+                setStudentAge(e.target.value);
+                const val = parseInt(e.target.value);
+                setAgeError(e.target.value.length > 0 && (isNaN(val) || val < 6 || val > 17));
+              }}
               placeholder={t('vak.ui.your_age_placeholder')}
-              className="w-full rounded-2xl border-2 border-[#B2D8E5]/50 bg-white px-5 py-3.5 text-base font-medium text-[#004B63] placeholder-[#004B63]/30 focus:outline-none focus:ring-2 focus:ring-[#4DA8C4]/30 focus:border-[#4DA8C4] transition-all shadow-md"
+              className={`w-full rounded-2xl border-2 bg-white px-5 py-3.5 text-base font-medium text-[#004B63] placeholder-[#004B63]/30 focus:outline-none focus:ring-2 transition-all shadow-md ${
+                ageError
+                  ? 'border-red-400 focus:ring-red-300 focus:border-red-400'
+                  : 'border-[#B2D8E5]/50 focus:ring-[#4DA8C4]/30 focus:border-[#4DA8C4]'
+              }`}
             />
           </div>
+          {ageError && (
+            <p className="text-red-500 text-xs mt-1.5 flex items-center gap-1">
+              <span>⚠</span>
+              <span>{t('vak.ui.error_age_range')}</span>
+            </p>
+          )}
         </motion.div>
 
         {/* Selector de Ánimo */}
@@ -1487,6 +1212,34 @@ const DiagnosticoVAK = ({ onNavigate }) => {
 
       {/* Modal Habeas Data */}
       {showHabeasModal && renderHabeasDataModal()}
+    </div>
+  );
+
+  const renderSkeleton = () => (
+    <div className="max-w-3xl mx-auto p-4">
+      <div className="flex items-center justify-between mb-6">
+        <div className="h-3 w-16 bg-gray-200 rounded-full animate-pulse" />
+        <div className="h-6 w-12 bg-gray-200 rounded-full animate-pulse" />
+      </div>
+      <div className="mb-8">
+        <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+          <div className="h-full w-0 bg-gray-200 rounded-full animate-pulse" />
+        </div>
+      </div>
+      <div className="mb-10">
+        <div className="h-8 w-3/4 bg-gray-200 rounded-lg animate-pulse mb-8" />
+        <div className="space-y-4">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="flex items-center gap-4 p-5 rounded-2xl bg-gray-100 animate-pulse">
+              <div className="w-10 h-10 shrink-0 rounded-xl bg-gray-200" />
+              <div className="flex-1 space-y-2">
+                <div className="h-4 w-3/4 bg-gray-200 rounded" />
+                <div className="h-3 w-1/2 bg-gray-200 rounded" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 
@@ -1683,10 +1436,23 @@ const DiagnosticoVAK = ({ onNavigate }) => {
               <input
                 type="email"
                 value={parentEmail}
-                onChange={(e) => setParentEmail(e.target.value)}
+                onChange={(e) => {
+                  setParentEmail(e.target.value);
+                  setEmailError(e.target.value.length > 0 && !validateEmail(e.target.value));
+                }}
                 placeholder={t('vak.ui.email_placeholder')}
-                className="w-full rounded-2xl border-2 border-[#B2D8E5]/50 bg-white px-5 py-3.5 text-base font-medium text-[#004B63] placeholder-[#004B63]/30 focus:outline-none focus:ring-2 focus:ring-[#4DA8C4]/30 focus:border-[#4DA8C4] transition-all shadow-md"
+                className={`w-full rounded-2xl border-2 bg-white px-5 py-3.5 text-base font-medium text-[#004B63] placeholder-[#004B63]/30 focus:outline-none focus:ring-2 transition-all shadow-md ${
+                  emailError
+                    ? 'border-red-400 focus:ring-red-300 focus:border-red-400'
+                    : 'border-[#B2D8E5]/50 focus:ring-[#4DA8C4]/30 focus:border-[#4DA8C4]'
+                }`}
               />
+              {emailError && (
+                <p className="text-red-500 text-xs mt-1.5 flex items-center gap-1">
+                  <span>⚠</span>
+                  <span>{t('vak.ui.invalid_email') || 'Correo electrónico inválido'}</span>
+                </p>
+              )}
             </motion.div>
           </div>
           
@@ -1707,6 +1473,12 @@ const DiagnosticoVAK = ({ onNavigate }) => {
                     parentPhone: parentPhone.trim(),
                     parentEmail: parentEmail.trim()
                   });
+                  setDiagnosis(prev => prev ? {
+                    ...prev,
+                    parentName: parentName.trim(),
+                    parentPhone: parentPhone.trim(),
+                    parentEmail: parentEmail.trim()
+                  } : prev);
                   setPhase('result');
                 }
               }}
@@ -1736,6 +1508,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     
     const qrUrl = buildResultsURL(diagnosis);
     const StyleIcon = getIconComponent(diagnosis.styleDetails?.icon || 'Eye');
+    const moodFeedback = getMoodFeedback(studentMood, MOOD_OPTIONS);
 
 
     const radarData = [
@@ -1906,7 +1679,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-[#004B63]">{t('vak.ui.mood_section')}</p>
-                    <p className="text-xs text-slate-500">{getMoodLabel(studentMood)}</p>
+                    <p className="text-xs text-slate-500">{getMoodLabel(studentMood, t)}</p>
                   </div>
                 </div>
                 <div className="text-right">
@@ -2018,7 +1791,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
 
         {/* Información adicional */}
         <div className="text-center mt-6">
-          <p className="text-xs text-slate-400 uppercase tracking-wider">{t('vak.ui.total_time')}: {formatTime(diagnosis.timeSpent || elapsedTime)} • {t('vak.ui.mood_section')}: {getMoodLabel(studentMood)}</p>
+          <p className="text-xs text-slate-400 uppercase tracking-wider">{t('vak.ui.total_time')}: {formatTime(diagnosis.timeSpent || elapsedTime)} • {t('vak.ui.mood_section')}: {getMoodLabel(studentMood, t)}</p>
         </div>
       </div>
     );
@@ -2032,9 +1805,28 @@ const DiagnosticoVAK = ({ onNavigate }) => {
         </div>
       );
     }
-    
+
     const StyleIcon = getIconComponent(diagnosis.styleDetails?.icon || 'Eye');
-    
+    const qrUrl = buildResultsURL(diagnosis);
+    const folio = `VAK-${(diagnosis.date || new Date().toISOString().split('T')[0]).replace(/\//g, '')}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+    const genDate = new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    const age = parseInt(diagnosis.studentAge || studentAge) || 12;
+
+    const sColor = diagnosis.predominantStyle === 'visual' ? '#4DA8C4' : diagnosis.predominantStyle === 'auditivo' ? '#66CCCC' : '#E8A838';
+    const sGradient = diagnosis.predominantStyle === 'visual'
+      ? 'linear-gradient(135deg, #4DA8C4 0%, #2D8BA8 50%, #1A5A6E 100%)'
+      : diagnosis.predominantStyle === 'auditivo'
+        ? 'linear-gradient(135deg, #66CCCC 0%, #4DA8C4 50%, #2D8BA8 100%)'
+        : 'linear-gradient(135deg, #E8A838 0%, #D4912A 50%, #B87A1E 100%)';
+
+    const styleIconBg = diagnosis.predominantStyle === 'visual' ? 'rgba(77,168,196,0.12)' : diagnosis.predominantStyle === 'auditivo' ? 'rgba(102,204,204,0.12)' : 'rgba(232,168,56,0.12)';
+
+    const secondPlace = Object.entries(diagnosis.counts || {})
+      .filter(([k]) => k !== diagnosis.predominantStyle)
+      .sort(([, a], [, b]) => b - a)[0];
+    const secondName = secondPlace ? (secondPlace[0] === 'visual' ? 'Visual' : secondPlace[0] === 'auditivo' ? 'Auditivo' : 'Kinestésico') : '';
+    const secondScore = secondPlace ? secondPlace[1] : 0;
+
     return (
       <motion.div
         initial={{ opacity: 0, y: 30 }}
@@ -2042,391 +1834,958 @@ const DiagnosticoVAK = ({ onNavigate }) => {
         transition={{ duration: 0.6, type: 'spring' }}
         className="max-w-4xl mx-auto"
       >
-        {/* Document Preview Container - Print Optimized - Compact */}
         <div id="document-preview-content" style={{
           backgroundColor: '#ffffff',
-          padding: '30px',
-          fontFamily: 'Montserrat, sans-serif',
+          padding: '0',
+          fontFamily: 'Montserrat, system-ui, sans-serif',
           color: '#334155',
           lineHeight: '1.5',
           fontSize: '13px'
         }}>
-          {/* Header - Compact */}
+          {/* ======== COVER PAGE ======== */}
           <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingBottom: '15px',
-            borderBottom: '2px solid #4DA8C4',
-            marginBottom: '20px'
+            background: 'linear-gradient(135deg, #004B63 0%, #1A5A6E 100%)',
+            padding: '60px 40px 40px',
+            textAlign: 'center',
+            position: 'relative',
+            overflow: 'hidden'
           }}>
-            <div>
-              <h1 style={{
-                color: '#004B63',
-                margin: '0 0 3px 0',
-                fontSize: '20px',
-                fontWeight: '800'
-              }}>{t('vak.ui.pdf_title')}</h1>
-              <p style={{
-                margin: 0,
-                color: '#64748B',
-                fontSize: '11px'
-              }}>{t('vak.ui.pdf_company')}</p>
+            <div style={{
+              position: 'absolute',
+              top: '-60px',
+              right: '-60px',
+              width: '200px',
+              height: '200px',
+              borderRadius: '50%',
+              background: 'rgba(77,168,196,0.08)',
+              pointerEvents: 'none'
+            }} />
+            <div style={{
+              position: 'absolute',
+              bottom: '-40px',
+              left: '-40px',
+              width: '160px',
+              height: '160px',
+              borderRadius: '50%',
+              background: 'rgba(102,204,204,0.06)',
+              pointerEvents: 'none'
+            }} />
+            <img
+              src="/images/logo-edutechlife.webp"
+              alt="Edutechlife"
+              style={{ height: '52px', width: 'auto', marginBottom: '24px' }}
+            />
+            <div style={{
+              display: 'inline-block',
+              padding: '4px 16px',
+              border: '1.5px solid rgba(255,255,255,0.25)',
+              borderRadius: '20px',
+              color: 'rgba(255,255,255,0.7)',
+              fontSize: '10px',
+              letterSpacing: '2px',
+              textTransform: 'uppercase',
+              marginBottom: '20px'
+            }}>{t('vak.ui.pdf_company')}</div>
+            <h1 style={{
+              color: '#ffffff',
+              margin: '0 0 8px 0',
+              fontSize: '28px',
+              fontWeight: '900',
+              letterSpacing: '0.5px'
+            }}>{t('vak.ui.pdf_title')}</h1>
+            <div style={{
+              width: '60px',
+              height: '3px',
+              background: '#4DA8C4',
+              margin: '16px auto',
+              borderRadius: '2px'
+            }} />
+            <p style={{
+              color: 'rgba(255,255,255,0.8)',
+              fontSize: '13px',
+              margin: '0 0 4px 0'
+            }}>{diagnosis.studentName}</p>
+            <p style={{
+              color: 'rgba(255,255,255,0.5)',
+              fontSize: '10px',
+              margin: '24px 0 0 0'
+            }}>{genDate}</p>
+            <div style={{
+              marginTop: '32px',
+              padding: '12px 20px',
+              display: 'inline-block',
+              borderTop: '1px solid rgba(255,255,255,0.12)',
+              color: 'rgba(255,255,255,0.4)',
+              fontSize: '9px',
+              letterSpacing: '1px',
+              textTransform: 'uppercase'
+            }}>Documento Confidencial — Folio {folio}</div>
+          </div>
+
+          {/* ======== HEADER ======== */}
+          <div style={{
+            background: 'linear-gradient(135deg, #004B63 0%, #1A5A6E 100%)',
+            padding: '18px 28px',
+            borderBottom: '3px solid #4DA8C4'
+          }}>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <img
+                  src="/images/logo-edutechlife.webp"
+                  alt="Edutechlife"
+                  style={{ height: '28px', width: 'auto' }}
+                />
+                <div style={{ borderLeft: '1.5px solid rgba(255,255,255,0.2)', paddingLeft: '12px' }}>
+                  <p style={{
+                    margin: 0,
+                    color: '#ffffff',
+                    fontSize: '13px',
+                    fontWeight: '700',
+                    letterSpacing: '0.3px'
+                  }}>{t('vak.ui.pdf_title')}</p>
+                  <p style={{
+                    margin: '1px 0 0 0',
+                    color: 'rgba(255,255,255,0.6)',
+                    fontSize: '10px',
+                    fontWeight: '400'
+                  }}>{t('vak.ui.pdf_company')}</p>
+                </div>
+              </div>
+              <div style={{ textAlign: 'right' }}>
+                <p style={{
+                  margin: 0,
+                  color: 'rgba(255,255,255,0.45)',
+                  fontSize: '8px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1.5px'
+                }}>Folio</p>
+                <p style={{
+                  margin: '1px 0 2px 0',
+                  color: '#4DA8C4',
+                  fontSize: '10px',
+                  fontWeight: '700',
+                  fontFamily: 'monospace'
+                }}>{folio}</p>
+                <p style={{
+                  margin: 0,
+                  color: 'rgba(255,255,255,0.6)',
+                  fontSize: '9px'
+                }}>{diagnosis.date || new Date().toLocaleDateString()}</p>
+              </div>
             </div>
-            <div style={{ textAlign: 'right' }}>
+          </div>
+
+          <div style={{ padding: '20px 28px', position: 'relative' }}>
+
+            {/* ======== SELLO DE AUTENTICIDAD (watermark) ======== */}
+            <div style={{
+              position: 'absolute',
+              top: '180px',
+              right: '40px',
+              width: '90px',
+              height: '90px',
+              borderRadius: '50%',
+              border: '2.5px solid rgba(77,168,196,0.15)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              opacity: 0.6,
+              pointerEvents: 'none',
+              zIndex: 1
+            }}>
               <div style={{
-                width: '50px',
-                height: '50px',
-                background: 'linear-gradient(135deg, #4DA8C4, #66CCCC)',
-                borderRadius: '10px',
+                width: '76px',
+                height: '76px',
+                borderRadius: '50%',
+                border: '1.5px solid rgba(77,168,196,0.1)',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center'
+                justifyContent: 'center',
+                flexDirection: 'column'
               }}>
-                <span style={{ color: 'white', fontSize: '20px', fontWeight: 'bold' }}>VAK</span>
+                <span style={{ color: '#4DA8C4', fontSize: '6px', fontWeight: '700', letterSpacing: '1px', textTransform: 'uppercase' }}>Certificado</span>
+                <span style={{ color: '#004B63', fontSize: '5px', fontWeight: '600', letterSpacing: '0.5px', marginTop: '1px', textTransform: 'uppercase' }}>VAK</span>
               </div>
             </div>
-          </div>
 
-          {/* Student & Parent Data - Side by side - Compact */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '15px',
-            marginBottom: '20px'
-          }}>
-            {/* Student Data - Compact */}
+            {/* ======== NOTA CONFIDENCIALIDAD ======== */}
             <div style={{
+              padding: '10px 14px',
               background: '#F8FAFC',
-              padding: '12px',
-              borderRadius: '8px'
-            }}>
-              <h3 style={{
-                color: '#004B63',
-                margin: '0 0 8px 0',
-                fontSize: '11px',
-                textTransform: 'uppercase',
-                letterSpacing: '1px',
-                borderBottom: '1px solid #E2E8F0',
-                paddingBottom: '6px'
-              }}>{t('vak.ui.pdf_student_section')}</h3>
-              <div style={{ fontSize: '12px', marginBottom: '4px' }}>
-                <span style={{ color: '#64748B', marginRight: '5px' }}>{t('vak.ui.pdf_name')}:</span>
-                <span style={{ color: '#004B63', fontWeight: '600' }}>{diagnosis.studentName}</span>
-              </div>
-              <div style={{ fontSize: '12px', marginBottom: '4px' }}>
-                <span style={{ color: '#64748B', marginRight: '5px' }}>{t('vak.ui.pdf_age')}:</span>
-                <span style={{ color: '#004B63' }}>{diagnosis.studentAge || studentAge || 'N/A'} {t('vak.ui.years')}</span>
-              </div>
-              <div style={{ fontSize: '12px', marginBottom: '4px' }}>
-                <span style={{ color: '#64748B', marginRight: '5px' }}>{t('vak.ui.pdf_date')}:</span>
-                <span style={{ color: '#004B63' }}>{diagnosis.date}</span>
-              </div>
-              <div style={{ fontSize: '12px' }}>
-                <span style={{ color: '#64748B', marginRight: '5px' }}>{t('vak.ui.pdf_mood')}:</span>
-                  <span style={{ color: '#004B63' }}>{getMoodLabel(diagnosis.studentMood || studentMood)}</span>
-              </div>
-            </div>
-
-            {/* Parent Data - Compact */}
-            <div style={{
-              background: '#F0FDFF',
-              padding: '12px',
-              borderRadius: '8px'
-            }}>
-              <h3 style={{
-                color: '#004B63',
-                margin: '0 0 8px 0',
-                fontSize: '11px',
-                textTransform: 'uppercase',
-                letterSpacing: '1px',
-                borderBottom: '1px solid #E2E8F0',
-                paddingBottom: '6px'
-              }}>{t('vak.ui.pdf_guardian_section')}</h3>
-              <div style={{ fontSize: '12px', marginBottom: '4px' }}>
-                <span style={{ color: '#64748B', marginRight: '5px' }}>{t('vak.ui.pdf_name')}:</span>
-                <span style={{ color: '#004B63' }}>{parentName || 'N/A'}</span>
-              </div>
-              <div style={{ fontSize: '12px', marginBottom: '4px' }}>
-                <span style={{ color: '#64748B', marginRight: '5px' }}>{t('vak.ui.contact_phone_label')}:</span>
-                <span style={{ color: '#004B63' }}>{parentPhone || 'N/A'}</span>
-              </div>
-              <div style={{ fontSize: '12px' }}>
-                <span style={{ color: '#64748B', marginRight: '5px' }}>{t('vak.ui.email_label')}:</span>
-                <span style={{ color: '#004B63' }}>{parentEmail || 'N/A'}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Main Result - Lighter background for better readability */}
-          <div style={{
-            margin: '20px 0',
-            padding: '20px',
-            background: 'linear-gradient(135deg, #4DA8C4 0%, #66CCCC 100%)',
-            borderRadius: '12px',
-            textAlign: 'center',
-            color: 'white'
-          }}>
-            <p style={{ margin: '0 0 8px 0', color: 'rgba(255,255,255,0.9)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '2px' }}>{t('vak.ui.pdf_learning_profile')}</p>
-            <h2 style={{ margin: '0 0 10px 0', fontSize: '28px', fontWeight: '800' }}>{diagnosis.styleDetails?.name}</h2>
-            <div style={{ fontSize: '48px', fontWeight: '800', margin: '8px 0' }}>{diagnosis.percentage}%</div>
-            <p style={{ margin: 0, opacity: 0.9, fontSize: '13px', lineHeight: '1.4' }}>{diagnosis.styleDetails?.description}</p>
-          </div>
-
-          {/* Scores - Compact horizontal layout */}
-          <div style={{
-            display: 'flex',
-            gap: '10px',
-            marginBottom: '20px'
-          }}>
-            <div style={{
-              flex: 1,
-              padding: '10px',
-              border: '1.5px solid #4DA8C4',
               borderRadius: '8px',
-              textAlign: 'center'
+              border: '1px solid #E8EDF2',
+              marginBottom: '20px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
             }}>
-              <div style={{ fontSize: '11px', color: '#4DA8C4', fontWeight: 'bold', marginBottom: '3px' }}>VISUAL</div>
-              <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#4DA8C4' }}>{diagnosis.counts?.visual || 0}<span style={{ fontSize: '12px', color: '#64748B' }}>/10</span></div>
+              <span dangerouslySetInnerHTML={{ __html: SVG_ICONS.lock }} />
+              <span style={{ color: '#94A3B8', fontSize: '9px', lineHeight: '1.4' }}>
+                Este informe ha sido preparado exclusivamente para {parentName || diagnosis.parentName || 'el acudiente'} y {diagnosis.studentName}. Prohibida su reproducción sin autorización de Edutechlife.
+              </span>
             </div>
+
+            {/* ======== DATOS ESTUDIANTE Y ACUDIENTE ======== */}
             <div style={{
-              flex: 1,
-              padding: '10px',
-              border: '1.5px solid #66CCCC',
-              borderRadius: '8px',
-              textAlign: 'center'
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '14px',
+              marginBottom: '20px'
             }}>
-              <div style={{ fontSize: '11px', color: '#66CCCC', fontWeight: 'bold', marginBottom: '3px' }}>AUDITIVO</div>
-              <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#66CCCC' }}>{diagnosis.counts?.auditivo || 0}<span style={{ fontSize: '12px', color: '#64748B' }}>/10</span></div>
-            </div>
-            <div style={{
-              flex: 1,
-              padding: '10px',
-              border: '1.5px solid #B2D8E5',
-              borderRadius: '8px',
-              textAlign: 'center'
-            }}>
-              <div style={{ fontSize: '11px', color: '#B2D8E5', fontWeight: 'bold', marginBottom: '3px' }}>KINESTÉSICO</div>
-              <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#4DA8C4' }}>{diagnosis.counts?.kinestesico || 0}<span style={{ fontSize: '12px', color: '#64748B' }}>/10</span></div>
-            </div>
-          </div>
-
-          {/* Análisis de Resultados — Nuevo */}
-          <div style={{
-            padding: '12px',
-            background: '#F8FAFC',
-            borderRadius: '8px',
-            border: '1px solid #E2E8F0',
-            marginBottom: '20px'
-          }}>
-            <h4 style={{
-              color: '#004B63',
-              margin: '0 0 8px 0',
-              fontSize: '13px',
-              borderBottom: '1.5px solid #4DA8C4',
-              paddingBottom: '5px'
-            }}>{t('vak.ui.pdf_analysis')}</h4>
-            <p style={{ margin: 0, color: '#334155', fontSize: '11px', lineHeight: '1.5' }}>
-              {diagnosis.predominantStyle === 'visual' && `El canal Visual obtuvo ${diagnosis.counts?.visual || 0} de 10 puntos, siendo el sistema de representación dominante. Esto indica que el estudiante procesa información de manera óptima a través de imágenes, gráficos y organizadores visuales.`}
-              {diagnosis.predominantStyle === 'auditivo' && `El canal Auditivo obtuvo ${diagnosis.counts?.auditivo || 0} de 10 puntos, siendo el sistema de representación dominante. Esto indica que el estudiante procesa información de manera óptima a través de la palabra hablada, explicaciones verbales y recursos sonoros.`}
-              {diagnosis.predominantStyle === 'kinestesico' && `El canal Kinestésico obtuvo ${diagnosis.counts?.kinestesico || 0} de 10 puntos, siendo el sistema de representación dominante. Esto indica que el estudiante procesa información de manera óptima a través de la experiencia práctica, el movimiento y la manipulación de objetos.`}
-              {' '}Los puntajes secundarios complementan el perfil, sugiriendo que aunque existe una especialización clara, el estudiante puede beneficiarse de estrategias multimodales para enriquecer su aprendizaje. Se recomienda priorizar las estrategias del estilo predominante sin descuidar los canales secundarios.
-            </p>
-          </div>
-
-          {/* 2-Column Layout for Content - Enhanced */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '15px',
-            marginBottom: '20px'
-          }}>
-            {/* Left Column */}
-            <div>
-              {/* Características - All items */}
-              <div style={{ marginBottom: '15px' }}>
-                <h4 style={{
-                  color: '#004B63',
-                  marginBottom: '8px',
-                  fontSize: '13px',
-                  borderBottom: '1.5px solid #4DA8C4',
-                  paddingBottom: '5px'
-                }}>{t('vak.ui.pdf_style_features')}</h4>
-                <div style={{ fontSize: '11px' }}>
-                  {getCaracteristicasEstilo(diagnosis.predominantStyle).map((c, i) => (
-                    <div key={i} style={{ marginBottom: '4px', display: 'flex', alignItems: 'flex-start', gap: '6px' }}>
-                      <span style={{ color: '#4DA8C4', fontWeight: 'bold', fontSize: '14px', lineHeight: '1.3' }}>•</span>
-                      <span>{c}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Fortalezas del Estilo */}
               <div style={{
-                padding: '10px',
-                background: 'linear-gradient(135deg, rgba(77,168,196,0.08), rgba(102,204,204,0.08))',
-                borderRadius: '8px',
-                borderLeft: '3px solid #4DA8C4'
+                background: '#ffffff',
+                padding: '14px',
+                borderRadius: '12px',
+                boxShadow: '0 4px 20px rgba(0,75,99,0.06)',
+                border: '1px solid #E8F0F3'
               }}>
-                <h4 style={{
+                <h3 style={{
                   color: '#004B63',
-                  margin: '0 0 6px 0',
-                  fontSize: '11px',
+                  margin: '0 0 10px 0',
+                  fontSize: '10px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1.5px',
+                  borderBottom: '2px solid #4DA8C4',
+                  paddingBottom: '7px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}>
+                  <span dangerouslySetInnerHTML={{ __html: SVG_ICONS.user }} />
+                  {t('vak.ui.pdf_student_section')}
+                </h3>
+                <div style={{ fontSize: '11px', marginBottom: '5px', display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: '#64748B' }}>{t('vak.ui.pdf_name')}:</span>
+                  <span style={{ color: '#004B63', fontWeight: '600' }}>{diagnosis.studentName}</span>
+                </div>
+                <div style={{ fontSize: '11px', marginBottom: '5px', display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: '#64748B' }}>{t('vak.ui.pdf_age')}:</span>
+                  <span style={{ color: '#004B63' }}>{diagnosis.studentAge || studentAge || 'N/A'} {t('vak.ui.years')}</span>
+                </div>
+                <div style={{ fontSize: '11px', marginBottom: '5px', display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: '#64748B' }}>Email:</span>
+                  <span style={{ color: '#004B63' }}>{diagnosis.studentEmail || studentEmail || '—'}</span>
+                </div>
+                <div style={{ fontSize: '11px', display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: '#64748B' }}>{t('vak.ui.pdf_mood')}:</span>
+                  <span style={{ color: '#004B63' }}>{getMoodLabel(diagnosis.studentMood || studentMood, t)}</span>
+                </div>
+              </div>
+
+              <div style={{
+                background: 'linear-gradient(135deg, #F8FCFF, #F0FDFF)',
+                padding: '14px',
+                borderRadius: '12px',
+                boxShadow: '0 4px 20px rgba(77,168,196,0.07)',
+                border: '1px solid #D6EEF5'
+              }}>
+                <h3 style={{
+                  color: '#004B63',
+                  margin: '0 0 10px 0',
+                  fontSize: '10px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1.5px',
+                  borderBottom: '2px solid #66CCCC',
+                  paddingBottom: '7px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}>
+                  <span dangerouslySetInnerHTML={{ __html: SVG_ICONS.users }} />
+                  {t('vak.ui.pdf_guardian_section')}
+                </h3>
+                <div style={{ fontSize: '11px', marginBottom: '5px', display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: '#64748B' }}>{t('vak.ui.pdf_name')}:</span>
+                  <span style={{ color: '#004B63', fontWeight: '600' }}>{parentName || diagnosis.parentName || 'N/A'}</span>
+                </div>
+                <div style={{ fontSize: '11px', marginBottom: '5px', display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: '#64748B' }}>{t('vak.ui.contact_phone_label')}:</span>
+                  <span style={{ color: '#004B63' }}>{parentPhone || diagnosis.parentPhone || 'N/A'}</span>
+                </div>
+                <div style={{ fontSize: '11px', display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: '#64748B' }}>{t('vak.ui.email_label')}:</span>
+                  <span style={{ color: '#004B63' }}>{parentEmail || diagnosis.parentEmail || 'N/A'}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* ======== SEPARADOR ======== */}
+            <div style={{
+              height: '1px',
+              background: 'linear-gradient(to right, transparent, #4DA8C4, transparent)',
+              margin: '0 0 20px 0',
+              opacity: 0.3
+            }} />
+
+            {/* ======== HERO RESULTADO PRINCIPAL ======== */}
+            <div style={{
+              position: 'relative',
+              margin: '0 0 20px 0',
+              padding: '28px 24px',
+              background: sGradient,
+              borderRadius: '16px',
+              textAlign: 'center',
+              color: 'white',
+              boxShadow: '0 8px 40px rgba(77,168,196,0.2)'
+            }}>
+              {/* Sello de autenticidad en hero */}
+              <div style={{
+                position: 'absolute',
+                top: '12px',
+                right: '12px',
+                width: '52px',
+                height: '52px',
+                borderRadius: '50%',
+                border: '2px solid rgba(255,255,255,0.25)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column',
+                opacity: 0.8
+              }}>
+                <span style={{
+                  color: '#ffffff',
+                  fontSize: '6px',
+                  fontWeight: '700',
+                  letterSpacing: '0.8px',
+                  textTransform: 'uppercase',
+                  lineHeight: '1.2'
+                }}>Oficial</span>
+                <div style={{
+                  width: '16px',
+                  height: '1.5px',
+                  background: 'rgba(255,255,255,0.4)',
+                  margin: '2px 0'
+                }} />
+                <span style={{
+                  color: 'rgba(255,255,255,0.8)',
+                  fontSize: '5px',
+                  fontWeight: '600',
+                  letterSpacing: '0.5px',
                   textTransform: 'uppercase'
-                }}>{t('vak.ui.pdf_identified_strengths')}</h4>
-                <div style={{ fontSize: '10px', lineHeight: '1.4' }}>
-                  {diagnosis.predominantStyle === 'visual' && (
-                    <>El estudiante posee una capacidad natural para procesar información visual, destacando en: memoria fotográfica, organización espacial, atención al detalle, síntesis gráfica de conceptos, y aprendizaje mediante observación. Estas fortalezas le permiten destacar en entornos que requieren análisis visual y pensamiento estructurado.</>
-                  )}
-                  {diagnosis.predominantStyle === 'auditivo' && (
-                    <>El estudiante posee una capacidad natural para procesar información auditiva, destacando en: memoria verbal, expresión oral estructurada, aprendizaje mediante diálogo, facilidad para idiomas, y retención de secuencias sonoras. Estas fortalezas le permiten destacar en entornos colaborativos y de comunicación verbal.</>
-                  )}
-                  {diagnosis.predominantStyle === 'kinestesico' && (
-                    <>El estudiante posee una capacidad natural para el aprendizaje experiencial, destacando en: coordinación motora, aprendizaje mediante práctica directa, resolución activa de problemas, pensamiento concreto, y memoria procedimental. Estas fortalezas le permiten destacar en entornos que requieren aplicación práctica y experimentación.</>
-                  )}
-                </div>
+                }}>Verificado</span>
               </div>
+
+              <div style={{
+                width: '52px',
+                height: '52px',
+                margin: '0 auto 10px',
+                background: 'rgba(255,255,255,0.18)',
+                borderRadius: '14px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backdropFilter: 'blur(4px)'
+              }}>
+                <StyleIcon size={26} strokeWidth={2} color="white" />
+              </div>
+              <p style={{
+                margin: '0 0 4px 0',
+                color: 'rgba(255,255,255,0.8)',
+                fontSize: '9px',
+                textTransform: 'uppercase',
+                letterSpacing: '3px',
+                fontWeight: '600'
+              }}>{t('vak.ui.pdf_learning_profile')}</p>
+              <h2 style={{
+                margin: '0 0 2px 0',
+                fontSize: '24px',
+                fontWeight: '800',
+                letterSpacing: '0.5px'
+              }}>{diagnosis.styleDetails?.name}</h2>
+              <div style={{
+                fontSize: '48px',
+                fontWeight: '900',
+                margin: '6px 0',
+                textShadow: '0 4px 20px rgba(0,0,0,0.12)',
+                lineHeight: '1'
+              }}>{diagnosis.percentage}%</div>
+              <div style={{
+                width: `${Math.min(diagnosis.percentage || 0, 100)}%`,
+                maxWidth: '260px',
+                height: '5px',
+                margin: '6px auto 10px',
+                background: 'rgba(255,255,255,0.3)',
+                borderRadius: '3px',
+                overflow: 'hidden'
+              }}>
+                <div style={{
+                  height: '100%',
+                  width: '100%',
+                  background: 'rgba(255,255,255,0.65)',
+                  borderRadius: '3px'
+                }} />
+              </div>
+              <p style={{
+                margin: 0,
+                opacity: 0.9,
+                fontSize: '12px',
+                lineHeight: '1.5',
+                maxWidth: '440px',
+                marginLeft: 'auto',
+                marginRight: 'auto'
+              }}>{diagnosis.styleDetails?.description}</p>
             </div>
 
-            {/* Right Column */}
-            <div>
-              {/* Estrategias - All items */}
-              <div style={{ marginBottom: '15px' }}>
-                <h4 style={{
-                  color: '#004B63',
-                  marginBottom: '8px',
-                  fontSize: '13px',
-                  borderBottom: '1.5px solid #4DA8C4',
-                  paddingBottom: '5px'
-                }}>{t('vak.ui.pdf_study_strategies')}</h4>
-                <ol style={{ paddingLeft: '16px', margin: 0, fontSize: '11px', lineHeight: '1.5' }}>
-                  {(diagnosis.styleDetails?.strategies || []).map((s, i) => (
-                    <li key={i} style={{ marginBottom: '4px' }}>{s}</li>
-                  ))}
-                </ol>
-              </div>
-
-              {/* Recommended Careers - All items */}
-              <div>
-                <h4 style={{
-                  color: '#004B63',
-                  marginBottom: '8px',
-                  fontSize: '13px',
-                  borderBottom: '1.5px solid #66CCCC',
-                  paddingBottom: '5px'
-                }}>{t('vak.ui.pdf_recommended_careers')}</h4>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
-                  {getCarrerasRecomendadas(diagnosis.predominantStyle).map((c, i) => (
-                    <span key={i} style={{
-                      padding: '4px 8px',
-                      background: '#F0FDFF',
-                      borderRadius: '12px',
-                      color: '#004B63',
-                      fontSize: '10px',
-                      fontWeight: '500',
-                      border: '1px solid #B2D8E5'
-                    }}>{c}</span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Tips para Padres - All items standalone */}
-          <div style={{
-            padding: '12px',
-            background: 'linear-gradient(135deg, rgba(77,168,196,0.06), rgba(102,204,204,0.06))',
-            borderRadius: '8px',
-            borderLeft: '3px solid #66CCCC',
-            marginBottom: '20px'
-          }}>
-            <h4 style={{
-              color: '#004B63',
-              margin: '0 0 8px 0',
-              fontSize: '12px',
-              borderBottom: '1px solid #E2E8F0',
-              paddingBottom: '5px'
-            }}>{t('vak.ui.pdf_parent_tips')}</h4>
-            <div style={{ fontSize: '11px', lineHeight: '1.5' }}>
-              {getTipsPadres(diagnosis.predominantStyle).map((t, i) => (
-                <div key={i} style={{ marginBottom: '4px', display: 'flex', alignItems: 'flex-start', gap: '6px' }}>
-                  <span style={{ color: '#66CCCC', fontWeight: 'bold', fontSize: '14px', lineHeight: '1.3' }}>•</span>
-                  <span>{t}</span>
+            {/* ======== PUNTAJES CON BARRA DE PROGRESO ======== */}
+            <div style={{
+              display: 'flex',
+              gap: '10px',
+              marginBottom: '20px'
+            }}>
+              {[
+                { label: 'VISUAL', score: diagnosis.counts?.visual || 0, color: '#4DA8C4', bg: 'linear-gradient(180deg, rgba(77,168,196,0.08) 0%, rgba(77,168,196,0.02) 100%)', border: 'rgba(77,168,196,0.2)', isDominant: diagnosis.predominantStyle === 'visual' },
+                { label: 'AUDITIVO', score: diagnosis.counts?.auditivo || 0, color: '#66CCCC', bg: 'linear-gradient(180deg, rgba(102,204,204,0.08) 0%, rgba(102,204,204,0.02) 100%)', border: 'rgba(102,204,204,0.2)', isDominant: diagnosis.predominantStyle === 'auditivo' },
+                { label: 'KINESTÉSICO', score: diagnosis.counts?.kinestesico || 0, color: '#E8A838', bg: 'linear-gradient(180deg, rgba(232,168,56,0.08) 0%, rgba(232,168,56,0.02) 100%)', border: 'rgba(232,168,56,0.2)', isDominant: diagnosis.predominantStyle === 'kinestesico' }
+              ].map((item, i) => (
+                <div key={i} style={{
+                  flex: 1,
+                  padding: '12px 10px',
+                  background: item.bg,
+                  borderRadius: '12px',
+                  border: `1.5px solid ${item.isDominant ? item.color : item.border}`,
+                  textAlign: 'center',
+                  position: 'relative',
+                  overflow: 'hidden'
+                }}>
+                  {item.isDominant && (
+                    <div style={{
+                      position: 'absolute',
+                      top: 0,
+                      right: 0,
+                      width: '0',
+                      height: '0',
+                      borderStyle: 'solid',
+                      borderWidth: '0 20px 20px 0',
+                      borderColor: `transparent ${item.color} transparent transparent`
+                    }}>
+                      <span style={{
+                        position: 'absolute',
+                        top: '3px',
+                        right: '-16px',
+                        color: 'white',
+                        fontSize: '7px',
+                        fontWeight: '700'
+                      }}>✓</span>
+                    </div>
+                  )}
+                  <div style={{
+                    fontSize: '9px',
+                    color: item.color,
+                    fontWeight: '700',
+                    marginBottom: '5px',
+                    letterSpacing: '1.5px'
+                  }}>{item.label}</div>
+                  <div style={{
+                    fontSize: '26px',
+                    fontWeight: '800',
+                    color: item.color,
+                    lineHeight: '1'
+                  }}>{item.score}<span style={{ fontSize: '11px', color: '#94A3B8', fontWeight: '400' }}>/10</span></div>
+                  <div style={{
+                    marginTop: '7px',
+                    height: '3px',
+                    background: '#E8EDF0',
+                    borderRadius: '2px',
+                    overflow: 'hidden'
+                  }}>
+                    <div style={{
+                      height: '100%',
+                      width: `${(item.score / 10) * 100}%`,
+                      background: item.color,
+                      borderRadius: '2px',
+                      transition: 'width 0.5s ease'
+                    }} />
+                  </div>
                 </div>
               ))}
             </div>
-          </div>
 
-          {/* Valeria's Commentary - Expanded */}
-          <div style={{
-            padding: '15px',
-            background: 'linear-gradient(135deg, rgba(102,204,204,0.1), rgba(77,168,196,0.1))',
-            borderRadius: '8px',
-            borderLeft: '3px solid #66CCCC',
-            marginBottom: '15px'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
+            {/* ======== ANÁLISIS PREMIUM ======== */}
+            <div style={{
+              padding: '18px 18px 18px 22px',
+              background: 'linear-gradient(135deg, #F8FAFC, #F0FDFF)',
+              borderRadius: '12px',
+              borderLeft: `4px solid ${sColor}`,
+              marginBottom: '20px',
+              position: 'relative',
+              boxShadow: '0 2px 12px rgba(77,168,196,0.06)'
+            }}>
               <div style={{
-                width: '36px',
-                height: '36px',
-                background: 'linear-gradient(135deg, #4DA8C4, #66CCCC)',
-                borderRadius: '50%',
+                position: 'absolute',
+                top: '4px',
+                left: '10px',
+                fontSize: '36px',
+                color: sColor,
+                opacity: 0.15,
+                fontFamily: 'Georgia, serif',
+                lineHeight: '1',
+                userSelect: 'none',
+                pointerEvents: 'none'
+              }}>{"\u201C"}</div>
+              <h4 style={{
+                color: '#004B63',
+                margin: '0 0 6px 0',
+                fontSize: '12px',
+                fontWeight: '700'
+              }}>{t('vak.ui.pdf_analysis')}</h4>
+              <p style={{
+                margin: 0,
+                color: '#334155',
+                fontSize: '11px',
+                lineHeight: '1.7',
+                fontStyle: 'italic'
+              }}>
+                {age <= 10 ? (
+                  <>
+                    {diagnosis.predominantStyle === 'visual' && `¡Hola! Después de analizar tus respuestas, descubrimos que aprendes mejor cuando PUEDES VER las cosas. Obtuviste ${diagnosis.counts?.visual || 0} de 10 en el canal Visual, ¡y ese es tu superpoder! También tienes habilidades en ${secondName.toLowerCase()} (${secondScore}/10). Te recomendamos usar dibujos, colores y videos para aprender más fácil.`}
+                    {diagnosis.predominantStyle === 'auditivo' && `¡Qué emoción! Descubrimos que aprendes mejor cuando ESCUCHAS y HABLAS. Obtuviste ${diagnosis.counts?.auditivo || 0} de 10 en el canal Auditivo, ¡y ese es tu superpoder! También tienes habilidades en ${secondName.toLowerCase()} (${secondScore}/10). Te recomendamos escuchar canciones, grabar tus clases y explicar en voz alta lo que aprendes.`}
+                    {diagnosis.predominantStyle === 'kinestesico' && `¡Increíble! Descubrimos que aprendes mejor cuando te MUEVES y PRACTICAS. Obtuviste ${diagnosis.counts?.kinestesico || 0} de 10 en el canal Kinestésico, ¡y ese es tu superpoder! También tienes habilidades en ${secondName.toLowerCase()} (${secondScore}/10). Te recomendamos tomar notas a mano, hacer pausas activas y aprender haciendo proyectos.`}
+                  </>
+                ) : (
+                  <>
+                    {diagnosis.predominantStyle === 'visual' && `El canal Visual obtuvo ${diagnosis.counts?.visual || 0} de 10 puntos, siendo el sistema de representación dominante. El canal secundario es ${secondName} con ${secondScore}/10 puntos. Esto indica que ${diagnosis.studentName} procesa información de manera óptima a través de imágenes, gráficos y organizadores visuales, complementado por su canal secundario que enriquece su versatilidad cognitiva.`}
+                    {diagnosis.predominantStyle === 'auditivo' && `El canal Auditivo obtuvo ${diagnosis.counts?.auditivo || 0} de 10 puntos, siendo el sistema de representación dominante. El canal secundario es ${secondName} con ${secondScore}/10 puntos. Esto indica que ${diagnosis.studentName} procesa información de manera óptima a través de la palabra hablada, explicaciones verbales y recursos sonoros, complementado por su canal secundario.`}
+                    {diagnosis.predominantStyle === 'kinestesico' && `El canal Kinestésico obtuvo ${diagnosis.counts?.kinestesico || 0} de 10 puntos, siendo el sistema de representación dominante. El canal secundario es ${secondName} con ${secondScore}/10 puntos. Esto indica que ${diagnosis.studentName} procesa información de manera óptima a través de la experiencia práctica, el movimiento y la manipulación de objetos, complementado por su canal secundario.`}
+                  </>
+                )}
+              </p>
+              <p style={{
+                margin: '8px 0 0 0',
+                color: '#64748B',
+                fontSize: '10px',
+                lineHeight: '1.5',
+                borderTop: '1px solid #E2E8F0',
+                paddingTop: '8px'
+              }}>
+                Los puntajes secundarios complementan el perfil, sugiriendo que aunque existe una especialización clara, {diagnosis.studentName} puede beneficiarse de estrategias multimodales para enriquecer su aprendizaje. Se recomienda priorizar las estrategias del estilo predominante sin descuidar los canales secundarios.
+              </p>
+            </div>
+
+            {/* ======== CONTENIDO A 2 COLUMNAS ======== */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '14px',
+              marginBottom: '20px'
+            }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <div style={{
+                  background: '#ffffff',
+                  borderRadius: '12px',
+                  padding: '14px',
+                  boxShadow: '0 4px 20px rgba(0,75,99,0.05)',
+                  border: '1px solid #E8F0F3'
+                }}>
+                  <h4 style={{
+                    color: '#004B63',
+                    margin: '0 0 8px 0',
+                    fontSize: '11px',
+                    fontWeight: '700',
+                    borderBottom: `2px solid ${sColor}`,
+                    paddingBottom: '7px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}>
+                    <span style={{
+                      display: 'inline-flex',
+                      width: '18px',
+                      height: '18px',
+                      background: styleIconBg,
+                      borderRadius: '5px',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '10px'
+                    }}>✦</span>
+                    {t('vak.ui.pdf_style_features')}
+                  </h4>
+                  <div style={{ fontSize: '10px' }}>
+                    {getCaracteristicasEstilo(diagnosis.predominantStyle).slice(0, 5).map((c, i) => (
+                      <div key={i} style={{
+                        marginBottom: '4px',
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        gap: '5px'
+                      }}>
+                        <span style={{
+                          color: sColor,
+                          fontWeight: 'bold',
+                          fontSize: '12px',
+                          lineHeight: '1.4',
+                          flexShrink: 0
+                        }}>•</span>
+                        <span style={{ color: '#475569' }}>{c}</span>
+                      </div>
+                    ))}
+                    <div style={{
+                      marginTop: '6px',
+                      color: sColor,
+                      fontSize: '9px',
+                      fontWeight: '600',
+                      cursor: 'pointer'
+                    }}>+ {getCaracteristicasEstilo(diagnosis.predominantStyle).length - 5} características más...</div>
+                  </div>
+                </div>
+
+                <div style={{
+                  padding: '12px 14px',
+                  background: `linear-gradient(135deg, ${styleIconBg}, transparent)`,
+                  borderRadius: '12px',
+                  borderLeft: `3px solid ${sColor}`,
+                  boxShadow: '0 2px 12px rgba(77,168,196,0.05)'
+                }}>
+                  <h4 style={{
+                    color: '#004B63',
+                    margin: '0 0 6px 0',
+                    fontSize: '10px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px'
+                  }}>{t('vak.ui.pdf_identified_strengths')}</h4>
+                  <div style={{ fontSize: '10px', lineHeight: '1.5', color: '#475569' }}>
+                    {diagnosis.predominantStyle === 'visual' && (
+                      <>{diagnosis.studentName} posee una capacidad natural para procesar información visual, destacando en: memoria fotográfica, organización espacial, atención al detalle, síntesis gráfica de conceptos, y aprendizaje mediante observación. Estas fortalezas le permiten destacar en entornos que requieren análisis visual y pensamiento estructurado.</>
+                    )}
+                    {diagnosis.predominantStyle === 'auditivo' && (
+                      <>{diagnosis.studentName} posee una capacidad natural para procesar información auditiva, destacando en: memoria verbal, expresión oral estructurada, aprendizaje mediante diálogo, facilidad para idiomas, y retención de secuencias sonoras. Estas fortalezas le permiten destacar en entornos colaborativos y de comunicación verbal.</>
+                    )}
+                    {diagnosis.predominantStyle === 'kinestesico' && (
+                      <>{diagnosis.studentName} posee una capacidad natural para el aprendizaje experiencial, destacando en: coordinación motora, aprendizaje mediante práctica directa, resolución activa de problemas, pensamiento concreto, y memoria procedimental. Estas fortalezas le permiten destacar en entornos que requieren aplicación práctica y experimentación.</>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <div style={{
+                  background: '#ffffff',
+                  borderRadius: '12px',
+                  padding: '14px',
+                  boxShadow: '0 4px 20px rgba(0,75,99,0.05)',
+                  border: '1px solid #E8F0F3'
+                }}>
+                  <h4 style={{
+                    color: '#004B63',
+                    margin: '0 0 8px 0',
+                    fontSize: '11px',
+                    fontWeight: '700',
+                    borderBottom: `2px solid ${sColor}`,
+                    paddingBottom: '7px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}>
+                    <span style={{
+                      display: 'inline-flex',
+                      width: '18px',
+                      height: '18px',
+                      background: styleIconBg,
+                      borderRadius: '5px',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '10px'
+                    }}>◆</span>
+                    {t('vak.ui.pdf_study_strategies')}
+                  </h4>
+                  <ol style={{
+                    paddingLeft: '16px',
+                    margin: 0,
+                    fontSize: '10px',
+                    lineHeight: '1.6',
+                    color: '#475569'
+                  }}>
+                    {(diagnosis.styleDetails?.strategies || []).map((s, i) => (
+                      <li key={i} style={{ marginBottom: '4px', color: '#475569' }}><span style={{ color: sColor, fontWeight: '600' }}>{s.split(' ')[0]}</span>{s.slice(s.split(' ')[0].length)}</li>
+                    ))}
+                  </ol>
+                </div>
+
+                <div style={{
+                  background: '#ffffff',
+                  borderRadius: '12px',
+                  padding: '14px',
+                  boxShadow: '0 4px 20px rgba(0,75,99,0.05)',
+                  border: '1px solid #E8F0F3'
+                }}>
+                  <h4 style={{
+                    color: '#004B63',
+                    margin: '0 0 8px 0',
+                    fontSize: '11px',
+                    fontWeight: '700',
+                    borderBottom: `2px solid #66CCCC`,
+                    paddingBottom: '7px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}>
+                    <span style={{
+                      display: 'inline-flex',
+                      width: '18px',
+                      height: '18px',
+                      background: 'rgba(102,204,204,0.12)',
+                      borderRadius: '5px',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '10px'
+                    }}>▸</span>
+                    {t('vak.ui.pdf_recommended_careers')}
+                  </h4>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
+                    {getCarrerasRecomendadas(diagnosis.predominantStyle).slice(0, 6).map((c, i) => (
+                      <span key={i} style={{
+                        padding: '4px 8px',
+                        background: `linear-gradient(135deg, ${styleIconBg}, transparent)`,
+                        borderRadius: '16px',
+                        color: '#004B63',
+                        fontSize: '9px',
+                        fontWeight: '600',
+                        border: `1px solid ${sColor}20`
+                      }}>{c}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* ======== SEPARADOR ======== */}
+            <div style={{
+              height: '1px',
+              background: 'linear-gradient(to right, transparent, #66CCCC, transparent)',
+              margin: '0 0 16px 0',
+              opacity: 0.25
+            }} />
+
+            {/* ======== TIPS PARA PADRES PREMIUM ======== */}
+            <div style={{
+              padding: '14px 16px',
+              background: 'linear-gradient(135deg, rgba(77,168,196,0.04), rgba(102,204,204,0.04))',
+              borderRadius: '12px',
+              borderLeft: `4px solid #66CCCC`,
+              marginBottom: '16px',
+              boxShadow: '0 2px 12px rgba(102,204,204,0.06)'
+            }}>
+              <h4 style={{
+                color: '#004B63',
+                margin: '0 0 8px 0',
+                fontSize: '11px',
+                fontWeight: '700',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center'
+                gap: '7px'
               }}>
-                <span style={{ color: 'white', fontSize: '14px', fontWeight: 'bold' }}>VR</span>
-              </div>
-              <div>
-                <h4 style={{ color: '#004B63', margin: '0', fontSize: '13px', fontWeight: '700' }}>{t('vak.ui.pdf_valeria_name')}</h4>
-                <p style={{ margin: 0, color: '#64748B', fontSize: '10px' }}>{t('vak.ui.pdf_valeria_title')}</p>
+                <span style={{
+                  display: 'inline-flex',
+                  width: '24px',
+                  height: '24px',
+                  background: 'linear-gradient(135deg, #66CCCC, #4DA8C4)',
+                  borderRadius: '7px',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white',
+                  fontSize: '12px'
+                }} dangerouslySetInnerHTML={{ __html: SVG_ICONS.lightbulb }} />
+                {t('vak.ui.pdf_parent_tips')}
+              </h4>
+              <div style={{ fontSize: '10px', lineHeight: '1.6' }}>
+                {getTipsPadres(diagnosis.predominantStyle).map((tip, i) => (
+                  <div key={i} style={{
+                    marginBottom: '4px',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '6px'
+                  }}>
+                    <span style={{
+                      color: '#66CCCC',
+                      fontWeight: 'bold',
+                      fontSize: '12px',
+                      lineHeight: '1.5',
+                      flexShrink: 0
+                    }}>•</span>
+                    <span style={{ color: '#475569' }}>{tip}</span>
+                  </div>
+                ))}
               </div>
             </div>
-            <div style={{ margin: 0, color: '#334155', fontSize: '11px', lineHeight: '1.6', whiteSpace: 'pre-line' }}>
-              {getValentinaCommentary()}
-            </div>
-          </div>
 
-          {/* Personalized Advice - Compact */}
-          {diagnosis.styleDetails?.tip && (
+            {/* ======== COMENTARIO DE VALERIA PREMIUM ======== */}
             <div style={{
-              padding: '10px',
-              background: 'linear-gradient(135deg, rgba(77,168,196,0.1), rgba(102,204,204,0.1))',
-              borderRadius: '8px',
-              borderLeft: '3px solid #4DA8C4',
-              marginBottom: '15px'
+              padding: '14px 16px',
+              background: 'linear-gradient(135deg, rgba(102,204,204,0.07), rgba(77,168,196,0.07))',
+              borderRadius: '12px',
+              borderLeft: `4px solid ${sColor}`,
+              marginBottom: '14px',
+              boxShadow: '0 2px 12px rgba(77,168,196,0.06)'
             }}>
-              <h4 style={{ color: '#004B63', margin: '0 0 5px 0', fontSize: '11px', textTransform: 'uppercase' }}>{t('vak.ui.pdf_personalized_advice')}</h4>
-              <p style={{ margin: 0, color: '#334155', fontSize: '11px', lineHeight: '1.4' }}>{diagnosis.styleDetails?.tip}</p>
-            </div>
-          )}
-
-          {/* Footer - Compact */}
-          <div style={{
-            marginTop: '20px',
-            paddingTop: '12px',
-            borderTop: '1px dashed #ccc',
-            textAlign: 'center',
-            fontSize: '10px',
-            color: '#999'
-          }}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-              {qrUrl && (
-                <a href={qrUrl} target="_blank" rel="noopener noreferrer" title={t('vak.ui.pdf_open_results')}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                marginBottom: '8px'
+              }}>
+                <div style={{
+                  position: 'relative',
+                  width: '40px',
+                  height: '40px',
+                  flexShrink: 0
+                }}>
                   <img
-                    src={qrUrl}
-                    alt={t('vak.ui.pdf_qr_alt')}
-                    style={{ width: 80, height: 80 }}
-                    crossOrigin="anonymous"
+                    src="/valeria.png"
+                    alt="Valeria"
+                    style={{
+                      width: '40px',
+                      height: '40px',
+                      borderRadius: '50%',
+                      objectFit: 'cover',
+                      border: `2px solid ${sColor}`,
+                      boxShadow: `0 0 0 3px ${sColor}15`
+                    }}
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
                   />
-                </a>
-              )}
-              <div>
-                <p style={{ margin: '0 0 3px 0' }}>{t('vak.ui.pdf_generated_by')}</p>
-                <p style={{ margin: 0 }}>{t('vak.ui.pdf_legal')}</p>
+                  <div style={{
+                    display: 'none',
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '50%',
+                    background: `linear-gradient(135deg, ${sColor}, ${sColor}88)`,
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <span style={{ color: 'white', fontSize: '14px', fontWeight: 'bold' }}>VR</span>
+                  </div>
+                </div>
+                <div>
+                  <h4 style={{
+                    color: '#004B63',
+                    margin: 0,
+                    fontSize: '12px',
+                    fontWeight: '700'
+                  }}>{t('vak.ui.pdf_valeria_name')}</h4>
+                  <p style={{
+                    margin: '1px 0 0 0',
+                    color: '#64748B',
+                    fontSize: '9px'
+                  }}>Psicóloga Educativa — Especialista VAK</p>
+                </div>
+              </div>
+              <div style={{
+                margin: 0,
+                color: '#334155',
+                fontSize: '10px',
+                lineHeight: '1.6',
+                whiteSpace: 'pre-line',
+                fontStyle: 'italic'
+              }}>
+                {getValentinaCommentary(diagnosis, studentName, studentAge)}
               </div>
             </div>
+
+            {/* ======== CONSEJO PERSONALIZADO ======== */}
+            {diagnosis.styleDetails?.tip && (
+              <div style={{
+                padding: '12px 14px',
+                background: `linear-gradient(135deg, ${styleIconBg}, transparent)`,
+                borderRadius: '10px',
+                borderLeft: `3px solid ${sColor}`,
+                marginBottom: '16px'
+              }}>
+                <h4 style={{
+                  color: '#004B63',
+                  margin: '0 0 4px 0',
+                  fontSize: '10px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px'
+                }}>{t('vak.ui.pdf_personalized_advice')}</h4>
+                <p style={{
+                  margin: 0,
+                  color: '#475569',
+                  fontSize: '10px',
+                  lineHeight: '1.5'
+                }}>{diagnosis.styleDetails?.tip}</p>
+              </div>
+            )}
+
+            {/* ======== FOOTER PREMIUM ======== */}
+            <div style={{
+              marginTop: '20px',
+              padding: '16px 0 0 0',
+              borderTop: '2px solid #D6E4EB',
+              textAlign: 'center'
+            }}>
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '8px'
+              }}>
+                {qrUrl && (
+                  <div style={{
+                    background: '#ffffff',
+                    padding: '6px',
+                    borderRadius: '8px',
+                    boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
+                    display: 'inline-flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '4px'
+                  }}>
+                    <a href={qrUrl} target="_blank" rel="noopener noreferrer" title={t('vak.ui.pdf_open_results')}>
+                      <img
+                        src={qrUrl}
+                        alt={t('vak.ui.pdf_qr_alt')}
+                        style={{ width: 80, height: 80, display: 'block' }}
+                        crossOrigin="anonymous"
+                      />
+                    </a>
+                    <span style={{
+                      color: '#94A3B8',
+                      fontSize: '7px',
+                      letterSpacing: '0.5px'
+                    }}>Escanea para ver resultados en línea</span>
+                  </div>
+                )}
+                <div style={{
+                  padding: '0 20px'
+                }}>
+                  <p style={{
+                    margin: '0 0 2px 0',
+                    color: '#64748B',
+                    fontSize: '9px',
+                    fontWeight: '500'
+                  }}>{t('vak.ui.pdf_generated_by')}</p>
+                  <p style={{
+                    margin: 0,
+                    color: '#4DA8C4',
+                    fontSize: '10px',
+                    fontWeight: '600'
+                  }}>www.edutechlife.co</p>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    marginTop: '4px'
+                  }}>
+                    <span style={{ color: '#94A3B8', fontSize: '7px' }}>Folio: {folio}</span>
+                    <span style={{ color: '#CBD5E1', fontSize: '7px' }}>|</span>
+                    <span style={{ color: '#94A3B8', fontSize: '7px' }}>{genDate}</span>
+                  </div>
+                  <p style={{
+                    margin: '4px 0 0 0',
+                    color: '#CBD5E1',
+                    fontSize: '7px',
+                    lineHeight: '1.4'
+                  }}>{t('vak.ui.pdf_legal')}</p>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
 
@@ -2680,7 +3039,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
             >
               {phase === 'intro' && renderWelcome()}
               {phase === 'calibration' && renderCalibration()}
-              {phase === 'test' && renderTest()}
+              {phase === 'test' && (isTransitioning ? renderSkeleton() : renderTest())}
               {phase === 'parentdata' && renderParentData()}
               {phase === 'result' && renderResults()}
               {phase === 'document-preview' && renderDocumentPreview()}

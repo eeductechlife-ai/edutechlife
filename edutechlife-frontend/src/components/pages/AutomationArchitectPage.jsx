@@ -45,15 +45,15 @@ const AutomationArchitectPage = () => {
       />
 
       <div id="automation-tools" className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 pb-16">
-        <div className="flex flex-wrap gap-2 mb-8 border-b border-slate-200 pb-4">
+        <div className="flex flex-wrap gap-2 mb-8 border-b border-white/40 pb-4">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${
                 activeTab === tab.id
-                  ? 'bg-[#004B63] text-white shadow-md'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  ? 'bg-petroleum text-white shadow-premium'
+                  : 'bg-white/70 backdrop-blur-xl border border-white/40 text-slate-600 hover:bg-white/90 shadow-sm'
               }`}
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -67,7 +67,7 @@ const AutomationArchitectPage = () => {
         {activeTab === 'diagnosis' && (
           <div>
             <div className="text-center mb-8">
-              <h2 className="text-2xl md:text-3xl font-black text-[#004B63] mb-2">{t('automation.page.diagnosis_title')}</h2>
+              <h2 className="text-2xl md:text-3xl font-black text-petroleum mb-2">{t('automation.page.diagnosis_title')}</h2>
               <p className="text-slate-500 max-w-2xl mx-auto">{t('automation.page.diagnosis_desc')}</p>
             </div>
             <AutomationReadinessTest onComplete={(result) => {
@@ -80,7 +80,7 @@ const AutomationArchitectPage = () => {
         {activeTab === 'discovery' && (
           <div>
             <div className="text-center mb-8">
-              <h2 className="text-2xl md:text-3xl font-black text-[#004B63] mb-2">{t('automation.page.discovery_title')}</h2>
+              <h2 className="text-2xl md:text-3xl font-black text-petroleum mb-2">{t('automation.page.discovery_title')}</h2>
               <p className="text-slate-500 max-w-2xl mx-auto">{t('automation.page.discovery_desc')}</p>
             </div>
             <AutomationProcessDiscovery onGeneratePlan={() => {
@@ -99,7 +99,7 @@ const AutomationArchitectPage = () => {
         {activeTab === 'roi' && (
           <div>
             <div className="text-center mb-8">
-              <h2 className="text-2xl md:text-3xl font-black text-[#004B63] mb-2">{t('automation.page.roi_title')}</h2>
+              <h2 className="text-2xl md:text-3xl font-black text-petroleum mb-2">{t('automation.page.roi_title')}</h2>
               <p className="text-slate-500 max-w-2xl mx-auto">{t('automation.page.roi_desc')}</p>
             </div>
             <AutomationROICalculator onGeneratePlan={() => {
@@ -112,7 +112,7 @@ const AutomationArchitectPage = () => {
         {activeTab === 'cases' && (
           <div>
             <div className="text-center mb-8">
-              <h2 className="text-2xl md:text-3xl font-black text-[#004B63] mb-2">{t('automation.page.cases_title')}</h2>
+              <h2 className="text-2xl md:text-3xl font-black text-petroleum mb-2">{t('automation.page.cases_title')}</h2>
               <p className="text-slate-500 max-w-2xl mx-auto">{t('automation.page.cases_desc')}</p>
             </div>
             <AutomationCaseStudies />
@@ -122,7 +122,7 @@ const AutomationArchitectPage = () => {
 
       <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 pb-20">
         <div className="text-center mb-10">
-          <h2 className="text-2xl md:text-3xl font-black text-[#004B63] mb-2">{t('automation.page.cta_title')}</h2>
+          <h2 className="text-2xl md:text-3xl font-black text-petroleum mb-2">{t('automation.page.cta_title')}</h2>
           <p className="text-slate-500 max-w-2xl mx-auto">{t('automation.page.cta_desc')}</p>
         </div>
         <AutomationLeadCapture />

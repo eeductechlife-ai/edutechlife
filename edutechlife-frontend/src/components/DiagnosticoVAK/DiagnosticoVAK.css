@@ -39,11 +39,11 @@
   --color-vak-auditivo-600: #52A3A3;
   --color-vak-auditivo-900: #2D7373;
   
-  --color-vak-kinestesico-50: rgba(77, 168, 196, 0.15);
-  --color-vak-kinestesico-200: rgba(77, 168, 196, 0.35);
-  --color-vak-kinestesico-500: #4DA8C4;
-  --color-vak-kinestesico-600: #3D8CA4;
-  --color-vak-kinestesico-900: #1A5A6E;
+  --color-vak-kinestesico-50: rgba(232, 168, 56, 0.12);
+  --color-vak-kinestesico-200: rgba(232, 168, 56, 0.3);
+  --color-vak-kinestesico-500: #E8A838;
+  --color-vak-kinestesico-600: #CF922E;
+  --color-vak-kinestesico-900: #8B601A;
 }
 
 /* ==================== UTILIDADES ESPECÍFICAS VAK ==================== */

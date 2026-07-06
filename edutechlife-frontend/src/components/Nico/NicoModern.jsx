@@ -4,10 +4,12 @@ import useConversationMemory from '../../hooks/useConversationMemory';
 import useLeadManagement from '../../hooks/useLeadManagement';
 import useLeadCaptureLogic from '../../hooks/useLeadCaptureLogic';
 import useAppointmentScheduling from '../../hooks/useAppointmentScheduling';
-import { callDeepseek } from '../../utils/api';
-import { speakTextConversational, stopSpeech } from '../../utils/speech';
+import { callDeepseekStream } from '../../utils/api';
+import { speakTextConversational, stopSpeech, warmupTts, prefetchTts } from '../../utils/speech';
 import { createSpeechRecognition, requestMicrophonePermission, getPermissionErrorMessage } from '../../utils/speechRecognition';
 import trainingData from '../../data/nico-training-data.json';
+import { matchIntent } from './nicoKnowledge';
+import { getConversationPhase, shouldInsertProactiveMessage, getProactiveMessageByContext } from './nicoConversation';
 
 // Carga diferida para componentes que no se usan inmediatamente
 const LeadCaptureForm = lazy(() => import('./LeadCaptureForm'));
@@ -21,9 +23,18 @@ const COLORS = {
   SOFT_BLUE: '#B2D8E5'
 };
 
-// Simple response cache
+// Simple response cache with eviction
 const responseCache = new Map();
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+const CACHE_MAX_SIZE = 100;
+
+const setResponseCache = (key, value) => {
+  if (responseCache.size >= CACHE_MAX_SIZE) {
+    const oldest = responseCache.keys().next().value;
+    responseCache.delete(oldest);
+  }
+  responseCache.set(key, value);
+};
 
 const removeEmojis = (text) => {
   if (!text) return '';
@@ -102,30 +113,6 @@ const removeEmojis = (text) => {
   }
   
   return cleanText;
-};
-
-// Función para simplificar respuestas largas manteniendo claridad
-const simplifyResponse = (text) => {
-  if (!text || text.length <= 300) return text;
-  
-  // Dividir en oraciones
-  const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
-  
-  if (sentences.length <= 3) {
-    // Si ya es corta, devolver tal cual
-    return text;
-  }
-  
-  // Tomar las 3 primeras oraciones (las más importantes)
-  const importantSentences = sentences.slice(0, 3);
-  let simplified = importantSentences.join('. ') + '.';
-  
-  // Agregar oferta de más información si es necesario
-  if (sentences.length > 3) {
-    simplified += ' ¿Te gustaría más detalles sobre algún punto específico?';
-  }
-  
-  return simplified;
 };
 
 // Función simple para eliminar solo muletillas de "Nico" - sin afectar otras palabras
@@ -596,7 +583,7 @@ const TRAINING = (() => {
 
 const PROMPT_NICO_SOPORTE = `Eres NICO, asistente de EdutechLife. Hablas espanol natural, como una persona real, NO como un robot.
 
-## REGLAS (maximo 10):
+## REGLAS (maximo 12):
 1. Responde DIRECTAMENTE a lo que el usuario pregunta, sin preambulos
 2. NO digas "Claro", "Con gusto", "Por supuesto" - ve directo al tema
 3. NUNCA te presentes - el usuario ya sabe quien eres
@@ -607,6 +594,8 @@ const PROMPT_NICO_SOPORTE = `Eres NICO, asistente de EdutechLife. Hablas espanol
 8. Usa el contexto de la conversacion previa
 9. Primera clase siempre gratuita
 10. Cancelacion en cualquier momento sin permanencia
+11. Si el usuario muestra interes, preguntale su nombre y telefono para ayudarlo mejor
+12. Si el usuario pregunta por servicios, ofrecer agendar una cita o primera clase gratis
 
 ## INFORMACION COMPLETA DE EDUTECHLIFE:
 
@@ -659,9 +648,69 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
     nameUsageCounter: 0 // Controlar uso del nombre cada 3-4 respuestas
   });
   
+  const [conversationPhase, setConversationPhase] = useState('reactive');
+  const [lastProactiveIndex, setLastProactiveIndex] = useState(0);
+  const [userMessageCount, setUserMessageCount] = useState(0);
+
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const speechRecognitionRef = useRef(null);
+  const pendingSentenceRef = useRef('');
+  const isSpeakingRef = useRef(false);
+  const sentenceQueueRef = useRef([]);
+  const speechTimeoutRef = useRef(null);
+  const lastStreamUpdateRef = useRef(0);
+  const streamFullResponseRef = useRef('');
+  
+  const clearSpeechSafetyTimeout = () => {
+    if (speechTimeoutRef.current) {
+      clearTimeout(speechTimeoutRef.current);
+      speechTimeoutRef.current = null;
+    }
+  };
+  
+  const setSpeechSafetyTimeout = () => {
+    clearSpeechSafetyTimeout();
+    speechTimeoutRef.current = setTimeout(() => {
+      if (isSpeakingRef.current) {
+        isSpeakingRef.current = false;
+        stopSpeech();
+        speakFromQueue();
+      }
+    }, 12000);
+  };
+
+  const speakFromQueue = () => {
+    if (isSpeakingRef.current) return;
+    if (sentenceQueueRef.current.length === 0) return;
+    
+    // Tomar maximo 3 oraciones para evitar acumular mucho texto
+    const sentences = sentenceQueueRef.current.splice(0, 3);
+    const combined = sentences.join(' ').trim();
+    
+    if (combined.length < 8) return;
+    
+    isSpeakingRef.current = true;
+    const cleanText = removeEmojis(combined);
+    if (cleanText.length === 0) {
+      isSpeakingRef.current = false;
+      speakFromQueue();
+      return;
+    }
+    
+    setSpeechSafetyTimeout();
+    try {
+      speakTextConversational(cleanText, 'nico_premium', {}, () => {
+        isSpeakingRef.current = false;
+        clearSpeechSafetyTimeout();
+        speakFromQueue();
+      }, setAudioPermissionError);
+    } catch (e) {
+      isSpeakingRef.current = false;
+      clearSpeechSafetyTimeout();
+      speakFromQueue();
+    }
+  };
   
   const { 
     memory = {}, 
@@ -734,7 +783,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       setMessages(prev => [...(prev || []), greetingMessageObj]);
       
       if (audioEnabled) {
-        speakTextConversational(greeting, 'nico_premium', null, setAudioPermissionError);
+        speakTextConversational(greeting, 'nico_premium', {}, undefined, setAudioPermissionError);
       }
     }
   }, [isOpen, greetingSent, messages, audioEnabled]);
@@ -745,18 +794,28 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
     }
   }, []);
 
-   // Inicializar servicios básicos
+   // Inicializar servicios básicos y pre-calentar TTS
   useEffect(() => {
     const initializeServices = async () => {
       try {
-        // Servicios inicializados correctamente
-
+        warmupTts()
+        // Pre-cachear frases comunes de Nico
+        prefetchTts('Hola, soy Nico, asistente de EdutechLife. En que puedo ayudarte?', 'nico_premium')
+        prefetchTts('De nada. Hay algo mas en que pueda ayudarte?', 'nico_premium')
+        prefetchTts('La primera clase es gratuita. Te gustaria agendarla?', 'nico_premium')
       } catch (error) {
         console.error('Error inicializando servicios:', error);
       }
     };
 
     initializeServices();
+
+    return () => {
+      clearSpeechSafetyTimeout()
+      isSpeakingRef.current = false
+      sentenceQueueRef.current = []
+      stopSpeech()
+    }
   }, []);
 
   // Atajos de teclado globales
@@ -831,8 +890,8 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
     scrollToBottom();
   }, [messages]);
 
-  const handleSendMessage = async () => {
-    const trimmedMessage = message.trim();
+  const handleSendMessage = async (overrideText) => {
+    const trimmedMessage = (typeof overrideText === 'string' ? overrideText : message).trim();
     if (!trimmedMessage || isLoading) return;
 
     const userMessage = trimmedMessage;
@@ -875,7 +934,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       // Determinar si debemos marcar que ya pedimos el nombre
       const shouldAsk = shouldAskForName(prev);
       let newNameAskedOnce = prev.nameAskedOnce;
-      if (shouldAsk && lowerMsg.includes('cómo te llamas') || lowerMsg.includes('tu nombre') || lowerMsg.includes('te llamas')) {
+      if (shouldAsk && (lowerMsg.includes('cómo te llamas') || lowerMsg.includes('tu nombre') || lowerMsg.includes('te llamas'))) {
         newNameAskedOnce = true;
       }
       
@@ -922,8 +981,13 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       if (audioEnabled) {
         const noMulletillaVoice = removeGreetingMulletilla(quickResponse);
         const textToSpeak = removeEmojis(noMulletillaVoice);
-        speakTextConversational(textToSpeak, 'nico_premium', null, setAudioPermissionError);
+        speakTextConversational(textToSpeak, 'nico_premium', {}, undefined, setAudioPermissionError);
       }
+      
+      // Track user message count for proactive phase
+      setUserMessageCount(prev => prev + 1)
+      const currentPhase = getConversationPhase(userMessageCount + 1)
+      setConversationPhase(currentPhase)
       
       setIsLoading(false);
       return;
@@ -998,73 +1062,201 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
     }
 
     try {
-      // Cache optimizado para velocidad
+      // 1. Try local knowledge engine first (instant, no API call)
+      const localMatch = matchIntent(userMessage)
+      if (localMatch) {
+        const cleanResponse = removeEmojis(localMatch.response)
+        const assistantMessageObj = {
+          role: 'assistant',
+          content: cleanResponse,
+          timestamp: new Date().toISOString(),
+          isLocalResponse: true
+        }
+        setMessages(prev => {
+          const newMessages = [...prev, assistantMessageObj];
+          return optimizeLongConversation(newMessages, 25);
+        })
+        processMessage('assistant', cleanResponse)
+
+        if (audioEnabled) {
+          speakTextConversational(cleanResponse, 'nico_premium', {}, undefined, setAudioPermissionError)
+        }
+
+        setUserMessageCount(prev => prev + 1)
+        setUserContext(prev => ({
+          ...prev,
+          messagesSinceStart: prev.messagesSinceStart + 1
+        }))
+
+        const currentPhase = getConversationPhase(userMessageCount + 1)
+        setConversationPhase(currentPhase)
+        if (shouldInsertProactiveMessage(currentPhase, userMessageCount + 1, lastProactiveIndex)) {
+          setTimeout(() => {
+            const proactiveMsg = getProactiveMessageByContext(currentPhase, userContext.detectedTopics, userContext.userName)
+            if (proactiveMsg) {
+              const proactiveObj = {
+                role: 'assistant',
+                content: proactiveMsg,
+                timestamp: new Date().toISOString(),
+                isProactive: true
+              }
+              setMessages(prev => [...prev, proactiveObj])
+              setLastProactiveIndex(userMessageCount + 1)
+              if (audioEnabled) {
+                speakTextConversational(proactiveMsg, 'nico_premium', {}, undefined, setAudioPermissionError)
+              }
+            }
+          }, 500)
+        }
+
+        setIsLoading(false)
+        return
+      }
+
+      // 2. No local match — use cache or streaming
       const cacheKey = userMessage.toLowerCase().trim();
       const cached = responseCache.get(cacheKey);
       
-      let response;
       if (cached && (Date.now() - cached.timestamp) < CACHE_DURATION) {
-        response = cached.response;
+        const cleanResponse = removeEmojis(cached.response)
+        const assistantMessageObj = { 
+          role: 'assistant', 
+          content: cleanResponse,
+          timestamp: new Date().toISOString()
+        }
+        setMessages(prev => {
+          const newMessages = [...prev, assistantMessageObj];
+          return optimizeLongConversation(newMessages, 25);
+        })
+        processMessage('assistant', cached.response)
+        
+        if (audioEnabled) {
+          speakTextConversational(cleanResponse, 'nico_premium', {}, undefined, setAudioPermissionError)
+        }
       } else {
         // Contexto simplificado para velocidad
         const memoryContext = getContextualPrompt();
         const userNameFromState = userContext?.userName;
         const contextInfo = userNameFromState ? `El usuario se llama ${userNameFromState}.` : '';
         const enhancedSystemPrompt = memoryContext 
-          ? `${PROMPT_NICO_SOPORTE}\nContexto: ${memoryContext.substring(0, 200)} ${contextInfo}`
+          ? `${PROMPT_NICO_SOPORTE}\nContexto: ${memoryContext.substring(0, 500)} ${contextInfo}`
           : `${PROMPT_NICO_SOPORTE} ${contextInfo}`;
         
-        response = await callDeepseek(userMessage, enhancedSystemPrompt);
+        // Create placeholder message
+        const placeholderObj = { 
+          role: 'assistant', 
+          content: '',
+          timestamp: new Date().toISOString(),
+          isStreaming: true
+        }
+        setMessages(prev => [...prev, placeholderObj])
         
-        // Cachear respuesta
-        responseCache.set(cacheKey, {
-          response,
+        // Stream the response
+        let fullResponse = ''
+        const streamMessages = [
+          { role: 'system', content: enhancedSystemPrompt },
+          { role: 'user', content: userMessage }
+        ]
+        await callDeepseekStream(
+          streamMessages,
+          { maxTokens: 2000, temperature: 0.7 },
+          false,
+          (chunk) => {
+            fullResponse += chunk
+            const now = Date.now()
+            if (now - lastStreamUpdateRef.current >= 80) {
+              lastStreamUpdateRef.current = now
+              setMessages(prev => {
+                const updated = [...prev]
+                const last = updated[updated.length - 1]
+                if (last && last.isStreaming) {
+                  updated[updated.length - 1] = {
+                    ...last,
+                    content: removeEmojis(fullResponse),
+                  }
+                }
+                return updated
+              })
+            }
+
+            if (audioEnabled) {
+              pendingSentenceRef.current += chunk
+              while (true) {
+                const match = pendingSentenceRef.current.match(/[.!?](?:\s|$)/)
+                if (!match) break
+                const endIdx = match.index + 1
+                const sentence = pendingSentenceRef.current.slice(0, endIdx).trim()
+                pendingSentenceRef.current = pendingSentenceRef.current.slice(endIdx + match[0].length)
+                // Si no se esta hablando, hablar inmediato
+                if (sentence.length >= 8 && !isSpeakingRef.current) {
+                  isSpeakingRef.current = true
+                  const cleanSentence = removeEmojis(sentence)
+                  if (cleanSentence.length > 0) {
+                    setSpeechSafetyTimeout()
+                    speakTextConversational(cleanSentence, 'nico_premium', {}, () => {
+                      isSpeakingRef.current = false
+                      clearSpeechSafetyTimeout()
+                      speakFromQueue()
+                    }, setAudioPermissionError).catch(() => {
+                      isSpeakingRef.current = false
+                      clearSpeechSafetyTimeout()
+                      speakFromQueue()
+                    })
+                  } else {
+                    isSpeakingRef.current = false
+                  }
+                } else if (sentence.length >= 3) {
+                  // Si ya se esta hablando, encolar
+                  sentenceQueueRef.current.push(sentence)
+                }
+              }
+            }
+          }
+        )
+        
+        // Mark as complete (force full content in case throttled)
+        setMessages(prev => {
+          const updated = [...prev]
+          const last = updated[updated.length - 1]
+          if (last) {
+            updated[updated.length - 1] = {
+              ...last,
+              content: removeEmojis(fullResponse),
+              isStreaming: false,
+            }
+          }
+          return updated
+        })
+        
+        // Cache
+        setResponseCache(cacheKey, {
+          response: fullResponse,
           timestamp: Date.now()
-        });
+        })
+        processMessage('assistant', fullResponse)
+        
+        // Speak remaining text after streaming
+        if (audioEnabled) {
+          const remaining = pendingSentenceRef.current.trim()
+          if (remaining.length >= 3) {
+            sentenceQueueRef.current.push(remaining)
+          }
+          pendingSentenceRef.current = ''
+          if (sentenceQueueRef.current.length > 0) {
+            if (!isSpeakingRef.current) {
+              speakFromQueue()
+            }
+          }
+        }
       }
       
-      // Simplificar respuesta si es muy larga
-      const simplifiedResponse = simplifyResponse(response);
-      
-      // Eliminar muletilla de presentación si la IA la incluyó
-      const noMulletillaResponse = removeGreetingMulletilla(simplifiedResponse);
-      
-      // Usar nombre del usuario ocasionalmente (cada 3-4 respuestas)
-      const { response: responseWithName, newCounter: counterAfterResponse } = useNameInResponse(noMulletillaResponse, userContext);
-      
-      // Limpiar texto de markdown y emojis antes de guardar
-      const cleanResponse = removeEmojis(responseWithName);
-      
-      // Actualizar contador de uso del nombre
-      setUserContext(prev => ({
-        ...prev,
-        nameUsageCounter: counterAfterResponse
-      }));
-      
-      // Respuesta asistente optimizada
-      const assistantMessageObj = { 
-        role: 'assistant', 
-        content: cleanResponse,
-        timestamp: new Date().toISOString(),
-        wasSimplified: simplifiedResponse !== response
-      };
-      
-      setMessages(prev => {
-        const newMessages = [...prev, assistantMessageObj];
-        return optimizeLongConversation(newMessages, 25);
-      });
-       processMessage('assistant', simplifiedResponse);
-      
       // Verificar si debemos mostrar opciones de conversación
-      const userMessageCount = messages.filter(msg => msg.role === 'user').length + 1; // +1 por el mensaje actual
-      if (userMessageCount >= 2 && !showedConversationOptions) {
-        // Esperar un momento antes de mostrar opciones
+      const userMsgCount = messages.filter(msg => msg.role === 'user').length + 1
+      if (userMsgCount >= 2 && !showedConversationOptions) {
         setTimeout(() => {
-          const options = getConversationOptions([...messages, assistantMessageObj], userContext);
+          const options = getConversationOptions([...messages], userContext);
           if (options) {
             setShowedConversationOptions(true);
-            
-            // Crear mensaje con opciones
             const optionsMessage = {
               role: 'assistant',
               content: 'Para hacer nuestra conversación más productiva, ¿te gustaría...',
@@ -1072,13 +1264,12 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
               hasOptions: true,
               options: options
             };
-            
             setMessages(prev => {
               const newMessages = [...prev, optionsMessage];
               return optimizeLongConversation(newMessages, 25);
             });
           }
-        }, 1000);
+        }, 300);
       }
       
       // Actualización rápida de lead si existe
@@ -1089,19 +1280,38 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
         });
       }
 
-      // Voz inmediata - sin setTimeout para preservar gesto del usuario
-      if (audioEnabled) {
-        const textToSpeak = removeEmojis(cleanResponse);
-        speakTextConversational(textToSpeak, 'nico_premium', null, setAudioPermissionError);
+      // Track user message count for proactive phase
+      setUserMessageCount(prev => prev + 1)
+      const currentPhase = getConversationPhase(userMessageCount + 1)
+      setConversationPhase(currentPhase)
+      if (shouldInsertProactiveMessage(currentPhase, userMessageCount + 1, lastProactiveIndex)) {
+        setTimeout(() => {
+          const proactiveMsg = getProactiveMessageByContext(currentPhase, userContext.detectedTopics, userContext.userName)
+          if (proactiveMsg) {
+            const proactiveObj = {
+              role: 'assistant',
+              content: proactiveMsg,
+              timestamp: new Date().toISOString(),
+              isProactive: true
+            }
+            setMessages(prev => [...prev, proactiveObj])
+            setLastProactiveIndex(userMessageCount + 1)
+            if (audioEnabled) {
+              speakTextConversational(proactiveMsg, 'nico_premium', {}, undefined, setAudioPermissionError)
+            }
+          }
+        }, 500)
       }
       
     } catch (error) {
       console.warn('Error en respuesta:', error.message);
       
-      // Respuesta de error rápida y útil
-      const errorMessage = `Parece que hubo un problema técnico. Puedo decirte que ofrecemos servicios educativos como VAK, STEM, tutorías y bienestar. Te interesa alguno?`;
+      // Respuesta de error según el tipo
+      const isTimeout = error.message?.includes('tiempo') || error.message?.includes('timeout') || error.message?.includes('Timeout')
+      const errorMessage = isTimeout
+        ? `El servicio esta tardando mucho en responder. ¿Quieres preguntarme por nuestros servicios educativos como VAK, STEM, tutorías o bienestar?`
+        : `Hubo un problema de conexion. Puedo contarte sobre VAK, STEM, tutorías y bienestar. ¿Te interesa alguno?`;
       
-      // Eliminar muletilla y limpiar texto
       const noMulletillaError = removeGreetingMulletilla(errorMessage);
       const cleanErrorMessage = removeEmojis(noMulletillaError);
       
@@ -1113,8 +1323,8 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       
       setMessages(prev => [...prev, errorMessageObj]);
       
-       if (audioEnabled) {
-        speakTextConversational(cleanErrorMessage, 'nico_premium', null, setAudioPermissionError);
+      if (audioEnabled) {
+        speakTextConversational(cleanErrorMessage, 'nico_premium', {}, undefined, setAudioPermissionError);
       }
     } finally {
       setIsLoading(false);
@@ -1161,7 +1371,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
       
       setMessages(prev => [...prev, successMessage]);
       
-      // Preguntar si quiere agendar cita (después de 1 segundo)
+      // Preguntar si quiere agendar cita (después de 500ms)
       setTimeout(() => {
         const appointmentQuestion = {
           role: 'assistant',
@@ -1178,18 +1388,21 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
             speakTextConversational(
               removeEmojis(appointmentQuestion.content),
               'nico_premium',
-              () => console.log('✅ Pregunta de agendamiento hablada')
+              {},
+              () => console.log('✅ Pregunta de agendamiento hablada'),
+              undefined
             );
-          }, 800);
+          }, 400);
         }
-      }, 1000);
+      }, 500);
       
       // Hablar confirmación inicial si audio está activado
       if (audioEnabled) {
         speakTextConversational(
           removeEmojis(successMessage.content),
           'nico_premium',
-          null,
+          {},
+          undefined,
           setAudioPermissionError
         );
       }
@@ -1255,7 +1468,8 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
         speakTextConversational(
           removeEmojis(successMessage.content),
           'nico_premium',
-          null,
+          {},
+          undefined,
           setAudioPermissionError
         );
       }
@@ -1301,12 +1515,10 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
         setIsListening(false);
         setInterimTranscript('');
         
-        // Si hay texto final, enviar automáticamente
+        // Si hay texto final, enviar automáticamente con el texto directo
         if (finalText && finalText.trim() !== '') {
           setMessage(finalText);
-          setTimeout(() => {
-            handleSendMessage();
-          }, 500);
+          handleSendMessage(finalText);
         }
       },
       onError: (error, message) => {
@@ -1413,7 +1625,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
     
     try {
 
-      speakTextConversational(textToSpeak, 'nico_premium', () => {
+      speakTextConversational(textToSpeak, 'nico_premium', {}, () => {
         setIsSpeaking(false);
       }, setAudioPermissionError);
     } catch (error) {
@@ -1440,6 +1652,9 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
     setShowSuggestions(true);
     setShowedConversationOptions(false);
     setGreetingSent(false); // Reiniciar estado del saludo
+    isSpeakingRef.current = false
+    clearSpeechSafetyTimeout()
+    sentenceQueueRef.current = []
     stopSpeech();
     
     // Limpiar memoria de conversación
@@ -1500,7 +1715,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
         // Voz automática inmediata - sin setTimeout para preservar gesto del usuario
         if (audioEnabled) {
           const textToSpeak = removeEmojis(welcomeMessage);
-          speakTextConversational(textToSpeak, 'nico_premium', null, setAudioPermissionError);
+          speakTextConversational(textToSpeak, 'nico_premium', {}, undefined, setAudioPermissionError);
         }
       } else if (audioEnabled) {
         // Reconexión: saludo rápido en voz
@@ -1508,7 +1723,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
         const nameGreeting = userName !== 'amigo' ? ` ${userName}` : '';
         const reconnectMessage = `Hola soy Nico, asistente de EdutechLife. ¿En que puedo ayudarte?${nameGreeting}`;
         const textToSpeak = removeEmojis(reconnectMessage);
-        speakTextConversational(textToSpeak, 'nico_premium', null, setAudioPermissionError);
+        speakTextConversational(textToSpeak, 'nico_premium', {}, undefined, setAudioPermissionError);
       }
     }
   };
@@ -1597,7 +1812,7 @@ const NicoModern = ({ studentName: initialName = 'amigo', onNavigate, onInteract
                 if (newAudioEnabled) {
                   // Si se activa el audio, Nico confirma
                   const confirmation = "Audio activado. Puedes hablar conmigo.";
-                  speakTextConversational(confirmation, 'nico_premium', null, setAudioPermissionError);
+                  speakTextConversational(confirmation, 'nico_premium', {}, undefined, setAudioPermissionError);
                 } else {
                   // Si se desactiva, detener cualquier audio en curso
                   stopSpeech();

@@ -9777,9 +9777,12 @@ h5 {
 .aa-content {
   max-width: 1000px;
   margin: 0 auto;
-  background: white;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 1.5rem;
-  box-shadow: 0 10px 40px rgba(0, 75, 99, 0.1);
+  box-shadow: var(--shadow-premium);
   padding: 2.5rem;
 }
 
@@ -10001,12 +10004,14 @@ h5 {
 }
 
 .aa-architecture-card {
-  border: 1px solid rgba(0, 75, 99, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 1rem;
   overflow: hidden;
   cursor: pointer;
   transition: all 0.3s ease;
-  background: white;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .aa-architecture-card:hover {
@@ -10108,9 +10113,11 @@ h5 {
 
 .aa-custom-card {
   padding: 1.5rem;
-  border: 1px solid rgba(0, 75, 99, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 1rem;
-  background: white;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .aa-custom-card h3 {
@@ -10262,8 +10269,10 @@ h5 {
 }
 
 .aa-plan-card {
-  background: white;
-  border: 1px solid rgba(0, 75, 99, 0.1);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 1rem;
   padding: 2rem;
   margin-bottom: 2rem;

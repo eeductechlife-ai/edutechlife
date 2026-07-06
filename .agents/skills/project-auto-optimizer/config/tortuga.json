@@ -1,0 +1,58 @@
+{
+  "name": "tortuga",
+  "version": "1.0.0",
+  "description": "Autonomous optimization agent for Edutechlife",
+  "schedule": {
+    "timesPerDay": 3,
+    "preferredHours": ["08:00", "13:00", "18:00"],
+    "timezone": "America/Mexico_City"
+  },
+  "execution": {
+    "mode": "auto",
+    "maxChangesPerRun": 15,
+    "requireApproval": false,
+    "autoInstallDeps": true,
+    "validateBeforeCommit": true
+  },
+  "vault": {
+    "keepLastNVaults": 30,
+    "autoPushToRemote": false
+  },
+  "skills": {
+    "searchPaths": [
+      ".agents/skills",
+      ".claude/skills"
+    ],
+    "excludeSkills": [],
+    "priorityCategories": ["frontend", "ui-ux", "performance", "security", "architecture"]
+  },
+  "projects": [
+    {
+      "name": "frontend",
+      "srcDir": "edutechlife-frontend/src",
+      "packageJson": "edutechlife-frontend/package.json",
+      "commands": [
+        { "name": "lint", "cmd": "npm run lint", "cwd": "edutechlife-frontend" },
+        { "name": "test:smoke", "cmd": "npm run test:smoke", "cwd": "edutechlife-frontend" },
+        { "name": "build", "cmd": "npm run build", "cwd": "edutechlife-frontend" }
+      ]
+    },
+    {
+      "name": "backend",
+      "srcDir": "edutechlife-backend/src",
+      "packageJson": "edutechlife-backend/package.json",
+      "commands": [
+        { "name": "node-check", "cmd": "node --check src/index.js", "cwd": "edutechlife-backend" }
+      ]
+    }
+  ],
+  "extensions": [".ts", ".tsx", ".js", ".jsx", ".mjs"],
+  "ignoreDirs": ["node_modules", ".next", ".git", "dist", "build", ".agents"],
+  "analysis": {
+    "batchSize": 5,
+    "deepseekModel": "deepseek-chat",
+    "deepseekBaseUrl": "https://api.deepseek.com/v1",
+    "maxTokens": 4096,
+    "temperature": 0.3
+  }
+}

@@ -284,7 +284,7 @@ const speakTextConversational = async (text, profile = 'valeria', overrides = {}
 
           const utterance = new SpeechSynthesisUtterance(text);
           utterance.lang = 'es-MX';
-          utterance.rate = Math.min(0.9, voice.speakingRate || 0.85);
+          utterance.rate = Math.min(1.0, voice.speakingRate || 0.9);
           utterance.volume = 1.0;
           const isMaleProfile = ['valerio', 'nico', 'nico_premium', 'nico_authority'].includes(profile);
 
@@ -441,7 +441,7 @@ const speakTextConversational = async (text, profile = 'valeria', overrides = {}
         const response = await fetch(`${currentApi}/api/tts`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          signal: AbortSignal.timeout(20000),
+          signal: (() => { const c = new AbortController(); setTimeout(() => c.abort(), 20000); return c.signal; })(),
           body: JSON.stringify({
             input: { text },
             voice: {
@@ -534,7 +534,13 @@ const speakTextConversational = async (text, profile = 'valeria', overrides = {}
       cleanup();
       return;
     }
-    await useNativeSpeech();
+    try {
+      await useNativeSpeech();
+    } catch (e) {
+      // Asegurar que onEndCallback SIEMPRE se llame incluso si useNativeSpeech falla
+      cleanup();
+      if (onEndCallback) onEndCallback();
+    }
   }
 };
 
@@ -642,7 +648,7 @@ export const speakAsValentina = async (text, age = 12, onEndCallback, onPermissi
     profile = 'valentina_teen'; // Adolescentes
   }
   
-  return await speakTextConversational(text, profile, onEndCallback, onPermissionError);
+  return await speakTextConversational(text, profile, {}, onEndCallback, onPermissionError);
 };
 
 /**
@@ -763,7 +769,7 @@ export const speakValerioSentence = (text, onEnd, lang = 'es-MX') => {
 
 export const fireConfetti = (opts) => import('canvas-confetti').then(m => m.default(opts));
 
-export const prefetchTts = async (text, profile = 'valeria') => {
+export const prefetchTts = async (text, profile = 'valeria', overrides = {}) => {
   if (!text || text.length < 3) return;
   try {
     const cached = audioCache.get(profile, text);

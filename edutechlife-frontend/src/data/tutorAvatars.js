@@ -2,7 +2,7 @@ const STORAGE = 'https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/publ
 
 export const tutorAvatars = {
   Valerio: '/VALERIO.png',
-  Valeria: `${STORAGE}/avatars/valeria.png`,
+  Valeria: '/valeria.png',
   Dani: `${STORAGE}/avatars/dani.png`,
 }
 

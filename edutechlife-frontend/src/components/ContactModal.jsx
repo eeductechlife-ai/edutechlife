@@ -106,7 +106,7 @@ const ContactModal = ({ isOpen, onClose }) => {
                     </div>
                     <div>
                       <p className="text-xs" style={{ color: '#6B7280' }}>Email</p>
-                      <p className="text-sm font-medium" style={{ color: '#004B63' }}>contacto@edutechlife.com</p>
+                        <p className="text-sm font-medium" style={{ color: '#004B63' }}>contacto@edutechlife.co</p>
                     </div>
                   </div>
 

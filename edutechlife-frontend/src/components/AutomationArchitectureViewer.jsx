@@ -82,8 +82,8 @@ const ArchitectureSVG = ({ data, title, description }) => {
   const h = 290;
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 p-4 md:p-6">
-      {title && <h4 className="text-sm font-bold text-[#004B63] mb-1">{title}</h4>}
+    <div className="bg-white/70 backdrop-blur-xl border border-white/40 shadow-premium rounded-2xl p-4 md:p-6">
+      {title && <h4 className="text-sm font-bold text-petroleum mb-1">{title}</h4>}
       {description && <p className="text-xs text-slate-500 mb-4">{description}</p>}
       <svg viewBox={`0 0 ${w} ${h}`} className="w-full max-w-[450px] h-auto mx-auto" xmlns="http://www.w3.org/2000/svg">
         {data.edges.map((edge, i) => {
@@ -97,9 +97,10 @@ const ArchitectureSVG = ({ data, title, description }) => {
               y1={from.y + 20}
               x2={to.x}
               y2={to.y + 20}
-              stroke="#CBD5E1"
-              strokeWidth="1.5"
-              strokeDasharray="4 3"
+               stroke="#4DA8C4"
+               strokeWidth="1.5"
+               strokeOpacity="0.4"
+               strokeDasharray="4 3"
             />
           );
         })}

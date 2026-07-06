@@ -121,15 +121,15 @@ Formato: Título, descripción, y secciones claras con viñetas.`;
                 <h1>{t('automation.architect.title')}</h1>
                 <p>{t('automation.architect.desc')}</p>
                 <div className="flex flex-wrap items-center justify-center gap-3 mt-4">
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#004B63]/5 border border-[#004B63]/10 rounded-full text-[10px] font-semibold text-[#004B63]">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-petroleum/5 border border-petroleum/10 rounded-full text-[10px] font-semibold text-petroleum">
                         <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
                         ISO/IEC 42001
                     </span>
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#4DA8C4]/5 border border-[#4DA8C4]/10 rounded-full text-[10px] font-semibold text-[#4DA8C4]">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-primary-light/5 border border-primary-light/10 rounded-full text-[10px] font-semibold text-primary-light">
                         <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
                         NIST AI RMF
                     </span>
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#66CCCC]/5 border border-[#66CCCC]/10 rounded-full text-[10px] font-semibold text-[#66CCCC]">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-mint/5 border border-mint/10 rounded-full text-[10px] font-semibold text-mint">
                         <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
                         ISO/IEC 23053
                     </span>
@@ -430,7 +430,7 @@ Formato: Título, descripción, y secciones claras con viñetas.`;
 
                         <div className="aa-plan-content">
                             <div className="mb-6">
-                                <h4 className="text-sm font-bold text-[#004B63] mb-3"><i className="fa-solid fa-diagram-project" /> {t('automation.architect.visual_architecture')}</h4>
+                                <h4 className="text-sm font-bold text-petroleum mb-3"><i className="fa-solid fa-diagram-project" /> {t('automation.architect.visual_architecture')}</h4>
                                 <AutomationArchitectureViewer
                                     architectures={arquitecturasPredefinidas}
                                     selectedArchitecture={selectedArchitecture}

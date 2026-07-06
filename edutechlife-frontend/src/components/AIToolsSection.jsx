@@ -117,6 +117,7 @@ function AIToolsSection() {
 
   return (
     <section id="herramientas" className="py-20 px-4 md:px-6 bg-white relative overflow-hidden">
+      <div id="ai-lab-academic" className="absolute -top-24" />
       <FloatingParticles count={8} className="z-0 opacity-20" />
 
       <div className="max-w-7xl mx-auto relative z-10">
@@ -129,7 +130,7 @@ function AIToolsSection() {
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           >
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-petroleum tracking-tighter mb-3">
-              {t('ai_tools.title_before')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-petroleum pr-1">{t('ai_tools.title_highlight')}</span>
+              {t('ai_tools.title_before')} <span className="text-gradient-accent pr-1">{t('ai_tools.title_highlight')}</span>
             </h2>
             <p className="text-base text-slate-500 max-w-2xl font-medium">
               {t('ai_tools.subtitle')}

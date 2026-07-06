@@ -18,8 +18,8 @@ const AutomationCaseStudies = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, delay: i * 0.1 }}
-            className={`bg-white rounded-3xl border shadow-sm overflow-hidden transition-all duration-300 ${
-              expandedId === c.id ? 'md:col-span-2 shadow-lg' : 'hover:shadow-md border-slate-100'
+            className={`bg-white/70 backdrop-blur-xl border shadow-premium overflow-hidden transition-all duration-300 rounded-2xl ${
+              expandedId === c.id ? 'md:col-span-2 shadow-premium-lg' : 'hover:shadow-premium border-white/40'
             }`}
           >
             <button
@@ -34,8 +34,8 @@ const AutomationCaseStudies = () => {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <h3 className="text-lg font-bold text-[#004B63]">{c.empresa}</h3>
-                    <span className="text-[10px] font-semibold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">{c.sector}</span>
+                    <h3 className="text-lg font-bold text-petroleum">{c.empresa}</h3>
+                    <span className="text-[10px] font-semibold text-slate-400 bg-white/70 backdrop-blur-xl border border-white/40 px-2 py-0.5 rounded-full">{c.sector}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-bold" style={{ color: c.color }}>{c.resultado}</span>
@@ -65,18 +65,18 @@ const AutomationCaseStudies = () => {
                   transition={{ duration: 0.3 }}
                   className="overflow-hidden"
                 >
-                  <div className="px-6 pb-6 pt-2 border-t border-slate-100">
+                  <div className="px-6 pb-6 pt-2 border-t border-white/40">
                     <div className="grid md:grid-cols-3 gap-4 pt-4">
                       <div>
-                        <h4 className="text-xs font-bold text-[#004B63] uppercase tracking-wider mb-2">{t('automation.cases.problema')}</h4>
+                        <h4 className="text-xs font-bold text-petroleum uppercase tracking-wider mb-2">{t('automation.cases.problema')}</h4>
                         <p className="text-sm text-slate-500 leading-relaxed">{c.problema}</p>
                       </div>
                       <div>
-                        <h4 className="text-xs font-bold text-[#004B63] uppercase tracking-wider mb-2">{t('automation.cases.solucion')}</h4>
+                        <h4 className="text-xs font-bold text-petroleum uppercase tracking-wider mb-2">{t('automation.cases.solucion')}</h4>
                         <p className="text-sm text-slate-500 leading-relaxed">{c.solucion}</p>
                       </div>
                       <div>
-                        <h4 className="text-xs font-bold text-[#004B63] uppercase tracking-wider mb-2">{t('automation.cases.resultados')}</h4>
+                        <h4 className="text-xs font-bold text-petroleum uppercase tracking-wider mb-2">{t('automation.cases.resultados')}</h4>
                         <p className="text-sm text-slate-500 leading-relaxed">{c.resultados}</p>
                       </div>
                     </div>

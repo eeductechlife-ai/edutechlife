@@ -23,7 +23,7 @@ const Aliados = memo(() => {
         { id: 12, name: 'Steam', category: t('aliados.category_steam'), icon: Cpu, color: '#66CCCC' },
     ];
 
-    const duplicatedAliados = [...aliados, ...aliados, ...aliados];
+    const duplicatedAliados = aliados;
 
     return (
         <section id="aliados" ref={sectionRef} className="relative w-full py-12 lg:py-16 overflow-hidden bg-white">
@@ -45,7 +45,7 @@ const Aliados = memo(() => {
                     </div>
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-[#004B63] tracking-tighter mb-3">
                         {t('aliados.title_before')}{' '}
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-petroleum">
+                        <span className="text-gradient-accent">
                             {t('aliados.title_highlight')}
                         </span>
                     </h2>
@@ -61,8 +61,10 @@ const Aliados = memo(() => {
                         onMouseEnter={() => setIsPaused(true)}
                         onMouseLeave={() => setIsPaused(false)}
                     >
-                        <div 
+                        <div
                             className="flex gap-4 py-2"
+                            role="list"
+                            aria-label="Logos de aliados"
                             style={{
                                 animation: isPaused ? 'none' : 'marquee 40s linear infinite',
                             }}
@@ -102,7 +104,7 @@ const Aliados = memo(() => {
             <style>{`
                 @keyframes marquee {
                     0% { transform: translateX(0); }
-                    100% { transform: translateX(-33.333%); }
+                    100% { transform: translateX(-100%); }
                 }
             `}</style>
         </section>

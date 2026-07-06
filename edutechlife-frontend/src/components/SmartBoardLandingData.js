@@ -1,13 +1,13 @@
-const VAQ_STYLES_ES = [
+const VAK_STYLES_ES = [
   { key: 'visual', icon: 'fa-eye', title: 'Visual', color: '#4DA8C4', description: 'Aprende mejor viendo: imágenes, videos, mapas mentales y diagramas. Su cerebro procesa la información a través del canal visual con alta retención.', traits: ['Mapas mentales', 'Videos educativos', 'Esquemas de color', 'Flashcards con imágenes'] },
   { key: 'auditivo', icon: 'fa-headphones', title: 'Auditivo', color: '#66CCCC', description: 'Aprende mejor escuchando: podcasts, debates, explicaciones en voz alta. Retiene información a través de conversaciones y audio.', traits: ['Podcasts educativos', 'Debates guiados', 'Audiolibros', 'Grabaciones de clase'] },
-  { key: 'kinestesico', icon: 'fa-hand-pointer', title: 'Kinestésico', color: '#FF6B9D', description: 'Aprende mejor haciendo: experimentos, movimiento, proyectos manuales. Necesita tocar y experimentar para comprender.', traits: ['Experimentos prácticos', 'Juegos de rol', 'Pausas activas', 'Proyectos manuales'] },
+  { key: 'kinestesico', icon: 'fa-hand-pointer', title: 'Kinestésico', color: '#00BCD4', description: 'Aprende mejor haciendo: experimentos, movimiento, proyectos manuales. Necesita tocar y experimentar para comprender.', traits: ['Experimentos prácticos', 'Juegos de rol', 'Pausas activas', 'Proyectos manuales'] },
 ];
 
-const VAQ_STYLES_EN = [
+const VAK_STYLES_EN = [
   { key: 'visual', icon: 'fa-eye', title: 'Visual', color: '#4DA8C4', description: 'Learns best by seeing: images, videos, mind maps, and diagrams. Their brain processes information through the visual channel with high retention.', traits: ['Mind maps', 'Educational videos', 'Color schemes', 'Image flashcards'] },
   { key: 'auditivo', icon: 'fa-headphones', title: 'Auditory', color: '#66CCCC', description: 'Learns best by listening: podcasts, debates, verbal explanations. Retains information through conversations and audio.', traits: ['Educational podcasts', 'Guided debates', 'Audiobooks', 'Class recordings'] },
-  { key: 'kinestesico', icon: 'fa-hand-pointer', title: 'Kinesthetic', color: '#FF6B9D', description: 'Learns best by doing: experiments, movement, hands-on projects. Needs to touch and experience to understand.', traits: ['Hands-on experiments', 'Role-playing', 'Active breaks', 'Crafts projects'] },
+  { key: 'kinestesico', icon: 'fa-hand-pointer', title: 'Kinesthetic', color: '#00BCD4', description: 'Learns best by doing: experiments, movement, hands-on projects. Needs to touch and experience to understand.', traits: ['Hands-on experiments', 'Role-playing', 'Active breaks', 'Crafts projects'] },
 ];
 
 const PRICING_PLANS_ES = [
@@ -206,12 +206,12 @@ const FAQ_ITEMS_EN = [
 
 const getData = (locale) => locale === 'en'
   ? {
-      vakStyles: VAQ_STYLES_EN, pricingPlans: PRICING_PLANS_EN, testimonials: TESTIMONIALS_EN,
+      vakStyles: VAK_STYLES_EN, pricingPlans: PRICING_PLANS_EN, testimonials: TESTIMONIALS_EN,
       beneficios: BENEFICIOS_HIJO_EN, tranquilidad: TRANQUILIDAD_EN, pasos: PASOS_EN, faq: FAQ_ITEMS_EN,
       paymentMethods: PAYMENT_METHODS_EN, guarantee: GUARANTEE_EN,
     }
   : {
-      vakStyles: VAQ_STYLES_ES, pricingPlans: PRICING_PLANS_ES, testimonials: TESTIMONIALS_ES,
+      vakStyles: VAK_STYLES_ES, pricingPlans: PRICING_PLANS_ES, testimonials: TESTIMONIALS_ES,
       beneficios: BENEFICIOS_HIJO_ES, tranquilidad: TRANQUILIDAD_ES, pasos: PASOS_ES, faq: FAQ_ITEMS_ES,
       paymentMethods: PAYMENT_METHODS_ES, guarantee: GUARANTEE_ES,
     };

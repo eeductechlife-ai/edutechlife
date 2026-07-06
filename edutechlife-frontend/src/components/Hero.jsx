@@ -78,7 +78,7 @@ const Hero = memo(() => {
                         className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-petroleum tracking-tighter leading-[0.9] mb-6"
                     >
                         {t('hero.title_line1')}<br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-petroleum pr-1">
+                        <span className="text-gradient-accent pr-1">
                             {t('hero.title_line2')}
                         </span>
                     </motion.h1>
@@ -132,7 +132,7 @@ const Hero = memo(() => {
                         className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-4"
                     >
                         <MagneticButton 
-                            onClick={() => navigate('/conoce-smartboard')}
+                            onClick={() => navigate('/ialab-academic')}
                             className="group relative overflow-hidden flex items-center justify-center gap-3 px-8 sm:px-12 py-4 rounded-full text-base sm:text-lg font-bold bg-primary-light text-white shadow-premium-lg hover:bg-petroleum hover:-translate-y-1 transition-all duration-300"
                         >
                             <span className="absolute inset-0 w-[150%] h-full -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-[sweep_1.5s_ease-in-out_infinite] skew-x-[-20deg]" />
@@ -141,7 +141,7 @@ const Hero = memo(() => {
                         </MagneticButton>
                         
                         <MagneticButton 
-                            onClick={() => navigate('/smartboard')}
+                            onClick={() => navigate('/conoce-smartboard')}
                             className="group flex items-center justify-center gap-3 px-8 sm:px-12 py-4 rounded-full text-base sm:text-lg font-bold bg-transparent border-2 border-petroleum text-petroleum hover:bg-petroleum hover:text-white transition-all duration-300"
                         >
                             <Icon name="fa-chalkboard" className="text-petroleum group-hover:text-white transition-colors duration-300" />

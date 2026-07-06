@@ -57,7 +57,7 @@ const Esencia = memo(() => {
                 <div className={`text-center mb-8 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-petroleum tracking-tighter mb-4">
                         {t('esencia.title_before')}{' '}
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-petroleum">
+                        <span className="text-gradient-accent">
                             {t('esencia.title_highlight')}
                         </span>
                     </h2>
@@ -134,7 +134,7 @@ const Esencia = memo(() => {
                     </div>
 
                     <div className="lg:col-span-2">
-                        <div className="relative bg-petroleum rounded-2xl overflow-hidden shadow-premium-lg h-full min-h-[400px] lg:min-h-[460px]">
+                        <div className="relative bg-petroleum rounded-2xl overflow-hidden shadow-premium-lg h-full min-h-[400px] lg:min-h-[460px]" role="region" aria-roledescription="carousel" aria-label="Galería de imágenes">
                             <div className="absolute inset-0">
                                 {slides.map((slide, index) => (
                                     <div
@@ -157,27 +157,30 @@ const Esencia = memo(() => {
 
                             <div className="absolute inset-0 flex flex-col justify-end p-8">
                                 <div className="max-w-lg">
-                                    <h3 className="text-xl md:text-2xl font-normal text-white">
+                                    <h3 className="text-sm md:text-base font-normal text-white/70">
                                         {slides[currentSlide].title}
                                     </h3>
                                 </div>
                             </div>
 
-                            <button 
+                            <button
                                 onClick={() => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)}
                                 className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all"
+                                aria-label="Slide anterior"
                             >
                                 <Icon name="fa-chevron-left" />
                             </button>
-                            <button 
+                            <button
                                 onClick={() => setCurrentSlide((prev) => (prev + 1) % slides.length)}
                                 className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all"
+                                aria-label="Siguiente slide"
                             >
                                 <Icon name="fa-chevron-right" />
                             </button>
-                        </div>
+
                     </div>
                 </div>
+            </div>
             </div>
         </section>
     );

@@ -210,6 +210,31 @@
     {"q": "¿La primera clase es gratis?", "a": "Sí, la primera clase es completamente gratuita y sin compromiso. Dura 30-45 minutos para que conozcas nuestra metodología."},
     {"q": "¿Qué es SmartBoard?", "a": "SmartBoard es un dashboard de acompañamiento académico y emocional para estudiantes de 8-16 años con misiones educativas, seguimiento de progreso, diagnóstico VAK y chat con Valerio AI."},
     {"q": "¿Qué es AI Lab Academic?", "a": "Entrenamiento de élite con agentes de IA para potenciar tu productividad y aprendizaje. Incluye 5 módulos: Ingeniería de Prompts, ChatGPT, Rastreo Profundo, NotebookLM y Proyecto Final."},
-    {"q": "¿Qué es el Neuro Entorno?", "a": "Es un entorno de aprendizaje neuro-cognitivo diseñado para potenciar las capacidades de aprendizaje mediante tecnología adaptativa."}
-  ]
+      {"q": "¿Qué es el Neuro Entorno?", "a": "Es un entorno de aprendizaje neuro-cognitivo diseñado para potenciar las capacidades de aprendizaje mediante tecnología adaptativa."}
+  ],
+  "sales_scripts": {
+    "qualification": {
+      "questions": [
+        "¿Para quién estás buscando el programa?",
+        "¿Qué edad tiene?",
+        "¿Qué área le interesa más?",
+        "¿Prefieres modalidad presencial u online?"
+      ]
+    },
+    "objections": {
+      "expensive": "Entendemos. Tenemos planes desde $99.000/mes y primera clase gratis. Es una inversión en el futuro educativo.",
+      "no_time": "Nuestras sesiones son flexibles con horarios de lunes a sábado. También ofrecemos online para mayor comodidad.",
+      "not_sure": "Te entiendo. ¿Qué te parece agendar una llamada informativa sin compromiso? Resolvemos todas tus dudas."
+    },
+    "closing": [
+      "¿Te gustaría agendar tu primera clase gratuita?",
+      "¿Quieres que te guíe en el proceso de inscripción?",
+      "¿Te parece bien si un especialista te llama para darte más información?"
+    ]
+  },
+  "troubleshooting": {
+    "platform_access": "Si tienes problemas para acceder a la plataforma, verifica tu conexión a internet o intenta con otro navegador. Si el problema persiste, contacta a soporte por WhatsApp.",
+    "payment_issues": "Si tu pago no fue procesado, verifica los datos de tu tarjeta o intenta con otro método de pago. Puedes contactarnos por WhatsApp para asistencia.",
+    "class_rescheduling": "Si necesitas reprogramar una clase, hazlo con al menos 24 horas de anticipación desde tu perfil en la plataforma o contactándonos directamente."
+  }
 }

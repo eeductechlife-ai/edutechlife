@@ -1,0 +1,22 @@
+{
+  "name": "tortuga",
+  "version": "1.0.0",
+  "description": "Tortuga — Autonomous Self-Healing & Optimization Agent for Edutechlife",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "tortuga": "npx tsx src/index.ts",
+    "tortuga:analyze": "npx tsx src/index.ts --analyze-only",
+    "tortuga:plan": "npx tsx src/index.ts --plan",
+    "tortuga:apply": "npx tsx src/index.ts --apply"
+  },
+  "dependencies": {
+    "simple-git": "^3.27.0",
+    "dotenv": "^16.4.7"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0",
+    "tsx": "^4.19.0",
+    "@types/node": "^22.0.0"
+  }
+}

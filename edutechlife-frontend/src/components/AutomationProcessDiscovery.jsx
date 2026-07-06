@@ -35,8 +35,8 @@ const AutomationProcessDiscovery = ({ onGeneratePlan }) => {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 md:p-8">
-        <h3 className="text-lg font-bold text-[#004B63] mb-2">{t('automation.discovery.title')}</h3>
+      <div className="bg-white/70 backdrop-blur-xl border border-white/40 shadow-premium rounded-2xl p-6 md:p-8">
+        <h3 className="text-lg font-bold text-petroleum mb-2">{t('automation.discovery.title')}</h3>
         <p className="text-slate-500 text-sm mb-6">
           {t('automation.discovery.subtitle')}
         </p>
@@ -46,14 +46,14 @@ const AutomationProcessDiscovery = ({ onGeneratePlan }) => {
             <button
               key={p}
               onClick={() => toggleProcess(p)}
-              className={`flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all duration-200 text-center ${
-                selected.includes(p)
-                  ? 'border-[#4DA8C4] bg-[#4DA8C4]/5 text-[#004B63]'
-                  : 'border-slate-100 bg-white text-slate-600 hover:border-slate-200 hover:bg-slate-50'
-              }`}
+                className={`flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all duration-200 text-center will-change-transform hover:scale-105 ${
+                  selected.includes(p)
+                    ? 'border-primary-light bg-primary-light/5 text-petroleum shadow-premium'
+                    : 'border-white/40 bg-white/70 text-slate-600 hover:border-primary-light/30 hover:bg-white/90'
+                }`}
             >
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                selected.includes(p) ? 'bg-[#4DA8C4] text-white' : 'bg-slate-100 text-slate-400'
+                selected.includes(p) ? 'bg-primary-light text-white' : 'bg-white/70 text-slate-400'
               }`}>
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={processIcons[p] || 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2'} />
@@ -64,7 +64,7 @@ const AutomationProcessDiscovery = ({ onGeneratePlan }) => {
           ))}
         </div>
 
-        <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+        <div className="flex items-center justify-between pt-4 border-t border-white/40">
           <span className="text-sm text-slate-500">
             {selected.length > 0
               ? `${selected.length} proceso${selected.length > 1 ? 's' : ''} seleccionado${selected.length > 1 ? 's' : ''}`
@@ -73,7 +73,7 @@ const AutomationProcessDiscovery = ({ onGeneratePlan }) => {
           <button
             onClick={() => setShowResults(true)}
             disabled={selected.length === 0}
-            className="px-5 py-2.5 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white rounded-full text-sm font-bold hover:shadow-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+            className="px-5 py-2.5 bg-gradient-to-r from-petroleum to-primary-light text-white rounded-full text-sm font-bold hover:shadow-premium transition-all disabled:opacity-30 disabled:cursor-not-allowed"
           >
             Ver Soluciones IA
           </button>
@@ -88,9 +88,9 @@ const AutomationProcessDiscovery = ({ onGeneratePlan }) => {
             exit={{ opacity: 0, y: -20 }}
             className="mt-6"
           >
-            <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 md:p-8">
+            <div className="bg-white/70 backdrop-blur-xl border border-white/40 shadow-premium rounded-2xl p-6 md:p-8">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-bold text-[#004B63]">
+                <h3 className="text-lg font-bold text-petroleum">
                   {`${t('automation.discovery.solutions_found')} (${solutions.length})`}
                 </h3>
                 <div className="flex gap-3">
@@ -113,29 +113,29 @@ const AutomationProcessDiscovery = ({ onGeneratePlan }) => {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.05 }}
-                    className="p-4 rounded-2xl border border-slate-100 bg-white hover:shadow-sm transition-shadow"
+                    className="p-4 rounded-2xl border border-white/40 bg-white/70 backdrop-blur-xl hover:shadow-premium transition-all hover:scale-[1.02]"
                   >
                     <div className="flex items-center gap-2 mb-2">
-                      <div className="w-2 h-2 rounded-full bg-[#4DA8C4]" />
-                      <h4 className="text-sm font-bold text-[#004B63]">{sol.name}</h4>
+                      <div className="w-2 h-2 rounded-full bg-primary-light" />
+                      <h4 className="text-sm font-bold text-petroleum">{sol.name}</h4>
                     </div>
                     <p className="text-xs text-slate-500 mb-2">{sol.desc}</p>
                     <div className="flex items-center justify-between">
                       <span className="text-[10px] text-slate-400 font-medium">{sol.tools}</span>
                       <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
-                        sol.impacto === 'Alto' || sol.impacto === 'High' ? 'text-green-600 bg-green-50' :
-                        sol.impacto === 'Medio' || sol.impacto === 'Medium' ? 'text-amber-600 bg-amber-50' :
-                        'text-slate-500 bg-slate-50'
+                        sol.impacto === 'Alto' || sol.impacto === 'High' ? 'text-green-600 bg-green-50 border border-green-200' :
+                        sol.impacto === 'Medio' || sol.impacto === 'Medium' ? 'text-amber-600 bg-amber-50 border border-amber-200' :
+                        'text-slate-500 bg-slate-50 border border-slate-200'
                       }`}>{sol.impacto}</span>
                     </div>
                   </motion.div>
                 ))}
               </div>
 
-              <div className="flex justify-center pt-4 border-t border-slate-100">
+              <div className="flex justify-center pt-4 border-t border-white/40">
                 <button
                   onClick={() => onGeneratePlan?.(selected)}
-                  className="px-6 py-3 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white rounded-full text-sm font-bold hover:shadow-lg transition-all"
+                  className="px-6 py-3 bg-gradient-to-r from-petroleum to-primary-light text-white rounded-full text-sm font-bold hover:shadow-premium transition-all"
                 >
                   {t('automation.discovery.btn_plan')}
                 </button>

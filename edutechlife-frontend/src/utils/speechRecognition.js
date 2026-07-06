@@ -48,7 +48,7 @@ export const createSpeechRecognition = (options = {}) => {
             console.warn('Error stopping recognition after silence:', e);
           }
         }
-      }, 5000); // Reducido de 10s a 5s para mayor velocidad
+      }, 2000); // Reducido de 5s a 2s para respuesta más rápida
     }
   };
 

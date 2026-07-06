@@ -2,7 +2,7 @@ import { PROMPT_ANALIZAR_DOCUMENTO } from '../constants/prompts';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'https://edutechlife-backend.onrender.com';
 
-const TIMEOUT_MS = 30000; // 30 segundos timeout
+const TIMEOUT_MS = 60000; // 60 segundos timeout (Deepseek tarda en empezar)
 
 async function fetchWithTimeout(url, options, timeout = TIMEOUT_MS) {
     const controller = new AbortController();
@@ -161,12 +161,19 @@ export async function callDeepseekStream(messagesOrPrompt, systemPromptOrOpts = 
 
 async function streamFetch(url, payload, onChunk, isJson) {
     return new Promise((resolve, reject) => {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => {
+            controller.abort(new Error('Timeout agotado: el servidor tardo demasiado en responder'));
+        }, 30000);
+
         fetch(url, { 
             method: 'POST', 
             headers: { 'Content-Type': 'application/json' }, 
-            body: JSON.stringify(payload) 
+            body: JSON.stringify(payload),
+            signal: controller.signal
         })
         .then(response => {
+            clearTimeout(timeoutId);
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}`);
             }
@@ -218,7 +225,12 @@ async function streamFetch(url, payload, onChunk, isJson) {
             read();
         })
         .catch(err => {
-            reject(err);
+            clearTimeout(timeoutId);
+            if (err.name === 'AbortError') {
+                reject(new Error('El servidor no respondio a tiempo. Intenta de nuevo.'));
+            } else {
+                reject(err);
+            }
         });
     });
 }

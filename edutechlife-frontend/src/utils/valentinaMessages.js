@@ -66,15 +66,7 @@ export const VALENTINA_MESSAGES = {
 
   // 6-10 años (Niños) - Tono: Cálido, lúdico, motivacional
   child: {
-    welcome: () => `¡Hola! Soy Valeria, psicóloga educativa especialista en metodología VAK. Tengo 10 años de experiencia trabajando con estudiantes como tú.
-
-Hoy vamos a descubrir cómo aprende mejor tu cerebro. ¿Sabías que cada persona tiene un superpower para aprender? Algunos prefieren ver las cosas, otros escuchar, y otros necesitan tocar y experimentar.
-
-Este diagnóstico tiene 10 preguntas muy divertidas. Yo te las leeré una por una y tú seleccionarás la opción que mejor te describa.
-
-No hay respuestas correctas o incorrectas, solo tu forma de ser.
-
-¿Te emociona descubrir tu superpower de aprendizaje? ¡Vamos a comenzar!`,
+    welcome: () => `¡Hola! Soy Valeria, psicóloga educativa. Hoy descubriremos cómo aprende mejor tu cerebro. Son 10 preguntas divertidas. Yo las leo, tú eliges la opción que más te guste. No hay respuestas incorrectas. ¿Listo para descubrir tu superpoder de aprendizaje? ¡Empecemos!`,
 
     askName: () => `Primero, ¿cómo te llamas?`,
 
@@ -137,13 +129,7 @@ En tu reporte encontrarás estrategias específicas diseñadas para ti, ${name},
 
   // 11-14 años (Preadolescentes) - Tono: Equilibrado, respetuoso, motivacional
   preteen: {
-    welcome: () => `Hola, soy Valeria. Soy psicóloga educativa especializada en metodología VAK con 10 años de experiencia trabajando con estudiantes de tu edad.
-
-Hoy vamos a descubrir tu estilo de aprendizaje. ¿Sabías que cada persona tiene una forma única de procesar información?
-
-Este diagnóstico tiene 10 preguntas. Yo te las leeré y tú seleccionarás la que mejor describa tu forma de aprender. No hay respuestas correctas o incorrectas, solo tus preferencias naturales.
-
-Al final, te daré un reporte personalizado con estrategias específicas para mejorar tu estudio. ¿Listo?`,
+    welcome: () => `Hola, soy Valeria, psicóloga educativa. Hoy identificaremos tu estilo de aprendizaje. Son 10 preguntas, yo las leo y tú seleccionas la opción que mejor te describa. No hay respuestas incorrectas. Al final tendrás un reporte personalizado. ¿Comenzamos?`,
 
     askName: () => `Antes de comenzar, ¿cómo te llamas?`,
 
@@ -206,13 +192,7 @@ En tu reporte encontrarás estrategias específicas diseñadas para ti, ${name},
 
   // 15-17 años (Adolescentes) - Tono: Profesional, directo, moderno
   teen: {
-    welcome: () => `Soy Valeria, psicóloga especialista en metodología VAK. Con 10 años de experiencia en psicología educativa, te acompaño en este diagnóstico.
-
-El objetivo: identificar tu estilo de aprendizaje predominante. Esto te dará insights concretos respaldados por la neurociencia cognitiva sobre cómo procesa información tu cerebro.
-
-10 preguntas. Yo las leo, tú seleccionas tu respuesta más auténtica según cómo aprendes naturalmente. Sin juicio, solo autoconocimiento.
-
-¿Comenzamos?`,
+    welcome: () => `Soy Valeria, psicóloga especialista en metodología VAK. 10 preguntas para identificar tu estilo de aprendizaje. Yo las leo, tú seleccionas tu respuesta más auténtica. Sin juicio, solo autoconocimiento. ¿Comenzamos?`,
 
     askName: () => `¿Cómo te llamas?`,
 

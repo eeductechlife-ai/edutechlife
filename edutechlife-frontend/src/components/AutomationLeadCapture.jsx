@@ -20,7 +20,7 @@ const AutomationLeadCapture = () => {
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="max-w-2xl mx-auto bg-gradient-to-br from-[#004B63] to-[#0A3550] rounded-3xl p-10 md:p-14 text-center text-white shadow-xl"
+        className="max-w-2xl mx-auto bg-gradient-to-br from-petroleum to-petroleum-dark rounded-3xl p-10 md:p-14 text-center text-white shadow-premium-lg"
       >
         <div className="w-20 h-20 rounded-full bg-white/15 flex items-center justify-center mx-auto mb-6">
           <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -37,15 +37,15 @@ const AutomationLeadCapture = () => {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="bg-gradient-to-br from-[#004B63] to-[#0A3550] rounded-3xl overflow-hidden shadow-xl">
+      <div className="bg-gradient-to-br from-petroleum to-petroleum-dark rounded-3xl overflow-hidden shadow-premium-lg">
         <div className="grid md:grid-cols-5">
           <div className="md:col-span-2 p-8 md:p-10 text-white flex flex-col justify-between">
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full text-[11px] font-semibold mb-5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#66CCCC] animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-mint animate-pulse" />
                 {t('automation.lead.badge')}
               </div>
-              <h3 className="text-2xl font-black mb-3 text-[#4DA8C4]">
+              <h3 className="text-2xl font-black mb-3 text-primary-light">
                 {t('automation.lead.title')}
               </h3>
               <p className="text-white/70 text-sm leading-relaxed mb-6">
@@ -59,7 +59,7 @@ const AutomationLeadCapture = () => {
                   t('automation.lead.feature_4'),
                 ].map((item, i) => (
                   <li key={i} className="flex items-center gap-3 text-sm text-white/80">
-                    <svg className="w-5 h-5 text-[#66CCCC] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="w-5 h-5 text-mint flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     {item}
@@ -71,7 +71,7 @@ const AutomationLeadCapture = () => {
               <div className="flex items-center gap-3">
                 <div className="flex -space-x-2">
                   {[1, 2, 3].map((a) => (
-                    <div key={a} className="w-8 h-8 rounded-full bg-white/20 border-2 border-[#004B63] flex items-center justify-center text-[10px] font-bold">
+                    <div key={a} className="w-8 h-8 rounded-full bg-white/20 border-2 border-petroleum flex items-center justify-center text-[10px] font-bold">
                       {['JD', 'MA', 'CR'][a - 1]}
                     </div>
                   ))}
@@ -83,8 +83,8 @@ const AutomationLeadCapture = () => {
             </div>
           </div>
 
-          <div className="md:col-span-3 bg-white p-8 md:p-10">
-            <h4 className="text-lg font-bold text-[#004B63] mb-6">{t('automation.lead.form_title')}</h4>
+          <div className="md:col-span-3 bg-white/70 backdrop-blur-xl p-8 md:p-10">
+            <h4 className="text-lg font-bold text-petroleum mb-6">{t('automation.lead.form_title')}</h4>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -94,7 +94,7 @@ const AutomationLeadCapture = () => {
                     value={form.nombre}
                     onChange={(e) => setForm(f => ({ ...f, nombre: e.target.value }))}
                     required
-                    className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm text-[#004B63] placeholder:text-slate-300 focus:outline-none focus:border-[#4DA8C4] focus:ring-2 focus:ring-[#4DA8C4]/10 transition-all"
+                    className="w-full px-4 py-2.5 border border-white/40 rounded-xl text-sm text-petroleum placeholder:text-slate-300 focus:outline-none focus:border-primary-light focus:ring-2 focus:ring-primary-light/20 transition-all bg-white/70 backdrop-blur-xl"
                     placeholder={t('automation.lead.placeholder_nombre')}
                   />
                 </div>
@@ -105,7 +105,7 @@ const AutomationLeadCapture = () => {
                     value={form.email}
                     onChange={(e) => setForm(f => ({ ...f, email: e.target.value }))}
                     required
-                    className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm text-[#004B63] placeholder:text-slate-300 focus:outline-none focus:border-[#4DA8C4] focus:ring-2 focus:ring-[#4DA8C4]/10 transition-all"
+                    className="w-full px-4 py-2.5 border border-white/40 rounded-xl text-sm text-petroleum placeholder:text-slate-300 focus:outline-none focus:border-primary-light focus:ring-2 focus:ring-primary-light/20 transition-all bg-white/70 backdrop-blur-xl"
                     placeholder={t('automation.lead.placeholder_email')}
                   />
                 </div>
@@ -117,7 +117,7 @@ const AutomationLeadCapture = () => {
                     type="tel"
                     value={form.telefono}
                     onChange={(e) => setForm(f => ({ ...f, telefono: e.target.value }))}
-                    className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm text-[#004B63] placeholder:text-slate-300 focus:outline-none focus:border-[#4DA8C4] focus:ring-2 focus:ring-[#4DA8C4]/10 transition-all"
+                    className="w-full px-4 py-2.5 border border-white/40 rounded-xl text-sm text-petroleum placeholder:text-slate-300 focus:outline-none focus:border-primary-light focus:ring-2 focus:ring-primary-light/20 transition-all bg-white/70 backdrop-blur-xl"
                     placeholder={t('automation.lead.placeholder_telefono')}
                   />
                 </div>
@@ -127,7 +127,7 @@ const AutomationLeadCapture = () => {
                     type="text"
                     value={form.empresa}
                     onChange={(e) => setForm(f => ({ ...f, empresa: e.target.value }))}
-                    className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm text-[#004B63] placeholder:text-slate-300 focus:outline-none focus:border-[#4DA8C4] focus:ring-2 focus:ring-[#4DA8C4]/10 transition-all"
+                    className="w-full px-4 py-2.5 border border-white/40 rounded-xl text-sm text-petroleum placeholder:text-slate-300 focus:outline-none focus:border-primary-light focus:ring-2 focus:ring-primary-light/20 transition-all bg-white/70 backdrop-blur-xl"
                     placeholder={t('automation.lead.placeholder_empresa')}
                   />
                 </div>
@@ -137,7 +137,7 @@ const AutomationLeadCapture = () => {
                 <select
                   value={form.sector}
                   onChange={(e) => setForm(f => ({ ...f, sector: e.target.value }))}
-                  className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm text-[#004B63] focus:outline-none focus:border-[#4DA8C4] focus:ring-2 focus:ring-[#4DA8C4]/10 transition-all"
+                  className="w-full px-4 py-2.5 border border-white/40 rounded-xl text-sm text-petroleum focus:outline-none focus:border-primary-light focus:ring-2 focus:ring-primary-light/20 transition-all bg-white/70 backdrop-blur-xl"
                 >
                   {sectorOptions.map(opt => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -146,13 +146,13 @@ const AutomationLeadCapture = () => {
               </div>
               <p className="text-[11px] text-slate-400">
                 {t('automation.lead.privacy_prefix')}{' '}
-                <a href="#" className="text-[#4DA8C4] hover:underline">{t('automation.lead.privacy_link')}</a>.
+                <a href="#" className="text-primary-light hover:underline">{t('automation.lead.privacy_link')}</a>.
                 {t('automation.lead.privacy_hint')}
               </p>
               <button
                 type="submit"
                 disabled={!form.nombre || !form.email}
-                className="w-full py-3 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white rounded-xl font-bold text-sm hover:shadow-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                className="w-full py-3 bg-gradient-to-r from-petroleum to-primary-light text-white rounded-xl font-bold text-sm hover:shadow-premium transition-all disabled:opacity-30 disabled:cursor-not-allowed relative overflow-hidden"
               >
                 {t('automation.lead.btn_submit')}
               </button>
