@@ -116,26 +116,6 @@ const AppLayout = () => {
       {/* Header - Navigation Premium (fixed glass with integrated 3D orbs) */}
       {shouldShowHeader() && (
         <header className="fixed top-0 left-0 w-full z-50 bg-white/70 backdrop-blur-xl">
-            
-            <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
-              <div className="absolute w-[400px] h-[400px] rounded-full opacity-[0.12] -top-[200px] -right-[100px]" 
-                   style={{ background: 'radial-gradient(circle, rgba(77,168,196,0.35), transparent 70%)', filter: 'blur(60px)' }} />
-              <div className="absolute w-[300px] h-[300px] rounded-full opacity-[0.08] -bottom-[100px] -left-[80px]"
-                   style={{ background: 'radial-gradient(circle, rgba(0,75,99,0.3), transparent 70%)', filter: 'blur(50px)' }} />
-              <div className="absolute w-[200px] h-[200px] rounded-full opacity-[0.06] top-1/2 left-[60%] -translate-x-1/2 -translate-y-1/2"
-                   style={{ background: 'radial-gradient(circle, rgba(102,204,204,0.25), transparent 70%)', filter: 'blur(40px)' }} />
-              <div className="absolute bottom-0 right-[30%] w-3 h-3 bg-[#4DA8C4]/25 rounded-full animate-[float-3d_6s_ease-in-out_infinite]" style={{ animationDelay: '-1s' }} />
-              <div className="absolute bottom-0 left-[15%] w-2.5 h-2.5 bg-[#66CCCC]/20 rounded-full animate-[float-3d_7s_ease-in-out_infinite]" style={{ animationDelay: '-3s' }} />
-              <div className="absolute top-[15%] right-[8%] w-2 h-2 bg-[#B2D8E5]/20 rounded-full animate-[float-3d_8s_ease-in-out_infinite]" />
-              <div className="absolute bottom-0 left-[50%] w-2 h-2 bg-[#4DA8C4]/15 rounded-full animate-[float-3d_9s_ease-in-out_infinite]" style={{ animationDelay: '-5s' }} />
-            </div>
-
-            <style>{`
-              @keyframes float-3d {
-                0%, 100% { transform: translateY(0px); opacity: 0.6; }
-                50% { transform: translateY(-10px); opacity: 1; }
-              }
-            `}</style>
 
             <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 flex items-center justify-between relative z-10">
               {/* Logo - Premium Clean */}
