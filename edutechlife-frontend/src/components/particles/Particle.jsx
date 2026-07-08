@@ -57,9 +57,8 @@ export const Particle = ({ index, color = "#4DA8C4", size = "medium" }) => {
         boxShadow: `0 0 40px ${brightGlowColor}, 0 0 20px ${glowColor}`,
         filter: "brightness(1.3)",
       }}
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: physics.opacity }}
-      viewport={{ once: true, margin: "50px" }}
+      initial={{ opacity: physics.opacity }}
+      animate={{ opacity: physics.opacity }}
     />
   );
 };
