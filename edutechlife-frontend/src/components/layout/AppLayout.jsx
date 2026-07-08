@@ -117,7 +117,7 @@ const AppLayout = () => {
       {shouldShowHeader() && (
         <header className="fixed top-0 left-0 w-full z-50 bg-white/70 backdrop-blur-xl">
 
-            <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 flex items-center justify-between relative z-10">
+            <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-2 sm:py-3 flex items-center justify-between relative z-10">
               {/* Logo - Premium Clean */}
               <div className="flex items-center">
                 <button 
@@ -130,13 +130,13 @@ const AppLayout = () => {
                     outline: 'none',
                   }}
                 >
-                  <img 
-                    src="/images/logo-edutechlife.webp" 
-                    alt="Edutechlife" 
-                    className="w-24 object-contain"
-                    style={{ 
-                      height: '80px',
-                      transform: 'scale(1.8)',
+                  <img
+                    src="/images/logo-edutechlife.webp"
+                    alt="Edutechlife"
+                    className="w-16 sm:w-20 md:w-24 object-contain"
+                    style={{
+                      height: '60px',
+                      transform: 'scale(1.4) sm:scale(1.5) md:scale(1.8)',
                       transformOrigin: 'left center',
                       background: 'transparent',
                       border: 'none',

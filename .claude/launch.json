@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "edutechlife-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "edutechlife-frontend"],
+      "port": 5174,
+      "autoPort": true
+    }
+  ]
+}

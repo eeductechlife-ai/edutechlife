@@ -49,9 +49,9 @@ const Hero = memo(() => {
     const countAños = useAnimatedCounter(10, 2200, statsVisible);
 
     return (
-        <section 
-            ref={heroRef} 
-            className="relative w-full min-h-[90vh] flex flex-col items-center justify-center overflow-hidden"
+        <section
+            ref={heroRef}
+            className="relative w-full min-h-screen sm:min-h-[85vh] md:min-h-[90vh] flex flex-col items-center justify-center overflow-hidden"
         >
             <FloatingParticles count={45} className="z-0" />
             
