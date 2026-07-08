@@ -46,27 +46,35 @@
   perspective: 1000px;
   transform-style: preserve-3d;
   backface-visibility: hidden;
+  --max-blur: 2.5px; /* CSS var para blur máximo */
 }
 
-/* Optimización para dispositivos de bajo rendimiento */
+/* Optimización para dispositivos de bajo rendimiento / accesibilidad */
 @media (prefers-reduced-motion: reduce) {
   .particle {
     animation: none !important;
     will-change: auto;
+    backdrop-filter: none;
+    --max-blur: 0px; /* Sin blur si reduce-motion */
   }
 }
 
-/* Adaptación para pantallas móviles */
+/* Adaptación para pantallas móviles - Fase 4 */
 @media (max-width: 768px) {
   .particle {
-    /* Las partículas en móvil se renderean correctamente pero sin cambios de tamaño */
-    filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.1));
+    /* Reducir sombra y blur para performance */
+    filter: drop-shadow(0 0 0.5px rgba(0, 0, 0, 0.08));
+    backdrop-filter: blur(0.5px);
+    --max-blur: 1px; /* Reducir blur máximo en móvil */
+    will-change: opacity; /* Solo opacidad en móvil */
   }
 }
 
 /* Adaptación para pantallas pequeñas */
 @media (max-width: 480px) {
   .particle {
-    filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.08));
+    filter: drop-shadow(0 0 0.5px rgba(0, 0, 0, 0.06));
+    backdrop-filter: blur(0.25px);
+    --max-blur: 0.5px; /* Blur mínimo en pequeñas pantallas */
   }
 }

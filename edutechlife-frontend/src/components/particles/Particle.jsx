@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { useParticlePhysics } from "../../hooks/useParticlePhysics";
 import { useMouseTracking } from "../../hooks/useMouseTracking";
 import { useScrollParallax } from "../../hooks/useScrollParallax";
@@ -13,29 +14,45 @@ const sizeMap = {
 
 /**
  * Componente de partícula individual con animaciones 3D
+ * Fase 4: Soporte mobile + prefers-reduced-motion
  * @param {number} index - Índice único para seed reproducible
  * @param {string} color - Color hexadecimal (#RRGGBB)
  * @param {string} size - Tamaño: 'small' | 'medium' | 'large'
+ * @param {boolean} orbital - Activar/desactivar órbita
+ * @param {number} totalParticles - Total de partículas (para calcular índice dinámicamente)
  */
 export const Particle = ({
   index,
   color = "#4DA8C4",
   size = "medium",
   sizeCategory = "medium",
+  orbital = true,
+  totalParticles = 45,
 }) => {
   const physics = useParticlePhysics(index);
   const { mouseX, mouseY, isInside } = useMouseTracking();
   const scrollY = useScrollParallax();
   const { glowIntensity, glowColor } = useGlowBreathing(color);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
-  // ===== FASE 3: DEPTH EFFECT =====
-  const zIndex = Math.floor((index / 45) * 100);
+  // Detectar prefers-reduced-motion
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mediaQuery.matches);
+
+    const handler = (e) => setPrefersReducedMotion(e.matches);
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
+  }, []);
+
+  // ===== FASE 3-4: DEPTH EFFECT =====
+  const zIndex = Math.floor((index / totalParticles) * 100);
   const depthOffset = (zIndex / 100 - 0.5) * 50; // -25 a 25
   const depthBlur = Math.max(0, depthOffset / 10); // 0 a 2.5px
   const depthOpacityModifier = Math.max(0.3, 1 - Math.abs(depthOffset) / 200);
 
-  // ===== FASE 3: ORBIT MOTION =====
-  const hasOrbit = index % 5 === 0;
+  // ===== FASE 4: ORBIT MOTION (mobile: deshabilitado) =====
+  const hasOrbit = orbital && index % 5 === 0;
   const orbitCenters = [
     { x: 20, y: 30 },
     { x: 80, y: 25 },
@@ -43,7 +60,7 @@ export const Particle = ({
   ];
   const orbitCenter = hasOrbit ? orbitCenters[index % 3] : null;
   const orbitRadius = 80; // px
-  const orbitAngle = (index * 360) / 45; // Distribuir ángulos
+  const orbitAngle = (index * 360) / totalParticles; // Distribuir ángulos dinámicamente
 
   // Aumentar opacidad para bolas más grandes
   const sizeOpacityBoost = {
@@ -52,9 +69,13 @@ export const Particle = ({
     large: 1.3, // Bolas grandes 30% más opacas
   };
 
-  const finalOpacity = Math.min(
-    physics.opacity * sizeOpacityBoost[sizeCategory] * depthOpacityModifier,
-    1,
+  // Fase 4: Opacidad mínima aumentada a 0.5 (antes 0.3) para mejor contrast
+  const finalOpacity = Math.max(
+    0.5,
+    Math.min(
+      physics.opacity * sizeOpacityBoost[sizeCategory] * depthOpacityModifier,
+      1,
+    ),
   );
 
   // Parallax multiplier por tamaño (small: 0.3x, medium: 0.5x, large: 0.7x)
@@ -82,78 +103,88 @@ export const Particle = ({
   const dynamicGlowSize = 20 + glowIntensity * 30; // 20-50px
   const dynamicBoxShadow = `0 0 ${dynamicGlowSize}px ${glowColor}, 0 0 15px ${color}66`;
 
-  // ===== ANIMACIONES COMBINADAS FASE 3 =====
-  const animateProps = hasOrbit
-    ? {
-        // Órbita circular alrededor del centro
-        x: Array.from(
-          { length: 5 },
-          (_, i) =>
-            orbitCenter.x +
-            Math.cos(((orbitAngle + i * 90) * Math.PI) / 180) * orbitRadius,
-        ),
-        y: Array.from(
-          { length: 5 },
-          (_, i) =>
-            orbitCenter.y +
-            Math.sin(((orbitAngle + i * 90) * Math.PI) / 180) * orbitRadius,
-        ),
-        rotateX: [0, 10, -10, 0],
-        rotateY: [0, 15, -15, 0],
-        rotate: [0, 360],
+  // ===== ANIMACIONES COMBINADAS FASE 4 =====
+  const animateProps = prefersReducedMotion
+    ? // Si prefers-reduced-motion: solo opacidad, sin movimiento
+      {
         opacity: finalOpacity,
       }
-    : {
-        // Movimiento normal + 3D rotations
-        y: [
-          mouseAttraction.y,
-          -physics.y.amplitude + parallaxOffset + mouseAttraction.y,
-          mouseAttraction.y,
-        ],
-        x: [
-          mouseAttraction.x,
-          physics.x.amplitude + mouseAttraction.x,
-          -physics.x.amplitude + mouseAttraction.x,
-          mouseAttraction.x,
-        ],
-        rotateX: [0, 10, -10, 0],
-        rotateY: [0, 15, -15, 0],
-        rotate: [0, 360],
-        opacity: finalOpacity,
-      };
+    : hasOrbit
+      ? {
+          // Órbita circular alrededor del centro
+          x: Array.from(
+            { length: 5 },
+            (_, i) =>
+              orbitCenter.x +
+              Math.cos(((orbitAngle + i * 90) * Math.PI) / 180) * orbitRadius,
+          ),
+          y: Array.from(
+            { length: 5 },
+            (_, i) =>
+              orbitCenter.y +
+              Math.sin(((orbitAngle + i * 90) * Math.PI) / 180) * orbitRadius,
+          ),
+          rotateX: [0, 10, -10, 0],
+          rotateY: [0, 15, -15, 0],
+          rotate: [0, 360],
+          opacity: finalOpacity,
+        }
+      : {
+          // Movimiento normal + 3D rotations
+          y: [
+            mouseAttraction.y,
+            -physics.y.amplitude + parallaxOffset + mouseAttraction.y,
+            mouseAttraction.y,
+          ],
+          x: [
+            mouseAttraction.x,
+            physics.x.amplitude + mouseAttraction.x,
+            -physics.x.amplitude + mouseAttraction.x,
+            mouseAttraction.x,
+          ],
+          rotateX: [0, 10, -10, 0],
+          rotateY: [0, 15, -15, 0],
+          rotate: [0, 360],
+          opacity: finalOpacity,
+        };
 
-  // ===== TRANSICIONES COMBINADAS FASE 3 =====
-  const transitionProps = hasOrbit
-    ? {
-        x: { duration: 8, repeat: Infinity, ease: "linear" },
-        y: { duration: 8, repeat: Infinity, ease: "linear" },
-        rotateX: { duration: 15, repeat: Infinity, ease: "easeInOut" },
-        rotateY: { duration: 18, repeat: Infinity, ease: "easeInOut" },
-        rotate: { duration: 8, repeat: Infinity, ease: "linear" },
-        opacity: { duration: 8, repeat: Infinity, ease: "linear" },
+  // ===== TRANSICIONES COMBINADAS FASE 4 =====
+  const transitionProps = prefersReducedMotion
+    ? // Si prefers-reduced-motion: transición mínima
+      {
+        opacity: { duration: 0.3 },
       }
-    : {
-        y: {
-          duration: physics.y.duration,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: physics.y.delay,
-        },
-        x: {
-          duration: physics.x.duration,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: physics.x.delay,
-        },
-        rotate: {
-          duration: physics.rotate.duration,
-          repeat: Infinity,
-          ease: "linear",
-          delay: physics.rotate.delay,
-        },
-        rotateX: { duration: 15, repeat: Infinity, ease: "easeInOut" },
-        rotateY: { duration: 18, repeat: Infinity, ease: "easeInOut" },
-      };
+    : hasOrbit
+      ? {
+          x: { duration: 8, repeat: Infinity, ease: "linear" },
+          y: { duration: 8, repeat: Infinity, ease: "linear" },
+          rotateX: { duration: 15, repeat: Infinity, ease: "easeInOut" },
+          rotateY: { duration: 18, repeat: Infinity, ease: "easeInOut" },
+          rotate: { duration: 8, repeat: Infinity, ease: "linear" },
+          opacity: { duration: 8, repeat: Infinity, ease: "linear" },
+        }
+      : {
+          y: {
+            duration: physics.y.duration,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: physics.y.delay,
+          },
+          x: {
+            duration: physics.x.duration,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: physics.x.delay,
+          },
+          rotate: {
+            duration: physics.rotate.duration,
+            repeat: Infinity,
+            ease: "linear",
+            delay: physics.rotate.delay,
+          },
+          rotateX: { duration: 15, repeat: Infinity, ease: "easeInOut" },
+          rotateY: { duration: 18, repeat: Infinity, ease: "easeInOut" },
+        };
 
   return (
     <motion.div
