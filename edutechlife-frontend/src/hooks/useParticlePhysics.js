@@ -23,8 +23,8 @@ export const useParticlePhysics = (index) => {
   // Delay escalonado (cada 50ms)
   const delay = (index * 50) / 1000;
 
-  // Opacidad base con variación
-  const baseOpacity = 0.15 + Math.abs(frac * 0.3);
+  // Opacidad base con variación (más visible)
+  const baseOpacity = 0.4 + Math.abs(frac * 0.4); // 0.4 a 0.8
 
   return {
     y: {

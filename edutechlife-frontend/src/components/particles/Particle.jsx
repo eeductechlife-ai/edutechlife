@@ -3,9 +3,9 @@ import { useParticlePhysics } from "../../hooks/useParticlePhysics";
 import "./particles.css";
 
 const sizeMap = {
-  small: "w-2 h-2",
-  medium: "w-3 h-3",
-  large: "w-4 h-4",
+  small: "w-3 h-3",    // 12px (antes 8px)
+  medium: "w-4 h-4",   // 16px (antes 12px)
+  large: "w-5 h-5",    // 20px (antes 16px)
 };
 
 /**
@@ -17,15 +17,21 @@ const sizeMap = {
 export const Particle = ({ index, color = "#4DA8C4", size = "medium" }) => {
   const physics = useParticlePhysics(index);
 
-  const glowColor = `${color}66`; // Alpha 40%
-  const brightGlowColor = `${color}CC`; // Alpha 80%
+  const glowColor = `${color}99`; // Alpha 60%
+  const brightGlowColor = `${color}FF`; // Alpha 100%
+
+  // Posición inicial dispersa aleatoria
+  const initialX = Math.sin(index * 12.9898) * 100; // -100 a 100 vw
+  const initialY = Math.cos(index * 78.233) * 100;  // -100 a 100 vh
 
   return (
     <motion.div
-      className={`${sizeMap[size]} rounded-full particle pointer-events-none`}
+      className={`${sizeMap[size]} rounded-full particle pointer-events-none absolute`}
       style={{
         background: color,
-        boxShadow: `0 0 20px ${glowColor}, 0 0 10px ${color}33`,
+        left: `${initialX}%`,
+        top: `${initialY}%`,
+        boxShadow: `0 0 30px ${glowColor}, 0 0 15px ${color}66`,
       }}
       animate={{
         y: [0, -physics.y.amplitude, 0],
