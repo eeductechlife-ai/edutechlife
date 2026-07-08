@@ -1,32 +1,27 @@
-import { useMemo } from 'react';
+import { useMemo } from "react";
+import { Particle } from "./particles/Particle";
 
-const COLORS = ['#4DA8C4', '#66CCCC', '#004B63', '#B2D8E5'];
+const COLORS = ["#4DA8C4", "#66CCCC", "#004B63", "#B2D8E5"];
 
-function seededRandom(seed) {
-  const x = Math.sin(seed * 9301 + 49297) * 49297;
-  return x - Math.floor(x);
-}
-
-const FloatingParticles = ({
-  count = 20,
-  className = '',
-  colors = COLORS,
-}) => {
-  const particles = useMemo(() =>
-    Array.from({ length: count }, (_, i) => {
-      const seed = i * 7919 + count;
-      return {
+/**
+ * FloatingParticles - Sistema modular de partículas 3D flotantes
+ * Fase 1: Arquitectura base con Particle component y useParticlePhysics hook
+ *
+ * @param {number} count - Número de partículas a renderizar (default: 45)
+ * @param {string[]} colors - Array de colores hex para las partículas
+ * @param {string} className - Clases CSS adicionales
+ */
+const FloatingParticles = ({ count = 45, className = "", colors = COLORS }) => {
+  // Generar configuración de partículas usando índices como seed
+  const particles = useMemo(
+    () =>
+      Array.from({ length: count }, (_, i) => ({
         id: i,
-        size: seededRandom(seed) * 10 + 4,
-        left: seededRandom(seed + 1) * 100,
-        top: seededRandom(seed + 2) * 100,
-        delay: seededRandom(seed + 3) * 20,
-        duration: seededRandom(seed + 4) * 16 + 16,
         color: colors[i % colors.length],
-        blur: seededRandom(seed + 5) > 0.7 ? 'blur-sm' : '',
-        zIndex: Math.floor(seededRandom(seed + 6) * 10),
-      };
-    }),
+        // Distribuir tamaños de forma determinística:
+        // 0-14: small, 15-29: medium, 30-44: large
+        size: ["small", "medium", "large"][Math.floor(i / 15) % 3],
+      })),
     [count, colors],
   );
 
@@ -36,27 +31,17 @@ const FloatingParticles = ({
       aria-hidden="true"
     >
       {particles.map((particle) => (
-        <div
+        <Particle
           key={particle.id}
-          className={`absolute rounded-full ${particle.blur}`}
-          style={{
-            width: particle.size,
-            height: particle.size,
-            left: `${particle.left}%`,
-            top: `${particle.top}%`,
-            backgroundColor: particle.color,
-            opacity: seededRandom(particle.id + 100) * 0.3 + 0.15,
-            animation: `particle-float-3d ${particle.duration}s ease-in-out ${particle.delay}s infinite`,
-            willChange: 'transform, opacity',
-            zIndex: particle.zIndex,
-            boxShadow: `0 0 ${particle.size * 2}px ${particle.color}`,
-          }}
+          index={particle.id}
+          color={particle.color}
+          size={particle.size}
         />
       ))}
     </div>
   );
 };
 
-FloatingParticles.displayName = 'FloatingParticles';
+FloatingParticles.displayName = "FloatingParticles";
 
 export default FloatingParticles;
