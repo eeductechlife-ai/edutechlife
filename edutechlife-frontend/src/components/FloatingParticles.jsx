@@ -36,6 +36,7 @@ const FloatingParticles = ({ count = 45, className = "", colors = COLORS }) => {
           index={particle.id}
           color={particle.color}
           size={particle.size}
+          sizeCategory={particle.size}
         />
       ))}
     </div>

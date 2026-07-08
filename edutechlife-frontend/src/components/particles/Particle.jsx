@@ -14,8 +14,17 @@ const sizeMap = {
  * @param {string} color - Color hexadecimal (#RRGGBB)
  * @param {string} size - Tamaño: 'small' | 'medium' | 'large'
  */
-export const Particle = ({ index, color = "#4DA8C4", size = "medium" }) => {
+export const Particle = ({ index, color = "#4DA8C4", size = "medium", sizeCategory = "medium" }) => {
   const physics = useParticlePhysics(index);
+
+  // Aumentar opacidad para bolas más grandes
+  const sizeOpacityBoost = {
+    small: 1,
+    medium: 1.1,
+    large: 1.3  // Bolas grandes 30% más opacas
+  };
+
+  const finalOpacity = Math.min(physics.opacity * sizeOpacityBoost[sizeCategory], 1);
 
   const glowColor = `${color}99`; // Alpha 60%
   const brightGlowColor = `${color}FF`; // Alpha 100%
@@ -63,8 +72,8 @@ export const Particle = ({ index, color = "#4DA8C4", size = "medium" }) => {
         boxShadow: `0 0 40px ${brightGlowColor}, 0 0 20px ${glowColor}`,
         filter: "brightness(1.3)",
       }}
-      initial={{ opacity: physics.opacity }}
-      animate={{ opacity: physics.opacity }}
+      initial={{ opacity: finalOpacity }}
+      animate={{ opacity: finalOpacity }}
     />
   );
 };
