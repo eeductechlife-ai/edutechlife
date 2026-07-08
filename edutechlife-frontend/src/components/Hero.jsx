@@ -84,10 +84,8 @@ const Hero = memo(() => {
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center justify-center text-center">
           <AnimatedTitle
-            text={`${t("hero.title_line1")} ${t("hero.title_line2")}`}
-            highlightText={t("hero.title_line2")}
-            splitMode="words"
-            gradientColors={["#004B63", "#4DA8C4", "#66CCCC"]}
+            text1={t("hero.title_line1")}
+            text2={t("hero.title_line2")}
           />
 
           <motion.p
