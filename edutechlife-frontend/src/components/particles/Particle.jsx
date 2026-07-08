@@ -1,11 +1,14 @@
 import { motion } from "framer-motion";
 import { useParticlePhysics } from "../../hooks/useParticlePhysics";
+import { useMouseTracking } from "../../hooks/useMouseTracking";
+import { useScrollParallax } from "../../hooks/useScrollParallax";
+import { useGlowBreathing } from "../../hooks/useGlowBreathing";
 import "./particles.css";
 
 const sizeMap = {
-  small: "w-3 h-3",    // 12px (antes 8px)
-  medium: "w-4 h-4",   // 16px (antes 12px)
-  large: "w-5 h-5",    // 20px (antes 16px)
+  small: "w-3 h-3", // 12px (antes 8px)
+  medium: "w-4 h-4", // 16px (antes 12px)
+  large: "w-5 h-5", // 20px (antes 16px)
 };
 
 /**
@@ -14,24 +17,53 @@ const sizeMap = {
  * @param {string} color - Color hexadecimal (#RRGGBB)
  * @param {string} size - Tamaño: 'small' | 'medium' | 'large'
  */
-export const Particle = ({ index, color = "#4DA8C4", size = "medium", sizeCategory = "medium" }) => {
+export const Particle = ({
+  index,
+  color = "#4DA8C4",
+  size = "medium",
+  sizeCategory = "medium",
+}) => {
   const physics = useParticlePhysics(index);
+  const { mouseX, mouseY, isInside } = useMouseTracking();
+  const scrollY = useScrollParallax();
+  const { glowIntensity, glowColor } = useGlowBreathing(color);
 
   // Aumentar opacidad para bolas más grandes
   const sizeOpacityBoost = {
     small: 1,
     medium: 1.1,
-    large: 1.3  // Bolas grandes 30% más opacas
+    large: 1.3, // Bolas grandes 30% más opacas
   };
 
-  const finalOpacity = Math.min(physics.opacity * sizeOpacityBoost[sizeCategory], 1);
+  const finalOpacity = Math.min(
+    physics.opacity * sizeOpacityBoost[sizeCategory],
+    1,
+  );
 
-  const glowColor = `${color}99`; // Alpha 60%
+  // Parallax multiplier por tamaño (small: 0.3x, medium: 0.5x, large: 0.7x)
+  const parallaxMap = { small: 0.3, medium: 0.5, large: 0.7 };
+  const parallaxOffset = (scrollY / 100) * 50 * parallaxMap[sizeCategory];
+
+  // Mouse attraction (si está dentro del viewport)
+  // Normalizar posición del mouse a ±15px (rango de atracción suave)
+  const mouseAttraction = isInside
+    ? {
+        x: (mouseX - 0.5) * 30, // ±15px
+        y: (mouseY - 0.5) * 30, // ±15px
+      }
+    : { x: 0, y: 0 };
+
+  // Glow base color con alpha
+  const baseGlowColor = `${color}99`; // Alpha 60%
   const brightGlowColor = `${color}FF`; // Alpha 100%
 
   // Posición inicial dispersa aleatoria
   const initialX = Math.sin(index * 12.9898) * 100; // -100 a 100 vw
-  const initialY = Math.cos(index * 78.233) * 100;  // -100 a 100 vh
+  const initialY = Math.cos(index * 78.233) * 100; // -100 a 100 vh
+
+  // Glow dinamico con breathing
+  const dynamicGlowSize = 20 + glowIntensity * 30; // 20-50px
+  const dynamicBoxShadow = `0 0 ${dynamicGlowSize}px ${glowColor}, 0 0 15px ${color}66`;
 
   return (
     <motion.div
@@ -40,12 +72,22 @@ export const Particle = ({ index, color = "#4DA8C4", size = "medium", sizeCatego
         background: color,
         left: `${initialX}%`,
         top: `${initialY}%`,
-        boxShadow: `0 0 30px ${glowColor}, 0 0 15px ${color}66`,
+        boxShadow: dynamicBoxShadow,
       }}
       animate={{
-        y: [0, -physics.y.amplitude, 0],
-        x: [0, physics.x.amplitude, -physics.x.amplitude, 0],
+        y: [
+          mouseAttraction.y,
+          -physics.y.amplitude + parallaxOffset + mouseAttraction.y,
+          mouseAttraction.y,
+        ],
+        x: [
+          mouseAttraction.x,
+          physics.x.amplitude + mouseAttraction.x,
+          -physics.x.amplitude + mouseAttraction.x,
+          mouseAttraction.x,
+        ],
         rotate: [0, 360],
+        opacity: finalOpacity,
       }}
       transition={{
         y: {
@@ -69,11 +111,10 @@ export const Particle = ({ index, color = "#4DA8C4", size = "medium", sizeCatego
       }}
       whileHover={{
         scale: 1.2,
-        boxShadow: `0 0 40px ${brightGlowColor}, 0 0 20px ${glowColor}`,
+        boxShadow: `0 0 40px ${brightGlowColor}, 0 0 20px ${baseGlowColor}`,
         filter: "brightness(1.3)",
       }}
       initial={{ opacity: finalOpacity }}
-      animate={{ opacity: finalOpacity }}
     />
   );
 };
