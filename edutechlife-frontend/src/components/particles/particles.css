@@ -43,6 +43,9 @@
   filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.1));
   backdrop-filter: blur(1px);
   position: absolute;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
 }
 
 /* Optimización para dispositivos de bajo rendimiento */
