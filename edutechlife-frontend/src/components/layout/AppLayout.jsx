@@ -133,10 +133,10 @@ const AppLayout = () => {
                   <img
                     src="/images/logo-edutechlife.webp"
                     alt="Edutechlife"
-                    className="w-16 sm:w-20 md:w-24 object-contain"
+                    className="w-20 sm:w-24 md:w-24 lg:w-24 object-contain"
                     style={{
-                      height: '60px',
-                      transform: 'scale(1.4) sm:scale(1.5) md:scale(1.8)',
+                      height: '80px',
+                      transform: 'scale(1.8)',
                       transformOrigin: 'left center',
                       background: 'transparent',
                       border: 'none',
