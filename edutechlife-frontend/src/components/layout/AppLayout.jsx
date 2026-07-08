@@ -108,14 +108,14 @@ const AppLayout = () => {
           <GlobalCanvas />
         </Suspense>
 
-      {/* Global Particle Background - Full viewport behind everything */}
-      <div className="fixed inset-0 z-[-1] pointer-events-none overflow-hidden" aria-hidden="true">
+      {/* Global Particle Background - Full viewport behind header and content */}
+      <div className="fixed inset-0 z-[5] pointer-events-none overflow-hidden" aria-hidden="true">
         <FloatingParticles count={45} colors={['#4DA8C4', '#66CCCC', '#004B63', '#B2D8E5']} />
       </div>
       
       {/* Header - Navigation Premium (fixed glass with integrated 3D orbs) */}
       {shouldShowHeader() && (
-        <header className="fixed top-0 left-0 w-full z-50 bg-white/70 backdrop-blur-xl">
+        <header className="fixed top-0 left-0 w-full z-50 bg-white/50 backdrop-blur-lg">
 
             <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-2 sm:py-3 flex items-center justify-between relative z-10">
               {/* Logo - Premium Clean */}
