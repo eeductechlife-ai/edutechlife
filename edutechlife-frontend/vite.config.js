@@ -176,6 +176,9 @@ export default defineConfig({
           if (id.includes('/src/features/vak-diagnosis')) {
             return 'vak-feature';
           }
+          if (id.includes('/src/components/layout/AppLayout')) {
+            return 'app-layout';
+          }
         },
         chunkFileNames: 'assets/[name]-[hash].js',
         entryFileNames: 'assets/[name]-[hash].js',
