@@ -108,6 +108,7 @@ const ProblemScanner = memo(() => {
     setDocumentForDani({
       type: "document_summary",
       subject: sl,
+      title: summary?.title || "Resumen de estudio",
       summary: `El estudiante subió material de ${sl || "estudio"}${
         summary?.title ? ` sobre "${summary.title}"` : ""
       }${desc ? `. Nota: ${desc}` : ""}. Ya tiene un resumen y quiere profundizar o resolver dudas.`,
