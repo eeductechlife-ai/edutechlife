@@ -25,7 +25,7 @@ const QuizCard = memo(
     themeIcon,
     gradeLabel,
   }) => (
-    <div className="flex flex-col items-center gap-6">
+    <div className="flex flex-col items-center gap-8 w-full">
       <p className="text-sm text-[#64748B]">
         {idx + 1} / {total}
       </p>
