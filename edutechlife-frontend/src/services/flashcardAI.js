@@ -88,6 +88,7 @@ export async function generateFlashcards(topic, grade = "4-6") {
     example: card.example || "Ejemplo",
     relatedTerms: Array.isArray(card.relatedTerms) ? card.relatedTerms : [],
     grade,
+    icon: detectCardIcon(card.keyword || card.front || ""),
   }));
 }
 
@@ -225,4 +226,157 @@ export function detectThemeFromTopic(topic) {
     icon: "📖",
     name: "General",
   };
+}
+
+// Detectar icono específico para cada palabra clave
+export function detectCardIcon(keyword) {
+  if (!keyword) return "📚";
+  const keywordLower = keyword.toLowerCase();
+
+  // Mapeo específico de palabras clave a iconos
+  const iconMap = {
+    // Ciencias - Biología
+    fotosíntesis: "🌿",
+    fotosintesis: "🌿",
+    clorofila: "🌱",
+    célula: "🧬",
+    celula: "🧬",
+    adn: "🧬",
+    planta: "🌱",
+    plantas: "🌿",
+    árbol: "🌳",
+    arbol: "🌳",
+    hoja: "🍃",
+    hojas: "🍃",
+    flor: "🌸",
+    flores: "🌸",
+    animal: "🦁",
+    animales: "🦁",
+    bacteria: "🦠",
+    virus: "🦠",
+
+    // Ciencias - Física/Química
+    luz: "💡",
+    solar: "☀️",
+    sol: "☀️",
+    energía: "⚡",
+    energia: "⚡",
+    oxígeno: "💨",
+    oxigeno: "💨",
+    aire: "💨",
+    agua: "💧",
+    átomo: "⚛️",
+    atomo: "⚛️",
+    molécula: "🔬",
+    molecula: "🔬",
+    química: "🧪",
+    quimica: "🧪",
+    reacción: "🔥",
+    reaccion: "🔥",
+
+    // Historia y Geografía
+    historia: "📚",
+    geografía: "🗺️",
+    geografia: "🗺️",
+    mapa: "🗺️",
+    mundo: "🌍",
+    continente: "🌍",
+    país: "🏴",
+    pais: "🏴",
+    guerra: "⚔️",
+    imperio: "👑",
+    civilización: "🏛️",
+    civilizacion: "🏛️",
+
+    // Lenguaje
+    inglés: "🇬🇧",
+    ingles: "🇬🇧",
+    español: "🇪🇸",
+    francés: "🇫🇷",
+    frances: "🇫🇷",
+    alemán: "🇩🇪",
+    aleman: "🇩🇪",
+    idioma: "🗣️",
+    gramática: "✏️",
+    gramatica: "✏️",
+    verbo: "📝",
+    sustantivo: "📝",
+    pronombre: "📝",
+    literatura: "📖",
+    poesía: "✨",
+    poesia: "✨",
+
+    // Matemáticas
+    matemáticas: "🧮",
+    matematicas: "🧮",
+    número: "🔢",
+    numero: "🔢",
+    suma: "➕",
+    resta: "➖",
+    multiplicación: "✖️",
+    multiplicacion: "✖️",
+    división: "➗",
+    division: "➗",
+    álgebra: "📐",
+    algebra: "📐",
+    geometría: "📐",
+    geometria: "📐",
+    ecuación: "🟰",
+    ecuacion: "🟰",
+    fórmula: "🔢",
+    formula: "🔢",
+    ángulo: "📐",
+    angulo: "📐",
+    triángulo: "△",
+    triangulo: "△",
+
+    // Artes
+    arte: "🎨",
+    música: "🎵",
+    musica: "🎵",
+    nota: "🎵",
+    pintura: "🖼️",
+    escultura: "🗿",
+    compositor: "🎼",
+    canción: "🎤",
+    cancion: "🎤",
+    instrumento: "🎸",
+    color: "🎨",
+    dibujo: "✏️",
+    danza: "💃",
+    teatro: "🎭",
+
+    // Tecnología
+    tecnología: "💻",
+    tecnologia: "💻",
+    computadora: "🖥️",
+    programación: "💻",
+    programacion: "💻",
+    código: "💻",
+    codigo: "💻",
+    software: "💾",
+    internet: "🌐",
+    robot: "🤖",
+    algoritmo: "⚙️",
+    datos: "📊",
+    red: "🌐",
+    app: "📱",
+    digital: "🔌",
+  };
+
+  // Buscar coincidencia exacta
+  if (iconMap[keywordLower]) {
+    return iconMap[keywordLower];
+  }
+
+  // Buscar coincidencia parcial
+  for (const [key, icon] of Object.entries(iconMap)) {
+    if (keywordLower.includes(key) || key.includes(keywordLower)) {
+      return icon;
+    }
+  }
+
+  // Default basado en tema general
+  const theme = detectThemeFromTopic(keyword);
+  return theme.icon;
 }

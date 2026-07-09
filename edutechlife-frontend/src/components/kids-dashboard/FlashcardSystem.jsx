@@ -57,7 +57,9 @@ const QuizCard = memo(
                   {gradeLabel}
                 </span>
               )}
-              <span className="text-5xl mb-6 mt-2">{themeIcon || "📚"}</span>
+              <span className="text-5xl mb-6 mt-2">
+                {card.icon || themeIcon || "📚"}
+              </span>
               <span
                 className="text-xs font-semibold mb-3 block"
                 style={{ color: themeColor || "#4DA8C4" }}
