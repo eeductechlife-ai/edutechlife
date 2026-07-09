@@ -128,10 +128,9 @@ const QuizCard = memo(
                     {card.relatedTerms.map((term, i) => (
                       <span
                         key={i}
-                        className="px-3 py-2 rounded-lg text-sm font-semibold bg-opacity-20 text-white"
+                        className="px-3 py-2 rounded-lg text-sm font-semibold text-white"
                         style={{
                           backgroundColor: themeColor,
-                          color: themeColor,
                         }}
                       >
                         {term}
