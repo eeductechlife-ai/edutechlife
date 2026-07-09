@@ -48,7 +48,7 @@ const QuizCard = memo(
               minHeight: "480px",
             }}
           >
-            <div className="flex flex-col items-center relative">
+            <div className="flex flex-col items-center justify-center flex-1 relative">
               {gradeLabel && (
                 <span
                   className="absolute top-0 right-0 px-2 py-1 rounded-lg text-xs font-bold bg-opacity-10 text-white"
@@ -57,18 +57,16 @@ const QuizCard = memo(
                   {gradeLabel}
                 </span>
               )}
-              <span className="text-5xl mb-6 mt-2">
-                {card.icon || themeIcon || "📚"}
-              </span>
               <span
-                className="text-xs font-semibold mb-3 block"
+                className="text-xs font-semibold mb-3 block tracking-wider"
                 style={{ color: themeColor || "#4DA8C4" }}
               >
                 PALABRA CLAVE
               </span>
-              <p className="text-3xl font-bold text-[#004B63] text-center">
+              <p className="text-3xl font-bold text-[#004B63] text-center mb-6">
                 {card.front}
               </p>
+              <span className="text-6xl">{card.icon || themeIcon || "📚"}</span>
             </div>
             <p className="text-xs text-[#64748B] text-center">
               Toca para ver la respuesta
@@ -348,6 +346,7 @@ const FlashcardSystem = memo(() => {
             back: card.back,
             example: card.example,
             relatedTerms: card.relatedTerms,
+            icon: card.icon,
           })),
           createdAt: new Date().toISOString(),
           stats: { totalStudied: 0, correct: 0, incorrect: 0, streak: 0 },
