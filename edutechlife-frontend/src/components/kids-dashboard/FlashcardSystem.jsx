@@ -150,23 +150,24 @@ const QuizCard = memo(
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="flex gap-4"
+            className="flex gap-6 w-full justify-center mt-4"
           >
             <motion.button
               onClick={() => onResult(false)}
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.95 }}
-              className="px-6 py-3 bg-white border-2 border-red-200 text-red-500 rounded-xl font-bold text-sm hover:bg-red-50"
+              className="flex-1 max-w-xs px-8 py-4 bg-white border-3 border-red-400 text-red-500 rounded-2xl font-bold text-base hover:bg-red-50 shadow-md transition-all"
             >
               ❌ No Entendido
             </motion.button>
             <motion.button
               onClick={() => onResult(true)}
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.95 }}
-              className="px-6 py-3 text-white rounded-xl font-bold text-sm shadow-md"
+              className="flex-1 max-w-xs px-8 py-4 text-white rounded-2xl font-bold text-base shadow-lg transition-all"
               style={{
-                backgroundImage: `linear-gradient(to right, ${themeColor || "#4DA8C4"}, ${themeColor || "#66CCCC"}40)`,
+                backgroundColor: "#2ECC71",
+                backgroundImage: `linear-gradient(135deg, #2ECC71 0%, #27AE60 100%)`,
               }}
             >
               ✅ Entendido
