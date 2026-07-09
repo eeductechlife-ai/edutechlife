@@ -702,25 +702,6 @@ const FlashcardSystem = memo(() => {
       <GenerateFlashcards onGenerated={handleGenerateFlashcards} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <motion.div
-          onClick={() => {
-            setDeckTitle("");
-            setDeckDescription("");
-            setCurrentDeckId(null);
-            setMode("editor");
-          }}
-          whileHover={{
-            scale: 1.02,
-            boxShadow: "0 10px 30px rgba(77, 168, 196, 0.15)",
-          }}
-          className="p-5 rounded-2xl border-2 border-dashed border-[#E2E8F0]/50 bg-white/50 backdrop-blur-xl flex flex-col items-center justify-center min-h-[160px] cursor-pointer hover:border-[#4DA8C4]/50 transition-all"
-        >
-          <span className="text-3xl mb-2">➕</span>
-          <p className="font-semibold text-[#004B63]">Crear nuevo mazo</p>
-          <p className="text-xs text-[#64748B] mt-1">
-            Agrega tarjetas de estudio
-          </p>
-        </motion.div>
         {decks.map((d, i) => (
           <DeckCard
             key={d.id}
