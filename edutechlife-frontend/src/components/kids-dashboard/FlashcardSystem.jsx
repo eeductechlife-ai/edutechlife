@@ -30,8 +30,8 @@ const QuizCard = memo(
         {idx + 1} / {total}
       </p>
       <div
-        className="w-full max-w-md cursor-pointer"
-        style={{ perspective: "1000px" }}
+        className="w-full cursor-pointer"
+        style={{ perspective: "1000px", maxWidth: "700px" }}
         onClick={onFlip}
       >
         <motion.div
@@ -41,10 +41,11 @@ const QuizCard = memo(
           style={{ transformStyle: "preserve-3d" }}
         >
           <div
-            className="absolute inset-0 rounded-2xl bg-white border-2 shadow-lg p-6 flex flex-col justify-between min-h-80"
+            className="absolute inset-0 rounded-2xl bg-white border-2 shadow-lg p-8 flex flex-col justify-between"
             style={{
               backfaceVisibility: "hidden",
               borderColor: themeColor || "#E2E8F0",
+              minHeight: "500px",
             }}
           >
             <div>
@@ -75,57 +76,61 @@ const QuizCard = memo(
           </div>
 
           <div
-            className="absolute inset-0 rounded-2xl bg-white border-2 shadow-lg p-6 overflow-y-auto max-h-80"
+            className="absolute inset-0 rounded-2xl bg-white border-2 shadow-lg p-8 overflow-y-auto"
             style={{
               backfaceVisibility: "hidden",
               transform: "rotateY(180deg)",
               borderColor: themeColor || "#4DA8C4",
+              minHeight: "500px",
+              maxHeight: "600px",
             }}
           >
-            <div className="space-y-4">
+            <div className="space-y-6">
               <div>
                 <span
-                  className="text-xs font-semibold block mb-2"
+                  className="text-sm font-bold block mb-3"
                   style={{ color: themeColor || "#66CCCC" }}
                 >
                   📖 DEFINICIÓN
                 </span>
-                <p className="text-sm font-semibold text-[#004B63]">
+                <p className="text-base font-semibold text-[#004B63] leading-relaxed">
                   {card.back}
                 </p>
               </div>
 
               {card.example && (
                 <div
-                  className="border-t pt-3"
+                  className="border-t pt-4"
                   style={{ borderColor: themeColor + "30" }}
                 >
                   <span
-                    className="text-xs font-semibold block mb-2"
+                    className="text-sm font-bold block mb-3"
                     style={{ color: themeColor || "#66CCCC" }}
                   >
                     💡 EJEMPLO
                   </span>
-                  <p className="text-sm text-[#404B5C]">{card.example}</p>
+                  <p className="text-base text-[#404B5C] leading-relaxed">
+                    {card.example}
+                  </p>
                 </div>
               )}
 
               {card.relatedTerms && card.relatedTerms.length > 0 && (
                 <div
-                  className="border-t pt-3"
+                  className="border-t pt-4"
                   style={{ borderColor: themeColor + "30" }}
                 >
                   <span
-                    className="text-xs font-semibold block mb-2"
+                    className="text-sm font-bold block mb-3"
                     style={{ color: themeColor || "#66CCCC" }}
                   >
                     🔗 TÉRMINOS RELACIONADOS
                   </span>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-3">
                     {card.relatedTerms.map((term, i) => (
                       <span
                         key={i}
-                        className="px-2 py-1 rounded-lg text-xs font-medium bg-opacity-20 text-white"
+                        className="px-3 py-2 rounded-lg text-sm font-semibold bg-opacity-20 text-white"
                         style={{
                           backgroundColor: themeColor,
                           color: themeColor,
