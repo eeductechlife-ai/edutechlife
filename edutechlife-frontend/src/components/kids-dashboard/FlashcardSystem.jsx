@@ -45,7 +45,7 @@ const QuizCard = memo(
             style={{
               backfaceVisibility: "hidden",
               borderColor: themeColor || "#E2E8F0",
-              minHeight: "500px",
+              minHeight: "420px",
             }}
           >
             <div>
@@ -81,8 +81,8 @@ const QuizCard = memo(
               backfaceVisibility: "hidden",
               transform: "rotateY(180deg)",
               borderColor: themeColor || "#4DA8C4",
-              minHeight: "500px",
-              maxHeight: "600px",
+              minHeight: "420px",
+              maxHeight: "500px",
             }}
           >
             <div className="space-y-6">
@@ -161,7 +161,7 @@ const QuizCard = memo(
               whileTap={{ scale: 0.95 }}
               className="px-6 py-3 bg-white border-2 border-red-200 text-red-500 rounded-xl font-bold text-sm hover:bg-red-50"
             >
-              🔄 Repasar
+              ❌ No Entendido
             </motion.button>
             <motion.button
               onClick={() => onResult(true)}
@@ -172,7 +172,7 @@ const QuizCard = memo(
                 backgroundImage: `linear-gradient(to right, ${themeColor || "#4DA8C4"}, ${themeColor || "#66CCCC"}40)`,
               }}
             >
-              ✅ Sabía
+              ✅ Entendido
             </motion.button>
           </motion.div>
         )}
