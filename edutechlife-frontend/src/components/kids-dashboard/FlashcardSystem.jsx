@@ -31,21 +31,21 @@ const QuizCard = memo(
       </p>
       <div
         className="w-full cursor-pointer"
-        style={{ perspective: "1000px", maxWidth: "700px" }}
+        style={{ perspective: "1000px", maxWidth: "700px", minHeight: "480px" }}
         onClick={onFlip}
       >
         <motion.div
           className="relative w-full"
           animate={{ rotateY: flipped ? 180 : 0 }}
           transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
-          style={{ transformStyle: "preserve-3d" }}
+          style={{ transformStyle: "preserve-3d", minHeight: "480px" }}
         >
           <div
             className="absolute inset-0 rounded-2xl bg-white border-2 shadow-lg p-8 flex flex-col justify-between"
             style={{
               backfaceVisibility: "hidden",
               borderColor: themeColor || "#E2E8F0",
-              minHeight: "420px",
+              minHeight: "480px",
             }}
           >
             <div className="flex flex-col items-center relative">
@@ -76,19 +76,18 @@ const QuizCard = memo(
           </div>
 
           <div
-            className="absolute inset-0 rounded-2xl bg-white border-2 shadow-lg p-8 overflow-y-auto"
+            className="absolute inset-0 rounded-2xl bg-white border-2 shadow-lg p-6 flex flex-col"
             style={{
               backfaceVisibility: "hidden",
               transform: "rotateY(180deg)",
               borderColor: themeColor || "#4DA8C4",
-              minHeight: "420px",
-              maxHeight: "500px",
+              minHeight: "480px",
             }}
           >
-            <div className="space-y-6">
+            <div className="flex-1 overflow-y-auto space-y-5 pr-1">
               <div>
                 <span
-                  className="text-sm font-bold block mb-3"
+                  className="text-sm font-bold block mb-2"
                   style={{ color: themeColor || "#66CCCC" }}
                 >
                   📖 DEFINICIÓN
@@ -100,11 +99,11 @@ const QuizCard = memo(
 
               {card.example && (
                 <div
-                  className="border-t pt-4"
+                  className="border-t pt-3"
                   style={{ borderColor: themeColor + "30" }}
                 >
                   <span
-                    className="text-sm font-bold block mb-3"
+                    className="text-sm font-bold block mb-2"
                     style={{ color: themeColor || "#66CCCC" }}
                   >
                     💡 EJEMPLO
@@ -117,20 +116,20 @@ const QuizCard = memo(
 
               {card.relatedTerms && card.relatedTerms.length > 0 && (
                 <div
-                  className="border-t pt-4"
+                  className="border-t pt-3"
                   style={{ borderColor: themeColor + "30" }}
                 >
                   <span
-                    className="text-sm font-bold block mb-3"
+                    className="text-sm font-bold block mb-2"
                     style={{ color: themeColor || "#66CCCC" }}
                   >
                     🔗 TÉRMINOS RELACIONADOS
                   </span>
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-wrap gap-2">
                     {card.relatedTerms.map((term, i) => (
                       <span
                         key={i}
-                        className="px-3 py-2 rounded-lg text-sm font-semibold text-white"
+                        className="px-3 py-1.5 rounded-lg text-sm font-semibold text-white"
                         style={{
                           backgroundColor: themeColor,
                         }}
@@ -142,41 +141,42 @@ const QuizCard = memo(
                 </div>
               )}
             </div>
+
+            {/* Botones fijos en la parte inferior de la tarjeta */}
+            <div
+              className="flex gap-3 pt-4 mt-3 border-t shrink-0"
+              style={{ borderColor: themeColor + "25" }}
+            >
+              <motion.button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onResult(false);
+                }}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
+                className="flex-1 py-3.5 bg-white border-2 border-red-400 text-red-500 rounded-xl font-bold text-base hover:bg-red-50 shadow-sm transition-all"
+              >
+                ❌ No Entendí
+              </motion.button>
+              <motion.button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onResult(true);
+                }}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
+                className="flex-1 py-3.5 text-white rounded-xl font-bold text-base shadow-md transition-all"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(135deg, #2ECC71 0%, #27AE60 100%)",
+                }}
+              >
+                ✅ Entendí
+              </motion.button>
+            </div>
           </div>
         </motion.div>
       </div>
-      <AnimatePresence mode="wait">
-        {flipped && (
-          <motion.div
-            key="actions"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="flex gap-6 w-full justify-center mt-4"
-          >
-            <motion.button
-              onClick={() => onResult(false)}
-              whileHover={{ scale: 1.08 }}
-              whileTap={{ scale: 0.95 }}
-              className="flex-1 max-w-xs px-8 py-4 bg-white border-3 border-red-400 text-red-500 rounded-2xl font-bold text-base hover:bg-red-50 shadow-md transition-all"
-            >
-              ❌ No Entendido
-            </motion.button>
-            <motion.button
-              onClick={() => onResult(true)}
-              whileHover={{ scale: 1.08 }}
-              whileTap={{ scale: 0.95 }}
-              className="flex-1 max-w-xs px-8 py-4 text-white rounded-2xl font-bold text-base shadow-lg transition-all"
-              style={{
-                backgroundColor: "#2ECC71",
-                backgroundImage: `linear-gradient(135deg, #2ECC71 0%, #27AE60 100%)`,
-              }}
-            >
-              ✅ Entendido
-            </motion.button>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   ),
 );
