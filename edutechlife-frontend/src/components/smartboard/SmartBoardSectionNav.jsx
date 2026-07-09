@@ -1,4 +1,9 @@
-export default function SmartBoardSectionNav({ currentStep, totalSteps, stepLabels, onGoToStep }) {
+export default function SmartBoardSectionNav({
+  currentStep,
+  totalSteps,
+  stepLabels,
+  onGoToStep,
+}) {
   return (
     <div className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-xl border-b border-petroleum/5 shadow-premium">
       <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-3 sm:py-3.5 overflow-x-auto scrollbar-none">
@@ -7,16 +12,13 @@ export default function SmartBoardSectionNav({ currentStep, totalSteps, stepLabe
             <button
               key={idx}
               onClick={() => onGoToStep(idx)}
-              className={`relative px-3 sm:px-4 py-2 sm:py-2.5 rounded-full text-[11px] sm:text-[13px] font-bold transition-all duration-300 whitespace-nowrap ${
+              className={`relative px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-[11px] sm:text-[13px] font-bold transition-all duration-300 whitespace-nowrap border-b-2 ${
                 idx === currentStep
-                  ? 'bg-petroleum text-white shadow-premium-lg scale-105 ring-2 ring-petroleum/20'
-                  : 'bg-petroleum/5 border border-petroleum/10 text-petroleum/80 hover:bg-petroleum hover:text-white'
+                  ? "bg-petroleum text-white shadow-premium-lg scale-105 ring-2 ring-petroleum/20 border-b-petroleum"
+                  : "bg-petroleum/5 border-petroleum/10 text-petroleum/80 border-b-transparent hover:bg-petroleum hover:text-white hover:border-b-petroleum"
               }`}
             >
               {label}
-              {idx === currentStep && (
-                <span className="absolute -bottom-[9px] left-1/2 -translate-x-1/2 w-3 h-0.5 rounded-full bg-petroleum" />
-              )}
             </button>
           ))}
           <span className="ml-2 sm:ml-3 px-2.5 py-1 rounded-full bg-petroleum/5 border border-petroleum/10 text-xs sm:text-sm font-bold text-petroleum whitespace-nowrap">
