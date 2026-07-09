@@ -48,25 +48,23 @@ const QuizCard = memo(
               minHeight: "420px",
             }}
           >
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-2xl">{themeIcon || "📚"}</span>
-                {gradeLabel && (
-                  <span
-                    className="px-2 py-1 rounded-lg text-xs font-bold bg-opacity-10 text-white"
-                    style={{ backgroundColor: themeColor, color: themeColor }}
-                  >
-                    {gradeLabel}
-                  </span>
-                )}
-              </div>
+            <div className="flex flex-col items-center relative">
+              {gradeLabel && (
+                <span
+                  className="absolute top-0 right-0 px-2 py-1 rounded-lg text-xs font-bold bg-opacity-10 text-white"
+                  style={{ backgroundColor: themeColor, color: themeColor }}
+                >
+                  {gradeLabel}
+                </span>
+              )}
+              <span className="text-5xl mb-6 mt-2">{themeIcon || "📚"}</span>
               <span
                 className="text-xs font-semibold mb-3 block"
                 style={{ color: themeColor || "#4DA8C4" }}
               >
                 PALABRA CLAVE
               </span>
-              <p className="text-2xl font-bold text-[#004B63] text-center mb-2">
+              <p className="text-3xl font-bold text-[#004B63] text-center">
                 {card.front}
               </p>
             </div>
