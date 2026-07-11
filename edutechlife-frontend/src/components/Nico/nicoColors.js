@@ -1,0 +1,7 @@
+export const COLORS = {
+  NAVY: "#0A1628",
+  PETROLEUM: "#004B63",
+  CORPORATE: "#4DA8C4",
+  MINT: "#66CCCC",
+  SOFT_BLUE: "#B2D8E5",
+};
