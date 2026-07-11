@@ -275,13 +275,15 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
   // Proactive contextual welcome every time chat opens
   useEffect(() => {
     if (!isOpen || hasSentWelcome.current || daniChatHistory.length > 0) return;
-    hasSentWelcome.current = true;
     setIsTyping(true);
     setDaniMood("thinking");
 
     const welcomeText = buildRichWelcome();
 
     const showWelcome = () => {
+      // Marca "enviado" solo cuando el saludo realmente se dispara, para que
+      // el doble montaje de React 18 StrictMode no lo bloquee.
+      hasSentWelcome.current = true;
       setIsTyping(false);
       setDaniMood("happy");
       addDaniMessage({ role: "assistant", text: welcomeText });
@@ -307,7 +309,12 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
     // Short delay so the typing indicator is visible
     const timeout = setTimeout(showWelcome, 300);
 
-    return () => clearTimeout(timeout);
+    return () => {
+      clearTimeout(timeout);
+      // Si el saludo se canceló antes de dispararse (p. ej. remonte de
+      // StrictMode), limpia el indicador de "escribiendo" para no dejarlo atascado.
+      if (!hasSentWelcome.current) setIsTyping(false);
+    };
   }, [isOpen]);
 
   const handleSendMessage = useCallback(
