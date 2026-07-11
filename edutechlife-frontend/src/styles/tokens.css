@@ -1,0 +1,106 @@
+/**
+ * DESIGN TOKENS — Fase 1 · Cimientos de diseño
+ * ============================================================
+ * Capa de tokens "brand-*" para los nuevos primitivos de UI
+ * (src/components/ui/Brand*.jsx).
+ *
+ * IMPORTANTE: la fuente de verdad de los colores corporativos ya
+ * vive en `src/design-system/tokens.css` (importado antes que este
+ * archivo en src/index.css) y en `tailwind.config.js`. Este archivo
+ * NO redefine esos hex — los referencia con `var(...)` para evitar
+ * una segunda fuente de verdad, y solo añade tokens `--brand-*` que
+ * hoy no existen con un nombre semántico (acentos rosa/amarillo/
+ * morado, gradientes "canónicos" repetidos como valores literales
+ * en componentes, radios y sombras pensados para Button/Card/Badge).
+ *
+ * Estos tokens heredan el soporte dark-mode ya existente: como
+ * apuntan a `--color-petroleum`, `--color-mint`, etc. definidos en
+ * design-system/tokens.css (que sí tienen overrides bajo `.dark`),
+ * cualquier componente que use `--brand-*` es theme-aware sin
+ * trabajo adicional.
+ */
+
+:root {
+  /* ==================== COLORES DE MARCA ==================== */
+  /* Alias semánticos sobre los tokens canónicos existentes. */
+
+  /* Petróleo — color de texto/marca principal, más oscuro */
+  --brand-ink: var(--color-petroleum);
+  /* Azul corporativo — color primario de acción (botones, links) */
+  --brand-primary: var(--color-primary-corporate);
+  /* Menta — acento secundario, usado en gradientes y highlights */
+  --brand-mint: var(--color-mint);
+  /* Cian corporativo — usado en IALab y algunos CTAs */
+  --brand-cyan: var(--color-corporate);
+  /* Azul suave — fondos y superficies sutiles */
+  --brand-soft-blue: var(--color-primary-softBlue);
+  /* Navy — fondos oscuros / modo oscuro de tarjetas */
+  --brand-navy: var(--color-navy);
+
+  /* Acentos — usados en gamificación (flashcards, scanner, juegos)
+     pero sin nombre semántico hasta ahora; hoy viven hardcodeados
+     como #FF6B9D / #FFD166 / #A855F7 en decenas de componentes. */
+  --brand-pink: #ff6b9d;
+  --brand-yellow: #ffd166;
+  --brand-purple: #a855f7;
+
+  /* ==================== COLORES SEMÁNTICOS ==================== */
+  /* Alias sobre la escala semántica ya definida en design-system. */
+
+  --brand-success: var(--color-semantic-success-500);
+  --brand-success-bg: var(--color-semantic-success-50);
+  --brand-warning: var(--color-semantic-warning-500);
+  --brand-warning-bg: var(--color-semantic-warning-50);
+  --brand-danger: var(--color-semantic-error-500);
+  --brand-danger-bg: var(--color-semantic-error-50);
+  --brand-info: var(--color-semantic-info-500);
+  --brand-info-bg: var(--color-semantic-info-50);
+
+  /* Texto y bordes neutros (alias sobre design-system/tokens.css) */
+  --brand-text: var(--color-text-main);
+  --brand-text-sub: var(--color-text-sub);
+  --brand-text-inverse: var(--color-text-inverse);
+  --brand-border: var(--color-border-light);
+
+  /* ==================== ESCALA DE RADIOS ==================== */
+  /* Coincide con los valores ya usados en componentes existentes
+     (rounded-xl / rounded-2xl de Tailwind) — se exponen como
+     variables para uso en CSS inline y en los primitivos nuevos. */
+
+  --brand-radius-sm: 0.5rem; /* botones pequeños, inputs */
+  --brand-radius-md: 0.75rem; /* == Tailwind rounded-xl (badges, chips) */
+  --brand-radius-lg: 1rem; /* == Tailwind rounded-2xl (cards, CTAs) */
+  --brand-radius-xl: 1.5rem; /* modales, superficies grandes */
+  --brand-radius-pill: 9999px; /* botones/badges tipo píldora */
+
+  /* ==================== SOMBRAS ==================== */
+  /* Alias sobre las sombras "premium/glass" ya definidas, más una
+     sombra de resplandor (glow) usada hoy solo vía inline styles
+     en botones/CTAs con motion (ver glow-pulse en tailwind.config.js). */
+
+  --brand-shadow-sm: var(--shadow-sm);
+  --brand-shadow-md: var(--shadow-premium);
+  --brand-shadow-lg: var(--shadow-premium-lg);
+  --brand-shadow-glow:
+    0 0 20px rgba(77, 168, 196, 0.4), 0 0 40px rgba(77, 168, 196, 0.2);
+
+  /* ==================== GRADIENTES CANÓNICOS ==================== */
+  /* `--brand-gradient-primary` reutiliza el gradiente ya nombrado en
+     design-system/tokens.css. Los demás capturan combinaciones que
+     hoy se repiten como literales `bg-gradient-to-r from-[#..] to-[#..]`
+     en FlashcardSystem.jsx / ProblemScanner.jsx, y se nombran aquí
+     por primera vez para poder reutilizarlas sin repetir hex. */
+
+  --brand-gradient-primary: var(--gradient-primary); /* #4DA8C4 → #66CCCC */
+  --brand-gradient-deep: linear-gradient(135deg, #004b63 0%, #4da8c4 100%);
+  --brand-gradient-sunset: linear-gradient(135deg, #ff6b9d 0%, #a855f7 100%);
+  --brand-gradient-gold: linear-gradient(135deg, #ffd166 0%, #ffb300 100%);
+}
+
+.dark {
+  /* Los alias de arriba heredan automáticamente los valores dark de
+     design-system/tokens.css. Solo se ajustan aquí los tokens que
+     este archivo define directamente (no derivados de var()). */
+  --brand-shadow-glow:
+    0 0 20px rgba(102, 204, 204, 0.35), 0 0 40px rgba(102, 204, 204, 0.18);
+}

@@ -52,6 +52,13 @@ export default {
           ring: 'hsl(var(--ring))',
           
          // Brand colors corporativos
+         // NOTA (Fase 1): `brand-primary` no se usa como clase Tailwind en
+         // ningún componente hoy (verificado por grep) — solo como valor
+         // literal. El namespace `brand.primary` agregado más abajo (dentro
+         // del objeto `brand: {...}`) resuelve al mismo nombre de utilidad
+         // `bg-brand-primary`/`text-brand-primary` y, por orden de objeto,
+         // toma precedencia. Se deja esta clave sin tocar (no destructivo)
+         // mientras nadie dependa de ella; no elimines sin auditar antes.
          'brand-primary': '#004B63',
          'brand-accent': '#00BCD4',
           petroleum: '#004B63',
@@ -92,6 +99,32 @@ export default {
         'border-light': '#E2E8F0',
         'border-dark': '#CBD5E1',
         'border-glass': 'rgba(255, 255, 255, 0.2)',
+
+        // Fase 1 · Design tokens — namespace "brand" (ver src/styles/tokens.css)
+        // Aditivo: no reemplaza los colores de arriba, solo agrega `brand-*`.
+        brand: {
+          ink: 'var(--brand-ink)',
+          primary: 'var(--brand-primary)',
+          mint: 'var(--brand-mint)',
+          cyan: 'var(--brand-cyan)',
+          'soft-blue': 'var(--brand-soft-blue)',
+          navy: 'var(--brand-navy)',
+          pink: 'var(--brand-pink)',
+          yellow: 'var(--brand-yellow)',
+          purple: 'var(--brand-purple)',
+          success: 'var(--brand-success)',
+          'success-bg': 'var(--brand-success-bg)',
+          warning: 'var(--brand-warning)',
+          'warning-bg': 'var(--brand-warning-bg)',
+          danger: 'var(--brand-danger)',
+          'danger-bg': 'var(--brand-danger-bg)',
+          info: 'var(--brand-info)',
+          'info-bg': 'var(--brand-info-bg)',
+          text: 'var(--brand-text)',
+          'text-sub': 'var(--brand-text-sub)',
+          'text-inverse': 'var(--brand-text-inverse)',
+          border: 'var(--brand-border)',
+        },
       },
        fontFamily: {
         sans: ['Inter', 'Geist', 'system-ui', '-apple-system', 'sans-serif'],
@@ -158,6 +191,14 @@ export default {
         'premium-gradient': 'linear-gradient(135deg, var(--color-primary), var(--color-accent))',
         'glass-gradient': 'linear-gradient(135deg, var(--color-bg-glass), var(--color-bg-glass-dark))',
       },
+      // Fase 1 · Gradientes canónicos de marca (ver src/styles/tokens.css).
+      // Namespace "gradient-brand-*" para no chocar con `bg-brand-*` (color sólido).
+      backgroundImage: {
+        'gradient-brand-primary': 'var(--brand-gradient-primary)',
+        'gradient-brand-deep': 'var(--brand-gradient-deep)',
+        'gradient-brand-sunset': 'var(--brand-gradient-sunset)',
+        'gradient-brand-gold': 'var(--brand-gradient-gold)',
+      },
       boxShadow: {
         glass: 'var(--shadow-glass)',
         'glass-lg': 'var(--shadow-glass-lg)',
@@ -167,6 +208,11 @@ export default {
         'premium-lg': 'var(--shadow-premium-lg)',
         'inner-glow': 'var(--shadow-inner-glow)',
         'outer-glow': 'var(--shadow-outer-glow)',
+        // Fase 1 · Sombras de marca (ver src/styles/tokens.css)
+        'brand-sm': 'var(--brand-shadow-sm)',
+        'brand-md': 'var(--brand-shadow-md)',
+        'brand-lg': 'var(--brand-shadow-lg)',
+        'brand-glow': 'var(--brand-shadow-glow)',
       },
       backdropBlur: {
         glass: 'var(--backdrop-blur-glass)',
@@ -185,6 +231,12 @@ export default {
         xl: '1.5rem',
         '2xl': '2rem',
         '3xl': '3rem',
+        // Fase 1 · Escala de radios de marca (ver src/styles/tokens.css)
+        'brand-sm': 'var(--brand-radius-sm)',
+        'brand-md': 'var(--brand-radius-md)',
+        'brand-lg': 'var(--brand-radius-lg)',
+        'brand-xl': 'var(--brand-radius-xl)',
+        'brand-pill': 'var(--brand-radius-pill)',
       },
       animation: {
         'grid-move': 'grid-move 24s linear infinite',
