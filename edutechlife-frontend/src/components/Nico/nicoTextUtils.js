@@ -85,15 +85,19 @@ export const removeGreetingMulletilla = (text) => {
 
   // Solo eliminar patrones específicos de presentación de Nico
   // NO tocar saludos genéricos como "hola" solos
+  // Orden: del más específico al más genérico, para que el prefijo largo
+  // ("soy nico de edutechlife,") se elimine completo antes que el corto
+  // ("soy nico,") consuma solo su parte y deje texto roto.
   const mulletillaPatterns = [
-    /^hola soy nico,?\s*/i,
+    /^hola,?\s+soy nico de edutechlife,?\s*/i,
     /^hola,?\s+soy nico,?\s*/i,
-    /^soy nico,?\s+/i,
+    /^hola soy nico,?\s*/i,
     /^soy nico de edutechlife,?\s+/i,
     /^soy el asistente nico,?\s+/i,
+    /^yo soy nico,?\s+/i,
+    /^soy nico,?\s+/i,
     /^nico aquí,?\s+/i,
     /^nicolas,?\s+/i,
-    /^yo soy nico,?\s+/i,
   ];
 
   let cleanText = text;
