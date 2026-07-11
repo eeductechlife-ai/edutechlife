@@ -71,7 +71,7 @@
     {
       "id": "smartboard",
       "name": "SmartBoard",
-      "description": "Dashboard de acompañamiento académico y emocional para estudiantes de 8-16 años. Incluye misiones educativas, seguimiento de progreso, diagnóstico VAK y chat con Valerio AI.",
+      "description": "Dashboard de acompañamiento académico y emocional para estudiantes de 8-16 años. Incluye misiones educativas, seguimiento de progreso, diagnóstico VAK y chat con Dani AI.",
       "path": "/smartboard"
     },
     {
@@ -208,7 +208,7 @@
     {"q": "¿Qué edades tienen los programas?", "a": "Tenemos programas para Niños (5-11 años), Adolescentes (12-17 años) y Adultos (18+ años). También ofrecemos programas para padres y docentes."},
     {"q": "¿Qué modalidades tienen?", "a": "Presencial (Bogotá y otras ciudades), Online (videollamada desde cualquier lugar) e Híbrido (combinación de ambas)."},
     {"q": "¿La primera clase es gratis?", "a": "Sí, la primera clase es completamente gratuita y sin compromiso. Dura 30-45 minutos para que conozcas nuestra metodología."},
-    {"q": "¿Qué es SmartBoard?", "a": "SmartBoard es un dashboard de acompañamiento académico y emocional para estudiantes de 8-16 años con misiones educativas, seguimiento de progreso, diagnóstico VAK y chat con Valerio AI."},
+    {"q": "¿Qué es SmartBoard?", "a": "SmartBoard es un dashboard de acompañamiento académico y emocional para estudiantes de 8-16 años con misiones educativas, seguimiento de progreso, diagnóstico VAK y chat con Dani AI."},
     {"q": "¿Qué es AI Lab Academic?", "a": "Entrenamiento de élite con agentes de IA para potenciar tu productividad y aprendizaje. Incluye 5 módulos: Ingeniería de Prompts, ChatGPT, Rastreo Profundo, NotebookLM y Proyecto Final."},
       {"q": "¿Qué es el Neuro Entorno?", "a": "Es un entorno de aprendizaje neuro-cognitivo diseñado para potenciar las capacidades de aprendizaje mediante tecnología adaptativa."}
   ],
