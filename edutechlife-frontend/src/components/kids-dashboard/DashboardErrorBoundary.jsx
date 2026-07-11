@@ -1,5 +1,5 @@
-import { Component } from 'react';
-import { motion } from 'framer-motion';
+import { Component } from "react";
+import { motion } from "framer-motion";
 
 class DashboardErrorBoundary extends Component {
   constructor(props) {
@@ -9,6 +9,14 @@ class DashboardErrorBoundary extends Component {
 
   static getDerivedStateFromError(error) {
     return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error(
+      "[DashboardErrorBoundary] Error capturado:",
+      error,
+      errorInfo,
+    );
   }
 
   handleRetry = () => {
@@ -31,7 +39,8 @@ class DashboardErrorBoundary extends Component {
               ¡Ups! Algo no salió bien
             </h3>
             <p className="text-sm text-[#64748B] mb-6">
-              {this.props.message || 'Tuvimos un problema al cargar esta sección. Puedes intentar de nuevo.'}
+              {this.props.message ||
+                "Tuvimos un problema al cargar esta sección. Puedes intentar de nuevo."}
             </p>
             <div className="flex gap-3 justify-center">
               <motion.button
@@ -43,7 +52,7 @@ class DashboardErrorBoundary extends Component {
                 Reintentar
               </motion.button>
               <motion.button
-                onClick={() => this.props.onTabChange?.('inicio')}
+                onClick={() => this.props.onTabChange?.("inicio")}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="px-6 py-2.5 bg-[#F8FAFC] text-[#64748B] rounded-xl font-semibold text-sm border border-[#E2E8F0]"
