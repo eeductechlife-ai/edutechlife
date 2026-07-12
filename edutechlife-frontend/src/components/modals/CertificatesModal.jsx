@@ -1,29 +1,42 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react';
-import { motion } from 'framer-motion';
-import { useUser } from '@clerk/react';
-import { supabase } from '../../lib/supabase';
-import { useProgressContext } from '../../context/ProgressContext';
-import { useIALabProgressContext, useIALabUIContext } from '../../context/IALabContext';
-import { Card, CardContent } from '../ui/card-simple';
-import { Icon } from '../../utils/iconMapping.jsx';
-import { useTranslation } from '../../i18n/I18nProvider';
+import React, { useState, useEffect, lazy, Suspense } from "react";
+import { motion } from "framer-motion";
+import { useUser } from "@clerk/react";
+import { supabase } from "../../lib/supabase";
+import { useProgressContext } from "../../context/ProgressContext";
+import {
+  useIALabProgressContext,
+  useIALabUIContext,
+} from "../../context/IALabContext";
+import { Card, CardContent } from "../ui/card-simple";
+import { Icon } from "../../utils/iconMapping.jsx";
+import { useTranslation } from "../../i18n/I18nProvider";
 
-const CertificatePreview = lazy(() => import('../IALab/CertificatePreview'));
+const CertificatePreview = lazy(() => import("../IALab/CertificatePreview"));
 
 const TOTAL_MODULES = 5;
-const COURSE_NAME = 'Introducción a la I.A Generativa';
+const COURSE_NAME = "Introducción a la I.A Generativa";
 
 const CertificatesModal = ({ isOpen, onClose }) => {
   const { t } = useTranslation();
   const { user } = useUser();
-  const { courseProgress, completedModules, isLoading: progressLoading } = useProgressContext();
-  const { calculateModuleScore } = useIALabProgressContext();
-  const { storedCertificate, generateCertificate } = useIALabUIContext();
+  const {
+    courseProgress,
+    completedModules,
+    isLoading: progressLoading,
+  } = useProgressContext();
+  // Estos contextos solo existen dentro de IALabProvider. El modal también se
+  // monta desde rutas fuera de IALab (ver UserDropdownMenuSimplified), donde
+  // devuelven `null` en vez de lanzar — se degrada con gracia en ese caso.
+  const ialabProgressContext = useIALabProgressContext();
+  const ialabUIContext = useIALabUIContext();
+  const calculateModuleScore =
+    ialabProgressContext?.calculateModuleScore ?? (() => 0);
+  const { storedCertificate, generateCertificate } = ialabUIContext ?? {};
 
   const [loading, setLoading] = useState(true);
   const [certificate, setCertificate] = useState(null);
   const [generating, setGenerating] = useState(false);
-  const [nameInput, setNameInput] = useState('');
+  const [nameInput, setNameInput] = useState("");
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -34,17 +47,17 @@ const CertificatesModal = ({ isOpen, onClose }) => {
 
       try {
         const certRes = await supabase
-          .from('certificates')
-          .select('*')
-          .eq('user_id', user.id)
+          .from("certificates")
+          .select("*")
+          .eq("user_id", user.id)
           .maybeSingle();
 
-        if (certRes.error && certRes.error.code !== 'PGRST116') {
-          console.error('Error loading certificate:', certRes.error);
+        if (certRes.error && certRes.error.code !== "PGRST116") {
+          console.error("Error loading certificate:", certRes.error);
         }
         setCertificate(certRes.data);
       } catch (err) {
-        console.error('Error loading certificate:', err);
+        console.error("Error loading certificate:", err);
       } finally {
         setLoading(false);
       }
@@ -61,29 +74,40 @@ const CertificatesModal = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
-  const modulesByScore = [1, 2, 3, 4, 5].filter(id => calculateModuleScore(id) >= 80).length;
+  const modulesByScore = [1, 2, 3, 4, 5].filter(
+    (id) => calculateModuleScore(id) >= 80,
+  ).length;
   const modulesByContext = completedModules.length;
   const completedModulesCount = Math.max(modulesByScore, modulesByContext);
 
-  const canGenerateCertificate = courseProgress >= 80 || completedModulesCount >= 5;
+  const canGenerateCertificate =
+    courseProgress >= 80 || completedModulesCount >= 5;
 
   const handleGenerateCertificate = async () => {
+    if (!generateCertificate) {
+      setError(t("modals.certificates.error_unknown"));
+      return;
+    }
     if (canGenerateCertificate) {
       setGenerating(true);
       setError(null);
       try {
-        const studentName = nameInput.trim() || user.fullName || t('modals.certificates.student_fallback');
+        const studentName =
+          nameInput.trim() ||
+          user.fullName ||
+          t("modals.certificates.student_fallback");
         const result = await generateCertificate(studentName);
         if (result && !result.error) {
           setCertificate(result);
         } else {
-          const errorMsg = result?.error || t('modals.certificates.error_unknown');
+          const errorMsg =
+            result?.error || t("modals.certificates.error_unknown");
           setError(errorMsg);
-          console.error('❌ Error en modal:', errorMsg);
+          console.error("❌ Error en modal:", errorMsg);
         }
       } catch (err) {
-        setError(err.message || t('modals.certificates.error_unexpected'));
-        console.error('❌ Error inesperado generando certificado:', err);
+        setError(err.message || t("modals.certificates.error_unexpected"));
+        console.error("❌ Error inesperado generando certificado:", err);
       } finally {
         setGenerating(false);
       }
@@ -92,10 +116,19 @@ const CertificatesModal = ({ isOpen, onClose }) => {
 
   const renderCertificateTab = () => {
     if (certificate) {
-      const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent('https://edutechlife.com')}&title=${encodeURIComponent(`Certificado en ${COURSE_NAME}`)}&summary=${encodeURIComponent(`He completado el curso "${COURSE_NAME}" en Edutechlife. Certificado Nº ${certificate.cert_number}`)}`;
+      const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent("https://edutechlife.com")}&title=${encodeURIComponent(`Certificado en ${COURSE_NAME}`)}&summary=${encodeURIComponent(`He completado el curso "${COURSE_NAME}" en Edutechlife. Certificado Nº ${certificate.cert_number}`)}`;
       return (
         <div className="space-y-4">
-          <Suspense fallback={<div className="w-full h-48 flex items-center justify-center"><Icon name="fa-spinner" className="animate-spin text-2xl text-[#00BCD4]" /></div>}>
+          <Suspense
+            fallback={
+              <div className="w-full h-48 flex items-center justify-center">
+                <Icon
+                  name="fa-spinner"
+                  className="animate-spin text-2xl text-[#00BCD4]"
+                />
+              </div>
+            }
+          >
             <CertificatePreview
               studentName={certificate.cert_name}
               certNumber={certificate.cert_number}
@@ -111,7 +144,7 @@ const CertificatesModal = ({ isOpen, onClose }) => {
             className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#0A66C2] text-white rounded-xl font-semibold text-sm shadow-md hover:shadow-lg hover:bg-[#004182] transition-all duration-300"
           >
             <Icon name="fa-linkedin-in" className="text-base" />
-            {t('modals.certificates.share_linkedin') || 'Compartir en LinkedIn'}
+            {t("modals.certificates.share_linkedin") || "Compartir en LinkedIn"}
           </motion.a>
         </div>
       );
@@ -123,19 +156,28 @@ const CertificatesModal = ({ isOpen, onClose }) => {
           <div className="p-4 bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 rounded-xl">
             <div className="flex items-start gap-3">
               <div className="w-9 h-9 rounded-lg bg-emerald-100 flex items-center justify-center flex-shrink-0">
-                <Icon name="fa-check-circle" className="text-emerald-600 text-sm" />
+                <Icon
+                  name="fa-check-circle"
+                  className="text-emerald-600 text-sm"
+                />
               </div>
               <div className="flex-1 min-w-0">
-                 <p className="text-sm font-bold text-emerald-800">{t('modals.certificates.course_completed')}</p>
-                 <p className="text-xs text-emerald-700 mt-1">
-                   {t('modals.certificates.course_completed_desc', { progress: Math.round(courseProgress) })}
+                <p className="text-sm font-bold text-emerald-800">
+                  {t("modals.certificates.course_completed")}
+                </p>
+                <p className="text-xs text-emerald-700 mt-1">
+                  {t("modals.certificates.course_completed_desc", {
+                    progress: Math.round(courseProgress),
+                  })}
                 </p>
               </div>
             </div>
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-slate-700 mb-1.5 block">{t('modals.certificates.name_label')}</label>
+            <label className="text-xs font-semibold text-slate-700 mb-1.5 block">
+              {t("modals.certificates.name_label")}
+            </label>
             <input
               type="text"
               value={nameInput}
@@ -143,7 +185,9 @@ const CertificatesModal = ({ isOpen, onClose }) => {
                 setNameInput(e.target.value);
                 if (error) setError(null);
               }}
-              placeholder={user?.fullName || t('modals.certificates.name_placeholder')}
+              placeholder={
+                user?.fullName || t("modals.certificates.name_placeholder")
+              }
               className="w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#004B63]/30 focus:border-[#004B63] transition-all"
             />
           </div>
@@ -152,13 +196,18 @@ const CertificatesModal = ({ isOpen, onClose }) => {
             <div className="p-4 bg-red-50 border border-red-200 rounded-xl">
               <div className="flex items-start gap-3">
                 <div className="w-9 h-9 rounded-lg bg-red-100 flex items-center justify-center flex-shrink-0">
-                  <Icon name="fa-exclamation-triangle" className="text-red-600 text-sm" />
+                  <Icon
+                    name="fa-exclamation-triangle"
+                    className="text-red-600 text-sm"
+                  />
                 </div>
                 <div className="flex-1 min-w-0">
-                   <p className="text-sm font-bold text-red-800">{t('modals.certificates.error_title')}</p>
+                  <p className="text-sm font-bold text-red-800">
+                    {t("modals.certificates.error_title")}
+                  </p>
                   <p className="text-xs text-red-700 mt-1">{error}</p>
-                   <p className="text-[10px] text-red-600 mt-2 font-medium">
-                     {t('modals.certificates.error_solution')}
+                  <p className="text-[10px] text-red-600 mt-2 font-medium">
+                    {t("modals.certificates.error_solution")}
                     <br />
                     <code className="bg-red-100 px-1.5 py-0.5 rounded text-[10px]">
                       sql/fix_certificates_rls.sql
@@ -179,12 +228,12 @@ const CertificatesModal = ({ isOpen, onClose }) => {
             {generating ? (
               <>
                 <Icon name="fa-spinner" className="animate-spin" />
-                {t('modals.certificates.generating')}
+                {t("modals.certificates.generating")}
               </>
             ) : (
               <>
                 <Icon name="fa-award" />
-                {t('modals.certificates.generate')}
+                {t("modals.certificates.generate")}
               </>
             )}
           </motion.button>
@@ -197,11 +246,18 @@ const CertificatesModal = ({ isOpen, onClose }) => {
         <div className="p-4 bg-gradient-to-r from-[#004B63]/5 to-[#00BCD4]/5 border border-[#004B63]/10 rounded-xl">
           <div className="flex items-start gap-3">
             <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center flex-shrink-0">
-              <Icon name="fa-graduation-cap" className="text-[#004B63] text-sm" />
+              <Icon
+                name="fa-graduation-cap"
+                className="text-[#004B63] text-sm"
+              />
             </div>
             <div className="flex-1 min-w-0">
-               <p className="text-[10px] text-slate-500 font-medium uppercase tracking-wider">{t('modals.certificates.course_enrolled')}</p>
-               <p className="text-xs font-bold text-slate-800 leading-snug mt-0.5">{t('modals.certificates.course_name')}</p>
+              <p className="text-[10px] text-slate-500 font-medium uppercase tracking-wider">
+                {t("modals.certificates.course_enrolled")}
+              </p>
+              <p className="text-xs font-bold text-slate-800 leading-snug mt-0.5">
+                {t("modals.certificates.course_name")}
+              </p>
             </div>
           </div>
         </div>
@@ -209,21 +265,36 @@ const CertificatesModal = ({ isOpen, onClose }) => {
         {completedModulesCount > 0 ? (
           <div className="border border-amber-200 rounded-xl bg-amber-50/50 p-4">
             <div className="flex items-start gap-3">
-              <Icon name="fa-trophy" className="text-amber-500 mt-0.5 flex-shrink-0" />
+              <Icon
+                name="fa-trophy"
+                className="text-amber-500 mt-0.5 flex-shrink-0"
+              />
               <div>
-                 <p className="font-semibold text-amber-800 text-sm">{t('modals.certificates.keep_going')}</p>
-                 <p className="text-xs text-amber-700 mt-1">
-                   {t('modals.certificates.keep_going_desc', { count: completedModulesCount, total: TOTAL_MODULES })}
+                <p className="font-semibold text-amber-800 text-sm">
+                  {t("modals.certificates.keep_going")}
+                </p>
+                <p className="text-xs text-amber-700 mt-1">
+                  {t("modals.certificates.keep_going_desc", {
+                    count: completedModulesCount,
+                    total: TOTAL_MODULES,
+                  })}
                 </p>
               </div>
             </div>
           </div>
         ) : (
           <div className="border border-slate-200 rounded-xl bg-slate-50 p-6 text-center">
-            <Icon name="fa-rocket" className="text-[#00BCD4] text-3xl mx-auto mb-3" />
-            <p className="font-semibold text-slate-700 text-sm">{t('modals.certificates.start_course')}</p>
+            <Icon
+              name="fa-rocket"
+              className="text-[#00BCD4] text-3xl mx-auto mb-3"
+            />
+            <p className="font-semibold text-slate-700 text-sm">
+              {t("modals.certificates.start_course")}
+            </p>
             <p className="text-xs text-slate-500 mt-1">
-              {t('modals.certificates.start_course_desc', { course: t('modals.certificates.course_name') })}
+              {t("modals.certificates.start_course_desc", {
+                course: t("modals.certificates.course_name"),
+              })}
             </p>
           </div>
         )}
@@ -244,13 +315,13 @@ const CertificatesModal = ({ isOpen, onClose }) => {
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+        transition={{ type: "spring", damping: 25, stiffness: 300 }}
         className="w-full max-w-lg bg-white rounded-xl border border-slate-200/60 shadow-lg max-h-[90vh] overflow-hidden relative z-10 flex flex-col"
       >
         <button
           onClick={onClose}
           className="absolute top-4 right-4 z-50 p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-all duration-200"
-          aria-label={t('modals.certificates.close')}
+          aria-label={t("modals.certificates.close")}
         >
           <Icon name="fa-times" className="text-lg" />
         </button>
@@ -261,8 +332,12 @@ const CertificatesModal = ({ isOpen, onClose }) => {
               <Icon name="fa-award" className="text-white text-lg" />
             </div>
             <div>
-          <h2 className="text-white font-bold text-base">{t('modals.certificates.title')}</h2>
-          <p className="text-xs text-white/70 mt-0.5">{t('modals.certificates.course_name')}</p>
+              <h2 className="text-white font-bold text-base">
+                {t("modals.certificates.title")}
+              </h2>
+              <p className="text-xs text-white/70 mt-0.5">
+                {t("modals.certificates.course_name")}
+              </p>
             </div>
           </div>
         </div>
@@ -274,8 +349,13 @@ const CertificatesModal = ({ isOpen, onClose }) => {
               animate={{ opacity: 1 }}
               className="flex flex-col items-center justify-center py-16"
             >
-              <Icon name="fa-spinner" className="text-3xl text-[#00BCD4] animate-spin mb-4" />
-              <p className="text-sm text-slate-500">{t('modals.certificates.loading')}</p>
+              <Icon
+                name="fa-spinner"
+                className="text-3xl text-[#00BCD4] animate-spin mb-4"
+              />
+              <p className="text-sm text-slate-500">
+                {t("modals.certificates.loading")}
+              </p>
             </motion.div>
           ) : (
             <motion.div
