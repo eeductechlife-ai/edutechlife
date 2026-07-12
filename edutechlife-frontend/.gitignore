@@ -3,3 +3,8 @@
 .github/deploy_key.pub
 .env
 .env.local
+
+# Generated / runtime artifacts (should not be tracked)
+.claude-flow/data/
+.claude-flow/sessions/
+bundle-stats.html

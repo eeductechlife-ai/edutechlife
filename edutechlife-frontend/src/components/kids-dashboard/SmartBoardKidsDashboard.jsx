@@ -310,7 +310,10 @@ const PremiumSidebar = ({
           return (
             <div key={cat.id}>
               <motion.button
-                onClick={() => toggleCategory(cat.id)}
+                onClick={() => {
+                  toggleCategory(cat.id);
+                  if (cat.tabs.length === 1) onTabChange(cat.tabs[0]);
+                }}
                 whileTap={{ scale: 0.98 }}
                 className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all text-sm font-semibold ${
                   hasActiveTab

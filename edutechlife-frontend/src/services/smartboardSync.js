@@ -1,6 +1,6 @@
-const TABLE_NAME = 'smartboard_kids_data';
+const TABLE_NAME = "smartboard_kids_data";
 
-const SYNC_QUEUE_KEY = 'smartboard_sync_queue';
+const SYNC_QUEUE_KEY = "smartboard_sync_queue";
 
 const getDefaultData = () => ({
   daniChatHistory: [],
@@ -31,18 +31,22 @@ const getDefaultData = () => ({
 
 export const loadFromSupabase = async (supabase, userId) => {
   if (!supabase || !userId) {
-    return { success: false, error: 'Cliente Supabase o userId no disponible', data: null };
+    return {
+      success: false,
+      error: "Cliente Supabase o userId no disponible",
+      data: null,
+    };
   }
 
   if (!navigator.onLine) {
-    return { success: false, error: 'offline', offline: true, data: null };
+    return { success: false, error: "offline", offline: true, data: null };
   }
 
   try {
     const { data, error } = await supabase
       .from(TABLE_NAME)
-      .select('data')
-      .eq('user_id', userId)
+      .select("data")
+      .eq("user_id", userId)
       .maybeSingle();
 
     if (error) throw error;
@@ -53,37 +57,41 @@ export const loadFromSupabase = async (supabase, userId) => {
 
     return { success: true, data: { ...getDefaultData(), ...data.data } };
   } catch (error) {
-    console.error('Error cargando datos SmartBoard:', error.message);
+    console.error("Error cargando datos SmartBoard:", error.message);
     return { success: false, error: error.message, data: null };
   }
 };
 
 export const saveToSupabase = async (supabase, userId, kidsData) => {
   if (!supabase || !userId) {
-    return { success: false, error: 'Cliente Supabase o userId no disponible' };
+    return { success: false, error: "Cliente Supabase o userId no disponible" };
   }
 
   if (!navigator.onLine) {
-    queueSyncOperation({ type: 'full_sync', data: kidsData });
-    return { success: false, error: 'offline', offline: true };
+    queueSyncOperation({ type: "full_sync", data: kidsData });
+    return { success: false, error: "offline", offline: true };
   }
 
   try {
     const payload = {
       user_id: userId,
-      platform: 'smartboard',
+      platform: "smartboard",
       data: kidsData,
     };
 
     const { data, error } = await supabase
       .from(TABLE_NAME)
-      .upsert(payload, { onConflict: 'user_id' })
+      .upsert(payload, { onConflict: "user_id" })
       .select()
       .maybeSingle();
 
     if (error) {
-      if (error.status === 401 || error.message.includes('JWT') || error.message.includes('key')) {
-        queueSyncOperation({ type: 'full_sync', data: kidsData });
+      if (
+        error.status === 401 ||
+        error.message.includes("JWT") ||
+        error.message.includes("key")
+      ) {
+        queueSyncOperation({ type: "full_sync", data: kidsData });
         return { success: false, error: error.message, offline: true };
       }
       throw error;
@@ -91,29 +99,29 @@ export const saveToSupabase = async (supabase, userId, kidsData) => {
 
     return { success: true, data };
   } catch (error) {
-    console.error('Error guardando datos SmartBoard:', error.message);
-    queueSyncOperation({ type: 'full_sync', data: kidsData });
+    console.error("Error guardando datos SmartBoard:", error.message);
+    queueSyncOperation({ type: "full_sync", data: kidsData });
     return { success: false, error: error.message };
   }
 };
 
 export const queueSyncOperation = (operation) => {
   try {
-    const queue = JSON.parse(localStorage.getItem(SYNC_QUEUE_KEY) || '[]');
+    const queue = JSON.parse(localStorage.getItem(SYNC_QUEUE_KEY) || "[]");
     queue.push({ ...operation, queuedAt: new Date().toISOString() });
     localStorage.setItem(SYNC_QUEUE_KEY, JSON.stringify(queue));
   } catch (error) {
-    console.error('Error encolando operación SmartBoard:', error);
+    console.error("Error encolando operación SmartBoard:", error);
   }
 };
 
 export const processSyncQueue = async (supabase, userId, currentData) => {
   if (!navigator.onLine) {
-    return { success: false, error: 'Sin conexión' };
+    return { success: false, error: "Sin conexión" };
   }
 
   try {
-    const queue = JSON.parse(localStorage.getItem(SYNC_QUEUE_KEY) || '[]');
+    const queue = JSON.parse(localStorage.getItem(SYNC_QUEUE_KEY) || "[]");
     if (queue.length === 0) return { success: true, processed: 0 };
 
     const result = await saveToSupabase(supabase, userId, currentData);
@@ -122,9 +130,12 @@ export const processSyncQueue = async (supabase, userId, currentData) => {
       localStorage.removeItem(SYNC_QUEUE_KEY);
     }
 
-    return { success: result.success, processed: result.success ? queue.length : 0 };
+    return {
+      success: result.success,
+      processed: result.success ? queue.length : 0,
+    };
   } catch (error) {
-    console.error('Error procesando cola SmartBoard:', error);
+    console.error("Error procesando cola SmartBoard:", error);
     return { success: false, error: error.message };
   }
 };
@@ -146,10 +157,25 @@ export const mergeWithLocal = (localData, remoteData) => {
     }
 
     if (Array.isArray(localVal) && Array.isArray(remoteVal)) {
-      merged[key] = localVal.length > remoteVal.length ? localVal : remoteVal;
-    } else if (typeof localVal === 'object' && typeof remoteVal === 'object') {
+      // Deduplicate merge: keep all unique items from both sides
+      const mergedArr = [...remoteVal];
+      for (const item of localVal) {
+        const key_ =
+          item?.id ?? item?.timestamp ?? item?.date ?? JSON.stringify(item);
+        const exists = mergedArr.some((existing) => {
+          const existingKey =
+            existing?.id ??
+            existing?.timestamp ??
+            existing?.date ??
+            JSON.stringify(existing);
+          return existingKey === key_;
+        });
+        if (!exists) mergedArr.push(item);
+      }
+      merged[key] = mergedArr;
+    } else if (typeof localVal === "object" && typeof remoteVal === "object") {
       merged[key] = { ...remoteVal, ...localVal };
-    } else if (typeof localVal === 'number' && typeof remoteVal === 'number') {
+    } else if (typeof localVal === "number" && typeof remoteVal === "number") {
       merged[key] = Math.max(localVal, remoteVal);
     }
   });
@@ -159,15 +185,16 @@ export const mergeWithLocal = (localData, remoteData) => {
 
 export const setupConnectionListener = (supabase, userId, getCurrentData) => {
   const handleOnline = async () => {
-    const currentData = typeof getCurrentData === 'function' ? getCurrentData() : null;
+    const currentData =
+      typeof getCurrentData === "function" ? getCurrentData() : null;
     if (currentData) {
       await processSyncQueue(supabase, userId, currentData);
     }
   };
 
-  window.addEventListener('online', handleOnline);
+  window.addEventListener("online", handleOnline);
 
   return () => {
-    window.removeEventListener('online', handleOnline);
+    window.removeEventListener("online", handleOnline);
   };
 };

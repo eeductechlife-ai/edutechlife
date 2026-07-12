@@ -1,17 +1,9 @@
-import { useState, useEffect, useCallback, useMemo, memo } from "react";
+import { useState, useCallback, useMemo, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 import GenerateFlashcards from "./GenerateFlashcards";
-const STORAGE_KEY = "edutechlife_flashcards";
 const id = () =>
   Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
-const load = () => {
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-  } catch {
-    return [];
-  }
-};
 
 const QuizCard = memo(
   ({
@@ -274,9 +266,9 @@ const DeckCard = memo(({ deck, onStudy, onEdit, onDelete, index }) => {
 DeckCard.displayName = "DeckCard";
 
 const FlashcardSystem = memo(() => {
-  useSmartBoardKids();
+  const { flashcardDecks: decks, setFlashcardDecks: setDecks } =
+    useSmartBoardKids();
   const [mode, setMode] = useState("decks");
-  const [decks, setDecks] = useState([]);
   const [currentDeckId, setCurrentDeckId] = useState(null);
   const [deckTitle, setDeckTitle] = useState("");
   const [deckDescription, setDeckDescription] = useState("");
@@ -296,15 +288,6 @@ const FlashcardSystem = memo(() => {
   const [mpCurrentPlayer, setMpCurrentPlayer] = useState(1);
   const [qIdx, setQIdx] = useState(0);
   const [playerAnswer, setPlayerAnswer] = useState("");
-
-  useEffect(() => {
-    setDecks(load());
-  }, []);
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(decks));
-    } catch {}
-  }, [decks]);
 
   const deck = useMemo(
     () => decks.find((d) => d.id === currentDeckId) || null,
@@ -838,9 +821,7 @@ const FlashcardSystem = memo(() => {
                   whileTap={{ scale: 0.95 }}
                   onClick={() => {
                     const allDecks = [
-                      ...JSON.parse(
-                        localStorage.getItem("edutechlife_flashcards") || "[]",
-                      ),
+                      ...decks,
                       ...JSON.parse(
                         localStorage.getItem("edutechlife_shared_decks") ||
                           "[]",
@@ -850,20 +831,21 @@ const FlashcardSystem = memo(() => {
                       (d) => d.shareCode === importCode,
                     );
                     if (found) {
-                      const imported = JSON.parse(
-                        localStorage.getItem("edutechlife_shared_decks") ||
-                          "[]",
-                      );
-                      if (!imported.some((d) => d.shareCode === importCode)) {
-                        imported.push({
-                          ...found,
-                          id: `${found.id}_imported_${Date.now()}`,
-                        });
-                        localStorage.setItem(
-                          "edutechlife_shared_decks",
-                          JSON.stringify(imported),
+                      setDecks((prev) => {
+                        const exists = prev.some(
+                          (d) => d.shareCode === importCode,
                         );
-                      }
+                        if (!exists) {
+                          return [
+                            ...prev,
+                            {
+                              ...found,
+                              id: `${found.id}_imported_${Date.now()}`,
+                            },
+                          ];
+                        }
+                        return prev;
+                      });
                       setShowImport(false);
                       setImportCode("");
                     }
