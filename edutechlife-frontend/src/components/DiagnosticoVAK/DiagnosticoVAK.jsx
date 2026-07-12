@@ -71,6 +71,8 @@ import { Confetti, Celebration } from "./vakComponents.jsx";
 import "./DiagnosticoVAK.css";
 import ValeriaControls from "./ValeriaControls";
 import { SVG_ICONS } from "./vakIcons";
+import { useSupabase } from "../../hooks/useSupabase";
+import { saveVakDiagnostic } from "../../services/institutionalAnalytics";
 
 const getIconComponent = (iconName) => {
   switch (iconName) {
@@ -124,6 +126,7 @@ const getIconComponent = (iconName) => {
 const DiagnosticoVAK = ({ onNavigate }) => {
   const { t } = useTranslation();
   const { studentInfo, updateStudentInfo } = useStudent();
+  const { supabase, userId } = useSupabase();
 
   const [phase, setPhase] = useState("intro");
   const [studentName, setStudentName] = useState(studentInfo.name || "");
@@ -577,6 +580,16 @@ const DiagnosticoVAK = ({ onNavigate }) => {
         updateStudentInfo({
           diagnosis: res,
         });
+
+        // Persistir a Supabase para el panel institucional de Valeria
+        // (best-effort: solo si hay usuario autenticado; no bloquea el flujo)
+        if (supabase && userId) {
+          saveVakDiagnostic(supabase, {
+            userId,
+            institutionId: studentInfo.institutionId || null,
+            diagnosis: res,
+          }).catch(() => {});
+        }
 
         // Activar celebración antes de mostrar resultados
         setShowConfetti(true);
