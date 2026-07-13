@@ -2,8 +2,6 @@
 // Provides two sample QA profiles and generates two PDFs using html2pdf.
 // Designed for QA in development. Call generateTwoQA_PDFs() from browser console.
 
-import html2pdf from 'html2pdf.js';
-
 export const QA_SAMPLE_PROFILES = [
   {
     name: "Perfil A",
@@ -26,11 +24,7 @@ export const QA_SAMPLE_PROFILES = [
     counts: { totals: 10, correct: 4, incorrect: 6 },
     profile: {
       description: "Perfil analítico; requiere explicación detallada.",
-      strategies: [
-        "Desglose paso a paso",
-        "Notas y gráficos",
-        "Checklists",
-      ],
+      strategies: ["Desglose paso a paso", "Notas y gráficos", "Checklists"],
     },
   },
 ];
@@ -42,15 +36,21 @@ function isoDateStamp() {
 
 function buildQAPDFHTML(profile) {
   const qrData = encodeURIComponent(
-    `https://edutechlife.co/diagnosis/vak/results?payload=${encodeURIComponent(JSON.stringify({
-      studentName: `${profile.student.firstName} ${profile.student.lastName}`,
-      date: isoDateStamp(),
-      predominantStyle: profile.name,
-      percentage: Math.round((profile.counts.correct / profile.counts.totals) * 100),
-    }))}`
+    `https://edutechlife.co/diagnosis/vak/results?payload=${encodeURIComponent(
+      JSON.stringify({
+        studentName: `${profile.student.firstName} ${profile.student.lastName}`,
+        date: isoDateStamp(),
+        predominantStyle: profile.name,
+        percentage: Math.round(
+          (profile.counts.correct / profile.counts.totals) * 100,
+        ),
+      }),
+    )}`,
   );
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${qrData}`;
-  const percentage = Math.round((profile.counts.correct / profile.counts.totals) * 100);
+  const percentage = Math.round(
+    (profile.counts.correct / profile.counts.totals) * 100,
+  );
 
   return `
     <div style="font-family: Arial, sans-serif; padding: 30px; max-width: 800px; margin: 0 auto; color: #333;">
@@ -84,7 +84,7 @@ function buildQAPDFHTML(profile) {
       <div style="margin: 15px 0;">
         <h3 style="color: #004B63; font-size: 14px; margin-bottom: 8px;">Estrategias Recomendadas</h3>
         <ol style="margin: 0; padding-left: 20px;">
-          ${profile.profile.strategies.map(s => `<li style="margin-bottom: 5px; font-size: 12px;">${s}</li>`).join('')}
+          ${profile.profile.strategies.map((s) => `<li style="margin-bottom: 5px; font-size: 12px;">${s}</li>`).join("")}
         </ol>
       </div>
 
@@ -100,27 +100,42 @@ function buildQAPDFHTML(profile) {
 export async function generateTwoQA_PDFs() {
   const dateIso = isoDateStamp();
   const items = [
-    { data: QA_SAMPLE_PROFILES[0], filename: `Diagnostico_VAK_QA_USUARIO_${dateIso}.pdf` },
-    { data: QA_SAMPLE_PROFILES[1], filename: `Diagnostico_VAK_QA_USUARIO_2_${dateIso}.pdf` },
+    {
+      data: QA_SAMPLE_PROFILES[0],
+      filename: `Diagnostico_VAK_QA_USUARIO_${dateIso}.pdf`,
+    },
+    {
+      data: QA_SAMPLE_PROFILES[1],
+      filename: `Diagnostico_VAK_QA_USUARIO_2_${dateIso}.pdf`,
+    },
   ];
 
   for (const item of items) {
     try {
       const html = buildQAPDFHTML(item.data);
-      const el = document.createElement('div');
+      const el = document.createElement("div");
       el.innerHTML = html;
-      el.style.position = 'absolute';
-      el.style.left = '-9999px';
-      el.style.top = '0';
+      el.style.position = "absolute";
+      el.style.left = "-9999px";
+      el.style.top = "0";
       document.body.appendChild(el);
 
-      await html2pdf().set({
-        margin: [10, 10, 10, 10],
-        filename: item.filename,
-        image: { type: 'jpeg', quality: 0.95 },
-        html2canvas: { scale: 2, useCORS: true, letterRendering: true, backgroundColor: '#ffffff' },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-      }).from(el).save();
+      const { default: html2pdf } = await import("html2pdf.js");
+      await html2pdf()
+        .set({
+          margin: [10, 10, 10, 10],
+          filename: item.filename,
+          image: { type: "jpeg", quality: 0.95 },
+          html2canvas: {
+            scale: 2,
+            useCORS: true,
+            letterRendering: true,
+            backgroundColor: "#ffffff",
+          },
+          jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+        })
+        .from(el)
+        .save();
 
       document.body.removeChild(el);
       console.info(`✅ QA PDF generated: ${item.filename}`);
@@ -131,7 +146,7 @@ export async function generateTwoQA_PDFs() {
 }
 
 // Expose on window for QA runner in development environments (browser)
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   try {
     window.generateTwoQA_PDFs = generateTwoQA_PDFs;
   } catch (e) {

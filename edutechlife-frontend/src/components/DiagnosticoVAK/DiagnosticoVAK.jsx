@@ -35,7 +35,6 @@ import {
   Clock,
   Shield,
 } from "lucide-react";
-import html2pdf from "html2pdf.js";
 import { speakTextConversational, warmupTts } from "../../utils/speech";
 import {
   Radar,
@@ -666,6 +665,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     };
 
     try {
+      const { default: html2pdf } = await import("html2pdf.js");
       await html2pdf().set(opt).from(el).save();
     } catch (e) {
       console.error("Error al generar PDF:", e);
