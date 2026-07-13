@@ -32,18 +32,25 @@ vi.mock('framer-motion', () => ({
 }));
 
 // Mock IntersectionObserver
-global.IntersectionObserver = vi.fn(() => ({
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-  disconnect: vi.fn(),
-}));
+// NOTE: must be a real constructable (class/function declaration), not an
+// arrow function passed to vi.fn() — arrow functions are not constructable,
+// so `new IntersectionObserver()` would throw "is not a constructor".
+class MockIntersectionObserver {
+  observe = vi.fn();
+  unobserve = vi.fn();
+  disconnect = vi.fn();
+}
+global.IntersectionObserver = MockIntersectionObserver;
 
 // Mock ResizeObserver
-global.ResizeObserver = vi.fn(() => ({
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-  disconnect: vi.fn(),
-}));
+// Same constructability requirement as above — recharts' ResponsiveContainer
+// calls `new ResizeObserver(...)`, which throws when the mock is an arrow fn.
+class MockResizeObserver {
+  observe = vi.fn();
+  unobserve = vi.fn();
+  disconnect = vi.fn();
+}
+global.ResizeObserver = MockResizeObserver;
 
 // Mock matchMedia
 Object.defineProperty(window, 'matchMedia', {
