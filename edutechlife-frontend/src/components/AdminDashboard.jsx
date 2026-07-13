@@ -28,6 +28,7 @@ import {
   fetchVakDiagnostics,
   aggregateDiagnostics,
 } from "../services/institutionalAnalytics";
+import { fetchInstitutions } from "../services/institutionService";
 
 // Datos de demostración — se usan solo cuando no hay diagnósticos reales en
 // Supabase (tabla nueva/vacía o sin sesión de admin interno).
@@ -224,11 +225,32 @@ const AdminDashboard = ({ onLogout, onBack }) => {
   const [realStudents, setRealStudents] = useState(null);
   const [aggregate, setAggregate] = useState(null);
   const [dataSource, setDataSource] = useState("loading"); // 'loading' | 'real' | 'demo'
+  const [institutions, setInstitutions] = useState([]);
+  const [institutionFilter, setInstitutionFilter] = useState("all"); // 'all' | slug
   const consultantEndRef = useRef(null);
 
   const { supabase, isLoading: supabaseLoading } = useSupabase();
 
+  // Cargar instituciones (para el selector multi-tenant del panel)
+  useEffect(() => {
+    if (supabaseLoading || !supabase) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const rows = await fetchInstitutions(supabase);
+        if (!cancelled) setInstitutions(rows || []);
+      } catch {
+        // Tabla aún no migrada o sin permisos: el selector simplemente no aparece
+        if (!cancelled) setInstitutions([]);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [supabase, supabaseLoading]);
+
   // Cargar diagnósticos VAK reales desde Supabase para el panel institucional
+  // (se recarga al cambiar el filtro de institución — filtra server-side)
   useEffect(() => {
     if (supabaseLoading) return;
     let cancelled = false;
@@ -238,12 +260,22 @@ const AdminDashboard = ({ onLogout, onBack }) => {
           if (!cancelled) setDataSource("demo");
           return;
         }
-        const rows = await fetchVakDiagnostics(supabase);
+        const rows = await fetchVakDiagnostics(
+          supabase,
+          institutionFilter !== "all"
+            ? { institutionId: institutionFilter }
+            : {},
+        );
         if (cancelled) return;
         if (rows.length > 0) {
           const agg = aggregateDiagnostics(rows);
           setAggregate(agg);
           setRealStudents(agg.students.map(mapDiagnosticToRow));
+          setDataSource("real");
+        } else if (institutionFilter !== "all") {
+          // Institución sin diagnósticos: mostrar vacío real, no demo
+          setAggregate(aggregateDiagnostics([]));
+          setRealStudents([]);
           setDataSource("real");
         } else {
           setDataSource("demo");
@@ -255,7 +287,7 @@ const AdminDashboard = ({ onLogout, onBack }) => {
     return () => {
       cancelled = true;
     };
-  }, [supabase, supabaseLoading]);
+  }, [supabase, supabaseLoading, institutionFilter]);
 
   const scrollToBottom = () => {
     consultantEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -703,6 +735,21 @@ const AdminDashboard = ({ onLogout, onBack }) => {
                       />
                     </div>
                     <div className="flex gap-3">
+                      {institutions.length > 0 && (
+                        <select
+                          value={institutionFilter}
+                          onChange={(e) => setInstitutionFilter(e.target.value)}
+                          className="px-4 py-3 rounded-xl bg-[#0B0F19] border border-[#004B63]/50 text-white focus:outline-none focus:border-[#4DA8C4] transition-colors cursor-pointer"
+                          title="Filtrar por institución"
+                        >
+                          <option value="all">Todas las instituciones</option>
+                          {institutions.map((inst) => (
+                            <option key={inst.slug} value={inst.slug}>
+                              {inst.name}
+                            </option>
+                          ))}
+                        </select>
+                      )}
                       <select
                         value={vakFilter}
                         onChange={(e) => setVakFilter(e.target.value)}
