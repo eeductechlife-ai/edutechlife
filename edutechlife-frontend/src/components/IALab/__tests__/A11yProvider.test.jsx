@@ -1,4 +1,4 @@
-import { render, screen, act } from '@testing-library/react';
+import { render, screen, act, renderHook } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import A11yProvider, { useA11y } from '../A11yProvider';
 
@@ -75,9 +75,15 @@ describe('A11yProvider', () => {
     expect(liveRegion).toHaveTextContent('Test announcement');
   });
 
-  test('throws error when useA11y is used outside provider', () => {
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    expect(() => render(<TestConsumer />)).toThrow();
-    consoleSpy.mockRestore();
+  test('useA11y returns null when used outside a provider', () => {
+    // A11yContext is created with a default value of `null`
+    // (createContext(null)), so consuming it outside <A11yProvider> does not
+    // throw a custom "must be used within provider" error — it simply
+    // yields null. Verifying the raw hook result (instead of rendering a
+    // component that destructures it) avoids an uncaught render error
+    // escaping through jsdom's event dispatch, which is noisy even with
+    // console.error mocked.
+    const { result } = renderHook(() => useA11y());
+    expect(result.current).toBeNull();
   });
 });

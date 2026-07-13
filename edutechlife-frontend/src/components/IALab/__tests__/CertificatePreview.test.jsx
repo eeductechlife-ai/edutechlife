@@ -29,6 +29,24 @@ vi.mock('framer-motion', () => {
   return { motion, AnimatePresence: ({ children }) => children };
 });
 
+vi.mock('jspdf', () => ({
+  default: vi.fn(() => ({
+    internal: { pageSize: { getWidth: () => 297, getHeight: () => 210 } },
+    setFillColor: vi.fn(),
+    rect: vi.fn(),
+    setDrawColor: vi.fn(),
+    setLineWidth: vi.fn(),
+    circle: vi.fn(),
+    setFont: vi.fn(),
+    setFontSize: vi.fn(),
+    setTextColor: vi.fn(),
+    text: vi.fn(),
+    line: vi.fn(),
+    getTextWidth: vi.fn(() => 50),
+    save: vi.fn(),
+  })),
+}));
+
 describe('CertificatePreview', () => {
   test('renders student name', () => {
     render(<CertificatePreview studentName="María López" />);
@@ -65,24 +83,6 @@ describe('CertificatePreview', () => {
   });
 
   test('shows generating state on download click', async () => {
-    vi.mock('jspdf', () => ({
-      default: vi.fn(() => ({
-        internal: { pageSize: { getWidth: () => 297, getHeight: () => 210 } },
-        setFillColor: vi.fn(),
-        rect: vi.fn(),
-        setDrawColor: vi.fn(),
-        setLineWidth: vi.fn(),
-        circle: vi.fn(),
-        setFont: vi.fn(),
-        setFontSize: vi.fn(),
-        setTextColor: vi.fn(),
-        text: vi.fn(),
-        line: vi.fn(),
-        getTextWidth: vi.fn(() => 50),
-        save: vi.fn(),
-      })),
-    }));
-
     render(<CertificatePreview studentName="Test User" />);
     fireEvent.click(screen.getByText(/ialab\.certificate_preview\.download/i));
     expect(screen.getByText(/ialab\.certificate_preview\.generating/i)).toBeInTheDocument();
