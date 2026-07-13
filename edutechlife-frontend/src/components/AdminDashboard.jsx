@@ -8,8 +8,6 @@ import {
   Filter,
   Download,
   ChevronDown,
-  TrendingUp,
-  TrendingDown,
   Eye,
   Ear,
   Hand,
@@ -40,6 +38,7 @@ const DEMO_STUDENTS = [
     vak: "Visual",
     module: "Módulo 3 - Fundamentos IA",
     xp: 4850,
+    affinity: 82,
     lastConnection: "Hace 5 min",
     status: "active",
   },
@@ -49,6 +48,7 @@ const DEMO_STUDENTS = [
     vak: "Auditivo",
     module: "Módulo 2 - Prompt Engineering",
     xp: 3200,
+    affinity: 76,
     lastConnection: "Hace 12 min",
     status: "active",
   },
@@ -58,6 +58,7 @@ const DEMO_STUDENTS = [
     vak: "Kinestésico",
     module: "Módulo 4 - Proyectos IA",
     xp: 5600,
+    affinity: 88,
     lastConnection: "Hace 1 hora",
     status: "away",
   },
@@ -67,6 +68,7 @@ const DEMO_STUDENTS = [
     vak: "Visual",
     module: "Módulo 1 - Intro a IA",
     xp: 2100,
+    affinity: 70,
     lastConnection: "Hace 2 horas",
     status: "inactive",
   },
@@ -76,6 +78,7 @@ const DEMO_STUDENTS = [
     vak: "Auditivo",
     module: "Módulo 5 - Certificación",
     xp: 6200,
+    affinity: 91,
     lastConnection: "Hace 30 min",
     status: "active",
   },
@@ -85,6 +88,7 @@ const DEMO_STUDENTS = [
     vak: "Kinestésico",
     module: "Módulo 3 - Fundamentos IA",
     xp: 4100,
+    affinity: 68,
     lastConnection: "Hace 3 horas",
     status: "inactive",
   },
@@ -94,6 +98,7 @@ const DEMO_STUDENTS = [
     vak: "Visual",
     module: "Módulo 4 - Proyectos IA",
     xp: 5300,
+    affinity: 85,
     lastConnection: "Hace 45 min",
     status: "active",
   },
@@ -103,6 +108,7 @@ const DEMO_STUDENTS = [
     vak: "Auditivo",
     module: "Módulo 2 - Prompt Engineering",
     xp: 2800,
+    affinity: 79,
     lastConnection: "Hace 20 min",
     status: "active",
   },
@@ -112,6 +118,7 @@ const DEMO_STUDENTS = [
     vak: "Kinestésico",
     module: "Módulo 5 - Certificación",
     xp: 5900,
+    affinity: 93,
     lastConnection: "Hace 1 hora",
     status: "away",
   },
@@ -121,10 +128,79 @@ const DEMO_STUDENTS = [
     vak: "Visual",
     module: "Módulo 1 - Intro a IA",
     xp: 1500,
+    affinity: 64,
     lastConnection: "Hace 4 horas",
     status: "inactive",
   },
 ];
+
+// --- Derivación pura de KPIs (testeable sin montar el componente) ---------
+
+const EMPTY_STYLE_PERCENTS = { visual: 0, auditory: 0, kinesthetic: 0 };
+
+// KPIs a partir de datos reales agregados por aggregateDiagnostics().
+function computeRealKpis(aggregate) {
+  if (!aggregate) {
+    return {
+      total: 0,
+      stylePercents: EMPTY_STYLE_PERCENTS,
+      avgAffinity: 0,
+      recentDiagnostics: 0,
+    };
+  }
+  const { total, stylePercents, avgPercentage, timeline } = aggregate;
+  const cutoff = Date.now() - 30 * 24 * 60 * 60 * 1000;
+  const recentDiagnostics = (timeline || []).reduce((sum, entry) => {
+    const t = new Date(entry.day).getTime();
+    return Number.isFinite(t) && t >= cutoff ? sum + entry.count : sum;
+  }, 0);
+  return {
+    total,
+    stylePercents: {
+      visual: stylePercents?.visual || 0,
+      auditory: stylePercents?.auditivo || 0,
+      kinesthetic: stylePercents?.kinestesico || 0,
+    },
+    avgAffinity: avgPercentage || 0,
+    recentDiagnostics,
+  };
+}
+
+// KPIs a partir de DEMO_STUDENTS, calculados (nunca inventados/hardcodeados).
+function computeDemoKpis(demoStudents) {
+  const total = demoStudents.length;
+  const counts = { visual: 0, auditory: 0, kinesthetic: 0 };
+  let sumAffinity = 0;
+  demoStudents.forEach((s) => {
+    if (s.vak === "Visual") counts.visual += 1;
+    else if (s.vak === "Auditivo") counts.auditory += 1;
+    else if (s.vak === "Kinestésico") counts.kinesthetic += 1;
+    sumAffinity += s.affinity || 0;
+  });
+  return {
+    total,
+    stylePercents: {
+      visual: total ? Math.round((counts.visual / total) * 100) : 0,
+      auditory: total ? Math.round((counts.auditory / total) * 100) : 0,
+      kinesthetic: total ? Math.round((counts.kinesthetic / total) * 100) : 0,
+    },
+    avgAffinity: total ? Math.round(sumAffinity / total) : 0,
+    // Sin fechas reales en los datos de demo: todo el set se cuenta como
+    // "reciente" para no inventar una serie temporal que no existe.
+    recentDiagnostics: total,
+  };
+}
+
+/**
+ * Deriva los KPIs del dashboard según la fuente de datos activa.
+ * Pura: sin acceso a red/estado de React, fácil de testear.
+ * @param {object} params - { dataSource, aggregate, demoStudents }
+ */
+export function computeDashboardKpis({ dataSource, aggregate, demoStudents }) {
+  return dataSource === "real"
+    ? computeRealKpis(aggregate)
+    : computeDemoKpis(demoStudents || []);
+}
 
 // Mapea un estudiante agregado del diagnóstico a la forma que consume la tabla
 const mapDiagnosticToRow = (s, i) => ({
@@ -139,7 +215,6 @@ const mapDiagnosticToRow = (s, i) => ({
 
 const AdminDashboard = ({ onLogout, onBack }) => {
   const [activeTab, setActiveTab] = useState("dashboard");
-  const [activeSessions, setActiveSessions] = useState(1847);
   const [consultantMessages, setConsultantMessages] = useState([]);
   const [consultantInput, setConsultantInput] = useState("");
   const [consultantLoading, setConsultantLoading] = useState(false);
@@ -147,6 +222,7 @@ const AdminDashboard = ({ onLogout, onBack }) => {
   const [vakFilter, setVakFilter] = useState("all");
   const [moduleFilter, setModuleFilter] = useState("all");
   const [realStudents, setRealStudents] = useState(null);
+  const [aggregate, setAggregate] = useState(null);
   const [dataSource, setDataSource] = useState("loading"); // 'loading' | 'real' | 'demo'
   const consultantEndRef = useRef(null);
 
@@ -166,6 +242,7 @@ const AdminDashboard = ({ onLogout, onBack }) => {
         if (cancelled) return;
         if (rows.length > 0) {
           const agg = aggregateDiagnostics(rows);
+          setAggregate(agg);
           setRealStudents(agg.students.map(mapDiagnosticToRow));
           setDataSource("real");
         } else {
@@ -188,22 +265,25 @@ const AdminDashboard = ({ onLogout, onBack }) => {
     scrollToBottom();
   }, [consultantMessages]);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveSessions((prev) => {
-        const change = Math.floor(Math.random() * 50) - 20;
-        return Math.max(1500, Math.min(2200, prev + change));
-      });
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
+  // Datos reales (diagnósticos VAK desde Supabase) con fallback a demo.
+  // students = reales si existen; si la tabla está vacía o no hay sesión admin,
+  // se usan DEMO_STUDENTS para que la UI nunca se vea vacía en desarrollo.
+  const students = realStudents ?? DEMO_STUDENTS;
+
+  // KPIs derivados: reales cuando dataSource === 'real', si no, calculados a
+  // partir de DEMO_STUDENTS (nunca inventados) mientras carga o sin datos.
+  const isDemo = dataSource !== "real";
+  const dashboardKpis = computeDashboardKpis({
+    dataSource,
+    aggregate,
+    demoStudents: DEMO_STUDENTS,
+  });
 
   const kpis = [
     {
       label: "Total Estudiantes",
-      value: "20,000",
-      change: "+12%",
-      positive: true,
+      value: dashboardKpis.total.toLocaleString("es-CO"),
+      demo: isDemo,
       icon: Users,
       color: "#4DA8C4",
       bgColor: "rgba(77, 168, 196, 0.15)",
@@ -211,36 +291,29 @@ const AdminDashboard = ({ onLogout, onBack }) => {
     {
       label: "Estilo VAK Promedio",
       value: null,
-      breakdown: { visual: 42, auditory: 31, kinesthetic: 27 },
+      breakdown: dashboardKpis.stylePercents,
+      demo: isDemo,
       icon: Brain,
       color: "#66CCCC",
       bgColor: "rgba(102, 204, 204, 0.15)",
     },
     {
-      label: "Completitud IA Lab",
-      value: "68%",
-      change: "+5%",
-      positive: true,
+      label: "% Afinidad Promedio",
+      value: `${dashboardKpis.avgAffinity}%`,
+      demo: isDemo,
       icon: GraduationCap,
       color: "#FFD166",
       bgColor: "rgba(255, 209, 102, 0.15)",
     },
     {
-      label: "Sesiones Activas",
-      value: activeSessions.toLocaleString(),
-      change: "+8%",
-      positive: true,
+      label: "Diagnósticos (últimos 30 días)",
+      value: dashboardKpis.recentDiagnostics.toLocaleString("es-CO"),
+      demo: isDemo,
       icon: Activity,
       color: "#FF6B9D",
       bgColor: "rgba(255, 107, 157, 0.15)",
-      isLive: true,
     },
   ];
-
-  // Datos reales (diagnósticos VAK desde Supabase) con fallback a demo.
-  // students = reales si existen; si la tabla está vacía o no hay sesión admin,
-  // se usan DEMO_STUDENTS para que la UI nunca se vea vacía en desarrollo.
-  const students = realStudents ?? DEMO_STUDENTS;
 
   const modules = [
     "Módulo 1 - Intro a IA",
@@ -439,6 +512,21 @@ const AdminDashboard = ({ onLogout, onBack }) => {
             </div>
           </div>
           <div className="flex items-center gap-4">
+            {dataSource === "real" && (
+              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-green-500/20 text-green-400 border border-green-500/30">
+                Datos reales
+              </span>
+            )}
+            {dataSource === "demo" && (
+              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-[#FFD166]/20 text-[#FFD166] border border-[#FFD166]/40">
+                Datos de demostración
+              </span>
+            )}
+            {dataSource === "loading" && (
+              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-white/10 text-[#B2D8E5] border border-white/20">
+                Cargando datos…
+              </span>
+            )}
             <span className="px-3 py-1 rounded-full text-xs font-semibold bg-[#004B63]/30 text-[#66CCCC] border border-[#004B63]/50">
               ADMIN_MASTER
             </span>
@@ -488,25 +576,9 @@ const AdminDashboard = ({ onLogout, onBack }) => {
                           style={{ color: kpi.color }}
                         />
                       </div>
-                      {kpi.change && (
-                        <div
-                          className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${kpi.positive ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}`}
-                        >
-                          {kpi.positive ? (
-                            <TrendingUp className="w-3 h-3" />
-                          ) : (
-                            <TrendingDown className="w-3 h-3" />
-                          )}
-                          {kpi.change}
-                        </div>
-                      )}
-                      {kpi.isLive && (
-                        <div className="flex items-center gap-2 px-2 py-1 rounded-full text-xs font-semibold bg-green-500/20 text-green-400">
-                          <span className="relative flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                          </span>
-                          LIVE
+                      {kpi.demo && (
+                        <div className="flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold bg-[#FFD166]/20 text-[#FFD166]">
+                          DEMO
                         </div>
                       )}
                     </div>
