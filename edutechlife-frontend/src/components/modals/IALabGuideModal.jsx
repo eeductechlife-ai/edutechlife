@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { marked } from 'marked';
-import { Icon } from '../../utils/iconMapping.jsx';
-import { useTranslation } from '../../i18n/I18nProvider';
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { marked } from "marked";
+import { Icon } from "../../utils/iconMapping.jsx";
+import { useTranslation } from "../../i18n/I18nProvider";
+import { sanitize } from "../../utils/sanitize";
 
 const IALabGuideModal = ({ isOpen, onClose }) => {
-  const [html, setHtml] = useState('');
+  const [html, setHtml] = useState("");
   const [loading, setLoading] = useState(true);
   const [downloading, setDownloading] = useState(false);
   const contentRef = useRef(null);
@@ -13,28 +14,31 @@ const IALabGuideModal = ({ isOpen, onClose }) => {
   useEffect(() => {
     if (!isOpen) return;
     setLoading(true);
-    const file = locale === 'en' ? '/docs/guia-ialab.md' : '/docs/guia-ialab.md';
+    const file =
+      locale === "en" ? "/docs/guia-ialab.md" : "/docs/guia-ialab.md";
     fetch(file)
-      .then(r => {
+      .then((r) => {
         if (!r.ok) {
-          return fetch('/docs/guia-ialab.md');
+          return fetch("/docs/guia-ialab.md");
         }
         return r;
       })
-      .then(r => r.text())
-      .then(md => {
-        setHtml(marked.parse(md, { breaks: true, gfm: true }));
+      .then((r) => r.text())
+      .then((md) => {
+        setHtml(sanitize(marked.parse(md, { breaks: true, gfm: true })));
         setLoading(false);
       })
       .catch(() => {
-        setHtml('<p class="text-red-500 text-sm">Error al cargar la guía. Intenta de nuevo más tarde.</p>');
+        setHtml(
+          '<p class="text-red-500 text-sm">Error al cargar la guía. Intenta de nuevo más tarde.</p>',
+        );
         setLoading(false);
       });
   }, [isOpen, locale]);
 
   useEffect(() => {
     if (!isOpen) return;
-    const scrollEl = document.getElementById('ialab-guide-scroll');
+    const scrollEl = document.getElementById("ialab-guide-scroll");
     if (scrollEl) scrollEl.scrollTop = 0;
   }, [isOpen]);
 
@@ -42,19 +46,19 @@ const IALabGuideModal = ({ isOpen, onClose }) => {
     if (downloading || !contentRef.current) return;
     setDownloading(true);
     try {
-      const { default: html2pdf } = await import('html2pdf.js');
+      const { default: html2pdf } = await import("html2pdf.js");
 
       const el = contentRef.current;
       const savedMaxHeight = el.style.maxHeight;
       const savedOverflow = el.style.overflow;
 
-      el.style.maxHeight = 'none';
-      el.style.overflow = 'visible';
+      el.style.maxHeight = "none";
+      el.style.overflow = "visible";
 
       const opt = {
         margin: [0.5, 0.5, 0.5, 0.5],
-        filename: `IALab-Guia-${new Date().toISOString().split('T')[0]}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
+        filename: `IALab-Guia-${new Date().toISOString().split("T")[0]}.pdf`,
+        image: { type: "jpeg", quality: 0.98 },
         html2canvas: {
           scale: 2,
           useCORS: true,
@@ -63,8 +67,8 @@ const IALabGuideModal = ({ isOpen, onClose }) => {
           width: el.scrollWidth,
           windowHeight: el.scrollHeight,
         },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+        jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+        pagebreak: { mode: ["avoid-all", "css", "legacy"] },
       };
 
       await html2pdf().set(opt).from(el).save();
@@ -72,7 +76,7 @@ const IALabGuideModal = ({ isOpen, onClose }) => {
       el.style.maxHeight = savedMaxHeight;
       el.style.overflow = savedOverflow;
     } catch (e) {
-      console.error('PDF error:', e);
+      console.error("PDF error:", e);
     } finally {
       setDownloading(false);
     }
@@ -91,27 +95,34 @@ const IALabGuideModal = ({ isOpen, onClose }) => {
               <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
                 <Icon name="fa-book" className="text-petroleum text-sm" />
               </div>
-              <h3 className="text-slate-800 font-bold text-base">{t('modals.settings.guide_title')}</h3>
+              <h3 className="text-slate-800 font-bold text-base">
+                {t("modals.settings.guide_title")}
+              </h3>
             </div>
             <div className="flex items-center gap-1">
               <button
                 onClick={handleDownloadPdf}
                 disabled={downloading || loading}
                 className="p-2 text-slate-400 hover:bg-white/50 hover:text-petroleum rounded-full transition-all disabled:opacity-40"
-                aria-label={t('modals.settings.guide_download')}
+                aria-label={t("modals.settings.guide_download")}
               >
-                <Icon name={downloading ? 'fa-spinner' : 'fa-download'} className={`text-base ${downloading ? 'animate-spin' : ''}`} />
+                <Icon
+                  name={downloading ? "fa-spinner" : "fa-download"}
+                  className={`text-base ${downloading ? "animate-spin" : ""}`}
+                />
               </button>
               <button
                 onClick={onClose}
                 className="p-2 text-slate-400 hover:bg-white/50 hover:text-slate-800 rounded-full transition-all"
-                aria-label={t('modals.settings.close')}
+                aria-label={t("modals.settings.close")}
               >
                 <Icon name="fa-times" className="text-lg" />
               </button>
             </div>
           </div>
-          <p className="text-[11px] text-slate-500 mt-1 ml-12">{t('modals.settings.guide_desc')}</p>
+          <p className="text-[11px] text-slate-500 mt-1 ml-12">
+            {t("modals.settings.guide_desc")}
+          </p>
         </div>
 
         {/* Content */}
@@ -119,12 +130,14 @@ const IALabGuideModal = ({ isOpen, onClose }) => {
           id="ialab-guide-scroll"
           ref={contentRef}
           className="p-6 overflow-y-auto"
-          style={{ maxHeight: 'calc(90vh - 100px)' }}
+          style={{ maxHeight: "calc(90vh - 100px)" }}
         >
           {loading ? (
             <div className="flex flex-col items-center justify-center py-16 gap-3">
               <div className="w-8 h-8 border-2 border-petroleum/30 border-t-petroleum rounded-full animate-spin" />
-              <p className="text-xs text-slate-400">{t('modals.settings.guide_loading')}</p>
+              <p className="text-xs text-slate-400">
+                {t("modals.settings.guide_loading")}
+              </p>
             </div>
           ) : (
             <div
