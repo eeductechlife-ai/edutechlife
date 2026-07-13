@@ -124,6 +124,17 @@ const getIconComponent = (iconName) => {
   }
 };
 
+// Slug institucional desde la URL (?inst=colegio-x) — enlaces B2B por colegio.
+// No se resuelve a uuid en el cliente: el trigger server-side lo valida.
+const getInstitutionSlugFromURL = () => {
+  try {
+    const slug = new URLSearchParams(window.location.search).get("inst");
+    return slug ? slug.trim().toLowerCase() : null;
+  } catch {
+    return null;
+  }
+};
+
 const DiagnosticoVAK = ({ onNavigate }) => {
   const { t } = useTranslation();
   const { studentInfo, updateStudentInfo } = useStudent();
@@ -583,13 +594,25 @@ const DiagnosticoVAK = ({ onNavigate }) => {
         });
 
         // Persistir a Supabase para el panel institucional de Valeria
-        // (best-effort: solo si hay usuario autenticado; no bloquea el flujo)
+        // (best-effort: solo si hay usuario autenticado; no bloquea el flujo).
+        // La institución llega como slug vía ?inst= en enlaces de colegios;
+        // el trigger server-side valida que el slug exista en `institutions`.
         if (supabase && userId) {
           saveVakDiagnostic(supabase, {
             userId,
-            institutionId: studentInfo.institutionId || null,
+            institutionId:
+              studentInfo.institutionId || getInstitutionSlugFromURL(),
             diagnosis: res,
-          }).catch(() => {});
+          })
+            .then((r) => {
+              if (r && !r.ok) {
+                // Slug mal configurado en un enlace de campaña, RLS, etc.
+                console.warn("[VAK] Diagnóstico no persistido:", r.error);
+              }
+            })
+            .catch((e) => {
+              console.warn("[VAK] Diagnóstico no persistido:", e?.message);
+            });
         }
 
         // Activar celebración antes de mostrar resultados
