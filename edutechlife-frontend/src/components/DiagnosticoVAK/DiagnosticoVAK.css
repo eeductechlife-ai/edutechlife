@@ -6,44 +6,44 @@
 /* ==================== VARIABLES CSS PREMIUM ==================== */
 :root {
   /* Colores corporativos premium */
-  --color-corporate-premium: #004B63;
-  --color-corporate-light-premium: #4DA8C4;
-  --color-corporate-mint-premium: #66CCCC;
-  --color-corporate-pale-premium: #B2D8E5;
-  
+  --color-corporate-premium: #004b63;
+  --color-corporate-light-premium: #4da8c4;
+  --color-corporate-mint-premium: #66cccc;
+  --color-corporate-pale-premium: #b2d8e5;
+
   /* Colores de texto premium */
-  --color-petroleum-premium: #004B63;
-  --color-gray-500-premium: #6B7280;
-  --color-gray-400-premium: #9CA3AF;
-  --color-gray-600-premium: #4B5563;
-  
+  --color-petroleum-premium: #004b63;
+  --color-gray-500-premium: #6b7280;
+  --color-gray-400-premium: #9ca3af;
+  --color-gray-600-premium: #4b5563;
+
   /* Colores semánticos premium */
-  --color-semantic-error-500-premium: #EF4444;
-  --color-semantic-success-500-premium: #10B981;
-  
+  --color-semantic-error-500-premium: #ef4444;
+  --color-semantic-success-500-premium: #10b981;
+
   /* Variables de accesibilidad */
   --focus-ring-width: 3px;
   --focus-ring-color: rgba(77, 168, 196, 0.5);
   --focus-ring-offset: 2px;
-  
+
   /* Colores VAK específicos */
   --color-vak-visual-50: rgba(77, 168, 196, 0.1);
   --color-vak-visual-200: rgba(77, 168, 196, 0.3);
-  --color-vak-visual-500: #4DA8C4;
-  --color-vak-visual-600: #3D8CA4;
-  --color-vak-visual-900: #1A5A6E;
-  
+  --color-vak-visual-500: #4da8c4;
+  --color-vak-visual-600: #3d8ca4;
+  --color-vak-visual-900: #1a5a6e;
+
   --color-vak-auditivo-50: rgba(102, 204, 204, 0.1);
   --color-vak-auditivo-200: rgba(102, 204, 204, 0.3);
-  --color-vak-auditivo-500: #66CCCC;
-  --color-vak-auditivo-600: #52A3A3;
-  --color-vak-auditivo-900: #2D7373;
-  
+  --color-vak-auditivo-500: #66cccc;
+  --color-vak-auditivo-600: #52a3a3;
+  --color-vak-auditivo-900: #2d7373;
+
   --color-vak-kinestesico-50: rgba(232, 168, 56, 0.12);
   --color-vak-kinestesico-200: rgba(232, 168, 56, 0.3);
-  --color-vak-kinestesico-500: #E8A838;
-  --color-vak-kinestesico-600: #CF922E;
-  --color-vak-kinestesico-900: #8B601A;
+  --color-vak-kinestesico-500: #e8a838;
+  --color-vak-kinestesico-600: #cf922e;
+  --color-vak-kinestesico-900: #8b601a;
 }
 
 /* ==================== UTILIDADES ESPECÍFICAS VAK ==================== */
@@ -166,7 +166,8 @@
   font-family: var(--font-family-display);
   font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-base);
-  transition: all var(--animation-duration-normal) var(--animation-timing-spring);
+  transition: all var(--animation-duration-normal)
+    var(--animation-timing-spring);
   border: var(--border-width-medium) solid transparent;
   cursor: pointer;
 }
@@ -208,7 +209,8 @@
   background: white;
   border: var(--border-width-medium) solid var(--color-gray-200);
   border-radius: var(--border-radius-xl);
-  transition: all var(--animation-duration-normal) var(--animation-timing-spring);
+  transition: all var(--animation-duration-normal)
+    var(--animation-timing-spring);
   cursor: pointer;
   text-align: left;
 }
@@ -248,7 +250,8 @@
   background: var(--color-gray-50);
   border: var(--border-width-medium) solid var(--color-gray-200);
   font-size: var(--font-size-2xl);
-  transition: all var(--animation-duration-normal) var(--animation-timing-spring);
+  transition: all var(--animation-duration-normal)
+    var(--animation-timing-spring);
 }
 
 .vak-option-card:hover .vak-option-icon {
@@ -292,7 +295,7 @@
 }
 
 .vak-progress-bar::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
@@ -324,7 +327,8 @@
   height: 0.5rem;
   border-radius: var(--border-radius-full);
   background: var(--color-gray-300);
-  transition: all var(--animation-duration-normal) var(--animation-timing-spring);
+  transition: all var(--animation-duration-normal)
+    var(--animation-timing-spring);
 }
 
 .vak-progress-dot-active {
@@ -347,7 +351,8 @@
   font-size: var(--font-size-base);
   color: var(--color-petroleum);
   background: white;
-  transition: all var(--animation-duration-normal) var(--animation-timing-spring);
+  transition: all var(--animation-duration-normal)
+    var(--animation-timing-spring);
 }
 
 .vak-input:focus {
@@ -376,7 +381,8 @@
   border-radius: var(--border-radius-lg);
   background: white;
   cursor: pointer;
-  transition: all var(--animation-duration-normal) var(--animation-timing-spring);
+  transition: all var(--animation-duration-normal)
+    var(--animation-timing-spring);
 }
 
 .vak-mood-option:hover {
@@ -387,14 +393,19 @@
 
 .vak-mood-option-selected {
   border-color: var(--color-corporate);
-  background: linear-gradient(135deg, var(--color-corporate) 0%, var(--color-mint) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-corporate) 0%,
+    var(--color-mint) 100%
+  );
   color: white;
   box-shadow: var(--shadow-lg);
 }
 
 .vak-mood-emoji {
   font-size: var(--font-size-3xl);
-  transition: transform var(--animation-duration-normal) var(--animation-timing-spring);
+  transition: transform var(--animation-duration-normal)
+    var(--animation-timing-spring);
 }
 
 .vak-mood-option:hover .vak-mood-emoji {
@@ -415,22 +426,38 @@
 }
 
 .vak-result-hero-visual {
-  background: linear-gradient(135deg, var(--color-vak-visual-500) 0%, var(--color-vak-visual-900) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-vak-visual-500) 0%,
+    var(--color-vak-visual-900) 100%
+  );
 }
 
 .vak-result-hero-auditivo {
-  background: linear-gradient(135deg, var(--color-vak-auditivo-500) 0%, var(--color-vak-auditivo-900) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-vak-auditivo-500) 0%,
+    var(--color-vak-auditivo-900) 100%
+  );
 }
 
 .vak-result-hero-kinestesico {
-  background: linear-gradient(135deg, var(--color-vak-kinestesico-500) 0%, var(--color-vak-kinestesico-900) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-vak-kinestesico-500) 0%,
+    var(--color-vak-kinestesico-900) 100%
+  );
 }
 
 .vak-result-hero::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+  background: radial-gradient(
+    circle at 30% 20%,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 50%
+  );
 }
 
 .vak-result-percentage {
@@ -465,26 +492,44 @@
     padding: var(--spacing-3);
     gap: var(--spacing-3);
   }
-  
+
   .vak-option-icon {
     width: 3rem;
     height: 3rem;
     font-size: var(--font-size-xl);
   }
-  
+
   .vak-result-percentage {
     font-size: var(--font-size-6xl);
   }
-  
+
   .vak-result-icon {
     width: 4rem;
     height: 4rem;
+  }
+
+  .vak-result-hero-premium {
+    padding: 2.5rem 1.5rem;
+    border-radius: 24px;
+  }
+
+  .vak-result-percentage-premium {
+    font-size: 4rem;
+  }
+
+  .vak-result-title-premium {
+    font-size: 2rem;
+  }
+
+  .vak-radar-container-premium {
+    padding: 1.25rem;
   }
 }
 
 /* Animaciones específicas */
 @keyframes vak-pulse-slow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -497,7 +542,8 @@
 }
 
 @keyframes vak-float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
@@ -589,7 +635,11 @@
 .valeria-controls-bar .valeria-logo-icon {
   width: 32px;
   height: 32px;
-  background: linear-gradient(135deg, var(--color-corporate), var(--color-mint));
+  background: linear-gradient(
+    135deg,
+    var(--color-corporate),
+    var(--color-mint)
+  );
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -624,11 +674,11 @@
 }
 
 .valeria-controls-bar .valeria-btn-toggle.muted {
-  background: #FEE2E2;
+  background: #fee2e2;
 }
 
 .valeria-controls-bar .valeria-btn-toggle.muted:hover {
-  background: #FECACA;
+  background: #fecaca;
 }
 
 .valeria-controls-bar .valeria-volume-slider {
@@ -672,13 +722,16 @@
 /* ==================== CONTENEDOR DE PREGUNTA PREMIUM ==================== */
 
 .vak-question-container-premium {
-  background: linear-gradient(135deg,
+  background: linear-gradient(
+    135deg,
     rgba(255, 255, 255, 0.98) 0%,
-    rgba(248, 252, 253, 0.95) 100%);
+    rgba(248, 252, 253, 0.95) 100%
+  );
   border: 2px solid rgba(77, 168, 196, 0.15);
   border-radius: 28px;
-  box-shadow: 0 12px 40px rgba(0, 75, 99, 0.1),
-              0 4px 20px rgba(0, 75, 99, 0.06);
+  box-shadow:
+    0 12px 40px rgba(0, 75, 99, 0.1),
+    0 4px 20px rgba(0, 75, 99, 0.06);
   padding: 2.5rem;
   position: relative;
   overflow: hidden;
@@ -687,28 +740,32 @@
 }
 
 .vak-question-container-premium::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg,
+  background: linear-gradient(
+    90deg,
     transparent 0%,
     rgba(77, 168, 196, 0.3) 50%,
-    transparent 100%);
+    transparent 100%
+  );
 }
 
 .vak-question-container-premium::after {
-  content: '';
+  content: "";
   position: absolute;
   top: -50%;
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle at center,
+  background: radial-gradient(
+    circle at center,
     rgba(255, 255, 255, 0.1) 0%,
-    transparent 70%);
+    transparent 70%
+  );
   opacity: 0;
   transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
@@ -726,9 +783,10 @@
   width: 80px;
   height: 80px;
   border-radius: 24px;
-  background: linear-gradient(135deg, #4DA8C4, #66CCCC);
-  box-shadow: 0 8px 32px rgba(77, 168, 196, 0.4),
-              inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  background: linear-gradient(135deg, #4da8c4, #66cccc);
+  box-shadow:
+    0 8px 32px rgba(77, 168, 196, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
   margin-bottom: 1.5rem;
   overflow: hidden;
 }
@@ -750,15 +808,22 @@
   transform: translate(-50%, -50%);
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at center, 
+  background: radial-gradient(
+    circle at center,
     rgba(255, 255, 255, 0.3) 0%,
-    transparent 70%);
+    transparent 70%
+  );
   animation: vak-premium-pulse 3s infinite;
 }
 
 @keyframes vak-premium-pulse {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 0.8; }
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.8;
+  }
 }
 
 .vak-question-text-premium {
@@ -766,7 +831,7 @@
   font-weight: 700;
   font-size: 1.5rem;
   line-height: 1.4;
-  color: #004B63;
+  color: #004b63;
   margin-bottom: 2rem;
   text-align: center;
   padding: 0 1rem;
@@ -790,7 +855,7 @@
   height: 44px;
   border-radius: 50%;
   border: none;
-  background: linear-gradient(135deg, #4DA8C4, #66CCCC);
+  background: linear-gradient(135deg, #4da8c4, #66cccc);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 12px rgba(77, 168, 196, 0.3);
@@ -806,12 +871,12 @@
 }
 
 .valeria-btn-toggle-premium.muted {
-  background: linear-gradient(135deg, #9CA3AF, #6B7280);
+  background: linear-gradient(135deg, #9ca3af, #6b7280);
   box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
 }
 
 .valeria-btn-toggle-premium.muted:hover {
-  background: linear-gradient(135deg, #6B7280, #4B5563);
+  background: linear-gradient(135deg, #6b7280, #4b5563);
   box-shadow: 0 6px 20px rgba(107, 114, 128, 0.4);
 }
 
@@ -832,12 +897,14 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg,
+  background: linear-gradient(
+    135deg,
     rgba(255, 255, 255, 0.95) 0%,
-    rgba(248, 252, 253, 0.9) 100%);
+    rgba(248, 252, 253, 0.9) 100%
+  );
   border: 2px solid rgba(77, 168, 196, 0.2);
   border-radius: 50px;
-  color: #004B63;
+  color: #004b63;
   font-family: var(--font-family-display);
   font-weight: 600;
   font-size: 0.875rem;
@@ -847,7 +914,7 @@
 }
 
 .valeria-btn-repeat-premium:hover:not(:disabled) {
-  border-color: #4DA8C4;
+  border-color: #4da8c4;
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(77, 168, 196, 0.15);
 }
@@ -864,12 +931,12 @@
 .valeria-icon-repeat {
   width: 18px;
   height: 18px;
-  color: #4DA8C4;
+  color: #4da8c4;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .valeria-btn-repeat-premium:hover:not(:disabled) .valeria-icon-repeat {
-  color: #004B63;
+  color: #004b63;
   transform: rotate(15deg);
 }
 
@@ -879,7 +946,11 @@
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  background: linear-gradient(135deg, var(--color-corporate), var(--color-mint));
+  background: linear-gradient(
+    135deg,
+    var(--color-corporate),
+    var(--color-mint)
+  );
   color: white;
   border-radius: 20px;
   font-size: 12px;
@@ -904,19 +975,33 @@
 }
 
 @keyframes wave {
-  0%, 100% { height: 4px; }
-  50% { height: 12px; }
+  0%,
+  100% {
+    height: 4px;
+  }
+  50% {
+    height: 12px;
+  }
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.8; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
 }
 
 /* Botón comenzar */
 .valeria-btn-start {
   padding: 10px 24px;
-  background: linear-gradient(135deg, var(--color-petroleum), var(--color-corporate));
+  background: linear-gradient(
+    135deg,
+    var(--color-petroleum),
+    var(--color-corporate)
+  );
   color: white;
   border: none;
   border-radius: 25px;
@@ -977,7 +1062,9 @@
 .valeria-fade-enter-active {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
 }
 
 .valeria-fade-exit {
@@ -988,7 +1075,9 @@
 .valeria-fade-exit-active {
   opacity: 0;
   transform: translateY(-20px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
 }
 
 /* ==================== AVATAR DE VALERIA ==================== */
@@ -1034,7 +1123,8 @@
 }
 
 @keyframes valeria-speak-pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {
@@ -1129,23 +1219,27 @@
 
 /* Sistema de sombras premium corporativas */
 .vak-shadow-premium-sm {
-  box-shadow: 0 2px 8px rgba(0, 75, 99, 0.08),
-              0 1px 3px rgba(0, 75, 99, 0.04);
+  box-shadow:
+    0 2px 8px rgba(0, 75, 99, 0.08),
+    0 1px 3px rgba(0, 75, 99, 0.04);
 }
 
 .vak-shadow-premium-md {
-  box-shadow: 0 4px 20px rgba(0, 75, 99, 0.1),
-              0 2px 6px rgba(0, 75, 99, 0.06);
+  box-shadow:
+    0 4px 20px rgba(0, 75, 99, 0.1),
+    0 2px 6px rgba(0, 75, 99, 0.06);
 }
 
 .vak-shadow-premium-lg {
-  box-shadow: 0 8px 32px rgba(0, 75, 99, 0.12),
-              0 4px 12px rgba(0, 75, 99, 0.08);
+  box-shadow:
+    0 8px 32px rgba(0, 75, 99, 0.12),
+    0 4px 12px rgba(0, 75, 99, 0.08);
 }
 
 .vak-shadow-premium-xl {
-  box-shadow: 0 16px 48px rgba(0, 75, 99, 0.15),
-              0 8px 24px rgba(0, 75, 99, 0.1);
+  box-shadow:
+    0 16px 48px rgba(0, 75, 99, 0.15),
+    0 8px 24px rgba(0, 75, 99, 0.1);
 }
 
 /* Bordes premium corporativos */
@@ -1166,29 +1260,37 @@
 
 /* Gradientes premium corporativos */
 .vak-gradient-premium-primary {
-  background: linear-gradient(135deg,
+  background: linear-gradient(
+    135deg,
     rgba(0, 75, 99, 0.95) 0%,
     rgba(0, 75, 99, 0.85) 50%,
-    rgba(77, 168, 196, 0.9) 100%);
+    rgba(77, 168, 196, 0.9) 100%
+  );
 }
 
 .vak-gradient-premium-secondary {
-  background: linear-gradient(135deg,
+  background: linear-gradient(
+    135deg,
     rgba(77, 168, 196, 0.95) 0%,
     rgba(77, 168, 196, 0.85) 50%,
-    rgba(102, 204, 204, 0.9) 100%);
+    rgba(102, 204, 204, 0.9) 100%
+  );
 }
 
 .vak-gradient-premium-light {
-  background: linear-gradient(135deg,
+  background: linear-gradient(
+    135deg,
     rgba(255, 255, 255, 0.95) 0%,
-    rgba(248, 252, 253, 0.9) 100%);
+    rgba(248, 252, 253, 0.9) 100%
+  );
 }
 
 .vak-gradient-premium-glass {
-  background: linear-gradient(135deg,
+  background: linear-gradient(
+    135deg,
     rgba(255, 255, 255, 0.85) 0%,
-    rgba(248, 252, 253, 0.75) 100%);
+    rgba(248, 252, 253, 0.75) 100%
+  );
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
@@ -1228,7 +1330,7 @@
 }
 
 .vak-hover-border:hover {
-  border-color: #4DA8C4;
+  border-color: #4da8c4;
 }
 
 /* Tipografía premium */
@@ -1263,35 +1365,35 @@
 
 /* Colores premium corporativos */
 .vak-color-premium-petroleum {
-  color: #004B63;
+  color: #004b63;
 }
 
 .vak-color-premium-corporate {
-  color: #4DA8C4;
+  color: #4da8c4;
 }
 
 .vak-color-premium-mint {
-  color: #66CCCC;
+  color: #66cccc;
 }
 
 .vak-color-premium-accent {
-  color: #B2D8E5;
+  color: #b2d8e5;
 }
 
 .vak-bg-premium-petroleum {
-  background-color: #004B63;
+  background-color: #004b63;
 }
 
 .vak-bg-premium-corporate {
-  background-color: #4DA8C4;
+  background-color: #4da8c4;
 }
 
 .vak-bg-premium-mint {
-  background-color: #66CCCC;
+  background-color: #66cccc;
 }
 
 .vak-bg-premium-accent {
-  background-color: #B2D8E5;
+  background-color: #b2d8e5;
 }
 
 /* Utilidades premium */
@@ -1333,22 +1435,22 @@
 
 /* Estados premium */
 .vak-state-premium-success {
-  border-color: #10B981;
+  border-color: #10b981;
   background-color: rgba(16, 185, 129, 0.1);
 }
 
 .vak-state-premium-error {
-  border-color: #EF4444;
+  border-color: #ef4444;
   background-color: rgba(239, 68, 68, 0.1);
 }
 
 .vak-state-premium-warning {
-  border-color: #F59E0B;
+  border-color: #f59e0b;
   background-color: rgba(245, 158, 11, 0.1);
 }
 
 .vak-state-premium-info {
-  border-color: #4DA8C4;
+  border-color: #4da8c4;
   background-color: rgba(77, 168, 196, 0.1);
 }
 
@@ -1407,41 +1509,48 @@
 
 .vak-option-card-premium {
   composes: vak-option-card;
-  background: linear-gradient(135deg,
+  background: linear-gradient(
+    135deg,
     rgba(255, 255, 255, 0.98) 0%,
-    rgba(248, 252, 253, 0.95) 100%);
+    rgba(248, 252, 253, 0.95) 100%
+  );
   border: 2px solid rgba(77, 168, 196, 0.12);
   border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(0, 75, 99, 0.06),
-              0 2px 6px rgba(0, 75, 99, 0.04);
+  box-shadow:
+    0 4px 20px rgba(0, 75, 99, 0.06),
+    0 2px 6px rgba(0, 75, 99, 0.04);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
 }
 
 .vak-option-card-premium::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg,
+  background: linear-gradient(
+    90deg,
     transparent 0%,
     rgba(77, 168, 196, 0.3) 50%,
-    transparent 100%);
+    transparent 100%
+  );
 }
 
 .vak-option-card-premium::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg,
+  background: linear-gradient(
+    135deg,
     rgba(77, 168, 196, 0) 0%,
-    rgba(77, 168, 196, 0.03) 100%);
+    rgba(77, 168, 196, 0.03) 100%
+  );
   opacity: 0;
   transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
@@ -1452,14 +1561,17 @@
 }
 
 .vak-option-card-premium:hover {
-  border-color: #4DA8C4;
-  box-shadow: 0 12px 40px rgba(77, 168, 196, 0.15),
-              0 6px 24px rgba(77, 168, 196, 0.1),
-              inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  border-color: #4da8c4;
+  box-shadow:
+    0 12px 40px rgba(77, 168, 196, 0.15),
+    0 6px 24px rgba(77, 168, 196, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
   transform: translateY(-6px) scale(1.01);
-  background: linear-gradient(135deg,
+  background: linear-gradient(
+    135deg,
     rgba(255, 255, 255, 0.98) 0%,
-    rgba(248, 252, 253, 0.98) 100%);
+    rgba(248, 252, 253, 0.98) 100%
+  );
 }
 
 .vak-option-card-premium:active {
@@ -1470,23 +1582,29 @@
 /* Variantes VAK para tarjetas premium */
 .vak-option-card-premium-visual:hover {
   border-color: var(--color-vak-visual-500);
-  background: linear-gradient(135deg,
+  background: linear-gradient(
+    135deg,
     rgba(255, 255, 255, 0.98) 0%,
-    rgba(77, 168, 196, 0.05) 100%);
+    rgba(77, 168, 196, 0.05) 100%
+  );
 }
 
 .vak-option-card-premium-auditivo:hover {
   border-color: var(--color-vak-auditivo-500);
-  background: linear-gradient(135deg,
+  background: linear-gradient(
+    135deg,
     rgba(255, 255, 255, 0.98) 0%,
-    rgba(102, 204, 204, 0.05) 100%);
+    rgba(102, 204, 204, 0.05) 100%
+  );
 }
 
 .vak-option-card-premium-kinestesico:hover {
   border-color: var(--color-vak-kinestesico-500);
-  background: linear-gradient(135deg,
+  background: linear-gradient(
+    135deg,
     rgba(255, 255, 255, 0.98) 0%,
-    rgba(0, 194, 224, 0.05) 100%);
+    rgba(0, 194, 224, 0.05) 100%
+  );
 }
 
 /* Letra de opción premium */
@@ -1494,7 +1612,7 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #4DA8C4, #66CCCC);
+  background: linear-gradient(135deg, #4da8c4, #66cccc);
   color: white;
   font-family: var(--font-family-display);
   font-weight: 700;
@@ -1518,7 +1636,7 @@
   font-weight: 500;
   font-size: 1rem;
   line-height: 1.5;
-  color: #004B63;
+  color: #004b63;
   text-align: left;
 }
 
@@ -1527,9 +1645,11 @@
   width: 44px;
   height: 44px;
   border-radius: 12px;
-  background: linear-gradient(135deg,
+  background: linear-gradient(
+    135deg,
     rgba(255, 255, 255, 0.95) 0%,
-    rgba(248, 252, 253, 0.9) 100%);
+    rgba(248, 252, 253, 0.9) 100%
+  );
   border: 2px solid rgba(77, 168, 196, 0.15);
   display: flex;
   align-items: center;
@@ -1547,7 +1667,7 @@
 }
 
 .vak-option-card-premium:hover .vak-option-icon-premium {
-  border-color: #4DA8C4;
+  border-color: #4da8c4;
   transform: scale(1.05);
   box-shadow: 0 4px 16px rgba(77, 168, 196, 0.15);
 }
@@ -1560,7 +1680,7 @@
 }
 
 .vak-option-card-premium:hover .vak-option-arrow-premium {
-  color: #4DA8C4;
+  color: #4da8c4;
   transform: translateX(4px);
 }
 
@@ -1568,61 +1688,80 @@
 
 .vak-result-hero-premium {
   position: relative;
-  padding: 3rem 2rem;
-  border-radius: 28px;
+  padding: 3.5rem 2.5rem;
+  border-radius: 32px;
   overflow: hidden;
   text-align: center;
-  background: linear-gradient(135deg,
+  background: linear-gradient(
+    135deg,
     rgba(0, 75, 99, 0.98) 0%,
     rgba(0, 75, 99, 0.92) 50%,
-    rgba(77, 168, 196, 0.95) 100%);
-  border: 3px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 20px 60px rgba(0, 75, 99, 0.25),
-              inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    rgba(77, 168, 196, 0.95) 100%
+  );
+  border: 3px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 32px 80px rgba(0, 75, 99, 0.35),
+    0 12px 32px rgba(0, 75, 99, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    inset 0 -20px 60px rgba(0, 30, 45, 0.2);
 }
 
 .vak-result-hero-premium::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    circle at 30% 20%,
-    rgba(255, 255, 255, 0.15) 0%,
-    transparent 60%
-  );
+  background:
+    radial-gradient(
+      circle at 30% 20%,
+      rgba(255, 255, 255, 0.18) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at 85% 90%,
+      rgba(102, 204, 204, 0.22) 0%,
+      transparent 50%
+    );
   pointer-events: none;
 }
 
 .vak-result-hero-premium::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg,
+  background: linear-gradient(
+    90deg,
     transparent 0%,
     rgba(255, 255, 255, 0.4) 50%,
-    transparent 100%);
+    transparent 100%
+  );
 }
 
 /* Variantes VAK para hero premium */
 .vak-result-hero-premium-visual {
-  background: linear-gradient(135deg,
+  background: linear-gradient(
+    135deg,
     rgba(0, 75, 99, 0.98) 0%,
-    rgba(77, 168, 196, 0.95) 100%);
+    rgba(77, 168, 196, 0.95) 100%
+  );
 }
 
 .vak-result-hero-premium-auditivo {
-  background: linear-gradient(135deg,
+  background: linear-gradient(
+    135deg,
     rgba(0, 75, 99, 0.98) 0%,
-    rgba(102, 204, 204, 0.95) 100%);
+    rgba(102, 204, 204, 0.95) 100%
+  );
 }
 
 .vak-result-hero-premium-kinestesico {
-  background: linear-gradient(135deg,
+  background: linear-gradient(
+    135deg,
     rgba(0, 75, 99, 0.98) 0%,
-    rgba(0, 194, 224, 0.95) 100%);
+    rgba(0, 194, 224, 0.95) 100%
+  );
 }
 
 /* Contenido del hero premium */
@@ -1641,8 +1780,13 @@
 }
 
 @keyframes vak-premium-float {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-10px) rotate(5deg); }
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(5deg);
+  }
 }
 
 /* Badge de bienvenida premium */
@@ -1657,22 +1801,49 @@
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.25);
   margin-bottom: 2rem;
+  box-shadow:
+    0 4px 16px rgba(0, 30, 45, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition:
+    background 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vak-result-badge-premium:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
 /* Icono del estilo premium */
 .vak-result-icon-premium {
-  width: 80px;
-  height: 80px;
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.2);
+  width: 84px;
+  height: 84px;
+  border-radius: 26px;
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.28) 0%,
+    rgba(255, 255, 255, 0.12) 100%
+  );
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 1.5rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  box-shadow:
+    0 12px 40px rgba(0, 30, 45, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition:
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vak-result-icon-premium:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow:
+    0 18px 52px rgba(0, 30, 45, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
 }
 
 .vak-result-icon-premium svg {
@@ -1698,16 +1869,19 @@
 .vak-result-percentage-premium {
   font-family: var(--font-family-display);
   font-weight: 900;
-  font-size: 5rem;
+  font-size: 5.5rem;
   line-height: 1;
+  letter-spacing: -0.03em;
   color: white;
   margin: 1rem 0;
-  text-shadow: 0 0 40px rgba(255, 255, 255, 0.5),
-               0 4px 12px rgba(0, 0, 0, 0.3);
-  background: linear-gradient(to bottom, #FFFFFF, #B2D8E5);
+  text-shadow:
+    0 0 40px rgba(255, 255, 255, 0.5),
+    0 4px 12px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(to bottom, #ffffff 20%, #b2d8e5);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  filter: drop-shadow(0 10px 24px rgba(0, 30, 45, 0.35));
 }
 
 .vak-result-percentage-label-premium {
@@ -1732,6 +1906,14 @@
   backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   margin-top: 1.5rem;
+  transition:
+    background 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vak-result-time-premium:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.32);
 }
 
 .vak-result-time-premium svg {
@@ -1754,35 +1936,55 @@
 /* ==================== GRÁFICA RADAR PREMIUM ==================== */
 
 .vak-radar-container-premium {
-  background: linear-gradient(135deg,
+  background: linear-gradient(
+    135deg,
     rgba(255, 255, 255, 0.98) 0%,
-    rgba(248, 252, 253, 0.95) 100%);
+    rgba(248, 252, 253, 0.95) 100%
+  );
   border: 2px solid rgba(77, 168, 196, 0.15);
   border-radius: 24px;
-  box-shadow: 0 8px 32px rgba(0, 75, 99, 0.08);
-  padding: 1.5rem;
+  box-shadow:
+    0 12px 40px rgba(0, 75, 99, 0.1),
+    0 4px 12px rgba(0, 75, 99, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  padding: 2rem;
   position: relative;
   overflow: hidden;
+  transition:
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vak-radar-container-premium:hover {
+  transform: translateY(-3px);
+  border-color: rgba(77, 168, 196, 0.3);
+  box-shadow:
+    0 20px 56px rgba(0, 75, 99, 0.14),
+    0 8px 20px rgba(0, 75, 99, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
 }
 
 .vak-radar-container-premium::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg,
+  background: linear-gradient(
+    90deg,
     transparent 0%,
     rgba(77, 168, 196, 0.3) 50%,
-    transparent 100%);
+    transparent 100%
+  );
 }
 
 .vak-radar-title-premium {
   font-family: var(--font-family-display);
   font-weight: 700;
   font-size: 1rem;
-  color: #004B63;
+  color: #004b63;
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
@@ -1790,18 +1992,23 @@
 }
 
 .vak-radar-title-premium::before {
-  content: '';
+  content: "";
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #4DA8C4;
+  background: #4da8c4;
   display: inline-block;
   animation: vak-premium-pulse 2s infinite;
 }
 
 @keyframes vak-premium-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 /* Estilos para Recharts premium */
@@ -1811,7 +2018,7 @@
 }
 
 .recharts-polar-angle-axis-premium text {
-  fill: #004B63;
+  fill: #004b63;
   font-family: var(--font-family-display);
   font-weight: 600;
   font-size: 0.875rem;
@@ -1828,8 +2035,8 @@
 }
 
 .recharts-radar-premium .recharts-radar-polygon {
-  stroke: #4DA8C4;
-  fill: #4DA8C4;
+  stroke: #4da8c4;
+  fill: #4da8c4;
 }
 
 .recharts-radar-premium .recharts-radar-polygon-fill {
@@ -1838,12 +2045,12 @@
 
 /* Gradiente para el radar */
 #vak-radar-gradient-premium stop:first-child {
-  stop-color: #4DA8C4;
+  stop-color: #4da8c4;
   stop-opacity: 0.8;
 }
 
 #vak-radar-gradient-premium stop:last-child {
-  stop-color: #66CCCC;
+  stop-color: #66cccc;
   stop-opacity: 0.3;
 }
 
@@ -1865,35 +2072,37 @@
 }
 
 .vak-badge-premium-primary {
-  background: linear-gradient(135deg, #4DA8C4, #66CCCC);
+  background: linear-gradient(135deg, #4da8c4, #66cccc);
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 4px 12px rgba(77, 168, 196, 0.3);
 }
 
 .vak-badge-premium-secondary {
-  background: linear-gradient(135deg,
+  background: linear-gradient(
+    135deg,
     rgba(255, 255, 255, 0.95) 0%,
-    rgba(248, 252, 253, 0.9) 100%);
-  color: #004B63;
+    rgba(248, 252, 253, 0.9) 100%
+  );
+  color: #004b63;
   border: 1px solid rgba(77, 168, 196, 0.2);
   box-shadow: 0 2px 8px rgba(0, 75, 99, 0.08);
 }
 
 .vak-badge-premium-success {
-  background: linear-gradient(135deg, #10B981, #34D399);
+  background: linear-gradient(135deg, #10b981, #34d399);
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .vak-badge-premium-warning {
-  background: linear-gradient(135deg, #F59E0B, #FBBF24);
+  background: linear-gradient(135deg, #f59e0b, #fbbf24);
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .vak-badge-premium-error {
-  background: linear-gradient(135deg, #EF4444, #F87171);
+  background: linear-gradient(135deg, #ef4444, #f87171);
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
@@ -1938,11 +2147,11 @@
   .vak-btn-premium-primary {
     border: 2px solid white;
   }
-  
+
   .vak-badge-premium-primary {
     border: 2px solid white;
   }
-  
+
   .vak-container-premium {
     border: 2px solid var(--color-corporate-premium);
   }
@@ -1951,59 +2160,31 @@
 /* Soporte para modo oscuro del sistema */
 @media (prefers-color-scheme: dark) {
   .vak-container-premium {
-    background: linear-gradient(135deg,
+    background: linear-gradient(
+      135deg,
       rgba(30, 41, 59, 0.98) 0%,
-      rgba(51, 65, 85, 0.95) 100%);
+      rgba(51, 65, 85, 0.95) 100%
+    );
     border-color: rgba(77, 168, 196, 0.3);
   }
-  
+
   .vak-input-premium {
-    background: linear-gradient(135deg,
+    background: linear-gradient(
+      135deg,
       rgba(30, 41, 59, 0.95) 0%,
-      rgba(51, 65, 85, 0.9) 100%);
+      rgba(51, 65, 85, 0.9) 100%
+    );
     border-color: rgba(77, 168, 196, 0.3);
-    color: #E2E8F0;
+    color: #e2e8f0;
   }
-  
+
   .vak-input-premium::placeholder {
     color: rgba(226, 232, 240, 0.5);
   }
 }
 
-/* Optimizaciones de rendimiento para dispositivos de gama media/baja */
-@media (prefers-reduced-motion: reduce) {
-  .vak-btn-premium::before,
-  .vak-btn-premium:hover::before {
-    animation: none;
-    transition: none;
-  }
-  
-  .vak-result-emoji-premium {
-    animation: none;
-  }
-  
-  .vak-radar-title-premium::before {
-    animation: none;
-  }
-  
-  .vak-option-card-premium:hover {
-    transform: none;
-  }
-  
-  .vak-icon-container-premium:hover {
-    transform: none;
-  }
-  
-  .vak-strategy-card-premium:hover {
-    transform: none;
-  }
-  
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
+/* Movimiento reducido: bloque consolidado al final del archivo
+   (ver "MOVIMIENTO REDUCIDO — ACCESIBILIDAD"). */
 
 /* Optimizaciones para pantallas pequeñas (móviles) */
 @media (max-width: 640px) {
@@ -2011,47 +2192,49 @@
     padding: 0.875rem 1.5rem;
     font-size: 0.9375rem;
   }
-  
+
   .vak-container-premium {
     padding: 1.5rem;
     border-radius: 20px;
   }
-  
+
   .vak-input-premium {
     padding: 0.875rem 1rem;
   }
-  
+
   .vak-icon-container-premium {
     width: 40px;
     height: 40px;
   }
-  
+
   .vak-icon-premium {
     width: 20px;
     height: 20px;
   }
-  
+
   /* Reducir efectos visuales en móviles para mejor rendimiento */
   .vak-btn-premium::before {
     display: none;
   }
-  
+
   .vak-container-premium::before {
     display: none;
   }
 }
 
 .vak-btn-premium::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg,
+  background: linear-gradient(
+    90deg,
     transparent 0%,
     rgba(255, 255, 255, 0.3) 50%,
-    transparent 100%);
+    transparent 100%
+  );
   transition: left 0.6s ease;
 }
 
@@ -2060,7 +2243,7 @@
 }
 
 .vak-btn-premium-primary {
-  background: linear-gradient(135deg, #4DA8C4, #66CCCC);
+  background: linear-gradient(135deg, #4da8c4, #66cccc);
   color: white;
   box-shadow: 0 8px 24px rgba(77, 168, 196, 0.4);
 }
@@ -2076,29 +2259,31 @@
 }
 
 .vak-btn-premium-secondary {
-  background: linear-gradient(135deg,
+  background: linear-gradient(
+    135deg,
     rgba(255, 255, 255, 0.95) 0%,
-    rgba(248, 252, 253, 0.9) 100%);
-  color: #004B63;
+    rgba(248, 252, 253, 0.9) 100%
+  );
+  color: #004b63;
   border: 2px solid rgba(77, 168, 196, 0.3);
   box-shadow: 0 4px 16px rgba(0, 75, 99, 0.1);
 }
 
 .vak-btn-premium-secondary:hover {
-  border-color: #4DA8C4;
+  border-color: #4da8c4;
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(77, 168, 196, 0.2);
 }
 
 .vak-btn-premium-ghost {
   background: transparent;
-  color: #4DA8C4;
+  color: #4da8c4;
   border: 2px solid rgba(77, 168, 196, 0.3);
 }
 
 .vak-btn-premium-ghost:hover {
   background: rgba(77, 168, 196, 0.1);
-  border-color: #4DA8C4;
+  border-color: #4da8c4;
   transform: translateY(-2px);
 }
 
@@ -2112,7 +2297,7 @@
   font-family: var(--font-family-display);
   font-weight: 600;
   font-size: 0.875rem;
-  color: #004B63;
+  color: #004b63;
   margin-bottom: 0.5rem;
   letter-spacing: 0.02em;
 }
@@ -2122,21 +2307,24 @@
   padding: 1rem 1.25rem;
   border-radius: 12px;
   border: 2px solid rgba(77, 168, 196, 0.2);
-  background: linear-gradient(135deg,
+  background: linear-gradient(
+    135deg,
     rgba(255, 255, 255, 0.95) 0%,
-    rgba(248, 252, 253, 0.9) 100%);
+    rgba(248, 252, 253, 0.9) 100%
+  );
   font-family: var(--font-family-body);
   font-size: 1rem;
-  color: #004B63;
+  color: #004b63;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 2px 8px rgba(0, 75, 99, 0.05);
 }
 
 .vak-input-premium:focus {
   outline: none;
-  border-color: #4DA8C4;
-  box-shadow: 0 0 0 4px rgba(77, 168, 196, 0.2),
-              0 4px 16px rgba(77, 168, 196, 0.1);
+  border-color: #4da8c4;
+  box-shadow:
+    0 0 0 4px rgba(77, 168, 196, 0.2),
+    0 4px 16px rgba(77, 168, 196, 0.1);
   transform: translateY(-1px);
 }
 
@@ -2145,26 +2333,30 @@
 }
 
 .vak-input-premium-error {
-  border-color: #EF4444;
-  background: linear-gradient(135deg,
+  border-color: #ef4444;
+  background: linear-gradient(
+    135deg,
     rgba(255, 255, 255, 0.95) 0%,
-    rgba(254, 242, 242, 0.9) 100%);
+    rgba(254, 242, 242, 0.9) 100%
+  );
 }
 
 .vak-input-premium-error:focus {
-  border-color: #EF4444;
+  border-color: #ef4444;
   box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2);
 }
 
 .vak-input-premium-success {
-  border-color: #10B981;
-  background: linear-gradient(135deg,
+  border-color: #10b981;
+  background: linear-gradient(
+    135deg,
     rgba(255, 255, 255, 0.95) 0%,
-    rgba(236, 253, 245, 0.9) 100%);
+    rgba(236, 253, 245, 0.9) 100%
+  );
 }
 
 .vak-input-premium-success:focus {
-  border-color: #10B981;
+  border-color: #10b981;
   box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
 }
 
@@ -2179,7 +2371,7 @@
 .vak-form-error-premium {
   font-family: var(--font-family-body);
   font-size: 0.75rem;
-  color: #EF4444;
+  color: #ef4444;
   margin-top: 0.5rem;
   display: flex;
   align-items: center;
@@ -2194,37 +2386,41 @@
   width: 48px;
   height: 48px;
   border-radius: 12px;
-  background: linear-gradient(135deg,
+  background: linear-gradient(
+    135deg,
     rgba(255, 255, 255, 0.95) 0%,
-    rgba(248, 252, 253, 0.9) 100%);
+    rgba(248, 252, 253, 0.9) 100%
+  );
   border: 2px solid rgba(77, 168, 196, 0.2);
   box-shadow: 0 4px 12px rgba(0, 75, 99, 0.08);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .vak-icon-container-premium:hover {
-  border-color: #4DA8C4;
+  border-color: #4da8c4;
   transform: translateY(-2px) scale(1.05);
   box-shadow: 0 8px 24px rgba(77, 168, 196, 0.15);
 }
 
 .vak-icon-premium {
-  color: #4DA8C4;
+  color: #4da8c4;
   width: 24px;
   height: 24px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .vak-icon-container-premium:hover .vak-icon-premium {
-  color: #004B63;
+  color: #004b63;
   transform: scale(1.1);
 }
 
 /* Tarjetas de estrategia premium */
 .vak-strategy-card-premium {
-  background: linear-gradient(135deg,
+  background: linear-gradient(
+    135deg,
     rgba(255, 255, 255, 0.95) 0%,
-    rgba(248, 252, 253, 0.9) 100%);
+    rgba(248, 252, 253, 0.9) 100%
+  );
   border: 2px solid rgba(77, 168, 196, 0.15);
   border-radius: 20px;
   padding: 1.5rem;
@@ -2234,19 +2430,26 @@
 }
 
 .vak-strategy-card-premium::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 4px;
   height: 100%;
-  background: linear-gradient(to bottom, #4DA8C4, #66CCCC);
+  background: linear-gradient(to bottom, #4da8c4, #66cccc);
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .vak-strategy-card-premium:hover {
   transform: translateY(-4px);
-  border-color: #4DA8C4;
-  box-shadow: 0 12px 32px rgba(77, 168, 196, 0.15);
+  border-color: #4da8c4;
+  box-shadow:
+    0 16px 40px rgba(77, 168, 196, 0.18),
+    0 6px 16px rgba(0, 75, 99, 0.08);
+}
+
+.vak-strategy-card-premium:hover::before {
+  width: 6px;
 }
 
 .vak-strategy-number-premium {
@@ -2256,19 +2459,22 @@
   width: 36px;
   height: 36px;
   border-radius: 10px;
-  background: linear-gradient(135deg, #4DA8C4, #66CCCC);
+  background: linear-gradient(135deg, #4da8c4, #66cccc);
   color: white;
   font-family: var(--font-family-display);
   font-weight: 700;
   font-size: 0.875rem;
   margin-bottom: 1rem;
+  box-shadow:
+    0 4px 12px rgba(77, 168, 196, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .vak-strategy-title-premium {
   font-family: var(--font-family-display);
   font-weight: 600;
   font-size: 1rem;
-  color: #004B63;
+  color: #004b63;
   line-height: 1.4;
   margin-bottom: 0.5rem;
 }
@@ -2282,9 +2488,11 @@
 
 /* Contenedores premium */
 .vak-container-premium {
-  background: linear-gradient(135deg,
+  background: linear-gradient(
+    135deg,
     rgba(255, 255, 255, 0.98) 0%,
-    rgba(248, 252, 253, 0.95) 100%);
+    rgba(248, 252, 253, 0.95) 100%
+  );
   border: 2px solid rgba(77, 168, 196, 0.15);
   border-radius: 24px;
   box-shadow: 0 8px 32px rgba(0, 75, 99, 0.08);
@@ -2294,28 +2502,33 @@
 }
 
 .vak-container-premium::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg,
+  background: linear-gradient(
+    90deg,
     transparent 0%,
     rgba(77, 168, 196, 0.3) 50%,
-    transparent 100%);
+    transparent 100%
+  );
 }
 
 .vak-container-premium-glass {
-  background: linear-gradient(135deg,
+  background: linear-gradient(
+    135deg,
     rgba(255, 255, 255, 0.85) 0%,
-    rgba(248, 252, 253, 0.75) 100%);
+    rgba(248, 252, 253, 0.75) 100%
+  );
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 24px;
-  box-shadow: 0 20px 60px rgba(0, 75, 99, 0.1),
-              inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  box-shadow:
+    0 20px 60px rgba(0, 75, 99, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
 /* Utilidades de espaciado premium */
@@ -2346,7 +2559,8 @@
 /* ==================== ANIMACIONES 3D PARA BÓVEDAS ==================== */
 
 @keyframes orb-1 {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(0, 0) translateZ(100px) scale(1);
   }
   33% {
@@ -2358,7 +2572,8 @@
 }
 
 @keyframes orb-2 {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(0, 0) translateZ(80px) scale(1);
   }
   33% {
@@ -2370,7 +2585,8 @@
 }
 
 @keyframes orb-3 {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(0, 0) translateZ(50px) scale(1);
   }
   50% {
@@ -2379,7 +2595,8 @@
 }
 
 @keyframes float-3d {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0) translateZ(var(--z-depth, 0px));
     opacity: 0.8;
   }
@@ -2418,7 +2635,7 @@
 }
 
 .vak-option-modern:hover {
-  border-color: #4DA8C4;
+  border-color: #4da8c4;
   background: rgba(255, 255, 255, 0.95);
   transform: translateY(-2px);
   box-shadow: 0 10px 30px rgba(77, 168, 196, 0.1);
@@ -2428,17 +2645,25 @@
   width: 3rem;
   height: 3rem;
   border-radius: 0.75rem;
-  background: linear-gradient(135deg, rgba(77, 168, 196, 0.1), rgba(102, 204, 204, 0.1));
+  background: linear-gradient(
+    135deg,
+    rgba(77, 168, 196, 0.1),
+    rgba(102, 204, 204, 0.1)
+  );
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  color: #0A1628;
+  color: #0a1628;
   transition: all 0.3s ease;
 }
 
 .vak-option-modern:hover .vak-option-letter {
-  background: linear-gradient(135deg, rgba(77, 168, 196, 0.2), rgba(102, 204, 204, 0.2));
+  background: linear-gradient(
+    135deg,
+    rgba(77, 168, 196, 0.2),
+    rgba(102, 204, 204, 0.2)
+  );
   transform: scale(1.05);
 }
 
@@ -2449,7 +2674,7 @@
 }
 
 .vak-option-icon-simple {
-  color: #4DA8C4;
+  color: #4da8c4;
   font-size: 1.25rem;
 }
 
@@ -2457,7 +2682,7 @@
   width: 2rem;
   height: 2rem;
   border-radius: 50%;
-  border: 2px solid #E5E7EB;
+  border: 2px solid #e5e7eb;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2465,31 +2690,134 @@
 }
 
 .vak-option-modern:hover .vak-option-selector {
-  border-color: #4DA8C4;
+  border-color: #4da8c4;
 }
 
 .vak-option-selector-arrow {
-  color: #9CA3AF;
+  color: #9ca3af;
   transition: all 0.3s ease;
 }
 
 /* ==================== CONFETTI FALL ANIMATION ==================== */
 @keyframes confetti-fall {
-  0%   { transform: translateY(-20px) rotate(0deg); opacity: 0.9; }
-  50%  { opacity: 0.6; }
-  100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+  0% {
+    transform: translateY(-20px) rotate(0deg);
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
 }
 
 .vak-option-modern:hover .vak-option-selector-arrow {
-  color: #4DA8C4;
+  color: #4da8c4;
 }
 
+/* ==================== MOVIMIENTO REDUCIDO — ACCESIBILIDAD ==================== */
+/* Bloque consolidado (único) para `prefers-reduced-motion: reduce`.
+   Estrategia:
+   1. Detener TODOS los keyframes decorativos (shimmers, floats, pulsos,
+      orbes 3D, confetti, ondas de voz): un solo ciclo imperceptible.
+   2. Las animaciones de entrada saltan directo a su estado final.
+   3. Las capas puramente decorativas que dependen de movimiento se ocultan.
+   4. Los hover/active basados en transform se neutralizan, PERO las
+      transiciones funcionales de color/borde/sombra se conservan para
+      que el feedback visual siga siendo claro sin generar movimiento. */
 @media (prefers-reduced-motion: reduce) {
+  /* 1) Keyframes: ciclo único imperceptible (cubre vak-shimmer,
+     vak-pulse-slow, vak-float, vak-premium-pulse, wave, pulse,
+     valeria-speak-pulse, valeria-pulse-ring, vak-premium-float,
+     vak-premium-shimmer, orb-1/2/3, float-3d, confetti-fall y
+     cualquier animación futura). */
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* 2) Entradas: estado final inmediato, sin desplazamiento. */
+  .vak-animate-premium-fade-in,
+  .vak-animate-premium-scale-in,
+  .valeria-fade-enter,
+  .valeria-fade-enter-active {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* Salidas: se conserva el fundido de opacidad (no es movimiento),
+     pero sin desplazamiento vertical. */
+  .valeria-fade-exit,
+  .valeria-fade-exit-active {
+    transform: none !important;
+  }
+
+  /* 3) Capas decorativas que solo existen para moverse: ocultas. */
+  .vak-progress-bar::after,
+  .vak-shimmer-premium,
+  .vak-btn-premium::before,
+  .valeria-avatar-pulse {
+    display: none !important;
+  }
+
+  /* Orbes y brillos: estáticos y atenuados (sin tocar transforms
+     posicionales como el translate(-50%, -50%) del orb-3 o el glow). */
+  .vak-gradient-orb,
+  .animate-orb-1,
+  .animate-orb-2,
+  .animate-orb-3,
+  .animate-float-3d,
+  .vak-question-number-glow {
+    animation: none !important;
+    opacity: 0.2;
+  }
+
+  /* 4) Hover/active con transform (lift, scale, rotate, translate):
+     se neutraliza el movimiento; el cambio de color/sombra permanece.
+     Solo selectores cuyo estado base no depende de transform. */
+  .vak-btn-primary:hover,
+  .vak-btn-primary:active,
+  .vak-option-card:hover,
+  .vak-option-card:active,
+  .vak-option-card:hover .vak-option-icon,
+  .vak-option-card:hover .vak-option-letter,
+  .vak-mood-option:hover,
+  .vak-mood-option:hover .vak-mood-emoji,
+  .vak-mood-option-selected .vak-mood-emoji,
+  .valeria-btn-toggle:hover,
+  .valeria-volume-slider::-webkit-slider-thumb:hover,
+  .valeria-btn-toggle-premium:hover,
+  .valeria-btn-toggle-premium:active,
+  .valeria-btn-toggle-premium:hover .valeria-icon-premium,
+  .valeria-btn-repeat-premium:hover:not(:disabled),
+  .valeria-btn-repeat-premium:hover:not(:disabled) .valeria-icon-repeat,
+  .valeria-btn-start:hover,
+  .valeria-avatar:hover,
+  .vak-hover-lift:hover,
+  .vak-option-card-premium:hover,
+  .vak-option-card-premium:active,
+  .vak-option-card-premium:hover .vak-option-letter-premium,
+  .vak-option-card-premium:hover .vak-option-icon-premium,
+  .vak-option-card-premium:hover .vak-option-arrow-premium,
+  .vak-btn-premium-primary:hover,
+  .vak-btn-premium-secondary:hover,
+  .vak-btn-premium-ghost:hover,
+  .vak-input-premium:focus,
+  .vak-icon-container-premium:hover,
+  .vak-icon-container-premium:hover .vak-icon-premium,
+  .vak-strategy-card-premium:hover,
+  .vak-badge-premium-primary:hover,
+  .vak-result-icon-premium:hover,
+  .vak-radar-container-premium:hover,
+  .vak-option-modern:hover,
+  .vak-option-modern:hover .vak-option-letter {
+    transform: none !important;
   }
 }
