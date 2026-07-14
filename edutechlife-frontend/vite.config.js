@@ -34,6 +34,9 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,webp}'],
+        globIgnores: [
+          '**/pdf-vendor*',
+        ],
         maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
         runtimeCaching: [
           {
@@ -122,13 +125,13 @@ export default defineConfig({
         ]
       }
     }),
-    visualizer({
+    process.env.BUILD_ANALYZE === 'true' && visualizer({
       filename: 'bundle-stats.html',
       open: false,
       gzipSize: true,
       brotliSize: true,
-    })
-  ],
+    }),
+  ].filter(Boolean),
   server: {
     port: 5174,
     host: true,
@@ -164,20 +167,8 @@ export default defineConfig({
           if (id.includes('node_modules/html2pdf.js/') || id.includes('node_modules/jspdf/')) {
             return 'pdf-vendor';
           }
-          if (id.includes('node_modules/xlsx/')) {
-            return 'xlsx-vendor';
-          }
           if (id.includes('node_modules/@supabase/supabase-js/')) {
             return 'supabase-vendor';
-          }
-          if (id.includes('/src/design-system')) {
-            return 'design-system';
-          }
-          if (id.includes('/src/features/vak-diagnosis')) {
-            return 'vak-feature';
-          }
-          if (id.includes('/src/components/layout/AppLayout')) {
-            return 'app-layout';
           }
         },
         chunkFileNames: 'assets/[name]-[hash].js',
