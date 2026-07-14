@@ -2,13 +2,16 @@ export {
   supabase,
   createClerkSupabaseClient,
   initSupabaseClient,
+} from "./supabaseClient.js";
+export {
   queueSyncOperation,
   processSyncQueue,
   setupConnectionListener,
-  transformProgressData,
-  mergeProgress,
+} from "./syncQueue.js";
+export { transformProgressData, mergeProgress } from "./transformer.js";
+export {
   syncProgressToSupabase,
   syncGamificationToSupabase,
   syncActivityToSupabase,
   loadProgressFromSupabase,
-} from "./progressSync/index.js";
+} from "./syncActivity.js";
