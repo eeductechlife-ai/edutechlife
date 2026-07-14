@@ -1357,7 +1357,14 @@ const DiagnosticoVAK = ({ onNavigate }) => {
 
         {/* Barra de progreso fina */}
         <div className="mb-8">
-          <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+          <div
+            className="h-2 bg-gray-100 rounded-full overflow-hidden"
+            role="progressbar"
+            aria-valuenow={currentQuestion + 1}
+            aria-valuemin={1}
+            aria-valuemax={ageQuestions.length}
+            aria-label={t("vak.ui.question")}
+          >
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
@@ -1780,6 +1787,10 @@ const DiagnosticoVAK = ({ onNavigate }) => {
               <div
                 className="w-full aspect-square max-w-[300px] mx-auto"
                 ref={chartRef}
+                role="img"
+                aria-label={`${t("vak.ui.vak_profile")}: ${radarData
+                  .map((d) => `${d.subject} ${d.A}/${d.fullMark}`)
+                  .join(", ")}`}
               >
                 <ResponsiveContainer width="100%" height="100%">
                   <RadarChart data={radarData}>
