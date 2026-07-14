@@ -36,7 +36,7 @@ const TooltipIcon = ({ label, children, premium }) => {
 
 
 TooltipIcon.propTypes = {
-  label: PropTypes.string,
+  label: PropTypes.node,
   premium: PropTypes.bool,
 };
 

@@ -188,7 +188,7 @@ SidebarCollapsed.propTypes = {
   isStreakAtRisk: PropTypes.func,
   getLevel: PropTypes.func,
   getTotalPoints: PropTypes.func,
-  storedCertificate: PropTypes.bool,
+  storedCertificate: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
   setShowCertificateModal: PropTypes.func,
   goToModule: PropTypes.func,
   fadeTransition: PropTypes.object,

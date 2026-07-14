@@ -287,12 +287,12 @@ const ModuleTopicAccordion = ({
 
 ModuleTopicAccordion.propTypes = {
   moduleData: PropTypes.object,
-  expandedTopic: PropTypes.string,
+  expandedTopic: PropTypes.number,
   setExpandedTopic: PropTypes.func,
   filterType: PropTypes.string,
   setFilterType: PropTypes.func,
   resourcesByTopic: PropTypes.object,
-  viewedIds: PropTypes.object,
+  viewedIds: PropTypes.array,
   isAdmin: PropTypes.bool,
   isResourceLocked: PropTypes.func,
   calculateTopicDuration: PropTypes.func,

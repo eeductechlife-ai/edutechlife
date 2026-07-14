@@ -40,7 +40,7 @@ const ModuleHeaderSection = ({ moduleData, activeMod, isDescriptionExpanded, set
 
 ModuleHeaderSection.propTypes = {
   moduleData: PropTypes.object,
-  activeMod: PropTypes.string,
+  activeMod: PropTypes.number,
   isDescriptionExpanded: PropTypes.bool,
   setIsDescriptionExpanded: PropTypes.func,
   lessonProgress: PropTypes.object,
