@@ -1,9 +1,4 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-} from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useUser, useClerk, useAuth as useClerkAuth } from "@clerk/react";
 import { useProgressContext } from "../../ProgressContext";
 import { useNotification } from "../../NotificationContext";
@@ -13,13 +8,7 @@ import { supabase } from "../../../lib/supabase";
 import { modules as STATIC_MODULES } from "@/data/ialab";
 import { LS_KEYS } from "@/constants/ialab";
 import { useIALabStore } from "../../../store/ialabStore";
-
-const getAnalyzingMsgs = (t) => [
-  t("progress.analyzing_1"),
-  t("progress.analyzing_2"),
-  t("progress.analyzing_3"),
-  t("progress.analyzing_4"),
-];
+import { getAnalyzingMsgs } from "./ialabAnalyzingMsgs";
 
 export function useIALabUI(onBack) {
   const { t } = useTranslation();
