@@ -1,3 +1,4 @@
+// fix vercel activity uploader casing
 import { useCallback, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "../../../i18n/I18nProvider";
@@ -14,11 +15,11 @@ import { PREMIUM_FEATURES } from "../kidsDashboardConfig";
 const KidsCalendar = lazy(() => import("../KidsCalendar"));
 const PointsRewardsSystem = lazy(() => import("../PointsRewardsSystem"));
 const NewsTechFeed = lazy(() => import("../NewsTechFeed"));
-const ActivityUploader = lazy(() => import("../ActivityUploader"));
-const SmartBoardProgress = lazy(() => import("../SmartBoardProgress"));
+const ActivityUploader = lazy(() => import("../activityUploader"));
+const SmartBoardProgress = lazy(() => import("../smartBoardProgress"));
 const PersonalizedPlan = lazy(() => import("../PersonalizedPlan"));
-const ExamPrep = lazy(() => import("../ExamPrep"));
-const FlashcardSystem = lazy(() => import("../FlashcardSystem"));
+const ExamPrep = lazy(() => import("../examPrep"));
+const FlashcardSystem = lazy(() => import("../flashcardSystem"));
 const SmartBookReader = lazy(() => import("../smartBookReader"));
 const ProblemScanner = lazy(() => import("../ProblemScanner"));
 const CurriculumView = lazy(() => import("../CurriculumView"));
