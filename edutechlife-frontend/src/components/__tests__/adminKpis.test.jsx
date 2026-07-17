@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { computeDashboardKpis } from "../AdminDashboard";
+import { computeDashboardKpis } from "../adminDashboard";
 
 describe("computeDashboardKpis", () => {
   it("deriva KPIs demo a partir de una lista de estudiantes de demostración", () => {
