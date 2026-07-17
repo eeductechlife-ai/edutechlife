@@ -1,9 +1,9 @@
+// fix vercel casing cache
 import { lazy, Suspense } from "react";
 import { useAuth } from "@clerk/react";
 import { useNavigate } from "react-router-dom";
 import { PageLoader } from "../LoadingScreen";
 
-// Lazy load del componente AdminDashboard
 const AdminDashboard = lazy(() => import("../adminDashboard"));
 
 /**
