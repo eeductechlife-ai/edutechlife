@@ -19,7 +19,7 @@ const SmartBoardProgress = lazy(() => import("../SmartBoardProgress"));
 const PersonalizedPlan = lazy(() => import("../PersonalizedPlan"));
 const ExamPrep = lazy(() => import("../ExamPrep"));
 const FlashcardSystem = lazy(() => import("../FlashcardSystem"));
-const SmartBookReader = lazy(() => import("../SmartBookReader"));
+const SmartBookReader = lazy(() => import("../smartBookReader"));
 const ProblemScanner = lazy(() => import("../ProblemScanner"));
 const CurriculumView = lazy(() => import("../CurriculumView"));
 const StudyPodcast = lazy(() => import("../StudyPodcast"));

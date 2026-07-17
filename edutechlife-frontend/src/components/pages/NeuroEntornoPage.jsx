@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PageLoader } from '../LoadingScreen';
+import SEO from '../SEO';
 
 // Lazy load del componente NeuroEntorno
 const NeuroEntorno = lazy(() => import('../NeuroEntorno'));
@@ -22,9 +23,12 @@ const NeuroEntornoPage = () => {
   };
   
   return (
-    <Suspense fallback={<PageLoader message="Cargando Neuro Entorno..." />}>
-      <NeuroEntorno onBack={handleBack} onNavigate={handleNavigate} />
-    </Suspense>
+    <>
+      <SEO title="NeuroEntorno" description="Explora el NeuroEntorno de Edutechlife y transforma la educación con neuropedagogía e inteligencia artificial." />
+      <Suspense fallback={<PageLoader message="Cargando Neuro Entorno..." />}>
+        <NeuroEntorno onBack={handleBack} onNavigate={handleNavigate} />
+      </Suspense>
+    </>
   );
 };
 

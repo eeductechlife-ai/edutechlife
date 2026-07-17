@@ -12,10 +12,10 @@
  */
 import { useContext } from 'react';
 import { IALabProgressContext, IALabProgressProvider } from './ialab/IALabProgressProvider';
-import { IALabUIContext, IALabUIProvider } from './ialab/IALabUIProvider';
+import { IALabUIContext, IALabUIProvider } from './ialab/ialabUIProvider';
 
 export { useIALabProgressContext } from './ialab/IALabProgressProvider';
-export { useIALabUIContext } from './ialab/IALabUIProvider';
+export { useIALabUIContext } from './ialab/ialabUIProvider';
 
 export const useIALabContext = () => {
   const progress = useContext(IALabProgressContext);

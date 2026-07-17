@@ -156,7 +156,7 @@ const AIPanel = ({ title, icon = 'fa-brain-circuit', placeholder, systemPrompt, 
         }
     };
 
-    const handleDownloadPDF = () => {
+    const handleDownloadPDF = async () => {
         if (!res) return;
         setPdfLoad(true);
 
@@ -192,7 +192,8 @@ const AIPanel = ({ title, icon = 'fa-brain-circuit', placeholder, systemPrompt, 
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
 
-        window.html2pdf().set(opt).from(container).save().then(() => {
+        const { default: html2pdf } = await import("html2pdf.js");
+        html2pdf().set(opt).from(container).save().then(() => {
             setPdfLoad(false);
         });
     };

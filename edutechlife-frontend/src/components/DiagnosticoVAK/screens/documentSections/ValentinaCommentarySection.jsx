@@ -15,7 +15,7 @@ const ValentinaCommentarySection = ({
       <div style={styles.commentHeader}>
         <div style={styles.commentAvatar}>
           <img
-            src="/valeria.png"
+            src="/valeria.webp"
             alt="Valeria"
             style={styles.commentAvatarImg(sColor)}
             onError={(e) => {

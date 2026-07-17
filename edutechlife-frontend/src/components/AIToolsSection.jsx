@@ -203,7 +203,6 @@ function AIToolsSection() {
                     className="w-full h-full object-cover"
                   >
                     <source src="/dashboard.mp4" type="video/mp4" />
-                    <source src="/dashboard.mov" type="video/quicktime" />
                   </video>
                   <div className="absolute inset-0 bg-gradient-to-t from-petroleum/60 via-transparent to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-6 flex justify-center">

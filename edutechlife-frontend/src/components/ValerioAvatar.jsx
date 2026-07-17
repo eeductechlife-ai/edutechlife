@@ -94,7 +94,7 @@ const ValerioAvatar = ({ state = 'idle', size = 80, enable3DTilt = true }) => {
         }}
       >
         <img
-          src="/VALERIO.png"
+          src="/VALERIO.webp"
           alt="Valerio"
           draggable={false}
           style={{

@@ -1,8 +1,8 @@
 const STORAGE = 'https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public'
 
 export const tutorAvatars = {
-  Valerio: '/VALERIO.png',
-  Valeria: '/valeria.png',
+  Valerio: '/VALERIO.webp',
+  Valeria: '/valeria.webp',
   Dani: `${STORAGE}/avatars/dani.png`,
 }
 

@@ -87,7 +87,7 @@ router.post('/stream', async (req, res) => {
               if (content) {
                 res.write(`data: ${JSON.stringify({ chunk: content })}\n\n`);
               }
-            } catch (e) { /* skip parse errors for incomplete chunks */ }
+            } catch { /* skip parse errors for incomplete chunks */ }
           }
         }
       }

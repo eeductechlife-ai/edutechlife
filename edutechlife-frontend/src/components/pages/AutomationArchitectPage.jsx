@@ -2,6 +2,7 @@ import { lazy, Suspense, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from '../../i18n/I18nProvider';
 import { PageLoader } from '../LoadingScreen';
+import SEO from '../SEO';
 import AutomationHero from '../AutomationHero';
 import AutomationReadinessTest from '../AutomationReadinessTest';
 import AutomationROICalculator from '../AutomationROICalculator';
@@ -32,7 +33,9 @@ const AutomationArchitectPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <>
+      <SEO title="Automation Architect" description="Automatización educativa con Inteligencia Artificial. Descubre cómo Edutechlife puede automatizar tus procesos educativos." />
+      <div className="min-h-screen bg-white">
       <AutomationHero
         onStartDiagnosis={() => {
           setActiveTab('architect');
@@ -130,6 +133,7 @@ const AutomationArchitectPage = () => {
 
       <Footer />
     </div>
+    </>
   );
 };
 

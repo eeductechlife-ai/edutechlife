@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { PageLoader } from '../LoadingScreen';
 import ErrorBoundary from '../common/ErrorBoundary';
+import SEO from '../SEO';
 
 const Hero = lazy(() => import('../Hero'));
 const AIToolsSection = lazy(() => import('../AIToolsSection'));
@@ -16,7 +17,9 @@ const sectionFallback = (h) => (
 
 const LandingPage = () => {
   return (
-    <div className="pt-24">
+    <>
+      <SEO title="Inicio" description="Liderando la Educación del Futuro con Pedagogía e Inteligencia Artificial. Cursos, diagnósticos y herramientas educativas impulsadas por IA." />
+      <div className="pt-24">
       <ErrorBoundary>
         <Suspense fallback={<PageLoader message="Cargando..." />}>
           <Hero />
@@ -53,6 +56,7 @@ const LandingPage = () => {
         </Suspense>
       </ErrorBoundary>
     </div>
+    </>
   );
 };
 

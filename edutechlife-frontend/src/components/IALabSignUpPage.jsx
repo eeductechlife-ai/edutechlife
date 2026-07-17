@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FloatingParticles from './FloatingParticles';
 import { Brain, CheckCircle, ArrowLeft } from 'lucide-react';
+import SEO from './SEO';
 
 const IALabSignUpPage = ({ onBack }) => {
   const location = useLocation();
@@ -17,7 +18,9 @@ const IALabSignUpPage = ({ onBack }) => {
   };
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#004B63] to-[#0A3550] flex items-center justify-center p-4 relative overflow-hidden">
+    <>
+      <SEO title="Registro IALab" description="Crea tu cuenta en IALab by Edutechlife y comienza a potenciar tu aprendizaje con inteligencia artificial." />
+      <div className="min-h-screen bg-gradient-to-br from-[#004B63] to-[#0A3550] flex items-center justify-center p-4 relative overflow-hidden">
       <FloatingParticles />
       
       {/* Background Pattern */}
@@ -172,6 +175,7 @@ const IALabSignUpPage = ({ onBack }) => {
         </div>
       </motion.div>
     </div>
+    </>
   );
 };
 

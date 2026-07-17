@@ -10,10 +10,23 @@ export default defineConfig({
   use: {
     baseURL: 'http://localhost:5174',
     trace: 'on-first-retry',
+    screenshot: process.env.CI ? 'only-on-failure' : 'off',
   },
   projects: [
-    { name: 'chromium', use: { browserName: 'chromium' } },
-    { name: 'firefox', use: { browserName: 'firefox' } },
-    { name: 'mobile', use: { browserName: 'chromium', viewport: { width: 375, height: 812 } } },
+    {
+      name: 'chromium',
+      use: {
+        browserName: 'chromium',
+        viewport: { width: 1280, height: 720 },
+      },
+    },
+    {
+      name: 'firefox',
+      use: { browserName: 'firefox' },
+    },
+    {
+      name: 'mobile',
+      use: { browserName: 'chromium', viewport: { width: 375, height: 812 } },
+    },
   ],
 });

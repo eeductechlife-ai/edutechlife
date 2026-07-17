@@ -24,11 +24,11 @@ vi.mock('framer-motion', () => ({
     h3: 'h3',
     img: 'img',
   },
-  AnimatePresence: ({ children }) => children,
+  AnimatePresence: ({ children }: { children: React.ReactNode }) => children,
   useReducedMotion: () => false,
-  useSpring: (val) => ({ get: () => val }),
-  useMotionValue: (val) => ({ get: () => val }),
-  useTransform: (val) => ({ get: () => val }),
+  useSpring: (val: unknown) => ({ get: () => val }),
+  useMotionValue: (val: unknown) => ({ get: () => val }),
+  useTransform: (val: unknown) => ({ get: () => val }),
 }));
 
 // Mock IntersectionObserver
@@ -40,7 +40,7 @@ class MockIntersectionObserver {
   unobserve = vi.fn();
   disconnect = vi.fn();
 }
-global.IntersectionObserver = MockIntersectionObserver;
+(globalThis as unknown as { IntersectionObserver: typeof MockIntersectionObserver }).IntersectionObserver = MockIntersectionObserver;
 
 // Mock ResizeObserver
 // Same constructability requirement as above — recharts' ResponsiveContainer
@@ -50,7 +50,7 @@ class MockResizeObserver {
   unobserve = vi.fn();
   disconnect = vi.fn();
 }
-global.ResizeObserver = MockResizeObserver;
+(globalThis as unknown as { ResizeObserver: typeof MockResizeObserver }).ResizeObserver = MockResizeObserver;
 
 // Mock matchMedia
 Object.defineProperty(window, 'matchMedia', {
@@ -70,7 +70,7 @@ Object.defineProperty(window, 'matchMedia', {
 // Mock I18nProvider to avoid translation context errors in component tests
 vi.mock('@/i18n/I18nProvider', () => ({
   useTranslation: () => ({
-    t: (key, params) => {
+    t: (key: string, params?: Record<string, string>) => {
       if (params) {
         let result = key;
         Object.entries(params).forEach(([k, v]) => {
@@ -83,5 +83,5 @@ vi.mock('@/i18n/I18nProvider', () => ({
     locale: 'es',
     setLocale: vi.fn(),
   }),
-  I18nProvider: ({ children }) => children,
+  I18nProvider: ({ children }: { children: React.ReactNode }) => children,
 }));

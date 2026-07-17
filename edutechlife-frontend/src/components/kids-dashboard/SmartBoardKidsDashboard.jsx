@@ -5,7 +5,7 @@ import { useClerk } from "@clerk/react";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 import ParticlesBackground from "./ParticlesBackground";
-import DaniTutorChat from "./DaniTutorChat";
+import DaniTutorChat from "./daniTutorChat";
 import PremiumSidebar from "./components/PremiumSidebar";
 import MobileBottomBar from "./components/MobileBottomBar";
 import CinematicContent from "./components/CinematicContent";

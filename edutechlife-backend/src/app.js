@@ -1,4 +1,5 @@
 const express = require('express');
+const compression = require('compression');
 const cors = require('cors');
 const helmet = require('helmet');
 const sanitizeMiddleware = require('./middleware/sanitize');
@@ -27,6 +28,7 @@ const isAllowed = (origin) => {
 
 const app = express();
 
+app.use(compression());
 app.use(cors({
   origin: (origin, callback) => callback(null, isAllowed(origin)),
   credentials: true,

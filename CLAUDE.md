@@ -142,6 +142,24 @@ npx @claude-flow/cli@latest hooks worker dispatch --trigger audit
 
 Any string works as a custom agent type.
 
+## @session-summary
+
+### Completed
+- **Phase 4B Refactoring**: Centralized MCP configs (20→1), tsconfigs (10→`.tsconfig/`), settings (`.claude/settings.json` → `settings/`), analytics images → `assets/`
+- **Docs Reorganization**: Auth docs → `docs/auth/`, Reports → `docs/reports/`, Guides → `docs/guides/`, SQL → `sql/`
+- **Deploy Pipeline**: Created `.github/workflows/deploy.yml` — real CD pipeline with 4 jobs:
+  - `migrate-db` (Supabase CLI) → `deploy-frontend` (Vercel) + `deploy-backend` (Render hook) → `smoke-test`
+- **SEO Prerendering**: Fixed SEO for SPA — implemented prerendering + meta tags dinámicos:
+  - `src/components/SEO.jsx` — componente SEO con react-helmet-async
+  - `HelmetProvider` en `main.jsx`
+  - SEO agregado a 14 páginas públicas (title + description únicos por ruta)
+  - `scripts/prerender.mjs` — prerender con puppeteer-core (Chrome local)
+  - 11/16 rutas prerenderizadas con contenido real
+  - `npm run build:full` para build + prerender
+
+### Secrets (set)
+- `SUPABASE_PROJECT_ID`, `SUPABASE_ACCESS_TOKEN`, `SUPABASE_DB_PASSWORD`, `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID_FRONTEND`, `RENDER_DEPLOY_HOOK`, `SMOKE_TEST_FRONTEND_URL`, `SMOKE_TEST_BACKEND_URL`
+
 ## Build & Test
 
 - ALWAYS run tests after code changes

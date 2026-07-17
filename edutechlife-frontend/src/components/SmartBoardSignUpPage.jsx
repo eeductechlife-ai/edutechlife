@@ -6,6 +6,7 @@ import FloatingParticles from './FloatingParticles';
 import { GraduationCap, BookOpen, Users, CheckCircle, ArrowLeft, LogIn, UserPlus } from 'lucide-react';
 import { useTranslation } from '../i18n/I18nProvider';
 import { sanitize } from '../utils/sanitize';
+import SEO from './SEO';
 
 const clerkAppearance = {
   variables: {
@@ -56,7 +57,9 @@ const SmartBoardSignUpPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#004B63] to-[#0A3550] flex items-center justify-center p-4 relative overflow-hidden">
+    <>
+      <SEO title="Registro SmartBoard" description="Crea tu cuenta SmartBoard by Edutechlife y comienza la aventura educativa interactiva para tus hijos." />
+      <div className="min-h-screen bg-gradient-to-br from-[#004B63] to-[#0A3550] flex items-center justify-center p-4 relative overflow-hidden">
       <FloatingParticles />
 
       <div className="absolute inset-0 opacity-5">
@@ -237,6 +240,7 @@ const SmartBoardSignUpPage = () => {
         </div>
       </motion.div>
     </div>
+    </>
   );
 };
 

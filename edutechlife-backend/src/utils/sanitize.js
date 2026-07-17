@@ -6,11 +6,12 @@ function sanitizeString(str) {
 }
 
 function sanitizeBody(obj) {
+  if (typeof obj === 'string') return sanitizeString(obj);
   if (Array.isArray(obj)) return obj.map(sanitizeBody);
   if (obj && typeof obj === 'object') {
     const result = {};
     for (const [key, value] of Object.entries(obj)) {
-      result[key] = typeof value === 'string' ? sanitizeString(value) : sanitizeBody(value);
+      result[key] = sanitizeBody(value);
     }
     return result;
   }

@@ -13,12 +13,9 @@ import { COLORS } from "./nicoColors";
 import { responseCache } from "./nicoCache";
 import { useNicoVoice } from "./useNicoVoice";
 import { useNicoSendMessage } from "./useNicoSendMessage";
-import {
-  ChatButton,
-  ChatHeader,
-  ChatMessages,
-  ChatInput,
-} from "./nicoChatComponents";
+import { ChatButton, ChatHeader } from "./nicoChatComponents";
+import { ChatMessages } from "./nicoChatMessages";
+import { ChatInput } from "./nicoChatInput";
 
 const NicoModern = ({
   studentName: initialName = "amigo",

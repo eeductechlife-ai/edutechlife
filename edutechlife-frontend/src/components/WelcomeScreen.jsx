@@ -6,6 +6,7 @@ import { Brain, CheckCircle } from 'lucide-react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useTranslation } from '../i18n/I18nProvider';
+import SEO from './SEO';
 
 const WelcomeScreen = ({ onNavigate }) => {
   const { t, locale } = useTranslation();
@@ -60,7 +61,9 @@ const WelcomeScreen = ({ onNavigate }) => {
   };
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#004B63] to-[#0A3550] flex items-center justify-center p-4 md:p-6 relative overflow-hidden">
+    <>
+      <SEO title="Iniciar Sesión" description="Accede a tu cuenta Edutechlife. Plataforma educativa con inteligencia artificial para potenciar el aprendizaje." />
+      <div className="min-h-screen bg-gradient-to-br from-[#004B63] to-[#0A3550] flex items-center justify-center p-4 md:p-6 relative overflow-hidden">
       <FloatingParticles />
       
       <div className="absolute inset-0 opacity-5">
@@ -188,6 +191,7 @@ const WelcomeScreen = ({ onNavigate }) => {
         </div>
       </motion.div>
     </div>
+    </>
   );
 };
 

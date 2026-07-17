@@ -150,7 +150,21 @@ export default defineConfig({
   },
   build: {
     target: 'es2020',
-    minify: 'esbuild',
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+      },
+      format: {
+        comments: false,
+      },
+    },
+    modulePreload: {
+      resolveDependencies: (url, deps, context) => {
+        return deps.filter(dep => !dep.includes('pdf-vendor'));
+      }
+    },
     rollupOptions: {
       external: ['@solana/web3.js'],
       output: {
@@ -176,9 +190,9 @@ export default defineConfig({
         assetFileNames: 'assets/[name]-[hash].[ext]'
       }
     },
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 250,
     sourcemap: false,
-    reportCompressedSize: true,
+    reportCompressedSize: false,
     cssCodeSplit: true,
     cssMinify: true
   },

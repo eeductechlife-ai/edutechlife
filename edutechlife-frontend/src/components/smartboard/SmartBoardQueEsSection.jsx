@@ -85,14 +85,16 @@ export default function SmartBoardQueEsSection({ t }) {
               <div className="aspect-video w-full bg-petroleum-dark/10 flex items-center justify-center">
                 <video
                   className="w-full h-full object-contain"
-                  src="/smarboard.mov"
                   autoPlay
                   muted
                   loop
                   playsInline
                   controls
                   preload="metadata"
-                />
+                >
+                  <source src="/smarboard.mp4" type="video/mp4" />
+                  <source src="/smarboard.mov" type="video/quicktime" />
+                </video>
               </div>
               <div className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-white/70 backdrop-blur-xl border border-white/40 text-[11px] font-bold text-petroleum flex items-center gap-1.5 pointer-events-none shadow-sm">
                 <Icon name="fa-flask-vial" className="text-[10px]" /> SmartBoard

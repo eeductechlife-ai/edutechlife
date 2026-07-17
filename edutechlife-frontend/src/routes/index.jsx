@@ -4,7 +4,7 @@ import AppLayout from '../components/layout/AppLayout';
 import AuthRouter from './auth-router';
 import ProtectedRoute from '../components/layout/ProtectedRoute';
 import RoleProtectedRoute from '../components/layout/RoleProtectedRoute';
-import { PageLoader } from '../components/LoadingScreen';
+import { PageLoader, SkeletonLoader } from '../components/LoadingScreen';
 import { useTranslation } from '../i18n/I18nProvider';
 
 // Lazy load para componentes pesados
@@ -82,7 +82,7 @@ const AppRoutes = () => {
     <Routes>
       <Route path="/" element={<AppLayout />}>
         <Route index element={
-          <Suspense fallback={<PageLoader message={t('common.loading')} />}>
+          <Suspense fallback={<SkeletonLoader type="hero" />}>
             <LandingPage />
           </Suspense>
         } />
@@ -164,14 +164,14 @@ const AppRoutes = () => {
         
         <Route path="ialab" element={
           <RoleProtectedRoute requiredRole="ialab">
-            <Suspense fallback={<PageLoader message={t('page_loader.ailab')} />}>
+            <Suspense fallback={<SkeletonLoader type="card" />}>
               <IALabDashboard />
             </Suspense>
           </RoleProtectedRoute>
         } />
         <Route path="ialab/:moduleId" element={
           <RoleProtectedRoute requiredRole="ialab">
-            <Suspense fallback={<PageLoader message={t('page_loader.ailab')} />}>
+            <Suspense fallback={<SkeletonLoader type="card" />}>
               <AILabPage />
             </Suspense>
           </RoleProtectedRoute>
@@ -187,7 +187,7 @@ const AppRoutes = () => {
         
         <Route path="admin" element={
           <RoleProtectedRoute requiredRole="admin">
-            <Suspense fallback={<PageLoader message={t('common.loading')} />}>
+            <Suspense fallback={<SkeletonLoader type="card" />}>
               <AdminPage />
             </Suspense>
           </RoleProtectedRoute>

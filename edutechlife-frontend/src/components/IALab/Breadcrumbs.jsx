@@ -1,6 +1,7 @@
 import { memo, Fragment } from 'react';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
+import JsonLd from '../JsonLd';
 
 /**
  * Breadcrumbs — Barra de navegación con migas de pan.
@@ -19,8 +20,14 @@ const Breadcrumbs = memo(function Breadcrumbs({ segments, className = '', separa
   const visibleSegments = segments.slice(0, -1);
   const lastSegment = segments[segments.length - 1];
 
+  const breadcrumbData = segments
+    .filter(s => s.href || s.label)
+    .map(s => ({ name: s.label, url: s.href || '#' }))
+
   return (
-    <nav aria-label={t('ialab.breadcrumb.aria_label')} className={`mb-2 ${className}`}>
+    <>
+      <JsonLd breadcrumbs={breadcrumbData} />
+      <nav aria-label={t('ialab.breadcrumb.aria_label')} className={`mb-2 ${className}`}>
       <ol className={`flex items-center gap-1.5 ${size}`}>
         {visibleSegments.map((seg, i) => (
           <Fragment key={i}>
@@ -63,6 +70,7 @@ const Breadcrumbs = memo(function Breadcrumbs({ segments, className = '', separa
         </li>
       </ol>
     </nav>
+    </>
   );
 });
 
