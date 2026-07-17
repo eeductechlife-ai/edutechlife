@@ -1,3 +1,4 @@
+// fix vercel consultoria casing
 import { lazy, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import { PageLoader } from "../LoadingScreen";
