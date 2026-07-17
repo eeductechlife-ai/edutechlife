@@ -1,10 +1,10 @@
-import { lazy, Suspense } from 'react';
-import { useAuth } from '@clerk/react';
-import { useNavigate } from 'react-router-dom';
-import { PageLoader } from '../LoadingScreen';
+import { lazy, Suspense } from "react";
+import { useAuth } from "@clerk/react";
+import { useNavigate } from "react-router-dom";
+import { PageLoader } from "../LoadingScreen";
 
 // Lazy load del componente AdminDashboard
-const AdminDashboard = lazy(() => import('../AdminDashboard'));
+const AdminDashboard = lazy(() => import("../adminDashboard"));
 
 /**
  * Página Admin Dashboard
@@ -14,16 +14,16 @@ const AdminDashboard = lazy(() => import('../AdminDashboard'));
 const AdminPage = () => {
   const { signOut } = useAuth();
   const navigate = useNavigate();
-  
+
   const handleLogout = async () => {
     await signOut();
-    navigate('/');
+    navigate("/");
   };
-  
+
   const handleBack = () => {
-    navigate('/');
+    navigate("/");
   };
-  
+
   return (
     <Suspense fallback={<PageLoader message="Cargando Admin Dashboard..." />}>
       <AdminDashboard onLogout={handleLogout} onBack={handleBack} />
