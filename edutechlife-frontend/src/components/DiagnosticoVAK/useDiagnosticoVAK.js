@@ -1,27 +1,4 @@
 import { useEffect, useState, useRef } from "react";
-import {
-  Eye,
-  Video,
-  Headphones,
-  Activity,
-  Sparkles,
-  Rocket,
-  Music,
-  Volume,
-  Wrench,
-  ListOrdered,
-  CheckSquare,
-  Users,
-  List,
-  BookOpen,
-  Mic,
-  MessageCircle,
-  Target,
-  Zap,
-  Globe,
-  Cpu,
-  Lightbulb,
-} from "lucide-react";
 import { useStudent } from "../../context/StudentContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 import useValentinaAgent from "../../hooks/useValentinaAgent";
@@ -29,67 +6,10 @@ import { getQuestionsByAge } from "../../data/vakQuestions";
 import { VALENTINA_MESSAGES, warmupTts } from "./vakVoice";
 import { safeStorage } from "../../utils/storage";
 import { STYLE_MAP } from "./vakStyles";
-import { MOOD_OPTIONS } from "./vakHelpers";
+import { MOOD_OPTIONS, getInstitutionSlugFromURL } from "./vakHelpers";
 import { useSupabase } from "../../hooks/useSupabase";
 import { saveVakDiagnostic } from "../../services/institutionalAnalytics";
-
-export function getIconComponent(iconName) {
-  switch (iconName) {
-    case "Eye":
-      return Eye;
-    case "Video":
-      return Video;
-    case "Headphones":
-      return Headphones;
-    case "Activity":
-      return Activity;
-    case "Sparkles":
-      return Sparkles;
-    case "Rocket":
-      return Rocket;
-    case "Music":
-      return Music;
-    case "Volume":
-      return Volume;
-    case "Wrench":
-      return Wrench;
-    case "ListOrdered":
-      return ListOrdered;
-    case "CheckSquare":
-      return CheckSquare;
-    case "Users":
-      return Users;
-    case "List":
-      return List;
-    case "BookOpen":
-      return BookOpen;
-    case "Mic":
-      return Mic;
-    case "MessageCircle":
-      return MessageCircle;
-    case "Target":
-      return Target;
-    case "Zap":
-      return Zap;
-    case "Globe":
-      return Globe;
-    case "Cpu":
-      return Cpu;
-    case "Lightbulb":
-      return Lightbulb;
-    default:
-      return Video;
-  }
-}
-
-const getInstitutionSlugFromURL = () => {
-  try {
-    const slug = new URLSearchParams(window.location.search).get("inst");
-    return slug ? slug.trim().toLowerCase() : null;
-  } catch {
-    return null;
-  }
-};
+import { getIconComponent } from "./getIconComponent";
 
 export default function useDiagnosticoVAK({ onNavigate }) {
   const { t } = useTranslation();

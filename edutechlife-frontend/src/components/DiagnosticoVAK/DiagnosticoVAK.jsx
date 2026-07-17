@@ -1,6 +1,7 @@
 import React from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import useDiagnosticoVAK, { getIconComponent } from "./useDiagnosticoVAK";
+import useDiagnosticoVAK from "./useDiagnosticoVAK";
+import { getIconComponent } from "./getIconComponent";
 import { Confetti, Celebration } from "./vakComponents";
 import ValeriaControls from "./ValeriaControls";
 import VakSkeleton from "./VakSkeleton";
