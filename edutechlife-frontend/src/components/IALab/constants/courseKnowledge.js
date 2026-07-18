@@ -1,10 +1,10 @@
 /**
  * courseKnowledge.js
- * 
+ *
  * Base de conocimiento consolidada de todo el curso IALab.
  * Utilizada por Valerio para responder preguntas de los estudiantes
  * con contexto real del contenido del curso.
- * 
+ *
  * Generado automáticamente desde moduleContent.js + moduleResources.js
  */
 
@@ -12,254 +12,334 @@ const COURSE_KNOWLEDGE = [
   {
     id: 1,
     title: "Ingeniería de Prompts",
-    objective: "Desarrolla habilidades de prompt engineering para obtener resultados precisos de la IA en contextos reales.",
-    description: "En este módulo, hemos diseñado una ruta estratégica que te llevará desde los fundamentos de la Inteligencia Artificial Generativa hasta la creación de instrucciones de alto impacto.",
-    challenge: "¡Llegó el momento de la práctica! Aplica todo lo aprendido en este módulo resolviendo un caso real. Atrévete a consolidar tu aprendizaje, supera el reto y lleva tus conocimientos al siguiente nivel.",
+    objective:
+      "Desarrolla habilidades de prompt engineering para obtener resultados precisos de la IA en contextos reales.",
+    description:
+      "En este módulo, hemos diseñado una ruta estratégica que te llevará desde los fundamentos de la Inteligencia Artificial Generativa hasta la creación de instrucciones de alto impacto.",
+    challenge:
+      "¡Llegó el momento de la práctica! Aplica todo lo aprendido en este módulo resolviendo un caso real. Atrévete a consolidar tu aprendizaje, supera el reto y lleva tus conocimientos al siguiente nivel.",
     topics: [
       {
         title: "Introducción a la Inteligencia Artificial Generativa",
-        description: "Conceptos básicos, historia y aplicaciones prácticas de la inteligencia artificial generativa en el mundo moderno.",
+        description:
+          "Conceptos básicos, historia y aplicaciones prácticas de la inteligencia artificial generativa en el mundo moderno.",
         difficulty: "Principiante",
         learningObjectives: [
           "Comprender qué es la IA Generativa y cómo funciona",
           "Diferenciar entre IA débil (narrow) y IA fuerte (general)",
           "Identificar aplicaciones prácticas en educación y negocios",
-          "Reconocer los límites éticos y técnicos actuales"
+          "Reconocer los límites éticos y técnicos actuales",
         ],
         resources: [
-          { type: "video", title: "Explicación Visual: Anatomía de un Prompt", duration: "6:06" },
-          { type: "ova", title: "Laboratorio: Ética en la I.A.", estimatedTime: "10 minutos" }
-        ]
+          {
+            type: "video",
+            title: "Explicación Visual: Anatomía de un Prompt",
+            duration: "6:06",
+          },
+          {
+            type: "ova",
+            title: "Laboratorio: Ética en la I.A.",
+            estimatedTime: "10 minutos",
+          },
+        ],
       },
       {
         title: "¿Qué es un Prompt?",
-        description: "Un prompt es la instrucción o mensaje que le damos a la IA para que realice una tarea específica. Es la clave para comunicarnos efectivamente con modelos como ChatGPT.",
+        description:
+          "Un prompt es la instrucción o mensaje que le damos a la IA para que realice una tarea específica. Es la clave para comunicarnos efectivamente con modelos como ChatGPT.",
         difficulty: "Principiante",
         learningObjectives: [
-          "Comprender qué es un prompt y cómo usarlo para comunicarte efectivamente con la IA"
+          "Comprender qué es un prompt y cómo usarlo para comunicarte efectivamente con la IA",
         ],
         resources: [
-          { type: "video", title: "Video Introductorio: ¿Qué es la IA Generativa?", duration: "4:30" },
+          {
+            type: "video",
+            title: "Video Introductorio: ¿Qué es la IA Generativa?",
+            duration: "4:30",
+          },
           { type: "pdf", title: "Guía: Anatomía de un Prompt", pages: 12 },
-          { type: "ova", title: "Infografía Interactiva: Prompt Engineering" }
-        ]
-      }
-    ]
+          { type: "ova", title: "Infografía Interactiva: Prompt Engineering" },
+        ],
+      },
+    ],
   },
   {
     id: 2,
     title: "Potencia ChatGPT",
-    objective: "Domina ChatGPT a nivel profesional: crea asistentes inteligentes, automatiza tareas y multiplica tu productividad.",
-    description: "Conviértete en un experto en ChatGPT: configura prompts profesionales, crea GPTs personalizados y automatiza tu trabajo diario.",
-    challenge: "Crea un GPT personalizado para automatizar una tarea de tu área profesional y conéctalo con una API externa usando Function Calling.",
+    objective:
+      "Domina ChatGPT a nivel profesional: crea asistentes inteligentes, automatiza tareas y multiplica tu productividad.",
+    description:
+      "Conviértete en un experto en ChatGPT: configura prompts profesionales, crea GPTs personalizados y automatiza tu trabajo diario.",
+    challenge:
+      "Crea un GPT personalizado para automatizar una tarea de tu área profesional y conéctalo con una API externa usando Function Calling.",
     topics: [
       {
         title: "ChatGPT de la A a la Z",
-        description: "Recurso integral de Edutechlife que cubre todos los aspectos de ChatGPT: desde la interfaz básica hasta técnicas avanzadas de prompt engineering y automatización.",
+        description:
+          "Recurso integral de Edutechlife que cubre todos los aspectos de ChatGPT: desde la interfaz básica hasta técnicas avanzadas de prompt engineering y automatización.",
         difficulty: "Principiante",
         learningObjectives: [
           "Navegar eficientemente por la interfaz de ChatGPT",
           "Configurar conversaciones para diferentes propósitos",
-          "Aplicar técnicas de prompt engineering específicas para ChatGPT"
+          "Aplicar técnicas de prompt engineering específicas para ChatGPT",
         ],
         resources: [
-          { type: "video", title: "Tutorial: Primeros Pasos con ChatGPT", duration: "5:43" },
+          {
+            type: "video",
+            title: "Tutorial: Primeros Pasos con ChatGPT",
+            duration: "5:43",
+          },
           { type: "pdf", title: "Guía Completa de ChatGPT", pages: 25 },
-          { type: "ova_interactive", title: "Dominando el Ecosistema ChatGPT" }
-        ]
+          { type: "ova_interactive", title: "Dominando el Ecosistema ChatGPT" },
+        ],
       },
       {
         title: "Automatiza tu Trabajo con IA",
-        description: "Descubre las herramientas integradas de ChatGPT y aprende a crear flujos de trabajo automatizados que potencien tu productividad.",
+        description:
+          "Descubre las herramientas integradas de ChatGPT y aprende a crear flujos de trabajo automatizados que potencien tu productividad.",
         difficulty: "Intermedio",
         learningObjectives: [
           "Identificar las 5 herramientas clave del ecosistema ChatGPT",
           "Seleccionar la herramienta correcta según el tipo de tarea",
-          "Combinar múltiples herramientas en flujos de trabajo eficientes"
+          "Combinar múltiples herramientas en flujos de trabajo eficientes",
         ],
         resources: [
-          { type: "pdf", title: "Las Herramientas Integradas de ChatGPT", pages: 20 },
-          { type: "ova_interactive", title: "Simulador: Crea tu Primer Flujo" }
-        ]
+          {
+            type: "pdf",
+            title: "Las Herramientas Integradas de ChatGPT",
+            pages: 20,
+          },
+          { type: "ova_interactive", title: "Simulador: Crea tu Primer Flujo" },
+        ],
       },
       {
         title: "Conecta ChatGPT con el Mundo Real",
-        description: "Descubre cómo crear y usar GPTs personalizados y acciones para automatizar tareas complejas con APIs externas.",
+        description:
+          "Descubre cómo crear y usar GPTs personalizados y acciones para automatizar tareas complejas con APIs externas.",
         difficulty: "Avanzado",
         learningObjectives: [
           "Crear GPTs personalizados para necesidades específicas",
           "Configurar acciones para conectar con APIs externas",
-          "Compartir y utilizar GPTs de la comunidad"
+          "Compartir y utilizar GPTs de la comunidad",
         ],
         resources: [
-          { type: "video", title: "Tutorial: Creando tu Primer GPT", duration: "18:45" },
+          {
+            type: "video",
+            title: "Tutorial: Creando tu Primer GPT",
+            duration: "18:45",
+          },
           { type: "image", title: "Guía de GPTs y Acciones" },
-          { type: "ova", title: "Laboratorio: Construye un GPT" }
-        ]
-      }
-    ]
+          { type: "ova", title: "Laboratorio: Construye un GPT" },
+        ],
+      },
+    ],
   },
   {
     id: 3,
     title: "Rastreo Profundo con Gemini",
-    objective: "Domina Google Gemini para investigar, verificar datos y analizar información como un profesional de élite.",
-    description: "Domina Google Gemini: investiga a fondo, cruza datos en tiempo real, analiza múltiples formatos y verifica información como un profesional.",
-    challenge: "Usa Gemini Deep Research para investigar un tema de actualidad, verifica cada fuente citada y presenta un informe profesional con conclusiones propias.",
+    objective:
+      "Domina Google Gemini para investigar, verificar datos y analizar información como un profesional de élite.",
+    description:
+      "Domina Google Gemini: investiga a fondo, cruza datos en tiempo real, analiza múltiples formatos y verifica información como un profesional.",
+    challenge:
+      "Usa Gemini Deep Research para investigar un tema de actualidad, verifica cada fuente citada y presenta un informe profesional con conclusiones propias.",
     topics: [
       {
         title: "Gemini: La IA que Ve, Lee y Escucha",
-        description: "Conoce Gemini, la IA multimodal de Google capaz de procesar texto, imágenes, audio y video simultáneamente.",
+        description:
+          "Conoce Gemini, la IA multimodal de Google capaz de procesar texto, imágenes, audio y video simultáneamente.",
         difficulty: "Principiante",
         learningObjectives: [
           "Comprender las capacidades multimodales de Gemini",
           "Utilizar Gemini con diferentes tipos de entrada",
-          "Comparar Gemini con otros modelos de IA"
+          "Comparar Gemini con otros modelos de IA",
         ],
         resources: [
           { type: "video", title: "Introducción a Gemini", duration: "14:10" },
           { type: "pdf", title: "Manual de Gemini", pages: 16 },
-          { type: "ova", title: "Laboratorio: Experimenta con Multimodalidad" }
-        ]
+          { type: "ova", title: "Laboratorio: Experimenta con Multimodalidad" },
+        ],
       },
       {
         title: "Imágenes + Texto + Datos en Vivo",
-        description: "Aprende a integrar Gemini en Google Docs, Sheets, Gmail y otras herramientas de Workspace.",
+        description:
+          "Aprende a integrar Gemini en Google Docs, Sheets, Gmail y otras herramientas de Workspace.",
         difficulty: "Intermedio",
         learningObjectives: [
           "Usar Gemini dentro de Google Docs para redacción",
           "Analizar datos con Gemini en Google Sheets",
-          "Gestionar correos electrónicos con Gemini en Gmail"
+          "Gestionar correos electrónicos con Gemini en Gmail",
         ],
         resources: [
-          { type: "video", title: "Gemini + Google Workspace: Tutorial Completo", duration: "20:15" },
+          {
+            type: "video",
+            title: "Gemini + Google Workspace: Tutorial Completo",
+            duration: "20:15",
+          },
           { type: "document", title: "Plantillas para Google Workspace" },
-          { type: "ova", title: "Gemini: Recorrido Interactivo" }
-        ]
+          { type: "ova", title: "Gemini: Recorrido Interactivo" },
+        ],
       },
       {
         title: "Investiga como un Detective Digital",
-        description: "Casos reales de uso profesional de Gemini en marketing, programación, educación e investigación.",
+        description:
+          "Casos reales de uso profesional de Gemini en marketing, programación, educación e investigación.",
         difficulty: "Avanzado",
         learningObjectives: [
           "Aplicar Gemini en estrategias de marketing",
           "Usar Gemini para asistencia en programación",
-          "Implementar Gemini en procesos educativos"
+          "Implementar Gemini en procesos educativos",
         ],
         resources: [
-          { type: "video", title: "Casos de Éxito con Gemini", duration: "16:30" },
+          {
+            type: "video",
+            title: "Casos de Éxito con Gemini",
+            duration: "16:30",
+          },
           { type: "pdf", title: "Guía de Casos de Uso", pages: 24 },
-          { type: "ova", title: "Laboratorio: Casos Prácticos" }
-        ]
-      }
-    ]
+          { type: "ova", title: "Laboratorio: Casos Prácticos" },
+        ],
+      },
+    ],
   },
   {
     id: 4,
     title: "Inmersión NotebookLM",
-    objective: "Transforma PDFs y documentos en resúmenes inteligentes, podcasts y asistentes de investigación personalizados.",
-    description: "Descubre cómo convertir tus PDFs y apuntes en conocimiento interactivo. Crea resúmenes automáticos, podcasts generados por IA y asistentes de investigación personalizados.",
+    objective:
+      "Transforma PDFs y documentos en resúmenes inteligentes, podcasts y asistentes de investigación personalizados.",
+    description:
+      "Descubre cómo convertir tus PDFs y apuntes en conocimiento interactivo. Crea resúmenes automáticos, podcasts generados por IA y asistentes de investigación personalizados.",
     challenge: "Genera un podcast analizando 5 papers sobre neuro-plasticidad.",
     topics: [
       {
         title: "¿Qué es NotebookLM?",
-        description: "Descubre NotebookLM, la herramienta de Google para investigación asistida por IA con fuentes personalizadas.",
+        description:
+          "Descubre NotebookLM, la herramienta de Google para investigación asistida por IA con fuentes personalizadas.",
         difficulty: "Principiante",
         learningObjectives: [
           "Crear notebooks con fuentes personalizadas",
           "Hacer preguntas específicas sobre tus documentos",
-          "Generar resúmenes inteligentes de contenido"
+          "Generar resúmenes inteligentes de contenido",
         ],
         resources: [
-          { type: "video", title: "Primeros Pasos con NotebookLM", duration: "12:30" },
+          {
+            type: "video",
+            title: "Primeros Pasos con NotebookLM",
+            duration: "12:30",
+          },
           { type: "pdf", title: "Guía de NotebookLM", pages: 14 },
-          { type: "ova", title: "Laboratorio: Crea tu Notebook" }
-        ]
+          { type: "ova", title: "Laboratorio: Crea tu Notebook" },
+        ],
       },
       {
         title: "Organiza tu Investigación como un Pro",
-        description: "Aprende a generar resúmenes, FAQ y briefings conectados a tus fuentes originales.",
+        description:
+          "Aprende a generar resúmenes, FAQ y briefings conectados a tus fuentes originales.",
         difficulty: "Intermedio",
         learningObjectives: [
           "Generar resúmenes ejecutivos automáticos",
           "Crear FAQs basadas en tus documentos",
-          "Conectar respuestas a fuentes originales"
+          "Conectar respuestas a fuentes originales",
         ],
         resources: [
-          { type: "video", title: "Resúmenes Inteligentes con NotebookLM", duration: "3:33" },
+          {
+            type: "video",
+            title: "Resúmenes Inteligentes con NotebookLM",
+            duration: "3:33",
+          },
           { type: "document", title: "Plantillas de Resumen" },
-          { type: "ova", title: "Simulador: Análisis de Documentos" }
-        ]
+          { type: "ova", title: "Simulador: Análisis de Documentos" },
+        ],
       },
       {
         title: "De PDF a Podcast en un Clic",
-        description: "Explora la función de Audio Overview que convierte tus notas en conversaciones de podcast generadas por IA.",
+        description:
+          "Explora la función de Audio Overview que convierte tus notas en conversaciones de podcast generadas por IA.",
         difficulty: "Avanzado",
         learningObjectives: [
           "Generar Audio Overviews de tus notebooks",
           "Personalizar el estilo y tono del audio",
-          "Usar audio para aprendizaje y repaso"
+          "Usar audio para aprendizaje y repaso",
         ],
         resources: [
-          { type: "video", title: "Crea tu propio podcast", duration: "2:15" },
+          { type: "video", title: "Crea tu propio podcast", duration: "2:16" },
           { type: "pdf", title: "Notebook LM", pages: 10 },
-          { type: "ova", title: "Laboratorio: Crea tu Podcast IA" }
-        ]
-      }
-    ]
+          { type: "ova", title: "Laboratorio: Crea tu Podcast IA" },
+        ],
+      },
+    ],
   },
   {
     id: 5,
     title: "Ética Aplicada a IA Generativa",
-    objective: "Aprende a usar la IA de forma responsable, ética y legal con frameworks que las empresas exigen hoy.",
-    description: "En este módulo final, desarrollarás pensamiento crítico sobre los impactos éticos de la IA. Aprenderás a identificar sesgos, cumplir regulaciones y crear frameworks de IA responsable.",
-    challenge: "Analiza un caso real de sesgo algorítmico en IA y propón un protocolo ético para prevenir y mitigar este tipo de discriminación.",
+    objective:
+      "Aprende a usar la IA de forma responsable, ética y legal con frameworks que las empresas exigen hoy.",
+    description:
+      "En este módulo final, desarrollarás pensamiento crítico sobre los impactos éticos de la IA. Aprenderás a identificar sesgos, cumplir regulaciones y crear frameworks de IA responsable.",
+    challenge:
+      "Analiza un caso real de sesgo algorítmico en IA y propón un protocolo ético para prevenir y mitigar este tipo de discriminación.",
     topics: [
       {
         title: "Ética en IA: Lo Esencial",
-        description: "Fundamentos éticos para el uso de IA generativa: transparencia, equidad, responsabilidad y privacidad.",
+        description:
+          "Fundamentos éticos para el uso de IA generativa: transparencia, equidad, responsabilidad y privacidad.",
         difficulty: "Intermedio",
         learningObjectives: [
           "Comprender los principios éticos fundamentales de la IA",
           "Identificar dilemas éticos en casos reales",
-          "Aplicar un checklist ético antes de usar IA"
+          "Aplicar un checklist ético antes de usar IA",
         ],
         resources: [
-          { type: "video", title: "Los Pilares de la I.A", duration: "1:54" },
-          { type: "pdf", title: "Etica de la Inteligencia artificial", pages: 9 },
-          { type: "ova", title: "Laboratorio: Detecta el Sesgo" }
-        ]
+          { type: "video", title: "Los Pilares de la I.A", duration: "1:56" },
+          {
+            type: "pdf",
+            title: "Etica de la Inteligencia artificial",
+            pages: 9,
+          },
+          { type: "ova", title: "Laboratorio: Detecta el Sesgo" },
+        ],
       },
       {
         title: "¿Es Justa tu IA? Descúbrelo",
-        description: "Estrategias prácticas para proteger tus datos personales y corporativos al usar herramientas de IA.",
+        description:
+          "Estrategias prácticas para proteger tus datos personales y corporativos al usar herramientas de IA.",
         difficulty: "Intermedio",
         learningObjectives: [
           "Comprender cómo las IA procesan tus datos",
           "Identificar riesgos de privacidad",
-          "Aplicar mejores prácticas de protección"
+          "Aplicar mejores prácticas de protección",
         ],
         resources: [
-          { type: "video", title: "Privacidad y IA: Lo que Debes Saber", duration: "9:20" },
+          {
+            type: "video",
+            title: "Privacidad y IA: Lo que Debes Saber",
+            duration: "9:20",
+          },
           { type: "pdf", title: "Manual de Privacidad en IA", pages: 13 },
-          { type: "ova", title: "Simulador: Evaluación de Riesgos" }
-        ]
+          { type: "ova", title: "Simulador: Evaluación de Riesgos" },
+        ],
       },
       {
         title: "Protege tus Datos en la Era de la IA",
-        description: "Marco ético para el uso responsable de IA en educación, trabajo y vida personal.",
+        description:
+          "Marco ético para el uso responsable de IA en educación, trabajo y vida personal.",
         difficulty: "Avanzado",
         learningObjectives: [
           "Aplicar principios éticos al usar IA",
           "Reconocer usos inapropiados de IA",
-          "Promover transparencia en el uso de IA"
+          "Promover transparencia en el uso de IA",
         ],
         resources: [
-          { type: "video", title: "IA Ética: Principios y Práctica", duration: "6:05" },
-          { type: "ova", title: "Laboratorio: Dilemas Éticos" }
-        ]
-      }
-    ]
-  }
+          {
+            type: "video",
+            title: "IA Ética: Principios y Práctica",
+            duration: "6:05",
+          },
+          { type: "ova", title: "Laboratorio: Dilemas Éticos" },
+        ],
+      },
+    ],
+  },
 ];
 
 export default COURSE_KNOWLEDGE;

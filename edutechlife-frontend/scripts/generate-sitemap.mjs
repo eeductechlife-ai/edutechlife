@@ -1,5 +1,8 @@
 import { writeFileSync } from 'fs'
-import { join } from 'path'
+import { join, dirname } from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const BASE = 'https://edutechlife.co'
 
@@ -38,6 +41,6 @@ ${urls}
 </urlset>
 `
 
-const out = join(import.meta.dirname, '../dist/sitemap.xml')
+const out = join(__dirname, '../dist/sitemap.xml')
 writeFileSync(out, xml)
 console.log(`[sitemap] ✅ ${out}`)
