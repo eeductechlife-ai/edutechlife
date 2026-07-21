@@ -1,8 +1,5 @@
-import { getConversationPhase } from "./nicoConversation";
-import { shouldInsertProactiveMessage } from "./nicoConversation";
-import { getProactiveMessageByContext } from "./nicoConversation";
-import { getConversationOptions } from "./nicoContext";
-import { optimizeLongConversation } from "./nicoContext";
+import { getConversationPhase, shouldInsertProactiveMessage, getProactiveMessageByContext } from "./nicoConversation";
+import { getConversationOptions, optimizeLongConversation } from "./nicoContext";
 import { speakTextConversational } from "../../utils/speech";
 
 export function handlePostStreamActions({

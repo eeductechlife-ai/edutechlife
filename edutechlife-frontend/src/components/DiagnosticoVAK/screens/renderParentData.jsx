@@ -121,7 +121,7 @@ export default function renderParentData({
               <p className="text-red-500 text-xs mt-1.5 flex items-center gap-1">
                 <span>⚠</span>
                 <span>
-                  {t("vak.ui.invalid_email") || "Correo electrónico inválido"}
+                  {t("vak.ui.invalid_email")}
                 </span>
               </p>
             )}

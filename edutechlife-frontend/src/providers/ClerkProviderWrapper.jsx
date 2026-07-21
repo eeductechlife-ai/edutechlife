@@ -1,9 +1,10 @@
-import React from 'react';
 import { ClerkProvider } from '@clerk/react';
-import { esES } from '@clerk/localizations';
+import { esES, enUS } from '@clerk/localizations';
+import { useTranslation } from '../i18n/I18nProvider';
 import { clerkConfig } from '../lib/clerk-config';
 
 const ClerkProviderWrapper = ({ children }) => {
+  const { locale } = useTranslation();
   return (
     <ClerkProvider
       publishableKey={clerkConfig.publishableKey}
@@ -12,7 +13,7 @@ const ClerkProviderWrapper = ({ children }) => {
       afterSignInUrl={clerkConfig.afterSignInUrl}
       afterSignUpUrl={clerkConfig.afterSignUpUrl}
       appearance={clerkConfig.appearance}
-      localization={esES}
+      localization={locale === 'en' ? enUS : esES}
     >
       {children}
     </ClerkProvider>

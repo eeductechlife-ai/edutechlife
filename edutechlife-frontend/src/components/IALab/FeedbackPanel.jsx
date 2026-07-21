@@ -1,5 +1,7 @@
+import { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from '../../utils/iconMapping.jsx';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const EXERCISE_CONFIG = [
   { key: 'ej1', titleKey: 'ialab.evaluation.results.exercise_1', icon: 'fa-search', color: 'text-corporate', bgColor: 'bg-corporate/10' },
@@ -8,8 +10,10 @@ const EXERCISE_CONFIG = [
   { key: 'ej4', titleKey: 'ialab.evaluation.results.exercise_4', icon: 'fa-file-alt', color: 'text-amber-500', bgColor: 'bg-amber-500/10' },
 ];
 
-const ExerciseFeedback = ({ icon, iconColor, iconBg, title, nota, feedback }) => (
-  <div className="bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700 rounded-2xl p-6">
+const ExerciseFeedback = forwardRef(function ExerciseFeedback({ icon, iconColor, iconBg, title, nota, feedback }, ref) {
+  const { t } = useTranslation();
+  return (
+  <div ref={ref} className="bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700 rounded-2xl p-6">
     <div className="flex items-center gap-4 mb-4">
       <div className={`w-12 h-12 rounded-xl ${iconBg} flex items-center justify-center`}>
         <Icon name={icon} className={`${iconColor} text-lg`} />
@@ -34,7 +38,8 @@ const ExerciseFeedback = ({ icon, iconColor, iconBg, title, nota, feedback }) =>
       </div>
     </div>
   </div>
-);
+  );
+});
 
 const FeedbackPanel = ({ evaluation, t }) => (
   <div className="space-y-6">

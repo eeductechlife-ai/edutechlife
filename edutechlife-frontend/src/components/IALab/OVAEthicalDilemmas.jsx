@@ -11,7 +11,7 @@ OVAEthicalDilemmas.propTypes = {
 };
 
 export default function OVAEthicalDilemmas({ onComplete }) {
-  const { t, locale } = useTranslation();
+  const { t } = useTranslation();
   const certCompletedRef = useRef(false);
   const [screen, setScreen] = useState('intro');
   const [activeSection, setActiveSection] = useState('intro');
@@ -67,30 +67,25 @@ export default function OVAEthicalDilemmas({ onComplete }) {
 
   const getValerioText = () => {
     if (activeSection === 'intro') {
-      return t('ova.ethical_dilemmas.intro_voice', 'Bienvenido al laboratorio de dilemas éticos en IA. Explora situaciones reales y descubre cómo tomar decisiones responsables.');
+      return t('ova.ethical_dilemmas.intro_voice');
     }
     if (activeSection === 'dilemmas') {
       return `${dilemmas[currentDilemma].scenario} ${dilemmas[currentDilemma].opts.join('. ')}`;
     }
-    return t('ova.ethical_dilemmas.principles_voice', 'Conoce los principios fundamentales para un uso ético de la inteligencia artificial.');
+    return t('ova.ethical_dilemmas.principles_voice');
   };
 
   if (screen === 'intro') {
-    const isES = locale === 'es';
     return (
       <div className="w-full h-full bg-gradient-to-br from-cyan-50 to-white dark:from-gray-900 dark:to-gray-800 flex items-center justify-center rounded-2xl">
         <OVAIntro
           icon="fa-scale-balanced"
-          badge={isES ? 'Laboratorio de Ética' : 'Ethics Lab'}
-          title={isES ? 'Dilemas Éticos en IA' : 'Ethical Dilemmas in AI'}
-          description={isES
-            ? 'Enfréntate a situaciones reales donde deberás elegir el camino más ético. Cada decisión tiene consecuencias y te ayudará a desarrollar tu criterio como profesional responsable.'
-            : 'Face real situations where you must choose the most ethical path. Each decision has consequences and will help develop your judgment as a responsible professional.'}
-          audioText={isES
-            ? 'Bienvenido al laboratorio de dilemas éticos en inteligencia artificial. Vamos a explorar situaciones reales y descubrir cómo tomar decisiones responsables.'
-            : 'Welcome to the ethical dilemmas in AI lab. Let us explore real situations and discover how to make responsible decisions.'}
+          badge={t('ova.ethical_dilemmas.intro_badge')}
+          title={t('ova.ethical_dilemmas.intro_title')}
+          description={t('ova.ethical_dilemmas.intro_desc')}
+          audioText={t('ova.ethical_dilemmas.intro_audio')}
           onStart={() => setScreen('slides')}
-          startLabel={isES ? 'Comenzar Dilemas' : 'Start Dilemmas'}
+          startLabel={t('ova.ethical_dilemmas.start_btn')}
         />
       </div>
     );
@@ -130,7 +125,7 @@ export default function OVAEthicalDilemmas({ onComplete }) {
                 {t('ova.ethical_dilemmas.intro_title', 'Dilemas Éticos en Inteligencia Artificial')}
               </h2>
               <div className="w-full h-64 md:h-80 rounded-2xl mb-8 overflow-hidden shadow-xl border border-gray-100 dark:border-gray-700">
-                <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=1000" alt="" loading="lazy" className="w-full h-full object-cover" />
+                <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=1000" alt="Dilemas éticos en inteligencia artificial" loading="lazy" className="w-full h-full object-cover" />
               </div>
               <p className="text-lg text-slate-700 dark:text-slate-200 leading-relaxed">
                 {t('ova.ethical_dilemmas.intro_text', 'La inteligencia artificial plantea dilemas éticos que no tienen respuestas fáciles. En este laboratorio, enfrentarás situaciones reales donde deberás elegir el camino más ético.')}

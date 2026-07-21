@@ -10,6 +10,8 @@ import { useUser, useAuth } from "@clerk/react";
 import { useClerkAuth, getClerkUserInfo } from "../utils/clerk-utils";
 import { Icon } from "../utils/iconMapping.jsx";
 import ErrorBoundary from "./forum/ErrorBoundary";
+import UserProfileSection from "./userDropdownMenuSimplified/UserProfileSection";
+import UserSettingsSection from "./userDropdownMenuSimplified/UserSettingsSection";
 import { useTranslation } from "../i18n/I18nProvider";
 
 const UserProfileSmartCard = lazy(() => import("./userProfileSmartCard"));
@@ -321,39 +323,13 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
             aria-label={t("modals.settings.user_options_aria")}
             onKeyDown={handleMenuKeyDown}
           >
-            <div className="p-3 bg-gradient-to-r from-petroleum to-corporate">
-              <div className="flex items-center gap-2.5">
-                <button
-                  onClick={handleAvatarClick}
-                  className="h-8 w-8 rounded-full overflow-hidden border border-white/30 hover:ring-2 hover:ring-white/50 transition-all duration-200 flex-shrink-0 cursor-pointer"
-                  aria-label={t("modals.settings.change_photo_aria")}
-                  title={t("modals.settings.change_photo_aria")}
-                >
-                  {userInfo.avatarUrl ? (
-                    <img
-                      src={userInfo.avatarUrl}
-                      alt={displayName}
-                      loading="lazy"
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-white/20 flex items-center justify-center">
-                      <span className="text-white font-semibold text-xs">
-                        {getUserInitials()}
-                      </span>
-                    </div>
-                  )}
-                </button>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs font-semibold text-white truncate">
-                    {displayName}
-                  </p>
-                  <p className="text-[10px] text-white/70 truncate">
-                    {userInfo.displayEmail}
-                  </p>
-                </div>
-              </div>
-            </div>
+            <UserProfileSection
+              userInfo={userInfo}
+              displayName={displayName}
+              getUserInitials={getUserInitials}
+              handleAvatarClick={handleAvatarClick}
+              t={t}
+            />
 
             <div className="p-2 space-y-1">
               <button
@@ -424,22 +400,13 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
                 </span>
               </button>
 
-              <button
-                ref={setMenuItemRef(4)}
-                role="menuitem"
-                tabIndex={focusedIndex === 4 ? 0 : -1}
-                className="group flex items-center gap-2.5 w-full px-3 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-slate-300 rounded-lg shadow-sm hover:shadow hover:border-l-petroleum hover:bg-slate-50 transition-all duration-200 cursor-pointer text-left"
-                onClick={handleSettingsSupport}
-                style={staggerStyle(4)}
-              >
-                <Icon
-                  name="fa-cog"
-                  className="text-sm text-slate-600 flex-shrink-0"
-                />
-                <span className="text-xs font-semibold text-slate-800 group-hover:text-petroleum transition-colors duration-200">
-                  {t("modals.settings.title")}
-                </span>
-              </button>
+              <UserSettingsSection
+                setMenuItemRef={setMenuItemRef}
+                focusedIndex={focusedIndex}
+                staggerStyle={staggerStyle}
+                handleSettingsSupport={handleSettingsSupport}
+                t={t}
+              />
 
               <div className="border-t border-slate-200/60 my-1"></div>
 

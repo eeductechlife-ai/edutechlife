@@ -1,0 +1,189 @@
+/* Marquee styles */
+.marquee-wrap {
+  overflow: hidden;
+  position: relative;
+}
+
+.marquee-wrap::before,
+.marquee-wrap::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 15rem;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.marquee-wrap::before {
+  left: 0;
+  background: linear-gradient(to right, var(--bg-dark), transparent);
+}
+
+.marquee-wrap::after {
+  right: 0;
+  background: linear-gradient(to left, var(--bg-dark), transparent);
+}
+
+.marquee-track {
+  display: flex;
+  gap: 2.5rem;
+  width: max-content;
+  animation: marquee-slide 30s linear infinite;
+}
+
+@keyframes marquee-slide {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Alliance Marquee Section */
+.alliance-section {
+  padding: 3rem 5%;
+  background: linear-gradient(
+    to bottom right,
+    #0f172a 0%,
+    #000 40%,
+    #1f2937 100%
+  );
+  position: relative;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .alliance-section {
+    padding: 2.5rem 4%;
+  }
+}
+
+.alliance-label {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.alliance-label span {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: #334155;
+  padding: 0.5rem 1.5rem;
+  border: 1px solid rgba(27, 158, 186, 0.3);
+  border-radius: 100px;
+  background: rgba(27, 158, 186, 0.05);
+}
+
+.marquee-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding: 1rem 0;
+}
+
+.marquee-fade-left,
+.marquee-fade-right {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 150px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.marquee-fade-left {
+  left: 0;
+  background: linear-gradient(90deg, rgba(10, 22, 40, 1) 0%, transparent 100%);
+}
+
+.marquee-fade-right {
+  right: 0;
+  background: linear-gradient(-90deg, rgba(10, 22, 40, 1) 0%, transparent 100%);
+}
+
+.marquee-track {
+  display: flex;
+  gap: 1rem;
+  width: max-content;
+}
+
+.marquee-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.5rem 2.5rem;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(27, 158, 186, 0.1);
+  border-radius: 1rem;
+  min-width: 160px;
+  transition: all 0.4s ease;
+  filter: grayscale(100%);
+  opacity: 0.6;
+  cursor: default;
+}
+
+.marquee-item:hover {
+  filter: grayscale(0%);
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(27, 158, 186, 0.3);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(27, 158, 186, 0.15);
+}
+
+.marquee-logo {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    rgba(27, 158, 186, 0.15),
+    rgba(27, 158, 186, 0.1)
+  );
+  border-radius: 12px;
+  color: #1b9eba;
+  font-size: 1.4rem;
+  transition: all 0.4s ease;
+}
+
+.marquee-item:hover .marquee-logo {
+  background: linear-gradient(135deg, #1b9eba, #0a3044);
+  color: white;
+  transform: scale(1.1);
+}
+
+.marquee-name {
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #0a3044;
+  letter-spacing: 0.05em;
+  transition: color 0.4s ease;
+}
+
+.marquee-item:hover .marquee-name {
+  color: #0a3044;
+}
+
+.marquee-sub {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.6rem;
+  font-weight: 500;
+  color: #334155;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: color 0.4s ease;
+}
+
+.marquee-item:hover .marquee-sub {
+  color: rgba(77, 168, 196, 0.8);
+}

@@ -1,25 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, Lock, User, Eye, EyeOff, X, AlertCircle, Sparkles } from 'lucide-react';
+import { useTranslation } from '../i18n/I18nProvider';
+import useFocusTrap from '../hooks/useFocusTrap';
+import useBodyScrollLock from '../hooks/useBodyScrollLock';
 
 const AdminLoginModal = ({ isOpen, onClose, onLogin }) => {
+  const { t } = useTranslation();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  const focusTrapRef = useFocusTrap(isOpen);
+  useBodyScrollLock(isOpen);
+
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
       setUsername('');
       setPassword('');
       setError('');
-    } else {
-      document.body.style.overflow = 'unset';
     }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
   }, [isOpen]);
 
   useEffect(() => {
@@ -44,14 +45,14 @@ const AdminLoginModal = ({ isOpen, onClose, onLogin }) => {
       onLogin();
     } else {
       setIsLoading(false);
-      setError('Credenciales incorrectas. Verifica tu usuario y contraseña.');
+      setError(t('adminLogin.invalid_credentials'));
     }
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4" style={{ background: 'rgba(11, 15, 25, 0.95)', backdropFilter: 'blur(20px)' }}>
+    <div ref={focusTrapRef} role="dialog" aria-modal="true" aria-label={t('adminLogin.restricted_access')} className="fixed inset-0 z-[9999] flex items-center justify-center p-4" style={{ background: 'rgba(11, 15, 25, 0.95)', backdropFilter: 'blur(20px)' }}>
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #004B63, transparent)', filter: 'blur(60px)' }}></div>
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #4DA8C4, transparent)', filter: 'blur(60px)' }}></div>
@@ -73,21 +74,22 @@ const AdminLoginModal = ({ isOpen, onClose, onLogin }) => {
               <Shield className="w-10 h-10 text-white" />
             </div>
             <h2 className="text-2xl font-bold text-white font-montserrat mb-2">Command Center</h2>
-            <p className="text-sm text-[#B2D8E5]">Acceso Restringido - ADMIN_MASTER</p>
+            <p className="text-sm text-[#B2D8E5]">{t('adminLogin.restricted_access')}</p>
           </div>
 
           <div className="flex items-center justify-center gap-2 mb-6 px-4 py-2 rounded-xl bg-[#66CCCC]/10 border border-[#66CCCC]/20">
             <Lock className="w-4 h-4 text-[#66CCCC]" />
-            <span className="text-xs text-[#66CCCC] font-semibold">Conexión Encriptada SSL 256-bit</span>
+            <span className="text-xs text-[#66CCCC] font-semibold">{t('adminLogin.ssl_connection')}</span>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-semibold text-[#B2D8E5] mb-2">Usuario</label>
+              <label htmlFor="admin-username" className="block text-sm font-semibold text-[#B2D8E5] mb-2">{t('adminLogin.username')}</label>
               <div className="relative">
                 <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#B2D8E5]/50" />
                 <input
                   type="text"
+                  id="admin-username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   className="w-full pl-12 pr-4 py-4 rounded-xl bg-[#0B0F19] border border-[#004B63]/50 text-white placeholder-[#B2D8E5]/50 focus:outline-none focus:border-[#4DA8C4] focus:ring-2 focus:ring-[#4DA8C4]/20 transition-all"
@@ -98,20 +100,23 @@ const AdminLoginModal = ({ isOpen, onClose, onLogin }) => {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#B2D8E5] mb-2">Contraseña</label>
+              <label htmlFor="admin-password" className="block text-sm font-semibold text-[#B2D8E5] mb-2">{t('adminLogin.password')}</label>
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#B2D8E5]/50" />
                 <input
                   type={showPassword ? 'text' : 'password'}
+                  id="admin-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-12 pr-12 py-4 rounded-xl bg-[#0B0F19] border border-[#004B63]/50 text-white placeholder-[#B2D8E5]/50 focus:outline-none focus:border-[#4DA8C4] focus:ring-2 focus:ring-[#4DA8C4]/20 transition-all"
-                  placeholder="123"
+                  className="w-full pl-12 pr-4 py-4 rounded-xl bg-[#0B0F19] border border-[#004B63]/50 text-white placeholder-[#B2D8E5]/50 focus:outline-none focus:border-[#4DA8C4] focus:ring-2 focus:ring-[#4DA8C4]/20 transition-all"
+                  placeholder="..."
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                  aria-pressed={showPassword}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-[#B2D8E5]/50 hover:text-[#B2D8E5] transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -138,12 +143,12 @@ const AdminLoginModal = ({ isOpen, onClose, onLogin }) => {
               {isLoading ? (
                 <>
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                  <span>Verificando...</span>
+                  <span>{t('adminLogin.verifying')}</span>
                 </>
               ) : (
                 <>
                   <Shield className="w-5 h-5" />
-                  <span>Acceder</span>
+                  <span>{t('adminLogin.access')}</span>
                 </>
               )}
             </button>
@@ -151,7 +156,7 @@ const AdminLoginModal = ({ isOpen, onClose, onLogin }) => {
 
           <div className="mt-6 pt-6 border-t border-[#004B63]/30">
             <p className="text-center text-xs text-[#B2D8E5]/70">
-              Centro de Administración Edutechlife Manizales
+              {t('adminLogin.admin_center')}
             </p>
             <div className="mt-3 flex items-center justify-center gap-2">
               <Sparkles className="w-4 h-4 text-[#FFD166]" />

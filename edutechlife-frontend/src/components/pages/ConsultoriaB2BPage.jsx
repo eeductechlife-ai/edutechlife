@@ -16,7 +16,7 @@ const ConsultoriaB2BPage = () => {
   
   return (
     <>
-      <SEO title="Consultoría B2B" description="Soluciones educativas inteligentes para empresas. Transforma tu organización con la consultoría B2B de Edutechlife." />
+      <SEO title={t('seo.consultoria_b2b.title')} description={t('seo.consultoria_b2b.desc')} />
       <Suspense fallback={<PageLoader message={t('page_loader.consulting_b2b')} />}>
         <ConsultoriaB2B onBack={handleBack} />
       </Suspense>

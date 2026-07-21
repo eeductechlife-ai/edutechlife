@@ -164,6 +164,7 @@ export default function EthicsExplorer() {
 
         <textarea value={respuesta} onChange={e => setRespuesta(e.target.value)}
           placeholder={t('ialab.ethics_explorer.paste_placeholder')}
+          aria-label={t('ialab.ethics_explorer.paste_title')}
           className="w-full h-44 p-5 rounded-2xl border-2 border-slate-200 focus:border-[#259eb5] focus:ring-2 focus:ring-[#259eb5]/20 outline-none resize-none text-sm text-slate-700 placeholder:text-slate-300 transition-all"
         />
 
@@ -348,6 +349,7 @@ export default function EthicsExplorer() {
           <p className="text-xs text-slate-500 mb-3">{t('ialab.ethics_explorer.reflection_desc')}</p>
           <textarea value={reflexion} onChange={e => setReflexion(e.target.value)}
             placeholder={t('ialab.ethics_explorer.reflection_placeholder')}
+            aria-label={t('ialab.ethics_explorer.reflection_question')}
             className="w-full h-24 p-4 rounded-xl border-2 border-slate-200 focus:border-[#259eb5] focus:ring-2 focus:ring-[#259eb5]/20 outline-none resize-none text-sm text-slate-700 placeholder:text-slate-300 transition-all"
           />
         </div>

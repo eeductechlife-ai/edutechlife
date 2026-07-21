@@ -1,6 +1,7 @@
 import { render } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { BrowserRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 
 expect.extend(toHaveNoViolations);
 
@@ -113,7 +114,13 @@ describe('Navigation a11y', () => {
       { label: 'IA Lab', onClick: () => {} },
       { label: 'Módulo 1' },
     ];
-    const { container } = render(<Breadcrumbs segments={segments} />);
+    const { container } = render(
+      <HelmetProvider>
+        <BrowserRouter>
+          <Breadcrumbs segments={segments} />
+        </BrowserRouter>
+      </HelmetProvider>
+    );
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   }, 30000);

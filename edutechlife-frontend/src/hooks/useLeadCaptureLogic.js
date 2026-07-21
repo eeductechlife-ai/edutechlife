@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef } from 'react';
 import { detectInterest } from '../utils/leads';
+import { track } from '../lib/analytics';
 
 const useLeadCaptureLogic = (options = {}) => {
   const {
@@ -182,10 +183,9 @@ const useLeadCaptureLogic = (options = {}) => {
   }, []);
 
   const handleLeadSaved = useCallback((leadData) => {
-    // Resetear scores después de guardar lead exitosamente
     interestScoreRef.current = 0;
-    // No resetear messageCount para mantener contexto
     hideForm();
+    track('lead_captured', { source: 'nico_chat', ...leadData });
     
     return leadData;
   }, [hideForm]);

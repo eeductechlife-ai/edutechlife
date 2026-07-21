@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from '../i18n/I18nProvider';
 import { getSectorOptions } from './AutomationData';
+import { track } from '../lib/analytics';
 
 const AutomationLeadCapture = () => {
   const [form, setForm] = useState({ nombre: '', email: '', telefono: '', empresa: '', sector: '' });
@@ -13,6 +14,7 @@ const AutomationLeadCapture = () => {
     e.preventDefault();
     if (!form.nombre || !form.email) return;
     setSent(true);
+    track('lead_captured', { source: 'automation_page', ...form });
   };
 
   if (sent) {

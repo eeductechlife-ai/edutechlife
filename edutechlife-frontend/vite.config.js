@@ -18,7 +18,7 @@ export default defineConfig({
       manifest: {
         name: 'Edutechlife',
         short_name: 'Edutechlife',
-        description: 'Liderando la Educación del Futuro con Pedagogía e Inteligencia Artificial',
+        description: 'Edutechlife — Leading the Future of Education with Pedagogy and AI. Educación del Futuro con Pedagogía e Inteligencia Artificial.',
         start_url: '/',
         display: 'standalone',
         background_color: '#ffffff',
@@ -160,11 +160,6 @@ export default defineConfig({
         comments: false,
       },
     },
-    modulePreload: {
-      resolveDependencies: (url, deps, context) => {
-        return deps.filter(dep => !dep.includes('pdf-vendor'));
-      }
-    },
     rollupOptions: {
       external: ['@solana/web3.js'],
       output: {
@@ -177,9 +172,6 @@ export default defineConfig({
           }
           if (id.includes('node_modules/recharts/')) {
             return 'charts-vendor';
-          }
-          if (id.includes('node_modules/html2pdf.js/') || id.includes('node_modules/jspdf/')) {
-            return 'pdf-vendor';
           }
           if (id.includes('node_modules/@supabase/supabase-js/')) {
             return 'supabase-vendor';

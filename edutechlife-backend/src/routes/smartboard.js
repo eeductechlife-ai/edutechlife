@@ -21,6 +21,29 @@ Reglas importantes:
 - Si el estudiante se frustra, ofrece pistas en lugar de soluciones
 - Promueve un ambiente de aprendizaje positivo y sin juzgamiento`;
 
+/**
+ * @swagger
+ * /api/smartboard/data/{userId}:
+ *   get:
+ *     summary: Obtener datos del SmartBoard para un usuario
+ *     tags: [SmartBoard]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID del usuario
+ *     responses:
+ *       200:
+ *         description: Datos del SmartBoard
+ *       404:
+ *         description: Datos no encontrados
+ *       500:
+ *         description: Error del servidor
+ */
 router.get('/data/:userId', async (req, res) => {
   const { userId } = req.params;
 
@@ -49,6 +72,48 @@ router.get('/data/:userId', async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/smartboard/chat:
+ *   post:
+ *     summary: Enviar mensaje al tutor virtual Dani
+ *     tags: [SmartBoard]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               messages:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     role:
+ *                       type: string
+ *                       enum: [system, user, assistant]
+ *                     content:
+ *                       type: string
+ *               context:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Respuesta del tutor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 result:
+ *                   type: string
+ *       400:
+ *         description: Error de validación
+ *       500:
+ *         description: Error del servidor
+ */
 router.post('/chat', async (req, res) => {
   const { messages, context } = req.body;
 
@@ -82,6 +147,49 @@ router.post('/chat', async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/smartboard/progress/{userId}:
+ *   get:
+ *     summary: Obtener progreso del estudiante en SmartBoard
+ *     tags: [SmartBoard]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID del usuario
+ *     responses:
+ *       200:
+ *         description: Progreso del estudiante
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 totalPoints:
+ *                   type: integer
+ *                 streak:
+ *                   type: integer
+ *                 completedMissions:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                 subjectProgress:
+ *                   type: object
+ *                 totalActiveMinutes:
+ *                   type: integer
+ *                 vakResult:
+ *                   type: string
+ *                   nullable: true
+ *       404:
+ *         description: Progreso no encontrado
+ *       500:
+ *         description: Error del servidor
+ */
 router.get('/progress/:userId', async (req, res) => {
   const { userId } = req.params;
 

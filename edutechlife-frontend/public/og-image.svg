@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#004B63"/>
+      <stop offset="100%" style="stop-color:#00BCD4"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#66CCCC"/>
+      <stop offset="100%" style="stop-color:#00BCD4"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="60" y="60" width="1080" height="510" rx="20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
+  <text x="600" y="260" font-family="Montserrat, sans-serif" font-size="72" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="2">Edutechlife</text>
+  <text x="600" y="340" font-family="Montserrat, sans-serif" font-size="32" font-weight="400" fill="#B2D8E5" text-anchor="middle">Liderando la Educación del Futuro</text>
+  <text x="600" y="390" font-family="Montserrat, sans-serif" font-size="28" font-weight="300" fill="#66CCCC" text-anchor="middle">Pedagogía + Inteligencia Artificial</text>
+  <rect x="480" y="420" width="240" height="4" rx="2" fill="url(#accent)"/>
+  <text x="600" y="500" font-family="Montserrat, sans-serif" font-size="18" font-weight="400" fill="rgba(255,255,255,0.6)" text-anchor="middle">edutechlife.co</text>
+</svg>

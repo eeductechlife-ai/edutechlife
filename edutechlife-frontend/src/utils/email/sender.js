@@ -6,7 +6,8 @@ import {
 } from "./templates.js";
 
 class EmailService {
-  constructor() {
+  constructor(locale = 'es') {
+    this.locale = locale;
     this.sentEmails = [];
     this.templates = null;
   }
@@ -28,14 +29,14 @@ class EmailService {
     return templates[templateName];
   }
 
-  async sendEmail(to, subject, templateName, data) {
+  async sendEmail(to, subject, templateName, data, locale) {
     try {
       const template = this.getTemplate(templateName);
       if (!template) {
         throw new Error(`Template ${templateName} no encontrado`);
       }
 
-      const htmlContent = template(data);
+      const htmlContent = template(data, locale || this.locale);
 
       const emailRecord = {
         id: `email_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -68,18 +69,23 @@ class EmailService {
     }
   }
 
-  async sendAppointmentConfirmation(appointment) {
+  async sendAppointmentConfirmation(appointment, locale) {
     const { leadEmail, leadName, date, time, duration, modality, topic } =
       appointment;
+    const loc = locale || this.locale;
 
     if (!leadEmail) {
       console.warn("⚠️ No hay email para enviar confirmación de cita");
       return { success: false, error: "No email provided" };
     }
 
+    const subject = loc === 'en'
+      ? `✅ Appointment Confirmed - EdutechLife`
+      : `✅ Confirmación de cita - EdutechLife`;
+
     return this.sendEmail(
       leadEmail,
-      `✅ Confirmación de cita - EdutechLife`,
+      subject,
       "appointmentConfirmation",
       {
         leadName,
@@ -89,20 +95,26 @@ class EmailService {
         modality,
         topic,
       },
+      loc,
     );
   }
 
-  async send24hReminder(appointment) {
+  async send24hReminder(appointment, locale) {
     const { leadEmail, leadName, date, time, duration, modality } = appointment;
+    const loc = locale || this.locale;
 
     if (!leadEmail) {
       console.warn("⚠️ No hay email para enviar recordatorio 24h");
       return { success: false, error: "No email provided" };
     }
 
+    const subject = loc === 'en'
+      ? `⏰ Reminder: Your appointment is tomorrow - EdutechLife`
+      : `⏰ Recordatorio: Tu cita es mañana - EdutechLife`;
+
     return this.sendEmail(
       leadEmail,
-      `⏰ Recordatorio: Tu cita es mañana - EdutechLife`,
+      subject,
       "appointmentReminder24h",
       {
         leadName,
@@ -111,10 +123,11 @@ class EmailService {
         duration,
         modality,
       },
+      loc,
     );
   }
 
-  async send1hReminder(appointment) {
+  async send1hReminder(appointment, locale) {
     const {
       leadEmail,
       leadName,
@@ -124,15 +137,20 @@ class EmailService {
       modality,
       appointmentId,
     } = appointment;
+    const loc = locale || this.locale;
 
     if (!leadEmail) {
       console.warn("⚠️ No hay email para enviar recordatorio 1h");
       return { success: false, error: "No email provided" };
     }
 
+    const subject = loc === 'en'
+      ? `🎯 Your appointment is in 1 hour! - EdutechLife`
+      : `🎯 ¡Tu cita es en 1 hora! - EdutechLife`;
+
     return this.sendEmail(
       leadEmail,
-      `🎯 ¡Tu cita es en 1 hora! - EdutechLife`,
+      subject,
       "appointmentReminder1h",
       {
         leadName,
@@ -142,25 +160,32 @@ class EmailService {
         modality,
         appointmentId,
       },
+      loc,
     );
   }
 
-  async sendLeadWelcome(lead) {
+  async sendLeadWelcome(lead, locale) {
     const { email, nombre, interes } = lead;
+    const loc = locale || this.locale;
 
     if (!email) {
       console.warn("⚠️ No hay email para enviar bienvenida");
       return { success: false, error: "No email provided" };
     }
 
+    const subject = loc === 'en'
+      ? `🎓 Welcome to EdutechLife - ${nombre}`
+      : `🎓 Bienvenido a EdutechLife - ${nombre}`;
+
     return this.sendEmail(
       email,
-      `🎓 Bienvenido a EdutechLife - ${nombre}`,
+      subject,
       "leadWelcome",
       {
         nombre,
         interes,
       },
+      loc,
     );
   }
 

@@ -51,7 +51,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
         onNavigate('landing');
       }
     } catch (error) {
-      console.error('Error al cerrar sesión:', error);
+      console.error(t('modals.settings.logout_error'), error);
     }
   };
 
@@ -388,7 +388,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
                <DialogTitle className="text-lg font-bold text-[#334155]">{t('mobile_menu.my_history')}</DialogTitle>
              </DialogHeader>
               <ErrorBoundary>
-                <Suspense fallback={<div className="p-8 text-center text-sm text-slate-500">{t('loading')}</div>}>
+                <Suspense fallback={<div className="p-8 text-center text-sm text-slate-500">{t('common.loading')}</div>}>
                   <ActivityHistory userId={user?.id} />
                 </Suspense>
               </ErrorBoundary>
@@ -403,7 +403,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
                 <DialogTitle className="text-lg font-bold text-[#334155]">{t('mobile_menu.study_plan')}</DialogTitle>
               </DialogHeader>
               <ErrorBoundary>
-                <Suspense fallback={<div className="p-8 text-center text-sm text-slate-500">{t('loading')}</div>}>
+                <Suspense fallback={<div className="p-8 text-center text-sm text-slate-500">{t('common.loading')}</div>}>
                   <StudyPlannerModal onClose={() => setShowStudyPlanner(false)} />
                 </Suspense>
               </ErrorBoundary>

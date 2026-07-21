@@ -5,34 +5,10 @@ import { useTranslation } from '../../../../i18n/I18nProvider';
 import VoiceReader from '../../VoiceReader';
 import { speakTextConversational, stopSpeech } from '../../../../utils/speech';
 
-const INTRO_TEXTS = {
-  1: {
-    es: "Bienvenido al desafío de Prompt Engineering. Aquí pondrás a prueba todo lo aprendido sobre la creación de prompts efectivos. El desafío tiene 3 pasos: Primero, aplicarás la plantilla universal para estructurar un prompt completo. Segundo, analizarás cómo piensa la IA y ajustarás parámetros como la temperatura. Tercero, detectarás y corregirás errores en prompts existentes usando el método CREATE. ¡Demuestra lo que sabes!",
-    en: "Welcome to the Prompt Engineering challenge. Here you will test everything you learned about creating effective prompts. The challenge has 3 steps: First, apply the universal template to structure a complete prompt. Second, analyze how AI thinks and adjust parameters like temperature. Third, detect and fix errors in existing prompts using the CREATE method. Show what you know!"
-  },
-  2: {
-    es: "Bienvenido al desafío de ChatGPT. Aquí aprenderás a crear tu propio GPT personalizado. El desafío tiene 3 pasos: Primero, analizarás un caso de negocio y elegirás cuál automatizar. Segundo, configurarás las instrucciones, conocimientos y capacidades de tu GPT. Tercero, definirás una función para conectarlo con una API externa usando Function Calling. ¡Manos a la obra!",
-    en: "Welcome to the ChatGPT challenge. You will create your own custom GPT. The challenge has 3 steps: First, analyze a business case and choose which to automate. Second, configure instructions, knowledge, and capabilities for your GPT. Third, define a function to connect it with an external API using Function Calling. Let's get started!"
-  },
-  3: {
-    es: "Bienvenido al desafío de Gemini. Te convertirás en un investigador digital. El desafío tiene 4 pasos: Primero, elegirás un tema y formularás una pregunta de investigación. Segundo, analizarás fuentes multimodales y extraerás datos clave. Tercero, verificarás la veracidad de distintas afirmaciones. Cuarto, redactarás un informe profesional con tus conclusiones. ¡A investigar!",
-    en: "Welcome to the Gemini challenge. You will become a digital researcher. The challenge has 4 steps: First, choose a topic and formulate a research question. Second, analyze multimodal sources and extract key data. Third, verify the truthfulness of different claims. Fourth, write a professional report with your conclusions. Let's research!"
-  },
-  4: {
-    es: "Bienvenido al desafío de NotebookLM. Aprenderás a curar información y crear un podcast académico. El desafío tiene 3 pasos: Primero, seleccionarás hasta 4 documentos y extraerás el insight clave de cada uno. Segundo, responderás preguntas de síntesis conectando ideas entre documentos. Tercero, estructurarás un guión de podcast con introducción, puntos clave y conclusión. ¡Tu voz y tu conocimiento al poder!",
-    en: "Welcome to the NotebookLM challenge. You will curate information and create an academic podcast. The challenge has 3 steps: First, select up to 4 documents and extract key insights. Second, answer synthesis questions connecting ideas across documents. Third, structure a podcast script with an introduction, key points, and conclusion. Your voice and knowledge!"
-  },
-  5: {
-    es: "Bienvenido al desafío de Ética en IA. Analizarás un caso real de sesgo algorítmico y diseñarás soluciones. El desafío tiene 3 pasos: Primero, leerás un caso de estudio e identificarás qué tipos de sesgo están presentes y en qué etapa del pipeline ocurrieron. Segundo, analizarás el impacto en las personas afectadas y las causas raíz del problema. Tercero, diseñarás un protocolo ético con principios, medidas de prevención, mitigación y monitoreo. ¡Construyamos una IA responsable!",
-    en: "Welcome to the AI Ethics challenge. You will analyze a real case of algorithmic bias and design solutions. The challenge has 3 steps: First, read a case study and identify which types of bias are present and at what pipeline stage they occurred. Second, analyze the impact on affected people and the root causes. Third, design an ethical protocol with principles, prevention measures, mitigation, and monitoring. Let's build responsible AI!"
-  }
-};
-
 const ValerioChallengeIntro = ({ moduleId, onStart, t, locale: localeProp }) => {
   const { locale: ctxLocale } = useTranslation();
   const locale = localeProp || ctxLocale || 'es';
-  const moduleTexts = INTRO_TEXTS[moduleId];
-  const text = moduleTexts?.[locale] || moduleTexts?.es || '';
+  const text = t(`ialab.challenge.intro_${moduleId}`, '');
   const [audioPlaying, setAudioPlaying] = useState(false);
 
   useEffect(() => {

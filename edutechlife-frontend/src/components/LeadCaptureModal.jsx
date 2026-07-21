@@ -1,8 +1,13 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Send } from 'lucide-react';
+import { useTranslation } from '../i18n/I18nProvider';
+import { track } from '../lib/analytics';
+import useFocusTrap from '../hooks/useFocusTrap';
+import useBodyScrollLock from '../hooks/useBodyScrollLock';
 
 const LeadCaptureModal = ({ isOpen, onClose, onSubmit, context }) => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     nombre: '',
     email: '',
@@ -21,7 +26,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onSubmit, context }) => {
     e.preventDefault();
     
     if (!formData.nombre.trim()) {
-      alert('Por favor ingresa tu nombre');
+      alert(t('leadCapture.name_required'));
       return;
     }
 
@@ -34,30 +39,39 @@ const LeadCaptureModal = ({ isOpen, onClose, onSubmit, context }) => {
       interes: context?.interest || 'general',
       tema: context?.topic || ''
     });
+
+    track('lead_captured', { source: 'lead_capture_modal', ...formData, interest: context?.interest, topic: context?.topic });
     
     setFormData({ nombre: '', email: '', telefono: '' });
     setIsSubmitting(false);
   };
 
   const getContextMessage = () => {
-    if (!context) return 'Para ayudarte mejor, ¿podrías compartir tus datos de contacto?';
+    if (!context) return t('leadCapture.context_default');
     
     const messages = {
-      diagnostico_vak: 'Para agendar tu diagnóstico VAK y darte información detallada, ¿me compartes tus datos?',
-      cursos: 'Para orientarte sobre los cursos disponibles, ¿me compartes tu contacto?',
-      metodologia: 'Para explicarte más sobre nuestra metodología, ¿podrías darme tus datos?',
-      precios: 'Para darte información sobre precios y planes, ¿me compartes tu contacto?',
-      general: 'Para darte una atención más personalizada, ¿podrías compartir tus datos?'
+      diagnostico_vak: t('leadCapture.context_diagnosis'),
+      cursos: t('leadCapture.context_courses'),
+      metodologia: t('leadCapture.context_methodology'),
+      precios: t('leadCapture.context_pricing'),
+      general: t('leadCapture.context_general')
     };
     
     return messages[context.interest] || messages.general;
   };
+
+  const focusTrapRef = useFocusTrap(isOpen);
+  useBodyScrollLock(isOpen);
 
   return (
     <AnimatePresence>
       {isOpen && (
         <>
           <motion.div
+            ref={focusTrapRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label={t('leadCapture.title')}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -94,6 +108,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onSubmit, context }) => {
           >
             <button
               onClick={onClose}
+              aria-label="Cerrar"
               style={{
                 position: 'absolute',
                 top: '12px',
@@ -128,7 +143,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onSubmit, context }) => {
                 color: '#1E293B',
                 margin: 0
               }}>
-                Datos de Contacto
+                {t('leadCapture.title')}
               </h3>
               <p style={{
                 fontSize: '0.875rem',
@@ -142,16 +157,16 @@ const LeadCaptureModal = ({ isOpen, onClose, onSubmit, context }) => {
              <form onSubmit={handleSubmit}>
                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                  <div>
-                   <label htmlFor="lead-nombre" style={{ display: 'block', marginBottom: '0.25rem', fontSize: '0.875rem', color: '#004B63', fontWeight: '500' }}>
-                     Nombre completo *
-                   </label>
-                   <input
-                     type="text"
-                     id="lead-nombre"
-                     name="nombre"
-                     value={formData.nombre}
-                     onChange={handleChange}
-                     placeholder="Tu nombre completo"
+                    <label htmlFor="lead-nombre" style={{ display: 'block', marginBottom: '0.25rem', fontSize: '0.875rem', color: '#004B63', fontWeight: '500' }}>
+                      {t('leadCapture.name_label')}
+                    </label>
+                    <input
+                      type="text"
+                      id="lead-nombre"
+                      name="nombre"
+                      value={formData.nombre}
+                      onChange={handleChange}
+                      placeholder={t('leadCapture.name_placeholder')}
                      style={{
                        width: '100%',
                        padding: '0.75rem 1rem',
@@ -167,16 +182,16 @@ const LeadCaptureModal = ({ isOpen, onClose, onSubmit, context }) => {
                    />
                  </div>
                  <div>
-                   <label htmlFor="lead-email" style={{ display: 'block', marginBottom: '0.25rem', fontSize: '0.875rem', color: '#004B63', fontWeight: '500' }}>
-                     Correo electrónico *
-                   </label>
-                   <input
-                     type="email"
-                     id="lead-email"
-                     name="email"
-                     value={formData.email}
-                     onChange={handleChange}
-                     placeholder="Tu correo electrónico"
+                    <label htmlFor="lead-email" style={{ display: 'block', marginBottom: '0.25rem', fontSize: '0.875rem', color: '#004B63', fontWeight: '500' }}>
+                      {t('leadCapture.email_label')}
+                    </label>
+                    <input
+                      type="email"
+                      id="lead-email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder={t('leadCapture.email_placeholder')}
                      style={{
                        width: '100%',
                        padding: '0.75rem 1rem',
@@ -192,16 +207,16 @@ const LeadCaptureModal = ({ isOpen, onClose, onSubmit, context }) => {
                    />
                  </div>
                  <div>
-                   <label htmlFor="lead-telefono" style={{ display: 'block', marginBottom: '0.25rem', fontSize: '0.875rem', color: '#004B63', fontWeight: '500' }}>
-                     Teléfono (opcional)
-                   </label>
-                   <input
-                     type="tel"
-                     id="lead-telefono"
-                     name="telefono"
-                     value={formData.telefono}
-                     onChange={handleChange}
-                     placeholder="Tu número de teléfono (opcional)"
+                    <label htmlFor="lead-telefono" style={{ display: 'block', marginBottom: '0.25rem', fontSize: '0.875rem', color: '#004B63', fontWeight: '500' }}>
+                      {t('leadCapture.phone_label')}
+                    </label>
+                    <input
+                      type="tel"
+                      id="lead-telefono"
+                      name="telefono"
+                      value={formData.telefono}
+                      onChange={handleChange}
+                      placeholder={t('leadCapture.phone_placeholder')}
                      style={{
                        width: '100%',
                        padding: '0.75rem 1rem',
@@ -235,7 +250,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onSubmit, context }) => {
                     transition: 'all 0.2s'
                   }}
                 >
-                  Ahora no
+                  {t('leadCapture.not_now')}
                 </button>
                 <button
                   type="submit"
@@ -257,7 +272,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onSubmit, context }) => {
                     gap: '0.5rem'
                   }}
                 >
-                  {isSubmitting ? 'Enviando...' : 'Compartir datos'}
+                  {isSubmitting ? t('leadCapture.sending') : t('leadCapture.share_data')}
                 </button>
               </div>
             </form>
@@ -268,7 +283,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onSubmit, context }) => {
               textAlign: 'center',
               marginTop: '1rem'
             }}>
-              Tus datos serán atendidos por un asesor de Edutechlife
+              {t('leadCapture.privacy_notice')}
             </p>
           </motion.div>
         </>

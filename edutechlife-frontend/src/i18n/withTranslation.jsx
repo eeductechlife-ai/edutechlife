@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from './I18nProvider';
 
 export function withTranslation(Component) {

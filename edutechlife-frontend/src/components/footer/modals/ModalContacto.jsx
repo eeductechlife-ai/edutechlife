@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { useTranslation } from '../../../i18n/I18nProvider';
+import useFocusTrap from '../../../hooks/useFocusTrap';
+import useBodyScrollLock from '../../../hooks/useBodyScrollLock';
 
 const footerWhiteText = { color: '#FFFFFF' };
 const footerPrimaryText = { color: '#004B63' };
@@ -16,6 +18,9 @@ export default function ModalContacto({ onClose }) {
   const { t } = useTranslation();
   const [formData, setFormData] = useState({ nombre: '', email: '', telefono: '', motivo: '' });
   const [submitted, setSubmitted] = useState(false);
+
+  const focusTrapRef = useFocusTrap(true);
+  useBodyScrollLock(true);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -44,7 +49,7 @@ export default function ModalContacto({ onClose }) {
 
   if (submitted) {
     return (
-      <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-4" onClick={handleClose}>
+      <div ref={focusTrapRef} role="dialog" aria-modal="true" aria-label={t('footer.contact_modal.success_title')} className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-4" onClick={handleClose}>
         <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
         <div className="relative w-full max-w-md mx-4 overflow-hidden rounded-2xl bg-white" onClick={(e) => e.stopPropagation()}>
           <div className="p-8 text-center">
@@ -66,11 +71,11 @@ export default function ModalContacto({ onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-4" onClick={handleClose}>
+    <div ref={focusTrapRef} role="dialog" aria-modal="true" aria-label={t('header.contact_us')} className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-4" onClick={handleClose}>
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
       <div className="relative w-full max-w-2xl mx-4 overflow-hidden rounded-2xl max-h-[90vh] overflow-y-auto bg-white" onClick={(e) => e.stopPropagation()}>
         <div className="sticky top-0 z-10 px-6 py-4 border-b" style={{ backgroundColor: '#FFFFFF', borderColor: '#E5E7EB' }}>
-          <button onClick={handleClose} className="absolute top-4 right-4 transition-colors" style={{ color: '#9CA3AF' }}
+          <button onClick={handleClose} aria-label="Cerrar" className="absolute top-4 right-4 transition-colors" style={{ color: '#9CA3AF' }}
             onMouseEnter={(e) => e.currentTarget.style.color = '#6B7280'}
             onMouseLeave={(e) => e.currentTarget.style.color = '#9CA3AF'}
           >
@@ -145,13 +150,13 @@ export default function ModalContacto({ onClose }) {
                 <h5 className="font-semibold mb-2" style={footerPrimaryText}>{t('footer.contact_modal.follow_us')}</h5>
                 <div className="flex gap-2">
                   {[
-                    { icon: 'fa-facebook-f', bg: '#004B63', hover: '#003d52', href: 'https://web.facebook.com/eductechlife/' },
-                    { icon: 'fa-instagram', bg: '#4DA8C4', hover: '#66CCCC', href: 'https://www.instagram.com/edu_techlife/' },
-                    { icon: 'fa-linkedin-in', bg: '#0A66C2', hover: '#0842A0', href: 'https://www.linkedin.com/company/edutechlife' },
-                    { icon: 'fa-youtube', bg: '#FF0000', hover: '#CC0000', href: 'https://www.youtube.com/@edutechlife' },
-                    { icon: 'fa-whatsapp', bg: '#66CCCC', hover: '#4DA8C4', href: 'https://wa.me/573001234567' },
+                    { icon: 'fa-facebook-f', label: 'Facebook', bg: '#004B63', hover: '#003d52', href: 'https://web.facebook.com/eductechlife/' },
+                    { icon: 'fa-instagram', label: 'Instagram', bg: '#4DA8C4', hover: '#66CCCC', href: 'https://www.instagram.com/edu_techlife/' },
+                    { icon: 'fa-linkedin-in', label: 'LinkedIn', bg: '#0A66C2', hover: '#0842A0', href: 'https://www.linkedin.com/company/edutechlife' },
+                    { icon: 'fa-youtube', label: 'YouTube', bg: '#FF0000', hover: '#CC0000', href: 'https://www.youtube.com/@edutechlife' },
+                    { icon: 'fa-whatsapp', label: 'WhatsApp', bg: '#66CCCC', hover: '#4DA8C4', href: 'https://wa.me/573001234567' },
                   ].map((s, i) => (
-                    <a key={i} href={s.href} target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full flex items-center justify-center transition-colors text-white"
+                    <a key={i} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label} className="w-9 h-9 rounded-full flex items-center justify-center transition-colors text-white"
                       style={{ backgroundColor: s.bg }}
                       onMouseEnter={(e) => e.currentTarget.style.backgroundColor = s.hover}
                       onMouseLeave={(e) => e.currentTarget.style.backgroundColor = s.bg}

@@ -62,7 +62,7 @@ const WelcomeScreen = ({ onNavigate }) => {
   
   return (
     <>
-      <SEO title="Iniciar Sesión" description="Accede a tu cuenta Edutechlife. Plataforma educativa con inteligencia artificial para potenciar el aprendizaje." />
+      <SEO title={t('seo.login.title')} description={t('seo.login.desc')} />
       <div className="min-h-screen bg-gradient-to-br from-[#004B63] to-[#0A3550] flex items-center justify-center p-4 md:p-6 relative overflow-hidden">
       <FloatingParticles />
       

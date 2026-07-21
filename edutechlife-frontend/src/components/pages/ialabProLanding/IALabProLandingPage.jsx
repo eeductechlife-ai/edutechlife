@@ -38,7 +38,7 @@ const IALabProLandingPage = () => {
 
   return (
     <>
-      <SEO title="IALab Pro" description="Plataforma educativa impulsada por Inteligencia Artificial. Cursos, diagnósticos y herramientas para potenciar el aprendizaje." />
+      <SEO title={t('seo.ialab_academic.title')} description={t('seo.ialab_academic.desc')} />
       <div className="min-h-screen bg-white">
       <motion.div
         className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#004B63] via-[#00BCD4] to-[#66CCCC] origin-left z-50"

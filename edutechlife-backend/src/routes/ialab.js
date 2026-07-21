@@ -13,6 +13,58 @@ function isSupabaseReady() {
   return !!(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_KEY);
 }
 
+/**
+ * @swagger
+ * /api/ialab/prompts:
+ *   post:
+ *     summary: Generar un MasterPrompt optimizado con IA
+ *     tags: [IALab]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - prompt
+ *             properties:
+ *               prompt:
+ *                 type: string
+ *                 maxLength: 2000
+ *               templateType:
+ *                 type: string
+ *                 default: general
+ *     responses:
+ *       200:
+ *         description: MasterPrompt generado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 masterPrompt:
+ *                   type: string
+ *                 feedback:
+ *                   type: string
+ *                 difficulty:
+ *                   type: string
+ *                   enum: [beginner, intermediate, advanced]
+ *                 templateType:
+ *                   type: string
+ *                 originalPrompt:
+ *                   type: string
+ *                 timestamp:
+ *                   type: string
+ *                   format: date-time
+ *                 responseTime:
+ *                   type: integer
+ *       400:
+ *         description: Prompt inválido
+ *       500:
+ *         description: Error del servidor
+ */
 router.post('/prompts', async (req, res) => {
   const { prompt, templateType = 'general' } = req.body;
 
@@ -77,10 +129,122 @@ router.post('/prompts', async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/ialab/progress:
+ *   post:
+ *     summary: Guardar progreso del usuario en IALab
+ *     tags: [IALab]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: string
+ *               moduleId:
+ *                 type: integer
+ *               completed:
+ *                 type: boolean
+ *               score:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Progreso guardado
+ *       400:
+ *         description: Error de validación
+ *       500:
+ *         description: Error del servidor
+ */
 router.post('/progress', saveProgress);
 
+/**
+ * @swagger
+ * /api/ialab/progress/{userId}:
+ *   get:
+ *     summary: Obtener progreso del usuario en IALab
+ *     tags: [IALab]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID del usuario
+ *     responses:
+ *       200:
+ *         description: Progreso del usuario
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *       404:
+ *         description: Progreso no encontrado
+ *       500:
+ *         description: Error del servidor
+ */
 router.get('/progress/:userId', getProgress);
 
+/**
+ * @swagger
+ * /api/ialab/modules:
+ *   get:
+ *     summary: Listar todos los módulos de IALab
+ *     tags: [IALab]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de módulos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   title:
+ *                     type: string
+ *                   description:
+ *                     type: string
+ */
+router.get('/modules', (req, res) => {
+  res.json(modulesList);
+});
+
+/**
+ * @swagger
+ * /api/ialab/modules/{id}:
+ *   get:
+ *     summary: Obtener detalle de un módulo de IALab
+ *     tags: [IALab]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 5
+ *         description: ID del módulo (1-5)
+ *     responses:
+ *       200:
+ *         description: Detalle del módulo
+ *       400:
+ *         description: ID inválido
+ *       404:
+ *         description: Módulo no encontrado
+ */
 router.get('/modules/:id', async (req, res) => {
   const { id } = req.params;
   const moduleId = parseInt(id);
@@ -106,15 +270,179 @@ router.get('/modules/:id', async (req, res) => {
   res.json(module);
 });
 
-router.get('/modules', (req, res) => {
-  res.json(modulesList);
-});
-
+/**
+ * @swagger
+ * /api/ialab/templates:
+ *   post:
+ *     summary: Crear una plantilla de prompt personalizada
+ *     tags: [IALab]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: string
+ *               name:
+ *                 type: string
+ *               content:
+ *                 type: string
+ *               category:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Plantilla creada
+ *       400:
+ *         description: Error de validación
+ *       500:
+ *         description: Error del servidor
+ */
 router.post('/templates', createTemplate);
+
+/**
+ * @swagger
+ * /api/ialab/templates/{userId}:
+ *   get:
+ *     summary: Obtener plantillas de un usuario
+ *     tags: [IALab]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID del usuario
+ *     responses:
+ *       200:
+ *         description: Lista de plantillas
+ *       500:
+ *         description: Error del servidor
+ */
 router.get('/templates/:userId', getTemplates);
+
+/**
+ * @swagger
+ * /api/ialab/templates/{templateId}:
+ *   put:
+ *     summary: Actualizar una plantilla existente
+ *     tags: [IALab]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: templateId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID de la plantilla
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               content:
+ *                 type: string
+ *               category:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Plantilla actualizada
+ *       404:
+ *         description: Plantilla no encontrada
+ *       500:
+ *         description: Error del servidor
+ */
 router.put('/templates/:templateId', updateTemplate);
+
+/**
+ * @swagger
+ * /api/ialab/templates/{templateId}:
+ *   delete:
+ *     summary: Eliminar una plantilla
+ *     tags: [IALab]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: templateId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID de la plantilla
+ *     responses:
+ *       200:
+ *         description: Plantilla eliminada
+ *       404:
+ *         description: Plantilla no encontrada
+ *       500:
+ *         description: Error del servidor
+ */
 router.delete('/templates/:templateId', deleteTemplate);
 
+/**
+ * @swagger
+ * /api/ialab/evaluate-prompt:
+ *   post:
+ *     summary: Evaluar la calidad de un prompt
+ *     tags: [IALab]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - prompt
+ *             properties:
+ *               prompt:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Evaluación del prompt
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 evaluation:
+ *                   type: object
+ *                   properties:
+ *                     scores:
+ *                       type: object
+ *                       properties:
+ *                         clarity:
+ *                           type: integer
+ *                         structure:
+ *                           type: integer
+ *                         completeness:
+ *                           type: integer
+ *                         tone:
+ *                           type: integer
+ *                         actionability:
+ *                           type: integer
+ *                     totalScore:
+ *                       type: string
+ *                     grade:
+ *                       type: string
+ *       400:
+ *         description: Prompt requerido
+ *       500:
+ *         description: Error del servidor
+ */
 router.post('/evaluate-prompt', (req, res) => {
   try {
     const { prompt } = req.body;
@@ -193,6 +521,49 @@ const resourcesData = {
   ]
 };
 
+/**
+ * @swagger
+ * /api/ialab/resources:
+ *   get:
+ *     summary: Obtener recursos educativos de IALab
+ *     tags: [IALab]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: moduleId
+ *         schema:
+ *           type: string
+ *         description: Filtrar por módulo (module1, module2, etc.)
+ *       - in: query
+ *         name: resourceType
+ *         schema:
+ *           type: string
+ *           enum: [pdf, template, infographic, json, guide, html]
+ *         description: Filtrar por tipo de recurso
+ *     responses:
+ *       200:
+ *         description: Lista de recursos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 resources:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                 total:
+ *                   type: integer
+ *                 modules:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *       500:
+ *         description: Error del servidor
+ */
 router.get('/resources', async (req, res) => {
   try {
     const { moduleId, resourceType } = req.query;

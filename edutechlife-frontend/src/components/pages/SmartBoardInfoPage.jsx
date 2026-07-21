@@ -21,7 +21,7 @@ const SmartBoardInfoPage = () => {
 
   return (
     <>
-      <SEO title="SmartBoard" description="Pizarra inteligente interactiva para niños. SmartBoard de Edutechlife combina educación y tecnología para potenciar el aprendizaje infantil." />
+      <SEO title={t('seo.smartboard.title')} description={t('seo.smartboard.desc')} />
       <Suspense fallback={<PageLoader message={t('smartboard.loading')} />}>
         <SmartBoardLandingInfo onBack={handleBack} onNavigate={handleNavigate} />
       </Suspense>

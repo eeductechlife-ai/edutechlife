@@ -1,4 +1,3 @@
-import React from 'react'
 import { motion } from 'framer-motion'
 import { Trophy, CheckCircle2, Star } from 'lucide-react'
 

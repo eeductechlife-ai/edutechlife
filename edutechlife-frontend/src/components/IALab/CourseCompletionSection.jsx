@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
+import { track } from '../../lib/analytics';
 
 const TOTAL_MODULES = 5;
 
@@ -10,6 +11,14 @@ const CourseCompletionSection = ({ hasCertificate, courseProgress, onViewCertifi
   const prefersReducedMotion = useReducedMotion();
   const { t } = useTranslation();
   const [showContent, setShowContent] = useState(prefersReducedMotion);
+  const tracked = useRef(false);
+
+  useEffect(() => {
+    if (hasCertificate && !tracked.current) {
+      tracked.current = true;
+      track('course_complete', { courseProgress, completedModules: TOTAL_MODULES });
+    }
+  }, [hasCertificate, courseProgress]);
 
   useEffect(() => {
     if (prefersReducedMotion) {

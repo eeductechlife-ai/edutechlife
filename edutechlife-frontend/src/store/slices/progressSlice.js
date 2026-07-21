@@ -18,8 +18,7 @@
  *   clearMemoCache, ls (utils)
  */
 import { LS_KEYS, WEIGHTS, INITIAL_MODULE_PROGRESS, MODULE_RESOURCE_COUNTS, XP_MAP } from '@/constants/ialab';
-import { calcModuleScore, calcGlobalProgress, memoize, clearMemoCache } from '@/utils/ialab';
-import { ls } from '@/utils/ialab';
+import { calcModuleScore, calcGlobalProgress, memoize, clearMemoCache, ls } from '@/utils/ialab';
 
 const _tryUnlockNextModule = (moduleId, updated, newProgress) => {
   if (moduleId < 5 && updated.resourcesCompleted && (updated.examScore || 0) >= 80 && (updated.challengeScore || 0) >= 80) {

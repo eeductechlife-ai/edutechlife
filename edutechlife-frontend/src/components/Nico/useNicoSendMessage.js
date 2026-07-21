@@ -2,11 +2,6 @@ import { useRef, useCallback } from "react";
 import { callDeepseekStream } from "../../utils/api";
 import { speakTextConversational } from "../../utils/speech";
 import { matchIntent } from "./nicoKnowledge";
-import {
-  getConversationPhase,
-  shouldInsertProactiveMessage,
-  getProactiveMessageByContext,
-} from "./nicoConversation";
 import { responseCache, CACHE_DURATION, setResponseCache } from "./nicoCache";
 import {
   removeEmojis,
@@ -16,10 +11,21 @@ import {
 import {
   extractUserContext,
   getQuickResponse,
-  getConversationOptions,
   optimizeLongConversation,
 } from "./nicoContext";
 import { PROMPT_NICO_SOPORTE } from "./nicoPrompts";
+import { checkAppointmentResponse } from "./nicoIntentMatcher";
+import {
+  createUserMessage,
+  createAssistantMessage,
+  createStreamingPlaceholder,
+  buildErrorContent,
+} from "./nicoMessageCache";
+import {
+  handlePostStreamActions,
+  advanceMessagePhase,
+  tryInsertProactiveMessage,
+} from "./nicoPhaseManager";
 
 export function useNicoSendMessage({
   message,
@@ -107,11 +113,7 @@ export function useNicoSendMessage({
     const userMessage = trimmedMessage;
     setMessage("");
 
-    const userMessageObj = {
-      role: "user",
-      content: userMessage,
-      timestamp: new Date().toISOString(),
-    };
+    const userMessageObj = createUserMessage(userMessage);
 
     setMessages((prev) => {
       const newMessages = [...prev, userMessageObj];
@@ -183,12 +185,7 @@ export function useNicoSendMessage({
       const noMulletilla = removeGreetingMulletilla(quickResponse);
       const cleanResponse = removeEmojis(noMulletilla);
 
-      const assistantMessageObj = {
-        role: "assistant",
-        content: cleanResponse,
-        timestamp: new Date().toISOString(),
-        isQuickResponse: true,
-      };
+      const assistantMessageObj = createAssistantMessage(cleanResponse, { isQuickResponse: true });
 
       setMessages((prev) => {
         const newMessages = [...prev, assistantMessageObj];
@@ -208,9 +205,7 @@ export function useNicoSendMessage({
         );
       }
 
-      setUserMessageCount((prev) => prev + 1);
-      const currentPhase = getConversationPhase(userMessageCount + 1);
-      setConversationPhase(currentPhase);
+      advanceMessagePhase(userMessageCount, setUserMessageCount, setConversationPhase);
 
       setIsLoading(false);
       return;
@@ -242,70 +237,20 @@ export function useNicoSendMessage({
       }
     }
 
-    const lowerMessage = userMessage.toLowerCase();
-    const lastMessage = messages[messages.length - 1];
-    const isAppointmentResponse = lastMessage?.isAppointmentPrompt;
-
-    if (isAppointmentResponse) {
-      const positiveResponses = [
-        "s\u00ed",
-        "si",
-        "claro",
-        "por supuesto",
-        "me encantar\u00eda",
-        "quiero",
-        "agenda",
-        "agendar",
-        "s\u00ed quiero",
-        "si quiero",
-      ];
-      const negativeResponses = [
-        "no",
-        "ahora no",
-        "despu\u00e9s",
-        "m\u00e1s tarde",
-        "no gracias",
-      ];
-
-      const isPositive = positiveResponses.some((response) =>
-        lowerMessage.includes(response),
-      );
-      const isNegative = negativeResponses.some((response) =>
-        lowerMessage.includes(response),
-      );
-
-      if (isPositive) {
-        const recentLead = messages.find((msg) => msg.isLeadSuccess);
-        let leadData = {};
-
-        if (recentLead) {
-          const nameMatch = recentLead.content.match(/Perfecto (\w+),/);
-          if (nameMatch) {
-            leadData.nombreCompleto = nameMatch[1];
-          }
-        }
-
-        showSchedulerWithContext({
-          leadData,
-          interest: memory?.userProfile?.interests?.[0] || "Consulta general",
-        });
-
-        setIsLoading(false);
-        return;
-      } else if (isNegative) {
-      }
-    }
+    const result = checkAppointmentResponse(
+      userMessage,
+      messages,
+      showSchedulerWithContext,
+      memory,
+      setIsLoading,
+    );
+    if (result.handled) return;
 
     try {
       const localMatch = matchIntent(userMessage);
       if (localMatch) {
         const cleanResponse = removeEmojis(localMatch.response);
-        const assistantMessageObj = {
-          role: "assistant",
-          content: cleanResponse,
-          timestamp: new Date().toISOString(),
-          isLocalResponse: true,
-        };
+        const assistantMessageObj = createAssistantMessage(cleanResponse, { isLocalResponse: true });
         setMessages((prev) => {
           const newMessages = [...prev, assistantMessageObj];
           return optimizeLongConversation(newMessages, 25);
@@ -322,48 +267,26 @@ export function useNicoSendMessage({
           );
         }
 
-        setUserMessageCount((prev) => prev + 1);
         setUserContext((prev) => ({
           ...prev,
           messagesSinceStart: prev.messagesSinceStart + 1,
         }));
 
-        const currentPhase = getConversationPhase(userMessageCount + 1);
-        setConversationPhase(currentPhase);
-        if (
-          shouldInsertProactiveMessage(
-            currentPhase,
-            userMessageCount + 1,
-            lastProactiveIndex,
-          )
-        ) {
-          setTimeout(() => {
-            const proactiveMsg = getProactiveMessageByContext(
-              currentPhase,
-              userContext.detectedTopics,
-              userContext.userName,
-            );
-            if (proactiveMsg) {
-              const proactiveObj = {
-                role: "assistant",
-                content: proactiveMsg,
-                timestamp: new Date().toISOString(),
-                isProactive: true,
-              };
-              setMessages((prev) => [...prev, proactiveObj]);
-              setLastProactiveIndex(userMessageCount + 1);
-              if (audioEnabled) {
-                speakTextConversational(
-                  proactiveMsg,
-                  "nico_premium",
-                  {},
-                  undefined,
-                  setAudioPermissionError,
-                );
-              }
-            }
-          }, 500);
-        }
+        const currentPhase = advanceMessagePhase(
+          userMessageCount,
+          setUserMessageCount,
+          setConversationPhase,
+        );
+        tryInsertProactiveMessage({
+          currentPhase,
+          userMessageCount,
+          lastProactiveIndex,
+          userContext,
+          audioEnabled,
+          setMessages,
+          setLastProactiveIndex,
+          setAudioPermissionError,
+        });
 
         setIsLoading(false);
         return;
@@ -374,11 +297,7 @@ export function useNicoSendMessage({
 
       if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
         const cleanResponse = removeEmojis(cached.response);
-        const assistantMessageObj = {
-          role: "assistant",
-          content: cleanResponse,
-          timestamp: new Date().toISOString(),
-        };
+        const assistantMessageObj = createAssistantMessage(cleanResponse);
         setMessages((prev) => {
           const newMessages = [...prev, assistantMessageObj];
           return optimizeLongConversation(newMessages, 25);
@@ -404,12 +323,7 @@ export function useNicoSendMessage({
           ? `${PROMPT_NICO_SOPORTE}\nContexto: ${memoryContext.substring(0, 500)} ${contextInfo}`
           : `${PROMPT_NICO_SOPORTE} ${contextInfo}`;
 
-        const placeholderObj = {
-          role: "assistant",
-          content: "",
-          timestamp: new Date().toISOString(),
-          isStreaming: true,
-        };
+        const placeholderObj = createStreamingPlaceholder();
         setMessages((prev) => [...prev, placeholderObj]);
 
         let fullResponse = "";
@@ -465,81 +379,29 @@ export function useNicoSendMessage({
         finishStreamAudio(audioEnabled);
       }
 
-      const userMsgCount =
-        messages.filter((msg) => msg.role === "user").length + 1;
-      if (userMsgCount >= 2 && !showedConversationOptions) {
-        setTimeout(() => {
-          const options = getConversationOptions([...messages], userContext);
-          if (options) {
-            setShowedConversationOptions(true);
-            const optionsMessage = {
-              role: "assistant",
-              content:
-                "Para hacer nuestra conversaci\u00f3n m\u00e1s productiva, \u00bfte gustar\u00eda...",
-              timestamp: new Date().toISOString(),
-              hasOptions: true,
-              options: options,
-            };
-            setMessages((prev) => {
-              const newMessages = [...prev, optionsMessage];
-              return optimizeLongConversation(newMessages, 25);
-            });
-          }
-        }, 300);
-      }
-
-      if (currentLead) {
-        updateLeadInfo({
-          lastInteraction: new Date().toISOString(),
-          lastMessage: userMessage,
-        });
-      }
-
-      setUserMessageCount((prev) => prev + 1);
-      const currentPhase = getConversationPhase(userMessageCount + 1);
-      setConversationPhase(currentPhase);
-      if (
-        shouldInsertProactiveMessage(
-          currentPhase,
-          userMessageCount + 1,
-          lastProactiveIndex,
-        )
-      ) {
-        setTimeout(() => {
-          const proactiveMsg = getProactiveMessageByContext(
-            currentPhase,
-            userContext.detectedTopics,
-            userContext.userName,
-          );
-          if (proactiveMsg) {
-            const proactiveObj = {
-              role: "assistant",
-              content: proactiveMsg,
-              timestamp: new Date().toISOString(),
-              isProactive: true,
-            };
-            setMessages((prev) => [...prev, proactiveObj]);
-            setLastProactiveIndex(userMessageCount + 1);
-            if (audioEnabled) {
-              speakTextConversational(
-                proactiveMsg,
-                "nico_premium",
-                {},
-                undefined,
-                setAudioPermissionError,
-              );
-            }
-          }
-        }, 500);
-      }
+      handlePostStreamActions({
+        messages,
+        showedConversationOptions,
+        userContext,
+        userMessageCount,
+        lastProactiveIndex,
+        audioEnabled,
+        currentLead,
+        userMessage,
+        setShowedConversationOptions,
+        setMessages,
+        setUserMessageCount,
+        setConversationPhase,
+        setLastProactiveIndex,
+        setAudioPermissionError,
+        updateLeadInfo,
+      });
     } catch (error) {
       const isTimeout =
         error.message?.includes("tiempo") ||
         error.message?.includes("timeout") ||
         error.message?.includes("Timeout");
-      const errorMessage = isTimeout
-        ? `El servicio esta tardando mucho en responder. \u00bfQuieres preguntarme por nuestros servicios educativos como VAK, STEM, tutor\u00edas o bienestar?`
-        : `Hubo un problema de conexion. Puedo contarte sobre VAK, STEM, tutor\u00edas y bienestar. \u00bfTe interesa alguno?`;
+      const errorMessage = buildErrorContent(isTimeout);
 
       const noMulletillaError = removeGreetingMulletilla(errorMessage);
       const cleanErrorMessage = removeEmojis(noMulletillaError);

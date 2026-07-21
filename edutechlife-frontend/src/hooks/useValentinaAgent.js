@@ -72,7 +72,8 @@ export default function useValentinaAgent(options = {}) {
       }
     }
     
-    speakingPromiseRef.current = new Promise(async (resolve) => {
+    speakingPromiseRef.current = new Promise((resolve) => {
+      (async () => {
       try {
         speakingRef.current = true;
         setIsValentinaSpeaking(true);
@@ -92,6 +93,7 @@ export default function useValentinaAgent(options = {}) {
         }
         resolve();
       }
+    })();
     });
     
     await speakingPromiseRef.current;

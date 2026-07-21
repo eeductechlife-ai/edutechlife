@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Brain, FileText, Play, Headphones, Star, AlertTriangle,
   BookOpen, Link as LinkIcon, Lightbulb

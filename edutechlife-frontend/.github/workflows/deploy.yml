@@ -1,11 +1,6 @@
 name: Deploy to Production
 
-on:
-  push:
-    branches: [main]
-    paths-ignore:
-      - '**.md'
-      - '.gitignore'
+on: workflow_dispatch
 
 jobs:
   deploy:

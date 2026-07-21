@@ -9,7 +9,7 @@
 ### 2. Credenciales Actuales (del archivo `.env.local`)
 ```
 VITE_CLERK_PUBLISHABLE_KEY=pk_test_c3RhYmxlLW1pbmstNzEuY2xlcmsuYWNjb3VudHMuZGV2JA
-VITE_CLERK_SECRET_KEY=sk_test_NDQcl4lUpTr3iFfY8CLE4TSwW69YtcZWIgJEMRPwMT
+VITE_CLERK_SECRET_KEY=sk_test_***_REEMPLAZA_CON_TU_CLAVE_REAL
 VITE_SUPABASE_URL=https://srirrwpgswlnuqfgtule.supabase.co
 VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNyaXJyd3Bnc3dsbnVxZmd0dWxlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzNTE5MjcsImV4cCI6MjA5MDkyNzkyN30.ElxGbhsfncV2m3OVr3P5X3HqAfwGMbAOGBEGzKqRV0A
 ```

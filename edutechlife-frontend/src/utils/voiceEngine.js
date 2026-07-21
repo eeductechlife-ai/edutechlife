@@ -100,11 +100,16 @@ class VoiceEngine {
   }
 
   speak(text, options = {}) {
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
+      (async () => {
       const profile = options.profile || this.currentProfile;
       
       const cleanText = text
-        .replace(/[#*`_~🎉🎯💡✨👏👍🎨🎧🎮🎬📚©®™°•↑↓→←↔↕]/g, '')
+        .replace(/[#*`_~]/g, '')
+        .replace(/[©®™°•↑↓→←↔↕]/g, '')
+        .replace(/🎉/g, '').replace(/🎯/g, '').replace(/💡/g, '').replace(/✨/g, '')
+        .replace(/👏/g, '').replace(/👍/g, '').replace(/🎨/g, '').replace(/🎧/g, '')
+        .replace(/🎮/g, '').replace(/🎬/g, '').replace(/📚/g, '')
         .replace(/\n+/g, ' ')
         .trim();
 
@@ -128,6 +133,7 @@ class VoiceEngine {
         if (this.onSpeakEnd) this.onSpeakEnd();
         resolve();
       }
+      })();
     });
   }
 

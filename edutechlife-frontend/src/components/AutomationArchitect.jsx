@@ -161,17 +161,19 @@ Formato: Título, descripción, y secciones claras con viñetas.`;
                         <p className="aa-subtitle">{t('automation.architect.step1_subtitle')}</p>
                         <div className="aa-form-grid">
                             <div className="aa-form-group">
-                                <label>{t('automation.architect.empresa_label')}</label>
+                                <label htmlFor="aa-empresa">{t('automation.architect.empresa_label')}</label>
                                 <input
                                     type="text"
+                                    id="aa-empresa"
                                     value={formData.empresa}
                                     onChange={(e) => handleInputChange('empresa', e.target.value)}
                                     placeholder={t('automation.architect.empresa_placeholder')}
                                 />
                             </div>
                             <div className="aa-form-group">
-                                <label>{t('automation.architect.sector_label')}</label>
+                                <label htmlFor="aa-industria">{t('automation.architect.sector_label')}</label>
                                 <select
+                                    id="aa-industria"
                                     value={formData.industria}
                                     onChange={(e) => handleInputChange('industria', e.target.value)}
                                 >
@@ -181,10 +183,11 @@ Formato: Título, descripción, y secciones claras con viñetas.`;
                                 </select>
                             </div>
                             <div className="aa-form-group">
-                                <label>{t('automation.architect.empleados_label')}</label>
+                                <label htmlFor="aa-empleados">{t('automation.architect.empleados_label')}</label>
                                 <div className="aa-slider-container">
                                     <input
                                         type="range"
+                                        id="aa-empleados"
                                         min="10"
                                         max="500"
                                         step="10"
@@ -215,8 +218,9 @@ Formato: Título, descripción, y secciones claras con viñetas.`;
                         </div>
 
                         <div className="aa-form-group">
-                            <label>{t('automation.architect.objetivos_label')}</label>
+                            <label htmlFor="aa-objetivos">{t('automation.architect.objetivos_label')}</label>
                             <textarea
+                                id="aa-objetivos"
                                 value={formData.objetivos}
                                 onChange={(e) => handleInputChange('objetivos', e.target.value)}
                                 placeholder={t('automation.architect.objetivos_placeholder')}

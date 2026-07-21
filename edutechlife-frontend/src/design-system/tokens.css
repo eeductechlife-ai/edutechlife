@@ -109,10 +109,10 @@
   
   /* Familias */
   --font-family-display: 'Montserrat', system-ui, -apple-system, sans-serif;
-  --font-family-body: 'Open Sans', system-ui, -apple-system, sans-serif;
+  --font-family-body: 'Inter', 'Geist', system-ui, -apple-system, sans-serif;
   --font-family-mono: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
   --font-display: 'Montserrat', system-ui, -apple-system, sans-serif;
-  --font-body: 'Open Sans', system-ui, -apple-system, sans-serif;
+  --font-body: 'Inter', 'Geist', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
   
   /* Tamaños */
@@ -388,7 +388,7 @@
 
   /* Typography */
   --ialab-font-display: 'Montserrat', system-ui, sans-serif;
-  --ialab-font-body: 'Open Sans', system-ui, sans-serif;
+  --ialab-font-body: 'Inter', 'Geist', system-ui, sans-serif;
   --ialab-font-mono: 'JetBrains Mono', monospace;
 
   /* Border radius */

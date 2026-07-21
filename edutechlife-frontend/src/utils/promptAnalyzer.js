@@ -38,7 +38,7 @@ const EVALUATION_CRITERIA = {
   STRUCTURE: {
     weight: 0.2,
     indicators: [
-      { pattern: /(\d+\.|\-|\*)\s/, score: 25 }, // Usa listas numeradas o viñetas
+      { pattern: /(\d+\.|-|\*)\s/, score: 25 }, // Usa listas numeradas o viñetas
       { pattern: /(paso|etapa|fase)/i, score: 20 }, // Estructura paso a paso
       { pattern: /(primero|luego|después|finalmente)/i, score: 15 }, // Secuencia temporal
       { pattern: /(introducción|desarrollo|conclusión)/i, score: 30 }, // Estructura formal

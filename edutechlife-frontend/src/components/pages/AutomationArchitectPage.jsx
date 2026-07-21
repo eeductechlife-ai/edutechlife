@@ -34,7 +34,7 @@ const AutomationArchitectPage = () => {
 
   return (
     <>
-      <SEO title="Automation Architect" description="Automatización educativa con Inteligencia Artificial. Descubre cómo Edutechlife puede automatizar tus procesos educativos." />
+      <SEO title={t('seo.automation.title')} description={t('seo.automation.desc')} />
       <div className="min-h-screen bg-white">
       <AutomationHero
         onStartDiagnosis={() => {

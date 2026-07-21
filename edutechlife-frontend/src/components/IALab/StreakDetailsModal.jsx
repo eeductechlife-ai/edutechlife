@@ -370,7 +370,7 @@ const StreakDetailsModal = ({ isOpen, onClose }) => {
                               )}
                             </div>
                             <div className="w-7 h-7 rounded-full bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center flex-shrink-0 text-white text-[10px] font-bold overflow-hidden">
-                              {entry.avatar ? <img src={entry.avatar} alt="" className="w-full h-full object-cover" /> : entry.name.charAt(0).toUpperCase()}
+                              {entry.avatar ? <img src={entry.avatar} alt={entry.name} className="w-full h-full object-cover" /> : entry.name.charAt(0).toUpperCase()}
                             </div>
                             <div className="flex-1 min-w-0">
                               <p className="text-sm font-semibold text-slate-700 truncate">

@@ -1,16 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import SEO from '../SEO';
+import { useTranslation } from '../../i18n/I18nProvider';
 
-/**
- * Página 404 - Not Found
- * Ruta comodín para rutas no encontradas
- */
 const NotFoundPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   
   return (
     <>
-      <SEO title="Página no encontrada" description="La página que buscas no existe. Regresa al inicio de Edutechlife." />
+      <SEO title={t('seo.notfound.title')} description={t('seo.notfound.desc')} />
       <div className="min-h-screen flex items-center justify-center bg-[#F8FAFC]">
         <div className="text-center">
           <h1 className="text-4xl font-bold text-[#004B63] mb-4">404</h1>

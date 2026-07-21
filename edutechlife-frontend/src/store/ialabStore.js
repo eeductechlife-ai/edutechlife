@@ -15,11 +15,9 @@
  */
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { LS_KEYS } from '@/constants/ialab';
-import { ls } from '@/utils/ialab';
+import { LS_KEYS, LAST_MODULE_ID } from "../constants/ialab";
+import { ls, analyzeQuizFailures, generateRecommendations } from '@/utils/ialab';
 import { MODULE_QUESTIONS, modules, ALL_LESSONS } from '@/data/ialab';
-import { LAST_MODULE_ID } from '@/constants/ialab';
-import { analyzeQuizFailures, generateRecommendations } from '@/utils/ialab';
 import { createPersistenceSlice } from './slices/persistenceSlice';
 import { createGamificationSlice } from './slices/gamificationSlice';
 import { createLessonSlice } from './slices/lessonSlice';

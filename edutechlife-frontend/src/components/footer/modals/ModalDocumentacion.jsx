@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { useTranslation } from '../../../i18n/I18nProvider';
+import useFocusTrap from '../../../hooks/useFocusTrap';
+import useBodyScrollLock from '../../../hooks/useBodyScrollLock';
 
 const footerWhiteText = { color: '#FFFFFF' };
 const footerPrimaryText = { color: '#004B63' };
@@ -18,12 +20,15 @@ export default function ModalDocumentacion({ onClose, content }) {
   const helpArticles = content.helpArticles;
   const helpArticleContents = content.helpArticleContents;
 
+  const focusTrapRef = useFocusTrap(true);
+  useBodyScrollLock(true);
+
   if (selectedDoc) {
     const doc = helpArticleContents[selectedDoc];
     if (!doc) return null;
 
     return (
-      <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-4" onClick={() => setSelectedDoc(null)}>
+      <div ref={focusTrapRef} role="dialog" aria-modal="true" aria-label={t('footer.docs')} className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-4" onClick={() => setSelectedDoc(null)}>
         <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
         <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white" onClick={(e) => e.stopPropagation()}>
           <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b" style={{ backgroundColor: '#004B63', borderColor: '#003d52' }}>
@@ -31,7 +36,7 @@ export default function ModalDocumentacion({ onClose, content }) {
               <img src="/images/logo-edutechlife.webp" alt="Edutechlife" className="h-8 w-auto" style={footerLogoInvert} />
               <span className="text-white font-medium text-sm">{t('footer.docs')}</span>
             </div>
-            <button onClick={() => setSelectedDoc(null)} className="w-9 h-9 rounded-full flex items-center justify-center transition-colors hover:bg-white/20" style={footerWhiteText}>
+            <button onClick={() => setSelectedDoc(null)} aria-label="Cerrar" className="w-9 h-9 rounded-full flex items-center justify-center transition-colors hover:bg-white/20" style={footerWhiteText}>
               <Icon name="fa-xmark" className="text-lg" />
             </button>
           </div>
@@ -159,10 +164,10 @@ export default function ModalDocumentacion({ onClose, content }) {
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" onClick={onClose}>
+    <div ref={focusTrapRef} role="dialog" aria-modal="true" aria-label={t('footer.docs')} className="fixed inset-0 z-[100] flex items-center justify-center p-4" onClick={onClose}>
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
       <div className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl p-6 md:p-8 bg-white" onClick={(e) => e.stopPropagation()}>
-        <button onClick={onClose} className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center transition-colors hover:bg-gray-100" style={footerPrimaryText}>
+        <button onClick={onClose} aria-label="Cerrar" className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center transition-colors hover:bg-gray-100" style={footerPrimaryText}>
           <Icon name="fa-xmark" className="text-xl" />
         </button>
         <div className="flex items-center gap-4 mb-6">

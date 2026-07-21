@@ -1,0 +1,36 @@
+/* ==================== OPTIMIZED GLASSMORPHISM ==================== */
+/* Solo para elementos flotantes pequeños (navbar, menus) */
+.glass-nav {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+}
+
+/* Tarjetas grandes - color solido sin blur (0% GPU) */
+.glass-card {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(77, 168, 196, 0.2);
+}
+
+.glass-card-dark {
+  background: rgba(10, 22, 40, 0.95);
+  border: 1px solid rgba(77, 168, 196, 0.2);
+}
+
+/* Modal overlay sin blur */
+.solid-overlay {
+  background: rgba(248, 250, 252, 0.95);
+}
+
+/* Deshabilitar blur durante scroll (si se usa scroll throttling) */
+body.is-scrolling .glass-card,
+body.is-scrolling .glass-card-dark {
+  backdrop-filter: none !important;
+}
+
+/* --- HARDWARE ACCELERATION FOR GLASSMORPHISM --- */
+[class*="backdrop-blur-"] {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}

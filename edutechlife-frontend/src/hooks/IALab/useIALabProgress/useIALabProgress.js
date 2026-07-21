@@ -28,8 +28,19 @@ import {
   setSupabaseClient,
   createProgressService,
 } from "../../../lib/progress";
-import { PROGRESS_STATUS, countModuleResources } from "./progressCalculations";
-import { saveToCache, loadFromCache } from "./supabaseQueries";
+import { PROGRESS_STATUS } from "./progressCalculations";
+import { loadFromCache } from "./supabaseQueries";
+import {
+  trackResourceViewed as trackResourceViewedFn,
+  trackExamResult as trackExamResultFn,
+  trackChallengeResult as trackChallengeResultFn,
+  trackCommunityComment as trackCommunityCommentFn,
+  loadModuleBreakdown as loadModuleBreakdownFn,
+} from "./progressTracking";
+import {
+  restoreFromCache as restoreFromCacheFn,
+  persistProgressToCache,
+} from "./progressStorage";
 
 /**
  * HOOK: useIALabProgress
@@ -81,21 +92,11 @@ export const useIALabProgress = () => {
   // ==================== PERSISTENCIA LOCAL ====================
 
   const restoreFromCache = useCallback(() => {
-    const cached = loadFromCache(user?.id);
-    if (cached) {
-      if (typeof cached.courseProgress === "number")
-        setCourseProgress(cached.courseProgress);
-      if (Array.isArray(cached.completedModules))
-        setCompletedModules(cached.completedModules);
-      if (Array.isArray(cached.visitedModules)) {
-        setVisitedModules((prev) => {
-          const merged = [...new Set([...prev, ...cached.visitedModules])];
-          return merged.sort((a, b) => a - b);
-        });
-      }
-      return true;
-    }
-    return false;
+    return restoreFromCacheFn(user?.id, {
+      setCourseProgress,
+      setCompletedModules,
+      setVisitedModules,
+    });
   }, [user?.id, setCourseProgress, setCompletedModules, setVisitedModules]);
 
   // ==================== CARGAR PROGRESO INICIAL ====================
@@ -176,12 +177,10 @@ export const useIALabProgress = () => {
 
         if (cancelledRef.current) return;
 
-        saveToCache(
-          {
-            courseProgress: globalProgress > 0 ? globalProgress : 0,
-            completedModules: completed,
-            visitedModules: visited,
-          },
+        persistProgressToCache(
+          globalProgress > 0 ? globalProgress : 0,
+          completed,
+          visited,
           user?.id,
         );
 
@@ -376,107 +375,35 @@ export const useIALabProgress = () => {
 
   const trackResourceViewed = useCallback(
     async (moduleId, resourceId, resourceType) => {
-      if (!user?.id) return { success: false, error: "Usuario no autenticado" };
-      if (!progressService)
-        return { success: false, error: "Servicio no disponible" };
-      try {
-        const total = countModuleResources(moduleId);
-        const result = await progressService.saveResourceViewed(
-          moduleId,
-          resourceId,
-          resourceType,
-          total,
-          user.id,
-        );
-        if (result.success) {
-          if (result.viewedCount >= total) {
-            updateModuleActivity(moduleId, "resourcesCompleted", true);
-          }
-        } else {
-          updateModuleActivity(moduleId, "resourcesCompleted", true);
-        }
-        return result;
-      } catch (error) {
-        console.error("Error tracking resource:", error);
-        return { success: false, error: error.message };
-      }
+      return trackResourceViewedFn(moduleId, resourceId, resourceType, user, progressService, updateModuleActivity);
     },
     [user, updateModuleActivity, progressService],
   );
 
   const trackExamResult = useCallback(
     async (moduleId, score, passed) => {
-      if (!user?.id) return { success: false, error: "Usuario no autenticado" };
-      if (!progressService)
-        return { success: false, error: "Servicio no disponible" };
-      updateModuleActivity(moduleId, "exam", score >= 80, score);
-      try {
-        const result = await progressService.saveExamProgress(
-          moduleId,
-          score,
-          passed,
-          user.id,
-        );
-        return result;
-      } catch (error) {
-        console.error("Error tracking exam:", error);
-        return { success: true, local: true };
-      }
+      return trackExamResultFn(moduleId, score, passed, user, progressService, updateModuleActivity);
     },
     [user, updateModuleActivity, progressService],
   );
 
   const trackChallengeResult = useCallback(
     async (moduleId, score) => {
-      if (!user?.id) return { success: false, error: "Usuario no autenticado" };
-      if (!progressService)
-        return { success: false, error: "Servicio no disponible" };
-      updateModuleActivity(moduleId, "challenge", score >= 80, score);
-      try {
-        const result = await progressService.saveChallengeProgress(
-          moduleId,
-          score,
-          user.id,
-        );
-        return result;
-      } catch (error) {
-        console.error("Error tracking challenge:", error);
-        return { success: true, local: true };
-      }
+      return trackChallengeResultFn(moduleId, score, user, progressService, updateModuleActivity);
     },
     [user, updateModuleActivity, progressService],
   );
 
   const trackCommunityComment = useCallback(
     async (moduleId) => {
-      if (!user?.id) return { success: false, error: "Usuario no autenticado" };
-      if (!progressService)
-        return { success: false, error: "Servicio no disponible" };
-      updateModuleActivity(moduleId, "community", true);
-      try {
-        const result = await progressService.saveCommunityProgress(
-          moduleId,
-          user.id,
-        );
-        return result;
-      } catch (error) {
-        console.error("Error tracking community:", error);
-        return { success: true, local: true };
-      }
+      return trackCommunityCommentFn(moduleId, user, progressService, updateModuleActivity);
     },
     [user, updateModuleActivity, progressService],
   );
 
   const loadModuleBreakdown = useCallback(
     async (moduleId) => {
-      if (!user?.id) return null;
-      if (!progressService) return null;
-      try {
-        return await progressService.getModuleBreakdown(moduleId, user.id);
-      } catch (error) {
-        console.error("Error loading module breakdown:", error);
-        return null;
-      }
+      return loadModuleBreakdownFn(moduleId, user, progressService);
     },
     [user, progressService],
   );
@@ -507,14 +434,7 @@ export const useIALabProgress = () => {
 
   useEffect(() => {
     return () => {
-      saveToCache(
-        {
-          courseProgress,
-          completedModules,
-          visitedModules,
-        },
-        user?.id,
-      );
+      persistProgressToCache(courseProgress, completedModules, visitedModules, user?.id);
     };
   }, [courseProgress, completedModules, visitedModules, user?.id]);
 

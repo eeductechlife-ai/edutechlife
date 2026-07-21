@@ -153,7 +153,7 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
 
                         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center flex-shrink-0 text-white text-xs font-bold overflow-hidden">
                           {entry.avatar ? (
-                            <img src={entry.avatar} alt="" className="w-full h-full object-cover" />
+                            <img src={entry.avatar} alt={entry.name} className="w-full h-full object-cover" />
                           ) : (
                             entry.name.charAt(0).toUpperCase()
                           )}

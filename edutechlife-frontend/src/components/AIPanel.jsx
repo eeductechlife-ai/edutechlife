@@ -171,15 +171,15 @@ const AIPanel = ({ title, icon = 'fa-brain-circuit', placeholder, systemPrompt, 
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
                 </div>
                 <div>
-                    <h1 style="font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; margin: 0; color: #061322; letter-spacing: -0.04em;">EDUTECHLIFE</h1>
-                    <p style="font-family: 'DM Mono', monospace; font-size: 10px; color: #0090B8; letter-spacing: 0.15em; margin: 0; text-transform: uppercase;">Inteligencia Analítica</p>
+                    <h1 style="font-family: 'Montserrat', system-ui, sans-serif; font-size: 24px; font-weight: 800; margin: 0; color: #061322; letter-spacing: -0.04em;">EDUTECHLIFE</h1>
+                    <p style="font-family: 'JetBrains Mono', 'SF Mono', Monaco, monospace; font-size: 10px; color: #0090B8; letter-spacing: 0.15em; margin: 0; text-transform: uppercase;">Inteligencia Analítica</p>
                 </div>
             </div>
-            <h2 style="font-family: 'Syne', sans-serif; font-size: 18px; color: #061322; margin-bottom: 20px;">Reporte: ${title}</h2>
+            <h2 style="font-family: 'Montserrat', system-ui, sans-serif; font-size: 18px; color: #061322; margin-bottom: 20px;">Reporte: ${title}</h2>
             <div style="line-height: 1.6; font-size: 14px;" class="pdf-content">
                 ${DOMPurify.sanitize(marked.parse(res))}
             </div>
-            <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb; font-family: 'DM Mono', monospace; font-size: 10px; color: #6b7280; text-align: center;">
+            <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb; font-family: 'JetBrains Mono', 'SF Mono', Monaco, monospace; font-size: 10px; color: #6b7280; text-align: center;">
                 Generado automáticamente por IA Lab Pro de Edutechlife — ${new Date().toLocaleDateString('es-CO')}
             </div>
         `;
@@ -223,6 +223,7 @@ const AIPanel = ({ title, icon = 'fa-brain-circuit', placeholder, systemPrompt, 
                 <button 
                     onClick={() => iniciarReconocimiento(setQ, run, setIsListening)} 
                     disabled={load} 
+                    aria-label="Hablar por micrófono"
                     className={`ai-run-btn ${isListening ? 'animate-pulse' : ''}`} 
                     style={{ flex: 'none', width: 'auto', padding: '0 1.5rem', marginTop: 0, background: isListening ? 'rgba(239, 68, 68, 0.2)' : 'rgba(255,255,255,0.05)', border: isListening ? '1px solid #EF4444' : '1px solid rgba(255,255,255,0.1)' }}
                     title="Hablar por micrófono"
@@ -233,7 +234,7 @@ const AIPanel = ({ title, icon = 'fa-brain-circuit', placeholder, systemPrompt, 
 
             {load && <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '1rem', marginTop: '1rem', background: 'rgba(0,194,224,.06)', border: '1px solid rgba(0,194,224,.15)', borderRadius: '1rem' }}>
                 <div className="ai-loading-bars"><span /><span /><span /><span /><span /></div>
-                <span style={{ fontFamily: 'DM Mono', fontSize: '10px', color: 'var(--primary)', letterSpacing: '.15em', textTransform: 'uppercase' }}>{msg}</span>
+                <span style={{ fontFamily: '"JetBrains Mono", "SF Mono", Monaco, monospace', fontSize: '10px', color: 'var(--primary)', letterSpacing: '.15em', textTransform: 'uppercase' }}>{msg}</span>
             </div>}
             
             {displayedRes && !load && (
@@ -250,7 +251,7 @@ const AIPanel = ({ title, icon = 'fa-brain-circuit', placeholder, systemPrompt, 
                             </button>
                             <button onClick={handleDownloadPDF} disabled={pdfLoad} style={{
                                 display: 'flex', alignItems: 'center', gap: 6, background: 'linear-gradient(135deg,rgba(0,194,224,.1),rgba(0,224,255,.05))',
-                                border: '1px solid rgba(0,194,224,.3)', color: 'var(--primary)', fontFamily: 'DM Mono', fontSize: '9px',
+                                border: '1px solid rgba(0,194,224,.3)', color: 'var(--primary)', fontFamily: '"JetBrains Mono", "SF Mono", Monaco, monospace', fontSize: '9px',
                                 fontWeight: 600, textTransform: 'uppercase', letterSpacing: '.1em', padding: '6px 14px', borderRadius: '100px',
                                 cursor: 'pointer', transition: 'all .3s'
                             }}

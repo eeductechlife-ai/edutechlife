@@ -126,14 +126,14 @@ export default {
           border: 'var(--brand-border)',
         },
       },
-       fontFamily: {
-        sans: ['Inter', 'Geist', 'system-ui', '-apple-system', 'sans-serif'],
-        display: ['Inter', 'Geist', 'system-ui', '-apple-system', 'sans-serif'],
-        body: ['Inter', 'Geist', 'system-ui', '-apple-system', 'sans-serif'],
-        mono: ['JetBrains Mono', 'monospace'],
-        inter: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        geist: ['Geist', 'system-ui', '-apple-system', 'sans-serif'],
-      },
+        fontFamily: {
+         sans: ['Inter', 'Geist', 'system-ui', '-apple-system', 'sans-serif'],
+         display: ['Montserrat', 'system-ui', '-apple-system', 'sans-serif'],
+         body: ['Inter', 'Geist', 'system-ui', '-apple-system', 'sans-serif'],
+         mono: ['JetBrains Mono', 'SF Mono', 'Monaco', 'monospace'],
+         inter: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+         geist: ['Geist', 'system-ui', '-apple-system', 'sans-serif'],
+       },
       backgroundColor: {
         petroleum: 'var(--color-petroleum)',
         'petroleum-dark': 'var(--color-petroleum-dark)',

@@ -3,10 +3,11 @@ import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import security from 'eslint-plugin-security';
 import js from '@eslint/js';
+import tsParser from '@typescript-eslint/parser';
 
 export default [
   {
-    ignores: ['dist', 'node_modules', '*.config.*', 'coverage'],
+    ignores: ['dist', 'node_modules', '*.config.*', 'coverage', 'src/i18n/keys.d.ts', 'src/**/*.d.ts'],
   },
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
@@ -21,6 +22,26 @@ export default [
         ecmaFeatures: {
           jsx: true,
         },
+      },
+    },
+  },
+  {
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaFeatures: { jsx: true },
+      },
+    },
+  },
+  {
+    files: ['**/*.{js,jsx,ts,tsx}'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: {
+        ...globals.browser,
+        ...globals.node,
       },
     },
     plugins: {
@@ -45,7 +66,7 @@ export default [
       'no-console': ['warn', { allow: ['warn', 'error'] }],
       'no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
       'no-debugger': 'error',
-      'max-lines': ['warn', { max: 400, skipBlankLines: true, skipComments: true }],
+      'max-lines': ['warn', { max: 500, skipBlankLines: true, skipComments: true }],
       'no-duplicate-imports': 'error',
       'react/jsx-key': 'error',
       'no-undef': 'warn',

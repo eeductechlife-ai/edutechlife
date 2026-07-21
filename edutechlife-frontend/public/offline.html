@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#004B63" />
-  <title>Edutechlife — Sin Conexión</title>
+  <title>Edutechlife — Offline</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -39,14 +39,30 @@
       cursor: pointer;
     }
     .retry-btn:active { transform: scale(0.97); }
+    [lang="en"] { display: none; }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="logo">E</div>
-    <h1>Sin Conexión</h1>
-    <p>Parece que no tienes conexión a internet en este momento. Vuelve a intentarlo cuando estés conectado.</p>
-    <button class="retry-btn" onclick="window.location.reload()">Reintentar</button>
+    <h1 id="title-es">Sin Conexión</h1>
+    <h1 id="title-en" lang="en" style="display:none">No Connection</h1>
+    <p id="desc-es">Parece que no tienes conexión a internet en este momento. Vuelve a intentarlo cuando estés conectado.</p>
+    <p id="desc-en" lang="en" style="display:none">You appear to be offline. Please try again when you have an internet connection.</p>
+    <button class="retry-btn" onclick="window.location.reload()" id="btn-es">Reintentar</button>
+    <button class="retry-btn" onclick="window.location.reload()" id="btn-en" style="display:none" lang="en">Retry</button>
   </div>
+  <script>
+    var lang = (navigator.language || '').startsWith('en') ? 'en' : 'es';
+    if (lang === 'en') {
+      document.title = 'Edutechlife — No Connection';
+      document.getElementById('title-es').style.display = 'none';
+      document.getElementById('title-en').style.display = '';
+      document.getElementById('desc-es').style.display = 'none';
+      document.getElementById('desc-en').style.display = '';
+      document.getElementById('btn-es').style.display = 'none';
+      document.getElementById('btn-en').style.display = '';
+    }
+  </script>
 </body>
 </html>

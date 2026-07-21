@@ -18,8 +18,16 @@ class ErrorBoundary extends Component {
     console.error('ErrorBoundary capturó un error:', error, errorInfo);
     this.setState({ errorInfo });
     
-    // Puedes enviar el error a un servicio de logging aquí
-    // logErrorToService(error, errorInfo);
+    try {
+      import('../../lib/analytics').then(({ track }) => {
+        track('error_boundary', {
+          message: error?.message,
+          componentStack: errorInfo?.componentStack,
+        });
+      });
+    } catch (e) {
+      // analytics not available
+    }
   }
 
   handleRetry = () => {

@@ -6,12 +6,16 @@ const sanitizeMiddleware = require('./middleware/sanitize');
 const { requireAuth } = require('./middleware/auth');
 const { apiLimiter, deepseekLimiter, authLimiter } = require('./middleware/rateLimiter');
 const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./docs/swagger');
 const healthRoutes = require('./routes/health');
 const chatRoutes = require('./routes/chat');
 const ialabRoutes = require('./routes/ialab');
 const voiceRoutes = require('./routes/voice');
 const ttsRoutes = require('./routes/tts');
 const smartboardRoutes = require('./routes/smartboard');
+const stripeRoutes = require('./routes/stripe');
+const { webhookHandler } = require('./routes/stripe');
 
 const ALLOWED_ORIGINS = [
   'https://edutechlife.co',
@@ -37,6 +41,14 @@ app.use(cors({
 }));
 
 app.use(helmet());
+
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: 'Edutechlife API Docs',
+}));
+
+app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), webhookHandler);
+
 app.use(express.json({ limit: '1mb' }));
 app.use(sanitizeMiddleware);
 
@@ -56,6 +68,7 @@ app.use('/api/ialab', ialabRoutes);
 app.use('/api/voice-token', voiceRoutes);
 app.use('/api/tts', ttsRoutes);
 app.use('/api/smartboard', smartboardRoutes);
+app.use('/api/stripe', stripeRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

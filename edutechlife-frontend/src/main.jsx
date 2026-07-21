@@ -10,6 +10,7 @@ import { NotificationProvider } from './context/NotificationContext'
 import { ThemeProvider } from './context/ThemeContext'
 import { I18nProvider } from './i18n/I18nProvider'
 import ErrorBoundary from './components/forum/ErrorBoundary'
+import { AnalyticsProvider } from './providers/AnalyticsProvider'
 import { registerSW } from './utils/registerSW'
 import './index.css'
 
@@ -28,19 +29,21 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <HelmetProvider>
       <BrowserRouter>
-        <ClerkProviderWrapper>
-          <AuthProvider>
-            <NotificationProvider>
-              <ThemeProvider>
-                <I18nProvider>
-                  <ErrorBoundary>
-                    <App />
-                  </ErrorBoundary>
-                </I18nProvider>
-              </ThemeProvider>
-            </NotificationProvider>
-          </AuthProvider>
-        </ClerkProviderWrapper>
+        <I18nProvider>
+          <ClerkProviderWrapper>
+            <AuthProvider>
+              <NotificationProvider>
+                <ThemeProvider>
+                  <AnalyticsProvider>
+                    <ErrorBoundary>
+                      <App />
+                    </ErrorBoundary>
+                  </AnalyticsProvider>
+                </ThemeProvider>
+              </NotificationProvider>
+            </AuthProvider>
+          </ClerkProviderWrapper>
+        </I18nProvider>
       </BrowserRouter>
     </HelmetProvider>
   </React.StrictMode>,

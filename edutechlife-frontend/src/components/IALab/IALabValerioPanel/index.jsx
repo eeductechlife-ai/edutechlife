@@ -100,19 +100,10 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
           }),
           signal: AbortSignal.timeout(12000),
         }).then(r => r.body?.cancel?.()).catch(() => {});
-        const OVA_INTRO_TEXTS = {
-          1: { es: 'Bienvenido al desafío de Prompt Engineering. Aquí pondrás a prueba todo lo aprendido sobre la creación de prompts efectivos.', en: 'Welcome to the Prompt Engineering challenge. Here you will test everything you learned about creating effective prompts.' },
-          2: { es: 'Bienvenido al desafío de ChatGPT. Aquí aprenderás a crear tu propio GPT personalizado.', en: 'Welcome to the ChatGPT challenge. You will create your own custom GPT.' },
-          3: { es: 'Bienvenido al desafío de Gemini. Te convertirás en un investigador digital.', en: 'Welcome to the Gemini challenge. You will become a digital researcher.' },
-          4: { es: 'Bienvenido al desafío de NotebookLM. Aprenderás a curar información y crear un podcast académico.', en: 'Welcome to the NotebookLM challenge. You will curate information and create an academic podcast.' },
-          5: { es: 'Bienvenido al desafío de Ética en IA. Analizarás un caso real de sesgo algorítmico.', en: 'Welcome to the AI Ethics challenge. You will analyze a real case of algorithmic bias.' }
-        };
-        const moduleTexts = OVA_INTRO_TEXTS[activeMod];
-        if (moduleTexts) {
-          prefetchTts(moduleTexts.es, 'valerio');
-          if (locale !== 'es') prefetchTts(moduleTexts.en, 'valerio');
+        if (activeMod) {
+          prefetchTts(t(`ialab.valerio.ova_intro_${activeMod}`), 'valerio');
         }
-        prefetchTts(locale === 'en' ? 'Read the instructions carefully and complete each step. Good luck!' : 'Lee las instrucciones cuidadosamente y completa cada paso. ¡Buena suerte!', 'sistema');
+        prefetchTts(t('ialab.valerio.system_instructions'), 'sistema');
       }
     } else {
       warmupDoneRef.current = false;
@@ -191,9 +182,7 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
       const alreadyWelcomed = useIALabStore.getState().getValerioWelcomed();
       if (!alreadyWelcomed) {
         useIALabStore.getState().setValerioWelcomed();
-        const introGreeting = locale === 'en'
-          ? 'Hello! I am Valerio, how can I help you?'
-          : '¡Hola! Soy Valerio, ¿en qué puedo ayudarte?';
+        const introGreeting = t('ialab.valerio.intro_greeting');
         speakTextConversational(introGreeting, 'valerio', () => setValerioState('idle'));
         const welcomeMessage = buildContextualWelcome({ locale, studentName, currentModule, userLevel, activeMod });
         setMessage(welcomeMessage);
@@ -205,8 +194,8 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
         }]);
       } else {
         const greeting = studentName
-          ? (locale === 'en' ? `Hello ${studentName}! How can I help you?` : `¡Hola ${studentName}! ¿En qué puedo ayudarte?`)
-          : (locale === 'en' ? 'Hello! How can I help you?' : '¡Hola! ¿En qué puedo ayudarte?');
+          ? t('ialab.valerio.greeting_name', { name: studentName })
+          : t('ialab.valerio.greeting_anon');
         speakTextConversational(greeting, 'valerio', () => setValerioState('idle'));
       }
     }

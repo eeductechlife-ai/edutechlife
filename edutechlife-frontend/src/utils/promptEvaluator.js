@@ -176,7 +176,7 @@ function generateImprovementsList(original, optimized, analysis) {
     improvements.push('Proporcionado contexto adicional');
   }
   
-  if (analysis.structure < 30 && optimized.match(/(\d+\.|\- |\* )/g)?.length > 0) {
+  if (analysis.structure < 30 && optimized.match(/(\d+\.|- |\* )/g)?.length > 0) {
     improvements.push('Estructurado en pasos o secciones claras');
   }
   
@@ -202,7 +202,7 @@ export const generateComparisonMetrics = (original, optimized) => {
     const paragraphs = text.split(/\n\s*\n/).length;
     const questions = (text.match(/\?/g) || []).length;
     const numbers = (text.match(/\b\d+\b/g) || []).length;
-    const structureMarkers = (text.match(/(\d+\.|\- |\* |•)/g) || []).length;
+    const structureMarkers = (text.match(/(\d+\.|- |\* |•)/g) || []).length;
     
     return {
       words,

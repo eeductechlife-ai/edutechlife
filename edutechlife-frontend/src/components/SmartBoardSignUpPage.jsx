@@ -58,7 +58,7 @@ const SmartBoardSignUpPage = () => {
 
   return (
     <>
-      <SEO title="Registro SmartBoard" description="Crea tu cuenta SmartBoard by Edutechlife y comienza la aventura educativa interactiva para tus hijos." />
+      <SEO title={t('seo.signup_smartboard.title')} description={t('seo.signup_smartboard.desc')} />
       <div className="min-h-screen bg-gradient-to-br from-[#004B63] to-[#0A3550] flex items-center justify-center p-4 relative overflow-hidden">
       <FloatingParticles />
 

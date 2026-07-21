@@ -1,0 +1,7 @@
+/* ==================== ZERO-LAG PERFORMANCE ==================== */
+/* Scroll nativo de alto rendimiento - scroll hijacking eliminado */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

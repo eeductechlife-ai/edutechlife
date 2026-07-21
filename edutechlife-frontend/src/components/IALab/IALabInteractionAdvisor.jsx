@@ -123,7 +123,7 @@ const IALabInteractionAdvisor = ({ className = '', ...rest }) => {
               {input.length >= 3 && <VoiceReader text={`Describe tu tarea y te recomendaré la mejor herramienta de ChatGPT. Escribe: ${input || 'tu tarea'}`} />}
             </div>
             <div className="relative">
-              <textarea value={input} onChange={handleInputChange} onKeyDown={handleKeyDown} placeholder={t('ialab.interaction_advisor.input_placeholder')} className="w-full min-h-[80px] p-4 bg-white border border-slate-200 rounded-xl text-sm text-slate-700 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-corporate/30 focus:border-corporate resize-none transition-all" maxLength={500} />
+              <textarea value={input} onChange={handleInputChange} onKeyDown={handleKeyDown} placeholder={t('ialab.interaction_advisor.input_placeholder')} aria-label={t('ialab.interaction_advisor.question')} className="w-full min-h-[80px] p-4 bg-white border border-slate-200 rounded-xl text-sm text-slate-700 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-corporate/30 focus:border-corporate resize-none transition-all" maxLength={500} />
               <div className="absolute bottom-3 right-3 text-[10px] text-slate-600 font-medium">{input.length}/500</div>
             </div>
             <div className="flex justify-end mt-3">

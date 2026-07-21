@@ -264,9 +264,10 @@ const ProyectosNacional = ({ onBack }) => {
                                 </div>
                                 <form onSubmit={handleEnroll} className="enroll-form">
                                     <div className="form-group">
-                                        <label>Nombre Completo</label>
+                                        <label htmlFor="enroll-name">Nombre Completo</label>
                                         <input 
                                             type="text" 
+                                            id="enroll-name"
                                             value={enrollForm.name}
                                             onChange={(e) => handleEnrollChange('name', e.target.value)}
                                             placeholder="Ej: María Elena Gómez"
@@ -274,9 +275,10 @@ const ProyectosNacional = ({ onBack }) => {
                                         />
                                     </div>
                                     <div className="form-group">
-                                        <label>Correo Electrónico</label>
+                                        <label htmlFor="enroll-email">Correo Electrónico</label>
                                         <input 
                                             type="email" 
+                                            id="enroll-email"
                                             value={enrollForm.email}
                                             onChange={(e) => handleEnrollChange('email', e.target.value)}
                                             placeholder="Ej: maria.gomez@email.com"
@@ -284,9 +286,10 @@ const ProyectosNacional = ({ onBack }) => {
                                         />
                                     </div>
                                     <div className="form-group">
-                                        <label>Institución / Empresa</label>
+                                        <label htmlFor="enroll-institution">Institución / Empresa</label>
                                         <input 
                                             type="text" 
+                                            id="enroll-institution"
                                             value={enrollForm.institution}
                                             onChange={(e) => handleEnrollChange('institution', e.target.value)}
                                             placeholder="Ej: I.E. San José"
@@ -294,8 +297,9 @@ const ProyectosNacional = ({ onBack }) => {
                                         />
                                     </div>
                                     <div className="form-group">
-                                        <label>Programa de Interés</label>
+                                        <label htmlFor="enroll-program">Programa de Interés</label>
                                         <select 
+                                            id="enroll-program"
                                             value={enrollForm.program}
                                             onChange={(e) => handleEnrollChange('program', e.target.value)}
                                             required

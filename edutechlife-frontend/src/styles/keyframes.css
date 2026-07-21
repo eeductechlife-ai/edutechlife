@@ -1,0 +1,123 @@
+/* =========================
+   V2286 KEYFRAMES & UTILITIES
+   ========================= */
+
+/* Grid Move Animation - Perspective 3D Effect */
+@keyframes grid-move-v2 {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 0 60px;
+  }
+}
+
+/* Particle Float Animation */
+@keyframes particle-float {
+  0%,
+  100% {
+    transform: translateY(0px) translateX(0px);
+    opacity: 0.3;
+  }
+
+  25% {
+    transform: translateY(-15px) translateX(5px);
+    opacity: 0.6;
+  }
+
+  50% {
+    transform: translateY(-25px) translateX(0px);
+    opacity: 0.4;
+  }
+
+  75% {
+    transform: translateY(-15px) translateX(-5px);
+    opacity: 0.6;
+  }
+}
+
+/* Orb Pulse Animation */
+@keyframes orb-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+
+  50% {
+    transform: scale(1.1);
+    opacity: 0.5;
+  }
+}
+
+/* Scan Line Animation */
+@keyframes scan-line {
+  0% {
+    top: 0;
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+/* Carousel Progress Animation */
+@keyframes carousel-progress {
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+/* Neural Glow Animation */
+@keyframes neural-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(77, 168, 196, 0.2);
+  }
+
+  50% {
+    box-shadow: 0 0 40px rgba(77, 168, 196, 0.4);
+  }
+}
+
+/* Text Glow Animation */
+@keyframes text-glow {
+  0%,
+  100% {
+    text-shadow: 0 0 10px rgba(77, 168, 196, 0.3);
+  }
+
+  50% {
+    text-shadow: 0 0 20px rgba(77, 168, 196, 0.6);
+  }
+}
+
+/* Gradient Shift Animation */
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}

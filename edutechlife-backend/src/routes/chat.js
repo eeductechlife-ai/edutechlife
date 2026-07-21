@@ -12,6 +12,58 @@ function checkApiKey(req, res) {
   return true;
 }
 
+/**
+ * @swagger
+ * /api/chat:
+ *   post:
+ *     summary: Enviar mensaje y obtener respuesta de IA
+ *     tags: [Chat]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               messages:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     role:
+ *                       type: string
+ *                       enum: [system, user, assistant]
+ *                     content:
+ *                       type: string
+ *               prompt:
+ *                 type: string
+ *               systemPrompt:
+ *                 type: string
+ *               isJson:
+ *                 type: boolean
+ *               temperature:
+ *                 type: number
+ *               maxTokens:
+ *                 type: integer
+ *               model:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Respuesta generada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 result:
+ *                   type: string
+ *       400:
+ *         description: Error de validación
+ *       500:
+ *         description: Error del servidor
+ */
 router.post('/', async (req, res) => {
   const { messages, prompt, systemPrompt, isJson, temperature, maxTokens, model } = req.body;
 
@@ -42,6 +94,55 @@ router.post('/', async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/chat/stream:
+ *   post:
+ *     summary: Enviar mensaje y recibir respuesta en streaming (SSE)
+ *     tags: [Chat]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               messages:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     role:
+ *                       type: string
+ *                       enum: [system, user, assistant]
+ *                     content:
+ *                       type: string
+ *               prompt:
+ *                 type: string
+ *               systemPrompt:
+ *                 type: string
+ *               isJson:
+ *                 type: boolean
+ *               temperature:
+ *                 type: number
+ *               maxTokens:
+ *                 type: integer
+ *               model:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Stream de eventos SSE
+ *         content:
+ *           text/event-stream:
+ *             schema:
+ *               type: string
+ *       400:
+ *         description: Error de validación
+ *       500:
+ *         description: Error del servidor
+ */
 router.post('/stream', async (req, res) => {
   const { messages, prompt, systemPrompt, isJson, temperature, maxTokens, model } = req.body;
 

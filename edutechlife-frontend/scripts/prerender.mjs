@@ -58,12 +58,17 @@ function createServer() {
 
 async function renderRoute(page, route) {
   const url = `http://127.0.0.1:4173${route}`
+  let navigated = false
   try {
-    await page.goto(url, { waitUntil: 'load', timeout: 15000 })
+    await page.goto(url, { waitUntil: 'load', timeout: 30000 })
+    navigated = true
+    await page.evaluate(() => document.title)
     await new Promise(r => setTimeout(r, 1000))
   } catch (e) {
-    await new Promise(r => setTimeout(r, 2000))
+    console.warn(`[prerender] ⚠️ ${route}: navigation failed (${e.message})`)
+    return
   }
+  if (!navigated) return
   try {
     const html = await page.content()
     const outputDir = route === '/' ? distDir : path.join(distDir, route.slice(1))

@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useEffect, useCallback } from "react";
 import {
   Routes,
   Route,
@@ -6,6 +6,7 @@ import {
   useNavigate,
   useLocation,
 } from "react-router-dom";
+import { track } from "../lib/analytics";
 import AppLayout from "../components/layout/AppLayout";
 import AuthRouter from "./auth-router";
 import ProtectedRoute from "../components/layout/ProtectedRoute";
@@ -110,8 +111,32 @@ const GenericSignUpRedirect = () => {
  * - Rutas protegidas: /ialab, /smartboard, /admin (requieren autenticación + rol)
  * - Rutas de autenticación: /auth-router (redirección inteligente)
  */
+const PlanesPage = lazy(() => import("../components/pages/PlanesPage"));
+
 const AppRoutes = () => {
   const { t } = useTranslation();
+  const location = useLocation();
+
+  useEffect(() => {
+    track("page_view", { path: location.pathname });
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const match = location.pathname.match(/^\/ialab\/(\d+)$/);
+    if (match) {
+      track("course_start", { moduleId: parseInt(match[1], 10) });
+    }
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("checkout") === "success") {
+      track("checkout_completed", {});
+    } else if (params.get("checkout") === "cancelled") {
+      track("checkout_cancelled", {});
+    }
+  }, [location.search]);
+
   return (
     <Routes>
       <Route path="/" element={<AppLayout />}>
@@ -224,6 +249,15 @@ const AppRoutes = () => {
           element={
             <Suspense fallback={<PageLoader message={t("common.loading")} />}>
               <SmartBoardInfoPage />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="planes"
+          element={
+            <Suspense fallback={<PageLoader message={t("common.loading")} />}>
+              <PlanesPage />
             </Suspense>
           }
         />

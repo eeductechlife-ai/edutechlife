@@ -1,13 +1,14 @@
+import { forwardRef } from 'react';
 import { motion } from 'framer-motion';
 import { Icon } from '../../../../utils/iconMapping';
 import { useTranslation } from '../../../../i18n/I18nProvider';
 
-export function QuizTimer({ timeElapsed, suggestedTime, currentQuestion, totalQuestions, isTimerRunning, showSecurityMessage, securityMessage, practiceMode, onTogglePractice, onClose, formatTime }) {
+const QuizTimer = forwardRef(function QuizTimer({ timeElapsed, suggestedTime, currentQuestion, totalQuestions, isTimerRunning, showSecurityMessage, securityMessage, practiceMode, onTogglePractice, onClose, formatTime }, ref) {
   const { t } = useTranslation();
   const timeWarning = timeElapsed > suggestedTime * 0.8;
 
   return (
-    <div className="bg-gradient-to-r from-petroleum to-corporate px-6 py-4 flex items-center justify-between z-50">
+    <div ref={ref} className="bg-gradient-to-r from-petroleum to-corporate px-6 py-4 flex items-center justify-between z-50">
       <button
         onClick={onClose}
         className="flex items-center gap-2 text-white/80 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition-colors"
@@ -73,4 +74,7 @@ export function QuizTimer({ timeElapsed, suggestedTime, currentQuestion, totalQu
       </div>
     </div>
   );
-}
+});
+
+export { QuizTimer };
+export default QuizTimer;

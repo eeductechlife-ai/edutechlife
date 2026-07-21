@@ -38,7 +38,7 @@ console.log('- Cache: 100 entradas LRU');
 console.log('- Pre-carga: Frases comunes pre-cargadas');
 
 console.log('\n🔧 Verificando API key de Google TTS...');
-const apiKey = process.env.VITE_GOOGLE_TTS_API_KEY || 'AIzaSyAP9Z-y-7K6_Y8EZzrW6zWm9yxjDhShwTQ';
+const apiKey = process.env.VITE_GOOGLE_TTS_API_KEY || '';
 console.log('✅ API key configurada:', apiKey ? 'Sí' : 'No');
 
 console.log('\n🎉 Configuración de voz verificada correctamente!');

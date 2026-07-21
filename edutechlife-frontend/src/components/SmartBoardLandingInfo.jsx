@@ -128,14 +128,14 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
   const countHours = useAnimatedCounter(12000, 2200, statStart);
 
   const sections = [
-    <SmartBoardQueEsSection t={t} />,
-    <SmartBoardVakStylesSection t={t} vakStyles={vakStyles} />,
-    <SmartBoardBeneficiosSection t={t} beneficios={beneficios} />,
-    <SmartBoardTranquilidadSection t={t} tranquilidad={tranquilidad} />,
-    <SmartBoardComoFuncionaSection t={t} pasos={pasos} handleCta={handleCta} />,
-    <SmartBoardPlanesSection t={t} pricingPlans={pricingPlans} paymentMethods={paymentMethods} guarantee={guarantee} handleCta={handleCta} />,
-    <SmartBoardTestimoniosSection t={t} testimonials={testimonials} />,
-    <SmartBoardFinalSection t={t} faqItems={faqItems} handleCta={handleCta} />,
+    <SmartBoardQueEsSection key="que-es" t={t} />,
+    <SmartBoardVakStylesSection key="vak-styles" t={t} vakStyles={vakStyles} />,
+    <SmartBoardBeneficiosSection key="beneficios" t={t} beneficios={beneficios} />,
+    <SmartBoardTranquilidadSection key="tranquilidad" t={t} tranquilidad={tranquilidad} />,
+    <SmartBoardComoFuncionaSection key="como-funciona" t={t} pasos={pasos} handleCta={handleCta} />,
+    <SmartBoardPlanesSection key="planes" t={t} pricingPlans={pricingPlans} paymentMethods={paymentMethods} guarantee={guarantee} handleCta={handleCta} />,
+    <SmartBoardTestimoniosSection key="testimonios" t={t} testimonials={testimonials} />,
+    <SmartBoardFinalSection key="final" t={t} faqItems={faqItems} handleCta={handleCta} />,
   ];
 
   const totalSteps = sections.length;

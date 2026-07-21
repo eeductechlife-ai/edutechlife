@@ -1,0 +1,1 @@
+export { checkAppointmentResponse } from "./nicoAppointmentResponse";

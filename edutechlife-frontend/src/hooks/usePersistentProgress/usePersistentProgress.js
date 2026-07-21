@@ -2,9 +2,6 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useUser, useAuth as useClerkAuth } from "@clerk/react";
 import { useSupabase } from "../useSupabase";
 import {
-  syncActivityToSupabase,
-  loadProgressFromSupabase,
-  mergeProgress,
   setupConnectionListener,
 } from "../../services/progressSync";
 import {
@@ -15,10 +12,16 @@ import {
 import { STORAGE_KEYS } from "./storageKeys";
 import {
   calculateModuleProgressInternal,
-  calculateGlobalProgressInternal,
 } from "./courseProgressUtils";
 import useLocalProgress from "./useLocalProgress";
 import useSyncProgress from "./useSyncProgress";
+import { INITIAL_STATE } from "./constants";
+import {
+  applyProgressData,
+  computeGlobalProgress,
+  mergeLocalWithRemote,
+} from "./localCache";
+import { syncActivity, loadRemoteProgress } from "./supabaseSync";
 
 export const usePersistentProgress = () => {
   const { user: clerkUser } = useUser();
@@ -33,17 +36,17 @@ export const usePersistentProgress = () => {
   const userId = supabaseUserId || clerkUser?.id;
   const isUserReady = isSignedIn && userId;
 
-  const [completedVideos, setCompletedVideos] = useState([]);
-  const [completedModules, setCompletedModules] = useState([]);
-  const [completedExams, setCompletedExams] = useState({});
-  const [completedInfographics, setCompletedInfographics] = useState([]);
-  const [completedActivities, setCompletedActivities] = useState([]);
-  const [challengeScores, setChallengeScores] = useState({});
-  const [completedCommunity, setCompletedCommunity] = useState([]);
-  const [gamification, setGamification] = useState(null);
-  const [courseProgress, setCourseProgress] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
-  const [syncStatus, setSyncStatus] = useState("idle");
+  const [completedVideos, setCompletedVideos] = useState(INITIAL_STATE.completedVideos);
+  const [completedModules, setCompletedModules] = useState(INITIAL_STATE.completedModules);
+  const [completedExams, setCompletedExams] = useState(INITIAL_STATE.completedExams);
+  const [completedInfographics, setCompletedInfographics] = useState(INITIAL_STATE.completedInfographics);
+  const [completedActivities, setCompletedActivities] = useState(INITIAL_STATE.completedActivities);
+  const [challengeScores, setChallengeScores] = useState(INITIAL_STATE.challengeScores);
+  const [completedCommunity, setCompletedCommunity] = useState(INITIAL_STATE.completedCommunity);
+  const [gamification, setGamification] = useState(INITIAL_STATE.gamification);
+  const [courseProgress, setCourseProgress] = useState(INITIAL_STATE.courseProgress);
+  const [isLoading, setIsLoading] = useState(INITIAL_STATE.isLoading);
+  const [syncStatus, setSyncStatus] = useState(INITIAL_STATE.syncStatus);
 
   const connectionCleanupRef = useRef(null);
 
@@ -59,6 +62,17 @@ export const usePersistentProgress = () => {
     setSyncStatus,
     setGamification,
   );
+
+  const setters = {
+    setCompletedVideos,
+    setCompletedModules,
+    setCompletedExams,
+    setCompletedInfographics,
+    setCompletedActivities,
+    setChallengeScores,
+    setCompletedCommunity,
+    setGamification,
+  };
 
   const updateProgress = useCallback(
     async (updates, immediate = false) => {
@@ -85,15 +99,7 @@ export const usePersistentProgress = () => {
       if (updates.completedCommunity)
         setCompletedCommunity(updates.completedCommunity);
 
-      const progress = calculateGlobalProgressInternal(
-        newData.completedModules,
-        newData.completedVideos,
-        newData.completedExams,
-        newData.completedInfographics,
-        newData.completedActivities,
-        newData.challengeScores,
-        newData.completedCommunity,
-      );
+      const progress = computeGlobalProgress(newData);
       setCourseProgress(progress);
 
       saveToLocalStorage(newData);
@@ -122,14 +128,12 @@ export const usePersistentProgress = () => {
         recordActivity();
         const progress = await updateProgress({ completedVideos: newVideos });
 
-        if (userId && supabase) {
-          syncActivityToSupabase(supabase, userId, {
-            activityType: "video",
-            resourceId: videoKey,
-            moduleId: videoId,
-            isCompleted: true,
-          });
-        }
+        syncActivity(supabase, userId, {
+          activityType: "video",
+          resourceId: videoKey,
+          moduleId: videoId,
+          isCompleted: true,
+        });
 
         return progress;
       }
@@ -152,14 +156,12 @@ export const usePersistentProgress = () => {
         recordActivity();
         const progress = await updateProgress({ completedModules: newModules });
 
-        if (userId && supabase) {
-          syncActivityToSupabase(supabase, userId, {
-            activityType: "module",
-            resourceId: `module_${moduleId}`,
-            moduleId: moduleId,
-            isCompleted: true,
-          });
-        }
+        syncActivity(supabase, userId, {
+          activityType: "module",
+          resourceId: `module_${moduleId}`,
+          moduleId: moduleId,
+          isCompleted: true,
+        });
 
         return progress;
       }
@@ -184,15 +186,13 @@ export const usePersistentProgress = () => {
         recordActivity();
         const progress = await updateProgress({ completedExams: newExams });
 
-        if (userId && supabase) {
-          syncActivityToSupabase(supabase, userId, {
-            activityType: "exam",
-            resourceId: null,
-            moduleId: moduleId,
-            isCompleted: true,
-            score: examScore,
-          });
-        }
+        syncActivity(supabase, userId, {
+          activityType: "exam",
+          resourceId: null,
+          moduleId: moduleId,
+          isCompleted: true,
+          score: examScore,
+        });
 
         return progress;
       } else if (!examScore) {
@@ -219,14 +219,12 @@ export const usePersistentProgress = () => {
           completedInfographics: newInfographics,
         });
 
-        if (userId && supabase) {
-          syncActivityToSupabase(supabase, userId, {
-            activityType: "infographic",
-            resourceId: infographicKey,
-            moduleId: infographicId,
-            isCompleted: true,
-          });
-        }
+        syncActivity(supabase, userId, {
+          activityType: "infographic",
+          resourceId: infographicKey,
+          moduleId: infographicId,
+          isCompleted: true,
+        });
 
         return progress;
       }
@@ -252,14 +250,12 @@ export const usePersistentProgress = () => {
           completedActivities: newActivities,
         });
 
-        if (userId && supabase) {
-          syncActivityToSupabase(supabase, userId, {
-            activityType: "activity",
-            resourceId: activityKey,
-            moduleId: activityId,
-            isCompleted: true,
-          });
-        }
+        syncActivity(supabase, userId, {
+          activityType: "activity",
+          resourceId: activityKey,
+          moduleId: activityId,
+          isCompleted: true,
+        });
 
         return progress;
       }
@@ -287,15 +283,13 @@ export const usePersistentProgress = () => {
         challengeScores: newChallengeScores,
       });
 
-      if (userId && supabase) {
-        syncActivityToSupabase(supabase, userId, {
-          activityType: "challenge",
-          resourceId: null,
-          moduleId: moduleId,
-          isCompleted: true,
-          score: score,
-        });
-      }
+      syncActivity(supabase, userId, {
+        activityType: "challenge",
+        resourceId: null,
+        moduleId: moduleId,
+        isCompleted: true,
+        score: score,
+      });
 
       return { progress, passed: true };
     },
@@ -318,14 +312,12 @@ export const usePersistentProgress = () => {
           completedCommunity: newCommunity,
         });
 
-        if (userId && supabase) {
-          syncActivityToSupabase(supabase, userId, {
-            activityType: "community_comment",
-            resourceId: null,
-            moduleId: moduleId,
-            isCompleted: true,
-          });
-        }
+        syncActivity(supabase, userId, {
+          activityType: "community_comment",
+          resourceId: null,
+          moduleId: moduleId,
+          isCompleted: true,
+        });
 
         return progress;
       }
@@ -421,14 +413,7 @@ export const usePersistentProgress = () => {
 
   const resetProgress = useCallback(() => {
     Object.values(STORAGE_KEYS).forEach((key) => localStorage.removeItem(key));
-
-    setCompletedVideos([]);
-    setCompletedModules([]);
-    setCompletedExams({});
-    setCompletedInfographics([]);
-    setCompletedActivities([]);
-    setChallengeScores({});
-    setCompletedCommunity([]);
+    applyProgressData(setters, INITIAL_STATE);
     setCourseProgress(0);
   }, []);
 
@@ -436,28 +421,12 @@ export const usePersistentProgress = () => {
     if (!userId || !supabase) return;
 
     setIsLoading(true);
-    const result = await loadProgressFromSupabase(supabase, userId);
+    const remoteData = await loadRemoteProgress(supabase, userId);
 
-    if (result.success) {
-      const mergedData = mergeProgress(loadFromLocalStorage(), result.data);
-
-      setCompletedVideos(mergedData.completedVideos);
-      setCompletedModules(mergedData.completedModules);
-      setCompletedExams(mergedData.completedExams);
-      setCompletedInfographics(mergedData.completedInfographics);
-      setCompletedActivities(mergedData.completedActivities);
-      setChallengeScores(mergedData.challengeScores || {});
-      setCompletedCommunity(mergedData.completedCommunity || []);
-
-      const progress = calculateGlobalProgressInternal(
-        mergedData.completedModules,
-        mergedData.completedVideos,
-        mergedData.completedExams,
-        mergedData.completedInfographics,
-        mergedData.completedActivities,
-        mergedData.challengeScores,
-        mergedData.completedCommunity,
-      );
+    if (remoteData) {
+      const mergedData = mergeLocalWithRemote(loadFromLocalStorage(), remoteData);
+      applyProgressData(setters, mergedData);
+      const progress = computeGlobalProgress(mergedData);
       setCourseProgress(progress);
       saveToLocalStorage(mergedData);
     }
@@ -477,35 +446,13 @@ export const usePersistentProgress = () => {
 
       try {
         const localData = loadFromLocalStorage();
+        const remoteData = await loadRemoteProgress(supabase, userId);
+        const mergedData = mergeLocalWithRemote(localData, remoteData);
 
-        let remoteData = null;
-        if (supabase && navigator.onLine) {
-          const result = await loadProgressFromSupabase(supabase, userId);
-          if (result.success) {
-            remoteData = result.data;
-          }
-        }
-
-        const mergedData = mergeProgress(localData, remoteData);
-
-        setCompletedVideos(mergedData.completedVideos);
-        setCompletedModules(mergedData.completedModules);
-        setCompletedExams(mergedData.completedExams);
-        setCompletedInfographics(mergedData.completedInfographics);
-        setCompletedActivities(mergedData.completedActivities);
-        setChallengeScores(mergedData.challengeScores || {});
-        setCompletedCommunity(mergedData.completedCommunity || []);
+        applyProgressData(setters, mergedData);
         if (mergedData.gamification) setGamification(mergedData.gamification);
 
-        const progress = calculateGlobalProgressInternal(
-          mergedData.completedModules,
-          mergedData.completedVideos,
-          mergedData.completedExams,
-          mergedData.completedInfographics,
-          mergedData.completedActivities,
-          mergedData.challengeScores,
-          mergedData.completedCommunity,
-        );
+        const progress = computeGlobalProgress(mergedData);
         setCourseProgress(progress);
 
         saveToLocalStorage(mergedData);
@@ -519,24 +466,8 @@ export const usePersistentProgress = () => {
 
         const localData = loadFromLocalStorage();
         if (localData) {
-          setCompletedVideos(localData.completedVideos);
-          setCompletedModules(localData.completedModules);
-          setCompletedExams(localData.completedExams);
-          setCompletedInfographics(localData.completedInfographics);
-          setCompletedActivities(localData.completedActivities);
-          setChallengeScores(localData.challengeScores || {});
-          setCompletedCommunity(localData.completedCommunity || []);
-          setCourseProgress(
-            calculateGlobalProgressInternal(
-              localData.completedModules,
-              localData.completedVideos,
-              localData.completedExams,
-              localData.completedInfographics,
-              localData.completedActivities,
-              localData.challengeScores,
-              localData.completedCommunity,
-            ),
-          );
+          applyProgressData(setters, localData);
+          setCourseProgress(computeGlobalProgress(localData));
         }
       } finally {
         setIsLoading(false);

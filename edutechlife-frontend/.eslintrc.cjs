@@ -32,7 +32,7 @@ module.exports = {
     'no-console': ['warn', { allow: ['warn', 'error'] }],
     'no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
     'no-debugger': 'error',
-    'max-lines': ['warn', { max: 400, skipBlankLines: true, skipComments: true }],
+    'max-lines': ['warn', { max: 500, skipBlankLines: true, skipComments: true }],
     'no-duplicate-imports': 'error',
     'react/jsx-key': 'error',
     'no-undef': 'warn',

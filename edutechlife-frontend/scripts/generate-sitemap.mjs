@@ -28,15 +28,29 @@ const ROUTES = [
 
 const today = new Date().toISOString().split('T')[0]
 
-const urls = ROUTES.map(r => `  <url>
-    <loc>${BASE}${r.loc}</loc>
+const urlElement = (loc, priority, changefreq, alternates) => {
+  const altTags = alternates.map(a =>
+    `    <xhtml:link rel="alternate" hreflang="${a.hreflang}" href="${BASE}${a.href}" />`
+  ).join('\n')
+  return `  <url>
+    <loc>${BASE}${loc}</loc>
     <lastmod>${today}</lastmod>
-    <changefreq>${r.changefreq}</changefreq>
-    <priority>${r.priority.toFixed(1)}</priority>
-  </url>`).join('\n')
+    <changefreq>${changefreq}</changefreq>
+    <priority>${priority.toFixed(1)}</priority>
+${altTags}
+  </url>`
+}
+
+const urls = ROUTES.map(r => {
+  const altEs = r.loc === '/' ? { href: '/', hreflang: 'es' } : { href: r.loc, hreflang: 'es' }
+  const altEn = { href: `/en${r.loc}`, hreflang: 'en' }
+  const altXDefault = r.loc === '/' ? { href: '/', hreflang: 'x-default' } : { href: r.loc, hreflang: 'x-default' }
+  return urlElement(r.loc, r.priority, r.changefreq, [altEs, altEn, altXDefault])
+}).join('\n')
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${urls}
 </urlset>
 `

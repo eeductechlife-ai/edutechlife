@@ -1,13 +1,15 @@
-import React, { useState, useId } from 'react'
+import React, { forwardRef, useState, useId } from 'react';
 import PropTypes from 'prop-types';
 
-const TooltipIcon = ({ label, children, premium }) => {
+const TooltipIcon = forwardRef(function TooltipIcon({ label, children, premium }, ref) {
   const [isFocused, setIsFocused] = useState(false);
   const tipId = useId();
   return (
     <div
+      ref={ref}
       className="relative group/tip flex items-center justify-center"
       tabIndex={0}
+      role="button"
       aria-describedby={tipId}
       onFocus={() => setIsFocused(true)}
       onBlur={() => setIsFocused(false)}
@@ -32,7 +34,7 @@ const TooltipIcon = ({ label, children, premium }) => {
       )}
     </div>
   );
-};
+});
 
 
 TooltipIcon.propTypes = {

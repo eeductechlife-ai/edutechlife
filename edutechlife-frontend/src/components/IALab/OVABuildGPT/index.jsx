@@ -50,10 +50,10 @@ export default function OVABuildGPT({ onComplete }) {
     const screenTexts = [
       '',
       t('ova.buildgpt.intro_text'),
-      'Los GPTs personalizados. Tu GPT personalizado puede conectarse a Slack mediante Acciones.',
-      'Al conectar tu GPT con Google Workspace mediante Acciones, puedes pedirle que redacte correos, analice documentos de Docs o extraiga conclusiones de Sheets.',
-      'Las Acciones de GPT funcionan como un puente: defines una especificación OpenAPI y tu GPT puede llamar a servicios externos.',
-      'Construye tu propio flujo de automatización seleccionando un disparador, una acción de IA y un destino.',
+      t('ova.buildgpt.valerio_screen_2'),
+      t('ova.buildgpt.valerio_screen_3'),
+      t('ova.buildgpt.valerio_screen_4'),
+      t('ova.buildgpt.valerio_screen_5'),
       t('ova.buildgpt.quiz_title'),
       t('ova.buildgpt.cert_desc'),
     ];
@@ -61,21 +61,16 @@ export default function OVABuildGPT({ onComplete }) {
   };
 
   if (screen === 'intro') {
-    const isES = locale === 'es';
     return (
       <div className="min-h-screen bg-gradient-to-br from-cyan-50 to-white dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
         <OVAIntro
           icon="fa-robot"
-          badge={isES ? 'OVA Interactivo' : 'Interactive OVA'}
-          title={isES ? 'Crea tu Propio GPT Personalizado' : 'Build Your Own Custom GPT'}
-          description={isES
-            ? 'Aprende a crear, configurar y conectar GPTs personalizados con acciones, APIs y herramientas externas en un recorrido práctico y completo.'
-            : 'Learn to create, configure and connect custom GPTs with actions, APIs and external tools in a practical, complete tour.'}
-          audioText={isES
-            ? 'Bienvenido al laboratorio de GPTs personalizados. Vamos a explorar cómo crear asistentes de IA a tu medida.'
-            : 'Welcome to the custom GPT lab. Let us explore how to create AI assistants tailored to your needs.'}
+          badge={t('ova.buildgpt.badge')}
+          title={t('ova.buildgpt.welcome_title')}
+          description={t('ova.buildgpt.welcome_desc')}
+          audioText={t('ova.buildgpt.welcome_audio')}
           onStart={() => setScreen('slides')}
-          startLabel={isES ? 'Comenzar Laboratorio' : 'Start Lab'}
+          startLabel={t('ova.buildgpt.start')}
         />
       </div>
     );

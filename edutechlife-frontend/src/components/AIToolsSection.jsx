@@ -152,6 +152,7 @@ function AIToolsSection() {
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             tabIndex={0}
+            role="button"
             onFocus={handleMouseEnter}
             onBlur={handleMouseLeave}
             className="col-span-1 md:col-span-2 card-clay-dark text-white p-8 flex flex-col relative overflow-hidden cursor-pointer"
@@ -277,6 +278,7 @@ function AIToolsSection() {
             onMouseEnter={handleMouseEnterSmartboard}
             onMouseLeave={handleMouseLeaveSmartboard}
             tabIndex={0}
+            role="button"
             onFocus={handleMouseEnterSmartboard}
             onBlur={handleMouseLeaveSmartboard}
             className="col-span-1 md:col-span-2 card-clay bg-primary-light/5 p-8 flex flex-col relative overflow-hidden cursor-pointer"

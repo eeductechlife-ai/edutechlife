@@ -55,29 +55,30 @@ const Logo = () => (
 );
 
 const ModuleHistory = () => {
- const [active, setActive] = useState(0);
- const sections = [
-   {
-     t: "1950–1980 · Fundamentos",
-     c: "En 1950, el matemático Alan Turing propuso el célebre Test de Turing, planteando la pregunta: ¿puede una máquina pensar? En 1956, durante la Conferencia de Dartmouth, John McCarthy acuñó el término 'Inteligencia Artificial'. Durante las siguientes décadas, se desarrollaron los primeros sistemas expertos, pero el progreso fue lento debido a las limitaciones de hardware, lo que llevó a los llamados 'inviernos de la IA'.",
-     icon: <Cpu className="w-8 h-8" />
-   },
-   {
-     t: "2010–2017 · Deep Learning",
-     c: "La disponibilidad de grandes volúmenes de datos (Big Data) y el aumento en la potencia de procesamiento (GPUs) permitieron el renacimiento de la IA. En 2012, el modelo AlexNet demostró el poder de las redes neuronales profundas. La IA comenzó a superar a los humanos en tareas específicas de visión artificial y traducción.",
-     icon: <Layers className="w-8 h-8" />
-   },
-   {
-     t: "2017 · El Hito del Transformer",
-     c: "Google publicó el paper «Attention is All You Need», introduciendo la arquitectura Transformer. Esta innovación permitió que los modelos «prestaran atención» a las relaciones entre palabras en contextos largos de forma eficiente, sentando las bases para los modelos de lenguaje modernos como GPT.",
-     icon: <Sparkles className="w-8 h-8" />
-   },
-   {
-     t: "2022–Actualidad · IA Generativa",
-     c: "Con el lanzamiento de ChatGPT en noviembre de 2022, la IA generativa se volvió masiva. Modelos como GPT-4, Llama de Meta y Claude de Anthropic demostraron capacidades asombrosas no solo para procesar información, sino para crear contenido original: código, ensayos, poemas y razonamiento lógico complejo.",
-     icon: <Rocket className="w-8 h-8" />
-   }
- ];
+  const { t } = useTranslation();
+  const [active, setActive] = useState(0);
+  const sections = [
+    {
+      t: t('ialab.que_es_prompt.history_0_title'),
+      c: t('ialab.que_es_prompt.history_0_content'),
+      icon: <Cpu className="w-8 h-8" />
+    },
+    {
+      t: t('ialab.que_es_prompt.history_1_title'),
+      c: t('ialab.que_es_prompt.history_1_content'),
+      icon: <Layers className="w-8 h-8" />
+    },
+    {
+      t: t('ialab.que_es_prompt.history_2_title'),
+      c: t('ialab.que_es_prompt.history_2_content'),
+      icon: <Sparkles className="w-8 h-8" />
+    },
+    {
+      t: t('ialab.que_es_prompt.history_3_title'),
+      c: t('ialab.que_es_prompt.history_3_content'),
+      icon: <Rocket className="w-8 h-8" />
+    }
+  ];
 
  return (
    <div className="space-y-6 animate-[fadeIn_1.1s_cubic-bezier(0.16,1,0.3,1)_forwards]">
@@ -106,14 +107,14 @@ const ModuleHistory = () => {
 const ModuleAnatomy = () => {
  const { t } = useTranslation();
  const [sel, setSel] = useState(null);
- const elements = [
-   { k: 'Rol', d: 'Define quién debe ser la IA (ej. experto en marketing, tutor de matemáticas, programador senior). Esto establece el tono y el nivel de experticia.', i: '👤', c: 'bg-[#0D2B5B]' },
-   { k: 'Contexto', d: 'Proporciona antecedentes, audiencia objetivo y situación (ej. "Estoy preparando una clase para niños de 10 años sobre el sistema solar").', i: '🌍', c: 'bg-[#00B4D8]' },
-   { k: 'Tarea', d: 'La acción específica que quieres que realice (ej. "Escribe un resumen", "Genera 5 ideas", "Corrige este código"). Debe ser clara y directa.', i: '⚡', c: 'bg-[#4361EE]' },
-   { k: 'Formato', d: 'Cómo quieres recibir la información (ej. una tabla, una lista de puntos, un ensayo de 3 párrafos, un archivo JSON).', i: '📄', c: 'bg-[#4CC9F0]' },
-   { k: 'Restricción', d: 'Lo que NO quieres que la IA haga o límites específicos (ej. "No uses tecnicismos", "Máximo 100 palabras").', i: '🚫', c: 'bg-[#F72585]' },
-   { k: 'Ejemplos', d: 'Proporcionar muestras del estilo o resultado esperado (técnica Few-Shot). Ayuda a la IA a entender el patrón deseado.', i: '✨', c: 'bg-[#FF9F1C]' }
- ];
+  const elements = [
+    { k: 'Rol', d: t('ialab.que_es_prompt.anatomy_rol'), i: '👤', c: 'bg-[#0D2B5B]' },
+    { k: 'Contexto', d: t('ialab.que_es_prompt.anatomy_contexto'), i: '🌍', c: 'bg-[#00B4D8]' },
+    { k: 'Tarea', d: t('ialab.que_es_prompt.anatomy_tarea'), i: '⚡', c: 'bg-[#4361EE]' },
+    { k: 'Formato', d: t('ialab.que_es_prompt.anatomy_formato'), i: '📄', c: 'bg-[#4CC9F0]' },
+    { k: 'Restricción', d: t('ialab.que_es_prompt.anatomy_restriccion'), i: '🚫', c: 'bg-[#F72585]' },
+    { k: 'Ejemplos', d: t('ialab.que_es_prompt.anatomy_ejemplos'), i: '✨', c: 'bg-[#FF9F1C]' }
+  ];
 
  return (
    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center animate-[zoomIn_0.6s_cubic-bezier(0.16,1,0.3,1)_forwards]">
@@ -169,7 +170,7 @@ const QueEsPrompt_OVA_Original = ({ onClose, onComplete }) => {
   const screensData = useMemo(() => ({
    welcome: {
      title: t('ialab.que_es_prompt.title'),
-     content: 'Bienvenidos. La IA generativa es una realidad que transforma la educación y el trabajo. Hoy aprenderás la habilidad más importante: saber hablarle a la máquina con inteligencia y criterio.'
+     content: t('ialab.que_es_prompt.welcome_content')
    },
    menu: {
      title: t('ialab.que_es_prompt.menu_title'),
@@ -177,29 +178,29 @@ const QueEsPrompt_OVA_Original = ({ onClose, onComplete }) => {
    },
    m1: {
      title: t('ialab.que_es_prompt.screen_m1'),
-     content: 'Más de 70 años de investigación culminaron en los modelos actuales. Conocerás los hitos clave desde el Test de Turing hasta la arquitectura Transformer.'
+     content: t('ialab.que_es_prompt.m1_content')
    },
    m2: {
      title: t('ialab.que_es_prompt.screen_m2'),
-     content: 'Un prompt es la interfaz de comunicación entre el usuario y un modelo de lenguaje. Es el conjunto de instrucciones que sirven de puente entre la mente humana y la IA.'
+     content: t('ialab.que_es_prompt.m2_content')
    },
    m3: {
      title: t('ialab.que_es_prompt.screen_m3'),
-     content: 'Un prompt efectivo incluye rol, contexto, tarea, formato, restricciones y ejemplos. Aprenderás a integrar cada componente.'
+     content: t('ialab.que_es_prompt.m3_content')
    },
    m4: {
      title: t('ialab.que_es_prompt.screen_m4'),
-     content: 'Dispondrás de estrategias concretas como Chain of Thought, few-shot e iteración para obtener resultados de alta calidad.'
+     content: t('ialab.que_es_prompt.m4_content')
    },
    m5: {
      title: t('ialab.que_es_prompt.screen_m5'),
-     content: 'Evita fallos como prompts vagos, pedir demasiado en una sola instrucción o no verificar la información generada.'
+     content: t('ialab.que_es_prompt.m5_content')
    },
    m6: {
      title: t('ialab.que_es_prompt.screen_m6'),
-     content: 'Es hora de demostrar tu capacidad de interpretación y comprensión de la lectura. El futuro pertenece a quienes sepan colaborar con la IA.'
+     content: t('ialab.que_es_prompt.m6_content')
    }
- }), [t]);
+  }), [t]);
 
  const nav = ['welcome', 'menu', 'm1', 'm2', 'm3', 'm4', 'm5', 'm6'];
  const curIdx = nav.indexOf(screen);
@@ -256,33 +257,33 @@ const QueEsPrompt_OVA_Original = ({ onClose, onComplete }) => {
          </div>
        );
      case 'm1': return <ModuleHistory />;
-     case 'm2': return (
-       <div className="space-y-8 animate-[fadeIn_1.1s_cubic-bezier(0.16,1,0.3,1)_forwards]">
-          <div className="p-10 bg-[#F0F9FF] dark:bg-slate-700/30 rounded-[4rem] border-4 border-white dark:border-slate-700 shadow-xl relative overflow-hidden group">
-           <h4 className="text-[#0D2B5B] font-[900] text-3xl mb-6 tracking-tighter leading-none lowercase">el prompt como interfaz</h4>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed font-bold text-lg max-w-2xl">
-             Es la interfaz de comunicación entre el usuario y un modelo de lenguaje. Es el conjunto de instrucciones que sirven de puente entre la mente humana y la red neuronal de la IA. Su diseño determina la calidad de los resultados.
-           </p>
-         </div>
-          <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-6 rounded-[2.5rem] flex items-center gap-6 shadow-sm">
-            <div className="p-4 bg-amber-50 rounded-2xl text-amber-500 shadow-inner"><Lightbulb size={32} /></div>
-             <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 font-bold italic leading-relaxed">
-              "Dominarás qué es un prompt, sus tipos y por qué su calidad determina directamente la calidad de la respuesta de la IA."
+      case 'm2': return (
+        <div className="space-y-8 animate-[fadeIn_1.1s_cubic-bezier(0.16,1,0.3,1)_forwards]">
+           <div className="p-10 bg-[#F0F9FF] dark:bg-slate-700/30 rounded-[4rem] border-4 border-white dark:border-slate-700 shadow-xl relative overflow-hidden group">
+            <h4 className="text-[#0D2B5B] font-[900] text-3xl mb-6 tracking-tighter leading-none lowercase">{t('ialab.que_es_prompt.m2_subtitle')}</h4>
+             <p className="text-slate-600 dark:text-slate-300 leading-relaxed font-bold text-lg max-w-2xl">
+              {t('ialab.que_es_prompt.m2_interface_desc')}
             </p>
-         </div>
-       </div>
-     );
+          </div>
+           <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-6 rounded-[2.5rem] flex items-center gap-6 shadow-sm">
+             <div className="p-4 bg-amber-50 rounded-2xl text-amber-500 shadow-inner"><Lightbulb size={32} /></div>
+              <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 font-bold italic leading-relaxed">
+               &ldquo;{t('ialab.que_es_prompt.m2_quote')}&rdquo;
+             </p>
+          </div>
+        </div>
+      );
      case 'm3': return <ModuleAnatomy />;
-     case 'm4': return (
-       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-[slideInFromBottom_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards]">
-         {[
-           { t: 'Chain of Thought', d: 'Pide a la IA que «piensa paso a paso» para mejorar el razonamiento.', i: <BrainCircuit className="w-5 h-5"/> },
-           { t: 'Few-Shot Prompting', d: 'Incluye ejemplos del resultado esperado para guiar el modelo.', i: <Layers className="w-5 h-5"/> },
-           { t: 'Iteración', d: 'Refina el prompt basándote en la respuesta anterior.', i: <Zap className="w-5 h-5"/> },
-           { t: 'Roles', d: 'Asigna una identidad experta para cambiar el enfoque del modelo.', i: <Globe className="w-5 h-5"/> },
-           { t: 'Descomposición', d: 'Divide tareas complejas en pasos pequeños y manejables.', i: <Target className="w-5 h-5"/> },
-           { t: 'Prompt Chaining', d: 'Usa la salida de un prompt como entrada del siguiente.', i: <Sparkles className="w-5 h-5"/> }
-         ].map((s, i) => (
+      case 'm4': return (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-[slideInFromBottom_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards]">
+          {[
+            { t: t('ialab.que_es_prompt.m4_technique_0_title'), d: t('ialab.que_es_prompt.m4_technique_0_desc'), i: <BrainCircuit className="w-5 h-5"/> },
+            { t: t('ialab.que_es_prompt.m4_technique_1_title'), d: t('ialab.que_es_prompt.m4_technique_1_desc'), i: <Layers className="w-5 h-5"/> },
+            { t: t('ialab.que_es_prompt.m4_technique_2_title'), d: t('ialab.que_es_prompt.m4_technique_2_desc'), i: <Zap className="w-5 h-5"/> },
+            { t: t('ialab.que_es_prompt.m4_technique_3_title'), d: t('ialab.que_es_prompt.m4_technique_3_desc'), i: <Globe className="w-5 h-5"/> },
+            { t: t('ialab.que_es_prompt.m4_technique_4_title'), d: t('ialab.que_es_prompt.m4_technique_4_desc'), i: <Target className="w-5 h-5"/> },
+            { t: t('ialab.que_es_prompt.m4_technique_5_title'), d: t('ialab.que_es_prompt.m4_technique_5_desc'), i: <Sparkles className="w-5 h-5"/> }
+          ].map((s, i) => (
             <div key={i} className="flex items-start gap-4 p-5 bg-white dark:bg-slate-700 border border-slate-100 dark:border-slate-600 rounded-[2.2rem] shadow-sm hover:shadow-lg transition-all group">
               <div className="p-3 bg-slate-50 dark:bg-slate-600 text-[#0D2B5B] dark:text-white rounded-[1rem] shadow-inner group-hover:bg-[#0D2B5B] group-hover:text-white transition-all">{s.i}</div>
               <div><h5 className="font-[900] text-[#0D2B5B] text-xs uppercase mb-1 tracking-tighter leading-none">{s.t}</h5><p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium leading-relaxed">{s.d}</p></div>
@@ -290,16 +291,16 @@ const QueEsPrompt_OVA_Original = ({ onClose, onComplete }) => {
          ))}
        </div>
      );
-     case 'm5': return (
-       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 animate-[fadeIn_1.1s_cubic-bezier(0.16,1,0.3,1)_forwards]">
-         {[
-           { t: 'Prompts vagos', d: '«Ayúdame con mi tarea» no indica materia, objetivo ni formato.', i: <AlertTriangle /> },
-           { t: 'Pedir demasiado', d: 'Hacer muchas peticiones en un solo prompt genera respuestas superficiales.', i: <FileText /> },
-           { t: 'No verificar', d: 'Los modelos pueden generar contenido incorrecto con aparente confianza.', i: <Search /> },
-           { t: 'No iterar', d: 'Si la primera respuesta no satisface, ajusta el prompt en lugar de abandonar.', i: <Zap /> },
-           { t: 'Olvidar el formato', d: 'Sin especificarlo, la respuesta puede ser difícil de usar directamente.', i: <Info /> },
-           { t: 'Asumir memoria', d: 'Cada sesión nueva empieza sin recordar conversaciones pasadas.', i: <Clock /> }
-         ].map((e, i) => (
+      case 'm5': return (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 animate-[fadeIn_1.1s_cubic-bezier(0.16,1,0.3,1)_forwards]">
+          {[
+            { t: t('ialab.que_es_prompt.m5_error_0_title'), d: t('ialab.que_es_prompt.m5_error_0_desc'), i: <AlertTriangle /> },
+            { t: t('ialab.que_es_prompt.m5_error_1_title'), d: t('ialab.que_es_prompt.m5_error_1_desc'), i: <FileText /> },
+            { t: t('ialab.que_es_prompt.m5_error_2_title'), d: t('ialab.que_es_prompt.m5_error_2_desc'), i: <Search /> },
+            { t: t('ialab.que_es_prompt.m5_error_3_title'), d: t('ialab.que_es_prompt.m5_error_3_desc'), i: <Zap /> },
+            { t: t('ialab.que_es_prompt.m5_error_4_title'), d: t('ialab.que_es_prompt.m5_error_4_desc'), i: <Info /> },
+            { t: t('ialab.que_es_prompt.m5_error_5_title'), d: t('ialab.que_es_prompt.m5_error_5_desc'), i: <Clock /> }
+          ].map((e, i) => (
             <div key={i} className="p-5 bg-white dark:bg-slate-700 border border-slate-100 dark:border-slate-600 rounded-[2rem] shadow-sm hover:shadow-md transition-all group">
               <div className="w-8 h-8 bg-red-50 dark:bg-red-900/30 text-red-500 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">{e.i}</div>
              <h5 className="font-[900] text-[#0D2B5B] text-[10px] uppercase tracking-widest leading-none mb-1">{e.t}</h5>

@@ -1,12 +1,14 @@
 import { SignUp } from '@clerk/react';
-import { esES } from '@clerk/localizations';
+import { esES, enUS } from '@clerk/localizations';
 import { motion } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FloatingParticles from './FloatingParticles';
 import { Brain, CheckCircle, ArrowLeft } from 'lucide-react';
+import { useTranslation } from '../i18n/I18nProvider';
 import SEO from './SEO';
 
 const IALabSignUpPage = ({ onBack }) => {
+  const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
@@ -19,7 +21,7 @@ const IALabSignUpPage = ({ onBack }) => {
   
   return (
     <>
-      <SEO title="Registro IALab" description="Crea tu cuenta en IALab by Edutechlife y comienza a potenciar tu aprendizaje con inteligencia artificial." />
+      <SEO title={t('seo.signup_ialab.title')} description={t('seo.signup_ialab.desc')} />
       <div className="min-h-screen bg-gradient-to-br from-[#004B63] to-[#0A3550] flex items-center justify-center p-4 relative overflow-hidden">
       <FloatingParticles />
       

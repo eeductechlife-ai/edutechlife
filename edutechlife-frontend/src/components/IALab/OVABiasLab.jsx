@@ -83,7 +83,7 @@ export default function OVABiasLab({ onComplete }) {
           ))}
         </nav>
         <div className="p-4 border-t border-blue-50">
-          <VoiceReader text={activeSection === 'intro' ? contentData.intro.text + ' ' + contentData.intro.extended : contentData[activeSection]?.text || 'Bienvenido al laboratorio de ética en IA'} />
+          <VoiceReader text={activeSection === 'intro' ? contentData.intro.text + ' ' + contentData.intro.extended : contentData[activeSection]?.text || t('ova.biaslab.default_voice_text')} />
         </div>
       </aside>
 

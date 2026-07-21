@@ -2,6 +2,27 @@ const { Router } = require('express');
 
 const router = Router();
 
+/**
+ * @swagger
+ * /api/voice-token/token:
+ *   get:
+ *     summary: Obtener token de acceso para Google Cloud Voice
+ *     tags: [Voice]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Token de acceso generado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 access_token:
+ *                   type: string
+ *       500:
+ *         description: Error del servidor
+ */
 router.get('/token', async (req, res) => {
   try {
     const { GoogleAuth } = require('google-auth-library');

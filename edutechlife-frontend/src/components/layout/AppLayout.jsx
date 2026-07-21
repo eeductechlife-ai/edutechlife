@@ -6,11 +6,11 @@ import ContactModal from "../ContactModal";
 import LeadCaptureModal from "../LeadCaptureModal";
 import AdminLoginModal from "../AdminLoginModal";
 import UserDropdownMenuPremium from "../userDropdownMenuPremium";
-import UserDropdownMenuSimplified from "../UserDropdownMenuSimplified";
 import { ProgressProvider } from "../../context/ProgressContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 import LocaleSwitcher from "../LocaleSwitcher";
 import ScrollToTop from "./ScrollToTop";
+import MobileDrawer from "./MobileDrawer";
 import FloatingParticles from "../FloatingParticles";
 
 // Lazy load components
@@ -221,6 +221,16 @@ const AppLayout = () => {
                       <i className="fa-solid fa-chalkboard text-[#4DA8C4]"></i>
                       {t("nav.smartboard")}
                     </button>
+                    <button
+                      onClick={() => {
+                        navigate("/planes");
+                        setShowLoginDropdown(false);
+                      }}
+                      className="w-full text-left px-3 py-2 text-sm font-semibold text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors flex items-center gap-2"
+                    >
+                      <i className="fa-solid fa-tag text-[#D4A017]"></i>
+                      {t("nav.planes")}
+                    </button>
                   </div>
                 </div>
 
@@ -343,181 +353,18 @@ const AppLayout = () => {
             </button>
           )}
 
-        {/* Mobile Menu Drawer */}
         {(mobileMenuOpen || drawerClosing) && (
-          <>
-            {/* Backdrop */}
-            <div
-              className={`fixed inset-0 z-[1001] bg-black/50 backdrop-blur-sm md:hidden ${drawerClosing ? "animate-fade-out" : ""}`}
-              role="presentation"
-              onClick={closeDrawer}
-            />
-            {/* Drawer - Expanded with scroll */}
-            <div
-              role="dialog"
-              aria-modal="true"
-              aria-label={t("ialab.nav_menu_aria")}
-              className={`fixed top-0 right-0 z-[1002] h-dvh w-80 bg-white shadow-2xl md:hidden flex flex-col ${drawerClosing ? "animate-slide-out" : "animate-slide-in"}`}
-              style={{ willChange: "transform" }}
-            >
-              {/* Header */}
-              <div className="p-4 border-b border-[#4DA8C4]/20 flex items-center justify-between flex-shrink-0">
-                <div className="flex items-center">
-                  <img
-                    src="/images/logo-edutechlife.webp"
-                    alt={t("nav.logo_alt")}
-                    className="w-24 object-contain"
-                    style={{
-                      height: "80px",
-                      transform: "scale(1.8)",
-                      transformOrigin: "left center",
-                    }}
-                  />
-                </div>
-                <div className="flex items-center gap-1">
-                  <LocaleSwitcher />
-                  <button
-                    onClick={closeDrawer}
-                    className="p-2 text-[#004B63] hover:text-[#4DA8C4] hover:bg-[#4DA8C4]/10 rounded-full transition-all duration-300"
-                    aria-label={t("header.close_menu")}
-                  >
-                    <svg
-                      className="w-6 h-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-
-              {/* Mobile Menu Content */}
-              <div className="flex-1 overflow-y-auto p-4 pb-20">
-                {/* User Info Section */}
-                {isSignedIn && clerkUser && (
-                  <div className="mb-6 pb-4 border-b border-[#4DA8C4]/10">
-                    <UserDropdownMenuSimplified
-                      userInfo={clerkUser}
-                      onNavigate={navigate}
-                    />
-                  </div>
-                )}
-
-                {/* Sign In — top for signed-out users */}
-                {!isSignedIn && (
-                  <div className="mb-6 pb-4 border-b border-[#4DA8C4]/20 space-y-2">
-                    <button
-                      onClick={() => {
-                        closeDrawer();
-                        navigate("/login");
-                      }}
-                      className="w-full py-3 text-sm font-semibold text-white bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] rounded-full shadow-md hover:shadow-lg transition-all"
-                    >
-                      <i className="fa-solid fa-right-to-bracket mr-2"></i>
-                      {t("nav.login")}
-                    </button>
-                    <button
-                      onClick={() => {
-                        closeDrawer();
-                        setShowLeadCaptureModal(true);
-                      }}
-                      className="w-full py-3 text-sm font-semibold text-[#004B63] border-2 border-[#4DA8C4]/30 rounded-full hover:border-[#4DA8C4] transition-colors"
-                    >
-                      {t("header.request_demo")}
-                    </button>
-                  </div>
-                )}
-
-                {/* Navigation Categories */}
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="text-xs font-semibold text-[#4DA8C4] uppercase tracking-wider mb-2">
-                      {t("nav.home_aria")}
-                    </h3>
-                    <div className="space-y-1">
-                      <button
-                        onClick={() => navigateToSection("/", "herramientas")}
-                        className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
-                      >
-                        {t("header.tools")}
-                      </button>
-                      <button
-                        onClick={() => navigateToSection("/", "metodo")}
-                        className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
-                      >
-                        {t("header.method")}
-                      </button>
-                      <button
-                        onClick={() => navigateToSection("/", "aliados")}
-                        className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
-                      >
-                        {t("header.allies")}
-                      </button>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h3 className="text-xs font-semibold text-[#4DA8C4] uppercase tracking-wider mb-2">
-                      {t("header.tools")}
-                    </h3>
-                    <div className="space-y-1">
-                      <button
-                        onClick={() => navigate("/ialab")}
-                        className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
-                      >
-                        {t("nav.ialab_pro")}
-                      </button>
-                      <button
-                        onClick={() => navigate("/sign-up/smartboard")}
-                        className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
-                      >
-                        {t("nav.smartboard")}
-                      </button>
-                      <button
-                        onClick={() => navigate("/vak")}
-                        className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
-                      >
-                        {t("footer.vak")}
-                      </button>
-                      <button
-                        onClick={() => navigate("/automation")}
-                        className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
-                      >
-                        {t("footer.automation")}
-                      </button>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h3 className="text-xs font-semibold text-[#4DA8C4] uppercase tracking-wider mb-2">
-                      {t("nav.contact")}
-                    </h3>
-                    <div className="space-y-1">
-                      <button
-                        onClick={openContactModal}
-                        className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
-                      >
-                        {t("header.contact_us")}
-                      </button>
-                      <button
-                        onClick={() => setShowLeadCaptureModal(true)}
-                        className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
-                      >
-                        {t("header.request_demo")}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </>
+          <MobileDrawer
+            drawerClosing={drawerClosing}
+            onClose={closeDrawer}
+            isSignedIn={isSignedIn}
+            clerkUser={clerkUser}
+            navigate={navigate}
+            navigateToSection={navigateToSection}
+            openContactModal={openContactModal}
+            setShowLeadCaptureModal={setShowLeadCaptureModal}
+            t={t}
+          />
         )}
 
         {/* Main Content Area */}

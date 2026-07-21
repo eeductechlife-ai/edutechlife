@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react'
-import { motion, useMotionValue, useSpring } from 'framer-motion'
+import { motion, useMotionValue, useSpring, useReducedMotion } from 'framer-motion'
 
 const CustomCursor = () => {
   const [isTouchDevice] = useState(() => typeof window !== 'undefined' ? window.matchMedia('(hover: none) and (pointer: coarse)').matches : false)
+  const prefersReducedMotion = useReducedMotion()
+
+  if (prefersReducedMotion) return null
   const cursorX = useMotionValue(-100)
   const cursorY = useMotionValue(-100)
 

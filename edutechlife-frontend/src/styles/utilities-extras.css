@@ -1,0 +1,185 @@
+/* Text Colors */
+.text-petroleum {
+  color: var(--color-petroleum);
+}
+
+.text-corporate {
+  color: var(--color-corporate);
+}
+
+.text-mint {
+  color: var(--color-mint);
+}
+
+.text-soft-blue {
+  color: var(--color-soft-blue);
+}
+
+/* Background Colors */
+.bg-petroleum {
+  background-color: var(--color-petroleum);
+}
+
+.bg-corporate {
+  background-color: var(--color-corporate);
+}
+
+.bg-soft-blue {
+  background-color: var(--color-soft-blue);
+}
+
+.bg-mint {
+  background-color: var(--color-mint);
+}
+
+/* Button Styles */
+.btn-primary {
+  background: linear-gradient(135deg, #4da8c4 0%, #004b63 100%);
+  color: white;
+  padding: 12px 28px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-family: var(--font-display);
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(77, 168, 196, 0.35);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #158694 0%, #072233 100%);
+  box-shadow: 0 8px 25px rgba(77, 168, 196, 0.45);
+  transform: translateY(-2px);
+}
+
+.btn-ghost {
+  background: white;
+  color: var(--text-main);
+  padding: 12px 28px;
+  border-radius: 50px;
+  font-weight: 600;
+  transition: all 0.3s;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  cursor: pointer;
+}
+
+/* Card Corporate */
+.card-corporate {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px -5px rgba(0, 75, 99, 0.15);
+  transition: all 0.3s ease;
+}
+
+.card-corporate:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -5px rgba(0, 75, 99, 0.2);
+}
+
+/* Icon Wrapper */
+.icon-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  background: var(--color-soft-blue);
+  color: var(--color-corporate);
+  border-radius: 50%;
+  font-size: 20px;
+}
+
+/* 2.5D Shadow */
+.shadow-2-5d {
+  box-shadow: 0 10px 25px -5px rgba(0, 75, 99, 0.15);
+}
+
+.shadow-2-5d-hover:hover {
+  box-shadow: 0 15px 35px -5px rgba(0, 75, 99, 0.25);
+}
+
+/* Heading font class */
+.heading-font {
+  font-family: var(--font-display) !important;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+}
+
+/* Base Heading Styles - Usan Montserrat Display */
+h1 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  color: var(--color-petroleum);
+}
+
+h2,
+h3,
+h4,
+h5 {
+  font-family: var(--font-display) !important;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: var(--color-petroleum);
+}
+
+/* Eyebrow pill - JetBrains Mono para labels tecnologicos */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: linear-gradient(
+    135deg,
+    rgba(77, 168, 196, 0.1),
+    rgba(102, 204, 204, 0.05)
+  );
+  border: 1px solid rgba(77, 168, 196, 0.25);
+  border-radius: 100px;
+  padding: 7px 18px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--color-corporate);
+  box-shadow: 0 2px 12px rgba(0, 194, 224, 0.1);
+  backdrop-filter: blur(8px);
+}
+
+.eyebrow-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--primary);
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: blink 2s ease-in-out infinite;
+  box-shadow: 0 0 8px var(--primary);
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Reveal animations */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}

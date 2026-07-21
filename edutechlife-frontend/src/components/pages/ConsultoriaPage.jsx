@@ -22,8 +22,8 @@ const ConsultoriaPage = () => {
   return (
     <>
       <SEO
-        title="Consultoría Educativa"
-        description="Consultoría educativa especializada con inteligencia artificial. Transforma tu institución con Edutechlife."
+        title={t('seo.consultoria.title')}
+        description={t('seo.consultoria.desc')}
       />
       <Suspense fallback={<PageLoader message={t("page_loader.consulting")} />}>
         <Consultoria onBack={handleBack} onNavigate={handleNavigate} />

@@ -10,13 +10,26 @@ import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
 import {
   speakTextConversational,
   stopSpeech,
-  iniciarReconocimiento,
-  stopRecognition,
 } from "../../../utils/speech";
 import useFocusTrap from "../../../hooks/useFocusTrap";
 import { inferMoodFromText, extractTopic } from "../dani/chatUtils";
-import { getVoiceOverrides, primeSpeech, stripEmoji } from "./DaniVoiceController";
+import { getVoiceOverrides, primeSpeech } from "./DaniVoiceController";
 import { getQuickActionMessage } from "./daniQuickActions";
+import {
+  retrySpeech as retrySpeechFn,
+  toggleVoice as toggleVoiceFn,
+  handleMicClick as handleMicClickFn,
+  processStreamChunkVoice,
+  speakRemainingText,
+} from "./daniChatVoice";
+import {
+  getMoodSupportPrompt,
+  getCrisisUserMessage,
+  isEmotionalBannerNeeded,
+  isCrisisAlert,
+  recordMoodIfNeeded,
+} from "./daniChatMood";
+import { trackTopicFromMessage } from "./daniChatTopics";
 
 export default function useDaniChat({ isOpen, onClose, activeTab }) {
   const navigate = useNavigate();
@@ -188,22 +201,12 @@ export default function useDaniChat({ isOpen, onClose, activeTab }) {
   }, [isOpen]);
 
   const retrySpeech = useCallback(() => {
-    setVoiceBlocked(false);
-    if (window.speechSynthesis) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance("");
-      utterance.volume = 0;
-      window.speechSynthesis.speak(utterance);
-      window.speechSynthesis.cancel();
-      speechPrimed.current = true;
-    }
-  }, []);
+    retrySpeechFn({ setVoiceBlocked, speechPrimed });
+  }, [setVoiceBlocked, speechPrimed]);
 
   const toggleVoice = useCallback(() => {
-    if (isSpeaking) stopSpeech();
-    setVoiceEnabled((prev) => !prev);
-    setVoiceBlocked(false);
-  }, [isSpeaking]);
+    toggleVoiceFn({ isSpeaking, stopSpeech, setVoiceEnabled, setVoiceBlocked });
+  }, [isSpeaking, setVoiceEnabled, setVoiceBlocked]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -321,16 +324,13 @@ export default function useDaniChat({ isOpen, onClose, activeTab }) {
 
         const mood = inferMoodFromText(userMessage.text);
 
-        if (
-          mood &&
-          ["triste", "enojado", "ansioso"].includes(mood.mood) &&
-          mood.confidence >= 0.7
-        ) {
+        if (isEmotionalBannerNeeded(mood)) {
           setShowEmotionalBanner(true);
-          systemPrompt += `\n\n## INSTRUCCIÓN DE APOYO EMOCIONAL\nEl estudiante está mostrando signos de ${mood.mood} en su mensaje: "${userMessage.text.substring(0, 100)}". Prioriza la VALIDACIÓN EMOCIONAL antes de continuar con contenido académico. Ofrece estrategias de afrontamiento concretas y un espacio seguro para que el estudiante se exprese.`;
+          const supportPrompt = getMoodSupportPrompt(mood, userMessage.text);
+          if (supportPrompt) systemPrompt += supportPrompt;
         }
 
-        if (mood && mood.mood === "CRISIS_ALERT" && mood.confidence >= 0.9) {
+        if (isCrisisAlert(mood)) {
           setShowCrisisResources(true);
         }
 
@@ -343,11 +343,14 @@ export default function useDaniChat({ isOpen, onClose, activeTab }) {
           });
         }
 
-        if (mood && mood.mood === "CRISIS_ALERT" && mood.confidence >= 0.9) {
-          messages.push({
-            role: "user",
-            content: `[ALERTA DE CRISIS - RESPUESTA OBLIGATORIA]\nEl estudiante ha expresado pensamientos de crisis. Es CRÍTICO que:\n1. Respondas con apoyo emocional inmediato\n2. Proporciones las siguientes líneas de ayuda colombianas:\n   • Línea 106 — Atención en salud mental (24/7)\n   • Línea 123 — Emergencias\n   • Línea 141 — ICBF\n3. NO continúes con contenido académico hasta abordar esto\n\nTu prioridad #1 es la seguridad y bienestar del estudiante.`,
-          });
+        if (isCrisisAlert(mood)) {
+          const crisisMsg = getCrisisUserMessage(mood);
+          if (crisisMsg) {
+            messages.push({
+              role: "user",
+              content: crisisMsg,
+            });
+          }
         }
 
         const history = daniChatHistory.slice(-15).map((msg) => ({
@@ -378,74 +381,25 @@ export default function useDaniChat({ isOpen, onClose, activeTab }) {
             setStreamingMessage(fullResponse);
             setDaniMood("explaining");
 
-            pendingSentenceRef.current += chunk;
-            while (true) {
-              const match = pendingSentenceRef.current.match(/[.!?](?:\s|$)/);
-              if (!match) break;
-              const endIdx = match.index + 1;
-              const sentence = pendingSentenceRef.current
-                .slice(0, endIdx)
-                .trim();
-              pendingSentenceRef.current = pendingSentenceRef.current.slice(
-                endIdx + match[0].length,
-              );
-              if (
-                voiceEnabled &&
-                sentence.length >= 8 &&
-                !isSpeakingRef.current
-              ) {
-                setIsSpeaking(true);
-                isSpeakingRef.current = true;
-                const cleanSentence = stripEmoji(sentence);
-                if (cleanSentence.length > 0) {
-                  const voiceOverrides = getVoiceOverrides(daniMood);
-                  speakTextConversational(
-                    cleanSentence,
-                    "dani",
-                    voiceOverrides,
-                    () => {
-                      setIsSpeaking(false);
-                      isSpeakingRef.current = false;
-                    },
-                    (err) => {
-                      setIsSpeaking(false);
-                      isSpeakingRef.current = false;
-                      if (err && err.includes("bloqueado"))
-                        setVoiceBlocked(true);
-                    },
-                  );
-                } else {
-                  setIsSpeaking(false);
-                  isSpeakingRef.current = false;
-                }
-              }
-            }
+            processStreamChunkVoice(chunk, {
+              pendingSentenceRef,
+              voiceEnabled,
+              isSpeakingRef,
+              daniMood,
+              setIsSpeaking,
+              setVoiceBlocked,
+            });
           },
         );
 
         const remaining = pendingSentenceRef.current.trim();
-        if (remaining.length >= 8 && voiceEnabled) {
-          setIsSpeaking(true);
-          isSpeakingRef.current = true;
-          const cleanRemaining = stripEmoji(remaining);
-          if (cleanRemaining.length > 0) {
-            const voiceOverrides = getVoiceOverrides(daniMood);
-            speakTextConversational(
-              cleanRemaining,
-              "dani",
-              voiceOverrides,
-              () => {
-                setIsSpeaking(false);
-                isSpeakingRef.current = false;
-              },
-              (err) => {
-                setIsSpeaking(false);
-                isSpeakingRef.current = false;
-                if (err && err.includes("bloqueado")) setVoiceBlocked(true);
-              },
-            );
-          }
-        }
+        speakRemainingText(remaining, {
+          voiceEnabled,
+          isSpeakingRef,
+          daniMood,
+          setIsSpeaking,
+          setVoiceBlocked,
+        });
 
         setDaniMood("explaining");
         setStreamingMessage("");
@@ -490,18 +444,9 @@ export default function useDaniChat({ isOpen, onClose, activeTab }) {
           console.warn("[Dani] Memoria parse error:", e.message);
         }
 
-        if (mood) {
-          recordMoodInference(
-            mood.mood,
-            mood.confidence,
-            userMessage.text.substring(0, 100),
-          );
-        }
+        recordMoodIfNeeded(mood, userMessage.text, recordMoodInference);
 
-        const subject = extractTopic(userMessage.text);
-        if (subject) {
-          trackAcademicTopic(subject.topic);
-        }
+        trackTopicFromMessage(userMessage, extractTopic, trackAcademicTopic);
       } catch (error) {
         console.error("Error calling Dani:", error);
         const errorMsg = error.message?.includes("400")
@@ -552,19 +497,7 @@ export default function useDaniChat({ isOpen, onClose, activeTab }) {
   );
 
   const handleMicClick = useCallback(() => {
-    if (isListening) {
-      stopRecognition();
-      return;
-    }
-    iniciarReconocimiento(
-      setInputText,
-      (finalText) => {
-        if (finalText.trim()) {
-          handleSendMessage(finalText);
-        }
-      },
-      setIsListening,
-    );
+    handleMicClickFn({ isListening, setInputText, handleSendMessage, setIsListening });
   }, [isListening, handleSendMessage]);
 
   return {

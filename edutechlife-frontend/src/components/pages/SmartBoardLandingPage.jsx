@@ -10,7 +10,7 @@ const SmartBoardLandingPage = () => {
   const { t } = useTranslation();
   return (
     <>
-      <SEO title="SmartBoard Kids" description="Dashboard infantil de SmartBoard. Aprendizaje interactivo y divertido para niños con la plataforma educativa Edutechlife." />
+      <SEO title={t('seo.smartboard_kids.title')} description={t('seo.smartboard_kids.desc')} />
       <SmartBoardKidsProvider>
       <Suspense fallback={<PageLoader message={t('smartboard.loading')} />}>
         <SmartBoardKidsDashboard />

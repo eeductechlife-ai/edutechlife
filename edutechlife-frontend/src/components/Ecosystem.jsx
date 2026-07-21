@@ -83,7 +83,7 @@ const Ecosystem = memo(() => {
             >
               <div className="h-56 w-full overflow-hidden relative rounded-t-[20px]">
                 <div className={`absolute inset-0 bg-gradient-to-t ${card.bg} to-transparent z-10`} />
-                <img src={card.img} alt="" loading="lazy" className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700" />
+                <img src={card.img} alt={t(card.titleKey)} loading="lazy" className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700" />
               </div>
               <div className="p-6 relative z-10">
                 <div className="flex items-center gap-3 mb-3">

@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { PageLoader } from '../LoadingScreen';
 import ErrorBoundary from '../common/ErrorBoundary';
 import SEO from '../SEO';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const Hero = lazy(() => import('../Hero'));
 const AIToolsSection = lazy(() => import('../AIToolsSection'));
@@ -16,9 +17,10 @@ const sectionFallback = (h) => (
 );
 
 const LandingPage = () => {
+  const { t } = useTranslation();
   return (
     <>
-      <SEO title="Inicio" description="Liderando la Educación del Futuro con Pedagogía e Inteligencia Artificial. Cursos, diagnósticos y herramientas educativas impulsadas por IA." />
+      <SEO title={t('seo.home.title')} description={t('seo.home.desc')} />
       <div className="pt-24">
       <ErrorBoundary>
         <Suspense fallback={<PageLoader message="Cargando..." />}>

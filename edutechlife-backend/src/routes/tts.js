@@ -4,6 +4,55 @@ const router = Router();
 const GOOGLE_TTS_URL = 'https://texttospeech.googleapis.com/v1/text:synthesize';
 const GOOGLE_TTS_API_KEY = process.env.GOOGLE_TTS_API_KEY;
 
+/**
+ * @swagger
+ * /api/tts:
+ *   post:
+ *     summary: Convertir texto a voz usando Google TTS
+ *     tags: [TTS]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               input:
+ *                 type: object
+ *                 properties:
+ *                   text:
+ *                     type: string
+ *               voice:
+ *                 type: object
+ *                 properties:
+ *                   languageCode:
+ *                     type: string
+ *                     example: es-US
+ *                   name:
+ *                     type: string
+ *                     example: es-US-Neural2-A
+ *               audioConfig:
+ *                 type: object
+ *                 properties:
+ *                   audioEncoding:
+ *                     type: string
+ *                     example: MP3
+ *     responses:
+ *       200:
+ *         description: Audio generado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 audioContent:
+ *                   type: string
+ *                   format: byte
+ *       500:
+ *         description: Error del servidor
+ */
 router.post('/', async (req, res) => {
   if (!GOOGLE_TTS_API_KEY) {
     return res.status(500).json({ error: 'TTS API key not configured on server' });

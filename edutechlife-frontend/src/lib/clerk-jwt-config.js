@@ -34,7 +34,7 @@ export const clerkSupabaseJWTConfig = {
       'app-metadata': {
         provider: 'clerk',
         sign_in_provider: 'email',
-        role: '{{user.public_metadata.role}}' || 'student',
+        role: '{{user.public_metadata.role || "student"}}',
       },
       
       // User metadata
@@ -42,7 +42,7 @@ export const clerkSupabaseJWTConfig = {
         email: '{{user.primary_email_address}}',
         full_name: '{{user.first_name}} {{user.last_name}}',
         avatar_url: '{{user.image_url}}',
-        phone: '{{user.private_metadata.phone}}' || '',
+        phone: '{{user.private_metadata.phone || ""}}',
       }
     },
     

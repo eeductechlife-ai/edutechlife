@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import { X, CheckCircle2 } from 'lucide-react'
 import { useTranslation } from '../../../i18n/I18nProvider'

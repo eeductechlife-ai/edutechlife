@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
+import React, { forwardRef, useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { getModuleContent } from './constants/moduleContent';
@@ -43,7 +43,7 @@ const fuzzyScore = (query, target) => {
  * @param {boolean}  [props.mobile=false] - Activa variante móvil con overlay
  * @param {Function} [props.onClose]      - Callback al cerrar la búsqueda
  */
-const GlobalSearchBar = ({ mobile, onClose }) => {
+const GlobalSearchBar = forwardRef(function GlobalSearchBar({ mobile, onClose }, ref) {
   const { t } = useTranslation();
   const { modules, activeMod, setActiveMod, openResourceById } = useIALabProgressContext();
   const [query, setQuery] = useState('');
@@ -132,7 +132,7 @@ const GlobalSearchBar = ({ mobile, onClose }) => {
 
   if (mobile) {
     return (
-      <div role="dialog" aria-modal="true" aria-label={t('ialab.search_aria')} className="fixed inset-0 z-[1002] bg-white dark:bg-slate-900 flex flex-col">
+      <div ref={ref} role="dialog" aria-modal="true" aria-label={t('ialab.search_aria')} className="fixed inset-0 z-[1002] bg-white dark:bg-slate-900 flex flex-col">
         <div className="flex items-center gap-3 p-4 border-b border-slate-200 dark:border-slate-700">
           <button onClick={onClose} className="w-9 h-9 flex items-center justify-center text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 -ml-1" aria-label={t('ialab.global_search.close_aria')}>
             <Icon name="fa-arrow-left" className="text-lg" aria-hidden="true" />
@@ -210,7 +210,7 @@ const GlobalSearchBar = ({ mobile, onClose }) => {
   };
 
   return (
-    <div ref={panelRef} className="relative">
+    <div ref={(node) => { panelRef.current = node; if (ref) { if (typeof ref === 'function') ref(node); else ref.current = node; } }} className="relative">
       <div className="flex items-center">
         <div className="relative" role="combobox" aria-expanded={isOpen && query.length > 0} aria-haspopup="listbox" aria-controls="search-listbox">
           <Icon name="fa-search" className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600 text-xs pointer-events-none" aria-hidden="true" />
@@ -277,8 +277,7 @@ const GlobalSearchBar = ({ mobile, onClose }) => {
       )}
     </div>
   );
-};
-
+});
 
 GlobalSearchBar.propTypes = {
   mobile: PropTypes.bool,
