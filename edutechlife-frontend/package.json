@@ -21,7 +21,7 @@
     "i18n:sync-types": "python3 scripts/sync-i18n-types.py",
     "i18n:full": "npm run i18n:validate && npm run i18n:sync-types",
     "i18n:extract": "node scripts/extract-hardcoded.js",
-    "test:smoke": "vitest run src/store/__tests__/ src/components/IALab/__tests__/ src/components/IALab/IALabValerioPanel/__tests__/ src/components/IALab/IALabQuizModal/__tests__/ src/components/DiagnosticoVAK/__tests__/ src/components/Nico/__tests__/ src/components/kids-dashboard/dani/__tests__/ src/components/__tests__/ src/services/__tests__/ src/utils/__tests__/ src/tests/a11y/ src/components/IALab/PDFThumbnail.test.jsx",
+    "test:smoke": "vitest run src/store/__tests__/ src/components/IALab/__tests__/ src/components/IALab/IALabValerioPanel/__tests__/ src/components/IALab/IALabQuizModal/__tests__/ src/components/DiagnosticoVAK/__tests__/ src/components/Nico/__tests__/ src/components/kids-dashboard/dani/__tests__/ src/components/__tests__/ src/services/__tests__/ src/utils/__tests__/ src/tests/a11y/ src/tests/integration/ src/components/IALab/PDFThumbnail.test.jsx",
     "check-budget": "node scripts/check-budget.mjs",
     "optimize-images": "node scripts/optimize-images.mjs",
     "test:e2e": "playwright test",
