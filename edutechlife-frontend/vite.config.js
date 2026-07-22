@@ -176,6 +176,15 @@ export default defineConfig({
           if (id.includes('node_modules/@supabase/supabase-js/')) {
             return 'supabase-vendor';
           }
+          if (id.includes('node_modules/@clerk/')) {
+            return 'clerk-vendor';
+          }
+          if (id.includes('node_modules/react-router-dom/') || id.includes('node_modules/react-router/')) {
+            return 'router-vendor';
+          }
+          if (id.includes('node_modules/@stripe/')) {
+            return 'stripe-vendor';
+          }
         },
         chunkFileNames: 'assets/[name]-[hash].js',
         entryFileNames: 'assets/[name]-[hash].js',
@@ -184,7 +193,7 @@ export default defineConfig({
     },
     chunkSizeWarningLimit: 250,
     sourcemap: false,
-    reportCompressedSize: false,
+    reportCompressedSize: true,
     cssCodeSplit: true,
     cssMinify: true
   },
