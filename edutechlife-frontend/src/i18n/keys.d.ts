@@ -1855,6 +1855,19 @@ export type TranslationKeys = {
   "ialab.security_warning.understood": string;
   "ialab.see_less": string;
   "ialab.see_more": string;
+  "ialab.signup_back_to_login": string;
+  "ialab.signup_feature_1": string;
+  "ialab.signup_feature_2": string;
+  "ialab.signup_feature_3": string;
+  "ialab.signup_form_desc": string;
+  "ialab.signup_form_title": string;
+  "ialab.signup_have_account": string;
+  "ialab.signup_login_here": string;
+  "ialab.signup_subtitle": string;
+  "ialab.signup_terms": string;
+  "ialab.signup_welcome_desc": string;
+  "ialab.signup_welcome_quote": string;
+  "ialab.signup_welcome_title": string;
   "ialab.skip_link": string;
   "ialab.speech.course_completed": string;
   "ialab.speech.module_passed": string;
@@ -5623,6 +5636,19 @@ const translationKeySet: Record<string, true> = {
   "ialab.security_warning.understood": true,
   "ialab.see_less": true,
   "ialab.see_more": true,
+  "ialab.signup_back_to_login": true,
+  "ialab.signup_feature_1": true,
+  "ialab.signup_feature_2": true,
+  "ialab.signup_feature_3": true,
+  "ialab.signup_form_desc": true,
+  "ialab.signup_form_title": true,
+  "ialab.signup_have_account": true,
+  "ialab.signup_login_here": true,
+  "ialab.signup_subtitle": true,
+  "ialab.signup_terms": true,
+  "ialab.signup_welcome_desc": true,
+  "ialab.signup_welcome_quote": true,
+  "ialab.signup_welcome_title": true,
   "ialab.skip_link": true,
   "ialab.speech.course_completed": true,
   "ialab.speech.module_passed": true,
